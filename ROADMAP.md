@@ -59,7 +59,7 @@ Hard gates before durable training:
 - [x] pass forward/backward/save/reload smoke on RTX 3080 Laptop GPU (16 GB VRAM)
 - [ ] confirm CI is green on GitHub
 
-Exit criterion: a fresh clone can validate manifests and run CPU-only CI, and the pinned model completes the documented 16 GB GPU smoke with base frozen and adapter trainable. Local CPU checks, loaded checkpoint inspection, and the GPU smoke pass. GitHub Actions has not run for this working tree, so Phase 1 remains open until remote CI is green.
+Exit criterion: a fresh clone can validate manifests and run CPU-only CI, and the pinned model completes the documented 16 GB GPU smoke with base frozen and adapter trainable. Local CPU checks, loaded checkpoint inspection, and the GPU smoke pass. The GitHub Actions run for the PR is queued; Phase 1 remains open until remote CI is green.
 
 ## Phase 2 — Dataset integration
 
