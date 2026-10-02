@@ -1,0 +1,16 @@
+schema_version: 1
+repo_id: google/gemma-4-E2B-it-qat-q4_0-unquantized
+revision: null
+role: multimodal_alignment_backbone
+license: Apache-2.0
+modalities:
+  - text
+  - image
+  - audio
+  - video
+processor_repo_id: google/gemma-4-E2B-it-qat-q4_0-unquantized
+processor_revision: null
+files: []
+notes:
+  revision_policy: Pin an immutable upstream revision before durable training.
+  quantization_policy: Do not assume a ternary runtime format until architecture support is verified.
