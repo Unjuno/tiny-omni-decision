@@ -42,10 +42,9 @@ def validate_dataset_manifest(path: Path) -> None:
 @app.command()
 def status() -> None:
     """Print the current implementation boundary."""
-    console.print(
-        "Phase 1: implementation in progress; model load requires optional ML dependencies."
-    )
-    console.print("Durable training gate: dataset provenance and ternary runtime verification")
+    console.print("Phase 1: complete; reproducible text decision LoRA smoke validated.")
+    console.print("Current focus: Phase 2 dataset provenance, licensing, and split gates.")
+    console.print("Later hard gate: architecture-compatible ternary runtime verification.")
 
 
 @app.command()
