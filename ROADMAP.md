@@ -96,7 +96,10 @@ and cross-split duplicates. No dataset training or full-media download was run.
 
 Candidate inventory and verified rights decisions are in `docs/DATASETS.md`; separate
 training and evaluation candidate catalogs are in `manifests/`. Small normalized samples
-from Typed Decisions Synth, Open-Jev train/test, and MVBench passed the disjointness check.
+from Typed Decisions Synth, Open-Jev train/test, MVBench, and Clevr-4's official train/val
+annotation splits passed the disjointness check. Clevr-4's nominal 10k archive contains
+10,531 annotation rows (8,424 train / 2,107 val); each image produces four ten-class
+decisions, and media bytes are not copied during normalization.
 Open gates before durable training remain full-corpus split/output verification, further
 OneJev component rights review, and ternary runtime compatibility. Phase 2 GitHub Actions
 validation is pending.

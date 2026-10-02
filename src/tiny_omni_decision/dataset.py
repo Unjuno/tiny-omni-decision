@@ -17,6 +17,45 @@ from typing import Any
 from .schema import DatasetManifest, DecisionExample, LicenseProvenance, MediaRef
 
 KNOWN_PERMISSIVE = {"CC0-1.0", "CC-BY-4.0", "MIT", "Apache-2.0", "BSD-3-Clause"}
+CLEVR4_TAXONOMIES = {
+    "color": [
+        "gray",
+        "red",
+        "blue",
+        "green",
+        "brown",
+        "purple",
+        "cyan",
+        "yellow",
+        "pink",
+        "orange",
+    ],
+    "texture": [
+        "rubber",
+        "metal",
+        "checkered",
+        "emojis",
+        "wave",
+        "brick",
+        "star",
+        "circles",
+        "zigzag",
+        "chessboard",
+    ],
+    "count": [str(value) for value in range(1, 11)],
+    "shape": [
+        "cube",
+        "sphere",
+        "monkey",
+        "cone",
+        "torus",
+        "star",
+        "teapot",
+        "diamond",
+        "gear",
+        "cylinder",
+    ],
+}
 
 
 def _canonical_license(value: str) -> str:
@@ -194,6 +233,8 @@ def _soft(value: Any) -> Any:
 def _single_target(options: list[str], target: Any) -> str:
     """Convert an explicit single-winner annotation; refuse soft/multilabel targets."""
     target = _soft(target)
+    if isinstance(target, int) and not isinstance(target, bool):
+        target = str(target)
     if isinstance(target, bool):
         label = "true" if target else "false"
         if label in options:
@@ -413,6 +454,54 @@ def _flatten_typed_synth(row: dict[str, Any], manifest: DatasetManifest) -> list
     return result
 
 
+def _flatten_clevr4(row: dict[str, Any], manifest: DatasetManifest) -> list[DecisionExample]:
+    """Turn one pinned Clevr-4 image annotation into four categorical decisions."""
+    source_record_id = str(row.get("id", ""))
+    if not source_record_id:
+        raise ValueError("Clevr-4 annotation needs its original image stem as id")
+    archive_sha512 = str(manifest.notes.get("archive_sha512", ""))
+    if not re.fullmatch(r"[0-9a-f]{128}", archive_sha512):
+        raise ValueError("Clevr-4 manifest must pin the source image archive SHA-512")
+    examples = []
+    for taxonomy, vocabulary in CLEVR4_TAXONOMIES.items():
+        if taxonomy not in row:
+            raise ValueError(f"Clevr-4 row is missing {taxonomy!r} label")
+        options = [str(value) for value in vocabulary]
+        target = str(row[taxonomy])
+        media = [
+            MediaRef(
+                kind="image",
+                uri=(
+                    f"source-ref://sgvaze/clevr4@sha512-{archive_sha512}/"
+                    f"images/{source_record_id}.png"
+                ),
+                license=manifest.license,
+            )
+        ]
+        example = _base_example(
+            row={"id": source_record_id},
+            dataset_id=manifest.dataset_id,
+            revision=manifest.revision,
+            split=str(row.get("split", manifest.split)),
+            options=options,
+            target=str(target),
+            state="Synthetic CLEVR-4 image with annotated object attributes.",
+            question=f"What is the image's {taxonomy} class?",
+            media=media,
+            license_name=manifest.license,
+            commercial_use=manifest.commercial_use,
+            derivative_model_training_allowed=manifest.derivative_model_training_allowed,
+            redistribution_allowed=manifest.redistribution_allowed,
+            media_redistribution_allowed=manifest.media_redistribution_allowed,
+            attribution=manifest.attribution,
+            source_component="sgvaze/clevr4",
+            source_target=row[taxonomy],
+            trust_status=manifest.trust_status,
+        )
+        examples.append(example.model_copy(update={"id": f"{example.id}:{taxonomy}"}))
+    return examples
+
+
 def adapt_row(
     row: dict[str, Any],
     manifest: DatasetManifest,
@@ -621,9 +710,15 @@ def iter_local_rows(path: str | Path) -> Iterator[dict[str, Any]]:
                     yield row
     elif file_path.suffix.lower() == ".json":
         rows = json.loads(file_path.read_text(encoding="utf-8"))
-        if not isinstance(rows, list):
-            raise ValueError("JSON dataset input must be an array of objects")
-        yield from rows
+        if isinstance(rows, list):
+            yield from rows
+        elif isinstance(rows, dict):
+            for record_id, value in rows.items():
+                if not isinstance(value, dict):
+                    raise ValueError(f"JSON record {record_id!r} must be an object")
+                yield {"id": record_id, **value}
+        else:
+            raise ValueError("JSON dataset input must be an array or object of records")
     else:
         raise ValueError("Local dataset input must be .json or .jsonl")
 
@@ -694,11 +789,20 @@ def normalize_jsonl(
     seed: int | None = None,
     components: dict[str, dict[str, Any]] | None = None,
 ) -> Iterator[DecisionExample]:
-    for index, row in enumerate(rows):
-        if limit is not None and index >= limit:
+    source_rows = 0
+    for row in rows:
+        if adapter in {"clevr4", "clevr-4"} and row.get("split", manifest.split) != manifest.split:
+            continue
+        if limit is not None and source_rows >= limit:
             break
+        source_rows += 1
         if adapter in {"typed-decisions-synth", "typed_synth"}:
             examples = _flatten_typed_synth(row, manifest)
+            for example in examples:
+                yield shuffle_options(example, seed) if seed is not None else example
+            continue
+        if adapter in {"clevr4", "clevr-4"}:
+            examples = _flatten_clevr4(row, manifest)
             for example in examples:
                 yield shuffle_options(example, seed) if seed is not None else example
             continue

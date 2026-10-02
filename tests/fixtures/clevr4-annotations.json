@@ -1,0 +1,30 @@
+{
+  "CLEVR_new_000000": {
+    "texture": "zigzag",
+    "shape": "cylinder",
+    "color": "yellow",
+    "count": 5,
+    "split": "train"
+  },
+  "CLEVR_new_000001": {
+    "texture": "wave",
+    "shape": "cylinder",
+    "color": "pink",
+    "count": 9,
+    "split": "train"
+  },
+  "CLEVR_new_008424": {
+    "texture": "metal",
+    "shape": "torus",
+    "color": "green",
+    "count": 7,
+    "split": "val"
+  },
+  "CLEVR_new_008425": {
+    "texture": "zigzag",
+    "shape": "gear",
+    "color": "orange",
+    "count": 5,
+    "split": "val"
+  }
+}

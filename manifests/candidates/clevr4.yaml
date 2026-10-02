@@ -1,0 +1,39 @@
+schema_version: 1
+dataset_id: sgvaze/clevr4
+revision: cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
+subset: clevr_4_10k_v1
+split: train
+modalities: [image]
+upstream_url: https://www.robots.ox.ac.uk/~vgg/data/clevr4/
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Sagar Vaze, Andrea Vedaldi, and Andrew Zisserman; cite No Representation Rules Them All in Category Discovery (NeurIPS 2023)."
+source_citation: https://www.robots.ox.ac.uk/~vgg/publications/2023/vaze23clevr4/vaze23clevr4.pdf
+usage: training
+trust_status: trusted
+schema:
+  state: synthetic image and annotation context
+  question: taxonomy classification prompt
+  options: pinned taxonomy vocabulary
+  target: taxonomy label
+  media: image archive path
+notes:
+  archive: https://thor.robots.ox.ac.uk/clevr4/clevr_4_10k_v1.zip
+  archive_sha512: 769465d90b6550a242f6d5940b52f2e0944c65af09e17e6f3f2cb65701af66057ab06485b2194fa9d8932e03a03e87b3fadece43049e1af1ddd9f8e4990ed19a
+  checksum_list: https://thor.robots.ox.ac.uk/clevr4/SHA512SUMS
+  checksum_list_sha256: 514720ded7cde46610e3871b2f21389b74b47b6232095cb15111445a044f84a0
+  source_code: https://github.com/sgvaze/clevr4/tree/cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
+  annotation_file: clevr_4_annots.json
+  annotation_sha256: fba922a00216bbc3641f7f03a117a9f5e6a0956edde1f66062ff399225219fd6
+  archive_rows: 10531
+  train_rows: 8424
+  train_examples_after_taxonomy_flattening: 33696
+  validation_rows: 2107
+  validation_examples_after_taxonomy_flattening: 8428
+  image_rows: 10531
+  modalities_evidence: Official archive contains one PNG image per annotation; image references are retained and media bytes are never copied to JSONL.
+  options_evidence: Four taxonomies and their ten class labels are pinned from utils.py in the source-code revision.
+  policy: Commercial training is permitted under CC BY 4.0 with attribution. Controlled synthetic image classification only; not a natural-image benchmark.

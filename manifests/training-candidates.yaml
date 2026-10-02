@@ -17,6 +17,12 @@ sources:
     adapter: open-jev
     include: true
     note: Only hard single-winner labels are accepted; audit output retains original soft targets.
+  - manifest: candidates/clevr4.yaml
+    subset: clevr_4_10k_v1
+    split: train
+    adapter: clevr4
+    include: true
+    note: Synthetic image taxonomy classification; CC BY 4.0, attributed, no images copied.
   - manifest: candidates/onejev.yaml
     include: false
     reason: per-source license audit is REVIEW; no rows enter training until rights are explicit.

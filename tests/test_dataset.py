@@ -13,6 +13,7 @@ from tiny_omni_decision.dataset import (
     content_fingerprint,
     filter_mixed_license_rows,
     iter_hub_rows,
+    iter_local_rows,
     normalize_jsonl,
     shuffle_options,
 )
@@ -90,6 +91,32 @@ def test_typed_decisions_synth_flattens_text_and_keeps_soft_teacher() -> None:
     assert values[0].source_target["teacher"]["probabilities"]["a"] == 0.9
     assert values[1].target == "true"
     assert values[0].source_record_id.endswith(":route")
+
+
+def test_clevr4_adapter_normalizes_image_taxonomies_with_source_rights() -> None:
+    path = ROOT / "tests" / "fixtures" / "clevr4-annotations.json"
+    raw = list(iter_local_rows(path))
+    training_manifest = manifest("candidates/clevr4.yaml")
+    evaluation_manifest = manifest("candidates/clevr4-validation.yaml")
+    training_rows = [row for row in raw if row["split"] == "train"]
+    evaluation_rows = [row for row in raw if row["split"] == "val"]
+    training = list(normalize_jsonl(training_rows, training_manifest, "clevr4", seed=17))
+    evaluation = list(normalize_jsonl(evaluation_rows, evaluation_manifest, "clevr4", seed=17))
+    assert len(training) == len(evaluation) == 8
+    assert {item.modality for item in training + evaluation} == {"image"}
+    assert {item.question.rsplit(" ", 2)[-2].rstrip("?") for item in training} <= {
+        "color",
+        "texture",
+        "count",
+        "shape",
+    }
+    assert all(item.target in item.options and len(item.options) == 10 for item in training)
+    assert all(item.provenance.license == "CC-BY-4.0" for item in training)
+    assert all(
+        item.source_target is not None and item.media[0].uri.startswith("source-ref://")
+        for item in training
+    )
+    assert check_train_eval_splits(training, evaluation)["status"] == "disjoint"
 
 
 @pytest.mark.parametrize(
