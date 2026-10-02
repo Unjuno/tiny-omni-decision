@@ -6,17 +6,31 @@ import json
 import os
 import platform
 import random
+import tempfile
 from pathlib import Path
 
+import click
 import typer
 from rich.console import Console
 
 from .decision_math import label_token_ids_from_prompt, prompt_for_decision
 from .io import load_structured_file
-from .schema import BaseModelManifest, DatasetManifest, TextDecision
+from .schema import (
+    BaseModelManifest,
+    DatasetCatalog,
+    DatasetManifest,
+    DecisionExample,
+    TextDecision,
+)
 
 app = typer.Typer(no_args_is_help=True)
 console = Console()
+MANIFEST_OPTION = typer.Option(..., "--manifest")
+OUTPUT_OPTION = typer.Option(..., "--output")
+ADAPTER_OPTION = typer.Option("generic", "--adapter")
+LIMIT_OPTION = typer.Option(None, "--limit", min=1)
+SEED_OPTION = typer.Option(None, "--seed")
+COMPONENTS_OPTION = typer.Option(None, "--components")
 
 
 @app.command()
@@ -33,19 +47,58 @@ def validate_dataset_manifest(path: Path) -> None:
     """Validate a dataset provenance manifest."""
     manifest = DatasetManifest.model_validate(load_structured_file(path))
     console.print(f"[green]valid[/green] dataset manifest: {manifest.dataset_id}")
-    if manifest.revision is None:
-        console.print("[yellow]warning:[/yellow] dataset revision is not pinned yet")
-    if manifest.license.upper() == "UNKNOWN":
-        console.print("[yellow]warning:[/yellow] dataset license is unresolved")
+    from .dataset import audit_manifest
+
+    result = audit_manifest(manifest)
+    console.print(json.dumps(result, indent=2))
+
+
+@app.command("validate-dataset-catalog")
+def validate_dataset_catalog(path: Path) -> None:
+    """Validate a separate training or evaluation candidate catalog."""
+    catalog = DatasetCatalog.model_validate(load_structured_file(path))
+    for item in catalog.sources:
+        if not item.include:
+            continue
+        manifest_path = (path.parent / item.manifest).resolve()
+        manifest = DatasetManifest.model_validate(load_structured_file(manifest_path))
+        if manifest.usage not in {catalog.purpose, "both"}:
+            raise click.ClickException(
+                f"{item.manifest} usage={manifest.usage} cannot enter {catalog.purpose} catalog"
+            )
+        if catalog.purpose == "evaluation" and item.split == "train":
+            raise click.ClickException(
+                f"training split cannot enter evaluation catalog: {item.manifest}"
+            )
+    console.print(f"valid {catalog.purpose} dataset catalog: {len(catalog.sources)} sources")
+
+
+@app.command("audit-dataset-manifest")
+def audit_dataset_manifest(path: Path) -> None:
+    """Report source facts and the fail-closed project license policy decision."""
+    manifest = DatasetManifest.model_validate(load_structured_file(path))
+    from .dataset import audit_manifest
+
+    result = audit_manifest(manifest)
+    console.print(json.dumps(result, indent=2))
+    if result["project_policy"] == "DENY":
+        raise typer.Exit(code=2)
 
 
 @app.command()
 def status() -> None:
     """Print the current implementation boundary."""
     console.print(
-        "Phase 1: implementation in progress; model load requires optional ML dependencies."
+        "Phase 1: complete; reproducible text decision LoRA smoke and CPU CI are implemented."
     )
-    console.print("Durable training gate: dataset provenance and ternary runtime verification")
+    console.print(
+        "Phase 2: pinned candidates, license audits, modality adapters, normalization, "
+        "and split gates are implemented."
+    )
+    console.print(
+        "Open hard gates: full-corpus split verification, mixed-source rights review, "
+        "ternary runtime."
+    )
 
 
 @app.command()
@@ -85,6 +138,137 @@ def preflight() -> None:
     except ImportError:
         report["ml_status"] = "Install the optional ML dependencies to inspect CUDA."
     console.print(json.dumps(report, indent=2))
+
+
+@app.command("dataset-inspect")
+def dataset_inspect(manifest_path: Path) -> None:
+    """Inspect a pinned source manifest without loading media."""
+    manifest = DatasetManifest.model_validate(load_structured_file(manifest_path))
+    from .dataset import audit_manifest
+
+    console.print(
+        json.dumps(
+            {**manifest.model_dump(mode="json"), "audit": audit_manifest(manifest)}, indent=2
+        )
+    )
+
+
+@app.command("dataset-normalize")
+def dataset_normalize(
+    source: str,
+    manifest_path: Path = MANIFEST_OPTION,
+    output: Path = OUTPUT_OPTION,
+    adapter: str = ADAPTER_OPTION,
+    limit: int | None = LIMIT_OPTION,
+    seed: int | None = SEED_OPTION,
+    components_path: Path | None = COMPONENTS_OPTION,
+) -> None:
+    """Normalize local JSON/JSONL or a Hub dataset in streaming mode."""
+    from .dataset import (
+        audit_license,
+        audit_manifest,
+        iter_hub_rows,
+        iter_local_rows,
+        iter_mixed_license_rows,
+        load_component_csv,
+        normalize_jsonl,
+    )
+
+    manifest = DatasetManifest.model_validate(load_structured_file(manifest_path))
+    audit = audit_manifest(manifest)
+    components = {
+        item.component_id: item.model_dump(mode="json") for item in manifest.source_components
+    }
+    if components_path:
+        components.update(load_component_csv(components_path))
+    mixed_policy = (
+        adapter in {"onejev", "onejev-data"}
+        and manifest.license.casefold() == "per-source"
+        and manifest.usage in {"training", "both"}
+    )
+    if (
+        manifest.usage in {"training", "both"}
+        and audit["project_policy"] != "ALLOW"
+        and not mixed_policy
+    ):
+        raise click.ClickException(
+            "training-safe normalization requires ALLOW; "
+            f"manifest policy is {audit['project_policy']}"
+        )
+    source_path = Path(source)
+    if source_path.is_file():
+        rows = iter_local_rows(source_path)
+    else:
+        if source != manifest.dataset_id:
+            raise typer.BadParameter("Hub source must match dataset_id in the pinned manifest")
+        rows = iter_hub_rows(manifest)
+    filter_counts = {"ALLOW": 0, "REVIEW": 0, "DENY": 0, "unresolved_source": 0}
+    if mixed_policy:
+        rows = iter_mixed_license_rows(rows, components, counts=filter_counts)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    count = 0
+    temp_name = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            newline="\n",
+            dir=output.parent,
+            prefix=f".{output.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as handle:
+            temp_name = handle.name
+            for item in normalize_jsonl(
+                rows, manifest, adapter, limit=limit, seed=seed, components=components
+            ):
+                if manifest.usage in {"training", "both"}:
+                    provenance = item.provenance
+                    record_policy, unresolved = audit_license(
+                        provenance.license,
+                        commercial_use=provenance.commercial_use,
+                        derivative_model_training_allowed=provenance.derivative_model_training_allowed,
+                        redistribution_allowed=provenance.redistribution_allowed,
+                        media_redistribution_allowed=provenance.media_redistribution_allowed,
+                        has_media=bool(item.media),
+                        trust_status=provenance.trust_status,
+                    )
+                    if record_policy != "ALLOW":
+                        raise ValueError(
+                            f"training-safe row {item.id} has policy {record_policy}; "
+                            f"unresolved={unresolved}"
+                        )
+                handle.write(item.model_dump_json() + "\n")
+                count += 1
+            if count == 0:
+                raise ValueError("normalization produced zero eligible examples")
+        Path(temp_name).replace(output)
+    except Exception as exc:
+        if temp_name:
+            Path(temp_name).unlink(missing_ok=True)
+        raise click.ClickException(f"Dataset normalization failed: {exc}") from exc
+    console.print(
+        {
+            "normalized": count,
+            "output": str(output),
+            "dataset_id": manifest.dataset_id,
+            "revision": manifest.revision,
+            "mixed_license_filter": filter_counts if mixed_policy else None,
+        }
+    )
+
+
+@app.command("dataset-check-splits")
+def dataset_check_splits(training_path: Path, evaluation_path: Path) -> None:
+    """Fail on duplicate source identities or normalized content across splits."""
+    from .dataset import check_train_eval_splits, iter_local_rows
+
+    training = (DecisionExample.model_validate(row) for row in iter_local_rows(training_path))
+    evaluation = (DecisionExample.model_validate(row) for row in iter_local_rows(evaluation_path))
+    try:
+        console.print(check_train_eval_splits(training, evaluation))
+    except ValueError as exc:
+        raise click.ClickException(str(exc)) from exc
 
 
 def _load_model(model_id: str, revision: str, dtype: str = "auto"):
@@ -129,7 +313,7 @@ def inspect_model(
         else:
             processor, model = _load_model(manifest.repo_id, manifest.revision)
     except Exception as exc:
-        raise typer.ClickException(f"Model inspection failed: {exc}") from exc
+        raise click.ClickException(f"Model inspection failed: {exc}") from exc
 
     modules = list(model.named_modules())
     names = [name for name, _ in modules]
@@ -227,14 +411,14 @@ def smoke_text_decision(
 
         from .decision import decision_loss, normalize_probabilities
     except Exception as exc:
-        raise typer.ClickException(
+        raise click.ClickException(
             'Install the ML extra plus a supported CUDA build: pip install ".[ml]"'
         ) from exc
     manifest = BaseModelManifest.model_validate(load_structured_file(manifest_path))
     if not manifest.revision:
         raise typer.BadParameter("manifest must pin an immutable revision")
     if not torch.cuda.is_available():
-        raise typer.ClickException("Smoke training requires CUDA; CPU-only mode is for CI tests")
+        raise click.ClickException("Smoke training requires CUDA; CPU-only mode is for CI tests")
     random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -250,7 +434,7 @@ def smoke_text_decision(
     base.enable_input_require_grads()
     modules = [name for name, module in base.named_modules() if isinstance(module, torch.nn.Linear)]
     if not modules:
-        raise typer.ClickException(
+        raise click.ClickException(
             "No Linear modules found; inspect the loaded model before choosing targets"
         )
     # Use decoder module paths to avoid similarly named vision/audio layers.
@@ -261,7 +445,7 @@ def smoke_text_decision(
         and name.rsplit(".", 1)[-1] in {"q_proj", "v_proj"}
     )
     if not targets:
-        raise typer.ClickException(
+        raise click.ClickException(
             "Could not identify attention projection modules; refusing guessed LoRA targets"
         )
     model = get_peft_model(
@@ -276,13 +460,13 @@ def smoke_text_decision(
         if hasattr(module, "lora_A")
     )
     if adapted_targets != targets:
-        raise typer.ClickException(
+        raise click.ClickException(
             f"LoRA target mismatch: expected {targets}, adapted {adapted_targets}"
         )
     trainable = [p for p in model.parameters() if p.requires_grad]
     frozen_base = [p for name, p in model.named_parameters() if "lora_" not in name]
     if not trainable or any(p.requires_grad for p in frozen_base):
-        raise typer.ClickException("Base frozen / LoRA trainable invariant failed")
+        raise click.ClickException("Base frozen / LoRA trainable invariant failed")
     base_versions = [param._version for param in frozen_base]
     sample = TextDecision(
         state="A device battery is low.",
@@ -297,16 +481,16 @@ def smoke_text_decision(
         logits.unsqueeze(0), torch.tensor([target], device=logits.device)
     )
     if not torch.isfinite(loss):
-        raise typer.ClickException("Loss is non-finite")
+        raise click.ClickException("Loss is non-finite")
     loss.backward()
     if not trainable or any(p.grad is None or not torch.isfinite(p.grad).all() for p in trainable):
-        raise typer.ClickException("No finite LoRA gradient")
+        raise click.ClickException("No finite LoRA gradient")
     if any(p.grad is not None for p in frozen_base):
-        raise typer.ClickException("Frozen base received gradients")
+        raise click.ClickException("Frozen base received gradients")
     optimizer = torch.optim.AdamW(trainable, lr=1e-4)
     optimizer.step()
     if [param._version for param in frozen_base] != base_versions:
-        raise typer.ClickException("A frozen base parameter was modified")
+        raise click.ClickException("A frozen base parameter was modified")
     model.eval()
     with torch.no_grad():
         before_reload_logits, _ = _decision_logits(model, processor, sample)
@@ -351,9 +535,9 @@ def smoke_text_decision(
     if not torch.isfinite(probabilities).all() or not torch.allclose(
         probabilities.sum(), torch.tensor(1.0, device=probabilities.device), atol=1e-5
     ):
-        raise typer.ClickException("Reloaded inference probability check failed")
+        raise click.ClickException("Reloaded inference probability check failed")
     if not torch.allclose(before_reload_probabilities, probabilities.cpu(), atol=1e-4, rtol=1e-4):
-        raise typer.ClickException("Adapter probabilities changed after save/reload")
+        raise click.ClickException("Adapter probabilities changed after save/reload")
     console.print(
         {
             **metrics,

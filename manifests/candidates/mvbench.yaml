@@ -1,0 +1,49 @@
+schema_version: 1
+dataset_id: OpenGVLab/MVBench
+revision: 230a2d4fac8900333c61754641c7a13e069ac9c6
+subset: all-task-json
+split: test
+modalities: [video]
+upstream_url: https://huggingface.co/datasets/OpenGVLab/MVBench
+license: MIT (annotations); source videos research-only / third-party
+commercial_use: false
+derivative_model_training_allowed: false
+redistribution_allowed: true
+media_redistribution_allowed: false
+attribution: MVBench authors and individual source video owners.
+source_citation: https://github.com/OpenGVLab/Ask-Anything
+usage: evaluation
+trust_status: review
+schema:
+  state: subtitle or source context
+  question: question
+  options: candidates
+  target: answer
+  media: video path
+notes:
+  data_files:
+    - json/action_antonym.json
+    - json/action_count.json
+    - json/action_localization.json
+    - json/action_prediction.json
+    - json/action_sequence.json
+    - json/character_order.json
+    - json/counterfactual_inference.json
+    - json/egocentric_navigation.json
+    - json/episodic_reasoning.json
+    - json/fine_grained_action.json
+    - json/fine_grained_pose.json
+    - json/moving_attribute.json
+    - json/moving_count.json
+    - json/moving_direction.json
+    - json/object_existence.json
+    - json/object_interaction.json
+    - json/object_shuffle.json
+    - json/scene_transition.json
+    - json/state_change.json
+    - json/unexpected_action.json
+  task_count: 20
+  sample_count: null
+  evidence: HF repository pins 20 task JSON files; video copyrights belong to original creators and are for academic research only.
+  media_availability: Annotation JSON is available; 320 NTU RGB+D clips require separate manual access. Whole-benchmark video availability is not established.
+  policy: Evaluation-only; original videos are not training or redistribution candidates.

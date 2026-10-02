@@ -26,8 +26,8 @@ The project uses the QAT-family checkpoint because the objective is to reuse an 
 
 1. typed decision behavior;
 2. calibrated probability outputs;
-3. extreme decoder-focused ternary compression;
-4. a separate probability-recovery adapter;
+3. extreme decoder-focused ternary compression of the task-adapted model;
+4. a single final probability-recovery adapter;
 5. reproducible edge/mobile packaging.
 
 ## Precision policy
@@ -42,6 +42,12 @@ The project uses the QAT-family checkpoint because the objective is to reuse an 
 | Recovery LoRA | BF16/FP16 trainable |
 
 This is a starting policy, not a claim that every listed component is sensitive.
+
+## Adapter lifecycle
+
+The Decision LoRA is used to create the high-precision Decision Teacher. Before ternary conversion, its update is merged into the task-adapted quantization source. The final runtime therefore does not need stacked Decision + Recovery adapters.
+
+After ternary compression, train one Recovery LoRA against the high-precision teacher. The default teacher cache stores only option logits/probabilities at the decision position. Full-vocabulary logits are optional diagnostics, not a required training artifact.
 
 ## Hard gates
 

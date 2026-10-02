@@ -1,0 +1,27 @@
+schema_version: 1
+dataset_id: gamma-lab-umd/MMAU-test-mini
+revision: ccd9696c0111ea7060827598f310558df0b71b0a
+subset: default
+split: test
+modalities: [audio]
+upstream_url: https://huggingface.co/datasets/gamma-lab-umd/MMAU-test-mini
+license: CC-BY-NC-4.0
+commercial_use: false
+derivative_model_training_allowed: false
+redistribution_allowed: true
+media_redistribution_allowed: false
+attribution: MMAU authors; see the dataset card and benchmark citation.
+source_citation: https://github.com/Sakshi113/MMAU
+usage: evaluation
+trust_status: review
+schema:
+  state: audio metadata
+  question: question
+  options: choices
+  target: answer
+  media: audio_id
+notes:
+  rows: 1000
+  evidence: Official MMAU README states 1,000 test-mini rows; HF dataset metadata pins the repository revision and CC-BY-NC-4.0.
+  policy: Non-commercial benchmark with third-party media. Evaluation metadata only; training and media redistribution are denied by project policy.
+  audio: The source repo has a 1.21 GB Parquet shard; the adapter streams rows and stores references only.

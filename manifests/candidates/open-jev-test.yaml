@@ -1,0 +1,25 @@
+schema_version: 1
+dataset_id: TypeSafeAI/Open-Jev
+revision: 538ce45e3e888d3e9147d425509e06ff2d05813c
+subset: release-v2-redistributable
+split: test
+modalities: [text]
+upstream_url: https://huggingface.co/datasets/TypeSafeAI/Open-Jev
+license: CC0-1.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: null
+attribution: TypeSafeAI Open-Jev dataset authors; attribution is requested by project policy.
+source_citation: https://huggingface.co/datasets/TypeSafeAI/Open-Jev
+usage: evaluation
+trust_status: trusted
+schema:
+  state: state_json
+  question: question
+  options: options
+  target: target
+notes:
+  data_file: raw/release-v2-redistributable/test.jsonl.gz
+  test_rows: 10356
+  split_policy: Use only the explicit official test split; do not train on this manifest.

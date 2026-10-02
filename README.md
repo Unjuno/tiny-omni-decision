@@ -65,14 +65,30 @@ The command refuses CPU execution, guessed target modules, non-finite loss, miss
 
 The smoke path was run successfully on an NVIDIA GeForce RTX 3080 Laptop GPU with 16,384 MiB VRAM, PyTorch 2.5.1+cu121, Transformers 5.6.2, and PEFT 0.21.2. It loaded the pinned checkpoint (about 10.21 GB parameter memory), then completed forward, CE+Brier, backward, optimizer step, LoRA save/reload, and same-sample inference. It uses `device_map="auto"`, gradient checkpointing, a short prompt, and micro-batch 1; it adds no secondary quantization. This is evidence for that setup, not a guarantee for every 16 GB GPU or software stack.
 
+## Planned compression and recovery flow
+
+The intended v0.1 path is:
+
+```text
+E2B QAT base
+  → Decision / Omni LoRA
+  → high-precision Decision Teacher
+  → merge Decision LoRA into task-adapted quantization source
+  → ternary decoder compression
+  → one Recovery LoRA
+  → final Tiny Omni Decision model
+```
+
+Teacher distillation caches **option logits at the single decision position** by default. Full-vocabulary logits are optional diagnostics, not a required cache. The final runtime is intended to carry one Recovery adapter, not stacked Decision + Recovery adapters.
+
 ## Current boundary and limitations
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
 - The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`). Install a PyTorch build that matches the local CUDA driver; GPU model loading is not covered by CPU CI.
-- Only text inputs are trained. Image/audio/video processing, dataset training, ternary conversion, Recovery LoRA, and rented GPU runs are out of scope for Phase 1.
+- Phase 2 now includes pinned dataset candidates, modality adapters, conservative license audits, and sampled normalization. No dataset training or media download has been performed. Full-corpus train/evaluation outputs still need to be generated and checked before training.
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
-- GitHub Actions passed for PR #1 at the current code revision (install, lint, CPU tests, and manifest validation). The workflow does not download model weights; the separate 16 GB GPU smoke was run locally.
-- Dataset licensing, held-out evaluation splits, and ternary runtime compatibility remain hard gates before Phase 2/3 durable work.
+- GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
+- Component-level rights review for mixed-license sources, full-corpus held-out split verification, and ternary runtime compatibility remain hard gates before durable training and compression.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).

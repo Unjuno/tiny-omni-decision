@@ -9,16 +9,22 @@ The v0.1 pipeline is:
 ```text
 Gemma 4 E2B QAT alignment backbone
         ↓
-Decision adaptation / probability distillation
+Decision / Omni LoRA training
         ↓
-Strong low-bit decision model
-        ↓
-Decoder-focused ternary compression
-        ↓
-Calibration-preserving Recovery LoRA
-        ↓
-Mobile / edge package
+High-precision Decision Teacher
+        ├── cache option logits at the decision position
+        └── merge Decision LoRA into task-adapted quantization source
+                    ↓
+          Decoder-focused ternary compression
+                    ↓
+          Quantization damage measurement
+                    ↓
+          single Recovery LoRA
+                    ↓
+          Final Tiny Omni Decision model
 ```
+
+The final runtime is intended to use a task-adapted ternary base plus one Recovery LoRA. The Decision LoRA is a teacher/training artifact and is merged before ternary conversion rather than stacked as a second runtime adapter.
 
 The project does not depend on preserving long-form generation.
 
@@ -38,8 +44,8 @@ Design decisions:
 - Modality encoders, projectors, norms, and readout components remain higher precision until proven safe.
 
 Hard gates before durable training:
-- [ ] pin exact base-model revision/hash
-- [ ] record upstream license/notice requirements
+- [x] pin exact base-model revision/hash
+- [x] record upstream license/notice requirements
 - [ ] freeze redistribution-safe training data manifests
 - [ ] verify architecture-compatible ternary implementation/runtime
 - [ ] define held-out paired benchmark splits
@@ -81,6 +87,19 @@ Required per sample/source metadata:
 - contamination/eval status
 
 Do not commit redistributable media blindly.
+
+**Phase 2 implementation status:** schema, fail-closed source and component license policy,
+pinned candidate manifests, text/image/audio/video metadata adapters, deterministic option
+shuffling, streaming normalization, and source/content split checks are implemented. CPU
+fixtures exercise unknown and non-commercial licenses, media metadata, malformed targets,
+and cross-split duplicates. No dataset training or full-media download was run.
+
+Candidate inventory and verified rights decisions are in `docs/DATASETS.md`; separate
+training and evaluation candidate catalogs are in `manifests/`. Small normalized samples
+from Typed Decisions Synth, Open-Jev train/test, and MVBench passed the disjointness check.
+Open gates before durable training remain full-corpus split/output verification, further
+OneJev component rights review, and ternary runtime compatibility. Phase 2 GitHub Actions
+validation is pending.
 
 ## Phase 3 — Local text decision experiment
 
@@ -139,6 +158,11 @@ Evaluate:
 
 ## Phase 6 — Extreme ternary compression
 
+Quantization source:
+- the completed high-precision Decision Teacher
+- merge the Decision LoRA into a task-adapted checkpoint before ternary conversion
+- do not carry a separate Decision LoRA into the final runtime stack
+
 First target:
 - decoder attention linear weights
 - decoder MLP linear weights
@@ -174,40 +198,44 @@ Metrics:
 - latency
 - peak RAM / VRAM
 
-## Phase 8 — Teacher decision-logit cache and Recovery adapter
+## Phase 8 — Teacher option-logit cache and Recovery adapter
 
-Freeze the ternary base.
+Freeze the high-precision Decision Teacher and the task-adapted ternary base.
 
-For each training decision, cache the **full vocabulary logits at the single decision/readout position** from the reference model. Do not cache full-vocabulary logits for every input token position.
+For each training decision, cache only the teacher signal needed for the decision task at the single readout position.
 
 Canonical cache record:
 
 ```text
 sample_id
 option_token_ids
-teacher_full_logits_at_decision_position
+teacher_option_logits
 teacher_option_probabilities
+target
 teacher_temperature / normalization metadata
 ```
 
 Default storage policy:
-- FP16/BF16 full decision-position logits as the canonical high-fidelity teacher record
-- option probabilities derived from the same logits and stored for fast training/evaluation
-- optional post-hoc compression such as int8 + per-vector scale only after fidelity is measured
+- raw FP16/BF16 **option logits** are the canonical teacher signal
+- option probabilities may be stored as a derived convenience field
+- full-vocabulary logits are **not required** and are disabled by default
+- optional full-vocabulary capture is reserved for diagnostics or experiments that explicitly test whether preserving non-option language distribution helps
 
-The reason this is tractable is that a Decision Model needs only one full-vocabulary vector per decision, not one vector per autoregressive token. This preserves the complete teacher distribution while keeping the cache bounded.
+This keeps the cache small and aligned with the product objective: calibrated decisions over supplied options.
 
-Recovery training uses a separate LoRA.
+Recovery training uses a **single final LoRA** on the frozen task-adapted ternary base. It is not stacked on top of an unmerged Decision LoRA.
 
 Primary objective:
-- KL over teacher vs student **option probabilities**
+- KL over teacher vs student **option distributions**
 
 Auxiliary objectives:
 - CE on the labeled option
 - Brier loss
-- optional low-weight full-vocabulary KL at the decision position
 
-Full-vocabulary KL is auxiliary, not the default main loss: the product objective is calibrated decision behavior, not preservation of unrestricted language-generation behavior.
+Optional experiment only:
+- low-weight full-vocabulary KL at the decision position, when a full-vocabulary cache was deliberately generated
+
+The high-precision Decision Teacher is the reference for Accuracy, ECE, Brier, NLL, and teacher/student option KL.
 
 ## Phase 9 — Runtime and mobile prototype
 

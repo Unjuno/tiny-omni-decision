@@ -1,0 +1,21 @@
+schema_version: 1
+manifest_type: candidate_catalog
+purpose: evaluation
+sources:
+  - manifest: candidates/typed-synth-validation.yaml
+    include: true
+    adapter: typed-decisions-synth
+  - manifest: candidates/open-jev-test.yaml
+    include: true
+    adapter: open-jev
+  - manifest: candidates/mmau-test-mini.yaml
+    include: true
+    adapter: mmau
+    note: Evaluation-only metadata; non-commercial license and media redistribution denial apply.
+  - manifest: candidates/mvbench.yaml
+    include: true
+    adapter: mvbench
+    note: Evaluation-only; only third-party videos under research terms.
+  - manifest: candidates/onejev.yaml
+    include: false
+    reason: Aggregate has only a train split and is itself training data; avoid evaluation leakage.

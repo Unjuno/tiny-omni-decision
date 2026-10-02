@@ -29,6 +29,16 @@ Every dataset source must have a manifest recording:
 
 A permissive model license does not override dataset restrictions.
 
+Verified dataset candidates and exact revisions are recorded in [docs/DATASETS.md](docs/DATASETS.md).
+The approved initial text training source is `n4ze3m/typed-decisions-synth` at
+`5ece89a225b23c4cd5c4bab5735a0819d61dd7d5`, metadata license MIT. Its card says the
+data and labels are LLM-generated and unreviewed; its use is a controlled synthetic
+training candidate, not a factual or quality benchmark. Open-Jev's redistributable
+text release is also pinned there. OneJev is mixed-license and remains REVIEW until
+source-level terms are represented and approved. MMAU test-mini is CC-BY-NC-4.0;
+MVBench's MIT annotation license does not grant commercial redistribution or training
+rights to its third-party videos. Those benchmarks remain evaluation-only.
+
 ## Release rule
 
 Do not publish a trained checkpoint until all contributing dataset sources have been reviewed and the release manifest contains their provenance and applicable notices.
