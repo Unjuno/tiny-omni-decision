@@ -1,0 +1,38 @@
+schema_version: 1
+base_model:
+  manifest: manifests/base-model.example.yaml
+
+task:
+  type: typed_decision
+  modalities: [text, image, audio, video]
+  option_order_shuffle: true
+  max_options_initial: 20
+
+training:
+  method: lora
+  precision: bf16
+  local_smoke_low_memory: true
+  rank: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+  freeze_modality_encoders: true
+  freeze_projector: true
+
+loss:
+  cross_entropy: 1.0
+  brier: 0.2
+  teacher_kl: 0.0
+  coherence: 0.0
+
+teacher:
+  enabled: false
+  source: null
+  probability_temperature: 1.0
