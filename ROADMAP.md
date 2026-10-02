@@ -174,26 +174,40 @@ Metrics:
 - latency
 - peak RAM / VRAM
 
-## Phase 8 — Recovery adapter
+## Phase 8 — Teacher decision-logit cache and Recovery adapter
 
 Freeze the ternary base.
 
-Train a separate Recovery LoRA against compact teacher signals:
+For each training decision, cache the **full vocabulary logits at the single decision/readout position** from the reference model. Do not cache full-vocabulary logits for every input token position.
+
+Canonical cache record:
 
 ```text
 sample_id
-options
-teacher_probabilities
+option_token_ids
+teacher_full_logits_at_decision_position
+teacher_option_probabilities
+teacher_temperature / normalization metadata
 ```
 
+Default storage policy:
+- FP16/BF16 full decision-position logits as the canonical high-fidelity teacher record
+- option probabilities derived from the same logits and stored for fast training/evaluation
+- optional post-hoc compression such as int8 + per-vector scale only after fidelity is measured
+
+The reason this is tractable is that a Decision Model needs only one full-vocabulary vector per decision, not one vector per autoregressive token. This preserves the complete teacher distribution while keeping the cache bounded.
+
+Recovery training uses a separate LoRA.
+
 Primary objective:
-- KL(reference || ternary + recovery)
+- KL over teacher vs student **option probabilities**
 
-Optional:
-- CE
-- Brier
+Auxiliary objectives:
+- CE on the labeled option
+- Brier loss
+- optional low-weight full-vocabulary KL at the decision position
 
-No full-vocabulary logit cache is required.
+Full-vocabulary KL is auxiliary, not the default main loss: the product objective is calibrated decision behavior, not preservation of unrestricted language-generation behavior.
 
 ## Phase 9 — Runtime and mobile prototype
 
