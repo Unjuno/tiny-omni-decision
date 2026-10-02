@@ -1,0 +1,24 @@
+schema_version: 1
+
+target:
+  scope: decoder_large_linear_weights
+  values: [-1, 0, 1]
+  scale: groupwise
+  nominal_bpw_target: 1.7
+
+preserve:
+  modality_encoders: true
+  multimodal_projector: true
+  norms: true
+  decision_readout: true
+
+runtime:
+  format: null
+  implementation: null
+  hard_gate: Verify architecture support before producing a release artifact.
+
+report:
+  tensor_type_histogram: true
+  whole_model_bytes: true
+  whole_model_effective_bpw: true
+  sha256: true
