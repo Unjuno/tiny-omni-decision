@@ -39,6 +39,13 @@ source-level terms are represented and approved. MMAU test-mini is CC-BY-NC-4.0;
 MVBench's MIT annotation license does not grant commercial redistribution or training
 rights to its third-party videos. Those benchmarks remain evaluation-only.
 
+Oxford Clevr-4 is an image training candidate under the official CC BY 4.0 terms, with
+attribution to Sagar Vaze, Andrea Vedaldi, and Andrew Zisserman and citation of *No
+Representation Rules Them All in Category Discovery* (NeurIPS 2023). The approved train
+manifest pins the official image archive checksum; the held-out `val` split is evaluation-only.
+This is a controlled synthetic image-classification source and does not clear rights for
+unrelated natural-image datasets.
+
 ## Release rule
 
 Do not publish a trained checkpoint until all contributing dataset sources have been reviewed and the release manifest contains their provenance and applicable notices.

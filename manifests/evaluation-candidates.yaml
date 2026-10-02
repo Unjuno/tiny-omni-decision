@@ -5,6 +5,9 @@ sources:
   - manifest: candidates/typed-synth-validation.yaml
     include: true
     adapter: typed-decisions-synth
+  - manifest: candidates/clevr4-validation.yaml
+    include: true
+    adapter: clevr4
   - manifest: candidates/open-jev-test.yaml
     include: true
     adapter: open-jev

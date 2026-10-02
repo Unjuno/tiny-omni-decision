@@ -85,7 +85,7 @@ Teacher distillation caches **option logits at the single decision position** by
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
 - The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`). Install a PyTorch build that matches the local CUDA driver; GPU model loading is not covered by CPU CI.
-- Phase 2 now includes pinned dataset candidates, modality adapters, conservative license audits, and sampled normalization. No dataset training or media download has been performed. Full-corpus train/evaluation outputs still need to be generated and checked before training.
+- Phase 2 now includes pinned dataset candidates, modality adapters, conservative license audits, and sampled normalization. Oxford Clevr-4 provides a CC BY 4.0 synthetic image-classification training path with attribution; mixed OneJev natural-image sources remain gated on component-level rights review. No dataset training or full media download has been performed. Full-corpus train/evaluation outputs still need to be generated and checked before training.
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
