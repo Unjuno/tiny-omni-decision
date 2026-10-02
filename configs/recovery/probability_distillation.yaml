@@ -1,0 +1,28 @@
+schema_version: 1
+
+base:
+  ternary_weights_frozen: true
+  decision_adapter_frozen: true
+
+recovery:
+  method: lora
+  precision: bf16
+  rank: 16
+  alpha: 32
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+teacher_signal:
+  type: option_probabilities
+  store_full_vocabulary_logits: false
+
+loss:
+  kl: 1.0
+  cross_entropy: 0.2
+  brier: 0.2
