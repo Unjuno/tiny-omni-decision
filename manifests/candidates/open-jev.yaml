@@ -1,0 +1,28 @@
+schema_version: 1
+dataset_id: TypeSafeAI/Open-Jev
+revision: 538ce45e3e888d3e9147d425509e06ff2d05813c
+subset: release-v2-redistributable
+split: train
+modalities: [text]
+upstream_url: https://huggingface.co/datasets/TypeSafeAI/Open-Jev
+license: CC0-1.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: null
+attribution: TypeSafeAI Open-Jev dataset authors; attribution is requested by project policy.
+source_citation: https://huggingface.co/datasets/TypeSafeAI/Open-Jev
+usage: training
+trust_status: trusted
+schema:
+  state: state_json
+  question: question
+  options: options
+  target: target
+notes:
+  data_file: raw/release-v2-redistributable/train.jsonl.gz
+  train_rows: 79116
+  all_split_rows: 113568
+  evidence: Dataset card documents exact release-v2-redistributable counts and CC0-1.0.
+  adapter: Only single-winner one-hot targets normalize to this v0.1 categorical schema; original target remains source_target.
+  quality: Controlled, mostly synthetic labels; not official Jev data or evidence of general capability.

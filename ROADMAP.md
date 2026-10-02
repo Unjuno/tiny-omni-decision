@@ -88,6 +88,19 @@ Required per sample/source metadata:
 
 Do not commit redistributable media blindly.
 
+**Phase 2 implementation status:** schema, fail-closed source and component license policy,
+pinned candidate manifests, text/image/audio/video metadata adapters, deterministic option
+shuffling, streaming normalization, and source/content split checks are implemented. CPU
+fixtures exercise unknown and non-commercial licenses, media metadata, malformed targets,
+and cross-split duplicates. No dataset training or full-media download was run.
+
+Candidate inventory and verified rights decisions are in `docs/DATASETS.md`; separate
+training and evaluation candidate catalogs are in `manifests/`. Small normalized samples
+from Typed Decisions Synth, Open-Jev train/test, and MVBench passed the disjointness check.
+Open gates before durable training remain full-corpus split/output verification, further
+OneJev component rights review, and ternary runtime compatibility. Phase 2 GitHub Actions
+validation is pending.
+
 ## Phase 3 — Local text decision experiment
 
 Local machine target: 16 GB dedicated VRAM / 32 GB RAM.

@@ -1,0 +1,22 @@
+schema_version: 1
+manifest_type: candidate_catalog
+purpose: training
+sources:
+  - manifest: candidates/typed-synth-validation.yaml
+    include: false
+    reason: evaluation split is held out
+  - manifest: dataset.example.yaml
+    subset: default
+    split: train
+    adapter: typed-decisions-synth
+    include: true
+    row_limit: null
+  - manifest: candidates/open-jev.yaml
+    subset: release-v2-redistributable
+    split: train
+    adapter: open-jev
+    include: true
+    note: Only hard single-winner labels are accepted; audit output retains original soft targets.
+  - manifest: candidates/onejev.yaml
+    include: false
+    reason: per-source license audit is REVIEW; no rows enter training until rights are explicit.

@@ -1,0 +1,128 @@
+source,rows,license,url
+amex,12911,cc-by-4.0,https://huggingface.co/datasets/Yuxiang007/AMEX
+multimodal_mind2web,7613,openrail,https://huggingface.co/datasets/osunlp/Multimodal-Mind2Web
+onejev/distill,6202,apache-2.0,https://github.com/OmniJev/OneJev
+breakfast,5826,cc-by-4.0,https://serre.lab.brown.edu/breakfast-actions-dataset.html
+typed-decisions-synth,4734,mit,https://huggingface.co/datasets/n4ze3m/typed-decisions-synth
+osworld_verified_trajs,4634,mit,https://huggingface.co/datasets/xlangai/ubuntu_osworld_verified_trajs
+agent_reward_bench,2226,research-only,https://huggingface.co/datasets/McGill-NLP/agent-reward-bench
+videofeedback,2137,non-commercial (part),https://huggingface.co/datasets/TIGER-Lab/VideoFeedback
+star,2136,apache-2.0 (labels); images: non-commercial,https://prior.allenai.org/projects/charades
+misactbench,2128,cc-by-4.0,https://huggingface.co/datasets/osunlp/MisActBench
+msrvtt,1731,none stated,https://www.microsoft.com/en-us/research/publication/msr-vtt-a-large-video-description-dataset-for-bridging-video-and-language/
+mlfoundations_osworld_trajs,1588,none stated,https://huggingface.co/datasets/mlfoundations-cua-dev/osworld-trajectories
+retention/onejev/distill,1513,apache-2.0,https://github.com/OmniJev/OneJev
+diving48,1485,none stated,http://www.svcl.ucsd.edu/projects/resound/dataset.html
+cua_speedrun_trajectories,1410,none stated,https://huggingface.co/datasets/anonymousmypcbench/cua-speedrun-trajectories
+clevrer,1376,none stated,http://clevrer.csail.mit.edu/
+nextqa,1362,mit (labels); images: non-commercial,https://github.com/doc-doc/NExT-QA
+nebius__SWE-agent-trajectories,1316,cc-by-4.0,https://huggingface.co/datasets/nebius/SWE-agent-trajectories
+konvid1k,1085,non-commercial,https://database.mmsp-kn.de/konvid-1k-database.html
+dcagent-tb2-traces,1075,none stated,https://huggingface.co/DCAgent2
+jevlite_dataset,1064,cc-by-sa-4.0,https://huggingface.co/datasets/vagmi/jevlite_dataset
+dtap_bench,993,apache-2.0,https://huggingface.co/datasets/AI-Secure/DTap-Bench-Agent-Trajectories
+swebench_experiments,966,none stated,https://github.com/swe-bench/experiments
+captaincook4d,953,apache-2.0,https://captaincook4d.github.io/captain-cook/
+aqa7,803,research-only,http://rtis.oit.unlv.edu/datasets.html
+terminal-bench-2-leaderboard,799,apache-2.0,https://huggingface.co/datasets/harborframework/terminal-bench-2-leaderboard
+gqa,762,cc-by-4.0,https://cs.stanford.edu/people/dorarad/gqa/download.html
+osworld,670,mit,https://huggingface.co/datasets/xlangai/ubuntu_osworld_verified_trajs
+imagerewarddb,659,apache-2.0,https://huggingface.co/datasets/zai-org/ImageRewardDB
+s3_submissions_text,658,none stated,https://sierra-tau-bench-public.s3.us-west-2.amazonaws.com/
+genai_arena,653,cc-by-4.0,https://huggingface.co/datasets/TIGER-Lab/GenAI-Bench
+fgvc_aircraft,650,non-commercial,https://www.robots.ox.ac.uk/~vgg/data/fgvc-aircraft/
+cauldron_clevr,620,cc-by-4.0,https://cs.stanford.edu/people/jcjohns/clevr/
+workbench,566,mit,https://github.com/olly-styles/WorkBench
+SWE-bench__SWE-smith-trajectories,556,mit,https://huggingface.co/datasets/SWE-bench/SWE-smith-trajectories
+agiqa3k,529,mit,https://github.com/lcysyzxdxc/AGIQA-3k-Database
+openhands_webarena,459,none stated,https://huggingface.co/datasets/OpenHandsCommunity/eval-output-webarena
+snli_ve,443,non-commercial (images),https://github.com/necla-ml/SNLI-VE
+flickr30k,442,non-commercial,https://shannon.cs.illinois.edu/DenotationGraph/
+cauldron_tallyqa,441,apache-2.0 (labels); images: source terms,https://github.com/manoja328/TallyQA_dataset
+a_okvqa,440,apache-2.0 (labels); images: source terms,https://github.com/allenai/aokvqa
+vizwiz,440,cc-by-4.0,https://vizwiz.org/tasks-and-datasets/vqa/
+cauldron_vqav2,438,cc-by-4.0 (labels); images: source terms,https://visualqa.org/terms.html
+cauldron_nlvr2,438,cc-by-4.0 (labels); images: research-only,https://github.com/lil-lab/nlvr
+scienceqa,437,cc-by-nc-sa-4.0,https://github.com/lupantech/ScienceQA
+seerray_androidworld_eval,436,mit,https://huggingface.co/datasets/SeerRay-Lab/Android-World-Eval
+nebius__SWE-rebench-openhands-trajectories,421,cc-by-4.0,https://huggingface.co/datasets/nebius/SWE-rebench-openhands-trajectories
+cauldron_vsr,385,cc-by-4.0 (labels); images: source terms,https://github.com/cambridgeltl/visual-spatial-reasoning
+cauldron_iconqa,382,cc-by-nc-sa-4.0,https://iconqa.github.io/
+cauldron_visual7w,382,mit (labels); images: source terms,https://github.com/yukezhu/visual7w-toolkit
+cauldron_figureqa,381,none stated,https://github.com/Maluuba/FigureQA
+exgentic-agent-llm-traces-v2,349,none stated,https://huggingface.co/datasets/Exgentic/agent-llm-traces-v2
+SWE-Gym__OpenHands-Sampled-Trajectories,348,none stated,https://huggingface.co/datasets/SWE-Gym/OpenHands-Sampled-Trajectories
+cauldron_mapqa,343,cc-by-sa-4.0,https://github.com/OSU-slatelab/MapQA
+agentsuite_tau2_bench,330,none stated,https://huggingface.co/datasets/AgentSuite/tau2-bench-trajectories
+tau2_bench_github,320,mit,https://github.com/sierra-research/tau2-bench
+hf_tarsur385_tau2_bench_simulations,318,none stated,https://huggingface.co/datasets/tarsur385/tau2-bench-simulations
+cub200,315,non-commercial,https://www.vision.caltech.edu/datasets/cub_200_2011/
+food101,315,research-only,https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/
+oxford_pets,314,cc-by-sa-4.0 (labels); images: owners,https://www.robots.ox.ac.uk/~vgg/data/pets/
+flowers102,312,none stated,https://www.robots.ox.ac.uk/~vgg/data/flowers/102/
+eurosat,311,mit,https://github.com/phelber/EuroSAT
+dtd,311,research-only,https://www.robots.ox.ac.uk/~vgg/data/dtd/
+stanford_cars,310,none stated,https://ai.stanford.edu/~jkrause/cars/car_dataset.html
+gtsrb,308,none stated,https://benchmark.ini.rub.de/
+s3_tau_knowledge_paper,276,none stated,https://sierra-tau-bench-public.s3.us-west-2.amazonaws.com/
+cauldron_ai2d,273,cc-by-sa-4.0,https://registry.opendata.aws/allenai-diagrams/
+ava,272,none stated,https://github.com/imfing/ava_downloader
+aadb,269,research-only,https://github.com/aimerykong/deepImageAestheticsAnalysis
+tarsur385__swebench-verified-trajectories,251,mit,https://huggingface.co/datasets/tarsur385/swebench-verified-trajectories
+cauldron_tqa,242,cc-by-nc-3.0,https://prior.allenai.org/projects/tqa
+terminal-wrench,224,apache-2.0,https://huggingface.co/datasets/few-sh/terminal-wrench-trajectories
+retention/DeveloperOats/DBPedia_Classes,207,cc0-1.0,https://huggingface.co/datasets/DeveloperOats/DBPedia_Classes
+retention/clinc/clinc_oos,206,cc-by-3.0,https://huggingface.co/datasets/clinc/clinc_oos
+agentdojo-trajectories,204,none stated,https://huggingface.co/datasets/sungjuncho/agentdojo-trajectories
+kadid10k,195,pixabay,https://database.mmsp-kn.de/kadid-10k-database.html
+SWE-Gym__OpenHands-Verifier-Trajectories,194,none stated,https://huggingface.co/datasets/SWE-Gym/OpenHands-Verifier-Trajectories
+koniq10k,192,research-only,https://database.mmsp-kn.de/koniq-10k-database.html
+flive,191,cc-by-nc-sa-4.0,https://github.com/baidut/PaQ-2-PiQ
+hf_kermitco_qwen3_5_9b_tau2bench_telecom_traces,188,none stated,https://huggingface.co/datasets/KermitCO/qwen3.5-9B-tau2bench-telecom-traces
+live_c,164,other (UT Austin notice),https://live.ece.utexas.edu/research/ChallengeDB/
+retention/openbmb/UltraFeedback,162,mit,https://huggingface.co/datasets/openbmb/UltraFeedback
+retention/prometheus-eval/Feedback-Collection,160,cc-by-4.0,https://huggingface.co/datasets/prometheus-eval/Feedback-Collection
+tau_bench_v1_github,159,mit,https://github.com/sierra-research/tau-bench
+retention/nvidia/HelpSteer2,153,cc-by-4.0,https://huggingface.co/datasets/nvidia/HelpSteer2
+retention/legacy-datasets/banking77,142,cc-by-4.0,https://huggingface.co/datasets/legacy-datasets/banking77
+theagentcompany-experiments,142,none stated,https://github.com/TheAgentCompany/experiments
+openguardrails-tb21,137,mit,https://huggingface.co/openguardrails
+hf_cloudsurf_software_tau2_trajectories_cloudsurf_4b_fc,132,cc-by-4.0,https://huggingface.co/datasets/cloudsurf-software/tau2-trajectories-cloudsurf-4b-fc
+hf_debdootmiitd_tau3_bench_qwen3_6_35b_a3b_v0,132,apache-2.0,https://huggingface.co/datasets/debdootmiitd/tau3-bench-qwen3.6-35b-a3b-v0
+R2E-Gym__R2EGym-Verifier-Trajectories,132,none stated,https://huggingface.co/datasets/R2E-Gym/R2EGym-Verifier-Trajectories
+JetBrains-Research__agent-trajectories-swe-bench-test-minus-verified,130,mit,https://huggingface.co/datasets/JetBrains-Research/agent-trajectories-swe-bench-test-minus-verified
+agentsuite_tau_bench,129,none stated,https://huggingface.co/datasets/AgentSuite/tau-bench-trajectories
+hf_monte_inc_tau2_banking_archived,124,apache-2.0,https://huggingface.co/datasets/monte-inc/tau2-banking-archived
+hf_lalitkumarps_sapientai_agent_opus_5_tau2_trajectories,123,mit,https://huggingface.co/datasets/lalitkumarps/sapientai-agent-opus-5-tau2-trajectories
+webarena_v2_traces,120,none stated,https://github.com/web-arena-x/webarena/blob/main/resources/README.md
+retention/google/civil_comments,116,cc0-1.0,https://huggingface.co/datasets/google/civil_comments
+s3_tau_voice_paper_text,108,none stated,https://sierra-tau-bench-public.s3.us-west-2.amazonaws.com/
+retention/tasksource/tasksource-instruct-v0,100,mixed,https://huggingface.co/datasets/tasksource/tasksource-instruct
+openhands_miniwob,96,none stated,https://huggingface.co/datasets/OpenHandsCommunity/eval-output-miniwob
+retention/MoritzLaurer/synthetic_zeroshot_mixtral_v0.1,95,apache-2.0,https://huggingface.co/datasets/MoritzLaurer/synthetic_zeroshot_mixtral_v0.1
+retention/Muennighoff/natural-instructions,92,mixed,https://huggingface.co/datasets/Muennighoff/natural-instructions
+retention/Arsive/toxicity_classification_jigsaw,86,apache-2.0,https://huggingface.co/datasets/Arsive/toxicity_classification_jigsaw
+retention/nyu-mll/multi_nli,85,mixed,https://huggingface.co/datasets/nyu-mll/multi_nli
+togethercomputer__CoderForge-Preview-32B-SWE-Bench-Verified-Evaluation-trajectories,81,none stated,https://huggingface.co/datasets/togethercomputer/CoderForge-Preview-32B-SWE-Bench-Verified-Evaluation-trajectories
+retention/alisawuffles/WANLI,79,cc-by-4.0,https://huggingface.co/datasets/alisawuffles/WANLI
+hf_monte_inc_tau2_banking_baselines,77,apache-2.0,https://huggingface.co/datasets/monte-inc/tau2-banking-baselines
+hf_monte_inc_tau2_airline_baselines,74,none stated,https://huggingface.co/datasets/monte-inc/tau2-airline-baselines
+hf_changdae_tau2_uq_artifacts,74,mit,https://huggingface.co/datasets/changdae/tau2-uq-artifacts
+hf_monte_inc_tau2_banking_eval_results,72,apache-2.0,https://huggingface.co/datasets/monte-inc/tau2-banking-eval-results
+hf_ziyiii0_0_trajectory2task_30b_a3b_taubench,70,none stated,https://huggingface.co/datasets/Ziyiii0-0/Trajectory2Task-30b-a3b-taubench
+hf_florin_inc_tau2_retail_trajectories,67,apache-2.0,https://huggingface.co/datasets/florin-inc/tau2-retail-trajectories
+hf_kargarisaac_tau2_retail_nablo_react_trajectories,63,mit,https://huggingface.co/datasets/kargarisaac/tau2-retail-nablo-react-trajectories
+hf_xiaomingneu_tau3_qwen35_4b_retail_baseline,60,mit,https://huggingface.co/datasets/xiaomingneu/tau3-qwen35-4b-retail-baseline
+hf_mindbomber_aana_tau2_bench_gpt41mini_1trial,53,mit,https://huggingface.co/datasets/mindbomber/aana-tau2-bench-gpt41mini-1trial
+s3_voice_labels,45,none stated,https://sierra-tau-bench-public.s3.us-west-2.amazonaws.com/
+snorkel_tau2_verified_airline_code_agents,42,apache-2.0,https://huggingface.co/datasets/snorkelai/Tau2-Bench-Verified-Airline-With-Code-Agents
+hf_kermitco_qwen3_5_9b_tau2bench_retail_traces,32,none stated,https://huggingface.co/datasets/KermitCO/qwen3.5-9B-tau2bench-retail-traces
+retention/google/boolq,31,cc-by-sa-3.0,https://huggingface.co/datasets/google/boolq
+hf_kermitco_qwen3_5_9b_tau2bench_retail_baseline_traces,28,mit,https://huggingface.co/datasets/KermitCO/qwen3.5-9B-tau2bench-retail-baseline-traces
+snorkel_tau2_airline_code_agents,27,apache-2.0,https://huggingface.co/datasets/snorkelai/Tau2-Bench-Airline-With-Code-Agents
+AlienKevin__SWE-bench-Multilingual-trajectories,24,mit,https://huggingface.co/datasets/AlienKevin/SWE-bench-Multilingual-trajectories
+hf_bojieli_pine_tau2_voice_gpt41_usersim,17,none stated,https://huggingface.co/datasets/bojieli/pine-tau2-voice-gpt41-usersim
+hf_naclin_qwen3_5_9b_tau2_retail_dpo,10,none stated,https://huggingface.co/datasets/Naclin/qwen3.5-9b-tau2-retail-dpo
+hf_kirutew17654321_tau2bench_gpt41_retail,8,mit,https://huggingface.co/datasets/kirutew17654321/tau2bench-gpt41-retail
+hf_ai_sherpa_repro_tau2bench_bundle,8,none stated,https://huggingface.co/datasets/ai-sherpa/repro-tau2bench-bundle
+hf_samtiz_tau2_voice_grok_tool_mentor_trajectories,4,none stated,https://huggingface.co/datasets/samtiz/tau2-voice-grok-tool-mentor-trajectories

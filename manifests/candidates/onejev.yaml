@@ -1,0 +1,28 @@
+schema_version: 1
+dataset_id: OmniJev/OneJev-Data
+revision: c991b20e70359acb4448147c2ce99eecccd08ac4
+subset: default
+split: train
+modalities: [text, image, video]
+upstream_url: https://huggingface.co/datasets/OmniJev/OneJev-Data
+license: per-source
+commercial_use: null
+derivative_model_training_allowed: null
+redistribution_allowed: null
+media_redistribution_allowed: null
+attribution: OmniJev Team and each contributing source; cite source-specific licenses.csv entries.
+source_citation: https://huggingface.co/datasets/OmniJev/OneJev-Data
+usage: training
+trust_status: review
+schema:
+  state: state
+  question: question
+  options: target keys
+  target: target
+  media: media and images
+notes:
+  data_file: sample/sample-100-preview.json
+  rows: 94707
+  source_components: 127
+  policy: Mixed-license aggregate. Adapter preserves the row source/license and refuses mismatches; whole-manifest audit is REVIEW until component rights are explicitly resolved.
+  media: Parquet media fields provide references/embeddings; this pipeline never writes binary media into JSONL.

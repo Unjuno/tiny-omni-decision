@@ -21,4 +21,9 @@ jobs:
       - name: Validate manifests
         run: |
           tiny-omni-decision validate-model-manifest manifests/base-model.example.yaml
-          tiny-omni-decision validate-dataset-manifest manifests/dataset.example.yaml
+          for manifest in manifests/dataset.example.yaml manifests/candidates/*.yaml; do
+            tiny-omni-decision validate-dataset-manifest "$manifest"
+          done
+          tiny-omni-decision validate-dataset-catalog manifests/training-candidates.yaml
+          tiny-omni-decision validate-dataset-catalog manifests/evaluation-candidates.yaml
+          tiny-omni-decision audit-dataset-manifest manifests/dataset.example.yaml
