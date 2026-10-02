@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Build
+build/
+dist/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Model/data artifacts
+artifacts/
+checkpoints/
+cache/
+data/raw/
+data/processed/
+*.safetensors
+*.gguf
+*.bin
+*.pt
+*.pth
+
+# Logs
+logs/
+wandb/
+runs/
