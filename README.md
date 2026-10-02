@@ -72,7 +72,7 @@ The smoke path was run successfully on an NVIDIA GeForce RTX 3080 Laptop GPU wit
 - Only text inputs are trained. Image/audio/video processing, dataset training, ternary conversion, Recovery LoRA, and rented GPU runs are out of scope for Phase 1.
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
-- GitHub Actions has been triggered for the PR and is currently queued; there is no remote CI result yet. Local lint, CPU tests, and manifest validation pass.
+- GitHub Actions passed for PR #1 at the current code revision (install, lint, CPU tests, and manifest validation). The workflow does not download model weights; the separate 16 GB GPU smoke was run locally.
 - Dataset licensing, held-out evaluation splits, and ternary runtime compatibility remain hard gates before Phase 2/3 durable work.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).

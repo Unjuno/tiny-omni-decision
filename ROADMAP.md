@@ -57,9 +57,9 @@ Hard gates before durable training:
 - [x] synthetic CE + Brier LoRA smoke CLI with save/reload and metadata
 - [x] load pinned weights and revalidate architecture module/LoRA targets against checkpoint tensors
 - [x] pass forward/backward/save/reload smoke on RTX 3080 Laptop GPU (16 GB VRAM)
-- [ ] confirm CI is green on GitHub
+- [x] confirm CI is green on GitHub (PR #1 Actions run #9 passed install, lint, tests, and manifest validation)
 
-Exit criterion: a fresh clone can validate manifests and run CPU-only CI, and the pinned model completes the documented 16 GB GPU smoke with base frozen and adapter trainable. Local CPU checks, loaded checkpoint inspection, and the GPU smoke pass. The GitHub Actions run for the PR is queued; Phase 1 remains open until remote CI is green.
+Exit criterion: a fresh clone can validate manifests and run CPU-only CI, and the pinned model completes the documented 16 GB GPU smoke with base frozen and adapter trainable. Local CPU checks, loaded checkpoint inspection, the 16 GB GPU smoke, and GitHub Actions on PR #1 all pass. Phase 1 implementation gates are complete; dataset licensing, held-out evaluation splits, and ternary runtime compatibility remain gates for later phases.
 
 ## Phase 2 — Dataset integration
 
