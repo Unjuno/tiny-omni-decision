@@ -65,6 +65,22 @@ The command refuses CPU execution, guessed target modules, non-finite loss, miss
 
 The smoke path was run successfully on an NVIDIA GeForce RTX 3080 Laptop GPU with 16,384 MiB VRAM, PyTorch 2.5.1+cu121, Transformers 5.6.2, and PEFT 0.21.2. It loaded the pinned checkpoint (about 10.21 GB parameter memory), then completed forward, CE+Brier, backward, optimizer step, LoRA save/reload, and same-sample inference. It uses `device_map="auto"`, gradient checkpointing, a short prompt, and micro-batch 1; it adds no secondary quantization. This is evidence for that setup, not a guarantee for every 16 GB GPU or software stack.
 
+## Planned compression and recovery flow
+
+The intended v0.1 path is:
+
+```text
+E2B QAT base
+  → Decision / Omni LoRA
+  → high-precision Decision Teacher
+  → merge Decision LoRA into task-adapted quantization source
+  → ternary decoder compression
+  → one Recovery LoRA
+  → final Tiny Omni Decision model
+```
+
+Teacher distillation caches **option logits at the single decision position** by default. Full-vocabulary logits are optional diagnostics, not a required cache. The final runtime is intended to carry one Recovery adapter, not stacked Decision + Recovery adapters.
+
 ## Current boundary and limitations
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
