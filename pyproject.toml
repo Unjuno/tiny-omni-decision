@@ -23,13 +23,14 @@ dev = [
   "ruff>=0.9,<1",
 ]
 ml = [
-  "torch>=2.8,<3",
-  "transformers>=5.17,<6",
-  "peft>=0.18,<1",
+  "torch>=2.5,<2.6",
+  "torchvision>=0.20,<0.21",
+  "transformers>=5.6.2,<5.7",
+  "peft>=0.21.2,<0.22",
   "accelerate>=1.10,<2",
   "datasets>=4,<5",
   "safetensors>=0.6,<1",
-  "huggingface-hub>=0.35,<1",
+  "huggingface-hub>=0.35,<2",
 ]
 
 [project.scripts]

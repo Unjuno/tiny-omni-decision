@@ -44,19 +44,22 @@ Hard gates before durable training:
 - [ ] verify architecture-compatible ternary implementation/runtime
 - [ ] define held-out paired benchmark splits
 
-## Phase 1 — Repository scaffold
+## Phase 1 — Reproducible text decision LoRA smoke
 
-- [x] Python package skeleton
-- [x] config layout
-- [x] model and dataset manifests
-- [x] validation CLI
-- [x] CI for schema/tests/lint
-- [x] reproducibility conventions
-- [ ] pin upstream revision
-- [ ] add environment probe for local GPU
-- [ ] add model-loading smoke test behind optional ML dependencies
+- [x] Python package skeleton, config layout, and validation CLI
+- [x] immutable upstream model and processor revision pinned in manifest
+- [x] license/attribution metadata recorded; weights excluded from Git
+- [x] CPU tests for schema, option labels, reordering, Brier, probabilities, and manifest
+- [x] local preflight command reports optional ML versions and CUDA device VRAM
+- [x] actual-model inspection CLI (requires download and optional ML dependencies)
+- [x] config-only architecture inspection verifies decoder attention paths separately from modality encoders
+- [x] vocabulary-logit text decision path (single-token labels validated at runtime)
+- [x] synthetic CE + Brier LoRA smoke CLI with save/reload and metadata
+- [x] load pinned weights and revalidate architecture module/LoRA targets against checkpoint tensors
+- [x] pass forward/backward/save/reload smoke on RTX 3080 Laptop GPU (16 GB VRAM)
+- [ ] confirm CI is green on GitHub
 
-Exit criterion: a fresh clone can validate manifests/configs and run CPU-only CI.
+Exit criterion: a fresh clone can validate manifests and run CPU-only CI, and the pinned model completes the documented 16 GB GPU smoke with base frozen and adapter trainable. Local CPU checks, loaded checkpoint inspection, and the GPU smoke pass. GitHub Actions has not run for this working tree, so Phase 1 remains open until remote CI is green.
 
 ## Phase 2 — Dataset integration
 
@@ -79,7 +82,7 @@ Required per sample/source metadata:
 
 Do not commit redistributable media blindly.
 
-## Phase 3 — Local text decision smoke test
+## Phase 3 — Local text decision experiment
 
 Local machine target: 16 GB dedicated VRAM / 32 GB RAM.
 
