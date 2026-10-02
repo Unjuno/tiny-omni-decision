@@ -357,6 +357,8 @@ def smoke_text_decision(
     console.print(
         {
             **metrics,
+            "options": sample.options,
+            "option_logits": verify_logits.tolist(),
             "probabilities": probabilities.tolist(),
             "prediction": sample.options[int(probabilities.argmax())],
             "confidence": float(probabilities.max()),
