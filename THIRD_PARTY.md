@@ -5,8 +5,12 @@ This repository is Apache-2.0, but upstream models and datasets retain their own
 ## Base model candidate
 
 - Repository: `google/gemma-4-E2B-it-qat-q4_0-unquantized`
+- Pinned revision: `6befbaca7398925921802abd1f277b495b78b738`
+- Metadata license: Apache-2.0; the model card also points to [Gemma 4 terms](https://ai.google.dev/gemma/docs/gemma_4_license).
+- Attribution: Google DeepMind. Retain applicable license, attribution, and notice materials with distributed model-derived artifacts.
+- Processor/tokenizer revision: same immutable revision as the model.
 - Intended role: pretrained multimodal alignment backbone
-- Upstream attribution and NOTICE requirements must be copied into release artifacts as required by the pinned upstream revision.
+- Upstream README at the pinned revision has no separate NOTICE file in the repository tree. Re-check upstream files and terms before redistribution.
 
 No upstream model weights are stored in this Git repository.
 

@@ -15,14 +15,8 @@ training:
   rank: 16
   alpha: 32
   dropout: 0.05
-  target_modules:
-    - q_proj
-    - k_proj
-    - v_proj
-    - o_proj
-    - gate_proj
-    - up_proj
-    - down_proj
+  # Must be populated from `inspect-model` on the pinned checkpoint.
+  target_modules: []
   freeze_modality_encoders: true
   freeze_projector: true
 

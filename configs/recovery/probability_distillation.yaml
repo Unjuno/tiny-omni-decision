@@ -19,10 +19,25 @@ recovery:
     - down_proj
 
 teacher_signal:
-  type: option_probabilities
-  store_full_vocabulary_logits: false
+  type: decision_position_full_logits
+  cache_scope: single_decision_position
+  canonical_storage_dtype: fp16
+  store_full_vocabulary_logits: true
+  store_option_token_ids: true
+  store_option_probabilities: true
+  store_temperature_metadata: true
+  optional_compression:
+    enabled: false
+    scheme: int8_per_vector_scale
+    hard_gate: Measure reconstruction and calibration fidelity before enabling.
 
 loss:
-  kl: 1.0
+  option_kl: 1.0
   cross_entropy: 0.2
   brier: 0.2
+  full_vocab_kl: 0.05
+
+notes:
+  - Full-vocabulary logits are cached only at the decision/readout position.
+  - Option KL remains the primary recovery objective.
+  - Full-vocabulary KL is auxiliary so recovery does not over-prioritize unrestricted generation behavior.

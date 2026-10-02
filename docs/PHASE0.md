@@ -4,6 +4,14 @@
 
 `google/gemma-4-E2B-it-qat-q4_0-unquantized`
 
+Phase 1 pinned the upstream repository and processor to immutable revision
+`6befbaca7398925921802abd1f277b495b78b738`. See
+`manifests/base-model.example.yaml` for the API-reported parameter count,
+architecture, license metadata, and file identifiers. The model card identifies
+Apache-2.0 and links Google DeepMind's Gemma 4 terms; comply with both when
+redistributing derivative artifacts. The unquantized QAT checkpoint contains
+BF16 weights and is not itself a 4-bit runtime checkpoint.
+
 The project uses the QAT-family checkpoint because the objective is to reuse an already aligned multimodal representation and move quickly toward a low-bit deployment model. The project does not require the base to be a frontier reasoning model.
 
 ## What the base is expected to provide

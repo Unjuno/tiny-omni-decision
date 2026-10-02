@@ -3,7 +3,6 @@ from pathlib import Path
 from tiny_omni_decision.io import load_structured_file
 from tiny_omni_decision.schema import BaseModelManifest, DatasetManifest
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

@@ -1,6 +1,6 @@
 schema_version: 1
 repo_id: google/gemma-4-E2B-it-qat-q4_0-unquantized
-revision: null
+revision: 6befbaca7398925921802abd1f277b495b78b738
 role: multimodal_alignment_backbone
 license: Apache-2.0
 modalities:
@@ -9,8 +9,28 @@ modalities:
   - audio
   - video
 processor_repo_id: google/gemma-4-E2B-it-qat-q4_0-unquantized
-processor_revision: null
-files: []
+processor_revision: 6befbaca7398925921802abd1f277b495b78b738
+files:
+  - path: config.json
+    git_blob_sha1: 362c15a7aa6443f731ea6ebff889064b2bbc7bb7
+  - path: model.safetensors
+    sha256: 33fe0cece08fb527ffefbd1a3a9ce73bd71073727993a283506293e5c6bf0137
+  - path: processor_config.json
+    git_blob_sha1: 5465974d23e1eca2c46c2809b26c997946ce0d90
+  - path: tokenizer.json
+    sha256: cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f
+  - path: tokenizer_config.json
+    git_blob_sha1: bd297dce3d66737f7d6f9136691db3ad05991a2f
 notes:
   revision_policy: Pin an immutable upstream revision before durable training.
+  architecture: Gemma4ForConditionalGeneration (config.json at pinned revision).
+  processor_info: "processor_class=Gemma4Processor; tokenizer_class=GemmaTokenizer"
+  parameter_count_api: 5104297539 BF16 parameters reported by Hugging Face API metadata.
+  parameter_count_safetensors_header: 5104298467 total tensor elements, including 928 scalar QAT metadata entries.
+  parameter_count_transformers_meta_tied: 5104297504 from Transformers 5.6.2 after tying shared input/output embeddings; differs from API parameter metadata by 35.
+  transformers_minimum: 5.6.2 (minimum specified by pinned upstream model card).
+  license_url: https://ai.google.dev/gemma/docs/gemma_4_license
+  attribution: Google DeepMind; comply with upstream Apache-2.0 license and Gemma terms.
+  lora_target_candidates: "Config-only inspection found decoder Linear paths under model.language_model.layers.*.self_attn.q_proj/v_proj; smoke resolves and verifies exact loaded paths."
+  lora_loaded_checkpoint_verification: "Verified on the pinned checkpoint: decoder Linear targets are under model.language_model.layers.*.self_attn.q_proj/v_proj; the smoke resolves and records exact per-layer paths."
   quantization_policy: Do not assume a ternary runtime format until architecture support is verified.
