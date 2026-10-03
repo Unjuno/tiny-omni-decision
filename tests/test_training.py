@@ -1124,7 +1124,14 @@ def test_metric_comparison_deltas() -> None:
             "brier": 0.8,
             "ece": 0.3,
             "mean_confidence": 0.7,
-        }
+        },
+        "macro": {
+            "macro_accuracy": 0.4,
+            "minimum_modality_accuracy": 0.2,
+            "macro_nll": 2.0,
+            "macro_brier": 0.8,
+            "macro_ece": 0.3,
+        },
     }
     after = {
         "all": {
@@ -1133,12 +1140,21 @@ def test_metric_comparison_deltas() -> None:
             "brier": 0.6,
             "ece": 0.2,
             "mean_confidence": 0.6,
-        }
+        },
+        "macro": {
+            "macro_accuracy": 0.5,
+            "minimum_modality_accuracy": 0.3,
+            "macro_nll": 1.5,
+            "macro_brier": 0.6,
+            "macro_ece": 0.2,
+        },
     }
-    delta = comparison_deltas(before, after)["all"]
-    assert delta["accuracy"] == pytest.approx(0.1)
-    assert delta["nll"] == pytest.approx(-0.5)
-    assert delta["mean_confidence"] == pytest.approx(-0.1)
+    deltas = comparison_deltas(before, after)
+    assert deltas["all"]["accuracy"] == pytest.approx(0.1)
+    assert deltas["all"]["nll"] == pytest.approx(-0.5)
+    assert deltas["all"]["mean_confidence"] == pytest.approx(-0.1)
+    assert deltas["macro"]["macro_accuracy"] == pytest.approx(0.1)
+    assert deltas["macro"]["minimum_modality_accuracy"] == pytest.approx(0.1)
 
 
 def test_collation_metadata_and_eval_serialization() -> None:

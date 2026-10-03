@@ -264,12 +264,12 @@ def comparison_deltas(
     baseline: dict[str, dict[str, float | int]],
     trained: dict[str, dict[str, float | int]],
 ) -> dict[str, dict[str, float]]:
-    """Return trained-minus-base metric changes for shared overall/group keys."""
+    """Return trained-minus-base metric changes for shared metrics in each group."""
     delta: dict[str, dict[str, float]] = {}
     for group in sorted(baseline.keys() & trained.keys()):
         delta[group] = {
             metric: float(trained[group][metric]) - float(baseline[group][metric])
-            for metric in ("accuracy", "nll", "brier", "ece", "mean_confidence")
+            for metric in sorted((baseline[group].keys() & trained[group].keys()) - {"count"})
         }
     return delta
 
