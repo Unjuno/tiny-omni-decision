@@ -6,7 +6,10 @@ import json
 from pathlib import Path
 
 import pytest
+import yaml
+from typer.testing import CliRunner
 
+from tiny_omni_decision.cli import app
 from tiny_omni_decision.dataset import (
     adapt_row,
     check_train_eval_splits,
@@ -116,6 +119,58 @@ def test_clevr4_adapter_normalizes_image_taxonomies_with_source_rights() -> None
         item.source_target is not None and item.media[0].uri.startswith("source-ref://")
         for item in training
     )
+    assert check_train_eval_splits(training, evaluation)["status"] == "disjoint"
+
+
+def test_speech_commands_adapter_keeps_ten_words_and_audio_references_only() -> None:
+    path = ROOT / "tests" / "fixtures" / "speech-commands.jsonl"
+    rows = list(iter_local_rows(path))
+    training = list(
+        normalize_jsonl(rows, manifest("candidates/speech-commands.yaml"), "speech-commands")
+    )
+    evaluation = list(
+        normalize_jsonl(rows, manifest("candidates/speech-commands-test.yaml"), "speech-commands")
+    )
+    assert len(training) == len(evaluation) == 2
+    assert {item.modality for item in training + evaluation} == {"audio"}
+    assert all(len(item.options) == 10 and item.target in item.options for item in training)
+    assert all(item.provenance.license == "CC-BY-4.0" for item in training)
+    assert all("/v0.02/" in item.media[0].uri for item in training + evaluation)
+    assert "stop" in {item.target for item in evaluation}
+    assert not any("_unknown_" in item.source_record_id for item in training)
+    assert check_train_eval_splits(training, evaluation)["status"] == "disjoint"
+
+
+def test_speech_commands_numeric_label_ids_follow_pinned_hub_class_order() -> None:
+    source = manifest("candidates/speech-commands.yaml")
+    rows = [
+        {"id": "yes.wav", "split": "train", "label": 0},
+        {"id": "stop.wav", "split": "train", "label": 8},
+        {"id": "zero.wav", "split": "train", "label": 10},
+        {"id": "silence.wav", "split": "train", "label": 35},
+        {"id": "aux.wav", "split": "train", "label": 20},
+        {"id": "unknown.wav", "split": "train", "label": 0, "is_unknown": True},
+    ]
+    items = list(normalize_jsonl(rows, source, "speech-commands"))
+    assert {item.source_record_id: item.target for item in items} == {
+        "yes.wav": "yes",
+        "stop.wav": "stop",
+    }
+
+
+def test_clevrer_adapter_normalizes_cc0_video_descriptive_questions() -> None:
+    path = ROOT / "tests" / "fixtures" / "clevrer-questions.json"
+    rows = list(iter_local_rows(path))
+    training = list(normalize_jsonl(rows, manifest("candidates/clevrer.yaml"), "clevrer"))
+    evaluation = list(
+        normalize_jsonl(rows, manifest("candidates/clevrer-validation.yaml"), "clevrer")
+    )
+    assert training and evaluation
+    assert {item.modality for item in training + evaluation} == {"video"}
+    assert all(item.provenance.license == "CC0-1.0" for item in training)
+    assert all(item.target in item.options for item in training + evaluation)
+    assert all("/videos/train/" in item.media[0].uri for item in training)
+    assert all("/videos/validation/" in item.media[0].uri for item in evaluation)
     assert check_train_eval_splits(training, evaluation)["status"] == "disjoint"
 
 
@@ -363,3 +418,128 @@ def test_candidate_catalogs_are_separate_and_valid(catalog_name: str) -> None:
     catalog = DatasetCatalog.model_validate(load_structured_file(path))
     assert catalog.purpose == catalog_name.split("-")[0]
     assert any(source.include for source in catalog.sources)
+
+
+def test_catalog_cli_accepts_candidates_for_each_declared_purpose() -> None:
+    runner = CliRunner()
+    training = runner.invoke(
+        app, ["validate-dataset-catalog", str(ROOT / "manifests/training-candidates.yaml")]
+    )
+    evaluation = runner.invoke(
+        app, ["validate-dataset-catalog", str(ROOT / "manifests/evaluation-candidates.yaml")]
+    )
+    assert training.exit_code == 0, training.output
+    assert evaluation.exit_code == 0, evaluation.output
+
+
+def test_training_catalog_rejects_noncommercial_evaluation_manifest(tmp_path: Path) -> None:
+    manifest_dir = tmp_path / "manifests"
+    candidate_dir = manifest_dir / "candidates"
+    candidate_dir.mkdir(parents=True)
+    mmau = manifest("candidates/mmau-test-mini.yaml")
+    mmau.usage = "training"
+    (candidate_dir / "mmau.yaml").write_text(
+        yaml.safe_dump(mmau.model_dump(mode="json", by_alias=True)), encoding="utf-8"
+    )
+    catalog = {
+        "schema_version": 1,
+        "manifest_type": "candidate_catalog",
+        "purpose": "training",
+        "sources": [{"manifest": "candidates/mmau.yaml", "include": True, "adapter": "mmau"}],
+    }
+    catalog_path = manifest_dir / "training-candidates.yaml"
+    catalog_path.write_text(yaml.safe_dump(catalog), encoding="utf-8")
+    result = CliRunner().invoke(app, ["validate-dataset-catalog", str(catalog_path)])
+    assert result.exit_code != 0
+    assert "DENY" in str(result.exception)
+
+
+def test_catalogs_reject_same_split_even_when_dataset_revisions_differ(
+    tmp_path: Path,
+) -> None:
+    manifest_dir = tmp_path / "manifests"
+    candidate_dir = manifest_dir / "candidates"
+    candidate_dir.mkdir(parents=True)
+    training = manifest("candidates/speech-commands.yaml")
+    training.split = "test"
+    training.revision = "a" * 40
+    evaluation = manifest("candidates/speech-commands-test.yaml")
+    evaluation.revision = "b" * 40
+    (candidate_dir / "speech-train.yaml").write_text(
+        yaml.safe_dump(training.model_dump(mode="json", by_alias=True)), encoding="utf-8"
+    )
+    (candidate_dir / "speech-test.yaml").write_text(
+        yaml.safe_dump(evaluation.model_dump(mode="json", by_alias=True)), encoding="utf-8"
+    )
+    training_catalog = {
+        "schema_version": 1,
+        "manifest_type": "candidate_catalog",
+        "purpose": "training",
+        "sources": [
+            {
+                "manifest": "candidates/speech-train.yaml",
+                "include": True,
+                "split": "test",
+                "adapter": "speech-commands",
+            }
+        ],
+    }
+    evaluation_catalog = {
+        "schema_version": 1,
+        "manifest_type": "candidate_catalog",
+        "purpose": "evaluation",
+        "sources": [
+            {
+                "manifest": "candidates/speech-test.yaml",
+                "include": True,
+                "split": "test",
+                "adapter": "speech-commands",
+            }
+        ],
+    }
+    (manifest_dir / "training-candidates.yaml").write_text(
+        yaml.safe_dump(training_catalog), encoding="utf-8"
+    )
+    (manifest_dir / "evaluation-candidates.yaml").write_text(
+        yaml.safe_dump(evaluation_catalog), encoding="utf-8"
+    )
+    result = CliRunner().invoke(
+        app,
+        ["validate-dataset-catalog", str(manifest_dir / "training-candidates.yaml")],
+    )
+    assert result.exit_code != 0
+    assert "same dataset split" in str(result.exception)
+
+
+def test_evaluation_catalog_rejects_train_split_even_without_catalog_split(
+    tmp_path: Path,
+) -> None:
+    manifest_dir = tmp_path / "manifests"
+    candidate_dir = manifest_dir / "candidates"
+    candidate_dir.mkdir(parents=True)
+    source = manifest("candidates/speech-commands.yaml")
+    source.usage = "evaluation"
+    (candidate_dir / "speech.yaml").write_text(
+        yaml.safe_dump(source.model_dump(mode="json", by_alias=True)), encoding="utf-8"
+    )
+    catalog_path = manifest_dir / "evaluation-candidates.yaml"
+    catalog_path.write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "manifest_type": "candidate_catalog",
+                "purpose": "evaluation",
+                "sources": [
+                    {
+                        "manifest": "candidates/speech.yaml",
+                        "include": True,
+                        "adapter": "speech-commands",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = CliRunner().invoke(app, ["validate-dataset-catalog", str(catalog_path)])
+    assert result.exit_code != 0
+    assert "training split" in str(result.exception)

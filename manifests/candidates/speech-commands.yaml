@@ -1,0 +1,40 @@
+schema_version: 1
+dataset_id: google/speech_commands
+revision: a751309c0fd613e8a5d30d77900f30e8b42bc2da
+subset: v0.02
+split: train
+modalities: [audio]
+upstream_url: https://huggingface.co/datasets/google/speech_commands/tree/a751309c0fd613e8a5d30d77900f30e8b42bc2da
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Google Speech Commands; cite Pete Warden, Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition (2018)."
+source_citation: https://arxiv.org/abs/1804.03209
+usage: training
+trust_status: trusted
+schema:
+  state: one-second English keyword recording
+  question: Which spoken English keyword was uttered?
+  options: ten keyword labels
+  target: spoken keyword label
+  media: audio path in the pinned Speech Commands v0.02 archive
+notes:
+  release: Speech Commands v0.02
+  hub_snapshot_url: https://huggingface.co/datasets/google/speech_commands/tree/a751309c0fd613e8a5d30d77900f30e8b42bc2da/data/v0.02
+  class_names: [down, go, left, no, off, on, right, stop, up, yes]
+  omitted_labels: [_silence_, _unknown_]
+  hub_card_split_rows: 84848
+  hub_card_validation_rows: 9982
+  hub_card_split: train
+  source_code: https://github.com/tensorflow/datasets/blob/470d259ad213ac458c5013f35e6fd01716c567a5/tensorflow_datasets/datasets/speech_commands/speech_commands_dataset_builder.py
+  hub_parquet_sha256:
+    train-00000-of-00006.parquet: 3104193b88158e7f507ecedd249283b1bfacd23bc84fde2d424df86bb9ca6279
+    train-00001-of-00006.parquet: 571445a0fa82c0f6c8c92c4545baf836bbe9f439326c9bd8e6b6a3dc8de6b7ff
+    train-00002-of-00006.parquet: f49d14a179e15fc861c708c9cb66479ab8fe8b96cdbfe06e2d8638b7faf4c1ef
+    train-00003-of-00006.parquet: e1e8d9e798b45053015632233265d0f6522b51f23eae80d75f96205acb545ff7
+    train-00004-of-00006.parquet: 18e1c61afe006401155334731fb27a338a50a65933e0fef71a3eb2204b15a3a0
+    train-00005-of-00006.parquet: 281d138d5dd89150b55b0f3ca8ccf1ccd5e63557d4972b64a787df11984e28cd
+  data_integrity: Pinned Hub Parquet snapshot; shard SHA-256 values are recorded above.
+  privacy: Use the word label only. Do not attempt to identify speakers; source recordings are crowdsourced voices with pseudonymous filenames.

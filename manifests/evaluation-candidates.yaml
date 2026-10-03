@@ -8,6 +8,12 @@ sources:
   - manifest: candidates/clevr4-validation.yaml
     include: true
     adapter: clevr4
+  - manifest: candidates/speech-commands-test.yaml
+    include: true
+    adapter: speech-commands
+  - manifest: candidates/clevrer-validation.yaml
+    include: true
+    adapter: clevrer
   - manifest: candidates/open-jev-test.yaml
     include: true
     adapter: open-jev

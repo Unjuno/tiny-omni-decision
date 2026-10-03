@@ -1,0 +1,5 @@
+{"id": "yes/speaker_a_nohash_0.wav", "split": "train", "label": "yes", "audio": {"path": "yes/speaker_a_nohash_0.wav"}}
+{"id": "up/speaker_b_nohash_0.wav", "split": "train", "label": "up", "audio": {"path": "up/speaker_b_nohash_0.wav"}}
+{"id": "_unknown_/speaker_c_nohash_0.wav", "split": "train", "label": "_unknown_", "audio": {"path": "_unknown_/speaker_c_nohash_0.wav"}}
+{"id": "no/speaker_d_nohash_0.wav", "split": "test", "label": "no", "audio": {"path": "no/speaker_d_nohash_0.wav"}}
+{"id": "stop/speaker_e_nohash_0.wav", "split": "test", "label": 8, "audio": {"path": "stop/speaker_e_nohash_0.wav"}}

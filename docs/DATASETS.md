@@ -15,6 +15,8 @@ in that manifest. Unknown terms fail closed for training-safe normalization.
 | [MMAU test-mini](https://huggingface.co/datasets/gamma-lab-umd/MMAU-test-mini) | `ccd9696c0111ea7060827598f310558df0b71b0a` | 1,000 test items; audio | Official MMAU README identifies 1,000 test-mini examples. Dataset card declares CC-BY-NC-4.0; it is a benchmark, and source audio remains third-party media. | **Evaluation-only / DENY for commercial training and media redistribution.** Metadata adapter stores a pinned media reference and does not download audio. Do not train on this benchmark. |
 | [MVBench](https://huggingface.co/datasets/OpenGVLab/MVBench) | `230a2d4fac8900333c61754641c7a13e069ac9c6` | 4,000 QA rows across 20 task JSON files; video QA | HF card declares MIT for the repo but states video copyrights belong to source creators and are for academic research only; 320 NTU clips require separate manual access. The pinned repo includes several large per-source video archives. | **Evaluation-only / DENY for commercial training and video redistribution.** Not all clips are available: 320 NTU RGB+D clips need separately obtained access. |
 | [Oxford Clevr-4](https://www.robots.ox.ac.uk/~vgg/data/clevr4/) | code `cddc78fb2a8359dc958987b2c750bfdd4bfd2c73`; archive SHA-512 pinned in the manifests | nominal 10k image set; annotation archive contains 10,531 images (8,424 train / 2,107 val); image | Official source offers the dataset under CC BY 4.0. The pinned code defines four ten-class taxonomies: texture, shape, color and count. The archive annotation JSON SHA-256 and official checksum-list SHA-256 are recorded in each manifest. | **ALLOW controlled synthetic image classification training** with attribution. Train uses only the official train split; the separate val manifest is evaluation-only. The adapter emits four decisions per image and stores source-image references, never image bytes. |
+| [Google Speech Commands v0.02](https://huggingface.co/datasets/google/speech_commands/tree/a751309c0fd613e8a5d30d77900f30e8b42bc2da) | Hub snapshot `a751309c0fd613e8a5d30d77900f30e8b42bc2da`; TFDS builder `470d259ad213ac458c5013f35e6fd01716c567a5` | Hub card: 84,848 train / 9,982 validation / 4,890 test; one-second audio; ten keyword classes | Google/TensorFlow documentation describes CC BY data collected for Speech Commands; the pinned Hub card declares CC-BY-4.0. The manifest records SHA-256 for each train/test Parquet shard. | **ALLOW keyword classification training** with attribution. Adapter pins the card's class-index mapping, keeps ten keyword labels, excludes auxiliary words and `_silence_`, and prohibits speaker identification. Test is evaluation-only. |
+| [CLEVRER](https://clevrer.csail.mit.edu/) | code `98b842082ba4f7c18b6b9e3f39145871782a65ef`; official question JSON SHA-256 pinned per split | 10,000 train / 5,000 validation videos; 152,572 train / 76,368 validation questions; synthetic video | Official MIT-hosted README states CC0 and documents split ranges. Question metadata is separate from video archives. | **ALLOW descriptive single-answer synthetic video training** under CC0. Adapter includes supported categorical descriptive questions only; validation is held out. Video archives are about 12.4 GB train / 6.2 GB validation and were not downloaded. |
 
 The HF repository `apple/mmau` is **not** the audio benchmark: its pinned files are
 CodeContests and math/tool-use JSONL. MMAU's official README links the correct
@@ -31,7 +33,7 @@ SHA-256, and optional source license. Binary media is never embedded. Per-record
 the source's original annotation, and soft targets where available. Revisions are exact
 40-character commit IDs.
 
-The initial text training and evaluation candidate manifests are frozen separately under
+The training and evaluation candidate manifests are frozen separately under
 `manifests/training-candidates.yaml` and `manifests/evaluation-candidates.yaml`. The
 evaluation list includes only held-out benchmark candidates; the mixed OneJev aggregate is
 excluded from both generated release lists pending source review.
@@ -40,6 +42,18 @@ The Clevr-4 archive is described as the 10k version upstream; the exact pinned a
 file has 10,531 records. Its four labels are flattened into four independent ten-option
 decisions. References include the official archive SHA-512 so downstream media resolution can
 verify the source archive before opening image files.
+
+Speech Commands is a bounded keyword-classification candidate, not general speech
+understanding. Its source rows require an explicit train/test split. `_silence_` and
+`_unknown_` rows are intentionally excluded because v0.1 options are the ten official
+keyword classes. The adapter stores a pinned source reference and does not copy audio
+bytes. The pinned Hub Parquet metadata includes shard SHA-256 values in the manifests.
+
+CLEVRER normalization reads official question JSON and creates option sets from fixed
+subtype taxonomies (`exist`, `query_color`, `query_material`, `query_shape`, and `count`).
+It excludes non-descriptive, answerless, unsupported, and non-categorical questions. Scene
+indices are checked against the official train (0–9999) and validation (10000–14999)
+ranges; media references identify the upstream video without downloading it.
 
 ## License policy
 
@@ -90,16 +104,42 @@ tiny-omni-decision dataset-normalize data/raw/clevr4-10k/clevr_4_annots.json \
   --limit 3 --seed 17 --output data/processed/clevr4-val-sample.jsonl
 ```
 
-## Remaining gates before Phase 3
+Audio and video candidates can be audited and sampled as follows. Install `.[data]` to
+read Speech Commands Parquet from the Hub; local CLEVRER question JSON is metadata-only:
+
+```bash
+tiny-omni-decision audit-dataset-manifest manifests/candidates/speech-commands.yaml
+tiny-omni-decision dataset-normalize google/speech_commands \
+  --manifest manifests/candidates/speech-commands.yaml --adapter speech-commands \
+  --limit 3 --seed 17 --output data/processed/speech-commands-train.jsonl
+tiny-omni-decision dataset-normalize data/raw/clevrer/train-questions.json \
+  --manifest manifests/candidates/clevrer.yaml --adapter clevrer \
+  --limit 3 --seed 17 --output data/processed/clevrer-train.jsonl
+tiny-omni-decision dataset-normalize data/raw/clevrer/validation-questions.json \
+  --manifest manifests/candidates/clevrer-validation.yaml --adapter clevrer \
+  --limit 3 --seed 17 --output data/processed/clevrer-validation.jsonl
+```
+
+Speech Commands adapter tests use tiny source-shaped metadata fixtures. In this Windows
+environment the optional `datasets` reader cannot initialize because of a Python DLL load
+failure, so no actual Hub audio rows were normalized here. CLEVRER examples were sampled
+from the official train/validation question JSON. Combined smoke sample files (including
+text, Clevr-4, CLEVRER and speech fixtures) contain 61 train and 66 evaluation decisions;
+the split checker reported zero shared source IDs and zero shared content fingerprints.
+These bounded outputs are not frozen full-corpus training data.
+
+## Remaining gates before durable Decision/Omni training
 
 - Decide whether further component-level OneJev sources have complete permissions; do not
   ingest `REVIEW` or `DENY` rows into training.
-- Clevr-4's controlled synthetic image taxonomy is eligible for training under its explicit
-  CC BY 4.0 grant and attribution. Natural-image QA ingestion remains blocked for OneJev
+- Clevr-4, Speech Commands, and CLEVRER provide controlled image/audio/video candidates
+  under their recorded grants. Natural-image QA ingestion remains blocked for OneJev
   components until each source's commercial, training, redistribution and media rights are
   resolved; the aggregate remains REVIEW.
 - Keep benchmark evaluation records completely out of train manifests; the overlap CLI is
   mandatory when producing a frozen pair.
 - Review the label quality/fit of synthetic text candidates against the intended task.
-- No model training, teacher-logit generation, Recovery training, ternary conversion,
-  benchmark media download, or rented GPU work belongs to Phase 2.
+- Phase 2 is closed at candidate/catalog level. Before durable training, generate and freeze
+  full-corpus outputs, verify splits over those outputs, review label fit, and freeze
+  held-out benchmarks. No model training, teacher-logit generation, Recovery training,
+  ternary conversion, benchmark media download, or rented GPU work was performed in Phase 2.

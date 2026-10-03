@@ -1,0 +1,334 @@
+[
+  {
+    "scene_index": 0,
+    "video_filename": "video_00000.mp4",
+    "questions": [
+      {
+        "question_id": 0,
+        "question": "What is the shape of the object to collide with the purple object?",
+        "question_type": "descriptive",
+        "question_subtype": "query_shape",
+        "answer": "sphere"
+      },
+      {
+        "question_id": 1,
+        "question": "What color is the first object to collide with the gray sphere?",
+        "question_type": "descriptive",
+        "question_subtype": "query_color",
+        "answer": "blue"
+      },
+      {
+        "question_id": 2,
+        "question": "What material is the first object to collide with the gray object?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "rubber"
+      },
+      {
+        "question_id": 3,
+        "question": "How many collisions happen after the cube enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "3"
+      },
+      {
+        "question_id": 4,
+        "question": "How many objects enter the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "2"
+      },
+      {
+        "question_id": 5,
+        "question": "Are there collisions before the cube enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "no"
+      },
+      {
+        "question_id": 6,
+        "question": "What color is the stationary rubber object?",
+        "question_type": "descriptive",
+        "question_subtype": "query_color",
+        "answer": "yellow"
+      },
+      {
+        "question_id": 7,
+        "question": "What is the shape of the metal object that is moving?",
+        "question_type": "descriptive",
+        "question_subtype": "query_shape",
+        "answer": "cube"
+      },
+      {
+        "question_id": 8,
+        "question": "How many moving cubes are there?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 9,
+        "question": "How many metal objects are stationary when the blue rubber object exits the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 10,
+        "question": "Are there any stationary brown objects?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "no"
+      }
+    ]
+  },
+  {
+    "scene_index": 1,
+    "video_filename": "video_00001.mp4",
+    "questions": [
+      {
+        "question_id": 0,
+        "question": "What is the color of the object that exits the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "query_color",
+        "answer": "gray"
+      },
+      {
+        "question_id": 1,
+        "question": "What material is the object to collide with the red object?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "metal"
+      },
+      {
+        "question_id": 2,
+        "question": "What is the material of the object to collide with the cube?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "metal"
+      },
+      {
+        "question_id": 3,
+        "question": "How many gray spheres exit the scene after the cylinder enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 4,
+        "question": "How many rubber objects exit the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 5,
+        "question": "Are there any cylinders that exit the scene before the gray sphere exits the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "no"
+      },
+      {
+        "question_id": 6,
+        "question": "What color is the stationary rubber object when the video begins?",
+        "question_type": "descriptive",
+        "question_subtype": "query_color",
+        "answer": "gray"
+      },
+      {
+        "question_id": 7,
+        "question": "What material is the moving sphere when the video ends?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "metal"
+      },
+      {
+        "question_id": 8,
+        "question": "How many moving metal objects are there when the video ends?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 9,
+        "question": "How many moving cylinders are there?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 10,
+        "question": "Are there any moving metal objects when the video ends?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "yes"
+      }
+    ]
+  },
+  {
+    "scene_index": 10000,
+    "video_filename": "video_10000.mp4",
+    "questions": [
+      {
+        "question_id": 0,
+        "question": "Are there any stationary green objects when the video ends?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "no"
+      },
+      {
+        "question_id": 1,
+        "question": "How many objects are stationary when the yellow object enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "0"
+      },
+      {
+        "question_id": 2,
+        "question": "How many objects are moving when the video ends?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "3"
+      },
+      {
+        "question_id": 3,
+        "question": "What material is the last object that enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "metal"
+      },
+      {
+        "question_id": 4,
+        "question": "What is the shape of the object to collide with the metal sphere?",
+        "question_type": "descriptive",
+        "question_subtype": "query_shape",
+        "answer": "cylinder"
+      },
+      {
+        "question_id": 5,
+        "question": "What material is the object to collide with the sphere?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "rubber"
+      },
+      {
+        "question_id": 6,
+        "question": "What is the shape of the object that is stationary when the video begins?",
+        "question_type": "descriptive",
+        "question_subtype": "query_shape",
+        "answer": "cylinder"
+      },
+      {
+        "question_id": 7,
+        "question": "What is the shape of the stationary object when the brown cube enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "query_shape",
+        "answer": "cylinder"
+      },
+      {
+        "question_id": 8,
+        "question": "Are there any yellow objects that enter the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "yes"
+      },
+      {
+        "question_id": 9,
+        "question": "How many cylinders enter the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "0"
+      },
+      {
+        "question_id": 10,
+        "question": "How many metal objects enter the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "2"
+      }
+    ]
+  },
+  {
+    "scene_index": 10001,
+    "video_filename": "video_10001.mp4",
+    "questions": [
+      {
+        "question_id": 0,
+        "question": "Are there any moving green objects when the video ends?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "yes"
+      },
+      {
+        "question_id": 1,
+        "question": "How many rubber objects are stationary when the video begins?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "0"
+      },
+      {
+        "question_id": 2,
+        "question": "How many moving cubes are there when the video ends?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 3,
+        "question": "What color is the object that enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "query_color",
+        "answer": "yellow"
+      },
+      {
+        "question_id": 4,
+        "question": "What is the material of the object to collide with the gray object?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "metal"
+      },
+      {
+        "question_id": 5,
+        "question": "What is the shape of the first object to collide with the green object?",
+        "question_type": "descriptive",
+        "question_subtype": "query_shape",
+        "answer": "sphere"
+      },
+      {
+        "question_id": 6,
+        "question": "What is the color of the metal cube that is moving when the video begins?",
+        "question_type": "descriptive",
+        "question_subtype": "query_color",
+        "answer": "gray"
+      },
+      {
+        "question_id": 7,
+        "question": "What material is the stationary cube when the yellow sphere enters the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "query_material",
+        "answer": "metal"
+      },
+      {
+        "question_id": 8,
+        "question": "Are there any yellow objects that exit the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "exist",
+        "answer": "no"
+      },
+      {
+        "question_id": 9,
+        "question": "How many rubber objects enter the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "1"
+      },
+      {
+        "question_id": 10,
+        "question": "How many metal spheres enter the scene?",
+        "question_type": "descriptive",
+        "question_subtype": "count",
+        "answer": "0"
+      }
+    ]
+  }
+]

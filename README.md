@@ -85,10 +85,10 @@ Teacher distillation caches **option logits at the single decision position** by
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
 - The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`). Install a PyTorch build that matches the local CUDA driver; GPU model loading is not covered by CPU CI.
-- Phase 2 now includes pinned dataset candidates, modality adapters, conservative license audits, and sampled normalization. Oxford Clevr-4 provides a CC BY 4.0 synthetic image-classification training path with attribution; mixed OneJev natural-image sources remain gated on component-level rights review. No dataset training or full media download has been performed. Full-corpus train/evaluation outputs still need to be generated and checked before training.
+- Phase 2 is complete at the candidate/catalog level: pinned, audited candidates and adapters cover text, image, audio, and video. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal training candidates; mixed OneJev natural-image sources remain gated on component-level rights review. Bounded normalization and train/evaluation disjointness checks passed; no model training or full media download was performed. Full-corpus outputs must still be generated and checked before durable Decision/Omni LoRA training.
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- Component-level rights review for mixed-license sources, full-corpus held-out split verification, and ternary runtime compatibility remain hard gates before durable training and compression.
+- Component-level rights review for mixed-license sources, full-corpus held-out split verification, benchmark freeze, and ternary runtime compatibility remain hard gates before durable training and compression.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).

@@ -23,6 +23,18 @@ sources:
     adapter: clevr4
     include: true
     note: Synthetic image taxonomy classification; CC BY 4.0, attributed, no images copied.
+  - manifest: candidates/speech-commands.yaml
+    subset: v0.02
+    split: train
+    adapter: speech-commands
+    include: true
+    note: Ten CC BY 4.0 keyword classes only; anonymous audio references, no speaker identification.
+  - manifest: candidates/clevrer.yaml
+    subset: official-2020
+    split: train
+    adapter: clevrer
+    include: true
+    note: Synthetic video under CC0; descriptive single-answer questions only, video bytes stay upstream.
   - manifest: candidates/onejev.yaml
     include: false
     reason: per-source license audit is REVIEW; no rows enter training until rights are explicit.
