@@ -1,0 +1,36 @@
+schema_version: 1
+dataset_id: google/speech_commands
+revision: a751309c0fd613e8a5d30d77900f30e8b42bc2da
+subset: v0.02
+split: validation
+modalities: [audio]
+upstream_url: https://huggingface.co/datasets/google/speech_commands/tree/a751309c0fd613e8a5d30d77900f30e8b42bc2da
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Google Speech Commands; cite Pete Warden, Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition (2018)."
+source_citation: https://arxiv.org/abs/1804.03209
+usage: evaluation
+trust_status: trusted
+schema:
+  state: one-second English keyword recording
+  question: Which spoken English keyword was uttered?
+  options: ten keyword labels
+  target: spoken keyword label
+  media: audio path in the pinned Speech Commands v0.02 validation archive
+notes:
+  release: Speech Commands v0.02
+  hub_snapshot_url: https://huggingface.co/datasets/google/speech_commands/tree/a751309c0fd613e8a5d30d77900f30e8b42bc2da/data/v0.02
+  parquet_files:
+    - v0.02/validation-00000-of-00001.parquet
+  class_names: [down, go, left, no, off, on, right, stop, up, yes]
+  omitted_labels: [_silence_, _unknown_]
+  hub_card_split_rows: 9982
+  hub_card_split: validation
+  source_code: https://github.com/tensorflow/datasets/blob/470d259ad213ac458c5013f35e6fd01716c567a5/tensorflow_datasets/datasets/speech_commands/speech_commands_dataset_builder.py
+  hub_parquet_sha256:
+    validation-00000-of-00001.parquet: 06683ef0761319a415ee516939c64b9b7a20be0b6bb17ce8d2b6e36abe373a46
+  data_integrity: Pinned Hub Parquet snapshot; shard SHA-256 is recorded above.
+  privacy: Use the word label only. Do not attempt to identify speakers; source recordings are crowdsourced voices with pseudonymous filenames.

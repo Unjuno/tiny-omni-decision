@@ -129,7 +129,7 @@ text, Clevr-4, CLEVRER and speech fixtures) contain 61 train and 66 evaluation d
 the split checker reported zero shared source IDs and zero shared content fingerprints.
 These bounded outputs are not frozen full-corpus training data.
 
-## Remaining gates before durable Decision/Omni training
+## Current dataset gates
 
 - Decide whether further component-level OneJev sources have complete permissions; do not
   ingest `REVIEW` or `DENY` rows into training.
@@ -140,7 +140,10 @@ These bounded outputs are not frozen full-corpus training data.
 - Keep benchmark evaluation records completely out of train manifests; the overlap CLI is
   mandatory when producing a frozen pair.
 - Review the label quality/fit of synthetic text candidates against the intended task.
-- Phase 2 is closed at candidate/catalog level. Before durable training, generate and freeze
-  full-corpus outputs, verify splits over those outputs, review label fit, and freeze
-  held-out benchmarks. No model training, teacher-logit generation, Recovery training,
-  ternary conversion, benchmark media download, or rented GPU work was performed in Phase 2.
+- Phase 2 closed at candidate/catalog level. The durable train/validation/evaluation
+  corpus has since been frozen, media-hashed, and checked for zero pairwise source-ID and
+  normalized-content overlap; the 256-step local Decision Teacher run and its held-out
+  results are documented in [DURABLE_TEACHER.md](DURABLE_TEACHER.md). Phase 2 itself did
+  not run model training. No Recovery training, ternary conversion, benchmark media
+  download, or rented GPU work has been performed. The OneJev aggregate remains excluded
+  pending component-level rights review.

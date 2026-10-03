@@ -17,11 +17,13 @@ class DecisionTrainingConfig(BaseModel):
     seed: int = Field(default=17, ge=0)
     max_train_examples: int = Field(default=512, ge=1)
     max_eval_examples: int = Field(default=256, ge=1)
+    selection_eval_examples: int = Field(default=256, ge=1)
     max_steps: int = Field(default=100, ge=1)
     gradient_accumulation_steps: int = Field(default=8, ge=1)
     checkpoint_interval: int = Field(default=25, ge=1)
     evaluation_interval: int = Field(default=25, ge=1)
     learning_rate: float = Field(default=1e-4, gt=0)
+    max_gradient_norm: float = Field(default=1.0, gt=0)
     max_sequence_length: int = Field(default=1024, ge=32)
     ece_bins: int = Field(default=15, ge=1)
     lora_rank: int = Field(default=16, ge=1)
@@ -33,6 +35,7 @@ class DecisionTrainingConfig(BaseModel):
         default_factory=lambda: {"text": 1.0, "image": 1.0, "audio": 1.0, "video": 1.0}
     )
     source_weights: dict[str, float] = Field(default_factory=dict)
+    max_sample_repeats: int = Field(default=1, ge=1)
 
     @model_validator(mode="after")
     def validate_sampling_weights(self) -> DecisionTrainingConfig:
@@ -54,11 +57,13 @@ def decision_training_config(raw: dict[str, Any]) -> DecisionTrainingConfig:
             "seed": training.get("seed", 17),
             "max_train_examples": training.get("max_train_examples", 512),
             "max_eval_examples": training.get("max_eval_examples", 256),
+            "selection_eval_examples": training.get("selection_eval_examples", 256),
             "max_steps": training.get("max_steps", 100),
             "gradient_accumulation_steps": training.get("gradient_accumulation_steps", 8),
             "checkpoint_interval": training.get("checkpoint_interval", 25),
             "evaluation_interval": training.get("evaluation_interval", 25),
             "learning_rate": training.get("learning_rate", 1e-4),
+            "max_gradient_norm": training.get("max_gradient_norm", 1.0),
             "max_sequence_length": training.get("max_sequence_length", 1024),
             "ece_bins": training.get("ece_bins", 15),
             "lora_rank": training.get("rank", 16),
@@ -70,6 +75,7 @@ def decision_training_config(raw: dict[str, Any]) -> DecisionTrainingConfig:
                 "modality_weights", {"text": 1.0, "image": 1.0, "audio": 1.0, "video": 1.0}
             ),
             "source_weights": sampling.get("source_weights", {}),
+            "max_sample_repeats": sampling.get("max_sample_repeats", 1),
         }
     )
 
@@ -85,10 +91,13 @@ def deterministic_sample_order(
     limit: int,
     modality_weights: dict[str, float],
     source_weights: dict[str, float] | None = None,
+    max_sample_repeats: int = 1,
 ) -> tuple[list[DecisionExample], dict[str, int]]:
     """Weighted deterministic round-robin over modality/source buckets."""
     if limit < 1:
         raise ValueError("limit must be at least one")
+    if max_sample_repeats < 1:
+        raise ValueError("max_sample_repeats must be at least one")
     source_weights = source_weights or {}
     buckets: dict[str, list[DecisionExample]] = defaultdict(list)
     for example in examples:
@@ -97,27 +106,55 @@ def deterministic_sample_order(
     for bucket in buckets.values():
         bucket.sort(key=lambda item: item.id)
         rng.shuffle(bucket)
-    keys = sorted(buckets)
-    weights = {
-        key: modality_weights.get(key.split(":", 1)[0], 0.0)
-        * source_weights.get(key, source_weights.get(key.split(":", 1)[1], 1.0))
-        for key in keys
+        if max_sample_repeats > 1:
+            bucket *= max_sample_repeats
+            rng.shuffle(bucket)
+    keys_by_modality: dict[str, list[str]] = defaultdict(list)
+    for key in sorted(buckets):
+        modality, source = key.split(":", 1)
+        weight = source_weights.get(key, source_weights.get(source, 1.0))
+        if weight > 0:
+            keys_by_modality[modality].append(key)
+    active_modalities = {
+        modality: weight
+        for modality, weight in modality_weights.items()
+        if weight > 0 and keys_by_modality.get(modality)
     }
-    if not any(weight > 0 for weight in weights.values()):
+    if not active_modalities:
         raise ValueError("no examples remain after applying modality/source sampling weights")
     consumed: Counter[str] = Counter()
+    modality_consumed: Counter[str] = Counter()
     selected: list[DecisionExample] = []
     target_count = min(limit, sum(len(bucket) for bucket in buckets.values()))
     while len(selected) < target_count:
-        eligible = [key for key in keys if buckets[key] and weights[key] > 0]
-        if not eligible:
+        eligible_modalities = [
+            modality
+            for modality in sorted(active_modalities)
+            if any(buckets[key] for key in keys_by_modality[modality])
+        ]
+        if not eligible_modalities:
             break
-        # Weighted fair scheduling: each bucket accrues its configured share each round.
+        # First allocate by modality, then split that modality's share across sources.
+        modality = max(
+            eligible_modalities,
+            key=lambda item: (
+                active_modalities[item] * (len(selected) + 1) - modality_consumed[item],
+                item,
+            ),
+        )
+        eligible_sources = [key for key in keys_by_modality[modality] if buckets[key]]
         key = max(
-            eligible, key=lambda item: (weights[item] * (len(selected) + 1) - consumed[item], item)
+            eligible_sources,
+            key=lambda item: (
+                source_weights.get(item, source_weights.get(item.split(":", 1)[1], 1.0))
+                * (modality_consumed[modality] + 1)
+                - consumed[item],
+                item,
+            ),
         )
         selected.append(buckets[key].pop())
         consumed[key] += 1
+        modality_consumed[modality] += 1
     return selected, dict(sorted(consumed.items()))
 
 
