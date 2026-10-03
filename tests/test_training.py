@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 import json
+from pathlib import Path
 
 import pytest
 
@@ -1086,3 +1087,65 @@ def test_collation_metadata_and_eval_serialization() -> None:
     assert record["prediction"] == 1
     assert record["target"] == 1
     assert record["option_logits"] == [1.5, 2.5]
+
+
+def test_best_adapter_publication_retries_transient_windows_rename_denial(
+    tmp_path, monkeypatch
+) -> None:
+    from tiny_omni_decision.trainer import publish_best_adapter
+
+    best = tmp_path / "best"
+    best.mkdir()
+    (best / "adapter_model.safetensors").write_bytes(b"previous-adapter")
+    temporary = tmp_path / "best.tmp"
+    temporary.mkdir()
+    (temporary / "adapter_model.safetensors").write_bytes(b"selected-adapter")
+
+    actual_replace = Path.replace
+    failed_once = False
+
+    def deny_first_promotion(source: Path, destination: Path) -> Path:
+        nonlocal failed_once
+        if source == temporary and destination == best and not failed_once:
+            failed_once = True
+            raise PermissionError("simulated transient Windows rename lock")
+        return actual_replace(source, destination)
+
+    monkeypatch.setattr(Path, "replace", deny_first_promotion)
+
+    publish_best_adapter(temporary, best)
+
+    assert failed_once is True
+    assert (best / "adapter_model.safetensors").read_bytes() == b"selected-adapter"
+    assert not temporary.exists()
+    assert list(tmp_path.glob(".best-backup-*")) == []
+
+
+def test_best_adapter_publication_restores_previous_adapter_after_retry_exhaustion(
+    tmp_path, monkeypatch
+) -> None:
+    import tiny_omni_decision.trainer as trainer_module
+    from tiny_omni_decision.trainer import publish_best_adapter
+
+    best = tmp_path / "best"
+    best.mkdir()
+    (best / "adapter_model.safetensors").write_bytes(b"previous-adapter")
+    temporary = tmp_path / "best.tmp"
+    temporary.mkdir()
+    (temporary / "adapter_model.safetensors").write_bytes(b"selected-adapter")
+
+    actual_replace = Path.replace
+
+    def deny_promotion(source: Path, destination: Path) -> Path:
+        if source == temporary and destination == best:
+            raise PermissionError("simulated persistent Windows rename lock")
+        return actual_replace(source, destination)
+
+    monkeypatch.setattr(Path, "replace", deny_promotion)
+    monkeypatch.setattr(trainer_module.time, "sleep", lambda _seconds: None)
+
+    with pytest.raises(PermissionError, match="persistent Windows rename lock"):
+        publish_best_adapter(temporary, best)
+
+    assert (best / "adapter_model.safetensors").read_bytes() == b"previous-adapter"
+    assert (temporary / "adapter_model.safetensors").read_bytes() == b"selected-adapter"

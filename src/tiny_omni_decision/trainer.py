@@ -142,6 +142,32 @@ def _evaluate(
     return {key: measure(values) for key, values in sorted(groups.items())}, predictions
 
 
+def publish_best_adapter(temporary_best: Path, best_path: Path) -> None:
+    """Publish the selected adapter while tolerating transient Windows file locks."""
+    backup_path = best_path.with_name(f".best-backup-{uuid.uuid4().hex}")
+
+    def replace_with_retry(source: Path, destination: Path) -> None:
+        for attempt in range(6):
+            try:
+                source.replace(destination)
+                return
+            except PermissionError:
+                if attempt == 5:
+                    raise
+                time.sleep(min(0.05 * (2**attempt), 1.0))
+
+    if best_path.exists():
+        replace_with_retry(best_path, backup_path)
+    try:
+        replace_with_retry(temporary_best, best_path)
+    except Exception:
+        if backup_path.exists() and not best_path.exists():
+            replace_with_retry(backup_path, best_path)
+        raise
+    if backup_path.exists():
+        shutil.rmtree(backup_path, ignore_errors=True)
+
+
 def _run_training_impl(
     *,
     train_path: Path,
@@ -569,9 +595,7 @@ def _run_training_impl(
                 if temporary_best.exists():
                     shutil.rmtree(temporary_best)
                 model.save_pretrained(temporary_best)
-                if best_path.exists():
-                    shutil.rmtree(best_path)
-                temporary_best.replace(best_path)
+                publish_best_adapter(temporary_best, best_path)
                 (output_dir / "best-checkpoint.json").write_text(
                     json.dumps(
                         {
