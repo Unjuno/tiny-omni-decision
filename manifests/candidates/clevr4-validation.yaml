@@ -27,6 +27,7 @@ notes:
   checksum_list_sha256: 514720ded7cde46610e3871b2f21389b74b47b6232095cb15111445a044f84a0
   source_code: https://github.com/sgvaze/clevr4/tree/cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
   annotation_file: clevr_4_annots.json
+  local_source: data/raw/clevr4-10k/clevr_4_val_annots.json
   validation_rows: 2107
   validation_examples_after_taxonomy_flattening: 8428
   evaluation_policy: Official held-out val split only; do not train on these images.

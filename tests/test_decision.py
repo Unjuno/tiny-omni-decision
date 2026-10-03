@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import math
+
 import pytest
 
 from tiny_omni_decision.decision_math import (
     brier_score,
+    expected_calibration_error,
     label_token_ids_from_prompt,
+    negative_log_likelihood,
     normalize_scores,
     option_label_ids,
     reorder_target,
@@ -49,6 +53,23 @@ def test_option_logits_and_probability_normalization() -> None:
 def test_brier_loss() -> None:
     loss = brier_score([[0.8, 0.2], [0.25, 0.75]], [0, 1])
     assert loss == pytest.approx((0.2**2 + 0.2**2 + 0.25**2 + 0.25**2) / 2)
+
+
+def test_nll_uses_only_the_supplied_options() -> None:
+    assert negative_log_likelihood([[0.8, 0.2], [0.25, 0.75]], [0, 1]) == pytest.approx(
+        -(math.log(0.8) + math.log(0.75)) / 2
+    )
+
+
+def test_ece_equal_width_top_label_bins_hand_check() -> None:
+    # Bin 0.5 contains one correct 0.6 prediction; bin 0.9 contains a wrong 0.9 prediction.
+    assert expected_calibration_error([[0.6, 0.4], [0.1, 0.9]], [0, 0], n_bins=5) == pytest.approx(
+        (0.4 + 0.9) / 2
+    )
+
+
+def test_ece_places_confidence_one_in_last_bin() -> None:
+    assert expected_calibration_error([[1.0, 0.0]], [0], n_bins=10) == pytest.approx(0.0)
 
 
 def test_reorder_target_tracks_option_mapping() -> None:

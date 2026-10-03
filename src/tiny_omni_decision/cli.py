@@ -135,13 +135,16 @@ def status() -> None:
         "Phase 1: complete; reproducible text decision LoRA smoke and CPU CI are implemented."
     )
     console.print(
-        "Phase 2: pinned text/image/audio/video candidates, license audits, modality "
-        "adapters, normalization, and split gates are implemented; no model training run."
+        "Phase 2: approved text/image/audio/video candidates and split gates are implemented."
     )
     console.print(
-        "Open hard gates before durable training: full-corpus split verification, "
-        "component-level rights review for OneJev, held-out benchmark freeze, "
-        "and ternary runtime compatibility."
+        "Phase 3: bounded local high-precision LoRA pipeline is implemented; run the "
+        "frozen corpus and GPU result in docs/PHASE3.md. This is a bounded experiment, "
+        "not a durable teacher or model-quality claim."
+    )
+    console.print(
+        "Still gated: larger durable training, benchmark expansion, component-level "
+        "rights review for OneJev, and ternary runtime compatibility."
     )
 
 
@@ -313,6 +316,277 @@ def dataset_check_splits(training_path: Path, evaluation_path: Path) -> None:
         console.print(check_train_eval_splits(training, evaluation))
     except ValueError as exc:
         raise click.ClickException(str(exc)) from exc
+
+
+@app.command("freeze-corpus")
+def freeze_corpus(
+    train_catalog_path: Path = Path("manifests/phase3-training-corpus.yaml"),
+    eval_catalog_path: Path = Path("manifests/phase3-evaluation-corpus.yaml"),
+    output_dir: Path = Path("data/processed/phase3-frozen"),
+    seed: int = 17,
+    max_records_per_source: int = typer.Option(256, min=1),
+) -> None:
+    """Materialize capped, reproducible corpora and hash their provenance."""
+    from .dataset import (
+        audit_license,
+        audit_manifest,
+        check_train_eval_splits,
+        corpus_statistics,
+        iter_hub_rows,
+        iter_local_rows,
+        normalize_jsonl,
+        sha256_file,
+    )
+
+    def normalize_catalog(
+        catalog_path: Path, split_output: Path
+    ) -> tuple[list[DecisionExample], list[dict[str, object]]]:
+        catalog = DatasetCatalog.model_validate(load_structured_file(catalog_path))
+        if catalog_path == train_catalog_path and catalog.purpose != "training":
+            raise click.ClickException("train catalog must have purpose=training")
+        if catalog_path == eval_catalog_path and catalog.purpose != "evaluation":
+            raise click.ClickException("evaluation catalog must have purpose=evaluation")
+        examples: list[DecisionExample] = []
+        source_rows: list[dict[str, object]] = []
+        for entry in catalog.sources:
+            if not entry.include:
+                continue
+            manifest_path = (catalog_path.parent / entry.manifest).resolve()
+            manifest = DatasetManifest.model_validate(load_structured_file(manifest_path))
+            policy = audit_manifest(manifest)["project_policy"]
+            if catalog.purpose == "training" and policy != "ALLOW":
+                raise click.ClickException(
+                    f"training source not ALLOW: {entry.manifest} ({policy})"
+                )
+            limit = min(entry.row_limit or max_records_per_source, max_records_per_source)
+            local_source = manifest.notes.get("local_source")
+            if local_source:
+                source = Path(str(local_source))
+                if not source.is_absolute():
+                    source = Path.cwd() / source
+                rows = iter_local_rows(source)
+            else:
+                source = None
+                rows = iter_hub_rows(manifest)
+            normalized = list(
+                normalize_jsonl(rows, manifest, entry.adapter or "generic", limit=limit, seed=seed)
+            )
+            if not normalized:
+                raise click.ClickException(f"source normalized to zero rows: {entry.manifest}")
+            for item in normalized:
+                if catalog.purpose == "training":
+                    record_policy, unresolved = audit_license(
+                        item.provenance.license,
+                        commercial_use=item.provenance.commercial_use,
+                        derivative_model_training_allowed=item.provenance.derivative_model_training_allowed,
+                        redistribution_allowed=item.provenance.redistribution_allowed,
+                        media_redistribution_allowed=item.provenance.media_redistribution_allowed,
+                        has_media=bool(item.media),
+                        trust_status=item.provenance.trust_status,
+                    )
+                    if record_policy != "ALLOW":
+                        raise click.ClickException(
+                            f"record is {record_policy}: {item.id}; {unresolved}"
+                        )
+            examples.extend(normalized)
+            source_rows.append(
+                {
+                    "catalog_manifest": entry.manifest,
+                    "dataset_id": manifest.dataset_id,
+                    "source_revision": manifest.revision,
+                    "split": manifest.split,
+                    "adapter": entry.adapter,
+                    "seed": seed,
+                    "source_row_limit": limit,
+                    "records": len(normalized),
+                    "manifest_sha256": sha256_file(manifest_path),
+                    "source_file": str(source) if source else None,
+                    "source_file_sha256": sha256_file(source)
+                    if source and source.is_file()
+                    else None,
+                }
+            )
+        split_output.parent.mkdir(parents=True, exist_ok=True)
+        with split_output.open("w", encoding="utf-8", newline="\n") as handle:
+            for example in examples:
+                handle.write(example.model_dump_json() + "\n")
+        return examples, source_rows
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    train_path = output_dir / "train.jsonl"
+    eval_path = output_dir / "eval.jsonl"
+    try:
+        train, train_sources = normalize_catalog(train_catalog_path, train_path)
+        evaluation, eval_sources = normalize_catalog(eval_catalog_path, eval_path)
+        clevr4_manifest = DatasetManifest.model_validate(
+            load_structured_file(Path("manifests/candidates/clevr4.yaml"))
+        )
+        from .media import (
+            materialize_clevr4_images,
+            materialize_clevrer_videos,
+            materialize_speech_commands_audio,
+        )
+
+        train, train_media = materialize_clevr4_images(
+            train,
+            data_root=Path("data"),
+            archive_url=str(clevr4_manifest.notes["archive"]),
+        )
+        evaluation, eval_media = materialize_clevr4_images(
+            evaluation,
+            data_root=Path("data"),
+            archive_url=str(clevr4_manifest.notes["archive"]),
+        )
+        clevrer_train_manifest = DatasetManifest.model_validate(
+            load_structured_file(Path("manifests/candidates/clevrer.yaml"))
+        )
+        clevrer_eval_manifest = DatasetManifest.model_validate(
+            load_structured_file(Path("manifests/candidates/clevrer-validation.yaml"))
+        )
+        train, train_video_media = materialize_clevrer_videos(
+            train,
+            data_root=Path("data"),
+            archive_urls={"train": str(clevrer_train_manifest.notes["video_archive_url"])},
+        )
+        evaluation, eval_video_media = materialize_clevrer_videos(
+            evaluation,
+            data_root=Path("data"),
+            archive_urls={"validation": str(clevrer_eval_manifest.notes["video_archive_url"])},
+        )
+        speech_train_manifest = DatasetManifest.model_validate(
+            load_structured_file(Path("manifests/candidates/speech-commands.yaml"))
+        )
+        speech_eval_manifest = DatasetManifest.model_validate(
+            load_structured_file(Path("manifests/candidates/speech-commands-test.yaml"))
+        )
+        train, train_audio_media = materialize_speech_commands_audio(
+            train, manifest=speech_train_manifest, data_root=Path("data")
+        )
+        evaluation, eval_audio_media = materialize_speech_commands_audio(
+            evaluation, manifest=speech_eval_manifest, data_root=Path("data")
+        )
+        for path, examples in ((train_path, train), (eval_path, evaluation)):
+            path.write_text(
+                "".join(example.model_dump_json() + "\n" for example in examples),
+                encoding="utf-8",
+            )
+        overlap = check_train_eval_splits(train, evaluation)
+    except Exception as exc:
+        train_path.unlink(missing_ok=True)
+        eval_path.unlink(missing_ok=True)
+        raise click.ClickException(f"Corpus freeze failed: {exc}") from exc
+    import hashlib
+
+    corpus_manifest = {
+        "schema_version": 1,
+        "status": "frozen_bounded_corpus",
+        "seed": seed,
+        "max_source_rows": max_records_per_source,
+        "option_order_policy": "stable per-example shuffle seeded by global seed and sample id",
+        "media_policy": (
+            "selected Clevr-4 PNG, Speech Commands WAV, and CLEVRER MP4 members "
+            "are materialized and sha256 pinned; no benchmark or full archive media is copied"
+        ),
+        "media_materialization": {
+            "train": {
+                "images": train_media,
+                "audio": train_audio_media,
+                "videos": train_video_media,
+            },
+            "evaluation": {
+                "images": eval_media,
+                "audio": eval_audio_media,
+                "videos": eval_video_media,
+            },
+        },
+        "train": {
+            "path": train_path.name,
+            **corpus_statistics(train),
+            "sha256": sha256_file(train_path),
+            "sources": train_sources,
+        },
+        "evaluation": {
+            "path": eval_path.name,
+            **corpus_statistics(evaluation),
+            "sha256": sha256_file(eval_path),
+            "sources": eval_sources,
+        },
+        "overlap": overlap,
+        "manifest_sha256": sha256_file(Path("manifests/base-model.example.yaml")),
+        "training_catalog_sha256": sha256_file(train_catalog_path),
+        "evaluation_catalog_sha256": sha256_file(eval_catalog_path),
+        "content_fingerprint_algorithm": (
+            "SHA-256 over NFKC/casefold/whitespace-normalized state, question, "
+            "sorted options, and media identity"
+        ),
+        "corpus_pair_sha256": hashlib.sha256(
+            (sha256_file(train_path) + sha256_file(eval_path)).encode()
+        ).hexdigest(),
+    }
+    if overlap["status"] != "disjoint":
+        raise click.ClickException("Corpus overlap gate failed")
+    (output_dir / "corpus-manifest.json").write_text(
+        json.dumps(corpus_manifest, indent=2), encoding="utf-8"
+    )
+    console.print(json.dumps(corpus_manifest, indent=2))
+
+
+@app.command("train-decision")
+def train_decision(
+    train_manifest: Path = Path("data/processed/phase3-frozen/train.jsonl"),
+    eval_manifest: Path = Path("data/processed/phase3-frozen/eval.jsonl"),
+    config: Path = Path("configs/decision/e2b_qat_lora.yaml"),
+    output: Path = Path("artifacts/decision-teacher-v0"),
+    seed: int | None = None,
+    max_train_examples: int | None = typer.Option(None, min=1),
+    max_eval_examples: int | None = typer.Option(None, min=1),
+    max_steps: int | None = typer.Option(None, min=1),
+    gradient_accumulation_steps: int | None = typer.Option(None, min=1),
+    checkpoint_interval: int | None = typer.Option(None, min=1),
+    evaluation_interval: int | None = typer.Option(None, min=1),
+    resume_from: Path | None = None,
+    modalities: str = typer.Option("text,image,audio,video"),
+    tiny_overfit: bool = False,
+) -> None:
+    """Train and evaluate the frozen-base vocabulary-readout Decision LoRA."""
+    from .trainer import run_training
+
+    selected_modalities = {item.strip() for item in modalities.split(",") if item.strip()}
+    try:
+        result = run_training(
+            train_path=train_manifest,
+            eval_path=eval_manifest,
+            config_path=config,
+            output_dir=output,
+            seed_override=seed,
+            max_train_examples=max_train_examples,
+            max_eval_examples=max_eval_examples,
+            max_steps=max_steps,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            checkpoint_interval=checkpoint_interval,
+            evaluation_interval=evaluation_interval,
+            resume_from=resume_from,
+            modalities=selected_modalities,
+            tiny_overfit=tiny_overfit,
+        )
+    except Exception as exc:
+        raise click.ClickException(f"Decision LoRA training failed: {exc}") from exc
+    console.print(
+        json.dumps(
+            {
+                "artifact": str(output),
+                "steps": result["global_steps"],
+                "consumed": result["actual_train_consumption_by_modality_source"],
+                "baseline": result["baseline_metrics"],
+                "decision_lora": result["decision_lora_metrics"],
+                "skipped_train": result["skipped_train_examples"],
+                "skipped_eval": result["skipped_eval_examples"],
+                "max_allocated_vram_bytes": result["max_allocated_vram_bytes"],
+                "checkpoint_reload_verified": result["checkpoint_reload_verified"],
+            },
+            indent=2,
+        )
+    )
 
 
 def _load_model(model_id: str, revision: str, dtype: str = "auto"):

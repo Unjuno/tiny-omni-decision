@@ -112,20 +112,19 @@ automated source/content split checks. Further OneJev source rights review, comp
 full-corpus split/output verification, held-out benchmark freeze, and ternary runtime
 compatibility remain hard gates before durable model training or compression.
 
-## Phase 3 — High-precision Decision/Omni LoRA
+## Phase 3 — High-precision Decision/Omni LoRA — bounded local run complete
 
-Local machine target: 16 GB dedicated VRAM / 32 GB RAM.
+The first bounded experiment is complete on the local RTX 3080 Laptop GPU. The
+frozen corpus, actual Gemma 4 text/image/audio/video processor forwards, tiny-overfit
+diagnostic, 16-step mixed-modality LoRA training, adapter reload check, metrics,
+and limitations are recorded in [docs/PHASE3.md](docs/PHASE3.md). This is a
+reproducible pipeline/result for a small capped dataset, not a durable teacher or
+a claim that training quality is saturated. PyTorch 2.6 is required for Gemma 4's
+multimodal attention masking path.
 
-Goals:
-- freeze and hash the first train/evaluation corpus outputs after full-corpus disjointness checks
-- load the E2B QAT family in a memory-efficient training mode
-- run a bounded Decision/Omni LoRA experiment on approved modalities
-- forward → loss → backward → checkpoint → reload
-- confirm option-order shuffling and finite CE/Brier losses
+No ternary quantization, Recovery adapter, or teacher-logit cache is included.
 
-No rented GPU time is spent until this passes.
-
-## Phase 4 — Multimodal decision adaptation
+## Phase 4 — Larger multimodal decision adaptation
 
 Add modalities in this order:
 1. text

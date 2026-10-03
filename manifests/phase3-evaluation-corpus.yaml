@@ -1,0 +1,30 @@
+schema_version: 1
+manifest_type: candidate_catalog
+purpose: evaluation
+sources:
+  - manifest: candidates/typed-synth-validation.yaml
+    include: true
+    adapter: typed-decisions-synth
+    row_limit: 16
+  - manifest: candidates/open-jev-test.yaml
+    include: true
+    adapter: open-jev
+    row_limit: 256
+  - manifest: candidates/clevr4-validation.yaml
+    include: true
+    adapter: clevr4
+    row_limit: 8
+  - manifest: candidates/speech-commands-test.yaml
+    include: true
+    adapter: speech-commands
+    row_limit: 16
+  - manifest: candidates/clevrer-validation.yaml
+    include: true
+    adapter: clevrer
+    row_limit: 4
+  - manifest: candidates/mmau-test-mini.yaml
+    include: false
+    reason: Non-commercial held-out benchmark kept separate from the first reproducible experiment.
+  - manifest: candidates/mvbench.yaml
+    include: false
+    reason: Third-party research-only media lacks confirmed full video availability.

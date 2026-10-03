@@ -30,6 +30,12 @@ For model loading and CUDA training, install the ML extra in an environment with
 python -m pip install ".[ml,dev]"
 ```
 
+Gemma 4 multimodal attention masking currently requires PyTorch 2.6 or newer;
+the supported ML extra therefore pins PyTorch 2.6.x and matching torchvision
+0.21.x. On Windows with a CUDA 12.4-compatible driver, the official wheel command
+is `python -m pip install torch==2.6.0 torchvision==0.21.0 --index-url
+https://download.pytorch.org/whl/cu124`.
+
 The pinned model is public. Do not put Hugging Face tokens or other credentials in repository files. Fresh-clone CPU preflight:
 
 ```bash
@@ -63,7 +69,32 @@ The command refuses CPU execution, guessed target modules, non-finite loss, miss
 
 ### Hardware expectation
 
-The smoke path was run successfully on an NVIDIA GeForce RTX 3080 Laptop GPU with 16,384 MiB VRAM, PyTorch 2.5.1+cu121, Transformers 5.6.2, and PEFT 0.21.2. It loaded the pinned checkpoint (about 10.21 GB parameter memory), then completed forward, CE+Brier, backward, optimizer step, LoRA save/reload, and same-sample inference. It uses `device_map="auto"`, gradient checkpointing, a short prompt, and micro-batch 1; it adds no secondary quantization. This is evidence for that setup, not a guarantee for every 16 GB GPU or software stack.
+The Phase 1 text smoke was run on an NVIDIA GeForce RTX 3080 Laptop GPU with
+16,384 MiB VRAM, PyTorch 2.5.1+cu121, Transformers 5.6.2, and PEFT 0.21.2.
+Phase 3's Gemma 4 multimodal path requires PyTorch 2.6; its actual four-modality
+training result and limitations are recorded in [docs/PHASE3.md](docs/PHASE3.md).
+
+## Phase 3 bounded Decision LoRA run
+
+The first reproducible local corpus can be frozen with:
+
+```bash
+tiny-omni-decision freeze-corpus
+```
+
+Then run a bounded local four-modality training and evaluation experiment:
+
+```bash
+tiny-omni-decision train-decision \\
+  --train-manifest data/processed/phase3-frozen/train.jsonl \\
+  --eval-manifest data/processed/phase3-frozen/eval.jsonl \\
+  --config configs/decision/e2b_qat_lora.yaml \\
+  --output artifacts/phase3-bounded-mixed
+```
+
+The frozen corpus is intentionally a capped experiment set; media is materialized
+locally and hashed. Detailed source revisions, corpus/output hashes, measured
+base/LoRA metrics, GPU settings, and remaining gates are in [docs/PHASE3.md](docs/PHASE3.md).
 
 ## Planned compression and recovery flow
 
@@ -84,8 +115,8 @@ Teacher distillation caches **option logits at the single decision position** by
 ## Current boundary and limitations
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
-- The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`). Install a PyTorch build that matches the local CUDA driver; GPU model loading is not covered by CPU CI.
-- Phase 2 is complete at the candidate/catalog level: pinned, audited candidates and adapters cover text, image, audio, and video. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal training candidates; mixed OneJev natural-image sources remain gated on component-level rights review. Bounded normalization and train/evaluation disjointness checks passed; no model training or full media download was performed. Full-corpus outputs must still be generated and checked before durable Decision/Omni LoRA training.
+- The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`) and requires PyTorch 2.6 for actual Gemma 4 multimodal forward. Install a wheel matching the local CUDA driver; GPU model loading is not covered by CPU CI.
+- Phase 2 approved candidates and the bounded Phase 3 train/eval corpus are frozen with zero source-ID and normalized-content overlap. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal candidates; OneJev remains excluded pending component-level rights review. The first local mixed-modality LoRA run and full frozen evaluation completed; see [docs/PHASE3.md](docs/PHASE3.md). Its small capped training budget is not a durable quality claim.
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.

@@ -27,6 +27,7 @@ notes:
   checksum_list_sha256: 514720ded7cde46610e3871b2f21389b74b47b6232095cb15111445a044f84a0
   source_code: https://github.com/sgvaze/clevr4/tree/cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
   annotation_file: clevr_4_annots.json
+  local_source: data/raw/clevr4-10k/clevr_4_annots.json
   annotation_sha256: fba922a00216bbc3641f7f03a117a9f5e6a0956edde1f66062ff399225219fd6
   archive_rows: 10531
   train_rows: 8424
