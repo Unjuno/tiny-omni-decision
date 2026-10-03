@@ -2,17 +2,205 @@ from __future__ import annotations
 
 import hashlib
 import random
+import re
+import unicodedata
 from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path, PurePosixPath
+from urllib.parse import unquote
 
-from .schema import DecisionExample
+from .schema import DecisionExample, MediaRef
+
+
+def media_identity(media: MediaRef) -> str:
+    """Return a stable identity for one underlying media asset."""
+    kind = media.kind
+    digest = media.sha256
+    if digest:
+        return f"{kind}:sha256:{digest}"
+    uri = media.uri
+    path = media.path
+    reference = unquote(str(uri or path or "")).replace("\\", "/").casefold()
+    return f"{kind}:{reference}"
+
+
+def _state_identity(example: DecisionExample) -> str:
+    normalized = " ".join(unicodedata.normalize("NFKC", example.state).casefold().split())
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
+def source_asset_identity(example: DecisionExample) -> str:
+    """Identify a source-level unit that must remain within a single split."""
+    if example.source == "n4ze3m/typed-decisions-synth":
+        return f"state:{example.source_record_id.split(':', 1)[0]}"
+    if example.modality in {"image", "video"} and example.media:
+        return media_identity(example.media[0])
+    if example.modality == "audio" and example.media:
+        references = [
+            example.source_record_id,
+            example.media[0].uri or "",
+            example.media[0].path or "",
+        ]
+        for reference in references:
+            decoded = unquote(str(reference)).replace("\\", "/")
+            basename = PurePosixPath(decoded).name
+            match = re.search(r"([^/]+?)_nohash_[^/]+(?:\.wav)?$", basename, re.IGNORECASE)
+            if match:
+                return f"speaker:{match.group(1).casefold()}"
+        return media_identity(example.media[0])
+    if example.modality == "text" and example.state.strip():
+        return f"state:{_state_identity(example)}"
+    return f"record:{example.source_record_id}"
+
+
+def filter_previously_seen_records(
+    candidates: list[DecisionExample], previously_seen: list[DecisionExample]
+) -> tuple[list[DecisionExample], dict[str, object]]:
+    """Drop candidate source-asset groups found in a prior corpus.
+
+    This is used before freezing a new validation or audit partition. A single
+    previously observed question removes its whole image, speaker, video, or
+    text-state group from the candidate partition.
+    """
+    from collections import defaultdict
+
+    from .dataset import content_fingerprint
+
+    used_ids = {(item.source, item.source_record_id) for item in previously_seen}
+    used_assets = {
+        (item.source, source_asset_identity(item)) for item in previously_seen
+    }
+    used_media = {
+        media_identity(reference) for item in previously_seen for reference in item.media
+    }
+    used_content = {content_fingerprint(item) for item in previously_seen}
+
+    groups: dict[tuple[str, str], list[DecisionExample]] = defaultdict(list)
+    for item in candidates:
+        groups[(item.source, source_asset_identity(item))].append(item)
+
+    excluded_groups: dict[tuple[str, str], str] = {}
+    for key, records in groups.items():
+        if any((item.source, item.source_record_id) in used_ids for item in records):
+            excluded_groups[key] = "source_record_id"
+        elif key in used_assets:
+            excluded_groups[key] = "source_asset"
+        elif any(
+            media_identity(reference) in used_media
+            for item in records
+            for reference in item.media
+        ):
+            excluded_groups[key] = "media_identity"
+        elif any(content_fingerprint(item) in used_content for item in records):
+            excluded_groups[key] = "normalized_content"
+
+    retained = [
+        item
+        for item in candidates
+        if (item.source, source_asset_identity(item)) not in excluded_groups
+    ]
+    excluded_by_reason: dict[str, int] = defaultdict(int)
+    for key, reason in excluded_groups.items():
+        excluded_by_reason[reason] += len(groups[key])
+    return retained, {
+        "candidate_records": len(candidates),
+        "retained_records": len(retained),
+        "excluded_records": len(candidates) - len(retained),
+        "candidate_asset_groups": len(groups),
+        "excluded_asset_groups": len(excluded_groups),
+        "excluded_by_reason": dict(sorted(excluded_by_reason.items())),
+    }
+
+
+def validate_training_inputs(
+    train_path: str | Path,
+    validation_path: str | Path | None,
+    *,
+    evaluation_path: str | Path | None = None,
+) -> None:
+    """Fail closed unless training and selection validation are independent inputs."""
+    if validation_path is None:
+        raise ValueError("independent validation is required for checkpoint selection")
+    if evaluation_path is not None:
+        raise ValueError("evaluation is isolated from normal experiment iteration")
+    train = Path(train_path).resolve()
+    validation = Path(validation_path).resolve()
+    if train == validation:
+        raise ValueError("training and validation must not use the same corpus")
+    for path in (train, validation):
+        components = {part.casefold().replace("_", "-") for part in path.parts}
+        if any("sealed-audit" in part for part in components):
+            raise ValueError("sealed audit data cannot be loaded during training")
+
+
+def macro_metrics(metrics: dict[str, dict[str, float | int]]) -> dict[str, float]:
+    """Aggregate each modality equally, independently of its sample count."""
+    modality_metrics = [
+        metrics[key]
+        for key in sorted(metrics)
+        if key.startswith("modality:")
+    ]
+    if not modality_metrics:
+        raise ValueError("macro metrics require at least one modality")
+    accuracy = [float(item["accuracy"]) for item in modality_metrics]
+    return {
+        "macro_accuracy": sum(accuracy) / len(accuracy),
+        "minimum_modality_accuracy": min(accuracy),
+        "macro_nll": sum(float(item["nll"]) for item in modality_metrics)
+        / len(modality_metrics),
+        "macro_brier": sum(float(item["brier"]) for item in modality_metrics)
+        / len(modality_metrics),
+        "macro_ece": sum(float(item["ece"]) for item in modality_metrics) / len(modality_metrics),
+    }
+
+
+def validation_selection_score(metrics: dict[str, dict[str, float | int]]) -> float:
+    """Predefined validation-only score; balance calibration and weak-modality quality."""
+    summary = macro_metrics(metrics)
+    return (
+        summary["macro_nll"]
+        + 0.2 * summary["macro_brier"]
+        + 0.1 * summary["macro_ece"]
+        - 0.25 * summary["macro_accuracy"]
+        - 0.25 * summary["minimum_modality_accuracy"]
+    )
+
+
+@dataclass
+class ValidationCheckpointSelector:
+    """Track best validation checkpoint and stop after a fixed plateau patience."""
+
+    patience: int = 4
+    min_delta: float = 0.0
+    best_score: float = float("inf")
+    best_step: int = 0
+    evaluations_without_improvement: int = 0
+
+    def __post_init__(self) -> None:
+        if self.patience < 1 or self.min_delta < 0:
+            raise ValueError("patience must be positive and min_delta nonnegative")
+
+    def observe(self, step: int, metrics: dict[str, dict[str, float | int]]) -> bool:
+        if step < 1:
+            raise ValueError("checkpoint step must be positive")
+        score = validation_selection_score(metrics)
+        if score < self.best_score - self.min_delta:
+            self.best_score = score
+            self.best_step = step
+            self.evaluations_without_improvement = 0
+            return True
+        self.evaluations_without_improvement += 1
+        return False
+
+    @property
+    def should_stop(self) -> bool:
+        return (
+            self.best_step > 0 and self.evaluations_without_improvement >= self.patience
+        )
 
 
 def _record_group(example: DecisionExample) -> tuple[str, str, str]:
-    record_id = example.source_record_id
-    # Typed Synth emits several question records from one state; keep the state intact.
-    if example.source == "n4ze3m/typed-decisions-synth":
-        record_id = record_id.split(":", 1)[0]
-    return example.source, example.split, record_id
+    return example.source, example.split, source_asset_identity(example)
 
 
 def partition_heldout_records(
@@ -76,12 +264,12 @@ def comparison_deltas(
     baseline: dict[str, dict[str, float | int]],
     trained: dict[str, dict[str, float | int]],
 ) -> dict[str, dict[str, float]]:
-    """Return trained-minus-base metric changes for shared overall/group keys."""
+    """Return trained-minus-base metric changes for shared metrics in each group."""
     delta: dict[str, dict[str, float]] = {}
     for group in sorted(baseline.keys() & trained.keys()):
         delta[group] = {
             metric: float(trained[group][metric]) - float(baseline[group][metric])
-            for metric in ("accuracy", "nll", "brier", "ece", "mean_confidence")
+            for metric in sorted((baseline[group].keys() & trained[group].keys()) - {"count"})
         }
     return delta
 
