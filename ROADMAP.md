@@ -12,6 +12,9 @@ Gemma 4 E2B QAT alignment backbone
 Decision / Omni LoRA training
         ↓
 High-precision Decision Teacher
+        ↓
+Option-only Decision Readout
+  (compute only supplied option logits; no full-vocab projection at runtime)
         ├── cache option logits at the decision position
         └── merge Decision LoRA into task-adapted quantization source
                     ↓
@@ -22,9 +25,18 @@ High-precision Decision Teacher
           single Recovery LoRA
                     ↓
           Final Tiny Omni Decision model
+                    ↓
+          runtime profiling / mobile benchmark
+                    ↓
+          conditional attention acceleration research
+          (only if attention is a measured bottleneck)
 ```
 
 The final runtime is intended to use a task-adapted ternary base plus one Recovery LoRA. The Decision LoRA is a teacher/training artifact and is merged before ternary conversion rather than stacked as a second runtime adapter.
+
+The runtime should also avoid computing the full vocabulary projection when only supplied option logits are required. The first implementation target is an option-only projection that reuses the existing LM-head rows for the active option labels so that decision semantics remain unchanged while unnecessary vocabulary work is removed.
+
+Architecture-level attention replacement (for example linear attention or another softmax-attention alternative) is tracked as a separate acceleration path. It may be prototyped after Teacher v1 is stable, but production adoption is gated by measured end-to-end profiling and by preservation of multimodal decision quality.
 
 The project does not depend on preserving long-form generation.
 
@@ -175,6 +187,28 @@ Evaluate:
 - NLL
 - latency by modality
 
+## Phase 5.5 — Option-only Decision Readout
+
+Make the runtime decision path compute only the logits that are actually used.
+
+Required first implementation:
+- reuse the existing embedding/LM-head rows corresponding to the supplied option-label tokens
+- compute only the active 2–20 option logits at the decision position
+- avoid a full-vocabulary projection during decision inference
+- preserve the exact option ordering and probability semantics
+- verify numerical equivalence against the current full-vocabulary readout to normal floating-point tolerance
+
+Measure:
+- end-to-end latency by modality
+- isolated readout latency
+- peak VRAM/RAM
+- output-logit/probability differences
+- prediction agreement
+
+This is a low-risk runtime optimization and should be implemented before the compression/recovery stack is finalized. It can be prototyped in parallel once the Teacher v1 decision interface is stable; it must not interfere with Teacher-quality model selection.
+
+Do not replace the readout with a newly trained fixed-class classifier by default. If a learned compact scorer is later tested, treat it as a separate architecture experiment and compare it against the option-only LM-head projection.
+
 ## Phase 6 — Extreme ternary compression
 
 Quantization source:
@@ -256,14 +290,38 @@ Optional experiment only:
 
 The high-precision Decision Teacher is the reference for Accuracy, ECE, Brier, NLL, and teacher/student option KL.
 
-## Phase 9 — Runtime and mobile prototype
+## Phase 9 — Runtime profiling and mobile prototype
 
 Target outputs:
 - portable model package
 - reproducible conversion
 - PC inference
 - Apple Silicon / Android / iOS feasibility notes
+- measured end-to-end latency by modality
+- startup time and resident RAM/VRAM
+- isolated encoder / decoder / attention / MLP / readout timing where practical
 - direct packed low-bit kernels only if required after v0.1
+
+The product KPI is the final lightweight Omni Decision model's absolute quality, size, memory footprint, startup, and latency. Teacher fidelity is a diagnostic, not the product objective.
+
+## Phase 10 — Conditional architecture-level acceleration
+
+Investigate deeper attention changes only when profiling shows that attention is a material end-to-end bottleneck.
+
+Candidate experiments:
+- linear attention
+- other softmax-attention approximations/replacements
+- limited attention-layer replacement rather than an all-at-once rewrite
+
+Requirements:
+- start from the completed high-quality multimodal decision model rather than redesigning the backbone prematurely
+- compare against the same text/image/audio/video decision benchmark
+- measure absolute Accuracy, NLL, Brier, ECE, latency, RAM/VRAM, and model size
+- preserve multimodal alignment; do not accept a speedup that materially breaks image/audio/video quality
+- use adaptation/distillation if needed, but account for the resulting parameter and runtime cost
+- adopt only if the end-to-end speedup is meaningful after encoder, MLP, readout, and I/O costs are included
+
+This research may be prototyped in parallel after Teacher v1 is stable, but it is not a blocker for the v0.1 ternary + Recovery product path.
 
 ## v0.1 non-goals
 
@@ -272,5 +330,6 @@ Target outputs:
 - preserving long chain-of-thought generation
 - quantizing every modality encoder to ternary
 - custom mobile ternary kernels before model quality is proven
+- making linear-attention replacement a prerequisite for v0.1
 - large quantizer comparison ladders
-- claiming speedup from lower bit-width without a kernel benchmark
+- claiming speedup from lower bit-width or attention changes without an end-to-end benchmark
