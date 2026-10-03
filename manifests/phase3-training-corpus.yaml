@@ -1,0 +1,38 @@
+schema_version: 1
+manifest_type: candidate_catalog
+purpose: training
+sources:
+  - manifest: dataset.example.yaml
+    subset: default
+    split: train
+    adapter: typed-decisions-synth
+    include: true
+    row_limit: 16
+  - manifest: candidates/open-jev.yaml
+    subset: release-v2-redistributable
+    split: train
+    adapter: open-jev
+    include: true
+    row_limit: 256
+    note: Soft/non-single-winner targets are excluded by the adapter.
+  - manifest: candidates/clevr4.yaml
+    subset: clevr_4_10k_v1
+    split: train
+    adapter: clevr4
+    include: true
+    row_limit: 8
+  - manifest: candidates/speech-commands.yaml
+    subset: v0.02
+    split: train
+    adapter: speech-commands
+    include: true
+    row_limit: 16
+  - manifest: candidates/clevrer.yaml
+    subset: official-2020
+    split: train
+    adapter: clevrer
+    include: true
+    row_limit: 4
+  - manifest: candidates/onejev.yaml
+    include: false
+    reason: Component-level source and media rights remain REVIEW.

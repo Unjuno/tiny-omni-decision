@@ -10,6 +10,7 @@ import re
 import unicodedata
 import urllib.parse
 import urllib.request
+from collections import Counter
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import Any
@@ -980,6 +981,11 @@ def iter_hub_rows(manifest: DatasetManifest) -> Iterator[dict[str, Any]]:
         revision=manifest.revision,
         streaming=True,
     )
+    from datasets import Audio
+
+    for column_name, feature in rows.features.items():
+        if isinstance(feature, Audio) and feature.decode:
+            rows = rows.cast_column(column_name, Audio(decode=False))
     for row in rows:
         yield {**row, "split": row.get("split", manifest.split)}
 
@@ -1025,7 +1031,15 @@ def normalize_jsonl(
             for example in examples:
                 yield shuffle_options(example, seed) if seed is not None else example
             continue
-        example = adapt_row(row, manifest, adapter, components)
+        try:
+            example = adapt_row(row, manifest, adapter, components)
+        except ValueError as exc:
+            if adapter in {"open-jev", "openjev"} and str(exc) in {
+                "soft or malformed target cannot be normalized as a single-choice label",
+                "multi-label target cannot be represented by a single-choice example",
+            }:
+                continue
+            raise
         yield shuffle_options(example, seed) if seed is not None else example
 
 
@@ -1079,4 +1093,35 @@ def check_train_eval_splits(
         "shared_source_ids": 0,
         "shared_content_fingerprints": 0,
         "status": "disjoint",
+    }
+
+
+def sha256_file(path: str | Path) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def corpus_statistics(examples: Iterable[DecisionExample]) -> dict[str, Any]:
+    sources: Counter[str] = Counter()
+    modalities: Counter[str] = Counter()
+    options: Counter[str] = Counter()
+    media_status: Counter[str] = Counter()
+    count = 0
+    for example in examples:
+        count += 1
+        sources[example.source] += 1
+        modalities[example.modality] += 1
+        options[str(len(example.options))] += 1
+        for media in example.media:
+            status = "local" if media.path else "source_reference"
+            media_status[f"{media.kind}:{status}"] += 1
+    return {
+        "records": count,
+        "by_source": dict(sorted(sources.items())),
+        "by_modality": dict(sorted(modalities.items())),
+        "by_option_count": dict(sorted(options.items(), key=lambda item: int(item[0]))),
+        "media_references": dict(sorted(media_status.items())),
     }

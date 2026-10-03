@@ -15,6 +15,16 @@ training:
   rank: 16
   alpha: 32
   dropout: 0.05
+  seed: 17
+  max_train_examples: 128
+  max_eval_examples: 64
+  max_steps: 16
+  gradient_accumulation_steps: 4
+  checkpoint_interval: 4
+  evaluation_interval: 4
+  learning_rate: 0.0001
+  max_sequence_length: 1024
+  ece_bins: 15
   # Must be populated from `inspect-model` on the pinned checkpoint.
   target_modules: []
   freeze_modality_encoders: true
@@ -30,3 +40,11 @@ teacher:
   enabled: false
   source: null
   probability_temperature: 1.0
+
+sampling:
+  modality_weights:
+    text: 1.0
+    image: 1.0
+    audio: 1.0
+    video: 1.0
+  source_weights: {}

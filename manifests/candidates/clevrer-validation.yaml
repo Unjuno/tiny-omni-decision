@@ -24,6 +24,7 @@ notes:
   source_code: https://github.com/chuangg/CLEVRER/tree/98b842082ba4f7c18b6b9e3f39145871782a65ef
   license_evidence: https://data.csail.mit.edu/clevrer/README.txt
   questions_url: https://data.csail.mit.edu/clevrer/questions/validation.json
+  local_source: data/raw/clevrer/validation-questions.json
   questions_sha256: fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d
   video_archive_url: https://data.csail.mit.edu/clevrer/videos/validation/video_validation.zip
   video_archive_size_bytes: 6206059321

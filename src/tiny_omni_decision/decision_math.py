@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 
 from .schema import TextDecision
 
@@ -62,6 +63,47 @@ def brier_score(probabilities: list[list[float]], targets: list[int]) -> float:
             raise ValueError("target index is out of range")
         total += sum((value - float(index == target)) ** 2 for index, value in enumerate(row))
     return total / len(probabilities)
+
+
+def negative_log_likelihood(
+    probabilities: Sequence[Sequence[float]], targets: Sequence[int]
+) -> float:
+    if not probabilities or len(probabilities) != len(targets):
+        raise ValueError("probability batch and targets must be nonempty and have equal lengths")
+    total = 0.0
+    for row, target in zip(probabilities, targets, strict=True):
+        if target < 0 or target >= len(row):
+            raise ValueError("target index is out of range")
+        if any(not math.isfinite(value) or value < 0.0 for value in row):
+            raise ValueError("probabilities must be finite and nonnegative")
+        total -= math.log(max(float(row[target]), 1e-12))
+    return total / len(probabilities)
+
+
+def expected_calibration_error(
+    probabilities: Sequence[Sequence[float]],
+    targets: Sequence[int],
+    n_bins: int = 15,
+) -> float:
+    """Top-label ECE with equal-width confidence bins on [0, 1]."""
+    if n_bins < 1:
+        raise ValueError("n_bins must be at least one")
+    if not probabilities or len(probabilities) != len(targets):
+        raise ValueError("probability batch and targets must be nonempty and have equal lengths")
+    bins: list[list[float]] = [[] for _ in range(n_bins)]
+    for row, target in zip(probabilities, targets, strict=True):
+        if len(row) < 2 or target < 0 or target >= len(row):
+            raise ValueError("each target must index a probability row with at least two options")
+        if any(not math.isfinite(value) or value < 0.0 for value in row):
+            raise ValueError("probabilities must be finite and nonnegative")
+        prediction = max(range(len(row)), key=row.__getitem__)
+        confidence = float(row[prediction])
+        if confidence > 1.0:
+            raise ValueError("probabilities must be in [0, 1]")
+        index = min(int(confidence * n_bins), n_bins - 1)
+        bins[index].append(float(prediction == target) - confidence)
+    count = len(targets)
+    return sum(len(items) * abs(sum(items) / len(items)) for items in bins if items) / count
 
 
 def reorder_target(

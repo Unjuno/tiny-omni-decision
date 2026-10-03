@@ -35,9 +35,12 @@ def brier_loss(probabilities: Tensor, target_indices: Tensor) -> Tensor:
 
 
 def decision_loss(
-    logits: Tensor, target_indices: Tensor, brier_weight: float = 0.2
+    logits: Tensor,
+    target_indices: Tensor,
+    brier_weight: float = 0.2,
+    cross_entropy_weight: float = 1.0,
 ) -> tuple[Tensor, Tensor, Tensor]:
     probabilities = torch.softmax(logits.float(), dim=-1)
     ce = F.cross_entropy(logits.float(), target_indices)
     brier = brier_loss(probabilities, target_indices)
-    return ce + brier_weight * brier, ce, brier
+    return cross_entropy_weight * ce + brier_weight * brier, ce, brier
