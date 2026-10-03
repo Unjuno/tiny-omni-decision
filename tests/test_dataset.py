@@ -3,7 +3,9 @@ from __future__ import annotations
 import gzip
 import io
 import json
+import sys
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 import yaml
@@ -389,6 +391,46 @@ def test_hub_gzip_jsonl_source_is_streamed(monkeypatch: pytest.MonkeyPatch) -> N
     monkeypatch.setattr("tiny_omni_decision.dataset.urllib.request.urlopen", fake_open)
     rows = iter_hub_rows(source)
     assert next(rows)["id"] == "row-1"
+    rows.close()
+
+
+def test_hub_parquet_source_bypasses_legacy_dataset_script(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    source = manifest("candidates/speech-commands.yaml")
+    source.notes["parquet_files"] = ["v0.02/train-00000-of-00006.parquet"]
+    seen: dict[str, object] = {}
+
+    class FakeRows(list[dict[str, object]]):
+        features = {"audio": object()}
+
+        def cast_column(self, name: str, feature: object) -> FakeRows:
+            seen["cast_column"] = (name, feature)
+            return self
+
+    def fake_load_dataset(path: str, **kwargs: object) -> FakeRows:
+        seen["path"] = path
+        seen.update(kwargs)
+        return FakeRows([{"file": "yes/example.wav", "label": 0}])
+
+    fake_module = ModuleType("datasets")
+    fake_module.load_dataset = fake_load_dataset
+    fake_module.Audio = lambda decode: {"decode": decode}
+    monkeypatch.setitem(sys.modules, "datasets", fake_module)
+    rows = iter_hub_rows(source)
+    assert next(rows)["label"] == 0
+    assert seen == {
+        "path": "parquet",
+        "data_files": {
+            "train": [
+                "https://huggingface.co/datasets/google/speech_commands/resolve/"
+                f"{source.revision}/v0.02/train-00000-of-00006.parquet"
+            ]
+        },
+        "split": "train",
+        "streaming": True,
+        "cast_column": ("audio", {"decode": False}),
+    }
     rows.close()
 
 

@@ -23,6 +23,8 @@ schema:
 notes:
   release: Speech Commands v0.02
   hub_snapshot_url: https://huggingface.co/datasets/google/speech_commands/tree/a751309c0fd613e8a5d30d77900f30e8b42bc2da/data/v0.02
+  parquet_files:
+    - v0.02/test-00000-of-00001.parquet
   class_names: [down, go, left, no, off, on, right, stop, up, yes]
   omitted_labels: [_silence_, _unknown_]
   hub_card_split_rows: 4890

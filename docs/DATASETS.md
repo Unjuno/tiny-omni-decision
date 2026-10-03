@@ -120,9 +120,10 @@ tiny-omni-decision dataset-normalize data/raw/clevrer/validation-questions.json 
   --limit 3 --seed 17 --output data/processed/clevrer-validation.jsonl
 ```
 
-Speech Commands adapter tests use tiny source-shaped metadata fixtures. In this Windows
-environment the optional `datasets` reader cannot initialize because of a Python DLL load
-failure, so no actual Hub audio rows were normalized here. CLEVRER examples were sampled
+The pinned Speech Commands Parquet shards are read directly in streaming mode, bypassing
+the legacy dataset script in the Hub repository. Audio decoding is disabled because the
+adapter needs only the path and label. A live Hub smoke run normalized three train rows;
+the checked-in CPU tests use tiny source-shaped fixtures. CLEVRER examples were sampled
 from the official train/validation question JSON. Combined smoke sample files (including
 text, Clevr-4, CLEVRER and speech fixtures) contain 61 train and 66 evaluation decisions;
 the split checker reported zero shared source IDs and zero shared content fingerprints.

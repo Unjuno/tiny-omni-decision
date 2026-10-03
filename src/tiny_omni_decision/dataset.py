@@ -945,6 +945,34 @@ def iter_hub_rows(manifest: DatasetManifest) -> Iterator[dict[str, Any]]:
             'python -m pip install "tiny-omni-decision[data]". '
             f"Optional reader initialization failed: {exc}"
         ) from exc
+    parquet_files = manifest.notes.get("parquet_files")
+    if parquet_files:
+        from datasets import Audio
+
+        if isinstance(parquet_files, str):
+            parquet_files = [parquet_files]
+        repo_id = urllib.parse.quote(manifest.dataset_id, safe="/")
+        urls = []
+        for parquet_file in parquet_files:
+            source_path = str(parquet_file).replace("\\", "/")
+            if source_path.startswith("/") or ".." in source_path.split("/"):
+                raise ValueError("manifest parquet_files must be relative repository paths")
+            quoted_path = urllib.parse.quote(source_path, safe="/")
+            urls.append(
+                f"https://huggingface.co/datasets/{repo_id}/resolve/"
+                f"{manifest.revision}/{quoted_path}"
+            )
+        rows = load_dataset(
+            "parquet",
+            data_files={manifest.split: urls},
+            split=manifest.split,
+            streaming=True,
+        )
+        if "audio" in rows.features:
+            rows = rows.cast_column("audio", Audio(decode=False))
+        for row in rows:
+            yield {**row, "split": row.get("split", manifest.split)}
+        return
     rows = load_dataset(
         manifest.dataset_id,
         manifest.subset,
@@ -952,7 +980,8 @@ def iter_hub_rows(manifest: DatasetManifest) -> Iterator[dict[str, Any]]:
         revision=manifest.revision,
         streaming=True,
     )
-    yield from rows
+    for row in rows:
+        yield {**row, "split": row.get("split", manifest.split)}
 
 
 def normalize_jsonl(
