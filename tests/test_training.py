@@ -258,6 +258,69 @@ def test_sampling_balances_modalities_before_splitting_sources() -> None:
     assert len(selected) == 40
 
 
+def test_sampling_normalizes_configured_modality_weights() -> None:
+    examples = [
+        *(example(f"t-{index}", "text-source") for index in range(300)),
+        *(
+            example(
+                f"i-{index}",
+                "image-source",
+                "image",
+                [MediaRef(kind="image", uri=f"image:{index}")],
+            )
+            for index in range(300)
+        ),
+        *(
+            example(
+                f"a-{index}",
+                "audio-source",
+                "audio",
+                [MediaRef(kind="audio", uri=f"audio:{index}")],
+            )
+            for index in range(300)
+        ),
+        *(
+            example(
+                f"v-{index}",
+                "video-source",
+                "video",
+                [MediaRef(kind="video", uri=f"video:{index}")],
+            )
+            for index in range(300)
+        ),
+    ]
+
+    selected, _ = deterministic_sample_order(
+        examples,
+        seed=17,
+        limit=600,
+        modality_weights={"text": 1.5, "image": 1.5, "audio": 1.0, "video": 2.0},
+    )
+
+    modality_counts = {
+        modality: sum(item.modality == modality for item in selected)
+        for modality in ("text", "image", "audio", "video")
+    }
+    assert modality_counts == {"text": 150, "image": 150, "audio": 100, "video": 200}
+
+
+def test_sampling_normalizes_source_weights_within_modality() -> None:
+    examples = [
+        *(example(f"a-{index}", "source-a") for index in range(100)),
+        *(example(f"b-{index}", "source-b") for index in range(100)),
+    ]
+
+    _, counts = deterministic_sample_order(
+        examples,
+        seed=17,
+        limit=90,
+        modality_weights={"text": 1.0},
+        source_weights={"source-a": 2.0, "source-b": 1.0},
+    )
+
+    assert counts == {"text:source-a": 60, "text:source-b": 30}
+
+
 def test_sampling_caps_reuse_to_keep_small_modalities_in_weighted_mix() -> None:
     examples = [
         *(example(f"t-{index}", "text-source") for index in range(20)),

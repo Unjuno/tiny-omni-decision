@@ -126,10 +126,13 @@ def deterministic_sample_order(
     }
     if not active_modalities:
         raise ValueError("no examples remain after applying modality/source sampling weights")
+    eligible_keys = [
+        key for modality in active_modalities for key in keys_by_modality[modality]
+    ]
     consumed: Counter[str] = Counter()
     modality_consumed: Counter[str] = Counter()
     selected: list[DecisionExample] = []
-    target_count = min(limit, sum(len(bucket) for bucket in buckets.values()))
+    target_count = min(limit, sum(len(buckets[key]) for key in eligible_keys))
     while len(selected) < target_count:
         eligible_modalities = [
             modality
@@ -139,19 +142,26 @@ def deterministic_sample_order(
         if not eligible_modalities:
             break
         # First allocate by modality, then split that modality's share across sources.
+        modality_weight_total = sum(active_modalities[item] for item in eligible_modalities)
         modality = max(
             eligible_modalities,
             key=lambda item: (
-                active_modalities[item] * (len(selected) + 1) - modality_consumed[item],
+                (len(selected) + 1) * active_modalities[item] / modality_weight_total
+                - modality_consumed[item],
                 item,
             ),
         )
         eligible_sources = [key for key in keys_by_modality[modality] if buckets[key]]
+        source_weight_total = sum(
+            source_weights.get(item, source_weights.get(item.split(":", 1)[1], 1.0))
+            for item in eligible_sources
+        )
         key = max(
             eligible_sources,
             key=lambda item: (
-                source_weights.get(item, source_weights.get(item.split(":", 1)[1], 1.0))
-                * (modality_consumed[modality] + 1)
+                (modality_consumed[modality] + 1)
+                * source_weights.get(item, source_weights.get(item.split(":", 1)[1], 1.0))
+                / source_weight_total
                 - consumed[item],
                 item,
             ),
