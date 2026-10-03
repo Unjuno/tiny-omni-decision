@@ -155,3 +155,15 @@ overwrite the v0 artifact. The final report must include per-modality and
 per-source Accuracy, NLL, Brier, ECE, mean confidence, data/checkpoint hashes,
 compute, CI, and the evidence for continuing training or proceeding to
 compression.
+
+## Downstream runtime optimization order
+
+Teacher v1 remains focused on high-precision quality and is not modified to accommodate later runtime shortcuts. After Teacher v1 is frozen, the downstream sequence is:
+
+1. merge the selected Decision LoRA and ternary-compress the decoder
+2. train Recovery and preserve this as Variant A
+3. replace the full-vocabulary runtime readout with a lightweight Decision classifier / option scorer and preserve Variant B
+4. add token pooling / a learned resampler, then re-distill and train a replacement Recovery adapter to produce Variant C
+5. benchmark A/B/C under identical quality and latency conditions before choosing the deployable artifact
+
+Token pooling is therefore intentionally deferred until after the first recovered quantized model and lightweight-readout model exist. This keeps the Teacher-quality experiment clean while still treating aggressive latency reduction as a planned product stage.
