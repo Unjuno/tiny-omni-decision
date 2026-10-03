@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import gc
+import hashlib
 import importlib.metadata
 import json
 import os
 import platform
 import random
+import shutil
 import tempfile
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import Annotated
 
 import click
 import typer
@@ -138,13 +142,14 @@ def status() -> None:
         "Phase 2: approved text/image/audio/video candidates and split gates are implemented."
     )
     console.print(
-        "Phase 3: bounded local high-precision LoRA pipeline is implemented; run the "
-        "frozen corpus and GPU result in docs/PHASE3.md. This is a bounded experiment, "
-        "not a durable teacher or model-quality claim."
+        "Teacher v0 is a legacy observed reference. Teacher v1 adds fail-closed "
+        "validation, asset-level split checks, an isolated one-time sealed audit, "
+        "and validation-only learning-curve selection."
     )
     console.print(
-        "Still gated: larger durable training, benchmark expansion, component-level "
-        "rights review for OneJev, and ternary runtime compatibility."
+        "Teacher v1 data freeze, local learning curves, policy/seed comparisons, "
+        "final audit, and quality claims remain gated. No ternary conversion or "
+        "Recovery LoRA is performed."
     )
 
 
@@ -626,16 +631,324 @@ def freeze_corpus(
     console.print(json.dumps(corpus_manifest, indent=2))
 
 
+@app.command("freeze-teacher-v1-corpus")
+def freeze_teacher_v1_corpus(
+    train_catalog_path: Path = Path("manifests/teacher-v1-training-corpus.yaml"),
+    heldout_catalog_path: Path = Path("manifests/teacher-v1-heldout-corpus.yaml"),
+    legacy_corpus_dir: Path = Path("data/processed/durable-teacher-v0"),
+    output_dir: Path = Path("data/processed/durable-teacher-v1"),
+    sealed_audit_dir: Path = Path("data/sealed/durable-teacher-v1"),
+    seed: int = 17,
+    max_records_per_source: int = typer.Option(8192, min=1),
+) -> None:
+    """Freeze disjoint Teacher v1 train/validation and an isolated sealed audit split."""
+    import uuid
+
+    from .corpus import filter_previously_seen_records, source_asset_identity
+    from .dataset import check_train_eval_splits, corpus_statistics, sha256_file
+
+    if seed != 17:
+        raise click.ClickException("Teacher v1 corpus seed is immutable at 17")
+    output_dir = output_dir.resolve()
+    sealed_audit_dir = sealed_audit_dir.resolve()
+    legacy_corpus_dir = legacy_corpus_dir.resolve()
+    if output_dir.exists() or sealed_audit_dir.exists():
+        raise click.ClickException(
+            "Teacher v1 corpus destinations already exist; refusing overwrite"
+        )
+    if output_dir == sealed_audit_dir or output_dir in sealed_audit_dir.parents:
+        raise click.ClickException("processed and sealed-audit destinations must be separate")
+    legacy_paths = {
+        "train": legacy_corpus_dir / "train.jsonl",
+        "validation": legacy_corpus_dir / "validation.jsonl",
+        "evaluation": legacy_corpus_dir / "eval.jsonl",
+    }
+    absent = [str(path) for path in legacy_paths.values() if not path.is_file()]
+    if absent:
+        raise click.ClickException(f"legacy Teacher v0 corpora are required: {absent}")
+
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    sealed_audit_dir.parent.mkdir(parents=True, exist_ok=True)
+    stage_dir = Path(
+        tempfile.mkdtemp(prefix=".teacher-v1-source-pool-", dir=output_dir.parent)
+    )
+    processed_build = Path(
+        tempfile.mkdtemp(prefix=".teacher-v1-build-", dir=output_dir.parent)
+    )
+    audit_build = Path(
+        tempfile.mkdtemp(prefix=".teacher-v1-audit-build-", dir=sealed_audit_dir.parent)
+    )
+
+    def read_examples(path: Path) -> list[DecisionExample]:
+        with path.open(encoding="utf-8") as handle:
+            return [
+                DecisionExample.model_validate_json(line)
+                for line in handle
+                if line.strip()
+            ]
+
+    def write_examples(path: Path, examples: list[DecisionExample]) -> None:
+        path.write_text(
+            "".join(item.model_dump_json() + "\n" for item in examples), encoding="utf-8"
+        )
+
+    try:
+        freeze_corpus(
+            train_catalog_path=train_catalog_path,
+            eval_catalog_path=heldout_catalog_path,
+            output_dir=stage_dir,
+            seed=seed,
+            max_records_per_source=max_records_per_source,
+        )
+        legacy = {name: read_examples(path) for name, path in legacy_paths.items()}
+        previously_observed = [item for rows in legacy.values() for item in rows]
+        stage_train = read_examples(stage_dir / "train.jsonl")
+        stage_validation = read_examples(stage_dir / "validation.jsonl")
+        stage_audit = read_examples(stage_dir / "eval.jsonl")
+
+        new_train, train_exclusion = filter_previously_seen_records(
+            stage_train, previously_observed
+        )
+        train = [*legacy["train"], *new_train]
+        validation, validation_exclusion = filter_previously_seen_records(
+            stage_validation, [*previously_observed, *train]
+        )
+        audit, audit_exclusion = filter_previously_seen_records(
+            stage_audit, [*previously_observed, *train, *validation]
+        )
+        modality_names = {"text", "image", "audio", "video"}
+        for name, rows in (("train", train), ("validation", validation), ("sealed_audit", audit)):
+            present = {item.modality for item in rows}
+            missing = sorted(modality_names - present)
+            if missing:
+                raise click.ClickException(
+                    f"{name} split has no examples for modalities: {missing}"
+                )
+
+        pairwise = {
+            "train_validation": check_train_eval_splits(train, validation),
+            "train_sealed_audit": check_train_eval_splits(train, audit),
+            "validation_sealed_audit": check_train_eval_splits(validation, audit),
+        }
+        stage_manifest = json.loads(
+            (stage_dir / "corpus-manifest.json").read_text(encoding="utf-8")
+        )
+
+        def source_split_statistics(examples: list[DecisionExample]) -> dict[str, dict[str, int]]:
+            buckets: dict[str, dict[str, object]] = {}
+            for item in examples:
+                key = f"{item.source}:{item.split}"
+                bucket = buckets.setdefault(key, {"records": 0, "assets": set()})
+                bucket["records"] = int(bucket["records"]) + 1
+                assets = bucket["assets"]
+                assert isinstance(assets, set)
+                assets.add(source_asset_identity(item))
+            return {
+                key: {"records": int(value["records"]), "unique_asset_groups": len(value["assets"])}
+                for key, value in sorted(buckets.items())
+            }
+
+        validation_source_stats = source_split_statistics(validation)
+        audit_source_stats = source_split_statistics(audit)
+        new_train_source_stats = source_split_statistics(new_train)
+        train_source_coverage = {}
+        train_source_shortages = []
+        for source in stage_manifest["train"]["sources"]:
+            key = f"{source['dataset_id']}:{source['split']}"
+            selected_source = new_train_source_stats.get(
+                key, {"records": 0, "unique_asset_groups": 0}
+            )
+            train_source_coverage[key] = {
+                "candidate_records": source["records"],
+                "previously_unseen_records": selected_source["records"],
+                "previously_unseen_asset_groups": selected_source["unique_asset_groups"],
+                "records_removed_by_legacy_gates": max(
+                    0, source["records"] - selected_source["records"]
+                ),
+            }
+            if selected_source["records"] == 0:
+                train_source_shortages.append(
+                    {
+                        "source_split": key,
+                        "candidate_records": source["records"],
+                        "reason": "no previously unseen training asset groups remained",
+                    }
+                )
+        heldout_source_coverage = {}
+        source_shortages = []
+        for source in stage_manifest["evaluation"]["sources"]:
+            key = f"{source['dataset_id']}:{source['split']}"
+            validation_source = validation_source_stats.get(
+                key, {"records": 0, "unique_asset_groups": 0}
+            )
+            audit_source = audit_source_stats.get(
+                key, {"records": 0, "unique_asset_groups": 0}
+            )
+            role = source["heldout_partition"]
+            heldout_source_coverage[key] = {
+                "heldout_role": role,
+                "candidate_records": source["records"],
+                "validation_records": validation_source["records"],
+                "validation_unique_asset_groups": validation_source["unique_asset_groups"],
+                "sealed_audit_records": audit_source["records"],
+                "sealed_audit_unique_asset_groups": audit_source["unique_asset_groups"],
+                "records_removed_by_legacy_or_cross_split_gates": max(
+                    0,
+                    source["records"]
+                    - validation_source["records"]
+                    - audit_source["records"],
+                ),
+            }
+            expected = {
+                "validation": (validation_source, "validation"),
+                "evaluation": (audit_source, "sealed_audit"),
+                "split": None,
+            }
+            expected_splits = (
+                [("validation", validation_source), ("sealed_audit", audit_source)]
+                if role == "split"
+                else [(expected[role][1], expected[role][0])]
+            )
+            for split_name, split_stats in expected_splits:
+                if split_stats["records"] == 0:
+                    source_shortages.append(
+                        {
+                            "source_split": key,
+                            "missing_partition": split_name,
+                            "candidate_records": source["records"],
+                            "reason": "no previously unused asset groups survived the gates",
+                        }
+                    )
+        train_path = processed_build / "train.jsonl"
+        validation_path = processed_build / "validation.jsonl"
+        audit_path = audit_build / "sealed_audit.jsonl"
+        write_examples(train_path, train)
+        write_examples(validation_path, validation)
+        write_examples(audit_path, audit)
+        audit_hash = sha256_file(audit_path)
+        source_revisions = {}
+        for split_name in ("train", "evaluation"):
+            for source in stage_manifest[split_name]["sources"]:
+                source_revisions[
+                    f"{source['dataset_id']}:{source['split']}"
+                ] = {
+                    "revision": source["source_revision"],
+                    "manifest_sha256": source["manifest_sha256"],
+                }
+
+        audit_manifest = {
+            "schema_version": 1,
+            "teacher_id": "tiny-omni-decision-teacher-v1",
+            "split": "sealed_audit",
+            "seed": seed,
+            "immutable_seed": True,
+            "source_revisions": source_revisions,
+            "train_catalog_sha256": sha256_file(train_catalog_path),
+            "heldout_catalog_sha256": sha256_file(heldout_catalog_path),
+            "legacy_corpus_sha256": {
+                name: sha256_file(path) for name, path in legacy_paths.items()
+            },
+            "sealed_audit_path": audit_path.name,
+            "sealed_audit_sha256": audit_hash,
+            "sealed_audit_statistics": corpus_statistics(audit),
+            "source_coverage": heldout_source_coverage,
+            "source_shortages": source_shortages,
+            "excluded_previously_seen": audit_exclusion,
+            "pairwise_overlap": pairwise,
+            "content_fingerprint_algorithm": stage_manifest["content_fingerprint_algorithm"],
+            "media_identity_policy": (
+                "sha256 for materialized assets; normalized source URI otherwise"
+            ),
+            "sealed_from_iterative_training": True,
+            "created_at_utc": datetime.now(UTC).isoformat(),
+        }
+        audit_manifest_path = audit_build / "sealed-audit-manifest.json"
+        audit_manifest_path.write_text(json.dumps(audit_manifest, indent=2), encoding="utf-8")
+
+        corpus_manifest = {
+            "schema_version": 1,
+            "status": "frozen_teacher_v1_train_validation_sealed_audit",
+            "seed": seed,
+            "immutable_seed": True,
+            "source_revisions": source_revisions,
+            "base_model_manifest_sha256": stage_manifest["manifest_sha256"],
+            "train_catalog_sha256": sha256_file(train_catalog_path),
+            "heldout_catalog_sha256": sha256_file(heldout_catalog_path),
+            "legacy_corpus_sha256": {
+                name: sha256_file(path) for name, path in legacy_paths.items()
+            },
+            "train": {
+                "path": "train.jsonl",
+                **corpus_statistics(train),
+                "sha256": sha256_file(train_path),
+                "previously_unseen_additions": corpus_statistics(new_train),
+                "source_coverage": train_source_coverage,
+                "source_shortages": train_source_shortages,
+                "excluded_previously_seen": train_exclusion,
+            },
+            "validation": {
+                "path": "validation.jsonl",
+                **corpus_statistics(validation),
+                "sha256": sha256_file(validation_path),
+                "source_coverage": validation_source_stats,
+                "excluded_previously_seen": validation_exclusion,
+            },
+            "sealed_audit": {
+                "manifest_path": "data/sealed/durable-teacher-v1/sealed-audit-manifest.json",
+                "audit_sha256": audit_hash,
+                "audit_manifest_sha256": sha256_file(audit_manifest_path),
+            },
+            "sealed_audit_sha256": audit_hash,
+            "pairwise_overlap": pairwise,
+            "source_coverage": heldout_source_coverage,
+            "source_shortages": source_shortages,
+            "train_source_shortages": train_source_shortages,
+            "corpus_pair_sha256": hashlib.sha256(
+                (sha256_file(train_path) + sha256_file(validation_path) + audit_hash).encode()
+            ).hexdigest(),
+            "experiment_iteration_may_load": ["train.jsonl", "validation.jsonl"],
+            "sealed_audit_may_load_only_after_selection_freeze": True,
+            "stage_candidate_pool_manifest_sha256": sha256_file(
+                stage_dir / "corpus-manifest.json"
+            ),
+            "build_id": uuid.uuid4().hex,
+        }
+        (processed_build / "corpus-manifest.json").write_text(
+            json.dumps(corpus_manifest, indent=2), encoding="utf-8"
+        )
+        output_dir.parent.mkdir(parents=True, exist_ok=True)
+        sealed_audit_dir.parent.mkdir(parents=True, exist_ok=True)
+        if output_dir.exists() or sealed_audit_dir.exists():
+            raise click.ClickException("Teacher v1 corpus destination appeared during freeze")
+        processed_build.rename(output_dir)
+        try:
+            audit_build.rename(sealed_audit_dir)
+        except Exception:
+            shutil.rmtree(output_dir)
+            raise
+    except Exception as exc:
+        raise click.ClickException(f"Teacher v1 corpus freeze failed: {exc}") from exc
+    finally:
+        for temporary in (stage_dir, processed_build, audit_build):
+            if temporary.exists():
+                shutil.rmtree(temporary)
+
+    console.print(json.dumps(corpus_manifest, indent=2))
+
+
 @app.command("train-decision")
 def train_decision(
-    train_manifest: Path = Path("data/processed/phase3-frozen/train.jsonl"),
-    eval_manifest: Path = Path("data/processed/phase3-frozen/eval.jsonl"),
-    validation_manifest: Path | None = None,
-    config: Path = Path("configs/decision/e2b_qat_lora.yaml"),
-    output: Path = Path("artifacts/decision-teacher-v0"),
+    validation_manifest: Annotated[
+        Path, typer.Option(help="Independent corpus used for checkpoint selection.")
+    ],
+    train_manifest: Path = Path("data/processed/durable-teacher-v1/train.jsonl"),
+    config: Path = Path("configs/decision/teacher_v1.yaml"),
+    output: Path = Path(
+        "artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-balanced"
+    ),
+    reference_adapter: Path | None = Path("artifacts/tiny-omni-decision-teacher-v0/best"),
     seed: int | None = None,
     max_train_examples: int | None = typer.Option(None, min=1),
-    max_eval_examples: int | None = typer.Option(None, min=1),
     max_steps: int | None = typer.Option(None, min=1),
     gradient_accumulation_steps: int | None = typer.Option(None, min=1),
     checkpoint_interval: int | None = typer.Option(None, min=1),
@@ -644,20 +957,19 @@ def train_decision(
     modalities: str = typer.Option("text,image,audio,video"),
     tiny_overfit: bool = False,
 ) -> None:
-    """Train, select, and evaluate the frozen-base vocabulary-readout Decision LoRA."""
+    """Train and select a candidate using train plus independent validation only."""
     from .trainer import run_training
 
     selected_modalities = {item.strip() for item in modalities.split(",") if item.strip()}
     try:
         result = run_training(
             train_path=train_manifest,
-            eval_path=eval_manifest,
             validation_path=validation_manifest,
             config_path=config,
             output_dir=output,
+            reference_adapter_path=reference_adapter,
             seed_override=seed,
             max_train_examples=max_train_examples,
-            max_eval_examples=max_eval_examples,
             max_steps=max_steps,
             gradient_accumulation_steps=gradient_accumulation_steps,
             checkpoint_interval=checkpoint_interval,
@@ -674,20 +986,271 @@ def train_decision(
                 "artifact": str(output),
                 "steps": result["global_steps"],
                 "consumed": result["actual_train_consumption_by_modality_source"],
-                "baseline": result["baseline_metrics"],
-                "decision_teacher": result["decision_teacher_metrics"],
-                "metric_deltas_teacher_minus_base": result[
-                    "metric_deltas_teacher_minus_base"
+                "validation_macro": result["validation_macro_metrics"],
+                "validation_teacher_v0": result["validation_teacher_v0_metrics"],
+                "validation_teacher_v1_candidate": result[
+                    "validation_teacher_v1_candidate_metrics"
                 ],
                 "best_checkpoint_step": result["best_checkpoint_step"],
                 "skipped_train": result["skipped_train_examples"],
-                "skipped_eval": result["skipped_eval_examples"],
+                "sample_accounting": result["sample_accounting"],
                 "max_allocated_vram_bytes": result["max_allocated_vram_bytes"],
                 "checkpoint_reload_verified": result["checkpoint_reload_verified"],
             },
             indent=2,
         )
     )
+
+
+@app.command("freeze-teacher-selection")
+def freeze_teacher_selection_command(
+    candidate: Annotated[Path, typer.Option(..., "--candidate")],
+    config_path: Annotated[Path, typer.Option(..., "--config-path")],
+    train_path: Annotated[Path, typer.Option(..., "--train-path")],
+    validation_path: Annotated[Path, typer.Option(..., "--validation-path")],
+    audit_manifest_path: Path = Path(
+        "data/sealed/durable-teacher-v1/sealed-audit-manifest.json"
+    ),
+    lock_path: Path = Path("artifacts/tiny-omni-decision-teacher-v1/selection-lock.json"),
+) -> None:
+    """Freeze the validation-selected candidate before the single audit evaluation."""
+    from .corpus import file_sha256
+    from .sealed_audit import artifact_sha256, freeze_teacher_selection
+
+    candidate = candidate.resolve()
+    metadata_path = candidate.parent / "run-metadata.json"
+    if not metadata_path.is_file():
+        raise click.ClickException("candidate run-metadata.json is missing beside its adapter")
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    if metadata.get("artifact_role") != "validation_selected_experiment_candidate":
+        raise click.ClickException("only a validation-selected experiment candidate can be frozen")
+    if metadata.get("seed") != 17:
+        raise click.ClickException(
+            "the sealed-audit candidate must use the predefined primary seed 17"
+        )
+    selected_adapter = (
+        metadata_path.parent / str(metadata.get("best_adapter_path"))
+    ).resolve()
+    if candidate != selected_adapter:
+        raise click.ClickException("candidate path must be the validation-selected best adapter")
+    weights_path = candidate / "adapter_model.safetensors"
+    if not weights_path.is_file() or metadata.get("best_adapter_sha256") != file_sha256(
+        str(weights_path)
+    ):
+        raise click.ClickException("selected adapter weights do not match run metadata")
+    expected_hashes = {
+        "training_config_sha256": file_sha256(str(config_path)),
+        "train_rows_sha256": file_sha256(str(train_path)),
+        "validation_rows_sha256": file_sha256(str(validation_path)),
+    }
+    for key, actual in expected_hashes.items():
+        if metadata.get(key) != actual:
+            raise click.ClickException(f"selected candidate {key} does not match frozen input")
+    audit_manifest = json.loads(audit_manifest_path.read_text(encoding="utf-8"))
+    corpus_manifest_path = train_path.resolve().parent / "corpus-manifest.json"
+    if not corpus_manifest_path.is_file():
+        raise click.ClickException("frozen train corpus manifest is missing")
+    corpus_manifest = json.loads(corpus_manifest_path.read_text(encoding="utf-8"))
+    audit_hash = audit_manifest.get("sealed_audit_sha256")
+    audit_manifest_hash = file_sha256(str(audit_manifest_path))
+    if corpus_manifest.get("sealed_audit_sha256") != audit_hash:
+        raise click.ClickException(
+            "sealed audit manifest does not match the frozen corpus manifest"
+        )
+    if (
+        corpus_manifest.get("sealed_audit", {}).get("audit_manifest_sha256")
+        != audit_manifest_hash
+    ):
+        raise click.ClickException(
+            "sealed audit manifest hash does not match the frozen corpus manifest"
+        )
+    sampling = metadata.get("sampling_mixture") or {}
+    selection = {
+        "teacher_id": "tiny-omni-decision-teacher-v1",
+        "checkpoint_sha256": artifact_sha256(candidate),
+        "config_sha256": expected_hashes["training_config_sha256"],
+        "train_corpus_sha256": expected_hashes["train_rows_sha256"],
+        "validation_corpus_sha256": expected_hashes["validation_rows_sha256"],
+        "sealed_audit_sha256": audit_hash,
+        "sealed_audit_manifest_sha256": audit_manifest_hash,
+        "seed": int(metadata["seed"]),
+        "best_step": int(metadata["best_checkpoint_step"]),
+        "selection_rule": (
+            "teacher-v1-validation-only: macro_nll + 0.2*macro_brier + "
+            "0.1*macro_ece - 0.25*macro_accuracy - 0.25*minimum_modality_accuracy; "
+            "checkpoint chosen by this score and configured early stopping"
+        ),
+        "sampling_policy": {
+            "modality_weights": sampling.get("modality_weights", {}),
+            "source_weights": sampling.get("source_weights", {}),
+            "max_sample_repeats": sampling.get("max_sample_repeats"),
+            "consumed_by_modality_source": sampling.get("consumed_by_modality_source", {}),
+        },
+        "base_repo_id": metadata.get("base_repo_id"),
+        "base_revision": metadata.get("base_revision"),
+        "best_validation_metrics": metadata.get("validation_best_metrics"),
+        "candidate_metadata_sha256": file_sha256(str(metadata_path)),
+        "candidate_path": str(candidate),
+    }
+    try:
+        frozen = freeze_teacher_selection(lock_path, selection)
+    except (OSError, ValueError) as exc:
+        raise click.ClickException(f"Could not freeze teacher selection: {exc}") from exc
+    console.print(json.dumps(frozen, indent=2))
+
+
+@app.command("evaluate-sealed-audit")
+def evaluate_sealed_audit(
+    candidate: Annotated[Path, typer.Option(..., "--candidate")],
+    config_path: Annotated[Path, typer.Option(..., "--config-path")],
+    train_path: Annotated[Path, typer.Option(..., "--train-path")],
+    validation_path: Annotated[Path, typer.Option(..., "--validation-path")],
+    audit_path: Path = Path("data/sealed/durable-teacher-v1/sealed_audit.jsonl"),
+    audit_manifest_path: Path = Path(
+        "data/sealed/durable-teacher-v1/sealed-audit-manifest.json"
+    ),
+    lock_path: Path = Path("artifacts/tiny-omni-decision-teacher-v1/selection-lock.json"),
+    claim_path: Path = Path("data/sealed/durable-teacher-v1/sealed-audit-claim.json"),
+    result_path: Path = Path("data/sealed/durable-teacher-v1/sealed-audit-result.json"),
+    model_manifest_path: Path = Path("manifests/base-model.example.yaml"),
+) -> None:
+    """Evaluate exactly once after hashes and the candidate selection are frozen."""
+    from .corpus import file_sha256, macro_metrics
+    from .sealed_audit import artifact_sha256, claim_sealed_audit_evaluation_once
+
+    candidate = candidate.resolve()
+    lock_path = lock_path.resolve()
+    audit_path = audit_path.resolve()
+    audit_manifest_path = audit_manifest_path.resolve()
+    if result_path.exists():
+        raise click.ClickException(
+            "sealed audit result already exists; a second attempt is forbidden"
+        )
+    if not lock_path.is_file():
+        raise click.ClickException("freeze-teacher-selection must run before audit evaluation")
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    metadata_path = candidate.parent / "run-metadata.json"
+    if not metadata_path.is_file():
+        raise click.ClickException("candidate run-metadata.json is missing beside its adapter")
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    if lock.get("candidate_metadata_sha256") != file_sha256(str(metadata_path)):
+        raise click.ClickException("candidate metadata differs from the frozen selection lock")
+    if metadata.get("artifact_role") != "validation_selected_experiment_candidate":
+        raise click.ClickException("locked candidate is not a validation-selected experiment")
+    selected_adapter = (metadata_path.parent / str(metadata.get("best_adapter_path"))).resolve()
+    if candidate != selected_adapter:
+        raise click.ClickException("candidate path is not the locked best adapter")
+    weights_path = candidate / "adapter_model.safetensors"
+    if not weights_path.is_file() or metadata.get("best_adapter_sha256") != file_sha256(
+        str(weights_path)
+    ):
+        raise click.ClickException("candidate adapter weights differ from run metadata")
+    actual_hashes = {
+        "checkpoint_sha256": artifact_sha256(candidate),
+        "config_sha256": file_sha256(str(config_path)),
+        "train_corpus_sha256": file_sha256(str(train_path)),
+        "validation_corpus_sha256": file_sha256(str(validation_path)),
+    }
+    for key, actual in actual_hashes.items():
+        if lock.get(key) != actual:
+            raise click.ClickException(f"{key} differs from the frozen selection lock")
+    if lock.get("sealed_audit_manifest_sha256") != file_sha256(
+        str(audit_manifest_path)
+    ):
+        raise click.ClickException(
+            "sealed audit manifest differs from the frozen selection lock"
+        )
+    if (
+        metadata.get("base_repo_id") != lock.get("base_repo_id")
+        or metadata.get("base_revision") != lock.get("base_revision")
+    ):
+        raise click.ClickException("candidate base model differs from the frozen selection lock")
+    if metadata.get("best_checkpoint_step") != lock.get("best_step"):
+        raise click.ClickException(
+            "candidate checkpoint step differs from the frozen selection lock"
+        )
+    try:
+        claim = claim_sealed_audit_evaluation_once(
+            lock_path, audit_manifest_path, audit_path, claim_path.resolve()
+        )
+    except (OSError, ValueError) as exc:
+        raise click.ClickException(f"Sealed audit access denied: {exc}") from exc
+
+    try:
+        from peft import PeftModel
+        from transformers import AutoModelForMultimodalLM, AutoProcessor
+
+        from .corpus import macro_metrics
+        from .schema import BaseModelManifest
+        from .trainer import _evaluate, _read_examples
+        from .training import decision_training_config
+
+        base_manifest = BaseModelManifest.model_validate(load_structured_file(model_manifest_path))
+        if (
+            base_manifest.repo_id != lock.get("base_repo_id")
+            or base_manifest.revision != lock.get("base_revision")
+        ):
+            raise ValueError("base model manifest differs from the frozen selection")
+        processor = AutoProcessor.from_pretrained(
+            base_manifest.processor_repo_id or base_manifest.repo_id,
+            revision=base_manifest.processor_revision,
+        )
+        base_model = AutoModelForMultimodalLM.from_pretrained(
+            base_manifest.repo_id,
+            revision=base_manifest.revision,
+            dtype="auto",
+            low_cpu_mem_usage=True,
+            device_map="auto",
+        )
+        model = PeftModel.from_pretrained(base_model, candidate, is_trainable=False).eval()
+        examples = _read_examples(audit_path)
+        required_modalities = {"text", "image", "audio", "video"}
+        present_modalities = {item.modality for item in examples}
+        if not examples or present_modalities != required_modalities:
+            raise ValueError(
+                f"sealed audit modality coverage mismatch: {sorted(present_modalities)}"
+            )
+        config = decision_training_config(load_structured_file(config_path))
+        data_root = audit_path.parent.parent.parent
+        metrics, _ = _evaluate(
+            model, processor, examples, data_root=data_root, config=config
+        )
+        metrics["macro"] = macro_metrics(metrics)
+        result = {
+            "schema_version": 1,
+            "status": "completed",
+            "teacher_id": lock["teacher_id"],
+            "checkpoint_sha256": claim["checkpoint_sha256"],
+            "selection_lock_sha256": claim["selection_lock_sha256"],
+            "sealed_audit_sha256": claim["sealed_audit_sha256"],
+            "record_count": len(examples),
+            "metrics": metrics,
+            "evaluated_at_utc": datetime.now(UTC).isoformat(),
+        }
+        result_path.parent.mkdir(parents=True, exist_ok=True)
+        with result_path.open("x", encoding="utf-8", newline="\n") as handle:
+            json.dump(result, handle, indent=2)
+            handle.write("\n")
+    except Exception as exc:
+        failure = {
+            "schema_version": 1,
+            "status": "failed",
+            "teacher_id": lock.get("teacher_id"),
+            "sealed_audit_sha256": claim["sealed_audit_sha256"],
+            "failure": f"{type(exc).__name__}: {exc}",
+            "attempted_at_utc": claim["attempted_at_utc"],
+        }
+        result_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            with result_path.open("x", encoding="utf-8", newline="\n") as handle:
+                json.dump(failure, handle, indent=2)
+                handle.write("\n")
+        except FileExistsError:
+            pass
+        raise click.ClickException(
+            f"Sealed audit evaluation failed after one-time claim: {exc}"
+        ) from exc
+    console.print(json.dumps(result, indent=2))
 
 
 def _load_model(model_id: str, revision: str, dtype: str = "auto"):

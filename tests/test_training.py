@@ -1,18 +1,38 @@
 from __future__ import annotations
 
+import importlib
+import json
+
 import pytest
 
 from tiny_omni_decision.corpus import comparison_deltas, partition_heldout_records
-from tiny_omni_decision.dataset import deterministic_reservoir_sample, sha256_file
+from tiny_omni_decision.dataset import (
+    check_train_eval_splits,
+    corpus_statistics,
+    deterministic_reservoir_sample,
+    sha256_file,
+)
 from tiny_omni_decision.io import load_structured_file
 from tiny_omni_decision.schema import DecisionExample, LicenseProvenance, MediaRef
 from tiny_omni_decision.training import (
     DecisionTrainingConfig,
+    aggregate_training_window,
     collate_metadata,
     decision_training_config,
     deterministic_sample_order,
     output_record,
+    project_runtime_seconds,
 )
+
+
+def available_helper(module_name: str, helper_name: str):
+    try:
+        module = importlib.import_module(module_name)
+    except ModuleNotFoundError:
+        pytest.fail(f"missing required behavior module {module_name}")
+    helper = getattr(module, helper_name, None)
+    assert callable(helper), f"missing required behavior helper {module_name}.{helper_name}"
+    return helper
 
 
 def example(
@@ -52,6 +72,52 @@ def test_config_defaults_and_sampling_validation() -> None:
         DecisionTrainingConfig(source_weights={"a": -1.0})
 
 
+def test_training_curve_aggregates_full_validation_interval() -> None:
+    aggregate = aggregate_training_window(
+        [
+            {
+                "cross_entropy": 2.0,
+                "train_examples": 2,
+                "microbatches": 2,
+                "train_correct_by_modality": {"text": 1, "audio": 1},
+                "train_examples_by_modality": {"text": 1, "audio": 1},
+                "train_ce_by_modality": {"text": 3.0, "audio": 1.0},
+            },
+            {
+                "cross_entropy": 1.0,
+                "train_examples": 2,
+                "microbatches": 2,
+                "train_correct_by_modality": {"text": 1},
+                "train_examples_by_modality": {"text": 2},
+                "train_ce_by_modality": {"text": 1.0},
+            },
+        ]
+    )
+    assert aggregate["train_ce"] == pytest.approx(1.5)
+    assert aggregate["train_accuracy"] == pytest.approx(0.75)
+    assert aggregate["train_accuracy_by_modality"] == {
+        "audio": 1.0,
+        "text": pytest.approx(2 / 3),
+    }
+    assert aggregate["train_ce_by_modality"] == {"audio": 1.0, "text": 5 / 3}
+    assert aggregate["training_examples_in_window"] == 4
+    assert aggregate["microbatches_in_window"] == 4
+    assert aggregate["optimizer_steps_in_window"] == 2
+
+
+def test_runtime_projection_includes_validation_costs() -> None:
+    projected = project_runtime_seconds(
+        seconds_per_optimizer_step=2.0,
+        optimizer_steps=512,
+        evaluation_interval=128,
+        mean_scheduled_evaluation_seconds=30.0,
+        setup_evaluation_seconds=40.0,
+        final_evaluation_seconds=20.0,
+        other_overhead_seconds=10.0,
+    )
+    assert projected == 512 * 2 + 4 * 30 + 40 + 20 + 10
+
+
 def test_repository_training_config_maps_to_explicit_fields() -> None:
     raw = load_structured_file("configs/decision/e2b_qat_lora.yaml")
     config = decision_training_config(raw)
@@ -66,6 +132,51 @@ def test_durable_teacher_config_bounds_small_modality_reuse() -> None:
     config = decision_training_config(raw)
     assert config.max_steps == 256
     assert config.max_sample_repeats == 2
+
+
+def test_teacher_v1_catalogs_are_pinned_and_training_sources_are_allow() -> None:
+    from tiny_omni_decision.dataset import audit_manifest
+    from tiny_omni_decision.schema import DatasetCatalog, DatasetManifest
+
+    train_path = __import__("pathlib").Path("manifests/teacher-v1-training-corpus.yaml")
+    heldout_path = __import__("pathlib").Path("manifests/teacher-v1-heldout-corpus.yaml")
+    train_catalog = DatasetCatalog.model_validate(load_structured_file(train_path))
+    heldout_catalog = DatasetCatalog.model_validate(load_structured_file(heldout_path))
+
+    assert train_catalog.purpose == "training"
+    assert heldout_catalog.purpose == "evaluation"
+    for entry in train_catalog.sources:
+        if not entry.include:
+            continue
+        source = DatasetManifest.model_validate(
+            load_structured_file(train_path.parent / entry.manifest)
+        )
+        assert source.revision
+        assert audit_manifest(source)["project_policy"] == "ALLOW"
+    heldout_roles = {
+        entry.manifest: entry.heldout_partition
+        for entry in heldout_catalog.sources
+        if entry.include
+    }
+    assert heldout_roles["candidates/open-jev-validation.yaml"] == "validation"
+    assert heldout_roles["candidates/open-jev-test.yaml"] == "evaluation"
+    assert heldout_roles["candidates/speech-commands-test.yaml"] == "evaluation"
+    assert all(role is not None for role in heldout_roles.values())
+
+
+def test_teacher_v1_sampling_policy_configs_share_rank16_and_seed17() -> None:
+    configs = [
+        "configs/decision/teacher_v1.yaml",
+        "configs/decision/teacher_v1_weak_modalities.yaml",
+        "configs/decision/teacher_v1_video_priority.yaml",
+    ]
+
+    for path in configs:
+        config = decision_training_config(load_structured_file(path))
+        assert config.seed == 17
+        assert config.lora_rank == 16
+        assert config.max_sample_repeats == 1
+        assert set(config.modality_weights) == {"text", "image", "audio", "video"}
 
 
 def test_durable_heldout_catalog_keeps_official_open_jev_test_sealed() -> None:
@@ -230,6 +341,715 @@ def test_heldout_partition_preserves_declared_official_splits() -> None:
     assert len(validation) == len(evaluation) == 4
     assert {item.split for item in validation} == {"validation"}
     assert {item.split for item in evaluation} == {"test"}
+
+
+def test_clevrer_questions_from_one_video_stay_together_deterministically() -> None:
+    examples = [
+        example(
+            f"{scene}:{question}",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [
+                MediaRef(
+                    kind="video",
+                    uri=f"source-ref://CLEVRER/revision/videos/validation/video_{scene}.mp4",
+                )
+            ],
+        ).model_copy(
+            update={
+                "source_record_id": f"{scene}:{question}",
+                "split": "validation",
+                "question": f"Question {question} for scene {scene}",
+            }
+        )
+        for scene in range(20)
+        for question in range(5)
+    ]
+
+    validation, evaluation = partition_heldout_records(examples, seed=17)
+    repeated_validation, repeated_evaluation = partition_heldout_records(examples, seed=17)
+
+    assert [item.id for item in validation] == [item.id for item in repeated_validation]
+    assert [item.id for item in evaluation] == [item.id for item in repeated_evaluation]
+    validation_ids = {item.id for item in validation}
+    split_by_video = {
+        scene: {
+            "validation" if item.id in validation_ids else "evaluation"
+            for item in examples
+            if item.source_record_id.startswith(f"{scene}:")
+        }
+        for scene in range(20)
+    }
+    assert all(len(roles) == 1 for roles in split_by_video.values())
+    assert {next(iter(roles)) for roles in split_by_video.values()} == {"validation", "evaluation"}
+
+
+def test_split_gate_rejects_reused_media_asset_with_different_questions() -> None:
+    train = example(
+        "train-image-question",
+        "image-source",
+        "image",
+        [MediaRef(kind="image", uri="source-ref://images/shared.png")],
+    )
+    evaluation = example(
+        "eval-image-question",
+        "image-source",
+        "image",
+        [MediaRef(kind="image", uri="source-ref://images/shared.png")],
+    ).model_copy(update={"state": "different state", "question": "different question"})
+
+    with pytest.raises(ValueError, match="media identities"):
+        check_train_eval_splits([train], [evaluation])
+
+
+def test_split_gate_rejects_speech_commands_speaker_overlap() -> None:
+    train = example(
+        "train-audio",
+        "google/speech_commands",
+        "audio",
+        [MediaRef(kind="audio", path="media/audio/train-clip.wav")],
+    ).model_copy(update={"source_record_id": "yes/3f45de8a_nohash_0.wav", "split": "train"})
+    validation = example(
+        "validation-audio",
+        "google/speech_commands",
+        "audio",
+        [MediaRef(kind="audio", path="media/audio/validation-clip.wav")],
+    ).model_copy(
+        update={
+            "source_record_id": "no/3f45de8a_nohash_7.wav",
+            "split": "validation",
+        }
+    )
+
+    with pytest.raises(ValueError, match="source assets"):
+        check_train_eval_splits([train], [validation])
+
+
+def test_filter_previously_seen_records_removes_entire_shared_asset_groups() -> None:
+    filter_seen = available_helper(
+        "tiny_omni_decision.corpus", "filter_previously_seen_records"
+    )
+    used_image = example(
+        "used-image-question",
+        "sgvaze/clevr4",
+        "image",
+        [MediaRef(kind="image", uri="source-ref://images/used.png")],
+    )
+    image_question = used_image.model_copy(
+        update={"id": "new-image-question", "source_record_id": "new-image-question"}
+    )
+    same_speaker_used = example(
+        "speaker-a-used",
+        "google/speech_commands",
+        "audio",
+        [MediaRef(kind="audio", path="audio/speaker-a_nohash_0.wav")],
+    ).model_copy(update={"source_record_id": "speaker-a_nohash_0.wav"})
+    same_speaker_new = example(
+        "speaker-a-new",
+        "google/speech_commands",
+        "audio",
+        [MediaRef(kind="audio", path="audio/other-name.wav")],
+    ).model_copy(update={"source_record_id": "speaker-a_nohash_7.wav"})
+    unseen = example(
+        "unseen-image",
+        "sgvaze/clevr4",
+        "image",
+        [MediaRef(kind="image", uri="source-ref://images/unseen.png")],
+    )
+
+    retained, report = filter_seen(
+        [image_question, same_speaker_new, unseen], [used_image, same_speaker_used]
+    )
+
+    assert [item.id for item in retained] == ["unseen-image"]
+    assert report["candidate_records"] == 3
+    assert report["retained_records"] == 1
+    assert report["excluded_records"] == 2
+    assert report["excluded_by_reason"] == {"source_asset": 2}
+
+
+def test_teacher_v1_corpus_freeze_excludes_legacy_audit_and_isolates_audit_file(
+    tmp_path, monkeypatch
+) -> None:
+    from tiny_omni_decision import cli
+
+    def split_examples(prefix: str, split: str) -> list[DecisionExample]:
+        rows = []
+        for modality in ("text", "image", "audio", "video"):
+            media = []
+            if modality == "image":
+                media = [MediaRef(kind="image", uri=f"source-ref://{prefix}/image.png")]
+            elif modality == "audio":
+                media = [MediaRef(kind="audio", uri=f"source-ref://{prefix}/audio.wav")]
+            elif modality == "video":
+                media = [MediaRef(kind="video", uri=f"source-ref://{prefix}/video.mp4")]
+            source = {
+                "text": "TypeSafeAI/Open-Jev",
+                "image": "sgvaze/clevr4",
+                "audio": "google/speech_commands",
+                "video": "MIT-IBM/CLEVRER",
+            }[modality]
+            rows.append(
+                example(f"{prefix}-{modality}", source, modality, media).model_copy(
+                    update={
+                        "state": f"unique state {prefix} {modality}",
+                        "split": split,
+                    }
+                )
+            )
+        return rows
+
+    legacy_train = split_examples("legacy-train", "train")
+    legacy_validation = split_examples("legacy-validation", "validation")
+    legacy_evaluation = split_examples("legacy-evaluation", "test")
+    legacy_dir = tmp_path / "v0"
+    legacy_dir.mkdir()
+    for name, rows in (
+        ("train.jsonl", legacy_train),
+        ("validation.jsonl", legacy_validation),
+        ("eval.jsonl", legacy_evaluation),
+    ):
+        (legacy_dir / name).write_text(
+            "".join(item.model_dump_json() + "\n" for item in rows), encoding="utf-8"
+        )
+
+    def fake_freeze_corpus(**kwargs) -> None:
+        stage = kwargs["output_dir"]
+        train = split_examples("new-train", "train")
+        validation = split_examples("new-validation", "validation")
+        audit = split_examples("new-audit", "test")
+        audit.append(legacy_evaluation[0])
+        for name, rows in (
+            ("train.jsonl", train),
+            ("validation.jsonl", validation),
+            ("eval.jsonl", audit),
+        ):
+            (stage / name).write_text(
+                "".join(item.model_dump_json() + "\n" for item in rows), encoding="utf-8"
+            )
+        (stage / "corpus-manifest.json").write_text(
+            json.dumps(
+                {
+                    "manifest_sha256": "a" * 64,
+                    "content_fingerprint_algorithm": "test-fixture",
+                    "train": {"sources": []},
+                    "evaluation": {"sources": []},
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    monkeypatch.setattr(cli, "freeze_corpus", fake_freeze_corpus, raising=False)
+    processed = tmp_path / "processed" / "durable-teacher-v1"
+    sealed = tmp_path / "sealed" / "durable-teacher-v1"
+
+    cli.freeze_teacher_v1_corpus(
+        train_catalog_path=__import__("pathlib").Path(
+            "manifests/teacher-v1-training-corpus.yaml"
+        ),
+        heldout_catalog_path=__import__("pathlib").Path(
+            "manifests/teacher-v1-heldout-corpus.yaml"
+        ),
+        legacy_corpus_dir=legacy_dir,
+        output_dir=processed,
+        sealed_audit_dir=sealed,
+        seed=17,
+        max_records_per_source=8192,
+    )
+
+    train_rows = [
+        DecisionExample.model_validate_json(line)
+        for line in (processed / "train.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    audit_rows = [
+        DecisionExample.model_validate_json(line)
+        for line in (sealed / "sealed_audit.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert len(train_rows) == 8
+    assert len(audit_rows) == 4
+    assert all(item.id != legacy_evaluation[0].id for item in audit_rows)
+    assert not (processed / "sealed_audit.jsonl").exists()
+    manifest = json.loads((processed / "corpus-manifest.json").read_text(encoding="utf-8"))
+    assert manifest["sealed_audit"]["audit_sha256"] == sha256_file(
+        sealed / "sealed_audit.jsonl"
+    )
+    assert all(item["status"] == "disjoint" for item in manifest["pairwise_overlap"].values())
+
+
+def test_teacher_v1_corpus_seed_is_immutable(tmp_path) -> None:
+    from click.exceptions import ClickException
+
+    from tiny_omni_decision import cli
+
+    with pytest.raises(ClickException, match="seed is immutable at 17"):
+        cli.freeze_teacher_v1_corpus(
+            legacy_corpus_dir=tmp_path / "missing-v0",
+            output_dir=tmp_path / "processed",
+            sealed_audit_dir=tmp_path / "sealed",
+            seed=19,
+        )
+    assert not (tmp_path / "processed").exists()
+    assert not (tmp_path / "sealed").exists()
+
+
+def test_training_inputs_require_independent_validation_and_exclude_audit() -> None:
+    validate = available_helper("tiny_omni_decision.corpus", "validate_training_inputs")
+
+    with pytest.raises(ValueError, match="independent validation"):
+        validate("train.jsonl", None)
+    with pytest.raises(ValueError, match="same corpus"):
+        validate("same.jsonl", "same.jsonl")
+    with pytest.raises(ValueError, match="sealed audit"):
+        validate("data/sealed-audit/train.jsonl", "data/validation.jsonl")
+    with pytest.raises(ValueError, match="sealed audit"):
+        validate("data/train.jsonl", "data/sealed/durable-teacher-v1/sealed_audit.jsonl")
+    with pytest.raises(ValueError, match="evaluation is isolated"):
+        validate("train.jsonl", "validation.jsonl", evaluation_path="audit.jsonl")
+
+
+def test_run_training_fails_before_loading_data_when_validation_is_missing(tmp_path) -> None:
+    from tiny_omni_decision.trainer import run_training
+
+    with pytest.raises(ValueError, match="independent validation"):
+        run_training(
+            train_path=tmp_path / "train.jsonl",
+            eval_path=tmp_path / "evaluation.jsonl",
+            validation_path=None,
+            config_path=tmp_path / "config.yaml",
+            output_dir=tmp_path / "experiment",
+        )
+
+
+def test_metric_summary_reports_macro_and_weakest_modality() -> None:
+    summarize = available_helper("tiny_omni_decision.corpus", "macro_metrics")
+
+    actual = summarize(
+        {
+            "modality:text": {"accuracy": 0.5, "nll": 2.0, "brier": 0.4, "ece": 0.1},
+            "modality:image": {"accuracy": 0.75, "nll": 1.0, "brier": 0.2, "ece": 0.2},
+            "modality:audio": {"accuracy": 0.9, "nll": 0.5, "brier": 0.1, "ece": 0.05},
+            "modality:video": {"accuracy": 0.25, "nll": 3.0, "brier": 0.6, "ece": 0.3},
+            "all": {"accuracy": 0.7, "nll": 0.8, "brier": 0.2, "ece": 0.08},
+        }
+    )
+
+    assert actual == {
+        "macro_accuracy": pytest.approx(0.6),
+        "minimum_modality_accuracy": pytest.approx(0.25),
+        "macro_nll": pytest.approx(1.625),
+        "macro_brier": pytest.approx(0.325),
+        "macro_ece": pytest.approx(0.1625),
+    }
+
+
+def test_sampling_accounting_counts_unique_samples_assets_and_repeats() -> None:
+    account = available_helper("tiny_omni_decision.training", "sampling_accounting")
+    first = example("text-1", "text-source").model_copy(
+        update={"source_record_id": "state-1", "state": "first state"}
+    )
+    second = example("text-2", "text-source").model_copy(
+        update={"source_record_id": "state-2", "state": "second state"}
+    )
+
+    actual = account([first, second, first])
+
+    assert actual["samples_consumed"] == 3
+    assert actual["unique_examples"] == 2
+    assert actual["repeated_example_count"] == 1
+    assert actual["unique_underlying_assets"] == 2
+    assert actual["unique_underlying_assets_by_source"] == {"text-source": 2}
+    assert actual["unique_underlying_assets_by_source_modality"] == {
+        "text-source:text": 2
+    }
+    assert actual["consumed_by_modality"] == {"text": 3}
+    assert actual["unique_examples_by_source"] == {"text-source": 2}
+
+
+def test_validation_selection_uses_equal_fixed_modality_counts() -> None:
+    select = available_helper(
+        "tiny_omni_decision.training", "deterministic_validation_subset"
+    )
+    examples = [
+        *(example(f"t-{index}", "text-source") for index in range(12)),
+        *(
+            example(
+                f"i-{index}",
+                "image-source",
+                "image",
+                [MediaRef(kind="image", uri=f"source-ref://images/{index}.png")],
+            )
+            for index in range(3)
+        ),
+        *(
+            example(
+                f"a-{index}",
+                "audio-source",
+                "audio",
+                [MediaRef(kind="audio", uri=f"source-ref://audio/{index}.wav")],
+            )
+            for index in range(9)
+        ),
+        *(
+            example(
+                f"v-{index}",
+                "video-source",
+                "video",
+                [MediaRef(kind="video", uri=f"source-ref://video/{index}.mp4")],
+            )
+            for index in range(5)
+        ),
+    ]
+
+    selected = select(examples, seed=17, limit=12)
+
+    assert {
+        modality: sum(item.modality == modality for item in selected)
+        for modality in ("text", "image", "audio", "video")
+    } == {
+        "text": 3,
+        "image": 3,
+        "audio": 3,
+        "video": 3,
+    }
+
+
+def test_corpus_statistics_reports_unique_examples_and_assets() -> None:
+    first = example(
+        "image-question-color",
+        "image-source",
+        "image",
+        [MediaRef(kind="image", uri="source-ref://images/one.png")],
+    ).model_copy(update={"source_record_id": "image-1"})
+    second = example(
+        "image-question-shape",
+        "image-source",
+        "image",
+        [MediaRef(kind="image", uri="source-ref://images/one.png")],
+    ).model_copy(update={"source_record_id": "image-1"})
+
+    stats = corpus_statistics([first, second])
+
+    assert stats["unique_examples"] == 2
+    assert stats["unique_underlying_assets"] == 1
+    assert stats["unique_underlying_assets_by_modality"] == {"image": 1}
+    assert stats["unique_underlying_assets_by_source"] == {"image-source": 1}
+    assert stats["unique_underlying_assets_by_source_modality"] == {
+        "image-source:image": 1
+    }
+
+
+def test_validation_checkpoint_selector_early_stops_on_plateau() -> None:
+    selector_type = getattr(
+        importlib.import_module("tiny_omni_decision.corpus"),
+        "ValidationCheckpointSelector",
+        None,
+    )
+    assert selector_type is not None, "missing validation-only checkpoint selector"
+    selector = selector_type(patience=2, min_delta=0.0)
+    good = {
+        "modality:text": {"accuracy": 0.8, "nll": 0.5, "brier": 0.2, "ece": 0.1},
+        "modality:image": {"accuracy": 0.7, "nll": 0.7, "brier": 0.3, "ece": 0.1},
+        "modality:audio": {"accuracy": 0.9, "nll": 0.3, "brier": 0.1, "ece": 0.05},
+        "modality:video": {"accuracy": 0.6, "nll": 0.9, "brier": 0.4, "ece": 0.15},
+    }
+    worse = {
+        key: {**value, "nll": value["nll"] + 0.1}
+        for key, value in good.items()
+    }
+
+    assert selector.observe(50, good) is True
+    assert selector.observe(100, worse) is False
+    assert selector.should_stop is False
+    assert selector.observe(150, worse) is False
+    assert selector.should_stop is True
+    assert selector.best_step == 50
+
+
+def test_experiment_manifest_round_trips_frozen_inputs_and_curves() -> None:
+    manifest_type = getattr(
+        importlib.import_module("tiny_omni_decision.experiment"),
+        "ExperimentManifest",
+        None,
+    )
+    assert manifest_type is not None, "missing serializable experiment manifest"
+    manifest = manifest_type(
+        experiment_id="seed17-rank16-512",
+        status="completed",
+        seed=17,
+        base_model_repo_id="google/gemma-4-E2B-it-qat-q4_0-unquantized",
+        base_model_revision="a" * 40,
+        base_model_weights_sha256="b" * 64,
+        train_corpus_sha256="a" * 64,
+        validation_corpus_sha256="b" * 64,
+        sealed_audit_corpus_sha256="c" * 64,
+        config_sha256="c" * 64,
+        sampling_policy={"modality_weights": {"text": 2, "image": 2, "audio": 1, "video": 2}},
+        optimizer_schedule={"max_steps": 512, "gradient_accumulation_steps": 4},
+        learning_curve=[{"step": 50, "train_ce": 1.2, "validation_nll": 1.3}],
+        metrics={"validation": {"macro_accuracy": 0.7}},
+        artifact={"best_step": 50, "trainable_parameter_count": 12345},
+        environment={"gpu": "RTX 3080 Laptop"},
+    )
+
+    restored = manifest_type.model_validate_json(manifest.model_dump_json())
+
+    assert restored == manifest
+
+
+def test_experiment_ledger_keeps_started_and_failed_attempts(tmp_path) -> None:
+    append_event = available_helper("tiny_omni_decision.experiment", "append_experiment_event")
+    ledger = tmp_path / "experiments.jsonl"
+    append_event(ledger, {"experiment_id": "failed-1", "status": "started"})
+    append_event(ledger, {"experiment_id": "failed-1", "status": "failed", "failure": "oom"})
+
+    events = [
+        __import__("json").loads(line)
+        for line in ledger.read_text(encoding="utf-8").splitlines()
+    ]
+
+    assert [event["status"] for event in events] == ["started", "failed"]
+    assert all(event["experiment_id"] == "failed-1" for event in events)
+
+
+def test_sealed_audit_requires_frozen_selection_and_can_be_claimed_once(tmp_path) -> None:
+    audit = importlib.import_module("tiny_omni_decision.sealed_audit")
+    freeze = getattr(audit, "freeze_teacher_selection", None)
+    claim_once = getattr(audit, "claim_sealed_audit_evaluation_once", None)
+    assert callable(freeze) and callable(claim_once), "missing sealed-audit access guard"
+    lock_path = tmp_path / "selection-lock.json"
+    audit_manifest_path = tmp_path / "sealed-audit-manifest.json"
+    audit_data_path = tmp_path / "sealed-audit.jsonl"
+    claim_path = tmp_path / "sealed-audit-claim.json"
+
+    with pytest.raises(ValueError, match="freeze candidate selection"):
+        claim_once(lock_path, audit_manifest_path, audit_data_path, claim_path)
+    assert not claim_path.exists()
+
+    audit_data_path.write_text('{"id":"hidden"}\n', encoding="utf-8")
+    actual_audit_hash = sha256_file(audit_data_path)
+    audit_manifest_path.write_text(
+        json.dumps({"sealed_audit_sha256": actual_audit_hash}), encoding="utf-8"
+    )
+
+    selection = {
+        "teacher_id": "tiny-omni-decision-teacher-v1",
+        "checkpoint_sha256": "a" * 64,
+        "config_sha256": "b" * 64,
+        "train_corpus_sha256": "c" * 64,
+        "validation_corpus_sha256": "d" * 64,
+        "sealed_audit_sha256": actual_audit_hash,
+        "sealed_audit_manifest_sha256": sha256_file(audit_manifest_path),
+        "seed": 17,
+        "best_step": 512,
+        "selection_rule": "validation macro score v1",
+        "sampling_policy": {"text": 2, "image": 2, "audio": 1, "video": 2},
+    }
+    freeze(lock_path, selection)
+
+    claim = claim_once(lock_path, audit_manifest_path, audit_data_path, claim_path)
+
+    assert claim["teacher_id"] == "tiny-omni-decision-teacher-v1"
+    assert claim["sealed_audit_sha256"] == actual_audit_hash
+    with pytest.raises(ValueError, match="already been attempted"):
+        claim_once(lock_path, audit_manifest_path, audit_data_path, claim_path)
+
+
+def test_sealed_audit_claim_checks_data_hash_before_consuming_single_attempt(tmp_path) -> None:
+    from tiny_omni_decision.sealed_audit import claim_sealed_audit_evaluation_once
+
+    lock_path = tmp_path / "selection-lock.json"
+    manifest_path = tmp_path / "sealed-audit-manifest.json"
+    data_path = tmp_path / "sealed-audit.jsonl"
+    claim_path = tmp_path / "sealed-audit-claim.json"
+    data_path.write_text('{"id":"actual"}\n', encoding="utf-8")
+    freeze_teacher_selection = __import__(
+        "tiny_omni_decision.sealed_audit", fromlist=["freeze_teacher_selection"]
+    ).freeze_teacher_selection
+    selection = {
+        "teacher_id": "tiny-omni-decision-teacher-v1",
+        "checkpoint_sha256": "a" * 64,
+        "config_sha256": "b" * 64,
+        "train_corpus_sha256": "c" * 64,
+        "validation_corpus_sha256": "d" * 64,
+        "sealed_audit_sha256": "e" * 64,
+        "sealed_audit_manifest_sha256": "f" * 64,
+        "seed": 17,
+        "best_step": 512,
+        "selection_rule": "validation-only rule v1",
+        "sampling_policy": {"text": 1, "image": 1, "audio": 1, "video": 1},
+    }
+    manifest_path.write_text(json.dumps({"sealed_audit_sha256": "e" * 64}), encoding="utf-8")
+    selection["sealed_audit_manifest_sha256"] = sha256_file(manifest_path)
+    freeze_teacher_selection(lock_path, selection)
+
+    with pytest.raises(ValueError, match="data hash"):
+        claim_sealed_audit_evaluation_once(lock_path, manifest_path, data_path, claim_path)
+
+    assert not claim_path.exists()
+
+
+def test_sealed_audit_cli_claims_before_loading_records(tmp_path, monkeypatch) -> None:
+    import sys
+    import types
+    from pathlib import Path
+
+    from tiny_omni_decision import cli, trainer
+    from tiny_omni_decision.corpus import file_sha256
+    from tiny_omni_decision.sealed_audit import artifact_sha256
+
+    experiment_dir = tmp_path / "experiment"
+    candidate = experiment_dir / "best"
+    candidate.mkdir(parents=True)
+    (candidate / "adapter_model.safetensors").write_bytes(b"adapter")
+    metadata_path = experiment_dir / "run-metadata.json"
+    manifest = load_structured_file("manifests/base-model.example.yaml")
+    metadata_path.write_text(
+        json.dumps(
+            {
+                "artifact_role": "validation_selected_experiment_candidate",
+                "best_adapter_path": "best",
+                "best_adapter_sha256": file_sha256(
+                    str(candidate / "adapter_model.safetensors")
+                ),
+                "base_repo_id": manifest["repo_id"],
+                "base_revision": manifest["revision"],
+                "best_checkpoint_step": 5,
+            }
+        ),
+        encoding="utf-8",
+    )
+    config_path = Path("configs/decision/teacher_v1.yaml")
+    train_path = tmp_path / "train.jsonl"
+    validation_path = tmp_path / "validation.jsonl"
+    train_path.write_text("train\n", encoding="utf-8")
+    validation_path.write_text("validation\n", encoding="utf-8")
+    audit_dir = tmp_path / "data" / "sealed" / "durable-teacher-v1"
+    audit_dir.mkdir(parents=True)
+    audit_path = audit_dir / "sealed_audit.jsonl"
+    audit_path.write_text("secret audit rows\n", encoding="utf-8")
+    audit_hash = file_sha256(str(audit_path))
+    audit_manifest_path = audit_dir / "sealed-audit-manifest.json"
+    audit_manifest_path.write_text(
+        json.dumps(
+            {
+                "sealed_audit_sha256": audit_hash,
+                "sealed_audit_path": audit_path.name,
+            }
+        ),
+        encoding="utf-8",
+    )
+    lock_path = tmp_path / "selection-lock.json"
+    lock_path.write_text(
+        json.dumps(
+            {
+                "frozen": True,
+                "teacher_id": "tiny-omni-decision-teacher-v1",
+                "checkpoint_sha256": artifact_sha256(candidate),
+                "candidate_metadata_sha256": file_sha256(str(metadata_path)),
+                "config_sha256": file_sha256(str(config_path)),
+                "train_corpus_sha256": file_sha256(str(train_path)),
+                "validation_corpus_sha256": file_sha256(str(validation_path)),
+                "sealed_audit_sha256": audit_hash,
+                "sealed_audit_manifest_sha256": file_sha256(str(audit_manifest_path)),
+                "best_step": 5,
+                "base_repo_id": manifest["repo_id"],
+                "base_revision": manifest["revision"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    claim_path = audit_dir / "sealed-audit-claim.json"
+    result_path = audit_dir / "sealed-audit-result.json"
+    access_order: list[str] = []
+
+    class FakeModel:
+        def eval(self):
+            return self
+
+    class FakePeftModel:
+        @staticmethod
+        def from_pretrained(base_model, adapter_path, is_trainable):
+            return FakeModel()
+
+    class FakeProcessor:
+        @staticmethod
+        def from_pretrained(model_id, revision):
+            return object()
+
+    class FakeBaseModel:
+        @staticmethod
+        def from_pretrained(*args, **kwargs):
+            return object()
+
+    monkeypatch.setitem(sys.modules, "peft", types.SimpleNamespace(PeftModel=FakePeftModel))
+    monkeypatch.setitem(
+        sys.modules,
+        "transformers",
+        types.SimpleNamespace(
+            AutoModelForMultimodalLM=FakeBaseModel, AutoProcessor=FakeProcessor
+        ),
+    )
+
+    def read_after_claim(path):
+        assert claim_path.is_file()
+        access_order.append("load-audit-records")
+        return split_examples_for_cli_test()
+
+    def evaluate_after_claim(*args, **kwargs):
+        assert claim_path.is_file()
+        access_order.append("evaluate")
+        metrics = {
+            f"modality:{name}": {
+                "accuracy": 0.5,
+                "nll": 1.0,
+                "brier": 0.5,
+                "ece": 0.1,
+                "mean_confidence": 0.7,
+            }
+            for name in ("text", "image", "audio", "video")
+        }
+        metrics["all"] = {
+            "accuracy": 0.5,
+            "nll": 1.0,
+            "brier": 0.5,
+            "ece": 0.1,
+            "mean_confidence": 0.7,
+        }
+        return metrics, []
+
+    def split_examples_for_cli_test():
+        rows = []
+        for modality in ("text", "image", "audio", "video"):
+            media = []
+            if modality == "image":
+                media = [MediaRef(kind="image", uri="source-ref://audit/image.png")]
+            elif modality == "audio":
+                media = [MediaRef(kind="audio", uri="source-ref://audit/audio.wav")]
+            elif modality == "video":
+                media = [MediaRef(kind="video", uri="source-ref://audit/video.mp4")]
+            rows.append(
+                example(f"audit-{modality}", f"source-{modality}", modality, media)
+            )
+        return rows
+
+    monkeypatch.setattr(trainer, "_read_examples", read_after_claim)
+    monkeypatch.setattr(trainer, "_evaluate", evaluate_after_claim)
+
+    cli.evaluate_sealed_audit(
+        candidate=candidate,
+        config_path=config_path,
+        train_path=train_path,
+        validation_path=validation_path,
+        audit_path=audit_path,
+        audit_manifest_path=audit_manifest_path,
+        lock_path=lock_path,
+        claim_path=claim_path,
+        result_path=result_path,
+        model_manifest_path=Path("manifests/base-model.example.yaml"),
+    )
+
+    assert access_order == ["load-audit-records", "evaluate"]
+    assert json.loads(result_path.read_text(encoding="utf-8"))["status"] == "completed"
 
 
 def test_metric_comparison_deltas() -> None:

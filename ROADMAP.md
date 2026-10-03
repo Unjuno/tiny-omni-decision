@@ -114,19 +114,24 @@ and automated source/content split checks. OneJev component-level rights review 
 open but OneJev is excluded from the frozen corpus. Ternary runtime compatibility remains
 a later compression gate.
 
-## Phase 3 — High-precision Decision/Omni LoRA — durable local teacher complete
+## Phase 3 — High-precision Decision/Omni LoRA — v0 complete, Teacher v1 in progress
 
-The local RTX 3080 Laptop GPU completed a 256-step four-modality Decision LoRA run
-on the frozen 4,859-record train corpus. The best validation checkpoint was
-reloaded and evaluated on all 2,917 held-out examples. Corpus provenance, zero-overlap
-checks, selection and final metrics, artifacts, and the merge/export instructions are
-recorded in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
-pipeline test remains documented in [docs/PHASE3.md](docs/PHASE3.md). PyTorch 2.6 is
-required for Gemma 4's multimodal attention masking path.
+Teacher v0 completed a 256-step four-modality run on the local RTX 3080 Laptop GPU.
+Its 2,917-record evaluation has already been observed and is a legacy reference,
+not a blind test or a model-selection target. Historical corpus provenance and
+metrics remain in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier
+16-step pipeline test remains documented in [docs/PHASE3.md](docs/PHASE3.md).
 
-The Decision LoRA remains an adapter artifact. No merge/export, ternary quantization,
-Recovery adapter, or teacher-logit cache was produced in this phase. The merge/export
-path is documented but has not yet been exercised.
+Teacher v1 is the active high-precision quality phase. It first fixes CLEVRER
+scene-level grouping and fail-closed independent validation, then freezes fresh
+train/validation/sealed-audit splits with record, source-asset, media, and
+normalized-content checks. Iteration loads train and validation only. The local
+RTX 3080 is measured before extending the rank-16 learning curve; policies for
+text/image/video emphasis are compared on validation. Architecture changes and
+sealed audit are gated on those results. See [docs/TEACHER_V1.md](docs/TEACHER_V1.md).
+
+The Teacher v1 phase does not merge the final Teacher, ternary-quantize, train a
+Recovery adapter, or create a teacher-logit cache. Those remain later gates.
 
 ## Phase 4 — Larger multimodal decision adaptation
 

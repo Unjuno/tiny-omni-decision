@@ -1,0 +1,53 @@
+schema_version: 1
+manifest_type: candidate_catalog
+purpose: evaluation
+sources:
+  - manifest: candidates/typed-synth-validation.yaml
+    split: validation
+    adapter: typed-decisions-synth
+    heldout_partition: split
+    include: true
+    row_limit: 8192
+  - manifest: candidates/open-jev-validation.yaml
+    subset: release-v2-redistributable
+    split: validation
+    adapter: open-jev
+    heldout_partition: validation
+    include: true
+    row_limit: 8192
+  - manifest: candidates/open-jev-test.yaml
+    subset: release-v2-redistributable
+    split: test
+    adapter: open-jev
+    heldout_partition: evaluation
+    include: true
+    row_limit: 8192
+  - manifest: candidates/clevr4-validation.yaml
+    subset: clevr_4_10k_v1
+    split: val
+    adapter: clevr4
+    heldout_partition: split
+    include: true
+    row_limit: 256
+  - manifest: candidates/speech-commands-validation.yaml
+    subset: v0.02
+    split: validation
+    adapter: speech-commands
+    heldout_partition: validation
+    include: true
+    row_limit: 8192
+  - manifest: candidates/speech-commands-test.yaml
+    subset: v0.02
+    split: test
+    adapter: speech-commands
+    heldout_partition: evaluation
+    include: true
+    row_limit: 8192
+  - manifest: candidates/clevrer-validation.yaml
+    subset: official-2020
+    split: validation
+    adapter: clevrer
+    heldout_partition: split
+    include: true
+    row_limit: 256
+    note: Keep each underlying scene/video in one split.

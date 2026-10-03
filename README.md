@@ -76,35 +76,55 @@ check and the durable teacher run are recorded in
 [docs/PHASE3.md](docs/PHASE3.md) and
 [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
 
-## Durable Decision Teacher
+## Teacher v1 quality run
 
-The reproducible train, validation, and held-out evaluation corpus can be frozen
-with:
-
-```bash
-tiny-omni-decision freeze-corpus \
-  manifests/durable-training-corpus.yaml \
-  manifests/durable-heldout-corpus.yaml \
-  data/processed/durable-teacher-v0 \
-  --max-records-per-source 2048
-```
-
-Then run the four-modality Decision LoRA training, validation selection, and
-full held-out evaluation:
+Teacher v0's evaluation metrics have already been observed. They are retained as
+a legacy reference in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md) and are
+not used for hyperparameter selection. Teacher v1 freezes fresh train and
+validation corpora plus a separate sealed audit set:
 
 ```bash
+tiny-omni-decision freeze-teacher-v1-corpus
 tiny-omni-decision train-decision \
-  --train-manifest data/processed/durable-teacher-v0/train.jsonl \
-  --eval-manifest data/processed/durable-teacher-v0/eval.jsonl \
-  --validation-manifest data/processed/durable-teacher-v0/validation.jsonl \
-  --config configs/decision/durable_teacher.yaml \
-  --output artifacts/tiny-omni-decision-teacher-v0
+  --train-manifest data/processed/durable-teacher-v1/train.jsonl \
+  --validation-manifest data/processed/durable-teacher-v1/validation.jsonl \
+  --config configs/decision/teacher_v1.yaml \
+  --output artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-balanced
 ```
 
-Corpus provenance, hashes, split checks, training setup, measured metrics,
-limitations, artifacts, and the later merge/export path are in
-[docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
-pipeline test is retained as historical context in [docs/PHASE3.md](docs/PHASE3.md).
+The trainer requires independent validation and has no evaluation-manifest
+argument. It records every attempt, sample/asset accounting, validation learning
+curves, per-modality metrics, and the best validation-selected checkpoint.
+Sampling policies for weaker modalities are in
+`configs/decision/teacher_v1_weak_modalities.yaml` and
+`configs/decision/teacher_v1_video_priority.yaml`.
+
+After the candidate, config, train/validation hashes, sampling policy, and
+selection rule are frozen, evaluate the sealed audit once:
+
+```bash
+tiny-omni-decision freeze-teacher-selection \
+  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-balanced/best \
+  --config-path configs/decision/teacher_v1.yaml \
+  --train-path data/processed/durable-teacher-v1/train.jsonl \
+  --validation-path data/processed/durable-teacher-v1/validation.jsonl
+tiny-omni-decision evaluate-sealed-audit \
+  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-balanced/best \
+  --config-path configs/decision/teacher_v1.yaml \
+  --train-path data/processed/durable-teacher-v1/train.jsonl \
+  --validation-path data/processed/durable-teacher-v1/validation.jsonl
+```
+
+The audit JSONL lives under `data/sealed/durable-teacher-v1/`; normal training
+loads only `train.jsonl` and `validation.jsonl`. Its immutable manifest records
+the audit hash, and an exclusive claim file prevents a second evaluation.
+Teacher v1 procedure, split hashes, coverage, experiments, curves, metrics, and
+remaining bottlenecks are documented in
+[docs/TEACHER_V1.md](docs/TEACHER_V1.md).
+
+The prior 16-step pipeline test remains historical context in
+[docs/PHASE3.md](docs/PHASE3.md). No ternary quantization or Recovery LoRA is
+performed during Teacher v1.
 
 ## Planned compression and recovery flow
 
@@ -126,7 +146,7 @@ Teacher distillation caches **option logits at the single decision position** by
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
 - The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`) and requires PyTorch 2.6 for actual Gemma 4 multimodal forward. Install a wheel matching the local CUDA driver; GPU model loading is not covered by CPU CI.
-- The durable Teacher run uses frozen text, image, audio, and video corpora with zero pairwise source-ID and normalized-content overlap. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal candidates; OneJev remains excluded pending component-level rights review. The dataset is sampled and the training budget is capped, so the results are not benchmark-generalizing quality claims; see [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
+- Teacher v0's final evaluation has been observed and is only a legacy reference. Teacher v1 uses fresh split assets where available, rejects record/media/state overlap, and isolates its sealed audit until validation-only selection is frozen; see [docs/TEACHER_V1.md](docs/TEACHER_V1.md). The sources remain controlled candidates, not broad real-world benchmarks.
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
