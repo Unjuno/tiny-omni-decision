@@ -148,6 +148,7 @@ class DatasetCatalogEntry(BaseModel):
     split: str | None = None
     adapter: str | None = None
     row_limit: int | None = Field(default=None, ge=1)
+    heldout_partition: Literal["validation", "evaluation", "split"] | None = None
     reason: str | None = None
     note: str | None = None
 

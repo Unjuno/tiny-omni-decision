@@ -43,12 +43,12 @@ Design decisions:
 - Ternary compression focuses on large decoder linear weights first.
 - Modality encoders, projectors, norms, and readout components remain higher precision until proven safe.
 
-Hard gates before durable training:
+Project-level hard gates:
 - [x] pin exact base-model revision/hash
 - [x] record upstream license/notice requirements
-- [ ] freeze redistribution-safe training data manifests
+- [x] freeze and validate redistribution-safe train/validation/evaluation catalogs
 - [ ] verify architecture-compatible ternary implementation/runtime
-- [ ] define held-out paired benchmark splits
+- [x] define disjoint held-out train/selection/evaluation splits and zero-overlap checks
 
 ## Phase 1 — Reproducible text decision LoRA smoke
 
@@ -94,7 +94,9 @@ shuffling, streaming normalization, and source/content split checks are implemen
 fixtures exercise unknown and non-commercial licenses, media metadata, malformed targets,
 and cross-split duplicates. Candidate catalog validation requires ALLOW rights, exact
 manifest/catalog split agreement, and disjoint train/evaluation splits for a shared pinned
-dataset revision. No dataset training or full-media download was run.
+dataset revision. The durable teacher corpus is frozen with selected media materialized and
+hashed; its source splits and zero-overlap checks are recorded in
+[docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
 
 Candidate inventory and verified rights decisions are in `docs/DATASETS.md`; separate
 training and evaluation candidate catalogs are in `manifests/`. Safe minimum candidates now
@@ -107,22 +109,24 @@ archive contains 10,531 annotation rows (8,424 train / 2,107 val); each image pr
 ten-class decisions, and media bytes are not copied during normalization.
 
 Phase 2 exit criteria are complete: at least one rights-audited candidate per modality,
-separate pinned train/evaluation catalogs, streaming adapters, reproducible small runs, and
-automated source/content split checks. Further OneJev source rights review, complete
-full-corpus split/output verification, held-out benchmark freeze, and ternary runtime
-compatibility remain hard gates before durable model training or compression.
+separate pinned train/evaluation catalogs, streaming adapters, reproducible normalization,
+and automated source/content split checks. OneJev component-level rights review remains
+open but OneJev is excluded from the frozen corpus. Ternary runtime compatibility remains
+a later compression gate.
 
-## Phase 3 — High-precision Decision/Omni LoRA — bounded local run complete
+## Phase 3 — High-precision Decision/Omni LoRA — durable local teacher complete
 
-The first bounded experiment is complete on the local RTX 3080 Laptop GPU. The
-frozen corpus, actual Gemma 4 text/image/audio/video processor forwards, tiny-overfit
-diagnostic, 16-step mixed-modality LoRA training, adapter reload check, metrics,
-and limitations are recorded in [docs/PHASE3.md](docs/PHASE3.md). This is a
-reproducible pipeline/result for a small capped dataset, not a durable teacher or
-a claim that training quality is saturated. PyTorch 2.6 is required for Gemma 4's
-multimodal attention masking path.
+The local RTX 3080 Laptop GPU completed a 256-step four-modality Decision LoRA run
+on the frozen 4,859-record train corpus. The best validation checkpoint was
+reloaded and evaluated on all 2,917 held-out examples. Corpus provenance, zero-overlap
+checks, selection and final metrics, artifacts, and the merge/export instructions are
+recorded in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
+pipeline test remains documented in [docs/PHASE3.md](docs/PHASE3.md). PyTorch 2.6 is
+required for Gemma 4's multimodal attention masking path.
 
-No ternary quantization, Recovery adapter, or teacher-logit cache is included.
+The Decision LoRA remains an adapter artifact. No merge/export, ternary quantization,
+Recovery adapter, or teacher-logit cache was produced in this phase. The merge/export
+path is documented but has not yet been exercised.
 
 ## Phase 4 — Larger multimodal decision adaptation
 

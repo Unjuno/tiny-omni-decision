@@ -1,0 +1,47 @@
+schema_version: 1
+manifest_type: candidate_catalog
+purpose: training
+sources:
+  - manifest: dataset.example.yaml
+    subset: default
+    split: train
+    adapter: typed-decisions-synth
+    include: true
+    row_limit: 256
+    note: Pinned MIT synthetic text; use hard-gold categorical decisions only.
+  - manifest: candidates/open-jev.yaml
+    subset: release-v2-redistributable
+    split: train
+    adapter: open-jev
+    include: true
+    row_limit: 2048
+    note: CC0 release only; soft/non-single-winner labels are skipped.
+  - manifest: candidates/clevr4.yaml
+    subset: clevr_4_10k_v1
+    split: train
+    adapter: clevr4
+    include: true
+    row_limit: 64
+    note: Cap distinct images at 64; four taxonomies yield up to 256 image decisions.
+  - manifest: candidates/speech-commands.yaml
+    subset: v0.02
+    split: train
+    adapter: speech-commands
+    include: true
+    row_limit: 1024
+  - manifest: candidates/clevrer.yaml
+    subset: official-2020
+    split: train
+    adapter: clevrer
+    include: true
+    row_limit: 64
+    note: Cap distinct training scenes at 64; keep clip reuse low in the 256-step run.
+  - manifest: candidates/onejev.yaml
+    include: false
+    reason: Component-level dataset and media rights are still REVIEW.
+  - manifest: candidates/mmau-test-mini.yaml
+    include: false
+    reason: Held-out non-commercial benchmark; excluded from training.
+  - manifest: candidates/mvbench.yaml
+    include: false
+    reason: Held-out third-party research media; excluded from training.

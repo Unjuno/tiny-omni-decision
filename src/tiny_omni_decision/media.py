@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import urllib.request
 import zipfile
+from collections.abc import Mapping
 from pathlib import Path
 
 from .dataset import _speech_command_label, iter_hub_rows, sha256_file
@@ -97,7 +98,10 @@ def materialize_clevr4_images(
     if missing:
         reader = _HttpRangeReader(archive_url)
         with zipfile.ZipFile(reader) as archive:
-            for filename, path in missing.items():
+            for filename, path in sorted(
+                missing.items(),
+                key=lambda item: archive.getinfo(f"images/{item[0]}").header_offset,
+            ):
                 archive_name = f"images/{filename}"
                 info = archive.getinfo(archive_name)
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -170,24 +174,28 @@ def materialize_clevrer_videos(
             missing_by_split.setdefault(split, {})[filename] = path
     for split, missing in missing_by_split.items():
         with zipfile.ZipFile(_HttpRangeReader(archive_urls[split])) as archive:
-            names_by_basename = {
-                name.rsplit("/", 1)[-1]: name
-                for name in archive.namelist()
-                if not name.endswith("/")
+            members_by_basename = {
+                info.filename.rsplit("/", 1)[-1]: info
+                for info in archive.infolist()
+                if not info.is_dir()
             }
-            for filename, path in missing.items():
-                archive_name = names_by_basename.get(filename)
-                if archive_name is None:
-                    raise FileNotFoundError(f"CLEVRER ZIP is missing {filename}")
+            absent = set(missing) - set(members_by_basename)
+            if absent:
+                raise FileNotFoundError(f"CLEVRER ZIP is missing {sorted(absent)}")
+            for filename, path in sorted(
+                missing.items(),
+                key=lambda item: members_by_basename[item[0]].header_offset,
+            ):
+                info = members_by_basename[filename]
                 path.parent.mkdir(parents=True, exist_ok=True)
-                with archive.open(archive_name) as source, path.open("wb") as target:
+                with archive.open(info) as source, path.open("wb") as target:
                     while chunk := source.read(1024 * 1024):
                         target.write(chunk)
                 with path.open("rb") as video_file:
                     header = video_file.read(12)
                     if len(header) < 12 or header[4:8] != b"ftyp":
                         path.unlink(missing_ok=True)
-                        raise ValueError(f"CLEVRER member is not an MP4: {archive_name}")
+                        raise ValueError(f"CLEVRER member is not an MP4: {info.filename}")
 
     hashes = {f"{split}/{name}": sha256_file(path) for (split, name), path in requested.items()}
     converted = []
@@ -231,25 +239,62 @@ def materialize_clevrer_videos(
 def materialize_speech_commands_audio(
     examples: list[DecisionExample],
     *,
-    manifest: DatasetManifest,
+    manifest: DatasetManifest | Mapping[str, DatasetManifest],
     data_root: Path,
 ) -> tuple[list[DecisionExample], dict[str, object]]:
-    requested: dict[tuple[str, str], Path] = {}
+    manifests_by_split = (
+        {manifest.split: manifest}
+        if isinstance(manifest, DatasetManifest)
+        else dict(manifest)
+    )
+    for split, source_manifest in manifests_by_split.items():
+        if source_manifest.split != split:
+            raise ValueError(
+                f"Speech Commands manifest key {split!r} does not match "
+                f"its declared split {source_manifest.split!r}"
+            )
+
+    requested: dict[tuple[str, str, str], Path] = {}
     for example in examples:
         if example.modality != "audio":
             continue
+        source_manifest = manifests_by_split.get(example.split)
+        if source_manifest is None:
+            raise ValueError(
+                f"no Speech Commands manifest supplied for split {example.split!r}"
+            )
+        if example.source != source_manifest.dataset_id:
+            raise ValueError(
+                f"Speech Commands source mismatch for {example.id}: "
+                f"{example.source!r} != {source_manifest.dataset_id!r}"
+            )
+        if example.source_revision != source_manifest.revision:
+            raise ValueError(
+                f"Speech Commands revision mismatch for {example.id}: "
+                f"{example.source_revision!r} != {source_manifest.revision!r}"
+            )
+        if example.split != source_manifest.split:
+            raise ValueError(
+                f"Speech Commands split mismatch for {example.id}: "
+                f"{example.split!r} != {source_manifest.split!r}"
+            )
         parts = example.source_record_id.replace("\\", "/").split("/")
         if len(parts) != 2 or parts[0] != example.target or not parts[1].endswith(".wav"):
             raise ValueError(f"invalid Speech Commands record id: {example.source_record_id}")
         label, filename = parts
-        requested[(label, filename)] = (
-            data_root / "raw" / "speech-commands" / manifest.split / label / filename
+        requested[(example.split, label, filename)] = (
+            data_root / "raw" / "speech-commands" / example.split / label / filename
         )
 
-    missing = {key for key, path in requested.items() if not path.is_file()}
-    found: set[tuple[str, str]] = set()
-    if missing:
-        for row in iter_hub_rows(manifest):
+    missing_by_split: dict[str, set[tuple[str, str, str]]] = {}
+    for key, path in requested.items():
+        if not path.is_file():
+            missing_by_split.setdefault(key[0], set()).add(key)
+    found: set[tuple[str, str, str]] = set()
+    for split, missing in sorted(missing_by_split.items()):
+        split_found: set[tuple[str, str, str]] = set()
+        source_manifest = manifests_by_split[split]
+        for row in iter_hub_rows(source_manifest):
             audio = row.get("audio")
             if not isinstance(audio, dict):
                 continue
@@ -258,7 +303,7 @@ def materialize_speech_commands_audio(
             payload = audio.get("bytes")
             if not label or not path_value or not isinstance(payload, bytes):
                 continue
-            key = (label, Path(str(path_value)).name)
+            key = (split, label, Path(str(path_value)).name)
             if key not in missing:
                 continue
             path = requested[key]
@@ -270,21 +315,33 @@ def materialize_speech_commands_audio(
                     path.unlink(missing_ok=True)
                     raise ValueError(f"Speech Commands media is not a WAV file: {key}")
             found.add(key)
-            if found == missing:
+            split_found.add(key)
+            if split_found == missing:
                 break
-    if found != missing:
-        raise FileNotFoundError(
-            f"Speech Commands audio bytes missing for {sorted(missing - found)}"
-        )
+        if split_found != missing:
+            absent = sorted(missing - split_found)
+            raise FileNotFoundError(
+                f"Speech Commands {split} audio bytes missing for {absent}"
+            )
 
-    hashes = {f"{label}/{name}": sha256_file(path) for (label, name), path in requested.items()}
+    for key, path in requested.items():
+        with path.open("rb") as audio_file:
+            header = audio_file.read(12)
+        if len(header) < 12 or header[:4] != b"RIFF" or header[8:12] != b"WAVE":
+            raise ValueError(f"Speech Commands media is not a WAV file: {key}")
+
+    hashes = {
+        f"{split}/{label}/{name}": sha256_file(path)
+        for (split, label, name), path in requested.items()
+    }
     converted = []
     for example in examples:
         if example.modality != "audio":
             converted.append(example)
             continue
         label, filename = example.source_record_id.replace("\\", "/").split("/")
-        path = requested[(label, filename)]
+        key = (example.split, label, filename)
+        path = requested[key]
         reference = example.media[0]
         converted.append(
             example.model_copy(
@@ -293,17 +350,23 @@ def materialize_speech_commands_audio(
                         MediaRef(
                             kind="audio",
                             path=path.relative_to(data_root).as_posix(),
-                            sha256=hashes[f"{label}/{filename}"],
+                            sha256=hashes[f"{example.split}/{label}/{filename}"],
                             license=reference.license,
                         )
                     ]
                 }
             )
         )
+    manifests_metadata = {
+        split: {
+            "source_dataset": source_manifest.dataset_id,
+            "source_revision": source_manifest.revision,
+            "parquet_files": source_manifest.notes.get("parquet_files", []),
+        }
+        for split, source_manifest in sorted(manifests_by_split.items())
+    }
     return converted, {
-        "source_dataset": manifest.dataset_id,
-        "source_revision": manifest.revision,
-        "parquet_files": manifest.notes["parquet_files"],
+        "source_manifests_by_split": manifests_metadata,
         "audio_materialized": len(requested),
         "audio_newly_downloaded": len(found),
         "audio_sha256": hashes,

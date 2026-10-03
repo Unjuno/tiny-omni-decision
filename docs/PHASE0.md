@@ -49,16 +49,18 @@ The Decision LoRA is used to create the high-precision Decision Teacher. Before 
 
 After ternary compression, train one Recovery LoRA against the high-precision teacher. The default teacher cache stores only option logits/probabilities at the decision position. Full-vocabulary logits are optional diagnostics, not a required training artifact.
 
-## Hard gates
+## Hard-gate status
 
-Before durable training:
+The pinned base/processor, license record, frozen train/selection/evaluation
+corpus, file hashes, and pairwise zero-overlap checks are complete for the first
+local high-precision Decision Teacher. Architecture-compatible ternary runtime
+support remains open and must be verified before compression.
 
-- [x] pin exact upstream revision
+- [x] pin exact upstream model and processor revision
 - [x] record upstream license/notice requirements
-- pin processor/tokenizer revision
-- record file hashes where practical
-- verify architecture-compatible ternary runtime support
-- freeze non-overlapping train/eval manifests
+- [x] record base and corpus file hashes
+- [x] freeze non-overlapping train/validation/evaluation manifests
+- [ ] verify architecture-compatible ternary runtime support
 
 ## Local hardware assumption
 
@@ -73,7 +75,7 @@ Local work:
 - evaluation subsets
 
 Rented GPU:
-- durable decision training
+- optional future scale-up after the local 16 GB training path and budget are reviewed
 - Recovery training when needed
 
 ## Research boundary

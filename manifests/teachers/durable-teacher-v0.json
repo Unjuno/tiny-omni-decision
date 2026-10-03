@@ -1,0 +1,471 @@
+{
+  "schema_version": 1,
+  "teacher_id": "tiny-omni-decision-teacher-v0",
+  "artifact_role": "high_precision_reference_before_ternary_compression",
+  "artifact": {
+    "format": "PEFT LoRA adapter",
+    "path": "artifacts/tiny-omni-decision-teacher-v0/best",
+    "weights_sha256": "fa666e7b46695979b9ffc6908fef12f57144fb8c0cdbdf1b9027eb8e9715bd13",
+    "config_sha256": "e9419bf17ae25fad0140df399879cf70196fa5c9ff644c347828a1a381f5bcfa",
+    "best_checkpoint_step": 256,
+    "best_checkpoint_sha256": "fa666e7b46695979b9ffc6908fef12f57144fb8c0cdbdf1b9027eb8e9715bd13",
+    "local_model_weights_committed": false
+  },
+  "base_model": {
+    "repo_id": "google/gemma-4-E2B-it-qat-q4_0-unquantized",
+    "revision": "6befbaca7398925921802abd1f277b495b78b738",
+    "model_manifest_sha256": "3073b756114904fbec8b8b590c087484aa6769dc510f8f95939509e6657fbfca",
+    "weights_sha256": "33fe0cece08fb527ffefbd1a3a9ce73bd71073727993a283506293e5c6bf0137"
+  },
+  "corpus": {
+    "manifest_file": "data/processed/durable-teacher-v0/corpus-manifest.json",
+    "manifest_file_sha256": "a0eecdbfb28dd92e31648a7ce7763a3156d99a950abc94d920ea969bb0400b03",
+    "train_jsonl_sha256": "c3e6796a2df47471d42e671272b3050f9db150ac6b7ef7289e3902253f36d84d",
+    "validation_jsonl_sha256": "afa9232ec60980de28f846654beac4f3b297c394ac79093fc2d1ffae57d3faf7",
+    "evaluation_jsonl_sha256": "19812d5211a45e8eedee2aa0c6b36795f613d8a1f8e0592c881edfabd13a2d9d",
+    "pair_sha256": "ed178fbc300c95794e17e5216726c499a46b7ee29f113b24124ee402d617d316",
+    "splits": {
+      "train": {
+        "records": 4859,
+        "by_source": {
+          "MIT-IBM/CLEVRER": 704,
+          "TypeSafeAI/Open-Jev": 1977,
+          "google/speech_commands": 1024,
+          "n4ze3m/typed-decisions-synth": 898,
+          "sgvaze/clevr4": 256
+        },
+        "by_modality": {
+          "audio": 1024,
+          "image": 256,
+          "text": 2875,
+          "video": 704
+        },
+        "sha256": "c3e6796a2df47471d42e671272b3050f9db150ac6b7ef7289e3902253f36d84d"
+      },
+      "validation": {
+        "records": 2901,
+        "by_source": {
+          "MIT-IBM/CLEVRER": 352,
+          "TypeSafeAI/Open-Jev": 952,
+          "google/speech_commands": 1024,
+          "n4ze3m/typed-decisions-synth": 445,
+          "sgvaze/clevr4": 128
+        },
+        "by_modality": {
+          "audio": 1024,
+          "image": 128,
+          "text": 1397,
+          "video": 352
+        },
+        "sha256": "afa9232ec60980de28f846654beac4f3b297c394ac79093fc2d1ffae57d3faf7"
+      },
+      "evaluation": {
+        "records": 2917,
+        "by_source": {
+          "MIT-IBM/CLEVRER": 352,
+          "TypeSafeAI/Open-Jev": 988,
+          "google/speech_commands": 1024,
+          "n4ze3m/typed-decisions-synth": 425,
+          "sgvaze/clevr4": 128
+        },
+        "by_modality": {
+          "audio": 1024,
+          "image": 128,
+          "text": 1413,
+          "video": 352
+        },
+        "sha256": "19812d5211a45e8eedee2aa0c6b36795f613d8a1f8e0592c881edfabd13a2d9d"
+      }
+    },
+    "overlap": {
+      "status": "disjoint",
+      "pairwise": {
+        "train_validation": {
+          "training_records": 4859,
+          "evaluation_records": 2901,
+          "shared_source_ids": 0,
+          "shared_content_fingerprints": 0,
+          "status": "disjoint"
+        },
+        "train_evaluation": {
+          "training_records": 4859,
+          "evaluation_records": 2917,
+          "shared_source_ids": 0,
+          "shared_content_fingerprints": 0,
+          "status": "disjoint"
+        },
+        "validation_evaluation": {
+          "training_records": 2901,
+          "evaluation_records": 2917,
+          "shared_source_ids": 0,
+          "shared_content_fingerprints": 0,
+          "status": "disjoint"
+        }
+      },
+      "training_records": 4859,
+      "validation_records": 2901,
+      "evaluation_records": 2917,
+      "shared_source_ids": 0,
+      "shared_content_fingerprints": 0
+    }
+  },
+  "training": {
+    "config": {
+      "seed": 17,
+      "max_train_examples": 8192,
+      "max_eval_examples": 8192,
+      "selection_eval_examples": 256,
+      "max_steps": 256,
+      "gradient_accumulation_steps": 4,
+      "checkpoint_interval": 50,
+      "evaluation_interval": 50,
+      "learning_rate": 5E-05,
+      "max_gradient_norm": 1.0,
+      "max_sequence_length": 1024,
+      "ece_bins": 15,
+      "lora_rank": 16,
+      "lora_alpha": 32,
+      "lora_dropout": 0.05,
+      "cross_entropy_weight": 1.0,
+      "brier_weight": 0.2,
+      "modality_weights": {
+        "text": 1.0,
+        "image": 1.0,
+        "audio": 1.0,
+        "video": 1.0
+      },
+      "source_weights": {},
+      "max_sample_repeats": 2
+    },
+    "config_sha256": "0d53d71faf744358d305bce02659ab3acbed30795286a62199d8e773eda42f73",
+    "seed": 17,
+    "optimizer_steps": 256,
+    "best_checkpoint_selection_loss": 0.9101660462211467,
+    "target_module_paths": [
+      "model.language_model.layers.0.self_attn.q_proj",
+      "model.language_model.layers.0.self_attn.v_proj",
+      "model.language_model.layers.1.self_attn.q_proj",
+      "model.language_model.layers.1.self_attn.v_proj",
+      "model.language_model.layers.10.self_attn.q_proj",
+      "model.language_model.layers.10.self_attn.v_proj",
+      "model.language_model.layers.11.self_attn.q_proj",
+      "model.language_model.layers.11.self_attn.v_proj",
+      "model.language_model.layers.12.self_attn.q_proj",
+      "model.language_model.layers.12.self_attn.v_proj",
+      "model.language_model.layers.13.self_attn.q_proj",
+      "model.language_model.layers.13.self_attn.v_proj",
+      "model.language_model.layers.14.self_attn.q_proj",
+      "model.language_model.layers.14.self_attn.v_proj",
+      "model.language_model.layers.15.self_attn.q_proj",
+      "model.language_model.layers.16.self_attn.q_proj",
+      "model.language_model.layers.17.self_attn.q_proj",
+      "model.language_model.layers.18.self_attn.q_proj",
+      "model.language_model.layers.19.self_attn.q_proj",
+      "model.language_model.layers.2.self_attn.q_proj",
+      "model.language_model.layers.2.self_attn.v_proj",
+      "model.language_model.layers.20.self_attn.q_proj",
+      "model.language_model.layers.21.self_attn.q_proj",
+      "model.language_model.layers.22.self_attn.q_proj",
+      "model.language_model.layers.23.self_attn.q_proj",
+      "model.language_model.layers.24.self_attn.q_proj",
+      "model.language_model.layers.25.self_attn.q_proj",
+      "model.language_model.layers.26.self_attn.q_proj",
+      "model.language_model.layers.27.self_attn.q_proj",
+      "model.language_model.layers.28.self_attn.q_proj",
+      "model.language_model.layers.29.self_attn.q_proj",
+      "model.language_model.layers.3.self_attn.q_proj",
+      "model.language_model.layers.3.self_attn.v_proj",
+      "model.language_model.layers.30.self_attn.q_proj",
+      "model.language_model.layers.31.self_attn.q_proj",
+      "model.language_model.layers.32.self_attn.q_proj",
+      "model.language_model.layers.33.self_attn.q_proj",
+      "model.language_model.layers.34.self_attn.q_proj",
+      "model.language_model.layers.4.self_attn.q_proj",
+      "model.language_model.layers.4.self_attn.v_proj",
+      "model.language_model.layers.5.self_attn.q_proj",
+      "model.language_model.layers.5.self_attn.v_proj",
+      "model.language_model.layers.6.self_attn.q_proj",
+      "model.language_model.layers.6.self_attn.v_proj",
+      "model.language_model.layers.7.self_attn.q_proj",
+      "model.language_model.layers.7.self_attn.v_proj",
+      "model.language_model.layers.8.self_attn.q_proj",
+      "model.language_model.layers.8.self_attn.v_proj",
+      "model.language_model.layers.9.self_attn.q_proj",
+      "model.language_model.layers.9.self_attn.v_proj"
+    ],
+    "sampling_mixture": {
+      "modality_weights": {
+        "text": 1.0,
+        "image": 1.0,
+        "audio": 1.0,
+        "video": 1.0
+      },
+      "source_weights": {},
+      "max_sample_repeats": 2,
+      "scheduler": "weighted modality round robin; source weights apply within modality; sample reuse is bounded by max_sample_repeats",
+      "consumed_by_modality_source": {
+        "audio:google/speech_commands": 256,
+        "image:sgvaze/clevr4": 256,
+        "text:TypeSafeAI/Open-Jev": 128,
+        "text:n4ze3m/typed-decisions-synth": 128,
+        "video:MIT-IBM/CLEVRER": 256
+      }
+    },
+    "checkpoint_reload_verified": true,
+    "max_allocated_vram_bytes": 11655203840,
+    "wall_seconds": 3670.3439999999973,
+    "rental_provider": "local workstation",
+    "rental_total_usd": 0.0
+  },
+  "evaluation_metrics": {
+    "base": {
+      "all": {
+        "count": 2917,
+        "accuracy": 0.5234830305107988,
+        "nll": 2.0083273813066986,
+        "brier": 0.7406531532337169,
+        "ece": 0.24016733816992472,
+        "mean_confidence": 0.7599596761200254
+      },
+      "modality:audio": {
+        "count": 1024,
+        "accuracy": 0.7041015625,
+        "nll": 1.2270675846569465,
+        "brier": 0.4289145225982362,
+        "ece": 0.09681115772400517,
+        "mean_confidence": 0.6769811716949334
+      },
+      "modality:image": {
+        "count": 128,
+        "accuracy": 0.0859375,
+        "nll": 4.4937516637787684,
+        "brier": 1.2805186372083437,
+        "ece": 0.554124036571011,
+        "mean_confidence": 0.6323301836382598
+      },
+      "modality:text": {
+        "count": 1413,
+        "accuracy": 0.49044585987261147,
+        "nll": 1.904710192618513,
+        "brier": 0.8285491695220606,
+        "ece": 0.3390682586650011,
+        "mean_confidence": 0.8295141185376126
+      },
+      "modality:video": {
+        "count": 352,
+        "accuracy": 0.2897727272727273,
+        "nll": 3.7932330950264186,
+        "brier": 1.0983818600705302,
+        "ece": 0.4787839273498817,
+        "mean_confidence": 0.7685566546226089
+      },
+      "source:MIT-IBM/CLEVRER": {
+        "count": 352,
+        "accuracy": 0.2897727272727273,
+        "nll": 3.7932330950264186,
+        "brier": 1.0983818600705302,
+        "ece": 0.4787839273498817,
+        "mean_confidence": 0.7685566546226089
+      },
+      "source:TypeSafeAI/Open-Jev": {
+        "count": 988,
+        "accuracy": 0.5111336032388664,
+        "nll": 1.6323543753800072,
+        "brier": 0.7557299873861455,
+        "ece": 0.28007262320774284,
+        "mean_confidence": 0.7912062264466093
+      },
+      "source:google/speech_commands": {
+        "count": 1024,
+        "accuracy": 0.7041015625,
+        "nll": 1.2270675846569465,
+        "brier": 0.4289145225982362,
+        "ece": 0.09681115772400517,
+        "mean_confidence": 0.6769811716949334
+      },
+      "source:n4ze3m/typed-decisions-synth": {
+        "count": 425,
+        "accuracy": 0.4423529411764706,
+        "nll": 2.5378573630459016,
+        "brier": 0.997832350581549,
+        "ece": 0.48245049280278823,
+        "mean_confidence": 0.9185687006221098
+      },
+      "source:sgvaze/clevr4": {
+        "count": 128,
+        "accuracy": 0.0859375,
+        "nll": 4.4937516637787684,
+        "brier": 1.2805186372083437,
+        "ece": 0.554124036571011,
+        "mean_confidence": 0.6323301836382598
+      }
+    },
+    "teacher": {
+      "all": {
+        "count": 2917,
+        "accuracy": 0.7343160781624957,
+        "nll": 0.6379761398708033,
+        "brier": 0.3344360059596617,
+        "ece": 0.03438234950914177,
+        "mean_confidence": 0.7500539101279677
+      },
+      "modality:audio": {
+        "count": 1024,
+        "accuracy": 0.94921875,
+        "nll": 0.18540658688673609,
+        "brier": 0.0643717250841588,
+        "ece": 0.029488220694474876,
+        "mean_confidence": 0.9286758930538781
+      },
+      "modality:image": {
+        "count": 128,
+        "accuracy": 0.5703125,
+        "nll": 1.374412633836283,
+        "brier": 0.5649964533807038,
+        "ece": 0.05286854854784906,
+        "mean_confidence": 0.5939191586803645
+      },
+      "modality:text": {
+        "count": 1413,
+        "accuracy": 0.6723283793347488,
+        "nll": 0.7323382084435747,
+        "brier": 0.4232208815148556,
+        "ece": 0.04417530525810568,
+        "mean_confidence": 0.705240835187204
+      },
+      "modality:video": {
+        "count": 352,
+        "accuracy": 0.41761363636363635,
+        "nll": 1.307958378890088,
+        "brier": 0.6798367366049229,
+        "ece": 0.05894230644811283,
+        "mean_confidence": 0.46709144581109285
+      },
+      "source:MIT-IBM/CLEVRER": {
+        "count": 352,
+        "accuracy": 0.41761363636363635,
+        "nll": 1.307958378890088,
+        "brier": 0.6798367366049229,
+        "ece": 0.05894230644811283,
+        "mean_confidence": 0.46709144581109285
+      },
+      "source:TypeSafeAI/Open-Jev": {
+        "count": 988,
+        "accuracy": 0.6356275303643725,
+        "nll": 0.7817337448232092,
+        "brier": 0.45935656716941003,
+        "ece": 0.05084509980159733,
+        "mean_confidence": 0.6655139796858133
+      },
+      "source:google/speech_commands": {
+        "count": 1024,
+        "accuracy": 0.94921875,
+        "nll": 0.18540658688673609,
+        "brier": 0.0643717250841588,
+        "ece": 0.029488220694474876,
+        "mean_confidence": 0.9286758930538781
+      },
+      "source:n4ze3m/typed-decisions-synth": {
+        "count": 425,
+        "accuracy": 0.7576470588235295,
+        "nll": 0.6175081144598643,
+        "brier": 0.33921604051085613,
+        "ece": 0.055779283116845525,
+        "mean_confidence": 0.7975940898586722
+      },
+      "source:sgvaze/clevr4": {
+        "count": 128,
+        "accuracy": 0.5703125,
+        "nll": 1.374412633836283,
+        "brier": 0.5649964533807038,
+        "ece": 0.05286854854784906,
+        "mean_confidence": 0.5939191586803645
+      }
+    },
+    "delta_teacher_minus_base": {
+      "all": {
+        "accuracy": 0.21083304765169686,
+        "nll": -1.3703512414358954,
+        "brier": -0.4062171472740552,
+        "ece": -0.20578498866078296,
+        "mean_confidence": -0.009905765992057614
+      },
+      "modality:audio": {
+        "accuracy": 0.2451171875,
+        "nll": -1.0416609977702105,
+        "brier": -0.3645427975140774,
+        "ece": -0.0673229370295303,
+        "mean_confidence": 0.25169472135894466
+      },
+      "modality:image": {
+        "accuracy": 0.484375,
+        "nll": -3.1193390299424855,
+        "brier": -0.7155221838276399,
+        "ece": -0.5012554880231619,
+        "mean_confidence": -0.03841102495789528
+      },
+      "modality:text": {
+        "accuracy": 0.1818825194621373,
+        "nll": -1.1723719841749385,
+        "brier": -0.405328288007205,
+        "ece": -0.2948929534068954,
+        "mean_confidence": -0.12427328335040855
+      },
+      "modality:video": {
+        "accuracy": 0.12784090909090906,
+        "nll": -2.4852747161363307,
+        "brier": -0.41854512346560724,
+        "ece": -0.41984162090176885,
+        "mean_confidence": -0.30146520881151606
+      },
+      "source:MIT-IBM/CLEVRER": {
+        "accuracy": 0.12784090909090906,
+        "nll": -2.4852747161363307,
+        "brier": -0.41854512346560724,
+        "ece": -0.41984162090176885,
+        "mean_confidence": -0.30146520881151606
+      },
+      "source:TypeSafeAI/Open-Jev": {
+        "accuracy": 0.12449392712550611,
+        "nll": -0.8506206305567979,
+        "brier": -0.29637342021673546,
+        "ece": -0.22922752340614552,
+        "mean_confidence": -0.12569224676079604
+      },
+      "source:google/speech_commands": {
+        "accuracy": 0.2451171875,
+        "nll": -1.0416609977702105,
+        "brier": -0.3645427975140774,
+        "ece": -0.0673229370295303,
+        "mean_confidence": 0.25169472135894466
+      },
+      "source:n4ze3m/typed-decisions-synth": {
+        "accuracy": 0.31529411764705884,
+        "nll": -1.9203492485860374,
+        "brier": -0.6586163100706928,
+        "ece": -0.4266712096859427,
+        "mean_confidence": -0.12097461076343763
+      },
+      "source:sgvaze/clevr4": {
+        "accuracy": 0.484375,
+        "nll": -3.1193390299424855,
+        "brier": -0.7155221838276399,
+        "ece": -0.5012554880231619,
+        "mean_confidence": -0.03841102495789528
+      }
+    }
+  },
+  "environment": {
+    "python_version": "3.11.9",
+    "torch_version": "2.6.0+cu124",
+    "cuda_runtime_version": "12.4",
+    "transformers_version": "5.6.2",
+    "peft_version": "0.21.2",
+    "accelerate_version": "1.15.0",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "gpu_total_memory_bytes": 17179344896
+  },
+  "merge_export_performed": false,
+  "ternary_quantization_performed": false,
+  "recovery_lora_trained": false
+}

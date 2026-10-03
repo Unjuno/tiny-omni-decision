@@ -327,11 +327,13 @@ def freeze_corpus(
     max_records_per_source: int = typer.Option(256, min=1),
 ) -> None:
     """Materialize capped, reproducible corpora and hash their provenance."""
+    from .corpus import partition_heldout_records
     from .dataset import (
         audit_license,
         audit_manifest,
         check_train_eval_splits,
         corpus_statistics,
+        deterministic_reservoir_sample,
         iter_hub_rows,
         iter_local_rows,
         normalize_jsonl,
@@ -340,7 +342,9 @@ def freeze_corpus(
 
     def normalize_catalog(
         catalog_path: Path, split_output: Path
-    ) -> tuple[list[DecisionExample], list[dict[str, object]]]:
+    ) -> tuple[
+        list[DecisionExample], list[dict[str, object]], dict[tuple[str, str], str]
+    ]:
         catalog = DatasetCatalog.model_validate(load_structured_file(catalog_path))
         if catalog_path == train_catalog_path and catalog.purpose != "training":
             raise click.ClickException("train catalog must have purpose=training")
@@ -348,11 +352,25 @@ def freeze_corpus(
             raise click.ClickException("evaluation catalog must have purpose=evaluation")
         examples: list[DecisionExample] = []
         source_rows: list[dict[str, object]] = []
+        heldout_partitions: dict[tuple[str, str], str] = {}
         for entry in catalog.sources:
             if not entry.include:
                 continue
             manifest_path = (catalog_path.parent / entry.manifest).resolve()
             manifest = DatasetManifest.model_validate(load_structured_file(manifest_path))
+            if catalog.purpose == "evaluation":
+                if entry.heldout_partition is None:
+                    raise click.ClickException(
+                        f"evaluation source needs heldout_partition: {entry.manifest}"
+                    )
+                source_split = (manifest.dataset_id, manifest.split)
+                previous_partition = heldout_partitions.setdefault(
+                    source_split, entry.heldout_partition
+                )
+                if previous_partition != entry.heldout_partition:
+                    raise click.ClickException(
+                        f"conflicting heldout partition roles for {source_split}"
+                    )
             policy = audit_manifest(manifest)["project_policy"]
             if catalog.purpose == "training" and policy != "ALLOW":
                 raise click.ClickException(
@@ -368,8 +386,32 @@ def freeze_corpus(
             else:
                 source = None
                 rows = iter_hub_rows(manifest)
+            adapter = entry.adapter or "generic"
+            if adapter in {"clevr4", "clevr-4"}:
+                rows = (
+                    row for row in rows if row.get("split", manifest.split) == manifest.split
+                )
+            elif adapter in {"speech-commands", "speech_commands"}:
+                from .dataset import _speech_command_label
+
+                rows = (
+                    row
+                    for row in rows
+                    if row.get("split", manifest.split) == manifest.split
+                    and _speech_command_label(row) is not None
+                )
+            elif adapter in {"clevrer", "clevrer-video"}:
+                from .dataset import _clevrer_row_matches_split
+
+                rows = (row for row in rows if _clevrer_row_matches_split(row, manifest.split))
+            rows = deterministic_reservoir_sample(
+                rows,
+                limit=limit,
+                seed=seed,
+                source_key=f"{manifest.dataset_id}@{manifest.revision}:{manifest.split}",
+            )
             normalized = list(
-                normalize_jsonl(rows, manifest, entry.adapter or "generic", limit=limit, seed=seed)
+                normalize_jsonl(rows, manifest, adapter, seed=seed)
             )
             if not normalized:
                 raise click.ClickException(f"source normalized to zero rows: {entry.manifest}")
@@ -398,6 +440,8 @@ def freeze_corpus(
                     "adapter": entry.adapter,
                     "seed": seed,
                     "source_row_limit": limit,
+                    "source_row_selection": "seeded reservoir sample without replacement",
+                    "heldout_partition": entry.heldout_partition,
                     "records": len(normalized),
                     "manifest_sha256": sha256_file(manifest_path),
                     "source_file": str(source) if source else None,
@@ -410,14 +454,18 @@ def freeze_corpus(
         with split_output.open("w", encoding="utf-8", newline="\n") as handle:
             for example in examples:
                 handle.write(example.model_dump_json() + "\n")
-        return examples, source_rows
+        return examples, source_rows, heldout_partitions
 
     output_dir.mkdir(parents=True, exist_ok=True)
     train_path = output_dir / "train.jsonl"
+    heldout_path = output_dir / "heldout-candidates.jsonl"
+    validation_path = output_dir / "validation.jsonl"
     eval_path = output_dir / "eval.jsonl"
     try:
-        train, train_sources = normalize_catalog(train_catalog_path, train_path)
-        evaluation, eval_sources = normalize_catalog(eval_catalog_path, eval_path)
+        train, train_sources, _ = normalize_catalog(train_catalog_path, train_path)
+        heldout_candidates, heldout_sources, heldout_partitions = normalize_catalog(
+            eval_catalog_path, heldout_path
+        )
         clevr4_manifest = DatasetManifest.model_validate(
             load_structured_file(Path("manifests/candidates/clevr4.yaml"))
         )
@@ -432,8 +480,8 @@ def freeze_corpus(
             data_root=Path("data"),
             archive_url=str(clevr4_manifest.notes["archive"]),
         )
-        evaluation, eval_media = materialize_clevr4_images(
-            evaluation,
+        heldout_candidates, heldout_media = materialize_clevr4_images(
+            heldout_candidates,
             data_root=Path("data"),
             archive_url=str(clevr4_manifest.notes["archive"]),
         )
@@ -448,40 +496,77 @@ def freeze_corpus(
             data_root=Path("data"),
             archive_urls={"train": str(clevrer_train_manifest.notes["video_archive_url"])},
         )
-        evaluation, eval_video_media = materialize_clevrer_videos(
-            evaluation,
+        heldout_candidates, heldout_video_media = materialize_clevrer_videos(
+            heldout_candidates,
             data_root=Path("data"),
             archive_urls={"validation": str(clevrer_eval_manifest.notes["video_archive_url"])},
         )
         speech_train_manifest = DatasetManifest.model_validate(
             load_structured_file(Path("manifests/candidates/speech-commands.yaml"))
         )
-        speech_eval_manifest = DatasetManifest.model_validate(
-            load_structured_file(Path("manifests/candidates/speech-commands-test.yaml"))
-        )
+        speech_eval_manifests = {
+            split: DatasetManifest.model_validate(
+                load_structured_file(
+                    Path(f"manifests/candidates/speech-commands-{split}.yaml")
+                )
+            )
+            for split in ("validation", "test")
+        }
         train, train_audio_media = materialize_speech_commands_audio(
             train, manifest=speech_train_manifest, data_root=Path("data")
         )
-        evaluation, eval_audio_media = materialize_speech_commands_audio(
-            evaluation, manifest=speech_eval_manifest, data_root=Path("data")
+        heldout_candidates, heldout_audio_media = materialize_speech_commands_audio(
+            heldout_candidates, manifest=speech_eval_manifests, data_root=Path("data")
+        )
+        validation, evaluation = partition_heldout_records(
+            heldout_candidates, seed=seed, heldout_partitions=heldout_partitions
         )
         for path, examples in ((train_path, train), (eval_path, evaluation)):
             path.write_text(
                 "".join(example.model_dump_json() + "\n" for example in examples),
                 encoding="utf-8",
             )
-        overlap = check_train_eval_splits(train, evaluation)
+        validation_path.write_text(
+            "".join(example.model_dump_json() + "\n" for example in validation),
+            encoding="utf-8",
+        )
+        overlaps = {
+            "train_validation": check_train_eval_splits(train, validation),
+            "train_evaluation": check_train_eval_splits(train, evaluation),
+            "validation_evaluation": check_train_eval_splits(validation, evaluation),
+        }
+        overlap = {
+            "status": "disjoint"
+            if all(item["status"] == "disjoint" for item in overlaps.values())
+            else "overlap",
+            "pairwise": overlaps,
+            "training_records": len(train),
+            "validation_records": len(validation),
+            "evaluation_records": len(evaluation),
+            "shared_source_ids": sum(item["shared_source_ids"] for item in overlaps.values()),
+            "shared_content_fingerprints": sum(
+                item["shared_content_fingerprints"] for item in overlaps.values()
+            ),
+        }
     except Exception as exc:
         train_path.unlink(missing_ok=True)
+        heldout_path.unlink(missing_ok=True)
+        validation_path.unlink(missing_ok=True)
         eval_path.unlink(missing_ok=True)
         raise click.ClickException(f"Corpus freeze failed: {exc}") from exc
+    heldout_path.unlink(missing_ok=True)
     import hashlib
 
     corpus_manifest = {
         "schema_version": 1,
-        "status": "frozen_bounded_corpus",
+        "status": "frozen_durable_corpus",
         "seed": seed,
         "max_source_rows": max_records_per_source,
+        "source_row_selection": "deterministic reservoir sampling without replacement",
+        "heldout_partition": (
+            "official validation/evaluation roles preserve source splits; entries marked "
+            "split are partitioned 50/50 by source record with a deterministic seed"
+        ),
         "option_order_policy": "stable per-example shuffle seeded by global seed and sample id",
         "media_policy": (
             "selected Clevr-4 PNG, Speech Commands WAV, and CLEVRER MP4 members "
@@ -493,10 +578,10 @@ def freeze_corpus(
                 "audio": train_audio_media,
                 "videos": train_video_media,
             },
-            "evaluation": {
-                "images": eval_media,
-                "audio": eval_audio_media,
-                "videos": eval_video_media,
+            "heldout": {
+                "images": heldout_media,
+                "audio": heldout_audio_media,
+                "videos": heldout_video_media,
             },
         },
         "train": {
@@ -509,7 +594,13 @@ def freeze_corpus(
             "path": eval_path.name,
             **corpus_statistics(evaluation),
             "sha256": sha256_file(eval_path),
-            "sources": eval_sources,
+            "sources": heldout_sources,
+        },
+        "validation": {
+            "path": validation_path.name,
+            **corpus_statistics(validation),
+            "sha256": sha256_file(validation_path),
+            "sources": heldout_sources,
         },
         "overlap": overlap,
         "manifest_sha256": sha256_file(Path("manifests/base-model.example.yaml")),
@@ -520,7 +611,11 @@ def freeze_corpus(
             "sorted options, and media identity"
         ),
         "corpus_pair_sha256": hashlib.sha256(
-            (sha256_file(train_path) + sha256_file(eval_path)).encode()
+            (
+                sha256_file(train_path)
+                + sha256_file(validation_path)
+                + sha256_file(eval_path)
+            ).encode()
         ).hexdigest(),
     }
     if overlap["status"] != "disjoint":
@@ -535,6 +630,7 @@ def freeze_corpus(
 def train_decision(
     train_manifest: Path = Path("data/processed/phase3-frozen/train.jsonl"),
     eval_manifest: Path = Path("data/processed/phase3-frozen/eval.jsonl"),
+    validation_manifest: Path | None = None,
     config: Path = Path("configs/decision/e2b_qat_lora.yaml"),
     output: Path = Path("artifacts/decision-teacher-v0"),
     seed: int | None = None,
@@ -548,7 +644,7 @@ def train_decision(
     modalities: str = typer.Option("text,image,audio,video"),
     tiny_overfit: bool = False,
 ) -> None:
-    """Train and evaluate the frozen-base vocabulary-readout Decision LoRA."""
+    """Train, select, and evaluate the frozen-base vocabulary-readout Decision LoRA."""
     from .trainer import run_training
 
     selected_modalities = {item.strip() for item in modalities.split(",") if item.strip()}
@@ -556,6 +652,7 @@ def train_decision(
         result = run_training(
             train_path=train_manifest,
             eval_path=eval_manifest,
+            validation_path=validation_manifest,
             config_path=config,
             output_dir=output,
             seed_override=seed,
@@ -578,7 +675,11 @@ def train_decision(
                 "steps": result["global_steps"],
                 "consumed": result["actual_train_consumption_by_modality_source"],
                 "baseline": result["baseline_metrics"],
-                "decision_lora": result["decision_lora_metrics"],
+                "decision_teacher": result["decision_teacher_metrics"],
+                "metric_deltas_teacher_minus_base": result[
+                    "metric_deltas_teacher_minus_base"
+                ],
+                "best_checkpoint_step": result["best_checkpoint_step"],
                 "skipped_train": result["skipped_train_examples"],
                 "skipped_eval": result["skipped_eval_examples"],
                 "max_allocated_vram_bytes": result["max_allocated_vram_bytes"],

@@ -1,0 +1,67 @@
+schema_version: 1
+manifest_type: candidate_catalog
+purpose: evaluation
+sources:
+  - manifest: candidates/typed-synth-validation.yaml
+    split: validation
+    adapter: typed-decisions-synth
+    heldout_partition: split
+    include: true
+    row_limit: 256
+    note: Source-state groups are partitioned between selection validation and final evaluation.
+  - manifest: candidates/open-jev-validation.yaml
+    subset: release-v2-redistributable
+    split: validation
+    adapter: open-jev
+    heldout_partition: validation
+    include: true
+    row_limit: 1024
+  - manifest: candidates/open-jev-test.yaml
+    subset: release-v2-redistributable
+    split: test
+    adapter: open-jev
+    heldout_partition: evaluation
+    include: true
+    note: Keep the official test split out of checkpoint selection.
+    row_limit: 1024
+  - manifest: candidates/clevr4-validation.yaml
+    subset: clevr_4_10k_v1
+    split: val
+    adapter: clevr4
+    heldout_partition: split
+    include: true
+    row_limit: 64
+    note: Cap distinct held-out images at 64; image groups split evenly between validation and evaluation.
+  - manifest: candidates/speech-commands-validation.yaml
+    subset: v0.02
+    split: validation
+    adapter: speech-commands
+    heldout_partition: validation
+    include: true
+    row_limit: 1024
+    note: Use the official validation split for checkpoint selection.
+  - manifest: candidates/speech-commands-test.yaml
+    subset: v0.02
+    split: test
+    adapter: speech-commands
+    heldout_partition: evaluation
+    include: true
+    row_limit: 1024
+    note: Keep the official test split for final evaluation only.
+  - manifest: candidates/clevrer-validation.yaml
+    subset: official-2020
+    split: validation
+    adapter: clevrer
+    heldout_partition: split
+    include: true
+    row_limit: 64
+    note: Cap distinct held-out scenes at 64; scene groups split evenly between validation and evaluation.
+  - manifest: candidates/mmau-test-mini.yaml
+    include: false
+    reason: Non-commercial benchmark remains excluded from the durable corpus.
+  - manifest: candidates/mvbench.yaml
+    include: false
+    reason: Third-party research-only media remains excluded from the durable corpus.
+  - manifest: candidates/onejev.yaml
+    include: false
+    reason: Component-level source rights remain REVIEW.

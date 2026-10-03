@@ -26,4 +26,6 @@ jobs:
           done
           tiny-omni-decision validate-dataset-catalog manifests/training-candidates.yaml
           tiny-omni-decision validate-dataset-catalog manifests/evaluation-candidates.yaml
+          tiny-omni-decision validate-dataset-catalog manifests/durable-training-corpus.yaml
+          tiny-omni-decision validate-dataset-catalog manifests/durable-heldout-corpus.yaml
           tiny-omni-decision audit-dataset-manifest manifests/dataset.example.yaml

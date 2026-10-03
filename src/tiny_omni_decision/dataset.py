@@ -1043,6 +1043,24 @@ def normalize_jsonl(
         yield shuffle_options(example, seed) if seed is not None else example
 
 
+def deterministic_reservoir_sample(
+    rows: Iterable[dict[str, Any]], *, limit: int, seed: int, source_key: str
+) -> list[dict[str, Any]]:
+    """Select a bounded, deterministic uniform sample while streaming source rows."""
+    if limit < 1:
+        raise ValueError("reservoir limit must be at least one")
+    rng = random.Random(f"{seed}:{source_key}")
+    reservoir: list[dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        if index < limit:
+            reservoir.append(row)
+            continue
+        replacement = rng.randrange(index + 1)
+        if replacement < limit:
+            reservoir[replacement] = row
+    return reservoir
+
+
 def _normal(value: Any) -> str:
     text = unicodedata.normalize("NFKC", str(value)).casefold()
     return " ".join(text.split())

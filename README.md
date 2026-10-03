@@ -1,6 +1,6 @@
 # Tiny Omni Decision
 
-Tiny Omni Decision adapts Gemma 4's multimodal representation to return probabilities over supplied choices. Phase 1 implements **text decision** only. It does not generate a response: it scores one-token labels (`A`, `B`, …) from the model's vocabulary logits and returns a distribution over the supplied options.
+Tiny Omni Decision adapts Gemma 4's multimodal representation to return probabilities over supplied choices. Phase 1 established a **text-only decision** path; the current training pipeline supports text, image, audio, and video. The decision readout scores supplied choices and returns a probability distribution instead of generating a response.
 
 ## Pinned base
 
@@ -71,30 +71,40 @@ The command refuses CPU execution, guessed target modules, non-finite loss, miss
 
 The Phase 1 text smoke was run on an NVIDIA GeForce RTX 3080 Laptop GPU with
 16,384 MiB VRAM, PyTorch 2.5.1+cu121, Transformers 5.6.2, and PEFT 0.21.2.
-Phase 3's Gemma 4 multimodal path requires PyTorch 2.6; its actual four-modality
-training result and limitations are recorded in [docs/PHASE3.md](docs/PHASE3.md).
+Gemma 4's multimodal path requires PyTorch 2.6. The earlier bounded pipeline
+check and the durable teacher run are recorded in
+[docs/PHASE3.md](docs/PHASE3.md) and
+[docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
 
-## Phase 3 bounded Decision LoRA run
+## Durable Decision Teacher
 
-The first reproducible local corpus can be frozen with:
-
-```bash
-tiny-omni-decision freeze-corpus
-```
-
-Then run a bounded local four-modality training and evaluation experiment:
+The reproducible train, validation, and held-out evaluation corpus can be frozen
+with:
 
 ```bash
-tiny-omni-decision train-decision \\
-  --train-manifest data/processed/phase3-frozen/train.jsonl \\
-  --eval-manifest data/processed/phase3-frozen/eval.jsonl \\
-  --config configs/decision/e2b_qat_lora.yaml \\
-  --output artifacts/phase3-bounded-mixed
+tiny-omni-decision freeze-corpus \
+  manifests/durable-training-corpus.yaml \
+  manifests/durable-heldout-corpus.yaml \
+  data/processed/durable-teacher-v0 \
+  --max-records-per-source 2048
 ```
 
-The frozen corpus is intentionally a capped experiment set; media is materialized
-locally and hashed. Detailed source revisions, corpus/output hashes, measured
-base/LoRA metrics, GPU settings, and remaining gates are in [docs/PHASE3.md](docs/PHASE3.md).
+Then run the four-modality Decision LoRA training, validation selection, and
+full held-out evaluation:
+
+```bash
+tiny-omni-decision train-decision \
+  --train-manifest data/processed/durable-teacher-v0/train.jsonl \
+  --eval-manifest data/processed/durable-teacher-v0/eval.jsonl \
+  --validation-manifest data/processed/durable-teacher-v0/validation.jsonl \
+  --config configs/decision/durable_teacher.yaml \
+  --output artifacts/tiny-omni-decision-teacher-v0
+```
+
+Corpus provenance, hashes, split checks, training setup, measured metrics,
+limitations, artifacts, and the later merge/export path are in
+[docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
+pipeline test is retained as historical context in [docs/PHASE3.md](docs/PHASE3.md).
 
 ## Planned compression and recovery flow
 
@@ -116,10 +126,10 @@ Teacher distillation caches **option logits at the single decision position** by
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
 - The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`) and requires PyTorch 2.6 for actual Gemma 4 multimodal forward. Install a wheel matching the local CUDA driver; GPU model loading is not covered by CPU CI.
-- Phase 2 approved candidates and the bounded Phase 3 train/eval corpus are frozen with zero source-ID and normalized-content overlap. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal candidates; OneJev remains excluded pending component-level rights review. The first local mixed-modality LoRA run and full frozen evaluation completed; see [docs/PHASE3.md](docs/PHASE3.md). Its small capped training budget is not a durable quality claim.
+- The durable Teacher run uses frozen text, image, audio, and video corpora with zero pairwise source-ID and normalized-content overlap. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal candidates; OneJev remains excluded pending component-level rights review. The dataset is sampled and the training budget is capped, so the results are not benchmark-generalizing quality claims; see [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- Component-level rights review for mixed-license sources, full-corpus held-out split verification, benchmark freeze, and ternary runtime compatibility remain hard gates before durable training and compression.
+- OneJev component-level rights review remains unresolved and excluded. Ternary runtime compatibility and paired quality checks after compression remain open later-phase gates; no ternary or Recovery training has been run.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).
