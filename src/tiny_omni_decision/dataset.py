@@ -56,6 +56,52 @@ CLEVR4_TAXONOMIES = {
         "cylinder",
     ],
 }
+SPEECH_COMMAND_WORDS = ["down", "go", "left", "no", "off", "on", "right", "stop", "up", "yes"]
+SPEECH_COMMAND_LABELS = [
+    "yes",
+    "no",
+    "up",
+    "down",
+    "left",
+    "right",
+    "on",
+    "off",
+    "stop",
+    "go",
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "bed",
+    "bird",
+    "cat",
+    "dog",
+    "happy",
+    "house",
+    "marvin",
+    "sheila",
+    "tree",
+    "wow",
+    "backward",
+    "forward",
+    "follow",
+    "learn",
+    "visual",
+    "_silence_",
+]
+CLEVRER_TAXONOMIES = {
+    "exist": ["no", "yes"],
+    "query_color": ["gray", "red", "blue", "green", "brown", "purple", "cyan", "yellow"],
+    "query_material": ["rubber", "metal"],
+    "query_shape": ["cube", "sphere", "cylinder"],
+    "count": [str(value) for value in range(0, 6)],
+}
 
 
 def _canonical_license(value: str) -> str:
@@ -502,6 +548,135 @@ def _flatten_clevr4(row: dict[str, Any], manifest: DatasetManifest) -> list[Deci
     return examples
 
 
+def _speech_command_label(row: dict[str, Any]) -> str | None:
+    label = row.get("label")
+    if row.get("is_unknown") is True:
+        return None
+    if isinstance(label, int) and not isinstance(label, bool):
+        if label < 0 or label >= len(SPEECH_COMMAND_LABELS):
+            raise ValueError(f"Speech Commands label index is out of range: {label}")
+        label = SPEECH_COMMAND_LABELS[label]
+    if not isinstance(label, str):
+        raise ValueError("Speech Commands row needs a string or integer label")
+    return label if label in SPEECH_COMMAND_WORDS else None
+
+
+def _adapt_speech_command(row: dict[str, Any], manifest: DatasetManifest) -> DecisionExample:
+    target = _speech_command_label(row)
+    if target is None:
+        raise ValueError("Speech Commands row is not one of the ten command words")
+    source_id = str(row.get("id") or row.get("file") or "")
+    audio = row.get("audio")
+    audio = audio if isinstance(audio, dict) else {}
+    audio_path = str(audio.get("path") or row.get("path") or "").replace("\\", "/")
+    if not source_id:
+        source_id = audio_path
+    if not source_id:
+        raise ValueError("Speech Commands row needs an audio path or stable id")
+    if audio_path.startswith("/") or ".." in audio_path.split("/"):
+        raise ValueError("Speech Commands audio path must be relative to the pinned archive")
+    archive_path = audio_path or f"records/{urllib.parse.quote(source_id, safe='')}"
+    media = [
+        MediaRef(
+            kind="audio",
+            uri=(
+                f"source-ref://google/speech_commands@{manifest.revision}/"
+                f"v0.02/{manifest.split}/{archive_path}"
+            ),
+            license=manifest.license,
+        )
+    ]
+    return _base_example(
+        row={"id": source_id},
+        dataset_id=manifest.dataset_id,
+        revision=manifest.revision,
+        split=str(row.get("split", manifest.split)),
+        options=SPEECH_COMMAND_WORDS,
+        target=target,
+        state="One-second English spoken-keyword recording.",
+        question="Which of the ten spoken English keywords was uttered?",
+        media=media,
+        license_name=manifest.license,
+        commercial_use=manifest.commercial_use,
+        derivative_model_training_allowed=manifest.derivative_model_training_allowed,
+        redistribution_allowed=manifest.redistribution_allowed,
+        media_redistribution_allowed=manifest.media_redistribution_allowed,
+        attribution=manifest.attribution,
+        source_component="google/speech_commands",
+        source_target=target,
+        trust_status=manifest.trust_status,
+    )
+
+
+def _flatten_clevrer(row: dict[str, Any], manifest: DatasetManifest) -> list[DecisionExample]:
+    """Convert supported single-answer descriptive questions for one CLEVRER video."""
+    video_name = str(row.get("video_filename") or "")
+    if not video_name or Path(video_name).name != video_name or not video_name.endswith(".mp4"):
+        raise ValueError("CLEVRER question row needs a plain video_filename")
+    scene_index = row.get("scene_index")
+    if not isinstance(scene_index, int):
+        raise ValueError("CLEVRER question row needs an integer scene_index")
+    expected_split = manifest.split
+    if expected_split == "train" and not 0 <= scene_index < 10_000:
+        raise ValueError("CLEVRER scene_index is outside the official training range")
+    if expected_split == "validation" and not 10_000 <= scene_index < 15_000:
+        raise ValueError("CLEVRER scene_index is outside the official validation range")
+    questions = row.get("questions")
+    if not isinstance(questions, list):
+        raise ValueError("CLEVRER video row needs a questions list")
+    split_dir = "validation" if expected_split == "validation" else "train"
+    media = [
+        MediaRef(
+            kind="video",
+            uri=f"source-ref://CLEVRER/{manifest.revision}/videos/{split_dir}/{video_name}",
+            license=manifest.license,
+        )
+    ]
+    result = []
+    for question in questions:
+        if question.get("question_type") != "descriptive":
+            continue
+        taxonomy = question.get("question_subtype")
+        options = CLEVRER_TAXONOMIES.get(taxonomy)
+        answer = question.get("answer")
+        if options is None or answer is None:
+            continue
+        source_id = f"{scene_index}:{question.get('question_id')}"
+        example = _base_example(
+            row={"id": source_id},
+            dataset_id=manifest.dataset_id,
+            revision=manifest.revision,
+            split=expected_split,
+            options=options,
+            target=str(answer),
+            state="Synthetic CLEVRER video of moving and colliding objects.",
+            question=str(question.get("question") or ""),
+            media=media,
+            license_name=manifest.license,
+            commercial_use=manifest.commercial_use,
+            derivative_model_training_allowed=manifest.derivative_model_training_allowed,
+            redistribution_allowed=manifest.redistribution_allowed,
+            media_redistribution_allowed=manifest.media_redistribution_allowed,
+            attribution=manifest.attribution,
+            source_component="MIT-IBM-CLEVRER",
+            source_target=answer,
+            trust_status=manifest.trust_status,
+        )
+        result.append(example)
+    return result
+
+
+def _clevrer_row_matches_split(row: dict[str, Any], split: str) -> bool:
+    scene_index = row.get("scene_index")
+    if not isinstance(scene_index, int):
+        raise ValueError("CLEVRER question row needs an integer scene_index")
+    if split == "train":
+        return 0 <= scene_index < 10_000
+    if split == "validation":
+        return 10_000 <= scene_index < 15_000
+    raise ValueError(f"Unsupported CLEVRER split: {split}")
+
+
 def adapt_row(
     row: dict[str, Any],
     manifest: DatasetManifest,
@@ -793,6 +968,12 @@ def normalize_jsonl(
     for row in rows:
         if adapter in {"clevr4", "clevr-4"} and row.get("split", manifest.split) != manifest.split:
             continue
+        if adapter in {"speech-commands", "speech_commands"}:
+            if row.get("split") != manifest.split or _speech_command_label(row) is None:
+                continue
+        if adapter in {"clevrer", "clevrer-video"}:
+            if not _clevrer_row_matches_split(row, manifest.split):
+                continue
         if limit is not None and source_rows >= limit:
             break
         source_rows += 1
@@ -803,6 +984,15 @@ def normalize_jsonl(
             continue
         if adapter in {"clevr4", "clevr-4"}:
             examples = _flatten_clevr4(row, manifest)
+            for example in examples:
+                yield shuffle_options(example, seed) if seed is not None else example
+            continue
+        if adapter in {"speech-commands", "speech_commands"}:
+            example = _adapt_speech_command(row, manifest)
+            yield shuffle_options(example, seed) if seed is not None else example
+            continue
+        if adapter in {"clevrer", "clevrer-video"}:
+            examples = _flatten_clevrer(row, manifest)
             for example in examples:
                 yield shuffle_options(example, seed) if seed is not None else example
             continue

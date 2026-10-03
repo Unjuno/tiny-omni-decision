@@ -57,6 +57,9 @@ def validate_dataset_manifest(path: Path) -> None:
 def validate_dataset_catalog(path: Path) -> None:
     """Validate a separate training or evaluation candidate catalog."""
     catalog = DatasetCatalog.model_validate(load_structured_file(path))
+    from .dataset import audit_manifest
+
+    included: list[tuple[DatasetManifest, str]] = []
     for item in catalog.sources:
         if not item.include:
             continue
@@ -66,10 +69,50 @@ def validate_dataset_catalog(path: Path) -> None:
             raise click.ClickException(
                 f"{item.manifest} usage={manifest.usage} cannot enter {catalog.purpose} catalog"
             )
-        if catalog.purpose == "evaluation" and item.split == "train":
+        if catalog.purpose == "evaluation" and manifest.split == "train":
             raise click.ClickException(
                 f"training split cannot enter evaluation catalog: {item.manifest}"
             )
+        if item.split and manifest.split != item.split:
+            raise click.ClickException(
+                f"catalog split {item.split} does not match {item.manifest} split {manifest.split}"
+            )
+        result = audit_manifest(manifest)
+        if catalog.purpose == "training" and result["project_policy"] != "ALLOW":
+            raise click.ClickException(
+                f"included source {item.manifest} has project policy {result['project_policy']}"
+            )
+        if catalog.purpose == "evaluation" and manifest.usage != "evaluation":
+            raise click.ClickException(
+                f"evaluation catalog source must be evaluation-only: {item.manifest}"
+            )
+        included.append((manifest, item.manifest))
+    if catalog.purpose == "training":
+        evaluation_path = path.with_name("evaluation-candidates.yaml")
+        if evaluation_path.is_file():
+            evaluation_catalog = DatasetCatalog.model_validate(
+                load_structured_file(evaluation_path)
+            )
+            evaluation_sources: dict[str, list[tuple[DatasetManifest, str]]] = {}
+            for eval_item in evaluation_catalog.sources:
+                if not eval_item.include:
+                    continue
+                eval_manifest_path = (evaluation_path.parent / eval_item.manifest).resolve()
+                eval_manifest = DatasetManifest.model_validate(
+                    load_structured_file(eval_manifest_path)
+                )
+                evaluation_sources.setdefault(eval_manifest.dataset_id, []).append(
+                    (eval_manifest, eval_item.manifest)
+                )
+            for train_manifest, train_name in included:
+                for eval_manifest, eval_name in evaluation_sources.get(
+                    train_manifest.dataset_id, []
+                ):
+                    if train_manifest.split == eval_manifest.split:
+                        raise click.ClickException(
+                            f"same dataset split included for training and evaluation: "
+                            f"{train_name}, {eval_name}"
+                        )
     console.print(f"valid {catalog.purpose} dataset catalog: {len(catalog.sources)} sources")
 
 
@@ -92,12 +135,13 @@ def status() -> None:
         "Phase 1: complete; reproducible text decision LoRA smoke and CPU CI are implemented."
     )
     console.print(
-        "Phase 2: pinned candidates, license audits, modality adapters, normalization, "
-        "and split gates are implemented."
+        "Phase 2: pinned text/image/audio/video candidates, license audits, modality "
+        "adapters, normalization, and split gates are implemented; no model training run."
     )
     console.print(
-        "Open hard gates: full-corpus split verification, mixed-source rights review, "
-        "ternary runtime."
+        "Open hard gates before durable training: full-corpus split verification, "
+        "component-level rights review for OneJev, held-out benchmark freeze, "
+        "and ternary runtime compatibility."
     )
 
 

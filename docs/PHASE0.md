@@ -53,8 +53,8 @@ After ternary compression, train one Recovery LoRA against the high-precision te
 
 Before durable training:
 
-- pin exact upstream revision
-- record upstream license/notice requirements
+- [x] pin exact upstream revision
+- [x] record upstream license/notice requirements
 - pin processor/tokenizer revision
 - record file hashes where practical
 - verify architecture-compatible ternary runtime support

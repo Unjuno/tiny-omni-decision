@@ -46,6 +46,16 @@ manifest pins the official image archive checksum; the held-out `val` split is e
 This is a controlled synthetic image-classification source and does not clear rights for
 unrelated natural-image datasets.
 
+Google Speech Commands v0.02 is a keyword-audio training candidate under CC-BY-4.0. Its
+Hub snapshot and per-shard Parquet SHA-256 values are pinned in the train and test
+manifests. Cite Pete Warden, *Speech Commands: A Dataset for Limited-Vocabulary Speech
+Recognition* (2018). Use only the ten keyword labels; do not attempt to identify speakers.
+
+CLEVRER is a synthetic video candidate under the official CC0 grant. Cite Kexin Yi et al.,
+*CLEVRER: Collision Events for Video Representation and Reasoning* (ICLR 2020). Its
+question JSON hashes, official split and video archive references are pinned in the
+manifests. Video bytes are not redistributed by this repository.
+
 ## Release rule
 
 Do not publish a trained checkpoint until all contributing dataset sources have been reviewed and the release manifest contains their provenance and applicable notices.

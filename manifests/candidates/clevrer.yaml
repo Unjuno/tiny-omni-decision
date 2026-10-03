@@ -1,0 +1,39 @@
+schema_version: 1
+dataset_id: MIT-IBM/CLEVRER
+revision: 98b842082ba4f7c18b6b9e3f39145871782a65ef
+subset: official-2020
+split: train
+modalities: [video]
+upstream_url: https://clevrer.csail.mit.edu/
+license: CC0-1.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Kexin Yi, Chuang Gan, Yunzhu Li, Pushmeet Kohli, Jiajun Wu, Antonio Torralba, and Joshua B. Tenenbaum; cite CLEVRER (ICLR 2020)."
+source_citation: https://arxiv.org/abs/1910.01442
+usage: training
+trust_status: trusted
+schema:
+  state: synthetic moving-object video context
+  question: supported single-answer descriptive CLEVRER question
+  options: fixed taxonomy vocabulary for the question subtype
+  target: official descriptive answer
+  media: video_filename in the official CLEVRER train archive
+notes:
+  source_code: https://github.com/chuangg/CLEVRER/tree/98b842082ba4f7c18b6b9e3f39145871782a65ef
+  license_evidence: https://data.csail.mit.edu/clevrer/README.txt
+  questions_url: https://data.csail.mit.edu/clevrer/questions/train.json
+  questions_sha256: 11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4
+  video_archive_url: https://data.csail.mit.edu/clevrer/videos/train/video_train.zip
+  video_archive_size_bytes: 12354893389
+  videos: 10000
+  question_rows: 152572
+  supported_descriptive_examples: 109952
+  taxonomy_vocabularies:
+    exist: [no, yes]
+    query_color: [gray, red, blue, green, brown, purple, cyan, yellow]
+    query_material: [rubber, metal]
+    query_shape: [cube, sphere, cylinder]
+    count: ["0", "1", "2", "3", "4", "5"]
+  policy: Synthetic video data under the upstream CC0 grant. Only single-answer descriptive questions are normalized; multilabel or answerless questions are excluded. Video bytes are not copied into JSONL.

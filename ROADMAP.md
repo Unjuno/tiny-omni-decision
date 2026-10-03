@@ -67,7 +67,7 @@ Hard gates before durable training:
 
 Exit criterion: a fresh clone can validate manifests and run CPU-only CI, and the pinned model completes the documented 16 GB GPU smoke with base frozen and adapter trainable. Local CPU checks, loaded checkpoint inspection, the 16 GB GPU smoke, and GitHub Actions on PR #1 all pass. Phase 1 implementation gates are complete; dataset licensing, held-out evaluation splits, and ternary runtime compatibility remain gates for later phases.
 
-## Phase 2 — Dataset integration
+## Phase 2 — Dataset integration — complete
 
 Normalize public decision data into one schema.
 
@@ -92,28 +92,36 @@ Do not commit redistributable media blindly.
 pinned candidate manifests, text/image/audio/video metadata adapters, deterministic option
 shuffling, streaming normalization, and source/content split checks are implemented. CPU
 fixtures exercise unknown and non-commercial licenses, media metadata, malformed targets,
-and cross-split duplicates. No dataset training or full-media download was run.
+and cross-split duplicates. Candidate catalog validation requires ALLOW rights, exact
+manifest/catalog split agreement, and disjoint train/evaluation splits for a shared pinned
+dataset revision. No dataset training or full-media download was run.
 
 Candidate inventory and verified rights decisions are in `docs/DATASETS.md`; separate
-training and evaluation candidate catalogs are in `manifests/`. Small normalized samples
-from Typed Decisions Synth, Open-Jev train/test, MVBench, and Clevr-4's official train/val
-annotation splits passed the disjointness check. Clevr-4's nominal 10k archive contains
-10,531 annotation rows (8,424 train / 2,107 val); each image produces four ten-class
-decisions, and media bytes are not copied during normalization.
-Open gates before durable training remain full-corpus split/output verification, further
-OneJev component rights review, and ternary runtime compatibility. Phase 2 GitHub Actions
-validation is pending.
+training and evaluation candidate catalogs are in `manifests/`. Safe minimum candidates now
+cover text (Typed Decisions Synth/Open-Jev), image (Clevr-4), audio (Speech Commands), and
+video (CLEVRER). Sampled normalization across these sources is checked for train/evaluation
+disjointness; Speech Commands' adapter smoke uses tiny source-shaped fixtures, while its
+upstream Parquet files are checksum-pinned. CLEVRER questions metadata was sampled from the
+official train/validation files; video bytes were not downloaded. Clevr-4's nominal 10k
+archive contains 10,531 annotation rows (8,424 train / 2,107 val); each image produces four
+ten-class decisions, and media bytes are not copied during normalization.
 
-## Phase 3 — Local text decision experiment
+Phase 2 exit criteria are complete: at least one rights-audited candidate per modality,
+separate pinned train/evaluation catalogs, streaming adapters, reproducible small runs, and
+automated source/content split checks. Further OneJev source rights review, complete
+full-corpus split/output verification, held-out benchmark freeze, and ternary runtime
+compatibility remain hard gates before durable model training or compression.
+
+## Phase 3 — High-precision Decision/Omni LoRA
 
 Local machine target: 16 GB dedicated VRAM / 32 GB RAM.
 
 Goals:
+- freeze and hash the first train/evaluation corpus outputs after full-corpus disjointness checks
 - load the E2B QAT family in a memory-efficient training mode
-- run 100–1000 text decision samples
+- run a bounded Decision/Omni LoRA experiment on approved modalities
 - forward → loss → backward → checkpoint → reload
-- confirm option-order shuffling
-- confirm finite CE/Brier losses
+- confirm option-order shuffling and finite CE/Brier losses
 
 No rented GPU time is spent until this passes.
 
