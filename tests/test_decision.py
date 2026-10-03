@@ -16,6 +16,30 @@ from tiny_omni_decision.decision_math import (
 from tiny_omni_decision.schema import BaseModelManifest, TextDecision
 
 
+def test_decision_module_import_does_not_require_optional_torch(monkeypatch) -> None:
+    import builtins
+    import importlib.util
+    import sys
+    from pathlib import Path
+
+    module_name = "_decision_without_optional_torch"
+    module_path = Path(__file__).parents[1] / "src" / "tiny_omni_decision" / "decision.py"
+    spec = importlib.util.spec_from_file_location(module_name, module_path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    monkeypatch.setitem(sys.modules, module_name, module)
+    original_import = builtins.__import__
+
+    def without_torch(name, globals=None, locals=None, fromlist=(), level=0):
+        if name == "torch" or name.startswith("torch."):
+            raise AssertionError("importing decision helpers must not require optional torch")
+        return original_import(name, globals, locals, fromlist, level)
+
+    monkeypatch.setattr(builtins, "__import__", without_torch)
+    spec.loader.exec_module(module)
+    assert callable(module.decision_loss)
+
+
 class FakeTokenizer:
     def encode(self, text: str, add_special_tokens: bool = False) -> list[int]:
         if text == "X":
