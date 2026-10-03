@@ -136,11 +136,25 @@ E2B QAT base
   → high-precision Decision Teacher
   → merge Decision LoRA into task-adapted quantization source
   → ternary decoder compression
-  → one Recovery LoRA
-  → final Tiny Omni Decision model
+  → Recovery
+  → Variant A: recovered ternary model
+  → lightweight Decision classifier / option scorer
+  → Variant B
+  → token pooling / learned resampler
+  → re-distillation + replacement Recovery
+  → Variant C
+  → identical A/B/C quality + latency benchmark
 ```
 
-Teacher distillation caches **option logits at the single decision position** by default. Full-vocabulary logits are optional diagnostics, not a required cache. The final runtime is intended to carry one Recovery adapter, not stacked Decision + Recovery adapters.
+Teacher distillation caches **option logits at the single decision position** by default. Full-vocabulary logits are optional diagnostics, not a required cache.
+
+The runtime plan deliberately preserves three benchmarkable artifacts instead of overwriting intermediate stages:
+
+- **Variant A:** ternary + Recovery
+- **Variant B:** Variant A with the full-vocabulary runtime readout replaced by a lightweight Decision classifier / option scorer
+- **Variant C:** Variant B plus token pooling / a learned resampler, followed by re-distillation and a replacement Recovery adapter
+
+Every deployable variant carries at most one Recovery adapter. Variant C retrains/replaces Recovery after token reduction; it does not stack two Recovery adapters. All three variants are evaluated on the same quality, memory, size, startup, and p50/p95 latency protocol. Deeper attention replacement remains optional after this comparison.
 
 ## Current boundary and limitations
 
