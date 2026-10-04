@@ -195,6 +195,37 @@ def test_candidate_b_cosine_changes_only_the_optimizer_schedule() -> None:
     }
 
 
+def test_candidate_e_uses_b_structure_and_explicit_video_task_mix() -> None:
+    candidate_e_raw = load_structured_file("configs/decision/teacher_v2_candidate_e.yaml")
+    candidate_e = decision_training_config(candidate_e_raw)
+    candidate_b = decision_training_config(
+        load_structured_file("configs/decision/teacher_v2_candidate_b.yaml")
+    )
+    candidate_b_cosine = decision_training_config(
+        load_structured_file("configs/decision/teacher_v2_candidate_b_cosine.yaml")
+    )
+    selected_schedule = (
+        candidate_b_cosine
+        if candidate_e.lr_scheduler == "cosine"
+        else candidate_b
+    )
+    expected = selected_schedule.model_copy(
+        update={
+            "max_steps": 512,
+            "video_task_weights": {
+                "temporal_descriptive": 0.2,
+                "explanatory": 0.3,
+                "predictive": 0.3,
+                "counterfactual": 0.2,
+            },
+        }
+    )
+
+    assert candidate_e == expected
+    assert candidate_e_raw["teacher_id"] == "tiny-omni-decision-teacher-v2-candidate-e"
+    assert candidate_e_raw["reference_teacher_id"] == "tiny-omni-decision-teacher-v1"
+
+
 def test_windows_base_model_loader_uses_pread_and_restores_transformers_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

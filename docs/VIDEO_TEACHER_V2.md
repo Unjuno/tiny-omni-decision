@@ -477,8 +477,48 @@ Laptop on branch `codex/video-teacher-v2`, source commit
 `4e9977e96a4119d8e9f5924f8f20b068df63f3e206cde7f89e86b69948b22ddc`; train
 and validation SHA-256 values are the frozen v1 hashes recorded above. The
 invocation, config snapshot, and runner are saved with the ignored run output.
-The sealed audit is not loaded. Results will be appended only after the fixed
-run completes and its selected checkpoint is reloaded and verified.
+The sealed audit is not loaded. The fixed 512-step run completed, and reloading
+the validation-selected best checkpoint reproduced validation predictions
+exactly (`checkpoint_reload_verified: true`).
+
+Validation learning curve (lower selector / loss is better):
+
+| Step | Selector | Macro Accuracy | Minimum Accuracy | Macro NLL | Macro Brier | Macro ECE | Video Accuracy | NLL rising | Weak modality degraded |
+|---:|---:|---:|---:|---:|---:|---:|---:|:---:|:---:|
+| 128 | 0.720481 | 0.6610 | 0.4407 | 0.8998 | 0.4301 | 0.1013 | 0.4407 | no | no |
+| 256 | 0.760070 | 0.6758 | 0.4661 | 0.9460 | 0.4359 | 0.1233 | 0.4661 | yes | no |
+| 384 | 0.572798 | 0.7034 | 0.5000 | 0.7899 | 0.3837 | 0.0705 | 0.5000 | no | no |
+| 512 | 0.547168 | 0.7161 | 0.5254 | 0.7743 | 0.3767 | 0.0793 | 0.5254 | no | no |
+
+The step-256 validation NLL rise was transient: both macro NLL and selector
+improved at steps 384 and 512, with no validation-NLL-rise or weak-modality
+degradation signals at the selected step. At step 512, train CE continued to
+fall without validation NLL rising or validation accuracy stalling.
+
+Per-modality validation metrics at step 512 (118 examples per modality):
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 0.8729 | 0.4350 | 0.1656 | 0.0399 |
+| Image | 0.7627 | 0.8116 | 0.3579 | 0.0729 |
+| Text | 0.7034 | 0.6870 | 0.3730 | 0.1029 |
+| Video | 0.5254 | 1.1635 | 0.6105 | 0.1015 |
+
+The step-512 cosine checkpoint is the current schedule-selection winner. Its
+selector is 0.049041 lower than Candidate B's constant-schedule best at step
+384 (0.596209), macro Accuracy is 0.0487 higher, minimum-modality Accuracy is
+0.1102 higher, and Video Accuracy is 0.1102 higher. Candidate E therefore
+uses `lr_scheduler: cosine` and `warmup_ratio: 0.03`; the A/B/C target-coverage
+comparisons remain on the constant schedule.
+
+The selected adapter has 24,158,208 trainable parameters, is 96,693,360 bytes
+on disk (SHA-256
+`7a83d92c6b203b1d7f8cfc74a8360828e78c8855b52fff70f45d9ff1bdf236ea`), and
+uses no trainable projector parameters. Peak allocated VRAM was
+12,006,595,072 bytes on the local NVIDIA GeForce RTX 3080 Laptop GPU (16 GiB).
+The run took 3,068.4 optimizer seconds and 5,235.3 seconds total wall time
+(87.3 minutes); validation evaluations used 2,134.2 seconds. Mean optimizer
+step time was 5.994 seconds. No cloud compute or sealed-audit data was used.
 
 ### Candidate E corpus and evaluation support
 
@@ -499,6 +539,32 @@ are read-only inputs. No sealed-audit path is accepted. The generated corpus
 manifest records input and output hashes, source revision, scene IDs,
 question/example counts by task type, realized corpus mix, and split-gate
 results.
+
+The first Candidate E corpus preflight found that normalized raw CLEVRER rows
+still carried source-reference URIs instead of local video paths. That corpus
+was never used for training or evaluation and remains preserved as a failed
+preflight artifact. The builder now reuses each frozen v1 scene's already
+materialized media reference, and the E runner passes the repository `data/`
+directory explicitly as the media root. The corrected corpus was checked for
+local media-file existence across its train and validation rows,
+alongside the video-scene split and existing overlap gates.
+
+The corrected frozen corpus is
+`artifacts/tiny-omni-decision-teacher-v2/candidate-e/corpus-v1-seed17-local-media-20261005`.
+Its builder source commit is `98a6ecdba2c836d1555fb0f732dc2b9f8ab48b62`;
+corpus manifest SHA-256 is
+`ef1239db99747a9eec3d1f5c8d474515a4ae12a80b8e6dbe15d568b67851830c`, train
+SHA-256 is
+`55e5622f90163a4d6ce421872e37e9825aba459cf8ff92f285056527f2eceb96`, and
+validation SHA-256 is
+`32fd9166bf37774fab08ae7b8ce99b38a7630c5ee500ff167fdb1f8b5b45197c`.
+The preflight sidecar in that directory has SHA-256
+`fee5d179d55f229f5bb709ae78f9de42229335f02ef0fc6df1c330d8eef3387f`.
+It records all train/validation media paths present, all 43,413 training rows
+ALLOW-approved, 318/128 disjoint video scenes, and a deterministic 512-step
+sampler preview of 2,048 unique examples, including 683 video examples from
+300 unique video assets. The preview is checked against actual run accounting
+after Candidate E completes.
 
 The trainer now accepts explicit video task weights, records task-type and
 parent-question consumption counts at validation points, and reports video
