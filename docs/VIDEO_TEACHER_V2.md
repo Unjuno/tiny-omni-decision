@@ -14,7 +14,11 @@ completed its fixed 512-step rank-32 + rsLoRA capacity run and selected step 512
 by the frozen validation score. It raises macro Accuracy slightly over A and B
 but does not improve Video over A or approach the v1 reference; its validation
 NLL, Brier, and ECE are worse than B's. It is retained as an experiment, not a
-replacement Teacher.
+replacement Teacher. Candidate B-cosine's separate schedule run and Candidate
+E's video-native task-mix run are also complete. Candidate E improves Video
+over B-cosine on the exact same mixed-task validation subset, but remains below
+the fixed Teacher v1 reference and is not a replacement Teacher. The v2
+experiments do not meet the gate for a 12-frame Candidate D, so D was not run.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -28,8 +32,8 @@ peak allocated VRAM. This matches the upstream Windows mmap issue and merged
 [PR #48341](https://github.com/huggingface/transformers/pull/48341)). The
 second attempt stopped on a full disk after recording its baseline only. The
 successful run used the Windows-only `pread` loader and is stored separately.
-Dataset expansion, ternary conversion, and sealed-audit evaluation have not
-started.
+The v2 experiments do not modify the frozen v1 corpus or artifacts. Ternary
+conversion and sealed-audit evaluation have not started.
 
 Teacher v1 remains the fixed reference. Its selected run used
 `configs/decision/teacher_v1_weak_modalities.yaml`; SHA-256
@@ -426,33 +430,28 @@ adapter, and checkpoint hashes are preserved in the local C output directory.
 ## Verification so far
 
 - `ruff check src tests`: passed.
-- Full CPU test suite after the Candidate C config regression and Windows
-  loader regression tests: **103 passed**.
+- The latest full CPU test suite after the video task-mix metrics test:
+  **115 passed**.
 - Candidate A config regression test: changing only `video_num_frames` from 4
   to 8 leaves the effective training configuration unchanged otherwise.
 - Recording processor test: receives `videos_kwargs.num_frames == 8`.
 - Real processor smoke: produced an eight-frame tensor and stayed below the
   sequence-length guard.
 - Candidate B target-policy tests: qv, attention, and decoder-all-linear select
-  only the intended decoder layer names; candidate B differs from A only in
-  target policy. The test suite passed at 100 tests before the Windows loader
-  regressions brought the total to 102.
+  only the intended decoder layer names; Candidate B differs from A only in
+  target policy.
 - Pinned-config meta-architecture scan: all seven requested linear leaves
   exist; all selected paths stay under the language-model decoder.
 
 ## Next gates
 
-Candidates A/B/C are complete. Candidate D (12 frames) is not justified by the
-validation evidence: the 8-frame A/B/C candidates do not improve Video over the
-4-frame v1 reference, and C's larger adapter does not improve Video over A.
-The selector's strongest structure is B (decoder all-linear, rank 16). First,
-run a separate schedule-only comparison from the same v1 initialization and
-frozen data as B, changing the schedule to cosine with 3% warmup while holding
-all other factors fixed. Then use the validation-selected B structure for
-Candidate E's video-native CLEVRER task mix; preserve descriptive questions and
-add explanatory, predictive, and counterfactual questions with video-level
-splits. Report temporal descriptive, explanatory, predictive, and
-counterfactual metrics separately. Do not read the sealed audit.
+Candidates A/B/C, the schedule-only B-cosine run, and Candidate E are complete.
+Candidate D (12 frames) was not justified: the 8-frame structural candidates
+did not improve Video over the 4-frame v1 reference, and Candidate E's 8-frame
+video-native task mix also remained below the v1 reference. The matched
+validation diagnostic shows that E improved Video over B-cosine on the same
+mixed-task examples, but that does not meet the precondition that more frames
+are helping. No sealed-audit data was read. See the Candidate E results below.
 
 The training loader uses the `pread` backend only on Windows and restores
 Transformers' loader after the base weights are loaded. This setting is
@@ -563,23 +562,167 @@ The preflight sidecar in that directory has SHA-256
 It records all train/validation media paths present, all 43,413 training rows
 ALLOW-approved, 318/128 disjoint video scenes, and a deterministic 512-step
 sampler preview of 2,048 unique examples, including 683 video examples from
-300 unique video assets. The preview is checked against actual run accounting
-after Candidate E completes.
+300 unique video assets. The deterministic preview matches Candidate E's actual
+training accounting: 2,048 unique examples, zero repeats, and 1,385 unique
+underlying assets (audio 298, image 282, text 505, video 300).
 
 The trainer now accepts explicit video task weights, records task-type and
 parent-question consumption counts at validation points, and reports video
 Accuracy/NLL/Brier/ECE by task type. Candidate E's initial policy is temporal
 descriptive 20%, explanatory 30%, predictive 30%, and counterfactual 20% at
 binary-example sampling time. Unique examples are consumed without replacement
-under the existing repeat cap of one. The selected optimizer schedule remains
-pending the separate B-cosine validation comparison.
+under the existing repeat cap of one. Candidate E used the separately selected
+cosine schedule and 3% warmup from the B-cosine comparison.
 
-The reproducible corpus command is:
+To reproduce the corpus without overwriting the frozen run input, use a new
+output directory:
 
 ```powershell
-python scripts/build_video_native_corpus.py --output-dir artifacts/tiny-omni-decision-teacher-v2/candidate-e/corpus-v1-seed17
+python scripts/build_video_native_corpus.py --output-dir artifacts/tiny-omni-decision-teacher-v2/candidate-e/corpus-v1-seed17-reproduction
 ```
 
 Verification after this implementation: `ruff check src tests
 scripts/build_video_native_corpus.py` passed; the full CPU suite passed with
-112 tests; both pinned CLEVRER video-native source manifests validate.
+115 tests; both pinned CLEVRER video-native source manifests validate. The
+latest implementation commit `97740c7` passed [GitHub Actions run #77](https://github.com/Unjuno/tiny-omni-decision/actions/runs/37224748535)
+(install, Ruff, pytest, and manifest validation).
+
+## Candidate E video-native task-mix run
+
+Candidate artifact ID: `tiny-omni-decision-teacher-v2-candidate-e` (an
+experiment artifact only; not selected as a new product Teacher).
+
+Candidate E completed the planned fixed 512-step run from the validation-chosen
+B-cosine structure. It used seed 17, 8 frames, `decoder_all_linear`, rank 16,
+cosine LR `5e-5`, warmup ratio `0.03`, frozen projector and modality encoders,
+and the corrected E corpus. It changed the video task mix while leaving the
+non-video v1 rows, split scenes, base revision, and architecture frozen. It did
+not load sealed-audit records or perform ternary quantization. Config SHA-256
+is `0635c29cc761412cebec53f1569fecfc296c647a2f7a11bdbb217f88cfa7ac5c`; the
+base revision is `6befbaca7398925921802abd1f277b495b78b738`; the source commit
+at launch is `c04019631d4c5f8013f4965f97a242717ef94779`.
+
+Run output is
+`artifacts/tiny-omni-decision-teacher-v2/candidate-e/seed17-512-pread-20261005T0319`.
+It completed all 512 steps and selected step 512 by the frozen validation
+selector: macro NLL + 0.2 macro Brier + 0.1 macro ECE - 0.25 macro Accuracy -
+0.25 minimum-modality Accuracy. The selector score was 0.472407. The selected
+checkpoint reload was verified against all 472 saved validation predictions.
+The adapter contains 24,158,208 trainable parameters, is 96,693,360 bytes, and
+has SHA-256
+`c0d483b89798bea0d20f50a2335a0fa658c1794cd31c4ceb245f079b0e8ae851`. No
+projector parameters were trainable.
+
+The frozen corpus hashes are manifest
+`ef1239db99747a9eec3d1f5c8d474515a4ae12a80b8e6dbe15d568b67851830c`, train
+`55e5622f90163a4d6ce421872e37e9825aba459cf8ff92f285056527f2eceb96`, and
+validation
+`32fd9166bf37774fab08ae7b8ce99b38a7630c5ee500ff167fdb1f8b5b45197c`. The
+preflight sidecar SHA-256 is
+`fee5d179d55f229f5bb709ae78f9de42229335f02ef0fc6df1c330d8eef3387f`. The
+frozen v1 train/validation inputs and selected adapter were not modified.
+
+### Learning curve and overfitting signals
+
+Train Accuracy is over the most recent 512 consumed examples. The gap is that
+rolling train Accuracy minus the equal-sized macro validation Accuracy, so it
+is descriptive rather than a fixed-example generalization estimate.
+
+| Step | Train CE | Train Accuracy | Train-validation Accuracy gap | Macro Accuracy | Minimum Accuracy | Macro NLL | Macro Brier | Macro ECE | Video Accuracy | Video NLL | Selector | Overfit signals |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 128 | 1.1186 | 0.5723 | -0.0803 | 0.6525 | 0.4915 | 0.8413 | 0.4267 | 0.0997 | 0.4915 | 0.8146 | 0.650603 | none |
+| 256 | 0.7585 | 0.6563 | -0.0450 | 0.7013 | 0.5339 | 0.7920 | 0.3944 | 0.0949 | 0.5339 | 0.8082 | 0.571537 | train loss falling |
+| 384 | 0.8204 | 0.6523 | -0.0595 | 0.7119 | 0.5424 | 0.7172 | 0.3748 | 0.0863 | 0.5424 | 0.7825 | 0.487218 | none |
+| 512 | 0.7209 | 0.6836 | -0.0325 | 0.7161 | 0.5339 | 0.7041 | 0.3677 | 0.0723 | 0.5339 | 0.7820 | 0.472407 | train loss falling; weak modality degraded |
+
+Validation score and calibration improved throughout, and step 512 won the
+frozen selector. At that point training CE was still falling and Video
+Accuracy had slipped from 0.5424 at step 384 to 0.5339; the explicit
+`weak_modality_degraded` signal is retained as a caution. This is not evidence
+of a clean plateau or of a fully overfit run, but later training should not be
+assumed to help Video.
+
+### Selected validation metrics
+
+There are 118 validation examples per modality. Accuracy / NLL / Brier / ECE /
+mean confidence at step 512:
+
+| Modality | Accuracy | NLL | Brier | ECE | Mean confidence |
+|---|---:|---:|---:|---:|---:|
+| Audio | 0.8898 | 0.4271 | 0.1539 | 0.0446 | 0.9298 |
+| Image | 0.7203 | 0.9230 | 0.4150 | 0.1047 | 0.7704 |
+| Text | 0.7203 | 0.6844 | 0.3809 | 0.0885 | 0.7447 |
+| Video | 0.5339 | 0.7820 | 0.5211 | 0.0513 | 0.5537 |
+
+Macro Accuracy was 0.7161, minimum-modality Accuracy 0.5339, macro NLL
+0.7041, macro Brier 0.3677, and macro ECE 0.0723. Per-source metrics
+(Accuracy / NLL / Brier / ECE) were:
+
+| Source | Count | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|---:|
+| MIT-IBM/CLEVRER | 118 | 0.5339 | 0.7820 | 0.5211 | 0.0513 |
+| TypeSafeAI/Open-Jev | 59 | 0.5932 | 0.8985 | 0.5282 | 0.1900 |
+| google/speech_commands | 118 | 0.8898 | 0.4271 | 0.1539 | 0.0446 |
+| n4ze3m/typed-decisions-synth | 59 | 0.8475 | 0.4702 | 0.2335 | 0.1022 |
+| sgvaze/clevr4 | 118 | 0.7203 | 0.9230 | 0.4150 | 0.1047 |
+
+Video validation by question type (Accuracy / NLL):
+
+| CLEVRER question type | Count | Accuracy | NLL |
+|---|---:|---:|---:|
+| Temporal descriptive | 24 | 0.5417 | 1.1209 |
+| Explanatory | 35 | 0.5429 | 0.6920 |
+| Predictive | 35 | 0.5429 | 0.6962 |
+| Counterfactual | 24 | 0.5000 | 0.6995 |
+
+### Data use and resources
+
+The run consumed 2,048 unique examples with zero repeats and 1,385 unique
+underlying assets: audio 298, image 282, text 505, and video 300. Unique
+examples by modality were audio 341, image 512, text 512, and video 683.
+Consumed examples by source were Speech Commands 341, CLEVR-4 512, Open-Jev
+256, Typed Decisions Synth 256, and CLEVRER 683. Actual CLEVRER task counts
+were temporal descriptive 137 (20.1%), explanatory 205 (30.0%), predictive
+205 (30.0%), and counterfactual 136 (19.9%); the requested proportions were
+approximated with unique examples and no repeated generation. Train/validation
+had 318/128 disjoint video scenes.
+
+On the local RTX 3080 Laptop 16 GiB, peak allocated VRAM was 12,006,743,040
+bytes, mean optimizer-step time 5.921 seconds, optimizer time 3,031.5 seconds,
+validation evaluation time 2,211.6 seconds, and wall time 5,281.2 seconds
+(88.0 minutes). Cloud compute and cloud cost were zero.
+
+### Same-subset B-cosine diagnostic and v1 comparison
+
+B-cosine's original validation contained descriptive-only video questions,
+while E uses all four CLEVRER types. To compare the task-mix effect without
+changing model selection or touching audit data, B-cosine's selected adapter
+was evaluated once on the exact same 472 E validation examples. The ordered
+subset sample-ID SHA-256 is
+`a3497d17679b5a6c6778317d12c74df9e1bcaa1daca04cddef9ee68a1ab18df4`; the
+cross-evaluation asserts exact agreement with E's recorded validation sample
+IDs. No training or tuning used this diagnostic.
+
+| Candidate | Macro Accuracy | Minimum Accuracy | Macro NLL | Macro Brier | Macro ECE | Video Accuracy |
+|---|---:|---:|---:|---:|---:|---:|
+| Teacher v1 reference on E validation | 0.7267 | 0.5508 | 0.6371 | 0.3531 | 0.0887 | 0.5508 |
+| B-cosine on same E validation | 0.6970 | 0.4492 | 0.7015 | 0.3763 | 0.1038 | 0.4492 |
+| Candidate E selected checkpoint | 0.7161 | 0.5339 | 0.7041 | 0.3677 | 0.0723 | 0.5339 |
+
+Candidate E improves same-subset Video Accuracy by 0.0847 over B-cosine and
+improves macro/minimum Accuracy and Brier/ECE, while macro NLL is 0.0027 worse.
+Compared with v1 on that same subset, E is lower in macro Accuracy by 0.0106,
+minimum/Video Accuracy by 0.0169, and higher in macro NLL by 0.0670. Non-video
+changes versus v1 are mixed: Audio 0.9068 to 0.8898, Image 0.7119 to 0.7203,
+and Text 0.7373 to 0.7203. Thus E is a useful validation experiment, but not a
+genuine overall improvement over the frozen baseline and not a new Teacher
+artifact. None of the modalities reaches 90% Accuracy, and Video remains the
+weakest at 53.4% on this validation set.
+
+The same-subset diagnostic helps separate the task-mix change from the earlier
+validation-composition mismatch, but it does not identify the remaining Video
+bottleneck by itself. Candidate D was not run because the required evidence
+that increasing frame count improves Video was absent. Current results do not
+distinguish temporal representation limits from CLEVRER difficulty, ambiguity,
+or the remaining capacity/data constraints. Keep the sealed audit unopened;
+do not promote E or claim a blind quality result from these validation scores.

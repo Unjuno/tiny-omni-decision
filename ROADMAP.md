@@ -161,8 +161,15 @@ logged attempts and the audit; cloud cost $0). It did not merge the final
 Teacher, ternary-quantize, train a Recovery adapter, or create a teacher-logit
 cache. Compression remains a later gate after the quality gap is addressed.
 The follow-up [Video Teacher v2 design](docs/superpowers/specs/2026-10-04-video-teacher-v2-design.md)
-is a separate proposal; its frame-count, decoder-target, rank, and CLEVRER
-task-coverage experiments have not been run.
+was executed on a separate branch and artifact tree; Teacher v1 remains frozen.
+Candidates A/B/C, the B-cosine schedule comparison, and the video-native
+Candidate E are complete. E improved Video over B-cosine on the exact same
+mixed-task validation examples, but remains below the v1 reference on macro
+Accuracy, minimum-modality Accuracy, and Video Accuracy. The 12-frame Candidate
+D gate was not met, so it was not run. Full learning curves, overlap/hash
+evidence, per-modality/source/question-type metrics, and the bottleneck limits
+are recorded in [docs/VIDEO_TEACHER_V2.md](docs/VIDEO_TEACHER_V2.md). No sealed
+audit data or ternary quantization was used for v2.
 
 ## Phase 4 — Larger multimodal decision adaptation
 
