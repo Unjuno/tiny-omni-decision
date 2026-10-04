@@ -344,7 +344,7 @@ def _run_training_impl(
         parameter.requires_grad_(False)
     base.gradient_checkpointing_enable()
     base.enable_input_require_grads()
-    targets = resolve_decoder_lora_targets(base)
+    targets = resolve_decoder_lora_targets(base, policy=config.lora_target_policy)
     if resume_from:
         model = PeftModel.from_pretrained(base, resume_from, is_trainable=True)
     else:
@@ -745,6 +745,9 @@ def _run_training_impl(
         "base_revision": manifest.revision,
         "seed": config.seed,
         "config": config.model_dump(mode="json"),
+        "lora_target_policy": config.lora_target_policy,
+        "lora_rank": config.lora_rank,
+        "use_rslora": config.use_rslora,
         "target_modules": targets,
         "base_weights_sha256": next(
             (item["sha256"] for item in manifest.files if item.get("path") == "model.safetensors"),

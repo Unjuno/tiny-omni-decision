@@ -33,7 +33,7 @@ class DecisionTrainingConfig(BaseModel):
     lora_rank: int = Field(default=16, ge=1)
     lora_alpha: int = Field(default=32, ge=1)
     lora_dropout: float = Field(default=0.05, ge=0, lt=1)
-    lora_target_policy: Literal["qv"] = "qv"
+    lora_target_policy: Literal["qv", "attention", "decoder_all_linear"] = "qv"
     lr_scheduler: Literal["constant", "cosine"] = "constant"
     warmup_ratio: float = Field(default=0.0, ge=0, lt=1)
     use_rslora: bool = False
@@ -458,19 +458,41 @@ def processor_inputs_for_example(
     return dict(encoded), option_ids, decision_position, target_index
 
 
-def resolve_decoder_lora_targets(model: Any) -> list[str]:
+def resolve_decoder_lora_targets(
+    model: Any,
+    *,
+    policy: Literal["qv", "attention", "decoder_all_linear"] = "qv",
+) -> list[str]:
     import torch
+
+    suffixes_by_policy = {
+        "qv": {"q_proj", "v_proj"},
+        "attention": {"q_proj", "k_proj", "v_proj", "o_proj"},
+        "decoder_all_linear": {
+            "q_proj",
+            "k_proj",
+            "v_proj",
+            "o_proj",
+            "gate_proj",
+            "up_proj",
+            "down_proj",
+        },
+    }
+    try:
+        selected_suffixes = suffixes_by_policy[policy]
+    except KeyError as exc:
+        raise ValueError(f"unsupported LoRA target policy: {policy}") from exc
 
     candidates = sorted(
         name
         for name, module in model.named_modules()
         if isinstance(module, torch.nn.Linear)
-        and name.startswith("model.language_model.")
-        and name.rsplit(".", 1)[-1] in {"q_proj", "v_proj"}
+        and name.startswith("model.language_model.layers.")
+        and name.rsplit(".", 1)[-1] in selected_suffixes
     )
     if not candidates:
         raise ValueError(
-            "loaded pinned model exposes no verified decoder q_proj/v_proj Linear modules"
+            f"loaded pinned model exposes no verified decoder {policy} Linear modules"
         )
     return candidates
 

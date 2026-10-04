@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import importlib
 import json
+import sys
 from pathlib import Path
-from types import SimpleNamespace
+from types import ModuleType, SimpleNamespace
 
 import pytest
 
@@ -26,6 +27,7 @@ from tiny_omni_decision.training import (
     output_record,
     processor_inputs_for_example,
     project_runtime_seconds,
+    resolve_decoder_lora_targets,
 )
 
 
@@ -103,6 +105,81 @@ def test_teacher_v1_explicit_reference_and_candidate_a_change_only_frames() -> N
     )
     assert candidate.use_rslora is False
     assert baseline_raw["sampling"] == candidate_raw["sampling"]
+
+
+def test_candidate_b_changes_only_decoder_lora_target_policy() -> None:
+    candidate_a = decision_training_config(
+        load_structured_file("configs/decision/teacher_v2_candidate_a.yaml")
+    )
+    candidate_b = decision_training_config(
+        load_structured_file("configs/decision/teacher_v2_candidate_b.yaml")
+    )
+
+    assert candidate_b.lora_target_policy == "decoder_all_linear"
+    assert candidate_b.model_copy(update={"lora_target_policy": "qv"}) == candidate_a
+    assert candidate_b.video_num_frames == 8
+    assert candidate_b.lora_rank == 16
+    assert candidate_b.learning_rate == candidate_a.learning_rate == 5e-5
+    assert candidate_b.lr_scheduler == candidate_a.lr_scheduler == "constant"
+    assert candidate_b.warmup_ratio == candidate_a.warmup_ratio == 0.0
+    assert candidate_b.use_rslora is candidate_a.use_rslora is False
+
+
+def test_lora_target_policies_are_limited_to_decoder_layers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class FakeLinear:
+        pass
+
+    target_names = [
+        "model.language_model.layers.0.self_attn.q_proj",
+        "model.language_model.layers.0.self_attn.k_proj",
+        "model.language_model.layers.0.self_attn.v_proj",
+        "model.language_model.layers.0.self_attn.o_proj",
+        "model.language_model.layers.0.mlp.gate_proj",
+        "model.language_model.layers.0.mlp.up_proj",
+        "model.language_model.layers.0.mlp.down_proj",
+        "model.language_model.mm_projector.q_proj",
+        "model.vision_tower.layers.0.self_attn.q_proj",
+        "model.audio_tower.layers.0.mlp.gate_proj",
+    ]
+    fake_torch = ModuleType("torch")
+    fake_torch.nn = SimpleNamespace(Linear=FakeLinear)
+    monkeypatch.setitem(sys.modules, "torch", fake_torch)
+
+    class FakeModel:
+        def named_modules(self) -> list[tuple[str, FakeLinear]]:
+            return [(name, FakeLinear()) for name in target_names]
+
+    model = FakeModel()
+    resolved_by_policy = {
+        policy: resolve_decoder_lora_targets(model, policy=policy)
+        for policy in ("qv", "attention", "decoder_all_linear")
+    }
+    assert {name.rsplit(".", 1)[-1] for name in resolved_by_policy["qv"]} == {
+        "q_proj",
+        "v_proj",
+    }
+    assert {name.rsplit(".", 1)[-1] for name in resolved_by_policy["attention"]} == {
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+    }
+    assert {name.rsplit(".", 1)[-1] for name in resolved_by_policy["decoder_all_linear"]} == {
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj",
+    }
+    assert all(
+        name.startswith("model.language_model.layers.")
+        for names in resolved_by_policy.values()
+        for name in names
+    )
 
 
 def test_learning_rate_multiplier_keeps_v1_constant_and_supports_separate_cosine() -> None:
