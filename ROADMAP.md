@@ -19,12 +19,35 @@ High-precision Decision Teacher
                     ↓
           Quantization damage measurement
                     ↓
-          single Recovery LoRA
+          Recovery LoRA
                     ↓
-          Final Tiny Omni Decision model
+          Variant A: recovered ternary Decision model
+                    ↓
+          lightweight Decision classifier / option scorer
+          (remove the full-vocabulary runtime readout)
+                    ↓
+          Variant B benchmark
+                    ↓
+          token pooling / learned resampler
+                    ↓
+          re-distillation + replacement Recovery adapter
+                    ↓
+          Variant C benchmark
+                    ↓
+          compare A / B / C on identical quality + latency tests
+                    ↓
+          runtime profiling / mobile benchmark
+                    ↓
+          optional deeper attention acceleration research
 ```
 
-The final runtime is intended to use a task-adapted ternary base plus one Recovery LoRA. The Decision LoRA is a teacher/training artifact and is merged before ternary conversion rather than stacked as a second runtime adapter.
+Each deployable artifact should carry at most one Recovery adapter. The Decision LoRA is a teacher/training artifact and is merged before ternary conversion. If token pooling/resampling is introduced later, train a new replacement Recovery adapter for that pooled student rather than stacking two Recovery adapters at runtime.
+
+The runtime should avoid computing the full vocabulary projection when only supplied option scores are required. After the first recovered ternary baseline is stable, replace the full-vocabulary readout with a lightweight Decision classifier / option scorer. An option-only projection using the existing LM-head rows is the low-risk equivalence baseline; a learned compact scorer may be tested if it gives a better latency/quality trade-off.
+
+Token pooling or a learned fixed-size resampler is a deliberate later acceleration stage, not a prerequisite for the first quantized model. It is applied after Variant B exists, then followed by re-distillation and a replacement Recovery adapter so pooling damage and quantization damage can be recovered together.
+
+Architecture-level attention replacement (for example linear attention or another softmax-attention alternative) remains a separate deeper acceleration path after the A/B/C runtime comparison.
 
 The project does not depend on preserving long-form generation.
 
@@ -114,19 +137,32 @@ and automated source/content split checks. OneJev component-level rights review 
 open but OneJev is excluded from the frozen corpus. Ternary runtime compatibility remains
 a later compression gate.
 
-## Phase 3 — High-precision Decision/Omni LoRA — durable local teacher complete
+## Phase 3 — High-precision Decision/Omni LoRA — complete; quality target unmet
 
-The local RTX 3080 Laptop GPU completed a 256-step four-modality Decision LoRA run
-on the frozen 4,859-record train corpus. The best validation checkpoint was
-reloaded and evaluated on all 2,917 held-out examples. Corpus provenance, zero-overlap
-checks, selection and final metrics, artifacts, and the merge/export instructions are
-recorded in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
-pipeline test remains documented in [docs/PHASE3.md](docs/PHASE3.md). PyTorch 2.6 is
-required for Gemma 4's multimodal attention masking path.
+Teacher v0 completed a 256-step four-modality run on the local RTX 3080 Laptop GPU.
+Its 2,917-record evaluation has already been observed and is a legacy reference,
+not a blind test or a model-selection target. Historical corpus provenance and
+metrics remain in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier
+16-step pipeline test remains documented in [docs/PHASE3.md](docs/PHASE3.md).
 
-The Decision LoRA remains an adapter artifact. No merge/export, ternary quantization,
-Recovery adapter, or teacher-logit cache was produced in this phase. The merge/export
-path is documented but has not yet been exercised.
+Teacher v1 fixed CLEVRER scene-level grouping and fail-closed independent
+validation, then froze fresh train/validation/sealed-audit splits with record,
+source-asset, media, and normalized-content checks. Validation-only selection
+compared sampling policies and three rank-16 seeds. Its candidate was frozen
+before one full sealed-audit evaluation. Audio reached 94.6% audit Accuracy;
+image reached 68.9%, text 71.3%, and video 52.0%, so the four-modality 90%
+quality gate remains open. Learning curves show a validation plateau/overfit
+signal at the 2,048-step budget. Full hashes, per-source metrics, experiments,
+and bottleneck analysis are in [docs/TEACHER_V1.md](docs/TEACHER_V1.md) and
+[`manifests/teachers/tiny-omni-decision-teacher-v1.json`](manifests/teachers/tiny-omni-decision-teacher-v1.json).
+
+Teacher v1 used only the local RTX 3080 Laptop GPU (about 14.2 GPU-hours across
+logged attempts and the audit; cloud cost $0). It did not merge the final
+Teacher, ternary-quantize, train a Recovery adapter, or create a teacher-logit
+cache. Compression remains a later gate after the quality gap is addressed.
+The follow-up [Video Teacher v2 design](docs/superpowers/specs/2026-10-04-video-teacher-v2-design.md)
+is a separate proposal; its frame-count, decoder-target, rank, and CLEVRER
+task-coverage experiments have not been run.
 
 ## Phase 4 — Larger multimodal decision adaptation
 
@@ -251,14 +287,92 @@ Optional experiment only:
 
 The high-precision Decision Teacher is the reference for Accuracy, ECE, Brier, NLL, and teacher/student option KL.
 
-## Phase 9 — Runtime and mobile prototype
+## Phase 8.5 — Lightweight Decision classifier / readout
+
+Start from the completed **Variant A** recovered ternary model.
+
+Goal:
+- remove the full-vocabulary runtime projection from the hot decision path
+- emit only the 2–20 supplied option scores
+- preserve the same typed-option semantics and calibration interface
+
+Implementation order:
+1. benchmark an option-only projection that reuses the existing LM-head rows for the active option labels; this should be numerically equivalent to the current readout apart from normal floating-point tolerance
+2. if worthwhile, test a learned compact Decision classifier / option scorer distilled from the high-precision Teacher
+
+Do not conflate this with replacing the transformer's attention mechanism. This phase changes the final Decision readout only.
+
+Save this as **Variant B** and benchmark it independently before introducing token pooling.
+
+Measure:
+- Accuracy, NLL, Brier, ECE by modality
+- p50 / p95 model latency by modality
+- isolated readout latency
+- resident RAM / VRAM
+- cold-start/startup latency where practical
+- artifact size
+
+## Phase 8.6 — Token pooling / learned resampler + re-Recovery
+
+Start only after Variant B is frozen and benchmarked.
+
+Add token-count reduction for expensive multimodal paths, prioritizing video and image and then audio when profiling justifies it. Prefer a learned fixed-size resampler or another hardware-friendly token reduction mechanism over blind average pooling.
+
+Evaluate explicit token budgets rather than assuming the most aggressive pooling is best. Preserve the unpooled Variant B as a comparison artifact.
+
+After introducing token reduction:
+- distill from the high-precision Teacher using option-distribution targets
+- train a **replacement** Recovery adapter for the pooled ternary student
+- do not stack the original Recovery adapter plus a second Recovery adapter at runtime
+- use CE + Brier as supervised auxiliaries and option KL as the main teacher signal
+
+Save the result as **Variant C**.
+
+The product target is the best quality/latency trade-off, not maximum compression in isolation. Pooling is allowed even if Variant B is already usable because the project explicitly targets aggressive latency reduction; the decision is made from the measured A/B/C frontier.
+
+## Phase 9 — Runtime profiling and mobile prototype
+
+Benchmark three preserved artifacts under identical conditions:
+
+- **Variant A:** ternary + Recovery
+- **Variant B:** Variant A architecture with the lightweight Decision classifier / option scorer
+- **Variant C:** lightweight readout + token pooling/resampler + replacement Recovery
 
 Target outputs:
-- portable model package
+- portable model packages for A/B/C
 - reproducible conversion
 - PC inference
 - Apple Silicon / Android / iOS feasibility notes
-- direct packed low-bit kernels only if required after v0.1
+- Accuracy, NLL, Brier, and ECE by modality
+- p50 / p95 model latency by modality
+- raw-media end-to-end latency where measurable
+- startup time and resident RAM/VRAM
+- isolated encoder / decoder / attention / MLP / readout timing where practical
+- model/artifact size
+- direct packed low-bit kernels only if required after the first runtime implementation
+
+Use the same benchmark samples, preprocessing, option ordering, device, warmup, and timing protocol for all variants. Keep intermediate artifacts instead of overwriting them.
+
+The product KPI is the final lightweight Omni Decision model's absolute quality, size, memory footprint, startup, and latency. Teacher fidelity is a diagnostic, not the product objective. The quality target remains >=90% Accuracy per modality where the clean task/data permit it; later compression/recovery work should also report retention relative to the high-precision Teacher.
+
+## Phase 10 — Conditional architecture-level acceleration
+
+Investigate deeper attention changes only when profiling shows that attention is a material end-to-end bottleneck.
+
+Candidate experiments:
+- linear attention
+- other softmax-attention approximations/replacements
+- limited attention-layer replacement rather than an all-at-once rewrite
+
+Requirements:
+- start from the completed high-quality multimodal decision model rather than redesigning the backbone prematurely
+- compare against the same text/image/audio/video decision benchmark
+- measure absolute Accuracy, NLL, Brier, ECE, latency, RAM/VRAM, and model size
+- preserve multimodal alignment; do not accept a speedup that materially breaks image/audio/video quality
+- use adaptation/distillation if needed, but account for the resulting parameter and runtime cost
+- adopt only if the end-to-end speedup is meaningful after encoder, MLP, readout, and I/O costs are included
+
+This research comes after the Variant A/B/C comparison unless profiling provides a strong reason to move it earlier. It is not a prerequisite for the first ternary + Recovery baseline.
 
 ## v0.1 non-goals
 
@@ -267,5 +381,6 @@ Target outputs:
 - preserving long chain-of-thought generation
 - quantizing every modality encoder to ternary
 - custom mobile ternary kernels before model quality is proven
+- making linear-attention replacement a prerequisite for v0.1
 - large quantizer comparison ladders
-- claiming speedup from lower bit-width without a kernel benchmark
+- claiming speedup from lower bit-width or attention changes without an end-to-end benchmark

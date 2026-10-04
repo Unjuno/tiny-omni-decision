@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any
 
-import torch
-from torch import Tensor
-from torch.nn import functional as F
+if TYPE_CHECKING:
+    from torch import Tensor
+else:
+    Tensor = Any
 
 
 @dataclass
@@ -22,12 +24,16 @@ def option_logits_from_vocab(last_logits: Tensor, label_ids: list[int]) -> Tenso
 
 
 def normalize_probabilities(logits: Tensor) -> Tensor:
+    import torch
+
     if logits.ndim != 1 or logits.numel() < 2:
         raise ValueError("option logits must be a vector with at least two options")
     return torch.softmax(logits.float(), dim=-1)
 
 
 def brier_loss(probabilities: Tensor, target_indices: Tensor) -> Tensor:
+    from torch.nn import functional as F
+
     if probabilities.ndim != 2:
         raise ValueError("probabilities must have shape [batch, options]")
     targets = F.one_hot(target_indices, num_classes=probabilities.shape[-1]).to(probabilities.dtype)
@@ -40,6 +46,9 @@ def decision_loss(
     brier_weight: float = 0.2,
     cross_entropy_weight: float = 1.0,
 ) -> tuple[Tensor, Tensor, Tensor]:
+    import torch
+    from torch.nn import functional as F
+
     probabilities = torch.softmax(logits.float(), dim=-1)
     ce = F.cross_entropy(logits.float(), target_indices)
     brier = brier_loss(probabilities, target_indices)

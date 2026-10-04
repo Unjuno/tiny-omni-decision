@@ -10,11 +10,12 @@ import re
 import unicodedata
 import urllib.parse
 import urllib.request
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import Any
 
+from .corpus import media_identity, source_asset_identity
 from .schema import DatasetManifest, DecisionExample, LicenseProvenance, MediaRef
 
 KNOWN_PERMISSIVE = {"CC0-1.0", "CC-BY-4.0", "MIT", "Apache-2.0", "BSD-3-Clause"}
@@ -1067,12 +1068,12 @@ def _normal(value: Any) -> str:
 
 
 def content_fingerprint(example: DecisionExample) -> str:
-    media_identity = sorted(item.sha256 or item.uri or item.path or "" for item in example.media)
+    media = sorted(media_identity(item) for item in example.media)
     payload = {
         "state": _normal(example.state),
         "question": _normal(example.question),
         "options": sorted(_normal(item) for item in example.options),
-        "media": media_identity,
+        "media": media,
     }
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()
@@ -1084,31 +1085,49 @@ def check_train_eval_splits(
 ) -> dict[str, Any]:
     train_ids: set[tuple[str, str]] = set()
     train_hashes: set[str] = set()
+    train_assets: set[tuple[str, str]] = set()
+    train_media: set[str] = set()
     training_count = 0
     for item in training:
         training_count += 1
         train_ids.add((item.source, item.source_record_id))
         train_hashes.add(content_fingerprint(item))
+        train_assets.add((item.source, source_asset_identity(item)))
+        train_media.update(media_identity(reference) for reference in item.media)
     evaluation_count = 0
     shared_ids: set[tuple[str, str]] = set()
     shared_hashes: set[str] = set()
+    shared_assets: set[tuple[str, str]] = set()
+    shared_media: set[str] = set()
     for item in evaluation:
         evaluation_count += 1
         identity = (item.source, item.source_record_id)
         if identity in train_ids:
             shared_ids.add(identity)
+        asset_identity = (item.source, source_asset_identity(item))
+        if asset_identity in train_assets:
+            shared_assets.add(asset_identity)
         fingerprint = content_fingerprint(item)
         if fingerprint in train_hashes:
             shared_hashes.add(fingerprint)
-    if shared_ids or shared_hashes:
+        shared_media.update(
+            identity
+            for identity in (media_identity(reference) for reference in item.media)
+            if identity in train_media
+        )
+    if shared_ids or shared_hashes or shared_assets or shared_media:
         raise ValueError(
             f"train/eval contamination: {len(shared_ids)} shared source IDs, "
+            f"{len(shared_assets)} shared source assets, "
+            f"{len(shared_media)} shared media identities, "
             f"{len(shared_hashes)} normalized content fingerprints"
         )
     return {
         "training_records": training_count,
         "evaluation_records": evaluation_count,
         "shared_source_ids": 0,
+        "shared_source_assets": 0,
+        "shared_media_identities": 0,
         "shared_content_fingerprints": 0,
         "status": "disjoint",
     }
@@ -1127,9 +1146,20 @@ def corpus_statistics(examples: Iterable[DecisionExample]) -> dict[str, Any]:
     modalities: Counter[str] = Counter()
     options: Counter[str] = Counter()
     media_status: Counter[str] = Counter()
+    unique_examples: set[tuple[str, str]] = set()
+    unique_assets: set[tuple[str, str, str]] = set()
+    assets_by_modality: dict[str, set[tuple[str, str, str]]] = defaultdict(set)
+    assets_by_source: dict[str, set[str]] = defaultdict(set)
+    assets_by_source_modality: dict[str, set[str]] = defaultdict(set)
     count = 0
     for example in examples:
         count += 1
+        unique_examples.add((example.source, example.id))
+        asset = (example.source, example.modality, source_asset_identity(example))
+        unique_assets.add(asset)
+        assets_by_modality[example.modality].add(asset)
+        assets_by_source[example.source].add(asset[2])
+        assets_by_source_modality[f"{example.source}:{example.modality}"].add(asset[2])
         sources[example.source] += 1
         modalities[example.modality] += 1
         options[str(len(example.options))] += 1
@@ -1138,6 +1168,17 @@ def corpus_statistics(examples: Iterable[DecisionExample]) -> dict[str, Any]:
             media_status[f"{media.kind}:{status}"] += 1
     return {
         "records": count,
+        "unique_examples": len(unique_examples),
+        "unique_underlying_assets": len(unique_assets),
+        "unique_underlying_assets_by_modality": {
+            modality: len(items) for modality, items in sorted(assets_by_modality.items())
+        },
+        "unique_underlying_assets_by_source": {
+            source: len(items) for source, items in sorted(assets_by_source.items())
+        },
+        "unique_underlying_assets_by_source_modality": {
+            key: len(items) for key, items in sorted(assets_by_source_modality.items())
+        },
         "by_source": dict(sorted(sources.items())),
         "by_modality": dict(sorted(modalities.items())),
         "by_option_count": dict(sorted(options.items(), key=lambda item: int(item[0]))),

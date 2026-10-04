@@ -1,5 +1,20 @@
 # Durable high-precision Decision Teacher
 
+> **Legacy reference:** Teacher v0's evaluation set has been observed and discussed.
+> Keep the metrics below for historical comparison only. Do not tune checkpoints,
+> sampling weights, seeds, or architecture against these evaluation results. The
+> new validation-only selection and isolated sealed audit process is described in
+> [TEACHER_V1.md](TEACHER_V1.md).
+
+Teacher v1 was introduced because the observed v0 result was especially weak on
+image and video and consumed only 1,024 distinct training examples. V1 uses a
+larger, source-disjoint corpus, video-level CLEVRER grouping, validation-only
+checkpoint selection, and a one-time sealed audit after freezing its candidate.
+The selected v1 model and full split/experiment/audit record are in
+[TEACHER_V1.md](TEACHER_V1.md). V0 remains unchanged here as the historical
+reference and was not used to inspect or tune against its already-observed
+evaluation.
+
 ## Result and scope
 
 The first reproducible four-modality Decision Teacher was trained locally on the

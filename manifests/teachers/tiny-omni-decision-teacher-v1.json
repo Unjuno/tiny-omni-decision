@@ -1,0 +1,1836 @@
+{
+  "schema_version": 1,
+  "teacher_id": "tiny-omni-decision-teacher-v1",
+  "artifact_role": "high_precision_multimodal_decision_teacher_before_ternary_compression",
+  "artifact": {
+    "format": "PEFT LoRA adapter",
+    "path": "artifacts/tiny-omni-decision-teacher-v1/selected",
+    "local_model_weights_committed": false,
+    "adapter_weights_sha256": "4e664a5500a3a109a48de7ec7c807d2b09b61cf386fd124ca8368e197802f951",
+    "adapter_config_sha256": "323d7dcec911d9a946da930df940345c2185681a0abdd58ee2647446ea86c745",
+    "training_config_sha256": "a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409",
+    "checkpoint_directory_sha256": "8f9d68a880759c337901a520c3f4ff7ffe2bb3e103a5caa9406f40ab4865bfdc",
+    "selection_lock_sha256": "751a1d05b462db4ff6970c39a888e284208dc6a04f270fe90695dd216f872417",
+    "weight_size_bytes": 10729912,
+    "best_checkpoint_step": 1920,
+    "seed": 17,
+    "best_checkpoint_reload_verified": true
+  },
+  "base_model": {
+    "repo_id": "google/gemma-4-E2B-it-qat-q4_0-unquantized",
+    "revision": "6befbaca7398925921802abd1f277b495b78b738",
+    "model_manifest_sha256": "3073b756114904fbec8b8b590c087484aa6769dc510f8f95939509e6657fbfca",
+    "weights_sha256": "33fe0cece08fb527ffefbd1a3a9ce73bd71073727993a283506293e5c6bf0137"
+  },
+  "corpus": {
+    "manifest_path": "data/processed/durable-teacher-v1/corpus-manifest.json",
+    "manifest_sha256": "bb97227ea7d9e9ac94d69a0d7974508563cbd6baa6c5d19207a315b64fc85534",
+    "seed": 17,
+    "immutable_seed": true,
+    "source_revisions": {
+      "n4ze3m/typed-decisions-synth:train": {
+        "revision": "5ece89a225b23c4cd5c4bab5735a0819d61dd7d5",
+        "manifest_sha256": "60c29a1efc4d93179422cf5acc7c2f38949b603efce5dc7a5073a36cd3e3ccdd"
+      },
+      "TypeSafeAI/Open-Jev:train": {
+        "revision": "538ce45e3e888d3e9147d425509e06ff2d05813c",
+        "manifest_sha256": "966290c414f5e3d467814afeb48bee0a7f3c11a7b07617ecc6b42d9f4ca0fec9"
+      },
+      "sgvaze/clevr4:train": {
+        "revision": "cddc78fb2a8359dc958987b2c750bfdd4bfd2c73",
+        "manifest_sha256": "9b2b6aaffb03f1a800607e598902cb9d893223c412ab025d06b4a15f8d3cadae"
+      },
+      "google/speech_commands:train": {
+        "revision": "a751309c0fd613e8a5d30d77900f30e8b42bc2da",
+        "manifest_sha256": "109984b9304ab0335c9e0b973bea3b828e3e0c901d9e46cfcbbf581459df03e2"
+      },
+      "MIT-IBM/CLEVRER:train": {
+        "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+        "manifest_sha256": "a87bd6834a94b8ed481a36e7088ee8d5391319fc271fed80497530f055dcbdf2"
+      },
+      "n4ze3m/typed-decisions-synth:validation": {
+        "revision": "5ece89a225b23c4cd5c4bab5735a0819d61dd7d5",
+        "manifest_sha256": "f203eb5bae312e80586bfd92ec9a7bf39918d110ed6441291a4dc64fa53bf51a"
+      },
+      "TypeSafeAI/Open-Jev:validation": {
+        "revision": "538ce45e3e888d3e9147d425509e06ff2d05813c",
+        "manifest_sha256": "76e829062b60d7edfbd92cc88aa32f0b64199c476f8fd3caf7f9833fc1f621b4"
+      },
+      "TypeSafeAI/Open-Jev:test": {
+        "revision": "538ce45e3e888d3e9147d425509e06ff2d05813c",
+        "manifest_sha256": "dc83003fee71451a3342f3d7bebca0032936566e050f2ecceb268412676d9f47"
+      },
+      "sgvaze/clevr4:val": {
+        "revision": "cddc78fb2a8359dc958987b2c750bfdd4bfd2c73",
+        "manifest_sha256": "ba524e02c7474e4b31cd52bbd3ecb9705979b9ead9e1fd5b46b5d6fdd9c81f12"
+      },
+      "google/speech_commands:validation": {
+        "revision": "a751309c0fd613e8a5d30d77900f30e8b42bc2da",
+        "manifest_sha256": "04d0476a72f5779fb579911928e1ea42f7a9c0c7ce1f14a765a6250329d5ce26"
+      },
+      "google/speech_commands:test": {
+        "revision": "a751309c0fd613e8a5d30d77900f30e8b42bc2da",
+        "manifest_sha256": "0b557bc44742d96ed1c5fa227726cc858fbf688ec26083952c70559492acfe58"
+      },
+      "MIT-IBM/CLEVRER:validation": {
+        "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+        "manifest_sha256": "ad2047bf40707f514cda825e1f409c7e19ace4fec5e313f6d9899bd5badce0c4"
+      }
+    },
+    "train": {
+      "path": "data/processed/durable-teacher-v1/train.jsonl",
+      "sha256": "5a9d8f3c1608b9cedef0c4c4b1513dcf5e1face4a67acc99c8002849cf07fb2b",
+      "records": 39126,
+      "by_source": {
+        "MIT-IBM/CLEVRER": 3492,
+        "TypeSafeAI/Open-Jev": 6527,
+        "google/speech_commands": 4516,
+        "n4ze3m/typed-decisions-synth": 23319,
+        "sgvaze/clevr4": 1272
+      },
+      "by_modality": {
+        "audio": 4516,
+        "image": 1272,
+        "text": 29846,
+        "video": 3492
+      }
+    },
+    "validation": {
+      "path": "data/processed/durable-teacher-v1/validation.jsonl",
+      "sha256": "ebfa46399f3139f4c97a6e126b3036e00afc274de9433fdb5755c089bb9995a6",
+      "records": 3507,
+      "by_source": {
+        "MIT-IBM/CLEVRER": 1406,
+        "TypeSafeAI/Open-Jev": 694,
+        "google/speech_commands": 118,
+        "n4ze3m/typed-decisions-synth": 797,
+        "sgvaze/clevr4": 492
+      },
+      "by_modality": {
+        "audio": 118,
+        "image": 492,
+        "text": 1491,
+        "video": 1406
+      },
+      "selection_subset": {
+        "records": 472,
+        "records_per_modality": 118
+      }
+    },
+    "sealed_audit": {
+      "path": "data/sealed/durable-teacher-v1/sealed_audit.jsonl",
+      "sha256": "227da0f27ffb3fff3e40b3513939d2c180e057db0616206817cbc6d7d4d291bf",
+      "manifest_sha256": "7e1da12dd681e2c377ebcbaf7ac34e3236bb04fde38ea482b2314ddfbf19712c",
+      "manifest_path": "data/sealed/durable-teacher-v1/sealed-audit-manifest.json",
+      "records": 5689,
+      "unique_underlying_assets": 1587,
+      "by_source": {
+        "MIT-IBM/CLEVRER": 1375,
+        "TypeSafeAI/Open-Jev": 2764,
+        "google/speech_commands": 185,
+        "n4ze3m/typed-decisions-synth": 873,
+        "sgvaze/clevr4": 492
+      },
+      "by_modality": {
+        "audio": 185,
+        "image": 492,
+        "text": 3637,
+        "video": 1375
+      },
+      "unique_underlying_assets_by_modality": {
+        "audio": 31,
+        "image": 123,
+        "text": 1308,
+        "video": 125
+      },
+      "audit_result_path": "data/sealed/durable-teacher-v1/sealed-audit-result.json",
+      "audit_result_sha256": "b1e3b26f97106576d9c9018fbc511b646a5bd5af9873d7aa35ffea8e09c8bc52",
+      "audit_runtime_seconds": 2249.413,
+      "single_attempt": true
+    },
+    "pairwise_overlap": {
+      "train_validation": {
+        "training_records": 39126,
+        "evaluation_records": 3507,
+        "shared_source_ids": 0,
+        "shared_source_assets": 0,
+        "shared_media_identities": 0,
+        "shared_content_fingerprints": 0,
+        "status": "disjoint"
+      },
+      "train_sealed_audit": {
+        "training_records": 39126,
+        "evaluation_records": 5689,
+        "shared_source_ids": 0,
+        "shared_source_assets": 0,
+        "shared_media_identities": 0,
+        "shared_content_fingerprints": 0,
+        "status": "disjoint"
+      },
+      "validation_sealed_audit": {
+        "training_records": 3507,
+        "evaluation_records": 5689,
+        "shared_source_ids": 0,
+        "shared_source_assets": 0,
+        "shared_media_identities": 0,
+        "shared_content_fingerprints": 0,
+        "status": "disjoint"
+      }
+    },
+    "sealed_audit_isolated_until_selection_freeze": true
+  },
+  "sampling_policy": {
+    "consumed_by_modality_source": {
+      "audio:google/speech_commands": 1396,
+      "image:sgvaze/clevr4": 1272,
+      "text:TypeSafeAI/Open-Jev": 1153,
+      "text:n4ze3m/typed-decisions-synth": 1154,
+      "video:MIT-IBM/CLEVRER": 3217
+    },
+    "max_sample_repeats": 1,
+    "modality_weights": {
+      "audio": 1.0,
+      "image": 1.5,
+      "text": 1.5,
+      "video": 2.0
+    },
+    "source_weights": {}
+  },
+  "selection": {
+    "policy": "validation_only",
+    "rule": "teacher-v1-validation-only: macro_nll + 0.2*macro_brier + 0.1*macro_ece - 0.25*macro_accuracy - 0.25*minimum_modality_accuracy; checkpoint chosen by this score and configured early stopping",
+    "selected_candidate_path": "C:\\Users\\junny\\OneDrive\\ドキュメント\\ChatGPT\\tiny-omni-decision\\artifacts\\tiny-omni-decision-teacher-v1\\candidates\\seed17-rank16-512-weak-modalities-normalized\\best",
+    "frozen_lock_path": "artifacts/tiny-omni-decision-teacher-v1/selection-lock.json",
+    "frozen_lock_sha256": "751a1d05b462db4ff6970c39a888e284208dc6a04f270fe90695dd216f872417",
+    "primary_seed": 17,
+    "replicate_seeds": [
+      19,
+      23
+    ],
+    "best_validation_metrics": {
+      "all": {
+        "accuracy": 0.7266949152542372,
+        "brier": 0.35929167172909376,
+        "count": 472,
+        "ece": 0.06452460587024689,
+        "mean_confidence": 0.7742712741433564,
+        "nll": 0.700816309114275
+      },
+      "macro": {
+        "macro_accuracy": 0.7266949152542372,
+        "macro_brier": 0.3592916717290938,
+        "macro_ece": 0.08075325620376457,
+        "macro_nll": 0.7008163091142756,
+        "minimum_modality_accuracy": 0.5508474576271186
+      },
+      "modality:audio": {
+        "accuracy": 0.9067796610169492,
+        "brier": 0.13607136631221878,
+        "count": 118,
+        "ece": 0.052172813880241524,
+        "mean_confidence": 0.9169206184855963,
+        "nll": 0.37556876586657684
+      },
+      "modality:image": {
+        "accuracy": 0.711864406779661,
+        "brier": 0.380701584148223,
+        "count": 118,
+        "ece": 0.10169210221807835,
+        "mean_confidence": 0.788759502819029,
+        "nll": 0.7652433360358661
+      },
+      "modality:text": {
+        "accuracy": 0.7372881355932204,
+        "brier": 0.35645841345250495,
+        "count": 118,
+        "ece": 0.053738775394730647,
+        "mean_confidence": 0.7556663094940832,
+        "nll": 0.6326920464124428
+      },
+      "modality:video": {
+        "accuracy": 0.5508474576271186,
+        "brier": 0.5639353230034285,
+        "count": 118,
+        "ece": 0.11540933332200777,
+        "mean_confidence": 0.6357386657747172,
+        "nll": 1.0297610881422166
+      },
+      "source:MIT-IBM/CLEVRER": {
+        "accuracy": 0.5508474576271186,
+        "brier": 0.5639353230034285,
+        "count": 118,
+        "ece": 0.11540933332200777,
+        "mean_confidence": 0.6357386657747172,
+        "nll": 1.0297610881422166
+      },
+      "source:TypeSafeAI/Open-Jev": {
+        "accuracy": 0.6440677966101694,
+        "brier": 0.4939622265525876,
+        "count": 59,
+        "ece": 0.1261509237653118,
+        "mean_confidence": 0.6679357436753935,
+        "nll": 0.8252393170154798
+      },
+      "source:google/speech_commands": {
+        "accuracy": 0.9067796610169492,
+        "brier": 0.13607136631221878,
+        "count": 118,
+        "ece": 0.052172813880241524,
+        "mean_confidence": 0.9169206184855963,
+        "nll": 0.37556876586657684
+      },
+      "source:n4ze3m/typed-decisions-synth": {
+        "accuracy": 0.8305084745762712,
+        "brier": 0.21895460035242215,
+        "count": 59,
+        "ece": 0.07521962664895139,
+        "mean_confidence": 0.8433968753127729,
+        "nll": 0.44014477580940603
+      },
+      "source:sgvaze/clevr4": {
+        "accuracy": 0.711864406779661,
+        "brier": 0.380701584148223,
+        "count": 118,
+        "ece": 0.10169210221807835,
+        "mean_confidence": 0.788759502819029,
+        "nll": 0.7652433360358661
+      }
+    },
+    "sealed_audit_not_used_for_selection": true
+  },
+  "training": {
+    "config_path": "configs/decision/teacher_v1_weak_modalities.yaml",
+    "optimizer_steps_max": 2048,
+    "best_step": 1920,
+    "evaluation_interval_steps": 128,
+    "gradient_accumulation_steps": 4,
+    "early_stopping_patience": 4,
+    "early_stopping_min_delta": 0.0005,
+    "training_seconds_recorded": 8241.807999999917,
+    "validation_evaluation_seconds_recorded": 4590.047000000035,
+    "learning_curves_path": "artifacts\\tiny-omni-decision-teacher-v1\\candidates\\seed17-rank16-512-weak-modalities-normalized\\learning-curves.jsonl",
+    "unique_examples_consumed": 8192,
+    "repeated_example_count": 0,
+    "unique_underlying_assets_consumed": 3731,
+    "consumed_by_source": {
+      "MIT-IBM/CLEVRER": 3217,
+      "TypeSafeAI/Open-Jev": 1153,
+      "google/speech_commands": 1396,
+      "n4ze3m/typed-decisions-synth": 1154,
+      "sgvaze/clevr4": 1272
+    },
+    "consumed_by_modality": {
+      "audio": 1396,
+      "image": 1272,
+      "text": 2307,
+      "video": 3217
+    },
+    "unique_assets_by_source": {
+      "MIT-IBM/CLEVRER": 318,
+      "TypeSafeAI/Open-Jev": 1074,
+      "google/speech_commands": 926,
+      "n4ze3m/typed-decisions-synth": 1095,
+      "sgvaze/clevr4": 318
+    },
+    "unique_assets_by_modality": {
+      "audio": 926,
+      "image": 318,
+      "text": 2169,
+      "video": 318
+    },
+    "trainable_parameter_count": 2678784,
+    "total_parameter_count": 5106976288,
+    "projector_trainable_parameter_count": 0,
+    "adapter_size_bytes": 10729912,
+    "target_modules": [
+      "model.language_model.layers.0.self_attn.q_proj",
+      "model.language_model.layers.0.self_attn.v_proj",
+      "model.language_model.layers.1.self_attn.q_proj",
+      "model.language_model.layers.1.self_attn.v_proj",
+      "model.language_model.layers.10.self_attn.q_proj",
+      "model.language_model.layers.10.self_attn.v_proj",
+      "model.language_model.layers.11.self_attn.q_proj",
+      "model.language_model.layers.11.self_attn.v_proj",
+      "model.language_model.layers.12.self_attn.q_proj",
+      "model.language_model.layers.12.self_attn.v_proj",
+      "model.language_model.layers.13.self_attn.q_proj",
+      "model.language_model.layers.13.self_attn.v_proj",
+      "model.language_model.layers.14.self_attn.q_proj",
+      "model.language_model.layers.14.self_attn.v_proj",
+      "model.language_model.layers.15.self_attn.q_proj",
+      "model.language_model.layers.16.self_attn.q_proj",
+      "model.language_model.layers.17.self_attn.q_proj",
+      "model.language_model.layers.18.self_attn.q_proj",
+      "model.language_model.layers.19.self_attn.q_proj",
+      "model.language_model.layers.2.self_attn.q_proj",
+      "model.language_model.layers.2.self_attn.v_proj",
+      "model.language_model.layers.20.self_attn.q_proj",
+      "model.language_model.layers.21.self_attn.q_proj",
+      "model.language_model.layers.22.self_attn.q_proj",
+      "model.language_model.layers.23.self_attn.q_proj",
+      "model.language_model.layers.24.self_attn.q_proj",
+      "model.language_model.layers.25.self_attn.q_proj",
+      "model.language_model.layers.26.self_attn.q_proj",
+      "model.language_model.layers.27.self_attn.q_proj",
+      "model.language_model.layers.28.self_attn.q_proj",
+      "model.language_model.layers.29.self_attn.q_proj",
+      "model.language_model.layers.3.self_attn.q_proj",
+      "model.language_model.layers.3.self_attn.v_proj",
+      "model.language_model.layers.30.self_attn.q_proj",
+      "model.language_model.layers.31.self_attn.q_proj",
+      "model.language_model.layers.32.self_attn.q_proj",
+      "model.language_model.layers.33.self_attn.q_proj",
+      "model.language_model.layers.34.self_attn.q_proj",
+      "model.language_model.layers.4.self_attn.q_proj",
+      "model.language_model.layers.4.self_attn.v_proj",
+      "model.language_model.layers.5.self_attn.q_proj",
+      "model.language_model.layers.5.self_attn.v_proj",
+      "model.language_model.layers.6.self_attn.q_proj",
+      "model.language_model.layers.6.self_attn.v_proj",
+      "model.language_model.layers.7.self_attn.q_proj",
+      "model.language_model.layers.7.self_attn.v_proj",
+      "model.language_model.layers.8.self_attn.q_proj",
+      "model.language_model.layers.8.self_attn.v_proj",
+      "model.language_model.layers.9.self_attn.q_proj",
+      "model.language_model.layers.9.self_attn.v_proj"
+    ],
+    "modality_encoders_frozen": true,
+    "projector_frozen": true
+  },
+  "validation_metrics": {
+    "all": {
+      "count": 472,
+      "accuracy": 0.7266949152542372,
+      "nll": 0.700816309114275,
+      "brier": 0.35929167172909376,
+      "ece": 0.06452460587024689,
+      "mean_confidence": 0.7742712741433564
+    },
+    "modality:audio": {
+      "count": 118,
+      "accuracy": 0.9067796610169492,
+      "nll": 0.37556876586657684,
+      "brier": 0.13607136631221878,
+      "ece": 0.052172813880241524,
+      "mean_confidence": 0.9169206184855963
+    },
+    "modality:image": {
+      "count": 118,
+      "accuracy": 0.711864406779661,
+      "nll": 0.7652433360358661,
+      "brier": 0.380701584148223,
+      "ece": 0.10169210221807835,
+      "mean_confidence": 0.788759502819029
+    },
+    "modality:text": {
+      "count": 118,
+      "accuracy": 0.7372881355932204,
+      "nll": 0.6326920464124428,
+      "brier": 0.35645841345250495,
+      "ece": 0.053738775394730647,
+      "mean_confidence": 0.7556663094940832
+    },
+    "modality:video": {
+      "count": 118,
+      "accuracy": 0.5508474576271186,
+      "nll": 1.0297610881422166,
+      "brier": 0.5639353230034285,
+      "ece": 0.11540933332200777,
+      "mean_confidence": 0.6357386657747172
+    },
+    "source:MIT-IBM/CLEVRER": {
+      "count": 118,
+      "accuracy": 0.5508474576271186,
+      "nll": 1.0297610881422166,
+      "brier": 0.5639353230034285,
+      "ece": 0.11540933332200777,
+      "mean_confidence": 0.6357386657747172
+    },
+    "source:TypeSafeAI/Open-Jev": {
+      "count": 59,
+      "accuracy": 0.6440677966101694,
+      "nll": 0.8252393170154798,
+      "brier": 0.4939622265525876,
+      "ece": 0.1261509237653118,
+      "mean_confidence": 0.6679357436753935
+    },
+    "source:google/speech_commands": {
+      "count": 118,
+      "accuracy": 0.9067796610169492,
+      "nll": 0.37556876586657684,
+      "brier": 0.13607136631221878,
+      "ece": 0.052172813880241524,
+      "mean_confidence": 0.9169206184855963
+    },
+    "source:n4ze3m/typed-decisions-synth": {
+      "count": 59,
+      "accuracy": 0.8305084745762712,
+      "nll": 0.44014477580940603,
+      "brier": 0.21895460035242215,
+      "ece": 0.07521962664895139,
+      "mean_confidence": 0.8433968753127729
+    },
+    "source:sgvaze/clevr4": {
+      "count": 118,
+      "accuracy": 0.711864406779661,
+      "nll": 0.7652433360358661,
+      "brier": 0.380701584148223,
+      "ece": 0.10169210221807835,
+      "mean_confidence": 0.788759502819029
+    },
+    "macro": {
+      "macro_accuracy": 0.7266949152542372,
+      "minimum_modality_accuracy": 0.5508474576271186,
+      "macro_nll": 0.7008163091142756,
+      "macro_brier": 0.3592916717290938,
+      "macro_ece": 0.08075325620376457
+    }
+  },
+  "teacher_v0_same_subset_validation_reference": {
+    "all": {
+      "count": 472,
+      "accuracy": 0.3411016949152542,
+      "nll": 2.989723112934535,
+      "brier": 0.9723593533621072,
+      "ece": 0.3923141490352356,
+      "mean_confidence": 0.7334158439504899
+    },
+    "modality:audio": {
+      "count": 118,
+      "accuracy": 0.635593220338983,
+      "nll": 1.537300519646157,
+      "brier": 0.5263441031502734,
+      "ece": 0.11754245828774015,
+      "mean_confidence": 0.6779481854479191
+    },
+    "modality:image": {
+      "count": 118,
+      "accuracy": 0.1016949152542373,
+      "nll": 4.146638980509747,
+      "brier": 1.2490643739431624,
+      "ece": 0.544598666793209,
+      "mean_confidence": 0.6462935820474462
+    },
+    "modality:text": {
+      "count": 118,
+      "accuracy": 0.4152542372881356,
+      "nll": 2.115863759553536,
+      "brier": 0.9452564626165182,
+      "ece": 0.44928444896714165,
+      "mean_confidence": 0.8645386862552772
+    },
+    "modality:video": {
+      "count": 118,
+      "accuracy": 0.211864406779661,
+      "nll": 4.159089192028709,
+      "brier": 1.1687724737384735,
+      "ece": 0.5330185152716556,
+      "mean_confidence": 0.7448829220513166
+    },
+    "source:MIT-IBM/CLEVRER": {
+      "count": 118,
+      "accuracy": 0.211864406779661,
+      "nll": 4.159089192028709,
+      "brier": 1.1687724737384735,
+      "ece": 0.5330185152716556,
+      "mean_confidence": 0.7448829220513166
+    },
+    "source:TypeSafeAI/Open-Jev": {
+      "count": 59,
+      "accuracy": 0.4576271186440678,
+      "nll": 2.037396717318793,
+      "brier": 0.8798059796110193,
+      "ece": 0.40053722211870096,
+      "mean_confidence": 0.8278482950339883
+    },
+    "source:google/speech_commands": {
+      "count": 118,
+      "accuracy": 0.635593220338983,
+      "nll": 1.537300519646157,
+      "brier": 0.5263441031502734,
+      "ece": 0.11754245828774015,
+      "mean_confidence": 0.6779481854479191
+    },
+    "source:n4ze3m/typed-decisions-synth": {
+      "count": 59,
+      "accuracy": 0.3728813559322034,
+      "nll": 2.194330801788277,
+      "brier": 1.0107069456220168,
+      "ece": 0.5283477215443627,
+      "mean_confidence": 0.9012290774765661
+    },
+    "source:sgvaze/clevr4": {
+      "count": 118,
+      "accuracy": 0.1016949152542373,
+      "nll": 4.146638980509747,
+      "brier": 1.2490643739431624,
+      "ece": 0.544598666793209,
+      "mean_confidence": 0.6462935820474462
+    },
+    "macro": {
+      "macro_accuracy": 0.3411016949152542,
+      "minimum_modality_accuracy": 0.1016949152542373,
+      "macro_nll": 2.9897231129345374,
+      "macro_brier": 0.9723593533621069,
+      "macro_ece": 0.41111102232993657
+    }
+  },
+  "teacher_v0_legacy_observed_evaluation_reference": {
+    "all": {
+      "count": 2917,
+      "accuracy": 0.7343160781624957,
+      "nll": 0.6379761398708033,
+      "brier": 0.3344360059596617,
+      "ece": 0.03438234950914177,
+      "mean_confidence": 0.7500539101279677
+    },
+    "modality:audio": {
+      "count": 1024,
+      "accuracy": 0.94921875,
+      "nll": 0.18540658688673609,
+      "brier": 0.0643717250841588,
+      "ece": 0.029488220694474876,
+      "mean_confidence": 0.9286758930538781
+    },
+    "modality:image": {
+      "count": 128,
+      "accuracy": 0.5703125,
+      "nll": 1.374412633836283,
+      "brier": 0.5649964533807038,
+      "ece": 0.05286854854784906,
+      "mean_confidence": 0.5939191586803645
+    },
+    "modality:text": {
+      "count": 1413,
+      "accuracy": 0.6723283793347488,
+      "nll": 0.7323382084435747,
+      "brier": 0.4232208815148556,
+      "ece": 0.04417530525810568,
+      "mean_confidence": 0.705240835187204
+    },
+    "modality:video": {
+      "count": 352,
+      "accuracy": 0.41761363636363635,
+      "nll": 1.307958378890088,
+      "brier": 0.6798367366049229,
+      "ece": 0.05894230644811283,
+      "mean_confidence": 0.46709144581109285
+    },
+    "source:MIT-IBM/CLEVRER": {
+      "count": 352,
+      "accuracy": 0.41761363636363635,
+      "nll": 1.307958378890088,
+      "brier": 0.6798367366049229,
+      "ece": 0.05894230644811283,
+      "mean_confidence": 0.46709144581109285
+    },
+    "source:TypeSafeAI/Open-Jev": {
+      "count": 988,
+      "accuracy": 0.6356275303643725,
+      "nll": 0.7817337448232092,
+      "brier": 0.45935656716941003,
+      "ece": 0.05084509980159733,
+      "mean_confidence": 0.6655139796858133
+    },
+    "source:google/speech_commands": {
+      "count": 1024,
+      "accuracy": 0.94921875,
+      "nll": 0.18540658688673609,
+      "brier": 0.0643717250841588,
+      "ece": 0.029488220694474876,
+      "mean_confidence": 0.9286758930538781
+    },
+    "source:n4ze3m/typed-decisions-synth": {
+      "count": 425,
+      "accuracy": 0.7576470588235295,
+      "nll": 0.6175081144598643,
+      "brier": 0.33921604051085613,
+      "ece": 0.055779283116845525,
+      "mean_confidence": 0.7975940898586722
+    },
+    "source:sgvaze/clevr4": {
+      "count": 128,
+      "accuracy": 0.5703125,
+      "nll": 1.374412633836283,
+      "brier": 0.5649964533807038,
+      "ece": 0.05286854854784906,
+      "mean_confidence": 0.5939191586803645
+    }
+  },
+  "sealed_audit_metrics": {
+    "all": {
+      "count": 5689,
+      "accuracy": 0.6718228159606258,
+      "nll": 0.7826854867685133,
+      "brier": 0.4336005800860733,
+      "ece": 0.08704538555613803,
+      "mean_confidence": 0.758073789889206
+    },
+    "modality:audio": {
+      "count": 185,
+      "accuracy": 0.9459459459459459,
+      "nll": 0.15343788133100436,
+      "brier": 0.06796748335831193,
+      "ece": 0.030954700950029734,
+      "mean_confidence": 0.942746216944746
+    },
+    "modality:image": {
+      "count": 492,
+      "accuracy": 0.6890243902439024,
+      "nll": 0.8547062912637421,
+      "brier": 0.4046163803021789,
+      "ece": 0.10859106565878643,
+      "mean_confidence": 0.7976154559026889
+    },
+    "modality:text": {
+      "count": 3637,
+      "accuracy": 0.7129502337091009,
+      "nll": 0.6809402523811579,
+      "brier": 0.38709416217002673,
+      "ece": 0.07283712087717888,
+      "mean_confidence": 0.7844222365523355
+    },
+    "modality:video": {
+      "count": 1375,
+      "accuracy": 0.52,
+      "nll": 1.1107029330674971,
+      "brier": 0.616179628194416,
+      "ece": 0.12938419047268954,
+      "mean_confidence": 0.6493841904726896
+    },
+    "source:MIT-IBM/CLEVRER": {
+      "count": 1375,
+      "accuracy": 0.52,
+      "nll": 1.1107029330674971,
+      "brier": 0.616179628194416,
+      "ece": 0.12938419047268954,
+      "mean_confidence": 0.6493841904726896
+    },
+    "source:TypeSafeAI/Open-Jev": {
+      "count": 2764,
+      "accuracy": 0.6780028943560058,
+      "nll": 0.7550852331018814,
+      "brier": 0.4311730874466108,
+      "ece": 0.0821231154485049,
+      "mean_confidence": 0.7583297238821317
+    },
+    "source:google/speech_commands": {
+      "count": 185,
+      "accuracy": 0.9459459459459459,
+      "nll": 0.15343788133100436,
+      "brier": 0.06796748335831193,
+      "ece": 0.030954700950029734,
+      "mean_confidence": 0.942746216944746
+    },
+    "source:n4ze3m/typed-decisions-synth": {
+      "count": 873,
+      "accuracy": 0.8235967926689576,
+      "nll": 0.4461902790568909,
+      "brier": 0.24753614445585873,
+      "ece": 0.04409686724344889,
+      "mean_confidence": 0.8670335825093151
+    },
+    "source:sgvaze/clevr4": {
+      "count": 492,
+      "accuracy": 0.6890243902439024,
+      "nll": 0.8547062912637421,
+      "brier": 0.4046163803021789,
+      "ece": 0.10859106565878643,
+      "mean_confidence": 0.7976154559026889
+    },
+    "macro": {
+      "macro_accuracy": 0.7169801424747374,
+      "minimum_modality_accuracy": 0.52,
+      "macro_nll": 0.6999468395108503,
+      "macro_brier": 0.3689644135062334,
+      "macro_ece": 0.08544176948967114
+    }
+  },
+  "environment": {
+    "python_version": "3.11.9",
+    "torch_version": "2.6.0+cu124",
+    "cuda_runtime_version": "12.4",
+    "transformers_version": "5.6.2",
+    "peft_version": "0.21.2",
+    "accelerate_version": "1.15.0",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "gpu_total_memory_bytes": 17179344896
+  },
+  "compute": {
+    "policy": "local_first",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "gpu_total_memory_bytes": 17179344896,
+    "total_local_gpu_wall_seconds_including_failed_attempts_and_sealed_audit": 51075.215,
+    "total_local_gpu_wall_hours": 14.188,
+    "cloud_gpu_used": false,
+    "cloud_cost_usd": 0.0,
+    "peak_allocated_vram_bytes": 11565741056
+  },
+  "experiment_attempts": [
+    {
+      "candidate": "seed17-rank16-512-balanced",
+      "experiment_id": "20261003T190544Z-09319536",
+      "seed": 17,
+      "config_path": "configs\\decision\\teacher_v1.yaml",
+      "config_sha256": "b98f04830eac45b119ac4dbc9a09b1834745eee5ab0bcb9a508f954da18dc24d",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.0,
+          "text": 1.0,
+          "video": 1.0
+        },
+        "source_weights": {}
+      },
+      "status": "failed",
+      "started_at_utc": "2026-10-03T19:05:44.622492+00:00",
+      "failure": "PermissionError: [WinError 5] アクセスが拒否されました。: 'artifacts\\\\tiny-omni-decision-teacher-v1\\\\candidates\\\\seed17-rank16-512-balanced\\\\best.tmp' -> 'artifacts\\\\tiny-omni-decision-teacher-v1\\\\candidates\\\\seed17-rank16-512-balanced\\\\best'",
+      "ended_at_utc": "2026-10-03T20:01:01.288252+00:00",
+      "wall_seconds": 3316.666
+    },
+    {
+      "candidate": "seed17-rank16-512-video-priority",
+      "experiment_id": "20261003T215730Z-20c5c61b",
+      "seed": 17,
+      "config_path": "configs\\decision\\teacher_v1_video_priority.yaml",
+      "config_sha256": "88e06b79fdb838a4294afc580010a2e460d8d978ef217db585eada72f3c9f570",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.0,
+          "video": 2.5
+        },
+        "source_weights": {}
+      },
+      "status": "completed",
+      "started_at_utc": "2026-10-03T21:57:30.370930+00:00",
+      "best_step": 512,
+      "ended_at_utc": "2026-10-03T22:57:25.649065+00:00",
+      "wall_seconds": 3595.278
+    },
+    {
+      "candidate": "seed17-rank16-512-weak-modalities",
+      "experiment_id": "20261003T202252Z-421b34f5",
+      "seed": 17,
+      "config_path": "configs\\decision\\teacher_v1_weak_modalities.yaml",
+      "config_sha256": "a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.5,
+          "video": 2.0
+        },
+        "source_weights": {}
+      },
+      "status": "failed",
+      "started_at_utc": "2026-10-03T20:22:52.359939+00:00",
+      "failure": "Aborted at optimizer step 23 after sampled modality counts violated configured policy: raw modality weights were used as unnormalized deficit increments; audio had zero consumed examples and video was 67% of 92 microbatches.",
+      "ended_at_utc": "2026-10-03T20:35:19.945768+00:00",
+      "last_completed_optimizer_step": 32,
+      "wall_seconds": 747.586
+    },
+    {
+      "candidate": "seed17-rank16-512-weak-modalities-normalized",
+      "experiment_id": "20261003T204043Z-27d3af67",
+      "seed": 17,
+      "config_path": "configs\\decision\\teacher_v1_weak_modalities.yaml",
+      "config_sha256": "a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.5,
+          "video": 2.0
+        },
+        "source_weights": {}
+      },
+      "status": "failed",
+      "started_at_utc": "2026-10-03T20:40:43.756114+00:00",
+      "failure": "KeyError: 'accuracy'",
+      "ended_at_utc": "2026-10-03T21:42:05.204331+00:00",
+      "wall_seconds": 3681.448
+    },
+    {
+      "candidate": "seed17-rank16-512-weak-modalities-normalized",
+      "experiment_id": "20261003T214443Z-3f66cfed",
+      "seed": 17,
+      "config_path": "configs\\decision\\teacher_v1_weak_modalities.yaml",
+      "config_sha256": "a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.5,
+          "video": 2.0
+        },
+        "source_weights": {}
+      },
+      "status": "completed",
+      "started_at_utc": "2026-10-03T21:44:43.391010+00:00",
+      "best_step": 512,
+      "ended_at_utc": "2026-10-03T21:56:57.679376+00:00",
+      "wall_seconds": 734.288
+    },
+    {
+      "candidate": "seed17-rank16-512-weak-modalities-normalized",
+      "experiment_id": "20261003T225817Z-8e0ba5c5",
+      "seed": 17,
+      "config_path": "configs\\decision\\teacher_v1_weak_modalities.yaml",
+      "config_sha256": "a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.5,
+          "video": 2.0
+        },
+        "source_weights": {}
+      },
+      "status": "completed",
+      "started_at_utc": "2026-10-03T22:58:17.155127+00:00",
+      "best_step": 1024,
+      "ended_at_utc": "2026-10-03T23:58:12.302224+00:00",
+      "wall_seconds": 3595.147
+    },
+    {
+      "candidate": "seed17-rank16-512-weak-modalities-normalized",
+      "experiment_id": "20261003T235831Z-40a90b15",
+      "seed": 17,
+      "config_path": "configs\\decision\\teacher_v1_weak_modalities.yaml",
+      "config_sha256": "a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.5,
+          "video": 2.0
+        },
+        "source_weights": {}
+      },
+      "status": "completed",
+      "started_at_utc": "2026-10-03T23:58:31.278109+00:00",
+      "best_step": 1920,
+      "ended_at_utc": "2026-10-04T01:56:25.543792+00:00",
+      "wall_seconds": 7074.266
+    },
+    {
+      "candidate": "seed19-rank16-2048-weak-modalities",
+      "experiment_id": "20261004T015842Z-9d9035b2",
+      "seed": 19,
+      "config_path": "configs\\decision\\teacher_v1_weak_modalities_seed19.yaml",
+      "config_sha256": "f86de588c831c04156beb851e1385a298df9922e5d2bb6e1c9e037bb59527311",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.5,
+          "video": 2.0
+        },
+        "source_weights": {}
+      },
+      "status": "completed",
+      "started_at_utc": "2026-10-04T01:58:42.932581+00:00",
+      "best_step": 1408,
+      "ended_at_utc": "2026-10-04T05:33:48.483417+00:00",
+      "wall_seconds": 12905.551
+    },
+    {
+      "candidate": "seed23-rank16-2048-weak-modalities",
+      "experiment_id": "20261004T053434Z-3f8b0e7a",
+      "seed": 23,
+      "config_path": "configs\\decision\\teacher_v1_weak_modalities_seed23.yaml",
+      "config_sha256": "47f1c743a1c1d16a426a2a1aad0efdcacadaed697bbec26ca472bfa8087a1c17",
+      "sampling_policy": {
+        "max_sample_repeats": 1,
+        "modality_weights": {
+          "audio": 1.0,
+          "image": 1.5,
+          "text": 1.5,
+          "video": 2.0
+        },
+        "source_weights": {}
+      },
+      "status": "completed",
+      "started_at_utc": "2026-10-04T05:34:34.050637+00:00",
+      "best_step": 1536,
+      "ended_at_utc": "2026-10-04T09:14:09.622159+00:00",
+      "wall_seconds": 13175.572
+    }
+  ],
+  "compression": {
+    "merged": false,
+    "ternary_quantization_performed": false,
+    "recovery_lora_trained": false
+  },
+  "validation_seed_results": {
+    "17": {
+      "candidate": "seed17-rank16-512-weak-modalities-normalized",
+      "seed": 17,
+      "best_step": 1920,
+      "validation": {
+        "all": {
+          "count": 472,
+          "accuracy": 0.7266949152542372,
+          "nll": 0.700816309114275,
+          "brier": 0.35929167172909376,
+          "ece": 0.06452460587024689,
+          "mean_confidence": 0.7742712741433564
+        },
+        "modality:audio": {
+          "count": 118,
+          "accuracy": 0.9067796610169492,
+          "nll": 0.37556876586657684,
+          "brier": 0.13607136631221878,
+          "ece": 0.052172813880241524,
+          "mean_confidence": 0.9169206184855963
+        },
+        "modality:image": {
+          "count": 118,
+          "accuracy": 0.711864406779661,
+          "nll": 0.7652433360358661,
+          "brier": 0.380701584148223,
+          "ece": 0.10169210221807835,
+          "mean_confidence": 0.788759502819029
+        },
+        "modality:text": {
+          "count": 118,
+          "accuracy": 0.7372881355932204,
+          "nll": 0.6326920464124428,
+          "brier": 0.35645841345250495,
+          "ece": 0.053738775394730647,
+          "mean_confidence": 0.7556663094940832
+        },
+        "modality:video": {
+          "count": 118,
+          "accuracy": 0.5508474576271186,
+          "nll": 1.0297610881422166,
+          "brier": 0.5639353230034285,
+          "ece": 0.11540933332200777,
+          "mean_confidence": 0.6357386657747172
+        },
+        "source:MIT-IBM/CLEVRER": {
+          "count": 118,
+          "accuracy": 0.5508474576271186,
+          "nll": 1.0297610881422166,
+          "brier": 0.5639353230034285,
+          "ece": 0.11540933332200777,
+          "mean_confidence": 0.6357386657747172
+        },
+        "source:TypeSafeAI/Open-Jev": {
+          "count": 59,
+          "accuracy": 0.6440677966101694,
+          "nll": 0.8252393170154798,
+          "brier": 0.4939622265525876,
+          "ece": 0.1261509237653118,
+          "mean_confidence": 0.6679357436753935
+        },
+        "source:google/speech_commands": {
+          "count": 118,
+          "accuracy": 0.9067796610169492,
+          "nll": 0.37556876586657684,
+          "brier": 0.13607136631221878,
+          "ece": 0.052172813880241524,
+          "mean_confidence": 0.9169206184855963
+        },
+        "source:n4ze3m/typed-decisions-synth": {
+          "count": 59,
+          "accuracy": 0.8305084745762712,
+          "nll": 0.44014477580940603,
+          "brier": 0.21895460035242215,
+          "ece": 0.07521962664895139,
+          "mean_confidence": 0.8433968753127729
+        },
+        "source:sgvaze/clevr4": {
+          "count": 118,
+          "accuracy": 0.711864406779661,
+          "nll": 0.7652433360358661,
+          "brier": 0.380701584148223,
+          "ece": 0.10169210221807835,
+          "mean_confidence": 0.788759502819029
+        },
+        "macro": {
+          "macro_accuracy": 0.7266949152542372,
+          "minimum_modality_accuracy": 0.5508474576271186,
+          "macro_nll": 0.7008163091142756,
+          "macro_brier": 0.3592916717290938,
+          "macro_ece": 0.08075325620376457
+        },
+        "selection_score": 0.461364375860132
+      },
+      "overfit_signals_at_best": {
+        "train_loss_falling": true,
+        "validation_nll_rising": false,
+        "train_accuracy_rising_validation_stalled": true,
+        "weak_modality_degraded": false
+      },
+      "sample_accounting": {
+        "samples_consumed": 8192,
+        "unique_examples": 8192,
+        "repeated_example_count": 0,
+        "unique_underlying_assets": 3731,
+        "consumed_by_source": {
+          "MIT-IBM/CLEVRER": 3217,
+          "TypeSafeAI/Open-Jev": 1153,
+          "google/speech_commands": 1396,
+          "n4ze3m/typed-decisions-synth": 1154,
+          "sgvaze/clevr4": 1272
+        },
+        "consumed_by_modality": {
+          "audio": 1396,
+          "image": 1272,
+          "text": 2307,
+          "video": 3217
+        },
+        "unique_examples_by_source": {
+          "MIT-IBM/CLEVRER": 3217,
+          "TypeSafeAI/Open-Jev": 1153,
+          "google/speech_commands": 1396,
+          "n4ze3m/typed-decisions-synth": 1154,
+          "sgvaze/clevr4": 1272
+        },
+        "unique_examples_by_modality": {
+          "audio": 1396,
+          "image": 1272,
+          "text": 2307,
+          "video": 3217
+        },
+        "unique_underlying_assets_by_modality": {
+          "audio": 926,
+          "image": 318,
+          "text": 2169,
+          "video": 318
+        },
+        "unique_underlying_assets_by_source": {
+          "MIT-IBM/CLEVRER": 318,
+          "TypeSafeAI/Open-Jev": 1074,
+          "google/speech_commands": 926,
+          "n4ze3m/typed-decisions-synth": 1095,
+          "sgvaze/clevr4": 318
+        },
+        "unique_underlying_assets_by_source_modality": {
+          "MIT-IBM/CLEVRER:video": 318,
+          "TypeSafeAI/Open-Jev:text": 1074,
+          "google/speech_commands:audio": 926,
+          "n4ze3m/typed-decisions-synth:text": 1095,
+          "sgvaze/clevr4:image": 318
+        }
+      },
+      "learning_curves_path": "artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized/learning-curves.jsonl",
+      "run_metadata_path": "artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized/run-metadata.json"
+    },
+    "19": {
+      "candidate": "seed19-rank16-2048-weak-modalities",
+      "seed": 19,
+      "best_step": 1408,
+      "validation": {
+        "all": {
+          "count": 472,
+          "accuracy": 0.7055084745762712,
+          "nll": 0.7502335300371934,
+          "brier": 0.37471880263846935,
+          "ece": 0.04313560029081369,
+          "mean_confidence": 0.720736247471581
+        },
+        "modality:audio": {
+          "count": 118,
+          "accuracy": 0.8813559322033898,
+          "nll": 0.41727068551441593,
+          "brier": 0.1476228199676359,
+          "ece": 0.048804401846255285,
+          "mean_confidence": 0.9109119631476321
+        },
+        "modality:image": {
+          "count": 118,
+          "accuracy": 0.711864406779661,
+          "nll": 0.8036804815831464,
+          "brier": 0.3766218785516491,
+          "ece": 0.10015948015754506,
+          "mean_confidence": 0.7201756789522656
+        },
+        "modality:text": {
+          "count": 118,
+          "accuracy": 0.6779661016949152,
+          "nll": 0.7252413819467135,
+          "brier": 0.410799416695614,
+          "ece": 0.13157753267530667,
+          "mean_confidence": 0.7612956625930334
+        },
+        "modality:video": {
+          "count": 118,
+          "accuracy": 0.5508474576271186,
+          "nll": 1.0547415711044963,
+          "brier": 0.5638310953389764,
+          "ece": 0.07640555589380911,
+          "mean_confidence": 0.4905616851933932
+        },
+        "source:MIT-IBM/CLEVRER": {
+          "count": 118,
+          "accuracy": 0.5508474576271186,
+          "nll": 1.0547415711044963,
+          "brier": 0.5638310953389764,
+          "ece": 0.07640555589380911,
+          "mean_confidence": 0.4905616851933932
+        },
+        "source:TypeSafeAI/Open-Jev": {
+          "count": 59,
+          "accuracy": 0.5423728813559322,
+          "nll": 0.9338662827002774,
+          "brier": 0.5606764726941378,
+          "ece": 0.24605996780476327,
+          "mean_confidence": 0.6732867829880472
+        },
+        "source:google/speech_commands": {
+          "count": 118,
+          "accuracy": 0.8813559322033898,
+          "nll": 0.41727068551441593,
+          "brier": 0.1476228199676359,
+          "ece": 0.048804401846255285,
+          "mean_confidence": 0.9109119631476321
+        },
+        "source:n4ze3m/typed-decisions-synth": {
+          "count": 59,
+          "accuracy": 0.8135593220338984,
+          "nll": 0.5166164811931486,
+          "brier": 0.26092236069709024,
+          "ece": 0.1191732878402128,
+          "mean_confidence": 0.8493045421980195
+        },
+        "source:sgvaze/clevr4": {
+          "count": 118,
+          "accuracy": 0.711864406779661,
+          "nll": 0.8036804815831464,
+          "brier": 0.3766218785516491,
+          "ece": 0.10015948015754506,
+          "mean_confidence": 0.7201756789522656
+        },
+        "macro": {
+          "macro_accuracy": 0.7055084745762712,
+          "minimum_modality_accuracy": 0.5508474576271186,
+          "macro_nll": 0.750233530037193,
+          "macro_brier": 0.3747188026384688,
+          "macro_ece": 0.08923674264322902
+        },
+        "selection_score": 0.5200119817783623
+      },
+      "overfit_signals_at_best": {
+        "train_loss_falling": false,
+        "validation_nll_rising": false,
+        "train_accuracy_rising_validation_stalled": false,
+        "weak_modality_degraded": false
+      },
+      "sample_accounting": {
+        "samples_consumed": 7680,
+        "unique_examples": 7680,
+        "repeated_example_count": 0,
+        "unique_underlying_assets": 3480,
+        "consumed_by_source": {
+          "MIT-IBM/CLEVRER": 2989,
+          "TypeSafeAI/Open-Jev": 1068,
+          "google/speech_commands": 1283,
+          "n4ze3m/typed-decisions-synth": 1068,
+          "sgvaze/clevr4": 1272
+        },
+        "consumed_by_modality": {
+          "audio": 1283,
+          "image": 1272,
+          "text": 2136,
+          "video": 2989
+        },
+        "unique_examples_by_source": {
+          "MIT-IBM/CLEVRER": 2989,
+          "TypeSafeAI/Open-Jev": 1068,
+          "google/speech_commands": 1283,
+          "n4ze3m/typed-decisions-synth": 1068,
+          "sgvaze/clevr4": 1272
+        },
+        "unique_examples_by_modality": {
+          "audio": 1283,
+          "image": 1272,
+          "text": 2136,
+          "video": 2989
+        },
+        "unique_underlying_assets_by_modality": {
+          "audio": 856,
+          "image": 318,
+          "text": 1988,
+          "video": 318
+        },
+        "unique_underlying_assets_by_source": {
+          "MIT-IBM/CLEVRER": 318,
+          "TypeSafeAI/Open-Jev": 1001,
+          "google/speech_commands": 856,
+          "n4ze3m/typed-decisions-synth": 987,
+          "sgvaze/clevr4": 318
+        },
+        "unique_underlying_assets_by_source_modality": {
+          "MIT-IBM/CLEVRER:video": 318,
+          "TypeSafeAI/Open-Jev:text": 1001,
+          "google/speech_commands:audio": 856,
+          "n4ze3m/typed-decisions-synth:text": 987,
+          "sgvaze/clevr4:image": 318
+        }
+      },
+      "learning_curves_path": "artifacts/tiny-omni-decision-teacher-v1/candidates/seed19-rank16-2048-weak-modalities/learning-curves.jsonl",
+      "run_metadata_path": "artifacts/tiny-omni-decision-teacher-v1/candidates/seed19-rank16-2048-weak-modalities/run-metadata.json"
+    },
+    "23": {
+      "candidate": "seed23-rank16-2048-weak-modalities",
+      "seed": 23,
+      "best_step": 1536,
+      "validation": {
+        "all": {
+          "count": 472,
+          "accuracy": 0.7033898305084746,
+          "nll": 0.7735386460168006,
+          "brier": 0.38877368141382335,
+          "ece": 0.05111358283182322,
+          "mean_confidence": 0.7130066715180874
+        },
+        "modality:audio": {
+          "count": 118,
+          "accuracy": 0.8983050847457628,
+          "nll": 0.37331202366089045,
+          "brier": 0.13869700480301994,
+          "ece": 0.04166596004013288,
+          "mean_confidence": 0.9239925152416957
+        },
+        "modality:image": {
+          "count": 118,
+          "accuracy": 0.6949152542372882,
+          "nll": 0.9567830320029034,
+          "brier": 0.42470042844100503,
+          "ece": 0.10449631638446097,
+          "mean_confidence": 0.7352711442163435
+        },
+        "modality:text": {
+          "count": 118,
+          "accuracy": 0.6864406779661016,
+          "nll": 0.678342588959544,
+          "brier": 0.3879331398732697,
+          "ece": 0.09083589734667438,
+          "mean_confidence": 0.6922320726059251
+        },
+        "modality:video": {
+          "count": 118,
+          "accuracy": 0.5338983050847458,
+          "nll": 1.0857169394438642,
+          "brier": 0.603764152538,
+          "ece": 0.13469864415415264,
+          "mean_confidence": 0.5005309540083853
+        },
+        "source:MIT-IBM/CLEVRER": {
+          "count": 118,
+          "accuracy": 0.5338983050847458,
+          "nll": 1.0857169394438642,
+          "brier": 0.603764152538,
+          "ece": 0.13469864415415264,
+          "mean_confidence": 0.5005309540083853
+        },
+        "source:TypeSafeAI/Open-Jev": {
+          "count": 59,
+          "accuracy": 0.559322033898305,
+          "nll": 0.8827456178745007,
+          "brier": 0.5357323570154635,
+          "ece": 0.14307596521862484,
+          "mean_confidence": 0.5710894808930865
+        },
+        "source:google/speech_commands": {
+          "count": 118,
+          "accuracy": 0.8983050847457628,
+          "nll": 0.37331202366089045,
+          "brier": 0.13869700480301994,
+          "ece": 0.04166596004013288,
+          "mean_confidence": 0.9239925152416957
+        },
+        "source:n4ze3m/typed-decisions-synth": {
+          "count": 59,
+          "accuracy": 0.8135593220338984,
+          "nll": 0.4739395600445875,
+          "brier": 0.2401339227310751,
+          "ece": 0.06704107128967673,
+          "mean_confidence": 0.8133746643187636
+        },
+        "source:sgvaze/clevr4": {
+          "count": 118,
+          "accuracy": 0.6949152542372882,
+          "nll": 0.9567830320029034,
+          "brier": 0.42470042844100503,
+          "ece": 0.10449631638446097,
+          "mean_confidence": 0.7352711442163435
+        },
+        "macro": {
+          "macro_accuracy": 0.7033898305084746,
+          "minimum_modality_accuracy": 0.5338983050847458,
+          "macro_nll": 0.7735386460168004,
+          "macro_brier": 0.3887736814138237,
+          "macro_ece": 0.09292420448135522
+        },
+        "selection_score": 0.5512637688493957
+      },
+      "overfit_signals_at_best": {
+        "train_loss_falling": true,
+        "validation_nll_rising": false,
+        "train_accuracy_rising_validation_stalled": false,
+        "weak_modality_degraded": false
+      },
+      "sample_accounting": {
+        "samples_consumed": 8192,
+        "unique_examples": 8192,
+        "repeated_example_count": 0,
+        "unique_underlying_assets": 3714,
+        "consumed_by_source": {
+          "MIT-IBM/CLEVRER": 3217,
+          "TypeSafeAI/Open-Jev": 1153,
+          "google/speech_commands": 1396,
+          "n4ze3m/typed-decisions-synth": 1154,
+          "sgvaze/clevr4": 1272
+        },
+        "consumed_by_modality": {
+          "audio": 1396,
+          "image": 1272,
+          "text": 2307,
+          "video": 3217
+        },
+        "unique_examples_by_source": {
+          "MIT-IBM/CLEVRER": 3217,
+          "TypeSafeAI/Open-Jev": 1153,
+          "google/speech_commands": 1396,
+          "n4ze3m/typed-decisions-synth": 1154,
+          "sgvaze/clevr4": 1272
+        },
+        "unique_examples_by_modality": {
+          "audio": 1396,
+          "image": 1272,
+          "text": 2307,
+          "video": 3217
+        },
+        "unique_underlying_assets_by_modality": {
+          "audio": 933,
+          "image": 318,
+          "text": 2145,
+          "video": 318
+        },
+        "unique_underlying_assets_by_source": {
+          "MIT-IBM/CLEVRER": 318,
+          "TypeSafeAI/Open-Jev": 1071,
+          "google/speech_commands": 933,
+          "n4ze3m/typed-decisions-synth": 1074,
+          "sgvaze/clevr4": 318
+        },
+        "unique_underlying_assets_by_source_modality": {
+          "MIT-IBM/CLEVRER:video": 318,
+          "TypeSafeAI/Open-Jev:text": 1071,
+          "google/speech_commands:audio": 933,
+          "n4ze3m/typed-decisions-synth:text": 1074,
+          "sgvaze/clevr4:image": 318
+        }
+      },
+      "learning_curves_path": "artifacts/tiny-omni-decision-teacher-v1/candidates/seed23-rank16-2048-weak-modalities/learning-curves.jsonl",
+      "run_metadata_path": "artifacts/tiny-omni-decision-teacher-v1/candidates/seed23-rank16-2048-weak-modalities/run-metadata.json"
+    }
+  },
+  "validation_sampling_policy_comparison": {
+    "balanced": {
+      "candidate": "seed17-rank16-512-balanced",
+      "modality_weights": {
+        "audio": 1.0,
+        "image": 1.0,
+        "text": 1.0,
+        "video": 1.0
+      },
+      "validation": {
+        "all": {
+          "count": 472,
+          "accuracy": 0.6673728813559322,
+          "nll": 0.8828537055215535,
+          "brier": 0.42477161903400423,
+          "ece": 0.053229087269154644,
+          "mean_confidence": 0.7142406376552278
+        },
+        "modality:audio": {
+          "count": 118,
+          "accuracy": 0.8898305084745762,
+          "nll": 0.40466712552087153,
+          "brier": 0.14219641790550816,
+          "ece": 0.047525171127359746,
+          "mean_confidence": 0.9008499559457019
+        },
+        "modality:image": {
+          "count": 118,
+          "accuracy": 0.635593220338983,
+          "nll": 1.1121067688646262,
+          "brier": 0.47933209037909286,
+          "ece": 0.09335977975594795,
+          "mean_confidence": 0.7041998649552718
+        },
+        "modality:text": {
+          "count": 118,
+          "accuracy": 0.6779661016949152,
+          "nll": 0.7654815018895963,
+          "brier": 0.42060707925794605,
+          "ece": 0.11270688373153492,
+          "mean_confidence": 0.7256318601006169
+        },
+        "modality:video": {
+          "count": 118,
+          "accuracy": 0.4661016949152542,
+          "nll": 1.2491594258111216,
+          "brier": 0.6569508885934706,
+          "ece": 0.13994648421214798,
+          "mean_confidence": 0.526280869619321
+        },
+        "source:MIT-IBM/CLEVRER": {
+          "count": 118,
+          "accuracy": 0.4661016949152542,
+          "nll": 1.2491594258111216,
+          "brier": 0.6569508885934706,
+          "ece": 0.13994648421214798,
+          "mean_confidence": 0.526280869619321
+        },
+        "source:TypeSafeAI/Open-Jev": {
+          "count": 59,
+          "accuracy": 0.5254237288135594,
+          "nll": 0.9956651058710139,
+          "brier": 0.5782465347781238,
+          "ece": 0.19818900904412998,
+          "mean_confidence": 0.6271052663609132
+        },
+        "source:google/speech_commands": {
+          "count": 118,
+          "accuracy": 0.8898305084745762,
+          "nll": 0.40466712552087153,
+          "brier": 0.14219641790550816,
+          "ece": 0.047525171127359746,
+          "mean_confidence": 0.9008499559457019
+        },
+        "source:n4ze3m/typed-decisions-synth": {
+          "count": 59,
+          "accuracy": 0.8305084745762712,
+          "nll": 0.5352978979081789,
+          "brier": 0.26296762373776816,
+          "ece": 0.08173630853830757,
+          "mean_confidence": 0.8241584538403204
+        },
+        "source:sgvaze/clevr4": {
+          "count": 118,
+          "accuracy": 0.635593220338983,
+          "nll": 1.1121067688646262,
+          "brier": 0.47933209037909286,
+          "ece": 0.09335977975594795,
+          "mean_confidence": 0.7041998649552718
+        },
+        "macro": {
+          "macro_accuracy": 0.6673728813559322,
+          "minimum_modality_accuracy": 0.4661016949152542,
+          "macro_nll": 0.882853705521554,
+          "macro_brier": 0.4247716190340044,
+          "macro_ece": 0.09838457970674763
+        },
+        "selection_score": 0.694277843231233
+      },
+      "validation_step": 512
+    },
+    "weak_modalities_normalized": {
+      "candidate": "seed17-rank16-512-weak-modalities-normalized",
+      "modality_weights": {
+        "audio": 1.0,
+        "image": 1.5,
+        "text": 1.5,
+        "video": 2.0
+      },
+      "validation": {
+        "all": {
+          "count": 472,
+          "accuracy": 0.6694915254237288,
+          "nll": 0.8794251704623935,
+          "brier": 0.426987652503096,
+          "ece": 0.0631666751420599,
+          "mean_confidence": 0.7249180256247015
+        },
+        "modality:audio": {
+          "count": 118,
+          "accuracy": 0.864406779661017,
+          "nll": 0.4332055316755932,
+          "brier": 0.16128742892788736,
+          "ece": 0.04400744529093726,
+          "mean_confidence": 0.8962891218015703
+        },
+        "modality:image": {
+          "count": 118,
+          "accuracy": 0.652542372881356,
+          "nll": 1.0461527331132257,
+          "brier": 0.46373202928850876,
+          "ece": 0.11628133008035563,
+          "mean_confidence": 0.7014884958832951
+        },
+        "modality:text": {
+          "count": 118,
+          "accuracy": 0.7033898305084746,
+          "nll": 0.755005826766562,
+          "brier": 0.4131134997626474,
+          "ece": 0.06896162689742395,
+          "mean_confidence": 0.723710970353272
+        },
+        "modality:video": {
+          "count": 118,
+          "accuracy": 0.4576271186440678,
+          "nll": 1.283336590294192,
+          "brier": 0.6698176520333413,
+          "ece": 0.16564015122288364,
+          "mean_confidence": 0.5781835144606687
+        },
+        "source:MIT-IBM/CLEVRER": {
+          "count": 118,
+          "accuracy": 0.4576271186440678,
+          "nll": 1.283336590294192,
+          "brier": 0.6698176520333413,
+          "ece": 0.16564015122288364,
+          "mean_confidence": 0.5781835144606687
+        },
+        "source:TypeSafeAI/Open-Jev": {
+          "count": 59,
+          "accuracy": 0.559322033898305,
+          "nll": 0.9951479776295589,
+          "brier": 0.5710152350471449,
+          "ece": 0.1707644624225164,
+          "mean_confidence": 0.6390788848117247
+        },
+        "source:google/speech_commands": {
+          "count": 118,
+          "accuracy": 0.864406779661017,
+          "nll": 0.4332055316755932,
+          "brier": 0.16128742892788736,
+          "ece": 0.04400744529093726,
+          "mean_confidence": 0.8962891218015703
+        },
+        "source:n4ze3m/typed-decisions-synth": {
+          "count": 59,
+          "accuracy": 0.847457627118644,
+          "nll": 0.5148636759035653,
+          "brier": 0.25521176447814986,
+          "ece": 0.11355705483485076,
+          "mean_confidence": 0.8083430558948194
+        },
+        "source:sgvaze/clevr4": {
+          "count": 118,
+          "accuracy": 0.652542372881356,
+          "nll": 1.0461527331132257,
+          "brier": 0.46373202928850876,
+          "ece": 0.11628133008035563,
+          "mean_confidence": 0.7014884958832951
+        },
+        "macro": {
+          "macro_accuracy": 0.6694915254237288,
+          "minimum_modality_accuracy": 0.4576271186440678,
+          "macro_nll": 0.8794251704623932,
+          "macro_brier": 0.4269876525030962,
+          "macro_ece": 0.09872263837290013
+        },
+        "selection_score": 0.6929153037833533
+      },
+      "validation_step": 512
+    },
+    "video_priority": {
+      "candidate": "seed17-rank16-512-video-priority",
+      "modality_weights": {
+        "audio": 1.0,
+        "image": 1.5,
+        "text": 1.0,
+        "video": 2.5
+      },
+      "validation": {
+        "all": {
+          "count": 472,
+          "accuracy": 0.663135593220339,
+          "nll": 0.8977736388438635,
+          "brier": 0.43550466656283304,
+          "ece": 0.0632604463815184,
+          "mean_confidence": 0.7112384364324607
+        },
+        "modality:audio": {
+          "count": 118,
+          "accuracy": 0.8813559322033898,
+          "nll": 0.44220196509113946,
+          "brier": 0.16069379614297002,
+          "ece": 0.03665036581835504,
+          "mean_confidence": 0.9026753934005559
+        },
+        "modality:image": {
+          "count": 118,
+          "accuracy": 0.6610169491525424,
+          "nll": 1.1141590562977322,
+          "brier": 0.4853796868741953,
+          "ece": 0.11302234876458928,
+          "mean_confidence": 0.7134080106171511
+        },
+        "modality:text": {
+          "count": 118,
+          "accuracy": 0.6864406779661016,
+          "nll": 0.7604494166448913,
+          "brier": 0.42226284799278374,
+          "ece": 0.11737699743549702,
+          "mean_confidence": 0.7398004083562706
+        },
+        "modality:video": {
+          "count": 118,
+          "accuracy": 0.423728813559322,
+          "nll": 1.2742841173416903,
+          "brier": 0.673682335241383,
+          "ece": 0.11889163089000572,
+          "mean_confidence": 0.48906993335586485
+        },
+        "source:MIT-IBM/CLEVRER": {
+          "count": 118,
+          "accuracy": 0.423728813559322,
+          "nll": 1.2742841173416903,
+          "brier": 0.673682335241383,
+          "ece": 0.11889163089000572,
+          "mean_confidence": 0.48906993335586485
+        },
+        "source:TypeSafeAI/Open-Jev": {
+          "count": 59,
+          "accuracy": 0.559322033898305,
+          "nll": 0.9578422802690214,
+          "brier": 0.5601822113505872,
+          "ece": 0.17174005786241112,
+          "mean_confidence": 0.6497486301902997
+        },
+        "source:google/speech_commands": {
+          "count": 118,
+          "accuracy": 0.8813559322033898,
+          "nll": 0.44220196509113946,
+          "brier": 0.16069379614297002,
+          "ece": 0.03665036581835504,
+          "mean_confidence": 0.9026753934005559
+        },
+        "source:n4ze3m/typed-decisions-synth": {
+          "count": 59,
+          "accuracy": 0.8135593220338984,
+          "nll": 0.5630565530207609,
+          "brier": 0.28434348463498044,
+          "ece": 0.08204454537165368,
+          "mean_confidence": 0.8298521865222414
+        },
+        "source:sgvaze/clevr4": {
+          "count": 118,
+          "accuracy": 0.6610169491525424,
+          "nll": 1.1141590562977322,
+          "brier": 0.4853796868741953,
+          "ece": 0.11302234876458928,
+          "mean_confidence": 0.7134080106171511
+        },
+        "macro": {
+          "macro_accuracy": 0.6631355932203389,
+          "minimum_modality_accuracy": 0.423728813559322,
+          "macro_nll": 0.8977736388438633,
+          "macro_brier": 0.435504666562833,
+          "macro_ece": 0.09648533572711177
+        },
+        "selection_score": 0.722807004034226
+      },
+      "validation_step": 512
+    }
+  },
+  "seed_variability_validation_mean_sample_sd": {
+    "macro": {
+      "accuracy": {
+        "mean": 0.711864406779661,
+        "sample_sd": 0.012887208750631787
+      },
+      "nll": {
+        "mean": 0.7415294950560897,
+        "sample_sd": 0.0371342798483461
+      },
+      "brier": {
+        "mean": 0.3742613852604621,
+        "sample_sd": 0.014746326551243303
+      },
+      "ece": {
+        "mean": 0.08763806777611627,
+        "sample_sd": 0.006240978808808772
+      }
+    },
+    "audio": {
+      "accuracy": {
+        "mean": 0.8954802259887006,
+        "sample_sd": 0.012945129081796184
+      },
+      "nll": {
+        "mean": 0.3887171583472944,
+        "sample_sd": 0.024753810951212984
+      },
+      "brier": {
+        "mean": 0.14079706369429154,
+        "sample_sd": 0.006055303947649457
+      },
+      "ece": {
+        "mean": 0.04754772525554323,
+        "sample_sd": 0.005364971709579111
+      }
+    },
+    "image": {
+      "accuracy": {
+        "mean": 0.7062146892655368,
+        "sample_sd": 0.009785597782874987
+      },
+      "nll": {
+        "mean": 0.8419022832073053,
+        "sample_sd": 0.10132888715629755
+      },
+      "brier": {
+        "mean": 0.39400796371362573,
+        "sample_sd": 0.02665861104258335
+      },
+      "ece": {
+        "mean": 0.10211596625336146,
+        "sample_sd": 0.0021992686636874135
+      }
+    },
+    "text": {
+      "accuracy": {
+        "mean": 0.7005649717514124,
+        "sample_sd": 0.03208422794237447
+      },
+      "nll": {
+        "mean": 0.6787586724395668,
+        "sample_sd": 0.046276070717548135
+      },
+      "brier": {
+        "mean": 0.3850636566737962,
+        "sample_sd": 0.027283907504991694
+      },
+      "ece": {
+        "mean": 0.0920507351389039,
+        "sample_sd": 0.038933596120730725
+      }
+    },
+    "video": {
+      "accuracy": {
+        "mean": 0.5451977401129944,
+        "sample_sd": 0.009785597782874987
+      },
+      "nll": {
+        "mean": 1.0567398662301923,
+        "sample_sd": 0.028031396884209313
+      },
+      "brier": {
+        "mean": 0.577176856960135,
+        "sample_sd": 0.0230253323637267
+      },
+      "ece": {
+        "mean": 0.10883784445665651,
+        "sample_sd": 0.02969695917367007
+      }
+    }
+  }
+}

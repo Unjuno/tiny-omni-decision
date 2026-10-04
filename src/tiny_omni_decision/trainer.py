@@ -7,6 +7,7 @@ import os
 import random
 import shutil
 import time
+import uuid
 from collections import Counter, defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -14,18 +15,30 @@ from typing import Any
 
 os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 
-from .corpus import comparison_deltas, file_sha256, selection_loss
+from .corpus import (
+    ValidationCheckpointSelector,
+    comparison_deltas,
+    file_sha256,
+    macro_metrics,
+    validate_training_inputs,
+    validation_selection_score,
+)
 from .decision import decision_loss, normalize_probabilities, option_logits_from_vocab
 from .decision_math import brier_score, expected_calibration_error, negative_log_likelihood
+from .experiment import ExperimentManifest, append_experiment_event
 from .io import load_structured_file
 from .schema import BaseModelManifest, DecisionExample
 from .training import (
     DecisionTrainingConfig,
+    aggregate_training_window,
     decision_training_config,
     deterministic_sample_order,
+    deterministic_validation_subset,
     output_record,
     processor_inputs_for_example,
+    project_runtime_seconds,
     resolve_decoder_lora_targets,
+    sampling_accounting,
 )
 
 
@@ -129,16 +142,42 @@ def _evaluate(
     return {key: measure(values) for key, values in sorted(groups.items())}, predictions
 
 
-def run_training(
+def publish_best_adapter(temporary_best: Path, best_path: Path) -> None:
+    """Publish the selected adapter while tolerating transient Windows file locks."""
+    backup_path = best_path.with_name(f".best-backup-{uuid.uuid4().hex}")
+
+    def replace_with_retry(source: Path, destination: Path) -> None:
+        for attempt in range(6):
+            try:
+                source.replace(destination)
+                return
+            except PermissionError:
+                if attempt == 5:
+                    raise
+                time.sleep(min(0.05 * (2**attempt), 1.0))
+
+    if best_path.exists():
+        replace_with_retry(best_path, backup_path)
+    try:
+        replace_with_retry(temporary_best, best_path)
+    except Exception:
+        if backup_path.exists() and not best_path.exists():
+            replace_with_retry(backup_path, best_path)
+        raise
+    if backup_path.exists():
+        shutil.rmtree(backup_path, ignore_errors=True)
+
+
+def _run_training_impl(
     *,
     train_path: Path,
-    eval_path: Path,
-    validation_path: Path | None = None,
+    validation_path: Path,
     config_path: Path,
     output_dir: Path,
+    experiment_id: str,
+    reference_adapter_path: Path | None = Path("artifacts/tiny-omni-decision-teacher-v0/best"),
     seed_override: int | None = None,
     max_train_examples: int | None = None,
-    max_eval_examples: int | None = None,
     max_steps: int | None = None,
     gradient_accumulation_steps: int | None = None,
     checkpoint_interval: int | None = None,
@@ -158,7 +197,6 @@ def run_training(
     overrides = {
         "seed": seed_override,
         "max_train_examples": max_train_examples,
-        "max_eval_examples": max_eval_examples,
         "max_steps": max_steps,
         "gradient_accumulation_steps": gradient_accumulation_steps,
         "checkpoint_interval": checkpoint_interval,
@@ -190,8 +228,7 @@ def run_training(
     started_at = datetime.now(UTC)
     started_clock = time.monotonic()
     train_raw = _read_examples(train_path)
-    eval_raw = _read_examples(eval_path)
-    validation_raw = _read_examples(validation_path) if validation_path else eval_raw
+    validation_raw = _read_examples(validation_path)
     from .dataset import audit_license, check_train_eval_splits
 
     for example in train_raw:
@@ -208,21 +245,16 @@ def run_training(
             raise ValueError(
                 f"training example is not ALLOW ({policy}): {example.id}: {unresolved}"
             )
-    if validation_path:
-        for left_name, left, right_name, right in (
-            ("train", train_raw, "validation", validation_raw),
-            ("train", train_raw, "evaluation", eval_raw),
-            ("validation", validation_raw, "evaluation", eval_raw),
-        ):
-            result = check_train_eval_splits(left, right)
-            if result["status"] != "disjoint":
-                raise ValueError(f"{left_name}/{right_name} contamination detected: {result}")
+    result = check_train_eval_splits(train_raw, validation_raw)
+    if result["status"] != "disjoint":
+        raise ValueError(f"train/validation contamination detected: {result}")
 
     train_ready, train_skipped = _eligible(train_raw, selected_modalities)
-    eval_ready, eval_skipped = _eligible(eval_raw, selected_modalities)
     validation_ready, validation_skipped = _eligible(validation_raw, selected_modalities)
-    if not train_ready or not eval_ready or not validation_ready:
-        raise ValueError("no locally materialized training/validation/evaluation samples remain")
+    if not train_ready or not validation_ready:
+        raise ValueError(
+            "no locally materialized training or independent validation samples remain"
+        )
     train_order, _ = deterministic_sample_order(
         train_ready,
         seed=config.seed,
@@ -231,24 +263,13 @@ def run_training(
         source_weights=config.source_weights,
         max_sample_repeats=config.max_sample_repeats,
     )
-    eval_subset, _ = deterministic_sample_order(
-        eval_ready,
-        seed=config.seed,
-        limit=min(config.max_eval_examples, len(eval_ready)),
-        modality_weights=config.modality_weights,
-        source_weights=config.source_weights,
-    )
-    validation_subset, _ = deterministic_sample_order(
+    validation_subset = deterministic_validation_subset(
         validation_ready,
-        seed=config.seed + 1,
+        seed=17,
         limit=min(config.selection_eval_examples, len(validation_ready)),
-        modality_weights=config.modality_weights,
-        source_weights=config.source_weights,
     )
     if tiny_overfit:
         train_order = train_order[: min(len(train_order), 8)]
-        eval_subset = train_order
-        validation_subset = train_order
     elif len(train_order) < config.max_steps * config.gradient_accumulation_steps:
         raise ValueError(
             "training schedule is shorter than the configured optimization run; "
@@ -270,18 +291,12 @@ def run_training(
 
     data_root = train_path.parent.parent.parent
     output_dir.mkdir(parents=True, exist_ok=True)
-    baseline_metrics, baseline_predictions = _evaluate(
-        base, processor, eval_subset, data_root=data_root, config=config
-    )
+    validation_started = time.monotonic()
     validation_baseline_metrics, validation_baseline_predictions = _evaluate(
         base, processor, validation_subset, data_root=data_root, config=config
     )
-    (output_dir / "baseline-evaluation.json").write_text(
-        json.dumps(baseline_metrics, indent=2), encoding="utf-8"
-    )
-    (output_dir / "baseline-predictions.jsonl").write_text(
-        "".join(json.dumps(item) + "\n" for item in baseline_predictions), encoding="utf-8"
-    )
+    validation_baseline_eval_seconds = time.monotonic() - validation_started
+    validation_baseline_metrics["macro"] = macro_metrics(validation_baseline_metrics)
     (output_dir / "validation-baseline-evaluation.json").write_text(
         json.dumps(validation_baseline_metrics, indent=2), encoding="utf-8"
     )
@@ -289,13 +304,31 @@ def run_training(
         "".join(json.dumps(item) + "\n" for item in validation_baseline_predictions),
         encoding="utf-8",
     )
+    teacher_v0_validation_metrics = None
+    teacher_v0_validation_eval_seconds = None
+    if reference_adapter_path is not None and reference_adapter_path.is_dir():
+        from peft import PeftModel
+
+        reference = PeftModel.from_pretrained(base, reference_adapter_path, is_trainable=False)
+        reference.eval()
+        reference_started = time.monotonic()
+        teacher_v0_validation_metrics, _ = _evaluate(
+            reference, processor, validation_subset, data_root=data_root, config=config
+        )
+        teacher_v0_validation_eval_seconds = time.monotonic() - reference_started
+        teacher_v0_validation_metrics["macro"] = macro_metrics(teacher_v0_validation_metrics)
+        base = reference.unload()
+        del reference
+        gc.collect()
+        base.eval()
     tiny_before = None
     if tiny_overfit:
-        probabilities = [record["option_probabilities"] for record in baseline_predictions]
-        targets = [record["target"] for record in baseline_predictions]
-        tiny_before = config.cross_entropy_weight * negative_log_likelihood(
-            probabilities, targets
-        ) + config.brier_weight * brier_score(probabilities, targets)
+        tiny_train_metrics, _ = _evaluate(
+            base, processor, train_order, data_root=data_root, config=config
+        )
+        tiny_before = tiny_train_metrics["all"]["nll"] + config.brier_weight * tiny_train_metrics[
+            "all"
+        ]["brier"]
     for parameter in base.parameters():
         parameter.requires_grad_(False)
     base.gradient_checkpointing_enable()
@@ -333,8 +366,7 @@ def run_training(
     checkpoints_dir = output_dir / "checkpoints"
     checkpoints_dir.mkdir(exist_ok=True)
     train_hash = file_sha256(str(train_path))
-    eval_hash = file_sha256(str(eval_path))
-    validation_hash = file_sha256(str(validation_path or eval_path))
+    validation_hash = file_sha256(str(validation_path))
     config_hash = file_sha256(str(config_path))
     if resume_from and (resume_from / "optimizer.pt").is_file():
         optimizer.load_state_dict(
@@ -342,11 +374,16 @@ def run_training(
         )
     model.train()
     consumed: Counter[str] = Counter()
+    consumed_examples: list[DecisionExample] = []
     losses: list[float] = []
     history: list[dict[str, Any]] = []
     optimizer.zero_grad(set_to_none=True)
     sample_index = 0
     global_step = 0
+    selector = ValidationCheckpointSelector(
+        patience=config.early_stopping_patience,
+        min_delta=config.early_stopping_min_delta,
+    )
     best_selection_loss = float("inf")
     best_step = 0
     best_validation_predictions: list[dict[str, Any]] | None = None
@@ -354,7 +391,6 @@ def run_training(
         saved_state = json.loads((resume_from / "trainer-state.json").read_text(encoding="utf-8"))
         expected_hashes = {
             "train_rows_sha256": train_hash,
-            "eval_rows_sha256": eval_hash,
             "validation_rows_sha256": validation_hash,
             "config_sha256": config_hash,
         }
@@ -368,6 +404,15 @@ def run_training(
         history.extend(saved_state.get("history", []))
         best_selection_loss = float(saved_state.get("best_selection_loss", float("inf")))
         best_step = int(saved_state.get("best_step", 0))
+        selector.best_score = best_selection_loss
+        selector.best_step = best_step
+        selector.evaluations_without_improvement = int(
+            saved_state.get("evaluations_without_improvement", 0)
+        )
+        consumed_examples.extend(
+            train_order[index % len(train_order)]
+            for index in range(sample_index)
+        )
         best_path = output_dir / "best"
         if best_step and not best_path.is_dir():
             raise ValueError("resume checkpoint refers to a missing best adapter directory")
@@ -389,24 +434,30 @@ def run_training(
             "sample_index": sample_index,
             "best_selection_loss": best_selection_loss,
             "best_step": best_step,
+            "evaluations_without_improvement": selector.evaluations_without_improvement,
             "consumed": dict(consumed),
             "losses": losses,
             "history": history,
             "train_rows_sha256": train_hash,
-            "eval_rows_sha256": eval_hash,
             "validation_rows_sha256": validation_hash,
             "config_sha256": config_hash,
             "base_revision": manifest.revision,
+            "experiment_id": experiment_id,
         }
 
     while global_step < config.max_steps:
+        step_started = time.monotonic()
         step_total_losses: list[float] = []
         step_cross_entropies: list[float] = []
         step_briers: list[float] = []
         step_composition: Counter[str] = Counter()
+        step_correct_by_modality: Counter[str] = Counter()
+        step_count_by_modality: Counter[str] = Counter()
+        step_ce_by_modality: dict[str, list[float]] = defaultdict(list)
         for _ in range(config.gradient_accumulation_steps):
             example = train_order[sample_index % len(train_order)]
             sample_index += 1
+            consumed_examples.append(example)
             batch_key = f"{example.modality}:{example.source}"
             consumed[batch_key] += 1
             step_composition[batch_key] += 1
@@ -431,6 +482,11 @@ def run_training(
             step_total_losses.append(loss_value)
             step_cross_entropies.append(float(cross_entropy.detach()))
             step_briers.append(float(brier.detach()))
+            step_correct_by_modality[example.modality] += int(
+                int(torch.argmax(logits).item()) == target
+            )
+            step_count_by_modality[example.modality] += 1
+            step_ce_by_modality[example.modality].append(float(cross_entropy.detach()))
         for parameter in adapter_parameters:
             if parameter.grad is None or not torch.isfinite(parameter.grad).all():
                 raise RuntimeError("Decision LoRA has a missing or non-finite gradient")
@@ -449,8 +505,23 @@ def run_training(
         step_record = {
             "step": global_step,
             "cross_entropy": sum(step_cross_entropies) / len(step_cross_entropies),
+            "train_accuracy": sum(step_correct_by_modality.values())
+            / sum(step_count_by_modality.values()),
+            "train_accuracy_by_modality": {
+                modality: step_correct_by_modality[modality] / count
+                for modality, count in sorted(step_count_by_modality.items())
+            },
+            "train_ce_by_modality": {
+                modality: sum(step_ce_by_modality[modality]) / len(step_ce_by_modality[modality])
+                for modality in sorted(step_ce_by_modality)
+            },
+            "train_correct_by_modality": dict(sorted(step_correct_by_modality.items())),
+            "train_examples_by_modality": dict(sorted(step_count_by_modality.items())),
+            "train_examples": sum(step_count_by_modality.values()),
+            "microbatches": config.gradient_accumulation_steps,
             "brier": sum(step_briers) / len(step_briers),
             "total_loss": sum(step_total_losses) / len(step_total_losses),
+            "step_seconds": time.monotonic() - step_started,
             "learning_rate": optimizer.param_groups[0]["lr"],
             "gradient_norm": gradient_norm,
             "sample_composition": dict(sorted(step_composition.items())),
@@ -461,28 +532,79 @@ def run_training(
 
         selection_metrics = None
         if global_step % config.evaluation_interval == 0 or global_step == config.max_steps:
+            validation_started = time.monotonic()
             selection_metrics, selection_predictions = _evaluate(
                 model, processor, validation_subset, data_root=data_root, config=config
             )
-            score = selection_loss(selection_metrics["all"], brier_weight=config.brier_weight)
-            selection_metrics["selection_loss"] = score
-            (output_dir / f"validation-step-{global_step}.json").write_text(
-                json.dumps(selection_metrics, indent=2), encoding="utf-8"
+            validation_eval_seconds = time.monotonic() - validation_started
+            selection_metrics["macro"] = macro_metrics(selection_metrics)
+            score = validation_selection_score(selection_metrics)
+            selection_metrics["selection_score"] = score
+            previous_validation = next(
+                (item for item in reversed(history) if "validation" in item), None
             )
-            if score < best_selection_loss:
-                best_selection_loss = score
-                best_step = global_step
+            prior_validation_step = (
+                int(previous_validation["step"]) if previous_validation is not None else 0
+            )
+            training_window = [
+                item
+                for item in history
+                if "step_seconds" in item and int(item["step"]) > prior_validation_step
+            ]
+            training_metrics = aggregate_training_window(training_window)
+            overfit_signals = {
+                "train_loss_falling": bool(
+                    previous_validation
+                    and training_metrics["train_ce"] < previous_validation["train"]["train_ce"]
+                ),
+                "validation_nll_rising": bool(
+                    previous_validation
+                    and selection_metrics["macro"]["macro_nll"]
+                    > previous_validation["validation"]["macro"]["macro_nll"]
+                ),
+                "train_accuracy_rising_validation_stalled": bool(
+                    previous_validation
+                    and training_metrics["train_accuracy"]
+                    > previous_validation["train"]["train_accuracy"]
+                    and selection_metrics["macro"]["macro_accuracy"]
+                    <= previous_validation["validation"]["macro"]["macro_accuracy"]
+                ),
+                "weak_modality_degraded": bool(
+                    previous_validation
+                    and selection_metrics["macro"]["minimum_modality_accuracy"]
+                    < previous_validation["validation"]["macro"]["minimum_modality_accuracy"]
+                ),
+            }
+            validation_record = {
+                "step": global_step,
+                "train": training_metrics,
+                "validation": selection_metrics,
+                "validation_eval_seconds": validation_eval_seconds,
+                "overfit_signals": overfit_signals,
+            }
+            history.append(validation_record)
+            improved = selector.observe(global_step, selection_metrics)
+            best_selection_loss = selector.best_score
+            best_step = selector.best_step
+            (output_dir / f"validation-step-{global_step}.json").write_text(
+                json.dumps(validation_record, indent=2), encoding="utf-8"
+            )
+            if improved:
                 best_validation_predictions = selection_predictions
                 temporary_best = output_dir / "best.tmp"
                 if temporary_best.exists():
                     shutil.rmtree(temporary_best)
                 model.save_pretrained(temporary_best)
-                if best_path.exists():
-                    shutil.rmtree(best_path)
-                temporary_best.replace(best_path)
+                publish_best_adapter(temporary_best, best_path)
                 (output_dir / "best-checkpoint.json").write_text(
                     json.dumps(
-                        {"step": best_step, "selection_loss": best_selection_loss}, indent=2
+                        {
+                            "step": best_step,
+                            "selection_score": best_selection_loss,
+                            "selection_rule": "macro NLL + 0.2 macro Brier + 0.1 macro ECE "
+                            "- 0.25 macro accuracy - 0.25 minimum modality accuracy",
+                        },
+                        indent=2,
                     ),
                     encoding="utf-8",
                 )
@@ -504,32 +626,35 @@ def run_training(
                 json.dumps(state_record(global_step)), encoding="utf-8"
             )
         model.train()
+        if selector.should_stop:
+            break
     if best_step == 0:
         raise RuntimeError("training ended without selecting a best validation checkpoint")
 
-    # Load the chosen validation checkpoint from disk before acceptance evaluation.
+    # Reload only the validation-selected adapter; the sealed audit is not read here.
     model.eval()
     unloaded_base = model.unload()
     del model
     gc.collect()
     reloaded = PeftModel.from_pretrained(unloaded_base, best_path, is_trainable=False).eval()
+    final_validation_started = time.monotonic()
     reloaded_validation_metrics, reloaded_validation_predictions = _evaluate(
         reloaded, processor, validation_subset, data_root=data_root, config=config
     )
+    final_validation_eval_seconds = time.monotonic() - final_validation_started
+    reloaded_validation_metrics["macro"] = macro_metrics(reloaded_validation_metrics)
     if best_validation_predictions is None or [
         record["option_probabilities"] for record in best_validation_predictions
     ] != [record["option_probabilities"] for record in reloaded_validation_predictions]:
         raise RuntimeError("best checkpoint save/reload validation predictions changed")
-    reloaded_metrics, reloaded_predictions = _evaluate(
-        reloaded, processor, eval_subset, data_root=data_root, config=config
-    )
     tiny_after = None
     if tiny_overfit:
-        probabilities = [record["option_probabilities"] for record in reloaded_predictions]
-        targets = [record["target"] for record in reloaded_predictions]
-        tiny_after = config.cross_entropy_weight * negative_log_likelihood(
-            probabilities, targets
-        ) + config.brier_weight * brier_score(probabilities, targets)
+        tiny_train_metrics, _ = _evaluate(
+            reloaded, processor, train_order, data_root=data_root, config=config
+        )
+        tiny_after = tiny_train_metrics["all"]["nll"] + config.brier_weight * tiny_train_metrics[
+            "all"
+        ]["brier"]
         if tiny_after >= tiny_before:
             raise RuntimeError(f"tiny-overfit loss did not decrease: {tiny_before} -> {tiny_after}")
 
@@ -537,8 +662,7 @@ def run_training(
     max_vram = torch.cuda.max_memory_allocated()
     end_at = datetime.now(UTC)
     wall_seconds = time.monotonic() - started_clock
-    source_counts = Counter(example.source for example in eval_subset)
-    modality_counts = Counter(example.modality for example in eval_subset)
+    usage = sampling_accounting(consumed_examples)
     modality_consumption: Counter[str] = Counter()
     for key, count in consumed.items():
         modality_consumption[key.split(":", 1)[0]] += count
@@ -549,9 +673,45 @@ def run_training(
         path.parent.name: file_sha256(str(path))
         for path in sorted(checkpoints_dir.glob("step-*/adapter_model.safetensors"))
     }
+    corpus_manifest_path = train_path.parent / "corpus-manifest.json"
+    corpus_manifest = json.loads(corpus_manifest_path.read_text(encoding="utf-8"))
+    training_seconds = sum(
+        float(item["step_seconds"]) for item in history if "step_seconds" in item
+    )
+    validation_points = [item for item in history if "validation" in item]
+    validation_eval_seconds = validation_baseline_eval_seconds + float(
+        teacher_v0_validation_eval_seconds or 0.0
+    ) + sum(float(item["validation_eval_seconds"]) for item in validation_points)
+    validation_eval_seconds += final_validation_eval_seconds
+    selected_seconds_per_step = training_seconds / max(global_step, 1)
+    scheduled_eval_times = [
+        float(item["validation_eval_seconds"]) for item in validation_points
+    ]
+    mean_scheduled_eval_seconds = (
+        sum(scheduled_eval_times) / len(scheduled_eval_times) if scheduled_eval_times else 0.0
+    )
+    setup_validation_seconds = validation_baseline_eval_seconds + float(
+        teacher_v0_validation_eval_seconds or 0.0
+    )
+    fixed_runtime_overhead_seconds = max(
+        0.0, wall_seconds - training_seconds - validation_eval_seconds
+    )
+    adapter_size_bytes = best_weights_path.stat().st_size
+    trainable_parameter_count = sum(parameter.numel() for parameter in adapter_parameters)
+    total_parameter_count = sum(parameter.numel() for parameter in reloaded.parameters())
+    overfit_signal_points = [
+        item["overfit_signals"] for item in validation_points if "overfit_signals" in item
+    ]
+    sealed_audit_sha256 = corpus_manifest.get("sealed_audit_sha256")
+    validation_v0_deltas = (
+        comparison_deltas(teacher_v0_validation_metrics, reloaded_validation_metrics)
+        if teacher_v0_validation_metrics is not None
+        else None
+    )
     metadata = {
-        "teacher_id": "tiny-omni-decision-teacher-v0",
-        "artifact_role": "high_precision_decision_teacher",
+        "teacher_id": "tiny-omni-decision-teacher-v1-candidate",
+        "experiment_id": experiment_id,
+        "artifact_role": "validation_selected_experiment_candidate",
         "base_repo_id": manifest.repo_id,
         "base_revision": manifest.revision,
         "seed": config.seed,
@@ -562,45 +722,77 @@ def run_training(
             None,
         ),
         "train_rows_sha256": train_hash,
-        "eval_rows_sha256": eval_hash,
         "validation_rows_sha256": validation_hash,
-        "corpus_manifest_sha256": file_sha256(
-            str(train_path.parent / "corpus-manifest.json")
-        ),
+        "sealed_audit_sha256": sealed_audit_sha256,
+        "corpus_manifest_sha256": file_sha256(str(corpus_manifest_path)),
         "training_config_sha256": config_hash,
         "train_examples_available": len(train_ready),
         "train_examples_selected": len(train_order),
         "validation_examples_available": len(validation_ready),
         "validation_examples_measured": len(validation_subset),
-        "eval_examples_measured": len(eval_subset),
         "skipped_train_examples": train_skipped,
         "skipped_validation_examples": validation_skipped,
-        "skipped_eval_examples": eval_skipped,
         "actual_train_consumption_by_modality_source": dict(sorted(consumed.items())),
         "actual_train_consumption_by_modality": dict(sorted(modality_consumption.items())),
+        "sample_accounting": usage,
         "train_loss_mean": sum(losses) / len(losses),
         "tiny_overfit_nll_before": tiny_before,
         "tiny_overfit_nll_after": tiny_after,
-        "evaluation_source_counts": dict(sorted(source_counts.items())),
-        "evaluation_modality_counts": dict(sorted(modality_counts.items())),
-        "baseline_metrics": baseline_metrics,
-        "decision_teacher_metrics": reloaded_metrics,
-        "metric_deltas_teacher_minus_base": comparison_deltas(
-            baseline_metrics, reloaded_metrics
+        "validation_base_metrics": validation_baseline_metrics,
+        "validation_teacher_v0_metrics": teacher_v0_validation_metrics,
+        "validation_teacher_v1_candidate_metrics": reloaded_validation_metrics,
+        "validation_deltas_v1_candidate_minus_base": comparison_deltas(
+            validation_baseline_metrics, reloaded_validation_metrics
         ),
+        "validation_deltas_v1_candidate_minus_teacher_v0": validation_v0_deltas,
         "validation_baseline_metrics": validation_baseline_metrics,
         "validation_best_metrics": reloaded_validation_metrics,
-        "validation_best_selection_loss": best_selection_loss,
+        "validation_best_selection_score": best_selection_loss,
+        "validation_macro_metrics": reloaded_validation_metrics["macro"],
+        "validation_learning_curve": validation_points,
+        "overfit_signal_points": overfit_signal_points,
         "best_checkpoint_step": best_step,
+        "early_stopping_patience": config.early_stopping_patience,
+        "early_stopping_min_delta": config.early_stopping_min_delta,
+        "stopped_early": global_step < config.max_steps,
         "best_adapter_path": "best",
         "step_checkpoint_sha256": checkpoint_hashes,
         "best_adapter_sha256": file_sha256(str(best_weights_path)),
         "adapter_config_sha256": file_sha256(str(best_path / "adapter_config.json")),
+        "adapter_size_bytes": adapter_size_bytes,
+        "trainable_parameter_count": trainable_parameter_count,
+        "projector_trainable_parameter_count": 0,
+        "total_parameter_count": total_parameter_count,
+        "expected_merge_impact": {
+            "adapter_trainable_parameters_absorbed_into_base": trainable_parameter_count,
+            "additional_projector_parameters": 0,
+            "separate_runtime_adapter_after_merge": False,
+            "ternary_conversion_performed": False,
+        },
         "global_steps": global_step,
         "optimizer_microbatches": sample_index,
         "gradient_accumulation_steps": config.gradient_accumulation_steps,
         "learning_rate": config.learning_rate,
         "max_gradient_norm": config.max_gradient_norm,
+        "mean_seconds_per_optimizer_step": selected_seconds_per_step,
+        "training_seconds": training_seconds,
+        "validation_evaluation_seconds": validation_eval_seconds,
+        "projected_seconds_by_budget": {
+            str(steps): selected_seconds_per_step * steps for steps in (512, 1024, 2048, 4096)
+        },
+        "projected_total_runtime_seconds_by_budget": {
+            str(steps): project_runtime_seconds(
+                seconds_per_optimizer_step=selected_seconds_per_step,
+                optimizer_steps=steps,
+                evaluation_interval=config.evaluation_interval,
+                mean_scheduled_evaluation_seconds=mean_scheduled_eval_seconds,
+                setup_evaluation_seconds=setup_validation_seconds,
+                final_evaluation_seconds=final_validation_eval_seconds,
+                other_overhead_seconds=fixed_runtime_overhead_seconds,
+            )
+            for steps in (512, 1024, 2048, 4096)
+        },
+        "projected_fixed_runtime_overhead_seconds": fixed_runtime_overhead_seconds,
         "sampling_mixture": {
             "modality_weights": config.modality_weights,
             "source_weights": config.source_weights,
@@ -610,6 +802,7 @@ def run_training(
                 "sample reuse is bounded by max_sample_repeats"
             ),
             "consumed_by_modality_source": dict(sorted(consumed.items())),
+            **usage,
         },
         "gpu": torch.cuda.get_device_name(0),
         "gpu_total_memory_bytes": torch.cuda.get_device_properties(0).total_memory,
@@ -630,14 +823,15 @@ def run_training(
         "merge_export_performed": False,
     }
     (output_dir / "run-metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
-    (output_dir / "decision-lora-predictions.jsonl").write_text(
-        "".join(json.dumps(item) + "\n" for item in reloaded_predictions), encoding="utf-8"
-    )
-    (output_dir / "decision-teacher-evaluation.json").write_text(
-        json.dumps(reloaded_metrics, indent=2), encoding="utf-8"
+    (output_dir / "validation-predictions.jsonl").write_text(
+        "".join(json.dumps(item) + "\n" for item in reloaded_validation_predictions),
+        encoding="utf-8",
     )
     (output_dir / "validation-teacher-evaluation.json").write_text(
         json.dumps(reloaded_validation_metrics, indent=2), encoding="utf-8"
+    )
+    (output_dir / "learning-curves.jsonl").write_text(
+        "".join(json.dumps(item) + "\n" for item in validation_points), encoding="utf-8"
     )
     (output_dir / "pip-freeze.txt").write_text(
         "\n".join(
@@ -650,77 +844,160 @@ def run_training(
         + "\n",
         encoding="utf-8",
     )
-    corpus_manifest_path = train_path.parent / "corpus-manifest.json"
-    corpus_manifest = json.loads(corpus_manifest_path.read_text(encoding="utf-8"))
-    teacher_manifest = {
-        "schema_version": 1,
-        "teacher_id": "tiny-omni-decision-teacher-v0",
-        "artifact_role": "high_precision_reference_before_ternary_compression",
-        "adapter_path": "best",
-        "adapter_weights_file": best_weights_path.name,
-        "adapter_weights_sha256": metadata["best_adapter_sha256"],
-        "adapter_config_sha256": metadata["adapter_config_sha256"],
-        "base_model": {
-            "repo_id": manifest.repo_id,
-            "revision": manifest.revision,
-            "model_manifest_sha256": file_sha256(str(model_manifest_path)),
-            "weights_sha256": metadata["base_weights_sha256"],
-        },
-        "corpus": {
-            "manifest_path": str(corpus_manifest_path),
-            "manifest_sha256": metadata["corpus_manifest_sha256"],
-            "train_jsonl_sha256": train_hash,
-            "validation_jsonl_sha256": validation_hash,
-            "evaluation_jsonl_sha256": eval_hash,
-            "pair_sha256": corpus_manifest.get("corpus_pair_sha256"),
-            "overlap": corpus_manifest.get("overlap"),
-            "counts": {
-                "train": corpus_manifest.get("train"),
-                "validation": corpus_manifest.get("validation"),
-                "evaluation": corpus_manifest.get("evaluation"),
-            },
-        },
-        "training_config": config.model_dump(mode="json"),
-        "training_config_sha256": config_hash,
-        "seed": config.seed,
-        "target_module_paths": targets,
-        "sampling_mixture": metadata["sampling_mixture"],
-        "optimizer_steps": global_step,
-        "best_checkpoint_step": best_step,
-        "best_checkpoint_selection_loss": best_selection_loss,
-        "checkpoint_sha256": checkpoint_hashes,
-        "run_metadata_path": "run-metadata.json",
-        "run_metadata_sha256": file_sha256(str(output_dir / "run-metadata.json")),
-        "baseline_metrics_path": "baseline-evaluation.json",
-        "baseline_predictions_path": "baseline-predictions.jsonl",
-        "teacher_metrics_path": "decision-teacher-evaluation.json",
-        "teacher_predictions_path": "decision-lora-predictions.jsonl",
-        "metrics": {
-            "base": baseline_metrics,
-            "teacher": reloaded_metrics,
-            "delta_teacher_minus_base": metadata["metric_deltas_teacher_minus_base"],
-        },
-        "environment": {
-            key: metadata[key]
-            for key in (
-                "python_version",
-                "torch_version",
-                "cuda_runtime_version",
-                "transformers_version",
-                "peft_version",
-                "accelerate_version",
-                "gpu",
-                "gpu_total_memory_bytes",
-            )
-        },
-        "training_wall_seconds": wall_seconds,
-        "rental_provider": "local workstation",
-        "rental_total_usd": 0.0,
-        "merge_export_performed": False,
-        "ternary_quantization_performed": False,
-        "recovery_lora_trained": False,
+    metadata["environment"] = {
+        key: metadata[key]
+        for key in (
+            "python_version",
+            "torch_version",
+            "cuda_runtime_version",
+            "transformers_version",
+            "peft_version",
+            "accelerate_version",
+            "gpu",
+            "gpu_total_memory_bytes",
+        )
     }
-    (output_dir / "teacher-manifest.json").write_text(
-        json.dumps(teacher_manifest, indent=2), encoding="utf-8"
-    )
+    (output_dir / "run-metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     return metadata
+
+
+def run_training(**kwargs: Any) -> dict[str, Any]:
+    """Log every attempt, require independent validation, and keep audit out of iteration."""
+    output_dir = Path(kwargs["output_dir"])
+    if output_dir.name == "tiny-omni-decision-teacher-v0":
+        raise ValueError("Teacher v0 is immutable; write experiments to a new output directory")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    experiment_id = f"{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
+    ledger_path = output_dir / "experiments.jsonl"
+    started_at = datetime.now(UTC).isoformat()
+    config_path = Path(kwargs["config_path"])
+    model_manifest_path = Path(
+        kwargs.get("model_manifest_path", Path("manifests/base-model.example.yaml"))
+    )
+    start_details: dict[str, Any] = {}
+    if config_path.is_file():
+        start_details["config_sha256"] = file_sha256(str(config_path))
+        try:
+            config_raw = load_structured_file(config_path)
+            start_details["seed"] = kwargs.get("seed_override")
+            if start_details["seed"] is None:
+                start_details["seed"] = int(config_raw.get("training", {}).get("seed", 17))
+            start_details["sampling_policy"] = config_raw.get("sampling", {})
+        except Exception:
+            pass
+    if model_manifest_path.is_file():
+        try:
+            base_manifest = BaseModelManifest.model_validate(
+                load_structured_file(model_manifest_path)
+            )
+            start_details["base_repo_id"] = base_manifest.repo_id
+            start_details["base_revision"] = base_manifest.revision
+        except Exception:
+            pass
+    for name, key in (
+        ("train_path", "train_corpus_sha256"),
+        ("validation_path", "validation_corpus_sha256"),
+    ):
+        value = kwargs.get(name)
+        path = Path(value) if value is not None else None
+        if path is not None and path.is_file():
+            start_details[key] = file_sha256(str(path))
+    append_experiment_event(
+        ledger_path,
+        {
+            "experiment_id": experiment_id,
+            "status": "started",
+            "started_at_utc": started_at,
+            "train_path": str(kwargs.get("train_path")),
+            "validation_path": str(kwargs.get("validation_path")),
+            "config_path": str(kwargs.get("config_path")),
+            **start_details,
+        },
+    )
+    try:
+        validate_training_inputs(
+            kwargs["train_path"],
+            kwargs.get("validation_path"),
+            evaluation_path=kwargs.get("eval_path"),
+        )
+        if kwargs.get("eval_path") is not None:
+            raise ValueError("evaluation is isolated from normal experiment iteration")
+        kwargs.pop("eval_path", None)
+        kwargs["experiment_id"] = experiment_id
+        kwargs.setdefault(
+            "reference_adapter_path", Path("artifacts/tiny-omni-decision-teacher-v0/best")
+        )
+        result = _run_training_impl(**kwargs)
+        manifest = ExperimentManifest(
+            experiment_id=experiment_id,
+            status="completed",
+            seed=int(result["seed"]),
+            base_model_repo_id=str(result["base_repo_id"]),
+            base_model_revision=str(result["base_revision"]),
+            base_model_weights_sha256=result["base_weights_sha256"],
+            train_corpus_sha256=str(result["train_rows_sha256"]),
+            validation_corpus_sha256=str(result["validation_rows_sha256"]),
+            sealed_audit_corpus_sha256=result["sealed_audit_sha256"],
+            config_sha256=str(result["training_config_sha256"]),
+            sampling_policy=result["sampling_mixture"],
+            optimizer_schedule={
+                "optimizer_steps": result["global_steps"],
+                "gradient_accumulation_steps": result["gradient_accumulation_steps"],
+                "learning_rate": result["learning_rate"],
+                "early_stopping_patience": result["early_stopping_patience"],
+            },
+            learning_curve=result["validation_learning_curve"],
+            metrics={
+                "validation": result["validation_best_metrics"],
+                "teacher_v0_validation": result["validation_teacher_v0_metrics"],
+            },
+            artifact={
+                "best_step": result["best_checkpoint_step"],
+                "adapter_size_bytes": result["adapter_size_bytes"],
+                "trainable_parameter_count": result["trainable_parameter_count"],
+                "projector_trainable_parameter_count": result[
+                    "projector_trainable_parameter_count"
+                ],
+                "best_adapter_sha256": result["best_adapter_sha256"],
+                "expected_merge_impact": result["expected_merge_impact"],
+            },
+            environment={
+                "gpu": result["gpu"],
+                "gpu_total_memory_bytes": result["gpu_total_memory_bytes"],
+                "max_allocated_vram_bytes": result["max_allocated_vram_bytes"],
+                "torch_version": result["torch_version"],
+                "cuda_runtime_version": result["cuda_runtime_version"],
+                "transformers_version": result["transformers_version"],
+                "peft_version": result["peft_version"],
+                "accelerate_version": result["accelerate_version"],
+            },
+        )
+        (output_dir / "experiment-manifest.json").write_text(
+            manifest.model_dump_json(indent=2), encoding="utf-8"
+        )
+        result["experiment_id"] = experiment_id
+        append_experiment_event(
+            ledger_path,
+            {
+                "experiment_id": experiment_id,
+                "status": "completed",
+                "ended_at_utc": datetime.now(UTC).isoformat(),
+                "train_corpus_sha256": result["train_rows_sha256"],
+                "validation_corpus_sha256": result["validation_rows_sha256"],
+                "config_sha256": result["training_config_sha256"],
+                "best_step": result["best_checkpoint_step"],
+                "validation_metrics": result["validation_best_metrics"],
+            },
+        )
+        return result
+    except BaseException as exc:
+        append_experiment_event(
+            ledger_path,
+            {
+                "experiment_id": experiment_id,
+                "status": "failed",
+                "ended_at_utc": datetime.now(UTC).isoformat(),
+                "failure": f"{type(exc).__name__}: {exc}",
+            },
+        )
+        raise
