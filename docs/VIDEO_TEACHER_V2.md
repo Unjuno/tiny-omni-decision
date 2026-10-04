@@ -10,10 +10,11 @@ eight-frame evaluation path. Candidate A is therefore recorded as a rejected
 experiment, not a replacement Teacher. Candidate B's separate 512-step run is
 complete; its validation-selected checkpoint is below Teacher v1 on aggregate
 and weakest-modality accuracy, so it is not a replacement Teacher. Candidate C
-has started as a separate rank-32 + rsLoRA capacity experiment. Through step
-384, Video Accuracy has improved modestly, but validation NLL worsened at the
-third point and the best-validation checkpoint remains step 256. Candidate C
-has not surpassed Teacher v1 and the fixed run continues through step 512.
+completed its fixed 512-step rank-32 + rsLoRA capacity run and selected step 512
+by the frozen validation score. It raises macro Accuracy slightly over A and B
+but does not improve Video over A or approach the v1 reference; its validation
+NLL, Brier, and ECE are worse than B's. It is retained as an experiment, not a
+replacement Teacher.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -299,12 +300,10 @@ signals, only `train_loss_falling` was true; validation NLL was not rising,
 training Accuracy did not rise while validation stalled, and the weakest
 modality did not degrade. Candidate C step 256 remains below Candidate B step
 256 (macro Accuracy 0.674, minimum-modality Accuracy 0.441, macro NLL 0.899)
-and the re-evaluated v1 reference. This is modest progress, not grounds for
-selecting C early. Continue the already-running 512-step configuration
-unchanged through its scheduled checkpoints. Its run remains active after step
-256; resource totals and final selection/reload verification are pending.
-Invocation and config snapshots are stored beside the run outputs; the sealed
-audit remains unopened.
+and the re-evaluated v1 reference. This was modest progress, not grounds for
+selecting C at that point. The run continued under the same configuration; the
+step-384 and step-512 outcomes follow. Invocation and config snapshots are
+stored beside the run outputs; the sealed audit remains unopened.
 
 At step 384, the next 512-example training window had CE 1.113 and Accuracy
 0.580 (train-minus-validation Accuracy gap -0.096). Validation had macro
@@ -323,17 +322,112 @@ step 256, while macro Accuracy rose from 0.642 to 0.676. However, macro NLL
 rose from 0.992 to 1.104 and macro ECE worsened from 0.102 to 0.139. Training
 CE fell and `validation_nll_rising` fired; the other three explicit signals
 were false. The selection score was 0.9280, so the validation-only selector
-retained step 256 (score 0.8313). Candidate C at step 384 exceeds Candidate B's
-selected macro Accuracy by 0.009 and its minimum-modality Accuracy by 0.034,
-but its macro NLL is 0.325 worse than B's selected step 384. Video Accuracy
-0.449 remains below Candidate A's selected 0.466 and the v1 reference 0.593.
-The step-512 validation is still required to complete this fixed run; adapter
-selection remains validation-only, and the sealed audit remains unopened.
+retained step 256 (score 0.8313). Video Accuracy 0.449 remained below
+Candidate A's selected 0.466 and the v1 reference 0.593.
+
+### Candidate C final validation and artifact
+
+The fixed run completed all 512 steps, four scheduled validations, selected
+step 512 by the frozen validation score, and passed save/reload verification.
+The reloaded adapter's 472 validation predictions exactly match the saved
+selected-checkpoint predictions (both JSONL files have SHA-256
+`63aedbabb29e3f071fc3874caca6e11aa41effd7a23922422eeaa0b726cd189c`). The
+sealed audit was not read.
+
+| Step | Train CE | Train Accuracy | Validation macro Accuracy | Macro NLL | Macro Brier | Macro ECE | Minimum / Video Accuracy | Train-minus-validation Accuracy |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 1.288 | 0.551 | 0.631 | 0.995 | 0.456 | 0.113 | 0.398 | -0.081 |
+| 256 | 1.158 | 0.572 | 0.642 | 0.992 | 0.459 | 0.102 | 0.407 | -0.070 |
+| 384 | 1.113 | 0.580 | 0.676 | 1.104 | 0.455 | 0.139 | 0.449 | -0.096 |
+| 512 | 1.031 | 0.652 | 0.678 | 0.945 | 0.437 | 0.131 | 0.424 | -0.026 |
+
+At step 512, per-modality Accuracy / NLL / Brier / ECE was:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 0.873 | 0.522 | 0.174 | 0.070 |
+| Image | 0.720 | 1.117 | 0.417 | 0.160 |
+| Text | 0.695 | 0.730 | 0.406 | 0.109 |
+| Video | 0.424 | 1.412 | 0.749 | 0.183 |
+
+Per-source Accuracy / NLL / Brier / ECE was:
+
+| Source | Count | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|---:|
+| MIT-IBM/CLEVRER | 118 | 0.424 | 1.412 | 0.749 | 0.183 |
+| TypeSafeAI/Open-Jev | 59 | 0.576 | 0.842 | 0.512 | 0.160 |
+| google/speech_commands | 118 | 0.873 | 0.522 | 0.174 | 0.070 |
+| n4ze3m/typed-decisions-synth | 59 | 0.814 | 0.619 | 0.301 | 0.109 |
+| sgvaze/clevr4 | 118 | 0.720 | 1.117 | 0.417 | 0.160 |
+
+Validation macro metrics for Teacher v1, A, B, and C respectively were:
+
+| Candidate | Selected step | Selector score | Macro Accuracy | Minimum Accuracy | Macro NLL | Macro Brier | Macro ECE | Video Accuracy |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Teacher v1 reference | — | — | 0.737 | 0.593 | 0.706 | 0.356 | 0.082 | 0.593 |
+| A: q/v rank 16 | 512 | 0.706441 | 0.672 | 0.466 | 0.893 | 0.434 | 0.106 | 0.466 |
+| B: decoder all-linear rank 16 | 384 | 0.596209 | 0.667 | 0.415 | 0.779 | 0.395 | 0.086 | 0.415 |
+| C: decoder all-linear rank 32 + rsLoRA | 512 | 0.770319 | 0.678 | 0.424 | 0.945 | 0.437 | 0.131 | 0.424 |
+
+The selector score makes B the strongest A/B/C structure under the predefined
+validation rule. C's macro Accuracy is 0.011 above B, but its minimum-modality
+Accuracy is 0.008 higher while macro NLL is 0.166 worse, macro Brier 0.042
+worse, and macro ECE 0.045 worse. Candidate C is not a product replacement.
+The step-384 `validation_nll_rising` signal and step-512
+`weak_modality_degraded` signal show a mixed learning curve: late accuracy
+gains do not consistently improve calibration or the weakest modality.
+
+The selected C adapter has 48,316,416 trainable parameters, a 193,326,648-byte
+artifact (SHA-256
+`e92e159d568ab9905afc5096b4fc416d0e3917b1768d183ebacf98da73a546d4`), and zero
+trainable projector parameters. Peak allocated VRAM was 12,418,481,152 bytes on
+the local NVIDIA GeForce RTX 3080 Laptop GPU (16 GiB). Mean optimizer-step time
+was 6.159 seconds; optimizer time was 3,153.5 seconds and total wall time
+5,423.6 seconds (90.4 minutes). No cloud compute was used.
+
+The run consumed 2,048 unique examples with zero repeats and 1,381 unique
+underlying assets: audio 298, image 282, text 505, video 296. Actual consumed
+examples were Speech Commands 341, CLEVR-4 512, Open-Jev 256, Typed Decisions
+Synth 256, and CLEVRER 683. Modality weights were text 1.5, image 1.5, audio
+1.0, and video 2.0. A deterministic post-hoc join to the raw CLEVRER
+annotations found that all 683 consumed CLEVRER questions were descriptive;
+the program-operator diagnostic classifies all as temporal descriptive
+(count 271, exist 117, query_color 93, query_material 91, query_shape 111).
+All 118 video validation examples are also temporal descriptive. Their C
+Accuracy / NLL / Brier / ECE is 0.424 / 1.412 / 0.749 / 0.183. No explanatory,
+predictive, counterfactual, or non-temporal descriptive examples exist in this
+frozen v1 validation subset, so their type-specific validation metrics are
+unavailable. The per-candidate post-hoc reports and exact operator rule are
+saved as `video-question-type-metrics.json` beside each A/B/C run; they use only
+the frozen train/validation records and predictions, never sealed audit data.
+
+The 118-row temporal descriptive validation group was identical for A/B/C:
+
+| Candidate | Count | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|---:|
+| A | 118 | 0.466 | 1.328 | 0.696 | 0.182 |
+| B | 118 | 0.415 | 1.161 | 0.631 | 0.113 |
+| C | 118 | 0.424 | 1.412 | 0.749 | 0.183 |
+
+Candidate C by CLEVRER descriptive subtype (Accuracy / NLL) was: count 52,
+0.365 / 1.486; exist 14, 0.429 / 0.978; query_color 24, 0.542 / 1.453;
+query_material 12, 0.250 / 2.149; and query_shape 16, 0.563 / 0.939. These
+subtype values are validation diagnostics; explanatory, predictive, and
+counterfactual rows are absent and therefore have no score in A/B/C.
+
+Candidate C config SHA-256 is
+`792227ce687e4a2f569870bcc463484a7fa456441314ad4972aead319db1a084`; frozen
+train and validation SHA-256 values match A/B. The exact base revision is
+`6befbaca7398925921802abd1f277b495b78b738`. Runtime schedule remained LR
+`5e-5`, constant scheduler, and warmup 0.0. Source/config hashes, exact target
+paths, run metadata, full learning curves, environment versions, selected
+adapter, and checkpoint hashes are preserved in the local C output directory.
 
 ## Verification so far
 
 - `ruff check src tests`: passed.
-- Full CPU test suite after the Windows loader regression tests: **102 passed**.
+- Full CPU test suite after the Candidate C config regression and Windows
+  loader regression tests: **103 passed**.
 - Candidate A config regression test: changing only `video_num_frames` from 4
   to 8 leaves the effective training configuration unchanged otherwise.
 - Recording processor test: receives `videos_kwargs.num_frames == 8`.
@@ -348,18 +442,20 @@ selection remains validation-only, and the sealed audit remains unopened.
 
 ## Next gates
 
-Candidates A and B are complete and Candidate C is running. Keep C's settings
-fixed through 512 steps, scheduled validation, checkpoint selection, and
-save/reload verification. The step-512 NLL reversal and Video
-accuracy plateau/variance in B support the rank-32 + rsLoRA capacity test; A/B
-show that broader target coverage alone has not closed the Video gap. Compare
-C with A/B and the re-evaluated v1 reference on validation. Cosine with 3%
-warmup and any frame count change remain separate later experiments. Do not
-read the sealed audit.
+Candidates A/B/C are complete. Candidate D (12 frames) is not justified by the
+validation evidence: the 8-frame A/B/C candidates do not improve Video over the
+4-frame v1 reference, and C's larger adapter does not improve Video over A.
+The selector's strongest structure is B (decoder all-linear, rank 16). First,
+run a separate schedule-only comparison from the same v1 initialization and
+frozen data as B, changing the schedule to cosine with 3% warmup while holding
+all other factors fixed. Then use the validation-selected B structure for
+Candidate E's video-native CLEVRER task mix; preserve descriptive questions and
+add explanatory, predictive, and counterfactual questions with video-level
+splits. Report temporal descriptive, explanatory, predictive, and
+counterfactual metrics separately. Do not read the sealed audit.
 
 The training loader uses the `pread` backend only on Windows and restores
 Transformers' loader after the base weights are loaded. This setting is
-recorded in run metadata and does not change optimization or data settings.
-The earlier target-only full-weight scan did not complete, while its
-pinned-config meta-architecture inventory did; Candidate B training will
-resolve and verify all actual target paths against the loaded pinned model.
+recorded in each run manifest and does not change optimization or data
+settings. Candidate B and C both verified the actual decoder-only target paths
+against the fully loaded pinned model before PEFT injection.
