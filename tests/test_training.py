@@ -143,6 +143,38 @@ def test_candidate_c_changes_only_rank_and_rslora_from_candidate_b() -> None:
     assert candidate_c.warmup_ratio == candidate_b.warmup_ratio == 0.0
 
 
+def test_candidate_b_cosine_changes_only_the_optimizer_schedule() -> None:
+    candidate_b_raw = load_structured_file("configs/decision/teacher_v2_candidate_b.yaml")
+    cosine_raw = load_structured_file("configs/decision/teacher_v2_candidate_b_cosine.yaml")
+    candidate_b = decision_training_config(candidate_b_raw)
+    cosine = decision_training_config(cosine_raw)
+
+    assert cosine == candidate_b.model_copy(
+        update={"lr_scheduler": "cosine", "warmup_ratio": 0.03}
+    )
+    assert cosine.lr_scheduler == "cosine"
+    assert cosine.warmup_ratio == 0.03
+    assert cosine.learning_rate == candidate_b.learning_rate == 5e-5
+    assert cosine.video_num_frames == candidate_b.video_num_frames == 8
+    assert cosine.lora_target_policy == candidate_b.lora_target_policy == "decoder_all_linear"
+    assert cosine.lora_rank == candidate_b.lora_rank == 16
+    assert cosine.use_rslora is candidate_b.use_rslora is False
+    for section in ("base_model", "task", "loss", "sampling"):
+        assert cosine_raw[section] == candidate_b_raw[section]
+    assert cosine_raw["reference_teacher_id"] == candidate_b_raw["reference_teacher_id"]
+    b_training = candidate_b_raw["training"]
+    cosine_training = cosine_raw["training"]
+    assert {
+        key: value
+        for key, value in cosine_training.items()
+        if key not in {"lr_scheduler", "warmup_ratio"}
+    } == {
+        key: value
+        for key, value in b_training.items()
+        if key not in {"lr_scheduler", "warmup_ratio"}
+    }
+
+
 def test_windows_base_model_loader_uses_pread_and_restores_transformers_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
