@@ -125,6 +125,24 @@ def test_candidate_b_changes_only_decoder_lora_target_policy() -> None:
     assert candidate_b.use_rslora is candidate_a.use_rslora is False
 
 
+def test_candidate_c_changes_only_rank_and_rslora_from_candidate_b() -> None:
+    candidate_b = decision_training_config(
+        load_structured_file("configs/decision/teacher_v2_candidate_b.yaml")
+    )
+    candidate_c = decision_training_config(
+        load_structured_file("configs/decision/teacher_v2_candidate_c.yaml")
+    )
+
+    assert candidate_c.model_copy(update={"lora_rank": 16, "use_rslora": False}) == candidate_b
+    assert candidate_c.lora_target_policy == candidate_b.lora_target_policy == "decoder_all_linear"
+    assert candidate_c.video_num_frames == candidate_b.video_num_frames == 8
+    assert candidate_c.lora_rank == 32
+    assert candidate_c.use_rslora is True
+    assert candidate_c.learning_rate == candidate_b.learning_rate == 5e-5
+    assert candidate_c.lr_scheduler == candidate_b.lr_scheduler == "constant"
+    assert candidate_c.warmup_ratio == candidate_b.warmup_ratio == 0.0
+
+
 def test_windows_base_model_loader_uses_pread_and_restores_transformers_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
