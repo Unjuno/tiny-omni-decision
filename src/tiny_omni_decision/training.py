@@ -4,7 +4,7 @@ import math
 import random
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -28,10 +28,15 @@ class DecisionTrainingConfig(BaseModel):
     learning_rate: float = Field(default=1e-4, gt=0)
     max_gradient_norm: float = Field(default=1.0, gt=0)
     max_sequence_length: int = Field(default=1024, ge=32)
+    video_num_frames: int = Field(default=4, ge=1, le=32)
     ece_bins: int = Field(default=15, ge=1)
     lora_rank: int = Field(default=16, ge=1)
     lora_alpha: int = Field(default=32, ge=1)
     lora_dropout: float = Field(default=0.05, ge=0, lt=1)
+    lora_target_policy: Literal["qv"] = "qv"
+    lr_scheduler: Literal["constant", "cosine"] = "constant"
+    warmup_ratio: float = Field(default=0.0, ge=0, lt=1)
+    use_rslora: bool = False
     cross_entropy_weight: float = Field(default=1.0, ge=0)
     brier_weight: float = Field(default=0.2, ge=0)
     modality_weights: dict[str, float] = Field(
@@ -48,6 +53,8 @@ class DecisionTrainingConfig(BaseModel):
             raise ValueError("sampling weights must be nonnegative")
         if not any(value > 0 for value in self.modality_weights.values()):
             raise ValueError("at least one modality weight must be positive")
+        if self.lr_scheduler == "constant" and self.warmup_ratio != 0:
+            raise ValueError("warmup_ratio must be zero when lr_scheduler is constant")
         return self
 
 
@@ -69,10 +76,15 @@ def decision_training_config(raw: dict[str, Any]) -> DecisionTrainingConfig:
             "learning_rate": training.get("learning_rate", 1e-4),
             "max_gradient_norm": training.get("max_gradient_norm", 1.0),
             "max_sequence_length": training.get("max_sequence_length", 1024),
+            "video_num_frames": training.get("video_num_frames", 4),
             "ece_bins": training.get("ece_bins", 15),
             "lora_rank": training.get("rank", 16),
             "lora_alpha": training.get("alpha", 32),
             "lora_dropout": training.get("dropout", 0.05),
+            "lora_target_policy": training.get("lora_target_policy", "qv"),
+            "lr_scheduler": training.get("lr_scheduler", "constant"),
+            "warmup_ratio": training.get("warmup_ratio", 0.0),
+            "use_rslora": training.get("use_rslora", False),
             "cross_entropy_weight": loss.get("cross_entropy", 1.0),
             "brier_weight": loss.get("brier", 0.2),
             "modality_weights": sampling.get(
@@ -331,6 +343,35 @@ def project_runtime_seconds(
     )
 
 
+def learning_rate_multiplier(
+    step: int,
+    *,
+    total_steps: int,
+    scheduler: Literal["constant", "cosine"],
+    warmup_ratio: float,
+) -> float:
+    """Return the configured LR multiplier at a zero-based optimizer step."""
+    if total_steps < 1 or step < 0:
+        raise ValueError(
+            "learning-rate schedule requires nonnegative step and positive total_steps"
+        )
+    if not 0 <= warmup_ratio < 1:
+        raise ValueError("warmup_ratio must be in [0, 1)")
+    if scheduler == "constant":
+        if warmup_ratio != 0:
+            raise ValueError("warmup_ratio must be zero when scheduler is constant")
+        return 1.0
+    if scheduler != "cosine":
+        raise ValueError(f"unsupported learning-rate scheduler: {scheduler}")
+
+    warmup_steps = math.ceil(total_steps * warmup_ratio)
+    if warmup_steps and step < warmup_steps:
+        return (step + 1) / warmup_steps
+    decay_steps = max(total_steps - warmup_steps, 1)
+    progress = min(max((step - warmup_steps) / decay_steps, 0.0), 1.0)
+    return 0.5 * (1.0 + math.cos(math.pi * progress))
+
+
 def collate_metadata(example: DecisionExample, labels: list[str]) -> dict[str, Any]:
     if len(labels) != len(example.options):
         raise ValueError("one decision label is required per option")
@@ -351,6 +392,7 @@ def processor_inputs_for_example(
     example: DecisionExample,
     *,
     data_root: Path,
+    video_num_frames: int = 4,
 ) -> tuple[dict[str, Any], list[int], int, int]:
     """Build actual Gemma4Processor inputs from a metadata record and local media."""
     labels = [chr(ord("A") + index) for index in range(len(example.options))]
@@ -407,7 +449,9 @@ def processor_inputs_for_example(
     )
     option_ids, prompt_length = label_token_ids_from_prompt(processor.tokenizer, rendered, labels)
     if example.modality == "video":
-        modality_payload["videos_kwargs"] = {"num_frames": 4}
+        if video_num_frames < 1:
+            raise ValueError("video_num_frames must be at least one")
+        modality_payload["videos_kwargs"] = {"num_frames": video_num_frames}
     encoded = processor(text=rendered, return_tensors="pt", **modality_payload)
     decision_position = int(encoded["input_ids"].shape[-1]) - 1
     target_index = example.options.index(example.target)

@@ -1,0 +1,57 @@
+# Effective Teacher v1 settings. The byte-exact run config and its historical
+# SHA-256 remain in the selected v1 artifact; this file makes runtime defaults
+# explicit without rewriting that artifact.
+schema_version: 1
+teacher_id: tiny-omni-decision-teacher-v1
+reference_teacher_id: tiny-omni-decision-teacher-v0
+base_model:
+  manifest: manifests/base-model.example.yaml
+
+task:
+  type: typed_decision
+  modalities: [text, image, audio, video]
+  option_order_shuffle: true
+  max_options_initial: 20
+
+training:
+  method: lora
+  precision: bf16
+  seed: 17
+  max_train_examples: 16384
+  selection_eval_examples: 512
+  max_steps: 2048
+  gradient_accumulation_steps: 4
+  checkpoint_interval: 128
+  evaluation_interval: 128
+  early_stopping_patience: 4
+  early_stopping_min_delta: 0.0005
+  learning_rate: 0.00005
+  lr_scheduler: constant
+  warmup_ratio: 0.0
+  max_gradient_norm: 1.0
+  max_sequence_length: 1024
+  video_num_frames: 4
+  ece_bins: 15
+  rank: 16
+  alpha: 32
+  dropout: 0.05
+  lora_target_policy: qv
+  use_rslora: false
+  target_modules: []
+  freeze_modality_encoders: true
+  freeze_projector: true
+
+loss:
+  cross_entropy: 1.0
+  brier: 0.2
+  teacher_kl: 0.0
+  coherence: 0.0
+
+sampling:
+  max_sample_repeats: 1
+  modality_weights:
+    text: 1.5
+    image: 1.5
+    audio: 1.0
+    video: 2.0
+  source_weights: {}

@@ -987,6 +987,8 @@ def train_decision(
                 "steps": result["global_steps"],
                 "consumed": result["actual_train_consumption_by_modality_source"],
                 "validation_macro": result["validation_macro_metrics"],
+                "validation_reference_teacher_id": result["validation_reference_teacher_id"],
+                "validation_reference": result["validation_reference_metrics"],
                 "validation_teacher_v0": result["validation_teacher_v0_metrics"],
                 "validation_teacher_v1_candidate": result[
                     "validation_teacher_v1_candidate_metrics"

@@ -34,6 +34,7 @@ from .training import (
     decision_training_config,
     deterministic_sample_order,
     deterministic_validation_subset,
+    learning_rate_multiplier,
     output_record,
     processor_inputs_for_example,
     project_runtime_seconds,
@@ -76,11 +77,12 @@ def _forward_decision(
     *,
     data_root: Path,
     max_sequence_length: int,
+    video_num_frames: int,
 ) -> tuple[Any, int]:
     import torch
 
     inputs, option_ids, position, target = processor_inputs_for_example(
-        processor, example, data_root=data_root
+        processor, example, data_root=data_root, video_num_frames=video_num_frames
     )
     if inputs["input_ids"].shape[-1] > max_sequence_length:
         raise ValueError(
@@ -116,6 +118,7 @@ def _evaluate(
                 example,
                 data_root=data_root,
                 max_sequence_length=config.max_sequence_length,
+                video_num_frames=config.video_num_frames,
             )
             probabilities = normalize_probabilities(logits).cpu().tolist()
             values = logits.float().cpu().tolist()
@@ -194,6 +197,14 @@ def _run_training_impl(
 
     raw = load_structured_file(config_path)
     config = decision_training_config(raw)
+    reference_teacher_id = str(raw.get("reference_teacher_id", "tiny-omni-decision-teacher-v0"))
+    if raw.get("reference_teacher_id") and (
+        reference_adapter_path is None or not reference_adapter_path.is_dir()
+    ):
+        raise ValueError(
+            f"configured reference adapter is missing for {reference_teacher_id}: "
+            f"{reference_adapter_path}"
+        )
     overrides = {
         "seed": seed_override,
         "max_train_examples": max_train_examples,
@@ -304,19 +315,19 @@ def _run_training_impl(
         "".join(json.dumps(item) + "\n" for item in validation_baseline_predictions),
         encoding="utf-8",
     )
-    teacher_v0_validation_metrics = None
-    teacher_v0_validation_eval_seconds = None
+    reference_validation_metrics = None
+    reference_validation_eval_seconds = None
     if reference_adapter_path is not None and reference_adapter_path.is_dir():
         from peft import PeftModel
 
         reference = PeftModel.from_pretrained(base, reference_adapter_path, is_trainable=False)
         reference.eval()
         reference_started = time.monotonic()
-        teacher_v0_validation_metrics, _ = _evaluate(
+        reference_validation_metrics, _ = _evaluate(
             reference, processor, validation_subset, data_root=data_root, config=config
         )
-        teacher_v0_validation_eval_seconds = time.monotonic() - reference_started
-        teacher_v0_validation_metrics["macro"] = macro_metrics(teacher_v0_validation_metrics)
+        reference_validation_eval_seconds = time.monotonic() - reference_started
+        reference_validation_metrics["macro"] = macro_metrics(reference_validation_metrics)
         base = reference.unload()
         del reference
         gc.collect()
@@ -343,6 +354,7 @@ def _run_training_impl(
                 r=config.lora_rank,
                 lora_alpha=config.lora_alpha,
                 lora_dropout=config.lora_dropout,
+                use_rslora=config.use_rslora,
                 target_modules=targets,
                 task_type="CAUSAL_LM",
             ),
@@ -362,6 +374,15 @@ def _run_training_impl(
         raise RuntimeError("base-freeze / LoRA-trainable invariant failed")
     base_versions = [parameter._version for parameter in frozen_parameters]
     optimizer = torch.optim.AdamW(adapter_parameters, lr=config.learning_rate)
+    lr_scheduler = torch.optim.lr_scheduler.LambdaLR(
+        optimizer,
+        lr_lambda=lambda step: learning_rate_multiplier(
+            step,
+            total_steps=config.max_steps,
+            scheduler=config.lr_scheduler,
+            warmup_ratio=config.warmup_ratio,
+        ),
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
     checkpoints_dir = output_dir / "checkpoints"
     checkpoints_dir.mkdir(exist_ok=True)
@@ -371,6 +392,10 @@ def _run_training_impl(
     if resume_from and (resume_from / "optimizer.pt").is_file():
         optimizer.load_state_dict(
             torch.load(resume_from / "optimizer.pt", map_location="cpu", weights_only=True)
+        )
+    if resume_from and (resume_from / "scheduler.pt").is_file():
+        lr_scheduler.load_state_dict(
+            torch.load(resume_from / "scheduler.pt", map_location="cpu", weights_only=True)
         )
     model.train()
     consumed: Counter[str] = Counter()
@@ -467,6 +492,7 @@ def _run_training_impl(
                 example,
                 data_root=data_root,
                 max_sequence_length=config.max_sequence_length,
+                video_num_frames=config.video_num_frames,
             )
             loss, cross_entropy, brier = decision_loss(
                 logits.unsqueeze(0),
@@ -497,7 +523,9 @@ def _run_training_impl(
         )
         if not torch.isfinite(torch.tensor(gradient_norm)):
             raise RuntimeError("Decision LoRA gradient norm is non-finite")
+        learning_rate_used = float(optimizer.param_groups[0]["lr"])
         optimizer.step()
+        lr_scheduler.step()
         optimizer.zero_grad(set_to_none=True)
         global_step += 1
         if [parameter._version for parameter in frozen_parameters] != base_versions:
@@ -522,7 +550,7 @@ def _run_training_impl(
             "brier": sum(step_briers) / len(step_briers),
             "total_loss": sum(step_total_losses) / len(step_total_losses),
             "step_seconds": time.monotonic() - step_started,
-            "learning_rate": optimizer.param_groups[0]["lr"],
+            "learning_rate": learning_rate_used,
             "gradient_norm": gradient_norm,
             "sample_composition": dict(sorted(step_composition.items())),
         }
@@ -618,6 +646,7 @@ def _run_training_impl(
             checkpoint_path.mkdir(exist_ok=True)
             model.save_pretrained(checkpoint_path)
             torch.save(optimizer.state_dict(), checkpoint_path / "optimizer.pt")
+            torch.save(lr_scheduler.state_dict(), checkpoint_path / "scheduler.pt")
             (checkpoint_path / "trainer-state.json").write_text(
                 json.dumps(state_record(global_step)), encoding="utf-8"
             )
@@ -680,7 +709,7 @@ def _run_training_impl(
     )
     validation_points = [item for item in history if "validation" in item]
     validation_eval_seconds = validation_baseline_eval_seconds + float(
-        teacher_v0_validation_eval_seconds or 0.0
+        reference_validation_eval_seconds or 0.0
     ) + sum(float(item["validation_eval_seconds"]) for item in validation_points)
     validation_eval_seconds += final_validation_eval_seconds
     selected_seconds_per_step = training_seconds / max(global_step, 1)
@@ -691,7 +720,7 @@ def _run_training_impl(
         sum(scheduled_eval_times) / len(scheduled_eval_times) if scheduled_eval_times else 0.0
     )
     setup_validation_seconds = validation_baseline_eval_seconds + float(
-        teacher_v0_validation_eval_seconds or 0.0
+        reference_validation_eval_seconds or 0.0
     )
     fixed_runtime_overhead_seconds = max(
         0.0, wall_seconds - training_seconds - validation_eval_seconds
@@ -703,13 +732,13 @@ def _run_training_impl(
         item["overfit_signals"] for item in validation_points if "overfit_signals" in item
     ]
     sealed_audit_sha256 = corpus_manifest.get("sealed_audit_sha256")
-    validation_v0_deltas = (
-        comparison_deltas(teacher_v0_validation_metrics, reloaded_validation_metrics)
-        if teacher_v0_validation_metrics is not None
+    validation_reference_deltas = (
+        comparison_deltas(reference_validation_metrics, reloaded_validation_metrics)
+        if reference_validation_metrics is not None
         else None
     )
     metadata = {
-        "teacher_id": "tiny-omni-decision-teacher-v1-candidate",
+        "teacher_id": str(raw.get("teacher_id", "tiny-omni-decision-teacher-v1-candidate")),
         "experiment_id": experiment_id,
         "artifact_role": "validation_selected_experiment_candidate",
         "base_repo_id": manifest.repo_id,
@@ -739,12 +768,27 @@ def _run_training_impl(
         "tiny_overfit_nll_before": tiny_before,
         "tiny_overfit_nll_after": tiny_after,
         "validation_base_metrics": validation_baseline_metrics,
-        "validation_teacher_v0_metrics": teacher_v0_validation_metrics,
+        "validation_reference_teacher_id": reference_teacher_id,
+        "validation_reference_metrics": reference_validation_metrics,
+        "validation_candidate_metrics": reloaded_validation_metrics,
+        "validation_deltas_candidate_minus_base": comparison_deltas(
+            validation_baseline_metrics, reloaded_validation_metrics
+        ),
+        "validation_teacher_v0_metrics": (
+            reference_validation_metrics
+            if reference_teacher_id == "tiny-omni-decision-teacher-v0"
+            else None
+        ),
         "validation_teacher_v1_candidate_metrics": reloaded_validation_metrics,
         "validation_deltas_v1_candidate_minus_base": comparison_deltas(
             validation_baseline_metrics, reloaded_validation_metrics
         ),
-        "validation_deltas_v1_candidate_minus_teacher_v0": validation_v0_deltas,
+        "validation_deltas_candidate_minus_reference": validation_reference_deltas,
+        "validation_deltas_v1_candidate_minus_teacher_v0": (
+            validation_reference_deltas
+            if reference_teacher_id == "tiny-omni-decision-teacher-v0"
+            else None
+        ),
         "validation_baseline_metrics": validation_baseline_metrics,
         "validation_best_metrics": reloaded_validation_metrics,
         "validation_best_selection_score": best_selection_loss,
@@ -773,6 +817,8 @@ def _run_training_impl(
         "optimizer_microbatches": sample_index,
         "gradient_accumulation_steps": config.gradient_accumulation_steps,
         "learning_rate": config.learning_rate,
+        "lr_scheduler": config.lr_scheduler,
+        "warmup_ratio": config.warmup_ratio,
         "max_gradient_norm": config.max_gradient_norm,
         "mean_seconds_per_optimizer_step": selected_seconds_per_step,
         "training_seconds": training_seconds,
@@ -949,6 +995,8 @@ def run_training(**kwargs: Any) -> dict[str, Any]:
             learning_curve=result["validation_learning_curve"],
             metrics={
                 "validation": result["validation_best_metrics"],
+                "reference_teacher_id": result["validation_reference_teacher_id"],
+                "reference_validation": result["validation_reference_metrics"],
                 "teacher_v0_validation": result["validation_teacher_v0_metrics"],
             },
             artifact={

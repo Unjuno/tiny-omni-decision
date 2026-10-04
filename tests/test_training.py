@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -21,7 +22,9 @@ from tiny_omni_decision.training import (
     collate_metadata,
     decision_training_config,
     deterministic_sample_order,
+    learning_rate_multiplier,
     output_record,
+    processor_inputs_for_example,
     project_runtime_seconds,
 )
 
@@ -67,10 +70,97 @@ def example(
 def test_config_defaults_and_sampling_validation() -> None:
     config = DecisionTrainingConfig()
     assert (config.lora_rank, config.lora_alpha, config.lora_dropout) == (16, 32, 0.05)
+    assert (
+        config.video_num_frames,
+        config.lora_target_policy,
+        config.lr_scheduler,
+        config.warmup_ratio,
+        config.use_rslora,
+    ) == (4, "qv", "constant", 0.0, False)
     with pytest.raises(ValueError, match="at least one modality"):
         DecisionTrainingConfig(modality_weights={"text": 0.0})
     with pytest.raises(ValueError, match="sampling weights"):
         DecisionTrainingConfig(source_weights={"a": -1.0})
+
+
+def test_teacher_v1_explicit_reference_and_candidate_a_change_only_frames() -> None:
+    baseline_raw = load_structured_file("configs/decision/teacher_v1_explicit_reference.yaml")
+    candidate_raw = load_structured_file("configs/decision/teacher_v2_candidate_a.yaml")
+    baseline = decision_training_config(baseline_raw)
+    candidate = decision_training_config(candidate_raw)
+
+    assert baseline_raw["teacher_id"] == "tiny-omni-decision-teacher-v1"
+    assert candidate_raw["teacher_id"] == "tiny-omni-decision-teacher-v2-candidate-a"
+    assert candidate_raw["reference_teacher_id"] == "tiny-omni-decision-teacher-v1"
+    assert baseline.video_num_frames == 4
+    assert candidate.video_num_frames == 8
+    assert candidate.model_copy(update={"video_num_frames": 4}) == baseline
+    assert (candidate.lora_target_policy, candidate.lora_rank) == ("qv", 16)
+    assert (candidate.learning_rate, candidate.lr_scheduler, candidate.warmup_ratio) == (
+        5e-5,
+        "constant",
+        0.0,
+    )
+    assert candidate.use_rslora is False
+    assert baseline_raw["sampling"] == candidate_raw["sampling"]
+
+
+def test_learning_rate_multiplier_keeps_v1_constant_and_supports_separate_cosine() -> None:
+    assert learning_rate_multiplier(0, total_steps=100, scheduler="constant", warmup_ratio=0) == 1
+    assert learning_rate_multiplier(100, total_steps=100, scheduler="constant", warmup_ratio=0) == 1
+    assert learning_rate_multiplier(
+        0, total_steps=100, scheduler="cosine", warmup_ratio=0.03
+    ) == pytest.approx(1 / 3)
+    assert learning_rate_multiplier(3, total_steps=100, scheduler="cosine", warmup_ratio=0.03) == 1
+    assert (
+        learning_rate_multiplier(100, total_steps=100, scheduler="cosine", warmup_ratio=0.03)
+        == 0
+    )
+    with pytest.raises(ValueError, match="warmup_ratio must be zero"):
+        DecisionTrainingConfig(lr_scheduler="constant", warmup_ratio=0.03)
+
+
+def test_processor_receives_configured_video_frame_count(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import tiny_omni_decision.training as training_module
+
+    video_path = tmp_path / "clip.mp4"
+    video_path.write_bytes(b"test video placeholder")
+    video_example = example(
+        "video-frame-smoke",
+        "MIT-IBM/CLEVRER",
+        "video",
+        [MediaRef(kind="video", path="clip.mp4")],
+    )
+    monkeypatch.setattr(training_module, "prompt_for_decision", lambda *_: "decision prompt")
+    monkeypatch.setattr(
+        training_module,
+        "label_token_ids_from_prompt",
+        lambda *_: ([11, 12], 5),
+    )
+
+    class RecordingProcessor:
+        video_token = "<video>"
+        tokenizer = object()
+
+        def __init__(self) -> None:
+            self.payload: dict[str, object] = {}
+
+        def apply_chat_template(self, *_args: object, **_kwargs: object) -> str:
+            return "rendered prompt"
+
+        def __call__(self, **kwargs: object) -> dict[str, object]:
+            self.payload = kwargs
+            return {"input_ids": SimpleNamespace(shape=(1, 19))}
+
+    processor = RecordingProcessor()
+    inputs, _, _, _ = processor_inputs_for_example(
+        processor, video_example, data_root=tmp_path, video_num_frames=8
+    )
+
+    assert processor.payload["videos_kwargs"] == {"num_frames": 8}
+    assert inputs["input_ids"].shape[-1] == 19
 
 
 def test_training_curve_aggregates_full_validation_interval() -> None:
