@@ -7,9 +7,9 @@ run are complete on `codex/video-teacher-v2`. Its validation improves through
 step 512 without a detected overfitting signal, but it is materially worse than
 the Teacher v1 reference on the same 472-row validation subset and the same
 eight-frame evaluation path. Candidate A is therefore recorded as a rejected
-experiment, not a replacement Teacher. Candidate B's decoder-only target
-resolver/config are implemented, and its separate 512-step run is now in
-progress.
+experiment, not a replacement Teacher. Candidate B's separate 512-step run is
+complete; its validation-selected checkpoint is below Teacher v1 on aggregate
+and weakest-modality accuracy, so it is not a replacement Teacher.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -189,8 +189,65 @@ loaded-model target-path check and entered training. It holds Candidate A's
 fixed LR `5e-5`, constant scheduler, zero warmup, frame count 8, rank 16, data,
 sampling policy, and validation set constant; decoder target coverage is the
 only experimental factor changed. Effective invocation and config snapshots
-are stored beside the run outputs. Candidate B has not yet completed a
-scheduled validation point, so no quality conclusion is available.
+are stored beside the run outputs. The run completed 512 steps, selected step
+384 by the frozen validation rule, and verified identical validation
+predictions after adapter reload. It used 24,158,208 trainable parameters and
+produced a 96,693,360-byte adapter (measured, not the BF16 estimate in the
+target inventory). Peak allocated VRAM was 12,006,595,072 bytes; mean
+optimizer-step time was 6.195 s, optimizer time was 52.9 minutes, and wall time
+was 91.2 minutes.
+
+| Step | Train CE | Rolling train Accuracy | Validation Accuracy | Macro NLL | Macro Brier | Macro ECE | Minimum modality Accuracy | Video Accuracy | Train-minus-validation Accuracy |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 1.245 | 0.566 | 0.640 | 0.908 | 0.442 | 0.089 | 0.415 | 0.415 | -0.073 |
+| 256 | 0.927 | 0.635 | 0.674 | 0.899 | 0.424 | 0.098 | 0.441 | 0.441 | -0.039 |
+| 384 | 0.943 | 0.633 | 0.667 | 0.779 | 0.395 | 0.086 | 0.415 | 0.415 | -0.035 |
+| 512 | 0.862 | 0.658 | 0.682 | 0.802 | 0.396 | 0.082 | 0.466 | 0.466 | -0.024 |
+
+At step 512, training CE fell and Accuracy rose while validation NLL rose from
+0.779 to 0.802; that scheduled point fired `validation_nll_rising`. Step 384
+remains selected by the predefined score (macro NLL + 0.2 macro Brier + 0.1
+macro ECE - 0.25 macro Accuracy - 0.25 minimum-modality Accuracy). The
+`weak_modality_degraded` guard also fired at step 384 when Video fell from
+0.441 to 0.415. Train Accuracy is measured over the most recent 512 consumed
+examples, so the displayed gap is descriptive rather than a fixed-example
+generalization estimate.
+
+Selected Candidate B step 384 versus Teacher v1 re-evaluated on the same
+validation subset and Candidate A's selected checkpoint:
+
+| Metric | Teacher v1 reference | Candidate A step 512 | Candidate B step 384 |
+|---|---:|---:|---:|
+| Macro Accuracy | 0.737 | 0.672 | 0.667 |
+| Minimum modality Accuracy | 0.593 | 0.466 | 0.415 |
+| Macro NLL | 0.706 | 0.893 | 0.779 |
+| Macro Brier | 0.356 | 0.434 | 0.395 |
+| Macro ECE | 0.082 | 0.106 | 0.086 |
+
+| Modality | v1 Accuracy / NLL / Brier / ECE | Candidate B Accuracy / NLL / Brier / ECE |
+|---|---:|---:|
+| Audio | 0.907 / 0.376 / 0.136 / 0.052 | 0.864 / 0.416 / 0.160 / 0.036 |
+| Image | 0.712 / 0.765 / 0.381 / 0.102 | 0.653 / 0.879 / 0.413 / 0.118 |
+| Text | 0.737 / 0.633 / 0.356 / 0.054 | 0.737 / 0.662 / 0.375 / 0.077 |
+| Video | 0.593 / 1.052 / 0.550 / 0.120 | 0.415 / 1.161 / 0.631 / 0.113 |
+
+Decoder-wide target coverage substantially improved loss and calibration over
+A, but the selected Video Accuracy was 0.415, below both v1 (0.593) and A's
+selected checkpoint (0.466). Candidate B's final scheduled point reached
+Video 0.466 and macro Accuracy 0.682, but its validation NLL rose and it was
+not selected. This shows that rank-16 decoder-wide capacity still does not
+reliably improve Video; Candidate C's rank-32 + rsLoRA run is justified as the
+next isolated capacity experiment. The remaining limitation may still be
+temporal representation rather than adapter capacity.
+
+Candidate B consumed 2,048 unique examples with zero repeated examples and
+1,381 unique underlying assets (audio 298, image 282, text 505, video 296),
+using the same per-source counts as A. The selected adapter SHA-256 is
+`28d301401f7f51ec72a288e85e9395fa894fae52a196c9018e55c55afd76ecb9`. Config
+SHA-256 is
+`a8c34f3929a4d38d3910221ec56bffc5fd8cd55cdee0d161b96b79dba822bd92`; train
+and validation corpus hashes match Candidate A. Sealed audit data remained
+unopened.
 
 ## Verification so far
 
@@ -210,15 +267,14 @@ scheduled validation point, so no quality conclusion is available.
 
 ## Next gates
 
-Candidate A is complete and Candidate B is currently training. Keep the B run
-at its 512-step budget with the frozen corpus and validation files. B changes
-only `lora_target_policy` from `qv` to `decoder_all_linear`; 8 frames, rank 16,
-seed 17, fixed `5e-5` LR, warmup 0, constant scheduler, modality/source mix,
-and sequence limit remain fixed. The previous user clarification explicitly
-fixes the A/B schedule; cosine with 3% warmup is a separate schedule experiment
-and is not part of B. After B's final validation and reload check, compare it
-with both Candidate A and the re-evaluated v1 reference before deciding whether
-the evidence justifies Candidate C. Do not read the sealed audit.
+Candidates A and B are complete. Candidate C is next: keep B's data, frame
+count, target policy, fixed schedule, seed, and training budget unchanged;
+increase rank to 32 and enable rsLoRA. The step-512 NLL reversal and Video
+accuracy plateau/variance support testing this capacity change; A/B results
+show that broader target coverage alone has not closed the Video gap. Keep C
+in a new config and output directory, then compare it with A/B and the
+re-evaluated v1 reference on validation. Cosine with 3% warmup and any frame
+count change remain separate later experiments. Do not read the sealed audit.
 
 The training loader uses the `pread` backend only on Windows and restores
 Transformers' loader after the base weights are loaded. This setting is
