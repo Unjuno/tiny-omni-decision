@@ -795,7 +795,22 @@ def test_training_config_parses_and_validates_video_task_weights() -> None:
 
 
 def test_validation_reports_accuracy_and_nll_by_video_reasoning_type(monkeypatch) -> None:
-    import torch
+    from contextlib import nullcontext
+
+    class FakeTensor:
+        def __init__(self, values):
+            self.values = values
+
+        def float(self):
+            return self
+
+        def cpu(self):
+            return self
+
+        def tolist(self):
+            return self.values
+
+    monkeypatch.setitem(sys.modules, "torch", SimpleNamespace(no_grad=nullcontext))
 
     trainer = available_helper("tiny_omni_decision.trainer", "_evaluate")
     trainer_module = importlib.import_module("tiny_omni_decision.trainer")
@@ -818,7 +833,12 @@ def test_validation_reports_accuracy_and_nll_by_video_reasoning_type(monkeypatch
     monkeypatch.setattr(
         trainer_module,
         "_forward_decision",
-        lambda *args, **kwargs: (torch.tensor([0.0, 3.0]), 1),
+        lambda *args, **kwargs: (FakeTensor([0.0, 3.0]), 1),
+    )
+    monkeypatch.setattr(
+        trainer_module,
+        "normalize_probabilities",
+        lambda _: FakeTensor([0.04742587317756678, 0.9525741268224334]),
     )
 
     class Model:
