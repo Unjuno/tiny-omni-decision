@@ -29,6 +29,7 @@ from tiny_omni_decision.schema import (
     DatasetManifest,
     DecisionExample,
     LicenseProvenance,
+    MediaRef,
 )
 from tiny_omni_decision.video_corpus import build_video_native_corpora
 
@@ -395,12 +396,49 @@ def test_video_native_corpus_replaces_only_video_rows_and_preserves_scene_splits
             ),
         )
 
+    frozen_train_video = normalize_jsonl(
+        [video_row(0), video_row(1)], train_source, "clevrer"
+    )
+    train_media_by_scene = {
+        scene: MediaRef(
+            kind="video",
+            path=f"raw/clevrer/videos/train/video_{scene:05}.mp4",
+            sha256=f"{scene + 1:064x}",
+            license="CC0-1.0",
+        )
+        for scene in (0, 1)
+    }
+    frozen_train_video = [
+        item.model_copy(
+            update={
+                "media": [
+                    train_media_by_scene[
+                        int(item.source_record_id.split(":", 1)[0])
+                    ]
+                ]
+            }
+        )
+        for item in frozen_train_video
+    ]
+    frozen_validation_video = normalize_jsonl(
+        [video_row(10_000)], validation_source, "clevrer"
+    )
+    validation_media = MediaRef(
+        kind="video",
+        path="raw/clevrer/videos/validation/video_10000.mp4",
+        sha256=f"{10_001:064x}",
+        license="CC0-1.0",
+    )
+    frozen_validation_video = [
+        item.model_copy(update={"media": [validation_media]})
+        for item in frozen_validation_video
+    ]
     base_train = [
-        *normalize_jsonl([video_row(0), video_row(1)], train_source, "clevrer"),
+        *frozen_train_video,
         text_example("train"),
     ]
     base_validation = [
-        *normalize_jsonl([video_row(10_000)], validation_source, "clevrer"),
+        *frozen_validation_video,
         text_example("validation"),
     ]
 
@@ -431,6 +469,14 @@ def test_video_native_corpus_replaces_only_video_rows_and_preserves_scene_splits
     assert report["validation"]["unique_video_scenes"] == [10_000]
     assert report["split_integrity"]["shared_media_identities"] == 0
     assert report["split_integrity"]["shared_content_fingerprints"] == 0
+    assert all(
+        item.media == [train_media_by_scene[int(item.task_group_id.split(":", 1)[0])]]
+        for item in train
+        if item.modality == "video"
+    )
+    assert all(
+        item.media == [validation_media] for item in validation if item.modality == "video"
+    )
     assert check_train_eval_splits(train, validation)["status"] == "disjoint"
 
 

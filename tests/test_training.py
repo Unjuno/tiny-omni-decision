@@ -9,6 +9,7 @@ from types import ModuleType, SimpleNamespace
 
 import pytest
 
+from tiny_omni_decision import trainer
 from tiny_omni_decision.corpus import comparison_deltas, partition_heldout_records
 from tiny_omni_decision.dataset import (
     check_train_eval_splits,
@@ -89,6 +90,19 @@ def test_config_defaults_and_sampling_validation() -> None:
         DecisionTrainingConfig(modality_weights={"text": 0.0})
     with pytest.raises(ValueError, match="sampling weights"):
         DecisionTrainingConfig(source_weights={"a": -1.0})
+
+
+def test_artifact_corpus_can_use_explicit_repository_media_root(tmp_path: Path) -> None:
+    train_path = tmp_path / "artifacts" / "teacher-v2" / "candidate-e" / "train.jsonl"
+    media_root = tmp_path / "data"
+
+    assert trainer.resolve_media_root(train_path, media_root) == media_root.resolve()
+
+
+def test_default_media_root_preserves_processed_corpus_layout(tmp_path: Path) -> None:
+    train_path = tmp_path / "data" / "processed" / "teacher-v1" / "train.jsonl"
+
+    assert trainer.resolve_media_root(train_path, None) == (tmp_path / "data").resolve()
 
 
 def test_teacher_v1_explicit_reference_and_candidate_a_change_only_frames() -> None:

@@ -6,7 +6,7 @@ from typing import Any
 
 from .corpus import source_asset_identity
 from .dataset import check_train_eval_splits, normalize_jsonl
-from .schema import DatasetManifest, DecisionExample
+from .schema import DatasetManifest, DecisionExample, MediaRef
 
 VIDEO_TASK_TYPES = (
     "temporal_descriptive",
@@ -55,6 +55,24 @@ def _selected_native_examples(
     if not result:
         raise ValueError("no temporal descriptive or native reasoning questions were available")
     return result
+
+
+def _materialized_video_media_by_scene(
+    examples: Iterable[DecisionExample], source: str
+) -> dict[int, MediaRef]:
+    media_by_scene: dict[int, MediaRef] = {}
+    for example in examples:
+        scene_id = _scene_id(example, source)
+        video_media = [item for item in example.media if item.kind == "video"]
+        if len(video_media) != 1 or not video_media[0].path:
+            raise ValueError(
+                f"frozen v1 scene {scene_id} must have one locally materialized video"
+            )
+        media = video_media[0]
+        previous = media_by_scene.setdefault(scene_id, media)
+        if previous != media:
+            raise ValueError(f"frozen v1 scene {scene_id} has inconsistent video references")
+    return media_by_scene
 
 
 def _split_statistics(examples: list[DecisionExample]) -> dict[str, Any]:
@@ -123,6 +141,12 @@ def build_video_native_corpora(
     }
     if train_scenes & validation_scenes:
         raise ValueError("frozen v1 train and validation share CLEVRER video scenes")
+    train_media_by_scene = _materialized_video_media_by_scene(
+        base_train_video, train_manifest.dataset_id
+    )
+    validation_media_by_scene = _materialized_video_media_by_scene(
+        base_validation_video, validation_manifest.dataset_id
+    )
 
     native_train_video = _selected_native_examples(
         raw_train_rows, scene_ids=train_scenes, manifest=train_manifest
@@ -140,6 +164,28 @@ def build_video_native_corpora(
         raise ValueError(
             "normalized CLEVRER validation videos differ from frozen v1 scene identities"
         )
+    native_train_video = [
+        item.model_copy(
+            update={
+                "media": [
+                    train_media_by_scene[_scene_id(item, train_manifest.dataset_id)]
+                ]
+            }
+        )
+        for item in native_train_video
+    ]
+    native_validation_video = [
+        item.model_copy(
+            update={
+                "media": [
+                    validation_media_by_scene[
+                        _scene_id(item, validation_manifest.dataset_id)
+                    ]
+                ]
+            }
+        )
+        for item in native_validation_video
+    ]
 
     train = [item for item in base_train if item.modality != "video"] + native_train_video
     validation = [

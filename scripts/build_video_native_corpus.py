@@ -111,6 +111,9 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         "validation_path": validation_path.name,
         "video_question_sampling_weights": TASK_WEIGHTS,
         "video_task_types": list(VIDEO_TASK_TYPES),
+        "video_media_reference_policy": (
+            "reuse the locally materialized Teacher v1 video reference for each frozen scene"
+        ),
         "video_question_format": {
             "descriptive": (
                 "original categorical DecisionExample retained if temporally descriptive"

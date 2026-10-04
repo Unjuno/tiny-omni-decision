@@ -49,6 +49,12 @@ def _read_examples(path: Path) -> list[DecisionExample]:
         return [DecisionExample.model_validate_json(line) for line in handle if line.strip()]
 
 
+def resolve_media_root(train_path: Path, media_root: Path | None = None) -> Path:
+    """Resolve local media relative to an explicit root or the corpus's legacy layout."""
+    root = Path(media_root) if media_root is not None else Path(train_path).parent.parent.parent
+    return root.resolve()
+
+
 def _eligible(
     examples: list[DecisionExample], modalities: set[str]
 ) -> tuple[list[DecisionExample], dict[str, int]]:
@@ -211,6 +217,7 @@ def _run_training_impl(
     modalities: set[str] | None = None,
     tiny_overfit: bool = False,
     model_manifest_path: Path = Path("manifests/base-model.example.yaml"),
+    media_root: Path | None = None,
 ) -> dict[str, Any]:
     os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     import torch
@@ -325,7 +332,7 @@ def _run_training_impl(
         device_map="auto",
     )
 
-    data_root = train_path.parent.parent.parent
+    data_root = resolve_media_root(train_path, media_root)
     output_dir.mkdir(parents=True, exist_ok=True)
     validation_started = time.monotonic()
     validation_baseline_metrics, validation_baseline_predictions = _evaluate(
@@ -781,6 +788,7 @@ def _run_training_impl(
         "artifact_role": "validation_selected_experiment_candidate",
         "base_repo_id": manifest.repo_id,
         "base_revision": manifest.revision,
+        "media_root": str(data_root),
         "seed": config.seed,
         "config": config.model_dump(mode="json"),
         "lora_target_policy": config.lora_target_policy,
@@ -1003,6 +1011,9 @@ def run_training(**kwargs: Any) -> dict[str, Any]:
             "started_at_utc": started_at,
             "train_path": str(kwargs.get("train_path")),
             "validation_path": str(kwargs.get("validation_path")),
+            "media_root": str(
+                resolve_media_root(Path(kwargs["train_path"]), kwargs.get("media_root"))
+            ),
             "config_path": str(kwargs.get("config_path")),
             **start_details,
         },
