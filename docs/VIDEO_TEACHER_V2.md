@@ -8,7 +8,8 @@ step 512 without a detected overfitting signal, but it is materially worse than
 the Teacher v1 reference on the same 472-row validation subset and the same
 eight-frame evaluation path. Candidate A is therefore recorded as a rejected
 experiment, not a replacement Teacher. Candidate B's decoder-only target
-resolver/config are implemented and its training has not started yet.
+resolver/config are implemented, and its separate 512-step run is now in
+progress.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -178,6 +179,19 @@ selector is used. Counts and every resolved path are retained in the local
 This is a meta-architecture count, not a measured PEFT artifact size or VRAM
 measurement; both will be recorded during training.
 
+### Candidate B training run
+
+The run started with seed 17, a 512-step budget, and output directory
+`artifacts/tiny-omni-decision-teacher-v2/candidate-b/seed17-512-pread-20261004T222136`.
+Its experiment ID is `20261004T132136Z-734d9b4f`; source commit at launch was
+`096f521085fa31dca1f9487420bdef6c22b5683d`. The run has passed the fully
+loaded-model target-path check and entered training. It holds Candidate A's
+fixed LR `5e-5`, constant scheduler, zero warmup, frame count 8, rank 16, data,
+sampling policy, and validation set constant; decoder target coverage is the
+only experimental factor changed. Effective invocation and config snapshots
+are stored beside the run outputs. Candidate B has not yet completed a
+scheduled validation point, so no quality conclusion is available.
+
 ## Verification so far
 
 - `ruff check src tests`: passed.
@@ -196,15 +210,15 @@ measurement; both will be recorded during training.
 
 ## Next gates
 
-Candidate A is complete. Next train Candidate B in a new output directory,
-starting with the same 512-step budget and frozen corpus/validation files.
-Candidate B changes only `lora_target_policy` from `qv` to
-`decoder_all_linear`; keep 8 frames, rank 16, seed 17, fixed `5e-5` LR, warmup
-0, constant scheduler, modality/source mix, and sequence limit. The previous
-user clarification explicitly fixes the A/B schedule; cosine with 3% warmup
-is a separate schedule experiment and is not part of B. Compare B against both
-Candidate A and the re-evaluated v1 reference on validation before deciding
-whether to continue to Candidate C. Do not read the sealed audit.
+Candidate A is complete and Candidate B is currently training. Keep the B run
+at its 512-step budget with the frozen corpus and validation files. B changes
+only `lora_target_policy` from `qv` to `decoder_all_linear`; 8 frames, rank 16,
+seed 17, fixed `5e-5` LR, warmup 0, constant scheduler, modality/source mix,
+and sequence limit remain fixed. The previous user clarification explicitly
+fixes the A/B schedule; cosine with 3% warmup is a separate schedule experiment
+and is not part of B. After B's final validation and reload check, compare it
+with both Candidate A and the re-evaluated v1 reference before deciding whether
+the evidence justifies Candidate C. Do not read the sealed audit.
 
 The training loader uses the `pread` backend only on Windows and restores
 Transformers' loader after the base weights are loaded. This setting is
