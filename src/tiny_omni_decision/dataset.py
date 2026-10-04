@@ -104,6 +104,23 @@ CLEVRER_TAXONOMIES = {
     "query_shape": ["cube", "sphere", "cylinder"],
     "count": [str(value) for value in range(0, 6)],
 }
+CLEVRER_NATIVE_REASONING_TYPES = {"explanatory", "predictive", "counterfactual"}
+CLEVRER_TEMPORAL_PROGRAM_TOKENS = {
+    "after",
+    "before",
+    "end",
+    "filter_collision",
+    "filter_in",
+    "filter_moving",
+    "filter_out",
+    "get_frame",
+    "start",
+}
+CLEVRER_TEMPORAL_QUESTION_RE = re.compile(
+    r"\b(first|last|before|after|enter(?:s|ed|ing)?|exit(?:s|ed|ing)?|"
+    r"begin(?:s|ning)?|ends?|collision|collide|moving|moves?|move|frame)\b",
+    re.IGNORECASE,
+)
 
 
 def _canonical_license(value: str) -> str:
@@ -373,6 +390,8 @@ def _base_example(
     attribution: str | None = None,
     source_component: str | None = None,
     source_target: Any = None,
+    task_type: str | None = None,
+    task_group_id: str | None = None,
     trust_status: str = "review",
 ) -> DecisionExample:
     source_record_id = (
@@ -406,6 +425,8 @@ def _base_example(
         source_revision=revision,
         source_record_id=str(source_record_id),
         split=split,
+        task_type=task_type,
+        task_group_id=task_group_id,
         media=media,
         source_target=target if source_target is None else source_target,
         provenance=LicenseProvenance(
@@ -610,8 +631,21 @@ def _adapt_speech_command(row: dict[str, Any], manifest: DatasetManifest) -> Dec
     )
 
 
-def _flatten_clevrer(row: dict[str, Any], manifest: DatasetManifest) -> list[DecisionExample]:
-    """Convert supported single-answer descriptive questions for one CLEVRER video."""
+def _clevrer_descriptive_task_type(question: dict[str, Any]) -> str:
+    """Classify temporal descriptive questions from program semantics, then text fallback."""
+    program = question.get("program")
+    if isinstance(program, list) and program:
+        temporal = bool(CLEVRER_TEMPORAL_PROGRAM_TOKENS.intersection(map(str, program)))
+    else:
+        text = str(question.get("question") or "")
+        temporal = bool(CLEVRER_TEMPORAL_QUESTION_RE.search(text))
+    return "temporal_descriptive" if temporal else "static_descriptive"
+
+
+def _flatten_clevrer(
+    row: dict[str, Any], manifest: DatasetManifest, *, video_native: bool = False
+) -> list[DecisionExample]:
+    """Normalize legacy descriptive or video-native CLEVRER questions for one video."""
     video_name = str(row.get("video_filename") or "")
     if not video_name or Path(video_name).name != video_name or not video_name.endswith(".mp4"):
         raise ValueError("CLEVRER question row needs a plain video_filename")
@@ -636,35 +670,89 @@ def _flatten_clevrer(row: dict[str, Any], manifest: DatasetManifest) -> list[Dec
     ]
     result = []
     for question in questions:
-        if question.get("question_type") != "descriptive":
+        question_type = question.get("question_type")
+        question_id = question.get("question_id")
+        if not isinstance(question_id, (str, int)) or isinstance(question_id, bool):
+            raise ValueError("CLEVRER question needs a stable question_id")
+        if question_type == "descriptive":
+            taxonomy = question.get("question_subtype")
+            options = CLEVRER_TAXONOMIES.get(taxonomy)
+            answer = question.get("answer")
+            if options is None or answer is None:
+                continue
+            task_type = _clevrer_descriptive_task_type(question) if video_native else None
+            source_id = f"{scene_index}:{question_id}"
+            result.append(
+                _base_example(
+                    row={"id": source_id},
+                    dataset_id=manifest.dataset_id,
+                    revision=manifest.revision,
+                    split=expected_split,
+                    options=options,
+                    target=str(answer),
+                    state="Synthetic CLEVRER video of moving and colliding objects.",
+                    question=str(question.get("question") or ""),
+                    media=media,
+                    license_name=manifest.license,
+                    commercial_use=manifest.commercial_use,
+                    derivative_model_training_allowed=manifest.derivative_model_training_allowed,
+                    redistribution_allowed=manifest.redistribution_allowed,
+                    media_redistribution_allowed=manifest.media_redistribution_allowed,
+                    attribution=manifest.attribution,
+                    source_component="MIT-IBM-CLEVRER",
+                    source_target=answer,
+                    task_type=task_type,
+                    task_group_id=(f"{scene_index}:{question_id}" if video_native else None),
+                    trust_status=manifest.trust_status,
+                )
+            )
             continue
-        taxonomy = question.get("question_subtype")
-        options = CLEVRER_TAXONOMIES.get(taxonomy)
-        answer = question.get("answer")
-        if options is None or answer is None:
+        if not video_native or question_type not in CLEVRER_NATIVE_REASONING_TYPES:
             continue
-        source_id = f"{scene_index}:{question.get('question_id')}"
-        example = _base_example(
-            row={"id": source_id},
-            dataset_id=manifest.dataset_id,
-            revision=manifest.revision,
-            split=expected_split,
-            options=options,
-            target=str(answer),
-            state="Synthetic CLEVRER video of moving and colliding objects.",
-            question=str(question.get("question") or ""),
-            media=media,
-            license_name=manifest.license,
-            commercial_use=manifest.commercial_use,
-            derivative_model_training_allowed=manifest.derivative_model_training_allowed,
-            redistribution_allowed=manifest.redistribution_allowed,
-            media_redistribution_allowed=manifest.media_redistribution_allowed,
-            attribution=manifest.attribution,
-            source_component="MIT-IBM-CLEVRER",
-            source_target=answer,
-            trust_status=manifest.trust_status,
-        )
-        result.append(example)
+        choices = question.get("choices")
+        if not isinstance(choices, list) or not choices:
+            raise ValueError(f"CLEVRER {question_type} question needs a non-empty choices list")
+        seen_choice_ids: set[str] = set()
+        for choice in choices:
+            choice_id = choice.get("choice_id")
+            if not isinstance(choice_id, (str, int)) or isinstance(choice_id, bool):
+                raise ValueError("CLEVRER choice needs a stable choice_id")
+            choice_id_text = str(choice_id)
+            if not choice_id_text or choice_id_text in seen_choice_ids:
+                raise ValueError("CLEVRER choices need unique choice_id values per question")
+            seen_choice_ids.add(choice_id_text)
+            candidate = str(choice.get("choice") or "").strip()
+            target = choice.get("answer")
+            if not candidate or target not in {"wrong", "correct"}:
+                raise ValueError("CLEVRER choice needs text and a wrong/correct answer")
+            source_id = f"{scene_index}:{question_id}:{choice_id_text}"
+            result.append(
+                _base_example(
+                    row={"id": source_id},
+                    dataset_id=manifest.dataset_id,
+                    revision=manifest.revision,
+                    split=expected_split,
+                    options=["wrong", "correct"],
+                    target=str(target),
+                    state="Synthetic CLEVRER video of moving and colliding objects.",
+                    question=(
+                        f"{str(question.get('question') or '').strip()}\n"
+                        f"Candidate statement: {candidate}"
+                    ),
+                    media=media,
+                    license_name=manifest.license,
+                    commercial_use=manifest.commercial_use,
+                    derivative_model_training_allowed=manifest.derivative_model_training_allowed,
+                    redistribution_allowed=manifest.redistribution_allowed,
+                    media_redistribution_allowed=manifest.media_redistribution_allowed,
+                    attribution=manifest.attribution,
+                    source_component="MIT-IBM-CLEVRER",
+                    source_target=target,
+                    task_type=question_type,
+                    task_group_id=f"{scene_index}:{question_id}",
+                    trust_status=manifest.trust_status,
+                )
+            )
     return result
 
 
@@ -1007,7 +1095,7 @@ def normalize_jsonl(
         if adapter in {"speech-commands", "speech_commands"}:
             if row.get("split") != manifest.split or _speech_command_label(row) is None:
                 continue
-        if adapter in {"clevrer", "clevrer-video"}:
+        if adapter in {"clevrer", "clevrer-video", "clevrer-video-native"}:
             if not _clevrer_row_matches_split(row, manifest.split):
                 continue
         if limit is not None and source_rows >= limit:
@@ -1027,8 +1115,10 @@ def normalize_jsonl(
             example = _adapt_speech_command(row, manifest)
             yield shuffle_options(example, seed) if seed is not None else example
             continue
-        if adapter in {"clevrer", "clevrer-video"}:
-            examples = _flatten_clevrer(row, manifest)
+        if adapter in {"clevrer", "clevrer-video", "clevrer-video-native"}:
+            examples = _flatten_clevrer(
+                row, manifest, video_native=adapter == "clevrer-video-native"
+            )
             for example in examples:
                 yield shuffle_options(example, seed) if seed is not None else example
             continue

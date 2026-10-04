@@ -479,3 +479,41 @@ and validation SHA-256 values are the frozen v1 hashes recorded above. The
 invocation, config snapshot, and runner are saved with the ignored run output.
 The sealed audit is not loaded. Results will be appended only after the fixed
 run completes and its selected checkpoint is reloaded and verified.
+
+### Candidate E corpus and evaluation support
+
+The video-native adapter and corpus builder are implemented separately from
+the legacy CLEVRER descriptive adapter. It keeps temporal descriptive items,
+labels static descriptive items so Candidate E can exclude them, and converts
+each explanatory, predictive, and counterfactual choice into an independent
+binary `[wrong, correct]` decision. Every derived choice records its parent
+`task_group_id`; every question from one video retains the same video media
+identity and split.
+
+The corpus builder replaces only video rows in new Candidate E files. It
+reuses exactly the scene identities present in frozen Teacher v1 train and
+validation, retains all non-video rows unchanged, and fails unless all four
+video task types exist in each split and the existing source-id, source-asset,
+media-identity, and normalized-content overlap checks pass. Teacher v1 files
+are read-only inputs. No sealed-audit path is accepted. The generated corpus
+manifest records input and output hashes, source revision, scene IDs,
+question/example counts by task type, realized corpus mix, and split-gate
+results.
+
+The trainer now accepts explicit video task weights, records task-type and
+parent-question consumption counts at validation points, and reports video
+Accuracy/NLL/Brier/ECE by task type. Candidate E's initial policy is temporal
+descriptive 20%, explanatory 30%, predictive 30%, and counterfactual 20% at
+binary-example sampling time. Unique examples are consumed without replacement
+under the existing repeat cap of one. The selected optimizer schedule remains
+pending the separate B-cosine validation comparison.
+
+The reproducible corpus command is:
+
+```powershell
+python scripts/build_video_native_corpus.py --output-dir artifacts/tiny-omni-decision-teacher-v2/candidate-e/corpus-v1-seed17
+```
+
+Verification after this implementation: `ruff check src tests
+scripts/build_video_native_corpus.py` passed; the full CPU suite passed with
+112 tests; both pinned CLEVRER video-native source manifests validate.

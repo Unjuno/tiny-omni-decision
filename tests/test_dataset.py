@@ -12,6 +12,7 @@ import yaml
 from typer.testing import CliRunner
 
 from tiny_omni_decision.cli import app
+from tiny_omni_decision.corpus import partition_heldout_records, source_asset_identity
 from tiny_omni_decision.dataset import (
     adapt_row,
     check_train_eval_splits,
@@ -23,7 +24,13 @@ from tiny_omni_decision.dataset import (
     shuffle_options,
 )
 from tiny_omni_decision.io import load_structured_file
-from tiny_omni_decision.schema import DatasetCatalog, DatasetManifest, DecisionExample
+from tiny_omni_decision.schema import (
+    DatasetCatalog,
+    DatasetManifest,
+    DecisionExample,
+    LicenseProvenance,
+)
+from tiny_omni_decision.video_corpus import build_video_native_corpora
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -174,6 +181,257 @@ def test_clevrer_adapter_normalizes_cc0_video_descriptive_questions() -> None:
     assert all("/videos/train/" in item.media[0].uri for item in training)
     assert all("/videos/validation/" in item.media[0].uri for item in evaluation)
     assert check_train_eval_splits(training, evaluation)["status"] == "disjoint"
+
+
+def test_clevrer_video_native_adapter_flattens_reasoning_choices_and_tags_tasks() -> None:
+    row = {
+        "scene_index": 5,
+        "video_filename": "video_00005.mp4",
+        "questions": [
+            {
+                "question_id": 0,
+                "question": "What color is the object?",
+                "question_type": "descriptive",
+                "question_subtype": "query_color",
+                "answer": "red",
+                "program": ["objects", "red", "query_color"],
+            },
+            {
+                "question_id": 1,
+                "question": "How many collisions occur before the cube enters?",
+                "question_type": "descriptive",
+                "question_subtype": "count",
+                "answer": "2",
+                "program": ["events", "filter_collision", "before", "count"],
+            },
+            {
+                "question_id": 2,
+                "question": "Which event explains the collision?",
+                "question_type": "explanatory",
+                "choices": [
+                    {"choice_id": 0, "choice": "the blue sphere enters", "answer": "wrong"},
+                    {"choice_id": 1, "choice": "the red cube moves", "answer": "correct"},
+                ],
+            },
+            {
+                "question_id": 3,
+                "question": "What happens next?",
+                "question_type": "predictive",
+                "choices": [
+                    {"choice_id": 0, "choice": "the cube collides", "answer": "correct"},
+                    {"choice_id": 1, "choice": "the sphere exits", "answer": "wrong"},
+                ],
+            },
+            {
+                "question_id": 4,
+                "question": "What would happen if the sphere were removed?",
+                "question_type": "counterfactual",
+                "choices": [
+                    {"choice_id": 0, "choice": "the cube enters", "answer": "wrong"},
+                    {"choice_id": 1, "choice": "no collision occurs", "answer": "correct"},
+                ],
+            },
+        ],
+    }
+    source = manifest("candidates/clevrer.yaml")
+
+    examples = list(normalize_jsonl([row], source, "clevrer-video-native"))
+
+    assert [item.task_type for item in examples] == [
+        "static_descriptive",
+        "temporal_descriptive",
+        "explanatory",
+        "explanatory",
+        "predictive",
+        "predictive",
+        "counterfactual",
+        "counterfactual",
+    ]
+    assert examples[2].source_record_id == "5:2:0"
+    assert examples[2].question == (
+        "Which event explains the collision?\nCandidate statement: the blue sphere enters"
+    )
+    assert examples[2].options == ["wrong", "correct"]
+    assert examples[2].target == "wrong"
+    assert examples[3].target == "correct"
+    assert examples[2].task_group_id == examples[3].task_group_id == "5:2"
+    assert examples[2].task_group_id != examples[4].task_group_id
+    assert len({source_asset_identity(item) for item in examples}) == 1
+    assert len({item.id for item in examples}) == len(examples)
+
+    legacy_examples = list(normalize_jsonl([row], source, "clevrer"))
+    assert len(legacy_examples) == 2
+    assert all(item.task_type is None for item in legacy_examples)
+
+
+def test_clevrer_native_questions_and_choices_stay_grouped_by_video_deterministically() -> None:
+    source = manifest("candidates/clevrer.yaml")
+    rows = [
+        {
+            "scene_index": scene,
+            "video_filename": f"video_{scene:05}.mp4",
+            "questions": [
+                {
+                    "question_id": 7,
+                    "question": "What happens next?",
+                    "question_type": "predictive",
+                    "choices": [
+                        {"choice_id": 0, "choice": "a collision", "answer": "correct"},
+                        {"choice_id": 1, "choice": "an exit", "answer": "wrong"},
+                    ],
+                },
+                {
+                    "question_id": 8,
+                    "question": "What if the cube were removed?",
+                    "question_type": "counterfactual",
+                    "choices": [
+                        {"choice_id": 0, "choice": "the sphere moves", "answer": "wrong"},
+                        {"choice_id": 1, "choice": "nothing collides", "answer": "correct"},
+                    ],
+                },
+            ],
+        }
+        for scene in (0, 1)
+    ]
+    examples = list(
+        normalize_jsonl(rows, source, "clevrer-video-native")
+    )
+
+    first_train, first_validation = partition_heldout_records(
+        examples, seed=17, validation_fraction=0.5
+    )
+    second_train, second_validation = partition_heldout_records(
+        examples, seed=17, validation_fraction=0.5
+    )
+
+    def scene_membership(partition: list[DecisionExample]) -> dict[int, set[str]]:
+        membership: dict[int, set[str]] = {}
+        for item in partition:
+            scene = int(item.source_record_id.split(":", 1)[0])
+            membership.setdefault(scene, set()).add(item.source_record_id)
+        return membership
+
+    assert scene_membership(first_train) == scene_membership(second_train)
+    assert scene_membership(first_validation) == scene_membership(second_validation)
+    assert set(scene_membership(first_train)).isdisjoint(scene_membership(first_validation))
+    assert len(scene_membership(first_train)) == len(scene_membership(first_validation)) == 1
+    assert len(first_train) == len(first_validation) == 4
+    assert check_train_eval_splits(first_train, first_validation)["status"] == "disjoint"
+
+
+def test_video_native_corpus_replaces_only_video_rows_and_preserves_scene_splits() -> None:
+    train_source = manifest("candidates/clevrer.yaml")
+    validation_source = manifest("candidates/clevrer-validation.yaml")
+
+    def video_row(scene: int) -> dict[str, object]:
+        return {
+            "scene_index": scene,
+            "video_filename": f"video_{scene:05}.mp4",
+            "questions": [
+                {
+                    "question_id": 0,
+                    "question": "What color is the stationary object?",
+                    "question_type": "descriptive",
+                    "question_subtype": "query_color",
+                    "answer": "red",
+                    "program": ["objects", "unique", "query_color"],
+                },
+                {
+                    "question_id": 1,
+                    "question": "How many collisions happen before the sphere exits?",
+                    "question_type": "descriptive",
+                    "question_subtype": "count",
+                    "answer": "1",
+                    "program": ["filter_collision", "before", "filter_out", "count"],
+                },
+                {
+                    "question_id": 2,
+                    "question": "Which event explains the collision?",
+                    "question_type": "explanatory",
+                    "choices": [
+                        {"choice_id": 0, "choice": "the sphere moves", "answer": "wrong"},
+                        {"choice_id": 1, "choice": "the cube enters", "answer": "correct"},
+                    ],
+                },
+                {
+                    "question_id": 3,
+                    "question": "What will happen next?",
+                    "question_type": "predictive",
+                    "choices": [
+                        {"choice_id": 0, "choice": "the cube exits", "answer": "wrong"},
+                        {"choice_id": 1, "choice": "the objects collide", "answer": "correct"},
+                    ],
+                },
+                {
+                    "question_id": 4,
+                    "question": "What if the sphere were removed?",
+                    "question_type": "counterfactual",
+                    "choices": [
+                        {"choice_id": 0, "choice": "the sphere enters", "answer": "wrong"},
+                        {"choice_id": 1, "choice": "the cube remains", "answer": "correct"},
+                    ],
+                },
+            ],
+        }
+
+    def text_example(split: str) -> DecisionExample:
+        return DecisionExample(
+            id=f"text-{split}",
+            modality="text",
+            state=f"State for {split}.",
+            question="Which option?",
+            options=["a", "b"],
+            target="a",
+            source="text-source",
+            source_revision="a" * 40,
+            source_record_id=split,
+            split=split,
+            provenance=LicenseProvenance(
+                license="CC0-1.0",
+                commercial_use=True,
+                derivative_model_training_allowed=True,
+                redistribution_allowed=True,
+                trust_status="trusted",
+            ),
+        )
+
+    base_train = [
+        *normalize_jsonl([video_row(0), video_row(1)], train_source, "clevrer"),
+        text_example("train"),
+    ]
+    base_validation = [
+        *normalize_jsonl([video_row(10_000)], validation_source, "clevrer"),
+        text_example("validation"),
+    ]
+
+    train, validation, report = build_video_native_corpora(
+        base_train,
+        base_validation,
+        [video_row(0), video_row(1)],
+        [video_row(10_000)],
+        train_source,
+        validation_source,
+    )
+
+    assert [item.id for item in train if item.modality == "text"] == ["text-train"]
+    assert [item.id for item in validation if item.modality == "text"] == ["text-validation"]
+    assert {item.task_type for item in train if item.modality == "video"} == {
+        "temporal_descriptive",
+        "explanatory",
+        "predictive",
+        "counterfactual",
+    }
+    assert {item.task_type for item in validation if item.modality == "video"} == {
+        "temporal_descriptive",
+        "explanatory",
+        "predictive",
+        "counterfactual",
+    }
+    assert report["train"]["unique_video_scenes"] == [0, 1]
+    assert report["validation"]["unique_video_scenes"] == [10_000]
+    assert report["split_integrity"]["shared_media_identities"] == 0
+    assert report["split_integrity"]["shared_content_fingerprints"] == 0
+    assert check_train_eval_splits(train, validation)["status"] == "disjoint"
 
 
 @pytest.mark.parametrize(

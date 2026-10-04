@@ -146,6 +146,8 @@ def _evaluate(
             groups["all"].append((probabilities, target))
             groups[f"modality:{example.modality}"].append((probabilities, target))
             groups[f"source:{example.source}"].append((probabilities, target))
+            if example.modality == "video" and example.task_type is not None:
+                groups[f"video_type:{example.task_type}"].append((probabilities, target))
 
     def measure(items: list[tuple[list[float], int]]) -> dict[str, float | int]:
         probs = [item[0] for item in items]
@@ -293,11 +295,13 @@ def _run_training_impl(
         modality_weights=config.modality_weights,
         source_weights=config.source_weights,
         max_sample_repeats=config.max_sample_repeats,
+        video_task_weights=config.video_task_weights or None,
     )
     validation_subset = deterministic_validation_subset(
         validation_ready,
         seed=17,
         limit=min(config.selection_eval_examples, len(validation_ready)),
+        video_task_weights=config.video_task_weights or None,
     )
     if tiny_overfit:
         train_order = train_order[: min(len(train_order), 8)]
@@ -421,6 +425,7 @@ def _run_training_impl(
     model.train()
     consumed: Counter[str] = Counter()
     consumed_examples: list[DecisionExample] = []
+    consumed_task_types: Counter[str] = Counter()
     losses: list[float] = []
     history: list[dict[str, Any]] = []
     optimizer.zero_grad(set_to_none=True)
@@ -459,6 +464,9 @@ def _run_training_impl(
             train_order[index % len(train_order)]
             for index in range(sample_index)
         )
+        consumed_task_types.update(
+            example.task_type for example in consumed_examples if example.task_type is not None
+        )
         best_path = output_dir / "best"
         if best_step and not best_path.is_dir():
             raise ValueError("resume checkpoint refers to a missing best adapter directory")
@@ -482,6 +490,7 @@ def _run_training_impl(
             "best_step": best_step,
             "evaluations_without_improvement": selector.evaluations_without_improvement,
             "consumed": dict(consumed),
+            "consumed_task_types": dict(consumed_task_types),
             "losses": losses,
             "history": history,
             "train_rows_sha256": train_hash,
@@ -497,6 +506,7 @@ def _run_training_impl(
         step_cross_entropies: list[float] = []
         step_briers: list[float] = []
         step_composition: Counter[str] = Counter()
+        step_task_composition: Counter[str] = Counter()
         step_correct_by_modality: Counter[str] = Counter()
         step_count_by_modality: Counter[str] = Counter()
         step_ce_by_modality: dict[str, list[float]] = defaultdict(list)
@@ -507,6 +517,9 @@ def _run_training_impl(
             batch_key = f"{example.modality}:{example.source}"
             consumed[batch_key] += 1
             step_composition[batch_key] += 1
+            if example.task_type is not None:
+                consumed_task_types[example.task_type] += 1
+                step_task_composition[example.task_type] += 1
             logits, target = _forward_decision(
                 model,
                 processor,
@@ -574,6 +587,9 @@ def _run_training_impl(
             "learning_rate": learning_rate_used,
             "gradient_norm": gradient_norm,
             "sample_composition": dict(sorted(step_composition.items())),
+            "sample_composition_by_video_task_type": dict(
+                sorted(step_task_composition.items())
+            ),
         }
         history.append(step_record)
         with history_path.open("a", encoding="utf-8") as log:
@@ -627,6 +643,7 @@ def _run_training_impl(
             validation_record = {
                 "step": global_step,
                 "train": training_metrics,
+                "consumed_video_task_types": dict(sorted(consumed_task_types.items())),
                 "validation": selection_metrics,
                 "validation_eval_seconds": validation_eval_seconds,
                 "overfit_signals": overfit_signals,
@@ -787,6 +804,9 @@ def _run_training_impl(
         "skipped_validation_examples": validation_skipped,
         "actual_train_consumption_by_modality_source": dict(sorted(consumed.items())),
         "actual_train_consumption_by_modality": dict(sorted(modality_consumption.items())),
+        "actual_train_consumption_by_video_task_type": dict(
+            sorted(usage["consumed_by_task_type"].items())
+        ),
         "sample_accounting": usage,
         "train_loss_mean": sum(losses) / len(losses),
         "tiny_overfit_nll_before": tiny_before,
@@ -866,6 +886,7 @@ def _run_training_impl(
         "sampling_mixture": {
             "modality_weights": config.modality_weights,
             "source_weights": config.source_weights,
+            "video_task_weights": config.video_task_weights,
             "max_sample_repeats": config.max_sample_repeats,
             "scheduler": (
                 "weighted modality round robin; source weights apply within modality; "

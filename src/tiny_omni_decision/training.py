@@ -43,10 +43,26 @@ class DecisionTrainingConfig(BaseModel):
         default_factory=lambda: {"text": 1.0, "image": 1.0, "audio": 1.0, "video": 1.0}
     )
     source_weights: dict[str, float] = Field(default_factory=dict)
+    video_task_weights: dict[str, float] = Field(default_factory=dict)
     max_sample_repeats: int = Field(default=1, ge=1)
 
     @model_validator(mode="after")
     def validate_sampling_weights(self) -> DecisionTrainingConfig:
+        known_video_tasks = {
+            "temporal_descriptive",
+            "explanatory",
+            "predictive",
+            "counterfactual",
+        }
+        if self.video_task_weights and (
+            any(value < 0 for value in self.video_task_weights.values())
+            or not any(value > 0 for value in self.video_task_weights.values())
+            or set(self.video_task_weights) - known_video_tasks
+        ):
+            raise ValueError(
+                "video task weights must be nonnegative, include a positive value, "
+                "and name supported video reasoning types"
+            )
         if any(
             value < 0 for value in [*self.modality_weights.values(), *self.source_weights.values()]
         ):
@@ -91,6 +107,7 @@ def decision_training_config(raw: dict[str, Any]) -> DecisionTrainingConfig:
                 "modality_weights", {"text": 1.0, "image": 1.0, "audio": 1.0, "video": 1.0}
             ),
             "source_weights": sampling.get("source_weights", {}),
+            "video_task_weights": sampling.get("video_task_weights", {}),
             "max_sample_repeats": sampling.get("max_sample_repeats", 1),
         }
     )
@@ -108,28 +125,78 @@ def deterministic_sample_order(
     modality_weights: dict[str, float],
     source_weights: dict[str, float] | None = None,
     max_sample_repeats: int = 1,
+    video_task_weights: dict[str, float] | None = None,
 ) -> tuple[list[DecisionExample], dict[str, int]]:
-    """Weighted deterministic round-robin over modality/source buckets."""
+    """Weighted deterministic round-robin over modality, source, and video task buckets."""
     if limit < 1:
         raise ValueError("limit must be at least one")
     if max_sample_repeats < 1:
         raise ValueError("max_sample_repeats must be at least one")
     source_weights = source_weights or {}
+    if any(value < 0 for value in source_weights.values()):
+        raise ValueError("sampling weights must be nonnegative")
+    if video_task_weights is not None and (
+        any(value < 0 for value in video_task_weights.values())
+        or not any(value > 0 for value in video_task_weights.values())
+    ):
+        raise ValueError("video task weights must be nonnegative with at least one positive value")
     buckets: dict[str, list[DecisionExample]] = defaultdict(list)
+    task_buckets: dict[str, dict[str, dict[str, list[DecisionExample]]]] = defaultdict(
+        lambda: defaultdict(dict)
+    )
     for example in examples:
-        buckets[sample_key(example)].append(example)
+        key = sample_key(example)
+        buckets[key].append(example)
+        if example.modality == "video" and video_task_weights is not None:
+            typed_bucket = task_buckets[key]
+            if example.task_type is None:
+                raise ValueError(f"video task sampling needs task_type for {example.id}")
+            if example.task_type not in video_task_weights:
+                raise ValueError(
+                    f"video task type {example.task_type!r} has no configured sampling weight"
+                )
+            if video_task_weights[example.task_type] > 0:
+                question_id = example.task_group_id or example.id
+                typed_bucket[example.task_type].setdefault(question_id, []).append(example)
     rng = random.Random(seed)
-    for bucket in buckets.values():
-        bucket.sort(key=lambda item: item.id)
-        rng.shuffle(bucket)
-        if max_sample_repeats > 1:
-            bucket *= max_sample_repeats
+    task_group_order: dict[str, dict[str, list[str]]] = defaultdict(dict)
+    task_group_rank: dict[str, dict[str, dict[str, int]]] = defaultdict(dict)
+    for key, bucket in buckets.items():
+        if key in task_buckets:
+            for task_type, question_buckets in task_buckets[key].items():
+                question_ids = sorted(question_buckets)
+                rng.shuffle(question_ids)
+                task_group_order[key][task_type] = question_ids
+                task_group_rank[key][task_type] = {
+                    question_id: rank for rank, question_id in enumerate(question_ids)
+                }
+                for question_bucket in question_buckets.values():
+                    question_bucket.sort(key=lambda item: item.id)
+                    rng.shuffle(question_bucket)
+                    if max_sample_repeats > 1:
+                        question_bucket *= max_sample_repeats
+                        rng.shuffle(question_bucket)
+        else:
+            bucket.sort(key=lambda item: item.id)
             rng.shuffle(bucket)
+            if max_sample_repeats > 1:
+                bucket *= max_sample_repeats
+                rng.shuffle(bucket)
+
+    def remaining(key: str) -> int:
+        if key in task_buckets:
+            return sum(
+                len(question_items)
+                for question_buckets in task_buckets[key].values()
+                for question_items in question_buckets.values()
+            )
+        return len(buckets[key])
+
     keys_by_modality: dict[str, list[str]] = defaultdict(list)
     for key in sorted(buckets):
         modality, source = key.split(":", 1)
         weight = source_weights.get(key, source_weights.get(source, 1.0))
-        if weight > 0:
+        if weight > 0 and remaining(key) > 0:
             keys_by_modality[modality].append(key)
     active_modalities = {
         modality: weight
@@ -143,13 +210,17 @@ def deterministic_sample_order(
     ]
     consumed: Counter[str] = Counter()
     modality_consumed: Counter[str] = Counter()
+    task_consumed: dict[str, Counter[str]] = defaultdict(Counter)
+    task_group_consumed: dict[str, dict[str, Counter[str]]] = defaultdict(
+        lambda: defaultdict(Counter)
+    )
     selected: list[DecisionExample] = []
-    target_count = min(limit, sum(len(buckets[key]) for key in eligible_keys))
+    target_count = min(limit, sum(remaining(key) for key in eligible_keys))
     while len(selected) < target_count:
         eligible_modalities = [
             modality
             for modality in sorted(active_modalities)
-            if any(buckets[key] for key in keys_by_modality[modality])
+            if any(remaining(key) for key in keys_by_modality[modality])
         ]
         if not eligible_modalities:
             break
@@ -163,7 +234,9 @@ def deterministic_sample_order(
                 item,
             ),
         )
-        eligible_sources = [key for key in keys_by_modality[modality] if buckets[key]]
+        eligible_sources = [
+            key for key in keys_by_modality[modality] if remaining(key) > 0
+        ]
         source_weight_total = sum(
             source_weights.get(item, source_weights.get(item.split(":", 1)[1], 1.0))
             for item in eligible_sources
@@ -178,7 +251,39 @@ def deterministic_sample_order(
                 item,
             ),
         )
-        selected.append(buckets[key].pop())
+        if key in task_buckets:
+            eligible_tasks = [
+                task_type
+                for task_type, question_buckets in task_buckets[key].items()
+                if any(question_buckets.values()) and video_task_weights[task_type] > 0
+            ]
+            task_weight_total = sum(video_task_weights[item] for item in eligible_tasks)
+            task_type = max(
+                eligible_tasks,
+                key=lambda item: (
+                    (consumed[key] + 1) * video_task_weights[item] / task_weight_total
+                    - task_consumed[key][item],
+                    item,
+                ),
+            )
+            question_buckets = task_buckets[key][task_type]
+            eligible_questions = [
+                question_id
+                for question_id in task_group_order[key][task_type]
+                if question_buckets[question_id]
+            ]
+            question_id = min(
+                eligible_questions,
+                key=lambda item: (
+                    task_group_consumed[key][task_type][item],
+                    task_group_rank[key][task_type][item],
+                ),
+            )
+            selected.append(question_buckets[question_id].pop())
+            task_consumed[key][task_type] += 1
+            task_group_consumed[key][task_type][question_id] += 1
+        else:
+            selected.append(buckets[key].pop())
         consumed[key] += 1
         modality_consumed[modality] += 1
     return selected, dict(sorted(consumed.items()))
@@ -190,6 +295,7 @@ def deterministic_validation_subset(
     seed: int,
     limit: int,
     modalities: tuple[str, ...] = ("text", "image", "audio", "video"),
+    video_task_weights: dict[str, float] | None = None,
 ) -> list[DecisionExample]:
     """Select the same number of independent validation examples per modality."""
     if limit < len(modalities):
@@ -210,6 +316,7 @@ def deterministic_validation_subset(
             limit=per_modality,
             modality_weights={modality: 1.0},
             max_sample_repeats=1,
+            video_task_weights=video_task_weights,
         )
         selected.extend(items)
     return selected
@@ -226,11 +333,21 @@ def sampling_accounting(examples: list[DecisionExample]) -> dict[str, Any]:
     assets_by_source: dict[str, set[str]] = defaultdict(set)
     assets_by_source_modality: dict[str, set[str]] = defaultdict(set)
     sample_occurrences: Counter[tuple[str, str]] = Counter()
+    consumed_by_task_type: Counter[str] = Counter()
+    unique_by_task_type: dict[str, set[str]] = defaultdict(set)
+    unique_questions_by_task_type: dict[str, set[tuple[str, str]]] = defaultdict(set)
 
     for example in examples:
         source_key = (example.source, example.id)
         asset_key = (example.source, example.modality, source_asset_identity(example))
         sample_occurrences[source_key] += 1
+        if example.task_type is not None:
+            consumed_by_task_type[example.task_type] += 1
+            unique_by_task_type[example.task_type].add(example.id)
+            question_group = example.task_group_id or example.id
+            unique_questions_by_task_type[example.task_type].add(
+                (example.source, question_group)
+            )
         consumed_by_source[example.source] += 1
         consumed_by_modality[example.modality] += 1
         unique_by_source[example.source].add(source_key)
@@ -245,6 +362,14 @@ def sampling_accounting(examples: list[DecisionExample]) -> dict[str, Any]:
         "unique_examples": len(sample_occurrences),
         "repeated_example_count": sum(count - 1 for count in sample_occurrences.values()),
         "unique_underlying_assets": len(assets),
+        "consumed_by_task_type": dict(sorted(consumed_by_task_type.items())),
+        "unique_examples_by_task_type": {
+            task_type: len(items) for task_type, items in sorted(unique_by_task_type.items())
+        },
+        "unique_questions_by_task_type": {
+            task_type: len(items)
+            for task_type, items in sorted(unique_questions_by_task_type.items())
+        },
         "consumed_by_source": dict(sorted(consumed_by_source.items())),
         "consumed_by_modality": dict(sorted(consumed_by_modality.items())),
         "unique_examples_by_source": {
@@ -503,7 +628,7 @@ def output_record(
     probabilities: list[float],
 ) -> dict[str, Any]:
     prediction = max(range(len(probabilities)), key=probabilities.__getitem__)
-    return {
+    record = {
         "sample_id": example.id,
         "source": example.source,
         "modality": example.modality,
@@ -514,3 +639,8 @@ def output_record(
         "prediction": prediction,
         "confidence": probabilities[prediction],
     }
+    if example.task_type is not None:
+        record["task_type"] = example.task_type
+    if example.task_group_id is not None:
+        record["task_group_id"] = example.task_group_id
+    return record

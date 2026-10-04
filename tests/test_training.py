@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
 
@@ -28,6 +29,7 @@ from tiny_omni_decision.training import (
     processor_inputs_for_example,
     project_runtime_seconds,
     resolve_decoder_lora_targets,
+    sampling_accounting,
 )
 
 
@@ -46,6 +48,8 @@ def example(
     source: str,
     modality: str = "text",
     media: list[MediaRef] | None = None,
+    task_type: str | None = None,
+    task_group_id: str | None = None,
 ) -> DecisionExample:
     return DecisionExample(
         id=sample_id,
@@ -59,6 +63,8 @@ def example(
         source_revision="a" * 40,
         source_record_id=sample_id,
         split="train",
+        task_type=task_type,
+        task_group_id=task_group_id,
         provenance=LicenseProvenance(
             license="MIT",
             commercial_use=True,
@@ -491,6 +497,111 @@ def test_sampling_is_seeded_balanced_and_reports_consumption() -> None:
     assert counts == {"image:image-source": 2, "text:text-source": 4}
 
 
+def test_video_task_weights_are_seeded_and_applied_within_the_video_bucket() -> None:
+    weights = {
+        "temporal_descriptive": 0.2,
+        "explanatory": 0.3,
+        "predictive": 0.3,
+        "counterfactual": 0.2,
+    }
+    examples = [
+        example(
+            f"{task_type}-{index}",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [MediaRef(kind="video", uri=f"source-ref://clevrer/video-{index}.mp4")],
+            task_type=task_type,
+        )
+        for task_type in weights
+        for index in range(100)
+    ]
+
+    first, source_counts = deterministic_sample_order(
+        examples,
+        seed=17,
+        limit=20,
+        modality_weights={"video": 1.0},
+        video_task_weights=weights,
+    )
+    second, _ = deterministic_sample_order(
+        examples,
+        seed=17,
+        limit=20,
+        modality_weights={"video": 1.0},
+        video_task_weights=weights,
+    )
+
+    assert [item.id for item in first] == [item.id for item in second]
+    assert Counter(item.task_type for item in first) == {
+        "temporal_descriptive": 4,
+        "explanatory": 6,
+        "predictive": 6,
+        "counterfactual": 4,
+    }
+    assert source_counts == {"video:MIT-IBM/CLEVRER": 20}
+    assert len({item.id for item in first}) == 20
+
+
+def test_video_task_sampling_uses_unique_parent_questions_before_sibling_choices() -> None:
+    examples = [
+        example(
+            f"choice-{question}-{choice}",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [MediaRef(kind="video", uri=f"source-ref://clevrer/video-{question}.mp4")],
+            task_type="predictive",
+            task_group_id=f"{question}:{question}",
+        )
+        for question in range(3)
+        for choice in range(2)
+    ]
+
+    selected, _ = deterministic_sample_order(
+        examples,
+        seed=17,
+        limit=3,
+        modality_weights={"video": 1.0},
+        video_task_weights={"predictive": 1.0},
+    )
+
+    assert len({item.task_group_id for item in selected}) == 3
+
+
+def test_sampling_accounting_reports_unique_video_questions_by_task_type() -> None:
+    examples = [
+        example(
+            "e-1",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [MediaRef(kind="video", uri="source-ref://clevrer/video-1.mp4")],
+            task_type="explanatory",
+            task_group_id="1:7",
+        ),
+        example(
+            "e-2",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [MediaRef(kind="video", uri="source-ref://clevrer/video-1.mp4")],
+            task_type="explanatory",
+            task_group_id="1:7",
+        ),
+        example(
+            "p-1",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [MediaRef(kind="video", uri="source-ref://clevrer/video-2.mp4")],
+            task_type="predictive",
+            task_group_id="2:9",
+        ),
+    ]
+
+    accounting = sampling_accounting(examples)
+
+    assert accounting["consumed_by_task_type"] == {"explanatory": 2, "predictive": 1}
+    assert accounting["unique_examples_by_task_type"] == {"explanatory": 2, "predictive": 1}
+    assert accounting["unique_questions_by_task_type"] == {"explanatory": 1, "predictive": 1}
+
+
 def test_sampling_balances_modalities_before_splitting_sources() -> None:
     image_examples = (
         example(
@@ -621,6 +732,69 @@ def test_sampling_caps_reuse_to_keep_small_modalities_in_weighted_mix() -> None:
     assert len(video_ids) == 4
     assert set(video_ids) == {"v-0", "v-1"}
     assert max(video_ids.count(sample_id) for sample_id in set(video_ids)) <= 4
+
+
+def test_training_config_parses_and_validates_video_task_weights() -> None:
+    weights = {
+        "temporal_descriptive": 0.2,
+        "explanatory": 0.3,
+        "predictive": 0.3,
+        "counterfactual": 0.2,
+    }
+
+    config = decision_training_config({"sampling": {"video_task_weights": weights}})
+
+    assert config.video_task_weights == weights
+    with pytest.raises(ValueError, match="task weights"):
+        DecisionTrainingConfig(video_task_weights={"predictive": -0.1})
+
+
+def test_validation_reports_accuracy_and_nll_by_video_reasoning_type(monkeypatch) -> None:
+    import torch
+
+    trainer = available_helper("tiny_omni_decision.trainer", "_evaluate")
+    trainer_module = importlib.import_module("tiny_omni_decision.trainer")
+    examples = [
+        example(
+            "predictive-1",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [MediaRef(kind="video", uri="source-ref://clevrer/video-1.mp4")],
+            task_type="predictive",
+        ),
+        example(
+            "counterfactual-1",
+            "MIT-IBM/CLEVRER",
+            "video",
+            [MediaRef(kind="video", uri="source-ref://clevrer/video-2.mp4")],
+            task_type="counterfactual",
+        ),
+    ]
+    monkeypatch.setattr(
+        trainer_module,
+        "_forward_decision",
+        lambda *args, **kwargs: (torch.tensor([0.0, 3.0]), 1),
+    )
+
+    class Model:
+        def eval(self):
+            return self
+
+    metrics, predictions = trainer(
+        Model(),
+        None,
+        examples,
+        data_root=Path("."),
+        config=DecisionTrainingConfig(),
+    )
+
+    assert metrics["video_type:predictive"]["count"] == 1
+    assert metrics["video_type:predictive"]["accuracy"] == 1.0
+    assert metrics["video_type:counterfactual"]["nll"] < 0.1
+    assert [record["task_type"] for record in predictions] == [
+        "predictive",
+        "counterfactual",
+    ]
 
 
 def test_reservoir_sampling_is_seeded_and_not_a_prefix() -> None:
