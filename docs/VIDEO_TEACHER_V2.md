@@ -459,3 +459,23 @@ Transformers' loader after the base weights are loaded. This setting is
 recorded in each run manifest and does not change optimization or data
 settings. Candidate B and C both verified the actual decoder-only target paths
 against the fully loaded pinned model before PEFT injection.
+
+## Candidate B-cosine schedule comparison
+
+The user selected a schedule-controlled comparison: retain Candidate B's
+constant LR schedule for the A/B target-coverage comparison, then evaluate
+cosine with a 3% warmup as a separate experiment. Candidate B-cosine therefore
+starts from the same v1 adapter and uses the same seed (17), 512-step budget,
+8-frame inputs, decoder-all-linear rank-16 policy, frozen train/validation
+corpus, sampling weights, and checkpoint/evaluation intervals as B. Its only
+configuration changes from B are `lr_scheduler: cosine` and
+`warmup_ratio: 0.03`.
+
+Run `seed17-512-pread-20261005T015001` was prepared on the local RTX 3080
+Laptop on branch `codex/video-teacher-v2`, source commit
+`b4dc23ad692d6866c1599245d98418c599b43ec1`. Config SHA-256 is
+`4e9977e96a4119d8e9f5924f8f20b068df63f3e206cde7f89e86b69948b22ddc`; train
+and validation SHA-256 values are the frozen v1 hashes recorded above. The
+invocation, config snapshot, and runner are saved with the ignored run output.
+The sealed audit is not loaded. Results will be appended only after the fixed
+run completes and its selected checkpoint is reloaded and verified.
