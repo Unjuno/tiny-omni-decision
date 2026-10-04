@@ -88,29 +88,32 @@ tiny-omni-decision freeze-teacher-v1-corpus
 tiny-omni-decision train-decision \
   --train-manifest data/processed/durable-teacher-v1/train.jsonl \
   --validation-manifest data/processed/durable-teacher-v1/validation.jsonl \
-  --config configs/decision/teacher_v1.yaml \
-  --output artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-balanced
+  --config configs/decision/teacher_v1_weak_modalities.yaml \
+  --output artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized
 ```
 
 The trainer requires independent validation and has no evaluation-manifest
 argument. It records every attempt, sample/asset accounting, validation learning
 curves, per-modality metrics, and the best validation-selected checkpoint.
-Sampling policies for weaker modalities are in
-`configs/decision/teacher_v1_weak_modalities.yaml` and
-`configs/decision/teacher_v1_video_priority.yaml`.
+The validation-only policy comparison, three-seed learning curves, selected
+checkpoint, and final sealed-audit report are documented in
+[`docs/TEACHER_V1.md`](docs/TEACHER_V1.md). The selected policy weights are
+audio 1, image 1.5, text 1.5, video 2. The alternative video-priority policy is
+in `configs/decision/teacher_v1_video_priority.yaml`; seed-specific reproducible
+configs are retained for seeds 19 and 23.
 
 After the candidate, config, train/validation hashes, sampling policy, and
 selection rule are frozen, evaluate the sealed audit once:
 
 ```bash
 tiny-omni-decision freeze-teacher-selection \
-  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-balanced/best \
-  --config-path configs/decision/teacher_v1.yaml \
+  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized/best \
+  --config-path configs/decision/teacher_v1_weak_modalities.yaml \
   --train-path data/processed/durable-teacher-v1/train.jsonl \
   --validation-path data/processed/durable-teacher-v1/validation.jsonl
 tiny-omni-decision evaluate-sealed-audit \
-  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-balanced/best \
-  --config-path configs/decision/teacher_v1.yaml \
+  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized/best \
+  --config-path configs/decision/teacher_v1_weak_modalities.yaml \
   --train-path data/processed/durable-teacher-v1/train.jsonl \
   --validation-path data/processed/durable-teacher-v1/validation.jsonl
 ```
@@ -121,6 +124,12 @@ the audit hash, and an exclusive claim file prevents a second evaluation.
 Teacher v1 procedure, split hashes, coverage, experiments, curves, metrics, and
 remaining bottlenecks are documented in
 [docs/TEACHER_V1.md](docs/TEACHER_V1.md).
+
+The one-time sealed audit scored 0.6718 Accuracy overall (macro across
+modalities: 0.7170). Audio reached 0.9459; image 0.6890, text 0.7130, and video
+0.5200 remain below the 0.90-per-modality goal. The selected adapter and
+provenance hashes are recorded in
+[`manifests/teachers/tiny-omni-decision-teacher-v1.json`](manifests/teachers/tiny-omni-decision-teacher-v1.json).
 
 The prior 16-step pipeline test remains historical context in
 [docs/PHASE3.md](docs/PHASE3.md). No ternary quantization or Recovery LoRA is

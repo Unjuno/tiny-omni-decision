@@ -137,7 +137,7 @@ and automated source/content split checks. OneJev component-level rights review 
 open but OneJev is excluded from the frozen corpus. Ternary runtime compatibility remains
 a later compression gate.
 
-## Phase 3 — High-precision Decision/Omni LoRA — v0 complete, Teacher v1 in progress
+## Phase 3 — High-precision Decision/Omni LoRA — complete; quality target unmet
 
 Teacher v0 completed a 256-step four-modality run on the local RTX 3080 Laptop GPU.
 Its 2,917-record evaluation has already been observed and is a legacy reference,
@@ -145,16 +145,24 @@ not a blind test or a model-selection target. Historical corpus provenance and
 metrics remain in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier
 16-step pipeline test remains documented in [docs/PHASE3.md](docs/PHASE3.md).
 
-Teacher v1 is the active high-precision quality phase. It first fixes CLEVRER
-scene-level grouping and fail-closed independent validation, then freezes fresh
-train/validation/sealed-audit splits with record, source-asset, media, and
-normalized-content checks. Iteration loads train and validation only. The local
-RTX 3080 is measured before extending the rank-16 learning curve; policies for
-text/image/video emphasis are compared on validation. Architecture changes and
-sealed audit are gated on those results. See [docs/TEACHER_V1.md](docs/TEACHER_V1.md).
+Teacher v1 fixed CLEVRER scene-level grouping and fail-closed independent
+validation, then froze fresh train/validation/sealed-audit splits with record,
+source-asset, media, and normalized-content checks. Validation-only selection
+compared sampling policies and three rank-16 seeds. Its candidate was frozen
+before one full sealed-audit evaluation. Audio reached 94.6% audit Accuracy;
+image reached 68.9%, text 71.3%, and video 52.0%, so the four-modality 90%
+quality gate remains open. Learning curves show a validation plateau/overfit
+signal at the 2,048-step budget. Full hashes, per-source metrics, experiments,
+and bottleneck analysis are in [docs/TEACHER_V1.md](docs/TEACHER_V1.md) and
+[`manifests/teachers/tiny-omni-decision-teacher-v1.json`](manifests/teachers/tiny-omni-decision-teacher-v1.json).
 
-The Teacher v1 phase does not merge the final Teacher, ternary-quantize, train a
-Recovery adapter, or create a teacher-logit cache. Those remain later gates.
+Teacher v1 used only the local RTX 3080 Laptop GPU (about 14.2 GPU-hours across
+logged attempts and the audit; cloud cost $0). It did not merge the final
+Teacher, ternary-quantize, train a Recovery adapter, or create a teacher-logit
+cache. Compression remains a later gate after the quality gap is addressed.
+The follow-up [Video Teacher v2 design](docs/superpowers/specs/2026-10-04-video-teacher-v2-design.md)
+is a separate proposal; its frame-count, decoder-target, rank, and CLEVRER
+task-coverage experiments have not been run.
 
 ## Phase 4 — Larger multimodal decision adaptation
 
