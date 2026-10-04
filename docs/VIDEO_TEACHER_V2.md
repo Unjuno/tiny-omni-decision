@@ -10,10 +10,10 @@ eight-frame evaluation path. Candidate A is therefore recorded as a rejected
 experiment, not a replacement Teacher. Candidate B's separate 512-step run is
 complete; its validation-selected checkpoint is below Teacher v1 on aggregate
 and weakest-modality accuracy, so it is not a replacement Teacher. Candidate C
-has started as a separate rank-32 + rsLoRA capacity experiment. Its first
-scheduled validation at step 128 completed without any configured overfitting
-signal, but did not improve on Candidate B or Teacher v1; the fixed run
-continues to the remaining scheduled checkpoints.
+has started as a separate rank-32 + rsLoRA capacity experiment. Its first two
+scheduled validations show small improvement through step 256, but remain below
+Candidate B and Teacher v1; the fixed run continues to the remaining scheduled
+checkpoints.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -279,14 +279,32 @@ Accuracy / NLL / Brier / ECE was:
 | Text | 0.610 | 0.858 | 0.476 | 0.151 |
 | Video | 0.398 | 1.436 | 0.692 | 0.129 |
 
-All four overfitting signals were false. This first point is below Candidate B
-step 128 on macro Accuracy (0.640), minimum-modality Accuracy (0.415), and
-macro NLL (0.908), and below the re-evaluated v1 reference; it is not evidence
-for selecting C. Continue the already-running 512-step configuration unchanged
-through its scheduled checkpoints. Its run remains active after step 128;
-resource totals and selection/reload verification are pending. Invocation and
-config snapshots are stored beside the run outputs; the sealed audit remains
-unopened.
+At step 256, the next 512-example training window had CE 1.158 and Accuracy
+0.572 (train-minus-validation Accuracy gap -0.070). Validation had macro
+Accuracy 0.642, minimum-modality Accuracy 0.407, macro NLL 0.992, macro Brier
+0.459, and macro ECE 0.102. Per-modality Accuracy / NLL / Brier / ECE was:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 0.907 | 0.413 | 0.145 | 0.051 |
+| Image | 0.619 | 1.296 | 0.497 | 0.126 |
+| Text | 0.636 | 0.844 | 0.490 | 0.090 |
+| Video | 0.407 | 1.412 | 0.702 | 0.141 |
+
+The second evaluation took 333.1 seconds. From step 128 to 256, macro Accuracy
+rose 0.631 to 0.642, minimum-modality Accuracy 0.398 to 0.407, and macro NLL
+improved 0.995 to 0.992; the selected validation score improved from 0.8404
+to 0.8313. Training CE fell while validation NLL also fell. Of the explicit
+signals, only `train_loss_falling` was true; validation NLL was not rising,
+training Accuracy did not rise while validation stalled, and the weakest
+modality did not degrade. Candidate C step 256 remains below Candidate B step
+256 (macro Accuracy 0.674, minimum-modality Accuracy 0.441, macro NLL 0.899)
+and the re-evaluated v1 reference. This is modest progress, not grounds for
+selecting C early. Continue the already-running 512-step configuration
+unchanged through its scheduled checkpoints. Its run remains active after step
+256; resource totals and final selection/reload verification are pending.
+Invocation and config snapshots are stored beside the run outputs; the sealed
+audit remains unopened.
 
 ## Verification so far
 
