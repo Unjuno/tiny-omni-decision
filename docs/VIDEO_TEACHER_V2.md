@@ -9,7 +9,9 @@ the Teacher v1 reference on the same 472-row validation subset and the same
 eight-frame evaluation path. Candidate A is therefore recorded as a rejected
 experiment, not a replacement Teacher. Candidate B's separate 512-step run is
 complete; its validation-selected checkpoint is below Teacher v1 on aggregate
-and weakest-modality accuracy, so it is not a replacement Teacher.
+and weakest-modality accuracy, so it is not a replacement Teacher. Candidate C
+has started as a separate rank-32 + rsLoRA capacity experiment; it has not yet
+reached its first scheduled validation point.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -249,6 +251,22 @@ SHA-256 is
 and validation corpus hashes match Candidate A. Sealed audit data remained
 unopened.
 
+### Candidate C training run
+
+Candidate C uses `configs/decision/teacher_v2_candidate_c.yaml` (SHA-256
+`792227ce687e4a2f569870bcc463484a7fa456441314ad4972aead319db1a084`) and a
+new output directory:
+`artifacts/tiny-omni-decision-teacher-v2/candidate-c/seed17-512-pread-20261004T235936`.
+Its experiment ID is `20261004T145937Z-58ce76dd`; source commit at launch was
+`611c750b2337f4af8b603fcd4fd9dbd43b2546f5`. It keeps Candidate B's rank-16
+run settings, data, video frames, `decoder_all_linear` target policy, LR,
+scheduler, warmup, sampling, seed, and 512-step budget fixed while raising rank
+to 32 and enabling rsLoRA. The loaded-model path check passed for the 205
+decoder-linear targets, the v1 reference was evaluated on the same validation
+subset, and Candidate C has entered training. Its first scheduled validation
+and measured resource use are pending. Invocation/config snapshots are stored
+beside the run outputs; the sealed audit remains unopened.
+
 ## Verification so far
 
 - `ruff check src tests`: passed.
@@ -267,14 +285,14 @@ unopened.
 
 ## Next gates
 
-Candidates A and B are complete. Candidate C is next: keep B's data, frame
-count, target policy, fixed schedule, seed, and training budget unchanged;
-increase rank to 32 and enable rsLoRA. The step-512 NLL reversal and Video
-accuracy plateau/variance support testing this capacity change; A/B results
-show that broader target coverage alone has not closed the Video gap. Keep C
-in a new config and output directory, then compare it with A/B and the
-re-evaluated v1 reference on validation. Cosine with 3% warmup and any frame
-count change remain separate later experiments. Do not read the sealed audit.
+Candidates A and B are complete and Candidate C is running. Keep C's settings
+fixed through 512 steps, scheduled validation, checkpoint selection, and
+save/reload verification. The step-512 NLL reversal and Video
+accuracy plateau/variance in B support the rank-32 + rsLoRA capacity test; A/B
+show that broader target coverage alone has not closed the Video gap. Compare
+C with A/B and the re-evaluated v1 reference on validation. Cosine with 3%
+warmup and any frame count change remain separate later experiments. Do not
+read the sealed audit.
 
 The training loader uses the `pread` backend only on Windows and restores
 Transformers' loader after the base weights are loaded. This setting is
