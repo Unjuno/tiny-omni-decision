@@ -10,8 +10,10 @@ eight-frame evaluation path. Candidate A is therefore recorded as a rejected
 experiment, not a replacement Teacher. Candidate B's separate 512-step run is
 complete; its validation-selected checkpoint is below Teacher v1 on aggregate
 and weakest-modality accuracy, so it is not a replacement Teacher. Candidate C
-has started as a separate rank-32 + rsLoRA capacity experiment; it has not yet
-reached its first scheduled validation point.
+has started as a separate rank-32 + rsLoRA capacity experiment. Its first
+scheduled validation at step 128 completed without any configured overfitting
+signal, but did not improve on Candidate B or Teacher v1; the fixed run
+continues to the remaining scheduled checkpoints.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -264,8 +266,27 @@ scheduler, warmup, sampling, seed, and 512-step budget fixed while raising rank
 to 32 and enabling rsLoRA. The loaded-model path check passed for the 205
 decoder-linear targets, the v1 reference was evaluated on the same validation
 subset, and Candidate C has entered training. Its first scheduled validation
-and measured resource use are pending. Invocation/config snapshots are stored
-beside the run outputs; the sealed audit remains unopened.
+at step 128 completed after 323.6 seconds. The 512-example rolling training
+window had CE 1.288 and Accuracy 0.551 (train-minus-validation Accuracy gap
+-0.081). Validation had macro Accuracy 0.631, minimum-modality Accuracy 0.398,
+macro NLL 0.995, macro Brier 0.456, and macro ECE 0.113. Per-modality
+Accuracy / NLL / Brier / ECE was:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 0.890 | 0.453 | 0.154 | 0.041 |
+| Image | 0.627 | 1.234 | 0.502 | 0.129 |
+| Text | 0.610 | 0.858 | 0.476 | 0.151 |
+| Video | 0.398 | 1.436 | 0.692 | 0.129 |
+
+All four overfitting signals were false. This first point is below Candidate B
+step 128 on macro Accuracy (0.640), minimum-modality Accuracy (0.415), and
+macro NLL (0.908), and below the re-evaluated v1 reference; it is not evidence
+for selecting C. Continue the already-running 512-step configuration unchanged
+through its scheduled checkpoints. Its run remains active after step 128;
+resource totals and selection/reload verification are pending. Invocation and
+config snapshots are stored beside the run outputs; the sealed audit remains
+unopened.
 
 ## Verification so far
 
