@@ -10,10 +10,10 @@ eight-frame evaluation path. Candidate A is therefore recorded as a rejected
 experiment, not a replacement Teacher. Candidate B's separate 512-step run is
 complete; its validation-selected checkpoint is below Teacher v1 on aggregate
 and weakest-modality accuracy, so it is not a replacement Teacher. Candidate C
-has started as a separate rank-32 + rsLoRA capacity experiment. Its first two
-scheduled validations show small improvement through step 256, but remain below
-Candidate B and Teacher v1; the fixed run continues to the remaining scheduled
-checkpoints.
+has started as a separate rank-32 + rsLoRA capacity experiment. Through step
+384, Video Accuracy has improved modestly, but validation NLL worsened at the
+third point and the best-validation checkpoint remains step 256. Candidate C
+has not surpassed Teacher v1 and the fixed run continues through step 512.
 
 The first two Candidate A attempts are retained in their own output
 directories. One failed before training with a Windows access violation
@@ -305,6 +305,30 @@ unchanged through its scheduled checkpoints. Its run remains active after step
 256; resource totals and final selection/reload verification are pending.
 Invocation and config snapshots are stored beside the run outputs; the sealed
 audit remains unopened.
+
+At step 384, the next 512-example training window had CE 1.113 and Accuracy
+0.580 (train-minus-validation Accuracy gap -0.096). Validation had macro
+Accuracy 0.676, minimum-modality Accuracy 0.449, macro NLL 1.104, macro Brier
+0.455, and macro ECE 0.139. Per-modality Accuracy / NLL / Brier / ECE was:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 0.898 | 0.715 | 0.185 | 0.088 |
+| Image | 0.686 | 1.372 | 0.467 | 0.184 |
+| Text | 0.669 | 0.890 | 0.464 | 0.124 |
+| Video | 0.449 | 1.441 | 0.705 | 0.162 |
+
+The third evaluation took 333.3 seconds. Video Accuracy rose by 0.042 versus
+step 256, while macro Accuracy rose from 0.642 to 0.676. However, macro NLL
+rose from 0.992 to 1.104 and macro ECE worsened from 0.102 to 0.139. Training
+CE fell and `validation_nll_rising` fired; the other three explicit signals
+were false. The selection score was 0.9280, so the validation-only selector
+retained step 256 (score 0.8313). Candidate C at step 384 exceeds Candidate B's
+selected macro Accuracy by 0.009 and its minimum-modality Accuracy by 0.034,
+but its macro NLL is 0.325 worse than B's selected step 384. Video Accuracy
+0.449 remains below Candidate A's selected 0.466 and the v1 reference 0.593.
+The step-512 validation is still required to complete this fixed run; adapter
+selection remains validation-only, and the sealed audit remains unopened.
 
 ## Verification so far
 
