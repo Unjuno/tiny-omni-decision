@@ -125,6 +125,65 @@ def test_candidate_b_changes_only_decoder_lora_target_policy() -> None:
     assert candidate_b.use_rslora is candidate_a.use_rslora is False
 
 
+def test_windows_base_model_loader_uses_pread_and_restores_transformers_state(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import tiny_omni_decision.trainer as trainer
+
+    modeling_utils = ModuleType("transformers.modeling_utils")
+    calls = []
+
+    def fake_safe_open(*args, **kwargs):
+        calls.append((args, kwargs.copy()))
+        return "opened"
+
+    modeling_utils.safe_open = fake_safe_open
+    transformers = ModuleType("transformers")
+    transformers.__path__ = []
+    transformers.modeling_utils = modeling_utils
+    monkeypatch.setitem(sys.modules, "transformers", transformers)
+    monkeypatch.setitem(sys.modules, "transformers.modeling_utils", modeling_utils)
+    monkeypatch.setattr(trainer.sys, "platform", "win32")
+    expected_model = object()
+
+    def load_model(repo_id, *, revision, **kwargs):
+        assert repo_id == "model/repo"
+        assert revision == "revision"
+        assert kwargs == {"dtype": "auto"}
+        assert modeling_utils.safe_open("weights.safetensors", framework="pt") == "opened"
+        return expected_model
+
+    result = trainer._load_pretrained_base(
+        load_model, "model/repo", revision="revision", dtype="auto"
+    )
+
+    assert result is expected_model
+    assert calls == [
+        (("weights.safetensors",), {"framework": "pt", "backend": "pread"})
+    ]
+    assert modeling_utils.safe_open is fake_safe_open
+
+
+def test_base_model_loader_leaves_non_windows_defaults_unchanged(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import tiny_omni_decision.trainer as trainer
+
+    monkeypatch.setattr(trainer.sys, "platform", "linux")
+    calls = []
+
+    def load_model(repo_id, *, revision, **kwargs):
+        calls.append((repo_id, revision, kwargs))
+        return "loaded"
+
+    result = trainer._load_pretrained_base(
+        load_model, "model/repo", revision="revision", dtype="auto"
+    )
+
+    assert result == "loaded"
+    assert calls == [("model/repo", "revision", {"dtype": "auto"})]
+
+
 def test_lora_target_policies_are_limited_to_decoder_layers(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

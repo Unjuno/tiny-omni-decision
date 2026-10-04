@@ -6,6 +6,7 @@ import json
 import os
 import random
 import shutil
+import sys
 import time
 import uuid
 from collections import Counter, defaultdict
@@ -68,6 +69,25 @@ def _move_inputs(inputs: dict[str, Any], device: Any) -> dict[str, Any]:
     return {
         key: value.to(device) if hasattr(value, "to") else value for key, value in inputs.items()
     }
+
+
+def _load_pretrained_base(model_loader: Any, repo_id: str, *, revision: str, **kwargs: Any) -> Any:
+    """Use bounded-memory safetensors reads on Windows, restoring the loader after use."""
+    if sys.platform != "win32":
+        return model_loader(repo_id, revision=revision, **kwargs)
+
+    modeling_utils = importlib.import_module("transformers.modeling_utils")
+    original_safe_open = modeling_utils.safe_open
+
+    def windows_pread_safe_open(*args: Any, **open_kwargs: Any) -> Any:
+        open_kwargs["backend"] = "pread"
+        return original_safe_open(*args, **open_kwargs)
+
+    modeling_utils.safe_open = windows_pread_safe_open
+    try:
+        return model_loader(repo_id, revision=revision, **kwargs)
+    finally:
+        modeling_utils.safe_open = original_safe_open
 
 
 def _forward_decision(
@@ -292,7 +312,8 @@ def _run_training_impl(
         manifest.processor_repo_id or manifest.repo_id,
         revision=manifest.processor_revision,
     )
-    base = AutoModelForMultimodalLM.from_pretrained(
+    base = _load_pretrained_base(
+        AutoModelForMultimodalLM.from_pretrained,
         manifest.repo_id,
         revision=manifest.revision,
         dtype="auto",
@@ -859,6 +880,7 @@ def _run_training_impl(
         "torch_version": torch.__version__,
         "cuda_runtime_version": torch.version.cuda,
         "transformers_version": __import__("transformers").__version__,
+        "safetensors_backend": "pread" if sys.platform == "win32" else "transformers-default",
         "peft_version": __import__("peft").__version__,
         "accelerate_version": importlib.metadata.version("accelerate"),
         "python_version": __import__("platform").python_version(),
@@ -900,6 +922,7 @@ def _run_training_impl(
             "torch_version",
             "cuda_runtime_version",
             "transformers_version",
+            "safetensors_backend",
             "peft_version",
             "accelerate_version",
             "gpu",
@@ -1019,6 +1042,7 @@ def run_training(**kwargs: Any) -> dict[str, Any]:
                 "torch_version": result["torch_version"],
                 "cuda_runtime_version": result["cuda_runtime_version"],
                 "transformers_version": result["transformers_version"],
+                "safetensors_backend": result["safetensors_backend"],
                 "peft_version": result["peft_version"],
                 "accelerate_version": result["accelerate_version"],
             },
