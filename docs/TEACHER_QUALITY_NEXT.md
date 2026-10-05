@@ -558,6 +558,38 @@ a fixed-example generalization-gap estimate. Further training and scheduled
 validation remain in progress; these development-validation gains do not
 promote the candidate to product or establish final-audit performance.
 
+At step 256, the selector chose a new best checkpoint with score 0.704172
+(adapter SHA-256 `bebc6c880f8c9cc188db49f6635e64e45ac851e36d5d4b0d81011fa3c75ecb6a`).
+The same fixed 512 validation IDs were used, in the same order. Metrics were:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 1.0000 | 0.0011 | 0.0001 | 0.0011 |
+| Image | 0.7266 | 0.9915 | 0.4269 | 0.1662 |
+| Text | 0.6563 | 1.8058 | 0.5071 | 0.2215 |
+| Video | 0.4922 | 0.8826 | 0.5580 | 0.0931 |
+| Macro | 0.7188 | 0.9203 | 0.3730 | 0.1205 |
+
+Compared with step 128, Image improved by 8.6 points and Audio reached 100%;
+Text gained 0.8 points, while Video fell by 3.1 points. Macro Accuracy,
+NLL, and Brier improved, while macro ECE worsened. The selector also recorded
+`weak_modality_degraded` and `train_loss_falling`. Video task-type results were
+temporal descriptive 6/26 (0.2308 accuracy, 1.6667 NLL), explanatory 21/38
+(0.5526, 0.6850), predictive 20/38 (0.5263, 0.6899), and counterfactual 16/26
+(0.6154, 0.6689). The candidate remains in training under the predeclared
+2,048-step budget; one weak-modality decline does not trigger a stop.
+
+By step 256 the run had consumed 1,024 unique examples with no repeats, 972
+unique assets, 300 video scenes, and 341 CLEVRER parent questions. Unique
+assets by modality were Audio 167, Image 249, Text 256, and Video 300. Source
+example counts were CLEVRER 341, Clevr-4 256, MASSIVE 128, Speech Commands 85,
+LibriSpeech 86, Open-Jev 64, and Typed Decisions Synth 64. The validation ID
+order SHA-256 remains
+`00754c90a2155aa8a8a949489a3d7a80e6205943f21153047f434be61fda92a0`. This
+validation pass took 404 seconds; elapsed run time was 3,295 seconds and peak
+allocated VRAM was 11,916,105,728 bytes. The 128-step rolling train window
+reported CE 0.8515 and Accuracy 0.6836; it is not a fixed-example gap measure.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
