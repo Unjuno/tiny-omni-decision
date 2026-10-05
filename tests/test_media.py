@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import io
+import struct
 import wave
 import zipfile
+import zlib
 from pathlib import Path
 
 from tiny_omni_decision import media
@@ -19,6 +21,18 @@ class _SizedBytesIO(io.BytesIO):
     def __init__(self, value: bytes) -> None:
         super().__init__(value)
         self.size = len(value)
+
+
+def _valid_png() -> bytes:
+    def chunk(name: bytes, payload: bytes) -> bytes:
+        checksum = zlib.crc32(name + payload) & 0xFFFFFFFF
+        return struct.pack(">I", len(payload)) + name + payload + struct.pack(">I", checksum)
+
+    header = struct.pack(">IIBBBBB", 1, 1, 8, 6, 0, 0, 0)
+    pixel = zlib.compress(b"\x00\xff\x00\x00\xff")
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header) + chunk(
+        b"IDAT", pixel
+    ) + chunk(b"IEND", b"")
 
 
 def _clevr4_example(example_id: str, filename: str) -> DecisionExample:
@@ -140,10 +154,10 @@ def test_clevr4_media_are_extracted_in_archive_order(
     tmp_path: Path, monkeypatch
 ) -> None:
     archive_data = io.BytesIO()
-    png_header = b"\x89PNG\r\n\x1a\n"
+    png = _valid_png()
     with zipfile.ZipFile(archive_data, "w", compression=zipfile.ZIP_STORED) as archive:
-        archive.writestr("images/early.png", png_header + b"early")
-        archive.writestr("images/late.png", png_header + b"late")
+        archive.writestr("images/early.png", png)
+        archive.writestr("images/late.png", png)
     payload = archive_data.getvalue()
 
     opened: list[str] = []
@@ -173,15 +187,18 @@ def test_clevr4_media_can_be_materialized_from_verified_local_archive(
     tmp_path: Path, monkeypatch
 ) -> None:
     archive_path = tmp_path / "clevr4.zip"
-    png_header = b"\x89PNG\r\n\x1a\n"
+    png = _valid_png()
     with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED) as archive:
-        archive.writestr("images/requested.png", png_header + b"requested")
-        archive.writestr("images/unrequested-reserve.png", png_header + b"reserve")
+        archive.writestr("images/requested.png", png)
+        archive.writestr("images/unrequested-reserve.png", png)
 
     def unexpected_http_reader(_url: str):
         raise AssertionError("verified local materialization must not read remote ranges")
 
     monkeypatch.setattr(media, "_HttpRangeReader", unexpected_http_reader)
+    corrupt_path = tmp_path / "raw/clevr4-10k/images/requested.png"
+    corrupt_path.parent.mkdir(parents=True)
+    corrupt_path.write_bytes(b"")
     examples = [_clevr4_example("requested", "requested.png")]
     converted, metadata = media.materialize_clevr4_images(
         examples,
@@ -190,7 +207,9 @@ def test_clevr4_media_can_be_materialized_from_verified_local_archive(
         archive_path=archive_path,
     )
 
-    assert (tmp_path / converted[0].media[0].path).is_file()
+    repaired_path = tmp_path / converted[0].media[0].path
+    assert repaired_path.read_bytes() == png
+    assert media._is_valid_png(repaired_path)
     assert metadata["images_materialized"] == 1
     assert metadata["images_newly_downloaded"] == 1
     assert "full archive hash verified" in str(metadata["archive_revision_or_checksum"])

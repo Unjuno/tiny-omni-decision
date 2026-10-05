@@ -153,16 +153,26 @@ taxonomy labels are represented in validation, and train/validation/reserve
 image identity overlap is zero. Manifests for both candidate splits validate
 with project policy `ALLOW`.
 
-The corpus has **not** yet been materialized: the local C: volume ran out of
-space during a full archive fetch. The run was stopped at 83/227 downloaded
-ranges. Its archive could not be hash-verified or used; no generated Clevr-4
-image candidate corpus is claimed. The range journal and partial archive are
-local ignored files, not repository artifacts. The intended archive SHA-512
-is pinned in the manifest as
+The full 3,797,490,816-byte archive has now been fetched and its SHA-512
+verified against the manifest:
 `769465d90b6550a242f6d5940b52f2e0944c65af09e17e6f3f2cb65701af66057ab06485b2194fa9d8932e03a03e87b3fadece43049e1af1ddd9f8e4990ed19a`.
-Continue after enough local disk space is available, verify the complete
-archive, materialize only train/validation image identities, and leave reserve
-images unmaterialized.
+Only candidate train/validation media were materialized; all 901 reserve
+identities remain unmaterialized. The resulting corpus hashes are:
+
+- Train: `2db15927f9b5d163f3be849f4442a2275e7653f29b053f7f9b1cf1b1d560a39a`
+- Validation: `73c5fa8de932877750614d73542630937f90a297e419538ffe813374778d098d`
+
+Independent verification covered every candidate media file, hashing and PNG
+decoding each image: train 17,272 examples / 4,318 unique images / 0 missing /
+0 hash mismatches / 0 invalid PNGs; validation 3,708 / 927 / 0 / 0 / 0. The
+train and validation image IDs, media hashes, and task groups are disjoint;
+the 901 reserve IDs also have zero overlap with either corpus. Their identity
+hash matches the split metadata above. An interrupted earlier materialization
+had left a zero-byte `CLEVR_new_000117.png`, which the independent decode pass
+found. The materializer now validates PNG structure and writes extracted files
+atomically; the builder repaired the image from the verified archive and
+regenerated the corpus hash. A regression test covers repair of an invalid
+existing image and verifies that reserve media are not extracted.
 
 The split implementation is `src/tiny_omni_decision/clevr4_quality.py`; the
 local materialization path is `scripts/build_teacher_quality_clevr4.py` and
@@ -174,9 +184,8 @@ when run with the repository's `src` directory on `PYTHONPATH`; the checked-in
 `.venv` currently fails during Python site initialization on a CP932 decoding
 error in its `.pth` processing. MASSIVE and LibriSpeech train/validation
 manifests, plus Clevr-4 train/validation candidate manifests, validate with
-project policy `ALLOW`. No model training, candidate selection, Clevr-4 media
-corpus, video candidate corpus, fresh final audit, or final Teacher has been
-produced.
+project policy `ALLOW`. No new model training, candidate selection, video
+candidate corpus, fresh final audit, or final Teacher has been produced.
 
 ## Primary source references
 

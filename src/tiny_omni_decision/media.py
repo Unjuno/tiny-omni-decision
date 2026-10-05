@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import io
+import struct
 import urllib.request
 import zipfile
+import zlib
 from collections.abc import Mapping
 from pathlib import Path
 
@@ -75,6 +77,65 @@ class _HttpRangeReader(io.RawIOBase):
         return bytes(result)
 
 
+def _is_valid_png(path: Path) -> bool:
+    """Reject partial or malformed PNGs left by interrupted media extraction."""
+    try:
+        with path.open("rb") as image_file:
+            if image_file.read(8) != b"\x89PNG\r\n\x1a\n":
+                return False
+            saw_header = False
+            saw_image_data = False
+            image_data_closed = False
+            inflater: zlib.Decompress | None = None
+            while True:
+                length_bytes = image_file.read(4)
+                if len(length_bytes) != 4:
+                    return False
+                length = struct.unpack(">I", length_bytes)[0]
+                if length > 64 * 1024 * 1024:
+                    return False
+                chunk_type = image_file.read(4)
+                chunk_data = image_file.read(length)
+                crc_bytes = image_file.read(4)
+                if len(chunk_type) != 4 or len(chunk_data) != length or len(crc_bytes) != 4:
+                    return False
+                expected_crc = struct.unpack(">I", crc_bytes)[0]
+                if zlib.crc32(chunk_type + chunk_data) & 0xFFFFFFFF != expected_crc:
+                    return False
+
+                if not saw_header:
+                    if chunk_type != b"IHDR" or length != 13:
+                        return False
+                    width, height = struct.unpack(">II", chunk_data[:8])
+                    if width == 0 or height == 0:
+                        return False
+                    saw_header = True
+                    continue
+                if chunk_type == b"IHDR":
+                    return False
+                if chunk_type == b"IDAT":
+                    if image_data_closed:
+                        return False
+                    if inflater is None:
+                        inflater = zlib.decompressobj()
+                    inflater.decompress(chunk_data)
+                    saw_image_data = True
+                    continue
+                if saw_image_data:
+                    image_data_closed = True
+                if chunk_type == b"IEND":
+                    return (
+                        length == 0
+                        and saw_image_data
+                        and inflater is not None
+                        and inflater.eof
+                        and not inflater.unused_data
+                        and image_file.read(1) == b""
+                    )
+    except (OSError, ValueError, OverflowError, zlib.error):
+        return False
+
+
 def materialize_clevr4_images(
     examples: list[DecisionExample],
     *,
@@ -98,7 +159,9 @@ def materialize_clevr4_images(
                 raise ValueError(f"invalid Clevr-4 source image path: {reference.uri}")
             requested[filename] = data_root / "raw" / "clevr4-10k" / "images" / filename
 
-    missing = {name: path for name, path in requested.items() if not path.is_file()}
+    missing = {
+        name: path for name, path in requested.items() if not _is_valid_png(path)
+    }
     if missing:
         archive_source: Path | _HttpRangeReader
         if archive_path is not None:
@@ -113,13 +176,13 @@ def materialize_clevr4_images(
                 archive_name = f"images/{filename}"
                 info = archive.getinfo(archive_name)
                 path.parent.mkdir(parents=True, exist_ok=True)
-                with archive.open(info) as source, path.open("wb") as target:
+                temporary = path.with_suffix(path.suffix + ".part")
+                with archive.open(info) as source, temporary.open("wb") as target:
                     while chunk := source.read(1024 * 1024):
                         target.write(chunk)
-                with path.open("rb") as image_file:
-                    if image_file.read(8) != b"\x89PNG\r\n\x1a\n":
-                        path.unlink(missing_ok=True)
-                        raise ValueError(f"Clevr-4 media member is not a PNG: {archive_name}")
+                if not _is_valid_png(temporary):
+                    raise ValueError(f"Clevr-4 media member is not a valid PNG: {archive_name}")
+                temporary.replace(path)
 
     checksums = {name: sha256_file(path) for name, path in requested.items()}
     converted: list[DecisionExample] = []
