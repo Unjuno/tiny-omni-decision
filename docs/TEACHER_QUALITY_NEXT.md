@@ -216,19 +216,41 @@ reusing any final audit. Raw predictions and machine-readable metrics are in
 the ignored local path
 `artifacts/teacher-quality-next/evaluations/v1-clevr4-validation/`.
 
-### Fresh CLEVRER video corpus in progress
+### Fresh CLEVRER video development corpus
 
-A deterministic candidate selects 500 train scenes and 100 validation scenes
-(seed 17) from unused official CLEVRER train-source videos, excluding scenes
-in the historical Teacher v1 and Candidate E corpora. At the latest recorded
-check, the builder had verified and retained 509 selected local MP4s and was
-fetching the remaining 91. An earlier attempt stopped with `ENOSPC` after
-200 additional files; no corpus manifest was emitted by that failed attempt.
-After available disk space recovered, the same builder and same scene split
-were resumed under a new log. It verified 509 existing videos and started
-fetching the remaining 91; final train/validation corpora and their hashes
-must not be considered complete until the builder exits successfully and its
-manifest is verified. No sealed-audit data has been loaded.
+The deterministic seed-17 split contains 500 train scenes and 100 validation
+scenes from unused official CLEVRER train-source videos. It excludes the 446
+historical scenes found in Teacher v1 and Candidate E train/validation
+corpora. All 600 selected MP4s were independently checked for existence and
+their SHA-256 values match the corpus manifest. An initial materialization
+attempt stopped with `ENOSPC`; after disk space recovered, the exact same
+selection was resumed, existing videos were verified and reused, and the
+builder completed without changing the split or sampling policy.
+
+| Split | Scenes / unique videos | Examples | Temporal descriptive | Explanatory | Predictive | Counterfactual |
+|---|---:|---:|---:|---:|---:|---:|
+| Train | 500 | 12,372 | 5,347 (43.2%) | 3,083 (24.9%) | 704 (5.7%) | 3,238 (26.2%) |
+| Validation | 100 | 2,538 | 1,067 (42.0%) | 638 (25.1%) | 132 (5.2%) | 701 (27.6%) |
+
+The official question source fingerprint is
+`11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4` and the
+video source revision is recorded in the manifest. Corpus SHA-256 values are
+`6196cc1f508210016430b97e3ddab5e72ef677d84f276bb11e4c3f5d31b38d26` (train)
+and `16b3b9a45c7c430cab81c74b7bf633ba0c4aea3ac120587820e33ae879a3dd4b`
+(validation); the manifest SHA-256 is
+`dfd6e3246c7f252982a57341913f872c2e23be5e4e6dc527731b5e7596bd6e1f`.
+Independent validation confirmed exact manifest and corpus hashes, 12,372 /
+2,538 rows, 500 / 100 disjoint scene IDs, 600 present nonempty media files,
+and zero shared source IDs, source assets, media identities, or normalized
+content fingerprints. The sealed-audit flag is false; no sealed audit was
+loaded. The machine-readable corpus and manifest are in the ignored local
+path `artifacts/teacher-quality-next/clevrer-fresh-scenes-v1/`.
+
+Teacher v1 is currently being evaluated on the 2,538-example development
+video validation, with its original 4-frame configuration. The evaluator
+uses the local TorchVision fallback because `torchcodec` is unavailable;
+processor preflight has measured 500 of 2,538 examples so far. No video score
+is available until inference finishes.
 
 ## Primary source references
 
