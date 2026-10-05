@@ -301,6 +301,7 @@ remains local and is not a Teacher v1/v2 replacement.
 - CPU tests: 126 passed, including the deep-path safetensors regression test.
 - Manifest validation: all CI model/dataset/corpus-manifest commands passed.
 - GitHub Actions: run #82 for `57bdccc` succeeded: [run #82](https://github.com/Unjuno/tiny-omni-decision/actions/runs/37254763372).
+- This report commit `313f3c8` also passed GitHub Actions run #83: [run #83](https://github.com/Unjuno/tiny-omni-decision/actions/runs/37256516736).
 - No final sealed evaluation, paired 512/2,048 bootstrap, full learning curve,
   2,048-step finish, best-checkpoint reload, product promotion, or PR was done.
 
