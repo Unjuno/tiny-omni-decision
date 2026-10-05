@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import pytest
 
-from tiny_omni_decision.librispeech import build_librispeech_decisions
+from tiny_omni_decision.librispeech import (
+    build_librispeech_decisions,
+    build_librispeech_development_decisions,
+)
 
 REVISION = "96519bc4ce8e8a57f84fd03b8833553f51e76dfc"
 
@@ -68,3 +71,28 @@ def test_librispeech_rejects_non_training_or_development_splits() -> None:
     records[-1]["split"] = "test"
     with pytest.raises(ValueError, match="only the official train and dev"):
         build_librispeech_decisions(records, revision=REVISION)
+
+
+def test_librispeech_builds_standalone_development_partition_without_train_rows() -> None:
+    records = [
+        _record("validation", f"dev-speaker-{index % 2}", index, f"dev sentence {index}")
+        for index in range(6)
+    ]
+    examples, accounting = build_librispeech_development_decisions(
+        records, revision=REVISION, seed=29
+    )
+    assert len(examples) == 6
+    assert all(item.split == "validation" and len(set(item.options)) == 4 for item in examples)
+    assert accounting["unique_speakers"] == 2
+    assert accounting["unique_audio_assets"] == 6
+    first, _ = build_librispeech_development_decisions(records, revision=REVISION, seed=29)
+    assert [item.model_dump() for item in examples] == [item.model_dump() for item in first]
+
+
+def test_librispeech_standalone_development_requires_validation_rows_only() -> None:
+    records = [
+        _record("train", f"speaker-{index}", index, f"sentence {index}")
+        for index in range(4)
+    ]
+    with pytest.raises(ValueError, match="must use the validation split"):
+        build_librispeech_development_decisions(records, revision=REVISION)
