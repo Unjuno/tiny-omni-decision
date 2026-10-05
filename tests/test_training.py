@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 import json
+import random
 import sys
 from collections import Counter
 from pathlib import Path
@@ -10,7 +11,11 @@ from types import ModuleType, SimpleNamespace
 import pytest
 
 from tiny_omni_decision import trainer
-from tiny_omni_decision.corpus import comparison_deltas, partition_heldout_records
+from tiny_omni_decision.corpus import (
+    ValidationCheckpointSelector,
+    comparison_deltas,
+    partition_heldout_records,
+)
 from tiny_omni_decision.dataset import (
     check_train_eval_splits,
     corpus_statistics,
@@ -1342,6 +1347,364 @@ def test_validation_checkpoint_selector_early_stops_on_plateau() -> None:
     assert selector.observe(150, worse) is False
     assert selector.should_stop is True
     assert selector.best_step == 50
+
+
+def test_long_budget_checkpoint_policy_keeps_all_sixteen_validation_events() -> None:
+    assert DecisionTrainingConfig().checkpoint_retention == "all"
+    raw = load_structured_file(Path("configs/decision/teacher_v2_candidate_e.yaml"))
+    raw["training"].update(
+        {
+            "max_steps": 2048,
+            "early_stopping_patience": 17,
+            "checkpoint_retention": "latest",
+        }
+    )
+    config = decision_training_config(raw)
+    selector = ValidationCheckpointSelector(
+        patience=config.early_stopping_patience,
+        min_delta=config.early_stopping_min_delta,
+    )
+    good = {
+        "modality:text": {"accuracy": 0.8, "nll": 0.5, "brier": 0.2, "ece": 0.1},
+        "modality:image": {"accuracy": 0.7, "nll": 0.7, "brier": 0.3, "ece": 0.1},
+        "modality:audio": {"accuracy": 0.9, "nll": 0.3, "brier": 0.1, "ece": 0.05},
+        "modality:video": {"accuracy": 0.6, "nll": 0.9, "brier": 0.4, "ece": 0.15},
+    }
+    worse = {
+        key: {**value, "nll": value["nll"] + 0.1}
+        for key, value in good.items()
+    }
+
+    assert config.max_steps == 2048
+    assert config.early_stopping_patience == 17
+    assert config.checkpoint_retention == "latest"
+    for evaluation in range(16):
+        selector.observe((evaluation + 1) * 128, good if evaluation == 0 else worse)
+    assert selector.should_stop is False
+
+
+def test_long_budget_config_preserves_candidate_e_training_conditions() -> None:
+    baseline = load_structured_file(Path("configs/decision/teacher_v2_candidate_e.yaml"))
+    long_budget = load_structured_file(
+        Path("configs/decision/teacher_v2_candidate_e_long_budget.yaml")
+    )
+    assert long_budget["teacher_id"] != baseline["teacher_id"]
+    assert long_budget["reference_teacher_id"] == baseline["reference_teacher_id"]
+    assert long_budget["base_model"] == baseline["base_model"]
+    assert long_budget["task"] == baseline["task"]
+    assert long_budget["loss"] == baseline["loss"]
+    assert long_budget["sampling"] == baseline["sampling"]
+    intentional_training_changes = {
+        "max_steps",
+        "early_stopping_patience",
+        "checkpoint_retention",
+    }
+    assert {
+        key: value
+        for key, value in long_budget["training"].items()
+        if key not in intentional_training_changes
+    } == {
+        key: value
+        for key, value in baseline["training"].items()
+        if key not in intentional_training_changes
+    }
+    assert long_budget["training"]["max_steps"] == 2048
+    assert long_budget["training"]["early_stopping_patience"] == 17
+    assert long_budget["training"]["checkpoint_retention"] == "latest"
+
+
+def test_latest_checkpoint_policy_replaces_resume_state_and_keeps_final(tmp_path: Path) -> None:
+    write = trainer.save_checkpoint_snapshot
+    checkpoints = tmp_path / "checkpoints"
+
+    def save_step(step: int, *, final: bool = False) -> Path:
+        def write_checkpoint(destination: Path) -> None:
+            (destination / "trainer-state.json").write_text(
+                json.dumps(
+                    {
+                        "global_step": step,
+                        "experiment_id": "teacher-e-long-seed17",
+                        "run_started_at_utc": "2026-10-05T00:00:00+00:00",
+                        "cumulative_wall_seconds": 120.0,
+                        "cumulative_setup_validation_seconds": 30.0,
+                        "consumed_sample_id_order_sha256": "a" * 64,
+                        "checkpoint_retention": "latest",
+                        "rng_state": {
+                            "python_random_state": [],
+                            "numpy_random_state": {},
+                            "torch_cpu_rng_state": [],
+                            "torch_cuda_rng_states": [],
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+            for name in ("adapter_config.json", "optimizer.pt", "scheduler.pt"):
+                (destination / name).write_bytes(b"state")
+            (destination / "adapter_model.safetensors").write_bytes(b"adapter")
+
+        return write(
+            checkpoints,
+            step=step,
+            retention="latest",
+            final=final,
+            write_checkpoint=write_checkpoint,
+        )
+
+    first = save_step(128)
+    assert first.name.startswith("resume-step-000128-")
+    second = save_step(256)
+    assert second.name.startswith("resume-step-000256-")
+    assert json.loads((second / "trainer-state.json").read_text())["global_step"] == 256
+    assert json.loads((checkpoints / "latest-checkpoint.json").read_text())["directory"] == (
+        second.name
+    )
+    assert trainer.resolve_resume_checkpoint(checkpoints) == second
+    assert trainer.experiment_id_from_resume_checkpoint(checkpoints) == (
+        second,
+        "teacher-e-long-seed17",
+    )
+    assert sorted(path.name for path in checkpoints.iterdir() if path.is_dir()) == [second.name]
+
+    final = save_step(2048, final=True)
+    assert final.name == "final-step-002048"
+    assert json.loads((final / "trainer-state.json").read_text())["global_step"] == 2048
+    assert json.loads((checkpoints / "latest-checkpoint.json").read_text())["directory"] == (
+        "final-step-002048"
+    )
+    assert sorted(path.name for path in checkpoints.iterdir() if path.is_dir()) == [
+        "final-step-002048"
+    ]
+
+    all_checkpoints = tmp_path / "all-checkpoints"
+    for step in (128, 256):
+        def write_step(destination: Path, current_step: int = step) -> None:
+            (destination / "trainer-state.json").write_text(
+                json.dumps({"global_step": current_step}), encoding="utf-8"
+            )
+
+        trainer.save_checkpoint_snapshot(
+            all_checkpoints,
+            step=step,
+            retention="all",
+            final=False,
+            write_checkpoint=write_step,
+        )
+    assert sorted(path.name for path in all_checkpoints.iterdir() if path.is_dir()) == [
+        "step-000128",
+        "step-000256",
+    ]
+
+
+def test_resume_checkpoint_snapshot_contains_selector_best_and_rng_state(tmp_path: Path) -> None:
+    best = tmp_path / "best"
+    best.mkdir()
+    (best / "adapter_config.json").write_text("best config", encoding="utf-8")
+    (best / "adapter_model.safetensors").write_bytes(b"selected adapter")
+    best_predictions = tmp_path / "best-validation-predictions.jsonl"
+    best_predictions.write_text('{"id":"v1","prediction":1}\n', encoding="utf-8")
+    best_metadata = tmp_path / "best-checkpoint.json"
+    best_metadata.write_text(json.dumps({"step": 128}), encoding="utf-8")
+
+    class Adapter:
+        def save_pretrained(self, destination: Path) -> None:
+            (destination / "adapter_config.json").write_text("current config", encoding="utf-8")
+            (destination / "adapter_model.safetensors").write_bytes(b"current adapter")
+
+    fake_torch = SimpleNamespace(
+        save=lambda value, path: path.write_text(json.dumps(value), encoding="utf-8")
+    )
+    snapshot_state = {
+        "global_step": 128,
+        "best_step": 128,
+        "experiment_id": "teacher-e-long-seed17",
+        "run_started_at_utc": "2026-10-05T00:00:00+00:00",
+        "cumulative_wall_seconds": 120.0,
+        "cumulative_setup_validation_seconds": 30.0,
+        "consumed_sample_id_order_sha256": "a" * 64,
+        "checkpoint_retention": "latest",
+        "rng_state": {
+            "python_random_state": [],
+            "numpy_random_state": {},
+            "torch_cpu_rng_state": [],
+            "torch_cuda_rng_states": [],
+        },
+    }
+    checkpoint = tmp_path / "snapshot"
+    checkpoint.mkdir()
+
+    trainer.write_training_checkpoint_payload(
+        checkpoint,
+        model=Adapter(),
+        optimizer=SimpleNamespace(state_dict=lambda: {"step": 128}),
+        scheduler=SimpleNamespace(state_dict=lambda: {"step": 128}),
+        trainer_state=snapshot_state,
+        torch_module=fake_torch,
+        best_adapter_path=best,
+        best_predictions_path=best_predictions,
+        best_checkpoint_metadata_path=best_metadata,
+        include_best_checkpoint=True,
+    )
+    assert (checkpoint / "best" / "adapter_model.safetensors").read_bytes() == b"selected adapter"
+    assert (checkpoint / "best-validation-predictions.jsonl").read_bytes() == (
+        best_predictions.read_bytes()
+    )
+    assert trainer.resolve_resume_checkpoint(checkpoint) == checkpoint
+
+
+def test_rng_snapshot_restores_python_and_cpu_torch_streams() -> None:
+    import numpy as np
+
+    torch = pytest.importorskip("torch")
+    random.seed(91)
+    np.random.seed(91)
+    torch.manual_seed(91)
+    state = trainer.capture_rng_state(torch)
+    expected_python = random.random()
+    expected_numpy = np.random.random(4)
+    expected_torch = torch.rand(4)
+
+    random.random()
+    np.random.random(4)
+    torch.rand(4)
+    trainer.restore_rng_state(torch, state)
+
+    assert random.random() == expected_python
+    assert np.array_equal(np.random.random(4), expected_numpy)
+    assert torch.equal(torch.rand(4), expected_torch)
+
+
+def test_rng_restore_rejects_incomplete_resume_state() -> None:
+    torch = pytest.importorskip("torch")
+    with pytest.raises(ValueError, match="missing RNG state"):
+        trainer.restore_rng_state(torch, {})
+
+
+def test_resume_checkpoint_rejects_snapshot_without_rng_state(tmp_path: Path) -> None:
+    checkpoint = tmp_path / "legacy-checkpoint"
+    checkpoint.mkdir()
+    (checkpoint / "trainer-state.json").write_text(
+        json.dumps({"global_step": 128}), encoding="utf-8"
+    )
+    for name in (
+        "adapter_config.json",
+        "adapter_model.safetensors",
+        "optimizer.pt",
+        "scheduler.pt",
+    ):
+        (checkpoint / name).write_bytes(b"state")
+
+    with pytest.raises(ValueError, match="RNG state"):
+        trainer.resolve_resume_checkpoint(checkpoint)
+
+
+def test_resume_restores_best_checkpoint_and_truncates_uncommitted_logs(tmp_path: Path) -> None:
+    output = tmp_path / "run"
+    checkpoint = tmp_path / "checkpoint"
+    best = checkpoint / "best"
+    best.mkdir(parents=True)
+    (best / "adapter_config.json").write_text("best config", encoding="utf-8")
+    (best / "adapter_model.safetensors").write_bytes(b"selected adapter")
+    (checkpoint / "best-checkpoint.json").write_text(
+        json.dumps({"step": 128}), encoding="utf-8"
+    )
+    (checkpoint / "best-validation-predictions.jsonl").write_text(
+        json.dumps({"id": "validation-1", "prediction": 1}) + "\n", encoding="utf-8"
+    )
+    output.mkdir()
+    (output / "best").mkdir()
+    (output / "best" / "adapter_model.safetensors").write_bytes(b"uncommitted adapter")
+    history_path = output / "training-history.jsonl"
+    history_path.write_text(
+        json.dumps({"step": 128, "step_seconds": 1.0})
+        + "\n"
+        + json.dumps({"step": 256, "step_seconds": 1.0})
+        + "\n",
+        encoding="utf-8",
+    )
+    for step in (128, 256):
+        (output / f"validation-step-{step}.json").write_text(
+            json.dumps({"step": step}), encoding="utf-8"
+        )
+        (output / f"validation-step-{step}-predictions.jsonl").write_text(
+            json.dumps({"id": f"validation-{step}"}) + "\n", encoding="utf-8"
+        )
+    state = {
+        "global_step": 128,
+        "best_step": 128,
+        "history": [
+            {"step": 128, "step_seconds": 1.0},
+            {"step": 128, "validation": {"all": {"accuracy": 1.0}}},
+        ],
+    }
+
+    trainer.restore_resume_artifacts(output, checkpoint, state)
+
+    assert (output / "best" / "adapter_model.safetensors").read_bytes() == b"selected adapter"
+    assert json.loads((output / "best-checkpoint.json").read_text())["step"] == 128
+    assert json.loads((output / "best-validation-predictions.jsonl").read_text())["prediction"] == 1
+    assert [json.loads(line)["step"] for line in history_path.read_text().splitlines()] == [128]
+    assert (output / "validation-step-128.json").is_file()
+    assert not (output / "validation-step-256.json").exists()
+    assert not (output / "validation-step-256-predictions.jsonl").exists()
+
+
+def test_validation_evaluation_writes_every_example_prediction(tmp_path: Path) -> None:
+    writer = trainer.save_validation_evaluation
+    prediction = {
+        "id": "validation-1",
+        "target": 1,
+        "prediction": 1,
+        "option_probabilities": [0.2, 0.8],
+    }
+
+    metrics_path, predictions_path = writer(
+        tmp_path,
+        128,
+        {"step": 128, "validation": {"macro": {"macro_accuracy": 1.0}}},
+        [prediction],
+    )
+
+    assert json.loads(metrics_path.read_text(encoding="utf-8"))["step"] == 128
+    assert [json.loads(line) for line in predictions_path.read_text().splitlines()] == [prediction]
+
+
+def test_training_consumption_summary_counts_video_scenes_and_parent_questions() -> None:
+    first_question = example(
+        "scene-1-question-1-choice-0",
+        "clevrer",
+        "video",
+        [MediaRef(kind="video", uri="source-ref://videos/scene-1.mp4")],
+        "explanatory",
+        "scene-1-question-1",
+    )
+    second_choice = example(
+        "scene-1-question-1-choice-1",
+        "clevrer",
+        "video",
+        [MediaRef(kind="video", uri="source-ref://videos/scene-1.mp4")],
+        "explanatory",
+        "scene-1-question-1",
+    )
+    next_question = example(
+        "scene-2-question-1-choice-0",
+        "clevrer",
+        "video",
+        [MediaRef(kind="video", uri="source-ref://videos/scene-2.mp4")],
+        "predictive",
+        "scene-2-question-1",
+    )
+
+    summary = trainer.training_consumption_summary(
+        [first_question, second_choice, next_question, first_question]
+    )
+
+    assert summary["consumed_examples"] == 4
+    assert summary["unique_examples"] == 3
+    assert summary["unique_underlying_assets"] == 2
+    assert summary["unique_video_scenes"] == 2
+    assert summary["unique_video_parent_questions"] == 2
+    assert summary["repeated_examples"] == 1
 
 
 def test_experiment_manifest_round_trips_frozen_inputs_and_curves() -> None:

@@ -22,6 +22,7 @@ class DecisionTrainingConfig(BaseModel):
     max_steps: int = Field(default=100, ge=1)
     gradient_accumulation_steps: int = Field(default=8, ge=1)
     checkpoint_interval: int = Field(default=25, ge=1)
+    checkpoint_retention: Literal["all", "latest"] = "all"
     evaluation_interval: int = Field(default=25, ge=1)
     early_stopping_patience: int = Field(default=4, ge=1)
     early_stopping_min_delta: float = Field(default=0.0, ge=0)
@@ -86,6 +87,7 @@ def decision_training_config(raw: dict[str, Any]) -> DecisionTrainingConfig:
             "max_steps": training.get("max_steps", 100),
             "gradient_accumulation_steps": training.get("gradient_accumulation_steps", 8),
             "checkpoint_interval": training.get("checkpoint_interval", 25),
+            "checkpoint_retention": training.get("checkpoint_retention", "all"),
             "evaluation_interval": training.get("evaluation_interval", 25),
             "early_stopping_patience": training.get("early_stopping_patience", 4),
             "early_stopping_min_delta": training.get("early_stopping_min_delta", 0.0),
