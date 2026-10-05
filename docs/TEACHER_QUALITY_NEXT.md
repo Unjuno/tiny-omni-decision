@@ -1324,6 +1324,21 @@ import the source package in this checkout; the corrected invocation was
 `py -c "import sys; sys.path.insert(0, 'src'); import pytest; raise SystemExit(pytest.main(['-q']))"`.
 GitHub Actions for the documentation commit is pending verification.
 
+### Post-run sampler exposure replay
+
+The deterministic sampler was replayed from the frozen train corpus and
+effective seed-17 sampling policy. Its first 8,192 sample IDs reproduce the
+saved order hash exactly (`4313ae5c498e6dd60b4c5ad0d066d83174f2d51e296b961da2bd1b39b0baea86`).
+After excluding those sample IDs and every underlying asset consumed by this
+run, the corpus still has 80,064 rows, but the remainder is not presumed
+unseen across earlier experiments. It comprises Text 37,527 rows / 21,016
+assets, Image 11,636 / 2,909, Audio 30,309 / 29,098, and Video 592 / 25
+scenes. The Video remainder is too small and scene-clustered to serve as a
+new video development generation. A future clean multimodal development set
+must audit historical exposure for the other source records and obtain a
+separate scene-disjoint CLEVRER generation rather than recycling these 25
+remaining scenes.
+
 ### Interpretation and next evidence needed
 
 This completed run shows that the candidate learned substantially from the
