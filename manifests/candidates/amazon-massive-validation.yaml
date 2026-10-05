@@ -1,0 +1,31 @@
+schema_version: 1
+dataset_id: alexa/massive
+revision: f966f21846043aabef9b0f974fa7970027f43738
+subset: en-US
+split: teacher-quality-next-validation-seed17
+modalities: [text]
+upstream_url: https://github.com/alexa/massive
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: null
+attribution: "Amazon Science; MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages."
+source_citation: https://www.amazon.science/blog/amazon-releases-51-language-dataset-for-language-understanding
+usage: evaluation
+trust_status: trusted
+schema:
+  state: user utterance from official en-US train/dev partitions
+  question: identify the single intent expressed by the utterance
+  options: all 60 en-US intent labels, unmodified
+  target: official intent label
+notes:
+  data_version: 1.0
+  data_archive_sha256: 7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8
+  output_path: data/processed/teacher-quality-next/massive/validation.jsonl
+  validation_role: development and candidate selection only; not a sealed or final audit.
+  split_policy: Official dev records seed validation groups; normalized duplicate utterance groups from train move wholly to validation, and a seed-17 train group is added for any intent absent from dev.
+  overlap_gate: Zero normalized utterance groups across the produced train/validation files; zero exact normalized utterance-state hashes against previously inspected train/validation corpora.
+  reserved_partition: The official test partition is not parsed or used.
+  option_integrity: Preserve all 60 intent choices in every example.
+  license_evidence: https://github.com/alexa/massive/blob/main/NOTICE.md

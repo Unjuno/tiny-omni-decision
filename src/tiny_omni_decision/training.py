@@ -9,7 +9,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from .corpus import source_asset_identity
-from .decision_math import label_token_ids_from_prompt, prompt_for_decision
+from .decision_math import label_token_ids_from_prompt, option_labels, prompt_for_decision
 from .schema import DecisionExample
 
 
@@ -522,7 +522,7 @@ def processor_inputs_for_example(
     video_num_frames: int = 4,
 ) -> tuple[dict[str, Any], list[int], int, int]:
     """Build actual Gemma4Processor inputs from a metadata record and local media."""
-    labels = [chr(ord("A") + index) for index in range(len(example.options))]
+    labels = option_labels(len(example.options))
     prompt = prompt_for_decision(example, labels)
     modality_payload: dict[str, Any] = {}
     media_line = ""
@@ -635,7 +635,7 @@ def output_record(
         "source": example.source,
         "modality": example.modality,
         "target": example.options.index(example.target),
-        "option_labels": [chr(ord("A") + index) for index in range(len(example.options))],
+        "option_labels": option_labels(len(example.options)),
         "option_logits": logits,
         "option_probabilities": probabilities,
         "prediction": prediction,

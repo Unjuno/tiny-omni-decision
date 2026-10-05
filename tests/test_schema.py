@@ -63,7 +63,7 @@ def test_text_decision_option_count_and_target() -> None:
     with pytest.raises(ValueError):
         TextDecision(state="s", question="q", options=["x", "y"], target="z")
     with pytest.raises(ValueError):
-        TextDecision(state="s", question="q", options=[str(i) for i in range(21)], target="0")
+        TextDecision(state="s", question="q", options=[str(i) for i in range(63)], target="0")
 
 
 @pytest.mark.parametrize("kind", ["image", "audio", "video"])
@@ -82,7 +82,7 @@ def test_media_ref_requires_safe_reference() -> None:
 
 
 def test_decision_example_option_limits_and_target() -> None:
-    for count in (2, 20):
+    for count in (2, 20, 60):
         options = [f"option {i}" for i in range(count)]
         assert _example(options=options, target=options[-1]).target == options[-1]
     with pytest.raises(ValueError):
@@ -90,7 +90,7 @@ def test_decision_example_option_limits_and_target() -> None:
     with pytest.raises(ValueError):
         _example(options=["a", "b"], target="missing")
     with pytest.raises(ValueError):
-        _example(options=["a"] * 21, target="a")
+        _example(options=["a"] * 63, target="a")
 
 
 def test_license_allow_review_deny_and_unknown_fail_closed() -> None:

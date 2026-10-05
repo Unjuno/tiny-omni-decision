@@ -11,6 +11,7 @@ from tiny_omni_decision.decision_math import (
     negative_log_likelihood,
     normalize_scores,
     option_label_ids,
+    option_labels,
     reorder_target,
 )
 from tiny_omni_decision.schema import BaseModelManifest, TextDecision
@@ -59,6 +60,15 @@ def test_option_label_ids_require_single_distinct_tokens() -> None:
     assert option_label_ids(FakeTokenizer(), ["A", "B", "C"]) == [10, 11, 12]
     with pytest.raises(ValueError, match="exactly one token"):
         option_label_ids(FakeTokenizer(), ["AB"])
+
+
+def test_option_labels_support_all_60_massive_intents() -> None:
+    labels = option_labels(60)
+    assert len(labels) == len(set(labels)) == 60
+    assert labels[:2] == ["A", "B"]
+    assert labels[-1] == "7"
+    with pytest.raises(ValueError):
+        option_labels(63)
 
 
 def test_contextual_label_ids_are_a_single_continuation_token() -> None:

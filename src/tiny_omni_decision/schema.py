@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, model_validator
 class TextDecision(BaseModel):
     state: str
     question: str
-    options: list[str] = Field(min_length=2, max_length=20)
+    options: list[str] = Field(min_length=2, max_length=62)
     target: str
 
     @model_validator(mode="after")
@@ -58,7 +58,7 @@ class DecisionExample(BaseModel):
     modality: Literal["text", "image", "audio", "video"]
     state: str
     question: str
-    options: list[str] = Field(min_length=2, max_length=20)
+    options: list[str] = Field(min_length=2, max_length=62)
     target: str
     media: list[MediaRef] = Field(default_factory=list)
     source: str = Field(min_length=1)

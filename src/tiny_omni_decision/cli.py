@@ -17,7 +17,7 @@ import click
 import typer
 from rich.console import Console
 
-from .decision_math import label_token_ids_from_prompt, prompt_for_decision
+from .decision_math import label_token_ids_from_prompt, option_labels, prompt_for_decision
 from .io import load_structured_file
 from .schema import (
     BaseModelManifest,
@@ -1365,7 +1365,7 @@ def inspect_model(
 def _decision_logits(model, processor, sample: TextDecision) -> tuple[object, list[int]]:
     from .decision import option_logits_from_vocab
 
-    labels = [chr(ord("A") + i) for i in range(len(sample.options))]
+    labels = option_labels(len(sample.options))
     text = processor.apply_chat_template(
         [{"role": "user", "content": prompt_for_decision(sample, labels)}],
         tokenize=False,

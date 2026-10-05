@@ -2,8 +2,17 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
+from string import ascii_lowercase, ascii_uppercase, digits
 
 from .schema import TextDecision
+
+
+def option_labels(option_count: int) -> list[str]:
+    """Return distinct single-character labels for every supplied option."""
+    labels = list(ascii_uppercase + ascii_lowercase + digits)
+    if option_count < 2 or option_count > len(labels):
+        raise ValueError(f"option count must be between 2 and {len(labels)}")
+    return labels[:option_count]
 
 
 def prompt_for_decision(sample: TextDecision, labels: list[str]) -> str:
