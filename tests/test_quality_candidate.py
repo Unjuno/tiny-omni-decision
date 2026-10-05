@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from scripts.evaluate_quality_candidate import install_video_decode_cache
+from tiny_omni_decision.video_cache import install_video_decode_cache
 
 
 class FakeVideoProcessor:
