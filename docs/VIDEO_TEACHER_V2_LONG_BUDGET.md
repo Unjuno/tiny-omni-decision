@@ -311,3 +311,74 @@ requires a fresh, separately named seed-17 run in a new output directory; that
 is a new initialization after an infrastructure failure, not a continuation of
 this partial run. No result here establishes a training-capacity, forgetting,
 or temporal-representation limit.
+
+## Follow-up: full clean-dev-v2 comparison
+
+After the blocked run, a separate read-only evaluation completed for the
+saved E-long step-128 adapter and selected Candidate E adapter. Both used the
+frozen `clean-dev-v2/validation.jsonl`, identical 7,901 ordered validation
+IDs (order SHA-256
+`6548ff2ad8419a775c08dbda37f86ed63ab57db66eeb24e7af1888794050f12b`),
+the same pinned base/processor revision, and the same E config. The effective
+processor length was 1,052 for both. These are development-validation results,
+not blind audit results, and were collected after Candidate E had already been
+selected using its earlier validation. They must not be interpreted as an
+independent test or used to promote a Teacher.
+
+| Candidate | Step | Macro accuracy | Minimum modality | Macro NLL | Macro Brier | Macro ECE | Video accuracy | Video NLL |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Candidate E | 512 | 0.6968 | 0.4655 | 0.9273 | 0.3745 | 0.0582 | 0.4655 | 0.9440 |
+| E-long partial | 128 | 0.6677 | 0.4549 | 1.0741 | 0.4165 | 0.0733 | 0.4549 | 0.9898 |
+
+| Modality | Candidate E accuracy / NLL / Brier / ECE | E-long step 128 accuracy / NLL / Brier / ECE |
+|---|---|---|
+| Audio (2,864) | 0.9969 / 0.0258 / 0.0073 / 0.0165 | 0.9916 / 0.0494 / 0.0158 / 0.0272 |
+| Image (2,048) | 0.7041 / 0.9063 / 0.4066 / 0.0812 | 0.6191 / 1.3242 / 0.5279 / 0.1161 |
+| Text (514) | 0.6206 / 1.8333 / 0.5071 / 0.0832 | 0.6051 / 1.9331 / 0.5295 / 0.0898 |
+| Video (2,475) | 0.4655 / 0.9440 / 0.5769 / 0.0520 | 0.4549 / 0.9898 / 0.5929 / 0.0600 |
+
+Candidate E per-question-type Video Accuracy / NLL was temporal descriptive
+0.4105 / 1.2691 (n=1,062), explanatory 0.5341 / 0.6923 (n=601), predictive
+0.5000 / 0.7017 (n=138), and counterfactual 0.4837 / 0.7057 (n=674).
+E-long step 128 was temporal descriptive 0.4040 / 1.3795 (n=1,062),
+explanatory 0.4908 / 0.7000 (n=601), predictive 0.5435 / 0.6937 (n=138),
+and counterfactual 0.4852 / 0.6948 (n=674). The small Video difference is
+mixed across task types and does not establish a learning-quantity effect.
+
+The full E evaluation took 5,336.4 seconds and the E-long adapter evaluation
+took 5,316.6 seconds; each used 11,449,122,304 bytes peak allocated VRAM.
+These timings are inference over the full validation, not training time.
+Audio and Image are stronger for E in this comparison, while Text and Video
+changes are smaller; these shifts are descriptive only because the validation
+data is used for development and has already influenced model selection.
+
+Evaluation artifacts are ignored local outputs at
+`artifacts/teacher-quality-next/evaluations/clean-dev-v2-candidate-e/` and
+`artifacts/teacher-quality-next/evaluations/clean-dev-v2-e-long-best/`.
+The E-long evaluation records adapter SHA-256
+`968f40de479682acd91d9fa0640ad7ff7af566402cc01883bb3531daaa3af337`,
+config SHA-256 `02590db67c80cc89b2dfc265067937d5d39f5ab445fcc18d426a7d6f95c3f72d`,
+and validation corpus SHA-256
+`cad3fe4f87e64fcc4b908ae6ab59ae6973cbe32093551956bb3164a49c6e8edf`. The E
+evaluation records adapter SHA-256
+`c0d483b89798bea0d20f50a2335a0fa658c1794cd31c4ceb245f079b0e8ae851` and the
+same config and validation hashes. Both evaluations cover all four modalities
+and the same full validation ID sequence. No audit data was opened.
+
+**Interpretation remains uncertain.** The 128-step observation is not the
+requested 512-step point on the 2,048-step cosine schedule, and the schedule
+differs from E-512 in both warmup and decay horizon. The run did not reach 512,
+1,024, 1,536, 1,920, or 2,048, so neither a matched within-run learning curve
+nor a paired scene bootstrap can answer the budget hypothesis. This full
+validation comparison does not repair that missing experiment. The partial
+run cannot be resumed exactly because optimizer, scheduler, sampler cursor,
+selector state, and RNG state were not saved at failure. A future attempt
+requires a newly named seed-17 initialization and must be reported as a new
+run, not a continuation of this run.
+
+The original E-long selector contained 472 IDs from the earlier Candidate E
+corpus; none of those IDs occur in clean-dev-v2 (0/472 intersection). Thus
+the full clean-dev-v2 numbers above compare the two saved adapters on one
+common fresh validation, but cannot be joined to the old 472-ID selector or
+used as a same-selector v1/E/E-long comparison. No same-selector claim is
+made here.
