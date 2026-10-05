@@ -389,6 +389,37 @@ predict the result on other text Decision sources. Future experiments may use
 this development split for selection, with validation-generation reuse
 tracked explicitly; no sealed audit was loaded.
 
+### Candidate E matched Text diagnostic
+
+The immutable Candidate E best checkpoint (step 512; adapter SHA-256
+`c0d483b89798bea0d20f50a2335a0fa658c1794cd31c4ceb245f079b0e8ae851`) was
+evaluated on the identical ordered MASSIVE validation IDs with the same
+preprocessing. It scored 0.6274 Accuracy, 1.8936 NLL, 0.5051 Brier, and
+0.0924 ECE (mean confidence 0.7197), compared with v1's 0.6509 Accuracy,
+1.8286 NLL, and 0.4976 Brier. Candidate E's ECE was lower than v1's by 0.0217,
+but its accuracy and both proper scoring rules were worse. Its config SHA-256
+is `0635c29cc761412cebec53f1569fecfc296c647a2f7a11bdbb217f88cfa7ac5c`; the
+base/processor revision, validation JSONL hash, and ordered sample-ID hash
+match the v1 evaluation above. Evaluation took 655.5 seconds; peak allocated
+VRAM was 10,824,126,464 bytes. Metrics JSON SHA-256 is
+`7e0a55e9f1bf779d8ae5c0e58be79a5dc2b3a418df06ad46c01c656a1359e9e6`; the
+2,045-row predictions JSONL SHA-256 is
+`9e28a96a672b2a68e33d46dcf460b38605ca683c6db549518f8c9563cb48e31`.
+
+A paired cluster bootstrap over the 2,032 normalized-utterance groups (10,000
+resamples, seed 17, percentile interval) estimated Candidate E minus v1
+Accuracy at -0.0235, with 95% CI [-0.0362, -0.0113]. This compares two already
+trained adapters and does not isolate any single training change. Across the
+60 target intents, unweighted class Accuracy was 0.7019 for v1 and 0.6458 for
+Candidate E. Per-intent validation counts range from 1 to 131, so that macro
+class summary is noisy; it is supplementary and does not replace the
+full-set sample-weighted result. Both candidates scored 0/8 on
+`music_settings`, 0/16 on `email_querycontact`, 5/106 on `general_quirky` for
+v1 (2/106 for E), and 1/26 on `recommendation_events`. These errors and the
+long-tailed validation counts motivate source/task analysis and broader clean
+text data, not deleting difficult intents. This validation generation is now
+observed for v1 and Candidate E; avoid repeated candidate selection on it.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
