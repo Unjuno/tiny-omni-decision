@@ -801,6 +801,56 @@ was 12,008,189,952 bytes. The rolling 128-step training window had CE 0.6440
 and Accuracy 0.7383; it is not a fixed-example generalization gap. Training
 continued under the unchanged 2,048-step budget and early-stopping patience.
 
+At step 1024, validation improved under the fixed selector and the checkpoint
+became the new best (selection score 0.373490; adapter SHA-256
+`2d617045b1a953ff248e8508f63e03354adbc319f712754fdde503d76e630be6`). The
+same 512 validation IDs were used in the same order (ordered-ID SHA-256
+`00754c90a2155aa8a8a949489a3d7a80e6205943f21153047f434be61fda92a0`). Metrics:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 1.0000 | 0.0032 | 0.0004 | 0.0030 |
+| Image | 0.7578 | 0.6223 | 0.3122 | 0.1009 |
+| Text | 0.7813 | 0.9764 | 0.3521 | 0.1613 |
+| Video | 0.5000 | 0.8673 | 0.5626 | 0.1256 |
+| Macro | 0.7598 | 0.6173 | 0.3068 | 0.0977 |
+
+Compared with step 896, Video Accuracy increased 7.03 points, Text increased
+3.13 points, Image fell 7.81 points, and Audio stayed at 100%. Macro Accuracy
+increased 0.59 points, macro NLL improved by 0.0065, macro Brier worsened by
+0.0069, and macro ECE improved slightly. Minimum-modality Accuracy rose from
+0.4297 to 0.5000. The selector emitted no warnings at this checkpoint; this
+does not erase the earlier step-896 warning or establish a fixed-example
+train/validation gap. The rolling training window had CE 0.7130 and Accuracy
+0.6914; it covers a different rolling set of examples and is not a direct
+generalization-gap estimate.
+
+Video question-type metrics were temporal descriptive 7/26 (0.2692 Accuracy,
+1.5875 NLL), explanatory 21/38 (0.5526, 0.6731), predictive 20/38 (0.5263,
+0.6936), and counterfactual 16/26 (0.6154, 0.6847). Thus the overall Video
+gain was mixed: temporal descriptive declined from 0.3846 at step 896 while
+the other three task types improved.
+
+For the paired Video Accuracy change from step 896 to 1024, the saved
+predictions were matched by sample ID and scene-cluster bootstrap resampled 77
+validation scenes with replacement, 20,000 replicates, Python
+`random.Random(17)`, percentile 95% interval. The observed difference was
++0.0703; the interval was [-0.0744, 0.2143]. This is a wide development-set
+diagnostic, and the same validation data participates in checkpoint selection;
+it is not blind-audit evidence.
+
+At step 1024, the run had consumed 4,096 unique examples with no repeats,
+3,370 unique underlying assets, 782 video scenes, and 1,365 CLEVRER parent
+questions. Unique assets by modality were Audio 637, Image 934, Text 1,017,
+and Video 782. Source examples were CLEVRER 1,365, Clevr-4 1,024, MASSIVE 512,
+Speech Commands 341, LibriSpeech 342, Open-Jev 256, and Typed Decisions Synth
+256. Video task counts were counterfactual 273, explanatory 409, predictive
+410, and temporal descriptive 273. The consumed sample-ID order hash was
+`33950ba758dd8767587c6a97868f9169308f463582cb16eb5b8dbc64112a3a80`. Evaluation
+took 386 seconds; elapsed run time was 10,864 seconds and peak allocated VRAM
+was 12,008,189,952 bytes. Evaluation completed and the same training process
+continued beyond step 1024 under the unchanged run configuration.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
