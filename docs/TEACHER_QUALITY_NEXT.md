@@ -1153,10 +1153,10 @@ same 512 validation IDs and order were used. Metrics:
 | Image | 0.8281 | 0.4349 | 0.2283 | 0.0784 |
 | Text | 0.8125 | 0.8153 | 0.2970 | 0.1234 |
 | Video | 0.5078 | 0.8278 | 0.5511 | 0.0824 |
-| Macro | 0.7871 | 0.5201 | 0.2692 | 0.0669 |
+| Macro | 0.7871 | 0.5201 | 0.2692 | 0.0716 |
 
 Compared with step 1792, macro Accuracy fell 0.39 points, NLL worsened by
-0.0029, and Brier worsened by 0.0010; ECE improved by 0.0075. Image and Video
+0.0029, and Brier worsened by 0.0010; ECE improved by 0.0009. Image and Video
 Accuracy each fell 0.78 points, while Audio stayed at 100% and Text stayed at
 81.25%. The selector reported `validation_nll_rising` and
 `weak_modality_degraded`; step 1792 remained selected. The rolling training
