@@ -548,6 +548,9 @@ Source counts were CLEVRER 171, Clevr-4 128, MASSIVE 64, Speech Commands 42,
 LibriSpeech 43, Open-Jev 32, and Typed Decisions Synth 32. The sample-ID order
 hash for these 512 examples is
 `19a34fe6a6432c4b8534d2e6fcd02fb2522f21ea21c7b2816b6946c908761382`.
+The base and step-128 validation prediction files contain the exact same 512
+unique sample IDs in the same order; their validation ID-order SHA-256 is
+`00754c90a2155aa8a8a949489a3d7a80e6205943f21153047f434be61fda92a0`.
 The measured validation pass took 390 seconds; elapsed run time at that point
 was 2,037 seconds and peak allocated VRAM was 11,916,105,728 bytes. Rolling
 train-window metrics are recorded in `validation-step-128.json`; they are not
