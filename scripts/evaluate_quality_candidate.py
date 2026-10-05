@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import time
+from collections import OrderedDict
 from pathlib import Path
 
 os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
@@ -39,6 +40,36 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def install_video_decode_cache(
+    processor: object, *, video_num_frames: int, capacity: int = 4
+) -> None:
+    """Reuse exact sampled frames for adjacent questions in one fixed-config evaluation."""
+    if capacity < 1:
+        raise ValueError("video decode cache capacity must be positive")
+    if video_num_frames < 1:
+        raise ValueError("video_num_frames must be positive")
+    video_processor = getattr(processor, "video_processor", None)
+    if video_processor is None:
+        return
+    original_fetch = video_processor.fetch_videos
+    cache: OrderedDict[tuple[str, int], object] = OrderedDict()
+
+    def cached_fetch(video: object, sample_indices_fn: object = None) -> object:
+        if not isinstance(video, str):
+            return original_fetch(video, sample_indices_fn=sample_indices_fn)
+        key = (video, video_num_frames)
+        if key in cache:
+            cache.move_to_end(key)
+            return cache[key]
+        result = original_fetch(video, sample_indices_fn=sample_indices_fn)
+        cache[key] = result
+        if len(cache) > capacity:
+            cache.popitem(last=False)
+        return result
+
+    video_processor.fetch_videos = cached_fetch
 
 
 def evaluate(args: argparse.Namespace) -> dict[str, object]:
@@ -77,6 +108,7 @@ def evaluate(args: argparse.Namespace) -> dict[str, object]:
         revision=model_manifest.processor_revision,
         local_files_only=True,
     )
+    install_video_decode_cache(processor, video_num_frames=config.video_num_frames)
 
     data_root = resolve_media_root(corpus, ROOT / "data")
     sequence_lengths: list[int] = []
