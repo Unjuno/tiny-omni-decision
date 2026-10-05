@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import sys
 import zipfile
+import zlib
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -119,6 +120,20 @@ def _write_examples(path: Path, examples: list[Any]) -> None:
             handle.write(example.model_dump_json(exclude_none=True) + "\n")
 
 
+def _verify_existing_archive_member(path: Path, info: zipfile.ZipInfo) -> str:
+    if not path.is_file() or path.stat().st_size != info.file_size:
+        raise ValueError(f"existing CLEVRER media does not match pinned member size: {path}")
+    digest = hashlib.sha256()
+    crc = 0
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+            crc = zlib.crc32(chunk, crc)
+    if crc & 0xFFFFFFFF != info.CRC:
+        raise ValueError(f"existing CLEVRER media failed ZIP CRC validation: {path}")
+    return digest.hexdigest()
+
+
 def build(args: argparse.Namespace) -> dict[str, Any]:
     output_dir = args.output_dir.resolve()
     expected_root = (ROOT / "artifacts" / "teacher-quality-next").resolve()
@@ -172,18 +187,39 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
                 raise ValueError(f"pinned CLEVRER archive is missing {filename}")
             selected_infos[scene] = info
 
-        expected_bytes = sum(info.file_size for info in selected_infos.values())
+        media_dir = args.data_root / "raw" / "teacher-quality-next" / "clevrer"
+        media_dir.mkdir(parents=True, exist_ok=True)
+        media_by_scene: dict[int, MediaRef] = {}
+        missing_infos: dict[int, zipfile.ZipInfo] = {}
+        for scene, info in selected_infos.items():
+            relative_path = media_path_for_scene(scene)
+            target = args.data_root / relative_path
+            if target.exists():
+                digest = _verify_existing_archive_member(target, info)
+                media_by_scene[scene] = MediaRef(
+                    kind="video",
+                    path=relative_path,
+                    sha256=digest,
+                    license=manifest.license,
+                )
+            else:
+                missing_infos[scene] = info
+
+        expected_bytes = sum(info.file_size for info in missing_infos.values())
         free_bytes = shutil.disk_usage(args.data_root).free
         if free_bytes - expected_bytes < MIN_FREE_AFTER_DOWNLOAD:
             raise OSError(
                 "insufficient disk space for selected CLEVRER videos while preserving "
-                f"the 1 GiB reserve: need {expected_bytes:,} bytes, have {free_bytes:,} free"
+                f"the 1 GiB reserve: need {expected_bytes:,} additional bytes, "
+                f"have {free_bytes:,} free"
             )
 
-        media_dir = args.data_root / "raw" / "teacher-quality-next" / "clevrer"
-        media_dir.mkdir(parents=True, exist_ok=False)
-        media_by_scene: dict[int, MediaRef] = {}
-        for scene, info in sorted(selected_infos.items()):
+        print(
+            f"Verified {len(media_by_scene)} existing selected videos; "
+            f"fetching {len(missing_infos)} more ({expected_bytes:,} bytes).",
+            flush=True,
+        )
+        for scene, info in sorted(missing_infos.items()):
             relative_path = media_path_for_scene(scene)
             target = args.data_root / relative_path
             temporary = target.with_suffix(target.suffix + ".part")
