@@ -628,6 +628,46 @@ was 4,645 seconds and peak allocated VRAM remained 11,916,105,728 bytes. The
 a fixed-example train/validation gap. Training continued after this evaluation
 under the existing 2,048-step budget.
 
+At step 512, validation Accuracy rose in aggregate, but the fixed selector did
+not improve and kept step 384 as best. The step-512 adapter was retained as a
+non-selected checkpoint (SHA-256
+`d716424676465e0045be8738b0ab8987f0cec7c647b36d27737f9f2cace1334d`). The same
+512 unique validation IDs and order were used (ordered-ID SHA-256
+`00754c90a2155aa8a8a949489a3d7a80e6205943f21153047f434be61fda92a0`). Metrics:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 1.0000 | 0.0007 | 0.0000 | 0.0007 |
+| Image | 0.7813 | 0.7320 | 0.3198 | 0.0890 |
+| Text | 0.7500 | 1.4155 | 0.4015 | 0.1459 |
+| Video | 0.5078 | 0.8473 | 0.5530 | 0.0874 |
+| Macro | 0.7598 | 0.7489 | 0.3186 | 0.0807 |
+
+From step 384 to 512, Image Accuracy rose 6.25 points and Text 3.13 points;
+Audio stayed at 100%, while Video fell 1.56 points. Macro Accuracy gained
+1.95 points, but macro NLL, Brier, and ECE worsened, and the selector score
+rose from 0.419176 to 0.503766 (higher is worse under this rule). The selector
+recorded `train_loss_falling`, `validation_nll_rising`, and
+`weak_modality_degraded`; it did not flag rising train Accuracy with stalled
+validation Accuracy. Video task-type results were temporal descriptive 8/26 (0.3077
+accuracy, 1.4519 NLL), explanatory 21/38 (0.5526, 0.6931), predictive 20/38
+(0.5263, 0.6931), and counterfactual 16/26 (0.6154, 0.6931). The temporal
+descriptive decline and Video Accuracy regression remain visible in the
+record; this checkpoint was not selected.
+
+Training had consumed 2,048 unique examples with no repeats, 1,837 unique
+underlying assets, 514 video scenes, and 683 CLEVRER parent questions. Unique
+assets by modality were Audio 327, Image 485, Text 511, and Video 514. Source
+example counts were CLEVRER 683, Clevr-4 512, MASSIVE 256, Speech Commands 170,
+LibriSpeech 171, Open-Jev 128, and Typed Decisions Synth 128. Video task counts
+were counterfactual 136, explanatory 205, predictive 205, and temporal
+descriptive 137. The sample-ID order hash was
+`2a6125de48ac552a9bb0738e9f1ff29f183a0e9b476eb0741d1e8e84e7e6d048`. Evaluation
+took 404 seconds; elapsed run time was 5,929 seconds and peak allocated VRAM
+remained 11,916,105,728 bytes. The 128-step rolling training window had CE
+0.7441 and Accuracy 0.6875; these are not fixed-example generalization-gap
+metrics. Training continued after evaluation under the existing budget.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
