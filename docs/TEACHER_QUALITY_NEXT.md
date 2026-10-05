@@ -524,6 +524,37 @@ validation baseline metrics, not final-audit results. The 2,048-step fresh
 LoRA training run is now in progress; its history and checkpoints are kept in
 the separate `seed17-2048-media-root-fix/` output directory.
 
+The first scheduled evaluation completed at step 128. The validation selector
+chose this checkpoint (selection score 0.749918; no overfit warnings) and
+saved it at `checkpoints/step-000128/` plus `best/`. Across 512 validation
+examples (128 per modality), metrics were:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 0.9844 | 0.0413 | 0.0136 | 0.0297 |
+| Image | 0.6406 | 1.0133 | 0.4660 | 0.1520 |
+| Text | 0.6484 | 1.9495 | 0.5134 | 0.1654 |
+| Video | 0.5234 | 0.8683 | 0.5485 | 0.0681 |
+| Macro | 0.6992 | 0.9681 | 0.3854 | 0.1038 |
+
+Relative to the fresh-base selection baseline on the same IDs, all four
+modalities improved at step 128; Video remains the weakest and Text has the
+worst NLL. Video question-type results were temporal descriptive 10/26
+(0.3846 accuracy, 1.5576 NLL), explanatory 21/38 (0.5526, 0.6879), predictive
+20/38 (0.5263, 0.7059), and counterfactual 16/26 (0.6154, 0.6801). At this
+checkpoint the run had consumed 512 unique examples with no repeats, 496
+unique underlying assets, 158 video scenes, and 171 CLEVRER parent questions.
+Source counts were CLEVRER 171, Clevr-4 128, MASSIVE 64, Speech Commands 42,
+LibriSpeech 43, Open-Jev 32, and Typed Decisions Synth 32. The sample-ID order
+hash for these 512 examples is
+`19a34fe6a6432c4b8534d2e6fcd02fb2522f21ea21c7b2816b6946c908761382`.
+The measured validation pass took 390 seconds; elapsed run time at that point
+was 2,037 seconds and peak allocated VRAM was 11,916,105,728 bytes. Rolling
+train-window metrics are recorded in `validation-step-128.json`; they are not
+a fixed-example generalization-gap estimate. Further training and scheduled
+validation remain in progress; these development-validation gains do not
+promote the candidate to product or establish final-audit performance.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
