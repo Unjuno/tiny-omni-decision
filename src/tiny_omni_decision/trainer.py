@@ -294,7 +294,9 @@ def save_checkpoint_snapshot(
     destination = checkpoints_dir / name
     if destination.exists():
         raise FileExistsError(f"refusing to overwrite checkpoint snapshot {destination}")
-    temporary = checkpoints_dir / f".{name}.tmp-{uuid.uuid4().hex}"
+    # PEFT writes adapter_model.safetensors below this path. Keep the temporary
+    # directory name short enough for Windows MAX_PATH on deeply nested repos.
+    temporary = checkpoints_dir / f".tmp-{uuid.uuid4().hex}"
     temporary.mkdir()
     try:
         write_checkpoint(temporary)

@@ -1496,6 +1496,37 @@ def test_latest_checkpoint_policy_replaces_resume_state_and_keeps_final(tmp_path
     ]
 
 
+def test_latest_checkpoint_temp_path_supports_safetensors_in_deep_windows_path(
+    tmp_path: Path,
+) -> None:
+    torch = pytest.importorskip("torch")
+    safetensors_torch = pytest.importorskip("safetensors.torch")
+
+    padding = max(1, 170 - len(str(tmp_path)) - len("/checkpoints") - 1)
+    checkpoints = tmp_path / ("p" * padding) / "checkpoints"
+    checkpoints.mkdir(parents=True)
+    saved_paths: list[Path] = []
+
+    def write_checkpoint(destination: Path) -> None:
+        adapter_path = destination / "adapter_model.safetensors"
+        saved_paths.append(adapter_path)
+        safetensors_torch.save_file({"probe": torch.zeros((2, 2))}, str(adapter_path))
+
+    snapshot = trainer.save_checkpoint_snapshot(
+        checkpoints,
+        step=128,
+        retention="latest",
+        final=False,
+        write_checkpoint=write_checkpoint,
+    )
+
+    assert len(saved_paths) == 1
+    assert len(str(saved_paths[0])) < 260
+    assert (snapshot / "adapter_model.safetensors").is_file()
+    latest = json.loads((checkpoints / "latest-checkpoint.json").read_text())
+    assert latest["directory"] == snapshot.name
+
+
 def test_resume_checkpoint_snapshot_contains_selector_best_and_rng_state(tmp_path: Path) -> None:
     best = tmp_path / "best"
     best.mkdir()
