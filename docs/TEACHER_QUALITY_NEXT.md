@@ -184,8 +184,51 @@ when run with the repository's `src` directory on `PYTHONPATH`; the checked-in
 `.venv` currently fails during Python site initialization on a CP932 decoding
 error in its `.pth` processing. MASSIVE and LibriSpeech train/validation
 manifests, plus Clevr-4 train/validation candidate manifests, validate with
-project policy `ALLOW`. No new model training, candidate selection, video
-candidate corpus, fresh final audit, or final Teacher has been produced.
+project policy `ALLOW`. No new model training, candidate selection, fresh
+final audit, or final Teacher has been produced.
+
+### Teacher v1 on fresh Clevr-4 development validation
+
+The read-only Teacher v1 adapter was evaluated once on the complete 3,708-row
+Clevr-4 development validation (927 unique images). This set is disjoint from
+the previously used image identities and the reserve set documented above; it
+is development evidence, not the final audit. The run used base and processor
+revision `6befbaca7398925921802abd1f277b495b78b738`, adapter SHA-256
+`4e664a5500a3a109a48de7ec7c807d2b09b61cf386fd124ca8368e197802f951`, and
+config SHA-256
+`a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409`. The
+validation JSONL SHA-256 is
+`73c5fa8de932877750614d73542630937f90a297e419538ffe813374778d098d`; its
+sample-ID order hash is
+`5dbeef2b479d65a20e23ba1100211faeb026657f9c1cc54a7f22655add026d1e`.
+
+| Modality | N | Accuracy | NLL | Brier | ECE | Mean confidence |
+|---|---:|---:|---:|---:|---:|---:|
+| Image (`sgvaze/clevr4`) | 3,708 | 0.7201 | 0.7937 | 0.3822 | 0.0880 | 0.8073 |
+
+Inference took 2,393.11 seconds with peak VRAM 11,031,089,664 bytes. All
+3,708 predictions were saved, and the prediction count, corpus row count,
+validation file hash, and adapter hash were verified against the metrics JSON.
+This one-source result is 18 percentage points below the per-modality 90%
+goal. It does not establish a general Image ceiling; further development must
+diagnose source/task coverage and improve using a separate candidate without
+reusing any final audit. Raw predictions and machine-readable metrics are in
+the ignored local path
+`artifacts/teacher-quality-next/evaluations/v1-clevr4-validation/`.
+
+### Fresh CLEVRER video corpus in progress
+
+A deterministic candidate selects 500 train scenes and 100 validation scenes
+(seed 17) from unused official CLEVRER train-source videos, excluding scenes
+in the historical Teacher v1 and Candidate E corpora. At the latest recorded
+check, the builder had verified and retained 509 selected local MP4s and was
+fetching the remaining 91. An earlier attempt stopped with `ENOSPC` after
+200 additional files; no corpus manifest was emitted by that failed attempt.
+After available disk space recovered, the same builder and same scene split
+were resumed under a new log. It verified 509 existing videos and started
+fetching the remaining 91; final train/validation corpora and their hashes
+must not be considered complete until the builder exits successfully and its
+manifest is verified. No sealed-audit data has been loaded.
 
 ## Primary source references
 
