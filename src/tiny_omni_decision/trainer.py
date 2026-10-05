@@ -133,6 +133,7 @@ def _evaluate(
     *,
     data_root: Path,
     config: DecisionTrainingConfig,
+    progress_callback: Callable[[int, int], None] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     import torch
 
@@ -140,7 +141,7 @@ def _evaluate(
     predictions = []
     groups: dict[str, list[tuple[list[float], int]]] = defaultdict(list)
     with torch.no_grad():
-        for example in examples:
+        for index, example in enumerate(examples, start=1):
             logits, target = _forward_decision(
                 model,
                 processor,
@@ -157,6 +158,8 @@ def _evaluate(
             groups[f"source:{example.source}"].append((probabilities, target))
             if example.modality == "video" and example.task_type is not None:
                 groups[f"video_type:{example.task_type}"].append((probabilities, target))
+            if progress_callback is not None:
+                progress_callback(index, len(examples))
 
     def measure(items: list[tuple[list[float], int]]) -> dict[str, float | int]:
         probs = [item[0] for item in items]

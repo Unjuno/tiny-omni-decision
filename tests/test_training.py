@@ -873,12 +873,16 @@ def test_validation_reports_accuracy_and_nll_by_video_reasoning_type(monkeypatch
         def eval(self):
             return self
 
+    evaluation_progress = []
     metrics, predictions = trainer(
         Model(),
         None,
         examples,
         data_root=Path("."),
         config=DecisionTrainingConfig(),
+        progress_callback=lambda completed, total: evaluation_progress.append(
+            (completed, total)
+        ),
     )
 
     assert metrics["video_type:predictive"]["count"] == 1
@@ -888,6 +892,7 @@ def test_validation_reports_accuracy_and_nll_by_video_reasoning_type(monkeypatch
         "predictive",
         "counterfactual",
     ]
+    assert evaluation_progress == [(1, 2), (2, 2)]
 
 
 def test_reservoir_sampling_is_seeded_and_not_a_prefix() -> None:

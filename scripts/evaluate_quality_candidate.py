@@ -116,12 +116,19 @@ def evaluate(args: argparse.Namespace) -> dict[str, object]:
     model = PeftModel.from_pretrained(base, adapter, is_trainable=False).eval()
     torch.cuda.reset_peak_memory_stats()
     started = time.monotonic()
+    print(f"Starting evaluation of {len(examples)} examples.", flush=True)
+
+    def report_progress(completed: int, total: int) -> None:
+        if completed % 100 == 0 or completed == total:
+            print(f"Evaluated {completed}/{total} examples.", flush=True)
+
     metrics, predictions = _evaluate(
         model,
         processor,
         examples,
         data_root=data_root,
         config=config,
+        progress_callback=report_progress,
     )
     evaluation_seconds = time.monotonic() - started
     metrics["macro"] = macro_metrics(metrics)

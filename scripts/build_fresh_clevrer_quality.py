@@ -219,7 +219,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             f"fetching {len(missing_infos)} more ({expected_bytes:,} bytes).",
             flush=True,
         )
-        for scene, info in sorted(missing_infos.items()):
+        for index, (scene, info) in enumerate(sorted(missing_infos.items()), start=1):
             relative_path = media_path_for_scene(scene)
             target = args.data_root / relative_path
             temporary = target.with_suffix(target.suffix + ".part")
@@ -245,6 +245,11 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
                 sha256=digest.hexdigest(),
                 license=manifest.license,
             )
+            if index % 25 == 0 or index == len(missing_infos):
+                print(
+                    f"Fetched {index}/{len(missing_infos)} additional selected videos.",
+                    flush=True,
+                )
 
     train, validation, report = materialize_clevrer_examples(
         rows,
