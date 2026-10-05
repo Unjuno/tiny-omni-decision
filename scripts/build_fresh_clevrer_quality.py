@@ -223,6 +223,14 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             relative_path = media_path_for_scene(scene)
             target = args.data_root / relative_path
             temporary = target.with_suffix(target.suffix + ".part")
+            if temporary.exists():
+                if not temporary.is_file() or temporary.is_symlink():
+                    raise ValueError(f"unexpected CLEVRER temporary path: {temporary}")
+                print(
+                    f"Discarding unverified partial archive member for scene {scene}.",
+                    flush=True,
+                )
+                temporary.unlink()
             digest = hashlib.sha256()
             written = 0
             try:
