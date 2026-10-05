@@ -998,6 +998,54 @@ Speech Commands 469, LibriSpeech 470, Open-Jev 352, and Typed Decisions Synth
 took 375 seconds; elapsed run time was 14,457 seconds and peak allocated VRAM
 was 12,008,189,952 bytes. The run continued beyond step 1408 unchanged.
 
+At step 1536, the fixed selector chose a new best checkpoint (score 0.320135;
+adapter SHA-256
+`a181fe0d1f681a0ab028df981d59176ee2380addd94d95649a862a8bafa6fd8d`). The
+same 512 validation IDs and order were used. Metrics:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 1.0000 | 0.0028 | 0.0005 | 0.0026 |
+| Image | 0.7813 | 0.5236 | 0.2816 | 0.1115 |
+| Text | 0.8125 | 0.9349 | 0.3164 | 0.1379 |
+| Video | 0.5000 | 0.8294 | 0.5528 | 0.0788 |
+| Macro | 0.7734 | 0.5727 | 0.2878 | 0.0827 |
+
+Compared with step 1408, macro Accuracy fell 0.39 points and Video Accuracy
+fell 2.34 points; Image rose 1.56 points, Text fell 0.78 points, and Audio
+stayed at 100%. Macro NLL improved by 0.0136, Brier by 0.0017, and ECE by
+0.0042. The selector's combined score improved, but the run flagged
+`train_loss_falling`, `train_accuracy_rising_validation_stalled`, and
+`weak_modality_degraded`. This is a quality trade-off: step 1536 is the
+selector's best, while the weakest-modality Accuracy is lower than at step
+1408. The rolling training window had CE 0.6464 and Accuracy 0.7285; these
+sampled-window values are not a fixed-example train/validation gap.
+
+Video question-type metrics were temporal descriptive 9/26 (0.3462 Accuracy,
+1.3624 NLL), explanatory 22/38 (0.5789, 0.6904), predictive 17/38 (0.4474,
+0.6982), and counterfactual 16/26 (0.6154, 0.6911). Temporal-descriptive and
+predictive Accuracy declined versus step 1408; explanatory rose and
+counterfactual was unchanged.
+
+For paired Video Accuracy from step 1408 to 1536, predictions were matched by
+sample ID. Scene-cluster bootstrap resampled 77 validation scenes, 20,000
+replicates, Python `random.Random(17)`, percentile 95% interval. The observed
+difference was -0.0234, with interval [-0.0756, 0.0259]. Against step 1024,
+the observed difference was zero, with interval [-0.0645, 0.0652]. These are
+development-validation diagnostics on repeatedly inspected data, not
+blind-audit evidence.
+
+At step 1536, training had consumed 6,144 unique examples with no repeats,
+4,743 unique underlying assets, 923 video scenes, and 2,048 CLEVRER parent
+questions. Unique assets by modality were Audio 946, Image 1,355, Text 1,519,
+and Video 923. Source examples were CLEVRER 2,048, Clevr-4 1,536, MASSIVE 768,
+Speech Commands 512, LibriSpeech 512, Open-Jev 384, and Typed Decisions Synth
+384. Video task counts were counterfactual 410, explanatory 614, predictive
+614, and temporal descriptive 410. The consumed sample-ID order hash was
+`f90ec365591f7b6a66ab8aaf697cd237b611e4da377651983fcab25144b1fa20`. Evaluation
+took 377 seconds; elapsed run time was 15,636 seconds and peak allocated VRAM
+was 12,008,189,952 bytes. The unchanged run continued beyond step 1536.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
