@@ -1094,6 +1094,53 @@ order hash was
 took 376 seconds; elapsed run time was 16,819 seconds and peak allocated VRAM
 was 12,008,189,952 bytes. The run continued beyond step 1664 unchanged.
 
+At step 1792, the fixed selector chose a new best checkpoint (score 0.251411;
+adapter SHA-256
+`35b68111c0bcc91047b4c89521f0fe3eed80ab8279073ac09c2251d9c0cbf8bf`). The
+same 512 validation IDs and order were used. Metrics:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 1.0000 | 0.0025 | 0.0005 | 0.0023 |
+| Image | 0.8359 | 0.4326 | 0.2282 | 0.0914 |
+| Text | 0.8125 | 0.8077 | 0.2960 | 0.1188 |
+| Video | 0.5156 | 0.8270 | 0.5481 | 0.0775 |
+| Macro | 0.7910 | 0.5172 | 0.2682 | 0.0725 |
+
+Compared with step 1664, macro Accuracy rose 0.59 points and NLL improved by
+0.0027; Brier was effectively unchanged and ECE changed by less than 0.0003.
+Image Accuracy rose 2.34 points; Audio, Text, and Video Accuracy were
+unchanged. The selector reported only `train_loss_falling`; its other
+overfitting signals were false. Rolling-window train CE was 0.5877 and
+Accuracy was 0.7578, which is not a fixed-example generalization gap.
+
+Video question-type metrics were temporal descriptive 9/26 (0.3462 Accuracy,
+1.3630 NLL), explanatory 21/38 (0.5526, 0.6823), predictive 20/38 (0.5263,
+0.6931), and counterfactual 16/26 (0.6154, 0.6931). Accuracy and NLL were
+largely unchanged from step 1664, aside from a 2.63-point explanatory
+Accuracy decline and a 3.85-point temporal-descriptive Accuracy increase.
+
+For paired Video Accuracy from step 1664 to 1792, predictions were matched by
+sample ID. Scene-cluster bootstrap resampled 77 validation scenes, 20,000
+replicates, Python `random.Random(17)`, percentile 95% interval. The observed
+difference was 0.0000, with interval [-0.0315, 0.0305]. Against step 1408,
+Video Accuracy declined by 0.78 points; the interval was [-0.0480, 0.0320].
+These results do not indicate a clear Video improvement and remain
+development-validation diagnostics, not blind-audit evidence.
+
+At step 1792, training had consumed 7,168 unique examples with no repeats,
+5,376 unique underlying assets, 970 video scenes, and 2,389 CLEVRER parent
+questions. Unique assets by modality were Audio 1,087, Image 1,549, Text
+1,770, and Video 970. Source examples were CLEVRER 2,389, Clevr-4 1,792,
+MASSIVE 896, Speech Commands 597, LibriSpeech 598, Open-Jev 448, and Typed
+Decisions Synth 448. Video task counts were counterfactual 478, explanatory
+716, predictive 717, and temporal descriptive 478. The consumed sample-ID
+order hash was
+`e672874aea410b2b5e61c83fcbffbb5ea11e9fdff1aabf0eb507ef75571fb200`.
+Evaluation took 375 seconds; elapsed run time was 17,999.891 seconds and peak
+allocated VRAM was 12,008,189,952 bytes. The unchanged run continued beyond
+step 1792.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
