@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from tiny_omni_decision.clevrer_quality import (  # noqa: E402
+    fresh_clevrer_dataset_id,
     materialize_clevrer_examples,
     media_path_for_scene,
     select_unseen_clevrer_scenes,
@@ -273,7 +274,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     _write_examples(validation_path, validation)
     result = {
         "schema_version": 1,
-        "dataset_id": "teacher-quality-next-clevrer-fresh-scenes-v1",
+        "dataset_id": fresh_clevrer_dataset_id(output_dir.name),
         "source_commit": subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
         ).strip(),

@@ -431,6 +431,99 @@ evidence points to fine-grained intent discrimination and long-tail coverage;
 it does not yet distinguish data scarcity from prompt/label representation or
 adapter interference.
 
+## Fresh CLEVRER development generation v2
+
+A second seed-23 development generation was built from the pinned official
+CLEVRER training questions, excluding all 1,046 scenes in the durable v1,
+Candidate E, and fresh-scenes-v1 corpora. The deterministic split has 500
+training scenes (12,509 examples) and 100 validation scenes (2,491 examples).
+The train and validation corpora have zero shared scene IDs. All 600 selected
+MP4 files were present and SHA-256 verified. A cross-corpus check against
+106,182 historical records found zero overlapping source IDs, assets, media
+identities, or normalized content. The sealed audit was not loaded.
+
+| Split | N | Temporal descriptive | Explanatory | Predictive | Counterfactual |
+|---|---:|---:|---:|---:|---:|
+| Train (500 scenes) | 12,509 | 5,349 | 3,047 | 734 | 3,379 |
+| Validation (100 scenes) | 2,491 | 1,070 | 628 | 144 | 649 |
+
+Corpus hashes are `78fde1efac834ff371dde233da60fec1d04aa6f7dee75d31fefdc36681e25549`
+(train) and `0dde757fee675c72489016170d2018fcf08ee309da76ec01eb7885a2375532f5`
+(validation). The corrected manifest SHA-256 is
+`8630c3d723018e02536d785cc682395fc1ace986e341491b4ae0ddafd7114c37`. The
+builder initially wrote a v1 dataset ID into the v2 manifest; this was caught
+before training, corrected using the output generation name, and recorded in
+the local `manifest-correction.json`. Corpus bytes and their hashes did not
+change. A regression test now covers generation-specific IDs.
+
+## Multimodal data-coverage candidate corpus and run
+
+The new local candidate corpus combines the durable v1 train rows for
+non-video modalities, MASSIVE train, LibriSpeech train-clean-100, fresh
+Clevr-4 train, and the fresh CLEVRER v1/v2 train scenes. It has 117,828 train
+examples and 10,947 validation examples. Validation combines MASSIVE,
+LibriSpeech, Clevr-4, and fresh CLEVRER v2. The full train/validation gate
+reports zero source-record, asset, media, and normalized-content overlap.
+The exact source counts and hashes are in the local corpus manifest at
+`data/processed/multimodal-data-coverage-v1/`:
+
+| Modality / source | Train examples | Validation examples |
+|---|---:|---:|
+| Text / `alexa/massive` | 11,502 | 2,045 |
+| Text / `TypeSafeAI/Open-Jev` | 6,527 | — |
+| Text / `n4ze3m/typed-decisions-synth` | 23,319 | — |
+| Image / `sgvaze/clevr4` | 18,544 | 3,708 |
+| Audio / `google/speech_commands` | 4,516 | — |
+| Audio / `openslr/LibriSpeech` | 28,539 | 2,703 |
+| Video / `MIT-IBM/CLEVRER` | 24,881 | 2,491 |
+
+The combined train SHA-256 is
+`7fe73a0039fd4b651b323f1cee0de12f6a429ff69605e485dce2ef538a6762e3`; the
+validation SHA-256 is
+`1a8691b7b09b5e37d17a46340519bbd67bca6480d1d887714b4bd1b8fa330db0`.
+The legacy v1 train corpus contributes no video rows because it includes
+CLEVRER records without the task labels required by the video task-weighted
+sampler. Its 3,492 video rows were excluded as a group; the candidate uses the
+two scene-disjoint, task-labeled fresh CLEVRER training generations instead.
+
+An actual sampler dry-run consumed 8,192 unique examples with zero repeats.
+Two explicit source policies kept modality weights and video task weights
+fixed. Equal source weights consumed 683 MASSIVE examples; weighting
+`alexa/massive` at 2.0 consumed 1,024 and proportionally reduced Open-Jev and
+Typed Decisions Synth to 512 each. The selected 2x policy is a text-coverage
+hypothesis, not a validation-proven improvement. Under it the dry-run
+consumed 1,365 audio, 2,048 image, 2,048 text, and 2,731 video rows; video task
+counts were 546 temporal descriptive, 819 explanatory, 820 predictive, and
+546 counterfactual, with 975 unique video scenes and zero repeated examples.
+Sample-ID order SHA-256 is
+`4313ae5c498e6dd60b4c5ad0d066d83174f2d51e296b961da2bd1b39b0baea86`.
+
+Candidate config is `configs/decision/teacher_quality_data_coverage_v1.yaml`
+(seed 17; 8 frames; decoder-all-linear rank 16; cosine schedule with 3% warmup;
+2,048 steps; early-stopping patience 17; one sample per example; frozen
+modality encoders and projector). Training constructs a fresh LoRA adapter on
+the pinned pretrained base. The read-only Teacher v1 selected adapter is used
+only for a same-validation reference evaluation, then unloaded; it is not a
+training initialization. No resume checkpoint is supplied.
+
+The first local launch stopped before baseline evaluation or optimizer updates:
+its nested corpus path made the legacy media-root resolver choose `data/processed`,
+so a Clevr-4 path resolved incorrectly. That failed attempt is retained under
+`artifacts/teacher-quality-next/teacher-data-coverage-v1/seed17-2048/` and is
+not a model result. The unchanged corpus files were copied to the standard
+`data/processed/multimodal-data-coverage-v1/` depth; their SHA-256 hashes match.
+A full preflight over 128,775 train/validation rows then found zero missing
+media files and zero paths escaping `data/`. Train/validation integrity checks
+also passed. A retry uses a distinct output directory; its result is pending.
+
+The retry's fresh-base pre-training selection baseline completed on 512
+validation examples (128 per modality). Accuracy was Audio 0.9531, Image
+0.1875, Text 0.0547, and Video 0.4844; macro Accuracy was 0.4199. Macro NLL,
+Brier, and ECE were 3.0106, 0.7664, and 0.2845. These are development
+validation baseline metrics, not final-audit results. The 2,048-step fresh
+LoRA training run is now in progress; its history and checkpoints are kept in
+the separate `seed17-2048-media-root-fix/` output directory.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)

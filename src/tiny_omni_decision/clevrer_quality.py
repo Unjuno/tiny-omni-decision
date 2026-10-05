@@ -11,6 +11,15 @@ from .dataset import check_train_eval_splits, normalize_jsonl
 from .schema import DatasetManifest, DecisionExample, MediaRef
 
 
+def fresh_clevrer_dataset_id(output_name: str) -> str:
+    """Name a generated corpus after its immutable output directory generation."""
+    if not output_name.startswith("clevrer-fresh-scenes-") or not output_name.removeprefix(
+        "clevrer-fresh-scenes-"
+    ):
+        raise ValueError("fresh CLEVRER output name must include its generation suffix")
+    return f"teacher-quality-next-{output_name}"
+
+
 def select_unseen_clevrer_scenes(
     rows: Iterable[dict[str, Any]],
     *,

@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from tiny_omni_decision.clevrer_quality import (
+    fresh_clevrer_dataset_id,
     materialize_clevrer_examples,
     media_path_for_scene,
     select_unseen_clevrer_scenes,
@@ -14,6 +15,24 @@ from tiny_omni_decision.io import load_structured_file
 from tiny_omni_decision.schema import DatasetManifest, MediaRef
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.mark.parametrize(
+    ("output_name", "expected"),
+    [
+        ("clevrer-fresh-scenes-v1", "teacher-quality-next-clevrer-fresh-scenes-v1"),
+        ("clevrer-fresh-scenes-v2", "teacher-quality-next-clevrer-fresh-scenes-v2"),
+    ],
+)
+def test_fresh_clevrer_dataset_id_tracks_output_generation(
+    output_name: str, expected: str
+) -> None:
+    assert fresh_clevrer_dataset_id(output_name) == expected
+
+
+def test_fresh_clevrer_dataset_id_requires_generation_name() -> None:
+    with pytest.raises(ValueError, match="generation suffix"):
+        fresh_clevrer_dataset_id("clevrer-fresh-scenes-")
 
 
 def _manifest() -> DatasetManifest:
