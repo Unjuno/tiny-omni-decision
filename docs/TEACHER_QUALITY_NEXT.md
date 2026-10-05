@@ -354,6 +354,41 @@ family has reached a ceiling. Any further broad candidate selection should
 use another clean development generation to limit repeated selection on these
 observed 100 scenes.
 
+## Teacher v1 on MASSIVE English development validation
+
+The read-only Teacher v1 adapter was evaluated on all 2,045 examples in the
+ALLOW-approved Amazon MASSIVE en-US development split. Each example selects
+from the full set of 60 intents; no options or examples were removed. The
+official test partition was not read. This is development evidence, not a
+final audit.
+
+| Modality / source | N | Accuracy | NLL | Brier | ECE | Mean confidence |
+|---|---:|---:|---:|---:|---:|---:|
+| Text / `alexa/massive` | 2,045 | 0.6509 | 1.8286 | 0.4976 | 0.1141 | 0.7648 |
+
+The evaluation used the immutable Teacher v1 selected adapter
+(`4e664a5500a3a109a48de7ec7c807d2b09b61cf386fd124ca8368e197802f951`), base
+and processor revision `6befbaca7398925921802abd1f277b495b78b738`, and the
+explicit reference config (`dc44f7dfa9bf1f5cf171ea707f3c8a5e0049ca2cc2064216f1c9c288650ae6e7`).
+The validation JSONL SHA-256 is
+`79d1559478c0b86b7d7ed2c1209ba1062dca8c08e9a83ea8056ab0a4a989505f`; ordered
+sample-ID SHA-256 is
+`6e409a3455522318b31cbd263b3d573a8185cfc89528522e65cd6b207aadb8e8`.
+Effective sequence length remained 1,024. Evaluation took 547.765 seconds
+and peak allocated VRAM was 10,738,208,768 bytes on the local RTX 3080 Laptop.
+Metrics JSON SHA-256 is
+`3d7427f1b822f5938fb478546f61e101b210da5b33fe28ad231f3823771f6dec`; all
+2,045 per-example predictions are in the ignored local evaluation directory,
+with SHA-256
+`809c16c3f23987898a7a6984693a9bd35b009100fd392a949633eaf668af39e1`.
+
+At 65.09%, v1 is 24.91 percentage points below the Text goal on this
+single-source 60-intent task. This identifies a substantial domain/task gap
+for the current teacher; it does not establish a general Text ceiling or
+predict the result on other text Decision sources. Future experiments may use
+this development split for selection, with validation-generation reuse
+tracked explicitly; no sealed audit was loaded.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
