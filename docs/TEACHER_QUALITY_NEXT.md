@@ -590,6 +590,44 @@ validation pass took 404 seconds; elapsed run time was 3,295 seconds and peak
 allocated VRAM was 11,916,105,728 bytes. The 128-step rolling train window
 reported CE 0.8515 and Accuracy 0.6836; it is not a fixed-example gap measure.
 
+At step 384, the validation evaluation completed and the validation-only
+selector chose the checkpoint (score 0.419176; adapter SHA-256
+`c942706eb00fc9f1058c536f5724365ff52fca5cbfbca5d3d5f10d2f358eca80`). The
+512 validation sample IDs remain unique and in exactly the same order as the
+baseline, step 128, and step 256 predictions (ordered-ID SHA-256
+`00754c90a2155aa8a8a949489a3d7a80e6205943f21153047f434be61fda92a0`). Metrics:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 1.0000 | 0.0040 | 0.0004 | 0.0038 |
+| Image | 0.7188 | 0.7006 | 0.3362 | 0.0963 |
+| Text | 0.7188 | 1.1038 | 0.3755 | 0.0988 |
+| Video | 0.5234 | 0.8539 | 0.5453 | 0.0674 |
+| Macro | 0.7402 | 0.6656 | 0.3143 | 0.0666 |
+
+Compared with step 256 on the identical validation examples, macro Accuracy
+rose by 2.15 points and macro NLL/Brier/ECE all improved. Video Accuracy rose
+by 3.13 points, Text by 6.25 points, Audio remained at 100%, and Image fell by
+0.78 points. The selector reported no overfit warnings. Video task-type results
+were temporal descriptive 10/26 (0.3846 accuracy, 1.4844 NLL), explanatory
+21/38 (0.5526, 0.6931), predictive 20/38 (0.5263, 0.6931), and counterfactual
+16/26 (0.6154, 0.6931). These estimates use small per-type counts and the same
+development validation repeatedly used for checkpoint selection.
+
+By step 384, training had consumed 1,536 unique examples with no repeats,
+1,412 unique underlying assets, 412 video scenes, and 512 CLEVRER parent
+questions. Unique assets by modality were Audio 247, Image 369, Text 384, and
+Video 412. Source examples were CLEVRER 512, Clevr-4 384, MASSIVE 192, Speech
+Commands 128, LibriSpeech 128, Open-Jev 96, and Typed Decisions Synth 96. The
+sample-ID order hash was
+`83c0c0402d10bf3ecebb05f2ba030a2af09f858bebbdcdddf3e7b3b997d766d4`. Video
+task counts were counterfactual 102, explanatory 154, predictive 154, and
+temporal descriptive 102. The evaluation took 421 seconds; elapsed run time
+was 4,645 seconds and peak allocated VRAM remained 11,916,105,728 bytes. The
+128-step rolling training window had CE 0.8950 and Accuracy 0.6406; it is not
+a fixed-example train/validation gap. Training continued after this evaluation
+under the existing 2,048-step budget.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
