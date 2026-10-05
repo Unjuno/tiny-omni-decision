@@ -420,6 +420,17 @@ long-tailed validation counts motivate source/task analysis and broader clean
 text data, not deleting difficult intents. This validation generation is now
 observed for v1 and Candidate E; avoid repeated candidate selection on it.
 
+The split includes all 60 intents, but is long-tailed: per-intent counts range
+from 4 to 810 in training and from 1 to 131 in validation. This reflects the
+available source distribution and is retained without reweighting the reported
+metrics. For v1, frequent confusions include `calendar_set` to
+`calendar_query` (34), `play_music` to `music_query` (30), and `calendar_set`
+to `alarm_set` (26). Candidate E has the same first confusion (36) and makes
+more `cooking_recipe` to `cooking_query` errors (33 versus v1's 15). The
+evidence points to fine-grained intent discrimination and long-tail coverage;
+it does not yet distinguish data scarcity from prompt/label representation or
+adapter interference.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
