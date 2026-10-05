@@ -246,11 +246,59 @@ content fingerprints. The sealed-audit flag is false; no sealed audit was
 loaded. The machine-readable corpus and manifest are in the ignored local
 path `artifacts/teacher-quality-next/clevrer-fresh-scenes-v1/`.
 
-Teacher v1 is currently being evaluated on the 2,538-example development
-video validation, with its original 4-frame configuration. The evaluator
-uses the local TorchVision fallback because `torchcodec` is unavailable;
-processor preflight has measured 500 of 2,538 examples so far. No video score
-is available until inference finishes.
+### Teacher v1 on fresh CLEVRER development validation
+
+The read-only Teacher v1 adapter was evaluated on all 2,538 validation
+examples from the fresh CLEVRER corpus above (100 unique validation videos).
+The evaluation used the existing 4-frame config and made no model, data, or
+preprocessing changes. The corpus split verifier had already confirmed
+zero train/validation source, asset, media-identity, and normalized-content
+overlap; the audit corpus was not loaded. This is development evidence and
+must not be presented as a blind audit.
+
+| Task type | N | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|---:|
+| Temporal descriptive | 1,067 | 0.4977 | 1.1374 | 0.6413 | 0.1672 |
+| Explanatory | 638 | 0.5376 | 0.7498 | 0.5459 | 0.1472 |
+| Predictive | 132 | 0.5379 | 0.8303 | 0.6100 | 0.2227 |
+| Counterfactual | 701 | 0.4650 | 0.7763 | 0.5734 | 0.1570 |
+| **Video / macro** | **2,538** | **0.5008** | **0.9243** | **0.5970** | **0.1584** |
+
+The validation and adapter hashes match the metrics record. Validation JSONL
+SHA-256:
+`16b3b9a45c7c430cab81c74b7bf633ba0c4aea3ac120587820e33ae879a3dd4b`;
+sample-ID order SHA-256:
+`b34e827212f089b44b72edf4fb06f7fcf9d447bd943419d4e56c66edd3677e18`;
+adapter SHA-256:
+`4e664a5500a3a109a48de7ec7c807d2b09b61cf386fd124ca8368e197802f951`;
+config SHA-256:
+`a68fae06267078dbbbcc8afc0ce4680cb553ed28b968e64e2bde50955c5a6409`.
+Base and processor revision are both
+`6befbaca7398925921802abd1f277b495b78b738`. Configured and effective maximum
+sequence length were both 1,024 tokens. All 2,538 prediction IDs match the
+validation IDs in exact order, and the prediction file contains 2,538 unique
+rows. Metrics JSON SHA-256 is
+`49bbf1935ecea2dfca8464feac4b4907d3765cf9ee0e2c491f67cc1e76b7e78e`;
+predictions JSONL SHA-256 is
+`0bcb9d9ba9c29b9e544c284dfa0cfe64ccc31776f3579d009d6f208dc4f64ac3`.
+
+Inference took 1,259.44 seconds; total wall time from process start through
+artifact write was about 23 minutes 24 seconds. Peak allocated VRAM was
+10,797,883,392 bytes. No cloud compute was used. The local TorchVision
+fallback was used because `torchcodec` is unavailable. The first uncached
+attempt completed its redundant processor preflight but was stopped before
+inference output; it produced no score and is not counted as an evaluation.
+Commit `2c3ff39` adds a bounded per-video sampled-frame cache to the
+development evaluator. Unit tests and a real-processor smoke confirmed cached
+and uncached tensors are identical, and that repeated rows reuse the decoded
+frames under the fixed evaluation config.
+
+The 50.08% score is far below the 90% per-modality target and identifies
+video as a major current weakness. It does not establish a model-family
+ceiling: task type, representation, coverage, and model adaptation still need
+separate development experiments. Metrics and predictions are in the ignored
+local path
+`artifacts/teacher-quality-next/evaluations/v1-clevrer-video-validation-cached/`.
 
 ## Primary source references
 
