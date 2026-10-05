@@ -114,6 +114,31 @@ Implementation and builder files are `src/tiny_omni_decision/librispeech.py`,
 the Decision processor through PyAV and resampled to the required mono 16 kHz
 waveform.
 
+### Read-only Teacher v1 reference on LibriSpeech validation
+
+The frozen Teacher v1 adapter was evaluated once on all 2,703 LibriSpeech
+development examples. The adapter SHA-256 is
+`4e664a5500a3a109a48de7ec7c807d2b09b61cf386fd124ca8368e197802f951`; the base
+revision is `6befbaca7398925921802abd1f277b495b78b738`. The validation corpus
+SHA-256 is the value above, and the ordered validation ID hash is
+`2adf72fcbf3f8eef3ab46ad39fb4fd45c326d26f56f0deac1e1ff8831506ebf6`.
+
+| Modality/source | N | Accuracy | NLL | Brier | ECE | Mean confidence |
+|---|---:|---:|---:|---:|---:|---:|
+| Audio / LibriSpeech | 2,703 | 0.99334 | 0.02910 | 0.00959 | 0.01527 | 0.97979 |
+
+The v1 training config has a 1,024-token input cap, but the complete validation
+set's measured maximum processor length is 1,072; three examples exceed 1,024.
+To retain every validation item, the evaluation used 1,072 tokens. This is a
+read-only baseline on a new development source and does not replace or update
+the historical v1 metrics. It is a clean audiobook transcript-selection task
+from one source, so this high score is not evidence of broad audio reasoning
+or of the four-modality goal being achieved. Full per-example predictions and
+metrics are saved locally under the ignored path
+`artifacts/teacher-quality-next/v1-librispeech-validation/`; no model weights
+were changed. Evaluation wall time was 762.2 seconds on the local GPU; peak
+VRAM was not instrumented for this run.
+
 ## Image candidate: fresh Clevr-4 train identities
 
 The pinned annotation SHA-256 is
