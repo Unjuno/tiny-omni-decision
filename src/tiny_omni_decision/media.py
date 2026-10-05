@@ -76,7 +76,11 @@ class _HttpRangeReader(io.RawIOBase):
 
 
 def materialize_clevr4_images(
-    examples: list[DecisionExample], *, data_root: Path, archive_url: str
+    examples: list[DecisionExample],
+    *,
+    data_root: Path,
+    archive_url: str,
+    archive_path: Path | None = None,
 ) -> tuple[list[DecisionExample], dict[str, object]]:
     requested: dict[str, Path] = {}
     for example in examples:
@@ -96,8 +100,12 @@ def materialize_clevr4_images(
 
     missing = {name: path for name, path in requested.items() if not path.is_file()}
     if missing:
-        reader = _HttpRangeReader(archive_url)
-        with zipfile.ZipFile(reader) as archive:
+        archive_source: Path | _HttpRangeReader
+        if archive_path is not None:
+            archive_source = archive_path
+        else:
+            archive_source = _HttpRangeReader(archive_url)
+        with zipfile.ZipFile(archive_source) as archive:
             for filename, path in sorted(
                 missing.items(),
                 key=lambda item: archive.getinfo(f"images/{item[0]}").header_offset,
@@ -135,7 +143,10 @@ def materialize_clevr4_images(
     return converted, {
         "archive_url": archive_url,
         "archive_revision_or_checksum": (
-            "SHA-512 pinned in the Clevr-4 dataset manifest; partial range reads "
+            "SHA-512 pinned in the Clevr-4 dataset manifest; full archive hash "
+            "verified before local materialization"
+            if archive_path is not None
+            else "SHA-512 pinned in the Clevr-4 dataset manifest; partial range reads "
             "do not verify the whole archive hash"
         ),
         "images_materialized": len(requested),

@@ -169,6 +169,34 @@ def test_clevr4_media_are_extracted_in_archive_order(
     assert opened == ["images/early.png", "images/late.png"]
 
 
+def test_clevr4_media_can_be_materialized_from_verified_local_archive(
+    tmp_path: Path, monkeypatch
+) -> None:
+    archive_path = tmp_path / "clevr4.zip"
+    png_header = b"\x89PNG\r\n\x1a\n"
+    with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED) as archive:
+        archive.writestr("images/requested.png", png_header + b"requested")
+        archive.writestr("images/unrequested-reserve.png", png_header + b"reserve")
+
+    def unexpected_http_reader(_url: str):
+        raise AssertionError("verified local materialization must not read remote ranges")
+
+    monkeypatch.setattr(media, "_HttpRangeReader", unexpected_http_reader)
+    examples = [_clevr4_example("requested", "requested.png")]
+    converted, metadata = media.materialize_clevr4_images(
+        examples,
+        data_root=tmp_path,
+        archive_url="https://example.invalid/clevr4.zip",
+        archive_path=archive_path,
+    )
+
+    assert (tmp_path / converted[0].media[0].path).is_file()
+    assert metadata["images_materialized"] == 1
+    assert metadata["images_newly_downloaded"] == 1
+    assert "full archive hash verified" in str(metadata["archive_revision_or_checksum"])
+    assert not (tmp_path / "raw/clevr4-10k/images/unrequested-reserve.png").exists()
+
+
 def test_clevrer_media_are_extracted_in_archive_order(
     tmp_path: Path, monkeypatch
 ) -> None:

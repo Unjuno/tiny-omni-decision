@@ -1,0 +1,32 @@
+schema_version: 1
+dataset_id: openslr/LibriSpeech
+revision: 96519bc4ce8e8a57f84fd03b8833553f51e76dfc
+subset: dev-clean
+split: teacher-quality-next-validation-seed17
+modalities: [audio]
+upstream_url: https://www.openslr.org/12/
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Vassil Panayotov, Guoguo Chen, Daniel Povey, and Sanjeev Khudanpur; LibriSpeech ASR corpus (ICASSP 2015)."
+source_citation: https://www.openslr.org/12/
+usage: evaluation
+trust_status: trusted
+schema:
+  state: a spoken audiobook excerpt provided as audio
+  question: select the sentence that matches the spoken audio
+  options: the true transcript and three distinct same-split transcripts
+  target: official utterance transcription
+  media: one 16 kHz FLAC speech clip
+notes:
+  source_identifier: OpenSLR SLR12
+  checksum_manifest_sha256: efe6522682d078fdcfd2c3b2d418a53a89683b342dd5147a769a41a7e021fe3f
+  checksum_manifest_sha1_revision: 96519bc4ce8e8a57f84fd03b8833553f51e76dfc
+  archive_md5: 42e2234ba48799c1f50f24a7926300a1
+  archive_sha256: 76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3
+  archive_size_bytes: 337926286
+  validation_role: Development and candidate selection only; not a sealed or final audit.
+  speaker_split: Official dev-clean speaker identities are disjoint from train-clean-100.
+  test_policy: test-clean and test-other archives were not downloaded or read.

@@ -546,22 +546,7 @@ def processor_inputs_for_example(
             modality_payload["images"] = [Image.open(media_path).convert("RGB")]
             media_line = processor.image_token
         elif example.modality == "audio":
-            import wave
-
-            import numpy as np
-
-            with wave.open(str(media_path), "rb") as audio_file:
-                channels = audio_file.getnchannels()
-                sample_rate = audio_file.getframerate()
-                if sample_rate != 16_000:
-                    raise ValueError(
-                        f"Gemma 4 audio path expects 16 kHz input, got {sample_rate} Hz"
-                    )
-                frames = audio_file.readframes(audio_file.getnframes())
-                waveform = np.frombuffer(frames, dtype=np.int16).astype(np.float32) / 32768.0
-                if channels > 1:
-                    waveform = waveform.reshape(-1, channels).mean(axis=1)
-            modality_payload["audio"] = [waveform]
+            modality_payload["audio"] = [audio_waveform_from_path(media_path)]
             media_line = processor.audio_token
         else:
             modality_payload["videos"] = [str(media_path)]
@@ -583,6 +568,54 @@ def processor_inputs_for_example(
     decision_position = int(encoded["input_ids"].shape[-1]) - 1
     target_index = example.options.index(example.target)
     return dict(encoded), option_ids, decision_position, target_index
+
+
+def audio_waveform_from_path(audio_path: Path) -> Any:
+    """Load mono 16 kHz audio from WAV or a PyAV-supported compressed format."""
+    import numpy as np
+
+    if audio_path.suffix.lower() == ".wav":
+        import wave
+
+        with wave.open(str(audio_path), "rb") as audio_file:
+            channels = audio_file.getnchannels()
+            sample_rate = audio_file.getframerate()
+            if sample_rate != 16_000:
+                raise ValueError(
+                    f"Gemma 4 audio path expects 16 kHz input, got {sample_rate} Hz"
+                )
+            frames = audio_file.readframes(audio_file.getnframes())
+            waveform = np.frombuffer(frames, dtype=np.int16).astype(np.float32) / 32768.0
+            if channels > 1:
+                waveform = waveform.reshape(-1, channels).mean(axis=1)
+    else:
+        import av
+
+        chunks = []
+        with av.open(str(audio_path)) as container:
+            if not container.streams.audio:
+                raise ValueError(f"audio file has no audio stream: {audio_path}")
+            stream = container.streams.audio[0]
+            sample_rate = stream.rate or stream.codec_context.sample_rate
+            if sample_rate != 16_000:
+                raise ValueError(
+                    f"Gemma 4 audio path expects 16 kHz input, got {sample_rate} Hz"
+                )
+            resampler = av.AudioResampler(format="fltp", layout="mono", rate=16_000)
+            for frame in container.decode(stream):
+                chunks.extend(
+                    converted.to_ndarray().reshape(-1)
+                    for converted in resampler.resample(frame)
+                )
+            chunks.extend(
+                converted.to_ndarray().reshape(-1) for converted in resampler.resample(None)
+            )
+        if not chunks:
+            raise ValueError(f"audio file contains no decodable samples: {audio_path}")
+        waveform = np.concatenate(chunks).astype(np.float32, copy=False)
+    if waveform.size == 0 or not np.isfinite(waveform).all():
+        raise ValueError(f"audio file contains no finite samples: {audio_path}")
+    return waveform
 
 
 def resolve_decoder_lora_targets(

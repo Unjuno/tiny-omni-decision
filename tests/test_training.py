@@ -27,6 +27,7 @@ from tiny_omni_decision.schema import DecisionExample, LicenseProvenance, MediaR
 from tiny_omni_decision.training import (
     DecisionTrainingConfig,
     aggregate_training_window,
+    audio_waveform_from_path,
     collate_metadata,
     decision_training_config,
     deterministic_sample_order,
@@ -95,6 +96,28 @@ def test_config_defaults_and_sampling_validation() -> None:
         DecisionTrainingConfig(modality_weights={"text": 0.0})
     with pytest.raises(ValueError, match="sampling weights"):
         DecisionTrainingConfig(source_weights={"a": -1.0})
+
+
+def test_flac_audio_decoder_produces_finite_16khz_mono_waveform(tmp_path: Path) -> None:
+    av = pytest.importorskip("av")
+    np = pytest.importorskip("numpy")
+    path = tmp_path / "speech.flac"
+    with av.open(str(path), "w", format="flac") as container:
+        stream = container.add_stream("flac", rate=16_000)
+        frame = av.AudioFrame.from_ndarray(
+            np.full((1, 16_000), 4096, dtype=np.int16), format="s16", layout="mono"
+        )
+        frame.sample_rate = 16_000
+        for packet in stream.encode(frame):
+            container.mux(packet)
+        for packet in stream.encode(None):
+            container.mux(packet)
+
+    waveform = audio_waveform_from_path(path)
+    assert waveform.shape == (16_000,)
+    assert waveform.dtype == np.float32
+    assert np.isfinite(waveform).all()
+    assert float(waveform.mean()) == pytest.approx(0.125, abs=1e-3)
 
 
 def test_artifact_corpus_can_use_explicit_repository_media_root(tmp_path: Path) -> None:
