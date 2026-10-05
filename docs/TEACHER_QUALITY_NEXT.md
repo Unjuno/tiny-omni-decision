@@ -2,11 +2,12 @@
 
 ## Scope and status
 
-This is development infrastructure for the active autonomous multimodal
-Teacher-quality goal. It does not promote a model, alter Teacher v1 or prior
-Video Teacher artifacts, evaluate a sealed audit, or perform quantization.
-The current work is data preparation and Decision-runtime support; no model
-training has run yet.
+This is development infrastructure and experiment reporting for the active
+autonomous multimodal Teacher-quality goal. It does not promote a model, alter
+Teacher v1 or prior Video Teacher artifacts, evaluate a sealed audit, or
+perform quantization. The seed-17 data-coverage run is complete through its
+planned 2,048 optimizer updates; its final results and limits are recorded at
+the end of this document.
 
 Working branch: `codex/teacher-quality-next`  
 Source code baseline: `455f56e2373f9f6133388133c5f469337d4ecef9`  
@@ -1193,3 +1194,146 @@ was 12,008,189,952 bytes. The unchanged run continued beyond step 1920.
 - [Official MASSIVE repository](https://github.com/alexa/massive)
 - [Official license notice](https://github.com/alexa/massive/blob/main/NOTICE.md)
 - [Amazon Science dataset announcement](https://www.amazon.science/blog/amazon-releases-51-language-dataset-for-language-understanding)
+
+## Completed 2,048-update data-coverage run
+
+The retry in `artifacts/teacher-quality-next/teacher-data-coverage-v1/seed17-2048-media-root-fix/`
+completed its planned 2,048 optimizer updates without early stopping. It
+consumed 8,192 unique examples (one example per microbatch, four
+microbatches per update), with zero repeats and 5,953 unique underlying
+assets. The best-validation checkpoint is step 1,792; the final step-2,048
+checkpoint is retained separately and did not replace it. The trainer records
+no run failure and confirms checkpoint reload verification. An independent
+manual reload check also matched the selected checkpoint's predictions and
+metrics on the same ordered 512 validation IDs.
+
+The failed first launch is retained separately and made no optimizer updates;
+it is not counted as a training run. The successful retry started from the
+pinned pretrained base with a new LoRA adapter. The v1 adapter was evaluated
+for reference only, then unloaded. `resume_from` was unset, so neither the v1
+adapter nor the earlier 512-step Candidate E checkpoint initialized training.
+The initial launch and final process exit codes were not retained in the
+metadata (UNKNOWN); completion is established from final trainer state, step
+2,048 validation output, completed experiment record, no failure, and the
+separate final checkpoint.
+
+### Frozen setup and provenance
+
+- Config: `configs/decision/teacher_quality_data_coverage_v1.yaml`; seed 17;
+  8 video frames; decoder-all-linear rank 16, alpha 32, dropout 0.05;
+  cosine schedule, 3% warmup, LR 5e-5 over the 2,048-step run; GA 4;
+  checkpoint/evaluation interval 128; patience 17; encoders and projector
+  frozen.
+- Config SHA-256: `5c6b6e96184b9ca969fcd0dacd6e47a65100f4d3b3184481d4b24b6db4f377de`.
+  Effective config SHA-256:
+  `26fdd665dde46ad9ad291a858b9aa2141232b608a3124a9044945816f749d92b`.
+- Train rows SHA-256:
+  `7fe73a0039fd4b651b323f1cee0de12f6a429ff69605e485dce2ef538a6762e3`;
+  validation rows SHA-256:
+  `1a8691b7b09b5e37d17a46340519bbd67bca6480d1d887714b4bd1b8fa330db0`.
+  The validation subset contained the same 512 IDs in the same order at each
+  reported point (ID-order hash `e3896391857ad541b1159b7c163efc9074b2b699bfc08aa09235bdaa62e69364`).
+- Base and processor: `google/gemma-4-E2B-it-qat-q4_0-unquantized`, revision
+  `6befbaca7398925921802abd1f277b495b78b738`; base-weight SHA-256
+  `33fe0cece08fb527efbd1a3a9ce73bd71073727993a283506293e5c6bf0137`.
+- Trainer and training code SHA-256:
+  `f3431514454ba07491e324f13cc18afced83bef3034de442d10910281141f533` and
+  `e3623f44ce687fffa248370fa38d466cca5a40a56b8e3f6613be379741d0be7e`.
+- The run manifest stores the config and run-option values, but not the
+  invoking shell command or source Git commit; those are UNKNOWN rather than
+  inferred from this later documentation history.
+- Run window: 2026-10-05 13:23:04 to 19:09:04 UTC. Recorded elapsed runtime
+  was 20,373 seconds (5.66 hours), including 748 seconds of setup/evaluation
+  overhead; final validation took 377 seconds. Local RTX 3080 Laptop GPU,
+  16 GiB; peak allocated VRAM 12,008,189,952 bytes. Python 3.11.9,
+  PyTorch 2.6.0+cu124, CUDA 12.4, Transformers 5.6.2, PEFT 0.21.2,
+  Accelerate 1.15.0, bf16 base weights, SDPA attention (math path enabled),
+  Windows safetensors `pread` backend. Cloud compute and cost: none / $0.
+- The selected adapter has 24,158,208 trainable parameters, size 96,693,360
+  bytes, and SHA-256
+  `35b68111c0bcc91047b4c89521f0fe3eed80ab8279073ac09c2251d9c0cbf8bf`.
+  Final step-2,048 adapter SHA-256 is
+  `363ea96489489b4c275fa1487fdd4632c88ad93aa39e6c759fccfe4c6c0bfab5`.
+
+### Learning curve and selected/final comparison
+
+All values below use the same 512-example development-validation subset. The
+best checkpoint uses the existing selector; fixed-step rows are not silently
+replaced by the best checkpoint.
+
+| Candidate / step | Macro Accuracy | Macro NLL | Video Accuracy | Selector score | Selected? |
+|---|---:|---:|---:|---:|---|
+| Teacher v1 reference | 0.7051 | 0.9695 | 0.5234 | — | reference only |
+| E-long 512 | 0.7598 | 0.7489 | 0.5078 | 0.503766 | no |
+| E-long 1,024 | 0.7598 | 0.6173 | 0.5000 | 0.373490 | temporary best |
+| E-long 1,536 | 0.7734 | 0.5727 | 0.5000 | 0.320135 | temporary best |
+| E-long 1,792 | 0.7910 | 0.5172 | 0.5156 | 0.251411 | final best |
+| E-long 1,920 | 0.7871 | 0.5201 | 0.5078 | 0.257372 | no |
+| E-long 2,048 | 0.7910 | 0.5212 | 0.5156 | 0.256405 | no |
+
+At 2,048, per-modality results were:
+
+| Modality (source) | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Text (`alexa/massive`) | 0.8203 | 0.8158 | 0.2962 | 0.1222 |
+| Image (`sgvaze/clevr4`) | 0.8281 | 0.4393 | 0.2319 | 0.1001 |
+| Audio (`openslr/LibriSpeech`) | 1.0000 | 0.0023 | 0.0004 | 0.0021 |
+| Video (`MIT-IBM/CLEVRER`) | 0.5156 | 0.8277 | 0.5501 | 0.0910 |
+| Macro | 0.7910 | 0.5212 | 0.2697 | 0.0788 |
+
+At selected step 1,792, Text was 0.8125 / 0.8077 / 0.2960 / 0.1188;
+Image 0.8359 / 0.4326 / 0.2282 / 0.0914; Audio 1.0000 / 0.0025 /
+0.0005 / 0.0023; and Video 0.5156 / 0.8260 / 0.5481 / 0.0775
+(Accuracy / NLL / Brier / ECE). The corresponding macro metrics were 0.7910 /
+0.5172 / 0.2682 / 0.0725. The v1 reference on these same E validation IDs
+was Text 0.5781 / 2.2663 / 0.5735 / 0.1531; Image 0.7344 / 0.7267 /
+0.3597 / 0.1048; Audio 0.9844 / 0.0330 / 0.0133 / 0.0232; and Video
+0.5234 / 0.8519 / 0.5686 / 0.1686. These are development-validation
+comparisons, not a sealed-audit result. Each modality has one source in this
+evaluation, so the source-level metrics equal the corresponding modality row.
+
+At step 2,048, Video task metrics were temporal descriptive 9/26 (0.3462
+Accuracy, 1.3689 NLL), explanatory 21/38 (0.5526, 0.6839), predictive 20/38
+(0.5263, 0.6931), and counterfactual 16/26 (0.6154, 0.6931). Counts are
+small, especially by task type. Predictions were paired by sample ID for a
+scene-cluster bootstrap from step 512 to 2,048: 77 scenes, 20,000 replicates,
+`random.Random(17)`, percentile 95% interval. The observed Video Accuracy
+change was +0.0078; interval [-0.0256, +0.0397] includes zero. The curve is
+not monotonic (Video Accuracy was 0.5000 at 1,536 and 0.5078 at 1,920), so
+the effect of additional training quantity is **UNCERTAIN**, not established.
+
+The selector chose step 1,792, not the final step. At 2,048, training CE was
+still falling relative to the preceding window while validation NLL had risen
+since the best point; the selector emitted `train_loss_falling` and
+`validation_nll_rising`. Rolling training windows are not fixed-example
+generalization-gap measurements. The run exceeded the v1 reference on Text,
+Image, and Audio Accuracy but not Video. None of the four-way 90% goal is
+achieved, and no product promotion follows from this run.
+
+The sealed audit was not loaded or evaluated. Teacher v1 and prior v2
+checkpoints, configs, and corpora were not overwritten. No ternary
+quantization, Recovery LoRA, or cloud training was performed. The detailed
+per-evaluation predictions, training history, trainer state, and metadata
+remain in the ignored local run directory; only this compact result is
+tracked in Git.
+
+Local verification for this documentation update: Ruff passed, all 147 CPU
+tests passed when invoked with `src` on `sys.path`, and the example model and
+dataset manifests validated. The plain `py -m pytest -q` invocation could not
+import the source package in this checkout; the corrected invocation was
+`py -c "import sys; sys.path.insert(0, 'src'); import pytest; raise SystemExit(pytest.main(['-q']))"`.
+GitHub Actions for the documentation commit is pending verification.
+
+### Interpretation and next evidence needed
+
+This completed run shows that the candidate learned substantially from the
+fresh base on the shared development subset and that more steps improved the
+fixed selector from step 512. It does not show that longer training alone
+solves Video: the Video change is small and uncertain, and the final selected
+Video Accuracy remains about 51.6%. Text and Image also remain below 90%.
+Before choosing another candidate, diagnose source/task and representation
+bottlenecks and address the repeated-selection risk of using this same 512-row
+subset at every 128-step checkpoint. Use a newly frozen development
+generation for future candidate selection; preserve all final/sealed audits
+without inspection. Further training of this exact run, extra seeds, and a
+4,096-step extension were not performed.
