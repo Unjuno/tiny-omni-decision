@@ -300,6 +300,60 @@ separate development experiments. Metrics and predictions are in the ignored
 local path
 `artifacts/teacher-quality-next/evaluations/v1-clevrer-video-validation-cached/`.
 
+### Candidate E on the same fresh CLEVRER development validation
+
+The immutable Candidate E best checkpoint (step 512; 8 frames;
+decoder-all-linear rank 16) was evaluated on the exact same 2,538 validation
+IDs, in the same order and with matching targets/options. This is a matched
+development comparison: Teacher v1 used 4 frames, while Candidate E used 8;
+the adapters and training procedures also differ, so the comparison does not
+isolate a causal frame-count effect. Both prediction sets have been observed
+on this development generation. It is not a final audit.
+
+| Candidate / task | N | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|---:|
+| Teacher v1, all video | 2,538 | 0.5008 | 0.9243 | 0.5970 | 0.1584 |
+| Candidate E, all video | 2,538 | 0.4704 | 0.9326 | 0.5736 | 0.0572 |
+| Candidate E, temporal descriptive | 1,067 | 0.4236 | 1.2526 | 0.6650 | 0.0514 |
+| Candidate E, explanatory | 638 | 0.4828 | 0.7059 | 0.5126 | 0.0832 |
+| Candidate E, predictive | 132 | 0.5000 | 0.7039 | 0.5106 | 0.0790 |
+| Candidate E, counterfactual | 701 | 0.5250 | 0.6950 | 0.5018 | 0.0406 |
+
+Candidate E accuracy is 3.03 percentage points below v1. A paired bootstrap
+resampling 100 video scenes (10,000 replicates, seed 17, percentile 95% CI)
+put the E-minus-v1 accuracy difference at `[-0.0524, -0.0087]`. Brier score
+improved by 0.0234 (95% CI `[-0.0402, -0.0070]`); NLL increased by 0.0084
+(95% CI `[-0.0180, 0.0348]`). Task-level differences are mixed: Candidate E
+improved counterfactual accuracy but declined on temporal descriptive,
+explanatory, and predictive questions. Temporal descriptive NLL also rose by
+0.1152. The overall accuracy target remains unmet by a wide margin.
+
+The validation SHA-256 and ordered-ID SHA-256 are the same values recorded
+for the v1 comparison above. Candidate E adapter SHA-256 is
+`c0d483b89798bea0d20f50a2335a0fa658c1794cd31c4ceb245f079b0e8ae851` and its
+config SHA-256 is
+`0635c29cc761412cebec53f1569fecfc296c647a2f7a11bdbb217f88cfa7ac5c`. The
+base and processor revision is
+`6befbaca7398925921802abd1f277b495b78b738`; effective sequence length was
+1,024 tokens. Inference took 2,178.69 seconds and process wall time through
+artifact write was 38 minutes 49 seconds. Peak allocated VRAM was
+11,426,737,152 bytes. It ran locally without cloud compute. The TorchVision
+fallback was used because `torchcodec` is unavailable.
+
+Prediction count, unique IDs, exact validation order, targets, options,
+validation hash, adapter hash, and config hash all passed. Metrics JSON SHA-256
+is `5e05c4b693d0fbe2a3afe9540469066507bc652eba7769cec1638dc77c54b094`;
+predictions JSONL SHA-256 is
+`229e256cbc707f44d57c6ed19864b54cc1e5953eb5df0e3dae56ec4f009fdfa8`;
+paired-comparison JSON SHA-256 is
+`6964fe1159f6eb0de97633fd63d5d3ed9aa3d8408cd51139e515310750a7fe75`.
+Artifacts are in the ignored local path
+`artifacts/teacher-quality-next/evaluations/candidate-e-clevrer-video-validation/`.
+These results do not show that 8 frames caused a regression or that the model
+family has reached a ceiling. Any further broad candidate selection should
+use another clean development generation to limit repeated selection on these
+observed 100 scenes.
+
 ## Primary source references
 
 - [Official MASSIVE repository](https://github.com/alexa/massive)
