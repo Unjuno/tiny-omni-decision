@@ -1553,9 +1553,8 @@ def test_resume_checkpoint_snapshot_contains_selector_best_and_rng_state(tmp_pat
 
 
 def test_rng_snapshot_restores_python_and_cpu_torch_streams() -> None:
-    import numpy as np
-
     torch = pytest.importorskip("torch")
+    np = pytest.importorskip("numpy")
     random.seed(91)
     np.random.seed(91)
     torch.manual_seed(91)
