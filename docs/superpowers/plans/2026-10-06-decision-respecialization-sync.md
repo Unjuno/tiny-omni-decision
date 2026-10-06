@@ -1,245 +1,84 @@
-# Decision Re-specialization Sync Implementation Plan
+# Decision Re-specialization Sync — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** Use `superpowers:executing-plans` or `superpowers:subagent-driven-development` task by task. Unchecked tasks are future implementation. This revision adjusts the plan; it does not declare the code, config migration or GPU training complete.
 
-> **Scope note:** This plan does **not** implement the training schedule, quantizer, packed runtime, cross-modal processor path, or temporal Video module. It only makes repository documentation/config agree with the approved design. The next implementation plan is `docs/superpowers/plans/2026-10-06-post-quantization-respecialization-experiment.md`.
+**Goal:** Align the current roadmap and README with the approved compression-first direction and link them to a real, testable post-quantization execution contract.
 
-**Goal:** Synchronize the repository's roadmap, recovery configuration, README, and config tests with the approved LM-to-Decision design: ternary bottleneck, two-stage Decision Recovery → Decision Re-specialization, and a 95% final gate for every modality.
+**Architecture:** Keep documentation alignment separate from executable training. Implement the new versioned policy, losses and runner through the companion experiment plan; never substitute a YAML-key test for a training integration test.
 
-**Architecture:** Keep the current high-precision Master and ternary conversion boundaries, but redefine post-quantization training as two explicit stages. This plan is documentation/config synchronization only; the actual schedule/loss/resume implementation lives in `docs/superpowers/plans/2026-10-06-post-quantization-respecialization-experiment.md`.
+**Tech Stack:** Markdown and the existing Python/pytest project. No new runtime dependencies for this synchronization.
 
-**Tech Stack:** Markdown, YAML, Python 3.11, pytest, existing `load_structured_file`.
+**Spec:** [LM-to-Decision design](../specs/2026-10-06-compression-first-video-specialization-design.md).
 
-**Spec:** `docs/superpowers/specs/2026-10-06-compression-first-video-specialization-design.md`
+**Execution contract:** [Post-quantization experiment plan](2026-10-06-post-quantization-respecialization-experiment.md).
 
-## Global Constraints
+## Global constraints
 
-- Final product gate: Text >=95%, Image >=95%, Audio >=95%, end-to-end Video >=95%.
-- The 95% gate does not block ternary conversion.
-- The frozen ternary base remains unchanged during the first Recovery/Re-specialization experiment.
-- Full-vocabulary KL stays disabled by default.
-- Recovery Teacher option distributions are an anchor, not a performance ceiling.
-- Dense Recovery state must not be merged into ternary weights for deployment without explicit re-quantization and re-evaluation.
-- Historical experiment metrics and sealed-audit records are not rewritten.
-- This change does not implement ternary kernels, GPU Recovery training, or the temporal Video aggregator.
+- Final Text, Image, Audio and end-to-end Video Accuracy must each reach at least 95%; this is not a compression-entry gate.
+- Keep the current high-precision run, frozen corpus, historical metrics, model weights and observed audit records unchanged.
+- Maintain one shared Omni product. Single-media compression experiments do not satisfy simultaneous-media fusion requirements.
+- Compression-induced regularization and selective loss of generative freedom are hypotheses, not guaranteed explanations.
+- The first candidate is a frozen ternary reference core with an accounted-for adapter; dense correction does not make the entire effective model sparse.
+- A genuine packed runtime, Video aggregation and full multi-media processing are separate downstream deliverables. No speed or product-completion claim from documentation changes.
+- Preserve the valid refinements already present at `73f30b64f4e2e78f7994f3a0b764fa1a1bb036e8`; reconcile new remote changes before writing and never force-push.
 
-## Review Focus
+## Review focus
 
-- Recovery config must unambiguously encode two stages rather than one fixed loss.
-- The fixed-recovery baseline must remain representable for comparison with annealed Re-specialization.
-- The config must preserve option-only teacher signals and disabled full-vocabulary KL.
-- README and ROADMAP must agree on Variant A/B/C/D meanings and all-modal 95% final gate.
-- Tests must fail if the stage names, initial candidate loss endpoints, or Q0/Q1/Q2/Q3/Q4 comparison contract drift.
+1. Do not confuse causal arms Q0–Q4 with product Variants A–D.
+2. Do not overwrite the legacy v1 Recovery config with unsupported schedule keys.
+3. Do not announce a two-stage learner before the real runner, losses and resume tests exist.
+4. Do not make successful sparsity regularization or superiority to the high-precision control a mandatory product criterion.
+5. Do not let a fallback single-media input path silently drop evidence or become a claim of Omni fusion.
 
----
+## Task 1 — Align ROADMAP and README
 
-### Task 1: Synchronize ROADMAP and README terminology and phase flow
+**Files:** Modify `ROADMAP.md`, `README.md`. Do not rewrite historical experiment reports.
 
-**Files:**
-- Modify: `ROADMAP.md`
-- Modify: `README.md`
+**Interface:** Repository navigation and stage definitions; the companion experiment plan is the detailed implementation contract.
 
-**Interfaces:**
-- Consumes: approved design spec terminology.
-- Produces: one repository-level narrative used by workers for later implementation.
+- [ ] Snapshot the target branch HEAD, read both documents and the two linked planning documents, and verify the companion plan actually exists. Preserve concurrent changes.
+- [ ] Update the active flow to Master freeze, LoRA merge, ternary feasibility/damage measurement, fixed-Recovery versus Recovery-to-Re-specialization comparison, selected Variant A, equivalent option readout for Variant B, temporal Video plus genuine joint specialization for Variant C, and optional pooling/re-specialization for Variant D.
+- [ ] Describe the two-stage policy as a candidate. If fixed Recovery wins, retain it as the reference; do not promote a losing annealed run merely to satisfy a diagram. The final product still requires all four modalities at least 95%.
+- [ ] Replace the active fixed 2–20-option limitation with the current 2–62-option contract, including the 60-intent Text task. Preserve ordered option semantics and separate readout changes from transformer attention changes.
+- [ ] Add the input contract gate: unsupported supplied media must fail closed; simultaneous-media learning and ablation/contradiction evaluation are mandatory before claiming fusion. This does not block a clearly labeled single-media compression pilot.
+- [ ] Link to the companion plan and mark ternary reference execution, packed execution, policy/loss/runner implementation and GPU experiments with their actual status. Documentation sync is not their completion.
+- [ ] Inspect the diff for stale Variant C-as-pooling, Video-only 95%-stretch, or current 90% shipping language. Historical 90% targets remain historical; do not falsify them.
+- [ ] Run the existing documentation checks if present and `git diff --check`; commit only the intended documentation changes.
 
-- [ ] **Step 1: Update the ROADMAP top-level flow**
+## Task 2 — Use unambiguous comparison names
 
-Replace the single `Recovery` step with:
+**Files:** Modify active comparison descriptions in `ROADMAP.md` and `README.md`; verify the linked spec and execution plan.
 
-```text
-Decision Recovery
-        ↓
-Decision Re-specialization
-```
+**Interface:** Exact arm IDs used by the later runner and result reports.
 
-Define Variant A as the ternary Decision Core after both stages. Keep Variant B as lightweight Decision readout, Variant C as temporal Video + final all-modal Decision specialization, and Variant D as optional pooling/resampling.
+| Experiment ID | Role |
+|---|---|
+| `q0_master` | Frozen merged high-precision Master, evaluation only |
+| `q1_ternary_raw` | Quantized Q0, evaluation only |
+| `q2_fixed_recovery` | Q1 with fixed Recovery objective |
+| `q3_recovery_to_respecialization` | Q1 with staged objective |
+| `q4_high_precision_control` | Q0 with the same staged objective and matched adaptation |
 
-- [ ] **Step 2: Rewrite Phase 8 around two-stage post-quantization training**
+- [ ] Remove the old A/B/C/D/E causal-arm aliases from active instructions. Do not rename historical candidate artifacts or product Variants A–D.
+- [ ] State that only Q2/Q3/Q4 are training runs. Match initial adapter tensors, data/order, gradients per update, optimizer/LR, coefficients where appropriate, validation and selection policy; matching only update count is insufficient.
+- [ ] Describe Q3 versus Q2 as the schedule comparison and Q3 versus Q4 as the quantization-intervention comparison. Neither isolates zero rate alone. Q3 can be a useful compact product without beating Q4 if it meets final quality and deployment gates.
+- [ ] Verify all active names and links agree; run `git diff --check` and commit the naming changes with Task 1 when practical.
 
-Phase 8 must state:
-- Stage 1 Recovery uses stronger teacher anchoring plus GT CE/Brier.
-- Stage 2 Re-specialization reduces KD pressure and increases GT pressure.
-- exact weights are development-selected;
-- fixed teacher-heavy Recovery and annealed Recovery→Re-specialization are both required candidates;
-- Master is an anchor, not a ceiling.
+## Task 3 — Safe config handoff, not a config-only false completion
 
-- [ ] **Step 3: Add the required Q0/Q1/Q2/Q3/Q4 causal comparison to ROADMAP**
+**Files in the execution plan:** Create `src/tiny_omni_decision/postquant_policy.py`, `tests/test_postquant_policy.py`, `configs/recovery/decision_respecialization_v2.example.yaml`, then the loss/cache/reference-quantizer/runner/comparison files specified there. Unqualified production module names in that plan are inside `src/tiny_omni_decision/`, not the repository root.
 
-Use these exact labels:
-- A — Master
-- B — Ternary raw
-- C — Ternary + fixed Recovery
-- D — Ternary + Recovery→Re-specialization
-- E — High-precision control
+**Interface:** The strict schema-v2 loader and per-update `LossWeights` consumed by the actual runner.
 
-Document the interpretations `C > B`, `D > C`, `D > A`, and `D > E`.
+- [ ] Keep `configs/recovery/probability_distillation.yaml` unchanged as the legacy template during documentation synchronization. The former proposal to retain schema v1 while replacing its loss keys is superseded.
+- [ ] Implement the new schema and its example config together with a strict parser under Task 2 of the execution plan. Reject legacy schemas and unsupported fields rather than silently falling back to fixed weights. Leave historical Decision-training configs and `tests/test_config.py` expectations intact.
+- [ ] Implement and test the categorical loss reductions, real coefficient consumption and stage-boundary resume under Tasks 3 and 6. No claim of two-stage training from successful YAML loading alone.
+- [ ] Use the companion plan's explicit initial budgets and boundaries; they are experiment defaults, not proven optima or a launch authorization. A smoke run has its own config and artifacts and must not be resumed as a larger run.
+- [ ] Complete CPU tests before GPU work. The one-layer quantizer checks in Task 5 may precede the runner; its 8-update end-to-end smoke must wait until Task 6 is implemented. No full experiment before all prerequisite checks and resource caps pass.
+- [ ] Record separate statuses: documentation synchronized, CPU implementation tested, GPU smoke verified, bounded experiment evaluated, and final product qualified. Advance only the status supported by executed evidence.
 
-- [ ] **Step 4: Update README's planned compression flow and variant definitions**
+## Acceptance for this synchronization
 
-README must match the new roadmap and remove the stale definition where Variant C is pooling/resampler.
+Active docs agree on the final four-modality 95% gate, compression-entry policy, Q0–Q4 names, Variant A–D roles, no-silent-media-drop rule, and the distinction between numerical reference and packed deployment. All referenced plan files exist. Legacy configs, active training and historical results remain intact.
 
-- [ ] **Step 5: Verify documentation consistency**
-
-Search both files for stale phrases that imply:
-- one-stage Recovery only;
-- Variant C = pooling;
-- final gate = 90%;
-- Video-only 95% stretch.
-
-Expected: none remain outside historical result descriptions.
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add ROADMAP.md README.md
-git commit -m "docs: align roadmap with decision re-specialization"
-```
-
-### Task 2: Replace fixed Recovery config with an explicit two-stage candidate policy
-
-**Files:**
-- Modify: `configs/recovery/probability_distillation.yaml`
-- Test: `tests/test_config.py`
-
-**Interfaces:**
-- Consumes: `load_structured_file(path) -> dict[str, Any]`.
-- Produces: a declarative Recovery/Re-specialization policy for later trainer implementation.
-
-- [ ] **Step 1: Write the failing config test**
-
-Add `test_recovery_config_declares_two_stage_decision_respecialization_policy()` asserting:
-- `schema_version == 1`
-- `recovery.method == "lora"`
-- `teacher_signal.cache_scope == "single_decision_position_options_only"`
-- `teacher_signal.store_full_vocabulary_logits is False`
-- stage order is exactly `["recovery", "respecialization"]`
-- Recovery stage weights are `option_kl=1.0`, `cross_entropy=0.2`, `brier=0.2`
-- Re-specialization endpoint is `option_kl=0.2`, `cross_entropy=1.0`, `brier=0.2`
-- comparison candidates are exactly `["q0_master", "q1_ternary_raw", "q2_fixed_recovery", "q3_recovery_to_respecialization", "q4_high_precision_control"]`
-- `full_vocab_kl == 0.0`
-
-- [ ] **Step 2: Run the test and confirm it fails**
-
-Run:
-
-```bash
-pytest tests/test_config.py::test_recovery_config_declares_two_stage_decision_respecialization_policy -q
-```
-
-Expected: FAIL because the current config has a single fixed `loss` block and no stage/comparison policy.
-
-- [ ] **Step 3: Update `probability_distillation.yaml`**
-
-Keep the existing base, LoRA, and teacher-signal settings. Replace the one-stage loss policy with:
-
-```yaml
-post_quantization_training:
-  stage_order: [recovery, respecialization]
-  recovery:
-    option_kl: 1.0
-    cross_entropy: 0.2
-    brier: 0.2
-  respecialization:
-    schedule: linear
-    option_kl_start: 1.0
-    option_kl_end: 0.2
-    cross_entropy_start: 0.2
-    cross_entropy_end: 1.0
-    brier: 0.2
-
-loss:
-  full_vocab_kl: 0.0
-
-experiment_comparison:
-  candidates:
-    - q0_master
-    - q1_ternary_raw
-    - q2_fixed_recovery
-    - q3_recovery_to_respecialization
-    - q4_high_precision_control
-```
-
-Add notes that these are initial candidate values, selected/validated on clean development data before becoming a training default.
-
-- [ ] **Step 4: Run the targeted config test**
-
-Run:
-
-```bash
-pytest tests/test_config.py::test_recovery_config_declares_two_stage_decision_respecialization_policy -q
-```
-
-Expected: PASS.
-
-- [ ] **Step 5: Run all config tests**
-
-Run:
-
-```bash
-pytest tests/test_config.py -q
-```
-
-Expected: PASS.
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add configs/recovery/probability_distillation.yaml tests/test_config.py
-git commit -m "config: stage recovery and decision respecialization"
-```
-
-### Task 3: Repository-wide consistency verification
-
-**Files:**
-- Verify: `ROADMAP.md`
-- Verify: `README.md`
-- Verify: `configs/recovery/probability_distillation.yaml`
-- Verify: `docs/superpowers/specs/2026-10-06-compression-first-video-specialization-design.md`
-
-**Interfaces:**
-- Consumes: outputs from Tasks 1 and 2.
-- Produces: a repository state where docs/config communicate the same pipeline.
-
-- [ ] **Step 1: Run CPU tests**
-
-Run:
-
-```bash
-pytest -q
-```
-
-Expected: all CPU tests pass.
-
-- [ ] **Step 2: Run lint**
-
-Run:
-
-```bash
-ruff check .
-```
-
-Expected: PASS.
-
-- [ ] **Step 3: Verify exact final quality contract**
-
-Search tracked docs/config for active product-target language.
-
-Expected active contract:
-- Text >=95%
-- Image >=95%
-- Audio >=95%
-- end-to-end Video >=95%
-
-Historical 90% experiment records may remain in historical result documents but must not appear as the current product gate.
-
-- [ ] **Step 4: Verify no implementation claim is overstated**
-
-README/ROADMAP must still state that ternary runtime, Recovery/Re-specialization GPU training, and temporal Video specialization are planned/unimplemented until actual experiments exist.
-
-- [ ] **Step 5: Commit any final consistency-only corrections**
-
-```bash
-git add ROADMAP.md README.md configs/recovery/probability_distillation.yaml tests/test_config.py
-git commit -m "docs: finalize lm-to-decision pipeline contract"
-```
+Completion of this synchronization does not complete the companion experiment or the product. Report actual changed paths and commit IDs, tests really run, and any remaining implementation gates.
