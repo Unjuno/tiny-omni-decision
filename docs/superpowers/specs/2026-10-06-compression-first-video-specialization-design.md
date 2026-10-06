@@ -4,7 +4,7 @@
 
 Approved architectural direction: **B**.
 
-The project will no longer block ternary compression on achieving 90% Accuracy in all four modalities at the high-precision stage. The active high-precision run should complete, its validation-selected best checkpoint should be frozen reproducibly, and that checkpoint becomes the **Pre-compression Decision Master** even if Text or Image remain below 90% and Video remains near its current full-video baseline.
+The project will no longer block ternary compression on achieving the final product quality target in all four modalities at the high-precision stage. The active high-precision run should complete, its validation-selected best checkpoint should be frozen reproducibly, and that checkpoint becomes the **Pre-compression Decision Master** even if one or more modalities remain below the final 95% product target and Video remains near its current full-video baseline.
 
 The final product quality gate remains strict. Compression is allowed to begin before the final quality gate is met; shipping is not.
 
@@ -21,7 +21,7 @@ The latest completed tracked data-coverage run selected step 1,792 with:
 | Text | 0.8125 |
 | Video | 0.5156 |
 
-The run improved Text, Image, and Audio substantially over the frozen Teacher v1 reference on the same development subset, while Video remained roughly flat around 50%. Earlier Video Teacher v2 experiments also failed to show a reliable route from more frames, broader decoder LoRA targets, or rank changes to a 90% video result.
+The run improved Text, Image, and Audio substantially over the frozen Teacher v1 reference on the same development subset, while Video remained roughly flat around 50%. Earlier Video Teacher v2 experiments also failed to show a reliable route from more frames, broader decoder LoRA targets, or rank changes to the final 95% Video target.
 
 This is evidence for changing **where** video specialization happens, not for accepting 50% video as final quality.
 
@@ -47,17 +47,16 @@ Compression may begin when all of the following are true:
 5. no sealed/final audit was used for tuning;
 6. the Master artifact records config, data hashes, checkpoint hash, environment, and per-modality Accuracy/NLL/Brier/ECE.
 
-**No 90% per-modality threshold is required at this gate.**
+**No final-product Accuracy threshold is required at this gate. In particular, the 95% per-modality product gate does not block compression entry.**
 
 ### Final product gate
 
-The final lightweight model must target:
+The final lightweight model must achieve:
 
-- Text Accuracy >= 90%
-- Image Accuracy >= 90%
-- Audio Accuracy >= 90%
-- end-to-end Video Accuracy >= 90%
-- Video stretch target >= 95%
+- Text Accuracy >= 95%
+- Image Accuracy >= 95%
+- Audio Accuracy >= 95%
+- end-to-end Video Accuracy >= 95%
 
 The video target applies to the complete deployed video path, not to an individual clip classifier.
 
