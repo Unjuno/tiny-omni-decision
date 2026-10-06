@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "kind": "postquant_launch",
+  "arm": "q3_recovery_to_respecialization",
+  "profile": "smoke",
+  "source_commit": "REPLACE_WITH_FULL_40_CHARACTER_COMMIT_SHA",
+  "expected_branch": "codex/postquant-worker-entrypoints",
+  "input_root": "/REPLACE/WITH/EXISTING/LOCAL/INPUTS",
+  "output_root": "/REPLACE/WITH/EXISTING/LOCAL/OUTPUTS",
+  "run_name": "smoke-q3-seed17",
+  "artifacts": {
+    "master": {
+      "path": "master.json",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256"
+    },
+    "ternary": {
+      "path": "ternary.json",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256"
+    },
+    "policy": {
+      "path": "policy.json",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256"
+    },
+    "train": {
+      "path": "train.json",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256"
+    },
+    "development": {
+      "path": "development.json",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256"
+    },
+    "teacher_cache": {
+      "path": "teacher_cache.json",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256"
+    },
+    "initial_adapter": {
+      "path": "initial_adapter.json",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256"
+    }
+  },
+  "budget": {
+    "total_updates": 8,
+    "recovery_updates": 2,
+    "gradient_accumulation_steps": 4
+  },
+  "limits": {
+    "max_wall_seconds": 600,
+    "max_vram_mib": 14000,
+    "min_free_disk_mib": 20000
+  },
+  "device": {
+    "index": 0,
+    "name": "REPLACE_WITH_EXACT_GPU_NAME",
+    "min_total_vram_mib": 16000
+  },
+  "authorization": {
+    "local_only": true,
+    "allow_paid_compute": false,
+    "allow_downloads": false,
+    "execute": false
+  }
+}
