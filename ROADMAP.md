@@ -11,41 +11,50 @@ Gemma 4 E2B QAT alignment backbone
         ↓
 Decision / Omni LoRA training
         ↓
-High-precision Decision Teacher
-        ├── cache option logits at the decision position
-        └── merge Decision LoRA into task-adapted quantization source
-                    ↓
-          Decoder-focused ternary compression
-                    ↓
-          Quantization damage measurement
-                    ↓
-          Recovery LoRA
-                    ↓
-          Variant A: recovered ternary Decision model
-                    ↓
-          lightweight Decision classifier / option scorer
-          (remove the full-vocabulary runtime readout)
-                    ↓
-          Variant B benchmark
-                    ↓
-          token pooling / learned resampler
-                    ↓
-          re-distillation + replacement Recovery adapter
-                    ↓
-          Variant C benchmark
-                    ↓
-          compare A / B / C on identical quality + latency tests
-                    ↓
-          runtime profiling / mobile benchmark
-                    ↓
-          optional deeper attention acceleration research
+freeze validation-selected Pre-compression Decision Master
+(no 90%-per-modality compression-entry requirement)
+        ↓
+merge Decision LoRA into task-adapted quantization source
+        ↓
+decoder-focused ternary compression
+        ↓
+quantization damage measurement
+        ↓
+Recovery from the frozen Master + labeled supervision
+        ↓
+Variant A: recovered ternary Decision model
+        ↓
+lightweight Decision classifier / option scorer
+        ↓
+Variant B: lightweight Decision Core
+        ↓
+temporal Video specialization
+(clips → compact states/scores → lightweight temporal aggregation)
+        ↓
+all-modal replay + final Recovery
+        ↓
+Variant C: lightweight Omni Decision
+        ↓
+profile A / B / C
+        ↓
+only if profiling justifies it:
+token pooling / learned resampler + replacement Recovery
+        ↓
+Variant D
+        ↓
+runtime profiling / mobile benchmark
+        ↓
+optional deeper attention acceleration research
 ```
+
+The architectural rationale and gate definitions are frozen in
+[the compression-first video-specialization design](docs/superpowers/specs/2026-10-06-compression-first-video-specialization-design.md).
 
 Each deployable artifact should carry at most one Recovery adapter. The Decision LoRA is a teacher/training artifact and is merged before ternary conversion. If token pooling/resampling is introduced later, train a new replacement Recovery adapter for that pooled student rather than stacking two Recovery adapters at runtime.
 
 The runtime should avoid computing the full vocabulary projection when only supplied option scores are required. After the first recovered ternary baseline is stable, replace the full-vocabulary readout with a lightweight Decision classifier / option scorer. An option-only projection using the existing LM-head rows is the low-risk equivalence baseline; a learned compact scorer may be tested if it gives a better latency/quality trade-off.
 
-Token pooling or a learned fixed-size resampler is a deliberate later acceleration stage, not a prerequisite for the first quantized model. It is applied after Variant B exists, then followed by re-distillation and a replacement Recovery adapter so pooling damage and quantization damage can be recovered together.
+Token pooling or a learned fixed-size resampler is a deliberate later acceleration stage, not a prerequisite for the first quantized model. It now comes after temporal Video specialization and the Variant C benchmark. Clip-based Video processing already introduces explicit compute/token budgeting, so generic pooling is added only if profiling shows a remaining worthwhile bottleneck. Any pooled Variant D uses a replacement Recovery adapter rather than stacking Recovery adapters.
 
 Architecture-level attention replacement (for example linear attention or another softmax-attention alternative) remains a separate deeper acceleration path after the A/B/C runtime comparison.
 
@@ -159,7 +168,17 @@ and bottleneck analysis are in [docs/TEACHER_V1.md](docs/TEACHER_V1.md) and
 Teacher v1 used only the local RTX 3080 Laptop GPU (about 14.2 GPU-hours across
 logged attempts and the audit; cloud cost $0). It did not merge the final
 Teacher, ternary-quantize, train a Recovery adapter, or create a teacher-logit
-cache. Compression remains a later gate after the quality gap is addressed.
+cache.
+
+The compression-entry policy has since changed. The project no longer requires
+all four modalities to reach 90% before ternary work can start. The active
+high-precision run should complete under its frozen rules, then its
+validation-selected best checkpoint becomes the **Pre-compression Decision
+Master** once reload/provenance checks pass. Text/Image/Audio/Video quality is
+still reported in full, but remaining quality gaps move forward into Recovery
+and post-compression specialization rather than blocking the compression
+pipeline indefinitely. The final product gate remains >=90% Accuracy for each
+modality, with an end-to-end Video stretch target of >=95%.
 The follow-up [Video Teacher v2 design](docs/superpowers/specs/2026-10-04-video-teacher-v2-design.md)
 was executed on a separate branch and artifact tree; Teacher v1 remains frozen.
 Candidates A/B/C, the B-cosine schedule comparison, and the video-native
@@ -178,26 +197,32 @@ not contain the state required for exact resume. The partial run is not a
 completed learning-curve result; see
 [docs/VIDEO_TEACHER_V2_LONG_BUDGET.md](docs/VIDEO_TEACHER_V2_LONG_BUDGET.md).
 
-## Phase 4 — Larger multimodal decision adaptation
+## Phase 4 — Finalize and freeze the Pre-compression Decision Master
 
-Add modalities in this order:
-1. text
-2. image
-3. audio
-4. video
+Complete the active clean-development run without changing its frozen
+configuration mid-run. Select the best checkpoint only from the declared
+development selector and verify reload reproducibility.
 
-Initial policy:
-- freeze modality encoders
-- freeze projector unless evidence requires adaptation
-- train decoder LoRA
-- use a portable decision readout
-- randomize option ordering
+Compression-entry requirements:
+- run completed its declared budget or predeclared stopping rule
+- best checkpoint frozen and reload-verified
+- data/config/checkpoint/environment hashes recorded
+- train/development integrity checks pass
+- no sealed/final audit used for tuning
+- per-modality Accuracy, NLL, Brier, and ECE recorded
 
-Initial objective:
-- cross entropy
-- Brier loss
-- optional probability-distillation KL
-- optional small coherence penalty
+A 90% per-modality result is **not** required to leave this phase. Remaining
+quality gaps are explicit inputs to later Recovery and specialization work.
+
+Keep the current high-precision training policy as historical experiment
+configuration rather than redefining it after seeing results:
+- modality encoders frozen
+- projector frozen unless a separately versioned experiment changes it
+- decoder LoRA
+- portable Decision readout
+- randomized option ordering
+- CE + Brier, with optional future teacher-distribution terms only in a
+  separately declared experiment
 
 ## Phase 5 — Decision training on rented GPU
 
@@ -223,9 +248,11 @@ Evaluate:
 ## Phase 6 — Extreme ternary compression
 
 Quantization source:
-- the completed high-precision Decision Teacher
+- the frozen validation-selected **Pre-compression Decision Master**
 - merge the Decision LoRA into a task-adapted checkpoint before ternary conversion
 - do not carry a separate Decision LoRA into the final runtime stack
+- do not block this phase solely because one or more modalities remain below 90%;
+  preserve their pre-compression metrics as paired baselines
 
 First target:
 - decoder attention linear weights
@@ -264,7 +291,8 @@ Metrics:
 
 ## Phase 8 — Teacher option-logit cache and Recovery adapter
 
-Freeze the high-precision Decision Teacher and the task-adapted ternary base.
+Freeze the high-precision Pre-compression Decision Master (the Recovery Teacher)
+and the task-adapted ternary base.
 
 For each training decision, cache only the teacher signal needed for the decision task at the single readout position.
 
@@ -290,11 +318,14 @@ This keeps the cache small and aligned with the product objective: calibrated de
 Recovery training uses a **single final LoRA** on the frozen task-adapted ternary base. It is not stacked on top of an unmerged Decision LoRA.
 
 Primary objective:
-- KL over teacher vs student **option distributions**
+- KL over Recovery-Teacher vs student **option distributions**
 
-Auxiliary objectives:
+Supervised correction objectives:
 - CE on the labeled option
 - Brier loss
+
+Recovery is not pure imitation: ground-truth supervision remains active so the
+student can correct Master mistakes instead of being forced to reproduce them.
 
 Optional experiment only:
 - low-weight full-vocabulary KL at the decision position, when a full-vocabulary cache was deliberately generated
@@ -326,34 +357,94 @@ Measure:
 - cold-start/startup latency where practical
 - artifact size
 
-## Phase 8.6 — Token pooling / learned resampler + re-Recovery
+## Phase 8.6 — Temporal Video specialization
 
 Start only after Variant B is frozen and benchmarked.
 
-Add token-count reduction for expensive multimodal paths, prioritizing video and image and then audio when profiling justifies it. Prefer a learned fixed-size resampler or another hardware-friendly token reduction mechanism over blind average pooling.
+Keep the Variant B full-video path as the baseline, then train the Video
+capability on the architecture intended for deployment:
 
-Evaluate explicit token budgets rather than assuming the most aggressive pooling is best. Preserve the unpooled Variant B as a comparison artifact.
+```text
+raw video
+  ↓
+fixed clips / sampled temporal windows
+  ↓
+compact clip representation and/or Decision scores
+  ↓
+lightweight temporal aggregator
+  ↓
+final option distribution
+```
 
-After introducing token reduction:
-- distill from the high-precision Teacher using option-distribution targets
-- train a **replacement** Recovery adapter for the pooled ternary student
-- do not stack the original Recovery adapter plus a second Recovery adapter at runtime
-- use CE + Brier as supervised auxiliaries and option KL as the main teacher signal
+First compare:
+1. the retained full-video Variant B baseline
+2. fixed non-overlapping clips plus aggregation
+3. overlapping or event-dense clips only if the simpler clip path justifies
+   the extra compute
 
-Save the result as **Variant C**.
+Clip-level Accuracy is diagnostic, not the product target. The gate is
+end-to-end Video Decision quality after aggregation.
 
-The product target is the best quality/latency trade-off, not maximum compression in isolation. Pooling is allowed even if Variant B is already usable because the project explicitly targets aggressive latency reduction; the decision is made from the measured A/B/C frontier.
+Use scene-disjoint clean development data. Mix Text/Image/Audio replay into
+Video specialization and select replay strength from validation evidence so
+Video gains cannot silently erase the Decision Core.
+
+Save the result after all-modal final Recovery as **Variant C**.
+
+Targets:
+- Text >=90% Accuracy
+- Image >=90% Accuracy
+- Audio >=90% Accuracy
+- end-to-end Video >=90% Accuracy
+- Video stretch target >=95%
+
+Also report NLL, Brier, ECE, per-video-task metrics, clip/frame budget,
+p50/p95 latency, memory, and modality-ablation evidence.
+
+## Phase 8.7 — All-modal final Recovery
+
+After the temporal Video module is trained, run a final Recovery pass using
+the frozen Master signal where applicable plus ground-truth supervision and
+non-video replay.
+
+The deployed Variant C must contain one coherent final Recovery state. Do not
+stack multiple Recovery adapters at runtime. If the architecture change
+requires a replacement adapter, replace the previous Recovery state.
+
+Benchmark Variant C against A and B before adding another compression
+mechanism.
+
+## Phase 8.8 — Optional token pooling / learned resampler + replacement Recovery
+
+Attempt this phase only after Variant C profiling shows a material remaining
+token/latency bottleneck.
+
+Add token-count reduction for expensive multimodal paths, prioritizing the
+measured bottleneck rather than assuming Video first. Prefer a learned
+fixed-size resampler or another hardware-friendly mechanism over blind average
+pooling.
+
+Evaluate explicit token budgets. Preserve Variant C unchanged for comparison.
+After token reduction:
+- distill from the frozen Master / relevant teacher signals
+- train a **replacement** Recovery adapter
+- do not stack Recovery adapters
+- retain CE + Brier supervision
+
+Save the result as **Variant D** only if it improves the measured
+quality/latency/memory frontier.
 
 ## Phase 9 — Runtime profiling and mobile prototype
 
-Benchmark three preserved artifacts under identical conditions:
+Benchmark the preserved artifacts under identical conditions:
 
 - **Variant A:** ternary + Recovery
 - **Variant B:** Variant A architecture with the lightweight Decision classifier / option scorer
-- **Variant C:** lightweight readout + token pooling/resampler + replacement Recovery
+- **Variant C:** Variant B + temporal Video specialization + all-modal final Recovery
+- **Variant D:** optional Variant C + pooling/resampler + replacement Recovery
 
 Target outputs:
-- portable model packages for A/B/C
+- portable model packages for A/B/C and D when D exists
 - reproducible conversion
 - PC inference
 - Apple Silicon / Android / iOS feasibility notes
@@ -365,7 +456,7 @@ Target outputs:
 - model/artifact size
 - direct packed low-bit kernels only if required after the first runtime implementation
 
-Use the same benchmark samples, preprocessing, option ordering, device, warmup, and timing protocol for all variants. Keep intermediate artifacts instead of overwriting them.
+Use the same benchmark samples, preprocessing, option ordering, device, warmup, and timing protocol for all variants. Keep intermediate artifacts instead of overwriting them. Video comparisons additionally record clip/window count, sampled-frame count, and end-to-end aggregation latency.
 
 The product KPI is the final lightweight Omni Decision model's absolute quality, size, memory footprint, startup, and latency. Teacher fidelity is a diagnostic, not the product objective. The quality target remains >=90% Accuracy per modality where the clean task/data permit it; later compression/recovery work should also report retention relative to the high-precision Teacher.
 
@@ -386,7 +477,7 @@ Requirements:
 - use adaptation/distillation if needed, but account for the resulting parameter and runtime cost
 - adopt only if the end-to-end speedup is meaningful after encoder, MLP, readout, and I/O costs are included
 
-This research comes after the Variant A/B/C comparison unless profiling provides a strong reason to move it earlier. It is not a prerequisite for the first ternary + Recovery baseline.
+This research comes after the Variant A/B/C comparison (and Variant D when attempted) unless profiling provides a strong reason to move it earlier. It is not a prerequisite for the first ternary + Recovery baseline.
 
 ## v0.1 non-goals
 
