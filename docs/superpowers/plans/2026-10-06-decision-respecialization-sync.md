@@ -2,9 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Scope note:** This plan does **not** implement the training schedule, quantizer, packed runtime, cross-modal processor path, or temporal Video module. It only makes repository documentation/config agree with the approved design. The next implementation plan is `docs/superpowers/plans/2026-10-06-post-quantization-respecialization-experiment.md`.
+
 **Goal:** Synchronize the repository's roadmap, recovery configuration, README, and config tests with the approved LM-to-Decision design: ternary bottleneck, two-stage Decision Recovery → Decision Re-specialization, and a 95% final gate for every modality.
 
-**Architecture:** Keep the current high-precision Master and ternary conversion boundaries, but redefine post-quantization training as two explicit stages. The configuration records an initial candidate schedule and the required A/B/C/D/E causal comparison; no GPU trainer implementation is added in this sync.
+**Architecture:** Keep the current high-precision Master and ternary conversion boundaries, but redefine post-quantization training as two explicit stages. This plan is documentation/config synchronization only; the actual schedule/loss/resume implementation lives in `docs/superpowers/plans/2026-10-06-post-quantization-respecialization-experiment.md`.
 
 **Tech Stack:** Markdown, YAML, Python 3.11, pytest, existing `load_structured_file`.
 
@@ -27,7 +29,7 @@
 - The fixed-recovery baseline must remain representable for comparison with annealed Re-specialization.
 - The config must preserve option-only teacher signals and disabled full-vocabulary KL.
 - README and ROADMAP must agree on Variant A/B/C/D meanings and all-modal 95% final gate.
-- Tests must fail if the stage names, loss endpoints, or A/B/C/D/E comparison contract drift.
+- Tests must fail if the stage names, initial candidate loss endpoints, or Q0/Q1/Q2/Q3/Q4 comparison contract drift.
 
 ---
 
@@ -62,7 +64,7 @@ Phase 8 must state:
 - fixed teacher-heavy Recovery and annealed Recovery→Re-specialization are both required candidates;
 - Master is an anchor, not a ceiling.
 
-- [ ] **Step 3: Add the required A/B/C/D/E causal comparison to ROADMAP**
+- [ ] **Step 3: Add the required Q0/Q1/Q2/Q3/Q4 causal comparison to ROADMAP**
 
 Use these exact labels:
 - A — Master
@@ -94,7 +96,7 @@ git add ROADMAP.md README.md
 git commit -m "docs: align roadmap with decision re-specialization"
 ```
 
-### Task 2: Replace fixed Recovery loss config with explicit two-stage policy
+### Task 2: Replace fixed Recovery config with an explicit two-stage candidate policy
 
 **Files:**
 - Modify: `configs/recovery/probability_distillation.yaml`
@@ -114,7 +116,7 @@ Add `test_recovery_config_declares_two_stage_decision_respecialization_policy()`
 - stage order is exactly `["recovery", "respecialization"]`
 - Recovery stage weights are `option_kl=1.0`, `cross_entropy=0.2`, `brier=0.2`
 - Re-specialization endpoint is `option_kl=0.2`, `cross_entropy=1.0`, `brier=0.2`
-- comparison candidates are exactly `["master", "ternary_raw", "fixed_recovery", "recovery_to_respecialization", "high_precision_control"]`
+- comparison candidates are exactly `["q0_master", "q1_ternary_raw", "q2_fixed_recovery", "q3_recovery_to_respecialization", "q4_high_precision_control"]`
 - `full_vocab_kl == 0.0`
 
 - [ ] **Step 2: Run the test and confirm it fails**
@@ -151,11 +153,11 @@ loss:
 
 experiment_comparison:
   candidates:
-    - master
-    - ternary_raw
-    - fixed_recovery
-    - recovery_to_respecialization
-    - high_precision_control
+    - q0_master
+    - q1_ternary_raw
+    - q2_fixed_recovery
+    - q3_recovery_to_respecialization
+    - q4_high_precision_control
 ```
 
 Add notes that these are initial candidate values, selected/validated on clean development data before becoming a training default.
