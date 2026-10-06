@@ -171,11 +171,15 @@ evidence, per-modality/source/question-type metrics, and the bottleneck limits
 are recorded in [docs/VIDEO_TEACHER_V2.md](docs/VIDEO_TEACHER_V2.md). No sealed
 audit data or ternary quantization was used for v2.
 
-The separate 2,048-step E-long attempt is blocked at step 128 by a Windows
-safetensors staging-path limit. A shorter staging path and regression test are
-committed on `codex/video-teacher-v2-long-budget`, but the failed snapshot did
-not contain the state required for exact resume. The partial run is not a
-completed learning-curve result; see
+The separate Candidate E long-budget continuation reached 2,048 optimizer
+updates from a verified step-1,408 resume snapshot. On the same 2,048-example
+validation selector, Video Accuracy rose from 44.5% at step 512 to 48.2% at
+step 2,048, while the fixed selector chose step 1,536. Final result
+serialization failed because the frozen corpus directory lacks
+`corpus-manifest.json`; the run is therefore recorded as training-complete but
+not cleanly finalized. This single development run supports a modest learning
+budget contribution but does not identify the sole bottleneck or establish
+product quality. Full metrics and hashes are in
 [docs/VIDEO_TEACHER_V2_LONG_BUDGET.md](docs/VIDEO_TEACHER_V2_LONG_BUDGET.md).
 
 ## Phase 4 — Larger multimodal decision adaptation

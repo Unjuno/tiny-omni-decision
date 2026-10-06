@@ -312,73 +312,284 @@ is a new initialization after an infrastructure failure, not a continuation of
 this partial run. No result here establishes a training-capacity, forgetting,
 or temporal-representation limit.
 
-## Follow-up: full clean-dev-v2 comparison
+## Subsequent exact continuation: clean-dev-v2, seed 17, 2,048-step plan
 
-After the blocked run, a separate read-only evaluation completed for the
-saved E-long step-128 adapter and selected Candidate E adapter. Both used the
-frozen `clean-dev-v2/validation.jsonl`, identical 7,901 ordered validation
-IDs (order SHA-256
-`6548ff2ad8419a775c08dbda37f86ed63ab57db66eeb24e7af1888794050f12b`),
-the same pinned base/processor revision, and the same E config. The effective
-processor length was 1,052 for both. These are development-validation results,
-not blind audit results, and were collected after Candidate E had already been
-selected using its earlier validation. They must not be interpreted as an
-independent test or used to promote a Teacher.
+This addendum records a later continuation and does not revise the failed
+128-step attempt above. The original process failed at step 1,024 while
+publishing a Windows checkpoint under the OneDrive workspace. A later attempt
+in that output also failed at step 1,024. A third process then passed the
+resume helper's exact-state preflight and resumed from the preserved step-896
+snapshot; `continuation-manifest.json` records matching checkpoint hashes,
+global step 896, sampler index 3,584, consumed-ID order hash, and
+`new_seed_or_hyperparameter_run: false`. Its output directory is outside
+OneDrive:
+`C:\Users\junny\AppData\Local\CodexArtifacts\tiny-omni-decision-teacher-v2\clean-dev-v2-seed17-2048-resume-step896-local\`.
 
-| Candidate | Step | Macro accuracy | Minimum modality | Macro NLL | Macro Brier | Macro ECE | Video accuracy | Video NLL |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Candidate E | 512 | 0.6968 | 0.4655 | 0.9273 | 0.3745 | 0.0582 | 0.4655 | 0.9440 |
-| E-long partial | 128 | 0.6677 | 0.4549 | 1.0741 | 0.4165 | 0.0733 | 0.4549 | 0.9898 |
+At the latest observation on 2026-10-06 18:30 JST, this exact continuation was
+still running as process 13068 at step 1,420. It had not reached the planned
+2,048 updates. The live checkout was branch
+`codex/teacher-quality-clean-dev-v1` at source commit
+`c3b7f187b90cdaaf9538214011a8e890294508b4`; the dedicated
+`codex/video-teacher-v2-long-budget` branch remained at `b1067c8`. The
+continuation used the saved 2,048-step effective configuration and existing
+clean-dev-v2 frozen corpora. It did not load sealed audit data.
 
-| Modality | Candidate E accuracy / NLL / Brier / ECE | E-long step 128 accuracy / NLL / Brier / ECE |
+- Effective config SHA-256: `d9d3ee1153fdc9ac7f454f509b68b5b5f4c5efc8814f017fe9d09545ee9a0b54`.
+- Source config SHA-256: `4ce9af8d0aa83c5526d3d3828b77df3a5cd727351f912ed58cd9aca8c7e1773a`.
+- Train corpus SHA-256: `2ebf1e75ed91b6e7021b5b202fce9ddd3cfa9feb3a9fec0cce17d3623cd4aaea`.
+- Validation corpus SHA-256: `cad3fe4f87e64fcc4b908ae6ab59ae6973cbe32093551956bb3164a49c6e8edf`.
+- Validation selector order SHA-256: `f3b2c57133100c5b9d8e3be35597a7925356f3a79e3f85f6b12b7ff7655d88eb`.
+- Pinned base revision: `6befbaca7398925921802abd1f277b495b78b738`.
+
+| Step | Macro Accuracy | Minimum modality Accuracy | Macro NLL | Macro Brier | Macro ECE | Video Accuracy | Best selector step |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 512 | 0.7285 | 0.4453 | 0.8178 | 0.3362 | 0.0886 | 0.4453 | 384 |
+| 1,024 | 0.7407 | 0.4434 | 0.7227 | 0.3263 | 0.0899 | 0.4434 | 1,024 |
+| 1,152 | 0.7515 | 0.4434 | 0.6335 | 0.3030 | 0.0778 | 0.4434 | 1,152 |
+| 1,280 | 0.7705 | 0.4570 | 0.6117 | 0.2898 | 0.0689 | 0.4570 | 1,280 |
+| 1,408 | 0.7773 | 0.4707 | 0.5589 | 0.2733 | 0.0581 | 0.4707 | 1,408 |
+
+At step 1,280, modality Accuracy / NLL / Brier / ECE was: Audio
+1.0000 / 0.000085 / 0.0000004 / 0.000085; Image 0.8145 / 0.5790 / 0.2715 /
+0.0729; Text 0.8105 / 0.9405 / 0.2985 / 0.1101; Video 0.4570 / 0.9272 /
+0.5894 / 0.0924. The selected step-1,280 adapter hash was
+`6f4bb8deb3a64791f35d7f6250a70499e7f99aa8626f41947ffac404c69d8168`.
+Validation took 1,386.2 seconds and peak allocated VRAM was 11.93 GB. By that
+step the run had consumed 5,120 unique examples, zero repeats, 3,511 unique
+underlying assets, 319 video scenes, and 1,413 parent questions. These rolling
+train metrics are not fixed-example generalization-gap measurements.
+
+The step-1,280 validation metrics file hash is
+`807f5c9921235ddbfcfbcc7eb1c1e75fc847ab6b0164d7669fa175d7918aa770`;
+its predictions file hash is
+`3bac5d39f32e6946e7610a13e8624f296acb77170b0d1a26925e13cd3669e260`.
+
+At step 1,408, validation Accuracy / NLL / Brier / ECE was Audio
+1.0000 / 0.000215 / 0.000003 / 0.000214; Image 0.8184 / 0.4851 / 0.2425 /
+0.0617; Text 0.8203 / 0.9043 / 0.2934 / 0.1067; Video 0.4707 / 0.8461 /
+0.5572 / 0.0636. Macro Accuracy was 0.7773 and minimum modality Accuracy was
+0.4707. The step-1,408 adapter SHA-256 is
+`e52513c43ac042095ca11ab25c0aac5fe4409b739accfbe83118634468fa2816`.
+Validation took 1,363.9 seconds; peak allocated VRAM remained 11.93 GB. The
+metrics and predictions SHA-256 values are respectively
+`7e29c5b6c9e7e9d0b03b78c653609ee8c9c1e0869954d0099adf5b7a0693c0e4` and
+`4eff0402e18b4e921228b70a51ea58bb5d63d606382878b7bb87ce8ae7473b48`.
+
+The 512, 1,024, 1,152, and 1,280 observations use the same selector order in
+this continuation. Video improves by 1.17 percentage points from step 512 to
+1,280, while non-video modalities also improve. This is an interim validation
+trend only; no learning-budget conclusion is made until the predeclared 1,536,
+1,920, and 2,048 points and completion checks are observed. The following
+remain pending: final-step evaluation, selected-checkpoint reload equivalence,
+paired scene bootstrap, v1 same-selector comparison, completed compute log,
+commit/push on the dedicated long-budget branch, and CI. No product promotion or
+sealed-audit evaluation has occurred.
+
+## Exact-resume audit after an unrecorded process exit
+
+The step-1,536 validation did not produce a result file. At 2026-10-06 19:01
+JST, process 13068 was absent and GPU memory was released. The latest rolling
+training-history row was step 1,536, but the last complete validation,
+selected adapter, trainer state, and full resume snapshot remained at step
+1,408. No terminal process output was available from the expired shell session;
+recent Windows Application/System logs contained no matching Python or GPU
+failure event. The exit cause is therefore **UNKNOWN**. No metrics are
+attributed to the incomplete step-1,536 evaluation.
+
+Before continuing, the step-1,408 snapshot was audited without modifying it:
+
+- `global_step=1408`, `sample_index=5632`, matching four microbatches per update.
+- Replayed consumed-ID order SHA-256 matched the saved hash
+  `b71b99aabfd0bfe58e0e05f956816947baf11a85526b461f943f7d62d5177030`.
+- All four RNG states were present (Python, NumPy, torch CPU, and one CUDA
+  stream); optimizer state had 410 entries, all at step 1,408.
+- Scheduler `last_epoch=1408`, `_step_count=1409`, and its last LR was
+  `1.1754254303406659e-05`, preserving the original 2,048-step cosine schedule.
+- Selected adapter and its metadata/predictions hashes matched. Snapshot
+  hashes for adapter, optimizer, scheduler, state, selected adapter, and
+  selector evidence are recorded in the new continuation manifest.
+- Config, train corpus, validation corpus, validation selector order, base
+  revision, processor revision, and trainer/training source hashes passed the
+  existing exact-resume checks. No audit data was loaded.
+
+An exact continuation was started at 2026-10-06 19:09 JST in a new output
+directory
+`C:\Users\junny\AppData\Local\CodexArtifacts\tiny-omni-decision-teacher-v2\clean-dev-v2-seed17-2048-resume-step1408-exact\`.
+Its manifest records the earlier process exit as unknown, the unvalidated
+step-1,536 tail as discarded, and retains the verified parent evidence through
+step 1,408. At 19:16 JST the process was still performing the same-selector
+base/reference setup evaluations; training had not yet advanced beyond the
+exact step-1,408 resume point. This continuation keeps the same run identity,
+seed, config, corpus, scheduler state, and model initialization trajectory.
+
+By 2026-10-06 19:52 JST, base and Teacher-v1 reference setup evaluations had
+completed and training had advanced to step 1,422. The retry will produce its
+own step-1,536 validation from the reproducible step-1,408 state; the previous
+unpersisted step-1,536 attempt remains excluded.
+
+## Post-run recovery: completed 2,048 updates, result finalization failed
+
+The exact continuation subsequently reached optimizer update 2,048. The
+trainer then raised `FileNotFoundError` while constructing the final result
+because the frozen clean-dev-v2 corpus directory has no
+`corpus-manifest.json`. The run ledger correctly retains this as a failed
+process termination. No manifest was added to, or reconstructed inside, the
+frozen corpus. This is an infrastructure/post-run metadata-finalization
+failure, not a training-quality failure. The failure ledger timestamp is
+2026-10-06 14:12:01 UTC (23:12:01 JST).
+
+The selected-checkpoint in-memory reload/prediction equality check is before
+the failing result-construction path in `trainer.py`; it completed before the
+traceback. This conclusion is based on the observed control-flow location, not
+on an independently persisted post-reload prediction file. Therefore the run
+is **complete through training and validation, but not a clean PASS under the
+requested reload-artifact gate**. The best and final adapters remain separate:
+selected step 1,536 is under `best/`, and the terminal update is preserved at
+`checkpoints/final-step-002048/`.
+
+The recovered local post-run summary and paired bootstrap are stored beside
+the run in AppData Local, outside Git. They do not alter the training ledger,
+frozen corpus, Teacher v1, Candidate E, or prior v2 outputs. The run command
+used the existing `resume_from` snapshot at step 1,408 for full optimizer,
+scheduler, RNG, sampler, and selector continuation. `reference_adapter_path`
+loaded Teacher v1 for a comparison evaluation only. The earlier E-512 adapter
+was not used for initialization; the verified lineage was a fresh LoRA over
+the pinned base, then exact resume. Run arguments and invocation metadata
+confirm this distinction. The exact-resume preflight helper is retained as
+`scripts/resume_teacher_quality_clean_dev_v2.py`.
+
+The raw shell argv was not persisted, so the exact command string is UNKNOWN.
+The durable invocation record identifies the config path/hash, source commit,
+reference adapter, exact resume snapshot, run options, and environment; these
+verified arguments are reported above rather than reconstructing a command.
+
+### Final observed curve
+
+All rows below use the same 2,048 validation IDs, order, preprocessing and
+selector. Each optimizer update consumed four microbatches; terminal accepted
+state consumed 8,192 unique training examples with zero repeated IDs. The
+step-1,536 selected checkpoint represents 6,144 unique examples consumed up to
+that point. Run-wide consumption and selected-checkpoint consumption are not
+interchangeable.
+
+| Step | Macro Acc. | Min modality Acc. | Macro NLL | Macro Brier | Macro ECE | Video Acc. | Selector best step |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 512 | 0.7285 | 0.4453 | 0.8178 | 0.3362 | 0.0886 | 0.4453 | 384 |
+| 1,024 | 0.7407 | 0.4434 | 0.7227 | 0.3263 | 0.0899 | 0.4434 | 1,024 |
+| 1,536 | 0.7798 | 0.4766 | 0.5471 | 0.2697 | 0.0555 | 0.4766 | 1,536 |
+| 1,920 | 0.7822 | 0.4824 | 0.5687 | 0.2723 | 0.0573 | 0.4824 | 1,536 |
+| 2,048 | 0.7832 | 0.4824 | 0.5668 | 0.2717 | 0.0572 | 0.4824 | 1,536 |
+
+The primary fixed-step comparison is same-run step 512 versus 2,048: Video
+Accuracy increased 3.71 percentage points (0.4453 to 0.4824), while macro
+Accuracy increased 5.47 points. The predeclared supporting points show that
+most Video improvement occurred by step 1,536 and largely plateaued by 1,920.
+The selected step is 1,536 because its fixed selector score (0.29253) was
+better than the terminal score (0.31048); final-step weights did not overwrite
+the selected checkpoint.
+
+A paired scene-cluster bootstrap over the same 512 Video questions grouped
+within 100 CLEVRER video scenes used 10,000 resamples and seed 17. The 2,048
+minus 512 Video Accuracy delta was +0.0371, percentile 95% interval
+[+0.0019, +0.0739]. This is a descriptive development interval on data used
+for checkpoint selection, not an independent test or a correction for
+selection bias.
+
+| Modality | Step 1,536 Accuracy / NLL / Brier / ECE | Step 2,048 Accuracy / NLL / Brier / ECE |
 |---|---|---|
-| Audio (2,864) | 0.9969 / 0.0258 / 0.0073 / 0.0165 | 0.9916 / 0.0494 / 0.0158 / 0.0272 |
-| Image (2,048) | 0.7041 / 0.9063 / 0.4066 / 0.0812 | 0.6191 / 1.3242 / 0.5279 / 0.1161 |
-| Text (514) | 0.6206 / 1.8333 / 0.5071 / 0.0832 | 0.6051 / 1.9331 / 0.5295 / 0.0898 |
-| Video (2,475) | 0.4655 / 0.9440 / 0.5769 / 0.0520 | 0.4549 / 0.9898 / 0.5929 / 0.0600 |
+| Audio | 1.0000 / 0.000458 / 0.000007 / 0.000456 | 1.0000 / 0.000194 / 0.000003 / 0.000193 |
+| Image | 0.8320 / 0.483394 / 0.234894 / 0.061967 | 0.8359 / 0.479888 / 0.228043 / 0.066108 |
+| Text | 0.8105 / 0.884679 / 0.295690 / 0.090317 | 0.8145 / 0.940826 / 0.301663 / 0.107476 |
+| Video | 0.4766 / 0.819963 / 0.548361 / 0.069274 | 0.4824 / 0.846372 / 0.557214 / 0.055072 |
 
-Candidate E per-question-type Video Accuracy / NLL was temporal descriptive
-0.4105 / 1.2691 (n=1,062), explanatory 0.5341 / 0.6923 (n=601), predictive
-0.5000 / 0.7017 (n=138), and counterfactual 0.4837 / 0.7057 (n=674).
-E-long step 128 was temporal descriptive 0.4040 / 1.3795 (n=1,062),
-explanatory 0.4908 / 0.7000 (n=601), predictive 0.5435 / 0.6937 (n=138),
-and counterfactual 0.4852 / 0.6948 (n=674). The small Video difference is
-mixed across task types and does not establish a learning-quantity effect.
+Video validation Accuracy / NLL by question type was:
 
-The full E evaluation took 5,336.4 seconds and the E-long adapter evaluation
-took 5,316.6 seconds; each used 11,449,122,304 bytes peak allocated VRAM.
-These timings are inference over the full validation, not training time.
-Audio and Image are stronger for E in this comparison, while Text and Video
-changes are smaller; these shifts are descriptive only because the validation
-data is used for development and has already influenced model selection.
+| Question type (n) | Step 512 | Step 1,536 | Step 2,048 |
+|---|---:|---:|---:|
+| Counterfactual (100) | 0.4000 / 0.695842 | 0.4100 / 0.693147 | 0.4100 / 0.693147 |
+| Explanatory (174) | 0.4655 / 0.698366 | 0.5287 / 0.695089 | 0.5345 / 0.698746 |
+| Predictive (138) | 0.5000 / 0.693147 | 0.5000 / 0.693147 | 0.5000 / 0.693147 |
+| Temporal descriptive (100) | 0.3800 / 1.392644 | 0.4200 / 1.339065 | 0.4400 / 1.467917 |
 
-Evaluation artifacts are ignored local outputs at
-`artifacts/teacher-quality-next/evaluations/clean-dev-v2-candidate-e/` and
-`artifacts/teacher-quality-next/evaluations/clean-dev-v2-e-long-best/`.
-The E-long evaluation records adapter SHA-256
-`968f40de479682acd91d9fa0640ad7ff7af566402cc01883bb3531daaa3af337`,
-config SHA-256 `02590db67c80cc89b2dfc265067937d5d39f5ab445fcc18d426a7d6f95c3f72d`,
-and validation corpus SHA-256
-`cad3fe4f87e64fcc4b908ae6ab59ae6973cbe32093551956bb3164a49c6e8edf`. The E
-evaluation records adapter SHA-256
-`c0d483b89798bea0d20f50a2335a0fa658c1794cd31c4ceb245f079b0e8ae851` and the
-same config and validation hashes. Both evaluations cover all four modalities
-and the same full validation ID sequence. No audit data was opened.
+Predictive scores remained at binary chance with near-uniform NLL at each point.
+Temporal descriptive improved in Accuracy but its NLL worsened after the best
+checkpoint; these task slices are small and share scenes, so they are
+diagnostic rather than independent evidence.
 
-**Interpretation remains uncertain.** The 128-step observation is not the
-requested 512-step point on the 2,048-step cosine schedule, and the schedule
-differs from E-512 in both warmup and decay horizon. The run did not reach 512,
-1,024, 1,536, 1,920, or 2,048, so neither a matched within-run learning curve
-nor a paired scene bootstrap can answer the budget hypothesis. This full
-validation comparison does not repair that missing experiment. The partial
-run cannot be resumed exactly because optimizer, scheduler, sampler cursor,
-selector state, and RNG state were not saved at failure. A future attempt
-requires a newly named seed-17 initialization and must be reported as a new
-run, not a continuation of this run.
+At step 1,536, training had consumed 6,144 unique examples, 4,106 unique
+assets, 319 video scenes and 1,608 parent questions. Source counts were
+CLEVRER 2,048; Clevr-4 1,536; and 512 each from Typed Decisions Synth,
+MASSIVE, Open-Jev, LibriSpeech and Speech Commands. Video task counts were
+422 counterfactual, 715 explanatory, 488 predictive and 423 temporal
+descriptive. At step 2,048 the source counts were CLEVRER 2,731; Clevr-4
+2,048; Typed Decisions Synth 683; MASSIVE 683; LibriSpeech 683; Open-Jev
+682; and Speech Commands 682. Unique assets by modality were Audio 1,235,
+Image 1,708, Text 2,001 and Video 319 (5,263 total). Video task counts were
+617 counterfactual, 1,008 explanatory, 488 predictive and 618 temporal
+descriptive. All these counts are consumed-example counts, not validation
+denominators.
 
-The original E-long selector contained 472 IDs from the earlier Candidate E
-corpus; none of those IDs occur in clean-dev-v2 (0/472 intersection). Thus
-the full clean-dev-v2 numbers above compare the two saved adapters on one
-common fresh validation, but cannot be joined to the old 472-ID selector or
-used as a same-selector v1/E/E-long comparison. No same-selector claim is
-made here.
+### Same-selector reference comparison and interpretation
+
+The Teacher v1 reference adapter was separately evaluated by the same
+clean-dev-v2 evaluator on these same IDs. It scored Audio 0.9434, Image
+0.1777, Text 0.1211 and Video 0.4414. E-long's selected checkpoint scored
+1.0000, 0.8320, 0.8105 and 0.4766 respectively. This is a same-selector
+reference run under the current preprocessing/readout path; it must not be
+confused with Teacher v1's historical validation or sealed-audit metrics.
+
+The result supports a **modest learning-budget contribution within this
+single seed and development selector**: step 2,048 beats its own step-512
+Video Accuracy and selector score, with the curve flattening late. It does not
+identify learning amount as the only cause. The terminal checkpoint has a
+validation NLL/selector regression relative to the best step; Text ECE and
+Video NLL/Brier also worsen from step 1,536 to 2,048. Video remains far below
+90% and the revised roadmap's 95% shipping gate. The run does not establish a
+model-family ceiling, product readiness, or permission to use sealed audit.
+
+The run ledger records `global_step=2048`, `sample_index=8192`, best step
+1,536, and effective config SHA-256
+`d9d3ee1153fdc9ac7f454f509b68b5b5f4c5efc8814f017fe9d09545ee9a0b54`.
+Train and validation hashes remain respectively
+`2ebf1e75ed91b6e7021b5b202fce9ddd3cfa9feb3a9fec0cce17d3623cd4aaea` and
+`cad3fe4f87e64fcc4b908ae6ab59ae6973cbe32093551956bb3164a49c6e8edf`;
+validation order hash is `f3b2c57133100c5b9d8e3be35597a7925356f3a79e3f85f6b12b7ff7655d88eb`.
+The pinned base and processor revision is
+`6befbaca7398925921802abd1f277b495b78b738`. The selected adapter SHA-256 is
+`0497a25742451daeb2e08c7879dc221d174a17bf451e4ab2de0f3af6223b5009`; the
+terminal adapter SHA-256 is
+`d17534df7b5141390c338a3f74e1c79aa4bf75be925d239036715372a4cefd62`.
+Step-1,536 and step-2,048 metric/prediction hashes are retained in the local
+recovery summary and the corresponding files; the terminal metric hash is
+`69e5cc5a8f7402b36409983fc3b06b896c20427f580c7348cd6201df3c1143cb` and
+prediction hash is
+`f19109a0421e6fbf381cfd4f80c0a7194cd4d39ad7f28922f5a1bcf119adbdec`.
+
+The active worktree in which training ran was `codex/teacher-quality-clean-dev-v1`
+at source commit `c3b7f187b90cdaaf9538214011a8e890294508b4`; result packaging is
+being recorded separately on `codex/video-teacher-v2-long-budget`. No model
+weights, corpus media, or large checkpoints are added to Git. No sealed audit,
+ternary conversion, Recovery training, product promotion or extra seed was
+run.
+
+### Hardware, environment and elapsed compute
+
+- Local GPU only: NVIDIA GeForce RTX 3080 Laptop GPU, 16,384 MiB, driver
+  616.92; no cloud compute or purchase. Electricity cost was not measured.
+- Windows 10 build 26300, Python 3.11.9, PyTorch 2.6.0+cu124,
+  torchvision 0.21.0+cu124, Transformers 5.6.2, PEFT 0.21.2, Accelerate
+  1.15.0, and PyAV 18.1.0. torchcodec was absent; the video path used the
+  recorded Transformers/torchvision loader fallback. BF16 was configured.
+- Attention backend: PyTorch math SDP; flash and memory-efficient SDP were
+  disabled. The bounded-memory Windows safetensors loader patch was active.
+- Peak allocated VRAM recorded at the final validation: 11,929,597,952 bytes.
+- Logged optimizer-step time sums to 11,255.342 seconds over 2,048 updates
+  (5.50 seconds/update on average). Training-history validation calls sum to
+  22,023.655 seconds; setup/reference evaluations add 7,282.484 seconds.
+  Trainer cumulative active elapsed time is 40,685.907 seconds (11.30 hours).
+  This is accumulated work across attempts and exact resume, not uninterrupted
+  calendar duration. The recorded experiment began 2026-10-05 23:38 UTC; the
+  final post-run failure was logged 2026-10-06 14:12 UTC. A validation call
+  around step 2,048 took 1,408.469 seconds. The calendar interval includes
+  retries and idle gaps and must not be read as GPU-hours.
+- Cloud cost: $0. No 4,096-step extension or extra seed was run.
