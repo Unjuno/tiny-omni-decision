@@ -48,24 +48,70 @@ access occurred, and no merged weights were written.
 The strict equivalence check failed. Changes by modality were Text 4/512,
 Image 5/512, Audio 0/512, and Video 5/512. The worst logit delta was on a
 Clevr-4 image example. Aggregate scores remain close, but the altered choices
-and probabilities are material for a frozen reference/cache contract. The
-precise numerical mechanism has not been isolated; BF16 merge rounding is a
-candidate explanation, not an established cause. Do not pass this result off as
-equivalent or proceed to a ternary comparison that assumes equivalence.
+and probabilities are material for a frozen reference/cache contract.
+
+The local environment confirms PEFT 0.21.2, 205 LoRA layers with FP32 adapter
+tensors, and BF16 base tensors. In PEFT's unmerged forward path, it computes the
+LoRA branch using the adapter dtype, adds it to the base-layer output, then
+casts the result to the base output dtype. The safe merge path instead casts
+each delta to the base weight dtype before adding it in-place to the base
+weight. This establishes a real arithmetic-order/dtype difference, though it
+does not by itself prove that this is the only source of every changed
+prediction.
+
+To test whether separate BF16 rounding caused the mismatch, a second in-memory
+merge computed `FP32(base) + FP32(delta)` per layer, then cast the merged matrix
+once back to its original BF16 dtype. It used the same 2,048 validation IDs and
+order, with no training or disk checkpoint. It still changed 13/2,048 top-1
+choices: Text 4/512, Image 5/512, Audio 0/512, Video 4/512. Maximum logit and
+probability deltas were 1.75 and 0.278382. The single-rounding merge therefore
+did not restore adapter equivalence; it changed which records flipped. Macro
+Accuracy was unchanged at displayed precision (0.779785 vs 0.779785), while
+macro NLL/Brier/ECE shifted from 0.547123/0.269738/0.055503 to
+0.546473/0.269509/0.054624. This does not establish a parity guarantee.
+Differences remained concentrated in Image/Text confidence, with probability
+deltas over 0.1 on 6 image/text examples; Audio probability deltas remained at
+or below 0.007563 and no Audio choices changed. Full predictions and metrics
+are retained in the local artifact paths below.
+
+This is not evidence of corrupted weights. It is an execution-path difference
+between adding a low-rank activation update and folding that update into a
+BF16 dense matrix. The merge gate remains unresolved for a reference/cache
+contract; do not claim exact equivalence or silently relax the tolerance after
+seeing these results. A future Q1 comparison must explicitly declare whether
+it measures ternary damage relative to the adapter execution path or to a
+frozen merged BF16 reference, and report merge deviation separately.
+
+Local diagnostic artifacts (not committed):
+
+- Safe merge: `C:\Users\junny\AppData\Local\CodexArtifacts\teacher-quality-reloads\clean-dev-v2-step1536-merge-equivalence-20261007\`
+- FP32-accumulation merge: `C:\Users\junny\AppData\Local\CodexArtifacts\teacher-quality-reloads\clean-dev-v2-step1536-merge-fp32accum-20261007\`
+- FP32-accumulation prediction SHA-256:
+  `969e36d6095feeb43a18a8bd52341d2ee80f4d0c96b3c8b3fba715c16993d955`
+- FP32-accumulation metrics SHA-256:
+  `70b8c42400e39aca7f9f63297b5993a1aa23bdb63180fc6421bad459fc224345`
 
 ## Next steps
 
 1. Keep the completed E-long run and both evaluation outputs immutable.
-2. Diagnose merge arithmetic/dtype and verify the comparison uses identical
-   loaded base, adapter, processor, and input tensors. Set a predeclared
-   tolerance based on numerical behavior while separately reporting every
-   top-1 change; do not weaken a threshold after seeing outcomes.
-3. In parallel, implement only the EmbeddingGemma 2 model/processor inspection
-   and held-out input compatibility gate. Do not begin training until the
-   repository's two quantization-source plans are reconciled into a versioned
-   run manifest.
-4. Preserve the proposed 1,024-update Q2/Q3/Q4 budgets if still feasible after
-   those gates; no extra E-long steps or seeds are justified by this plan review.
+2. Treat exact adapter/merged parity as unproven. If the research experiment
+   proceeds, preregister the Q0 execution path, merge tolerance, and separate
+   top-1/probability deviation report before examining Q1 outcomes.
+3. The EmbeddingGemma 2 model card identifies an all-modality embedding model
+   with 740M parameters and a 768D output ([official model card](https://huggingface.co/google/embeddinggemma-2)).
+   The local environment has Transformers 5.6.2, which does not recognize its
+   `embedding_gemma2` config; `sentence-transformers` is not installed. Only
+   small metadata files were fetched at immutable revision
+   `914f7f89142e33e77833254d9c9b90c3cef7303b`; no model weights were downloaded
+   and no working dependencies were upgraded. A separate pinned runtime is
+   required before the student gate can run.
+4. Reconcile the product student's option-scoring/calibration contract with
+   the teacher-cache and quantization plans. An embedding vector supports all
+   four media types, but the project still needs an evaluated option scorer
+   that returns calibrated probabilities over the supplied choices.
+5. Preserve the proposed 1,024-update Q2/Q3/Q4 budgets if still feasible after
+   the student/Q0 gates; no extra E-long steps or seeds are justified by this
+   plan review.
 
 This note records plan reconciliation and a failed engineering gate. It does
 not promote the E-long checkpoint, claim compression, or alter the canonical
