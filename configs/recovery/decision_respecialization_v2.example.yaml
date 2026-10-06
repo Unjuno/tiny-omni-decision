@@ -1,0 +1,20 @@
+# Numerical policy only, NOT a run/launch manifest. No paths or execution consent.
+# Initial comparison candidate, not a measured optimum.
+schema_version: 2
+kind: postquant_policy
+arm: q3_recovery_to_respecialization
+profile: comparison
+total_updates: 1024
+recovery_updates: 256
+gradient_accumulation_steps: 4
+temperature: 1.0
+full_vocab_kl: 0.0
+schedule: recovery_then_linear
+recovery:
+  option_kl: 1.0
+  cross_entropy: 0.2
+  brier: 0.2
+respecialization_end:
+  option_kl: 0.2
+  cross_entropy: 1.0
+  brier: 0.2

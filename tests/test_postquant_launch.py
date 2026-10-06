@@ -59,6 +59,7 @@ def case(tmp_path):
         'authorization': {'local_only': True, 'allow_paid_compute': False,
                           'allow_downloads': False, 'execute': False},
     }
+    _write_policy(inputs, manifest)
     mpath = tmp_path / 'launch.json'
     def save():
         mpath.write_text(json.dumps(manifest), encoding='utf-8')
@@ -174,9 +175,11 @@ def test_duplicate_and_nonfinite_json(launch, tmp_path):
     ('q4_high_precision_control', 1024, 256),
 ])
 def test_comparison_arm_budgets(launch, case, arm, updates, recovery):
-    repo, _, _, manifest, save = case
+    repo, inputs, _, manifest, save = case
     manifest.update(arm=arm, profile='comparison')
     manifest['budget'].update(total_updates=updates, recovery_updates=recovery)
+    if updates:
+        _write_policy(inputs, manifest)
     assert launch.preflight(save(), repo)['arm'] == arm
 
 
@@ -369,3 +372,41 @@ def test_offline_mode_covers_backend_import_and_failure(launch, case, monkeypatc
         launch.dispatch(save(), repo, execute=True)
     assert os.environ['HF_HUB_OFFLINE'] == 'original'
     assert list(outputs.iterdir()) == []
+
+
+def _write_policy(inputs, manifest):
+    fixed = manifest['arm'] == 'q2_fixed_recovery'
+    policy = {
+        'schema_version': 2, 'kind': 'postquant_policy',
+        'arm': manifest['arm'], 'profile': manifest['profile'], **manifest['budget'],
+        'temperature': 1.0, 'full_vocab_kl': 0.0,
+        'schedule': 'fixed' if fixed else 'recovery_then_linear',
+        'recovery': {'option_kl': 1.0, 'cross_entropy': 0.2, 'brier': 0.2},
+        'respecialization_end': {'option_kl': 1.0 if fixed else 0.2,
+                                'cross_entropy': 0.2 if fixed else 1.0, 'brier': 0.2},
+    }
+    path = inputs / 'policy.json'
+    path.write_text(json.dumps(policy))
+    manifest['artifacts']['policy']['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return path
+
+
+@pytest.mark.parametrize('key,value', [('schema_version', 1), ('arm', 'q4_high_precision_control'),
+                                      ('total_updates', 1024), ('typo', 1)])
+def test_preflight_checks_real_policy_not_only_hash(launch, case, key, value):
+    repo, inputs, _, manifest, save = case
+    path = inputs / 'policy.json'
+    policy = json.loads(path.read_text())
+    policy[key] = value
+    path.write_text(json.dumps(policy))
+    manifest['artifacts']['policy']['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+    with pytest.raises(launch.LaunchError, match='policy'):
+        launch.preflight(save(), repo)
+
+
+def test_preflight_reports_policy_identity_but_no_trainer(launch, case):
+    repo, _, _, _, save = case
+    report = launch.preflight(save(), repo)
+    assert report['numerical_policy']['schema_version'] == 2
+    assert len(report['numerical_policy']['identity']) == 64
+    assert report['backend_available'] is False
