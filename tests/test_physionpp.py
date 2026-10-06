@@ -18,6 +18,25 @@ from tiny_omni_decision.training import sampling_accounting
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_physionpp_clean_dev_v3_candidate_keeps_e_long_training_settings() -> None:
+    control = load_structured_file(ROOT / "configs/decision/teacher_quality_clean_dev_v2.yaml")
+    candidate = load_structured_file(
+        ROOT / "configs/decision/teacher_v2_physionpp_clean_dev_v3.yaml"
+    )
+    candidate["teacher_id"] = control["teacher_id"]
+
+    assert candidate == control
+    training = candidate["training"]
+    assert training["seed"] == 17
+    assert training["max_steps"] == 2048
+    assert training["gradient_accumulation_steps"] == 4
+    assert training["video_num_frames"] == 8
+    assert training["lora_target_policy"] == "decoder_all_linear"
+    assert training["rank"] == 16
+    assert training["use_rslora"] is False
+    assert training["early_stopping_patience"] == 17
+
+
 def _row(name: str, seed: int, label: bool, path: str) -> dict[str, object]:
     return {
         "stimulus_name": name,
@@ -255,6 +274,80 @@ def test_physion_group_split_is_deterministic_and_keeps_each_scene_seed_together
     assert all(item.split == "train" for item in train)
     assert all(item.split == "validation" for item in validation)
     assert report["integrity"]["status"] == "disjoint"
+
+
+def test_deterministic_asset_holdout_is_balanced_and_reproducible() -> None:
+    from tiny_omni_decision.development import deterministic_asset_holdout
+
+    provenance = LicenseProvenance(
+        license="MIT",
+        commercial_use=True,
+        derivative_model_training_allowed=True,
+        redistribution_allowed=True,
+        media_redistribution_allowed=True,
+        trust_status="trusted",
+    )
+    examples = [
+        DecisionExample(
+            id=f"{source}:{asset}:{index}",
+            modality="text",
+            state=f"state {asset}",
+            question=f"question {index}",
+            options=["no", "yes"],
+            target="yes",
+            source=source,
+            source_record_id=f"{asset}:{index}",
+            source_asset_group_id=str(asset),
+            source_revision="a" * 40,
+            split="train",
+            provenance=provenance,
+        )
+        for source in ("text/a", "text/b")
+        for asset in range(4)
+        for index in range(2)
+    ]
+
+    selected, groups = deterministic_asset_holdout(examples, modality="text", count=4, seed=17)
+    repeated, repeated_groups = deterministic_asset_holdout(
+        examples, modality="text", count=4, seed=17
+    )
+
+    assert [item.id for item in selected] == [item.id for item in repeated]
+    assert groups == repeated_groups
+    assert len(groups) == len(selected) == 4
+    assert len({(item.source, item.source_asset_group_id) for item in selected}) == 4
+    assert {item.source for item in selected} == {"text/a", "text/b"}
+
+
+def test_deterministic_asset_holdout_fails_when_unique_assets_are_insufficient() -> None:
+    from tiny_omni_decision.development import deterministic_asset_holdout
+
+    provenance = LicenseProvenance(
+        license="MIT",
+        commercial_use=True,
+        derivative_model_training_allowed=True,
+        redistribution_allowed=True,
+        media_redistribution_allowed=True,
+        trust_status="trusted",
+    )
+    example = DecisionExample(
+        id="only-one",
+        modality="video",
+        state="state",
+        question="question",
+        options=["no", "yes"],
+        target="yes",
+        source="video/source",
+        source_record_id="one",
+        source_asset_group_id="scene-1",
+        media=[MediaRef(kind="video", uri="source-ref://video/scene-1.mp4")],
+        source_revision="a" * 40,
+        split="train",
+        provenance=provenance,
+    )
+
+    with pytest.raises(ValueError, match="only 1 eligible"):
+        deterministic_asset_holdout([example], modality="video", count=2, seed=17)
 
 
 def test_media_end_frame_is_video_only_and_positive() -> None:
