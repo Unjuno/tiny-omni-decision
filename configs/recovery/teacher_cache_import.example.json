@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "postquant_cache_import",
+  "purpose": "training",
+  "master_state": "not_yet_verified",
+  "teacher": {
+    "master_sha256": "REPLACE_WITH_FROZEN_MASTER_SHA256",
+    "model_revision": "REPLACE_WITH_IMMUTABLE_MODEL_REVISION",
+    "processor_revision": "REPLACE_WITH_IMMUTABLE_PROCESSOR_REVISION",
+    "preprocessing_sha256": "REPLACE_WITH_PREPROCESSING_SHA256"
+  },
+  "expected_rows": 0,
+  "inputs": {
+    "path": "frozen/expected-inputs.jsonl",
+    "sha256": "REPLACE_WITH_EXPECTED_INPUTS_SHA256"
+  },
+  "predictions": {
+    "path": "frozen/raw-option-logits.jsonl",
+    "sha256": "REPLACE_WITH_RECORDED_EXPORT_SHA256"
+  }
+}
