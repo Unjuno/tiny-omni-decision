@@ -106,21 +106,27 @@ limitations, artifacts, and the later merge/export path are in
 [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
 pipeline test is retained as historical context in [docs/PHASE3.md](docs/PHASE3.md).
 
-## Planned compression and recovery flow
+## Planned student, compression, and recovery flow
 
-The intended v0.1 path is:
+The intended v0.1 path is now:
 
 ```text
 E2B QAT base
   → Decision / Omni LoRA
-  → high-precision Decision Teacher
-  → merge Decision LoRA into task-adapted quantization source
-  → ternary decoder compression
-  → one Recovery LoRA
+  → high-precision Gemma 4 Decision Teacher
+  → EmbeddingGemma 2 decision student candidate
+      ├─ native embedding/pooling/readout path first
+      └─ fallback: replace the terminal pooling/readout path with a small classifier
+  → ternary compression of the selected student
+  → Recovery adapter only if needed
   → final Tiny Omni Decision model
 ```
 
-Teacher distillation caches **option logits at the single decision position** by default. Full-vocabulary logits are optional diagnostics, not a required cache. The final runtime is intended to carry one Recovery adapter, not stacked Decision + Recovery adapters.
+The Gemma 4 Decision Teacher remains the external quality reference. EmbeddingGemma 2 is the preferred deployment/compression student candidate only after its exact upstream revision, architecture, and runtime are pinned and it passes the same held-out decision-quality gates.
+
+Do not assume the structural fallback cut point. Inspect the actual EmbeddingGemma 2 module graph first; remove or bypass only terminal pooling/readout components, or any final attention/projection block, when a measured ablation shows that it is unnecessary for the decision task.
+
+Compact option-level teacher/reference signals remain preferred for distillation and recovery. Full-vocabulary logits are optional diagnostics, not a required cache.
 
 ## Current boundary and limitations
 
@@ -130,6 +136,6 @@ Teacher distillation caches **option logits at the single decision position** by
 - Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. Ternary runtime compatibility and paired quality checks after compression remain open later-phase gates; no ternary or Recovery training has been run.
+- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 student integration, ternary runtime compatibility, and paired quality checks after compression remain open later-phase gates; no EmbeddingGemma 2 student, ternary, or Recovery training has been run.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).
