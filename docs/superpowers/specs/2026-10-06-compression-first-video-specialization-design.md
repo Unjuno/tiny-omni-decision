@@ -6,7 +6,7 @@ Approved architectural direction: **B**, refined around the actual product trans
 
 > The project is not preserving a language model at smaller size. It is converting a pretrained multimodal generative model into a compact Decision model.
 
-The ternary stage is therefore not treated only as compression damage. It is also an intentional capacity bottleneck that may remove redundant generative freedom before the model is re-optimized for typed decisions.
+The ternary stage is therefore not treated only as compression damage. It is an intentional capacity bottleneck under which the model is re-optimized for typed decisions. Whether that bottleneck preferentially removes redundant generative freedom is a hypothesis to test, not an assumed mechanism.
 
 The final product quality gate remains strict:
 
@@ -209,6 +209,18 @@ Do **not** claim that the complete model is sparse merely because the frozen bas
 
 Do not merge a dense Recovery adapter into ternary weights for deployment unless the merged model is explicitly re-quantized and re-evaluated.
 
+### Quantizer and runtime feasibility gate
+
+Before spending the full post-quantization training budget:
+
+1. freeze and record the exact ternary assignment rule, group size, scale rule, and any threshold/calibration procedure;
+2. run a representative decoder-layer and small end-to-end reference conversion;
+3. verify finite logits, deterministic conversion, zero/nonzero accounting, reversible metadata, and measured packed/reference bytes;
+4. record quality damage on a fixed development slice before Recovery;
+5. keep runtime speed claims blocked until a real packed low-bit backend is selected and benchmarked.
+
+A BF16-dequantized reference implementation is sufficient for quality experiments, but it is **not** evidence of ternary runtime speed.
+
 ## Two-stage post-quantization training
 
 ### Stage 1 — Decision Recovery
@@ -250,6 +262,38 @@ The Recovery Teacher is therefore an **anchor**, not a performance ceiling.
 
 A fixed teacher-heavy objective and an annealed Recovery→Re-specialization objective must be compared directly before the annealed policy becomes default.
 
+### Loss semantics and first predeclared schedule
+
+The first experiment must freeze the mathematical reductions before tuning coefficients:
+
+- option KL is the categorical KL **summed across the active options for one example**, then averaged across examples; do not divide by the number of options;
+- CE is standard per-example cross entropy, averaged across examples;
+- Brier remains the sum of squared probability errors across active options per example, averaged across examples, matching the existing project implementation;
+- the first experiment uses teacher temperature `T = 1.0`; any later `T != 1` experiment records the temperature and uses the standard `T^2` scaling explicitly.
+
+The first predeclared Q3 schedule is deliberately simple and is a **candidate**, not an asserted optimum:
+
+- total post-quantization optimizer-update budget is matched to Q2 and Q4;
+- first 25% of updates: Recovery coefficients `KL=1.0, CE=0.2, Brier=0.2`;
+- remaining 75%: linearly anneal `KL 1.0 → 0.2` and `CE 0.2 → 1.0`; keep `Brier=0.2`;
+- Q2 uses `KL=1.0, CE=0.2, Brier=0.2` for the entire matched budget;
+- Q4 uses the same two-stage coefficient schedule as Q3, but without ternary conversion.
+
+If this first schedule is not competitive, change it only in a separately versioned development experiment.
+
+### Exact resume contract
+
+Post-quantization checkpoints must persist enough state to reproduce the coefficient schedule exactly after resume:
+
+- global optimizer update;
+- current post-quantization stage;
+- stage-local update;
+- current effective KL/CE/Brier coefficients;
+- optimizer/scheduler state;
+- RNG and deterministic sample-order state.
+
+Resuming at the same checkpoint must produce the same next-example order and the same loss coefficients as uninterrupted training.
+
 ## Required causal comparison
 
 The first post-quantization experiment must preserve enough controls to separate three effects:
@@ -258,20 +302,20 @@ The first post-quantization experiment must preserve enough controls to separate
 2. ternary compression damage/recovery;
 3. possible regularization or capacity-allocation benefit from the ternary bottleneck.
 
-Minimum comparison:
+Use **Q0–Q4** for causal experiment arms so they cannot be confused with deployable product Variants A–D:
 
-- **A — Master**: frozen high-precision Pre-compression Decision Master.
-- **B — Ternary raw**: the same Master after ternary conversion, no post-training.
-- **C — Ternary + fixed Recovery**: teacher-heavy post-training.
-- **D — Ternary + Recovery→Re-specialization**: teacher influence annealed down and Decision supervision strengthened.
-- **E — High-precision control**: non-quantized Master given the same additional Decision data/update budget as D, without ternary conversion.
+- **Q0 — Master**: frozen high-precision Pre-compression Decision Master.
+- **Q1 — Ternary raw**: the same Master after ternary conversion, no post-training.
+- **Q2 — Ternary + fixed Recovery**: teacher-heavy post-training for the full matched update budget.
+- **Q3 — Ternary + Recovery→Re-specialization**: teacher influence annealed down and Decision supervision strengthened.
+- **Q4 — High-precision control**: non-quantized Master with the same trainable adapter topology, initialization seed, training examples/order, optimizer/scheduler, total update budget, and Recovery→Re-specialization coefficient schedule as Q3.
 
 Interpretation:
 
-- C > B measures recoverability.
-- D > C supports the value of Decision Re-specialization over pure recovery.
-- D > A shows that the constrained student can exceed its Master on the tested Decision task.
-- D > E is stronger evidence that the ternary bottleneck itself contributed beyond ordinary additional training.
+- Q2 > Q1 measures recoverability.
+- Q3 > Q2 supports the value of Decision Re-specialization over fixed Recovery.
+- Q3 > Q0 shows that the constrained student can exceed its Master on the tested Decision task.
+- Q3 > Q4 is stronger evidence that the ternary bottleneck contributed beyond ordinary additional training.
 
 No single seed or repeatedly tuned development subset is sufficient to claim a general regularization benefit.
 
@@ -309,6 +353,18 @@ First test an option-only projection that reuses the equivalent existing output 
 Only if the equivalence path is not sufficient should a learned compact classifier/scorer be introduced.
 
 The readout must preserve the repository's current variable option-count contract rather than assuming a fixed 20-class output.
+
+## Cross-modal input contract
+
+The first Q0–Q4 compression experiment may use the repository's currently supported single-media Decision path. Before the final Omni specialization and before any claim of genuine multimodal fusion:
+
+- the schema and processor path must support the declared simultaneous media combinations rather than selecting only one media kind;
+- no supplied media may be silently dropped;
+- unsupported combinations must fail closed;
+- training must include examples whose correct answer actually requires evidence from more than one modality;
+- evaluation must include modality-ablation and contradiction/counterfactual cases to detect shortcut learning.
+
+Single-modal Text/Image/Audio/Video scores do not by themselves prove cross-modal fusion. The cross-modal evaluation generation and its success threshold must be frozen before using it for final model selection.
 
 ## Video Temporal Specialization
 
@@ -433,10 +489,12 @@ Requirements:
 
 1. finish and freeze the current high-precision run;
 2. create the reproducible Pre-compression Decision Master artifact;
-3. implement/verify ternary conversion and sparsity/damage measurement;
-4. run the controlled A/B/C/D/E post-quantization comparison;
-5. freeze Variant A using the selected two-stage policy if it wins;
-6. implement and benchmark the lightweight Decision readout for Variant B;
-7. implement temporal Video specialization and final all-modal specialization for Variant C;
-8. profile A/B/C;
-9. attempt Variant D only if the measured frontier justifies pooling/resampling.
+3. freeze the quantizer definition and pass the reference/runtime-feasibility gate;
+4. implement exact two-stage loss/schedule/resume semantics;
+5. run the controlled Q0/Q1/Q2/Q3/Q4 post-quantization comparison;
+6. freeze Variant A using the selected post-quantization policy;
+7. implement and benchmark the lightweight Decision readout for Variant B;
+8. implement the genuine cross-modal input contract and fusion evaluation;
+9. implement temporal Video specialization and final all-modal specialization for Variant C;
+10. profile A/B/C;
+11. attempt Variant D only if the measured frontier justifies pooling/resampling.
