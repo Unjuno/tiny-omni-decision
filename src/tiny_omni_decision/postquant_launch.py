@@ -283,6 +283,20 @@ def preflight(manifest_path: Path, repo: Path, *, check_device: bool = False) ->
             raise LaunchError(f'{role}: artifact hash mismatch')
     if 'train' in hashes and hashes['train'] == hashes['development']:
         raise LaunchError('identical train/development artifacts')
+    policy_info = None
+    if arm not in ARMS[:2]:
+        from .postquant_policy import load_postquant_config, policy_identity
+
+        try:
+            policy = load_postquant_config(paths['policy'])
+        except (OSError, ValueError) as exc:
+            raise LaunchError(f'numerical policy rejected: {exc}') from exc
+        if (policy.arm != arm or policy.profile != profile
+                or any(getattr(policy, key) != value for key, value in expected.items())):
+            raise LaunchError('numerical policy does not match launch arm/profile/budget')
+        if _file_hash(paths['policy']) != hashes['policy']:
+            raise LaunchError('numerical policy changed during validation')
+        policy_info = {'schema_version': 2, 'identity': policy_identity(policy)}
     if (_git(repo, 'rev-parse', 'HEAD') != commit
             or _git(repo, 'branch', '--show-current') != branch
             or _git(repo, 'status', '--porcelain', '--untracked-files=all')):
@@ -291,7 +305,7 @@ def preflight(manifest_path: Path, repo: Path, *, check_device: bool = False) ->
             'verification_scope': 'declared_files_only_not_deep_model_or_corpus_audit',
             'manifest_sha256': _file_hash(manifest_path), 'source_commit': commit,
             'arm': arm, 'profile': profile, 'budget': expected, 'output_dir': str(output),
-            'artifact_hashes': hashes,
+            'artifact_hashes': hashes, 'numerical_policy': policy_info,
             'backend_available': (repo / 'src/tiny_omni_decision/postquant_trainer.py').is_file(),
             'gpu': probe_device(manifest['device'], manifest['limits']) if check_device else None,
             'python': sys.version.split()[0]}
