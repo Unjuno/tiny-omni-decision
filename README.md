@@ -1,6 +1,6 @@
 # Tiny Omni Decision
 
-Tiny Omni Decision adapts Gemma 4's multimodal representation to return probabilities over supplied choices. Phase 1 established a **text-only decision** path; the current training pipeline supports text, image, audio, and video. The decision readout scores supplied choices and returns a probability distribution instead of generating a response.
+Tiny Omni Decision adapts Gemma 4's multimodal representation to return probabilities over supplied choices. The existing training path supports text and a single image, audio, or video media input per example. Simultaneous multi-media fusion is a required later capability, not an implemented property of that path. The Decision readout scores supplied choices instead of generating a response.
 
 ## Pinned base
 
@@ -76,12 +76,13 @@ check and the durable teacher run are recorded in
 [docs/PHASE3.md](docs/PHASE3.md) and
 [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
 
-## Teacher v1 quality run
+## Teacher v1 quality run — historical procedure
 
 Teacher v0's evaluation metrics have already been observed. They are retained as
 a legacy reference in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md) and are
-not used for hyperparameter selection. Teacher v1 freezes fresh train and
-validation corpora plus a separate sealed audit set:
+not used for hyperparameter selection. Teacher v1 froze fresh train and
+validation corpora plus a separate sealed audit set. The following commands
+document that historical procedure; do not rerun them over existing artifacts:
 
 ```bash
 tiny-omni-decision freeze-teacher-v1-corpus
@@ -103,7 +104,7 @@ in `configs/decision/teacher_v1_video_priority.yaml`; seed-specific reproducible
 configs are retained for seeds 19 and 23.
 
 After the candidate, config, train/validation hashes, sampling policy, and
-selection rule are frozen, evaluate the sealed audit once:
+selection rule were frozen, the historical sealed audit was evaluated once:
 
 ```bash
 tiny-omni-decision freeze-teacher-selection \
@@ -121,60 +122,77 @@ tiny-omni-decision evaluate-sealed-audit \
 The audit JSONL lives under `data/sealed/durable-teacher-v1/`; normal training
 loads only `train.jsonl` and `validation.jsonl`. Its immutable manifest records
 the audit hash, and an exclusive claim file prevents a second evaluation.
-Teacher v1 procedure, split hashes, coverage, experiments, curves, metrics, and
-remaining bottlenecks are documented in
-[docs/TEACHER_V1.md](docs/TEACHER_V1.md).
+This audit is now observed; it is not a fresh final audit for a new candidate.
 
 The one-time sealed audit scored 0.6718 Accuracy overall (macro across
 modalities: 0.7170). Audio reached 0.9459; image 0.6890, text 0.7130, and video
-0.5200 remain below the 0.90-per-modality goal. The selected adapter and
-provenance hashes are recorded in
+0.5200 did not meet the then-used 0.90-per-modality development goal. The
+current final product target is 95% in every modality. The selected adapter
+and provenance hashes remain in
 [`manifests/teachers/tiny-omni-decision-teacher-v1.json`](manifests/teachers/tiny-omni-decision-teacher-v1.json).
 
 The prior 16-step pipeline test remains historical context in
-[docs/PHASE3.md](docs/PHASE3.md). No ternary quantization or Recovery LoRA is
-performed during Teacher v1.
+[docs/PHASE3.md](docs/PHASE3.md). No ternary quantization or Recovery LoRA was
+performed during Teacher v1. Later development runs are separately identified
+in [docs/TEACHER_QUALITY_NEXT.md](docs/TEACHER_QUALITY_NEXT.md); do not combine
+their validation generations into one learning curve.
 
-## Planned compression and recovery flow
+## Planned compression, Recovery and Decision Re-specialization
 
-The intended v0.1 path is:
+Approved direction B allows a frozen, reload/merge-verified Master to enter
+bounded compression experiments below final product accuracy. The final
+artifact still requires Text >=95%, Image >=95%, Audio >=95%, and end-to-end
+Video >=95% Accuracy, plus declared fusion and runtime qualification.
 
 ```text
-E2B QAT base
-  → Decision / Omni LoRA
-  → high-precision Decision Teacher
-  → merge Decision LoRA into task-adapted quantization source
-  → ternary decoder compression
-  → Recovery
-  → Variant A: recovered ternary model
-  → lightweight Decision classifier / option scorer
-  → Variant B
-  → token pooling / learned resampler
-  → re-distillation + replacement Recovery
-  → Variant C
-  → identical A/B/C quality + latency benchmark
+E2B base -> Decision adaptation -> frozen Master -> verified LoRA merge
+  -> input/quantizer feasibility -> Q0-Q4 experiment
+  -> Recovery -> candidate Decision Re-specialization -> Variant A
+  -> equivalent option-only readout first -> Variant B
+  -> verified multi-media fusion + temporal Video + joint specialization -> Variant C
+  -> optional profiling-justified pooling/resampling -> Variant D
+  -> untouched final audit and actual target-runtime benchmark
 ```
 
-Teacher distillation caches **option logits at the single decision position** by default. Full-vocabulary logits are optional diagnostics, not a required cache.
+Q0 is Master; Q1 raw ternary; Q2 fixed Recovery; Q3 two-stage Recovery and
+Re-specialization; Q4 non-quantized control with the same additional learning
+as Q3. These are experiment arms, not product variant names. Match adapter
+initialization/topology, sample order, update budget, optimizer/LR policy and
+Q3/Q4 loss schedules; compare fixed-update endpoints separately from selected
+checkpoints. Quantization-induced improvement is a hypothesis, not a guarantee.
 
-The runtime plan deliberately preserves three benchmarkable artifacts instead of overwriting intermediate stages:
+The initial candidate uses Recovery for the first quarter of updates, then
+reduces KD influence and strengthens gold-label supervision. Keep fixed
+Recovery when it wins. Cache only ordered option logits by default; this does
+not require preserving long-form generation or full-vocabulary distributions.
 
-- **Variant A:** ternary + Recovery
-- **Variant B:** Variant A with the full-vocabulary runtime readout replaced by a lightweight Decision classifier / option scorer
-- **Variant C:** Variant B plus token pooling / a learned resampler, followed by re-distillation and a replacement Recovery adapter
+Preserved product artifacts:
+- **Variant A:** selected feasible ternary Decision core and one adaptation state.
+- **Variant B:** A with equivalent or independently validated lightweight readout, preserving 2-62 choices.
+- **Variant C:** B with temporal Video and final joint all-modal specialization after the fusion gate.
+- **Variant D:** optional C with pooling/resampling and replacement specialization.
 
-Every deployable variant carries at most one Recovery adapter. Variant C retrains/replaces Recovery after token reduction; it does not stack two Recovery adapters. All three variants are evaluated on the same quality, memory, size, startup, and p50/p95 latency protocol. Deeper attention replacement remains optional after this comparison.
+Do not stack obsolete Recovery adapters or silently merge a dense residual
+into three-valued weights. Count the residual/readout/temporal modules in
+all bytes, memory and latency reports. A BF16-dequantized ternary reference
+can test quality but cannot establish packed-runtime speed.
+
+Read the [design spec](docs/superpowers/specs/2026-10-06-compression-first-video-specialization-design.md),
+[remaining contract sync plan](docs/superpowers/plans/2026-10-06-decision-respecialization-sync.md),
+and [actual bounded experiment plan](docs/superpowers/plans/2026-10-06-post-quantization-respecialization-experiment.md).
+The existing `configs/recovery/probability_distillation.yaml` is still a fixed-loss
+legacy control. A versioned two-stage config, its parser, schedule/loss/resume
+code and measured experiments are required before claiming the new policy runs.
 
 ## Current boundary and limitations
 
-- CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
-- The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`) and requires PyTorch 2.6 for actual Gemma 4 multimodal forward. Install a wheel matching the local CUDA driver; GPU model loading is not covered by CPU CI.
-- Teacher v0's final evaluation has been observed and is only a legacy reference. Teacher v1 uses fresh split assets where available, rejects record/media/state overlap, and isolates its sealed audit until validation-only selection is frozen; see [docs/TEACHER_V1.md](docs/TEACHER_V1.md). The sources remain controlled candidates, not broad real-world benchmarks.
-- Video Teacher v2 Candidates A/B/C, the separate B-cosine schedule comparison, and the video-native Candidate E are documented in [docs/VIDEO_TEACHER_V2.md](docs/VIDEO_TEACHER_V2.md). E improved Video over B-cosine on a matched mixed-task validation subset, but remains below frozen Teacher v1; no v1 artifact or sealed audit was changed, and no ternary quantization was run.
-- The separate Candidate E long-budget attempt stopped at step 128/2,048 when Windows rejected the overlong temporary safetensors checkpoint path. The path fix and regression test are on `codex/video-teacher-v2-long-budget`; the run could not be exactly resumed because optimizer/scheduler/RNG/sampler state was not saved. Partial validation results and hashes are in [docs/VIDEO_TEACHER_V2_LONG_BUDGET.md](docs/VIDEO_TEACHER_V2_LONG_BUDGET.md). This is not a completed long-budget result.
-- Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
-- The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
-- GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. Ternary runtime compatibility and paired quality checks after compression remain open later-phase gates; no ternary or Recovery training has been run.
+- CPU CI and prior tests do not establish current GPU quality, packed execution speed or 95% release accuracy. This documentation revision does not run model training.
+- The ML extra and pinned model/backend compatibility must be checked in the actual execution environment. Historical smoke conditions are not a new benchmark.
+- Current single-media input processing does not implement general simultaneous image/audio/video fusion. New experiments must reject unsupported extra inputs before calling it; final Omni specialization requires a tested capability matrix and correctly aligned multi-evidence data.
+- Teacher v0/v1 and Video v2 results, including failed staging-path attempts and negative results, remain historical reports. Their observed evaluations are not fresh audits for new models.
+- The source tasks are controlled candidates, not proof of broad real-world quality. Keep Audio random-negative results and add validated hard-negative evaluation separately.
+- All option labels must map to distinct single continuation tokens; preserve the current 2-62 choice contract and test the 60-intent task.
+- OneJev unresolved rights remain excluded. Architecture-compatible ternary reference conversion, Recovery/Re-specialization GPU execution, packed runtime, fusion and temporal specialization are planned until implementation and measurements demonstrate them.
+- Attention replacement is separate optional profiling-gated research, not the lightweight-readout stage.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).

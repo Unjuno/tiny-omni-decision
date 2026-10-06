@@ -1,491 +1,136 @@
 # Roadmap
 
-## Goal
+## Goal and current contract
 
-Build a compact multimodal decision model that accepts text, image, audio, and video and returns calibrated probabilities over typed options.
+Build one compact Omni Decision model returning calibrated probabilities over supplied choices. Final product Accuracy must be Text >=95%, Image >=95%, Audio >=95%, and end-to-end Video >=95%. Model confidence is not Accuracy. Declared fusion capabilities and target-runtime budgets have independent mandatory release checks.
 
-The v0.1 pipeline is:
-
-```text
-Gemma 4 E2B QAT alignment backbone
-        ↓
-Decision / Omni LoRA training
-        ↓
-freeze validation-selected Pre-compression Decision Master
-(final 95%-per-modality product gate does not block compression entry)
-        ↓
-merge Decision LoRA into task-adapted quantization source
-        ↓
-decoder-focused ternary compression
-        ↓
-quantization damage measurement
-        ↓
-Recovery from the frozen Master + labeled supervision
-        ↓
-Variant A: recovered ternary Decision model
-        ↓
-lightweight Decision classifier / option scorer
-        ↓
-Variant B: lightweight Decision Core
-        ↓
-temporal Video specialization
-(clips → compact states/scores → lightweight temporal aggregation)
-        ↓
-all-modal replay + final Recovery
-        ↓
-Variant C: lightweight Omni Decision
-        ↓
-profile A / B / C
-        ↓
-only if profiling justifies it:
-token pooling / learned resampler + replacement Recovery
-        ↓
-Variant D
-        ↓
-runtime profiling / mobile benchmark
-        ↓
-optional deeper attention acceleration research
-```
-
-The architectural rationale and gate definitions are frozen in
-[the compression-first video-specialization design](docs/superpowers/specs/2026-10-06-compression-first-video-specialization-design.md).
-
-Each deployable artifact should carry at most one Recovery adapter. The Decision LoRA is a teacher/training artifact and is merged before ternary conversion. If token pooling/resampling is introduced later, train a new replacement Recovery adapter for that pooled student rather than stacking two Recovery adapters at runtime.
-
-The runtime should avoid computing the full vocabulary projection when only supplied option scores are required. After the first recovered ternary baseline is stable, replace the full-vocabulary readout with a lightweight Decision classifier / option scorer. An option-only projection using the existing LM-head rows is the low-risk equivalence baseline; a learned compact scorer may be tested if it gives a better latency/quality trade-off.
-
-Token pooling or a learned fixed-size resampler is a deliberate later acceleration stage, not a prerequisite for the first quantized model. It now comes after temporal Video specialization and the Variant C benchmark. Clip-based Video processing already introduces explicit compute/token budgeting, so generic pooling is added only if profiling shows a remaining worthwhile bottleneck. Any pooled Variant D uses a replacement Recovery adapter rather than stacking Recovery adapters.
-
-Architecture-level attention replacement (for example linear attention or another softmax-attention alternative) remains a separate deeper acceleration path after the A/B/C runtime comparison.
-
-The project does not depend on preserving long-form generation.
-
-## Phase 0 — Freeze the design
-
-**Status: implementation-ready with hard gates.**
-
-Primary target:
-- `google/gemma-4-E2B-it-qat-q4_0-unquantized`
-
-Design decisions:
-- E2B is used for pretrained multimodal alignment.
-- Text/image/audio/video decision quality matters more than long-context reasoning.
-- Decision tuning may use labels and/or soft probability targets from stronger decision teachers.
-- No custom decision head is required by default; option-token/readout approaches remain preferred when they preserve runtime portability.
-- Ternary compression focuses on large decoder linear weights first.
-- Modality encoders, projectors, norms, and readout components remain higher precision until proven safe.
-
-Project-level hard gates:
-- [x] pin exact base-model revision/hash
-- [x] record upstream license/notice requirements
-- [x] freeze and validate redistribution-safe train/validation/evaluation catalogs
-- [ ] verify architecture-compatible ternary implementation/runtime
-- [x] define disjoint held-out train/selection/evaluation splits and zero-overlap checks
-
-## Phase 1 — Reproducible text decision LoRA smoke
-
-- [x] Python package skeleton, config layout, and validation CLI
-- [x] immutable upstream model and processor revision pinned in manifest
-- [x] license/attribution metadata recorded; weights excluded from Git
-- [x] CPU tests for schema, option labels, reordering, Brier, probabilities, and manifest
-- [x] local preflight command reports optional ML versions and CUDA device VRAM
-- [x] actual-model inspection CLI (requires download and optional ML dependencies)
-- [x] config-only architecture inspection verifies decoder attention paths separately from modality encoders
-- [x] vocabulary-logit text decision path (single-token labels validated at runtime)
-- [x] synthetic CE + Brier LoRA smoke CLI with save/reload and metadata
-- [x] load pinned weights and revalidate architecture module/LoRA targets against checkpoint tensors
-- [x] pass forward/backward/save/reload smoke on RTX 3080 Laptop GPU (16 GB VRAM)
-- [x] confirm CI is green on GitHub (PR #1 Actions run #9 passed install, lint, tests, and manifest validation)
-
-Exit criterion: a fresh clone can validate manifests and run CPU-only CI, and the pinned model completes the documented 16 GB GPU smoke with base frozen and adapter trainable. Local CPU checks, loaded checkpoint inspection, the 16 GB GPU smoke, and GitHub Actions on PR #1 all pass. Phase 1 implementation gates are complete; dataset licensing, held-out evaluation splits, and ternary runtime compatibility remain gates for later phases.
-
-## Phase 2 — Dataset integration — complete
-
-Normalize public decision data into one schema.
-
-Initial sources to investigate and license-filter:
-- typed-decision / Open-Jev style text data
-- OneJev-style multimodal decision data
-- audio multiple-choice / classification data
-- video multiple-choice / classification data
-
-Required per sample/source metadata:
-- source repository/dataset
-- revision
-- split
-- modality
-- license
-- media reference
-- contamination/eval status
-
-Do not commit redistributable media blindly.
-
-**Phase 2 implementation status:** schema, fail-closed source and component license policy,
-pinned candidate manifests, text/image/audio/video metadata adapters, deterministic option
-shuffling, streaming normalization, and source/content split checks are implemented. CPU
-fixtures exercise unknown and non-commercial licenses, media metadata, malformed targets,
-and cross-split duplicates. Candidate catalog validation requires ALLOW rights, exact
-manifest/catalog split agreement, and disjoint train/evaluation splits for a shared pinned
-dataset revision. The durable teacher corpus is frozen with selected media materialized and
-hashed; its source splits and zero-overlap checks are recorded in
-[docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
-
-Candidate inventory and verified rights decisions are in `docs/DATASETS.md`; separate
-training and evaluation candidate catalogs are in `manifests/`. Safe minimum candidates now
-cover text (Typed Decisions Synth/Open-Jev), image (Clevr-4), audio (Speech Commands), and
-video (CLEVRER). Sampled normalization across these sources is checked for train/evaluation
-disjointness; Speech Commands' adapter smoke uses tiny source-shaped fixtures, while its
-upstream Parquet files are checksum-pinned. CLEVRER questions metadata was sampled from the
-official train/validation files; video bytes were not downloaded. Clevr-4's nominal 10k
-archive contains 10,531 annotation rows (8,424 train / 2,107 val); each image produces four
-ten-class decisions, and media bytes are not copied during normalization.
-
-Phase 2 exit criteria are complete: at least one rights-audited candidate per modality,
-separate pinned train/evaluation catalogs, streaming adapters, reproducible normalization,
-and automated source/content split checks. OneJev component-level rights review remains
-open but OneJev is excluded from the frozen corpus. Ternary runtime compatibility remains
-a later compression gate.
-
-## Phase 3 — High-precision Decision/Omni LoRA — complete; quality target unmet
-
-Teacher v0 completed a 256-step four-modality run on the local RTX 3080 Laptop GPU.
-Its 2,917-record evaluation has already been observed and is a legacy reference,
-not a blind test or a model-selection target. Historical corpus provenance and
-metrics remain in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier
-16-step pipeline test remains documented in [docs/PHASE3.md](docs/PHASE3.md).
-
-Teacher v1 fixed CLEVRER scene-level grouping and fail-closed independent
-validation, then froze fresh train/validation/sealed-audit splits with record,
-source-asset, media, and normalized-content checks. Validation-only selection
-compared sampling policies and three rank-16 seeds. Its candidate was frozen
-before one full sealed-audit evaluation. Audio reached 94.6% audit Accuracy;
-image reached 68.9%, text 71.3%, and video 52.0%, so even the then-used
-four-modality 90% development gate remained open. The current final product
-target is 95% Accuracy in every modality. Learning curves show a validation plateau/overfit
-signal at the 2,048-step budget. Full hashes, per-source metrics, experiments,
-and bottleneck analysis are in [docs/TEACHER_V1.md](docs/TEACHER_V1.md) and
-[`manifests/teachers/tiny-omni-decision-teacher-v1.json`](manifests/teachers/tiny-omni-decision-teacher-v1.json).
-
-Teacher v1 used only the local RTX 3080 Laptop GPU (about 14.2 GPU-hours across
-logged attempts and the audit; cloud cost $0). It did not merge the final
-Teacher, ternary-quantize, train a Recovery adapter, or create a teacher-logit
-cache.
-
-The compression-entry policy has since changed. The project no longer requires
-all four modalities to reach the final product threshold before ternary work can start. The active
-high-precision run should complete under its frozen rules, then its
-validation-selected best checkpoint becomes the **Pre-compression Decision
-Master** once reload/provenance checks pass. Text/Image/Audio/Video quality is
-still reported in full, but remaining quality gaps move forward into Recovery
-and post-compression specialization rather than blocking the compression
-pipeline indefinitely. The final product gate is >=95% Accuracy for **each**
-modality, including end-to-end Video.
-The follow-up [Video Teacher v2 design](docs/superpowers/specs/2026-10-04-video-teacher-v2-design.md)
-was executed on a separate branch and artifact tree; Teacher v1 remains frozen.
-Candidates A/B/C, the B-cosine schedule comparison, and the video-native
-Candidate E are complete. E improved Video over B-cosine on the exact same
-mixed-task validation examples, but remains below the v1 reference on macro
-Accuracy, minimum-modality Accuracy, and Video Accuracy. The 12-frame Candidate
-D gate was not met, so it was not run. Full learning curves, overlap/hash
-evidence, per-modality/source/question-type metrics, and the bottleneck limits
-are recorded in [docs/VIDEO_TEACHER_V2.md](docs/VIDEO_TEACHER_V2.md). No sealed
-audit data or ternary quantization was used for v2.
-
-The separate 2,048-step E-long attempt is blocked at step 128 by a Windows
-safetensors staging-path limit. A shorter staging path and regression test are
-committed on `codex/video-teacher-v2-long-budget`, but the failed snapshot did
-not contain the state required for exact resume. The partial run is not a
-completed learning-curve result; see
-[docs/VIDEO_TEACHER_V2_LONG_BUDGET.md](docs/VIDEO_TEACHER_V2_LONG_BUDGET.md).
-
-## Phase 4 — Finalize and freeze the Pre-compression Decision Master
-
-Complete the active clean-development run without changing its frozen
-configuration mid-run. Select the best checkpoint only from the declared
-development selector and verify reload reproducibility.
-
-Compression-entry requirements:
-- run completed its declared budget or predeclared stopping rule
-- best checkpoint frozen and reload-verified
-- data/config/checkpoint/environment hashes recorded
-- train/development integrity checks pass
-- no sealed/final audit used for tuning
-- per-modality Accuracy, NLL, Brier, and ECE recorded
-
-A 95% per-modality result is **not** required to leave this phase. Remaining
-quality gaps are explicit inputs to later Recovery and specialization work.
-
-Keep the current high-precision training policy as historical experiment
-configuration rather than redefining it after seeing results:
-- modality encoders frozen
-- projector frozen unless a separately versioned experiment changes it
-- decoder LoRA
-- portable Decision readout
-- randomized option ordering
-- CE + Brier, with optional future teacher-distribution terms only in a
-  separately declared experiment
-
-## Phase 5 — Decision training on rented GPU
-
-Use rented GPU only after local smoke tests pass.
-
-Budget target: **≤ US$15 total** for the first complete experiment.
-
-Record:
-- GPU model
-- hourly price at run time
-- wall time
-- processed samples/tokens
-- checkpoint hashes
-- exact environment
-
-Evaluate:
-- Accuracy
-- ECE
-- Brier
-- NLL
-- latency by modality
-
-## Phase 6 — Extreme ternary compression
-
-Quantization source:
-- the frozen validation-selected **Pre-compression Decision Master**
-- merge the Decision LoRA into a task-adapted checkpoint before ternary conversion
-- do not carry a separate Decision LoRA into the final runtime stack
-- do not block this phase solely because one or more modalities remain below the final 95% product target;
-  preserve their pre-compression metrics as paired baselines
-
-First target:
-- decoder attention linear weights
-- decoder MLP linear weights
-
-Preserve initially:
-- image/audio encoders
-- multimodal projector
-- norms
-- embeddings/readout when sensitivity requires it
-- decision-specific small components
-
-Representation target:
-- group-wise ternary values `{-s, 0, +s}`
-- measure actual whole-model BPW and bytes; never infer them from a format name
-
-Do not assume `TQ1_0` or another runtime format supports the architecture until verified.
-
-## Phase 7 — Quantization damage measurement
-
-Paired evaluation on exactly the same held-out samples:
-
-- decision reference
-- ternary base
-
-Metrics:
-- top-1 preservation
-- Accuracy
-- ECE
-- Brier
-- NLL
-- KL / JS to reference probabilities
-- probability rank preservation
-- latency
-- peak RAM / VRAM
-
-## Phase 8 — Teacher option-logit cache and Recovery adapter
-
-Freeze the high-precision Pre-compression Decision Master (the Recovery Teacher)
-and the task-adapted ternary base.
-
-For each training decision, cache only the teacher signal needed for the decision task at the single readout position.
-
-Canonical cache record:
+Approved direction B remains: finish the active high-precision run under its existing rules and freeze its validation-selected Master; a 95% Master is not required before a bounded compression experiment. Final quality requirements are not relaxed.
 
 ```text
-sample_id
-option_token_ids
-teacher_option_logits
-teacher_option_probabilities
-target
-teacher_temperature / normalization metadata
+Multimodal base -> Decision adaptation -> frozen Master -> verified LoRA merge
+  -> input/quantizer feasibility -> Q0-Q4 comparison
+  -> fixed Recovery versus Recovery-to-Re-specialization -> selected Variant A
+  -> equivalent option-only readout first -> Variant B
+  -> verified simultaneous-media contract
+  -> temporal Video + genuine joint all-modal specialization -> Variant C
+  -> profiling -> conditional pooling/resampling + replacement adaptation -> Variant D
+  -> untouched release audit and measured target-runtime qualification
 ```
 
-Default storage policy:
-- raw FP16/BF16 **option logits** are the canonical teacher signal
-- option probabilities may be stored as a derived convenience field
-- full-vocabulary logits are **not required** and are disabled by default
-- optional full-vocabulary capture is reserved for diagnostics or experiments that explicitly test whether preserving non-option language distribution helps
+The two-stage policy is an experiment, not a forced winner. Fixed Recovery remains valid if it performs better. Ternary constraints may support Decision specialization, but removing only unwanted generative capabilities is not an established mechanism. Option-only KD already targets decisions rather than the whole language model.
 
-This keeps the cache small and aligned with the product objective: calibrated decisions over supplied options.
+Read the [design spec](docs/superpowers/specs/2026-10-06-compression-first-video-specialization-design.md), [sync plan](docs/superpowers/plans/2026-10-06-decision-respecialization-sync.md), [executable experiment plan](docs/superpowers/plans/2026-10-06-post-quantization-respecialization-experiment.md), and [review addendum](docs/superpowers/plans/2026-10-06-postquant-review-addendum.md). This roadmap incorporates the concurrent planning updates through `b049c28580a3c62ea6bd770b480ff5fc81b60f19`; it does not replace their interfaces or candidate values.
 
-Recovery training uses a **single final LoRA** on the frozen task-adapted ternary base. It is not stacked on top of an unmerged Decision LoRA.
+## Phase 0 — Design and provenance
 
-Primary objective:
-- KL over Recovery-Teacher vs student **option distributions**
+Primary target: `google/gemma-4-E2B-it-qat-q4_0-unquantized`, at the pinned revision in `manifests/base-model.example.yaml`.
 
-Supervised correction objectives:
-- CE on the labeled option
-- Brier loss
+Preserve encoder/projector alignment initially, adapt verified decoder matrices and retain the existing variable typed-option contract. Long-form generation preservation is not required. Model/processor revisions, rights/attribution and data integrity remain hard gates.
 
-Recovery is not pure imitation: ground-truth supervision remains active so the
-student can correct Master mistakes instead of being forced to reproduce them.
+- [x] pinned base and processor provenance
+- [x] historical rights-gated data adapters and split checks
+- [ ] tested ternary reference conversion and adaptation
+- [ ] tested packed deployment runtime
+- [ ] tested declared simultaneous-media capability matrix
 
-Optional experiment only:
-- low-weight full-vocabulary KL at the decision position, when a full-vocabulary cache was deliberately generated
+## Phases 1-3 — Historical foundation; product-quality gate unmet
 
-The high-precision Decision Teacher is the reference for Accuracy, ECE, Brier, NLL, and teacher/student option KL.
+The repository established Decision smoke training, frozen-base LoRA, metadata/manifest tests and single-media text/image/audio/video training. These are historical results, not checks rerun by this planning update.
 
-## Phase 8.5 — Lightweight Decision classifier / readout
+Teacher v0's evaluation is observed legacy evidence. Teacher v1's audit reported Audio 94.6%, Image 68.9%, Text 71.3% and Video 52.0%; its exact metrics and hashes remain unchanged in `docs/TEACHER_V1.md` and the teacher manifest. None of these statements means the current final four-modality 95% requirement has been achieved.
 
-Start from the completed **Variant A** recovered ternary model.
+Preserve all underlying reports: `docs/DURABLE_TEACHER.md`, `docs/PHASE3.md`, `docs/DATASETS.md`, `docs/TEACHER_V1.md`, `docs/VIDEO_TEACHER_V2.md`, `docs/VIDEO_TEACHER_V2_LONG_BUDGET.md`, and `docs/TEACHER_QUALITY_NEXT.md`. Historical Video Candidate A/B/C/E names are not the Q experiment arms or product versions below.
 
-Goal:
-- remove the full-vocabulary runtime projection from the hot decision path
-- emit only the 2–20 supplied option scores
-- preserve the same typed-option semantics and calibration interface
+The failed staging-path attempt, completed data-coverage run, and later clean-dev-v2 run are separate experiments. Never concatenate their metrics into a learning curve or promote a historical checkpoint as the current best without its run lock. Historical configs, corpora, weights, failed attempts and observed audit results are not rewritten.
 
-Implementation order:
-1. benchmark an option-only projection that reuses the existing LM-head rows for the active option labels; this should be numerically equivalent to the current readout apart from normal floating-point tolerance
-2. if worthwhile, test a learned compact Decision classifier / option scorer distilled from the high-precision Teacher
+## Phase 4 — Freeze Master and experimental contract
 
-Do not conflate this with replacing the transformer's attention mechanism. This phase changes the final Decision readout only.
+Complete the active run without changing its selector, data or schedule. Verify selected-checkpoint reload and LoRA-merge equivalence in a separate artifact; record the complete model/config/code/data/preprocessing identity and per-modality scores. No minimum Accuracy at compression entry.
 
-Save this as **Variant B** and benchmark it independently before introducing token pooling.
+For the new comparison predeclare train/dev IDs, option order, target paths, initial adapter tensors, quantizer recipe, losses, LR policy, update budget, endpoint/selection rules and resource caps. Keep verified gold labels separate from teacher predictions. No final-audit use in cache creation, calibration or selection.
 
-Measure:
-- Accuracy, NLL, Brier, ECE by modality
-- p50 / p95 model latency by modality
-- isolated readout latency
-- resident RAM / VRAM
-- cold-start/startup latency where practical
-- artifact size
+Initial input contract: Text with no media or exactly one declared image/audio/video reference. Reject other supplied media before the existing processor; do not silently filter them. This strict limited-profile experiment does not establish fusion and does not replace the final shared Omni product.
 
-## Phase 8.6 — Temporal Video specialization
+## Phase 5 — Resources and execution authorization
 
-Start only after Variant B is frozen and benchmarked.
+Local feasibility checks precede full experiments. A planning document is not a GPU launch manifest. Require explicit model/data paths, approved local GPU-hour/VRAM/disk bounds and environment before execution. Stop on a cap rather than silently lowering options, frame count or batch semantics.
 
-Keep the Variant B full-video path as the baseline, then train the Video
-capability on the architecture intended for deployment:
+No automatic paid GPU/API use. Preserve the historical first-rented-experiment ceiling of US$15 unless explicitly revised. Record device, backend and library versions, clocks/power mode when known, batch/accumulation, tokens/frames, wall time, memory and artifact hashes. Unknown conditions stay unknown.
 
-```text
-raw video
-  ↓
-fixed clips / sampled temporal windows
-  ↓
-compact clip representation and/or Decision scores
-  ↓
-lightweight temporal aggregator
-  ↓
-final option distribution
-```
+## Phase 6 — Reference ternary conversion and feasibility
 
-First compare:
-1. the retained full-video Variant B baseline
-2. fixed non-overlapping clips plus aggregation
-3. overlapping or event-dense clips only if the simpler clip path justifies
-   the extra compute
+Quantize approved large decoder attention/MLP matrices in a copy of the merged Master. Preserve encoders, projector, norms and sensitive embeddings/readout. The initial recipe is the one in the companion experiment plan: row-wise groups of 128 actual weights, threshold multiplier 0.7, FP32 assignment/scale calculation, strict threshold ties and explicit tail handling. These are candidate choices, not demonstrated optima.
 
-Clip-level Accuracy is diagnostic, not the product target. The gate is
-end-to-end Video Decision quality after aggregation.
+Measure exact zero counts, reconstruction error, code/scale metadata bytes and all unquantized/residual storage. A BF16-dequantized reference is allowed for quality research but does not prove packed speed or nominal 1.58-bit storage. The real deployment format/backend remains a separate gate.
 
-Use scene-disjoint clean development data. Mix Text/Image/Audio replay into
-Video specialization and select replay strength from validation evidence so
-Video gains cannot silently erase the Decision Core.
+Run tensor/one-layer checks first. The separate 8-update end-to-end smoke must wait until the real runner is implemented; it is not run by the converter alone. Verify finite gradients, frozen-base stability and reload before the full comparison. Do not resume that smoke as the larger experiment.
 
-Save the result after all-modal final Recovery as **Variant C**.
+## Phase 7 — Q0/Q1 paired damage baseline
 
-Final product targets:
-- Text >=95% Accuracy
-- Image >=95% Accuracy
-- Audio >=95% Accuracy
-- end-to-end Video >=95% Accuracy
+Q0 is the merged, equivalence-verified frozen Master; Q1 is the same Master after reference ternary conversion. Both are evaluation-only. Use the same development IDs, options, labels and preprocessing. Report Accuracy/NLL/Brier/ECE, divergence, zero/reconstruction statistics and measured reference memory/cost. Final audits remain untouched.
 
-Also report NLL, Brier, ECE, per-video-task metrics, clip/frame budget,
-p50/p95 latency, memory, and modality-ablation evidence.
+## Phase 8 — Fixed Recovery versus Decision Re-specialization
 
-## Phase 8.7 — All-modal final Recovery
+Keep one current adapter state and a frozen base for the initial experiment. Cache ordered option logits and bind them to all relevant sample, option, media, model and preprocessing hashes. Full-vocabulary KL is disabled. A dense residual is accounted for separately; do not merge it into three-valued weights without re-quantization and reevaluation.
 
-After the temporal Video module is trained, run a final Recovery pass using
-the frozen Master signal where applicable plus ground-truth supervision and
-non-video replay.
+The executable plan fixes the first bounded candidate at 1,024 optimizer updates, with 256 Recovery updates and 768 annealing updates, gradient accumulation 4 and seed 17. Q2 uses KL/CE/Brier coefficients 1.0/0.2/0.2 throughout. Q3/Q4 start there and linearly move to 0.2/1.0/0.2 in stage two. Temperature is 1.0. These values are not an optimum claim, and no run is authorized merely by documenting them.
 
-The deployed Variant C must contain one coherent final Recovery state. Do not
-stack multiple Recovery adapters at runtime. If the architecture change
-requires a replacement adapter, replace the previous Recovery state.
+Sum KL across each example's active options, then average examples; do not divide by option count. Compute stable FP32 losses, ignore padded choices correctly and detach teacher targets. Keep one coefficient set for all microbatches in an optimizer update. Persist optimizer/LR, RNG, sampler and exact stage/update state for resume; no optimizer reset at the phase boundary.
 
-Benchmark Variant C against A and B before adding another compression
-mechanism.
+| Arm | Role |
+|---|---|
+| Q0 `q0_master` | Master reference, evaluation only |
+| Q1 `q1_ternary_raw` | Raw ternary reference, evaluation only |
+| Q2 `q2_fixed_recovery` | Ternary plus fixed Recovery |
+| Q3 `q3_recovery_to_respecialization` | Ternary plus two-stage policy |
+| Q4 `q4_high_precision_control` | Frozen non-quantized Master plus the exact Q3 additional-learning policy |
 
-## Phase 8.8 — Optional token pooling / learned resampler + replacement Recovery
+Only Q2/Q3/Q4 train. Match actual initial adapter tensors, topology, data/order, option permutations, optimizer/LR, update budget and evaluation rules; match Q3/Q4 coefficient schedules too. Primary comparisons use the same final update; separately report development-selected checkpoints under the companion plan's frozen rule. Equal updates do not imply equal compute, so report runtime separately.
 
-Attempt this phase only after Variant C profiling shows a material remaining
-token/latency bottleneck.
+The initial research adoption rule is a minimum-modality gain of at least 2 percentage points for Q3 over Q2, with no other modality losing more than 1 point; report asset-aware uncertainty and replicate promising comparisons. These are predeclared research tolerances, not final product gates. Noisy results remain UNCERTAIN. Q3 need not beat Q4 to make a useful compact product, and Q3 beating Q4 would not isolate sparsity alone.
 
-Add token-count reduction for expensive multimodal paths, prioritizing the
-measured bottleneck rather than assuming Video first. Prefer a learned
-fixed-size resampler or another hardware-friendly mechanism over blind average
-pooling.
+**Variant A:** the selected feasible ternary Decision core. Retain fixed Recovery if annealing loses. Failed fixed-base LoRA may motivate a separate residual-initialization or constrained-QAT experiment; it does not automatically authorize a large search or more compute.
 
-Evaluate explicit token budgets. Preserve Variant C unchanged for comparison.
-After token reduction:
-- distill from the frozen Master / relevant teacher signals
-- train a **replacement** Recovery adapter
-- do not stack Recovery adapters
-- retain CE + Brier supervision
+## Phase 8.5 — Lightweight readout: Variant B
 
-Save the result as **Variant D** only if it improves the measured
-quality/latency/memory frontier.
+Start with equivalent existing LM-head rows, preserving 2-62 options, case-sensitive single-token labels, permutations, bias and all output transformations. Test the 60-intent Text task. Equivalence needs no extra learning merely because the projection is smaller. A learned compact scorer needs its own quality/cost comparison.
 
-## Phase 9 — Runtime profiling and mobile prototype
+Readout replacement is not transformer-attention replacement. Freeze and benchmark B before introducing temporal aggregation.
 
-Benchmark the preserved artifacts under identical conditions:
+## Phase 8.6 — Fusion contract and temporal Video
 
-- **Variant A:** ternary + Recovery
-- **Variant B:** Variant A architecture with the lightweight Decision classifier / option scorer
-- **Variant C:** Variant B + temporal Video specialization + all-modal final Recovery
-- **Variant D:** optional Variant C + pooling/resampler + replacement Recovery
+Before final Omni specialization, implement all declared simultaneous-media combinations end-to-end. Every supplied reference reaches the model or fails clearly. Test timestamp units and alignment, supported payloads, missing evidence and contradictory evidence. Use legally usable, aligned examples that actually require combined information; do not equate interleaved single-media tasks with fusion.
 
-Target outputs:
-- portable model packages for A/B/C and D when D exists
-- reproducible conversion
-- PC inference
-- Apple Silicon / Android / iOS feasibility notes
-- Accuracy, NLL, Brier, and ECE by modality
-- p50 / p95 model latency by modality
-- raw-media end-to-end latency where measurable
-- startup time and resident RAM/VRAM
-- isolated encoder / decoder / attention / MLP / readout timing where practical
-- model/artifact size
-- direct packed low-bit kernels only if required after the first runtime implementation
+Use question-conditioned time-stamped clip representations and/or evidence with a lightweight temporal aggregator. Score-only aggregation is a baseline, not assumed sufficient. Preserve event order and supervise video-level labels after aggregation unless valid clip labels exist.
 
-Use the same benchmark samples, preprocessing, option ordering, device, warmup, and timing protocol for all variants. Keep intermediate artifacts instead of overwriting them. Video comparisons additionally record clip/window count, sampled-frame count, and end-to-end aggregation latency.
+Compare fixed clips against the original full-video task under explicit frame/compute budgets. Overlapping or event-dense clips are conditional later candidates. More clips are not automatically faster. Record decode, sampling, per-clip inference, aggregation and end-to-end latency; a synthetic soundtrack is not observed CLEVRER evidence.
 
-The product KPI is the final lightweight Omni Decision model's absolute quality, size, memory footprint, startup, and latency. Teacher fidelity is a diagnostic, not the product objective. The final quality gate is >=95% Accuracy in Text, Image, Audio, and end-to-end Video; later compression/recovery work should also report retention relative to the high-precision Master.
+## Phase 8.7 — Final shared all-modal specialization: Variant C
 
-## Phase 10 — Conditional architecture-level acceleration
+Train the same shared model with Video and Text/Image/Audio replay. Replay prevents forgetting but cannot substitute for relevant labeled data and learning capacity to improve still-weak Text/Image tasks. The teacher is an anchor, not an infallible labeler.
 
-Investigate deeper attention changes only when profiling shows that attention is a material end-to-end bottleneck.
+Ablations and counterfactuals require valid labels and matched controls. Removing required evidence may make a question unanswerable; handle that explicitly rather than scoring confident guessing as fusion.
 
-Candidate experiments:
-- linear attention
-- other softmax-attention approximations/replacements
-- limited attention-layer replacement rather than an all-at-once rewrite
+Preserve A/B. Final point Accuracy remains Text >=95%, Image >=95%, Audio >=95%, end-to-end Video >=95%. Additional declared cross-modal release slices cannot be waived because the input path is unsupported.
 
-Requirements:
-- start from the completed high-quality multimodal decision model rather than redesigning the backbone prematurely
-- compare against the same text/image/audio/video decision benchmark
-- measure absolute Accuracy, NLL, Brier, ECE, latency, RAM/VRAM, and model size
-- preserve multimodal alignment; do not accept a speedup that materially breaks image/audio/video quality
-- use adaptation/distillation if needed, but account for the resulting parameter and runtime cost
-- adopt only if the end-to-end speedup is meaningful after encoder, MLP, readout, and I/O costs are included
+## Phase 8.8 — Conditional pooling/resampling: Variant D
 
-This research comes after the Variant A/B/C comparison (and Variant D when attempted) unless profiling provides a strong reason to move it earlier. It is not a prerequisite for the first ternary + Recovery baseline.
+Attempt only after C profiling identifies a worthwhile remaining token/latency bottleneck. Keep C, use explicit budgets and retrain one replacement adaptation state rather than stacking obsolete adapters. Include resampler/readout/temporal modules in all resource totals. D must meet the same release gates.
 
-## v0.1 non-goals
+## Phase 9 — Release evaluation and deployment
 
-- full-parameter fine-tuning
-- reinforcement learning
-- preserving long chain-of-thought generation
-- quantizing every modality encoder to ternary
-- custom mobile ternary kernels before model quality is proven
-- making linear-attention replacement a prerequisite for v0.1
-- large quantizer comparison ladders
-- claiming speedup from lower bit-width or attention changes without an end-to-end benchmark
+Freeze task/source populations, options, labels, preprocessing, denominators and fusion criteria before final selection. Keep Audio random-negative and validated hard-negative suites separate; report both. Retain old Video task results when adding a new task family. No easier benchmark substitution or post-result deletion of hard items.
+
+Freeze model, calibration and actual runtime before an untouched asset-disjoint audit. Require all four modality Accuracy values at least 95%, with denominators, independent asset counts and uncertainty. A population-level lower-bound guarantee is a stronger separate claim, not implied by a 95% point estimate. Do not repeatedly audit candidates until one passes.
+
+Before any speed/release claim, set target hardware and numeric latency/size/memory/startup budgets. Report batch-one warm p50/p95, cold start, raw-media-to-decision latency and all resident/artifact bytes. For streaming Video separate observation-window delay from processing delay. Dense-reference and packed-backend measurements are different results; revalidate quality after backend changes.
+
+## Phase 10 — Optional attention acceleration
+
+Only measured end-to-end bottlenecks justify deeper attention replacement. Preserve task contracts, multimodal quality and adaptation-cost accounting. This is not required for the initial controlled compression experiment.
+
+## Evidence-preservation and status
+
+Spec/plan/README alignment does not implement YAML parsing, numerical loss/schedule wiring, a quantizer, a runner or fusion. Preserve the legacy fixed-loss Recovery config until the versioned implementation exists. Code/config/tests, historical reports and weights are not changed by this documentation revision.
+
+Do not infer speed from zeros or nominal bits, Accuracy from confidence, or product success from engineering completion. Do not directly modify main, force-push, rewrite historical results or silently alter an in-flight experiment.
