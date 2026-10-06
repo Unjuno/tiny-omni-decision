@@ -12,7 +12,7 @@ Gemma 4 E2B QAT alignment backbone
 Decision / Omni LoRA training
         ↓
 freeze validation-selected Pre-compression Decision Master
-(no 90%-per-modality compression-entry requirement)
+(final 95%-per-modality product gate does not block compression entry)
         ↓
 merge Decision LoRA into task-adapted quantization source
         ↓
@@ -159,8 +159,9 @@ validation, then froze fresh train/validation/sealed-audit splits with record,
 source-asset, media, and normalized-content checks. Validation-only selection
 compared sampling policies and three rank-16 seeds. Its candidate was frozen
 before one full sealed-audit evaluation. Audio reached 94.6% audit Accuracy;
-image reached 68.9%, text 71.3%, and video 52.0%, so the four-modality 90%
-quality gate remains open. Learning curves show a validation plateau/overfit
+image reached 68.9%, text 71.3%, and video 52.0%, so even the then-used
+four-modality 90% development gate remained open. The current final product
+target is 95% Accuracy in every modality. Learning curves show a validation plateau/overfit
 signal at the 2,048-step budget. Full hashes, per-source metrics, experiments,
 and bottleneck analysis are in [docs/TEACHER_V1.md](docs/TEACHER_V1.md) and
 [`manifests/teachers/tiny-omni-decision-teacher-v1.json`](manifests/teachers/tiny-omni-decision-teacher-v1.json).
@@ -171,14 +172,14 @@ Teacher, ternary-quantize, train a Recovery adapter, or create a teacher-logit
 cache.
 
 The compression-entry policy has since changed. The project no longer requires
-all four modalities to reach 90% before ternary work can start. The active
+all four modalities to reach the final product threshold before ternary work can start. The active
 high-precision run should complete under its frozen rules, then its
 validation-selected best checkpoint becomes the **Pre-compression Decision
 Master** once reload/provenance checks pass. Text/Image/Audio/Video quality is
 still reported in full, but remaining quality gaps move forward into Recovery
 and post-compression specialization rather than blocking the compression
-pipeline indefinitely. The final product gate remains >=90% Accuracy for each
-modality, with an end-to-end Video stretch target of >=95%.
+pipeline indefinitely. The final product gate is >=95% Accuracy for **each**
+modality, including end-to-end Video.
 The follow-up [Video Teacher v2 design](docs/superpowers/specs/2026-10-04-video-teacher-v2-design.md)
 was executed on a separate branch and artifact tree; Teacher v1 remains frozen.
 Candidates A/B/C, the B-cosine schedule comparison, and the video-native
@@ -211,7 +212,7 @@ Compression-entry requirements:
 - no sealed/final audit used for tuning
 - per-modality Accuracy, NLL, Brier, and ECE recorded
 
-A 90% per-modality result is **not** required to leave this phase. Remaining
+A 95% per-modality result is **not** required to leave this phase. Remaining
 quality gaps are explicit inputs to later Recovery and specialization work.
 
 Keep the current high-precision training policy as historical experiment
@@ -251,7 +252,7 @@ Quantization source:
 - the frozen validation-selected **Pre-compression Decision Master**
 - merge the Decision LoRA into a task-adapted checkpoint before ternary conversion
 - do not carry a separate Decision LoRA into the final runtime stack
-- do not block this phase solely because one or more modalities remain below 90%;
+- do not block this phase solely because one or more modalities remain below the final 95% product target;
   preserve their pre-compression metrics as paired baselines
 
 First target:
@@ -391,12 +392,11 @@ Video gains cannot silently erase the Decision Core.
 
 Save the result after all-modal final Recovery as **Variant C**.
 
-Targets:
-- Text >=90% Accuracy
-- Image >=90% Accuracy
-- Audio >=90% Accuracy
-- end-to-end Video >=90% Accuracy
-- Video stretch target >=95%
+Final product targets:
+- Text >=95% Accuracy
+- Image >=95% Accuracy
+- Audio >=95% Accuracy
+- end-to-end Video >=95% Accuracy
 
 Also report NLL, Brier, ECE, per-video-task metrics, clip/frame budget,
 p50/p95 latency, memory, and modality-ablation evidence.
@@ -458,7 +458,7 @@ Target outputs:
 
 Use the same benchmark samples, preprocessing, option ordering, device, warmup, and timing protocol for all variants. Keep intermediate artifacts instead of overwriting them. Video comparisons additionally record clip/window count, sampled-frame count, and end-to-end aggregation latency.
 
-The product KPI is the final lightweight Omni Decision model's absolute quality, size, memory footprint, startup, and latency. Teacher fidelity is a diagnostic, not the product objective. The quality target remains >=90% Accuracy per modality where the clean task/data permit it; later compression/recovery work should also report retention relative to the high-precision Teacher.
+The product KPI is the final lightweight Omni Decision model's absolute quality, size, memory footprint, startup, and latency. Teacher fidelity is a diagnostic, not the product objective. The final quality gate is >=95% Accuracy in Text, Image, Audio, and end-to-end Video; later compression/recovery work should also report retention relative to the high-precision Master.
 
 ## Phase 10 — Conditional architecture-level acceleration
 
