@@ -1231,6 +1231,31 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+def resolve_corpus_manifest_path(corpus_path: str | Path) -> Path:
+    """Resolve either supported manifest filename beside a corpus file.
+
+    Older hand-built development corpora use ``manifest.json`` while the
+    corpus freezer writes ``corpus-manifest.json``. If both exist, require
+    identical JSON content rather than guessing which provenance record wins.
+    """
+    corpus_file = Path(corpus_path)
+    candidates = [
+        corpus_file.parent / "corpus-manifest.json",
+        corpus_file.parent / "manifest.json",
+    ]
+    existing = [path for path in candidates if path.is_file()]
+    if not existing:
+        expected = " or ".join(path.name for path in candidates)
+        raise FileNotFoundError(
+            f"corpus manifest is missing beside {corpus_file}; expected {expected}"
+        )
+    if len(existing) == 2:
+        contents = [json.loads(path.read_text(encoding="utf-8")) for path in existing]
+        if contents[0] != contents[1]:
+            raise ValueError(f"conflicting corpus manifests beside {corpus_file}")
+    return existing[0]
+
+
 def corpus_statistics(examples: Iterable[DecisionExample]) -> dict[str, Any]:
     sources: Counter[str] = Counter()
     modalities: Counter[str] = Counter()

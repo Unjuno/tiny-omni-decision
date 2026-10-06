@@ -11,6 +11,7 @@ import pytest
 import yaml
 from typer.testing import CliRunner
 
+from tiny_omni_decision import dataset as dataset_module
 from tiny_omni_decision.cli import app
 from tiny_omni_decision.corpus import partition_heldout_records, source_asset_identity
 from tiny_omni_decision.dataset import (
@@ -34,6 +35,33 @@ from tiny_omni_decision.schema import (
 from tiny_omni_decision.video_corpus import build_video_native_corpora
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_corpus_manifest_resolver_accepts_both_supported_filenames(tmp_path: Path) -> None:
+    resolve = getattr(dataset_module, "resolve_corpus_manifest_path", None)
+    assert callable(resolve)
+
+    (tmp_path / "train.jsonl").write_text("{}\n", encoding="utf-8")
+    legacy_manifest = tmp_path / "manifest.json"
+    legacy_manifest.write_text('{"corpus": "clean-dev"}\n', encoding="utf-8")
+    assert resolve(tmp_path / "train.jsonl") == legacy_manifest
+
+    canonical_manifest = tmp_path / "corpus-manifest.json"
+    canonical_manifest.write_text('{"corpus": "clean-dev"}\n', encoding="utf-8")
+    assert resolve(tmp_path / "train.jsonl") == canonical_manifest
+
+    canonical_manifest.write_text('{"corpus": "different"}\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="conflicting corpus manifests"):
+        resolve(tmp_path / "train.jsonl")
+
+
+def test_corpus_manifest_resolver_fails_when_manifest_is_missing(tmp_path: Path) -> None:
+    resolve = getattr(dataset_module, "resolve_corpus_manifest_path", None)
+    assert callable(resolve)
+
+    (tmp_path / "train.jsonl").write_text("{}\n", encoding="utf-8")
+    with pytest.raises(FileNotFoundError, match="corpus manifest"):
+        resolve(tmp_path / "train.jsonl")
 
 
 def manifest(name: str = "dataset.example.yaml") -> DatasetManifest:

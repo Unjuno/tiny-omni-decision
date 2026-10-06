@@ -175,11 +175,13 @@ The separate Candidate E long-budget continuation reached 2,048 optimizer
 updates from a verified step-1,408 resume snapshot. On the same 2,048-example
 validation selector, Video Accuracy rose from 44.5% at step 512 to 48.2% at
 step 2,048, while the fixed selector chose step 1,536. Final result
-serialization failed because the frozen corpus directory lacks
-`corpus-manifest.json`; the run is therefore recorded as training-complete but
-not cleanly finalized. This single development run supports a modest learning
-budget contribution but does not identify the sole bottleneck or establish
-product quality. Full metrics and hashes are in
+serialization failed because the trainer expected `corpus-manifest.json`,
+while the frozen corpus contains a matching-hash `manifest.json`. The resolver
+now accepts both names, and a separate fresh-process reload reproduced the
+selected step-1,536 predictions and metrics exactly. The original failure
+ledger remains preserved. This single development run supports a modest
+learning-budget contribution but does not identify the sole bottleneck or
+establish product quality. Full metrics and hashes are in
 [docs/VIDEO_TEACHER_V2_LONG_BUDGET.md](docs/VIDEO_TEACHER_V2_LONG_BUDGET.md).
 
 ## Phase 4 — Larger multimodal decision adaptation

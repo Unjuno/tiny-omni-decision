@@ -593,3 +593,34 @@ run.
   around step 2,048 took 1,408.469 seconds. The calendar interval includes
   retries and idle gaps and must not be read as GPU-hours.
 - Cloud cost: $0. No 4,096-step extension or extra seed was run.
+
+## Follow-up: manifest-name repair and independent selected-checkpoint reload
+
+The post-run exception said `corpus-manifest.json` was missing. The frozen
+corpus itself was not missing provenance: its builder wrote `manifest.json`,
+whose SHA-256 is `f5efe676063d90596eecd8fb88c1fdf43c039c11ddc96330f6f16bf0c0e867d1`,
+exactly matching the hash recorded in the run invocation. The trainer assumed
+only the other filename. A resolver now accepts either supported name and
+rejects conflicting manifests if both exist. The frozen corpus and original
+failed run ledger were left untouched.
+
+The selected step-1,536 adapter was independently reloaded in a fresh local
+process and evaluated on the same ordered 2,048 validation IDs. All prediction
+records matched the saved step-1,536 predictions exactly, and macro,
+per-modality, per-source, and Video question-type metrics matched exactly.
+The adapter hash remains
+`0497a25742451daeb2e08c7879dc221d174a17bf451e4ab2de0f3af6223b5009`.
+Evaluation took 1,319.093 seconds and peaked at 11,426,224,128 allocated VRAM
+bytes. The sealed audit was not loaded. This verifies the selected checkpoint
+reload gate; it does not rewrite the original process's finalization-failure
+event or claim product readiness.
+
+A separate research-only freeze record is stored outside Git at
+`C:\Users\junny\AppData\Local\CodexArtifacts\teacher-quality-reloads\clean-dev-v2-step1536-20261007\precompression-master-freeze.json`
+(SHA-256
+`b1eb22eb47b7d03487df17b62fe952e6fd89893e5371cf1f8dad30f86b2b5d83`). It
+points to the existing selected adapter without copying or modifying the
+checkpoint. Text/Image/Audio/Video Accuracy on this development selector is
+0.8105 / 0.8320 / 1.0000 / 0.4766; the frozen Teacher-quality goal remains
+unmet. This checkpoint may serve as an engineering-research pre-compression
+Master under the updated roadmap, not as a product-qualified Teacher.

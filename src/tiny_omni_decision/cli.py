@@ -1049,9 +1049,12 @@ def freeze_teacher_selection_command(
         if metadata.get(key) != actual:
             raise click.ClickException(f"selected candidate {key} does not match frozen input")
     audit_manifest = json.loads(audit_manifest_path.read_text(encoding="utf-8"))
-    corpus_manifest_path = train_path.resolve().parent / "corpus-manifest.json"
-    if not corpus_manifest_path.is_file():
-        raise click.ClickException("frozen train corpus manifest is missing")
+    from .dataset import resolve_corpus_manifest_path
+
+    try:
+        corpus_manifest_path = resolve_corpus_manifest_path(train_path.resolve())
+    except (FileNotFoundError, ValueError) as exc:
+        raise click.ClickException(str(exc)) from exc
     corpus_manifest = json.loads(corpus_manifest_path.read_text(encoding="utf-8"))
     audit_hash = audit_manifest.get("sealed_audit_sha256")
     audit_manifest_hash = file_sha256(str(audit_manifest_path))

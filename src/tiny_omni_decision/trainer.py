@@ -27,6 +27,7 @@ from .corpus import (
     validate_training_inputs,
     validation_selection_score,
 )
+from .dataset import resolve_corpus_manifest_path
 from .decision import decision_loss, normalize_probabilities, option_logits_from_vocab
 from .decision_math import brier_score, expected_calibration_error, negative_log_likelihood
 from .experiment import ExperimentManifest, append_experiment_event
@@ -1221,7 +1222,7 @@ def _run_training_impl(
         latest_checkpoint_path = str(Path("checkpoints") / latest_pointer["directory"])
     elif config.checkpoint_retention == "all":
         latest_checkpoint_path = str(Path("checkpoints") / f"step-{global_step:06d}")
-    corpus_manifest_path = train_path.parent / "corpus-manifest.json"
+    corpus_manifest_path = resolve_corpus_manifest_path(train_path)
     corpus_manifest = json.loads(corpus_manifest_path.read_text(encoding="utf-8"))
     training_seconds = sum(
         float(item["step_seconds"]) for item in history if "step_seconds" in item
