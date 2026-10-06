@@ -13,6 +13,7 @@ from typing import Annotated, Any, Literal, Self
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator, model_validator
+
 Nonnegative = Annotated[float, Field(strict=True, ge=0, allow_inf_nan=False)]
 TrainedArm = Literal['q2_fixed_recovery',
      'q3_recovery_to_respecialization',
@@ -117,7 +118,7 @@ class _UniqueSafeLoader(yaml.SafeLoader):
 def load_postquant_config(path: Path) -> PostQuantConfig:
     """Read a small local YAML/JSON policy. Duplicate keys and aliases fail closed."""
     pattern = re.compile('(^|[-_.])(audit|sealed|heldout)([-_.]|$)', re.I)
-    if any((pattern.search(part) for p in (path, path.resolve()) for part in p.parts)):
+    if any(pattern.search(part) for p in (path, path.resolve()) for part in p.parts):
         raise ValueError('protected audit/sealed policy path')
     if not path.is_file() or path.is_symlink():
         raise ValueError('policy must be a local regular file, not a symlink')
@@ -127,7 +128,7 @@ def load_postquant_config(path: Path) -> PostQuantConfig:
         raise ValueError('numerical policy exceeds 64 KiB')
     try:
         text = raw.decode('utf-8')
-        if any((isinstance(event, yaml.AliasEvent) for event in yaml.parse(text))):
+        if any(isinstance(event, yaml.AliasEvent) for event in yaml.parse(text)):
             raise ValueError('policy YAML aliases are unsupported')
         data = yaml.load(text, Loader=_UniqueSafeLoader)
     except (UnicodeError, yaml.YAMLError) as exc:

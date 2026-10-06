@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+
 def policy_data(arm='q3_recovery_to_respecialization', profile='comparison'):
     fixed = arm == 'q2_fixed_recovery'
     return {'schema_version': 2,
@@ -47,12 +48,12 @@ def test_endpoints_and_control_match(profile, end, boundary):
     assert values[boundary].stage == 'respecialization'
     assert values[-1].option_kl == 0.2
     assert values[-1].cross_entropy == 1.0
-    assert all((a.option_kl >= b.option_kl for a, b in zip(values, values[1:], strict=False)))
-    assert all((a.cross_entropy <= b.cross_entropy for a,
+    assert all(a.option_kl >= b.option_kl for a, b in zip(values, values[1:], strict=False))
+    assert all(a.cross_entropy <= b.cross_entropy for a,
          b in zip(values,
          values[1:],
-         strict=False)))
-    assert all((v.brier == 0.2 for v in values))
+         strict=False))
+    assert all(v.brier == 0.2 for v in values)
 
 def test_fixed_arm_never_anneals():
     m = module()

@@ -13,8 +13,10 @@ from typing import Any
 
 from .postquant_policy import load_postquant_config, loss_weights_for_update, policy_identity
 
+
 def synthetic_cpu_checks() -> dict[str, Any]:
     import torch
+
     from .postquant_loss import option_distillation_loss
     from .postquant_policy import LossWeights
     from .ternary_reference import TernaryTensor, dequantize_reference, quantize_reference

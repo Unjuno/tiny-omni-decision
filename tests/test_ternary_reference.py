@@ -4,6 +4,7 @@ import importlib
 import io
 
 import pytest
+
 torch = pytest.importorskip('torch')
 
 def module():

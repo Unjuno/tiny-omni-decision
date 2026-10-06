@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import pytest
+
 ROOT = Path(__file__).parents[1]
 POLICY = ROOT / 'configs/recovery/decision_respecialization_v2.example.yaml'
 

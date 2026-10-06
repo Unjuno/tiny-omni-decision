@@ -7,6 +7,7 @@ from torch.nn import functional as F
 
 from .postquant_policy import LossWeights
 
+
 def option_distillation_loss(student_logits: Tensor,
      teacher_logits: Tensor,
      targets: Tensor,
@@ -19,11 +20,11 @@ def option_distillation_loss(student_logits: Tensor,
     Teacher logits are detached; padded values never affect gradients or losses.
     Temperature is 1.0. This function does not alter sampling or optimizer state.
     """
-    if not all((isinstance(v,
+    if not all(isinstance(v,
          Tensor) for v in (student_logits,
          teacher_logits,
          targets,
-         valid_options))):
+         valid_options)):
         raise TypeError('all numerical inputs must be tensors')
     if (student_logits.ndim != 2
         or student_logits.shape[0] == 0
@@ -41,9 +42,9 @@ def option_distillation_loss(student_logits: Tensor,
         raise TypeError('require real floating logits, boolean mask and int64 targets')
     device = student_logits.device
     if device.type not in ('cpu',
-         'cuda') or any((v.device != device for v in (teacher_logits,
+         'cuda') or any(v.device != device for v in (teacher_logits,
          targets,
-         valid_options))):
+         valid_options)):
         raise ValueError('inputs must share one CPU or CUDA device')
     if bool((valid_options.sum(-1) < 2).any()):
         raise ValueError('each example requires at least two valid options')

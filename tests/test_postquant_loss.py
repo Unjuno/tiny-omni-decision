@@ -5,6 +5,7 @@ import math
 from pathlib import Path
 
 import pytest
+
 torch = pytest.importorskip('torch')
 
 def api():
@@ -169,6 +170,6 @@ def test_stage_weights_reach_real_gradient_not_only_yaml():
 def test_bfloat16_inputs_still_compute_fp32_loss():
     s = torch.tensor([[1.0, 2.0]], dtype=torch.bfloat16, requires_grad=True)
     r = api()(s, s.detach(), torch.tensor([1]), torch.ones_like(s, dtype=torch.bool), weights())
-    assert all((v.dtype == torch.float32 for v in r.values()))
+    assert all(v.dtype == torch.float32 for v in r.values())
     r['total'].backward()
     assert torch.isfinite(s.grad).all()

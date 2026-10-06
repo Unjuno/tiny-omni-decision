@@ -11,6 +11,7 @@ from typing import Any
 
 import torch
 from torch import Tensor
+
 RECIPE = 'row_group_meanabs_strict_ternary_v1'
 DTYPES = (torch.float16, torch.bfloat16, torch.float32, torch.float64)
 
@@ -36,13 +37,13 @@ class TernaryTensor:
         if (self.recipe_id != RECIPE
             or type(self.shape) is not tuple
             or len(self.shape) != 2
-            or any((type(n) is not int
-            or n <= 0 for n in self.shape))):
+            or any(type(n) is not int
+            or n <= 0 for n in self.shape)):
             raise ValueError('invalid ternary recipe or shape')
         rows, cols = self.shape
-        tails = tuple((min(self.group_size, cols - j) for j in range(0, cols, self.group_size)))
+        tails = tuple(min(self.group_size, cols - j) for j in range(0, cols, self.group_size))
         if (self.tail_lengths != tails
-            or any((type(n) is not int for n in self.tail_lengths))
+            or any(type(n) is not int for n in self.tail_lengths)
             or (not isinstance(self.codes,
 
              Tensor)) or (not isinstance(self.scales,
@@ -132,7 +133,7 @@ def quantize_reference(weight: Tensor,
     if not bool(torch.isfinite(w).all()):
         raise ValueError('weight must be finite and representable in FP32')
     rows, cols = w.shape
-    tails = tuple((min(group_size, cols - j) for j in range(0, cols, group_size)))
+    tails = tuple(min(group_size, cols - j) for j in range(0, cols, group_size))
     codes = torch.zeros_like(w, dtype=torch.int8)
     scales = torch.zeros((rows, len(tails)), dtype=torch.float32, device=w.device)
     for j, n in enumerate(tails):
