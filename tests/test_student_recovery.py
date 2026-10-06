@@ -3,7 +3,6 @@ import json
 
 import pytest
 
-
 torch = pytest.importorskip("torch")
 pytest.importorskip("safetensors")
 
@@ -221,7 +220,9 @@ def test_artifact_size_limit_cannot_report_pass(tmp_path):
 
 def test_evaluation_guard_checks_training_and_selection_content():
     from tiny_omni_decision.student.data import (
-        Cache, assert_heldout, split_identities,
+        Cache,
+        assert_heldout,
+        split_identities,
     )
     train = Cache("train", "t", [record("1")], "a"*64)
     validation = Cache("validation", "t", [record("2")], "b"*64)
