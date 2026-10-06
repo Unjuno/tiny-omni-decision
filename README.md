@@ -76,105 +76,74 @@ check and the durable teacher run are recorded in
 [docs/PHASE3.md](docs/PHASE3.md) and
 [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
 
-## Teacher v1 quality run
+## Durable Decision Teacher
 
-Teacher v0's evaluation metrics have already been observed. They are retained as
-a legacy reference in [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md) and are
-not used for hyperparameter selection. Teacher v1 freezes fresh train and
-validation corpora plus a separate sealed audit set:
+The reproducible train, validation, and held-out evaluation corpus can be frozen
+with:
 
 ```bash
-tiny-omni-decision freeze-teacher-v1-corpus
+tiny-omni-decision freeze-corpus \
+  manifests/durable-training-corpus.yaml \
+  manifests/durable-heldout-corpus.yaml \
+  data/processed/durable-teacher-v0 \
+  --max-records-per-source 2048
+```
+
+Then run the four-modality Decision LoRA training, validation selection, and
+full held-out evaluation:
+
+```bash
 tiny-omni-decision train-decision \
-  --train-manifest data/processed/durable-teacher-v1/train.jsonl \
-  --validation-manifest data/processed/durable-teacher-v1/validation.jsonl \
-  --config configs/decision/teacher_v1_weak_modalities.yaml \
-  --output artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized
+  --train-manifest data/processed/durable-teacher-v0/train.jsonl \
+  --eval-manifest data/processed/durable-teacher-v0/eval.jsonl \
+  --validation-manifest data/processed/durable-teacher-v0/validation.jsonl \
+  --config configs/decision/durable_teacher.yaml \
+  --output artifacts/tiny-omni-decision-teacher-v0
 ```
 
-The trainer requires independent validation and has no evaluation-manifest
-argument. It records every attempt, sample/asset accounting, validation learning
-curves, per-modality metrics, and the best validation-selected checkpoint.
-The validation-only policy comparison, three-seed learning curves, selected
-checkpoint, and final sealed-audit report are documented in
-[`docs/TEACHER_V1.md`](docs/TEACHER_V1.md). The selected policy weights are
-audio 1, image 1.5, text 1.5, video 2. The alternative video-priority policy is
-in `configs/decision/teacher_v1_video_priority.yaml`; seed-specific reproducible
-configs are retained for seeds 19 and 23.
+Corpus provenance, hashes, split checks, training setup, measured metrics,
+limitations, artifacts, and the later merge/export path are in
+[docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
+pipeline test is retained as historical context in [docs/PHASE3.md](docs/PHASE3.md).
 
-After the candidate, config, train/validation hashes, sampling policy, and
-selection rule are frozen, evaluate the sealed audit once:
+## Planned student, compression, and recovery flow
 
-```bash
-tiny-omni-decision freeze-teacher-selection \
-  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized/best \
-  --config-path configs/decision/teacher_v1_weak_modalities.yaml \
-  --train-path data/processed/durable-teacher-v1/train.jsonl \
-  --validation-path data/processed/durable-teacher-v1/validation.jsonl
-tiny-omni-decision evaluate-sealed-audit \
-  --candidate artifacts/tiny-omni-decision-teacher-v1/candidates/seed17-rank16-512-weak-modalities-normalized/best \
-  --config-path configs/decision/teacher_v1_weak_modalities.yaml \
-  --train-path data/processed/durable-teacher-v1/train.jsonl \
-  --validation-path data/processed/durable-teacher-v1/validation.jsonl
-```
-
-The audit JSONL lives under `data/sealed/durable-teacher-v1/`; normal training
-loads only `train.jsonl` and `validation.jsonl`. Its immutable manifest records
-the audit hash, and an exclusive claim file prevents a second evaluation.
-Teacher v1 procedure, split hashes, coverage, experiments, curves, metrics, and
-remaining bottlenecks are documented in
-[docs/TEACHER_V1.md](docs/TEACHER_V1.md).
-
-The one-time sealed audit scored 0.6718 Accuracy overall (macro across
-modalities: 0.7170). Audio reached 0.9459; image 0.6890, text 0.7130, and video
-0.5200 remain below the 0.90-per-modality goal. The selected adapter and
-provenance hashes are recorded in
-[`manifests/teachers/tiny-omni-decision-teacher-v1.json`](manifests/teachers/tiny-omni-decision-teacher-v1.json).
-
-The prior 16-step pipeline test remains historical context in
-[docs/PHASE3.md](docs/PHASE3.md). No ternary quantization or Recovery LoRA is
-performed during Teacher v1.
-
-## Planned compression and recovery flow
-
-The intended v0.1 path is:
+**Next experiment: ternary first, recover with the Teacher, add LoRA only if recovery is insufficient.**
 
 ```text
-E2B QAT base
-  → Decision / Omni LoRA
-  → high-precision Decision Teacher
-  → merge Decision LoRA into task-adapted quantization source
-  → ternary decoder compression
-  → Recovery
-  → Variant A: recovered ternary model
-  → lightweight Decision classifier / option scorer
-  → Variant B
-  → token pooling / learned resampler
-  → re-distillation + replacement Recovery
-  → Variant C
-  → identical A/B/C quality + latency benchmark
+Gemma 4 Decision Teacher: finish → select → reload → freeze
+                                              │
+                                              │ supervises recovery
+Pretrained EmbeddingGemma 2                    │
+  → aggressive ternary conversion             │
+  → measure initial damage                    │
+  → ternary-constrained QAT + distillation ←───┘
+  → if sufficient: export / reload / final evaluation / runtime
+  → if insufficient: freeze quantized base
+       → add one Recovery LoRA and train it with the same Teacher
+       → export / reload / re-evaluate
 ```
 
-Teacher distillation caches **option logits at the single decision position** by default. Full-vocabulary logits are optional diagnostics, not a required cache.
+Do not first train a separate high-precision decision student. Gemma 4 remains both the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged; student recovery is planned, not yet demonstrated.
 
-The runtime plan deliberately preserves three benchmarkable artifacts instead of overwriting intermediate stages:
+Target the student's large text/backbone, embedding, vision, and audio weights for ternary conversion after pinning and inspecting the actual model. Record every higher-precision exception. During the first recovery stage, each forward uses ternary-quantized target weights even when gradient updates use higher-precision shadow weights.
 
-- **Variant A:** ternary + Recovery
-- **Variant B:** Variant A with the full-vocabulary runtime readout replaced by a lightweight Decision classifier / option scorer
-- **Variant C:** Variant B plus token pooling / a learned resampler, followed by re-distillation and a replacement Recovery adapter
+If that recovery is insufficient, freeze the selected quantized base and train one separate Recovery LoRA. Count its bytes and runtime overhead. Do not silently merge it into the ternary base: a merged correction is generally no longer ternary. The approximately 1.58-bit packing goal is not a measured whole-model size or a performance guarantee.
 
-Every deployable variant carries at most one Recovery adapter. Variant C retrains/replaces Recovery after token reduction; it does not stack two Recovery adapters. All three variants are evaluated on the same quality, memory, size, startup, and p50/p95 latency protocol. Deeper attention replacement remains optional after this comparison.
+Keep native backbone/pooling initially and define only the minimal supplied-option readout. The earlier pooling-plus-small-classifier structural fallback is deferred until constrained recovery and LoRA are insufficient; it is not a mandatory stage before quantization. Inspect actual modules before any terminal-path removal.
+
+Reuse compact Teacher option signals, matching the actual choices and their order rather than assuming shared vocabulary IDs. Training, validation selection, and final held-out evaluation remain separate. The detailed sequence is in [ROADMAP.md](ROADMAP.md).
 
 ## Current boundary and limitations
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
 - The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`) and requires PyTorch 2.6 for actual Gemma 4 multimodal forward. Install a wheel matching the local CUDA driver; GPU model loading is not covered by CPU CI.
-- Teacher v0's final evaluation has been observed and is only a legacy reference. Teacher v1 uses fresh split assets where available, rejects record/media/state overlap, and isolates its sealed audit until validation-only selection is frozen; see [docs/TEACHER_V1.md](docs/TEACHER_V1.md). The sources remain controlled candidates, not broad real-world benchmarks.
-- Video Teacher v2 Candidates A/B/C, the separate B-cosine schedule comparison, and the video-native Candidate E are documented in [docs/VIDEO_TEACHER_V2.md](docs/VIDEO_TEACHER_V2.md). E improved Video over B-cosine on a matched mixed-task validation subset, but remains below frozen Teacher v1; no v1 artifact or sealed audit was changed, and no ternary quantization was run.
-- The exact-resumed Candidate E long-budget run later reached 2,048 updates on the same frozen validation selector. Video Accuracy rose from 44.5% at step 512 to 48.2% at step 2,048; the validation selector chose step 1,536. Final result serialization then failed because the frozen corpus directory lacks `corpus-manifest.json`; this is documented as a post-run metadata failure, not a cleanly finalized run. See [docs/VIDEO_TEACHER_V2_LONG_BUDGET.md](docs/VIDEO_TEACHER_V2_LONG_BUDGET.md). The separate LibriSpeech matched hard-negative evaluation is in [docs/LIBRISPEECH_HARD_NEGATIVE_EVALUATION.md](docs/LIBRISPEECH_HARD_NEGATIVE_EVALUATION.md).
-- Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
+- The durable Teacher run uses frozen text, image, audio, and video corpora with zero pairwise source-ID and normalized-content overlap. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal candidates; OneJev remains excluded pending component-level rights review. The dataset is sampled and the training budget is capped, so the results are not benchmark-generalizing quality claims; see [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
+- The current Gemma 4 vocabulary readout requires option labels to tokenize to exactly one distinct token each; it fails closed otherwise. This does not imply a shared Teacher/student tokenizer.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. Ternary runtime compatibility and paired quality checks after compression remain open later-phase gates; no ternary or Recovery training has been run.
+- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 revision pinning, integration, ternary-constrained recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
+- A separate frozen-reference check on a development-only Physion++ video split is recorded in [docs/PHYSIONPP_VIDEO_REFERENCE.md](docs/PHYSIONPP_VIDEO_REFERENCE.md). Teacher v1 scored 54.1% and E-long's selected checkpoint 57.4% Video Accuracy; uncertainty spans zero and E-long has worse NLL/Brier. This is not a blind audit or a Teacher promotion.
+- The EmbeddingGemma 2 plan update is documentation only; its student training path is not implemented. This separate experiment adds a Physion++ development corpus adapter and frozen-reference evaluator. Existing Teacher configs, corpora, and checkpoints remain unchanged.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).

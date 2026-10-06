@@ -392,6 +392,7 @@ def _base_example(
     source_target: Any = None,
     task_type: str | None = None,
     task_group_id: str | None = None,
+    source_asset_group_id: str | None = None,
     trust_status: str = "review",
 ) -> DecisionExample:
     source_record_id = (
@@ -427,6 +428,7 @@ def _base_example(
         split=split,
         task_type=task_type,
         task_group_id=task_group_id,
+        source_asset_group_id=source_asset_group_id,
         media=media,
         source_target=target if source_target is None else source_target,
         provenance=LicenseProvenance(
@@ -917,6 +919,10 @@ def adapt_row(
             state=row["state"],
             question=row["question"],
             media=media,
+            source_target=row.get("source_target"),
+            task_type=row.get("task_type"),
+            task_group_id=row.get("task_group_id"),
+            source_asset_group_id=row.get("source_asset_group_id"),
             license_name=str(row.get("license", manifest.license)),
             commercial_use=row.get("commercial_use", manifest.commercial_use),
             derivative_model_training_allowed=row.get(

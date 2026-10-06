@@ -31,6 +31,10 @@ def _state_identity(example: DecisionExample) -> str:
 
 def source_asset_identity(example: DecisionExample) -> str:
     """Identify a source-level unit that must remain within a single split."""
+    if example.source_asset_group_id:
+        return f"source-asset-group:{example.source_asset_group_id}"
+    if example.source == "physionpp/readout" and example.task_group_id:
+        return f"scene-seed:{example.task_group_id}"
     if example.source == "n4ze3m/typed-decisions-synth":
         return f"state:{example.source_record_id.split(':', 1)[0]}"
     if example.modality in {"image", "video"} and example.media:
@@ -67,12 +71,8 @@ def filter_previously_seen_records(
     from .dataset import content_fingerprint
 
     used_ids = {(item.source, item.source_record_id) for item in previously_seen}
-    used_assets = {
-        (item.source, source_asset_identity(item)) for item in previously_seen
-    }
-    used_media = {
-        media_identity(reference) for item in previously_seen for reference in item.media
-    }
+    used_assets = {(item.source, source_asset_identity(item)) for item in previously_seen}
+    used_media = {media_identity(reference) for item in previously_seen for reference in item.media}
     used_content = {content_fingerprint(item) for item in previously_seen}
 
     groups: dict[tuple[str, str], list[DecisionExample]] = defaultdict(list)
@@ -86,9 +86,7 @@ def filter_previously_seen_records(
         elif key in used_assets:
             excluded_groups[key] = "source_asset"
         elif any(
-            media_identity(reference) in used_media
-            for item in records
-            for reference in item.media
+            media_identity(reference) in used_media for item in records for reference in item.media
         ):
             excluded_groups[key] = "media_identity"
         elif any(content_fingerprint(item) in used_content for item in records):
@@ -135,19 +133,14 @@ def validate_training_inputs(
 
 def macro_metrics(metrics: dict[str, dict[str, float | int]]) -> dict[str, float]:
     """Aggregate each modality equally, independently of its sample count."""
-    modality_metrics = [
-        metrics[key]
-        for key in sorted(metrics)
-        if key.startswith("modality:")
-    ]
+    modality_metrics = [metrics[key] for key in sorted(metrics) if key.startswith("modality:")]
     if not modality_metrics:
         raise ValueError("macro metrics require at least one modality")
     accuracy = [float(item["accuracy"]) for item in modality_metrics]
     return {
         "macro_accuracy": sum(accuracy) / len(accuracy),
         "minimum_modality_accuracy": min(accuracy),
-        "macro_nll": sum(float(item["nll"]) for item in modality_metrics)
-        / len(modality_metrics),
+        "macro_nll": sum(float(item["nll"]) for item in modality_metrics) / len(modality_metrics),
         "macro_brier": sum(float(item["brier"]) for item in modality_metrics)
         / len(modality_metrics),
         "macro_ece": sum(float(item["ece"]) for item in modality_metrics) / len(modality_metrics),
@@ -194,9 +187,7 @@ class ValidationCheckpointSelector:
 
     @property
     def should_stop(self) -> bool:
-        return (
-            self.best_step > 0 and self.evaluations_without_improvement >= self.patience
-        )
+        return self.best_step > 0 and self.evaluations_without_improvement >= self.patience
 
 
 def _record_group(example: DecisionExample) -> tuple[str, str, str]:
@@ -249,9 +240,7 @@ def partition_heldout_records(
             raise ValueError(
                 f"source {source} split {split} needs at least two held-out records to split"
             )
-        validation_count = min(
-            len(ordered) - 1, max(1, round(len(ordered) * validation_fraction))
-        )
+        validation_count = min(len(ordered) - 1, max(1, round(len(ordered) * validation_fraction)))
         validation_groups.update(ordered[:validation_count])
         evaluation_groups.update(ordered[validation_count:])
 

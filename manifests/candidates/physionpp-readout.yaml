@@ -1,0 +1,42 @@
+schema_version: 1
+dataset_id: physionpp/readout
+revision: 0c53b983ca138962ba636c0936e735490ad4c326
+subset: readout-archive-v1-2023-06
+split: readout-development
+modalities: [video]
+upstream_url: https://physion-v2.s3.amazonaws.com/readout_data.zip
+license: MIT
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Hsiao-Yu Tung et al.; cite Physion++ (NeurIPS 2023). TDW is acknowledged as the simulation environment."
+source_citation: https://papers.neurips.cc/paper_files/paper/2023/file/d3e8011c912e651ab2a76e7935a1e464-Paper-Datasets_and_Benchmarks.pdf
+usage: both
+trust_status: trusted
+schema:
+  state: simulated physical-scene video context
+  question: whether the red object contacts the yellow target in the supplied full clip
+  options: options
+  target: does_target_contact_zone
+  media: mapped _img.mp4 member from readout_data.zip
+notes:
+  source_revision_policy: "Synthetic SHA-1 identity over S3 object ETag/Last-Modified and pinned metadata/media-ID inventory hashes; it is not an upstream Git commit."
+  source_snapshot:
+    archive_size_bytes: 2971891321
+    archive_etag: '"4cf84f667bcc3eaf991dbcc10dd31177-355"'
+    archive_last_modified: "Sat, 10 Jun 2023 23:02:20 GMT"
+    metadata_records_sha256: e673b6ba5ee3f96a75051b946003e0dafafdeb8bc12b034c7699cf2934d0b84c
+    mapped_media_id_sha256: 59abe4999b4485139ce925108dd96eca8bdb1f08e2ebf2aae04ae9768f39dc77
+  observed_inventory:
+    mapped_rgb_media: 800
+    metadata_rows: 832
+    metadata_placeholders_mapped_by_verified_row_order: 166
+    duplicate_named_metadata_rows_excluded: 1
+    named_metadata_rows_without_media_excluded: 31
+    scene_seed_groups: 615
+  grouping: "Keep all examples with the same (scenario, trial_seed) in one partition. This is a conservative shared-initial-condition proxy."
+  task: "This adapter uses the full RGB clip for retrospective temporal event classification. It is not a future-prediction task or a paper-faithful readout benchmark."
+  release_discrepancy: "The published paper describes 192 balanced examples per property and nine scenarios. The pinned S3 archive inventory has 200 examples per property, imbalanced labels, and ten scenario directory names."
+  audit_status: "Readout metadata and labels have been inspected; this source cannot serve as a fresh sealed final audit. The official test_data.zip content remains unopened."
+  selected_member_policy: "Require RGB, segmentation, and PKL member identities for each mapped record, but read only RGB media. Do not deserialize or download large PKLs. Training materialization records each extracted RGB video SHA-256."

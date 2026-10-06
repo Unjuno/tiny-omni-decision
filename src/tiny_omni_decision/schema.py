@@ -26,6 +26,8 @@ class MediaRef(BaseModel):
     path: str | None = None
     uri: str | None = None
     frame_refs: list[str] = Field(default_factory=list)
+    num_frames: int | None = Field(default=None, strict=True, ge=1)
+    end_frame: int | None = Field(default=None, strict=True, ge=1)
     sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     license: str | None = None
 
@@ -39,6 +41,13 @@ class MediaRef(BaseModel):
             or ".." in self.path.replace("\\", "/").split("/")
         ):
             raise ValueError("media path must be relative and remain inside the data root")
+        if self.end_frame is not None and self.kind != "video":
+            raise ValueError("end_frame is only valid for video media")
+        if self.num_frames is not None and self.kind != "video":
+            raise ValueError("num_frames is only valid for video media")
+        if self.end_frame is not None and self.num_frames is not None:
+            if self.end_frame >= self.num_frames:
+                raise ValueError("end_frame must be before num_frames")
         return self
 
 
@@ -65,14 +74,18 @@ class DecisionExample(BaseModel):
     source_revision: str = Field(pattern=r"^[0-9a-f]{40}$")
     source_record_id: str = Field(min_length=1)
     split: str
-    task_type: Literal[
-        "temporal_descriptive",
-        "static_descriptive",
-        "explanatory",
-        "predictive",
-        "counterfactual",
-    ] | None = None
+    task_type: (
+        Literal[
+            "temporal_descriptive",
+            "static_descriptive",
+            "explanatory",
+            "predictive",
+            "counterfactual",
+        ]
+        | None
+    ) = None
     task_group_id: str | None = None
+    source_asset_group_id: str | None = None
     source_target: Any | None = None
     provenance: LicenseProvenance
 

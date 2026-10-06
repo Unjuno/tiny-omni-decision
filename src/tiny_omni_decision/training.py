@@ -207,9 +207,7 @@ def deterministic_sample_order(
     }
     if not active_modalities:
         raise ValueError("no examples remain after applying modality/source sampling weights")
-    eligible_keys = [
-        key for modality in active_modalities for key in keys_by_modality[modality]
-    ]
+    eligible_keys = [key for modality in active_modalities for key in keys_by_modality[modality]]
     consumed: Counter[str] = Counter()
     modality_consumed: Counter[str] = Counter()
     task_consumed: dict[str, Counter[str]] = defaultdict(Counter)
@@ -236,9 +234,7 @@ def deterministic_sample_order(
                 item,
             ),
         )
-        eligible_sources = [
-            key for key in keys_by_modality[modality] if remaining(key) > 0
-        ]
+        eligible_sources = [key for key in keys_by_modality[modality] if remaining(key) > 0]
         source_weight_total = sum(
             source_weights.get(item, source_weights.get(item.split(":", 1)[1], 1.0))
             for item in eligible_sources
@@ -347,9 +343,7 @@ def sampling_accounting(examples: list[DecisionExample]) -> dict[str, Any]:
             consumed_by_task_type[example.task_type] += 1
             unique_by_task_type[example.task_type].add(example.id)
             question_group = example.task_group_id or example.id
-            unique_questions_by_task_type[example.task_type].add(
-                (example.source, question_group)
-            )
+            unique_questions_by_task_type[example.task_type].add((example.source, question_group))
         consumed_by_source[example.source] += 1
         consumed_by_modality[example.modality] += 1
         unique_by_source[example.source].add(source_key)
@@ -406,8 +400,8 @@ def aggregate_training_window(step_records: list[dict[str, Any]]) -> dict[str, A
     for record in step_records:
         for modality, count in record["train_examples_by_modality"].items():
             examples_by_modality[modality] += int(count)
-            ce_sum_by_modality[modality] += (
-                float(record["train_ce_by_modality"][modality]) * int(count)
+            ce_sum_by_modality[modality] += float(record["train_ce_by_modality"][modality]) * int(
+                count
             )
         for modality, count in record["train_correct_by_modality"].items():
             correct_by_modality[modality] += int(count)
@@ -429,9 +423,7 @@ def aggregate_training_window(step_records: list[dict[str, Any]]) -> dict[str, A
             for modality, count in sorted(examples_by_modality.items())
         },
         "training_examples_in_window": total_examples,
-        "microbatches_in_window": sum(
-            int(record["microbatches"]) for record in step_records
-        ),
+        "microbatches_in_window": sum(int(record["microbatches"]) for record in step_records),
         "optimizer_steps_in_window": len(step_records),
     }
 
@@ -581,9 +573,7 @@ def audio_waveform_from_path(audio_path: Path) -> Any:
             channels = audio_file.getnchannels()
             sample_rate = audio_file.getframerate()
             if sample_rate != 16_000:
-                raise ValueError(
-                    f"Gemma 4 audio path expects 16 kHz input, got {sample_rate} Hz"
-                )
+                raise ValueError(f"Gemma 4 audio path expects 16 kHz input, got {sample_rate} Hz")
             frames = audio_file.readframes(audio_file.getnframes())
             waveform = np.frombuffer(frames, dtype=np.int16).astype(np.float32) / 32768.0
             if channels > 1:
@@ -598,14 +588,11 @@ def audio_waveform_from_path(audio_path: Path) -> Any:
             stream = container.streams.audio[0]
             sample_rate = stream.rate or stream.codec_context.sample_rate
             if sample_rate != 16_000:
-                raise ValueError(
-                    f"Gemma 4 audio path expects 16 kHz input, got {sample_rate} Hz"
-                )
+                raise ValueError(f"Gemma 4 audio path expects 16 kHz input, got {sample_rate} Hz")
             resampler = av.AudioResampler(format="fltp", layout="mono", rate=16_000)
             for frame in container.decode(stream):
                 chunks.extend(
-                    converted.to_ndarray().reshape(-1)
-                    for converted in resampler.resample(frame)
+                    converted.to_ndarray().reshape(-1) for converted in resampler.resample(frame)
                 )
             chunks.extend(
                 converted.to_ndarray().reshape(-1) for converted in resampler.resample(None)
@@ -651,9 +638,7 @@ def resolve_decoder_lora_targets(
         and name.rsplit(".", 1)[-1] in selected_suffixes
     )
     if not candidates:
-        raise ValueError(
-            f"loaded pinned model exposes no verified decoder {policy} Linear modules"
-        )
+        raise ValueError(f"loaded pinned model exposes no verified decoder {policy} Linear modules")
     return candidates
 
 
@@ -678,4 +663,6 @@ def output_record(
         record["task_type"] = example.task_type
     if example.task_group_id is not None:
         record["task_group_id"] = example.task_group_id
+    if example.source_asset_group_id is not None:
+        record["source_asset_group_id"] = example.source_asset_group_id
     return record

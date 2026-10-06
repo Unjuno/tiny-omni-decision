@@ -1,14 +1,24 @@
 from __future__ import annotations
 
 import io
+import os
 import struct
+import tempfile
 import urllib.request
 import zipfile
 import zlib
 from collections.abc import Mapping
+from fractions import Fraction
 from pathlib import Path
+from urllib.parse import unquote
 
 from .dataset import _speech_command_label, iter_hub_rows, sha256_file
+from .physionpp import (
+    PHYSIONPP_ETAG,
+    PHYSIONPP_LAST_MODIFIED,
+    PHYSIONPP_READOUT_URL,
+    PHYSIONPP_REVISION,
+)
 from .schema import DatasetManifest, DecisionExample, MediaRef
 
 
@@ -159,9 +169,7 @@ def materialize_clevr4_images(
                 raise ValueError(f"invalid Clevr-4 source image path: {reference.uri}")
             requested[filename] = data_root / "raw" / "clevr4-10k" / "images" / filename
 
-    missing = {
-        name: path for name, path in requested.items() if not _is_valid_png(path)
-    }
+    missing = {name: path for name, path in requested.items() if not _is_valid_png(path)}
     if missing:
         archive_source: Path | _HttpRangeReader
         if archive_path is not None:
@@ -310,6 +318,234 @@ def materialize_clevrer_videos(
     }
 
 
+def materialize_physionpp_videos(
+    examples: list[DecisionExample],
+    *,
+    data_root: Path,
+    archive_url: str = PHYSIONPP_READOUT_URL,
+) -> tuple[list[DecisionExample], dict[str, object]]:
+    """Extract pinned RGB videos and verify frame counts or explicit cutoffs."""
+    prefix = f"source-ref://physionpp-readout/{PHYSIONPP_REVISION}/"
+    requested: dict[str, tuple[Path, Path, int | None, int | None]] = {}
+    for example in examples:
+        for reference in example.media:
+            if reference.kind != "video" or reference.path or not reference.uri:
+                continue
+            if reference.uri.startswith("source-ref://physionpp-readout/"):
+                if not reference.uri.startswith(prefix):
+                    raise ValueError(f"Physion++ source revision is not pinned: {reference.uri}")
+                member = unquote(reference.uri.removeprefix(prefix))
+                parts = member.split("/")
+                if (
+                    len(parts) < 4
+                    or parts[0] != "readout_data_v1"
+                    or any(part in {"", ".", ".."} for part in parts)
+                    or not parts[-1].endswith("_img.mp4")
+                ):
+                    raise ValueError(f"invalid Physion++ RGB member: {reference.uri}")
+                if reference.num_frames is None:
+                    raise ValueError(
+                        f"Physion++ video lacks its pinned frame count: {reference.uri}"
+                    )
+                raw_path = data_root / "raw" / "physionpp-readout" / Path(*parts)
+                final_path = (
+                    data_root / "processed" / "physionpp-readout" / Path(*parts)
+                    if reference.end_frame is not None
+                    else raw_path
+                )
+                requested[member] = (
+                    raw_path,
+                    final_path,
+                    reference.end_frame,
+                    reference.num_frames,
+                )
+
+    if not requested:
+        return examples, {
+            "archive_url": archive_url,
+            "videos_materialized": 0,
+            "video_end_frame": {},
+            "video_num_frames": {},
+            "video_sha256": {},
+        }
+
+    request = urllib.request.Request(archive_url, method="HEAD")
+    with urllib.request.urlopen(request, timeout=60) as response:
+        size = int(response.headers["Content-Length"])
+        etag = response.headers.get("ETag")
+        last_modified = response.headers.get("Last-Modified")
+    if size != 2_971_891_321 or etag != PHYSIONPP_ETAG or last_modified != PHYSIONPP_LAST_MODIFIED:
+        raise ValueError("Physion++ archive does not match the pinned source object")
+
+    downloaded = 0
+    existing_verified = 0
+    with zipfile.ZipFile(_HttpRangeReader(archive_url, chunk_size=512 * 1024)) as archive:
+        members_by_name = {info.filename: info for info in archive.infolist() if not info.is_dir()}
+        absent = set(requested) - members_by_name.keys()
+        if absent:
+            raise FileNotFoundError(f"Physion++ ZIP is missing {sorted(absent)}")
+        for member, path in sorted(
+            requested.items(), key=lambda item: members_by_name[item[0]].header_offset
+        ):
+            raw_path, final_path, end_frame, source_num_frames = path
+            raw_path.parent.mkdir(parents=True, exist_ok=True)
+            final_path.parent.mkdir(parents=True, exist_ok=True)
+            if not raw_path.is_file():
+                descriptor, temporary_name = tempfile.mkstemp(
+                    prefix=f".{raw_path.name}.", suffix=".tmp", dir=raw_path.parent
+                )
+                os.close(descriptor)
+                temporary_path = Path(temporary_name)
+                try:
+                    with (
+                        archive.open(members_by_name[member]) as source,
+                        temporary_path.open("wb") as target,
+                    ):
+                        while chunk := source.read(1024 * 1024):
+                            target.write(chunk)
+                    with temporary_path.open("rb") as video_file:
+                        header = video_file.read(12)
+                    if len(header) < 12 or header[4:8] != b"ftyp":
+                        raise ValueError(f"Physion++ member is not an MP4: {member}")
+                    temporary_path.replace(raw_path)
+                    downloaded += 1
+                except Exception:
+                    temporary_path.unlink(missing_ok=True)
+                    raise
+            else:
+                info = members_by_name[member]
+                if raw_path.stat().st_size != info.file_size:
+                    raise ValueError(f"existing Physion++ member has the wrong size: {raw_path}")
+                with raw_path.open("rb") as video_file:
+                    header = video_file.read(12)
+                if len(header) < 12 or header[4:8] != b"ftyp":
+                    raise ValueError(f"existing Physion++ media is not an MP4: {raw_path}")
+                crc = 0
+                with raw_path.open("rb") as video_file:
+                    while chunk := video_file.read(1024 * 1024):
+                        crc = zlib.crc32(chunk, crc)
+                if crc & 0xFFFFFFFF != info.CRC:
+                    raise ValueError(
+                        f"existing Physion++ member failed ZIP CRC validation: {raw_path}"
+                    )
+                existing_verified += 1
+
+            if end_frame is not None and not final_path.is_file():
+                _truncate_physionpp_video(raw_path, final_path, end_frame=end_frame)
+            actual_frames = _video_frame_count(final_path)
+            expected_frames = end_frame if end_frame is not None else source_num_frames
+            if actual_frames != expected_frames:
+                raise ValueError(
+                    f"Physion++ video has {actual_frames} frames; expected {expected_frames}: "
+                    f"{final_path}"
+                )
+
+    raw_hashes = {member: sha256_file(paths[0]) for member, paths in requested.items()}
+    hashes = {member: sha256_file(paths[1]) for member, paths in requested.items()}
+    converted = []
+    for example in examples:
+        media = []
+        for reference in example.media:
+            if reference.kind == "video" and reference.uri and reference.uri.startswith(prefix):
+                member = unquote(reference.uri.removeprefix(prefix))
+                _, path, end_frame, source_num_frames = requested[member]
+                media.append(
+                    MediaRef(
+                        kind="video",
+                        path=path.relative_to(data_root).as_posix(),
+                        sha256=hashes[member],
+                        license=reference.license,
+                        num_frames=end_frame if end_frame is not None else source_num_frames,
+                    )
+                )
+            else:
+                media.append(reference)
+        converted.append(example.model_copy(update={"media": media}))
+    return converted, {
+        "archive_url": archive_url,
+        "archive_size_bytes": size,
+        "archive_etag": etag,
+        "archive_last_modified": last_modified,
+        "videos_materialized": len(requested),
+        "videos_newly_downloaded": downloaded,
+        "videos_existing_verified": existing_verified,
+        "video_end_frame": {member: paths[2] for member, paths in requested.items()},
+        "video_num_frames": {
+            member: paths[2] if paths[2] is not None else paths[3]
+            for member, paths in requested.items()
+        },
+        "raw_video_sha256": raw_hashes,
+        "video_sha256": hashes,
+        "archive_hash_note": (
+            "Only selected RGB members were extracted with HTTP byte ranges; "
+            "the full archive was not downloaded or hashed."
+        ),
+    }
+
+
+def _video_frame_count(path: Path) -> int:
+    import av
+
+    with av.open(str(path), mode="r") as container:
+        streams = container.streams.video
+        if len(streams) != 1:
+            raise ValueError(f"Physion++ video must have one video stream: {path}")
+        return sum(1 for _ in container.decode(streams[0]))
+
+
+def _truncate_physionpp_video(source: Path, destination: Path, *, end_frame: int) -> None:
+    """Re-encode exactly the visible prefix, excluding the outcome after the cutoff."""
+    import av
+
+    if end_frame < 1:
+        raise ValueError("Physion++ video cutoff must be a positive frame index")
+    temporary_path = destination.with_name(f".{destination.name}.{os.getpid()}.tmp.mp4")
+    try:
+        with av.open(str(source), mode="r") as input_container:
+            streams = input_container.streams.video
+            if len(streams) != 1:
+                raise ValueError(f"Physion++ source must have one video stream: {source}")
+            input_stream = streams[0]
+            rate = input_stream.average_rate or input_stream.base_rate
+            if rate is None or rate <= 0:
+                raise ValueError(f"Physion++ source has no valid frame rate: {source}")
+            with av.open(str(temporary_path), mode="w", format="mp4") as output_container:
+                output_stream = output_container.add_stream("libx264", rate=rate)
+                output_stream.width = input_stream.codec_context.width
+                output_stream.height = input_stream.codec_context.height
+                output_stream.pix_fmt = "yuv420p"
+                output_stream.time_base = Fraction(rate.denominator, rate.numerator)
+                seen = 0
+                for frame in input_container.decode(input_stream):
+                    if seen >= end_frame:
+                        break
+                    frame = frame.reformat(
+                        width=output_stream.width,
+                        height=output_stream.height,
+                        format=output_stream.pix_fmt,
+                    )
+                    frame.pts = seen
+                    frame.time_base = output_stream.time_base
+                    for packet in output_stream.encode(frame):
+                        output_container.mux(packet)
+                    seen += 1
+                if seen != end_frame:
+                    raise ValueError(
+                        f"Physion++ source has only {seen} decoded frames before requested "
+                        f"cutoff {end_frame}: {source}"
+                    )
+                for packet in output_stream.encode(None):
+                    output_container.mux(packet)
+        with temporary_path.open("rb") as video_file:
+            header = video_file.read(12)
+        if len(header) < 12 or header[4:8] != b"ftyp":
+            raise ValueError(f"Physion++ cropped output is not a valid MP4: {temporary_path}")
+        temporary_path.replace(destination)
+    except Exception:
+        temporary_path.unlink(missing_ok=True)
+        raise
+
+
 def materialize_speech_commands_audio(
     examples: list[DecisionExample],
     *,
@@ -317,9 +553,7 @@ def materialize_speech_commands_audio(
     data_root: Path,
 ) -> tuple[list[DecisionExample], dict[str, object]]:
     manifests_by_split = (
-        {manifest.split: manifest}
-        if isinstance(manifest, DatasetManifest)
-        else dict(manifest)
+        {manifest.split: manifest} if isinstance(manifest, DatasetManifest) else dict(manifest)
     )
     for split, source_manifest in manifests_by_split.items():
         if source_manifest.split != split:
@@ -334,9 +568,7 @@ def materialize_speech_commands_audio(
             continue
         source_manifest = manifests_by_split.get(example.split)
         if source_manifest is None:
-            raise ValueError(
-                f"no Speech Commands manifest supplied for split {example.split!r}"
-            )
+            raise ValueError(f"no Speech Commands manifest supplied for split {example.split!r}")
         if example.source != source_manifest.dataset_id:
             raise ValueError(
                 f"Speech Commands source mismatch for {example.id}: "
@@ -394,9 +626,7 @@ def materialize_speech_commands_audio(
                 break
         if split_found != missing:
             absent = sorted(missing - split_found)
-            raise FileNotFoundError(
-                f"Speech Commands {split} audio bytes missing for {absent}"
-            )
+            raise FileNotFoundError(f"Speech Commands {split} audio bytes missing for {absent}")
 
     for key, path in requested.items():
         with path.open("rb") as audio_file:
