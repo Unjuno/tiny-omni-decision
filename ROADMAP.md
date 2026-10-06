@@ -4,57 +4,61 @@
 
 Build a compact multimodal decision model that accepts text, image, audio, and video and returns calibrated probabilities over typed options.
 
-The v0.1 pipeline is:
+The next experiment is **ternary first → Teacher recovery → LoRA only if recovery is insufficient**:
 
 ```text
-Gemma 4 E2B QAT alignment backbone
+Gemma 4 E2B → Decision / Omni LoRA → frozen high-precision Decision Teacher
+                                                    │
+                                                    │ option supervision
+EmbeddingGemma 2 pretrained checkpoint               │
+        ↓                                           │
+Aggressive ternary conversion                       │
+        ↓                                           │
+Unrecovered damage measurement                      │
+        ↓                                           ▼
+Ternary-constrained recovery with the Teacher (QAT + distillation)
         ↓
-Decision / Omni LoRA training
-        ↓
-High-precision Decision Teacher
-        ↓
-EmbeddingGemma 2 student candidate
-        ├── use the native embedding/readout path first
-        └── fallback: replace the terminal pooling/readout path with a small classifier
-                    ↓
-          Decoder/backbone-focused ternary compression
-                    ↓
-          Quantization damage measurement
-                    ↓
-          single Recovery adapter if needed
-                    ↓
-          Final Tiny Omni Decision model
+Meets validation quality and deployment requirements?
+        ├── yes → packed export / reload / final evaluation / runtime
+        └── no  → freeze the quantized base
+                    → add one Recovery LoRA
+                    → train that LoRA with the same Teacher
+                    → export / reload / re-evaluate
 ```
 
-Gemma 4 remains the high-precision teacher/reference. EmbeddingGemma 2 is the preferred deployment/compression student candidate once it passes the same held-out decision-quality gates. The exact EmbeddingGemma 2 upstream model ID, revision, architecture cut point, and runtime support must be pinned and inspected before implementation.
+Gemma 4 supplies recovery supervision and remains the external quality reference. EmbeddingGemma 2 is the student for this experiment; successful recovery is a hypothesis, not a measured result. Do not require a separately trained high-precision decision student before ternary conversion.
 
-The project does not require the teacher and final deployment model to share the same architecture.
+This sequence supersedes the previous native-student-training → classifier fallback → quantization plan. It does not change the active Gemma 4 Teacher run, datasets, seeds, checkpoints, or historical results. Direct Gemma 4 compression is not the next experiment, but its existing artifacts are retained.
 
-The project does not depend on preserving long-form generation.
+The project does not require the Teacher and student to share an architecture and does not depend on preserving long-form generation.
 
 ## Phase 0 — Freeze the design
 
-**Status: implementation-ready with hard gates.**
+**Status: existing Teacher path retained; ternary-first student experiment planned, not implemented.**
 
-Primary target:
+Teacher target:
 - `google/gemma-4-E2B-it-qat-q4_0-unquantized`
 
+Student target:
+- EmbeddingGemma 2; pin the exact upstream model/processor revision and license metadata before implementation
+
 Design decisions:
-- E2B is used for the high-precision multimodal Decision Teacher.
-- Text/image/audio/video decision quality matters more than long-context reasoning.
-- Decision tuning may use labels and/or soft probability targets from stronger decision teachers.
-- EmbeddingGemma 2 is the preferred student candidate for the deployment/compression path, subject to a pinned revision and paired held-out validation.
-- Use the student's native embedding/readout path first; do not add a custom classifier unless the native path misses the decision-quality gate.
-- Structural fallback: after inspecting the actual model graph, remove or bypass the terminal pooling/readout path (and only any terminal attention/projection block proven unnecessary) and attach a small classifier. Do not guess the cut boundary.
-- Ternary compression focuses on the selected student's large linear weights first.
-- Modality encoders, projectors, norms, pooling/readout, and classifier components remain higher precision until proven safe.
+- Keep the high-precision Gemma 4 Decision Teacher fixed during student recovery.
+- Initialize the student from pretrained EmbeddingGemma 2 and impose ternary constraints before task recovery training.
+- Use Teacher option distributions with the existing labeled CE and Brier objectives. No second teacher or new representation-loss stack is required.
+- Retain the native backbone/pooling structure for the first experiment. Establish only the minimal readout needed to score supplied options; an embedding vector is not itself an option-probability distribution.
+- Target large text/backbone, embedding, vision, and audio weight tensors for ternary conversion. Record all higher-precision exceptions and their bytes rather than silently excluding whole encoders from the size claim.
+- First recover by updating the student under ternary forward constraints. Only if that is insufficient, freeze the quantized base and train one separate Recovery LoRA against the same Teacher.
+- Pooling plus a small classifier, with any justified terminal-path removal, remains a deferred structural fallback after recovery and LoRA are insufficient. No attention-block removal is assumed in advance.
 
 Project-level hard gates:
-- [x] pin exact base-model revision/hash
-- [x] record upstream license/notice requirements
+- [x] pin exact Teacher base-model revision/hash
+- [x] record Teacher upstream license/notice requirements
 - [x] freeze and validate redistribution-safe train/validation/evaluation catalogs
-- [ ] verify architecture-compatible ternary implementation/runtime
 - [x] define disjoint held-out train/selection/evaluation splits and zero-overlap checks
+- [ ] pin and inspect the exact EmbeddingGemma 2 model/processor revision and rights
+- [ ] verify student option readout and numerical forward/backward behavior
+- [ ] verify architecture-compatible ternary conversion, packed export, and runtime support
 
 ## Phase 1 — Reproducible text decision LoRA smoke
 
@@ -176,126 +180,95 @@ Evaluate:
 - NLL
 - latency by modality
 
-## Phase 6 — Student gate and extreme ternary compression
+### Teacher handoff
 
-### 6A — EmbeddingGemma 2 student gate
+Finish the current Teacher run under its existing configuration, select the best checkpoint using validation, verify reload, then freeze the Master Teacher and its provenance. This is a handoff requirement, not a claim that the current local run has completed. Do not restart or alter the active Teacher run for this plan change. Keep different experiment series separate.
 
-Keep the completed Gemma 4 Decision Teacher frozen as the quality reference.
+## Phase 6 — EmbeddingGemma 2: ternary first
 
-Before ternary conversion:
-- pin the exact EmbeddingGemma 2 model/processor revision and license metadata
-- inspect the actual module graph and runtime requirements
-- evaluate the native EmbeddingGemma 2 path on the same held-out decision splits
-- adapt/distill only as much as required to make it a viable decision student
-- compare Accuracy, ECE, Brier, NLL, and modality-specific results against the frozen Teacher
+Start from the pretrained EmbeddingGemma 2 checkpoint, not from a separately task-trained high-precision student.
 
-Preferred path:
-- keep the native embedding/pooling/readout structure and use the smallest decision readout that satisfies the gate
+Before conversion:
+- pin the exact model/processor revision, inspect the actual graph, and record the execution backend and supported dtypes
+- retain the native backbone/pooling path and define the minimal option-score readout, with stable option identity/order for supervision
+- record an unquantized baseline using that same input/readout setup; this is a diagnostic, not a high-precision student-training stage
+- record numeric quality and deployment acceptance limits and a bounded recovery budget before selecting results; use validation for decisions, not the final evaluation split
 
-Structural fallback only if the preferred path is insufficient:
-- inspect the real terminal module graph
-- remove or bypass the terminal pooling/readout path
-- if a final attention/projection block is demonstrably unnecessary for the decision task, remove it as part of the same measured ablation
-- attach a small classifier and re-run the same held-out evaluation
-- do not assume module names or a cut point before inspection
+Convert the intended large weight tensors directly to scaled ternary values: negative scale, zero, or positive scale. Include text/backbone, embeddings, and vision/audio weights in the target inventory. Inspect actual tensor paths rather than reusing Gemma 4 module names. List every excluded tensor, dtype, and byte cost; any unsupported or unstable component is an explicit exception, not evidence that the whole model is ternary.
 
-Exit criterion: select one high-precision EmbeddingGemma 2 decision student as the pre-quantization reference. If neither native nor structural-fallback variants pass the quality gate, retain the existing Gemma 4 path rather than forcing the student substitution.
+The approximately 1.58-bit goal concerns densely packed ternary weight codes. It is not a guaranteed whole-model size, memory footprint, or performance result. Count scales, packing/alignment, metadata, higher-precision exceptions, the decision readout, and any later LoRA in the exported package. A 2-bit container is not 1.58-bit storage, and a fake-quantized floating-point tensor is not a packed low-bit artifact.
 
-### 6B — Extreme ternary compression
+Fail closed on numerical or shape errors. Low initial decision quality is expected to be measured, not used to reject the student before attempting recovery. Verify the intended export/runtime path; do not assume that a ternary format or kernel supports this architecture. Training shadow weights and optimizer memory must be accounted for separately from deployment memory.
 
-Quantization source:
-- the selected high-precision EmbeddingGemma 2 decision student
-- the frozen Gemma 4 Decision Teacher remains the external quality reference
+## Phase 7 — Measure initial damage
 
-First target:
-- large student backbone/decoder linear weights identified by actual-model inspection
+Record the frozen Teacher, unquantized student diagnostic, and unrecovered ternary student on the same fixed validation examples and option ordering. Isolate quantization damage using the same student input/readout setup before and after conversion; Teacher-to-student differences also include architecture and task-adaptation differences.
 
-Preserve initially:
-- modality encoders when sensitivity requires it
-- multimodal projectors
-- norms
-- pooling/readout or classifier
-- other small decision-specific components
+Retain the existing metrics:
+- Accuracy, NLL, Brier, and ECE, overall and by modality
+- top-1 and probability-rank preservation; option-distribution KL / JS
+- actual model bytes, latency, and peak RAM / VRAM with hardware, backend, dtype, input sizes, and batch recorded
 
-Representation target:
-- group-wise ternary values `{-s, 0, +s}`
-- measure actual whole-model BPW and bytes; never infer them from a format name
+Proceed to recovery after a numerically valid damaged baseline. This phase does not require the unrecovered student to match the Teacher.
 
-Do not assume `TQ1_0` or another runtime format supports EmbeddingGemma 2 until verified.
+## Phase 8 — Teacher recovery, then LoRA if needed
 
-## Phase 7 — Quantization damage measurement
+### Shared supervision
 
-Paired evaluation on exactly the same held-out samples:
+Freeze the Gemma 4 Decision Teacher. Reuse the existing training/validation/evaluation separation. Training uses only training examples and their Teacher signals; validation selects checkpoints and the fallback decision. Keep final evaluation out of training, calibration fitting, and model selection.
 
-- selected high-precision EmbeddingGemma 2 decision student
-- ternary student
-- frozen Gemma 4 Decision Teacher as an external quality reference
-
-Metrics:
-- top-1 preservation
-- Accuracy
-- ECE
-- Brier
-- NLL
-- KL / JS to reference probabilities
-- probability rank preservation
-- latency
-- peak RAM / VRAM
-
-## Phase 8 — Compact reference cache and Recovery adapter
-
-Freeze the selected high-precision student and the task-adapted ternary student. Keep the Gemma 4 Decision Teacher frozen as the external quality reference.
-
-For each training decision, cache only the reference signal needed for the decision task. Reuse the existing compact option-logit/probability cache format when the selected student exposes compatible option logits; otherwise store the smallest equivalent option-level score/probability signal required for recovery.
-
-Canonical cache record:
+Use a compact option-level cache, not a full-vocabulary cache:
 
 ```text
 sample_id
-option_token_ids
-teacher_option_logits
-teacher_option_probabilities
+option_ids / option_order
+teacher_option_token_ids (Teacher-side metadata only)
+teacher_option_logits / teacher_option_probabilities
 target
 teacher_temperature / normalization metadata
 ```
 
-Default storage policy:
-- raw FP16/BF16 **option logits** are the canonical teacher signal
-- option probabilities may be stored as a derived convenience field
-- full-vocabulary logits are **not required** and are disabled by default
-- optional full-vocabulary capture is reserved for diagnostics or experiments that explicitly test whether preserving non-option language distribution helps
+Teacher and student must refer to the same actual choices in the same order. Teacher token IDs are not student vocabulary IDs. Keep loss coefficients and temperature fixed in the recorded experiment configuration.
 
-This keeps the cache small and aligned with the product objective: calibrated decisions over supplied options.
+Primary objective: Teacher-to-student KL over option distributions. Auxiliary objectives: labeled cross entropy and Brier loss. No additional embedding-geometry objective or teacher is required for this experiment.
 
-Recovery training uses a **single final LoRA** on the frozen task-adapted ternary base. It is not stacked on top of an unmerged Decision LoRA.
+### 8A — Recover under ternary constraints
 
-Primary objective:
-- KL over teacher vs student **option distributions**
+Train the quantized student with the frozen Teacher through quantization-aware distillation. Higher-precision shadow weights may receive gradient updates, but every forward uses their ternary-quantized values for the target tensors. Export those tensors as ternary; do not remove the constraint during training and merely quantize again at the end.
 
-Auxiliary objectives:
-- CE on the labeled option
-- Brier loss
+This stage updates the student under the constraint; it is not the old frozen-base LoRA-only recovery plan. Use a numerically supported activation/accumulation dtype, with BF16/FP32 as the reference choices. Lower-bit weights do not require lower-bit activations. Verify save/reload and exported predictions before accepting the recovered student.
 
-Optional experiment only:
-- low-weight full-vocabulary KL at the decision position, when a full-vocabulary cache was deliberately generated
+If the agreed validation quality and deployment limits are met, proceed to Phase 9 without adding LoRA.
 
-Quantization damage is measured against the selected high-precision student. The frozen Gemma 4 Decision Teacher remains the external reference for final Accuracy, ECE, Brier, NLL, and decision-quality comparisons.
+### 8B — Recovery LoRA only if 8A is insufficient
 
-## Phase 9 — Runtime and mobile prototype
+Freeze the selected quantized student base, including its ternary codes and scales. Attach one small higher-precision Recovery LoRA to verified compatible modules and train the adapter with the same frozen Teacher and option-level objectives. Do not change the Teacher or stack multiple recovery adapters.
+
+The deployed artifact is the quantized base plus that LoRA. Count adapter bytes and runtime overhead. Keep the adapter separate by default: merging its update into the base generally breaks the ternary weight constraint. Any later merge/requantization requires a new quality check and is not assumed in this plan.
+
+Reload the exported base and adapter together and repeat the same validation checks. Recovery is not guaranteed; failure within the recorded budget remains a failed experiment rather than a reason to claim success or silently increase precision.
+
+### Deferred structural fallback
+
+If ternary-constrained recovery and the LoRA fallback are still insufficient, retain the earlier pooling-plus-small-classifier idea as a separate structural fallback, not a mandatory pre-quantization stage. Inspect the graph before replacing a terminal readout or removing a terminal attention/projection block. Do not equate an attention block with the output head or assume either can be removed without loss. No such surgery is part of the first experiment.
+
+## Phase 9 — Export, final evaluation, and runtime
+
+Freeze the selected recovered student, package its packed ternary weights and any required readout/Recovery LoRA, then reload in the intended runtime. Verify predictions against the training-time quantized path.
+
+Run the final paired evaluation on the same frozen held-out samples for the Teacher, unquantized student diagnostic, unrecovered ternary student, and selected recovered artifact. Report per-modality quality together with actual package bytes and measured latency/RAM/VRAM. Do not claim pure whole-model 1.58-bit storage when higher-precision exceptions or LoRA remain.
 
 Target outputs:
-- portable model package
-- reproducible conversion
+- portable model package and reproducible conversion
 - PC inference
 - Apple Silicon / Android / iOS feasibility notes
 - direct packed low-bit kernels only if required after v0.1
 
-## v0.1 non-goals
+## Scope and non-goals
 
-- full-parameter fine-tuning
-- reinforcement learning
-- preserving long chain-of-thought generation
-- quantizing every modality encoder to ternary
-- custom mobile ternary kernels before model quality is proven
-- large quantizer comparison ladders
-- claiming speedup from lower bit-width without a kernel benchmark
+- This is a plan-only change. Existing training code, configs, manifests, checkpoints, and historical reports are unchanged; old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.
+- No separate unconstrained high-precision student fine-tuning stage before this ternary experiment.
+- No reinforcement learning or long chain-of-thought preservation.
+- No mandatory pooling/classifier surgery, extra teacher, or broad quantizer comparison ladder.
+- No custom mobile ternary kernels before model quality is proven.
+- No speedup claim from a bit-width or storage label without a kernel/runtime benchmark.

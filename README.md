@@ -108,34 +108,41 @@ pipeline test is retained as historical context in [docs/PHASE3.md](docs/PHASE3.
 
 ## Planned student, compression, and recovery flow
 
-The intended v0.1 path is now:
+**Next experiment: ternary first, recover with the Teacher, add LoRA only if recovery is insufficient.**
 
 ```text
-E2B QAT base
-  → Decision / Omni LoRA
-  → high-precision Gemma 4 Decision Teacher
-  → EmbeddingGemma 2 decision student candidate
-      ├─ native embedding/pooling/readout path first
-      └─ fallback: replace the terminal pooling/readout path with a small classifier
-  → ternary compression of the selected student
-  → Recovery adapter only if needed
-  → final Tiny Omni Decision model
+Gemma 4 Decision Teacher: finish → select → reload → freeze
+                                              │
+                                              │ supervises recovery
+Pretrained EmbeddingGemma 2                    │
+  → aggressive ternary conversion             │
+  → measure initial damage                    │
+  → ternary-constrained QAT + distillation ←───┘
+  → if sufficient: export / reload / final evaluation / runtime
+  → if insufficient: freeze quantized base
+       → add one Recovery LoRA and train it with the same Teacher
+       → export / reload / re-evaluate
 ```
 
-The Gemma 4 Decision Teacher remains the external quality reference. EmbeddingGemma 2 is the preferred deployment/compression student candidate only after its exact upstream revision, architecture, and runtime are pinned and it passes the same held-out decision-quality gates.
+Do not first train a separate high-precision decision student. Gemma 4 remains both the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged; student recovery is planned, not yet demonstrated.
 
-Do not assume the structural fallback cut point. Inspect the actual EmbeddingGemma 2 module graph first; remove or bypass only terminal pooling/readout components, or any final attention/projection block, when a measured ablation shows that it is unnecessary for the decision task.
+Target the student's large text/backbone, embedding, vision, and audio weights for ternary conversion after pinning and inspecting the actual model. Record every higher-precision exception. During the first recovery stage, each forward uses ternary-quantized target weights even when gradient updates use higher-precision shadow weights.
 
-Compact option-level teacher/reference signals remain preferred for distillation and recovery. Full-vocabulary logits are optional diagnostics, not a required cache.
+If that recovery is insufficient, freeze the selected quantized base and train one separate Recovery LoRA. Count its bytes and runtime overhead. Do not silently merge it into the ternary base: a merged correction is generally no longer ternary. The approximately 1.58-bit packing goal is not a measured whole-model size or a performance guarantee.
+
+Keep native backbone/pooling initially and define only the minimal supplied-option readout. The earlier pooling-plus-small-classifier structural fallback is deferred until constrained recovery and LoRA are insufficient; it is not a mandatory stage before quantization. Inspect actual modules before any terminal-path removal.
+
+Reuse compact Teacher option signals, matching the actual choices and their order rather than assuming shared vocabulary IDs. Training, validation selection, and final held-out evaluation remain separate. The detailed sequence is in [ROADMAP.md](ROADMAP.md).
 
 ## Current boundary and limitations
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
 - The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`) and requires PyTorch 2.6 for actual Gemma 4 multimodal forward. Install a wheel matching the local CUDA driver; GPU model loading is not covered by CPU CI.
 - The durable Teacher run uses frozen text, image, audio, and video corpora with zero pairwise source-ID and normalized-content overlap. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal candidates; OneJev remains excluded pending component-level rights review. The dataset is sampled and the training budget is capped, so the results are not benchmark-generalizing quality claims; see [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
-- Option labels must each tokenize to exactly one distinct token; the command fails closed if this assumption is false.
+- The current Gemma 4 vocabulary readout requires option labels to tokenize to exactly one distinct token each; it fails closed otherwise. This does not imply a shared Teacher/student tokenizer.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 student integration, ternary runtime compatibility, and paired quality checks after compression remain open later-phase gates; no EmbeddingGemma 2 student, ternary, or Recovery training has been run.
+- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 revision pinning, integration, ternary-constrained recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
+- This is a documentation-only plan change. Existing training code, configs, manifests, and checkpoints are unchanged. The Gemma 4 quantization/recovery configs do not implement this new student path.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).
