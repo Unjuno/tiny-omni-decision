@@ -37,6 +37,7 @@ student = [
   "torch>=2.6,<2.7",
   "torchvision>=0.21,<0.22",
   "transformers>=5.19,<5.20",
+  "peft>=0.21.2,<0.22",
   "accelerate>=1.10,<2",
   "av>=14,<19",
   "safetensors>=0.6,<1",

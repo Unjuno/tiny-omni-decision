@@ -18,6 +18,10 @@ in [the student manifest](../manifests/embeddinggemma2-student.yaml).
 - The new `[student]` extra isolates that compatibility range from the existing
   Teacher-oriented `[ml]` extra. Do not combine the extras in one installation;
   the active Teacher environment remains unchanged.
+- Every downloaded metadata, tokenizer, and pooling/normalization file matches
+  the manifest's pinned Git blob ID, SHA-256, and/or byte size. The model weight
+  file itself remains undownloaded; its SHA-256 and length are pinned from Hub
+  metadata, while its tensor header was read with HTTP Range requests.
 
 ## Checkpoint tensor inventory
 
