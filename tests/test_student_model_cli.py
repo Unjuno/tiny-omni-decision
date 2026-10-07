@@ -236,3 +236,14 @@ def test_decision_head_is_created_on_encoder_device(tmp_path):
         encoder, tmp_path, max_length=32, head_hidden_dim=7
     )
     assert next(student.decision_head.parameters()).device.type == "meta"
+
+
+def test_committed_embeddinggemma2_pin_is_immutable_and_valid():
+    from tiny_omni_decision.student.model import validate_pin
+
+    root = Path(__file__).parents[1]
+    pin = json.loads(
+        (root / "configs/student/embeddinggemma2.pin.json").read_text(encoding="utf-8")
+    )
+    validate_pin(pin)
+    assert pin["revision"] == "914f7f89142e33e77833254d9c9b90c3cef7303b"
