@@ -47,8 +47,11 @@ def save_bundle(c: TernaryController, path: Path, metadata: dict[str, Any]) -> d
             row = {"shape": list(value.shape), "dtype": str(value.dtype), "prefix": prefix}
             if name in c.targets:
                 codes, scales = c.components(name)
-                packed = pack_trits(codes).cpu().contiguous()
+                # Pack on CPU to avoid an avoidable GPU memory spike from the int16
+                # base-3 packing workspace for large embedding/backbone tensors.
+                codes = codes.cpu()
                 scales = scales.float().cpu().contiguous()
+                packed = pack_trits(codes).contiguous()
                 tensors[prefix + ".codes"] = packed
                 tensors[prefix + ".scales"] = scales
                 row["kind"] = "ternary"
