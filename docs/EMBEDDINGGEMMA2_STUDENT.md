@@ -291,16 +291,86 @@ ternary value in the forward pass. It now adds a zero-valued gradient term to
 the detached quantized tensor, and a regression test checks exact BF16 forward
 codes plus identity gradients.
 
-The standard evaluator now accepts `--ternary-overlay` and includes its
-manifest hash in run identity, so a ternary run cannot be confused with or
-resume the unquantized baseline. The baseline's same-input comparison will use
-the same 256 examples and option order after it completes. The evaluator's
-first partial file is at
-`C:/CodexArtifacts/embeddinggemma2-unquantized-validation-v0-256/`; it has not
-yet produced final metrics. At 2026-10-08 01:45 JST, it held 62 of 256 rows
-and its Python process was still alive with CPU time increasing. No sealed
-audit data has been read. The full CPU test suite passed (98 tests), Ruff
-passed, and the EmbeddingGemma 2 manifest validator passed.
+The standard evaluator accepts `--ternary-overlay` and includes the overlay
+manifest hash in run identity. The initial CPU baseline attempt was slow and
+was stopped after 112 durable rows when the same fixed validation was completed
+on the idle RTX 3080 Laptop GPU. Its partial output remains external and is not
+used as a result. The completed GPU runs and paired metrics follow. No sealed
+audit data was read. The CPU test suite, Ruff, and manifest validation had
+passed before these evaluation-only documentation changes.
+
+## Phase 7 — Initial quantization damage measurement
+
+On 2026-10-08, the unquantized pretrained checkpoint and packed ternary
+overlay were evaluated sequentially on the same fixed validation snapshot,
+with identical sample IDs, targets, option strings/order, processor, BF16
+weights, eager attention, temperature `0.1`, and CUDA device. The snapshot has
+256 examples (64 each for text, image, audio, and video), SHA-256
+`43358f0e4444dabfaba30eba0d9e4af7851f1aff56d71b2edbf38982b1bb6faf`. The
+selection manifest SHA-256 is
+`7aa1168ce3baa6402e0ed05b21038015c8dcc3607570e942f3a92ad667a9bc08`. Every
+prediction record's sample ID, target, options, and option-order hash matched
+between runs. The Teacher column is its already-saved prediction on those same
+validation examples; it is a reference, not a new run or a sealed score.
+
+| Modality | Teacher accuracy / NLL / Brier / ECE | Unquantized student | Unrecovered ternary | Ternary minus unquantized accuracy |
+|---|---:|---:|---:|---:|
+| Audio (n=64) | 0.9219 / 0.2283 / 0.0766 / 0.0454 | 0.5938 / 2.1284 / 0.8607 / 0.4684 | 0.0938 / 2.6073 / 0.9629 / 0.1451 | -0.5000 |
+| Image (n=64) | 0.5938 / 1.2357 / 0.5422 / 0.1141 | 0.4688 / 2.1178 / 0.8565 / 0.3335 | 0.1094 / 2.3543 / 0.9119 / 0.0832 | -0.3594 |
+| Text (n=64) | 0.7188 / 0.5733 / 0.3470 / 0.0933 | 0.4062 / 1.0546 / 0.6345 / 0.1942 | 0.2969 / 1.1238 / 0.6777 / 0.2907 | -0.1094 |
+| Video (n=64) | 0.4062 / 1.2781 / 0.6607 / 0.1242 | 0.3125 / 1.3226 / 0.6823 / 0.0812 | 0.2656 / 1.4057 / 0.7247 / 0.1253 | -0.0469 |
+| Overall (n=256) | 0.6602 / 0.8288 / 0.4066 / 0.0490 | 0.4453 / 1.6559 / 0.7585 / 0.2412 | 0.1914 / 1.8728 / 0.8193 / 0.1495 | -0.2539 |
+
+Metric tuple order is accuracy / NLL / Brier / ECE. Macro-modality metrics were:
+unquantized `0.4453 / 1.6559 / 0.7585 / 0.2693`, ternary
+`0.1914 / 1.8728 / 0.8193 / 0.1611`. The lower ternary ECE does not mean
+better task quality: accuracy, NLL, and Brier all worsened. Per-source metrics
+are in the external `metrics.json` files and summarized below.
+
+| Source | n | Unquantized accuracy / NLL / Brier / ECE | Ternary accuracy / NLL / Brier / ECE |
+|---|---:|---:|---:|
+| MIT-IBM/CLEVRER | 64 | 0.3125 / 1.3226 / 0.6823 / 0.0812 | 0.2656 / 1.4057 / 0.7247 / 0.1253 |
+| TypeSafeAI/Open-Jev | 32 | 0.2500 / 0.9587 / 0.6262 / 0.3052 | 0.1875 / 1.0104 / 0.6884 / 0.4456 |
+| google/speech_commands | 64 | 0.5938 / 2.1284 / 0.8607 / 0.4684 | 0.0938 / 2.6073 / 0.9629 / 0.1451 |
+| n4ze3m/typed-decisions-synth | 32 | 0.5625 / 1.1504 / 0.6428 / 0.1941 | 0.4062 / 1.2373 / 0.6669 / 0.1580 |
+| sgvaze/clevr4 | 64 | 0.4688 / 2.1178 / 0.8565 / 0.3335 | 0.1094 / 2.3543 / 0.9119 / 0.0832 |
+
+Across examples, top-1 prediction agreement was `0.28125`; mean per-example
+Spearman correlation of option-probability ranks (average ranks for ties) was
+`0.04821`; mean KL(unquantized || ternary) was `0.14088` nats and mean
+Jensen-Shannon divergence was `0.03250` nats. These indicate substantial
+representational change, not stable rank-preserving compression. The
+unquantized comparison is itself an untrained pretrained-embedding/cosine
+readout diagnostic, so this conversion-damage result does not estimate the
+loss of a subsequently trained student.
+
+Both runs used `google/embeddinggemma-2` revision
+`914f7f89142e33e77833254d9c9b90c3cef7303b`, Transformers `5.19.0`, PyTorch
+`2.6.0+cu124`, CUDA `12.4`, BF16 weights, eager attention, and an NVIDIA RTX
+3080 Laptop GPU (16 GiB). Baseline duration was `121.32 s`; ternary duration
+was `130.47 s`. Free VRAM at each run start was `14.91 GiB`. A live `nvidia-smi`
+sample while the models were loaded showed about 2.8–3.0 GiB in use; actual
+peak VRAM was not captured and is UNKNOWN. No cloud compute or compute cost was
+used. The stock Transformers runtime dequantizes the overlay to BF16; these
+timings establish neither packed-kernel speedup nor inference-memory reduction.
+
+Run directories remain outside Git:
+
+- Baseline: `C:/CodexArtifacts/embeddinggemma2-unquantized-validation-v0-256-cuda/`
+- Ternary: `C:/CodexArtifacts/embeddinggemma2-ternary-validation-v0-256-cuda/`
+- Incomplete CPU prefix (112 rows, not a result): `C:/CodexArtifacts/embeddinggemma2-unquantized-validation-v0-256/`
+
+| Run | Predictions SHA-256 | Metrics SHA-256 | Metadata SHA-256 |
+|---|---|---|---|
+| Unquantized GPU | `032f5264bd1c2c1858b7727af91c0b7adc9e77b69282f54e85a0a81e6a8a8a56` | `e2df45344f4092d46bae98642d049b14c1a2d7bfc20df49fe322d47088faf4fe` | `1696fd6dc6fb64a1cc4fe33e7de39cb555fe68e05f654c57f81ddc3c93464c6a` |
+| Ternary GPU | `57c980df2106c2f1800d42aaff78c79758016dfb7549249e97bea66a08c4c73f` | `5584a05dfddf4aa0f179d9f3f2814a885a9c09a117463e3c996e974c8224d308` | `9b973aad835320766c6f3aef907fbb80f335383e69f432ccba7e3ca97ef80107` |
+
+Both evaluators completed 256 rows and hash checks. This is a development
+validation comparison, not a blind final evaluation. It completes the Phase 7
+initial-damage measurement only. No real Teacher train cache, QAT optimizer
+step, trained recovery checkpoint, Recovery LoRA, or final/sealed evaluation
+exists yet. Teacher artifacts were read-only; no active Teacher Python process
+was present during these GPU evaluations.
 
 ## Phase 8 groundwork
 
@@ -311,4 +381,4 @@ duplicate samples, mismatched Teacher identity/temperature, reordered options,
 invalid distributions, and Teacher logits/probabilities that disagree. This is
 only an implementation contract: no real Teacher train cache has been
 generated, no recovery optimizer step has run, and Phase 8 QAT is not complete.
-The active Teacher process and all Teacher/corpus artifacts remain untouched.
+Teacher artifacts and corpus files were not modified; the saved Teacher predictions were read-only.

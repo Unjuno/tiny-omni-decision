@@ -194,22 +194,18 @@ Transformers 5.19.0 environment, and records the instantiated module/tensor
 inventory. CPU smokes completed synthetic text forward, supplied-option
 readout, CE+Brier backward, and finite projection gradients, plus generated
 image/audio/one-frame-video inputs through the actual model with finite
-768-dimensional outputs. The shared Teacher environment was not upgraded and
-no student GPU allocation occurred. These are path checks, not a quality
-baseline. The actual loaded checkpoint has a fail-closed candidate target
-inventory. A CPU real-checkpoint smoke now converts all 483 candidate tensors,
-exports five-trit codes and FP32 group scales, reloads the overlay onto a fresh
-pinned model, and reproduces the ternary-QAT synthetic embeddings exactly. The
-overlay contains 160,577,615 tensor-file bytes; the high-precision parameter
-exceptions are 483,648 bytes and runtime buffers are 5,258 bytes. This path
-dequantizes to BF16 for the ordinary Transformers runtime; it does not provide
-a packed low-bit compute kernel or reduced inference memory. The frozen-corpus
-unquantized evaluator is in progress and has not produced complete metrics; its
-hashed validation-only subset fixes Teacher v1's 256 checkpoint-selection
-examples and exact ID/option order. The new evaluator option accepts the
-integrity-checked ternary overlay for a subsequent same-example comparison.
-No sealed audit data has been read. Conversion details and the partial
-baseline status are in
+768-dimensional outputs. These path checks ran CPU-only and are not a quality baseline. The actual
+loaded checkpoint has a fail-closed candidate target inventory. A CPU
+real-checkpoint smoke converts all 483 candidate tensors, exports five-trit
+codes and FP32 group scales, reloads the overlay onto a fresh pinned model, and
+reproduces the ternary-QAT synthetic embeddings exactly. The overlay contains
+160,577,615 tensor-file bytes; high-precision parameter exceptions are 483,648
+bytes and runtime buffers are 5,258 bytes. The standard runtime dequantizes to
+BF16 and does not provide packed compute or reduced inference memory. The
+unquantized diagnostic and unrecovered ternary overlay have now both been
+evaluated on the same hashed 256-example validation subset and exact ID/option
+order using the RTX 3080 Laptop GPU. No sealed audit data has been read.
+Conversion and paired initial-damage results are in
 [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 Before conversion:
@@ -224,9 +220,17 @@ The approximately 1.58-bit goal concerns densely packed ternary weight codes. It
 
 Fail closed on numerical or shape errors. Low initial decision quality is expected to be measured, not used to reject the student before attempting recovery. Verify the intended export/runtime path; do not assume that a ternary format or kernel supports this architecture. Training shadow weights and optimizer memory must be accounted for separately from deployment memory.
 
-## Phase 7 — Measure initial damage
+## Phase 7 — Measure initial damage — validation comparison complete
 
 Record the frozen Teacher, unquantized student diagnostic, and unrecovered ternary student on the same fixed validation examples and option ordering. Isolate quantization damage using the same student input/readout setup before and after conversion; Teacher-to-student differences also include architecture and task-adaptation differences.
+
+The fixed 256-example comparison is complete. Unquantized student accuracy was
+44.53% and unrecovered ternary accuracy was 19.14%; same-example option
+order/target checks passed. This is initial-damage evidence on a development
+validation subset, not a trained-student result or sealed evaluation.
+Teacher-supervised recovery remains the next gate; detailed per-modality and
+per-source metrics, hashes, and runtime limits are recorded in
+[docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 Retain the existing metrics:
 - Accuracy, NLL, Brier, and ECE, overall and by modality
@@ -290,7 +294,7 @@ Target outputs:
 
 ## Scope and non-goals
 
-- This is a plan-only change. Existing training code, configs, manifests, checkpoints, and historical reports are unchanged; old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.
+- This remains a staged student experiment, not a product promotion. Existing Teacher training inputs and historical artifacts remain unchanged; old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.
 - No separate unconstrained high-precision student fine-tuning stage before this ternary experiment.
 - No reinforcement learning or long chain-of-thought preservation.
 - No mandatory pooling/classifier surgery, extra teacher, or broad quantizer comparison ladder.
