@@ -115,9 +115,9 @@ Gemma 4 Decision Teacher: finish → select → reload → freeze
                                               │
                                               │ supervises recovery
 Pretrained EmbeddingGemma 2                    │
-  → aggressive ternary conversion             │
-  → measure initial damage                    │
-  → ternary-constrained QAT + distillation ←───┘
+  → custom mean pooling + tiny Decision Head  │
+  → aggressive ternary backbone conversion    │
+  → joint head training + ternary QAT/distillation ←───┘
   → if sufficient: export / reload / final evaluation / runtime
   → if insufficient: freeze quantized base
        → add one Recovery LoRA and train it with the same Teacher
@@ -130,7 +130,7 @@ Target the student's large text/backbone, embedding, vision, and audio weights f
 
 If that recovery is insufficient, freeze the selected quantized base and train one separate Recovery LoRA. Count its bytes and runtime overhead. Do not silently merge it into the ternary base: a merged correction is generally no longer ternary. The approximately 1.58-bit packing goal is not a measured whole-model size or a performance guarantee.
 
-Keep native backbone/pooling initially and define only the minimal supplied-option readout. The earlier pooling-plus-small-classifier structural fallback is deferred until constrained recovery and LoRA are insufficient; it is not a mandatory stage before quantization. Inspect actual modules before any terminal-path removal.
+Bypass the native sentence-level readout from the start. Use masked mean pooling over native token embeddings plus one tiny shared variable-option MLP Decision Head. Keep that head higher precision and train it jointly with the ternary-constrained backbone during Teacher distillation. Deeper terminal-block removal remains deferred; inspect actual modules before any such surgery.
 
 Reuse compact Teacher option signals, matching the actual choices and their order rather than assuming shared vocabulary IDs. Training, validation selection, and final held-out evaluation remain separate. The detailed sequence is in [ROADMAP.md](ROADMAP.md).
 
