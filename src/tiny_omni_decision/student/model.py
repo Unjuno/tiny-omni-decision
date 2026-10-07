@@ -19,6 +19,12 @@ from .data import Record, media_path
 MODEL_ID = "google/embeddinggemma-2"
 MODEL_TYPE = "embedding_gemma2"
 PREFIX = "task: classification | query: "
+VIDEO_PROCESSING_KWARGS = {
+    "max_frames": 4,
+    "max_soft_tokens": 140,
+    "overflow_strategy": "uniform",
+    "add_timestamps": False,
+}
 
 
 def validate_pin(pin: dict) -> None:
@@ -134,7 +140,11 @@ class EmbeddingDecisionStudent(nn.Module):
 
     def _embed(self, inputs: list) -> torch.Tensor:
         features = self.encoder.preprocess(
-            inputs, processing_kwargs={"text": {"truncation": False}}
+            inputs,
+            processing_kwargs={
+                "text": {"truncation": False},
+                "video": VIDEO_PROCESSING_KWARGS,
+            },
         )
         if not _check_lengths(features, self.max_length):
             raise ValueError("processor input_ids unavailable; cannot enforce sequence bound")
