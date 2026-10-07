@@ -108,7 +108,13 @@ model-output pooling, and mask-aware mean pooling have CPU tests over a syntheti
 encoder. A separate real-checkpoint CPU forward/backward smoke is recorded
 below; neither the synthetic tests nor that one synthetic text example is a
 quality baseline. The temperature and input prompt template must be frozen
-before the first validation comparison.
+before the first validation comparison. `evaluate_student_examples` in
+`src/tiny_omni_decision/student_eval.py` evaluates the examples in supplied
+order, records each original option list and its SHA-256, and returns
+Accuracy/NLL/Brier/ECE by modality and source plus macro-modality and minimum
+modality Accuracy. Its CPU tests use a synthetic encoder only. No frozen
+corpus validation metrics have been produced yet; keep the test/evaluation
+corpus out of model selection.
 
 `processor_inputs_for_decision_example` resolves one local media path under the
 configured data root, fails closed on remote/out-of-root/missing media, converts

@@ -198,9 +198,11 @@ image/audio/one-frame-video inputs through the actual model with finite
 no student GPU allocation occurred. These are path checks, not a quality
 baseline. The actual loaded checkpoint now has a fail-closed candidate
 target inventory, and CPU tests cover groupwise quantization, STE/QAT parametrization, and a
-reversible five-trit codec. This is code groundwork only: no model weights have
-been converted or packed. Frozen-corpus evaluation, conversion, packed export,
-and runtime verification remain open; see
+reversible five-trit codec. This is code groundwork only: a fixed-order validation evaluator now records
+option-order hashes and modality/source metrics, but it has only synthetic CPU
+tests. No real corpus quality values exist, and no model weights have been
+converted or packed. Frozen-corpus evaluation, conversion, packed export, and
+runtime verification remain open; see
 [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 Before conversion:
