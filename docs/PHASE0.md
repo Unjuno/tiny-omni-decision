@@ -78,14 +78,15 @@ Use option-distribution KL, labeled CE, and Brier objectives with compact Teache
 
 ## Hard-gate status
 
-Teacher provenance and the first corpus's disjoint splits are recorded in the existing manifests. Student integration, recovery, and packed runtime support remain planned, not implemented.
+Teacher provenance and the first corpus's disjoint splits are recorded in the existing manifests. A CPU-tested student reference pipeline now exists; full EmbeddingGemma 2 GPU integration, measured recovery, and packed runtime support remain open.
 
 - [x] pin exact Teacher upstream model and processor revision
 - [x] record Teacher upstream license/notice requirements
 - [x] record Teacher base and corpus file hashes
 - [x] freeze non-overlapping train/validation/evaluation manifests
 - [ ] pin and inspect the exact EmbeddingGemma 2 student revision
-- [ ] verify student option readout, ternary-constrained training, and save/reload
+- [x] verify pooled Decision Head, ternary-constrained training, and save/reload on CPU fixtures
+- [ ] verify the same path on the pinned full EmbeddingGemma 2 model
 - [ ] set numeric acceptance limits and a bounded recovery budget before selecting results
 - [ ] verify packed export and architecture-compatible runtime, including LoRA if used
 
@@ -108,4 +109,4 @@ A small inference artifact does not establish that shadow-weight QAT and optimiz
 
 ## Research boundary
 
-This is a product-oriented compression project, not a benchmark survey. Comparisons are added only when they answer an engineering decision. This documentation change does not alter running jobs, training code, or configs. Existing Gemma 4 quantization/recovery configs remain historical starting points, not a working EmbeddingGemma 2 training path. See [ROADMAP.md](../ROADMAP.md) for the sequence and deferred deeper-structure fallback.
+This is a product-oriented compression project, not a benchmark survey. Comparisons are added only when they answer an engineering decision. The isolated student implementation does not alter the active Teacher training path. Existing Gemma 4 quantization/recovery configs remain historical starting points rather than the EmbeddingGemma 2 implementation. See [ROADMAP.md](../ROADMAP.md) for the sequence and deferred deeper-structure fallback.
