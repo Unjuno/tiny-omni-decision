@@ -11,14 +11,14 @@ from pathlib import Path
 
 def validate_config(config: dict) -> None:
     required = {
-        "group_size", "exclude", "max_length", "score_temperature", "seed", "qat_steps",
+        "group_size", "exclude", "max_length", "head_hidden_dim", "seed", "qat_steps",
         "lora_steps", "evaluation_interval", "learning_rate", "lora_learning_rate",
         "lora_rank", "lora_alpha", "temperature", "ce_weight", "brier_weight",
         "reload_atol", "limits", "max_artifact_bytes",
     }
     if set(config) != required:
         raise ValueError(f"config keys missing/extra: {sorted(set(config) ^ required)}")
-    for key in ("group_size", "max_length", "qat_steps", "lora_steps",
+    for key in ("group_size", "max_length", "head_hidden_dim", "qat_steps", "lora_steps",
                 "evaluation_interval", "lora_rank", "max_artifact_bytes"):
         if type(config[key]) is not int or config[key] <= 0:
             raise ValueError(f"{key} must be a positive integer")
@@ -28,7 +28,7 @@ def validate_config(config: dict) -> None:
         isinstance(n, str) and n for n in config["exclude"]
     ):
         raise ValueError("exclude must contain exact parameter names")
-    for key in ("score_temperature", "learning_rate", "lora_learning_rate", "lora_alpha",
+    for key in ("learning_rate", "lora_learning_rate", "lora_alpha",
                 "temperature", "ce_weight", "brier_weight", "reload_atol"):
         if type(config[key]) not in (float, int) or not math.isfinite(config[key]):
             raise ValueError(f"invalid {key}")
@@ -183,11 +183,16 @@ def dispatch(args: argparse.Namespace) -> dict:
             raise ValueError("evaluation Teacher differs from training Teacher")
         assert_heldout(cache, metadata["split_guard"])
         validate_media(cache, args.data_root)
-        student = load_student(metadata["student_pin"], data_root=args.data_root,
-                               device=args.device, max_length=config["max_length"],
-                               score_temperature=config["score_temperature"],
-                               allow_download=args.allow_download)
-        controller = TernaryController(student, config["group_size"], config["exclude"])
+        student = load_student(
+            metadata["student_pin"],
+            data_root=args.data_root,
+            device=args.device,
+            max_length=config["max_length"],
+            head_hidden_dim=config["head_hidden_dim"],
+            allow_download=args.allow_download,
+        )
+        exclusions = list(dict.fromkeys(config["exclude"] + student.ternary_exclusions()))
+        controller = TernaryController(student, config["group_size"], exclusions)
         load_bundle(controller, args.bundle)
         metrics, logits = evaluate(student, cache.records)
         teacher_metrics, _ = evaluate(None, cache.records)
@@ -209,18 +214,29 @@ def dispatch(args: argparse.Namespace) -> dict:
             validate_media(cache, args.data_root)
         caches = (train, validation)
     torch.manual_seed(config["seed"])
-    student = load_student(pin, data_root=args.data_root, device=args.device,
-                           max_length=config["max_length"],
-                           score_temperature=config["score_temperature"],
-                           allow_download=args.allow_download)
+    student = load_student(
+        pin,
+        data_root=args.data_root,
+        device=args.device,
+        max_length=config["max_length"],
+        head_hidden_dim=config["head_hidden_dim"],
+        allow_download=args.allow_download,
+    )
     baseline = evaluate(student, caches[1].records)[0] if caches else None
-    controller = TernaryController(student, config["group_size"], config["exclude"])
-    metadata = {"student_pin": pin, "environment": _environment(args.device),
-                "readout": "native_cosine_logits_v1", "unquantized_validation": baseline}
+    exclusions = list(dict.fromkeys(config["exclude"] + student.ternary_exclusions()))
+    controller = TernaryController(student, config["group_size"], exclusions)
+    metadata = {
+        "student_pin": pin,
+        "environment": _environment(args.device),
+        "readout": "custom_mean_pool_tiny_variable_option_mlp_v1",
+        "head_hidden_dim": config["head_hidden_dim"],
+        "unquantized_validation": baseline,
+    }
     if args.command == "inspect":
         result = metadata | {"inventory": controller.inventory()}
         write_json(args.output, result)
         return result
+    student.enable_decision_head_training()
     return run_recovery(student, controller, *caches, args.output, config, metadata=metadata)
 
 
