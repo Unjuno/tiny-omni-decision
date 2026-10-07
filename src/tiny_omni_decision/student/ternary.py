@@ -116,6 +116,63 @@ def owner_attribute(model: nn.Module, name: str) -> tuple[nn.Module, str]:
     return (model.get_submodule(path) if path else model), attribute
 
 
+def _analyze_quantization_targets(
+    model: nn.Module, group_size: int, exclude: Sequence[str] = ()
+) -> tuple[dict[str, nn.Parameter], dict[str, nn.Parameter], dict[str, dict]]:
+    _group_size(group_size)
+    parameters = dict(model.named_parameters(remove_duplicate=False))
+    excluded = set(exclude)
+    if excluded - parameters.keys():
+        raise ValueError(f"unknown exclusion: {sorted(excluded - parameters.keys())}")
+    if any(parametrize.is_parametrized(module) for module in model.modules()):
+        raise ValueError("model is already parametrized")
+    counts = Counter(id(parameter) for parameter in parameters.values())
+    candidates = {
+        name: parameter
+        for name, parameter in parameters.items()
+        if parameter.is_floating_point() and parameter.ndim >= 2 and name not in excluded
+    }
+    if not candidates:
+        raise ValueError("no quantization targets")
+    if any(counts[id(parameter)] != 1 for parameter in candidates.values()):
+        raise ValueError(
+            "shared target parameters require an explicit alias-aware implementation"
+        )
+    for name, weight in candidates.items():
+        owner, _ = owner_attribute(model, name)
+        if isinstance(owner, nn.Embedding) and owner.max_norm is not None:
+            raise ValueError("Embedding max_norm would modify quantized weights in-place")
+        if not weight.numel():
+            raise ValueError(f"empty target: {name}")
+        if not torch.isfinite(weight).all():
+            raise ValueError(f"target {name} is not finite")
+    exceptions = {
+        name: {
+            "shape": list(parameter.shape),
+            "dtype": str(parameter.dtype),
+            "bytes": parameter.numel() * parameter.element_size(),
+            "reason": "explicit" if name in excluded else "non-matrix",
+        }
+        for name, parameter in parameters.items()
+        if name not in candidates
+    }
+    return parameters, candidates, exceptions
+
+
+def inspect_quantization_inventory(
+    model: nn.Module, group_size: int = 128, exclude: Sequence[str] = ()
+) -> dict:
+    """Return the exact ternary target inventory without mutating the model graph."""
+    _, candidates, exceptions = _analyze_quantization_targets(model, group_size, exclude)
+    return {
+        "group_size": group_size,
+        "parameter_count": sum(parameter.numel() for parameter in model.parameters()),
+        "targets": {name: list(parameter.shape) for name, parameter in candidates.items()},
+        "exceptions": exceptions,
+        "execution": "read_only_inventory_no_parametrization",
+    }
+
+
 class TernaryController:
     """Quantize all floating rank>=2 parameters except exact explicit exclusions.
 
@@ -125,44 +182,16 @@ class TernaryController:
     def __init__(
         self, model: nn.Module, group_size: int = 128, exclude: Sequence[str] = ()
     ):
-        _group_size(group_size)
-        parameters = dict(model.named_parameters(remove_duplicate=False))
-        excluded = set(exclude)
-        if excluded - parameters.keys():
-            raise ValueError(f"unknown exclusion: {sorted(excluded - parameters.keys())}")
-        if any(parametrize.is_parametrized(m) for m in model.modules()):
-            raise ValueError("model is already parametrized")
-        counts = Counter(id(p) for p in parameters.values())
-        candidates = {
-            n: p for n, p in parameters.items()
-            if p.is_floating_point() and p.ndim >= 2 and n not in excluded
-        }
-        if not candidates:
-            raise ValueError("no quantization targets")
-        if any(counts[id(p)] != 1 for p in candidates.values()):
-            raise ValueError(
-                "shared target parameters require an explicit alias-aware implementation"
-            )
-        for name, weight in candidates.items():
-            owner, _ = owner_attribute(model, name)
-            if isinstance(owner, nn.Embedding) and owner.max_norm is not None:
-                raise ValueError("Embedding max_norm would modify quantized weights in-place")
-            if not weight.numel():
-                raise ValueError(f"empty target: {name}")
-            if not torch.isfinite(weight).all():
-                raise ValueError(f"target {name} is not finite")
+        _, candidates, exceptions = _analyze_quantization_targets(
+            model, group_size, exclude
+        )
         self.model = model
         self.group_size = group_size
         self.state_keys = tuple(model.state_dict().keys())
-        self.parameter_count = sum(p.numel() for p in model.parameters())
+        self.parameter_count = sum(parameter.numel() for parameter in model.parameters())
         self.targets: dict[str, TernaryWeight] = {}
         self.loras: dict[str, LowRankDelta] = {}
-        self.exceptions = {
-            n: {"shape": list(p.shape), "dtype": str(p.dtype),
-                "bytes": p.numel() * p.element_size(),
-                "reason": "explicit" if n in excluded else "non-matrix"}
-            for n, p in parameters.items() if n not in candidates
-        }
+        self.exceptions = exceptions
         model.requires_grad_(False)
         for name, weight in candidates.items():
             owner, attribute = owner_attribute(model, name)
