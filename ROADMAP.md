@@ -186,6 +186,8 @@ Finish the current Teacher run under its existing configuration, select the best
 
 The separate 90%-per-modality Teacher quality objective remains unfulfilled by the recorded Gemma 4 experiments. A frozen-reference check on a new, development-only Physion++ split found 54.1% Video Accuracy for Teacher v1 and 57.4% for E-long's selected checkpoint; the paired scene/seed interval includes zero and E-long has worse NLL/Brier. This does not change the ternary-first student sequence or promote either Teacher. See [docs/PHYSIONPP_VIDEO_REFERENCE.md](docs/PHYSIONPP_VIDEO_REFERENCE.md).
 
+The subsequent seed-17 clean-dev-v3 Teacher run is incomplete: the process was safety-stopped after the last exact checkpoint at step 256 because active Windows pagefile growth left less disk space than the next checkpoint required. The complete stop record and a conditional exact-resume path are in [docs/TEACHER_QUALITY_PHYSIONPP_CLEAN_DEV_V3.md](docs/TEACHER_QUALITY_PHYSIONPP_CLEAN_DEV_V3.md).
+
 ## Phase 6 — EmbeddingGemma 2: ternary first
 
 Start from the pretrained EmbeddingGemma 2 checkpoint, not from a separately task-trained high-precision student.
