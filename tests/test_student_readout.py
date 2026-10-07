@@ -56,3 +56,9 @@ def test_option_readout_rejects_invalid_temperature_and_dimensions(readout) -> N
         supplied_option_logits(query, options, temperature=0)
     with pytest.raises(ValueError, match="dimensions"):
         supplied_option_logits(query, torch.ones(2, 4), temperature=1.0)
+
+
+def test_option_readout_rejects_zero_embeddings(readout) -> None:
+    torch, _, supplied_option_logits = readout
+    with pytest.raises(ValueError, match="nonzero"):
+        supplied_option_logits(torch.zeros(3), torch.ones(2, 3), temperature=1.0)

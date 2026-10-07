@@ -40,6 +40,10 @@ def supplied_option_logits(
         raise ValueError("temperature must be finite and positive")
     if not torch.isfinite(query_embedding).all() or not torch.isfinite(option_embeddings).all():
         raise ValueError("embeddings must be finite")
+    if torch.linalg.vector_norm(query_embedding) == 0 or torch.any(
+        torch.linalg.vector_norm(option_embeddings, dim=-1) == 0
+    ):
+        raise ValueError("query and option embeddings must be nonzero")
 
     query = F.normalize(query_embedding.float(), dim=-1)
     options = F.normalize(option_embeddings.float(), dim=-1)
