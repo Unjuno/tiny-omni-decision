@@ -6,7 +6,6 @@ mean-pooled here, then a small shared MLP scores each supplied option.
 """
 from __future__ import annotations
 
-import math
 import re
 from pathlib import Path
 from typing import Any
