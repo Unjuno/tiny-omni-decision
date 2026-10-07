@@ -137,3 +137,24 @@ def test_empty_target_rejected_before_mutating_other_weights():
     with pytest.raises(ValueError, match="empty"):
         t.TernaryController(model)
     assert not hasattr(model["a"], "parametrizations")
+
+
+def test_quantization_inventory_is_read_only():
+    from torch.nn.utils import parametrize
+
+    from tiny_omni_decision.student.ternary import inspect_quantization_inventory
+
+    model = torch.nn.Sequential(
+        torch.nn.Linear(4, 3),
+        torch.nn.LayerNorm(3),
+    )
+    flags = {name: p.requires_grad for name, p in model.named_parameters()}
+    state = {name: value.clone() for name, value in model.state_dict().items()}
+
+    inventory = inspect_quantization_inventory(model, group_size=4)
+
+    assert "0.weight" in inventory["targets"]
+    assert not any(parametrize.is_parametrized(module) for module in model.modules())
+    assert flags == {name: p.requires_grad for name, p in model.named_parameters()}
+    for name, value in model.state_dict().items():
+        assert torch.equal(value, state[name])
