@@ -1,6 +1,8 @@
 # Use a separate environment: do not upgrade the active Teacher environment.
 # Install an appropriate torch wheel for the target device first.
-torch>=2.6,<3
+torch>=2.6,<2.7
+torchvision>=0.21,<0.22
+torchaudio>=2.6,<2.7
 safetensors>=0.6,<1
 numpy>=1.26,<3
 sentence-transformers[image,audio,video]>=6.1,<7
