@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -37,6 +38,56 @@ def test_decision_query_and_options_use_the_same_similarity_prefix() -> None:
     )
     assert option == "task: sentence similarity | query: The cube."
     assert "The cube" not in query
+
+
+def test_decision_example_and_options_use_processor_in_source_order(
+    readout, tmp_path: Path
+) -> None:
+    from tiny_omni_decision.schema import DecisionExample
+    from tiny_omni_decision.student import (
+        processor_inputs_for_decision_example,
+        processor_inputs_for_options,
+    )
+
+    class RecordingProcessor:
+        image_token = "<|image|>"
+        audio_token = "<|audio|>"
+        video_token = "<|video|>"
+
+        def __init__(self) -> None:
+            self.calls = []
+
+        def __call__(self, *, text, return_tensors, **payload):
+            self.calls.append((text, return_tensors, payload))
+            return {"text": text, **payload}
+
+    example = DecisionExample.model_validate(
+        {
+            "id": "sample-1",
+            "modality": "text",
+            "state": "Scene details",
+            "question": "Which object moved?",
+            "options": ["The cube", "The sphere"],
+            "target": "The cube",
+            "source": "fixture",
+            "source_revision": "a" * 40,
+            "source_record_id": "1",
+            "split": "train",
+            "provenance": {"license": "CC0-1.0"},
+        }
+    )
+    processor = RecordingProcessor()
+
+    processor_inputs_for_decision_example(processor, example, data_root=tmp_path)
+    processor_inputs_for_options(processor, example.options)
+
+    assert processor.calls[0][0] == [
+        "task: sentence similarity | query: Scene details\nWhich object moved?"
+    ]
+    assert processor.calls[1][0] == [
+        "task: sentence similarity | query: The cube",
+        "task: sentence similarity | query: The sphere",
+    ]
 
 
 def test_supplied_option_logits_preserve_order_and_backpropagate(readout) -> None:

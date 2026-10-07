@@ -72,6 +72,13 @@ is not an EmbeddingGemma 2 weight forward/backward test or a quality baseline.
 The temperature and input prompt template must be frozen before the first
 validation comparison.
 
+`processor_inputs_for_decision_example` resolves one local media path under the
+configured data root, fails closed on remote/out-of-root/missing media, converts
+audio to mono float32 16 kHz from 16-bit PCM WAV, and passes video paths with
+metadata disabled for model input. `processor_inputs_for_options` preserves
+option order and rejects options that become duplicates after prompt
+normalization.
+
 The pinned `AutoProcessor` was also run on CPU with CUDA hidden and synthetic
 inputs; no model weights were loaded. Observed processor outputs:
 
@@ -84,6 +91,15 @@ inputs; no model weights were loaded. Observed processor outputs:
 
 These shapes confirm preprocessing paths only; they do not prove that the model
 accepts the inputs or yields finite embeddings.
+
+After adding `processor_inputs_for_decision_example`, an end-to-end temporary
+media-file smoke was attempted. The process failed while importing the pinned
+Processor because Windows could not load `cublas64_12.dll` (`WinError 1455`,
+insufficient paging-file resources) while the existing Teacher run remained
+active. It failed before creating temporary media. The helper is covered by
+CPU unit tests for the text path and prompt/option-order invariants, but its
+local image/audio/video file branches still need a retry when the Teacher run
+and system memory pressure allow it.
 
 ## Phase 6 status
 

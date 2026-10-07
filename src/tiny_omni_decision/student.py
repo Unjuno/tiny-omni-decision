@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import math
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 import torch
 from torch import Tensor
 from torch.nn import functional as F
+
+from .schema import DecisionExample
 
 SENTENCE_SIMILARITY_PREFIX = "task: sentence similarity | query:"
 
@@ -32,6 +35,93 @@ def decision_option_text(option: str) -> str:
     if not content:
         raise ValueError("decision option must be non-empty")
     return f"{SENTENCE_SIMILARITY_PREFIX} {content}"
+
+
+def processor_inputs_for_decision_example(
+    processor: Any,
+    example: DecisionExample,
+    *,
+    data_root: Path,
+) -> Any:
+    """Create pinned-processor inputs for one query and its optional local media."""
+    modality_payload: dict[str, Any] = {}
+    media_token = None
+
+    if example.modality == "text":
+        if example.media:
+            raise ValueError(f"{example.id}: text examples cannot carry media references")
+    else:
+        references = [
+            reference for reference in example.media if reference.kind == example.modality
+        ]
+        if len(references) != 1 or len(example.media) != 1:
+            raise ValueError(
+                f"{example.id}: expected exactly one media reference matching {example.modality}"
+            )
+        reference = references[0]
+        if not reference.path:
+            raise ValueError(f"{example.id}: media must be locally materialized ({reference.uri})")
+
+        root = data_root.resolve()
+        media_path = (root / reference.path).resolve()
+        if root not in media_path.parents:
+            raise ValueError(f"{example.id}: media path escapes the configured data root")
+        if not media_path.is_file():
+            raise FileNotFoundError(f"{example.id}: media file is missing: {media_path}")
+
+        if example.modality == "image":
+            from PIL import Image
+
+            with Image.open(media_path) as image:
+                modality_payload["images"] = [image.convert("RGB")]
+            media_token = processor.image_token
+        elif example.modality == "audio":
+            import wave
+
+            import numpy as np
+
+            with wave.open(str(media_path), "rb") as audio_file:
+                sample_rate = audio_file.getframerate()
+                channels = audio_file.getnchannels()
+                sample_width = audio_file.getsampwidth()
+                if sample_rate != 16_000:
+                    raise ValueError(
+                        f"{example.id}: audio requires 16 kHz input, got {sample_rate} Hz"
+                    )
+                if sample_width != 2:
+                    raise ValueError(
+                        f"{example.id}: audio must be 16-bit PCM, got {sample_width * 8}-bit"
+                    )
+            waveform = np.frombuffer(
+                audio_file.readframes(audio_file.getnframes()), dtype=np.int16
+            )
+            if waveform.size == 0:
+                raise ValueError(f"{example.id}: audio file has no PCM samples")
+            waveform = waveform.astype(np.float32) / 32768.0
+            if channels > 1:
+                waveform = waveform.reshape(-1, channels).mean(axis=1)
+            modality_payload["audio"] = [waveform]
+            media_token = processor.audio_token
+        else:
+            modality_payload["videos"] = [str(media_path)]
+            modality_payload["videos_kwargs"] = {"return_metadata": False}
+            media_token = processor.video_token
+
+    query = decision_query_text(example.state, example.question, media_token=media_token)
+    return processor(text=[query], return_tensors="pt", **modality_payload)
+
+
+def processor_inputs_for_options(processor: Any, options: list[str]) -> Any:
+    """Encode candidate options in source order with the same task prefix."""
+    if len(options) < 2:
+        raise ValueError("at least two supplied options are required")
+    encoded_options = [decision_option_text(option) for option in options]
+    if len(set(encoded_options)) != len(encoded_options):
+        raise ValueError("supplied options must be unique")
+    return processor(
+        text=encoded_options,
+        return_tensors="pt",
+    )
 
 
 def mean_pool_projected_tokens(token_embeddings: Tensor, attention_mask: Tensor) -> Tensor:
