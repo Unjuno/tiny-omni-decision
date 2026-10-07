@@ -24,8 +24,10 @@ in [the student manifest](../manifests/embeddinggemma2-student.yaml).
 The model's safetensors header was inspected by HTTP Range requests. The 1.49 GB
 weight file was not downloaded or opened. It declares 1,376 BF16 tensors and
 744,371,992 tensor elements (1,488,743,984 payload bytes); the remaining 171,304
-bytes are file/header overhead. This is a storage inventory, not a trainable
-parameter count.
+bytes are file/header overhead. The complete 171,295-byte parsed header is
+saved at `C:/CodexArtifacts/embeddinggemma2-tensor-inventory-914f7f8.json`
+(SHA-256 `5b021dc52fea66eb3099159d7ee14c0de08960dd3c68ed011c26943b708becf7`).
+This is a storage inventory, not a trainable parameter count.
 
 | Tensor root | Tensors | Elements | BF16 payload bytes |
 |---|---:|---:|---:|

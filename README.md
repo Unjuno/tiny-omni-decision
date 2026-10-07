@@ -36,6 +36,17 @@ the supported ML extra therefore pins PyTorch 2.6.x and matching torchvision
 is `python -m pip install torch==2.6.0 torchvision==0.21.0 --index-url
 https://download.pytorch.org/whl/cu124`.
 
+EmbeddingGemma 2 requires Transformers 5.19.x. Install the separate student
+extra in its own environment with a compatible PyTorch build:
+
+```bash
+python -m pip install ".[student,dev]"
+```
+
+Do not combine `[student]` with the Teacher-oriented `[ml]` extra. The current
+student manifest, pooling/readout prototype, and verification boundary are
+recorded in [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
+
 The pinned model is public. Do not put Hugging Face tokens or other credentials in repository files. Fresh-clone CPU preflight:
 
 ```bash
@@ -106,7 +117,7 @@ limitations, artifacts, and the later merge/export path are in
 [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md). The earlier 16-step
 pipeline test is retained as historical context in [docs/PHASE3.md](docs/PHASE3.md).
 
-## Planned student, compression, and recovery flow
+## Student, compression, and recovery flow
 
 **Next experiment: ternary first, recover with the Teacher, add LoRA only if recovery is insufficient.**
 
@@ -124,7 +135,7 @@ Pretrained EmbeddingGemma 2                    │
        → export / reload / re-evaluate
 ```
 
-Do not first train a separate high-precision decision student. Gemma 4 remains both the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged; student recovery is planned, not yet demonstrated.
+Do not first train a separate high-precision decision student. Gemma 4 remains both the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged. EmbeddingGemma 2 is pinned and a synthetic-vector option-readout prototype is tested; pretrained weights have not been loaded, and student quality or recovery is not yet demonstrated.
 
 Target the student's large text/backbone, embedding, vision, and audio weights for ternary conversion after pinning and inspecting the actual model. Record every higher-precision exception. During the first recovery stage, each forward uses ternary-quantized target weights even when gradient updates use higher-precision shadow weights.
 
@@ -142,7 +153,7 @@ Reuse compact Teacher option signals, matching the actual choices and their orde
 - The current Gemma 4 vocabulary readout requires option labels to tokenize to exactly one distinct token each; it fails closed otherwise. This does not imply a shared Teacher/student tokenizer.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 revision pinning, integration, ternary-constrained recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
-- This is a documentation-only plan change. Existing training code, configs, manifests, and checkpoints are unchanged. The Gemma 4 quantization/recovery configs do not implement this new student path.
+- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 model loading, baseline quality, ternary conversion/recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
+- The EmbeddingGemma 2 readout prototype is separate from the active Teacher training path. Existing Teacher configs, corpora, checkpoints, and artifacts remain unchanged. The Gemma 4 quantization/recovery configs do not implement this student path.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).

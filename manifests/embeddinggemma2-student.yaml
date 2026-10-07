@@ -46,6 +46,8 @@ notes:
   processor_info: Pinned AutoProcessor loads with Transformers 5.19.0 and a matching GemmaTokenizer (vocab 262144). Sentence Transformers pipeline metadata specifies mean pooling including prompt tokens followed by L2 normalization.
   transformers_minimum_verified: 5.19.0
   safetensors_header_inventory: {tensor_count: 1376, dtype_counts: {BF16: 1376}, model_file_bytes: 1488915288, tensor_payload_bytes: 1488743984, non_tensor_file_bytes: 171304, header_read_by_http_range_without_downloading_weights: true}
+  safetensors_header_inventory_sha256: 5b021dc52fea66eb3099159d7ee14c0de08960dd3c68ed011c26943b708becf7
+  safetensors_header_inventory_path: C:/CodexArtifacts/embeddinggemma2-tensor-inventory-914f7f8.json
   tensor_roots:
     language_model: {tensors: 413, parameters: 271002648, raw_bf16_bytes: 542005296}
     vision_tower: {tensors: 210, parameters: 167364608, raw_bf16_bytes: 334729216}

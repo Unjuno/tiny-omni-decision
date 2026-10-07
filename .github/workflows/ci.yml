@@ -21,6 +21,7 @@ jobs:
       - name: Validate manifests
         run: |
           tiny-omni-decision validate-model-manifest manifests/base-model.example.yaml
+          tiny-omni-decision validate-model-manifest manifests/embeddinggemma2-student.yaml
           for manifest in manifests/dataset.example.yaml manifests/candidates/*.yaml; do
             tiny-omni-decision validate-dataset-manifest "$manifest"
           done
