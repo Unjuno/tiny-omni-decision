@@ -5,13 +5,13 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
-
-import torch
-from torch import Tensor
-from torch.nn import functional as F
+from typing import TYPE_CHECKING, Any
 
 from .schema import DecisionExample
+
+if TYPE_CHECKING:
+    import torch
+    from torch import Tensor
 
 SENTENCE_SIMILARITY_PREFIX = "task: sentence similarity | query:"
 
@@ -125,6 +125,7 @@ def processor_inputs_for_options(processor: Any, options: list[str]) -> Any:
 
 def mean_pool_projected_tokens(token_embeddings: Tensor, attention_mask: Tensor) -> Tensor:
     """Apply the pinned Sentence Transformers mean-pooling semantics."""
+    import torch
     if token_embeddings.ndim != 3:
         raise ValueError("token_embeddings must have shape [sequence, tokens, dimensions]")
     if attention_mask.ndim != 2 or attention_mask.shape != token_embeddings.shape[:2]:
@@ -139,6 +140,8 @@ def mean_pool_projected_tokens(token_embeddings: Tensor, attention_mask: Tensor)
 
 def _move_tensor_inputs(model_inputs: Mapping[str, Any], *, device: torch.device) -> dict[str, Any]:
     """Move processor tensors to the model input device without changing their dtype."""
+    from torch import Tensor
+
     return {
         name: value.to(device=device) if isinstance(value, Tensor) else value
         for name, value in model_inputs.items()
@@ -147,6 +150,7 @@ def _move_tensor_inputs(model_inputs: Mapping[str, Any], *, device: torch.device
 
 def model_sentence_embeddings(model: Any, model_inputs: Mapping[str, Any]) -> Tensor:
     """Run an EmbeddingGemma-style encoder and apply its native pooling pipeline."""
+    import torch
     attention_mask = model_inputs.get("attention_mask")
     if attention_mask is None:
         raise ValueError("model_inputs must include attention_mask for native mean pooling")
@@ -186,6 +190,8 @@ def supplied_option_logits(
     temperature: float,
 ) -> Tensor:
     """Score supplied options by cosine similarity, preserving their input order."""
+    import torch
+    from torch.nn import functional as F
     if query_embedding.ndim != 1:
         raise ValueError("query_embedding must be a one-dimensional vector")
     if option_embeddings.ndim != 2 or option_embeddings.shape[0] < 2:
