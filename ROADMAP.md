@@ -196,7 +196,11 @@ readout, CE+Brier backward, and finite projection gradients, plus generated
 image/audio/one-frame-video inputs through the actual model with finite
 768-dimensional outputs. The shared Teacher environment was not upgraded and
 no student GPU allocation occurred. These are path checks, not a quality
-baseline. Frozen-corpus evaluation and ternary conversion remain open; see
+baseline. The actual loaded checkpoint now has a fail-closed candidate
+target inventory, and CPU tests cover groupwise quantization, STE/QAT parametrization, and a
+reversible five-trit codec. This is code groundwork only: no model weights have
+been converted or packed. Frozen-corpus evaluation, conversion, packed export,
+and runtime verification remain open; see
 [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 Before conversion:

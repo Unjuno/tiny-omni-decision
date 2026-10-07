@@ -69,6 +69,30 @@ notes:
       LayerNorm: 2
     inspection_report: C:/CodexArtifacts/embeddinggemma2-model-inspection-914f7f8.json
     inspection_report_sha256: 1b5ecfceea51f9dcbedf7faa5d18df3bab8ec4f9840aade4f2c991448c29ea6d
+  ternary_target_inventory_candidate:
+    selector: select_ternary_parameter_names
+    selector_source: src/tiny_omni_decision/ternary.py
+    selector_verified_on_loaded_checkpoint: true
+    target_tensor_count: 483
+    target_parameter_elements: 744129664
+    target_raw_bf16_bytes: 1488259328
+    module_type_counts:
+      Linear: 467
+      Conv2d: 2
+      Gemma4AudioCausalConv1d: 12
+      EmbeddingGemma2TextScaledWordEmbedding: 1
+      Gemma4VisionPatchEmbedder: 1
+    high_precision_parameter_elements: 241824
+    high_precision_parameter_bf16_bytes: 483648
+    high_precision_exceptions:
+      normalization_weights: 376
+      audio_per_dim_scale_vectors: 12
+      audio_output_projection_bias: 1
+    scalar_state_buffers: {count: 504, elements: 504, bf16_bytes: 1008}
+    inventory_report: C:/CodexArtifacts/embeddinggemma2-quantization-target-inventory-914f7f8.json
+    inventory_report_sha256: a0b4fad68f4946a941e3a58adce3da35f2d9a814117675391e177179b33f29b5
+    selected_by_quality: false
+    conversion_or_export_completed: false
   option_readout_candidate: Parameter-free cosine similarity between mean-pooled normalized query/media and supplied-option embeddings; temperature must be fixed and recorded before evaluation.
   license_url: https://ai.google.dev/gemma/docs/embeddinggemma/model_card_2
   license_metadata_source: Hugging Face model metadata at the pinned revision reports apache-2.0.

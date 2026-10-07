@@ -68,6 +68,22 @@ A linear-only converter would omit audio convolution tensors and embedding
 weights, so the serialized tensor inventory must drive conversion and every
 exception must be accounted for.
 
+The first fail-closed selector candidate was then run against the instantiated
+checkpoint. It selected 483 tensors / 744,129,664 elements (1,488,259,328 raw
+BF16 bytes): 467 Linear, 2 Conv2d, 12 custom audio causal Conv1d weights, the
+scaled text embedding weight, and the exact vision patch positional table.
+It matched the separately inspected inventory with no unclassified matrix
+parameter. The remaining high-precision parameters are 241,824 elements
+(483,648 BF16 bytes): 376 normalization weights, 12 audio `per_dim_scale`
+vectors, and one audio output-projection bias. The 504 scalar state tensors
+(1,008 BF16 bytes) are buffers, not parameters; runtime buffers also need
+native regeneration or explicit serialization handling. The machine-readable
+inventory is outside Git at
+`C:/CodexArtifacts/embeddinggemma2-quantization-target-inventory-914f7f8.json`
+(SHA-256 `a0b4fad68f4946a941e3a58adce3da35f2d9a814117675391e177179b33f29b5`).
+This is an architecture coverage candidate, not a quality-selected target
+policy, conversion, packed artifact, or size result.
+
 ## Minimal supplied-option readout
 
 The pinned Sentence Transformers metadata defines mean pooling over the model's
@@ -181,8 +197,12 @@ the real checkpoint.
 Also completed: synthetic local-file image, audio, and one-frame video
 inference through the actual checkpoint on CPU, with finite 768-dimensional
 outputs. Not yet completed: measuring unquantized same-input quality on the
-frozen validation set, freezing quality and deployment limits, ternary
-conversion, packed export, or runtime verification. The active Gemma 4 Teacher
+frozen validation set, freezing quality and deployment limits, applying the
+target selector to a full model for QAT, converting checkpoint weights, packed
+export, or runtime verification. A CPU-tested groupwise ternary quantizer,
+identity-STE fake quantizer, QAT parametrization helper, and reversible five-trit
+codec now exist as implementation groundwork; their tests do not constitute a
+model conversion or packed export. The active Gemma 4 Teacher
 run still occupies the shared GPU, so all student smokes used CPU and no
 student GPU workload was started. No ternary size or quality result is
 claimed.
