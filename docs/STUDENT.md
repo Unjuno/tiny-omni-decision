@@ -29,8 +29,10 @@ shared tiny MLP. For each option the head consumes [query, option, query * optio
 so the number and ordering of choices remain dynamic rather than fixed to a class
 count. The head stays FP32 and is trained jointly with ternary-constrained backbone
 shadow weights during QAT/distillation. Student preprocessing uses Sentence
-Transformers' native defaults; the existing Teacher video bridge uses four frames.
-Record the library versions, and keep preprocessing fixed before and after quantization.
+Transformers for modality handling, but video is explicitly bounded to four uniformly
+selected frames at 140 soft tokens per frame with timestamps disabled, matching the
+Teacher's four-frame budget and keeping the 1024-token guard practical. Record the
+library versions, and keep preprocessing fixed before and after quantization.
 
 ## Environments and offline smoke
 
