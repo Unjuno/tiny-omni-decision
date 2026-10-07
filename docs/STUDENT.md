@@ -49,6 +49,8 @@ python -m venv .venv-student
 # Linux/macOS: source .venv-student/bin/activate
 # Windows PowerShell: .venv-student\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
+# CUDA 12.4 example; choose the matching official PyTorch index for another driver/runtime.
+python -m pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 python -m pip install -r requirements-student.txt
 python -m tiny_omni_decision.student smoke --output artifacts/student-smoke-001
 ```
