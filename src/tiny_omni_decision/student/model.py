@@ -137,9 +137,17 @@ class EmbeddingDecisionStudent(nn.Module):
             raise ValueError("processor input_ids unavailable; cannot enforce sequence bound")
         device = next(self.encoder.parameters()).device
         moved = _move(features, device)
-        output = self.encoder(moved)
+        try:
+            input_module = self.encoder[0]
+        except (AttributeError, IndexError, KeyError, TypeError) as exc:
+            raise ValueError(
+                "encoder must expose its input Transformer as module 0"
+            ) from exc
+        output = input_module(moved)
         if not isinstance(output, dict) or "token_embeddings" not in output:
-            raise ValueError("native forward must expose token_embeddings for custom pooling")
+            raise ValueError(
+                "input Transformer must expose token_embeddings for custom pooling"
+            )
         mask = output.get("attention_mask")
         if mask is None and isinstance(moved, dict):
             mask = moved.get("attention_mask")
