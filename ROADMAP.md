@@ -56,7 +56,8 @@ Project-level hard gates:
 - [x] record Teacher upstream license/notice requirements
 - [x] freeze and validate redistribution-safe train/validation/evaluation catalogs
 - [x] define disjoint held-out train/selection/evaluation splits and zero-overlap checks
-- [ ] pin and inspect the exact EmbeddingGemma 2 model/processor revision and rights
+- [x] pin exact EmbeddingGemma 2 revision and Apache-2.0 metadata
+- [ ] inspect the pinned full model/processor on the target GPU runtime
 - [ ] verify student option readout and numerical forward/backward behavior
 - [ ] verify architecture-compatible ternary conversion, packed export, and runtime support
 
