@@ -301,3 +301,14 @@ yet produced final metrics. At 2026-10-08 01:45 JST, it held 62 of 256 rows
 and its Python process was still alive with CPU time increasing. No sealed
 audit data has been read. The full CPU test suite passed (98 tests), Ruff
 passed, and the EmbeddingGemma 2 manifest validator passed.
+
+## Phase 8 groundwork
+
+The branch now has a CPU-tested option-supervision loss primitive combining
+Teacher-to-student option KL, labeled cross entropy, and Brier loss. Its
+train-only JSONL cache loader fails closed on non-train inputs, missing or
+duplicate samples, mismatched Teacher identity/temperature, reordered options,
+invalid distributions, and Teacher logits/probabilities that disagree. This is
+only an implementation contract: no real Teacher train cache has been
+generated, no recovery optimizer step has run, and Phase 8 QAT is not complete.
+The active Teacher process and all Teacher/corpus artifacts remain untouched.
