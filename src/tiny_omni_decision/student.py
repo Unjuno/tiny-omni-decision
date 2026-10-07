@@ -92,9 +92,8 @@ def processor_inputs_for_decision_example(
                     raise ValueError(
                         f"{example.id}: audio must be 16-bit PCM, got {sample_width * 8}-bit"
                     )
-            waveform = np.frombuffer(
-                audio_file.readframes(audio_file.getnframes()), dtype=np.int16
-            )
+                pcm_frames = audio_file.readframes(audio_file.getnframes())
+            waveform = np.frombuffer(pcm_frames, dtype=np.int16)
             if waveform.size == 0:
                 raise ValueError(f"{example.id}: audio file has no PCM samples")
             waveform = waveform.astype(np.float32) / 32768.0
@@ -138,11 +137,34 @@ def mean_pool_projected_tokens(token_embeddings: Tensor, attention_mask: Tensor)
     return (token_embeddings * mask.unsqueeze(-1)).sum(dim=1) / token_counts
 
 
+def _move_tensor_inputs(model_inputs: Mapping[str, Any], *, device: torch.device) -> dict[str, Any]:
+    """Move processor tensors to the model input device without changing their dtype."""
+    return {
+        name: value.to(device=device) if isinstance(value, Tensor) else value
+        for name, value in model_inputs.items()
+    }
+
+
 def model_sentence_embeddings(model: Any, model_inputs: Mapping[str, Any]) -> Tensor:
     """Run an EmbeddingGemma-style encoder and apply its native pooling pipeline."""
     attention_mask = model_inputs.get("attention_mask")
     if attention_mask is None:
         raise ValueError("model_inputs must include attention_mask for native mean pooling")
+    input_embeddings = getattr(model, "get_input_embeddings", None)
+    if callable(input_embeddings):
+        input_embedding_layer = input_embeddings()
+        input_weight = getattr(input_embedding_layer, "weight", None)
+    else:
+        input_weight = None
+    if input_weight is None:
+        try:
+            input_weight = next(model.parameters())
+        except (AttributeError, StopIteration) as exc:
+            raise ValueError("model must expose parameters to determine its input device") from exc
+    if input_weight.device.type == "meta":
+        raise ValueError("model input embeddings must be materialized on a real device")
+    model_inputs = _move_tensor_inputs(model_inputs, device=input_weight.device)
+    attention_mask = model_inputs["attention_mask"]
     output = model(**model_inputs)
     token_embeddings = getattr(output, "last_hidden_state", None)
     if token_embeddings is None:

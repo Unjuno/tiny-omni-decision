@@ -24,6 +24,25 @@ def test_mean_pool_matches_attention_mask_and_keeps_prompt_tokens(readout) -> No
     torch.testing.assert_close(pooled, torch.tensor([[2.0, 4.0]]))
 
 
+def test_processor_tensors_move_to_model_device_without_dtype_changes(readout) -> None:
+    torch, _, _ = readout
+    from tiny_omni_decision.student import _move_tensor_inputs
+
+    inputs = {
+        "input_ids": torch.tensor([[1, 2]], dtype=torch.int64),
+        "pixel_values": torch.tensor([[0.5]], dtype=torch.float32),
+        "metadata": "kept",
+    }
+
+    moved = _move_tensor_inputs(inputs, device=torch.device("meta"))
+
+    assert moved["input_ids"].device.type == "meta"
+    assert moved["input_ids"].dtype == torch.int64
+    assert moved["pixel_values"].device.type == "meta"
+    assert moved["pixel_values"].dtype == torch.float32
+    assert moved["metadata"] == "kept"
+
+
 def test_decision_query_and_options_use_the_same_similarity_prefix() -> None:
     from tiny_omni_decision.student import decision_option_text, decision_query_text
 
@@ -88,6 +107,52 @@ def test_decision_example_and_options_use_processor_in_source_order(
         "task: sentence similarity | query: The cube",
         "task: sentence similarity | query: The sphere",
     ]
+
+
+def test_audio_example_reads_pcm_frames_while_wave_file_is_open(
+    readout, tmp_path: Path
+) -> None:
+    import wave
+
+    from tiny_omni_decision.schema import DecisionExample
+    from tiny_omni_decision.student import processor_inputs_for_decision_example
+
+    audio_path = tmp_path / "sample.wav"
+    with wave.open(str(audio_path), "wb") as audio_file:
+        audio_file.setnchannels(1)
+        audio_file.setsampwidth(2)
+        audio_file.setframerate(16_000)
+        audio_file.writeframes(b"\x01\x00" * 32)
+
+    example = DecisionExample.model_validate(
+        {
+            "id": "audio-sample",
+            "modality": "audio",
+            "state": "",
+            "question": "Which word was spoken?",
+            "options": ["left", "right"],
+            "target": "left",
+            "media": [{"kind": "audio", "path": "sample.wav"}],
+            "source": "fixture",
+            "source_revision": "a" * 40,
+            "source_record_id": "sample.wav",
+            "split": "train",
+            "provenance": {"license": "CC0-1.0"},
+        }
+    )
+
+    class RecordingProcessor:
+        audio_token = "<|audio|>"
+
+        def __call__(self, *, text, return_tensors, **payload):
+            return {"text": text, **payload}
+
+    inputs = processor_inputs_for_decision_example(
+        RecordingProcessor(), example, data_root=tmp_path
+    )
+
+    assert inputs["audio"][0].shape == (32,)
+    assert inputs["audio"][0].dtype.name == "float32"
 
 
 def test_supplied_option_logits_preserve_order_and_backpropagate(readout) -> None:

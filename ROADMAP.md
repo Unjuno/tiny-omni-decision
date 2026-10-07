@@ -56,8 +56,8 @@ Project-level hard gates:
 - [x] record Teacher upstream license/notice requirements
 - [x] freeze and validate redistribution-safe train/validation/evaluation catalogs
 - [x] define disjoint held-out train/selection/evaluation splits and zero-overlap checks
-- [ ] pin and inspect the exact EmbeddingGemma 2 model/processor revision and rights
-- [ ] verify student option readout and numerical forward/backward behavior
+- [x] pin and inspect the exact EmbeddingGemma 2 model/processor revision and rights
+- [x] verify student option readout and numerical forward/backward behavior
 - [ ] verify architecture-compatible ternary conversion, packed export, and runtime support
 
 ## Phase 1 — Reproducible text decision LoRA smoke
@@ -188,12 +188,16 @@ Finish the current Teacher run under its existing configuration, select the best
 
 Start from the pretrained EmbeddingGemma 2 checkpoint, not from a separately task-trained high-precision student.
 
-Initial inspection on `codex/ternary-student-recovery` pins the model and
-processor, verifies that Transformers 5.19.0 recognizes the architecture, and
-records the safetensors header inventory without downloading the weights. The
-shared Teacher environment remains unchanged. Weight loading, model-level
-forward/backward, the unquantized diagnostic, and ternary conversion remain
-open gates; see [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
+The dedicated `codex/ternary-student-recovery` branch pins and hash-verifies
+the complete model and processor, loads the BF16 checkpoint with an isolated
+Transformers 5.19.0 environment, and records the instantiated module/tensor
+inventory. CPU smokes completed synthetic text forward, supplied-option
+readout, CE+Brier backward, and finite projection gradients, plus generated
+image/audio/one-frame-video inputs through the actual model with finite
+768-dimensional outputs. The shared Teacher environment was not upgraded and
+no student GPU allocation occurred. These are path checks, not a quality
+baseline. Frozen-corpus evaluation and ternary conversion remain open; see
+[docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 Before conversion:
 - pin the exact model/processor revision, inspect the actual graph, and record the execution backend and supported dtypes

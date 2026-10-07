@@ -44,8 +44,9 @@ python -m pip install ".[student,dev]"
 ```
 
 Do not combine `[student]` with the Teacher-oriented `[ml]` extra. The current
-student manifest, pooling/readout prototype, and verification boundary are
-recorded in [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
+student manifest, loaded graph inventory, CPU forward/backward smoke, and
+verification boundary are recorded in
+[docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 The pinned model is public. Do not put Hugging Face tokens or other credentials in repository files. Fresh-clone CPU preflight:
 
@@ -135,7 +136,7 @@ Pretrained EmbeddingGemma 2                    │
        → export / reload / re-evaluate
 ```
 
-Do not first train a separate high-precision decision student. Gemma 4 remains both the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged. EmbeddingGemma 2 is pinned and a synthetic-vector option-readout prototype is tested; pretrained weights have not been loaded, and student quality or recovery is not yet demonstrated.
+Do not first train a separate high-precision decision student. Gemma 4 remains both the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged. EmbeddingGemma 2's pinned weights and processor have been loaded in an isolated Transformers 5.19.0 environment, and a synthetic text batch completed a CPU forward/readout/backward smoke. This is not a student quality or recovery result.
 
 Target the student's large text/backbone, embedding, vision, and audio weights for ternary conversion after pinning and inspecting the actual model. Record every higher-precision exception. During the first recovery stage, each forward uses ternary-quantized target weights even when gradient updates use higher-precision shadow weights.
 
@@ -148,12 +149,12 @@ Reuse compact Teacher option signals, matching the actual choices and their orde
 ## Current boundary and limitations
 
 - CPU CI covers schema, manifest, token-label mapping, probability normalization, Brier loss, and option reordering. It does not download model weights.
-- The ML extra follows the model card's documented Transformers minimum (`>=5.6.2`) and requires PyTorch 2.6 for actual Gemma 4 multimodal forward. Install a wheel matching the local CUDA driver; GPU model loading is not covered by CPU CI.
+- The Teacher-oriented ML extra requires PyTorch 2.6 for Gemma 4 multimodal forward; the separate student extra pins Transformers 5.19.x. Install each in a separate environment and match the PyTorch wheel to the local CUDA driver. CPU CI does not download or load model weights; the EmbeddingGemma 2 checkpoint smoke was performed locally on CPU.
 - The durable Teacher run uses frozen text, image, audio, and video corpora with zero pairwise source-ID and normalized-content overlap. Clevr-4 (CC BY 4.0), Speech Commands (CC-BY-4.0), and CLEVRER (CC0) provide controlled multimodal candidates; OneJev remains excluded pending component-level rights review. The dataset is sampled and the training budget is capped, so the results are not benchmark-generalizing quality claims; see [docs/DURABLE_TEACHER.md](docs/DURABLE_TEACHER.md).
 - The current Gemma 4 vocabulary readout requires option labels to tokenize to exactly one distinct token each; it fails closed otherwise. This does not imply a shared Teacher/student tokenizer.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 model loading, baseline quality, ternary conversion/recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
+- OneJev component-level rights review remains unresolved and excluded. Synthetic-file text/image/audio/video paths now pass through the pinned EmbeddingGemma 2 checkpoint on CPU; frozen-corpus quality evaluation, ternary conversion/recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
 - The EmbeddingGemma 2 readout prototype is separate from the active Teacher training path. Existing Teacher configs, corpora, checkpoints, and artifacts remain unchanged. The Gemma 4 quantization/recovery configs do not implement this student path.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).
