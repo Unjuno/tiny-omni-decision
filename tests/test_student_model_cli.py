@@ -224,3 +224,13 @@ def test_custom_pooling_bypasses_sentence_transformer_pooling_modules(tmp_path):
     )
     logits = student(make_record())
     assert logits.shape == (3,)
+
+
+def test_decision_head_is_created_on_encoder_device(tmp_path):
+    from tiny_omni_decision.student.model import EmbeddingDecisionStudent
+
+    encoder = TinyEncoder().to("meta")
+    student = EmbeddingDecisionStudent(
+        encoder, tmp_path, max_length=32, head_hidden_dim=7
+    )
+    assert next(student.decision_head.parameters()).device.type == "meta"
