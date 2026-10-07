@@ -192,6 +192,40 @@ The full machine-readable report is at
 `2195f8bc99f3432e97e245fb7ad1475841cef8d2227fe0c6593ae073029e0b52`); the
 actual model graph inventory is in the separately hashed report above.
 
+## Fixed validation comparison set
+
+The frozen durable corpus has 2,901 validation examples. Teacher v1's actual
+run metadata reports that checkpoint selection measured 256 of them: 64 per
+modality. Its ignored local `best-validation-predictions.jsonl` contains those
+256 records. Matching those IDs against the read-only frozen validation JSONL
+confirmed exact prediction order, matching targets/source/modality, and
+matching option counts. A derived snapshot outside Git is stored at
+`C:/CodexArtifacts/embeddinggemma2-validation-v0-256/validation.jsonl`
+(SHA-256 `43358f0e4444dabfaba30eba0d9e4af7851f1aff56d71b2edbf38982b1bb6faf`).
+Its checked-in selection manifest is
+[embeddinggemma2-validation-v0-256.json](../manifests/embeddinggemma2-validation-v0-256.json)
+(SHA-256 `7aa1168ce3baa6402e0ed05b21038015c8dcc3607570e942f3a92ad667a9bc08`).
+The ordered selected-ID hash is
+`1334b45f6910b7b104241324163fca6a6357f1fff503718a59201fda251b8bd4`.
+
+This is a validation-only paired comparison subset chosen by the existing
+Teacher checkpoint-selection procedure, not by Student outcomes. The 2,917
+record final evaluation and any sealed audit were not read. The unquantized
+Student baseline will first be compared with Teacher on these exact 256 IDs and
+option orders. The remaining 2,645 validation examples are not silently
+substituted into that paired Teacher comparison.
+
+`tiny-omni-student-evaluate` verifies the model file hashes, validation
+snapshot/source/Teacher hashes, IDs, targets, option counts, and option-order
+hashes before inference. It writes each prediction incrementally and resumes
+only from an exact validated prefix. The baseline temperature is explicitly
+passed on the command line; use `0.1`, the setting used in the earlier
+synthetic readout smoke, without fitting temperature on this validation run.
+The CLI defaults to CPU. CUDA requires explicit selection and at least 7 GiB
+free VRAM, preventing overlap with the running Teacher. Pass the repository's
+top-level `data` directory as `--data-root`; the frozen JSONL media references
+are relative to that directory, not the processed-corpus directory.
+
 ## Phase 6 status
 
 Completed: exact model/processor pin and license metadata; full checkpoint
@@ -202,8 +236,8 @@ the real checkpoint.
 
 Also completed: synthetic local-file image, audio, and one-frame video
 inference through the actual checkpoint on CPU, with finite 768-dimensional
-outputs. Not yet completed: measuring unquantized same-input quality on the
-frozen validation set, freezing quality and deployment limits, applying the
+outputs. Not yet completed: running the verified 256-example same-input validation
+comparison, freezing quality and deployment limits, applying the
 target selector to a full model for QAT, converting checkpoint weights, packed
 export, or runtime verification. A CPU-tested groupwise ternary quantizer,
 identity-STE fake quantizer, QAT parametrization helper, and reversible five-trit

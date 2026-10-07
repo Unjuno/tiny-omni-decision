@@ -47,6 +47,7 @@ data = ["datasets>=4,<5"]
 
 [project.scripts]
 tiny-omni-decision = "tiny_omni_decision.cli:app"
+tiny-omni-student-evaluate = "tiny_omni_decision.student_evaluate:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tiny_omni_decision"]

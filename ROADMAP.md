@@ -202,7 +202,10 @@ reversible five-trit codec. This is code groundwork only: a fixed-order validati
 option-order hashes and modality/source metrics, but it has only synthetic CPU
 tests. No real corpus quality values exist, and no model weights have been
 converted or packed. Frozen-corpus evaluation, conversion, packed export, and
-runtime verification remain open; see
+runtime verification remain open. A hashed validation-only subset fixes Teacher
+v1's 256 checkpoint-selection examples and exact ID/option order; a resumable
+evaluator checks those inputs and the pinned checkpoint before inference. No
+model quality evaluation has run yet; see
 [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 Before conversion:

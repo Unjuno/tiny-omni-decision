@@ -100,7 +100,7 @@ notes:
   implementation_status: The pinned model/processor and Apache-2.0 metadata are verified. The 1,488,915,288-byte model checkpoint was downloaded outside Git and matches SHA-256 197a32965d4b1105faf060417baa899e193fb73cd401f42ec9295234d5553d79. Transformers 5.19.0 loads the actual BF16 checkpoint on CPU; the instantiated graph and state-dict inventory are recorded in loaded_checkpoint_inspection. Synthetic text completed finite real-model forward, option readout, CE+Brier backward, and a finite projection gradient; generated image, audio, and one-frame video files completed finite 768-dimensional CPU forward passes. These are plumbing smokes only; frozen-corpus quality evaluation, ternary conversion, packed export, and runtime verification remain open.
   inspected_config_sha256: b8f1e9931b57fbc054acdb445c41765d55b0074c58d145fa82839941ad1b5bb3
   inspected_processor_config_sha256: 168f6a08522f3ce5dea596d94d003af2fd691742d4f41fe1f9d8cce76bfbf69c
-  inspected_preprocessor_config_sha256: ea2ae257e901064abdd98dceB19f2b0da06af600bed15e0f99f5c85c37ee9d78
+  inspected_preprocessor_config_sha256: ea2ae257e901064abdd98dceb19f2b0da06af600bed15e0f99f5c85c37ee9d78
   compatibility_note: Installed shared environment is Transformers 5.6.2 and does not recognize embedding_gemma2. An isolated Transformers 5.19.0 environment successfully loads AutoConfig; AutoProcessor successfully loads when paired with the existing PyTorch 2.6 installation. Do not upgrade the shared Teacher environment while its run is active.
   model_weights_sha256_verified_locally: true
   actual_checkpoint_cpu_forward_backward_smoke: true
