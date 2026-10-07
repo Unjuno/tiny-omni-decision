@@ -62,7 +62,7 @@ def _smoke(output: Path) -> dict:
 
     from .data import Cache, Record
     from .recovery import run_recovery
-    from .ternary import TernaryController, inspect_quantization_inventory
+    from .ternary import TernaryController
 
     class Toy(torch.nn.Module):
         def __init__(self):
@@ -171,7 +171,7 @@ def dispatch(args: argparse.Namespace) -> dict:
     from .data import assert_disjoint, assert_heldout, load_cache, validate_media
     from .model import load_student
     from .recovery import evaluate, run_recovery
-    from .ternary import TernaryController
+    from .ternary import TernaryController, inspect_quantization_inventory
 
     if args.command == "evaluate":
         bundle = bundle_info(args.bundle)
