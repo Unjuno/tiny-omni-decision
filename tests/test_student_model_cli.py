@@ -195,3 +195,32 @@ def test_embeddinggemma2_classes_exist_when_student_dependencies_are_installed()
 
     assert EmbeddingGemma2Model is not None
     assert EmbeddingGemma2Processor is not None
+
+
+def test_custom_pooling_bypasses_sentence_transformer_pooling_modules(tmp_path):
+    from tiny_omni_decision.student.model import EmbeddingDecisionStudent
+
+    class SentenceTransformerLike(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.backbone = TinyEncoder()
+
+        def get_sentence_embedding_dimension(self):
+            return self.backbone.get_sentence_embedding_dimension()
+
+        def preprocess(self, inputs, **kwargs):
+            return self.backbone.preprocess(inputs, **kwargs)
+
+        def __getitem__(self, index):
+            if index != 0:
+                raise IndexError(index)
+            return self.backbone
+
+        def forward(self, features):
+            raise AssertionError("native SentenceTransformer pooling must be bypassed")
+
+    student = EmbeddingDecisionStudent(
+        SentenceTransformerLike(), tmp_path, max_length=32, head_hidden_dim=7
+    )
+    logits = student(make_record())
+    assert logits.shape == (3,)
