@@ -247,3 +247,38 @@ def test_committed_embeddinggemma2_pin_is_immutable_and_valid():
     )
     validate_pin(pin)
     assert pin["revision"] == "914f7f89142e33e77833254d9c9b90c3cef7303b"
+
+
+def test_student_video_preprocessing_matches_four_frame_teacher_budget(tmp_path):
+    from tiny_omni_decision.student.model import EmbeddingDecisionStudent
+
+    class CapturingEncoder(TinyEncoder):
+        def __init__(self):
+            super().__init__()
+            self.processing_kwargs_seen = []
+
+        def preprocess(self, inputs, **kwargs):
+            self.processing_kwargs_seen.append(kwargs.get("processing_kwargs"))
+            return super().preprocess(inputs, **kwargs)
+
+    encoder = CapturingEncoder()
+    student = EmbeddingDecisionStudent(
+        encoder, tmp_path, max_length=1024, head_hidden_dim=7
+    )
+    video = tmp_path / "clip.mp4"
+    video.write_bytes(b"fixture")
+    from tiny_omni_decision.student.data import Record
+    record = Record(
+        "v", "gv", "cv", "video",
+        {"text": "question", "video": "clip.mp4"},
+        ["first", "second"], 0, [1.0, 0.0],
+        {"clip.mp4": __import__("hashlib").sha256(b"fixture").hexdigest()},
+    )
+    student(record)
+    kwargs = encoder.processing_kwargs_seen[0]
+    assert kwargs["video"] == {
+        "max_frames": 4,
+        "max_soft_tokens": 140,
+        "overflow_strategy": "uniform",
+        "add_timestamps": False,
+    }
