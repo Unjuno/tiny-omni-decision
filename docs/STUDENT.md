@@ -87,10 +87,13 @@ JSONL files lacking these bindings are not silently accepted as training caches.
 In the separate student environment:
 
 ```bash
-python -m tiny_omni_decision.student pin --output artifacts/student-input/student-pin.json
-python -m tiny_omni_decision.student inspect --pin artifacts/student-input/student-pin.json --config configs/student/ternary_first.example.json --data-root DATA_ROOT --allow-download --output artifacts/student-inventory.json
-python -m tiny_omni_decision.student train --pin artifacts/student-input/student-pin.json --config configs/student/ternary_first.example.json --data-root DATA_ROOT --train-cache artifacts/student-input/train.jsonl --validation-cache artifacts/student-input/validation.jsonl --output artifacts/student-run-001
+python -m tiny_omni_decision.student inspect --pin configs/student/embeddinggemma2.pin.json --config configs/student/ternary_first.example.json --data-root DATA_ROOT --allow-download --output artifacts/student-inventory.json
+python -m tiny_omni_decision.student train --pin configs/student/embeddinggemma2.pin.json --config configs/student/ternary_first.example.json --data-root DATA_ROOT --train-cache artifacts/student-input/train.jsonl --validation-cache artifacts/student-input/validation.jsonl --output artifacts/student-run-001
 ```
+
+The committed student pin fixes `google/embeddinggemma-2` at
+`914f7f89142e33e77833254d9c9b90c3cef7303b`. The `pin` command remains available
+only to create a deliberately reviewed replacement pin when upstream changes.
 
 The example config specifies 128 steps per stage and illustrative, editable
 validation tolerances. They are **not measured performance claims or agreed
