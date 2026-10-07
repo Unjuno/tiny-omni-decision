@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import pytest
 
 
@@ -56,6 +58,38 @@ def test_supplied_option_logits_preserve_order_and_backpropagate(readout) -> Non
     assert options.grad is not None and torch.isfinite(options.grad).all()
     assert query.grad.abs().sum().item() > 0
     assert options.grad.abs().sum().item() > 0
+
+
+def test_encoder_forward_native_pooling_and_option_loss_backpropagate(readout) -> None:
+    torch, _, supplied_option_logits = readout
+    from tiny_omni_decision.student import model_sentence_embeddings
+
+    class TinyEncoder(torch.nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.embedding = torch.nn.Embedding(5, 4)
+
+        def forward(self, input_ids, attention_mask):
+            return SimpleNamespace(last_hidden_state=self.embedding(input_ids))
+
+    model = TinyEncoder()
+    query = model_sentence_embeddings(
+        model,
+        {"input_ids": torch.tensor([[1, 2, 0]]), "attention_mask": torch.tensor([[1, 1, 0]])},
+    )[0]
+    options = model_sentence_embeddings(
+        model,
+        {
+            "input_ids": torch.tensor([[3, 0], [4, 0]]),
+            "attention_mask": torch.tensor([[1, 0], [1, 0]]),
+        },
+    )
+    logits = supplied_option_logits(query, options, temperature=1.0)
+    torch.nn.functional.cross_entropy(logits.unsqueeze(0), torch.tensor([0])).backward()
+
+    assert torch.isfinite(logits).all()
+    assert model.embedding.weight.grad is not None
+    assert model.embedding.weight.grad.abs().sum().item() > 0
 
 
 def test_mean_pool_rejects_empty_attention_mask(readout) -> None:

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Mapping
+from typing import Any
 
 import torch
 from torch import Tensor
@@ -44,6 +46,25 @@ def mean_pool_projected_tokens(token_embeddings: Tensor, attention_mask: Tensor)
     if torch.any(token_counts <= 0):
         raise ValueError("every sequence must contain at least one attended token")
     return (token_embeddings * mask.unsqueeze(-1)).sum(dim=1) / token_counts
+
+
+def model_sentence_embeddings(model: Any, model_inputs: Mapping[str, Any]) -> Tensor:
+    """Run an EmbeddingGemma-style encoder and apply its native pooling pipeline."""
+    attention_mask = model_inputs.get("attention_mask")
+    if attention_mask is None:
+        raise ValueError("model_inputs must include attention_mask for native mean pooling")
+    output = model(**model_inputs)
+    token_embeddings = getattr(output, "last_hidden_state", None)
+    if token_embeddings is None:
+        raise ValueError("embedding model output must include last_hidden_state")
+
+    pooled = mean_pool_projected_tokens(token_embeddings, attention_mask).float()
+    if not torch.isfinite(pooled).all():
+        raise ValueError("pooled embeddings must be finite")
+    norms = torch.linalg.vector_norm(pooled, dim=-1, keepdim=True)
+    if torch.any(norms == 0):
+        raise ValueError("pooled embeddings must be nonzero")
+    return pooled / norms
 
 
 def supplied_option_logits(

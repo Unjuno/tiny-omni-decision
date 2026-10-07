@@ -66,10 +66,24 @@ The placeholder for attached media is placed after the query text and paired
 with the corresponding processor input. No option text is included in the query
 representation. This adds no classifier or output vocabulary, and does not
 interpret Teacher token IDs as student token IDs. The readout, prompt builder,
-and mask-aware mean pooling have CPU tests over synthetic vectors. The backward
-test validates score math and gradients only; it is not a model
-forward/backward test or a quality baseline. The temperature and input prompt
-template must be frozen before the first validation comparison.
+model-output pooling, and mask-aware mean pooling have CPU tests over a synthetic
+encoder. This verifies gradients through the adapter interface and readout, but
+is not an EmbeddingGemma 2 weight forward/backward test or a quality baseline.
+The temperature and input prompt template must be frozen before the first
+validation comparison.
+
+The pinned `AutoProcessor` was also run on CPU with CUDA hidden and synthetic
+inputs; no model weights were loaded. Observed processor outputs:
+
+| Input | Key output shapes |
+|---|---|
+| Text | `input_ids (1, 15)`, `attention_mask (1, 15)` |
+| Image | `input_ids (1, 285)`, `pixel_values (1, 2520, 768)`, `image_position_ids (1, 2520, 2)` |
+| 1 second, 16 kHz audio | `input_ids (1, 43)`, `input_features (1, 99, 128)`, `input_features_mask (1, 99)` |
+| Two video frames | `input_ids (1, 280)`, `pixel_values_videos (2, 1260, 768)`, `video_position_ids (2, 1260, 2)`, `num_frames_per_video (1)` with value 2 |
+
+These shapes confirm preprocessing paths only; they do not prove that the model
+accepts the inputs or yields finite embeddings.
 
 ## Phase 6 status
 
