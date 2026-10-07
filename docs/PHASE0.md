@@ -84,7 +84,8 @@ Teacher provenance and the first corpus's disjoint splits are recorded in the ex
 - [x] record Teacher upstream license/notice requirements
 - [x] record Teacher base and corpus file hashes
 - [x] freeze non-overlapping train/validation/evaluation manifests
-- [ ] pin and inspect the exact EmbeddingGemma 2 student revision
+- [x] pin exact EmbeddingGemma 2 student revision and license metadata
+- [ ] inspect the pinned full student on the target GPU runtime
 - [x] verify pooled Decision Head, ternary-constrained training, and save/reload on CPU fixtures
 - [ ] verify the same path on the pinned full EmbeddingGemma 2 model
 - [ ] set numeric acceptance limits and a bounded recovery budget before selecting results
