@@ -1,17 +1,19 @@
 # Ternary-first student implementation
 
 This is an experimental PyTorch reference implementation of the approved flow:
-pretrained EmbeddingGemma 2 -> ternary -> Teacher-supervised constrained recovery
+pretrained EmbeddingGemma 2 -> custom mean pooling + tiny variable-option Decision Head
+-> ternary backbone -> joint Teacher-supervised QAT/distillation
 -> one frozen-base Recovery LoRA only if the validation quality gate fails.
 The active Teacher trainer, its configuration and its checkpoints are unchanged.
-No classifier surgery or extra teacher is introduced.
+The native sentence-level readout is bypassed; no deeper backbone surgery or extra teacher is introduced.
 
 ## What is implemented and what is not
 
-Implemented: option-bound Teacher caches, generic matrix/embedding/convolution
-weight parametrization, straight-through ternary QAT, option KL + CE + Brier,
-validation checkpoint selection, conditional LoRA, integrity-checked export and
-reload, and train/validation/final-evaluation separation.
+Implemented: option-bound Teacher caches, custom masked mean pooling, a tiny shared
+variable-option MLP Decision Head, generic matrix/embedding/convolution weight
+parametrization, straight-through ternary QAT, option KL + CE + Brier, validation
+checkpoint selection, conditional LoRA, integrity-checked export and reload, and
+train/validation/final-evaluation separation.
 
 Tested locally on CPU with small differentiable fixtures. Full EmbeddingGemma 2
 loading, multimodal forward/backward, GPU memory fit and quality recovery have
@@ -19,13 +21,15 @@ loading, multimodal forward/backward, GPU memory fit and quality recovery have
 The runtime checks the pinned architecture and actual tensor inventory; shared
 quantization-target parameters and unsupported inputs fail explicitly.
 
-The first implementation keeps native pooling and uses cosine scores between the
-question/context embedding and the supplied option embeddings, with a fixed score
-temperature. This is the minimal decision readout, not a claim that similarity
-scores are calibrated probabilities. The Teacher supplies supervision for that
-calibration. Student preprocessing uses Sentence Transformers' native defaults;
-the existing Teacher video bridge uses four frames. Record the library versions,
-and keep the student's preprocessing fixed before and after quantization.
+The first implementation bypasses the upstream sentence embedding readout. It
+takes token embeddings from the native multimodal encoder, applies masked mean
+pooling, L2-normalizes the pooled vectors, and scores each supplied option with one
+shared tiny MLP. For each option the head consumes [query, option, query * option],
+so the number and ordering of choices remain dynamic rather than fixed to a class
+count. The head stays FP32 and is trained jointly with ternary-constrained backbone
+shadow weights during QAT/distillation. Student preprocessing uses Sentence
+Transformers' native defaults; the existing Teacher video bridge uses four frames.
+Record the library versions, and keep preprocessing fixed before and after quantization.
 
 ## Environments and offline smoke
 
@@ -91,9 +95,10 @@ Brier and ECE. Checkpoint selection uses only validation. No final-evaluation
 cache is accepted by `train`.
 
 `inspect` inventories actual parameters rather than guessing module names.
-By default all floating rank-2-or-higher weight tensors are targets, including
-text embeddings, vision and audio. Explicit exclusions must be exact existing
-parameter names. Their dtype and bytes are reported. Biases, norms and buffers
+By default all floating rank-2-or-higher backbone weight tensors are targets,
+including text embeddings, vision and audio. The tiny Decision Head is an automatic
+explicit higher-precision exception; user exclusions must also be exact existing
+parameter names. Exception dtype and bytes are reported. Biases, norms and buffers
 are retained. No part of the model is silently described as ternary if excluded.
 
 The reference trainer uses FP32 master parameters and FP32 execution. It retains
@@ -103,11 +108,12 @@ input lengths only deliberately. Overlength input is rejected, not silently
 truncated. This implementation has no exact-resume checkpoint or mixed-precision
 optimizer yet. Saved bundles are inference/selection artifacts, not resume state.
 
-During QAT, every target tensor uses ternary values in the forward pass. The
-straight-through estimator updates the shadows. If quality still fails, the
-selected codes/scales and all base parameters are frozen; only one LoRA is
-trained. LoRA is not added for a size-only failure, and is not merged into the
-ternary codes. The Teacher never changes during either student stage.
+During QAT, every targeted backbone tensor uses ternary values in the forward pass.
+The straight-through estimator updates the backbone shadows while the small FP32
+Decision Head trains normally in the same loss. If quality still fails, the
+selected ternary codes/scales and the Decision Head are frozen; only one backbone
+Recovery LoRA is trained. LoRA is not added for a size-only failure, and is not
+merged into the ternary codes. The Teacher never changes during either student stage.
 
 ## Results, packing and final evaluation
 
@@ -138,7 +144,7 @@ python -m tiny_omni_decision.student evaluate --bundle artifacts/student-run-001
 Replace `SELECTED_BUNDLE` with `result.json`'s `selected` value. Evaluation checks
 Teacher identity and rejects overlap with **both** training and selection records,
 source groups, content and media hashes recorded in the export. It reports paired
-Teacher/student metrics and option logits. Pooling/classifier fallback remains
+Teacher/student metrics and option logits. Deeper terminal-block removal remains
 deferred until constrained recovery plus LoRA have proved insufficient.
 
 ## Verification
