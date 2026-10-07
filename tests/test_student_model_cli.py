@@ -188,13 +188,15 @@ def test_student_requirements_match_embeddinggemma2_runtime_contract():
     assert "transformers>=5.19,<6" in requirements
 
 
-def test_embeddinggemma2_classes_exist_when_student_dependencies_are_installed():
+def test_embeddinggemma2_modules_exist_when_student_dependencies_are_installed():
     if importlib.util.find_spec("transformers") is None:
         pytest.skip("student runtime dependencies are installed only in student CI")
-    from transformers import EmbeddingGemma2Model, EmbeddingGemma2Processor
-
-    assert EmbeddingGemma2Model is not None
-    assert EmbeddingGemma2Processor is not None
+    assert importlib.util.find_spec(
+        "transformers.models.embedding_gemma2.modeling_embedding_gemma2"
+    ) is not None
+    assert importlib.util.find_spec(
+        "transformers.models.embedding_gemma2.processing_embedding_gemma2"
+    ) is not None
 
 
 def test_custom_pooling_bypasses_sentence_transformer_pooling_modules(tmp_path):
