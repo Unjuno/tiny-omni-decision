@@ -62,7 +62,9 @@ when a completed experiment fails its acceptance gate: inspect `result.json`.
 Malformed inputs or runtime errors exit with code 2.
 
 All output paths must be new. No command overwrites an existing artifact or
-starts training implicitly. Model loads use local caches unless
+starts training implicitly. `inspect` is read-only with respect to the loaded model graph:
+it inventories the exact ternary targets and exceptions without attaching QAT
+parametrizations or changing `requires_grad`. Model loads use local caches unless
 `--allow-download` is explicitly supplied. The `pin` command accesses upstream
 metadata and configuration but does not download model weights.
 
@@ -115,7 +117,9 @@ are retained. No part of the model is silently described as ternary if excluded.
 
 The reference trainer uses FP32 master parameters and FP32 execution. It retains
 high-precision shadows/optimizer state, so it does **not** claim 1.6-bit training
-memory or guaranteed fit on a 16 GB GPU. Start with a bounded local trial; reduce
+memory or guaranteed fit on a 16 GB GPU. AdamW explicitly uses `foreach=False`
+to avoid the additional CUDA tensor-list peak-memory path; this reduces avoidable
+peak memory but does not make 16 GB fit a proven result. Start with a bounded local trial; reduce
 input lengths only deliberately. Overlength input is rejected, not silently
 truncated. This implementation has no exact-resume checkpoint or mixed-precision
 optimizer yet. Saved bundles are inference/selection artifacts, not resume state.
@@ -166,5 +170,6 @@ python -m pytest tests/test_student_ternary.py tests/test_student_recovery.py te
 python -m tiny_omni_decision.student --help
 ```
 
-The separate student CI installs CPU PyTorch and safetensors, runs the complete
-repository test suite and lints the additions. It downloads no model weights.
+The separate student CI installs the matched CPU PyTorch media stack plus the
+student runtime dependencies, runs the complete repository test suite and lints
+the additions. It downloads no model weights.
