@@ -137,12 +137,16 @@ class EmbeddingDecisionStudent(nn.Module):
             raise ValueError("processor input_ids unavailable; cannot enforce sequence bound")
         device = next(self.encoder.parameters()).device
         moved = _move(features, device)
-        try:
-            input_module = self.encoder[0]
-        except (AttributeError, IndexError, KeyError, TypeError) as exc:
-            raise ValueError(
-                "encoder must expose its input Transformer as module 0"
-            ) from exc
+        if hasattr(self.encoder, "__getitem__"):
+            try:
+                input_module = self.encoder[0]
+            except (IndexError, KeyError, TypeError) as exc:
+                raise ValueError(
+                    "SentenceTransformer must expose its input Transformer as module 0"
+                ) from exc
+        else:
+            # Small test/reference input modules can be supplied directly.
+            input_module = self.encoder
         output = input_module(moved)
         if not isinstance(output, dict) or "token_embeddings" not in output:
             raise ValueError(
