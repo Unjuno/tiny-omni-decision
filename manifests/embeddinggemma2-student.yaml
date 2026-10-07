@@ -1,0 +1,54 @@
+schema_version: 1
+repo_id: google/embeddinggemma-2
+revision: 914f7f89142e33e77833254d9c9b90c3cef7303b
+role: multimodal_ternary_decision_student
+license: Apache-2.0
+modalities:
+  - text
+  - image
+  - audio
+  - video
+processor_repo_id: google/embeddinggemma-2
+processor_revision: 914f7f89142e33e77833254d9c9b90c3cef7303b
+files:
+  - path: config.json
+    git_blob_sha1: dc524b2cbef566d66d8533c67dc68a6a8f5d340a
+  - path: model.safetensors
+    sha256: 197a32965d4b1105faf060417baa899e193fb73cd401f42ec9295234d5553d79
+    size_bytes: 1488915288
+  - path: processor_config.json
+    git_blob_sha1: 63043a5a2fd2e25a2fc5336fcdaf24e515d12289
+  - path: preprocessor_config.json
+    git_blob_sha1: 4adff307a29874c969eda7edb5d3f07faaef879d
+  - path: tokenizer.json
+    sha256: 4d777ef5bdc1aa36227abdfb77c3e49e7b9c892d16e1b6bda41c393504828be4
+    size_bytes: 32170510
+  - path: tokenizer.model
+    sha256: e594c8a90eb08d8bda498ff4747977dc827ae0c3c56b5c0d41a605a22d02ef03
+    size_bytes: 4689013
+  - path: tokenizer_config.json
+    git_blob_sha1: a9afd12fb3ca2c418fd405320ace85ad46748d03
+  - path: chat_template.jinja
+    git_blob_sha1: 8df4ab8961aa08b66b470c5adbdc51374aabb63b
+  - path: modules.json
+    git_blob_sha1: 1ab20c8ab29b8338488b415e5c09af14b742fe3d
+  - path: 1_Pooling/config.json
+    git_blob_sha1: 2730fc1de168630e474c4066987f46d091de2189
+  - path: 2_Normalize/config.json
+    git_blob_sha1: 8babba92405167e8718211dc51f44fb117e423e4
+notes:
+  upstream_model_card: https://ai.google.dev/gemma/docs/embeddinggemma/model_card_2
+  upstream_huggingface_page: https://huggingface.co/google/embeddinggemma-2
+  upstream_revision_url: https://huggingface.co/google/embeddinggemma-2/commit/914f7f89142e33e77833254d9c9b90c3cef7303b
+  model_architecture: EmbeddingGemma2Model
+  parameter_count_safetensors_header: 744371512
+  model_design: 270M text model plus modular 170M vision and 300M audio encoders; 768-dimensional multimodal embedding output.
+  processor_info: Hugging Face metadata declares AutoProcessor at the pinned model revision.
+  license_url: https://ai.google.dev/gemma/docs/embeddinggemma/model_card_2
+  license_metadata_source: Hugging Face model metadata at the pinned revision reports apache-2.0.
+  revision_policy: Pin both model and processor to this immutable commit; do not resolve main at runtime.
+  implementation_status: Revision, file hashes, license, and model-card metadata are pinned. The checkpoint config was downloaded and inspected. Installed Transformers 5.6.2 does not register model_type embedding_gemma2; current Transformers source contains the implementation, but a compatible version and local loaded-tensor inspection remain pending.
+  inspected_config_sha256: b8f1e9931b57fbc054acdb445c41765d55b0074c58d145fa82839941ad1b5bb3
+  inspected_processor_config_sha256: 168f6a08522f3ce5dea596d94d003af2fd691742d4f41fe1f9d8cce76bfbf69c
+  inspected_preprocessor_config_sha256: ea2ae257e901064abdd98dceB19f2b0da06af600bed15e0f99f5c85c37ee9d78
+  compatibility_blocker: Pinned architecture requires a Transformers implementation newer than installed 5.6.2. The active Teacher run uses this Python/GPU environment; do not upgrade its shared environment while it is running.
