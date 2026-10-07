@@ -62,7 +62,7 @@ def _smoke(output: Path) -> dict:
 
     from .data import Cache, Record
     from .recovery import run_recovery
-    from .ternary import TernaryController
+    from .ternary import TernaryController, inspect_quantization_inventory
 
     class Toy(torch.nn.Module):
         def __init__(self):
@@ -224,7 +224,6 @@ def dispatch(args: argparse.Namespace) -> dict:
     )
     baseline = evaluate(student, caches[1].records)[0] if caches else None
     exclusions = list(dict.fromkeys(config["exclude"] + student.ternary_exclusions()))
-    controller = TernaryController(student, config["group_size"], exclusions)
     metadata = {
         "student_pin": pin,
         "environment": _environment(args.device),
@@ -233,9 +232,14 @@ def dispatch(args: argparse.Namespace) -> dict:
         "unquantized_validation": baseline,
     }
     if args.command == "inspect":
-        result = metadata | {"inventory": controller.inventory()}
+        result = metadata | {
+            "inventory": inspect_quantization_inventory(
+                student, config["group_size"], exclusions
+            )
+        }
         write_json(args.output, result)
         return result
+    controller = TernaryController(student, config["group_size"], exclusions)
     student.enable_decision_head_training()
     return run_recovery(student, controller, *caches, args.output, config, metadata=metadata)
 
