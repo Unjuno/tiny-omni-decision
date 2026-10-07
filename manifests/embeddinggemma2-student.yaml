@@ -41,9 +41,18 @@ notes:
   upstream_huggingface_page: https://huggingface.co/google/embeddinggemma-2
   upstream_revision_url: https://huggingface.co/google/embeddinggemma-2/commit/914f7f89142e33e77833254d9c9b90c3cef7303b
   model_architecture: EmbeddingGemma2Model
-  parameter_count_safetensors_header: 744371512
+  parameter_count_safetensors_header: 744371992
   model_design: 270M text model plus modular 170M vision and 300M audio encoders; 768-dimensional multimodal embedding output.
-  processor_info: Hugging Face metadata declares AutoProcessor at the pinned model revision.
+  processor_info: Pinned AutoProcessor loads with Transformers 5.19.0 and a matching GemmaTokenizer (vocab 262144). Sentence Transformers pipeline metadata specifies mean pooling including prompt tokens followed by L2 normalization.
+  transformers_minimum_verified: 5.19.0
+  safetensors_header_inventory: {tensor_count: 1376, dtype_counts: {BF16: 1376}, model_file_bytes: 1488915288, tensor_payload_bytes: 1488743984, non_tensor_file_bytes: 171304, header_read_by_http_range_without_downloading_weights: true}
+  tensor_roots:
+    language_model: {tensors: 413, parameters: 271002648, raw_bf16_bytes: 542005296}
+    vision_tower: {tensors: 210, parameters: 167364608, raw_bf16_bytes: 334729216}
+    audio_tower: {tensors: 751, parameters: 304825088, scalar_metadata_tensors: 480, raw_bf16_bytes: 609650176}
+    embed_vision: {tensors: 1, parameters: 393216, raw_bf16_bytes: 786432}
+    embed_audio: {tensors: 1, parameters: 786432, raw_bf16_bytes: 1572864}
+  option_readout_candidate: Parameter-free cosine similarity between mean-pooled normalized query/media and supplied-option embeddings; temperature must be fixed and recorded before evaluation.
   license_url: https://ai.google.dev/gemma/docs/embeddinggemma/model_card_2
   license_metadata_source: Hugging Face model metadata at the pinned revision reports apache-2.0.
   revision_policy: Pin both model and processor to this immutable commit; do not resolve main at runtime.
@@ -51,4 +60,4 @@ notes:
   inspected_config_sha256: b8f1e9931b57fbc054acdb445c41765d55b0074c58d145fa82839941ad1b5bb3
   inspected_processor_config_sha256: 168f6a08522f3ce5dea596d94d003af2fd691742d4f41fe1f9d8cce76bfbf69c
   inspected_preprocessor_config_sha256: ea2ae257e901064abdd98dceB19f2b0da06af600bed15e0f99f5c85c37ee9d78
-  compatibility_blocker: Pinned architecture requires a Transformers implementation newer than installed 5.6.2. The active Teacher run uses this Python/GPU environment; do not upgrade its shared environment while it is running.
+  compatibility_note: Installed shared environment is Transformers 5.6.2 and does not recognize embedding_gemma2. An isolated Transformers 5.19.0 environment successfully loads AutoConfig; AutoProcessor successfully loads when paired with the existing PyTorch 2.6 installation. Do not upgrade the shared Teacher environment while its run is active.

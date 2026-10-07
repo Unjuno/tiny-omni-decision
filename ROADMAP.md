@@ -188,6 +188,13 @@ Finish the current Teacher run under its existing configuration, select the best
 
 Start from the pretrained EmbeddingGemma 2 checkpoint, not from a separately task-trained high-precision student.
 
+Initial inspection on `codex/ternary-student-recovery` pins the model and
+processor, verifies that Transformers 5.19.0 recognizes the architecture, and
+records the safetensors header inventory without downloading the weights. The
+shared Teacher environment remains unchanged. Weight loading, model-level
+forward/backward, the unquantized diagnostic, and ternary conversion remain
+open gates; see [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
+
 Before conversion:
 - pin the exact model/processor revision, inspect the actual graph, and record the execution backend and supported dtypes
 - retain the native backbone/pooling path and define the minimal option-score readout, with stable option identity/order for supervision
