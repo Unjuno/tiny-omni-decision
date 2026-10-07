@@ -1,7 +1,8 @@
-"""Differentiable native EmbeddingGemma 2 similarity readout (no new classifier).
+"""EmbeddingGemma 2 with custom mean pooling and a tiny variable-option Decision Head.
 
-Uses Sentence Transformers 6 preprocess + forward, NEVER inference-only encode.
-The real upstream model is feature-checked at load time and must be revision-pinned.
+The upstream encoder remains the multimodal representation backbone. Native
+sentence pooling/cosine readout is intentionally bypassed: token embeddings are
+mean-pooled here, then a small shared MLP scores each supplied option.
 """
 from __future__ import annotations
 
@@ -11,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 import torch
-from torch import nn
+from torch import Tensor, nn
 from torch.nn import functional as F
 
 from .data import Record, media_path
@@ -57,22 +58,77 @@ def _check_lengths(features: Any, max_length: int) -> int:
     return count
 
 
+def mean_pool(token_embeddings: Tensor, attention_mask: Tensor) -> Tensor:
+    """Mean-pool unmasked token embeddings without using upstream sentence pooling."""
+    if token_embeddings.ndim != 3:
+        raise ValueError("token_embeddings must have shape [batch, sequence, hidden]")
+    if attention_mask.ndim != 2 or attention_mask.shape != token_embeddings.shape[:2]:
+        raise ValueError("attention_mask must match token embedding batch/sequence dimensions")
+    if not torch.isfinite(token_embeddings).all():
+        raise ValueError("token embeddings must be finite")
+    mask = attention_mask.to(device=token_embeddings.device, dtype=token_embeddings.dtype)
+    counts = mask.sum(dim=1, keepdim=True)
+    if (counts <= 0).any():
+        raise ValueError("cannot pool an input with no unmasked tokens")
+    return (token_embeddings * mask.unsqueeze(-1)).sum(dim=1) / counts
+
+
+class VariableOptionDecisionHead(nn.Module):
+    """Small shared classifier that scores any number of supplied options independently."""
+
+    def __init__(self, embedding_dim: int, hidden_dim: int):
+        super().__init__()
+        if type(embedding_dim) is not int or embedding_dim <= 0:
+            raise ValueError("embedding_dim must be a positive integer")
+        if type(hidden_dim) is not int or hidden_dim <= 0:
+            raise ValueError("head_hidden_dim must be a positive integer")
+        self.embedding_dim = embedding_dim
+        self.hidden_dim = hidden_dim
+        self.input = nn.Linear(embedding_dim * 3, hidden_dim)
+        self.output = nn.Linear(hidden_dim, 1)
+
+    def forward(self, query: Tensor, options: Tensor) -> Tensor:
+        if query.ndim != 1 or options.ndim != 2 or options.shape[1] != query.shape[0]:
+            raise ValueError("query/options embedding shapes are incompatible")
+        if options.shape[0] < 2:
+            raise ValueError("at least two options are required")
+        expanded = query.unsqueeze(0).expand(options.shape[0], -1)
+        features = torch.cat((expanded, options, expanded * options), dim=-1)
+        return self.output(F.gelu(self.input(features))).squeeze(-1)
+
+
 class EmbeddingDecisionStudent(nn.Module):
     def __init__(
-        self, encoder: nn.Module, data_root: Path, *, max_length: int = 512,
-        score_temperature: float = 0.1,
+        self,
+        encoder: nn.Module,
+        data_root: Path,
+        *,
+        max_length: int = 512,
+        head_hidden_dim: int = 128,
     ):
         super().__init__()
         if type(max_length) is not int or not 1 <= max_length <= 8192:
             raise ValueError("max_length must be in 1..8192")
-        if not math.isfinite(score_temperature) or score_temperature <= 0:
-            raise ValueError("score_temperature must be positive and finite")
         if not callable(getattr(encoder, "preprocess", None)):
             raise ValueError("encoder needs Sentence Transformers 6 preprocess/forward support")
+        get_dimension = getattr(encoder, "get_sentence_embedding_dimension", None)
+        if not callable(get_dimension):
+            raise ValueError("encoder must report its embedding dimension")
+        embedding_dim = get_dimension()
+        if type(embedding_dim) is not int or embedding_dim <= 0:
+            raise ValueError("encoder returned an invalid embedding dimension")
         self.encoder = encoder
         self.data_root = data_root
         self.max_length = max_length
-        self.score_temperature = score_temperature
+        self.decision_head = VariableOptionDecisionHead(embedding_dim, head_hidden_dim)
+
+    def ternary_exclusions(self) -> list[str]:
+        """Keep the tiny Decision Head higher precision during backbone ternary QAT."""
+        return [f"decision_head.{name}" for name, _ in self.decision_head.named_parameters()]
+
+    def enable_decision_head_training(self) -> None:
+        for parameter in self.decision_head.parameters():
+            parameter.requires_grad_(True)
 
     def _embed(self, inputs: list) -> torch.Tensor:
         features = self.encoder.preprocess(
@@ -81,14 +137,20 @@ class EmbeddingDecisionStudent(nn.Module):
         if not _check_lengths(features, self.max_length):
             raise ValueError("processor input_ids unavailable; cannot enforce sequence bound")
         device = next(self.encoder.parameters()).device
-        output = self.encoder(_move(features, device))
-        if not isinstance(output, dict) or "sentence_embedding" not in output:
-            raise ValueError("native forward must return sentence_embedding")
-        embedding = output["sentence_embedding"].float()
-        if embedding.ndim != 2 or embedding.shape[0] != len(inputs):
-            raise ValueError("unexpected embedding shape")
+        moved = _move(features, device)
+        output = self.encoder(moved)
+        if not isinstance(output, dict) or "token_embeddings" not in output:
+            raise ValueError("native forward must expose token_embeddings for custom pooling")
+        mask = output.get("attention_mask")
+        if mask is None and isinstance(moved, dict):
+            mask = moved.get("attention_mask")
+        if not isinstance(mask, torch.Tensor):
+            raise ValueError("attention_mask is required for custom mean pooling")
+        embedding = mean_pool(output["token_embeddings"].float(), mask)
+        if embedding.shape[0] != len(inputs):
+            raise ValueError("unexpected pooled embedding shape")
         if not torch.isfinite(embedding).all() or (embedding.norm(dim=-1) == 0).any():
-            raise ValueError("non-finite or zero embedding")
+            raise ValueError("non-finite or zero pooled embedding")
         return F.normalize(embedding, p=2, dim=-1)
 
     def forward(self, record: Record) -> torch.Tensor:
@@ -101,14 +163,19 @@ class EmbeddingDecisionStudent(nn.Module):
             else:
                 query[key] = str(media_path(self.data_root, values))
         query_vector = self._embed([query])[0]
-        # Recompute candidate embeddings during training; stale caches lose gradients.
-        options = self._embed([PREFIX + option for option in record.options])
-        return (options @ query_vector) / self.score_temperature
+        # Recompute options on each forward so backbone gradients remain live during QAT.
+        option_vectors = self._embed([PREFIX + option for option in record.options])
+        return self.decision_head(query_vector, option_vectors)
 
 
 def load_student(
-    pin: dict, *, data_root: Path, device: str, max_length: int = 512,
-    score_temperature: float = 0.1, allow_download: bool = False,
+    pin: dict,
+    *,
+    data_root: Path,
+    device: str,
+    max_length: int = 512,
+    head_hidden_dim: int = 128,
+    allow_download: bool = False,
 ) -> EmbeddingDecisionStudent:
     validate_pin(pin)
     try:
@@ -117,7 +184,9 @@ def load_student(
     except ImportError as exc:
         raise RuntimeError("install requirements-student.txt in a separate environment") from exc
     config = AutoConfig.from_pretrained(
-        pin["model_id"], revision=pin["revision"], trust_remote_code=False,
+        pin["model_id"],
+        revision=pin["revision"],
+        trust_remote_code=False,
         local_files_only=not allow_download,
     )
     if config.model_type != MODEL_TYPE:
@@ -125,9 +194,17 @@ def load_student(
     # FP32 master parameters avoid tiny QAT updates disappearing in BF16 rounding.
     # This reference backend does NOT claim to fit any particular GPU memory budget.
     encoder = SentenceTransformer(
-        pin["model_id"], revision=pin["revision"], device=device, trust_remote_code=False,
-        local_files_only=not allow_download, backend="torch",
+        pin["model_id"],
+        revision=pin["revision"],
+        device=device,
+        trust_remote_code=False,
+        local_files_only=not allow_download,
+        backend="torch",
         model_kwargs={"torch_dtype": torch.float32},
     )
-    return EmbeddingDecisionStudent(encoder, data_root, max_length=max_length,
-                                    score_temperature=score_temperature)
+    return EmbeddingDecisionStudent(
+        encoder,
+        data_root,
+        max_length=max_length,
+        head_hidden_dim=head_hidden_dim,
+    )
