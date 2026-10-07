@@ -37,8 +37,10 @@ Record the library versions, and keep preprocessing fixed before and after quant
 Keep the existing Teacher environment unchanged. Use Python 3.11 or 3.12 in a
 separate student environment. EmbeddingGemma 2 requires Sentence Transformers
 6.1+ for correct multimodal ordering; this implementation also requires
-Transformers 5.19+ for the current EmbeddingGemma 2 classes. From the repository
-root, after installing the appropriate PyTorch wheel for your device:
+Transformers 5.19+ for the current EmbeddingGemma 2 classes. Install a matched
+PyTorch 2.6 / torchvision 0.21 / torchaudio 2.6 wheel set for the target device
+before the remaining student requirements; do not let pip replace only one member
+of that stack. Then from the repository root:
 
 ```bash
 python -m venv .venv-student
