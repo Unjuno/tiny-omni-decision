@@ -21,9 +21,10 @@ loading, multimodal forward/backward, GPU memory fit and quality recovery have
 The runtime checks the pinned architecture and actual tensor inventory; shared
 quantization-target parameters and unsupported inputs fail explicitly.
 
-The first implementation bypasses the upstream sentence embedding readout. It
-takes token embeddings from the native multimodal encoder, applies masked mean
-pooling, L2-normalizes the pooled vectors, and scores each supplied option with one
+The first implementation bypasses the upstream Sentence Transformers Pooling and
+Normalize modules by running only input module 0 after preprocessing. That module
+returns EmbeddingGemma 2's projected token embeddings. The student applies masked
+mean pooling itself, L2-normalizes the pooled vectors, and scores each supplied option with one
 shared tiny MLP. For each option the head consumes [query, option, query * option],
 so the number and ordering of choices remain dynamic rather than fixed to a class
 count. The head stays FP32 and is trained jointly with ternary-constrained backbone
@@ -34,8 +35,10 @@ Record the library versions, and keep preprocessing fixed before and after quant
 ## Environments and offline smoke
 
 Keep the existing Teacher environment unchanged. Use Python 3.11 or 3.12 in a
-separate student environment. From the repository root, after installing the
-appropriate PyTorch wheel for your device:
+separate student environment. EmbeddingGemma 2 requires Sentence Transformers
+6.1+ for correct multimodal ordering; this implementation also requires
+Transformers 5.19+ for the current EmbeddingGemma 2 classes. From the repository
+root, after installing the appropriate PyTorch wheel for your device:
 
 ```bash
 python -m venv .venv-student
