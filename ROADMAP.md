@@ -12,11 +12,11 @@ Gemma 4 E2B → Decision / Omni LoRA → frozen high-precision Decision Teacher
                                                     │ option supervision
 EmbeddingGemma 2 pretrained checkpoint               │
         ↓                                           │
-Aggressive ternary conversion                       │
+Custom mean pooling + tiny variable-option head      │
         ↓                                           │
-Unrecovered damage measurement                      │
+Aggressive ternary backbone conversion               │
         ↓                                           ▼
-Ternary-constrained recovery with the Teacher (QAT + distillation)
+Joint head training + ternary QAT/distillation with the Teacher
         ↓
 Meets validation quality and deployment requirements?
         ├── yes → packed export / reload / final evaluation / runtime
@@ -46,10 +46,10 @@ Design decisions:
 - Keep the high-precision Gemma 4 Decision Teacher fixed during student recovery.
 - Initialize the student from pretrained EmbeddingGemma 2 and impose ternary constraints before task recovery training.
 - Use Teacher option distributions with the existing labeled CE and Brier objectives. No second teacher or new representation-loss stack is required.
-- Retain the native backbone/pooling structure for the first experiment. Establish only the minimal readout needed to score supplied options; an embedding vector is not itself an option-probability distribution.
+- Retain the native multimodal backbone but bypass its sentence-level pooling/readout. Apply masked mean pooling to token embeddings and train one tiny shared variable-option MLP Decision Head.
 - Target large text/backbone, embedding, vision, and audio weight tensors for ternary conversion. Record all higher-precision exceptions and their bytes rather than silently excluding whole encoders from the size claim.
 - First recover by updating the student under ternary forward constraints. Only if that is insufficient, freeze the quantized base and train one separate Recovery LoRA against the same Teacher.
-- Pooling plus a small classifier, with any justified terminal-path removal, remains a deferred structural fallback after recovery and LoRA are insufficient. No attention-block removal is assumed in advance.
+- Keep the tiny Decision Head higher precision during QAT and count its bytes explicitly. Deeper terminal-path removal remains a deferred structural fallback after QAT and LoRA are insufficient. No attention-block removal is assumed in advance.
 
 Project-level hard gates:
 - [x] pin exact Teacher base-model revision/hash
@@ -190,7 +190,7 @@ Start from the pretrained EmbeddingGemma 2 checkpoint, not from a separately tas
 
 Before conversion:
 - pin the exact model/processor revision, inspect the actual graph, and record the execution backend and supported dtypes
-- retain the native backbone/pooling path and define the minimal option-score readout, with stable option identity/order for supervision
+- bypass native sentence pooling/readout; use masked mean pooling plus a tiny shared variable-option MLP head, with stable option identity/order for supervision
 - record an unquantized baseline using that same input/readout setup; this is a diagnostic, not a high-precision student-training stage
 - record numeric quality and deployment acceptance limits and a bounded recovery budget before selecting results; use validation for decisions, not the final evaluation split
 
@@ -234,7 +234,7 @@ Primary objective: Teacher-to-student KL over option distributions. Auxiliary ob
 
 ### 8A — Recover under ternary constraints
 
-Train the quantized student with the frozen Teacher through quantization-aware distillation. Higher-precision shadow weights may receive gradient updates, but every forward uses their ternary-quantized values for the target tensors. Export those tensors as ternary; do not remove the constraint during training and merely quantize again at the end.
+Train the quantized student with the frozen Teacher through quantization-aware distillation. Higher-precision backbone shadow weights may receive gradient updates, but every forward uses their ternary-quantized values for the target tensors. Train the small FP32 Decision Head jointly in the same KL + CE + Brier objective. Export backbone targets as ternary and the head as a counted dense exception; do not remove the ternary constraint during training and merely quantize again at the end.
 
 This stage updates the student under the constraint; it is not the old frozen-base LoRA-only recovery plan. Use a numerically supported activation/accumulation dtype, with BF16/FP32 as the reference choices. Lower-bit weights do not require lower-bit activations. Verify save/reload and exported predictions before accepting the recovered student.
 
@@ -250,7 +250,7 @@ Reload the exported base and adapter together and repeat the same validation che
 
 ### Deferred structural fallback
 
-If ternary-constrained recovery and the LoRA fallback are still insufficient, retain the earlier pooling-plus-small-classifier idea as a separate structural fallback, not a mandatory pre-quantization stage. Inspect the graph before replacing a terminal readout or removing a terminal attention/projection block. Do not equate an attention block with the output head or assume either can be removed without loss. No such surgery is part of the first experiment.
+If ternary-constrained recovery and the LoRA fallback are still insufficient, consider deeper structural surgery only then. The pooling + tiny Decision Head is already part of the primary path. Inspect the graph before removing any terminal attention/projection block; do not assume such a block can be removed without loss.
 
 ## Phase 9 — Export, final evaluation, and runtime
 
@@ -269,6 +269,6 @@ Target outputs:
 - This is a plan-only change. Existing training code, configs, manifests, checkpoints, and historical reports are unchanged; old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.
 - No separate unconstrained high-precision student fine-tuning stage before this ternary experiment.
 - No reinforcement learning or long chain-of-thought preservation.
-- No mandatory pooling/classifier surgery, extra teacher, or broad quantizer comparison ladder.
+- No deeper terminal-block surgery, extra teacher, or broad quantizer comparison ladder before the primary pooled-head path is measured.
 - No custom mobile ternary kernels before model quality is proven.
 - No speedup claim from a bit-width or storage label without a kernel/runtime benchmark.
