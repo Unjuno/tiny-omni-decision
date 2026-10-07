@@ -1,0 +1,6 @@
+{
+  "model_id": "google/embeddinggemma-2",
+  "revision": "914f7f89142e33e77833254d9c9b90c3cef7303b",
+  "model_type": "embedding_gemma2",
+  "license": "apache-2.0"
+}
