@@ -50,21 +50,26 @@ matrix weight. No quantization target or exception has been selected yet.
 
 The pinned Sentence Transformers metadata defines mean pooling over the model's
 projected token outputs (including prompt tokens), followed by L2 normalization.
-The current candidate readout uses that native 768-dimensional embedding path:
+The current candidate readout uses that native 768-dimensional embedding path.
+For the symmetric query/option comparison, both sides use the model card's
+`task: sentence similarity | query:` instruction prefix:
 
 1. Encode the state/question and any attached image, audio, or video as the
    query input.
-2. Encode each supplied answer option as text in the same processor/model.
+2. Encode each supplied answer option as text with the same prefix in the same
+   processor/model.
 3. Score each option by query/option cosine similarity divided by an explicit
    temperature; preserve the source option order and map the target to its
    original option index.
 
-This adds no classifier or output vocabulary, and does not interpret Teacher
-token IDs as student token IDs. The readout and mask-aware mean pooling have
-CPU forward/backward unit tests over synthetic vectors. Those tests validate
-the score math and gradients only; they are not a model forward/backward test
-or a quality baseline. The temperature and input prompt template must be frozen
-before the first validation comparison.
+The placeholder for attached media is placed after the query text and paired
+with the corresponding processor input. No option text is included in the query
+representation. This adds no classifier or output vocabulary, and does not
+interpret Teacher token IDs as student token IDs. The readout, prompt builder,
+and mask-aware mean pooling have CPU tests over synthetic vectors. The backward
+test validates score math and gradients only; it is not a model
+forward/backward test or a quality baseline. The temperature and input prompt
+template must be frozen before the first validation comparison.
 
 ## Phase 6 status
 

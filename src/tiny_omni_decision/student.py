@@ -8,6 +8,29 @@ import torch
 from torch import Tensor
 from torch.nn import functional as F
 
+SENTENCE_SIMILARITY_PREFIX = "task: sentence similarity | query:"
+
+
+def decision_query_text(state: str, question: str, *, media_token: str | None = None) -> str:
+    """Build the symmetric similarity-task query without leaking any answer option."""
+    content = "\n".join(part.strip() for part in (state, question) if part.strip())
+    if not content:
+        raise ValueError("decision query must include state or question text")
+    query = f"{SENTENCE_SIMILARITY_PREFIX} {content}"
+    if media_token is not None:
+        if not media_token.strip():
+            raise ValueError("media_token must be non-empty when provided")
+        query = f"{query}\n{media_token}"
+    return query
+
+
+def decision_option_text(option: str) -> str:
+    """Build a candidate string using the same symmetric task prefix as the query."""
+    content = option.strip()
+    if not content:
+        raise ValueError("decision option must be non-empty")
+    return f"{SENTENCE_SIMILARITY_PREFIX} {content}"
+
 
 def mean_pool_projected_tokens(token_embeddings: Tensor, attention_mask: Tensor) -> Tensor:
     """Apply the pinned Sentence Transformers mean-pooling semantics."""

@@ -21,6 +21,22 @@ def test_mean_pool_matches_attention_mask_and_keeps_prompt_tokens(readout) -> No
     torch.testing.assert_close(pooled, torch.tensor([[2.0, 4.0]]))
 
 
+def test_decision_query_and_options_use_the_same_similarity_prefix() -> None:
+    from tiny_omni_decision.student import decision_option_text, decision_query_text
+
+    query = decision_query_text(
+        "A red cube is left of a sphere.", "Which is farther?", media_token="<|video|>"
+    )
+    option = decision_option_text("The cube.")
+
+    assert query == (
+        "task: sentence similarity | query: A red cube is left of a sphere.\n"
+        "Which is farther?\n<|video|>"
+    )
+    assert option == "task: sentence similarity | query: The cube."
+    assert "The cube" not in query
+
+
 def test_supplied_option_logits_preserve_order_and_backpropagate(readout) -> None:
     torch, _, supplied_option_logits = readout
     query = torch.tensor([1.0, 0.0], requires_grad=True)
