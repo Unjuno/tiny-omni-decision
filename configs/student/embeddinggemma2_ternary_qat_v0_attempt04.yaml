@@ -1,0 +1,70 @@
+schema_version: 1
+experiment_id: embeddinggemma2-ternary-qat-v0
+
+student:
+  model_manifest: manifests/embeddinggemma2-student.yaml
+  model_path: C:/CodexArtifacts/embeddinggemma2-metadata-914f7f8
+  initialization: pinned_pretrained_base_with_new_qat_shadows
+  modalities: [text, image, audio, video]
+  score_temperature: 0.1
+  initial_ternary_overlay: C:/CodexArtifacts/embeddinggemma2-ternary-overlay-v0
+  initial_ternary_overlay_manifest_sha256: 01e4d9e6b265c149f3aeefc25775f6a1e5d4ed1fb224f345339872edfe5e0997
+  initial_ternary_validation_predictions: C:/CodexArtifacts/embeddinggemma2-ternary-validation-v0-256-cuda/predictions.jsonl
+  initial_ternary_validation_predictions_sha256: 57c980df2106c2f1800d42aaff78c79758016dfb7549249e97bea66a08c4c73f
+  ternary:
+    group_size: 256
+    threshold_factor: 0.7
+    trainable_scope: all_verified_ternary_target_shadow_weights
+    freeze_higher_precision_exceptions: true
+    optimizer: AdamW
+    optimizer_state_dtype: parameter_dtype
+
+teacher:
+  manifest: manifests/teachers/durable-teacher-v0.json
+  run_metadata: artifacts/tiny-omni-decision-teacher-v0/run-metadata.json
+  base_model_manifest: manifests/base-model.example.yaml
+  adapter: artifacts/tiny-omni-decision-teacher-v0/best
+  train_corpus: data/processed/durable-teacher-v0/train.jsonl
+  train_cache: C:/CodexArtifacts/embeddinggemma2-teacher-option-cache-v0/teacher-options.jsonl
+  validation_snapshot: C:/CodexArtifacts/embeddinggemma2-validation-v0-256/validation.jsonl
+  validation_manifest: manifests/embeddinggemma2-validation-v0-256.json
+  validation_corpus: data/processed/durable-teacher-v0/validation.jsonl
+  validation_predictions: artifacts/tiny-omni-decision-teacher-v0/best-validation-predictions.jsonl
+  teacher_temperature: 1.0
+  teacher_id: tiny-omni-decision-teacher-v0
+  teacher_revision: 6befbaca7398925921802abd1f277b495b78b738
+
+loss:
+  option_kl: 1.0
+  cross_entropy: 0.2
+  brier: 0.2
+
+training:
+  seed: 17
+  device: cuda
+  dtype: bfloat16
+  batch_size: 1
+  gradient_accumulation_steps: 4
+  max_train_examples: 4859
+  max_sample_repeats: 1
+  modality_weights:
+    text: 1.0
+    image: 1.0
+    audio: 1.0
+    video: 1.0
+  source_weights: {}
+  max_sequence_length: 1024
+  optimizer: AdamW
+  learning_rate: 0.00001
+  lr_scheduler: cosine
+  warmup_ratio: 0.03
+  max_gradient_norm: 1.0
+  evaluation_interval: 128
+  checkpoint_interval: 128
+  max_steps: 1215
+  early_stopping: false
+  best_checkpoint_selector:
+    primary: macro_modality_nll_min
+    tie_break_1: minimum_modality_accuracy_max
+    tie_break_2: macro_modality_brier_min
+  output_dir: C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-04

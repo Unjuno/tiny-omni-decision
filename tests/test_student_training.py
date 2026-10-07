@@ -75,6 +75,76 @@ def test_student_distillation_loss_matches_option_kl_ce_and_brier() -> None:
     assert logits.grad is not None and torch.isfinite(logits.grad).all()
 
 
+def test_ternary_qat_adafactor_uses_factored_state_and_updates_bf16_shadow() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.student_training import build_ternary_qat_optimizer
+
+    shadow = torch.nn.Parameter(torch.ones((64, 128), dtype=torch.bfloat16))
+    optimizer = build_ternary_qat_optimizer([shadow], name="adafactor", learning_rate=0.05)
+    shadow.grad = torch.ones_like(shadow)
+    optimizer.step()
+
+    state = optimizer.state[shadow]
+    assert set(state) == {"step", "row_var", "col_var"}
+    assert state["row_var"].numel() + state["col_var"].numel() == 64 + 128
+    assert state["row_var"].dtype == shadow.dtype
+    assert torch.isfinite(shadow).all()
+    assert not torch.equal(shadow, torch.ones_like(shadow))
+
+
+def test_ternary_qat_optimizer_rejects_unknown_or_empty_configuration() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.student_training import build_ternary_qat_optimizer
+
+    parameter = torch.nn.Parameter(torch.ones((2, 2)))
+    with pytest.raises(ValueError, match="unsupported QAT optimizer"):
+        build_ternary_qat_optimizer([parameter], name="unknown", learning_rate=1e-5)
+    with pytest.raises(ValueError, match="at least one trainable parameter"):
+        build_ternary_qat_optimizer([], name="adafactor", learning_rate=1e-5)
+
+
+def test_fp32_cpu_master_accumulates_updates_below_bf16_resolution() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.student_training import (
+        build_ternary_qat_optimizer,
+        copy_shadow_gradients_to_masters,
+        make_fp32_cpu_master_parameters,
+        sync_cpu_masters_to_shadows,
+    )
+
+    shadow = torch.nn.Parameter(torch.ones((64, 128), dtype=torch.bfloat16))
+    masters = make_fp32_cpu_master_parameters([shadow])
+    optimizer = build_ternary_qat_optimizer(masters, name="adafactor", learning_rate=0.001)
+
+    for _ in range(2):
+        shadow.grad = torch.ones_like(shadow)
+        active = copy_shadow_gradients_to_masters([shadow], masters)
+        optimizer.step()
+        optimizer.zero_grad(set_to_none=True)
+        sync_cpu_masters_to_shadows([shadow], masters, active)
+        shadow.grad = None
+
+    assert masters[0].device.type == "cpu"
+    assert masters[0].dtype == torch.float32
+    assert not torch.equal(masters[0], torch.ones_like(masters[0]))
+    assert not torch.equal(shadow, torch.ones_like(shadow))
+    assert torch.isfinite(shadow).all()
+
+
+def test_cpu_master_gradient_transfer_fails_closed_on_nonfinite_gradient() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.student_training import (
+        copy_shadow_gradients_to_masters,
+        make_fp32_cpu_master_parameters,
+    )
+
+    shadow = torch.nn.Parameter(torch.ones((2, 2), dtype=torch.bfloat16))
+    masters = make_fp32_cpu_master_parameters([shadow])
+    shadow.grad = torch.full_like(shadow, float("inf"))
+    with pytest.raises(ValueError, match="gradient must be finite"):
+        copy_shadow_gradients_to_masters([shadow], masters)
+
+
 def test_teacher_cache_requires_exact_options_target_and_identity(tmp_path) -> None:
     from tiny_omni_decision.student_training import load_teacher_option_cache
 

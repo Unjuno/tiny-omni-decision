@@ -15,6 +15,91 @@ from torch.nn import functional as F
 from .schema import DecisionExample
 
 
+def build_ternary_qat_optimizer(
+    parameters: list[torch.nn.Parameter],
+    *,
+    name: str,
+    learning_rate: float,
+) -> torch.optim.Optimizer:
+    """Build a QAT optimizer with an explicit optimizer-state memory policy."""
+    if not math.isfinite(learning_rate) or learning_rate <= 0:
+        raise ValueError("learning_rate must be finite and positive")
+    if not parameters:
+        raise ValueError("QAT optimizer requires at least one trainable parameter")
+    if name == "adamw":
+        return torch.optim.AdamW(
+            parameters,
+            lr=learning_rate,
+            betas=(0.9, 0.999),
+            weight_decay=0.0,
+            fused=True,
+        )
+    if name == "adafactor":
+        return torch.optim.Adafactor(
+            parameters,
+            lr=learning_rate,
+            beta2_decay=-0.8,
+            eps=(None, 1e-3),
+            d=1.0,
+            weight_decay=0.0,
+            foreach=False,
+        )
+    raise ValueError(f"unsupported QAT optimizer: {name}")
+
+
+def make_fp32_cpu_master_parameters(
+    parameters: list[torch.nn.Parameter],
+) -> list[torch.nn.Parameter]:
+    """Create CPU FP32 master weights for lower-precision QAT shadow parameters."""
+    if not parameters:
+        raise ValueError("CPU master weights require at least one shadow parameter")
+    return [
+        torch.nn.Parameter(parameter.detach().to(device="cpu", dtype=torch.float32))
+        for parameter in parameters
+    ]
+
+
+def copy_shadow_gradients_to_masters(
+    shadows: list[torch.nn.Parameter],
+    masters: list[torch.nn.Parameter],
+    *,
+    check_finite: bool = True,
+) -> list[int]:
+    """Transfer only present gradients to CPU FP32 masters and return active indices."""
+    if len(shadows) != len(masters):
+        raise ValueError("shadow and master parameter counts differ")
+    active: list[int] = []
+    for index, (shadow, master) in enumerate(zip(shadows, masters, strict=True)):
+        if shadow.shape != master.shape or master.device.type != "cpu":
+            raise ValueError("shadow/master device or shape contract is invalid")
+        if shadow.grad is None:
+            master.grad = None
+            continue
+        if check_finite and not torch.isfinite(shadow.grad).all():
+            raise ValueError("shadow gradient must be finite")
+        master.grad = shadow.grad.detach().to(device="cpu", dtype=torch.float32)
+        active.append(index)
+    return active
+
+
+def sync_cpu_masters_to_shadows(
+    shadows: list[torch.nn.Parameter],
+    masters: list[torch.nn.Parameter],
+    active_indices: list[int],
+) -> None:
+    """Copy updated FP32 master values back into the model's lower-precision shadows."""
+    if len(shadows) != len(masters):
+        raise ValueError("shadow and master parameter counts differ")
+    if any(index < 0 or index >= len(shadows) for index in active_indices):
+        raise ValueError("active master index is out of range")
+    with torch.no_grad():
+        for index in active_indices:
+            shadow, master = shadows[index], masters[index]
+            if shadow.shape != master.shape or master.device.type != "cpu":
+                raise ValueError("shadow/master device or shape contract is invalid")
+            shadow.copy_(master.to(device=shadow.device, dtype=shadow.dtype))
+
+
 def _option_order_sha256(options: list[str]) -> str:
     payload = json.dumps(options, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
