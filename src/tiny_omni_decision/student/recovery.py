@@ -110,6 +110,22 @@ def _positive_int(config: dict, key: str) -> int:
     return value
 
 
+def make_optimizer(
+    parameters: list[nn.Parameter], *, learning_rate: float
+) -> torch.optim.AdamW:
+    """AdamW without the CUDA foreach tensor-list peak-memory path."""
+    if not parameters:
+        raise ValueError("no trainable parameters")
+    if not math.isfinite(learning_rate) or learning_rate <= 0:
+        raise ValueError("learning_rate must be positive and finite")
+    return torch.optim.AdamW(
+        parameters,
+        lr=learning_rate,
+        weight_decay=0.0,
+        foreach=False,
+    )
+
+
 def run_recovery(
     model: nn.Module, controller: TernaryController, train: Cache, validation: Cache,
     output: Path, config: dict, *, metadata: dict[str, Any],
@@ -150,7 +166,7 @@ def run_recovery(
         trainable = [p for p in model.parameters() if p.requires_grad]
         if not trainable:
             raise ValueError("no trainable parameters")
-        optimizer = torch.optim.AdamW(trainable, lr=learning_rate, weight_decay=0.0)
+        optimizer = make_optimizer(trainable, learning_rate=learning_rate)
         best_path = None
         best_score = None
         best_logits = None
