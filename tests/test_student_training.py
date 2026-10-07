@@ -146,6 +146,7 @@ def test_cpu_master_gradient_transfer_fails_closed_on_nonfinite_gradient() -> No
 
 
 def test_teacher_cache_requires_exact_options_target_and_identity(tmp_path) -> None:
+    pytest.importorskip("torch")
     from tiny_omni_decision.student_training import load_teacher_option_cache
 
     example = _example()
@@ -175,6 +176,7 @@ def test_teacher_cache_requires_exact_options_target_and_identity(tmp_path) -> N
 
 
 def test_teacher_cache_rejects_missing_duplicate_and_wrong_teacher_records(tmp_path) -> None:
+    pytest.importorskip("torch")
     from tiny_omni_decision.student_training import load_teacher_option_cache
 
     first = _example(sample_id="train-1")
@@ -215,6 +217,7 @@ def test_teacher_cache_rejects_missing_duplicate_and_wrong_teacher_records(tmp_p
 
 
 def test_teacher_cache_is_train_only_and_rejects_boolean_probabilities(tmp_path) -> None:
+    pytest.importorskip("torch")
     from tiny_omni_decision.student_training import load_teacher_option_cache
 
     example = _example()
