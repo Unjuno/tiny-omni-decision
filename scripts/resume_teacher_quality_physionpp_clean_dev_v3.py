@@ -241,7 +241,7 @@ def main() -> None:
         "training_seconds": result["training_seconds"],
         "wall_seconds": time.monotonic() - started,
         "peak_vram_bytes": result["max_allocated_vram_bytes"],
-        "selected_adapter_sha256": result.get("selected_adapter_sha256"),
+        "selected_adapter_sha256": result.get("best_adapter_sha256"),
         "train_corpus_sha256": preflight["train_sha256"],
         "validation_corpus_sha256": preflight["validation_sha256"],
     }
