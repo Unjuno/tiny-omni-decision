@@ -179,3 +179,19 @@ def test_example_config_is_valid():
     validate_config(values)
     with pytest.raises(ValueError):
         validate_config(values | {"qat_steps": 0})
+
+
+def test_student_requirements_match_embeddinggemma2_runtime_contract():
+    root = Path(__file__).parents[1]
+    requirements = (root / "requirements-student.txt").read_text(encoding="utf-8")
+    assert "sentence-transformers[image,audio,video]>=6.1,<7" in requirements
+    assert "transformers>=5.19,<6" in requirements
+
+
+def test_embeddinggemma2_classes_exist_when_student_dependencies_are_installed():
+    if importlib.util.find_spec("transformers") is None:
+        pytest.skip("student runtime dependencies are installed only in student CI")
+    from transformers import EmbeddingGemma2Model, EmbeddingGemma2Processor
+
+    assert EmbeddingGemma2Model is not None
+    assert EmbeddingGemma2Processor is not None
