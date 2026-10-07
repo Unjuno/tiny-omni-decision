@@ -143,6 +143,6 @@ Reuse compact Teacher option signals, matching the actual choices and their orde
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
 - OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 revision pinning, integration, ternary-constrained recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
-- This is a documentation-only plan change. Existing training code, configs, manifests, and checkpoints are unchanged. The Gemma 4 quantization/recovery configs do not implement this new student path.
+- The student reference implementation is isolated under `tiny_omni_decision.student`; existing Gemma 4 Teacher training code, configs, manifests, and checkpoints remain unchanged. Full real-model GPU execution is still unverified.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).
