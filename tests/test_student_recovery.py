@@ -231,3 +231,11 @@ def test_evaluation_guard_checks_training_and_selection_content():
     with pytest.raises(ValueError, match="overlap"):
         assert_heldout(leaked, guard)
     assert_heldout(Cache("evaluation", "t", [record("3")], "d"*64), guard)
+
+
+def test_qat_optimizer_disables_foreach_peak_memory_path():
+    from tiny_omni_decision.student.recovery import make_optimizer
+
+    parameter = torch.nn.Parameter(torch.ones(4))
+    optimizer = make_optimizer([parameter], learning_rate=1e-3)
+    assert optimizer.defaults["foreach"] is False
