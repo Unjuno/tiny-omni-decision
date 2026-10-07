@@ -67,6 +67,19 @@ def test_ste_preserves_the_forward_codes_and_identity_gradient(ternary) -> None:
     torch.testing.assert_close(weights.grad, torch.ones_like(weights))
 
 
+def test_bfloat16_ste_forward_is_exactly_the_dequantized_ternary_value(ternary) -> None:
+    torch = ternary.torch
+    weights = torch.tensor([0.30078125, 3.0], dtype=torch.bfloat16, requires_grad=True)
+    codes, scales = ternary.quantize(weights, group_size=2, threshold_factor=0.01)
+    expected = ternary.dequantize(codes, scales, group_size=2, dtype=torch.bfloat16)
+
+    actual = ternary.fake_quantize(weights, group_size=2, threshold_factor=0.01)
+    actual.sum().backward()
+
+    torch.testing.assert_close(actual.detach(), expected, rtol=0, atol=0)
+    torch.testing.assert_close(weights.grad, torch.ones_like(weights))
+
+
 def test_qat_parametrization_uses_ternary_weights_and_backpropagates(ternary) -> None:
     torch = ternary.torch
     apply_qat = ternary.apply_qat
@@ -200,3 +213,61 @@ def test_target_selector_covers_loaded_weight_families_and_fails_closed(ternary)
     model.unsupported = UnknownMatrix()
     with pytest.raises(ValueError, match="unclassified matrix parameter.*unsupported.kernel"):
         select_targets(model)
+
+
+def test_packed_overlay_round_trips_quantized_weights_and_checks_base_revision(
+    tmp_path,
+) -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import (
+        export_packed_ternary_overlay,
+        load_packed_ternary_overlay,
+    )
+
+    class LinearModel(torch.nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.linear = torch.nn.Linear(4, 1, bias=False)
+
+        def forward(self, inputs):
+            return self.linear(inputs)
+
+    model = LinearModel()
+    with torch.no_grad():
+        model.linear.weight.copy_(torch.tensor([[-3.0, -1.0, 1.0, 3.0]]))
+    expected = torch.tensor([[-3.0, 0.0, 0.0, 3.0]])
+    expected_output = torch.tensor([[9.0]])
+
+    overlay = tmp_path / "student-ternary"
+    metadata = export_packed_ternary_overlay(
+        model,
+        overlay,
+        base_model_id="google/embeddinggemma-2",
+        base_revision="immutable-revision",
+        group_size=4,
+        threshold_factor=0.7,
+    )
+    restored = LinearModel()
+    with torch.no_grad():
+        restored.linear.weight.fill_(9.0)
+    loaded = load_packed_ternary_overlay(
+        restored,
+        overlay,
+        expected_base_model_id="google/embeddinggemma-2",
+        expected_base_revision="immutable-revision",
+    )
+
+    torch.testing.assert_close(restored.linear.weight, expected)
+    torch.testing.assert_close(
+        restored(torch.tensor([[1.0, 2.0, 3.0, 4.0]])).detach(), expected_output
+    )
+    assert metadata["target_parameter_count"] == 1
+    assert metadata["packed_code_bytes"] == 1
+    assert loaded["base_revision"] == "immutable-revision"
+    with pytest.raises(ValueError, match="base revision mismatch"):
+        load_packed_ternary_overlay(
+            restored,
+            overlay,
+            expected_base_model_id="google/embeddinggemma-2",
+            expected_base_revision="different-revision",
+        )

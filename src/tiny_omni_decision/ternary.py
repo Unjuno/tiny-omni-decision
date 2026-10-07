@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import math
+import os
+from pathlib import Path
 
 import torch
 from torch import Tensor, nn
@@ -107,7 +111,7 @@ def fake_quantize_ternary(
     quantized = dequantize_groupwise_ternary(
         codes, scales, group_size=group_size, dtype=weights.dtype
     )
-    return weights + (quantized - weights).detach()
+    return quantized.detach() + (weights - weights.detach())
 
 
 class _TernaryWeightParametrization(nn.Module):
@@ -231,3 +235,190 @@ def apply_ternary_qat(
             ),
         )
     return target_names
+
+
+def _tensor_bytes(tensor: Tensor) -> int:
+    return tensor.numel() * tensor.element_size()
+
+
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def export_packed_ternary_overlay(
+    model: nn.Module,
+    output_dir: str | Path,
+    *,
+    base_model_id: str,
+    base_revision: str,
+    group_size: int = 256,
+    threshold_factor: float = 0.7,
+) -> dict[str, object]:
+    """Write packed ternary weights as an immutable overlay for a pinned base model.
+
+    The overlay contains only packed target codes and FP32 group scales. The base
+    checkpoint remains an external dependency; exceptions are inventoried in the
+    manifest and retain their original high-precision base values.
+    """
+    _validate_grouping(group_size, threshold_factor)
+    if not base_model_id.strip() or not base_revision.strip():
+        raise ValueError("base_model_id and base_revision are required")
+
+    targets = select_ternary_parameter_names(model)
+    parameters = dict(model.named_parameters())
+    modules = dict(model.named_modules())
+    for name in targets:
+        parent_name, _, leaf_name = name.rpartition(".")
+        if parametrize.is_parametrized(modules[parent_name], leaf_name):
+            raise ValueError(f"cannot export a model with active QAT parametrization: {name}")
+
+    tensor_file = Path(output_dir) / "weights.safetensors"
+    manifest_file = Path(output_dir) / "manifest.json"
+    if tensor_file.exists() or manifest_file.exists():
+        raise FileExistsError(f"ternary overlay already exists: {output_dir}")
+    tensor_file.parent.mkdir(parents=True, exist_ok=True)
+
+    from safetensors.torch import save_file
+
+    tensors: dict[str, Tensor] = {}
+    records: list[dict[str, object]] = []
+    for name in targets:
+        parameter = parameters[name]
+        codes, scales = quantize_groupwise_ternary(
+            parameter, group_size=group_size, threshold_factor=threshold_factor
+        )
+        packed = pack_ternary_codes(codes).detach().cpu().contiguous()
+        scale_tensor = scales.detach().to(device="cpu", dtype=torch.float32).contiguous()
+        tensors[f"code__{name}"] = packed
+        tensors[f"scale__{name}"] = scale_tensor
+        records.append(
+            {
+                "name": name,
+                "shape": list(parameter.shape),
+                "dtype": str(parameter.dtype),
+                "elements": parameter.numel(),
+                "packed_code_bytes": packed.numel(),
+                "scale_bytes": _tensor_bytes(scale_tensor),
+            }
+        )
+
+    temporary_file = tensor_file.with_name("weights.safetensors.tmp")
+    save_file(tensors, str(temporary_file))
+    os.replace(temporary_file, tensor_file)
+    high_precision_parameters = [
+        {
+            "name": name,
+            "shape": list(parameter.shape),
+            "dtype": str(parameter.dtype),
+            "bytes": _tensor_bytes(parameter),
+            "reason": "non_matrix_parameter_or_unsupported_weight_role",
+        }
+        for name, parameter in sorted(parameters.items())
+        if name not in targets
+    ]
+    high_precision_buffers = [
+        {
+            "name": name,
+            "shape": list(buffer.shape),
+            "dtype": str(buffer.dtype),
+            "bytes": _tensor_bytes(buffer),
+            "reason": "runtime_buffer_retained_from_pinned_base",
+        }
+        for name, buffer in sorted(model.named_buffers())
+    ]
+    payload_bytes = tensor_file.stat().st_size
+    metadata: dict[str, object] = {
+        "format": "tiny-omni-ternary-overlay-v1",
+        "base_model_id": base_model_id,
+        "base_revision": base_revision,
+        "group_size": group_size,
+        "threshold_factor": threshold_factor,
+        "code_encoding": "five_signed_trits_per_byte_little_endian_base3",
+        "scale_dtype": "torch.float32",
+        "tensor_file": tensor_file.name,
+        "tensor_file_sha256": _file_sha256(tensor_file),
+        "tensor_file_bytes": payload_bytes,
+        "target_parameter_count": len(records),
+        "target_element_count": sum(int(record["elements"]) for record in records),
+        "packed_code_bytes": sum(int(record["packed_code_bytes"]) for record in records),
+        "scale_bytes": sum(int(record["scale_bytes"]) for record in records),
+        "higher_precision_parameter_bytes": sum(
+            int(record["bytes"]) for record in high_precision_parameters
+        ),
+        "runtime_buffer_bytes": sum(int(record["bytes"]) for record in high_precision_buffers),
+        "targets": records,
+        "higher_precision_parameters": high_precision_parameters,
+        "runtime_buffers": high_precision_buffers,
+        "base_checkpoint_is_external": True,
+    }
+    manifest_file.write_text(
+        json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return metadata
+
+
+def load_packed_ternary_overlay(
+    model: nn.Module,
+    overlay_dir: str | Path,
+    *,
+    expected_base_model_id: str,
+    expected_base_revision: str,
+) -> dict[str, object]:
+    """Validate and apply an overlay to the matching unparametrized base model."""
+    directory = Path(overlay_dir)
+    manifest_path = directory / "manifest.json"
+    metadata = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if metadata.get("format") != "tiny-omni-ternary-overlay-v1":
+        raise ValueError("unsupported ternary overlay format")
+    if metadata.get("base_model_id") != expected_base_model_id:
+        raise ValueError("base model id mismatch")
+    if metadata.get("base_revision") != expected_base_revision:
+        raise ValueError("base revision mismatch")
+
+    tensor_file = directory / str(metadata["tensor_file"])
+    if _file_sha256(tensor_file) != metadata.get("tensor_file_sha256"):
+        raise ValueError("ternary overlay tensor hash mismatch")
+    target_names = select_ternary_parameter_names(model)
+    records = metadata.get("targets")
+    if not isinstance(records, list):
+        raise ValueError("ternary overlay target inventory is invalid")
+    record_by_name = {str(record.get("name")): record for record in records}
+    if len(record_by_name) != len(records) or set(record_by_name) != set(target_names):
+        raise ValueError("ternary overlay targets do not match the loaded model")
+
+    from safetensors.torch import load_file
+
+    tensors = load_file(str(tensor_file), device="cpu")
+    expected_keys = {
+        key
+        for name in target_names
+        for key in (f"code__{name}", f"scale__{name}")
+    }
+    if set(tensors) != expected_keys:
+        raise ValueError("ternary overlay tensor inventory does not match its manifest")
+
+    parameters = dict(model.named_parameters())
+    group_size = int(metadata["group_size"])
+    with torch.no_grad():
+        for name in target_names:
+            parameter = parameters[name]
+            record = record_by_name[name]
+            if list(parameter.shape) != record.get("shape") or str(parameter.dtype) != record.get(
+                "dtype"
+            ):
+                raise ValueError(f"base tensor shape or dtype mismatch: {name}")
+            codes = unpack_ternary_codes(
+                tensors[f"code__{name}"], num_elements=parameter.numel()
+            ).reshape(parameter.shape)
+            scales = tensors[f"scale__{name}"]
+            restored = dequantize_groupwise_ternary(
+                codes, scales, group_size=group_size, dtype=parameter.dtype
+            )
+            if list(restored.shape) != list(parameter.shape):
+                raise ValueError(f"decoded tensor shape mismatch: {name}")
+            parameter.copy_(restored.to(device=parameter.device))
+    return metadata

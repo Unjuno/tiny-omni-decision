@@ -92,11 +92,30 @@ def _arguments() -> argparse.Namespace:
     parser.add_argument("--teacher-predictions", type=Path, required=True)
     parser.add_argument("--data-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--ternary-overlay", type=Path)
     parser.add_argument("--temperature", type=float, required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--minimum-free-vram-gib", type=float, default=7.0)
     return parser.parse_args()
+
+
+def apply_student_ternary_overlay(
+    model: Any,
+    overlay_dir: Path,
+    *,
+    expected_base_model_id: str,
+    expected_base_revision: str,
+) -> dict[str, Any]:
+    """Apply an integrity-checked packed overlay to its pinned student base."""
+    from .ternary import load_packed_ternary_overlay
+
+    return load_packed_ternary_overlay(
+        model,
+        overlay_dir,
+        expected_base_model_id=expected_base_model_id,
+        expected_base_revision=expected_base_revision,
+    )
 
 
 def main() -> None:
@@ -175,6 +194,14 @@ def main() -> None:
         "validation_count": len(examples),
         "validation_media_counts": media_counts,
     }
+    if args.ternary_overlay is not None:
+        overlay_manifest_path = args.ternary_overlay / "manifest.json"
+        if not overlay_manifest_path.is_file():
+            raise SystemExit(f"ternary overlay manifest is missing: {overlay_manifest_path}")
+        identity["ternary_overlay"] = {
+            "path": str(args.ternary_overlay.resolve()),
+            "manifest_sha256": _sha256(overlay_manifest_path),
+        }
     args.output_dir.mkdir(parents=True, exist_ok=True)
     run_path = args.output_dir / "run-metadata.json"
     partial_path = args.output_dir / "predictions.partial.jsonl"
@@ -223,6 +250,21 @@ def main() -> None:
         low_cpu_mem_usage=True,
     )
     model.to(args.device).eval()
+    if args.ternary_overlay is not None:
+        overlay_metadata = apply_student_ternary_overlay(
+            model,
+            args.ternary_overlay,
+            expected_base_model_id=manifest.repo_id,
+            expected_base_revision=manifest.revision,
+        )
+        run_metadata["ternary_overlay"] = {
+            "path": str(args.ternary_overlay.resolve()),
+            "manifest_sha256": _sha256(args.ternary_overlay / "manifest.json"),
+            "tensor_file_sha256": overlay_metadata["tensor_file_sha256"],
+            "tensor_file_bytes": overlay_metadata["tensor_file_bytes"],
+            "runtime": "BF16 dequantization into the pinned Transformers model",
+        }
+        _write_json_atomic(run_path, run_metadata)
     processor = AutoProcessor.from_pretrained(args.model_path)
     append_mode = "ab" if partial_bytes else "wb"
     saved_count = len(existing)

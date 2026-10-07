@@ -236,13 +236,68 @@ the real checkpoint.
 
 Also completed: synthetic local-file image, audio, and one-frame video
 inference through the actual checkpoint on CPU, with finite 768-dimensional
-outputs. Not yet completed: running the verified 256-example same-input validation
-comparison, freezing quality and deployment limits, applying the
-target selector to a full model for QAT, converting checkpoint weights, packed
-export, or runtime verification. A CPU-tested groupwise ternary quantizer,
-identity-STE fake quantizer, QAT parametrization helper, and reversible five-trit
-codec now exist as implementation groundwork; their tests do not constitute a
-model conversion or packed export. The active Gemma 4 Teacher
-run still occupies the shared GPU, so all student smokes used CPU and no
-student GPU workload was started. No ternary size or quality result is
-claimed.
+outputs. The verified 256-example same-input unquantized evaluation is in
+progress; its partial predictions remain outside Git and no complete quality
+metrics are available. The active Gemma 4 Teacher run still occupies the
+shared GPU, so student work remains CPU-only.
+
+## Packed overlay and runtime round-trip smoke
+
+On 2026-10-08 JST, the pinned local BF16 checkpoint was loaded with Transformers
+5.19.0 and PyTorch 2.6.0+cu124 on CPU, one thread, eager attention. The complete
+483-tensor candidate inventory (744,129,664 elements) was run through the
+ternary-QAT parametrization. Its weights were restored to their original base
+values, exported as five-trit packed codes plus FP32 scales, and applied to a
+fresh load of the same hash-verified base. The fresh load's synthetic query and
+two-option embeddings exactly matched the QAT forward outputs (`torch.equal`;
+embedding SHA-256
+`81a32bc804888f05ba6658a384e3bc9726cf198766ba896b1d8abe8b58936a0d`). The
+export took 23.91 seconds; fresh reload and forward took 20.16 seconds; the
+whole smoke took 99.25 seconds.
+
+The run artifact is outside Git at
+`C:/CodexArtifacts/embeddinggemma2-ternary-overlay-v0/`. Its packed
+`weights.safetensors` is 160,577,615 bytes: 148,826,163 code bytes plus
+11,627,028 scale bytes, with the remainder in the safetensors header. The
+overlay contains 483 targets / 744,129,664 elements and retains a dependency on
+the pinned base. The manifest lists every target shape/dtype and all exceptions:
+483,648 bytes of high-precision parameters and 5,258 bytes of runtime buffers.
+The checkpoint file remains external and unchanged. The manifest SHA-256 is
+`01e4d9e6b265c149f3aeefc25775f6a1e5d4ed1fb224f345339872edfe5e0997`; the tensor
+file SHA-256 is
+`481be94149c6784bcc052e21503ae160f11c8971972024a09ebba0e911b4a4c1`.
+The machine-readable runtime report is `runtime-roundtrip-report.json`,
+SHA-256 `63250285ece72e517916a0143ed8f37e2ba964760abaf8e32dcc05f2458b1aee`;
+it records working-tree source hashes and exact run metadata. The external
+smoke driver SHA-256 is
+`a1d1dd452064528bbeecc9015aebd4c81ecd2901687bf345478eb9bf14c38574c`.
+
+The successful command used the existing isolated Transformers site-packages
+with the shared PyTorch runtime; no dependency was upgraded:
+
+```powershell
+$env:PYTHONPATH='C:\CodexArtifacts\venvs\embeddinggemma2-v518\Lib\site-packages;src'
+python 'C:\CodexArtifacts\run_embeddinggemma2_ternary_overlay.py' --model-path 'C:\CodexArtifacts\embeddinggemma2-metadata-914f7f8' --model-manifest 'manifests/embeddinggemma2-student.yaml' --output-dir 'C:\CodexArtifacts\embeddinggemma2-ternary-overlay-v0'
+```
+
+This verifies architecture-aware conversion, packed serialization, integrity
+checks, and the standard Transformers load path after BF16 dequantization. It
+does not verify a runtime that computes directly from packed codes, and it
+does not reduce inference RAM. The five-trit code payload is physically 1.6
+bits per target weight before scales, headers, exceptions, and model metadata;
+this is not a whole-model storage claim. A BF16 edge case also surfaced during
+the smoke work: the previous identity-STE expression could round away from the
+ternary value in the forward pass. It now adds a zero-valued gradient term to
+the detached quantized tensor, and a regression test checks exact BF16 forward
+codes plus identity gradients.
+
+The standard evaluator now accepts `--ternary-overlay` and includes its
+manifest hash in run identity, so a ternary run cannot be confused with or
+resume the unquantized baseline. The baseline's same-input comparison will use
+the same 256 examples and option order after it completes. The evaluator's
+first partial file is at
+`C:/CodexArtifacts/embeddinggemma2-unquantized-validation-v0-256/`; it has not
+yet produced final metrics. At 2026-10-08 01:45 JST, it held 62 of 256 rows
+and its Python process was still alive with CPU time increasing. No sealed
+audit data has been read. The full CPU test suite passed (98 tests), Ruff
+passed, and the EmbeddingGemma 2 manifest validator passed.

@@ -196,16 +196,20 @@ readout, CE+Brier backward, and finite projection gradients, plus generated
 image/audio/one-frame-video inputs through the actual model with finite
 768-dimensional outputs. The shared Teacher environment was not upgraded and
 no student GPU allocation occurred. These are path checks, not a quality
-baseline. The actual loaded checkpoint now has a fail-closed candidate
-target inventory, and CPU tests cover groupwise quantization, STE/QAT parametrization, and a
-reversible five-trit codec. This is code groundwork only: a fixed-order validation evaluator now records
-option-order hashes and modality/source metrics, but it has only synthetic CPU
-tests. No real corpus quality values exist, and no model weights have been
-converted or packed. Frozen-corpus evaluation, conversion, packed export, and
-runtime verification remain open. A hashed validation-only subset fixes Teacher
-v1's 256 checkpoint-selection examples and exact ID/option order; a resumable
-evaluator checks those inputs and the pinned checkpoint before inference. No
-model quality evaluation has run yet; see
+baseline. The actual loaded checkpoint has a fail-closed candidate target
+inventory. A CPU real-checkpoint smoke now converts all 483 candidate tensors,
+exports five-trit codes and FP32 group scales, reloads the overlay onto a fresh
+pinned model, and reproduces the ternary-QAT synthetic embeddings exactly. The
+overlay contains 160,577,615 tensor-file bytes; the high-precision parameter
+exceptions are 483,648 bytes and runtime buffers are 5,258 bytes. This path
+dequantizes to BF16 for the ordinary Transformers runtime; it does not provide
+a packed low-bit compute kernel or reduced inference memory. The frozen-corpus
+unquantized evaluator is in progress and has not produced complete metrics; its
+hashed validation-only subset fixes Teacher v1's 256 checkpoint-selection
+examples and exact ID/option order. The new evaluator option accepts the
+integrity-checked ternary overlay for a subsequent same-example comparison.
+No sealed audit data has been read. Conversion details and the partial
+baseline status are in
 [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
 
 Before conversion:

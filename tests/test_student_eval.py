@@ -338,3 +338,40 @@ def test_student_eval_resumes_only_from_an_exact_prediction_prefix(
             temperature=1.0,
             existing_predictions=reordered,
         )
+
+
+def test_student_evaluation_applies_overlay_for_its_pinned_base(tmp_path: Path) -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.student_evaluate import apply_student_ternary_overlay
+    from tiny_omni_decision.ternary import export_packed_ternary_overlay
+
+    class TinyModel(torch.nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.projection = torch.nn.Linear(4, 1, bias=False)
+
+    source = TinyModel()
+    with torch.no_grad():
+        source.projection.weight.copy_(torch.tensor([[-3.0, -1.0, 1.0, 3.0]]))
+    overlay = tmp_path / "packed-overlay"
+    export_packed_ternary_overlay(
+        source,
+        overlay,
+        base_model_id="google/embeddinggemma-2",
+        base_revision="revision-123",
+        group_size=4,
+    )
+    loaded = TinyModel()
+    with torch.no_grad():
+        loaded.projection.weight.zero_()
+
+    apply_student_ternary_overlay(
+        loaded,
+        overlay,
+        expected_base_model_id="google/embeddinggemma-2",
+        expected_base_revision="revision-123",
+    )
+
+    torch.testing.assert_close(
+        loaded.projection.weight, torch.tensor([[-3.0, 0.0, 0.0, 3.0]])
+    )
