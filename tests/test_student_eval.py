@@ -81,3 +81,49 @@ def test_student_eval_rejects_duplicate_ids_and_invalid_temperature(tmp_path: Pa
         evaluate_student_examples(
             model, object(), [example, example], data_root=tmp_path, temperature=1.0
         )
+
+
+def test_student_eval_reuses_option_embeddings_within_one_run(
+    monkeypatch, tmp_path: Path
+) -> None:
+    torch = pytest.importorskip("torch")
+    import tiny_omni_decision.student_eval as student_eval
+
+    examples = [
+        _example(sample_id="first", options=["wrong", "right"], target="right"),
+        _example(sample_id="second", options=["right", "other"], target="right"),
+    ]
+
+    class RecordingProcessor:
+        def __init__(self) -> None:
+            self.calls = []
+
+        def __call__(self, *, text, return_tensors):
+            self.calls.append(text)
+            return {"text": text}
+
+    def embeddings(_model, inputs):
+        texts = inputs["text"]
+        if "Pick the matching answer." in texts[0]:
+            return torch.tensor([[1.0, 0.0]])
+        vectors = {
+            "wrong": [0.0, 1.0],
+            "right": [1.0, 0.0],
+            "other": [-1.0, 0.0],
+        }
+        return torch.tensor([vectors[text.rsplit(" ", 1)[-1]] for text in texts])
+
+    monkeypatch.setattr(student_eval, "model_sentence_embeddings", embeddings)
+    processor = RecordingProcessor()
+    model = SimpleNamespace(eval=lambda: None)
+
+    _, predictions = student_eval.evaluate_student_examples(
+        model, processor, examples, data_root=tmp_path, temperature=1.0
+    )
+
+    assert [len(call) for call in processor.calls] == [1, 2, 1, 1]
+    assert [row["prediction"] for row in predictions] == [1, 0]
+    assert [row["options"] for row in predictions] == [
+        ["wrong", "right"],
+        ["right", "other"],
+    ]

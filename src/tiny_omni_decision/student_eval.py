@@ -11,9 +11,9 @@ from typing import Any
 from .decision_math import brier_score, expected_calibration_error, negative_log_likelihood
 from .schema import DecisionExample
 from .student import (
+    decision_option_text,
     model_sentence_embeddings,
     processor_inputs_for_decision_example,
-    processor_inputs_for_options,
     supplied_option_logits,
 )
 
@@ -65,14 +65,42 @@ def evaluate_student_examples(
     model.eval()
     groups: dict[str, list[tuple[list[float], int]]] = defaultdict(list)
     predictions: list[dict[str, Any]] = []
+    option_embedding_cache: dict[str, Any] = {}
     with torch.inference_mode():
         for example in materialized:
             query_inputs = processor_inputs_for_decision_example(
                 processor, example, data_root=data_root
             )
-            option_inputs = processor_inputs_for_options(processor, example.options)
             query_embedding = model_sentence_embeddings(model, query_inputs)[0]
-            option_embeddings = model_sentence_embeddings(model, option_inputs)
+            missing_options = list(
+                dict.fromkeys(
+                    option
+                    for option in example.options
+                    if decision_option_text(option) not in option_embedding_cache
+                )
+            )
+            if missing_options:
+                option_inputs = processor(
+                    text=[decision_option_text(option) for option in missing_options],
+                    return_tensors="pt",
+                )
+                new_embeddings = model_sentence_embeddings(model, option_inputs)
+                if new_embeddings.shape[0] != len(missing_options):
+                    raise ValueError("option encoder returned a different number of embeddings")
+                option_embedding_cache.update(
+                    {
+                        decision_option_text(option): embedding.detach().cpu().float()
+                        for option, embedding in zip(
+                            missing_options, new_embeddings, strict=True
+                        )
+                    }
+                )
+            option_embeddings = torch.stack(
+                [
+                    option_embedding_cache[decision_option_text(option)]
+                    for option in example.options
+                ]
+            ).to(device=query_embedding.device)
             logits = supplied_option_logits(
                 query_embedding, option_embeddings, temperature=temperature
             )
