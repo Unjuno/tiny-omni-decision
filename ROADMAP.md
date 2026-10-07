@@ -34,7 +34,7 @@ The project does not require the Teacher and student to share an architecture an
 
 ## Phase 0 — Freeze the design
 
-**Status: existing Teacher path retained; ternary-first student experiment planned, not implemented.**
+**Status: existing Teacher path retained; CPU-tested student reference implementation added, real-model GPU validation still open.**
 
 Teacher target:
 - `google/gemma-4-E2B-it-qat-q4_0-unquantized`
@@ -266,7 +266,7 @@ Target outputs:
 
 ## Scope and non-goals
 
-- This is a plan-only change. Existing training code, configs, manifests, checkpoints, and historical reports are unchanged; old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.
+- The student path is implemented in an isolated package; existing Teacher code, configs, manifests, checkpoints, and historical reports remain unchanged. Old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.
 - No separate unconstrained high-precision student fine-tuning stage before this ternary experiment.
 - No reinforcement learning or long chain-of-thought preservation.
 - No deeper terminal-block surgery, extra teacher, or broad quantizer comparison ladder before the primary pooled-head path is measured.
