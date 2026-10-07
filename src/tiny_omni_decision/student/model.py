@@ -119,7 +119,10 @@ class EmbeddingDecisionStudent(nn.Module):
         self.encoder = encoder
         self.data_root = data_root
         self.max_length = max_length
-        self.decision_head = VariableOptionDecisionHead(embedding_dim, head_hidden_dim)
+        encoder_device = next(encoder.parameters()).device
+        self.decision_head = VariableOptionDecisionHead(
+            embedding_dim, head_hidden_dim
+        ).to(device=encoder_device)
 
     def ternary_exclusions(self) -> list[str]:
         """Keep the tiny Decision Head higher precision during backbone ternary QAT."""
