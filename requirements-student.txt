@@ -1,5 +1,5 @@
 # Use a separate environment: do not upgrade the active Teacher environment.
-# Install an appropriate torch wheel for the target device first.
+# Install a matched torch/torchvision/torchaudio wheel set for the target device first.
 torch>=2.6,<2.7
 torchvision>=0.21,<0.22
 torchaudio>=2.6,<2.7
