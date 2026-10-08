@@ -271,7 +271,7 @@ def test_qat_script_progress_is_written_and_flushed(tmp_path, capsys) -> None:
     assert json.loads(capsys.readouterr().out.strip()) == payload
 
 
-def test_explicit_best_shadow_warm_start_checks_identity_and_step(tmp_path) -> None:
+def test_explicit_latest_shadow_warm_start_checks_identity_and_step(tmp_path) -> None:
     import runpy
     from pathlib import Path
 
@@ -288,19 +288,38 @@ def test_explicit_best_shadow_warm_start_checks_identity_and_step(tmp_path) -> N
         "target_element_count": 8,
         "target_parameter_names": ["0.weight"],
     }
-    ledger = dict(identity, best_validation_step=128, global_step=256,
-                  best_shadow_sha256="f" * 64)
+    ledger = dict(
+        identity,
+        best_validation_step=128,
+        global_step=256,
+        latest_checkpoint_step=256,
+        latest_shadow_filename="latest-shadow-step-0256.safetensors",
+        latest_shadow_sha256="f" * 64,
+    )
+    # Even if best is 128, resume from the most recently saved step: 256.
     assert helper(
         ledger, identity, total_steps=1215, checkpoint_interval=128
-    ) == 128
+    ) == 256
     bad = dict(ledger, teacher_cache_sha256="different")
     with pytest.raises(ValueError, match="teacher_cache_sha256"):
         helper(bad, identity, total_steps=1215, checkpoint_interval=128)
     with pytest.raises(ValueError, match="checkpoint interval"):
         helper(
-            dict(ledger, best_validation_step=120),
+            dict(ledger, latest_checkpoint_step=120),
             identity, total_steps=1215, checkpoint_interval=128
         )
+    with pytest.raises(ValueError, match="latest shadow filename"):
+        helper(
+            dict(ledger, latest_shadow_filename="best-shadow.safetensors"),
+            identity, total_steps=1215, checkpoint_interval=128
+        )
+    # The old run has only best-shadow; do not silently fall back to step 128.
+    old_run = dict(
+        identity, global_step=256, best_validation_step=128,
+        best_shadow_sha256="f" * 64,
+    )
+    with pytest.raises(ValueError, match="latest checkpoint"):
+        helper(old_run, identity, total_steps=1215, checkpoint_interval=128)
 
 
 def test_warm_start_shadow_restoration_validates_all_before_mutating() -> None:
