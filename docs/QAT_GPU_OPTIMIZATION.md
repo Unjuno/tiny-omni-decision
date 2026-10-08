@@ -165,12 +165,19 @@ PyOpenCL. Therefore this installed QAT path cannot dispatch model training to
 the Iris Xe. No second GPU job or package installation was attempted while
 the RTX run was active.
 
-This is an environment limitation, not a claim that Iris Xe training is
-unsupported in general. Current PyTorch documentation describes native Intel
-XPU training on Windows, with Windows `torch.compile` support starting in
-PyTorch 2.7; this run is pinned to PyTorch 2.6.0+cu124 and the QAT script uses
-CUDA-specific APIs throughout. A separate XPU environment plus an explicit
-device-port and model/operator smoke would be required. Microsoft's
+This is an environment limitation, and generic Intel XPU support does not
+establish support for this particular Iris Xe generation. The current PyTorch
+Windows client-GPU validation list names Arc and newer Core Ultra integrated
+graphics, but does not list this Iris Xe adapter. Its installed driver is
+31.0.101.3887; Intel's PyTorch GPU prerequisites page specifies a newer driver
+for its documented setup. Treat Iris Xe compatibility as **unverified and
+potentially unsupported** until the exact adapter and driver pass an XPU
+availability check and model/operator smoke in an isolated environment. Current
+PyTorch documentation describes native Intel XPU training on Windows, with
+Windows `torch.compile` support starting in PyTorch 2.7; this run is pinned to
+PyTorch 2.6.0+cu124 and the QAT script uses CUDA-specific APIs throughout. A
+separate XPU environment plus an explicit device-port and model/operator smoke
+would be required. Microsoft's
 `torch-directml` path is not a drop-in alternative here: its documented package
 is capped at PyTorch 2.3.1 and DirectML is in maintenance mode. Neither route
 has been installed or measured on this machine.
@@ -181,11 +188,13 @@ attributed approximately 15.77 GiB dedicated and 3.79 GiB shared allocation
 to attempt08 PID 30928. This confirms the process is already using WDDM shared
 system memory while the RTX remains nearly full; it does not mean the Intel
 adapter supplied that memory or that such paging improves throughput. The
-Iris Xe may be useful for a separately supported inference/compute backend,
-but that needs its own compatibility and throughput measurement after the
-current run releases the device. It should not be treated as extra CUDA VRAM.
+Iris Xe's shared system-memory capacity may be useful to workloads supported by
+its driver/backend, but it is not pooled CUDA VRAM and is not evidence that
+this QAT run can use the adapter. Any potential use needs compatibility and
+throughput measurements after the current run releases the device.
 
 Official references: [PyTorch Intel GPU/XPU setup](https://docs.pytorch.org/docs/stable/notes/get_start_xpu.html),
+[Intel PyTorch GPU prerequisites](https://www.intel.com/content/www/us/en/developer/articles/tool/pytorch-prerequisites-for-intel-gpu/2-8.html),
 [Microsoft DirectML status](https://github.com/microsoft/DirectML), and
 [DirectML PyTorch version limit](https://github.com/MicrosoftDocs/windows-ai-docs/blob/docs/docs/directml/pytorch-windows.md).
 
