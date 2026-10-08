@@ -44,6 +44,35 @@ def emit_progress(path: Path, *, event: str, **fields: Any) -> None:
     print(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), flush=True)
 
 
+def verify_warm_start_ledger(
+    previous: dict[str, Any],
+    expected: dict[str, Any],
+    *,
+    total_steps: int,
+    checkpoint_interval: int,
+) -> int:
+    """Validate an explicitly requested shadow-only, optimizer-reset handoff."""
+    for field, value in expected.items():
+        if previous.get(field) != value:
+            raise ValueError(f"warm-start source differs in {field}")
+    step = previous.get("best_validation_step")
+    current = previous.get("global_step")
+    if type(step) is not int or type(current) is not int or not (
+        0 < step <= current <= total_steps
+    ):
+        raise ValueError("warm-start source has no completed selected checkpoint")
+    if checkpoint_interval <= 0 or step % checkpoint_interval:
+        raise ValueError("warm-start selected step is not on the checkpoint interval")
+    digest = previous.get("best_shadow_sha256")
+    if (
+        not isinstance(digest, str)
+        or len(digest) != 64
+        or any(char not in "0123456789abcdef" for char in digest)
+    ):
+        raise ValueError("warm-start source best-shadow digest is invalid")
+    return step
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     with temporary.open("w", encoding="utf-8", newline="\n") as stream:
@@ -63,6 +92,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--teacher-repo-root", type=Path, required=True)
+    parser.add_argument(
+        "--warm-start-run", type=Path,
+        help=("Selected BF16 best-shadow from a stopped earlier run. "
+              "Resets optimizer and scheduler state; NOT an exact resume."),
+    )
     return parser.parse_args()
 
 
@@ -95,6 +129,7 @@ def main() -> None:
         copy_shadow_gradients_to_masters,
         load_teacher_option_cache,
         make_fp32_cpu_master_parameters,
+        restore_qat_shadows,
         student_option_distillation_loss,
         sync_cpu_masters_to_shadows,
     )
