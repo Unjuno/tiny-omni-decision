@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import math
 from collections import Counter
+from contextlib import contextmanager
 from collections.abc import Sequence
 
 import torch
@@ -88,6 +89,10 @@ class TernaryWeight(nn.Module):
         dequantize(codes, scales, self.group_size)  # validate before mutation
         self.codes = codes.detach().clone()
         self.scales = scales.detach().float().clone()
+
+    def clear_frozen(self) -> None:
+        self.codes = None
+        self.scales = None
 
     def forward(self, weight: Tensor) -> Tensor:
         if self.frozen:
@@ -197,7 +202,12 @@ class TernaryController:
             owner, attribute = owner_attribute(model, name)
             quantizer = TernaryWeight(group_size)
             weight.requires_grad_(True)
-            parametrize.register_parametrization(owner, attribute, quantizer)
+            # TernaryWeight is shape/dtype preserving by construction. unsafe=True
+            # avoids PyTorch calling it once during registration, which would
+            # otherwise quantize the entire full-size weight before training starts.
+            parametrize.register_parametrization(
+                owner, attribute, quantizer, unsafe=True
+            )
             self.targets[name] = quantizer
 
     def original(self, name: str) -> Tensor:
@@ -209,6 +219,23 @@ class TernaryController:
         if q.frozen:
             return q.codes.detach().clone(), q.scales.detach().clone()
         return quantize(self.original(name), self.group_size)
+
+    @contextmanager
+    def cached_evaluation_codes(self):
+        """Quantize each target once for an evaluation pass, then restore trainable QAT."""
+        frozen = [q.frozen for q in self.targets.values()]
+        if any(frozen):
+            if not all(frozen):
+                raise ValueError("partially frozen ternary state")
+            yield
+            return
+        try:
+            for name, q in self.targets.items():
+                q.set_frozen(*self.components(name))
+            yield
+        finally:
+            for q in self.targets.values():
+                q.clear_frozen()
 
     def freeze(self) -> None:
         for name, q in self.targets.items():
