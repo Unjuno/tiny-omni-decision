@@ -414,34 +414,52 @@ line after update 1 and every 4 updates, as well as around validation
 and selected-shadow saves. A report of GPU saturation alone does not
 distinguish a slow update from a slow validation; these timing events do.
 
-**A selected `best-shadow.safetensors` is NOT an optimizer checkpoint.**
-The currently running old process cannot pick up a change to this script,
-and its state does not contain optimizer/scheduler or RNG snapshots.
-Therefore it cannot be resumed *exactly* from step 128 or 256 by
-switching code. Do not describe it as a strict resume.
+**Best is for model selection; latest is for continuing training.**
+`best-shadow.safetensors` is updated only when validation improves.
+In the original attempt05 script, `run-metadata.json` at step 256 with
+`best_validation_step: 128` **does not imply that step-256 model weights
+were saved**. The old running process does not support a live script patch
+or a strict optimizer resume; it must **not** be stopped on the assumption
+that latest weights can be reconstructed from the metrics or best shadow.
 
-For an explicit optimizer-reset continuation, first stop the source
-process after verifying that the selected `best-shadow` and
-`run-metadata.json` are consistent and the process has exited.
-Use a **different output directory** in a separately reviewed copy of
-the config (do not overwrite the original). Then:
+The revised script additionally saves
+`latest-shadow-step-0128.safetensors`,
+`latest-shadow-step-0256.safetensors`, etc., at every configured
+checkpoint boundary **regardless of whether validation improved**.
+The new shadow is fully saved and SHA-256-verified before an atomic
+`run-metadata.json` update publishes its `latest_checkpoint_step`,
+`latest_shadow_filename`, `latest_shadow_sha256`, and consumed-example
+count. Only then is the previous latest-shadow file removed; a failed save
+leaves the prior published checkpoint intact. The best-shadow is never
+substituted for latest. These additional checkpoint writes take disk space
+and time and still do not contain optimizer state.
+
+For a run produced by **the revised script**, after verifying that the
+source run has a complete latest-shadow + matching ledger and that its
+process has exited, a user-approved optimizer-reset continuation can
+start into a **different output directory**, using a separately reviewed
+config and:
 
 ```powershell
-python scripts/train_student_ternary_qat.py --config CONFIG_WITH_NEW_OUTPUT_DIR.yaml --repo-root . --teacher-repo-root TEACHER_REPO_ROOT --warm-start-run C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-05-adafactor
+python scripts/train_student_ternary_qat.py --config CONFIG_WITH_NEW_OUTPUT_DIR.yaml --repo-root . --teacher-repo-root TEACHER_REPO_ROOT --warm-start-run SOURCE_RUN_WITH_LATEST_SHADOW
 ```
 
-The warm start checks selected-step alignment with the 128-step
-checkpoint interval, matching model revision, immutable Teacher cache,
-data and validation hashes, deterministic sample order, target
-inventory, option-readout settings, and the selected shadow SHA-256
-before and after loading. It begins from the previously selected
-`best_validation_step` and skips precisely those consumed examples
-in the same one-pass sample order, maintaining the global cosine
-scheduler *position*. Optimizer moments and CPU FP32 master fractional
-state are reinitialized from the saved BF16 weights and are **not**
-restored. The new run records that fact and its source-run hashes.
-If the source reached step 256 but best remained step 128, the
-continuation deliberately restarts from the selected step 128; the
-intervening updates are discarded. Never switch or stop the live
-process without explicit operator confirmation. PR #14 remains
-separate and unmerged until checks and real GPU tests pass.
+Warm start checks model revision, immutable Teacher cache, data/validation
+hashes, deterministic sample order, quantization/readout settings,
+complete target inventory, exact checkpoint step, consumed count, and
+latest-shadow SHA-256 before and after loading. It begins from the actual
+`latest_checkpoint_step`, **not** `best_validation_step`. For example,
+if best remains 128 but the newest weight snapshot is 256, it starts
+from step 256 and skips exactly 1,024 already-consumed examples. The
+global cosine scheduler step is retained, but optimizer moments and
+CPU FP32 master fractional state are reinitialized from the saved BF16
+shadow weights. This is explicitly an **optimizer-reset warm start, not
+an exact resume**. No performance equivalence is claimed.
+
+**The currently running pre-fix attempt05 cannot use this new warm-start
+path unless it independently has a verified latest-shadow file and ledger
+in the new format.** Otherwise the safe options are to let the old run
+finish, or explicitly accept loss of its unsaved training progress; never
+silently restart from its best at 128 while calling it latest at 256.
+Do not stop the live process without operator confirmation. PR #14 remains
+draft/unmerged pending real GPU testing.
