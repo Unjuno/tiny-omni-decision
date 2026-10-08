@@ -447,19 +447,29 @@ python scripts/train_student_ternary_qat.py --config CONFIG_WITH_NEW_OUTPUT_DIR.
 Warm start checks model revision, immutable Teacher cache, data/validation
 hashes, deterministic sample order, quantization/readout settings,
 complete target inventory, exact checkpoint step, consumed count, and
-latest-shadow SHA-256 before and after loading. It begins from the actual
-`latest_checkpoint_step`, **not** `best_validation_step`. For example,
-if best remains 128 but the newest weight snapshot is 256, it starts
-from step 256 and skips exactly 1,024 already-consumed examples. The
-global cosine scheduler step is retained, but optimizer moments and
-CPU FP32 master fractional state are reinitialized from the saved BF16
+checkpoint SHA-256 before and after loading. It begins from the actual
+`latest_checkpoint_step` when that ledger exists, **not** the best step.
+For an older run that has no latest-shadow ledger, the best checkpoint is
+accepted only when `best_validation_step == global_step`, the step is on
+the configured checkpoint interval, the consumed-example count matches,
+and `best-shadow.safetensors` matches `best_shadow_sha256`. For example,
+an old run at global step 256 with best step 128 is rejected; if a later
+validation writes a new best at step 384 and metadata also records global
+step 384, that best shadow may be used as the step-384 warm-start source
+after its SHA-256 is verified. A mismatch fails closed; it never silently
+falls back to an older best.
+
+The global cosine scheduler position is retained, but optimizer moments
+and CPU FP32 master fractional state are reinitialized from the saved BF16
 shadow weights. This is explicitly an **optimizer-reset warm start, not
 an exact resume**. No performance equivalence is claimed.
 
-**The currently running pre-fix attempt05 cannot use this new warm-start
-path unless it independently has a verified latest-shadow file and ledger
-in the new format.** Otherwise the safe options are to let the old run
-finish, or explicitly accept loss of its unsaved training progress; never
-silently restart from its best at 128 while calling it latest at 256.
-Do not stop the live process without operator confirmation. PR #14 remains
-draft/unmerged pending real GPU testing.
+**The currently running pre-fix attempt05 must not be stopped while its
+best shadow is stale relative to its last saved step.** It can use the
+legacy-best warm-start path only after an operator-approved stop at a
+validation boundary where `best_validation_step == global_step`, with the
+recorded sample count and best-shadow SHA-256 verified. If the best remains
+behind global step, continue the existing process and wait for a newer best;
+do not call the old best a latest checkpoint. This handoff does not restore
+optimizer state and is not an exact resume. PR #14 remains draft/unmerged
+pending real GPU testing.

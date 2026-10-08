@@ -53,33 +53,59 @@ def verify_warm_start_ledger(
     total_steps: int,
     checkpoint_interval: int,
 ) -> int:
-    """Validate an explicitly requested shadow-only, optimizer-reset handoff."""
+    """Validate an explicit optimizer-reset warm start from a saved shadow."""
     for field, value in expected.items():
         if previous.get(field) != value:
             raise ValueError(f"warm-start source differs in {field}")
-    step = previous.get("latest_checkpoint_step")
     current = previous.get("global_step")
-    if type(step) is not int or type(current) is not int or not (
-        0 < step <= current <= total_steps
-    ):
+    if type(current) is not int or not 0 < current <= total_steps:
         raise ValueError(
-            "warm-start source has no completed latest checkpoint; "
-            "best-shadow alone cannot resume the latest training state"
+            "warm-start source has no valid last recorded training step"
         )
+
+    # New-format runs publish a latest-shadow at every checkpoint boundary.
+    # Reject partial ledgers instead of falling back to a possibly stale best.
+    has_latest_ledger = any(
+        field in previous
+        for field in (
+            "latest_checkpoint_step",
+            "latest_shadow_filename",
+            "latest_shadow_sha256",
+        )
+    )
+    if has_latest_ledger:
+        step = previous.get("latest_checkpoint_step")
+        if type(step) is not int or not 0 < step <= current:
+            raise ValueError("warm-start source has no completed latest checkpoint")
+        expected_filename = f"latest-shadow-step-{step:04d}.safetensors"
+        if previous.get("latest_shadow_filename") != expected_filename:
+            raise ValueError("warm-start latest shadow filename is invalid")
+        digest = previous.get("latest_shadow_sha256")
+        if (
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(char not in "0123456789abcdef" for char in digest)
+        ):
+            raise ValueError("warm-start source latest shadow digest is invalid")
+    else:
+        # The old attempt05 writer persisted only best-shadow. It is eligible
+        # only when that saved validation checkpoint is exactly the last
+        # metadata step; otherwise its best is stale relative to training.
+        step = previous.get("best_validation_step")
+        if type(step) is not int or step != current:
+            raise ValueError("best shadow is not the latest saved step")
+        digest = previous.get("best_shadow_sha256")
+        if (
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(char not in "0123456789abcdef" for char in digest)
+        ):
+            raise ValueError("warm-start source best shadow digest is invalid")
+
     if checkpoint_interval <= 0 or (
         step % checkpoint_interval and step != total_steps
     ):
-        raise ValueError("warm-start latest step is not on the checkpoint interval")
-    expected_filename = f"latest-shadow-step-{step:04d}.safetensors"
-    if previous.get("latest_shadow_filename") != expected_filename:
-        raise ValueError("warm-start latest shadow filename is invalid")
-    digest = previous.get("latest_shadow_sha256")
-    if (
-        not isinstance(digest, str)
-        or len(digest) != 64
-        or any(char not in "0123456789abcdef" for char in digest)
-    ):
-        raise ValueError("warm-start source latest shadow digest is invalid")
+        raise ValueError("warm-start checkpoint step is not on the checkpoint interval")
     return step
 
 
@@ -455,24 +481,42 @@ def main() -> None:
         expected_consumed = warm_start_step * int(
             train_cfg["gradient_accumulation_steps"]
         )
-        if previous_run.get("latest_checkpoint_examples_consumed") != expected_consumed:
-            raise ValueError("warm-start source latest checkpoint example count differs")
-        warm_start_shadow_path = source_dir / previous_run["latest_shadow_filename"]
+        has_latest_ledger = any(
+            field in previous_run
+            for field in (
+                "latest_checkpoint_step",
+                "latest_shadow_filename",
+                "latest_shadow_sha256",
+            )
+        )
+        if has_latest_ledger:
+            source_examples = previous_run.get("latest_checkpoint_examples_consumed")
+            source_shadow_filename = previous_run.get("latest_shadow_filename")
+            expected_shadow_digest = previous_run.get("latest_shadow_sha256")
+            source_checkpoint_kind = "latest_shadow"
+        else:
+            source_examples = previous_run.get("examples_consumed")
+            source_shadow_filename = "best-shadow.safetensors"
+            expected_shadow_digest = previous_run.get("best_shadow_sha256")
+            source_checkpoint_kind = "best_validation_shadow"
+        if source_examples != expected_consumed:
+            raise ValueError("warm-start source checkpoint example count differs")
+        warm_start_shadow_path = source_dir / source_shadow_filename
         if not warm_start_shadow_path.is_file():
-            raise FileNotFoundError("warm-start source latest shadow is missing")
-        expected_shadow_digest = previous_run["latest_shadow_sha256"]
+            raise FileNotFoundError("warm-start source shadow checkpoint is missing")
         actual_shadow_digest = sha256(warm_start_shadow_path)
         if actual_shadow_digest != expected_shadow_digest:
-            raise ValueError("warm-start latest shadow checksum differs from ledger")
+            raise ValueError("warm-start shadow checksum differs from ledger")
         warm_start_lineage = {
-            "kind": "latest_shadow_warm_start_optimizer_reset",
+            "kind": f"{source_checkpoint_kind}_warm_start_optimizer_reset",
             "exact_resume": False,
             "source_run_dir": str(source_dir),
             "source_run_metadata_sha256": sha256(source_metadata_path),
-            "source_latest_shadow_sha256": actual_shadow_digest,
-            "source_latest_checkpoint_step": warm_start_step,
+            "source_shadow_filename": source_shadow_filename,
+            "source_shadow_sha256": actual_shadow_digest,
+            "source_checkpoint_step": warm_start_step,
             "source_last_recorded_step": previous_run["global_step"],
-            "prior_examples_consumed_on_latest_path": expected_consumed,
+            "source_examples_consumed": expected_consumed,
             "optimizer_moments_restored": False,
             "scheduler_position_restored": True,
         }
@@ -621,8 +665,8 @@ def main() -> None:
         )
         selected_weights = load_file(str(warm_start_shadow_path), device="cpu")
         restore_qat_shadows(model, target_names, selected_weights)
-        if sha256(warm_start_shadow_path) != previous_run["latest_shadow_sha256"]:
-            raise ValueError("warm-start latest shadow changed during load")
+        if sha256(warm_start_shadow_path) != expected_shadow_digest:
+            raise ValueError("warm-start shadow changed during load")
         del selected_weights
     modules = dict(model.named_modules())
     for parameter in model.parameters():

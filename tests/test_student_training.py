@@ -305,7 +305,11 @@ def test_explicit_latest_shadow_warm_start_checks_identity_and_step(tmp_path) ->
         helper(bad, identity, total_steps=1215, checkpoint_interval=128)
     with pytest.raises(ValueError, match="checkpoint interval"):
         helper(
-            dict(ledger, latest_checkpoint_step=120),
+            dict(
+                ledger,
+                latest_checkpoint_step=120,
+                latest_shadow_filename="latest-shadow-step-0120.safetensors",
+            ),
             identity, total_steps=1215, checkpoint_interval=128
         )
     with pytest.raises(ValueError, match="latest shadow filename"):
@@ -313,13 +317,30 @@ def test_explicit_latest_shadow_warm_start_checks_identity_and_step(tmp_path) ->
             dict(ledger, latest_shadow_filename="best-shadow.safetensors"),
             identity, total_steps=1215, checkpoint_interval=128
         )
-    # The old run has only best-shadow; do not silently fall back to step 128.
-    old_run = dict(
-        identity, global_step=256, best_validation_step=128,
-        best_shadow_sha256="f" * 64,
+    # Legacy runs have no latest-shadow ledger. They may hand off the best
+    # shadow only when that best is also the latest saved validation step.
+    legacy_best_is_latest = dict(
+        identity,
+        global_step=384,
+        examples_consumed=1536,
+        best_validation_step=384,
+        best_shadow_sha256="e" * 64,
     )
-    with pytest.raises(ValueError, match="latest checkpoint"):
-        helper(old_run, identity, total_steps=1215, checkpoint_interval=128)
+    assert helper(
+        legacy_best_is_latest, identity, total_steps=1215, checkpoint_interval=128
+    ) == 384
+    legacy_best_is_stale = dict(
+        legacy_best_is_latest, global_step=512, examples_consumed=2048
+    )
+    with pytest.raises(ValueError, match="best shadow is not the latest saved step"):
+        helper(legacy_best_is_stale, identity, total_steps=1215, checkpoint_interval=128)
+    with pytest.raises(ValueError, match="best shadow digest"):
+        helper(
+            dict(legacy_best_is_latest, best_shadow_sha256="bad"),
+            identity,
+            total_steps=1215,
+            checkpoint_interval=128,
+        )
 
 
 def test_warm_start_shadow_restoration_validates_all_before_mutating() -> None:
