@@ -139,8 +139,10 @@ class _TernaryWeightParametrization(nn.Module):
                         group_size=self.group_size,
                         threshold_factor=self.threshold_factor,
                     )
+                    # Mark before the in-place write so an interrupted
+                    # copy still causes restoration from the CPU master.
+                    self._training_cache_hit = True
                     weights.copy_(quantized)
-                self._training_cache_hit = True
             return weights
         return fake_quantize_ternary(
             weights,
