@@ -56,21 +56,29 @@ def verify_warm_start_ledger(
     for field, value in expected.items():
         if previous.get(field) != value:
             raise ValueError(f"warm-start source differs in {field}")
-    step = previous.get("best_validation_step")
+    step = previous.get("latest_checkpoint_step")
     current = previous.get("global_step")
     if type(step) is not int or type(current) is not int or not (
         0 < step <= current <= total_steps
     ):
-        raise ValueError("warm-start source has no completed selected checkpoint")
-    if checkpoint_interval <= 0 or step % checkpoint_interval:
-        raise ValueError("warm-start selected step is not on the checkpoint interval")
-    digest = previous.get("best_shadow_sha256")
+        raise ValueError(
+            "warm-start source has no completed latest checkpoint; "
+            "best-shadow alone cannot resume the latest training state"
+        )
+    if checkpoint_interval <= 0 or (
+        step % checkpoint_interval and step != total_steps
+    ):
+        raise ValueError("warm-start latest step is not on the checkpoint interval")
+    expected_filename = f"latest-shadow-step-{step:04d}.safetensors"
+    if previous.get("latest_shadow_filename") != expected_filename:
+        raise ValueError("warm-start latest shadow filename is invalid")
+    digest = previous.get("latest_shadow_sha256")
     if (
         not isinstance(digest, str)
         or len(digest) != 64
         or any(char not in "0123456789abcdef" for char in digest)
     ):
-        raise ValueError("warm-start source best-shadow digest is invalid")
+        raise ValueError("warm-start source latest shadow digest is invalid")
     return step
 
 
@@ -95,8 +103,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--teacher-repo-root", type=Path, required=True)
     parser.add_argument(
         "--warm-start-run", type=Path,
-        help=("Selected BF16 best-shadow from a stopped earlier run. "
-              "Resets optimizer and scheduler state; NOT an exact resume."),
+        help=("Latest saved BF16 QAT shadow from a stopped earlier run. "
+              "Resets optimizer state; keeps scheduler position. NOT an exact resume."),
     )
     return parser.parse_args()
 
