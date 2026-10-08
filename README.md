@@ -115,9 +115,9 @@ Gemma 4 Decision Teacher: finish → select → reload → freeze
                                               │
                                               │ supervises recovery
 Pretrained EmbeddingGemma 2                    │
-  → aggressive ternary conversion             │
-  → measure initial damage                    │
-  → ternary-constrained QAT + distillation ←───┘
+  → custom mean pooling + tiny Decision Head  │
+  → aggressive ternary backbone conversion    │
+  → joint head training + ternary QAT/distillation ←───┘
   → if sufficient: export / reload / final evaluation / runtime
   → if insufficient: freeze quantized base
        → add one Recovery LoRA and train it with the same Teacher
@@ -130,7 +130,7 @@ Target the student's large text/backbone, embedding, vision, and audio weights f
 
 If that recovery is insufficient, freeze the selected quantized base and train one separate Recovery LoRA. Count its bytes and runtime overhead. Do not silently merge it into the ternary base: a merged correction is generally no longer ternary. The approximately 1.58-bit packing goal is not a measured whole-model size or a performance guarantee.
 
-Keep native backbone/pooling initially and define only the minimal supplied-option readout. The earlier pooling-plus-small-classifier structural fallback is deferred until constrained recovery and LoRA are insufficient; it is not a mandatory stage before quantization. Inspect actual modules before any terminal-path removal.
+Bypass the native sentence-level readout from the start. Use masked mean pooling over native token embeddings plus one tiny shared variable-option MLP Decision Head. Keep that head higher precision and train it jointly with the ternary-constrained backbone during Teacher distillation. Deeper terminal-block removal remains deferred; inspect actual modules before any such surgery.
 
 Reuse compact Teacher option signals, matching the actual choices and their order rather than assuming shared vocabulary IDs. Training, validation selection, and final held-out evaluation remain separate. The detailed sequence is in [ROADMAP.md](ROADMAP.md).
 
@@ -142,7 +142,7 @@ Reuse compact Teacher option signals, matching the actual choices and their orde
 - The current Gemma 4 vocabulary readout requires option labels to tokenize to exactly one distinct token each; it fails closed otherwise. This does not imply a shared Teacher/student tokenizer.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 revision pinning, integration, ternary-constrained recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
-- This is a documentation-only plan change. Existing training code, configs, manifests, and checkpoints are unchanged. The Gemma 4 quantization/recovery configs do not implement this new student path.
+- OneJev component-level rights review remains unresolved and excluded. EmbeddingGemma 2 is pinned at `914f7f89142e33e77833254d9c9b90c3cef7303b`; full-model GPU integration, ternary-constrained recovery, optional LoRA recovery, and packed runtime support remain open. No student recovery or student-size result is claimed.
+- The student reference implementation is isolated under `tiny_omni_decision.student`; existing Gemma 4 Teacher training code, configs, manifests, and checkpoints remain unchanged. Full real-model GPU execution is still unverified.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).
