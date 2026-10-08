@@ -100,6 +100,44 @@ def sync_cpu_masters_to_shadows(
             shadow.copy_(master.to(device=shadow.device, dtype=shadow.dtype))
 
 
+def restore_qat_shadows(
+    model: torch.nn.Module,
+    target_names: tuple[str, ...],
+    weights: dict[str, Tensor],
+) -> None:
+    """Restore selected BF16 QAT shadow weights, validating all tensors first.
+
+    Used only for an explicitly marked optimizer-reset warm start. This does
+    not restore optimizer moments or constitute an exact training resume.
+    """
+    if not target_names or len(set(target_names)) != len(target_names):
+        raise ValueError("warm-start targets must be nonempty and unique")
+    if set(weights) != set(target_names):
+        raise ValueError("warm-start shadow names differ from ternary target inventory")
+    modules = dict(model.named_modules())
+    copies: list[tuple[torch.nn.Parameter, Tensor]] = []
+    for name in target_names:
+        module_path, _, leaf = name.rpartition(".")
+        module = modules.get(module_path)
+        if module is None or not hasattr(module, "parametrizations"):
+            raise ValueError(f"missing QAT shadow: {name}")
+        chain = getattr(module.parametrizations, leaf, None)
+        if chain is None:
+            raise ValueError(f"missing QAT shadow: {name}")
+        original = chain.original
+        value = weights[name]
+        if tuple(value.shape) != tuple(original.shape):
+            raise ValueError(f"warm-start shadow shape mismatch: {name}")
+        if value.dtype != original.dtype:
+            raise ValueError(f"warm-start shadow dtype mismatch: {name}")
+        if not torch.isfinite(value).all():
+            raise ValueError(f"warm-start shadow contains non-finite values: {name}")
+        copies.append((original, value))
+    with torch.no_grad():
+        for original, value in copies:
+            original.copy_(value.to(device=original.device))
+
+
 def _option_order_sha256(options: list[str]) -> str:
     payload = json.dumps(options, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
