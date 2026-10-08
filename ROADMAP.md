@@ -280,6 +280,14 @@ If the agreed validation quality and deployment limits are met, proceed to Phase
 
 Freeze the selected quantized student base, including its ternary codes and scales. Attach one small higher-precision Recovery LoRA to verified compatible modules and train the adapter with the same frozen Teacher and option-level objectives. Do not change the Teacher or stack multiple recovery adapters.
 
+One local Recovery LoRA run has completed on the selected QAT attempt 08
+overlay. It consumed 4,859 unique examples in one pass; the selected checkpoint
+reached 25.78% macro accuracy on the fixed 256-example validation set, with
+Audio 12.50%, Image 4.69%, Text 54.69%, and Video 31.25%. This is not a
+product promotion and does not establish a general capacity ceiling. See
+[docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md](docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md)
+for hashes, full metrics, and limitations.
+
 The deployed artifact is the quantized base plus that LoRA. Count adapter bytes and runtime overhead. Keep the adapter separate by default: merging its update into the base generally breaks the ternary weight constraint. Any later merge/requantization requires a new quality check and is not assumed in this plan.
 
 Reload the exported base and adapter together and repeat the same validation checks. Recovery is not guaranteed; failure within the recorded budget remains a failed experiment rather than a reason to claim success or silently increase precision.

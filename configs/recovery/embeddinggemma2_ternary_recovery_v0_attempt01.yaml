@@ -1,0 +1,86 @@
+schema_version: 1
+experiment_id: embeddinggemma2-ternary-recovery-v0-attempt01-lora16-decoder-all
+
+student:
+  model_manifest: manifests/embeddinggemma2-student.yaml
+  model_path: C:/CodexArtifacts/embeddinggemma2-metadata-914f7f8
+  score_temperature: 0.1
+  source_qat_run: C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-08-workspace-warmstart
+  source_qat_run_metadata_sha256: 2fe5f1d56d064098e1ec5da63d6c9095062017fd204ad1685ddc243fc1334e53
+  source_best_step: 512
+  source_best_shadow_sha256: 9bc704d7c31e20cf66768e73a0bb82810aa98097a938202d46f1bcd8c5a84cae
+  ternary_overlay: C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-08-workspace-warmstart/overlays/best
+  ternary_overlay_manifest_sha256: 5a94951425b3913da5896a5a46be010e1f901f93d30291c4397407b2674d2edb
+  ternary_overlay_tensor_sha256: 7b90ea585e07653777d68c9f7022d705a74ddf4b8b404285bb8999fe82b74e34
+
+data:
+  train_corpus: data/processed/durable-teacher-v0/train.jsonl
+  train_corpus_sha256: c3e6796a2df47471d42e671272b3050f9db150ac6b7ef7289e3902253f36d84d
+  data_root: data
+  validation_snapshot: C:/CodexArtifacts/embeddinggemma2-validation-v0-256/validation.jsonl
+  validation_snapshot_sha256: 43358f0e4444dabfaba30eba0d9e4af7851f1aff56d71b2edbf38982b1bb6faf
+  validation_selection_manifest: manifests/embeddinggemma2-validation-v0-256.json
+  validation_selection_manifest_sha256: 7aa1168ce3baa6402e0ed05b21038015c8dcc3607570e942f3a92ad667a9bc08
+  source_validation_corpus: data/processed/durable-teacher-v0/validation.jsonl
+  teacher_validation_predictions: artifacts/tiny-omni-decision-teacher-v0/best-validation-predictions.jsonl
+
+teacher:
+  id: tiny-omni-decision-teacher-v0
+  revision: 6befbaca7398925921802abd1f277b495b78b738
+  train_cache: C:/CodexArtifacts/embeddinggemma2-teacher-option-cache-v0/teacher-options.jsonl
+  train_cache_sha256: f2d3cc1a9d579c7fe75f0dfb1e5441b81964a6d41e8efa76ed1cc43bc0d3e0a4
+  train_cache_metadata: C:/CodexArtifacts/embeddinggemma2-teacher-option-cache-v0/cache-run.json
+  train_cache_metadata_sha256: 4a50870c9b0d4e4f2d2bf037461820c74dd92a5d059e9dc0626bffe389e3c54b
+  temperature: 1.0
+
+base:
+  source: selected_best_qat_checkpoint
+  ternary_weights_frozen: true
+  task_adapted_before_ternary: true
+  decision_adapter_merged_before_ternary: true
+  separate_decision_adapter_at_runtime: false
+  trainable_base_parameters: 0
+
+recovery:
+  method: lora
+  precision: bfloat16
+  target_policy: language_model_decoder_all_linear
+  target_modules: []
+  rank: 16
+  alpha: 32
+  dropout: 0.05
+
+loss:
+  option_kl: 1.0
+  cross_entropy: 0.2
+  brier: 0.2
+
+training:
+  seed: 17
+  device: cuda
+  dtype: bfloat16
+  batch_size: 1
+  gradient_accumulation_steps: 4
+  max_train_examples: 4859
+  max_sample_repeats: 1
+  modality_weights:
+    text: 1.0
+    image: 1.0
+    audio: 1.0
+    video: 1.0
+  source_weights: {}
+  max_sequence_length: 1024
+  optimizer: AdamW
+  learning_rate: 0.00005
+  lr_scheduler: cosine
+  warmup_ratio: 0.03
+  max_gradient_norm: 1.0
+  evaluation_interval: 128
+  checkpoint_interval: 128
+  max_steps: 1215
+  early_stopping: false
+  best_checkpoint_selector:
+    primary: macro_modality_nll_min
+    tie_break_1: minimum_modality_accuracy_max
+    tie_break_2: macro_modality_brier_min
+  output_dir: C:/CodexArtifacts/embeddinggemma2-ternary-recovery-v0-attempt01-lora16-decoder-all
