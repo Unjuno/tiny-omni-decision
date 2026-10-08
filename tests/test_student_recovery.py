@@ -284,3 +284,15 @@ def test_qat_step_zero_reuses_initial_ternary_validation(tmp_path):
     )
     # One initial/step-0 validation, one step-1 validation, one reload verification.
     assert model.validation_calls == 3
+    progress = [
+        json.loads(line)
+        for line in (tmp_path / "run" / "progress.jsonl").read_text().splitlines()
+    ]
+    assert progress[0]["event"] == "initial_ternary_validation_start"
+    assert any(
+        item["event"] == "validation_done"
+        and item["stage"] == "qat"
+        and item["step"] == 1
+        and item["elapsed_seconds"] >= 0
+        for item in progress
+    )
