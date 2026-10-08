@@ -146,6 +146,41 @@ commit outside the working tree, then run on an idle local CUDA GPU:
 ```powershell
 python scripts/benchmark_ternary_workspace.py --reference C:/path/reference-ternary.py --output C:/path/new-result.json --require-improvement
 ```
-
 The result file records both source SHA-256 hashes, individual trial times and
 peak allocations. The benchmark refuses to overwrite an existing result file.
+
+## Integrated GPU capability check — 2026-10-09
+
+The host does have an Intel Iris Xe integrated GPU. Windows DxDiag reports
+128 MB dedicated and 16,254 MB shared memory for that adapter. The RTX 3080
+also reports 16,254 MB shared memory; these shared-memory figures describe
+system RAM available under WDDM, not separate pools that can be added to the
+RTX's 16,384 MiB of dedicated VRAM. The machine has about 32 GiB physical RAM.
+
+The active attempt08 process was still alive at step 420 / 1,215 (1,680
+examples consumed). PyTorch 2.6.0+cu124 reports one CUDA device (the RTX 3080),
+`torch.xpu.is_available() == false`, and this run's environment has no
+`torch-directml`, OpenVINO, ONNX Runtime, Intel Extension for PyTorch, or
+PyOpenCL. Therefore this installed QAT path cannot dispatch model training to
+the Iris Xe. No second GPU job or package installation was attempted while
+the RTX run was active.
+
+At the same observation, `nvidia-smi` reported 16,154 MiB used and 22 MiB
+free on the RTX at 99% utilization. Windows GPU process-memory counters
+attributed approximately 15.77 GiB dedicated and 3.79 GiB shared allocation
+to attempt08 PID 30928. This confirms the process is already using WDDM shared
+system memory while the RTX remains nearly full; it does not mean the Intel
+adapter supplied that memory or that such paging improves throughput. The
+Iris Xe may be useful for a separately supported inference/compute backend,
+but that needs its own compatibility and throughput measurement after the
+current run releases the device. It should not be treated as extra CUDA VRAM.
+
+The current measured update profile still identifies four-example forward,
+backward, and ternary-shadow restoration as the largest portion (13.70 s of a
+17.07 s diagnostic update). CPU gradient transfer and Adafactor together take
+about 2.8 s. The next useful GPU optimization comparison is therefore a
+controlled attention-kernel/backend experiment, not moving the CPU optimizer
+to the Iris Xe. The active attempt08 explicitly uses eager attention and
+disables Flash and memory-efficient SDPA; changing those settings requires a
+separate parity and throughput experiment and is not applied to the active
+run.
