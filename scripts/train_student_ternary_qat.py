@@ -625,7 +625,17 @@ def main() -> None:
         progress = min(1.0, (step - warmup_steps) / max(1, total_steps - warmup_steps))
         return 0.5 * (1.0 + math.cos(math.pi * progress))
 
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_multiplier)
+    if warm_start_step:
+        # LambdaLR performs its initial step during construction, so the
+        # last_epoch input must be the previous step. Optimizer moments start
+        # fresh; the original cosine schedule position does not.
+        for group in optimizer.param_groups:
+            group.setdefault("initial_lr", group["lr"])
+    scheduler = torch.optim.lr_scheduler.LambdaLR(
+        optimizer,
+        lr_lambda=lr_multiplier,
+        last_epoch=warm_start_step - 1 if warm_start_step else -1,
+    )
     model.train()
     torch.cuda.reset_peak_memory_stats()
     best_key: tuple[float, float, float] | None = None
@@ -634,17 +644,19 @@ def main() -> None:
     history_path = output_dir / "training-history.jsonl"
     progress_path = output_dir / "latest-progress.json"
     evaluation_seconds = 0.0
+    evaluation_count = 0
     train_started = time.perf_counter()
     last_progress_time = train_started
+    accumulation = int(train_cfg["gradient_accumulation_steps"])
+    consumed = warm_start_step * accumulation
     emit_progress(
         progress_path,
-        event="training_start",
-        step=0,
-        examples_seen=0,
+        event="warm_start_optimizer_reset" if warm_start_step else "training_start",
+        step=warm_start_step,
+        examples_seen=consumed,
         total_steps=total_steps,
         elapsed_seconds=0.0,
     )
-    consumed = 0
     rolling_losses: list[float] = []
     initial_pairing_verified: list[str] = []
     initial_probability_differences: list[float] = []
@@ -694,7 +706,7 @@ def main() -> None:
         learning_rate_used: float | None,
         gradient_norm: float | None,
     ) -> None:
-        nonlocal best_key, best_step, evaluation_seconds, run_metadata
+        nonlocal best_key, best_step, evaluation_seconds, evaluation_count, run_metadata
         nonlocal modules, shadow_state, model, save_shadow, optimizer
         eval_started = time.perf_counter()
         model.eval()
@@ -781,6 +793,7 @@ def main() -> None:
             best_step = step
         eval_seconds = time.perf_counter() - eval_started
         evaluation_seconds += eval_seconds
+        evaluation_count += 1
         write_jsonl(output_dir / f"validation-step-{step:04d}.jsonl", predictions)
         atomic_json(
             output_dir / f"validation-step-{step:04d}.json",
@@ -836,7 +849,7 @@ def main() -> None:
                 "best_validation_step": best_step,
                 "best_selector_key": best_key,
                 "best_shadow_sha256": sha256(best_shadow_path),
-                "validation_evaluations": step // int(train_cfg["evaluation_interval"]) + 1,
+                "validation_evaluations": evaluation_count,
                 "last_validation_metrics": metrics,
                 "peak_allocated_vram_bytes": torch.cuda.max_memory_allocated(),
                 "evaluation_seconds_total": evaluation_seconds,
@@ -845,12 +858,14 @@ def main() -> None:
         atomic_json(output_dir / "run-metadata.json", run_metadata)
         model.train()
 
-    # QAT step 0 must match the separately exported ternary artifact before updates begin.
-    evaluate_at(0, 0, None, None, None)
-    accumulation = int(train_cfg["gradient_accumulation_steps"])
+    # Only a fresh pretrained run may claim step-0 pairing with the frozen
+    # initial ternary overlay. A warm start is a new optimizer-reset segment.
+    evaluate_at(warm_start_step, consumed, None, None, None)
     interval = int(train_cfg["evaluation_interval"])
     max_grad_norm = float(train_cfg["max_gradient_norm"])
-    for update_index, start in enumerate(range(0, len(order), accumulation), start=1):
+    for update_index, start in enumerate(
+        range(consumed, len(order), accumulation), start=warm_start_step + 1
+    ):
         microbatch = order[start : start + accumulation]
         optimizer.zero_grad(set_to_none=True)
         if parameter_device_policy == "cpu_fp32_master":
