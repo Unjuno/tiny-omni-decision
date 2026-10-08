@@ -6,6 +6,7 @@ import importlib.metadata
 import json
 import math
 import sys
+import time
 from pathlib import Path
 
 
@@ -38,6 +39,16 @@ def validate_config(config: dict) -> None:
     from .recovery import quality_gate
     metrics = {"all": dict(accuracy=0.0, nll=0.0, brier=0.0, ece=0.0)}
     quality_gate(metrics, metrics, config["limits"])
+
+
+def _status(event: str, **fields) -> None:
+    payload = {"event": event, **fields}
+    print(
+        "student-progress "
+        + json.dumps(payload, ensure_ascii=False, sort_keys=True, allow_nan=False),
+        file=sys.stderr,
+        flush=True,
+    )
 
 
 def _environment(device: str = "cpu") -> dict:
@@ -214,6 +225,8 @@ def dispatch(args: argparse.Namespace) -> dict:
             validate_media(cache, args.data_root)
         caches = (train, validation)
     torch.manual_seed(config["seed"])
+    _status("student_load_start", device=args.device)
+    load_started = time.perf_counter()
     student = load_student(
         pin,
         data_root=args.data_root,
@@ -222,7 +235,24 @@ def dispatch(args: argparse.Namespace) -> dict:
         head_hidden_dim=config["head_hidden_dim"],
         allow_download=args.allow_download,
     )
-    baseline = evaluate(student, caches[1].records)[0] if caches else None
+    _status(
+        "student_load_done",
+        device=args.device,
+        elapsed_seconds=time.perf_counter() - load_started,
+    )
+    baseline = None
+    if caches:
+        _status(
+            "unquantized_validation_start",
+            records=len(caches[1].records),
+        )
+        baseline_started = time.perf_counter()
+        baseline = evaluate(student, caches[1].records)[0]
+        _status(
+            "unquantized_validation_done",
+            records=len(caches[1].records),
+            elapsed_seconds=time.perf_counter() - baseline_started,
+        )
     exclusions = list(dict.fromkeys(config["exclude"] + student.ternary_exclusions()))
     metadata = {
         "student_pin": pin,
@@ -239,7 +269,14 @@ def dispatch(args: argparse.Namespace) -> dict:
         }
         write_json(args.output, result)
         return result
+    _status("ternary_controller_start")
+    controller_started = time.perf_counter()
     controller = TernaryController(student, config["group_size"], exclusions)
+    _status(
+        "ternary_controller_done",
+        targets=len(controller.targets),
+        elapsed_seconds=time.perf_counter() - controller_started,
+    )
     student.enable_decision_head_training()
     return run_recovery(student, controller, *caches, args.output, config, metadata=metadata)
 
