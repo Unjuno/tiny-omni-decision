@@ -34,7 +34,7 @@ The project does not require the Teacher and student to share an architecture an
 
 ## Phase 0 — Freeze the design
 
-**Status: existing Teacher path retained; ternary-first student experiment planned, not implemented.**
+**Status: student path implemented through initial ternary export and damage measurement; Teacher-guided QAT is in progress.**
 
 Teacher target:
 - `google/gemma-4-E2B-it-qat-q4_0-unquantized`
@@ -58,7 +58,7 @@ Project-level hard gates:
 - [x] define disjoint held-out train/selection/evaluation splits and zero-overlap checks
 - [x] pin and inspect the exact EmbeddingGemma 2 model/processor revision and rights
 - [x] verify student option readout and numerical forward/backward behavior
-- [ ] verify architecture-compatible ternary conversion, packed export, and runtime support
+- [x] verify architecture-compatible ternary conversion, packed export, and the supported Transformers reload path after BF16 dequantization
 
 ## Phase 1 — Reproducible text decision LoRA smoke
 
@@ -239,7 +239,15 @@ Retain the existing metrics:
 
 Proceed to recovery after a numerically valid damaged baseline. This phase does not require the unrecovered student to match the Teacher.
 
-## Phase 8 — Teacher recovery, then LoRA if needed
+## Phase 8 — Teacher recovery, then LoRA if needed — QAT in progress
+
+Attempt 05 is running from a fresh pretrained EmbeddingGemma 2 base with new
+ternary-QAT shadow weights. At the latest recorded validation (step 128), the
+fixed validation macro NLL improved slightly from 1.8786 to 1.8300; modality
+metrics are mixed and no quality conclusion is drawn. The run is configured
+for 1,215 updates over 4,859 unique training examples. Interim hashes,
+conditions, metrics, and local-memory measurements are in
+[docs/EMBEDDINGGEMMA2_QAT_ATTEMPT05.md](docs/EMBEDDINGGEMMA2_QAT_ATTEMPT05.md).
 
 ### Shared supervision
 
