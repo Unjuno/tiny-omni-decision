@@ -353,8 +353,11 @@ def test_cpu_master_update_reuses_ternary_weights_with_identical_ste_gradients(
     original = cached_shadow.detach().clone()
     examples = [torch.randn(1, 4), torch.randn(1, 4)]
 
+    baseline_outputs = []
     for inputs in examples:
-        baseline(inputs).sum().backward()
+        output = baseline(inputs)
+        baseline_outputs.append(output.detach().clone())
+        output.sum().backward()
 
     quantize = ternary.quantize_groupwise_ternary
     quantizations = []
@@ -365,8 +368,10 @@ def test_cpu_master_update_reuses_ternary_weights_with_identical_ste_gradients(
 
     monkeypatch.setattr(ternary, "quantize_groupwise_ternary", counted)
     with ternary.cached_ternary_training_update(cached, names, cpu_master):
-        for inputs in examples:
-            cached(inputs).sum().backward()
+        for inputs, expected in zip(examples, baseline_outputs, strict=True):
+            output = cached(inputs)
+            torch.testing.assert_close(output.detach(), expected, rtol=0, atol=0)
+            output.sum().backward()
         assert quantizations == [tuple(original.shape)]
 
     torch.testing.assert_close(cached_shadow.grad, base_shadow.grad, rtol=0, atol=0)
