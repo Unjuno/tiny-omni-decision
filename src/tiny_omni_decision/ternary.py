@@ -122,9 +122,25 @@ class _TernaryWeightParametrization(nn.Module):
         self.group_size = group_size
         self.threshold_factor = threshold_factor
         self._validation_bypass = False
+        self._training_cache_enabled = False
+        self._training_cache_hit = False
 
     def forward(self, weights: Tensor) -> Tensor:
         if self._validation_bypass:
+            return weights
+        if self._training_cache_enabled:
+            if not self._training_cache_hit:
+                # CPU FP32 optimizer masters retain the shadow originals.
+                # Each touched module is quantized once per update. Returning
+                # its leaf weight gives the same identity-STE gradient.
+                with torch.no_grad():
+                    quantized = fake_quantize_ternary(
+                        weights,
+                        group_size=self.group_size,
+                        threshold_factor=self.threshold_factor,
+                    )
+                    weights.copy_(quantized)
+                self._training_cache_hit = True
             return weights
         return fake_quantize_ternary(
             weights,
@@ -291,6 +307,64 @@ def cached_ternary_validation(model: nn.Module, target_names: tuple[str, ...]):
                     original.copy_(snapshot.to(device=original.device))
                 finally:
                     transform._validation_bypass = False
+
+
+@contextmanager
+def cached_ternary_training_update(
+    model: nn.Module,
+    target_names: tuple[str, ...],
+    cpu_masters: list[nn.Parameter],
+):
+    """Quantize each *touched* QAT weight once per accumulation update.
+
+    This is valid only while FP32 CPU masters retain the exact pre-update
+    weights. Gradients flow to the original leaf tensors through identity STE.
+    The original shadows are restored before clipping/optimizer update.
+    No second full-size GPU weight cache is allocated.
+    """
+    if not model.training:
+        raise ValueError("ternary update cache requires model.train()")
+    if not target_names or len(target_names) != len(set(target_names)):
+        raise ValueError("ternary update cache requires unique nonempty targets")
+    if len(target_names) != len(cpu_masters):
+        raise ValueError("CPU masters and ternary target inventory differ")
+
+    modules = dict(model.named_modules())
+    entries: list[tuple[nn.Parameter, _TernaryWeightParametrization, nn.Parameter]] = []
+    for name, master in zip(target_names, cpu_masters, strict=True):
+        parent_name, _, leaf = name.rpartition(".")
+        module = modules.get(parent_name)
+        if module is None or not parametrize.is_parametrized(module, leaf):
+            raise ValueError(f"missing ternary parametrization: {name}")
+        chain = getattr(module.parametrizations, leaf)
+        if len(chain) != 1 or not isinstance(chain[0], _TernaryWeightParametrization):
+            raise ValueError(f"unsupported ternary parametrization: {name}")
+        transform = chain[0]
+        original = chain.original
+        if transform._validation_bypass or transform._training_cache_enabled:
+            raise ValueError(f"ternary cache already active: {name}")
+        if (
+            master.device.type != "cpu"
+            or master.dtype != torch.float32
+            or tuple(master.shape) != tuple(original.shape)
+        ):
+            raise ValueError(f"incompatible CPU FP32 master for {name}")
+        entries.append((original, transform, master))
+    for _, transform, _ in entries:
+        transform._training_cache_enabled = True
+    try:
+        yield
+    finally:
+        with torch.no_grad():
+            for original, transform, master in reversed(entries):
+                try:
+                    if transform._training_cache_hit:
+                        original.copy_(
+                            master.to(device=original.device, dtype=original.dtype)
+                        )
+                finally:
+                    transform._training_cache_hit = False
+                    transform._training_cache_enabled = False
 
 
 def _tensor_bytes(tensor: Tensor) -> int:
