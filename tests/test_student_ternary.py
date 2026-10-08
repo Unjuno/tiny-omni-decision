@@ -398,3 +398,38 @@ def test_cpu_master_update_restores_shadows_when_microbatch_fails() -> None:
             model(torch.ones(1, 4)).sum().backward()
             raise RuntimeError("microbatch failed")
     assert torch.equal(model[0].parametrizations.weight.original.detach(), original)
+
+
+def test_cached_qat_update_preserves_bf16_forward_and_ste() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import (
+        apply_ternary_qat,
+        cached_ternary_training_update,
+    )
+
+    torch.manual_seed(7)
+    reference = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).to(torch.bfloat16)
+    candidate = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).to(torch.bfloat16)
+    candidate.load_state_dict(reference.state_dict())
+    names = apply_ternary_qat(reference, group_size=4)
+    apply_ternary_qat(candidate, group_size=4)
+    ref_param = reference[0].parametrizations.weight.original
+    can_param = candidate[0].parametrizations.weight.original
+    saved = can_param.detach().clone()
+    cpu_master = [torch.nn.Parameter(saved.detach().cpu().float().clone())]
+    inputs = [
+        torch.tensor([[1.0, -2.0, 0.5, 3.0]], dtype=torch.bfloat16),
+        torch.tensor([[-2.0, 0.5, 1.0, -1.0]], dtype=torch.bfloat16),
+    ]
+    originals = []
+    for value in inputs:
+        logits = reference(value)
+        originals.append(logits.detach().clone())
+        logits.sum().backward()
+    with cached_ternary_training_update(candidate, names, cpu_master):
+        for value, expected in zip(inputs, originals, strict=True):
+            logits = candidate(value)
+            torch.testing.assert_close(logits, expected, atol=0, rtol=0)
+            logits.sum().backward()
+    torch.testing.assert_close(can_param.grad, ref_param.grad, atol=0, rtol=0)
+    assert torch.equal(can_param.detach(), saved)
