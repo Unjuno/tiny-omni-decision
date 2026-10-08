@@ -1,0 +1,331 @@
+{
+  "scope": "four-example validation and one discarded train-only diagnostic update",
+  "source_step": 384,
+  "shadow_sha256": "b85839f25edb9918c299f3c8258742ee4aa1ba0230fcb5f0bf90a70c372399b6",
+  "ternary_sha256": "2407ad435291ca4fccc0f7a67f36c9678835765ecbf4ac03484f5b2f3a7be177",
+  "model_revision": "914f7f89142e33e77833254d9c9b90c3cef7303b",
+  "sample_ids": [
+    "MIT-IBM/CLEVRER:13876:6",
+    "n4ze3m/typed-decisions-synth:synth-3439faf53701294c:q2",
+    "sgvaze/clevr4:CLEVR_new_008444:shape",
+    "google/speech_commands:right/8dc18a75_nohash_2.wav"
+  ],
+  "load_seconds": 5.03610289999051,
+  "cache_seconds": 1.541755300015211,
+  "evaluation_seconds": 4.352682000026107,
+  "peak_allocated_bytes": 5007002112,
+  "shadow_restoration_exact": true,
+  "metrics": {
+    "all": {
+      "count": 4,
+      "accuracy": 0.0,
+      "nll": 2.5266905667196515,
+      "brier": 0.9523135007457971,
+      "ece": 0.2093026377260685,
+      "mean_confidence": 0.2093026377260685
+    },
+    "modality:audio": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 3.761925390914658,
+      "brier": 1.0986749939975966,
+      "ece": 0.23498784005641937,
+      "mean_confidence": 0.23498784005641937
+    },
+    "modality:image": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 2.3933043560757494,
+      "brier": 0.9260953171422925,
+      "ece": 0.14888368546962738,
+      "mean_confidence": 0.14888368546962738
+    },
+    "modality:text": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 1.7597488018383882,
+      "brier": 0.8625932854581457,
+      "ece": 0.24964110553264618,
+      "mean_confidence": 0.24964110553264618
+    },
+    "modality:video": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 2.1917837180498103,
+      "brier": 0.9218904063851536,
+      "ece": 0.20369791984558105,
+      "mean_confidence": 0.20369791984558105
+    },
+    "source:MIT-IBM/CLEVRER": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 2.1917837180498103,
+      "brier": 0.9218904063851536,
+      "ece": 0.20369791984558105,
+      "mean_confidence": 0.20369791984558105
+    },
+    "source:google/speech_commands": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 3.761925390914658,
+      "brier": 1.0986749939975966,
+      "ece": 0.23498784005641937,
+      "mean_confidence": 0.23498784005641937
+    },
+    "source:n4ze3m/typed-decisions-synth": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 1.7597488018383882,
+      "brier": 0.8625932854581457,
+      "ece": 0.24964110553264618,
+      "mean_confidence": 0.24964110553264618
+    },
+    "source:sgvaze/clevr4": {
+      "count": 1,
+      "accuracy": 0.0,
+      "nll": 2.3933043560757494,
+      "brier": 0.9260953171422925,
+      "ece": 0.14888368546962738,
+      "mean_confidence": 0.14888368546962738
+    },
+    "macro_modality": {
+      "accuracy": 0.0,
+      "nll": 2.5266905667196515,
+      "brier": 0.952313500745797,
+      "ece": 0.2093026377260685,
+      "mean_confidence": 0.2093026377260685,
+      "count": 4
+    },
+    "minimum_modality_accuracy": 0.0
+  },
+  "predictions": [
+    {
+      "sample_id": "MIT-IBM/CLEVRER:13876:6",
+      "source": "MIT-IBM/CLEVRER",
+      "modality": "video",
+      "target": 0,
+      "options": [
+        "cyan",
+        "red",
+        "gray",
+        "yellow",
+        "green",
+        "brown",
+        "purple",
+        "blue"
+      ],
+      "option_order_sha256": "bb685e2243143f2b439db45f450ea3d1a679f7fee879af148444a693279ade4a",
+      "option_logits": [
+        2.2850775718688965,
+        2.885744094848633,
+        2.5090103149414062,
+        2.454256772994995,
+        2.017972469329834,
+        1.805640697479248,
+        2.846766710281372,
+        1.6947665214538574
+      ],
+      "option_probabilities": [
+        0.11171729862689972,
+        0.20369791984558105,
+        0.13975687325000763,
+        0.1323104053735733,
+        0.08552993834018707,
+        0.06916775554418564,
+        0.19591106474399567,
+        0.06190868467092514
+      ],
+      "prediction": 1,
+      "confidence": 0.20369791984558105
+    },
+    {
+      "sample_id": "n4ze3m/typed-decisions-synth:synth-3439faf53701294c:q2",
+      "source": "n4ze3m/typed-decisions-synth",
+      "modality": "text",
+      "target": 2,
+      "options": [
+        "Brief but somewhat informative",
+        "Highly detailed with comprehensive information",
+        "Extremely brief, one word",
+        "No detail at all, empty or irrelevant",
+        "Moderately detailed with some specifics"
+      ],
+      "option_order_sha256": "d537076087c7b6b2e4a0a7c5444356c9a8baf1890150cee4bb5f62740788db86",
+      "option_logits": [
+        4.402517795562744,
+        3.933302879333496,
+        4.0304999351501465,
+        4.35107421875,
+        4.102842330932617
+      ],
+      "option_probabilities": [
+        0.24964110553264618,
+        0.1561487913131714,
+        0.17208808660507202,
+        0.23712339997291565,
+        0.18499869108200073
+      ],
+      "prediction": 0,
+      "confidence": 0.24964110553264618
+    },
+    {
+      "sample_id": "sgvaze/clevr4:CLEVR_new_008444:shape",
+      "source": "sgvaze/clevr4",
+      "modality": "image",
+      "target": 5,
+      "options": [
+        "cube",
+        "cone",
+        "gear",
+        "monkey",
+        "sphere",
+        "torus",
+        "teapot",
+        "diamond",
+        "star",
+        "cylinder"
+      ],
+      "option_order_sha256": "49b1a54aa8b58ed9bdffa77ed71be8585edef9c44855c2aab77acf236603e879",
+      "option_logits": [
+        2.962606430053711,
+        2.9964752197265625,
+        2.1359479427337646,
+        2.8147494792938232,
+        2.7020063400268555,
+        2.507760763168335,
+        2.568836212158203,
+        2.3991880416870117,
+        2.1398417949676514,
+        2.3190135955810547
+      ],
+      "option_probabilities": [
+        0.14392562210559845,
+        0.14888368546962738,
+        0.06296872347593307,
+        0.12414368987083435,
+        0.11090750992298126,
+        0.09132740646600723,
+        0.09707913547754288,
+        0.08193106949329376,
+        0.06321439146995544,
+        0.07561870664358139
+      ],
+      "prediction": 1,
+      "confidence": 0.14888368546962738
+    },
+    {
+      "sample_id": "google/speech_commands:right/8dc18a75_nohash_2.wav",
+      "source": "google/speech_commands",
+      "modality": "audio",
+      "target": 4,
+      "options": [
+        "down",
+        "yes",
+        "off",
+        "no",
+        "right",
+        "stop",
+        "up",
+        "on",
+        "go",
+        "left"
+      ],
+      "option_order_sha256": "fcf2d1281375bb8afc7742a99f2b1cdf59fea3744ae58f8bc8970fbea0e3ef41",
+      "option_logits": [
+        2.814211845397949,
+        2.435915231704712,
+        4.087388515472412,
+        2.6451210975646973,
+        2.0241687297821045,
+        3.647059202194214,
+        2.8354475498199463,
+        4.337872505187988,
+        3.7436599731445312,
+        3.7423322200775146
+      ],
+      "option_probabilities": [
+        0.05120684206485748,
+        0.035078078508377075,
+        0.1829201579093933,
+        0.043240707367658615,
+        0.023238953202962875,
+        0.11776845902204514,
+        0.052305884659290314,
+        0.23498784005641937,
+        0.12971259653568268,
+        0.12954048812389374
+      ],
+      "prediction": 7,
+      "confidence": 0.23498784005641937
+    }
+  ],
+  "diagnostic_update": {
+    "step": 385,
+    "discarded": true,
+    "lr": 8.000023133366804e-06,
+    "examples": [
+      {
+        "id": "google/speech_commands:down/de4f7798_nohash_0.wav",
+        "loss": 3.574201822280884,
+        "logits": [
+          2.7565743923187256,
+          3.080230712890625,
+          3.8079233169555664,
+          3.194226026535034,
+          2.9836535453796387,
+          2.854818344116211,
+          3.8443450927734375,
+          3.8019564151763916,
+          2.3136143684387207,
+          3.9715769290924072
+        ]
+      },
+      {
+        "id": "MIT-IBM/CLEVRER:6177:5",
+        "loss": 0.3409922420978546,
+        "logits": [
+          2.5664710998535156,
+          2.0476393699645996
+        ]
+      },
+      {
+        "id": "TypeSafeAI/Open-Jev:painting-geometry-v1:625155c5098365ce7bfc9799:hsl:x7_y3_lightness",
+        "loss": 0.7725619673728943,
+        "logits": [
+          4.740180015563965,
+          3.745852470397949,
+          4.610968589782715,
+          3.150205135345459,
+          4.445558071136475
+        ]
+      },
+      {
+        "id": "google/speech_commands:yes/2f0ce4d9_nohash_4.wav",
+        "loss": 3.4475624561309814,
+        "logits": [
+          2.8449010848999023,
+          2.6720690727233887,
+          3.230905055999756,
+          4.572338104248047,
+          3.1554195880889893,
+          3.5004022121429443,
+          4.122661590576172,
+          2.789168119430542,
+          3.8982510566711426,
+          3.459059000015259
+        ]
+      }
+    ],
+    "gradient_norm": 19200.0,
+    "seconds": 21.856272399949376,
+    "phases": {
+      "four_examples_and_shadow_restore": 18.522361899958923,
+      "clip_and_gradient_to_cpu": 1.0576055999845266,
+      "cpu_optimizer": 1.6561718999873847,
+      "master_to_gpu": 0.6201271000318229
+    },
+    "peak_allocated_bytes": 19228432896,
+    "updated_bf16_shadow_sha256": "a5bce73162a1c654a6b4f46e88ffcc1b8f97a51d9c086e5f1392ee391f9fe74d",
+    "frozen_parameters_unchanged": true
+  }
+}

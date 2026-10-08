@@ -6,6 +6,55 @@ This change is based on PR #14 commit
 changing the training objective, data, optimizer, scheduler, cache lifecycle,
 checkpoint policy, or warm-start protocol. No training run was restarted.
 
+## Follow-up: real-model migration smoke
+
+Before migration, a separate harness loaded the hash-verified step-384
+`best-shadow.safetensors` and the pinned local model/processor with the same
+eager BF16/deterministic settings. The harness's first attempt omitted the
+trainer's `CUBLAS_WORKSPACE_CONFIG=:4096:8` setting and failed before inference;
+the harness was corrected to match the existing trainer. No production code or
+environment package was changed for that correction.
+
+Four fixed validation examples (first encountered for each modality, retaining
+snapshot order) produced exactly the same probability records before/after.
+All 483 BF16 shadows matched the saved values after cached validation.
+The initial paired runs took 4.538 s / 3.941 s for evaluation plus restoration,
+with 4,775 / 3,622 MiB peak PyTorch GPU allocations respectively.
+
+A second paired process run performed one **discarded diagnostic optimizer
+update** at the step-385 position: train examples 1,537–1,540 in the original
+hash-verified sampler order, accumulation 4, original losses, fresh CPU Adafactor
+state and the original cosine LR at step 384. No validation examples were used
+for gradients. This is optimizer-reset warm-start behavior, not an exact resume.
+
+| Phase (seconds) | PR #14 reference | Optimized |
+| --- | ---: | ---: |
+| Four train examples + shadow restoration | 18.522 | 13.701 |
+| Gradient clip + gradient transfer to CPU | 1.058 | 1.031 |
+| CPU optimizer | 1.656 | 1.753 |
+| Master transfer back to GPU | 0.620 | 0.589 |
+| Total diagnostic update | 21.856 | 17.074 |
+| Peak allocated GPU memory (MiB) | 18,337.66 | 18,342.28 |
+
+Train logits/losses, validation predictions and the hash of **all updated BF16
+shadow bytes** matched exactly. Non-target frozen parameters and the source
+checkpoint remained unchanged. The updated diagnostic weights were discarded.
+Raw records are `benchmarks/qat-update-{reference,candidate}-2026-10-09.json`.
+The local harness/logs are retained in `C:/CodexArtifacts/qat-groupwise-performance/`.
+
+This is one update per variant, not a throughput learning curve. While time
+improved about 22% in this pair, training peak allocations did not improve;
+activation/gradient memory is still material. PyTorch allocated memory exceeding
+16 GiB on Windows must not be described as physical dedicated VRAM usage.
+Forward/backward and shadow restoration dominate this measurement; it does not
+establish that the CPU optimizer is the main bottleneck.
+
+The migration config `embeddinggemma2_ternary_qat_v0_attempt08_workspace_warmstart.yaml`
+changes only experiment ID/output directory from attempt05. It retains the
+1,215-step full-corpus plan and takes step 384 from the immutable source run via
+the explicit warm-start CLI argument. Attempt08 has its own output directory;
+its actual execution status must be checked in process/progress evidence.
+
 ## Measured hardware and run state
 
 - NVIDIA RTX 3080 Laptop: NVIDIA reports 16,384 MiB dedicated memory.
