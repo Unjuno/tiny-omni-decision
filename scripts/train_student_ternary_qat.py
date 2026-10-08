@@ -372,12 +372,10 @@ def main() -> None:
             raise ValueError("warm-start requires a NEW output directory")
         source_metadata_path = source_dir / "run-metadata.json"
         source_config_path = source_dir / "effective-config.yaml"
-        warm_start_shadow_path = source_dir / "best-shadow.safetensors"
         if not all(
-            path.is_file()
-            for path in (source_metadata_path, source_config_path, warm_start_shadow_path)
+            path.is_file() for path in (source_metadata_path, source_config_path)
         ):
-            raise FileNotFoundError("warm-start source lacks metadata/config/best-shadow")
+            raise FileNotFoundError("warm-start source lacks metadata/config")
         previous_run = json.loads(source_metadata_path.read_text(encoding="utf-8"))
         previous_config = yaml.safe_load(source_config_path.read_text(encoding="utf-8"))
         if (
@@ -406,21 +404,27 @@ def main() -> None:
         )
         if warm_start_step * int(train_cfg["gradient_accumulation_steps"]) >= len(order):
             raise ValueError("warm-start source has no remaining training examples")
-        expected_shadow_digest = previous_run["best_shadow_sha256"]
+        expected_consumed = warm_start_step * int(
+            train_cfg["gradient_accumulation_steps"]
+        )
+        if previous_run.get("latest_checkpoint_examples_consumed") != expected_consumed:
+            raise ValueError("warm-start source latest checkpoint example count differs")
+        warm_start_shadow_path = source_dir / previous_run["latest_shadow_filename"]
+        if not warm_start_shadow_path.is_file():
+            raise FileNotFoundError("warm-start source latest shadow is missing")
+        expected_shadow_digest = previous_run["latest_shadow_sha256"]
         actual_shadow_digest = sha256(warm_start_shadow_path)
         if actual_shadow_digest != expected_shadow_digest:
-            raise ValueError("warm-start best-shadow checksum differs from ledger")
+            raise ValueError("warm-start latest shadow checksum differs from ledger")
         warm_start_lineage = {
-            "kind": "best_shadow_warm_start_optimizer_and_scheduler_reset",
+            "kind": "latest_shadow_warm_start_optimizer_reset",
             "exact_resume": False,
             "source_run_dir": str(source_dir),
             "source_run_metadata_sha256": sha256(source_metadata_path),
-            "source_best_shadow_sha256": actual_shadow_digest,
-            "source_best_step": warm_start_step,
+            "source_latest_shadow_sha256": actual_shadow_digest,
+            "source_latest_checkpoint_step": warm_start_step,
             "source_last_recorded_step": previous_run["global_step"],
-            "prior_examples_consumed_on_selected_path": (
-                warm_start_step * int(train_cfg["gradient_accumulation_steps"])
-            ),
+            "prior_examples_consumed_on_latest_path": expected_consumed,
             "optimizer_moments_restored": False,
             "scheduler_position_restored": True,
         }
@@ -565,8 +569,8 @@ def main() -> None:
         )
         selected_weights = load_file(str(warm_start_shadow_path), device="cpu")
         restore_qat_shadows(model, target_names, selected_weights)
-        if sha256(warm_start_shadow_path) != previous_run["best_shadow_sha256"]:
-            raise ValueError("warm-start best-shadow changed during load")
+        if sha256(warm_start_shadow_path) != previous_run["latest_shadow_sha256"]:
+            raise ValueError("warm-start latest shadow changed during load")
         del selected_weights
     modules = dict(model.named_modules())
     for parameter in model.parameters():
