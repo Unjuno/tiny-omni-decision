@@ -11,6 +11,8 @@ import random
 import subprocess
 import sys
 import time
+from collections.abc import Callable
+from contextlib import nullcontext
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -37,6 +39,123 @@ def atomic_json(path: Path, value: Any) -> None:
     os.replace(temporary, path)
 
 
+def emit_progress(path: Path, *, event: str, **fields: Any) -> None:
+    """Publish an atomic, human-readable training heartbeat."""
+    payload = {"event": event, **fields}
+    atomic_json(path, payload)
+    print(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), flush=True)
+
+
+def verify_warm_start_ledger(
+    previous: dict[str, Any],
+    expected: dict[str, Any],
+    *,
+    total_steps: int,
+    checkpoint_interval: int,
+) -> int:
+    """Validate an explicit optimizer-reset warm start from a saved shadow."""
+    for field, value in expected.items():
+        if previous.get(field) != value:
+            raise ValueError(f"warm-start source differs in {field}")
+    current = previous.get("global_step")
+    if type(current) is not int or not 0 < current <= total_steps:
+        raise ValueError(
+            "warm-start source has no valid last recorded training step"
+        )
+
+    # New-format runs publish a latest-shadow at every checkpoint boundary.
+    # Reject partial ledgers instead of falling back to a possibly stale best.
+    has_latest_ledger = any(
+        field in previous
+        for field in (
+            "latest_checkpoint_step",
+            "latest_shadow_filename",
+            "latest_shadow_sha256",
+        )
+    )
+    if has_latest_ledger:
+        step = previous.get("latest_checkpoint_step")
+        if type(step) is not int or not 0 < step <= current:
+            raise ValueError("warm-start source has no completed latest checkpoint")
+        expected_filename = f"latest-shadow-step-{step:04d}.safetensors"
+        if previous.get("latest_shadow_filename") != expected_filename:
+            raise ValueError("warm-start latest shadow filename is invalid")
+        digest = previous.get("latest_shadow_sha256")
+        if (
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(char not in "0123456789abcdef" for char in digest)
+        ):
+            raise ValueError("warm-start source latest shadow digest is invalid")
+    else:
+        # The old attempt05 writer persisted only best-shadow. It is eligible
+        # only when that saved validation checkpoint is exactly the last
+        # metadata step; otherwise its best is stale relative to training.
+        step = previous.get("best_validation_step")
+        if type(step) is not int or step != current:
+            raise ValueError("best shadow is not the latest saved step")
+        digest = previous.get("best_shadow_sha256")
+        if (
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(char not in "0123456789abcdef" for char in digest)
+        ):
+            raise ValueError("warm-start source best shadow digest is invalid")
+
+    if checkpoint_interval <= 0 or (
+        step % checkpoint_interval and step != total_steps
+    ):
+        raise ValueError("warm-start checkpoint step is not on the checkpoint interval")
+    return step
+
+
+def publish_latest_shadow(
+    output_dir: Path,
+    *,
+    step: int,
+    examples_seen: int,
+    metadata: dict[str, Any],
+    save_shadow: Callable[[Path], None],
+) -> None:
+    """Publish the most recent training weights, independent of best selection.
+
+    Write a new step-specific file before atomically updating the ledger.
+    Remove the prior step file only after the new ledger is durable. Interrupted
+    writes therefore leave the previous resumable checkpoint intact.
+    """
+    if type(step) is not int or step <= 0:
+        raise ValueError("latest checkpoint step must be positive")
+    if type(examples_seen) is not int or examples_seen <= 0:
+        raise ValueError("latest checkpoint examples_seen must be positive")
+    previous_step = metadata.get("latest_checkpoint_step")
+    if previous_step is not None and (
+        type(previous_step) is not int or step <= previous_step
+    ):
+        raise ValueError("latest checkpoint step must increase")
+    filename = f"latest-shadow-step-{step:04d}.safetensors"
+    destination = output_dir / filename
+    if destination.exists():
+        raise FileExistsError(destination)
+    save_shadow(destination)
+    digest = sha256(destination)
+    old_filename = metadata.get("latest_shadow_filename")
+    updated = metadata | {
+        "global_step": step,
+        "latest_checkpoint_step": step,
+        "latest_checkpoint_examples_consumed": examples_seen,
+        "latest_shadow_filename": filename,
+        "latest_shadow_sha256": digest,
+    }
+    atomic_json(output_dir / "run-metadata.json", updated)
+    metadata.update(updated)
+    if old_filename and old_filename != filename:
+        # The old filename must have been generated by this checkpoint writer.
+        old_step = previous_step
+        if old_filename != f"latest-shadow-step-{old_step:04d}.safetensors":
+            raise ValueError("unexpected previous latest-shadow filename")
+        (output_dir / old_filename).unlink(missing_ok=True)
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     with temporary.open("w", encoding="utf-8", newline="\n") as stream:
@@ -56,6 +175,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--teacher-repo-root", type=Path, required=True)
+    parser.add_argument(
+        "--warm-start-run", type=Path,
+        help=("Latest saved BF16 QAT shadow from a stopped earlier run. "
+              "Resets optimizer state; keeps scheduler position. NOT an exact resume."),
+    )
     return parser.parse_args()
 
 
@@ -88,11 +212,14 @@ def main() -> None:
         copy_shadow_gradients_to_masters,
         load_teacher_option_cache,
         make_fp32_cpu_master_parameters,
+        restore_qat_shadows,
         student_option_distillation_loss,
         sync_cpu_masters_to_shadows,
     )
     from tiny_omni_decision.ternary import (
         apply_ternary_qat,
+        cached_ternary_training_update,
+        cached_ternary_validation,
         export_packed_ternary_overlay,
         load_packed_ternary_overlay,
     )
@@ -309,6 +436,91 @@ def main() -> None:
     if len(initial_predictions) != len(validation_examples):
         raise ValueError("initial ternary predictions do not cover the validation snapshot")
 
+    warm_start_step = 0
+    warm_start_shadow_path: Path | None = None
+    warm_start_lineage: dict[str, Any] | None = None
+    previous_run: dict[str, Any] | None = None
+    if args.warm_start_run is not None:
+        source_dir = args.warm_start_run.resolve()
+        if source_dir == output_dir:
+            raise ValueError("warm-start requires a NEW output directory")
+        source_metadata_path = source_dir / "run-metadata.json"
+        source_config_path = source_dir / "effective-config.yaml"
+        if not all(
+            path.is_file() for path in (source_metadata_path, source_config_path)
+        ):
+            raise FileNotFoundError("warm-start source lacks metadata/config")
+        previous_run = json.loads(source_metadata_path.read_text(encoding="utf-8"))
+        previous_config = yaml.safe_load(source_config_path.read_text(encoding="utf-8"))
+        if (
+            previous_config.get("student", {}).get("ternary") != student_cfg["ternary"]
+            or previous_config.get("loss") != loss_cfg
+            or previous_config.get("training", {}).get("gradient_accumulation_steps")
+            != train_cfg["gradient_accumulation_steps"]
+            or previous_config.get("student", {}).get("score_temperature")
+            != student_cfg["score_temperature"]
+        ):
+            raise ValueError("warm-start source QAT configuration is incompatible")
+        expected_identity = {
+            "student_revision": manifest.revision,
+            "teacher_id": teacher_cfg["teacher_id"],
+            "teacher_cache_sha256": sha256(cache_path),
+            "train_id_order_sha256": order_hash,
+            "validation_snapshot_sha256": sha256(validation_snapshot),
+            "train_corpus_sha256": sha256(train_path),
+            "target_element_count": int(initial_overlay_manifest["target_element_count"]),
+        }
+        warm_start_step = verify_warm_start_ledger(
+            previous_run,
+            expected_identity,
+            total_steps=planned_steps,
+            checkpoint_interval=int(train_cfg["checkpoint_interval"]),
+        )
+        if warm_start_step * int(train_cfg["gradient_accumulation_steps"]) >= len(order):
+            raise ValueError("warm-start source has no remaining training examples")
+        expected_consumed = warm_start_step * int(
+            train_cfg["gradient_accumulation_steps"]
+        )
+        has_latest_ledger = any(
+            field in previous_run
+            for field in (
+                "latest_checkpoint_step",
+                "latest_shadow_filename",
+                "latest_shadow_sha256",
+            )
+        )
+        if has_latest_ledger:
+            source_examples = previous_run.get("latest_checkpoint_examples_consumed")
+            source_shadow_filename = previous_run.get("latest_shadow_filename")
+            expected_shadow_digest = previous_run.get("latest_shadow_sha256")
+            source_checkpoint_kind = "latest_shadow"
+        else:
+            source_examples = previous_run.get("examples_consumed")
+            source_shadow_filename = "best-shadow.safetensors"
+            expected_shadow_digest = previous_run.get("best_shadow_sha256")
+            source_checkpoint_kind = "best_validation_shadow"
+        if source_examples != expected_consumed:
+            raise ValueError("warm-start source checkpoint example count differs")
+        warm_start_shadow_path = source_dir / source_shadow_filename
+        if not warm_start_shadow_path.is_file():
+            raise FileNotFoundError("warm-start source shadow checkpoint is missing")
+        actual_shadow_digest = sha256(warm_start_shadow_path)
+        if actual_shadow_digest != expected_shadow_digest:
+            raise ValueError("warm-start shadow checksum differs from ledger")
+        warm_start_lineage = {
+            "kind": f"{source_checkpoint_kind}_warm_start_optimizer_reset",
+            "exact_resume": False,
+            "source_run_dir": str(source_dir),
+            "source_run_metadata_sha256": sha256(source_metadata_path),
+            "source_shadow_filename": source_shadow_filename,
+            "source_shadow_sha256": actual_shadow_digest,
+            "source_checkpoint_step": warm_start_step,
+            "source_last_recorded_step": previous_run["global_step"],
+            "source_examples_consumed": expected_consumed,
+            "optimizer_moments_restored": False,
+            "scheduler_position_restored": True,
+        }
+
     output_dir.parent.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=False, exist_ok=False)
     (output_dir / "effective-config.yaml").write_bytes(config_path.read_bytes())
@@ -404,6 +616,11 @@ def main() -> None:
         "sealed_audit_loaded": False,
         "teacher_artifacts_modified": False,
         "optimizer_resume_state_saved": False,
+        "warm_start_lineage": warm_start_lineage,
+        "latest_checkpoint_step": None,
+        "latest_checkpoint_examples_consumed": None,
+        "latest_shadow_filename": None,
+        "latest_shadow_sha256": None,
     }
     atomic_json(output_dir / "run-metadata.json", run_metadata)
     atomic_json(
@@ -438,6 +655,19 @@ def main() -> None:
         group_size=int(student_cfg["ternary"]["group_size"]),
         threshold_factor=float(student_cfg["ternary"]["threshold_factor"]),
     )
+    if warm_start_shadow_path is not None:
+        assert previous_run is not None
+        verify_warm_start_ledger(
+            previous_run,
+            {"target_parameter_names": list(target_names)},
+            total_steps=planned_steps,
+            checkpoint_interval=int(train_cfg["checkpoint_interval"]),
+        )
+        selected_weights = load_file(str(warm_start_shadow_path), device="cpu")
+        restore_qat_shadows(model, target_names, selected_weights)
+        if sha256(warm_start_shadow_path) != expected_shadow_digest:
+            raise ValueError("warm-start shadow changed during load")
+        del selected_weights
     modules = dict(model.named_modules())
     for parameter in model.parameters():
         parameter.requires_grad_(False)
@@ -507,16 +737,38 @@ def main() -> None:
         progress = min(1.0, (step - warmup_steps) / max(1, total_steps - warmup_steps))
         return 0.5 * (1.0 + math.cos(math.pi * progress))
 
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_multiplier)
+    if warm_start_step:
+        # LambdaLR performs its initial step during construction, so the
+        # last_epoch input must be the previous step. Optimizer moments start
+        # fresh; the original cosine schedule position does not.
+        for group in optimizer.param_groups:
+            group.setdefault("initial_lr", group["lr"])
+    scheduler = torch.optim.lr_scheduler.LambdaLR(
+        optimizer,
+        lr_lambda=lr_multiplier,
+        last_epoch=warm_start_step - 1 if warm_start_step else -1,
+    )
     model.train()
     torch.cuda.reset_peak_memory_stats()
     best_key: tuple[float, float, float] | None = None
     best_step = -1
     best_shadow_path = output_dir / "best-shadow.safetensors"
     history_path = output_dir / "training-history.jsonl"
+    progress_path = output_dir / "latest-progress.json"
     evaluation_seconds = 0.0
+    evaluation_count = 0
     train_started = time.perf_counter()
-    consumed = 0
+    last_progress_time = train_started
+    accumulation = int(train_cfg["gradient_accumulation_steps"])
+    consumed = warm_start_step * accumulation
+    emit_progress(
+        progress_path,
+        event="warm_start_optimizer_reset" if warm_start_step else "training_start",
+        step=warm_start_step,
+        examples_seen=consumed,
+        total_steps=total_steps,
+        elapsed_seconds=0.0,
+    )
     rolling_losses: list[float] = []
     initial_pairing_verified: list[str] = []
     initial_probability_differences: list[float] = []
@@ -566,18 +818,39 @@ def main() -> None:
         learning_rate_used: float | None,
         gradient_norm: float | None,
     ) -> None:
-        nonlocal best_key, best_step, evaluation_seconds, run_metadata
+        nonlocal best_key, best_step, evaluation_seconds, evaluation_count, run_metadata
         nonlocal modules, shadow_state, model, save_shadow, optimizer
         eval_started = time.perf_counter()
         model.eval()
-        metrics, predictions = evaluate_student_examples(
-            model,
-            processor,
-            validation_examples,
-            data_root=data_root,
-            temperature=float(student_cfg["score_temperature"]),
-            ece_bins=15,
-            on_prediction=verify_initial_pairing if step == 0 else None,
+        emit_progress(
+            progress_path,
+            event="validation_start",
+            step=step,
+            examples_seen=examples_seen,
+            validation_examples=len(validation_examples),
+            elapsed_seconds=eval_started - train_started,
+        )
+        # Each BF16 QAT shadow is held on CPU while its ternary value is used
+        # in-place. This avoids 256 * 2 repeated full-model quantizations
+        # without allocating a second full quantized model on the 16-GiB GPU.
+        with cached_ternary_validation(model, target_names):
+            metrics, predictions = evaluate_student_examples(
+                model,
+                processor,
+                validation_examples,
+                data_root=data_root,
+                temperature=float(student_cfg["score_temperature"]),
+                ece_bins=15,
+                on_prediction=verify_initial_pairing if step == 0 else None,
+            )
+        emit_progress(
+            progress_path,
+            event="validation_done",
+            step=step,
+            examples_seen=examples_seen,
+            validation_examples=len(validation_examples),
+            validation_seconds=time.perf_counter() - eval_started,
+            elapsed_seconds=time.perf_counter() - train_started,
         )
         teacher_comparison = compare_student_predictions(predictions, validation_teacher)
         if step == 0:
@@ -611,11 +884,28 @@ def main() -> None:
         )
         improved = best_key is None or key < best_key
         if improved:
+            emit_progress(
+                progress_path,
+                event="best_shadow_save_start",
+                step=step,
+                examples_seen=examples_seen,
+                elapsed_seconds=time.perf_counter() - train_started,
+            )
+            save_started = time.perf_counter()
             save_shadow(best_shadow_path)
+            emit_progress(
+                progress_path,
+                event="best_shadow_save_done",
+                step=step,
+                examples_seen=examples_seen,
+                save_seconds=time.perf_counter() - save_started,
+                elapsed_seconds=time.perf_counter() - train_started,
+            )
             best_key = key
             best_step = step
         eval_seconds = time.perf_counter() - eval_started
         evaluation_seconds += eval_seconds
+        evaluation_count += 1
         write_jsonl(output_dir / f"validation-step-{step:04d}.jsonl", predictions)
         atomic_json(
             output_dir / f"validation-step-{step:04d}.json",
@@ -671,7 +961,7 @@ def main() -> None:
                 "best_validation_step": best_step,
                 "best_selector_key": best_key,
                 "best_shadow_sha256": sha256(best_shadow_path),
-                "validation_evaluations": step // int(train_cfg["evaluation_interval"]) + 1,
+                "validation_evaluations": evaluation_count,
                 "last_validation_metrics": metrics,
                 "peak_allocated_vram_bytes": torch.cuda.max_memory_allocated(),
                 "evaluation_seconds_total": evaluation_seconds,
@@ -680,52 +970,61 @@ def main() -> None:
         atomic_json(output_dir / "run-metadata.json", run_metadata)
         model.train()
 
-    # QAT step 0 must match the separately exported ternary artifact before updates begin.
-    evaluate_at(0, 0, None, None, None)
-    accumulation = int(train_cfg["gradient_accumulation_steps"])
+    # Only a fresh pretrained run may claim step-0 pairing with the frozen
+    # initial ternary overlay. A warm start is a new optimizer-reset segment.
+    evaluate_at(warm_start_step, consumed, None, None, None)
     interval = int(train_cfg["evaluation_interval"])
     max_grad_norm = float(train_cfg["max_gradient_norm"])
-    for update_index, start in enumerate(range(0, len(order), accumulation), start=1):
+    for update_index, start in enumerate(
+        range(consumed, len(order), accumulation), start=warm_start_step + 1
+    ):
         microbatch = order[start : start + accumulation]
         optimizer.zero_grad(set_to_none=True)
         if parameter_device_policy == "cpu_fp32_master":
             for parameter in trainable:
                 parameter.grad = None
         interval_losses: list[float] = []
-        for example in microbatch:
-            query_inputs = processor_inputs_for_decision_example(
-                processor, example, data_root=data_root
-            )
-            option_inputs = processor_inputs_for_options(processor, example.options)
-            if max(query_inputs["input_ids"].shape[-1], option_inputs["input_ids"].shape[-1]) > int(
-                train_cfg["max_sequence_length"]
-            ):
-                raise ValueError(f"{example.id}: sequence exceeds configured max length")
-            query_embedding = model_sentence_embeddings(model, query_inputs)[0]
-            option_embeddings = model_sentence_embeddings(model, option_inputs)
-            logits = supplied_option_logits(
-                query_embedding,
-                option_embeddings,
-                temperature=float(student_cfg["score_temperature"]),
-            )
-            cached = teacher_cache[example.id]
-            teacher_probabilities = torch.tensor(
-                cached["teacher_option_probabilities"],
-                device=logits.device,
-                dtype=torch.float32,
-            )
-            loss, loss_parts = student_option_distillation_loss(
-                logits,
-                teacher_probabilities,
-                target_index=example.options.index(example.target),
-                option_kl_weight=float(loss_cfg["option_kl"]),
-                cross_entropy_weight=float(loss_cfg["cross_entropy"]),
-                brier_weight=float(loss_cfg["brier"]),
-            )
-            if not torch.isfinite(loss):
-                raise ValueError(f"non-finite QAT loss at {example.id}")
-            (loss / len(microbatch)).backward()
-            interval_losses.append(float(loss.detach().cpu()))
+        update_cache = (
+            cached_ternary_training_update(model, target_names, master_parameters)
+            if parameter_device_policy == "cpu_fp32_master"
+            else nullcontext()
+        )
+        with update_cache:
+            for example in microbatch:
+                query_inputs = processor_inputs_for_decision_example(
+                    processor, example, data_root=data_root
+                )
+                option_inputs = processor_inputs_for_options(processor, example.options)
+                if max(
+                    query_inputs["input_ids"].shape[-1],
+                    option_inputs["input_ids"].shape[-1],
+                ) > int(train_cfg["max_sequence_length"]):
+                    raise ValueError(f"{example.id}: sequence exceeds configured max length")
+                query_embedding = model_sentence_embeddings(model, query_inputs)[0]
+                option_embeddings = model_sentence_embeddings(model, option_inputs)
+                logits = supplied_option_logits(
+                    query_embedding,
+                    option_embeddings,
+                    temperature=float(student_cfg["score_temperature"]),
+                )
+                cached = teacher_cache[example.id]
+                teacher_probabilities = torch.tensor(
+                    cached["teacher_option_probabilities"],
+                    device=logits.device,
+                    dtype=torch.float32,
+                )
+                loss, loss_parts = student_option_distillation_loss(
+                    logits,
+                    teacher_probabilities,
+                    target_index=example.options.index(example.target),
+                    option_kl_weight=float(loss_cfg["option_kl"]),
+                    cross_entropy_weight=float(loss_cfg["cross_entropy"]),
+                    brier_weight=float(loss_cfg["brier"]),
+                )
+                if not torch.isfinite(loss):
+                    raise ValueError(f"non-finite QAT loss at {example.id}")
+                (loss / len(microbatch)).backward()
+                interval_losses.append(float(loss.detach().cpu()))
         gradient_norm = torch.nn.utils.clip_grad_norm_(
             trainable,
             max_grad_norm,
@@ -757,11 +1056,49 @@ def main() -> None:
         scheduler.step()
         consumed += len(microbatch)
         rolling_losses.extend(interval_losses)
+        if update_index == 1 or update_index % 4 == 0 or update_index == total_steps:
+            now = time.perf_counter()
+            emit_progress(
+                progress_path,
+                event="training_update",
+                step=update_index,
+                examples_seen=consumed,
+                total_steps=total_steps,
+                window_seconds=now - last_progress_time,
+                elapsed_seconds=now - train_started,
+                microbatch_loss_mean=sum(interval_losses) / len(interval_losses),
+                allocated_vram_bytes=torch.cuda.memory_allocated(),
+                reserved_vram_bytes=torch.cuda.memory_reserved(),
+            )
+            last_progress_time = now
         if update_index % interval == 0 or update_index == total_steps:
             mean_loss = sum(rolling_losses) / len(rolling_losses) if rolling_losses else None
             evaluate_at(update_index, consumed, mean_loss, current_lr, float(gradient_norm))
             rolling_losses.clear()
         if update_index % int(train_cfg["checkpoint_interval"]) == 0 or update_index == total_steps:
+            emit_progress(
+                progress_path,
+                event="latest_shadow_save_start",
+                step=update_index,
+                examples_seen=consumed,
+                elapsed_seconds=time.perf_counter() - train_started,
+            )
+            checkpoint_started = time.perf_counter()
+            publish_latest_shadow(
+                output_dir,
+                step=update_index,
+                examples_seen=consumed,
+                metadata=run_metadata,
+                save_shadow=save_shadow,
+            )
+            emit_progress(
+                progress_path,
+                event="latest_shadow_save_done",
+                step=update_index,
+                examples_seen=consumed,
+                save_seconds=time.perf_counter() - checkpoint_started,
+                elapsed_seconds=time.perf_counter() - train_started,
+            )
             with history_path.open("a", encoding="utf-8", newline="\n") as stream:
                 stream.write(
                     json.dumps(

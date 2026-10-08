@@ -271,3 +271,165 @@ def test_packed_overlay_round_trips_quantized_weights_and_checks_base_revision(
             expected_base_model_id="google/embeddinggemma-2",
             expected_base_revision="different-revision",
         )
+
+
+def test_registering_qat_weights_does_not_quantize_full_weights(monkeypatch) -> None:
+    torch = pytest.importorskip("torch")
+    import tiny_omni_decision.ternary as ternary
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("quantization during parametrization registration")
+
+    monkeypatch.setattr(ternary, "quantize_groupwise_ternary", forbidden)
+    targets = ternary.apply_ternary_qat(model, group_size=4)
+    assert targets == ("0.weight",)
+
+
+def test_validation_uses_one_quantization_per_target_and_restores_shadows(monkeypatch) -> None:
+    torch = pytest.importorskip("torch")
+    import tiny_omni_decision.ternary as ternary
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).eval()
+    with torch.no_grad():
+        model[0].weight.copy_(torch.tensor([[-3., -1., 1., 3.], [2., 3., 4., 5.]]))
+    targets = ternary.apply_ternary_qat(model, group_size=4)
+    shadow = model[0].parametrizations.weight.original
+    original = shadow.detach().clone()
+    x = torch.tensor([[1., 2., 3., 4.]])
+    with torch.no_grad():
+        expected = model(x)
+    quantize = ternary.quantize_groupwise_ternary
+    calls = []
+
+    def counted(weights, **kwargs):
+        calls.append(tuple(weights.shape))
+        return quantize(weights, **kwargs)
+
+    monkeypatch.setattr(ternary, "quantize_groupwise_ternary", counted)
+    with ternary.cached_ternary_validation(model, targets):
+        with torch.inference_mode():
+            assert torch.equal(model(x), expected)
+            assert torch.equal(model(x), expected)
+        assert calls == [tuple(original.shape)]
+        assert shadow.device == original.device
+    assert torch.equal(shadow.detach(), original)
+    with torch.no_grad():
+        assert torch.equal(model(x), expected)
+    assert len(calls) == 2
+    model(x).sum().backward()
+    assert shadow.grad is not None and torch.isfinite(shadow.grad).all()
+
+
+def test_validation_restores_original_shadows_after_exception() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import apply_ternary_qat, cached_ternary_validation
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).eval()
+    targets = apply_ternary_qat(model, group_size=4)
+    original = model[0].parametrizations.weight.original.detach().clone()
+    with pytest.raises(RuntimeError, match="interrupted"):
+        with cached_ternary_validation(model, targets):
+            raise RuntimeError("interrupted")
+    assert torch.equal(model[0].parametrizations.weight.original.detach(), original)
+
+
+def test_cpu_master_update_reuses_ternary_weights_with_identical_ste_gradients(
+    monkeypatch,
+) -> None:
+    torch = pytest.importorskip("torch")
+    import tiny_omni_decision.ternary as ternary
+
+    torch.manual_seed(17)
+    baseline = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+    cached = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+    cached.load_state_dict(baseline.state_dict())
+    names = ternary.apply_ternary_qat(baseline, group_size=4)
+    ternary.apply_ternary_qat(cached, group_size=4)
+    base_shadow = baseline[0].parametrizations.weight.original
+    cached_shadow = cached[0].parametrizations.weight.original
+    cpu_master = [torch.nn.Parameter(cached_shadow.detach().cpu().float().clone())]
+    original = cached_shadow.detach().clone()
+    examples = [torch.randn(1, 4), torch.randn(1, 4)]
+
+    baseline_outputs = []
+    for inputs in examples:
+        output = baseline(inputs)
+        baseline_outputs.append(output.detach().clone())
+        output.sum().backward()
+
+    quantize = ternary.quantize_groupwise_ternary
+    quantizations = []
+
+    def counted(weights, **kwargs):
+        quantizations.append(tuple(weights.shape))
+        return quantize(weights, **kwargs)
+
+    monkeypatch.setattr(ternary, "quantize_groupwise_ternary", counted)
+    with ternary.cached_ternary_training_update(cached, names, cpu_master):
+        for inputs, expected in zip(examples, baseline_outputs, strict=True):
+            output = cached(inputs)
+            torch.testing.assert_close(output.detach(), expected, rtol=0, atol=0)
+            output.sum().backward()
+        assert quantizations == [tuple(original.shape)]
+
+    torch.testing.assert_close(cached_shadow.grad, base_shadow.grad, rtol=0, atol=0)
+    assert torch.equal(cached_shadow.detach(), original)
+    assert len(quantizations) == 1
+    with torch.no_grad():
+        cached(examples[0])
+    assert len(quantizations) == 2
+
+
+def test_cpu_master_update_restores_shadows_when_microbatch_fails() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import (
+        apply_ternary_qat,
+        cached_ternary_training_update,
+    )
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+    names = apply_ternary_qat(model, group_size=4)
+    original = model[0].parametrizations.weight.original.detach().clone()
+    master = [torch.nn.Parameter(original.detach().cpu().float().clone())]
+    with pytest.raises(RuntimeError, match="microbatch failed"):
+        with cached_ternary_training_update(model, names, master):
+            model(torch.ones(1, 4)).sum().backward()
+            raise RuntimeError("microbatch failed")
+    assert torch.equal(model[0].parametrizations.weight.original.detach(), original)
+
+
+def test_cached_qat_update_preserves_bf16_forward_and_ste() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import (
+        apply_ternary_qat,
+        cached_ternary_training_update,
+    )
+
+    torch.manual_seed(7)
+    reference = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).to(torch.bfloat16)
+    candidate = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).to(torch.bfloat16)
+    candidate.load_state_dict(reference.state_dict())
+    names = apply_ternary_qat(reference, group_size=4)
+    apply_ternary_qat(candidate, group_size=4)
+    ref_param = reference[0].parametrizations.weight.original
+    can_param = candidate[0].parametrizations.weight.original
+    saved = can_param.detach().clone()
+    cpu_master = [torch.nn.Parameter(saved.detach().cpu().float().clone())]
+    inputs = [
+        torch.tensor([[1.0, -2.0, 0.5, 3.0]], dtype=torch.bfloat16),
+        torch.tensor([[-2.0, 0.5, 1.0, -1.0]], dtype=torch.bfloat16),
+    ]
+    originals = []
+    for value in inputs:
+        logits = reference(value)
+        originals.append(logits.detach().clone())
+        logits.sum().backward()
+    with cached_ternary_training_update(candidate, names, cpu_master):
+        for value, expected in zip(inputs, originals, strict=True):
+            logits = candidate(value)
+            torch.testing.assert_close(logits, expected, atol=0, rtol=0)
+            logits.sum().backward()
+    torch.testing.assert_close(can_param.grad, ref_param.grad, atol=0, rtol=0)
+    assert torch.equal(can_param.detach(), saved)

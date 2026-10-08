@@ -382,3 +382,94 @@ invalid distributions, and Teacher logits/probabilities that disagree. This is
 only an implementation contract: no real Teacher train cache has been
 generated, no recovery optimizer step has run, and Phase 8 QAT is not complete.
 Teacher artifacts and corpus files were not modified; the saved Teacher predictions were read-only.
+
+
+## QAT training performance audit and safe handoff (PR #14, not yet deployed)
+
+The actual QAT trainer is `scripts/train_student_ternary_qat.py` on
+`codex/ternary-student-recovery`, not the separate
+`feat/ternary-student-recovery` reference CLI. Attempt 05 uses
+`gradient_accumulation_steps: 4`, `evaluation_interval: 128`,
+`checkpoint_interval: 128`, and `max_steps: 1215`. Between update
+steps 128 and 256 it processes another 512 training examples. It does
+**not** repeatedly evaluate the validation set inside that interval.
+
+The audited trainer originally fake-quantized its targeted matrix
+weights on every model forward. Each example separately forwards the
+question and option batch. The PR's CPU-FP32-master-backed update cache
+quantizes each *used* target once per four-example optimizer update,
+and restores its original BF16 shadow from the existing FP32 CPU master
+after all four backward passes. The original STE gradient to those
+shadows is preserved. This does not add another full-model GPU weight
+cache. Validation uses a separate read-only-to-the-outside CPU-backed
+shadow snapshot so ternary values are prepared once per validation and
+the exact original shadows/STE are restored even if evaluation raises.
+The no-grad validation cache requires about one BF16 model's target
+weight bytes of *additional host RAM* during the validation pass.
+This is a reference optimization pending actual 16 GiB GPU timings,
+not a claimed speedup or memory-fit result.
+
+The PR emits atomic `latest-progress.json` and a flushed JSON status
+line after update 1 and every 4 updates, as well as around validation
+and selected-shadow saves. A report of GPU saturation alone does not
+distinguish a slow update from a slow validation; these timing events do.
+
+**Best is for model selection; latest is for continuing training.**
+`best-shadow.safetensors` is updated only when validation improves.
+In the original attempt05 script, `run-metadata.json` at step 256 with
+`best_validation_step: 128` **does not imply that step-256 model weights
+were saved**. The old running process does not support a live script patch
+or a strict optimizer resume; it must **not** be stopped on the assumption
+that latest weights can be reconstructed from the metrics or best shadow.
+
+The revised script additionally saves
+`latest-shadow-step-0128.safetensors`,
+`latest-shadow-step-0256.safetensors`, etc., at every configured
+checkpoint boundary **regardless of whether validation improved**.
+The new shadow is fully saved and SHA-256-verified before an atomic
+`run-metadata.json` update publishes its `latest_checkpoint_step`,
+`latest_shadow_filename`, `latest_shadow_sha256`, and consumed-example
+count. Only then is the previous latest-shadow file removed; a failed save
+leaves the prior published checkpoint intact. The best-shadow is never
+substituted for latest. These additional checkpoint writes take disk space
+and time and still do not contain optimizer state.
+
+For a run produced by **the revised script**, after verifying that the
+source run has a complete latest-shadow + matching ledger and that its
+process has exited, a user-approved optimizer-reset continuation can
+start into a **different output directory**, using a separately reviewed
+config and:
+
+```powershell
+python scripts/train_student_ternary_qat.py --config CONFIG_WITH_NEW_OUTPUT_DIR.yaml --repo-root . --teacher-repo-root TEACHER_REPO_ROOT --warm-start-run SOURCE_RUN_WITH_LATEST_SHADOW
+```
+
+Warm start checks model revision, immutable Teacher cache, data/validation
+hashes, deterministic sample order, quantization/readout settings,
+complete target inventory, exact checkpoint step, consumed count, and
+checkpoint SHA-256 before and after loading. It begins from the actual
+`latest_checkpoint_step` when that ledger exists, **not** the best step.
+For an older run that has no latest-shadow ledger, the best checkpoint is
+accepted only when `best_validation_step == global_step`, the step is on
+the configured checkpoint interval, the consumed-example count matches,
+and `best-shadow.safetensors` matches `best_shadow_sha256`. For example,
+an old run at global step 256 with best step 128 is rejected; if a later
+validation writes a new best at step 384 and metadata also records global
+step 384, that best shadow may be used as the step-384 warm-start source
+after its SHA-256 is verified. A mismatch fails closed; it never silently
+falls back to an older best.
+
+The global cosine scheduler position is retained, but optimizer moments
+and CPU FP32 master fractional state are reinitialized from the saved BF16
+shadow weights. This is explicitly an **optimizer-reset warm start, not
+an exact resume**. No performance equivalence is claimed.
+
+**The currently running pre-fix attempt05 must not be stopped while its
+best shadow is stale relative to its last saved step.** It can use the
+legacy-best warm-start path only after an operator-approved stop at a
+validation boundary where `best_validation_step == global_step`, with the
+recorded sample count and best-shadow SHA-256 verified. If the best remains
+behind global step, continue the existing process and wait for a newer best;
+do not call the old best a latest checkpoint. This handoff does not restore
+optimizer state and is not an exact resume. PR #14 remains draft/unmerged
+pending real GPU testing.
