@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import math
 from collections import Counter
-from contextlib import contextmanager
 from collections.abc import Sequence
+from contextlib import contextmanager
 
 import torch
 from torch import Tensor, nn
