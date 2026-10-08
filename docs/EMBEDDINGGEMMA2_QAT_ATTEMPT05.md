@@ -107,3 +107,58 @@ generalization-gap estimate.
   profile.
 - Any sealed-audit result. The sealed audit remains unopened and must not be
   used for tuning.
+
+## Subsequent validation checkpoint: step 256
+
+At 2026-10-08 17:01 JST, the same run saved validation step 256 and the
+corresponding optimizer update. A live check at 17:12 JST confirmed that the
+process remained running. It had consumed 1,024 unique examples; the best
+validation checkpoint and fixed selector remained at step 128. No conclusion
+is drawn from the last checkpoint alone.
+
+Step 256 used the same 256 validation records. The saved prediction files at
+steps 128 and 256 both contain 256 rows, and row-by-row `sample_id`, `target`,
+`options`, and `option_order_sha256` matched exactly.
+
+| Step | Macro Accuracy | Minimum modality Accuracy | Macro NLL | Macro Brier | Macro ECE |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 0.1836 | 0.0938 | 1.8786 | 0.8219 | 0.1698 |
+| 128 | 0.2227 | 0.1250 | 1.8300 | 0.8146 | 0.1357 |
+| 256 | 0.2031 | 0.1094 | 1.8657 | 0.8293 | 0.1524 |
+
+At step 256, modality Accuracy / NLL / Brier / ECE was:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 0.1094 | 2.3903 | 0.9146 | 0.0764 |
+| Image | 0.1250 | 2.4116 | 0.9240 | 0.0966 |
+| Text | 0.3438 | 1.1770 | 0.6966 | 0.2356 |
+| Video | 0.2344 | 1.4839 | 0.7819 | 0.2010 |
+
+From step 128 to 256, Video Accuracy rose by 3.13 percentage points, but
+Video NLL and Brier worsened. Macro Accuracy, macro NLL, macro Brier, and macro
+ECE all worsened; the selector therefore retained step 128. Text and Image
+Accuracy declined, while Audio Accuracy declined slightly even as its NLL,
+Brier, and ECE improved. The rolling training loss was 1.5398 at step 256
+(versus 1.5382 at step 128); this is not a fixed-example generalization-gap
+measurement.
+
+- Step 256 learning rate used: `9.172551684162025e-06`; scheduler remains the
+  original 1,215-step cosine plan. Logged gradient norm was 14,848 before the
+  configured norm-1.0 clipping.
+- Validation duration: 4,869.86 seconds. Total elapsed training-loop time in
+  the history row: 37,310.65 seconds.
+- Validation metrics JSON SHA-256:
+  `f66b4663120ba8897a11a10354767db05a8420d5d3472e0d1642dabca92c12bc`.
+- Validation predictions JSONL SHA-256:
+  `5fa36f3b5e5b7c13e3c03c8d78ef16b7d1c7bf4f12c23cf69d04f1a57b823a83`.
+- Selected step-128 shadow SHA-256 remains
+  `9dff2005f9264c58103a80f410f7a9fbb08e7280b7ef40a4afdd052d25c3a5ac`.
+- Metadata's CUDA allocator high-water value at step 256 is
+  `21,935,098,880` bytes. Interpret it alongside the dedicated/shared WDDM
+  observations above; do not label it dedicated VRAM.
+
+These validation observations are used by the fixed selector and remain
+development data, not a blind final evaluation. Training is still in progress;
+the QAT sufficiency decision and any conditional Recovery LoRA stage remain
+pending.

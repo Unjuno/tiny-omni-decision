@@ -242,11 +242,13 @@ Proceed to recovery after a numerically valid damaged baseline. This phase does 
 ## Phase 8 — Teacher recovery, then LoRA if needed — QAT in progress
 
 Attempt 05 is running from a fresh pretrained EmbeddingGemma 2 base with new
-ternary-QAT shadow weights. At the latest recorded validation (step 128), the
-fixed validation macro NLL improved slightly from 1.8786 to 1.8300; modality
-metrics are mixed and no quality conclusion is drawn. The run is configured
-for 1,215 updates over 4,859 unique training examples. Interim hashes,
-conditions, metrics, and local-memory measurements are in
+ternary-QAT shadow weights. At step 256, video Accuracy rose from 0.2031 at
+step 128 to 0.2344, while video NLL worsened from 1.4519 to 1.4839. Macro
+Accuracy fell from 0.2227 to 0.2031, macro NLL worsened from 1.8300 to 1.8657,
+and the validation selector still chooses step 128. The modality trade-offs
+remain mixed; no quality conclusion is drawn. The run is configured for 1,215
+updates over 4,859 unique training examples. Interim hashes, conditions,
+metrics, and local-memory measurements are in
 [docs/EMBEDDINGGEMMA2_QAT_ATTEMPT05.md](docs/EMBEDDINGGEMMA2_QAT_ATTEMPT05.md).
 
 ### Shared supervision
