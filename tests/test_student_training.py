@@ -247,7 +247,11 @@ def test_teacher_cache_is_train_only_and_rejects_boolean_probabilities(tmp_path)
 
 
 def test_qat_script_progress_is_written_and_flushed(tmp_path, capsys) -> None:
-    from scripts.train_student_ternary_qat import emit_progress
+    import runpy
+    from pathlib import Path
+
+    script = Path(__file__).resolve().parents[1] / "scripts" / "train_student_ternary_qat.py"
+    emit_progress = runpy.run_path(str(script))["emit_progress"]
 
     output = tmp_path / "latest-progress.json"
     emit_progress(
