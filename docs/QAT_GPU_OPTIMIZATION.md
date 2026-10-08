@@ -165,6 +165,16 @@ PyOpenCL. Therefore this installed QAT path cannot dispatch model training to
 the Iris Xe. No second GPU job or package installation was attempted while
 the RTX run was active.
 
+This is an environment limitation, not a claim that Iris Xe training is
+unsupported in general. Current PyTorch documentation describes native Intel
+XPU training on Windows, with Windows `torch.compile` support starting in
+PyTorch 2.7; this run is pinned to PyTorch 2.6.0+cu124 and the QAT script uses
+CUDA-specific APIs throughout. A separate XPU environment plus an explicit
+device-port and model/operator smoke would be required. Microsoft's
+`torch-directml` path is not a drop-in alternative here: its documented package
+is capped at PyTorch 2.3.1 and DirectML is in maintenance mode. Neither route
+has been installed or measured on this machine.
+
 At the same observation, `nvidia-smi` reported 16,154 MiB used and 22 MiB
 free on the RTX at 99% utilization. Windows GPU process-memory counters
 attributed approximately 15.77 GiB dedicated and 3.79 GiB shared allocation
@@ -174,6 +184,10 @@ adapter supplied that memory or that such paging improves throughput. The
 Iris Xe may be useful for a separately supported inference/compute backend,
 but that needs its own compatibility and throughput measurement after the
 current run releases the device. It should not be treated as extra CUDA VRAM.
+
+Official references: [PyTorch Intel GPU/XPU setup](https://docs.pytorch.org/docs/stable/notes/get_start_xpu.html),
+[Microsoft DirectML status](https://github.com/microsoft/DirectML), and
+[DirectML PyTorch version limit](https://github.com/MicrosoftDocs/windows-ai-docs/blob/docs/docs/directml/pytorch-windows.md).
 
 The current measured update profile still identifies four-example forward,
 backward, and ternary-shadow restoration as the largest portion (13.70 s of a
