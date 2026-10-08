@@ -305,8 +305,8 @@ def test_explicit_best_shadow_warm_start_checks_identity_and_step(tmp_path) -> N
 
 def test_warm_start_shadow_restoration_validates_all_before_mutating() -> None:
     torch = pytest.importorskip("torch")
-    from tiny_omni_decision.ternary import apply_ternary_qat
     from tiny_omni_decision.student_training import restore_qat_shadows
+    from tiny_omni_decision.ternary import apply_ternary_qat
 
     model = torch.nn.Sequential(torch.nn.Linear(4, 2), torch.nn.Linear(2, 2))
     targets = apply_ternary_qat(model, group_size=4)
