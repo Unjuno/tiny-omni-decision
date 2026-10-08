@@ -4,8 +4,12 @@ Final held-out data are intentionally not accepted by the training entry point.
 """
 from __future__ import annotations
 
+import json
 import math
+import os
 import random
+import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -110,6 +114,16 @@ def _positive_int(config: dict, key: str) -> int:
     return value
 
 
+def _append_progress(path: Path, event: str, **fields: Any) -> None:
+    payload = {"event": event, **fields}
+    line = json.dumps(payload, ensure_ascii=False, sort_keys=True, allow_nan=False)
+    with path.open("a", encoding="utf-8") as stream:
+        stream.write(line + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    print(f"student-progress {line}", file=sys.stderr, flush=True)
+
+
 def make_optimizer(
     parameters: list[nn.Parameter], *, learning_rate: float
 ) -> torch.optim.AdamW:
@@ -152,8 +166,35 @@ def run_recovery(
         raise ValueError("seed must be integer")
     torch.manual_seed(seed)
     randomizer = random.Random(seed)
+    progress_path = output / "progress.jsonl"
+    run_started = time.perf_counter()
+    _append_progress(
+        progress_path,
+        "initial_ternary_validation_start",
+        records=len(validation.records),
+        run_elapsed_seconds=0.0,
+    )
+    started = time.perf_counter()
     with controller.cached_evaluation_codes():
         initial_metrics, initial_logits = evaluate(model, validation.records)
+    initial_elapsed = time.perf_counter() - started
+    _append_progress(
+        progress_path,
+        "initial_ternary_validation_done",
+        records=len(validation.records),
+        elapsed_seconds=initial_elapsed,
+        run_elapsed_seconds=time.perf_counter() - run_started,
+    )
+    _append_progress(
+        progress_path,
+        "validation_done",
+        stage="qat",
+        step=0,
+        records=len(validation.records),
+        elapsed_seconds=initial_elapsed,
+        reused_initial=True,
+        run_elapsed_seconds=time.perf_counter() - run_started,
+    )
     run_meta = metadata | {"teacher_id": train.teacher_id, "config": config,
                            "train_source_sha256": train.source_sha256,
                            "validation_source_sha256": validation.source_sha256,
@@ -211,13 +252,48 @@ def run_recovery(
                                 "metrics": metrics, "gate": gate})
                 if best_score is None or score < best_score:
                     destination = output / f"{name}-step-{step:06d}"
+                    save_started = time.perf_counter()
+                    _append_progress(
+                        progress_path,
+                        "checkpoint_save_start",
+                        stage=name,
+                        step=step,
+                        run_elapsed_seconds=time.perf_counter() - run_started,
+                    )
                     save_bundle(
                         controller, destination, run_meta | {"stage": name, "step": step}
                     )
+                    _append_progress(
+                        progress_path,
+                        "checkpoint_save_done",
+                        stage=name,
+                        step=step,
+                        elapsed_seconds=time.perf_counter() - save_started,
+                        run_elapsed_seconds=time.perf_counter() - run_started,
+                    )
                     best_path, best_score, best_logits = destination, score, current_logits
                 continue
+            _append_progress(
+                progress_path,
+                "validation_start",
+                stage=name,
+                step=step,
+                records=len(validation.records),
+                run_elapsed_seconds=time.perf_counter() - run_started,
+            )
+            evaluation_started = time.perf_counter()
             with controller.cached_evaluation_codes():
                 metrics, current_logits = evaluate(model, validation.records)
+                evaluation_elapsed = time.perf_counter() - evaluation_started
+                _append_progress(
+                    progress_path,
+                    "validation_done",
+                    stage=name,
+                    step=step,
+                    records=len(validation.records),
+                    elapsed_seconds=evaluation_elapsed,
+                    run_elapsed_seconds=time.perf_counter() - run_started,
+                )
                 gate = quality_gate(metrics, teacher_metrics, config["limits"])
                 # Any passing checkpoint outranks every failing one; NLL breaks ties.
                 score = (not gate["passed"], metrics["all"]["nll"])
@@ -225,8 +301,24 @@ def run_recovery(
                                 "metrics": metrics, "gate": gate})
                 if best_score is None or score < best_score:
                     destination = output / f"{name}-step-{step:06d}"
+                    save_started = time.perf_counter()
+                    _append_progress(
+                        progress_path,
+                        "checkpoint_save_start",
+                        stage=name,
+                        step=step,
+                        run_elapsed_seconds=time.perf_counter() - run_started,
+                    )
                     save_bundle(
                         controller, destination, run_meta | {"stage": name, "step": step}
+                    )
+                    _append_progress(
+                        progress_path,
+                        "checkpoint_save_done",
+                        stage=name,
+                        step=step,
+                        elapsed_seconds=time.perf_counter() - save_started,
+                        run_elapsed_seconds=time.perf_counter() - run_started,
                     )
                     best_path, best_score, best_logits = destination, score, current_logits
         assert best_path is not None and best_logits is not None
