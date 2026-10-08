@@ -344,3 +344,63 @@ def test_warm_start_shadow_restoration_validates_all_before_mutating() -> None:
     with pytest.raises(ValueError, match="shape"):
         restore_qat_shadows(model, targets, invalid)
     assert torch.equal(model[0].parametrizations.weight.original, before)
+
+
+def test_latest_shadow_publication_rotates_without_losing_last_checkpoint(tmp_path) -> None:
+    import runpy
+    from pathlib import Path
+
+    script = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts" / "train_student_ternary_qat.py")
+    )
+    publish = script["publish_latest_shadow"]
+    data = {"global_step": 128, "best_validation_step": 128}
+    metadata_path = tmp_path / "run-metadata.json"
+
+    def save(path):
+        path.write_bytes(f"weights for {path.name}".encode())
+
+    publish(tmp_path, step=128, examples_seen=512, metadata=data, save_shadow=save)
+    first = tmp_path / "latest-shadow-step-0128.safetensors"
+    assert first.is_file()
+    first_digest = data["latest_shadow_sha256"]
+    assert data["latest_checkpoint_step"] == 128
+    assert data["latest_checkpoint_examples_consumed"] == 512
+
+    data["global_step"] = 256
+    publish(tmp_path, step=256, examples_seen=1024, metadata=data, save_shadow=save)
+    latest = tmp_path / "latest-shadow-step-0256.safetensors"
+    assert latest.is_file()
+    assert not first.exists()
+    assert data["latest_checkpoint_step"] == 256
+    assert data["latest_shadow_sha256"] != first_digest
+    assert json.loads(metadata_path.read_text())["latest_shadow_filename"] == latest.name
+
+
+def test_failed_latest_publication_keeps_prior_shadow_and_ledger(tmp_path) -> None:
+    import runpy
+    from pathlib import Path
+
+    publish = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts" / "train_student_ternary_qat.py")
+    )["publish_latest_shadow"]
+    data = {"global_step": 128}
+    publish(
+        tmp_path, step=128, examples_seen=512, metadata=data,
+        save_shadow=lambda path: path.write_bytes(b"first"),
+    )
+    stored = dict(data)
+    data["global_step"] = 256
+
+    def failed_save(path):
+        raise OSError("disk full")
+
+    with pytest.raises(OSError, match="disk full"):
+        publish(
+            tmp_path, step=256, examples_seen=1024,
+            metadata=data, save_shadow=failed_save,
+        )
+    assert (tmp_path / stored["latest_shadow_filename"]).read_bytes() == b"first"
+    record = json.loads((tmp_path / "run-metadata.json").read_text())
+    assert record["latest_checkpoint_step"] == 128
+    assert record["latest_shadow_sha256"] == stored["latest_shadow_sha256"]
