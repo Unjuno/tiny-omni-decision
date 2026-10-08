@@ -382,3 +382,66 @@ invalid distributions, and Teacher logits/probabilities that disagree. This is
 only an implementation contract: no real Teacher train cache has been
 generated, no recovery optimizer step has run, and Phase 8 QAT is not complete.
 Teacher artifacts and corpus files were not modified; the saved Teacher predictions were read-only.
+
+
+## QAT training performance audit and safe handoff (PR #14, not yet deployed)
+
+The actual QAT trainer is `scripts/train_student_ternary_qat.py` on
+`codex/ternary-student-recovery`, not the separate
+`feat/ternary-student-recovery` reference CLI. Attempt 05 uses
+`gradient_accumulation_steps: 4`, `evaluation_interval: 128`,
+`checkpoint_interval: 128`, and `max_steps: 1215`. Between update
+steps 128 and 256 it processes another 512 training examples. It does
+**not** repeatedly evaluate the validation set inside that interval.
+
+The audited trainer originally fake-quantized its targeted matrix
+weights on every model forward. Each example separately forwards the
+question and option batch. The PR's CPU-FP32-master-backed update cache
+quantizes each *used* target once per four-example optimizer update,
+and restores its original BF16 shadow from the existing FP32 CPU master
+after all four backward passes. The original STE gradient to those
+shadows is preserved. This does not add another full-model GPU weight
+cache. Validation uses a separate read-only-to-the-outside CPU-backed
+shadow snapshot so ternary values are prepared once per validation and
+the exact original shadows/STE are restored even if evaluation raises.
+The no-grad validation cache requires about one BF16 model's target
+weight bytes of *additional host RAM* during the validation pass.
+This is a reference optimization pending actual 16 GiB GPU timings,
+not a claimed speedup or memory-fit result.
+
+The PR emits atomic `latest-progress.json` and a flushed JSON status
+line after update 1 and every 4 updates, as well as around validation
+and selected-shadow saves. A report of GPU saturation alone does not
+distinguish a slow update from a slow validation; these timing events do.
+
+**A selected `best-shadow.safetensors` is NOT an optimizer checkpoint.**
+The currently running old process cannot pick up a change to this script,
+and its state does not contain optimizer/scheduler or RNG snapshots.
+Therefore it cannot be resumed *exactly* from step 128 or 256 by
+switching code. Do not describe it as a strict resume.
+
+For an explicit optimizer-reset continuation, first stop the source
+process after verifying that the selected `best-shadow` and
+`run-metadata.json` are consistent and the process has exited.
+Use a **different output directory** in a separately reviewed copy of
+the config (do not overwrite the original). Then:
+
+```powershell
+python scripts/train_student_ternary_qat.py --config CONFIG_WITH_NEW_OUTPUT_DIR.yaml --repo-root . --teacher-repo-root TEACHER_REPO_ROOT --warm-start-run C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-05-adafactor
+```
+
+The warm start checks selected-step alignment with the 128-step
+checkpoint interval, matching model revision, immutable Teacher cache,
+data and validation hashes, deterministic sample order, target
+inventory, option-readout settings, and the selected shadow SHA-256
+before and after loading. It begins from the previously selected
+`best_validation_step` and skips precisely those consumed examples
+in the same one-pass sample order, maintaining the global cosine
+scheduler *position*. Optimizer moments and CPU FP32 master fractional
+state are reinitialized from the saved BF16 weights and are **not**
+restored. The new run records that fact and its source-run hashes.
+If the source reached step 256 but best remained step 128, the
+continuation deliberately restarts from the selected step 128; the
+intervening updates are discarded. Never switch or stop the live
+process without explicit operator confirmation. PR #14 remains
+separate and unmerged until checks and real GPU tests pass.
