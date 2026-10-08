@@ -282,3 +282,13 @@ def test_student_video_preprocessing_matches_four_frame_teacher_budget(tmp_path)
         "overflow_strategy": "uniform",
         "add_timestamps": False,
     }
+
+
+def test_status_line_is_immediate_machine_readable(capsys):
+    from tiny_omni_decision.student.__main__ import _status
+
+    _status("unquantized_validation_start", records=17)
+    line = capsys.readouterr().err.strip()
+    assert line.startswith("student-progress ")
+    payload = json.loads(line.removeprefix("student-progress "))
+    assert payload == {"event": "unquantized_validation_start", "records": 17}
