@@ -333,3 +333,63 @@ def test_validation_restores_original_shadows_after_exception() -> None:
         with cached_ternary_validation(model, targets):
             raise RuntimeError("interrupted")
     assert torch.equal(model[0].parametrizations.weight.original.detach(), original)
+
+
+def test_cpu_master_update_reuses_ternary_weights_with_identical_ste_gradients(
+    monkeypatch,
+) -> None:
+    torch = pytest.importorskip("torch")
+    import tiny_omni_decision.ternary as ternary
+
+    torch.manual_seed(17)
+    baseline = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+    cached = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+    cached.load_state_dict(baseline.state_dict())
+    names = ternary.apply_ternary_qat(baseline, group_size=4)
+    ternary.apply_ternary_qat(cached, group_size=4)
+    base_shadow = baseline[0].parametrizations.weight.original
+    cached_shadow = cached[0].parametrizations.weight.original
+    cpu_master = [torch.nn.Parameter(cached_shadow.detach().cpu().float().clone())]
+    original = cached_shadow.detach().clone()
+    examples = [torch.randn(1, 4), torch.randn(1, 4)]
+
+    for inputs in examples:
+        baseline(inputs).sum().backward()
+
+    quantize = ternary.quantize_groupwise_ternary
+    quantizations = []
+
+    def counted(weights, **kwargs):
+        quantizations.append(tuple(weights.shape))
+        return quantize(weights, **kwargs)
+
+    monkeypatch.setattr(ternary, "quantize_groupwise_ternary", counted)
+    with ternary.cached_ternary_training_update(cached, names, cpu_master):
+        for inputs in examples:
+            cached(inputs).sum().backward()
+        assert quantizations == [tuple(original.shape)]
+
+    torch.testing.assert_close(cached_shadow.grad, base_shadow.grad, rtol=0, atol=0)
+    assert torch.equal(cached_shadow.detach(), original)
+    assert len(quantizations) == 1
+    with torch.no_grad():
+        cached(examples[0])
+    assert len(quantizations) == 2
+
+
+def test_cpu_master_update_restores_shadows_when_microbatch_fails() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import (
+        apply_ternary_qat,
+        cached_ternary_training_update,
+    )
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+    names = apply_ternary_qat(model, group_size=4)
+    original = model[0].parametrizations.weight.original.detach().clone()
+    master = [torch.nn.Parameter(original.detach().cpu().float().clone())]
+    with pytest.raises(RuntimeError, match="microbatch failed"):
+        with cached_ternary_training_update(model, names, master):
+            model(torch.ones(1, 4)).sum().backward()
+            raise RuntimeError("microbatch failed")
+    assert torch.equal(model[0].parametrizations.weight.original.detach(), original)
