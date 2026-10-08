@@ -352,6 +352,69 @@ def main() -> None:
     if len(initial_predictions) != len(validation_examples):
         raise ValueError("initial ternary predictions do not cover the validation snapshot")
 
+    warm_start_step = 0
+    warm_start_shadow_path: Path | None = None
+    warm_start_lineage: dict[str, Any] | None = None
+    previous_run: dict[str, Any] | None = None
+    if args.warm_start_run is not None:
+        source_dir = args.warm_start_run.resolve()
+        if source_dir == output_dir:
+            raise ValueError("warm-start requires a NEW output directory")
+        source_metadata_path = source_dir / "run-metadata.json"
+        source_config_path = source_dir / "effective-config.yaml"
+        warm_start_shadow_path = source_dir / "best-shadow.safetensors"
+        if not all(
+            path.is_file()
+            for path in (source_metadata_path, source_config_path, warm_start_shadow_path)
+        ):
+            raise FileNotFoundError("warm-start source lacks metadata/config/best-shadow")
+        previous_run = json.loads(source_metadata_path.read_text(encoding="utf-8"))
+        previous_config = yaml.safe_load(source_config_path.read_text(encoding="utf-8"))
+        if (
+            previous_config.get("student", {}).get("ternary") != student_cfg["ternary"]
+            or previous_config.get("loss") != loss_cfg
+            or previous_config.get("training", {}).get("gradient_accumulation_steps")
+            != train_cfg["gradient_accumulation_steps"]
+            or previous_config.get("student", {}).get("score_temperature")
+            != student_cfg["score_temperature"]
+        ):
+            raise ValueError("warm-start source QAT configuration is incompatible")
+        expected_identity = {
+            "student_revision": manifest.revision,
+            "teacher_id": teacher_cfg["teacher_id"],
+            "teacher_cache_sha256": sha256(cache_path),
+            "train_id_order_sha256": order_hash,
+            "validation_snapshot_sha256": sha256(validation_snapshot),
+            "train_corpus_sha256": sha256(train_path),
+            "target_element_count": int(initial_overlay_manifest["target_element_count"]),
+        }
+        warm_start_step = verify_warm_start_ledger(
+            previous_run,
+            expected_identity,
+            total_steps=planned_steps,
+            checkpoint_interval=int(train_cfg["checkpoint_interval"]),
+        )
+        if warm_start_step * int(train_cfg["gradient_accumulation_steps"]) >= len(order):
+            raise ValueError("warm-start source has no remaining training examples")
+        expected_shadow_digest = previous_run["best_shadow_sha256"]
+        actual_shadow_digest = sha256(warm_start_shadow_path)
+        if actual_shadow_digest != expected_shadow_digest:
+            raise ValueError("warm-start best-shadow checksum differs from ledger")
+        warm_start_lineage = {
+            "kind": "best_shadow_warm_start_optimizer_and_scheduler_reset",
+            "exact_resume": False,
+            "source_run_dir": str(source_dir),
+            "source_run_metadata_sha256": sha256(source_metadata_path),
+            "source_best_shadow_sha256": actual_shadow_digest,
+            "source_best_step": warm_start_step,
+            "source_last_recorded_step": previous_run["global_step"],
+            "prior_examples_consumed_on_selected_path": (
+                warm_start_step * int(train_cfg["gradient_accumulation_steps"])
+            ),
+            "optimizer_moments_restored": False,
+            "scheduler_position_restored": True,
+        }
+
     output_dir.parent.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=False, exist_ok=False)
     (output_dir / "effective-config.yaml").write_bytes(config_path.read_bytes())
@@ -447,6 +510,7 @@ def main() -> None:
         "sealed_audit_loaded": False,
         "teacher_artifacts_modified": False,
         "optimizer_resume_state_saved": False,
+        "warm_start_lineage": warm_start_lineage,
     }
     atomic_json(output_dir / "run-metadata.json", run_metadata)
     atomic_json(
@@ -481,6 +545,17 @@ def main() -> None:
         group_size=int(student_cfg["ternary"]["group_size"]),
         threshold_factor=float(student_cfg["ternary"]["threshold_factor"]),
     )
+    if warm_start_shadow_path is not None:
+        assert previous_run is not None
+        verify_warm_start_ledger(
+            previous_run,
+            {"target_parameter_names": list(target_names)},
+            total_steps=planned_steps,
+            checkpoint_interval=int(train_cfg["checkpoint_interval"]),
+        )
+        selected_weights = load_file(str(warm_start_shadow_path), device="cpu")
+        restore_qat_shadows(model, target_names, selected_weights)
+        del selected_weights
     modules = dict(model.named_modules())
     for parameter in model.parameters():
         parameter.requires_grad_(False)
