@@ -244,3 +244,24 @@ def test_teacher_cache_is_train_only_and_rejects_boolean_probabilities(tmp_path)
             expected_teacher_revision="teacher-revision-sha",
             expected_temperature=1.0,
         )
+
+
+def test_qat_script_progress_is_written_and_flushed(tmp_path, capsys) -> None:
+    from scripts.train_student_ternary_qat import emit_progress
+
+    output = tmp_path / "latest-progress.json"
+    emit_progress(
+        output,
+        event="train_update",
+        step=16,
+        examples_seen=64,
+        elapsed_seconds=42.5,
+    )
+    payload = json.loads(output.read_text(encoding="utf-8"))
+    assert payload == {
+        "event": "train_update",
+        "step": 16,
+        "examples_seen": 64,
+        "elapsed_seconds": 42.5,
+    }
+    assert json.loads(capsys.readouterr().out.strip()) == payload
