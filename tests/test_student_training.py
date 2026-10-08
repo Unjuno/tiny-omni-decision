@@ -269,3 +269,59 @@ def test_qat_script_progress_is_written_and_flushed(tmp_path, capsys) -> None:
         "elapsed_seconds": 42.5,
     }
     assert json.loads(capsys.readouterr().out.strip()) == payload
+
+
+def test_explicit_best_shadow_warm_start_checks_identity_and_step(tmp_path) -> None:
+    import runpy
+    from pathlib import Path
+
+    helper = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts" / "train_student_ternary_qat.py")
+    )["verify_warm_start_ledger"]
+    identity = {
+        "student_revision": "pinned",
+        "teacher_id": "teacher",
+        "teacher_cache_sha256": "a" * 64,
+        "train_id_order_sha256": "b" * 64,
+        "validation_snapshot_sha256": "c" * 64,
+        "train_corpus_sha256": "d" * 64,
+        "target_element_count": 8,
+        "target_parameter_names": ["0.weight"],
+    }
+    ledger = dict(identity, best_validation_step=128, global_step=256,
+                  best_shadow_sha256="f" * 64)
+    assert helper(
+        ledger, identity, total_steps=1215, checkpoint_interval=128
+    ) == 128
+    bad = dict(ledger, teacher_cache_sha256="different")
+    with pytest.raises(ValueError, match="teacher_cache_sha256"):
+        helper(bad, identity, total_steps=1215, checkpoint_interval=128)
+    with pytest.raises(ValueError, match="checkpoint interval"):
+        helper(
+            dict(ledger, best_validation_step=120),
+            identity, total_steps=1215, checkpoint_interval=128
+        )
+
+
+def test_warm_start_shadow_restoration_validates_all_before_mutating() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import apply_ternary_qat
+    from tiny_omni_decision.student_training import restore_qat_shadows
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2), torch.nn.Linear(2, 2))
+    targets = apply_ternary_qat(model, group_size=4)
+    original = [model[i].parametrizations.weight.original.detach().clone() for i in (0, 1)]
+    weights = {name: torch.ones_like(original[i]) for i, name in enumerate(targets)}
+    restore_qat_shadows(model, targets, weights)
+    for i in (0, 1):
+        assert torch.equal(
+            model[i].parametrizations.weight.original,
+            torch.ones_like(original[i]),
+        )
+    # A later invalid tensor must not result in a partially applied restoration.
+    before = model[0].parametrizations.weight.original.detach().clone()
+    invalid = dict(weights)
+    invalid[targets[-1]] = torch.ones(3, 3)
+    with pytest.raises(ValueError, match="shape"):
+        restore_qat_shadows(model, targets, invalid)
+    assert torch.equal(model[0].parametrizations.weight.original, before)
