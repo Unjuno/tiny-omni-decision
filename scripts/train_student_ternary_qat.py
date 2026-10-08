@@ -11,10 +11,11 @@ import random
 import subprocess
 import sys
 import time
+from collections.abc import Callable
 from contextlib import nullcontext
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
