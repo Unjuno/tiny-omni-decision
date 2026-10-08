@@ -152,7 +152,8 @@ def run_recovery(
         raise ValueError("seed must be integer")
     torch.manual_seed(seed)
     randomizer = random.Random(seed)
-    initial_metrics, _ = evaluate(model, validation.records)
+    with controller.cached_evaluation_codes():
+        initial_metrics, initial_logits = evaluate(model, validation.records)
     run_meta = metadata | {"teacher_id": train.teacher_id, "config": config,
                            "train_source_sha256": train.source_sha256,
                            "validation_source_sha256": validation.source_sha256,
@@ -160,7 +161,13 @@ def run_recovery(
     write_json(output / "run.json", run_meta | {"inventory": controller.inventory()})
     history = []
 
-    def stage(name: str, steps: int, learning_rate: float) -> tuple[Path, dict]:
+    def stage(
+        name: str,
+        steps: int,
+        learning_rate: float,
+        *,
+        initial_evaluation: tuple[dict, list[list[float]]] | None = None,
+    ) -> tuple[Path, dict]:
         # eval mode freezes dropout/BN buffers; gradients remain enabled.
         model.eval()
         trainable = [p for p in model.parameters() if p.requires_grad]
@@ -196,16 +203,32 @@ def run_recovery(
                 last_loss = float(loss.detach())
             if step % config["evaluation_interval"] and step != steps:
                 continue
-            metrics, current_logits = evaluate(model, validation.records)
-            gate = quality_gate(metrics, teacher_metrics, config["limits"])
-            # Any passing checkpoint outranks every failing one; NLL breaks ties.
-            score = (not gate["passed"], metrics["all"]["nll"])
-            history.append({"stage": name, "step": step, "loss": last_loss,
-                            "metrics": metrics, "gate": gate})
-            if best_score is None or score < best_score:
-                destination = output / f"{name}-step-{step:06d}"
-                save_bundle(controller, destination, run_meta | {"stage": name, "step": step})
-                best_path, best_score, best_logits = destination, score, current_logits
+            if step == 0 and initial_evaluation is not None:
+                metrics, current_logits = initial_evaluation
+                gate = quality_gate(metrics, teacher_metrics, config["limits"])
+                score = (not gate["passed"], metrics["all"]["nll"])
+                history.append({"stage": name, "step": step, "loss": last_loss,
+                                "metrics": metrics, "gate": gate})
+                if best_score is None or score < best_score:
+                    destination = output / f"{name}-step-{step:06d}"
+                    save_bundle(
+                        controller, destination, run_meta | {"stage": name, "step": step}
+                    )
+                    best_path, best_score, best_logits = destination, score, current_logits
+                continue
+            with controller.cached_evaluation_codes():
+                metrics, current_logits = evaluate(model, validation.records)
+                gate = quality_gate(metrics, teacher_metrics, config["limits"])
+                # Any passing checkpoint outranks every failing one; NLL breaks ties.
+                score = (not gate["passed"], metrics["all"]["nll"])
+                history.append({"stage": name, "step": step, "loss": last_loss,
+                                "metrics": metrics, "gate": gate})
+                if best_score is None or score < best_score:
+                    destination = output / f"{name}-step-{step:06d}"
+                    save_bundle(
+                        controller, destination, run_meta | {"stage": name, "step": step}
+                    )
+                    best_path, best_score, best_logits = destination, score, current_logits
         assert best_path is not None and best_logits is not None
         load_bundle(controller, best_path)
         selected_metrics, reloaded_logits = evaluate(model, validation.records)
@@ -215,7 +238,12 @@ def run_recovery(
             raise ValueError(f"export/reload prediction mismatch: {error}")
         return best_path, {"metrics": selected_metrics, "reload_max_abs_error": error}
 
-    selected, result = stage("qat", config["qat_steps"], config["learning_rate"])
+    selected, result = stage(
+        "qat",
+        config["qat_steps"],
+        config["learning_rate"],
+        initial_evaluation=(initial_metrics, initial_logits),
+    )
     gate = quality_gate(result["metrics"], teacher_metrics, config["limits"])
     lora_used = not gate["passed"]
     if lora_used:
