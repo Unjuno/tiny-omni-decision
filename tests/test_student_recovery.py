@@ -239,3 +239,48 @@ def test_qat_optimizer_disables_foreach_peak_memory_path():
     parameter = torch.nn.Parameter(torch.ones(4))
     optimizer = make_optimizer([parameter], learning_rate=1e-3)
     assert optimizer.defaults["foreach"] is False
+
+
+def test_qat_step_zero_reuses_initial_ternary_validation(tmp_path):
+    from tiny_omni_decision.student.data import Cache, Record
+    from tiny_omni_decision.student.recovery import run_recovery
+    from tiny_omni_decision.student.ternary import TernaryController
+
+    class CountingModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.linear = torch.nn.Linear(2, 2)
+            self.validation_calls = 0
+
+        def forward(self, record):
+            if record.sample_id == "validation":
+                self.validation_calls += 1
+            return self.linear(torch.tensor([1.0, -1.0]))
+
+    def record(sample_id, role):
+        return Record(
+            sample_id, "g-" + sample_id, "c-" + sample_id, "text",
+            {"text": role}, ["a", "b"], 0, [2.0, -2.0], {}
+        )
+
+    model = CountingModel()
+    controller = TernaryController(model, group_size=2)
+    config = {
+        "qat_steps": 1, "lora_steps": 1, "evaluation_interval": 1,
+        "learning_rate": 1e-3, "lora_learning_rate": 1e-3,
+        "seed": 17, "lora_rank": 1, "lora_alpha": 1.0,
+        "temperature": 1.0, "ce_weight": 1.0, "brier_weight": 0.2,
+        "reload_atol": 1e-6, "max_artifact_bytes": 10_000_000,
+        "limits": {
+            "max_accuracy_drop": 1.0, "max_nll_increase": 100.0,
+            "max_brier_increase": 2.0, "max_ece_increase": 1.0,
+        },
+    }
+    run_recovery(
+        model, controller,
+        Cache("train", "teacher", [record("train", "train")], "a" * 64),
+        Cache("validation", "teacher", [record("validation", "validation")], "b" * 64),
+        tmp_path / "run", config, metadata={},
+    )
+    # One initial/step-0 validation, one step-1 validation, one reload verification.
+    assert model.validation_calls == 3
