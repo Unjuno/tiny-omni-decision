@@ -60,20 +60,28 @@ def quantize_groupwise_ternary(
 
     group_count = (values.numel() + group_size - 1) // group_size
     padding = group_count * group_size - values.numel()
-    padded = nn.functional.pad(values, (0, padding))
+    padded = nn.functional.pad(values, (0, padding)) if padding else values
     grouped = padded.reshape(group_count, group_size)
-    valid = torch.arange(group_count * group_size, device=values.device).reshape(
-        group_count, group_size
-    ) < values.numel()
+    del values, padded
     absolute = grouped.abs()
-    valid_counts = valid.sum(dim=1).clamp_min(1)
-    means = (absolute * valid).sum(dim=1) / valid_counts
+    # Only the tail has missing elements. Padding is zero and the active-value
+    # predicate excludes zero, so no per-element validity/index tensors are needed.
+    valid_counts = torch.full(
+        (group_count,), group_size, device=weights.device, dtype=torch.int64
+    )
+    if padding:
+        valid_counts[-1] = group_size - padding
+    means = absolute.sum(dim=1) / valid_counts
     thresholds = means * threshold_factor
-    active = valid & (absolute > 0) & (absolute >= thresholds.unsqueeze(1))
+    active = (absolute > 0) & (absolute >= thresholds.unsqueeze(1))
     active_counts = active.sum(dim=1).clamp_min(1)
     scales = (absolute * active).sum(dim=1) / active_counts
-    codes = torch.where(active, grouped.sign(), torch.zeros_like(grouped))
-    return codes.reshape(-1)[: values.numel()].reshape(weights.shape).to(torch.int8), scales
+    del absolute
+    # Codes only need one byte. Avoid two additional full-sized FP32 tensors
+    # for the zero branch and the result of where().
+    codes = grouped.sign().to(torch.int8)
+    codes.masked_fill_(~active, 0)
+    return codes.reshape(-1)[: weights.numel()].reshape(weights.shape), scales
 
 
 def dequantize_groupwise_ternary(
@@ -94,9 +102,14 @@ def dequantize_groupwise_ternary(
     scale_values = scales.to(device=codes.device, dtype=torch.float32)
     if not torch.isfinite(scale_values).all() or torch.any(scale_values < 0):
         raise ValueError("scales must be finite and non-negative")
-    group_ids = torch.arange(codes.numel(), device=codes.device) // group_size
-    restored = codes.reshape(-1).float() * scale_values[group_ids]
-    return restored.reshape(codes.shape).to(dtype=dtype or torch.float32)
+    values = codes.reshape(-1).float()
+    padding = expected_groups * group_size - codes.numel()
+    if padding:
+        values = nn.functional.pad(values, (0, padding))
+    restored = values.reshape(expected_groups, group_size) * scale_values.unsqueeze(1)
+    return restored.reshape(-1)[: codes.numel()].reshape(codes.shape).to(
+        dtype=dtype or torch.float32
+    )
 
 
 def fake_quantize_ternary(

@@ -1,0 +1,246 @@
+{
+  "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+  "torch": "2.6.0+cu124",
+  "cuda": "12.4",
+  "seed": 17,
+  "dtype": "bfloat16",
+  "group_size": 256,
+  "threshold_factor": 0.7,
+  "reference_sha256": "2407ad435291ca4fccc0f7a67f36c9678835765ecbf4ac03484f5b2f3a7be177",
+  "candidate_sha256": "a323899b5149fe2fd0c84e535227f621da55ad3502542603d96c76a49b7e3621",
+  "scope": "synthetic no-grad fake quantization only; two warmups, five alternating trials",
+  "results": [
+    {
+      "elements": 65536,
+      "exact_bf16_parity": true,
+      "methods": {
+        "reference": {
+          "median_seconds": 0.0007669000187888741,
+          "extra_peak_bytes": 1711104,
+          "samples": [
+            {
+              "seconds": 0.0008516000234521925,
+              "extra_peak_bytes": 1711104
+            },
+            {
+              "seconds": 0.000742600008379668,
+              "extra_peak_bytes": 1711104
+            },
+            {
+              "seconds": 0.0007610000320710242,
+              "extra_peak_bytes": 1711104
+            },
+            {
+              "seconds": 0.0007669000187888741,
+              "extra_peak_bytes": 1711104
+            },
+            {
+              "seconds": 0.0008294999715872109,
+              "extra_peak_bytes": 1711104
+            }
+          ]
+        },
+        "candidate": {
+          "median_seconds": 0.0006626999820582569,
+          "extra_peak_bytes": 1120256,
+          "samples": [
+            {
+              "seconds": 0.0006626999820582569,
+              "extra_peak_bytes": 1120256
+            },
+            {
+              "seconds": 0.0006294000195339322,
+              "extra_peak_bytes": 1120256
+            },
+            {
+              "seconds": 0.0006152000278234482,
+              "extra_peak_bytes": 1120256
+            },
+            {
+              "seconds": 0.0006978000164963305,
+              "extra_peak_bytes": 1120256
+            },
+            {
+              "seconds": 0.000754699984099716,
+              "extra_peak_bytes": 1120256
+            }
+          ]
+        }
+      }
+    },
+    {
+      "elements": 1048576,
+      "exact_bf16_parity": true,
+      "methods": {
+        "reference": {
+          "median_seconds": 0.0025559000205248594,
+          "extra_peak_bytes": 27377664,
+          "samples": [
+            {
+              "seconds": 0.0029955999925732613,
+              "extra_peak_bytes": 27377664
+            },
+            {
+              "seconds": 0.0023894000332802534,
+              "extra_peak_bytes": 27377664
+            },
+            {
+              "seconds": 0.0023772999993525445,
+              "extra_peak_bytes": 27377664
+            },
+            {
+              "seconds": 0.0025559000205248594,
+              "extra_peak_bytes": 27377664
+            },
+            {
+              "seconds": 0.002558100037276745,
+              "extra_peak_bytes": 27377664
+            }
+          ]
+        },
+        "candidate": {
+          "median_seconds": 0.0013781000161543489,
+          "extra_peak_bytes": 17924096,
+          "samples": [
+            {
+              "seconds": 0.0013833999983035028,
+              "extra_peak_bytes": 17924096
+            },
+            {
+              "seconds": 0.001197999983560294,
+              "extra_peak_bytes": 17924096
+            },
+            {
+              "seconds": 0.0012407000176608562,
+              "extra_peak_bytes": 17924096
+            },
+            {
+              "seconds": 0.0013781000161543489,
+              "extra_peak_bytes": 17924096
+            },
+            {
+              "seconds": 0.00151119998190552,
+              "extra_peak_bytes": 17924096
+            }
+          ]
+        }
+      }
+    },
+    {
+      "elements": 16777216,
+      "exact_bf16_parity": true,
+      "methods": {
+        "reference": {
+          "median_seconds": 0.022521400009281933,
+          "extra_peak_bytes": 438042624,
+          "samples": [
+            {
+              "seconds": 0.02681399998255074,
+              "extra_peak_bytes": 438042624
+            },
+            {
+              "seconds": 0.022751699958462268,
+              "extra_peak_bytes": 438042624
+            },
+            {
+              "seconds": 0.02246569999260828,
+              "extra_peak_bytes": 438042624
+            },
+            {
+              "seconds": 0.022521400009281933,
+              "extra_peak_bytes": 438042624
+            },
+            {
+              "seconds": 0.02244639996206388,
+              "extra_peak_bytes": 438042624
+            }
+          ]
+        },
+        "candidate": {
+          "median_seconds": 0.014486400003079325,
+          "extra_peak_bytes": 286785536,
+          "samples": [
+            {
+              "seconds": 0.01791259995661676,
+              "extra_peak_bytes": 286785536
+            },
+            {
+              "seconds": 0.014484399987850338,
+              "extra_peak_bytes": 286785536
+            },
+            {
+              "seconds": 0.014486400003079325,
+              "extra_peak_bytes": 286785536
+            },
+            {
+              "seconds": 0.014507299987599254,
+              "extra_peak_bytes": 286785536
+            },
+            {
+              "seconds": 0.014200999983586371,
+              "extra_peak_bytes": 286785536
+            }
+          ]
+        }
+      }
+    },
+    {
+      "elements": 16777219,
+      "exact_bf16_parity": true,
+      "methods": {
+        "reference": {
+          "median_seconds": 0.02289809996727854,
+          "extra_peak_bytes": 438051840,
+          "samples": [
+            {
+              "seconds": 0.02323300001444295,
+              "extra_peak_bytes": 438051840
+            },
+            {
+              "seconds": 0.022817699995357543,
+              "extra_peak_bytes": 438051840
+            },
+            {
+              "seconds": 0.022988000011537224,
+              "extra_peak_bytes": 438051840
+            },
+            {
+              "seconds": 0.02275170001666993,
+              "extra_peak_bytes": 438051840
+            },
+            {
+              "seconds": 0.02289809996727854,
+              "extra_peak_bytes": 438051840
+            }
+          ]
+        },
+        "candidate": {
+          "median_seconds": 0.015995999972801656,
+          "extra_peak_bytes": 286792192,
+          "samples": [
+            {
+              "seconds": 0.016904699965380132,
+              "extra_peak_bytes": 286792192
+            },
+            {
+              "seconds": 0.015879300015512854,
+              "extra_peak_bytes": 286792192
+            },
+            {
+              "seconds": 0.016051099984906614,
+              "extra_peak_bytes": 286792192
+            },
+            {
+              "seconds": 0.015995999972801656,
+              "extra_peak_bytes": 286792192
+            },
+            {
+              "seconds": 0.015953199996147305,
+              "extra_peak_bytes": 286792192
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
