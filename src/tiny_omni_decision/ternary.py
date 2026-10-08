@@ -6,6 +6,7 @@ import hashlib
 import json
 import math
 import os
+from contextlib import contextmanager
 from pathlib import Path
 
 import torch
@@ -120,8 +121,11 @@ class _TernaryWeightParametrization(nn.Module):
         _validate_grouping(group_size, threshold_factor)
         self.group_size = group_size
         self.threshold_factor = threshold_factor
+        self._validation_bypass = False
 
     def forward(self, weights: Tensor) -> Tensor:
+        if self._validation_bypass:
+            return weights
         return fake_quantize_ternary(
             weights,
             group_size=self.group_size,
@@ -226,6 +230,8 @@ def apply_ternary_qat(
         module = modules[parent_name]
         if parametrize.is_parametrized(module, leaf_name):
             raise ValueError(f"parameter is already parametrized: {name}")
+        # The ternary STE is shape- and dtype-preserving. Avoid the additional
+        # full-weight fake-quantization PyTorch runs when unsafe=False.
         parametrize.register_parametrization(
             module,
             leaf_name,
@@ -233,8 +239,58 @@ def apply_ternary_qat(
                 group_size=group_size,
                 threshold_factor=threshold_factor,
             ),
+            unsafe=True,
         )
     return target_names
+
+
+@contextmanager
+def cached_ternary_validation(model: nn.Module, target_names: tuple[str, ...]):
+    """Reuse quantized weights during no-grad validation without another GPU copy.
+
+    Back up BF16 QAT shadows on CPU, temporarily replace their values with exact
+    ternary values, and bypass the parametrization. Restore the original shadows
+    and STE even when evaluation fails. Never enter this context during training.
+    """
+    if model.training:
+        raise ValueError("ternary validation cache requires model.eval()")
+    if not target_names or len(target_names) != len(set(target_names)):
+        raise ValueError("ternary validation requires unique nonempty targets")
+    modules = dict(model.named_modules())
+    backups: list[tuple[nn.Parameter, _TernaryWeightParametrization, Tensor]] = []
+    try:
+        with torch.no_grad():
+            for name in target_names:
+                parent_name, _, leaf = name.rpartition(".")
+                module = modules.get(parent_name)
+                if module is None or not parametrize.is_parametrized(module, leaf):
+                    raise ValueError(f"missing ternary parametrization: {name}")
+                chain = getattr(module.parametrizations, leaf)
+                if len(chain) != 1 or not isinstance(chain[0], _TernaryWeightParametrization):
+                    raise ValueError(f"unsupported ternary parametrization: {name}")
+                transform = chain[0]
+                if transform._validation_bypass:
+                    raise ValueError(f"ternary validation cache already active: {name}")
+                original = chain.original
+                # CPU backup avoids an extra full-sized quantized copy in a
+                # 16-GiB GPU. Save before mutation so setup failures can unwind.
+                snapshot = original.detach().to(device="cpu", copy=True)
+                backups.append((original, transform, snapshot))
+                quantized = fake_quantize_ternary(
+                    original,
+                    group_size=transform.group_size,
+                    threshold_factor=transform.threshold_factor,
+                )
+                original.copy_(quantized.detach())
+                transform._validation_bypass = True
+        yield
+    finally:
+        with torch.no_grad():
+            for original, transform, snapshot in reversed(backups):
+                try:
+                    original.copy_(snapshot.to(device=original.device))
+                finally:
+                    transform._validation_bypass = False
 
 
 def _tensor_bytes(tensor: Tensor) -> int:
