@@ -557,6 +557,8 @@ def main() -> None:
         )
         selected_weights = load_file(str(warm_start_shadow_path), device="cpu")
         restore_qat_shadows(model, target_names, selected_weights)
+        if sha256(warm_start_shadow_path) != previous_run["best_shadow_sha256"]:
+            raise ValueError("warm-start best-shadow changed during load")
         del selected_weights
     modules = dict(model.named_modules())
     for parameter in model.parameters():
@@ -946,7 +948,7 @@ def main() -> None:
         scheduler.step()
         consumed += len(microbatch)
         rolling_losses.extend(interval_losses)
-        if update_index == 1 or update_index % 16 == 0 or update_index == total_steps:
+        if update_index == 1 or update_index % 4 == 0 or update_index == total_steps:
             now = time.perf_counter()
             emit_progress(
                 progress_path,
