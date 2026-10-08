@@ -37,6 +37,13 @@ def atomic_json(path: Path, value: Any) -> None:
     os.replace(temporary, path)
 
 
+def emit_progress(path: Path, *, event: str, **fields: Any) -> None:
+    """Publish an atomic, human-readable training heartbeat."""
+    payload = {"event": event, **fields}
+    atomic_json(path, payload)
+    print(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), flush=True)
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     with temporary.open("w", encoding="utf-8", newline="\n") as stream:
@@ -93,6 +100,7 @@ def main() -> None:
     )
     from tiny_omni_decision.ternary import (
         apply_ternary_qat,
+        cached_ternary_validation,
         export_packed_ternary_overlay,
         load_packed_ternary_overlay,
     )
@@ -514,8 +522,18 @@ def main() -> None:
     best_step = -1
     best_shadow_path = output_dir / "best-shadow.safetensors"
     history_path = output_dir / "training-history.jsonl"
+    progress_path = output_dir / "latest-progress.json"
     evaluation_seconds = 0.0
     train_started = time.perf_counter()
+    last_progress_time = train_started
+    emit_progress(
+        progress_path,
+        event="training_start",
+        step=0,
+        examples_seen=0,
+        total_steps=total_steps,
+        elapsed_seconds=0.0,
+    )
     consumed = 0
     rolling_losses: list[float] = []
     initial_pairing_verified: list[str] = []
@@ -570,14 +588,35 @@ def main() -> None:
         nonlocal modules, shadow_state, model, save_shadow, optimizer
         eval_started = time.perf_counter()
         model.eval()
-        metrics, predictions = evaluate_student_examples(
-            model,
-            processor,
-            validation_examples,
-            data_root=data_root,
-            temperature=float(student_cfg["score_temperature"]),
-            ece_bins=15,
-            on_prediction=verify_initial_pairing if step == 0 else None,
+        emit_progress(
+            progress_path,
+            event="validation_start",
+            step=step,
+            examples_seen=examples_seen,
+            validation_examples=len(validation_examples),
+            elapsed_seconds=eval_started - train_started,
+        )
+        # Each BF16 QAT shadow is held on CPU while its ternary value is used
+        # in-place. This avoids 256 * 2 repeated full-model quantizations
+        # without allocating a second full quantized model on the 16-GiB GPU.
+        with cached_ternary_validation(model, target_names):
+            metrics, predictions = evaluate_student_examples(
+                model,
+                processor,
+                validation_examples,
+                data_root=data_root,
+                temperature=float(student_cfg["score_temperature"]),
+                ece_bins=15,
+                on_prediction=verify_initial_pairing if step == 0 else None,
+            )
+        emit_progress(
+            progress_path,
+            event="validation_done",
+            step=step,
+            examples_seen=examples_seen,
+            validation_examples=len(validation_examples),
+            validation_seconds=time.perf_counter() - eval_started,
+            elapsed_seconds=time.perf_counter() - train_started,
         )
         teacher_comparison = compare_student_predictions(predictions, validation_teacher)
         if step == 0:
@@ -611,7 +650,23 @@ def main() -> None:
         )
         improved = best_key is None or key < best_key
         if improved:
+            emit_progress(
+                progress_path,
+                event="best_shadow_save_start",
+                step=step,
+                examples_seen=examples_seen,
+                elapsed_seconds=time.perf_counter() - train_started,
+            )
+            save_started = time.perf_counter()
             save_shadow(best_shadow_path)
+            emit_progress(
+                progress_path,
+                event="best_shadow_save_done",
+                step=step,
+                examples_seen=examples_seen,
+                save_seconds=time.perf_counter() - save_started,
+                elapsed_seconds=time.perf_counter() - train_started,
+            )
             best_key = key
             best_step = step
         eval_seconds = time.perf_counter() - eval_started
@@ -757,6 +812,21 @@ def main() -> None:
         scheduler.step()
         consumed += len(microbatch)
         rolling_losses.extend(interval_losses)
+        if update_index == 1 or update_index % 16 == 0 or update_index == total_steps:
+            now = time.perf_counter()
+            emit_progress(
+                progress_path,
+                event="training_update",
+                step=update_index,
+                examples_seen=consumed,
+                total_steps=total_steps,
+                window_seconds=now - last_progress_time,
+                elapsed_seconds=now - train_started,
+                microbatch_loss_mean=sum(interval_losses) / len(interval_losses),
+                allocated_vram_bytes=torch.cuda.memory_allocated(),
+                reserved_vram_bytes=torch.cuda.memory_reserved(),
+            )
+            last_progress_time = now
         if update_index % interval == 0 or update_index == total_steps:
             mean_loss = sum(rolling_losses) / len(rolling_losses) if rolling_losses else None
             evaluate_at(update_index, consumed, mean_loss, current_lr, float(gradient_norm))
