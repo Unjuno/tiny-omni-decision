@@ -885,9 +885,10 @@ def main() -> None:
                     processor, example, data_root=data_root
                 )
                 option_inputs = processor_inputs_for_options(processor, example.options)
-                if max(query_inputs["input_ids"].shape[-1], option_inputs["input_ids"].shape[-1]) > int(
-                    train_cfg["max_sequence_length"]
-                ):
+                if max(
+                    query_inputs["input_ids"].shape[-1],
+                    option_inputs["input_ids"].shape[-1],
+                ) > int(train_cfg["max_sequence_length"]):
                     raise ValueError(f"{example.id}: sequence exceeds configured max length")
                 query_embedding = model_sentence_embeddings(model, query_inputs)[0]
                 option_embeddings = model_sentence_embeddings(model, option_inputs)
