@@ -158,3 +158,38 @@ def test_quantization_inventory_is_read_only():
     assert flags == {name: p.requires_grad for name, p in model.named_parameters()}
     for name, value in model.state_dict().items():
         assert torch.equal(value, state[name])
+
+
+def test_controller_registration_does_not_quantize_weights(monkeypatch):
+    import tiny_omni_decision.student.ternary as ternary
+
+    model = torch.nn.Linear(8, 4)
+    def forbidden(*args, **kwargs):
+        raise AssertionError("controller registration must not run fake quantization")
+    monkeypatch.setattr(ternary, "quantize", forbidden)
+    controller = ternary.TernaryController(model, group_size=4)
+    assert "weight" in controller.targets
+
+
+def test_temporary_evaluation_codes_quantize_once_and_clear(monkeypatch):
+    import tiny_omni_decision.student.ternary as ternary
+
+    torch.manual_seed(17)
+    model = torch.nn.Linear(8, 4, bias=False)
+    controller = ternary.TernaryController(model, group_size=4)
+    original_quantize = ternary.quantize
+    calls = {"count": 0}
+
+    def counted(weight, group_size):
+        calls["count"] += 1
+        return original_quantize(weight, group_size)
+
+    monkeypatch.setattr(ternary, "quantize", counted)
+    x = torch.randn(2, 8)
+    with controller.cached_evaluation_codes():
+        first = model(x)
+        second = model(x)
+        assert all(q.frozen for q in controller.targets.values())
+    assert torch.equal(first, second)
+    assert calls["count"] == len(controller.targets)
+    assert not any(q.frozen for q in controller.targets.values())
