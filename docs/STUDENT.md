@@ -124,6 +124,18 @@ input lengths only deliberately. Overlength input is rejected, not silently
 truncated. This implementation has no exact-resume checkpoint or mixed-precision
 optimizer yet. Saved bundles are inference/selection artifacts, not resume state.
 
+Before QAT step 0 is written, `train` performs one unquantized validation pass and
+one initial ternary validation pass. The initial ternary result is reused as the
+step-0 selection result; it is not evaluated a second time. During each validation
+pass, ternary codes/scales are computed once per target tensor and reused across
+all validation records. Training forwards still use live straight-through
+quantization because the shadow weights change after optimizer steps.
+
+Long stages emit `student-progress {...}` lines to stderr. After the output
+directory is created, the same recovery-stage events are appended to
+`progress.jsonl`, including record counts and elapsed seconds for initial
+ternary validation, later validation passes, and checkpoint saves.
+
 During QAT, every targeted backbone tensor uses ternary values in the forward pass.
 The straight-through estimator updates the backbone shadows while the small FP32
 Decision Head trains normally in the same loss. If quality still fails, the
