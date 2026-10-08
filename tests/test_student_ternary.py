@@ -271,3 +271,65 @@ def test_packed_overlay_round_trips_quantized_weights_and_checks_base_revision(
             expected_base_model_id="google/embeddinggemma-2",
             expected_base_revision="different-revision",
         )
+
+
+def test_registering_qat_weights_does_not_quantize_full_weights(monkeypatch) -> None:
+    torch = pytest.importorskip("torch")
+    import tiny_omni_decision.ternary as ternary
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False))
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("quantization during parametrization registration")
+
+    monkeypatch.setattr(ternary, "quantize_groupwise_ternary", forbidden)
+    targets = ternary.apply_ternary_qat(model, group_size=4)
+    assert targets == ("0.weight",)
+
+
+def test_validation_uses_one_quantization_per_target_and_restores_shadows(monkeypatch) -> None:
+    torch = pytest.importorskip("torch")
+    import tiny_omni_decision.ternary as ternary
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).eval()
+    with torch.no_grad():
+        model[0].weight.copy_(torch.tensor([[-3., -1., 1., 3.], [2., 3., 4., 5.]]))
+    targets = ternary.apply_ternary_qat(model, group_size=4)
+    shadow = model[0].parametrizations.weight.original
+    original = shadow.detach().clone()
+    x = torch.tensor([[1., 2., 3., 4.]])
+    with torch.no_grad():
+        expected = model(x)
+    quantize = ternary.quantize_groupwise_ternary
+    calls = []
+
+    def counted(weights, **kwargs):
+        calls.append(tuple(weights.shape))
+        return quantize(weights, **kwargs)
+
+    monkeypatch.setattr(ternary, "quantize_groupwise_ternary", counted)
+    with ternary.cached_ternary_validation(model, targets):
+        with torch.inference_mode():
+            assert torch.equal(model(x), expected)
+            assert torch.equal(model(x), expected)
+        assert calls == [tuple(original.shape)]
+        assert shadow.device == original.device
+    assert torch.equal(shadow.detach(), original)
+    with torch.no_grad():
+        assert torch.equal(model(x), expected)
+    assert len(calls) == 2
+    model(x).sum().backward()
+    assert shadow.grad is not None and torch.isfinite(shadow.grad).all()
+
+
+def test_validation_restores_original_shadows_after_exception() -> None:
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.ternary import apply_ternary_qat, cached_ternary_validation
+
+    model = torch.nn.Sequential(torch.nn.Linear(4, 2, bias=False)).eval()
+    targets = apply_ternary_qat(model, group_size=4)
+    original = model[0].parametrizations.weight.original.detach().clone()
+    with pytest.raises(RuntimeError, match="interrupted"):
+        with cached_ternary_validation(model, targets):
+            raise RuntimeError("interrupted")
+    assert torch.equal(model[0].parametrizations.weight.original.detach(), original)
