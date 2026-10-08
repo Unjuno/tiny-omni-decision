@@ -11,6 +11,7 @@ import random
 import subprocess
 import sys
 import time
+from contextlib import nullcontext
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -135,6 +136,7 @@ def main() -> None:
     )
     from tiny_omni_decision.ternary import (
         apply_ternary_qat,
+        cached_ternary_training_update,
         cached_ternary_validation,
         export_packed_ternary_overlay,
         load_packed_ternary_overlay,
@@ -872,40 +874,46 @@ def main() -> None:
             for parameter in trainable:
                 parameter.grad = None
         interval_losses: list[float] = []
-        for example in microbatch:
-            query_inputs = processor_inputs_for_decision_example(
-                processor, example, data_root=data_root
-            )
-            option_inputs = processor_inputs_for_options(processor, example.options)
-            if max(query_inputs["input_ids"].shape[-1], option_inputs["input_ids"].shape[-1]) > int(
-                train_cfg["max_sequence_length"]
-            ):
-                raise ValueError(f"{example.id}: sequence exceeds configured max length")
-            query_embedding = model_sentence_embeddings(model, query_inputs)[0]
-            option_embeddings = model_sentence_embeddings(model, option_inputs)
-            logits = supplied_option_logits(
-                query_embedding,
-                option_embeddings,
-                temperature=float(student_cfg["score_temperature"]),
-            )
-            cached = teacher_cache[example.id]
-            teacher_probabilities = torch.tensor(
-                cached["teacher_option_probabilities"],
-                device=logits.device,
-                dtype=torch.float32,
-            )
-            loss, loss_parts = student_option_distillation_loss(
-                logits,
-                teacher_probabilities,
-                target_index=example.options.index(example.target),
-                option_kl_weight=float(loss_cfg["option_kl"]),
-                cross_entropy_weight=float(loss_cfg["cross_entropy"]),
-                brier_weight=float(loss_cfg["brier"]),
-            )
-            if not torch.isfinite(loss):
-                raise ValueError(f"non-finite QAT loss at {example.id}")
-            (loss / len(microbatch)).backward()
-            interval_losses.append(float(loss.detach().cpu()))
+        update_cache = (
+            cached_ternary_training_update(model, target_names, master_parameters)
+            if parameter_device_policy == "cpu_fp32_master"
+            else nullcontext()
+        )
+        with update_cache:
+            for example in microbatch:
+                query_inputs = processor_inputs_for_decision_example(
+                    processor, example, data_root=data_root
+                )
+                option_inputs = processor_inputs_for_options(processor, example.options)
+                if max(query_inputs["input_ids"].shape[-1], option_inputs["input_ids"].shape[-1]) > int(
+                    train_cfg["max_sequence_length"]
+                ):
+                    raise ValueError(f"{example.id}: sequence exceeds configured max length")
+                query_embedding = model_sentence_embeddings(model, query_inputs)[0]
+                option_embeddings = model_sentence_embeddings(model, option_inputs)
+                logits = supplied_option_logits(
+                    query_embedding,
+                    option_embeddings,
+                    temperature=float(student_cfg["score_temperature"]),
+                )
+                cached = teacher_cache[example.id]
+                teacher_probabilities = torch.tensor(
+                    cached["teacher_option_probabilities"],
+                    device=logits.device,
+                    dtype=torch.float32,
+                )
+                loss, loss_parts = student_option_distillation_loss(
+                    logits,
+                    teacher_probabilities,
+                    target_index=example.options.index(example.target),
+                    option_kl_weight=float(loss_cfg["option_kl"]),
+                    cross_entropy_weight=float(loss_cfg["cross_entropy"]),
+                    brier_weight=float(loss_cfg["brier"]),
+                )
+                if not torch.isfinite(loss):
+                    raise ValueError(f"non-finite QAT loss at {example.id}")
+                (loss / len(microbatch)).backward()
+                interval_losses.append(float(loss.detach().cpu()))
         gradient_norm = torch.nn.utils.clip_grad_norm_(
             trainable,
             max_grad_norm,
