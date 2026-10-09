@@ -5,6 +5,11 @@ This records the first Phase 6 implementation evidence on branch
 `09246d7b1821662a6b1eba47fc08c43f9dc3863c`; the model and processor are pinned
 in [the student manifest](../manifests/embeddinggemma2-student.yaml).
 
+This document preserves historical status snapshots from before QAT and
+Recovery completed. The current-state addendum at the end supersedes earlier
+statements that those experiments or Phase 9 artifacts did not yet exist; the
+earlier evidence and PR #14 handoff notes remain historical records.
+
 ## Revision and implementation compatibility
 
 - Model and processor: `google/embeddinggemma-2`, revision
@@ -473,3 +478,93 @@ behind global step, continue the existing process and wait for a newer best;
 do not call the old best a latest checkpoint. This handoff does not restore
 optimizer state and is not an exact resume. PR #14 remains draft/unmerged
 pending real GPU testing.
+
+## Current experiment status — 2026-10-09
+
+The QAT and Recovery runs, export/reload, and paired evaluation are complete
+on the dedicated experiment branch. No candidate is promoted. The latest
+`origin/main` roadmap remains plan-only; this addendum reports branch evidence
+without changing `main` or the frozen Teacher.
+
+### QAT attempt 08
+
+Authoritative local run metadata is at
+`C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-08-workspace-warmstart/run-metadata.json`.
+It records `complete`, source commit `911308de3643c9fc2445644c5850f1bd5494f9c2`,
+pretrained student `google/embeddinggemma-2@914f7f89142e33e77833254d9c9b90c3cef7303b`,
+and Teacher revision `6befbaca7398925921802abd1f277b495b78b738`. It used seed 17,
+Adafactor, LR `1e-5`, cosine with 3% warmup, gradient accumulation 4, and
+max sequence length 1024. The train corpus SHA-256 is
+`c3e6796a2df47471d42e671272b3050f9db150ac6b7ef7289e3902253f36d84d`; Teacher
+option-cache SHA-256 is
+`f2d3cc1a9d579c7fe75f0dfb1e5441b81964a6d41e8efa76ed1cc43bc0d3e0a4`. The
+fixed validation snapshot remains the same 256 IDs described above. No sealed
+audit was loaded, Teacher artifacts were not modified, and cloud spend was $0.
+
+This was an **optimizer-reset warm start**, not a fresh-start run or exact
+resume: it loaded attempt 05's best shadow at step 384, restored the cosine
+scheduler position, and did not restore optimizer moments. It completed 1,215
+updates over 4,859 unique examples. Best validation selection was step 512 by
+the fixed macro-NLL selector; final step 1,215 was saved/reloaded separately.
+The complete history, per-example predictions, snapshots, and both shadows are
+in the run directory above. The selected best-shadow SHA-256 is
+`9bc704d7c31e20cf66768e73a0bb82810aa98097a938202d46f1bcd8c5a84cae`; the
+final-shadow SHA-256 is
+`fc6e69808566b6161c313181aa1fb4eb9935c11e36d9ffdd6d359268cd2e9b8c`. The
+effective config SHA-256 is
+`56c1c1d6604420ed959690529d3e7c5c5c10f4a748eb35784c91a1b7382b732b`, validation
+snapshot SHA-256 is
+`43358f0e4444dabfaba30eba0d9e4af7851f1aff56d71b2edbf38982b1bb6faf`, and
+ordered train-ID SHA-256 is
+`d12e2225776fe895efd9c9686742326e494170ee4291506649f75dd70b7afbac`. The QAT
+target inventory covered 483 tensors / 744,129,664 elements.
+Run-metadata SHA-256 is
+`2fe5f1d56d064098e1ec5da63d6c9095062017fd204ad1685ddc243fc1334e53`, history
+SHA-256 is
+`3b5a30b76bd8a0d9e92b3ac4ccf32ae82fc0c38bec4ebc79f8ad86186164ebe5`, and
+best-reload-metrics SHA-256 is
+`87c0bea7c7b360ade07520169d4dac3b1c3cbd2dfbf894ed4c64bf64bbe16864`.
+
+| Step | Examples | Rolling train loss¹ | Macro val Accuracy | Macro val NLL | Min modality Accuracy |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 384 | 1,536 | — | 0.2422 | 1.8259 | 0.1406 |
+| 512 (selected) | 2,048 | 1.4398 | 0.2383 | 1.7931 | 0.0781 |
+| 640 | 2,560 | 1.6201 | 0.2188 | 1.8120 | 0.0781 |
+| 768 | 3,072 | 1.6892 | 0.2422 | 1.8607 | 0.1094 |
+| 1,024 | 4,096 | 0.7411 | 0.2461 | 1.8657 | 0.0781 |
+| 1,215 (final) | 4,859 | 0.6123 | 0.2891 | 1.8168 | 0.0625 |
+
+¹ Rolling loss is not a fixed-example generalization-gap estimate. Training loss
+fell while selected-checkpoint macro validation NLL was better than the final
+step, and calibration/weak-modality results remained poor. Best-step metrics by
+modality (Accuracy / NLL / Brier / ECE) were Audio `0.1406 / 2.3668 / 0.9155 /
+0.0807`, Image `0.0781 / 2.3753 / 0.9154 / 0.1309`, Text `0.4063 / 1.0852 /
+0.6548 / 0.1551`, Video `0.3281 / 1.3450 / 0.6912 / 0.1111`. The final
+checkpoint's aggregate accuracy is higher, but macro NLL is worse; it does not
+replace the selected best checkpoint.
+
+The run started `2026-10-08T18:01:16Z` and ended `2026-10-08T22:00:46Z`, with
+14,363.9 s recorded wall time and 3,609.2 s evaluation time. It ran on the
+NVIDIA RTX 3080 Laptop under Windows WDDM. **The recorded PyTorch peak allocator
+counters (19.63 GB allocated, 21.18 GB reserved) exceed the reported 16 GiB
+device total. They are internally inconsistent as physical-VRAM measurements;
+the true physical peak is UNKNOWN and those counters must not be cited as
+usable VRAM.** Current idle `nvidia-smi` output reports the same 16,384 MiB
+device. This limits memory-fit conclusions from this run.
+
+### Recovery and Phase 9
+
+The selected step-512 QAT overlay was the frozen Recovery starting point. The
+separate rank-16 decoder-all Recovery LoRA run completed one pass over 4,859
+unique train examples; its best checkpoint was step 1,152. It reached 25.78%
+macro accuracy on the 256-example validation snapshot, versus the QAT overlay's
+23.83%. The package reloaded with exact validation-probability parity, and the
+same three student candidates plus Teacher were paired on the historical,
+previously observed 2,917-example evaluation. The latter is not a blind audit
+and was not used for model selection. Recovery reached 23.97% macro accuracy
+there versus Teacher v0's 65.24%; Audio and Image remained especially weak.
+Full Phase 9 metrics, hashes, package bytes, runtime, and the bounded video
+decode optimization measurements are in
+[the Recovery report](EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md). No Teacher v1,
+corpus, checkpoint, sealed-audit data, or existing QAT/Recovery artifact was
+overwritten; all model weights/media remain outside Git.

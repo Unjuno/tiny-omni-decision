@@ -120,7 +120,7 @@ pipeline test is retained as historical context in [docs/PHASE3.md](docs/PHASE3.
 
 ## Student, compression, and recovery flow
 
-**Next experiment: ternary first, recover with the Teacher, add LoRA only if recovery is insufficient.**
+**Experiment status: ternary QAT and one Teacher-supervised Recovery LoRA run are complete; no candidate was promoted.**
 
 ```text
 Gemma 4 Decision Teacher: finish → select → reload → freeze
@@ -136,7 +136,7 @@ Pretrained EmbeddingGemma 2                    │
        → export / reload / re-evaluate
 ```
 
-Do not first train a separate high-precision decision student. Gemma 4 remains both the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged. EmbeddingGemma 2's pinned weights and processor have been loaded in an isolated Transformers 5.19.0 environment, and a synthetic text batch completed a CPU forward/readout/backward smoke. This is not a student quality or recovery result.
+Gemma 4 remains the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged. EmbeddingGemma 2's pinned weights and processor passed CPU forward/readout/backward smokes, then local RTX 3080 QAT and a separate Recovery LoRA experiment. Neither candidate met the multimodal quality objective; detailed results and integrity limits are in the Phase 8/9 report.
 
 Target the student's large text/backbone, embedding, vision, and audio weights for ternary conversion after pinning and inspecting the actual model. Record every higher-precision exception. During the first recovery stage, each forward uses ternary-quantized target weights even when gradient updates use higher-precision shadow weights.
 
@@ -154,7 +154,7 @@ Reuse compact Teacher option signals, matching the actual choices and their orde
 - The current Gemma 4 vocabulary readout requires option labels to tokenize to exactly one distinct token each; it fails closed otherwise. This does not imply a shared Teacher/student tokenizer.
 - The synthetic smoke example is a plumbing check, not a quality or calibration evaluation.
 - GitHub Actions PR checks validate proposed commits; push checks on `main` validate the resulting merge commit. Both run install, lint, CPU tests, and manifest validation without downloading model weights. The separate 16 GB GPU smoke was run locally.
-- OneJev component-level rights review remains unresolved and excluded. The pinned EmbeddingGemma 2 checkpoint and packed 483-tensor ternary overlay pass CPU path/reload smokes, but the standard runtime expands ternary weights back to BF16 and provides neither packed compute nor inference-memory reduction. The same 256 fixed validation examples were evaluated on the RTX 3080 Laptop GPU: the unquantized pretrained-student diagnostic scored 44.53% accuracy and the unrecovered ternary overlay 19.14%. Teacher-supervised recovery and a self-contained deployment package remain open; detailed metrics and hashes are in [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
+- OneJev component-level rights review remains unresolved and excluded. The pinned EmbeddingGemma 2 checkpoint and packed 483-tensor ternary overlay pass CPU path/reload smokes, but the standard runtime expands ternary weights back to BF16 and provides neither packed compute nor inference-memory reduction. The same 256 fixed validation examples showed 44.53% unquantized and 19.14% unrecovered ternary accuracy. Teacher-supervised QAT and Recovery LoRA, bundle export/reload, and paired evaluation are complete on this experiment branch; quality remains insufficient for promotion. See [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md) and [docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md](docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md).
 - The EmbeddingGemma 2 readout prototype is separate from the active Teacher training path. Existing Teacher configs, corpora, checkpoints, and artifacts remain unchanged. The Gemma 4 quantization/recovery configs do not implement this student path.
 - A local ternary Recovery LoRA experiment completed one pass over 4,859 unique training examples. Its selected checkpoint reached 25.78% macro accuracy on the fixed validation snapshot, with substantial modality gaps; it is not a product promotion. Metrics, hashes, hardware, and limitations are recorded in [docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md](docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md).
 - Phase 9 exported and hash-verified a portable bundle, confirmed exact best-validation reload parity, and paired the unquantized, ternary, Recovery LoRA, and Teacher on the same historical 2,917-example evaluation. Recovery reached 31.98% overall / 23.97% macro accuracy versus Teacher 73.43% / 65.24%; this is not a blind audit or product promotion. An opt-in bounded video decode cache also passed bitwise processor-input parity on a repeated-scene microbenchmark; full-evaluation speedup remains unmeasured. See the Phase 9 section of the Recovery report.

@@ -185,6 +185,21 @@ evaluation used the RTX 3080 CUDA device. The active student environment did
 not expose an Intel XPU device, so the integrated GPU was not used as a compute
 device. No runtime upgrade or cloud run was used for this optimization check.
 
+### Platform feasibility boundary
+
+- **This Windows PC + RTX 3080:** verified for the local CUDA evaluation path.
+  The candidate reload peaked at about 2.58 GB allocated VRAM. This validates
+  only this machine, pinned stack, and model path.
+- **Iris Xe integrated GPU:** not used. Its reported 16 GB is shared system
+  memory, and the installed student PyTorch environment did not expose an Intel
+  XPU device. Do not add this to the RTX's VRAM budget.
+- **Apple Silicon, Android, and iOS:** untested / UNKNOWN. The bundle contains
+  the complete BF16 base alongside the ternary overlay and Recovery adapter;
+  the validated loader applies the overlay by materializing standard model
+  tensors. Thus the present evidence does not establish a native mobile or
+  packed-ternary runtime, memory fit, or speedup. These need separate platform
+  and kernel measurements if model quality later justifies them.
+
 Phase 9 local outputs remain outside Git:
 
 - Bundle: `C:/CodexArtifacts/embeddinggemma2-ternary-recovery-v0-attempt01-bundle`

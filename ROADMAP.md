@@ -34,7 +34,7 @@ The project does not require the Teacher and student to share an architecture an
 
 ## Phase 0 — Freeze the design
 
-**Status: student path implemented through initial ternary export and damage measurement; Teacher-guided QAT is in progress.**
+**Status: design remains frozen; local student implementation and QAT/Recovery/Phase 9 experiments are recorded below as non-promoted research results.**
 
 Teacher target:
 - `google/gemma-4-E2B-it-qat-q4_0-unquantized`
