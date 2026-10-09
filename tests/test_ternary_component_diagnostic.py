@@ -1,6 +1,6 @@
 import pytest
 
-from scripts.diagnose_student_ternary_components import component_for_target
+from tiny_omni_decision.ternary_diagnostic_utils import component_for_target
 
 
 @pytest.mark.parametrize(

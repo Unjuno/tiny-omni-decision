@@ -11,6 +11,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from tiny_omni_decision.ternary_diagnostic_utils import component_for_target
+
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
 
@@ -20,17 +22,6 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
-
-
-def component_for_target(name: str) -> str:
-    root = name.split(".", maxsplit=1)[0]
-    if root in {"audio_tower", "embed_audio"}:
-        return "audio_path"
-    if root in {"vision_tower", "embed_vision"}:
-        return "vision_path"
-    if root == "language_model":
-        return "shared_decoder"
-    raise ValueError(f"unclassified ternary target root: {root}")
 
 
 def parse_args() -> argparse.Namespace:

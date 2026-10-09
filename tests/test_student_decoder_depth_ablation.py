@@ -1,6 +1,6 @@
 import pytest
 
-from scripts.diagnose_student_decoder_depth_ablation import group_decoder_layer_targets
+from tiny_omni_decision.ternary_diagnostic_utils import group_decoder_layer_targets
 
 
 def test_decoder_targets_are_split_into_three_contiguous_equal_groups():
