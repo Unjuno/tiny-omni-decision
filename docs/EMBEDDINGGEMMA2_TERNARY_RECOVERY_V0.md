@@ -108,3 +108,90 @@ Run metadata records state `complete`, 1,215 planned and completed updates,
 20,232,264 bytes; they remain outside Git. No Teacher or QAT artifact was
 overwritten. This result is a validation-only research artifact and must not
 be treated as a production promotion or a sealed-audit claim.
+
+## Phase 9 — portable bundle and paired evaluation
+
+The selected ternary overlay and step-1,152 Recovery LoRA were exported to a
+self-contained local bundle at
+`C:/CodexArtifacts/embeddinggemma2-ternary-recovery-v0-attempt01-bundle`.
+The bundle contains the pinned base checkpoint, processor/tokenizer, packed
+ternary overlay, Recovery adapter, effective config, metadata, and license
+notice. Its manifest SHA-256 is
+`f7677723f4a642f4b666ac7feffa4a99209692eb9149e8a3611fc567b83c8546`; it records
+1,706,973,718 total file bytes, including the 1,488,915,288-byte base, a
+160,453,191-byte packed overlay plus scales, and a 20,232,264-byte adapter.
+All bundle files were hash-verified. A fresh reload reproduced all 256 saved
+best-validation option probabilities exactly (maximum absolute difference
+0.0).
+
+The unquantized diagnostic, ternary overlay, Recovery LoRA, and frozen Teacher
+were paired on the same 2,917 examples, option order, and evaluation
+preprocessing from the historical durable-Teacher evaluation. That evaluation
+had already been observed; this is a reproducibility/comparison run, not a
+blind audit and not a basis for tuning. The held-out records were not used for
+model selection. The corpus SHA-256 is
+`19812d5211a45e8eedee2aa0c6b36795f613d8a1f8e0592c881edfabd13a2d9d`.
+
+| Candidate | Overall Acc. | Overall NLL | Overall Brier | Overall ECE | Macro modality Acc. | Macro NLL | Macro Brier | Macro ECE | Min modality Acc. |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Teacher v0 | 0.7343 | 0.6380 | 0.3344 | 0.0344 | 0.6524 | 0.9000 | 0.4339 | 0.0463 | 0.4176 |
+| Unquantized student | 0.4326 | 1.5164 | 0.7295 | 0.2466 | 0.4202 | 1.6717 | 0.7626 | 0.2407 | 0.3210 |
+| Ternary student | 0.3157 | 1.6632 | 0.7479 | 0.0779 | 0.2387 | 1.8461 | 0.7973 | 0.0993 | 0.0625 |
+| Ternary + Recovery LoRA | 0.3198 | 1.6032 | 0.7282 | 0.0572 | 0.2397 | 1.8068 | 0.7880 | 0.0945 | 0.0547 |
+
+Per-modality results (Accuracy / NLL / Brier / ECE):
+
+| Candidate | Audio | Image | Text | Video |
+| --- | --- | --- | --- | --- |
+| Teacher v0 | 0.9492 / 0.1854 / 0.0644 / 0.0295 | 0.5703 / 1.3744 / 0.5650 / 0.0529 | 0.6723 / 0.7323 / 0.4232 / 0.0442 | 0.4176 / 1.3080 / 0.6798 / 0.0589 |
+| Unquantized student | 0.5654 / 2.1302 / 0.8611 / 0.4405 | 0.4297 / 2.1322 / 0.8602 / 0.2947 | 0.3645 / 1.0515 / 0.6300 / 0.1691 | 0.3210 / 1.3730 / 0.6990 / 0.0585 |
+| Ternary student | 0.1191 / 2.4608 / 0.9276 / 0.0828 | 0.0625 / 2.3527 / 0.9128 / 0.1271 | 0.4890 / 1.0610 / 0.6034 / 0.0625 | 0.2841 / 1.5098 / 0.7452 / 0.1246 |
+| Ternary + Recovery LoRA | 0.1055 / 2.3654 / 0.9122 / 0.0609 | 0.0547 / 2.3718 / 0.9154 / 0.1365 | 0.5060 / 1.0126 / 0.5718 / 0.0472 | 0.2926 / 1.4772 / 0.7525 / 0.1334 |
+
+All student variants remain well below Teacher v0 and far below the four
+90%-per-modality target. The Recovery adapter made small text/video and
+calibration changes while further lowering Audio/Image accuracy versus the
+ternary-only student. This is a mixed trade-off, not a successful four-modal
+recovery or a reason to promote the artifact. The sealed audit remains unopened.
+
+The full three-candidate student evaluation took 719.6 s unquantized, 709.2 s
+ternary, and 780.6 s with Recovery on the RTX 3080 Laptop GPU. Peak allocated
+VRAM was 2.56–2.58 GB per candidate; the evaluations used no cloud compute.
+Video elapsed time dominated at about 502–512 s per candidate (352 examples,
+about 1.43–1.45 s/example). These wall intervals include decoding,
+preprocessing, inference, and output work; they are not GPU-kernel timings.
+
+### Video preprocessing optimization
+
+The evaluation CLI now has an opt-in, one-scene host-memory cache. It decodes
+the full video with the pinned PyAV backend once, supplies the original video
+metadata to the processor, and evicts the previous scene when the input path
+changes. The default path and historical scores are unchanged. On a local
+three-question CLEVRER scene, uncached processor input creation took 3.42 s
+total; cached creation took 1.17 s total (about 66% lower). The `input_ids`,
+`attention_mask`, `pixel_values_videos`, `video_position_ids`, and
+`num_frames_per_video` tensors were bitwise equal for all three questions.
+This CPU-side microbenchmark establishes input parity and repeated-decode
+savings for one scene; a full paired evaluation has not yet been rerun with
+the cache, so no full-run speedup is claimed. The cache holds at most one raw
+scene to bound host/shared-memory use. A three-example Recovery inference smoke
+then measured 5.52 s uncached and 2.83 s cached, with identical predictions
+and maximum option-probability difference 0.0; peak allocated RTX VRAM was
+2.58 GB. This is a small repeated-scene smoke, not a full-suite timing.
+
+The machine reports approximately 16 GB of Intel Iris Xe shared system memory,
+not 16 GB of dedicated integrated-GPU VRAM. The completed training and paired
+evaluation used the RTX 3080 CUDA device. The active student environment did
+not expose an Intel XPU device, so the integrated GPU was not used as a compute
+device. No runtime upgrade or cloud run was used for this optimization check.
+
+Phase 9 local outputs remain outside Git:
+
+- Bundle: `C:/CodexArtifacts/embeddinggemma2-ternary-recovery-v0-attempt01-bundle`
+- Reload validation: `C:/CodexArtifacts/embeddinggemma2-ternary-recovery-v0-attempt01-bundle-reload-validation`
+- Paired evaluation: `C:/CodexArtifacts/embeddinggemma2-ternary-recovery-v0-attempt01-final-evaluation`
+- Evaluation example hash: `19812d5211a45e8eedee2aa0c6b36795f613d8a1f8e0592c881edfabd13a2d9d`
+- Prediction hashes (unquantized / ternary / recovery):
+  `b62d6a849b964ecf1e4fcf6988569bdf9c3004c4482cb75d03a41497e10f5c3a` /
+  `edcd32a502ac3b845c25152a6a60228f5c0cb13a0c82209ce2b7b57e03339b0a` /
+  `508e08ac196fa38b54fbf4e0fe1dc21ce85b5e8dede9d76508c906edaf5d53c9`

@@ -42,6 +42,7 @@ def processor_inputs_for_decision_example(
     example: DecisionExample,
     *,
     data_root: Path,
+    video_frame_cache: dict[str, tuple[Any, Any]] | None = None,
 ) -> Any:
     """Create pinned-processor inputs for one query and its optional local media."""
     modality_payload: dict[str, Any] = {}
@@ -102,8 +103,27 @@ def processor_inputs_for_decision_example(
             modality_payload["audio"] = [waveform]
             media_token = processor.audio_token
         else:
-            modality_payload["videos"] = [str(media_path)]
-            modality_payload["videos_kwargs"] = {"return_metadata": False}
+            if video_frame_cache is None:
+                modality_payload["videos"] = [str(media_path)]
+                modality_payload["videos_kwargs"] = {"return_metadata": False}
+            else:
+                cache_key = str(media_path)
+                decoded = video_frame_cache.get(cache_key)
+                if decoded is None:
+                    from transformers.video_utils import load_video
+
+                    decoded = load_video(cache_key, backend="pyav")
+                    # Keep at most the current scene in host memory. CLEVRER
+                    # questions are grouped by video, so this avoids repeat
+                    # decoding without accumulating full clips across a split.
+                    video_frame_cache.clear()
+                    video_frame_cache[cache_key] = decoded
+                frames, metadata = decoded
+                modality_payload["videos"] = [frames]
+                modality_payload["videos_kwargs"] = {
+                    "video_metadata": metadata,
+                    "return_metadata": False,
+                }
             media_token = processor.video_token
 
     query = decision_query_text(example.state, example.question, media_token=media_token)

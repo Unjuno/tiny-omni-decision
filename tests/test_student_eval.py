@@ -131,6 +131,72 @@ def test_student_eval_reuses_option_embeddings_within_one_run(
     ]
 
 
+def test_video_frame_cache_decodes_a_scene_once_and_passes_original_metadata(
+    monkeypatch, tmp_path: Path
+) -> None:
+    import sys
+    import types
+
+    from tiny_omni_decision.schema import DecisionExample
+    from tiny_omni_decision.student import processor_inputs_for_decision_example
+
+    video_path = tmp_path / "scene.mp4"
+    video_path.write_bytes(b"fixture")
+    example = DecisionExample.model_validate(
+        {
+            "id": "video-one",
+            "modality": "video",
+            "state": "",
+            "question": "What happens?",
+            "options": ["a", "b"],
+            "target": "a",
+            "media": [{"kind": "video", "path": "scene.mp4"}],
+            "source": "fixture/source",
+            "source_revision": "a" * 40,
+            "source_record_id": "video-one",
+            "split": "validation",
+            "provenance": {"license": "CC0-1.0"},
+        }
+    )
+    decoded = (["frame-0", "frame-1"], {"fps": 25, "total_num_frames": 50})
+    decoder_calls = []
+
+    def load_video(path, *, backend):
+        decoder_calls.append((path, backend))
+        return decoded
+
+    transformers = types.ModuleType("transformers")
+    video_utils = types.ModuleType("transformers.video_utils")
+    video_utils.load_video = load_video
+    transformers.video_utils = video_utils
+    monkeypatch.setitem(sys.modules, "transformers", transformers)
+    monkeypatch.setitem(sys.modules, "transformers.video_utils", video_utils)
+
+    class RecordingProcessor:
+        video_token = "<video>"
+
+        def __init__(self):
+            self.calls = []
+
+        def __call__(self, **kwargs):
+            self.calls.append(kwargs)
+            return kwargs
+
+    cache = {}
+    processor = RecordingProcessor()
+    first = processor_inputs_for_decision_example(
+        processor, example, data_root=tmp_path, video_frame_cache=cache
+    )
+    second = processor_inputs_for_decision_example(
+        processor, example, data_root=tmp_path, video_frame_cache=cache
+    )
+
+    assert decoder_calls == [(str(video_path.resolve()), "pyav")]
+    assert first == second
+    assert first["videos"] == [decoded[0]]
+    assert first["videos_kwargs"]["video_metadata"] == decoded[1]
+
+
 def test_fixed_validation_loader_checks_hash_ids_targets_and_option_order(
     tmp_path: Path,
 ) -> None:

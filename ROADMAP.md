@@ -239,14 +239,12 @@ Retain the existing metrics:
 
 Proceed to recovery after a numerically valid damaged baseline. This phase does not require the unrecovered student to match the Teacher.
 
-## Phase 8 — Teacher recovery, then LoRA if needed — QAT in progress
+## Phase 8 — Teacher recovery, then LoRA if needed — local QAT and Recovery experiments complete
 
-Attempt 05 is running from a fresh pretrained EmbeddingGemma 2 base with new
-ternary-QAT shadow weights. At the latest recorded validation (step 128), the
-fixed validation macro NLL improved slightly from 1.8786 to 1.8300; modality
-metrics are mixed and no quality conclusion is drawn. The run is configured
-for 1,215 updates over 4,859 unique training examples. Interim hashes,
-conditions, metrics, and local-memory measurements are in
+The previously active QAT run is no longer in progress. QAT attempt 08 supplied
+the selected ternary overlay for a separate Recovery LoRA experiment; neither
+the QAT nor Teacher artifacts were overwritten. The historical attempt 05
+record remains available at
 [docs/EMBEDDINGGEMMA2_QAT_ATTEMPT05.md](docs/EMBEDDINGGEMMA2_QAT_ATTEMPT05.md).
 
 ### Shared supervision
@@ -307,6 +305,19 @@ Target outputs:
 - PC inference
 - Apple Silicon / Android / iOS feasibility notes
 - direct packed low-bit kernels only if required after v0.1
+
+Local Phase 9 export/reload and paired evaluation are complete for the current
+research candidate. The hash-verified package is 1.707 GB including the pinned
+base checkpoint, and reload exactly reproduced the selected 256-example
+validation predictions. On the same previously observed 2,917-example
+evaluation, the Recovery candidate scored 31.98% overall and 23.97% macro
+accuracy, versus 73.43% and 65.24% for Teacher v0. It is not a product
+promotion and this historical evaluation is not blind. A bounded, opt-in
+one-scene video frame cache achieved bitwise identical processor tensors and
+reduced a three-question scene preprocessing microbenchmark from 3.42 s to
+1.17 s; full paired-evaluation speedup is not yet measured. Detailed metrics,
+hashes, and limitations are in
+[docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md](docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md).
 
 ## Scope and non-goals
 

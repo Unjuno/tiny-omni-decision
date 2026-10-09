@@ -208,6 +208,7 @@ def evaluate_student_examples(
     ece_bins: int = 15,
     existing_predictions: list[dict[str, Any]] | None = None,
     on_prediction: Callable[[dict[str, Any]], None] | None = None,
+    cache_video_frames: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Evaluate examples in input order and report modality/source calibration metrics."""
 
@@ -256,10 +257,16 @@ def evaluate_student_examples(
         groups[f"modality:{example.modality}"].append((probabilities, target))
         groups[f"source:{example.source}"].append((probabilities, target))
     option_embedding_cache: dict[str, Any] = {}
+    video_frame_cache: dict[str, tuple[Any, Any]] | None = (
+        {} if cache_video_frames else None
+    )
     with torch.inference_mode():
         for example in materialized[len(predictions) :]:
             query_inputs = processor_inputs_for_decision_example(
-                processor, example, data_root=data_root
+                processor,
+                example,
+                data_root=data_root,
+                video_frame_cache=video_frame_cache,
             )
             query_embedding = model_sentence_embeddings(model, query_inputs)[0]
             missing_options = list(
