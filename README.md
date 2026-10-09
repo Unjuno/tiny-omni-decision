@@ -47,6 +47,9 @@ Do not combine `[student]` with the Teacher-oriented `[ml]` extra. The current
 student manifest, loaded graph inventory, CPU forward/backward smoke, and
 verification boundary are recorded in
 [docs/EMBEDDINGGEMMA2_STUDENT.md](docs/EMBEDDINGGEMMA2_STUDENT.md).
+The later no-training ternary component diagnosis and per-modality ablations
+are recorded in
+[docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md).
 
 The pinned model is public. Do not put Hugging Face tokens or other credentials in repository files. Fresh-clone CPU preflight:
 

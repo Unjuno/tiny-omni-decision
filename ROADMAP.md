@@ -319,6 +319,15 @@ reduced a three-question scene preprocessing microbenchmark from 3.42 s to
 hashes, and limitations are in
 [docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md](docs/EMBEDDINGGEMMA2_TERNARY_RECOVERY_V0.md).
 
+A no-training component ablation has now compared all-ternary, Audio-path
+BF16, Vision-path BF16, and shared-decoder BF16 on the same frozen 256-example
+validation snapshot. Restoring any one component did not improve all four
+modalities; the results point to a mixed shared-decoder/modality interaction,
+not a demonstrated tower-only failure. Keep the quantized research artifact
+unchanged. The next diagnostic is a per-decoder-block BF16 sensitivity scan;
+details and hashes are in
+[docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md).
+
 ## Scope and non-goals
 
 - This remains a staged student experiment, not a product promotion. Existing Teacher training inputs and historical artifacts remain unchanged; old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.
