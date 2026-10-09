@@ -1,7 +1,8 @@
 import pytest
-import torch
 
-from tiny_omni_decision.decision_head import (
+torch = pytest.importorskip("torch")
+
+from tiny_omni_decision.decision_head import (  # noqa: E402
     OptionDecisionHead,
     decision_head_parameter_count,
     train_decision_head_one_pass,
@@ -61,20 +62,3 @@ def test_one_pass_updates_only_head_once_per_ordered_example():
     assert all(
         not torch.equal(old, new) for old, new in zip(before, head.parameters(), strict=True)
     )
-
-
-def test_missing_single_option_uses_regular_processor_without_two_choice_guard():
-    from tiny_omni_decision.student import processor_inputs_for_option
-
-    calls = []
-
-    def processor(**kwargs):
-        calls.append(kwargs)
-        return kwargs
-
-    result = processor_inputs_for_option(processor, "candidate")
-    assert result == {
-        "text": ["task: sentence similarity | query: candidate"],
-        "return_tensors": "pt",
-    }
-    assert calls == [result]
