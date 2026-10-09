@@ -324,9 +324,12 @@ BF16, Vision-path BF16, and shared-decoder BF16 on the same frozen 256-example
 validation snapshot. Restoring any one component did not improve all four
 modalities; the results point to a mixed shared-decoder/modality interaction,
 not a demonstrated tower-only failure. Keep the quantized research artifact
-unchanged. The next diagnostic is a per-decoder-block BF16 sensitivity scan;
-details and hashes are in
-[docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md).
+unchanged. A follow-up early/middle/late decoder-block BF16 sensitivity scan
+also failed the predefined clear-improvement rule, so stop layer-level search.
+Results and hashes are in
+[docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md)
+and
+[docs/EMBEDDINGGEMMA2_TERNARY_DECODER_DEPTH_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_DECODER_DEPTH_ABLATION.md).
 
 ## Scope and non-goals
 

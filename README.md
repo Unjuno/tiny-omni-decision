@@ -50,6 +50,8 @@ verification boundary are recorded in
 The later no-training ternary component diagnosis and per-modality ablations
 are recorded in
 [docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_COMPONENT_ABLATION.md).
+The follow-up early/middle/late decoder sensitivity scan is documented in
+[docs/EMBEDDINGGEMMA2_TERNARY_DECODER_DEPTH_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_DECODER_DEPTH_ABLATION.md).
 
 The pinned model is public. Do not put Hugging Face tokens or other credentials in repository files. Fresh-clone CPU preflight:
 
