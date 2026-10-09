@@ -130,6 +130,11 @@ def processor_inputs_for_decision_example(
     return processor(text=[query], return_tensors="pt", **modality_payload)
 
 
+def processor_inputs_for_option(processor: Any, option: str) -> Any:
+    """Encode one candidate option with the shared sentence-similarity prefix."""
+    return processor(text=[decision_option_text(option)], return_tensors="pt")
+
+
 def processor_inputs_for_options(processor: Any, options: list[str]) -> Any:
     """Encode candidate options in source order with the same task prefix."""
     if len(options) < 2:
@@ -146,6 +151,7 @@ def processor_inputs_for_options(processor: Any, options: list[str]) -> Any:
 def mean_pool_projected_tokens(token_embeddings: Tensor, attention_mask: Tensor) -> Tensor:
     """Apply the pinned Sentence Transformers mean-pooling semantics."""
     import torch
+
     if token_embeddings.ndim != 3:
         raise ValueError("token_embeddings must have shape [sequence, tokens, dimensions]")
     if attention_mask.ndim != 2 or attention_mask.shape != token_embeddings.shape[:2]:
@@ -171,6 +177,7 @@ def _move_tensor_inputs(model_inputs: Mapping[str, Any], *, device: torch.device
 def model_sentence_embeddings(model: Any, model_inputs: Mapping[str, Any]) -> Tensor:
     """Run an EmbeddingGemma-style encoder and apply its native pooling pipeline."""
     import torch
+
     attention_mask = model_inputs.get("attention_mask")
     if attention_mask is None:
         raise ValueError("model_inputs must include attention_mask for native mean pooling")
@@ -212,6 +219,7 @@ def supplied_option_logits(
     """Score supplied options by cosine similarity, preserving their input order."""
     import torch
     from torch.nn import functional as F
+
     if query_embedding.ndim != 1:
         raise ValueError("query_embedding must be a one-dimensional vector")
     if option_embeddings.ndim != 2 or option_embeddings.shape[0] < 2:

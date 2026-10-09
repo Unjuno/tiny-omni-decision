@@ -64,7 +64,7 @@ def test_one_pass_updates_only_head_once_per_ordered_example():
 
 
 def test_missing_single_option_uses_regular_processor_without_two_choice_guard():
-    from scripts.train_student_decision_head import _processor_inputs_for_missing_options
+    from tiny_omni_decision.student import processor_inputs_for_option
 
     calls = []
 
@@ -72,7 +72,7 @@ def test_missing_single_option_uses_regular_processor_without_two_choice_guard()
         calls.append(kwargs)
         return kwargs
 
-    result = _processor_inputs_for_missing_options(processor, ["candidate"])
+    result = processor_inputs_for_option(processor, "candidate")
     assert result == {
         "text": ["task: sentence similarity | query: candidate"],
         "return_tensors": "pt",
