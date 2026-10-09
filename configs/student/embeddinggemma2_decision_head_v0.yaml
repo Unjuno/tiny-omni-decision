@@ -1,0 +1,67 @@
+schema_version: 1
+experiment_id: embeddinggemma2-decision-head-v0-attempt-01
+seed: 17
+device: cuda
+dtype: bfloat16
+
+backbone:
+  repo_id: google/embeddinggemma-2
+  revision: 914f7f89142e33e77833254d9c9b90c3cef7303b
+  model_path: C:/CodexArtifacts/embeddinggemma2-metadata-914f7f8
+  model_manifest: manifests/embeddinggemma2-student.yaml
+  qat_run_dir: C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-08-workspace-warmstart
+  qat_metadata_sha256: 2fe5f1d56d064098e1ec5da63d6c9095062017fd204ad1685ddc243fc1334e53
+  selected_step: 512
+  selected_shadow_path: C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-08-workspace-warmstart/best-shadow.safetensors
+  selected_shadow_sha256: 9bc704d7c31e20cf66768e73a0bb82810aa98097a938202d46f1bcd8c5a84cae
+  ternary_overlay_dir: C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-08-workspace-warmstart/overlays/best
+  ternary_overlay_manifest_sha256: 5a94951425b3913da5896a5a46be010e1f901f93d30291c4397407b2674d2edb
+  ternary_overlay_tensor_sha256: 7b90ea585e07653777d68c9f7022d705a74ddf4b8b404285bb8999fe82b74e34
+
+data:
+  teacher_repo_root: C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision
+  data_root: C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision/data
+  train_corpus: C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision/data/processed/durable-teacher-v0/train.jsonl
+  train_corpus_sha256: c3e6796a2df47471d42e671272b3050f9db150ac6b7ef7289e3902253f36d84d
+  train_sampling_plan: C:/CodexArtifacts/embeddinggemma2-ternary-qat-v0-attempt-08-workspace-warmstart/sampling-plan.json
+  train_id_order_sha256: d12e2225776fe895efd9c9686742326e494170ee4291506649f75dd70b7afbac
+  teacher_cache: C:/CodexArtifacts/embeddinggemma2-teacher-option-cache-v0/teacher-options.jsonl
+  teacher_cache_sha256: f2d3cc1a9d579c7fe75f0dfb1e5441b81964a6d41e8efa76ed1cc43bc0d3e0a4
+  teacher_cache_metadata: C:/CodexArtifacts/embeddinggemma2-teacher-option-cache-v0/cache-run.json
+  teacher_id: tiny-omni-decision-teacher-v0
+  teacher_revision: 6befbaca7398925921802abd1f277b495b78b738
+  teacher_temperature: 1.0
+  validation_snapshot: C:/CodexArtifacts/embeddinggemma2-validation-v0-256/validation.jsonl
+  validation_manifest: manifests/embeddinggemma2-validation-v0-256.json
+  source_validation: C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision/data/processed/durable-teacher-v0/validation.jsonl
+  teacher_validation_predictions: C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision/artifacts/tiny-omni-decision-teacher-v0/best-validation-predictions.jsonl
+
+head:
+  embedding_dim: 768
+  hidden_dim: 128
+  activation: gelu
+  optimizer: AdamW
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  examples_per_update: 1
+  epochs: 1
+  option_embedding_batch_size: 32
+  text_query_batch_size: 8
+  torch_num_threads: 4
+  minimum_free_vram_bytes: 8589934592
+  loss:
+    option_kl: 1.0
+    cross_entropy: 0.2
+    brier: 0.2
+
+evaluation:
+  cosine_temperature: 0.1
+  ece_bins: 15
+  required_validation_count: 256
+  per_modality_count: 64
+  adoption_rule: >-
+    For a given frozen backbone, adopt its trained head only if macro NLL and macro
+    Brier both improve over that backbone's cosine readout and no modality accuracy
+    falls by more than one example out of 64. This is a validation-only diagnostic rule.
+
+output_dir: C:/CodexArtifacts/embeddinggemma2-decision-head-v0-attempt-01
