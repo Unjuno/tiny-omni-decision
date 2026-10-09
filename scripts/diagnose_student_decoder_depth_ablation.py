@@ -6,6 +6,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import time
 from collections import defaultdict
 from datetime import UTC, datetime
@@ -13,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 DECODER_LAYER_PATTERN = re.compile(r"^language_model\.layers\.(\d+)\.")
 
