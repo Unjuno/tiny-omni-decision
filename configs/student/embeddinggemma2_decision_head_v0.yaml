@@ -1,5 +1,5 @@
 schema_version: 1
-experiment_id: embeddinggemma2-decision-head-v0-attempt-01
+experiment_id: embeddinggemma2-decision-head-v0-attempt-02
 seed: 17
 device: cuda
 dtype: bfloat16
@@ -45,14 +45,17 @@ head:
   weight_decay: 0.01
   examples_per_update: 1
   epochs: 1
-  option_embedding_batch_size: 32
-  text_query_batch_size: 8
   torch_num_threads: 4
   minimum_free_vram_bytes: 8589934592
   loss:
     option_kl: 1.0
     cross_entropy: 0.2
     brier: 0.2
+
+feature_extraction:
+  query_batch_size: 1
+  option_cache_policy: per_split_first_occurrence_per_example
+  validation_video_frame_cache: true
 
 evaluation:
   cosine_temperature: 0.1
@@ -64,4 +67,4 @@ evaluation:
     Brier both improve over that backbone's cosine readout and no modality accuracy
     falls by more than one example out of 64. This is a validation-only diagnostic rule.
 
-output_dir: C:/CodexArtifacts/embeddinggemma2-decision-head-v0-attempt-01
+output_dir: C:/CodexArtifacts/embeddinggemma2-decision-head-v0-attempt-02

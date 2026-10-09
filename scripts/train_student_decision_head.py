@@ -226,9 +226,9 @@ def _extract_variant_features(
 
     from tiny_omni_decision.student import (
         decision_option_text,
-        decision_query_text,
         model_sentence_embeddings,
         processor_inputs_for_decision_example,
+        processor_inputs_for_options,
     )
     from tiny_omni_decision.ternary import load_packed_ternary_overlay
 
@@ -265,85 +265,75 @@ def _extract_variant_features(
     if trainable_parameters:
         raise RuntimeError("frozen backbone unexpectedly has trainable parameters")
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
-    all_examples = [*train_examples, *validation_examples]
-    unique_option_texts = list(
-        dict.fromkeys(
-            decision_option_text(option) for example in all_examples for option in example.options
-        )
-    )
     started = time.perf_counter()
-    option_embeddings: dict[str, Any] = {}
-    option_batch_size = int(config["head"]["option_embedding_batch_size"])
-    for start in range(0, len(unique_option_texts), option_batch_size):
-        batch = unique_option_texts[start : start + option_batch_size]
-        encoded = processor(text=batch, return_tensors="pt", padding=True)
-        with torch.no_grad():
-            embeddings = model_sentence_embeddings(model, encoded).detach().float().cpu()
-        if embeddings.shape != (len(batch), int(config["head"]["embedding_dim"])):
-            raise ValueError("option encoder output differs from configured 768-D embeddings")
-        for text, embedding in zip(batch, embeddings, strict=True):
-            option_embeddings[text] = embedding.clone()
-        if (start // option_batch_size) % 100 == 0:
-            print(
-                f"{variant}: options {min(start + len(batch), len(unique_option_texts))}/"
-                f"{len(unique_option_texts)}",
-                flush=True,
-            )
 
-    query_rows: list[Any | None] = [None] * len(all_examples)
-    text_indices = [
-        index for index, example in enumerate(all_examples) if example.modality == "text"
-    ]
-    text_batch_size = int(config["head"]["text_query_batch_size"])
-    for start in range(0, len(text_indices), text_batch_size):
-        indices = text_indices[start : start + text_batch_size]
-        texts = [
-            decision_query_text(all_examples[index].state, all_examples[index].question)
-            for index in indices
-        ]
-        encoded = processor(text=texts, return_tensors="pt", padding=True)
-        with torch.no_grad():
-            embeddings = model_sentence_embeddings(model, encoded).detach().float().cpu()
-        if embeddings.shape != (len(indices), int(config["head"]["embedding_dim"])):
-            raise ValueError("text query encoder output differs from configured 768-D embeddings")
-        for index, embedding in zip(indices, embeddings, strict=True):
-            query_rows[index] = embedding.clone()
-
-    non_text_indices = [
-        index for index, example in enumerate(all_examples) if example.modality != "text"
-    ]
-    media_start = time.perf_counter()
-    for done, index in enumerate(non_text_indices, start=1):
-        example = all_examples[index]
-        encoded = processor_inputs_for_decision_example(
-            processor, example, data_root=Path(config["data"]["data_root"])
+    def extract_split_features(
+        model: Any, processor: Any, examples: list[Any], *, role: str
+    ) -> tuple[list[Any], dict[str, Any]]:
+        query_rows: list[Any] = []
+        option_cache: dict[str, Any] = {}
+        video_frame_cache = (
+            {}
+            if role == "validation"
+            and bool(config["feature_extraction"]["validation_video_frame_cache"])
+            else None
         )
-        with torch.no_grad():
-            embedding = model_sentence_embeddings(model, encoded)[0].detach().float().cpu()
-        if embedding.shape != (int(config["head"]["embedding_dim"]),):
-            raise ValueError(
-                "multimodal query encoder output differs from configured 768-D embeddings"
+        for index, example in enumerate(examples, start=1):
+            query_inputs = processor_inputs_for_decision_example(
+                processor,
+                example,
+                data_root=Path(config["data"]["data_root"]),
+                video_frame_cache=video_frame_cache,
             )
-        query_rows[index] = embedding.clone()
-        if done % 100 == 0 or done == len(non_text_indices):
-            print(
-                f"{variant}: multimodal queries {done}/{len(non_text_indices)} "
-                f"({time.perf_counter() - media_start:.1f}s)",
-                flush=True,
-            )
-    if any(embedding is None for embedding in query_rows):
-        raise RuntimeError("not all frozen query embeddings were produced")
-    train_queries = [
-        embedding for embedding in query_rows[: len(train_examples)] if embedding is not None
-    ]
-    validation_queries = [
-        embedding for embedding in query_rows[len(train_examples) :] if embedding is not None
-    ]
+            with torch.no_grad():
+                query = model_sentence_embeddings(model, query_inputs)[0].detach().float().cpu()
+            if query.shape != (int(config["head"]["embedding_dim"]),):
+                raise ValueError("query encoder output differs from configured 768-D embeddings")
+            query_rows.append(query.clone())
+
+            missing_options = [
+                option
+                for option in example.options
+                if decision_option_text(option) not in option_cache
+            ]
+            if missing_options:
+                option_inputs = processor_inputs_for_options(processor, missing_options)
+                with torch.no_grad():
+                    embeddings = (
+                        model_sentence_embeddings(model, option_inputs).detach().float().cpu()
+                    )
+                if embeddings.shape != (
+                    len(missing_options),
+                    int(config["head"]["embedding_dim"]),
+                ):
+                    raise ValueError(
+                        "option encoder output differs from configured 768-D embeddings"
+                    )
+                option_cache.update(
+                    {
+                        decision_option_text(option): embedding.clone()
+                        for option, embedding in zip(missing_options, embeddings, strict=True)
+                    }
+                )
+            if index % 100 == 0 or index == len(examples):
+                print(
+                    f"{variant}: {role} examples {index}/{len(examples)} "
+                    f"({time.perf_counter() - started:.1f}s)",
+                    flush=True,
+                )
+        return query_rows, option_cache
+
+    train_queries, train_option_embeddings = extract_split_features(
+        model, processor, train_examples, role="train"
+    )
+    validation_queries, validation_option_embeddings = extract_split_features(
+        model, processor, validation_examples, role="validation"
+    )
     train_features = _features_for_examples(
-        train_examples, option_embeddings, train_queries, teacher_by_id=teacher_by_id
+        train_examples, train_option_embeddings, train_queries, teacher_by_id=teacher_by_id
     )
     validation_features = _features_for_examples(
-        validation_examples, option_embeddings, validation_queries
+        validation_examples, validation_option_embeddings, validation_queries
     )
     feature_path = output_dir / f"{variant}-frozen-features.safetensors"
     tensors = {
@@ -374,7 +364,7 @@ def _extract_variant_features(
         "variant": variant,
         "base_model_parameter_count": parameter_count,
         "base_trainable_parameter_count": trainable_parameters,
-        "option_embedding_count": len(unique_option_texts),
+        "option_embedding_count": len(train_option_embeddings) + len(validation_option_embeddings),
         "train_examples": len(train_examples),
         "validation_examples": len(validation_examples),
         "train_id_order_sha256": _ids_sha256([example.id for example in train_examples]),
@@ -397,7 +387,7 @@ def _extract_variant_features(
         raise RuntimeError("frozen backbone unexpectedly accumulated gradients")
     progress.setdefault("feature_extraction", {})[variant] = metadata
     _atomic_json(output_dir / "progress.json", progress)
-    del model, processor, option_embeddings, query_rows, tensors
+    del model, processor, train_option_embeddings, validation_option_embeddings, tensors
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
     return train_features, validation_features, metadata
