@@ -331,6 +331,8 @@ Results and hashes are in
 and
 [docs/EMBEDDINGGEMMA2_TERNARY_DECODER_DEPTH_ABLATION.md](docs/EMBEDDINGGEMMA2_TERNARY_DECODER_DEPTH_ABLATION.md).
 
+A separate frozen-backbone Decision Head readout diagnostic was completed on the same fixed 256-example validation set. The ternary head improved macro NLL/Brier but failed the predefined per-modality Accuracy guard; the unquantized head was worse on macro Accuracy, NLL, and Brier. Neither is adopted. See [docs/EMBEDDINGGEMMA2_DECISION_HEAD.md](docs/EMBEDDINGGEMMA2_DECISION_HEAD.md).
+
 ## Scope and non-goals
 
 - This remains a staged student experiment, not a product promotion. Existing Teacher training inputs and historical artifacts remain unchanged; old Gemma 4 quantization/recovery configs are not EmbeddingGemma 2 implementations.

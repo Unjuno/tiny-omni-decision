@@ -141,7 +141,7 @@ Pretrained EmbeddingGemma 2                    │
        → export / reload / re-evaluate
 ```
 
-Gemma 4 remains the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged. EmbeddingGemma 2's pinned weights and processor passed CPU forward/readout/backward smokes, then local RTX 3080 QAT and a separate Recovery LoRA experiment. Neither candidate met the multimodal quality objective; detailed results and integrity limits are in the Phase 8/9 report.
+Gemma 4 remains the source of option-level supervision and the quality reference. The existing Teacher run and artifacts are unchanged. EmbeddingGemma 2's pinned weights and processor passed CPU forward/readout/backward smokes, then local RTX 3080 QAT and a separate Recovery LoRA experiment. Neither candidate met the multimodal quality objective; detailed results and integrity limits are in the Phase 8/9 report. A separate frozen-backbone Decision Head diagnostic was also completed and rejected for both ternary and unquantized variants; see [docs/EMBEDDINGGEMMA2_DECISION_HEAD.md](docs/EMBEDDINGGEMMA2_DECISION_HEAD.md).
 
 Target the student's large text/backbone, embedding, vision, and audio weights for ternary conversion after pinning and inspecting the actual model. Record every higher-precision exception. During the first recovery stage, each forward uses ternary-quantized target weights even when gradient updates use higher-precision shadow weights.
 
