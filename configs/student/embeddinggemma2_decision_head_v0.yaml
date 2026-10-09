@@ -1,5 +1,5 @@
 schema_version: 1
-experiment_id: embeddinggemma2-decision-head-v0-attempt-02
+experiment_id: embeddinggemma2-decision-head-v0-attempt-03
 seed: 17
 device: cuda
 dtype: bfloat16
@@ -67,4 +67,4 @@ evaluation:
     Brier both improve over that backbone's cosine readout and no modality accuracy
     falls by more than one example out of 64. This is a validation-only diagnostic rule.
 
-output_dir: C:/CodexArtifacts/embeddinggemma2-decision-head-v0-attempt-02
+output_dir: C:/CodexArtifacts/embeddinggemma2-decision-head-v0-attempt-03

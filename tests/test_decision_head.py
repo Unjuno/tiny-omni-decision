@@ -61,3 +61,20 @@ def test_one_pass_updates_only_head_once_per_ordered_example():
     assert all(
         not torch.equal(old, new) for old, new in zip(before, head.parameters(), strict=True)
     )
+
+
+def test_missing_single_option_uses_regular_processor_without_two_choice_guard():
+    from scripts.train_student_decision_head import _processor_inputs_for_missing_options
+
+    calls = []
+
+    def processor(**kwargs):
+        calls.append(kwargs)
+        return kwargs
+
+    result = _processor_inputs_for_missing_options(processor, ["candidate"])
+    assert result == {
+        "text": ["task: sentence similarity | query: candidate"],
+        "return_tensors": "pt",
+    }
+    assert calls == [result]

@@ -20,6 +20,16 @@ from typing import Any
 import yaml
 
 
+def _processor_inputs_for_missing_options(processor: Any, options: list[str]) -> Any:
+    from tiny_omni_decision.student import decision_option_text, processor_inputs_for_options
+
+    if not options:
+        raise ValueError("at least one missing option is required")
+    if len(options) == 1:
+        return processor(text=[decision_option_text(options[0])], return_tensors="pt")
+    return processor_inputs_for_options(processor, options)
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -228,7 +238,6 @@ def _extract_variant_features(
         decision_option_text,
         model_sentence_embeddings,
         processor_inputs_for_decision_example,
-        processor_inputs_for_options,
     )
     from tiny_omni_decision.ternary import load_packed_ternary_overlay
 
@@ -297,7 +306,7 @@ def _extract_variant_features(
                 if decision_option_text(option) not in option_cache
             ]
             if missing_options:
-                option_inputs = processor_inputs_for_options(processor, missing_options)
+                option_inputs = _processor_inputs_for_missing_options(processor, missing_options)
                 with torch.no_grad():
                     embeddings = (
                         model_sentence_embeddings(model, option_inputs).detach().float().cpu()
