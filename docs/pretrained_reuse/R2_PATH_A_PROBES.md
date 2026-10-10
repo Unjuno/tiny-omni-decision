@@ -809,3 +809,11 @@ replicate across every metric/task; it is not evidence of a general backbone
 ceiling. Repeated question templates further narrow the claim to scene/media
 generalization under CLEVRER's existing template distribution. Keep both as
 research candidates; do not promote either readout from this result alone.
+
+### CLEVRER binary reasoning extension
+
+The follow-up frozen VideoPrism + MiniLM probe converted CLEVRER explanatory,
+predictive and counterfactual choices to binary Decisions and reached 0.519
+macro validation Accuracy; its scene-bootstrap interval includes chance. Data
+integrity, task metrics, learning curve, artifacts and limitations are recorded
+in [CLEVRER_BINARY_REASONING_PROBE_20261011.md](CLEVRER_BINARY_REASONING_PROBE_20261011.md).
