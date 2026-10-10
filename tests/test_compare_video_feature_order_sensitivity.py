@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-import numpy as np
+import importlib
+
 import pytest
 
-from scripts.compare_video_feature_order_sensitivity import compare_features
+np = pytest.importorskip("numpy")
+compare_features = importlib.import_module(
+    "scripts.compare_video_feature_order_sensitivity"
+).compare_features
 
 
 def test_compare_features_reports_small_order_perturbations() -> None:
