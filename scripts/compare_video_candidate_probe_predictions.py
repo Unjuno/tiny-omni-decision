@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import random
 from pathlib import Path
+from statistics import fmean
 from typing import Any
-
-import numpy as np
 
 
 def _read_predictions(path: Path) -> dict[str, dict[str, Any]]:
@@ -31,52 +32,69 @@ def _validate_pair(
             if ref[key] != got[key]:
                 raise ValueError(f"paired prediction metadata differs for {sample_id}: {key}")
         for row in (ref, got):
-            probabilities = np.asarray(row["probabilities"], dtype=np.float64)
-            if probabilities.shape != (len(row["options"]),):
+            probabilities = [float(value) for value in row["probabilities"]]
+            if len(probabilities) != len(row["options"]):
                 raise ValueError(f"probability width mismatch for {sample_id}")
-            if not np.isfinite(probabilities).all() or np.any(probabilities < 0):
+            if any(not math.isfinite(value) or value < 0 for value in probabilities):
                 raise ValueError(f"invalid probabilities for {sample_id}")
-            if not np.isclose(probabilities.sum(), 1.0, atol=1e-5):
+            if not math.isclose(math.fsum(probabilities), 1.0, abs_tol=1e-5):
                 raise ValueError(f"probabilities do not sum to one for {sample_id}")
 
 
 def _metrics(rows: list[dict[str, Any]], bins: int = 15) -> dict[str, float | int]:
     if not rows:
         raise ValueError("cannot measure an empty prediction sample")
-    probabilities = [np.asarray(row["probabilities"], dtype=np.float64) for row in rows]
+    probabilities = [[float(value) for value in row["probabilities"]] for row in rows]
     targets = [row["options"].index(row["target"]) for row in rows]
-    correct = np.asarray(
-        [
-            int(probability.argmax()) == target
-            for probability, target in zip(probabilities, targets, strict=True)
-        ],
-        dtype=np.float64,
-    )
-    confidence = np.asarray([probability.max() for probability in probabilities])
-    nll = np.asarray(
-        [
-            -np.log(np.clip(probability[target], 1e-12, 1.0))
-            for probability, target in zip(probabilities, targets, strict=True)
-        ]
-    )
+    correct = [
+        float(max(range(len(probability)), key=probability.__getitem__) == target)
+        for probability, target in zip(probabilities, targets, strict=True)
+    ]
+    confidence = [max(probability) for probability in probabilities]
+    nll = [
+        -math.log(min(max(probability[target], 1e-12), 1.0))
+        for probability, target in zip(probabilities, targets, strict=True)
+    ]
     brier = []
     for probability, target in zip(probabilities, targets, strict=True):
-        one_hot = np.zeros_like(probability)
-        one_hot[target] = 1.0
-        brier.append(float(np.square(probability - one_hot).sum()))
+        brier.append(
+            math.fsum(
+                (value - float(index == target)) ** 2 for index, value in enumerate(probability)
+            )
+        )
     ece = 0.0
     for index in range(bins):
         low, high = index / bins, (index + 1) / bins
-        mask = (confidence >= low) & (confidence < high if index < bins - 1 else confidence <= high)
-        if mask.any():
-            ece += float(mask.mean() * abs(correct[mask].mean() - confidence[mask].mean()))
+        selected = [
+            offset
+            for offset, value in enumerate(confidence)
+            if value >= low and (value < high if index < bins - 1 else value <= high)
+        ]
+        if selected:
+            ece += (
+                len(selected)
+                / len(rows)
+                * abs(
+                    fmean(correct[offset] for offset in selected)
+                    - fmean(confidence[offset] for offset in selected)
+                )
+            )
     return {
         "count": len(rows),
-        "accuracy": float(correct.mean()),
-        "nll": float(nll.mean()),
-        "brier": float(np.mean(brier)),
+        "accuracy": fmean(correct),
+        "nll": fmean(nll),
+        "brier": fmean(brier),
         "ece_15_bins": ece,
     }
+
+
+def _percentile(values: list[float], probability: float) -> float:
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * probability
+    lower = math.floor(position)
+    upper = math.ceil(position)
+    fraction = position - lower
+    return ordered[lower] * (1.0 - fraction) + ordered[upper] * fraction
 
 
 def paired_scene_bootstrap(
@@ -93,7 +111,7 @@ def paired_scene_bootstrap(
     scenes = sorted(scene_to_ids)
     if replicates < 1 or len(scenes) < 2:
         raise ValueError("need positive replicates and at least two independent scenes")
-    rng = np.random.default_rng(seed)
+    rng = random.Random(seed)
     metric_names = ("accuracy", "nll", "brier", "ece_15_bins")
     distributions: dict[str, list[float]] = {name: [] for name in metric_names}
     by_type: dict[str, dict[str, list[float]]] = {}
@@ -101,7 +119,7 @@ def paired_scene_bootstrap(
     for task in task_types:
         by_type[task] = {name: [] for name in metric_names}
     for _ in range(replicates):
-        sampled_scenes = rng.choice(scenes, size=len(scenes), replace=True).tolist()
+        sampled_scenes = rng.choices(scenes, k=len(scenes))
         sample_ids = [sample_id for scene in sampled_scenes for sample_id in scene_to_ids[scene]]
         ref_rows = [reference[sample_id] for sample_id in sample_ids]
         cand_rows = [candidate[sample_id] for sample_id in sample_ids]
@@ -119,14 +137,14 @@ def paired_scene_bootstrap(
     intervals = {}
     for name, values in distributions.items():
         intervals[name] = {
-            "candidate_minus_reference_mean": float(np.mean(values)),
-            "percentile_95_ci": [float(x) for x in np.quantile(values, [0.025, 0.975])],
+            "candidate_minus_reference_mean": fmean(values),
+            "percentile_95_ci": [_percentile(values, 0.025), _percentile(values, 0.975)],
         }
     task_intervals = {
         task: {
             name: {
-                "candidate_minus_reference_mean": float(np.mean(values)),
-                "percentile_95_ci": [float(x) for x in np.quantile(values, [0.025, 0.975])],
+                "candidate_minus_reference_mean": fmean(values),
+                "percentile_95_ci": [_percentile(values, 0.025), _percentile(values, 0.975)],
             }
             for name, values in metrics.items()
         }
@@ -135,7 +153,7 @@ def paired_scene_bootstrap(
     return {
         "method": (
             "paired percentile bootstrap resampling independent scene IDs with replacement; "
-            "all questions for a sampled scene move together"
+            "all questions for a sampled scene move together; Python random.Random RNG"
         ),
         "seed": seed,
         "replicates": replicates,

@@ -29,9 +29,10 @@ def sha256_file(path: Path) -> str:
 def uniform_indices(frame_count: int, requested: int = FRAME_COUNT) -> list[int]:
     if frame_count < 1 or requested < 1:
         raise ValueError("frame counts must be positive")
-    import numpy as np
-
-    return np.linspace(0, frame_count - 1, num=requested).round().astype(int).tolist()
+    if requested == 1:
+        return [0]
+    step = (frame_count - 1) / (requested - 1)
+    return [round(index * step) for index in range(requested)]
 
 
 def validate_split_rows(train: list[dict[str, Any]], validation: list[dict[str, Any]]) -> None:
