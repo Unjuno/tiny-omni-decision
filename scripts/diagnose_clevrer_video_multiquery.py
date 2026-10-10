@@ -26,6 +26,7 @@ from scripts.train_frozen_video_probe import (
     _text_features,
     _validate_splits,
 )
+from tiny_omni_decision.cache import ObservationFeatureCache, ObservationFeatureKey
 from tiny_omni_decision.clevrer import expand_descriptive_questions
 from tiny_omni_decision.dataset import sha256_file
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
@@ -33,6 +34,7 @@ from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 TEXT_REVISION = "4ca70771034acceecb2e72475f72050fcdde4ddc"
 TEXT_MODEL_WEIGHTS_SHA256 = "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433"
 VJEPA_CHECKPOINT_SHA256 = "848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d"
+VJEPA_SOURCE_COMMIT = "204698b45b3712590f06245fbfba32d3be539812"
 
 
 def _args() -> argparse.Namespace:
@@ -198,8 +200,83 @@ def main() -> None:
     cache_read_started = time.perf_counter()
     media_hashes = sorted({str(row["media_sha256"]) for row in rows})
     cached_video = {key: cache[key].float().cpu() for key in media_hashes}
-    video_rows = torch.stack([cached_video[str(row["media_sha256"])] for row in rows])
     cache_read_seconds = time.perf_counter() - cache_read_started
+    output.mkdir(parents=True, exist_ok=True)
+    typed_cache = ObservationFeatureCache(output / "observation-feature-cache")
+    media_to_cache_id: dict[str, str] = {}
+    typed_cache_entries = []
+    validation_scene_by_hash = {str(row["media_sha256"]): row for row in validation}
+    av_version = cache_report["environment"]["av"]
+    preprocessing_spec = {
+        "decoder": "PyAV",
+        "decoder_version": av_version,
+        "frame_count": FRAME_COUNT,
+        "frame_selection": "uniform-linspace-rounded-endpoints-v1",
+        "preprocessor": "vjepa2_preprocessor(pretrained=False,crop_size=384)",
+        "vjepa_source_commit": VJEPA_SOURCE_COMMIT,
+        "feature_extraction_code_sha256": cache_report["training_script_sha256"],
+    }
+    preprocessing_sha256 = hashlib.sha256(
+        json.dumps(preprocessing_spec, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    video_features_from_persistent_cache: dict[str, torch.Tensor] = {}
+    for media_hash in media_hashes:
+        row = validation_scene_by_hash[media_hash]
+        feature = cached_video[media_hash].contiguous()
+        if feature.shape != (768,) or not torch.isfinite(feature).all():
+            raise ValueError(f"invalid cached V-JEPA observation feature for {media_hash}")
+        key = ObservationFeatureKey(
+            modality="video",
+            source_id="MIT-IBM/CLEVRER",
+            source_revision=REVISION,
+            observation_sha256=media_hash,
+            encoder_id="facebookresearch/vjepa2/vjepa2_1_vit_base_384",
+            encoder_revision=VJEPA_SOURCE_COMMIT,
+            encoder_weights_sha256=VJEPA_CHECKPOINT_SHA256,
+            preprocessor_id="vjepa2_preprocessor",
+            preprocessor_revision=f"{VJEPA_SOURCE_COMMIT}+PyAV-{av_version}",
+            preprocessing_sha256=preprocessing_sha256,
+            feature_name="mean_spatiotemporal_tokens",
+            feature_dtype="float32",
+            feature_shape=(768,),
+            temporal_policy=f"uniform-linspace-{FRAME_COUNT}-inclusive-v1",
+        )
+        typed_cache.put(key, feature.numpy().tobytes())
+        restored = typed_cache.get(key)
+        roundtrip = torch.frombuffer(bytearray(restored.payload), dtype=torch.float32).reshape(768)
+        if not torch.equal(feature, roundtrip):
+            raise ValueError(f"persistent cache roundtrip changed feature for {media_hash}")
+        video_features_from_persistent_cache[media_hash] = roundtrip.clone()
+        media_to_cache_id[media_hash] = key.cache_id
+        entry_path = output / "observation-feature-cache" / f"{key.cache_id}.feature"
+        typed_cache_entries.append(
+            {
+                "scene_index": int(row["scene_index"]),
+                "observation_sha256": media_hash,
+                "cache_id": key.cache_id,
+                "feature_payload_sha256": restored.payload_sha256,
+                "feature_payload_bytes": len(restored.payload),
+                "entry_bytes": restored.entry_bytes,
+                "entry_sha256": sha256_file(entry_path),
+                "key": key.to_dict(),
+            }
+        )
+    video_rows = torch.stack(
+        [video_features_from_persistent_cache[str(row["media_sha256"])] for row in rows]
+    )
+    cache_manifest_path = output / "observation-feature-cache-manifest.json"
+    cache_manifest_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "cache_key_scope": "observation-level; no question or candidate text in key",
+                "entries": typed_cache_entries,
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
     text_load_started = time.perf_counter()
     tokenizer = AutoTokenizer.from_pretrained(args.text_model, local_files_only=True)
@@ -240,6 +317,7 @@ def main() -> None:
                 "scene_index": int(row["scene_index"]),
                 "scene_group_id": row["scene_group_id"],
                 "media_sha256": row["media_sha256"],
+                "observation_feature_cache_id": media_to_cache_id[str(row["media_sha256"])],
                 "question_id": int(row["question_id"]),
                 "question_type": row["question_type"],
                 "taxonomy": row["taxonomy"],
@@ -310,6 +388,16 @@ def main() -> None:
         "text_encoder_weights_sha256": TEXT_MODEL_WEIGHTS_SHA256,
         "readout_best_epoch_by_validation_nll": readout_report["best_epoch_by_validation_nll"],
         "feature_cache_sha256": sha256_file(args.cache_dir / "video-features.pt"),
+        "persistent_observation_cache": {
+            "entry_count": len(typed_cache_entries),
+            "unique_feature_payload_bytes": sum(
+                entry["feature_payload_bytes"] for entry in typed_cache_entries
+            ),
+            "total_entry_bytes": sum(entry["entry_bytes"] for entry in typed_cache_entries),
+            "manifest_path": str(cache_manifest_path),
+            "manifest_sha256": sha256_file(cache_manifest_path),
+            "all_features_roundtrip_exact": True,
+        },
         "feature_cache_source_commit": cache_report.get("source_commit"),
         "source_cache_run_validation_video_encoder_executions": cache_report[
             "video_encoder_executions"
