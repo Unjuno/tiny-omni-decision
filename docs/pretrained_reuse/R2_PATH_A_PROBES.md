@@ -23,6 +23,20 @@ Date: 2026-10-11. These are bounded development probes over frozen features. The
 
 Training CE fell from 1.0741 at epoch 1 to 0.7355 at epoch 8. The selected epoch was 3; by epoch 8 validation NLL rose to 1.1068 and ECE to 0.1160 while accuracy was 0.4787. This is clear overfitting after the selected point. It is an early low-capacity synthetic proxy, not an estimate of real-world English text accuracy. Open-Jev's pinned data endpoint returned HTTP 401 anonymously, so the Open-Jev task remains unmeasured.
 
+### Text pooling ablation (same frozen encoder and split)
+
+To check whether the baseline result depends on its token readout, three fixed pooling variants were compared on the exact same 23,319 train and 2,540 validation decisions, with seed 17 and the same 8-epoch, 196,865-parameter candidate scorer. Each variant selected its checkpoint by validation NLL. This is validation-only development evidence over synthetic labels.
+
+| Pooling | Best epoch | Validation Accuracy | NLL | Brier | ECE (15 bins) | Train Accuracy at best |
+|---|---:|---:|---:|---:|---:|---:|
+| Final-layer masked mean (baseline control) | 3 | 0.4937 | 1.0303 | 0.5946 | 0.0268 | 0.5438 |
+| Middle transformer layer masked mean (`hidden_states[-2]`) | 5 | 0.4972 | 1.0204 | 0.5909 | 0.0329 | 0.5837 |
+| Final-layer first token | 3 | 0.4646 | 1.0658 | 0.6163 | 0.0387 | 0.5435 |
+
+The middle-layer mean has a small numerical improvement over the baseline control (+0.0035 Accuracy, -0.0099 NLL, -0.0037 Brier) and slightly worse ECE (+0.0061). The first-token readout is worse on all four metrics. One seed and one synthetic validation set do not establish a general pooling advantage; the small difference is not a real-world text quality claim. No learned attention pooling was tested.
+
+Reproduction: `scripts/compare_frozen_text_pooling.py` with `configs/pretrained_reuse/path_a_text_pooling.yaml`; output is outside Git at `C:\CodexArtifacts\pretrained-reuse-r2\text-pooling-probe-v0`. It contains all epoch train/validation metrics, selected readouts, per-example validation probabilities, and a serialized frozen feature cache. Run report SHA-256 `c71d4d483edc523906cb7186ccb0dbd69b2ec923f11b9efd598d3b4fa6061f75`; feature cache SHA-256 `21734e23ae51339e1c775b50a52e447824117ae242966d48aba0fd3c7ba3a06c`; config SHA-256 `8822361c43a22efc53fdd840574b30a394a5e007223aabfe804a24a09a70eb5a`; script SHA-256 `457b56d0a69c1dfd988ce70fa0349bcd77f025a1182770ed0deac6b9c6ca57dc`. Model and dataset hashes match the baseline above. No sealed audit or legacy final evaluation was loaded. The existing `text-probe-v0` artifact was not modified.
+
 ## Image: CLEVR-4 + V-JEPA 2.1 ViT-B
 
 | Item | Value |

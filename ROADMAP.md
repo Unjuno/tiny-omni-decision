@@ -173,7 +173,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
 - [x] Cache deterministic frozen text/image/audio features separately for train/validation; preserve sample IDs, source/media hashes and run artifacts outside Git. Text/image repeated-run byte parity, cache invalidation, and audio/video shared-event cache parity remain open.
-- [ ] Compare raw token, middle-layer token, mean/attention pooled token readouts with a variable-option lightweight head. The first probes use mean-pooled text and image tokens; alternate poolings and per-modality readouts remain untested.
+- [x] Compare final-layer masked-mean, middle-layer masked-mean, and final-layer first-token text readouts with the same variable-option head on identical train/validation IDs (`docs/pretrained_reuse/R2_PATH_A_PROBES.md`). This is one synthetic English task and one seed; learned attention pooling, image/audio pooling, and per-modality readouts remain untested.
 - [ ] Test many questions on one cached visual/audio event; count avoided encoder executions, memory residency and latency, not merely Accuracy. The small CLEVRER probe reused each video feature for two questions and measured 16/16 train and 8/8 validation encoder calls avoided; persistent cache parity, measured resident-memory impact, audio reuse, and event invalidation remain open.
 - [x] Report initial synthetic text, CLEVR-4 image, CLEVRER video, and closed-set Speech Commands keyword audio probes by source, task/taxonomy and independent source groups in `docs/pretrained_reuse/R2_PATH_A_PROBES.md`. Joint tasks and old Gemma reference comparisons remain open.
 
