@@ -357,6 +357,39 @@
       "decision": "architecture reference only until a compatible released checkpoint is identified",
       "parameter_tensor_bytes": null,
       "primary_citations": []
+    },
+    {
+      "id": "google-videoprism-base-f16r288",
+      "modality": [
+        "video",
+        "image"
+      ],
+      "model_revision": "google/videoprism-base-f16r288@be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "upstream_code_revision": "google-deepmind/videoprism@c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+      "checkpoint": "https://huggingface.co/google/videoprism-base-f16r288/resolve/be719a406d563b66f0ac969e7c94bab8e997c81a/flax_base_f16r288_repeated.npz",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "checkpoint_bytes": 457475296,
+      "parameters": 114365184,
+      "license": "Pinned official Google Hub card declares Apache-2.0; pinned official upstream repository states software is Apache-2.0 and all other materials are CC-BY-4.0, covering its released model checkpoints. Retain attribution and both notices.",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/google/videoprism-base-f16r288/tree/be719a406d563b66f0ac969e7c94bab8e997c81a",
+        "https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/README.md",
+        "https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/LICENSE"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "Official source model loaded exact SHA-256-verified local checkpoint; 8-frame [1,8,288,288,3] input produced finite [1,2048,768] output. Windows JAX CPU path, JAX 0.6.2 / Flax 0.11.1; repeated compile+forward 6.13s, peak working set 4,113,592,320 bytes. Small frozen CLEVRER probe completed; see R2_PATH_A_PROBES.md.",
+      "task_quality_status": "small matched 8-scene CLEVRER descriptive validation probe measured; tied V-JEPA accuracy and slightly worse NLL/Brier/ECE point estimates; uncertainty wide and readout overfit evident",
+      "decision": "no task-quality basis to select over V-JEPA; retain research-only, not product-selected; 457,475,296-byte FP32 checkpoint exceeds the 200MB package aspiration before compression/runtime costs",
+      "parameter_tensor_bytes": 457460736,
+      "primary_citations": [
+        "https://huggingface.co/google/videoprism-base-f16r288/tree/be719a406d563b66f0ac969e7c94bab8e997c81a",
+        "https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/README.md",
+        "https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/LICENSE"
+      ]
     }
   ]
 }

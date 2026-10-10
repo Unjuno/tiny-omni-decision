@@ -654,3 +654,43 @@ separate representation limits from task ambiguity, sampling, or scorer
 capacity. Do not increase epochs or treat this as a backbone ceiling. No sealed
 audit or legacy final evaluation was loaded, and neither old outputs nor model
 weights/media were added to Git.
+
+#### VideoPrism-B matched small CLEVRER probe (2026-10-11)
+
+This is a candidate-specific R2 validation of the legally usable VideoPrism-B
+checkpoint audited above. It uses the same frozen CLEVRER sample manifests,
+validation questions, MiniLM revision, readout architecture, seed, and fitting
+schedule as the existing 16-scene V-JEPA probe. It is only 16 validation
+questions from 8 scenes (8 static and 8 temporal descriptive); these are
+development validation data and were used for checkpoint selection. The
+result does not establish general video quality or a product choice.
+
+| Item | Result |
+|---|---|
+| Source and split | `MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef`; 32 train questions / 16 scenes and 16 validation questions / 8 scenes. Scene and media overlap: zero. Ordered train manifest SHA-256 `25d70a899f934cd84f479ba19e52e109dbe64492446a47baf898e64ccb1824fc`; ordered validation manifest SHA-256 `8d227fb2c49449730e920e3efcb10aa377d64e3926cca10fddc6f37e561dae0e`; fetch report SHA-256 `ea3918dc66ec8b355405faf36722a0774db6e921d885cf69fdb135578c27134f`. |
+| Video features | Official VideoPrism-B revision `be719a406d563b66f0ac969e7c94bab8e997c81a`, checkpoint SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`; 8 uniform endpoint-inclusive frames, resize short side and center crop to 288, TensorFlow bilinear interpolation, `[0,1]` float32, mean over all spatiotemporal tokens. Frozen feature cache contains 24 scene vectors; cache SHA-256 `b27918f789c2ae22fb7144054bd0aa201d5e8b30e4d9b3b9c19a4fe11f28a195`. This preprocessing is recorded exactly; interpolation is not claimed to be byte-identical to every upstream preprocessing backend. |
+| Readout | Same 295,169-parameter MiniLM + candidate MLP setup and 24 epochs, batch 8, AdamW lr `0.001`, seed 17 as the matched existing probe; VideoPrism and MiniLM frozen. Checkpoint selection: minimum validation NLL; selected epoch 1. Config SHA-256 `3dffed96b415a3d5e39870d67465cc8d678b7bac8283eadaf22aaff054b2a2e8`; training script SHA-256 `730d1cd7a7852d67964b97c866a8d8eee7bf8936e171497a81810295221fdc51`. |
+| Matched validation results | V-JEPA reference: Accuracy/NLL/Brier/ECE-15 = `0.3750 / 1.1459 / 0.6475 / 0.1403`. VideoPrism-B: `0.3750 / 1.1530 / 0.6529 / 0.1591`. Static descriptive (8): V-JEPA `0.25 / 1.1338 / 0.6565 / 0.2766`; VideoPrism `0.25 / 1.1433 / 0.6646 / 0.2842`. Temporal descriptive (8): V-JEPA `0.50 / 1.1581 / 0.6385 / 0.3813`; VideoPrism `0.50 / 1.1627 / 0.6412 / 0.3836`. Candidate and reference IDs, order, and media hashes match. |
+| Paired uncertainty | 10,000-replicate paired percentile bootstrap, seed 17, resampling 8 independent scenes and keeping all scene questions together. VideoPrism minus V-JEPA: Accuracy `0.000` (95% CI `[0, 0]`); NLL `+0.0071` (CI `[-0.0015, +0.0175]`); Brier `+0.0054` (CI `[-0.0033, +0.0162]`); ECE-15 `+0.0217` (CI `[-0.0056, +0.0754]`). All non-accuracy intervals include zero; the sample is too small to establish a difference. Bootstrap report SHA-256 `f99450580f150a319b244033b5be555815f220b7258b3ee45e78cd8386e0caec` (full artifact remains outside Git). |
+| Learning curve / resource | Training CE decreased from `1.2670` at epoch 1 to `0.2162` at epoch 24; validation NLL was best at epoch 1 (`1.1530`) and reached `2.2624` at epoch 24, while accuracy stayed between `0.3750` and `0.4375`. This is a strong small-sample readout-overfit signal, not evidence of a VideoPrism representation ceiling. Feature extraction took 38.03 seconds for 24 scenes (first compile+video 6.23s; remaining videos about 1.13–1.25s each), with peak working set 4,154,662,912 bytes. Readout fit took 0.418s on RTX 3080 Laptop GPU; peak CUDA allocation 102,269,440 bytes. JAX encoder execution used Windows CPU only. |
+| Artifacts | Reports, features, predictions, selected readout, and bootstrap output are under `C:\CodexArtifacts\pretrained-reuse-r2\videoprism-clevrer-*`; none are in Git. Prediction SHA-256 `c036478cca0a45f5a2c9e118f9548af1c87ae14e62bd5b5878e20b9e4d670a85`; readout SHA-256 `20439e64e26bd8299e83fcb1a5bd083f1832b0eb3728cca4baf545f1bfb04344`. |
+
+**Interpretation:** on this tiny matched development split, VideoPrism ties V-JEPA
+on Accuracy and is slightly worse on the point estimates for NLL, Brier, and
+ECE. Scene-bootstrap intervals are wide and include no difference. This does
+not justify selecting VideoPrism over V-JEPA for task quality; it only confirms
+that the audited checkpoint can feed the frozen-feature R2 path. Both encoders
+remain research candidates, and V-JEPA's exact checkpoint rights remain
+`REVIEW`. The falling train CE and rising validation NLL call for more
+independent scenes and task coverage before any backbone ranking.
+
+The run report SHA-256 is
+`6a3d092f69515edb638b2e2ac04ed37aea2af173a9089818595cb9000e4648b4`;
+the feature-cache report SHA-256 is
+`074726c8315adb02405bbe8696d68eca66ee07033a16c2c2736d40765a29745b`.
+Full reports and outputs are preserved outside Git.
+The paired comparison script is
+`scripts/compare_video_candidate_probe_predictions.py` (SHA-256
+`03d666f284dcf50991564593ec1e8989589d58bfdb179d6e1f00252f33daffa2`);
+the feature extractor is `scripts/extract_frozen_videoprism_features.py`
+(SHA-256 `d9ac1185d1957414d886d5d9bc6840701cb79ea250724c27ab30abece7ff7d22`).

@@ -113,3 +113,36 @@ no model weights were downloaded or loaded.
   product or evaluation run until the model maintainers clarify.
 
 Sources: [Meta's pinned V-JEPA 2 ViT-G card](https://huggingface.co/facebook/vjepa2-vitg-fpc64-256/tree/875c192b7b704b87d1e1d99345769632dd5f739a), [pinned model README/config](https://huggingface.co/facebook/vjepa2-vitg-fpc64-256/blob/875c192b7b704b87d1e1d99345769632dd5f739a/README.md), [OpenGVLab's pinned VideoMamba card](https://huggingface.co/OpenGVLab/VideoMamba/tree/69502a732f8f69709cec9ed6c54d5345259fd825), [upstream model zoo](https://github.com/OpenGVLab/VideoMamba/blob/37355c26d0ae99ca2459f6d4044a5f509031a79f/videomamba/video_mm/MODEL_ZOO.md), and [upstream license](https://github.com/OpenGVLab/VideoMamba/blob/37355c26d0ae99ca2459f6d4044a5f509031a79f/LICENSE).
+
+## Google VideoPrism-B pinned checkpoint audit (2026-10-11)
+
+This is a new official, compact-enough video candidate. Unlike V-JEPA 2.1,
+its exact public checkpoint has an explicit rights basis: the official Google
+Hub model card labels the checkpoint repository Apache-2.0, and the official
+upstream README says software is Apache-2.0 and all other released materials
+are CC-BY-4.0. The official upstream repository identifies the VideoPrism
+weights as released checkpoints; CC-BY-4.0 permits commercial reuse with
+attribution. Preserve both notices when redistributing. The official Hub card
+and upstream repository use different license labels, but both are permissive
+grants for this released weight. No inference is made from code license alone.
+
+- Exact weights: `google/videoprism-base-f16r288@be719a406d563b66f0ac969e7c94bab8e997c81a`, file `flax_base_f16r288_repeated.npz`, 457,475,296 bytes, verified SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29` (matches the Hub LFS SHA-256).
+- Official implementation: `google-deepmind/videoprism@c6eba0ece3dd49a24ffc44582966997a4a59f1d8`. Used `vp.get_model("videoprism_public_v1_base")` and `vp.load_pretrained_weights(..., checkpoint_path=<verified local file>)`; no implicit latest-checkpoint download. The loaded tree contained 114,365,184 float32 parameters (457,460,736 tensor bytes).
+- A deterministic synthetic 8-frame `[1,8,288,288,3]` float32 input in `[0,1]` produced finite `[1,2048,768]` float32 token features. Output SHA-256: `df185755af2fabc6c8dcf0765743edd5cbb01cf6bb6bc7d968e469a929b9796f`.
+- This is a load/shape/numerical smoke test only; task quality is unmeasured. Model-card benchmark numbers are not used as CLEVRER or product claims. It is 114.4M parameters, but the uncompressed checkpoint alone is 457.5MB, above the 200MB package aspiration; compression and complete runtime costs remain unmeasured.
+- Environment: Windows x86-64, Python 3.11.16, JAX 0.6.2, Flax 0.11.1, TensorFlow CPU 2.18.1, NumPy 1.26.4; one JAX CPU device. Windows JAX GPU is unsupported by the official platform matrix. First 8-frame compile+forward took 7.91s; peak process working set was 3,917,281,280 bytes. The RTX 3080 Laptop GPU was idle and not used for this JAX run. A newer JAX/Flax attempt was blocked by the machine's Smart App Control policy on an unsigned `_sdy.pyd`; the isolated environment was pinned to the compatible 0.6.2/0.11.1 pair, which imported and ran without bypassing the policy. Existing Python environments and user processes were not changed.
+- External run directory: `C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1`; result JSON SHA-256 `9a0521eedfc656751a24c2d9d639998c9e57dd53747fffaaf698acbd1a4815e`, external audit script SHA-256 `a1c3d210f84bd6f6df3fc90f9dcbea31529863e12839480203a96be200c0b526`, and environment freeze SHA-256 `91012917e8fe29d3a3bedfecc8e3fc641a7a055580bc8c5f4eea1457519c0aad`. The downloaded weights, source checkout, venv, and report remain outside Git.
+
+The repository audit driver was subsequently run against the same pinned local
+checkpoint/source in a separate, non-overwriting output file. It reproduced
+the same parameter count, output shape, finite values, and feature SHA-256;
+the recorded report is
+`C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\audit-result-repro-v2.json`
+(SHA-256
+`0c259eaaa0521236e775d76f773ca992c7db757225e099aeb34917651fe3af25`).
+The checked-in driver hash is
+`0f57e97bc1e43ea2248e9537aa922a666ef62ad6db842b3ca291ceca1300dd19`.
+This second compile-plus-forward took 6.13 seconds, with a 4,113,592,320-byte
+peak working set; run start was recorded at `2026-10-10T20:22:24.014815+00:00`.
+
+Sources: [official VideoPrism README at the pinned implementation commit](https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/README.md), [official pinned license](https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/LICENSE), and [pinned Google Hub model card](https://huggingface.co/google/videoprism-base-f16r288/tree/be719a406d563b66f0ac969e7c94bab8e997c81a). The current [JAX platform matrix](https://docs.jax.dev/en/latest/installation.html) lists Windows x86-64 CPU support and no native Windows NVIDIA GPU support.
