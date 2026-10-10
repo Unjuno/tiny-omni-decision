@@ -146,3 +146,18 @@ This second compile-plus-forward took 6.13 seconds, with a 4,113,592,320-byte
 peak working set; run start was recorded at `2026-10-10T20:22:24.014815+00:00`.
 
 Sources: [official VideoPrism README at the pinned implementation commit](https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/README.md), [official pinned license](https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/LICENSE), and [pinned Google Hub model card](https://huggingface.co/google/videoprism-base-f16r288/tree/be719a406d563b66f0ac969e7c94bab8e997c81a). The current [JAX platform matrix](https://docs.jax.dev/en/latest/installation.html) lists Windows x86-64 CPU support and no native Windows NVIDIA GPU support.
+
+## Release-status and license follow-up (2026-10-11)
+
+The broader candidate screen has been completed and recorded in
+`R1_RELEASE_LICENSE_FOLLOWUP_20261011.md` and the machine-readable inventory.
+EfficientAT DyMN-0.4 is now an ALLOW environmental-audio candidate after a
+pinned strict load and explicit upstream owner permission. ViT-Lens is released
+but too large for this compact path. PE Core T/S/B checkpoint files are listed
+by upstream with Apache-2.0 weight terms, but exact T/S/B asset access, hashes,
+and local loads are not all verified; the official implementation package has
+separately declared FAIR Noncommercial Research terms, so product use remains
+unresolved. VATT weights are listed but the tested link redirected to Google
+sign-in, leaving access/rights UNKNOWN. MJEPA has MIT code and no official
+pretrained release. These entries close the candidate-screening checklist, not
+task-quality, licensing, packaging, or R1/R2 product gates.

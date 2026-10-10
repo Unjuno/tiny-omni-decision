@@ -146,25 +146,31 @@
       "modality": [
         "environmental-audio"
       ],
-      "model_revision": "fschmid56/EfficientAT@revision-unpinned-in-audit",
+      "model_revision": "fschmid56/EfficientAT@a425fdce92572e602a1d5634799bd9f1f2efa806",
       "checkpoint_bytes": 8086973,
-      "parameters": null,
-      "license": "upstream code repository MIT; checkpoint grant unresolved in cited upstream issue",
-      "license_allowed": null,
-      "license_status": "REVIEW",
+      "parameters": 1961239,
+      "license": "MIT source; checkpoint commercial use explicitly permitted by upstream owner in issue #44 on 2026-09-07",
+      "license_allowed": true,
+      "license_status": "ALLOW",
       "license_evidence": [
+        "https://github.com/fschmid56/EfficientAT/blob/a425fdce92572e602a1d5634799bd9f1f2efa806/LICENSE",
         "https://github.com/fschmid56/EfficientAT/issues/44"
       ],
-      "passed_load": false,
+      "passed_load": true,
       "has_real_weights": true,
-      "runtime_supported": false,
-      "runtime_evidence": "no local forward performed",
-      "task_quality_status": "unmeasured",
-      "decision": "excluded until weight rights and immutable revision are resolved",
-      "parameter_tensor_bytes": null,
+      "runtime_supported": true,
+      "runtime_evidence": "Strict local checkpoint load from v0.0.1 release asset; 2-second deterministic waveform through official AugmentMelSTFT produced finite [1,527] logits and [1,384] pooled features on RTX 3080 Laptop; one forward 0.366s, peak allocated 18,560,512 CUDA bytes",
+      "task_quality_status": "unmeasured on a Decision task; environmental AudioSet tagging checkpoint",
+      "decision": "small ALLOW environmental-audio candidate; does not establish speech keyword or joint audio-video Decision quality",
+      "parameter_tensor_bytes": 7844956,
       "primary_citations": [
+        "https://github.com/fschmid56/EfficientAT/tree/a425fdce92572e602a1d5634799bd9f1f2efa806",
+        "https://github.com/fschmid56/EfficientAT/releases/tag/v0.0.1",
         "https://github.com/fschmid56/EfficientAT/issues/44"
-      ]
+      ],
+      "checkpoint_url": "https://github.com/fschmid56/EfficientAT/releases/download/v0.0.1/dymn04_as.pt",
+      "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+      "release_status": "pretrained and accessible"
     },
     {
       "id": "vitlens-large-audio",
@@ -194,13 +200,14 @@
       "passed_load": false,
       "has_real_weights": true,
       "runtime_supported": false,
-      "runtime_evidence": "not downloaded; published paired files exceed 12.3 GB",
+      "runtime_evidence": "Pinned HF release lists vitlensL.pt (8,891,845,036 bytes) and vitlensL_audio.pt (3,434,449,193 bytes); no download/load because pair exceeds 12.3 GB and uses original CLIP ViT-L/14, not V-JEPA",
       "task_quality_status": "published task results only; no local matched test",
       "decision": "outside compact target and not a V-JEPA-compatible Lens",
       "parameter_tensor_bytes": null,
       "primary_citations": [
         "https://huggingface.co/TencentARC/ViT-Lens-L"
-      ]
+      ],
+      "release_status": "pretrained and accessible"
     },
     {
       "id": "pe-core-t16",
@@ -211,22 +218,26 @@
       "model_revision": "facebook/PE-Core-T16-384@8b4722741a516c18e7d311f158f13c600fea6c78",
       "checkpoint_bytes": 278284008,
       "parameters": 50000000,
-      "license": "model documentation states Apache-2.0 weights; official source package declares FAIR Noncommercial Research License",
+      "license": "Official PE Core docs state released checkpoint weights are Apache-2.0; repository implementation package separately declares FAIR Noncommercial Research License",
       "license_allowed": null,
       "license_status": "REVIEW",
       "license_evidence": [
-        "https://github.com/facebookresearch/perception_models/blob/main/apps/pe/README.md"
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
       ],
       "passed_load": false,
       "has_real_weights": true,
       "runtime_supported": false,
-      "runtime_evidence": "not downloaded or loaded",
+      "runtime_evidence": "Official model card and checkpoint are listed; anonymous Hub API audit returned HTTP 401, so no download/load was independently verified. The official repository package setup.py declares FAIR Noncommercial Research; keep implementation/product rights under REVIEW.",
       "task_quality_status": "unmeasured",
-      "decision": "research reference; source/checkpoint terms need resolution before product use",
+      "decision": "pretrained checkpoint is listed with Apache-2.0 weight terms, but anonymous asset access was not verified; official implementation package declares FAIR Noncommercial Research, so product use needs license-clean implementation or resolution",
       "parameter_tensor_bytes": null,
       "primary_citations": [
-        "https://github.com/facebookresearch/perception_models/blob/main/apps/pe/README.md"
-      ]
+        "https://huggingface.co/facebook/PE-Core-T16-384",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
+      ],
+      "release_status": "unknown"
     },
     {
       "id": "pe-av-small",
@@ -320,21 +331,26 @@
         "video",
         "text"
       ],
-      "model_revision": null,
+      "model_revision": "google-research/google-research@5b381db4139c3cbf25cc9a698c5fe9754215fae2",
       "checkpoint_bytes": null,
       "parameters": null,
       "license": "no specific compact pretrained checkpoint and license grant established in this audit",
       "license_allowed": null,
       "license_status": "UNKNOWN",
-      "license_evidence": [],
+      "license_evidence": [
+        "https://github.com/google-research/google-research/blob/5b381db4139c3cbf25cc9a698c5fe9754215fae2/vatt/README.md"
+      ],
       "passed_load": false,
-      "has_real_weights": null,
+      "has_real_weights": true,
       "runtime_supported": false,
-      "runtime_evidence": "no checkpoint pinned or loaded",
+      "runtime_evidence": "Official README lists Google Storage checkpoint URLs, but the tested download link redirects to Google sign-in; exact weight grant, asset digest and local runtime not established",
       "task_quality_status": "unmeasured",
-      "decision": "architecture reference only until a compatible released checkpoint is identified",
+      "decision": "checkpoint release is listed but was not anonymously accessible in this audit; rights, exact hash and compatibility remain unknown; legacy documented TensorFlow/CUDA stack is outside the current runtime",
       "parameter_tensor_bytes": null,
-      "primary_citations": []
+      "primary_citations": [
+        "https://github.com/google-research/google-research/blob/5b381db4139c3cbf25cc9a698c5fe9754215fae2/vatt/README.md"
+      ],
+      "release_status": "unknown"
     },
     {
       "id": "mjepa",
@@ -342,21 +358,25 @@
         "audio",
         "video"
       ],
-      "model_revision": null,
+      "model_revision": "facebookresearch/MJEPA@82f3472219f2f58672999ed654314b34ad590c07",
       "checkpoint_bytes": null,
       "parameters": null,
-      "license": "no specific compact pretrained checkpoint and license grant established in this audit",
-      "license_allowed": null,
-      "license_status": "UNKNOWN",
-      "license_evidence": [],
+      "license": "MIT code; no official pretrained checkpoint release found",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://github.com/facebookresearch/MJEPA/blob/82f3472219f2f58672999ed654314b34ad590c07/LICENSE",
+        "https://github.com/facebookresearch/MJEPA/releases"
+      ],
       "passed_load": false,
-      "has_real_weights": null,
+      "has_real_weights": false,
       "runtime_supported": false,
-      "runtime_evidence": "no checkpoint pinned or loaded",
+      "runtime_evidence": "Official training/evaluation code and large-model configs are published; official Releases page has no releases or checkpoint assets",
       "task_quality_status": "unmeasured",
-      "decision": "architecture reference only until a compatible released checkpoint is identified",
+      "decision": "architecture reference only; no pretrained checkpoint is currently released for a local weights audit",
       "parameter_tensor_bytes": null,
-      "primary_citations": []
+      "primary_citations": [],
+      "release_status": "code only"
     },
     {
       "id": "google-videoprism-base-f16r288",
@@ -390,6 +410,70 @@
         "https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/README.md",
         "https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/LICENSE"
       ]
+    },
+    {
+      "id": "pe-core-s16",
+      "modality": [
+        "image",
+        "video",
+        "text"
+      ],
+      "model_revision": "facebookresearch/perception_models@3e352cca660658d4b5c90f42a7808b11469e4c66 (checkpoint revision not verified)",
+      "checkpoint": "facebook/PE-Core-S16-384",
+      "checkpoint_sha256": null,
+      "checkpoint_bytes": null,
+      "parameters": 60000000,
+      "license": "Official PE docs state released checkpoint weights are Apache-2.0; repository implementation package declares FAIR Noncommercial Research License",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "Official model page lists the checkpoint; anonymous Hub API returned HTTP 401 during this audit, so exact file access, hash, byte size and local load are UNKNOWN.",
+      "task_quality_status": "unmeasured",
+      "decision": "pretrained checkpoint listed; exact asset access and revision not verified. Keep official implementation/product rights under REVIEW pending license-clean implementation or resolution.",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/facebook/PE-Core-S16-384",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md"
+      ],
+      "release_status": "unknown"
+    },
+    {
+      "id": "pe-core-b16",
+      "modality": [
+        "image",
+        "video",
+        "text"
+      ],
+      "model_revision": "facebookresearch/perception_models@3e352cca660658d4b5c90f42a7808b11469e4c66 (checkpoint revision not verified)",
+      "checkpoint": "facebook/PE-Core-B16-224",
+      "checkpoint_sha256": null,
+      "checkpoint_bytes": null,
+      "parameters": 400000000,
+      "license": "Official PE docs state released checkpoint weights are Apache-2.0; repository implementation package declares FAIR Noncommercial Research License",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "Official model page lists the checkpoint; anonymous Hub API returned HTTP 401 during this audit, so exact file access, hash, byte size and local load are UNKNOWN.",
+      "task_quality_status": "unmeasured",
+      "decision": "pretrained checkpoint listed; exact asset access and revision not verified. Keep official implementation/product rights under REVIEW pending license-clean implementation or resolution.",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/facebook/PE-Core-B16-224",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md"
+      ],
+      "release_status": "unknown"
     }
   ]
 }
