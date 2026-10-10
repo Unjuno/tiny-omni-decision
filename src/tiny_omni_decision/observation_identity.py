@@ -1,0 +1,43 @@
+"""Stable identities for cached observation-level features."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from tiny_omni_decision.cache import ObservationFeatureKey
+
+
+def audio_observation_feature_key(
+    row: dict[str, Any],
+    *,
+    encoder_revision: str,
+    encoder_weights_sha256: str,
+    extraction_code_sha256: str,
+    preprocessor_config_sha256: str,
+    preprocessing_sha256: str,
+) -> ObservationFeatureKey:
+    """Build a question-independent key for a pinned Whisper audio observation."""
+    source = str(row["source"])
+    source_id, separator, source_revision = source.rpartition("@")
+    if not separator or not source_id or len(source_revision) != 40:
+        raise ValueError(f"source is not pinned to a commit: {source}")
+    return ObservationFeatureKey(
+        modality="audio",
+        source_id=source_id,
+        source_revision=source_revision,
+        observation_sha256=str(row["media_sha256"]),
+        encoder_id="openai/whisper-tiny",
+        encoder_revision=encoder_revision,
+        encoder_weights_sha256=encoder_weights_sha256,
+        preprocessor_id="openai/whisper-tiny/WhisperFeatureExtractor",
+        preprocessor_revision=encoder_revision,
+        preprocessing_sha256=preprocessing_sha256,
+        feature_name="whisper_last_hidden_valid_mean",
+        feature_dtype="float32",
+        feature_shape=(384,),
+        temporal_policy=(
+            "16000hz-max_length-truncate;valid_tokens=min(hidden,ceil(samples/320));mean-v1;"
+            f"extractor_config_sha256={preprocessor_config_sha256};"
+            f"extraction_code_sha256={extraction_code_sha256}"
+        ),
+    )

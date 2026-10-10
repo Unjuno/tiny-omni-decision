@@ -26,8 +26,9 @@ from scripts.train_frozen_audio_multiquery import (
     make_query_examples,
 )
 from scripts.train_frozen_audio_probe import LABELS, _rows, _validate_splits
-from tiny_omni_decision.cache import ObservationFeatureCache, ObservationFeatureKey
+from tiny_omni_decision.cache import ObservationFeatureCache
 from tiny_omni_decision.dataset import sha256_file
+from tiny_omni_decision.observation_identity import audio_observation_feature_key
 
 
 def _args() -> argparse.Namespace:
@@ -49,41 +50,6 @@ def _tensor_from_payload(payload: bytes, shape: tuple[int, ...]) -> torch.Tensor
     if len(payload) != expected_bytes:
         raise ValueError(f"feature payload has {len(payload)} bytes; expected {expected_bytes}")
     return torch.frombuffer(bytearray(payload), dtype=torch.float32).reshape(shape).clone()
-
-
-def _key_for_row(
-    row: dict[str, Any],
-    *,
-    encoder_revision: str,
-    encoder_weights_sha256: str,
-    extraction_code_sha256: str,
-    preprocessor_config_sha256: str,
-    preprocessing_sha256: str,
-) -> ObservationFeatureKey:
-    source = str(row["source"])
-    source_id, separator, source_revision = source.rpartition("@")
-    if not separator or not source_id or len(source_revision) != 40:
-        raise ValueError(f"source is not pinned to a commit: {source}")
-    return ObservationFeatureKey(
-        modality="audio",
-        source_id=source_id,
-        source_revision=source_revision,
-        observation_sha256=str(row["media_sha256"]),
-        encoder_id="openai/whisper-tiny",
-        encoder_revision=encoder_revision,
-        encoder_weights_sha256=encoder_weights_sha256,
-        preprocessor_id="openai/whisper-tiny/WhisperFeatureExtractor",
-        preprocessor_revision=encoder_revision,
-        preprocessing_sha256=preprocessing_sha256,
-        feature_name="whisper_last_hidden_valid_mean",
-        feature_dtype="float32",
-        feature_shape=(384,),
-        temporal_policy=(
-            "16000hz-max_length-truncate;valid_tokens=min(hidden,ceil(samples/320));mean-v1;"
-            f"extractor_config_sha256={preprocessor_config_sha256};"
-            f"extraction_code_sha256={extraction_code_sha256}"
-        ),
-    )
 
 
 def _compare_predictions(
@@ -241,7 +207,7 @@ def main() -> None:
             if not media_path.is_file() or sha256_file(media_path) != row["media_sha256"]:
                 raise ValueError(f"missing or changed {split_name} audio media: {row['id']}")
             feature = original_features[index].contiguous()
-            key = _key_for_row(
+            key = audio_observation_feature_key(
                 row,
                 encoder_revision=encoder_revision,
                 encoder_weights_sha256=encoder_weights_sha256,
@@ -362,6 +328,8 @@ def main() -> None:
         "preprocessing_sha256": preprocessing_sha256,
         "train_sample_count": len(train_rows),
         "validation_sample_count": len(validation_rows),
+        "train_ordered_ids_sha256": _ordered_ids_sha256(train_rows),
+        "validation_ordered_ids_sha256": _ordered_ids_sha256(validation_rows),
         "train_unique_audio_assets": len({row["media_sha256"] for row in train_rows}),
         "validation_unique_audio_assets": len({row["media_sha256"] for row in validation_rows}),
         "train_unique_speakers": len({row["speaker_group_sha256"] for row in train_rows}),
@@ -377,6 +345,10 @@ def main() -> None:
         "cache_write_and_reload_seconds": cache_seconds,
         "query_types_per_audio_observation": len(QUESTION_TASKS),
         "validation_queries": len(predictions),
+        "validation_queries_by_type": {
+            task: sum(prediction["question_type"] == task for prediction in predictions)
+            for task in QUESTION_TASKS
+        },
         "reloaded_validation_metrics": metrics,
         "saved_run_validation_metrics": report["validation_metrics"],
         "max_abs_logit_delta_vs_saved_run": max_logit_delta,
