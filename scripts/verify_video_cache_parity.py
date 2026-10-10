@@ -14,16 +14,6 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
-import av
-import torch
-
-from scripts.train_frozen_image_probe import _load_vjepa
-from scripts.train_frozen_video_probe import (
-    _decode_video,
-    _load_rows,
-    _validate_splits,
-    _video_features,
-)
 from tiny_omni_decision.dataset import sha256_file
 
 
@@ -44,8 +34,12 @@ def _args() -> argparse.Namespace:
 
 
 def _uncached_rows(
-    rows: list[dict[str, Any]], root: Path, encoder: Any, transform: Any, device: torch.device
-) -> tuple[list[torch.Tensor], float]:
+    rows: list[dict[str, Any]], root: Path, encoder: Any, transform: Any, device: Any
+) -> tuple[list[Any], float]:
+    import torch
+
+    from scripts.train_frozen_video_probe import _decode_video
+
     features = []
     started = time.perf_counter()
     for row in rows:
@@ -81,6 +75,12 @@ def _select_validation_scenes(
 
 
 def main() -> None:
+    import av
+    import torch
+
+    from scripts.train_frozen_image_probe import _load_vjepa
+    from scripts.train_frozen_video_probe import _load_rows, _validate_splits, _video_features
+
     args = _args()
     run_started_at = datetime.now(UTC).isoformat()
     output = args.output_dir.resolve()
