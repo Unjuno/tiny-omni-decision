@@ -1,11 +1,16 @@
 from __future__ import annotations
 
-import numpy as np
 import pytest
-import torch
 
-from scripts.train_frozen_videoprism_clevr4_probe import _features_by_id, _tasks
-from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES
+np = pytest.importorskip("numpy")
+torch = pytest.importorskip("torch")
+pytest.importorskip("transformers")
+
+from scripts.train_frozen_videoprism_clevr4_probe import (  # noqa: E402
+    _features_by_id,
+    _tasks,
+)
+from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES  # noqa: E402
 
 
 def test_feature_cache_rejects_cross_split_duplicate_ids_and_media(tmp_path) -> None:

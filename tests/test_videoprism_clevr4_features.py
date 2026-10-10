@@ -2,15 +2,14 @@ from __future__ import annotations
 
 import pytest
 
-from scripts.extract_frozen_videoprism_clevr4_features import (
-    _preprocess_rgb_image,
-    _validate_full_splits,
-    _validate_validation_partition,
+from tiny_omni_decision.pretrained_reuse import (
+    validate_clevr4_splits,
+    validate_validation_partition,
 )
 
 
 def test_validation_partition_preserves_prior_selection_and_new_holdout_order() -> None:
-    selected, holdout = _validate_validation_partition(
+    selected, holdout = validate_validation_partition(
         ["v3", "v1", "v4", "v2"], ["v2", "v3"]
     )
     assert selected == ["v3", "v2"]
@@ -26,7 +25,7 @@ def test_validation_partition_fails_on_duplicate_or_missing_ids(
     validation_ids: list[str], selection_ids: list[str]
 ) -> None:
     with pytest.raises(ValueError):
-        _validate_validation_partition(validation_ids, selection_ids)
+        validate_validation_partition(validation_ids, selection_ids)
 
 
 def test_full_split_validation_rejects_media_hash_overlap() -> None:
@@ -35,12 +34,13 @@ def test_full_split_validation_rejects_media_hash_overlap() -> None:
     train_assets = [{"id": "a", "sha256": "same"}]
     validation_assets = [{"id": "b", "sha256": "same"}]
     with pytest.raises(ValueError, match="media hashes overlap"):
-        _validate_full_splits(train_rows, validation_rows, train_assets, validation_assets)
+        validate_clevr4_splits(train_rows, validation_rows, train_assets, validation_assets)
 
 
 def test_static_image_preprocessing_repeats_eight_finite_frames() -> None:
-    import numpy as np
+    np = pytest.importorskip("numpy")
     tf = pytest.importorskip("tensorflow")
+    from scripts.extract_frozen_videoprism_clevr4_features import _preprocess_rgb_image
 
     pixels = np.full((360, 512, 3), 255, dtype=np.uint8)
     frames = _preprocess_rgb_image(tf.convert_to_tensor(pixels), tf)

@@ -13,6 +13,11 @@ from typing import Any
 
 import numpy as np
 
+from tiny_omni_decision.pretrained_reuse import (
+    validate_clevr4_splits,
+    validate_validation_partition,
+)
+
 MODEL_REVISION = "be719a406d563b66f0ac969e7c94bab8e997c81a"
 SOURCE_COMMIT = "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
 CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
@@ -46,48 +51,6 @@ def sha256_file(path: Path) -> str:
 
 def _ordered_ids_sha256(ids: list[str]) -> str:
     return hashlib.sha256("\n".join(ids).encode("utf-8")).hexdigest()
-
-
-def _validate_validation_partition(
-    validation_ids: list[str], selection_ids: list[str]
-) -> tuple[list[str], list[str]]:
-    if len(validation_ids) != len(set(validation_ids)):
-        raise ValueError("full validation IDs contain duplicates")
-    if len(selection_ids) != len(set(selection_ids)):
-        raise ValueError("checkpoint-selection IDs contain duplicates")
-    missing = set(selection_ids) - set(validation_ids)
-    if missing:
-        raise ValueError(
-            f"checkpoint-selection IDs are absent from full validation: {len(missing)}"
-        )
-    selection = set(selection_ids)
-    ordered_selection = [image_id for image_id in validation_ids if image_id in selection]
-    new_holdout = [image_id for image_id in validation_ids if image_id not in selection]
-    if (set(ordered_selection) & set(new_holdout)) or (
-        set(ordered_selection) | set(new_holdout) != set(validation_ids)
-    ):
-        raise AssertionError("validation selection/holdout partition is inconsistent")
-    return ordered_selection, new_holdout
-
-
-def _validate_full_splits(
-    train_rows: list[dict[str, Any]],
-    validation_rows: list[dict[str, Any]],
-    train_assets: list[dict[str, Any]],
-    validation_assets: list[dict[str, Any]],
-) -> None:
-    if [row["id"] for row in train_rows] != [row["id"] for row in train_assets]:
-        raise ValueError("train labels and image manifest ID order differ")
-    if [row["id"] for row in validation_rows] != [row["id"] for row in validation_assets]:
-        raise ValueError("validation labels and image manifest ID order differ")
-    if {row.get("split") for row in train_rows} != {"train"}:
-        raise ValueError("train label file contains non-train rows")
-    if {row.get("split") for row in validation_rows} != {"val"}:
-        raise ValueError("validation label file contains non-validation rows")
-    if {row["id"] for row in train_rows} & {row["id"] for row in validation_rows}:
-        raise ValueError("train and validation image IDs overlap")
-    if {row["sha256"] for row in train_assets} & {row["sha256"] for row in validation_assets}:
-        raise ValueError("train and validation media hashes overlap")
 
 
 def _preprocess_rgb_image(image: Any, tf: Any) -> np.ndarray:
@@ -210,8 +173,8 @@ def main() -> None:
     selection_assets = _read_jsonl(selection_manifest_path)
     if len(train_rows) != 8424 or len(validation_rows) != 2107:
         raise ValueError("full CLEVR-4 input must contain 8,424 train and 2,107 validation images")
-    _validate_full_splits(train_rows, validation_rows, train_assets, validation_assets)
-    selection_order, new_holdout_order = _validate_validation_partition(
+    validate_clevr4_splits(train_rows, validation_rows, train_assets, validation_assets)
+    selection_order, new_holdout_order = validate_validation_partition(
         [row["id"] for row in validation_rows], [row["id"] for row in selection_assets]
     )
     if len(selection_order) != 512 or len(new_holdout_order) != 1595:
