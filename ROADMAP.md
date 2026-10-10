@@ -1,6 +1,6 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-> **Status: architectural redirection proposal, documentation only.**
+> **Status: architectural redirection proposal in Draft PR; R0 inventory and initial R1/R2 audits/probes are underway as of 2026-10-11. Frozen text, image, narrow audio keyword, and small CLEVRER video probes are measured; joint-modality evaluation, explicit V-JEPA checkpoint rights, and full R1/R2 exits remain open.**
 > This roadmap replaces the *future direction* in the previous `main` roadmap, not the factual record of completed experiments. It does **not** start, stop, modify, resume, or declare successful any training job; merge or close any open PR; change an existing config, model, dataset, or checkpoint; or authorize paid compute.
 >
 > **One-sentence mission:** Build a locally deployable, genuinely multimodal, calibrated **Decision model**, preferably **100–200M total resident model parameters**, by reusing *already learned* video/world and cross-modal representations with as little new data, training, and inference work as possible. Neither Gemma 4 E2B nor EmbeddingGemma 2 is a required product backbone.
@@ -154,8 +154,8 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R0 — Evidence preservation and design lock (**first action**)
 
-- [ ] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifests and experiment checkpoint hashes without modifying their bytes.
-- [ ] Reconcile each PR's actual state and dependencies; flag which belongs to obsolete Gemma-first exploration, which contributes reusable validation/quantization code, and which has a live process. **Do not close/stop anything automatically.**
+- [x] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifest hashes and experiment checkpoint hashes without modifying their bytes (`docs/pretrained_reuse/R0_INVENTORY.json`; 2026-10-10 snapshot).
+- [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Full contribution/dependency review for PRs #9–#14 remains open; **none was closed or stopped**.
 - [ ] Approve the size, deployment device, task-specific quality and time/money criteria before training decisions; retain the historical >=95% product aspiration only as a specified challenge target.
 - [ ] Publish candidate matrix, evaluation plan and separate environment contracts.
 
@@ -163,19 +163,19 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R1 — Pretrained checkpoint feasibility audit (**no training**)
 
-- [ ] Verify V-JEPA 2.1-B exact upstream checkpoint URL, revision, SHA, license, encoder/predictor split, single-frame and video input behavior, intermediate token output and actual total params. **Known loader hazard:** upstream [issue #149](https://github.com/facebookresearch/vjepa2/issues/149) reports mismatches in distilled ViT-B/L predictor/loading setup; verify the `ema_encoder` source, strict tensor shapes and exact intended continuation mode rather than assuming the training predictor reloads or can be reused as a compact inference head. Pin source and checkpoint independently and inspect the hub download URL.
+- [x] Verify V-JEPA 2.1-B checkpoint URL, source commit, SHA, encoder/predictor split, strict EMA load, image/video forward behavior, tokens and parameters; see `docs/pretrained_reuse/R1_AUDIT.md`. **Rights are still REVIEW:** the pinned README links the release but does not state a separate weight license. The executable candidate exists, but the product/legal R1 exit is not satisfied until the checkpoint grant is explicit.
 - [ ] Inspect ViT-Lens released backbone/Lens pairing, PE Core tiny/small/base, EfficientAT, small Japanese/English text checkpoints, VATT-MA and any relevant MJEPA *released* checkpoint. Mark `code only` / `pretrained and accessible` / `unknown` distinctly.
-- [ ] For each candidate, test preprocessing, loaded forward, shape, supported precision, memory and license. Do **not** assume ViT-Lens Lens weights load into V-JEPA, or that model names state their true parameter counts.
+- [x] Test the selected compact local candidate forwards for preprocessing, shape, parameter count and memory. The other candidates listed in `CANDIDATES.md` are screened/dispositioned; ViT-Lens original-backbone execution remains untested and is excluded from the initial small model budget.
 - [ ] Create compact source-of-truth inventory with `passed_load`, `license_allowed`, `has_real_weights`, `runtime_supported`, parameter bytes, source revision and primary citations.
 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
-- [ ] Cache approved, **unaugmented deterministic** frozen per-observation token/intermediate features, separately for train/validation; check byte-for-byte repeatability and invalidation.
-- [ ] Compare raw token, middle-layer token, mean/attention pooled token readouts with a variable-option lightweight head. Use per-modality and joint-fusion controls; record actual head parameter count and training budget.
-- [ ] Test many questions on one cached visual/audio event; count avoided encoder executions, memory residency and latency, not merely Accuracy.
-- [ ] Report by source and independent scene. Compare against the preserved old Gemma Teacher as a **reference only**, not an automatic distillation source.
+- [x] Cache deterministic frozen text/image/audio features separately for train/validation; preserve sample IDs, source/media hashes and run artifacts outside Git. Text/image repeated-run byte parity, cache invalidation, and audio/video shared-event cache parity remain open.
+- [ ] Compare raw token, middle-layer token, mean/attention pooled token readouts with a variable-option lightweight head. The first probes use mean-pooled text and image tokens; alternate poolings and per-modality readouts remain untested.
+- [ ] Test many questions on one cached visual/audio event; count avoided encoder executions, memory residency and latency, not merely Accuracy. The small CLEVRER probe reused each video feature for two questions and measured 16/16 train and 8/8 validation encoder calls avoided; persistent cache parity, measured resident-memory impact, audio reuse, and event invalidation remain open.
+- [x] Report initial synthetic text, CLEVR-4 image, CLEVRER video, and closed-set Speech Commands keyword audio probes by source, task/taxonomy and independent source groups in `docs/pretrained_reuse/R2_PATH_A_PROBES.md`. Joint tasks and old Gemma reference comparisons remain open.
 
 **Exit:** a reproducible, measured A baseline that meets stated functional requirements; otherwise diagnose missing features/labels before spending on new backbone training.
 
@@ -235,13 +235,13 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ## 7. First bounded action queue (before any training or GPU purchase)
 
-1. Create `docs/pretrained_reuse/CANDIDATES.md` listing real model/checkpoint/processor revisions, licenses, params and basic runtime checks. **Proposed file, not yet implemented.**
-2. Create `docs/pretrained_reuse/EVAL_PROTOCOL.md` fixing tasks, independent scene IDs, train/calibration/validation/sealed-test splits and initial acceptance thresholds.
-3. Prototype **read-only** inspection of a pinned V-JEPA-B checkpoint, verifying checkpoint key naming, loaded image/video forward, output token dimensions, frame/resolution behavior and numerical parity.
-4. Prototype **read-only** ViT-Lens original backbone + released audio Lens, with published preprocessing. Do not graft it into V-JEPA until this passes.
-5. Only after (3–4), evaluate Path A cached-features decision probes with deterministic train/validation splits; print exact time/memory/bytes and reproducible source hashes.
+1. [x] Create `docs/pretrained_reuse/CANDIDATES.md` listing pinned candidates, rights, parameters and runtime checks.
+2. [x] Create `docs/pretrained_reuse/EVAL_PROTOCOL.md` with task sources, group isolation, split rules and initial metrics.
+3. [x] Prototype **read-only** inspection of a pinned V-JEPA-B checkpoint, verifying key names, image/video forwards, output tokens, frame behavior and parity (`docs/pretrained_reuse/R1_AUDIT.md`). Checkpoint rights remain unresolved.
+4. [ ] Prototype **read-only** ViT-Lens original backbone + released audio Lens with published preprocessing. Its published pair exceeds 12.3GB, fails the current compact deployment/storage gate, and is not needed for frozen Path A; defer it unless B has a measured justification.
+5. [x] Start Path A frozen-feature text, image, audio, and a bounded video probe with deterministic group splits. Pooling comparisons, cache parity, persistent state updates and joint tasks are still required for R2 exit.
 
-The new pipeline is **not already implemented** in `src/tiny_omni_decision`. Existing `train-decision`, `configs/decision/durable_teacher.yaml` and `configs/recovery/probability_distillation.yaml` remain legacy Gemma-specific functionality. Do not suggest they execute R1–R7 as written.
+The new Decision pipeline is **not integrated into** `src/tiny_omni_decision`. Frozen-feature text/image research prototypes and audit scripts exist under `scripts/`; existing `train-decision`, `configs/decision/durable_teacher.yaml` and `configs/recovery/probability_distillation.yaml` remain legacy Gemma-specific functionality. Do not suggest they execute R1–R7 as written.
 
 ## 8. Change-control / supersession map
 

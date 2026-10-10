@@ -2,6 +2,10 @@
 
 Tiny Omni Decision adapts Gemma 4's multimodal representation to return probabilities over supplied choices. Phase 1 established a **text-only decision** path; the current training pipeline supports text, image, audio, and video. The decision readout scores supplied choices and returns a probability distribution instead of generating a response.
 
+The current pretrained-representation research follows the R0–R8 process in [ROADMAP.md](ROADMAP.md). Frozen-feature text, synthetic image, small CLEVRER video, and closed-set English keyword audio probes are recorded in [docs/pretrained_reuse/R2_PATH_A_PROBES.md](docs/pretrained_reuse/R2_PATH_A_PROBES.md); joint-modality quality remains pending. These development probes are not a product Teacher or release result.
+
+The Gemma 4 material below documents the legacy implementation. The pretrained-representation research direction is tracked in [ROADMAP.md](ROADMAP.md); the isolated inventory, pinned checkpoint audits, evaluation protocol and frozen-feature probes are recorded under [docs/pretrained_reuse](docs/pretrained_reuse/). These are research prototypes, not a complete multimodal Decision pipeline or selected product model.
+
 ## Pinned base
 
 - Model and processor: `google/gemma-4-E2B-it-qat-q4_0-unquantized`
