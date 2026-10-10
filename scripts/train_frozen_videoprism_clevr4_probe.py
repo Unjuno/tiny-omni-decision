@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import importlib.metadata
 import json
+import platform
 import random
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -197,6 +200,7 @@ def _prediction_rows(
 
 def main() -> None:
     args = _args()
+    run_started_at = datetime.now(UTC).isoformat()
     sample_dir = args.sample_dir.resolve(strict=True)
     selection_dir = args.selection_sample_dir.resolve(strict=True)
     cache_path = args.feature_cache.resolve(strict=True)
@@ -464,6 +468,21 @@ def main() -> None:
         "one_time_reporting_validation_metrics": holdout_metrics,
         "one_time_reporting_validation_by_taxonomy": holdout_by_taxonomy,
         "training_seconds": training_seconds,
+        "run_started_at_utc": run_started_at,
+        "run_completed_at_utc": datetime.now(UTC).isoformat(),
+        "environment": {
+            "platform": platform.platform(),
+            "python": platform.python_version(),
+            "torch": torch.__version__,
+            "transformers": importlib.metadata.version("transformers"),
+            "device": str(device),
+            "device_name": torch.cuda.get_device_name(device) if device.type == "cuda" else None,
+            "device_total_memory_bytes": (
+                torch.cuda.get_device_properties(device).total_memory
+                if device.type == "cuda"
+                else None
+            ),
+        },
         "device": str(device),
         "cuda_peak_allocated_bytes": (
             torch.cuda.max_memory_allocated(device) if device.type == "cuda" else 0
@@ -474,6 +493,13 @@ def main() -> None:
             "The one-time validation subset is not a sealed audit."
         ),
         "readout_sha256": sha256_file(readout_path),
+        "checkpoint_selection_predictions_sha256": sha256_file(
+            output / "checkpoint-selection-predictions.jsonl"
+        ),
+        "reporting_validation_predictions_sha256": sha256_file(
+            output / "reporting-validation-predictions.jsonl"
+        ),
+        "text_model_weights_sha256": sha256_file(text_model / "model.safetensors"),
     }
     (output / "run-report.json").write_text(
         json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
