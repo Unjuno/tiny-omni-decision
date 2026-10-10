@@ -516,8 +516,38 @@ The script SHA-256 is `49cd598f1150f58074028125d3f0113b35911c3dfd8c4104ae9ca35ec
 The external report SHA-256 is
 `2296bdb92b5c226d170b6e70f5f20737720f40b7007c27df471d114da570bfab`. This
 demonstrates deterministic payload-budget eviction and multi-query reuse over
-one validation query order; it is not yet integrated into a serving path or
-measured for actual process RSS/allocator overhead. No model or GPU was used.
+one validation query order; at that point it was not integrated into a serving
+path or measured for actual process RSS/allocator overhead. No model or GPU was
+used in that replay.
+
+#### CPU LRU-to-scorer integration check (2026-10-11)
+
+The LRU was then exercised inside the actual frozen-feature CLEVRER scoring
+path. The check loaded the existing eight observation features through the
+typed persistent cache, recomputed the same MiniLM question/candidate features
+on CPU, loaded the existing frozen readout, and scored the same 88 descriptive
+questions in two ways: direct persistent-cache feature reads and a 12,288-byte
+LRU retrieval path. All source artifacts remained read-only. The run used no
+video encoder, GPU, training, or sealed audit data.
+
+| Item | Measurement |
+|---|---|
+| Inputs | CLEVRER development validation: 88 questions / 8 scenes; existing 8-feature typed cache, existing MiniLM and best readout. Validation IDs and order match the prior multi-query prediction file. |
+| LRU | 12,288 payload bytes; 80 hits, 8 misses/persistent reads, 4 evictions; 4 resident entries / 12,288 payload bytes at end. The 24,576-byte unique feature set exceeds the configured capacity, so eviction was exercised. |
+| Exact path parity | Direct-read vs LRU-read scorer logits and probabilities are bitwise equal; 0 prediction mismatches. Compared with the prior CUDA artifact, all 88 classes match and maximum probability delta is `5.96e-8`. |
+| Metrics | Same development-set result as the prior expansion: Accuracy `0.3523`, NLL `1.3390`, Brier `0.6978`, ECE-15 `0.0441`. These are not independent of checkpoint selection and are reported only to show the scoring output was unchanged. |
+| CPU timings | MiniLM load `0.783 s`, text-feature extraction `0.250 s`, readout load `0.0025 s`, direct scorer `0.00163 s`, LRU retrieval `0.00618 s`, and LRU scorer `0.00148 s`. The LRU retrieval interval includes persistent-cache reads and feature decoding; these CPU measurements are not comparable to prior CUDA timings and are not a product latency result. |
+| Reproduction | `scripts/verify_video_lru_scorer_parity.py`; base checkout commit `edeb34086138d204d713a33159410d48fe7b5324`; uncommitted verifier bytes are identified by script SHA-256 `255f5284ca961cbc8cf8d8bc4911050ef573f8f520c0750ebf6d46f85b787d1e`. Output: `C:\\CodexArtifacts\\pretrained-reuse-r2\\video-cache-lru-scorer-v1`. |
+| Saved evidence | Report SHA-256 `a8431542240983309ed48d4b435b498335d13ad4aff3c7f5614902c85e6ce8b0`; prediction SHA-256 `609c59036bdbc2f61827a741c4dc97cfc47cdd30db31557e8db775eb2b6c61a4`. Focused CPU tests: `tests/test_video_lru_scorer_parity.py` plus `tests/test_feature_cache.py`. |
+
+This closes the narrow LRU retrieval-to-frozen-scorer correctness and bounded
+eviction check. It does not establish whole-process RSS (the limit counts
+payload bytes only), user-facing serving behavior, persistent-cache eviction,
+concurrent request performance, full encoder-plus-readout residency, or
+joint-modality quality. The next cache-related implementation should move
+toward model/runtime packaging and integration rather than another isolated
+LRU microbenchmark. The reused eight scenes remain development validation, not
+independent evidence of model quality.
 
 #### Packed feature-cache experiment
 
@@ -547,8 +577,9 @@ the finished pack/index, and publishes a manifest after the files are complete.
 The reader checks per-entry hashes and embedded payload hashes; `verify()` also
 checks whole-file hashes and the SQLite index. CPU tests cover exact roundtrip,
 overwrite refusal, and post-pack corruption detection. The storage remains
-read-only and is not wired into a model-serving pipeline; cache eviction,
-crash-recovery under power loss, and model-plus-readout residency remain open.
+read-only and is not wired into a model-serving pipeline; persistent-cache
+eviction, crash-recovery under power loss, and model-plus-readout residency
+remain open.
 
 Reproduction:
 
@@ -578,7 +609,7 @@ command wrapper: `scripts/pack_observation_feature_cache.py`.
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
-- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. A separate direct V-JEPA check on one validation scene recomputed both questions independently and matched the deduplicated cache features exactly (max difference 0.0); this is a one-scene correctness check, not a latency claim. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio cache roundtrip covers 1,920 frozen train/validation observations, with exact feature reload and the same class predictions for all 2,560 validation queries. Image cache roundtrip covers 1,536 frozen train/validation images, with exact feature reload and the same classes for all 2,048 validation decisions. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
+- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. A separate direct V-JEPA check on one validation scene recomputed both questions independently and matched the deduplicated cache features exactly (max difference 0.0); this is a one-scene correctness check, not a latency claim. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; CPU tests cover key invalidation and payload corruption, and a 12-KiB in-memory LRU was exercised through the real frozen scorer with 80 hits, 8 misses, 4 evictions, and bitwise output parity. Audio cache roundtrip covers 1,920 frozen train/validation observations, with exact feature reload and the same class predictions for all 2,560 validation queries. Image cache roundtrip covers 1,536 frozen train/validation images, with exact feature reload and the same classes for all 2,048 validation decisions. Independent visual scene coverage, synchronized audio-video tasks, full encoder-plus-readout deployment memory, and end-user runtime packaging remain open.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.
 
