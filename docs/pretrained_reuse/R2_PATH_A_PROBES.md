@@ -441,6 +441,62 @@ and readout reproducibility only; it does not raise the image-quality estimate.
 
 ## R2 status
 
+#### Packed feature-cache experiment
+
+The text observation cache contained 94,636 immutable entries across 94,636
+files (244,770,850 bytes). Its earlier materialization recorded 421.98 seconds
+for entry writes/fsync and 18.84 seconds for a complete reload. I tested two
+read-only repacking formats against a new output directory; the source cache
+was not modified.
+
+| Format | Build time | Stored bytes | Result |
+|---|---:|---:|---|
+| SQLite rows with each full entry as a BLOB | 11.59 s | 443,899,904 | Rejected: 81.3% larger than source. |
+| Sequential `features.pack` plus SQLite offset/hash index | 7.76 s in the standalone comparison; 11.49 s through the checked API | 260,311,357 | Retained as an optional immutable export format: 6.35% larger than source, one payload file and one index. |
+
+The checked API snapshot contains all 94,636 entries. Full package SHA-256 and
+SQLite integrity verification took 0.254 s; 1,000 seeded random entries were
+loaded through the API and their decoded payloads matched exactly (0.218 s,
+including key reconstruction and entry hashing). A lower-level matched raw-byte
+read comparison measured 1,000 random reads at 0.077 s from individual files
+and 0.018 s from the pack plus an already-open index/pack handle; this does not
+include decoding the feature payload or running an encoder. These local warm-cache
+measurements are a storage diagnostic, not a deployment latency claim.
+
+The packer refuses to overwrite an existing destination, stages the new package
+in a sibling directory, stores exact source entry bytes, hashes each entry and
+the finished pack/index, and publishes a manifest after the files are complete.
+The reader checks per-entry hashes and embedded payload hashes; `verify()` also
+checks whole-file hashes and the SQLite index. CPU tests cover exact roundtrip,
+overwrite refusal, and post-pack corruption detection. The storage remains
+read-only and is not wired into a model-serving pipeline; cache eviction,
+crash-recovery under power loss, and model-plus-readout residency remain open.
+
+Reproduction:
+
+```powershell
+py -3.11 scripts/pack_observation_feature_cache.py `
+  --source-cache C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0-retry1\feature-cache `
+  --output C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0-packed-api
+```
+
+Source cache and packed output are outside Git. Packed manifest SHA-256 is
+`1e6341df5a63708b343baefd10618b426e4dc59f295cf466db2bf0c662633781`; pack
+SHA-256 is `f015c139dfc26d995fc6bf5dd4b891a9c526f58b4b751bc5f1e98b6f228867db`;
+index SHA-256 is `91cd8dcd21ddacd35f1601b8e70a2076c70154441be336440c43648dfd97fecd`;
+verification report SHA-256 is
+`ecd8b905fd60d06c99150e48be1caa68bb98d20bb3e341a1f664cd0e2075b01f`.
+The source cache report SHA-256 is `f3fc621e47008d997a07b45c5bfe7afba1a119d5379f61cf27fdf6068bab66d2`.
+The experiment started from commit `06cd6c560e3bb8c6cc9ae4a7e03bbadd9f2fd8b8`
+with the new implementation uncommitted; `packed_cache.py` SHA-256 was
+`c1fbb3fd2ddd663cd6c50ff82b42ff3b801d8c53e07ffea4b00d340b8fec9ca2`, and the
+external API validation driver SHA-256 was
+`99d9875914f1548c9522b932b1a6e37efedd6eed691658f2433b7456ac715df9`. Runtime
+was Python 3.11.9 on the local Windows machine; no GPU, model, media, or training
+process was used. This was storage-only, so no validation predictions or model
+quality metrics were regenerated. Implementation: `src/tiny_omni_decision/packed_cache.py`;
+command wrapper: `scripts/pack_observation_feature_cache.py`.
+
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.

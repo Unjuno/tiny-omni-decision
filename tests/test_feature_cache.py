@@ -10,6 +10,7 @@ from tiny_omni_decision.cache import (
     ObservationFeatureCache,
     ObservationFeatureKey,
 )
+from tiny_omni_decision.packed_cache import PackedObservationFeatureCache
 
 
 def _key() -> ObservationFeatureKey:
@@ -90,3 +91,42 @@ def test_observation_feature_cache_rejects_payload_corruption(tmp_path):
 def test_observation_feature_key_rejects_invalid_identity(updates):
     with pytest.raises(FeatureCacheError):
         replace(_key(), **updates)
+
+
+def test_packed_observation_cache_preserves_entries_and_is_immutable(tmp_path):
+    source = tmp_path / "source"
+    source_cache = ObservationFeatureCache(source)
+    keys = [_key(), replace(_key(), observation_sha256=hashlib.sha256(b"other").hexdigest())]
+    payloads = [b"first feature", b"second feature"]
+    expected = [
+        source_cache.put(key, payload)
+        for key, payload in zip(keys, payloads, strict=True)
+    ]
+    target = tmp_path / "packed"
+
+    with PackedObservationFeatureCache.pack(source, target) as packed:
+        packed.verify()
+        assert packed.manifest["entry_count"] == 2
+        assert [packed.get(key) for key in keys] == expected
+        with pytest.raises(FileNotFoundError, match="not found"):
+            packed.get(replace(_key(), observation_sha256=hashlib.sha256(b"missing").hexdigest()))
+
+    with pytest.raises(FileExistsError, match="refusing to overwrite"):
+        PackedObservationFeatureCache.pack(source, target)
+    assert len(list(source.glob("*.feature"))) == 2
+
+
+def test_packed_observation_cache_detects_entry_and_container_corruption(tmp_path):
+    source = tmp_path / "source"
+    key = _key()
+    ObservationFeatureCache(source).put(key, b"stable feature")
+    target = tmp_path / "packed"
+    packed = PackedObservationFeatureCache.pack(source, target)
+    pack_path = target / "features.pack"
+    pack_path.write_bytes(pack_path.read_bytes()[:-1] + b"!")
+
+    with pytest.raises(FeatureCacheError, match="entry is truncated or has changed"):
+        packed.get(key)
+    with pytest.raises(FeatureCacheError, match="SHA-256 does not match manifest"):
+        packed.verify()
+    packed.close()
