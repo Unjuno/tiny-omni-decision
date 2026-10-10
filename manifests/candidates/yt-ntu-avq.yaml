@@ -1,0 +1,53 @@
+schema_version: 1
+dataset_id: ntu-avqa/YT-NTU-AVQ
+revision: 5d559cb82f571fcec33bdd90529f40637bdb2097
+subset: full-1620-av-sequences
+split: train
+modalities: [audio, video]
+upstream_url: https://github.com/renyu12/YT-NTU-AVQ
+license: CC-BY-3.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Renyu Yang et al.; cite Scaling Audio-Visual Quality Assessment Dataset via Crowdsourcing (ICASSP 2026)."
+source_citation: https://arxiv.org/abs/2602.22659
+usage: evaluation
+trust_status: review
+source_components:
+  - component_id: synchronized-audio-video-media
+    url: https://huggingface.co/datasets/ntu-avqa/YT-NTU-AVQ
+    license: CC-BY-3.0
+    commercial_use: true
+    derivative_model_training_allowed: true
+    redistribution_allowed: true
+    media_redistribution_allowed: true
+    modalities: [audio, video]
+    trust_status: review
+  - component_id: human-quality-annotations
+    url: https://github.com/renyu12/YT-NTU-AVQ
+    license: CC-BY-4.0
+    commercial_use: true
+    derivative_model_training_allowed: true
+    redistribution_allowed: true
+    media_redistribution_allowed: true
+    modalities: [text]
+    trust_status: review
+notes:
+  hf_dataset_revision: 5d559cb82f571fcec33bdd90529f40637bdb2097
+  hf_archive_path: YT-NTU-AVQ_release.zip
+  hf_archive_bytes: 9228491494
+  hf_archive_sha256: c0296b62c0bf0f4a6fdda08790f7d6fea78b551c1dbbabbcaad060fb41d4541f
+  annotation_source_commit: 61da60f281199e5a13706c3d40c6d4e6a2e3731f
+  annotation_path: dataset/meta_info_YT-NTU-AVQ.csv
+  annotation_bytes: 481654
+  annotation_sha256: 78656856a3e2fd970cb17e7e4052e82c1f6a463a84be1e77cd644bd9bd200259
+  sequence_count: 1620
+  notes: >-
+    Candidate synchronized audio-video quality assessment data. Metadata has
+    one unique seq_name per row, overall/audio/video MOS and AV weight, but no
+    source YouTube ID mapping in the inspected CSV. Do not assume row-level
+    split guarantees underlying-source disjointness. This is subjective
+    perceptual quality, not semantic AV reasoning. trust_status stays review;
+    not included in any training or evaluation catalog. User R0 product criteria
+    remain unapproved.
