@@ -21,6 +21,49 @@ benchmark.
 | Frozen features | VideoPrism-B, 8 frames, 768 pooled features; cache SHA-256 `40eaff323e3654bf34653950d5fea4cd532f1a0e096438ec9cb73703dc589ea1`; pinned checkpoint SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`. MiniLM `sentence-transformers/paraphrase-MiniLM-L3-v2@4ca70771034acceecb2e72475f72050fcdde4ddc`, weights SHA-256 `cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`. Both encoders were frozen. |
 | Leakage/audit | Validation exact-content collisions were excluded; scene/media overlap is 0. The sealed audit was not loaded. The validation assets were used for earlier descriptive readout selection, and the validation questions were used for selecting this checkpoint; results are development-only. |
 
+### Parent-question target structure audit
+
+The source labels were checked on the saved normalized examples before
+interpreting the binary-choice metrics. They do not define one winning choice
+per parent question: a parent can have zero, one, or several choices labeled
+`correct`. On the 868 validation parent questions (3,014 statement-level
+examples), the number of `correct` statements was 0 for 68 questions, 1 for
+337, 2 for 229, 3 for 218, and 4 for 16. By task, the corresponding counts
+were:
+
+| Task | Parent questions with 0 / 1 / 2 / 3 / 4 correct statements |
+|---|---|
+| Explanatory | 57 / 74 / 101 / 92 / 16 (340 total) |
+| Predictive | 10 / 128 / 0 / 0 / 0 (138 total) |
+| Counterfactual | 1 / 135 / 128 / 126 / 0 (390 total) |
+
+The 1,098 train parent questions have counts 63 / 454 / 316 / 235 / 30.
+The separate fresh-scene control validation also has a multi-label structure:
+among 894 parents, counts are 84 / 413 / 234 / 154 / 9 (0 through 4 correct
+statements). The control rows are the same candidates used for that already
+reported development comparison; no new prediction or model selection was run.
+
+Therefore, the current conversion—one `[wrong, correct]` decision per
+candidate statement—is faithful to the source labels. Its reported Accuracy,
+NLL, Brier and ECE are statement-level binary metrics. They must not be
+reinterpreted as original-question single-winner accuracy, and probabilities
+must not be renormalized across all statements under a single-target
+assumption. This label structure helps explain why a single multiclass
+choice-probability benchmark cannot be derived from these rows without
+changing the task. It does not by itself explain the near-chance binary
+validation result.
+
+Audited artifacts, stored outside Git:
+
+- Train normalized decisions SHA-256
+  `b98c3089f9850fa2343c77561a963306fd0b8201912e38000143fc72da36f032`.
+- Original validation normalized decisions SHA-256
+  `57e663bef75c4d652ab71083476b39f3b9d3a0e5913a4e8f6e0cad0245e9c587`.
+- Fresh-scene control validation source SHA-256
+  `1eaf8b65eb632f930b201bd9e4d48b904d69aaa49f85764298083740d6bd5ae0`.
+- Fresh-scene control predictions SHA-256
+  `251fce980966dae57733b378934e36df4712e446667b1603280898d0aeeeaffd`.
+
 ## Training and results
 
 The seed-17 shared candidate MLP has hidden size 128 and 295,169 trainable
@@ -84,6 +127,11 @@ py -3.11 -m scripts.train_frozen_clevrer_binary_reasoning
 ```
 
 The config, corpus, source questions, VideoPrism cache/checkpoint and prior
-artifacts were read-only. This result does not justify shared-Lens training or
-model merging; next evaluation should first add predeclared text-only and
-video-shuffled controls on newly sourced, content-disjoint scenes.
+artifacts were read-only. The follow-up text-only and video-shuffled controls
+on content-disjoint scenes are documented in
+[`CLEVRER_VIDEO_TEXT_CONTROLS_20261011.md`](CLEVRER_VIDEO_TEXT_CONTROLS_20261011.md).
+The parent-question label structure is audited above. These results do not
+justify shared-Lens training or model merging; further readout tuning on these
+already-used development validations is not warranted. A stronger next
+quality experiment needs a new, task-matched evaluation source or a new
+predeclared task whose labels support the intended output semantics.
