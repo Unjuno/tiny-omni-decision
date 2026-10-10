@@ -41,3 +41,33 @@ def audio_observation_feature_key(
             f"extraction_code_sha256={extraction_code_sha256}"
         ),
     )
+
+
+def image_observation_feature_key(
+    *,
+    source_id: str,
+    source_revision: str,
+    media_sha256: str,
+    encoder_id: str,
+    encoder_revision: str,
+    encoder_weights_sha256: str,
+    preprocessor_id: str,
+    preprocessor_revision: str,
+    preprocessing_sha256: str,
+) -> ObservationFeatureKey:
+    """Build a question-independent key for a frozen image representation."""
+    return ObservationFeatureKey(
+        modality="image",
+        source_id=source_id,
+        source_revision=source_revision,
+        observation_sha256=media_sha256,
+        encoder_id=encoder_id,
+        encoder_revision=encoder_revision,
+        encoder_weights_sha256=encoder_weights_sha256,
+        preprocessor_id=preprocessor_id,
+        preprocessor_revision=preprocessor_revision,
+        preprocessing_sha256=preprocessing_sha256,
+        feature_name="mean_over_spatial_tokens",
+        feature_dtype="float32",
+        feature_shape=(768,),
+    )
