@@ -5,6 +5,7 @@ import hashlib
 from tiny_omni_decision.observation_identity import (
     audio_observation_feature_key,
     image_observation_feature_key,
+    text_observation_feature_key,
 )
 
 
@@ -62,3 +63,38 @@ def test_image_observation_cache_key_invalidates_on_asset_or_preprocessor_change
     assert original.cache_id == _image_key(b"image asset").cache_id
     assert original.cache_id != _image_key(b"different image asset").cache_id
     assert original.cache_id != _image_key(b"image asset", b"different preprocessing").cache_id
+
+
+def _text_key(text: str, *, role: str = "state", preprocessing: bytes = b"tokenizer policy"):
+    return text_observation_feature_key(
+        source_id="n4ze3m/typed-decisions-synth",
+        source_revision="5ece89a225b23c4cd5c4bab5735a0819d61dd7d5",
+        observation_text=text,
+        encoder_id="sentence-transformers/paraphrase-MiniLM-L3-v2",
+        encoder_revision="4ca70771034acceecb2e72475f72050fcdde4ddc",
+        encoder_weights_sha256=_sha256(b"minilm weights"),
+        tokenizer_sha256=_sha256(b"tokenizer files"),
+        preprocessing_sha256=_sha256(preprocessing),
+        feature_role=role,
+        hidden_size=384,
+    )
+
+
+def test_text_state_feature_key_is_reusable_across_questions_and_asset_scoped():
+    first_question_state = _text_key("State: room temperature is 20 C")
+    second_question_state = _text_key("State: room temperature is 20 C")
+
+    assert first_question_state.cache_id == second_question_state.cache_id
+    assert first_question_state.cache_id != _text_key("State: room temperature is 21 C").cache_id
+
+
+def test_text_feature_key_invalidates_on_role_or_tokenization_change():
+    original = _text_key("Question: which value?", role="question")
+
+    assert original.cache_id != _text_key("Question: which value?", role="state").cache_id
+    assert (
+        original.cache_id
+        != _text_key(
+            "Question: which value?", role="question", preprocessing=b"changed tokenizer policy"
+        ).cache_id
+    )

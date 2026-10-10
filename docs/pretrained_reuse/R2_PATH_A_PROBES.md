@@ -37,6 +37,58 @@ The middle-layer mean has a small numerical improvement over the baseline contro
 
 Reproduction: `scripts/compare_frozen_text_pooling.py` with `configs/pretrained_reuse/path_a_text_pooling.yaml`; output is outside Git at `C:\CodexArtifacts\pretrained-reuse-r2\text-pooling-probe-v0`. It contains all epoch train/validation metrics, selected readouts, per-example validation probabilities, and a serialized frozen feature cache. Run report SHA-256 `c71d4d483edc523906cb7186ccb0dbd69b2ec923f11b9efd598d3b4fa6061f75`; feature cache SHA-256 `21734e23ae51339e1c775b50a52e447824117ae242966d48aba0fd3c7ba3a06c`; config SHA-256 `8822361c43a22efc53fdd840574b30a394a5e007223aabfe804a24a09a70eb5a`; script SHA-256 `457b56d0a69c1dfd988ce70fa0349bcd77f025a1182770ed0deac6b9c6ca57dc`. Model and dataset hashes match the baseline above. No sealed audit or legacy final evaluation was loaded. The existing `text-probe-v0` artifact was not modified.
 
+### Text state/query feature reuse probe
+
+This separate seed-17 readout experiment split each text decision into a query-independent `State: ...` segment, a `Question: ...` segment, and candidate strings. It cached each frozen MiniLM masked-mean embedding by source revision, role, content hash, weights hash, tokenizer files and preprocessing hash. The readout receives the arithmetic mean of state and question vectors and the same four-way candidate features as the baseline scorer. Encoder weights stayed frozen; only the 196,865-parameter scorer was trained. This tests genuine state-feature reuse, while changing the readout inputs; it is **not** a cache-only parity ablation of the old scorer.
+
+| Item | Value |
+|---|---|
+| Corpus and split | Same train/validation file hashes and exact 2,540 validation IDs as the baseline; 23,319 train decisions / 6,682 states and 2,540 validation decisions / 732 states; zero state or normalized-content overlap |
+| Rights | Separate pinned train and validation manifests, both `ALLOW`; train usage `training`, validation usage `evaluation`, same dataset revision |
+| Encoder | MiniLM revision and weights hash as above; tokenizer files SHA-256 `dd8aae41e429614ae2cce6385510055251c300d5ec3753fe4bfe89dc943bdd41`; 17,389,824 frozen parameters, 384 dimensions, max length 256 |
+| Run | Seed 17; 8 epochs; AdamW 0.001 / 0.0001; selected epoch 3 by minimum validation NLL; peak CUDA allocation 691,373,056 bytes |
+| Unique text cache | 94,636 entries; 145,360,896 payload bytes / 244,770,850 entry bytes; 94,636 cache entries verified on full reload |
+| Reuse | 6,682 train and 732 validation state embeddings for 23,319 / 2,540 decisions: 16,637 / 1,808 state re-encodes avoided (71.35% / 71.18%) versus encoding each decision's state separately. Across state/question/candidate segment occurrences, content deduplication avoided 48,234 encodes |
+| Runtime | Frozen feature extraction 70.56s; cache writes 421.98s; complete cache reload 18.84s; readout training 40.94s; post-save validation 0.22s. Cache writes of many small immutable files are the measured bottleneck; the research cache is not a deployment package |
+| Artifact | `C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0-retry1`; report SHA-256 `f3fc621e47008d997a07b45c5bfe7afba1a119d5379f61cf27fdf6068bab66d2`; runner SHA-256 `18904827108be068ce17384c7afe6f806ece1e3ab7c6afa5c97b18a91a7368ca`; validation predictions SHA-256 `ff8bc8a7f7306aebaf58381c0298a8bfb882922757ffa381d51437eb4eb61901`; reload verifier SHA-256 `d3fd9e4cad6dfe1ae4cf656fec4986f54b0ca76ef36968bc4414acb04f7836ab` |
+
+Runtime was Python 3.11.9, PyTorch 2.6.0+cu124 / CUDA 12.4, Transformers 5.6.2, and NVIDIA GeForce RTX 3080 Laptop GPU (16 GiB, driver 616.92); MiniLM loaded as FP32. The successful process started at 2026-10-11 03:39:33 local time; its report was written at 03:49:00 and the independent reload verification at 03:50:16. No cloud compute was used. The run ledger records the effective arguments/config; the source commit was `049503b9212533ec2610a366fd8003faf80c76eb` and the executed runner bytes are pinned by the script hash above.
+
+Reproduction command (from repository root; all input and output paths are explicit):
+
+```powershell
+$env:PYTHONPATH='src;.'
+python -m scripts.train_frozen_text_observation_probe `
+  --train C:\CodexArtifacts\pretrained-reuse-r2\text\train.jsonl `
+  --validation C:\CodexArtifacts\pretrained-reuse-r2\text\validation.jsonl `
+  --train-manifest manifests\dataset.example.yaml `
+  --validation-manifest manifests\candidates\typed-synth-validation.yaml `
+  --model C:\CodexArtifacts\pretrained-reuse-r2\models\text-minilm-en `
+  --revision 4ca70771034acceecb2e72475f72050fcdde4ddc `
+  --reference-run-dir C:\CodexArtifacts\pretrained-reuse-r2\text-probe-v0 `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0-retry1 `
+  --seed 17 --epochs 8 --batch-questions 64 --feature-batch-size 128 --max-length 256
+
+python -m scripts.verify_frozen_text_observation_probe `
+  --run-dir C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0-retry1 `
+  --validation C:\CodexArtifacts\pretrained-reuse-r2\text\validation.jsonl `
+  --validation-manifest manifests\candidates\typed-synth-validation.yaml `
+  --model C:\CodexArtifacts\pretrained-reuse-r2\models\text-minilm-en `
+  --output C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0-retry1\readout-reload-verification.json `
+  --device cuda
+```
+
+The earlier failed invocation used the validation-only manifest for both splits. It was stopped before readout training; its partial cache was not reused and remains isolated with an `aborted_before_readout_training` marker at `C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0`.
+
+| Selected readout | Accuracy | NLL | Brier | ECE (15 bins) |
+|---|---:|---:|---:|---:|
+| Original context scorer, epoch 3 | 0.4937 | 1.0303 | 0.5946 | 0.0268 |
+| State/query factorized scorer, epoch 3 | 0.4752 | 1.0477 | 0.6053 | 0.0366 |
+
+The factorized scorer is lower by 1.85 accuracy points and worse by 0.0174 NLL, 0.0107 Brier and 0.0098 ECE on these same development IDs. Its train Accuracy / NLL / Brier / ECE at the selected epoch was 0.5403 / 0.9656 / 0.5580 / 0.0301. Training CE kept falling while validation NLL and calibration worsened after epoch 3, showing the same overfitting pattern as the original probe. This one-seed synthetic result establishes that persistent text state features can be reused and exactly reloaded; it does **not** establish that arithmetic-mean state/query fusion preserves baseline decision quality.
+
+The original direct-versus-cache validation logit delta was exactly 0 and all classes matched. A separate save/reload check loaded the saved readout and 9,996 validation cache entries, reproduced all 2,540 prediction classes/options/targets, and had max probability delta 0.0 on CUDA; verification JSON SHA-256 `b196b99a192f98c5800dc73de8ca6215f7ef9535008d00f3585f53bfb8ddfb62`. No sealed audit, legacy final evaluation, or model fine-tuning was used. A first invocation was aborted after passing the evaluation-only manifest for both splits; its partial cache remains isolated at `C:\CodexArtifacts\pretrained-reuse-r2\text-observation-cache-v0` with `run-aborted.json` (SHA-256 `a0ef726bcb3f7e629145b2365fe94b76014ea74d64b0024d230782dc9dafd1af`) and was not reused. The successful retry used the explicit training and evaluation manifests and a fresh output directory.
+
 ## Image: CLEVR-4 + V-JEPA 2.1 ViT-B
 
 | Item | Value |
