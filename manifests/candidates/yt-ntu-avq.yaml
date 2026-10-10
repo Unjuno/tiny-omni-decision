@@ -49,5 +49,9 @@ notes:
     source YouTube ID mapping in the inspected CSV. Do not assume row-level
     split guarantees underlying-source disjointness. This is subjective
     perceptual quality, not semantic AV reasoning. trust_status stays review;
-    not included in any training or evaluation catalog. User R0 product criteria
+    the paper describes 120 pretest clips and 1500 formal clips; 1296 were
+    quality/semantics-stratified from a VALOR-derived candidate pool and 324
+    newer YouTube CC clips were manually added. Exclude pretest from any future
+    model-selection split and audit possible source/representation overlap.
+    Not included in any training or evaluation catalog. User R0 product criteria
     remain unapproved.

@@ -37,6 +37,28 @@ the R0 product-criteria decision.
 | Identity limitation | The inspected metadata has no original YouTube source ID. Unique `seq_name` does not prove that two files were not derived from one underlying source. A split cannot yet be certified by original media identity. |
 | Policy | The new candidate manifest is `manifests/candidates/yt-ntu-avq.yaml`; it is not added to any corpus catalog, and its trust status is `review`. |
 
+## Paper-derived construction and split constraints
+
+The pinned paper clarifies why the flags matter. It reports that 1,296 clips
+were stratified from a candidate pool using predicted audio quality, predicted
+video quality, and coarse audio semantics; 324 additional post-2017 YouTube CC
+clips were manually added. It describes 120 pretest clips used to establish
+references and qualify annotators, followed by the remaining 1,500 formal
+clips. The metadata flags match those counts (120 `pretest`, 324
+`manual_selected`). If this source is ever used, keep the pretest partition out
+of model selection and treat the other 1,500 as the candidate pool, subject to
+source-identity grouping.
+
+Ratings are crowdsourced single-stimulus scores on 1.0–5.0 scales (0–100 for
+relative AV attention); submissions were filtered by ranking agreement and
+score dispersion. The paper reports strong monotonic correlations among
+overall, audio-only, and video-only scores, and that visual quality tends to
+dominate overall AV quality for these user-generated clips. Thus even a clean
+future split would only measure an AV perceptual-quality proxy with known
+selection/annotation structure. It is not an independent semantic multimodal
+reasoning benchmark, and its AudioSet/VALOR-derived sampling creates potential
+representation/data overlap to audit before model evaluation.
+
 The local `audit-dataset-manifest` result is **REVIEW**, with unresolved
 `license_policy_review` and `trust_status` for the media component, and
 `trust_status` for annotations. This is an honest result of the existing
@@ -66,4 +88,5 @@ allowlist and source policy, not an affirmative project authorization.
 - [Official project repository at the pinned commit](https://github.com/renyu12/YT-NTU-AVQ/tree/61da60f281199e5a13706c3d40c6d4e6a2e3731f)
 - [Official project README](https://github.com/renyu12/YT-NTU-AVQ/blob/61da60f281199e5a13706c3d40c6d4e6a2e3731f/README.md)
 - [ICASSP 2026 paper](https://arxiv.org/abs/2602.22659)
+- [Pinned paper HTML with sampling and annotation details](https://arxiv.org/html/2602.22659v1)
 - [Creative Commons BY 3.0 deed](https://creativecommons.org/licenses/by/3.0/)
