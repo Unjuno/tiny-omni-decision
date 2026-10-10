@@ -68,6 +68,21 @@ fixed scorer before any costly shared-backbone experiment. All findings remain
 development-validation evidence, with prior validation exposure explicitly
 retained.
 
+### Read-only label/choice audit
+
+The frozen validation manifest contains 894 parent questions across 200
+scenes. Positive-label rates are close to balanced overall and by task:
+explanatory 590/1,185 (`49.79%`), predictive 174/337 (`51.63%`), and
+counterfactual 615/1,255 (`49.00%`). A simple task-level majority label does
+not explain the near-chance result. After exact-content exclusions, the number
+of retained candidates per parent varies: explanatory parents retain 1–4 rows,
+predictive 1–2, and counterfactual 1–4. Candidate `choice_id` positive rates
+also vary modestly (predictive choice 0 `46.11%` vs choice 1 `57.06%`, for
+example). Future controls should stratify or report by choice position and
+parent question. These are descriptive counts from the already-used validation
+manifest, not a new evaluation and not evidence of a statistically reliable
+position shortcut.
+
 ## Compute and artifacts
 
 - Reverse feature extraction: `268.70 s`, CPU `TFRT_CPU_0`, JAX `0.6.2`, peak
