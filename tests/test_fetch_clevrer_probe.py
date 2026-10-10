@@ -72,6 +72,21 @@ def test_validation_scene_selector_excludes_train_question_content():
     assert not train_content & validation_content
 
 
+def test_scene_selector_excludes_previously_consumed_scenes_deterministically():
+    excluded = {3, 4, 5}
+    selected = choose(
+        _rows(), "train", per_type=2, seed=17, excluded_scenes=excluded
+    )
+    repeated = choose(
+        _rows(), "train", per_type=2, seed=17, excluded_scenes=excluded
+    )
+
+    scenes = {row["scene_index"] for row in selected}
+    assert scenes == {row["scene_index"] for row in repeated}
+    assert scenes.isdisjoint(excluded)
+    assert scenes.isdisjoint({0, 1, 2})
+
+
 def test_video_probe_selects_eight_deterministic_temporal_positions():
     indices = _uniform_indices(64, requested=8)
 

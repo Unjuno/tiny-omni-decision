@@ -103,9 +103,10 @@ def choose(
     per_type: int,
     seed: int,
     excluded_content: set[tuple[str, tuple[str, ...]]] | None = None,
+    excluded_scenes: set[int] | None = None,
 ) -> list[dict[str, Any]]:
     candidates: dict[int, dict[str, list[dict[str, Any]]]] = {}
-    used = PREVIOUSLY_USED_SCENES[split]
+    used = PREVIOUSLY_USED_SCENES[split] | (excluded_scenes or set())
     for row in rows:
         scene = int(row["scene_index"])
         if scene in used:
@@ -175,6 +176,11 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--train-per-type", type=int, default=16)
     parser.add_argument("--validation-per-type", type=int, default=8)
     parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument(
+        "--exclude-scenes-json",
+        type=Path,
+        help="optional JSON mapping train/validation to excluded scene IDs",
+    )
     return parser.parse_args()
 
 
@@ -194,7 +200,30 @@ def main() -> None:
         raise ValueError("CLEVRER question JSON hash does not match pinned source revision")
     train_rows = json.loads(train_bytes)
     val_rows = json.loads(val_bytes)
-    train = choose(train_rows, "train", args.train_per_type, args.seed)
+    excluded_scenes = {"train": set(), "validation": set()}
+    exclude_scenes_sha256 = None
+    if args.exclude_scenes_json:
+        excluded_bytes = args.exclude_scenes_json.read_bytes()
+        excluded_raw = json.loads(excluded_bytes)
+        if not isinstance(excluded_raw, dict) or set(excluded_raw) != set(excluded_scenes):
+            raise ValueError("excluded-scene JSON must have exactly train and validation keys")
+        for split, raw_scenes in excluded_raw.items():
+            if not isinstance(raw_scenes, list) or any(
+                not isinstance(scene, int) or isinstance(scene, bool) or scene < 0
+                for scene in raw_scenes
+            ):
+                raise ValueError(f"excluded {split} scene IDs must be non-negative integers")
+            if len(raw_scenes) != len(set(raw_scenes)):
+                raise ValueError(f"excluded {split} scene IDs must be unique")
+            excluded_scenes[split] = set(raw_scenes)
+        exclude_scenes_sha256 = sha256(excluded_bytes)
+    train = choose(
+        train_rows,
+        "train",
+        args.train_per_type,
+        args.seed,
+        excluded_scenes=excluded_scenes["train"],
+    )
     train_content = {
         (row["question"].casefold().strip(), tuple(sorted(row["options"]))) for row in train
     }
@@ -204,6 +233,7 @@ def main() -> None:
         args.validation_per_type,
         args.seed,
         excluded_content=train_content,
+        excluded_scenes=excluded_scenes["validation"],
     )
     validation_content = {
         (row["question"].casefold().strip(), tuple(sorted(row["options"]))) for row in validation
@@ -309,8 +339,10 @@ def main() -> None:
         "normalized_question_content_overlap": 0,
         "media_hash_overlap": 0,
         "previous_scenes_excluded": {
-            split: sorted(scenes) for split, scenes in PREVIOUSLY_USED_SCENES.items()
+            split: sorted(PREVIOUSLY_USED_SCENES[split] | excluded_scenes[split])
+            for split in PREVIOUSLY_USED_SCENES
         },
+        "exclude_scenes_json_sha256": exclude_scenes_sha256,
         "archive_sources": {
             split: {
                 "size_bytes": source["bytes"],
