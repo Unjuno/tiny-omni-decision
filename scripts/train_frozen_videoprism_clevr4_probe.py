@@ -7,6 +7,7 @@ import importlib.metadata
 import json
 import platform
 import random
+import subprocess
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -416,6 +417,13 @@ def main() -> None:
         "seed": args.seed,
         "source_revision": DATASET_REVISION,
         "config_sha256": sha256_file(config_path),
+        "implementation_commit": subprocess.run(
+            ["git", "-C", str(Path(__file__).resolve().parents[1]), "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip(),
+        "training_script_sha256": sha256_file(Path(__file__).resolve()),
         "feature_cache_sha256": sha256_file(cache_path),
         "cache_report_sha256": sha256_file(cache_report_path),
         "training_image_count": len(train_rows),

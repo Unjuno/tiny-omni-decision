@@ -260,6 +260,13 @@ def main() -> None:
     report = {
         "schema_version": 1,
         "status": "complete_videoprism_clevr4_full_feature_cache",
+        "implementation_commit": subprocess.run(
+            ["git", "-C", str(Path(__file__).resolve().parents[1]), "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip(),
+        "extractor_sha256": sha256_file(Path(__file__).resolve()),
         "claim_scope": "synthetic CLEVR-4 taxonomy decisions; image-only Path A feature candidate",
         "dataset_revision": DATASET_REVISION,
         "source_archive_sha512_expected": (
