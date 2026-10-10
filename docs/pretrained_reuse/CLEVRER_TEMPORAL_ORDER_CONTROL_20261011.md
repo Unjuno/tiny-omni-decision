@@ -83,6 +83,34 @@ parent question. These are descriptive counts from the already-used validation
 manifest, not a new evaluation and not evidence of a statistically reliable
 position shortcut.
 
+### Saved pooled-feature sensitivity
+
+After the prediction control, the already-saved forward and reversed
+VideoPrism caches were aligned by media SHA-256 for the exact 200 validation
+assets. The cache reports match on model/checkpoint, data revision, frame
+count, preprocessing, pooling and validation asset identities; only temporal
+order differs. The 768-dimensional pooled vectors were not bitwise equal:
+mean cosine similarity was `0.999759` (median `0.999837`, minimum `0.998404`)
+and mean relative L2 difference was `0.02013` (median `0.01809`, maximum
+`0.05649`). This describes a small order-sensitive change in pooled features;
+it does not establish that the readout can use that change or that the encoder's
+unpooled tokens lack temporal information. No fitting or new quality evaluation
+was performed.
+
+The comparison is reproducible with
+`scripts/compare_video_feature_order_sensitivity.py` and
+`tests/test_compare_video_feature_order_sensitivity.py`. Its saved report is
+outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\clevrer-temporal-feature-order-analysis-v1\report.json`
+(SHA-256
+`3fd939382772f11d8f4aaa76feb6f32da09b2832d2c8caf7e418f9abc6a66905`; source
+commit `f64421f31e06b22ed13d57261c554f92e4fbb07b`, analysis script SHA-256
+`09310032d8468b164feaba0b00c4f4cb66f5e042fc55750fb625b3fba674bf46`). The
+inputs are the forward feature cache
+`688a4f4801d439bdfd6991805cedfea2ac4530daf90206630c041cc463f618e1` and the
+reversed cache `adc7a97b6929684a092bd7cde27590cb65dacc46632f34afe26e56adb5a78f7b`;
+both were generated from the same frozen 200-scene validation manifest.
+
 ## Compute and artifacts
 
 - Reverse feature extraction: `268.70 s`, CPU `TFRT_CPU_0`, JAX `0.6.2`, peak

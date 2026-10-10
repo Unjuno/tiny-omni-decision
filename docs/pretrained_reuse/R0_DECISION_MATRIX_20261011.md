@@ -1,9 +1,10 @@
 # R0 candidate matrix and execution contracts (2026-10-11)
 
-Status: evidence and proposal for review. This document does **not** record
-approval of product size, deployment device, task thresholds, or time/money
-limits. Those choices remain a human decision in `ROADMAP.md` before any
-training or promotion decision.
+Status: evidence and proposal for review. The user authorized the ROADMAP's
+100–200M parameter and <=200 MB package figures as provisional engineering
+targets. This does **not** approve a deployment device, task thresholds,
+confidence bounds, or time/money limits; those remain open before any product
+selection or promotion decision.
 
 ## Candidate matrix
 
@@ -57,7 +58,9 @@ or promotion decision.
 | Artifacts and datasets | Checkpoints, media, feature caches, predictions. | Store outside Git under the dedicated artifact root. Preserve existing corpus, checkpoints, worktrees, runs, and PRs read-only unless a later explicit work item says otherwise. |
 | Cloud | None for current R0/R1/R2 work. | $0 cloud spend. Any future paid compute requires a separate approved decision. |
 
-R0 approval remains open for: target deployment device, maximum installed
-artifact size, per-task quality floors and confidence bounds, and allowed
-elapsed time/cost. This file makes the candidate and execution constraints
-reviewable without silently setting those product decisions.
+R0 remains open for: target deployment device, per-task quality floors and
+confidence bounds, and allowed elapsed time/cost. The parameter and package
+figures above may guide isolated engineering experiments, but they are not a
+release pass/fail gate until the device and task-specific criteria are set.
+This file makes the candidate and execution constraints reviewable without
+silently setting those product decisions.
