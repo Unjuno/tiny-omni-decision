@@ -163,7 +163,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R1 — Pretrained checkpoint feasibility audit (**no training**)
 
-- [ ] Verify V-JEPA 2.1-B exact upstream checkpoint URL, revision, SHA, license, encoder/predictor split, single-frame and video input behavior, intermediate token output and actual total params.
+- [ ] Verify V-JEPA 2.1-B exact upstream checkpoint URL, revision, SHA, license, encoder/predictor split, single-frame and video input behavior, intermediate token output and actual total params. **Known loader hazard:** upstream [issue #149](https://github.com/facebookresearch/vjepa2/issues/149) reports mismatches in distilled ViT-B/L predictor/loading setup; verify the `ema_encoder` source, strict tensor shapes and exact intended continuation mode rather than assuming the training predictor reloads or can be reused as a compact inference head. Pin source and checkpoint independently and inspect the hub download URL.
 - [ ] Inspect ViT-Lens released backbone/Lens pairing, PE Core tiny/small/base, EfficientAT, small Japanese/English text checkpoints, VATT-MA and any relevant MJEPA *released* checkpoint. Mark `code only` / `pretrained and accessible` / `unknown` distinctly.
 - [ ] For each candidate, test preprocessing, loaded forward, shape, supported precision, memory and license. Do **not** assume ViT-Lens Lens weights load into V-JEPA, or that model names state their true parameter counts.
 - [ ] Create compact source-of-truth inventory with `passed_load`, `license_allowed`, `has_real_weights`, `runtime_supported`, parameter bytes, source revision and primary citations.
