@@ -155,7 +155,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 ### R0 — Evidence preservation and design lock (**first action**)
 
 - [x] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifest hashes and experiment checkpoint hashes without modifying their bytes (`docs/pretrained_reuse/R0_INVENTORY.json`; 2026-10-10 snapshot).
-- [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Full contribution/dependency review for PRs #9–#14 remains open; **none was closed or stopped**.
+- [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Read-only contribution/dependency review for PRs #9–#14: `docs/pretrained_reuse/R0_OPEN_PR_REVIEW_20261011.md`. All remain open and unchanged; CI for PRs #13/#14 was not verifiable from the unauthenticated status lookup.
 - [ ] Approve the size, deployment device, task-specific quality and time/money criteria before training decisions; retain the historical >=95% product aspiration only as a specified challenge target.
 - [x] Publish candidate matrix, evaluation plan and separate environment contracts (`docs/pretrained_reuse/R0_DECISION_MATRIX_20261011.md`). Product size/device/task thresholds and time/money approval remain open.
 
