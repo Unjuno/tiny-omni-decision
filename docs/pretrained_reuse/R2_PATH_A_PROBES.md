@@ -727,3 +727,85 @@ selection and directly selected the VideoPrism checkpoint, so a new
 independent scene split is required before claiming a task-quality advantage.
 Both encoders overfit this small readout setup by epoch 24. V-JEPA's exact
 checkpoint rights also remain `REVIEW`. No model was promoted or packaged.
+
+#### Fixed-readout evaluation on previously unused CLEVRER scenes (2026-10-11)
+
+The two selected epoch-2 readouts above were evaluated without retraining,
+calibration, or checkpoint selection on a new deterministic 200-scene sample.
+All video scene IDs and media assets were excluded from the earlier CLEVRER
+samples; this is a held-out-scene development diagnostic, not a blind/sealed
+audit. The candidate checkpoints were selected on the earlier validation set,
+so selection bias remains. No follow-up tuning was done on these results.
+
+| Item | Result |
+|---|---|
+| Source / split | `MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef`; seed 17; 400 validation questions from 200 new scenes (200 temporal descriptive, 200 static descriptive). The 2-question/1-scene `train` file is only a split-integrity witness and was not used to fit either readout. Prior used and excluded scene IDs were collected from existing sample manifests; new validation scene overlap is 0. New train/validation scene, media SHA, and normalized question+option overlap are all 0. |
+| Content limitation | Compared with all prior saved CLEVRER train/validation manifests, **259/400** new validation rows share an exact normalized question string plus sorted option set (119 distinct such contents); the video scene/media identities are different. This reflects CLEVRER's repeated question templates and means this is asset-held-out, not question-template/content-held-out. |
+| Data hashes | Pinned source question JSON SHA-256: train `11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4`, validation `fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d`. Train manifest SHA-256 `0fa165bd30f6dcaa4c93ad1807c89b098b4a8ac2ece7665840bb0986742528ee`; validation manifest `3bd8a90f32b8977e83e6491452906a9447af7c098103df9cdb6268a92bac37f2`; fetch report `a9f14d8e965081128dc3b367470ba1c517a36bea87a8911c2a856bdfbfbc8564`; excluded-scene manifest [clevrer-heldout-video-excluded-scenes-20261011.json](../../manifests/pretrained_reuse/clevrer-heldout-video-excluded-scenes-20261011.json), SHA-256 `b0485cf041d91b0bbacc231224d7b0b7609e27e8d9fefa68666c674cf3cd4f8b`; validation ID-order SHA-256 `ac4a7f297e343d260f8c9b3fc3f8cf87afab3d7ac871ec2b55c54b1757d0b78d`. Selected video hashes were verified; the full 6.21-GB video archive SHA-256 was not computed. |
+| Fixed models | V-JEPA 2.1 ViT-B distilled: upstream commit `204698b45b3712590f06245fbfba32d3be539812`, checkpoint SHA-256 `848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d`, selected readout SHA-256 `0db407b986c8a19e836883f3137d4ed99b684e962c531ba50907e3a6ebfcd25e`. VideoPrism-B: revision `be719a406d563b66f0ac969e7c94bab8e997c81a`, upstream commit `c6eba0ece3dd49a24ffc44582966997a4a59f1d8`, checkpoint SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`, selected readout SHA-256 `f68b04a4079c537772938d27c6456841c5eed19595ab49d0f42dd014211f0dbc`. Both readouts had previously been selected by minimum NLL at epoch 2. MiniLM revision `4ca70771034acceecb2e72475f72050fcdde4ddc` and the same question/option preprocessing were used for both. Readout parameters were frozen; no gradients, fit, calibration, or selection occurred. |
+| Metrics, overall (400) | V-JEPA Accuracy/NLL/Brier/ECE-15/mean confidence `0.3800 / 1.1711 / 0.6544 / 0.0606 / 0.4097`; VideoPrism `0.3775 / 1.1635 / 0.6478 / 0.0518 / 0.3902`. |
+| Temporal descriptive (200) | V-JEPA `0.4350 / 1.2168 / 0.6584 / 0.0967`; VideoPrism `0.4350 / 1.2150 / 0.6571 / 0.0817`. Metric order: Accuracy / NLL / Brier / ECE-15. |
+| Static descriptive (200) | V-JEPA `0.3250 / 1.1255 / 0.6503 / 0.1084`; VideoPrism `0.3200 / 1.1121 / 0.6386 / 0.1028`. Metric order: Accuracy / NLL / Brier / ECE-15. |
+| Paired scene bootstrap | 10,000 resamples, seed 17, 200 independent scenes, all questions for a sampled scene kept together. VideoPrism minus V-JEPA: Accuracy `-0.00235` (95% CI `[-0.02750, +0.02250]`); NLL `-0.00766` (`[-0.01578, +0.00034]`); Brier `-0.00657` (`[-0.01253, -0.00096]`); ECE-15 `-0.00766` (`[-0.03824, +0.02307]`). Static-descriptive NLL `-0.01344` (`[-0.02462, -0.00284]`) and Brier `-0.01176` (`[-0.02087, -0.00328]`) favor VideoPrism; temporal task intervals include zero. Accuracy and overall NLL/ECE intervals include zero. |
+| Cost / environment | Data range fetch 494.48s (247,833,952 range bytes); V-JEPA extraction 58.74s on the local RTX 3080 Laptop 16 GiB (peak allocated 464,645,120 bytes); VideoPrism extraction 269.67s on JAX CPU, peak working set 4,156,190,720 bytes; fixed-readout evaluation 2.23s wall on CPU (scorer-only forward portion 0.020s). JAX `0.6.2`, Flax `0.11.1`, TensorFlow `2.18.1`; PyTorch `2.6.0+cu124`. No cloud cost. |
+| External artifacts | `C:\CodexArtifacts\pretrained-reuse-r2\clevrer-heldout-video-readout-v0*`. V-JEPA feature cache SHA-256 `473cc3f37c94897310ad6276de4670759fbcda26bee548484c9766a94325849a`, report `62e80d186d4ebff9c0f12962c905c9fe8b597d6ec001d334161e65e0814fd724`; VideoPrism feature cache `2b69e7253761b80fca970fe5849afde2fdc2e6a9951bb6493a9951fdb1cbb229`, report `f8a60c0ca8eda7dfb60eadf836efa9a577e828a065dd77ae490e78a1652b0de5`; evaluation report `b900c535093925adb2356699e130dbe37a089d1f714b61e6a49bb565ece3da6a`; predictions SHA-256 V-JEPA `1434f01a1ac3264fcaacde583d4833114ed9f5b536bdacd111ffe2b7c7c9a4f7`, VideoPrism `688ddad42caeb7212491da5d13ae9a7838c3e013039b31a8945e3da4837522b6`; bootstrap report `fbf580b31a2050c54c1088414a8facdf1c1b0532d660a3d8c7d135acdc6b7c30`. Evaluation script SHA-256 `34841aace7e9200865ab11b5036c4d1afe81e8a43fc32cf5bdfad83385524a5a`; V-JEPA extractor script `e9ce31fe155632d95fe888948e520569a84ef4fcb292fbc6baa34a58dcf6c7c1`. |
+
+The saved outputs were produced with the following command sequence (PowerShell;
+all output directories were new and external to Git):
+
+```powershell
+$env:PYTHONPATH = "$PWD\src;$PWD"
+$A = 'C:\CodexArtifacts\pretrained-reuse-r2'
+$D = "$A\clevrer-heldout-video-readout-v0-data"
+$X = "$PWD\manifests\pretrained_reuse\clevrer-heldout-video-excluded-scenes-20261011.json"
+
+python -m scripts.fetch_clevrer_probe `
+  --train-questions "$A\clevrer-sample-seed17\train-questions.json" `
+  --validation-questions "$A\clevrer-sample-seed17\validation-questions.json" `
+  --output-dir $D --train-per-type 1 --validation-per-type 200 --seed 17 `
+  --exclude-scenes-json $X
+
+$env:PYTHONPATH = "$PWD\src;$PWD;C:\CodexArtifacts\pretrained-reuse-r1\python-deps"
+python -m scripts.extract_frozen_vjepa_video_features `
+  --sample-dir $D `
+  --vjepa-source 'C:\CodexArtifacts\pretrained-reuse-r1\vjepa2-source' `
+  --vjepa-checkpoint 'C:\CodexArtifacts\pretrained-reuse-r1\vjepa2_1_vitb_dist_vitG_384.pt' `
+  --vjepa-sha256 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d `
+  --output-dir "$A\clevrer-heldout-video-readout-v0-vjepa-features"
+
+$env:PYTHONPATH = "$PWD\src;$PWD"
+$VP = 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1'
+& "$VP\venv\Scripts\python.exe" -m scripts.extract_frozen_videoprism_features `
+  --sample-dir $D `
+  --checkpoint 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-f16r288.npz' `
+  --source-root "$VP\source" `
+  --output-dir "$A\clevrer-heldout-video-readout-v0-videoprism-features"
+
+$env:PYTHONPATH = "$PWD\src;$PWD"
+python -m scripts.evaluate_frozen_video_readouts `
+  --sample-dir $D --excluded-scenes-json $X `
+  --text-model "$A\models\text-minilm-en" `
+  --vjepa-feature-cache "$A\clevrer-heldout-video-readout-v0-vjepa-features\video-features.npz" `
+  --vjepa-cache-report "$A\clevrer-heldout-video-readout-v0-vjepa-features\cache-report.json" `
+  --vjepa-readout "$A\clevrer-video-expanded-readout-v0-retry1\best-readout.pt" `
+  --videoprism-feature-cache "$A\clevrer-heldout-video-readout-v0-videoprism-features\video-features.npz" `
+  --videoprism-cache-report "$A\clevrer-heldout-video-readout-v0-videoprism-features\cache-report.json" `
+  --videoprism-readout "$A\videoprism-clevrer-expanded-probe-v0\best-readout.pt" `
+  --output-dir "$A\clevrer-heldout-video-readout-v0-evaluation" --device cpu
+
+python -m scripts.compare_video_candidate_probe_predictions `
+  --reference "$A\clevrer-heldout-video-readout-v0-evaluation\vjepa-predictions.jsonl" `
+  --candidate "$A\clevrer-heldout-video-readout-v0-evaluation\videoprism-predictions.jsonl" `
+  --output "$A\clevrer-heldout-video-readout-v0-evaluation\paired-scene-bootstrap.json" `
+  --replicates 10000 --seed 17
+```
+
+**Interpretation:** on these unseen scenes the two fixed readouts remain close.
+VideoPrism has a small paired Brier improvement overall and better static
+descriptive NLL/Brier, while accuracy is effectively tied and overall NLL's
+interval includes zero. The temporal descriptive comparison is inconclusive.
+This is limited evidence that the earlier NLL point advantage does not cleanly
+replicate across every metric/task; it is not evidence of a general backbone
+ceiling. Repeated question templates further narrow the claim to scene/media
+generalization under CLEVRER's existing template distribution. Keep both as
+research candidates; do not promote either readout from this result alone.
