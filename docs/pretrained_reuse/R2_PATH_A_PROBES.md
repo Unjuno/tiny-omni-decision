@@ -847,3 +847,41 @@ this supports checking task construction and designing a prespecified temporal
 control before costly Lens or merge experiments. Full provenance, hashes,
 commands, task metrics and limitations are in
 [CLEVRER_TEMPORAL_ORDER_CONTROL_20261011.md](CLEVRER_TEMPORAL_ORDER_CONTROL_20261011.md).
+
+#### Frozen Speech Commands runtime bundle (2026-10-11)
+
+The existing Path A audio encoder, MiniLM option scorer, and frozen multi-query
+readout were packaged as an immutable local development bundle. The first
+end-to-end replay with audio batch size 1 had one mismatch among 2,560
+decisions (maximum logit delta 0.06238). Diagnostics showed BF16 audio
+features varied with encoder batch shape. Reusing cached audio features while
+recomputing text/readout reproduced predictions exactly, and batch size 8
+reproduced all 640 reference audio feature tensors bitwise. The failed batch-1
+replay remains at
+`C:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-runtime-validation-v0`.
+
+The corrected replay used the same 640 validation IDs (four query types per
+clip) at batch size 8 and had zero prediction mismatches (max logit delta
+`5.96e-6`, max probability delta `8.35e-7`). Macro question-type
+Accuracy/NLL/Brier/ECE-15 were `0.97852/0.06933/0.03232/0.01435`, matching the
+frozen source readout. Runtime was 6.34 seconds end-to-end (9.91 ms per audio
+observation), 0.52 seconds to load, and 380,225,024 bytes peak CUDA inference
+allocation on an RTX 3080 Laptop GPU. It has 55,494,785 parameters and a
+227,100,577-byte payload (manifest excluded), above the aspirational 200 MB
+target. It supports the tested closed-set Speech Commands queries only. This
+is packaging parity, not a new quality result, calibration, or broad speech
+claim. Single-query serving must preserve batch-shape parity, for example by
+batching requests or using a validated fixed-shape audio encoder path.
+
+Bundle:
+`C:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-multiquery-runtime-bundle-v2`
+(manifest SHA-256 `574640d88d6ddbbdb2d12f2466a248ce13c8d9eb3ac542d099b2f08981b690f4`).
+Validation report:
+`C:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-runtime-validation-v1\report.json`
+(SHA-256 `adb75cbdafd47099655618523d883ada0def0d5f1fca34f3503a8eb0bce2e8f8`). The
+prediction file SHA-256 is
+`c218ef22b83390a06b36b66f1f9c639bb3e6df8a95ae3d294a8c552fa4829fd0`. Runtime
+and bundle checks are in `src/tiny_omni_decision/audio_runtime.py`,
+`src/tiny_omni_decision/bundle_validation.py`, and the corresponding tests.
+CI's CPU-only dependency contract required keeping bundle verification
+independent of optional Torch/Transformers imports.
