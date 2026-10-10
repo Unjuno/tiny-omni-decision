@@ -145,9 +145,21 @@ This is a tiny synthetic probe with two questions per scene. The sample is too s
 
 ### Video feature cache parity diagnostic
 
-On one existing CLEVRER validation scene with its two original questions, the pinned 8-frame V-JEPA extractor was run once through the scene-keyed cache and once per question without reuse. Both paths produced exactly matching pooled features (max absolute delta `0.0`; allclose true). Reuse reduced encoder calls from 2 to 1. One timing sample measured 0.537 s cached and 0.639 s uncached (1.19x ratio); this is a smoke measurement, not a stable latency claim. The unique pooled feature occupied 3,072 bytes, while the question-expanded pair occupied 6,144 bytes. CUDA model allocation before inference was 347,332,608 bytes and peak allocation was 457,564,160 bytes on the RTX 3080 Laptop GPU. The diagnostic confirms basic per-scene feature parity and reuse; it does not test audio caching, persistent-cache invalidation, or broad multi-query scaling.
+On one existing CLEVRER validation scene with its two original questions, the pinned 8-frame V-JEPA extractor was run once through the scene-keyed cache and once per question without reuse. Both paths produced exactly matching pooled features (max absolute delta `0.0`; allclose true). Reuse reduced encoder calls from 2 to 1. The initial timing sample measured 0.537 s cached and 0.639 s uncached (1.19x ratio); this is a smoke measurement, not a stable latency claim. The unique pooled feature occupied 3,072 bytes, while the question-expanded pair occupied 6,144 bytes. CUDA model allocation before inference was 347,332,608 bytes and peak allocation was 457,564,160 bytes on the RTX 3080 Laptop GPU.
 
 The reproduction script is `scripts/verify_video_cache_parity.py`. It used the existing sample `C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-probe-v0-retry3` and wrote outputs only to `C:\CodexArtifacts\pretrained-reuse-r2\video-cache-parity-v1`. Report SHA-256 `668b74699f475973286e463ae41d18ed650316fd002c021670c51aa14b8144a2`; saved feature comparison SHA-256 `c19327cfef7591330e9eb4a4c5e4a28375738f37b0f9b0d115bd2cc457950bab`; script SHA-256 `b9e8f28148d59d22dc2a138be0b718958198578d81d41692b63a27e927f11fcc`. It ran with Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2, PyAV 18.1.0 and the already-pinned local `timm` dependency; no package was upgraded.
+
+A later invocation of the same script, on the same split and scene, wrote to
+`C:\CodexArtifacts\pretrained-reuse-r2\video-feature-cache-parity-v1`. Its
+report records source commit `279e8d8692e41217d79df26abf1be46e6597fca6` and
+the same script SHA-256. The serialized cached/uncached feature file was
+byte-identical to the initial run (SHA-256
+`c19327cfef7591330e9eb4a4c5e4a28375738f37b0f9b0d115bd2cc457950bab`). The
+repeat report SHA-256 is
+`20f3573d325651e3671b38dc20deebe88b7708a659f317a8cd1239686a55ef41`; timing
+was 0.535 s cached and 0.653 s uncached. This confirms repeatability for this
+single scene, checkpoint, and software/backend setup, not multi-scene or
+cross-backend determinism.
 
 ## Audio: Speech Commands + frozen Whisper Tiny
 
@@ -438,28 +450,6 @@ source archive full SHA-512 is also still unverified.
 The original validation is reused, not independent, and V-JEPA checkpoint rights
 remain **REVIEW**. The successful replay validates persistent feature integrity
 and readout reproducibility only; it does not raise the image-quality estimate.
-
-#### Direct video-cache versus fresh-encoder parity (single scene)
-
-To close the narrow question of whether video cache reuse reproduces a fresh
-V-JEPA feature computation, I reloaded the pinned frozen encoder and processed
-the same two existing validation questions both through `_video_features`
-(which deduplicates their shared scene) and independently per question. The
-sample, manifest, and media were read-only; the sealed audit was not loaded.
-
-| Item | Result |
-|---|---|
-| Sample | CLEVRER validation scene `10498`; question IDs `clevrer-validation-10498-q000` and `clevrer-validation-10498-q008`; one underlying video SHA-256 `f5dc257fc4091cb2b2e6519a6ac1496c6399fdb16b2e60d897c37d9ddbd3c94f`. |
-| Encoder | V-JEPA source commit `204698b45b3712590f06245fbfba32d3be539812`; checkpoint SHA-256 `848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d`; 8 frames; output `[2, 768]` float32. |
-| Parity and reuse | Cached and fresh-encoder features are `allclose`; maximum absolute difference `0.0`. Deduplicated path made 1 encoder call for 2 questions (1 avoided). Feature payload was 3,072 bytes instead of 6,144 bytes for repeated rows. |
-| Runtime and memory | RTX 3080 Laptop 16 GiB; CUDA 12.4, PyTorch 2.6.0+cu124, Transformers 5.6.2, PyAV 18.1.0. Cache path `0.5350 s`, uncached path `0.6527 s`, observed ratio `1.22x`; model allocation before inference `347,332,608` bytes and peak allocation `457,564,160` bytes. One scene is too small for a product latency claim. |
-| Reproduction | `python -m scripts.verify_video_cache_parity --sample-dir C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-probe-v0-retry3 --vjepa-source C:\CodexArtifacts\pretrained-reuse-r1\vjepa2-source --vjepa-checkpoint C:\CodexArtifacts\pretrained-reuse-r1\vjepa2_1_vitb_dist_vitG_384.pt --vjepa-sha256 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d --output-dir C:\CodexArtifacts\pretrained-reuse-r2\video-feature-cache-parity-v1`. Source commit `279e8d8692e41217d79df26abf1be46e6597fca6`; script SHA-256 `b9e8f28148d59d22dc2a138be0b718958198578d81d41692b63a27e927f11fcc`. |
-| External artifacts | `C:\CodexArtifacts\pretrained-reuse-r2\video-feature-cache-parity-v1\report.json` SHA-256 `20f3573d325651e3671b38dc20deebe88b7708a659f317a8cd1239686a55ef41`; features SHA-256 `c19327cfef7591330e9eb4a4c5e4a28375738f37b0f9b0d115bd2cc457950bab`. |
-
-This establishes exact feature parity for this one deterministic scene and
-implementation path. It does not establish repeated-run determinism across
-backends, prediction parity for a trained scorer, multi-scene latency, or broad
-video quality. V-JEPA rights remain **REVIEW**.
 
 ## R2 status
 
