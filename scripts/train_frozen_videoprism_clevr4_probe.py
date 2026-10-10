@@ -11,6 +11,7 @@ from typing import Any
 
 import numpy as np
 import torch
+import yaml
 from torch import Tensor, nn
 from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer
@@ -207,6 +208,20 @@ def main() -> None:
         raise FileExistsError(f"refusing to overwrite existing output: {output}")
     if args.seed != 17 or args.epochs != 8 or args.batch_questions != 64:
         raise ValueError("this frozen experiment requires seed 17, 8 epochs, batch_questions 64")
+    effective_config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    if effective_config.get("experiment_id") != "path-a-image-videoprism-clevr4-full-seed17":
+        raise ValueError("unexpected CLEVR-4 VideoPrism experiment ID")
+    if effective_config.get("seed") != args.seed or effective_config.get("readout", {}).get(
+        "epochs"
+    ) != args.epochs or effective_config.get("readout", {}).get(
+        "batch_questions"
+    ) != args.batch_questions:
+        raise ValueError("CLI arguments differ from the frozen experiment configuration")
+    configured_options = effective_config.get("task", {}).get("options_per_taxonomy", {})
+    if configured_options != {
+        taxonomy: len(options) for taxonomy, options in CLEVR4_TAXONOMIES.items()
+    }:
+        raise ValueError("configured taxonomy option counts differ from the task adapter")
 
     cache_report = json.loads(cache_report_path.read_text(encoding="utf-8"))
     if cache_report.get("status") != "complete_videoprism_clevr4_full_feature_cache":
@@ -243,15 +258,45 @@ def main() -> None:
     features_by_id, media_by_id = _features_by_id(cache_path)
     train_rows = _load_rows(sample_dir / "train-labels.jsonl")
     all_validation = _load_rows(sample_dir / "val-labels.jsonl")
+    train_assets = _load_rows(sample_dir / "train-image-manifest.jsonl")
+    validation_assets = _load_rows(sample_dir / "val-image-manifest.jsonl")
+    with np.load(cache_path, allow_pickle=False) as payload:
+        cached_train_ids = payload["train_ids"].astype(str).tolist()
+        cached_validation_ids = payload["validation_ids"].astype(str).tolist()
+    if [str(row["id"]) for row in train_rows] != cached_train_ids:
+        raise ValueError("training label ID order differs from the cached feature order")
+    if [str(row["id"]) for row in all_validation] != cached_validation_ids:
+        raise ValueError("validation label ID order differs from the cached feature order")
+    if [row["id"] for row in train_assets] != cached_train_ids:
+        raise ValueError("training media manifest order differs from the cached features")
+    if [row["id"] for row in validation_assets] != cached_validation_ids:
+        raise ValueError("validation media manifest order differs from the cached features")
+    if any(media_by_id[str(row["id"])] != row["sha256"] for row in train_assets):
+        raise ValueError("training media identities differ from the feature cache")
+    if any(media_by_id[str(row["id"])] != row["sha256"] for row in validation_assets):
+        raise ValueError("validation media identities differ from the feature cache")
+    if {row["id"] for row in train_rows} & {row["id"] for row in all_validation}:
+        raise ValueError("train and full validation IDs overlap")
     selection_ids = {
         str(row["id"]) for row in _load_rows(selection_dir / "val-image-manifest.jsonl")
     }
     selected_rows = [row for row in all_validation if str(row["id"]) in selection_ids]
     report_holdout_rows = [row for row in all_validation if str(row["id"]) not in selection_ids]
+    selection_order = [
+        str(row["id"]) for row in _load_rows(selection_dir / "val-image-manifest.jsonl")
+    ]
+    if [str(row["id"]) for row in selected_rows] != selection_order:
+        raise ValueError("checkpoint-selection validation order differs from the frozen sample")
     if len(train_rows) != 8424 or len(selected_rows) != 512 or len(report_holdout_rows) != 1595:
         raise ValueError("full CLEVR-4 split counts differ from the frozen experiment config")
     if {row["id"] for row in train_rows} & selection_ids:
         raise ValueError("train and checkpoint-selection validation IDs overlap")
+    if selection_ids & {str(row["id"]) for row in report_holdout_rows}:
+        raise ValueError("checkpoint-selection and one-time reporting IDs overlap")
+    if {media_by_id[str(row["id"])] for row in train_rows} & {
+        media_by_id[str(row["id"])] for row in all_validation
+    }:
+        raise ValueError("train and full validation media identities overlap")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if device.type == "cuda":
@@ -259,6 +304,9 @@ def main() -> None:
     torch.manual_seed(args.seed)
     random.seed(args.seed)
     option_embeddings, text_encoder = _option_embeddings(device, text_model)
+    candidate_text_parameter_count = sum(
+        parameter.numel() for parameter in text_encoder.parameters()
+    )
     train_tasks, train_targets, _, _ = _tasks(train_rows, features_by_id, option_embeddings)
     selection_tasks, selection_targets, _, selection_types = _tasks(
         selected_rows, features_by_id, option_embeddings
@@ -376,16 +424,35 @@ def main() -> None:
         "one_time_reporting_validation_unique_media_count": len(
             {media_by_id[str(row["id"])] for row in report_holdout_rows}
         ),
-        "train_validation_id_overlap": 0,
-        "train_validation_media_hash_overlap": 0,
-        "selection_reporting_id_overlap": 0,
+        "train_validation_id_overlap": len(
+            {row["id"] for row in train_rows} & {row["id"] for row in all_validation}
+        ),
+        "train_validation_media_hash_overlap": len(
+            {media_by_id[str(row["id"])] for row in train_rows}
+            & {media_by_id[str(row["id"])] for row in all_validation}
+        ),
+        "selection_reporting_id_overlap": len(
+            selection_ids & {str(row["id"]) for row in report_holdout_rows}
+        ),
         "training_task_count": len(train_tasks),
         "checkpoint_selection_task_count": len(selection_tasks),
         "reporting_task_count": len(holdout_tasks),
         "encoder_revision": MODEL_REVISION,
         "encoder_checkpoint_sha256": CHECKPOINT_SHA256,
         "candidate_text_revision": TEXT_REVISION,
+        "effective_config": effective_config,
+        "effective_config_sha256": sha256_file(config_path),
+        "candidate_text_parameter_count": candidate_text_parameter_count,
         "readout_parameters": parameter_count,
+        "total_resident_parameter_count": (
+            114365184 + candidate_text_parameter_count + parameter_count
+        ),
+        "weight_package_bytes": (
+            int(cache_report["encoder"]["checkpoint_bytes"])
+            + sum(path.stat().st_size for path in text_model.rglob("*") if path.is_file())
+            + readout_path.stat().st_size
+        ),
+        "provisional_package_target_bytes": 200_000_000,
         "optimizer": "AdamW(lr=0.001, weight_decay=0.0001)",
         "epochs": args.epochs,
         "batch_questions": args.batch_questions,
