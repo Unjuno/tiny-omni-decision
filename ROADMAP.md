@@ -157,7 +157,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 - [x] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifest hashes and experiment checkpoint hashes without modifying their bytes (`docs/pretrained_reuse/R0_INVENTORY.json`; 2026-10-10 snapshot).
 - [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Read-only contribution/dependency review for PRs #9–#14: `docs/pretrained_reuse/R0_OPEN_PR_REVIEW_20261011.md`. All remain open and unchanged; CI for PRs #13/#14 was not verifiable from the unauthenticated status lookup.
 - [ ] Set the deployment device, task-specific quality/confidence and time/money criteria before training or promotion decisions; retain the historical >=95% product aspiration only as a specified challenge target. The user provisionally authorized the roadmap's 100–200M parameter and <=200 MB package figures for engineering work only; neither is a release gate yet.
-- [x] Publish candidate matrix, evaluation plan and separate environment contracts (`docs/pretrained_reuse/R0_DECISION_MATRIX_20261011.md`). Product size/device/task thresholds and time/money approval remain open.
+- [x] Publish candidate matrix, evaluation plan and separate environment contracts (`docs/pretrained_reuse/R0_DECISION_MATRIX_20261011.md`). Parameter/package targets are provisional; deployment device, task thresholds and time/money approval remain open.
 
 **Exit:** frozen legacy baseline and written constraints; no historical evidence altered.
 
