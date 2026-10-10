@@ -439,6 +439,28 @@ The original validation is reused, not independent, and V-JEPA checkpoint rights
 remain **REVIEW**. The successful replay validates persistent feature integrity
 and readout reproducibility only; it does not raise the image-quality estimate.
 
+#### Direct video-cache versus fresh-encoder parity (single scene)
+
+To close the narrow question of whether video cache reuse reproduces a fresh
+V-JEPA feature computation, I reloaded the pinned frozen encoder and processed
+the same two existing validation questions both through `_video_features`
+(which deduplicates their shared scene) and independently per question. The
+sample, manifest, and media were read-only; the sealed audit was not loaded.
+
+| Item | Result |
+|---|---|
+| Sample | CLEVRER validation scene `10498`; question IDs `clevrer-validation-10498-q000` and `clevrer-validation-10498-q008`; one underlying video SHA-256 `f5dc257fc4091cb2b2e6519a6ac1496c6399fdb16b2e60d897c37d9ddbd3c94f`. |
+| Encoder | V-JEPA source commit `204698b45b3712590f06245fbfba32d3be539812`; checkpoint SHA-256 `848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d`; 8 frames; output `[2, 768]` float32. |
+| Parity and reuse | Cached and fresh-encoder features are `allclose`; maximum absolute difference `0.0`. Deduplicated path made 1 encoder call for 2 questions (1 avoided). Feature payload was 3,072 bytes instead of 6,144 bytes for repeated rows. |
+| Runtime and memory | RTX 3080 Laptop 16 GiB; CUDA 12.4, PyTorch 2.6.0+cu124, Transformers 5.6.2, PyAV 18.1.0. Cache path `0.5350 s`, uncached path `0.6527 s`, observed ratio `1.22x`; model allocation before inference `347,332,608` bytes and peak allocation `457,564,160` bytes. One scene is too small for a product latency claim. |
+| Reproduction | `python -m scripts.verify_video_cache_parity --sample-dir C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-probe-v0-retry3 --vjepa-source C:\CodexArtifacts\pretrained-reuse-r1\vjepa2-source --vjepa-checkpoint C:\CodexArtifacts\pretrained-reuse-r1\vjepa2_1_vitb_dist_vitG_384.pt --vjepa-sha256 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d --output-dir C:\CodexArtifacts\pretrained-reuse-r2\video-feature-cache-parity-v1`. Source commit `279e8d8692e41217d79df26abf1be46e6597fca6`; script SHA-256 `b9e8f28148d59d22dc2a138be0b718958198578d81d41692b63a27e927f11fcc`. |
+| External artifacts | `C:\CodexArtifacts\pretrained-reuse-r2\video-feature-cache-parity-v1\report.json` SHA-256 `20f3573d325651e3671b38dc20deebe88b7708a659f317a8cd1239686a55ef41`; features SHA-256 `c19327cfef7591330e9eb4a4c5e4a28375738f37b0f9b0d115bd2cc457950bab`. |
+
+This establishes exact feature parity for this one deterministic scene and
+implementation path. It does not establish repeated-run determinism across
+backends, prediction parity for a trained scorer, multi-scene latency, or broad
+video quality. V-JEPA rights remain **REVIEW**.
+
 ## R2 status
 
 #### Packed feature-cache experiment
@@ -500,7 +522,7 @@ command wrapper: `scripts/pack_observation_feature_cache.py`.
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
-- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio cache roundtrip covers 1,920 frozen train/validation observations, with exact feature reload and the same class predictions for all 2,560 validation queries. Image cache roundtrip covers 1,536 frozen train/validation images, with exact feature reload and the same classes for all 2,048 validation decisions. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
+- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. A separate direct V-JEPA check on one validation scene recomputed both questions independently and matched the deduplicated cache features exactly (max difference 0.0); this is a one-scene correctness check, not a latency claim. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio cache roundtrip covers 1,920 frozen train/validation observations, with exact feature reload and the same class predictions for all 2,560 validation queries. Image cache roundtrip covers 1,536 frozen train/validation images, with exact feature reload and the same classes for all 2,048 validation decisions. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.
 
