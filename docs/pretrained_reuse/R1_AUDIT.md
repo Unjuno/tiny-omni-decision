@@ -86,3 +86,30 @@ close R1's legally-cleared video-candidate exit. Sources: [pinned ViViT Hub
 card](https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42), [pinned ViViT Hub API
 metadata](https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?blobs=true), and [pinned VideoMAE
 card](https://huggingface.co/MCG-NJU/videomae-base/tree/dc740ceda42fce44faed2ea03c6d447db72f6af9).
+
+## Supplementary video-model screen (2026-10-11)
+
+Two further public video checkpoints were screened by their pinned Hub metadata;
+no model weights were downloaded or loaded.
+
+- `facebook/vjepa2-vitg-fpc64-256@875c192b7b704b87d1e1d99345769632dd5f739a`
+  is explicitly tagged Apache-2.0 on Meta's Hub model card. The API reports
+  1,034,555,264 parameters and a 4,138,311,608-byte safetensors file
+  (SHA-256 `f205e77aa2ade168db6b09d4bc420d156141f64ab964278a9c181a2bdf2a232b`).
+  Its pinned config specifies 40 layers, hidden size 1,408, 22 attention heads,
+  and 64 frames; the repository totals 20.6GB including the 16,464,208,210-byte
+  original checkpoint. This is the V-JEPA 2 ViT-G model, not the V-JEPA 2.1
+  ViT-B Path A encoder. It is a possible large teacher only; its size and input
+  budget are incompatible with the compact product target, and no benefit from
+  distilling it has been measured.
+- `OpenGVLab/VideoMamba@69502a732f8f69709cec9ed6c54d5345259fd825` exposes a
+  K400 / 64-frame checkpoint of 28,327,498 bytes (SHA-256
+  `1323c8d2e23ac806e28b1abf4f37458db8b490b376987130ab1b6cc219bc6c16`). Its
+  Hub API metadata says Apache-2.0, but the same model card body says
+  “Non-commercial license.” The upstream repository's root `LICENSE` is
+  Apache-2.0; its model zoo describes masked pretraining on K400 and separately
+  lists WebVid/multimodal-data variants. Because the exact checkpoint grant and
+  training-data scope are ambiguous, keep it **REVIEW** and do not use it in a
+  product or evaluation run until the model maintainers clarify.
+
+Sources: [Meta's pinned V-JEPA 2 ViT-G card](https://huggingface.co/facebook/vjepa2-vitg-fpc64-256/tree/875c192b7b704b87d1e1d99345769632dd5f739a), [pinned model README/config](https://huggingface.co/facebook/vjepa2-vitg-fpc64-256/blob/875c192b7b704b87d1e1d99345769632dd5f739a/README.md), [OpenGVLab's pinned VideoMamba card](https://huggingface.co/OpenGVLab/VideoMamba/tree/69502a732f8f69709cec9ed6c54d5345259fd825), [upstream model zoo](https://github.com/OpenGVLab/VideoMamba/blob/37355c26d0ae99ca2459f6d4044a5f509031a79f/videomamba/video_mm/MODEL_ZOO.md), and [upstream license](https://github.com/OpenGVLab/VideoMamba/blob/37355c26d0ae99ca2459f6d4044a5f509031a79f/LICENSE).
