@@ -503,3 +503,45 @@ command wrapper: `scripts/pack_observation_feature_cache.py`.
 - Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio cache roundtrip covers 1,920 frozen train/validation observations, with exact feature reload and the same class predictions for all 2,560 validation queries. Image cache roundtrip covers 1,536 frozen train/validation images, with exact feature reload and the same classes for all 2,048 validation decisions. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.
+
+#### Expanded CLEVRER frozen-video readout (2026-10-11)
+
+This bounded data-coverage follow-up keeps the prior 8-frame V-JEPA + frozen
+MiniLM encoders and the 295,169-parameter candidate scorer fixed, while
+increasing unique CLEVRER scene coverage. It is a descriptive synthetic-video
+probe, not general video understanding. The V-JEPA checkpoint's commercial
+rights remain **REVIEW**; no product use is implied.
+
+| Item | Result |
+|---|---|
+| Source/split | `MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef`, CC0-1.0. Seed 17; 256 train scenes / 512 questions and 200 validation scenes / 400 questions; 50% temporal-descriptive and 50% static-descriptive in each split. Existing scene IDs were excluded. Scene, media SHA-256, and normalized question overlap are all zero. The ordered validation ID hash is `eac798f4f3234f3aa9003bedd3721cb25597a923f7a7409d168fbc9226ea5874`. |
+| Data provenance | Train manifest SHA-256 `5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d`; validation manifest SHA-256 `53aa6f01447a43337a601279daf620c0df91d807773522cc92230fcab173db7c`; fetch report SHA-256 `75f0511bb94df2abd7e2734c0881af0282ed3797ec7b725cc07fa7dc8fd84a44`; excluded-scene config SHA-256 `a567348f615aa3f953c7fd95287e45ec4bfca0e55af9f6f4176305827efde138`. Only selected HTTP ranges were downloaded and per-video hashes were checked; the full source archives were not SHA-verified (pinned size/ETag only). |
+| Configuration/models | Config `configs/pretrained_reuse/path_a_video_vjepa_expanded_seed17.yaml`, SHA-256 `3a81f75b80546f2484b8be0a8ad350aa81d3a79c8cc5c5e87081c6237edd8e3e`; training script SHA-256 `89943d01ba780671841d6b79ea85fd7c0078ca98ef95226207c1242ae33acaa0`; source commit `351136463af00ec5bad202b2d72823a37e229d27`. V-JEPA source commit `204698b45b3712590f06245fbfba32d3be539812`, checkpoint SHA-256 `848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d`, 8 frames at 384px; frozen MiniLM revision `4ca70771034acceecb2e72475f72050fcdde4ddc`, weights SHA-256 `cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`. Readout: shared candidate MLP, AdamW lr `0.001`, weight decay `0.001`, 24 epochs, batch 8, seed 17; selected by minimum validation NLL. |
+| Selected validation | 400 questions: Accuracy `0.3100`, NLL `1.3150`, Brier `0.6890`, ECE-15 `0.0573`; best epoch 2. Static descriptive (200): `0.3100 / 1.3437 / 0.6990 / 0.0628`. Temporal descriptive (200): `0.3100 / 1.2863 / 0.6791 / 0.0712`. |
+| Learning curve / overfit | At selected epoch 2, train Accuracy/NLL/Brier/ECE was `0.4395 / 1.1819 / 0.6439 / 0.0584` (train CE `1.2189`), versus validation `0.3100 / 1.3150 / 0.6890 / 0.0573`. Train CE fell from `1.2736` at epoch 1 to `0.8566` at epoch 24. Validation NLL was best at epoch 2 (`1.3150`) and rose to `1.6378` at epoch 24; validation Brier rose from `0.6890` at epoch 2 to `0.8009` at epoch 24. Validation Accuracy fluctuated and reached `0.3675` at epoch 24, so the validation-NLL-selected checkpoint was not the final epoch. This is direct evidence of readout overfitting on this small synthetic task. |
+| Matched held-out comparison | Both checkpoints were reloaded and scored on the exact same 400 expanded validation IDs with the same cached video and newly recomputed MiniLM features. The prior 16-scene v0 checkpoint (trained on disjoint earlier scenes) scored Accuracy/NLL/Brier/ECE `0.3325 / 1.3952 / 0.7095 / 0.0286`; the expanded-data checkpoint scored `0.3100 / 1.3150 / 0.6890 / 0.0573`. Thus expanded coverage improved NLL/Brier but reduced Accuracy by 2.25 points and worsened ECE; it is a mixed result, not a win. This is one-seed development validation and does not establish causality or generalization. Comparison artifact SHA-256 `104c3c5a4514508e4071bb538721a3661477ba299449fcd02fede6560687169`. |
+| Runtime/artifacts | Local RTX 3080 Laptop 16 GiB; Python 3.11.9, PyTorch 2.6.0+cu124, torchvision 0.21.0+cu124, CUDA runtime 12.4, pinned `timm` 1.0.15, PyAV 18.1.0, Transformers 5.6.2. Start/end: `2026-10-10 19:21:34`–`19:23:56 UTC` (`2026-10-11 04:21:34`–`04:23:56 JST`). Video feature extraction: train `74.62s`, validation `57.54s`; readout fit `4.34s`; peak CUDA allocation `464,645,120` bytes. The full run was about 142 seconds. External output: `C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-expanded-readout-v0-retry1`. Best readout SHA-256 `0db407b986c8a19e836883f3137d4ed99b684e962c531ba50907e3a6ebfcd25e`; predictions SHA-256 `78d7ea0ceeb247de363a7ada1b2d925aee9f9a2849ee9eac124849d67e6a8279`; video feature cache SHA-256 `2fa8935de933c1baa72f5562861c57ff7e482331f21316e30f1383ef1f3234d0`; run report SHA-256 `7a3b026b11a50e08e358fece496a363a8c831154c69eb3232533adfaf5ccf4f1`. The attempted original output path is an empty directory after a missing-`timm` initialization failure; it was preserved and the successful run used the separate `retry1` path. No package installation or upgrade occurred. |
+
+Exact successful invocation (local pinned dependency path is needed for `timm`; no package was installed):
+
+```powershell
+$env:PYTHONPATH = "src;.;C:\CodexArtifacts\pretrained-reuse-r1\python-deps"
+py -3.11 scripts/train_frozen_video_probe.py `
+  --sample-dir C:\CodexArtifacts\pretrained-reuse-r2\clevrer-expanded-seed17-256train-200val `
+  --vjepa-source C:\CodexArtifacts\pretrained-reuse-r1\vjepa2-source `
+  --vjepa-checkpoint C:\CodexArtifacts\pretrained-reuse-r1\vjepa2_1_vitb_dist_vitG_384.pt `
+  --vjepa-sha256 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d `
+  --text-model C:\CodexArtifacts\pretrained-reuse-r2\models\text-minilm-en `
+  --text-revision 4ca70771034acceecb2e72475f72050fcdde4ddc `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-expanded-readout-v0-retry1 `
+  --config configs/pretrained_reuse/path_a_video_vjepa_expanded_seed17.yaml `
+  --seed 17 --epochs 24 --batch-questions 8
+```
+
+This result shows that unique-scene expansion alone did not improve accuracy on
+the held-out scenes, though probability losses improved. Training loss versus
+validation NLL/Brier indicates early overfitting; the probe is too small to
+separate representation limits from task ambiguity, sampling, or scorer
+capacity. Do not increase epochs or treat this as a backbone ceiling. No sealed
+audit or legacy final evaluation was loaded, and neither old outputs nor model
+weights/media were added to Git.
