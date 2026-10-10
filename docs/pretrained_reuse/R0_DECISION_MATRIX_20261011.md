@@ -16,6 +16,7 @@ training or promotion decision.
 | Whisper-tiny speech | Pinned Apache-2.0 encoder loaded; feature plumbing works. | Speech Commands task quality not established; current checkpoint is an ASR encoder. | Use only for task-matched frozen keyword evaluation. |
 | EfficientAT DyMN-0.4 AudioSet | Pinned 8,086,973-byte release strictly loaded; owner explicitly permits commercial checkpoint use. | Environmental audio tagging only; no speech keyword or joint AV result. | ALLOW as a small environmental-audio candidate; do not substitute its task for speech. |
 | YT-NTU-AVQ joint AV quality | Pinned, ungated 1,620-sequence dataset with MOS annotations; metadata and archive hashes recorded in the candidate manifest. | CC BY 3.0 terms are explicit, but the local license allowlist returns REVIEW and original source IDs are missing from metadata; perceptual quality is not semantic AV reasoning. | Review-only; no corpus inclusion, media fetch, or readout training yet. |
+| UnAV-100 joint AV event localization | Official page describes >10K untrimmed videos, >30K events, 100 categories, temporal boundaries, and a YouTube-ID/timestamp/split CSV; project page states CC BY 4.0. | Official page reserves original video-owner copyright; HF mirror advertises conflicting CC BY-NC-SA 4.0. Source-level rights, immutable data revision, archive hashes, and split identity are unverified. | Review-only; exclude the HF mirror and do not fetch/use assets until license scope, per-source rights and grouping are reconciled. |
 | PE Core T/S/B | Official docs list T/16, S/16, B/16 checkpoints and Apache-2.0 checkpoint terms. | The implementation package's `setup.py` declares FAIR Noncommercial Research; the anonymous Hub API audit returned 401, so local artifact access/load was not verified. | Keep rights/access split explicit; no product use of the official implementation without resolution. |
 | ViT-Lens-L | Pinned released CLIP ViT-L/14 + audio Lens pair totals 12,326,294,229 bytes. | Too large for the proposed compact path; original backbone, not V-JEPA; no matched Decision result. | Reference only; no local download or load planned. |
 | VATT | Official README lists Google Storage checkpoints. | Tested link redirects to sign-in; exact weights, hash, license, and current runtime unresolved. | UNKNOWN; revisit only if anonymous access and exact terms are established. |
@@ -36,8 +37,8 @@ by the strongest underlying identity (source/state, image, audio speaker/source,
 or video scene). Development validation supports iteration; sealed audit stays
 unloaded until the architecture, preprocessing, calibration, selection rule,
 and thresholds are frozen. Do not combine separate unimodal scores into a
-joint audio-video capability claim: there is no currently approved synchronized
-AV Decision source in the manifests.
+joint audio-video capability claim: YT-NTU-AVQ and UnAV-100 are review-status
+candidates, and no synchronized AV Decision source is approved in the manifests.
 
 The current executable work remains frozen-feature readout evaluation, not
 backbone training, unfreezing, distillation, or product promotion. The existing
