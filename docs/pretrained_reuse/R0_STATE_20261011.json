@@ -1,0 +1,352 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-10-10T17:10:01.9985438Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "source_branch": "docs/pretrained-reuse-roadmap-20261010",
+  "source_head": "45a60af16ef10df2b20781232f2c54175eb29ab5",
+  "origin_branch_head": "45a60af16ef10df2b20781232f2c54175eb29ab5",
+  "prior_r0_inventory_sha256": "6113a38431681ab6fcedb9eb4d4ce9cb0a1875d11ea8a95bc44d5f9128f0c881",
+  "remote_branches_and_refs": [
+    {
+      "name": "codex/clevr4-image-candidate",
+      "sha": "6c2abb842b448e248573e2f729670e1a1080ae98"
+    },
+    {
+      "name": "codex/decision-head-validation",
+      "sha": "24d7fab171524aea51b3ba82726d33c728407d50"
+    },
+    {
+      "name": "codex/durable-decision-teacher",
+      "sha": "fbb1dced2f6b6a0272ca29325dfb0b54da7e5c58"
+    },
+    {
+      "name": "codex/fix-speechcommands-parquet",
+      "sha": "ac44d457073df83d7a0c2f8d6c5e4490f725014b"
+    },
+    {
+      "name": "codex/phase2-audio-video",
+      "sha": "b8057ec534b3792ab54ee136465544fa9c26d925"
+    },
+    {
+      "name": "codex/phase2-dataset-gates",
+      "sha": "b02180f7f2bd6f2876958a1e5c6018fc6bdc9927"
+    },
+    {
+      "name": "codex/phase3-high-precision-omni",
+      "sha": "30bcf23c510b9db724c0b17b07f284139105ee44"
+    },
+    {
+      "name": "codex/qat-groupwise-performance",
+      "sha": "344c831d8ae060ed78567fd59f0700accff50ea0"
+    },
+    {
+      "name": "codex/teacher-quality-clean-dev-v1",
+      "sha": "041c5954b37ba74dc9286d1d37d8bfe029dc6414"
+    },
+    {
+      "name": "codex/teacher-quality-next",
+      "sha": "c5f120857bc5c4f392e1605895a614760cef12a1"
+    },
+    {
+      "name": "codex/teacher-quality-physionpp",
+      "sha": "740ec0a7d2d8ba870b384a130c8b0821537b9626"
+    },
+    {
+      "name": "codex/teacher-quality-v1",
+      "sha": "8bf351c9b2537e03780d55edf12c45ad09819134"
+    },
+    {
+      "name": "codex/ternary-student-recovery",
+      "sha": "acd20f04f3410900689098d7b50eeb10c5d4c52f"
+    },
+    {
+      "name": "codex/ternary-student-recovery-updated",
+      "sha": "8c87ac47dbf2e81ada01719cfca75ee02e870cca"
+    },
+    {
+      "name": "codex/video-teacher-v2",
+      "sha": "6b15fcbb2546ac153c0313af0d63be86f41ff885"
+    },
+    {
+      "name": "codex/video-teacher-v2-long-budget",
+      "sha": "ac93eddd289bf207b70b55759a922b070132d0d2"
+    },
+    {
+      "name": "docs/pretrained-reuse-roadmap-20261010",
+      "sha": "45a60af16ef10df2b20781232f2c54175eb29ab5"
+    },
+    {
+      "name": "fix/student-qat-training-handoff",
+      "sha": "c3391a0c689d69df3300686d9c287546b741e7c8"
+    },
+    {
+      "name": "main",
+      "sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    },
+    {
+      "name": "origin",
+      "sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    },
+    {
+      "name": "origin/codex/clevr4-image-candidate",
+      "sha": "6c2abb842b448e248573e2f729670e1a1080ae98"
+    },
+    {
+      "name": "origin/codex/decision-head-validation",
+      "sha": "24d7fab171524aea51b3ba82726d33c728407d50"
+    },
+    {
+      "name": "origin/codex/durable-decision-teacher",
+      "sha": "fbb1dced2f6b6a0272ca29325dfb0b54da7e5c58"
+    },
+    {
+      "name": "origin/codex/fix-speechcommands-parquet",
+      "sha": "ac44d457073df83d7a0c2f8d6c5e4490f725014b"
+    },
+    {
+      "name": "origin/codex/phase1-reproducible-smoke",
+      "sha": "c5b0c5020f77018fbce8d6f0880a079a3bd51281"
+    },
+    {
+      "name": "origin/codex/phase2-audio-video",
+      "sha": "b8057ec534b3792ab54ee136465544fa9c26d925"
+    },
+    {
+      "name": "origin/codex/phase2-dataset-gates",
+      "sha": "b02180f7f2bd6f2876958a1e5c6018fc6bdc9927"
+    },
+    {
+      "name": "origin/codex/phase3-high-precision-omni",
+      "sha": "30bcf23c510b9db724c0b17b07f284139105ee44"
+    },
+    {
+      "name": "origin/codex/postquant-cache-preparation",
+      "sha": "92fc57f2a28d82b7afad5533f2df66a4042d67a0"
+    },
+    {
+      "name": "origin/codex/postquant-numerical-core",
+      "sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"
+    },
+    {
+      "name": "origin/codex/postquant-teacher-cache",
+      "sha": "c79a50bd937de9266fb1277efd68fd24b3989a61"
+    },
+    {
+      "name": "origin/codex/postquant-worker-entrypoints",
+      "sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"
+    },
+    {
+      "name": "origin/codex/qat-groupwise-performance",
+      "sha": "344c831d8ae060ed78567fd59f0700accff50ea0"
+    },
+    {
+      "name": "origin/codex/roadmap-compression-video-specialization",
+      "sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"
+    },
+    {
+      "name": "origin/codex/teacher-quality-clean-dev-v1",
+      "sha": "041c5954b37ba74dc9286d1d37d8bfe029dc6414"
+    },
+    {
+      "name": "origin/codex/teacher-quality-next",
+      "sha": "c5f120857bc5c4f392e1605895a614760cef12a1"
+    },
+    {
+      "name": "origin/codex/teacher-quality-physionpp",
+      "sha": "740ec0a7d2d8ba870b384a130c8b0821537b9626"
+    },
+    {
+      "name": "origin/codex/teacher-quality-v1",
+      "sha": "8bf351c9b2537e03780d55edf12c45ad09819134"
+    },
+    {
+      "name": "origin/codex/ternary-student-recovery",
+      "sha": "acd20f04f3410900689098d7b50eeb10c5d4c52f"
+    },
+    {
+      "name": "origin/codex/video-teacher-v2",
+      "sha": "6b15fcbb2546ac153c0313af0d63be86f41ff885"
+    },
+    {
+      "name": "origin/codex/video-teacher-v2-long-budget",
+      "sha": "ac93eddd289bf207b70b55759a922b070132d0d2"
+    },
+    {
+      "name": "origin/docs/pretrained-reuse-roadmap-20261010",
+      "sha": "45a60af16ef10df2b20781232f2c54175eb29ab5"
+    },
+    {
+      "name": "origin/feat/ternary-student-recovery",
+      "sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd"
+    },
+    {
+      "name": "origin/fix/student-qat-training-handoff",
+      "sha": "c3391a0c689d69df3300686d9c287546b741e7c8"
+    },
+    {
+      "name": "origin/main",
+      "sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    }
+  ],
+  "open_pull_requests": [
+    {
+      "number": 15,
+      "state": "open",
+      "draft": true,
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "head_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "head_sha": "45a60af16ef10df2b20781232f2c54175eb29ab5",
+      "base_branch": "main"
+    },
+    {
+      "number": 14,
+      "state": "open",
+      "draft": true,
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "head_branch": "fix/student-qat-training-handoff",
+      "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "base_branch": "codex/ternary-student-recovery"
+    },
+    {
+      "number": 13,
+      "state": "open",
+      "draft": false,
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "head_branch": "feat/ternary-student-recovery",
+      "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "base_branch": "main"
+    },
+    {
+      "number": 12,
+      "state": "open",
+      "draft": true,
+      "title": "feat: add strict postquant teacher cache boundary",
+      "head_branch": "codex/postquant-teacher-cache",
+      "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "base_branch": "codex/postquant-numerical-core"
+    },
+    {
+      "number": 11,
+      "state": "open",
+      "draft": true,
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "head_branch": "codex/postquant-numerical-core",
+      "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "base_branch": "codex/postquant-worker-entrypoints"
+    },
+    {
+      "number": 10,
+      "state": "open",
+      "draft": true,
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "head_branch": "codex/postquant-worker-entrypoints",
+      "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "base_branch": "codex/roadmap-compression-video-specialization"
+    },
+    {
+      "number": 9,
+      "state": "open",
+      "draft": true,
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "head_branch": "codex/teacher-quality-v1",
+      "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "base_branch": "main"
+    }
+  ],
+  "worktrees": [
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "branch": "refs/heads/codex/teacher-quality-clean-dev-v1",
+      "detached": false
+    },
+    {
+      "path": "C:/CodexWorktrees/decision-head-validation",
+      "head": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "branch": "refs/heads/codex/decision-head-validation",
+      "detached": false
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat",
+      "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "branch": null,
+      "detached": true
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat-latest",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "branch": "refs/heads/fix/student-qat-training-handoff",
+      "detached": false
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-omni",
+      "head": "45a60af16ef10df2b20781232f2c54175eb29ab5",
+      "branch": "refs/heads/docs/pretrained-reuse-roadmap-20261010",
+      "detached": false
+    },
+    {
+      "path": "C:/CodexWorktrees/qat-groupwise-performance",
+      "head": "344c831d8ae060ed78567fd59f0700accff50ea0",
+      "branch": "refs/heads/codex/qat-groupwise-performance",
+      "detached": false
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-long-budget",
+      "head": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "branch": "refs/heads/codex/video-teacher-v2-long-budget",
+      "detached": false
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp",
+      "head": "740ec0a7d2d8ba870b384a130c8b0821537b9626",
+      "branch": "refs/heads/codex/teacher-quality-physionpp",
+      "detached": false
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-ternary-student",
+      "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "branch": "refs/heads/codex/ternary-student-recovery",
+      "detached": false
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery",
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "branch": "refs/heads/codex/ternary-student-recovery-updated",
+      "detached": false
+    }
+  ],
+  "gpu_query": "NVIDIA GeForce RTX 3080 Laptop GPU, 16384 MiB, 11 MiB, 0 %",
+  "process_snapshot": [
+    {
+      "pid": 26456,
+      "created": "2026-10-05T17:10:24.2712300+09:00",
+      "image": "python.exe",
+      "training_like": false
+    },
+    {
+      "pid": 66896,
+      "created": "2026-10-08T12:16:46.0776370+09:00",
+      "image": "python.exe",
+      "training_like": false
+    }
+  ],
+  "no_process_stopped_or_modified": true,
+  "external_diagnostic_artifact": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ruri-jamcqa-v2-dev-zero-shot-v1",
+    "files": [
+      {
+        "name": "dev-predictions.jsonl",
+        "bytes": 29193,
+        "modified": "2026-10-11T02:05:40.5627650+09:00",
+        "sha256": "2de1b928fc1a177aef537c2359a0a5b7277df5495f3412fd6930cdcebdda5d74"
+      },
+      {
+        "name": "run-report.json",
+        "bytes": 7427,
+        "modified": "2026-10-11T02:05:40.6158823+09:00",
+        "sha256": "0f17d5cb26a53943930e5dcbc15fde81d4ede27a019f666d480c24979aa57dc4"
+      }
+    ]
+  },
+  "scope_note": "Read-only state snapshot. No model/data/checkpoint/process was changed by this inventory."
+}

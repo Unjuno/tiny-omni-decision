@@ -1,0 +1,28 @@
+schema_version: 1
+dataset_id: sbintuitions/JamC-QA-V2
+revision: cfb4b64d289acaf592237179f90dd23d3f2d5bdf
+subset: v2.0
+split: dev
+modalities: [text]
+upstream_url: https://huggingface.co/datasets/sbintuitions/JamC-QA-V2
+license: CC-BY-SA-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: null
+attribution: Oka, Shibata, and Yoshida; JamC-QA-V2 (2026)
+source_citation: https://huggingface.co/datasets/sbintuitions/JamC-QA-V2
+usage: evaluation
+trust_status: trusted
+schema:
+  state: question
+  question: question
+  options: options
+  target: target
+notes:
+  parquet_path: v2.0/dev-00000-of-00001.parquet
+  expected_rows: 52
+  evaluation_only: true
+  test_split_loaded: false
+  license_note: CC BY-SA 4.0; preserve attribution and share-alike requirements.
+  contamination_note: The model card lists Ruri's fine-tuning dataset family; JamC-QA-V2 overlap was not independently ruled out.

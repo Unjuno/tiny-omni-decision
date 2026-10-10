@@ -137,10 +137,46 @@ On the first fixed validation clip, the saved Whisper feature and a fresh extrac
 
 Reproduction script: `scripts/verify_audio_cache_parity.py`. Inputs are the existing `C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-sample-seed17-128-64-retry2`, Whisper and MiniLM checkpoints and readout from `audio-probe-v0-retry3`; output is external at `C:\CodexArtifacts\pretrained-reuse-r2\audio-cache-parity-v0`. Report SHA-256 `6d02a98c91dfd0a393b27d38dbca9afaf2b20ca750218c01d21c94392e1accdf`; source feature cache SHA-256 `ace323458e7f443daf63382d2d41d99151d2a5801c671d30b0df68d52338ae64`; script SHA-256 `270073d31fa1ed8419e8368deb1b3ec3ab266d0e7e25ce83af3b511d983b2bd0`. It used Python 3.11.9, PyTorch 2.6.0+cu124 and Transformers 5.6.2; no model was updated, and no sealed or test split was loaded.
 
+## Japanese text-only diagnostic: Ruri v3-30m + JamC-QA-V2 dev
+
+This one-time zero-shot diagnostic checks whether a small Japanese embedding
+encoder can already rank multiple-choice answers without training a Decision
+head. It is not a trained Path A result and does not establish broad Japanese
+Decision quality.
+
+| Item | Value |
+|---|---|
+| Dataset | [`sbintuitions/JamC-QA-V2`](https://huggingface.co/datasets/sbintuitions/JamC-QA-V2) at revision `cfb4b64d289acaf592237179f90dd23d3f2d5bdf`; CC-BY-SA-4.0; dev only |
+| License status | **REVIEW** under the repository manifest policy; used only for this isolated evaluation diagnostic, not training or product distribution |
+| Rows | 52; category counts: 4 each for culture, custom, regional identity, geography, history, government, law and healthcare; 20 JSDF. Duplicate answer strings were retained. |
+| Data hashes | Source Parquet SHA-256 `acd98fd9a1cf3fd5c59bb321b4480141fae6d124b70779599280171741ed3198`; normalized dev JSONL SHA-256 `7c9eece543968f49816a17020d7ea286b43a7c689b383be3b795c4557a159380`; ordered question IDs SHA-256 `ca69c3443026fd44025b4c50d2e0dab5dfd5843f146beaf2fdc63d987af13e29` |
+| Encoder | `cl-nagoya/ruri-v3-30m@24899e5de370b56d179604a007c0d727bf144504`; local weights SHA-256 `e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832`; 36,705,536 frozen parameters; masked-mean pooling and L2 normalization |
+| Scoring | Query prefix `検索クエリ: `, candidate prefix `検索文書: `; cosine similarity, fixed temperature 1.0; no fitting, training or checkpoint selection |
+| Split protection | Test split not loaded; sealed audit not loaded; zero training examples. Ruri training-data contamination on JamC-QA was not independently excluded. |
+| Runtime | RTX 3080 Laptop GPU; CUDA; 0.330 s encoder time; peak allocated CUDA memory 213,029,888 bytes |
+| Reproduction | Config `configs/pretrained_reuse/ruri_jamcqa_zero_shot.yaml`, SHA-256 `b2346f2e4f08d9c6c2629a7f68e05e7a6fe5c43b629a14e3a654e25108623b9f`; evaluator `scripts/evaluate_ruri_jamcqa_dev.py`, SHA-256 `21298059e7df0b6574cb4d1ac051d29d8d2242e221f9c778a72821919343f4dc`; external output `C:\CodexArtifacts\pretrained-reuse-r2\ruri-jamcqa-v2-dev-zero-shot-v1` |
+| Saved predictions | SHA-256 `2de1b928fc1a177aef537c2359a0a5b7277df5495f3412fd6930cdcebdda5d74`; report SHA-256 `0f17d5cb26a53943930e5dcbc15fde81d4ede27a019f666d480c24979aa57dc4` |
+
+| Split | Count | Accuracy | NLL | Brier | ECE (15 bins) | Mean confidence |
+|---|---:|---:|---:|---:|---:|---:|
+| JamC-QA-V2 dev | 52 | 0.2308 | 1.3864 | 0.7500 | 0.0222 | 0.2530 |
+| Uniform four-choice reference | — | 0.2500 expected | 1.3863 | 0.7500 | 0.0000 expected | 0.2500 |
+
+The result is near the uniform four-choice reference and does not support using
+this frozen embedding/cosine setup as a Japanese Decision path. ECE is low
+because confidence is near 0.25, not because the ranking is useful. The dev set
+is small and intended for development; the single run is a diagnostic, not a
+blind estimate. No follow-up tuning or second evaluation was performed. The
+result motivates a trained small readout or a different Japanese text encoder
+as separately preregistered validation work; it does not justify selecting one
+from this dev result. The fixed development evaluation was intentionally not
+repeated after inspecting these metrics.
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
+- A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
 - Video cache reuse is measured on two questions per scene: half of the would-be encoder calls were avoided. Persistent event updates, multi-observation state, and joint audio-video tasks remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.
