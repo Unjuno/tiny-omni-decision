@@ -1,5 +1,12 @@
 from __future__ import annotations
 
+import pytest
+
+pytest.importorskip("numpy", reason="optional Path A model-evaluation dependency")
+pytest.importorskip("torch", reason="optional Path A model-evaluation dependency")
+pytest.importorskip("transformers", reason="optional Path A model-evaluation dependency")
+pytest.importorskip("av", reason="optional video-decoding dependency")
+
 from scripts.evaluate_clevrer_binary_reasoning_controls import (
     _paired_scene_bootstrap,
     _scene_derangement,

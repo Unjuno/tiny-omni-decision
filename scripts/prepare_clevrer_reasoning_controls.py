@@ -12,16 +12,6 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
-
-from scripts.fetch_clevrer_probe import (
-    REVISION,
-    VALIDATION_BYTES,
-    VALIDATION_ETAG,
-    VALIDATION_URL,
-    RangeFile,
-)
 from tiny_omni_decision.clevrer import (
     REASONING_TYPES,
     clevrer_binary_choice_content_key,
@@ -31,6 +21,10 @@ from tiny_omni_decision.dataset import sha256_file
 
 SEED = 17
 SCENE_COUNT = 200
+REVISION = "98b842082ba4f7c18b6b9e3f39145871782a65ef"
+VALIDATION_URL = "https://data.csail.mit.edu/clevrer/videos/validation/video_validation.zip"
+VALIDATION_BYTES = 6_206_059_321
+VALIDATION_ETAG = '"171e8f339-59db35a74239f"'
 QUESTION_HASHES = {
     "train": "11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4",
     "validation": "fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d",
@@ -47,22 +41,31 @@ PREFLIGHT_DIR = CONTENT_ROOT / "clevrer-binary-controls-preflight-v2"
 SAMPLE_DIR = CONTENT_ROOT / "clevrer-binary-controls-sample-v2"
 
 
-class RetryingRangeFile(RangeFile):
-    """Range reader with bounded retries for idempotent byte-range GETs."""
+def _open_retrying_range_file() -> Any:
+    """Create the optional network reader only for the explicit fetch command."""
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
 
-    def __init__(self, url: str, expected_bytes: int, expected_etag: str):
-        super().__init__(url, expected_bytes, expected_etag)
-        retry = Retry(
-            total=5,
-            connect=5,
-            read=5,
-            status=5,
-            backoff_factor=0.5,
-            status_forcelist=(429, 500, 502, 503, 504),
-            allowed_methods=frozenset({"GET"}),
-            raise_on_status=False,
-        )
-        self.session.mount("https://", HTTPAdapter(max_retries=retry))
+    from scripts.fetch_clevrer_probe import RangeFile
+
+    class RetryingRangeFile(RangeFile):
+        """Range reader with bounded retries for idempotent byte-range GETs."""
+
+        def __init__(self) -> None:
+            super().__init__(VALIDATION_URL, VALIDATION_BYTES, VALIDATION_ETAG)
+            retry = Retry(
+                total=5,
+                connect=5,
+                read=5,
+                status=5,
+                backoff_factor=0.5,
+                status_forcelist=(429, 500, 502, 503, 504),
+                allowed_methods=frozenset({"GET"}),
+                raise_on_status=False,
+            )
+            self.session.mount("https://", HTTPAdapter(max_retries=retry))
+
+    return RetryingRangeFile()
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -276,7 +279,7 @@ def fetch_sample(*, resume: bool = False) -> None:
         raise ValueError("training-split feature-extractor witness media hash mismatch")
 
     started = time.perf_counter()
-    range_file = RetryingRangeFile(VALIDATION_URL, VALIDATION_BYTES, VALIDATION_ETAG)
+    range_file = _open_retrying_range_file()
     media_by_scene: dict[int, dict[str, Any]] = {}
     for row in rows:
         media_by_scene.setdefault(int(row["scene_index"]), row)
