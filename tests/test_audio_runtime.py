@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import wave
 
-import numpy as np
 import pytest
 
+np = pytest.importorskip("numpy")
 torch = pytest.importorskip("torch")
 audio_runtime = pytest.importorskip("tiny_omni_decision.audio_runtime")
 pair_candidate_features = audio_runtime.pair_candidate_features
