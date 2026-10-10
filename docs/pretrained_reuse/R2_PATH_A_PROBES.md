@@ -131,6 +131,12 @@ py -3.11 -m scripts.train_frozen_audio_probe `
   --output-dir C:\CodexArtifacts\pretrained-reuse-r2\audio-probe-v0-retry3
 ```
 
+### Audio feature-cache parity diagnostic
+
+On the first fixed validation clip, the saved Whisper feature and a fresh extraction with the same pinned encoder matched exactly (max absolute feature delta `0.0`). The downstream fixed 10-option readout logits and probabilities also matched exactly (max logit delta `0.0`). The cached feature is 1,536 bytes; re-encoding this clip took 0.289 s on the RTX 3080 Laptop GPU, peak allocated memory was 151,452,672 bytes, and the feature cache avoided one encoder execution for that one existing decision. These are parity and micro-timing diagnostics only: this does not create multiple independent questions for one audio event or measure repeated-query latency at scale.
+
+Reproduction script: `scripts/verify_audio_cache_parity.py`. Inputs are the existing `C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-sample-seed17-128-64-retry2`, Whisper and MiniLM checkpoints and readout from `audio-probe-v0-retry3`; output is external at `C:\CodexArtifacts\pretrained-reuse-r2\audio-cache-parity-v0`. Report SHA-256 `6d02a98c91dfd0a393b27d38dbca9afaf2b20ca750218c01d21c94392e1accdf`; source feature cache SHA-256 `ace323458e7f443daf63382d2d41d99151d2a5801c671d30b0df68d52338ae64`; script SHA-256 `270073d31fa1ed8419e8368deb1b3ec3ab266d0e7e25ce83af3b511d983b2bd0`. It used Python 3.11.9, PyTorch 2.6.0+cu124 and Transformers 5.6.2; no model was updated, and no sealed or test split was loaded.
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
