@@ -21,20 +21,8 @@ from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer
 
 from tiny_omni_decision.dataset import iter_local_rows, normalize_jsonl, sha256_file
+from tiny_omni_decision.decision import FrozenFeatureCandidateScorer as CandidateScorer
 from tiny_omni_decision.schema import DatasetManifest
-
-
-class CandidateScorer(nn.Module):
-    def __init__(self, hidden_size: int):
-        super().__init__()
-        self.network = nn.Sequential(
-            nn.Linear(hidden_size, 128),
-            nn.GELU(),
-            nn.Linear(128, 1),
-        )
-
-    def forward(self, features: Tensor) -> Tensor:
-        return self.network(features).squeeze(-1)
 
 
 def _args() -> argparse.Namespace:

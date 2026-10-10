@@ -225,6 +225,28 @@ package target. The original report remains unchanged; the external
 reload verifier is `scripts/verify_audio_multiquery_reload.py` (SHA-256
 `4178f760481db40d1a825faa3faa931b2ed5ba8b3736d52deebcd70706a3e7cd`).
 
+### Shared Path A candidate-scoring core
+
+The frozen-feature Path A probes now use
+`tiny_omni_decision.decision.FrozenFeatureCandidateScorer`. Modality encoders
+and feature construction remain separate; the shared MLP scores each supplied
+candidate feature and returns option logits, a temperature-scaled probability
+distribution, the selected index, and confidence. It supports padded/batched
+candidate tensors through `forward` and variable candidate counts per query
+through `decide`. This is a shared readout implementation, not a jointly
+trained multimodal encoder or fusion model.
+
+The saved audio multi-query checkpoint was loaded through this package class
+and re-evaluated on the same 2,560 validation questions. Logit, probability,
+and metric deltas were all exactly zero. The separate verification artifact is
+`C:\CodexArtifacts\pretrained-reuse-r2\audio-multiquery-v0\shared-decision-api-verification.json`
+(SHA-256 `37bfea1155f742fd8fbde62e065609d45277c10cbae2f2157e08cb013a8f6f3b`);
+it records the package module SHA-256
+`43d26817150777a895f67a8992702a1cb722bbf07afc635027fbfaf01691a4ec` and
+verifier SHA-256
+`0766a703c1663544daf3a8b5319bbc65cad50d96fee9a43ab0524fa123af532d`. The
+older reload sidecar and training report were not overwritten.
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.

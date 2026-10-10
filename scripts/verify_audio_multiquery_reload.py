@@ -26,6 +26,7 @@ def _args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", type=Path, required=True)
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
+    parser.add_argument("--verification-path", type=Path)
     return parser.parse_args()
 
 
@@ -170,7 +171,13 @@ def main() -> None:
         "retrained": False,
         "device": torch.cuda.get_device_name(device) if device.type == "cuda" else "cpu",
     }
-    verification_path = run_dir / "best-reload-verification.json"
+    verification_path = args.verification_path or (run_dir / "best-reload-verification.json")
+    verification_path = verification_path.resolve()
+    if verification_path.exists():
+        raise FileExistsError(f"refusing to overwrite verification artifact: {verification_path}")
+    decision_module = Path(__file__).resolve().parents[1] / "src/tiny_omni_decision/decision.py"
+    verification["decision_module_sha256"] = sha256_file(decision_module)
+    verification["decision_head_class"] = "FrozenFeatureCandidateScorer"
     verification_path.write_text(
         json.dumps(verification, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )

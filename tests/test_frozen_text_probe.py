@@ -32,7 +32,7 @@ def test_frozen_text_probe_rejects_duplicate_normalized_content():
 
 
 def test_candidate_scorer_returns_one_logit_per_option():
-    scorer = CandidateScorer(hidden_size=8)
+    scorer = CandidateScorer(feature_size=8)
     assert scorer(torch.zeros(3, 8)).shape == (3,)
 
 

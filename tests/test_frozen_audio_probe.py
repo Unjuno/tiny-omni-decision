@@ -71,7 +71,7 @@ def test_audio_probe_rejects_media_hash_mismatch(tmp_path: Path):
 
 def test_audio_candidate_scores_are_stable_under_option_reordering():
     torch.manual_seed(17)
-    scorer = CandidateScorer(hidden_size=4 * 8).eval()
+    scorer = CandidateScorer(feature_size=4 * 8).eval()
     results = _option_order_stability(
         scorer,
         torch.randn(3, 8),
