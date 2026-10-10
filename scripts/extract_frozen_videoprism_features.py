@@ -71,6 +71,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--expected-sha256", default=CHECKPOINT_SHA256)
+    parser.add_argument("--temporal-order", choices=("forward", "reverse"), default="forward")
     return parser.parse_args()
 
 
@@ -118,6 +119,14 @@ def _preprocess(frames: Any, tf: Any) -> Any:
     resized = tf.image.resize(frames, (new_height, new_width), method="bilinear")
     cropped = tf.image.resize_with_crop_or_pad(resized, FRAME_SIZE, FRAME_SIZE)
     return np.asarray(cropped, dtype=np.float32) / 255.0
+
+
+def _apply_temporal_order(frames: Any, temporal_order: str) -> Any:
+    if temporal_order == "forward":
+        return frames
+    if temporal_order == "reverse":
+        return frames[::-1].copy()
+    raise ValueError(f"unsupported temporal order: {temporal_order}")
 
 
 def main() -> None:
@@ -169,7 +178,9 @@ def main() -> None:
         media_hash = str(row["media_sha256"])
         if media_hash in features_by_media:
             continue
-        frames = _decode_video(sample_dir / row["media_path"])
+        frames = _apply_temporal_order(
+            _decode_video(sample_dir / row["media_path"]), args.temporal_order
+        )
         video = jnp.asarray(_preprocess(frames, tf)[None, ...])
         forward_started = time.perf_counter()
         result = encode(video)
@@ -216,6 +227,7 @@ def main() -> None:
         "unique_video_count": len(features_by_media),
         "frame_count": FRAME_COUNT,
         "frame_size": FRAME_SIZE,
+        "temporal_order": args.temporal_order,
         "preprocessing": (
             "uniform endpoint-inclusive frame indices; upstream resize-short-side "
             "then center crop; float32 RGB [0,1]"

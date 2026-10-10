@@ -831,3 +831,19 @@ readout and task construction. The single shuffle mapping and the text-only
 seed are limited diagnostics, not general conclusions. Full data hashes,
 per-task metrics, intervals, local compute and reproduction steps are in
 [CLEVRER_VIDEO_TEXT_CONTROLS_20261011.md](CLEVRER_VIDEO_TEXT_CONTROLS_20261011.md).
+
+#### Temporal-order reversal control (2026-10-11)
+
+On the same 2,777 fresh-scene validation rows, the fixed scorer was evaluated
+with the original eight VideoPrism frames and with those exact frames reversed.
+No fitting or selection occurred. Macro Accuracy/NLL/Brier/ECE-15 were
+`0.49899/0.69432/0.50117/0.02426` forward and
+`0.49873/0.69433/0.50118/0.02463` reversed. Paired scene-bootstrap NLL and
+Brier intervals included zero; forward probability reload matched saved
+predictions exactly. The current readout shows negligible sensitivity to frame
+order on these tasks, which does not establish that the frozen backbone lacks
+temporal information. Together with the video shuffle and text-only controls,
+this supports checking task construction and designing a prespecified temporal
+control before costly Lens or merge experiments. Full provenance, hashes,
+commands, task metrics and limitations are in
+[CLEVRER_TEMPORAL_ORDER_CONTROL_20261011.md](CLEVRER_TEMPORAL_ORDER_CONTROL_20261011.md).
