@@ -161,6 +161,28 @@ was 0.535 s cached and 0.653 s uncached. This confirms repeatability for this
 single scene, checkpoint, and software/backend setup, not multi-scene or
 cross-backend determinism.
 
+#### Multi-scene video-cache parity
+
+The verifier now accepts `--scene-limit` (default `1`, preserving the prior
+single-scene behavior) and reports parity and timings per scene. On the existing
+eight-scene CLEVRER validation sample, the pinned V-JEPA encoder was evaluated
+through the scene-deduplicated path and independently for each question. This
+was a feature-correctness check only: no scorer was run and no quality metric
+was recomputed.
+
+| Item | Result |
+|---|---|
+| Data | 8 existing validation scenes, 16 questions, 8 distinct video SHA-256 values; train/validation checks and media hashes passed. Validation manifest SHA-256 `8d227fb2c49449730e920e3efcb10aa377d64e3926cca10fddc6f37e561dae0e`. |
+| Parity and reuse | All 8 scenes and all 16 rows were allclose with maximum absolute feature difference `0.0`. Encoder calls fell from 16 to 8; 8 calls were avoided. Pooled unique features occupied 24,576 bytes versus 49,152 question-expanded bytes. |
+| Runtime and memory | RTX 3080 Laptop GPU, PyTorch 2.6.0+cu124, CUDA 12.4, Transformers 5.6.2, PyAV 18.1.0. Combined cache path `2.559 s`, uncached path `4.743 s` (1.85x for this sample); peak CUDA allocation `457,564,160` bytes. The timings cover only these 8 scenes and are not deployment benchmarks. |
+| Reproduction | `python -m scripts.verify_video_cache_parity --sample-dir C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-probe-v0-retry3 --vjepa-source C:\CodexArtifacts\pretrained-reuse-r1\vjepa2-source --vjepa-checkpoint C:\CodexArtifacts\pretrained-reuse-r1\vjepa2_1_vitb_dist_vitG_384.pt --vjepa-sha256 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d --output-dir C:\CodexArtifacts\pretrained-reuse-r2\video-cache-parity-multiscene-v1 --scene-limit 8`. Source commit `5a294c7a44b8ce0b3050b46a59b8eedd497aedad`; script SHA-256 `0ccbc52f7b6203240b67bfbdb6efe901f3590c2bb0d0c6524d00554c44df5a36`. |
+| External artifacts | Report SHA-256 `07e2c18f01c3c1b12642c8ba9e7926f057474b0ba9df8b3149dff1a27dd6ccf7`; tensor-file SHA-256 `675cf91958c391991d3ebef752e0ffb52d8fabea479efb29c69f75226aa8def3`. The first launch used an incorrect sample directory and failed before loading a model; its empty `video-cache-parity-multiscene-v0` attempt directory was preserved. The successful run used a new output directory. |
+
+No sealed audit was loaded, no training or model update occurred, and no
+existing run artifact was modified. This extends cache correctness evidence to
+eight scenes; it does not show question-level prediction parity or product
+latency.
+
 ## Audio: Speech Commands + frozen Whisper Tiny
 
 | Item | Value |
