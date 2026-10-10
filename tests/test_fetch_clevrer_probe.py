@@ -5,9 +5,6 @@ np = pytest.importorskip("numpy")
 pytest.importorskip("transformers")
 pytest.importorskip("av")
 
-from scripts.diagnose_clevrer_video_multiquery import (  # noqa: E402
-    expand_descriptive_questions,
-)
 from scripts.fetch_clevrer_probe import choose  # noqa: E402
 from scripts.train_frozen_video_probe import _uniform_indices, _video_features  # noqa: E402
 
@@ -73,110 +70,6 @@ def test_validation_scene_selector_excludes_train_question_content():
     }
 
     assert not train_content & validation_content
-
-
-def test_multiquery_expansion_uses_all_supported_descriptive_questions_per_video():
-    validation = [
-        {
-            "scene_index": 21,
-            "video_filename": "video_00021.mp4",
-            "media_path": "media/validation/video_00021.mp4",
-            "media_sha256": "sha-scene-21",
-            "media_bytes": 1024,
-            "scene_group_id": "clevrer:validation:21",
-            "source": "MIT-IBM/CLEVRER@test",
-            "split": "validation",
-        },
-        {
-            "scene_index": 21,
-            "video_filename": "video_00021.mp4",
-            "media_path": "media/validation/video_00021.mp4",
-            "media_sha256": "sha-scene-21",
-            "media_bytes": 1024,
-            "scene_group_id": "clevrer:validation:21",
-            "source": "MIT-IBM/CLEVRER@test",
-            "split": "validation",
-        },
-        {
-            "scene_index": 22,
-            "video_filename": "video_00022.mp4",
-            "media_path": "media/validation/video_00022.mp4",
-            "media_sha256": "sha-scene-22",
-            "media_bytes": 2048,
-            "scene_group_id": "clevrer:validation:22",
-            "source": "MIT-IBM/CLEVRER@test",
-            "split": "validation",
-        },
-    ]
-    raw = [
-        {
-            "scene_index": 21,
-            "video_filename": "video_00021.mp4",
-            "questions": [
-                _question(2, "Is a green object present?", ["objects", "exist"]),
-                {
-                    **_question(3, "How many objects move?", ["objects", "count"]),
-                    "question_subtype": "count",
-                    "answer": "2",
-                },
-                {
-                    **_question(4, "What happens next?", ["events"]),
-                    "question_type": "predictive",
-                    "choices": [{"choice": "event", "answer": "correct"}],
-                },
-            ],
-        },
-        {
-            "scene_index": 22,
-            "video_filename": "video_00022.mp4",
-            "questions": [
-                {
-                    **_question(0, "Does the blue sphere exist at the end?", ["end", "exist"]),
-                    "answer": "no",
-                },
-            ],
-        },
-    ]
-
-    expanded = expand_descriptive_questions(raw, validation)
-
-    assert [row["id"] for row in expanded] == [
-        "clevrer-validation-00021-q002",
-        "clevrer-validation-00021-q003",
-        "clevrer-validation-00022-q000",
-    ]
-    assert [row["question_type"] for row in expanded] == [
-        "static_descriptive",
-        "static_descriptive",
-        "temporal_descriptive",
-    ]
-    assert expanded[0]["media_sha256"] == expanded[1]["media_sha256"]
-    assert expanded[0]["scene_group_id"] == expanded[1]["scene_group_id"]
-    assert expanded[2]["media_sha256"] == "sha-scene-22"
-    assert len({row["id"] for row in expanded}) == len(expanded)
-
-
-def test_multiquery_expansion_rejects_scene_media_mismatch():
-    with pytest.raises(ValueError, match="filename does not match"):
-        expand_descriptive_questions(
-            [
-                {
-                    "scene_index": 21,
-                    "video_filename": "wrong-video.mp4",
-                    "questions": [_question(0, "Is it visible?", ["objects", "exist"])],
-                }
-            ],
-            [
-                {
-                    "scene_index": 21,
-                    "video_filename": "video_00021.mp4",
-                    "media_path": "media/validation/video_00021.mp4",
-                    "media_sha256": "sha-scene-21",
-                    "scene_group_id": "clevrer:validation:21",
-                    "split": "validation",
-                }
-            ],
-        )
 
 
 def test_video_probe_selects_eight_deterministic_temporal_positions():

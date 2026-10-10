@@ -6,13 +6,14 @@ import argparse
 import hashlib
 import io
 import json
-import re
 import time
 import zipfile
 from pathlib import Path
 from typing import Any
 
 import requests
+
+from tiny_omni_decision.clevrer import TAXONOMIES, classify
 
 TRAIN_URL = "https://data.csail.mit.edu/clevrer/videos/train/video_train.zip"
 TRAIN_BYTES = 12_354_893_389
@@ -23,28 +24,6 @@ VALIDATION_ETAG = '"171e8f339-59db35a74239f"'
 TRAIN_QUESTIONS_SHA256 = "11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4"
 VALIDATION_QUESTIONS_SHA256 = "fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d"
 REVISION = "98b842082ba4f7c18b6b9e3f39145871782a65ef"
-TASK_TOKENS = {
-    "after",
-    "before",
-    "end",
-    "filter_collision",
-    "filter_in",
-    "filter_moving",
-    "filter_out",
-    "get_frame",
-    "start",
-}
-TASK_RE = re.compile(
-    r"\b(first|last|before|after|enter(?:s|ed|ing)?|exit(?:s|ed|ing)?|begin(?:s|ning)?|ends?|collision|collide|moving|moves?|move|frame)\b",
-    re.I,
-)
-TAXONOMIES = {
-    "exist": ["no", "yes"],
-    "query_color": ["gray", "red", "blue", "green", "brown", "purple", "cyan", "yellow"],
-    "query_material": ["rubber", "metal"],
-    "query_shape": ["cube", "sphere", "cylinder"],
-    "count": [str(index) for index in range(6)],
-}
 PREVIOUSLY_USED_SCENES = {"train": {0, 1, 2}, "validation": {10_000, 10_001, 10_002}}
 
 
@@ -116,16 +95,6 @@ class RangeFile(io.RawIOBase):
         self.position += len(data)
         self.bytes_read += len(data)
         return data
-
-
-def classify(question: dict[str, Any]) -> str:
-    program = question.get("program")
-    temporal = (
-        bool(TASK_TOKENS.intersection(map(str, program)))
-        if isinstance(program, list)
-        else bool(TASK_RE.search(str(question.get("question") or "")))
-    )
-    return "temporal_descriptive" if temporal else "static_descriptive"
 
 
 def choose(

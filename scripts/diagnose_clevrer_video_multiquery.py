@@ -16,7 +16,7 @@ from typing import Any
 import torch
 from transformers import AutoModel, AutoTokenizer
 
-from scripts.fetch_clevrer_probe import REVISION, TAXONOMIES, VALIDATION_QUESTIONS_SHA256, classify
+from scripts.fetch_clevrer_probe import REVISION, VALIDATION_QUESTIONS_SHA256
 from scripts.train_frozen_text_probe import _metrics
 from scripts.train_frozen_video_probe import (
     FRAME_COUNT,
@@ -26,78 +26,13 @@ from scripts.train_frozen_video_probe import (
     _text_features,
     _validate_splits,
 )
+from tiny_omni_decision.clevrer import expand_descriptive_questions
 from tiny_omni_decision.dataset import sha256_file
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 
 TEXT_REVISION = "4ca70771034acceecb2e72475f72050fcdde4ddc"
 TEXT_MODEL_WEIGHTS_SHA256 = "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433"
 VJEPA_CHECKPOINT_SHA256 = "848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d"
-
-
-def expand_descriptive_questions(
-    raw_rows: list[dict[str, Any]], validation_rows: list[dict[str, Any]]
-) -> list[dict[str, Any]]:
-    """Expand sampled validation scenes while retaining their pinned media identity."""
-    media_by_scene: dict[int, dict[str, Any]] = {}
-    for row in validation_rows:
-        scene = int(row["scene_index"])
-        media = {
-            key: row[key]
-            for key in (
-                "media_path",
-                "media_sha256",
-                "media_bytes",
-                "video_filename",
-                "scene_group_id",
-                "source",
-                "split",
-            )
-            if key in row
-        }
-        if scene in media_by_scene and media_by_scene[scene] != media:
-            raise ValueError(f"inconsistent sampled media identity for scene {scene}")
-        media_by_scene[scene] = media
-
-    raw_by_scene = {int(row["scene_index"]): row for row in raw_rows}
-    if len(raw_by_scene) != len(raw_rows):
-        raise ValueError("raw CLEVRER validation data has duplicate scene rows")
-    missing = set(media_by_scene) - set(raw_by_scene)
-    if missing:
-        raise ValueError(f"raw validation questions missing sampled scenes: {sorted(missing)}")
-
-    expanded: list[dict[str, Any]] = []
-    for scene in sorted(media_by_scene):
-        raw_scene = raw_by_scene[scene]
-        media = media_by_scene[scene]
-        if str(raw_scene["video_filename"]) != str(media["video_filename"]):
-            raise ValueError(f"raw video filename does not match sampled scene {scene}")
-        for question in raw_scene.get("questions", []):
-            if question.get("question_type") != "descriptive":
-                continue
-            taxonomy = question.get("question_subtype")
-            target = question.get("answer")
-            if taxonomy not in TAXONOMIES or target not in TAXONOMIES[taxonomy]:
-                continue
-            question_id = int(question["question_id"])
-            expanded.append(
-                {
-                    **media,
-                    "id": f"clevrer-validation-{scene:05d}-q{question_id:03d}",
-                    "scene_index": scene,
-                    "question_id": question_id,
-                    "question_type": classify(question),
-                    "taxonomy": taxonomy,
-                    "question": str(question["question"]),
-                    "options": list(TAXONOMIES[taxonomy]),
-                    "target": str(target),
-                    "program": question.get("program", []),
-                }
-            )
-    expanded.sort(key=lambda row: (row["scene_index"], row["question_id"]))
-    ids = [row["id"] for row in expanded]
-    if len(ids) != len(set(ids)):
-        raise ValueError("expanded CLEVRER question IDs are not unique")
-    return expanded
 
 
 def _args() -> argparse.Namespace:
