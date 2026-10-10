@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from scripts.evaluate_path_a_audio_runtime import _verify_bundle
+from tiny_omni_decision.bundle_validation import verify_bundle
 
 
 def test_runtime_bundle_verifier_checks_hashes_sizes_and_exact_file_set(tmp_path) -> None:
@@ -22,11 +22,11 @@ def test_runtime_bundle_verifier_checks_hashes_sizes_and_exact_file_set(tmp_path
         ]
     }
 
-    _verify_bundle(package, manifest)
+    verify_bundle(package, manifest)
 
     (package / "unexpected.txt").write_text("extra", encoding="utf-8")
     with pytest.raises(ValueError, match="file set"):
-        _verify_bundle(package, manifest)
+        verify_bundle(package, manifest)
 
 
 def test_runtime_bundle_verifier_rejects_tampered_payload(tmp_path) -> None:
@@ -48,7 +48,7 @@ def test_runtime_bundle_verifier_rejects_tampered_payload(tmp_path) -> None:
     payload.write_bytes(b"after!")
 
     with pytest.raises(ValueError, match="hash mismatch"):
-        _verify_bundle(package, manifest)
+        verify_bundle(package, manifest)
 
 
 def test_runtime_bundle_verifier_rejects_path_traversal(tmp_path) -> None:
@@ -69,4 +69,5 @@ def test_runtime_bundle_verifier_rejects_path_traversal(tmp_path) -> None:
     }
 
     with pytest.raises(ValueError, match="outside the bundle"):
-        _verify_bundle(package, manifest)
+        verify_bundle(package, manifest)
+

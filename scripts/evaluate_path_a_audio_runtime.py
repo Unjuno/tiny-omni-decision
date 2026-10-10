@@ -21,6 +21,7 @@ from scripts.train_frozen_audio_multiquery import (
 )
 from scripts.train_frozen_audio_probe import _rows, _validate_splits
 from tiny_omni_decision.audio_runtime import DecisionQuery, SpeechCommandsMultiQueryRuntime
+from tiny_omni_decision.bundle_validation import verify_bundle
 
 
 def _args() -> argparse.Namespace:
@@ -48,27 +49,6 @@ def _jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
-def _verify_bundle(bundle: Path, manifest: dict[str, Any]) -> None:
-    expected_paths = set()
-    for entry in manifest.get("files", []):
-        relative = Path(str(entry["path"]))
-        path = (bundle / relative).resolve()
-        if not path.is_relative_to(bundle.resolve()):
-            raise ValueError("bundle manifest contains a path outside the bundle")
-        if not path.is_file() or path.stat().st_size != int(entry["bytes"]):
-            raise ValueError(f"bundle file missing or wrong-sized: {relative}")
-        if _sha256(path) != entry["sha256"]:
-            raise ValueError(f"bundle file hash mismatch: {relative}")
-        expected_paths.add(relative.as_posix())
-    actual_paths = {
-        path.relative_to(bundle).as_posix()
-        for path in bundle.rglob("*")
-        if path.is_file() and path.name != "bundle-manifest.json"
-    }
-    if actual_paths != expected_paths:
-        raise ValueError("bundle file set differs from its manifest")
-
-
 def main() -> None:
     args = _args()
     bundle = args.bundle.resolve()
@@ -86,7 +66,7 @@ def main() -> None:
     manifest = json.loads((bundle / "bundle-manifest.json").read_text(encoding="utf-8"))
     if manifest.get("bundle_id") != "path-a-audio-multiquery-runtime-v0":
         raise ValueError("unexpected runtime bundle ID")
-    _verify_bundle(bundle, manifest)
+    verify_bundle(bundle, manifest)
     source_report = json.loads(baseline_report_path.read_text(encoding="utf-8"))
     if _sha256(baseline_predictions_path) != source_report["validation_predictions_sha256"]:
         raise ValueError("baseline prediction file does not match the frozen source report")
