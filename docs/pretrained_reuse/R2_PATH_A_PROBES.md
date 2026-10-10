@@ -172,11 +172,64 @@ as separately preregistered validation work; it does not justify selecting one
 from this dev result. The fixed development evaluation was intentionally not
 repeated after inspecting these metrics.
 
+## Audio multi-query readout: four questions per Speech Commands event
+
+To exercise observation reuse with a question-conditioned Decision interface,
+the frozen Speech Commands audio features were reused to answer four
+deterministic questions per clip: identify the keyword, detect a direction
+word, detect a yes/no response, and detect an on/off control word. The last
+three labels are mechanically derived from the original keyword, so this is a
+closed-set compositional probe—not open-ended speech understanding or an
+independent semantic benchmark. Every query variant for a clip stayed in its
+original split.
+
+| Item | Value |
+|---|---|
+| Source | `google/speech_commands@a751309c0fd613e8a5d30d77900f30e8b42bc2da`, 1,280 train / 640 validation clips; 829 / 206 speakers; zero speaker, clip ID and audio hash overlap |
+| Frozen observation features | Existing Whisper Tiny validation/train feature cache SHA-256 `ace323458e7f443daf63382d2d41d99151d2a5801c671d30b0df68d52338ae64`; Whisper revision `169d4a4341b33bc18d8881c4b69c2e104e1cc0af`; no audio encoder execution in this experiment |
+| Question/candidate encoder | MiniLM-L3 English, revision `4ca70771034acceecb2e72475f72050fcdde4ddc`, model weights SHA-256 `cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`; frozen masked-mean text embeddings |
+| Readout | Shared candidate MLP; question, audio and candidate embeddings are input features; 344,321 trainable parameters; AdamW lr 0.001, weight decay 0.0001; seed 17; 8 epochs, 1,280 updates; minimum macro question-type validation NLL selected epoch 4 |
+| Query counts | 5,120 train and 2,560 validation query examples from 1,280 / 640 unique audio events; each question type has 1,280 / 640 queries |
+| Local runtime | RTX 3080 Laptop GPU, CUDA 12.4, PyTorch 2.6.0+cu124, Transformers 5.6.2; readout training 6.33s; evaluation 0.284s / 0.111ms per query; CUDA peak 27,896,832 bytes is readout-only and does not measure a simultaneous full-encoder resident runtime |
+| Checkpoint and cache reuse | Best readout SHA-256 `4efa7939a686ad97b38f9eec0b8171e6e62d125ba4eb373e5d83e33ac4df42c7`; saved-checkpoint reload reproduced all 2,560 validation predictions with zero logit/probability/metric delta. One cached feature per each of 640 validation events serves 4 questions, avoiding 1,920 hypothetical per-query encoder executions; no encoder was actually run during this experiment. |
+| Reproduction | Config `configs/pretrained_reuse/path_a_audio_multiquery.yaml`, SHA-256 `d5b130b8ba859a21091cd2fd6ff327301d408ae1cd0a4ae83e9a282708843396`; training script at source commit `685f9a413d78b16916d8662bfd9fb788ae01a0f0`, SHA-256 `1f52f0d4594771919043771a55bc9d0e9215bf16e4131f855ec8af263c2a9ffd`; output `C:\CodexArtifacts\pretrained-reuse-r2\audio-multiquery-v0` |
+| Saved evidence | Run report SHA-256 `833258cbc584cbe5f2583c7cc9a5a6f115deb9a46b232e81b3eb7c7489fc081b`; predictions SHA-256 `e203cb22ba5e18d75b0a4a78afcd475993f556edefedc7cf12aeb5210a5b3932`; history SHA-256 `960a79406d3a292d8787ba63510cf8a8acd59ec81f77fa8e2f9d0af26323a274`; best reload verification SHA-256 `4e458403d31e7faec6a706512fe2d57304a5fa5a199415441331e42678bdd5f8` |
+
+| Question type | Validation count | Accuracy | NLL | Brier | ECE (15 bins) | Positive rate |
+|---|---:|---:|---:|---:|---:|---:|
+| Keyword identity (10 choices) | 640 | 0.9594 | 0.1493 | 0.0610 | 0.0248 | — |
+| Direction presence (2 choices) | 640 | 0.9797 | 0.0596 | 0.0319 | 0.0114 | 0.400 |
+| Yes/no response presence (2 choices) | 640 | 0.9812 | 0.0422 | 0.0225 | 0.0093 | 0.200 |
+| On/off control presence (2 choices) | 640 | 0.9937 | 0.0262 | 0.0139 | 0.0119 | 0.200 |
+| Macro across question types | 2,560 | 0.9785 | 0.0693 | 0.0323 | 0.0143 | — |
+
+Question-type Accuracy is not directly comparable because the three derived
+binary tasks have different class balance and are much simpler than open-ended
+speech questions. For reference, the earlier keyword-only checkpoint reached
+0.9531 Accuracy / 0.1624 NLL on these same validation IDs, while the new
+keyword-identity row reached 0.9594 / 0.1493. Candidate prompt text, scorer
+architecture and training setup also changed, so this small difference is not
+attributed to question conditioning. The validation split was already used for
+checkpoint selection in the earlier audio probe and remains development data.
+
+The original report's `model.total_resident_parameters` field was the sum of
+Whisper (37,760,640), MiniLM (17,389,824) and the readout (344,321), not a
+measurement of simultaneous residency in this cache-focused run. Its corrected
+interpretation is a 55,494,785 full-component parameter sum; the 27.9 MB CUDA
+peak applies only to cached-feature readout training/inference. Encoder model
+files alone total 220,631,160 bytes and the readout is another 1,379,344 bytes,
+before tokenizer/config files, so this component set exceeds the initial 200 MB
+package target. The original report remains unchanged; the external
+`interpretation-correction.json` records this scope correction (SHA-256
+`48f06eec102529aba9c2e7f929384490cd5de04379cb1e4b7d5221ca68023c9e`). The
+reload verifier is `scripts/verify_audio_multiquery_reload.py` (SHA-256
+`4178f760481db40d1a825faa3faa931b2ed5ba8b3736d52deebcd70706a3e7cd`).
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
-- Video cache reuse is measured on two questions per scene: half of the would-be encoder calls were avoided. Persistent event updates, multi-observation state, and joint audio-video tasks remain untested.
+- Video cache reuse is measured on two questions per scene, and the audio multi-query probe measured four question types per cached event across 640 validation clips. Persistent cache invalidation, richer visual multi-query coverage, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.

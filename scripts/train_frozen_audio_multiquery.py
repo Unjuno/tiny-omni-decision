@@ -550,9 +550,12 @@ def main() -> None:
             "text_encoder_parameters": text_parameter_count,
             "trainable_readout_parameters": trainable_parameters,
             "readout_parameters": sum(parameter.numel() for parameter in scorer.parameters()),
-            "total_resident_parameters": audio_parameter_count
+            "full_component_parameter_sum": audio_parameter_count
             + text_parameter_count
             + sum(parameter.numel() for parameter in scorer.parameters()),
+            "resident_parameters_during_cached_readout": sum(
+                parameter.numel() for parameter in scorer.parameters()
+            ),
             "readout_state_dict_sha256": sha256_file(readout_path),
             "final_readout_sha256": sha256_file(final_checkpoint_path),
         },
@@ -608,6 +611,7 @@ def main() -> None:
         "cuda_peak_allocated_bytes": torch.cuda.max_memory_allocated(device)
         if device.type == "cuda"
         else None,
+        "cuda_peak_scope": "readout training/inference only; frozen audio/text features are cached",
         "environment": {
             "python": platform.python_version(),
             "torch": torch.__version__,
