@@ -13,6 +13,12 @@ Date: 2026-10-10. Scope: pinned sources, rights metadata, safe checkpoint loadin
 - Both official and direct reference model were resident during parity comparison. Peak allocated/reserved GPU memory was 831,897,600 / 985,661,440 bytes. Primary forward time was 0.297s for the image and 0.191s for video on this run; process timing is not a stable benchmark.
 - License evidence was rechecked against the exact pinned source commit. It includes both `LICENSE` (MIT) and `APACHE-LICENSE`; its README says most of V-JEPA 2 is MIT and names three source files under Apache-2.0, while linking the checkpoint in its model table. It does not explicitly identify the externally hosted `vjepa2_1_vitb_dist_vitG_384.pt` weight file's license or say that either repository license covers that download. Keep checkpoint rights status **REVIEW**; do not redistribute or package the weight for product use until the grant is explicit. This uncertainty does not change the verified tensor/load results. Candidate status is also recorded in `R1_CANDIDATE_INVENTORY.json`.
 
+### Rights follow-up, 2026-10-11
+
+An additional primary-source check found that Meta's June 2025 V-JEPA 2 announcement says Meta is making V-JEPA 2 code and model checkpoints available for commercial and research applications. That announcement predates the pinned V-JEPA 2.1 release and does not name the exact 2026 V-JEPA 2.1 ViT-B file. The pinned repository's README links the 2.1 checkpoint and says the majority of V-JEPA 2 is MIT-licensed, but the README's license section does not explicitly state that the separately hosted 2.1 weights are covered. Therefore the official announcement is useful context but does not close the exact-weight grant gap; keep status **REVIEW** until a license statement that clearly applies to that checkpoint is found. This is a provenance/legal-status update only; no checkpoint was re-downloaded or modified.
+
+Sources: [pinned V-JEPA 2.1 repository README](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md), [Meta's June 2025 V-JEPA 2 announcement](https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/), and [Meta's V-JEPA project page](https://ai.meta.com/vjepa/).
+
 Command (report saved outside Git at C:\CodexArtifacts\pretrained-reuse-r1\vjepa21-audit.json):
 
     $env:PYTHONPATH='C:\CodexArtifacts\pretrained-reuse-r1\python-deps'
