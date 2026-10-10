@@ -91,6 +91,12 @@ The upstream V-JEPA code repository is MIT-licensed, but no separate checkpoint 
 
 This is a tiny synthetic probe with two questions per scene. The sample is too small for a stable quality claim; temporal and static numbers are descriptive diagnostics only. The low accuracy and calibration do not establish a V-JEPA capability ceiling. The checkpoint's product-use rights remain **REVIEW**; no packaging or product adoption follows from this result.
 
+### Video feature cache parity diagnostic
+
+On one existing CLEVRER validation scene with its two original questions, the pinned 8-frame V-JEPA extractor was run once through the scene-keyed cache and once per question without reuse. Both paths produced exactly matching pooled features (max absolute delta `0.0`; allclose true). Reuse reduced encoder calls from 2 to 1. One timing sample measured 0.537 s cached and 0.639 s uncached (1.19x ratio); this is a smoke measurement, not a stable latency claim. The unique pooled feature occupied 3,072 bytes, while the question-expanded pair occupied 6,144 bytes. CUDA model allocation before inference was 347,332,608 bytes and peak allocation was 457,564,160 bytes on the RTX 3080 Laptop GPU. The diagnostic confirms basic per-scene feature parity and reuse; it does not test audio caching, persistent-cache invalidation, or broad multi-query scaling.
+
+The reproduction script is `scripts/verify_video_cache_parity.py`. It used the existing sample `C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-probe-v0-retry3` and wrote outputs only to `C:\CodexArtifacts\pretrained-reuse-r2\video-cache-parity-v1`. Report SHA-256 `668b74699f475973286e463ae41d18ed650316fd002c021670c51aa14b8144a2`; saved feature comparison SHA-256 `c19327cfef7591330e9eb4a4c5e4a28375738f37b0f9b0d115bd2cc457950bab`; script SHA-256 `b9e8f28148d59d22dc2a138be0b718958198578d81d41692b63a27e927f11fcc`. It ran with Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2, PyAV 18.1.0 and the already-pinned local `timm` dependency; no package was upgraded.
+
 ## Audio: Speech Commands + frozen Whisper Tiny
 
 | Item | Value |

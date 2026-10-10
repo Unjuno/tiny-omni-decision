@@ -1,11 +1,12 @@
 import pytest
 
-pytest.importorskip("torch")
+torch = pytest.importorskip("torch")  # noqa: F401
+np = pytest.importorskip("numpy")
 pytest.importorskip("transformers")
 pytest.importorskip("av")
 
-from scripts.fetch_clevrer_probe import choose
-from scripts.train_frozen_video_probe import _uniform_indices
+from scripts.fetch_clevrer_probe import choose  # noqa: E402
+from scripts.train_frozen_video_probe import _uniform_indices, _video_features  # noqa: E402
 
 
 def _question(question_id: int, text: str, program: list[str]) -> dict[str, object]:
@@ -75,3 +76,39 @@ def test_video_probe_selects_eight_deterministic_temporal_positions():
     indices = _uniform_indices(64, requested=8)
 
     assert indices == [0, 9, 18, 27, 36, 45, 54, 63]
+
+
+def test_video_features_share_one_forward_per_underlying_video(tmp_path, monkeypatch):
+    import scripts.train_frozen_video_probe as video_probe
+
+    class Encoder:
+        def __init__(self):
+            self.calls = 0
+
+        def __call__(self, clip):
+            self.calls += 1
+            return torch.arange(768, dtype=torch.float32).reshape(1, 1, 768).expand(
+                clip.shape[0], 2, 768
+            )
+
+    rows = [
+        {"id": "question-a", "media_sha256": "same-video", "media_path": "scene.mp4"},
+        {"id": "question-b", "media_sha256": "same-video", "media_path": "scene.mp4"},
+    ]
+    monkeypatch.setattr(
+        video_probe, "_decode_video", lambda _path: np.zeros((8, 2, 2, 3), dtype=np.uint8)
+    )
+    def transform(_frames):
+        return (torch.zeros((3, 8, 2, 2)),)
+
+    encoder = Encoder()
+
+    features, _, unique_videos, cache = _video_features(
+        rows, tmp_path, encoder, transform, torch.device("cpu")
+    )
+
+    assert encoder.calls == 1
+    assert unique_videos == 1
+    assert list(cache) == ["same-video"]
+    assert features.shape == (2, 768)
+    assert torch.equal(features[0], features[1])
