@@ -4,6 +4,10 @@ import wave
 from pathlib import Path
 
 import pytest
+
+pytest.importorskip("torch")
+pytest.importorskip("transformers")
+
 import torch
 
 from scripts.train_frozen_audio_probe import (

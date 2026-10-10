@@ -1,3 +1,9 @@
+import pytest
+
+pytest.importorskip("torch")
+pytest.importorskip("transformers")
+pytest.importorskip("av")
+
 from scripts.fetch_clevrer_probe import choose
 from scripts.train_frozen_video_probe import _uniform_indices
 

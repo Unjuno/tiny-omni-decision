@@ -1,6 +1,10 @@
 from types import SimpleNamespace
 
 import pytest
+
+pytest.importorskip("torch")
+pytest.importorskip("transformers")
+
 import torch
 
 from scripts.fetch_clevr4_sample import deterministic_split_sample
