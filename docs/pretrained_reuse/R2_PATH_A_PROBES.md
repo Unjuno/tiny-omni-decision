@@ -308,11 +308,38 @@ readout and prediction hashes and supplies provenance (source commit
 media were left untouched. The evaluator is a versioned repository script;
 predictions and reports are external artifacts and were not added to Git.
 
+#### Typed persistent observation-cache follow-up
+
+The multi-query evaluator was then rerun through the new
+`tiny_omni_decision.cache.ObservationFeatureCache`, using the same frozen
+features and the same 88 validation questions. The cache key is observation
+level and includes modality, source and source revision, media SHA-256, encoder
+revision and weight SHA-256, preprocessing/code SHA-256, temporal frame policy,
+feature dtype/shape, and optional time bounds. It contains no question or
+candidate text, so all questions for one scene resolve to one entry. Entries
+are immutable; exact repeats return the existing payload, identity changes
+produce a different key, and read validates metadata, byte count and payload
+SHA-256.
+
+| Item | Value |
+|---|---|
+| Implementation | `src/tiny_omni_decision/cache.py`; CPU-only tests in `tests/test_feature_cache.py` cover exact roundtrip/idempotence, asset/source/model/preprocessor/frame-policy invalidation, malformed identities, and payload corruption. |
+| Real cached records | 8 unique scene observations; 24,576 feature-payload bytes and 32,072 bytes including metadata. All eight persisted entries reloaded byte-for-byte and were then used to score the 88 questions. Each record was referenced by 11 questions. |
+| Evaluation | Original 16 questions retained zero class mismatches and maximum probability delta `5.96e-8`; 88-question metrics are unchanged from the preceding diagnostic. No V-JEPA encoder executions occurred in this run. |
+| Reproduction | Source commit `b2d285d0de93e22a3f2807761e65f80053cf28b3`; script SHA-256 `f8782e0ae33c819e41c9bec2651c1660104daddffc02d761db61b74dfa934cda`; output `C:\CodexArtifacts\pretrained-reuse-r2\video-probe-multiquery-v4` |
+| Saved evidence | Cache manifest SHA-256 `289b3b435fc318c40f9e03ada0902645debd76f61cb1d6ac36c70e8fc35ed9d4`; prediction SHA-256 `0ccb8d1dc40502927d1a76717ebf09fa7e2075456ddac9506b8e9baf9647bf34`; report SHA-256 `2c676ab412fc41f4b13d3126e2fa396e06af1b005846692c461014bdfb85388b` |
+
+This establishes content verification and key-based invalidation for the
+video observation cache used by this diagnostic. It does not add cache
+eviction/garbage collection, prove cross-process crash recovery under power
+loss, integrate the cache with audio/image/text encoders, or measure a live
+V-JEPA + text tower resident at once.
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
-- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. Audio multi-query covers four question types per cached event across 640 validation clips. Persistent-cache invalidation, independent visual scene coverage, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
+- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio multi-query covers four question types per cached event across 640 validation clips. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.

@@ -47,3 +47,18 @@ Command:
 Technical feasibility: PASS for local V-JEPA image/video, Ruri Japanese text, MiniLM English text, AST environmental audio and Whisper speech encoders. The V-JEPA checkpoint rights gate remains REVIEW, so R1's legally cleared video-candidate exit is not yet satisfied for product use. Deployment fit: parameter target PASS for the four-tower proposal (178,689,152), package-byte target FAIL before compression (714,791,920 bytes), runtime and task quality UNCERTAIN. Typed Decisions Synth and CLEVR-4 are now used for synthetic readout probes only; neither closes real-world quality gates. Open-Jev is inaccessible anonymously (HTTP 401 on 2026-10-10); its pinned manifest remains unchanged.
 
 The only local Python processes found were Django development servers, not training. The RTX 3080 Laptop GPU was idle (11 MiB used, 0% utilization) before the read-only forward audits. No legacy run or worktree was changed.
+
+## V-JEPA 2.1 checkpoint-rights follow-up (2026-10-11)
+
+The official Meta V-JEPA page links the public V-JEPA 2 download and describes
+release for community use, while the upstream repository README identifies
+V-JEPA 2.1 and links its ViT-B/16 checkpoint. The repository exposes MIT and
+Apache-2.0 license files for code. In the reviewed materials, no separate
+grant is attached to the exact `vjepa2_1_vitb_dist_vitG_384.pt` weight file;
+the community-release statement alone does not specify downstream commercial
+rights, redistribution, or derivative-weight terms. Therefore the existing
+checkpoint status stays **REVIEW**, and its established local forward results
+remain research-only. This follow-up does not change or overwrite the prior
+audit or candidate inventory.
+
+Sources inspected 2026-10-11: [official Meta V-JEPA release page](https://ai.meta.com/research/vjepa/), [upstream README at the pinned source commit](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md), [upstream MIT license](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/LICENSE), and [upstream Apache license](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/APACHE-LICENSE). The public Hugging Face V-JEPA 2 collection was also checked; it does not list the pinned 2.1 ViT-B/16 checkpoint as a model-card alternative.
