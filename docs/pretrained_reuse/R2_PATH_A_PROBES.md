@@ -475,6 +475,50 @@ and readout reproducibility only; it does not raise the image-quality estimate.
 
 ## R2 status
 
+#### Byte-bounded in-memory observation-feature LRU
+
+`tiny_omni_decision.cache.InMemoryObservationFeatureLRU` provides a process-local
+LRU keyed by the complete immutable `ObservationFeatureKey`. Its configured
+limit counts feature payload bytes only; Python object/key/container overhead
+is not included. Access promotes an entry, insertion evicts least-recently-used
+payloads until the payload budget fits, and a single oversized payload is
+declined without evicting existing entries. Counters expose hits, misses and
+evictions. The persistent content-verified cache remains unchanged and is not
+deleted or pruned by this class.
+
+CPU tests in `tests/test_feature_cache.py` exercise LRU promotion/eviction,
+payload-byte accounting, oversized-entry behavior, invalid capacities, and
+parsing exact cache-key metadata.
+
+The new primitive was replayed over the actual ordered 16-question CLEVRER
+validation query sequence using the eight persisted V-JEPA features. At a
+12,288-byte payload budget (four 3,072-byte video features), the run recorded 8
+in-memory hits, 8 persistent-cache reads, and 4 LRU evictions; four entries
+(12,288 payload bytes) remained resident. The script verifies each persistent
+payload hash before inserting it. It does not invoke the encoder or compute
+Decision predictions. Replay took 0.0058 s on CPU, which is not an inference or
+encoder-latency measurement. Python object/container overhead is excluded from
+the configured byte budget.
+
+Reproduction:
+
+```powershell
+$env:PYTHONPATH='src;.'
+python -m scripts.measure_observation_feature_lru `
+  --cache-dir C:\CodexArtifacts\pretrained-reuse-r2\video-probe-multiquery-v4\observation-feature-cache `
+  --cache-manifest C:\CodexArtifacts\pretrained-reuse-r2\video-probe-multiquery-v4\observation-feature-cache-manifest.json `
+  --validation-jsonl C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-probe-v0-retry3\validation.jsonl `
+  --capacity-bytes 12288 `
+  --output C:\CodexArtifacts\pretrained-reuse-r2\video-cache-lru-4feature-v0\measurement.json
+```
+
+The script SHA-256 is `49cd598f1150f58074028125d3f0113b35911c3dfd8c4104ae9ca35ecfa2543c`.
+The external report SHA-256 is
+`2296bdb92b5c226d170b6e70f5f20737720f40b7007c27df471d114da570bfab`. This
+demonstrates deterministic payload-budget eviction and multi-query reuse over
+one validation query order; it is not yet integrated into a serving path or
+measured for actual process RSS/allocator overhead. No model or GPU was used.
+
 #### Packed feature-cache experiment
 
 The text observation cache contained 94,636 immutable entries across 94,636

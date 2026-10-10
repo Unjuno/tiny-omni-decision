@@ -5,8 +5,10 @@ from dataclasses import replace
 
 import pytest
 
+from scripts.measure_observation_feature_lru import _key_from_dict
 from tiny_omni_decision.cache import (
     FeatureCacheError,
+    InMemoryObservationFeatureLRU,
     ObservationFeatureCache,
     ObservationFeatureKey,
 )
@@ -76,6 +78,55 @@ def test_observation_feature_cache_rejects_payload_corruption(tmp_path):
 
     with pytest.raises(FeatureCacheError, match="SHA-256 mismatch"):
         cache.get(key)
+
+
+def test_in_memory_feature_lru_evicts_least_recently_used_within_byte_budget():
+    first = _key()
+    second = replace(first, observation_sha256=hashlib.sha256(b"second").hexdigest())
+    third = replace(first, observation_sha256=hashlib.sha256(b"third").hexdigest())
+    cache = InMemoryObservationFeatureLRU(max_bytes=6)
+
+    assert cache.put(first, b"one")
+    assert cache.put(second, b"two")
+    assert cache.get(first) == b"one"  # first becomes most recently used
+    assert cache.put(third, b"tri")
+
+    assert cache.get(second) is None
+    assert cache.get(first) == b"one"
+    assert cache.get(third) == b"tri"
+    assert cache.bytes_used == 6
+    assert cache.entry_count == 2
+    assert cache.eviction_count == 1
+    assert cache.hit_count == 3
+    assert cache.miss_count == 1
+
+
+def test_in_memory_feature_lru_oversized_payload_does_not_evict_entries():
+    key = _key()
+    cache = InMemoryObservationFeatureLRU(max_bytes=4)
+    assert cache.put(key, b"keep")
+
+    assert not cache.put(replace(key, feature_name="oversized"), b"too long")
+    assert cache.get(key) == b"keep"
+    assert cache.bytes_used == 4
+    assert cache.eviction_count == 0
+
+
+@pytest.mark.parametrize("max_bytes", [0, -1])
+def test_in_memory_feature_lru_rejects_non_positive_capacity(max_bytes):
+    with pytest.raises(FeatureCacheError, match="at least 1"):
+        InMemoryObservationFeatureLRU(max_bytes=max_bytes)
+
+
+def test_in_memory_feature_lru_rejects_empty_payload():
+    with pytest.raises(FeatureCacheError, match="non-empty"):
+        InMemoryObservationFeatureLRU(max_bytes=1).put(_key(), b"")
+
+
+def test_lru_measurement_key_parser_roundtrips_cache_manifest_identity():
+    key = _key()
+
+    assert _key_from_dict(key.to_dict()) == key
 
 
 @pytest.mark.parametrize(

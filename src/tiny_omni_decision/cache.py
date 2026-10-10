@@ -7,8 +7,10 @@ import json
 import os
 import struct
 import tempfile
+from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path
+from threading import RLock
 from typing import Any
 
 _HEADER_LENGTH = struct.Struct(">Q")
@@ -195,3 +197,73 @@ class ObservationFeatureCache:
             payload_sha256=payload_hash,
             entry_bytes=len(entry),
         )
+
+
+class InMemoryObservationFeatureLRU:
+    """Keep reusable observation features in a byte-bounded, process-local LRU."""
+
+    def __init__(self, max_bytes: int) -> None:
+        if max_bytes < 1:
+            raise FeatureCacheError("max_bytes must be at least 1")
+        self.max_bytes = max_bytes
+        self._entries: OrderedDict[str, bytes] = OrderedDict()
+        self._bytes_used = 0
+        self._evictions = 0
+        self._hits = 0
+        self._misses = 0
+        self._lock = RLock()
+
+    def get(self, key: ObservationFeatureKey) -> bytes | None:
+        cache_id = key.cache_id
+        with self._lock:
+            payload = self._entries.get(cache_id)
+            if payload is None:
+                self._misses += 1
+                return None
+            self._entries.move_to_end(cache_id)
+            self._hits += 1
+            return payload
+
+    def put(self, key: ObservationFeatureKey, payload: bytes) -> bool:
+        if not isinstance(payload, bytes) or not payload:
+            raise FeatureCacheError("feature payload must be non-empty bytes")
+        if len(payload) > self.max_bytes:
+            return False
+
+        cache_id = key.cache_id
+        with self._lock:
+            previous = self._entries.pop(cache_id, None)
+            if previous is not None:
+                self._bytes_used -= len(previous)
+            while self._bytes_used + len(payload) > self.max_bytes:
+                _, evicted = self._entries.popitem(last=False)
+                self._bytes_used -= len(evicted)
+                self._evictions += 1
+            self._entries[cache_id] = payload
+            self._bytes_used += len(payload)
+            return True
+
+    @property
+    def bytes_used(self) -> int:
+        with self._lock:
+            return self._bytes_used
+
+    @property
+    def entry_count(self) -> int:
+        with self._lock:
+            return len(self._entries)
+
+    @property
+    def eviction_count(self) -> int:
+        with self._lock:
+            return self._evictions
+
+    @property
+    def hit_count(self) -> int:
+        with self._lock:
+            return self._hits
+
+    @property
+    def miss_count(self) -> int:
+        with self._lock:
+            return self._misses
