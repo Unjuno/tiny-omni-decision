@@ -255,6 +255,62 @@
       ]
     },
     {
+      "id": "google-vivit-b-16x2-k400",
+      "modality": [
+        "video"
+      ],
+      "model_revision": "google/vivit-b-16x2-kinetics400@8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+      "checkpoint": "https://huggingface.co/google/vivit-b-16x2-kinetics400/resolve/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42/pytorch_model.bin",
+      "checkpoint_sha256": "160c79526e796d6101c4d9d0fe4000e26a6098a4d8e97f4cb8935fa6deb060d0",
+      "checkpoint_bytes": 355881581,
+      "parameters": null,
+      "license": "Hub card frontmatter says MIT, but the card states that Hugging Face authored it rather than the model team; the Hub API top-level license field is null and exact upstream weight terms were not independently verified",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?blobs=true"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "pinned Hub revision lists a 355,881,581-byte PyTorch checkpoint; not downloaded or loaded",
+      "task_quality_status": "unmeasured",
+      "decision": "do not select until exact checkpoint terms and parameter count are verified",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42"
+      ]
+    },
+    {
+      "id": "mcg-nju-videomae-base",
+      "modality": [
+        "video"
+      ],
+      "model_revision": "MCG-NJU/videomae-base@dc740ceda42fce44faed2ea03c6d447db72f6af9",
+      "checkpoint": "https://huggingface.co/MCG-NJU/videomae-base/resolve/dc740ceda42fce44faed2ea03c6d447db72f6af9/model.safetensors",
+      "checkpoint_sha256": "bc053ca2840a038b1068269a4eec06ca569689e9a1ed9376a5b2b8a111be5290",
+      "checkpoint_bytes": 376873760,
+      "parameters": 94200000,
+      "license": "CC-BY-NC-4.0 per Hub model card; model card states it was written by Hugging Face, not the model team",
+      "license_allowed": false,
+      "license_status": "DENY",
+      "license_evidence": [
+        "https://huggingface.co/MCG-NJU/videomae-base/tree/dc740ceda42fce44faed2ea03c6d447db72f6af9",
+        "https://huggingface.co/api/models/MCG-NJU/videomae-base?blobs=true"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "pinned Hub revision lists 376,873,760-byte safetensors; excluded before download due to the stated noncommercial license",
+      "task_quality_status": "unmeasured",
+      "decision": "exclude from the commercial-use path due to CC-BY-NC-4.0",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/MCG-NJU/videomae-base/tree/dc740ceda42fce44faed2ea03c6d447db72f6af9"
+      ]
+    },
+    {
       "id": "vatt-ma",
       "modality": [
         "audio",

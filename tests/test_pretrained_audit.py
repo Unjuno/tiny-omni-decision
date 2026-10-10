@@ -65,3 +65,20 @@ def test_machine_readable_candidate_inventory_is_explicit_and_conservative():
         "848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d"
     )
     assert vjepa["parameter_tensor_bytes"] == 347332608
+
+    vivit = next(
+        candidate
+        for candidate in candidates
+        if candidate["id"] == "google-vivit-b-16x2-k400"
+    )
+    assert vivit["license_status"] == "REVIEW"
+    assert vivit["license_allowed"] is None
+    assert vivit["passed_load"] is False
+    assert vivit["parameters"] is None
+
+    videomae = next(
+        candidate for candidate in candidates if candidate["id"] == "mcg-nju-videomae-base"
+    )
+    assert videomae["license_status"] == "DENY"
+    assert videomae["license_allowed"] is False
+    assert videomae["passed_load"] is False

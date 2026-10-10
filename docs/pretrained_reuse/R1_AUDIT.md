@@ -62,3 +62,27 @@ remain research-only. This follow-up does not change or overwrite the prior
 audit or candidate inventory.
 
 Sources inspected 2026-10-11: [official Meta V-JEPA release page](https://ai.meta.com/research/vjepa/), [upstream README at the pinned source commit](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md), [upstream MIT license](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/LICENSE), and [upstream Apache license](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/APACHE-LICENSE). The public Hugging Face V-JEPA 2 collection was also checked; it does not list the pinned 2.1 ViT-B/16 checkpoint as a model-card alternative.
+
+## Additional compact video candidates (2026-10-11)
+
+Two smaller released video encoders were checked without downloading weights.
+The exact Hugging Face revisions, file hashes/sizes and conservative rights
+dispositions are in `R1_CANDIDATE_INVENTORY.json`.
+
+- `google/vivit-b-16x2-kinetics400@8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42`
+  lists a 355,881,581-byte checkpoint. Its card frontmatter says MIT, but the
+  same card says Hugging Face authored it rather than the model team; the Hub
+  API's top-level `license` field is null, and the checkpoint-add commit is
+  attributed to a non-Google account. I did not find an independent grant for
+  these exact weights or verify the exact parameter count. Keep it **REVIEW**;
+  it was not downloaded or loaded.
+- `MCG-NJU/videomae-base@dc740ceda42fce44faed2ea03c6d447db72f6af9` lists
+  94.2M parameters and a 376,873,760-byte safetensors file, but its Hub card
+  declares CC BY-NC 4.0. Exclude it from the project's commercial-use path;
+  it was not downloaded or loaded.
+
+These screens do not resolve the exact V-JEPA 2.1 checkpoint grant and do not
+close R1's legally-cleared video-candidate exit. Sources: [pinned ViViT Hub
+card](https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42), [pinned ViViT Hub API
+metadata](https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?blobs=true), and [pinned VideoMAE
+card](https://huggingface.co/MCG-NJU/videomae-base/tree/dc740ceda42fce44faed2ea03c6d447db72f6af9).
