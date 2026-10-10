@@ -166,7 +166,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 - [x] Verify V-JEPA 2.1-B checkpoint URL, source commit, SHA, encoder/predictor split, strict EMA load, image/video forward behavior, tokens and parameters; see `docs/pretrained_reuse/R1_AUDIT.md`. **Rights are still REVIEW:** the pinned README links the release but does not state a separate weight license. The executable candidate exists, but the product/legal R1 exit is not satisfied until the checkpoint grant is explicit.
 - [ ] Inspect ViT-Lens released backbone/Lens pairing, PE Core tiny/small/base, EfficientAT, small Japanese/English text checkpoints, VATT-MA and any relevant MJEPA *released* checkpoint. Mark `code only` / `pretrained and accessible` / `unknown` distinctly.
 - [x] Test the selected compact local candidate forwards for preprocessing, shape, parameter count and memory. The other candidates listed in `CANDIDATES.md` are screened/dispositioned; ViT-Lens original-backbone execution remains untested and is excluded from the initial small model budget.
-- [ ] Create compact source-of-truth inventory with `passed_load`, `license_allowed`, `has_real_weights`, `runtime_supported`, parameter bytes, source revision and primary citations.
+- [x] Create compact source-of-truth inventory with `passed_load`, `license_allowed`, `has_real_weights`, `runtime_supported`, parameter tensor bytes, source revision and primary citations in `docs/pretrained_reuse/R1_CANDIDATE_INVENTORY.json`. V-JEPA 2.1 weight rights remain REVIEW; the legal R1 exit is still open.
 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
 
