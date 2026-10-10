@@ -330,10 +330,11 @@ SHA-256.
 | Saved evidence | Cache manifest SHA-256 `289b3b435fc318c40f9e03ada0902645debd76f61cb1d6ac36c70e8fc35ed9d4`; prediction SHA-256 `0ccb8d1dc40502927d1a76717ebf09fa7e2075456ddac9506b8e9baf9647bf34`; report SHA-256 `2c676ab412fc41f4b13d3126e2fa396e06af1b005846692c461014bdfb85388b` |
 
 This establishes content verification and key-based invalidation for the
-video observation cache used by this diagnostic. It does not add cache
-eviction/garbage collection, prove cross-process crash recovery under power
-loss, integrate the cache with audio/image/text encoders, or measure a live
-V-JEPA + text tower resident at once.
+video observation cache used by this diagnostic. The video-only run did not
+add cache eviction/garbage collection, prove cross-process crash recovery
+under power loss, or measure a live V-JEPA + text tower resident at once.
+Audio and image follow-up checks below exercise the cache on their existing
+frozen features; text integration and a shared end-to-end pipeline remain open.
 
 #### Typed persistent audio-observation cache follow-up
 
@@ -362,11 +363,35 @@ while preserving measured CPU-vs-CUDA numeric deltas above. This is cache
 correctness evidence on the same development validation set, not an independent
 quality estimate. No sealed audit or test split was loaded.
 
+#### Typed persistent image-observation cache follow-up
+
+The same immutable observation cache was exercised on the existing frozen
+CLEVR-4 image features, without re-running V-JEPA. Every selected PNG was
+checked against the per-image SHA-256 manifest. The key binds the pinned
+CLEVR-4 revision, image content hash, V-JEPA source/weight hashes, official
+384-pixel preprocessor code, and the pooled spatial-token feature contract.
+The original image probe's report omitted its source commit and script hash;
+both remain **UNKNOWN** rather than being inferred from current files. The
+source archive full SHA-512 is also still unverified.
+
+| Item | Value |
+|---|---|
+| Persisted records | 1,024 train and 512 validation images; 1,536 cache entries. Image-ID and media-hash overlap = 0. All feature tensors reloaded exactly. |
+| Payload and scoring | 768 float32 values per image; 4,718,592 feature-payload bytes and 6,099,456 bytes including entry metadata. The fixed 147,713-parameter readout and pinned MiniLM were replayed on 2,048 validation decisions. All prediction classes matched the saved CUDA run; maximum probability delta `1.3113e-6` and metric delta `1.1921e-7`. |
+| Validation metrics | Macro Accuracy/NLL/Brier/ECE `0.5737 / 1.18360 / 0.53216 / 0.09024`. By taxonomy: color `0.6641 / 1.04290 / 0.50716 / 0.20532`; texture `0.3828 / 1.76196 / 0.75130 / 0.05588`; count `0.2988 / 1.72505 / 0.77995 / 0.05771`; shape `0.9492 / 0.20449 / 0.09025 / 0.05566`. This remains a synthetic CLEVR-4 task, not natural-image understanding. |
+| Runtime | Cache write plus reload `8.362 s`; CPU validation inference `0.033 s`. No V-JEPA encoder execution or GPU use. The 86,833,152-parameter V-JEPA checkpoint was not rehashed or loaded during this cache check; its pinned hash is inherited from the frozen feature-cache metadata and original probe report. |
+| Reproduction | Source commit `8a5e449cd8a6f490526ef1d448bbd795609af46f`; script SHA-256 `2ba4fb0aae83a9f61cc55da0fa3d3b9f0ed98b14ca7395f0f69bf5c87c68e77e`; output `C:\CodexArtifacts\pretrained-reuse-r2\image-observation-cache-v1`. The pinned upstream checkout had unrelated modified eval/train YAML files; those files were left untouched, and the preprocessor/transform source files were hashed into the cache identity. |
+| Saved evidence | Verification report SHA-256 `6b27c717db997bc035afc9dfb128789c82405c9c9f3a20e7b023f3646de702ee`; cache manifest SHA-256 `1e4c1efcf352705aa05a8b0e431688bdcf8195c7e1614eccd8a218e122e56851`; original image feature cache SHA-256 `d647605c707315839c5a81e0ac57c60df1092f051fdcb668482ae670f2a7001c`; readout SHA-256 `e99708aba55159a7e1e50c02ebe7492d343082d8c3e0ea810406b594bd23d174`. |
+
+The original validation is reused, not independent, and V-JEPA checkpoint rights
+remain **REVIEW**. The successful replay validates persistent feature integrity
+and readout reproducibility only; it does not raise the image-quality estimate.
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
-- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio cache roundtrip now covers 1,920 frozen train/validation observations, with exact feature reload and same class predictions for all 2,560 validation queries. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
+- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio cache roundtrip covers 1,920 frozen train/validation observations, with exact feature reload and the same class predictions for all 2,560 validation queries. Image cache roundtrip covers 1,536 frozen train/validation images, with exact feature reload and the same classes for all 2,048 validation decisions. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.
