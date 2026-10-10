@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-10T14:16:14Z",
+  "repository": "https://github.com/Unjuno/tiny-omni-decision",
+  "worktree": {
+    "path": "C:/CodexWorktrees/pretrained-reuse-omni",
+    "branch": "docs/pretrained-reuse-roadmap-20261010",
+    "head": "2124ea984e47cdeb431f436f681c9e454c5c4a8e",
+    "tracking_head": "2124ea984e47cdeb431f436f681c9e454c5c4a8e",
+    "working_tree_at_capture": "clean"
+  },
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_branch": "2124ea984e47cdeb431f436f681c9e454c5c4a8e"
+  },
+  "pull_requests": [
+    {"number": 15, "draft": true, "head": "docs/pretrained-reuse-roadmap-20261010", "head_sha": "2124ea984e47cdeb431f436f681c9e454c5c4a8e", "base": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+    {"number": 14, "draft": true, "head": "fix/student-qat-training-handoff", "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8", "base": "codex/ternary-student-recovery", "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c"},
+    {"number": 13, "draft": false, "head": "feat/ternary-student-recovery", "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd", "base": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+    {"number": 12, "draft": true, "head": "codex/postquant-teacher-cache", "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61", "base": "codex/postquant-numerical-core", "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"},
+    {"number": 11, "draft": true, "head": "codex/postquant-numerical-core", "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5", "base": "codex/postquant-worker-entrypoints", "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"},
+    {"number": 10, "draft": true, "head": "codex/postquant-worker-entrypoints", "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932", "base": "codex/roadmap-compression-video-specialization", "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"},
+    {"number": 9, "draft": true, "head": "codex/teacher-quality-v1", "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134", "base": "main", "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c"}
+  ],
+  "other_worktrees": [
+    {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision", "branch": "codex/teacher-quality-clean-dev-v1", "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414", "dirty": ["M ROADMAP.md", "M docs/VIDEO_TEACHER_V2_LONG_BUDGET.md", "?? scripts/resume_teacher_quality_clean_dev_v2.py"]},
+    {"path": "C:/CodexWorktrees/decision-head-validation", "branch": "codex/decision-head-validation", "head": "24d7fab171524aea51b3ba82726d33c728407d50", "dirty": []},
+    {"path": "C:/CodexWorktrees/pr14-review-qat", "branch": null, "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939", "dirty": []},
+    {"path": "C:/CodexWorktrees/pr14-review-qat-latest", "branch": "fix/student-qat-training-handoff", "head": "c3391a0c689d69df3300686d9c287546b741e7c8", "dirty": ["?? configs/student/embeddinggemma2_ternary_qat_v0_attempt06_pr14_legacybest_warmstart.yaml", "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt07_pr14_legacybest_warmstart.yaml"]},
+    {"path": "C:/CodexWorktrees/qat-groupwise-performance", "branch": "codex/qat-groupwise-performance", "head": "344c831d8ae060ed78567fd59f0700accff50ea0", "dirty": []},
+    {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-long-budget", "branch": "codex/video-teacher-v2-long-budget", "head": "ac93eddd289bf207b70b55759a922b070132d0d2", "dirty": []},
+    {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp", "branch": "codex/teacher-quality-physionpp", "head": "740ec0a7d2d8ba870b384a130c8b0821537b9626", "dirty": ["?? scripts/resume_teacher_quality_physionpp_clean_dev_v3_step1152.py"]},
+    {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-ternary-student", "branch": "codex/ternary-student-recovery", "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f", "dirty": []},
+    {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery", "branch": "codex/ternary-student-recovery-updated", "tracking": "origin/feat/ternary-student-recovery", "behind": 10, "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca", "dirty": ["M configs/student/ternary_first.example.json", "M docs/STUDENT.md", "M src/tiny_omni_decision/student/__main__.py", "M src/tiny_omni_decision/student/model.py", "M src/tiny_omni_decision/student/recovery.py", "M src/tiny_omni_decision/student/teacher_cache.py", "M tests/test_student_model_cli.py", "M tests/test_student_recovery.py", "?? configs/student/ternary_recovery_local_1215.json", "?? scripts/repackage_frozen_teacher_predictions.py", "?? tests/test_student_teacher_cache_repack.py"]}
+  ],
+  "running_python_processes": [
+    {"pid": 26456, "started": "2026-10-05T17:10:24+09:00", "command": "manage.py runserver 127.0.0.1:8000"},
+    {"pid": 66896, "started": "2026-10-08T12:16:46+09:00", "command": "manage.py runserver 127.0.0.1:8000"}
+  ],
+  "dataset_manifest_sha256": {
+    "manifests/base-model.example.yaml": "3073b756114904fbec8b8b590c087484aa6769dc510f8f95939509e6657fbfca",
+    "manifests/dataset.example.yaml": "60c29a1efc4d93179422cf5acc7c2f38949b603efce5dc7a5073a36cd3e3ccdd",
+    "manifests/durable-heldout-corpus.yaml": "10e7b191edf318882585f5c7cf38863be35b6c825a18f8ed3b36d1d43d4788b1",
+    "manifests/durable-training-corpus.yaml": "365e154310f6c1c16199f511bc0a83959d250d1308ade853b4a0d8f5f6010829",
+    "manifests/evaluation-candidates.yaml": "0073862468fbe33fc6f9540fd083ef38eb5dcc3da3233db1e93ce517814bd940",
+    "manifests/phase3-evaluation-corpus.yaml": "49b0ac3c133a5041241bbc3cee85989cd696f6aee388814bc28984490f3bb0c2",
+    "manifests/phase3-training-corpus.yaml": "8c34a80c513eebc30791e0e9f68de5dbbf4f1fc11d2027acbc17b4cc79949656",
+    "manifests/training-candidates.yaml": "4a2aec4747e4b8fbc17cb20e14dc00c278d0d545219d5e8adf775ece02796f22",
+    "manifests/candidates/clevr4-validation.yaml": "ba524e02c7474e4b31cd52bbd3ecb9705979b9ead9e1fd5b46b5d6fdd9c81f12",
+    "manifests/candidates/clevr4.yaml": "9b2b6aaffb03f1a800607e598902cb9d893223c412ab025d06b4a15f8d3cadae",
+    "manifests/candidates/clevrer-validation.yaml": "ad2047bf40707f514cda825e1f409c7e19ace4fec5e313f6d9899bd5badce0c4",
+    "manifests/candidates/clevrer.yaml": "a87bd6834a94b8ed481a36e7088ee8d5391319fc271fed80497530f055dcbdf2",
+    "manifests/candidates/mmau-test-mini.yaml": "ed4ab92e6ab4e2ec9fd93b895ff02603323fd276e61dac0400e929e9c935a6cf",
+    "manifests/candidates/mvbench.yaml": "a886fdf6ce866b38bbfc82639a7b1ed39c5a9211f3d584c0f746d788b4f4cd37",
+    "manifests/candidates/onejev-licenses.csv": "27b0b90e143b5abd4116c0a81438253d9250f99ea2699c16e974c8f5d142f9a8",
+    "manifests/candidates/onejev.yaml": "ca7e7e0a2b4b1651ada9b7d3d8e1c071721f95f2bf6bdfdf613a4dea8b4386bb",
+    "manifests/candidates/open-jev-test.yaml": "dc83003fee71451a3342f3d7bebca0032936566e050f2eccbeb268412676d9f47",
+    "manifests/candidates/open-jev-validation.yaml": "43b0c948f5316494db5499711b657aa4a791ae8e934b434524bab9ef604cf916",
+    "manifests/candidates/open-jev.yaml": "966290c414f5e3d467814afeb48bee0a7f3c11a7b07617ecc6b42d9f4ca0fec9",
+    "manifests/candidates/speech-commands-test.yaml": "0b557bc44742d96ed1c5fa227726cc858fbf688ec26083952c70559492acfe58",
+    "manifests/candidates/speech-commands-validation.yaml": "c416e1a1af57387397d73d6f4ac66a02d481dc9cbc44477c25c2375112bdaf24",
+    "manifests/candidates/speech-commands.yaml": "109984b9304ab0335c9e0b973bea3b828e3e0c901d9e46cfcbbf581459df03e2",
+    "manifests/candidates/typed-synth-validation.yaml": "f203eb5bae312e80586bfd92ec9a7bf39918d110ed6441291a4dc64fa53bf51a",
+    "manifests/teachers/durable-teacher-v0.json": "9af2616684dd00c557941cf790b7e2d65fbe8100e9ae8be7296bc250c2ec2d94"
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "driver": "616.92",
+    "compute_capability": "8.6",
+    "vram_total_mib": 16384,
+    "vram_used_mib_at_capture": 11,
+    "gpu_utilization_percent_at_capture": 0,
+    "ram_total_kib": 33288572,
+    "ram_free_kib": 12795676,
+    "c_drive_free_bytes_at_capture": 19070865408
+  },
+  "software": {
+    "python": "3.11.9",
+    "pytorch": "2.6.0+cu124",
+    "torch_cuda": "12.4",
+    "transformers": "5.6.2",
+    "attention_backend": "PyTorch SDPA in pinned V-JEPA source",
+    "video_loader": "PyAV 14.2.1 in isolated audit dependency target",
+    "training_process_detected": false
+  },
+  "preservation": {
+    "existing_training_processes_stopped": false,
+    "existing_worktrees_modified": false,
+    "legacy_manifests_or_checkpoints_modified": false,
+    "sealed_audit_opened": false,
+    "paid_compute_used": false,
+    "new_model_training_started": false
+  }
+}

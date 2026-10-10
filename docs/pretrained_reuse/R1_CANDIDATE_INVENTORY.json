@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-10-11",
+  "scope": "Pretrained encoder/checkpoint feasibility. License facts apply only as stated by the cited source; an unclear weight grant remains unknown.",
+  "candidates": [
+    {
+      "id": "vjepa2-1-vitb-384",
+      "modality": [
+        "image",
+        "video"
+      ],
+      "model_revision": "facebookresearch/vjepa2@204698b45b3712590f06245fbfba32d3be539812",
+      "checkpoint": "https://dl.fbaipublicfiles.com/vjepa2/vjepa2_1_vitb_dist_vitG_384.pt",
+      "checkpoint_sha256": "848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d",
+      "checkpoint_bytes": 1664223428,
+      "parameters": 86833152,
+      "license": "repository contains MIT and Apache-2.0 terms; pinned README says the majority is MIT and names three Apache-licensed source files",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md",
+        "https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/LICENSE",
+        "https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/APACHE-LICENSE"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "strict official-factory and EMA loads; finite image and 8-frame video forwards on local CUDA",
+      "task_quality_status": "small CLEVRER descriptive probe measured; not general video quality",
+      "decision": "research-only pending explicit checkpoint grant; do not package or promote",
+      "parameter_tensor_bytes": 347332608,
+      "primary_citations": [
+        "https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md",
+        "https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/LICENSE",
+        "https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/APACHE-LICENSE"
+      ]
+    },
+    {
+      "id": "ruri-v3-30m",
+      "modality": [
+        "text-ja"
+      ],
+      "model_revision": "cl-nagoya/ruri-v3-30m@24899e5de370b56d179604a007c0d727bf144504",
+      "checkpoint_sha256": "e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832",
+      "checkpoint_bytes": 146828152,
+      "parameters": 36705536,
+      "license": "Apache-2.0 per pinned model card",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/cl-nagoya/ruri-v3-30m"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "local tokenizer/model load; finite Japanese and English hidden states; English quality not measured",
+      "task_quality_status": "unmeasured",
+      "decision": "viable small Japanese text encoder candidate; quality gate remains open",
+      "parameter_tensor_bytes": 146828152,
+      "primary_citations": [
+        "https://huggingface.co/cl-nagoya/ruri-v3-30m"
+      ]
+    },
+    {
+      "id": "minilm-l3-en",
+      "modality": [
+        "text-en"
+      ],
+      "model_revision": "sentence-transformers/paraphrase-MiniLM-L3-v2@4ca70771034acceecb2e72475f72050fcdde4ddc",
+      "checkpoint_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "checkpoint_bytes": 69569488,
+      "parameters": 17389824,
+      "license": "Apache-2.0 per pinned model card",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/sentence-transformers/paraphrase-MiniLM-L3-v2"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "local tokenizer/model load; finite English pooled vectors",
+      "task_quality_status": "synthetic Typed Decisions Synth probe measured; real-world text quality unmeasured",
+      "decision": "viable small English text encoder candidate; quality gate remains open",
+      "parameter_tensor_bytes": 69569488,
+      "primary_citations": [
+        "https://huggingface.co/sentence-transformers/paraphrase-MiniLM-L3-v2"
+      ]
+    },
+    {
+      "id": "ast-audioset",
+      "modality": [
+        "environmental-audio"
+      ],
+      "model_revision": "MIT/ast-finetuned-audioset-10-10-0.4593@f826b80d28226b62986cc218e5cec390b1096902",
+      "checkpoint_sha256": "ae0c1e2ad4e1381d851fa9bf298ba13ebc9c5a914cdee2dbe427a6583869924d",
+      "checkpoint_bytes": 346404948,
+      "parameters": 86594063,
+      "license": "BSD-3-Clause per pinned model card and original AST project",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593",
+        "https://github.com/YuanGongND/ast"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "local feature extractor/model load; finite 527-class outputs on a plumbing fixture",
+      "task_quality_status": "not evaluated on a Decision task",
+      "decision": "viable environmental-audio candidate; speech and joint-audio quality remain open",
+      "parameter_tensor_bytes": 346404948,
+      "primary_citations": [
+        "https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593",
+        "https://github.com/YuanGongND/ast"
+      ]
+    },
+    {
+      "id": "whisper-tiny",
+      "modality": [
+        "speech-audio"
+      ],
+      "model_revision": "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+      "checkpoint_sha256": "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395",
+      "checkpoint_bytes": 151061672,
+      "parameters": 37760640,
+      "license": "Apache-2.0 per pinned model card",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/openai/whisper-tiny"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "local frozen encoder returns finite features; Speech Commands closed-set probe measured",
+      "task_quality_status": "English fixed-vocabulary keyword probe measured; general speech quality unmeasured",
+      "decision": "viable small speech encoder candidate; broader speech gate remains open",
+      "parameter_tensor_bytes": 151061672,
+      "primary_citations": [
+        "https://huggingface.co/openai/whisper-tiny"
+      ]
+    },
+    {
+      "id": "efficientat-dymn04-as",
+      "modality": [
+        "environmental-audio"
+      ],
+      "model_revision": "fschmid56/EfficientAT@revision-unpinned-in-audit",
+      "checkpoint_bytes": 8086973,
+      "parameters": null,
+      "license": "upstream code repository MIT; checkpoint grant unresolved in cited upstream issue",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://github.com/fschmid56/EfficientAT/issues/44"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "no local forward performed",
+      "task_quality_status": "unmeasured",
+      "decision": "excluded until weight rights and immutable revision are resolved",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://github.com/fschmid56/EfficientAT/issues/44"
+      ]
+    },
+    {
+      "id": "vitlens-large-audio",
+      "modality": [
+        "audio",
+        "image"
+      ],
+      "model_revision": "TencentARC/ViT-Lens-L@a80fe8f1a4039747f4e9a3e40d5287607ef940d3",
+      "checkpoint_files": [
+        {
+          "name": "vitlensL.pt",
+          "bytes": 8891845036
+        },
+        {
+          "name": "vitlensL_audio.pt",
+          "bytes": 3434449193
+        }
+      ],
+      "checkpoint_bytes": 12326294229,
+      "parameters": null,
+      "license": "Apache-2.0 advertised by pinned model repository; the paired base/Lens is CLIP ViT-L-14",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://huggingface.co/TencentARC/ViT-Lens-L"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "not downloaded; published paired files exceed 12.3 GB",
+      "task_quality_status": "published task results only; no local matched test",
+      "decision": "outside compact target and not a V-JEPA-compatible Lens",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/TencentARC/ViT-Lens-L"
+      ]
+    },
+    {
+      "id": "pe-core-t16",
+      "modality": [
+        "image",
+        "text"
+      ],
+      "model_revision": "facebook/PE-Core-T16-384@8b4722741a516c18e7d311f158f13c600fea6c78",
+      "checkpoint_bytes": 278284008,
+      "parameters": 50000000,
+      "license": "model documentation states Apache-2.0 weights; official source package declares FAIR Noncommercial Research License",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://github.com/facebookresearch/perception_models/blob/main/apps/pe/README.md"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "not downloaded or loaded",
+      "task_quality_status": "unmeasured",
+      "decision": "research reference; source/checkpoint terms need resolution before product use",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://github.com/facebookresearch/perception_models/blob/main/apps/pe/README.md"
+      ]
+    },
+    {
+      "id": "pe-av-small",
+      "modality": [
+        "audio",
+        "video"
+      ],
+      "model_revision": "facebook/pe-av-small@dd050762bb9704ae9cd996ca45532a98f81d817e",
+      "checkpoint_bytes": null,
+      "parameters": 846991308,
+      "license": "not resolved in the inspected candidate record",
+      "license_allowed": null,
+      "license_status": "UNKNOWN",
+      "license_evidence": [
+        "https://huggingface.co/facebook/pe-av-small"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "not downloaded; parameter count exceeds the complete target by over four times",
+      "task_quality_status": "unmeasured",
+      "decision": "outside the 100–200M total parameter target",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/facebook/pe-av-small"
+      ]
+    },
+    {
+      "id": "google-vivit-b-16x2-k400",
+      "modality": [
+        "video"
+      ],
+      "model_revision": "google/vivit-b-16x2-kinetics400@8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+      "checkpoint": "https://huggingface.co/google/vivit-b-16x2-kinetics400/resolve/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42/pytorch_model.bin",
+      "checkpoint_sha256": "160c79526e796d6101c4d9d0fe4000e26a6098a4d8e97f4cb8935fa6deb060d0",
+      "checkpoint_bytes": 355881581,
+      "parameters": null,
+      "license": "Pinned Hub API identifies google as repository owner and exposes MIT in cardData.license and the license:mit tag; the card says Hugging Face authored it, not the model team, and Hub commit history shows weight upload/fix commits by jegormeister. No model-team statement for these exact weights was found; exact upstream weight terms remain unverified",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "license_evidence": [
+        "https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?revision=8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400/commits/main"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "pinned Hub revision lists a 355,881,581-byte PyTorch checkpoint; not downloaded or loaded",
+      "task_quality_status": "unmeasured",
+      "decision": "do not select until exact checkpoint terms and parameter count are verified",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?revision=8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400/commits/main"
+      ]
+    },
+    {
+      "id": "mcg-nju-videomae-base",
+      "modality": [
+        "video"
+      ],
+      "model_revision": "MCG-NJU/videomae-base@dc740ceda42fce44faed2ea03c6d447db72f6af9",
+      "checkpoint": "https://huggingface.co/MCG-NJU/videomae-base/resolve/dc740ceda42fce44faed2ea03c6d447db72f6af9/model.safetensors",
+      "checkpoint_sha256": "bc053ca2840a038b1068269a4eec06ca569689e9a1ed9376a5b2b8a111be5290",
+      "checkpoint_bytes": 376873760,
+      "parameters": 94200000,
+      "license": "CC-BY-NC-4.0 per Hub model card; model card states it was written by Hugging Face, not the model team",
+      "license_allowed": false,
+      "license_status": "DENY",
+      "license_evidence": [
+        "https://huggingface.co/MCG-NJU/videomae-base/tree/dc740ceda42fce44faed2ea03c6d447db72f6af9",
+        "https://huggingface.co/api/models/MCG-NJU/videomae-base?blobs=true"
+      ],
+      "passed_load": false,
+      "has_real_weights": true,
+      "runtime_supported": false,
+      "runtime_evidence": "pinned Hub revision lists 376,873,760-byte safetensors; excluded before download due to the stated noncommercial license",
+      "task_quality_status": "unmeasured",
+      "decision": "exclude from the commercial-use path due to CC-BY-NC-4.0",
+      "parameter_tensor_bytes": null,
+      "primary_citations": [
+        "https://huggingface.co/MCG-NJU/videomae-base/tree/dc740ceda42fce44faed2ea03c6d447db72f6af9"
+      ]
+    },
+    {
+      "id": "vatt-ma",
+      "modality": [
+        "audio",
+        "video",
+        "text"
+      ],
+      "model_revision": null,
+      "checkpoint_bytes": null,
+      "parameters": null,
+      "license": "no specific compact pretrained checkpoint and license grant established in this audit",
+      "license_allowed": null,
+      "license_status": "UNKNOWN",
+      "license_evidence": [],
+      "passed_load": false,
+      "has_real_weights": null,
+      "runtime_supported": false,
+      "runtime_evidence": "no checkpoint pinned or loaded",
+      "task_quality_status": "unmeasured",
+      "decision": "architecture reference only until a compatible released checkpoint is identified",
+      "parameter_tensor_bytes": null,
+      "primary_citations": []
+    },
+    {
+      "id": "mjepa",
+      "modality": [
+        "audio",
+        "video"
+      ],
+      "model_revision": null,
+      "checkpoint_bytes": null,
+      "parameters": null,
+      "license": "no specific compact pretrained checkpoint and license grant established in this audit",
+      "license_allowed": null,
+      "license_status": "UNKNOWN",
+      "license_evidence": [],
+      "passed_load": false,
+      "has_real_weights": null,
+      "runtime_supported": false,
+      "runtime_evidence": "no checkpoint pinned or loaded",
+      "task_quality_status": "unmeasured",
+      "decision": "architecture reference only until a compatible released checkpoint is identified",
+      "parameter_tensor_bytes": null,
+      "primary_citations": []
+    }
+  ]
+}
