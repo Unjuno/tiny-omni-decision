@@ -61,6 +61,49 @@ metadata file. The runner verifies the baseline, shadow, overlay, base model,
 validation corpus, ordered IDs, and local media before evaluating. Prediction
 files are saved separately for each arm.
 
+### Exact reproduction confirmation (2026-10-11)
+
+The three-group diagnostic was rerun from the clean sensitivity branch using a
+new external output directory. The original checkpoint, overlay, baseline,
+validation snapshot and attempt-01 outputs were read-only. The successful run
+used the already-installed `C:\CodexArtifacts\venvs\embeddinggemma2-v518`
+environment; no package was installed or upgraded.
+
+- Source commit: `344c831d8ae060ed78567fd59f0700accff50ea0`; runner SHA-256
+  `82b4c1e648654523f811d59cda6914e85aa918e98d559394886568bcad11f13f`.
+- Frozen validation snapshot, ordered IDs, selected shadow, overlay tensor,
+  component baseline, and each group definition matched attempt-01. The
+  reproduction metadata includes 16 input-file hashes (including all six
+  loaded base-model files); the overlay tensor is checked against its
+  manifest. All 192 validation media references resolve
+  to 136 unique files; their expected and actual SHA-256 values match. The
+  media hash sidecar SHA-256 is
+  `2e66f2db3b223c121d859bf3641dd0f88cc2f9553be0c28357650536816f7b48`.
+- All three 256-row prediction files match attempt-01 **byte-for-byte**:
+  early `0a8d3b5067c61daebadd7818789b1158d0d367a37b20b64babbdda910a2e7b9a`,
+  middle `7585777cbdaafd28e31afb3e5e576c0498cc759b60c0755d11c83badec009651`,
+  late `d3c61bf2e4db255a253300f0ae2d0b8f4f5fac61e21b17d5c7ce872b822b13d4`.
+  Every aggregate and per-modality metric also matches exactly. The result JSON
+  differs because it records the new commit, timestamps, and measured runtimes.
+- New run: `2026-10-10T19:31:47Z`–`2026-10-10T19:38:02Z` (375 seconds).
+  Environment: Windows 10, Python 3.11.9, PyTorch 2.6.0+cu124, CUDA 12.4,
+  Transformers 5.19.0, PEFT 0.21.2, safetensors 0.8.0, PyAV 18.1.0,
+  torchvision 0.21.0+cu124, RTX 3080 Laptop 16 GiB. Per-group evaluation
+  times were 123.26 / 119.97 / 118.58 seconds; peak allocated CUDA memory was
+  about 2.56 GB and peak reserved memory about 2.95–3.01 GB.
+- External attempt-02 output:
+  `C:/CodexArtifacts/embeddinggemma2-ternary-decoder-depth-ablation-v0-attempt-02/`.
+  Result SHA-256 `1252666ee65341601bf365d8d8baaa38cb7e77e7e9ab73ee464d56395a4dd0c9`;
+  reproduction metadata SHA-256
+  `037bdc2e692fa92c2f79032d40231a572363695d11cd056354beae17aafd9091`.
+- The focused CPU tests pass: `3 passed`. No optimizer updates, QAT,
+  Recovery LoRA, sealed audit or final evaluation were run.
+
+This independent rerun reproduces the earlier evidence but does not add
+statistical power to the repeatedly inspected validation set. The decision is
+unchanged: no group meets the fixed clear-improvement rule, so stop the
+decoder-depth restoration search.
+
 ## Group construction
 
 Groups were derived from actual selected target names, not guessed module
