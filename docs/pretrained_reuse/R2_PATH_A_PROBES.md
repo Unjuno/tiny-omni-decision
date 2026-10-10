@@ -817,3 +817,17 @@ predictive and counterfactual choices to binary Decisions and reached 0.519
 macro validation Accuracy; its scene-bootstrap interval includes chance. Data
 integrity, task metrics, learning curve, artifacts and limitations are recorded
 in [CLEVRER_BINARY_REASONING_PROBE_20261011.md](CLEVRER_BINARY_REASONING_PROBE_20261011.md).
+
+#### New-scene video/text controls (2026-10-11)
+
+A separate sample excluded all previously discovered scene IDs and normalized
+question/options keys. On 2,777 choices from 200 new CLEVRER scenes, the fixed
+VideoPrism+MiniLM scorer, a text-only scorer trained on the same 3,794 choices,
+and a scene-shuffled-video control all remained near chance. Scene-level paired
+bootstrap found no Accuracy separation between fixed multimodal and text-only;
+shuffling validation videos left NLL/Brier essentially unchanged. This does
+not support a useful scene-specific video contribution for the current small
+readout and task construction. The single shuffle mapping and the text-only
+seed are limited diagnostics, not general conclusions. Full data hashes,
+per-task metrics, intervals, local compute and reproduction steps are in
+[CLEVRER_VIDEO_TEXT_CONTROLS_20261011.md](CLEVRER_VIDEO_TEXT_CONTROLS_20261011.md).
