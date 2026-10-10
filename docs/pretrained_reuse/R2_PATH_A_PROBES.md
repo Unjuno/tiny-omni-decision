@@ -247,11 +247,72 @@ verifier SHA-256
 `0766a703c1663544daf3a8b5319bbc65cad50d96fee9a43ab0524fa123af532d`. The
 older reload sidecar and training report were not overwritten.
 
+### CLEVRER visual multi-query/cache diagnostic
+
+The frozen video readout was evaluated over every supported descriptive
+question from the same eight CLEVRER development-validation scenes already
+used by the original probe: 88 questions total (11 per scene), versus 16
+questions in the original sampled validation file. The 16 original questions
+are included in the 88 and reproduce after checkpoint reload with zero class
+prediction mismatches and a maximum probability delta of `5.96e-8`. This is a
+reuse/coverage diagnostic, **not independent validation**: all 88 decisions
+come from only eight scenes, and the original 16 questions from those scenes
+participated in readout checkpoint selection. No sealed audit was opened.
+
+| Item | Value |
+|---|---|
+| Raw question source | `MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef`; pinned validation JSON SHA-256 `fdf841678a476655b906165e6e4b0ed1516785c5ab927c8d0a4614e4e27e10d` |
+| Frozen sample | 8 validation scenes; train manifest SHA-256 `25d70a899f934cd84f479ba19e52e109dbe64492446a47baf898e64ccb1824fc`; validation manifest SHA-256 `8d227fb2c49449730e920e3efcb10aa377d64e3926cca10fddc6f37e561dae0e`; fetch report SHA-256 `ea3918dc66ec8b355405faf36722a0774db6e921d885cf69fdb135578c27134f` |
+| Feature cache | Existing 8 pooled V-JEPA features, 24,576 bytes; cache file SHA-256 `7e97c562e10a5ff635dd1748349b16bc35bcd61399635f3e712f4c81bdeb623b`; frame count 8; V-JEPA source commit `204698b45b3712590f06245fbfba32d3be539812`; checkpoint SHA-256 `848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d` |
+| Readout and text model | Existing readout SHA-256 `77ff3dcc1067da138235fc3082fffc1746e8c5a14d644da5827c82813496df1f`, selected at epoch 1 by validation NLL; MiniLM `paraphrase-MiniLM-L3-v2@4ca70771034acceecb2e72475f72050fcdde4ddc`, weights SHA-256 `cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433` |
+| Task mix | 8 static descriptive; 80 temporal descriptive. Taxonomies: count 32, exist 16, color 12, material 14, shape 14. |
+| Runtime | RTX 3080 Laptop GPU; Python 3.11.9, PyTorch 2.6.0+cu124, CUDA 12.4, Transformers 5.6.2. This query run loaded cached video features and did **zero** V-JEPA executions. MiniLM load 0.858s, text feature extraction 0.232s, readout load 0.005s, readout inference 0.006s; peak allocated CUDA memory 104,437,760 bytes. The source cache run separately encoded its 8 validation videos in 2.392s and reported a process peak of 464,645,120 bytes; this is not a simultaneous V-JEPA + MiniLM residency measure. Neither figure is full-pipeline latency/memory. |
+| Cache accounting | 8 unique video features served 88 queries (11 per scene on average); 80 encoder calls would be avoided versus the hypothetical one-call-per-question pattern. The uncached 88-pass runtime was not measured; this is an execution-count comparison, not a measured speedup. |
+| Reproduction | `scripts/diagnose_clevrer_video_multiquery.py`, SHA-256 `61f8aedd38ef371cb0499a03ffc4f7372f5b153b5fc357003aa1a87d2960be38`; source commit `e2461643adf47ae26096f4ccb04bc312d4e30839`; output `C:\CodexArtifacts\pretrained-reuse-r2\video-probe-multiquery-v3` |
+| Saved evidence | Predictions SHA-256 `a35573e528949ca02e2b8fc29398358c097d3919c584b63c10e7e98b7e834cdd`; report SHA-256 `9fe6c2ee4db92c3027cacdb2ac14b84cfa8c1bca89fb061782a430349ba1da04` |
+
+Exact invocation (PowerShell; all inputs are read-only and the output directory
+must not already contain files):
+
+```powershell
+$env:PYTHONPATH = "src;."
+python scripts/diagnose_clevrer_video_multiquery.py `
+  --sample-dir C:\CodexArtifacts\pretrained-reuse-r2\clevrer-video-probe-v0-retry3 `
+  --raw-validation-questions C:\CodexArtifacts\pretrained-reuse-r2\clevrer-sample-seed17\validation-questions.json `
+  --cache-dir C:\CodexArtifacts\pretrained-reuse-r2\video-probe-cache-v4 `
+  --readout-dir C:\CodexArtifacts\pretrained-reuse-r2\video-probe-v0 `
+  --text-model C:\CodexArtifacts\pretrained-reuse-r2\models\text-minilm-en `
+  --text-revision 4ca70771034acceecb2e72475f72050fcdde4ddc `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\video-probe-multiquery-v3
+```
+
+| Scope | Count | Accuracy | NLL | Brier | ECE (15 bins) |
+|---|---:|---:|---:|---:|---:|
+| All expanded validation questions | 88 | 0.3523 | 1.3390 | 0.6978 | 0.0441 |
+| Static descriptive | 8 | 0.2500 | 1.1338 | 0.6565 | 0.2766 |
+| Temporal descriptive | 80 | 0.3625 | 1.3596 | 0.7020 | 0.0534 |
+| Count | 32 | 0.1563 | 1.7931 | 0.8338 | 0.0173 |
+| Exist | 16 | 0.6875 | 0.6829 | 0.4898 | 0.1742 |
+| Color | 12 | 0.2500 | 2.0092 | 0.8551 | 0.0633 |
+| Material | 14 | 0.5000 | 0.7101 | 0.5168 | 0.0547 |
+| Shape | 14 | 0.3571 | 1.1054 | 0.6710 | 0.0086 |
+
+The taxonomy breakdown suggests that this probe's decision quality varies
+substantially with the question/answer task; aggregate accuracy obscures very
+weak count/color results. It does not identify whether the cause is the frozen
+video representation, text-question embedding, or readout because those
+components were not ablated here. The original v0 report lacked artifact hashes
+and source commit metadata; the matching cache-v4 report records the identical
+readout and prediction hashes and supplies provenance (source commit
+`2124ea984e47cdeb431f436f681c9e454c5c4a8e`). Existing reports/checkpoints and
+media were left untouched. The evaluator is a versioned repository script;
+predictions and reports are external artifacts and were not added to Git.
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
-- Video cache reuse is measured on two questions per scene, and the audio multi-query probe measured four question types per cached event across 640 validation clips. Persistent cache invalidation, richer visual multi-query coverage, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
+- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. Audio multi-query covers four question types per cached event across 640 validation clips. Persistent-cache invalidation, independent visual scene coverage, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.
