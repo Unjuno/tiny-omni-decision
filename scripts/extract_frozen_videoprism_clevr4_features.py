@@ -13,8 +13,6 @@ from typing import Any
 
 import numpy as np
 
-from tiny_omni_decision.dataset import sha256_file
-
 MODEL_REVISION = "be719a406d563b66f0ac969e7c94bab8e997c81a"
 SOURCE_COMMIT = "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
 CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
@@ -36,6 +34,14 @@ def _args() -> argparse.Namespace:
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _ordered_ids_sha256(ids: list[str]) -> str:
