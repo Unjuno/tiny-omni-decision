@@ -381,9 +381,9 @@
       "passed_load": true,
       "has_real_weights": true,
       "runtime_supported": true,
-      "runtime_evidence": "Official source model loaded exact SHA-256-verified local checkpoint; 8-frame [1,8,288,288,3] input produced finite [1,2048,768] output. Windows JAX CPU path, JAX 0.6.2 / Flax 0.11.1; repeated compile+forward 6.13s, peak working set 4,113,592,320 bytes. Small frozen CLEVRER probe completed; see R2_PATH_A_PROBES.md.",
-      "task_quality_status": "small matched 8-scene CLEVRER descriptive validation probe measured; tied V-JEPA accuracy and slightly worse NLL/Brier/ECE point estimates; uncertainty wide and readout overfit evident",
-      "decision": "no task-quality basis to select over V-JEPA; retain research-only, not product-selected; 457,475,296-byte FP32 checkpoint exceeds the 200MB package aspiration before compression/runtime costs",
+      "runtime_evidence": "Official source model loaded exact SHA-256-verified local checkpoint; 8-frame [1,8,288,288,3] input produced finite [1,2048,768] output. Windows JAX CPU path, JAX 0.6.2 / Flax 0.11.1; repeated compile+forward 6.13s. Expanded 456-scene feature extraction took 611.04s, peak working set 4,167,176,192 bytes; see R2_PATH_A_PROBES.md.",
+      "task_quality_status": "matched 200-scene CLEVRER descriptive development validation compared against V-JEPA; VideoPrism had slightly better NLL/Brier/Accuracy point estimates and lower NLL in paired scene bootstrap, but validation was already used for V-JEPA and selected VideoPrism readout; overfit evident",
+      "decision": "suggestive task evidence only; retain research-only pending independent scene validation, not product-selected; 457,475,296-byte FP32 checkpoint exceeds the 200MB package aspiration before compression/runtime costs",
       "parameter_tensor_bytes": 457460736,
       "primary_citations": [
         "https://huggingface.co/google/videoprism-base-f16r288/tree/be719a406d563b66f0ac969e7c94bab8e997c81a",

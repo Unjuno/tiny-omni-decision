@@ -698,3 +698,32 @@ After the probe run, its frame-index helper was changed to standard-library
 rounding so CPU-only tests do not need NumPy; parity against NumPy `linspace`
 rounding was checked across 1,881 frame/request-count pairs (1–99 frames,
 1–19 requested frames) with no mismatches.
+
+#### Expanded CLEVRER VideoPrism-B comparison (2026-10-11)
+
+To check whether the tiny 8-scene comparison was dominated by sample noise,
+the same frozen feature/readout path was run on the already-created expanded
+CLEVRER development split. This split was previously used to fit and select
+the expanded V-JEPA readout; VideoPrism's readout was also selected on this
+same validation set. This is a matched, previously observed development
+comparison, not a blind or independent test. No sealed audit was loaded.
+
+| Item | Result |
+|---|---|
+| Data / integrity | `MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef`; 512 train questions / 256 scenes (256 static, 256 temporal) and 400 validation questions / 200 scenes (200 static, 200 temporal). Scene, media SHA, and normalized question overlaps are zero. Train manifest SHA-256 `5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d`; validation manifest SHA-256 `53aa6f01447a43337a601279daf620c0df91d807773522cc92230fcab173db7c`; fetch report SHA-256 `75f0511bb94df2abd7e2734c0881af0282ed3797ec7b725cc07fa7dc8fd84a44`. The source fetch report says the selected video hashes were verified but full source-archive SHA-256 was not computed. |
+| Video representation | Same pinned VideoPrism-B weights and preprocessing as above, 8 frames × 288 pixels; 456 scene features cached, 1,328,066 bytes (SHA-256 `40eaff323e3654bf34653950d5fea4cd532f1a0e096438ec9cb73703dc589ea1`). JAX CPU extraction took 611.04 seconds, peak working set 4,167,176,192 bytes; cache report SHA-256 `7b7dbbd7b89253bf7d890584509369ce7172d41907b1001e9e1f28107b0e27d7`. |
+| Readout / cost | Same frozen MiniLM + 295,169-parameter candidate MLP, seed 17, 24 epochs, batch 8, AdamW lr `0.001`, weight decay `0.001`, minimum validation NLL selection. Best epoch 2. Only the candidate scorer was trained; VideoPrism and MiniLM were frozen. Readout fit took 4.40s on local RTX 3080 Laptop GPU; peak allocation 106,707,968 bytes. Environment: Python 3.11.9, PyTorch 2.6.0+cu124, CUDA 12.4, Transformers 5.6.2, PyAV 18.1.0; JAX 0.6.2 / Flax 0.11.1 CPU encoder. Total model parameter count is approximately 132.05M (VideoPrism 114,365,184 + MiniLM 17,389,824 + scorer 295,169). The VideoPrism checkpoint alone is 457,475,296 bytes, so the package aspiration of <=200MB is not met. |
+| Matched selected validation | V-JEPA: Accuracy/NLL/Brier/ECE-15 = `0.3100 / 1.3150 / 0.6890 / 0.0573` (best epoch 2). VideoPrism: `0.3125 / 1.3059 / 0.6838 / 0.0520` (best epoch 2). Static descriptive (200): V-JEPA `0.3100 / 1.3437 / 0.6990 / 0.0628`; VideoPrism `0.3150 / 1.3375 / 0.6932 / 0.0640`. Temporal descriptive (200): V-JEPA `0.3100 / 1.2863 / 0.6791 / 0.0712`; VideoPrism `0.3100 / 1.2743 / 0.6745 / 0.0728`. Metric ordering is Accuracy / NLL / Brier / ECE-15. |
+| Paired scene uncertainty | 10,000 paired percentile bootstrap resamples, seed 17, 200 independent scene IDs, all questions from sampled scenes kept together; Python `random.Random`. VideoPrism minus V-JEPA overall: Accuracy `+0.00235` (95% CI `[-0.0275, +0.0325]`); NLL `-0.00901` (CI `[-0.01712, -0.00090]`); Brier `-0.00515` (CI `[-0.01076, +0.00039]`); ECE-15 `+0.00130` (CI `[-0.03308, +0.03916]`). NLL favors VideoPrism in this paired resampling; accuracy, Brier, and ECE intervals include zero. Temporal NLL difference was `-0.01177` (CI `[-0.02323, -0.00084]`), while static NLL difference was `-0.00625` (CI `[-0.01806, +0.00524]`). The intervals describe this reused development sample and do not account for checkpoint-selection bias. Bootstrap report SHA-256 `6835db64622907b14c9d974cee15cad48daee190c51669bfbc7bd73c67558077`. |
+| Learning curve | Train CE fell from `1.2668` at epoch 1 to `0.5718` at epoch 24. The fixed selector chose epoch 2 (validation NLL `1.3059`); at epoch 24 validation NLL was `1.7710` and Brier `0.7956`, even though Accuracy rose to `0.4000`. At the selected epoch, train Accuracy/NLL was `0.4395 / 1.1781` versus validation `0.3125 / 1.3059`. This is a clear calibration/loss overfit pattern and supports retaining the fixed min-NLL selector rather than selecting on Accuracy. |
+| Provenance / external outputs | Run source commit `0e1af922e19a91f89127fc32e89b8ae10bb03deb`; config SHA-256 `30edd90c1db3ff892b2a0ecae7823ea7ea89f6c6eea03187405399f5074e8410`; probe script SHA-256 `730d1cd7a7852d67964b97c866a8d8eee7bf8936e171497a81810295221fdc51`; feature extractor SHA-256 `b30076b4506f5177e17a34b6d6cfb788b3b7c5ca99b65dd5af36fcf10d7048f8`. Run report SHA-256 `358f077fd697a42c824cb14a2b264fee7607b7d757b81ffafa7475341b66744e`; selected readout SHA-256 `f68b04a4079c537772938d27c6456841c5eed19595ab49d0f42dd014211f0dbc`; validation predictions SHA-256 `e66c54e56368883256b6a5b61325aabec25ad62f8a66a7df61d215db0c4b3c73`. All weights, features, reports and predictions remain in `C:\CodexArtifacts\pretrained-reuse-r2\videoprism-clevrer-expanded-*`, outside Git. |
+
+**Interpretation:** the expanded comparison is more informative than the tiny
+probe: VideoPrism's NLL is lower on the same 400 questions, with a paired
+scene-bootstrap interval below zero, and its other point estimates are close
+to V-JEPA. This is suggestive evidence for this synthetic descriptive task,
+not a general video-model ranking. The validation had already informed V-JEPA
+selection and directly selected the VideoPrism checkpoint, so a new
+independent scene split is required before claiming a task-quality advantage.
+Both encoders overfit this small readout setup by epoch 24. V-JEPA's exact
+checkpoint rights also remain `REVIEW`. No model was promoted or packaged.
