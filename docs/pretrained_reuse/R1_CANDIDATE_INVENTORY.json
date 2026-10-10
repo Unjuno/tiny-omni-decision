@@ -264,12 +264,13 @@
       "checkpoint_sha256": "160c79526e796d6101c4d9d0fe4000e26a6098a4d8e97f4cb8935fa6deb060d0",
       "checkpoint_bytes": 355881581,
       "parameters": null,
-      "license": "Hub card frontmatter says MIT, but the card states that Hugging Face authored it rather than the model team; the Hub API top-level license field is null and exact upstream weight terms were not independently verified",
+      "license": "Pinned Hub API identifies google as repository owner and exposes MIT in cardData.license and the license:mit tag; the card says Hugging Face authored it, not the model team, and Hub commit history shows weight upload/fix commits by jegormeister. No model-team statement for these exact weights was found; exact upstream weight terms remain unverified",
       "license_allowed": null,
       "license_status": "REVIEW",
       "license_evidence": [
         "https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
-        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?blobs=true"
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?revision=8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400/commits/main"
       ],
       "passed_load": false,
       "has_real_weights": true,
@@ -279,7 +280,9 @@
       "decision": "do not select until exact checkpoint terms and parameter count are verified",
       "parameter_tensor_bytes": null,
       "primary_citations": [
-        "https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42"
+        "https://huggingface.co/google/vivit-b-16x2-kinetics400/tree/8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400?revision=8a7171a57f79b9aaa58bc8d977c002a0ea0f0d42",
+        "https://huggingface.co/api/models/google/vivit-b-16x2-kinetics400/commits/main"
       ]
     },
     {
