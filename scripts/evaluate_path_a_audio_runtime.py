@@ -32,6 +32,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--audio-batch-size", type=int, default=8)
     return parser.parse_args()
 
 
@@ -79,6 +80,8 @@ def main() -> None:
         raise FileExistsError(f"refusing to reuse runtime parity output: {output}")
     if args.limit is not None and args.limit < 1:
         raise ValueError("--limit must be positive")
+    if args.audio_batch_size < 1:
+        raise ValueError("--audio-batch-size must be positive")
 
     manifest = json.loads((bundle / "bundle-manifest.json").read_text(encoding="utf-8"))
     if manifest.get("bundle_id") != "path-a-audio-multiquery-runtime-v0":
@@ -139,43 +142,53 @@ def main() -> None:
     max_probability_delta = 0.0
     prediction_mismatches = 0
     inference_started = time.perf_counter()
-    for row_index, row in enumerate(selected_rows):
-        queries = [
-            DecisionQuery(question=str(spec["question"]), options=tuple(spec["options"]))
-            for spec in build_query_specs(str(row["target"]))
+    for batch_start in range(0, len(selected_rows), args.audio_batch_size):
+        batch_rows = selected_rows[batch_start : batch_start + args.audio_batch_size]
+        batch_specs = [build_query_specs(str(row["target"])) for row in batch_rows]
+        batch_queries = [
+            [
+                DecisionQuery(question=str(spec["question"]), options=tuple(spec["options"]))
+                for spec in specs
+            ]
+            for specs in batch_specs
         ]
-        results = runtime.decide_many(sample_dir / row["media_path"], queries)
-        specs = build_query_specs(str(row["target"]))
-        for task_index, (spec, result) in enumerate(zip(specs, results, strict=True)):
-            reference = selected_baseline[row_index * len(QUESTION_TASKS) + task_index]
-            logits = result.option_logits.float()
-            probs = result.probabilities.float()
-            target_index = int(spec["target_index"])
-            ref_logits = torch.tensor(reference["logits"], dtype=torch.float32)
-            ref_probs = torch.tensor(reference["probabilities"], dtype=torch.float32)
-            max_logit_delta = max(max_logit_delta, float((logits - ref_logits).abs().max()))
-            max_probability_delta = max(
-                max_probability_delta, float((probs - ref_probs).abs().max())
-            )
-            prediction_mismatches += int(
-                result.predicted_index != int(reference["prediction_index"])
-            )
-            metrics_logits[spec["question_type"]].append(logits)
-            metrics_targets[spec["question_type"]].append(target_index)
-            predictions.append(
-                {
-                    "sample_id": str(row["id"]),
-                    "media_sha256": str(row["media_sha256"]),
-                    "question_type": spec["question_type"],
-                    "question": spec["question"],
-                    "options": spec["options"],
-                    "target_index": target_index,
-                    "prediction_index": result.predicted_index,
-                    "logits": logits.tolist(),
-                    "probabilities": probs.tolist(),
-                    "reference_prediction_index": int(reference["prediction_index"]),
-                }
-            )
+        batch_results = runtime.decide_batch(
+            [sample_dir / row["media_path"] for row in batch_rows], batch_queries
+        )
+        for local_index, (row, specs, results) in enumerate(
+            zip(batch_rows, batch_specs, batch_results, strict=True)
+        ):
+            row_index = batch_start + local_index
+            for task_index, (spec, result) in enumerate(zip(specs, results, strict=True)):
+                reference = selected_baseline[row_index * len(QUESTION_TASKS) + task_index]
+                logits = result.option_logits.float()
+                probs = result.probabilities.float()
+                target_index = int(spec["target_index"])
+                ref_logits = torch.tensor(reference["logits"], dtype=torch.float32)
+                ref_probs = torch.tensor(reference["probabilities"], dtype=torch.float32)
+                max_logit_delta = max(max_logit_delta, float((logits - ref_logits).abs().max()))
+                max_probability_delta = max(
+                    max_probability_delta, float((probs - ref_probs).abs().max())
+                )
+                prediction_mismatches += int(
+                    result.predicted_index != int(reference["prediction_index"])
+                )
+                metrics_logits[spec["question_type"]].append(logits)
+                metrics_targets[spec["question_type"]].append(target_index)
+                predictions.append(
+                    {
+                        "sample_id": str(row["id"]),
+                        "media_sha256": str(row["media_sha256"]),
+                        "question_type": spec["question_type"],
+                        "question": spec["question"],
+                        "options": spec["options"],
+                        "target_index": target_index,
+                        "prediction_index": result.predicted_index,
+                        "logits": logits.tolist(),
+                        "probabilities": probs.tolist(),
+                        "reference_prediction_index": int(reference["prediction_index"]),
+                    }
+                )
     if device.type == "cuda":
         torch.cuda.synchronize(device)
         inference_peak = torch.cuda.max_memory_allocated(device)
@@ -234,6 +247,7 @@ def main() -> None:
         "unique_audio_observations": len(selected_rows),
         "device": torch.cuda.get_device_name(device) if device.type == "cuda" else "cpu",
         "runtime_parameters": runtime.parameter_count,
+        "audio_encoder_batch_size": args.audio_batch_size,
         "temperature": 1.0,
         "training_performed": False,
         "test_split_loaded": False,

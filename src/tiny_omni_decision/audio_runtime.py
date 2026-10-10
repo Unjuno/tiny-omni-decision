@@ -133,7 +133,7 @@ class SpeechCommandsMultiQueryRuntime:
             raise ValueError("Path A readout hash mismatch")
 
         self.audio_model = WhisperModel.from_pretrained(
-            audio_dir, local_files_only=True, torch_dtype=torch.float32
+            audio_dir, local_files_only=True, dtype=torch.float32
         ).eval().to(self.device)
         self.audio_encoder = self.audio_model.encoder
         self.audio_processor = WhisperFeatureExtractor.from_pretrained(
@@ -141,7 +141,7 @@ class SpeechCommandsMultiQueryRuntime:
         )
         self.text_tokenizer = AutoTokenizer.from_pretrained(text_dir, local_files_only=True)
         self.text_model = AutoModel.from_pretrained(
-            text_dir, local_files_only=True, torch_dtype=torch.float32
+            text_dir, local_files_only=True, dtype=torch.float32
         ).eval().to(self.device)
         for model in (self.audio_model, self.text_model):
             for parameter in model.parameters():
@@ -167,10 +167,12 @@ class SpeechCommandsMultiQueryRuntime:
         if self.parameter_count != 55_494_785:
             raise ValueError(f"unexpected total runtime parameter count: {self.parameter_count}")
 
-    def _encode_audio(self, path: Path) -> Tensor:
-        waveform = read_pcm_wav(path)
+    def _encode_audio_batch(self, paths: Sequence[Path]) -> list[Tensor]:
+        if not paths:
+            raise ValueError("at least one audio file is required")
+        waveforms = [read_pcm_wav(path) for path in paths]
         encoded = self.audio_processor(
-            [waveform],
+            waveforms,
             sampling_rate=16000,
             padding="max_length",
             max_length=self.audio_processor.n_samples,
@@ -185,11 +187,17 @@ class SpeechCommandsMultiQueryRuntime:
         )
         with torch.inference_mode(), autocast:
             hidden = self.audio_encoder(input_features).last_hidden_state
-        valid_tokens = min(hidden.shape[1], max(1, math.ceil(len(waveform) / 320)))
-        pooled = hidden[0, :valid_tokens].float().mean(dim=0).cpu()
-        if pooled.shape != (AUDIO_FEATURE_SIZE,) or not torch.isfinite(pooled).all():
-            raise ValueError("Whisper produced invalid pooled audio features")
-        return pooled
+        pooled_rows = []
+        for index, waveform in enumerate(waveforms):
+            valid_tokens = min(hidden.shape[1], max(1, math.ceil(len(waveform) / 320)))
+            pooled = hidden[index, :valid_tokens].float().mean(dim=0).cpu()
+            if pooled.shape != (AUDIO_FEATURE_SIZE,) or not torch.isfinite(pooled).all():
+                raise ValueError("Whisper produced invalid pooled audio features")
+            pooled_rows.append(pooled)
+        return pooled_rows
+
+    def _encode_audio(self, path: Path) -> Tensor:
+        return self._encode_audio_batch([path])[0]
 
     def _encode_texts(self, texts: Sequence[str]) -> dict[str, Tensor]:
         missing = list(dict.fromkeys(text for text in texts if text not in self.text_cache))
@@ -213,9 +221,8 @@ class SpeechCommandsMultiQueryRuntime:
             )
         return {text: self.text_cache[text] for text in texts}
 
-    def decide_many(
-        self, audio_path: Path, queries: Sequence[DecisionQuery]
-    ) -> list[DecisionOutput]:
+    @staticmethod
+    def _validate_queries(queries: Sequence[DecisionQuery]) -> None:
         if not queries:
             raise ValueError("at least one decision query is required")
         for query in queries:
@@ -226,12 +233,12 @@ class SpeechCommandsMultiQueryRuntime:
             if len(set(query.options)) != len(query.options):
                 raise ValueError("candidate options must be unique")
 
-        texts = []
-        for query in queries:
-            texts.append(f"Question: {query.question}")
-            texts.extend(f"Candidate answer: {option}." for option in query.options)
-        text_vectors = self._encode_texts(texts)
-        audio = self._encode_audio(audio_path)
+    def _score_queries(
+        self,
+        audio: Tensor,
+        queries: Sequence[DecisionQuery],
+        text_vectors: dict[str, Tensor],
+    ) -> list[DecisionOutput]:
         outputs = []
         with torch.inference_mode():
             for query in queries:
@@ -254,4 +261,42 @@ class SpeechCommandsMultiQueryRuntime:
                     )
                 )
         return outputs
+
+    def _texts_for_queries(self, query_groups: Sequence[Sequence[DecisionQuery]]) -> list[str]:
+        texts = []
+        for queries in query_groups:
+            for query in queries:
+                texts.append(f"Question: {query.question}")
+                texts.extend(f"Candidate answer: {option}." for option in query.options)
+        return texts
+
+    def decide_many(
+        self, audio_path: Path, queries: Sequence[DecisionQuery]
+    ) -> list[DecisionOutput]:
+        """Score several questions for one audio event, reusing its encoding."""
+        self._validate_queries(queries)
+        text_vectors = self._encode_texts(self._texts_for_queries([queries]))
+        return self._score_queries(self._encode_audio(audio_path), queries, text_vectors)
+
+    def decide_batch(
+        self,
+        audio_paths: Sequence[Path],
+        queries_by_audio: Sequence[Sequence[DecisionQuery]],
+    ) -> list[list[DecisionOutput]]:
+        """Batch separate requests; BF16 numerics depend on the encoder batch size.
+
+        Use the same audio batch size as feature extraction when reproducing a
+        cached-feature experiment. The Speech Commands reference extraction
+        used batches of eight. Single-event callers can use `decide_many`.
+        """
+        if not audio_paths or len(audio_paths) != len(queries_by_audio):
+            raise ValueError("audio path and query batch sizes must be equal and nonzero")
+        for queries in queries_by_audio:
+            self._validate_queries(queries)
+        text_vectors = self._encode_texts(self._texts_for_queries(queries_by_audio))
+        audio_vectors = self._encode_audio_batch(audio_paths)
+        return [
+            self._score_queries(audio, queries, text_vectors)
+            for audio, queries in zip(audio_vectors, queries_by_audio, strict=True)
+        ]
 
