@@ -335,11 +335,38 @@ eviction/garbage collection, prove cross-process crash recovery under power
 loss, integrate the cache with audio/image/text encoders, or measure a live
 V-JEPA + text tower resident at once.
 
+#### Typed persistent audio-observation cache follow-up
+
+The same immutable observation cache was exercised on the existing frozen
+Speech Commands features. The run and its train/validation manifests,
+checkpoint, saved predictions, and media were read-only. Every referenced WAV
+was checked against its recorded SHA-256 before cache materialization. Cache
+identity includes pinned dataset revision, audio asset hash, Whisper revision
+and weight hash, feature-extractor config hash, and the extraction/pooling code
+hash; question and candidate strings are absent from the key.
+
+| Item | Value |
+|---|---|
+| Persisted records | 1,280 train and 640 validation observations; 1,920 cache entries total. Train/validation media overlap = 0 and speaker overlap = 0. Unique speakers: 829 train, 206 validation. |
+| Payload and reuse | 384 float32 values per clip; 2,949,120 payload bytes and 5,172,480 bytes including entry metadata. Each of 640 validation observations is reused by four question types (2,560 queries). All restored feature tensors exactly equal the frozen source tensors. |
+| Same-checkpoint re-evaluation | CPU replay reproduced all saved class predictions exactly. Relative to the original CUDA evaluation, max absolute logit delta was `1.1444e-5`, probability delta `2.2054e-6`, and metric delta `1.8627e-8`; these backend deltas are reported rather than described as bitwise output parity. Macro Accuracy/NLL/Brier/ECE remain `0.9785 / 0.069327 / 0.032318 / 0.014346`. |
+| Runtime | Cache write plus reload: 10.025 s; CPU validation inference: 0.504 s. No audio encoder was loaded or executed, and the GPU was not used. |
+| Reproduction | Source commit `f2c9ba71a19dabb0a05368a69a8be89d7c065781`; script SHA-256 `c7e9889e95ed109efc9dec0a8fdd402549d3326054544eba3bafea995f0bef9e`; output `C:\CodexArtifacts\pretrained-reuse-r2\audio-observation-cache-multiquery-v2`. |
+| Saved evidence | Verification report SHA-256 `23514320da74b01350d5a1fd353228481c8a03a5f8675aa163a27793e6c8edc6`; cache manifest SHA-256 `fe0d8b5717651d7e845e577902c6230f2f96516b654870310433bb2c648d3f39`; original multi-query run report SHA-256 `833258cbc584cbe5f2583c7cc9a5a6f115deb9a46b232e81b3eb7c7489fc081b`. |
+
+The initial verification attempt used an overly strict cross-backend logit
+threshold and stopped despite identical class predictions; that partial output
+was retained under `audio-observation-cache-multiquery-v0`. The successful
+follow-up reports exact feature equality and exact class-prediction equality,
+while preserving measured CPU-vs-CUDA numeric deltas above. This is cache
+correctness evidence on the same development validation set, not an independent
+quality estimate. No sealed audit or test split was loaded.
+
 ## R2 status
 
 - Implemented and exercised frozen-feature candidate readouts for text, image, and a small video task. Per-example validation probabilities, epoch metrics, source/media hashes, and selected heads are saved outside Git.
 - Audio-only closed-set keyword evaluation is complete using frozen Whisper Tiny features and a small candidate readout; it does not establish broad speech understanding. Train/validation speaker and media gates passed, and artifacts are outside Git.
 - A one-time Ruri Japanese zero-shot check on 52 JamC-QA-V2 dev items was near the uniform four-choice baseline. It is evaluation-only, has unresolved contamination risk, and the dataset license is `REVIEW`; it does not qualify as a Japanese Decision model or close the text-quality gate.
-- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio multi-query covers four question types per cached event across 640 validation clips. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
+- Video cache reuse now covers 11 descriptive questions per each of 8 existing CLEVRER validation scenes; the original 16-query subset reloads with numerical parity. The 88-query metrics are not independent of the validation used for checkpoint selection. A typed immutable cache roundtrip was exercised on all 8 video features; separate CPU tests cover key invalidation and payload corruption. Audio cache roundtrip now covers 1,920 frozen train/validation observations, with exact feature reload and same class predictions for all 2,560 validation queries. Independent visual scene coverage, cache eviction, synchronized audio-video tasks, and full encoder-plus-readout deployment memory remain untested.
 - No sealed audit, legacy final evaluation, or training checkpoint was loaded. No backbone was updated. No model weights or media are added to Git.
 - This is not a selected release candidate. Open-Jev access and V-JEPA checkpoint rights remain unresolved; broader real text, audio, natural-image, joint-modality, calibration and deployment gates remain open.
