@@ -377,3 +377,12 @@ answer changes. See docs/pretrained_reuse/R2_NLI_CONDITION_20261012.md.
 Do not spend further iterations optimizing that diagnostic or deploy either
 text scorer as a general reasoning solution. Reassess pretrained objective,
 conditional architecture, data coverage and full multimodal parameter budget.
+
+### Instruction-reference result (2026-10-12)
+
+Pinned SmolLM2-135M-Instruct loaded with134,515,008 deduplicated parameters,
+but the fixed next-label conditional diagnostic returned A for all256 items
+(30.47% Accuracy). This candidate is not selected for multimodal integration.
+See docs/pretrained_reuse/R1_R2_INSTRUCTION_REFERENCE_20261012.md for exact
+scoring, confidence limitations and parameter accounting. More checkpoint
+screening alone is not a demonstrated route to the required quality.
