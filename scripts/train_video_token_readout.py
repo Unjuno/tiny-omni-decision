@@ -40,7 +40,14 @@ def main():
     rows = {s: checked[s + "_rows"] for s in ["train", "validation"]}
     if args.smoke:
         rows = {
-            s: sum(([r for r in data if r["question_type"] == q][:2] for q in QUESTION_TYPES), [])
+            s: sum(
+                (
+                    [r for r in data if r["question_type"] == q][:2]
+                    + [r for r in data if r["question_type"] == q][-2:]
+                    for q in QUESTION_TYPES
+                ),
+                [],
+            )
             for s, data in rows.items()
         }
     keys = list(dict.fromkeys(r["media_sha256"] for data in rows.values() for r in data))
