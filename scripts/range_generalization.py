@@ -99,7 +99,22 @@ def prepare(root, output):
           counts=counts, builder_sha256=sha(Path(__file__)), overlap=0))
 
 
-def evaluate(root, model_path, data, expected_input, output, checkpoints=None):
+def validate_evaluation_rows(rows, variants, expected_rows):
+    if len(rows) != expected_rows or len({r["id"] for r in rows}) != expected_rows:
+        raise ValueError("incomplete or duplicate inputs")
+    if not variants or len(set(variants)) != len(variants):
+        raise ValueError("invalid variants")
+    if expected_rows % len(variants) or {r["variant"] for r in rows} != set(variants):
+        raise ValueError("variant mismatch")
+    if any(
+        sum(r["variant"] == v for r in rows) != expected_rows // len(variants)
+        for v in variants
+    ):
+        raise ValueError("unbalanced variant count")
+
+
+def evaluate(root, model_path, data, expected_input, output, checkpoints=None,
+             variants=VARIANTS, expected_rows=10240):
     import time
 
     import numpy as np
@@ -122,12 +137,12 @@ def evaluate(root, model_path, data, expected_input, output, checkpoints=None):
         if sha(root / name / "best-delta.pt") != digest:
             raise ValueError("checkpoint mismatch")
     rows = [json.loads(line) for line in inputs.read_text(encoding="utf-8").splitlines()]
-    if len(rows) != 10240 or len({r["id"] for r in rows}) != 10240:
-        raise ValueError("incomplete inputs")
+    validate_evaluation_rows(rows, variants, expected_rows)
     output.mkdir(parents=True, exist_ok=False)
     write(output / "protocol.json", dict(input_sha256=expected_input, checkpoints=checkpoints,
           base_sha256=base_hash, runner_sha256=sha(Path(__file__)), training=False,
-          selection=False, seed=20261012, resamples=10000))
+          selection=False, seed=20261012, resamples=10000, variants=variants,
+          expected_rows=expected_rows))
     torch.set_num_threads(4)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     start = time.perf_counter()
@@ -145,7 +160,7 @@ def evaluate(root, model_path, data, expected_input, output, checkpoints=None):
         model.requires_grad_(False)
         reports[name], predictions[name] = {}, {}
         with torch.inference_mode():
-            for variant in VARIANTS:
+            for variant in variants:
                 selected = [r for r in rows if r["variant"] == variant]
                 values, max_tokens = [], 0
                 for offset in range(0, len(selected), 8):
@@ -180,7 +195,7 @@ def evaluate(root, model_path, data, expected_input, output, checkpoints=None):
         if device == "cuda":
             torch.cuda.empty_cache()
     comparisons = {}
-    for variant in VARIANTS:
+    for variant in variants:
         selected = [r for r in rows if r["variant"] == variant]
         diff = np.array(paired_accuracy(selected, predictions["parent"][variant],
                                         predictions["candidate"][variant]))
