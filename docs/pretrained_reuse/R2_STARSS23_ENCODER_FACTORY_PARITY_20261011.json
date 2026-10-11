@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "modality": "audio",
+      "features": 4,
+      "all_feature_sha256_exact": true,
+      "result_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-audio-factory-parity-01\\result.json",
+      "result_sha256": "05e1595ed89e86675e48931545b976af316e131d460df6d53cbf1c995e34e4ff"
+    },
+    {
+      "modality": "video",
+      "features": 4,
+      "all_feature_sha256_exact": true,
+      "result_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-video-factory-parity-01\\result.json",
+      "result_sha256": "b45110a559a3d297711b893828bfdefdcdd89010ee074fc1234a14c0a07abb1a"
+    }
+  ]
+}

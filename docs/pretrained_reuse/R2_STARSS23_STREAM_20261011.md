@@ -52,3 +52,22 @@ The 78-recording acquisition is a separate live process. This parity result
 does not certify its completion or provide any independent quality evidence.
 Next integrate the iterators with one loaded frozen encoder per extraction
 process, after the complete acquisition and window-manifest gates pass.
+
+## Encoder integration follow-up
+
+`extract_starss23_features.load_encoder` now shares the unchanged pinned model
+loading and preprocessing between the original four-window smoke runner and
+`scripts/extract_starss23_corpus_features.py`. The latter checks the complete
+window manifest hashes, unique IDs and room/recording split separation, loads
+one model, streams each recording's inputs, and saves float32 features in the
+same order. Each completed recording has a hash-verified, reload-checked shard;
+the final matrix is saved only after every window succeeds. A partial run has
+FAIL/RUNNING state, not a valid final matrix. Automatic resume is not implemented.
+
+Both original-model smoke commands were re-run with separate new outputs
+`starss23-audio-factory-parity-01` and `starss23-video-factory-parity-01`.
+All eight feature-file SHA-256 values exactly match the earlier audio/video
+features. The small comparison record is
+`R2_STARSS23_ENCODER_FACTORY_PARITY_20261011.json`. This establishes unchanged
+factory outputs; the full-corpus streaming extraction itself has not run yet
+because acquisition is incomplete. No held-out quality result is claimed.

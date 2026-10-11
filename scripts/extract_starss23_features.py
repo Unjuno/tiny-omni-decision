@@ -36,6 +36,67 @@ def validate_windows(report):
     return rows
 
 
+def load_encoder(args, report):
+    """Load the same frozen encoder once for a caller-verified source/checkpoint."""
+    sys.path.insert(0, str(args.source_root.resolve()))
+    if args.modality == "audio":
+        import torch
+        import torchaudio
+        from models.dymn.model import get_model
+        from models.preprocess import AugmentMelSTFT
+
+        torch.set_num_threads(4)
+        with contextlib.redirect_stdout(io.StringIO()):
+            model = get_model(width_mult=0.4, pretrained_name=None, T_max=1.0)
+            mel = AugmentMelSTFT().eval()
+        model.load_state_dict(
+            torch.load(args.checkpoint, map_location="cpu", weights_only=True), strict=True
+        )
+        model.eval().requires_grad_(False)
+        report.update(
+            parameters=sum(p.numel() for p in model.parameters()),
+            preprocessing="channel 0; 24k->32k torchaudio sinc; official eval mel",
+            torch=torch.__version__,
+            torchaudio=torchaudio.__version__,
+        )
+
+        def encode(data):
+            waveform = torch.from_numpy(data["audio"][:, 0].copy()).unsqueeze(0)
+            waveform = torchaudio.functional.resample(waveform, 24000, 32000)
+            with torch.inference_mode():
+                _, feature = model(mel(waveform).unsqueeze(1))
+            return feature.squeeze(0).numpy()
+
+        expected_shape = (384,)
+    else:
+        import jax
+        import jax.numpy as jnp
+        import tensorflow as tf
+        from videoprism import models as vp
+
+        model = vp.get_model("videoprism_public_v1_base")
+        variables = vp.load_pretrained_weights(
+            "videoprism_public_v1_base", checkpoint_path=str(args.checkpoint)
+        )
+        forward = jax.jit(lambda x: model.apply(variables, x, train=False))
+        report.update(
+            parameters=sum(x.size for x in jax.tree_util.tree_leaves(variables)),
+            model_revision=MODEL_REVISION,
+            jax=jax.__version__,
+            tensorflow=tf.__version__,
+            preprocessing="full equirectangular frame bilinear resize 288x288 /255",
+        )
+
+        def encode(data):
+            frames = np.asarray(tf.image.resize(data["video"], (288, 288)), dtype=np.float32) / 255
+            result = forward(jnp.asarray(frames[None]))
+            tokens = result[0] if isinstance(result, tuple) else result
+            return np.asarray(tokens).mean(axis=1).squeeze(0).astype(np.float32)
+
+        expected_shape = (768,)
+    return encode, expected_shape
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--modality", choices=["audio", "video"], required=True)
@@ -78,63 +139,7 @@ def main():
         "training": False,
     }
     try:
-        if args.modality == "audio":
-            import torch
-            import torchaudio
-            from models.dymn.model import get_model
-            from models.preprocess import AugmentMelSTFT
-
-            torch.set_num_threads(4)
-            with contextlib.redirect_stdout(io.StringIO()):
-                model = get_model(width_mult=0.4, pretrained_name=None, T_max=1.0)
-                mel = AugmentMelSTFT().eval()
-            model.load_state_dict(
-                torch.load(args.checkpoint, map_location="cpu", weights_only=True), strict=True
-            )
-            model.eval().requires_grad_(False)
-            report.update(
-                parameters=sum(p.numel() for p in model.parameters()),
-                preprocessing="channel 0; 24k->32k torchaudio sinc; official eval mel",
-                torch=torch.__version__,
-                torchaudio=torchaudio.__version__,
-            )
-
-            def encode(data):
-                waveform = torch.from_numpy(data["audio"][:, 0].copy()).unsqueeze(0)
-                waveform = torchaudio.functional.resample(waveform, 24000, 32000)
-                with torch.inference_mode():
-                    _, feature = model(mel(waveform).unsqueeze(1))
-                return feature.squeeze(0).numpy()
-
-            expected_shape = (384,)
-        else:
-            import jax
-            import jax.numpy as jnp
-            import tensorflow as tf
-            from videoprism import models as vp
-
-            model = vp.get_model("videoprism_public_v1_base")
-            variables = vp.load_pretrained_weights(
-                "videoprism_public_v1_base", checkpoint_path=str(args.checkpoint)
-            )
-            forward = jax.jit(lambda x: model.apply(variables, x, train=False))
-            report.update(
-                parameters=sum(x.size for x in jax.tree_util.tree_leaves(variables)),
-                model_revision=MODEL_REVISION,
-                jax=jax.__version__,
-                tensorflow=tf.__version__,
-                preprocessing="full equirectangular frame bilinear resize 288x288 /255",
-            )
-
-            def encode(data):
-                frames = (
-                    np.asarray(tf.image.resize(data["video"], (288, 288)), dtype=np.float32) / 255
-                )
-                result = forward(jnp.asarray(frames[None]))
-                tokens = result[0] if isinstance(result, tuple) else result
-                return np.asarray(tokens).mean(axis=1).squeeze(0).astype(np.float32)
-
-            expected_shape = (768,)
+        encode, expected_shape = load_encoder(args, report)
         report["load_seconds"] = time.perf_counter() - started
         for row in rows:
             tick = time.perf_counter()
