@@ -588,3 +588,8 @@ is uncertain and ECE worsens. Preserve both; general four-modality95% remains un
 Matched physical-mirror augmentation gives90.19% versus90.04% image Accuracy,
 an uncertain3/2048-answer gain; NLL worsens and counting drops. No adoption.
 [Controlled result](docs/pretrained_reuse/R2_MIRROR_CONTROL_RESULTS_20261012.md).
+
+Shared nonlinear cell pooling reduces head size to180736 parameters but gives
+89.79% selected image Accuracy; counting66.41% trails spatial bilinear70.51%.
+Later training overfits; no counting-fix or product-quality claim.
+[Cell readout result](docs/pretrained_reuse/R2_CELLWISE_RESULTS_20261012.md).
