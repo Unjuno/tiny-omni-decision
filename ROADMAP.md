@@ -436,3 +436,12 @@ the narrow-range model scores82.32% on the same latent states with its own train
 values. This supports inadequate fit within the measured recipe, not just failed
 transfer; it does not identify a universal capacity ceiling. See
 [fixed training-fit diagnosis](docs/pretrained_reuse/R2_NUMERIC_TRAINING_FIT_20261012.md).
+
+### Numeric representation audit (2026-10-12)
+
+The wider training corpus changes numeric vocabulary199→583values and introduces
+32.79% two-token numerals, versus0% in the original corpus, with no unknown tokens.
+This is a measured representation change, not proof of causation. Before increasing
+model size, assess reuse of the learned narrow-format checkpoint under a separately
+budgeted, validation-selected wide-range run. See
+[contextual token audit](docs/pretrained_reuse/R2_NUMERIC_TOKENIZATION_20261012.md).
