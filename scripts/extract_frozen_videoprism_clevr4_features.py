@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import platform
 import subprocess
 import sys
 import time
@@ -284,6 +285,14 @@ def main() -> None:
         "validation_batch_forward_seconds": val_times,
         "feature_extraction_seconds": time.perf_counter() - extraction_started,
         "jax_version": jax.__version__,
+        "tensorflow_version": tf.__version__,
+        "python_version": sys.version,
+        "host_platform": {
+            "system": platform.system(),
+            "release": platform.release(),
+            "machine": platform.machine(),
+            "processor": platform.processor(),
+        },
         "devices": [str(device) for device in jax.devices()],
         "rss_start_bytes": rss_start,
         "rss_end_bytes": process.memory_info().rss,
