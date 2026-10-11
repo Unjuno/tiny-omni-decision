@@ -231,6 +231,8 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R7 — Precision, packaging and runtime (**after quality gate**)
 
+**Read-only size envelope (2026-10-11):** all three main encoder weight files are FP32. A manifest- and hash-checked storage-only estimate for group-wise INT8 (group size 256; one FP32 scale and one INT8 zero point per group) is ~182.0 MB decimal versus the current 687.3 MB package, leaving ~18.0 MB against the provisional 200 MB target. No weights were quantized and no quality, device, kernel, memory, or latency result was measured; this does not close R7. Details and hashes: [Path A size envelope audit](docs/pretrained_reuse/R7_PATH_A_SIZE_ENVELOPE_20261011.md).
+
 - [ ] Profile FP32/BF16/FP16 reference behavior **per backend**, with supported numeric combinations only.
 - [ ] Test 8-bit and 4-bit deployment paths and their *actual kernels* before targeting BitNet-style ternary. Quantized storage without low-bit compute may not reduce runtime.
 - [ ] If needed, measure architecture-compatible ternary-QAT plus recovery, preserving high-precision exceptions and optimizer/master state for training. This is **optional**, not a first-stage prerequisite.
