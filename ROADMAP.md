@@ -420,3 +420,11 @@ and22.95% with all five perturbations combined. Identifier/field renaming had
 small effects. This supports range/wording fragility under the tested conditions;
 it does not isolate candidate-count effects or establish broad multimodal quality.
 See [all arms, task metrics and uncertainty](docs/pretrained_reuse/R2_TRANSFER_CONTROLS_20261012.md).
+
+### Numeric-range coverage result (2026-10-12)
+
+The numeric-only augmentation run completed2,048updates and best reload. On the
+predeclared new transfer set, selected-model Accuracy24.27% versus prior30.66%;
+the confidence loss improved but useful reasoning did not. Original curriculum
+Accuracy fell80.57%→24.51% at the same budget. No promotion or95%claim. See
+[fixed-budget range experiment](docs/pretrained_reuse/R2_NUMERIC_RANGE_20261012.md).
