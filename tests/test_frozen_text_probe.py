@@ -84,3 +84,28 @@ def test_question_pair_rejects_question_without_state_budget():
 
     with pytest.raises(ValueError, match="reserved context budget"):
         _question_pair_batch(PairTokenizerStub(), [_example("a", "word " * 252)])
+
+
+def test_noul_criteria_preserves_target_index_and_original():
+    from pydantic import BaseModel
+
+    from scripts.train_frozen_text_probe import _apply_noul_criteria
+
+    class Example(BaseModel):
+        options: list[str]
+        target: str
+
+    old = Example(options=["true", "false"], target="false")
+    new = _apply_noul_criteria(
+        old, {"criteria": {"true": "condition holds", "false": "condition absent"}}
+    )
+    assert new.options == ["true: condition holds", "false: condition absent"]
+    assert new.options.index(new.target) == old.options.index(old.target)
+    assert old.options == ["true", "false"]
+
+
+def test_noul_criteria_fails_closed_for_missing_definition():
+    from scripts.train_frozen_text_probe import _apply_noul_criteria
+
+    with pytest.raises(ValueError, match="explicit true/false"):
+        _apply_noul_criteria(_example("x"), {"criteria": {"true": "yes"}})

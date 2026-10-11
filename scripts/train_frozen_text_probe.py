@@ -34,6 +34,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--context-policy", choices=("legacy", "question_pair"), default="legacy")
+    parser.add_argument("--preserve-noul-criteria", action="store_true")
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-questions", type=int, default=64)
@@ -41,8 +42,52 @@ def _args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _load_examples(path: Path, manifest: DatasetManifest) -> list[Any]:
-    return list(normalize_jsonl(iter_local_rows(path), manifest, "typed-decisions-synth"))
+def _apply_noul_criteria(example: Any, definition: dict[str, Any]) -> Any:
+    criteria = definition.get("criteria")
+    if isinstance(criteria, dict):
+        criteria = {
+            key: json.dumps(value, ensure_ascii=False, sort_keys=True)
+            if isinstance(value, (dict, list)) and value
+            else value
+            for key, value in criteria.items()
+        }
+    if not isinstance(criteria, dict) or any(
+        not isinstance(criteria.get(key), str) or not criteria[key].strip()
+        for key in ("true", "false")
+    ):
+        raise ValueError("noul requires explicit true/false criteria")
+    mapping = {key: f"{key}: {criteria[key]}" for key in ("true", "false")}
+    return example.model_copy(
+        update={
+            "options": [mapping[key] for key in example.options],
+            "target": mapping[example.target],
+        }
+    )
+
+
+def _load_examples(
+    path: Path, manifest: DatasetManifest, preserve_noul_criteria: bool = False
+) -> list[Any]:
+    rows = list(iter_local_rows(path))
+    examples = list(normalize_jsonl(rows, manifest, "typed-decisions-synth"))
+    if not preserve_noul_criteria:
+        return examples
+    definitions = {}
+    for row in rows:
+        questions = row["questions"]
+        if isinstance(questions, str):
+            questions = json.loads(questions)
+        for key, value in questions.items():
+            identity = f"{row['state_id']}:{key}"
+            if identity in definitions:
+                raise ValueError("duplicate source question identity")
+            definitions[identity] = value
+    return [
+        _apply_noul_criteria(e, definitions[e.source_record_id])
+        if definitions[e.source_record_id]["type"] == "noul"
+        else e
+        for e in examples
+    ]
 
 
 def _identity_sets(examples: list[Any]) -> tuple[set[str], set[str]]:
@@ -249,13 +294,19 @@ def main() -> None:
     manifest = DatasetManifest.model_validate(manifest_data)
     train_manifest = manifest.model_copy(update={"split": "train"})
     validation_manifest = manifest.model_copy(update={"split": "validation"})
-    train = _load_examples(args.train, train_manifest)
-    validation = _load_examples(args.validation, validation_manifest)
+    train = _load_examples(args.train, train_manifest, args.preserve_noul_criteria)
+    validation = _load_examples(args.validation, validation_manifest, args.preserve_noul_criteria)
     _assert_disjoint(train, validation)
     train_groups, _ = _identity_sets(train)
     validation_groups, _ = _identity_sets(validation)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=True)
+    if args.preserve_noul_criteria:
+        for example in train + validation:
+            for option in example.options:
+                ids = tokenizer(f"Candidate answer: {option}", truncation=False)["input_ids"]
+                if len(ids) > 256:
+                    raise ValueError(f"candidate exceeds context budget: {example.id}")
     encoder = AutoModel.from_pretrained(args.model, local_files_only=True).eval().to(device)
     for parameter in encoder.parameters():
         parameter.requires_grad_(False)
@@ -355,6 +406,7 @@ def main() -> None:
         "task_claim": "Typed Decisions Synth is synthetic and not a real-world task benchmark.",
         "seed": args.seed,
         "context_policy": args.context_policy,
+        "preserve_noul_criteria": args.preserve_noul_criteria,
         "runner_sha256": sha256_file(Path(__file__)),
         "source_revision": manifest.revision,
         "model_revision": args.revision,
