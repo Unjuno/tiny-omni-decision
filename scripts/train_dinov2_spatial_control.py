@@ -28,6 +28,15 @@ from tiny_omni_decision.dinov2_features import (
     require_image_splits,
     spatial_cells,
 )
+from tiny_omni_decision.spatial_curve import require_prefix
+
+PARENT_HASHES = {
+    "train-cells.npy": "34ad4961e4daf0df7e9672335b9d7c23a4a65d328491be9644e2631c8e376857",
+    "val-cells.npy": "9fa89ef8474d34e4a5e12b6a65a911bbc8e1fc1f1006e568b42948de63e9e0bf",
+    "config.json": "24ad7893c52f8a0f82c0065264211e6fb00a3e917189c05ac8fdf78f3426afe9",
+    "global/history.json": "01f2a2798cd45d5d85020d88ca07550aed9236c701377ca70863dcce516f4cd0",
+    "spatial/history.json": "1bc54cd23bb09a90d7b694e84925ea7b9e0ce93fb1de7b870e54cf4e1315c7a3",
+}
 
 
 def tensor_hash(model):
@@ -43,9 +52,17 @@ def main():
     for name in ("root", "model", "text-model", "output"):
         p.add_argument("--" + name, type=Path, required=True)
     p.add_argument("--smoke", action="store_true")
+    p.add_argument("--epochs", type=int, choices=[8, 24], default=8)
+    p.add_argument("--feature-cache", type=Path)
     a = p.parse_args()
     if a.output.exists():
         raise FileExistsError(a.output)
+    if a.epochs == 24 and a.feature_cache is None:
+        raise ValueError("24-epoch experiment requires pinned parent cache")
+    if a.feature_cache is not None:
+        for name, expected_hash in PARENT_HASHES.items():
+            if sha(a.feature_cache / name) != expected_hash:
+                raise ValueError(f"parent changed: {name}")
     if (
         sha(a.model / "model.safetensors") != WEIGHTS
         or sha(a.text_model / "model.safetensors") != TEXT
@@ -80,7 +97,8 @@ def main():
         runner_sha256=sha(Path(__file__)),
         inputs=HASHES,
         seed=17,
-        epochs=1 if a.smoke else 8,
+        epochs=1 if a.smoke else a.epochs,
+        parent_hashes=PARENT_HASHES if a.feature_cache is not None else None,
         normalization="cells /4, unchanged CLS; whole-image224x224",
         optimizer="AdamW lr1e-3 wd1e-4",
         batch_questions=64,
@@ -89,43 +107,64 @@ def main():
         model_files={x.name: sha(x) for x in a.model.iterdir() if x.is_file()},
     )
     write(a.output / "config.json", config)
-    encoder = AutoModel.from_pretrained(a.model, local_files_only=True, dtype=torch.float32).eval()
-    encoder.requires_grad_(False).to(device)
-    processor = AutoImageProcessor.from_pretrained(a.model, local_files_only=True)
-    torch.cuda.reset_peak_memory_stats()
-    cells = {}
-    parity = {}
-    with torch.inference_mode():
-        for split, directory in directories.items():
-            parts = []
-            for offset in range(0, len(rows[split]), 32):
-                images = []
-                for row in manifests[split][offset : offset + 32]:
-                    path = directory / split / "images" / (row["id"] + ".png")
-                    if sha(path) != row["sha256"]:
-                        raise ValueError("media mismatch")
-                    with Image.open(path) as im:
-                        images.append(
-                            im.convert("RGB").resize((224, 224), Image.Resampling.BICUBIC)
-                        )
-                inputs = processor(
-                    images=images, do_resize=False, do_center_crop=False, return_tensors="pt"
-                ).to(device)
-                parts.append(spatial_cells(encoder(**inputs).last_hidden_state.cpu().numpy()))
-                if offset % 2048 == 0:
-                    print(split, offset + len(images), flush=True)
-            cells[split] = np.concatenate(parts)
+    if a.feature_cache is not None:
+        cells = {}
+        parity = {}
+        torch.cuda.reset_peak_memory_stats()
+        for split in directories:
+            values = np.load(a.feature_cache / f"{split}-cells.npy", allow_pickle=False)
+            expected_count = 8424 if split == "train" else 512
+            if values.shape != (expected_count, 17, 384) or not np.isfinite(values).all():
+                raise ValueError("cache shape or values changed")
+            cells[split] = values[: len(rows[split])]
             prior = np.load(
                 a.root / "dinov2-clevr4-probe-01" / f"{split}-features.npy", allow_pickle=False
             )[: len(rows[split])]
             mean = np.concatenate([cells[split][:, 0], cells[split][:, 1:].mean(1)], 1)
             parity[split] = float(np.abs(mean - prior).max())
             if parity[split] > 1e-5:
-                raise ValueError(f"global cache parity failed: {parity}")
-            np.save(a.output / f"{split}-cells.npy", cells[split])
-    extraction_seconds = time.perf_counter() - start
-    del encoder
-    torch.cuda.empty_cache()
+                raise ValueError("global feature parity failed")
+        extraction_seconds = time.perf_counter() - start
+    else:
+        encoder = AutoModel.from_pretrained(
+            a.model, local_files_only=True, dtype=torch.float32
+        ).eval()
+        encoder.requires_grad_(False).to(device)
+        processor = AutoImageProcessor.from_pretrained(a.model, local_files_only=True)
+        torch.cuda.reset_peak_memory_stats()
+        cells = {}
+        parity = {}
+        with torch.inference_mode():
+            for split, directory in directories.items():
+                parts = []
+                for offset in range(0, len(rows[split]), 32):
+                    images = []
+                    for row in manifests[split][offset : offset + 32]:
+                        path = directory / split / "images" / (row["id"] + ".png")
+                        if sha(path) != row["sha256"]:
+                            raise ValueError("media mismatch")
+                        with Image.open(path) as im:
+                            images.append(
+                                im.convert("RGB").resize((224, 224), Image.Resampling.BICUBIC)
+                            )
+                    inputs = processor(
+                        images=images, do_resize=False, do_center_crop=False, return_tensors="pt"
+                    ).to(device)
+                    parts.append(spatial_cells(encoder(**inputs).last_hidden_state.cpu().numpy()))
+                    if offset % 2048 == 0:
+                        print(split, offset + len(images), flush=True)
+                cells[split] = np.concatenate(parts)
+                prior = np.load(
+                    a.root / "dinov2-clevr4-probe-01" / f"{split}-features.npy", allow_pickle=False
+                )[: len(rows[split])]
+                mean = np.concatenate([cells[split][:, 0], cells[split][:, 1:].mean(1)], 1)
+                parity[split] = float(np.abs(mean - prior).max())
+                if parity[split] > 1e-5:
+                    raise ValueError(f"global cache parity failed: {parity}")
+                np.save(a.output / f"{split}-cells.npy", cells[split])
+        extraction_seconds = time.perf_counter() - start
+        del encoder
+        torch.cuda.empty_cache()
     options, text_encoder = _option_embeddings(device, a.text_model)
     option_tensor = torch.stack(
         [torch.stack([options[f"{t}|{o}"] for o in opts]) for t, opts in CLEVR4_TAXONOMIES.items()]
@@ -216,6 +255,9 @@ def main():
             )
             history.append(record)
             write(out / "history.json", history)
+            if epoch == 8 and a.feature_cache is not None and not a.smoke:
+                reference = json.loads((a.feature_cache / condition / "history.json").read_text())
+                require_prefix(history, reference)
             if quality["nll"] < best:
                 best = quality["nll"]
                 best_epoch = epoch
