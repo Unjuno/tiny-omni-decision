@@ -161,3 +161,49 @@ def test_shared_task_reuses_model_file_without_copying_it(tmp_path: Path) -> Non
     assert manifest["component_parameter_sum"] == 20
     assert len(list(output.rglob("model.safetensors"))) == 1
     assert verify_modular_bundle(output)["component_count"] == 2
+
+
+def test_shared_task_can_reference_a_pinned_file_asset(tmp_path: Path) -> None:
+    image = tmp_path / "image-source"
+    _write_component(image, "image-v0", "videoprism.npz", b"encoder")
+    readout = tmp_path / "readout.pt"
+    readout.write_bytes(b"readout")
+    runtime = tmp_path / "video_runtime.py"
+    runtime.write_text("# video feature decision runtime\n", encoding="utf-8")
+    output = tmp_path / "assembled"
+
+    manifest = assemble_modular_bundle(
+        {"image": image},
+        output,
+        source_commit="abc123",
+        shared_tasks={
+            "video": {
+                "task_id": "clevrer-video-v0",
+                "scope": "precomputed VideoPrism features only",
+                "source_report_sha256": "b" * 64,
+                "shared_assets": [
+                    {
+                        "name": "videoprism-base",
+                        "path": "components/image/videoprism.npz",
+                        "weights_sha256": hashlib.sha256(b"encoder").hexdigest(),
+                        "parameters": 7,
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "video-readout",
+                        "identity": hashlib.sha256(b"readout").hexdigest(),
+                        "parameters": 3,
+                        "path": "readout/best-readout.pt",
+                    }
+                ],
+                "files": {"readout/best-readout.pt": readout, "runtime/video.py": runtime},
+            }
+        },
+    )
+
+    assert manifest["has_temporal_video_task"] is True
+    assert "components/video/videoprism.npz" not in {
+        item["path"] for item in manifest["files"]
+    }
+    assert verify_modular_bundle(output)["component_count"] == 2

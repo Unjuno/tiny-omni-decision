@@ -153,7 +153,13 @@ def assemble_modular_bundle(
                 shared_path = (output / relative).resolve()
                 if not shared_path.is_relative_to(output) or not shared_path.exists():
                     raise ValueError("shared task dependency is missing or outside the package")
-                weight_path = shared_path / "model.safetensors"
+                if shared_path.is_dir():
+                    asset_file = str(asset.get("file", "model.safetensors"))
+                    weight_path = (shared_path / asset_file).resolve()
+                    if not weight_path.is_relative_to(shared_path):
+                        raise ValueError("shared asset file path escapes its directory")
+                else:
+                    weight_path = shared_path
                 if not weight_path.is_file() or sha256_file(weight_path) != asset["weights_sha256"]:
                     raise ValueError("shared task dependency weight hash mismatch")
                 shared_assets.append({**asset, "path": relative.as_posix()})
@@ -163,6 +169,7 @@ def assemble_modular_bundle(
                 "task_id": spec["task_id"],
                 "scope": spec["scope"],
                 "source_report_sha256": spec["source_report_sha256"],
+                "runtime_environment": spec.get("runtime_environment", {}),
                 "shared_assets": shared_assets,
                 "parameters": spec["parameters"],
                 "files": local_files,
@@ -180,6 +187,7 @@ def assemble_modular_bundle(
                     "path": f"components/{name}",
                     "task_manifest_sha256": sha256_file(task_manifest_path),
                     "scope": spec["scope"],
+                    "runtime_environment": spec.get("runtime_environment", {}),
                     "parameters": spec["parameters"],
                     "shared_parameter_refs": [
                         {
@@ -192,7 +200,7 @@ def assemble_modular_bundle(
             )
 
         (output / "README.md").write_text(
-            "# Path A modular runtime assembly v3\n\n"
+            "# Path A modular runtime assembly v4\n\n"
             "This directory combines independently verified, task-scoped runtime components. It "
             "is a packaging artifact, not a jointly trained or fused model. Each task supports "
             "only "
@@ -241,7 +249,7 @@ def assemble_modular_bundle(
 
         manifest = {
             "schema_version": 1,
-            "package_id": "path-a-modular-runtime-assembly-v3",
+            "package_id": "path-a-modular-runtime-assembly-v4",
             "created_utc": datetime.now(UTC).isoformat(),
             "source_commit": source_commit,
             "status": "modular_task_scoped_assembly",
@@ -341,7 +349,13 @@ def verify_modular_bundle(package_dir: Path) -> dict[str, Any]:
                 shared_path = (root / str(asset["path"])).resolve()
                 if not shared_path.is_relative_to(root):
                     raise ValueError("task dependency points outside the package")
-                weight_path = shared_path / "model.safetensors"
+                if shared_path.is_dir():
+                    asset_file = str(asset.get("file", "model.safetensors"))
+                    weight_path = (shared_path / asset_file).resolve()
+                    if not weight_path.is_relative_to(shared_path):
+                        raise ValueError("shared asset file path escapes its directory")
+                else:
+                    weight_path = shared_path
                 if not weight_path.is_file() or sha256_file(weight_path) != asset["weights_sha256"]:
                     raise ValueError("shared task dependency weight hash mismatch")
         else:
