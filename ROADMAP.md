@@ -403,3 +403,11 @@ for final-block-only; original Accuracy60.24% versus57.28%. Best reload and sour
 hash checks passed. This is synthetic development evidence; count/conditional
 selection remain weak and no four-modality95% claim follows. See
 [full curve and controlled comparison](docs/pretrained_reuse/R2_ENCODER_COVERAGE_20261012.md).
+
+### Transfer limitation (2026-10-12)
+
+The selected encoder-coverage weights scored33.59% on the unchanged known-failure
+256-question diagnostic, with10/128 fully correct opposite-condition pairs.
+Thus80.57% on the training generator's validation does not establish general
+Decision reasoning. No truncation occurred; no prompt or checkpoint search followed.
+See [transfer evidence](docs/pretrained_reuse/R2_ENCODER_TRANSFER_20261012.md).
