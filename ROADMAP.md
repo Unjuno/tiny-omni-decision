@@ -597,3 +597,12 @@ Later training overfits; no counting-fix or product-quality claim.
 Numeric embedding updates pass a matched512-step run, but both candidate and
 control select their unchanged initialization. No quality artifact promoted.
 [Numeric comparison](docs/pretrained_reuse/R2_NUMERIC_EMBEDDING_RESULTS_20261012.md).
+
+### Combined candidate budget (2026-10-12)
+
+Separately measured VideoPrism, DINO, Whisper, Cross-Encoder, MiniLM and selected
+readout shapes sum to 215,696,513 resident parameters when all retained. This
+exceeds the hard 200M limit. A shared Cross-Encoder text-feature hypothesis is
+198,306,689 with the same head shapes, but has no combined runtime or quality
+verification; existing MiniLM-dependent readouts cannot simply be reused.
+See [component audit](docs/pretrained_reuse/R2_COMBINED_CANDIDATE_BUDGET_20261012.md).
