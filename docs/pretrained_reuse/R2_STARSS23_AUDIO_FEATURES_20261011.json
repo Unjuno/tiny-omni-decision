@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "modality": "audio",
+  "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+  "source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+  "windows_sha256": "7ed1bf595a36ae9dd334c191806bad8e8d2b9f4574f051c5a40b2f8b79f4c3f1",
+  "features": [
+    {
+      "id": "fold3_room12_mix001:t0000-0005",
+      "window_sha256": "05f4be05373f280c4cbff0e0cb1d4ed9d50d33752cf97b7ff04376954e616c55",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-audio-features-02\\feature-000.npy",
+      "sha256": "f4ea24eb1859490a768ac42c6b071f0ab3f2e7519d59f3c3d30f4071ee0e0f14",
+      "shape": [
+        384
+      ],
+      "seconds": 0.08125180000206456,
+      "repeat_max_abs_diff": 0.0
+    },
+    {
+      "id": "fold3_room12_mix001:t0005-0010",
+      "window_sha256": "cb61846555e861094211f98bf4ab9fe82bf9f5d7e3011758386007e4a25ac837",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-audio-features-02\\feature-001.npy",
+      "sha256": "247f3761904e818307780009cbeb73df9f33d0c2aaeb2b778d75d339a47caf65",
+      "shape": [
+        384
+      ],
+      "seconds": 0.040762699965853244,
+      "repeat_max_abs_diff": 0.0
+    },
+    {
+      "id": "fold3_room13_mix001:t0000-0005",
+      "window_sha256": "4f78afbb57497df7a3f193c84c8282b4c84fece91d24be9a69759193880a85bf",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-audio-features-02\\feature-002.npy",
+      "sha256": "d81dd244ceea0f078046b57d829d5f8493b4afd9f9835580eb95395bc30fdd45",
+      "shape": [
+        384
+      ],
+      "seconds": 0.04136939998716116,
+      "repeat_max_abs_diff": 0.0
+    },
+    {
+      "id": "fold3_room13_mix001:t0005-0010",
+      "window_sha256": "4d432d73787e38256908f97c726fe6e16c39ac1cfc3f26a5cd85c7eca3c04cb8",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-audio-features-02\\feature-003.npy",
+      "sha256": "d26d6667640e308f3be7041d004f135a38e3a2a4d8e8746bb7c2578f9084bd64",
+      "shape": [
+        384
+      ],
+      "seconds": 0.04119560000253841,
+      "repeat_max_abs_diff": 0.0
+    }
+  ],
+  "runner_sha256": "6eb79dd70c53732bc09e8b515af15ff91ca8080b8910307f6eb6eb7196d0787b",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "device": "cpu",
+  "precision": "float32",
+  "training": false,
+  "parameters": 1961239,
+  "preprocessing": "channel 0; 24k->32k torchaudio sinc; official eval mel",
+  "torch": "2.6.0+cu124",
+  "torchaudio": "2.6.0+cu124",
+  "load_seconds": 3.3222160000004806,
+  "wall_seconds": 3.7110364999971353,
+  "peak_working_set_bytes": 554610688
+}

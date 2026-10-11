@@ -54,6 +54,11 @@ suite: 261 passed, one skipped; Ruff passed.
 
 ## Unresolved before quality fitting
 
+Follow-up: `R2_STARSS23_FEATURES_20261011.md` records successful real frozen
+audio/video extraction and repeated-forward parity for these exact windows.
+The statements below describe what was unresolved at the window-probe stage;
+fusion/readout fitting and independent quality evaluation are still outstanding.
+
 Real input and target plumbing now works, but synchronized latent extraction,
 fusion/readout fitting and matched unimodal/AV ablations are still unmeasured.
 The preserved four-channel audio needs an explicitly specified mono or spatial
