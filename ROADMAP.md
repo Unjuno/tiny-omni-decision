@@ -529,3 +529,8 @@ The image-successful bilinear readout did not clearly transfer to pooled video:
 macro Accuracy52.24% vs concat52.02% and no-video51.93%, with differences uncertain.
 Validation NLL degrades after selected epoch12 despite better train fit. Do not adopt
 or extend pooled training. [Video controls](docs/pretrained_reuse/R2_VIDEO_INTERACTION_RESULTS_20261012.md).
+
+The pinned VideoPrism unpooled-token audit passed on two training scenes:
+FP32[8,16,16,768], exact reload/repeat and zero global-mean difference from the
+old cache. Full456-scene storage would need2.87GB, exceeding current free disk;
+no full extraction or quality claim. [Token audit](docs/pretrained_reuse/R2_VIDEO_TOKEN_AUDIT_RESULTS_20261012.md).
