@@ -8,6 +8,7 @@ pytest.importorskip("transformers")
 
 from scripts.train_frozen_videoprism_clevr4_probe import (  # noqa: E402
     _features_by_id,
+    _quality_metrics,
     _tasks,
 )
 from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES  # noqa: E402
@@ -52,3 +53,10 @@ def test_clevr4_tasks_keep_each_taxonomy_as_a_variable_choice() -> None:
     ]
     assert image_ids == [row["id"]] * 4
     assert taxonomies == list(CLEVR4_TAXONOMIES)
+
+
+def test_quality_metrics_include_mean_option_confidence() -> None:
+    logits = torch.tensor([2.0, 0.0])
+    result = _quality_metrics([logits], [0])
+    assert result["accuracy"] == 1.0
+    assert result["mean_confidence"] == pytest.approx(torch.softmax(logits, dim=0).max().item())

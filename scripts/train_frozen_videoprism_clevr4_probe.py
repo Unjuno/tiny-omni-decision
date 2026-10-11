@@ -165,12 +165,20 @@ def _taxonomy_metrics(
     logits: list[Tensor], targets: list[int], taxonomies: list[str]
 ) -> dict[str, Any]:
     return {
-        taxonomy: _metrics(
+        taxonomy: _quality_metrics(
             [item for item, kind in zip(logits, taxonomies, strict=True) if kind == taxonomy],
             [target for target, kind in zip(targets, taxonomies, strict=True) if kind == taxonomy],
         )
         for taxonomy in CLEVR4_TAXONOMIES
     }
+
+
+def _quality_metrics(logits: list[Tensor], targets: list[int]) -> dict[str, Any]:
+    metrics = _metrics(logits, targets)
+    metrics["mean_confidence"] = float(
+        torch.stack([torch.softmax(item.float(), dim=-1).max() for item in logits]).mean()
+    )
+    return metrics
 
 
 def _prediction_rows(
@@ -202,6 +210,7 @@ def _prediction_rows(
 def main() -> None:
     args = _args()
     run_started_at = datetime.now(UTC).isoformat()
+    run_started_clock = time.perf_counter()
     sample_dir = args.sample_dir.resolve(strict=True)
     selection_dir = args.selection_sample_dir.resolve(strict=True)
     cache_path = args.feature_cache.resolve(strict=True)
@@ -353,7 +362,7 @@ def main() -> None:
             optimizer.step()
             losses.append(float(loss.detach()))
         selection_logits = _predict(scorer, selection_tasks, device)
-        selection_metrics = _metrics(selection_logits, selection_targets)
+        selection_metrics = _quality_metrics(selection_logits, selection_targets)
         history.append(
             {
                 "epoch": epoch,
@@ -375,7 +384,7 @@ def main() -> None:
         raise RuntimeError("checkpoint selection failed to produce a readout")
     scorer.load_state_dict(best_state)
     final_selection_logits = _predict(scorer, selection_tasks, device)
-    selected_metrics = _metrics(final_selection_logits, selection_targets)
+    selected_metrics = _quality_metrics(final_selection_logits, selection_targets)
     selected_by_taxonomy = _taxonomy_metrics(
         final_selection_logits, selection_targets, selection_types
     )
@@ -389,7 +398,7 @@ def main() -> None:
     )
     del text_encoder, option_embeddings
     holdout_logits = _predict(scorer, holdout_tasks, device)
-    holdout_metrics = _metrics(holdout_logits, holdout_targets)
+    holdout_metrics = _quality_metrics(holdout_logits, holdout_targets)
     holdout_by_taxonomy = _taxonomy_metrics(holdout_logits, holdout_targets, holdout_types)
 
     output.mkdir(parents=True, exist_ok=False)
@@ -476,6 +485,7 @@ def main() -> None:
         "one_time_reporting_validation_metrics": holdout_metrics,
         "one_time_reporting_validation_by_taxonomy": holdout_by_taxonomy,
         "training_seconds": training_seconds,
+        "total_run_seconds": time.perf_counter() - run_started_clock,
         "run_started_at_utc": run_started_at,
         "run_completed_at_utc": datetime.now(UTC).isoformat(),
         "environment": {
