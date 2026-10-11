@@ -29,6 +29,7 @@ from scripts.train_frozen_videoprism_clevr4_probe import (
 from tiny_omni_decision.bilinear_readout import BilinearCandidateScorer
 from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES
 from tiny_omni_decision.dinov2_features import require_image_splits
+from tiny_omni_decision.spatial_curve import require_prefix
 from tiny_omni_decision.vilt_compat import remove_legacy_position_ids
 
 WEIGHTS = "4d5f3409947b0369487ece7c5868f0040ceb67d25735dbb4ac5e99e03bab3a19"
@@ -72,8 +73,12 @@ def main():
     for name in ("train", "validation", "model", "text-model", "output"):
         p.add_argument("--" + name, type=Path, required=True)
     p.add_argument("--smoke", action="store_true")
+    p.add_argument("--cache", type=Path)
+    p.add_argument("--epochs", type=int, choices=[8, 24], default=8)
     p.add_argument("--policy", choices=["bilinear"], required=True)
     a = p.parse_args()
+    if a.epochs == 24 and a.cache is None:
+        raise ValueError("24-epoch curve requires pinned reference cache")
     if a.output.exists():
         raise FileExistsError(a.output)
     if (
@@ -105,11 +110,11 @@ def main():
         started_utc=datetime.now(UTC).isoformat(),
         inputs=HASHES,
         seed=17,
-        epochs=1 if a.smoke else 8,
+        epochs=1 if a.smoke else a.epochs,
         lr=0.001,
         weight_decay=0.0001,
         batch_questions=64,
-        representation="CLS384 + mean-patch384",
+        representation="ViLT question-conditioned pooler_output768",
         processor="pinned published ViLT whole-image resize",
         questions=QUESTIONS,
         selector="earliest minimum validation NLL",
@@ -126,59 +131,86 @@ def main():
     device = torch.device("cuda")
     start = time.perf_counter()
     features = {}
-    if (
-        shutil.disk_usage(a.output).free
-        < (len(rows["train"]) + len(rows["val"])) * 4 * 768 * 4 + 1024**3
-    ):
-        raise ValueError("insufficient feature-cache disk reserve")
-    model_config = ViltConfig.from_pretrained(a.model, local_files_only=True)
-    model = ViltForQuestionAnswering(model_config)
-    state = torch.load(a.model / "pytorch_model.bin", weights_only=True, map_location="cpu")
-    model.load_state_dict(
-        remove_legacy_position_ids(state, model_config.max_position_embeddings), strict=True
-    )
-    del state
-    model.eval().requires_grad_(False).to(device)
-    processor = ViltProcessor.from_pretrained(a.model, local_files_only=True)
-    lengths = [len(x) for x in processor.tokenizer(list(QUESTIONS.values()))["input_ids"]]
-    if max(lengths) > model_config.max_position_embeddings:
-        raise ValueError("question exceeds position table")
-    config["question_token_lengths"] = lengths
-    config["cache_hashes"] = {}
-    torch.cuda.reset_peak_memory_stats()
-    for split, directory in [("train", a.train), ("val", a.validation)]:
-        arrays = []
-        for index, row in enumerate(manifests[split]):
-            path = directory / split / "images" / (row["id"] + ".png")
-            if sha(path) != row["sha256"]:
-                raise ValueError("image changed")
-            with Image.open(path) as source:
-                image = source.convert("RGB")
-            inputs = processor(
-                images=[image] * 4,
-                text=list(QUESTIONS.values()),
-                padding=True,
-                truncation=False,
-                return_tensors="pt",
-            ).to(device)
-            with torch.inference_mode():
-                values = model.vilt(**inputs).pooler_output.cpu().numpy()
-            if values.shape != (4, 768) or not np.isfinite(values).all():
-                raise ValueError("invalid conditioned features")
-            arrays.append(values)
-            features[row["id"]] = torch.from_numpy(values.copy())
-            if index % 256 == 0:
-                print("features", split, index + 1, "/", len(manifests[split]), flush=True)
-        cache = a.output / (split + "-features.npy")
-        np.save(cache, np.stack(arrays))
-        np.testing.assert_array_equal(np.load(cache, allow_pickle=False), np.stack(arrays))
-        config["cache_hashes"][split] = sha(cache)
+    if a.cache is not None:
+        pins = {
+            "config.json": "4ec7ee67f9efcf9b4d8215a65066657aac6ee4f708c3e6e2bbe046fe81e1d4d7",
+            "history.json": "f67821e58d653bfeb030678b672f827ce2098eb8622ac9b60fb9d0111e6c4ab4",
+            "train-features.npy": "0e6a3dd742043cd47260bb71c453419eaf46c5b20627eb428f4e593563af9faf",
+            "val-features.npy": "60e615ef5861964a6f212a176f022ab38e1c58271dfa4e0e76beef6e8a689b94",
+        }
+        for name, expected in pins.items():
+            if sha(a.cache / name) != expected:
+                raise ValueError("pinned reference changed: " + name)
+        reference = json.loads((a.cache / "config.json").read_text())
+        if reference["questions"] != QUESTIONS or reference["inputs"] != HASHES:
+            raise ValueError("reference preprocessing/data changed")
+        config["pinned_reference"] = pins
+        config["question_token_lengths"] = reference["question_token_lengths"]
+        config["cache_hashes"] = reference["cache_hashes"]
         write(a.output / "config.json", config)
-    parameters = sum(p.numel() for p in model.parameters())
-    extraction_seconds = time.perf_counter() - start
-    extraction_peak = torch.cuda.max_memory_allocated()
-    del model, processor, inputs, arrays, values
-    torch.cuda.empty_cache()
+        for split, expected in [("train", 8424), ("val", 512)]:
+            values = np.load(a.cache / (split + "-features.npy"), allow_pickle=False)
+            if values.shape != (expected, 4, 768) or not np.isfinite(values).all():
+                raise ValueError("invalid cached features")
+            for row, value in zip(rows[split], values[: len(rows[split])], strict=True):
+                features[row["id"]] = torch.from_numpy(value.copy())
+        parameters = 117588537
+        extraction_seconds = time.perf_counter() - start
+        extraction_peak = 0
+    else:
+        if (
+            shutil.disk_usage(a.output).free
+            < (len(rows["train"]) + len(rows["val"])) * 4 * 768 * 4 + 1024**3
+        ):
+            raise ValueError("insufficient feature-cache disk reserve")
+        model_config = ViltConfig.from_pretrained(a.model, local_files_only=True)
+        model = ViltForQuestionAnswering(model_config)
+        state = torch.load(a.model / "pytorch_model.bin", weights_only=True, map_location="cpu")
+        model.load_state_dict(
+            remove_legacy_position_ids(state, model_config.max_position_embeddings), strict=True
+        )
+        del state
+        model.eval().requires_grad_(False).to(device)
+        processor = ViltProcessor.from_pretrained(a.model, local_files_only=True)
+        lengths = [len(x) for x in processor.tokenizer(list(QUESTIONS.values()))["input_ids"]]
+        if max(lengths) > model_config.max_position_embeddings:
+            raise ValueError("question exceeds position table")
+        config["question_token_lengths"] = lengths
+        config["cache_hashes"] = {}
+        torch.cuda.reset_peak_memory_stats()
+        for split, directory in [("train", a.train), ("val", a.validation)]:
+            arrays = []
+            for index, row in enumerate(manifests[split]):
+                path = directory / split / "images" / (row["id"] + ".png")
+                if sha(path) != row["sha256"]:
+                    raise ValueError("image changed")
+                with Image.open(path) as source:
+                    image = source.convert("RGB")
+                inputs = processor(
+                    images=[image] * 4,
+                    text=list(QUESTIONS.values()),
+                    padding=True,
+                    truncation=False,
+                    return_tensors="pt",
+                ).to(device)
+                with torch.inference_mode():
+                    values = model.vilt(**inputs).pooler_output.cpu().numpy()
+                if values.shape != (4, 768) or not np.isfinite(values).all():
+                    raise ValueError("invalid conditioned features")
+                arrays.append(values)
+                features[row["id"]] = torch.from_numpy(values.copy())
+                if index % 256 == 0:
+                    print("features", split, index + 1, "/", len(manifests[split]), flush=True)
+            cache = a.output / (split + "-features.npy")
+            np.save(cache, np.stack(arrays))
+            np.testing.assert_array_equal(np.load(cache, allow_pickle=False), np.stack(arrays))
+            config["cache_hashes"][split] = sha(cache)
+            write(a.output / "config.json", config)
+        parameters = sum(p.numel() for p in model.parameters())
+        extraction_seconds = time.perf_counter() - start
+        extraction_peak = torch.cuda.max_memory_allocated()
+        del model, processor, inputs, arrays, values
+        torch.cuda.empty_cache()
     torch.manual_seed(17)
     option_embeddings, text_encoder = _option_embeddings(device, a.text_model)
     text_parameters = sum(p.numel() for p in text_encoder.parameters())
@@ -240,6 +272,8 @@ def main():
             best_logits = [x.clone() for x in logits]
             torch.save(scorer.state_dict(), a.output / "best-readout.pt")
         write(a.output / "history.json", history)
+        if a.cache is not None and epoch == 8:
+            require_prefix(history, json.loads((a.cache / "history.json").read_text()))
         print(json.dumps(dict(epoch=epoch, validation=quality, best_epoch=best_epoch)), flush=True)
     torch.save(scorer.state_dict(), a.output / "final-readout.pt")
     scorer.load_state_dict(
