@@ -115,7 +115,7 @@ def assemble_modular_bundle(
             )
 
         (output / "README.md").write_text(
-            "# Path A modular runtime assembly v0\n\n"
+            "# Path A modular runtime assembly v2\n\n"
             "This directory combines independently verified, task-scoped Audio and Image runtime "
             "bundles. It is a packaging and relocation artifact, not a jointly trained or fused "
             "model. Audio supports the four fixed Speech Commands query templates; Image supports "
@@ -157,7 +157,7 @@ def assemble_modular_bundle(
 
         manifest = {
             "schema_version": 1,
-            "package_id": "path-a-modular-runtime-assembly-v0",
+            "package_id": "path-a-modular-runtime-assembly-v2",
             "created_utc": datetime.now(UTC).isoformat(),
             "source_commit": source_commit,
             "status": "modular_task_scoped_assembly",
@@ -193,17 +193,21 @@ def verify_modular_bundle(package_dir: Path) -> dict[str, Any]:
     if manifest.get("schema_version") != 1:
         raise ValueError("unsupported modular package schema")
 
-    expected = {}
+    expected: dict[str, dict[str, Any]] = {}
+    content_sizes: dict[str, int] = {}
     for entry in manifest.get("files", []):
         relative = Path(str(entry["path"]))
         resolved = (root / relative).resolve()
         if not resolved.is_relative_to(root):
             raise ValueError("package manifest contains a path outside the package")
+        if relative.as_posix() in expected:
+            raise ValueError(f"duplicate package file entry: {relative}")
         if not resolved.is_file() or resolved.stat().st_size != int(entry["bytes"]):
             raise ValueError(f"package file missing or wrong-sized: {relative}")
         if sha256_file(resolved) != entry["sha256"]:
             raise ValueError(f"package file hash mismatch: {relative}")
         expected[relative.as_posix()] = entry
+        content_sizes.setdefault(str(entry["sha256"]), int(entry["bytes"]))
     actual = {
         path.relative_to(root).as_posix()
         for path in root.rglob("*")
@@ -212,8 +216,13 @@ def verify_modular_bundle(package_dir: Path) -> dict[str, Any]:
     if actual != set(expected):
         raise ValueError("package file set differs from its manifest")
 
-    for component in manifest.get("components", []):
-        component_root = root / str(component["path"])
+    components = manifest.get("components", [])
+    if len(components) != int(manifest.get("component_count", -1)):
+        raise ValueError("component count differs from package manifest")
+    for component in components:
+        component_root = (root / str(component["path"])).resolve()
+        if not component_root.is_relative_to(root):
+            raise ValueError("component manifest contains a path outside the package")
         component_manifest_path = component_root / "bundle-manifest.json"
         if sha256_file(component_manifest_path) != component["source_bundle_manifest_sha256"]:
             raise ValueError(f"component manifest hash mismatch: {component['name']}")
@@ -224,6 +233,19 @@ def verify_modular_bundle(package_dir: Path) -> dict[str, Any]:
     size = sum(int(entry["bytes"]) for entry in manifest["files"])
     if size != int(manifest["package_file_bytes_excluding_manifest"]):
         raise ValueError("package byte accounting mismatch")
+    if sum(content_sizes.values()) != int(manifest["unique_content_file_bytes"]):
+        raise ValueError("unique content byte accounting mismatch")
+    parameter_counts: dict[str, int] = {}
+    for artifact in manifest.get("parameter_artifacts", []):
+        identity = str(artifact.get("identity", ""))
+        if not identity:
+            raise ValueError("parameter artifact has no identity hash")
+        count = int(artifact["parameters"])
+        previous = parameter_counts.setdefault(identity, count)
+        if previous != count:
+            raise ValueError("one parameter artifact hash has conflicting parameter counts")
+    if sum(parameter_counts.values()) != int(manifest["unique_runtime_parameters"]):
+        raise ValueError("parameter accounting mismatch")
     if bool(manifest["package_target_met"]) != (size <= int(manifest["package_target_bytes"])):
         raise ValueError("package target status disagrees with measured bytes")
     return manifest

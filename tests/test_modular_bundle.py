@@ -89,3 +89,23 @@ def test_verifier_rejects_tampering_and_path_traversal(tmp_path: Path) -> None:
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     with pytest.raises(ValueError, match="outside the package|missing or wrong-sized"):
         verify_modular_bundle(output)
+
+
+def test_verifier_rejects_accounting_and_component_path_tampering(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    _write_component(source, "audio-v0", "weights.bin", b"payload")
+    output = tmp_path / "assembled"
+    assemble_modular_bundle({"audio": source}, output, source_commit="abc123")
+    manifest_path = output / "package-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+    manifest["unique_content_file_bytes"] += 1
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="unique content byte accounting"):
+        verify_modular_bundle(output)
+
+    manifest["unique_content_file_bytes"] -= 1
+    manifest["components"][0]["path"] = "../../outside"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="component manifest contains a path outside"):
+        verify_modular_bundle(output)
