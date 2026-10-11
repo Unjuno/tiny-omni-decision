@@ -548,3 +548,8 @@ automatically extend training. [Token readout results](docs/pretrained_reuse/R2_
 Training-only64-example diagnosis reaches100% with attention and97.68% without
 video after512updates. This verifies small-subset fit, not generalization or
 the product target. [Fit diagnostic](docs/pretrained_reuse/R2_TOKEN_TRAIN_FIT_RESULTS_20261012.md).
+
+Sampler replay exactly reproduces all1440 updates; accumulation normalization
+matches the intended objective. Weight ESS is about37/64 for typical full batches,
+but this alone does not establish a cause of poor quality.
+[Weight audit](docs/pretrained_reuse/R2_VIDEO_BATCH_WEIGHT_AUDIT_20261012.md).
