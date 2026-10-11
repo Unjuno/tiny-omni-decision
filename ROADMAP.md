@@ -471,3 +471,9 @@ The fixed lexical-transfer follow-up found only a small change on its novel
 minimum/maximum wording (80.71%→81.05%), with numeric-calibration trade-offs.
 It does not repair the previously observed smallest/largest failure by evidence.
 [Results](docs/pretrained_reuse/R2_LEXICAL_TRANSFER_RESULTS_20261012.md).
+
+
+A paired factorial text diagnosis confirms substantial comparison-word
+sensitivity at fixed state/range/structure. Lexical training helps but leaves
+smallest/largest far below minimum/maximum. No general-quality claim.
+[Diagnosis](docs/pretrained_reuse/R2_COMPARATIVE_WORD_RESULTS_20261012.md).
