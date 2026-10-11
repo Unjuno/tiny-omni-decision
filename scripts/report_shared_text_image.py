@@ -23,6 +23,9 @@ def main():
             assert sha(run / key / f"{label}.pt") == r[f"{label}_sha256"]
         assert r["reload_exact"] and r["consumed"] == 808704
         assert r["best_epoch"] == min(history, key=lambda x: x["validation"]["nll"])["epoch"]
+    baseline_parity = histories["minilm"] == read(
+        root / "dinov2-spatial-bilinear-01/spatial/history.json"
+    )
     a, b = result["conditions"].values()
     assert a["initial_tensor_hash"] == b["initial_tensor_hash"]
     assert a["order_sha256"] == b["order_sha256"]
@@ -37,6 +40,7 @@ def main():
         out.with_suffix(".json"),
         dict(
             config=config,
+            historical_minilm_history_exact=baseline_parity,
             result=result,
             histories=histories,
             paired_comparisons=comparisons,
@@ -134,6 +138,33 @@ def main():
         "The same development images selected checkpoints; intervals do not establish",
         "blind generalization or remove repeated-testing/model-selection bias.",
         "Native video, general questions, simultaneous fusion and all-modality95% remain open.",
+    ]
+    lines += [
+        "",
+        "## Measured interpretation and next action",
+        "",
+        f"MiniLM 24-epoch history exactly matches its prior spatial run: {baseline_parity}.",
+        "The shared condition selects23 versus16, therefore selected checkpoints",
+        "have different exposure even though both full runs use the same24-epoch budget.",
+        "Sharing raises aggregate Accuracy90.04% to90.43% (+0.39pp, image-bootstrap",
+        "interval -0.93 to+1.71pp), while NLL slightly worsens0.253458 to0.255284.",
+        "Brier improves0.140201 to0.136715 and ECE0.022108 to0.010872.",
+        "",
+        "Counting improves70.51% to73.63%, but its Accuracy-difference interval crosses",
+        "zero. Count NLL/Brier improve; color and texture Accuracy each fall0.78pp",
+        "and their NLL/Brier worsen. Shape Accuracy stays99.80% but NLL/Brier worsen.",
+        "This trade-off does not establish uniform quality preservation or95% image quality.",
+        "",
+        "At selected23, fixed-train Accuracy93.39% versus90.43% validation and NLL",
+        "0.165281 versus0.255284. At24 train NLL falls to0.152799 but validation rises",
+        "to0.257456 and Accuracy falls89.75%: overfitting warning, no automatic extension.",
+        "",
+        "Keep both readouts. Sharing saves17,389,824 parameters only in a full system",
+        "already using this exact Cross-Encoder for text. Video readout compatibility",
+        "with the shared text features remains untested; do not remove MiniLM from",
+        "the current video runtime or claim a verified sub200M combined candidate yet.",
+        "The next integration gate is a matched video text-feature comparison; retain",
+        "the existing video encoder/data/controls and report failures without promotion.",
     ]
     out.with_suffix(".md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

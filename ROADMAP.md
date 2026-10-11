@@ -613,3 +613,11 @@ Both fixed2048-update runs completed and selected step1664. Numeric embedding
 updates improved the numeric curriculum but worsened original-text selected
 Accuracy/NLL/Brier/ECE. Preserve both; no product adoption or95%claim.
 See [learning curves, paired diagnostics and hashes](docs/pretrained_reuse/R2_NUMERIC_DETERMINISTIC_RESULTS_20261012.md).
+
+### Shared text/image feature comparison (2026-10-12)
+
+A same-head24-epoch pair completed. Shared Cross-Encoder features yield90.43%
+versus90.04% image Accuracy (paired difference uncertain), improved count NLL
+but worse color/texture metrics. No product adoption. Sharing is implemented
+for the image probe only; video compatibility and the combined <=200M runtime
+remain unverified. [Results](docs/pretrained_reuse/R2_SHARED_TEXT_IMAGE_RESULTS_20261012.md).
