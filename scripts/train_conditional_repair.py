@@ -1,4 +1,4 @@
-"""Fixed 512-update equal-source final-block repair pilot; not exact resume."""
+"""Fixed-budget equal-source final-block repair experiment; not exact resume."""
 
 import argparse
 import json
@@ -58,6 +58,7 @@ def main():
     for name in ("root", "model", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--steps", type=int, choices=(512, 2048), default=512)
     args = parser.parse_args()
     paths = {
         args.root / "text/train.jsonl": (
@@ -120,7 +121,7 @@ def main():
     trains = [original("train"), curriculum("train")]
     validations = [original("validation"), curriculum("validation")]
     verify_splits(sum(trains, []), sum(validations, []))
-    steps = 2 if args.smoke else 512
+    steps = 2 if args.smoke else args.steps
     if args.smoke:
         validations = [r[:8] for r in validations]
     planned = schedule(trains, steps)

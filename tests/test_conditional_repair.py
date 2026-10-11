@@ -21,3 +21,13 @@ def test_cross_source_state_overlap_and_duplicate_rejected():
     with pytest.raises(ValueError):
         verify_splits(train * 2, [{"id": "b", "state": "other"}])
     verify_splits(train, [{"id": "b", "state": "other"}])
+
+
+def test_full_coverage_budget_preserves_pilot_prefix():
+    sources = [list(range(23319)), list(range(8192))]
+    long = schedule(sources, 2048)
+    assert long[:512] == schedule(sources, 512)
+    curriculum = [i for batch in long for source, i in batch if source == 1]
+    original = [i for batch in long for source, i in batch if source == 0]
+    assert sorted(curriculum) == list(range(8192))
+    assert len(original) == len(set(original)) == 8192
