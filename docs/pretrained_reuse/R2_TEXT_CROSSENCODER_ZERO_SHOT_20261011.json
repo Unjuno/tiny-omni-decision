@@ -1,0 +1,38 @@
+{
+  "status": "PASS_EXECUTION_ONLY",
+  "metrics": {
+    "count": 2540,
+    "accuracy": 0.4598425328731537,
+    "nll": 1.198691487312317,
+    "brier": 0.6497542262077332,
+    "ece_15_bins": 0.13666121610623644,
+    "ece_bin_counts": [
+      0,
+      0,
+      0,
+      141,
+      217,
+      219,
+      158,
+      293,
+      334,
+      268,
+      216,
+      189,
+      155,
+      143,
+      207
+    ]
+  },
+  "device": "cuda",
+  "wall_seconds": 22.322760900016874,
+  "parameters": 22713601,
+  "pairs": 9015,
+  "state_truncated_pairs": 239,
+  "temperature": 1.0,
+  "training": false,
+  "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+  "runner_sha256": "d03bab7d3de8f6654c9d38081d6c62da5ffae9d85c28c48e4ed947e7f5ac799d",
+  "blind_audit": false,
+  "limitation": "Retrieval logits softmax is not validated calibration; different task training and serialization confound architecture comparison."
+}
