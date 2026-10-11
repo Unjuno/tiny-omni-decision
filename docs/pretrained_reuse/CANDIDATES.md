@@ -79,3 +79,11 @@ Per the user's clarification,100–200M is the underlying total parameter target
 <=200MB applies to measured quantized deployment packaging. Historical FP32
 sizes above are reference measurements, not grounds alone to reject capacity.
 No quantized quality/package result is available for the adapted L6 candidate.
+
+### NLI reference follow-up
+
+An82.12M NLI MiniLM2 checkpoint passed an actual pinned CPU load/smoke audit;
+it remains reference-only because replacing the current text path would bring
+the complete assembly to about235M parameters. A24.58M MobileBERT NLI candidate
+has unresolved published licensing and was not downloaded. See
+[R1 NLI audit](R1_NLI_REFERENCE_20261012.md). No new Decision-quality claim.
