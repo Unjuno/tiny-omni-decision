@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import re
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from difflib import SequenceMatcher
-from typing import Iterable
 
 
 _WORD_RE = re.compile(r"[A-Z]+(?:'[A-Z]+)?")

@@ -26,13 +26,13 @@ from transformers import AutoTokenizer
 
 from tiny_omni_decision.audio_hard_negatives import (
     DistractorMatch,
-    TranscriptRecord,
     find_hard_distractors,
     make_transcript_record,
     multiset_dice_similarity,
     normalize_transcript,
     parse_cmudict,
     phoneme_sequence_similarity,
+    TranscriptRecord,
     vocabulary_jaccard,
 )
 from tiny_omni_decision.audio_runtime import DecisionQuery, SpeechCommandsMultiQueryRuntime
@@ -153,7 +153,7 @@ def _load_records(
 
 
 def _stable_seed(seed: int, sample_id: str) -> int:
-    data = f"{seed}:{sample_id}".encode("utf-8")
+    data = f"{seed}:{sample_id}".encode()
     return int.from_bytes(hashlib.sha256(data).digest()[:8], "big")
 
 
