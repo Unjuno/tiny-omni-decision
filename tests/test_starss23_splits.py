@@ -41,3 +41,15 @@ def test_coverage_does_not_read_calibration_or_validation():
     archive.read.assert_called_once_with("allowed")
     assert result[0]["active_ticks"] == 1
     assert result[0]["recordings"] == 1
+
+
+def test_frozen_split_bytes_match_recorded_hashes():
+    import hashlib
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1] / "docs/pretrained_reuse"
+    result = json.loads((root / "R2_STARSS23_SPLITS_20261011.json").read_text())
+    for split, recorded in result["splits"].items():
+        payload = (root / "starss23-splits-v1" / f"{split}.jsonl").read_bytes()
+        assert hashlib.sha256(payload).hexdigest() == recorded["sha256"]
