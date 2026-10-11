@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 from scripts.build_vocabulary_transfer import VARIANTS
@@ -13,6 +14,8 @@ def require_selection(result, history, config):
         raise ValueError("full training must have completed")
     if [r["step"] for r in history] != list(range(0, 2049, 128)):
         raise ValueError("incomplete history")
+    if any(not math.isfinite(r["selector"]) for r in history):
+        raise ValueError("nonfinite selector")
     if min(history, key=lambda r: r["selector"])["step"] != result["best_step"]:
         raise ValueError("checkpoint violates earliest minimum selector")
     if (
@@ -24,6 +27,41 @@ def require_selection(result, history, config):
     return result["best_step"]
 
 
+def opposing_pairs(rows, predictions):
+    pairs = {}
+    if len({r["id"] for r in rows}) != len(rows):
+        raise ValueError("duplicate input IDs")
+    for row, pred in zip(rows, predictions, strict=True):
+        if any(row[k] != pred[k] for k in ("id", "options", "target")):
+            raise ValueError("prediction mismatch")
+        probs = pred["probabilities"]
+        if (
+            len(probs) != len(row["options"])
+            or any(not math.isfinite(x) or x < 0 or x > 1 for x in probs)
+            or abs(sum(probs) - 1) > 1e-5
+        ):
+            raise ValueError("invalid probabilities")
+        if row["task"] not in ("extremum", "temporal_order"):
+            continue
+        o = row["oracle"]
+        key = (row["group"], o["field"])
+        values = pairs.setdefault(key, {})
+        if o["direction"] in values:
+            raise ValueError("duplicate opposing condition")
+        chosen = row["options"][max(range(len(probs)), key=probs.__getitem__)]
+        values[o["direction"]] = (chosen, row["target"])
+    summary = {}
+    for (_, field), values in pairs.items():
+        if set(values) != {"minimum", "maximum"}:
+            raise ValueError("missing opposing condition")
+        a, b = values["minimum"], values["maximum"]
+        counts = summary.setdefault(field, dict(pairs=0, both_correct=0, prediction_changed=0))
+        counts["pairs"] += 1
+        counts["both_correct"] += int(a[0] == a[1] and b[0] == b[1])
+        counts["prediction_changed"] += int(a[0] != b[0])
+    return summary
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("root", "model", "data", "output"):
@@ -33,8 +71,10 @@ def main():
     if args.output.exists() or selection_file.exists():
         raise FileExistsError("output already exists")
     run = args.root / "conditional-repair-comparison-vocabulary-01"
+
     def read(name):
         return json.loads((run / name).read_text(encoding="utf-8"))
+
     result, history, config = read("result.json"), read("history.json"), read("config.json")
     step = require_selection(result, history, config)
     if sha(run / "best-delta.pt") != result["best_sha256"]:
@@ -71,6 +111,21 @@ def main():
         VARIANTS,
         10240,
     )
+    rows = [
+        json.loads(line)
+        for line in (args.data / "inputs.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    pairs = {}
+    for model in checkpoints:
+        pairs[model] = {}
+        for variant in VARIANTS:
+            predictions = json.loads(
+                (args.output / f"{model}-{variant}-predictions.json").read_text(encoding="utf-8")
+            )
+            pairs[model][variant] = opposing_pairs(
+                [r for r in rows if r["variant"] == variant], predictions
+            )
+    write(args.output / "opposing-pairs.json", pairs)
 
 
 if __name__ == "__main__":

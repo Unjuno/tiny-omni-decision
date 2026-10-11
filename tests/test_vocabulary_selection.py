@@ -17,3 +17,28 @@ def test_completed_earliest_selection_only():
         require_selection(result, history[:-1], config)
     with pytest.raises(ValueError):
         require_selection(result, history, dict(config, seed=18))
+    with pytest.raises(ValueError):
+        require_selection(result, [dict(r, selector=float("nan")) for r in history], config)
+
+
+def test_opposing_pairs_use_candidate_identity_not_option_position():
+    from scripts.build_conditional_curriculum import build
+    from scripts.evaluate_vocabulary_transfer import opposing_pairs
+
+    rows = build(167, 1, "test")
+    predictions = [
+        dict(
+            id=r["id"],
+            options=r["options"],
+            target=r["target"],
+            probabilities=[float(o == r["target"]) for o in r["options"]],
+        )
+        for r in rows
+    ]
+    result = opposing_pairs(rows, predictions)
+    assert set(result) == {"cost", "risk", "time"}
+    assert all(r == dict(pairs=1, both_correct=1, prediction_changed=1) for r in result.values())
+    with pytest.raises(ValueError):
+        opposing_pairs(rows, predictions[::-1])
+    with pytest.raises(ValueError):
+        opposing_pairs(rows[1:], predictions[1:])
