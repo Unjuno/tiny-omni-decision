@@ -47,3 +47,10 @@ No new global product benchmark or deployment promotion is implied.
 
 The pilot has **not** run yet. The corpus generation and oracle/split checks
 have executed successfully. Large data remain outside Git.
+
+## Execution follow-up
+
+The declared512-update pilot has now completed. See
+[R2_CONDITIONAL_REPAIR_PILOT_20261012.md](R2_CONDITIONAL_REPAIR_PILOT_20261012.md).
+Execution and freeze/reload checks passed; useful reasoning improvement was
+not established. No product gate is closed by this development experiment.
