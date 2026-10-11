@@ -46,6 +46,20 @@ def candidate_text(option, style):
     raise ValueError("unknown candidate style")
 
 
+def checkpoint_contract(reference):
+    if reference == "original_epoch3":
+        return (
+            "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+            ("bert.encoder.layer.5.", "classifier."),
+        )
+    if reference == "encoder_coverage":
+        return (
+            "4024788b1a9d17735612a98da6acb1a65af5d82a9d440b4fddb4ab62efb9d318",
+            ("bert.encoder.layer.", "classifier."),
+        )
+    raise ValueError("unknown pinned checkpoint")
+
+
 def main():
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -57,6 +71,11 @@ def main():
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--weights", choices=("base", "adapted"), default="adapted")
     parser.add_argument("--candidate-style", choices=("bare", "described"), default="bare")
+    parser.add_argument(
+        "--checkpoint-reference",
+        choices=("original_epoch3", "encoder_coverage"),
+        default="original_epoch3",
+    )
     args = parser.parse_args()
     if (
         sha256_file(args.model / "model.safetensors")
@@ -64,10 +83,8 @@ def main():
     ):
         raise ValueError("base hash mismatch")
     delta_path = args.adaptation / "best-delta.pt"
-    if (
-        sha256_file(delta_path)
-        != "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78"
-    ):
+    expected_sha, prefixes = checkpoint_contract(args.checkpoint_reference)
+    if sha256_file(delta_path) != expected_sha:
         raise ValueError("selected checkpoint mismatch")
     rows = examples()
     args.output.mkdir(parents=True, exist_ok=False)
@@ -80,6 +97,7 @@ def main():
         "protocol.json",
         {
             "weights": args.weights,
+            "checkpoint_reference": args.checkpoint_reference,
             "candidate_style": args.candidate_style,
             "seed": 17,
             "states": 64,
@@ -112,8 +130,8 @@ def main():
         .eval()
     )
     delta = torch.load(delta_path, map_location="cpu", weights_only=True)
-    config = json.loads((args.adaptation / "config.json").read_text(encoding="utf-8"))
-    if set(delta) != set(config["trainable_names"]):
+    expected_names = {n for n, _ in model.named_parameters() if n.startswith(prefixes)}
+    if set(delta) != expected_names:
         raise ValueError("delta keys mismatch")
     if args.weights == "adapted":
         model.load_state_dict(delta, strict=False)
