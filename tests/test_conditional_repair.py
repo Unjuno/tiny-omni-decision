@@ -46,3 +46,17 @@ def test_curriculum_training_contract_preserves_old_default():
     assert len(old_sha) == len(new_sha) == 64 and old_sha != new_sha
     with pytest.raises(ValueError):
         curriculum_training_contract(root, "latest")
+
+
+def test_initial_checkpoint_contract_keeps_default_and_pins_warm_start():
+    from pathlib import Path
+
+    from scripts.train_conditional_repair import initial_checkpoint_contract
+
+    old = initial_checkpoint_contract(Path("data"), "epoch3")
+    new = initial_checkpoint_contract(Path("data"), "encoder_coverage")
+    assert old[0] != new[0] and old[1] != new[1]
+    assert len(old[1]) == len(new[1]) == 64
+    assert old[2] == "last_block" and new[2] == "all_encoder_blocks"
+    with pytest.raises(ValueError):
+        initial_checkpoint_contract(Path("data"), "latest")

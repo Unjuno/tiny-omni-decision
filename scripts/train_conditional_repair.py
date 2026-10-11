@@ -71,13 +71,29 @@ def curriculum_training_contract(root, policy):
     raise ValueError("unknown curriculum policy")
 
 
+def initial_checkpoint_contract(root, name):
+    if name == "epoch3":
+        return (
+            root / "text-crossencoder-adapt-v1/best-delta.pt",
+            "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+            "last_block",
+        )
+    if name == "encoder_coverage":
+        return (
+            root / "conditional-repair-encoder-coverage-01/best-delta.pt",
+            "4024788b1a9d17735612a98da6acb1a65af5d82a9d440b4fddb4ab62efb9d318",
+            "all_encoder_blocks",
+        )
+    raise ValueError("unknown initial checkpoint")
+
+
 def main():
     import torch
     import yaml
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
     from scripts.train_frozen_text_probe import _load_examples, _metrics
-    from scripts.train_text_crossencoder import choice_loss, configure_trainable, frozen_hash
+    from scripts.train_text_crossencoder import choice_loss, frozen_hash
     from tiny_omni_decision.dataset import sha256_file
     from tiny_omni_decision.schema import DatasetManifest
 
@@ -92,7 +108,18 @@ def main():
     parser.add_argument(
         "--curriculum-training", choices=("original", "numeric_range"), default="original"
     )
+    parser.add_argument(
+        "--initial-checkpoint", choices=("epoch3", "encoder_coverage"), default="epoch3"
+    )
     args = parser.parse_args()
+    initial_path, initial_hash, initial_policy = initial_checkpoint_contract(
+        args.root, args.initial_checkpoint
+    )
+    if (
+        args.initial_checkpoint == "encoder_coverage"
+        and args.trainable_policy != "all_encoder_blocks"
+    ):
+        raise ValueError("encoder warm start requires the matching training policy")
     curriculum_train_path, curriculum_train_hash = curriculum_training_contract(
         args.root, args.curriculum_training
     )
@@ -107,13 +134,15 @@ def main():
         args.root / "conditional-curriculum-01/validation.jsonl": (
             "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c"
         ),
-        args.root / "text-crossencoder-adapt-v1/best-delta.pt": (
-            "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78"
-        ),
+        initial_path: initial_hash,
         args.model / "model.safetensors": (
             "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae"
         ),
     }
+    if args.initial_checkpoint == "encoder_coverage":
+        paths[args.root / "conditional-repair-encoder-coverage-01/history.json"] = (
+            "93c8fbb70eae255dc37418b57f152e5a5e6a773fff0b26386a1f849fb76fd5a3"
+        )
     for path, expected in paths.items():
         if sha256_file(path) != expected:
             raise ValueError(f"hash mismatch: {path}")
@@ -184,7 +213,13 @@ def main():
             "clip": 1.0,
             "dropout": False,
             "optimizer_reset": True,
-            "initialization": "saved adapted epoch3 weights; new AdamW",
+            "initialization": (
+                "saved adapted epoch3 weights; new AdamW"
+                if args.initial_checkpoint == "epoch3"
+                else "saved narrow-format encoder step2048; new AdamW"
+            ),
+            "initial_checkpoint": args.initial_checkpoint,
+            "inherited_post_epoch3_steps": 0 if args.initial_checkpoint == "epoch3" else 2048,
             "selector": "earliest minimum mean of original and curriculum NLL, including step0",
             "paths": {str(p): h for p, h in paths.items()},
             "runner_sha256": sha256_file(Path(__file__)),
@@ -222,9 +257,9 @@ def main():
         .to(device)
         .eval()
     )
-    names = configure_trainable(model)
+    names = configure_repair_policy(model, initial_policy)
     delta = torch.load(
-        args.root / "text-crossencoder-adapt-v1/best-delta.pt",
+        initial_path,
         weights_only=True,
         map_location="cpu",
     )
@@ -338,12 +373,25 @@ def main():
 
     evaluate(0)
     if not args.smoke:
-        reference = json.loads(
-            (args.root / "text-crossencoder-adapt-v1/result.json").read_text(encoding="utf-8")
-        )["metrics"]
-        for key in ("accuracy", "nll", "brier", "ece_15_bins"):
-            if abs(history[0]["original"][key] - reference[key]) > 1e-6:
-                raise ValueError("initial original-validation reference mismatch")
+        if args.initial_checkpoint == "epoch3":
+            reference = {
+                "original": json.loads(
+                    (args.root / "text-crossencoder-adapt-v1/result.json").read_text(
+                        encoding="utf-8"
+                    )
+                )["metrics"]
+            }
+        else:
+            previous = json.loads(
+                (args.root / "conditional-repair-encoder-coverage-01/history.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            reference = {source: previous[-1][source] for source in ("original", "curriculum")}
+        for source, metrics in reference.items():
+            for key in ("accuracy", "nll", "brier", "ece_15_bins"):
+                if abs(history[0][source][key] - metrics[key]) > 1e-6:
+                    raise ValueError("initial validation reference mismatch")
     for step in range(1, steps + 1):
         start = (step - 1) * 8
         scores, widths = forward(train_encoded[start : start + 8])
