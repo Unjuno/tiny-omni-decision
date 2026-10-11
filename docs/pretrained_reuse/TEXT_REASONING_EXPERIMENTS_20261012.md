@@ -13,6 +13,7 @@ commits and failures remain in individual reports. All use seed17; no seed searc
 | conditional-repair-numeric-range-01 | 2048 | 10647169 | 2048 | 0.61024 | 0.24512 | 1119.3 |
 | conditional-repair-range-warmstart-01 | 2048 | 10647169 | 1408 | 0.60315 | 0.82227 | 1122.3 |
 | conditional-repair-lexical-range-01 | 2048 | 10647169 | 1408 | 0.60433 | 0.82959 | 1123.8 |
+| conditional-repair-comparison-vocabulary-01 | 2048 | 10647169 | 1664 | 0.61535 | 0.81543 | 1121.5 |
 
 ## Findings that constrain the next action
 
@@ -45,3 +46,6 @@ Unique questions are per-run only; the runs reuse IDs, states, inherited weights
 and development validation. Do not sum them into lifetime unique coverage.
 Weights-only artifacts do not support strict optimizer/RNG resume. All stages
 retain separate outputs, histories, selected/final weights and source hashes.
+
+Comparison-word coverage improves trained-word transfer but leaves domain-term and
+numeric-range weaknesses. See [fixed transfer](R2_VOCABULARY_TRANSFER_RESULTS_20261012.md).

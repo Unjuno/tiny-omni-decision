@@ -477,3 +477,10 @@ A paired factorial text diagnosis confirms substantial comparison-word
 sensitivity at fixed state/range/structure. Lexical training helps but leaves
 smallest/largest far below minimum/maximum. No general-quality claim.
 [Diagnosis](docs/pretrained_reuse/R2_COMPARATIVE_WORD_RESULTS_20261012.md).
+
+
+Comparison-vocabulary training completed2,048updates (selected1664). On fixed new
+states/templates, smallest/largest improves59.96%→82.81%, but domain terms remain
+40.04% (expanded range34.08%). General four-modality95% remains unmet.
+[Training](docs/pretrained_reuse/R2_COMPARISON_VOCABULARY_RESULTS_20261012.md) /
+[transfer](docs/pretrained_reuse/R2_VOCABULARY_TRANSFER_RESULTS_20261012.md).
