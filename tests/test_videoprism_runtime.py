@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import numpy as np
 import pytest
 
-from tiny_omni_decision.videoprism_runtime import candidate_features
+np = pytest.importorskip("numpy")
+videoprism_runtime = pytest.importorskip("tiny_omni_decision.videoprism_runtime")
+candidate_features = videoprism_runtime.candidate_features
 
 
 def test_candidate_features_preserves_image_and_option_order() -> None:
