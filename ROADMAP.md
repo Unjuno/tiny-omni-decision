@@ -452,3 +452,9 @@ narrow-curriculum validation82.23%, final expanded-range training fit83.50%,
 with worse original-text NLL/calibration and extra inherited compute. No new
 transfer/audit or multimodal quality claim. See
 [record](docs/pretrained_reuse/R2_RANGE_WARMSTART_20261012.md).
+
+
+A fixed selected-weight comparison on new synthetic states found range
+interpolation improvement24.12%→71.00%, but wording regression56.54%→42.09%
+and poor extrapolation calibration. No general-model promotion.
+[Results](docs/pretrained_reuse/R2_RANGE_GENERALIZATION_RESULTS_20261012.md).
