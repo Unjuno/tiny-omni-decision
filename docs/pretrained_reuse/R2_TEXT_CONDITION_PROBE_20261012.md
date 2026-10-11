@@ -39,3 +39,20 @@ are retained in the external artifact directory.
 The next architectural decision must address conditional interpretation, while
 preserving the100–200M total pre-quantization parameter target. Simply integrating
 this text scorer or adding more same-corpus epochs is not justified by this result.
+
+## Candidate-coverage follow-up (read-only)
+
+The frozen train corpus has9,171 dictionary-valued choice questions. Only one
+has exactly the keys A/B/C; its target is A. Three have all A/B/C among their
+keys. Their normalized choices are `key: description`, never the bare three
+strings used in this new probe. Validation has1,008 dictionary-valued choices
+and no A/B/C key set. A global "B majority in supervised targets" explanation
+is not supported by this audit. Other key sets/pretraining priors are not ruled
+out. Full counts and source hashes: R2_TEXT_CANDIDATE_COVERAGE_20261012.json.
+
+This is an input-format/coverage confound. Failure on the exact approved probe
+remains unchanged, but it cannot uniquely identify missing numerical reasoning
+or architecture capacity. Do not replace its result with a better wording.
+A separately declared comparison could isolate pretrained versus adapted scores
+and candidate serialization, retaining every condition and selecting no winner
+for deployment. No such additional inference or training has been run here.
