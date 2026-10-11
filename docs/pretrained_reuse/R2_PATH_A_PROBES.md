@@ -311,6 +311,20 @@ package target. The original report remains unchanged; the external
 reload verifier is `scripts/verify_audio_multiquery_reload.py` (SHA-256
 `4178f760481db40d1a825faa3faa931b2ed5ba8b3736d52deebcd70706a3e7cd`).
 
+### Audio-feature dependence control
+
+A post-hoc counterfactual validation diagnostic compared the selected readout
+with original audio features, zeroed audio features, and a seeded permutation
+that assigns every validation clip audio from a different clip. It reloaded
+and matched the saved baseline predictions before applying either
+intervention. The 10,000-replicate speaker-cluster paired bootstrap showed
+large changes in all macro metrics, with intervals excluding zero. This is
+evidence that the *fixed readout* uses its audio feature on this narrow
+Speech Commands task; it is not a blind evaluation, general speech result, or
+audio-video fusion result. The earlier validation was used to select the
+checkpoint. Full metrics, hashes, and limits are in
+[`AUDIO_MULTIQUERY_FEATURE_DEPENDENCE_20261011.md`](AUDIO_MULTIQUERY_FEATURE_DEPENDENCE_20261011.md).
+
 ### Shared Path A candidate-scoring core
 
 The frozen-feature Path A probes now use
