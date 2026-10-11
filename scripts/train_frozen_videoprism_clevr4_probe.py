@@ -236,6 +236,44 @@ def main() -> None:
         taxonomy: len(options) for taxonomy, options in CLEVR4_TAXONOMIES.items()
     }:
         raise ValueError("configured taxonomy option counts differ from the task adapter")
+    encoder_config = effective_config.get("encoder", {})
+    if (
+        encoder_config.get("repo_id") != "google/videoprism-base-f16r288"
+        or encoder_config.get("revision") != MODEL_REVISION
+        or encoder_config.get("checkpoint_sha256") != CHECKPOINT_SHA256
+        or encoder_config.get("frames") != 8
+        or encoder_config.get("resolution") != 288
+        or encoder_config.get("frozen") is not True
+    ):
+        raise ValueError("encoder settings differ from the pinned frozen VideoPrism candidate")
+    text_config = effective_config.get("candidate_text_encoder", {})
+    if (
+        text_config.get("revision") != TEXT_REVISION
+        or text_config.get("hidden_size") != 384
+        or text_config.get("frozen") is not True
+    ):
+        raise ValueError("candidate-text settings differ from the fixed MiniLM revision")
+    readout_config = effective_config.get("readout", {})
+    if (
+        readout_config.get("architecture") != "shared_candidate_mlp"
+        or readout_config.get("hidden_size") != 128
+        or readout_config.get("trainable_parameters_expected") != 147713
+        or readout_config.get("optimizer") != "AdamW"
+        or readout_config.get("learning_rate") != 1e-3
+        or readout_config.get("weight_decay") != 1e-4
+        or readout_config.get("checkpoint_selection")
+        != "minimum_nll_on_prior_512_validation_images"
+    ):
+        raise ValueError("readout settings differ from the fixed CLEVR-4 probe policy")
+    task_config = effective_config.get("task", {})
+    if (
+        task_config.get("source_revision") != DATASET_REVISION
+        or task_config.get("training_images") != 8424
+        or task_config.get("checkpoint_selection_validation_images") != 512
+        or task_config.get("one_time_reporting_validation_images") != 1595
+        or task_config.get("sealed_audit_loaded") is not False
+    ):
+        raise ValueError("dataset/split settings differ from the frozen CLEVR-4 probe plan")
 
     cache_report = json.loads(cache_report_path.read_text(encoding="utf-8"))
     if cache_report.get("status") != "complete_videoprism_clevr4_full_feature_cache":
