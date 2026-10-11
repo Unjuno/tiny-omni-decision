@@ -95,6 +95,14 @@ def initial_checkpoint_contract(root, name):
     raise ValueError("unknown initial checkpoint")
 
 
+def require_numeric_prefix(record, reference):
+    ignored = {"elapsed_seconds", "evaluation_seconds"}
+    if {k: v for k, v in record.items() if k not in ignored} != {
+        k: v for k, v in reference.items() if k not in ignored
+    }:
+        raise ValueError("numeric512-prefix differs")
+
+
 def main():
     import torch
     import yaml
@@ -123,12 +131,25 @@ def main():
     )
     args = parser.parse_args()
     if (
-        args.steps != 512
+        args.steps not in (512, 2048)
         or args.trainable_policy != "all_encoder_blocks"
         or args.curriculum_training != "comparison_vocabulary"
         or args.initial_checkpoint != "encoder_coverage"
     ):
         raise ValueError("fixed numeric embedding experiment requires prescribed conditions")
+    prefix_history = None
+    if args.steps == 2048 and not args.smoke:
+        import shutil
+
+        prefix_path = args.root / "numeric-embedding-training-01/history.json"
+        if (
+            sha256_file(prefix_path)
+            != "0965a7312bc41dca024fcba770fb0b142d9b2d1495ca99984494dcb6805d4cf5"
+        ):
+            raise ValueError("reference512 history changed")
+        prefix_history = json.loads(prefix_path.read_text())
+        if shutil.disk_usage(args.root).free < 1024**3:
+            raise OSError("need1GiB free for output plus reserve")
     coverage_path = args.root / "numeric-embedding-coverage-01/result.json"
     if (
         sha256_file(coverage_path)
@@ -406,6 +427,8 @@ def main():
             "evaluation_seconds": time.perf_counter() - stamp,
             "elapsed_seconds": time.perf_counter() - started,
         }
+        if prefix_history is not None and step <= 512:
+            require_numeric_prefix(record, prefix_history[step // 128])
         history.append(record)
         write("history.json", history)
         print(

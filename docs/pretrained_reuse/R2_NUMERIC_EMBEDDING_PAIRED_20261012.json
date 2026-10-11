@@ -1,0 +1,430 @@
+{
+  "comparisons": {
+    "0-original": {
+      "questions": 2540,
+      "states": 732,
+      "group_sizes": {
+        "4": 250,
+        "5": 111,
+        "3": 259,
+        "2": 91,
+        "1": 20,
+        "6": 1
+      },
+      "transitions": {
+        "0_to_0": 1010,
+        "1_to_1": 1530
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.0,
+          "percentile_95_interval": [
+            0.0,
+            0.0
+          ]
+        },
+        "nll": {
+          "difference": 0.0,
+          "percentile_95_interval": [
+            0.0,
+            0.0
+          ]
+        },
+        "brier": {
+          "difference": 0.0,
+          "percentile_95_interval": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "0-curriculum": {
+      "questions": 2048,
+      "states": 256,
+      "group_sizes": {
+        "8": 256
+      },
+      "transitions": {
+        "1_to_1": 1650,
+        "0_to_0": 398
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.0,
+          "percentile_95_interval": [
+            0.0,
+            0.0
+          ]
+        },
+        "nll": {
+          "difference": 0.0,
+          "percentile_95_interval": [
+            0.0,
+            0.0
+          ]
+        },
+        "brier": {
+          "difference": 0.0,
+          "percentile_95_interval": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "128-original": {
+      "questions": 2540,
+      "states": 732,
+      "group_sizes": {
+        "4": 250,
+        "5": 111,
+        "3": 259,
+        "2": 91,
+        "1": 20,
+        "6": 1
+      },
+      "transitions": {
+        "1_to_1": 1561,
+        "0_to_0": 974,
+        "1_to_0": 3,
+        "0_to_1": 2
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": -0.0003937007874015748,
+          "percentile_95_interval": [
+            -0.0019976428126312396,
+            0.0011918951132300357
+          ]
+        },
+        "nll": {
+          "difference": 0.0012395939831658736,
+          "percentile_95_interval": [
+            0.0008776198447935841,
+            0.0016124265020227987
+          ]
+        },
+        "brier": {
+          "difference": 0.000405460397816774,
+          "percentile_95_interval": [
+            0.00021163114559244424,
+            0.0005956502250105758
+          ]
+        }
+      }
+    },
+    "128-curriculum": {
+      "questions": 2048,
+      "states": 256,
+      "group_sizes": {
+        "8": 256
+      },
+      "transitions": {
+        "1_to_1": 1610,
+        "0_to_0": 414,
+        "0_to_1": 16,
+        "1_to_0": 8
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.00390625,
+          "percentile_95_interval": [
+            -0.00048828125,
+            0.00830078125
+          ]
+        },
+        "nll": {
+          "difference": -0.0005068637456132562,
+          "percentile_95_interval": [
+            -0.0015434957120449863,
+            0.0005895361884605357
+          ]
+        },
+        "brier": {
+          "difference": 1.21667057608829e-05,
+          "percentile_95_interval": [
+            -0.0006752142439388091,
+            0.0007252666956527483
+          ]
+        }
+      }
+    },
+    "256-original": {
+      "questions": 2540,
+      "states": 732,
+      "group_sizes": {
+        "4": 250,
+        "5": 111,
+        "3": 259,
+        "2": 91,
+        "1": 20,
+        "6": 1
+      },
+      "transitions": {
+        "0_to_0": 973,
+        "1_to_1": 1558,
+        "0_to_1": 5,
+        "1_to_0": 4
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.0003937007874015748,
+          "percentile_95_interval": [
+            -0.0019577325614743477,
+            0.0027581044046923494
+          ]
+        },
+        "nll": {
+          "difference": -0.0006952956499251895,
+          "percentile_95_interval": [
+            -0.0011794661616692799,
+            -0.00021566818794493066
+          ]
+        },
+        "brier": {
+          "difference": -0.000320254920977275,
+          "percentile_95_interval": [
+            -0.0005931486348971248,
+            -3.951163298934075e-05
+          ]
+        }
+      }
+    },
+    "256-curriculum": {
+      "questions": 2048,
+      "states": 256,
+      "group_sizes": {
+        "8": 256
+      },
+      "transitions": {
+        "1_to_1": 1591,
+        "0_to_0": 442,
+        "0_to_1": 8,
+        "1_to_0": 7
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.00048828125,
+          "percentile_95_interval": [
+            -0.00341796875,
+            0.00439453125
+          ]
+        },
+        "nll": {
+          "difference": -0.0011676819470247007,
+          "percentile_95_interval": [
+            -0.0029715309607259285,
+            0.0006670105651717064
+          ]
+        },
+        "brier": {
+          "difference": -0.0006002807521860353,
+          "percentile_95_interval": [
+            -0.0017567361074163979,
+            0.0006073607095310993
+          ]
+        }
+      }
+    },
+    "384-original": {
+      "questions": 2540,
+      "states": 732,
+      "group_sizes": {
+        "4": 250,
+        "5": 111,
+        "3": 259,
+        "2": 91,
+        "1": 20,
+        "6": 1
+      },
+      "transitions": {
+        "0_to_0": 957,
+        "1_to_1": 1570,
+        "1_to_0": 9,
+        "0_to_1": 4
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": -0.001968503937007874,
+          "percentile_95_interval": [
+            -0.004790514855227619,
+            0.000784937060807833
+          ]
+        },
+        "nll": {
+          "difference": -7.935836913167292e-05,
+          "percentile_95_interval": [
+            -0.0010074288702581074,
+            0.0008644843380695307
+          ]
+        },
+        "brier": {
+          "difference": -6.087309856018446e-05,
+          "percentile_95_interval": [
+            -0.0005685879098333979,
+            0.0004597740503520632
+          ]
+        }
+      }
+    },
+    "384-curriculum": {
+      "questions": 2048,
+      "states": 256,
+      "group_sizes": {
+        "8": 256
+      },
+      "transitions": {
+        "1_to_1": 1584,
+        "0_to_0": 424,
+        "1_to_0": 20,
+        "0_to_1": 20
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.0,
+          "percentile_95_interval": [
+            -0.005859375,
+            0.005859375
+          ]
+        },
+        "nll": {
+          "difference": -0.001283525773887372,
+          "percentile_95_interval": [
+            -0.0037028219546361386,
+            0.001157975755744651
+          ]
+        },
+        "brier": {
+          "difference": -0.00020238981460165453,
+          "percentile_95_interval": [
+            -0.0017964389338598584,
+            0.0013982467131283221
+          ]
+        }
+      }
+    },
+    "512-original": {
+      "questions": 2540,
+      "states": 732,
+      "group_sizes": {
+        "4": 250,
+        "5": 111,
+        "3": 259,
+        "2": 91,
+        "1": 20,
+        "6": 1
+      },
+      "transitions": {
+        "0_to_0": 999,
+        "1_to_1": 1527,
+        "0_to_1": 11,
+        "1_to_0": 3
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.0031496062992125984,
+          "percentile_95_interval": [
+            0.0003929234501672179,
+            0.006039073973308051
+          ]
+        },
+        "nll": {
+          "difference": 0.0015238976034083478,
+          "percentile_95_interval": [
+            0.0004914045433670067,
+            0.0026064654868273905
+          ]
+        },
+        "brier": {
+          "difference": 0.0005551007648472055,
+          "percentile_95_interval": [
+            2.89437985009804e-05,
+            0.0011022434944416722
+          ]
+        }
+      }
+    },
+    "512-curriculum": {
+      "questions": 2048,
+      "states": 256,
+      "group_sizes": {
+        "8": 256
+      },
+      "transitions": {
+        "1_to_1": 1581,
+        "0_to_0": 428,
+        "0_to_1": 20,
+        "1_to_0": 19
+      },
+      "seed": 17,
+      "draws": 10000,
+      "metrics": {
+        "accuracy": {
+          "difference": 0.00048828125,
+          "percentile_95_interval": [
+            -0.005859375,
+            0.0068359375
+          ]
+        },
+        "nll": {
+          "difference": -0.006859015748957211,
+          "percentile_95_interval": [
+            -0.009694194402186508,
+            -0.0038616151474401648
+          ]
+        },
+        "brier": {
+          "difference": -0.0032857407542107794,
+          "percentile_95_interval": [
+            -0.005147963589483534,
+            -0.0014076463211349435
+          ]
+        }
+      }
+    }
+  },
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-0-original.json": "343146385c8ca52ac832c68d0aa784c6dd2aeeab527f98acd8807c4f56c4f54a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-0-original.json": "343146385c8ca52ac832c68d0aa784c6dd2aeeab527f98acd8807c4f56c4f54a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-0-curriculum.json": "17dcb98cca085f66bef555da757f0f087da3eea9709b86e9a491615461752034",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-0-curriculum.json": "17dcb98cca085f66bef555da757f0f087da3eea9709b86e9a491615461752034",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-128-original.json": "7fd6bfbaf0d6c1625808ac0dfb32a1fb2729c55dd007b856fdd52fe71525f4b8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-128-original.json": "3adc4c5da7c1cf39b70b35b7ecbd3237b0f86b4bb28159aef1e79dc698c539db",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-128-curriculum.json": "b4250b331cfa3f9ec459cc7f9cb60ca9523905e4513d3a9f2d8fd0326730bcc7",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-128-curriculum.json": "070562944ae6e2ab11d09ee33abae38ad183299d5b26e1e2e0c7d755c7cce740",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-256-original.json": "1accaf6f5159727fae22226005aa79faad0f4d50573374f78b7562334b1b23dc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-256-original.json": "2964a48e3cef62cf875e8f89211ac7c0032a68ff095c0a8f19a4951cf2c80ef0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-256-curriculum.json": "919917faef2fef8fc9b08dee3e386d00512e0f0b52e547c98a6fe1b3060707f1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-256-curriculum.json": "4808a4e2d29ccfdddf8a8beec190ab11c86b4661fea8c5549f80f42e2a130a11",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-384-original.json": "35a4af1e6bcfb46b63fb3d7e418f7c9c4f6af736e107ac4bf44189cc75b455ae",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-384-original.json": "fc7d1f687812e759d2b08f4e9e1ae3fc1bf4525ec6ef644845f1e934c2754d01",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-384-curriculum.json": "b86a7c0c62f7c2096a83f9a506982327f42ae44dd8ca7b19add02ac97509107c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-384-curriculum.json": "05407c68988aa0804d59b2fff2f672e2068bd9bb63ee75a4b7acdd1c28cff3c3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-512-original.json": "ece1d21728b9e3615afac1668f67bbdb34352c6044e6ddde795083a3ec9c4be4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-512-original.json": "6607ce8e027b9895305054c0e147eec0d6306a1a9fdcc12343de65fb3ef6ada5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-comparison-vocabulary-01\\predictions-512-curriculum.json": "5d4703037139bcf1e5138cd209ec8096bc63c0df15c10cfa441375a705289d1e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-512-curriculum.json": "b547609f8c48762aa2ca809a4cb2f6aecc3301d01527a3009427d661e4a86711"
+  },
+  "limitation": "Post-hoc descriptive development diagnostics; no multiplicity correction.",
+  "inference": false,
+  "training": false
+}
