@@ -342,3 +342,8 @@ DINO/bilinear24epochs reproduces its first8epochs and reaches89.26% (+1.86pp),
 with lower NLL/Brier but higher ECE. Exact counting remains64.06% and accounts
 for184/220 errors; no tolerance relaxation or general95% claim.
 [DINO curve](docs/pretrained_reuse/R2_DINO_BILINEAR_CURVE_RESULTS_20261012.md).
+
+Spatial/bilinear reaches90.04% on the reused image selector; matched global88.48%.
+Counting improves to70.51%, but superiority over the smaller89.26% reference
+is uncertain and ECE worsens. Preserve both; general four-modality95% remains unmet.
+[Spatial comparison](docs/pretrained_reuse/R2_SPATIAL_BILINEAR_RESULTS_20261012.md).

@@ -579,3 +579,8 @@ Two training images pass frozen question-conditioned feature extraction, enablin
 a full-option candidate-head comparison next. Quality remains untested, and
 new questions require a joint image/text forward.
 [Feature audit](docs/pretrained_reuse/R1_VILT_FEATURE_AUDIT_20261012.md).
+
+Spatial/bilinear reaches90.04% on the reused image selector; matched global88.48%.
+Counting improves to70.51%, but superiority over the smaller89.26% reference
+is uncertain and ECE worsens. Preserve both; general four-modality95% remains unmet.
+[Spatial comparison](docs/pretrained_reuse/R2_SPATIAL_BILINEAR_RESULTS_20261012.md).
