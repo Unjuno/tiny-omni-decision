@@ -534,3 +534,8 @@ The pinned VideoPrism unpooled-token audit passed on two training scenes:
 FP32[8,16,16,768], exact reload/repeat and zero global-mean difference from the
 old cache. Full456-scene storage would need2.87GB, exceeding current free disk;
 no full extraction or quality claim. [Token audit](docs/pretrained_reuse/R2_VIDEO_TOKEN_AUDIT_RESULTS_20261012.md).
+
+RAM transport now passes a full-size allocation check: 456 slots (2.87 GB),
+with two real saved tensors transferred exactly and 454 synthetic zero slots.
+No live full extraction or quality result yet.
+[RAM transport measurements](docs/pretrained_reuse/R2_TOKEN_RAM_TRANSPORT_20261012.md).
