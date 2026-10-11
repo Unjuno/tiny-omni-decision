@@ -344,3 +344,12 @@ lowest/highest. No input truncation occurred. The earlier58.11% synthetic corpus
 result therefore does not qualify general conditional Decision behavior. See
 [condition probe](docs/pretrained_reuse/R2_TEXT_CONDITION_PROBE_20261012.md).
 No additional training or product promotion followed.
+
+### Fixed condition-control follow-up (2026-10-12)
+
+The approved2x2 comparison (base/adapted x bare/described candidate) retained
+all256 questions and yielded all-B predictions in every condition. Minimal
+candidate descriptions do not fix this failure; it is present before adaptation.
+This does not establish a general model-capacity ceiling. Further wording search
+on this probe is not justified. See
+[full fixed comparison](docs/pretrained_reuse/R2_TEXT_CONDITION_FACTORIAL_20261012.md).
