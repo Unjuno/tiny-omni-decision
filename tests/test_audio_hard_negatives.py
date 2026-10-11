@@ -1,10 +1,10 @@
 from tiny_omni_decision.audio_hard_negatives import (
+    TranscriptRecord,
     find_hard_distractors,
     make_transcript_record,
     normalize_transcript,
     parse_cmudict,
     transcript_phonemes,
-    TranscriptRecord,
 )
 
 

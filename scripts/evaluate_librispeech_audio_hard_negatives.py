@@ -26,13 +26,13 @@ from transformers import AutoTokenizer
 
 from tiny_omni_decision.audio_hard_negatives import (
     DistractorMatch,
+    TranscriptRecord,
     find_hard_distractors,
     make_transcript_record,
     multiset_dice_similarity,
     normalize_transcript,
     parse_cmudict,
     phoneme_sequence_similarity,
-    TranscriptRecord,
     vocabulary_jaccard,
 )
 from tiny_omni_decision.audio_runtime import DecisionQuery, SpeechCommandsMultiQueryRuntime

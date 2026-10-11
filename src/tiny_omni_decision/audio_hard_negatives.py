@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import re
-from collections import Counter
 from collections.abc import Iterable
+from collections import Counter
 from dataclasses import dataclass
 from difflib import SequenceMatcher
 
