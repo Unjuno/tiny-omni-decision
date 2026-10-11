@@ -518,3 +518,9 @@ of the original first8epochs. Selected global81.35%, spatial82.62%; the paired
 spatial gain remains uncertain and both trail the smaller-head85.06% reference.
 Count remains46.88% for spatial. No adoption or automatic budget extension.
 [Learning curves](docs/pretrained_reuse/R2_SPATIAL_CURVE_RESULTS_20261012.md).
+
+At essentially equal readout size, bilinear image/candidate interaction improves
+the frozen DINO reference85.06%→87.40% (paired512-image interval+1.03…+3.66pp),
+with lower NLL/Brier. Count improves53.71%→59.77%; general image95% remains unmet.
+Retain as a measured candidate, without product promotion or video-quality claims.
+[Interaction comparison](docs/pretrained_reuse/R2_BILINEAR_RESULTS_20261012.md).
