@@ -46,3 +46,31 @@ Compare one new seed-17 run using the same model, split, head, optimizer,
 epoch budget and checkpoint rule. Record truncation and retained-state counts;
 this tests question-preserving serialization, not pure length or capacity.
 No such corrected training has been executed yet.
+
+## Controlled question-preserving run executed
+
+Source commit 89b14e9 adds opt-in `--context-policy question_pair`; the default
+legacy tokenization remains unchanged. Question is sequence one, state is
+sequence two, and only sequence two may be truncated. Over-budget questions
+fail closed. Actual tokenizer checks retained every question token in all
+23,319 train and 2,540 validation examples. Ruff and CPU suite passed
+(311 passed, 1 skipped).
+
+The separate `C:/CodexArtifacts/pretrained-reuse-r2/text-question-pair-v1` run
+completed with seed 17, 8 epochs, batch-questions 64, feature-batch-size 64,
+the same pinned MiniLM, source splits, optimizer and readout. The command is
+the original `scripts.train_frozen_text_probe` invocation with this new output
+path and `--context-policy question_pair`. Full run report and epoch history:
+R2_TEXT_QUESTION_PAIR_20261011.json. Existing baseline artifacts were unchanged.
+
+| Selected epoch 3 | Accuracy | NLL | Brier | ECE |
+| --- | ---: | ---: | ---: | ---: |
+| Legacy | .4937 | 1.0303 | .5946 | .0268 |
+| Question pair | .4882 | 1.0279 | .5937 | .0292 |
+
+Question preservation did not yield a substantial aggregate improvement:
+NLL/Brier improved slightly, Accuracy/ECE worsened. No product-quality claim
+or further seed search follows. This changes order, segment representation and
+retained state as well as question retention, so it is not a pure causal test
+of dropped questions. The remaining limitation cannot be assigned solely to
+truncation. Both runs use development validation for checkpoint selection.
