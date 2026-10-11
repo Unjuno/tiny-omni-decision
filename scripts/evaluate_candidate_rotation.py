@@ -186,7 +186,9 @@ def main():
             gpu=torch.cuda.get_device_name(),
             training=False,
             cost_usd=0,
-            limitation="Observed development states; cyclic averaging lacks full permutation invariance.",
+            limitation=(
+                "Observed development states; cyclic averaging lacks full permutation invariance."
+            ),
         ),
     )
 

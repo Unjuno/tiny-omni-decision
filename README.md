@@ -286,3 +286,8 @@ validation improves30.91%→49.92%, but fixed new-state conditional transfer is2
 versus81.05% for the22.7M BERT reference; candidate-order consistency is weak.
 No replacement, no four-modality95% claim.
 [Learning and transfer results](docs/pretrained_reuse/R2_SMALL_DECODER_RESULTS_20261012.md).
+
+Fixed candidate-position averaging on the134.5M decoder costs4.25forwards/question
+and gives21.29%/24.71% for normal/reversed options; no consistent Accuracy gain.
+Do not adopt or automatically extend training.
+[Rotation diagnostic](docs/pretrained_reuse/R2_CANDIDATE_ROTATION_RESULTS_20261012.md).
