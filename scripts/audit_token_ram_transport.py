@@ -40,7 +40,7 @@ def process_tree_rss(parent):
     return total
 
 
-def live_worker(audit, stream):
+def live_worker(audit, stream, requested=None):
     """Re-extract the same two training assets, keeping the binary pipe clean."""
     from scripts.audit_videoprism_tokens import MANIFEST, environment_versions
     from scripts.extract_frozen_videoprism_features import (
@@ -74,6 +74,14 @@ def live_worker(audit, stream):
             break
     if selected != config["selected"]:
         raise ValueError("audited selection changed")
+    if requested is not None:
+        manifests = manifest + [
+            json.loads(line) for line in (sample_dir / "validation.jsonl").read_text().splitlines()
+        ]
+        known = {row["media_sha256"]: row for row in manifests}
+        if len(requested) != len(set(requested)) or not set(requested) <= known.keys():
+            raise ValueError("unknown or repeated requested media")
+        selected = [known[key] for key in requested]
     with contextlib.redirect_stdout(sys.stderr):
         sys.path.insert(0, str(source))
         import jax
@@ -92,7 +100,8 @@ def live_worker(audit, stream):
         encode = jax.jit(lambda x: model.apply(variables, x, train=False))
         for index, row in enumerate(selected):
             media = sample_dir / row["media_path"]
-            if row["split"] != "train" or sha(media) != row["media_sha256"]:
+            allowed = {"train"} if requested is None else {"train", "validation"}
+            if row["split"] not in allowed or sha(media) != row["media_sha256"]:
                 raise ValueError("training media mismatch")
             started = time.perf_counter()
             video = jnp.asarray(_preprocess(_decode_video(media), tf)[None])
@@ -134,13 +143,15 @@ def main():
     parser.add_argument("--output", type=Path)
     parser.add_argument("--worker", action="store_true")
     parser.add_argument("--live", action="store_true")
+    parser.add_argument("--request", type=Path)
     args = parser.parse_args()
     paths = [args.audit / f"tokens-{i}.npy" for i in range(2)]
     if [sha(p) for p in paths] != HASHES:
         raise ValueError("pinned saved tensors changed")
     if args.worker:
         if args.live:
-            live_worker(args.audit, sys.stdout.buffer)
+            requested = json.loads(args.request.read_text()) if args.request else None
+            live_worker(args.audit, sys.stdout.buffer, requested)
             return
         for i, path in enumerate(paths):
             write_tokens(sys.stdout.buffer, str(i), np.load(path, allow_pickle=False))
