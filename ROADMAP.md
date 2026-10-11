@@ -606,3 +606,10 @@ exceeds the hard 200M limit. A shared Cross-Encoder text-feature hypothesis is
 198,306,689 with the same head shapes, but has no combined runtime or quality
 verification; existing MiniLM-dependent readouts cannot simply be reused.
 See [component audit](docs/pretrained_reuse/R2_COMBINED_CANDIDATE_BUDGET_20261012.md).
+
+### Deterministic numeric-embedding comparison (2026-10-12)
+
+Both fixed2048-update runs completed and selected step1664. Numeric embedding
+updates improved the numeric curriculum but worsened original-text selected
+Accuracy/NLL/Brier/ECE. Preserve both; no product adoption or95%claim.
+See [learning curves, paired diagnostics and hashes](docs/pretrained_reuse/R2_NUMERIC_DETERMINISTIC_RESULTS_20261012.md).

@@ -360,3 +360,10 @@ Later training overfits; no counting-fix or product-quality claim.
 Numeric embedding updates pass a matched512-step run, but both candidate and
 control select their unchanged initialization. No quality artifact promoted.
 [Numeric comparison](docs/pretrained_reuse/R2_NUMERIC_EMBEDDING_RESULTS_20261012.md).
+
+### Deterministic numeric-embedding comparison (2026-10-12)
+
+Both fixed2048-update runs completed and selected step1664. Numeric embedding
+updates improved the numeric curriculum but worsened original-text selected
+Accuracy/NLL/Brier/ECE. Preserve both; no product adoption or95%claim.
+See [learning curves, paired diagnostics and hashes](docs/pretrained_reuse/R2_NUMERIC_DETERMINISTIC_RESULTS_20261012.md).
