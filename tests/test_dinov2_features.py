@@ -1,7 +1,33 @@
 import numpy as np
 import pytest
 
-from tiny_omni_decision.dinov2_features import cls_patch_mean, require_image_splits
+from tiny_omni_decision.dinov2_features import (
+    cls_patch_mean,
+    readout_features,
+    require_image_splits,
+    spatial_cells,
+)
+
+
+def test_spatial_cells_row_major_and_mean():
+    grid = np.arange(256, dtype=np.float32).reshape(1, 16, 16, 1)
+    tokens = np.concatenate([np.zeros((1, 1, 384)), np.repeat(grid.reshape(1, 256, 1), 384, 2)], 1)
+    cells = spatial_cells(tokens)
+    assert cells.shape == (1, 17, 384)
+    assert cells[0, 1, 0] == grid[0, :4, :4, 0].mean()
+    assert cells[0, 2, 0] == grid[0, :4, 4:8, 0].mean()
+    np.testing.assert_allclose(cells[:, 1:].mean(1), tokens[:, 1:].mean(1))
+
+
+def test_global_control_discards_layout_with_equal_shape():
+    cells = np.arange(17 * 384, dtype=np.float32).reshape(1, 17, 384)
+    a = readout_features(cells, "global")
+    b = readout_features(cells, "spatial")
+    assert a.shape == b.shape == (1, 6528)
+    np.testing.assert_allclose(a[:, 384:].reshape(1, 16, 384)[:, 0], cells[:, 1:].mean(1) / 4)
+    np.testing.assert_array_equal(b[:, 384:], cells[:, 1:].reshape(1, -1) / 4)
+    with pytest.raises(ValueError):
+        readout_features(cells, "unknown")
 
 
 def test_cls_patch_mean_separates_cls():
