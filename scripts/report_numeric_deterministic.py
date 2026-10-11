@@ -1,9 +1,24 @@
 """Compare the fresh deterministic control and numeric-delta runs."""
 
+import hashlib
+import json
 from pathlib import Path
 
 from scripts.range_generalization import sha, write
 from scripts.report_spatial_curve import read
+
+
+def compact_config(config):
+    """Keep ID order provenance without duplicating the full local config in Git."""
+
+    def summary(ids):
+        payload = json.dumps(ids, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        return dict(count=len(ids), order_sha256=hashlib.sha256(payload).hexdigest())
+
+    result = dict(config)
+    result["train_ids"] = summary(config["train_ids"])
+    result["validation_ids"] = [summary(ids) for ids in config["validation_ids"]]
+    return result
 
 
 def verify_pair(control, candidate):
@@ -62,7 +77,7 @@ def main():
             result=result,
             parent_result=parent_result,
             paired_comparisons=paired,
-            config=config,
+            config_summary=compact_config(config),
             history=history,
             control_history=old,
             control_best=oldbest["step"],
@@ -80,6 +95,7 @@ def main():
         "Only additional trainable scope is 343 numeric embedding deltas / 131,712 parameters.",
         "Both total 22,845,313; trainable control 10,647,169 vs numeric 10,778,881.",
         "No new audit/transfer evaluation. Historical nondeterministic runs are separate.",
+        "Full configs stay immutable locally; ID lists in Git use counts and order SHA-256.",
         "",
         "| Run | Step | Selector | Original Acc | Original NLL | Curriculum Acc | Curriculum NLL |",
         "|---|---:|---:|---:|---:|---:|---:|",

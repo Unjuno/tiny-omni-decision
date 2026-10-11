@@ -37,3 +37,17 @@ def test_pair_rejects_unplanned_data_or_training_changes():
             verify_pair(control, dict(numeric, **{key: value}))
     with pytest.raises(ValueError):
         verify_pair(numeric, control)
+
+
+def test_compact_config_retains_order_provenance_without_mutation():
+    from scripts.report_numeric_deterministic import compact_config
+
+    config = dict(seed=17, train_ids=["a", "b"], validation_ids=[["v1"], ["v2"]])
+    before = deepcopy(config)
+    result = compact_config(config)
+    assert config == before
+    assert result["train_ids"]["count"] == 2
+    assert result["validation_ids"][0]["count"] == 1
+    assert len(result["train_ids"]["order_sha256"]) == 64
+    reversed_config = dict(config, train_ids=["b", "a"])
+    assert result["train_ids"] != compact_config(reversed_config)["train_ids"]

@@ -7,6 +7,7 @@ Original encoder-coverage warm start has inherited training; no exact optimizer 
 Only additional trainable scope is 343 numeric embedding deltas / 131,712 parameters.
 Both total 22,845,313; trainable control 10,647,169 vs numeric 10,778,881.
 No new audit/transfer evaluation. Historical nondeterministic runs are separate.
+Full configs stay immutable locally; ID lists in Git use counts and order SHA-256.
 
 | Run | Step | Selector | Original Acc | Original NLL | Curriculum Acc | Curriculum NLL |
 |---|---:|---:|---:|---:|---:|---:|
