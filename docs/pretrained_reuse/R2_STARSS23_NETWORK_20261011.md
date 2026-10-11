@@ -35,3 +35,19 @@ disk budget. The network workaround does not itself establish capacity or
 complete the media acquisition. At this record's creation, permission to stop
 the pending preflight had been requested and no replacement acquisition was
 started.
+
+## Downstream integrity gate
+
+Before feature extraction from a completed acquisition, run:
+
+```powershell
+python -m scripts.verify_starss23_acquisition --progress <completed-output>/progress.json --splits docs/pretrained_reuse/starss23-splits-v1 --summary docs/pretrained_reuse/R2_STARSS23_SPLITS_20261011.json
+```
+
+This rejects INDEXING/FETCHING/FAIL/PREFLIGHT_PASS outputs, changed summary
+hashes, incomplete recording sets, wrong room/split/source identity, missing
+audio/video, byte-size or SHA mismatches and identical underlying media reused
+under different recording IDs. It checks the exact frozen set, not only a
+reported count. Eight CPU tests cover successful paired input and rejection
+paths. This guard has not certified the real 78-recording dataset yet because
+the acquisition is still incomplete.
