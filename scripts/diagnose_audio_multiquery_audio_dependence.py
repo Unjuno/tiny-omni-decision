@@ -43,7 +43,9 @@ def _args() -> argparse.Namespace:
         "--config", type=Path, default=Path("configs/pretrained_reuse/path_a_audio_multiquery.yaml")
     )
     parser.add_argument(
-        "--run-dir", type=Path, default=Path("C:/CodexArtifacts/pretrained-reuse-r2/audio-multiquery-v0")
+        "--run-dir",
+        type=Path,
+        default=Path("C:/CodexArtifacts/pretrained-reuse-r2/audio-multiquery-v0"),
     )
     parser.add_argument(
         "--cache-dir",
@@ -218,7 +220,10 @@ def _bootstrap_differences(
                 "mean_difference": sum(samples) / replicates,
             }
     return {
-        "unit": "speaker_group_sha256 cluster; all clips and four queries retained per sampled speaker",
+        "unit": (
+            "speaker_group_sha256 cluster; all clips and four queries retained "
+            "per sampled speaker"
+        ),
         "speaker_clusters": len({str(row["speaker_group_sha256"]) for row in rows}),
         "replicates": replicates,
         "seed": seed,
@@ -268,7 +273,10 @@ def main() -> None:
     cache_report = json.loads(cache_report_path.read_text(encoding="utf-8"))
     if report.get("status") != "complete_frozen_audio_multiquery_development_experiment":
         raise ValueError("source run is not a completed frozen multi-query experiment")
-    if report.get("sealed_audit_loaded") is not False or report.get("test_split_loaded") is not False:
+    if (
+        report.get("sealed_audit_loaded") is not False
+        or report.get("test_split_loaded") is not False
+    ):
         raise ValueError("source run indicates forbidden test or sealed-audit use")
     expected_hashes = {
         config_path: report["config_sha256"],
@@ -309,7 +317,9 @@ def main() -> None:
     if source_features.get("validation_ids") != [str(row["id"]) for row in validation_rows]:
         raise ValueError("frozen audio feature-cache validation ID order changed")
     original_audio = source_features["validation_features"].float().contiguous()
-    if original_audio.shape != (len(validation_rows), 384) or not torch.isfinite(original_audio).all():
+    if original_audio.shape != (len(validation_rows), 384) or not torch.isfinite(
+        original_audio
+    ).all():
         raise ValueError("frozen validation audio feature matrix has an invalid shape or value")
 
     cache_rows = _jsonl(cache_manifest_path)
@@ -354,7 +364,9 @@ def main() -> None:
         raise ValueError("frozen train and validation data have speaker or media overlap")
 
     text_vectors, text_parameter_count = _encode_texts(
-        sorted(_text_payloads()), Path(config["encoder"]["text_model_path"]).resolve(), torch.device("cpu")
+        sorted(_text_payloads()),
+        Path(config["encoder"]["text_model_path"]).resolve(),
+        torch.device("cpu"),
     )
     if text_parameter_count != int(config["encoder"]["text_parameters"]):
         raise ValueError("pinned MiniLM parameter count changed")
@@ -365,7 +377,10 @@ def main() -> None:
     expected_ids = [(row["id"], task) for row in validation_rows for task in QUESTION_TASKS]
     actual_ids = [(item["sample_id"], item["question_type"]) for item in expected_predictions]
     if actual_ids != expected_ids:
-        raise ValueError("saved baseline prediction identity/order differs from validation query order")
+        raise ValueError(
+            "saved baseline prediction identity/order differs "
+            "from validation query order"
+        )
 
     permutation = _derangement(len(validation_rows), args.seed)
     shuffled_audio = audio[permutation]
@@ -406,10 +421,13 @@ def main() -> None:
                     )
                     delta = abs(float(actual_metric) - float(expected_metric))
                     if delta > 2e-5:
-                        raise ValueError(f"baseline metric parity failed for {group}.{metric}: {delta}")
+                        raise ValueError(
+                            f"baseline metric parity failed for {group}.{metric}: {delta}"
+                        )
             if max_logit_delta > 2e-5 or max_probability_delta > 2e-6:
                 raise ValueError(
-                    f"saved baseline predictions did not reload within tolerance: {max_logit_delta}, {max_probability_delta}"
+                    "saved baseline predictions did not reload within tolerance: "
+                    f"{max_logit_delta}, {max_probability_delta}"
                 )
     predictions_by_condition = {
         name: _prediction_tensors(validation_rows, predictions)
@@ -422,7 +440,10 @@ def main() -> None:
         keyed = {(item["sample_id"], item["question_type"]): item for item in predictions}
         for task in QUESTION_TASKS:
             task_predictions = [keyed[(str(row["id"]), task)] for row in validation_rows]
-            logits = [torch.tensor(item["logits"], dtype=torch.float32) for item in task_predictions]
+            logits = [
+                torch.tensor(item["logits"], dtype=torch.float32)
+                for item in task_predictions
+            ]
             targets = [int(item["target_index"]) for item in task_predictions]
             from scripts.train_frozen_text_probe import _metrics
 
@@ -430,8 +451,13 @@ def main() -> None:
         metrics_by_condition[name] = {
             "by_question_type": by_task,
             "macro_question_type": _macro_metrics(
-                {task: {key: float(by_task[task][key]) for key in ("accuracy", "nll", "brier", "ece_15_bins")}
-                 for task in QUESTION_TASKS}
+                {
+                    task: {
+                        key: float(by_task[task][key])
+                        for key in ("accuracy", "nll", "brier", "ece_15_bins")
+                    }
+                    for task in QUESTION_TASKS
+                }
             ),
             "prediction_sha256": None,
         }
@@ -451,7 +477,10 @@ def main() -> None:
     for name, (_, predictions) in conditions.items():
         path = output / f"{name}-predictions.jsonl"
         path.write_text(
-            "".join(json.dumps(item, sort_keys=True, ensure_ascii=False) + "\n" for item in predictions),
+            "".join(
+                json.dumps(item, sort_keys=True, ensure_ascii=False) + "\n"
+                for item in predictions
+            ),
             encoding="utf-8",
         )
         digest = sha256_file(path)
@@ -526,8 +555,12 @@ def main() -> None:
             "saved_prediction_order_matches_validation": True,
         },
         "conditions": {
-            "original_audio": "Original Whisper feature for each clip; unchanged text/query construction.",
-            "zero_audio": "Zero the 384D audio feature before rebuilding all audio-dependent pair terms.",
+            "original_audio": (
+                "Original Whisper feature for each clip; unchanged text/query construction."
+            ),
+            "zero_audio": (
+                "Zero the 384D audio feature before rebuilding all audio-dependent pair terms."
+            ),
             "shuffled_other_clip_audio": (
                 "Replace each clip feature with a different validation clip's Whisper feature; "
                 "one seeded derangement is shared across all four query types."
@@ -544,10 +577,23 @@ def main() -> None:
         "paired_cluster_bootstrap": bootstrap,
         "evaluation_seconds": evaluation_seconds,
         "interpretation_limitations": [
-            "The same development validation was used to select the saved readout; this post-hoc diagnostic is not a blind or independent evaluation.",
-            "Speech Commands is a narrow closed-set keyword task; results do not establish general speech understanding or synchronized audio-video fusion.",
-            "Zeroing or shuffling audio tests dependence of this fixed readout on the cached audio feature, not causal modality quality in a jointly trained model.",
-            "Cluster bootstrap resamples validation speakers; with only the available speaker groups it is an uncertainty diagnostic, not a replacement for new held-out data.",
+            (
+                "The same development validation was used to select the saved readout; "
+                "this post-hoc diagnostic is not a blind or independent evaluation."
+            ),
+            (
+                "Speech Commands is a narrow closed-set keyword task; results do not establish "
+                "general speech understanding or synchronized audio-video fusion."
+            ),
+            (
+                "Zeroing or shuffling audio tests dependence of this fixed readout on the cached "
+                "audio feature, not causal modality quality in a jointly trained model."
+            ),
+            (
+                "Cluster bootstrap resamples validation speakers; with only the available "
+                "speaker groups it is an uncertainty diagnostic, not a replacement for new "
+                "held-out data."
+            ),
         ],
         "training_performed": False,
         "sealed_audit_loaded": False,
