@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import pytest
-import torch
 
-from tiny_omni_decision.text_runtime import candidate_features
+torch = pytest.importorskip("torch", reason="optional Path A model-evaluation dependency")
+pytest.importorskip("transformers", reason="optional Path A model-evaluation dependency")
+
+from tiny_omni_decision.text_runtime import candidate_features  # noqa: E402
 
 
 def test_candidate_features_preserve_supplied_option_count_and_shape() -> None:
