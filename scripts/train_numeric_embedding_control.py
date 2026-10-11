@@ -344,6 +344,22 @@ def main():
             "total_count": sum(p.numel() for p in model.parameters()),
         },
     )
+    import os
+
+    write(
+        "runtime-reproducibility.json",
+        {
+            "torch": torch.__version__,
+            "cuda": torch.version.cuda,
+            "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+            "cudnn_deterministic": torch.backends.cudnn.deterministic,
+            "cudnn_benchmark": torch.backends.cudnn.benchmark,
+            "cublas_workspace": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+            "attention_backend": model.config._attn_implementation,
+            "matmul_precision": torch.get_float32_matmul_precision(),
+            "allow_tf32": torch.backends.cuda.matmul.allow_tf32,
+        },
+    )
     before = frozen_hash(model)
     optimizer = torch.optim.AdamW(parameters, lr=2e-5, weight_decay=0.01)
 
@@ -428,7 +444,25 @@ def main():
             "elapsed_seconds": time.perf_counter() - started,
         }
         if prefix_history is not None and step <= 512:
-            require_numeric_prefix(record, prefix_history[step // 128])
+            expected_record = prefix_history[step // 128]
+            try:
+                require_numeric_prefix(record, expected_record)
+            except ValueError:
+                write(
+                    "prefix-failure.json",
+                    {
+                        "step": step,
+                        "actual": record,
+                        "expected": expected_record,
+                        "differing_top_level_fields": [
+                            k
+                            for k in set(record) | set(expected_record)
+                            if k not in {"elapsed_seconds", "evaluation_seconds"}
+                            and record.get(k) != expected_record.get(k)
+                        ],
+                    },
+                )
+                raise
         history.append(record)
         write("history.json", history)
         print(
