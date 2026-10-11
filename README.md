@@ -224,3 +224,10 @@ predeclared new transfer set, selected-model Accuracy24.27% versus prior30.66%;
 the confidence loss improved but useful reasoning did not. Original curriculum
 Accuracy fell80.57%→24.51% at the same budget. No promotion or95%claim. See
 [fixed-budget range experiment](docs/pretrained_reuse/R2_NUMERIC_RANGE_20261012.md).
+
+
+The learned-initialization numeric-range control completed2,048updates: selected
+narrow-curriculum validation82.23%, final expanded-range training fit83.50%,
+with worse original-text NLL/calibration and extra inherited compute. No new
+transfer/audit or multimodal quality claim. See
+[record](docs/pretrained_reuse/R2_RANGE_WARMSTART_20261012.md).

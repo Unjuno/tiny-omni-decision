@@ -11,6 +11,7 @@ commits and failures remain in individual reports. All use seed17; no seed searc
 | conditional-repair-full-coverage-01 | 2048 | 1774849 | 768 | 0.57953 | 0.23291 | 884.7 |
 | conditional-repair-encoder-coverage-01 | 2048 | 10647169 | 2048 | 0.60236 | 0.80566 | 1141.0 |
 | conditional-repair-numeric-range-01 | 2048 | 10647169 | 2048 | 0.61024 | 0.24512 | 1119.3 |
+| conditional-repair-range-warmstart-01 | 2048 | 10647169 | 1408 | 0.60315 | 0.82227 | 1122.3 |
 
 ## Findings that constrain the next action
 
@@ -28,7 +29,8 @@ commits and failures remain in individual reports. All use seed17; no seed searc
   two-token values. Magnitude and vocabulary also changed: this is a clue, not a
   causal diagnosis or proof a larger model is needed.
 
-The active learned-initialization control is excluded from completed totals.
+The learned-initialization control completed; final expanded-range training fit83.50%,
+selected narrow validation82.23%, with worsened original-text NLL/calibration.
 It adds prior training exposure; do not describe it as equal-total-compute.
 No final audit, modality-wide95% result, compression or product promotion exists.
 Text is one unresolved prerequisite; image/audio/video general reasoning and

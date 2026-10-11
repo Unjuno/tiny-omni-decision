@@ -445,3 +445,10 @@ This is a measured representation change, not proof of causation. Before increas
 model size, assess reuse of the learned narrow-format checkpoint under a separately
 budgeted, validation-selected wide-range run. See
 [contextual token audit](docs/pretrained_reuse/R2_NUMERIC_TOKENIZATION_20261012.md).
+
+
+The learned-initialization numeric-range control completed2,048updates: selected
+narrow-curriculum validation82.23%, final expanded-range training fit83.50%,
+with worse original-text NLL/calibration and extra inherited compute. No new
+transfer/audit or multimodal quality claim. See
+[record](docs/pretrained_reuse/R2_RANGE_WARMSTART_20261012.md).
