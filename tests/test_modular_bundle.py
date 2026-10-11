@@ -109,3 +109,55 @@ def test_verifier_rejects_accounting_and_component_path_tampering(tmp_path: Path
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     with pytest.raises(ValueError, match="component manifest contains a path outside"):
         verify_modular_bundle(output)
+
+
+def test_shared_task_reuses_model_file_without_copying_it(tmp_path: Path) -> None:
+    audio = tmp_path / "audio-source"
+    _write_component(audio, "audio-v0", "models/text-minilm-en/model.safetensors", b"model")
+    text_readout = tmp_path / "text-readout.pt"
+    text_readout.write_bytes(b"readout")
+    runtime_module = tmp_path / "text_runtime.py"
+    runtime_module.write_text("# runtime\n", encoding="utf-8")
+    model_hash = hashlib.sha256(b"model").hexdigest()
+    readout_hash = hashlib.sha256(b"readout").hexdigest()
+    output = tmp_path / "assembled"
+
+    manifest = assemble_modular_bundle(
+        {"audio": audio},
+        output,
+        source_commit="abc123",
+        shared_tasks={
+            "text": {
+                "task_id": "typed-text-v0",
+                "scope": "synthetic text only",
+                "source_report_sha256": "a" * 64,
+                "shared_assets": [
+                    {
+                        "name": "minilm",
+                        "path": "components/audio/models/text-minilm-en",
+                        "weights_sha256": model_hash,
+                        "parameters": 7,
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "readout",
+                        "identity": readout_hash,
+                        "parameters": 3,
+                        "path": "readout/head.pt",
+                    }
+                ],
+                "files": {
+                    "readout/head.pt": text_readout,
+                    "runtime/text_runtime.py": runtime_module,
+                },
+            }
+        },
+    )
+
+    assert manifest["has_standalone_text_task"] is True
+    assert manifest["has_temporal_video_task"] is False
+    assert manifest["unique_runtime_parameters"] == 13
+    assert manifest["component_parameter_sum"] == 20
+    assert len(list(output.rglob("model.safetensors"))) == 1
+    assert verify_modular_bundle(output)["component_count"] == 2
