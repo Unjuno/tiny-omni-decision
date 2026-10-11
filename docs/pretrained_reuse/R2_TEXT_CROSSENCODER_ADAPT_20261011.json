@@ -1,0 +1,243 @@
+{
+  "source_commit": "a98df3a",
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-crossencoder-adapt-v1",
+  "config": {
+    "seed": 17,
+    "epochs": 3,
+    "batch_questions": 8,
+    "lr": 2e-05,
+    "weight_decay": 0.01,
+    "gradient_clip": 1.0,
+    "dropout": "disabled in all modules",
+    "scheduler": "constant",
+    "trainable_names": [
+      "bert.encoder.layer.5.attention.self.query.weight",
+      "bert.encoder.layer.5.attention.self.query.bias",
+      "bert.encoder.layer.5.attention.self.key.weight",
+      "bert.encoder.layer.5.attention.self.key.bias",
+      "bert.encoder.layer.5.attention.self.value.weight",
+      "bert.encoder.layer.5.attention.self.value.bias",
+      "bert.encoder.layer.5.attention.output.dense.weight",
+      "bert.encoder.layer.5.attention.output.dense.bias",
+      "bert.encoder.layer.5.attention.output.LayerNorm.weight",
+      "bert.encoder.layer.5.attention.output.LayerNorm.bias",
+      "bert.encoder.layer.5.intermediate.dense.weight",
+      "bert.encoder.layer.5.intermediate.dense.bias",
+      "bert.encoder.layer.5.output.dense.weight",
+      "bert.encoder.layer.5.output.dense.bias",
+      "bert.encoder.layer.5.output.LayerNorm.weight",
+      "bert.encoder.layer.5.output.LayerNorm.bias",
+      "classifier.weight",
+      "classifier.bias"
+    ],
+    "trainable_parameters": 1774849,
+    "total_parameters": 22713601,
+    "argv": [
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\train_text_crossencoder.py",
+      "--model",
+      "C:/CodexArtifacts/pretrained-reuse-r1/crossencoder-minilm-l6-audit-01/model",
+      "--train",
+      "C:/CodexArtifacts/pretrained-reuse-r2/text/train.jsonl",
+      "--validation",
+      "C:/CodexArtifacts/pretrained-reuse-r2/text/validation.jsonl",
+      "--manifest",
+      "manifests/dataset.example.yaml",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/text-crossencoder-adapt-v1"
+    ],
+    "device": "cuda",
+    "smoke": false,
+    "runner_sha256": "a6bfeeaeae1d55955ce31b4147896663679316326dc63baac0d1faa38e93311f",
+    "torch": "2.6.0+cu124",
+    "hashes": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\model.safetensors": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8"
+    }
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "step": 2915,
+      "rolling_train_ce": 1.0082688050898052,
+      "validation": {
+        "count": 2540,
+        "accuracy": 0.5456693172454834,
+        "nll": 0.9731683731079102,
+        "brier": 0.5538114309310913,
+        "ece_15_bins": 0.042246385587482005,
+        "ece_bin_counts": [
+          0,
+          0,
+          2,
+          64,
+          222,
+          281,
+          254,
+          301,
+          379,
+          286,
+          239,
+          174,
+          132,
+          109,
+          97
+        ]
+      },
+      "last_gradient_norm": 0.7125600576400757
+    },
+    {
+      "epoch": 2,
+      "step": 5830,
+      "rolling_train_ce": 0.9525446782359956,
+      "validation": {
+        "count": 2540,
+        "accuracy": 0.5677165389060974,
+        "nll": 0.9461439251899719,
+        "brier": 0.5388451218605042,
+        "ece_15_bins": 0.036240497777077156,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          45,
+          168,
+          262,
+          238,
+          300,
+          353,
+          334,
+          262,
+          180,
+          153,
+          116,
+          129
+        ]
+      },
+      "last_gradient_norm": 1.904205322265625
+    },
+    {
+      "epoch": 3,
+      "step": 8745,
+      "rolling_train_ce": 0.9344635170336996,
+      "validation": {
+        "count": 2540,
+        "accuracy": 0.5811023712158203,
+        "nll": 0.9377868175506592,
+        "brier": 0.5343148112297058,
+        "ece_15_bins": 0.04276003085487472,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          34,
+          144,
+          249,
+          253,
+          284,
+          344,
+          321,
+          282,
+          197,
+          150,
+          140,
+          142
+        ]
+      },
+      "last_gradient_norm": 2.292975664138794
+    }
+  ],
+  "result": {
+    "status": "PASS",
+    "smoke": false,
+    "best_epoch": 3,
+    "metrics": {
+      "count": 2540,
+      "accuracy": 0.5811023712158203,
+      "nll": 0.9377868175506592,
+      "brier": 0.5343148112297058,
+      "ece_15_bins": 0.04276003085487472,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        34,
+        144,
+        249,
+        253,
+        284,
+        344,
+        321,
+        282,
+        197,
+        150,
+        140,
+        142
+      ]
+    },
+    "frozen_sha256": "8c282b2fcbc6bc9c30c621995dda629f7a0df4d90f2a1e168b0a38251602aaa2",
+    "steps": 8745,
+    "seconds": 1311.2170335000847,
+    "best_sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+    "peak_vram_bytes": 834455552
+  },
+  "accounting": {
+    "unique_train_questions": 23319,
+    "unique_train_states": 6682,
+    "total_question_consumptions": 69957,
+    "selected_checkpoint_question_consumptions": 69957,
+    "validation_questions": 2540,
+    "validation_states": 732
+  },
+  "artifact_inventory": {
+    "config.json": {
+      "sha256": "ebf29de7f044598119ff50db38538980809ce6e12fa38b7e1284efbaa5a0bd7c",
+      "bytes": 2370,
+      "modified_utc": "2026-10-11T14:38:44.098593+00:00"
+    },
+    "history.json": {
+      "sha256": "07345d1de0cefb6f248dbca7f16f2f62f8381775edfed092824866d860d7292e",
+      "bytes": 1741,
+      "modified_utc": "2026-10-11T14:59:44.783951+00:00"
+    },
+    "result.json": {
+      "sha256": "77d0ff79427fd6da6f468a9f2a1254a3baaa732371a618ab6c5103bdb97aeac2",
+      "bytes": 714,
+      "modified_utc": "2026-10-11T15:00:35.323039+00:00"
+    },
+    "predictions.json": {
+      "sha256": "2abd122adba3fbf9161d76d0546f230cf5c760fa7f50046eb5ff0f956e64d6c4",
+      "bytes": 1347409,
+      "modified_utc": "2026-10-11T15:00:35.219785+00:00"
+    },
+    "best-delta.pt": {
+      "sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+      "bytes": 7105634,
+      "modified_utc": "2026-10-11T14:59:44.782963+00:00"
+    },
+    "final-delta.pt": {
+      "sha256": "3841bd3ca7b66d9da53d6e620fbf46e5939b699f68266e6c05bdd1853ae33850",
+      "bytes": 7105656,
+      "modified_utc": "2026-10-11T14:59:44.790964+00:00"
+    },
+    "train-inputs.json": {
+      "sha256": "2356e3b6b238610092df5db9c785bab1b13e9033a83ca33dddca441ee184526a",
+      "bytes": 1652378,
+      "modified_utc": "2026-10-11T14:38:40.062838+00:00"
+    },
+    "validation-inputs.json": {
+      "sha256": "f6328e02dbe9aede6f8950d3ff4b9c5fb4231c78380ab3723eacc8b42b6cd50e",
+      "bytes": 179714,
+      "modified_utc": "2026-10-11T14:38:43.196212+00:00"
+    }
+  },
+  "best_final_tensor_equality": true,
+  "limitations": [
+    "One seed, observed synthetic English validation used for selection; not blind evaluation.",
+    "Rolling train CE is not a fixed-sample generalization gap.",
+    "Third epoch still improves NLL; no plateau established and no further training authorized.",
+    "ECE worsens from epoch 2 to 3.",
+    "No optimizer state: not exact resume.",
+    "Reported seconds exclude model loading and tokenization; no separate evaluation-time instrumentation."
+  ]
+}

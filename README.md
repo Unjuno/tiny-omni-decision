@@ -163,3 +163,13 @@ gate. Two validation rooms, class imbalance and event-specific losses limit
 interpretation. See [STARSS23 comparison](docs/pretrained_reuse/R2_STARSS23_COMPARISON_20261011.md)
 for metrics, curves, controls and artifact hashes. No product promotion,
 compression, additional seed or sealed evaluation followed.
+
+### Bounded text adaptation result (2026-10-12)
+
+Approved final-block adaptation of a 22.7M Cross-Encoder completed three epochs.
+On the same 2,540 development questions, Accuracy rose from zero-shot 45.98%
+to 58.11%, with NLL 1.19869 -> 0.93779. Only 1.775M existing parameters were
+updated; frozen hashes and best reload checks passed. Calibration worsened
+slightly in the last epoch. This is synthetic English text evidence, not an
+Omni quality or quantized deployment result. See
+[bounded adaptation report](docs/pretrained_reuse/R2_TEXT_CROSSENCODER_ADAPT_20261011.md).
