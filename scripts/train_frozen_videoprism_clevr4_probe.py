@@ -383,7 +383,21 @@ def main() -> None:
     if best_state is None:
         raise RuntimeError("checkpoint selection failed to produce a readout")
     scorer.load_state_dict(best_state)
+    before_reload_logits = _predict(scorer, selection_tasks, device)
+    output.mkdir(parents=True, exist_ok=False)
+    readout_path = output / "best-readout.pt"
+    torch.save(best_state, readout_path)
+    saved_state = torch.load(readout_path, map_location=device, weights_only=True)
+    scorer.load_state_dict(saved_state)
     final_selection_logits = _predict(scorer, selection_tasks, device)
+    reload_max_logit_delta = max(
+        float((before - after).abs().max())
+        for before, after in zip(before_reload_logits, final_selection_logits, strict=True)
+    )
+    if reload_max_logit_delta > 1e-7:
+        raise ValueError(
+            f"saved/reloaded readout predictions differ by {reload_max_logit_delta:.3g}"
+        )
     selected_metrics = _quality_metrics(final_selection_logits, selection_targets)
     selected_by_taxonomy = _taxonomy_metrics(
         final_selection_logits, selection_targets, selection_types
@@ -401,9 +415,6 @@ def main() -> None:
     holdout_metrics = _quality_metrics(holdout_logits, holdout_targets)
     holdout_by_taxonomy = _taxonomy_metrics(holdout_logits, holdout_targets, holdout_types)
 
-    output.mkdir(parents=True, exist_ok=False)
-    readout_path = output / "best-readout.pt"
-    torch.save(best_state, readout_path)
     prediction_sets = (
         (
             "checkpoint-selection-predictions.jsonl",
@@ -480,6 +491,8 @@ def main() -> None:
         "history": history,
         "best_epoch": best_epoch,
         "checkpoint_selection_rule": "minimum NLL on prior 512-image validation subset",
+        "best_reload_max_logit_delta": reload_max_logit_delta,
+        "best_reload_check_passed": True,
         "checkpoint_selection_metrics": selected_metrics,
         "checkpoint_selection_by_taxonomy": selected_by_taxonomy,
         "one_time_reporting_validation_metrics": holdout_metrics,
