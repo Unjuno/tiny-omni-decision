@@ -110,6 +110,8 @@ def _extract_split(
     media_hashes: list[str] = []
     batch_seconds: list[float] = []
     padded_count = 0
+    extraction_started = time.perf_counter()
+    batch_count = (len(rows) + batch_size - 1) // batch_size
     for start in range(0, len(rows), batch_size):
         current = rows[start : start + batch_size]
         videos = []
@@ -147,6 +149,24 @@ def _extract_split(
         if pooled.shape != (len(current), 768) or not np.isfinite(pooled).all():
             raise ValueError(f"invalid VideoPrism features for {split} batch at {start}")
         features.append(pooled)
+        completed_batches = start // batch_size + 1
+        if completed_batches % 100 == 0 or completed_batches == batch_count:
+            elapsed = time.perf_counter() - extraction_started
+            print(
+                json.dumps(
+                    {
+                        "event": "feature_extraction_progress",
+                        "split": split,
+                        "completed_images": len(ids),
+                        "total_images": len(rows),
+                        "completed_batches": completed_batches,
+                        "total_batches": batch_count,
+                        "elapsed_seconds": elapsed,
+                        "images_per_second": len(ids) / elapsed if elapsed else None,
+                    }
+                ),
+                flush=True,
+            )
     if len(ids) != len(rows):
         raise AssertionError("feature rows do not cover split IDs")
     return ids, media_hashes, np.concatenate(features), batch_seconds, padded_count
