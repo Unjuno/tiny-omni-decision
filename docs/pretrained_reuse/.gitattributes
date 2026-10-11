@@ -1,0 +1,2 @@
+# Preserve audited artifact bytes, including the recorded line endings.
+R2_STARSS23*.json -text

@@ -83,3 +83,17 @@ python -m scripts.train_starss23_readouts --manifest-dir <complete-window-manife
 
 No STARSS23 model fitting, validation-score inspection, or product promotion
 has occurred at this implementation checkpoint.
+
+## Artifact byte-preservation correction
+
+A later pre-execution audit found Git text normalization changed the archived
+JSON bytes: the local split-summary hash was the registered `209423b7...`, but
+the earlier Git blob hash was `a3fe5477...`. Likewise the local window-result
+hash was `7ed1bf59...` while its earlier Git blob hash was `bdde815b...`.
+The JSON contents were equivalent, but an exact provenance check on another
+checkout would fail. `docs/pretrained_reuse/.gitattributes` now disables text
+normalization for `R2_STARSS23*.json`, and the original local artifact bytes
+are committed unchanged. Split JSONL files retain their separate LF rule.
+Regression tests check the actual split-summary hash against preregistration
+and the original window-result hash. No recorded hash, split, model setting,
+external artifact or active acquisition process was changed to bypass a gate.
