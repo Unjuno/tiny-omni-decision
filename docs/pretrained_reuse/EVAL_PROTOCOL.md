@@ -17,6 +17,15 @@ Initial source tasks, only under the existing project source policy:
 
 No approved synchronized audio-video decision source is present in the current project manifests. Therefore do not claim joint audio-video reasoning from these separate unimodal tasks. A read-only screen of VGG-Sound found a task-relevant audiovisual candidate, but it is **not approved for this project**: the official site says clips come from YouTube, says original video copyright remains with the original owners, and says its download links are no longer available. Its CC BY 4.0 notice for the dataset does not by itself establish rights to retrieve and use the underlying audiovisual clips for model training. The official privacy notice also records that subjects cannot be notified individually and provides a removal contact. No VGG-Sound files were fetched or added to any manifest. Reconsider only after the exact media retrieval and training rights are established and the content is locally obtainable through an authorized route. Sources: [official VGG-Sound page](https://www.robots.ox.ac.uk/~vgg/data/vggsound/) and [VGG dataset privacy notice](https://www.robots.ox.ac.uk/~vgg/terms/url-lists-privacy-notice.html). Sensor input has no approved dataset or checkpoint in this inventory and remains untested.
 
+### Source-screen follow-up (2026-10-11)
+
+The inventory paragraph above describes the initial protocol state. A subsequent
+official STARSS23 MIT source audit and bounded paired-media probe are recorded
+in `R2_STARSS23_SOURCE_20261011.md`. This provides a synchronized AV candidate;
+it does not yet define an approved normalized Decision task or demonstrate
+joint quality. Sensor checkpoint loading has also since been exercised in
+`R1_MOMENT_SENSOR_20261011.md`; sensor task quality remains unmeasured.
+
 ## Split isolation
 
 - Freeze exact source revisions and hashes before normalization.
