@@ -174,7 +174,7 @@ def make_transcript_record(
 def multiset_dice_similarity(left: tuple[str, ...], right: tuple[str, ...]) -> float:
     """Cheap phoneme-bigram similarity used to audit selected-vs-random hardness."""
     def bigrams(sequence: tuple[str, ...]) -> Counter[tuple[str, str]]:
-        return Counter(zip(sequence, sequence[1:]))
+        return Counter(zip(sequence, sequence[1:], strict=False))
 
     left_counts = bigrams(left)
     right_counts = bigrams(right)
