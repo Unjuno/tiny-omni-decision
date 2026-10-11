@@ -20,3 +20,14 @@ def test_grid_rejects_wrong_shape_and_nonfinite():
     values[0, 0, 0] = np.nan
     with pytest.raises(ValueError):
         token_grid(values)
+
+
+def test_tensorflow_module_version_does_not_require_distribution_alias(monkeypatch):
+    from scripts.audit_videoprism_tokens import environment_versions
+
+    def version(name):
+        assert name != "tensorflow"
+        return "test-version"
+
+    monkeypatch.setattr("importlib.metadata.version", version)
+    assert environment_versions("2.20.0")["tensorflow"] == "2.20.0"

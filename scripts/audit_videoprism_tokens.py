@@ -30,6 +30,13 @@ def write(path, value):
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
+def environment_versions(tensorflow_version):
+    # Windows may install tensorflow-cpu rather than a distribution named tensorflow.
+    return {p: importlib.metadata.version(p) for p in ["jax", "jaxlib", "numpy", "av"]} | {
+        "tensorflow": tensorflow_version
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ["sample-dir", "cache", "checkpoint", "source-root", "output"]:
@@ -159,10 +166,7 @@ def main():
             memory=process.memory_info()._asdict(),
             devices=[str(d) for d in jax.devices()],
             backend=jax.default_backend(),
-            versions={
-                p: importlib.metadata.version(p)
-                for p in ["jax", "jaxlib", "tensorflow", "numpy", "av"]
-            },
+            versions=environment_versions(tf.__version__),
             projected456_scene_array_bytes=456 * records[0]["array_bytes"],
             projected456_scene_npy_bytes=456 * records[0]["file_bytes"],
             free_disk_bytes=shutil.disk_usage(args.output).free,
