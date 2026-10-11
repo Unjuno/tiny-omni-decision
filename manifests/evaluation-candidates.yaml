@@ -11,6 +11,9 @@ sources:
   - manifest: candidates/speech-commands-test.yaml
     include: true
     adapter: speech-commands
+  - manifest: candidates/librispeech-dev-clean.yaml
+    include: true
+    adapter: librispeech-hard-negatives
   - manifest: candidates/clevrer-validation.yaml
     include: true
     adapter: clevrer
