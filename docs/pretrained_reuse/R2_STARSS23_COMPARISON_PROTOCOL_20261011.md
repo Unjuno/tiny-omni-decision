@@ -60,3 +60,26 @@ label-independent cross-recording permutation. CPU tests cover marginal
 preservation, deterministic mapping, impossible controls, absent-class
 handling, Brier normalization and invalid probabilities. These helpers passing
 tests is not evidence that the planned training/evaluation has run.
+
+## Executable runner (real-corpus execution pending)
+
+`scripts/train_starss23_readouts.py` implements this fixed policy. It rejects
+changed canonical config content, mismatched split-summary/manifest hashes,
+wrong encoder revisions, incomplete features and changed feature order/media
+identities. It saves normalization, effective config, input hashes, validation
+IDs, per-epoch history, separate best/final weights, raw/calibrated predictions,
+control predictions and paired room-bootstrap intervals. No resume or automatic
+hyperparameter retry is implemented.
+
+CPU tests use a small synthetic fixture to check train-only normalization,
+candidate identity, calibration search, identical-prediction bootstrap zero
+differences, and two epochs with best/final save and reload. This fixture is
+not a STARSS23 score. The full media acquisition and feature extraction must
+finish before running the following with real artifact paths:
+
+```powershell
+python -m scripts.train_starss23_readouts --manifest-dir <complete-window-manifest> --audio-features <complete-audio-features> --video-features <complete-video-features> --config configs/pretrained_reuse/path_a_starss23_events.yaml --output-dir <new-readout-output>
+```
+
+No STARSS23 model fitting, validation-score inspection, or product promotion
+has occurred at this implementation checkpoint.
