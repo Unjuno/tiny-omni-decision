@@ -152,6 +152,40 @@ Replay report SHA-256:
 Predictions SHA-256:
 `de1b00f04a65bc96dd6c105f8ab76f5f1db07aa3346d760ea7aacaf3d53cbfa2`.
 
+### One raw-video cross-environment smoke
+
+The single-video wrapper `scripts/verify_path_a_video_end_to_end.py` invokes
+`scripts/encode_path_a_video_feature.py` in the existing VideoPrism Python
+environment, then loads the packaged feature scorer in the Torch/CUDA
+environment. For the first existing development-validation item
+(`clevrer-validation-10005-q011-c000`, scene `10005`), it decoded the frozen
+video asset, sampled the same 8 frames, extracted the feature with the shared
+v4 VideoPrism checkpoint, and scored the candidate statement with the v4
+readout. It did not fetch or create data, train a model, or compute new quality
+metrics.
+
+| Measurement | Result |
+| --- | ---: |
+| VideoPrism feature max absolute delta vs frozen cache | `0.0` |
+| Decision vs saved validation prediction | match (index 0) |
+| Logit / probability max absolute delta vs saved prediction | `1.79e-7` / `1.19e-7` |
+| VideoPrism profile | Python 3.11.16, JAX 0.6.2, TensorFlow 2.18.1; CPU (`TFRT_CPU_0`) |
+| VideoPrism process time including model load | 6.782 s |
+| VideoPrism forward after model load | 6.234 s |
+| VideoPrism peak working set | 4,163,686,400 bytes |
+| Scorer profile | Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2; RTX 3080 Laptop GPU |
+| Scorer load / one-decision inference | 0.884 s / 0.235 s |
+| Scorer peak CUDA allocation | 81,750,016 bytes |
+| Total cold wrapper wall time | 11.908 s |
+
+This is one cold smoke measurement, not p50/p95, a warm steady-state result,
+or a user-facing latency claim. It shows the fixed feature extraction and
+scorer can be wired across the two existing environments. A reusable process
+dispatcher, resident-model accounting, repeated latency sampling, Audio and
+Image task routing, and joint audio-video inference remain unimplemented.
+Report SHA-256:
+`13ae4252c424aca30ab749fa36aab2453e48f262aebbfb52c21252d08dce3413`.
+
 `verify_modular_bundle` passed the complete v4 file/hash/path/accounting check.
 The v4 Video replay used the assembled MiniLM and Video readout files. Audio,
 Image and Text v3 relocation results remain valid for v4's identical component
