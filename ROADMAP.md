@@ -428,3 +428,11 @@ predeclared new transfer set, selected-model Accuracy24.27% versus prior30.66%;
 the confidence loss improved but useful reasoning did not. Original curriculum
 Accuracy fell80.57%→24.51% at the same budget. No promotion or95%claim. See
 [fixed-budget range experiment](docs/pretrained_reuse/R2_NUMERIC_RANGE_20261012.md).
+
+### Numeric training-fit diagnosis (2026-10-12)
+
+The selected wide-range model scores27.25% even on1,024consumed training questions;
+the narrow-range model scores82.32% on the same latent states with its own training
+values. This supports inadequate fit within the measured recipe, not just failed
+transfer; it does not identify a universal capacity ceiling. See
+[fixed training-fit diagnosis](docs/pretrained_reuse/R2_NUMERIC_TRAINING_FIT_20261012.md).

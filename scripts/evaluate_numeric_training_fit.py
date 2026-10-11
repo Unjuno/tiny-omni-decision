@@ -92,7 +92,9 @@ def main():
             "specs": specs,
             "runner_sha256": sha(Path(__file__)),
             "selection": False,
-            "limitation": "Each model sees its own training values; not same-input causal comparison.",
+            "limitation": (
+                "Each model sees its own training values; not same-input causal comparison."
+            ),
         },
     )
     torch.set_num_threads(4)
