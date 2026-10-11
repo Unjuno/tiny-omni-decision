@@ -38,6 +38,11 @@ def load_data(root):
     )
     original = {}
     for split in ["train", "validation"]:
+        kinds = {}
+        for line in (root / f"text/{split}.jsonl").read_text(encoding="utf-8").splitlines():
+            raw = json.loads(line)
+            for key, value in json.loads(raw["questions"]).items():
+                kinds[f"{raw['state_id']}:{key}"] = value["type"]
         loaded = _load_examples(
             root / f"text/{split}.jsonl", manifest.model_copy(update={"split": split}), True
         )
@@ -49,6 +54,8 @@ def load_data(root):
                 options=e.options,
                 target=e.target,
                 source="original",
+                task=kinds[e.source_record_id],
+                group=e.source_record_id.split(":")[0],
             )
             for e in loaded
         ]
