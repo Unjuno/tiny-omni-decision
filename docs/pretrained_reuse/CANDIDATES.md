@@ -50,3 +50,32 @@ The three executed towers total **210,132,751 parameters** and **840,565,708 res
 - [Google VideoPrism-B pinned Hub card](https://huggingface.co/google/videoprism-base-f16r288/tree/be719a406d563b66f0ac969e7c94bab8e997c81a), [official README](https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/README.md), [official license](https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/LICENSE)
 
 See [`R1_AUDIT.md`](R1_AUDIT.md) for local commands, hardware, output tensors and limitations.
+
+## Text candidate update (2026-10-12)
+
+The earlier table is a dated load audit. Subsequent task measurements supersede
+its "quality unmeasured" entries; they do not change pinned source rights.
+
+| Candidate | Loaded parameters | Evidence | Current disposition |
+|---|---:|---|---|
+| paraphrase-MiniLM-L3-v2, same pinned revision above | 17,389,824 plus196,865 readout | Criteria-preserving synthetic English validation Accuracy50.91%, NLL1.01490 | Frozen reference, not general conditional capability |
+| cross-encoder/ms-marco-MiniLM-L6-v2@233902d25c440f23af6f7d6e94d2946bac0bee0a | 22,713,601 including classifier | Same validation: zero-shot45.98%, selected three-epoch final-block adaptation58.11%;1,774,849 existing parameters updated | Research candidate; not product-qualified |
+
+The L6 base is Apache-2.0 per pinned card. Base SHA-256 is
+`821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae`;
+90,870,598 serialized weight bytes. The selected delta is7,105,634bytes,
+replaces existing tensors and adds no parameters. Its SHA-256 is
+`5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78`.
+See R1_TEXT_CROSSENCODER_20261011.json and
+R2_TEXT_CROSSENCODER_ADAPT_20261011.md for exact accounting and reload evidence.
+
+The selected L6 failed the fixed64-state/256-question numerical condition probe:
+all predictions B,35.94% Accuracy,0/128 lowest/highest answer changes. Candidate
+serialization differs from training and remains an unresolved confound. Neither
+this failure nor previous gains demonstrate a capacity ceiling; integration as a
+general Decision scorer is not justified yet. See R2_TEXT_CONDITION_PROBE_20261012.md.
+
+Per the user's clarification,100–200M is the underlying total parameter target;
+<=200MB applies to measured quantized deployment packaging. Historical FP32
+sizes above are reference measurements, not grounds alone to reject capacity.
+No quantized quality/package result is available for the adapted L6 candidate.
