@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--budget", type=int, choices=[512, 2048], required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--deterministic", action="store_true")
+    parser.add_argument("--control", action="store_true")
     args = parser.parse_args()
     if args.deterministic:
         os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
@@ -109,11 +110,14 @@ def main():
             model.get_input_embeddings(), [r["id"] for r in coverage["numeric_tokens"]]
         )
     )
+    if args.control:
+        model.get_input_embeddings().delta.requires_grad_(False)
     parameters = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.AdamW(parameters, lr=2e-5, weight_decay=0.01)
     args.output.mkdir()
     config = dict(
         budget=args.budget,
+        numeric_delta_trainable=not args.control,
         actual_updates=16,
         seed=17,
         first128_input_sha256=hashlib.sha256(
@@ -160,6 +164,7 @@ def main():
             dict(
                 status="PASS_DIAGNOSTIC_ONLY",
                 budget=args.budget,
+                numeric_delta_trainable=not args.control,
                 updates=16,
                 loss=history[-1]["loss"],
             )
