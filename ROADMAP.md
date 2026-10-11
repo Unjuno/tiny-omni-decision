@@ -178,6 +178,9 @@ Source follow-up: STARSS23's official MIT release supplies a synchronized
 environmental audio/video candidate. The bounded source/decoding probe and
 remaining task/split gates are in `docs/pretrained_reuse/R2_STARSS23_SOURCE_20261011.md`.
 This does not close joint Decision quality or change existing Teacher corpora.
+The subsequent frozen room split covers 49 train / 8 calibration / 21 validation
+recordings. Train has no bell positives and validation has only two rooms;
+these limits remain explicit in `docs/pretrained_reuse/R2_STARSS23_SPLITS_20261011.md`.
 
 - [x] Cache deterministic frozen text/image/audio features separately for train/validation; preserve sample IDs, source/media hashes and run artifacts outside Git. The typed immutable observation-cache core is exercised on 1,920 audio observations, 1,536 image observations, eight video features, and the state/query/candidate segments of the synthetic text probe; separate CPU tests cover content-key invalidation and payload integrity. Video cache-vs-fresh feature parity now covers eight scenes (16 questions) with zero feature delta on one backend; byte-identical repeat invocation was also confirmed for one scene. Cross-backend video parity and repeated fresh-encoder parity for audio/image remain open.
 - [x] Compare final-layer masked-mean, middle-layer masked-mean, and final-layer first-token text readouts with the same variable-option head on identical train/validation IDs (`docs/pretrained_reuse/R2_PATH_A_PROBES.md`). The common `FrozenFeatureCandidateScorer` now lives in `src/tiny_omni_decision/decision.py` and is used by the Path A probe runners; the saved audio multi-query checkpoint reloads through this package head with exact prediction parity. This is one synthetic English task and one seed; learned attention pooling, image/audio pooling, and per-modality readouts remain untested.
