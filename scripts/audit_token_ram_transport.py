@@ -27,6 +27,19 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def process_tree_rss(parent):
+    """Include Windows venv launcher descendants, not only the launcher PID."""
+    import psutil
+
+    total = parent.memory_info().rss
+    for child in parent.children(recursive=True):
+        try:
+            total += child.memory_info().rss
+        except psutil.NoSuchProcess:
+            pass  # A child may finish between enumeration and measurement.
+    return total
+
+
 def live_worker(audit, stream):
     """Re-extract the same two training assets, keeping the binary pipe clean."""
     from scripts.audit_videoprism_tokens import MANIFEST, environment_versions
@@ -178,12 +191,9 @@ def main():
         def sample_memory():
             nonlocal sampled_peak, sample_count
             parent = psutil.Process()
-            worker = psutil.Process(child.pid)
             while not stop.is_set():
                 try:
-                    sampled_peak = max(
-                        sampled_peak, parent.memory_info().rss + worker.memory_info().rss
-                    )
+                    sampled_peak = max(sampled_peak, process_tree_rss(parent))
                     sample_count += 1
                 except psutil.NoSuchProcess:
                     break
@@ -233,7 +243,7 @@ def main():
         synthetic_zero_slots=454,
         bank_bytes=bank.nbytes,
         process_memory=psutil.Process().memory_info()._asdict(),
-        sampled_parent_plus_worker_peak_rss=sampled_peak,
+        sampled_process_tree_peak_rss=sampled_peak,
         memory_sample_interval_seconds=0.05,
         memory_sample_count=sample_count,
         available_ram_after_bytes=psutil.virtual_memory().available,
