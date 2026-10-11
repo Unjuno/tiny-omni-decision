@@ -411,3 +411,12 @@ The selected encoder-coverage weights scored33.59% on the unchanged known-failur
 Thus80.57% on the training generator's validation does not establish general
 Decision reasoning. No truncation occurred; no prompt or checkpoint search followed.
 See [transfer evidence](docs/pretrained_reuse/R2_ENCODER_TRANSFER_20261012.md).
+
+### Controlled transfer diagnosis (2026-10-12)
+
+Fixed-weight, paired128-state comparisons found79.79% Accuracy in control,
+25.88% after an order-preserving numeric-range shift,54.39% after paraphrasing,
+and22.95% with all five perturbations combined. Identifier/field renaming had
+small effects. This supports range/wording fragility under the tested conditions;
+it does not isolate candidate-count effects or establish broad multimodal quality.
+See [all arms, task metrics and uncertainty](docs/pretrained_reuse/R2_TRANSFER_CONTROLS_20261012.md).
