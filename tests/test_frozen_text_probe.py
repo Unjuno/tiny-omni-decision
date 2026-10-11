@@ -109,3 +109,10 @@ def test_noul_criteria_fails_closed_for_missing_definition():
 
     with pytest.raises(ValueError, match="explicit true/false"):
         _apply_noul_criteria(_example("x"), {"criteria": {"true": "yes"}})
+
+
+def test_extended_options_require_separate_context_batches():
+    from scripts.train_frozen_text_probe import _extract_features
+
+    with pytest.raises(ValueError, match="separate question_pair"):
+        _extract_features([], None, None, torch.device("cpu"), 64, "legacy", 512)

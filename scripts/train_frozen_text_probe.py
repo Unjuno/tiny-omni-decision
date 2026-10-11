@@ -35,6 +35,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--context-policy", choices=("legacy", "question_pair"), default="legacy")
     parser.add_argument("--preserve-noul-criteria", action="store_true")
+    parser.add_argument("--option-max-length", type=int, choices=(256, 512), default=256)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-questions", type=int, default=64)
@@ -143,7 +144,10 @@ def _extract_features(
     device: torch.device,
     batch_size: int,
     context_policy: str = "legacy",
+    option_max_length: int = 256,
 ) -> tuple[list[Tensor], list[int]]:
+    if option_max_length != 256 and context_policy != "question_pair":
+        raise ValueError("extended options require separate question_pair batches")
     text_rows: list[str] = []
     question_ranges: list[tuple[int, int]] = []
     contexts: list[str] = []
@@ -181,7 +185,7 @@ def _extract_features(
             else:
                 encoded = tokenizer(
                     all_text[start:end],
-                    max_length=256,
+                    max_length=option_max_length if start >= len(contexts) else 256,
                     truncation=True,
                     padding=True,
                     return_tensors="pt",
@@ -305,17 +309,29 @@ def main() -> None:
         for example in train + validation:
             for option in example.options:
                 ids = tokenizer(f"Candidate answer: {option}", truncation=False)["input_ids"]
-                if len(ids) > 256:
+                if len(ids) > args.option_max_length:
                     raise ValueError(f"candidate exceeds context budget: {example.id}")
     encoder = AutoModel.from_pretrained(args.model, local_files_only=True).eval().to(device)
     for parameter in encoder.parameters():
         parameter.requires_grad_(False)
     feature_started = time.perf_counter()
     train_features, train_targets = _extract_features(
-        train, tokenizer, encoder, device, args.feature_batch_size, args.context_policy
+        train,
+        tokenizer,
+        encoder,
+        device,
+        args.feature_batch_size,
+        args.context_policy,
+        args.option_max_length,
     )
     validation_features, validation_targets = _extract_features(
-        validation, tokenizer, encoder, device, args.feature_batch_size, args.context_policy
+        validation,
+        tokenizer,
+        encoder,
+        device,
+        args.feature_batch_size,
+        args.context_policy,
+        args.option_max_length,
     )
     feature_seconds = time.perf_counter() - feature_started
     feature_path = output / "frozen-features.pt"
@@ -407,6 +423,7 @@ def main() -> None:
         "seed": args.seed,
         "context_policy": args.context_policy,
         "preserve_noul_criteria": args.preserve_noul_criteria,
+        "option_max_length": args.option_max_length,
         "runner_sha256": sha256_file(Path(__file__)),
         "source_revision": manifest.revision,
         "model_revision": args.revision,
