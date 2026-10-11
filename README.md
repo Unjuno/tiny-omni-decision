@@ -190,3 +190,12 @@ best reload. Best mean-NLL checkpoint was step768. Curriculum Accuracy changed
 24.37% at512 to23.14% at2048; original Accuracy57.83% to57.28%. Slight NLL gains
 did not establish useful conditional reasoning. No95% claim or product promotion.
 See [full curve and uncertainty](docs/pretrained_reuse/R2_CONDITIONAL_FULL_COVERAGE_20261012.md).
+
+### Encoder-coverage comparison (2026-10-12)
+
+Updating all six existing22.7M-model encoder blocks, with embeddings/pooler frozen,
+completed the same2,048-update protocol. Curriculum Accuracy80.57% versus23.14%
+for final-block-only; original Accuracy60.24% versus57.28%. Best reload and source
+hash checks passed. This is synthetic development evidence; count/conditional
+selection remain weak and no four-modality95% claim follows. See
+[full curve and controlled comparison](docs/pretrained_reuse/R2_ENCODER_COVERAGE_20261012.md).
