@@ -337,3 +337,8 @@ ViLT24epochs reproduces its original8-epoch prefix exactly and improves to84.47%
 (+3.37pp), still below smaller DINO87.40%; ECE worsens slightly. Retain DINO,
 with no clean-plateau or general95% claim.
 [Fixed learning curve](docs/pretrained_reuse/R2_VILT_CURVE_RESULTS_20261012.md).
+
+DINO/bilinear24epochs reproduces its first8epochs and reaches89.26% (+1.86pp),
+with lower NLL/Brier but higher ECE. Exact counting remains64.06% and accounts
+for184/220 errors; no tolerance relaxation or general95% claim.
+[DINO curve](docs/pretrained_reuse/R2_DINO_BILINEAR_CURVE_RESULTS_20261012.md).
