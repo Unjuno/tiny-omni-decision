@@ -56,7 +56,8 @@ def build(seed, states, split):
         target = labels[selected] if selected is not None else "none"
         questions.append(
             (
-                f"Among items with risk at most {threshold}, select the item with the minimum cost. "
+                f"Among items with risk at most {threshold}, "
+                "select the item with the minimum cost. "
                 "Select none if no item qualifies.",
                 labels + ["none"],
                 target,
