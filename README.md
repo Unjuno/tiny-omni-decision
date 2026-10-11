@@ -303,3 +303,8 @@ the frozen DINO reference85.06%→87.40% (paired512-image interval+1.03…+3.66p
 with lower NLL/Brier. Count improves53.71%→59.77%; general image95% remains unmet.
 Retain as a measured candidate, without product promotion or video-quality claims.
 [Interaction comparison](docs/pretrained_reuse/R2_BILINEAR_RESULTS_20261012.md).
+
+The image-successful bilinear readout did not clearly transfer to pooled video:
+macro Accuracy52.24% vs concat52.02% and no-video51.93%, with differences uncertain.
+Validation NLL degrades after selected epoch12 despite better train fit. Do not adopt
+or extend pooled training. [Video controls](docs/pretrained_reuse/R2_VIDEO_INTERACTION_RESULTS_20261012.md).
