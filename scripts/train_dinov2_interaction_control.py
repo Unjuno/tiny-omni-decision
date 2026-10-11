@@ -25,6 +25,7 @@ from scripts.train_frozen_videoprism_clevr4_probe import (
 )
 from tiny_omni_decision.bilinear_readout import BilinearCandidateScorer
 from tiny_omni_decision.dinov2_features import require_image_splits
+from tiny_omni_decision.spatial_curve import require_prefix
 
 WEIGHTS = "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1"
 TEXT = "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433"
@@ -53,7 +54,16 @@ def main():
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--cache", type=Path, required=True)
     p.add_argument("--policy", choices=["concat", "bilinear"], required=True)
+    p.add_argument("--epochs", type=int, choices=[8, 24], default=8)
+    p.add_argument("--reference-history", type=Path)
     a = p.parse_args()
+    if a.epochs == 24:
+        if a.policy != "bilinear" or a.reference_history is None:
+            raise ValueError("24-epoch curve requires the bilinear reference history")
+        if sha(a.reference_history) != (
+            "bddcbdf141c1846d73046313f0b5d1f9b1905ad708825a90400939db8a1459f8"
+        ):
+            raise ValueError("reference history changed")
     if a.output.exists():
         raise FileExistsError(a.output)
     if (
@@ -85,7 +95,7 @@ def main():
         started_utc=datetime.now(UTC).isoformat(),
         inputs=HASHES,
         seed=17,
-        epochs=1 if a.smoke else 8,
+        epochs=1 if a.smoke else a.epochs,
         lr=0.001,
         weight_decay=0.0001,
         batch_questions=64,
@@ -185,6 +195,8 @@ def main():
             best_logits = [x.clone() for x in logits]
             torch.save(scorer.state_dict(), a.output / "best-readout.pt")
         write(a.output / "history.json", history)
+        if a.epochs == 24 and epoch == 8:
+            require_prefix(history, json.loads(a.reference_history.read_text()))
         print(json.dumps(dict(epoch=epoch, validation=quality, best_epoch=best_epoch)), flush=True)
     if a.policy == "concat" and not a.smoke:
         reference = json.loads((a.cache / "history.json").read_text())
