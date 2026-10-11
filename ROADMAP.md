@@ -501,3 +501,9 @@ or general-image95% claim. [Results](docs/pretrained_reuse/R2_DINOV2_IMAGE_RESUL
 The matched-capacity4x4spatial readout gives76.42% vs76.03% for its global control,
 with worse NLL and no clear aggregate gain; both trail the smaller-head85.06%.
 No adoption or backbone-limit claim. [Spatial control](docs/pretrained_reuse/R2_DINOV2_SPATIAL_RESULTS_20261012.md).
+
+The 134.5M decoder completed2,048updates with exact best reload. Original text
+validation improves30.91%→49.92%, but fixed new-state conditional transfer is23.44%
+versus81.05% for the22.7M BERT reference; candidate-order consistency is weak.
+No replacement, no four-modality95% claim.
+[Learning and transfer results](docs/pretrained_reuse/R2_SMALL_DECODER_RESULTS_20261012.md).
