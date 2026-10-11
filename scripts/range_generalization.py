@@ -99,7 +99,7 @@ def prepare(root, output):
           counts=counts, builder_sha256=sha(Path(__file__)), overlap=0))
 
 
-def evaluate(root, model_path, data, expected_input, output):
+def evaluate(root, model_path, data, expected_input, output, checkpoints=None):
     import time
 
     import numpy as np
@@ -109,20 +109,23 @@ def evaluate(root, model_path, data, expected_input, output):
     from scripts.compare_conditional_runs import paired_accuracy
     from scripts.train_frozen_text_probe import _metrics
 
+    checkpoints = CHECKPOINTS if checkpoints is None else checkpoints
+    if set(checkpoints) != {"parent", "candidate"}:
+        raise ValueError("expected fixed parent/candidate comparison")
     inputs = data / "inputs.jsonl"
     if sha(inputs) != expected_input:
         raise ValueError("input hash mismatch")
     base_hash = "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae"
     if sha(model_path / "model.safetensors") != base_hash:
         raise ValueError("base mismatch")
-    for name, digest in CHECKPOINTS.values():
+    for name, digest in checkpoints.values():
         if sha(root / name / "best-delta.pt") != digest:
             raise ValueError("checkpoint mismatch")
     rows = [json.loads(line) for line in inputs.read_text(encoding="utf-8").splitlines()]
     if len(rows) != 10240 or len({r["id"] for r in rows}) != 10240:
         raise ValueError("incomplete inputs")
     output.mkdir(parents=True, exist_ok=False)
-    write(output / "protocol.json", dict(input_sha256=expected_input, checkpoints=CHECKPOINTS,
+    write(output / "protocol.json", dict(input_sha256=expected_input, checkpoints=checkpoints,
           base_sha256=base_hash, runner_sha256=sha(Path(__file__)), training=False,
           selection=False, seed=20261012, resamples=10000))
     torch.set_num_threads(4)
@@ -130,7 +133,7 @@ def evaluate(root, model_path, data, expected_input, output):
     start = time.perf_counter()
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
     reports, predictions = {}, {}
-    for name, (directory, _) in CHECKPOINTS.items():
+    for name, (directory, _) in checkpoints.items():
         model = AutoModelForSequenceClassification.from_pretrained(
             model_path, local_files_only=True).to(device).eval()
         delta = torch.load(root / directory / "best-delta.pt", weights_only=True,
