@@ -554,6 +554,11 @@ paired difference−6.30pp. Color improves, texture/count worsen; no replacement
 The curve is still improving, so no capacity-ceiling claim.
 [ViLT comparison](docs/pretrained_reuse/R2_VILT_IMAGE_RESULTS_20261012.md).
 
+ViLT24epochs reproduces its original8-epoch prefix exactly and improves to84.47%
+(+3.37pp), still below smaller DINO87.40%; ECE worsens slightly. Retain DINO,
+with no clean-plateau or general95% claim.
+[Fixed learning curve](docs/pretrained_reuse/R2_VILT_CURVE_RESULTS_20261012.md).
+
 Sampler replay exactly reproduces all1440 updates; accumulation normalization
 matches the intended objective. Weight ESS is about37/64 for typical full batches,
 but this alone does not establish a cause of poor quality.
