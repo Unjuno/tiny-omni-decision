@@ -910,3 +910,50 @@ V-JEPA probe. It is a strong same-ID development comparison, not an independent
 blind quality estimate. CLEVR-4 is synthetic; count remains substantially
 harder than the other three taxonomies. The result supports further task-matched
 testing, but not product promotion or a claim of general image understanding.
+
+#### Frozen VideoPrism CLEVR-4 runtime parity (2026-10-11)
+
+The selected image readout was exported with the pinned VideoPrism checkpoint
+and 40 fixed MiniLM taxonomy/option embeddings. The runtime accepts one CLEVR-4
+image and a taxonomy plus two or more choices from that taxonomy's fixed
+vocabulary. It applies the same image preprocessing, repeats the image across
+eight temporal slots, and scores with the unchanged epoch-8 MLP. MiniLM is not
+loaded at inference. This bounded static-image runtime does not support
+arbitrary option text or temporal video decisions.
+
+| Item | Value |
+|---|---|
+| Pinned artifacts | VideoPrism revision `be719a406d563b66f0ac969e7c94bab8e997c81a`, checkpoint SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`; MiniLM revision `4ca70771034acceecb2e72475f72050fcdde4ddc`; source readout SHA-256 `d8499747b8b94de20972c2c9ddf6c15911727a62e1aaeea393d76f6359bb40b1`; source run report SHA-256 `ef130520d00188325f599ae0671505def64b3c5df015c63808dbf815621659ee`. Validation image-manifest SHA-256 `7b3c1b5ef0698e5eeb967b85d2a6beac6b8cc5792f45178d56fc986511ba2d08`; labels SHA-256 `3db398bc2f5658f34891a5687ea44193da9529854695fab7b343f36a1bbb8adb`. |
+| Runtime parity | Replayed the first 32 IDs from the existing 512-image selector (128 taxonomy decisions) with the bundled runtime and fixed encoder batch size 8. Zero prediction mismatches; maximum probability absolute delta `2.9803e-6`. This is packaging parity only: no checkpoint selection, calibration, or new quality evaluation. |
+| Local cost | JAX CPU `TFRT_CPU_0`, Python 3.11.16, JAX 0.6.2, TensorFlow 2.18.1, NumPy 1.26.4. Load `3.33 s`; 32-image encode-and-score `35.79 s` (`1.12 s/image`); peak Windows working set `4,258,926,592` bytes. No GPU or cloud compute. |
+| Size | 114,512,897 resident parameters; bundle payload `458,143,789` bytes excluding manifest. The provisional 200MB package target is not met. Only 40 fixed 384-dimensional MiniLM option embeddings are packaged; MiniLM's weights are not resident at inference. |
+| Artifacts | Bundle `C:\CodexArtifacts\pretrained-reuse-r2\path-a-image-videoprism-clevr4-runtime-bundle-v2`; manifest SHA-256 `958e1f8735c33237342d0533f7529a0514fc4f002ca812057b2eff28ac51012e`. Parity report `C:\CodexArtifacts\pretrained-reuse-r2\image-videoprism-clevr4-runtime-validation-v2\report.json`; SHA-256 `b51868ac1f4429db6d35799244e3348c5a5ca52d244bd603ebe7fa99286fac5a`. |
+
+Reproduction used the build environment's Torch/Transformers profile, then the
+existing VideoPrism JAX/TF environment for inference (no dependency upgrades):
+
+```powershell
+$env:PYTHONPATH = 'src;.'
+$bundleDir = 'C:\CodexArtifacts\pretrained-reuse-r2\path-a-image-videoprism-clevr4-runtime-bundle-v3'
+$validationDir = 'C:\CodexArtifacts\pretrained-reuse-r2\image-videoprism-clevr4-runtime-validation-v3'
+python -m scripts.build_path_a_videoprism_clevr4_runtime_bundle --output-dir $bundleDir
+$vpPython = 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\venv\Scripts\python.exe'
+& $vpPython -m scripts.verify_path_a_videoprism_clevr4_runtime `
+  --bundle $bundleDir `
+  --sample-dir 'C:\CodexArtifacts\pretrained-reuse-r2\clevr4-full-coverage-seed17' `
+  --source-root 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\source' `
+  --baseline-predictions 'C:\CodexArtifacts\pretrained-reuse-r2\image-videoprism-clevr4-full-seed17\checkpoint-selection-predictions.jsonl' `
+  --baseline-run-report 'C:\CodexArtifacts\pretrained-reuse-r2\image-videoprism-clevr4-full-seed17\run-report.json' `
+  --output-dir $validationDir `
+  --images 32
+```
+
+Build script SHA-256 `1a23031a591609424d98ff9cca7e0e4a18ba78470763b0c8bdc54d5526d38f64`,
+verification script SHA-256 `64bff7c3a71eb1adc70f381f29f6168ec4cabf811ea6efc8fb0928688b5c310c`,
+and repository runtime module SHA-256 `d1744f69a10a36651a563b3687dfb23e53ff78f6aa4a80c445cf90476d325023`.
+The bundle manifest separately hashes the exact bundled runtime module.
+
+The package is over twice the size target. CPU latency and peak working set
+also do not establish practical lightweight-device deployment. The bundle
+provides a real local save/reload/forward path for this fixed synthetic task;
+it does not close deployment suitability or general multimodal runtime gates.
