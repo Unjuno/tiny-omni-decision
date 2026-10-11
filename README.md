@@ -263,3 +263,9 @@ states/templates, smallest/largest improves59.96%→82.81%, but domain terms rem
 40.04% (expanded range34.08%). General four-modality95% remains unmet.
 [Training](docs/pretrained_reuse/R2_COMPARISON_VOCABULARY_RESULTS_20261012.md) /
 [transfer](docs/pretrained_reuse/R2_VOCABULARY_TRANSFER_RESULTS_20261012.md).
+
+
+Frozen native Whisper transcript likelihood reaches99.95% on the same1,938
+random/hard4-choice transcript questions; rotated audio falls to24.82%/22.03%.
+No training or parameter increase; calibration and general spoken reasoning remain
+open. [Native audio evidence](docs/pretrained_reuse/R2_NATIVE_AUDIO_RESULTS_20261012.md).
