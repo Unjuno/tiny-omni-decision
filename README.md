@@ -323,3 +323,7 @@ The full456-scene token experiment completed three24-epoch comparisons:
 attention52.44%, mean52.72%, no-video51.56% selected macro Accuracy.
 Paired intervals do not establish an attention/video benefit; do not adopt or
 automatically extend training. [Token readout results](docs/pretrained_reuse/R2_TOKEN_READOUT_RESULTS_20261012.md).
+
+Training-only64-example diagnosis reaches100% with attention and97.68% without
+video after512updates. This verifies small-subset fit, not generalization or
+the product target. [Fit diagnostic](docs/pretrained_reuse/R2_TOKEN_TRAIN_FIT_RESULTS_20261012.md).
