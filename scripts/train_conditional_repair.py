@@ -68,6 +68,10 @@ def curriculum_training_contract(root, policy):
         return root / "numeric-range-curriculum-01/train.jsonl", (
             "95f4edc33711a6ac334fff77cb08300a45bbe2bc8acefad1e8591b069c076101"
         )
+    if policy == "lexical_range":
+        return root / "lexical-range-curriculum-01/train.jsonl", (
+            "91c4b3f9ff81a3d01c5f4a9db0c83d548b33daab44a9ee879b236a5ded136645"
+        )
     raise ValueError("unknown curriculum policy")
 
 
@@ -106,7 +110,9 @@ def main():
         "--trainable-policy", choices=("last_block", "all_encoder_blocks"), default="last_block"
     )
     parser.add_argument(
-        "--curriculum-training", choices=("original", "numeric_range"), default="original"
+        "--curriculum-training",
+        choices=("original", "numeric_range", "lexical_range"),
+        default="original",
     )
     parser.add_argument(
         "--initial-checkpoint", choices=("epoch3", "encoder_coverage"), default="epoch3"
