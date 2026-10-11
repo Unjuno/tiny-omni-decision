@@ -72,3 +72,23 @@ under different recording IDs. It checks the exact frozen set, not only a
 reported count. Eight CPU tests cover successful paired input and rejection
 paths. This guard has not certified the real 78-recording dataset yet because
 the acquisition is still incomplete.
+
+## Fixed-window manifest after acquisition
+
+`scripts/build_starss23_window_manifest.py` first verifies the complete paired
+acquisition and pinned metadata, then emits every complete, nonoverlapping
+five-second interval from each recording. It uses the shorter audio/video
+duration and records the discarded incomplete tail. It checks source audio
+format and video timeline origin, preserves all twelve binary queries and the
+frozen recording/room/split identities, and hashes each output JSONL. It stores
+media references rather than full-resolution decoded arrays. Official dev-test
+is excluded. Calibration/validation annotations are read only when this actual
+window-generation step is run; their class counts are not used to redesign
+the split or task.
+
+The real in-progress acquisition was passed to this entry point as a negative
+integration check: it raised `acquisition is incomplete` before creating an
+output directory. No full-corpus window-generation success is claimed yet.
+Five additional tests cover interval boundaries, shorter-media handling and
+invalid durations. The full CPU suite passed 287 tests with one skipped;
+Ruff passed.
