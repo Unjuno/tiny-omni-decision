@@ -57,3 +57,30 @@ def test_clevr4_sample_selection_is_deterministic_and_split_specific():
     assert set(train_a).issubset({f"image-{index:03}" for index in range(8)})
     assert set(validation).issubset({f"image-{index:03}" for index in range(8, 12)})
     assert not set(train_a) & set(validation)
+
+
+class PairTokenizerStub:
+    def num_special_tokens_to_add(self, pair=False):
+        return 3 if pair else 2
+
+    def __call__(self, questions, states=None, **kwargs):
+        if states is None:
+            return {"input_ids": [list(range(len(q.split()))) for q in questions]}
+        return {"questions": questions, "states": states, "settings": kwargs}
+
+
+def test_question_pair_reserves_question_and_truncates_only_state():
+    from scripts.train_frozen_text_probe import _question_pair_batch
+
+    result = _question_pair_batch(PairTokenizerStub(), [_example("a")])
+    assert result["questions"] == ["Question: Is it true?"]
+    assert result["states"] == ['State: {"value": 1}']
+    assert result["settings"]["truncation"] == "only_second"
+    assert result["settings"]["max_length"] == 256
+
+
+def test_question_pair_rejects_question_without_state_budget():
+    from scripts.train_frozen_text_probe import _question_pair_batch
+
+    with pytest.raises(ValueError, match="reserved context budget"):
+        _question_pair_batch(PairTokenizerStub(), [_example("a", "word " * 252)])

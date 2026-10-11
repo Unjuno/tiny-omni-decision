@@ -33,6 +33,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--context-policy", choices=("legacy", "question_pair"), default="legacy")
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-questions", type=int, default=64)
@@ -74,12 +75,29 @@ def _format_context(example: Any) -> str:
     return f"State: {example.state}\nQuestion: {example.question}"
 
 
+def _question_pair_batch(tokenizer: Any, examples: list[Any]) -> Any:
+    questions = [f"Question: {e.question}" for e in examples]
+    states = [f"State: {e.state}" for e in examples]
+    lengths = tokenizer(questions, add_special_tokens=False, truncation=False)["input_ids"]
+    if any(len(ids) + tokenizer.num_special_tokens_to_add(pair=True) >= 256 for ids in lengths):
+        raise ValueError("question exceeds reserved context budget")
+    return tokenizer(
+        questions,
+        states,
+        max_length=256,
+        truncation="only_second",
+        padding=True,
+        return_tensors="pt",
+    )
+
+
 def _extract_features(
     examples: list[Any],
     tokenizer: Any,
     encoder: nn.Module,
     device: torch.device,
     batch_size: int,
+    context_policy: str = "legacy",
 ) -> tuple[list[Tensor], list[int]]:
     text_rows: list[str] = []
     question_ranges: list[tuple[int, int]] = []
@@ -93,18 +111,36 @@ def _extract_features(
         question_ranges.append((start, len(text_rows)))
         targets.append(example.options.index(example.target))
 
+    if context_policy not in ("legacy", "question_pair"):
+        raise ValueError("unknown context policy")
     all_text = contexts + text_rows
     embeddings: list[Tensor] = []
     encoder.eval()
     with torch.inference_mode():
-        for start in range(0, len(all_text), batch_size):
-            encoded = tokenizer(
-                all_text[start : start + batch_size],
-                max_length=256,
-                truncation=True,
-                padding=True,
-                return_tensors="pt",
-            ).to(device)
+        batches = [
+            (start, min(start + batch_size, len(all_text)))
+            for start in range(0, len(all_text), batch_size)
+        ]
+        if context_policy == "question_pair":
+            batches = [
+                (start, min(start + batch_size, len(contexts)))
+                for start in range(0, len(contexts), batch_size)
+            ]
+            batches += [
+                (start, min(start + batch_size, len(all_text)))
+                for start in range(len(contexts), len(all_text), batch_size)
+            ]
+        for start, end in batches:
+            if context_policy == "question_pair" and start < len(contexts):
+                encoded = _question_pair_batch(tokenizer, examples[start:end]).to(device)
+            else:
+                encoded = tokenizer(
+                    all_text[start:end],
+                    max_length=256,
+                    truncation=True,
+                    padding=True,
+                    return_tensors="pt",
+                ).to(device)
             hidden = encoder(**encoded).last_hidden_state
             mask = encoded["attention_mask"].unsqueeze(-1).to(hidden.dtype)
             pooled = ((hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp_min(1)).float().cpu()
@@ -225,10 +261,10 @@ def main() -> None:
         parameter.requires_grad_(False)
     feature_started = time.perf_counter()
     train_features, train_targets = _extract_features(
-        train, tokenizer, encoder, device, args.feature_batch_size
+        train, tokenizer, encoder, device, args.feature_batch_size, args.context_policy
     )
     validation_features, validation_targets = _extract_features(
-        validation, tokenizer, encoder, device, args.feature_batch_size
+        validation, tokenizer, encoder, device, args.feature_batch_size, args.context_policy
     )
     feature_seconds = time.perf_counter() - feature_started
     feature_path = output / "frozen-features.pt"
@@ -318,6 +354,8 @@ def main() -> None:
         "status": "complete_text_only_synthetic_probe",
         "task_claim": "Typed Decisions Synth is synthetic and not a real-world task benchmark.",
         "seed": args.seed,
+        "context_policy": args.context_policy,
+        "runner_sha256": sha256_file(Path(__file__)),
         "source_revision": manifest.revision,
         "model_revision": args.revision,
         "model_weights_sha256": sha256_file(args.model / "model.safetensors"),
