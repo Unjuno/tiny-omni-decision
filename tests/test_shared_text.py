@@ -1,10 +1,8 @@
 from types import SimpleNamespace
 
 import pytest
-import torch
-from torch import nn
-
-from tiny_omni_decision.shared_text import shared_text_features
+torch = pytest.importorskip("torch")
+nn = torch.nn
 
 
 class Backbone(nn.Module):
@@ -32,6 +30,8 @@ class Scorer(nn.Module):
 
 
 def test_shared_backbone_pooling_without_copy_or_update():
+    from tiny_omni_decision.shared_text import shared_text_features
+
     model = Scorer().eval().requires_grad_(False)
     identities = [id(p) for p in model.parameters()]
     before = {k: v.clone() for k, v in model.state_dict().items()}
@@ -45,6 +45,8 @@ def test_shared_backbone_pooling_without_copy_or_update():
 
 
 def test_shared_features_fail_closed_on_live_training_or_bad_mask():
+    from tiny_omni_decision.shared_text import shared_text_features
+
     model = Scorer()
     inputs = dict(input_ids=torch.tensor([[1, 2]]), attention_mask=torch.tensor([[1, 1]]))
     with pytest.raises(ValueError, match="frozen"):
