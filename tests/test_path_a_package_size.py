@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import numpy as np
+from types import SimpleNamespace
+
 import pytest
 
 from scripts.audit_path_a_package_size import (
@@ -42,10 +43,13 @@ def test_int8_estimate_rejects_group_size_zero() -> None:
 
 
 @pytest.mark.parametrize(
-    ("dtype", "expected"),
-    [(np.dtype("float32"), "F32"), (np.dtype("int64"), "I64"), (np.dtype("uint8"), "U8")],
+    ("kind", "itemsize", "expected"),
+    [("f", 4, "F32"), ("i", 8, "I64"), ("u", 1, "U8")],
 )
-def test_numpy_dtypes_are_normalized_to_safetensors_names(dtype, expected: str) -> None:
+def test_numpy_dtypes_are_normalized_to_safetensors_names(
+    kind: str, itemsize: int, expected: str
+) -> None:
+    dtype = SimpleNamespace(kind=kind, itemsize=itemsize)
     assert _canonical_numpy_dtype(dtype) == expected
 
 
