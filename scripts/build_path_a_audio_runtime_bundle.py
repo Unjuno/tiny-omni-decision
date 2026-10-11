@@ -102,7 +102,7 @@ def main() -> None:
     runtime_root = output / "runtime" / "tiny_omni_decision"
     runtime_root.mkdir(parents=True)
     source_root = Path(__file__).resolve().parents[1] / "src" / "tiny_omni_decision"
-    for filename in ("__init__.py", "decision.py", "audio_runtime.py"):
+    for filename in ("__init__.py", "decision.py", "audio_runtime.py", "feature_cache.py"):
         shutil.copy2(source_root / filename, runtime_root / filename)
 
     (output / "README.md").write_text(

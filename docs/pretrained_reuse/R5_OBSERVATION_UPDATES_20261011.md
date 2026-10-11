@@ -72,7 +72,8 @@ reuse for two visual assets per task. It does not test concurrent file writes,
 stream timestamps, causal state updates, long-term memory, or sensor fusion.
 An old feature can remain resident under its old hash without being served for
 new content; this is intentional reuse, not deletion of prior observations.
-Image/Video use a fixed 64-entry in-process cache. Existing Audio reuses one
-encoding within a query group, but still recomputes it on a later request for
-the same file. Persistent Audio request reuse remains an implementation gap.
+Image/Video use a fixed 64-entry in-process cache. At this measurement, Audio
+reused one encoding within a query group, but recomputed it on a later request
+for the same file. The subsequent cross-request Audio reuse implementation and
+matched uncached comparison are recorded in `R5_AUDIO_REQUEST_REUSE_20261011.md`.
 No R2 quality, R7 package, or R8 release gate is closed by these measurements.

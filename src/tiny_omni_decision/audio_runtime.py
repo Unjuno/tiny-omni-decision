@@ -22,6 +22,7 @@ from torch import Tensor
 from transformers import AutoModel, AutoTokenizer, WhisperFeatureExtractor, WhisperModel
 
 from tiny_omni_decision.decision import DecisionOutput, FrozenFeatureCandidateScorer
+from tiny_omni_decision.feature_cache import BoundedFeatureCache
 
 AUDIO_MODEL_ID = "openai/whisper-tiny"
 AUDIO_MODEL_REVISION = "169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
@@ -111,7 +112,13 @@ class SpeechCommandsMultiQueryRuntime:
         readout_path: Path,
         *,
         device: str | torch.device = "cpu",
+        audio_cache_entries: int = 64,
     ) -> None:
+        if audio_cache_entries < 0:
+            raise ValueError("audio cache capacity must be nonnegative")
+        self.audio_cache = BoundedFeatureCache(audio_cache_entries) if audio_cache_entries else None
+        self.audio_cache_metrics: dict[str, object] = {}
+        self.audio_encoder_calls = 0
         self.device = torch.device(device)
         if self.device.type == "cuda" and not torch.cuda.is_available():
             raise RuntimeError("CUDA was requested but is unavailable")
@@ -271,12 +278,39 @@ class SpeechCommandsMultiQueryRuntime:
         return texts
 
     def decide_many(
-        self, audio_path: Path, queries: Sequence[DecisionQuery]
+        self, audio_path: Path, queries: Sequence[DecisionQuery],
+        *, expected_media_sha256: str | None = None,
     ) -> list[DecisionOutput]:
-        """Score several questions for one audio event, reusing its encoding."""
+        """Reuse content-addressed single-event features across sequential requests.
+
+        Cache entries are local to this fixed model/processor/backend instance.
+        Batched inference bypasses this cache because BF16 batch numerics differ.
+        A zero capacity disables caching for matched runtime comparisons.
+        """
         self._validate_queries(queries)
+        digest = _file_sha256(audio_path)
+        if expected_media_sha256 is not None and digest != expected_media_sha256:
+            raise ValueError("audio hash differs from the supplied frozen identity")
+        cached = self.audio_cache.get(digest) if self.audio_cache is not None else None
+        if cached is None:
+            audio = self._encode_audio(audio_path)
+            self.audio_encoder_calls += 1
+            if _file_sha256(audio_path) != digest:
+                raise ValueError("audio content changed while encoding")
+            feature_hash = hashlib.sha256(audio.numpy().tobytes()).hexdigest()
+            if self.audio_cache is not None:
+                self.audio_cache.put(digest, audio, feature_hash)
+        else:
+            audio, feature_hash = cached
+        self.audio_cache_metrics = {
+            "cache_hit": cached is not None,
+            "media_sha256": digest,
+            "feature_sha256": feature_hash,
+            "cache_entries": len(self.audio_cache) if self.audio_cache is not None else 0,
+            "single_event_encoder_calls": self.audio_encoder_calls,
+        }
         text_vectors = self._encode_texts(self._texts_for_queries([queries]))
-        return self._score_queries(self._encode_audio(audio_path), queries, text_vectors)
+        return self._score_queries(audio, queries, text_vectors)
 
     def decide_batch(
         self,

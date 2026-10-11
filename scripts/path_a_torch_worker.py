@@ -67,6 +67,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--assembly", type=Path, required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), required=True)
+    parser.add_argument("--audio-cache-entries", type=int, default=64)
     args = parser.parse_args()
     assembly = args.assembly.resolve(strict=True)
     components = assembly / "components"
@@ -87,6 +88,7 @@ def main() -> None:
             model_root,
             audio_root / "readout/best-readout.pt",
             device=args.device,
+            audio_cache_entries=args.audio_cache_entries,
         )
         text = TypedTextDecisionRuntime(
             model_root / "text-minilm-en",
@@ -128,6 +130,7 @@ def main() -> None:
         "transformers": __import__("transformers").__version__,
         "device": torch.cuda.get_device_name() if args.device == "cuda" else "cpu",
         "resident_unique_parameters": parameter_count,
+        "audio_cache_max_entries": args.audio_cache_entries,
         "shared_minilm_instances_after_consolidation": 1,
         "audio_encoder_revision": AUDIO_MODEL_REVISION,
         "audio_encoder_weights_sha256": AUDIO_WEIGHTS_SHA256,
@@ -183,8 +186,14 @@ def main() -> None:
                         )
                         for item in payload["queries"]
                     ]
-                    decisions = audio.decide_many(Path(payload["audio_path"]), queries)
-                    result = {"decisions": [_serialize_decision(item) for item in decisions]}
+                    decisions = audio.decide_many(
+                        Path(payload["audio_path"]), queries,
+                        expected_media_sha256=payload.get("expected_media_sha256"),
+                    )
+                    result = {
+                        "decisions": [_serialize_decision(item) for item in decisions],
+                        "encoder_metrics": dict(audio.audio_cache_metrics),
+                    }
                 elif task == "video_score":
                     feature = torch.tensor(payload["video_feature"], dtype=torch.float32)
                     decision = video.decide(
