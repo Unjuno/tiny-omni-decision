@@ -19,6 +19,12 @@ def test_spatial_cells_row_major_and_mean():
     np.testing.assert_allclose(cells[:, 1:].mean(1), tokens[:, 1:].mean(1))
 
 
+def test_spatial_aggregation_preserves_float32_reference_mean():
+    x = np.random.default_rng(17).normal(16, 2, (3, 257, 384)).astype(np.float32)
+    cells = spatial_cells(x)
+    np.testing.assert_allclose(cells[:, 1:].mean(1), x[:, 1:].mean(1), rtol=0, atol=5e-6)
+
+
 def test_global_control_discards_layout_with_equal_shape():
     cells = np.arange(17 * 384, dtype=np.float32).reshape(1, 17, 384)
     a = readout_features(cells, "global")

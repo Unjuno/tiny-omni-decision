@@ -15,6 +15,11 @@ def spatial_cells(tokens):
     cls_patch_mean(x)  # Shared finite/shape contract.
     grid = x[:, 1:].reshape(len(x), 4, 4, 4, 4, 384)
     cells = grid.mean(axis=(2, 4)).reshape(len(x), 16, 384)
+    # Align only the rounding offset, identically for every spatial cell.
+    # The direct FP32 mean is the frozen baseline's actual representation.
+    reference = x[:, 1:].mean(1, keepdims=True).astype(np.float64)
+    precise = cells.astype(np.float64)
+    cells = (precise + reference - precise.mean(1, keepdims=True)).astype(x.dtype)
     return np.concatenate([x[:, :1], cells], axis=1)
 
 

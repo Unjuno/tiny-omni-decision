@@ -36,3 +36,16 @@ seed17, percentile95% Accuracy difference spatial-minus-global. No selection
 based on bootstrap or rotated metrics. This observed development comparison is
 not a blind95% claim. No generic-question/video capability inferred from taxonomy
 classification; no product replacement, compression or old artifact changes.
+
+## Numerical correction before any full-run training
+
+Attempt01 stopped before training: nested FP32 means differed from prior direct
+mean by1.335144e-5, above the unchanged1e-5gate. A256-image diagnostic showed
+direct extraction exactly reproduces saved features; nested-versus-direct
+differences disappear in FP64 (zero). A synthetic regression reproduces this.
+Apply a label-independent per-channel uniform offset to all16cells in FP64 so
+their average matches the original direct FP32 mean, then cast back to FP32.
+Keep the original gate and report resulting deltas. Spatial differences remain
+unchanged except roundoff. No mean/reference feature derives from labels.
+Attempt01 is retained; retry uses dinov2-spatial-control-02 and smoke-02. All
+model/data/budget/selector settings remain fixed; this is not a quality-driven retry.
