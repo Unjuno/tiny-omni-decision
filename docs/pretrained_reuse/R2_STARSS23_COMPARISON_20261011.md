@@ -89,3 +89,15 @@ Each head has 74,753 parameters and a 300,792-byte best checkpoint. Fixed train
 versus validation calibrated NLL: audio .0871/.2704, video .1886/.4108, joint
 .1798/.3290. These gaps show a generalization problem without identifying its
 cause. This post-hoc diagnostic does not alter the preregistered protocol.
+
+## Independent-process reload check
+
+A separate CPU process reloaded all three best checkpoints, saved normalization,
+calibration temperatures and complete frozen feature matrices. It verified
+checkpoint/feature/manifest hashes, validation IDs and targets, and reproduced
+all 5,832 validation queries per condition: maximum absolute difference was
+exactly zero for both raw and calibrated probabilities. This is feature-to-score
+replay, not a new raw-media decode or blind quality evaluation. The compact
+record is `R2_STARSS23_RELOAD_20261011.json`; full local artifact directory is
+`C:/CodexArtifacts/pretrained-reuse-r2/starss23-readout-independent-reload-01`.
+GitHub checks for commit `8d89617` both completed successfully.
