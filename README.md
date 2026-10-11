@@ -347,3 +347,7 @@ Spatial/bilinear reaches90.04% on the reused image selector; matched global88.48
 Counting improves to70.51%, but superiority over the smaller89.26% reference
 is uncertain and ECE worsens. Preserve both; general four-modality95% remains unmet.
 [Spatial comparison](docs/pretrained_reuse/R2_SPATIAL_BILINEAR_RESULTS_20261012.md).
+
+Matched physical-mirror augmentation gives90.19% versus90.04% image Accuracy,
+an uncertain3/2048-answer gain; NLL worsens and counting drops. No adoption.
+[Controlled result](docs/pretrained_reuse/R2_MIRROR_CONTROL_RESULTS_20261012.md).
