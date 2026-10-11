@@ -490,3 +490,9 @@ Frozen native Whisper transcript likelihood reaches99.95% on the same1,938
 random/hard4-choice transcript questions; rotated audio falls to24.82%/22.03%.
 No training or parameter increase; calibration and general spoken reasoning remain
 open. [Native audio evidence](docs/pretrained_reuse/R2_NATIVE_AUDIO_RESULTS_20261012.md).
+
+
+The frozen DINOv2 image baseline completed:85.06% across four synthetic taxonomies,
+versus87.89% for the existing VideoPrism reference on the same512selection images.
+Its39.59M image/text/readout stack is smaller, but count remains53.71%; no replacement
+or general-image95% claim. [Results](docs/pretrained_reuse/R2_DINOV2_IMAGE_RESULTS_20261012.md).
