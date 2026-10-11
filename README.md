@@ -318,3 +318,8 @@ RAM transport now passes a full-size allocation check: 456 slots (2.87 GB),
 with two real saved tensors transferred exactly and 454 synthetic zero slots.
 No live full extraction or quality result yet.
 [RAM transport measurements](docs/pretrained_reuse/R2_TOKEN_RAM_TRANSPORT_20261012.md).
+
+The full456-scene token experiment completed three24-epoch comparisons:
+attention52.44%, mean52.72%, no-video51.56% selected macro Accuracy.
+Paired intervals do not establish an attention/video benefit; do not adopt or
+automatically extend training. [Token readout results](docs/pretrained_reuse/R2_TOKEN_READOUT_RESULTS_20261012.md).

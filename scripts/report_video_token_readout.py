@@ -98,6 +98,37 @@ def main():
         "  smoke-02 used first/last rows across task types, completed all three conditions.",
         "- Four-modality95% and general decision quality remain unproven.",
     ]
+    lines += [
+        "",
+        "## Decision and interpretation",
+        "",
+        "Do not adopt this attention readout: Accuracy is 0.282pp below its matched mean",
+        "control, and the paired interval spans zero. Its lower NLL/Brier/ECE versus mean",
+        "does not establish a reliable gain over no-video; no-video NLL is lower still.",
+        "Scene derangement does not hurt Accuracy reliably (matched-minus-shuffled -0.964pp).",
+        "This does not prove video information is absent in the pretrained tokens.",
+        "",
+        "At selected attention epoch21, train Accuracy57.57% versus validation52.44%",
+        "and train NLL0.67876 versus validation0.69273 indicate limited train fit plus a gap.",
+        "At epoch24 both train and validation deteriorate; do not label this final change",
+        "pure overfitting while ignoring optimization instability. Best21 is retained.",
+        "The single attention readout does not explicitly model object-to-object relations.",
+        "These data do not isolate optimization, task/label complexity, text conditioning,",
+        "or representational limitations. No backbone capacity ceiling has been established.",
+        "",
+        "Full video/text/attention parameter count is132,148,992 before quantization.",
+        "This excludes any audio encoder; it is not a complete omni-model size claim.",
+        "The logged active_parameters field counts parameters in the chosen forward branch.",
+        "For no-video, value.weight (98,304 parameters) receives zero input and has no",
+        "functional influence, despite being included in that field and optimizer group.",
+        "Thus functionally influential no-video parameters are196,864. No effective-capacity",
+        "equivalence claim is made. Mean and attention share identical query/value initialization",
+        "by resetting CPU RNG before construction; the extra keys and positions are explicit.",
+        "",
+        "No automatic epoch extension. Before another full validation search, diagnose whether",
+        "the readout can fit a fixed training-only subset and whether its gradients/attention",
+        "use video. Such a diagnostic must retain original data and use a new output path.",
+    ]
     out.with_suffix(".md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
