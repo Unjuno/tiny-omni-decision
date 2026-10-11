@@ -182,3 +182,11 @@ lowest/highest. No input truncation occurred. The earlier58.11% synthetic corpus
 result therefore does not qualify general conditional Decision behavior. See
 [condition probe](docs/pretrained_reuse/R2_TEXT_CONDITION_PROBE_20261012.md).
 No additional training or product promotion followed.
+
+### Full-coverage conditional repair (2026-10-12)
+
+The fixed 2,048-update run completed with 16,384 distinct questions and exact
+best reload. Best mean-NLL checkpoint was step768. Curriculum Accuracy changed
+24.37% at512 to23.14% at2048; original Accuracy57.83% to57.28%. Slight NLL gains
+did not establish useful conditional reasoning. No95% claim or product promotion.
+See [full curve and uncertainty](docs/pretrained_reuse/R2_CONDITIONAL_FULL_COVERAGE_20261012.md).

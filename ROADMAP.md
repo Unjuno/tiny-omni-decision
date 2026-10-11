@@ -386,3 +386,11 @@ but the fixed next-label conditional diagnostic returned A for all256 items
 See docs/pretrained_reuse/R1_R2_INSTRUCTION_REFERENCE_20261012.md for exact
 scoring, confidence limitations and parameter accounting. More checkpoint
 screening alone is not a demonstrated route to the required quality.
+
+### Full-coverage conditional repair (2026-10-12)
+
+The fixed 2,048-update run completed with 16,384 distinct questions and exact
+best reload. Best mean-NLL checkpoint was step768. Curriculum Accuracy changed
+24.37% at512 to23.14% at2048; original Accuracy57.83% to57.28%. Slight NLL gains
+did not establish useful conditional reasoning. No95% claim or product promotion.
+See [full curve and uncertainty](docs/pretrained_reuse/R2_CONDITIONAL_FULL_COVERAGE_20261012.md).
