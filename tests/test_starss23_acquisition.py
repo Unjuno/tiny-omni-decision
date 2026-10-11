@@ -58,3 +58,22 @@ def test_duplicate_media_rejected_across_recordings(tmp_path):
     report["pairs"].append(dict(second, files=deepcopy(report["pairs"][0]["files"])))
     with pytest.raises(ValueError, match="duplicate underlying"):
         validate_acquisition(report, rows)
+
+
+def test_failed_acquisition_reuse_validates_completed_subset(tmp_path):
+    import json
+
+    from scripts.fetch_starss23_frozen_media import load_reusable_progress
+
+    rows, report = fixture(tmp_path)
+    report.update(status="FAIL", summary_sha256="summary", error="range length mismatch")
+    path = tmp_path / "progress.json"
+    path.write_text(json.dumps(report))
+    original = path.read_bytes()
+    assert set(load_reusable_progress(path, rows, "summary")) == {"a"}
+    assert path.read_bytes() == original
+    with pytest.raises(ValueError, match="summary"):
+        load_reusable_progress(path, rows, "changed")
+    (tmp_path / "audio").write_bytes(b"xxxxx")
+    with pytest.raises(ValueError, match="hash mismatch"):
+        load_reusable_progress(path, rows, "summary")

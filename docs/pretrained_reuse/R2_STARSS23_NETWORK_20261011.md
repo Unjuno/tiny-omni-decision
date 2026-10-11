@@ -92,3 +92,27 @@ output directory. No full-corpus window-generation success is claimed yet.
 Five additional tests cover interval boundaries, shorter-media handling and
 invalid durations. The full CPU suite passed 287 tests with one skipped;
 Ruff passed.
+
+
+## First full acquisition interruption and recovery
+
+The IPv4 acquisition `starss23-frozen-media-ipv4-01` exited with code 1
+at 14/78 completed pairs: `ValueError: range length mismatch` while fetching
+`fold3_room13_mix005` video. The exact-range guard rejected a short body;
+no incomplete video was accepted. The 14 completed pairs (28 files) were
+rehashed and size-checked successfully in
+`C:/CodexArtifacts/pretrained-reuse-r2/starss23-failed-acquisition-audit-01/result.json`.
+The failed progress SHA-256 is
+`c06721a9c0e7a7f086f4dd3c34769bd0d493a27253544ac17789be0fa7771fe1`.
+Original files and the failed report remain unchanged. The unpaired saved audio
+is retained but not reused by the completed-pair recovery path.
+
+The acquisition CLI now accepts `--reuse-progress` from a terminal PASS/FAIL
+acquisition with the exact frozen summary hash. It verifies complete-pair split
+identity, file size/SHA, and duplicate media before reuse. This does not make a
+partial acquisition eligible for training: the downstream all-78 gate is unchanged.
+Only short bodies with correct HTTP 206 and Content-Range can be retried, twice
+at most for the new acquisition; incorrect headers and oversized responses fail.
+Every returned body, including failed short bodies, counts against the existing
+transfer budget. TLS and ZIP CRC checks remain enabled. No generic network-error
+retry or training resume is claimed.

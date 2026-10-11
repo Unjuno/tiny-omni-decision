@@ -44,6 +44,21 @@ def write_json(path, payload):
     pending.replace(path)
 
 
+def load_reusable_progress(path, rows, summary_sha):
+    from scripts.verify_starss23_acquisition import validate_acquisition
+
+    report = json.loads(path.read_text())
+    if report.get("status") not in ("FAIL", "PASS"):
+        raise ValueError("reuse requires terminal acquisition")
+    if report.get("summary_sha256") != summary_sha:
+        raise ValueError("reuse split summary mismatch")
+    clips = {pair["clip"] for pair in report["pairs"]}
+    subset = [row for row in rows if row["clip"] in clips]
+    # Validate only completed pairs; the original failed report stays unchanged.
+    validate_acquisition({**report, "status": "PASS"}, subset)
+    return {pair["clip"]: pair for pair in report["pairs"]}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--splits", type=Path, required=True)
@@ -51,6 +66,7 @@ def main():
     parser.add_argument("--reuse-probe", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--reuse-progress", type=Path)
     args = parser.parse_args()
     summary = json.loads(args.summary.read_text())
     rows = load_splits(args.splits, summary)
@@ -62,6 +78,10 @@ def main():
         for media in row["files"].values():
             if sha256_file(Path(media["path"])) != media["sha256"]:
                 raise ValueError("reuse media hash mismatch")
+    if args.reuse_progress:
+        existing.update(
+            load_reusable_progress(args.reuse_progress, rows, sha256_file(args.summary))
+        )
     args.output_dir.mkdir(parents=True, exist_ok=False)
     progress = {
         "status": "INDEXING",
@@ -70,10 +90,12 @@ def main():
         "dev_test_accessed": False,
         "summary_sha256": sha256_file(args.summary),
         "runner_sha256": sha256_file(Path(__file__)),
+        "reuse_progress_sha256": sha256_file(args.reuse_progress) if args.reuse_progress else None,
+        "short_body_retries": 2,
     }
     started = time.perf_counter()
     readers = {
-        name: HttpRangeReader(f"{BASE}/{name}/content", size, budget=5 * 1024**3)
+        name: HttpRangeReader(f"{BASE}/{name}/content", size, budget=5 * 1024**3, retries=2)
         for name, (size, _) in ARCHIVES.items()
     }
     try:

@@ -73,3 +73,30 @@ def test_range_reader_rejects_truncated_body():
     with patch("urllib.request.urlopen", return_value=response):
         with pytest.raises(ValueError, match="length mismatch"):
             reader.read(4)
+
+
+def test_short_response_retry_keeps_range_and_counts_failed_bytes():
+    reader = HttpRangeReader("https://example.invalid/archive", 100, budget=8, retries=2)
+    response = Mock(status=206, headers={"Content-Range": "bytes 0-3/100"})
+    response.__enter__ = Mock(return_value=response)
+    response.__exit__ = Mock(return_value=False)
+    response.read.side_effect = [b"ab", b"abcd"]
+    with patch("urllib.request.urlopen", return_value=response) as opened:
+        assert reader.read(4) == b"abcd"
+    assert reader.tell() == 4
+    assert reader.transferred == 6
+    assert opened.call_count == 2
+    assert all(call.args[0].get_header("Range") == "bytes=0-3" for call in opened.call_args_list)
+
+
+def test_short_response_retries_obey_transfer_budget():
+    reader = HttpRangeReader("https://example.invalid/archive", 100, budget=4, retries=2)
+    response = Mock(status=206, headers={"Content-Range": "bytes 0-3/100"})
+    response.__enter__ = Mock(return_value=response)
+    response.__exit__ = Mock(return_value=False)
+    response.read.return_value = b"ab"
+    with patch("urllib.request.urlopen", return_value=response) as opened:
+        with pytest.raises(ValueError, match="budget"):
+            reader.read(4)
+    assert opened.call_count == 1
+    assert reader.tell() == 0

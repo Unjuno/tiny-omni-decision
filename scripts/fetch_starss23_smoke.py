@@ -32,8 +32,9 @@ NAME = re.compile(r"metadata_dev/dev-(train|test)-(sony|tau)/(fold\d+_(room\d+)_
 
 
 class HttpRangeReader(io.RawIOBase):
-    def __init__(self, url: str, size: int, budget: int = 256 * 1024 * 1024):
+    def __init__(self, url: str, size: int, budget: int = 256 * 1024 * 1024, retries: int = 0):
         self.url, self.size, self.budget = url, size, budget
+        self.retries = retries
         self.position = 0
         self.transferred = 0
 
@@ -60,15 +61,20 @@ class HttpRangeReader(io.RawIOBase):
         request = urllib.request.Request(
             self.url, headers={"Range": f"bytes={self.position}-{end}"}
         )
-        with urllib.request.urlopen(request, timeout=60) as response:
-            expected = f"bytes {self.position}-{end}/{self.size}"
-            if response.status != 206 or response.headers.get("Content-Range") != expected:
-                raise ValueError("server did not return the exact requested byte range")
-            data = response.read(count + 1)
-        if len(data) != count:
-            raise ValueError("range length mismatch")
+        for attempt in range(self.retries + 1):
+            if self.transferred + count > self.budget:
+                raise ValueError("range transfer budget exceeded")
+            with urllib.request.urlopen(request, timeout=60) as response:
+                expected = f"bytes {self.position}-{end}/{self.size}"
+                if response.status != 206 or response.headers.get("Content-Range") != expected:
+                    raise ValueError("server did not return the exact requested byte range")
+                data = response.read(count + 1)
+            self.transferred += len(data)
+            if len(data) == count:
+                break
+            if len(data) > count or attempt == self.retries:
+                raise ValueError("range length mismatch")
         self.position += count
-        self.transferred += count
         return data
 
 
