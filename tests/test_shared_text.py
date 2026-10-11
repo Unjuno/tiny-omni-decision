@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 import pytest
+
 torch = pytest.importorskip("torch")
 nn = torch.nn
 
