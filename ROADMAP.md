@@ -28,6 +28,17 @@
 
 **Optimization order:** (1) usable quality on the required tasks, (2) zero/minimal training for comparable quality, (3) parameter/byte/latency feasibility, (4) stronger sharing/merging **only where it improves the measured Pareto frontier**. Never promote a smaller model solely because it is smaller.
 
+**User clarification (2026-10-11):** 100–200M describes the underlying model's
+parameter count before quantization, including all resident components. The
+deployment plan then quantizes that model; the provisional <=200 MB target
+applies to the resulting deployment package, not to its FP32 reference weights.
+Quantization normally changes representation precision, not parameter count.
+The measured 170.5M / 687.3 MB FP32 reference therefore meets the provisional
+parameter range while leaving quantized packaging unmeasured. Its FP32 size
+alone is not grounds to narrow the intended Decision tasks or reject its model
+capacity. Quality, calibration and actual runtime after quantization still need
+measurement; the ~182 MB INT8 envelope remains an estimate only.
+
 ## 2. Historical evidence to retain — not the new architecture
 
 Completed on legacy `main` as documented in [`docs/DURABLE_TEACHER.md`](docs/DURABLE_TEACHER.md):
