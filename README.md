@@ -275,3 +275,8 @@ The frozen DINOv2 image baseline completed:85.06% across four synthetic taxonomi
 versus87.89% for the existing VideoPrism reference on the same512selection images.
 Its39.59M image/text/readout stack is smaller, but count remains53.71%; no replacement
 or general-image95% claim. [Results](docs/pretrained_reuse/R2_DINOV2_IMAGE_RESULTS_20261012.md).
+
+
+The matched-capacity4x4spatial readout gives76.42% vs76.03% for its global control,
+with worse NLL and no clear aggregate gain; both trail the smaller-head85.06%.
+No adoption or backbone-limit claim. [Spatial control](docs/pretrained_reuse/R2_DINOV2_SPATIAL_RESULTS_20261012.md).
