@@ -10,11 +10,11 @@ audio-video inference.
 
 ## Assembly
 
-- Builder source commit: `277c128` (`feat: assemble verified modular Path A runtime bundles`).
+- Builder source commit: `9737579` (`fix: verify Path A assembly accounting and component paths`).
 - Builder: `scripts/assemble_path_a_modular_runtime.py`.
 - Assembler and verifier: `src/tiny_omni_decision/modular_bundle.py`.
-- Assembly: `C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v1`.
-- Assembly manifest SHA-256: `95fd0ce47be48a10c50a237ce0e79f806ee3464d507b493f3ff8554d3505da4d`.
+- Assembly: `C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v2`.
+- Assembly manifest SHA-256: `42393f6e6e047dca652a07565530479c56740954d32420db4d715598f39a75cc`.
 - Source Audio manifest SHA-256: `574640d88d6ddbbdb2d12f2466a248ce13c8d9eb3ac542d099b2f08981b690f4`.
 - Source Image manifest SHA-256: `958e1f8735c33237342d0533f7529a0514fc4f002ca812057b2eff28ac51012e`.
 - Source components were verified before copying and again after copying;
@@ -36,8 +36,8 @@ audio-video inference.
 The copied component manifests match the source manifests byte-for-byte. The
 following end-to-end replays used the existing development validation records
 as packaging checks, not as new model selection or quality evidence. Both used
-the components from assembly `v0`; assembly `v1` contains those same component
-manifest hashes and passed full file verification.
+assembly `v0`; final assembly `v2` contains those same component manifest
+hashes and passed full file verification.
 
 | Component | Validation slice | Backend / time | Resource | Parity |
 | --- | ---: | --- | --- | --- |
@@ -72,10 +72,10 @@ Image replay report SHA-256:
 
 ## Verification
 
-- Unit tests: `tests/test_modular_bundle.py` — 3 passed.
-- Full suite before the final documentation update: 213 passed, 1 skipped.
+- Unit tests: `tests/test_modular_bundle.py` — 4 passed.
+- Full suite: 214 passed, 1 skipped.
 - Ruff: passed.
-- `verify_modular_bundle` passed for assembly `v1`, including all component
+- `verify_modular_bundle` passed for assembly `v2`, including all component
   manifests and files.
 - Assembly contents live under `C:\CodexArtifacts`; no model weights or media
   were added to Git.
