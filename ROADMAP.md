@@ -215,7 +215,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R5 — State reuse and caching (**functionally driven, not assumed**)
 
-- [ ] Establish observation caching correctness, event updates, invalidation and multi-query reuse on one observation first.
+- [x] Establish content-based observation caching correctness and multi-query reuse for sequential Image/Video updates. A real-worker probe passed all 14 checks on two images and two scenes: same-path/same-mtime replacement re-encoded, stale hashes were rejected, aliases and restored content reused features, and all 12 decisions matched saved predictions within 2.4e-7. Source hashes were unchanged. This covers immutable file observations; concurrent streams, timestamped state, and cross-request Audio caching remain open. See `docs/pretrained_reuse/R5_OBSERVATION_UPDATES_20261011.md`.
 - [ ] If delayed queries need persistence, compare no memory, 16/32/64 compressed latent slots, and a gated update; retain time/location/missingness metadata. No default promise of action-conditioned physics.
 - [ ] If a State Predictor helps specified future-state or sensor tests, train the smallest viable module using permitted temporal supervision; report forecasting quality separately from decision accuracy.
 
