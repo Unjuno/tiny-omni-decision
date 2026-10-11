@@ -87,3 +87,75 @@ the Image replay prediction SHA-256 is
   sources; `git diff --check`: passed.
 - Model weights and media remain under `C:\CodexArtifacts`; no large artifacts
   were added to Git.
+
+## v4 Video feature-input scorer addendum
+
+The v2/v3 records above remain the history of those immutable artifacts. On
+2026-10-11, v4 added a CLEVRER Video Decision scorer that consumes frozen,
+pooled VideoPrism features extracted from 8 uniformly sampled frames. The
+scorer itself accepts those feature vectors and the question/candidate text;
+raw-video decode and VideoPrism execution are not included in that component's
+runtime. The checkpoint is referenced from the already packaged Image
+component, not copied again. The Video runtime reports near-chance performance
+on its existing development validation and is recorded for interface and
+packaging parity only.
+
+- Package: `C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v4`.
+- Source commit: `b32d2b0c3d3fccfeb7772ca61ec153ce99aa1a6a`.
+- Package manifest SHA-256: `79fbca05e6062b66fe6ffb8a831d6c635edffe361c76ea4ce1574f0736ae9519`.
+- Components: Audio, CLEVR-4 Image, synthetic Typed Decisions Text, and
+  CLEVRER binary-choice Video feature scorer. Audio/Image weights, MiniLM and
+  VideoPrism are each stored once; Text and Video reference the shared MiniLM
+  file from Audio, and Video references VideoPrism from Image.
+- Unique runtime parameters: `170,499,716`; summed per-component accounting is
+  `319,644,548` because shared encoder parameters are referenced by more than
+  one task. Package files excluding root manifest: `687,254,772` bytes;
+  unique-content bytes: `687,247,126`. The provisional 200 MB target is not met.
+- The Video task-local scorer loads `17,684,993` parameters (MiniLM plus its
+  readout); including the shared VideoPrism encoder, its task uses
+  `132,050,177` unique parameters. It is not a raw-video standalone runtime or
+  an audio-video task.
+
+### CLEVRER Video scorer replay
+
+The v4 packaged runtime was run against all `3,014` frozen binary validation
+choices from `200` CLEVRER scenes/videos, using the matching cached VideoPrism
+feature per media hash. Validation IDs and order match the saved predictions:
+`209acf5d75fbbfa4b017f0e81604590ed549108d2b8519aaab74de3bd45ef283`. The
+VideoPrism checkpoint hash is
+`61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`, the
+MiniLM hash is
+`cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`, and the
+selected readout hash is
+`c15f9184794717e5942ed45a2eec18e93b12ad9a15d4b27f8b3cdf4ff480be77`.
+
+| Metric | Result |
+| --- | ---: |
+| Prediction mismatches against saved readout | 0 / 3,014 |
+| Maximum absolute logit delta | `4.77e-7` |
+| Maximum absolute probability delta | `1.79e-7` |
+| GPU | NVIDIA GeForce RTX 3080 Laptop GPU, CUDA |
+| Runtime load time | 0.912 s |
+| Scorer inference for all choices | 1.323 s (0.439 ms/choice) |
+| Peak CUDA allocated memory | 202,064,384 bytes |
+
+Inference time starts after pooled VideoPrism features already exist. It does
+not include MP4 decode or VideoPrism feature extraction, so it is not an
+end-to-end video latency measurement. No metrics were reselected or recomputed;
+the upstream binary scorer's held validation macro Accuracy was `0.4990`,
+NLL `0.6943`, Brier `0.5012`, and ECE-15 `0.0243`, near binary chance. This
+validation had previously informed readout selection, so these are not blind
+quality estimates.
+
+Replay report SHA-256:
+`2598645b66d1abf77aab5e30944125bef7bf3e04f29a756dfbb1eba9c31a8efb`.
+Predictions SHA-256:
+`de1b00f04a65bc96dd6c105f8ab76f5f1db07aa3346d760ea7aacaf3d53cbfa2`.
+
+`verify_modular_bundle` passed the complete v4 file/hash/path/accounting check.
+The v4 Video replay used the assembled MiniLM and Video readout files. Audio,
+Image and Text v3 relocation results remain valid for v4's identical component
+manifests; the v4 assembly changed only by adding the Video task and manifest
+metadata. Joint AV, raw-video extraction through a packaged/dispatcher path,
+and package-size reduction remain open. All model weights and media remain
+outside Git.
