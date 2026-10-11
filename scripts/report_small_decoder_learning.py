@@ -28,6 +28,15 @@ def main():
     run = data[names[0]]
     for filename in ["config", "history"]:
         run[filename] = json.loads((root / names[0] / f"{filename}.json").read_text())
+    # Full ordered IDs remain in the hashed local config, not the Git summary.
+    for field in ["train_ids", "validation_ids"]:
+        ids = run["config"].pop(field)
+        run["config"][field + "_summary"] = {
+            "counts": [len(group) for group in ids] if field == "validation_ids" else len(ids),
+            "ordered_json_sha256": hashlib.sha256(
+                json.dumps(ids, separators=(",", ":")).encode()
+            ).hexdigest(),
+        }
     history = run["history"]
     selected = min(history, key=lambda row: row["selector"])
     assert selected["step"] == run["result"]["best_step"] == 2048
