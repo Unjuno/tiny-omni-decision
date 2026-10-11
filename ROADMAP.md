@@ -558,3 +558,9 @@ An alternative pretrained image/text fusion checkpoint, ViLT VQA, passes real
 load/forward at117.59M parameters. Closed answers,40-token text positions and
 missing temporal/audio capability prevent direct product adoption.
 [Runtime audit](docs/pretrained_reuse/R1_VILT_RUNTIME_AUDIT_20261012.md).
+
+ViLT's native answer head lacks9/40 Clevr-4 option slots; none were removed.
+Two training images pass frozen question-conditioned feature extraction, enabling
+a full-option candidate-head comparison next. Quality remains untested, and
+new questions require a joint image/text forward.
+[Feature audit](docs/pretrained_reuse/R1_VILT_FEATURE_AUDIT_20261012.md).
