@@ -1,5 +1,6 @@
 """Pinned ViLT checkpoint load/forward audit; no quality evaluation or training."""
 
+import argparse
 import hashlib
 import json
 import shutil
@@ -15,14 +16,19 @@ WEIGHTS_SHA = "4d5f3409947b0369487ece7c5868f0040ceb67d25735dbb4ac5e99e03bab3a19"
 
 
 def main():
-    root = Path("C:/CodexArtifacts/pretrained-reuse-r1/vilt-vqa-audit-01")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--existing-model", type=Path)
+    args = parser.parse_args()
+    root = args.output
     if root.exists():
         raise FileExistsError(root)
-    if shutil.disk_usage(root.parent).free < 470435927 + 1024**3:
+    if shutil.disk_usage(root.parent).free < (0 if args.existing_model else 470435927) + 1024**3:
         raise ValueError("insufficient disk reserve")
     root.mkdir()
-    model_dir = root / "model"
-    model_dir.mkdir()
+    model_dir = args.existing_model or root / "model"
+    if not args.existing_model:
+        model_dir.mkdir()
     started = time.perf_counter()
     api = requests.get(
         f"https://huggingface.co/api/models/{REPO}/revision/{REVISION}?blobs=true", timeout=60
@@ -44,6 +50,10 @@ def main():
     ]
     hashes = {}
     for name in names:
+        if args.existing_model:
+            path = model_dir / name
+            hashes[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+            continue
         response = requests.get(
             f"https://huggingface.co/{REPO}/resolve/{REVISION}/{name}",
             timeout=(30, 60),
@@ -70,6 +80,8 @@ def main():
     from PIL import Image
     from transformers import ViltConfig, ViltForQuestionAnswering, ViltProcessor
 
+    from tiny_omni_decision.vilt_compat import remove_legacy_position_ids
+
     torch.set_num_threads(4)
     torch.manual_seed(17)
     torch.cuda.manual_seed_all(17)
@@ -78,7 +90,9 @@ def main():
     config = ViltConfig.from_pretrained(model_dir, local_files_only=True)
     model = ViltForQuestionAnswering(config)
     state = torch.load(model_dir / "pytorch_model.bin", map_location="cpu", weights_only=True)
-    model.load_state_dict(state, strict=True)
+    model.load_state_dict(
+        remove_legacy_position_ids(state, config.max_position_embeddings), strict=True
+    )
     del state
     model.eval().requires_grad_(False).cuda()
     parameters = sum(p.numel() for p in model.parameters())
@@ -107,6 +121,8 @@ def main():
         hashes=hashes,
         source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         parameters=parameters,
+        model_path=str(model_dir),
+        removed_buffer="vilt.embeddings.text_embeddings.position_ids: exact int64 arange(40)",
         components={n: sum(p.numel() for p in m.parameters()) for n, m in model.named_children()},
         input_shapes={k: list(v.shape) for k, v in inputs.items()},
         output_shape=list(first.shape),
