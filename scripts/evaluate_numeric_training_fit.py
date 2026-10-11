@@ -20,6 +20,21 @@ def choose_groups(rows, per_scale=32, seed=83):
     return selected
 
 
+def require_completed_warmstart(config, result, sample_ids):
+    if result["status"] != "PASS" or result["steps"] != 2048:
+        raise ValueError("warm-start experiment must be complete")
+    if (
+        config.get("initial_checkpoint") != "encoder_coverage"
+        or config["curriculum_training"] != "numeric_range"
+        or config["trainable_policy"] != "all_encoder_blocks"
+    ):
+        raise ValueError("wrong warm-start experiment")
+    if len(config["train_ids"]) != 16384 or len(set(config["train_ids"])) != 16384:
+        raise ValueError("incomplete or repeated planned sample IDs")
+    if not set(sample_ids) <= set(config["train_ids"][: result["steps"] * 8]):
+        raise ValueError("final checkpoint has not consumed the training slice")
+
+
 def main():
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -29,6 +44,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("root", "model", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--warmstart-final-only", action="store_true")
     args = parser.parse_args()
 
     def sha(p):
@@ -78,6 +94,17 @@ def main():
         consumed = set(config["train_ids"][: result["best_step"] * 8])
         if not {r["id"] for r in rows} <= consumed or result["status"] != "PASS":
             raise ValueError("sample was not consumed by selected checkpoint")
+    checkpoint_name = "best-delta.pt"
+    if args.warmstart_final_only:
+        run = "conditional-repair-range-warmstart-01"
+        config = json.loads((args.root / run / "config.json").read_text())
+        result = json.loads((args.root / run / "result.json").read_text())
+        require_completed_warmstart(config, result, [r["id"] for r in samples[1]])
+        checkpoint_name = "final-delta.pt"
+        if sha(args.root / run / checkpoint_name) != result["final_sha256"]:
+            raise ValueError("warm-start final hash mismatch")
+        specs = [("warmstart_final", specs[1][1], run, specs[1][3], result["final_sha256"])]
+        samples = [samples[1]]
     args.output.mkdir(parents=True, exist_ok=False)
 
     def write(name, value):
@@ -92,6 +119,7 @@ def main():
             "specs": specs,
             "runner_sha256": sha(Path(__file__)),
             "selection": False,
+            "checkpoint_file": checkpoint_name,
             "limitation": (
                 "Each model sees its own training values; not same-input causal comparison."
             ),
@@ -109,7 +137,7 @@ def main():
             .eval()
         )
         delta = torch.load(
-            args.root / spec[2] / "best-delta.pt", weights_only=True, map_location="cpu"
+            args.root / spec[2] / checkpoint_name, weights_only=True, map_location="cpu"
         )
         if set(delta) != {
             n

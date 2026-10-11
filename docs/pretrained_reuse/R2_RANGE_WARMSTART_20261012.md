@@ -33,3 +33,12 @@ protocol. No95%, general reasoning or multimodal claim follows from retention
 or training fit. No extra seed, budget extension, paid compute, product promotion
 or legacy overwrite is authorized by this protocol. Local estimate20minutes;
 check disk and live GPU state before launch.
+
+## Training-fit endpoint fixed before completion
+
+Measure the final2048weight on the same seed83,128-state training slice once,
+even if the retention selector prefers step0 or another checkpoint. Report this
+as final training fit only; it cannot replace the selected checkpoint or establish
+transfer. The new evaluator mode rejects incomplete runs, wrong initialization,
+unconsumed IDs and a final-weight hash mismatch. It reuses the prior slice without
+rerunning the earlier models or any transfer set. New output warmstart-training-fit-01.
