@@ -86,6 +86,10 @@ passed. The original metadata/archive files and Teacher artifacts are untouched.
 
 ## Interpretation and next gate
 
+Follow-up: `R2_STARSS23_WINDOWS_20261011.md` records actual PCM and timestamped
+video extraction for four fixed windows and 48 binary queries, including exact
+save/reload checks. This remains a dev-train plumbing probe without model fitting.
+
 Header/duration checks and a decoded frame establish media readability only.
 Temporal synchronization is documented upstream; this probe does not measure
 audio/video event offset or establish that vision adds predictive information.
