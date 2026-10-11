@@ -335,3 +335,12 @@ updated; frozen hashes and best reload checks passed. Calibration worsened
 slightly in the last epoch. This is synthetic English text evidence, not an
 Omni quality or quantized deployment result. See
 [bounded adaptation report](docs/pretrained_reuse/R2_TEXT_CROSSENCODER_ADAPT_20261011.md).
+
+### Conditional text limitation (2026-10-12)
+
+The fixed adapted Cross-Encoder failed the approved64-state numerical condition
+probe:35.94% Accuracy, always selecting B, with0/128 answer changes when switching
+lowest/highest. No input truncation occurred. The earlier58.11% synthetic corpus
+result therefore does not qualify general conditional Decision behavior. See
+[condition probe](docs/pretrained_reuse/R2_TEXT_CONDITION_PROBE_20261012.md).
+No additional training or product promotion followed.
