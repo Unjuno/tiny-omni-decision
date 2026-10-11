@@ -6,10 +6,6 @@ import random
 import time
 from pathlib import Path
 
-import torch
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
-from scripts.train_frozen_text_probe import _metrics
 from tiny_omni_decision.dataset import sha256_file
 
 
@@ -43,6 +39,11 @@ def examples():
 
 
 def main():
+    import torch
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+    from scripts.train_frozen_text_probe import _metrics
+
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("model", "adaptation", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
