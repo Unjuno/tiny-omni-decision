@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "scope": "posthoc saved-prediction stratification; exact wording only; no causal claim",
+  "groups": {
+    "choice": {
+      "count": 1008,
+      "accuracy": 0.4722222222222222,
+      "nll": 1.2079064844347935,
+      "uniform_expected_accuracy": 0.22764786470143353
+    },
+    "unseen_exact_instruction": {
+      "count": 2146,
+      "accuracy": 0.4962721342031687,
+      "nll": 1.0166396022042734,
+      "uniform_expected_accuracy": 0.3439544224027015
+    },
+    "noul": {
+      "count": 987,
+      "accuracy": 0.5643363728470111,
+      "nll": 0.6775306696735934,
+      "uniform_expected_accuracy": 0.5
+    },
+    "score": {
+      "count": 545,
+      "accuracy": 0.4055045871559633,
+      "nll": 1.3405707768090593,
+      "uniform_expected_accuracy": 0.21899082568807474
+    },
+    "seen_instruction": {
+      "count": 394,
+      "accuracy": 0.4796954314720812,
+      "nll": 1.10455582311846,
+      "uniform_expected_accuracy": 0.26444887599710043
+    }
+  },
+  "prediction_sha256": "02ce1913cdb31e9da21f5fbff67643dd60cc00698306ca328f1eb96eb4889514"
+}
