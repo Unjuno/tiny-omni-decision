@@ -474,6 +474,40 @@
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md"
       ],
       "release_status": "unknown"
+    },
+    {
+      "id": "moment-1-small-sensor",
+      "modality": [
+        "sensor-time-series"
+      ],
+      "model_revision": "AutonLab/MOMENT-1-small@411e288267f82cce86296dbe4d6c8bc533cc162f",
+      "upstream_code_revision": "moment-timeseries-foundation-model/moment@38f7310ad594100747ca2a8357e9c7ca7d323e0e",
+      "checkpoint": "https://huggingface.co/AutonLab/MOMENT-1-small/resolve/411e288267f82cce86296dbe4d6c8bc533cc162f/model.safetensors",
+      "checkpoint_sha256": "785e6c6f57ffa7cac7e2a1fff6369618d49f2f441563ddea76c866231e5aa877",
+      "checkpoint_bytes": 151615328,
+      "parameters": 35337408,
+      "checkpoint_total_parameters": 37901512,
+      "license": "MIT per pinned model card and official source repository; model card states only reconstruction head is pretrained and task heads require fine-tuning",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/AutonLab/MOMENT-1-small/tree/411e288267f82cce86296dbe4d6c8bc533cc162f",
+        "https://github.com/moment-timeseries-foundation-model/moment/tree/38f7310ad594100747ca2a8357e9c7ca7d323e0e"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "Pinned official source loaded local weights; embedding mode processed [1,6,128] and returned finite [1,6,16,512]. RTX 3080 Laptop peak allocated 162730496 bytes. Result and environment record are external at C:\\CodexArtifacts\\pretrained-reuse-r1\\moment-small-sensor-r1-attempt-01\\r1-sensor-audit-result.json.",
+      "pretraining_overlap_status": "UNKNOWN",
+      "task_quality_status": "unmeasured; UCI HAR evaluation not run because possible overlap with MOMENT pretraining via UCR/UEA could not be ruled out from available official corpus inventory",
+      "decision": "technically viable frozen sensor feature candidate; do not treat as task-quality validated or product eligible; resolve pretraining/evaluation data overlap before model-selection use",
+      "parameter_tensor_bytes": 141349632,
+      "primary_citations": [
+        "https://huggingface.co/AutonLab/MOMENT-1-small/tree/411e288267f82cce86296dbe4d6c8bc533cc162f",
+        "https://huggingface.co/datasets/AutonLab/Timeseries-PILE",
+        "https://arxiv.org/abs/2402.03885",
+        "https://archive.ics.uci.edu/dataset/341/smartphone%2Bbased%2Brecognition%2Bof%2Bhuman%2Bactivities%2Band%2Bpostura"
+      ]
     }
   ]
 }

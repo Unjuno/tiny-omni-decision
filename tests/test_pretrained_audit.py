@@ -82,3 +82,13 @@ def test_machine_readable_candidate_inventory_is_explicit_and_conservative():
     assert videomae["license_status"] == "DENY"
     assert videomae["license_allowed"] is False
     assert videomae["passed_load"] is False
+
+    moment = next(
+        candidate for candidate in candidates if candidate["id"] == "moment-1-small-sensor"
+    )
+    assert moment["model_revision"] == (
+        "AutonLab/MOMENT-1-small@411e288267f82cce86296dbe4d6c8bc533cc162f"
+    )
+    assert moment["passed_load"] is True
+    assert moment["task_quality_status"].startswith("unmeasured;")
+    assert moment["pretraining_overlap_status"] == "UNKNOWN"
