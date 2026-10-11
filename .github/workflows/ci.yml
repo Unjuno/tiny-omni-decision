@@ -14,10 +14,6 @@ jobs:
           python-version: "3.11"
       - name: Install
         run: python -m pip install ".[dev]"
-      - name: Temporary Ruff fix diagnostic
-        run: |
-          ruff check --fix scripts/evaluate_librispeech_audio_hard_negatives.py src/tiny_omni_decision/audio_hard_negatives.py tests/test_audio_hard_negatives.py || true
-          git diff -- scripts/evaluate_librispeech_audio_hard_negatives.py src/tiny_omni_decision/audio_hard_negatives.py tests/test_audio_hard_negatives.py
       - name: Lint
         run: ruff check .
       - name: Test

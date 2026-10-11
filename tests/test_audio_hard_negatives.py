@@ -7,7 +7,6 @@ from tiny_omni_decision.audio_hard_negatives import (
     transcript_phonemes,
 )
 
-
 CMUDICT_SAMPLE = """;;; sample dictionary
 A  AH0
 CAT  K AE1 T

@@ -38,7 +38,6 @@ from tiny_omni_decision.audio_hard_negatives import (
 from tiny_omni_decision.audio_runtime import DecisionQuery, SpeechCommandsMultiQueryRuntime
 from tiny_omni_decision.bundle_validation import verify_bundle
 
-
 OPENSLR_DEV_CLEAN_MD5 = "42e2234ba48799c1f50f24a7926300a1"
 OPENSLR_DEV_CLEAN_SHA256 = "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3"
 OPENSLR_DEV_CLEAN_URL = "https://openslr.org/resources/12/dev-clean.tar.gz"

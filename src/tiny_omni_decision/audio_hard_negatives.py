@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from difflib import SequenceMatcher
-
 
 _WORD_RE = re.compile(r"[A-Z]+(?:'[A-Z]+)?")
 _ALT_PRON_RE = re.compile(r"\(\d+\)$")
