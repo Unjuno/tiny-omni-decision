@@ -18,7 +18,10 @@ from transformers.modeling_outputs import BaseModelOutput
 
 from scripts.evaluate_librispeech_audio_hard_negatives import CONDITIONS, _metric_summary
 from tiny_omni_decision.audio_runtime import AUDIO_WEIGHTS_SHA256
-from tiny_omni_decision.transcript_likelihood import mean_transcript_logprob
+from tiny_omni_decision.transcript_likelihood import (
+    mean_transcript_logprob,
+    rotated_speaker_indices,
+)
 
 INPUT_HASH = "1f17d86a15faecc3ba3e13cd406dfd0119ef17850d1a7206956a70f4eb801923"
 
@@ -62,6 +65,7 @@ def main():
     for name in ("model", "examples", "source", "baseline", "output"):
         p.add_argument("--" + name, type=Path, required=True)
     p.add_argument("--smoke", action="store_true")
+    p.add_argument("--audio-control", choices=["matched", "rotated"], default="matched")
     args = p.parse_args()
     if args.output.exists():
         raise FileExistsError(args.output)
@@ -73,8 +77,13 @@ def main():
     rows = [json.loads(s) for s in args.examples.read_text(encoding="utf-8").splitlines()]
     if len(rows) != 1938 or len({r["id"] for r in rows}) != 1938:
         raise ValueError("wrong fixed example count")
+    audio_rows = rows
+    if args.audio_control == "rotated":
+        indices = rotated_speaker_indices([r["speaker_id"] for r in rows])
+        audio_rows = [rows[i] for i in indices]
     if args.smoke:
         rows = rows[:8]
+        audio_rows = audio_rows[:8]
     baseline = {}
     for condition in CONDITIONS:
         path = args.baseline / f"{condition}-predictions.jsonl"
@@ -158,8 +167,9 @@ def main():
 
     with torch.inference_mode():
         for i, row in enumerate(rows):
-            audio = args.source / row["audio_path"]
-            if sha(audio) != row["audio_sha256"]:
+            audio_row = audio_rows[i]
+            audio = args.source / audio_row["audio_path"]
+            if sha(audio) != audio_row["audio_sha256"]:
                 raise ValueError("audio hash mismatch")
             pcm, sr = sf.read(audio, dtype="int16")
             if sr != 16000 or pcm.ndim != 1 or not 0 < len(pcm) <= processor.n_samples:
@@ -193,7 +203,9 @@ def main():
                 pred = dict(
                     sample_id=row["id"],
                     speaker_id=row["speaker_id"],
-                    audio_sha256=row["audio_sha256"],
+                    audio_sha256=audio_row["audio_sha256"],
+                    audio_sample_id=audio_row["id"],
+                    audio_speaker_id=audio_row["speaker_id"],
                     options=choices,
                     target_index=row["target_index"],
                     prediction_index=int(probs.argmax()),

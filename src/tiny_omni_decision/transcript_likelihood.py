@@ -3,6 +3,17 @@
 import numpy as np
 
 
+def rotated_speaker_indices(speakers):
+    """Fixed half-corpus rotation; fail instead of searching for favorable controls."""
+    n = len(speakers)
+    if n < 2:
+        raise ValueError("at least two speakers required")
+    indices = [(i + n // 2) % n for i in range(n)]
+    if any(speakers[i] == speakers[j] for i, j in enumerate(indices)):
+        raise ValueError("fixed rotation contains same-speaker pairs")
+    return indices
+
+
 def mean_transcript_logprob(token_logprobs, sequence_lengths, *, prefix_length):
     values = np.asarray(token_logprobs, dtype=np.float64)
     lengths = np.asarray(sequence_lengths)

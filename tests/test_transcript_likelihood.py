@@ -1,7 +1,16 @@
 import numpy as np
 import pytest
 
-from tiny_omni_decision.transcript_likelihood import mean_transcript_logprob
+from tiny_omni_decision.transcript_likelihood import (
+    mean_transcript_logprob,
+    rotated_speaker_indices,
+)
+
+
+def test_rotation_is_bijective_and_cross_speaker():
+    assert rotated_speaker_indices(["a", "a", "b", "b"]) == [2, 3, 0, 1]
+    with pytest.raises(ValueError):
+        rotated_speaker_indices(["a", "b", "a", "b"])
 
 
 def test_excludes_prefix_and_padding_includes_eos():
