@@ -553,3 +553,8 @@ Sampler replay exactly reproduces all1440 updates; accumulation normalization
 matches the intended objective. Weight ESS is about37/64 for typical full batches,
 but this alone does not establish a cause of poor quality.
 [Weight audit](docs/pretrained_reuse/R2_VIDEO_BATCH_WEIGHT_AUDIT_20261012.md).
+
+An alternative pretrained image/text fusion checkpoint, ViLT VQA, passes real
+load/forward at117.59M parameters. Closed answers,40-token text positions and
+missing temporal/audio capability prevent direct product adoption.
+[Runtime audit](docs/pretrained_reuse/R1_VILT_RUNTIME_AUDIT_20261012.md).

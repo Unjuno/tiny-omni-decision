@@ -87,3 +87,9 @@ it remains reference-only because replacing the current text path would bring
 the complete assembly to about235M parameters. A24.58M MobileBERT NLI candidate
 has unresolved published licensing and was not downloaded. See
 [R1 NLI audit](R1_NLI_REFERENCE_20261012.md). No new Decision-quality claim.
+
+ViLT VQA jointly pretrained image/text checkpoint passed a pinned FP32 GPU
+load/forward audit:117,588,537 resident parameters. Its3129-answer head and40-token
+position table do not meet arbitrary-option/general-state requirements unchanged.
+ViLT+VideoPrism exceeds200M before audio. No video or quality capability established.
+[ViLT runtime audit](R1_VILT_RUNTIME_AUDIT_20261012.md).
