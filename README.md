@@ -150,3 +150,16 @@ Reuse compact Teacher option signals, matching the actual choices and their orde
 - This is a documentation-only plan change. Existing training code, configs, manifests, and checkpoints are unchanged. The Gemma 4 quantization/recovery configs do not implement this new student path.
 
 See [ROADMAP.md](ROADMAP.md), [docs/PHASE0.md](docs/PHASE0.md), and [THIRD_PARTY.md](THIRD_PARTY.md).
+
+
+### STARSS23 measured update (2026-10-11)
+
+All 78 approved paired recordings and 2,720 five-second windows were processed
+with frozen audio/video encoders. The preregistered readout comparison completed:
+audio-only validation NLL 0.2704, video-only 0.4108, joint 0.3290. Joint input
+did not improve audio-only; zeroing joint video improved NLL to 0.2978.
+This closes the initial paired-data execution gap, but not the joint-quality
+gate. Two validation rooms, class imbalance and event-specific losses limit
+interpretation. See [STARSS23 comparison](docs/pretrained_reuse/R2_STARSS23_COMPARISON_20261011.md)
+for metrics, curves, controls and artifact hashes. No product promotion,
+compression, additional seed or sealed evaluation followed.

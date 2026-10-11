@@ -301,3 +301,16 @@ Primary references and official implementations (paper merit does **not** imply 
 This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the full previous roadmap in Git history; it is not deleted from the project record. The requested product outcome stays constant—**small, high-quality, local, genuinely multimodal typed decision inference**—while the mandatory Gemma/EmbeddingGemma ternary-first implementation path is no longer the assumed route. Since this proposal was opened, a task-scoped frozen Speech Commands audio runtime bundle has been integrated on this branch and passed existing-validation replay parity; see the R2 runtime record. It does not close joint AV or full multimodal packaging.
 
 **Next implementation action:** define R0 task/device criteria and R2 task-matched quality gates, including an approved synchronized audio-video task, before new training or product selection. Expand Path A task coverage only with approved sources and report results by task. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
+
+
+### STARSS23 measured update (2026-10-11)
+
+All 78 approved paired recordings and 2,720 five-second windows were processed
+with frozen audio/video encoders. The preregistered readout comparison completed:
+audio-only validation NLL 0.2704, video-only 0.4108, joint 0.3290. Joint input
+did not improve audio-only; zeroing joint video improved NLL to 0.2978.
+This closes the initial paired-data execution gap, but not the joint-quality
+gate. Two validation rooms, class imbalance and event-specific losses limit
+interpretation. See [STARSS23 comparison](docs/pretrained_reuse/R2_STARSS23_COMPARISON_20261011.md)
+for metrics, curves, controls and artifact hashes. No product promotion,
+compression, additional seed or sealed evaluation followed.

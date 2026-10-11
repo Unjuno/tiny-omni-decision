@@ -59,3 +59,33 @@ The next decision must distinguish task suitability, room shift and loss of
 spatial/temporal information in pooled panorama features. These are hypotheses,
 not measured causes. Repeated tuning against these same two rooms would not
 establish generalization; a further experiment needs a separately fixed protocol.
+
+## Event-level diagnostic from saved predictions
+
+No retraining or new model selection was performed.
+
+| Event | Positive windows | Audio balanced Accuracy | Joint balanced Accuracy | Audio NLL | Joint NLL |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| speech | 311 | 0.6691 | 0.7339 | 0.4349 | 0.6024 |
+| clapping | 10 | 0.4989 | 0.5000 | 0.1128 | 0.1367 |
+| telephone | 19 | 0.4979 | 0.5000 | 0.1511 | 0.1675 |
+| laughter | 56 | 0.6926 | 0.5016 | 0.3513 | 0.4185 |
+| domestic sounds | 267 | 0.5918 | 0.4954 | 0.8667 | 1.0063 |
+| footsteps | 19 | 0.5092 | 0.5000 | 0.2809 | 0.3051 |
+| door | 17 | 0.5535 | 0.5000 | 0.1536 | 0.1818 |
+| music | 229 | 0.8857 | 0.5352 | 0.3052 | 0.6397 |
+| instrument | 5 | 0.4979 | 0.5000 | 0.0844 | 0.1126 |
+| water tap | 0 | undefined | undefined | 0.0543 | 0.0861 |
+| bell | 32 | 0.5000 | 0.5000 | 0.4058 | 0.2028 |
+| knock | 4 | 0.6240 | 0.5000 | 0.0436 | 0.0886 |
+
+Largest joint-minus-audio NLL degradations: music (+0.3345), speech (+0.1675),
+domestic sounds (+0.1396). Speech balanced Accuracy improves while NLL worsens.
+Music balanced Accuracy falls from .8857 to .5352. Bell NLL improves despite
+zero positive training examples, while balanced Accuracy stays .5; this is
+not learned bell discrimination. Water tap has no validation positives.
+
+Each head has 74,753 parameters and a 300,792-byte best checkpoint. Fixed train
+versus validation calibrated NLL: audio .0871/.2704, video .1886/.4108, joint
+.1798/.3290. These gaps show a generalization problem without identifying its
+cause. This post-hoc diagnostic does not alter the preregistered protocol.
