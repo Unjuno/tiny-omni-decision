@@ -465,3 +465,9 @@ remains unmeasured for that checkpoint. Separately, frozen TinyCLIP scored48.19%
 macro on CLEVR-4 vs9.81% with rotated images; count/texture remain weak.
 [Training](docs/pretrained_reuse/R2_LEXICAL_RANGE_RESULTS_20261012.md) /
 [image grounding](docs/pretrained_reuse/R2_TINYCLIP_CLEVR4_RESULTS_20261012.md).
+
+
+The fixed lexical-transfer follow-up found only a small change on its novel
+minimum/maximum wording (80.71%→81.05%), with numeric-calibration trade-offs.
+It does not repair the previously observed smallest/largest failure by evidence.
+[Results](docs/pretrained_reuse/R2_LEXICAL_TRANSFER_RESULTS_20261012.md).
