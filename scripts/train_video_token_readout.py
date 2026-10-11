@@ -38,6 +38,8 @@ def main():
     config = yaml.safe_load(args.config.read_text())
     checked = _validate_inputs(args.config, config)
     rows = {s: checked[s + "_rows"] for s in ["train", "validation"]}
+    if [len(rows[s]) for s in rows] != [3794, 3014]:
+        raise ValueError("fixed corpus counts changed")
     if args.smoke:
         rows = {
             s: sum(
@@ -256,6 +258,12 @@ def main():
         del model, optimizer
     if len({r["order_sha256"] for r in results.values()}) != 1:
         raise ValueError("sample order differs")
+    if (
+        sha(Path(config["text_encoder"]["model_path"]) / "model.safetensors")
+        != checked["text_model_weights_sha256"]
+        or sha(Path(config["features"]["cache"])) != checked["feature_cache_sha256"]
+    ):
+        raise ValueError("frozen input changed during run")
     comparisons = (
         {}
         if args.smoke
