@@ -22,6 +22,7 @@ from scripts.train_frozen_videoprism_clevr4_probe import (
     _quality_metrics,
     _taxonomy_metrics,
 )
+from tiny_omni_decision.bilinear_readout import BilinearCandidateScorer
 from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES
 from tiny_omni_decision.dinov2_features import (
     readout_features,
@@ -54,6 +55,7 @@ def main():
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--epochs", type=int, choices=[8, 24], default=8)
     p.add_argument("--feature-cache", type=Path)
+    p.add_argument("--readout", choices=["mlp", "bilinear"], default="mlp")
     a = p.parse_args()
     if a.output.exists():
         raise FileExistsError(a.output)
@@ -103,6 +105,7 @@ def main():
         optimizer="AdamW lr1e-3 wd1e-4",
         batch_questions=64,
         selector="earliest min validation NLL",
+        readout=a.readout,
         torch=torch.__version__,
         model_files={x.name: sha(x) for x in a.model.iterdir() if x.is_file()},
     )
@@ -186,8 +189,13 @@ def main():
             s: torch.from_numpy(readout_features(x, condition)).to(device) for s, x in cells.items()
         }
         torch.manual_seed(17)
-        scorer = CandidateScorer(6912, hidden_size=128).to(device)
-        assert sum(p.numel() for p in scorer.parameters()) == 884993
+        scorer = (
+            CandidateScorer(6912, hidden_size=128)
+            if a.readout == "mlp"
+            else BilinearCandidateScorer(6528, 384, 128)
+        ).to(device)
+        trainable_parameters = sum(p.numel() for p in scorer.parameters())
+        assert trainable_parameters == (884993 if a.readout == "mlp" else 884992)
         initial = tensor_hash(scorer)
         if initialization is not None and initialization != initial:
             raise ValueError("initialization mismatch")
@@ -255,7 +263,7 @@ def main():
             )
             history.append(record)
             write(out / "history.json", history)
-            if epoch == 8 and a.feature_cache is not None and not a.smoke:
+            if epoch == 8 and a.feature_cache is not None and not a.smoke and a.readout == "mlp":
                 reference = json.loads((a.feature_cache / condition / "history.json").read_text())
                 require_prefix(history, reference)
             if quality["nll"] < best:
@@ -313,8 +321,8 @@ def main():
             extraction_seconds=extraction_seconds,
             total_seconds=time.perf_counter() - start,
             peak_vram_bytes=torch.cuda.max_memory_allocated(),
-            total_parameters=40331393,
-            trainable_parameters=884993,
+            total_parameters=39446400 + trainable_parameters,
+            trainable_parameters=trainable_parameters,
             frozen_weights_unchanged=True,
             gpu=torch.cuda.get_device_name(),
             cost_usd=0,
