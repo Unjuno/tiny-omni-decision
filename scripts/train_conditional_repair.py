@@ -72,6 +72,10 @@ def curriculum_training_contract(root, policy):
         return root / "lexical-range-curriculum-01/train.jsonl", (
             "91c4b3f9ff81a3d01c5f4a9db0c83d548b33daab44a9ee879b236a5ded136645"
         )
+    if policy == "comparison_vocabulary":
+        return root / "comparison-vocabulary-curriculum-01/train.jsonl", (
+            "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76"
+        )
     raise ValueError("unknown curriculum policy")
 
 
@@ -111,7 +115,7 @@ def main():
     )
     parser.add_argument(
         "--curriculum-training",
-        choices=("original", "numeric_range", "lexical_range"),
+        choices=("original", "numeric_range", "lexical_range", "comparison_vocabulary"),
         default="original",
     )
     parser.add_argument(
