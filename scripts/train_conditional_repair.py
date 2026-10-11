@@ -44,6 +44,21 @@ def schedule(sources, steps, seed=17):
     ]
 
 
+def configure_repair_policy(model, policy):
+    if policy not in ("last_block", "all_encoder_blocks"):
+        raise ValueError("unknown training policy")
+    prefix = "bert.encoder.layer.5." if policy == "last_block" else "bert.encoder.layer."
+    names = []
+    for name, parameter in model.named_parameters():
+        enabled = name.startswith((prefix, "classifier."))
+        parameter.requires_grad_(enabled)
+        if enabled:
+            names.append(name)
+    if not names:
+        raise ValueError("no matching encoder parameters")
+    return names
+
+
 def main():
     import torch
     import yaml
@@ -59,6 +74,9 @@ def main():
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--steps", type=int, choices=(512, 2048), default=512)
+    parser.add_argument(
+        "--trainable-policy", choices=("last_block", "all_encoder_blocks"), default="last_block"
+    )
     args = parser.parse_args()
     paths = {
         args.root / "text/train.jsonl": (
@@ -137,6 +155,7 @@ def main():
             "argv": sys.argv,
             "started_utc": datetime.now(UTC).isoformat(),
             "seed": 17,
+            "trainable_policy": args.trainable_policy,
             "steps": steps,
             "smoke": args.smoke,
             "batch": 8,
@@ -192,9 +211,21 @@ def main():
     if set(names) != set(delta):
         raise ValueError("initial delta names mismatch")
     model.load_state_dict(delta, strict=False)
+    names = configure_repair_policy(model, args.trainable_policy)
     parameters = [p for p in model.parameters() if p.requires_grad]
-    if sum(p.numel() for p in parameters) != 1774849:
+    trainable_count = sum(p.numel() for p in parameters)
+    expected_count = 1774849 if args.trainable_policy == "last_block" else 10647169
+    if trainable_count != expected_count:
         raise ValueError("trainable parameter mismatch")
+    write(
+        "trainable-parameters.json",
+        {
+            "policy": args.trainable_policy,
+            "names": names,
+            "trainable_count": trainable_count,
+            "total_count": sum(p.numel() for p in model.parameters()),
+        },
+    )
     before = frozen_hash(model)
     optimizer = torch.optim.AdamW(parameters, lr=2e-5, weight_decay=0.01)
 
@@ -336,7 +367,8 @@ def main():
             "final_sha256": sha256_file(args.output / "final-delta.pt"),
             "seconds": time.perf_counter() - started,
             "peak_vram_bytes": torch.cuda.max_memory_allocated() if device == "cuda" else None,
-            "trainable_parameters": 1774849,
+            "trainable_parameters": trainable_count,
+            "trainable_policy": args.trainable_policy,
             "exact_resume": False,
         },
     )
