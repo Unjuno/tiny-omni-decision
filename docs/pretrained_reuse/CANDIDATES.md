@@ -93,3 +93,10 @@ load/forward audit:117,588,537 resident parameters. Its3129-answer head and40-to
 position table do not meet arbitrary-option/general-state requirements unchanged.
 ViLT+VideoPrism exceeds200M before audio. No video or quality capability established.
 [ViLT runtime audit](R1_VILT_RUNTIME_AUDIT_20261012.md).
+
+### Compact-video follow-up (2026-10-12)
+
+VideoMAE-small also has a noncommercial card; X3D-S is a possible compact
+research candidate with explicit checkpoint rights and actual runtime/count
+still unverified. No weights downloaded or architecture replaced. See
+[bounded source audit](R1_COMPACT_VIDEO_FOLLOWUP_20261012.md).
