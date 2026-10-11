@@ -38,6 +38,14 @@ def examples():
     return rows
 
 
+def candidate_text(option, style):
+    if style == "bare":
+        return option
+    if style == "described":
+        return f"{option}: Candidate {option}."
+    raise ValueError("unknown candidate style")
+
+
 def main():
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -47,6 +55,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("model", "adaptation", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--weights", choices=("base", "adapted"), default="adapted")
+    parser.add_argument("--candidate-style", choices=("bare", "described"), default="bare")
     args = parser.parse_args()
     if (
         sha256_file(args.model / "model.safetensors")
@@ -69,6 +79,8 @@ def main():
     write(
         "protocol.json",
         {
+            "weights": args.weights,
+            "candidate_style": args.candidate_style,
             "seed": 17,
             "states": 64,
             "questions": 256,
@@ -85,7 +97,8 @@ def main():
     first, second = [], []
     for row in rows:
         for option in row["options"]:
-            first.append(f"Question: {row['question']}\nCandidate answer: {option}")
+            rendered = candidate_text(option, args.candidate_style)
+            first.append(f"Question: {row['question']}\nCandidate answer: {rendered}")
             second.append(f"State: {row['state']}")
     lengths = [len(v) for v in tokenizer(first, second, truncation=False)["input_ids"]]
     if max(lengths) > 512:
@@ -102,7 +115,8 @@ def main():
     config = json.loads((args.adaptation / "config.json").read_text(encoding="utf-8"))
     if set(delta) != set(config["trainable_names"]):
         raise ValueError("delta keys mismatch")
-    model.load_state_dict(delta, strict=False)
+    if args.weights == "adapted":
+        model.load_state_dict(delta, strict=False)
     model.requires_grad_(False)
     scores = []
     with torch.inference_mode():
@@ -144,6 +158,8 @@ def main():
     changed_pairs = sum(predictions[i] != predictions[i + 1] for i in range(0, 256, 2))
     result = {
         "status": "PASS_EXECUTION_ONLY",
+        "weights": args.weights,
+        "candidate_style": args.candidate_style,
         "metrics": _metrics(list(logits), targets),
         "groups": groups,
         "both_correct_condition_pairs": correct_pairs,

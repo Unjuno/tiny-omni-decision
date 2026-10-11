@@ -16,3 +16,15 @@ def test_condition_probe_oracle_and_pairing():
         a, b = rows[index:index+2]
         assert a["state"] == b["state"] and a["options"] == b["options"]
         assert a["target"] != b["target"]
+
+
+def test_candidate_description_keeps_identifier_and_adds_no_facts():
+    import pytest
+
+    from scripts.evaluate_text_condition_probe import candidate_text
+
+    for key in ("A", "B", "C"):
+        assert candidate_text(key, "bare") == key
+        assert candidate_text(key, "described") == f"{key}: Candidate {key}."
+    with pytest.raises(ValueError):
+        candidate_text("A", "unknown")
