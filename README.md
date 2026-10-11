@@ -356,3 +356,7 @@ Shared nonlinear cell pooling reduces head size to180736 parameters but gives
 89.79% selected image Accuracy; counting66.41% trails spatial bilinear70.51%.
 Later training overfits; no counting-fix or product-quality claim.
 [Cell readout result](docs/pretrained_reuse/R2_CELLWISE_RESULTS_20261012.md).
+
+Numeric embedding updates pass a matched512-step run, but both candidate and
+control select their unchanged initialization. No quality artifact promoted.
+[Numeric comparison](docs/pretrained_reuse/R2_NUMERIC_EMBEDDING_RESULTS_20261012.md).
