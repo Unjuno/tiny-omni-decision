@@ -237,3 +237,10 @@ A fixed selected-weight comparison on new synthetic states found range
 interpolation improvement24.12%→71.00%, but wording regression56.54%→42.09%
 and poor extrapolation calibration. No general-model promotion.
 [Results](docs/pretrained_reuse/R2_RANGE_GENERALIZATION_RESULTS_20261012.md).
+
+
+Lexical-range control completed2,048updates (selected1408); wording transfer
+remains unmeasured for that checkpoint. Separately, frozen TinyCLIP scored48.19%
+macro on CLEVR-4 vs9.81% with rotated images; count/texture remain weak.
+[Training](docs/pretrained_reuse/R2_LEXICAL_RANGE_RESULTS_20261012.md) /
+[image grounding](docs/pretrained_reuse/R2_TINYCLIP_CLEVR4_RESULTS_20261012.md).

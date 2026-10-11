@@ -633,9 +633,137 @@
         "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-encoder-coverage-01\\history.json": "93c8fbb70eae255dc37418b57f152e5a5e6a773fff0b26386a1f849fb76fd5a3"
       },
       "scope": "Synthetic English development; inherited extra training; not general multimodal evidence"
+    },
+    {
+      "run": "conditional-repair-lexical-range-01",
+      "result": {
+        "status": "PASS",
+        "smoke": false,
+        "steps": 2048,
+        "best_step": 1408,
+        "frozen_sha256": "2947322a7fe4101ea8110b9689092ce542fbf0042d0204edacc5e6ce3477e7b9",
+        "best_sha256": "fccee21e0e5ffbaffdee899a65fe6538f52f3b788752a56b6b5b6388cad15abb",
+        "final_sha256": "cba9e188539612aa8d886a53a70bff766de9ecae440199222d73472f7c11f824",
+        "seconds": 1123.782160700066,
+        "peak_vram_bytes": 3473190400,
+        "trainable_parameters": 10647169,
+        "trainable_policy": "all_encoder_blocks",
+        "exact_resume": false
+      },
+      "initialization": "saved narrow-format encoder step2048; new AdamW",
+      "seed": 17,
+      "consumed": 16384,
+      "unique_questions_in_run": 16384,
+      "selected_consumed": 11264,
+      "selected_original": {
+        "count": 2540,
+        "accuracy": 0.6043307185173035,
+        "nll": 0.9077046513557434,
+        "brier": 0.5099391937255859,
+        "ece_15_bins": 0.08020729145665807,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          12,
+          55,
+          167,
+          188,
+          267,
+          277,
+          246,
+          237,
+          247,
+          227,
+          245,
+          372
+        ]
+      },
+      "selected_curriculum": {
+        "count": 2048,
+        "accuracy": 0.82958984375,
+        "nll": 0.4232773184776306,
+        "brier": 0.23093807697296143,
+        "ece_15_bins": 0.023412530979840085,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          6,
+          28,
+          105,
+          155,
+          112,
+          94,
+          93,
+          109,
+          123,
+          187,
+          1036
+        ]
+      },
+      "final_original": {
+        "count": 2540,
+        "accuracy": 0.6059055328369141,
+        "nll": 0.9419711232185364,
+        "brier": 0.5087358951568604,
+        "ece_15_bins": 0.07045656149898927,
+        "ece_bin_counts": [
+          0,
+          0,
+          1,
+          18,
+          110,
+          200,
+          210,
+          236,
+          261,
+          256,
+          221,
+          205,
+          193,
+          177,
+          452
+        ]
+      },
+      "final_curriculum": {
+        "count": 2048,
+        "accuracy": 0.830078125,
+        "nll": 0.43738487362861633,
+        "brier": 0.2381276935338974,
+        "ece_15_bins": 0.04659812158206478,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          7,
+          26,
+          50,
+          96,
+          110,
+          100,
+          87,
+          77,
+          76,
+          150,
+          1269
+        ]
+      },
+      "corpus_hashes": {
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\lexical-range-curriculum-01\\train.jsonl": "91c4b3f9ff81a3d01c5f4a9db0c83d548b33daab44a9ee879b236a5ded136645",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-encoder-coverage-01\\best-delta.pt": "4024788b1a9d17735612a98da6acb1a65af5d82a9d440b4fddb4ab62efb9d318",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\model.safetensors": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-encoder-coverage-01\\history.json": "93c8fbb70eae255dc37418b57f152e5a5e6a773fff0b26386a1f849fb76fd5a3"
+      },
+      "scope": "Synthetic English development; wording transfer unmeasured"
     }
   ],
-  "total_seconds_excluding_load_tokenization": 4520.9508361000335,
+  "total_seconds_excluding_load_tokenization": 5644.7329968000995,
   "limitation": "Shared ancestry and overlapping corpora. Do not sum unique counts across runs.",
   "active_experiment": null
 }

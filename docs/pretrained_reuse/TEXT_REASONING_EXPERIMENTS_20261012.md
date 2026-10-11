@@ -12,6 +12,7 @@ commits and failures remain in individual reports. All use seed17; no seed searc
 | conditional-repair-encoder-coverage-01 | 2048 | 10647169 | 2048 | 0.60236 | 0.80566 | 1141.0 |
 | conditional-repair-numeric-range-01 | 2048 | 10647169 | 2048 | 0.61024 | 0.24512 | 1119.3 |
 | conditional-repair-range-warmstart-01 | 2048 | 10647169 | 1408 | 0.60315 | 0.82227 | 1122.3 |
+| conditional-repair-lexical-range-01 | 2048 | 10647169 | 1408 | 0.60433 | 0.82959 | 1123.8 |
 
 ## Findings that constrain the next action
 
@@ -35,7 +36,7 @@ It adds prior training exposure; do not describe it as equal-total-compute.
 No final audit, modality-wide95% result, compression or product promotion exists.
 Text is one unresolved prerequisite; image/audio/video general reasoning and
 joint fusion remain open. Individual task-specific image/audio successes cannot
-substitute for those gates. See ROADMAP for the complete R0–R8 objective.
+substitute for those gates. See ROADMAP for the complete R0遯ｶ霑ｭ8 objective.
 
 ## Accounting limits
 
