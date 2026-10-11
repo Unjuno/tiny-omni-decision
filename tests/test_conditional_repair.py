@@ -31,3 +31,18 @@ def test_full_coverage_budget_preserves_pilot_prefix():
     original = [i for batch in long for source, i in batch if source == 0]
     assert sorted(curriculum) == list(range(8192))
     assert len(original) == len(set(original)) == 8192
+
+
+def test_curriculum_training_contract_preserves_old_default():
+    from pathlib import Path
+
+    from scripts.train_conditional_repair import curriculum_training_contract
+
+    root = Path("data")
+    original, old_sha = curriculum_training_contract(root, "original")
+    numeric, new_sha = curriculum_training_contract(root, "numeric_range")
+    assert original == root / "conditional-curriculum-01/train.jsonl"
+    assert numeric == root / "numeric-range-curriculum-01/train.jsonl"
+    assert len(old_sha) == len(new_sha) == 64 and old_sha != new_sha
+    with pytest.raises(ValueError):
+        curriculum_training_contract(root, "latest")

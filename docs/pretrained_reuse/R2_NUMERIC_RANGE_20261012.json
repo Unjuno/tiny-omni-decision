@@ -1,0 +1,32 @@
+{
+  "purpose": "development range coverage; not final audit",
+  "source_sha256": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+  "builder_sha256": "ec79d62b378c1e02328d673685e6e9bd1c3c67fcc3cef7dc833e987f0c5021af",
+  "train_transform_seed": 71,
+  "transfer_state_seed": 59,
+  "transfer_transform_seed": 73,
+  "splits": {
+    "train": {
+      "rows": 8192,
+      "groups": 1024,
+      "sha256": "95f4edc33711a6ac334fff77cb08300a45bbe2bc8acefad1e8591b069c076101",
+      "transform_counts": {
+        "{'scale': 4, 'offset': 31}": 2048,
+        "{'scale': 8, 'offset': 0}": 2048,
+        "{'scale': 1, 'offset': 0}": 2048,
+        "{'scale': 2, 'offset': 7}": 2048
+      }
+    },
+    "transfer": {
+      "rows": 2048,
+      "groups": 256,
+      "sha256": "41df283d98a6e251482f9fedfed468e00231d179b32ae6891eadbe2bb820d16a",
+      "transform_counts": {
+        "{'scale': 3, 'offset': 11}": 512,
+        "{'scale': 12, 'offset': 11}": 512,
+        "{'scale': 5, 'offset': 23}": 512,
+        "{'scale': 16, 'offset': 23}": 512
+      }
+    }
+  }
+}

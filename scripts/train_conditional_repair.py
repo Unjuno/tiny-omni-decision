@@ -59,6 +59,18 @@ def configure_repair_policy(model, policy):
     return names
 
 
+def curriculum_training_contract(root, policy):
+    if policy == "original":
+        return root / "conditional-curriculum-01/train.jsonl", (
+            "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe"
+        )
+    if policy == "numeric_range":
+        return root / "numeric-range-curriculum-01/train.jsonl", (
+            "95f4edc33711a6ac334fff77cb08300a45bbe2bc8acefad1e8591b069c076101"
+        )
+    raise ValueError("unknown curriculum policy")
+
+
 def main():
     import torch
     import yaml
@@ -77,7 +89,13 @@ def main():
     parser.add_argument(
         "--trainable-policy", choices=("last_block", "all_encoder_blocks"), default="last_block"
     )
+    parser.add_argument(
+        "--curriculum-training", choices=("original", "numeric_range"), default="original"
+    )
     args = parser.parse_args()
+    curriculum_train_path, curriculum_train_hash = curriculum_training_contract(
+        args.root, args.curriculum_training
+    )
     paths = {
         args.root / "text/train.jsonl": (
             "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675"
@@ -85,9 +103,7 @@ def main():
         args.root / "text/validation.jsonl": (
             "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8"
         ),
-        args.root / "conditional-curriculum-01/train.jsonl": (
-            "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe"
-        ),
+        curriculum_train_path: curriculum_train_hash,
         args.root / "conditional-curriculum-01/validation.jsonl": (
             "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c"
         ),
@@ -129,11 +145,14 @@ def main():
         ]
 
     def curriculum(split):
+        path = (
+            curriculum_train_path
+            if split == "train"
+            else (args.root / "conditional-curriculum-01/validation.jsonl")
+        )
         return [
             dict(json.loads(line), source="curriculum")
-            for line in (args.root / f"conditional-curriculum-01/{split}.jsonl")
-            .read_text(encoding="utf-8")
-            .splitlines()
+            for line in path.read_text(encoding="utf-8").splitlines()
         ]
 
     trains = [original("train"), curriculum("train")]
@@ -156,6 +175,7 @@ def main():
             "started_utc": datetime.now(UTC).isoformat(),
             "seed": 17,
             "trainable_policy": args.trainable_policy,
+            "curriculum_training": args.curriculum_training,
             "steps": steps,
             "smoke": args.smoke,
             "batch": 8,
