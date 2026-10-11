@@ -26,3 +26,23 @@ Raw compact records are R2_TEXT_QUERY_STRATA_20261011.json and
 R2_TEXT_TOKEN_LENGTHS_20261011.json. External audit artifacts remain under
 C:/CodexArtifacts/pretrained-reuse-r2/text-query-stratification-01/.
 Next: inspect retained state/question coverage before changing capacity or training.
+
+## Measured question retention
+
+The actual fast tokenizer's offset mappings with right truncation and
+max_length=256 show: full question retained 1,535; partial question 79;
+no question-body tokens retained 926 (36.46%). Per-ID retention details are
+saved in C:/CodexArtifacts/pretrained-reuse-r2/text-query-retention-audit-01/.
+The compact summary is R2_TEXT_QUERY_RETENTION_20261011.json.
+
+Saved Accuracy/NLL: full .5081/1.0055, partial .5570/.9600,
+absent .4644/1.0774. These groups differ in tasks and lengths; this is not a
+causal ablation. Full-question performance also remains weak.
+
+Bounded proposed correction: preserve the full question in a separately
+budgeted tokenizer pair, truncate only state, fail closed if the question
+itself exceeds the budget, and keep the original runner's default unchanged.
+Compare one new seed-17 run using the same model, split, head, optimizer,
+epoch budget and checkpoint rule. Record truncation and retained-state counts;
+this tests question-preserving serialization, not pure length or capacity.
+No such corrected training has been executed yet.
