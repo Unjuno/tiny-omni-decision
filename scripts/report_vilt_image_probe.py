@@ -86,6 +86,26 @@ def main():
         "- Fixed taxonomy performance is not general image/video/omni decision quality.",
         "  ViLT feature extraction requires a new joint forward for each new question.",
     ]
+    lines += [
+        "",
+        "## Decision and limits",
+        "",
+        "Do not replace the current DINO candidate on these results. ViLT is6.299pp lower",
+        "overall with a paired interval excluding zero; NLL/Brier/ECE are also worse.",
+        "Color improves to99.61%, but texture77.15% and count48.83% dominate the failures.",
+        "Image rotation reduces Accuracy to10.06%, consistent with image dependence on",
+        "these taxonomy tasks. It does not demonstrate general question understanding.",
+        "",
+        "Best is the final epoch8: train81.79%/NLL0.4593, validation81.10%/NLL0.4718.",
+        "Both continue improving; this is not evidence of a clean plateau or an absolute",
+        "ViLT capability ceiling. The small gap and incomplete train fit leave additional",
+        "optimization as a possible explanation. Any budget extension must retain the",
+        "fixed feature hashes and report its extra encounters; do not overwrite this run.",
+        "",
+        "The135.13M measured stack includes the unused5.99M VQA classifier and17.39M",
+        "candidate encoder. DINO's corresponding stack is39.59M. No tested video path",
+        "or all-modality95% result exists for ViLT. Preserve all prior candidates.",
+    ]
     out.with_suffix(".md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

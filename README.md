@@ -327,3 +327,8 @@ automatically extend training. [Token readout results](docs/pretrained_reuse/R2_
 Training-only64-example diagnosis reaches100% with attention and97.68% without
 video after512updates. This verifies small-subset fit, not generalization or
 the product target. [Fit diagnostic](docs/pretrained_reuse/R2_TOKEN_TRAIN_FIT_RESULTS_20261012.md).
+
+Frozen ViLT's full-option8-epoch image probe reaches81.10% versus DINO87.40%;
+paired difference−6.30pp. Color improves, texture/count worsen; no replacement.
+The curve is still improving, so no capacity-ceiling claim.
+[ViLT comparison](docs/pretrained_reuse/R2_VILT_IMAGE_RESULTS_20261012.md).
