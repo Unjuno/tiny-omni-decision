@@ -135,7 +135,9 @@ def main():
         pins = {
             "config.json": "4ec7ee67f9efcf9b4d8215a65066657aac6ee4f708c3e6e2bbe046fe81e1d4d7",
             "history.json": "f67821e58d653bfeb030678b672f827ce2098eb8622ac9b60fb9d0111e6c4ab4",
-            "train-features.npy": "0e6a3dd742043cd47260bb71c453419eaf46c5b20627eb428f4e593563af9faf",
+            "train-features.npy": (
+                "0e6a3dd742043cd47260bb71c453419eaf46c5b20627eb428f4e593563af9faf"
+            ),
             "val-features.npy": "60e615ef5861964a6f212a176f022ab38e1c58271dfa4e0e76beef6e8a689b94",
         }
         for name, expected in pins.items():
