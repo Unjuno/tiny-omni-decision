@@ -291,3 +291,9 @@ Fixed candidate-position averaging on the134.5M decoder costs4.25forwards/questi
 and gives21.29%/24.71% for normal/reversed options; no consistent Accuracy gain.
 Do not adopt or automatically extend training.
 [Rotation diagnostic](docs/pretrained_reuse/R2_CANDIDATE_ROTATION_RESULTS_20261012.md).
+
+The matched DINO spatial/global heads completed24epochs with exact reproduction
+of the original first8epochs. Selected global81.35%, spatial82.62%; the paired
+spatial gain remains uncertain and both trail the smaller-head85.06% reference.
+Count remains46.88% for spatial. No adoption or automatic budget extension.
+[Learning curves](docs/pretrained_reuse/R2_SPATIAL_CURVE_RESULTS_20261012.md).
