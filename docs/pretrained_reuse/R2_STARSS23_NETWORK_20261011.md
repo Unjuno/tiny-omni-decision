@@ -38,6 +38,27 @@ started.
 
 ## Downstream integrity gate
 
+### Approved switch outcome
+
+On 2026-10-11 the user approved stopping the old preflight and switching to
+IPv4. At execution time PID 65896 was already absent: the original process
+had naturally completed with exit code 0 and PREFLIGHT_PASS, taking 764.872 s.
+No process was killed. The fresh IPv4 preflight in
+`C:\CodexArtifacts\pretrained-reuse-r2\starss23-media-preflight-ipv4-01`
+also passed, taking 7.364 s. Both read 38,446 ZIP-directory bytes and computed
+identical acquisition sizes: 78 recordings, two reused recordings,
+4,710,820,298 new uncompressed bytes and 3,881,505,469 compressed bytes.
+Available disk was approximately 10.87 GB, sufficient for the required
+2 GiB reserve. This is one observed transport comparison, not a general network
+benchmark.
+
+The actual IPv4 acquisition was then launched with `--execute` and new output
+directory `C:\CodexArtifacts\pretrained-reuse-r2\starss23-frozen-media-ipv4-01`.
+This launch is not an acquisition-completion claim. Its `progress.json` and
+process exit status are authoritative; the downstream gate below must still
+pass after all 78 pairs are present. The original preflight and smoke files
+remain preserved. No learning job or Teacher artifact was touched.
+
 Before feature extraction from a completed acquisition, run:
 
 ```powershell
