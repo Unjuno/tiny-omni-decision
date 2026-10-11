@@ -353,3 +353,27 @@ candidate descriptions do not fix this failure; it is present before adaptation.
 This does not establish a general model-capacity ceiling. Further wording search
 on this probe is not justified. See
 [full fixed comparison](docs/pretrained_reuse/R2_TEXT_CONDITION_FACTORIAL_20261012.md).
+
+## User-confirmed product contract (2026-10-12)
+
+The user authorizes autonomous strategy, implementation and local experiments.
+Routine bounded experiments no longer require repeated design confirmation.
+Existing restrictions on paid compute, live-process intervention and preservation
+of legacy artifacts remain unless explicitly changed.
+
+Hard architecture target: <=200M underlying resident parameters before
+quantization, including all modality towers, embeddings, adapters and heads.
+Required inputs: text, video, audio and image; sensors optional. Required quality
+target: >=95% on each required modality, aiming for >=98%, for a general
+question/criteria-conditioned Decision model. Do not replace this with aggregate
+Accuracy, narrow fixed-class taxonomy, or a benchmark chosen after observing
+results. Freeze independently grouped task/generalization evaluations before
+model selection and retain an untouched final audit. No current candidate meets
+this contract. Quantization does not reduce the parameter count for this gate.
+
+Recent NLI reference comparison also failed the fixed numerical diagnostic:
+32.03% Accuracy,12/128 fully correct opposite-condition pairs, despite70/128
+answer changes. See docs/pretrained_reuse/R2_NLI_CONDITION_20261012.md.
+Do not spend further iterations optimizing that diagnostic or deploy either
+text scorer as a general reasoning solution. Reassess pretrained objective,
+conditional architecture, data coverage and full multimodal parameter budget.
