@@ -3,79 +3,87 @@
 ## Scope
 
 This is a local packaging and relocation check for the existing frozen Path A
-Audio and CLEVR-4 Image runtimes. It does not train, select, recalibrate, or
-change either model. The output supports the two component tasks only. It is
-not a four-modality runtime, a temporal video decision runtime, or joint
-audio-video inference.
+Audio, CLEVR-4 Image, and synthetic Typed Decisions Text runtimes. It does not
+train, select, recalibrate, or change any model. The result is a set of
+task-scoped components, not a four-modality runtime, a temporal video decision
+runtime, or joint audio-video inference.
 
 ## Assembly
 
-- Builder source commit: `9737579` (`fix: verify Path A assembly accounting and component paths`).
+- Builder source commit: `5fbe5c2232812441a80c956fcdde33043a59642a`.
 - Builder: `scripts/assemble_path_a_modular_runtime.py`.
 - Assembler and verifier: `src/tiny_omni_decision/modular_bundle.py`.
-- Assembly: `C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v2`.
-- Assembly manifest SHA-256: `42393f6e6e047dca652a07565530479c56740954d32420db4d715598f39a75cc`.
+- Standalone Text runtime: `src/tiny_omni_decision/text_runtime.py`.
+- Assembly: `C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v3`.
+- Package manifest SHA-256: `9d98b4384c57ba7b15ae531b3b209dd13677e64baea005ac64fd35b7a534d7ae`.
 - Source Audio manifest SHA-256: `574640d88d6ddbbdb2d12f2466a248ce13c8d9eb3ac542d099b2f08981b690f4`.
 - Source Image manifest SHA-256: `958e1f8735c33237342d0533f7529a0514fc4f002ca812057b2eff28ac51012e`.
-- Source components were verified before copying and again after copying;
-  the assembled package passed a complete file-set, size, hash, and accounting
-  verification. The source directories were not modified.
-- Measured model parameters: `170,007,682` (Audio component `55,494,785`,
-  Image component `114,512,897`).
-- Assembly files excluding the root package manifest: `685,255,687` bytes.
-  The full directory including its package manifest is `685,265,908` bytes.
-  No component file hashes overlap, so the component files cannot be reduced
-  by deduplication. The provisional 200,000,000-byte target is **not met**.
-- The Audio component includes Whisper Tiny, MiniLM, and its fixed-task head.
-  The Image component includes VideoPrism-B and its CLEVR-4 head plus fixed
-  option embeddings; it does not load MiniLM at inference. MiniLM is therefore
-  stored once in the assembly.
+- Text task manifest SHA-256: `d30a845589f9dee62711d2f82597091d4aaaf27d6cea9d77099d4a2f2c067838`.
+- All source bundles were checked before copying; the output passed a full
+  file-set, size, hash, path and parameter-accounting verification. Existing
+  source and v2 directories remain unchanged.
+- The manifest records `170,204,547` unique runtime parameters. The sum of
+  per-task loaded parameters is `187,594,371` because Audio and Text each load
+  the same MiniLM weights in their separate task runtime. These shared weights
+  are stored only once in the assembly and referenced by path and hash.
+- Package files excluding the root manifest total `686,056,517` bytes;
+  unique-content bytes are `686,052,694`. The full directory is about 686.1 MB.
+  The provisional 200,000,000-byte target is **not met**.
+- Components: Audio uses Whisper Tiny, MiniLM and its fixed task head; Image
+  uses VideoPrism-B and its CLEVR-4 head; Text uses shared MiniLM plus a
+  separate synthetic-text readout. There is no component for temporal video.
 
 ## Runtime relocation checks
 
-The copied component manifests match the source manifests byte-for-byte. The
-following end-to-end replays used the existing development validation records
-as packaging checks, not as new model selection or quality evidence. Both used
-assembly `v0`; final assembly `v2` contains those same component manifest
-hashes and passed full file verification.
+The following end-to-end replays used existing development validation records
+as packaging checks, not as new model selection or quality evidence. Each
+component was loaded from the assembled v3 path and compared with its existing
+runtime. Prediction files and reports are outside Git under
+`C:\CodexArtifacts\pretrained-reuse-r2`.
 
 | Component | Validation slice | Backend / time | Resource | Parity |
 | --- | ---: | --- | --- | --- |
 | Audio | 8 audio observations, 32 decisions | RTX 3080 Laptop; load 0.544 s, inference 0.730 s total (0.0913 s/audio) | Peak CUDA allocation 380,225,024 bytes | 0 prediction mismatches; max logit delta `3.34e-6`, max probability delta `1.19e-7` |
-| Image | 8 images, 32 decisions | JAX CPU; load 3.424 s, inference 13.903 s total (1.738 s/image) | Peak working set 4,256,534,528 bytes | 0 prediction mismatches; max probability delta `2.33e-6` |
+| Image | 8 images, 32 decisions | JAX CPU; load 3.576 s, inference 13.975 s total (1.7469 s/image) | Peak working set 4,252,143,616 bytes | 0 prediction mismatches; max probability delta `2.32e-6` |
+| Text | 8 synthetic decisions | CUDA; load 0.844 s, inference 0.263 s total (0.0329 s/decision) | Peak CUDA allocation 102,433,280 bytes | 0 prediction mismatches; max probability delta `7.15e-7` |
 
-Audio replay report SHA-256:
-`53f496e1dd6012ab96b26bf93eb9db7565e91cebd54c505b58ec2265346ae13d`.
-Image replay report SHA-256:
-`f1583f55764541683c1527dbee96f2d2120a422d2be5de56070babd163dbaa7d`.
+Report SHA-256 values:
+
+- Audio: `72b8032b0bccb67e2da6e990b7eaa5702664682124852f69583233833d4f88c0`
+- Image: `59fe7dadcbb4c74218cd09bd5d4c3569d3842ea0b30457651a644f9e3768c518`
+- Text: `c753da530ee3867e9aa582f6dd536d2454504d321762544ab8ac547f7547f1f8`
+
+The Text replay prediction SHA-256 is
+`b6a6739ed115cf673154b4f8427df0923fb4f5da321f8298449b5cd9397e3e07`;
+the Image replay prediction SHA-256 is
+`b9764c0901099f1269319c3f54525b6fa205fbae61c24c03e94c1c4c5a2bde35`.
 
 ## Runtime and quality limits
 
-- Audio used Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2, and
-  CUDA 12.4 on the local NVIDIA GeForce RTX 3080 Laptop GPU (16 GiB).
+- Audio and Text used Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2,
+  and CUDA 12.4 on the local NVIDIA GeForce RTX 3080 Laptop GPU (16 GiB).
 - Image used the existing separate Python 3.11.16 environment with JAX 0.6.2,
-  TensorFlow 2.18.1 and NumPy 1.26.4 on CPU. That environment does not contain
-  PyTorch; the Audio environment does not contain JAX or TensorFlow. The
-  assembly records these separate profiles and does not vendor environments.
-- The two components are independently callable bundles. A single process
-  dispatcher and standalone text and temporal-video runtimes have not been
-  integrated. The MiniLM tower is only part of the Audio task's fixed query
-  and candidate encoding here; this is not standalone text reasoning.
-- Audio remains a closed-set Speech Commands task with four fixed query
-  templates. Image remains a synthetic CLEVR-4 taxonomy task. The 8-record
-  slices above establish relocation parity only; they do not update quality
-  estimates or satisfy an independent quality gate.
-- Joint audio-video data/task support, text task packaging, temporal video
-  inference, a common runtime dependency profile, and package-size reduction
-  remain open. No training, quantization, sealed-audit loading, cloud use, or
-  model-weight update occurred.
+  TensorFlow 2.18.1 and NumPy 1.26.4 on CPU. The assembly records separate
+  runtime profiles and does not vendor environments or provide one dispatcher.
+- The task scopes remain narrow: Audio is closed-set Speech Commands with
+  four fixed query templates; Image is a synthetic CLEVR-4 taxonomy task; Text
+  is synthetic Typed Decisions Synth. The tiny replay slices establish
+  relocation parity only, not independent quality estimates or release gates.
+- The Text task reuses the exact MiniLM artifact already stored in the Audio
+  component; no model weight file is duplicated. Text and Audio remain
+  independently loaded runtime components.
+- Temporal video inference, joint audio-video task support, a common runtime
+  dependency profile, and package-size reduction remain open. No training,
+  quantization, sealed-audit loading, cloud use, or model-weight update
+  occurred.
 
 ## Verification
 
-- Unit tests: `tests/test_modular_bundle.py` — 4 passed.
-- Full suite: 214 passed, 1 skipped.
-- Ruff: passed.
-- `verify_modular_bundle` passed for assembly `v2`, including all component
-  manifests and files.
-- Assembly contents live under `C:\CodexArtifacts`; no model weights or media
+- `verify_modular_bundle` passed for assembly v3, including component manifests,
+  path safety, file hashes and parameter accounting.
+- Audio, Image and Text relocation replays each had zero prediction mismatches.
+- Local full suite: 220 passed, 1 skipped.
+- Ruff: passed; dataset catalog validation: 7 training and 9 evaluation
+  sources; `git diff --check`: passed.
+- Model weights and media remain under `C:\CodexArtifacts`; no large artifacts
   were added to Git.
