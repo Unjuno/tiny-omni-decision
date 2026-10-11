@@ -39,7 +39,7 @@ def paired_macro(rows, first, second):
     differences = np.zeros_like(counts)
     scene_index = {s: i for i, s in enumerate(scenes)}
     for row, a, b in zip(rows, first, second, strict=True):
-        if a["id"] != b["id"] or row["id"] != a["id"]:
+        if a["id"] != b["id"] or row["id"] != a["id"] or a["target_index"] != b["target_index"]:
             raise ValueError("paired ID mismatch")
         i, j = scene_index[row["scene_index"]], QUESTION_TYPES.index(row["question_type"])
         counts[i, j] += 1
@@ -47,7 +47,10 @@ def paired_macro(rows, first, second):
             a["prediction_index"] == a["target_index"]
         )
     draws = np.random.default_rng(17).integers(len(scenes), size=(10000, len(scenes)))
-    values = (differences[draws].sum(1) / counts[draws].sum(1)).mean(1)
+    denominators = counts[draws].sum(1)
+    if np.any(denominators == 0):
+        raise ValueError("bootstrap replicate lacks a question type")
+    values = (differences[draws].sum(1) / denominators).mean(1)
     return dict(
         difference=float((differences.sum(0) / counts.sum(0)).mean()),
         percentile_95_interval=np.quantile(values, [0.025, 0.975]).tolist(),
@@ -265,14 +268,18 @@ def main():
         or sha(Path(config["features"]["cache"])) != checked["feature_cache_sha256"]
     ):
         raise ValueError("frozen inputs changed")
-    comparisons = {
-        name: paired_macro(rows["validation"], predictions[a], predictions[b])
-        for name, a, b in [
-            ("bilinear_minus_concat", "concat", "bilinear"),
-            ("bilinear_minus_no_video", "no_video", "bilinear"),
-            ("matched_minus_shuffled", "bilinear_shuffled", "bilinear"),
-        ]
-    }
+    comparisons = (
+        {}
+        if args.smoke
+        else {
+            name: paired_macro(rows["validation"], predictions[a], predictions[b])
+            for name, a, b in [
+                ("bilinear_minus_concat", "concat", "bilinear"),
+                ("bilinear_minus_no_video", "no_video", "bilinear"),
+                ("matched_minus_shuffled", "bilinear_shuffled", "bilinear"),
+            ]
+        }
+    )
     write(
         args.output / "result.json",
         dict(
