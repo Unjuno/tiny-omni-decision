@@ -46,3 +46,10 @@ general95%multimodal evidence. Domain terms have no prior training guarantee bey
 this local curriculum (base pretraining is unknown). Count/conditional retention,
 numeric range and calibration regressions must remain visible. Existing weak
 benchmarks and checkpoints stay intact. No new training is authorized here.
+
+## Clarification added after actual-file audit (2026-10-12)
+
+The earlier field-naming description refers to the question's alias preamble,
+not renamed state keys. All state fields/values are identical across vocabulary
+families within each numeric regime. No recorded metrics or inputs changed.
+See [field audit](R2_TRANSFER_FIELD_AUDIT_20261012.md).

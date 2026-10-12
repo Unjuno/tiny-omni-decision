@@ -3,7 +3,7 @@
 Execution completed; inference only. No checkpoint selection from these results.
 Same128 latent states/1024 base questions,10arms/10240rows per model.
 Repeated variants do not multiply independent sample size. Observed development data.
-Families0–3 use trained comparison words; family4 also changes domain field names.
+Families0–3 use trained comparison words; family4 changes only question wording.
 Expanded values use7*x+19. No dropped arms, prompt search, calibration or new training.
 
 | Arm | Old Acc | New Acc | Old NLL | New NLL | Accuracy difference95%CI |
@@ -105,7 +105,7 @@ Base-family4 stays near40%; expanded-family4 reaches36.13% but NLL worsens
 Expanded-family0–3 probability scores generally fail to improve; preserve all regressions.
 Do not adopt the checkpoint as a general reasoning fix or replace shared multimodal towers.
 This is not evidence that the model family can never improve. No clean capacity ceiling.
-The family4 change combines vocabulary/field naming; it cannot isolate either cause.
+Family4 adds domain adjectives and a field-alias preamble; state keys stay unchanged.
 The next quality experiment needs a different, preregistered hypothesis; no automatic extension.
 
 ## Provenance and limits

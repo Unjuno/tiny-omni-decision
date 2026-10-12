@@ -66,3 +66,10 @@ The primary baseline is the prior lexical model; both training stages share init
 Accuracy intervals: paired128-state bootstrap,10,000replicates,seed20261012,percentile95%; all questions of a state kept together. Exploratory multiple arms, no simultaneous correction; repeated development/selection limits apply. NLL/Brier/ECE are point estimates. Scalar timestamps are not video reasoning.
 
 Local FP32 evaluation 101.62s; peak CUDA allocation 194127360bytes; no cloud costs. Artifact directory `C:\CodexArtifacts\pretrained-reuse-r2\vocabulary-transfer-eval-01`. Companion JSON contains full per-task metrics, all opposing-pair counts and artifact hashes. Per-example probabilities remain local, with hashes tracked. Best model SHA `868cc435f3b70ce84d0c49781d80680ba28a1078cbcf6de25f53a58756661b13`. Existing outputs preserved.
+
+## Clarification added after actual-file audit (2026-10-12)
+
+The earlier field-naming description refers to the question's alias preamble,
+not renamed state keys. All state fields/values are identical across vocabulary
+families within each numeric regime. No recorded metrics or inputs changed.
+See [field audit](R2_TRANSFER_FIELD_AUDIT_20261012.md).
