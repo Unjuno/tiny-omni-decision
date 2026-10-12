@@ -168,3 +168,29 @@ the conditional-semantic gate. Future work must explicitly connect target identi
 covering-object association and condition-dependent readout.
 
 CI for documentation commit0fad303: both workflows completed successfully.
+
+## Grounding/orientation feasibility check
+
+Visually inspected fixed train video10103 at frames0,90,180,270,360,458,
+all before the reveal cut. There are two covering glasses, consistent with the
+upstream count question; the three ordinal answer options also come from the
+upstream questions. Do not remove the third option or simplify the benchmark.
+Contact sheet:`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-train-visual-inspection-01/video_10103.png`.
+
+Upstream grounded questions link the hidden object, its covering object and the
+set of similar covering objects. An annotation-only diagnostic on all99 train
+videos ranked the marked covering object's box-center x among that set at the
+first/last common unmasked annotated pre-cut frame. Comparing zero-based ordinal
+ranks with canonical question targets gives101/198 matches for screen-left order,
+and134/198 for screen-right order. Both orientations were reported; neither is
+adopted as a learned or product rule. The latter67.68% is not model Accuracy.
+
+Even oracle identity plus a simple screen-x rank is therefore insufficient as a
+surrogate task. Person-relative viewpoint, temporal endpoint mismatch, overlap
+and object changes require review before using this supervision. These results
+do not establish annotation errors. Do not feed grounded answer IDs into runtime
+inputs or use them to select evaluation trajectories.
+
+Full diagnostic rows, exact comparison frames, object counts and both ranks:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-oracle-rank-train-01.json`.
+No fitting, model inference, validation or sealed evaluation was performed.
