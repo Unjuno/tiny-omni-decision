@@ -1,4 +1,5 @@
 """Approved fixed NLI condition diagnostic; no training or calibration."""
+
 import argparse
 import json
 import time
@@ -6,6 +7,24 @@ from pathlib import Path
 
 from scripts.evaluate_text_condition_probe import examples
 from tiny_omni_decision.dataset import sha256_file
+
+
+def checkpoint_contract(name):
+    contracts = {
+        "minilm2": (
+            "ec9c5b6a08b60d7a01b465c7ed44b496244dfd1bed3274c95875a74cea89ab35",
+            "b95119ce93d3e065de6214e38cd4a97b0f2f2c6d",
+            1,
+        ),
+        "deberta_xsmall": (
+            "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+            "262ae02f29173eec1c250f90804dc7edc677dcff",
+            0,
+        ),
+    }
+    if name not in contracts:
+        raise ValueError("unknown checkpoint")
+    return contracts[name]
 
 
 def hypothesis(row, option):
@@ -25,11 +44,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("model", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--checkpoint", choices=("minilm2", "deberta_xsmall"), default="minilm2")
     args = parser.parse_args()
-    if (
-        sha256_file(args.model / "model.safetensors")
-        != "ec9c5b6a08b60d7a01b465c7ed44b496244dfd1bed3274c95875a74cea89ab35"
-    ):
+    weight_hash, revision, entailment_index = checkpoint_contract(args.checkpoint)
+    if sha256_file(args.model / "model.safetensors") != weight_hash:
         raise ValueError("base hash mismatch")
     rows = examples()
     args.output.mkdir(parents=True, exist_ok=False)
@@ -38,6 +56,10 @@ def main():
         (args.output / name).write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
     write("inputs.json", rows)
+    if sha256_file(args.output / "inputs.json") != (
+        "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+    ):
+        raise ValueError("fixed diagnostic inputs changed")
     write(
         "protocol.json",
         {
@@ -48,7 +70,9 @@ def main():
             "training": False,
             "selection": False,
             "runner_sha256": sha256_file(Path(__file__)),
-            "base_revision": "b95119ce93d3e065de6214e38cd4a97b0f2f2c6d",
+            "base_revision": revision,
+            "weight_sha256": weight_hash,
+            "entailment_index": entailment_index,
             "input_sha256": sha256_file(args.output / "inputs.json"),
         },
     )
@@ -66,11 +90,13 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     started = time.perf_counter()
     model = (
-        AutoModelForSequenceClassification.from_pretrained(args.model, local_files_only=True)
+        AutoModelForSequenceClassification.from_pretrained(
+            args.model, local_files_only=True, dtype=torch.float32
+        )
         .to(device)
         .eval()
     )
-    if model.config.label2id.get("entailment") != 1:
+    if model.config.label2id.get("entailment") != entailment_index:
         raise ValueError("unexpected entailment label")
     model.requires_grad_(False)
     scores = []
@@ -83,7 +109,7 @@ def main():
                 truncation=False,
                 return_tensors="pt",
             ).to(device)
-            scores.extend(model(**batch).logits[:, 1].float().cpu().tolist())
+            scores.extend(model(**batch).logits[:, entailment_index].float().cpu().tolist())
     logits = torch.tensor(scores).reshape(-1, 3)
     if not torch.isfinite(logits).all():
         raise ValueError("nonfinite scores")
@@ -113,6 +139,7 @@ def main():
     changed_pairs = sum(predictions[i] != predictions[i + 1] for i in range(0, 256, 2))
     result = {
         "status": "PASS_EXECUTION_ONLY",
+        "parameters": sum(p.numel() for p in model.parameters()),
         "scoring": "entailment logit softmax over options; temperature 1",
         "metrics": _metrics(list(logits), targets),
         "groups": groups,
