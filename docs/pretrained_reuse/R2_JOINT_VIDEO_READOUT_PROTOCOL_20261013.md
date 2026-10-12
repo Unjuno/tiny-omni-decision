@@ -66,3 +66,13 @@ frame IDs that differ across question conditions or black/normal controls.
 Synthetic readout tests verify the 51 recorded points (epoch0 plus50 updates),
 minimum-validation-NLL selection, separate final weight and exact best reload.
 Actual corpus training remains dependent on both full feature extractions.
+
+## Completed training-feature cache admission
+
+Train extraction completed99 videos /198 questions in600.539seconds CPU,
+396 rows covering normal and black inputs. Each mode has shape[198,3,192].
+The full prior diagnostic's396 probability/identity/frame records match exactly
+when removing the newly added feature vectors; no extraction behavior drift.
+Cache SHA2568d061543600446f0dfd659feeb1e88c6c039c7f8cfab3104141c92a5fe9be3ef.
+Admission saved under all-in-one-tiny-train-features-01/admission.json.
+Validation extraction remains in progress; no actual readout fit yet.
