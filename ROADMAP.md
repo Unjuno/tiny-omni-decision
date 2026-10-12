@@ -917,3 +917,11 @@ zero changed answers. The API preserves all twelve classes and explicitly marks
 the central label's 1.26 seconds of future evidence; it rejects premature queries.
 This verifies delayed-window runtime semantics, not instantaneous or joint quality.
 [Replay and limits](docs/pretrained_reuse/R2_NATIVE_SENSOR_RUNTIME_20261012.md).
+
+### Concurrent functional native paths (2026-10-12)
+
+One retained visual worker and its host now execute image/video/speech/sensor
+inputs at 169,973,492 resident parameters, preserving saved answers. MiniLM serves
+video question/options; standalone text, event audio, screen and joint fusion
+are outside this slice. The next gate is task-matched joint quality, not another
+residency-only claim. [Measured scope](docs/pretrained_reuse/R2_RESIDENT_NATIVE_PATHS_20261012.md).

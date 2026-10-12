@@ -24,9 +24,8 @@ def read(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def main():
+def replay(out, companion=None):
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
-    out = root / "shared-visual-decision-replay-01"
     out.mkdir(exist_ok=False)
     config_path = Path("configs/pretrained_reuse/path_a_videoprism_clevrer_binary_reasoning.yaml")
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
@@ -109,7 +108,9 @@ def main():
                 str(out / "requests.json"),
                 "--report",
                 str(out / "worker-report.json"),
+                *(["--hold-for-release"] if companion is not None else []),
             ],
+            stdin=subprocess.PIPE if companion is not None else None,
             stdout=subprocess.PIPE,
             stderr=log,
             env=dict(os.environ, PYTHONPATH=str(Path.cwd() / "src"), JAX_PLATFORMS="cpu"),
@@ -153,6 +154,15 @@ def main():
                     decisions=decisions,
                     max_probability_delta=float(abs(probabilities - reference).max()),
                 )
+            if companion is not None:
+                try:
+                    companion_result = companion.run()
+                    if worker.poll() is not None:
+                        raise ValueError("visual worker exited before companion replay")
+                    write(out / "companion-result.json", companion_result)
+                finally:
+                    worker.stdin.write(b"release\n")
+                    worker.stdin.flush()
             if worker.stdout.read(1) or worker.wait(timeout=30) != 0:
                 raise ValueError("unexpected worker termination/output")
     np.testing.assert_array_equal(arrays["images"], arrays["images-repeat"])
@@ -178,6 +188,7 @@ def main():
             source_unchanged=True,
             full_omni_runtime=False,
             parameters=114365184
+            + (companion.parameters if companion is not None else 0)
             + sum(
                 p.numel() for m in (image_model, video_model, text_model) for p in m.parameters()
             ),
@@ -185,6 +196,10 @@ def main():
         ),
     )
     print("PASS_RAW_SHARED_DECISIONS")
+
+
+def main():
+    replay(Path("C:/CodexArtifacts/pretrained-reuse-r2/shared-visual-decision-replay-01"))
 
 
 if __name__ == "__main__":

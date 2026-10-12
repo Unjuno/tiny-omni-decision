@@ -25,6 +25,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--requests", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--hold-for-release", action="store_true")
     args = parser.parse_args()
     if args.report.exists() or args.requests.stat().st_size > 1024 * 1024:
         raise ValueError("fresh report and bounded requests required")
@@ -91,6 +92,8 @@ def main():
                 )
             )
         assert sha256_file(weights) == CHECKPOINT_SHA256
+        if args.hold_for_release and sys.stdin.readline().strip() != "release":
+            raise RuntimeError("missing parent release")
         args.report.write_text(
             json.dumps(
                 dict(
