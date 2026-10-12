@@ -182,3 +182,26 @@ This resolves this module's source compatibility, not full multimodal forward or
 checkpoint provenance beyond key/shape compatibility. Complete text/pooler/ITM
 load, original preprocessing, seeded-repeat behavior and actual predictions are
 still required before quality experiments. Product license remains REVIEW.
+
+## Actual joint matching forward passed
+
+Constructed the matching inference path using initial-commit vision,TemporalRoll,
+Pooler and ITMHead, installed BertEmbeddings, and the unmodified infer method
+extracted from the pinned module AST. This avoids importing unrelated Lightning
+training/data utilities. Explicitly excludes six mlm_score training-only keys;
+every retained key strict-loads with no missing/unexpected entries. The historical
+position_ids buffer is made persistent for exact checkpoint accounting.
+
+Actual resident parameters:11,430,914. Synthetic one-video/three-frame224px random
+RGB input plus six text tokens produced finite two-class ITM logits. CPU4threads,
+FP32:0.060458s first forward,0.045626s second. Reset seed17 before each forward
+reproduced logits exactly. This is only synthetic runtime evidence; no real-media
+preprocessing, option calibration, video quality or deployment latency claim.
+Seed-reset parity does not mean inference is independent of stochastic patch order.
+
+Evidence:`C:/CodexArtifacts/pretrained-reuse-r1/all-in-one-tiny-forward-01/result.json`.
+Runner:`all-in-one-source-initial-01/forward_probe.py`, SHA256
+1103824ff40b7ecfdf24e14cb69f455a47d678f7a4aade828cacd1995eefeb5d.
+No fitting/GPU/cloud/legacy modification. Product-use license remains REVIEW.
+Next verify original real-video preprocessing, input-sensitive outputs and
+save/reload before proposing any quality run.
