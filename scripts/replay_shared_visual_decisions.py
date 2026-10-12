@@ -124,7 +124,9 @@ def main():
                 np.save(out / f"{request.key}.npy", values, allow_pickle=False)
                 with torch.inference_mode():
                     if request.modality == "image":
-                        x = torch.from_numpy(np.concatenate((values[:, 0], values[:, 1:].mean(1)), 1))
+                        x = torch.from_numpy(
+                            np.concatenate((values[:, 0], values[:, 1:].mean(1)), 1)
+                        )
                         probabilities = image_model(x.double()).reshape(-1, 10).softmax(-1).numpy()
                         expected = image_expected
                     else:
@@ -137,9 +139,12 @@ def main():
                 decisions = []
                 for index, (row, p) in enumerate(zip(expected, probabilities, strict=True)):
                     classes = row.get(
-                        "options", video_rows[index]["options"] if request.modality == "video" else []
+                        "options",
+                        video_rows[index]["options"] if request.modality == "video" else [],
                     )
-                    options = [dict(option_id=f"custom-{i}", class_id=c) for i, c in enumerate(classes)]
+                    options = [
+                        dict(option_id=f"custom-{i}", class_id=c) for i, c in enumerate(classes)
+                    ]
                     a = classification_json(p, classes, options)
                     b = classification_json(p, classes, options[::-1])
                     assert a["selected_option_id"] == b["selected_option_id"]

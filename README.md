@@ -599,3 +599,13 @@ at the snapshot. A replacement checkpoint and Windows launcher PID initially
 caused double counting and memory undercounting; the corrected run preserves both
 attempts. This is capacity evidence, not a wired or quality-qualified Omni model.
 [Exact ledger and integration gaps](docs/pretrained_reuse/R2_SHARED_RESIDENT_BUDGET_20261012.md).
+
+
+### Shared raw visual decisions (2026-10-12)
+
+One visual worker now handles raw images and a raw video with the existing heads:
+32 image decisions and8 video decisions match saved outputs, with zero answer
+changes; repeated images are exact. The video path explicitly retains2048 tokens
+required by its attention head. This132.21M functional slice excludes the other
+modalities and is a runtime parity result, not new quality or joint-fusion proof.
+[Execution, JSON outputs and remaining gates](docs/pretrained_reuse/R2_SHARED_VISUAL_DECISIONS_20261012.md).
