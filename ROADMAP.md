@@ -978,3 +978,8 @@ epoch1 reaches51% Accuracy versus25% untrained; later training memorizes train
 and worsens validation NLL/calibration. Keep the NLL-selected research probe,
 close this comparison, and do not claim general Omni quality or justify greater
 capacity from it. [Results and uncertainty](docs/pretrained_reuse/R2_AV_CORRESPONDENCE_RESULTS_20261012.md).
+
+The [post-correspondence requirements audit](docs/pretrained_reuse/R2_POST_CORRESPONDENCE_GATE_AUDIT_20261012.md)
+separates completed narrow probes/runtime parity from unmet conditional-semantic,
+joint-quality and release gates. Consult it before repeating coverage, transfer,
+correspondence or residency experiments.
