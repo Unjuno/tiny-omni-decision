@@ -142,3 +142,23 @@ not a verified instantiated resident count or authorized arbitrary layer removal
 A future strict loader must explicitly account for excluded MLM training heads,
 position-ID buffers and every inference key, and compare actual forward behavior.
 No model forward or quality claim has yet been made.
+
+## First actual module construction: strict-load failure retained
+
+Installed timm0.4.12/einops0.3.2 without dependencies into the separate artifact
+folder all-in-one-runtime-deps-01; global packages were not changed. Imported the
+pinned original vision source and constructed its Tiny model with pretrained=False
+and released hparams. Initial dynamic-import registration needed sys.modules;
+that tooling error was corrected before the model-state attempt.
+
+Strict transformer-state load fails: current pinned source expects temporal_embed,
+while the actual released checkpoint has no transformer.temporal_embed tensor.
+The source uses this parameter in visual_embed, so silently ignoring the missing
+key or inventing a zero tensor would not verify the original model. No forward
+or successful load is claimed. Reproduction script preserved as
+`all-in-one-tiny-weight-audit-01/load_vision.py`.
+
+Next inspect publisher history for the source corresponding to the released
+checkpoint; retain strict key checking and avoid synthetic checkpoint repairs.
+Also retain source visual_embed's stochastic patch ordering when measuring parity:
+evaluation contains torch.multinomial, interacting with temporal token rolling.
