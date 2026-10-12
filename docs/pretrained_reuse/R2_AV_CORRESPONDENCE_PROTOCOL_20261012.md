@@ -162,3 +162,35 @@ fixed73,728-parameter projection. No validation selector is used in this train-o
 smoke. Keep final weights, history, all control predictions and reload evidence;
 training memorization is not generalization. Encoders are not loaded or updated.
 Full development fitting still requires independent validation media/content gates.
+
+## Executed projection mechanics smoke
+
+Source commit41f1e3bdc2c9dc81e1a5e508785b166a4a2c8322 ran
+`python -m scripts.smoke_av_correspondence --output C:/CodexArtifacts/pretrained-reuse-r2/perception-correspondence-smoke-01`.
+CPU, seed17,100 epochs /200 optimizer updates, eight unique recordings /two
+quartets /800 presentations. Only73,728 projection parameters were trained;
+no encoder loaded. Fit/history measurement took0.360 seconds, excluding file
+loading and earlier feature extraction. Final checkpoint296,332 bytes, SHA256
+`526db7760da7d5ed7774f2e5634cf024b3548b93fb3382a5e61b31652a6fe809`.
+
+| Train-only condition | Accuracy | NLL | Brier | ECE15 |
+|---|---:|---:|---:|---:|
+| Untrained fixed projection |0.625|1.343219|0.728032|0.402192|
+| Trained final |1.000|0.000061|0.000000006|0.000061|
+| Audio zero |0.250|1.386294|0.750000|0.000000|
+| Video zero |0.250|1.386294|0.750000|0.000000|
+| Query audio cyclically shifted within quartet |0.000|11.234765|1.999845|0.999939|
+| Reversed options with remapped targets |1.000|0.000061|0.000000006|0.000061|
+
+Reload logits were bit-exact; reversal logits pass1e-6 tolerance. All feature and
+routing hashes remained unchanged. The zero controls are uniform by construction
+of bias-free projections, so their scores verify mechanics rather than proving
+semantic complementarity. All probabilities/targets, config/hashes,100-point
+history and executed source are retained. There is no selected best checkpoint,
+validation, confidence interval or quality claim: fitting eight examples can
+memorize recordings. The initial62.5% is only5/8 examples and is not reliable
+zero-shot evidence. The next stage is the fixed256-train/200-valid acquisition
+and independent development comparison, not further fitting on these eight.
+
+Ruff and606 CPU tests passed (one optional test skipped). Source attribution and
+all original input/model artifacts are preserved; no GPU or paid compute used.

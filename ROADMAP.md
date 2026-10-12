@@ -966,3 +966,9 @@ The protocol and 256 deterministic train routing records are fixed, including
 balanced candidate positions, no source-ID features, unimodal/shuffle controls and
 explicit recording-shortcut limitations. This remains an alignment diagnostic,
 not general decision quality. See [protocol](docs/pretrained_reuse/R2_AV_CORRESPONDENCE_PROTOCOL_20261012.md).
+
+Correspondence follow-up: the fixed200 official-validation recordings are pinned
+with zero train recording-ID overlap. An eight-train-recording projection smoke
+passes save/reload and candidate-order controls, using73,728 trainable parameters.
+Its100% training Accuracy is memorization evidence only; independent development
+quality and content-overlap checks remain pending. [Protocol and all controls](docs/pretrained_reuse/R2_AV_CORRESPONDENCE_PROTOCOL_20261012.md).
