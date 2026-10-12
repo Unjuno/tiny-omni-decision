@@ -1,3 +1,5 @@
+> Correction: earlier tokenizer-based length and real-text smoke claims are superseded by the tokenizer correction below.
+
 # Smaller video-language candidate follow-up
 
 Existing MobileCLIP/MobileViCLIP audit remains controlling: inherited model-weight
@@ -225,3 +227,27 @@ Runner:`all-in-one-source-initial-01/real_forward_probe.py`;
 SHA2566a244513a7d6b9da08c3edd214584b25433706875d05d91e694c00b4e1dc7513.
 Exact resident count remains11,430,914; product licensing remains REVIEW.
 No new training, evaluation-set scoring or legacy artifact modification.
+
+## Tokenizer compatibility correction — supersedes prior text checks
+
+Candidate-order control exposed identical scores for all three ordinal candidates.
+Installed Transformers BertTokenizer uses `vocab=`, while `vocab_file=` is silently
+ignored. The previous constructor had vocabulary size5 and mapped ordinary words
+to UNK. Therefore earlier39–43/28–32 length counts and real-text smoke semantic
+claims are invalid; preserved original artifacts are not usable quality evidence.
+Synthetic hardcoded-token forward, strict module loads and parameter counts are
+unaffected. No training or validation quality run used this tokenizer.
+
+Corrected constructor uses the same pinned vocabulary with `vocab=`, asserts30522
+entries and distinct first/second/third token IDs. Actual594 original inputs are
+41–45 tokens (all594 exceed40); compact inputs are30–34 (none exceed40).
+Corrected measurements:all-in-one-source-audit-01/corrected-text-length-audit.json.
+
+Fixed real candidate probe02 has exact candidate-order equivariance. Seed17
+uncalibrated probabilities:[0.275253,0.316989,0.407758]; seed18 differs, max logit
+delta0.029445. Reversing frames changes logits by up to0.074431. These are one-video
+runtime controls, not accuracy or evidence of correct reasoning. Keep seed17;
+seed18 is a sensitivity diagnostic, never a seed-selection candidate.
+Artifacts:all-in-one-tiny-candidate-controls-02; corrected real save/reload probe
+all-in-one-tiny-real-forward-02. Old01 artifacts remain preserved as invalid-text
+runs. Future admission must assert vocabulary and actual token IDs before scoring.
