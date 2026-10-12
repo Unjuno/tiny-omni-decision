@@ -725,3 +725,12 @@ independent63.54%/84.08%. Reversing candidates drops joint original Accuracy
 to40.79%; independent predictions remain exact. Reject this candidate, without
 claiming a joint-architecture capacity ceiling.
 [Curves and fixed order diagnosis](docs/pretrained_reuse/R2_JOINT_LEARNING_RESULTS_20261012.md).
+
+
+### Training-order intervention (2026-10-12)
+
+A matched 1,024-update option-shuffle run completed with exact best reload.
+Original/curriculum Accuracy fell to 54.80%/25.29%; reversing options still
+changes 897/2,540 and 1,741/2,048 answer identities. The smaller aggregate order
+gap does not establish stability. Candidate rejected; all prior artifacts remain.
+[Verified results](docs/pretrained_reuse/R2_JOINT_SHUFFLED_RESULTS_20261012.md).
