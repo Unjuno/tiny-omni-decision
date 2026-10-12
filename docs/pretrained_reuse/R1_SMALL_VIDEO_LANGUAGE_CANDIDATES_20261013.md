@@ -262,3 +262,21 @@ signatures and invalid input. Real local pinned vocabulary load produced 30,522
 entries and ordinal token IDs [101, 2034, 2117, 2353, 102].
 Ruff passed; full CPU suite: 653 passed, 1 skipped. This establishes tokenizer
 admission only; it does not establish downstream quality or authorize adoption.
+
+## Frozen train-only diagnostic admission
+
+The repository tokenizer helper was exercised on the real candidate-control run03:
+all logits exactly reproduce corrected run02, including candidate permutation.
+New diagnostic02 scores all 99 training videos / 198 questions, seed17, three
+first/middle/last pre-cut frames, frozen ITM positive-minus-negative logits and
+uncalibrated option softmax. Compare normal video with normalized black pixels
+(-1). No validation/audit, optimization, calibration or checkpoint selection.
+This is a training-side diagnostic, not evidence of held-out generalization.
+
+Attempt01 stopped: normalized zero pixels are interpreted as padding by upstream
+visual_embed; positional interpolation requests H=0/W=0. Its partial predictions
+are not a completed result. Attempt02 uses valid black-image padding masks.
+Artifacts: C:/CodexArtifacts/pretrained-reuse-r1/all-in-one-tiny-train-diagnostic-02.
+Runner: all-in-one-source-initial-01/train_diagnostic_black.py,
+SHA256 a7f6f04293c88159d11a88277d660fe2054ed9d1b803e532f9b25c72aaea65f9.
+Completion and quality remain pending at protocol publication.
