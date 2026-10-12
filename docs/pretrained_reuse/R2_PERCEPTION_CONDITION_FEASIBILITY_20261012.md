@@ -74,3 +74,27 @@ frame indices/PTS, cut and train-only scope), and `.png` under the R2 root.
 Initial rendering failed because the PyAV environment has no Pillow; decoding
 and rendering were then run in their existing separate environments. No package
 upgrade, existing window modification, training or validation evaluation occurred.
+
+## Prospective dense temporal plan measured on all acquired train examples
+
+A separate policy was fixed before model scoring:4 fps by actual PTS, each target
+selecting the latest frame not after that time, eight distinct frames per window.
+The final window overlaps the preceding one where necessary to retain the tail;
+duplicate frame indices within a window are forbidden. Bounds use the existing
+common interval and exclude its end/reveal cut. This is offline planning, not an
+online latency guarantee or a change to any previous experiment.
+
+`scripts.audit_dense_video_plan` decoded all16 acquired train occlusion examples,
+verifying source media hashes. Result:1,159 distinct selected frames in151
+eight-frame windows. The old per-video maximum spacing ranges1.6329–4.4985seconds;
+the new maximum across all16 is0.28004seconds. This improves temporal coverage
+but costs151 rather than16 encoder calls (9.4375x calls, not measured9.4375x
+runtime). It does not certify every hidden-object trajectory or label.
+
+Artifact: `C:/CodexArtifacts/pretrained-reuse-r2/perception-dense-temporal-plan-01.json`.
+Command: existing PyAV Python, `python -m scripts.audit_dense_video_plan --output <fresh.json>`.
+No features, scores or trained weights were produced. Tests check deterministic
+selection, end exclusion, complete tail coverage and malformed clocks/short input;
+Ruff and612 CPU tests passed, one optional test skipped. The next bounded gate
+is runtime/feature feasibility of these windows before a separately fixed paired
+decision protocol, not an automatic large frame-count training run.
