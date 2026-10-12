@@ -1,0 +1,320 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "results": {
+    "minilm_attention": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5179163901791639,
+        "parent_exact_accuracy": 0.14631336405529954,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5009836065573771,
+        "parent_exact_accuracy": 0.03076923076923077,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.5348460291734197,
+        "parent_exact_accuracy": 0.20588235294117646,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.5372549019607843,
+        "parent_exact_accuracy": 0.32608695652173914,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    },
+    "minilm_attention_shuffled": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5238885202388852,
+        "parent_exact_accuracy": 0.14631336405529954,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5062295081967213,
+        "parent_exact_accuracy": 0.04358974358974359,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.5388978930307942,
+        "parent_exact_accuracy": 0.18529411764705883,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.5568627450980392,
+        "parent_exact_accuracy": 0.34057971014492755,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    },
+    "minilm_no_video": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5192435301924353,
+        "parent_exact_accuracy": 0.1382488479262673,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5075409836065574,
+        "parent_exact_accuracy": 0.05384615384615385,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.5372771474878444,
+        "parent_exact_accuracy": 0.17941176470588235,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.5019607843137255,
+        "parent_exact_accuracy": 0.2753623188405797,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    },
+    "minilm_no_video_shuffled": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5192435301924353,
+        "parent_exact_accuracy": 0.1382488479262673,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5075409836065574,
+        "parent_exact_accuracy": 0.05384615384615385,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.5372771474878444,
+        "parent_exact_accuracy": 0.17941176470588235,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.5019607843137255,
+        "parent_exact_accuracy": 0.2753623188405797,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    },
+    "shared_attention": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5006635700066357,
+        "parent_exact_accuracy": 0.08755760368663594,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5003278688524591,
+        "parent_exact_accuracy": 0.023076923076923078,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.5032414910858996,
+        "parent_exact_accuracy": 0.1676470588235294,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.49019607843137253,
+        "parent_exact_accuracy": 0.07246376811594203,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    },
+    "shared_attention_shuffled": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5059721300597213,
+        "parent_exact_accuracy": 0.07949308755760369,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5140983606557377,
+        "parent_exact_accuracy": 0.017948717948717947,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.5,
+        "parent_exact_accuracy": 0.15,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.48627450980392156,
+        "parent_exact_accuracy": 0.07971014492753623,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    },
+    "shared_no_video": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5019907100199071,
+        "parent_exact_accuracy": 0.07949308755760369,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5042622950819672,
+        "parent_exact_accuracy": 0.005128205128205128,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.4991896272285251,
+        "parent_exact_accuracy": 0.16470588235294117,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.5019607843137255,
+        "parent_exact_accuracy": 0.07971014492753623,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    },
+    "shared_no_video_shuffled": {
+      "all": {
+        "choices": 3014,
+        "parents": 868,
+        "scenes": 200,
+        "choice_accuracy": 0.5019907100199071,
+        "parent_exact_accuracy": 0.07949308755760369,
+        "always_wrong_parent_accuracy": 0.07834101382488479,
+        "always_correct_parent_accuracy": 0.07949308755760369
+      },
+      "counterfactual": {
+        "choices": 1525,
+        "parents": 390,
+        "scenes": 200,
+        "choice_accuracy": 0.5042622950819672,
+        "parent_exact_accuracy": 0.005128205128205128,
+        "always_wrong_parent_accuracy": 0.002564102564102564,
+        "always_correct_parent_accuracy": 0.005128205128205128
+      },
+      "explanatory": {
+        "choices": 1234,
+        "parents": 340,
+        "scenes": 194,
+        "choice_accuracy": 0.4991896272285251,
+        "parent_exact_accuracy": 0.16470588235294117,
+        "always_wrong_parent_accuracy": 0.1676470588235294,
+        "always_correct_parent_accuracy": 0.16470588235294117
+      },
+      "predictive": {
+        "choices": 255,
+        "parents": 138,
+        "scenes": 138,
+        "choice_accuracy": 0.5019607843137255,
+        "parent_exact_accuracy": 0.07971014492753623,
+        "always_wrong_parent_accuracy": 0.07246376811594203,
+        "always_correct_parent_accuracy": 0.07971014492753623
+      }
+    }
+  },
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\minilm_attention\\predictions.json": "eed7265a43d565b5ff2c9df9fd133f19d2bc1dfb984ec2bd32932c82b07c13c4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\minilm_attention\\predictions_shuffled.json": "372d26bd0f4c199e9f9ba1142bde8bd157dd64075a8c22022eb60635d527c57e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\minilm_no_video\\predictions.json": "beefe1249e2487963a5214db277a5a9204cc323794020049db6e4b754ab0adb1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\minilm_no_video\\predictions_shuffled.json": "0c6021e55a8cdb41a4fbd1b6751e3d7ed88fa455d466d96c1e40d4d6486e4b82",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\shared_attention\\predictions.json": "dd32e22403f197204a9fe6d90fb056b714822b610649657a5e23649f29f08c33",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\shared_attention\\predictions_shuffled.json": "bb222c5eb58c1de2f9d6a18ac9046e3f658537178da56f0d7388237291d07993",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\shared_no_video\\predictions.json": "b781e8553e831a6990ed940f2b0314431fd0cbb1eed01e21d260affba3463383",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-text-video-01\\shared_no_video\\predictions_shuffled.json": "18270916c6bd6f7138c7f930a340b6ee0ee30858b14a61b9c99da6a3c7367c07"
+  },
+  "limitation": "Development validation; exact match only over recorded choices; no joint probability independence assumption."
+}
