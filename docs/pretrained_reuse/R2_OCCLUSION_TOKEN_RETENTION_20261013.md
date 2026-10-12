@@ -24,3 +24,15 @@ Next gate: determine whether a compact spatial readout can recover known train-o
 ## Reproduction
 
 `python -m scripts.audit_occlusion_token_retention` in the existing CPU JAX environment. The script deliberately requires a fresh output path. Artifacts: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-token-retention-01/`; config pins parent report and script hashes, result pins each token file. No weights were changed.
+
+## Boundary-frame visual check
+
+Contact sheets of all16 selected frames per video were inspected. The initial
+windows show the tabletop setup before the hiding action; the ending windows show
+covered objects and hands. These boundary windows alone do not visibly establish
+the hidden-object location. Do not attach whole-video target labels to these
+individual windows as if independently observable. Both preselected videos have
+initial and final target index1, so this tiny diagnostic also cannot establish
+condition switching. A future semantic probe must account for presentation and
+movement intervals and actor-relative coordinates. No data or labels were changed.
+Local contact sheets: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-token-contact-01/`.
