@@ -12,10 +12,18 @@ from scripts.train_occlusion_readout import PINS, ROOT, summarize
 from tiny_omni_decision.paired_video_intervals import video_cluster_intervals
 
 
+def aligned_reference(saved, pairs, targets):
+    if saved["pairs"] != pairs or saved["targets"] != list(targets):
+        raise ValueError("reference prediction identity mismatch")
+    values = np.asarray(saved["probabilities"]["normal"])
+    return values.reshape(len(pairs), 2, -1)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--reference", type=Path)
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError("fresh output required")
@@ -83,6 +91,24 @@ def main():
     output["attention_minus_mean"] = video_cluster_intervals(
         predictions["attention"], targets, reference=predictions["mean"]
     )
+    if args.reference is not None:
+        reference_result = json.loads((args.reference / "result.json").read_text())
+        reference_config = json.loads((args.reference / "config.json").read_text())
+        for key in ("seed", "epochs", "learning_rate", "weight_decay", "selector", "pair_hashes"):
+            if reference_config[key] != config[key]:
+                raise ValueError(f"reference training policy differs: {key}")
+        output["reference_result_sha256"] = sha(args.reference / "result.json")
+        output["candidate_minus_reference"] = {}
+        for mode in ("mean", "attention"):
+            path = args.reference / mode / "predictions.json"
+            if sha(path) != reference_result[mode]["artifacts"]["predictions.json"]["sha256"]:
+                raise ValueError("reference predictions changed")
+            reference = aligned_reference(
+                json.loads(path.read_text()), pairs["valid"], targets.ravel().tolist()
+            )
+            output["candidate_minus_reference"][mode] = video_cluster_intervals(
+                predictions[mode], targets, reference=reference
+            )
     write(args.output, output)
     print("PASS_METRIC_SELECTOR_HASH_REPRODUCTION_AND_PAIRED_INTERVALS")
 
