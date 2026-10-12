@@ -1,6 +1,7 @@
 """Frozen VideoMAEv2 features on the pinned prior experiment's exact windows."""
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import subprocess
@@ -13,7 +14,20 @@ import numpy as np
 import torch
 
 from scripts.audit_correspondence_validation import sha, write
-from scripts.extract_occlusion_dense_features import PAIR_PINS, PINS, array_hash
+from scripts.train_occlusion_readout import PINS as PAIR_PINS
+
+PINS = {
+    "train": "469299ad240ff85c47ba44abb8920aae9994b0e3ec15a3fca1373c49b2fa6ee3",
+    "valid": "213bd33994fb80d79ee05ee0580af2cc9915dfc61094aed00c847c2c67f1d546",
+}
+
+
+def array_hash(array):
+    digest = hashlib.sha256()
+    digest.update(str(array.dtype).encode())
+    digest.update(str(array.shape).encode())
+    digest.update(np.ascontiguousarray(array).tobytes())
+    return digest.hexdigest()
 
 ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r2")
 MODEL = Path("C:/CodexArtifacts/pretrained-reuse-r1/videomaev2-small-audit-01")
