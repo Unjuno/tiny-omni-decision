@@ -773,3 +773,14 @@ has an uncertain difference; both exceed no-video35.83% on development metrics.
 Attention clearly overfits. Preserve as optional-criterion evidence, do not
 extend this family; prioritize the new modality-native/sensor-inclusive R2-M.
 [Measured report](docs/pretrained_reuse/R2_GROUNDING_TOKEN_RESULTS_20261012.md).
+
+
+### Native video/sensor fixed comparison (2026-10-12)
+
+VIDIMU frozen-feature video and joint readouts completed100epochs each on
+130train/39validation trials. Selected Accuracy: sensor100%, video66.67%,
+joint76.92%; NLL0.164/0.777/0.572. Fixed modality shuffles show both inputs
+affect the joint model, but fusion is worse than sensor-only and fails adoption.
+This narrow13-class,3-validation-subject result does not establish general Omni
+quality or synchronized fusion. No extra seeds or tuning; preserve negative
+results and all artifacts. [Full comparison](docs/pretrained_reuse/R2M_VIDIMU_COMPARISON_20261012.md).
