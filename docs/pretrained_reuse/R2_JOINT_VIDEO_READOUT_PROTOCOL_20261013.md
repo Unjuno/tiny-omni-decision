@@ -54,3 +54,15 @@ validation candidate statements now pass, each30–34 tokens, no truncation.
 Preserve partial all-in-one-tiny-valid-features-01. Restart full extraction into
 all-in-one-tiny-valid-features-02; train-features-01 continues unchanged.
 Regression tests include literal fourth-ordinal preservation.
+
+## Readout admission tests
+
+On the real one-video CPU feature smoke, replacing the two-logit ITM layer with
+its positive-minus-negative weight vector reproduces option probabilities to
+max absolute error5.960464477539063e-08 (admission tolerance1e-6). This is192
+trainable parameters; the common scalar bias cancels in option softmax.
+Feature admission now rejects partial runs, unexpected protocol settings and
+frame IDs that differ across question conditions or black/normal controls.
+Synthetic readout tests verify the 51 recorded points (epoch0 plus50 updates),
+minimum-validation-NLL selection, separate final weight and exact best reload.
+Actual corpus training remains dependent on both full feature extractions.

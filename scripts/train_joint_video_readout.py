@@ -31,6 +31,22 @@ def load_features(directory, pairs):
     completion = json.loads((directory / "completion.json").read_text())
     if completion["rows"] != len(rows) or len(rows) != len(pairs) * 4:
         raise ValueError("complete feature extraction required")
+    protocol = json.loads((directory / "protocol.json").read_text())
+    if (
+        protocol["seed"] != 17
+        or protocol["frames"] != 3
+        or protocol["modes"] != ["normal", "black_pixels"]
+        or protocol["training"] is not False
+    ):
+        raise ValueError("feature protocol mismatch")
+    frames = {}
+    for row in rows:
+        ids = row["frame_ids"]
+        if len(ids) != 3 or ids != sorted(set(ids)) or ids[0] < 0:
+            raise ValueError("invalid frame IDs")
+        prior = frames.setdefault(row["video_id"], ids)
+        if prior != ids:
+            raise ValueError("condition/control frame mismatch")
     probabilities, targets = align(rows, pairs)
     indexed = {(r["video_id"], r["condition"], r["mode"]): r["features"] for r in rows}
     features = {}
