@@ -205,3 +205,23 @@ Runner:`all-in-one-source-initial-01/forward_probe.py`, SHA256
 No fitting/GPU/cloud/legacy modification. Product-use license remains REVIEW.
 Next verify original real-video preprocessing, input-sensitive outputs and
 save/reload before proposing any quality run.
+
+## Single real-video forward and save/reload
+
+Fixed train video10103, media SHA verified, frames0/229/458 before exclusive cut459,
+one predefined initial-condition candidate statement. Applied the pinned pixelbert
+composition:Resize256,RandomResizedCrop224,ToTensor,mean/std0.5 with seed17. This is
+a smoke policy, not a claim of complete downstream dataset-preprocessing parity.
+Random crops can remove relevant objects; a quality protocol must account for this.
+
+Joint CPU FP32 output finite; same patch-order seed repeat exact. Saved matching
+state45,784,435bytes and strict-loaded into a new instance; logits match exactly.
+First/second forward0.060367/0.044328seconds excludes decode,transform and loading.
+No accuracy is calculated from this one video/candidate; ITM logits are not yet
+calibrated probabilities over supplied options.
+
+Artifacts:`C:/CodexArtifacts/pretrained-reuse-r1/all-in-one-tiny-real-forward-01/`.
+Runner:`all-in-one-source-initial-01/real_forward_probe.py`;
+SHA2566a244513a7d6b9da08c3edd214584b25433706875d05d91e694c00b4e1dc7513.
+Exact resident count remains11,430,914; product licensing remains REVIEW.
+No new training, evaluation-set scoring or legacy artifact modification.
