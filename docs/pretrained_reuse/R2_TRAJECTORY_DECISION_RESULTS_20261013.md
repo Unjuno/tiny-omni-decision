@@ -90,3 +90,35 @@ curve alone.
 Runner:`scripts/diagnose_trajectory_train_condition.py`.
 Artifact:`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-trajectory-train-condition-01.json`.
 Input hashes and checkpoint hashes verified; old artifacts preserved.
+
+## Fixed train-only feature ablations
+
+The same best/final checkpoints were replayed without fitting. Geometry is the
+first128 channels; appearance is the remaining384. Misalignment rolls geometry
+by one grid point within each clip, preserving each block's marginal values.
+Zeroing is out-of-distribution, so these are dependence diagnostics, not clean
+causal estimates or substitute validation quality.
+
+| Checkpoint/control | Train Accuracy | Train NLL | Condition switches /99 |
+|---|---:|---:|---:|
+| attention/best/normal | 0.449495 | 1.040250 | 0 |
+| attention/best/zero_geometry | 0.449495 | 1.094536 | 1 |
+| attention/best/zero_appearance | 0.449495 | 1.053038 | 0 |
+| attention/best/misaligned | 0.449495 | 1.040378 | 0 |
+| attention/final/normal | 0.742424 | 0.495379 | 6 |
+| attention/final/zero_geometry | 0.424242 | 1.353203 | 3 |
+| attention/final/zero_appearance | 0.494949 | 1.084682 | 4 |
+| attention/final/misaligned | 0.691919 | 0.722401 | 4 |
+
+The final head depends on both blocks to fit train, and breaking their association
+also worsens train NLL. This contradicts a claim that geometry is completely
+ignored. It does not prove correct hidden-object identity tracking: changed-target
+fit and development generalization remain weak. Best-checkpoint labels barely
+respond, consistent with its previously observed lack of condition switches.
+No additional validation inference or checkpoint selection was performed.
+
+Runner:`scripts/diagnose_trajectory_train_ablation.py`.
+Artifact:`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-trajectory-train-ablation-01.json`.
+Next representation work must test hidden-object identity evidence, since initial
+appearance plus point motion does not explicitly encode what becomes visible
+later. This is a hypothesis to investigate, not a demonstrated root cause.
