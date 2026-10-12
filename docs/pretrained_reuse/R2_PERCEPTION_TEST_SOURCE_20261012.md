@@ -76,3 +76,31 @@ cut map and result.json with all hashes, tags and sound classes. The audit check
 train identities, three-option targets, cut ranges and source-parent references.
 Unit testing rejects non-train input. No model inference, fitting, media download,
 validation/test access, user form submission or cloud cost occurred.
+
+## Follow-up: official grouping evidence
+
+The [paper's Appendix 5](https://arxiv.org/html/2305.13786#A5) specifies grouping
+by the combination of filming script and participant. Alternate viewpoints of
+the same performance remain together. It does not promise participant-disjoint
+splits: the same participant could contribute different scripts to different
+splits. The appendix also explains that question templates recur across splits.
+
+Inspection of the complete repository tree at the pinned revision found README,
+license/contribution files, visualization and baseline notebooks, but no
+participant-to-video mapping. The inspected train metadata likewise contains no
+participant or script IDs. This is scoped evidence about these inspected files,
+not proof that such a mapping cannot be obtained elsewhere.
+
+Therefore preserve official splits for any prospective development experiment;
+do not randomly subdivide videos from official train and call them independent
+validation. Official grouping is useful provenance, but does not meet a stronger
+participant/household-disjoint gate. Do not rename official validation as a sealed
+audit. A stricter split needs an authoritative mapping; do not infer identities
+from faces/voices or guess groups from adjacent numeric video IDs.
+
+No external message requesting metadata was sent. No training or validation
+acquisition was initiated. Next independent work can define the train-only task
+adapter and truncation contract, while keeping this generalization limit open.
+The paper HTML and pinned repository-tree response are preserved alongside the
+source audit. This follow-up resolves what upstream guarantees; it does not
+resolve the missing fine-grained grouping information.

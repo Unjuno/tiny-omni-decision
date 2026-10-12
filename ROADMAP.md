@@ -943,3 +943,8 @@ Source visibility offers a concrete candidate joint task, but contributor groupi
 and option semantics remain unresolved. Keep REVIEW; no media, validation or test
 was acquired. Answer-reveal cuts are required for 135 train videos.
 [Source evidence and admission gates](docs/pretrained_reuse/R2_PERCEPTION_TEST_SOURCE_20261012.md).
+
+Perception Test grouping follow-up: the official paper guarantees script ×
+participant grouping, not participant-disjoint splits. The inspected public tree
+and train metadata do not expose that mapping. Preserve upstream splits for
+development; do not create video-random validation or claim household independence.
