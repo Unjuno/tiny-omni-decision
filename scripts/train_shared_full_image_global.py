@@ -48,13 +48,17 @@ def main():
     if report["status"] != "PASS":
         raise ValueError("incomplete extraction")
     cache_config = json.loads((a.feature_cache / "config.json").read_text())
-    if (cache_config["batch"] != 8 or cache_config["single_frame"] is not True
-            or cache_config.get("preprocessing") != "full image bilinear288x288"):
+    if (
+        cache_config["batch"] != 8
+        or cache_config["single_frame"] is not True
+        or cache_config.get("preprocessing") != "full image bilinear288x288"
+    ):
         raise ValueError("extraction contract changed")
     cache_hashes = {f"{key}-cells.npy": value for key, value in report["feature_hashes"].items()}
     cache_hashes["result.json"] = sha(a.feature_cache / "result.json")
-    cache_hashes.update({"config.json": report["config_sha256"],
-                         "records.json": report["records_sha256"]})
+    cache_hashes.update(
+        {"config.json": report["config_sha256"], "records.json": report["records_sha256"]}
+    )
     for name, expected in cache_hashes.items():
         if sha(a.feature_cache / name) != expected:
             raise ValueError(f"cache changed: {name}")
@@ -95,8 +99,9 @@ def main():
         inputs=HASHES,
         started_at=datetime.now(UTC).isoformat(),
         python=platform.python_version(),
-        packages={name: importlib.metadata.version(name)
-                  for name in ("torch", "numpy", "transformers")},
+        packages={
+            name: importlib.metadata.version(name) for name in ("torch", "numpy", "transformers")
+        },
         cuda=torch.version.cuda,
         tf32_matmul=torch.backends.cuda.matmul.allow_tf32,
         tf32_cudnn=torch.backends.cudnn.allow_tf32,
@@ -109,7 +114,9 @@ def main():
         selector="earliest min validation NLL",
         readout="bilinear",
         torch=torch.__version__,
-        representation_helper_sha256=sha(Path("src/tiny_omni_decision/videoprism_spatial_features.py")),
+        representation_helper_sha256=sha(
+            Path("src/tiny_omni_decision/videoprism_spatial_features.py")
+        ),
         extractor_config=cache_config,
         text_model_files={x.name: sha(x) for x in a.text_model.iterdir() if x.is_file()},
     )
@@ -121,7 +128,7 @@ def main():
         expected_count = 8424 if split == "train" else 512
         if values.shape != (expected_count, 17, 768) or not np.isfinite(values).all():
             raise ValueError("cache shape or values changed")
-        cells[split] = values[:len(rows[split])]
+        cells[split] = values[: len(rows[split])]
     cache_load_seconds = time.perf_counter() - start
     options, text_encoder = _option_embeddings(device, a.text_model)
     option_tensor = torch.stack(
@@ -151,8 +158,14 @@ def main():
         trainable_parameters = sum(p.numel() for p in scorer.parameters())
         assert trainable_parameters == 1720576
         initial = tensor_hash(scorer)
-        reference = json.loads(
-            (a.root / "shared-spatial-image-readout-01/global/result.json").read_text())
+        reference_path = a.root / "shared-spatial-image-readout-01/global/result.json"
+        if sha(reference_path) != (
+            "d05fa12d733fe9a135f00397fe59e268c837d8e8e181b874244672f5c98f3f7e"
+        ):
+            raise ValueError("cropped reference changed")
+        config["cropped_reference_sha256"] = sha(reference_path)
+        write(a.output / "config.json", config)
+        reference = json.loads(reference_path.read_text())
         if initial != reference["initial_tensor_hash"]:
             raise ValueError("cropped reference initialization mismatch")
         if initialization is not None and initialization != initial:
