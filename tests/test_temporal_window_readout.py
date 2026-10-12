@@ -1,11 +1,12 @@
 import pytest
-import torch
 
-from tiny_omni_decision.temporal_window_readout import TemporalWindowReadout
+torch = pytest.importorskip("torch")
 
 
 @pytest.mark.parametrize("mode", ["mean", "attention"])
 def test_padding_and_option_permutation(mode):
+    from tiny_omni_decision.temporal_window_readout import TemporalWindowReadout
+
     torch.manual_seed(17)
     model = TemporalWindowReadout(mode)
     video = torch.randn(1, 3, 768)
@@ -22,6 +23,8 @@ def test_padding_and_option_permutation(mode):
 
 
 def test_temporal_order_and_empty_mask():
+    from tiny_omni_decision.temporal_window_readout import TemporalWindowReadout
+
     torch.manual_seed(17)
     video, text = torch.randn(1, 5, 768), torch.randn(1, 3, 1536)
     mask = torch.ones(1, 5, dtype=torch.bool)
