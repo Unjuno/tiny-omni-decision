@@ -141,6 +141,32 @@ def main():
         f"Artifacts: `{run}` and `{cache}`. Existing artifacts unchanged.",
         "No arbitrary task95% or product-quality claim; other modality weaknesses remain.",
     ]
+    lines += [
+        "", "## Interpretation and decision", "",
+        "Whole-image resizing does not establish a meaningful aggregate improvement:",
+        "one fewer correct answer overall; Accuracy,NLL and Brier difference intervals",
+        "all include zero. Counting gains6/512 answers (+1.17pp), with an interval",
+        "[-2.73,+5.08]pp. Texture loses9/512 answers. These are mixed, uncertain results.",
+        "",
+        "This experiment does not support removing the crop as a sufficient solution",
+        "to counting. It also cannot prove that cropping has no effect: aspect ratio",
+        "and sampling density change together, and uncertainty remains substantial.",
+        "Keep the existing cropped runtime reference and preserve this alternative.",
+        "Do not select another preprocessing variant or extend this budget from these results.",
+        "",
+        "Both arms select epoch24. Full-image train Accuracy91.40% versus90.72%",
+        "validation, NLL0.205416 versus0.219238, has a small aggregate gap.",
+        "Counting train68.93% versus validation67.58% remains weak in both splits.",
+        "NLL improves late in the run, so this is not a proven plateau or a model",
+        "capacity ceiling. The predeclared budget is complete; no automatic extension.",
+        "",
+        "The weak counting task still needs a training-side representation/readout",
+        "diagnosis before another selector-based search. This result provides no",
+        "evidence for the general Omni95-98% objective or for quantization readiness.",
+        "",
+        "Verification:578 CPU tests passed,1 skipped; Ruff and manifest/catalog",
+        "validation passed. Final pushed commit CI is checked separately.",
+    ]
     out.with_suffix(".md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

@@ -539,3 +539,13 @@ video profiles. Alternating raw image/video requests exactly reproduce prior
 features, with unchanged weight hashes and a measured1.20GB process peak.
 This verifies feature sharing, not joint quality or physical backend buffer
 deduplication. [Execution and timing limits](docs/pretrained_reuse/R2_SHARED_VISUAL_ENCODER_20261012.md).
+
+
+### Fixed full-image preprocessing comparison (2026-10-12)
+
+A single matched24-epoch global readout completed using full-image resizing.
+Accuracy90.72% versus cropped90.77%, with uncertain aggregate metric differences.
+Counting66.41%->67.58% is also uncertain and texture declines. Preserve the
+alternative, retain the existing runtime reference, and stop this preprocessing
+comparison without an extra variant or budget extension.
+[Curves, paired task intervals and hashes](docs/pretrained_reuse/R2_FULL_IMAGE_RESULTS_20261012.md).
