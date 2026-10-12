@@ -136,6 +136,10 @@ def main():
     ).to(device)
     np.save(a.output / "option-embeddings.npy", option_tensor.cpu().numpy())
     config["option_embeddings_sha256"] = sha(a.output / "option-embeddings.npy")
+    parent_config = json.loads(
+        (a.root / "shared-spatial-image-readout-01/config.json").read_text())
+    if config["option_embeddings_sha256"] != parent_config["option_embeddings_sha256"]:
+        raise ValueError("cropped reference option embeddings differ")
     write(a.output / "config.json", config)
     del text_encoder, options
     torch.cuda.empty_cache()

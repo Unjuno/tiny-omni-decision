@@ -24,6 +24,8 @@ def main():
     assert set(result["conditions"]) == {"global"} and config["epochs"] == 24
     new, old = result["conditions"]["global"], read(reference / "result.json")
     assert sha(reference / "result.json") == config["cropped_reference_sha256"]
+    assert config["option_embeddings_sha256"] == read(
+        reference.parent / "config.json")["option_embeddings_sha256"]
     assert new["initial_tensor_hash"] == old["initial_tensor_hash"]
     assert new["order_sha256"] == old["order_sha256"]
     assert new["consumed"] == old["consumed"] == 808704
@@ -55,6 +57,8 @@ def main():
         reference_history=read(reference / "history.json"),
         comparisons=comparisons,
         extraction=read(cache / "result.json"),
+        encoder_environment=read(root / "full-image-environment-01.json"),
+        environment_sha256=sha(root / "full-image-environment-01.json"),
         smoke=read(root / "shared-full-image-global-smoke-01/result.json"),
         hashes={str(p.relative_to(run)): sha(p) for p in run.rglob("*.json")},
     )
