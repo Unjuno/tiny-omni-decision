@@ -1,12 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-> **Current user constraints (2026-10-12):** The finished model must have at most
-> **200M total resident parameters before quantization**, covering text, image,
-> audio and video (sensors optional), and target **>=95% Accuracy for each modality,
-> aspiring to98% or higher**, with calibrated supplied-option probabilities and
-> general condition following. These supersede earlier provisional parameter
-> wording below. Narrow taxonomy/ASR or aggregate Accuracy cannot satisfy this
-> requirement. No current result establishes completion; historical records remain.
+> **Current user constraints (2026-10-12, clarified):** Build ONE compact,
+> genuinely multimodal Decision model with at most **200M total resident
+> parameters before quantization**, including **text, audio, video, image,
+> screen-capture and sensor handling**. The model must support **native direct
+> decisions from any supported input modality without making a text question
+> compulsory**, as well as **fusion of simultaneously present modalities**.
+> Target **95–98% Accuracy** on predeclared representative per-modality and
+> fusion tasks, then quantize/recover the same model to **>=95%** on those tasks.
+> These are aspirational and currently unachieved; "world understanding" does
+> not have a meaningful universal percentage without a specified task battery.
+> This clarification supersedes older "sensor optional" and text-first wording
+> as a future design priority. Past measurements remain unchanged.
 
 > **Status: architectural redirection proposal in Draft PR; R0 inventory and initial R1/R2 audits/probes are underway as of 2026-10-11. A shared frozen-feature candidate-scoring core now serves the text/image/audio/video Path A probe runners; typed immutable observation caching has been exercised on 1,920 audio assets, 1,536 CLEVR-4 images, eight reused CLEVRER scenes, and reusable state/query/candidate text features, with saved predictions rechecked after cache reload. A byte-bounded LRU now serves the real frozen CLEVRER CPU scorer with exact direct-path output parity and measured evictions. A separate expanded CLEVRER descriptive readout used 256 train and 200 validation scenes; it improved NLL/Brier but not Accuracy over the prior small readout on identical new validation IDs and showed early overfitting. The initial frozen VideoPrism + MiniLM binary reasoning readout reached macro Accuracy 0.519 on reused development validation scenes. A new content- and scene-disjoint 200-scene control found near-chance Accuracy for fixed video+text, same-data text-only and shuffled-video readouts; shuffling scene video left NLL/Brier essentially unchanged, so this setup shows no clear useful scene-specific video contribution. A full-coverage static CLEVR-4 VideoPrism probe used 8,424 unique train images and scored 87.9% on the reused 512-image selector and 88.1% on a one-time 1,595-image validation subset; a fixed-task runtime replay matched 128 saved decisions on 32 images, while the 458MB bundle and 4.26GB peak CPU working set miss practical lightweight packaging targets. This is synthetic image taxonomy performance, not video quality. These are bounded development diagnostics, not blind audits or general video claims. Frozen synthetic-English text, CLEVR-4 image, narrow audio keyword, video, and a one-time near-uniform Japanese zero-shot text diagnostic are measured; synchronized audio-video quality, deployment-ready packaging, explicit V-JEPA checkpoint rights, and full R1/R2 exits remain open.**
 > This roadmap replaces the *future direction* in the previous `main` roadmap, not the factual record of completed experiments. It does **not** start, stop, modify, resume, or declare successful any training job; merge or close any open PR; change an existing config, model, dataset, or checkpoint; or authorize paid compute.
@@ -17,8 +22,8 @@
 
 ### Product behavior
 
-- Accept **text, image, audio, video**, and later timestamped **sensor** observations; distinguish single-media operation from **simultaneous** audio+video+text/sensor support. Do not declare simultaneous fusion until tested.
-- Consume a shared observation/state and independently authored typed questions with variable candidate sets: `choice`, yes/no (`noul`), and ordinal `score`. Return **option probabilities** and permitted abstention/escalation, not free-form generated answers.
+- Accept **audio, video, image, screen captures, sensor streams and text** as **equally valid observation sources**, alone or synchronized. Support **direct no-text Decision** from each non-text modality; do not treat speech/video/sensor as mere attachments to a mandatory text question.
+- A shared observation/world state may produce calibrated decisions **without any question text**, or under an optional typed, spoken or written criterion, over stable candidate/action IDs: `choice`, yes/no and ordinal `score`. A text/question encoder is optional and must be excluded from no-text tests. Return **option probabilities** and supported abstention; no generative language Decoder is required for the Decision output.
 - Reuse one encoded observation for **many questions** without rerunning a costly video tower whenever its state has not changed; represent time and modality/source identity when relevant.
 - The persistent world-state cache is a means to reuse temporal evidence, **not a claim of a general, causal, action-conditioned world simulator**. Add recurrent state prediction or action-conditioned dynamics only if measured task requirements justify it.
 
@@ -192,6 +197,13 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
+
+**Mandatory design correction — R2-M modality-native and sensor-inclusive fusion experiments (2026-10-12).** This is the next architecture/evaluation workstream, superseding the earlier text-question-first assumption. See [R2-M experiment protocol](docs/pretrained_reuse/R2_MODALITY_NATIVE_FUSION_PROTOCOL_20261012.md). The independently scoped <=10M audio-only experiment is **on hold**; do not fold that task or budget into the main 100–200M Omni system. All preserved legacy experiments remain valid in their original scope.
+
+- [ ] **M-0/M-1:** Build direct text-free audio-only, video-only, image-only, screen-only and sensor-only decision probes (plus text-only control) with typed action/option IDs, time/unit/missingness metadata, and no hidden text question or mandatory text encoder. Treat existing Audio+Text, Video+Text and sensor-embedding-only results as *non-equivalent* controls.
+- [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Include matched best-unimodal baselines, all missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
+- [ ] **M-3–M-6:** Add optional text/spoken conditions without making them compulsory, then evaluate individual and combined task quality, <=200M loaded parameters **including the sensor path**, and actual post-quantization >=95% recovery on the same locked task battery. Do not claim general 95–98% world understanding from unrelated narrow benchmarks; lock evaluation before training/selection.
+
 
 Source follow-up: STARSS23's official MIT release supplies a synchronized
 environmental audio/video candidate. The bounded source/decoding probe and
