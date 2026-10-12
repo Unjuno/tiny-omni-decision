@@ -95,16 +95,34 @@ class NativeSpeechRuntime:
         return values, [n - len(prefix) for n in lengths]
 
     def decide(self, encoded, options):
-        if not 2 <= len(options) <= 16 or any(
-            set(o) != {"option_id", "transcript"} for o in options
-        ):
-            raise ValueError("2..16 option_id/transcript options required")
-        transcripts = [o["transcript"] for o in options]
-        # Validate IDs and duplicate transcripts before expensive decoding.
-        supplied = [dict(option_id=o["option_id"], class_id=o["transcript"]) for o in options]
-        classification_json([1 / len(options)] * len(options), transcripts, supplied)
-        scores, counts = self.scores(encoded, transcripts)
-        probabilities = np.exp(scores - scores.max())
-        probabilities /= probabilities.sum()
-        result = classification_json(probabilities, transcripts, supplied)
-        return dict(decision=result, scores=scores.tolist(), scored_token_counts=counts)
+        return self.decide_many(encoded, [options])[0]
+
+    def decide_many(self, encoded, option_sets):
+        if not 1 <= len(option_sets) <= 8:
+            raise ValueError("1..8 candidate sets required")
+        validated = []
+        for options in option_sets:
+            if not 2 <= len(options) <= 16 or any(
+                set(o) != {"option_id", "transcript"} for o in options
+            ):
+                raise ValueError("2..16 option_id/transcript options required")
+            transcripts = [o["transcript"] for o in options]
+            supplied = [dict(option_id=o["option_id"], class_id=o["transcript"]) for o in options]
+            classification_json([1 / len(options)] * len(options), transcripts, supplied)
+            validated.append((transcripts, supplied))
+        pool = list(dict.fromkeys(s for transcripts, _ in validated for s in transcripts))
+        scores, counts = self.scores(encoded, pool)
+        results = []
+        for transcripts, supplied in validated:
+            indices = [pool.index(s) for s in transcripts]
+            values = scores[indices]
+            probabilities = np.exp(values - values.max())
+            probabilities /= probabilities.sum()
+            results.append(
+                dict(
+                    decision=classification_json(probabilities, transcripts, supplied),
+                    scores=values.tolist(),
+                    scored_token_counts=[counts[i] for i in indices],
+                )
+            )
+        return results

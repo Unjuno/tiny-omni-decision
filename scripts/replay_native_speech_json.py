@@ -1,5 +1,6 @@
 """Eight fixed real audio assets, reused encodings and custom-ID JSON parity."""
 
+import argparse
 import hashlib
 import json
 import subprocess
@@ -18,6 +19,10 @@ from tiny_omni_decision.native_speech_runtime import NativeSpeechRuntime
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
     previous = root / "native-speech-eval-01"
     old_config = json.loads((previous / "config.json").read_text(encoding="utf-8"))
@@ -37,7 +42,7 @@ def main():
         ][:8]
         for condition in CONDITIONS
     }
-    out = root / "native-speech-json-replay-01"
+    out = args.output
     out.mkdir(exist_ok=False)
     write(
         out / "config.json",
@@ -47,7 +52,7 @@ def main():
             model_files=old_config["model_files"],
             input_sha256=INPUT_HASH,
             sample_ids=[r["id"] for r in rows],
-            device="cpu",
+            device=args.device,
             dtype="float32",
             threads=2,
             probability_atol=1e-4,
@@ -62,9 +67,11 @@ def main():
         ),
     )
     torch.set_num_threads(2)
-    model = WhisperForConditionalGeneration.from_pretrained(
-        model_path, local_files_only=True
-    ).eval()
+    model = (
+        WhisperForConditionalGeneration.from_pretrained(model_path, local_files_only=True)
+        .eval()
+        .to(args.device)
+    )
     tokenizer = WhisperTokenizer.from_pretrained(
         model_path,
         local_files_only=True,
@@ -75,7 +82,8 @@ def main():
     processor = WhisperFeatureExtractor.from_pretrained(model_path, local_files_only=True)
     runtime = NativeSpeechRuntime(model, tokenizer, processor)
     versions = {name: p._version for name, p in model.named_parameters()}
-    encodes = []
+    encodes, decodes = [], []
+    decoder_hook = model.register_forward_hook(lambda *args: decodes.append(1))
     hook = model.model.encoder.register_forward_hook(lambda *args: encodes.append(1))
     records = []
     started = time.perf_counter()
@@ -86,23 +94,28 @@ def main():
         tick = time.perf_counter()
         encoded = runtime.encode(pcm, sample_rate=rate)
         encode_seconds = time.perf_counter() - tick
-        for condition in CONDITIONS:
+        option_sets = [
+            [
+                dict(option_id=f"candidate-{j}", transcript=s)
+                for j, s in enumerate(row["options_by_condition"][condition])
+            ]
+            for condition in CONDITIONS
+        ]
+        tick = time.perf_counter()
+        joint_outputs = runtime.decide_many(encoded, option_sets)
+        score_seconds = time.perf_counter() - tick
+        joint_reverse = runtime.decide_many(encoded, [options[::-1] for options in option_sets])
+        for condition_index, condition in enumerate(CONDITIONS):
             reference = expected[condition][i]
             choices = row["options_by_condition"][condition]
             assert reference["sample_id"] == row["id"] and reference["options"] == choices
             assert reference["audio_sha256"] == row["audio_sha256"]
-            options = [
-                dict(option_id=f"candidate-{j}", transcript=s) for j, s in enumerate(choices)
-            ]
-            tick = time.perf_counter()
-            output = runtime.decide(encoded, options)
-            score_seconds = time.perf_counter() - tick
-            reverse = runtime.decide(encoded, options[::-1])
+            output = joint_outputs[condition_index]
+            reverse = joint_reverse[condition_index]
             a, b = output["decision"], reverse["decision"]
             assert a["selected_option_id"] == b["selected_option_id"]
             probabilities = [o["probability"] for o in a["options"]]
             np.testing.assert_allclose(probabilities, reference["probabilities"], atol=1e-4, rtol=0)
-            np.testing.assert_allclose(output["scores"], reference["scores"], atol=1e-4, rtol=0)
             np.testing.assert_allclose(
                 probabilities, [o["probability"] for o in b["options"]][::-1], atol=1e-5, rtol=0
             )
@@ -129,6 +142,8 @@ def main():
             )
         print(f"completed {i + 1}/8 audio assets", flush=True)
     hook.remove()
+    decoder_hook.remove()
+    assert len(decodes) == 16
     assert len(encodes) == 8
     assert versions == {name: p._version for name, p in model.named_parameters()}
     for name, digest in old_config["model_files"].items():
@@ -137,11 +152,14 @@ def main():
     write(
         out / "result.json",
         dict(
-            status="PASS_NATIVE_SPEECH_JSON",
+            status="PASS_NATIVE_SPEECH_JSON"
+            if max(r["max_score_delta"] for r in records) <= 1e-4
+            else "FAIL_RAW_SCORE_PARITY",
             assets=8,
             decisions=16,
             encoder_calls=len(encodes),
             decoder_candidate_sets=32,
+            decoder_forward_calls=len(decodes),
             changed_answers=0,
             parameters=sum(p.numel() for p in model.parameters()),
             seconds=time.perf_counter() - started,

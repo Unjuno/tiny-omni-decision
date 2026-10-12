@@ -13,6 +13,7 @@ def make_runtime():
             super().__init__()
             self.weight = torch.nn.Parameter(torch.zeros(1))
             self.calls = 0
+            self.decodes = 0
             self.config = SimpleNamespace(max_target_positions=8)
             self.model = SimpleNamespace(encoder=self.encode)
 
@@ -21,6 +22,7 @@ def make_runtime():
             return SimpleNamespace(last_hidden_state=torch.zeros(1, 2, 3))
 
         def forward(self, **kwargs):
+            self.decodes += 1
             shape = kwargs["decoder_input_ids"].shape
             return SimpleNamespace(logits=torch.zeros(*shape, 50364))
 
@@ -67,3 +69,14 @@ def test_invalid_audio_ownership_and_truncation_fail_closed():
         runtime.scores(encoded, ["much too long"])
     with pytest.raises(ValueError):
         runtime.decide(encoded, [dict(option_id="same", transcript=s) for s in ("a", "b")])
+
+
+def test_many_candidate_sets_share_one_decoder_batch():
+    runtime = make_runtime()
+    encoded = runtime.encode(np.zeros(32, np.int16), sample_rate=16000)
+    sets = [[dict(option_id=str(i), transcript=s) for i, s in enumerate(values)]
+            for values in (("a", "bb"), ("bb", "c"))]
+    results = runtime.decide_many(encoded, sets)
+    assert len(results) == 2
+    assert runtime.model.calls == 1 and runtime.model.decodes == 1
+    assert results[0]["scores"][1] == results[1]["scores"][0]
