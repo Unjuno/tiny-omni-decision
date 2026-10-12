@@ -31,6 +31,13 @@ def test_matched_paths_keep_identical_state_token_prefix():
     assert len(evidence[0]) == meta["kept_state_tokens"]
     assert meta["state_truncated"]
     assert len(markers) == len(pairs) == 3
+    (_, reversed_markers), reversed_pairs, reversed_meta = encode_matched(
+        DistinctTokenizer(), "pick", "one two three four five six seven eight nine ten",
+        ["c", "longer option b", "a"], 26,
+    )
+    assert reversed_pairs == list(reversed(pairs))
+    assert reversed_meta == meta
+    assert len(reversed_markers) == len(markers)
 
 
 def test_joint_preserves_options_and_truncates_state_only():
