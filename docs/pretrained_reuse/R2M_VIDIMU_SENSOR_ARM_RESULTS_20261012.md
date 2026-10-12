@@ -48,3 +48,21 @@ preserved. Outputs: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-sensor-json-re
 This checks the output layer using saved predictions, not another model forward
 pass or support for arbitrary semantic candidate descriptions. It adds no neural
 parameters, and JSON values are not asserted to be perfectly calibrated.
+
+## Actual CPU reload/inference replay
+
+`scripts/replay_vidimu_sensor.py` reloaded the hash-pinned best weights, training
+normalization and pinned validation features in a fresh CPU process. All39 batch
+probability vectors matched the stored selected predictions exactly; reversed
+option serialization also passed. No retraining/recalibration occurred.
+
+Measured load/preparation3.90ms; first39-row forward/softmax1.28ms; subsequent
+single-row median10.6us and p95 15.4us. These short timings are only the4,719-
+parameter head on cached features, excluding sensor decoding, orientation
+features, file acquisition and any video tower. They are not Omni end-to-end
+latency claims. Process peak working set412,573,696 bytes includes Python/Torch;
+weights20,294 bytes. This inference process measurement does not recover the
+unmeasured earlier training peak.
+
+JSON decisions with input record IDs and measured results are saved under
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-sensor-runtime-replay-01`.
