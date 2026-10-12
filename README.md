@@ -619,3 +619,8 @@ scoring across candidate sets, returning custom-ID JSON. Eight existing assets /
 probabilities also match but its raw-score gate fails; that limitation is retained.
 This is transcript-choice runtime parity, not general audio or joint-Omni quality.
 [Both backend results and failure records](docs/pretrained_reuse/R2_NATIVE_SPEECH_RUNTIME_20261012.md).
+
+Dense temporal occlusion comparison completed on 99 train / 257 validation videos.
+Mean and attention reach 39.11% / 38.91% selected Accuracy, near the train-only prior;
+mismatched videos do not reduce Accuracy and later epochs overfit. Neither head
+is promoted. [Results and controls](docs/pretrained_reuse/R2_OCCLUSION_RESULTS_20261013.md).

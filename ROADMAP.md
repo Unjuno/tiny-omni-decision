@@ -983,3 +983,8 @@ The [post-correspondence requirements audit](docs/pretrained_reuse/R2_POST_CORRE
 separates completed narrow probes/runtime parity from unmet conditional-semantic,
 joint-quality and release gates. Consult it before repeating coverage, transfer,
 correspondence or residency experiments.
+
+Dense temporal occlusion comparison completed on 99 train / 257 validation videos.
+Mean and attention reach 39.11% / 38.91% selected Accuracy, near the train-only prior;
+mismatched videos do not reduce Accuracy and later epochs overfit. Neither head
+is promoted. [Results and controls](docs/pretrained_reuse/R2_OCCLUSION_RESULTS_20261013.md).
