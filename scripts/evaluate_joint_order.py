@@ -1,5 +1,6 @@
 """Fixed reverse-option diagnostic after both learning runs finish."""
 
+import argparse
 import json
 import os
 import time
@@ -19,14 +20,25 @@ def main():
     from tiny_omni_decision.schema import DatasetManifest
 
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
-    runs = [root / n for n in ("independent-matched-training-01", "joint-readout-training-01")]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--candidate", choices=("original", "shuffled"), default="original")
+    args = parser.parse_args()
+    shuffled = args.candidate == "shuffled"
+    run_name = "joint-shuffled-training-01" if shuffled else "joint-readout-training-01"
+    runs = [root / n for n in ("independent-matched-training-01", run_name)]
 
     def read(p):
         return json.loads(p.read_text(encoding="utf-8"))
 
     triples = [tuple(read(p / f"{n}.json") for n in ("config", "result", "history")) for p in runs]
     verify_joint_pair(*triples)
-    output = root / "joint-readout-order-diagnostic-01"
+    output = root / (
+        "joint-shuffled-order-diagnostic-01" if shuffled else "joint-readout-order-diagnostic-01"
+    )
+    if shuffled and triples[1][0].get("option_order_policy") != (
+        "per-training-encounter shuffle; local Random(17)"
+    ):
+        raise ValueError("unexpected training intervention")
     if output.exists():
         raise FileExistsError(output)
     base = Path("C:/CodexArtifacts/pretrained-reuse-r1/crossencoder-minilm-l6-audit-01/model")
@@ -73,6 +85,8 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(base, local_files_only=True)
     summary = {}
     for run, (config, result, _) in zip(runs, triples, strict=True):
+        if shuffled and config["arm"] == "independent":
+            continue  # Preserve and reuse the completed independent diagnostic.
         model = AutoModelForSequenceClassification.from_pretrained(base, local_files_only=True)
         model.load_state_dict(
             torch.load(run / "best-delta.pt", map_location="cpu", weights_only=True), strict=False
