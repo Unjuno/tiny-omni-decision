@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import math
 from dataclasses import dataclass
 
@@ -14,6 +15,31 @@ class DecisionOutput:
     probabilities: Tensor
     predicted_index: int
     confidence: float
+
+    def to_json(self, question_name: str, option_names: list[str]) -> str:
+        """Serialize existing probabilities without generation or recalibration."""
+        if not isinstance(question_name, str) or not question_name.strip():
+            raise ValueError("question name must be a nonempty string")
+        if (
+            any(not isinstance(name, str) or not name.strip() for name in option_names)
+            or len(set(option_names)) != len(option_names)
+        ):
+            raise ValueError("option names must be nonempty unique strings")
+        if self.probabilities.ndim != 1 or self.probabilities.numel() < 2:
+            raise ValueError("probabilities must be a vector with at least two options")
+        values = self.probabilities.detach().cpu().tolist()
+        if len(option_names) != len(values):
+            raise ValueError("option names must match probability order and count")
+        if (
+            any(not math.isfinite(p) or p < 0 or p > 1 for p in values)
+            or not math.isclose(sum(values), 1.0, abs_tol=1e-5)
+        ):
+            raise ValueError("invalid probability distribution")
+        return json.dumps(
+            {question_name: dict(zip(option_names, values, strict=True))},
+            ensure_ascii=False,
+            allow_nan=False,
+        )
 
 
 class FrozenFeatureCandidateScorer(nn.Module):

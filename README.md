@@ -452,3 +452,15 @@ constructed using known answers, not an available inference policy or a tested
 yes/no reformulation. Retain variable options (including binary questions),
 full-task quality gates and calibrated probabilities.
 [Cardinality analysis](docs/pretrained_reuse/R2_OPTION_CARDINALITY_20261012.md).
+
+
+### Named JSON decisions
+
+`DecisionOutput.to_json(question_name, option_names)` returns a JSON object
+mapping the supplied question name to option probabilities, for example
+`{"danger": {"yes": 0.97, "no": 0.03}}`. Names must be unique within the
+option set and follow the same order supplied to inference. Binary and custom
+multi-option distributions use the same serializer. Values are neither rounded
+nor recalibrated; malformed distributions fail closed. JSON is produced by
+Python, with no generated tokens or additional model parameters. This interface
+does not establish model quality or calibration.
