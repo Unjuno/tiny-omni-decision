@@ -15,3 +15,18 @@ def test_selector_weights_taxonomies_equally():
     assert result["macro_taxonomy"]["nll"] == pytest.approx(
         (result["taxonomy:a"]["nll"] + result["taxonomy:b"]["nll"]) / 2
     )
+
+
+from scripts.report_video_grounding import compare  # noqa: E402
+
+
+def test_grounding_scene_bootstrap_identity_and_mismatch():
+    rows = [
+        dict(id=str(i), scene_index=i, taxonomy="count", target_index=0, probabilities=[0.7, 0.3])
+        for i in range(3)
+    ]
+    result = compare(rows, rows)
+    assert result["accuracy"]["difference"] == 0
+    assert result["nll"]["percentile_95_interval"] == [0, 0]
+    with pytest.raises(ValueError, match="unpaired"):
+        compare(rows, [{**r, "id": "changed"} for r in rows])

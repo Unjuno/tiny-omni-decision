@@ -734,3 +734,13 @@ Original/curriculum Accuracy fell to 54.80%/25.29%; reversing options still
 changes 897/2,540 and 1,741/2,048 answer identities. The smaller aggregate order
 gap does not establish stability. Candidate rejected; all prior artifacts remain.
 [Verified results](docs/pretrained_reuse/R2_JOINT_SHUFFLED_RESULTS_20261012.md).
+
+
+### Descriptive video grounding (2026-10-12)
+
+A frozen-feature, 24-epoch matched comparison completed on 1,337 training and
+2,200 validation questions. Video macro Accuracy38.14% versus no-video35.72%
+has an interval including zero; matched versus mismatched video shows a small
++2.32pp scene-information signal. Both overfit and are rejected for product use.
+This supports a bounded token-readout diagnostic, not more epochs or a temporal
+reasoning claim. [Results](docs/pretrained_reuse/R2_VIDEO_GROUNDING_RESULTS_20261012.md).
