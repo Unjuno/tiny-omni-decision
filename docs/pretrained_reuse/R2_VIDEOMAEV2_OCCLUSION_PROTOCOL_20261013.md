@@ -19,3 +19,5 @@ python -m scripts.report_occlusion_readout --run C:/CodexArtifacts/pretrained-re
 ```
 
 Run later commands only after prior success and input admission. Current status: protocol and width regression tests prepared; execution results will be recorded separately.
+
+Execution ledger: the initial import failed before creating output because an old decoder import required SciPy. The new extractor now uses no legacy decoder import. Attempt `features-01` then stopped after two videos: the new cut assertion incorrectly treated upstream `-1` (no cut) as a frame index. Existing decoder semantics were checked; a regression test now covers sentinel, exclusive boundary and invalid negative values. Failed artifacts are retained. Source `a12a399` started extraction into `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-videomaev2-features-02/`; use this new path in the training command only after successful complete extraction. Twelve targeted CPU tests pass. No readout training or new quality result exists yet.
