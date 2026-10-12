@@ -954,3 +954,9 @@ separates supervision from inputs, and marks 1,063 records held with reasons.
 Same-class overlapping events expose ambiguity missed by exact-input checks.
 The 24,694 candidates are not admitted training data: oracle event boundaries,
 media timing, broad-source semantics and evaluation coverage remain explicit gates.
+
+Visibility task rejected as the primary fusion-quality benchmark: a fixed
+leave-video-out sound-class-only prior reaches 96.44% on all train annotations
+without audio or pixels. Do not train that proposed head or count the result
+toward product quality. Preserve the technical media/features and require a
+question-only control for the next evidence-dependent task.

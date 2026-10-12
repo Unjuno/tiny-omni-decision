@@ -262,3 +262,33 @@ This is a two-video technical pilot, not fusion quality or training admission.
 No readout fitting, validation/test access or cloud/GPU computation occurred.
 Next requires a fixed task protocol and representative grouped development data,
 including short/ambiguous intervals and explicit coverage accounting.
+
+## Decision: reject visibility as the primary fusion-quality task
+
+A fixed query-only Laplace-smoothed class prior, excluding **all annotations of
+the queried video** from its class counts, achieves:
+
+| Population | Accuracy | NLL | Brier | ECE (10 bins) |
+|---|---:|---:|---:|---:|
+| All 25,757 annotations | 96.4359% | 0.117077 | 0.060095 | 0.000599 |
+| Proposed 24,694 candidates | 96.5093% | 0.114004 | 0.058734 | 0.000598 |
+
+No pixels, waveform, timestamp or model features are used. The sound-class query
+alone carries a strong target prior. Therefore a visibility model reaching the
+product's numerical aspiration on this task would not establish AV reasoning.
+Do not train the planned visibility head or report these numbers as model quality.
+Do not remove dominant classes or rebalance based on this result to force a gain.
+Retain the media/feature pilot as infrastructure evidence and the failed task as
+an attempted design. The dataset itself is not rejected for all other tasks.
+
+This diagnostic uses previously inspected official train annotations. It is
+leave-video-out, not participant-disjoint validation or a blind benchmark.
+Fixed alpha=1; unseen classes return 0.5/0.5. ECE is descriptive and does not
+establish calibration under distribution shift. Source target proportions and
+all predictions/IDs are retained under `perception-query-prior-01`.
+
+Reproduce with `python -m scripts.audit_perception_query_prior --output <fresh>`.
+The unit test verifies whole-video exclusion and unseen-class handling. No model
+training or new validation/audit access occurred. The next task must require
+evidence beyond supplied question categories and pass a query-only control before
+scaling acquisition or training. No 95–98% achievement is claimed.
