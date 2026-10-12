@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+> **Current user constraints (2026-10-12):** The finished model must have at most
+> **200M total resident parameters before quantization**, covering text, image,
+> audio and video (sensors optional), and target **>=95% Accuracy for each modality,
+> aspiring to98% or higher**, with calibrated supplied-option probabilities and
+> general condition following. These supersede earlier provisional parameter
+> wording below. Narrow taxonomy/ASR or aggregate Accuracy cannot satisfy this
+> requirement. No current result establishes completion; historical records remain.
+
 > **Status: architectural redirection proposal in Draft PR; R0 inventory and initial R1/R2 audits/probes are underway as of 2026-10-11. A shared frozen-feature candidate-scoring core now serves the text/image/audio/video Path A probe runners; typed immutable observation caching has been exercised on 1,920 audio assets, 1,536 CLEVR-4 images, eight reused CLEVRER scenes, and reusable state/query/candidate text features, with saved predictions rechecked after cache reload. A byte-bounded LRU now serves the real frozen CLEVRER CPU scorer with exact direct-path output parity and measured evictions. A separate expanded CLEVRER descriptive readout used 256 train and 200 validation scenes; it improved NLL/Brier but not Accuracy over the prior small readout on identical new validation IDs and showed early overfitting. The initial frozen VideoPrism + MiniLM binary reasoning readout reached macro Accuracy 0.519 on reused development validation scenes. A new content- and scene-disjoint 200-scene control found near-chance Accuracy for fixed video+text, same-data text-only and shuffled-video readouts; shuffling scene video left NLL/Brier essentially unchanged, so this setup shows no clear useful scene-specific video contribution. A full-coverage static CLEVR-4 VideoPrism probe used 8,424 unique train images and scored 87.9% on the reused 512-image selector and 88.1% on a one-time 1,595-image validation subset; a fixed-task runtime replay matched 128 saved decisions on 32 images, while the 458MB bundle and 4.26GB peak CPU working set miss practical lightweight packaging targets. This is synthetic image taxonomy performance, not video quality. These are bounded development diagnostics, not blind audits or general video claims. Frozen synthetic-English text, CLEVR-4 image, narrow audio keyword, video, and a one-time near-uniform Japanese zero-shot text diagnostic are measured; synchronized audio-video quality, deployment-ready packaging, explicit V-JEPA checkpoint rights, and full R1/R2 exits remain open.**
 > This roadmap replaces the *future direction* in the previous `main` roadmap, not the factual record of completed experiments. It does **not** start, stop, modify, resume, or declare successful any training job; merge or close any open PR; change an existing config, model, dataset, or checkpoint; or authorize paid compute.
 >
@@ -630,3 +638,11 @@ Neither encoder shows a clear matched-video benefit; later shared training overf
 No sharing adoption or combined-runtime quality claim. This closes the sharing
 probe, not the <=200M / four-modality95% objective.
 [Curves, uncertainty and artifacts](docs/pretrained_reuse/R2_SHARED_TEXT_VIDEO_RESULTS_20261012.md).
+
+### Text error attribution (2026-10-12)
+
+A read-only audit of all2540 saved original-text validation decisions finds950
+of977 errors in untruncated inputs; score questions reach46.24% exact Accuracy.
+Longer context and dismissing errors as label noise lack supporting evidence.
+All questions retained; no training or new inference.
+[Attribution and limits](docs/pretrained_reuse/R2_TEXT_ERROR_ATTRIBUTION_20261012.md).

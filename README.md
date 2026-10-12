@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+> **Current user constraints (2026-10-12):** The finished model must have at most
+> **200M total resident parameters before quantization**, covering text, image,
+> audio and video (sensors optional), and target **>=95% Accuracy for each modality,
+> aspiring to98% or higher**, with calibrated supplied-option probabilities and
+> general condition following. These supersede earlier provisional parameter
+> wording below. Narrow taxonomy/ASR or aggregate Accuracy cannot satisfy this
+> requirement. No current result establishes completion; historical records remain.
+
 Tiny Omni Decision adapts Gemma 4's multimodal representation to return probabilities over supplied choices. Phase 1 established a **text-only decision** path; the current training pipeline supports text, image, audio, and video. The decision readout scores supplied choices and returns a probability distribution instead of generating a response.
 
 The current pretrained-representation research follows the R0–R8 process in [ROADMAP.md](ROADMAP.md). Frozen-feature text, synthetic image, CLEVRER video (including a binary explanatory/predictive/counterfactual readout, a new-scene text/video control, and a temporal-order reversal control), and closed-set English keyword audio probes are recorded in [docs/pretrained_reuse/R2_PATH_A_PROBES.md](docs/pretrained_reuse/R2_PATH_A_PROBES.md). A post-hoc Speech Commands control shows that the saved Audio+Text readout depends on its audio features, but the selected validation is not blind and the task remains narrow ([report](docs/pretrained_reuse/AUDIO_MULTIQUERY_FEATURE_DEPENDENCE_20261011.md)). A full-coverage static CLEVR-4 image probe with frozen VideoPrism reached 87.9% on the previously used 512-image selector and 88.1% on a one-time 1,595-image validation subset; a packaged local replay matched 128 saved decisions across 32 images. The synthetic task, changed encoder and expanded training coverage limit the quality comparison; the runtime bundle is 458 MB and CPU-only replay used about 4.26 GB peak working set. The CLEVRER controls found no clear scene-specific video contribution or temporal-order sensitivity for the current small readout; this is not a backbone capability claim. A dispatcher now replays eight saved assets per modality and records latency distributions, parity, caching, and memory ([report](docs/pretrained_reuse/R2_PATH_A_LATENCY_DISTRIBUTION_20261011.md)). Joint-modality quality remains pending. These development probes are not a product Teacher or release result.
@@ -384,3 +392,11 @@ Neither encoder shows a clear matched-video benefit; later shared training overf
 No sharing adoption or combined-runtime quality claim. This closes the sharing
 probe, not the <=200M / four-modality95% objective.
 [Curves, uncertainty and artifacts](docs/pretrained_reuse/R2_SHARED_TEXT_VIDEO_RESULTS_20261012.md).
+
+### Text error attribution (2026-10-12)
+
+A read-only audit of all2540 saved original-text validation decisions finds950
+of977 errors in untruncated inputs; score questions reach46.24% exact Accuracy.
+Longer context and dismissing errors as label noise lack supporting evidence.
+All questions retained; no training or new inference.
+[Attribution and limits](docs/pretrained_reuse/R2_TEXT_ERROR_ATTRIBUTION_20261012.md).
