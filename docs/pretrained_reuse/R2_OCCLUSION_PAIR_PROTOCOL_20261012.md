@@ -100,3 +100,19 @@ Integrity report: `perception-occlusion-train-media-integrity-01.json` in the sa
 artifact root. These checks establish decode/clock/cut validity only, not dense
 feature admission, semantic evidence sufficiency, or decision quality. Validation
 acquisition is still running; no fitting has started for this family.
+
+## Completed validation acquisition and decode check (2026-10-13)
+
+Validation acquisition finished257/257 with exit0. A separate all356-file pass
+matched byte sizes, SHA256, ordered video IDs and cut indices against the pinned
+plan; cross-split video-ID and exact-media overlap are both0. Report:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-all-media-integrity-01.json`.
+Validation acquisition manifest SHA256:
+`213bd33994fb80d79ee05ee0580af2cc9915dfc61094aed00c847c2c67f1d546`.
+The separate PyAV18.1 process decoded all257 videos /182,087 frames in715.792
+seconds, checking strictly increasing PTS and cut-index bounds (236 cuts), exit0.
+Report `perception-occlusion-valid-decode-01.json` in the same artifact root has
+SHA256 `1319430044bc766ca1be00726fcf2ac1c21e5a6c2db9042cec45ec9b5572a8d5`.
+All356 videos now pass these media/clock checks. Dense-window feature extraction,
+prepared-content overlap checks and conditional decision fitting remain pending;
+these results establish no model quality or temporal reasoning performance.
