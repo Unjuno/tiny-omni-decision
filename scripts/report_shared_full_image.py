@@ -107,6 +107,7 @@ def main():
         "",
         "512-image groups,10,000 resamples,seed17,linear percentile95% intervals.",
         "Reused validation and checkpoint selection limit inference; not blind testing.",
+        "Intervals are descriptive, without correction for multiple task comparisons.",
         "",
         "| Scope | Metric | Difference | Lower | Upper |",
         "|---|---|---:|---:|---:|",
