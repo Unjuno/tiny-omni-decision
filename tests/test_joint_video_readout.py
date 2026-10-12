@@ -1,4 +1,5 @@
 import json
+import sys
 
 import pytest
 
@@ -64,3 +65,27 @@ def test_feature_condition_alignment(tmp_path, mismatch):
         features, targets, _ = load_features(tmp_path, pairs)
         assert features["normal"].shape == (2, 3, 192)
         assert targets.tolist() == [0, 1]
+
+
+def test_report_reproduces_selected_metrics(tmp_path, monkeypatch):
+    from scripts import report_joint_video_readout as reporter
+
+    root = tmp_path / "pairs"
+    (root / "perception-occlusion-pairs-01").mkdir(parents=True)
+    pairs = [dict(video_id=f"v{i}", questions=[dict(target=0), dict(target=1)]) for i in range(2)]
+    path = root / "perception-occlusion-pairs-01/valid.json"
+    path.write_text(json.dumps(dict(pairs=pairs)))
+    monkeypatch.setattr(reporter, "ROOT", root)
+    monkeypatch.setattr(reporter, "PINS", {"valid": reporter.sha(path)})
+    torch.manual_seed(17)
+    x = torch.randn(4, 3, 192)
+    y = torch.tensor([0, 1, 0, 1])
+    run = tmp_path / "run"
+    run.mkdir()
+    results = {m: fit(x, x, y, y, torch.zeros(192), run / m) for m in ("normal", "black_pixels")}
+    (run / "result.json").write_text(json.dumps(results))
+    output = tmp_path / "report.json"
+    monkeypatch.setattr(sys, "argv", ["report", "--run", str(run), "--output", str(output)])
+    reporter.main()
+    report = json.loads(output.read_text())
+    assert report["normal_minus_black"]["paired_difference_intervals"]["accuracy"] == [0, 0]
