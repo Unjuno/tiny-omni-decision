@@ -418,3 +418,14 @@ per model. The new checkpoint scores83.98–84.38% on trained-word base conditio
 domain-word inputs. Every paired Accuracy-difference interval includes zero;
 expanded/domain probability quality worsens. No general-reasoning adoption.
 [All metrics, opposite-condition pairs and limits](docs/pretrained_reuse/R2_COVERAGE_TRANSFER_RESULTS_20261012.md).
+
+### Question-side failure isolation (2026-10-12)
+
+An actual-file audit corrects the earlier field-name wording: vocabulary family4
+never changes state keys. A fixed2x2 diagnostic on8192 rows/model separates the
+alias prefix from the remaining domain wording. For the coverage checkpoint,
+adding the prefix lowers generic baseAccuracy84.38% to53.03%; domain wording
+without the prefix still scores48.83%. All legacy reference probabilities replay
+exactly. Both weaknesses coexist; no template-specific fix or product adoption.
+[Factorial results](docs/pretrained_reuse/R2_TRANSFER_FACTORIAL_RESULTS_20261012.md)
+and [factual correction](docs/pretrained_reuse/R2_TRANSFER_FIELD_AUDIT_20261012.md).
