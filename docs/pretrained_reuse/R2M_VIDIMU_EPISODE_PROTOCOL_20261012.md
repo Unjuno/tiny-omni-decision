@@ -64,3 +64,18 @@ from success on this narrow task.
 Before the full comparison, verify one training video and a separate-process
 training-only extraction/readout smoke. This document freezes the intended
 experiment; it does not claim training or evaluation has happened.
+
+## Fixed perturbation implementation
+
+`grouped_derangement` hash-sorts unique episode IDs using seed17 separately in
+each placement group, then rotates by one. It uses no target labels and is
+stable under input ordering. This is a deterministic derangement, not uniform
+random sampling over all derangements. Singleton groups and duplicated IDs
+fail closed. Six CPU tests verify these properties.
+
+The fixed39-trial validation mapping is saved before feature extraction at
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-validation-control-01/permutation.json`.
+It has zero self-pairs. Counting activity labels after fixing the permutation
+found zero same-activity replacements; no seed or permutation was retried to
+obtain this outcome. Only frozen manifest metadata was read, not validation
+observations. Use this exact mapping for each modality perturbation.
