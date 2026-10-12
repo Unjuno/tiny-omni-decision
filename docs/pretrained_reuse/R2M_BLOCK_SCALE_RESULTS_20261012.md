@@ -20,3 +20,17 @@ Paired subject-cluster NLL differences (scaled minus comparator),10000 replicate
 Only3 development subjects and reused checkpoint-selection validation; not an independent audit. Scaling alters initialization contributions, gradients and regularization jointly. It supports sensitivity to this parameterization, not a unique causal explanation or general fusion gain.
 
 Artifact: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-joint-blockscale-arm-01`; comparisons in `vidimu-blockscale-comparison-01`. All101 prediction snapshots, normalization, config, best/final weights and hashes preserved. Readout84591 parameters, total with frozen VideoPrism114449775. CPU fit/evaluation/save loop1.136s excluding startup/load; no paid compute. No sealed audit access, legacy changes or product promotion.
+
+## Same fixed intervention controls
+
+Same39 IDs and preregistered within-placement permutation; no refitting.
+
+| Condition | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| matched | 0.871795 | 0.350965 | 0.199967 | 0.092742 |
+| shuffle_video | 0.179487 | 5.637317 | 1.235884 | 0.534034 |
+| missing_video | 0.897436 | 0.883627 | 0.427512 | 0.450175 |
+| shuffle_sensor | 0.384615 | 1.733467 | 0.901216 | 0.411010 |
+| missing_sensor | 0.641026 | 0.845391 | 0.463414 | 0.150183 |
+
+Both shuffles worsen Accuracy/NLL. Missing-video Accuracy alone rises, but NLL worsens; zero-feature missingness remains out of distribution. These controls do not overturn the sensor-only comparison or justify adoption. Full predictions and exact matched-reload verification: `vidimu-blockscale-controls-01`.
