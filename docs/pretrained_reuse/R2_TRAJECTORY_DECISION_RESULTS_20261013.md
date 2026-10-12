@@ -217,3 +217,18 @@ Do not train an ordinal head using these surrogate ranks. A future approach must
 retain scene/person reference information and target-cover association rather
 than assuming static camera coordinates. No extra quality experiment is launched
 from these three visual observations alone.
+
+## Prospective scene-feature reuse admission
+
+Before any combined readout fit, compared existing VideoMAEv2 scene and TAPIR
+trajectory caches. Their manifest pins and356 video-ID sets agree, but strict
+temporal-endpoint equivalence failed on33 clips: every affected clip has
+cut_frame=-1 and the scene plan ends one frame earlier than the trajectory cache.
+No training was launched and no old feature was modified. This is a preprocessing
+extent difference, not evidence of leakage or the cause of the quality failure.
+Do not describe the two encoders as receiving identical frames.
+
+Failure inventory:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-scene-trajectory-admission-failed-01.json`.
+Trace the original duration/end-index calculation before admitting a combined
+experiment; explicitly retain or resolve this difference in a new protocol.
