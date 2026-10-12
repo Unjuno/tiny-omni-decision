@@ -94,3 +94,20 @@ weights, train-fit normalization, training probabilities and result/input hashes
 This disposable smoke is not used to initialize the planned comparison. No
 validation/audit data or video encoder was loaded; no model quality, general
 fusion, or whole-model parameter-budget conclusion follows from this check.
+
+## Validation sensor preparation after protocol freeze
+
+The identical frozen sensor transform was applied to all39 validation trials
+with `python -m scripts.cache_vidimu_training_sensor --split validation`.
+No failures or exclusions occurred; shape39x8x5x3x3. Exact float32 feature-array
+hash overlap with the pinned130-trial training cache is0. This is an exact
+duplication check, not a near-duplicate or physical synchronization guarantee.
+
+Output: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-validation-sensor-features-01`.
+Features SHA256: `1329f39d60b179446bcef095f7685e58bba478925b56196ebc877f3f0237486e`.
+Records SHA256: `fbaf822aff1ce4844dd6481470b4e84c2fa9130d3f56a21ad29972a2b23a6792`.
+The CLI exposes only train/validation; its sealed-audit rejection is regression
+tested. Existing training cache and smoke artifacts were not overwritten.
+Validation observations have now been read for feature extraction, but no
+validation predictions, selection or hyperparameter tuning have occurred.
+Sealed audit observations remain unopened. Video download remains in progress.
