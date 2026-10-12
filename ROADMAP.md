@@ -646,3 +646,11 @@ of977 errors in untruncated inputs; score questions reach46.24% exact Accuracy.
 Longer context and dismissing errors as label noise lack supporting evidence.
 All questions retained; no training or new inference.
 [Attribution and limits](docs/pretrained_reuse/R2_TEXT_ERROR_ATTRIBUTION_20261012.md).
+
+### Broad text coverage preflight (2026-10-12)
+
+A real sampler dry-run identifies15127 original questions absent from prior
+all-block runs, and produces16384 unique mixed-source encounters. All original
+records were used in inherited last-block training. Storage failed:622MB free
+versus705MB required, so no learning run started.
+[Evidence and retention budget](docs/pretrained_reuse/R2_TEXT_COVERAGE_PREFLIGHT_20261012.md).
