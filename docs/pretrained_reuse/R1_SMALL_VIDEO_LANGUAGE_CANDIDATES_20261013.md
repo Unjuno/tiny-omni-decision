@@ -83,3 +83,22 @@ validation; text-length admission is not model quality or license admission.
 
 Artifact:`all-in-one-source-audit-01/compact-text-audit.json` preserves every
 statement, token length and pair-file SHA256. All old inputs/runs are untouched.
+
+## Distribution response and publisher clarification search
+
+Publisher-repository issue searches for license/commercial returned zero results;
+this is absence of discovered clarification, not proof of permission or prohibition.
+Checkpoint search located issues4,17,19 but their issue bodies do not resolve
+weight licensing. Query results preserved in publisher-issue-check.json.
+
+Direct Tiny download returnedHTTP200 text/html(2468bytes), not a checkpoint.
+The Drive page labels all-in-one-tiny.ckpt approximately199M and says its file is
+too large for Google's virus scan. This is a scan-size notice, not a detected
+malware report. No checkpoint was saved or deserialized. Do not count this HTML
+response or the advertised size as downloaded weights or resident model size.
+Response metadata preserved in weight-response-probe.json. An optional bs4 parser
+was absent; no dependency was installed, and the notice was inspected with stdlib.
+
+Product-use weight rights remain REVIEW. The existing README MIT declaration,
+missing full license notice and unverified weight scope must be represented
+accurately rather than silently upgrading this candidate to ALLOW.
