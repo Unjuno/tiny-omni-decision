@@ -218,3 +218,26 @@ fixed; this is not annotation- or performance-based acquisition.
 Command template:
 `python -m scripts.acquire_av_correspondence --plan <plan.json> --plan-sha256 0c6a07048c393d2fddd54fb3e72883055bb43634f9e3a8cac5d8570edcc39931 --split train|valid --output <fresh>`.
 Local checks: Ruff passed;607 CPU tests passed and one optional test skipped.
+
+## Development preprocessing parity gate
+
+The pilot decoder is now a reusable `decode_window` with unchanged clock,
+resampling and frame-selection operations. In a separate PyAV process, all eight
+pilot PCM arrays, RGB arrays and timing fields match their original artifacts
+exactly. Evidence: `perception-correspondence-preprocessor-parity-01/result.json`.
+The saved original windows and features were not overwritten.
+
+`scripts.prepare_correspondence_development` requires both complete256/200 media
+manifests and the fixed plan hash before creating output. It verifies recording
+IDs, split labels and every media hash, rejects cross-split exact media duplicates,
+and then prepares the same common-clock windows. Exact prepared-array content is
+also checked across splits. These exact hashes do not establish absence of near
+duplicates, recurring scripts, participants or environments.
+
+A live negative check against the unfinished acquisition correctly rejected it
+with `train acquisition incomplete` and did not create an output directory.
+Full preparation has therefore not started. When acquisition finishes, run the
+new script in the existing PyAV environment with a fresh output directory. No
+subsampling, failure-based replacement or validation-label filtering is allowed.
+Ruff and607 CPU tests pass; the PyAV parity and incomplete-input checks were run
+separately from normal CI. Download processes continue unchanged.
