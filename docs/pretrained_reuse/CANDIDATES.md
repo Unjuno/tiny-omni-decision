@@ -100,3 +100,7 @@ VideoMAE-small also has a noncommercial card; X3D-S is a possible compact
 research candidate with explicit checkpoint rights and actual runtime/count
 still unverified. No weights downloaded or architecture replaced. See
 [bounded source audit](R1_COMPACT_VIDEO_FOLLOWUP_20261012.md).
+
+## 2026-10-13 compact temporal candidate
+
+OpenGVLab VideoMAE V2 distilled Small strictly loads and executes real-video inference at 22,153,286 parameters. This is distinct from VideoMAE v1; no Decision quality is established. [Pinned runtime audit](R1_VIDEOMAEV2_SMALL_20261013.md).
