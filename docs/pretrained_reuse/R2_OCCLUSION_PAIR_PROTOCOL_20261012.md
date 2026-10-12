@@ -84,3 +84,19 @@ source hashes and exact estimator. No pretrained model, media evidence,
 temperature fitting or model selection was used. This measured prior is a
 necessary comparison; exceeding33.3% alone is not sufficient evidence of useful
 video decisions. No sample was removed because of the unexpected option set.
+
+## Completed train acquisition and decode check (2026-10-13)
+
+All99 planned training videos finished acquisition with exit0. A separate read-only
+pass rehashed every file and matched IDs, byte sizes and cut indices to the pinned
+plan. Acquisition manifest SHA256:
+`469299ad240ff85c47ba44abb8920aae9994b0e3ec15a3fca1373c49b2fa6ee3`.
+The separate PyAV18.1 decode process then completed all99 videos /69,192 frames in
+302.204 seconds, checking strictly increasing presentation timestamps and valid
+cut indices (87 videos have a cut). It exited0. Decode report:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-train-decode-01.json`,
+SHA256 `f017c71e877d00e41fa3d812a9d4dd6e4236aae2e69070f7bd8905a8960dc9d2`.
+Integrity report: `perception-occlusion-train-media-integrity-01.json` in the same
+artifact root. These checks establish decode/clock/cut validity only, not dense
+feature admission, semantic evidence sufficiency, or decision quality. Validation
+acquisition is still running; no fitting has started for this family.
