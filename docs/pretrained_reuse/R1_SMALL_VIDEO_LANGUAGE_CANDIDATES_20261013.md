@@ -251,3 +251,14 @@ seed18 is a sensitivity diagnostic, never a seed-selection candidate.
 Artifacts:all-in-one-tiny-candidate-controls-02; corrected real save/reload probe
 all-in-one-tiny-real-forward-02. Old01 artifacts remain preserved as invalid-text
 runs. Future admission must assert vocabulary and actual token IDs before scoring.
+
+## Fail-closed tokenizer admission
+
+The repository now provides `pinned_bert_tokenizer.load_pinned_bert_tokenizer`.
+It verifies the vocabulary SHA-256 before importing Transformers, selects the
+explicit supported constructor argument, and rejects incorrect vocabulary size,
+special IDs, or collapsed ordinal tokens. Regression tests cover both constructor
+signatures and invalid input. Real local pinned vocabulary load produced 30,522
+entries and ordinal token IDs [101, 2034, 2117, 2353, 102].
+Ruff passed; full CPU suite: 653 passed, 1 skipped. This establishes tokenizer
+admission only; it does not establish downstream quality or authorize adoption.
