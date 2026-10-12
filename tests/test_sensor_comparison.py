@@ -12,7 +12,9 @@ def test_center_readout_keeps_parameters_and_local_support():
     mean = NativeSensorDecision()
     torch.manual_seed(17)
     center = NativeSensorDecision(readout="center")
-    assert all(torch.equal(a, b) for a, b in zip(mean.parameters(), center.parameters()))
+    assert all(
+        torch.equal(a, b) for a, b in zip(mean.parameters(), center.parameters(), strict=True)
+    )
     x = torch.randn(2, 128, 6)
     t = torch.arange(128).expand(2, -1).double() * 20
     changed = x.clone()
