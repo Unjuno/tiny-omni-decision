@@ -4,6 +4,22 @@ import pytest
 torch = pytest.importorskip("torch")
 
 from scripts.train_sensor_subjects import StaticSensor, metrics  # noqa: E402
+from tiny_omni_decision.native_sensor import NativeSensorDecision  # noqa: E402
+
+
+def test_center_readout_keeps_parameters_and_local_support():
+    torch.manual_seed(17)
+    mean = NativeSensorDecision()
+    torch.manual_seed(17)
+    center = NativeSensorDecision(readout="center")
+    assert all(torch.equal(a, b) for a, b in zip(mean.parameters(), center.parameters()))
+    x = torch.randn(2, 128, 6)
+    t = torch.arange(128).expand(2, -1).double() * 20
+    changed = x.clone()
+    changed[:, :20] += 100
+    assert torch.equal(center(x, t), center(changed, t))
+    with pytest.raises(ValueError):
+        NativeSensorDecision(readout="unknown")
 
 
 def test_static_is_order_invariant():

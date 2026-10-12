@@ -11,8 +11,11 @@ ACTIVITY_CODES = (1, 2, 3, 4, 5, 6, 7, 8, 13, 14, 130, 140)
 
 
 class NativeSensorDecision(nn.Module):
-    def __init__(self):
+    def __init__(self, readout="mean"):
         super().__init__()
+        if readout not in ("mean", "center"):
+            raise ValueError("unsupported readout")
+        self.readout = readout
         self.stem = nn.Sequential(
             nn.Conv1d(7, 32, 5, padding=2), nn.GELU(), nn.Conv1d(32, 32, 5, padding=2), nn.GELU()
         )
@@ -32,7 +35,9 @@ class NativeSensorDecision(nn.Module):
             raise ValueError("noncontiguous timestamps")
         dt = torch.cat((torch.zeros_like(deltas[:, :1]), deltas / 20.0), dim=1)
         features = torch.cat((values, dt.unsqueeze(-1).to(values.dtype)), dim=-1)
-        return self.head(self.stem(features.transpose(1, 2)).mean(-1))
+        hidden = self.stem(features.transpose(1, 2))
+        pooled = hidden.mean(-1) if self.readout == "mean" else hidden[:, :, hidden.shape[-1] // 2]
+        return self.head(pooled)
 
 
 def decide_sensor(model: NativeSensorDecision, batch: ObservationBatch):

@@ -80,8 +80,11 @@ def load(split, manifest, smoke):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--center", action="store_true")
     args = parser.parse_args()
     output = ROOT / ("sensor-subject-smoke-01" if args.smoke else "sensor-subject-training-01")
+    if args.center:
+        output = ROOT / ("sensor-center-smoke-01" if args.smoke else "sensor-center-training-01")
     output.mkdir(exist_ok=False)
     torch.set_num_threads(2)
     device = "cpu" if args.smoke else "cuda"
@@ -104,6 +107,7 @@ def main():
             "weight_decay": 0.01,
             "device": device,
             "smoke": args.smoke,
+            "readout": "center" if args.center else "mean_and_static",
             "class_index_to_activity_code": ACTIVITY_CODES,
             "torch": torch.__version__,
             "train_windows": len(train["target"]),
@@ -119,7 +123,10 @@ def main():
         for s, d in (("train", train), ("val", val))
     }
     summaries = {}
-    for mode, constructor in (("temporal", NativeSensorDecision), ("static", StaticSensor)):
+    modes = (("temporal", NativeSensorDecision), ("static", StaticSensor))
+    if args.center:
+        modes = (("center", lambda: NativeSensorDecision(readout="center")),)
+    for mode, constructor in modes:
         torch.manual_seed(17)
         model = constructor().to(device)
         optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
