@@ -56,3 +56,28 @@ def test_cross_clock_and_bad_queries_rejected():
 def test_future_observation_is_never_exposed():
     result = align_observations(batch(), [-1], max_age_ms=1000)
     assert all(r["indices"] == (None,) for r in result.values())
+
+
+def test_age_boundary_is_inclusive_and_zero_age_requires_exact_timestamp():
+    result = align_observations(batch(), [12, 12.001], max_age_ms=12)
+    assert result["v"]["indices"] == (0, None)
+    assert result["v"]["age_ms"] == (12, None)
+    exact = align_observations(batch(), [0, 0.001, 10, 20], max_age_ms=0)
+    assert exact["v"]["indices"] == (0, None, None, 2)
+
+
+def test_all_invalid_stream_remains_unavailable_and_absent_stream_is_not_invented():
+    b = batch()
+    invalid = b.observations[0].model_copy(update={"valid_mask": (False, False, False)})
+    b = b.model_copy(update={"observations": (invalid,)})
+    result = align_observations(b, [0, 20, 100], max_age_ms=1000)
+    assert set(result) == {"v"}
+    assert result["v"]["indices"] == (None, None, None)
+    assert result["v"]["age_ms"] == (None, None, None)
+    assert result["v"]["available"] == (False, False, False)
+
+
+@pytest.mark.parametrize("max_age", [-1, float("nan"), float("inf"), -float("inf")])
+def test_invalid_maximum_age_rejected(max_age):
+    with pytest.raises(ValueError, match="maximum age"):
+        align_observations(batch(), [0], max_age_ms=max_age)
