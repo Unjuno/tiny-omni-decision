@@ -1,3 +1,12 @@
+# ARCHIVED — Standalone Audio Decision (withdrawn 2026-10-12)
+
+> **WITHDRAWN by the user on 2026-10-12. This is NOT an active project, milestone, experiment queue, or delivery commitment.**
+> The separate <=10M-parameter / 98%-accuracy audio-only model is canceled as an independent research direction. Do not start new training, model-selection, quantization, dataset acquisition, benchmarking, or packaging in response to the archived tasks below.
+> **Only the main 100–200M (hard maximum 200M) multimodal Omni Decision project is prioritized**, with audio as one of its required modalities alongside image, screen/video, text, and sensors. The main model targets 95–98% quality before quantization and >=95% on the same representative tasks after quantization and recovery, all currently unachieved.
+> This record is preserved for historical traceability; previous experimental results remain valid only for their original scoped tasks. Do not delete checkpoints, samples, or code as a side effect. Nothing here instructs changes to live jobs.
+
+## Historical proposal below — superseded, not actionable
+
 # Standalone Audio Decision — pretrained ~8M audio representation, <=10M total, 98% target
 
 **Status:** independent research proposal (2026-10-12). This document defines a **separate project** and does not change or depend on Tiny Omni Decision, V-JEPA, audiovisual fusion, or the parent roadmap's completion. This is not a claim that a qualifying model already exists.

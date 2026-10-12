@@ -1,3 +1,10 @@
+# ARCHIVED — withdrawn standalone Audio Decision subsection
+
+> **WITHDRAWN, 2026-10-12:** The user canceled the independent <=10M/98% audio-only model. All prospective scope, training, model selection, packaging, runtime and Omni-integration discussion below is **historical and no longer actionable**. The active effort is the <=200M-parameter **full Omni Decision model**, including native audio, visual, text and sensor input, crossmodal fusion, and quantization recovery. Preserve old evidence; do not launch an audio-only project based on the older text.
+> [Archived standalone roadmap](../audio_decision/ROADMAP.md); [active fusion experiment plan](R2_MODALITY_NATIVE_FUSION_PROTOCOL_20261012.md).
+
+## Superseded historical note
+
 # Audio Decision — independent 10M / 98% research track
 
 > **Status update (2026-10-12).** The previous R2-A "Omni roadmap subsection" wording is **superseded**. The user explicitly chose a **standalone Audio Decision model**, **not** an Audio encoder required to be integrated into Tiny Omni Decision. The prior version of this file remains available in Git history for research provenance.
