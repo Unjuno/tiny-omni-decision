@@ -925,3 +925,12 @@ inputs at 169,973,492 resident parameters, preserving saved answers. MiniLM serv
 video question/options; standalone text, event audio, screen and joint fusion
 are outside this slice. The next gate is task-matched joint quality, not another
 residency-only claim. [Measured scope](docs/pretrained_reuse/R2_RESIDENT_NATIVE_PATHS_20261012.md).
+
+### Fusion complementarity diagnosis (2026-10-12)
+
+Saved VIDIMU predictions show zero video-only correct episodes and nine sensor
+correct answers lost by the original linear joint model, including two episodes
+correct in both unimodal arms. Joint NLL worsens in all three subjects. This set
+has no sensor Accuracy headroom; stop fitting additional fusion variants on it
+and require a complementary, task-matched paired benchmark before new training.
+[Diagnostic scope and next-task gates](docs/pretrained_reuse/R2_FUSION_COMPLEMENTARITY_20261012.md).
