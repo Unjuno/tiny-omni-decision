@@ -183,3 +183,8 @@ passed, including padding/permutation, temporal order, paired aggregation, contr
 routing and rejection of incomplete extraction. No new fit has run yet: the full
 video feature process remains active. This is preparation, not a quality result.
 CI for295e2f8 passed both runs after the optional-Torch collection fix.
+
+## Completed execution (2026-10-13)
+
+The preparation above is historical. All356 features and both50-epoch runs
+completed; see [results](R2_OCCLUSION_RESULTS_20261013.md). Neither head is adopted.

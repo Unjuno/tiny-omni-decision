@@ -76,3 +76,17 @@ Head training/control wall times: mean 5.362s; attention 8.078s. Feature extract
 | perception-occlusion-readout-01/attention/final.pt | `1effbf6042f21247eb5d2ecbe794bdf2d5aea6f89119fa2f5d9e0af9b91f6e5c` |
 | perception-occlusion-readout-01/attention/history.json | `3a9f160e0ce776b195cf5c6ab4a05cb69205b4a5b33cb1bf6f0a7202b91acfb1` |
 | perception-occlusion-readout-01/attention/predictions.json | `44e5a94d9f5de819623fe892c7f4f15ebf85bb06fdbc313bfacbf120f746cd76` |
+
+## Train-only input diagnostic
+
+All99 train feature files were rehashed and inspected without fitting or reading
+validation predictions. For each video, relative temporal RMS is
+`norm(windows - mean(windows, axis=0)) / norm(windows)`. Its min/median/max
+are0.017767/0.050059/0.079506. For each corresponding candidate, the initial/final
+text-feature relative L2 difference has min/median/max0.078768/0.081116/0.082141.
+Inputs therefore have nonzero numerical variation; this does not establish
+semantic information sufficiency. The encoder wrapper averages all output tokens
+along axis1 before the temporal readout. Spatial token pooling is a concrete
+possible loss point, not a demonstrated sole cause. Preserve the fixed comparison;
+any next token-retention diagnostic should use train assets only and no new fit.
+Saved diagnostic: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-train-input-diagnostic-01.json`.
