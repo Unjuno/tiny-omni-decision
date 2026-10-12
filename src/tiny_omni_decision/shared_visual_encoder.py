@@ -23,7 +23,10 @@ class SharedVisualEncoder:
                 or x.min() < 0 or x.max() > 1):
             raise ValueError("requires normalized float32 [B,T,288,288,3] for the fixed profile")
         if modality == "image":
-            return spatial_cells(np.asarray(self._spatial(self.variables, x)))
+            cells = spatial_cells(np.asarray(self._spatial(self.variables, x)))
+            if len(cells) != len(x):
+                raise ValueError("spatial output batch differs from input")
+            return cells
         features = np.asarray(self._temporal(self.variables, x))
         if features.shape != (len(x), 2048, 768) or not np.isfinite(features).all():
             raise ValueError("invalid temporal features")

@@ -32,3 +32,13 @@ def test_invalid_profiles_fail_before_model_use():
         encoder.encode(np.full((1, 1, 288, 288, 3), np.nan, np.float32), modality="image")
     with pytest.raises(ValueError):
         encoder.encode(np.zeros((1, 1, 288, 288, 3), np.float32), modality="audio")
+
+
+def test_wrong_output_batch_rejected():
+    class BadModel:
+        def apply(self, *args, **kwargs):
+            return None, {"spatial_features": np.zeros((2, 256, 768), np.float32)}
+
+    encoder = SharedVisualEncoder(BadModel(), {}, compile_fn=lambda fn: fn)
+    with pytest.raises(ValueError, match="batch"):
+        encoder.encode(np.zeros((1, 1, 288, 288, 3), np.float32), modality="image")

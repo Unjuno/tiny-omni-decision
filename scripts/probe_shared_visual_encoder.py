@@ -36,7 +36,7 @@ def main():
         assert sha256_file(path) == digest
     assert subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"],
                                    text=True).strip() == SOURCE_COMMIT
-    out = r2 / "shared-visual-encoder-probe-01"
+    out = r2 / "shared-visual-encoder-probe-02"
     out.mkdir(exist_ok=False)
     config = dict(pins={str(p): h for p, h in pins.items()}, source=SOURCE_COMMIT,
         script_sha256=sha256_file(Path(__file__)),
@@ -82,7 +82,7 @@ def main():
 
     def tree_hash():
         digest = hashlib.sha256()
-        for leaf in leaves:
+        for leaf in jax.tree_util.tree_leaves(encoder.variables):
             value = np.asarray(leaf)
             digest.update(str((value.shape, value.dtype)).encode())
             digest.update(value.tobytes())
