@@ -42,3 +42,20 @@ def test_wrong_output_batch_rejected():
     encoder = SharedVisualEncoder(BadModel(), {}, compile_fn=lambda fn: fn)
     with pytest.raises(ValueError, match="batch"):
         encoder.encode(np.zeros((1, 1, 288, 288, 3), np.float32), modality="image")
+
+
+def test_video_tokens_preserve_spatial_order_and_default_pooling():
+    tokens = np.arange(2048 * 768, dtype=np.float32).reshape(1, 2048, 768)
+
+    class Model:
+        def apply(self, *args, **kwargs):
+            return tokens, {}
+
+    encoder = SharedVisualEncoder(Model(), {}, compile_fn=lambda fn: fn)
+    frames = np.zeros((1, 8, 288, 288, 3), np.float32)
+    np.testing.assert_array_equal(encoder.encode(frames, modality="video", representation="tokens"),
+                                  tokens)
+    np.testing.assert_array_equal(encoder.encode(frames, modality="video"),
+                                  tokens.reshape(1, 8, 256, 768).mean(2))
+    with pytest.raises(ValueError):
+        encoder.encode(frames[:, :1], modality="image", representation="tokens")
