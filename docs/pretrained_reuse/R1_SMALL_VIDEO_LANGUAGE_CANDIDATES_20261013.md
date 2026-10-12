@@ -280,3 +280,7 @@ Artifacts: C:/CodexArtifacts/pretrained-reuse-r1/all-in-one-tiny-train-diagnosti
 Runner: all-in-one-source-initial-01/train_diagnostic_black.py,
 SHA256 a7f6f04293c88159d11a88277d660fe2054ed9d1b803e532f9b25c72aaea65f9.
 Completion and quality remain pending at protocol publication.
+
+Completed subsequently: [full train diagnostic results](R2_JOINT_VIDEO_ITM_DIAGNOSTIC_20261013.md).
+All 99 videos completed; frozen ITM readout is not adopted (25.25% Accuracy,
+zero correct changed-condition pairs). This does not establish a model-family ceiling.
