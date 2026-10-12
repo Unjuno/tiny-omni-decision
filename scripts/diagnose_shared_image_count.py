@@ -20,16 +20,16 @@ def main():
     source = root / "shared-spatial-image-readout-01"
     corpus = root / "clevr4-full-coverage-seed17"
     cache = root / "videoprism-spatial-image-cache-01/train-cells.npy"
+    options_path = source / "option-embeddings.npy"
+    manifest_path = corpus / "train-image-manifest.jsonl"
     pins = {
         cache: "0355ae96cfadf421266452cca5df950ba6d0a09e3bbbfc10d71c356bc556fa5b",
         source
         / "global/best.pt": "dc7053b7c6e949a08e3e3dae4ff5a4e651e042e097d6baba9756442d9fc7a48b",
-        source
-        / "option-embeddings.npy": "97e212eee5b5f7121e6bdfba631620e5859403665da3ad2ffaf2b044c58a50dc",
+        options_path: "97e212eee5b5f7121e6bdfba631620e5859403665da3ad2ffaf2b044c58a50dc",
         corpus
         / "train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
-        corpus
-        / "train-image-manifest.jsonl": "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010",
+        manifest_path: "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010",
     }
     for path, digest in pins.items():
         assert sha(path) == digest

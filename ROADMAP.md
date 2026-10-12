@@ -839,3 +839,13 @@ Counting66.41%->67.58% is also uncertain and texture declines. Preserve the
 alternative, retain the existing runtime reference, and stop this preprocessing
 comparison without an extra variant or budget extension.
 [Curves, paired task intervals and hashes](docs/pretrained_reuse/R2_FULL_IMAGE_RESULTS_20261012.md).
+
+
+### Training-only counting diagnosis (2026-10-12)
+
+On all8,424 training images the frozen global readout has exact counting68.02%,
+with2,001 overestimates and693 underestimates. An affine fixed-candidate rewrite
+changes no answers within declared numeric tolerances. No new training or
+validation evaluation was performed. Optimize a controlled training-only linear
+baseline before attributing the remaining weakness to encoder capacity.
+[Confusion matrix and limits](docs/pretrained_reuse/R2_COUNT_TRAINING_DIAGNOSTIC_20261012.md).
