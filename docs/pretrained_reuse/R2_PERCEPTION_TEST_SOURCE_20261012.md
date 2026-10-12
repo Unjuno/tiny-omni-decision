@@ -104,3 +104,24 @@ adapter and truncation contract, while keeping this generalization limit open.
 The paper HTML and pinned repository-tree response are preserved alongside the
 source audit. This follow-up resolves what upstream guarantees; it does not
 resolve the missing fine-grained grouping information.
+
+## Follow-up: proposed query failed an identity check
+
+The interval-only question, asking whether the sound source is visible, is
+underspecified when multiple sounds occupy the same interval. A train-only exact
+input collision audit found 25,661 unique (video, start, end) inputs, with five
+contradictory input groups involving eleven annotations. No deterministic model
+can give both targets for exactly the same input. Do not fit that formulation.
+
+Adding the requested sound class to the query yields 25,743 unique inputs and no
+exact contradictory groups. This supports a class-conditioned query contract,
+not a claim of solved semantics: overlapping intervals, broad `Other` classes,
+multiple sources and visibility changes still require definition. Class is an
+explicit user query condition; it must not be described as predicted from audio.
+Parent IDs and visibility remain supervision, never inference inputs. Do not
+remove the conflicting rows or turn unknown parents into negatives.
+
+Run: `python -m scripts.audit_perception_visibility_identity --source C:/CodexArtifacts/pretrained-reuse-r2/perception-test-source-audit-01/train_annotations.zip --output <fresh-json>`.
+The saved `visibility-identity.json` retains every contradiction and input hash.
+One regression test covers class-disambiguated and still-contradictory sources,
+and rejects non-train input. No fitting, media, validation or audit access.
