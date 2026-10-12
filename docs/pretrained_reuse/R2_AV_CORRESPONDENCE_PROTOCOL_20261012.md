@@ -83,3 +83,21 @@ The first smoke IDs are video_3174, video_7855, video_9027, video_1688,
 video_4873, video_1693, video_2797 and video_5013. No validation IDs or labels were
 inspected to choose them. Only eight-clip acquisition is initiated in this stage;
 the remaining planned train records do not imply downloaded media or training.
+
+## Eight-clip acquisition completed
+
+`python -m scripts.probe_perception_media --count 8 --output C:/CodexArtifacts/pretrained-reuse-r2/perception-media-probe-02`
+completed download/reuse, CRC/SHA checks and full audio/video decoding of the eight
+fixed IDs. Existing first two files were copied only after hash/CRC validation;
+their originals remain untouched. Archive generation and size checks are the
+same as the preceding pilot. All decoded streams have increasing timestamps.
+
+Metadata is not a substitute for decoder evidence: video_5013 decodes 699 frames
+while annotations list 700. Sound sample counts also differ for some clips.
+The next preprocessing stage must use decoded PTS, the observed common interval
+and upstream cuts; do not fabricate a missing frame or pad audio to metadata.
+Detailed counts, file hashes and timing are in manifest.json and timing.json.
+Eight train recordings are not independent evidence for general quality.
+
+No fitting or validation acquisition occurred. Protocol/builder/acquisition code
+was committed as a42ebd3; 604 CPU tests passed and both CI runs succeeded.
