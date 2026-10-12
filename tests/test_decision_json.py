@@ -1,6 +1,9 @@
 import json
 
 import pytest
+
+pytest.importorskip("torch")
+
 import torch
 
 from tiny_omni_decision.decision import DecisionOutput, FrozenFeatureCandidateScorer
