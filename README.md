@@ -578,3 +578,13 @@ Accuracy/NLL differences and a larger train-validation gap. Aggregate NLL improv
 but ECE worsens. Preserve the original runtime; stop unregularized extension and
 predefine regularization before further fitting. No audit or promotion.
 [Matched metrics, gaps and intervals](docs/pretrained_reuse/R2_AFFINE_ENDPOINT_RESULTS_20261012.md).
+
+
+### Anchored affine regularization (2026-10-12)
+
+Two fixed 200-iteration fits improve counting on reused validation from the
+unregularized 65.82% to 70.51%; paired Accuracy/NLL intervals favor regularization.
+Coefficient 0.01 has aggregate Accuracy 91.94%, NLL 0.1964, and is the predefined
+research recommendation. This remains far below the weakest-task target and is
+not product promotion or a blind result. Stop coefficient refinement on these IDs.
+[All arms, curves, gaps and limits](docs/pretrained_reuse/R2_AFFINE_REGULARIZATION_RESULTS_20261012.md).
