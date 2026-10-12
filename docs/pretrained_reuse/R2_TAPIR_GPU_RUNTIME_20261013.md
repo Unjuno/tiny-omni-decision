@@ -101,3 +101,28 @@ Combined feature SHA-256:
 Existing models and outputs are unchanged. A subsequent conditional readout
 must use the full fixed grid and retain video-mismatch controls, rather than
 selecting the target trajectory with ground-truth boxes.
+
+
+## Conditional trajectory readout plumbing
+
+`TrajectoryReadout` adds 164,032 trainable parameters: candidate-query projection
+and point key/value projections at hidden width64. Each token includes ordered
+trajectory information and initial appearance. Attention is invariant to point
+permutation; candidate permutation permutes scores. No point-index positional
+embedding or ground-truth object selector is added. The frozen tracker and text
+encoder remain outside the optimizer.
+
+Eight CPU tests across trajectory conversion and readout pass, including point
+and candidate permutation, padding invariance, finite gradients and invalid-input
+rejection; Ruff passes. A separate process used the hash-verified video_10103
+features and its two cached train questions for ten AdamW updates (seed17,
+lr0.001). CE fell from1.099633 to0.322235; saved weights reload with exact logits.
+CPU update/save/reload interval was0.072830seconds. This is a plumbing smoke,
+not a generalization result or selected candidate. Both questions have target1,
+so it cannot establish condition switching or meaningful visual grounding.
+
+New artifact: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-trajectory-readout-smoke-01/`;
+script: `C:/CodexArtifacts/pretrained-reuse-r1/tapir-audit-01/readout_smoke.py`.
+Checkpoint, loss history, routed questions, input hashes and probabilities are
+preserved. Full frozen-feature extraction, preregistered train/validation fitting
+and mismatch controls remain required before assessing this representation.
