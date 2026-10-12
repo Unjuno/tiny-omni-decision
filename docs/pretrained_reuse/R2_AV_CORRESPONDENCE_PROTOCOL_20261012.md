@@ -241,3 +241,19 @@ new script in the existing PyAV environment with a fresh output directory. No
 subsampling, failure-based replacement or validation-label filtering is allowed.
 Ruff and607 CPU tests pass; the PyAV parity and incomplete-input checks were run
 separately from normal CI. Download processes continue unchanged.
+
+## Acquisition completed; full preprocessing running
+
+Both acquisition processes exited0. Final manifests report
+`PASS_ACQUISITION_NOT_DECODE`: train256 files /3,412,517,675 bytes, valid200 files /
+2,525,646,586 bytes. Wall times were130.881 and101.398 minutes respectively,
+with overlapping execution; do not sum them as elapsed wall time. No selections
+were replaced. These counts include the eight verified reused train files.
+
+Full preprocessing was launched from ef06dcc into
+`perception-correspondence-development-windows-01` using the existing PyAV Python
+and `python -m scripts.prepare_correspondence_development --output <fresh>`.
+It passed the initial complete-manifest, recording identity, all-media SHA256 and
+exact cross-split media-duplicate gates and began producing windows. This records
+launch and initial gates only: full decode, prepared-content checks, feature
+extraction and development comparison remain incomplete until their reports pass.
