@@ -220,3 +220,45 @@ C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-r1/venv/Scripts/python.exe
 The first invocation lacked PYTHONPATH and failed at import before processing;
 setting the existing source path resolved it without dependency changes. CPU tests
 cover inward rounding, continuous blocks, out-of-range refusal and clock gaps.
+
+## PTS-bounded joint feature pilot
+
+All seventeen train intervals now have input-only NPZ windows. Video uses actual
+PTS inside the half-open query interval, eight uniformly selected indices, PyAV
+RGB reformat to 288x288. Audio uses exact decoded bounds, channel averaging and
+SciPy polyphase 48-to-24 kHz conversion. Targets/classes are absent from NPZs;
+query and supervision remain separate. This does not validate physical AV sync.
+
+Six intervals contain fewer than eight unique video frames (4–6); the eight-frame
+profile repeats selected in-range frames explicitly. These short intervals are
+not discarded or claimed to contain eight independent temporal observations.
+The remaining eleven have eight unique frames. No frame outside the requested
+interval is used by timestamp; exposure duration is not modeled.
+
+Both pinned encoders were loaded and executed twice on every window:
+
+| Encoder | Parameters | Feature size | Windows | Repeat max difference | CPU load/extract time |
+|---|---:|---:|---:|---:|---:|
+| DyMN | 1,961,239 | 384 | 17 | 0 | 8.021 s |
+| VideoPrism | 114,365,184 | 768 pooled | 17 | 0 | 46.668 s |
+
+Every output is finite. Audio inherits the existing 24-to-32 kHz sinc/mel
+profile, so the full pilot route is 48->24->32 kHz, not a direct conversion.
+The original video report inherited STARSS23's inaccurate word `equirectangular`;
+these are ordinary perspective frames. Its numerical operation resizes the
+already square windows and divides by 255. The runner description is corrected
+for future runs; original report and executed source are preserved. No feature
+bytes were recomputed to hide that metadata issue.
+
+Artifacts: `perception-windows-01`, `perception-audio-features-01`,
+`perception-video-features-01` under the existing local R2 artifact root. Reports
+include source/checkpoint/window/feature hashes, frame indices, rational PTS and
+sample bounds. Commands are `scripts.prepare_perception_windows --output <fresh>`
+and `scripts.extract_perception_pilot --modality audio|video --output <fresh>`.
+Use the existing audio dependency overlay for audio and VideoPrism environment
+with `PYTHONPATH=<worktree>/src`, `JAX_PLATFORMS=cpu` for video. No new dependencies.
+
+This is a two-video technical pilot, not fusion quality or training admission.
+No readout fitting, validation/test access or cloud/GPU computation occurred.
+Next requires a fixed task protocol and representative grouped development data,
+including short/ambiguous intervals and explicit coverage accounting.
