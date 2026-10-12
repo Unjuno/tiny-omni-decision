@@ -67,3 +67,26 @@ establish a TAPIR or model-family ceiling. Next investigation should isolate
 object identity/condition grounding using training-only evidence before another
 quality run; simply extending this head's epochs is not supported. All broader
 Omni quality/fusion/release gates remain open.
+
+## Train-only condition replay
+
+Replayed the pinned best/final weights on198 training questions, with no fitting,
+validation inference or checkpoint reselection. Initial/final text features are
+numerically distinct (relative L2 range0.078768–0.082141); this does not prove
+semantic adequacy.
+
+| Checkpoint | Train Accuracy | Condition switches /99 | Changed-target both correct /53 |
+|---|---:|---:|---:|
+| Best epoch11 | 0.449495 | 0 | 0 |
+| Final epoch50 | 0.742424 | 6 | 4 |
+
+The final head fits all92 unchanged-target training questions but only55/106
+changed-target questions. The contrast identifies conditional tracking/readout
+as a remaining weakness even within train; it cannot distinguish insufficient
+identity representation from insufficient readout or supervision. Do not infer
+a universal encoder ceiling. Extra epochs are not justified by this overfitting
+curve alone.
+
+Runner:`scripts/diagnose_trajectory_train_condition.py`.
+Artifact:`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-trajectory-train-condition-01.json`.
+Input hashes and checkpoint hashes verified; old artifacts preserved.
