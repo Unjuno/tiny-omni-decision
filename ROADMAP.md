@@ -934,3 +934,12 @@ correct in both unimodal arms. Joint NLL worsens in all three subjects. This set
 has no sensor Accuracy headroom; stop fitting additional fusion variants on it
 and require a complementary, task-matched paired benchmark before new training.
 [Diagnostic scope and next-task gates](docs/pretrained_reuse/R2_FUSION_COMPLEMENTARITY_20261012.md).
+
+### New paired-task source feasibility (2026-10-12)
+
+Official Perception Test train annotations were acquired and hashed: 2,184 videos,
+25,757 sound intervals and 17,558 intervals with resolvable source objects.
+Source visibility offers a concrete candidate joint task, but contributor grouping
+and option semantics remain unresolved. Keep REVIEW; no media, validation or test
+was acquired. Answer-reveal cuts are required for 135 train videos.
+[Source evidence and admission gates](docs/pretrained_reuse/R2_PERCEPTION_TEST_SOURCE_20261012.md).
