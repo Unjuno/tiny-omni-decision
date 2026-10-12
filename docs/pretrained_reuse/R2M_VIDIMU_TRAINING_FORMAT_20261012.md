@@ -75,3 +75,18 @@ against placement-only priors, and preserve all 13 classes. The initial zero-tim
 pose remains in the source; its role must be fixed in preprocessing before any
 quality comparison. No arbitrary timestamp replacement or raw-row trimming is
 authorized by this audit. The reduced-video download continues independently.
+
+## Sign-invariant orientation conversion
+
+`quaternion_features.quaternion_rotation_matrices` converts wxyz quaternions to
+3x3 active column-vector rotation matrices. It rejects malformed/nonfinite or
+nonunit inputs, normalizing only rounding deviations within norm tolerance1e-3.
+It does not infer world/body coordinates or remove device mounting differences.
+Sensor identities and source timestamps must remain attached to features.
+
+Eleven combined reader/transform tests pass. On the fixed S40/A01/T01 training
+trial, output shape is (1817,5,3,3); q/-q maximum difference is exactly0,
+orthogonality error1.78e-15 and determinant error1.56e-15.
+Artifact: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-quaternion-transform-smoke-01/result.json`.
+This protects representation invariance; no quality gain is claimed, no new
+model was trained, and held-out payloads remain unopened.
