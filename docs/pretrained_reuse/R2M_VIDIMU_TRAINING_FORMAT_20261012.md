@@ -90,3 +90,18 @@ orthogonality error1.78e-15 and determinant error1.56e-15.
 Artifact: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-quaternion-transform-smoke-01/result.json`.
 This protects representation invariance; no quality gain is claimed, no new
 model was trained, and held-out payloads remain unopened.
+
+## Training episode cache
+
+`cache_vidimu_training_sensor.py` produced 130x8x5x3x3 float32 features in
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-training-sensor-features-01`.
+Eight equal-duration bins average rotation-matrix entries; these averages are
+features, not claimed to be valid rotations themselves. All samples, including
+the initial pose, are retained. Empty bins fail instead of being interpolated.
+Sensor labels remain in records.json; different placements are not renamed.
+Feature SHA256: `84bead6d313839b7fa0949bebc4d66af2574c53f393ce717459359eb61496925`.
+Record SHA256: `72d6934344b746af1d76c6eeb3dc380104dc41967a025e175004a1a617b0bdf6`.
+The transform tests verify time-bin order, quaternion sign invariance and empty
+bin rejection. No validation/audit cache, normalization fit, classifier training
+or checkpoint selection has occurred. Episode-relative bins do not imply
+cross-modal physical synchronization. Video acquisition is still underway.
