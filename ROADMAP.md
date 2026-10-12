@@ -792,3 +792,12 @@ The421,826-parameter readout selects epoch100: Accuracy89.74%, NLL1.729,
 Brier0.732, ECE0.706. Probability quality is worse than both singletons and
 scaled linear fusion; do not adopt. Both losses still improve, so no plateau
 claim. [Curves, controls and numerical-check limits](docs/pretrained_reuse/R2M_GATED_FUSION_RESULTS_20261012.md).
+
+### Separate gated learning-budget curve (2026-10-12)
+
+A preregistered fresh1,000-epoch run exactly reproduced all101 earlier prediction
+snapshots. Best395 reduces NLL1.729->0.542 but Accuracy89.74%->82.05%; thereafter
+train loss falls while validation NLL rises to0.665. This demonstrates budget
+sensitivity followed by overfitting, not a model-family ceiling. Sensor-only
+still wins; no adoption or further extension.
+[Fixed endpoints, selected checkpoint and controls](docs/pretrained_reuse/R2M_GATED_BUDGET_RESULTS_20261012.md).
