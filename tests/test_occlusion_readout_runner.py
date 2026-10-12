@@ -58,3 +58,39 @@ def test_incomplete_extraction_fails_closed(tmp_path, monkeypatch):
     (text / "result.json").write_text("{}")
     with pytest.raises(ValueError, match="complete video"):
         runner.load_inputs(video, text)
+
+
+def test_training_and_reload_synthetic_only(tmp_path, monkeypatch):
+    import json
+    import sys
+
+    import scripts.train_occlusion_readout as runner
+
+    torch.manual_seed(123)
+    bank = {f"synthetic-{i}": torch.randn(2 + i % 3, 768) for i in range(8)}
+    data = {}
+    for split, offset in (("train", 0), ("valid", 4)):
+        data[split] = dict(
+            pairs=[dict(video_id=f"synthetic-{i}") for i in range(offset, offset + 4)],
+            text=torch.randn(8, 3, 1536),
+            targets=torch.tensor([0, 1, 2, 2, 1, 0, 1, 1]),
+        )
+    # No real media, annotations, encoders or checkpoints enter this mechanics test.
+    monkeypatch.setattr(runner, "load_inputs", lambda *_: (bank, data, {}))
+    output = tmp_path / "synthetic-run"
+    monkeypatch.setattr(
+        sys, "argv", ["runner", "--video", "unused", "--text", "unused", "--output", str(output)]
+    )
+    runner.main()
+    result = json.loads((output / "result.json").read_text())
+    for mode in ("mean", "attention"):
+        history = json.loads((output / mode / "history.json").read_text())
+        assert len(history) == 50
+        best = min(history, key=lambda row: row["valid"]["nll"])
+        assert result[mode]["best_epoch"] == best["epoch"]
+        assert result[mode]["reload_exact"]
+        assert result[mode]["run_presentations"] == 400
+        assert result[mode]["selected_presentations"] == 8 * best["epoch"]
+        assert result[mode]["unique_train_videos"] == 4
+        assert (output / mode / "best.pt").is_file()
+        assert (output / mode / "final.pt").is_file()

@@ -224,7 +224,7 @@ def main():
                 dict(
                     epoch=epoch,
                     updates=updates,
-                    presentations=epoch * 198,
+                    presentations=epoch * len(data["train"]["targets"]),
                     best_epoch=best_epoch,
                     seconds=time.perf_counter() - start,
                     **measurements,
@@ -253,10 +253,10 @@ def main():
         results[mode] = dict(
             best_epoch=best_epoch,
             controls=controls,
-            run_presentations=50 * 198,
-            selected_presentations=best_epoch * 198,
-            unique_train_questions=198,
-            unique_train_videos=99,
+            run_presentations=50 * len(data["train"]["targets"]),
+            selected_presentations=best_epoch * len(data["train"]["targets"]),
+            unique_train_questions=len(data["train"]["targets"]),
+            unique_train_videos=len(data["train"]["pairs"]),
             updates=updates,
             seconds=time.perf_counter() - start,
             parameters=sum(p.numel() for p in model.parameters()),
