@@ -899,3 +899,13 @@ changes; repeated images are exact. The video path explicitly retains2048 tokens
 required by its attention head. This132.21M functional slice excludes the other
 modalities and is a runtime parity result, not new quality or joint-fusion proof.
 [Execution, JSON outputs and remaining gates](docs/pretrained_reuse/R2_SHARED_VISUAL_DECISIONS_20261012.md).
+
+
+### Reusable native speech JSON (2026-10-12)
+
+The native speech runtime now encodes each audio once and shares transcript
+scoring across candidate sets, returning custom-ID JSON. Eight existing assets /
+16 decisions match the original CUDA reference without answer changes. CPU
+probabilities also match but its raw-score gate fails; that limitation is retained.
+This is transcript-choice runtime parity, not general audio or joint-Omni quality.
+[Both backend results and failure records](docs/pretrained_reuse/R2_NATIVE_SPEECH_RUNTIME_20261012.md).
