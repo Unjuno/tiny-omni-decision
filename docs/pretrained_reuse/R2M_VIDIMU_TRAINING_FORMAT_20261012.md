@@ -58,3 +58,20 @@ activity group. A future 13-way classifier must include a placement-only prior
 and within-placement comparisons; overall recognition cannot be interpreted as
 pure motion understanding. These headers must not be silently mapped to the
 same physical body locations. No quality training has been launched.
+
+## Complete frozen training input audit
+
+`scripts/audit_vidimu_training_sto.py` validated all 130 frozen training trials
+against archive/split pins and saved every source member SHA256 and result to
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-training-sto-audit-01/result.json`.
+All 130 passed strict parsing, finite/unit-quaternion and increasing-time checks.
+All start at zero, have 20ms steps within floating-point tolerance, and span
+11.30 to 69.96 seconds. Lower-body sensor layout occurs in 40 trials and upper
+body in 90. No failed record was dropped; no validation/audit values were read.
+
+This establishes usable processed training sensor inputs, not physical video
+alignment or classifier quality. Keep different placements explicit, compare
+against placement-only priors, and preserve all 13 classes. The initial zero-time
+pose remains in the source; its role must be fixed in preprocessing before any
+quality comparison. No arbitrary timestamp replacement or raw-row trimming is
+authorized by this audit. The reduced-video download continues independently.
