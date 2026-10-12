@@ -51,3 +51,11 @@ def fixed_candidate_affine(model, candidates):
         weight = projected @ model.observation.weight / model.scale
         bias = projected @ model.observation.bias / model.scale
     return weight, bias
+
+
+def fixed_taxonomy_loss(logits, targets):
+    from torch.nn import functional as functional
+
+    if logits.ndim != 3 or targets.shape != logits.shape[:2]:
+        raise ValueError("[image,task,class] logits and aligned [image,task] targets required")
+    return functional.cross_entropy(logits.flatten(0, 1), targets.flatten())

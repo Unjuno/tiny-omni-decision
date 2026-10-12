@@ -39,3 +39,19 @@ def test_fixed_candidate_affine_equivalence():
         model(inputs), observations @ weight.T + bias, rtol=1e-12, atol=1e-12
     )
     assert np.isfinite(weight.numpy()).all()
+
+
+def test_grouped_loss_preserves_equal_task_weight_and_label_order():
+    torch = pytest.importorskip("torch")
+    from torch.nn import functional as functional
+
+    from tiny_omni_decision.count_diagnostic import fixed_taxonomy_loss
+
+    torch.manual_seed(17)
+    logits = torch.randn(3, 4, 10)
+    targets = torch.randint(10, (3, 4))
+    expected = torch.stack([functional.cross_entropy(logits[:, i], targets[:, i])
+                            for i in range(4)]).mean()
+    torch.testing.assert_close(fixed_taxonomy_loss(logits, targets), expected)
+    with pytest.raises(ValueError):
+        fixed_taxonomy_loss(logits, targets.T)

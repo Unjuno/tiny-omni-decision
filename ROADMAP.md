@@ -849,3 +849,12 @@ changes no answers within declared numeric tolerances. No new training or
 validation evaluation was performed. Optimize a controlled training-only linear
 baseline before attributing the remaining weakness to encoder capacity.
 [Confusion matrix and limits](docs/pretrained_reuse/R2_COUNT_TRAINING_DIAGNOSTIC_20261012.md).
+
+
+### Training-only affine optimization (2026-10-12)
+
+A fixed 200-iteration CPU fit on the same frozen image features improved training
+count Accuracy 68.02% -> 78.17% and aggregate training Accuracy 91.43% -> 94.46%.
+ECE worsened and the convergence gate was not reached. No validation or audit was
+loaded; preserve the runtime reference and do not call this generalization gain.
+[Protocol, curves and integrity](docs/pretrained_reuse/R2_AFFINE_FIT_RESULTS_20261012.md).
