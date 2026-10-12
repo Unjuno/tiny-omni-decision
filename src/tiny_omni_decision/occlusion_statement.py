@@ -17,6 +17,7 @@ OPTIONS = frozenset(
         "the second object from the left",
         "the third closest object to the person",
         "the third object from the left",
+        "the fourth object from the left",
     )
 )
 

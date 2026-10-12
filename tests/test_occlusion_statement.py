@@ -20,3 +20,8 @@ def test_unknown_input_fails_closed():
         occlusion_statement("Where?", next(iter(OPTIONS)))
     with pytest.raises(ValueError):
         occlusion_statement(next(iter(QUESTIONS)), "Under object A.")
+
+
+def test_fourth_ordinal_preserved_without_relabeling():
+    result = occlusion_statement(next(iter(QUESTIONS)), "Under the fourth object from the left.")
+    assert result.endswith("under the fourth object from the left.")

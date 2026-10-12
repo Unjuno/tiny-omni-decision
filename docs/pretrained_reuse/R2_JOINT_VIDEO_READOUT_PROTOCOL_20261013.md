@@ -43,3 +43,14 @@ exactly match the earlier normal/black diagnostic for the same video.
 Artifact: C:/CodexArtifacts/pretrained-reuse-r1/all-in-one-tiny-feature-smoke-cpu-01.
 CPU path avoids mixing a GPU compatibility patch into this readout experiment.
 Full training-feature extraction is the next step; no completed training claimed.
+
+## Validation input admission correction
+
+First validation extraction stopped after six complete videos on the literal
+candidate "Under the fourth object from the left." The train-derived whitelist
+had only first/second/third. Added fourth with the identical semantic template;
+no training input changes, no rows/options removed or relabeled. All 1,542
+validation candidate statements now pass, each30–34 tokens, no truncation.
+Preserve partial all-in-one-tiny-valid-features-01. Restart full extraction into
+all-in-one-tiny-valid-features-02; train-features-01 continues unchanged.
+Regression tests include literal fourth-ordinal preservation.
