@@ -32,3 +32,28 @@ Verification command:
 `python -m scripts.audit_vidimu_analysis --verify-existing C:/CodexArtifacts/pretrained-reuse-r2/vidimu-analysis-audit-02`.
 Current regression suite: 500 passed, 1 skipped; Ruff passes. Commit befee5a CI
 passed both checks. These checks do not establish physical synchronization.
+
+## Full identity reconciliation
+
+`scripts/reconcile_vidimu_sync.py` verifies the pinned split/CSV hashes, unique
+offset types, 1-14 frame bounds, paired raw/mot and mp4/csv agreement, and that
+all CSV trial identities exist in the frozen inventory. It succeeded.
+
+| Group | Single direction recorded | Missing record | Both directions |
+|---|---:|---:|---:|
+| train | 114 | 15 | 1 |
+| validation | 35 | 3 | 1 |
+| sealed audit (metadata only) | 30 | 9 | 0 |
+
+Full per-trial statuses are preserved at
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-sync-reconciliation-01/result.json`.
+No missing entry was interpreted as zero or any trial removed. Single-direction
+metadata alone is also not proof of physical synchronization.
+
+The pinned reduced-video archive (1,060,471,682 bytes; publisher MD5
+`b90c4ae792b3dd54a8ba337ae5f75e36`) is being downloaded separately to
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-small-video-audit-01` over IPv4 HTTPS.
+Its contents are not yet verified or decoded. Full checksum verification and
+trial pairing must precede any training/validation feature extraction. Audit
+payloads remain unopened. Whole-trial recognition, if evaluated, must be labeled
+as episode-level fusion and cannot establish frame-synchronized causal decisions.
