@@ -36,3 +36,15 @@ fusion, or95% quality across text/image/audio/video. Video can no longer improve
 this arm's observed validation Accuracy; fusion must still be compared honestly
 on NLL/Brier and perturbation controls. Keep the fixed video/joint protocol
 unchanged and retain negative outcomes. No product promotion or compression.
+
+## JSON output replay
+
+`classification_json` maps fixed-class probabilities to caller option IDs and
+serializes deterministically; it requires the complete class set, rejects invalid
+probabilities and uses semantic class ID for ties. Five CPU tests passed.
+All39 saved selected-checkpoint probability vectors were serialized and compared
+against reversed option order, with exact class probabilities and selections
+preserved. Outputs: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-sensor-json-replay-01`.
+This checks the output layer using saved predictions, not another model forward
+pass or support for arbitrary semantic candidate descriptions. It adds no neural
+parameters, and JSON values are not asserted to be perfectly calibrated.
