@@ -116,3 +116,20 @@ SHA256 `1319430044bc766ca1be00726fcf2ac1c21e5a6c2db9042cec45ec9b5572a8d5`.
 All356 videos now pass these media/clock checks. Dense-window feature extraction,
 prepared-content overlap checks and conditional decision fitting remain pending;
 these results establish no model quality or temporal reasoning performance.
+
+## Dense feature extraction launched (2026-10-13)
+
+Source `e8fb6d7` runs `scripts.extract_occlusion_dense_features` with output
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-dense-features-01`.
+This is a new CPU process using the same pinned VideoPrism checkpoint/source,
+4fps and eight-frame windows tested in the earlier smoke. All356 complete pairs
+remain scheduled; no labels are passed to the encoder. Each video retains its
+window sequence, exclusive reveal cut and existing common-PTS interval policy.
+Media and pair manifests are pinned. Prepared video/window hashes reject exact
+cross-split duplication; this does not prove participant or semantic independence.
+Per-video feature hashes, sampling indices, timestamps and timings are saved.
+
+The first video completed (eight windows), confirming the full runner reaches
+real inference. Extraction is still in progress; no complete-feature admission or
+new decision training result is claimed. Ruff and four focused CPU tests passed;
+both GitHub Actions runs for `e8fb6d7` succeeded. Prior artifacts are unchanged.
