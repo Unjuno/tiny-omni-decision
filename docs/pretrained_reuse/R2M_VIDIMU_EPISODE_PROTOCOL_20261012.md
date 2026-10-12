@@ -79,3 +79,18 @@ It has zero self-pairs. Counting activity labels after fixing the permutation
 found zero same-activity replacements; no seed or permutation was retried to
 obtain this outcome. Only frozen manifest metadata was read, not validation
 observations. Use this exact mapping for each modality perturbation.
+
+## Training-only CPU smoke completed
+
+Source `85c25a0c9b09ea7cac5793755048342c192428a4`, command
+`python -m scripts.smoke_vidimu_readout`, separate Python process, Torch2.6.0+cu124
+on CPU float32. Two full-training-batch updates, seed17; 4,719 trainable readout
+parameters; 1.04 seconds measured body wall time. CE was2.7330 then2.4812 before
+each update. Sensor placement is read from actual sensor column metadata, not
+the target labels. Exact probability parity after weight reload passed.
+
+Artifacts: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-readout-smoke-01` includes
+weights, train-fit normalization, training probabilities and result/input hashes.
+This disposable smoke is not used to initialize the planned comparison. No
+validation/audit data or video encoder was loaded; no model quality, general
+fusion, or whole-model parameter-budget conclusion follows from this check.
