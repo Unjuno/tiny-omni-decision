@@ -262,6 +262,10 @@ these limits remain explicit in `docs/pretrained_reuse/R2_STARSS23_SPLITS_202610
 
 ### R6 — Compatible weight integration / structural reduction (**optional**)
 
+**New research option, not a mandate (2026-10-12):** A small learned multi-modal **decision-sufficient bottleneck** may compress tokens/latent state. That **does not** reduce the upstream pretrained Encoder's parameter count if it still runs. To reach a truly smaller model, verify **teacher-free structured width/head/FFN/layer pruning and recovery**, followed by evidence-preserving quantization. The user suggested exploring ~50M after pruning as a stretch, but preserving 95–98% native/fusion quality at such a reduction is untested. See [latent bottleneck / pruning / Samsung sub-1-bit research note](docs/pretrained_reuse/R6_R7_LATENT_BOTTLENECK_SUBBIT_RESEARCH_20261012.md).
+
+
+
 - [ ] For any merge pair, verify shape, ordering, architecture, checkpoint genealogy and pre/post-merge source-task functional equivalence. Reject arbitrary averaging across different bases.
 - [ ] Where justified, try aligned weights / FS-Merge-like folding with **small validation-safe alignment data**. Count its training and source towers used during merge.
 - [ ] Compare merged output to A and B; keep the unmerged model as a reproducible fallback.
@@ -270,6 +274,10 @@ these limits remain explicit in `docs/pretrained_reuse/R2_STARSS23_SPLITS_202610
 **Exit:** H3 and hardware benefit; otherwise document negative result and skip merger.
 
 ### R7 — Precision, packaging and runtime (**after quality gate**)
+
+**Quantization and size clarification (2026-10-12):** Plain low-bit quantization changes **bits per existing weight**, not 100–200M original parameters into 20–30M parameters. The ideal weight-code-only envelope (decimal MB) is: for **100M** weights FP16 **200MB**, INT8 **100MB**, 4bit **50MB**, ternary-entropy (~1.585bpw) **19.8MB**; for **200M** weights FP16 **400MB**, INT8 **200MB**, 4bit **100MB**, ideal ternary **39.6MB**. All exclude scales, embeddings/exceptions, activations, kernels and file/runtime overhead. Samsung Research's [LittleBit](https://arxiv.org/abs/2506.13771), [LittleBit-2](https://proceedings.mlr.press/v306/lee26y.html) and [NanoQuant](https://proceedings.mlr.press/v306/chong26a.html) can factorize and binarize **large linear matrices** to achieve sub-1-bit *average bits per original dense weight*, but they have **not** been validated to preserve >=95% Omni Decisions on 100–200M JEPA-family encoders. Small-width matrices may force extremely low ranks. LittleBit official code is **CC BY-NC 4.0**; NanoQuant is **Apache-2.0**. Neither's existing specialized CUDA decoder kernels establish phone/ARM performance. Treat sub-1-bit as a gated, optional research path **after** achieving the uncompressed modality-native and fusion task quality targets. Full formulas and counter-evidence: [research note](docs/pretrained_reuse/R6_R7_LATENT_BOTTLENECK_SUBBIT_RESEARCH_20261012.md).
+
+
 
 **Read-only size envelope (2026-10-11):** all three main encoder weight files are FP32. A manifest- and hash-checked storage-only estimate for group-wise INT8 (group size 256; one FP32 scale and one INT8 zero point per group) is ~182.0 MB decimal versus the current 687.3 MB package, leaving ~18.0 MB against the provisional 200 MB target. No weights were quantized and no quality, device, kernel, memory, or latency result was measured; this does not close R7. Details and hashes: [Path A size envelope audit](docs/pretrained_reuse/R7_PATH_A_SIZE_ENVELOPE_20261011.md).
 
