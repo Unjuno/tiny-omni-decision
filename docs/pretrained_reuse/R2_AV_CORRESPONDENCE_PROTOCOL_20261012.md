@@ -132,3 +132,33 @@ PyAV environment with the worktree src on PYTHONPATH. Feature extraction uses
 No readout fitting or validation/test access occurred. Actual44.1 kHz interval
 handling has a regression test. Duration/recording-background shortcuts remain
 possible and must not be presented as general semantic understanding.
+
+## Validation identity audit and bounded smoke admission
+
+Official validation metadata was pinned to storage generation1688372812971719
+and SHA256 `eeefeb43955b1850b5e521ad774fe66675baac0a2a06617bd83ffbe43aaf03d7`.
+It contains5,900 official-valid recordings and zero recording-ID overlap with
+all2,184 train keys. The predeclared hash ordering selects200 recordings /50
+quartets, routing SHA256
+`03d389b0eda847b4d16e0205a7c285ad78ebecfb6405fde1c85c0ddfd569d395`.
+The selected media total2,525,646,586 bytes; maximum member122,791,611 bytes.
+Eleven selected recordings need upstream cuts. None were removed or substituted.
+The previous32MB pilot member cap cannot acquire this fixed selection; a new
+bounded acquisition must budget for these actual sizes. Metadata inspection has
+not acquired validation media or measured validation performance.
+
+Evidence lives in `perception-correspondence-valid-audit-01`: pinned URLs/ETags,
+annotation/cut hashes, all selected members, routing and result. Validation media
+is generation1685479088600941; complete archive75,375,143,328 bytes. Only ZIP index
+ranges were read. Content-level cross-split checks remain pending acquisition.
+Official script-by-participant splitting does not guarantee unseen participants.
+
+The existing eight train recordings are admitted only to the protocol's technical
+projection smoke: official CC-BY-4.0 source and attribution retained, media hashes
+verified, actual clocks/cuts resolved, no supervision in feature payloads. This
+narrow admission does not reverse the rejected visibility-task decision or admit
+a quality benchmark. Use seed17, two quartet batches per epoch,100 epochs of the
+fixed73,728-parameter projection. No validation selector is used in this train-only
+smoke. Keep final weights, history, all control predictions and reload evidence;
+training memorization is not generalization. Encoders are not loaded or updated.
+Full development fitting still requires independent validation media/content gates.
