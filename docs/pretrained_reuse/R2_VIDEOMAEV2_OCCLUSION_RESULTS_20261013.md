@@ -77,3 +77,18 @@ Both selected heads choose option index1 for all514 questions: target counts [15
 Probabilities are not constant: mismatch changes a probability by up to0.081271(mean) /0.083766(attention); reversing windows changes attention probabilities by up to0.025039. Accordingly, do not say pixels are absent from the computation. Mean initial/final probability L1 differences are0.002581/0.002605. Zero video changes40 labels but still has zero condition switches; its42.80% does not establish grounding.
 
 Read-only diagnostic: `scripts/diagnose_occlusion_prediction_collapse.py`, pinned saved prediction hashes, output `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-videomaev2-collapse-01.json`. No model inference, additional fitting, checkpoint reselection or sealed evaluation. Future representation/readout work must measure conditional decision changes and matched-video evidence, not just calibrated priors.
+
+## Train-only condition replay
+
+Pinned best/final checkpoints were replayed on the198 training questions only, with no fitting or reselection. The297 corresponding initial/final candidate-feature pairs are never exactly equal; relative L2 distance min/median/max is0.078768/0.081116/0.082141. Numerical distinctness does not prove semantic adequacy.
+
+| Checkpoint | Train Accuracy | Condition switches /99 | Changed-target both correct /53 |
+|---|---:|---:|---:|
+| Mean best | 0.449495 | 0 | 0 |
+| Mean final | 0.727273 | 5 | 3 |
+| Attention best | 0.449495 | 0 | 0 |
+| Attention final | 0.959596 | 45 | 45 |
+
+Attention can fit conditional answers on these training videos while its final validation NLL worsens to2.811064. The evidence rules out an absolute inability of this head to express different conditions on the training set; it does not establish useful transferable temporal features. Treat95.96% as training fit, never product or validation quality. Simply adding epochs or counting training accuracy as the goal would be misleading. The next research step must address transferable evidence/representation and data support, not a presumed condition-vector collision.
+
+Runner: `scripts/diagnose_occlusion_train_condition.py`. Artifact: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-videomaev2-train-condition-01.json`. Input admission reads existing manifests/features for integrity; prediction replay uses train only. Preserved hashes and four fixed checkpoint results; no GPU, new training, validation inference or sealed audit.
