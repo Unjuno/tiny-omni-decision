@@ -124,3 +124,21 @@ must be reconciled with instantiated inference modules. Tensor names/shapes/dtyp
 are saved in tensor-audit.json; initial rejection and static scan are also retained.
 Actual model construction, strict loading, preprocessing/forward parity and
 product-use rights remain unverified. Do not claim a functioning model yet.
+
+## Checkpoint head accounting and inference source
+
+Fetched pinned vision-transformer and temporal-roll source; hashes saved in
+runtime-source-hashes.json. Inference concatenates repeated text and frame tokens,
+rolls image tokens temporally within shared blocks, then pools joint features.
+This is cross-modal interaction before readout, unlike our separate frozen towers.
+Compatibility with installed timm/Transformers/Lightning remains untested.
+
+Actual checkpoint floating tensor elements:17,359,100;40 integer position IDs
+account for the remainder of the earlier17,359,140. Input word embeddings and
+MLM decoder weights have distinct storage and unequal values: do not subtract
+one as a tied alias. Excluding all mlm_score tensors leaves11,430,914 floating
+elements for the proposed matching inference path. This remains state accounting,
+not a verified instantiated resident count or authorized arbitrary layer removal.
+A future strict loader must explicitly account for excluded MLM training heads,
+position-ID buffers and every inference key, and compare actual forward behavior.
+No model forward or quality claim has yet been made.
