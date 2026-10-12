@@ -101,3 +101,34 @@ Eight train recordings are not independent evidence for general quality.
 
 No fitting or validation acquisition occurred. Protocol/builder/acquisition code
 was committed as a42ebd3; 604 CPU tests passed and both CI runs succeeded.
+
+## Common-time inputs and actual-rate correction
+
+All eight fixed recordings now have input-only audio/video windows. Bounds use
+the intersection of decoded audio support and video PTS, ending conservatively
+before the last video PTS and any upstream cut. Sample supports round inward;
+video samples are selected only inside the resulting half-open interval. Payloads
+contain PCM and RGB arrays, with routing/targets retained separately.
+
+Actual decoding found video_4873 is **44.1 kHz**, despite annotation metadata
+saying48 kHz. Its earlier sample-count difference cannot be interpreted as lost
+audio without rate conversion. The other seven streams are48 kHz. The preparer
+uses each decoded rate and exact rational resampling ratio to24 kHz; it rejects
+changing rates, missing clocks, nonplanar/nonfloat PCM and unavailable intervals.
+The audio encoder then retains its existing24-to32 kHz preprocessing profile.
+
+The fixed DyMN and VideoPrism encoders each extracted eight finite feature
+vectors; duplicate execution gave maximum absolute difference zero for both.
+This is feature plumbing, not learned alignment or validation quality.
+Raw media and all previous feature runs remain unchanged.
+
+Artifacts under R2: `perception-correspondence-windows-01`,
+`perception-correspondence-audio-01`, `perception-correspondence-video-01`.
+Reports record actual rates, interval bounds, selected rational PTS, cuts, window
+hashes and pinned model identities. The new preparation command is
+`scripts.prepare_av_correspondence_windows --output <fresh>` in the existing
+PyAV environment with the worktree src on PYTHONPATH. Feature extraction uses
+`scripts.extract_perception_pilot --windows <new-result.json> --modality audio|video --output <fresh>`.
+No readout fitting or validation/test access occurred. Actual44.1 kHz interval
+handling has a regression test. Duration/recording-background shortcuts remain
+possible and must not be presented as general semantic understanding.

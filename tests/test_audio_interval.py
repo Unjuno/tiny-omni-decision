@@ -18,3 +18,7 @@ def test_contiguous_blocks_and_no_padding():
         sample_interval(
             [(0, Fraction(1, 48000), 1024), (1025, Fraction(1, 48000), 1024)], 48000, 0, 40000
         )
+
+
+def test_actual_44100_clock_is_not_assumed_48000():
+    assert sample_interval([(0, Fraction(1, 44100), 44100)], 44100, 0, 1000000) == (0, 44100)

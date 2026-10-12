@@ -22,6 +22,11 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--modality", choices=["audio", "video"], required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument(
+        "--windows",
+        type=Path,
+        default=Path("C:/CodexArtifacts/pretrained-reuse-r2/perception-windows-01/result.json"),
+    )
     args = p.parse_args()
     r1 = Path("C:/CodexArtifacts/pretrained-reuse-r1")
     args.source_root = r1 / (
@@ -42,7 +47,7 @@ def main():
         != revision
     ):
         raise ValueError("encoder revision mismatch")
-    windows = Path("C:/CodexArtifacts/pretrained-reuse-r2/perception-windows-01/result.json")
+    windows = args.windows
     rows = json.loads(windows.read_text(encoding="utf-8"))["windows"]
     args.output.mkdir(exist_ok=False)
     report = dict(
