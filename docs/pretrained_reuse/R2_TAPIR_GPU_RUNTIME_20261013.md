@@ -44,3 +44,26 @@ SHA-256 ledger covering those files and the exact script. Execution command:
 `python C:/CodexArtifacts/pretrained-reuse-r1/tapir-audit-01/grid256_gpu_fullclip_runtime.py`.
 Source repository commit at execution: `579bcda`. Existing outputs were not
 modified. This is an inference measurement, not another comparison training run.
+
+
+## Ordered trajectory input conversion
+
+`trajectory_features.py` now retains all fixed queries and uniformly samples 32
+ordered times, concatenating normalized xy, sigmoid occlusion and sigmoid
+expected-distance logits per time. It produces 256×128 features on the saved
+459-frame train clip. It never takes annotation boxes, target labels or an
+object-selected query mask. Coordinates outside the image remain unclipped;
+uncertainty channels are not calibrated Decision probabilities. Short clips
+repeat temporal indices explicitly rather than inventing new observations.
+
+Five CPU tests cover temporal order, query permutation, all-query retention,
+shape errors and nonfinite rejection. Ruff passes. Real saved inputs were
+verified against their SHA-256 ledger before conversion. Output and exact frame
+indices: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-trajectory-features-smoke-01/`.
+Feature SHA-256: `3a501543f8b895cde2ac1e00189e275b115e737346871185d9953a13796bc0b0`.
+
+This is a reusable input primitive, not a trained Decision head or evidence of
+quality improvement. Geometry alone omits appearance needed to associate a
+question with its object. A subsequent readout experiment must account for that
+limitation and retain mismatch/condition controls; the previous failed pooled
+feature probes remain unchanged.
