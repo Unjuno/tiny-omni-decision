@@ -960,3 +960,9 @@ leave-video-out sound-class-only prior reaches 96.44% on all train annotations
 without audio or pixels. Do not train that proposed head or count the result
 toward product quality. Preserve the technical media/features and require a
 question-only control for the next evidence-dependent task.
+
+The next prospective task is four-candidate audio-to-video recording correspondence.
+The protocol and 256 deterministic train routing records are fixed, including
+balanced candidate positions, no source-ID features, unimodal/shuffle controls and
+explicit recording-shortcut limitations. This remains an alignment diagnostic,
+not general decision quality. See [protocol](docs/pretrained_reuse/R2_AV_CORRESPONDENCE_PROTOCOL_20261012.md).

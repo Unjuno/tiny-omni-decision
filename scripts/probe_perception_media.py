@@ -5,6 +5,7 @@ import hashlib
 import json
 import subprocess
 import zipfile
+import zlib
 from pathlib import Path
 
 
@@ -66,6 +67,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--decode", action="store_true")
+    parser.add_argument("--count", type=int, choices=(2, 8), default=2)
     args = parser.parse_args()
     if args.decode:
         decode(args.output)
@@ -80,7 +82,9 @@ def main():
     args.output.mkdir(exist_ok=False)
     with zipfile.ZipFile(source) as z:
         annotations = json.loads(z.read("all_train.json"))
-    ids = sorted(annotations, key=lambda x: hashlib.sha256(f"17:{x}".encode()).hexdigest())[:2]
+    ids = sorted(annotations, key=lambda x: hashlib.sha256(f"17:{x}".encode()).hexdigest())[
+        : args.count
+    ]
     url = "https://storage.googleapis.com/dm-perception-test/zip_data/train_videos.zip?generation=1685446268139925"
     remote = RemoteZip(url, 28404087974, '"-CJXz5tD4nP8CEAE="')
     records = []
@@ -91,9 +95,26 @@ def main():
                 raise ValueError("missing/duplicate/oversized selected clip; do not substitute")
             entry = matches[0]
             path = args.output / (video_id + ".mp4")
-            with z.open(entry) as src, path.open("xb") as dst:
-                while chunk := src.read(1024 * 1024):
-                    dst.write(chunk)
+            prior = Path("C:/CodexArtifacts/pretrained-reuse-r2/perception-media-probe-01")
+            prior_manifest = (
+                json.loads((prior / "manifest.json").read_text(encoding="utf-8"))
+                if (prior / "manifest.json").exists()
+                else {"clips": []}
+            )
+            cached = next((r for r in prior_manifest["clips"] if r["video_id"] == video_id), None)
+            if cached:
+                original = prior / cached["file"]
+                if (
+                    digest(original) != cached["sha256"]
+                    or zlib.crc32(original.read_bytes()) != entry.CRC
+                ):
+                    raise ValueError("existing clip changed")
+                with path.open("xb") as dst:
+                    dst.write(original.read_bytes())
+            else:
+                with z.open(entry) as src, path.open("xb") as dst:
+                    while chunk := src.read(1024 * 1024):
+                        dst.write(chunk)
             records.append(
                 dict(
                     video_id=video_id,
@@ -107,7 +128,7 @@ def main():
     manifest = dict(
         url=url,
         archive_bytes=28404087974,
-        selection="sha256(17:video_id), first two",
+        selection=f"sha256(17:video_id), first {args.count}",
         source_sha256=digest(source),
         clips=records,
         training=False,
