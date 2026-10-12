@@ -43,3 +43,18 @@ preserved. A separate IPv4 curl download is active in
 verification, 15-second connection timeout, 600-second total limit and a
 60-second low-speed limit. No data from that archive is trusted until the same
 pinned size/MD5 checks pass. The failed process was not killed or restarted.
+
+## Input reader smoke
+
+`quaternion_sto.parse_quaternion_sto` now preserves sensor column names, w/x/y/z
+order, quaternion signs and actual processed timestamps (seconds converted to
+milliseconds), without resampling or claiming video clock alignment. Nonfinite
+values, malformed rows, nonincreasing times and nonunit quaternions are rejected.
+Six CPU tests passed; the S40/A01/T01 training file parsed as (1817,5,4).
+
+A second training header, S40/A05/T01, uses torso/humerus/radius sensors instead
+of pelvis/femur/tibia. Sensor placement consequently reveals the upper/lower
+activity group. A future 13-way classifier must include a placement-only prior
+and within-placement comparisons; overall recognition cannot be interpreted as
+pure motion understanding. These headers must not be silently mapped to the
+same physical body locations. No quality training has been launched.
