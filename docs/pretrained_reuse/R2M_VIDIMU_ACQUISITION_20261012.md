@@ -26,3 +26,20 @@ Do not restart a live download based on a polling timeout.
 
 Sources: [dataset](https://zenodo.org/records/8210563),
 [upstream tools](https://github.com/twyncoder/vidimu-tools).
+
+## Verified completion (13:45 JST)
+
+Attempt02 exited successfully. Exact archive size and publisher MD5 matched.
+Local SHA256:
+`605b695dcec5c2e7c4fd9a81dda22b60049697063d9eda150a637166813b79c2`.
+The archive contains 2,076 entries, including original and corrected sensor/
+video-derived records, but no `infoToSync.csv` or README. No sensor records have
+been decoded. The corrected directory is not assumed to establish alignment.
+
+The separately pinned 169,608,328-byte `analysis.zip` is now being acquired by
+`scripts/audit_vidimu_analysis.py`, using the metadata already preserved from
+record8210563 and publisher MD5 `6c937c7122fee77ff1ce306175cb26c7`.
+Output: `C:/CodexArtifacts/pretrained-reuse-r2/vidimu-analysis-audit-01`.
+Only archive inventory and `infoToSync.csv` will be read after full verification.
+This is acquisition in progress, not a verified synchronization result.
+See the separate synchronization-code audit for the concrete offset ambiguity.
