@@ -1,0 +1,24 @@
+{
+  "status": "REAL_SENSOR_LOAD_PASS",
+  "shape": [
+    128,
+    6
+  ],
+  "units": [
+    "g",
+    "g",
+    "g",
+    "g",
+    "g",
+    "g"
+  ],
+  "valid_samples": 128,
+  "first_timestamp_ms": 7540.0,
+  "last_timestamp_ms": 10080.0,
+  "seconds": 0.09210550005082041,
+  "text_encoder_loaded": false,
+  "request_sha256": "14821ee1e331ab26084983231c494e67cf8fb67e37c7b0fbb9a408b61eccb8dd",
+  "loader_sha256": "587d86e32fa9c9cdaf6da2aedd034a8bcf6c4f5038f8ac4eaa20bc00d3d3c82b",
+  "decision_quality": "NOT_MEASURED",
+  "training": false
+}

@@ -67,3 +67,25 @@ that cannot cross gaps/invalid samples.
 Real raw-media adapters for this contract, native probability readouts, sensor
 stem, screen dataset, event-aligned multi-signal sources and intervention evaluator
 remain incomplete. No M-1 or M-2 quality gate is closed by schema fixtures.
+
+## Verified sensor payload loader
+
+`load_sensor_payload` now resolves the sensor NPZ path, reads bounded bytes once,
+checks SHA256 against those same bytes, restricts members to values/timestamps,
+and enforces compressed/decompressed byte budgets with pickle disabled. It checks
+window index, dimensions, channel count and exact timestamps before returning
+values. Valid samples receive the declared affine calibration and optional range
+check; invalid samples return zeros **and an explicit false mask**. Output arrays
+have read-only flags. Unit labels are preserved; no implicit unit conversion.
+
+Eight tests reject changed hashes, times, indices, channel metadata, target fields
+and budget overflow, and check mask/calibration behavior. The saved S025 request
+loaded128x6 real values without importing Torch/Transformers: timestamps7540–10080ms,
+all128 valid. One CPU load took0.0921s including reading/decompressing the batched
+file; this is not per-request production latency or model inference timing.
+[Measured loader result](R2M_SENSOR_PAYLOAD_LOAD_20261012.json).
+
+The loader supports this explicitly defined sensor NPZ format only. It does not
+establish learned sensor decisions, cross-modal alignment, audio/image/video
+adapters, or sensor quality. The target/supervision file is rejected as input;
+future runners must also avoid passing source IDs or filenames as learned features.
