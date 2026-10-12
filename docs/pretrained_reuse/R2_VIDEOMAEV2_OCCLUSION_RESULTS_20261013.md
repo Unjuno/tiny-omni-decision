@@ -69,3 +69,11 @@ Both heads use seed17, fifty epochs, the fixed selector and controls. Report run
 Artifacts under `C:/CodexArtifacts/pretrained-reuse-r2/`: `perception-occlusion-videomaev2-features-02/`, `perception-occlusion-videomaev2-readout-01/`, `perception-occlusion-videomaev2-report-01.json`. Best/final weights, histories, predictions and configuration/hash ledgers retained. The two prior startup failures are preserved as described in the protocol. Source extraction commit `a12a399`; training/report commit `6b5fabe`.
 
 The compact encoder reduces component size but has not solved conditional temporal reasoning. Per-modality and joint 95–98% product gates remain unmet; no compression or shared-Lens experiment is justified by this result alone.
+
+## Saved-prediction collapse diagnosis
+
+Both selected heads choose option index1 for all514 questions: target counts [157,200,157], prediction counts [0,514,0]. Thus38.91% equals200/514. Neither switches decisions between initial/final in any of257 videos, despite127 videos with different targets. Normal, mismatched and reversed-window inputs retain identical predicted labels. This is observed output collapse, not proof of an encoder capacity ceiling.
+
+Probabilities are not constant: mismatch changes a probability by up to0.081271(mean) /0.083766(attention); reversing windows changes attention probabilities by up to0.025039. Accordingly, do not say pixels are absent from the computation. Mean initial/final probability L1 differences are0.002581/0.002605. Zero video changes40 labels but still has zero condition switches; its42.80% does not establish grounding.
+
+Read-only diagnostic: `scripts/diagnose_occlusion_prediction_collapse.py`, pinned saved prediction hashes, output `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-videomaev2-collapse-01.json`. No model inference, additional fitting, checkpoint reselection or sealed evaluation. Future representation/readout work must measure conditional decision changes and matched-video evidence, not just calibrated priors.
