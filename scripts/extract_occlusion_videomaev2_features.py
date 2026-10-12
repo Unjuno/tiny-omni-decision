@@ -36,6 +36,12 @@ WEIGHT_SHA = "24fb71687fa3671b8387cadfbcbab0f72af695692e93cf1ecc82caa888626172"
 SOURCE_SHA = "d132c97369f25207e380e78c59294fd00b93d2f6aa0fb5c4ded19eff26a5a3cb"
 
 
+def check_cut(indices, cut):
+    # Upstream -1 explicitly means no answer-reveal cut for this clip.
+    if cut < -1 or (cut != -1 and max(indices) >= cut):
+        raise ValueError("reveal cut violated")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
@@ -100,8 +106,7 @@ def main():
                     raise ValueError("media or split changed")
                 plan = prior["plan"]
                 wanted = set(plan["indices"])
-                if max(wanted) >= row["cut_frame"]:
-                    raise ValueError("reveal cut violated")
+                check_cut(wanted, row["cut_frame"])
                 frames = {}
                 with av.open(str(path)) as container:
                     for i, frame in enumerate(container.decode(video=0)):
