@@ -441,3 +441,14 @@ search was performed. This candidate is not adopted, and the result is not
 a general capacity ceiling. The four-modality >=95% goal remains unmet.
 [Load audit](docs/pretrained_reuse/R1_DEBERTA_XSMALL_20261012.md) and
 [fixed diagnostic](docs/pretrained_reuse/R2_DEBERTA_NLI_RESULTS_20261012.md).
+
+
+### Binary versus variable-option scoring
+
+Saved selected-checkpoint predictions show why reduced-choice Accuracy cannot
+replace the full task: the 1,536 four-option curriculum questions have 90.89%
+full-choice Accuracy but 96.64% gold-versus-distractor pair wins. Pairs are
+constructed using known answers, not an available inference policy or a tested
+yes/no reformulation. Retain variable options (including binary questions),
+full-task quality gates and calibrated probabilities.
+[Cardinality analysis](docs/pretrained_reuse/R2_OPTION_CARDINALITY_20261012.md).
