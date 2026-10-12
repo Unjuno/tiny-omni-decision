@@ -260,3 +260,26 @@ def test_binary_reasoning_expansion_rejects_unknown_choice_labels(answer):
 
     with pytest.raises(ValueError, match="choice answer must be 'correct' or 'wrong'"):
         expand_binary_reasoning_choices(raw, sampled, split="train")
+
+
+def test_descriptive_training_expansion_preserves_training_identity():
+    media = [
+        {
+            "scene_index": 1,
+            "video_filename": "video_00001.mp4",
+            "split": "train",
+            "scene_group_id": "clevrer:train:1",
+        }
+    ]
+    raw = [
+        {
+            "scene_index": 1,
+            "video_filename": "video_00001.mp4",
+            "questions": [_question(2, "Does it move?", ["objects", "exist"])],
+        }
+    ]
+    result = expand_descriptive_questions(raw, media, split="train")
+    assert result[0]["id"] == "clevrer-train-00001-q002"
+    assert result[0]["split"] == "train"
+    with pytest.raises(ValueError, match="split"):
+        expand_descriptive_questions(raw, media, split="validation")

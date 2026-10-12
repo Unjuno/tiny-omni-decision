@@ -40,11 +40,18 @@ def classify(question: dict[str, Any]) -> str:
 
 
 def expand_descriptive_questions(
-    raw_rows: list[dict[str, Any]], validation_rows: list[dict[str, Any]]
+    raw_rows: list[dict[str, Any]],
+    validation_rows: list[dict[str, Any]],
+    *,
+    split: str = "validation",
 ) -> list[dict[str, Any]]:
-    """Expand sampled validation scenes while retaining their pinned media identity."""
+    """Expand sampled scenes while retaining their pinned media and split identity."""
+    if split not in {"train", "validation"}:
+        raise ValueError("unsupported descriptive split")
     media_by_scene: dict[int, dict[str, Any]] = {}
     for row in validation_rows:
+        if row.get("split", split) != split:
+            raise ValueError("sampled row split mismatch")
         scene = int(row["scene_index"])
         media = {
             key: row[key]
@@ -87,7 +94,7 @@ def expand_descriptive_questions(
             expanded.append(
                 {
                     **media,
-                    "id": f"clevrer-validation-{scene:05d}-q{question_id:03d}",
+                    "id": f"clevrer-{split}-{scene:05d}-q{question_id:03d}",
                     "scene_index": scene,
                     "question_id": question_id,
                     "question_type": classify(question),
