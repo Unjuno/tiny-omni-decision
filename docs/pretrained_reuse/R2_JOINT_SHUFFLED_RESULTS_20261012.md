@@ -67,7 +67,7 @@ averaging, calibration fitting or diagnostic-based checkpoint selection occurred
 
 - Run: `C:/CodexArtifacts/pretrained-reuse-r2/joint-shuffled-training-01`
 - Diagnostic: `C:/CodexArtifacts/pretrained-reuse-r2/joint-shuffled-order-diagnostic-01`
-- Training: `python -m scripts.train_joint_shuffled` (see frozen protocol for configuration).
+- Training: `python -m scripts.train_joint_shuffled --output C:/CodexArtifacts/pretrained-reuse-r2/joint-shuffled-training-01` (original invocation; existing outputs are protected, use a new directory for any authorized reproduction).
 - Diagnostic: `python -m scripts.evaluate_joint_order --candidate shuffled`
 - Report verification: `python -m scripts.report_joint_shuffled` (refuses existing report).
 - Best SHA-256: `3a93ce9af6db773182294ebd31589f46ba93ba1abf3bbde0f4b63df4a5f1dadc`
