@@ -133,3 +133,37 @@ The first video completed (eight windows), confirming the full runner reaches
 real inference. Extraction is still in progress; no complete-feature admission or
 new decision training result is claimed. Ruff and four focused CPU tests passed;
 both GitHub Actions runs for `e8fb6d7` succeeded. Prior artifacts are unchanged.
+
+## Prospective fixed readout comparison (before fitting)
+
+Compare exactly two seed17 heads over the same admitted dense features: masked
+window mean versus candidate-conditioned attention with relative temporal position.
+Both use frozen VideoPrism features and the existing frozen MiniLM question/option
+features `[q, option, abs(q-option), q*option]`; options keep their actual text.
+The shared head width is64. Video windows are768-dimensional, candidate features
+1536-dimensional. This is a variable-length adaptation of the existing token
+readout, not base-model fine-tuning. No new encoder or checkpoint search is added.
+
+Each head starts from the same seed17 initialization, AdamW lr0.001,
+weight_decay0.01, fifty epochs, eight video pairs per batch (last partial batch
+retained), both questions per pair, train-only seeded epoch shuffles, cross-entropy
+with equal question weights. No augmentation or class reweighting. All99 training
+pairs and257 development pairs remain included. Both heads retain final and earliest
+minimum validation mean-question NLL checkpoints. Record every epoch, full-run and
+selected-checkpoint presentations separately, fixed train and validation metrics,
+parameter counts, artifact hashes, CPU runtime and environment. The mean model's
+key/position parameters are unused and must be reported separately from effective
+trainable parameters; its representational capacity is lower by design.
+
+After selection, evaluate each fixed selected head on normal inputs, zero-video,
+video-ID cyclic mismatch and reversed window order. These controls cannot select
+checkpoints. Check option permutation and saved-checkpoint reload parity. Report
+initial/final Accuracy/NLL/Brier/ECE15, both-correct rate, changed/unchanged strata,
+and10000 video-cluster bootstrap draws, seed17, percentile95% intervals. Compare
+with the already frozen train-only prior. No claim of improvement without direct
+paired evidence; no blind-audit claim. Preserve all saved predictions.
+
+The100% finite-input and full356 coverage gates must pass before fitting. Smoke
+runs use separate processes and outputs and do not select hyperparameters. This
+comparison tests whether temporal window readout uses video evidence for this
+narrow family; it cannot establish the complete Omni product objective.
