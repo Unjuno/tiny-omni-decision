@@ -125,3 +125,39 @@ Run: `python -m scripts.audit_perception_visibility_identity --source C:/CodexAr
 The saved `visibility-identity.json` retains every contradiction and input hash.
 One regression test covers class-disambiguated and still-contradictory sources,
 and rejects non-train input. No fitting, media, validation or audit access.
+
+## Train proposal adapter: all rows retained
+
+`perception_visibility.visibility_records` now separates the inference request
+from supervision and provenance. Request fields are task, video ID, interval,
+sound class and two visibility options. Ground-truth visibility, parent object
+IDs and annotation IDs are not model input. Event boundaries and sound class
+are supplied query information, so this is an **oracle-boundary, class-conditioned
+visibility proposal**, not autonomous event detection or the original MCQA task.
+
+Running the adapter over all train annotations produced 25,757 records:
+
+| Status | Not visible | Visible | Total |
+|---|---:|---:|---:|
+| Candidate | 6,123 | 18,571 | 24,694 |
+| Held | 464 | 599 | 1,063 |
+
+All records remain in the output; none were silently dropped. Held reasons:
+91 annotations overlap another same-class event with contradictory visibility;
+977 exceed a conservative video/audio/cut boundary; five satisfy both reasons.
+An exact-input collision check alone therefore missed an important ambiguity.
+The cut frame itself is excluded conservatively. Intervals are not clipped and
+relabelled, since that could change visibility semantics. Actual decoded media
+timing is not yet checked, and broad class/unknown-source semantics remain open.
+
+No training admission or quality claim follows. Candidate/held is a proposed
+adapter status, not a performance-based data selection. Any future evaluation
+must report coverage and held strata, preserve its predefined population and
+not inflate accuracy by excluding these cases. Video-level IDs retain grouping;
+the official participant/script limitation above remains.
+
+Command: `python -m scripts.prepare_perception_visibility --source C:/CodexArtifacts/pretrained-reuse-r2/perception-test-source-audit-01 --output C:/CodexArtifacts/pretrained-reuse-r2/perception-visibility-proposal-01`.
+The records SHA-256 is
+`f2d19f6c148bd44c14d1f9b6949bf129f0e3fd2df300dedac0257a55cef7ac4a`.
+Tests cover inference-field separation, conservative cuts, overlapping and
+touching intervals, and train-only rejection. No media or evaluation data opened.

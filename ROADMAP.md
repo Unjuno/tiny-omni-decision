@@ -948,3 +948,9 @@ Perception Test grouping follow-up: the official paper guarantees script ×
 participant grouping, not participant-disjoint splits. The inspected public tree
 and train metadata do not expose that mapping. Preserve upstream splits for
 development; do not create video-random validation or claim household independence.
+
+The train-only visibility proposal adapter retains all 25,757 annotations,
+separates supervision from inputs, and marks 1,063 records held with reasons.
+Same-class overlapping events expose ambiguity missed by exact-input checks.
+The 24,694 candidates are not admitted training data: oracle event boundaries,
+media timing, broad-source semantics and evaluation coverage remain explicit gates.
