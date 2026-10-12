@@ -1,18 +1,38 @@
 """Fetch checksum-pinned synchronization metadata; leave sensor payloads unopened."""
 
+import argparse
 import hashlib
 import json
 import zipfile
 from pathlib import Path
 
-import requests
-
 from scripts.range_generalization import sha, write
 
 
+def verify_archive(path, *, size, checksum):
+    if path.stat().st_size != size:
+        raise ValueError("archive size mismatch")
+    digest = hashlib.md5()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    if "md5:" + digest.hexdigest() != checksum:
+        raise ValueError("archive checksum mismatch")
+
+
 def main():
-    output = Path("C:/CodexArtifacts/pretrained-reuse-r2/vidimu-analysis-audit-01")
-    output.mkdir(exist_ok=False)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verify-existing", type=Path)
+    args = parser.parse_args()
+    output = args.verify_existing or Path(
+        "C:/CodexArtifacts/pretrained-reuse-r2/vidimu-analysis-audit-01"
+    )
+    if not args.verify_existing:
+        output.mkdir(exist_ok=False)
+    elif any(
+        (output / name).exists() for name in ("result.json", "inventory.json", "infoToSync.csv")
+    ):
+        raise ValueError("refusing to overwrite existing inspection")
     source = Path("C:/CodexArtifacts/pretrained-reuse-r2/vidimu-source-audit-02")
     metadata = json.loads((source / "metadata.json").read_text(encoding="utf-8"))
     entry = next(f for f in metadata["files"] if f["key"] == "analysis.zip")
@@ -20,21 +40,21 @@ def main():
         169608328, "md5:6c937c7122fee77ff1ce306175cb26c7"
     ):
         raise ValueError("source pin mismatch")
-    write(output / "source.json", entry)
     path = output / "analysis.zip"
-    digest = hashlib.md5()
-    received = 0
-    with requests.get(entry["links"]["self"], stream=True, timeout=30) as response:
-        response.raise_for_status()
-        with path.open("xb") as target:
-            for chunk in response.iter_content(1024 * 1024):
-                received += len(chunk)
-                if received > entry["size"]:
-                    raise ValueError("size exceeded")
-                digest.update(chunk)
-                target.write(chunk)
-    if received != entry["size"] or "md5:" + digest.hexdigest() != entry["checksum"]:
-        raise ValueError("archive integrity failed")
+    if not args.verify_existing:
+        import requests
+
+        received = 0
+        with requests.get(entry["links"]["self"], stream=True, timeout=30) as response:
+            response.raise_for_status()
+            with path.open("xb") as target:
+                for chunk in response.iter_content(1024 * 1024):
+                    received += len(chunk)
+                    if received > entry["size"]:
+                        raise ValueError("size exceeded")
+                    target.write(chunk)
+    verify_archive(path, size=entry["size"], checksum=entry["checksum"])
+    write(output / "source.json", entry)
     with zipfile.ZipFile(path) as archive:
         write(output / "inventory.json", [
             {"name": i.filename, "size": i.file_size, "crc": i.CRC}
