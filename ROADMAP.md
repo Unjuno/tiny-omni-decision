@@ -801,3 +801,13 @@ train loss falls while validation NLL rises to0.665. This demonstrates budget
 sensitivity followed by overfitting, not a model-family ceiling. Sensor-only
 still wins; no adoption or further extension.
 [Fixed endpoints, selected checkpoint and controls](docs/pretrained_reuse/R2M_GATED_BUDGET_RESULTS_20261012.md).
+
+
+### Shared spatial image comparison (2026-10-12)
+
+Two fixed 24-epoch readouts completed on the same 8,424 train / 512 selector
+images. Shared VideoPrism global/spatial Accuracy is 90.77%/90.92%; the paired
++0.15pp difference is uncertain. Spatial counting improves but texture declines,
+with a larger train/validation gap. Keep both artifacts; no product adoption or
+95% claim. The image stack is 133,475,584 pre-quantization parameters; a complete
+Omni runtime remains unverified. [Curves, hashes and controls](docs/pretrained_reuse/R2_SHARED_SPATIAL_RESULTS_20261012.md).

@@ -511,3 +511,13 @@ has an uncertain difference; both exceed no-video35.83% on development metrics.
 Attention clearly overfits. Preserve as optional-criterion evidence, do not
 extend this family; prioritize the new modality-native/sensor-inclusive R2-M.
 [Measured report](docs/pretrained_reuse/R2_GROUNDING_TOKEN_RESULTS_20261012.md).
+
+
+### Shared spatial image comparison (2026-10-12)
+
+Two fixed 24-epoch readouts completed on the same 8,424 train / 512 selector
+images. Shared VideoPrism global/spatial Accuracy is 90.77%/90.92%; the paired
++0.15pp difference is uncertain. Spatial counting improves but texture declines,
+with a larger train/validation gap. Keep both artifacts; no product adoption or
+95% claim. The image stack is 133,475,584 pre-quantization parameters; a complete
+Omni runtime remains unverified. [Curves, hashes and controls](docs/pretrained_reuse/R2_SHARED_SPATIAL_RESULTS_20261012.md).
