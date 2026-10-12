@@ -784,3 +784,11 @@ affect the joint model, but fusion is worse than sensor-only and fails adoption.
 This narrow13-class,3-validation-subject result does not establish general Omni
 quality or synchronized fusion. No extra seeds or tuning; preserve negative
 results and all artifacts. [Full comparison](docs/pretrained_reuse/R2M_VIDIMU_COMPARISON_20261012.md).
+
+### Fixed gated fusion readout (2026-10-12)
+
+A separate preregistered100-epoch run completed on the same frozen VIDIMU split.
+The421,826-parameter readout selects epoch100: Accuracy89.74%, NLL1.729,
+Brier0.732, ECE0.706. Probability quality is worse than both singletons and
+scaled linear fusion; do not adopt. Both losses still improve, so no plateau
+claim. [Curves, controls and numerical-check limits](docs/pretrained_reuse/R2M_GATED_FUSION_RESULTS_20261012.md).
