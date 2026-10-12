@@ -102,3 +102,25 @@ was absent; no dependency was installed, and the notice was inspected with stdli
 Product-use weight rights remain REVIEW. The existing README MIT declaration,
 missing full license notice and unverified weight scope must be represented
 accurately rather than silently upgrading this candidate to ALLOW.
+
+## Actual Tiny checkpoint acquisition and bounded inspection
+
+Processed the publisher-linked Drive download confirmation for local research
+inspection; product license remains REVIEW. Actual file208,484,108bytes, SHA256
+`d79415e85a6ade9d14e932bead53fadd7c61248fcd72808e2c6d86d46e2e9ca7`.
+Saved separately at `C:/CodexArtifacts/pretrained-reuse-r1/all-in-one-tiny-weight-audit-01/`.
+No legacy model/file was modified.
+
+Initial weights_only=True load rejected one Lightning ModelCheckpoint global.
+Static torch global scan found only that external symbol, in a503-entry ZIP.
+A second bounded inspection retained weights_only=True and mapped that exact
+symbol to a locally defined inert marker class (no methods, no Lightning import).
+No unrestricted pickle load was used. The checkpoint contains model state plus
+optimizer/scheduler/callback/AMP training state; file size is not inference size.
+
+State dictionary contains167 tensor entries totaling17,359,140 elements. This is
+not an exact resident-parameter count: tied weights/buffers/unused training heads
+must be reconciled with instantiated inference modules. Tensor names/shapes/dtypes
+are saved in tensor-audit.json; initial rejection and static scan are also retained.
+Actual model construction, strict loading, preprocessing/forward parity and
+product-use rights remain unverified. Do not claim a functioning model yet.
