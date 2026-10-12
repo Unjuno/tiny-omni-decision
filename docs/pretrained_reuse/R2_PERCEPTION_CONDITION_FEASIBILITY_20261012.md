@@ -53,3 +53,24 @@ Do not fit this family on the existing pooled vectors yet. Admission needs an
 explicit temporal evidence audit against the underlying pre-cut sequence and a
 prospectively fixed input policy. Preserve the current eight-frame AV experiment
 as-is; any different temporal policy would be a separate experiment.
+
+## Dense initial-sequence check: a concrete sampling loss
+
+For the same first train example `video_3334`, the source media SHA256 was checked
+against `e511a81e7d1f1b5f533c3be134e6e3604a4789f52eb807903405476c2bff996d`.
+Frames0,6,...,90 were decoded before the upstream cut404, with actual PTS saved.
+At frames12/18/24 (approximately0.401/0.602/0.802 seconds), lifting the leftmost
+cup in the viewer's coordinates exposes a small object. This visible initial
+evidence is absent from the inspected eight-frame contact sheet. Do not confuse
+viewer coordinates with the question's person's-point-of-view answer semantics.
+
+This establishes a sampling-loss example, not complete final-position
+recoverability, a dataset-wide rate, or a backbone limitation. The full motion
+trajectory still needs coverage. Any future task policy must be fixed before
+scoring and applied to all selected examples, not tuned to successful answers.
+
+Artifacts: `perception-condition-initial-dense-01.npz`, `.json` (source hash,
+frame indices/PTS, cut and train-only scope), and `.png` under the R2 root.
+Initial rendering failed because the PyAV environment has no Pillow; decoding
+and rendering were then run in their existing separate environments. No package
+upgrade, existing window modification, training or validation evaluation occurred.
