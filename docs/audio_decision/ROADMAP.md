@@ -15,6 +15,51 @@ The intended input contract is:
 
 The model **does not** need to be merged into Omni or used as an Omni audio Encoder. The only relationship is historical research provenance: both may reuse separately permitted tools and papers. Do not count a successful audio result as progress toward full Omni quality.
 
+## JSON interface contract — the complete independent voice-to-choice product
+
+**Input:** Local application supplies raw microphone audio and an arbitrary *runtime-provided*, variable-sized candidate list. Each candidate has a stable string ID and optional typed fields / display name / description. The interface must not embed a fixed label taxonomy or rely on a pre-enumerated set of options. For a 10M model, distinguish **typed numeric/enum field predicates** (reasonable early scope) from unrestricted free-form document semantics (research target, not already solved).
+
+**Output:** One well-formed, versioned **JSON object** per request, with no prose generation. The neural model can produce speech-derived criterion representations and option logits; a deterministic, locally implemented formatter serializes these values to JSON. The formatting code need not be a language model and contributes no neural parameters. Ensure keys and array ordering are stable; the option IDs must exactly refer to supplied candidates and probability values must be finite and normalized across eligible supplied choices when \`status="selected"\`.
+
+Example application input (illustrative; not an achieved benchmark):
+
+\`\`\`json
+{
+  "request_id": "demo-001",
+  "audio": {"source": "microphone", "sample_rate_hz": 16000, "language": "ja"},
+  "candidates": [
+    {"id": "A", "name": "Option A", "distance_to_station_m": 420},
+    {"id": "B", "name": "Option B", "distance_to_station_m": 180},
+    {"id": "C", "name": "Option C", "distance_to_station_m": 650}
+  ]
+}
+\`\`\`
+
+Spoken audio: 「駅から一番近い候補を選んで」
+
+Example structured response, **illustrative uncalibrated values**:
+
+\`\`\`json
+{
+  "schema_version": "1.0",
+  "request_id": "demo-001",
+  "status": "selected",
+  "selected_option_id": "B",
+  "criterion": {"field": "distance_to_station_m", "operator": "min"},
+  "options": [
+    {"id": "A", "probability": 0.03},
+    {"id": "B", "probability": 0.96},
+    {"id": "C", "probability": 0.01}
+  ]
+}
+\`\`\`
+
+The **98% research target measures correct choices on unseen spoken conditions and candidate sets**, not JSON syntax-validity alone and not Smart Turn's original turn-end-detection accuracy. Report separately (a) speech criterion understanding, (b) candidate/field grounding, (c) choice correctness, (d) probability calibration, (e) JSON schema conformance, and (f) raw-audio-to-JSON latency. A speech-only classifier that picks a fixed label irrespective of supplied candidates fails the product contract.
+
+**Robustness:** Reject unknown candidate IDs, duplicate IDs, missing required fields, nonfinite logits/probabilities, malformed audio, schema mismatch, unsupported language or unresolved criteria. Use \`status="abstain"\` with \`selected_option_id=null\` where no reliable answer exists; abstention must not silently select an invalid or unavailable option. Explicit confirmation is a UI concern for high-impact or irreversible actions. No private audio or transcript needs to be included in the returned JSON by default.
+
+**Interaction distinction:** A mouse directly addresses screen coordinates. This project aims at **voice-conditioned semantic pointing** over an application-supplied candidate context. Its benefit depends on the actual supported criterion vocabulary, errors, speaking burden, environment noise, latency, privacy and confirmation workflow. Claims that it replaces mouse interactions or understands unrestricted spoken requests require separate evidence.
+
 ## Hard research targets and honest evidence rules
 
 1. **Complete standalone model <=10,000,000 unique, loaded resident parameters before quantization.** Include the acoustic Encoder, all vocabulary/token embeddings, any language/option Encoder, adapters, pooling, scoring, and trained normalization. A model with 8M acoustic weights and an external 17M MiniLM **fails** this target. Non-neural application data, code and deterministic comparison operators have no model parameters, but their functional restrictions and memory/latency still must be reported.
