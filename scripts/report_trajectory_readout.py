@@ -96,7 +96,9 @@ def main():
                 raise ValueError(f"reference training policy differs: {key}")
         output["reference_result_sha256"] = sha(args.reference / "result.json")
         output["candidate_minus_reference"] = {}
-        for mode in ("mean", "attention"):
+        if not reference_result or not set(reference_result) <= {"mean", "attention"}:
+            raise ValueError("unsupported reference modes")
+        for mode in sorted(reference_result):
             path = args.reference / mode / "predictions.json"
             if sha(path) != reference_result[mode]["artifacts"]["predictions.json"]["sha256"]:
                 raise ValueError("reference predictions changed")

@@ -30,8 +30,29 @@ this pooled-scene addition; do not infer all viewpoint representations are usele
 | 50 | 0.813131 | 0.428202 | 0.350195 | 2.489246 |
 
 Later fitting worsens validation NLL. Close this fixed capacity/scene comparison
-without a seed or hidden-size sweep. Paired uncertainty analysis remains pending.
+without a seed or hidden-size sweep. Paired uncertainty analysis is complete below.
 All checkpoints, config/input hashes, histories and predictions are under
 `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-scene-trajectory-readout-01/`.
 Protocol:R2_SCENE_TRAJECTORY_PROTOCOL_20261013.md. Prior cache endpoint difference
 is retained explicitly. Product and multimodal-quality gates remain unmet.
+
+
+## Paired uncertainty and final disposition
+
+All saved artifact hashes, prediction IDs/targets, reconstructed metrics and the
+50-epoch NLL selector were verified. Video-cluster paired bootstrap uses10,000
+draws,seed17,percentile95 intervals. It does not correct selection bias from this
+reused development set.
+
+- Scene candidate minus trajectory-only NLL:[-0.005452,0.013696].
+- Accuracy difference:[0,0]; both-correct difference:[0,0].
+- Scene mismatch minus normal NLL:[-0.001633,0.001010].
+
+No demonstrated gain or scene sensitivity supports adoption. Close this fixed
+comparison; do not sweep seeds, capacity or calibration on these results.
+This conclusion applies to the pooled-scene query-conditioning implementation,
+not all visual context representations. General Omni semantic quality remains
+unmet, and compression/shared-Lens work is not justified by this outcome.
+
+Reproduction:`python -m scripts.report_trajectory_readout --run <scene-run> --reference <trajectory-run> --output <fresh-report>`.
+Saved report:`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-scene-trajectory-report-01.json`.

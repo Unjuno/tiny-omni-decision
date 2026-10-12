@@ -31,4 +31,4 @@ without evidence sensitivity and condition-dependent correct answers. No sealed
 or product promotion. If not useful, close this comparison without a capacity sweep.
 
 Execution completed under sourcecdbe1fe; see R2_SCENE_TRAJECTORY_RESULTS_20261013.md.
-Head and control tests pass. Paired uncertainty analysis remains pending.
+Head and control tests pass. Paired uncertainty analysis completed; no adoption.
