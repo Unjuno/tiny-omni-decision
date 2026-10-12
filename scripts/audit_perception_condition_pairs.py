@@ -14,6 +14,8 @@ def summarize(data):
     counts = collections.Counter()
     reasoning = collections.Counter()
     examples = []
+    templates = collections.Counter()
+    pair_videos = set()
     for identity, row in data.items():
         if row["metadata"]["split"] != "train":
             raise ValueError("train only")
@@ -32,11 +34,21 @@ def summarize(data):
                     counts["same_question_pairs"] += 1
                     continue
                 counts["different_question_pairs"] += 1
+                templates[(a["question"], b["question"])] += 1
+                pair_videos.add(identity)
                 if target_a != target_b:
                     counts["different_question_different_answer_pairs"] += 1
                     if len(examples) < 12:
                         examples.append(dict(video_id=identity, first=a, second=b))
-    return dict(counts=dict(counts), reasoning=dict(reasoning), examples=examples)
+    counts["videos_with_pairs"] = len(pair_videos)
+    return dict(
+        counts=dict(counts),
+        reasoning=dict(reasoning),
+        examples=examples,
+        question_templates=[
+            dict(first=a, second=b, pairs=count) for (a, b), count in templates.most_common()
+        ],
+    )
 
 
 def main():

@@ -26,3 +26,30 @@ candidate-pair semantics on train only, then fix a rule independently of model
 performance. Keep upstream scene splits and group both questions together.
 This offers a concrete condition-sensitive direction beyond recording matching;
 it is not yet a completed quality benchmark or a claimed multimodal capability.
+
+## Template and input inspection
+
+The full498 pairs span358 train videos and29 ordered question-template pairs.
+The largest family has99 pairs asking the hidden object's initial/final location
+in an occlusion game. Other families include first/second/third shown objects,
+written-letter order, counts, and yes/no shape comparisons. They cannot all be
+treated as one controlled temporal intervention.
+
+The existing256-recording train acquisition contains67 lexical candidate pairs.
+Sixteen acquired videos contain an occlusion-game question;13 have a nonnegative
+upstream reveal-cut index. These counts are feasibility information, not sample
+selection by model performance. The extended reproducible audit saves all29
+template counts in `perception-condition-template-audit-01.json` under the R2 root.
+
+A contact sheet of the existing eight selected frames for the first acquired
+occlusion example, `video_3334` / `window-016.npz`, was inspected. It shows three
+similar cups and manipulation, but does not clearly establish the initial hidden
+object identity or every intervening movement. Therefore this inspection cannot
+certify that the eight-frame representation makes the label recoverable. The
+sheet is `perception-condition-contact-01.png` in the R2 artifact root. This is
+one train-example input audit, not a model score or proof that all clips fail.
+
+Do not fit this family on the existing pooled vectors yet. Admission needs an
+explicit temporal evidence audit against the underlying pre-cut sequence and a
+prospectively fixed input policy. Preserve the current eight-frame AV experiment
+as-is; any different temporal policy would be a separate experiment.
