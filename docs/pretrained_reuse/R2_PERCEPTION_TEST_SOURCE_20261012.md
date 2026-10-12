@@ -191,3 +191,32 @@ and the exact executed runner. Decode uses the existing isolated PyAV environmen
 No inference/training/GPU work, validation/audit access or cloud cost occurred.
 The task remains REVIEW. The next extraction step must use actual PTS and audio
 availability, preserve unknown regions and test cutoff handling before fitting.
+
+## Exact decoded audio clock follow-up
+
+Both selected MP4s start with audio packets at PTS -2048 (time base 1/48000)
+and carry `skip_samples` side data. For video_3174, decoded samples (1,680,384)
+equal the container stream duration in sample units; annotation count remains
+1,681,408. This does not support describing the difference as missing interior
+audio. For video_7855, stream duration is 1,034,256 while decoded samples and
+annotation count are 1,034,240; these are distinct quantities, not interchangeable.
+The exact upstream annotation-counting convention remains unverified.
+
+`audio_interval.sample_interval` uses rational PTS/time bases and decoded sample
+counts, rejects gaps/overlaps or requests beyond actual availability, and rounds
+sample supports inward to the half-open requested interval. No padding or implicit
+resampling occurs. All seventeen annotated sound intervals in the two fixed clips
+have valid plans (3 and 14 respectively). This validates audio coverage only;
+video cuts and source visibility are separate checks. No model inference occurred.
+
+Output: `perception-media-probe-01/audio-clock.json`, including packet side data,
+sample counts and all interval plans. Execute with the existing isolated Python:
+
+```powershell
+$env:PYTHONPATH='C:/CodexWorktrees/pretrained-reuse-omni/src'
+C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-r1/venv/Scripts/python.exe -m scripts.audit_perception_audio_clock --output <fresh-json>
+```
+
+The first invocation lacked PYTHONPATH and failed at import before processing;
+setting the existing source path resolved it without dependency changes. CPU tests
+cover inward rounding, continuous blocks, out-of-range refusal and clock gaps.
