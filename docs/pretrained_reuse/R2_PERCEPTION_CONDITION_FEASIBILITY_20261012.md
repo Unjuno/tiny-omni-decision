@@ -98,3 +98,26 @@ selection, end exclusion, complete tail coverage and malformed clocks/short inpu
 Ruff and612 CPU tests passed, one optional test skipped. The next bounded gate
 is runtime/feature feasibility of these windows before a separately fixed paired
 decision protocol, not an automatic large frame-count training run.
+
+## First-recording feature cost measured
+
+`scripts.smoke_dense_temporal_features` executed on the prospectively fixed first
+train recording `video_3334`, with the existing pinned114,365,184-parameter
+VideoPrism on CPU. Baseline eight-frame features matched the saved reference
+within1e-6/1e-5 tolerance; its immediate repeated extraction was bit-exact.
+Warm baseline encoding took1.0664seconds; seven dense windows took7.5675seconds
+total. Source decoding took4.4949seconds. Loading/JIT compile is excluded from
+those encoding timings; these are single observations, not latency percentiles.
+Seven finite768D vectors occupy21,632bytes including the NPY header.
+No new parameters, model training or decision predictions were introduced.
+
+Artifact `perception-dense-feature-smoke-01` under the R2 root preserves result,
+features and executed source. Feature SHA256
+`df2fd274c67d8f73f9b1eef429da2af1da7acc00e49ba1925032bfa0497b17a7`.
+The inherited report string incorrectly says equirectangular; actual operations
+were ordinary PyAV RGB resizing plus the existing288x288 encoder normalization.
+The report is preserved, and future runner metadata is corrected explicitly.
+
+Runtime feasibility passes for this one input, with an observed7.10x warm encoding
+cost. Quality is still unmeasured; window features must retain sequence position
+and must not be silently averaged into a claim of improved temporal reasoning.
