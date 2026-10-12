@@ -409,3 +409,12 @@ fixed validation rule. Original textAccuracy improves61.54% to63.58%; curriculum
 result, not95% or a causal coverage-only claim. Existing multimodal towers remain
 unchanged; selected/final artifacts and all curves are preserved.
 [Results, uncertainty and accounting](docs/pretrained_reuse/R2_TEXT_COVERAGE_RESULTS_20261012.md).
+
+### Coverage checkpoint fixed transfer (2026-10-12)
+
+A separate frozen10-condition comparison completed on all10240 diagnostic rows
+per model. The new checkpoint scores83.98–84.38% on trained-word base conditions,
+73.54–74.61% on expanded ranges,40.14% on domain words and36.13% on expanded
+domain-word inputs. Every paired Accuracy-difference interval includes zero;
+expanded/domain probability quality worsens. No general-reasoning adoption.
+[All metrics, opposite-condition pairs and limits](docs/pretrained_reuse/R2_COVERAGE_TRANSFER_RESULTS_20261012.md).
