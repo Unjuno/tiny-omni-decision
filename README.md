@@ -588,3 +588,14 @@ Coefficient 0.01 has aggregate Accuracy 91.94%, NLL 0.1964, and is the predefine
 research recommendation. This remains far below the weakest-task target and is
 not product promotion or a blind result. Stop coefficient refinement on these IDs.
 [All arms, curves, gaps and limits](docs/pretrained_reuse/R2_AFFINE_REGULARIZATION_RESULTS_20261012.md).
+
+
+### Actual shared-visual residency (2026-10-12)
+
+A live two-worker CPU smoke holds the shared image/video backbone, text/speech/
+event-audio encoders and conservative head tensors at 195,420,792 elements,
+within the pre-quantization 200M budget for those components. RSS sum is 1.81 GB
+at the snapshot. A replacement checkpoint and Windows launcher PID initially
+caused double counting and memory undercounting; the corrected run preserves both
+attempts. This is capacity evidence, not a wired or quality-qualified Omni model.
+[Exact ledger and integration gaps](docs/pretrained_reuse/R2_SHARED_RESIDENT_BUDGET_20261012.md).
