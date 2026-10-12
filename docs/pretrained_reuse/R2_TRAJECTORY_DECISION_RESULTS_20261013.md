@@ -232,3 +232,24 @@ Failure inventory:
 `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-scene-trajectory-admission-failed-01.json`.
 Trace the original duration/end-index calculation before admitting a combined
 experiment; explicitly retain or resolve this difference in a new protocol.
+
+### Endpoint mismatch resolved as an explicit policy difference
+
+`decode_window` in `scripts/prepare_av_correspondence_windows.py` uses the common
+AV support ending no later than the last video PTS, then an exclusive end.
+`plan_windows` preserves that exclusion. The trajectory extractor instead uses
+all decoded frames when cut_frame=-1. For witness10212, last timestamps are
+34.97249541590265 and35.00583430571762 seconds: scene ends at index1049, trajectory
+at1050. This explains the observed one-frame endpoint difference.
+
+A full second admission verified all356 IDs/splits/media bindings, both feature
+files per video by SHA256 and finite values, matching manifest pins, and allowed
+only zero delta or delta1 with cut=-1.33 cases have the latter. Original files
+remain untouched. Report:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-scene-trajectory-admission-02.json`.
+
+Caches may be reused in a prospective combined-feature comparison with this
+explicit difference fixed across its arms. They must not be called identical
+preprocessing or evidence isolating encoder architecture alone. No additional
+extraction is required to test whether the existing scene representation adds
+useful information; usefulness remains unproven.
