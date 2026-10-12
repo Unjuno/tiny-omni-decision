@@ -277,3 +277,23 @@ control uses remapped targets. Existing artifacts remain unchanged.
 Ruff and609 CPU tests passed (one optional test skipped). Full preprocessing was
 still running at this code checkpoint; neither full feature extraction nor this
 development fit has executed. Runner availability is not a measured quality result.
+
+## Full development windows complete; encoder extraction launched
+
+The preprocessing process exited0 with PASS and exactly256 train /200 valid
+windows,456 unique recording IDs. The final result.json SHA256 is
+`50451ef411f8de406d631d293eaa10fe93c2cbcebcd37e521cd1fabfd89c3d3d`.
+All media and manifest hashes and exact cross-split prepared-content checks
+passed. This does not rule out near duplicates or recurring participants/scripts.
+There are29 windows with an upstream answer-reveal cut and112 whose actual audio
+rate differs from metadata; the decoder uses the actual rate and observed PTS,
+not the metadata rate. No recordings were dropped or replaced. Executed decoder
+and batch sources are preserved beside the result.
+
+From709e9f9, separate CPU processes launched `scripts.extract_perception_pilot`
+with `--windows` pointing to that complete result, and `--modality audio|video`.
+Fresh outputs are `perception-correspondence-development-audio-01` and
+`perception-correspondence-development-video-01`. Both fixed encoders repeat each
+extraction for consistency and verify window hashes. This records launch only;
+full extraction and development training results remain pending. No GPU or paid
+compute was used. Model/dataset manifest and catalog validation also passed.
