@@ -473,3 +473,13 @@ checkpoint; wording views improve endpoint NLL/Brier relative to repetition,
 but neither improves the fixed validation selector over initialization. Neither
 continuation is adopted. This is not a capacity ceiling or a generalization
 claim. [Full curves and comparison](docs/pretrained_reuse/R2_PAIRED_WORDING_RESULTS_20261012.md).
+
+
+### Joint candidate readout: measured, not adopted
+
+Matched1,024-update runs completed. Joint processing reduced timed loop cost
+and memory, but selected original/curriculum Accuracy58.31%/40.09% trails
+independent63.54%/84.08%. Reversing candidates drops joint original Accuracy
+to40.79%; independent predictions remain exact. Reject this candidate, without
+claiming a joint-architecture capacity ceiling.
+[Curves and fixed order diagnosis](docs/pretrained_reuse/R2_JOINT_LEARNING_RESULTS_20261012.md).
