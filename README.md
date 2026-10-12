@@ -568,3 +568,13 @@ count Accuracy 68.02% -> 78.17% and aggregate training Accuracy 91.43% -> 94.46%
 ECE worsened and the convergence gate was not reached. No validation or audit was
 loaded; preserve the runtime reference and do not call this generalization gain.
 [Protocol, curves and integrity](docs/pretrained_reuse/R2_AFFINE_FIT_RESULTS_20261012.md).
+
+
+### Fixed affine endpoint validation (2026-10-12)
+
+The frozen 200-iteration endpoint did not transfer its counting training gain:
+reused-validation counting Accuracy 66.41% -> 65.82%, with uncertain paired
+Accuracy/NLL differences and a larger train-validation gap. Aggregate NLL improves,
+but ECE worsens. Preserve the original runtime; stop unregularized extension and
+predefine regularization before further fitting. No audit or promotion.
+[Matched metrics, gaps and intervals](docs/pretrained_reuse/R2_AFFINE_ENDPOINT_RESULTS_20261012.md).
