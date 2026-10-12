@@ -126,3 +126,25 @@ script: `C:/CodexArtifacts/pretrained-reuse-r1/tapir-audit-01/readout_smoke.py`.
 Checkpoint, loss history, routed questions, input hashes and probabilities are
 preserved. Full frozen-feature extraction, preregistered train/validation fitting
 and mismatch controls remain required before assessing this representation.
+
+
+## Corpus-length admission
+
+A container-metadata audit of all356 pinned media files finds171,067 planned
+frames before reveal cuts; maximum1053 (validation video_4324), train maximum1051
+(video_10212). This metadata pass is not complete decode or content verification.
+Audit: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-trajectory-length-audit-01/`.
+
+The1051-frame train clip was then decoded and processed with identical fixed-grid
+settings. Forward took25.517727seconds, peak allocated10,621,511,680bytes
+(9.89GiB), peak reserved13,354,663,936bytes(12.44GiB). All output values finite;
+media and checkpoint hashes verified. No clipping or query reduction was needed.
+This supports proceeding to full extraction, with individual failures retained;
+it does not guarantee the1053-frame clip or every allocator state will fit.
+Output: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-grid256-gpu-longest-train-01/`.
+Script: `C:/CodexArtifacts/pretrained-reuse-r1/tapir-audit-01/grid256_gpu_longest_train.py`.
+
+The conditional readout comparison is fixed in
+[R2_TRAJECTORY_DECISION_PROTOCOL_20261013.md](R2_TRAJECTORY_DECISION_PROTOCOL_20261013.md).
+Full corpus extraction and that training comparison have not yet run. Existing
+CPU CI workflows for readout commit bb9d7e4 both completed successfully.
