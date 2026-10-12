@@ -161,3 +161,33 @@ The records SHA-256 is
 `f2d19f6c148bd44c14d1f9b6949bf129f0e3fd2df300dedac0257a55cef7ac4a`.
 Tests cover inference-field separation, conservative cuts, overlapping and
 touching intervals, and train-only rejection. No media or evaluation data opened.
+
+## Subsequent bounded real-media probe
+
+Two train videos were subsequently acquired from the official train ZIP via
+HTTP ranges. Selection was the first two IDs ordered by SHA-256 of `17:video_id`,
+independent of labels and model scores. Each selected file was capped at 32 MB;
+an oversized/missing selection would fail rather than substitute another video.
+Generation `1685446268139925`, archive size 28,404,087,974 bytes and If-Match ETag
+bound reads; ZIP CRC and per-file SHA-256 were checked. The full archive was not
+downloaded. Earlier statements about no media refer to the preceding audits.
+
+| Train ID | MP4 bytes | Decoded video frames | Decoded audio samples | Metadata samples |
+|---|---:|---:|---:|---:|
+| video_3174 | 14,443,857 | 1,050 | 1,680,384 | 1,681,408 |
+| video_7855 | 5,147,694 | 641 | 1,034,240 | 1,034,240 |
+
+Both streams start at PTS zero and have strictly increasing decoded timestamps.
+Video counts match metadata. The first clip has 1,024 fewer decoded audio samples
+than metadata (21.333 ms at 48 kHz). Do not silently assume sample-count equality
+or infer a decoder cause without investigation. End differences are approximately
+19.663 ms and 4.793 ms: video ends here are estimates using the last PTS plus
+one average-frame interval, not measured per-frame duration or synchronization
+proof. These two files do not validate the whole corpus or semantic AV alignment.
+
+Command: `python -m scripts.probe_perception_media --output C:/CodexArtifacts/pretrained-reuse-r2/perception-media-probe-01`.
+The fresh directory contains both files, manifest with byte hashes, timing.json
+and the exact executed runner. Decode uses the existing isolated PyAV environment.
+No inference/training/GPU work, validation/audit access or cloud cost occurred.
+The task remains REVIEW. The next extraction step must use actual PTS and audio
+availability, preserve unknown regions and test cutoff handling before fitting.
