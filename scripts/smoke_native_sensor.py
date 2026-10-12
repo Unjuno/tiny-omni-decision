@@ -20,9 +20,13 @@ def main():
     source = ROOT / "harth-native-window-smoke-02"
     output = ROOT / "native-sensor-decision-smoke-01"
     expected = {
-        "observation-features.npz": "52ee95851ba8dc5128518ba12ec07e04ed61ac83c5a9b5a9c940fb0aa8ccd702",
+        "observation-features.npz": (
+            "52ee95851ba8dc5128518ba12ec07e04ed61ac83c5a9b5a9c940fb0aa8ccd702"
+        ),
         "supervision.npz": "7ed4020b79cacd8eda4512441b54892843be2eb69cde1fe50e2720f7b915af7f",
-        "first-window-request.json": "14821ee1e331ab26084983231c494e67cf8fb67e37c7b0fbb9a408b61eccb8dd",
+        "first-window-request.json": (
+            "14821ee1e331ab26084983231c494e67cf8fb67e37c7b0fbb9a408b61eccb8dd"
+        ),
     }
     for name, digest in expected.items():
         if sha(source / name) != digest:
@@ -69,20 +73,29 @@ def main():
     assert reversed_result["selected_option_id"] == prediction["selected_option_id"]
     assert reversed_result["options"] == list(reversed(prediction["options"]))
     result = {
-        "status": "functional_smoke_pass", "quality_measured": False,
+        "status": "functional_smoke_pass",
+        "quality_measured": False,
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
-        "source_hashes": expected, "seed": 17, "updates": 2,
-        "unique_training_windows": 8, "training_encounters": 16,
+        "source_hashes": expected,
+        "seed": 17,
+        "updates": 2,
+        "unique_training_windows": 8,
+        "training_encounters": 16,
         "parameters": sum(p.numel() for p in model.parameters()),
         "optimizer": {"name": "AdamW", "lr": 0.001, "weight_decay": 0.01},
-        "backend": "CPU float32", "python": platform.python_version(),
-        "torch": torch.__version__, "numpy": np.__version__,
-        "history": history, "prediction": prediction,
-        "exact_reload": True, "exact_option_permutation": True,
+        "backend": "CPU float32",
+        "python": platform.python_version(),
+        "torch": torch.__version__,
+        "numpy": np.__version__,
+        "history": history,
+        "prediction": prediction,
+        "exact_reload": True,
+        "exact_option_permutation": True,
         "seconds": time.perf_counter() - started,
-        "artifacts": {name: {"sha256": sha(output / name),
-                               "bytes": (output / name).stat().st_size}
-                      for name in ("initial.pt", "final.pt")},
+        "artifacts": {
+            name: {"sha256": sha(output / name), "bytes": (output / name).stat().st_size}
+            for name in ("initial.pt", "final.pt")
+        },
     }
     write(output / "result.json", result)
     print(json.dumps(result, indent=2))
