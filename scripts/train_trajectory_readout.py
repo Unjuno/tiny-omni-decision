@@ -26,6 +26,14 @@ PINS = {
 }
 
 
+def verify_media_binding(row, media):
+    expected = media.get(row["video_id"])
+    if expected is None or (
+        row["split"] != expected["split"] or row["media_sha256"] != expected["sha256"]
+    ):
+        raise ValueError("feature media binding changed")
+
+
 def load_inputs(video_dir, text_dir):
     hashes, pairs = {}, {}
     for split, pin in PINS.items():
@@ -43,6 +51,17 @@ def load_inputs(video_dir, text_dir):
     }
     if video.get("manifest_hashes") != expected_manifests:
         raise ValueError("media manifest provenance changed")
+    media, seen_media_hashes = {}, set()
+    for split, pin in expected_manifests.items():
+        manifest = ROOT / f"perception-occlusion-{split}-media-01/manifest.json"
+        if sha(manifest) != pin:
+            raise ValueError("actual media manifest changed")
+        hashes[str(manifest)] = pin
+        for row in json.loads(manifest.read_text())["clips"]:
+            if row["video_id"] in media or row["sha256"] in seen_media_hashes:
+                raise ValueError("duplicate media identity/content")
+            media[row["video_id"]] = dict(row, split=split)
+            seen_media_hashes.add(row["sha256"])
     if text["status"] != "PASS_FROZEN_TEXT_FEATURES":
         raise ValueError("verified text features required")
     if text["pair_hashes"] != PINS:
@@ -51,9 +70,8 @@ def load_inputs(video_dir, text_dir):
         hashes[str(folder / "result.json")] = sha(folder / "result.json")
     bank, identities, contents = {}, {}, {"train": set(), "valid": set()}
     video_dim = 512
-    if video_dim != 512:
-        raise ValueError("unsupported video feature dimension")
     for row in video["features"]:
+        verify_media_binding(row, media)
         key = row["video_id"]
         if key in bank or sha(Path(row["path"])) != row["sha256"]:
             raise ValueError("duplicate/changed video feature")
@@ -104,8 +122,6 @@ def batch(bank, data, indices, control="normal"):
         value = bank[data["pairs"][video_index]["video_id"]]
         if control == "zero":
             value = torch.zeros_like(value)
-        elif control == "reverse":
-            value = value.flip(0)
         clips.extend([value, value])
         texts.append(data["text"][2 * index : 2 * index + 2])
         targets.append(data["targets"][2 * index : 2 * index + 2])

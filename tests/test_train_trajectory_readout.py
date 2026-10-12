@@ -25,3 +25,14 @@ def test_incomplete_extraction_cannot_start_training(tmp_path, monkeypatch):
     (text / "result.json").write_text(json.dumps({"status": "PASS_FROZEN_TEXT_FEATURES"}))
     with pytest.raises(ValueError, match="complete video feature extraction required"):
         load_inputs(video, text)
+
+
+def test_feature_media_binding_rejects_misrouting():
+    from scripts.train_trajectory_readout import verify_media_binding
+
+    media = {"clip": {"split": "train", "sha256": "expected"}}
+    row = {"video_id": "clip", "split": "train", "media_sha256": "expected"}
+    verify_media_binding(row, media)
+    for field, value in (("split", "valid"), ("media_sha256", "changed"), ("video_id", "other")):
+        with pytest.raises(ValueError, match="media binding"):
+            verify_media_binding(dict(row, **{field: value}), media)
