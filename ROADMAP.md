@@ -988,3 +988,10 @@ Dense temporal occlusion comparison completed on 99 train / 257 validation video
 Mean and attention reach 39.11% / 38.91% selected Accuracy, near the train-only prior;
 mismatched videos do not reduce Accuracy and later epochs overfit. Neither head
 is promoted. [Results and controls](docs/pretrained_reuse/R2_OCCLUSION_RESULTS_20261013.md).
+
+
+Frozen TAPIR trajectory plus initial-appearance comparison also completed:
+356 clips, seed17,50 epochs, selected epoch11 Accuracy38.91%. Changed-target
+pairs remain0/127 jointly correct; later epochs overfit. Train-only ablations
+show both feature blocks affect fitting, but do not establish useful identity
+reasoning. No promotion or compression. [Results and uncertainty](docs/pretrained_reuse/R2_TRAJECTORY_DECISION_RESULTS_20261013.md).

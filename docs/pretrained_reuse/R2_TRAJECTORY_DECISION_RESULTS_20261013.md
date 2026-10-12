@@ -122,3 +122,18 @@ Artifact:`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-trajectory-
 Next representation work must test hidden-object identity evidence, since initial
 appearance plus point motion does not explicitly encode what becomes visible
 later. This is a hypothesis to investigate, not a demonstrated root cause.
+
+## Initial-query timing check
+
+Pinned train annotations contain99 marked occluder tracks;98 have an unmasked
+frame0 box and all99 have a pre-cut observation. Therefore a blanket explanation
+that the relevant covering objects enter after the initial query frame is not
+supported. These are covering-object tracks, not an oracle label identifying the
+hidden object's pixels. Missing annotation is not proof of invisibility, and
+frame0 coverage does not establish identity tracking through occlusion.
+
+Read-only timing inventory retained at
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-initial-query-coverage-01.json`.
+The inventory records every train track's label, marked-occluder flag and first
+unmasked annotated frame; annotation SHA256 is checked against the existing pin.
+No new extraction/training is justified solely by the late-entry hypothesis.
