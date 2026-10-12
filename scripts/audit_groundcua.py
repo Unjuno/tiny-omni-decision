@@ -7,9 +7,6 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import quote
 
-import requests
-from PIL import Image
-
 from scripts.range_generalization import write
 
 REVISION = "5d6845b0116029d46ec762e734701c5b8ce207c3"
@@ -17,6 +14,8 @@ REPO = "ServiceNow/GroundCUA"
 
 
 def fetch(path):
+    import requests
+
     url = f"https://huggingface.co/datasets/{REPO}/resolve/{REVISION}/{quote(path)}"
     response = requests.get(url, timeout=45)
     response.raise_for_status()
@@ -26,6 +25,9 @@ def fetch(path):
 
 
 def main():
+    import requests
+    from PIL import Image
+
     output = Path("C:/CodexArtifacts/pretrained-reuse-r2/groundcua-source-audit-01")
     output.mkdir(exist_ok=False)
     response = requests.get(

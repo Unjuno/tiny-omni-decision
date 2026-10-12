@@ -7,8 +7,6 @@ import random
 from collections import Counter
 from pathlib import Path
 
-from PIL import Image
-
 from scripts.audit_groundcua import REVISION, fetch
 from scripts.range_generalization import sha, write
 
@@ -24,6 +22,8 @@ def split_apps(apps):
 
 
 def main():
+    from PIL import Image
+
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
     source = root / "groundcua-source-audit-01/inventory.json"
     inventory = json.loads(source.read_text())
