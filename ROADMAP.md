@@ -654,3 +654,12 @@ all-block runs, and produces16384 unique mixed-source encounters. All original
 records were used in inherited last-block training. Storage failed:622MB free
 versus705MB required, so no learning run started.
 [Evidence and retention budget](docs/pretrained_reuse/R2_TEXT_COVERAGE_PREFLIGHT_20261012.md).
+
+### Broader text coverage continuation completed (2026-10-12)
+
+Storage was freed and a separate2048-update run completed, selecting1792 by the
+fixed validation rule. Original textAccuracy improves61.54% to63.58%; curriculum
+81.54% to84.08%, with lower NLL/Brier/ECE. This is one reused-development-validation
+result, not95% or a causal coverage-only claim. Existing multimodal towers remain
+unchanged; selected/final artifacts and all curves are preserved.
+[Results, uncertainty and accounting](docs/pretrained_reuse/R2_TEXT_COVERAGE_RESULTS_20261012.md).

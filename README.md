@@ -400,3 +400,12 @@ of977 errors in untruncated inputs; score questions reach46.24% exact Accuracy.
 Longer context and dismissing errors as label noise lack supporting evidence.
 All questions retained; no training or new inference.
 [Attribution and limits](docs/pretrained_reuse/R2_TEXT_ERROR_ATTRIBUTION_20261012.md).
+
+### Broader text coverage continuation completed (2026-10-12)
+
+Storage was freed and a separate2048-update run completed, selecting1792 by the
+fixed validation rule. Original textAccuracy improves61.54% to63.58%; curriculum
+81.54% to84.08%, with lower NLL/Brier/ECE. This is one reused-development-validation
+result, not95% or a causal coverage-only claim. Existing multimodal towers remain
+unchanged; selected/final artifacts and all curves are preserved.
+[Results, uncertainty and accounting](docs/pretrained_reuse/R2_TEXT_COVERAGE_RESULTS_20261012.md).
