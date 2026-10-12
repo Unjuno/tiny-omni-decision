@@ -27,3 +27,23 @@ encoded candidate features, but superiority is a hypothesis requiring actual
 load, resource measurements and fixed condition/evidence controls. No current
 candidate resolves the four-modality95–98% goal. Continue R1 admission before
 allocating another full-corpus quality experiment.
+
+## Public-link and released-hparams check
+
+Both Tiny/Small official weight landing pages returned200 and named the expected
+.ckpt files. This proves landing-page availability, not full weight retrieval.
+The two released YAML hparams files were actually downloaded from the README's
+Drive IDs and preserved locally:
+
+- Tiny1424bytes,SHA25648e441debf3f9d350fb3b9bab7fca5812f7f93e20f746ae71e8d35453d041b84.
+- Small1435bytes,SHA256ed573fc9ad074d3701aa784fde6bc1591fba6881a506826868136fec06033618.
+
+Both specify3frames,224px,12layers,vocabulary30522,max_text_len40,MLM+ITM
+pretraining; Tiny hidden192/3heads and Small hidden384/6heads. These are released
+training settings, not our experiment choices or proof of runtime capability.
+Long existing question-plus-candidate input requires an explicit token-length
+check; do not silently truncate conditions or rephrase repeatedly against scores.
+Pinned allinone_module.py and heads.py were fetched for compatibility inspection.
+The main environment and all prior artifacts are unchanged. Weight license,
+checkpoint content, exact resident count and actual forward remain unverified.
+Local link-check.json and hparams-fetch.json record HTTP status, sizes and hashes.
