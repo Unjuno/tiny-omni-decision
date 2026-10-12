@@ -811,3 +811,12 @@ images. Shared VideoPrism global/spatial Accuracy is 90.77%/90.92%; the paired
 with a larger train/validation gap. Keep both artifacts; no product adoption or
 95% claim. The image stack is 133,475,584 pre-quantization parameters; a complete
 Omni runtime remains unverified. [Curves, hashes and controls](docs/pretrained_reuse/R2_SHARED_SPATIAL_RESULTS_20261012.md).
+
+
+### Shared global runtime export (2026-10-12)
+
+Algebraically folding repeated global cells reduces the image readout from
+1,720,576 to 246,016 parameters without changing any of 2,048 saved answers.
+Eight raw images reproduce cached features exactly and produce32 matching typed
+JSON decisions. This is a fixed-taxonomy runtime check, not a general Omni
+quality result. [Measured export and remaining gates](docs/pretrained_reuse/R2_SHARED_GLOBAL_RUNTIME_20261012.md).

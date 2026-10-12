@@ -48,7 +48,8 @@ def main():
     assert all(d.platform == "cpu" for d in jax.devices())
     start = time.perf_counter()
     model = vp.get_model("videoprism_public_v1_base")
-    variables = vp.load_pretrained_weights("videoprism_public_v1_base", checkpoint_path=str(weights))
+    variables = vp.load_pretrained_weights(
+        "videoprism_public_v1_base", checkpoint_path=str(weights))
     load_seconds = time.perf_counter() - start
     encode = jax.jit(lambda x: model.apply(variables, x, train=False,
         return_intermediate={"spatial_features"})[1]["spatial_features"])
