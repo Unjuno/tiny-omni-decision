@@ -909,3 +909,11 @@ scoring across candidate sets, returning custom-ID JSON. Eight existing assets /
 probabilities also match but its raw-score gate fails; that limitation is retained.
 This is transcript-choice runtime parity, not general audio or joint-Omni quality.
 [Both backend results and failure records](docs/pretrained_reuse/R2_NATIVE_SPEECH_RUNTIME_20261012.md).
+
+### Native sensor time-aware JSON (2026-10-12)
+
+The selected static sensor head reproduces eight saved validation outputs with
+zero changed answers. The API preserves all twelve classes and explicitly marks
+the central label's 1.26 seconds of future evidence; it rejects premature queries.
+This verifies delayed-window runtime semantics, not instantaneous or joint quality.
+[Replay and limits](docs/pretrained_reuse/R2_NATIVE_SENSOR_RUNTIME_20261012.md).

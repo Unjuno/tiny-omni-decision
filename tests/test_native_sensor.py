@@ -74,3 +74,39 @@ def test_unsupported_request_fails_closed(tmp_path, change):
         data["criterion"] = {"kind": "text", "value": "different task"}
     with pytest.raises(ValueError):
         decide_sensor(NativeSensorDecision(), ObservationBatch.model_validate(data))
+
+
+def test_center_runtime_timing_and_full_taxonomy(tmp_path):
+    from tiny_omni_decision.native_sensor import ACTIVITY_CODES
+    from tiny_omni_decision.native_sensor_runtime import StaticSensor, decide_sensor_window
+
+    data = request(tmp_path).model_dump()
+    data["options"] = [
+        dict(option_id=f"activity-{c}", attributes={"activity_code": c}) for c in ACTIVITY_CODES
+    ]
+    batch = ObservationBatch.model_validate(data)
+    model = StaticSensor().eval()
+    result = decide_sensor_window(model, batch, query_time_ms=2540, clock_id="relative")
+    assert result["temporal_scope"]["label_time_ms"] == 1280
+    assert result["temporal_scope"]["future_evidence_ms"] == 1260
+    json.dumps(result, allow_nan=False)
+    reverse = decide_sensor_window(
+        model,
+        batch.model_copy(update={"options": batch.options[::-1]}),
+        query_time_ms=2540,
+        clock_id="relative",
+    )
+    assert result["options"] == reverse["options"][::-1]
+    for time, clock in [(1280, "relative"), (2540, "other"), (float("nan"), "relative")]:
+        with pytest.raises(ValueError):
+            decide_sensor_window(model, batch, query_time_ms=time, clock_id=clock)
+    with pytest.raises(ValueError, match="12"):
+        decide_sensor_window(model, request(tmp_path), query_time_ms=2540, clock_id="relative")
+    obs = batch.observations[0].model_copy(update={"valid_mask": (False,) * 128})
+    missing = decide_sensor_window(
+        model,
+        batch.model_copy(update={"observations": (obs,)}),
+        query_time_ms=2540,
+        clock_id="relative",
+    )
+    assert missing["status"] == "abstain"
