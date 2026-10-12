@@ -55,3 +55,20 @@ def test_grouped_loss_preserves_equal_task_weight_and_label_order():
     torch.testing.assert_close(fixed_taxonomy_loss(logits, targets), expected)
     with pytest.raises(ValueError):
         fixed_taxonomy_loss(logits, targets.T)
+
+
+def test_anchored_penalty_value_gradient_and_frozen_anchor():
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.count_diagnostic import anchored_weight_penalty
+
+    anchor = torch.ones(2, 3, requires_grad=True)
+    weight = torch.full((2, 3), 2.0, requires_grad=True)
+    penalty = anchored_weight_penalty(weight, anchor, 0.1)
+    assert float(penalty.detach()) == pytest.approx(0.15)
+    penalty.backward()
+    torch.testing.assert_close(weight.grad, torch.full_like(weight, 0.05))
+    assert anchor.grad is None
+    assert anchored_weight_penalty(anchor, anchor, 0.1).item() == 0
+    for coefficient in (-1, float("nan")):
+        with pytest.raises(ValueError):
+            anchored_weight_penalty(weight, anchor, coefficient)

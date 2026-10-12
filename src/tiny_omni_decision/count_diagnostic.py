@@ -59,3 +59,13 @@ def fixed_taxonomy_loss(logits, targets):
     if logits.ndim != 3 or targets.shape != logits.shape[:2]:
         raise ValueError("[image,task,class] logits and aligned [image,task] targets required")
     return functional.cross_entropy(logits.flatten(0, 1), targets.flatten())
+
+
+def anchored_weight_penalty(weight, initial, coefficient):
+    """Mean per-output squared departure; bias is deliberately excluded."""
+    import math
+
+    if (weight.ndim != 2 or weight.shape != initial.shape or not weight.shape[0]
+            or not math.isfinite(coefficient) or coefficient < 0):
+        raise ValueError("matching weight matrices and finite nonnegative coefficient required")
+    return coefficient * (weight - initial.detach()).square().sum() / (2 * weight.shape[0])
