@@ -65,3 +65,21 @@ Do not silently truncate, discard long examples or claim the original input
 contract works. A prospective meaning-preserving serialization could be fixed
 without score-based prompt search, but is not yet implemented/evaluated.
 This diagnostic accesses train only, no weights or validation scores.
+
+## Fixed prospective compact serialization
+
+Implemented `occlusion_statement` for the two exact audited question templates
+and eight exact candidate relations. It retains occlusion/similar-object context,
+beginning/end, person's viewpoint, hidden object and the complete candidate
+relation (including distance vs left-order wording). Unknown inputs fail closed.
+It neither reads targets nor maps option indices to geometric ranks.
+
+Using the same pinned BERT vocabulary, all594 train candidate statements fit:
+28–32 tokens including special tokens, no truncation. Each example keeps three
+distinct statements. Tests cover all16 template/relation combinations and unknown
+input rejection. This fixed wording was defined before any model scores, not
+selected from a prompt sweep. Semantic adequacy still requires actual task
+validation; text-length admission is not model quality or license admission.
+
+Artifact:`all-in-one-source-audit-01/compact-text-audit.json` preserves every
+statement, token length and pair-file SHA256. All old inputs/runs are untouched.
