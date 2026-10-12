@@ -24,3 +24,22 @@ sensor model without an explicitly different input contract.
 This observation changes the next step to raw/processed time-base verification;
 it does not establish a dataset defect, reject all VIDIMU trials, or produce a
 model-quality result. The analysis archive download is still running.
+
+## Processed time-base follow-up
+
+`scripts/inspect_vidimu_timebase.py` inspected only the same training trial's
+original .sto and .mot. Both contain 1,817 rows, 0 through 36.32 seconds with
+0.02-second spacing. The .sto explicitly declares DataRate=50. Thus the 50Hz
+assumption is supported for these processed records, but not raw row indices.
+Their duration agrees closely with raw positive timestamps (36.32456 seconds).
+This narrows the issue to raw/processed sampling conversion and initial-row
+handling, rather than demonstrating a global recording-duration discrepancy.
+Results and member hashes:
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-training-timebase-audit-01/result.json`.
+
+The first analysis download exited with a requests read timeout; its output is
+preserved. A separate IPv4 curl download is active in
+`C:/CodexArtifacts/pretrained-reuse-r2/vidimu-analysis-audit-02`, using HTTPS
+verification, 15-second connection timeout, 600-second total limit and a
+60-second low-speed limit. No data from that archive is trusted until the same
+pinned size/MD5 checks pass. The failed process was not killed or restarted.
