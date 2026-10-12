@@ -67,3 +67,37 @@ quality improvement. Geometry alone omits appearance needed to associate a
 question with its object. A subsequent readout experiment must account for that
 limitation and retain mismatch/condition controls; the previous failed pooled
 feature probes remain unchanged.
+
+
+## Reuse of tracker appearance features
+
+The pinned TAPIR `get_query_features` API supplies low-resolution and
+high-resolution query appearance descriptors. Concatenating its first-resolution
+descriptors gives 384 values for each of the same 256 grid points. This uses the
+existing 31,072,327 frozen parameters and does not add another encoder.
+
+A real GPU inference probe on video_10103 compares descriptors from just frame0
+with descriptors from frames0–31, using identical queries at t=0. Maximum absolute
+difference is **8.195639e-7**. The inspected extractor processes frames through a
+shared spatial ResNet; it does not temporally pool the query descriptor. This
+supports extracting initial appearance from frame0 for this configuration,
+without claiming equality across every backend or clip. Both arrays are retained.
+First-frame and 32-frame calls took 0.187996 and 0.133865 seconds respectively;
+this ordered cold/warm pair is not a speed benchmark.
+
+Concatenation with the verified ordered trajectory features produces **256×512**
+inputs (128 geometry/uncertainty + 384 initial appearance). All values are finite.
+No labels or annotation masks were used to select points. No Decision training,
+validation selection, or quality evaluation was performed. Initial descriptors
+are tracking representations, not proven semantic embeddings; they also cannot
+represent an object absent from the initial query grid/frame.
+
+Outputs and hashes:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-grid256-appearance-01/`.
+Exact script:
+`C:/CodexArtifacts/pretrained-reuse-r1/tapir-audit-01/grid256_appearance.py`.
+Combined feature SHA-256:
+`a6bf8f12299309e034c5bdca655540131f4e3afaef922fdeecb3ec79b357f07c`.
+Existing models and outputs are unchanged. A subsequent conditional readout
+must use the full fixed grid and retain video-mismatch controls, rather than
+selecting the target trajectory with ground-truth boxes.
