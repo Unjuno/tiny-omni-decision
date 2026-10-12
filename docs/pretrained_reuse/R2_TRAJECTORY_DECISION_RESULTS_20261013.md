@@ -137,3 +137,34 @@ Read-only timing inventory retained at
 The inventory records every train track's label, marked-occluder flag and first
 unmasked annotated frame; annotation SHA256 is checked against the existing pin.
 No new extraction/training is justified solely by the late-entry hypothesis.
+
+## Exact-frame train tracking diagnostic
+
+Read the existing train feature cache only. For each marked covering-object track,
+require an unmasked frame0 annotation. Among grid queries inside that box, choose
+the nearest to its center (oracle initialization). Compare saved xy only where a
+nonzero sampled frame exactly matches an unmasked annotation; no box interpolation.
+All feature SHA256 values and the pinned train annotation archive were checked.
+
+Of99 train videos,71 have eligible later exact-frame comparisons, totaling108
+points. The selected track falls inside the covering-object box at72/108 points.
+Mean normalized center error is0.105969 versus0.149384 for retaining the initial
+point. Using one mean error difference per video,48/71 improve; mean difference
+is-0.040782. Video bootstrap with replacement,10,000 draws,NumPy default_rng17,
+percentile95 interval:[-0.066221,-0.016773].
+
+This confirms some usable motion information in the actual retained features.
+It neither proves continuous identity retention between sparse observations nor
+solves which covering object hides the target. Oracle initialization, varying
+numbers of observations and incomplete temporal coverage limit this diagnostic.
+Do not treat72/108 as Decision Accuracy or apply it to all356 videos.
+
+Artifact:`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-grid-track-exact-train-01.json`.
+Contains per-video selected grid index, exact frames, tracked/static errors,
+box-membership result, source hashes and explicit missing-coverage records.
+No model inference, training, checkpoint selection or validation use was needed.
+The fixed trajectory experiment therefore supports motion reuse but still fails
+the conditional-semantic gate. Future work must explicitly connect target identity,
+covering-object association and condition-dependent readout.
+
+CI for documentation commit0fad303: both workflows completed successfully.
