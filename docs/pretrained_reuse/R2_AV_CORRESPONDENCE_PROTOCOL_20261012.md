@@ -257,3 +257,23 @@ It passed the initial complete-manifest, recording identity, all-media SHA256 an
 exact cross-split media-duplicate gates and began producing windows. This records
 launch and initial gates only: full decode, prepared-content checks, feature
 extraction and development comparison remain incomplete until their reports pass.
+
+## Fixed development runner prepared
+
+`scripts.train_av_correspondence` implements the predeclared256/200 comparison:
+seed17,100 epochs,64D bias-free projections,AdamW0.001/0.01, quartet batches,
+earliest minimum validation NLL. Complete PASS windows, pinned routing and exact
+feature IDs/hashes are mandatory. Best and final checkpoints are separate and
+both must reproduce their recorded validation metrics after reload. Every epoch
+records train and validation metrics; controls retain all probabilities and IDs.
+No encoder is loaded or updated by this readout fit.
+
+`scripts.bootstrap_av_correspondence` uses10,000 shared quartet resamples with
+seed17 and95% percentile intervals, including paired best-minus-untrained
+differences. These are development intervals after checkpoint selection, not
+blind-test intervals or evidence of participant independence. The reversed-option
+control uses remapped targets. Existing artifacts remain unchanged.
+
+Ruff and609 CPU tests passed (one optional test skipped). Full preprocessing was
+still running at this code checkpoint; neither full feature extraction nor this
+development fit has executed. Runner availability is not a measured quality result.
