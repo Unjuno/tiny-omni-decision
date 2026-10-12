@@ -167,3 +167,19 @@ The100% finite-input and full356 coverage gates must pass before fitting. Smoke
 runs use separate processes and outputs and do not select hyperparameters. This
 comparison tests whether temporal window readout uses video evidence for this
 narrow family; it cannot establish the complete Omni product objective.
+
+## Readout execution preparation
+
+Frozen text extraction completed all712 questions in a separate CPU process,
+using the existing MiniLM revision and unchanged mean-pooling/feature formula.
+Every feature was repeated with exact equality. Artifacts:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-text-features-01`.
+The report pins model/tokenizer files, pair manifests, identities and feature files.
+
+`train_occlusion_readout.py` implements the predeclared two-head fit and controls.
+It rejects an incomplete video extraction, changed feature hashes or routing,
+nonfinite values and cross-split prepared-window duplicates. Six focused CPU tests
+passed, including padding/permutation, temporal order, paired aggregation, control
+routing and rejection of incomplete extraction. No new fit has run yet: the full
+video feature process remains active. This is preparation, not a quality result.
+CI for295e2f8 passed both runs after the optional-Torch collection fix.
