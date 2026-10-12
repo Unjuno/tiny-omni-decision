@@ -683,3 +683,15 @@ without the prefix still scores48.83%. All legacy reference probabilities replay
 exactly. Both weaknesses coexist; no template-specific fix or product adoption.
 [Factorial results](docs/pretrained_reuse/R2_TRANSFER_FACTORIAL_RESULTS_20261012.md)
 and [factual correction](docs/pretrained_reuse/R2_TRANSFER_FIELD_AUDIT_20261012.md).
+
+
+### Compact pretrained NLI check (2026-10-12)
+
+A pinned DeBERTa xsmall checkpoint has **70,830,722 actual parameters**, including
+embeddings. On the unchanged 256-question numerical-condition diagnostic it
+scored **30.47% Accuracy**, NLL 1.1430, Brier 0.7001 and ECE 0.2041;
+opposite conditions changed no answers (0/128 pairs). No training or prompt
+search was performed. This candidate is not adopted, and the result is not
+a general capacity ceiling. The four-modality >=95% goal remains unmet.
+[Load audit](docs/pretrained_reuse/R1_DEBERTA_XSMALL_20261012.md) and
+[fixed diagnostic](docs/pretrained_reuse/R2_DEBERTA_NLI_RESULTS_20261012.md).
