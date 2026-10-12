@@ -2,10 +2,13 @@
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
+import platform
 import random
 import subprocess
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -89,6 +92,13 @@ def main():
         source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         runner_sha256=sha(Path(__file__)),
         inputs=HASHES,
+        started_at=datetime.now(UTC).isoformat(),
+        python=platform.python_version(),
+        packages={name: importlib.metadata.version(name)
+                  for name in ("torch", "numpy", "transformers")},
+        cuda=torch.version.cuda,
+        tf32_matmul=torch.backends.cuda.matmul.allow_tf32,
+        tf32_cudnn=torch.backends.cudnn.allow_tf32,
         seed=17,
         epochs=1 if a.smoke else 24,
         cache_hashes=cache_hashes,
@@ -192,6 +202,7 @@ def main():
                 optimizer.step()
                 losses.append(float(loss.detach()))
                 norms.append(float(norm))
+            evaluation_start = time.perf_counter()
             validation = predict("val")
             training = predict("train")
             quality = _quality_metrics(validation, targets["val"])
@@ -199,6 +210,7 @@ def main():
                 epoch=epoch,
                 elapsed_seconds=time.perf_counter() - trained_start,
                 peak_vram_bytes=torch.cuda.max_memory_allocated(),
+                evaluation_seconds=time.perf_counter() - evaluation_start,
                 rolling_ce=float(np.mean(losses)),
                 gradient_norm_mean=float(np.mean(norms)),
                 train=_quality_metrics(training, targets["train"]),
@@ -257,6 +269,7 @@ def main():
         a.output / "result.json",
         dict(
             status="PASS_EXECUTION_ONLY",
+            finished_at=datetime.now(UTC).isoformat(),
             smoke=a.smoke,
             conditions=results,
             cache_hashes=cache_hashes,
