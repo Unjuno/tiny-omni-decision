@@ -820,3 +820,12 @@ Algebraically folding repeated global cells reduces the image readout from
 Eight raw images reproduce cached features exactly and produce32 matching typed
 JSON decisions. This is a fixed-taxonomy runtime check, not a general Omni
 quality result. [Measured export and remaining gates](docs/pretrained_reuse/R2_SHARED_GLOBAL_RUNTIME_20261012.md).
+
+
+### One shared visual encoder process (2026-10-12)
+
+A single114,365,184-parameter VideoPrism tree now serves explicit image and
+video profiles. Alternating raw image/video requests exactly reproduce prior
+features, with unchanged weight hashes and a measured1.20GB process peak.
+This verifies feature sharing, not joint quality or physical backend buffer
+deduplication. [Execution and timing limits](docs/pretrained_reuse/R2_SHARED_VISUAL_ENCODER_20261012.md).
