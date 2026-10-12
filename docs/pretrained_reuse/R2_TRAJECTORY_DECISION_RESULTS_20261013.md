@@ -169,7 +169,7 @@ covering-object association and condition-dependent readout.
 
 CI for documentation commit0fad303: both workflows completed successfully.
 
-## Grounding/orientation feasibility check
+## Grounding/orientation feasibility check (full aggregate invalid; see correction)
 
 Visually inspected fixed train video10103 at frames0,90,180,270,360,458,
 all before the reveal cut. There are two covering glasses, consistent with the
@@ -253,3 +253,25 @@ explicit difference fixed across its arms. They must not be called identical
 preprocessing or evidence isolating encoder architecture alone. No additional
 extraction is required to test whether the existing scene representation adds
 useful information; usefulness remains unproven.
+
+## Correction: ordinal diagnostic candidate semantics
+
+The previous101/198 and134/198 oracle-rank aggregates are INVALID and withdrawn.
+The diagnostic erroneously treated all target indices as left-to-right ordinals.
+Only82/99 train videos use first/second/third-from-left options.16 use closest /
+farthest /middle, and1 uses farthest /second-closest /third-closest. Canonical
+option sorting preserves text, but its indices are not a common spatial variable.
+This is a diagnostic implementation error, not a dataset-label error.
+
+Within the82 ordinal-option videos only, screen-left matches47 initial +46 final
+(93/164), screen-right59 initial +64 final (123/164). This restricted diagnostic
+is not a replacement benchmark: all99 remain in the actual training/evaluation.
+Do not compare these subset counts with full-corpus model Accuracy. The distance
+candidate cases need a separate person-relative geometry definition.
+
+Old diagnostic JSON is preserved for traceability. Correction artifact:
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-oracle-rank-semantics-correction-01.json`.
+No model run used the oracle-rank results as targets/features. Original models
+used actual candidate text and original targets; their reported metrics remain
+unchanged. Future semantic diagnostics must validate option meaning before
+mapping candidate indices to coordinates.
