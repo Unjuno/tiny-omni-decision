@@ -162,3 +162,23 @@ Next inspect publisher history for the source corresponding to the released
 checkpoint; retain strict key checking and avoid synthetic checkpoint repairs.
 Also retain source visual_embed's stochastic patch ordering when measuring parity:
 evaluation contains torch.multinomial, interacting with temporal token rolling.
+
+## Source-history resolution: actual strict transformer load
+
+File history inspection identified the initial publisher commit
+c6f4d5d18109f99ea748b11ed26a4b9239212cf4. Its temporal_embed declaration and use
+are commented out. The next March14 revision9917ef5 still failed strict loading;
+that attempt was preserved separately. Initial-commit vision,module,heads and
+roll sources are pinned/hashes saved in all-in-one-source-initial-01/source.json.
+
+Using the unchanged initial vision source, released Tiny config and actual
+checkpoint transformer tensors, strict=True reports all keys matched.
+Instantiated transformer parameters:5,524,416. No missing tensor synthesized,
+no strict=False fallback, no global environment change. Evidence:
+`all-in-one-tiny-weight-audit-01/vision-initial-strict-load.json` and reproducible
+`all-in-one-source-initial-01/load_vision.py`.
+
+This resolves this module's source compatibility, not full multimodal forward or
+checkpoint provenance beyond key/shape compatibility. Complete text/pooler/ITM
+load, original preprocessing, seeded-repeat behavior and actual predictions are
+still required before quality experiments. Product license remains REVIEW.
