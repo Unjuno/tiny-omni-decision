@@ -71,6 +71,11 @@ def main():
         "|---|---:|---:|---:|---:|",
     ]
     for config, result, history in triples:
+        if config["arm"] == "wording":
+            lines += [
+                "| Arm | Step | Selector | Original Accuracy | Curriculum Accuracy |",
+                "|---|---:|---:|---:|---:|",
+            ]
         for h in history:
             lines.append(
                 f"| {config['arm']} | {h['step']} | {h['selector']:.6f} | "

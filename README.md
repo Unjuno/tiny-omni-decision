@@ -464,3 +464,12 @@ multi-option distributions use the same serializer. Values are neither rounded
 nor recalibrated; malformed distributions fail closed. JSON is produced by
 Python, with no generated tokens or additional model parameters. This interface
 does not establish model quality or calibration.
+
+
+### Matched wording continuation result
+
+Two matched1,024-update runs completed. Both select their unchanged starting
+checkpoint; wording views improve endpoint NLL/Brier relative to repetition,
+but neither improves the fixed validation selector over initialization. Neither
+continuation is adopted. This is not a capacity ceiling or a generalization
+claim. [Full curves and comparison](docs/pretrained_reuse/R2_PAIRED_WORDING_RESULTS_20261012.md).

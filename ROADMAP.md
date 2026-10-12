@@ -706,3 +706,12 @@ constructed using known answers, not an available inference policy or a tested
 yes/no reformulation. Retain variable options (including binary questions),
 full-task quality gates and calibrated probabilities.
 [Cardinality analysis](docs/pretrained_reuse/R2_OPTION_CARDINALITY_20261012.md).
+
+
+### Matched wording continuation result
+
+Two matched1,024-update runs completed. Both select their unchanged starting
+checkpoint; wording views improve endpoint NLL/Brier relative to repetition,
+but neither improves the fixed validation selector over initialization. Neither
+continuation is adopted. This is not a capacity ceiling or a generalization
+claim. [Full curves and comparison](docs/pretrained_reuse/R2_PAIRED_WORDING_RESULTS_20261012.md).
