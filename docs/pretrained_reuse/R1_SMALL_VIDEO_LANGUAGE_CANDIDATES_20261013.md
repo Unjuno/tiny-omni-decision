@@ -47,3 +47,21 @@ Pinned allinone_module.py and heads.py were fetched for compatibility inspection
 The main environment and all prior artifacts are unchanged. Weight license,
 checkpoint content, exact resident count and actual forward remain unverified.
 Local link-check.json and hparams-fetch.json record HTTP status, sizes and hashes.
+
+## Actual input-length measurement
+
+Fetched BERT uncased vocabulary at immutable revision
+86b5e0934494bd15c9632b12f734a8a67f723594; SHA256
+07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3.
+With BertTokenizer(lowercase), concatenated each unchanged train question, one
+space and each candidate, including special tokens and no truncation. Across
+594 inputs, lengths39–43;562 exceed40. Saved all row lengths in
+`all-in-one-source-audit-01/text-length-audit.json`.
+
+Pinned model code passes max_text_len directly into BertConfig's
+max_position_embeddings. Thus enlarging a tokenizer limit alone is insufficient;
+a checkpoint position-embedding change would require a separate verified policy.
+Do not silently truncate, discard long examples or claim the original input
+contract works. A prospective meaning-preserving serialization could be fixed
+without score-based prompt search, but is not yet implemented/evaluated.
+This diagnostic accesses train only, no weights or validation scores.
