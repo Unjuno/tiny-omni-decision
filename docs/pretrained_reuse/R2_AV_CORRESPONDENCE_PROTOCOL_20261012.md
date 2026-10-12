@@ -194,3 +194,27 @@ and independent development comparison, not further fitting on these eight.
 
 Ruff and606 CPU tests passed (one optional test skipped). Source attribution and
 all original input/model artifacts are preserved; no GPU or paid compute used.
+
+## Fixed development media acquisition started
+
+The combined plan SHA256 is
+`0c6a07048c393d2fddd54fb3e72883055bb43634f9e3a8cac5d8570edcc39931`.
+All256 train and200 valid selections total5,938,164,261 bytes. The bounded loader
+raises on missing/duplicate members, wrong split, changed ZIP sizes/CRC, or disk
+reserve failure. It retains an8GB free-space reserve and a256MB per-member cap;
+no recording is substituted to satisfy that cap. Storage generations, exact
+members, cuts and metadata are in `perception-correspondence-acquisition-plan-01`.
+
+Source1091148 launched separate train and valid processes into fresh directories:
+`perception-correspondence-train-media-01` and
+`perception-correspondence-valid-media-01`. The first eight train files reference
+verified existing pilot files instead of copying them. Each downloaded member is
+ZIP-CRC checked, size checked and SHA256 hashed; an incomplete file retains its
+`.partial` suffix. Each completed record is logged immediately in manifest.json.
+This entry records launch, not completion, decoding, content-overlap clearance or
+training. No test/audit archive is accessed. The source and selected metadata are
+fixed; this is not annotation- or performance-based acquisition.
+
+Command template:
+`python -m scripts.acquire_av_correspondence --plan <plan.json> --plan-sha256 0c6a07048c393d2fddd54fb3e72883055bb43634f9e3a8cac5d8570edcc39931 --split train|valid --output <fresh>`.
+Local checks: Ruff passed;607 CPU tests passed and one optional test skipped.
