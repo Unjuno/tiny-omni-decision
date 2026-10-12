@@ -42,6 +42,8 @@ def aligned_evidence_json(predict, batch, class_ids, options, *, required_source
 
     if not required_sources or len(set(required_sources.values())) != len(required_sources):
         raise ValueError("distinct required source IDs needed")
+    if [o.option_id for o in batch.options] != [o["option_id"] for o in options]:
+        raise ValueError("output options must match observation batch IDs and order")
     aligned = align_observations(batch, [query_time_ms], max_age_ms=max_age_ms)
     selected, available = {}, {}
     for modality, source_id in required_sources.items():

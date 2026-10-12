@@ -45,12 +45,16 @@ def test_alignment_gate_uses_exact_source_and_causal_index():
         seen.append(selected)
         return [.8, .2]
 
-    result = aligned_evidence_json(predict, batch(), ['a', 'b'], OPTIONS,
+    result = aligned_evidence_json(predict, batch(), ['a', 'b'], [
+                                       {'option_id': 'a', 'class_id': 'a'},
+                                       {'option_id': 'b', 'class_id': 'b'}],
                                    required_sources={'video': 'v', 'audio': 'a'},
                                    query_time_ms=20, max_age_ms=12)
     assert result['status'] == 'selected'
     assert seen == [{'v': {'index': 2, 'age_ms': 0}, 'a': {'index': 1, 'age_ms': 5}}]
-    stale = aligned_evidence_json(predict, batch(), ['a', 'b'], OPTIONS,
+    stale = aligned_evidence_json(predict, batch(), ['a', 'b'], [
+                                       {'option_id': 'a', 'class_id': 'a'},
+                                       {'option_id': 'b', 'class_id': 'b'}],
                                   required_sources={'video': 'v', 'audio': 'a'},
                                   query_time_ms=100, max_age_ms=12)
     assert stale['status'] == 'abstain'
@@ -63,7 +67,21 @@ def test_alignment_gate_does_not_substitute_another_source():
     from tiny_omni_decision.evidence_decision import aligned_evidence_json
 
     result = aligned_evidence_json(lambda _: pytest.fail('unexpected inference'),
-                                   batch(), ['a', 'b'], OPTIONS,
+                                   batch(), ['a', 'b'], [
+                                       {'option_id': 'a', 'class_id': 'a'},
+                                       {'option_id': 'b', 'class_id': 'b'}],
                                    required_sources={'video': 'different_camera'},
                                    query_time_ms=20, max_age_ms=12)
     assert result['status'] == 'abstain'
+
+
+def test_batch_option_mismatch_rejected_before_inference():
+    from test_observation_alignment import batch
+
+    from tiny_omni_decision.evidence_decision import aligned_evidence_json
+
+    with pytest.raises(ValueError, match="batch IDs"):
+        aligned_evidence_json(lambda _: pytest.fail("unexpected inference"),
+                              batch(), ['a', 'b'], OPTIONS,
+                              required_sources={'video': 'v'},
+                              query_time_ms=20, max_age_ms=12)
