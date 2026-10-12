@@ -756,3 +756,12 @@ has an interval including zero; matched versus mismatched video shows a small
 +2.32pp scene-information signal. Both overfit and are rejected for product use.
 This supports a bounded token-readout diagnostic, not more epochs or a temporal
 reasoning claim. [Results](docs/pretrained_reuse/R2_VIDEO_GROUNDING_RESULTS_20261012.md).
+
+
+### Completed descriptive token comparison; transition to R2-M
+
+All three frozen-token modes completed24epochs. Attention39.99% versus mean38.91%
+has an uncertain difference; both exceed no-video35.83% on development metrics.
+Attention clearly overfits. Preserve as optional-criterion evidence, do not
+extend this family; prioritize the new modality-native/sensor-inclusive R2-M.
+[Measured report](docs/pretrained_reuse/R2_GROUNDING_TOKEN_RESULTS_20261012.md).
