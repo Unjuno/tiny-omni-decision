@@ -32,3 +32,14 @@ be needed, but is a separate design factor and not part of this comparison.
 No length extension, new training, or altered frozen corpus was performed.
 
 Artifacts: C:/CodexArtifacts/pretrained-reuse-r2/joint-context-preflight-01
+
+## Matched evidence implementation
+
+`encode_matched` now constructs both encodings from one shared state-token
+prefix, without decode/re-encode. All9,708 training/validation parent questions
+were checked using the real pinned local tokenizer: exact state-token identity,
+all candidates retained, and every row<=512tokens. Zero failures. No examples
+were removed. Matched truncation counts260training/117validation original
+questions; curriculum0. New artifact `joint-context-preflight-02` preserves the
+first audit. Details in R2_JOINT_MATCHED_CONTEXT_20261012.json.
+No model training or quality evaluation has started for this matched format.

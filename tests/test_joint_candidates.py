@@ -11,6 +11,28 @@ class Tokenizer:
         return {"input_ids": [3] * len(text.split())}
 
 
+def test_matched_paths_keep_identical_state_token_prefix():
+    from tiny_omni_decision.joint_candidates import encode_matched
+
+    class DistinctTokenizer(Tokenizer):
+        def __call__(self, text, add_special_tokens=False):
+            return {"input_ids": [sum(map(ord, w)) + 3 for w in text.split()]}
+
+    (joint, markers), pairs, meta = encode_matched(
+        DistinctTokenizer(), "pick", "one two three four five six seven eight nine ten",
+        ["a", "longer option b", "c"], 26,
+    )
+    evidence = []
+    for row in [joint, *pairs]:
+        evidence.append([x for x, t in zip(row["input_ids"], row["token_type_ids"], strict=True)
+                         if t == 1][:-1])
+        assert len(row["input_ids"]) <= 26
+    assert all(x == evidence[0] for x in evidence)
+    assert len(evidence[0]) == meta["kept_state_tokens"]
+    assert meta["state_truncated"]
+    assert len(markers) == len(pairs) == 3
+
+
 def test_joint_preserves_options_and_truncates_state_only():
     b, markers, meta = encode_joint(Tokenizer(), "pick minimum", "long " * 100,
                                      ["a", "b", "c"], max_length=24)

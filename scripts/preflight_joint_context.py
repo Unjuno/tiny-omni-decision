@@ -8,13 +8,13 @@ from transformers import AutoTokenizer
 
 from scripts.range_generalization import sha, write
 from scripts.train_frozen_text_probe import _load_examples
-from tiny_omni_decision.joint_candidates import encode_joint
+from tiny_omni_decision.joint_candidates import encode_joint, encode_matched
 from tiny_omni_decision.schema import DatasetManifest
 
 
 def main():
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
-    output = root / "joint-context-preflight-01"
+    output = root / "joint-context-preflight-02"
     if output.exists():
         raise FileExistsError(output)
     config_path = root / "paired-wording-control-01/config.json"
@@ -65,6 +65,16 @@ def main():
                 failures.append(dict(id=row["id"], error=str(error)))
                 continue
             assert len(markers) == len(row["options"])
+            (joint, _), pairs, matched_meta = encode_matched(
+                tokenizer, row["question"], row["state"], row["options"])
+            evidence = []
+            for encoded in [joint, *pairs]:
+                evidence.append([v for v, t in zip(encoded["input_ids"],
+                    encoded["token_type_ids"], strict=True) if t == 1][:-1])
+                assert len(encoded["input_ids"]) <= 512
+            assert all(v == evidence[0] for v in evidence)
+            counts["matched_evidence_verified"] += 1
+            counts["matched_state_truncated"] += int(matched_meta["state_truncated"])
             counts["joint_state_truncated"] += int(meta["state_truncated"])
             counts["joint_unpadded_tokens"] += len(batch["input_ids"])
             if meta["state_truncated"]:
