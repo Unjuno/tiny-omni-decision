@@ -88,6 +88,9 @@ def main():
     extraction = read(root / "extraction.json")
     assert len(extraction) == 456 and len({r["media_sha256"] for r in extraction}) == 456
     assert max(r["pooled_max_abs"] for r in extraction) <= 1e-5
+    for name, old in (("minilm_attention", "attention"), ("minilm_no_video", "no_video")):
+        previous = root.parent / "video-token-readout-01" / old / "history.json"
+        assert histories[name] == read(previous)
     predictions = {}
     for name, r in result["conditions"].items():
         for suffix in ("", "_shuffled"):
@@ -202,7 +205,7 @@ def main():
     lines += [
         f"- Extraction {result['extraction_seconds']:.3f}s; "
         f"total {result['total_seconds']:.3f}s; peak allocated VRAM "
-        f"{result['peak_vram_bytes']} bytes; local cost $0.",
+        f"{result['peak_vram_bytes']} bytes; cloud charges $0; electricity unmeasured.",
         "- Frozen video:114,365,184; text: MiniLM17,389,824 or shared Cross-Encoder22,713,601.",
         "  Mean/zero-video controls carry unused key/position parameters; active capacity differs.",
         "- Best/final weights separate; best reload exact. Original artifacts preserved.",
@@ -220,6 +223,20 @@ def main():
                 f"95% interval [{lo:+.6f}, {hi:+.6f}]."
             )
     lines += [
+        "",
+        "## Measured decision",
+        "",
+        "Neither text policy establishes useful video contribution: matched-minus-shuffled",
+        "and video-minus-no-video intervals include zero for Accuracy/NLL/Brier.",
+        "The shared policy selects epoch5 at49.79% macro Accuracy; its no-video model",
+        "selects epoch1 at50.18%. No sharing adoption or removal of existing MiniLM.",
+        "Both MiniLM24-epoch histories exactly reproduce the previous token-readout run.",
+        "Shared attention overfits after its selected epoch: train NLL falls from0.692803",
+        "to0.662739 while validation NLL rises from0.693170 to0.708971 by epoch24.",
+        "Low selected ECE accompanies near-chance predictions; it is not high quality.",
+        "Do not extend this same probe merely because the product target is unmet.",
+        "The next hypothesis needs different grounding evidence, not additional epochs",
+        "or a claim that the entire model family has reached its capacity ceiling.",
         "",
         "## Interpretation limits",
         "",

@@ -621,3 +621,12 @@ versus90.04% image Accuracy (paired difference uncertain), improved count NLL
 but worse color/texture metrics. No product adoption. Sharing is implemented
 for the image probe only; video compatibility and the combined <=200M runtime
 remain unverified. [Results](docs/pretrained_reuse/R2_SHARED_TEXT_IMAGE_RESULTS_20261012.md).
+
+### Shared text/video comparison (2026-10-12)
+
+All four fixed24-epoch runs completed; prior MiniLM curves reproduced exactly.
+Shared text features yield49.79% video macro Accuracy versus50.18% without video.
+Neither encoder shows a clear matched-video benefit; later shared training overfits.
+No sharing adoption or combined-runtime quality claim. This closes the sharing
+probe, not the <=200M / four-modality95% objective.
+[Curves, uncertainty and artifacts](docs/pretrained_reuse/R2_SHARED_TEXT_VIDEO_RESULTS_20261012.md).
