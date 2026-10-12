@@ -44,12 +44,15 @@ def load_inputs(video_dir, text_dir):
     for folder in (video_dir, text_dir):
         hashes[str(folder / "result.json")] = sha(folder / "result.json")
     bank, identities, contents = {}, {}, {"train": set(), "valid": set()}
+    video_dim = video.get("feature_dim", 768)
+    if video_dim not in (384, 768):
+        raise ValueError("unsupported video feature dimension")
     for row in video["features"]:
         key = row["video_id"]
         if key in bank or sha(Path(row["path"])) != row["sha256"]:
             raise ValueError("duplicate/changed video feature")
         value = np.load(row["path"], allow_pickle=False)
-        if value.ndim != 2 or value.shape[1] != 768 or not np.isfinite(value).all():
+        if value.ndim != 2 or value.shape[1] != video_dim or not np.isfinite(value).all():
             raise ValueError("invalid video features")
         bank[key] = torch.from_numpy(value)
         identities[key] = row["split"]
@@ -101,7 +104,7 @@ def batch(bank, data, indices, control="normal"):
         texts.append(data["text"][2 * index : 2 * index + 2])
         targets.append(data["targets"][2 * index : 2 * index + 2])
     width = max(len(x) for x in clips)
-    windows = torch.zeros(len(clips), width, 768)
+    windows = torch.zeros(len(clips), width, clips[0].shape[-1])
     mask = torch.zeros(len(clips), width, dtype=torch.bool)
     for i, clip in enumerate(clips):
         windows[i, : len(clip)] = clip
@@ -164,6 +167,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     bank, data, hashes = load_inputs(args.video, args.text)
+    video_dim = next(iter(bank.values())).shape[-1]
     args.output.mkdir(exist_ok=False)
     torch.set_num_threads(4)
     torch.use_deterministic_algorithms(True)
@@ -176,6 +180,7 @@ def main():
             weight_decay=0.01,
             batch_video_pairs=8,
             hidden=64,
+            video_dim=video_dim,
             selector="earliest minimum validation mean-question NLL",
             input_hashes=hashes,
             pair_hashes=PINS,
@@ -192,7 +197,7 @@ def main():
         folder.mkdir()
         torch.manual_seed(17)
         generator = torch.Generator().manual_seed(17)
-        model = TemporalWindowReadout(mode)
+        model = TemporalWindowReadout(mode, video_dim=video_dim)
         optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
         best, best_epoch, history, updates = float("inf"), None, [], 0
         start = time.perf_counter()
@@ -239,7 +244,7 @@ def main():
             p = predict(model, bank, data["valid"], control)
             predictions[control] = p.tolist()
             controls[control] = summarize(p, data["valid"]["targets"].numpy())
-        restored = TemporalWindowReadout(mode)
+        restored = TemporalWindowReadout(mode, video_dim=video_dim)
         restored.load_state_dict(torch.load(folder / "best.pt", weights_only=True))
         np.testing.assert_array_equal(predictions["normal"], predict(restored, bank, data["valid"]))
         write(

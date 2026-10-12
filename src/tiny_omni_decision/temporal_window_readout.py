@@ -7,20 +7,23 @@ from torch import nn
 
 
 class TemporalWindowReadout(nn.Module):
-    def __init__(self, mode="attention", hidden=64):
+    def __init__(self, mode="attention", hidden=64, video_dim=768):
         super().__init__()
         if mode not in {"attention", "mean"}:
             raise ValueError("unknown mode")
         self.mode = mode
+        if video_dim not in (384, 768):
+            raise ValueError("unsupported video feature dimension")
+        self.video_dim = video_dim
         self.query = nn.Linear(1536, hidden)
-        self.key = nn.Linear(768, hidden)
-        self.value = nn.Linear(768, hidden)
+        self.key = nn.Linear(video_dim, hidden)
+        self.value = nn.Linear(video_dim, hidden)
         self.position = nn.Linear(1, hidden, bias=False)
         self.scale = math.sqrt(hidden)
 
     def forward(self, windows, candidates, mask):
-        if windows.ndim != 3 or windows.shape[-1] != 768:
-            raise ValueError("expected [batch,windows,768]")
+        if windows.ndim != 3 or windows.shape[-1] != self.video_dim:
+            raise ValueError(f"expected [batch,windows,{self.video_dim}]")
         if mask.shape != windows.shape[:2] or mask.dtype != torch.bool:
             raise ValueError("aligned boolean window mask required")
         if not mask.any(-1).all():

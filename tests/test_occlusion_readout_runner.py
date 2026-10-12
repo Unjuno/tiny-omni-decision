@@ -4,10 +4,14 @@ import pytest
 torch = pytest.importorskip("torch")
 
 
-def test_batch_controls_keep_questions_and_targets():
+@pytest.mark.parametrize("video_dim", [384, 768])
+def test_batch_controls_keep_questions_and_targets(video_dim):
     from scripts.train_occlusion_readout import batch
 
-    bank = {"a": torch.arange(3.0).view(3, 1).expand(3, 768), "b": torch.full((2, 768), 8.0)}
+    bank = {
+        "a": torch.arange(3.0).view(3, 1).expand(3, video_dim),
+        "b": torch.full((2, video_dim), 8.0),
+    }
     data = dict(
         pairs=[dict(video_id="a"), dict(video_id="b")],
         text=torch.randn(4, 3, 1536),
@@ -60,14 +64,15 @@ def test_incomplete_extraction_fails_closed(tmp_path, monkeypatch):
         runner.load_inputs(video, text)
 
 
-def test_training_and_reload_synthetic_only(tmp_path, monkeypatch):
+@pytest.mark.parametrize("video_dim", [384, 768])
+def test_training_and_reload_synthetic_only(tmp_path, monkeypatch, video_dim):
     import json
     import sys
 
     import scripts.train_occlusion_readout as runner
 
     torch.manual_seed(123)
-    bank = {f"synthetic-{i}": torch.randn(2 + i % 3, 768) for i in range(8)}
+    bank = {f"synthetic-{i}": torch.randn(2 + i % 3, video_dim) for i in range(8)}
     data = {}
     for split, offset in (("train", 0), ("valid", 4)):
         data[split] = dict(
