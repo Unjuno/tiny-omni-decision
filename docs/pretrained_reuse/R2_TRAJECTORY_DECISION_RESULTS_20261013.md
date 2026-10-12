@@ -194,3 +194,26 @@ inputs or use them to select evaluation trajectories.
 Full diagnostic rows, exact comparison frames, object counts and both ranks:
 `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-oracle-rank-train-01.json`.
 No fitting, model inference, validation or sealed evaluation was performed.
+
+## Visual review of oracle-rank mismatches
+
+Diagnostic-only review selected the first three train records disagreeing with
+screen-right order:10212,10387,10886. This is intentionally failure-selected and
+must not estimate prevalence or quality. Contact sheet preserves frames0 and the
+previously compared final common annotation (1050/480/630 respectively):
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-train-visual-inspection-02/frames.png`.
+
+The views differ:10212 is an oblique table view,10387 has a row extending in depth
+at the start and a markedly different screen orientation at the end,10886 shows
+the covering glasses from the interacting person's side. Thus neither one global
+screen-left nor screen-right transform is an adequate definition of the explicit
+person-relative question. This observation does not verify every target or explain
+all mismatches. Initial/ending game state can also differ from first/last available
+annotation; the oracle-rank calculation remains a surrogate.
+
+Across all99 rows, screen-left matched49 initial/52 final answers; screen-right
+matched66 initial/68 final. Preserve both, not a per-example best orientation.
+Do not train an ordinal head using these surrogate ranks. A future approach must
+retain scene/person reference information and target-cover association rather
+than assuming static camera coordinates. No extra quality experiment is launched
+from these three visual observations alone.
