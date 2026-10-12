@@ -30,5 +30,5 @@ The current reused development set is not blind. Reject an aggregate-only gain
 without evidence sensitivity and condition-dependent correct answers. No sealed
 or product promotion. If not useful, close this comparison without a capacity sweep.
 
-Implementation stage: head unit tests pass; full input admission/training runner
-and real comparison are pending. No run has started under this protocol yet.
+Execution completed under sourcecdbe1fe; see R2_SCENE_TRAJECTORY_RESULTS_20261013.md.
+Head and control tests pass. Paired uncertainty analysis remains pending.
