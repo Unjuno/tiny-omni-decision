@@ -997,3 +997,40 @@ Frozen TAPIR trajectory plus initial-appearance comparison also completed:
 pairs remain0/127 jointly correct; later epochs overfit. Train-only ablations
 show both feature blocks affect fitting, but do not establish useful identity
 reasoning. No promotion or compression. [Results and uncertainty](docs/pretrained_reuse/R2_TRAJECTORY_DECISION_RESULTS_20261013.md).
+
+### Frozen slot and geometry decisions (2026-10-13)
+
+VideoSAUR feature extraction and fixed Decision evaluation completed. Correct
+video identity did not demonstrate a resolved quality benefit. On the separate
+79-fit/20-observed-development split, an interaction block improved train fit
+but lowered development Accuracy from42.5% to30.0%; no adoption.
+[Evidence controls](docs/pretrained_reuse/R2_SLOT_INTERNAL_EVIDENCE_CONTROLS_20261013.md).
+
+Slots retain linearly accessible information about their own mask centroids,
+including beyond a fixed slot-index prior. Actual decoder replay verifies the
+feature/mask correspondence on18 matched frames. This is not ground-truth tracking.
+An explicit geometry append was then tested with identical134-input initialization
+and fixed50epoch budget: both arms45% development Accuracy; NLL worsens while Brier
+improves. Stop this append comparison; preserve both artifacts, no promotion.
+[Matched experiment](docs/pretrained_reuse/R2_SLOT_GEOMETRY_COMPARISON_20261013.md).
+
+### Instruction reference follow-up (2026-10-13)
+
+Pinned FLAN-T5-small now loads with all checkpoint tensors verified:76,961,152
+parameters, input embeddings shared and output matrix distinct. This local adapter
+resolves the installed library's incompatible output tying without modifying the
+environment. It does not fit beside current VideoPrism and Whisper under200M.
+[Runtime audit](docs/pretrained_reuse/R1_FLAN_T5_RUNTIME_20261013.md).
+The fixed256-question diagnostic gives30.47% Accuracy, all answersA, zero correctly
+answered opposite-condition pairs. No adoption or additional fit is justified by
+that reference result. [Saved metrics](docs/pretrained_reuse/R2_FLAN_FIXED_CONDITION_20261013.md).
+
+Keep the independently scored BERT candidate as the stronger measured text
+reference; its lexical/range transfer failures remain explicit. Do not repeat the
+completed2,048-update small-decoder experiment or start prompt/seed searches to
+rescue these observed diagnostics. R2 still needs useful conditional-semantic and
+synchronized multimodal quality; R3/R4 adoption and R7/R8 release remain gated.
+Future experiments must specify a distinct intervention and prospective task
+contract before fitting, retain evidence-shuffle and candidate-order controls,
+and count the complete resident system. None of the new results qualifies the
+four-modality95–98% objective or changes the <=200M pre-quantization constraint.
