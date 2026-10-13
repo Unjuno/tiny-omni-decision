@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from scripts.clap_full_clip import duration_weighted_feature, window_spans
+from scripts.clap_progress_io import save_progress
 from scripts.clotho_acquisition_gate import complete_acquisition
 
 ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r2")
@@ -112,9 +113,7 @@ def main():
 
     def save():
         report["seconds"] = time.perf_counter() - started
-        temporary = output / "progress.tmp"
-        temporary.write_text(json.dumps(report, indent=2), encoding="utf-8")
-        temporary.replace(output / "progress.json")
+        save_progress(output / "progress.json", report)
 
     def encode(wave):
         prepared = frontend(wave, sampling_rate=48000, return_tensors="pt")
