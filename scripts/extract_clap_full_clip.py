@@ -28,7 +28,10 @@ def main():
     parser.add_argument("--scope", choices=("smoke", "full"), default="smoke")
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--max-seconds", type=int, default=900)
     args = parser.parse_args()
+    if args.max_seconds < 1:
+        raise ValueError("positive extraction time cap required")
     os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     import av
     import torch
@@ -97,6 +100,7 @@ def main():
         seed=17,
         deterministic_algorithms=True,
         native_padding=frontend.padding,
+        max_extraction_seconds=args.max_seconds,
         window_samples=480000,
         sample_rate=48000,
         tf32=False,
@@ -123,6 +127,8 @@ def main():
     save()
     try:
         for row in records:
+            if time.perf_counter() - started >= args.max_seconds:
+                raise TimeoutError("extraction time cap exceeded; corpus incomplete")
             with av.open(str(media / (row["source_id"] + ".wav"))) as container:
                 stream = container.streams.audio[0]
                 rate = stream.codec_context.sample_rate
