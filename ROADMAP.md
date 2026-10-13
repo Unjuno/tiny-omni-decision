@@ -1055,3 +1055,9 @@ Accuracy improves, but domain wording remains poor and numeric extrapolation is
 only43.3% with NLL3.03. No further budget extension or product promotion from these
 in-template gains. [Vocabulary](docs/pretrained_reuse/R2_SOFT_REPLAY_PREFIX_TRANSFER_20261013.md)
 and [numeric range](docs/pretrained_reuse/R2_SOFT_REPLAY_RANGE_20261013.md) results.
+
+Screen context follow-up: same-capacity crop+screen classification failed versus
+crop+zero. Independent replay verifies final train98.9% versus validation23.0%
+and NLL .092/6.378, confirming overfitting in this pilot. Close capacity/budget
+extension on these screens; task/representation and app diversity remain open.
+[Fixed-set gap and reload](docs/pretrained_reuse/R2_SCREEN_CONTEXT_GAP_20261013.md).
