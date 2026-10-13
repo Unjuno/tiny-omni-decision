@@ -1,5 +1,10 @@
 # Native visual extraction: launched, not yet complete
 
+**Completion update:** The5,367-source native job finished with all integrity
+checks; the fixed readout study also completed. See the
+[final results](R2_LOMBARD_GRID_RESULTS_20261014.md). This original launch snapshot
+and its JSON remain preserved below.
+
 The original frozen native JAX/Flax VideoPrism-B is actually extracting all
 5,367 common-valid AV assets. This report's adjacent JSON is a **start/progress
 snapshot**, not a finished result. Current state is the local progress file and

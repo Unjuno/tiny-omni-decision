@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 fixed native AV study completed:** Native extraction5,367/5,367 and
+audio/video/joint24-epoch comparisons actually completed. Selected macro slot
+Accuracy97.94%/30.15%/97.09%; joint-minus-audio−0.844pp, grouped95% interval
+[−1.498,−0.260], with worse NLL/Brier. Video best3 versus final24 shows overfitting;
+video mismatch does not establish useful joint contribution. Retain all artifacts
+and the narrow audio reference; do not extend/adopt pooled video fusion or promote
+an Omni product. R2 complementary visual/AV and general conditional quality remain
+open. Earlier pending snapshots below are historical.
+[Executed comparison and remaining gates](docs/pretrained_reuse/R2_LOMBARD_GRID_RESULTS_20261014.md).
+
 **2026-10-14 fixed native AV readout implemented:** Three-arm train-only GPU
 smoke passed at about70MB peak Torch allocation; explicit complete-cache gates
 prohibit using the running extraction's partial arrays. Same-budget full learning,

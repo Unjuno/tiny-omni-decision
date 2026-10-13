@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 native AV comparison completed:** All5,367 native feature extractions
+and three fixed24-epoch runs passed integrity/reload checks. Audio-only macro slot
+Accuracy97.94%, video30.15%, joint97.09%; joint worsens NLL/Brier and Accuracy versus
+audio. Retain the narrow audio research reference; no pooled-fusion adoption or
+generic Omni95–98% claim. Historical pending entries below describe earlier stages.
+[Full metrics, curves, controls and limits](docs/pretrained_reuse/R2_LOMBARD_GRID_RESULTS_20261014.md).
+
 **2026-10-14 native decision smoke:** Fixed51-option six-slot readouts passed
 two train-only GPU updates for audio/video/joint, with identical initialization/
 sampling and exact reload/JSON checks. No heldout score; full24-epoch learning
