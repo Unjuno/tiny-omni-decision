@@ -109,7 +109,9 @@ def load_valid(folder):
     )
 
 
-def evaluate(bank, data, output, hashes, checkpoints, model_factory=TrajectoryReadout):
+def evaluate(
+    bank, data, output, hashes, checkpoints, model_factory=TrajectoryReadout, input_dim=129
+):
     output.mkdir(exist_ok=False)
     torch.set_num_threads(4)
     torch.use_deterministic_algorithms(True)
@@ -118,7 +120,7 @@ def evaluate(bank, data, output, hashes, checkpoints, model_factory=TrajectoryRe
     for name, (path, expected_hash) in checkpoints.items():
         if sha(path) != expected_hash:
             raise ValueError("checkpoint changed")
-        model = model_factory(input_dim=129)
+        model = model_factory(input_dim=input_dim)
         model.load_state_dict(torch.load(path, map_location="cpu", weights_only=True), strict=True)
         model.requires_grad_(False)
         predictions[name] = {

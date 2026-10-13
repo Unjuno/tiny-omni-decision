@@ -116,13 +116,13 @@ def summary(probabilities, targets):
     return out
 
 
-def fit(bank, data, output, hashes, model_factory=TrajectoryReadout):
+def fit(bank, data, output, hashes, model_factory=TrajectoryReadout, input_dim=129):
     output.mkdir(exist_ok=False)
     torch.set_num_threads(4)
     torch.use_deterministic_algorithms(True)
     torch.manual_seed(17)
     generator = torch.Generator().manual_seed(17)
-    model = model_factory(input_dim=129)
+    model = model_factory(input_dim=input_dim)
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
     write(
         output / "config.json",
@@ -132,7 +132,7 @@ def fit(bank, data, output, hashes, model_factory=TrajectoryReadout):
             learning_rate=0.001,
             weight_decay=0.01,
             batch_pairs=8,
-            input_dim=129,
+            input_dim=input_dim,
             hidden=64,
             selector="none; fixed final train diagnostic",
             device="cpu",
@@ -186,7 +186,7 @@ def fit(bank, data, output, hashes, model_factory=TrajectoryReadout):
     torch.save(model.state_dict(), output / "final.pt")
     controls = {mode: predict(model, bank, data, mode) for mode in ["normal", "mismatch", "zero"]}
     write(output / "final-predictions.json", {k: v.tolist() for k, v in controls.items()})
-    reloaded = model_factory(input_dim=129)
+    reloaded = model_factory(input_dim=input_dim)
     reloaded.load_state_dict(
         torch.load(output / "final.pt", map_location="cpu", weights_only=True), strict=True
     )
