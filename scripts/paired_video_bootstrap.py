@@ -3,8 +3,10 @@
 import numpy as np
 
 
-def paired_video_bootstrap(normal, mismatch, targets):
+def paired_video_bootstrap(normal, mismatch, targets, *, probability_floor=1e-15):
     """Normal minus mismatch, resampling whole videos (not independent questions)."""
+    if not np.isfinite(probability_floor) or not 0 < probability_floor < 1:
+        raise ValueError("probability floor must be finite and between zero and one")
     normal = np.asarray(normal, dtype=np.float64)
     mismatch = np.asarray(mismatch, dtype=np.float64)
     targets = np.asarray(targets)
@@ -32,15 +34,15 @@ def paired_video_bootstrap(normal, mismatch, targets):
     differences = {
         "accuracy": (normal.argmax(-1) == targets).astype(float)
         - (mismatch.argmax(-1) == targets).astype(float),
-        "nll": -np.log(np.clip(normal[rows, targets], 1e-15, 1))
-        + np.log(np.clip(mismatch[rows, targets], 1e-15, 1)),
+        "nll": -np.log(np.clip(normal[rows, targets], probability_floor, 1))
+        + np.log(np.clip(mismatch[rows, targets], probability_floor, 1)),
     }
     rng = np.random.default_rng(17)
     indices = rng.integers(len(targets) // 2, size=(10000, len(targets) // 2))
     result = dict(
         seed=17, replicates=10000, unit="video_pair", videos=len(targets) // 2,
         method="95% percentile; numpy linear quantile", direction="normal-minus-mismatch",
-        probability_floor=1e-15,
+        probability_floor=probability_floor,
     )
     for name, difference in differences.items():
         per_video = difference.reshape(-1, 2).mean(-1)

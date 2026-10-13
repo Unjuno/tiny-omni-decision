@@ -35,3 +35,23 @@ def test_questions_remain_paired_and_sign_is_normal_minus_mismatch():
 def test_invalid_inputs_fail_closed(p, y):
     with pytest.raises(ValueError):
         paired_video_bootstrap(np.array(p), np.array(p), np.array(y))
+
+
+def test_explicit_floor_matches_aggregate_nll_even_for_extreme_predictions():
+    p = np.array([[1e-30, 1.0], [0.2, 0.8]])
+    q = np.array([[0.5, 0.5], [1.0, 0.0]])
+    y = np.array([0, 1])
+    result = paired_video_bootstrap(p, q, y, probability_floor=1e-12)
+    rows = np.arange(2)
+    expected = (-np.log(np.clip(p[rows, y], 1e-12, 1)).mean()
+                + np.log(np.clip(q[rows, y], 1e-12, 1)).mean())
+    assert result['nll']['difference'] == pytest.approx(expected)
+    assert result['probability_floor'] == 1e-12
+    assert paired_video_bootstrap(p, q, y)['probability_floor'] == 1e-15
+
+
+@pytest.mark.parametrize('floor', [0, -1, 1, 2, float('nan'), float('inf')])
+def test_invalid_probability_floor(floor):
+    p = np.array([[0.5, 0.5]] * 2)
+    with pytest.raises(ValueError, match='probability floor'):
+        paired_video_bootstrap(p, p, np.array([0, 1]), probability_floor=floor)

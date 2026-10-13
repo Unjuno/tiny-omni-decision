@@ -36,3 +36,21 @@ Do not use auxiliary easy questions to redefine success on temporal decisions.
 Any subsequent route requires a prospectively fixed evidence/label contract and
 a distinct intervention, preserving these results. No shared-Lens, compression,
 product promotion or sealed evaluation is justified by these measurements.
+
+## Matched NLL convention follow-up
+
+The helper now accepts an explicit keyword-only `probability_floor`, preserving
+the historical 1e-15 default. Regression tests check extreme probabilities,
+aggregate equality, default compatibility and invalid floors (13 tests pass).
+Recomputed both arms with 1e-12, the same convention as their aggregate metrics;
+input file hashes are unchanged. See `R2_SLOT_INTERNAL_MATCHED_NLL_20261013.json`.
+Original-head NLL difference is -1.487292 with interval [-4.887444,1.026715];
+interaction-head difference remains -.387072 [-1.593878,.860630]. Point estimates
+match stored aggregate subtraction within 1e-12. Both intervals still include zero.
+The decision to close this fitting path is unchanged. No model was run or changed.
+
+Reproduction: load `predictions.json` final normal/mismatch arrays and targets
+from `examples.json` in each internal evaluation directory; call
+`paired_video_bootstrap(normal, mismatch, targets, probability_floor=1e-12)`.
+Compare its NLL difference with the normal-minus-mismatch NLL from `result.json`.
+The previous results remain preserved under their explicitly different convention.
