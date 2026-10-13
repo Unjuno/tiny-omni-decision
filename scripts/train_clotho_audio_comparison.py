@@ -10,6 +10,7 @@ import torch
 from torch.nn import functional as F
 
 from scripts.clotho_acquisition_gate import complete_acquisition
+from scripts.clotho_audio_controls import VALIDATION_MAPPING_SHA256, source_derangement
 from scripts.fetch_clotho_development_media import HASHES
 from scripts.starss23_readout_common import binary_metrics
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
@@ -88,6 +89,12 @@ def load_inputs(root):
 
 
 def fit(root, condition, raw, y, rows, provenance):
+    mapping = source_derangement(rows["validation"]) if condition == "joint" else {}
+    mapping_json = json.dumps(mapping, sort_keys=True, indent=2)
+    if condition == "joint" and hashlib.sha256(mapping_json.encode()).hexdigest() != (
+        VALIDATION_MAPPING_SHA256
+    ):
+        raise ValueError("frozen validation source control changed")
     output = root / f"clotho-aqa-{condition}-control-01"
     output.mkdir(exist_ok=False)
     protocol = dict(
@@ -101,6 +108,12 @@ def fit(root, condition, raw, y, rows, provenance):
         selector="earliest minimum raw validation NLL",
         calibration="17 geometric temperatures .25..4, calibration split only",
         normalization="train question-weighted features only",
+        inference_control_policy="seed17 source-coherent cross-uploader bijection and zero-mean "
+        "audio; selected joint weights/temperature frozen",
+        inference_control_module_sha256=hashlib.sha256(
+            Path(__file__).with_name("clotho_audio_controls.py").read_bytes()
+        ).hexdigest(),
+        validation_control_sha256=VALIDATION_MAPPING_SHA256 if condition == "joint" else None,
         provenance=provenance,
         script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     )
@@ -176,6 +189,24 @@ def fit(root, condition, raw, y, rows, provenance):
         unique_train_questions=len(y["train"]),
         best_sha256=hashlib.sha256((output / "best.pt").read_bytes()).hexdigest(),
     )
+    if condition == "joint":
+        diagnostic_started = time.perf_counter()
+        first = {}
+        for index, row in enumerate(rows["validation"]):
+            first.setdefault(row["source_id"], index)
+        indices = [first[mapping[r["source_id"]]] for r in rows["validation"]]
+        changed = x["validation"].clone()
+        changed[:, :, :384] = changed[indices, :, :384]
+        zero = x["validation"].clone()
+        zero[:, :, :384] = 0
+        result["inference_controls"] = {}
+        with torch.inference_mode():
+            for name, features in (("source_deranged", changed), ("audio_zero_mean", zero)):
+                values = (model(features) / temperature).softmax(-1)[:, 1].numpy()
+                np.save(output / (name + "_probabilities.npy"), values)
+                result["inference_controls"][name] = binary_metrics(y["validation"].numpy(), values)
+        (output / "source_derangement.json").write_text(mapping_json)
+        result["inference_control_seconds"] = time.perf_counter() - diagnostic_started
     (output / "result.json").write_text(json.dumps(result, indent=2))
     print(json.dumps({k: v for k, v in result.items() if k != "history"}))
 
