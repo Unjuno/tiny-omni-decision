@@ -88,14 +88,14 @@ def load_inputs(root):
     )
 
 
-def fit(root, condition, raw, y, rows, provenance):
+def fit(root, condition, raw, y, rows, provenance, *, output_directory=None):
     mapping = source_derangement(rows["validation"]) if condition == "joint" else {}
     mapping_json = json.dumps(mapping, sort_keys=True, indent=2)
     if condition == "joint" and hashlib.sha256(mapping_json.encode()).hexdigest() != (
         VALIDATION_MAPPING_SHA256
     ):
         raise ValueError("frozen validation source control changed")
-    output = root / f"clotho-aqa-{condition}-control-01"
+    output = output_directory or root / f"clotho-aqa-{condition}-control-01"
     output.mkdir(exist_ok=False)
     protocol = dict(
         condition=condition,
