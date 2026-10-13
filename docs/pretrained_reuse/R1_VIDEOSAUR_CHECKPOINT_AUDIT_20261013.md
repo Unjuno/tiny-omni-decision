@@ -83,3 +83,5 @@ frozen finite-output/save-reload checks before any train-side transfer diagnosti
 Do not silently use strict=False, drop incompatible layers, or quote upstream
 segmentation numbers as this project's Decision quality. Neither the checkpoint
 nor this audit satisfies the R2 quality gate or the overall Omni objective.
+
+Follow-up: [reconstructed runtime admission](R1_VIDEOSAUR_RUNTIME_20261013.md) strictly loads all tensors and verifies CPU/GPU inference and reload; original training provenance and quality remain unverified.
