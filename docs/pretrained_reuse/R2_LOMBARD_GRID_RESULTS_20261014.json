@@ -7917,6 +7917,8 @@
     "missing_stream_scope": "unseen masks; diagnostic OOD, not trained missing-input support",
     "mismatch_scope": "p/l-preserving cross-group donors; paired dependencies remain"
   },
-  "curve_file_sha256": "7e78db40550bba52f466d49e07d68e38d477ce3858ea748de36f8505f18d9b20",
-  "recording_script_sha256": "06d0efb32278a9a684f65768a0d4c979f303b5f18958c8177e29dc17d1451f72"
+  "curve_file_sha256": "5e21cec3b2eb3b1e84a4ecac5e78cd0c9b88f0047a00050734f857d9986ed3ef",
+  "recording_script_sha256": "06d0efb32278a9a684f65768a0d4c979f303b5f18958c8177e29dc17d1451f72",
+  "publication_line_endings": "LF; no numeric/data changes, original local experiment artifacts unchanged",
+  "publication_format_script_sha256": "8c0188b9a3de351c38b6035512d25437c435304674bfef317e67daafcbd8ebdb"
 }
