@@ -1061,3 +1061,10 @@ crop+zero. Independent replay verifies final train98.9% versus validation23.0%
 and NLL .092/6.378, confirming overfitting in this pilot. Close capacity/budget
 extension on these screens; task/representation and app diversity remain open.
 [Fixed-set gap and reload](docs/pretrained_reuse/R2_SCREEN_CONTEXT_GAP_20261013.md).
+
+Screen source expansion improves pooled metrics but remains app-dependent and
+below a training-frequency prior. Audited TinyCLIP zero-shot also fails class
+coverage. Both models miss305/723regions; even label-informed top1 routing reaches
+only57.8%, not a deployable quality result. Close these screen readout/reference
+comparisons; no merging/residency expansion or prompt tuning is justified.
+[Complementarity and limits](docs/pretrained_reuse/R2_SCREEN_COMPLEMENTARITY_20261013.md).
