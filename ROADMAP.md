@@ -1,5 +1,10 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 bounded GPU port:** Real full-token parity failed despite small
+pooled differences and faster CUDA forwards. Gates remain unchanged; continue
+native CPU extraction for the fixed AV data. No full port job or quality claim.
+[Measurements and remaining numerical uncertainty](docs/pretrained_reuse/R1_VIDEOPRISM_TORCH_20261014.md).
+
 **2026-10-14 native AV command source:** Full Lombard Grid archives and5,390
 audio records were checked; four training MOVs are broken in both official copies.
 New common-valid train4,080 preserves calibration398/validation889 byte-for-byte.

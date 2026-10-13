@@ -1,8 +1,10 @@
-"""Frozen FP32 execution of the pinned native VideoPrism factorized encoder.
+"""Experimental frozen FP32 port of the native VideoPrism factorized encoder.
 
 Operator conventions derive from google-deepmind/videoprism at
 c6eba0ece3dd49a24ffc44582966997a4a59f1d8 (Apache-2.0). This backend is
 unpadded inference at the configured native resolution; it does not interpolate.
+Full native-token parity FAILED on real videos (see the R1 VideoPrism Torch
+2026-10-14 report). This research backend is not the qualified extraction path.
 """
 
 import hashlib
@@ -145,6 +147,8 @@ class FrozenVideoPrism(nn.Module):
         if (video.ndim != 5 or video.shape[0] < 1
                 or tuple(video.shape[1:]) != (c.frames, c.grid*c.patch, c.grid*c.patch, 3)
                 or video.dtype != torch.float32 or reference.dtype != torch.float32
+                or torch.is_autocast_enabled(video.device.type)
+                or (video.device.type == 'cuda' and torch.backends.cuda.matmul.allow_tf32)
                 or video.device != reference.device or not torch.isfinite(video).all()
                 or video.min() < 0 or video.max() > 1):
             raise ValueError('native unpadded FP32 RGB input on the model device required')

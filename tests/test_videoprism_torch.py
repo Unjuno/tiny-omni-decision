@@ -99,3 +99,10 @@ def test_training_precision_and_invalid_inputs_are_not_silently_supported():
     model.eval().half()
     with pytest.raises(ValueError):
         model(x)
+
+
+def test_ambient_autocast_cannot_silently_reduce_native_precision():
+    weights, config = tiny()
+    model = FrozenVideoPrism(weights, config)
+    with torch.autocast('cpu', dtype=torch.bfloat16), pytest.raises(ValueError, match='FP32'):
+        model(torch.rand(1, 2, 4, 4, 3))

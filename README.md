@@ -1,5 +1,10 @@
 # Tiny Omni Decision
 
+**2026-10-14 visual backend audit:** Frozen native16-frame Torch/CUDA port
+is faster but fails the predeclared full-token numerical gate. Keep the native
+CPU extraction path; no quality result or artifact promotion.
+[Negative parity experiment](docs/pretrained_reuse/R1_VIDEOPRISM_TORCH_20261014.md).
+
 **2026-10-14 native AV data:** Licensed Lombard Grid speech/video archives are
 acquired and audited. Fixed common train4,080/calibration398/validation889 retains
 all held-out IDs; four broken training videos and19 unresolved labels remain
