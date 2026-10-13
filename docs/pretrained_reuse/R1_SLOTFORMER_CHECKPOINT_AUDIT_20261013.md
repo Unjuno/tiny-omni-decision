@@ -59,3 +59,5 @@ Artifacts:
 and `C:/CodexArtifacts/pretrained-reuse-r1/slotformer-weight-audit-01/`.
 Includes immutable source hashes, download hash, archive index and tensor audit.
 No legacy artifacts changed, GPU training or cloud compute used.
+
+Follow-up: [strict StoSAVi runtime admission](R1_STOSAVI_RUNTIME_20261013.md) measures actual parameters and reproducible CPU extraction; quality remains unverified.
