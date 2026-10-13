@@ -29,3 +29,13 @@ these results. This remains observed development validation, never a sealed audi
 CPU FP32/four threads, initial one-training-video smoke, then full frozen feature
 extraction if finite outputs and unchanged black-control features are confirmed.
 No encoder updates, cloud compute, product promotion or old artifact replacement.
+
+## Training cache admission completed
+
+Full-frame train99 videos /198 questions completed in614.973seconds CPU.
+Normal/black feature shapes both[198,3,192];396 rows total. All198 black rows
+(including every feature and probability) exactly match the crop cache; all396
+row identities, targets and frame IDs match. No accuracy-based selection made.
+New cache SHA256329bb4e3541d4458239613f3f13e8dc7bd415dd13370256db65a6316508aa94d.
+Artifact: all-in-one-tiny-fullframe-train-features-01/admission.json.
+Validation extraction is still running; no full-frame readout fit yet.
