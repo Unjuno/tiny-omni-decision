@@ -35,6 +35,10 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument(
+        "--policy", choices=["last_block", "all_encoder_blocks"], default="last_block"
+    )
+    parser.add_argument("--arm", choices=["both", "plain", "context"], default="both")
     args = parser.parse_args()
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
     corpus = root / "context-robustness-corpus-01"
@@ -57,8 +61,12 @@ def main():
     torch.set_num_threads(4)
     torch.use_deterministic_algorithms(True)
     torch.backends.cuda.matmul.allow_tf32 = False
+
     def run_arm(arm, train):
         out = root / f"context-robustness-{arm}-{'smoke' if args.smoke else 'run'}-01"
+        if args.policy != "last_block":
+            out = out.with_name(out.name + "-all-encoder")
+        artifact_scope = "lastblock" if args.policy == "last_block" else "encoder"
         out.mkdir(exist_ok=False)
         torch.manual_seed(17)
         torch.cuda.manual_seed_all(17)
@@ -76,7 +84,7 @@ def main():
         if set(delta) != expected:
             raise ValueError("parent scope changed")
         model.load_state_dict(delta, strict=False)
-        names = configure_repair_policy(model, "last_block")
+        names = configure_repair_policy(model, args.policy)
         before = frozen_hash(model)
         params = [p for p in model.parameters() if p.requires_grad]
         optimizer = torch.optim.AdamW(params, lr=2e-5, weight_decay=0.01)
@@ -86,6 +94,7 @@ def main():
             out / "config.json",
             dict(
                 arm=arm,
+                policy=args.policy,
                 smoke=args.smoke,
                 steps=steps,
                 batch=8,
@@ -174,7 +183,7 @@ def main():
             print(arm, step, {k: v["accuracy"] for k, v in metrics.items()}, flush=True)
             return torch.stack(values)
 
-        save("initial-lastblock.pt")
+        save(f"initial-{artifact_scope}.pt")
         evaluate(0)
         losses = []
         for step in range(1, steps + 1):
@@ -192,9 +201,9 @@ def main():
             if step % 128 == 0 or step == steps:
                 final = evaluate(step)
                 write(out / "training.json", losses)
-        save("final-lastblock.pt")
+        save(f"final-{artifact_scope}.pt")
         model.load_state_dict(
-            torch.load(out / "final-lastblock.pt", weights_only=True), strict=False
+            torch.load(out / f"final-{artifact_scope}.pt", weights_only=True), strict=False
         )
         with torch.inference_mode():
             replay = torch.cat(
@@ -218,7 +227,8 @@ def main():
         torch.cuda.empty_cache()
 
     for arm, train in arms.items():
-        run_arm(arm, train)
+        if args.arm in ("both", arm):
+            run_arm(arm, train)
 
 
 if __name__ == "__main__":
