@@ -56,6 +56,19 @@ def check_artifact_hashes(folder, report):
             raise ValueError(f"checkpoint/normalizer hash differs: {name}")
 
 
+def audit_prediction_bundle(folder, prefix, replay, rows, temperatures=None):
+    stored = np.load(folder / (prefix + "-logits.npy"), allow_pickle=False)
+    if stored.dtype != replay.dtype or not np.array_equal(stored, replay):
+        raise ValueError(f"saved logits differ from checkpoint replay: {prefix}")
+    probabilities = summarize(replay, targets_from_rows(rows), temperatures)[1]
+    saved = np.load(folder / (prefix + "-probabilities.npy"), allow_pickle=False)
+    if saved.dtype != probabilities.dtype or not np.array_equal(saved, probabilities):
+        raise ValueError(f"saved probabilities differ from checkpoint replay: {prefix}")
+    return validate_saved_predictions(
+        replay, read_json(folder / (prefix + "-predictions.json")), rows, temperatures,
+    )
+
+
 def joint_controls(model, audio, video, normalizer, rows, temperatures, output, *, device="cuda"):
     if model.training or any(p.requires_grad for p in model.parameters()):
         raise ValueError("selected inference model must be eval and frozen")
@@ -74,12 +87,13 @@ def joint_controls(model, audio, video, normalizer, rows, temperatures, output, 
     for name, value in conditions.items():
         logits = predict(model, torch.from_numpy(value).to(device))
         metric = save_predictions(output, name, logits, targets_from_rows(rows), rows, temperatures)
-        records = read_json(output / (name + "-predictions.json"))
-        validate_saved_predictions(logits, records, rows, temperatures)
+        if audit_prediction_bundle(output, name, logits, rows, temperatures) != metric:
+            raise ValueError("saved control metrics differ")
         results[name] = dict(
             metrics=metric,
             logits_sha256=sha(output / (name + "-logits.npy")),
             predictions_sha256=sha(output / (name + "-predictions.json")),
+            probabilities_sha256=sha(output / (name + "-probabilities.npy")),
         )
     if state_sha(model) != before:
         raise ValueError("selected inference weights changed during controls")
@@ -174,18 +188,6 @@ def main():
             value = predict(
                 model, torch.from_numpy(make_inputs(*raw["validation"], name, norm)).cuda()
             )
-            if not np.array_equal(
-                value, np.load(folder / "best-raw-logits.npy", allow_pickle=False)
-            ):
-                raise ValueError("selected validation same-backend replay differs")
-            metric = validate_saved_predictions(
-                value,
-                read_json(folder / "best-calibrated-predictions.json"),
-                rows["validation"],
-                temperatures,
-            )
-            if metric != report["best_calibrated"]:
-                raise ValueError("saved selected calibrated metrics differ")
             final_model = SlotHead().to("cuda")
             final_model.load_state_dict(
                 torch.load(folder / "final.pt", map_location="cuda", weights_only=True), strict=True
@@ -194,24 +196,18 @@ def main():
             final_logits = predict(
                 final_model, torch.from_numpy(make_inputs(*raw["validation"], name, norm)).cuda()
             )
-            if not np.array_equal(
-                final_logits, np.load(folder / "final-raw-logits.npy", allow_pickle=False)
-            ):
-                raise ValueError("final checkpoint same-backend replay differs")
-            for prefix, t, key in [
-                ("best-raw", None, "best_raw"),
-                ("final-raw", None, "final_raw"),
-                ("final-same-temperature", temperatures, "final_same_temperature"),
+            for prefix, replay, t, key in [
+                ("best-raw", value, None, "best_raw"),
+                ("best-calibrated", value, temperatures, "best_calibrated"),
+                ("final-raw", final_logits, None, "final_raw"),
+                ("final-same-temperature", final_logits, temperatures, "final_same_temperature"),
             ]:
-                stored = np.load(folder / (prefix + "-logits.npy"), allow_pickle=False)
-                computed = validate_saved_predictions(
-                    stored,
-                    read_json(folder / (prefix + "-predictions.json")),
-                    rows["validation"],
-                    t,
+                computed = audit_prediction_bundle(
+                    folder, prefix, replay, rows["validation"], t,
                 )
                 if computed != report[key]:
-                    raise ValueError("saved raw/final predictions differ")
+                    raise ValueError(f"saved prediction metrics differ: {prefix}")
+            metric = report["best_calibrated"]
             epoch_metric = report["history"][report["best_epoch"] - 1]["validation"]
             if (
                 report["best_raw"] != epoch_metric

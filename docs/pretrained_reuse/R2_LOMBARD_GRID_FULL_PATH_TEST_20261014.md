@@ -32,6 +32,31 @@ files and attach`FIXTURE-SCOPE-ADDENDUM.json` explicitly correcting the scope.
 The evaluator now emits`PASS_MECHANICAL_FIXTURE_REPORT` and artificial/no-quality
 scope for such fixtures; a regression case was observed RED then GREEN.
 
+## Independent review and saved-array audit correction
+
+The independent review of `f494940..cc76523` found no Critical issues and one
+Important issue: some saved NumPy arrays were not bound to actual checkpoint
+replay. In particular, final-temperature logits could agree with their own JSON
+while belonging to another checkpoint. All four best/final variants now require
+their saved logits to equal the appropriate reloaded model, saved probabilities
+to equal recomputation with the specified temperatures, and JSON to match both.
+Frozen controls use the same complete bundle audit and record probability hashes.
+
+Twenty missing/corrupt/wrong-checkpoint regression cases and four legitimate
+variants were observed RED before implementation and GREEN afterward. The full
+local suite passed **953 tests, 1 skipped**, and Ruff passed. The review raised no
+Minor issues; real native quality and final interpretation were outside its scope.
+
+Existing artificial fixture checkpoints were replayed without training in a new
+directory `C:/CodexArtifacts/pretrained-reuse-r2/lombard-prediction-replay-fixture-audit-02/`.
+All three arms, four saved prediction variants each, frozen controls and six
+bootstrap comparisons passed in 4.592 seconds. Status:
+`PASS_MECHANICAL_FIXTURE_REPORT`; real quality evaluated: false. Runner SHA-256:
+`72dc9e70302e85f4d5856a5021d5542d420b4ff202ab548a3a12ecc08a7f3f5e`.
+Report SHA-256:
+`68a8ab7794fc2e2cda48ef68c363a1e36c7f52e8f1354ee433388526daed738a`.
+The original fixture and live native extraction files were preserved.
+
 The real frozen-video extraction remains a separate active process. Its complete
 source/hash/reload gates are mandatory before the real three-arm study. The
 24-epoch native learning, measured audiovisual benefit and full Omni quality

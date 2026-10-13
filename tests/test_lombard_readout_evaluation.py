@@ -108,3 +108,47 @@ def test_artificial_fixture_report_is_never_identified_as_real_quality():
     assert status == "PASS_MECHANICAL_FIXTURE_REPORT"
     assert "artificial" in scope and "not model quality" in scope
     assert report_identity({})[0] == "PASS_FIXED_MODEL_REPORT"
+
+
+@pytest.mark.parametrize("prefix", [
+    "best-raw", "best-calibrated", "final-raw", "final-same-temperature",
+])
+@pytest.mark.parametrize("damage", [
+    "none", "missing_logits", "missing_probabilities", "corrupt_logits",
+    "corrupt_probabilities", "wrong_checkpoint_bundle",
+])
+def test_every_numpy_prediction_artifact_must_match_actual_checkpoint_replay(
+    tmp_path, prefix, damage,
+):
+    from scripts import evaluate_lombard_grid_readouts as driver
+    from scripts.lombard_readout_core import targets_from_rows
+    from scripts.train_lombard_grid_readouts import save_predictions
+
+    rows = [dict(source_id="sample", speaker="speaker", speaker_group="group",
+                 condition="p", targets={s: o[-1] for s, o in OPTIONS.items()})]
+    replay = np.arange(51, dtype=np.float32).reshape(1, 51) / 7
+    temperatures = None if prefix.endswith("raw") else np.linspace(.5, 2, 6)
+    metric = save_predictions(
+        tmp_path, prefix, replay, targets_from_rows(rows), rows, temperatures,
+    )
+    if damage.startswith("missing_"):
+        kind = damage.removeprefix("missing_")
+        (tmp_path / (prefix + "-" + kind + ".npy")).unlink()
+    elif damage.startswith("corrupt_"):
+        kind = damage.removeprefix("corrupt_")
+        path = tmp_path / (prefix + "-" + kind + ".npy")
+        value = np.load(path, allow_pickle=False)
+        value[0, 0] += .125
+        np.save(path, value)
+    elif damage == "wrong_checkpoint_bundle":
+        # Internally consistent logits/probabilities/JSON/metric, wrong model.
+        metric = save_predictions(
+            tmp_path, prefix, -replay, targets_from_rows(rows), rows, temperatures,
+        )
+    if damage == "none":
+        assert driver.audit_prediction_bundle(
+            tmp_path, prefix, replay, rows, temperatures,
+        ) == metric
+    else:
+        with pytest.raises((ValueError, FileNotFoundError)):
+            driver.audit_prediction_bundle(tmp_path, prefix, replay, rows, temperatures)
