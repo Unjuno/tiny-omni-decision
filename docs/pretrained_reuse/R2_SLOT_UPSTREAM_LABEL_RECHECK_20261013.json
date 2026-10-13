@@ -1,0 +1,1394 @@
+{
+  "status": "PASS_ALL_TRAIN_QUESTION_TEXT_OPTION_SET_AND_SEMANTIC_TARGETS",
+  "count": 198,
+  "archive_sha256": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78",
+  "pairs_sha256": "8869bb903591af3a0995eeca0eeae1b50b990c8b08752a6e5d4d549f8a356fd7",
+  "rows": [
+    {
+      "video_id": "video_10103",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10103",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10186",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10186",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10212",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_10212",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10387",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10387",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_1087",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_1087",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_10886",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_10886",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_10894",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10894",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_10903",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10903",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_10957",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_10957",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_11066",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_11066",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_112",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_112",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_11261",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_11261",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_11439",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_11439",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_11587",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_11587",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_1302",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1302",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_132",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_132",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1461",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1461",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1614",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1614",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_1638",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_1638",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_1671",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1671",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_1672",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1672",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1686",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1686",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1779",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1779",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1805",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_1805",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_1879",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_1879",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_2155",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2155",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_2205",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_2205",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_2437",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_2437",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2508",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2508",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2514",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_2514",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_2528",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_2528",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2633",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2633",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2775",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2775",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_287",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_287",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_2873",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_2873",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_288",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_288",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_304",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_304",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_307",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_307",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3074",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_3074",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_3259",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_3259",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_3334",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_3334",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3506",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3506",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3584",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3584",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3766",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_3766",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_3778",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_3778",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_3785",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_3785",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3935",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_3935",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_4036",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4036",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_4049",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_4049",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4243",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4243",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_4366",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_4366",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_4411",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_4411",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4437",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_4437",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4523",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4523",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4544",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4544",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4664",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_4664",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_485",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_485",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_4900",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_4900",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5081",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_5081",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5164",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_5164",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_5201",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_5201",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5299",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5299",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5336",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5336",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5422",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5422",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_580",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_580",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5855",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_5855",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6008",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_6008",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6117",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6117",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_6146",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_6146",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_6172",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_6172",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_6190",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_6190",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6208",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_6208",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_621",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_621",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_6322",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6322",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_6354",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6354",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_636",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_636",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6597",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6597",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_6721",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_6721",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_68",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_68",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_694",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_694",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_6943",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_6943",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7114",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7114",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_76",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_76",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_7609",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_7609",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7682",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_7682",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7752",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7752",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7793",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7793",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_7978",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_7978",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_8158",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_8158",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_8208",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_8208",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_853",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_853",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_8638",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_8638",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_8676",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_8676",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_8795",
+      "condition": "initial",
+      "question_id": 5,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_8795",
+      "condition": "final",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_890",
+      "condition": "initial",
+      "question_id": 4,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_890",
+      "condition": "final",
+      "question_id": 3,
+      "upstream_target_index": 0,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_9411",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_9411",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 2,
+      "mapped_target_index": 0
+    },
+    {
+      "video_id": "video_9642",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_9642",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_9767",
+      "condition": "initial",
+      "question_id": 7,
+      "upstream_target_index": 0,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_9767",
+      "condition": "final",
+      "question_id": 6,
+      "upstream_target_index": 1,
+      "mapped_target_index": 2
+    },
+    {
+      "video_id": "video_9850",
+      "condition": "initial",
+      "question_id": 6,
+      "upstream_target_index": 2,
+      "mapped_target_index": 1
+    },
+    {
+      "video_id": "video_9850",
+      "condition": "final",
+      "question_id": 5,
+      "upstream_target_index": 1,
+      "mapped_target_index": 1
+    }
+  ]
+}
