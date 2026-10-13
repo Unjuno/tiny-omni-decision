@@ -69,6 +69,11 @@ Missing-stream masks were not trained, so their scores are explicitly diagnostic
 OOD. Donor coupling limits the control bootstrap's independence interpretation.
 No claim of generic-video capability or pretrained-data blindness is introduced.
 
+The production-sized artificial full-path test later passed all3x24 epochs,
+early-best/final separation and complete replay/control/report checks in29.57s.
+This remains **mechanical test evidence**, not native learning or quality;
+[exact scope and accounting](R2_LOMBARD_GRID_FULL_PATH_TEST_20261014.md).
+
 Execution ruling: proceed with these independent pure helpers while the full-run
 task awaits the verified live extractor; integration remains unverified until all
 three actual arms finish. Condition-preserving donor stratification tightens the

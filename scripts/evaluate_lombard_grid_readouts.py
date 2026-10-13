@@ -33,6 +33,19 @@ from scripts.train_lombard_grid_readouts import predict, sample_orders, save_pre
 ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r2")
 
 
+def report_identity(provenance):
+    if provenance.get("test_fixture_only"):
+        return (
+            "PASS_MECHANICAL_FIXTURE_REPORT",
+            "artificial test inputs only; not model quality or native corpus evidence",
+        )
+    return (
+        "PASS_FIXED_MODEL_REPORT",
+        "native spoken-command slots; pooled features, reused development validation "
+        "and selected/calibrated weights, not blind/generic Omni",
+    )
+
+
 def check_artifact_hashes(folder, report):
     for name, key in [
         ("best.pt", "best_sha256"),
@@ -262,11 +275,12 @@ def main():
         after = load_data(ROOT)[3]
         if after != provenance:
             raise ValueError("source/feature hashes changed during report evaluation")
+        status, scope = report_identity(provenance)
         result.update(
-            status="PASS_FIXED_MODEL_REPORT",
+            status=status,
             all_source_hashes_unchanged=True,
-            quality_scope="native spoken-command slots; pooled features, reused development "
-            "validation and selected/calibrated weights, not blind/generic Omni",
+            test_fixture_only=bool(provenance.get("test_fixture_only")),
+            quality_scope=scope,
         )
     except Exception as error:
         result.update(status="FAIL_INCOMPLETE", error=repr(error), traceback=traceback.format_exc())

@@ -8,6 +8,7 @@ torch = pytest.importorskip("torch")
 from scripts.evaluate_lombard_grid_readouts import (  # noqa: E402
     check_artifact_hashes,
     joint_controls,
+    report_identity,
 )
 from scripts.lombard_readout_core import OPTIONS, SlotHead, fit_normalizer  # noqa: E402
 from scripts.lombard_readout_data import sha  # noqa: E402
@@ -100,3 +101,10 @@ def test_report_rejects_partial_controller_before_source_loading(tmp_path, monke
     with pytest.raises(ValueError, match="completed"):
         driver.main()
     assert not (tmp_path / "lombard-grid-pooled-readouts-report-01").exists()
+
+
+def test_artificial_fixture_report_is_never_identified_as_real_quality():
+    status, scope = report_identity({"test_fixture_only": True})
+    assert status == "PASS_MECHANICAL_FIXTURE_REPORT"
+    assert "artificial" in scope and "not model quality" in scope
+    assert report_identity({})[0] == "PASS_FIXED_MODEL_REPORT"
