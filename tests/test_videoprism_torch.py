@@ -106,3 +106,41 @@ def test_ambient_autocast_cannot_silently_reduce_native_precision():
     model = FrozenVideoPrism(weights, config)
     with torch.autocast('cpu', dtype=torch.bfloat16), pytest.raises(ValueError, match='FP32'):
         model(torch.rand(1, 2, 4, 4, 3))
+
+
+@pytest.mark.parametrize('fault', ['missing', 'extra', 'dtype', 'shape', 'nan'])
+def test_state_reload_rejects_invalid_complete_state_without_partial_mutation(fault):
+    weights, config = tiny()
+    model = FrozenVideoPrism(weights, config)
+    original = {k: v.clone() for k, v in model.state_dict().items()}
+    state = {k: v.clone() for k, v in original.items()}
+    first, last = next(iter(state)), next(reversed(state))
+    state[first].add_(1)  # would mutate the model before a late default-loader failure
+    if fault == 'missing':
+        del state[last]
+    elif fault == 'extra':
+        state['unreviewed'] = torch.ones(1)
+    elif fault == 'dtype':
+        state[last] = state[last].double()
+    elif fault == 'shape':
+        state[last] = torch.ones(1)
+    else:
+        state[last].view(-1)[0] = float('nan')
+    with pytest.raises(ValueError, match='state'):
+        model.load_state_dict(state, strict=True)
+    assert all(torch.equal(v, original[k]) for k, v in model.state_dict().items())
+
+
+@pytest.mark.parametrize('mode', ['assign', 'non_strict', 'target_half'])
+def test_reload_cannot_bypass_frozen_fp32_copy_policy(mode):
+    weights, config = tiny()
+    model = FrozenVideoPrism(weights, config)
+    state = {k: v.clone() for k, v in model.state_dict().items()}
+    if mode == 'target_half':
+        model.half()
+    original = {k: v.clone() for k, v in model.state_dict().items()}
+    kwargs = ({'assign': True} if mode == 'assign'
+              else {'strict': False} if mode == 'non_strict' else {})
+    with pytest.raises(ValueError, match='state'):
+        model.load_state_dict(state, **kwargs)
+    assert all(torch.equal(v, original[k]) for k, v in model.state_dict().items())

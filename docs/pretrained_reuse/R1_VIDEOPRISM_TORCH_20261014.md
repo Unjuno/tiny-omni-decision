@@ -16,6 +16,14 @@ query scaling,50*tanh(logits/50), stacked projections and chronological output.
 Shape/schema/dtype/finite checks reject partial loading, training, autocast and
 CUDA TF32. Its module explicitly labels it an unqualified research backend.
 
+Fresh read-only review found the inherited Torch state-dictionary loader bypassed
+constructor validation: wrong dtypes silently cast and missing keys could leave
+partial copies. Eight regression cases were observed failing before the fix.
+The reload API now preflights every key/shape/FP32/finite tensor before copying,
+rejects non-strict/assign modes and non-FP32 destination weights. Valid reloads
+remain supported. Direct manual parameter edits are outside this controlled API;
+requires_grad=False does not make a Torch object tamper-proof.
+
 Independent NumPy attention and native tiny Flax model checks pass (tiny maximum
 absolute difference about3.58e-7). Those checks alone do not establish parity for
 the pretrained full model. CPU tests856 passed,1 skipped; Ruff passed before this

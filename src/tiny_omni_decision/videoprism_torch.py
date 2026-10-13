@@ -109,6 +109,22 @@ class FrozenVideoPrism(nn.Module):
         })
         self.eval()
 
+    def load_state_dict(self, state_dict, strict=True, assign=False):
+        """Preflight the complete FP32 copy before any parameter can change."""
+        if not strict or assign:
+            raise ValueError('state reload requires strict copy; partial/assign unsupported')
+        current = self.state_dict()
+        if set(state_dict) != set(current):
+            raise ValueError('state tensor names differ from exact reviewed schema')
+        for key, target in current.items():
+            value = state_dict[key]
+            if (not isinstance(value, torch.Tensor) or value.shape != target.shape
+                    or value.dtype != torch.float32 or target.dtype != torch.float32
+                    or value.layout != torch.strided or value.device.type == 'meta'
+                    or not torch.isfinite(value).all()):
+                raise ValueError(f'state tensor shape/dtype/values invalid: {key}')
+        return super().load_state_dict(state_dict, strict=True, assign=False)
+
     def weight(self, key):
         return self.weights['params__' + key.replace('/', '__')]
 
