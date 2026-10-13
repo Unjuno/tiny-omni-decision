@@ -1,15 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-13 conditional-audio task:** Fixed Clotho-AQA development grouping
-retains3,422 human-majority yes/no questions,856 sources and all disagreements.
-Question-only Accuracy64.82%, NLL.6231 on560 development questions is a measured
-control. Full audio acquisition remains active; audio-only/joint results are
-pending exhaustive split integrity and matched24-epoch comparisons. Source-
-coherent inference derangement is frozen before audio results and cannot select
-checkpoints. This task does not establish synchronized AV/sensor benefits or
-the95–98% product target.
-[Comparison protocol](docs/pretrained_reuse/R2_CLOTHO_AQA_COMPARISON_PROTOCOL_20261013.md),
-[acquisition recovery](docs/pretrained_reuse/R2_CLOTHO_AQA_ACQUISITION_RECOVERY_20261013.md).
+**2026-10-13 conditional-audio task completed:** All856 licensed Clotho-AQA
+development sources were acquired, decoded and checked with180,004 cross-split
+waveform comparisons. Fixed24-epoch joint Accuracy66.96% versus question-only
+64.82% is mixed: grouped intervals include no gain and NLL/Brier are slightly
+worse. Matching audio contributes to the selected joint readout, while final24
+overfits (train93.64%, validation65.54%). No promotion or epoch extension.
+Keep all3,422 questions, source grouping and disagreements; this is development
+evidence, not synchronized AV/sensor quality or the95–98% product target.
+[Results, hashes, curves and remaining work](docs/pretrained_reuse/R2_CLOTHO_AQA_RESULTS_20261013.md).
 
 **2026-10-13 additional audio coverage:** Completed a fixed128-uploader FSD50K
 positive-only augmentation after verified selective acquisition and9,984 waveform
