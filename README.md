@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 native decision smoke:** Fixed51-option six-slot readouts passed
+two train-only GPU updates for audio/video/joint, with identical initialization/
+sampling and exact reload/JSON checks. No heldout score; full24-epoch learning
+awaits the live native visual extraction.
+[Executed smoke and pending full comparison](docs/pretrained_reuse/R2_LOMBARD_GRID_READOUT_SMOKE_20261014.md).
+
 **2026-10-14 native AV extraction running:** The original CPU VideoPrism
 actually started the fixed5,367-video job after exact native-reference smoke.
 Its final integrity/reload checks and joint quality comparison are pending;

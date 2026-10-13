@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 fixed native AV readout implemented:** Three-arm train-only GPU
+smoke passed at about70MB peak Torch allocation; explicit complete-cache gates
+prohibit using the running extraction's partial arrays. Same-budget full learning,
+joint-benefit controls and final uncertainty/report audit remain pending.
+[Smoke evidence and full-study gates](docs/pretrained_reuse/R2_LOMBARD_GRID_READOUT_SMOKE_20261014.md).
+
 **2026-10-14 actual native extraction started:** Same fixed common AV splits,
 original16-frame CPU VideoPrism and separate new output; do not use incomplete
 caches. Pinned audio/video/joint native-slot protocol preserves every option,
