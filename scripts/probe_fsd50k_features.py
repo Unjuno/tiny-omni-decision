@@ -1,5 +1,6 @@
 """Frozen whole-clip features and cross-source similarity triage, no fitting."""
 
+import argparse
 import contextlib
 import hashlib
 import io
@@ -19,8 +20,11 @@ from scripts.extract_starss23_features import AUDIO_SHA, AUDIO_SOURCE
 
 def main():
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
-    media = root / "fsd50k-training-smoke-02"
-    output = root / "fsd50k-frozen-feature-smoke-02"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--media", type=Path, default=root / "fsd50k-training-smoke-02")
+    parser.add_argument("--output", type=Path, default=root / "fsd50k-frozen-feature-smoke-02")
+    args = parser.parse_args()
+    media, output = args.media, args.output
     audio_root = Path("C:/CodexArtifacts/pretrained-reuse-r1/efficientat-audit-v1")
     source = audio_root / "source"
     checkpoint = audio_root / "dymn04_as.pt"

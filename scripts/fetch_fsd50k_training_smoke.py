@@ -1,9 +1,11 @@
 """Fetch one rights-filtered, fixed-ID training clip per event from split ZIP."""
 
+import argparse
 import csv
 import hashlib
 import io
 import json
+import shutil
 import struct
 import urllib.request
 import zipfile
@@ -32,8 +34,14 @@ def central_entries(data, count):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--per-event", type=int, default=1)
+    parser.add_argument("--output", type=Path, default=ROOT / "fsd50k-training-smoke-02")
+    args = parser.parse_args()
+    if not 1 <= args.per_event <= 16:
+        raise ValueError("bounded acquisition requires1..16 per event")
     source = ROOT / "fsd50k-metadata-audit-01"
-    output = ROOT / "fsd50k-training-smoke-02"
+    output = args.output
     output.mkdir(exist_ok=False)
     hashes = json.loads((source / "downloads.json").read_text())
     for name, info in hashes.items():
@@ -50,18 +58,25 @@ def main():
                       and meta[r["fname"]]["license"] in ALLOW
                       and meta[r["fname"]]["uploader"] not in uploaders and r["fname"] not in ids]
         candidates.sort(key=lambda r: hashlib.sha256(f"17:{r['fname']}".encode()).hexdigest())
-        if not candidates:
-            raise ValueError("missing eligible event")
-        row = candidates[0]
-        selected.append({"event": event, "id": row["fname"], "known_positive_labels": row["labels"],
-                         "license": meta[row["fname"]]["license"],
-                         "uploader": meta[row["fname"]]["uploader"]})
-        ids.add(row["fname"])
-        uploaders.add(meta[row["fname"]]["uploader"])
+        taken = 0
+        for row in candidates:
+            if meta[row["fname"]]["uploader"] in uploaders:
+                continue
+            selected.append({"event": event, "id": row["fname"],
+                             "known_positive_labels": row["labels"],
+                             "license": meta[row["fname"]]["license"],
+                             "uploader": meta[row["fname"]]["uploader"]})
+            ids.add(row["fname"])
+            uploaders.add(meta[row["fname"]]["uploader"])
+            taken += 1
+            if taken == args.per_event:
+                break
+        if taken != args.per_event:
+            raise ValueError("insufficient distinct eligible uploaders; no replacement policy")
     (output / "selection.json").write_text(json.dumps(selected, indent=2), encoding="utf-8")
     names = [f"FSD50K.dev_audio.z{i:02d}" for i in range(1, 6)] + ["FSD50K.dev_audio.zip"]
     readers = [HttpRangeReader(f"https://zenodo.org/api/records/4060432/files/{name}/content",
-                              3221225472 if i < 5 else 2306663327, budget=32 * 1024**2)
+                              3221225472 if i < 5 else 2306663327, budget=256 * 1024**2)
                for i, name in enumerate(names)]
 
     def read_parts(disk, offset, count):
@@ -90,6 +105,11 @@ def main():
             directory = readers[-1].read(end[5])
             result["directory_sha256"] = hashlib.sha256(directory).hexdigest()
             index = central_entries(directory, end[4])
+            planned = [index[f"FSD50K.dev_audio/{item['id']}.wav"] for item in selected]
+            if sum(i.compress_size + 65536 for i in planned) + len(directory) > 256 * 1024**2:
+                raise ValueError("planned transfer exceeds256MiB; no data substitution")
+            if sum(i.file_size for i in planned) + 2 * 1024**3 > shutil.disk_usage(output).free:
+                raise ValueError("insufficient space including2GiB reserve")
             for item in selected:
                 name = f"FSD50K.dev_audio/{item['id']}.wav"
                 info = index[name]
