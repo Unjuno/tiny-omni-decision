@@ -1,5 +1,8 @@
 # Full-frame preprocessing comparison
 
+Completed: [results](R2_JOINT_FULL_FRAME_RESULTS_20261013.md). All extraction,
+fixed fits and paired comparisons finished. Quality remains insufficient.
+
 The preceding train annotation diagnostic found the random crop fully excluded
 the marked occluder at frame0 in24/98 annotated training clips. Test full-frame
 retention without using any box annotation to construct model inputs.
