@@ -1,15 +1,22 @@
 """Admission for the fixed VideoSAUR development validation endpoint."""
 
+import argparse
 import json
+import subprocess
+import time
 from pathlib import Path
 
 import numpy as np
 import torch
 
-from scripts.audit_correspondence_validation import sha
+from scripts.audit_correspondence_validation import sha, write
+from scripts.paired_video_bootstrap import paired_video_bootstrap
 from scripts.slot_feature_sampling import sample_indices
+from scripts.train_slot_readout import summary
+from scripts.train_trajectory_readout import predict
+from tiny_omni_decision.trajectory_readout import TrajectoryReadout
 
-ROOT = Path("C:/CodexArtifacts/prevalided-reuse-r2")
+ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r2")
 PAIR_SHA = "30846aaa87e2292e97ee3187c5f2f986ba3c3d57d46a249b361e5a14c0cc8ec2"
 MEDIA_SHA = "213bd33994fb80d79ee05ee0580af2cc9915dfc61094aed00c847c2c67f1d546"
 
@@ -100,4 +107,70 @@ def load_valid(folder):
         ),
         hashes,
     )
+
+
+def evaluate(bank, data, output, hashes, checkpoints):
+    output.mkdir(exist_ok=False)
+    torch.set_num_threads(4)
+    torch.use_deterministic_algorithms(True)
+    started = time.perf_counter()
+    predictions, metrics = {}, {}
+    for name, (path, expected_hash) in checkpoints.items():
+        if sha(path) != expected_hash:
+            raise ValueError("checkpoint changed")
+        model = TrajectoryReadout(input_dim=129)
+        model.load_state_dict(torch.load(path, map_location="cpu", weights_only=True), strict=True)
+        model.requires_grad_(False)
+        predictions[name] = {
+            control: predict(model, bank, data, control)
+            for control in ("normal", "mismatch", "zero")
+        }
+        metrics[name] = {
+            key: summary(value, data["targets"].numpy())
+            for key, value in predictions[name].items()
+        }
+        if sha(path) != expected_hash:
+            raise ValueError("checkpoint changed during evaluation")
+    examples = [
+        dict(video_id=p["video_id"], condition=condition, options=p["options"],
+             target=int(data["targets"][2 * i + j]))
+        for i, p in enumerate(data["pairs"])
+        for j, condition in enumerate(("initial", "final"))
+    ]
+    write(output / "examples.json", examples)
+    write(output / "predictions.json", {
+        name: {mode: values.tolist() for mode, values in controls.items()}
+        for name, controls in predictions.items()
+    })
+    write(output / "result.json", dict(
+        status="COMPLETE_FIXED_DEVELOPMENT_EVALUATION_NOT_BLIND",
+        weights_unchanged=True, metrics=metrics, seconds=time.perf_counter() - started,
+        input_hashes=hashes,
+        checkpoint_hashes={name: expected for name, (_, expected) in checkpoints.items()},
+        bootstrap=paired_video_bootstrap(predictions["final"]["normal"],
+                                         predictions["final"]["mismatch"],
+                                         data["targets"].numpy()),
+        source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        script_sha256=sha(Path(__file__)),
+        artifacts={p.name: sha(p) for p in output.iterdir()},
+    ))
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--features", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    bank, data, hashes = load_valid(args.features)
+    trained = ROOT / "perception-occlusion-slot-train-readout-01"
+    evaluate(bank, data, args.output, hashes, {
+        "final": (trained / "final.pt",
+                  "3d12ea26148724ba0113e251b29c1e69e9aca9ff7c3bd3f95aed6d685c97b765"),
+        "untrained": (trained / "untrained.pt",
+                      "255f77f008c74662dc5b204612d7968f940bcd15b12334a45bd0ea07c47fa046"),
+    })
+
+
+if __name__ == "__main__":
+    main()
 
