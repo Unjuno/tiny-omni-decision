@@ -95,3 +95,5 @@ all preprocessing/model differences disclosed, not as a one-factor pretraining
 causal experiment. Checkpoint rights remain REVIEW; no product adoption,
 compression or R2 quality claim is justified yet.
 
+
+Follow-up: [eight-video transfer diagnostic](R2_VIDEOSAUR_TRAIN_MASK_RESULTS_20261013.md) completed with improved localization and remaining identity limitations.
