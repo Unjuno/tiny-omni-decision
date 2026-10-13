@@ -5,6 +5,51 @@ from tiny_omni_decision.evidence_decision import evidence_gated_json
 OPTIONS = [{"option_id": "x", "class_id": "a"}, {"option_id": "y", "class_id": "b"}]
 
 
+@pytest.mark.parametrize("times, valid, max_age, expected_index", [
+    ((21,), (True,), 100, None),  # Future evidence cannot satisfy the condition.
+    ((20,), (False,), 100, None),
+    ((15, 21), (True, True), 5, 0),  # Inclusive boundary; never choose future.
+    ((15,), (True,), 4.999, None),
+    ((10, 20), (True, False), 10, 0),  # Latest valid evidence policy.
+    ((20,), (True,), 0, 0),
+])
+def test_spoken_criterion_causal_boundaries(times, valid, max_age, expected_index):
+    from test_observation_alignment import batch
+
+    from tiny_omni_decision.evidence_decision import aligned_evidence_json
+    from tiny_omni_decision.observations import Criterion
+
+    request = batch()
+    audio = request.observations[1].model_copy(update={
+        "timestamps_ms": times, "valid_mask": valid,
+    })
+    request = request.model_copy(update={
+        "observations": (request.observations[0], audio),
+        "criterion": Criterion(kind="spoken", value="a"),
+    })
+    seen = []
+
+    def predict(selected):
+        seen.append(selected)
+        return [.8, .2]
+
+    result = aligned_evidence_json(
+        predict, request, ['a', 'b'],
+        [{'option_id': 'a', 'class_id': 'a'}, {'option_id': 'b', 'class_id': 'b'}],
+        required_sources={'video': 'v'}, query_time_ms=20, max_age_ms=max_age,
+    )
+    if expected_index is None:
+        assert result['status'] == 'abstain'
+        assert seen == []
+        assert result['selected_option_id'] is None
+        assert all(o['probability'] is None for o in result['options'])
+    else:
+        assert result['status'] == 'selected'
+        assert len(seen) == 1
+        assert seen[0]['a'] == {'index': expected_index,
+                                'age_ms': 20 - times[expected_index]}
+
+
 @pytest.mark.parametrize("max_age, expected", [(4, "abstain"), (12, "selected")])
 def test_spoken_criterion_requires_fresh_audio_even_for_visual_task(max_age, expected):
     from test_observation_alignment import batch
