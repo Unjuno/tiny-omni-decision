@@ -45,14 +45,20 @@ def aligned_evidence_json(predict, batch, class_ids, options, *, required_source
     if [o.option_id for o in batch.options] != [o["option_id"] for o in options]:
         raise ValueError("output options must match observation batch IDs and order")
     aligned = align_observations(batch, [query_time_ms], max_age_ms=max_age_ms)
+    requirements = list(required_sources.items())
+    if batch.criterion is not None and batch.criterion.kind == "spoken":
+        # A spoken condition is evidence too, even for a visual-only task.
+        # Keep both sources when observation audio and criterion audio differ.
+        requirements.append(("audio", batch.criterion.value))
     selected, available = {}, {}
-    for modality, source_id in required_sources.items():
+    for modality, source_id in requirements:
         stream = aligned.get(source_id)
         if stream is not None and stream["modality"] != modality:
             raise ValueError("required source modality mismatch")
-        available[modality] = stream is not None and stream["available"][0]
-        if available[modality]:
+        source_available = stream is not None and stream["available"][0]
+        available[modality] = available.get(modality, True) and source_available
+        if source_available:
             selected[source_id] = {"index": stream["indices"][0],
                                    "age_ms": stream["age_ms"][0]}
     return evidence_gated_json(lambda: predict(selected), class_ids, options,
-                               required=required_sources, available=available)
+                               required=tuple(available), available=available)
