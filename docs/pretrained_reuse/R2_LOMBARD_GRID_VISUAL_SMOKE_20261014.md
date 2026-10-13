@@ -5,7 +5,8 @@ native16-frame profile. Actual-PTS uniform endpoint sampling, official bilinear
 resize/center crop288,RGB[0,1],FP32. No filename, transcript, gold word alignment
 or model-quality scoring. Old8-frame CLEVRER/Teacher configs and caches are untouched.
 
-Pinned source `c6eba0ece3dd49a24ffc44582966997a4a59f1d8`, unmodified checkout;
+Pinned source `c6eba0ece3dd49a24ffc44582966997a4a59f1d8`, tracked source unchanged
+(existing build/egg-info/bytecode directories retained);
 checkpointSHA`61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`;
 114,365,184loaded parameters. All outputs `[1,4096,768]` finite and repeated
 bitwise on the same CPU backend. Framewise spatial means `[16,768]` are saved,
