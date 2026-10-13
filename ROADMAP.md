@@ -1044,3 +1044,8 @@ ECE .0189→.1594. Accuracy difference remains uncertain under paired-state boot
 Preserve the coverage parent; no promotion or additional budget sweep.
 [Replay results](docs/pretrained_reuse/R2_CONTEXT_REPLAY_RESULTS_20261013.md) and
 [saved-prediction diagnosis](docs/pretrained_reuse/R2_CONTEXT_REPLAY_RETENTION_DIAGNOSTIC_20261013.md).
+
+Fixed soft-teacher replay subsequently completed384updates with identical initial
+weights, ordered examples and evaluation. Original NLL improves1.1244→.8598 and
+ECE .1594→.0303 versus hard replay, but remains worse than the parent .8356/.0189.
+No promotion; retain all comparisons. [Result](docs/pretrained_reuse/R2_SOFT_REPLAY_RESULTS_20261013.md).
