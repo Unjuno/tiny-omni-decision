@@ -1,0 +1,11 @@
+{
+  "repository": "DragonLiu1995/MUSIC-AVQA-v2.0",
+  "revision": "7db4f5480dcf833d4aa588235bc7a533c57c1719",
+  "readme_url": "https://raw.githubusercontent.com/DragonLiu1995/MUSIC-AVQA-v2.0/7db4f5480dcf833d4aa588235bc7a533c57c1719/README.md",
+  "readme_sha256": "38079eabe6a6752808decef96d829e7e46e39cbb6d3e6e7e5ba76235723d357f",
+  "media_acquired": false,
+  "annotations_acquired": false,
+  "training_admission": "not ALLOW: publisher describes research-purpose-only videos; underlying media grant unresolved",
+  "split_requirement": "group all clips and horizontal flips by original YouTube identity",
+  "quality_warning": "balancing a benchmark does not establish required-modality reliance for each question"
+}
