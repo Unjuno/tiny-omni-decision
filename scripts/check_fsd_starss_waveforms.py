@@ -1,24 +1,25 @@
 """Bounded full-recording waveform overlap screen; no learning or label tuning."""
 
-import json
 import time
 import wave
 from pathlib import Path
 
-import av
 import numpy as np
-import torch
-import torchaudio
 
 from scripts.audio_overlap_probe import peak_normalized_match
 from scripts.extract_frozen_videoprism_features import sha256_file
 from scripts.extract_starss23_corpus_features import read_manifest
 from scripts.fetch_starss23_frozen_media import write_json
+from scripts.fsd_acquisition_gate import complete_acquisition
 
 ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r2")
 
 
 def fsd_waveform(path):
+    import av
+    import torch
+    import torchaudio
+
     with av.open(str(path)) as container:
         stream = container.streams.audio[0]
         rate = stream.codec_context.sample_rate
@@ -36,12 +37,11 @@ def fsd_waveform(path):
 def main():
     media = ROOT / "fsd50k-training-128-02"
     output = ROOT / "fsd-starss-waveform-screen-128-01"
-    report = json.loads((media / "result.json").read_text())
-    if report["status"] != "PASS" or len(report["files"]) != 128:
-        raise ValueError("complete128-clip acquisition required")
+    report = complete_acquisition(media)
     ids = [r["id"] for r in report["files"]]
-    if ids != [r["id"] for r in report["selection"]] or len(set(ids)) != 128:
-        raise ValueError("acquisition order/identity mismatch")
+    import torch
+    import torchaudio
+
     windows = read_manifest(ROOT / "starss23-all-windows-v1")
     recordings = {}
     for row in windows:
