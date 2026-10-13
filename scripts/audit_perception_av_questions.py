@@ -25,6 +25,9 @@ result = {
     "lexical_sound_hear_audio_questions": sum(
         any(w in q["question"].lower() for w in ["sound", "hear", "audio"]) for q in questions
     ),
-    "decision": "No explicit required-modality supervision found; lexical absence is not proof of visual-only solvability. Do not auto-admit MCQA as complementary AV benchmark.",
+    "decision": (
+        "No explicit required-modality supervision found; lexical absence is not proof "
+        "of visual-only solvability. Do not auto-admit MCQA as complementary AV benchmark."
+    ),
 }
 write(Path("docs/pretrained_reuse/R2_PERCEPTION_AV_QUESTION_AUDIT_20261013.json"), result)
