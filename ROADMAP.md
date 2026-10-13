@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-13 CLAP follow-up completed:** Fixed Clotho-AQA learning reached
+joint65.18% versus EfficientAT66.96%. NLL/Brier point estimates worsen, grouped
+intervals include no change, and later epochs overfit. Keep the existing reference;
+conditional fusion/readout and genuinely joint audiovisual evaluation remain open.
+[Measured comparison](docs/pretrained_reuse/R2_CLOTHO_CLAP_RESULTS_20261013.md).
+
 **2026-10-13 conditional-audio task completed:** All856 licensed Clotho-AQA
 development sources were acquired, decoded and checked with180,004 cross-split
 waveform comparisons. Fixed24-epoch joint Accuracy66.96% versus question-only

@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-13 CLAP comparison completed:** Same-data joint Accuracy65.18%
+versus EfficientAT66.96%, with worse NLL/Brier point estimates and clear later
+overfitting. Full-clip extraction, train-only PCA and reload checks passed.
+No replacement/promotion; this is reused development validation.
+[Results and limits](docs/pretrained_reuse/R2_CLOTHO_CLAP_RESULTS_20261013.md).
+
 **2026-10-13 conditional-audio comparison completed:** All856 licensed sources
 and180,004 cross-split waveform pairs were checked before fixed24-epoch learning.
 Joint Accuracy66.96% versus question-only64.82% has an uncertain2.14-point gain;
