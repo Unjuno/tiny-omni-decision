@@ -1,0 +1,142 @@
+{
+  "revisions": {
+    "CaptainCook4D": "1137b884e038cc128589c18eab215024018fb642",
+    "downloader": "cf248fe2139fc6e37f9737141ec719948fbd1747",
+    "annotations": "a8a920a3293c4db27099a20ddbe3a3a9be1283e3"
+  },
+  "files": {
+    "CaptainCook4D/README.md": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/CaptainCook4D/1137b884e038cc128589c18eab215024018fb642/README.md",
+      "sha256": "7a4e5566619bb4a85f83113a182e3b1731a65609acb4e46b4ddbfb3ed02c4a1c",
+      "bytes": 10276
+    },
+    "downloader/README.md": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/downloader/cf248fe2139fc6e37f9737141ec719948fbd1747/README.md",
+      "sha256": "d79b7ecd1166218d792c0d1e1734a69300fd4019955815496d00c52092738dbb",
+      "bytes": 3728
+    },
+    "downloader/LICENSE": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/downloader/cf248fe2139fc6e37f9737141ec719948fbd1747/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "bytes": 11357
+    },
+    "downloader/metadata/download_links.json": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/downloader/cf248fe2139fc6e37f9737141ec719948fbd1747/metadata/download_links.json",
+      "sha256": "81b1e1ef571621da182c5fc31ef97f177927a1a95b22aa545229794542e6f2b4",
+      "bytes": 700705
+    },
+    "downloader/download_gopro_data.py": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/downloader/cf248fe2139fc6e37f9737141ec719948fbd1747/download_gopro_data.py",
+      "sha256": "4f48220da3e907b5a9a2bd73e123f4fcb04bcec348cdadcbf5b973c5df6c5972",
+      "bytes": 2821
+    },
+    "downloader/download_hololens_3d_data.py": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/downloader/cf248fe2139fc6e37f9737141ec719948fbd1747/download_hololens_3d_data.py",
+      "sha256": "580573fb415fe869929575cee60dd793ff65dfd187933df3d2a39e7fec43006c",
+      "bytes": 4929
+    },
+    "downloader/util.py": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/downloader/cf248fe2139fc6e37f9737141ec719948fbd1747/util.py",
+      "sha256": "1460568f42996fcd30e40a9edec4960cace35d3752217a8aeaf68c6733bc9daa",
+      "bytes": 15605
+    },
+    "annotations/README.md": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/annotations/a8a920a3293c4db27099a20ddbe3a3a9be1283e3/README.md",
+      "sha256": "cc303fa31a50ea42d56aa0b2657137a64363a36fc40d1587cd0b2984e2744053",
+      "bytes": 3883
+    },
+    "annotations/LICENSE": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/annotations/a8a920a3293c4db27099a20ddbe3a3a9be1283e3/LICENSE",
+      "sha256": "0cf0cdd477d245de93184b3f6f5190d21e004a760a752ceb1e520ff2d8c338a4",
+      "bytes": 1070
+    },
+    "annotations/ANNOTATIONS.md": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/annotations/a8a920a3293c4db27099a20ddbe3a3a9be1283e3/ANNOTATIONS.md",
+      "sha256": "d807139b26a726b2626f19743f731ab97fddc9c957fe932f5825bf1d67c8452f",
+      "bytes": 9599
+    },
+    "annotations/metadata/video_information.csv": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/annotations/a8a920a3293c4db27099a20ddbe3a3a9be1283e3/metadata/video_information.csv",
+      "sha256": "51febe466df9d336eaca8c5a467475bc3909b9d597208861316be78f4dd50138",
+      "bytes": 8684
+    },
+    "annotations/data_splits/person_data_split_combined.json": {
+      "url": "https://raw.githubusercontent.com/CaptainCook4D/annotations/a8a920a3293c4db27099a20ddbe3a3a9be1283e3/data_splits/person_data_split_combined.json",
+      "sha256": "1ccb06b475871948946411205ace77e34081fa49f45fdd1ea62c24acdb42ea96",
+      "bytes": 3299
+    }
+  },
+  "recordings_with_download_metadata": 384,
+  "recordings_with_identity_metadata": 384,
+  "stream_link_counts": {
+    "gopro_360p": 383,
+    "gopro_4k": 363,
+    "hololens_raw_depth_ahat_ab_zip": 332,
+    "hololens_raw_depth_ahat_depth_zip": 331,
+    "hololens_raw_depth_pose_pkl": 294,
+    "hololens_raw_imu_accelerometer_pkl": 276,
+    "hololens_raw_imu_gyroscope_pkl": 276,
+    "hololens_raw_imu_magnetometer_pkl": 276,
+    "hololens_raw_pv_frames_zip": 333,
+    "hololens_raw_pv_pose_pkl": 294,
+    "hololens_raw_spatial_pkl": 292,
+    "hololens_sync_depth_ahat_ab_zip": 277,
+    "hololens_sync_depth_ahat_depth_zip": 280,
+    "hololens_sync_depth_pose_pkl": 244,
+    "hololens_sync_imu_accelerometer_pkl": 243,
+    "hololens_sync_imu_gyroscope_pkl": 242,
+    "hololens_sync_imu_magnetometer_pkl": 243,
+    "hololens_sync_pv_frames_zip": 293,
+    "hololens_sync_pv_pose_pkl": 292,
+    "hololens_sync_pv_video": 335,
+    "hololens_sync_spatial_pkl": 261
+  },
+  "split_counts": {
+    "train": 204,
+    "val": 84,
+    "test": 96
+  },
+  "split_overlap_from_video_information": {
+    "train/val": {
+      "recordings": [],
+      "persons": [
+        "8"
+      ]
+    },
+    "test/train": {
+      "recordings": [],
+      "persons": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "6",
+        "8"
+      ]
+    },
+    "test/val": {
+      "recordings": [],
+      "persons": [
+        "7",
+        "8"
+      ]
+    }
+  },
+  "requested_stream_groups": {
+    "video_audio_accelerometer": [
+      "hololens_sync_pv_video",
+      "hololens_raw_mc_pkl",
+      "hololens_sync_imu_accelerometer_pkl"
+    ]
+  },
+  "availability": {
+    "video_audio_accelerometer": {
+      "train": [],
+      "val": [],
+      "test": []
+    }
+  },
+  "media_downloaded": false,
+  "outcome_annotations_loaded": false,
+  "limitation": "Link presence is not availability, synchronization, or task quality."
+}
