@@ -1,5 +1,8 @@
 # Bounded frozen joint-feature readout comparison
 
+Completed: [measured results and learning curves](R2_JOINT_VIDEO_READOUT_RESULTS_20261013.md).
+Both fixed50-update runs finished; this readout was not adopted.
+
 Purpose: distinguish a weak pretrained ITM classifier from unusable frozen
 joint video/text representations. Existing modular trajectory/scene readouts
 do not test these jointly contextualized representations.
