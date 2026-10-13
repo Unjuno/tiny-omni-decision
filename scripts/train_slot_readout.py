@@ -21,6 +21,9 @@ PAIR_SHA = "8869bb903591af3a0995eeca0eeae1b50b990c8b08752a6e5d4d549f8a356fd7"
 MEDIA_SHA = "469299ad240ff85c47ba44abb8920aae9994b0e3ec15a3fca1373c49b2fa6ee3"
 
 
+PROTOCOL_SHA = "e124805a88fcdd6181ae1a79dacd32bbc1a836920fbb2331be0f028603e2af67"
+
+
 def validate_feature(row, value, media):
     if row["split"] != "train" or row["media_sha256"] != media["sha256"]:
         raise ValueError("feature media binding mismatch")
@@ -41,6 +44,8 @@ def load_train(folder):
     protocol_path = folder / "protocol.json"
     if sha(protocol_path) != ledger["protocol_sha256"]:
         raise ValueError("protocol changed")
+    if sha(protocol_path) != PROTOCOL_SHA:
+        raise ValueError("unexpected experiment protocol")
     protocol = json.loads(protocol_path.read_text())
     if protocol["manifest_sha256"] != MEDIA_SHA or protocol["pair_sha256"] != PAIR_SHA:
         raise ValueError("source corpus changed")

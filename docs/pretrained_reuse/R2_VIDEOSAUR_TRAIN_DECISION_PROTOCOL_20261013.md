@@ -80,3 +80,9 @@ required before executing it; preserve any existing output directory. Outputs
 include ordered example identities/targets/options, all epoch metrics, initial
 and final weights, final control predictions, hashes and reload verification.
 No best.pt is produced and train results cannot select a deployment checkpoint.
+
+The train runner additionally pins the actual extraction protocol SHA256
+`e124805a88fcdd6181ae1a79dacd32bbc1a836920fbb2331be0f028603e2af67`.
+A self-consistent ledger from another experiment is rejected before corpus reads;
+active extraction still matches this pin. Regression/full suite686passed,1skipped.
+This admission fix does not change running extraction or planned optimization.

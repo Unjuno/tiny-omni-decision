@@ -71,3 +71,24 @@ def test_fixed_fit_cpu_smoke_and_reload(tmp_path):
     assert result["example_presentations"] == 200
     assert len(json.loads((output / "history.json").read_text())) == 51
     assert not (output / "best.pt").exists()
+
+
+def test_self_consistent_other_experiment_is_rejected(tmp_path):
+    import hashlib
+    import json
+
+    from scripts.train_slot_readout import load_train
+
+    protocol = tmp_path / "protocol.json"
+    protocol.write_text("{}")
+    (tmp_path / "result.json").write_text(
+        json.dumps(
+            dict(
+                status="PASS_TRAIN_ONLY_SLOT_EXTRACTION",
+                weights_unchanged=True,
+                protocol_sha256=hashlib.sha256(protocol.read_bytes()).hexdigest(),
+            )
+        )
+    )
+    with pytest.raises(ValueError, match="experiment protocol"):
+        load_train(tmp_path)
