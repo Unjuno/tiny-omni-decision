@@ -1158,6 +1158,23 @@
     "torchaudio": "2.6.0+cu124",
     "device": "cpu",
     "gpu_training": false,
-    "cloud_compute_cost": 0
+    "cloud_compute_cost": 0,
+    "cpu": "Intel Core i7-12700H",
+    "host_ram_gib": 32,
+    "available_gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "available_vram_mib": 16384,
+    "model_precision": "float32",
+    "waveform_precision": "float64"
+  },
+  "verification": {
+    "ruff": "passed",
+    "cpu_tests_passed": 793,
+    "cpu_tests_skipped": 1,
+    "manifest_commands_passed": 25,
+    "ci_verified_commit": "577d5f47443842b44d0cc86a85c9ca4478feef6a",
+    "ci_checks": [
+      "success",
+      "success"
+    ]
   }
 }

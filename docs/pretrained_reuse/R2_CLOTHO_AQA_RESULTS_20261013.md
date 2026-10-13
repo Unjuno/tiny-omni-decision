@@ -92,6 +92,9 @@ weight, normalization, protocol, probability and ID hashes plus independent audi
 
 Python3.11.9, Torch2.6.0+cu124, NumPy2.4.6, Transformers5.6.2, PyAV18.1.0,
 torchaudio2.6.0+cu124; reused process-local dependencies, no environment upgrade.
+Host: Intel Core i7-12700H,32GiB RAM, RTX3080 Laptop16GiB available. This
+comparison used CPU FP32 encoder/readout inference and learning; waveform
+correlations use float64. No GPU memory/latency measurement is claimed.
 Audio/joint head learning+selection+calibration .701/.657s CPU; joint diagnostic
 .0047s. No GPU learning or paid/cloud compute. Peak process RAM was not measured;
 the prepared-cache byte count is not a peak-RAM claim. Joint-only inference model
@@ -117,3 +120,4 @@ not extend epochs or redefine the benchmark around unanimous/easy questions.
 Verification: repository-wide Ruff passed;793 CPU tests passed,1skipped; all25
 model/dataset/catalog manifest audit commands passed. The scorer class was
 confirmed to load from this worktree's `src/tiny_omni_decision/decision.py`.
+GitHub Actions for577d5f47443842b44d0cc86a85c9ca4478feef6a passed both checks.
