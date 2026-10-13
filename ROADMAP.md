@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 SAM2 initialization gate:** All8,192 proposals and model-produced-mask
+seeding completed on the fixed8train clips; frozen-state/repeat/readback checks
+passed. Initial annotated covering-object bbox opportunity8/8 in raw/NMS banks
+falls to2/8 under unconditional top3 presence ranking. This is not hidden-item
+identification or QA Accuracy. Validate target cue, game-time anchors and
+actor-relative semantics before a query-dependent fit; no GT-match seeding or
+threshold sweep. [Execution and limits](docs/pretrained_reuse/R1_SAM2_AUTO_INIT_20261014.md).
+
 **2026-10-14 R1 object-mask/memory candidate:** Pinned SAM2.1 Tiny passed full strict
 load and fixed train-only image-frame/video propagation on the local GPU, with
 38,962,498 registered parameters,512 persistent coefficients and measured~695MB

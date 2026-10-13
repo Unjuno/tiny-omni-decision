@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 annotation-free initialization probe:** SAM2 generated all8,192
+geometric-grid proposals on eight fixed train clips and seeded its own top3
+masks. Covering-object bbox opportunity8/8 survives NMS, but top3 coverage2/8.
+This is geometry/ranking diagnosis; hidden-item/QA target mapping remains open.
+[Executed probe and semantic limits](docs/pretrained_reuse/R1_SAM2_AUTO_INIT_20261014.md).
+
 **2026-10-14 object-memory candidate admission:** SAM2.1 Tiny actually loaded and
 processed four train clips×16frames on the existing GPU.38,962,498 parameters,
 ~695MB peak Torch allocation; repeat/reload and frozen-state checks passed.
