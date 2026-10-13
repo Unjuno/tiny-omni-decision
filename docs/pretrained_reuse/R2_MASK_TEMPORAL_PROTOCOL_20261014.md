@@ -44,6 +44,12 @@ IDs,32 ordered temporal indices,512-wide combined tokens, hashes, timings and
 memory. Verify finite values, output order/count, input hashes, bitwise first-clip
 repeat and save/readback. Check model-state/weight hashes unchanged.
 
+**Execution clarification:** The pinned inference path consumes CPU RNG via
+`torch.randperm`. A bitwise repeat restores the same CPU/CUDA before-state, then
+restores the primary after-state for later clips. Both states are saved. The
+failed consecutive-forward attempt and confirming diagnosis are preserved in
+[executed results](R2_MASK_TEMPORAL_RESULTS_20261014.md); no tolerance/model patch.
+
 The original `mask_trajectory_features` pooling primitive retains unsupported
 zero tokens with explicit false flags. These flags describe availability of
 initial support, not track validity; a consumer must fail closed if all are

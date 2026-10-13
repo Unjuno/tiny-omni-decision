@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 object-temporal execution:** All696 model-mask queries tracked
+4,979 train frames with unchanged frozen weights and exact checkpoint/RNG replay.
+Initial group opportunity24/24 fixes a grid gap; GT-associated future point-in-box
+371/500 is diagnostic, not QA Accuracy. Later appearance/target association and
+full Omni quality remain open. [Executed state primitive and limits](docs/pretrained_reuse/R2_MASK_TEMPORAL_RESULTS_20261014.md).
+
 **2026-10-14 frozen mask-ranking comparison:** Existing TinyCLIP actually ranked
 all696 saved SAM2 NMS candidates. Fixed top3 distinct group coverage10/24→9/24;
 cover hits2/8→3/8 do not establish improvement. Preserve the negative result;
