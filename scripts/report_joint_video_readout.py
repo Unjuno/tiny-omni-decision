@@ -11,10 +11,25 @@ from scripts.train_trajectory_readout import PINS, ROOT, summarize
 from tiny_omni_decision.paired_video_intervals import video_cluster_intervals
 
 
+def check_comparison_configs(current, reference):
+    for key in (
+        "seed",
+        "epochs",
+        "lr",
+        "weight_decay",
+        "selector",
+        "pair_hashes",
+        "checkpoint_sha256",
+    ):
+        if current[key] != reference[key]:
+            raise ValueError(f"comparison setting mismatch: {key}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--reference-run", type=Path)
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError("fresh report output required")
@@ -62,6 +77,32 @@ def main():
     report["normal_minus_black"] = video_cluster_intervals(
         values["normal"], targets, reference=values["black_pixels"], draws=10000, seed=17
     )
+    if args.reference_run:
+        reference = args.reference_run
+        check_comparison_configs(
+            json.loads((args.run / "config.json").read_text()),
+            json.loads((reference / "config.json").read_text()),
+        )
+        reference_result = json.loads((reference / "result.json").read_text())
+        reference_values = {}
+        for mode in ("normal", "black_pixels"):
+            prediction_path = reference / mode / "predictions.json"
+            expected = reference_result[mode]["artifacts"]["predictions.json"]["sha256"]
+            if sha(prediction_path) != expected:
+                raise ValueError("reference prediction hash mismatch")
+            saved = json.loads(prediction_path.read_text())
+            if saved["targets"] != targets.ravel().tolist():
+                raise ValueError("reference target alignment mismatch")
+            reference_values[mode] = np.asarray(saved["probabilities"], dtype=np.float32).reshape(
+                len(pairs), 2, 3
+            )
+        if not np.array_equal(values["black_pixels"], reference_values["black_pixels"]):
+            raise ValueError("unchanged black-control prediction mismatch")
+        report["black_reference_exact"] = True
+        report["reference_result_sha256"] = sha(reference / "result.json")
+        report["normal_minus_reference"] = video_cluster_intervals(
+            values["normal"], targets, reference=reference_values["normal"], draws=10000, seed=17
+        )
     write(args.output, report)
     print(json.dumps(report, indent=2))
 

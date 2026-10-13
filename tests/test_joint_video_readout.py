@@ -106,3 +106,20 @@ def test_report_reproduces_selected_metrics(tmp_path, monkeypatch):
     reporter.main()
     report = json.loads(output.read_text())
     assert report["normal_minus_black"]["paired_difference_intervals"]["accuracy"] == [0, 0]
+
+
+def test_comparison_refuses_changed_training_budget():
+    from scripts.report_joint_video_readout import check_comparison_configs
+
+    config = dict(
+        seed=17,
+        epochs=50,
+        lr=0.001,
+        weight_decay=0.01,
+        selector="nll",
+        pair_hashes={"train": "fixed", "valid": "fixed2"},
+        checkpoint_sha256="same",
+    )
+    check_comparison_configs(config, dict(config))
+    with pytest.raises(ValueError, match="epochs"):
+        check_comparison_configs(config, dict(config, epochs=100))
