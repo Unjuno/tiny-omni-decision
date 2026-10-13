@@ -37,3 +37,18 @@ def test_separate_states_and_heldout_context_templates():
 def test_unknown_split_rejected():
     with pytest.raises(ValueError):
         context_rows(17, 1, 'audit')
+
+
+def test_training_arms_share_order_and_balance_context():
+    from collections import Counter
+
+    from scripts.train_context_robustness import ordered_views
+
+    rows = context_rows(211, 512, 'train')
+    arms = ordered_views(rows)
+    assert arms == ordered_views(rows)
+    assert [r['base_id'] for r in arms['plain']] == [r['base_id'] for r in arms['context']]
+    assert len({r['base_id'] for r in arms['context']}) == 3072
+    assert Counter(r['context'] for r in arms['context']) == {
+        'plain': 1024, 'irrelevant': 1024, 'necessary': 1024
+    }
