@@ -56,3 +56,27 @@ before running it; all prior development exposure must remain disclosed. No
 sealed audit, model promotion, compression or shared-Lens experiment is authorized
 by a low train loss. Checkpoint license and original non-shape config limitations
 remain those recorded in R1. Existing artifacts are unchanged.
+
+## Runner implementation follow-up
+
+`scripts/train_slot_readout.py` implements the fixed train-only fit. It rejects
+incomplete extraction, changed input hashes, wrong media/frame counts, altered
+time values and mismatched question routing. It reads only the train feature
+entry from the existing text ledger, never the validation feature file.
+
+The unit smoke uses two synthetic video pairs in a separate pytest process:
+50updates/50epochs, finite gradients, complete history and exact final reload
+passed. Those synthetic metrics are not a real experiment result. No real-data
+readout fitting has run yet.685tests passed,1skipped;Ruff passed.
+
+After result.json confirms all99features, the intended command is:
+
+```powershell
+python -m scripts.train_slot_readout --features C:/CodexArtifacts/pretrained-reuse-r1/videosaur-train-slots-01 --output C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-slot-train-readout-01
+```
+
+This is a recorded command, not a scheduled or completed run. Completion is
+required before executing it; preserve any existing output directory. Outputs
+include ordered example identities/targets/options, all epoch metrics, initial
+and final weights, final control predictions, hashes and reload verification.
+No best.pt is produced and train results cannot select a deployment checkpoint.
