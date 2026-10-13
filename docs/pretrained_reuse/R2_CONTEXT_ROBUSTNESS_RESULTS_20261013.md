@@ -39,3 +39,27 @@ Command: `python -m scripts.train_context_robustness` (source1f55c31).
 Corpus/sampler tests4passed; Ruff passed. Corpus and parent checkpoints untouched.
 Full CPU suite/CI for the final report commit must still be checked; neither is
 implied by the successful GPU experiment.
+
+## Paired uncertainty and verification follow-up
+
+Preserved final predictions were joined on ID, state group, context, target and
+candidate order. Resampled128 whole states (six questions/context)10,000times,
+seed17, percentile95% intervals, NLL probability floor1e-12. Context-trained minus
+plain-trained differences:
+
+| Context | Accuracy difference [95% interval] | NLL difference [95% interval] |
+|---|---:|---:|
+| Plain | -.007813 [-.016927,.000000] | +.013375 [.003664,.022626] |
+| Irrelevant | +.022135 [.002604,.042969] | -.782727 [-.902498,-.665991] |
+| Necessary | -.003906 [-.014323,.005208] | +.008203 [-.001590,.016844] |
+
+Intervals are post-hoc, unadjusted across contexts and conditional on this single
+seed/constructed state distribution. Irrelevant-context improvement is supported
+within this diagnostic, while plain NLL degradation is also supported. This is
+evidence for the treatment's limited effect, not a product acceptance or a clean
+global improvement. Full method/input hashes: R2_CONTEXT_PAIRED_UNCERTAINTY_20261013.json.
+
+Full CPU suite721passed,1skipped (14.65s); repository-wide Ruff passes. All workflow
+model/dataset/catalog validations and example policy audit pass. CI for833bbfb:
+runs38361581911 and38361577055 completed successfully. These checks validate code
+and manifests, not general model quality. No training rerun or sealed evaluation.
