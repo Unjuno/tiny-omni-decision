@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-13 AV reference follow-up:** CAV-MAE Sync's official pretrained
+checkpoint passed strict CPU loading and real-input checks. Fixed200-question
+development correspondence scored32% with one frame and35% with eight; paired
+intervals do not establish improvement. Audio-window reversal leaves NLL nearly
+unchanged. Close this readout comparison; no product adoption or training-budget
+extension follows. Weight rights remain REVIEW and semantic fusion is unmet.
+See [eight-frame comparison](docs/pretrained_reuse/R2_CAV_MAE_SYNC_EIGHT_FRAMES_20261013.md)
+and [temporal control](docs/pretrained_reuse/R2_CAV_MAE_SYNC_TEMPORAL_CONTROL_20261013.md).
+
 > **Current user constraints (2026-10-12, clarified):** Build ONE compact,
 > genuinely multimodal Decision model with at most **200M total resident
 > parameters before quantization**, including **text, audio, video, image,
