@@ -1,6 +1,7 @@
 """Fail closed before consuming the full frozen AQA development acquisition."""
 
 import hashlib
+import html
 import json
 
 from scripts.clotho_media_identity import ALIAS_SHA256, media_basename
@@ -24,7 +25,7 @@ def validate_records(report, expected):
         for key in ("split", "license", "uploader"):
             if record[key] != wanted[key]:
                 raise ValueError("acquisition provenance mismatch")
-        if record["member"] != "audio_files/" + media_basename(wanted):
+        if html.unescape(record["member"]) != "audio_files/" + media_basename(wanted):
             raise ValueError("archive member mismatch")
         digest = record["sha256"]
         if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):

@@ -29,7 +29,7 @@ def candidate_inputs(audio, question, condition):
 
 
 def load_inputs(root):
-    media = root / "clotho-aqa-development-media-01"
+    media = root / "clotho-aqa-development-media-02"
     records = complete_acquisition(media, root / "clotho-aqa-development-split-01")
     media_sha = hashlib.sha256((media / "result.json").read_bytes()).hexdigest()
     screen = json.loads(

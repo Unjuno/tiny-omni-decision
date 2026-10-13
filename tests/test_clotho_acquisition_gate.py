@@ -40,3 +40,10 @@ def test_same_media_cannot_cross_splits():
                                  member="audio_files/two.wav", split="validation"))
     with pytest.raises(ValueError, match="cross splits"):
         validate_records(report, wanted)
+
+
+def test_html_entity_archive_name_matches_same_source_identity():
+    wanted, report = fixture()
+    wanted["1"]["file_name"] = "church's bell.wav"
+    report["files"][0]["member"] = "audio_files/church&#39;s bell.wav"
+    assert validate_records(report, wanted) == report["files"]

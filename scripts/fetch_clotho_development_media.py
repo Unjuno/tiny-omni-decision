@@ -1,11 +1,13 @@
 """Fetch the fixed856-source development corpus with four bounded range readers."""
 
+import argparse
 import hashlib
 import html
 import json
 import shutil
 import threading
 import time
+import urllib.error
 import urllib.request
 import zipfile
 import zlib
@@ -25,7 +27,51 @@ HASHES = {
 }
 
 
+class TransientRangeReader(HttpRangeReader):
+    """Retry explicit transient gateway responses without accepting invalid ranges."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.transient_errors = []
+
+    def read(self, size=-1):
+        for attempt in range(3):
+            try:
+                return super().read(size)
+            except urllib.error.HTTPError as error:
+                self.transient_errors.append({"status": error.code, "position": self.position})
+                if error.code not in {502, 503, 504} or attempt == 2:
+                    raise
+                time.sleep(attempt + 1)
+
+
+def reusable_records(source, expected):
+    report = json.loads((source / "result.json").read_text())
+    if report["status"] not in {"PASS", "FAIL"} or report["split_hashes"] != HASHES:
+        raise ValueError("reuse requires terminal acquisition with identical splits")
+    reuse = {}
+    for row in report["files"]:
+        identity = row["source_id"]
+        if identity not in expected or identity in reuse:
+            raise ValueError("unexpected or duplicate reuse identity")
+        wanted = expected[identity]
+        if any(row[k] != wanted[k] for k in ("license", "uploader", "split")) or html.unescape(
+            row["member"]
+        ) != "audio_files/" + media_basename(wanted):
+            raise ValueError("reuse provenance mismatch")
+        path = source / (identity + ".wav")
+        content = path.read_bytes()
+        if len(content) != row["bytes"] or hashlib.sha256(content).hexdigest() != row["sha256"]:
+            raise ValueError("reuse media hash/length mismatch")
+        reuse[identity] = (path, row["sha256"])
+    return reuse
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=ROOT / "clotho-aqa-development-media-02")
+    parser.add_argument("--reuse", type=Path)
+    args = parser.parse_args()
     rows = {}
     for split, expected in HASHES.items():
         data = (ROOT / f"clotho-aqa-development-split-01/{split}.json").read_bytes()
@@ -51,11 +97,13 @@ def main():
         r["source_id"]: (old / (r["source_id"] + ".wav"), r["sha256"]) for r in old_report["files"]
     }
     reuse["16854"] = (ROOT / "clotho-aqa-alias-waveform-01/candidate.wav", ALIAS_SHA256)
-    output = ROOT / "clotho-aqa-development-media-01"
+    if args.reuse is not None:
+        reuse.update(reusable_records(args.reuse, rows))
+    output = args.output
     output.mkdir(exist_ok=False)
     lock = threading.Lock()
     readers = [
-        HttpRangeReader(
+        TransientRangeReader(
             "https://zenodo.org/api/records/6473207/files/audio_files.zip/content",
             3140677494,
             budget=512 * 1024**2,
@@ -70,10 +118,12 @@ def main():
         workers=4,
         started=time.time(),
         script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        reused_acquisition=str(args.reuse) if args.reuse else None,
     )
 
     def save():
         report["transferred"] = sum(r.transferred for r in readers)
+        report["transient_http_errors"] = [error for r in readers for error in r.transient_errors]
         temporary = output / "result.tmp"
         temporary.write_text(json.dumps(report, indent=2), encoding="utf-8")
         temporary.replace(output / "result.json")

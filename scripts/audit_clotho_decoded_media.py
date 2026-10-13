@@ -22,7 +22,7 @@ def main():
     import av
 
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
-    media = root / "clotho-aqa-development-media-01"
+    media = root / "clotho-aqa-development-media-02"
     records = complete_acquisition(media, root / "clotho-aqa-development-split-01")
     output = root / "clotho-aqa-decoded-audit-01"
     output.mkdir(exist_ok=False)

@@ -15,7 +15,7 @@ from scripts.clotho_acquisition_gate import complete_acquisition
 def main():
     started = time.perf_counter()
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
-    media = root / "clotho-aqa-development-media-01"
+    media = root / "clotho-aqa-development-media-02"
     records = complete_acquisition(media, root / "clotho-aqa-development-split-01")
     decoded = root / "clotho-aqa-decoded-audit-01"
     data = (decoded / "result.json").read_bytes()
