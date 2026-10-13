@@ -23,6 +23,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--media", type=Path, default=root / "clotho-aqa-training-probe-01")
     parser.add_argument("--output", type=Path, default=root / "clotho-aqa-frozen-feature-probe-01")
+    parser.add_argument("--full-corpus", action="store_true")
     args = parser.parse_args()
     media, output = args.media, args.output
     audio_root = Path("C:/CodexArtifacts/pretrained-reuse-r1/efficientat-audit-v1")
@@ -35,6 +36,13 @@ def main():
     if revision != AUDIO_SOURCE:
         raise ValueError("source mismatch")
     acquisition = json.loads((media / "result.json").read_text())
+    if args.full_corpus:
+        from scripts.clotho_acquisition_gate import complete_acquisition
+
+        acquisition["files"] = complete_acquisition(
+            media, root / "clotho-aqa-development-split-01")
+    elif len(acquisition.get("files", [])) != 16:
+        raise ValueError("non-smoke acquisitions require --full-corpus integrity checks")
     if acquisition["status"] != "PASS":
         raise ValueError("incomplete media")
     for row in acquisition["files"]:
