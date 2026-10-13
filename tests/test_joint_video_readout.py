@@ -30,6 +30,23 @@ def test_partial_features_rejected(tmp_path):
         load_features(tmp_path, [dict(video_id="v")])
 
 
+def test_spatial_policy_must_match(tmp_path):
+    from scripts.train_joint_video_readout import matched_spatial_transform
+
+    train, valid = tmp_path / "train", tmp_path / "valid"
+    train.mkdir()
+    valid.mkdir()
+    (train / "protocol.json").write_text("{}")
+    (valid / "protocol.json").write_text("{}")
+    assert matched_spatial_transform(train, valid) == "legacy_random_crop"
+    fullframe = json.dumps(dict(spatial_transform="fullframe_resize_224x224"))
+    (valid / "protocol.json").write_text(fullframe)
+    with pytest.raises(ValueError, match="spatial"):
+        matched_spatial_transform(train, valid)
+    (train / "protocol.json").write_text(fullframe)
+    assert matched_spatial_transform(train, valid) == "fullframe_resize_224x224"
+
+
 @pytest.mark.parametrize("mismatch", [False, True])
 def test_feature_condition_alignment(tmp_path, mismatch):
     pairs = [

@@ -26,6 +26,21 @@ def write(path, value):
     path.write_text(json.dumps(value, indent=2), encoding="utf-8")
 
 
+def matched_spatial_transform(train_directory, valid_directory):
+    policies = [
+        json.loads((path / "protocol.json").read_text()).get(
+            "spatial_transform", "legacy_random_crop"
+        )
+        for path in (train_directory, valid_directory)
+    ]
+    if policies[0] != policies[1] or policies[0] not in {
+        "legacy_random_crop",
+        "fullframe_resize_224x224",
+    }:
+        raise ValueError("spatial preprocessing mismatch")
+    return policies[0]
+
+
 def load_features(directory, pairs):
     rows = [json.loads(x) for x in (directory / "predictions.jsonl").read_text().splitlines()]
     completion = json.loads((directory / "completion.json").read_text())
@@ -141,6 +156,7 @@ def main():
         raise ValueError("fresh output required")
     if sha(args.checkpoint) != CHECKPOINT:
         raise ValueError("checkpoint changed")
+    spatial_transform = matched_spatial_transform(args.train, args.valid)
     pairs = {}
     for split, pin in PINS.items():
         path = ROOT / f"perception-occlusion-pairs-01/{split}.json"
@@ -173,6 +189,7 @@ def main():
         args.output / "config.json",
         dict(
             seed=17,
+            spatial_transform=spatial_transform,
             epochs=50,
             lr=0.001,
             weight_decay=0.01,
