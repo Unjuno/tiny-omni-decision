@@ -42,3 +42,15 @@ evaluation metrics and hashes. The original257-video validation was not reopened
 
 The next step requires stronger evidence about input grounding/data coverage;
 shared-Lens, merging and product promotion remain unjustified.
+
+## Post-hoc paired uncertainty check
+
+Saved example records match exactly between arms. Resampling20 whole video pairs
+10,000 times with seed17 gives relational-minus-baseline Accuracy difference
+-.125,95% percentile interval[-.300,.025]; NLL difference-.129308,
+interval[-1.330742,1.089811]. Both include zero. See
+`R2_SLOT_INTERNAL_PAIRED_COMPARISON_20261013.json` for hashes and method.
+This does not establish a statistically resolved architecture ranking; rejection
+means insufficient adoption evidence under the quality goals, not proof that the
+architecture is universally worse. This post-hoc diagnostic does not provide a
+new blind evaluation or license further tuning on these20 videos.
