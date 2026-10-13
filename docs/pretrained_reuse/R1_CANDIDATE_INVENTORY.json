@@ -265,7 +265,7 @@
       "runtime_supported": false,
       "runtime_evidence": "not downloaded; parameter count exceeds the complete target by over four times",
       "task_quality_status": "unmeasured",
-      "decision": "outside the 100–200M total parameter target",
+      "decision": "outside the 100\u2013200M total parameter target",
       "parameter_tensor_bytes": null,
       "primary_citations": [
         "https://huggingface.co/facebook/pe-av-small"
@@ -583,6 +583,65 @@
         "https://github.com/edsonroteia/cav-mae-sync/tree/0add2e7cbfcb2ff0315456b9db7ad347893ba54b"
       ],
       "audit_date": "2026-10-13"
+    },
+    {
+      "modality": [
+        "environmental-audio",
+        "text-en"
+      ],
+      "model_revision": "laion/clap-htsat-unfused@8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
+      "license": "Apache-2.0 per pinned LAION Hub card; upstream code CC0 is a distinct scope",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/laion/clap-htsat-unfused/blob/8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a/README.md"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "task_quality_status": "unmeasured; one8s training-prefix feature smoke only",
+      "primary_citations": [
+        "https://huggingface.co/laion/clap-htsat-unfused/tree/8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
+        "https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/README.md"
+      ],
+      "audit_date": "2026-10-13",
+      "id": "clap-htsat-unfused-full",
+      "checkpoint": "https://huggingface.co/laion/clap-htsat-unfused/resolve/8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a/pytorch_model.bin",
+      "checkpoint_sha256": "1cd3c601bc4afe0fa87be3de4c13dd2cfadd249fac1e29acf74a9b296c3219bb",
+      "checkpoint_bytes": 614525833,
+      "parameters": 153492890,
+      "parameter_tensor_bytes": 613971560,
+      "runtime_evidence": "all loading lists empty; finite512-dimensional audio/text vectors and exact audio repeat on CPU FP32",
+      "decision": "research reference; whole pair plus current VideoPrism already exceeds200M; Clotho influenced upstream checkpoint selection"
+    },
+    {
+      "modality": [
+        "environmental-audio"
+      ],
+      "model_revision": "laion/clap-htsat-unfused@8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
+      "license": "Apache-2.0 per pinned LAION Hub card; upstream code CC0 is a distinct scope",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/laion/clap-htsat-unfused/blob/8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a/README.md"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "task_quality_status": "unmeasured; one8s training-prefix feature smoke only",
+      "primary_citations": [
+        "https://huggingface.co/laion/clap-htsat-unfused/tree/8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
+        "https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/README.md"
+      ],
+      "audit_date": "2026-10-13",
+      "id": "clap-htsat-unfused-audio",
+      "checkpoint": "C:/CodexArtifacts/pretrained-reuse-r1/clap-audit-01/audio-runtime-01/audio.pt",
+      "checkpoint_sha256": "d190141ffd119b9096d9f3e096b2285f8ce6fa401cdb666d6f53911a2517fee3",
+      "checkpoint_bytes": 113223978,
+      "parameters": 28190872,
+      "parameter_tensor_bytes": 112763488,
+      "runtime_evidence": "strict audio-only reload, then explicit L2 normalization gives bitwise parity with full model and independent prior smoke",
+      "decision": "frozen audio reuse candidate; full-clip deterministic coverage and decision quality remain unmeasured"
     }
   ],
   "incremental_update_date": "2026-10-13",
