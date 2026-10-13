@@ -37,6 +37,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--per-event", type=int, default=1)
     parser.add_argument("--output", type=Path, default=ROOT / "fsd50k-training-smoke-02")
+    parser.add_argument("--reuse", type=Path)
     args = parser.parse_args()
     if not 1 <= args.per_event <= 16:
         raise ValueError("bounded acquisition requires1..16 per event")
@@ -74,9 +75,22 @@ def main():
         if taken != args.per_event:
             raise ValueError("insufficient distinct eligible uploaders; no replacement policy")
     (output / "selection.json").write_text(json.dumps(selected, indent=2), encoding="utf-8")
+    reusable = {}
+    if args.reuse:
+        previous = json.loads((args.reuse / "result.json").read_text())
+        if previous["status"] not in ("PASS", "FAIL") or previous["selection"] != selected:
+            raise ValueError("reuse requires terminal acquisition with identical selection")
+        for item in previous["files"]:
+            path = args.reuse / f"{item['id']}.wav"
+            if hashlib.sha256(path.read_bytes()).hexdigest() != item["sha256"]:
+                raise ValueError("reusable media hash mismatch")
+            if item["id"] in reusable:
+                raise ValueError("duplicate reusable ID")
+            reusable[item["id"]] = item
     names = [f"FSD50K.dev_audio.z{i:02d}" for i in range(1, 6)] + ["FSD50K.dev_audio.zip"]
     readers = [HttpRangeReader(f"https://zenodo.org/api/records/4060432/files/{name}/content",
-                              3221225472 if i < 5 else 2306663327, budget=256 * 1024**2)
+                              3221225472 if i < 5 else 2306663327,
+                              budget=256 * 1024**2, retries=2)
                for i, name in enumerate(names)]
 
     def read_parts(disk, offset, count):
@@ -113,6 +127,15 @@ def main():
             for item in selected:
                 name = f"FSD50K.dev_audio/{item['id']}.wav"
                 info = index[name]
+                if item["id"] in reusable:
+                    saved = reusable[item["id"]]
+                    data = (args.reuse / f"{item['id']}.wav").read_bytes()
+                    if len(data) != info.file_size or zlib.crc32(data) != info.CRC:
+                        raise ValueError("reused member differs from original ZIP index")
+                    (output / f"{item['id']}.wav").write_bytes(data)
+                    result["files"].append({**saved, "reused_from": str(args.reuse)})
+                    (output / "progress.json").write_text(json.dumps(result, indent=2))
+                    continue
                 if info.file_size > 32 * 1024**2 or info.compress_size > 16 * 1024**2:
                     raise ValueError("selected member exceeds smoke budget; no substitution")
                 header = read_parts(info.volume, info.header_offset, 30)
