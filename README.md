@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-13 audio coverage comparison:** A fixed128-clip licensed FSD50K
+positive-only augmentation completed with the frozen audio encoder. Validation
+Accuracy fell89.97%→89.37%; nearly unchanged aggregate NLL hides worse music
+performance and zero bell recall. Not adopted; all prior artifacts are retained.
+[Measured results and learning curve](docs/pretrained_reuse/R2_FSD_POSITIVE_RESULTS_20261013.md).
+
 > **Current user constraints (2026-10-12):** The finished model must have at most
 > **200M total resident parameters before quantization**, covering text, image,
 > audio and video (sensors optional), and target **>=95% Accuracy for each modality,

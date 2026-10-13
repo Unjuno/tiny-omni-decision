@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-13 additional audio coverage:** Completed a fixed128-uploader FSD50K
+positive-only augmentation after verified selective acquisition and9,984 waveform
+comparisons.24epochs selected epoch9; later NLL worsened while training CE fell.
+Accuracy89.97%→89.37%, Brier worsened, bell recall remained0. Do not adopt this
+candidate or extend its budget based on tiny aggregate NLL improvement.
+[Results and limits](docs/pretrained_reuse/R2_FSD_POSITIVE_RESULTS_20261013.md).
+
 **2026-10-13 conditional-text reference:** FLAN-T5 Small passed exact pretrained
 loading, but fixed384-update last-block/all-decoder adaptations remain near
 chance (about24% development Accuracy). Consumed-train replay is also poor;
