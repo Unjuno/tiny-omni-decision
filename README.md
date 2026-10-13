@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 source-cue audit:** Pinned training annotations distinguish hidden
+items, covering objects and variable-sized candidate groups on all eight pilot
+clips.64 raw frames were decoded/reviewed; input-only target association,
+game-time anchors and actor-relative geometry remain unmeasured. No new fit or
+quality claim. [Executed source/frame audit](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CUES_20261014.md).
+
 **2026-10-14 annotation-free initialization probe:** SAM2 generated all8,192
 geometric-grid proposals on eight fixed train clips and seeded its own top3
 masks. Covering-object bbox opportunity8/8 survives NMS, but top3 coverage2/8.

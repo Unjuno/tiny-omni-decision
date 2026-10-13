@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 temporal source-cue gate:** Eight known training clips have explicit
+grounded hidden/cover/group roles; group sizes are2/3/4 and one hidden track begins
+at224.64 raw frames were reviewed without changing source cuts or model outputs.
+Define input-only prelude association and actor-relative semantics before fitting;
+source IDs/events supervise training only, and first-frame coverage is not QA
+quality. [Source/frame evidence and unresolved gates](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CUES_20261014.md).
+
 **2026-10-14 SAM2 initialization gate:** All8,192 proposals and model-produced-mask
 seeding completed on the fixed8train clips; frozen-state/repeat/readback checks
 passed. Initial annotated covering-object bbox opportunity8/8 in raw/NMS banks
