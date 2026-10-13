@@ -1,0 +1,162 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "id": "155281",
+      "samples_32k": 821718,
+      "nearest_starss": {
+        "id": "fold3_room6_mix007:t0030-0035",
+        "split": "train",
+        "cosine": 0.7355871200561523
+      }
+    },
+    {
+      "id": "43357",
+      "samples_32k": 738219,
+      "nearest_starss": {
+        "id": "fold3_room12_mix003:t0000-0005",
+        "split": "train",
+        "cosine": 0.7202868461608887
+      }
+    },
+    {
+      "id": "217919",
+      "samples_32k": 834754,
+      "nearest_starss": {
+        "id": "fold3_room4_mix007:t0100-0105",
+        "split": "train",
+        "cosine": 0.7873100638389587
+      }
+    },
+    {
+      "id": "94146",
+      "samples_32k": 692219,
+      "nearest_starss": {
+        "id": "fold3_room6_mix004:t0000-0005",
+        "split": "train",
+        "cosine": 0.7567868828773499
+      }
+    },
+    {
+      "id": "180963",
+      "samples_32k": 919277,
+      "nearest_starss": {
+        "id": "fold3_room12_mix003:t0065-0070",
+        "split": "train",
+        "cosine": 0.6949724555015564
+      }
+    },
+    {
+      "id": "273649",
+      "samples_32k": 698053,
+      "nearest_starss": {
+        "id": "fold3_room21_mix023:t0050-0055",
+        "split": "validation",
+        "cosine": 0.7527462840080261
+      }
+    },
+    {
+      "id": "139958",
+      "samples_32k": 480746,
+      "nearest_starss": {
+        "id": "fold3_room7_mix005:t0210-0215",
+        "split": "train",
+        "cosine": 0.6799970865249634
+      }
+    },
+    {
+      "id": "360729",
+      "samples_32k": 543162,
+      "nearest_starss": {
+        "id": "fold3_room22_mix010:t0025-0030",
+        "split": "train",
+        "cosine": 0.7126708030700684
+      }
+    },
+    {
+      "id": "259626",
+      "samples_32k": 791526,
+      "nearest_starss": {
+        "id": "fold3_room6_mix007:t0085-0090",
+        "split": "train",
+        "cosine": 0.6679677367210388
+      }
+    },
+    {
+      "id": "18894",
+      "samples_32k": 910263,
+      "nearest_starss": {
+        "id": "fold3_room6_mix004:t0000-0005",
+        "split": "train",
+        "cosine": 0.6725110411643982
+      }
+    },
+    {
+      "id": "121965",
+      "samples_32k": 895151,
+      "nearest_starss": {
+        "id": "fold3_room6_mix007:t0090-0095",
+        "split": "train",
+        "cosine": 0.6139234304428101
+      }
+    },
+    {
+      "id": "155806",
+      "samples_32k": 853760,
+      "nearest_starss": {
+        "id": "fold3_room12_mix003:t0060-0065",
+        "split": "train",
+        "cosine": 0.6648683547973633
+      }
+    },
+    {
+      "id": "57586",
+      "samples_32k": 573887,
+      "nearest_starss": {
+        "id": "fold3_room21_mix024:t0050-0055",
+        "split": "validation",
+        "cosine": 0.6338019371032715
+      }
+    },
+    {
+      "id": "337791",
+      "samples_32k": 563097,
+      "nearest_starss": {
+        "id": "fold3_room12_mix003:t0090-0095",
+        "split": "train",
+        "cosine": 0.6435132026672363
+      }
+    },
+    {
+      "id": "150183",
+      "samples_32k": 482588,
+      "nearest_starss": {
+        "id": "fold3_room12_mix008:t0070-0075",
+        "split": "train",
+        "cosine": 0.7834210395812988
+      }
+    },
+    {
+      "id": "238650",
+      "samples_32k": 788736,
+      "nearest_starss": {
+        "id": "fold3_room4_mix001:t0115-0120",
+        "split": "train",
+        "cosine": 0.7529113292694092
+      }
+    }
+  ],
+  "seconds": 2.694597400026396,
+  "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+  "source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+  "feature_sha256": "88e84347e13d29455754a14dc87b70798a77a2868926fc74967aa237c9fefe4b",
+  "media_report_sha256": "45040d68486a542cf9792cf6a0324e813752d3cae09000b63c7e42c5840ee324",
+  "reference_features_sha256": "7b633d8316d6a3c9e7cd6305072dc492036276fad35fb937d63aa96ea7cac860",
+  "script_sha256": "a0c7dc645b805a90b9ab08bb337cd2ffc9aac344a684ba7d3df5526b2e4ff3d4",
+  "parameters": 1961239,
+  "device": "cpu",
+  "training": false,
+  "torch": "2.6.0+cu124",
+  "preprocessing": "native mono float; torchaudio native->32k; official eval mel",
+  "limitation": "Whole clips versus 5s windows. Cosine is not a duplication test."
+}
