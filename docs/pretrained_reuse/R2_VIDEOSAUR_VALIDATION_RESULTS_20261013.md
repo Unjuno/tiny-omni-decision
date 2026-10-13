@@ -44,6 +44,11 @@ The evaluation completed on CPU in .7775 seconds excluding admission/loading.
 Saved checkpoint hashes remained unchanged. The original train extraction,
 training artifacts and all legacy runs were preserved. No sealed audit was used.
 
-Remaining work: cross-check prediction-derived metrics and provenance, record
-complete extraction resource measurements, and assess the next R2 action against
-the roadmap. The complete Omni objective remains unmet.
+Independent NumPy recomputation from saved predictions matched all four aggregate
+metrics for both heads and all three controls within1e-12. Prediction/example file
+hashes matched the saved ledger. See R2_VIDEOSAUR_VALIDATION_RECHECK_20261013.json.
+Extraction processed122,973 frames in11,902.759 seconds (3.306 hours); peak CUDA
+allocated memory was705,276,928 bytes and reserved memory893,386,752 bytes.
+
+Remaining work: assess the next R2 action against the roadmap. The complete Omni
+objective remains unmet. Neither shared-Lens nor merging is justified by this result.
