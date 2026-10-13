@@ -60,3 +60,26 @@ over frames, slots and coordinates, then average the eight video errors.
 This is a post-hoc training diagnostic, not an independent validation result.
 It weakens this specific fixed-index confound; it does not resolve separate-run
 correspondence, object identity, ground-truth localization or Decision quality.
+
+## Actual decoder correspondence check
+
+Loaded the pinned 93,530,201-parameter checkpoint strictly on CPU FP32 and decoded
+all 18 intersecting frames directly from their saved 128-dimensional slots.
+Reshaped each decoder mask to 37x37 and bilinearly resized to 64x64 with
+align_corners=False, matching the original mask cache. All 18 frames pass
+atol=1e-4, rtol=1e-4 against the separate CUDA extraction. Maximum absolute
+mask difference is 3.755093e-6. All checkpoint tensors remain exactly unchanged.
+This resolves the separate-extraction correspondence concern for these 18 frames;
+it does not verify the entire corpus or turn model masks into ground truth.
+
+Decode/check time .892491 CPU seconds excludes model loading. No GPU job launched.
+Result: `R2_SLOT_MASK_CORRESPONDENCE_20261013.json`; local directory
+`C:/CodexArtifacts/pretrained-reuse-r1/videosaur-slot-mask-correspondence-01`.
+Reproduction harness:
+`C:/CodexArtifacts/pretrained-reuse-r1/videosaur-source-audit-01/check_slot_mask_correspondence.py`,
+SHA256 da4e2d46aab3af6bf60dfc228dca2689126f3d6d592318fd7823ca697213db97.
+It checks the pinned loader hash, uses a fresh output directory, loads all weights
+strictly, and reports every frame including failures. Torch2.6.0+cu124, NumPy2.4.6.
+The fixed slot input plus pretrained decoder can recover its masks without
+re-encoding raw video; any future geometric readout must still account for decoder
+parameters and demonstrate task quality before adoption.

@@ -1,0 +1,141 @@
+{
+  "scope": "CPU decoder of saved CUDA slots versus saved CUDA masks, matching exact frame IDs",
+  "rows": [
+    {
+      "video_id": "video_10103",
+      "frame": 0,
+      "max_abs": 2.7418136596679688e-06,
+      "mean_abs": 9.877393125634626e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10103",
+      "frame": 30,
+      "max_abs": 2.3245811462402344e-06,
+      "mean_abs": 8.961802677731612e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10186",
+      "frame": 0,
+      "max_abs": 2.3245811462402344e-06,
+      "mean_abs": 1.2691292283761868e-07,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10186",
+      "frame": 210,
+      "max_abs": 3.6954879760742188e-06,
+      "mean_abs": 9.876846718270826e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10212",
+      "frame": 0,
+      "max_abs": 3.159046173095703e-06,
+      "mean_abs": 1.1666755739270229e-07,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10212",
+      "frame": 1050,
+      "max_abs": 2.205371856689453e-06,
+      "mean_abs": 1.2133173754591553e-07,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10387",
+      "frame": 0,
+      "max_abs": 2.9206275939941406e-06,
+      "mean_abs": 1.0996807731089575e-07,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10387",
+      "frame": 180,
+      "max_abs": 2.5331974029541016e-06,
+      "mean_abs": 8.24068067117878e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_1087",
+      "frame": 0,
+      "max_abs": 2.205371856689453e-06,
+      "mean_abs": 9.280586255044909e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10886",
+      "frame": 0,
+      "max_abs": 2.4139881134033203e-06,
+      "mean_abs": 1.2402763616137236e-07,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10886",
+      "frame": 570,
+      "max_abs": 2.86102294921875e-06,
+      "mean_abs": 8.849642796349144e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10894",
+      "frame": 0,
+      "max_abs": 3.129243850708008e-06,
+      "mean_abs": 1.0954810392149739e-07,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10894",
+      "frame": 210,
+      "max_abs": 2.8908252716064453e-06,
+      "mean_abs": 8.714540911114455e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10894",
+      "frame": 420,
+      "max_abs": 2.294778823852539e-06,
+      "mean_abs": 9.772791997875174e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10903",
+      "frame": 0,
+      "max_abs": 2.473592758178711e-06,
+      "mean_abs": 9.755098062669276e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10903",
+      "frame": 90,
+      "max_abs": 2.6226043701171875e-06,
+      "mean_abs": 8.165291376371897e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10903",
+      "frame": 180,
+      "max_abs": 3.0100345611572266e-06,
+      "mean_abs": 8.166485088167974e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    },
+    {
+      "video_id": "video_10903",
+      "frame": 270,
+      "max_abs": 3.7550926208496094e-06,
+      "mean_abs": 9.651302690372177e-08,
+      "allclose_atol_1e-4_rtol_1e-4": true
+    }
+  ],
+  "weights_unchanged": true,
+  "seconds": 0.8924908000044525,
+  "checkpoint_sha256": "8c6881307ec37b952325239103ad37bb542665ed24257e837c9db560502b468f",
+  "script_sha256": "da4e2d46aab3af6bf60dfc228dca2689126f3d6d592318fd7823ca697213db97",
+  "all_pass": true,
+  "max_abs": 3.7550926208496094e-06,
+  "versions": {
+    "torch": "2.6.0+cu124",
+    "numpy": "2.4.6"
+  }
+}
