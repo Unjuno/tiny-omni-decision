@@ -1,0 +1,124 @@
+{
+  "experiment_id": "lombard-grid-pooled-slot-v1",
+  "status": "FROZEN_BEFORE_ANY_READOUT_QUALITY_METRICS",
+  "source_manifest": "manifests/pretrained_reuse/lombard-grid-source-20261014.json",
+  "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+  "split_hashes": {
+    "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+    "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+    "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+    "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+  },
+  "arms": [
+    "audio",
+    "video",
+    "joint"
+  ],
+  "seed": 17,
+  "epochs": 24,
+  "batch_size": 128,
+  "optimizer": "AdamW",
+  "learning_rate": 0.001,
+  "weight_decay": 0.001,
+  "lr_schedule": "fixed",
+  "hidden_size": 64,
+  "activation": "GELU",
+  "input_features": {
+    "audio": "mean complete physical frozen Whisper Encoder tokens(384)",
+    "video": "mean native16 chronological VideoPrism framewise spatial means(768)"
+  },
+  "input_dimensions": 1154,
+  "presence_mask_dimensions": 2,
+  "absent_stream": "zero standardized feature vector with absent mask bit",
+  "encoder_training": false,
+  "head": "Linear1154->64,GELU,Linear64->51; split into6 native slot option-logit vectors",
+  "head_parameters": 77235,
+  "options": {
+    "command": [
+      "bin",
+      "lay",
+      "place",
+      "set"
+    ],
+    "color": [
+      "blue",
+      "green",
+      "red",
+      "white"
+    ],
+    "preposition": [
+      "at",
+      "by",
+      "in",
+      "with"
+    ],
+    "letter": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "x",
+      "y",
+      "z"
+    ],
+    "number": [
+      "zero",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "adverb": [
+      "again",
+      "now",
+      "please",
+      "soon"
+    ]
+  },
+  "loss": "mean of6 unweighted full-vocabulary slot cross-entropies; all native options preserved",
+  "normalization": "per-feature train-only mean/std; std<=1e-6 replaced with1; no heldout fitting",
+  "selector": "earliest minimum unrounded raw validation macro NLL across6 slots",
+  "checkpoint_policy": "retain best and final separately; no automatic last selection",
+  "calibration": "independent calibration split; per-slot earliest minimum NLL over17 geometric temperatures0.25..4",
+  "report": [
+    "each-slot Accuracy/NLL/Brier/ECE15/mean confidence",
+    "macro6-slot Accuracy/NLL/Brier/ECE",
+    "minimum slot Accuracy",
+    "all6-slots-correct utterance Accuracy",
+    "plain/Lombard and each validation speaker results",
+    "train/validation curves at every epoch",
+    "best/final metrics and train/validation gaps",
+    "unique assets/examples and repeated-example count, total versus selected",
+    "parameter count, normalization coefficients, wall time, VRAM, hashes/reload checks"
+  ],
+  "controls": "selected joint weights/temperature frozen; label-independent different-speaker-group bijective audio mismatch and video mismatch; missing stream with mask unset; no contrived noise/degradation",
+  "paired_uncertainty": "10000 bootstrap resamples of whole validation speaker groups, seed17, percentile95% interval; all observations per sampled group, pooled metrics recomputed; development selector/calibration caveats explicit",
+  "json": "native probabilities for all options under6 named slots; exact option permutation, no text generation; no claim of open vocabulary or legacy DecisionExample25-letter compatibility",
+  "stopping": "fixed24 epochs; safe stop for nonfinite loss/gradients, hash/integrity, frozen-feature failure or resource issues; no extra seed/epoch/policy search",
+  "outputs": "new separate per-arm directories; no weight overwrite of older artifacts",
+  "quality_scope": "native closed-vocabulary spoken-command slots; generic pooled visual representation may miss fine lip motion; pooling removes time order and cannot validate temporal reasoning; not general4-modality95\u201398% product",
+  "extra_trials": "none before fixed three-arm comparison; poor result is retained, not made easier"
+}

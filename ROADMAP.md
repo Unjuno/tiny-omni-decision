@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 actual native extraction started:** Same fixed common AV splits,
+original16-frame CPU VideoPrism and separate new output; do not use incomplete
+caches. Pinned audio/video/joint native-slot protocol preserves every option,
+including25 letters, with independent calibration and grouped uncertainty.
+Final feature integrity and quality remain pending; no product promotion.
+[Started execution and next comparison](docs/pretrained_reuse/R2_LOMBARD_GRID_VISUAL_FEATURES_20261014.md).
+
 **2026-10-14 bounded GPU port:** Real full-token parity failed despite small
 pooled differences and faster CUDA forwards. Gates remain unchanged; continue
 native CPU extraction for the fixed AV data. No full port job or quality claim.

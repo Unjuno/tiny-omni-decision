@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 native AV extraction running:** The original CPU VideoPrism
+actually started the fixed5,367-video job after exact native-reference smoke.
+Its final integrity/reload checks and joint quality comparison are pending;
+the three-arm/full-vocabulary protocol is frozen before readout metrics.
+[Execution snapshot and fixed comparison](docs/pretrained_reuse/R2_LOMBARD_GRID_VISUAL_FEATURES_20261014.md).
+
 **2026-10-14 visual backend audit:** Frozen native16-frame Torch/CUDA port
 is faster but fails the predeclared full-token numerical gate. Keep the native
 CPU extraction path; no quality result or artifact promotion.

@@ -26,8 +26,17 @@ requires_grad=False does not make a Torch object tamper-proof.
 
 Independent NumPy attention and native tiny Flax model checks pass (tiny maximum
 absolute difference about3.58e-7). Those checks alone do not establish parity for
-the pretrained full model. CPU tests856 passed,1 skipped; Ruff passed before this
-report. Final review and CI are separate verification steps.
+the pretrained full model. CPU tests856 passed,1 skipped before review; after
+the reload fix864 passed,1 skipped, with Ruff passed. Fresh review found no
+Critical/Minor issues and one Important reload finding, fixed with the eight
+regression cases above. Commit`b71378fbb6df5d41021e3588ef4d6732f8ba62e9`
+push/PR CI both succeeded.
+
+Review dispositions: full-model parity repair/adoption remain deferred(cost:
+native CPU time); the reviewer checked saved hashes/tiny outputs rather than
+rerunning heavy CPU/CUDA/CI(cost:no independent full-device replication); direct
+manual parameter/gradient re-enabling remains outside the controlled loader
+(cost:freezing is not a tamper-proof security boundary). No deferred Minor findings.
 
 ## Predeclared real-model gate and observed failure
 
