@@ -87,3 +87,5 @@ frame policy; do not launch another full validation readout merely because this
 small model loads. Any annotation-assisted identity assignment must be labeled
 oracle diagnostic and cannot be counted as Decision accuracy. Existing models,
 corpora and runs remain unchanged. R2 quality and R3–R8 goals remain unmet.
+
+Follow-up: [fixed train mask diagnostic](R2_STOSAVI_TRAIN_MASK_DIAGNOSTIC_20261013.md) completed; the natural-video evidence does not justify a full Decision fit.
