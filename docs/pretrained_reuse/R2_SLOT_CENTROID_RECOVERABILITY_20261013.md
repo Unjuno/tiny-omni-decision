@@ -42,3 +42,21 @@ generated targets limit the conclusion. Do not promote an architecture or launch
 another full fit from this result. The useful next distinction is correspondence
 and condition readout versus complete loss of spatial information; the latter is
 not supported by this diagnostic. Existing failed Decision results remain valid.
+
+## Slot-index confound control
+
+Same saved targets and leave-one-video-out folds; predict each slot's centroid
+using that slot index's mean over frames in the other seven videos. No test-video
+coordinates enter the mean. This tests whether consistent slot-index location
+bias alone explains the feature readout result (the initialization seed was fixed).
+Equal-video MSE is .054323103, compared with .023801654 for the feature readout.
+Features improve every fold over this index-only control. Full predictions and
+source-result hash are in `R2_SLOT_CENTROID_INDEX_CONTROL_20261013.json`.
+
+Reproduce by reshaping each fold's saved targets to [frames,7,2], concatenating
+the other seven folds on the frame axis, averaging that axis and broadcasting
+the resulting [7,2] predictions to the held-out frames. Average squared error
+over frames, slots and coordinates, then average the eight video errors.
+This is a post-hoc training diagnostic, not an independent validation result.
+It weakens this specific fixed-index confound; it does not resolve separate-run
+correspondence, object identity, ground-truth localization or Decision quality.
