@@ -9,16 +9,17 @@ from torch import nn
 class TrajectoryReadout(nn.Module):
     """Point-order invariant; temporal order is encoded inside each token."""
 
-    def __init__(self, hidden=64):
+    def __init__(self, hidden=64, input_dim=512):
         super().__init__()
+        self.input_dim = input_dim
         self.query = nn.Linear(1536, hidden)
-        self.key = nn.Linear(512, hidden)
-        self.value = nn.Linear(512, hidden)
+        self.key = nn.Linear(input_dim, hidden)
+        self.value = nn.Linear(input_dim, hidden)
         self.scale = math.sqrt(hidden)
 
     def forward(self, points, candidates, mask=None):
-        if points.ndim != 3 or points.shape[-1] != 512 or points.shape[1] == 0:
-            raise ValueError("nonempty [batch,points,512] required")
+        if points.ndim != 3 or points.shape[-1] != self.input_dim or points.shape[1] == 0:
+            raise ValueError(f"nonempty [batch,points,{self.input_dim}] required")
         if (
             candidates.ndim != 3
             or candidates.shape[0] != points.shape[0]
