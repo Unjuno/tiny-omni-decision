@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-13 conditional-audio task:** Fixed Clotho-AQA development grouping
+retains3,422 human-majority yes/no questions,856 sources and all disagreements.
+Question-only Accuracy64.82%, NLL.6231 on560 development questions is a measured
+control. Full audio acquisition remains active; audio-only/joint results are
+pending exhaustive split integrity and matched24-epoch comparisons. Source-
+coherent inference derangement is frozen before audio results and cannot select
+checkpoints. This task does not establish synchronized AV/sensor benefits or
+the95–98% product target.
+[Comparison protocol](docs/pretrained_reuse/R2_CLOTHO_AQA_COMPARISON_PROTOCOL_20261013.md),
+[acquisition recovery](docs/pretrained_reuse/R2_CLOTHO_AQA_ACQUISITION_RECOVERY_20261013.md).
+
 **2026-10-13 additional audio coverage:** Completed a fixed128-uploader FSD50K
 positive-only augmentation after verified selective acquisition and9,984 waveform
 comparisons.24epochs selected epoch9; later NLL worsened while training CE fell.

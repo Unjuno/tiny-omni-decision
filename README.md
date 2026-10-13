@@ -1,5 +1,16 @@
 # Tiny Omni Decision
 
+**2026-10-13 conditional-audio comparison:** Clotho-AQA development candidates
+are frozen by uploader/source identity:3,422 licensed yes/no questions over856
+audio sources. The question-only control scores64.82% on560 development questions
+(train-prior56.61%); this establishes a language-prior baseline, not audio quality.
+Full audio acquisition is in progress after verified gateway-failure recovery.
+Audio-only/joint learning awaits complete media and waveform checks; all questions,
+including annotation disagreements, remain in the comparison.
+[Fixed comparison](docs/pretrained_reuse/R2_CLOTHO_AQA_COMPARISON_PROTOCOL_20261013.md),
+[recovery and current output](docs/pretrained_reuse/R2_CLOTHO_AQA_ACQUISITION_RECOVERY_20261013.md),
+[evidence controls](docs/pretrained_reuse/R2_CLOTHO_AQA_SOURCE_CONTROLS_20261013.md).
+
 **2026-10-13 audio coverage comparison:** A fixed128-clip licensed FSD50K
 positive-only augmentation completed with the frozen audio encoder. Validation
 Accuracy fell89.97%→89.37%; nearly unchanged aggregate NLL hides worse music
