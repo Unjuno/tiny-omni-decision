@@ -1049,3 +1049,9 @@ Fixed soft-teacher replay subsequently completed384updates with identical initia
 weights, ordered examples and evaluation. Original NLL improves1.1244→.8598 and
 ECE .1594→.0303 versus hard replay, but remains worse than the parent .8356/.0189.
 No promotion; retain all comparisons. [Result](docs/pretrained_reuse/R2_SOFT_REPLAY_RESULTS_20261013.md).
+
+Frozen transfer follow-up closes the context-adaptation comparison: familiar-prefix
+Accuracy improves, but domain wording remains poor and numeric extrapolation is
+only43.3% with NLL3.03. No further budget extension or product promotion from these
+in-template gains. [Vocabulary](docs/pretrained_reuse/R2_SOFT_REPLAY_PREFIX_TRANSFER_20261013.md)
+and [numeric range](docs/pretrained_reuse/R2_SOFT_REPLAY_RANGE_20261013.md) results.
