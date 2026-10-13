@@ -1,6 +1,7 @@
 import pytest
 
 from scripts.lombard_grid_corpus import (
+    apply_media_gate,
     decode_code,
     parse_member,
     partition_groups,
@@ -86,3 +87,37 @@ def test_group_partitions_are_deterministic_and_never_split_connected_speakers()
     first = partition_groups(rows)
     assert first == partition_groups(list(reversed(rows)))
     assert len(set(first.values())) == 1
+
+
+def test_corrupt_training_media_are_explicit_without_changing_heldout_ids():
+    splits = {'train': [{'source_id': 'a'}, {'source_id': 'b'}],
+              'calibration': [{'source_id': 'c'}], 'validation': [{'source_id': 'd'}],
+              'unresolved': []}
+    audit = [{'source_id': s, 'audio_status': 'PASS', 'video_status': 'PASS'}
+             for s in 'abcd']
+    audit[1]['video_status'] = 'FAIL'
+    clean, rejected = apply_media_gate(splits, audit)
+    assert clean['train'] == [{'source_id': 'a'}]
+    assert rejected == [{'source_id': 'b'}]
+    assert clean['calibration'] == splits['calibration']
+    assert clean['validation'] == splits['validation']
+    assert len(splits['train']) == 2
+
+
+@pytest.mark.parametrize('split', ['calibration', 'validation'])
+def test_corrupt_heldout_media_fail_instead_of_shrinking_benchmark(split):
+    splits = {'train': [], 'calibration': [], 'validation': [], 'unresolved': []}
+    splits[split] = [{'source_id': 'x'}]
+    with pytest.raises(ValueError, match='held-out'):
+        apply_media_gate(splits, [{'source_id': 'x', 'audio_status': 'PASS',
+                                   'video_status': 'FAIL'}])
+
+
+@pytest.mark.parametrize('audit', [[],
+    [{'source_id': 'x', 'audio_status': 'PASS', 'video_status': 'PASS'}] * 2,
+    [{'source_id': 'other', 'audio_status': 'PASS', 'video_status': 'PASS'}]])
+def test_partial_duplicate_or_unknown_audit_is_rejected(audit):
+    splits = {'train': [{'source_id': 'x'}], 'calibration': [],
+              'validation': [], 'unresolved': []}
+    with pytest.raises(ValueError):
+        apply_media_gate(splits, audit)

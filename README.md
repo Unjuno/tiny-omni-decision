@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 native AV data:** Licensed Lombard Grid speech/video archives are
+acquired and audited. Fixed common train4,080/calibration398/validation889 retains
+all held-out IDs; four broken training videos and19 unresolved labels remain
+documented. A frozen8.21M speech Encoder passed real CPU/CUDA feature checks.
+Native joint command quality remains unmeasured.
+[Source integrity and next execution](docs/pretrained_reuse/R2_LOMBARD_GRID_MEDIA_20261014.md).
+
 **2026-10-13 CLAP comparison completed:** Same-data joint Accuracy65.18%
 versus EfficientAT66.96%, with worse NLL/Brier point estimates and clear later
 overfitting. Full-clip extraction, train-only PCA and reload checks passed.

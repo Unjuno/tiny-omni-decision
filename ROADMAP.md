@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 native AV command source:** Full Lombard Grid archives and5,390
+audio records were checked; four training MOVs are broken in both official copies.
+New common-valid train4,080 preserves calibration398/validation889 byte-for-byte.
+Compact frozen Whisper Encoder CPU/CUDA smokes passed. Next measure native
+unimodal/joint command readouts; this scoped speech test does not close general
+AV/sensor reasoning or the95–98% quality gates.
+[Acquisition, media failures and fixed layout](docs/pretrained_reuse/R2_LOMBARD_GRID_MEDIA_20261014.md).
+
 **2026-10-13 CLAP follow-up completed:** Fixed Clotho-AQA learning reached
 joint65.18% versus EfficientAT66.96%. NLL/Brier point estimates worsen, grouped
 intervals include no change, and later epochs overfit. Keep the existing reference;

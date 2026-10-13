@@ -110,3 +110,29 @@ def partition_groups(rows, seed=17):
         bucket = int.from_bytes(digest[:8], 'big') % 100
         result[speaker] = 'train' if bucket < 70 else 'calibration' if bucket < 85 else 'validation'
     return result
+
+
+def apply_media_gate(splits, audit_rows):
+    expected = [row['source_id'] for rows in splits.values() for row in rows]
+    actual = [row['source_id'] for row in audit_rows]
+    if (len(set(expected)) != len(expected) or len(set(actual)) != len(actual)
+            or set(expected) != set(actual)):
+        raise ValueError('complete unique source audit required')
+    lookup = {row['source_id']: row for row in audit_rows}
+    clean, rejected = {}, []
+    for split, rows in splits.items():
+        clean[split] = []
+        for row in rows:
+            audit = lookup[row['source_id']]
+            if audit['audio_status'] not in {'PASS', 'FAIL'} or audit['video_status'] not in {
+                'PASS', 'FAIL'
+            }:
+                raise ValueError('unresolved media audit status')
+            valid = audit['audio_status'] == audit['video_status'] == 'PASS'
+            if not valid and split in {'validation', 'calibration'}:
+                raise ValueError('held-out media failure: benchmark cannot be reduced')
+            if split == 'train' and not valid:
+                rejected.append(row)
+            else:
+                clean[split].append(row)
+    return clean, rejected
