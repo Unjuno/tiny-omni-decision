@@ -1034,3 +1034,13 @@ Future experiments must specify a distinct intervention and prospective task
 contract before fitting, retain evidence-shuffle and candidate-order controls,
 and count the complete resident system. None of the new results qualifies the
 four-modality95–98% objective or changes the <=200M pre-quantization constraint.
+
+### Text context adaptation and retention (2026-10-13)
+
+All-encoder context adaptation improved the fixed synthetic context diagnostic,
+but original-task retention degraded. A fixed384-update, 50% original-task replay
+comparison completed and did not resolve the trade-off: original NLL .8356→1.1244,
+ECE .0189→.1594. Accuracy difference remains uncertain under paired-state bootstrap.
+Preserve the coverage parent; no promotion or additional budget sweep.
+[Replay results](docs/pretrained_reuse/R2_CONTEXT_REPLAY_RESULTS_20261013.md) and
+[saved-prediction diagnosis](docs/pretrained_reuse/R2_CONTEXT_REPLAY_RETENTION_DIAGNOSTIC_20261013.md).
