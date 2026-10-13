@@ -1,11 +1,11 @@
-import numpy as np
-
 """Read-only exact-crop label ambiguity audit; no training or audit split access."""
 
 import collections
 import hashlib
 import json
 from pathlib import Path
+
+import numpy as np
 
 root = Path("C:/CodexArtifacts/pretrained-reuse-r2/groundcua-classifier-01")
 p = root / "records.json"
