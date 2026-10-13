@@ -54,7 +54,20 @@ label-independent cross-speaker-group bijections preserve p/l condition and dono
 marginals; paired bootstrap resamples entire groups(10,000/seed17/linear-percentile95%
 in the final protocol); saved JSON/logit/provenance checks reject corrupted options,
 labels, ordering, probabilities and predictions. No real validation controls or
-bootstrap comparison have run. Final report/control orchestration remains pending.
+bootstrap comparison have run. Final report/control orchestration is now implemented
+in`python -m scripts.evaluate_lombard_grid_readouts`, with CPU fixture tests for
+hash checking, frozen-weight controls and partial-controller rejection. Its **real
+full-run integration remains pending**, and it must not be invoked before all
+three24-epoch runs and the complete-source gates pass.
+
+The report audits all24 histories, six-slot macro/count denominators, best selection,
+total versus selected consumption, every768-update optimizer log and actual seed17
+sample orders. It reloads both best and final on the training CUDA backend, checks
+saved logits/predictions, recomputes train-only normalizers/calibration-only
+temperatures, then records fixed-model controls and10,000 whole-group resamples.
+Missing-stream masks were not trained, so their scores are explicitly diagnostic
+OOD. Donor coupling limits the control bootstrap's independence interpretation.
+No claim of generic-video capability or pretrained-data blindness is introduced.
 
 Execution ruling: proceed with these independent pure helpers while the full-run
 task awaits the verified live extractor; integration remains unverified until all

@@ -59,6 +59,7 @@
 ### Task 4: Fixed-model controls, uncertainty and result audit
 
 **Files:** create scripts/report_lombard_grid_readouts.py; tests/test_lombard_readout_report.py; docs/pretrained_reuse/R2_LOMBARD_GRID_RESULTS_20261014.{md,json}.
+**Orchestration split:** scripts/evaluate_lombard_grid_readouts.py and tests/test_lombard_readout_evaluation.py keep actual checkpoint replay/control/file IO separate from pure paired metrics. This adds one focused module; original interfaces/protocol unchanged.
 **Consumes:** all three complete Task3 outputs, same validation IDs/order.
 
 - [ ] RED tests for source-coherent different-speaker-group bijection, paired-bootstrap alignment/group preservation, saved prediction/metric/checkpoint/accounting consistency.

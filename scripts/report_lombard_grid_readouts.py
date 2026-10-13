@@ -5,6 +5,7 @@ import numpy as np
 from scripts.lombard_readout_core import (
     OPTIONS,
     _log_probabilities,
+    selected_epoch,
     summarize,
     targets_from_rows,
 )
@@ -133,3 +134,70 @@ def validate_saved_predictions(logits, records, rows, temperatures=None):
                 raise ValueError('stored probability/prediction differs from full logits')
         start = end
     return metric
+
+
+def _audit_metric(value, count):
+    if set(value['by_slot']) != set(OPTIONS) or value['macro']['count'] != count*6:
+        raise ValueError('full native metric counts/slots differ')
+    keys = ['accuracy', 'nll', 'brier', 'ece', 'mean_confidence']
+    for slot in OPTIONS:
+        m = value['by_slot'][slot]
+        if m['count'] != count or not np.isfinite([m[k] for k in keys]).all():
+            raise ValueError('invalid per-slot metric count/value')
+        if (not 0 <= m['accuracy'] <= 1 or not 0 <= m['ece'] <= 1
+                or not 0 <= m['mean_confidence'] <= 1 or not 0 <= m['brier'] <= 2
+                or m['nll'] < 0):
+            raise ValueError('per-slot metric outside valid range')
+    for key in keys:
+        expected = np.mean([m[key] for m in value['by_slot'].values()])
+        if not np.isclose(value['macro'][key], expected, atol=1e-12, rtol=0):
+            raise ValueError('macro metrics differ from six equal native slots')
+    minimum = min(m['accuracy'] for m in value['by_slot'].values())
+    if (value['minimum_slot_accuracy'] != minimum
+            or not 0 <= value['whole_utterance_accuracy'] <= minimum):
+        raise ValueError('minimum/whole-utterance metric inconsistent')
+
+
+def audit_summary(report, provenance, *, train_count=4080, validation_count=889):
+    from scripts.train_lombard_grid_readouts import accounting
+    if (report.get('status') != 'PASS_ARM_EXECUTION' or report.get('smoke') is not False
+            or report['provenance'] != provenance or report['protocol'] != provenance['protocol']
+            or provenance['training_only_smoke'] is not False
+            or report['protocol']['epochs'] != 24 or report['protocol']['batch_size'] != 128
+            or report['head_parameters'] != 77235
+            or report['encoders_loaded_in_training'] is not False
+            or any(report.get(k) is not True for k in ['validation_evaluated',
+                    'calibration_evaluated', 'reload_bitwise_equal',
+                    'json_option_permutation_exact'])):
+        raise ValueError('complete fixed-budget calibrated/reloaded full arm required')
+    history = report['history']
+    if [r['epoch'] for r in history] != list(range(1, 25)):
+        raise ValueError('all24 training/validation observations required')
+    for row in history:
+        epoch = row['epoch']
+        if (row['consumed_assets'] != epoch*train_count
+                or row['updates'] != accounting(train_count, epoch)['optimizer_updates']):
+            raise ValueError('history consumption/update count differs')
+        _audit_metric(row['train_fixed'], train_count)
+        _audit_metric(row['validation'], validation_count)
+    best = selected_epoch(history)
+    if (report['best_epoch'] != best
+            or report['accounting'] != accounting(train_count, 24, best)):
+        raise ValueError('selected checkpoint or total/selected consumption differs')
+    temperatures = np.asarray(report['temperatures'])
+    if (temperatures.shape != (6,) or not np.isfinite(temperatures).all()
+            or (temperatures <= 0).any()):
+        raise ValueError('six fixed-calibration temperatures required')
+
+
+def audit_optimizer_history(entries, *, train_count=4080):
+    batches = (train_count+127)//128
+    if len(entries) != 24*batches or [e['update'] for e in entries] != list(range(1, 24*batches+1)):
+        raise ValueError('complete ordered optimizer log required')
+    for index, entry in enumerate(entries):
+        epoch, batch = index//batches+1, index % batches
+        count = min(128, train_count-batch*128)
+        if (entry['epoch'] != epoch or entry['samples'] != count
+                or entry['learning_rate'] != .001
+                or not np.isfinite(entry['gradient_norm']) or entry['gradient_norm'] < 0):
+            raise ValueError('actual sample/LR/gradient update differs from fixed budget')

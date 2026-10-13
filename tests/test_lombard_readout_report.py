@@ -13,6 +13,8 @@ from scripts.lombard_readout_core import (  # noqa: E402
     targets_from_rows,
 )
 from scripts.report_lombard_grid_readouts import (  # noqa: E402
+    audit_optimizer_history,
+    audit_summary,
     paired_bootstrap,
     source_permutation,
     validate_saved_predictions,
@@ -115,3 +117,67 @@ def test_saved_prediction_audit_recomputes_full_logits_and_rejects_corruption(fa
     else:
         with pytest.raises(ValueError):
             validate_saved_predictions(values, records, source)
+
+
+@pytest.mark.parametrize('fault', ['none', 'smoke', 'budget', 'selected', 'accounting',
+                                 'macro', 'calibration', 'protocol', 'reload'])
+def test_full_run_contract_does_not_accept_partial_or_selected_count_confusion(fault):
+    from scripts.train_lombard_grid_readouts import accounting
+    def metric(count, nll):
+        slots = {s: dict(count=count, accuracy=.5, nll=nll, brier=.8,
+                         ece=.1, mean_confidence=.6) for s in OPTIONS}
+        return dict(by_slot=slots, macro={**slots['command'], 'count': count*6},
+                    minimum_slot_accuracy=.5, whole_utterance_accuracy=.1)
+    protocol = dict(epochs=24, batch_size=128)
+    provenance = dict(protocol=protocol, training_only_smoke=False)
+    history = [dict(epoch=e, consumed_assets=e*4, updates=e,
+                    train_fixed=metric(4, .1), validation=metric(6, .2 if e == 7 else .3))
+               for e in range(1, 25)]
+    report = dict(status='PASS_ARM_EXECUTION', smoke=False, protocol=protocol,
+                  provenance=provenance, head_parameters=77235,
+                  encoders_loaded_in_training=False, validation_evaluated=True,
+                  calibration_evaluated=True, reload_bitwise_equal=True,
+                  json_option_permutation_exact=True, history=history, best_epoch=7,
+                  accounting=accounting(4, 24, 7), temperatures=[1.]*6)
+    if fault == 'smoke':
+        report['smoke'] = True
+    elif fault == 'budget':
+        report['history'].pop()
+    elif fault == 'selected':
+        report['best_epoch'] = 24
+    elif fault == 'accounting':
+        report['accounting']['consumed_assets'] = 28
+    elif fault == 'macro':
+        report['history'][0]['validation']['macro']['nll'] = 0
+    elif fault == 'calibration':
+        report['calibration_evaluated'] = False
+    elif fault == 'protocol':
+        report['protocol'] = {'epochs': 512}
+    elif fault == 'reload':
+        report['reload_bitwise_equal'] = False
+    if fault == 'none':
+        audit_summary(report, provenance, train_count=4, validation_count=6)
+    else:
+        with pytest.raises(ValueError):
+            audit_summary(report, provenance, train_count=4, validation_count=6)
+
+
+@pytest.mark.parametrize('fault', ['none', 'missing', 'samples', 'lr', 'gradient', 'order'])
+def test_optimizer_log_matches_actual_full_budget_and_finite_updates(fault):
+    entries = [dict(update=i, epoch=i, samples=4, gradient_norm=1., learning_rate=.001)
+               for i in range(1, 25)]
+    if fault == 'missing':
+        entries.pop()
+    elif fault == 'samples':
+        entries[0]['samples'] = 3
+    elif fault == 'lr':
+        entries[0]['learning_rate'] = .01
+    elif fault == 'gradient':
+        entries[0]['gradient_norm'] = float('nan')
+    elif fault == 'order':
+        entries.reverse()
+    if fault == 'none':
+        audit_optimizer_history(entries, train_count=4)
+    else:
+        with pytest.raises(ValueError):
+            audit_optimizer_history(entries, train_count=4)
