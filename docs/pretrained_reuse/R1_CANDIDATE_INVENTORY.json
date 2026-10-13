@@ -664,7 +664,11 @@
       "runtime_evidence": "strict native encoder-only export/reload; four full training utterances match original encoder and repeat bitwise; FP32 CPU",
       "task_quality_status": "new native command Decision readout untrained/unmeasured; no ASR decoder capability claimed",
       "decision": "small frozen speech-token source candidate, not a replacement for existing transcript-scoring runtime",
-      "report": "docs/pretrained_reuse/R1_WHISPER_ENCODER_EXPORT_20261013.json"
+      "report": "docs/pretrained_reuse/R1_WHISPER_ENCODER_EXPORT_20261013.json",
+      "parameter_tensor_bytes": 32833536,
+      "primary_citations": [
+        "https://huggingface.co/openai/whisper-tiny/resolve/169d4a4341b33bc18d8881c4b69c2e104e1cc0af/README.md"
+      ]
     }
   ],
   "incremental_update_date": "2026-10-13",
