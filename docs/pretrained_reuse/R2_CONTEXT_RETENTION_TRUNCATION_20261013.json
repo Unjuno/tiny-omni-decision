@@ -1,0 +1,38 @@
+{
+  "scope": "saved predictions, truncation-stratified posthoc development analysis",
+  "source_hashes": {
+    "inputs.json": "c9f6a78e64889afd088a39b719597bb62665d8a81e8a99d4274780abd455440b",
+    "parent-predictions.json": "fc82fea5c253ff0f85f0392d8e5032e6da32510a9f4149cf563043fe175c81dc",
+    "context-predictions.json": "a02e4ab51e515856134cc1ceec8b282410b6c79882032984942e4b213eeaba79"
+  },
+  "strata": {
+    "no_truncation": {
+      "parent": {
+        "count": 2474,
+        "correct": 1576,
+        "accuracy": 0.6370250606305577,
+        "nll": 0.8346218898210723
+      },
+      "context": {
+        "count": 2474,
+        "correct": 1551,
+        "accuracy": 0.6269199676637025,
+        "nll": 0.8777898900668017
+      }
+    },
+    "any_candidate_truncated": {
+      "parent": {
+        "count": 66,
+        "correct": 39,
+        "accuracy": 0.5909090909090909,
+        "nll": 0.8719136855395337
+      },
+      "context": {
+        "count": 66,
+        "correct": 45,
+        "accuracy": 0.6818181818181818,
+        "nll": 0.8337663779128526
+      }
+    }
+  }
+}

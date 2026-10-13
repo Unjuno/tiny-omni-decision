@@ -31,3 +31,22 @@ C:/CodexArtifacts/pretrained-reuse-r2/context-original-retention-02.
 Both attempts remain. Runner evaluate_context_original_retention_02.py is adjacent
 to these directories; its hash and all result-file hashes are retained. The result
 explicitly records actual truncation policy and counts. No legacy run changed.
+
+## Truncation-stratified saved-prediction check
+
+Re-tokenized the same inputs without truncation to classify each question by
+whether any candidate pair exceeds512tokens. No model inference.239 truncated
+candidate pairs correspond to66questions;2,474questions require no truncation.
+
+| Stratum | Parent Accuracy/NLL | Context Accuracy/NLL |
+|---|---:|---:|
+| No truncation,2474questions | .637025/.834622 | .626920/.877790 |
+| Any candidate truncated,66questions | .590909/.871914 | .681818/.833766 |
+
+The untruncated majority loses25correct answers; the truncated subset gains6,
+giving the previously reported net loss19. The observed retention loss therefore
+cannot be attributed solely to truncation. The66-question subset is small and
+post-hoc: no general truncation benefit claim, no exclusions from the benchmark,
+and no new model selection. Adjacent R2_CONTEXT_RETENTION_TRUNCATION_20261013.json
+records joined input/prediction hashes and exact counts. Aggregate original-task
+retention remains an unmet acceptance gate for the context-adapted candidate.
