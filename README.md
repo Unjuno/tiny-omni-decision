@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 object-memory candidate admission:** SAM2.1 Tiny actually loaded and
+processed four train clips×16frames on the existing GPU.38,962,498 parameters,
+~695MB peak Torch allocation; repeat/reload and frozen-state checks passed.
+Fixed geometric prompting only; automatic discovery/Decision quality unmeasured.
+[Executed R1 audit and remaining gates](docs/pretrained_reuse/R1_SAM2_TINY_20261014.md).
+
 **2026-10-14 native AV comparison completed:** All5,367 native feature extractions
 and three fixed24-epoch runs passed integrity/reload checks. Audio-only macro slot
 Accuracy97.94%, video30.15%, joint97.09%; joint worsens NLL/Brier and Accuracy versus

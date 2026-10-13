@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 R1 object-mask/memory candidate:** Pinned SAM2.1 Tiny passed full strict
+load and fixed train-only image-frame/video propagation on the local GPU, with
+38,962,498 registered parameters,512 persistent coefficients and measured~695MB
+peak Torch allocation. Reporting failures were preserved and corrected separately.
+This is functional admission only; label-free automatic discovery, semantic
+correspondence and Decision/joint quality still need evidence before a fit/adoption.
+[Audit, rights, buffers and runtime](docs/pretrained_reuse/R1_SAM2_TINY_20261014.md).
+
 **2026-10-14 fixed native AV study completed:** Native extraction5,367/5,367 and
 audio/video/joint24-epoch comparisons actually completed. Selected macro slot
 Accuracy97.94%/30.15%/97.09%; joint-minus-audio−0.844pp, grouped95% interval
