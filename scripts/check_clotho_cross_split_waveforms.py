@@ -8,11 +8,12 @@ from pathlib import Path
 
 import numpy as np
 
-from scripts.audio_overlap_probe import peak_normalized_match
+from scripts.audio_overlap_probe import PreparedWaveformMatcher
 from scripts.clotho_acquisition_gate import complete_acquisition
 
 
 def main():
+    started = time.perf_counter()
     root = Path("C:/CodexArtifacts/pretrained-reuse-r2")
     media = root / "clotho-aqa-development-media-01"
     records = complete_acquisition(media, root / "clotho-aqa-development-split-01")
@@ -36,13 +37,17 @@ def main():
     output.mkdir(exist_ok=False)
     pairs = [(left, right) for i, left in enumerate(records) for right in records[i + 1:]
              if left["split"] != right["split"]]
+    prepare_started = time.perf_counter()
+    matcher = PreparedWaveformMatcher(waveforms, memory_limit_bytes=3 * 1024**3)
+    prepare_seconds = time.perf_counter() - prepare_started
     report = dict(status="RUNNING", scope="all cross-split whole-template pairs",
                   review_threshold=0.99, expected_pairs=len(pairs), pairs=0,
                   flagged_pairs=0, maximum_correlation=0.0,
                   media_report_sha256=media_sha,
                   decoded_report_sha256=hashlib.sha256(data).hexdigest(), workers=4,
+                  prepared_cache_bytes=matcher.cache_bytes, cache_limit_bytes=3 * 1024**3,
+                  preparation_seconds=prepare_seconds,
                   limitation="Does not exclude edits, mixing, time-stretch or shorter reuse")
-    started = time.perf_counter()
 
     def score(pair):
         left, right = pair
@@ -50,7 +55,7 @@ def main():
         if len(a) > len(b):
             left, right, a, b = right, left, b, a
         return dict(template=left["source_id"], recording=right["source_id"],
-                    **peak_normalized_match(a, b))
+                    **matcher.match(left["source_id"], right["source_id"]))
 
     def save():
         report["seconds"] = time.perf_counter() - started
