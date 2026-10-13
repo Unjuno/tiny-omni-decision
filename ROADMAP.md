@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 static semantic ranking closed:** Frozen TinyCLIP encoded696
+unchanged NMS mask crops and passed freeze/repeat/reload/readback checks. Distinct
+group coverage9/24 versus presence10/24, complete groups1/8 in both; no adoption.
+Do not prompt/threshold sweep these known train outcomes. Temporal target
+association and variable-group supervision still need a fixed input-only protocol.
+[Actual comparison and retained artifacts](docs/pretrained_reuse/R2_TINYCLIP_MASK_RANK_20261014.md).
+
 **2026-10-14 temporal source-cue gate:** Eight known training clips have explicit
 grounded hidden/cover/group roles; group sizes are2/3/4 and one hidden track begins
 at224.64 raw frames were reviewed without changing source cuts or model outputs.

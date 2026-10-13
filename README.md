@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 frozen mask-ranking comparison:** Existing TinyCLIP actually ranked
+all696 saved SAM2 NMS candidates. Fixed top3 distinct group coverage10/24→9/24;
+cover hits2/8→3/8 do not establish improvement. Preserve the negative result;
+no static-ranker adoption, QA quality claim or prompt sweep.
+[Execution, controls and limits](docs/pretrained_reuse/R2_TINYCLIP_MASK_RANK_20261014.md).
+
 **2026-10-14 source-cue audit:** Pinned training annotations distinguish hidden
 items, covering objects and variable-sized candidate groups on all eight pilot
 clips.64 raw frames were decoded/reviewed; input-only target association,
