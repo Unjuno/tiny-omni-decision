@@ -508,6 +508,77 @@
         "https://arxiv.org/abs/2402.03885",
         "https://archive.ics.uci.edu/dataset/341/smartphone%2Bbased%2Brecognition%2Bof%2Bhuman%2Bactivities%2Band%2Bpostura"
       ]
+    },
+    {
+      "id": "google-flan-t5-small",
+      "modality": [
+        "text"
+      ],
+      "model_revision": "google/flan-t5-small@0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab",
+      "checkpoint_sha256": "495fa51e204676f1a857a9fc13c4c89f3f5ba9f480b898cebca02add25e6d749",
+      "checkpoint_bytes": 307867048,
+      "parameters": 76961152,
+      "parameter_tensor_bytes": 307844608,
+      "license": "Apache-2.0 per pinned model card",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "Strict untied-output load, exact checkpoint tensors and CPU repeats; local decoder adaptation runs complete.",
+      "task_quality_status": "Rejected measured frozen/last-block/all-decoder/brace-free scoring setups; best selected accuracies remain near chance on conditional development task.",
+      "decision": "Research reference only; no product adoption, no repeated format/scope search from these results.",
+      "evidence": [
+        "R1_FLAN_T5_RUNTIME_20261013.md",
+        "R2_FLAN_CONTEXT_RESULTS_20261013.md",
+        "R2_FLAN_DECODER_COMPARISON_20261013.md",
+        "R2_FLAN_NO_BRACES_20261013.md"
+      ],
+      "primary_citations": [
+        "https://huggingface.co/google/flan-t5-small/tree/0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab"
+      ],
+      "license_evidence": [
+        "https://huggingface.co/google/flan-t5-small/tree/0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab"
+      ],
+      "audit_date": "2026-10-13"
+    },
+    {
+      "id": "cav-mae-sync-retrieval",
+      "modality": [
+        "audio",
+        "image",
+        "video"
+      ],
+      "model_revision": "edsonroteia/cav-mae-sync@0add2e7cbfcb2ff0315456b9db7ad347893ba54b",
+      "checkpoint_sha256": "a035b04cf615fe4c85d6aa1e74b26d8223a85945957664e66abea16e183629bd",
+      "checkpoint_bytes": 762886272,
+      "parameters": 190660864,
+      "parameter_tensor_bytes": 762643456,
+      "feature_path_parameters": 164140800,
+      "feature_path_pruned_runtime_verified": false,
+      "license": "BSD-2-Clause source repository; exact external weight grant unresolved",
+      "license_allowed": null,
+      "license_status": "REVIEW",
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "650-key strict checkpoint load and CPU/GPU finite forward; exact repeated real-input features.",
+      "task_quality_status": "Fixed correspondence 32% one frame /35% eight frames; no clear temporal dependence; not semantic Omni quality.",
+      "decision": "Research only; no product packaging; close measured correspondence readout without extra fitting.",
+      "evidence": [
+        "R1_CAV_MAE_SYNC_RUNTIME_20261013.md",
+        "R2_CAV_MAE_SYNC_EIGHT_FRAMES_20261013.md",
+        "R2_CAV_MAE_SYNC_TEMPORAL_CONTROL_20261013.md"
+      ],
+      "primary_citations": [
+        "https://github.com/edsonroteia/cav-mae-sync/tree/0add2e7cbfcb2ff0315456b9db7ad347893ba54b"
+      ],
+      "license_evidence": [
+        "https://github.com/edsonroteia/cav-mae-sync/tree/0add2e7cbfcb2ff0315456b9db7ad347893ba54b"
+      ],
+      "audit_date": "2026-10-13"
     }
-  ]
+  ],
+  "incremental_update_date": "2026-10-13",
+  "incremental_update_scope": "Add measured FLAN-T5 Small and CAV-MAE Sync; historical entries retain their original audit scope/date. Not an exhaustive refresh."
 }

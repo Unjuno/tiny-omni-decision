@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-13 conditional-text reference:** FLAN-T5 Small passed exact pretrained
+loading, but fixed384-update last-block/all-decoder adaptations remain near
+chance (about24% development Accuracy). Consumed-train replay is also poor;
+removing tokenizer-unknown JSON braces does not resolve it. Close these measured
+format/scope comparisons without adoption or budget extension. The model is
+77M resident parameters and cannot simply replace text beside VideoPrism and
+Whisper under200M. [Results](docs/pretrained_reuse/R2_FLAN_NO_BRACES_20261013.md).
+The R1 candidate inventory now includes this reference and CAV-MAE Sync, with
+load, rights and quality status separated; older entries retain their audit scope.
+
 **2026-10-13 AV reference follow-up:** CAV-MAE Sync's official pretrained
 checkpoint passed strict CPU loading and real-input checks. Fixed200-question
 development correspondence scored32% with one frame and35% with eight; paired
