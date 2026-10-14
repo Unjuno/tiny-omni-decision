@@ -3,7 +3,9 @@ import json
 
 import pytest
 
-from scripts import train_mask_pair_association as runner
+pytest.importorskip("torch")
+
+from scripts import train_mask_pair_association as runner  # noqa: E402
 
 
 def test_smoke_actual_config_and_saved_artifacts_must_match(tmp_path):
