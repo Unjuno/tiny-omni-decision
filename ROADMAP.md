@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 all99 train grid support executed:** Corpus preparation, full fresh
+1,188-array replay and independent811,008-cell/2,111,587-pair audit pass. Only19
+same-hidden pairs in5scenes; all99/zero-support scenes retained. Aggregate pair
+count does not justify hidden-memory training; preserve fixed rule and require
+actual finer small-object/time evidence plus diverse cue supervision. No fit,
+development/audit scoring or model-capability ceiling claim.
+[Measured support and next gate](docs/pretrained_reuse/R2_GRID_ROLE_CORPUS_RESULTS_20261014.md).
+
 **2026-10-14 learned correspondence primitive rejected:** All8scene-held-out
 folds/two arms finish512steps; trainappearanceAccuracy100% with held-outNLL worse
 in everyfold (macro1.875 vs geometry0.536). Independent metrics/reload/sampler

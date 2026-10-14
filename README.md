@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 all99 train scenes checked:** Native grid supervision corpus and
+independent complete replay/audit pass, but only19 same-hidden pairs across5scenes.
+Keep all zero-support scenes; more pair rows do not justify hidden-memory fitting.
+No new model training or QA/Omni quality claim.
+[Actual support and limitations](docs/pretrained_reuse/R2_GRID_ROLE_CORPUS_RESULTS_20261014.md).
+
 **2026-10-14 correspondence learning executed:** 16fixed CPU fits×512steps on
 5,400 weakly proxy-labelled pairs/8knowntrain clips, scene-held-out. Appearance
 MLP memorizes train100%; macro NLL1.875 vs geometry0.536 and worse in all8folds.
