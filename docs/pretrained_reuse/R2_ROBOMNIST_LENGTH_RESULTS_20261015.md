@@ -132,6 +132,17 @@ four catalogs and the policy audit pass. Read-only whole-publication review find
 no remaining Critical/Important issue. All84 current diagnostic pins,92 earlier
 raw-input pins and50 protected native-memory pins remain unchanged.
 
+The initial85c25f7 push/PR CI failed at the Ubuntu test step. A separate subprocess
+reproduced the two pure fault tests' dependence on the Windows-only peak counter.
+The new test harness supplies healthy memory/disk fixtures **only for those two
+named unit cases**, and tests their behavior with the real counter deliberately
+unavailable. It adds no skips or runtime fallback. Executed producer, pinned
+tests, config and all84 experiment/replay pins stay unchanged. This corrects
+test portability; the experimental producer still uses its Windows-only monitor.
+Post-correction CPU verification:1,485passed/1skipped (22.58s), NoTorch
+1,071passed/96skipped (6.56s), Ruff and scoped read-only review pass. Failed CI
+history remains visible.
+
 ## Next action
 
 Keep length-only and no-input controls in future native-input development.
