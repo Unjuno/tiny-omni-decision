@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 native saved-prefix audit:**59 saved train frames/60,416 raw
+candidates passed independent mask→box/NMS/grid reconstruction and source RGB
+hash checks. Two media assets only;4,969 NMS survivors are not unique objects.
+Main continues unchanged; full256-frame/fresh-replay admission and quality remain
+pending.
+[Actual scope and saved audit](docs/pretrained_reuse/R2_NATIVE_DYNAMIC_CORPUS_PREFIX_AUDIT_20261014.md).
+
 **2026-10-14 native wider-input smoke:** Full1,024 candidates saved at two fixed
 train times; frame0's five arrays match the old archive, while objects64–127
 match cached/fresh sessions at both times. Main extraction

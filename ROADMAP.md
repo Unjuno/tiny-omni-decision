@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 independent native input audit executed:**59/256 captured rows
+(57 new,2 reused) passed complete1,024-mask geometry/NMS/grid/source-RGB checks
+on two known train assets. CPU-only auditor leaves the active extractor
+unchanged; no full-corpus, object-identity, QA or95–98% quality claim.
+[Prefix evidence and final admission gates](docs/pretrained_reuse/R2_NATIVE_DYNAMIC_CORPUS_PREFIX_AUDIT_20261014.md).
+
 **2026-10-14 native dynamic input expansion running:** Native-wrapper smoke
 passed with five arrays containing all1,024 candidates, hashes/freeze/RNG retained.
 Eight known train clips
