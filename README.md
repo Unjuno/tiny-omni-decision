@@ -906,3 +906,9 @@ heads, no new model training; full predictions and custom-ID JSON reproduce in a
 separate process. This is a controlled AV task, with correlated query roles and
 explicit uniform missing-input controls, not four-modality95–98% qualification.
 [Full metrics, controls, hashes and limitations](docs/pretrained_reuse/R2_LOMBARD_CORRESPONDENCE_RESULTS_20261015.md).
+
+Native AV correspondence now also runs from actual audio/video bytes to custom
+JSON. A six-clip TRAIN pilot and separate raw replay pass;48 repeated raw requests
+and128 additional decisions reuse states without encoder forwards. Cached-score
+latency excludes native encoding. AV122.79M is a functional slice, not complete
+Omni quality or packaging. [Execution and exact reference distinctions](docs/pretrained_reuse/R5_NATIVE_AV_CORRESPONDENCE_RESULTS_20261015.md).

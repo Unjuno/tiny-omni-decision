@@ -1448,3 +1448,18 @@ with serialization failure and its separate correction retained. Keep as an AV
 baseline; independent task/OOD coverage and the complete four-modality product
 remain open. No checkpoint/temperature/negative tuning from these scores.
 [Actual results and prospective protocol](docs/pretrained_reuse/R2_LOMBARD_CORRESPONDENCE_RESULTS_20261015.md).
+
+### Actual native AV input and state reuse (2026-10-15)
+
+The frozen correspondence primitive now accepts actual archive audio/front-video
+bytes through CPU Whisper encoder and an isolated persistent native VideoPrism
+worker. Six TRAIN assets /eight fixed query roles complete, with exact full raw
+feature/state/JSON fresh replay and both-process profile/dependency checks.48raw
+cache hits and128 further decisions invoke neither encoder. Video features match
+the original bank exactly; video logits match same-head B1 recomputation exactly
+and differ from original stored temporal logits by up to1.91e-6. Audio CPU/CUDA
+differences remain explicit.122790899 AV parameters/coefficients include both full
+heads; score-only latency is not end-to-end native latency. No new training,
+independent quality, full four-modality/package or release qualification. Retain
+this runnable reference while independent task/OOD quality coverage stays open.
+[Measured runtime, resources, correction and hashes](docs/pretrained_reuse/R5_NATIVE_AV_CORRESPONDENCE_RESULTS_20261015.md).

@@ -57,3 +57,6 @@ select = ["E", "F", "I", "UP", "B"]
 # Preserve the hash-bound executed first publisher; v2 fixes explicit zip length checks.
 [tool.ruff.lint.per-file-ignores]
 "scripts/report_lombard_correspondence.py" = ["B905"]
+# Retain physically hash-bound executed correction and its original literal fixture.
+"scripts/correct_native_av_publication.py" = ["E501"]
+"tests/test_native_av_reference_correction.py" = ["E501"]
