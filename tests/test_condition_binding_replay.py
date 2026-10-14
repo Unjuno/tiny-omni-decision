@@ -20,6 +20,25 @@ def test_original_epoch_hash_and_exact_byte_replay(tmp_path):
         verify_original_train(path, "changed", values)
 
 
+def test_reference_parameter_flags_preserved_but_no_gradient_graph_or_updates():
+    import torch
+
+    from scripts.diagnose_condition_binding import frozen_weight_logits
+    from tiny_omni_decision.spatial_trajectory_readout import SpatialTrajectoryReadout
+
+    model = SpatialTrajectoryReadout(hidden=8, latent_count=2, heads=2).eval()
+    before = {k: v.detach().clone() for k, v in model.state_dict().items()}
+    flags = [p.requires_grad for p in model.parameters()]
+    qa, cover = frozen_weight_logits(
+        model, torch.randn(1, 3, 512), torch.randn(1, 6, 1536), torch.randn(1, 4, 387)
+    )
+    assert not qa.requires_grad and not cover.requires_grad
+    assert [p.requires_grad for p in model.parameters()] == flags
+    assert all(p.grad is None for p in model.parameters())
+    for key, value in model.state_dict().items():
+        torch.testing.assert_close(value, before[key], rtol=0, atol=0)
+
+
 @pytest.mark.parametrize("kind", ["dtype", "signed_zero"])
 def test_numerically_equal_but_not_bitwise_replay_is_rejected(tmp_path, kind):
     path, values = fixture(tmp_path)

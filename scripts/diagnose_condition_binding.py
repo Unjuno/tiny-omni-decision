@@ -39,13 +39,22 @@ def verify_original_train(path, expected_hash, values):
             require_bitwise(original["train" + suffix], replay)
 
 
+@torch.no_grad()
+def frozen_weight_logits(model, points, candidates, context):
+    state = model.encode_state(points, context)
+    logits = model.score_candidates(state, candidates).reshape(-1, 3)
+    if logits.requires_grad or any(v.requires_grad for v in state):
+        raise ValueError("diagnostic forward must not record gradients")
+    return logits, state[1]
+
+
 def predict_control(model, bank, spatial, data, control, limits):
     qa, cover, logp, raw = [], [], [], []
     route = [p["video_id"] for p in data["pairs"]]
     if control == "mismatched_state":
         bank = {v: bank[route[(i + 1) % len(route)]] for i, v in enumerate(route)}
         spatial = {v: spatial[route[(i + 1) % len(route)]] for i, v in enumerate(route)}
-    with torch.inference_mode():
+    with torch.no_grad():
         for offset in range(0, len(route), 8):
             require_limits(*limits)
             points, candidates, context, _ = paired_batch(
@@ -60,10 +69,9 @@ def predict_control(model, bank, spatial, data, control, limits):
             candidates = question_control(candidates.reshape(-1, 2, 3, 1536), mode).reshape(
                 -1, 6, 1536
             )
-            state = model.encode_state(points, context)
-            logits = model.score_candidates(state, candidates).reshape(-1, 3)
+            logits, roles = frozen_weight_logits(model, points, candidates, context)
             qa.append(logits.softmax(-1).cpu().numpy())
-            cover.append(state[1].sigmoid().cpu().numpy())
+            cover.append(roles.sigmoid().cpu().numpy())
             logp.append(logits.log_softmax(-1).cpu().numpy())
             raw.append(logits.cpu().numpy())
             require_limits(*limits)
@@ -175,7 +183,11 @@ def main():
             hidden=64,
             latent_count=16,
             heads=4,
-            frozen=True,
+            weights_frozen=True,
+            reference_parameter_flags_preserved=True,
+            gradient_tracking=False,
+            optimizer_updates=0,
+            execution_context="torch.no_grad",
             training=False,
             checkpoint_selection=False,
             precision="FP32",
@@ -203,9 +215,10 @@ def main():
             path = folder / f"{kind}.pt"
             if sha(path) != metadata["hashes"][path.name]:
                 raise ValueError("checkpoint changed")
-            model = SpatialTrajectoryReadout().cuda().eval().requires_grad_(False)
+            model = SpatialTrajectoryReadout().cuda().eval()
             model.load_state_dict(torch.load(path, weights_only=True), strict=True)
             before = state_hash(model)
+            before_flags = [p.requires_grad for p in model.parameters()]
             cpu_rng, cuda_rng = torch.get_rng_state(), torch.cuda.get_rng_state_all()
             probabilities, metrics, saved_arrays = {}, {}, {}
             for control in ("normal", "neutral_question", "swapped_question", "mismatched_state"):
@@ -263,8 +276,10 @@ def main():
             assert metrics["neutral_question"]["different_condition_predictions"] == 0
             assert metrics["neutral_question"]["changed_target_both_correct"] == 0
             after = state_hash(model)
-            if before != after or any(
-                p.requires_grad or p.grad is not None for p in model.parameters()
+            if (
+                before != after
+                or before_flags != [p.requires_grad for p in model.parameters()]
+                or any(p.grad is not None for p in model.parameters())
             ):
                 raise ValueError("frozen readout changed")
             if not torch.equal(cpu_rng, torch.get_rng_state()) or not all(
@@ -284,7 +299,13 @@ def main():
                 swapped_question_logits_equivariant=True,
                 metrics=metrics,
                 parameters=sum(p.numel() for p in model.parameters()),
-                trainable_parameters=0,
+                requires_grad_parameters=sum(
+                    p.numel() for p in model.parameters() if p.requires_grad
+                ),
+                weights_frozen=True,
+                gradient_tracking=False,
+                optimizer_updates=0,
+                parameter_flags_preserved=True,
                 prediction_sha256=sha(args.output / f"{kind}-predictions.npz"),
             )
             del model

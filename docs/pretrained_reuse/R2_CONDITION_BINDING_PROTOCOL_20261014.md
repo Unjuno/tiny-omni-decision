@@ -38,7 +38,7 @@ Require original epoch archive SHA before shape/dtype/tobytes replay. Save raw
 logits and measure both raw and per-row-centered logit changes. Question-swap
 logit/probability gates use the existing candidate-equivariance tolerance
 rtol1e-5/atol1e-6; normal original-epoch replay remains strict byte equality.
-Every registered readout parameter is frozen, before/after state hashes equal,
+Every readout weight remains frozen, before/after state hashes equal,
 CPU/CUDA RNG unchanged, all outputs finite; cap total600seconds/4GiB allocation,
 12GiB free GPU preflight. Preserve original best/final/config/run files.
 
@@ -58,6 +58,18 @@ No performance metric was observed before this correction. Question-only control
 retain the small option differences; neutral probability/prediction equality and
 question-swap equivalence are measured gates, not assumed identities of all bytes.
 Attempt01 code/error/provenance are archived; retry uses a new output directory.
+
+Attempt02 retained its fixed best-checkpoint outputs but failed original byte
+replay by up to4.7683716e-7 in log probabilities. A separate first8 train-video
+four-case runtime probe found original `requires_grad=True` flags reproduce
+original QA/cover/logp bytes under either no_grad or inference_mode; changing
+flags toFalse changes last bits under both modes. Allfour cases leave weights
+unchanged and call no backward. Do not loosen the original byte gate. Attempt03
+preserves the reference parameter flags and uses no_grad, records the actual
+232,385 requires_grad-flagged parameters separately from **zero optimizer updates**,
+and asserts no output graph/parameter gradients or weight changes. No encoder is
+loaded or unfrozen. This runtime correction does not address the quality failure.
+Probe/code and both failed attempts remain in separate local outputs.
 
 If final training predictions depend on the question and state while selected
 best collapses to an option prior, condition information/routing loss is not a
