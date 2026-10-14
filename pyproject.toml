@@ -53,3 +53,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+# Preserve the hash-bound executed first publisher; v2 fixes explicit zip length checks.
+[tool.ruff.lint.per-file-ignores]
+"scripts/report_lombard_correspondence.py" = ["B905"]
