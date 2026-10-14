@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 proposal-forward engineering comparison:** Same frozen SAM2/native
+prefix64, alternating warmed equal-work windows: ~5.04× cached forward ratio.
+All discrete outputs match, but score maxerror1.335e-5>predefined1e-5; prefix
+nonadmission retained, no silent tolerance change/corpus substitution. Fresh
+replay passed; freeze/guard/resource checks recorded. Require explicit new
+chunk-size/derived-input admission before wider semantic cue/cover data work.
+No decision-quality improvement or product latency claim.
+[Measurements and failed numerical guard](docs/pretrained_reuse/R2_SAM2_BATCH_DECODER_RESULTS_20261014.md).
+
 **2026-10-14 timed spatial relation executed:** All1,070 queries×32times×3policies
 predicted before posthoc labels. Later group current-bbox proxy69.13% actual vs
 37.24% static; hidden-cue→cover0/18 actual and cue bbox retention2/18. One correlated

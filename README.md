@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 cached SAM2 batch measurement:** Matched64-object forward median
+0.932s→0.185s (~5.04×); discrete prefix masks/boxes/seeds/NMS unchanged,8-array
+fresh replay exact. Presence-score error1.335e-5 exceeds the fixed1e-5 guard:
+no corpus replacement/adoption or full-grid/quality claim. Preserve the numerical
+failure before broader cue/memory data work.
+[Actual windows, guards and limits](docs/pretrained_reuse/R2_SAM2_BATCH_DECODER_RESULTS_20261014.md).
+
 **2026-10-14 spatial relation diagnostic:** Same-time motion helps later group-box
 association, but nearest-distance hidden-cue→source-cover correspondence is0/18
 on the known one-scene train diagnostic. The cue track is in its source bbox2/18.
