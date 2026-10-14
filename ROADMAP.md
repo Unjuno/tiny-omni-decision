@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 source/task follow-up executed:** Real and silence audio reproduce
+the same fixed-ASR text, leaving RoboMNIST counter/clock hypotheses unsettled.
+New CC BY4.0 contact-material candidate VisTouch has24 source sessions /28min
+unique window coverage, despite10,498 stretched overlapping clips. Supplied
+validation is absent; video timing/specimen/media/source-identity gates remain
+open. Audit all native sources before fitting; no archive access, quality, GPU
+restart or full95–98%/<=200M Omni completion is claimed.
+[Actual acoustic diagnostic](docs/pretrained_reuse/R2_ROBOMNIST_AUDIO_CUE_RESULTS_20261015.md) ·
+[Complete metadata and access limits](docs/pretrained_reuse/R2_VISTOUCH_SOURCE_RESULTS_20261015.md).
+
 **2026-10-15 native frontend/container gate executed:** On one known-train pilot,
 harmless container padding leaves full native decoded frames and frozen TinyCLIP
 features exact, but changes both fixed length-only predictions. Fresh CPU model/

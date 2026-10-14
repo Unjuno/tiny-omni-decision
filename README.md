@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-15 public native-input follow-up executed:** Fixed real/silence ASR gives
+identical text, so RoboMNIST's acoustic counter remains unknown. VisTouch's full
+metadata audit finds24 source sessions behind10,498 overlapping stretched clips,
+no validation and approximate video timing. Native access/quality remain open;
+no new fitting or promotion. [Acoustic evidence](docs/pretrained_reuse/R2_ROBOMNIST_AUDIO_CUE_RESULTS_20261015.md) ·
+[Contact-material candidate and data gates](docs/pretrained_reuse/R2_VISTOUCH_SOURCE_RESULTS_20261015.md).
+
 **2026-10-15 native frozen visual frontend executed:** One fixed RoboMNIST pilot
 preserves all decoder pixels and TinyCLIP features after1MiB container padding,
 while both fixed length-only classifiers change predictions. Fresh model/native
