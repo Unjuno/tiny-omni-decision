@@ -717,3 +717,8 @@ Dense temporal occlusion comparison completed on 99 train / 257 validation video
 Mean and attention reach 39.11% / 38.91% selected Accuracy, near the train-only prior;
 mismatched videos do not reduce Accuracy and later epochs overfit. Neither head
 is promoted. [Results and controls](docs/pretrained_reuse/R2_OCCLUSION_RESULTS_20261013.md).
+
+Full spatial-context follow-up completed on the same356 clips: initial-broadcast
+and32-time appearance both reach38.91% selected Accuracy, with0/127 changed-target
+pairs both correct. Both50-epoch curves overfit; no adoption or budget extension.
+[Audited comparison, controls and all curves](docs/pretrained_reuse/R2_SPATIAL_READOUT_RESULTS_20261014.md).

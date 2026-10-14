@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 complete spatial-context comparison executed:** All356 frozen clips
+and fresh replay passed integrity gates. Same232,385-parameter readout compared
+initial-broadcast versus32-time appearance, seed17/50epochs/650updates each.
+Both selected Accuracy38.91%, changed-target both-correct0/127 and all controls
+change0answers; later train95–97% versus dev33–36% shows overfitting. Close this
+readout/data repetition without promotion; condition/state binding and useful
+native fusion remain open. [Results and all curves](docs/pretrained_reuse/R2_SPATIAL_READOUT_RESULTS_20261014.md).
+
 **2026-10-14 supervised role/QA comparison executed:** Same139,521-parameter readout,
 seed17/50epochs, auxiliary loss0 versus1; every99train/257development video retained.
 Selected Accuracy38.91%→40.27%, but grouped intervals include zero. Changed-target
