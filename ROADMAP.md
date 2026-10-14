@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 per-time discovery pilot:** All32 fixed times/32,768 raw masks completed
+on one known train regression scene. Group bbox opportunity improves over static
+frame0; a later visible small-item cue survives NMS. Hidden-box1/19 is neither
+recognition quality nor a visibility-denominated detection ceiling. Keep all13
+unavailable times and all candidates. Next bind input-only time-specific queries
+and measure occlusion/container association; do not GT-seed a chosen mask or
+extend the failed readout. Cache parity passed, but product latency and full
+Omni quality remain unqualified. [Execution and limits](docs/pretrained_reuse/R2_DYNAMIC_DISCOVERY_RESULTS_20261014.md).
+
 **2026-10-14 input-only association comparison:** All256 queries/time were
 predicted before posthoc labels. Future same-group bbox rates: actual45.86%,
 static41.05%, original fixed-track51.72%; actual trails fixed routing in all8clips.

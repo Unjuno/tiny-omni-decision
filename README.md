@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 temporal discovery executed:** The fixed train regression scene
+completed all32 times/32,768 proposals, with exact cache admission and last-time
+reload. A later exposed-item cue has a model-produced mask; source-box opportunity
+does not select that item or preserve its container relationship. No quality fit
+or adoption. [Actual costs, cue scope and limits](docs/pretrained_reuse/R2_DYNAMIC_DISCOVERY_RESULTS_20261014.md).
+
 **2026-10-14 train-only appearance association:** Moving-position cosine retrieval
 beats static sampling on eight reused scenes, but trails original track routing
 on every clip. This is a sparse-box geometric proxy, not Decision Accuracy.
