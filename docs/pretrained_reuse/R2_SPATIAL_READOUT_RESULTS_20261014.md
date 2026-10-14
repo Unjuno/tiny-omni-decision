@@ -144,6 +144,10 @@ All100 epochs, nested initial/final/changed metrics and auxiliary membership
 metrics were recomputed from saved original predictions;116 arm artifact hashes,
 exact original labels/ordered IDs, sampling, selected controls and earliest-minimum
 selector were checked. Missing-label masks remain98/253 and all original QA rows.
+The first publication byte check rejected Windows CRLF versus Git LF differences.
+Numeric content was identical; original publication bytes were archived separately,
+and publication JSON now uses explicit UTF-8 LF with a regression test. Training,
+config and checkpoint bytes were not changed by this publication correction.
 Separate fresh-process replay passed allfour best/final checkpoints on full198train/
 514dev predictions, cover probabilities and log-softmax outputs bitwise. It took
 46.483787seconds and overlapped CPU publication audit; no training occurred.
@@ -165,8 +169,8 @@ their dependent full execution/publication. Regression tests showed those failur
 then passed. All smoke/extraction/comparison attempts remain in independent outputs;
 no failed learning attempt was hidden. No legacy teacher/data/config/artifact or
 active unrelated process was changed. No sealed audit, quantization, cloud,
-product promotion or main merge. Fresh CPU verification:1043passed/1skipped in
-16.51seconds; Ruff passes, all manifests/four catalogs/policy audit pass.
+product promotion or main merge. Fresh CPU verification:1044passed/1skipped in
+15.71seconds; Ruff passes, all manifests/four catalogs/policy audit pass.
 Implementation-head Actions [38496555042](https://github.com/Unjuno/tiny-omni-decision/actions/runs/38496555042)
 and [38496551653](https://github.com/Unjuno/tiny-omni-decision/actions/runs/38496551653)
 passed on `fa360f1`. Final publication-head CI is checked after push and recorded

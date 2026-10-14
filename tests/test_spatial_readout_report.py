@@ -6,6 +6,17 @@ from scripts.report_spatial_trajectory_readout import audit_epoch  # noqa: E402
 from scripts.train_role_supervised_qa import qa_summary  # noqa: E402
 
 
+def test_publication_json_has_stable_lf_bytes(tmp_path):
+    import json
+
+    from scripts.report_spatial_trajectory_readout import write_publication
+
+    path = tmp_path / "report.json"
+    write_publication(path, {"status": "記録", "nll": 1.0})
+    assert b"\r\n" not in path.read_bytes()
+    assert json.loads(path.read_bytes()) == {"status": "記録", "nll": 1.0}
+
+
 def test_saved_labels_bind_original_ids_targets_and_optional_cover():
     from scripts.report_spatial_trajectory_readout import verify_original_labels
 

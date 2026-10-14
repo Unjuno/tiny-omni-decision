@@ -7,10 +7,14 @@ from pathlib import Path
 
 import numpy as np
 
-from scripts.audit_correspondence_validation import sha, write
+from scripts.audit_correspondence_validation import sha
 from scripts.cover_point_metrics import membership_metrics
 from scripts.train_role_supervised_qa import load, qa_summary
 from scripts.train_spatial_trajectory_readout import paired_video_bootstrap
+
+
+def write_publication(path, value):
+    path.write_bytes((json.dumps(value, indent=2) + "\n").encode("utf-8"))
 
 
 def verify_original_labels(saved, original):
@@ -222,7 +226,7 @@ def main():
         full_four_modality_model=False,
         sealed_audit_opened=False,
     )
-    write(args.output, output)
+    write_publication(args.output, output)
     print(output["status"], checked, "artifacts", flush=True)
 
 
