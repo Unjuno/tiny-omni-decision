@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-15 native frozen visual frontend executed:** One fixed RoboMNIST pilot
+preserves all decoder pixels and TinyCLIP features after1MiB container padding,
+while both fixed length-only classifiers change predictions. Fresh model/native
+reload passes. This is pixel-processing evidence, not decision/temporal/joint
+quality. [Measured controls and remaining gates](docs/pretrained_reuse/R2_ROBOMNIST_CONTAINER_FEATURE_RESULTS_20261015.md).
+
 **2026-10-15 public-source shortcut diagnostic executed:** All2,135 RoboMNIST
 groups stay intact in global repetition-block development splits. Camera file
 lengths alone reach65.45% activity60 /85.30% robot identification; this is source

@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 native frontend/container gate executed:** On one known-train pilot,
+harmless container padding leaves full native decoded frames and frozen TinyCLIP
+features exact, but changes both fixed length-only predictions. Fresh CPU model/
+native replay passes; all resident83.1M parameters are counted. Conditional and
+temporal quality, common clock, native corpus/split admission and joint benefit
+remain open. Retain nuisance controls before fitting; no legacy GPU restart.
+[Actual execution and bounds](docs/pretrained_reuse/R2_ROBOMNIST_CONTAINER_FEATURE_RESULTS_20261015.md).
+
 **2026-10-15 RoboMNIST shortcut evidence measured:** Complete2,135-group metadata
 diagnostic uses1,475train/660validation and preserves global-Rp grouping/all60
 classes. Camera lengths alone predictactivity60 at65.45%; all-length fusion has
