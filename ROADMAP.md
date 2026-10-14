@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 timed spatial relation executed:** All1,070 queries×32times×3policies
+predicted before posthoc labels. Later group current-bbox proxy69.13% actual vs
+37.24% static; hidden-cue→cover0/18 actual and cue bbox retention2/18. One correlated
+train cue, not QA or a model ceiling. Keep failed comparison, unknowns and
+frame0 self-trajectory sanity cases. Close nearest geometry; require semantic
+cue-to-cover binding/identity memory before another fit or broader claim.
+[All arms, source exceptions and exact replay](docs/pretrained_reuse/R2_TIMED_SPATIAL_RELATION_RESULTS_20261014.md).
+
 **2026-10-14 time-specific mask tracking executed:** Every1,070 NMS candidate
 from all32 times became an own-mask query at its original frame; full558-frame
 tracking and all15-array fresh replay passed. No GT seed selection, filtering,

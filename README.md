@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 spatial relation diagnostic:** Same-time motion helps later group-box
+association, but nearest-distance hidden-cue→source-cover correspondence is0/18
+on the known one-scene train diagnostic. The cue track is in its source bbox2/18.
+All controls/unknowns retained,18-array fresh replay and independent audit passed.
+Close this simple distance policy; semantic binding/memory and Omni quality remain
+open. [Actual comparison and limits](docs/pretrained_reuse/R2_TIMED_SPATIAL_RELATION_RESULTS_20261014.md).
+
 **2026-10-14 time-specific mask tracking:** All1,070 model candidates were tracked
 from their own original times over the full558-frame train regression clip.
 Primary63.02s/5.45GiB Torch; fresh replay matches all15 arrays exactly. No GT
