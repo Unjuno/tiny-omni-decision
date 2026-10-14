@@ -18,8 +18,8 @@ Four predeclared conditions, with original targets unchanged:
 1. Normal: exact original saved train output replay.
 2. Neutral question: replace both question384-d vectors by their input-only
    average, preserving each option vector; rebuild question/option/absolute
-   difference/product1536-d features. Identical question inputs cannot satisfy
-   two different targets; this control is not an alternative deployable task.
+   difference/product1536-d features. Exactly identical question-and-option
+   inputs cannot satisfy two different targets; this is not a deployable task.
 3. Swapped question: swap question vectors, keep option vectors/state unchanged;
    rebuild features. Check logits/probabilities against the normal paired outputs
    in reversed condition order, proving candidate/condition routing consistency.
@@ -43,6 +43,21 @@ CPU/CUDA RNG unchanged, all outputs finite; cap total600seconds/4GiB allocation,
 12GiB free GPU preflight. Preserve original best/final/config/run files.
 
 ## Interpretation
+
+### Preflight correction before any model forward
+
+Attempt01 failed on an overly strict diagnostic assumption: two of99 videos
+have paired option vectors differing by at most2.0861626e-7, despite identical
+original option strings and byte-pinned cache. Question sharing and feature
+factorization are exact. This is consistent with numerical differences in
+batched frozen encoder inference; the cause of those last bits is not independently
+proven. Preserve both original option vectors and every cache/hash. Accept paired
+option consistency at the existing candidate-equivariance rtol1e-5/atol1e-6,
+record the difference, and keep original epoch byte replay and all hash gates strict.
+No performance metric was observed before this correction. Question-only controls
+retain the small option differences; neutral probability/prediction equality and
+question-swap equivalence are measured gates, not assumed identities of all bytes.
+Attempt01 code/error/provenance are archived; retry uses a new output directory.
 
 If final training predictions depend on the question and state while selected
 best collapses to an option prior, condition information/routing loss is not a

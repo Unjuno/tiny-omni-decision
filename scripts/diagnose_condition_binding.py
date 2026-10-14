@@ -136,6 +136,12 @@ def main():
                 cosine=float(np.dot(*u) / np.prod(np.linalg.norm(u, axis=-1))),
                 l2_difference=float(np.linalg.norm(u[0] - u[1])),
                 factorization_bitwise=True,
+                paired_option_maximum_difference=float(
+                    (text[:, 0, :, 384:768] - text[:, 1, :, 384:768]).abs().max()
+                ),
+                paired_option_rounding_videos=int(
+                    ((text[:, 0, :, 384:768] - text[:, 1, :, 384:768]).abs().amax((1, 2)) > 0).sum()
+                ),
             ),
             gpu=torch.cuda.get_device_name(),
             torch=torch.__version__,
@@ -179,6 +185,8 @@ def main():
             python=platform.python_version(),
             gpu=report["gpu"],
             swapped_equivariance_tolerance=dict(rtol=1e-5, atol=1e-6),
+            paired_option_tolerance=dict(rtol=1e-5, atol=1e-6),
+            paired_option_values_preserved=True,
             original_epoch_replay="shape/dtype/bytes exact",
             sealed_audit_opened=False,
         )
@@ -231,6 +239,9 @@ def main():
                         np.abs(difference - difference.mean(-1, keepdims=True)).max()
                     )
                 metrics[control] = measurements
+            np.savez_compressed(args.output / f"{kind}-predictions.npz", **saved_arrays)
+            report["pending_checkpoint_checks"] = dict(kind=kind, epoch=epoch, metrics=metrics)
+            write_publication(args.output / "progress.json", report)
             original_path = folder / f"epoch-{epoch:02d}-predictions.npz"
             verify_original_train(
                 original_path,
@@ -261,7 +272,6 @@ def main():
                 for a, b in zip(cuda_rng, torch.cuda.get_rng_state_all(), strict=True)
             ):
                 raise ValueError("inference changed RNG")
-            np.savez_compressed(args.output / f"{kind}-predictions.npz", **saved_arrays)
             report["checkpoints"][kind] = dict(
                 epoch=epoch,
                 weights_sha256=sha(path),
@@ -279,6 +289,7 @@ def main():
             )
             del model
             torch.cuda.empty_cache()
+        report.pop("pending_checkpoint_checks", None)
         for path, pin in config["input_hashes"].items():
             require_limits(*limits)
             if sha(Path(path)) != pin:

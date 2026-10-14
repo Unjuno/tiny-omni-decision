@@ -23,6 +23,16 @@ def test_controls_rebuild_only_question_preserve_options_and_source():
     torch.testing.assert_close(values, original, rtol=0, atol=0)
 
 
+def test_paired_encoder_rounding_preserved_without_replacing_options():
+    values = candidates()
+    q, o = values[..., :384], values[..., 384:768].clone()
+    o[0, 1, 0, 0] = torch.nextafter(o[0, 1, 0, 0], torch.tensor(torch.inf))
+    values = torch.cat((q, o, (q - o).abs(), q * o), -1)
+    for mode in ("normal", "neutral_question", "swapped_question"):
+        result = question_control(values, mode)
+        torch.testing.assert_close(result[..., 384:768], o, rtol=0, atol=0)
+
+
 @pytest.mark.parametrize("kind", ["factor", "options", "questions", "empty", "nan", "mode"])
 def test_invalid_factorization_or_condition_pair_fails_closed(kind):
     values = candidates()

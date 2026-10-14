@@ -16,7 +16,7 @@ def question_control(values, mode):
     q, o = values[..., :384], values[..., 384:768]
     if (
         not torch.equal(q, q[:, :, :1].expand_as(q))
-        or not torch.equal(o, o[:, :1].expand_as(o))
+        or not torch.allclose(o, o[:, :1].expand_as(o), rtol=1e-5, atol=1e-6)
         or not torch.equal(values, torch.cat((q, o, (q - o).abs(), q * o), -1))
     ):
         raise ValueError("exact question/option factorization and paired options required")
