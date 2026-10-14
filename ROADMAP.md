@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 native wider corpus admitted:** Unchanged native run finished all
+256 times on eight known train clips;39 reused/217 new. Fresh fixed-frame replay
+and independent complete geometry/NMS/RGB/hash audit passed. Next: training-only
+semantic cue/cover-memory input/supervision, with no GT runtime seeds or quality claim.
+[Executed full admission](docs/pretrained_reuse/R2_NATIVE_DYNAMIC_CORPUS_FULL_RESULTS_20261014.md).
+
 **2026-10-14 masked frozen-feature inputs verified:** All1,070 proposals over
 32 times from one train asset are retained; full9-array replay exact and fixed8-row
 independent numerical reference exact. No fitting/quality claim or live-run change.

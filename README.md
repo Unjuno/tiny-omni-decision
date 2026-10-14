@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 native wider inputs completed:** Eight known train clips×32times,
+256 full banks/39 reused/217 new, all18,441 NMS proposals retained.
+Fixed one-frame fresh replay and full geometry/source-RGB/hash audit passed.
+Input admission only; semantic binding and Omni quality remain open.
+[Actual completion and limits](docs/pretrained_reuse/R2_NATIVE_DYNAMIC_CORPUS_FULL_RESULTS_20261014.md).
+
 **2026-10-14 mask-region input probe:** One known train clip,32 times/all1,070
 NMS candidates,384 mean+384 standard-deviation channels: full9-array fresh replay
 exact; independent numerical reference8 rows exact. CPU primary9.74s,2.98MB,
