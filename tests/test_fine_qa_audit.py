@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 
+from scripts import audit_fine_grouped_qa as module
 from scripts.audit_fine_grouped_qa import metrics, scene_bootstrap
 
 
@@ -25,3 +26,39 @@ def test_scene_bootstrap_keeps_two_conditions_together():
     assert m["videos"] == 2 and m["repetitions"] == 10000 and m["seed"] == 17
     with pytest.raises(ValueError):
         metrics(a, np.log(a), y[:3])
+
+
+def test_strict_replay_rejects_dtype_and_signed_zero_changes():
+    a = np.array([0.0, 1.0], np.float32)
+    module.require_bytes(a, a.copy())
+    with pytest.raises(ValueError):
+        module.require_bytes(a, a.astype(np.float64))
+    b = a.copy()
+    b[0] = -0.0
+    with pytest.raises(ValueError):
+        module.require_bytes(a, b)
+
+
+def test_bound_config_checks_effective_mode_digest_split_and_terminal_references(tmp_path):
+    import json
+
+    (tmp_path / "split.json").write_text("fixed split")
+    contract = dict(split_sha256=module.sha(tmp_path / "split.json"), seed=17)
+    config = dict(contract=contract, mode="replay")
+    (tmp_path / "config.json").write_text(json.dumps(config))
+    evidence = dict(
+        contract=contract,
+        contract_sha256=module.digest(contract),
+        config_sha256=module.sha(tmp_path / "config.json"),
+        arms={},
+    )
+    (tmp_path / "result.json").write_text(json.dumps(evidence))
+    pins = module.evidence_pins(tmp_path, evidence, "replay")
+    module.verify_pins(pins)
+    with pytest.raises(ValueError):
+        module.evidence_pins(tmp_path, evidence, "main")
+    (tmp_path / "split.json").write_text("modified")
+    with pytest.raises(ValueError):
+        module.verify_pins(pins)
+    with pytest.raises(ValueError):
+        module.evidence_pins(tmp_path, evidence, "replay")

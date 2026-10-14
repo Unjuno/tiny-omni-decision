@@ -17,6 +17,47 @@ def sha(path):
     return h.hexdigest()
 
 
+def digest(value):
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+
+
+def require_bytes(a, b):
+    if a.shape != b.shape or a.dtype != b.dtype or a.tobytes() != b.tobytes():
+        raise ValueError("array shape/dtype/bytes differ")
+
+
+def verify_pins(pins):
+    for path, pin in pins.items():
+        if sha(path) != pin:
+            raise ValueError("bound evidence changed")
+
+
+def evidence_pins(folder, result, mode):
+    path = folder / "config.json"
+    split = folder / "split.json"
+    effective = json.loads(path.read_text(encoding="utf-8"))
+    if (
+        sha(path) != result["config_sha256"]
+        or effective["mode"] != mode
+        or effective["contract"] != result["contract"]
+        or sha(split) != result["contract"]["split_sha256"]
+        or digest(result["contract"]) != result["contract_sha256"]
+    ):
+        raise ValueError("actual config/mode/contract digest/split not bound")
+    pins = {
+        str(folder / "result.json"): sha(folder / "result.json"),
+        str(path): result["config_sha256"],
+        str(split): result["contract"]["split_sha256"],
+    }
+    for arm, r in result["arms"].items():
+        for file, pin in r["hashes"].items():
+            pins[str(folder / file if mode == "replay" else folder / arm / file)] = pin
+    verify_pins(pins)
+    return pins
+
+
 def scalar_metrics(p, logp, y):
     p, logp = np.asarray(p, np.float64), np.asarray(logp, np.float64)
     if p.shape != (len(y), 3) or logp.shape != p.shape or not len(y) or not np.isfinite(logp).all():
@@ -123,10 +164,18 @@ def audit(run, run_sha, replay, replay_sha):
         r["status"] != "PASS_FIXED_GROUPED_FINE_QA_COMPARISON_ONLY"
         or fresh["status"] != "PASS_FRESH_ALL_FOUR_WEIGHT_REPLAYS_NOT_QUALITY"
         or fresh["contract"] != r["contract"]
+        or set(r["arms"]) != {"coarse16", "fine32"}
+        or set(fresh["arms"]) != {"coarse16", "fine32"}
         or sha(run / "config.json") != r["config_sha256"]
         or sha(run / "split.json") != r["contract"]["split_sha256"]
     ):
         raise ValueError("complete bound comparison/fresh replay required")
+    primary_pins = evidence_pins(run, r, "main")
+    replay_pins = evidence_pins(replay, fresh, "replay")
+    if fresh["reference_evidence_hashes"] != primary_pins:
+        raise ValueError("fresh replay does not bind exact supplied primary result/artifacts")
+    pins = {**primary_pins, **replay_pins, **r["reference_evidence_hashes"]}
+    verify_pins(pins)
     split = json.loads((run / "split.json").read_text())
     a, b = split["fit"], split["selector"]
     for key in ("video_ids", "media_sha256"):
@@ -134,6 +183,7 @@ def audit(run, run_sha, replay, replay_sha):
             raise ValueError("cross-split content/identity overlap")
     labels = {}
     for name in ("fit", "selector"):
+        pins[str(run / f"{name}-labels.npz")] = sha(run / f"{name}-labels.npz")
         with np.load(run / f"{name}-labels.npz", allow_pickle=False) as d:
             labels[name] = d["qa"].copy()
             if d["identities"].tolist() != split[name]["video_ids"]:
@@ -189,8 +239,10 @@ def audit(run, run_sha, replay, replay_sha):
                 np.load(path, allow_pickle=False) as p,
                 np.load(folder / f"epoch-{epoch:02d}-predictions.npz", allow_pickle=False) as o,
             ):
+                if set(p.files) != set(o.files):
+                    raise ValueError("fresh prediction keys differ")
                 for k in o.files:
-                    np.testing.assert_array_equal(p[k], o[k])
+                    require_bytes(p[k], o[k])
         controls = {}
         with np.load(folder / "selected-controls.npz", allow_pickle=False) as p:
             for control in ("normal", "zero", "mismatch", "initial", "reverse"):
@@ -234,6 +286,7 @@ def audit(run, run_sha, replay, replay_sha):
                 atol=1e-6,
             )
         bootstraps[label] = got
+    verify_pins(pins)
     return dict(
         status="PASS_INDEPENDENT_PREDICTION_ACCOUNTING_AUDIT_NOT_QUALITY",
         run_result_sha256=run_sha,
@@ -246,6 +299,10 @@ def audit(run, run_sha, replay, replay_sha):
             "known TRAIN scene selector; weak auxiliary labels not independently rebuilt; not blind"
         ),
         no_torch_or_model_loaded=True,
+        actual_config_split_reference_binding=True,
+        fresh_array_shape_dtype_bytes_identical=True,
+        terminal_evidence_rehash=True,
+        evidence_hashes=pins,
         official_validation_or_sealed_arrays_opened=False,
     )
 
