@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 RoboMNIST payload mechanics executed:** Fixed seven-input pilot
+finishes in186s; fresh native decoding matches all27 arrays/92 pins. Actual CSI
+timestamps start at0; WAV provides no common start clock, so synchronization
+and corpus/split/complementarity admission remain open. Next verify immutable
+collection timing and task contracts before joint fitting. No model/GT/GPU
+work or restart; full Omni/JSON/95–98% requirements remain unmet.
+[Actual native formats and replay](docs/pretrained_reuse/R2_ROBOMNIST_INPUT_RESULTS_20261015.md).
+
 **2026-10-14 RoboMNIST full-directory stage executed:** Complete60-class
 inventory and separate lexical replay pass:2,135 groups,32–44/class,17,080 files.
 Source bytes/config/group accounting retained; no payload/timing/session/split

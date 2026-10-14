@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-15 public native joint inputs executed:** A fixed RoboMNIST pilot
+fetches only seven audio/video/CSI files in186s. All27 native arrays match a
+fresh raw-file replay; 450 frames per camera and450×256 CSI points per module.
+Common clock, split admission and Decision quality remain unverified; no fitting
+or GPU restart. [Measured formats, hashes and next gates](docs/pretrained_reuse/R2_ROBOMNIST_INPUT_RESULTS_20261015.md).
+
 **2026-10-14 complete public joint-input inventory executed:** All60 RoboMNIST
 ZIP directories finish in401s with4.69MB response bodies; independent lexical
 replay verifies2,135 repetition groups/all17,080 source files. All camera/mic/CSI
