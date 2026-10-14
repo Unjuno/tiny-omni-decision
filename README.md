@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 train-only appearance association:** Moving-position cosine retrieval
+beats static sampling on eight reused scenes, but trails original track routing
+on every clip. This is a sparse-box geometric proxy, not Decision Accuracy.
+Preserve the negative comparison; no nearest-descriptor adoption or new fit.
+[Raw matches, controls and remaining gates](docs/pretrained_reuse/R2_TRACK_ASSOCIATION_RESULTS_20261014.md).
+
 **2026-10-14 track-aligned appearance:** All256 model tracks×32times on eight
 training clips passed pinned official sampling and exact fresh-process replay.
 All48 outputs remain outside Git. This establishes input routing, not object

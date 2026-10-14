@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 input-only association comparison:** All256 queries/time were
+predicted before posthoc labels. Future same-group bbox rates: actual45.86%,
+static41.05%, original fixed-track51.72%; actual trails fixed routing in all8clips.
+One of24 game groups lacks an initial unique grid point; keep it in the report.
+No nearest-descriptor reassignment adoption or same99-scene budget extension.
+Target/prelude association, relationship semantics and scene generalization still
+need evidence. These reused training geometry proxies do not meet Omni quality.
+[Executed comparison and limits](docs/pretrained_reuse/R2_TRACK_ASSOCIATION_RESULTS_20261014.md).
+
 **2026-10-14 temporal appearance along model tracks:** Numerical routing on eight
 known training clips passed official1e-5 sampling parity and exact fresh replay
 for all256points×32times. Out-of-frame points remain with explicit support flags.
