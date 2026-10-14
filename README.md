@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 fixed SAM2 chunk matrix:** Same64-object chunks16/32/64 all
+retain exact masks/boxes/seeds/NMS but exceed the fixed presence-score guard.
+Fresh16-array replay exact; cached forward ratios4.50–5.01×, no adoption,
+quality or end-to-end claim. Close batch-width search and use native reference
+or a separately fixed semantic-input protocol.
+[Results and retained failures](docs/pretrained_reuse/R2_SAM2_CHUNK_MATRIX_RESULTS_20261014.md).
+
 **2026-10-14 cached SAM2 batch measurement:** Matched64-object forward median
 0.932s→0.185s (~5.04×); discrete prefix masks/boxes/seeds/NMS unchanged,8-array
 fresh replay exact. Presence-score error1.335e-5 exceeds the fixed1e-5 guard:

@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 fixed chunk admission executed:** Chunks16/32/64 fail unchanged
+score tolerance; every discrete output and fresh16-array replay match. Actual
+head call counts confirm equal64-object work. Retain all arms and stop batch-width
+search; broader semantic cue/cover input needs native reference or its own fixed
+derived-input protocol, with no frozen-corpus substitution.
+[Measured matrix and source-gate correction](docs/pretrained_reuse/R2_SAM2_CHUNK_MATRIX_RESULTS_20261014.md).
+
 **2026-10-14 proposal-forward engineering comparison:** Same frozen SAM2/native
 prefix64, alternating warmed equal-work windows: ~5.04× cached forward ratio.
 All discrete outputs match, but score maxerror1.335e-5>predefined1e-5; prefix
