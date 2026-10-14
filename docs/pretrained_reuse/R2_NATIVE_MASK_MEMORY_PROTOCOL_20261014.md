@@ -27,6 +27,11 @@ Same source media/cuts and rounded-linspace32 frame indices as the admitted spat
 bank. Decode raw RGB only at those times. Native processor retains its published
 1024-square profile; mask output is256-square. This is a **subsampled** video,
 not full dense original-frame tracking or a causal comparison to full-frame TAPIR.
+The old spatial-bank RGB hash binds the PyAV256-square resized verification view,
+not raw-resolution bytes. Reproduce that view for the exact hash check while
+passing raw-resolution RGB to SAM2. Smoke01 stopped at this binding check before
+propagation; preserve its failed result, config and error. This correction does
+not relax hashes, change timestamps or change native model inputs.
 
 Fixed released `facebook/sam2.1-hiera-tiny` revision
 `de431c4043854a71d8101e17995dfe596bf101a5`, weightSHA

@@ -1,3 +1,4 @@
+import hashlib
 import json
 
 import numpy as np
@@ -8,6 +9,49 @@ pytest.importorskip("av")
 pytest.importorskip("transformers")
 
 from scripts import probe_native_mask_memory as runner  # noqa: E402
+
+
+def test_source_rgb_hash_uses_original_saved_256_pixel_view(monkeypatch):
+    native = np.zeros((2, 3, 3), np.uint8)
+    small = np.ones((256, 256, 3), np.uint8)
+
+    class Frame:
+        def to_ndarray(self, **kwargs):
+            return native
+
+        def reformat(self, **kwargs):
+            assert kwargs == dict(width=256, height=256, format="rgb24")
+            return type("Small", (), {"to_ndarray": lambda self: small})()
+
+    class Container:
+        streams = type(
+            "Streams",
+            (),
+            {
+                "video": [
+                    type(
+                        "Stream", (), {"codec_context": type("Context", (), {"thread_count": 0})()}
+                    )()
+                ]
+            },
+        )()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            pass
+
+        def decode(self, **kwargs):
+            return [Frame()] * 32
+
+    monkeypatch.setattr(runner.av, "open", lambda path: Container())
+    plan = dict(
+        media_path="fixed",
+        frame_indices=list(range(32)),
+        selected_rgb_sha256=hashlib.sha256(np.stack([small] * 32).tobytes()).hexdigest(),
+    )
+    np.testing.assert_array_equal(runner.decode(plan), np.stack([native] * 32))
 
 
 def test_reference_configuration_bytes_and_mode_are_mandatory(tmp_path):

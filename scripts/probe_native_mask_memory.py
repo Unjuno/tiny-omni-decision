@@ -197,18 +197,19 @@ def load_contract():
 
 def decode(plan):
     wanted = set(plan["frame_indices"])
-    frames = []
+    frames, verification = [], []
     with av.open(plan["media_path"]) as c:
         c.streams.video[0].codec_context.thread_count = 1
         for i, f in enumerate(c.decode(video=0)):
             if i in wanted:
+                verification.append(f.reformat(width=256, height=256, format="rgb24").to_ndarray())
                 frames.append(f.to_ndarray(format="rgb24"))
             if i == plan["frame_indices"][-1]:
                 break
     if len(frames) != 32:
         raise ValueError("incomplete fixed observation sequence")
     rgb = np.stack(frames)
-    if hashlib.sha256(rgb.tobytes()).hexdigest() != plan["selected_rgb_sha256"]:
+    if hashlib.sha256(np.stack(verification).tobytes()).hexdigest() != plan["selected_rgb_sha256"]:
         raise ValueError("decoded source pixels differ from admitted source times")
     return rgb
 
