@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 complete public joint-input inventory executed:** All60 RoboMNIST
+ZIP directories finish in401s with4.69MB response bodies; independent lexical
+replay verifies2,135 repetition groups/all17,080 source files. All camera/mic/CSI
+views stay together and positionGT is supervision-only. No media payloads, fit,
+GPU restart, split admission or joint/OOD quality claim.
+[Actual counts, source binding and next gates](docs/pretrained_reuse/R2_ROBOMNIST_DIRECTORY_RESULTS_20261014.md).
+
 **2026-10-14 new component/source checks and incomplete memory run:** The separate
 4h native comparison stopped at3,585.95s on its8GiB disk guard; six complete arms
 and a partial49-seed arm are saved/CPU checked, with no quality scoring or restart.

@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 RoboMNIST full-directory stage executed:** Complete60-class
+inventory and separate lexical replay pass:2,135 groups,32–44/class,17,080 files.
+Source bytes/config/group accounting retained; no payload/timing/session/split
+admission or model training. The8GiB disk-interrupted memory comparison remains
+protected. Next bounded input-schema/sync evidence before any joint fit;
+full native Omni/calibrated JSON/95–98% and OOD requirements remain open.
+[Measured inventory and limits](docs/pretrained_reuse/R2_ROBOMNIST_DIRECTORY_RESULTS_20261014.md).
+
 **2026-10-14 follow-up execution:** Separate4h native memory inference is incomplete
 after8GiB disk-reserve stop;18,176 complete-arm +1,568 partial object-frames pass
 saved-product geometry checks only. Full/fresh/proxy-quality gates remain closed.
