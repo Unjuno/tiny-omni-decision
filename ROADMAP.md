@@ -7,6 +7,10 @@ variation alone does not prove later-target identity or cover association.
 Define supervised input-only semantics and fixed controls before a new fit;
 full Omni quality and package gates remain open.
 [Actual extraction and limitations](docs/pretrained_reuse/R2_TEMPORAL_APPEARANCE_20261014.md).
+All99 existing train clips/198 questions also passed source-role and canonical
+answer-remapping checks; groups are2/3/4, and13 hidden tracks begin after frame0.
+This permits candidate loss supervision, not GT-selected inference inputs.
+[Executed supervision coverage and corrected audit attempt](docs/pretrained_reuse/R2_ROLE_SUPERVISION_20261014.md).
 
 **2026-10-14 mask-temporal primitive executed:** Fixed-grid pooling keeps209
 unsupported masks; corrected mask-internal queries then tracked all696 candidates
