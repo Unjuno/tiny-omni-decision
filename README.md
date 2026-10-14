@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-15 accessible contact-source follow-up executed:** Bare-finger source
+accounting verifies500 trials/200 shared surface photos. One complete native
+trial/image and fresh seven-array replay pass, but paper/reader audio-column
+semantics conflict; independent splits and typed source admission remain open.
+No RGB video or new fitting. [Actual source and native evidence](docs/pretrained_reuse/R2_BAREFINGER_SOURCE_RESULTS_20261015.md).
+
 **2026-10-15 public native-input follow-up executed:** Fixed real/silence ASR gives
 identical text, so RoboMNIST's acoustic counter remains unknown. VisTouch's full
 metadata audit finds24 source sessions behind10,498 overlapping stretched clips,

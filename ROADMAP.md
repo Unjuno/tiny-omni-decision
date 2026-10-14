@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 alternative native source actually read:** Direct CC BY4.0
+bare-finger contact data provides500 trials and200 texture-shared photographs.
+Full one-trial numeric/JPEG inspection and fresh seven-array replay pass; raw
+audio/vibration column semantics conflict between paper and supplied reader.
+No RGB video, independent split or quality admission. Resolve semantics and
+shared-photo/specimen/calibration gates before fitting, retaining all product
+and legacy constraints. [Measured evidence](docs/pretrained_reuse/R2_BAREFINGER_SOURCE_RESULTS_20261015.md).
+
 **2026-10-15 source/task follow-up executed:** Real and silence audio reproduce
 the same fixed-ASR text, leaving RoboMNIST counter/clock hypotheses unsettled.
 New CC BY4.0 contact-material candidate VisTouch has24 source sessions /28min

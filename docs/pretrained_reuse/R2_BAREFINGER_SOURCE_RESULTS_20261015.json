@@ -1,0 +1,482 @@
+{
+  "status": "EXECUTED_SOURCE_FEASIBILITY_ONLY_NOT_TRAINING_ADMITTED",
+  "source_commit": "8c6cc0c40f8293cae0a5b875f3378a0aece3c805",
+  "source": "doi:10.6084/m9.figshare.26965267.v1",
+  "license": "CC BY4.0",
+  "reports": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-full-source-audit-01.json": "dea100ea10b16a799108015ea58e1e147aec18d4249b23529e33aa5d3aa40a3d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-native-probe-01.json": "8fc66000b7771c5dbbd2cbbd1c9dfb81cda602ea904894c5e92626bc89cd3c65",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-native-replay-01.json": "33f3dded65a1e0cdc4f720b01ae7c4426f570665b0fcca988e1b25544bfda99f"
+  },
+  "accounting": {
+    "physical_trials": 500,
+    "participants": 10,
+    "textures": [
+      "108t",
+      "10t",
+      "120t",
+      "18t",
+      "39t",
+      "44t",
+      "54t",
+      "59t",
+      "7t",
+      "83t"
+    ],
+    "participant_texture_groups": 100,
+    "texture_photo_groups": 10,
+    "trials_by_type": {
+      "cte_force_3": 100,
+      "cte_speed_4": 100,
+      "std_0": 100,
+      "std_1": 100,
+      "std_2": 100
+    },
+    "trials_by_participant": {
+      "0": 50,
+      "1": 50,
+      "2": 50,
+      "3": 50,
+      "4": 50,
+      "5": 50,
+      "6": 50,
+      "7": 50,
+      "8": 50,
+      "9": 50
+    },
+    "trials_by_texture": {
+      "108t": 50,
+      "10t": 50,
+      "120t": 50,
+      "18t": 50,
+      "39t": 50,
+      "44t": 50,
+      "54t": 50,
+      "59t": 50,
+      "7t": 50,
+      "83t": 50
+    },
+    "stereo_photos": 200,
+    "images_independent_by_participant": false,
+    "native_rgb_video_members": 0,
+    "specimen_held_out_generalization": "UNVERIFIED",
+    "independent_validation": "NOT_DEFINED",
+    "normalized_content_overlap": "UNVERIFIED",
+    "common_clock": "UNVERIFIED",
+    "training_admission": "NOT_ADMITTED",
+    "model_inference": false,
+    "training": false,
+    "quality_measured": false,
+    "grouping": "participant/texture/trial; all channels together; photos grouped by texture",
+    "calibration_policy": "texture-keyed force offsets cannot be selected using unknown target",
+    "source": "10.6084/m9.figshare.26965267.v1",
+    "license": {
+      "value": 52,
+      "name": "CC BY",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "archive_sizes": {
+      "datah5.zip": 20384594825,
+      "script.zip": 1299628,
+      "figs.zip": 184366663,
+      "README.md": 1564,
+      "img.zip": 344714298
+    },
+    "directory_transferred_bytes": 101139,
+    "full_archive_md5_verified": false,
+    "media_members_opened": false,
+    "upstream_code_executed": false,
+    "sealed_audit_opened": false,
+    "gpu_used": false,
+    "cloud_cost": 0,
+    "source_commit": "8c6cc0c40f8293cae0a5b875f3378a0aece3c805",
+    "status": "PASS_COMPLETE_CONTACT_SOURCE_ACCOUNTING_ONLY",
+    "elapsed_seconds": 0.1680633999640122,
+    "peak_cpu_bytes": 44376064,
+    "prepared_accounting_sha256": "5cee1582c650274e18aa3d4286105b9c633a77d53b2e033abfba847dc8aa5f36"
+  },
+  "native": {
+    "status": "PASS_FULL_FIXED_NATIVE_NUMERIC_AND_IMAGE_INSPECTION_ONLY",
+    "streams": {
+      "kistler_data": {
+        "rows": 759808,
+        "channels": 4,
+        "time_dtype": "float64",
+        "value_dtype": "float64",
+        "first_time": 918.60640001297,
+        "last_time": 979.3910710811615,
+        "span_seconds": 60.78467106819153,
+        "timestamp_duplicates": 0,
+        "timestamp_backwards": 0,
+        "timestamp_delta_quantiles": [
+          3.0994415283203125e-05,
+          8.0108642578125e-05,
+          8.0108642578125e-05
+        ],
+        "value_nonfinite": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "channel_minimum": [
+          -5.487147808074951,
+          -5.5297417640686035,
+          -5.700247764587402,
+          -0.746590793132782
+        ],
+        "channel_maximum": [
+          5.931265830993652,
+          5.643528461456299,
+          3.8909912109375,
+          1.434326171875
+        ],
+        "time_bytes_sha256": "9e2704c78a41ed9b1992a3949b8da9aa892c4127a60ea240c2f196c5c690829e",
+        "values_bytes_sha256": "2bb2818fabcaea0dc748ab0abb5b805b23e96e028c564360d6ffb07956257dec",
+        "retimed": false,
+        "interpolated": false,
+        "calibrated": false,
+        "channel_semantics": "UNVERIFIED",
+        "fine_clock_accuracy": "UNVERIFIED",
+        "gzip_level": 2
+      },
+      "ft_sensor_data": {
+        "rows": 745099,
+        "channels": 6,
+        "time_dtype": "float64",
+        "value_dtype": "float64",
+        "first_time": 918.7021658420563,
+        "last_time": 979.5522925853729,
+        "span_seconds": 60.85012674331665,
+        "timestamp_duplicates": 0,
+        "timestamp_backwards": 0,
+        "timestamp_delta_quantiles": [
+          2.0265579223632812e-05,
+          8.106231689453125e-05,
+          0.017111778259277344
+        ],
+        "value_nonfinite": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "channel_minimum": [
+          -1.0932477326881245,
+          -4.886388835902615,
+          -3.4237523566981287,
+          -118.45324877711491,
+          -41.770886965814455,
+          -5.2328973169050865
+        ],
+        "channel_maximum": [
+          0.9269217302739321,
+          -2.3384348701033937,
+          -2.197540308172055,
+          8.453615067977875,
+          70.41986961025063,
+          67.70657130476725
+        ],
+        "time_bytes_sha256": "56273e8ebda01687dcfb6cc838e24c9d10f815b7b0aacce7571c911e86628b7f",
+        "values_bytes_sha256": "1b77b43c27a8e1f17272de0db7ffb8ecf048d5c79879406bb3df10dee99c56e9",
+        "retimed": false,
+        "interpolated": false,
+        "calibrated": false,
+        "channel_semantics": "UNVERIFIED",
+        "fine_clock_accuracy": "UNVERIFIED",
+        "gzip_level": 2
+      },
+      "pos_data": {
+        "rows": 1826,
+        "channels": 4,
+        "time_dtype": "float64",
+        "value_dtype": "float64",
+        "first_time": 918.6880059242249,
+        "last_time": 979.5277819633484,
+        "span_seconds": 60.839776039123535,
+        "timestamp_duplicates": 0,
+        "timestamp_backwards": 0,
+        "timestamp_delta_quantiles": [
+          0.015168190002441406,
+          0.03238511085510254,
+          0.06057476997375488
+        ],
+        "value_nonfinite": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "channel_minimum": [
+          0.05034327507019043,
+          -0.027489986270666122,
+          0.13327793776988983,
+          -0.14638157188892365
+        ],
+        "channel_maximum": [
+          0.9243577718734741,
+          0.9204596877098083,
+          1.033780813217163,
+          0.7582423090934753
+        ],
+        "time_bytes_sha256": "46794f858abe149d907cc895b35af932d0e7e3c7955d7243674a724ba4d742b3",
+        "values_bytes_sha256": "b67cb58e6bc15710776de2441a7db4280cec94ddf6e90a29561e5268e1ac75e5",
+        "retimed": false,
+        "interpolated": false,
+        "calibrated": false,
+        "channel_semantics": "UNVERIFIED",
+        "fine_clock_accuracy": "UNVERIFIED",
+        "gzip_level": 2
+      }
+    },
+    "source_commit": "8c6cc0c40f8293cae0a5b875f3378a0aece3c805",
+    "h5py": "3.15.1",
+    "hdf5": "1.14.6",
+    "numpy": "2.4.6",
+    "hdf5_plugin_search_paths": 0,
+    "raw_channel_semantics": "UNVERIFIED_CONFLICT",
+    "paper_kistler_order": "vibration nail/phalanx then microphones left/right",
+    "released_reader_kistler_order": "audio columns0:2 then vibration columns2:4",
+    "source_correction_or_channel_choice": false,
+    "calibration_applied": false,
+    "native_rgb_video": false,
+    "common_clock_accuracy": "UNVERIFIED",
+    "training_admission": "NOT_ADMITTED",
+    "upstream_code_executed": false,
+    "model_inference": false,
+    "training": false,
+    "quality_measured": false,
+    "gpu_used": false,
+    "sealed_audit_opened": false,
+    "cloud_cost": 0,
+    "raw_array_bytes": 72190904,
+    "image": {
+      "format": "JPEG",
+      "width": 3264,
+      "height": 3264,
+      "rgb_shape": [
+        3264,
+        3264,
+        3
+      ],
+      "rgb_sha256": "a06b865468a3f61d80edbef561f4c298edd53d83e8d7d33a5ff50386b7852613",
+      "shared_texture_identity": "7t",
+      "synchronized_trial_view": false
+    },
+    "prepared_accounting_sha256": "029567c3e0cb13189183a08faf3e9cbaf0c60f6a1c6db729bcfb85388a133b59",
+    "seconds": 1.6345061000902206,
+    "peak_cpu_bytes": 211963904
+  },
+  "replay": {
+    "status": "PASS_FRESH_SEVEN_FULL_NATIVE_ARRAY_REPLAY_ONLY",
+    "main_sha256": "8fc66000b7771c5dbbd2cbbd1c9dfb81cda602ea904894c5e92626bc89cd3c65",
+    "arrays": [
+      {
+        "array": "time_kistler",
+        "shape": [
+          759808,
+          1
+        ],
+        "sha256": "9e2704c78a41ed9b1992a3949b8da9aa892c4127a60ea240c2f196c5c690829e",
+        "byte_exact": true
+      },
+      {
+        "array": "kistler_data",
+        "shape": [
+          759808,
+          4
+        ],
+        "sha256": "2bb2818fabcaea0dc748ab0abb5b805b23e96e028c564360d6ffb07956257dec",
+        "byte_exact": true
+      },
+      {
+        "array": "time_ft_sensor",
+        "shape": [
+          745099,
+          1
+        ],
+        "sha256": "56273e8ebda01687dcfb6cc838e24c9d10f815b7b0aacce7571c911e86628b7f",
+        "byte_exact": true
+      },
+      {
+        "array": "ft_sensor_data",
+        "shape": [
+          745099,
+          6
+        ],
+        "sha256": "1b77b43c27a8e1f17272de0db7ffb8ecf048d5c79879406bb3df10dee99c56e9",
+        "byte_exact": true
+      },
+      {
+        "array": "time_pos",
+        "shape": [
+          1826,
+          1
+        ],
+        "sha256": "46794f858abe149d907cc895b35af932d0e7e3c7955d7243674a724ba4d742b3",
+        "byte_exact": true
+      },
+      {
+        "array": "pos_data",
+        "shape": [
+          1826,
+          4
+        ],
+        "sha256": "b67cb58e6bc15710776de2441a7db4280cec94ddf6e90a29561e5268e1ac75e5",
+        "byte_exact": true
+      },
+      {
+        "array": "RGB",
+        "shape": [
+          3264,
+          3264,
+          3
+        ],
+        "sha256": "a06b865468a3f61d80edbef561f4c298edd53d83e8d7d33a5ff50386b7852613",
+        "byte_exact": true
+      }
+    ],
+    "h5py": "3.15.1",
+    "hdf5": "1.14.6",
+    "numpy": "2.4.6",
+    "seconds": 0.9311456999275833,
+    "peak_cpu_bytes": 206651392,
+    "shared_hdf5_and_image_libraries": true,
+    "independent_sensor_or_audio_truth": false,
+    "training_admission": "NOT_ADMITTED",
+    "channel_semantics": "UNVERIFIED_CONFLICT",
+    "common_clock": "UNVERIFIED",
+    "source_mutations": false,
+    "model_inference": false,
+    "quality_measured": false,
+    "training": false,
+    "gpu_used": false,
+    "cloud_cost": 0
+  },
+  "pin_counts": {
+    "barefinger-full-source-audit-01.json": 13,
+    "barefinger-native-probe-01.json": 733,
+    "barefinger-native-replay-01.json": 735
+  },
+  "source_payload_pilot": {
+    "status": "PASS_FIXED_NATIVE_PAYLOAD_CRC_AND_LOCAL_HASH_ONLY",
+    "media_payloads_opened": true,
+    "model_inference": false,
+    "training": false,
+    "quality_measured": false,
+    "full_archive_md5_verified": false,
+    "files": [
+      {
+        "archive": {
+          "id": 49101535,
+          "name": "datah5.zip",
+          "size": 20384594825,
+          "is_link_only": false,
+          "download_url": "https://ndownloader.figshare.com/files/49101535",
+          "supplied_md5": "2d7d906472dde32a2020227a325ec69b",
+          "computed_md5": "",
+          "mimetype": "undefined"
+        },
+        "member": "datah5/texture_metadata.json",
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-payload-pilot-01\\texture_metadata.json",
+        "bytes": 913,
+        "sha256": "0fd74b417c84f8422096f3ade8ab547d1476b550cd7029ea19115e4ba9a08fea",
+        "crc32": "b2244c8f",
+        "crc_verified": true
+      },
+      {
+        "archive": {
+          "id": 49101535,
+          "name": "datah5.zip",
+          "size": 20384594825,
+          "is_link_only": false,
+          "download_url": "https://ndownloader.figshare.com/files/49101535",
+          "supplied_md5": "2d7d906472dde32a2020227a325ec69b",
+          "computed_md5": "",
+          "mimetype": "undefined"
+        },
+        "member": "datah5/subject_0/7t/subject_0_7t_std_0.h5",
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-payload-pilot-01\\subject_0_7t_std_0.h5",
+        "bytes": 44633568,
+        "sha256": "67bd49b0f8ea5069045c45c95c2c3217a60d122aba33fa2b37a908288206e5a4",
+        "crc32": "cec8cc35",
+        "crc_verified": true
+      },
+      {
+        "archive": {
+          "id": 49108012,
+          "name": "img.zip",
+          "size": 344714298,
+          "is_link_only": false,
+          "download_url": "https://ndownloader.figshare.com/files/49108012",
+          "supplied_md5": "5e0d5ca1bd75f5fcad11feb8cdb76b80",
+          "computed_md5": "5e0d5ca1bd75f5fcad11feb8cdb76b80",
+          "mimetype": "application/zip"
+        },
+        "member": "img/7t/7t_l_0.jpg",
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-payload-pilot-01\\7t_l_0.jpg",
+        "bytes": 996440,
+        "sha256": "2aab430d273ec7245efb507fb97ddeea56a5650179298093c2e7d89c7a826fc5",
+        "crc32": "45525ee1",
+        "crc_verified": true
+      },
+      {
+        "archive": {
+          "id": 49101589,
+          "name": "script.zip",
+          "size": 1299628,
+          "is_link_only": false,
+          "download_url": "https://ndownloader.figshare.com/files/49101589",
+          "supplied_md5": "e87fbbf20beeb4a210e7746548575f49",
+          "computed_md5": "e87fbbf20beeb4a210e7746548575f49",
+          "mimetype": "application/zip"
+        },
+        "member": "script/HAVdb/README.md",
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-payload-pilot-01\\README.md",
+        "bytes": 563,
+        "sha256": "655a88eb2b46639b2ea7b9ae86d8d08a370139dbe9f32ee5a012a14c2ad72b51",
+        "crc32": "1ff5a25d",
+        "crc_verified": true
+      },
+      {
+        "archive": {
+          "id": 49101589,
+          "name": "script.zip",
+          "size": 1299628,
+          "is_link_only": false,
+          "download_url": "https://ndownloader.figshare.com/files/49101589",
+          "supplied_md5": "e87fbbf20beeb4a210e7746548575f49",
+          "computed_md5": "e87fbbf20beeb4a210e7746548575f49",
+          "mimetype": "application/zip"
+        },
+        "member": "script/HAVdb/importer.py",
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-payload-pilot-01\\importer.py",
+        "bytes": 9125,
+        "sha256": "f623201e1c3c047d5af54c99f6f64fbf343d2736ae6034e077df916a3a7c4805",
+        "crc32": "05cca5f9",
+        "crc_verified": true
+      }
+    ],
+    "fixed_selection": "subject_0 / texture7t / std_0 and image7t_l_0; source format pilot, no train/eval split designated",
+    "upstream_code_executed": false,
+    "transferred_bytes": {
+      "datah5.zip": 43930658,
+      "img.zip": 1014792,
+      "script.zip": 4731
+    },
+    "source_hashes": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-source-directory-01\\version-1.json": "402e3ef1007615f090b4cf1805920d443c45a9ff4487b57879ccfa74edd96f81",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-source-directory-01\\result.json": "68310284d4b9e660267d76301e5da1cc485e43d74c9ca1b43a5a6cd51bc7ed19",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-source-directory-01\\datah5.zip.directory.json": "46227b100fc03ed3df8762ce91b3790a92a84abcfd9dc753b22185c86a6bb2e5",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-source-directory-01\\img.zip.directory.json": "f88b74d746ae23f7d2871bbba1b47ee432c38a8a9e27b3e39a8cbb20602a1a90",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\barefinger-source-directory-01\\script.zip.directory.json": "fa794228d7a5c1ec551db5ba64dea90ccb7f576cf900be03995ee6c65fa257f2"
+    },
+    "seconds": 120.93799999996554
+  },
+  "no_new_product_parameters": true,
+  "electricity_cost_measured": false,
+  "native_pilot_is_one_unique_trial": true,
+  "next_action": "Resolve source channel semantics, calibrated units, image/specimen grouping and independent task validation before frozen features/fit; does not supply RGB video."
+}
