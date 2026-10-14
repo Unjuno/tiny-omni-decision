@@ -101,3 +101,64 @@ def test_paired_bootstrap_keeps_whole_unequal_blocks_and_observed_micro_differen
     assert result == paired_block_interval(a, control, blocks)
     assert result["delta_accuracy"] == 0.25 and result["repetition_blocks"] == 2
     assert result["interval_95_percentile"] == [0.0, 1.0]
+
+
+def test_saved_config_rows_and_arrays_are_bound_at_creation_and_read_back(tmp_path):
+    from scripts.diagnose_robomnist_lengths import require_products, write, write_arrays
+
+    config, rows = {"policy": "fixed"}, [{"split": "train"}]
+    arrays = {"x": np.arange(3, dtype=np.float64)}
+    hashes = {
+        "config.json": write(tmp_path / "config.json", config),
+        "rows.json": write(tmp_path / "rows.json", rows),
+        "arrays.npz": write_arrays(tmp_path / "arrays.npz", arrays),
+    }
+    require_products(tmp_path, hashes, config, rows, arrays)
+    (tmp_path / "config.json").write_text('{"policy":"changed"}', encoding="utf8")
+    with pytest.raises(ValueError):
+        require_products(tmp_path, hashes, config, rows, arrays)
+
+
+def test_source_or_numeric_failure_saves_incomplete_terminal_and_never_overwrites(
+    tmp_path, monkeypatch
+):
+    import json
+
+    from scripts import diagnose_robomnist_lengths as module
+
+    def fail(output, tick):
+        raise RuntimeError("simulated source/hash/numeric guard")
+
+    monkeypatch.setattr(module, "run_body", fail, raising=False)
+    output = tmp_path / "fresh"
+    assert module.execute(output) is False
+    result = json.loads((output / "result.json").read_bytes())
+    assert result["status"] == "FAIL_INCOMPLETE_LENGTH_DIAGNOSTIC"
+    assert "simulated source" in result["error"]
+    original = (output / "result.json").read_bytes()
+    with pytest.raises(ValueError):
+        module.execute(output)
+    assert (output / "result.json").read_bytes() == original
+
+
+def test_final_readback_resource_growth_cannot_keep_earlier_pass_snapshot(tmp_path, monkeypatch):
+    import json
+
+    from scripts import diagnose_robomnist_lengths as module
+
+    monkeypatch.setattr(
+        module,
+        "run_body",
+        lambda output, tick: dict(
+            status="PASS_FIXED_DIRECTORY_LENGTH_SHORTCUT_DIAGNOSTIC_ONLY",
+            elapsed_seconds=1.0,
+            peak_cpu_bytes=100,
+        ),
+    )
+    ticks = iter([0.0, 121.0, 121.0])
+    monkeypatch.setattr(module.time, "perf_counter", lambda: next(ticks))
+    output = tmp_path / "fresh"
+    assert module.execute(output) is False
+    result = json.loads((output / "result.json").read_bytes())
+    assert result["status"] == "FAIL_INCOMPLETE_LENGTH_DIAGNOSTIC"
+    assert result["elapsed_seconds"] == 121.0

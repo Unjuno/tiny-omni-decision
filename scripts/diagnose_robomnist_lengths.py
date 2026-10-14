@@ -2,12 +2,16 @@
 
 import argparse
 import hashlib
+import io
 import json
+import os
 import platform
 import shutil
 import subprocess
+import sys
 import time
 from collections import Counter
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -127,20 +131,43 @@ def calculate(rows, x):
 
 
 def write(path, value):
-    with path.open("x", encoding="utf8", newline="\n") as f:
-        json.dump(value, f, indent=2, allow_nan=False)
-        f.write("\n")
+    blob = (json.dumps(value, indent=2, allow_nan=False) + "\n").encode("utf8")
+    expected = hashlib.sha256(blob).hexdigest()
+    with path.open("xb") as f:
+        f.write(blob)
+    return expected
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, required=True)
-    args = parser.parse_args()
-    if args.output.exists():
-        raise ValueError("new diagnostic output directory required")
-    if shutil.disk_usage(args.output.parent).free < 2**30 + 16 * 2**20:
+def write_arrays(path, arrays):
+    buffer = io.BytesIO()
+    np.savez_compressed(buffer, **arrays)
+    blob = buffer.getvalue()
+    expected = hashlib.sha256(blob).hexdigest()
+    with path.open("xb") as f:
+        f.write(blob)
+    return expected
+
+
+def require_products(output, hashes, config, rows, arrays):
+    if any(sha(output / name) != expected for name, expected in hashes.items()):
+        raise ValueError("saved artifact hash changed since creation")
+    if (
+        json.loads((output / "config.json").read_bytes()) != config
+        or json.loads((output / "rows.json").read_bytes()) != rows
+    ):
+        raise ValueError("saved effective config or rows differ from calculated values")
+    with np.load(output / "arrays.npz", allow_pickle=False) as saved:
+        if set(saved.files) != set(arrays):
+            raise ValueError("every saved diagnostic array required")
+        for key, value in arrays.items():
+            a = saved[key]
+            if a.shape != value.shape or a.dtype != value.dtype or a.tobytes() != value.tobytes():
+                raise ValueError("saved diagnostic array shape/dtype/bytes differ")
+
+
+def run_body(output, tick):
+    if shutil.disk_usage(output).free < 2**30 + 16 * 2**20:
         raise RuntimeError("separate metadata diagnostic1GiB reserve unavailable")
-    tick = time.perf_counter()
     rows, x, parent = load_rows()
     source = {**parent["validated_hashes"], str(PARENT): PARENT_SHA}
     for p in [
@@ -159,6 +186,9 @@ def main():
         source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         python=platform.python_version(),
         numpy=np.__version__,
+        backend="CPU NumPy float64",
+        platform=platform.platform(),
+        execution_arguments=sys.argv,
         seed=17,
         source_hashes=source,
         feature_order=[
@@ -183,32 +213,34 @@ def main():
         max_output_bytes=16 * 2**20,
         disk_reserve_bytes=2**30,
     )
-    args.output.mkdir()
-    write(args.output / "config.json", config)
-    write(args.output / "rows.json", rows)
+    products = {
+        "config.json": write(output / "config.json", config),
+        "rows.json": write(output / "rows.json", rows),
+    }
     predictions, results = calculate(rows, x)
-    np.savez_compressed(
-        args.output / "arrays.npz",
+    arrays = dict(
         diagnostic_log_lengths=x,
         class_targets=np.array([r["class_target"] for r in rows], np.int64),
         **predictions,
     )
+    products["arrays.npz"] = write_arrays(output / "arrays.npz", arrays)
+    require_products(output, products, config, rows, arrays)
     for p, h in source.items():
         if sha(p) != h:
             raise ValueError("source changed during diagnostic")
     seconds, peak = time.perf_counter() - tick, peak_bytes()
-    size = sum(p.stat().st_size for p in args.output.iterdir())
+    size = sum(p.stat().st_size for p in output.iterdir())
     if (
         seconds > 120
         or peak > 2 * 2**30
         or size > 15 * 2**20
-        or shutil.disk_usage(args.output).free < 2**30
+        or shutil.disk_usage(output).free < 2**30
     ):
         raise RuntimeError("metadata diagnostic resource bound exhausted")
     report = dict(
         status="PASS_FIXED_DIRECTORY_LENGTH_SHORTCUT_DIAGNOSTIC_ONLY",
         source_commit=config["source_commit"],
-        config_sha256=sha(args.output / "config.json"),
+        config_sha256=products["config.json"],
         source_pins_unchanged=True,
         unique_source_groups=len(rows),
         split_counts=dict(Counter(r["split"] for r in rows)),
@@ -230,7 +262,7 @@ def main():
         elapsed_seconds=seconds,
         peak_cpu_bytes=peak,
         output_bytes_before_terminal=size,
-        artifacts={p.name: sha(p) for p in args.output.iterdir()},
+        artifacts=products,
         pretrained_models_loaded=False,
         metadata_estimator_fit=True,
         teacher_training=False,
@@ -244,8 +276,59 @@ def main():
         training_corpus_admission="NOT_ADMITTED",
         cloud_cost=0,
     )
-    write(args.output / "result.json", report)
-    print(report["status"], report["split_counts"], "seconds", seconds, flush=True)
+    require_products(output, products, config, rows, arrays)
+    return report
+
+
+def execute(output):
+    if output.exists():
+        raise ValueError("new diagnostic output directory required; existing outputs protected")
+    output.mkdir()
+    tick = time.perf_counter()
+    started = datetime.now(UTC).isoformat()
+    try:
+        report = run_body(output, tick)
+        final_seconds, final_peak = time.perf_counter() - tick, peak_bytes()
+        final_size = sum(p.stat().st_size for p in output.iterdir())
+        if (
+            final_seconds > 120
+            or final_peak > 2 * 2**30
+            or final_size > 15 * 2**20
+            or shutil.disk_usage(output).free < 2**30
+        ):
+            raise RuntimeError("terminal metadata diagnostic resource bound exhausted")
+        report.update(
+            elapsed_seconds=final_seconds,
+            peak_cpu_bytes=final_peak,
+            output_bytes_before_terminal=final_size,
+        )
+    except Exception as exc:
+        report = dict(
+            status="FAIL_INCOMPLETE_LENGTH_DIAGNOSTIC",
+            error=repr(exc),
+            elapsed_seconds=time.perf_counter() - tick,
+            peak_cpu_bytes=peak_bytes(),
+            native_modality_quality_measured=False,
+            training_corpus_admission="NOT_ADMITTED",
+        )
+    report.update(pid=os.getpid(), started_utc=started, ended_utc=datetime.now(UTC).isoformat())
+    write(output / "result.json", report)
+    print(
+        report["status"],
+        report.get("split_counts", {}),
+        "seconds",
+        report["elapsed_seconds"],
+        flush=True,
+    )
+    return report["status"] == "PASS_FIXED_DIRECTORY_LENGTH_SHORTCUT_DIAGNOSTIC_ONLY"
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    if not execute(args.output):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
