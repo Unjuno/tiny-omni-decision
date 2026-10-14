@@ -1432,3 +1432,19 @@ coverage. Both models miss305/723regions; even label-informed top1 routing reach
 only57.8%, not a deployable quality result. Close these screen readout/reference
 comparisons; no merging/residency expansion or prompt tuning is justified.
 [Complementarity and limits](docs/pretrained_reuse/R2_SCREEN_COMPLEMENTARITY_20261013.md).
+
+### Native AV evidence-dependent correspondence (2026-10-15)
+
+The prior joint command readout preserved every answer with a constant training
+visual state. A controlled native correspondence task now uses an audio query
+and four same-speaker/condition videos, all four balanced query roles per quartet.
+Frozen audio24/video_ordered18,122790899 AV parameters/coefficients, no new training:
+random94.85%/NLL.1450 versus near-command84.08%/NLL.4133. JSON option order is exact;
+content swaps under fixed IDs break original answers and corrected labels restore
+matched metrics. Missing-input25% is an explicit uniform policy, not trained
+unimodal evidence. Nine observed development speakers and repeated quartet roles
+limit inference; hard-task train/dev gap10.18pp remains. Primary/replay complete,
+with serialization failure and its separate correction retained. Keep as an AV
+baseline; independent task/OOD coverage and the complete four-modality product
+remain open. No checkpoint/temperature/negative tuning from these scores.
+[Actual results and prospective protocol](docs/pretrained_reuse/R2_LOMBARD_CORRESPONDENCE_RESULTS_20261015.md).

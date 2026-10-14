@@ -899,3 +899,10 @@ pairs both correct. Both50-epoch curves overfit; no adoption or budget extension
 Train-only follow-up confirms the final readout uses both question and scene
 information on its training examples; its poor development generalization remains.
 No new training or product promotion. [Fixed diagnosis and numeric replay corrections](docs/pretrained_reuse/R2_CONDITION_BINDING_RESULTS_20261014.md).
+
+Native audio-to-four-video correspondence completed on889 observed development
+assets: random candidates94.85%, near-command candidates84.08%. Fixed audio/video
+heads, no new model training; full predictions and custom-ID JSON reproduce in a
+separate process. This is a controlled AV task, with correlated query roles and
+explicit uniform missing-input controls, not four-modality95–98% qualification.
+[Full metrics, controls, hashes and limitations](docs/pretrained_reuse/R2_LOMBARD_CORRESPONDENCE_RESULTS_20261015.md).
