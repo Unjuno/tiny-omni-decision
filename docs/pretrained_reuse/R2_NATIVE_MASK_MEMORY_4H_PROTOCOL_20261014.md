@@ -29,6 +29,14 @@ All condition fields and parent hashes stay fixed. No GT/officialvalid/sealed
 input, optimizer, semantic prompt, readout fit, ternary, product promotion or
 legacy intervention. Preserve previous failed batched-head paths as rejected.
 
+Preflight attempt `native-mask-memory-full-4h-01` ended before decoding or any
+propagation: empty sets in the native loader's info broke JSON progress/terminal
+serialization. Keep live/config records and separately labelled observed-failure
+receipt (terminal result itself was not saved). Normalize only the four already
+strictly checked empty loader fields into JSON lists; reject nonempty mismatches.
+Test RED→GREEN. Confirm terminal PID absence before a new independent output02;
+no numerical/data/model changes, restart from zero inferred frames, not a resume.
+
 Main budget14400s; fresh fixed2seed/botharm replay600s. Same peak6GiB GPU/4GiB
 process and8GiB disk reserve,12GiB free GPU preflight,450MiB packed-output budget.
 Limits checked per native frame/seed and after final hashes. Main stores all

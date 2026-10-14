@@ -6,7 +6,23 @@ pytest.importorskip("torch")
 pytest.importorskip("av")
 pytest.importorskip("transformers")
 
-from scripts.probe_native_mask_memory_4h import validate_amendment  # noqa: E402
+from scripts.probe_native_mask_memory_4h import (  # noqa: E402
+    validate_amendment,
+    validated_loading_info,
+)
+
+
+def test_strict_loading_record_handles_native_empty_sets_and_rejects_mismatch():
+    import json
+
+    info = {k: set() for k in ["missing_keys", "unexpected_keys", "mismatched_keys", "error_msgs"]}
+    checked = validated_loading_info(info)
+    assert json.loads(json.dumps(checked)) == {k: [] for k in info}
+    assert all(isinstance(v, set) for v in info.values())
+    for key in info:
+        bad = dict(info, **{key: {"bad-key"}})
+        with pytest.raises(ValueError):
+            validated_loading_info(bad)
 
 
 def reference():

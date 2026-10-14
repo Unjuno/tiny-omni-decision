@@ -30,6 +30,15 @@ PARENT_PINS = {
 PROTOCOL = Path("docs/pretrained_reuse/R2_NATIVE_MASK_MEMORY_4H_PROTOCOL_20261014.md")
 
 
+def validated_loading_info(info):
+    keys = ["missing_keys", "unexpected_keys", "mismatched_keys", "error_msgs"]
+    if any(info.get(k) for k in keys):
+        raise ValueError("strict released weight load required")
+    # Transformers5.6.2 may return empty sets. Record exactly the checked empty
+    # fields without introducing non-JSON objects into terminal failure handling.
+    return {k: [] for k in keys}
+
+
 def validate_amendment(prior, current):
     old = prior["contract"]
     if {k: v for k, v in old.items() if k != "source_commit"} != {
@@ -186,11 +195,7 @@ def main():
             dtype=torch.float32,
             attn_implementation="sdpa",
         )
-        if any(
-            info.get(k)
-            for k in ["missing_keys", "unexpected_keys", "mismatched_keys", "error_msgs"]
-        ):
-            raise ValueError("strict released weight load required")
+        checked_loading = validated_loading_info(info)
         model = model.eval().requires_grad_(False).cuda()
         if sum(p.numel() for p in model.parameters()) != 38962498:
             raise ValueError("registered parameter count changed")
@@ -199,7 +204,9 @@ def main():
         cpu_rng = torch.get_rng_state().clone()
         cuda_rng = torch.cuda.get_rng_state_all()
         numpy_rng = np.random.get_state()
-        result.update(state_before=before, gpu=torch.cuda.get_device_name(), loading_info=info)
+        result.update(
+            state_before=before, gpu=torch.cuda.get_device_name(), loading_info=checked_loading
+        )
         native.write(args.output / "progress.json", result)
         for plan in contract["plans"][:1] if args.replay_from else contract["plans"]:
             native.write(args.output / "current-input-plan.json", plan)
