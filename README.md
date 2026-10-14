@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-15 native temporal comparison completed:** Five fixed CPU fits and
+fresh checkpoint replay pass. Ordered visual readout improves video29.85%→48.01%.
+Joint scores99.53%, but mismatched video changes no answers: matched AV semantics
+remain unproved, so no Omni promotion. [All curves, controls and limits](docs/pretrained_reuse/R2_LOMBARD_TEMPORAL_RESULTS_20261015.md).
+Bare-finger's fixed notebook still leaves the audio-channel conflict unresolved;
+[primary-source clarification](docs/pretrained_reuse/R2_BAREFINGER_PRIMARY_CLARIFICATION_20261015.md).
+
 **2026-10-15 accessible contact-source follow-up executed:** Bare-finger source
 accounting verifies500 trials/200 shared surface photos. One complete native
 trial/image and fresh seven-array replay pass, but paper/reader audio-column

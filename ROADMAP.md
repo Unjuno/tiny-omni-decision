@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 R2-M temporal readout actually measured:** Same106355parameter head,
+five fresh CPU arms×24epochs, full best/final replay and fixed controls pass.
+Video-only ordered48.01% versus broadcast29.85%; ECE worsens and letters remain
+6.97%. Joint99.53% does not establish semantic fusion: mismatched video changes
+0/5334answers. No extra budget/capacity or promotion. Next distinguish fixed
+visual/mask/parameterization contributions before further fusion fitting;
+genuinely joint tasks and four-modality95–98% quality remain open.
+[Measured results](docs/pretrained_reuse/R2_LOMBARD_TEMPORAL_RESULTS_20261015.md).
+Bare-finger Audio admission stays held after notebook/author-link inspection;
+reopen only with traceable primary channel mapping.
+[Clarification and preserved limits](docs/pretrained_reuse/R2_BAREFINGER_PRIMARY_CLARIFICATION_20261015.md).
+
 **2026-10-15 alternative native source actually read:** Direct CC BY4.0
 bare-finger contact data provides500 trials and200 texture-shared photographs.
 Full one-trial numeric/JPEG inspection and fresh seven-array replay pass; raw
