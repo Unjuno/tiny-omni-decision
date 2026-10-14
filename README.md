@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-10-14 original QA resolution comparison executed:** Both fresh heads finish
+50 epochs / 500 updates on 79 fit / 20 selector TRAIN scenes. Best epoch 8 Accuracy
+is 25% for both; final coarse/fine Accuracy is 45%/32.5%, with strong overfitting.
+Full saved-output replay and independent metrics/accounting audit pass. Close this
+resolution-only fit; require semantic identity/temporal evidence before another fit.
+No blind result, product promotion or full Omni quality claim.
+[All curves, controls, artifacts and limits](docs/pretrained_reuse/R2_FINE_QA_GROUPED_RESULTS_20261014.md).
+
 **2026-10-14 actual fine inputs + fixed support executed:** All99train clips retain
 32×32spatial cells with full coarse regression, first-clip fresh replay and audits.
 Same-rule hidden proxy support19→1,957pairs/5→34scenes; same-hidden gap8=30,endpoint0.
