@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 foreground inputs admitted; role support sparse:** All18,441 native
+regions/8 knowntrain clips×32times retained;72-array fresh replay and independent
+64-row numerical reference pass. Source-box hidden/cover co-support30times,20 in
+oneclip; do not confuse correlated region count with diverse semantic supervision.
+Next define input-only cue/time-memory supervision and grouped controls before fit.
+[Actual foreground bank](docs/pretrained_reuse/R2_NATIVE_MASK_FEATURE_CORPUS_RESULTS_20261014.md) ·
+[Training-only census](docs/pretrained_reuse/R2_NATIVE_ROLE_OPPORTUNITY_RESULTS_20261014.md).
+
 **2026-10-14 native wider corpus admitted:** Unchanged native run finished all
 256 times on eight known train clips;39 reused/217 new. Fresh fixed-frame replay
 and independent complete geometry/NMS/RGB/hash audit passed. Next: training-only

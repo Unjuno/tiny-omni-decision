@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 foreground corpus + semantic supervision audit:** Eight known train
+clips/all18,441 regions now have mean/std appearance; all72 fresh arrays exact.
+Training source-box overlap: hidden41/243 available times; hidden+cover30 times,
+20 from oneclip. This is geometry/input evidence, not Decision quality.
+[Feature bank](docs/pretrained_reuse/R2_NATIVE_MASK_FEATURE_CORPUS_RESULTS_20261014.md) ·
+[Role opportunity and limits](docs/pretrained_reuse/R2_NATIVE_ROLE_OPPORTUNITY_RESULTS_20261014.md).
+
 **2026-10-14 native wider inputs completed:** Eight known train clips×32times,
 256 full banks/39 reused/217 new, all18,441 NMS proposals retained.
 Fixed one-frame fresh replay and full geometry/source-RGB/hash audit passed.
