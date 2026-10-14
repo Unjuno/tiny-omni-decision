@@ -3,6 +3,58 @@
 import numpy as np
 
 
+def timed_mask_queries(proposal_masks, proposal_ids, *, frame_index, frames,
+                       width=256, height=256):
+    """Keep each model mask's own foreground seed at its original video time.
+
+    Return float32 [time,y,x], copied int64 IDs and nonempty flags. Duplicate
+    coordinates remain distinct proposals. An empty mask keeps its ID and invalid
+    placeholder; consumers must reject it rather than seed a fabricated point.
+    Observation time is not physical object birth or a causal/online guarantee.
+    """
+    if (
+        isinstance(frames, (bool, np.bool_))
+        or not isinstance(frames, (int, np.integer))
+        or isinstance(frame_index, (bool, np.bool_))
+        or not isinstance(frame_index, (int, np.integer))
+        or not 0 <= frame_index < frames <= 2**24
+    ):
+        raise ValueError('exact nonnegative original frame within video required')
+    points, valid = mask_query_points(proposal_masks, width=width, height=height)
+    ids = np.asarray(proposal_ids)
+    if (
+        ids.ndim != 1 or len(ids) != len(points) or ids.dtype.kind not in 'iu'
+        or (ids < 0).any() or (ids > np.iinfo(np.int64).max).any()
+        or len(np.unique(ids)) != len(ids)
+    ):
+        raise ValueError('unique aligned nonnegative integer proposal IDs required')
+    q = np.column_stack((np.full(len(points), frame_index), points[:, ::-1]))
+    with np.errstate(over='ignore', invalid='ignore'):
+        q = q.astype(np.float32)
+    if not np.isfinite(q).all():
+        raise ValueError('tracker coordinates must fit finite float32')
+    return q, ids.astype(np.int64, copy=True), valid
+
+
+def query_observation_support(query_tyx, frame_indices):
+    """Flag retained times on/after each seed, without dropping backwards tracks.
+
+    This is an observation-time flag only: the offline tracker sees the complete
+    video and may use future context. It is neither visibility nor confidence.
+    """
+    q = np.asarray(query_tyx)
+    times = np.asarray(frame_indices)
+    if (
+        q.ndim != 2 or q.shape[1] != 3 or len(q) == 0 or q.dtype.kind not in 'iuf'
+        or not np.isfinite(q).all() or (q[:, 0] < 0).any()
+        or (q[:, 0] != np.floor(q[:, 0])).any()
+        or times.ndim != 1 or len(times) == 0 or times.dtype.kind not in 'iu'
+        or (times < 0).any() or (times[1:] <= times[:-1]).any()
+    ):
+        raise ValueError('finite integer query times and ordered original sample times required')
+    return times[None, :] >= q[:, 0, None]
+
+
 def mask_query_points(proposal_masks, *, width=256, height=256):
     """Return one foreground pixel-center query per mask and nonempty flags.
 
