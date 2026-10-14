@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 supervised role/QA comparison executed:** Same139,521-parameter readout,
+seed17/50epochs, auxiliary loss0 versus1; every99train/257development video retained.
+Selected Accuracy38.91%→40.27%, but grouped intervals include zero. Changed-target
+pairs both-correct0/127; motion-zero raises role-supervised Accuracy42.22%.
+Both late curves overfit. Close this comparison without product promotion or more
+repetition; test later appearance/relations with input-only semantics next.
+[Actual results, source exceptions and all curves](docs/pretrained_reuse/R2_ROLE_SUPERVISED_QA_RESULTS_20261014.md).
+
 **2026-10-14 per-time appearance executed:** Same frozen31.07M TAPIR preserves
 whole-frame low/hi spatial maps at32 predetermined times×8known train clips.
 Freeze/RNG/readback/repeat/fresh-reload gates passed, adding0parameters. Numerical

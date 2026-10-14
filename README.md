@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 role-supervised Video QA comparison completed:** Both paired50-epoch
+runs retained all514 development questions. Accuracy38.91%→40.27% has a95% interval
+including no gain; changed-target pairs both-correct0/127, and temporal-zero control
+is better. Preserve the negative/mixed result; no adoption or epoch extension.
+[Full curves, controls, exact replay and costs](docs/pretrained_reuse/R2_ROLE_SUPERVISED_QA_RESULTS_20261014.md).
+
 **2026-10-14 later-appearance retention:** Frozen TAPIR saved full spatial maps
 at32 fixed times on eight known train clips, with exact fresh-process reload.
 Initial descriptor parity passed; later numerical variation is not target
