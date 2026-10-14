@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 later-appearance retention:** Frozen TAPIR saved full spatial maps
+at32 fixed times on eight known train clips, with exact fresh-process reload.
+Initial descriptor parity passed; later numerical variation is not target
+recognition or Decision quality. No additional training or model parameters.
+[Execution, resource cost and remaining semantic gate](docs/pretrained_reuse/R2_TEMPORAL_APPEARANCE_20261014.md).
+
 **2026-10-14 object-temporal execution:** All696 model-mask queries tracked
 4,979 train frames with unchanged frozen weights and exact checkpoint/RNG replay.
 Initial group opportunity24/24 fixes a grid gap; GT-associated future point-in-box

@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 per-time appearance executed:** Same frozen31.07M TAPIR preserves
+whole-frame low/hi spatial maps at32 predetermined times×8known train clips.
+Freeze/RNG/readback/repeat/fresh-reload gates passed, adding0parameters. Numerical
+variation alone does not prove later-target identity or cover association.
+Define supervised input-only semantics and fixed controls before a new fit;
+full Omni quality and package gates remain open.
+[Actual extraction and limitations](docs/pretrained_reuse/R2_TEMPORAL_APPEARANCE_20261014.md).
+
 **2026-10-14 mask-temporal primitive executed:** Fixed-grid pooling keeps209
 unsupported masks; corrected mask-internal queries then tracked all696 candidates
 and4,979 original train frames. Initial group opportunity24/24; post-hoc GT
