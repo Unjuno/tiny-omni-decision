@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-15 visual-state diagnosis completed:** A fixed training-derived visual
+state preserves every joint answer; the ordered joint GRU is nearly saturated.
+Video-only remains order-sensitive (48.01%→21.18% on token reversal). Close this
+fusion capacity/budget route and require genuinely joint tasks; no promotion.
+[Frozen-model controls, fresh replay and limits](docs/pretrained_reuse/R2_LOMBARD_VISUAL_STATE_RESULTS_20261015.md).
+
 **2026-10-15 native temporal comparison completed:** Five fixed CPU fits and
 fresh checkpoint replay pass. Ordered visual readout improves video29.85%→48.01%.
 Joint scores99.53%, but mismatched video changes no answers: matched AV semantics

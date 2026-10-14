@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 R2-M visual-state diagnosis actually completed:** Three fixed models,
+all889development utterances, no training, full fresh-process replay pass. A
+single training-derived latent preserves all5334joint answers; ordered joint
+states are saturated and carry negligible variation to the readout. Video-only
+48.01%→21.18% on cached-token reversal confirms order-sensitive readout use.
+Close further capacity/epoch/auxiliary-loss exploration on this redundant task;
+require complementary AV decisions with hard source-matched distractors before
+fusion fitting. No new audio-only product or general Omni claim.
+[Measured diagnosis and all controls](docs/pretrained_reuse/R2_LOMBARD_VISUAL_STATE_RESULTS_20261015.md).
+
 **2026-10-15 R2-M temporal readout actually measured:** Same106355parameter head,
 five fresh CPU arms×24epochs, full best/final replay and fixed controls pass.
 Video-only ordered48.01% versus broadcast29.85%; ECE worsens and letters remain
