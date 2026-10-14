@@ -722,3 +722,7 @@ Full spatial-context follow-up completed on the same356 clips: initial-broadcast
 and32-time appearance both reach38.91% selected Accuracy, with0/127 changed-target
 pairs both correct. Both50-epoch curves overfit; no adoption or budget extension.
 [Audited comparison, controls and all curves](docs/pretrained_reuse/R2_SPATIAL_READOUT_RESULTS_20261014.md).
+
+Train-only follow-up confirms the final readout uses both question and scene
+information on its training examples; its poor development generalization remains.
+No new training or product promotion. [Fixed diagnosis and numeric replay corrections](docs/pretrained_reuse/R2_CONDITION_BINDING_RESULTS_20261014.md).

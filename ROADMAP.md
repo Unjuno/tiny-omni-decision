@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 condition/state diagnosis executed:** Existing best6/final50 only,
+all99train/198QA; no fitting or development scoring. Final train95.96% drops to
+49.49% with swapped questions and40.40% with mismatched whole scene; changed-target
+both-correct46/53→0/53 or3/53. Question information remains, but prior development
+failure/overfitting remains. Exact original replay passed after preserving reference
+numeric flags; failed attempts retained. Inspect input-only object/cover association
+before another fit. [Evidence and limitations](docs/pretrained_reuse/R2_CONDITION_BINDING_RESULTS_20261014.md).
+
 **2026-10-14 complete spatial-context comparison executed:** All356 frozen clips
 and fresh replay passed integrity gates. Same232,385-parameter readout compared
 initial-broadcast versus32-time appearance, seed17/50epochs/650updates each.
