@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 native mask-memory feasibility executed:** Public cache32 preserves
+all raw outputs on the fixed2seed prefix and halves vision calls; independent
+192-frame audit passes. The full8video/696seed comparison is not admitted because
+projected9,945s exceeds7,200s. Keep the failed gate and full cohort; no quality,
+fresh model replay or product claim. Any larger resource budget requires a new
+recorded protocol without changing inputs/numerics or reviving rejected batching.
+[Actual smoke, resources and unfinished comparison](docs/pretrained_reuse/R2_NATIVE_MASK_MEMORY_SMOKE_RESULTS_20261014.md).
+
 **2026-10-14 original QA resolution comparison executed:** Both fresh heads finish
 50 epochs / 500 updates on 79 fit / 20 selector TRAIN scenes. Best epoch 8 Accuracy
 is 25% for both; final coarse/fine Accuracy is 45%/32.5%, with strong overfitting.

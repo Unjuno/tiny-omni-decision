@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 native mask-memory smoke executed:** Public cache32 matches native
+cache1 exactly on2automatic seeds/32frames; independent192-output audit passes.
+Full696seed/two-arm projection9,945s exceeds the fixed7,200s gate, so main is
+not started. No fresh full replay or tracking/Decision quality claim.
+[Measurements, failed admission and limits](docs/pretrained_reuse/R2_NATIVE_MASK_MEMORY_SMOKE_RESULTS_20261014.md).
+
 **2026-10-14 original QA resolution comparison executed:** Both fresh heads finish
 50 epochs / 500 updates on 79 fit / 20 selector TRAIN scenes. Best epoch 8 Accuracy
 is 25% for both; final coarse/fine Accuracy is 45%/32.5%, with strong overfitting.
