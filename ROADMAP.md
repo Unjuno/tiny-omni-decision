@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 learned correspondence primitive rejected:** All8scene-held-out
+folds/two arms finish512steps; trainappearanceAccuracy100% with held-outNLL worse
+in everyfold (macro1.875 vs geometry0.536). Independent metrics/reload/sampler
+audit passed. Only5,400proxy pairs of2.63M opportunities are scored; noQA/blind
+claim. Close this fixed fit and require more diverse cue/temporal supervision.
+[Executed learning curves](docs/pretrained_reuse/R2_MASK_PAIR_ASSOCIATION_RESULTS_20261014.md).
+
 **2026-10-14 foreground inputs admitted; role support sparse:** All18,441 native
 regions/8 knowntrain clips×32times retained;72-array fresh replay and independent
 64-row numerical reference pass. Source-box hidden/cover co-support30times,20 in

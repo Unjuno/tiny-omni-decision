@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 correspondence learning executed:** 16fixed CPU fits×512steps on
+5,400 weakly proxy-labelled pairs/8knowntrain clips, scene-held-out. Appearance
+MLP memorizes train100%; macro NLL1.875 vs geometry0.536 and worse in all8folds.
+Reject the endpoint; all curves/controls/weights retained, no Omni quality claim.
+[Actual metrics, overfit and limits](docs/pretrained_reuse/R2_MASK_PAIR_ASSOCIATION_RESULTS_20261014.md).
+
 **2026-10-14 foreground corpus + semantic supervision audit:** Eight known train
 clips/all18,441 regions now have mean/std appearance; all72 fresh arrays exact.
 Training source-box overlap: hidden41/243 available times; hidden+cover30 times,
