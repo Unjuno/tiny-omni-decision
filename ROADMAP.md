@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 RoboMNIST shortcut evidence measured:** Complete2,135-group metadata
+diagnostic uses1,475train/660validation and preserves global-Rp grouping/all60
+classes. Camera lengths alone predictactivity60 at65.45%; all-length fusion has
+lower43.48% Accuracy despite improved NLL. No native/encoder quality or blind
+claim. Next check container invariance and source-free decoded preprocessing;
+keep length/no-input controls. Full Omni/95–98% gates remain open.
+[Measured five conditions and replay](docs/pretrained_reuse/R2_ROBOMNIST_LENGTH_RESULTS_20261015.md).
+
 **2026-10-15 RoboMNIST payload mechanics executed:** Fixed seven-input pilot
 finishes in186s; fresh native decoding matches all27 arrays/92 pins. Actual CSI
 timestamps start at0; WAV provides no common start clock, so synchronization

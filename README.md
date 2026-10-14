@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-15 public-source shortcut diagnostic executed:** All2,135 RoboMNIST
+groups stay intact in global repetition-block development splits. Camera file
+lengths alone reach65.45% activity60 /85.30% robot identification; this is source
+shortcut potential, not native Omni quality. Fresh full-array/scalar-metric replay
+passes. Preserve this control before any new native fit.
+[All conditions, calibration and limitations](docs/pretrained_reuse/R2_ROBOMNIST_LENGTH_RESULTS_20261015.md).
+
 **2026-10-15 public native joint inputs executed:** A fixed RoboMNIST pilot
 fetches only seven audio/video/CSI files in186s. All27 native arrays match a
 fresh raw-file replay; 450 frames per camera and450×256 CSI points per module.
