@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 follow-up execution:** Separate4h native memory inference is incomplete
+after8GiB disk-reserve stop;18,176 complete-arm +1,568 partial object-frames pass
+saved-product geometry checks only. Full/fresh/proxy-quality gates remain closed.
+New20.17M RTDETRv2-R18 passes CPU/fresh mechanics; no semantic adoption. Public
+RoboMNIST version1 clears source-rights metadata and first-directory grouping,
+not split/payload/complementarity admission. No new fitting or goal narrowing.
+[Saved failure and next conditions](docs/pretrained_reuse/R2_NATIVE_MASK_MEMORY_INTERRUPTION_20261014.md) ·
+[Actual detector audit](docs/pretrained_reuse/R1_RTDETR_V2_R18_CPU_RESULTS_20261014.md) ·
+[Prospective joint-input source](docs/pretrained_reuse/R2_ROBOMNIST_SOURCE_20261014.md).
+
 **2026-10-14 native mask-memory feasibility executed:** Public cache32 preserves
 all raw outputs on the fixed2seed prefix and halves vision calls; independent
 192-frame audit passes. The full8video/696seed comparison is not admitted because

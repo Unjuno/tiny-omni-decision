@@ -1,5 +1,15 @@
 # Tiny Omni Decision
 
+**2026-10-14 new component/source checks and incomplete memory run:** The separate
+4h native comparison stopped at3,585.95s on its8GiB disk guard; six complete arms
+and a partial49-seed arm are saved/CPU checked, with no quality scoring or restart.
+RTDETRv2-R18 (20.17M) passes frozen CPU/fresh-model mechanics on one train image.
+RoboMNIST's CC BY4.0 source/first ZIP-directory audit identifies34 grouped
+audio/video/CSI repetitions; payload, split and joint-quality gates remain open.
+[Interruption](docs/pretrained_reuse/R2_NATIVE_MASK_MEMORY_INTERRUPTION_20261014.md) ·
+[Detector](docs/pretrained_reuse/R1_RTDETR_V2_R18_CPU_RESULTS_20261014.md) ·
+[Public source](docs/pretrained_reuse/R2_ROBOMNIST_SOURCE_20261014.md).
+
 **2026-10-14 native mask-memory smoke executed:** Public cache32 matches native
 cache1 exactly on2automatic seeds/32frames; independent192-output audit passes.
 Full696seed/two-arm projection9,945s exceeds the fixed7,200s gate, so main is
