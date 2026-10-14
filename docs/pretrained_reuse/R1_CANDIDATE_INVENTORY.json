@@ -265,7 +265,7 @@
       "runtime_supported": false,
       "runtime_evidence": "not downloaded; parameter count exceeds the complete target by over four times",
       "task_quality_status": "unmeasured",
-      "decision": "outside the 100\u2013200M total parameter target",
+      "decision": "outside the 100–200M total parameter target",
       "parameter_tensor_bytes": null,
       "primary_citations": [
         "https://huggingface.co/facebook/pe-av-small"
@@ -669,8 +669,39 @@
       "primary_citations": [
         "https://huggingface.co/openai/whisper-tiny/resolve/169d4a4341b33bc18d8881c4b69c2e104e1cc0af/README.md"
       ]
+    },
+    {
+      "id": "rtdetr-v2-r18",
+      "modality": [
+        "image",
+        "video-frame-object-detection"
+      ],
+      "model_revision": "PekingU/rtdetr_v2_r18vd@5650961749fa93567c0d46fc7f43ea4f9e914107",
+      "checkpoint_sha256": "d18309d0d7ea57048138885c4c6ecfcb1e24506fc6153b94ad484f8ab62c7115",
+      "checkpoint_bytes": 80904640,
+      "parameters": 20174608,
+      "parameter_tensor_bytes": 80698432,
+      "license": "Apache-2.0 pinned official released-weight card; COCO training-media rights distinct",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/PekingU/rtdetr_v2_r18vd/blob/5650961749fa93567c0d46fc7f43ea4f9e914107/README.md"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "CPU FP32 frozen native forward on one known TRAIN image; fresh model matches all300query/80class logits/boxes/input bytes; no CUDA initialized",
+      "task_quality_status": "UNMEASURED; mechanics only, no semantic or temporal adoption",
+      "decision": "frozen semantic object-input candidate; require prospective task/temporal evidence before fitting or selection",
+      "report": "docs/pretrained_reuse/R1_RTDETR_V2_R18_CPU_RESULTS_20261014.json",
+      "audit_date": "2026-10-14",
+      "primary_citations": [
+        "https://huggingface.co/PekingU/rtdetr_v2_r18vd/blob/5650961749fa93567c0d46fc7f43ea4f9e914107/README.md",
+        "https://huggingface.co/PekingU/rtdetr_v2_r18vd/tree/5650961749fa93567c0d46fc7f43ea4f9e914107",
+        "https://github.com/lyuwenyu/RT-DETR"
+      ]
     }
   ],
-  "incremental_update_date": "2026-10-13",
-  "incremental_update_scope": "append native Whisper encoder component audit; existing candidate measurements preserved"
+  "incremental_update_date": "2026-10-14",
+  "incremental_update_scope": "append pinned RTDETRv2 R18 actual CPU/fresh component audit; earlier candidate records preserved"
 }
