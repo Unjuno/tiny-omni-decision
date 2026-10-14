@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 temporal appearance along model tracks:** Numerical routing on eight
+known training clips passed official1e-5 sampling parity and exact fresh replay
+for all256points×32times. Out-of-frame points remain with explicit support flags.
+No learning, label-based selection or quality improvement is claimed. Establish
+target/cover association and conditional relationship generalization before a
+new readout fit; complementary multimodal and full Omni gates remain open.
+[Executed input primitive](docs/pretrained_reuse/R2_TRACK_APPEARANCE_RESULTS_20261014.md).
+
 **2026-10-14 condition/state diagnosis executed:** Existing best6/final50 only,
 all99train/198QA; no fitting or development scoring. Final train95.96% drops to
 49.49% with swapped questions and40.40% with mismatched whole scene; changed-target

@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 track-aligned appearance:** All256 model tracks×32times on eight
+training clips passed pinned official sampling and exact fresh-process replay.
+All48 outputs remain outside Git. This establishes input routing, not object
+identity or Decision quality; no fitting or added parameters.
+[Measurements and remaining gates](docs/pretrained_reuse/R2_TRACK_APPEARANCE_RESULTS_20261014.md).
+
 **2026-10-14 role-supervised Video QA comparison completed:** Both paired50-epoch
 runs retained all514 development questions. Accuracy38.91%→40.27% has a95% interval
 including no gain; changed-target pairs both-correct0/127, and temporal-zero control
