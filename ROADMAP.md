@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 fine retention/support executed:** FrozenTAPIR actual32×32tokens on
+all99knowntrain clips finish in303s; coarse parity/fresh/full file audit and8clip
+independent numerical reference pass. Same-rule support: hidden19→1,957pairs and
+5→34scenes, but same-hidden gap8only30/endpoint0. Preserve all zero-support scenes;
+require grouped source-free semantic/temporal evidence before another fit or QA
+claim. No new model/training/quantization or release promotion.
+[Measured finer inputs and support limits](docs/pretrained_reuse/R2_FINE_SPATIAL_AND_ROLE_RESULTS_20261014.md).
+
 **2026-10-14 all99 train grid support executed:** Corpus preparation, full fresh
 1,188-array replay and independent811,008-cell/2,111,587-pair audit pass. Only19
 same-hidden pairs in5scenes; all99/zero-support scenes retained. Aggregate pair

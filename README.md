@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 actual fine inputs + fixed support executed:** All99train clips retain
+32×32spatial cells with full coarse regression, first-clip fresh replay and audits.
+Same-rule hidden proxy support19→1,957pairs/5→34scenes; same-hidden gap8=30,endpoint0.
+This is input/supervision coverage, not Decision quality; no training or promotion.
+[Execution, all scenes and remaining gates](docs/pretrained_reuse/R2_FINE_SPATIAL_AND_ROLE_RESULTS_20261014.md).
+
 **2026-10-14 all99 train scenes checked:** Native grid supervision corpus and
 independent complete replay/audit pass, but only19 same-hidden pairs across5scenes.
 Keep all zero-support scenes; more pair rows do not justify hidden-memory fitting.
