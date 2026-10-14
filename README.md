@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-14 mask-region input probe:** One known train clip,32 times/all1,070
+NMS candidates,384 mean+384 standard-deviation channels: full9-array fresh replay
+exact; independent numerical reference8 rows exact. CPU primary9.74s,2.98MB,
+0 added parameters. Input integrity only; semantic/Omni quality remains open.
+[Executed scope and limits](docs/pretrained_reuse/R2_MASK_FEATURE_POOL_RESULTS_20261014.md).
+
 **2026-10-14 native saved-prefix audit:**59 saved train frames/60,416 raw
 candidates passed independent mask→box/NMS/grid reconstruction and source RGB
 hash checks. Two media assets only;4,969 NMS survivors are not unique objects.

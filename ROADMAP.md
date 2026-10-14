@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 masked frozen-feature inputs verified:** All1,070 proposals over
+32 times from one train asset are retained; full9-array replay exact and fixed8-row
+independent numerical reference exact. No fitting/quality claim or live-run change.
+Admit the native wider corpus before semantic cue/cover-memory supervision.
+[Actual measurements and remaining gates](docs/pretrained_reuse/R2_MASK_FEATURE_POOL_RESULTS_20261014.md).
+
 **2026-10-14 independent native input audit executed:**59/256 captured rows
 (57 new,2 reused) passed complete1,024-mask geometry/NMS/grid/source-RGB checks
 on two known train assets. CPU-only auditor leaves the active extractor
