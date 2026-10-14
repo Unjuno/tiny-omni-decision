@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 native dynamic input expansion running:** Native-wrapper smoke
+passed with five arrays containing all1,024 candidates, hashes/freeze/RNG retained.
+Eight known train clips
+use unchanged32times; reuse39 frame records and infer217 new. Main is started,
+not admitted/completed; require terminal full coverage, fresh replay and CPU
+audit before semantic cue/cover supervision. No nonadmitted batch path used.
+[Actual smoke and live-run gates](docs/pretrained_reuse/R2_NATIVE_DYNAMIC_CORPUS_SMOKE_20261014.md).
+
 **2026-10-14 fixed chunk admission executed:** Chunks16/32/64 fail unchanged
 score tolerance; every discrete output and fresh16-array replay match. Actual
 head call counts confirm equal64-object work. Retain all arms and stop batch-width

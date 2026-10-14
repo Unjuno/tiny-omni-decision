@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 native wider-input smoke:** Full1,024 candidates saved at two fixed
+train times; frame0's five arrays match the old archive, while objects64–127
+match cached/fresh sessions at both times. Main extraction
+actually started for eight known train clips×32times (39 records reused,217 new).
+Full input admission/semantic quality are not complete; follow the live process.
+[Smoke evidence and continuation gates](docs/pretrained_reuse/R2_NATIVE_DYNAMIC_CORPUS_SMOKE_20261014.md).
+
 **2026-10-14 fixed SAM2 chunk matrix:** Same64-object chunks16/32/64 all
 retain exact masks/boxes/seeds/NMS but exceed the fixed presence-score guard.
 Fresh16-array replay exact; cached forward ratios4.50–5.01×, no adoption,
