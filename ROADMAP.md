@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-14 time-specific mask tracking executed:** Every1,070 NMS candidate
+from all32 times became an own-mask query at its original frame; full558-frame
+tracking and all15-array fresh replay passed. No GT seed selection, filtering,
+training or QA claim. Retain backwards predictions with explicit observation-time
+flags; this is offline inference. Next measure input-only target memory and
+container association before fitting. Full Omni/joint/OOD quality remains open.
+[Actual resource and integrity evidence](docs/pretrained_reuse/R2_TIMED_MASK_TRACKING_RESULTS_20261014.md).
+
 **2026-10-14 per-time discovery pilot:** All32 fixed times/32,768 raw masks completed
 on one known train regression scene. Group bbox opportunity improves over static
 frame0; a later visible small-item cue survives NMS. Hidden-box1/19 is neither

@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-14 time-specific mask tracking:** All1,070 model candidates were tracked
+from their own original times over the full558-frame train regression clip.
+Primary63.02s/5.45GiB Torch; fresh replay matches all15 arrays exactly. No GT
+selection or training. This establishes input routing; semantic target/container
+association, native joint quality and product latency remain unqualified.
+[Executed primitive and limits](docs/pretrained_reuse/R2_TIMED_MASK_TRACKING_RESULTS_20261014.md).
+
 **2026-10-14 temporal discovery executed:** The fixed train regression scene
 completed all32 times/32,768 proposals, with exact cache admission and last-time
 reload. A later exposed-item cue has a model-produced mask; source-box opportunity
