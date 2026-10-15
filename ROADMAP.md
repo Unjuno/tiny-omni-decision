@@ -9,6 +9,16 @@ comparison before further fitting; quality precedes quantization. The <=200M,
 native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
 [Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
 
+**2026-10-15 conditional-state diagnosis executed:** Fixed256TRAIN images,
+same40typed options/four questions, no fit or validation/audit access. Correct
+oracle facts yield27.05% overall despite100% within-correct-field accuracy;
+all-four0/256 and changed-question pairs34/1536. Predicted facts yield23.93%.
+Full fresh-process replay of22payloads is exact. Prioritize conditional binding
+and an independent semantic-transfer data contract; this new interface/TRAIN
+probe does not establish a universal encoder ceiling or product quality.
+Close prompt/readout search on this probe; all four-modality goals remain open.
+[Measured results, accounting correction and next action](docs/pretrained_reuse/R2_SEMANTIC_BRIDGE_RESULTS_20261015.md).
+
 **2026-10-15 R2-M visual-state diagnosis actually completed:** Three fixed models,
 all889development utterances, no training, full fresh-process replay pass. A
 single training-derived latent preserves all5334joint answers; ordered joint
