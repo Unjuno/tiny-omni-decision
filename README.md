@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**Execution strategy consolidated (2026-10-15):** Reuse the native-input/JSON
+baseline, complete one fixed semantic learning comparison, then measure the same
+decisions from oracle states versus real inputs. Keep the <=200M pre-quantization
+and per-task95–98% goals; no new model adoption or quality result is claimed.
+[Priorities, evidence, budget trade-offs and stop rules](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md).
+
 **Independent decision supervision generated and verified:** 23,552 new questions
 across 2,432 states, with all candidate sets retained and 31 mandatory validation
 slices. Full CPU regeneration matches all 13 files. Existing replay/validation

@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 strategy clarification:** Keep Architecture A as the primary route.
+Complete one fixed semantic learning comparison, followed by matched oracle-state
+and native-input decisions; avoid another open-ended synthetic-only search.
+DeBERTa xsmall is the preferred research comparison, not a product selection:
+its encoder-only speech budget leaves only4.63M for heads and speech quality is
+unproven. Preserve the frozen31-slice selector; later product adoption additionally
+requires comparison with the incumbent and a measured complete <=200M stack.
+No training was performed in this strategy revision. R0–R8 and legacy results are
+unchanged. [Consolidated strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md).
+
 **2026-10-15 independent decision supervision actually generated:** Fixed 16,384
 TRAIN / 3,072 selection / 4,096 development-transfer questions; 2,432 new state
 classes, all candidate widths retained. Historical 7,612 binding and 3,328 numeric
