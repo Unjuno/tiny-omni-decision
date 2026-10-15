@@ -9,6 +9,15 @@ comparison before further fitting; quality precedes quantization. The <=200M,
 native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
 [Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
 
+**2026-10-15 independent conditional transfer measured:** Fixed parent and retained
+candidate, 256 unused states, eight conditions, same 40 choices. Candidate is
+100% on known wording, 49.22% with new question/option descriptions, and 9.47%
+with exclusion instructions plus new descriptions. Both primary transfer gates
+fail, despite improvement in some arms. No training, audit access or promotion.
+Prioritize independent diverse conditional supervision; keep these observed
+conditions as regression evidence and do not tune templates against them.
+[Full metrics, controls and limits](docs/pretrained_reuse/R2_BINDING_TRANSFER_RESULTS_20261015.md).
+
 **2026-10-15 fixed probability-retention comparison completed:** One seed-17
 512-update fit preserves narrow binding Accuracy at 100% and passes all unchanged
 old-task gates at step 512. Fresh selected scores and 12 payloads are exact.
