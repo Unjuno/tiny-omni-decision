@@ -9,6 +9,14 @@ reference. All resident <=200M and four-modality95–98% remain unmet.
 [Strategy and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md) ·
 [Fixed learning comparison and limits](docs/pretrained_reuse/R2_BINDING_LANGUAGE_RESULTS_20261015.md).
 
+**Replay coverage comparison completed:** At the same512-update budget, replacing
+half of original replay with curriculum improves curriculumNLL .4481→.3588,
+but originalECE breaches the unchanged retention limit. Observed focus+description
+Accuracy falls81.64%→76.27%; complement+description rises6.45%→15.43%.
+Keep both research outputs, select0 within this trial, and preserve the earlier
+KL512 reference. Verify conditional-semantic teachers on TRAIN before another fit;
+no ratio sweep, promotion or quantization. [Full comparison](docs/pretrained_reuse/R2_BINDING_REPLAY_COVERAGE_RESULTS_20261015.md).
+
 **2026-10-15 visual-state diagnosis completed:** A fixed training-derived visual
 state preserves every joint answer; the ordered joint GRU is nearly saturated.
 Video-only remains order-sensitive (48.01%→21.18% on token reversal). Close this

@@ -9,6 +9,17 @@ comparison before further fitting; quality precedes quantization. The <=200M,
 native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
 [Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
 
+**2026-10-15 retention-source coverage comparison executed:** One fixed512 fit,
+same binding instructions/model/budget/loss/selector; replay changes from2048original
+to1024original+1024curriculum. Curriculum Accuracy+1.46pp and NLL-.08939 versus
+language512, with state-paired intervals on the improvement side. OriginalECE
+still fails the unchanged gate; all trained checkpoints are ineligible, selected0.
+Observed regression also trades focus-description Accuracy81.64%→76.27% against
+complement-description6.45%→15.43%. Keep earlier KL512 reference; MIXED, no promotion.
+Close this fixed ratio comparison and verify TRAIN-side semantic teachers before
+another fit; do not optimize the same validation via ratio/temperature/step sweeps.
+[Protocol, learning curves, all comparisons and artifacts](docs/pretrained_reuse/R2_BINDING_REPLAY_COVERAGE_RESULTS_20261015.md).
+
 **2026-10-15 instruction-diversity comparison executed:** One fixed512 fit,
 same states/options/replay/selection; only instruction text changed. On new
 state-disjoint syntax, old512→new512 improves focus+descriptions31.15%→81.64%,
