@@ -4,9 +4,12 @@
 1,024 updates with 18,432 unique questions and exact selected reload. New16-slice
 minimum Accuracy is100% in both, but all trained checkpoints fail47-slice
 retention; both select0. The auxiliary adoption gate fails. Three fixed weights
-pass exact536-question TRAIN replay; the predeclared transfer evaluation is
-running, not yet a quality result. No promotion or four-modality claim.
+pass exact536-question TRAIN replay. Fixed256-state transfer and independent
+output audit now complete: endpoint Accuracy CE93.70% /relevance94.17%, but
+new-query/new-option count Accuracy50.00% /50.88%, with an actual syntax slice
+at0% for both. No promotion or four-modality claim.
 [Measured curves and preserved failures](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_FIT_RESULTS_20261016.md) ·
+[Completed transfer and limits](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_TRANSFER_RESULTS_20261016.md) ·
 [Current strategy and next gates](docs/pretrained_reuse/NEXT_STRATEGY_20261016.md).
 
 **Next comparison prerequisites measured (2026-10-15):** The declared nine-file

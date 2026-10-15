@@ -1,8 +1,10 @@
 # R2: matched condition-relevance fits — completed, no promotion
 
 2026-10-16 JST. Both main fits and exact TRAIN replay completed. The fixed
-development-transfer evaluation is **running**, not completed, at this report's
-publication. This is a structured-state **text diagnosis**, with zero native
+development-transfer evaluation was running at initial publication and has now
+[completed with an independent output audit](R2_CONDITION_RELEVANCE_TRANSFER_RESULTS_20261016.md).
+The companion fit JSON preserves its initial pre-completion snapshot.
+This is a structured-state **text diagnosis**, with zero native
 media assets; these numbers are not four-modality product quality.
 
 ## Decision
@@ -16,7 +18,7 @@ artifacts; do not promote them or alter selection/calibration rules.
 Auxiliary supervision improves endpoint macro NLL/Brier/ECE relative to CE,
 but lowers macro Accuracy. This is a measured trade-off. It does not establish
 that the model lacks capacity, nor that more training can resolve retention.
-Finish the already-frozen transfer comparison before any new intervention.
+The frozen transfer comparison is now complete; close this intervention.
 
 ## Fixed experiment and executed scope
 
@@ -153,15 +155,16 @@ measurement. Separate replay/transfer costs are additional. Cloud cost: zero.
 
 ## Transfer and remaining gates
 
-The fixed factorial is now running in `condition-relevance-postfit-transfer-01`
-(PID 11760 at publication): 256 untouched source states, 16,384 questions,
+The fixed factorial completed in `condition-relevance-postfit-transfer-01`
+(PID11760 exited 2026-10-16 JST): 256 previously untouched source states,16,384 questions,
 40 supplied candidates, four seen/new query × seen/new candidate cells of
 4,096 questions each. Source/state separation and complete groups pass; maximum
 pair length is 70 tokens with no truncation. Only the fixed three unique weights
 are scored, retaining all five role identities. No calibration or checkpoint,
-seed, wording or candidate reselection is permitted. Transfer metrics are **not
-yet available in this report**; completion must be confirmed from the live
-process and terminal result before reporting them.
+seed, wording or candidate reselection occurred. Full terminal evidence and
+metrics are in the [transfer report](R2_CONDITION_RELEVANCE_TRANSFER_RESULTS_20261016.md).
+Endpoint Accuracy is93.70% /94.17%; the weakest condition/field is50.00% /50.88%,
+and an actual query/form slice is0% for both. The adoption gate remains failed.
 
 Sealed audit and reserved calibration remain unopened. This is authored
 development transfer, not an estimate of general native-media performance.

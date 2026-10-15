@@ -5,10 +5,13 @@ with exact reload and all original source/input pins unchanged. Both endpoints
 reach100% on new16 validation slices; no trained checkpoint retains all47
 slices, so both selected steps remain0 and the auxiliary promising gate fails.
 All three fixed weights pass536-question TRAIN replay. Fixed256-state transfer
-is running; finish/report it before a new native contract. No coefficient/budget
-sweep or promotion. Next measure one candidate across independent native,
+and independent output audit complete: endpoints CE93.70% /relevance94.17%, with
+minimum16-slice Accuracy50.00% /50.88% and an actual syntax slice at0% for both.
+Close this comparison; no coefficient/budget sweep or promotion. Next define
+one native candidate/task contract and measure it across independent native,
 conditional, temporal and joint tasks, retaining the <=200M and95–98% gates.
-[Completed fits and pending transfer](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_FIT_RESULTS_20261016.md) ·
+[Completed fits](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_FIT_RESULTS_20261016.md) ·
+[Completed fixed transfer](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_TRANSFER_RESULTS_20261016.md) ·
 [Current strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261016.md).
 
 **2026-10-15 fixed native-image bridge comparison completed:** Architecture A
