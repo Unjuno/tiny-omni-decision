@@ -1,10 +1,18 @@
 # Tiny Omni Decision
 
-**Execution strategy consolidated (2026-10-15):** Reuse the native-input/JSON
-baseline, complete one fixed semantic learning comparison, then measure the same
-decisions from oracle states versus real inputs. Keep the <=200M pre-quantization
-and per-task95–98% goals; no new model adoption or quality result is claimed.
-[Priorities, evidence, budget trade-offs and stop rules](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md).
+**Current strategy after the completed semantic fit (2026-10-15):** One fixed
+1024-call fit improves limited binding24.22%→100% and numeric24.46%→75.59%, but
+every trained checkpoint fails the frozen retention contract; selected step0.
+Fresh replay and independent verification pass. Next compare the same fixed
+decisions from oracle facts and image-predicted facts before another fit.
+Separate answer quality, calibration and whole-model size; the195.37M component
+subtotal assumes unproven encoder-only speech and omits all heads/sensor paths.
+No adoption or four-modality95–98% claim. Native comparison remains unexecuted.
+[Current priorities and stop rules](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md) ·
+[Completed fit, curves and limitations](docs/pretrained_reuse/R2_DECISION_SEMANTIC_FIT_RESULTS_20261015.md).
+
+The entries below preserve earlier milestones; the current strategy above takes
+precedence for the next action.
 
 **Independent decision supervision generated and verified:** 23,552 new questions
 across 2,432 states, with all candidate sets retained and 31 mandatory validation

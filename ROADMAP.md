@@ -1,14 +1,20 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-15 strategy clarification:** Keep Architecture A as the primary route.
-Complete one fixed semantic learning comparison, followed by matched oracle-state
-and native-input decisions; avoid another open-ended synthetic-only search.
-DeBERTa xsmall is the preferred research comparison, not a product selection:
-its encoder-only speech budget leaves only4.63M for heads and speech quality is
-unproven. Preserve the frozen31-slice selector; later product adoption additionally
-requires comparison with the incumbent and a measured complete <=200M stack.
-No training was performed in this strategy revision. R0–R8 and legacy results are
-unchanged. [Consolidated strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md).
+**2026-10-15 current strategy after the semantic fit:** Architecture A remains
+the primary route. The fixed1024-call fit is complete and independently verified:
+limited binding24.22%→100%, numeric24.46%→75.59%, but every trained snapshot fails
+the frozen31-slice retention contract; selected0, no adoption. Next complete the
+matched oracle/image-predicted state comparison, then choose one intervention
+from its error attribution. Native comparison is prepared but unexecuted.
+Calibration needs a prospective separate data contract; do not change old gates.
+The195.37M subtotal assumes unverified encoder-only speech and excludes complete
+heads/fusion/sensor paths; full Whisper raises it to224.92M. R0–R8, native direct
+decisions, screen/sensor, joint/temporal/OOD and per-task95–98% gates remain open.
+[Updated priorities and stopping rules](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md) ·
+[Completed fit evidence](docs/pretrained_reuse/R2_DECISION_SEMANTIC_FIT_RESULTS_20261015.md).
+
+The chronological entries below retain their historical scope. Use the current
+strategy above for the next action, without changing any frozen experiment rule.
 
 **2026-10-15 independent decision supervision actually generated:** Fixed 16,384
 TRAIN / 3,072 selection / 4,096 development-transfer questions; 2,432 new state
