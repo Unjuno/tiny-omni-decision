@@ -9,6 +9,15 @@ comparison before further fitting; quality precedes quantization. The <=200M,
 native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
 [Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
 
+**2026-10-15 instruction-diversity comparison executed:** One fixed512 fit,
+same states/options/replay/selection; only instruction text changed. On new
+state-disjoint syntax, old512→new512 improves focus+descriptions31.15%→81.64%,
+but complement+descriptions1.46%→6.45%. Both transfer-quality gates fail;
+all trained checkpoints also fail old-task retention, so this trial selects0.
+Preserve the earlier KL512 reference. Prioritize conditional meaning and explicit
+retention-source coverage in separate comparisons; no size/step rescue or promotion.
+[Learning curves, exact comparisons and artifacts](docs/pretrained_reuse/R2_BINDING_LANGUAGE_RESULTS_20261015.md).
+
 **2026-10-15 independent conditional transfer measured:** Fixed parent and retained
 candidate, 256 unused states, eight conditions, same 40 choices. Candidate is
 100% on known wording, 49.22% with new question/option descriptions, and 9.47%

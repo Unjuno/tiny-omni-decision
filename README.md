@@ -1,13 +1,13 @@
 # Tiny Omni Decision
 
-**Current strategy:** reuse the existing encoders and prioritize conditional
-decision learning with retention, then grounded temporal/multimodal transfer.
-The fixed candidate retains 100% on familiar instructions with unused states,
-but new question/option wording scores 49.22%, and an exclusion instruction with
-new descriptions scores 9.47%. Both predeclared transfer gates fail. Preserve
-all results; prioritize diverse conditional supervision before native integration.
+**Current strategy:** strengthen conditional semantics and retention coverage,
+then validate grounded temporal/multimodal transfer before quantization.
+A fixed instruction-diversity comparison improved new focus+description decisions
+31.15%→81.64%, but complement+description decisions remained6.45% and old-task
+retention failed. Do not adopt the new final weights; keep the earlier KL512
+reference. All resident <=200M and four-modality95–98% remain unmet.
 [Strategy and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md) ·
-[Independent transfer comparison](docs/pretrained_reuse/R2_BINDING_TRANSFER_RESULTS_20261015.md).
+[Fixed learning comparison and limits](docs/pretrained_reuse/R2_BINDING_LANGUAGE_RESULTS_20261015.md).
 
 **2026-10-15 visual-state diagnosis completed:** A fixed training-derived visual
 state preserves every joint answer; the ordered joint GRU is nearly saturated.
