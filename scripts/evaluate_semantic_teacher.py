@@ -303,17 +303,6 @@ def main():
                             unrestricted_top_token=int(logits.argmax()),
                             tokens=int(encoded["input_ids"].shape[-1]),
                         )
-                        if expected is not None:
-                            reference = expected[index]
-                            if reference["row_id"] != item["row_id"]:
-                                raise ValueError("replay identity mismatch")
-                            difference = float(np.max(np.abs(values - reference["logits"])))
-                            differences.append(difference)
-                            if (
-                                difference > config["replay_atol"]
-                                or item["prediction_id"] != reference["prediction_id"]
-                            ):
-                                raise ValueError("bounded replay mismatch")
                         outputs.append(item)
                         progress.write(
                             json.dumps(
@@ -327,6 +316,17 @@ def main():
                             + "\n"
                         )
                         progress.flush()
+                        if expected is not None:
+                            reference = expected[index]
+                            if reference["row_id"] != item["row_id"]:
+                                raise ValueError("replay identity mismatch")
+                            difference = float(np.max(np.abs(values - reference["logits"])))
+                            differences.append(difference)
+                            if (
+                                difference > config["replay_atol"]
+                                or item["prediction_id"] != reference["prediction_id"]
+                            ):
+                                raise ValueError(f"bounded replay mismatch at {index}: {difference}")
                         del output, logits, encoded
                         if len(outputs) % 32 == 0:
                             print(
