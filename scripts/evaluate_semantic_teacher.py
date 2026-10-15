@@ -326,7 +326,9 @@ def main():
                                 difference > config["replay_atol"]
                                 or item["prediction_id"] != reference["prediction_id"]
                             ):
-                                raise ValueError(f"bounded replay mismatch at {index}: {difference}")
+                                raise ValueError(
+                                    f"bounded replay mismatch at {index}: {difference}"
+                                )
                         del output, logits, encoded
                         if len(outputs) % 32 == 0:
                             print(
