@@ -1,5 +1,8 @@
 """Small deterministic contracts for the native candidate integration smoke."""
 
+import math
+import subprocess
+
 import torch
 
 
@@ -37,3 +40,35 @@ def masked_mean(hidden, mask):
             or not ((mask == 0) | (mask == 1)).all() or not (mask.sum(1) > 0).all()):
         raise ValueError("finite aligned language tokens and nonempty binary masks required")
     return (hidden * mask[..., None]).sum(1) / mask.sum(1, keepdim=True)
+
+
+def require_source_revision(source, revision, package):
+    def git(*args):
+        return subprocess.check_output(["git", "-C", str(source), *args], text=True).strip()
+
+    if git("rev-parse", "HEAD") != revision or git("diff", "HEAD", "--name-only"):
+        raise ValueError("external source HEAD/index/worktree differs")
+    extra = git("ls-files", "--others", "--exclude-standard", "--", package).splitlines()
+    if any(p.endswith((".py", ".pyd", ".dll")) for p in extra):
+        raise ValueError("untracked importable model source")
+
+
+def compare_decisions(current, reference, *, atol):
+    if len(current) != len(reference):
+        raise ValueError("replay decision count differs")
+    maximum = 0.0
+    for a, b in zip(current, reference, strict=True):
+        if any(a[k] != b[k] for k in ["modality", "question", "candidates"]):
+            raise ValueError("replay candidate/condition association differs")
+        a, b = a["decision"], b["decision"]
+        if (a["selected_option_id"] != b["selected_option_id"]
+                or a["probabilities"].keys() != b["probabilities"].keys()):
+            raise ValueError("replay selected ID or probability keys differ")
+        for key, value in a["probabilities"].items():
+            expected = b["probabilities"][key]
+            if not math.isfinite(value) or not math.isfinite(expected):
+                raise ValueError("nonfinite replay probability")
+            maximum = max(maximum, abs(value - expected))
+    if maximum > atol:
+        raise ValueError("replay probability tolerance exceeded")
+    return maximum

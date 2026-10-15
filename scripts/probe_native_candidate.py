@@ -37,7 +37,13 @@ from transformers import (
 from transformers.models.whisper.modeling_whisper import WhisperEncoder
 
 from scripts.evaluate_semantic_state_bridge import read, sha, tensor_digest, verify, write
-from scripts.native_candidate_inputs import masked_mean, positions, validate_native_sources
+from scripts.native_candidate_inputs import (
+    compare_decisions,
+    masked_mean,
+    positions,
+    require_source_revision,
+    validate_native_sources,
+)
 from tiny_omni_decision.native_candidate import (
     NativeCandidateReadout,
     NativeTokenBlock,
@@ -69,10 +75,25 @@ def main():
                   source_commit=subprocess.check_output(
                       ["git", "rev-parse", "HEAD"], cwd=REPO, text=True).strip(),
                   config_sha256=sha(CONFIG), model_updates=0, head_status="UNTRAINED_SEED17",
-                  quality_evaluation=False, validation_loaded=False, calibration_loaded=False,
+                  quality_evaluation=False, validation_payloads_loaded=False,
+                  source_inventory_includes_validation_metadata=True, calibration_loaded=False,
                   sealed_audit_loaded=False, cloud_cost=0)
     worker = log = None
     arrays = {}
+    memory_stop = threading.Event()
+    memory_peaks = []
+
+    def monitor_memory():
+        while not memory_stop.is_set():
+            try:
+                processes = [psutil.Process(), *psutil.Process().children(recursive=True)]
+                memory_peaks.append(sum(p.memory_info().rss for p in processes if p.is_running()))
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+            memory_stop.wait(.1)
+
+    memory_thread = threading.Thread(target=monitor_memory, daemon=True)
+    memory_thread.start()
     write(args.output / "result.json", result)
     try:
         config = read(CONFIG)
@@ -81,15 +102,11 @@ def main():
                                         text=True).split("\0")
         pins.update({str(REPO / p): sha(REPO / p) for p in names if p.endswith(".py")})
         pins[str(CONFIG)] = sha(CONFIG)
-        for source, revision in [(R1 / "efficientat-audit-v1/source",
-                                  config["source_revisions"]["event_audio"]),
-                                 (R1 / "videoprism-base-r1/source",
-                                  config["source_revisions"]["visual"])]:
-            if (subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"],
-                                        text=True).strip() != revision
-                    or subprocess.check_output(["git", "-C", str(source), "diff", "--name-only"],
-                                               text=True).strip()):
-                raise ValueError("external model source differs")
+        for source, revision, package in [(R1 / "efficientat-audit-v1/source",
+                                          config["source_revisions"]["event_audio"], "models"),
+                                         (R1 / "videoprism-base-r1/source",
+                                          config["source_revisions"]["visual"], "videoprism")]:
+            require_source_revision(source, revision, package)
             pins.update({str(p): sha(p) for p in source.rglob("*.py")})
         verify(pins)
         if shutil.disk_usage(args.output).free < 2 * 2**30:
@@ -145,7 +162,8 @@ def main():
         from models.dymn.model import get_model
         from models.preprocess import AugmentMelSTFT
 
-        with contextlib.redirect_stdout(sys.stderr):
+        with (args.output / "audio-model-load.log").open("w", encoding="utf-8") as audio_log, \
+                contextlib.redirect_stdout(audio_log):
             event = get_model(width_mult=0.4, pretrained_name=None, T_max=1.0)
             mel = AugmentMelSTFT()
         event.load_state_dict(torch.load(R1 / "efficientat-audit-v1/dymn04_as.pt",
@@ -247,7 +265,7 @@ def main():
         if worker.poll() is not None:
             raise RuntimeError("visual worker must stay resident for combined inference")
         result["visual_process_live_during_combined_snapshot"] = worker.pid
-        result["observed_process_tree_peak_rss_bytes"] = peak_sum
+        result["encoding_phase_observed_process_tree_peak_rss_bytes"] = peak_sum
         outputs = []
         reloaded = NativeCandidateReadout().eval().requires_grad_(False).to(device)
         reloaded.load_state_dict(torch.load(args.output / "readout.pt", weights_only=True,
@@ -300,11 +318,15 @@ def main():
                 raise ValueError("nonfinite saved payload")
             np.save(args.output / (name + ".npy"), value, allow_pickle=False)
         replay = {}
+        replay_probability_delta = None
         if reference:
             for name, value in arrays.items():
                 old = np.load(args.replay_reference / (name + ".npy"), allow_pickle=False)
                 np.testing.assert_allclose(value, old, rtol=0, atol=config["replay_atol"])
                 replay[name] = float(np.max(np.abs(value - old)))
+            replay_probability_delta = compare_decisions(
+                outputs, reference["decisions"], atol=config["replay_atol"]
+            )
         result.update(status="PASS_NATIVE_CANDIDATE_INTEGRATION", decisions=outputs,
                       torch_inventory=counted, visual_parameters=visual["parameters"],
                       candidate_total_parameters=total, reload_helper_parameters=reload_parameters,
@@ -312,13 +334,15 @@ def main():
                       buffer_elements=sum(b.numel() for m in frozen.values() for b in m.buffers()),
                       buffer_bytes=sum(b.numel() * b.element_size()
                                        for m in frozen.values() for b in m.buffers()),
-                      candidate_tensor_bytes=counted["tensor_bytes"] + visual["parameters"] * 4,
+                      candidate_parameter_bytes=counted["tensor_bytes"] + visual["parameters"] * 4,
                       frozen_state_sha256=before, head_state_sha256=head_before,
                       validated_hashes=pins, input_config=config,
                       observations=dict(text=1, image=1, audio=1, video=1,
                                         independent_media_source_groups=2),
                       outputs=len(outputs), frozen_and_sources_unchanged=True,
-                      replay_max_abs=replay, device=torch.cuda.get_device_name(),
+                      replay_max_abs=replay, replay_probability_max_abs=replay_probability_delta,
+                      replay_selected_ids_exact=bool(reference),
+                      device=torch.cuda.get_device_name(),
                       environment_pythonpath=os.environ.get("PYTHONPATH"),
                       module_origins={m.__name__: str(Path(m.__file__).resolve())
                                       for m in [torch, torchaudio, sf, np]},
@@ -343,8 +367,13 @@ def main():
                 result["worker_still_live_or_release_failed"] = worker.pid
         if log is not None:
             log.close()
+        memory_stop.set()
+        memory_thread.join(timeout=1)
         result.update(finished_utc=datetime.now(UTC).isoformat(),
                       seconds=time.perf_counter() - tick,
+                      observed_process_tree_peak_rss_bytes=max(memory_peaks, default=0),
+                      memory_measurement="whole-run process-tree RSS sampled every100ms; "
+                      "may miss short peaks; includes fresh-reload helper",
                       artifact_hashes={p.name: sha(p) for p in args.output.iterdir()
                                        if p.is_file() and p.name != "result.json"})
         write(args.output / "result.json", result)

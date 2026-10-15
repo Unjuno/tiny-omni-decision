@@ -1,3 +1,6 @@
+import copy
+import subprocess
+
 import pytest
 
 torch = pytest.importorskip("torch")
@@ -46,3 +49,52 @@ def test_masked_language_pool_rejects_truncation_and_nonfinite():
     for mask in [torch.zeros(1, 3), torch.ones(1, 2)]:
         with pytest.raises(ValueError):
             masked_mean(x, mask)
+
+
+@pytest.mark.parametrize("change", ["winner", "candidate", "question", "probability", "count"])
+def test_replay_rejects_changed_decision_even_with_near_equal_logits(change):
+    from scripts.native_candidate_inputs import compare_decisions
+
+    a = [dict(modality="text", question="Which?", candidates=["yes", "no"],
+              decision=dict(probabilities={"a": .5, "b": .5}, selected_option_id="a"))]
+    b = copy.deepcopy(a)
+    if change == "winner":
+        b[0]["decision"]["selected_option_id"] = "b"
+    elif change == "candidate":
+        b[0]["candidates"].reverse()
+    elif change == "question":
+        b[0]["question"] = "Different?"
+    elif change == "probability":
+        b[0]["decision"]["probabilities"] = {"a": .1, "b": .9}
+    else:
+        b.append(copy.deepcopy(b[0]))
+    assert compare_decisions(a, a, atol=1e-6) == 0
+    with pytest.raises(ValueError):
+        compare_decisions(a, b, atol=1e-6)
+
+
+def test_source_gate_rejects_staged_and_untracked_importable_changes(tmp_path):
+    from scripts.native_candidate_inputs import require_source_revision
+
+    def git(*args):
+        return subprocess.check_output(["git", "-C", str(tmp_path), *args], text=True).strip()
+
+    git("init", "-q")
+    package = tmp_path / "models"
+    package.mkdir()
+    p = package / "model.py"
+    p.write_text("value = 1\n")
+    git("add", ".")
+    git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+        "commit", "-qm", "test fixture")
+    revision = git("rev-parse", "HEAD")
+    require_source_revision(tmp_path, revision, "models")
+    p.write_text("value = 2\n")
+    git("add", ".")
+    with pytest.raises(ValueError):
+        require_source_revision(tmp_path, revision, "models")
+    git("restore", "--staged", ".")
+    git("restore", ".")
+    (package / "injected.py").write_text("value = 3\n")
+    with pytest.raises(ValueError):
+        require_source_revision(tmp_path, revision, "models")
