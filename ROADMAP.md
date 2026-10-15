@@ -1616,3 +1616,17 @@ No extra seed/budget/weight search on these development IDs. This does not
 establish a representation ceiling; independent joint task/OOD coverage and
 complete four-modality95–98% quality remain open.
 [Frozen protocol, all curves/controls/strata and result hashes](docs/pretrained_reuse/R2_AV_SLOT_WEIGHTS_RESULTS_20261015.md).
+
+### Conditional candidate budget and independent supervision (2026-10-15)
+
+The declared nine-file semantic/native inventory plus13 calibration scalars
+contains195,655,225 stored tensor elements including buffers. This conservatively
+fits200M with4,344,775 headroom; full integration, required-task quality and package
+size remain open. New condition-relevance data allocates1,024 previously unused
+states /28,672 questions, with12-file exact regeneration and unchanged31 old
+validation slices plus16 new slices. No native media, fitting or quality result
+was added. Calibration covers binding only. Freeze one matched supervision
+comparison and native transfer gates next; do not reopen closed prompt/seed
+searches. Old selected0 and all prior failure records remain unchanged.
+[Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
+[data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).

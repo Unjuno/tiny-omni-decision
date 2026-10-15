@@ -1,5 +1,18 @@
 # Tiny Omni Decision
 
+**Next comparison prerequisites measured (2026-10-15):** The declared nine-file
+conditional/native candidate plus calibration contains195,655,225 stored tensor
+elements including buffers, leaving4,344,775 below200M. This is a conservative
+component inventory; combined runtime, complete quality and <=200MB packaging
+remain unverified. Independent condition-relevance data is generated:1,024 new
+states /28,672 questions; all12 files match a separate-process regeneration.
+Old validation31 slices are preserved alongside16 new slices. No model fitting
+or quality gain in this preparation. Next freeze one matched CE versus relevance
+supervision comparison and its native transfer/retention gates.
+[Measured budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) ·
+[Data coverage and isolation](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md) ·
+[Current strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md).
+
 **Current result and next priority (2026-10-15):** The fixed semantic adaptation
 has now been connected to the observed256-image bridge. Oracle Accuracy improves
 41.80%→73.83%; image-predicted facts41.11%→73.34%. However, all256 count questions
