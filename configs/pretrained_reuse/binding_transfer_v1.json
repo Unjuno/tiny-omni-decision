@@ -1,0 +1,18 @@
+{
+  "experiment_id": "fixed-binding-independent-transfer-v1",
+  "root": "C:/CodexArtifacts/pretrained-reuse-r2",
+  "base_directory": "C:/CodexArtifacts/pretrained-reuse-r1/crossencoder-minilm-l6-audit-01",
+  "fit_result_sha256": "040c4e838af84f2a19ea57ffde894189891383adb0df396199e6e7c62aade82c",
+  "old_corpus_sha256": "957e2ce3ade65c5d2caa26a1cbb0e95a3adeee5cf5b312110f8c2a7e3cfed971",
+  "seed": 17,
+  "states": 256,
+  "questions_per_state": 4,
+  "options": 40,
+  "question_batch_size": 4,
+  "max_tokens": 512,
+  "max_seconds": 1200,
+  "max_vram_bytes": 4294967296,
+  "max_host_bytes": 4294967296,
+  "max_output_bytes": 268435456,
+  "min_free_disk_bytes": 2147483648
+}
