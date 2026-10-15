@@ -912,3 +912,10 @@ JSON. A six-clip TRAIN pilot and separate raw replay pass;48 repeated raw reques
 and128 additional decisions reuse states without encoder forwards. Cached-score
 latency excludes native encoding. AV122.79M is a functional slice, not complete
 Omni quality or packaging. [Execution and exact reference distinctions](docs/pretrained_reuse/R5_NATIVE_AV_CORRESPONDENCE_RESULTS_20261015.md).
+
+TRAIN-only reliability weighting of six native AV slots completed512 fixed
+iterations and an exact fresh refit. Near-command Accuracy84.08%→84.11% and
+NLL.4133→.3983; random Accuracy and Brier worsen, so the combined prospective
+gate fails. Keep equal weights and close this coefficient comparison; no new
+runtime/Teacher promotion. The four-modality95–98% objective remains unmet.
+[Curves, paired intervals, all attempts and hashes](docs/pretrained_reuse/R2_AV_SLOT_WEIGHTS_RESULTS_20261015.md).

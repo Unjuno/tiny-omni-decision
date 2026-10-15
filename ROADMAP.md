@@ -1463,3 +1463,16 @@ heads; score-only latency is not end-to-end native latency. No new training,
 independent quality, full four-modality/package or release qualification. Retain
 this runnable reference while independent task/OOD quality coverage stays open.
 [Measured runtime, resources, correction and hashes](docs/pretrained_reuse/R5_NATIVE_AV_CORRESPONDENCE_RESULTS_20261015.md).
+
+### Fixed TRAIN-only AV reliability coefficients (2026-10-15)
+
+Six nonnegative slot coefficients, original encoders/heads/data/catalogs unchanged,
+complete512 fixed full-batch iterations and an exact independent process refit.
+Hard-candidate NLL improves.4133→.3983 with Accuracy84.08%→84.11%, but paired
+speaker intervals include zero. Random Accuracy94.85%→94.83% and Brier worsen;
+combined prospective runtime-eligibility gate fails. Close this coefficient
+comparison, retain equal-weight native runtime and every research artifact.
+No extra seed/budget/weight search on these development IDs. This does not
+establish a representation ceiling; independent joint task/OOD coverage and
+complete four-modality95–98% quality remain open.
+[Frozen protocol, all curves/controls/strata and result hashes](docs/pretrained_reuse/R2_AV_SLOT_WEIGHTS_RESULTS_20261015.md).
