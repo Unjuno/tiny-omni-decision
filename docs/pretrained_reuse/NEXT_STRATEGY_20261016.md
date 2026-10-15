@@ -1,59 +1,123 @@
-# Current strategy: one candidate, all required decision tasks
+# 実行戦略：同じ候補で、必要な判断能力を成立させる
 
-2026-10-16. Preserve ROADMAP R0–R8 and the <=200M **pre-quantization total**
-parameter constraint. All resident encoders, embeddings, bridges and heads count.
-Text, image, audio and video are required; sensor is optional. Return supplied
-candidate probabilities through JSON. Exclusive multiple choice and independent
-binary propositions retain distinct probability semantics.
+2026-10-16。ROADMAP R0–R8に沿った優先順位の整理。
+新しい学習の設定書や、既存実験の採否条件を変更する文書ではない。
+参照HEADは `55a59190c624ac359778e491a55d315b58076fa6`。
 
-Architecture A remains the main path: reuse pretrained perception and connect
-its reusable observation state to a compact conditional decision component.
-Use B/shared-transformer or C/aligned-merging experiments only when a measured
-quality/cost or connection limitation justifies them. The conservative 195,655,225
-stored-element inventory fits the provisional budget, but it is not a completed
-integrated named-parameter, package or native-quality measurement.
+## 1. 目標と現在地
 
-## Next actions and stopping rules
+目標は、**量子化前の全推論パラメーターが200M以下で、テキスト・画像・音声・動画から、
+条件と候補に対応した確率をJSONで返すモデル**。センサーは任意。
+Encoder、埋め込み、接続層、判断層を全て数える。量子化による保存容量の減少とは別に管理する。
 
-1. Finish the already-running fixed condition-relevance transfer comparison.
-   Both fits completed; both selected step 0; the predefined auxiliary gate
-   fails. Keep the fixed endpoint and selected roles. Do not extend this into
-   a coefficient, seed, prompt or training-budget sweep.
-2. Report the complete comparison before defining the next native experiment.
-   Reuse the existing runnable encoders, state cache and JSON interfaces.
-   Measure one declared candidate across all four modalities in a shared task
-   ledger. Separate adopted weights from diagnostic endpoints explicitly.
-3. Use independent assets for unknown conditions and candidate wording,
-   temporal order/state changes, and decisions requiring both audio and video.
-   Preserve existing observed native probes as regression only. Keep question-only,
-   missing-input, mismatched-input, option-order and temporal-order controls.
-4. Compare correct observation states with predicted states. Failure with correct
-   states points to the conditional decision component; additional failures with
-   predicted states expose perception/connection problems. Change one identified
-   component at a time. Do not discard uncertainty, object identity or time order
-   through an unexamined top-1 bottleneck.
-5. Require the same candidate to retain all required task quality before
-   independent calibration and compression. Start with measured 8/4-bit options;
-   consider ternary only after quality and cost evidence justify it.
+品質目標は事前定義した各必須タスクで95%以上、98%を目指す。
+未見の条件表現・候補・場面・組合せも評価する。集計Accuracyで弱い課題を隠さず、
+難しい課題を除外して目標を達成したことにしない。未定義のあらゆる問題で95–98%という保証は未証明。
 
-The first useful scope is local condition-dependent state/event decisions:
-attributes, counts, comparisons, ordering, changes and audio/visual evidence.
-This is an initial evaluation scope, not permission to redefine the general Omni
-objective as a fixed-label classifier. Predefine the required task matrix and
-keep difficult tasks. Target >=95%, aiming98%, on each required task with
-appropriate uncertainty and independent groups. Aggregate Accuracy alone is
-insufficient, and arbitrary unseen-task95–98% is not a supported claim.
+現在は、実入力の処理、再利用可能な特徴、JSON出力、再現性検証の部品が揃ってきた段階。
+**一つの構成が全必須課題の品質を満たした証拠はまだない。**
 
-Measure Accuracy/NLL/Brier/ECE, weakest task, paired condition correctness,
-independent source/scene/speaker counts, full parameters, package, native latency
-and RAM/VRAM. A useful next deliverable is the same candidate's pass/unmet/unmeasured
-table and one justified intervention. More reports or synthetic fitting alone
-do not advance native product qualification.
+| 確認済みの事実 | 戦略への反映 |
+|---|---|
+| 最新のCE／relevance比較は両方1,024更新を完了。新16検証区分は両方100%だが、全47区分の保持条件を満たす学習後checkpointはなく、選択は両方step 0 | 新合成課題の得点だけで採用しない。固定済みの転移比較を完了して、この比較を閉じる |
+| 既存の画像状態診断では、正解の状態を渡しても学習終点の数え上げ判断は0%。正しい値を持つ別属性を選ぶ失敗がある | 条件と情報の対応付けを独立して検証する。知覚改善だけで解決するとは判断しない |
+| AV対応付けはランダム候補94.85%、近い候補84.08%。同じ開発データ上の値 | 難しい候補と独立した話者・場面を維持し、単独入力との対照も置く |
+| 既存の時間判断では条件変更ペア0/127両問正解 | 時間順序・状態変化を必須課題として残す。動画を入力できることと、時間情報を使えることを別に測る |
+| 現行候補部品はバッファ込み195,655,225要素、重み等9ファイル約641MB | 200M内の見込みはあるが余裕は約4.34M。完成モデルの正確なパラメーター数・容量・品質は未確定 |
 
-Current evidence: [matched fits](R2_CONDITION_RELEVANCE_FIT_RESULTS_20261016.md),
-[native semantic bridge](R2_SEMANTIC_NATIVE_RESULTS_20261015.md),
-[hard audio/visual correspondence](R2_LOMBARD_CORRESPONDENCE_RESULTS_20261015.md),
-[runnable native AV reuse](R5_NATIVE_AV_CORRESPONDENCE_RESULTS_20261015.md).
-Four-modality quality, temporal/joint/OOD benefits and full release gates remain
-open. Preserve every legacy artifact; no large Teacher/QAT/Recovery restart,
-paid compute or live-process intervention follows from this strategy.
+これらは異なるモデル・タスク・分割の結果であり、平均してOmni精度にはしない。
+実行成功、テスト件数、文書数は品質達成の代替指標にしない。
+
+## 2. 主経路と出力設計
+
+**Path Aを主経路にする。** 既存の知覚モデルを再利用し、小型の条件付き判断部分を接続する。
+画像／動画では位置・対象・時刻、音声では発話と環境音の情報を保持する。
+一度得た観測表現を、複数の条件・候補の評価に使い回す。
+
+```text
+テキスト・画像・音声・動画
+  → 既存Encoder＋観測表現（位置・時刻・不確かさ）
+  → 条件／候補との対応付け・必要な情報の読み出し
+  → 候補確率
+  → 通常のコードでJSON化
+```
+
+この図は目指す接続であり、全経路の品質が既に成立したことは示さない。
+非テキスト入力だけの判断も保ち、全入力を文字起こしへ変換する前提は置かない。
+最初からtop-1の属性だけに情報を潰すと何を失うかも検証する。
+
+JSONのための文章生成decoderは不要。排他的な多択は候補間の確率分布、独立した複数のyes/noは
+それぞれの確率として扱う。二択もこの共通出力に含める。棄権を使う場合は精度と回答率を分けて報告する。
+Liquid D1の公式仕様もChoice／Score／Noulを区別している。
+[公式Decision仕様](https://docs.liquid.ai/lfm/models/decision-models)（2026-10-16確認）。
+
+| 経路 | 今の扱い | 進む根拠 |
+|---|---|---|
+| A：既存Encoder＋小型判断部分 | 主経路 | 既存実装と特徴キャッシュを使い、失敗箇所と追加学習費用を分離できる |
+| B：共有Transformer＋Modality Lens | 条件付き比較候補 | Aの情報接続やコストの限界が実測され、改善仮説を固定できる場合 |
+| C：重み整列・統合 | 任意の比較候補 | 重みの互換性が確認され、品質を維持しながら実行費用を減らせる場合 |
+
+VideoPrismの公式実装には凍結backbone＋軽量readoutの例があるが、その実績を本プロジェクトの
+条件理解・時間推論の達成とは扱わない。[公式実装](https://github.com/google-deepmind/videoprism)。
+Encoder凍結は比較基準。十分な教師信号でも特徴側の不足が実測された場合に、限定した適応を検討する。
+
+## 3. 次に進める順序と成果物
+
+| 順序 | 実施すること | 完了を示す成果物／次の判断 |
+|---|---|---|
+| 1. 現在の比較を閉じる | 固定済みの転移推論を完了し、保存logitから独立に指標を照合する。終点と選択checkpointを分けて報告 | CE／relevance／初期値の全条件比較。結果を使ったcheckpointの再選択や同じ評価への再調整はしない |
+| 2. 一つの実行候補を固定する | 既存部品・重み・前処理を明示して、同じ候補で全課題を実行する。未接続部分は最小限接続する | 量子化前の全パラメーター数、入出力、save/reload、実入力からの実行経路。診断用重みと採用対象を区別する |
+| 3. 共通の評価表を埋める | 必須課題・独立分割・採否条件を実行前に固定する。正解状態と実入力由来の状態を同じ判断で比較する | タスクごとの達成／未達／未測定、誤りの種類、区間推定。ここで次の変更箇所を一つ選ぶ |
+| 4. 一箇所だけ改善する | 対照と同じデータ・予算で、特定した原因への最小変更を比較する | 当該課題の改善と既存課題の保持。利益がなければ不採用として比較を閉じる |
+| 5. 校正・圧縮・最終監査 | 品質を満たした同じ候補に、独立校正と8/4-bit比較を行う。必要性が示された場合にternaryを検討 | 実機の容量・RAM/VRAM・入力から判断までのp50/p95、圧縮後の各課題品質。構成を固定して最終監査 |
+
+段階2は不採用の学習終点を昇格させる操作ではない。未達を測る統合比較基準を作る。
+段階3の詳細なデータ／学習契約は、現在の固定比較を報告した後に作成する。
+
+最初の共通評価表には、少なくとも以下を含める。
+
+- **Text**：条件の切替、否定・除外、比較、未知の候補表現。
+- **Image**：属性、対象の数、関係。同じ画像に異なる条件を与える。
+- **Audio**：発話の内容／条件と環境音。音韻・語彙・長さが近い候補も含める。
+- **Video**：前後関係、状態変化、対象の維持。同じ動画への異なる時点の質問。
+- **共同入力**：片方だけでは決まらない音声＋映像の対応判断。
+- **横断対照**：質問だけ、入力欠落、入力取り違え、候補順変更、時間順変更、未見の場面／話者。
+
+各行でAccuracy／NLL／Brier／ECE、独立asset数、条件ペア両問正解率を報告する。
+質問数と独立した場面数を混同しない。既に観測したデータは回帰用とし、新たな汎化の証拠とは分ける。
+日本語・英語の対応も実測範囲を明記する。センサー追加を必須にして四つの必須入力の作業を遅らせない。
+
+## 4. 改善箇所を選ぶ規則
+
+| 観測された失敗 | 優先して検証する箇所 |
+|---|---|
+| 正しい状態でも、条件と無関係な正しい属性を選ぶ | 条件・候補の意味と観測情報の対応付け |
+| 正しい状態なら解けるが、実入力で崩れる | 知覚、局所情報、不確かさを保持する接続 |
+| 静止画は解けるが前後で答えが変わらない | 時間位置・対象対応・読み出し。単なるframe増加を結論にしない |
+| 単独入力と共同入力が同じ性能 | データが本当に両入力を必要とするか、同期、対応付け、融合 |
+| TRAINは良いが独立した条件・場面で崩れる | 独立データの多様性と教師信号。反復回数だけを増やさない |
+
+正解状態は原因診断専用。製品の入力に正解ラベルや正解の属性マスクを渡さない。
+既存の弱い教師や大きいモデルの出力を、検証せず正解の代わりにしない。
+
+## 5. 実験を広げる前の規則
+
+- 最新の二本は固定転移評価までで閉じる。係数・seed・文面・学習量の追加探索へ自動的に広げない。
+- 新しい比較は変更点、データ、予算、採否・終了条件を先に固定する。一度に一つの仮説を扱う。
+- 学習量や容量を増やすのは、固定した学習曲線・独立検証がその仮説を支持する場合。
+- 同じ候補が全必須課題を満たすまで、部品ごとの最高点を寄せ集めて製品精度と呼ばない。
+- 校正セットとsealed auditをチューニングに使わない。採用できなかった結果も保存する。
+- 既存Teacher/QAT/Recovery、稼働中process、固定corpus、過去成果物を保護する。ローカル計算のみ。
+
+当面の進捗指標は、**同じ候補で実測できた必須課題の範囲と、最弱課題の改善・能力保持**。
+次の成果物は、その共通評価表と根拠のある一つの改善比較とする。
+四モダリティ品質、時間・共同判断、OOD、全体のサイズ・実行費用は引き続き未達／未確認。
+
+## 根拠
+
+- [最新の二本の学習結果と固定転移評価の状態](R2_CONDITION_RELEVANCE_FIT_RESULTS_20261016.md)
+- [画像状態から条件判断へ接続した診断](R2_SEMANTIC_NATIVE_RESULTS_20261015.md)
+- [音声と映像の難しい対応付け](R2_LOMBARD_CORRESPONDENCE_RESULTS_20261015.md)
+- [時間条件の切替診断](R2_SPATIAL_READOUT_RESULTS_20261014.md)
+- [実入力AVと観測状態の再利用](R5_NATIVE_AV_CORRESPONDENCE_RESULTS_20261015.md)
+- [現行部品の実測サイズ](R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md)
