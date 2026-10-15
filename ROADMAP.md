@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**Active strategy, 2026-10-15:** The user requested a synthesis of accumulated
+results and a new priority order. Preserve R0–R8 and all historical evidence;
+prioritize conditional semantics, task-grounded temporal/multimodal data and a
+compact Decision core. Close the failed six-coefficient and repeated small-scene
+readout searches. Define a shared capability/data contract and one discriminating
+comparison before further fitting; quality precedes quantization. The <=200M,
+native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
+[Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
+
 **2026-10-15 R2-M visual-state diagnosis actually completed:** Three fixed models,
 all889development utterances, no training, full fresh-process replay pass. A
 single training-derived latent preserves all5334joint answers; ordered joint
