@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 independent decision supervision actually generated:** Fixed 16,384
+TRAIN / 3,072 selection / 4,096 development-transfer questions; 2,432 new state
+classes, all candidate widths retained. Historical 7,612 binding and 3,328 numeric
+classes excluded; exact legacy replay/validation preserved. All 13 files reproduce
+byte-for-byte. Validation selection requires all 31 slice counts and retains
+step 0 in macro-NLL minimization. No model load, optimizer step or audit access.
+This completes the data/selection deliverable, not model quality. Next freeze one
+semantic training comparison and its uncertainty runner, then connect successful
+decisions to native temporal/joint inputs. Product goals remain unmet.
+[Execution, hashes, tests and limitations](docs/pretrained_reuse/R2_DECISION_SUPERVISION_RESULTS_20261015.md).
+
 **2026-10-15 representation/factorization screen actually executed:** Two frozen
 checkpoints,32unused states/eight syntaxes/1,024questions/all40choices, no training.
 DeBERTa34.08%→59.08% with factoring (state-paired95% change interval+21.58 to+28.91pp),

@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**Independent decision supervision generated and verified:** 23,552 new questions
+across 2,432 states, with all candidate sets retained and 31 mandatory validation
+slices. Full CPU regeneration matches all 13 files. Existing replay/validation
+bytes are preserved; no model inference, training or quality improvement is
+claimed. Next freeze one semantic fit against this data/retention contract.
+[Coverage, integrity, selection rules and remaining work](docs/pretrained_reuse/R2_DECISION_SUPERVISION_RESULTS_20261015.md).
+
 **Frozen representation/readout screen completed:** On1,024 structured-state
 questions with all40 options, DeBERTa direct→factorized Accuracy improves
 34.08%→59.08%, but minimum-family25% and family retention fail. MiniLM changes
