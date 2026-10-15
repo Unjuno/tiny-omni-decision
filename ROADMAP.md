@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 strategy synthesis and fixed teacher factorial completed:**
+Display order and label assignment are separated on the same1536 TRAIN prompts.
+Binding Accuracy is81.25/59.38/74.22/42.97% across00/10/01/11; numeric52.73–54.69%.
+All768 historical endpoint logits and48 predeclared fresh replay outputs match.
+Do not admit this teacher interface or sweep prompts/labels. Next freeze independent
+conditional-contrast supervision and retention contracts, compare one training factor,
+then connect the same decisions to native inputs and temporal/joint tasks.
+R0–R8, <=200M before quantization, each-task95–98%, legacy artifacts and final audit
+remain intact; product goals remain unmet.
+[Actionable three-deliverable strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md) ·
+[Complete diagnostic evidence](docs/pretrained_reuse/R2_TEACHER_LABEL_FACTORIAL_RESULTS_20261015.md).
+
 **Active strategy, 2026-10-15:** The user requested a synthesis of accumulated
 results and a new priority order. Preserve R0–R8 and all historical evidence;
 prioritize conditional semantics, task-grounded temporal/multimodal data and a

@@ -1,5 +1,15 @@
 # Tiny Omni Decision
 
+**Next execution strategy:** Preserve the native-input/JSON baseline; prioritize
+conditional contrast supervision with independent syntax/state splits, then real
+input grounding, temporal/joint evidence and integration before quantization.
+The fixed teacher factorial diagnostic is complete: binding81.25%→59.38% with
+display order alone,74.22% with label mapping alone,42.97% with both. Numeric
+remains52.73–54.69%. All768 historical logits and48 planned replay outputs match.
+Close this teacher-interface search; no training or product promotion in this trial.
+[Concise strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md) ·
+[All factorial results and limits](docs/pretrained_reuse/R2_TEACHER_LABEL_FACTORIAL_RESULTS_20261015.md).
+
 **Current strategy:** strengthen conditional semantics and retention coverage,
 then validate grounded temporal/multimodal transfer before quantization.
 A fixed instruction-diversity comparison improved new focus+description decisions
