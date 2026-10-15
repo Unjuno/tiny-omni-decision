@@ -319,6 +319,9 @@ def main():
                                         independent_media_source_groups=2),
                       outputs=len(outputs), frozen_and_sources_unchanged=True,
                       replay_max_abs=replay, device=torch.cuda.get_device_name(),
+                      environment_pythonpath=os.environ.get("PYTHONPATH"),
+                      module_origins={m.__name__: str(Path(m.__file__).resolve())
+                                      for m in [torch, torchaudio, sf, np]},
                       versions=dict(python=sys.version, torch=torch.__version__,
                                     numpy=np.__version__, torchaudio=torchaudio.__version__,
                                     transformers=__import__("transformers").__version__),
