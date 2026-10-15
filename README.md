@@ -1,14 +1,16 @@
 # Tiny Omni Decision
 
-**Current strategy after the completed semantic fit (2026-10-15):** One fixed
-1024-call fit improves limited binding24.22%→100% and numeric24.46%→75.59%, but
-every trained checkpoint fails the frozen retention contract; selected step0.
-Fresh replay and independent verification pass. Next compare the same fixed
-decisions from oracle facts and image-predicted facts before another fit.
-Separate answer quality, calibration and whole-model size; the195.37M component
-subtotal assumes unproven encoder-only speech and omits all heads/sensor paths.
-No adoption or four-modality95–98% claim. Native comparison remains unexecuted.
+**Current result and next priority (2026-10-15):** The fixed semantic adaptation
+has now been connected to the observed256-image bridge. Oracle Accuracy improves
+41.80%→73.83%; image-predicted facts41.11%→73.34%. However, all256 count questions
+fail even with correct facts:268 oracle errors select true-but-unrequested
+attributes. Native perception has54 additional count errors hidden by this failure.
+Full26-file fresh replay and independent20480-prediction verification pass.
+Prioritize condition-to-property transfer with independent, matched supervision;
+close this comparison without prompt/mask/checkpoint tuning. The fit still selects0,
+and whole <=200M/native four-modality95–98% gates remain unmet. No promotion.
 [Current priorities and stop rules](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md) ·
+[Completed image-bridge comparison](docs/pretrained_reuse/R2_SEMANTIC_NATIVE_RESULTS_20261015.md) ·
 [Completed fit, curves and limitations](docs/pretrained_reuse/R2_DECISION_SEMANTIC_FIT_RESULTS_20261015.md).
 
 The entries below preserve earlier milestones; the current strategy above takes

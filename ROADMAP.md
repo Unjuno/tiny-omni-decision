@@ -1,16 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-15 current strategy after the semantic fit:** Architecture A remains
-the primary route. The fixed1024-call fit is complete and independently verified:
-limited binding24.22%→100%, numeric24.46%→75.59%, but every trained snapshot fails
-the frozen31-slice retention contract; selected0, no adoption. Next complete the
-matched oracle/image-predicted state comparison, then choose one intervention
-from its error attribution. Native comparison is prepared but unexecuted.
-Calibration needs a prospective separate data contract; do not change old gates.
-The195.37M subtotal assumes unverified encoder-only speech and excludes complete
-heads/fusion/sensor paths; full Whisper raises it to224.92M. R0–R8, native direct
-decisions, screen/sensor, joint/temporal/OOD and per-task95–98% gates remain open.
+**2026-10-15 fixed native-image bridge comparison completed:** Architecture A
+remains primary. The1024 semantic endpoint improves oracle41.80%→73.83% and
+image-predicted41.11%→73.34% on256 observed TRAIN images, but count is0/256 even
+with correct facts. All268 oracle errors select true-but-unrequested attributes;
+54 native count errors are additionally masked by this downstream failure.
+Full26-payload fresh replay and independent20480-prediction audit pass. Next define
+one independent condition-to-property supervision/retention contract; no same-probe
+prompt, field-mask or checkpoint search. The fit's frozen selector remains0.
+No adoption, independent native-quality or four-modality95–98% claim. Complete
+<=200M, native speech, screen/sensor, joint/temporal/OOD requirements remain open.
 [Updated priorities and stopping rules](docs/pretrained_reuse/NEXT_STRATEGY_20261015.md) ·
+[Actual image-bridge results](docs/pretrained_reuse/R2_SEMANTIC_NATIVE_RESULTS_20261015.md) ·
 [Completed fit evidence](docs/pretrained_reuse/R2_DECISION_SEMANTIC_FIT_RESULTS_20261015.md).
 
 The chronological entries below retain their historical scope. Use the current
