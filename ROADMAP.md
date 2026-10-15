@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 matched supervision comparison:** Both1024-update fits complete,
+with exact reload and all original source/input pins unchanged. Both endpoints
+reach100% on new16 validation slices; no trained checkpoint retains all47
+slices, so both selected steps remain0 and the auxiliary promising gate fails.
+All three fixed weights pass536-question TRAIN replay. Fixed256-state transfer
+is running; finish/report it before a new native contract. No coefficient/budget
+sweep or promotion. Next measure one candidate across independent native,
+conditional, temporal and joint tasks, retaining the <=200M and95–98% gates.
+[Completed fits and pending transfer](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_FIT_RESULTS_20261016.md) ·
+[Current strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261016.md).
+
 **2026-10-15 fixed native-image bridge comparison completed:** Architecture A
 remains primary. The1024 semantic endpoint improves oracle41.80%→73.83% and
 image-predicted41.11%→73.34% on256 observed TRAIN images, but count is0/256 even
