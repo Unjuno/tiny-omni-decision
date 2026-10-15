@@ -131,7 +131,7 @@ def verify_execution_source(source_root, entry_file, entry_name, pins, *, module
         actual = getattr(module, "__file__", None)
         if actual is None:
             locations = [_no_redirect(p) for p in getattr(module, "__path__", [])]
-            _require(locations == [expected], "imported namespace path differs: " + name)
+            _require(set(locations) == {expected}, "imported namespace path differs: " + name)
             continue
         actual = _no_redirect(actual)
         _require(

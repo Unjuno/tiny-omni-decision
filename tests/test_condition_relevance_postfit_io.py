@@ -83,6 +83,13 @@ def test_additional_namespace_location_rejected(execution_source, tmp_path):
         bind_execution(execution_source)
 
 
+def test_duplicate_same_namespace_location_is_not_another_checkout(execution_source):
+    *_, modules = execution_source
+    modules["scripts"].__path__ *= 2
+    evidence = bind_execution(execution_source)
+    assert set(evidence) == {"__main__", "scripts.helper", "tiny_omni_decision"}
+
+
 def test_bare_stale_postfit_helper_rejected(execution_source, tmp_path):
     *_, modules = execution_source
     stale = tmp_path / "condition_relevance_transfer.py"
