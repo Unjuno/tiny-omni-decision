@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**Frozen representation/readout screen completed:** On1,024 structured-state
+questions with all40 options, DeBERTa direct→factorized Accuracy improves
+34.08%→59.08%, but minimum-family25% and family retention fail. MiniLM changes
+32.42%→28.91%. Both full fresh-process replays match25payloads exactly. No training,
+adoption or audit access. Close this fixed rendering screen; define conditional,
+numeric and old-task retention coverage together before another semantic fit.
+[Results, controls, parameter budgets and limitations](docs/pretrained_reuse/R2_FACTORIZED_REPRESENTATION_RESULTS_20261015.md).
+
 **Matched conditional-contrast comparison completed:** Two fresh seed17 fits
 completed 512 updates each on the same new states, replay and budget. The added
 objective worsens focus+new-description Accuracy 23.14%→17.38% and

@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 representation/factorization screen actually executed:** Two frozen
+checkpoints,32unused states/eight syntaxes/1,024questions/all40choices, no training.
+DeBERTa34.08%→59.08% with factoring (state-paired95% change interval+21.58 to+28.91pp),
+but weakest-family25% and retention fail; MiniLM32.42%→28.91%. Full fresh replays
+match25payloads/model exactly. ExecutionPASS, research gatesFAIL, no adoption.
+Close this fixed rendering screen. Next prepare joint conditional-relevance,
+state-consistency, numerical and original-task retention contracts before any fit;
+no prompt/temperature sweep or repeated old numeric probe. DeBERTa's195.37M
+encoder-only speech scenario leaves4.63M before all heads and has unproven speech
+quality. Whole <=200M/native four-modality95–98%/temporal/joint/OOD gates stay open.
+[Full measurements and limits](docs/pretrained_reuse/R2_FACTORIZED_REPRESENTATION_RESULTS_20261015.md).
+
 **2026-10-15 matched conditional-contrast comparison completed:** Two 512-update
 fits use the same new states/replay/order and differ only in the auxiliary loss.
 Focus+new-description Accuracy falls 23.14%→17.38% (paired 95% difference interval
