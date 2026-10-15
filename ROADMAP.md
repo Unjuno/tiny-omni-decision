@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-15 matched conditional-contrast comparison completed:** Two 512-update
+fits use the same new states/replay/order and differ only in the auxiliary loss.
+Focus+new-description Accuracy falls 23.14%→17.38% (paired 95% difference interval
+[-7.324, -4.297] pp); complement+new-description falls 97.27%→96.39%.
+Neither endpoint meets retention; both selectors fall back to step 0. The prior
+KL512 remains a historical reference, not a generally qualified model. All 86
+full-transfer replay files match. Saved-error attribution identifies wrong-field
+selection with correct state values; it does not prove a model-capacity ceiling.
+Close this loss comparison. Reassess conditional-language representations and
+the whole <=200M allocation before another semantic fit, then connect native
+perception and temporal/joint decisions. No promotion, audit access or quantization.
+[Full execution, learning curves and limitations](docs/pretrained_reuse/R2_CONDITION_CONTRAST_RESULTS_20261015.md).
+
 **2026-10-15 strategy synthesis and fixed teacher factorial completed:**
 Display order and label assignment are separated on the same1536 TRAIN prompts.
 Binding Accuracy is81.25/59.38/74.22/42.97% across00/10/01/11; numeric52.73–54.69%.

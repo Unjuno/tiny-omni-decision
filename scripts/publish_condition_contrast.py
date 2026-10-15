@@ -1,6 +1,7 @@
 """Verify both frozen fits, transfer/replay and publish the complete matched comparison."""
 
 import argparse
+import json
 from pathlib import Path
 
 import numpy as np
@@ -15,6 +16,34 @@ from scripts.evaluate_semantic_state_bridge import read, sha, verify, write
 from scripts.prepare_condition_contrast import CONFIG, validate_corpus
 from scripts.semantic_state_diagnostic import log_probabilities
 from scripts.summarize_condition_binding import score_difference
+
+
+def error_attribution(rows, prediction_ids):
+    """Post-hoc saved-prediction description; never used for model selection."""
+    result = dict(
+        questions=len(rows),
+        correct=0,
+        wrong_field=0,
+        correct_field_wrong_value=0,
+        wrong_field_value_matches_state=0,
+        target_to_predicted_field={},
+    )
+    for row, predicted in zip(rows, prediction_ids, strict=True):
+        if predicted not in row["option_ids"]:
+            raise ValueError("prediction must identify a supplied candidate")
+        field, value = predicted.split(":", 1)
+        target_field = row["target_id"].split(":", 1)[0]
+        confusion = result["target_to_predicted_field"].setdefault(target_field, {})
+        confusion[field] = confusion.get(field, 0) + 1
+        if predicted == row["target_id"]:
+            result["correct"] += 1
+        elif field == target_field:
+            result["correct_field_wrong_value"] += 1
+        else:
+            result["wrong_field"] += 1
+            if value == str(json.loads(row["state"])[field]):
+                result["wrong_field_value_matches_state"] += 1
+    return result
 
 
 def mechanism_failures(models, intervals, final_retained):
@@ -182,9 +211,11 @@ def build_publication(root):
         verify_run_provenance(runs[name], post_pins, code_pins)
     post = read(root / evaluation / "metrics.json")
     arrays = {}
+    attribution = {}
     transfer = {n: lines(corpus / f"{n}.jsonl") for n in CONDITIONS}
     for label, conditions in post["models"].items():
         arrays[label] = {}
+        attribution[label] = {}
         for name, metric in conditions.items():
             rows = transfer[name]
             scores = np.load(root / evaluation / f"{label}-{name}-scores.npy", allow_pickle=False)
@@ -208,6 +239,9 @@ def build_publication(root):
                     or item["prediction_id"] != row["option_ids"][int(p.argmax())]
                 ):
                     raise ValueError("per-example prediction mismatch")
+            attribution[label][name] = error_attribution(
+                rows, [item["prediction_id"] for item in predictions]
+            )
         controls = control_summary(
             arrays[label]["focus_descriptions"],
             arrays[label]["reverse_focus_descriptions"],
@@ -246,6 +280,13 @@ def build_publication(root):
         selected_for_product=False,
         sealed_audit_loaded=False,
         source_commit=fits["ce"]["source_commit"],
+        publication_code_pins={
+            str(Path(p).resolve()): sha(p)
+            for p in (
+                "scripts/publish_condition_contrast.py",
+                "tests/test_condition_contrast_publication.py",
+            )
+        },
         config=config,
         corpus_sha256=sha(corpus / "result.json"),
         corpus_summary={
@@ -262,6 +303,7 @@ def build_publication(root):
         corpus_artifacts=cp["artifacts"],
         curves=curves,
         post_selection=post,
+        post_hoc_error_attribution=attribution,
         mechanism_support=not failures,
         mechanism_failures=failures,
         final_quality_failures=quality,

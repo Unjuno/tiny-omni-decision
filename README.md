@@ -1,8 +1,17 @@
 # Tiny Omni Decision
 
+**Matched conditional-contrast comparison completed:** Two fresh seed17 fits
+completed 512 updates each on the same new states, replay and budget. The added
+objective worsens focus+new-description Accuracy 23.14%→17.38% and
+complement+new-description 97.27%→96.39%; both trained endpoints fail retention.
+Selected step is 0 in each run. All 86 full-transfer replay files match exactly.
+Close this auxiliary-loss comparison; reassess conditional-language representation
+and whole-model parameter allocation before another fit. No product promotion.
+[Learning curves, uncertainty, error attribution and hashes](docs/pretrained_reuse/R2_CONDITION_CONTRAST_RESULTS_20261015.md).
+
 **Next execution strategy:** Preserve the native-input/JSON baseline; prioritize
-conditional contrast supervision with independent syntax/state splits, then real
-input grounding, temporal/joint evidence and integration before quantization.
+conditional-language suitability and retention, then real input grounding,
+temporal/joint evidence and integration before quantization.
 The fixed teacher factorial diagnostic is complete: binding81.25%→59.38% with
 display order alone,74.22% with label mapping alone,42.97% with both. Numeric
 remains52.73–54.69%. All768 historical logits and48 planned replay outputs match.

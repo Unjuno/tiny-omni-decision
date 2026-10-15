@@ -3,6 +3,29 @@ from copy import deepcopy
 import pytest
 
 
+def test_error_attribution_separates_condition_selection_and_value_errors():
+    import json
+
+    from scripts.publish_condition_contrast import error_attribution
+
+    state = json.dumps(dict(color="red", count=2))
+    base = dict(state=state, option_ids=["color:red", "color:blue", "count:2", "count:3"])
+    rows = [dict(base, target_id="color:red") for _ in range(4)]
+    actual = error_attribution(rows, ["color:red", "color:blue", "count:2", "count:3"])
+    assert actual == dict(
+        questions=4,
+        correct=1,
+        wrong_field=2,
+        correct_field_wrong_value=1,
+        wrong_field_value_matches_state=1,
+        target_to_predicted_field={"color": {"color": 2, "count": 2}},
+    )
+    with pytest.raises(ValueError):
+        error_attribution(rows, ["color:red"])
+    with pytest.raises(ValueError, match="candidate"):
+        error_attribution(rows[:1], ["color:unknown"])
+
+
 def test_run_provenance_rejects_self_consistent_stale_inputs_and_code(tmp_path):
     from scripts.evaluate_semantic_state_bridge import sha
     from scripts.publish_condition_contrast import verify_run_provenance
