@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**Current strategy:** reuse the existing encoders and prioritize conditional
+decision learning with retention, then grounded temporal/multimodal transfer.
+The fixed512-update semantic fit reaches100% on its narrow new task but fails
+old-task probability-quality gates; retain the parent, no product promotion.
+[Strategy and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md) ·
+[Measured comparison](docs/pretrained_reuse/R2_CONDITION_BINDING_RESULTS_20261015.md).
+
 **2026-10-15 visual-state diagnosis completed:** A fixed training-derived visual
 state preserves every joint answer; the ordered joint GRU is nearly saturated.
 Video-only remains order-sensitive (48.01%→21.18% on token reversal). Close this

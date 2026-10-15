@@ -9,6 +9,14 @@ comparison before further fitting; quality precedes quantization. The <=200M,
 native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
 [Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
 
+**2026-10-15 fixed conditional-binding fit completed:** One seed17/512-update
+mixed continuation raises narrow semantic validation31.74%→100%, but every
+trained checkpoint fails unchanged retention/calibration gates. Keep step0parent
+and preserve final weights separately; no model promotion. Next investigate
+retention of old option distributions before increasing capacity or steps.
+This annotation-state task is not native Omni or unknown-language quality.
+[All curves, selection, controls and limitations](docs/pretrained_reuse/R2_CONDITION_BINDING_RESULTS_20261015.md).
+
 **2026-10-15 conditional-state diagnosis executed:** Fixed256TRAIN images,
 same40typed options/four questions, no fit or validation/audit access. Correct
 oracle facts yield27.05% overall despite100% within-correct-field accuracy;
