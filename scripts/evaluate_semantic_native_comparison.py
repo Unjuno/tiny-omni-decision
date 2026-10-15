@@ -37,6 +37,25 @@ REPO = Path(__file__).resolve().parents[1]
 CONFIG = REPO / "configs/pretrained_reuse/semantic_native_comparison_v1.json"
 
 
+def tracked_source_names(repo, config_path, protocol_path):
+    # Return the inventory on stdout, never as thousands of command-line arguments.
+    # NUL separation also preserves spaces and non-ASCII names without Git quoting.
+    tracked = subprocess.check_output(
+        ["git", "-C", str(repo), "ls-files", "-z"], text=True, encoding="utf-8"
+    ).split("\0")
+    tracked = [name for name in tracked if name]
+    required = [
+        "scripts/evaluate_semantic_native_comparison.py",
+        "scripts/semantic_native_comparison.py",
+        config_path,
+        "pyproject.toml",
+        protocol_path,
+    ]
+    if not set(required).issubset(tracked):
+        raise ValueError("producer, config and protocol must be tracked and frozen")
+    return [name for name in tracked if name.endswith(".py")] + required[2:]
+
+
 def admit_native_sources(root, pins):
     old = root / "semantic-state-bridge-01"
     payload_names = (
@@ -188,20 +207,8 @@ def main():
         source_commit = subprocess.check_output(
             ["git", "-C", str(REPO), "rev-parse", "HEAD"], text=True
         ).strip()
-        names = subprocess.check_output(
-            ["git", "-C", str(REPO), "ls-files", "*.py"], text=True
-        ).splitlines()
-        names += [str(CONFIG.relative_to(REPO)), "pyproject.toml", config["protocol_path"]]
-        for required in (
-            "scripts/evaluate_semantic_native_comparison.py",
-            "scripts/semantic_native_comparison.py",
-        ):
-            if required not in names:
-                raise ValueError("producer must be tracked and frozen")
-        subprocess.run(
-            ["git", "-C", str(REPO), "ls-files", "--error-unmatch", "--", *names],
-            check=True,
-            capture_output=True,
+        names = tracked_source_names(
+            REPO, CONFIG.relative_to(REPO).as_posix(), config["protocol_path"]
         )
         code = {str(REPO / name): sha(REPO / name) for name in names}
         result["source_commit"] = source_commit

@@ -105,6 +105,19 @@ python -u -m scripts.evaluate_semantic_native_comparison --output C:/CodexArtifa
 
 ## Decision after this diagnosis
 
+### Pre-inference platform correction
+
+The first smoke attempt at source `04aa3c13c12516b8ea50e99b50e3518cc0899e0e`
+stopped before torch/model import with Windows error206: the941-file Git verification
+command was35615 characters, above32767. Its separate `semantic-native-comparison-smoke-01`
+directory/log remain intact, with0 candidate forwards. Source inventory now reads
+NUL-delimited tracked paths from a58-character Git command; the full pinned file
+set is unchanged. CPU regressions cover1000long paths and every required untracked
+file rejection. No data, weights, questions, numeric conditions or cohort change.
+Use `semantic-native-comparison-smoke-02` for the next smoke; do not overwrite01.
+
+### Interpretation
+
 If oracle facts fail, condition/interface transfer remains a bottleneck. If they
 work but predicted facts fail, quantify perception/readout loss. If both work,
 move to a separately admitted independent native task. Do not select another

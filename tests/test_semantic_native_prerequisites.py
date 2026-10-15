@@ -12,6 +12,39 @@ from scripts import evaluate_semantic_native_comparison as runner
 
 
 class PrerequisiteTest(unittest.TestCase):
+    def test_source_inventory_has_bounded_command_length_and_preserves_every_path(self):
+        names = [f"scripts/nested_{i:04d}/" + "long_path_" * 8 + ".py" for i in range(1000)]
+        names += [
+            "scripts/evaluate_semantic_native_comparison.py",
+            "scripts/semantic_native_comparison.py",
+            "configs/config.json", "pyproject.toml", "docs/protocol.md",
+        ]
+        with patch.object(
+            runner.subprocess, "check_output", return_value="\0".join(names) + "\0"
+        ) as call:
+            actual = runner.tracked_source_names(
+                Path("repo"), "configs/config.json", "docs/protocol.md"
+            )
+        self.assertEqual(set(actual), set(names))
+        self.assertLess(sum(len(str(x)) for x in call.call_args.args[0]), 512)
+        self.assertIn("-z", call.call_args.args[0])
+
+    def test_source_inventory_rejects_untracked_required_file(self):
+        names = [
+            "scripts/evaluate_semantic_native_comparison.py",
+            "scripts/semantic_native_comparison.py",
+            "configs/config.json", "pyproject.toml", "docs/protocol.md",
+        ]
+        for missing in names:
+            with patch.object(
+                runner.subprocess, "check_output",
+                return_value="\0".join(n for n in names if n != missing) + "\0",
+            ):
+                with self.assertRaisesRegex(ValueError, "tracked and frozen"):
+                    runner.tracked_source_names(
+                        Path("repo"), "configs/config.json", "docs/protocol.md"
+                    )
+
     def test_native_payload_coverage_required(self):
         with tempfile.TemporaryDirectory() as folder:
             with self.assertRaisesRegex(ValueError, "unpinned native input"):
