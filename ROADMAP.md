@@ -9,6 +9,16 @@ comparison before further fitting; quality precedes quantization. The <=200M,
 native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
 [Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
 
+**2026-10-15 TRAIN-side semantic teacher screen executed:** Existing pinned Gemma4
+BF16, no adapter/fitting/audit:1,152 prompts/64 TRAIN states, all40 binding and4/5
+numeric choices retained. Explicit/switch98.44%, exclusion81.25%, reversed
+exclusion42.97%, numeric54.69%; option-order agreement41.41%/51.95% fails both
+fixed gates. Fresh predeclared36-row replay is exact. Do not distill this interface;
+next separate semantic difficulty from option-label/position handling with a
+prospective mechanism test. No teacher/model ceiling, native quality or product
+admission; <=200M and four-modality95–98% remain open.
+[Full metrics, controls, resources and hashes](docs/pretrained_reuse/R2_SEMANTIC_TEACHER_RESULTS_20261015.md).
+
 **2026-10-15 retention-source coverage comparison executed:** One fixed512 fit,
 same binding instructions/model/budget/loss/selector; replay changes from2048original
 to1024original+1024curriculum. Curriculum Accuracy+1.46pp and NLL-.08939 versus

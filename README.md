@@ -9,6 +9,13 @@ reference. All resident <=200M and four-modality95–98% remain unmet.
 [Strategy and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md) ·
 [Fixed learning comparison and limits](docs/pretrained_reuse/R2_BINDING_LANGUAGE_RESULTS_20261015.md).
 
+**Teacher prerequisite measured:** Pinned Gemma4 BF16,1,152 TRAIN prompts/64states,
+no fitting: explicit/switch98.44%, exclusion81.25%, reversed exclusion42.97%,
+numeric54.69%. Both option-order gates fail;36 predeclared replay outputs are exact.
+Do not distill this fixed nonthinking label-logit interface. Separate condition
+meaning from option-label/position handling before another fit; this is not a model
+ceiling or product result. [Evidence and revised strategy](docs/pretrained_reuse/R2_SEMANTIC_TEACHER_RESULTS_20261015.md).
+
 **Replay coverage comparison completed:** At the same512-update budget, replacing
 half of original replay with curriculum improves curriculumNLL .4481→.3588,
 but originalECE breaches the unchanged retention limit. Observed focus+description
