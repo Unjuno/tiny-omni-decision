@@ -9,6 +9,15 @@ comparison before further fitting; quality precedes quantization. The <=200M,
 native four-modality, reusable-state/JSON and95–98% objectives remain unmet.
 [Evidence, architecture budget, next experiments and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md).
 
+**2026-10-15 fixed probability-retention comparison completed:** One seed-17
+512-update fit preserves narrow binding Accuracy at 100% and passes all unchanged
+old-task gates at step 512. Fresh selected scores and 12 payloads are exact.
+Curriculum NLL still worsens versus the parent and extremum Accuracy is close to
+the tolerance boundary. Freeze this research candidate; next measure independent
+conditional/native transfer without further tuning on the current selector.
+No transfer/audit evaluation or product promotion occurred.
+[All curves, cost, bootstrap and limits](docs/pretrained_reuse/R2_BINDING_RETENTION_KL_RESULTS_20261015.md).
+
 **2026-10-15 fixed conditional-binding fit completed:** One seed17/512-update
 mixed continuation raises narrow semantic validation31.74%→100%, but every
 trained checkpoint fails unchanged retention/calibration gates. Keep step0parent

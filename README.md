@@ -2,10 +2,12 @@
 
 **Current strategy:** reuse the existing encoders and prioritize conditional
 decision learning with retention, then grounded temporal/multimodal transfer.
-The fixed512-update semantic fit reaches100% on its narrow new task but fails
-old-task probability-quality gates; retain the parent, no product promotion.
+The fixed 512-update parent-probability retention comparison keeps 100% on its
+narrow semantic task and passes the unchanged retention gates at step 512.
+Fresh selected replay is exact. Preserve this research candidate; independent
+conditional/native transfer and full four-modality quality remain unverified.
 [Strategy and stop rules](docs/pretrained_reuse/STRATEGY_20261015.md) ·
-[Measured comparison](docs/pretrained_reuse/R2_CONDITION_BINDING_RESULTS_20261015.md).
+[Measured comparison and near-threshold trade-offs](docs/pretrained_reuse/R2_BINDING_RETENTION_KL_RESULTS_20261015.md).
 
 **2026-10-15 visual-state diagnosis completed:** A fixed training-derived visual
 state preserves every joint answer; the ordered joint GRU is nearly saturated.
