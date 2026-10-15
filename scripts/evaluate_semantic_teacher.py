@@ -50,6 +50,17 @@ def code_pins():
     return {str(Path(p).resolve()): sha(p) for p in CODE}
 
 
+def validate_reference(ref, config, code, model, inputs):
+    if (
+        ref.get("status") != "PASS_FULL_TRAIN_SCREEN"
+        or ref.get("config") != config
+        or ref.get("code_pins") != code
+        or ref.get("model_pins") != model
+        or ref.get("input_pins") != inputs
+    ):
+        raise ValueError("complete identical reference required")
+
+
 def encode(processor, row, config):
     rendered = processor.apply_chat_template(
         [{"role": "user", "content": input_text(row)}],
@@ -211,13 +222,15 @@ def main():
                 if args.reference is None:
                     raise ValueError("full reference required")
                 ref = read(args.reference / "result.json")
-                if ref["status"] != "PASS_FULL_TRAIN_SCREEN" or ref["config"] != config:
-                    raise ValueError("complete fixed reference required")
+                validate_reference(ref, config, pins, model_pins, result["input_pins"])
                 rp = {
                     str(args.reference / "predictions.json"): ref["artifacts"]["predictions.json"]
                 }
                 verify(rp)
                 result["input_pins"].update(rp)
+                result["input_pins"][str(args.reference / "result.json")] = sha(
+                    args.reference / "result.json"
+                )
                 expected = read(args.reference / "predictions.json")
             # Process-local reader choice; no installed dependency or legacy file edits.
             original_safe_open = modeling_utils.safe_open
@@ -308,6 +321,7 @@ def main():
                                     index=index,
                                     row_id=row["id"],
                                     elapsed_seconds=time.perf_counter() - tick,
+                                    prediction=item,
                                 )
                             )
                             + "\n"
@@ -381,6 +395,9 @@ def main():
         result.update(
             ended_utc=datetime.now(UTC).isoformat(), elapsed_seconds=time.perf_counter() - tick
         )
+        result["artifacts"] = {
+            p.name: sha(p) for p in args.output.iterdir() if p.is_file() and p.name != "result.json"
+        }
         write(args.output / "result.json", result)
         print(
             json.dumps({k: result.get(k) for k in ("status", "rows", "elapsed_seconds", "error")}),

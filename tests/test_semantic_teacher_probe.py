@@ -83,3 +83,21 @@ def test_uniform_and_perfect_metric_and_reversal_accounting():
     assert report["reversal"]["numeric"]["answer_agreement"] == 1
     with pytest.raises(ValueError):
         summarize_rows(rows, outputs[:-1])
+
+
+def test_replay_requires_same_complete_code_model_and_corpus():
+    from scripts.evaluate_semantic_teacher import validate_reference
+
+    ref = dict(
+        status="PASS_FULL_TRAIN_SCREEN",
+        config={"x": 1},
+        code_pins={"c": "1"},
+        model_pins={"m": "2"},
+        input_pins={"data": "3"},
+    )
+    args = [ref[k] for k in ("config", "code_pins", "model_pins", "input_pins")]
+    validate_reference(ref, *args)
+    for key in ref:
+        wrong = dict(ref, **{key: {"different": True}})
+        with pytest.raises(ValueError):
+            validate_reference(wrong, *args)
