@@ -76,8 +76,11 @@ def bind_caches(splits, audio, video, audio_plan, video_plan, *, phase):
                  for rows in splits.values() for row in rows if row['event_id'] in ids}
     if len(questions) != counts['questions']:
         raise ValueError('incomplete question binding')
-    return dict(events=bound[0], questions=questions,
-                query_keys=[q['key'] for q in queries], phase=phase)
+    result = dict(events=bound[0], questions=questions,
+                  query_keys=[q['key'] for q in queries], phase=phase)
+    if 'audio_admission' in audio:
+        result['audio_admission'] = dict(audio['audio_admission'])
+    return result
 
 
 def validate_positions(positions, pts, clock):
