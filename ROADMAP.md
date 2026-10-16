@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 full-extent comparison registered:** Keep the original control's
+sampling/model/long budget and replace only Image/Video center crop with one
+288px full-extent bilinear/black-pad policy. Geometry tests precede real CPU
+encoder smoke, exact original-feature parity, complete new caches and a separate
+training comparison. Object-scale/padding trade-offs and all modality declines
+remain visible; no geometry/seed search or sealed audit.
+[Frozen protocol](docs/pretrained_reuse/R2_NATIVE_FULL_EXTENT_PROTOCOL_20261016.md).
+
 **2026-10-16 positive-support comparison completed:** One fixed32,768-update run,
 exact best/final/parent replay and full sampler/LR/metric audit PASS. Non-speech
 balanced Accuracy50.00→54.11%, but selected macro NLL1.630→1.679 and Audio
