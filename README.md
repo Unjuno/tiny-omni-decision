@@ -1,5 +1,14 @@
 # Tiny Omni Decision
 
+**Matched-batch comparison completed (2026-10-16):** Both independent/matched
+arms finish1,024 updates on the identical8,192-occurrence pool, with exact full
+best/final and TRAIN-contrast replay. Matched macro Accuracy30.36%→31.61% does
+not improve macro NLL; consumed text both-correct2/442→1/442 and video0/16 in
+both. Video Accuracy gain has a scene interval spanning zero; STARSS remains
+all-no. Do not adopt or infer an encoder/memory ceiling. Next measure actual
+consumed-TRAIN task reachability before another optimization/architecture change.
+[All results, learning curves and limitations](docs/pretrained_reuse/R2_NATIVE_MATCHED_BATCH_RESULTS_20261016.md).
+
 **Native state dependence measured (2026-10-16):** Fixed TRAIN contrasts now
 compare identical questions/options across different inputs and correct answers.
 All1,250pairs reproduce exactly. The2048 endpoint answers both sides correctly

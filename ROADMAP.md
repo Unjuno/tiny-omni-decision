@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 matched-state batch comparison completed:** Both controls finish
+1,024 updates with identical sample multiplicities, candidate permutations,
+initialization and full validation. Best/final/contrast fresh replay is exact.
+Macro Accuracy improves30.36%→31.61%, but macro NLL does not; consumed text
+both-correct2/442→1/442 and video0/16 in both. Close this batching intervention
+without adoption, seed retry or automatic budget extension. Next measure task
+reachability on the actual consumed TRAIN rows, then choose one evidence-based
+readout/coverage change. Preserve all temporal/joint/OOD and95–98% gates;
+do not equate this failure with a capacity ceiling or expand xLSTM from it.
+[Complete measured comparison](docs/pretrained_reuse/R2_NATIVE_MATCHED_BATCH_RESULTS_20261016.md).
+
 **2026-10-16 fixed TRAIN state diagnostic completed:**1,250 exact-question/full-
 candidate pairs pass full fresh replay with frozen initial/2048 weights. Both-
 correct rates are0/442 consumed text pairs and1/16 consumed video pairs; image
