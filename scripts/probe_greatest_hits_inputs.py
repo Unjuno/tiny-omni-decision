@@ -122,7 +122,8 @@ def main():
                     stream = output.add_stream("png", rate=1)
                     stream.width, stream.height = contact.shape[1], contact.shape[0]
                     stream.pix_fmt = "rgb24"
-                    for packet in stream.encode(av.VideoFrame.from_ndarray(contact, format="rgb24")):
+                    png_frame = av.VideoFrame.from_ndarray(contact, format="rgb24")
+                    for packet in stream.encode(png_frame):
                         output.mux(packet)
                     for packet in stream.encode():
                         output.mux(packet)
