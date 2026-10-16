@@ -41,12 +41,12 @@ returns full candidate order and aligned target. `select_checkpoint(best, joint_
 retention, initial)` returns eligibility, selection and explicit failure reasons.
 Reuses the existing long LR schedule unchanged.
 
-- [ ] Write failing tests for determinism, exhausted buckets, exact8-item batches,
+- [x] Write failing tests for determinism, exhausted buckets, exact8-item batches,
   full coverage before repeats, invalid IDs/splits/options/targets, label-blind
   sampling, full option alignment and retention/selection/tie behavior.
-- [ ] Run `python -m pytest tests/test_greatest_hits_matched.py -q`; expect RED.
-- [ ] Implement those interfaces and rerun; expect all tests PASS.
-- [ ] Commit the tested sampler/selector and protocol.
+- [x] Run `python -m pytest tests/test_greatest_hits_matched.py -q`; expect RED.
+- [x] Implement those interfaces and rerun; expect all tests PASS.
+- [x] Commit the tested sampler/selector and protocol.
 
 ### Task 2: Real full-plan and warm-start evidence
 
@@ -59,7 +59,7 @@ Preflight consumes Task1's plan/selection contracts and exact pinned real TRAIN
 corpora/control/fixture receipts. It emits plan, prefix/class counts, common initial
 states, hashes and a terminal receipt; it refuses an existing output directory.
 
-- [ ] Write and run RED initialization tests for all five arms, baseline parity,
+- [x] Write and run RED initialization tests for all five arms, baseline parity,
   disabled policies, malformed/nonfinite control, nonzero correction and budget.
 - [ ] Implement initialization and preflight; run tests GREEN, full CPU suite,
   Ruff and existing manifest commands. Expected: no failures.
