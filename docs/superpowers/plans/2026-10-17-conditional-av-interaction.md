@@ -63,3 +63,7 @@ training without complementary synchronized data admission. Add no runner defaul
   commands PASS;994prior artifact hashes unchanged. No original baseline or
   trainer file changed. Publication/CI receipt is outside Git to avoid a recursive
   commit-hash dependency. Quality learning remains unexecuted and unadmitted.
+- CI1851 exposed an unnecessary optional-Torch import in metadata counting.
+  Reproduced in a subprocess with Torch blocked, separated metadata schema from
+  model construction, and added a runtime schema equality guard. RED/GREEN kept.
+  Final full verification2,193passed/1skipped, Ruff and25manifest commands PASS.

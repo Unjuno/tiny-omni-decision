@@ -1,3 +1,6 @@
+import subprocess
+import sys
+
 import pytest
 
 
@@ -28,3 +31,13 @@ def test_unsupported_metadata_rejected(value):
 
     with pytest.raises(ValueError):
         observation_counts(value)
+
+
+def test_metadata_import_does_not_require_torch():
+    result = subprocess.run([
+        sys.executable, "-c",
+        "import sys; sys.modules['torch'] = None; "
+        "from scripts.audit_native_av_interaction import observation_counts; "
+        "assert observation_counts({})['joint_training_admitted'] is False",
+    ], capture_output=True, text=True, check=False)
+    assert result.returncode == 0, result.stderr

@@ -110,11 +110,19 @@ cross-policy rejection, parameter budget and metadata fail-closed behavior.
 Random CPU fixtures establish mechanics only. No media, validation labels, sealed
 audit or GPU workload was loaded for this stage; optimizer updates0, cloud cost0.
 
-Final local verification: Ruff PASS; full CPU suite2,192 passed/1skipped; all25
+Final local verification: Ruff PASS; full CPU suite2,193 passed/1skipped; all25
 manifest validation commands PASS. Rehashing994 previously pinned artifact files
 found0changes. The original user worktree's three preexisting changes remain
 untouched. Baseline/trainer source diffs against673932c are empty. Publication CI
 is checked against the pushed commit and recorded separately in local verification.
+
+CI1851 initially found4metadata-test failures because importing the metadata helper
+also imported optional PyTorch; the local ML environment concealed that dependency.
+Moved the model import into the parameter-audit entry point and kept the metadata
+schema independent, with a runtime schema-equality check. A fresh subprocess with
+PyTorch explicitly unavailable reproduced RED and now passes GREEN. The model,
+numerical logic and original audit receipt are unchanged. Failed CI/logs remain
+recorded; no CI dependency or test was removed to hide the failure.
 
 Local immutable artifacts:
 

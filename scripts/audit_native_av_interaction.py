@@ -11,7 +11,9 @@ from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 
-from tiny_omni_decision.native_candidate import WIDTHS
+# Metadata admission stays usable without optional ML dependencies. The full
+# parameter audit checks this schema against the instantiated readout below.
+KINDS = frozenset({"text", "image", "video", "speech", "event_audio"})
 
 
 def observation_counts(observations):
@@ -21,7 +23,7 @@ def observation_counts(observations):
         split = item.get("split")
         features = item.get("features", [])
         kinds = {f.get("kind") for f in features}
-        if split not in result or not kinds or not kinds.issubset(WIDTHS):
+        if split not in result or not kinds or not kinds.issubset(KINDS):
             raise ValueError("only known train/validation observation metadata permitted")
         row = result[split]
         row["observations"] += 1
@@ -55,7 +57,10 @@ def main():
     import torch
 
     from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
+    from tiny_omni_decision.native_candidate import WIDTHS
 
+    if KINDS != set(WIDTHS):
+        raise ValueError("metadata/readout kind schema differs")
     args.output.mkdir(parents=True, exist_ok=False)
     counts = observation_counts(json.loads(args.observations.read_text(encoding="utf-8")))
     ledgers = {}
