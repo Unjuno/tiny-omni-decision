@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**Temporal memory candidate (2026-10-16):** A separate LSTM residual path now
+preserves native video spatial tokens and speech timelines. Total197,291,290
+parameters; actual GPU plumbing and fresh-process replay pass. Task quality is
+unmeasured; xLSTM remains a possible subsequent comparison.
+[Measured costs and limits](docs/pretrained_reuse/R2_TEMPORAL_STATE_RESULTS_20261016.md).
+
 **Full input features completed (2026-10-16):** All4,382 language states,
 22,328 query pairs and7,410 audio examples now have frozen features. Independent
 full recomputation matches every saved value exactly;1,135 source/input pins pass.

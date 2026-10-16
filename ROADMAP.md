@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 temporal state extension:** User-authorized architecture flexibility
+adds an optional LSTM residual candidate at197.291M total parameters. Native
+feature/GPU/gradient/replay checks pass; the existing baseline is preserved.
+This is not a task fit or quality result. Complete common supervision first,
+then compare under fixed data/selection/retention rules. xLSTM remains untested.
+[Actual execution and comparison policy](docs/pretrained_reuse/R2_TEMPORAL_STATE_RESULTS_20261016.md).
+
 **2026-10-16 complete language/audio extraction:** All4,382 states/22,328 pairs
 and7,410 native audio examples are persisted and pass full independent feature
 recomputation with zero difference. Both audio paths are present for each example;
