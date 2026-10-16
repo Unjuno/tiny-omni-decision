@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 joint-source decode/tasks/input completed:** All409 development media
+decode,17,932 windows pass, and23,707 TRAIN /8,875 validation questions rebuild
+exactly. Three fixed TRAIN events produce18 exactly replayed input payloads:
+native96kHz, independent16/32kHz paths, eight real RGB frames and actual PTS.
+Exact cross-split raw/audio/video hashes are disjoint; physical offset, near
+duplicates and cross-date actor/site identity remain unresolved. No encoder load,
+gate fit, quality claim or product promotion. Next freeze and execute the same
+three-event frozen-encoder smoke, then resolve complementary-task/intervention
+admission before matched gate learning. The separate long unique-coverage question
+remains unexecuted. [Actual results and limits](docs/pretrained_reuse/R2_GREATEST_HITS_DEVELOPMENT_RESULTS_20261017.md).
+
 **2026-10-17 complete joint-source inventory/acquisition:** All733 official TRAIN
 annotation files parsed. The prospective date partition remains308 TRAIN /101
 development validation /324 quarantine. Native17/2/5-way fields support23,707 /
