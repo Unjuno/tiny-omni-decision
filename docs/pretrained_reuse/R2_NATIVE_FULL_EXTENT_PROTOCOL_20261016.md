@@ -79,3 +79,30 @@ Use paired image/scene-cluster bootstrap5000,seed17,linear percentile95% for vis
 Accuracy/NLL/Brier differences; acknowledge development/selection bias. If it fails,
 preserve the result and do not tune geometry against validation. The full Omni
 quality, joint/temporal/OOD, calibration and deployment goal remains unchanged.
+
+## Encoder completion and fixed readout execution
+
+Encoder source4ca45b517328d77f2be644c625920f8cdd22624f completed smoke02 and
+full cache01. Original crop features and repeat/smoke-full arrays match exactly.
+All8936 images and456 videos completed in1595.079s, peak process4914466816bytes;
+new arrays3335636224bytes. Cache receipt SHA256:
+`d61a11cc2b0810c48b17f9495c61059b89fb3ad7670d186b1fc5b553ce623a4f`.
+No quality evaluation was performed in encoder extraction.
+
+`configs/pretrained_reuse/native_full_extent_fit_v1.json` pins that receipt and
+the completed original long control. The separate `train_native_full_extent`
+runner keeps the original optimizer loop and enforces exact sampler/probe/LR/
+validation-ID hashes plus initial nonvisual prediction parity. Feature integrity
+checks include validation arrays in all phases; readout smoke only scores TRAIN.
+
+Use distinct readout output paths to preserve both encoder smoke attempts:
+
+```powershell
+python -u -m scripts.train_native_full_extent --phase smoke --policy repeat --output C:/CodexArtifacts/pretrained-reuse-r2/native-full-extent-readout-smoke-01
+python -u -m scripts.train_native_full_extent --phase train --policy repeat --output C:/CodexArtifacts/pretrained-reuse-r2/native-full-extent-fit-01 --reference C:/CodexArtifacts/pretrained-reuse-r2/native-full-extent-readout-smoke-01 --reference-sha256 <actual-completed-smoke-SHA>
+python -u -m scripts.train_native_full_extent --phase replay --policy repeat --output C:/CodexArtifacts/pretrained-reuse-r2/native-full-extent-replay-01 --reference C:/CodexArtifacts/pretrained-reuse-r2/native-full-extent-fit-01 --reference-sha256 <actual-completed-fit-SHA>
+```
+
+Use the existing Python3.11/Torch2.6+cu124 readout environment; smoke/main/replay
+are separate processes. These commands are a fixed procedure, not evidence of
+execution. Actual commands/statuses/hashes will be recorded in their receipts.
