@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 complete language/audio extraction:** All4,382 states/22,328 pairs
+and7,410 native audio examples are persisted and pass full independent feature
+recomputation with zero difference. Both audio paths are present for each example;
+all1,135 distinct source/input pins pass. The prior disk-blocked output is preserved.
+Next bind image/audio/video query features and freeze one shared fit contract,
+then train the current readout. Zero optimizer updates here; R2 remains open.
+[Actual execution and remaining coverage](docs/pretrained_reuse/R2_NATIVE_FULL_FEATURES_RESULTS_20261016.md).
+
 **2026-10-16 strategy refresh, 14:35 JST:** Keep the 196.25M candidate and focus
 the next work on common inputs/run contract, one shared-readout baseline fit,
 then one evidence-directed repair. The readout still has zero updates. C: free

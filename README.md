@@ -1,9 +1,11 @@
 # Tiny Omni Decision
 
-**Input execution (2026-10-16):** Long-text and common speech/event preprocessing
-pass real-model smokes; all6 audio arrays reproduce exactly in a fresh process.
-Full language caching remains incomplete at the fixed disk-capacity gate; common
-readout training has not started. [Results and restart conditions](docs/pretrained_reuse/R2_NATIVE_LANGUAGE_AUDIO_RESULTS_20261016.md).
+**Full input features completed (2026-10-16):** All4,382 language states,
+22,328 query pairs and7,410 audio examples now have frozen features. Independent
+full recomputation matches every saved value exactly;1,135 source/input pins pass.
+Next align other modalities' query features and freeze the common fit contract.
+The shared readout remains untrained; no quality claim.
+[Execution, hashes and remaining gaps](docs/pretrained_reuse/R2_NATIVE_FULL_FEATURES_RESULTS_20261016.md).
 
 **Common training preparation (2026-10-16):** All456 existing development video
 scenes now have persistent8-frame full tokens, exactly matching historical hashes.
