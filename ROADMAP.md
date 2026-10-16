@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 positive-support comparison completed:** One fixed32,768-update run,
+exact best/final/parent replay and full sampler/LR/metric audit PASS. Non-speech
+balanced Accuracy50.00→54.11%, but selected macro NLL1.630→1.679 and Audio
+61.27→45.06% fail the predefined retention rule. Preserve the failed policy;
+do not adopt or search its ratios/seeds. Next isolate full-field-of-view resize/pad
+against the original control, with new feature/output paths and unchanged IDs,
+model/budget/selector. Object-scale and padding trade-offs must be measured.
+This result does not establish a model-capacity ceiling or complete the product goal.
+[Measured results](docs/pretrained_reuse/R2_NATIVE_SUPPORT_RESULTS_20261016.md).
+
 **2026-10-16 positive-support experiment fixed:** Compare one TRAIN-only STARSS
 support-floor policy against the completed32,768-update control. Replace292
 negative questions with unused positives, retaining every existing positive and
