@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "experiment": "greatest-hits-audio-revalidation-20261017",
+  "execution_source_commit": "933e5dc84cbf125b3a2965f4250fdd0de5ad3ef5",
+  "audit_receipt_sha256": "1ab6ad21ef9e838ef2c3df3b6d3d0848c46ac1163604942a6839c83262487048",
+  "audit_script_sha256": "b3cc2419d1c04bb33681dd0daad5b44252b89cf8c81ae27cfcee10ea6028c753",
+  "artifact_ledger_sha256": "e4b69c7affd72e5b1ef64ee267aff4268b233169fb4870d2180be75b3413d6fb",
+  "status": "PASS_FULL_AUDIO_REVALIDATION_PUBLICATION_AUDIT",
+  "completed_utc": "2026-10-16T19:28:58.867273+00:00",
+  "source_sha256": "b3cc2419d1c04bb33681dd0daad5b44252b89cf8c81ae27cfcee10ea6028c753",
+  "preserved_previous_files": 8824,
+  "verified_new_files": 825,
+  "producer_status": "INCOMPLETE",
+  "producer_exit_code": 1,
+  "producer_receipt_sha256": "74a12e2d2779751eed6867b3fd0186e6ad14d9ea44a527a2d9b0ceee41a1c10d",
+  "revalidation_status": "PASS_FULL_AUDIO_CACHE_REVALIDATION",
+  "revalidation_receipt_sha256": "4b273e75298e640b79cbe5de0e234f1d1b6f54e45965af692cba86471b95f4cb",
+  "producer_seconds": 1576.369779200002,
+  "producer_audio_forward_seconds": 1010.1278359019198,
+  "producer_audio_decode_seconds": 47.45549539971398,
+  "producer_peak_vram_bytes": 485888000,
+  "producer_peak_working_set_bytes": 1971634176,
+  "revalidation_seconds": 241.61508389998926,
+  "revalidation_peak_working_set_bytes": 331710464,
+  "events": 11151,
+  "parents": 409,
+  "questions": 32582,
+  "input_replay_matches": 11151,
+  "feature_digest_matches": 22302,
+  "corrected_reference_matches": 2,
+  "excluded_reference": [
+    [
+      "2015-03-30-00-26-27",
+      1
+    ]
+  ],
+  "optimizer_updates": 0,
+  "quality_evaluated": false,
+  "product_goal_complete": false,
+  "audio_cache": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-audio-query-cache-01",
+  "revalidation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-audio-cache-revalidation-01",
+  "training_admitted": false,
+  "pending": "Full video completion/audit and explicit revalidation admission",
+  "verification": {
+    "ruff": "PASS",
+    "cpu_tests": "2297 passed, 1 skipped",
+    "manifest_commands": 25
+  },
+  "ci_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-audio-full-verification-01\\ci.json"
+}

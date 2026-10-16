@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 full audio cache independently revalidated:** The producer saved all
+11,151 events but exited1 at an erroneous three-reference count: the third old
+probe has all missing labels and no frozen task row. Fix future expected counts
+using exact event/reference intersection. Preserve the failed receipt; independently
+redecode409 videos and verify all inputs,22,302 feature digests,823 producer files
+and frozen state. New revalidation passes without rerunning encoders or changing
+data. Video remains live; training awaits full video and explicit admission of
+the separately pinned revalidation. No quality or original-run-success claim.
+[Failure and independent evidence](docs/pretrained_reuse/R2_GREATEST_HITS_AUDIO_REVALIDATION_RESULTS_20261017.md).
+
 **2026-10-17 explicit AV transport executed:** Complete-cache admission and saved
 physical-position transport now have18 new tests. Real21 TRAIN events /63 questions
 pass C0 plus four residual arms in joint/audio/video views,945 outputs per process.
