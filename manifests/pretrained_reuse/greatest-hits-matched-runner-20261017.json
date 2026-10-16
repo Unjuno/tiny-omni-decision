@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "experiment": "greatest-hits-matched-runner-20261017",
+  "status": "CPU_VERIFIED_FULL_COMPARISON_PENDING",
+  "implementation_commit": "07e958c63af85de371921d925ee931f014133e2f",
+  "cpu_tests_passed": 2376,
+  "cpu_tests_skipped": 1,
+  "ruff": "PASS",
+  "manifest_commands_passed": 25,
+  "rehearsal_audit": {
+    "status": "PASS_MATCHED_REHEARSAL_BANK_AUDIT",
+    "banks": 466,
+    "tensor_bytes": 6223056384,
+    "train_rows": 100580,
+    "validation_rows": 24346,
+    "seconds": 32.479028200003086,
+    "result_sha256": "5b7aa5bc3d64e04d72746d0123386c7b5fce9b77ebd440e1bb55cd7bcbc98f3c",
+    "script_sha256": "b58aeda1ad4eabc9c1044e17c0a6c0e6b8968ec6f6df95bdefd66424ca24b05a"
+  },
+  "full_av_input_audit_executed": false,
+  "full_path_gpu_smoke_executed": false,
+  "matched_training_executed": false,
+  "new_quality_result": false,
+  "sealed_audit_loaded": false,
+  "calibration_loaded": false,
+  "cloud_cost": 0,
+  "product_promoted": false
+}
