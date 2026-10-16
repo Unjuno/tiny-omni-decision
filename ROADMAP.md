@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 fixed TRAIN source review completed:** Decode and inspect one fixed
+event from each of 21 TRAIN dates (315 frames, 84 payloads). Preserve all labels,
+including ambiguous material/reaction and edge-contact cases. Admit only scoped
+native material/action/reaction development; silent-video-derived labels do not
+certify both-required truth, precise physical sync or unseen-actor/site quality.
+Next execute full-extent encoder/replay on these same events before common caching
+and matched Attention/exchange/gate learning. All compared arms must share the new
+geometry; valid counterfactual labels and product admission gates remain open.
+No fit, quality claim, audit access or product promotion in this review.
+[Evidence and task disposition](docs/pretrained_reuse/R2_GREATEST_HITS_SOURCE_REVIEW_RESULTS_20261017.md).
+
 **2026-10-17 joint-source encoder probe completed:** Three fixed TRAIN event
 windows pass frozen Whisper/EfficientAT/VideoPrism forwards and21-payload exact
 fresh-process replay. Weights and prior artifacts are unchanged; measured audio
