@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 conditional AV interaction:** Add an opt-in residual with parallel
+audio/video exchange and query/candidate-conditioned independent gates; preserve
+the current Attention baseline and all trainer defaults. Four gate/exchange
+ablations have CPU contract coverage. Instantiated reference total197,097,949
+parameters fits200M. Frozen metadata confirms0joint AV observations in both TRAIN
+and validation, so no joint learning or quality improvement is claimed. First
+admit synchronized, complementary paired tasks with valid swap/missing/conflict
+labels; then compare on a fixed learning protocol. The long unique-coverage
+question remains separate and unexecuted. No audit or product promotion.
+[Implementation, exact counts and limits](docs/pretrained_reuse/R2_CONDITIONAL_AV_INTERACTION_20261017.md).
+
 **2026-10-17 full-extent comparison completed:** All8936 Image/456 Video caches,
 32768 updates, exact best/final replay and saved-prediction audit PASS. Selected
 Image/Video Accuracy improves, but Audio falls3.096pp and macro NLL1.630→1.674;

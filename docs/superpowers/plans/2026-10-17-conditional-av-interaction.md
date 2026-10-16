@@ -51,3 +51,15 @@ training without complementary synchronized data admission. Add no runner defaul
   no repeated permission request. Real joint learning remains data-gated.
 - Ruling: keep the first stage local and mechanical; no new quality experiment is
   configured or scheduled on the unsuitable single-modality corpus.
+- Tasks1/2: missing-module RED preserved; model/baseline/metadata tests GREEN36.
+  Parallel exchange inputs, independent gate extremes and same-seed arm tensors
+  checked. Implementation committed as e31cb35.
+- Task3: CPU metadata audit PASS on e31cb35; total197,097,949 parameters. TRAIN
+  17,341observations and validation3,843 have0AV observations. No learning admitted.
+- Review ruling: `active_joint_parameters` counts policy-enabled allocation, not
+  per-example nonzero gradients. Clarified in the report. Scalar shared correction
+  bias cancels in option softmax; do not require a nonzero CE gradient for it.
+- Task4 local verification: Ruff PASS,2,192CPU tests passed/1skipped,25manifest
+  commands PASS;994prior artifact hashes unchanged. No original baseline or
+  trainer file changed. Publication/CI receipt is outside Git to avoid a recursive
+  commit-hash dependency. Quality learning remains unexecuted and unadmitted.
