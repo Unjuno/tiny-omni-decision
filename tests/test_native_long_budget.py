@@ -58,3 +58,19 @@ def test_invalid_plan_fails_closed(case):
         batches = []
     with pytest.raises(ValueError):
         extend_plan(pool, batches, steps)
+
+
+def test_long_curve_bootstrap_nll_stays_finite_for_confident_wrong_answers():
+    import numpy as np
+
+    from scripts.analyze_native_long_budget import per_example
+    from scripts.semantic_state_diagnostic import metrics
+
+    scores = np.full((2, 40), -1e30, dtype=np.float32)
+    scores[0, :2], scores[1, :2] = [0, -1000], [2, 1]
+    target = np.array([1, 0])
+    values = per_example([dict(target_index=int(t)) for t in target], scores)
+    expected = metrics(scores, target)
+    for name, vector in values.items():
+        assert np.isfinite(vector).all()
+        assert float(vector.mean()) == pytest.approx(expected[name], abs=1e-12)

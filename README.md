@@ -1,5 +1,16 @@
 # Tiny Omni Decision
 
+**2026-10-16 long learning curve completed:** One fixed native attention run
+finishes 32,768 updates, followed by exact full best/final replay. Within-run
+2,048→32,768 macro Accuracy improves 32.83→45.70%, while NLL worsens 1.740→4.848;
+validation NLL selects 8,192. Video TRAIN reaches 100%, but validation 37.25% and
+temporal 33.5% show no clear late generalization. Short runs did miss continued
+Accuracy gains; this does not demonstrate grokking or a capacity ceiling. Preserve
+best/final and all history. Next isolate regularization under a fixed long budget
+before combining data/architecture changes. No additional run, audit or promotion.
+[All learning curves and limits](docs/pretrained_reuse/R2_NATIVE_LONG_BUDGET_RESULTS_20261016.md).
+
+
 **Unique-coverage control completed (2026-10-16):** Both fresh-initialized arms
 finish2,048 updates with exact best/final/complete TRAIN replay. Replacing repeats
 with6,144 unused nonVideo TRAIN questions improves Image29.05→31.54% and
