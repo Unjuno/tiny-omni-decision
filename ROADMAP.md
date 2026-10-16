@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 complete joint-source inventory/acquisition:** All733 official TRAIN
+annotation files parsed. The prospective date partition remains308 TRAIN /101
+development validation /324 quarantine. Native17/2/5-way fields support23,707 /
+8,875 prospective questions, with no unseen validation class but marked label-mix
+shift. All409 development AV files acquired/CRC checked (643MB). Complete CPU
+decode is running; task construction and neural training are not claimed complete.
+Observe the existing process, then inspect all window/content gates before building
+the frozen task corpus. [Evidence and live-stage handles](docs/pretrained_reuse/R2_GREATEST_HITS_DEVELOPMENT_INVENTORY_20261017.md).
+
 **2026-10-17 joint-source physical probe:** Greatest Hits official TRAIN labels
 and one real AV clip were acquired with bounded version-checked ranges; full CPU
 decode passed.98 annotation rows include54 complete/37 wholly missing/7 partial
