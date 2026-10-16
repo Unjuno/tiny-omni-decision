@@ -1,0 +1,54 @@
+{
+  "id": "native-fixed-pool-long-budget-v1",
+  "corpus": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "queries": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01",
+  "initial_readout": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\initial.pt",
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01\\result.json": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\readout.pt": "77a45ce55b5b17eb787ca649d2affbd6a8c72118f8953967eab41a02c2b2646b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\initial.pt": "3ce7f72450e16946b1fb113c3fa8793f1d6a59f2b6221564cff7b30feebfba1c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\sampling.json": "b2647f3a1783fe5909ab4864281522314b694ef9a33851a35cc11b6beabe41fb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\repeat-pool.json": "1d62b014b1a029a2f447ca1a46763cd8e1c05e207b3528ef7ffb7250a60b8d1f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\repeat-plan.json": "ff1508ea5c0db4b35014c74149008e855a0977985b92d40db75dd7f5f41d26dd",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\fresh-pool.json": "a9b8bb1ce7019d0cd392333a7b855fddf5c1ad286802a9702af92ec81f027f16",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\fresh-plan.json": "39b2e82d19df585c1548251850ad8a7050a52e4d4d811a0306f20f6acc9299c0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\parent-state-pairs.json": "93297e34af6ced5bdd4ca35417caefa36c71de5af24e3a7f36908abf416ee86f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\union-train-ids.json": "e20a55e41d5cd03753782e053e3925f4d9c89ba32efb980c2a94ee8cfc315da7"
+  },
+  "training": {
+    "seed": 17,
+    "max_steps": 32768,
+    "microbatches_per_update": 8,
+    "lr": 0.001,
+    "warmup_updates": 62,
+    "scheduler": "cosine",
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "evaluation_steps": [
+      0,
+      512,
+      1024,
+      2048,
+      4096,
+      8192,
+      12288,
+      16384,
+      24576,
+      32768
+    ],
+    "performance_early_stopping": false
+  },
+  "parent_sampling": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\sampling.json",
+  "pools": {
+    "repeat": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\repeat-pool.json"
+  },
+  "plans": {
+    "repeat": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\repeat-plan.json"
+  },
+  "state_plan": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\parent-state-pairs.json",
+  "union_probe": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-plan-02\\union-train-ids.json",
+  "interpretation": "New initialization, fresh optimizer, fixed repeat pool, 16 exact occurrence-plan cycles. Cosine horizon changes LR after warmup; historical2048 is not a steps-only causal control. Main contrast within this run2048 versus32768, auxiliary8192/16384/24576. No claim of grokking without a measured train-fit-then-validation sequence.",
+  "training_probe_scope": "All6656 unique consumed TRAIN questions, fixed before training; full validation24346 unchanged."
+}

@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 longer-training correction:** The user notes possible delayed
+learning/grokking. Both coverage best checkpoints are at the final2,048 updates;
+TRAIN is still weak. Prioritize one fixed32,768-update attention curve before
+architectural changes. Preserve the same repeat pool, seed and model; freeze a
+new full-horizon cosine schedule and evaluate complete consumed TRAIN and full
+validation. No performance early stop or claim of a capacity ceiling. This new
+prospective experiment supersedes the next-gradient-audit priority below.
+[Fixed protocol](docs/pretrained_reuse/R2_NATIVE_LONG_BUDGET_PROTOCOL_20261016.md).
+
+
 **2026-10-16 matched-budget unique coverage completed:** Both arms finish2,048
 updates and exact full replay. Fresh nonVideo questions improve Image/Audio but
 reduce Video37.50→32.75% (paired scene95% interval for difference−8.5 to−1.0pp).
