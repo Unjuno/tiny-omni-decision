@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-10-16 データ／学習パイプライン監査完了:** 消費した音声イベント5種類は正例0。
+うち4種類は元TRAINの正例をsamplerが未使用だった。画像は中央75%、動画は中央66.67%の
+視野だけを保持し、動画128→8フレームの最大間隔は0.76秒。全件の入力対応・特徴transport・
+独立ラベル計算・実入力の蓄積勾配・保存評価集計では取り違えを確認しなかった。
+次は正例被覆と視野保持を別々に検証し、その後に時間処理・regularizationへ進む。
+既存runは固定。追加学習0、sealed audit未使用、製品目標未達。
+[監査結果と次の順序](docs/pretrained_reuse/R2_NATIVE_PIPELINE_AUDIT_RESULTS_20261016.md)。
+
 **2026-10-16 long learning curve completed:** One fixed native attention run
 finishes 32,768 updates, followed by exact full best/final replay. Within-run
 2,048→32,768 macro Accuracy improves 32.83→45.70%, while NLL worsens 1.740→4.848;
