@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import math
 import re
 import struct
 import subprocess
@@ -10,6 +11,23 @@ import zlib
 
 ID = re.compile(r"[0-9]{4}(?:-[0-9]+){5,6}")
 MEMBER_LIMIT = 32 * 2**20
+
+
+def parse_times(payload):
+    """Keep the three released categorical fields, including explicit missingness."""
+    rows = []
+    for line in payload.decode("ascii").splitlines():
+        parts = line.split()
+        if len(parts) != 4:
+            raise ValueError("expected timestamp plus three raw label fields")
+        seconds = float(parts[0])
+        if (not math.isfinite(seconds) or seconds < 0
+                or (rows and seconds <= rows[-1]["seconds"])):
+            raise ValueError("finite, nonnegative, strictly increasing timestamps required")
+        rows.append(dict(seconds=seconds, fields=[None if s == "None" else s for s in parts[1:]]))
+    if not rows:
+        raise ValueError("empty annotation member")
+    return rows
 
 
 def parse_ids(payload):

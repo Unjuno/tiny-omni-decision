@@ -66,3 +66,23 @@ def test_train_selection_is_order_invariant_and_rejects_test_overlap():
             select_train(tr, te, parents)
     with pytest.raises(ValueError):
         parse_ids(b"../../escape\n")
+
+
+def test_times_preserves_unknown_labels_and_partial_annotations():
+    from scripts.greatest_hits_source import parse_times
+
+    rows = parse_times(b"1.2 leaf scratch scatter\n2.3 None hit None\n")
+    assert rows == [dict(seconds=1.2, fields=["leaf", "scratch", "scatter"]),
+                    dict(seconds=2.3, fields=[None, "hit", None])]
+    # Do not reject or map an as-yet-unreviewed category into a negative class.
+    assert parse_times(b"0.1 unreviewed unreviewed unreviewed\n")[0]["fields"][0] == "unreviewed"
+
+
+@pytest.mark.parametrize("payload", [b"", b"nan leaf hit static\n", b"-1 leaf hit static\n",
+                                    b"1 leaf hit\n", b"2 leaf hit static\n1 leaf hit static\n",
+                                    b"1 leaf hit static\n1 leaf hit static\n"])
+def test_times_rejects_bad_schema_and_timestamps(payload):
+    from scripts.greatest_hits_source import parse_times
+
+    with pytest.raises(ValueError):
+        parse_times(payload)
