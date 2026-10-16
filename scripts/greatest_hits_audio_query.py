@@ -6,6 +6,13 @@ from scripts.greatest_hits_cache import frozen_events
 from scripts.native_language_cache import pair_key
 
 
+def expected_reference_matches(events, reference_keys):
+    keys = [(e['parent'], e['source_line']) for e in events]
+    if len(keys) != len(set(keys)):
+        raise ValueError('selected cache events must be unique')
+    return len(set(keys).intersection(reference_keys))
+
+
 def query_inventory(splits):
     frozen_events(splits)
     pairs = {}

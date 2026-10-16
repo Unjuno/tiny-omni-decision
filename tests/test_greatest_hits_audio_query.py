@@ -79,3 +79,23 @@ def test_bad_audio_bank_write_fails_before_any_mutation(case):
     with pytest.raises(ValueError):
         store_audio_event(banks, index, values)
     assert all(np.isnan(x).all() for x in banks.values())
+
+
+@pytest.mark.parametrize('lines, expected', [([2,3], 0), ([1,2,3], 1), ([1], 1)])
+def test_reference_match_count_uses_frozen_event_intersection(lines, expected):
+    from scripts.greatest_hits_audio_query import expected_reference_matches
+
+    events = [dict(parent='same-parent', source_line=line) for line in lines]
+    references = {('same-parent',1), ('other-parent',1), ('third-parent',1)}
+    assert expected_reference_matches(events, references) == expected
+    # The original three-event probe may contain an event with no usable labels.
+    # Such a reference must not force that event into the frozen task corpus.
+    assert len(references) == 3
+
+
+def test_reference_count_rejects_duplicate_selected_events():
+    from scripts.greatest_hits_audio_query import expected_reference_matches
+
+    event = dict(parent='same-parent', source_line=1)
+    with pytest.raises(ValueError):
+        expected_reference_matches([event,event], {('same-parent',1)})

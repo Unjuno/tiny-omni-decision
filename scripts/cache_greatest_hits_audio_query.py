@@ -25,7 +25,12 @@ os.environ['TRANSFORMERS_OFFLINE'] = '1'
 import numpy as np
 import psutil
 
-from scripts.greatest_hits_audio_query import audio_positions, query_inventory, store_audio_event
+from scripts.greatest_hits_audio_query import (
+    audio_positions,
+    expected_reference_matches,
+    query_inventory,
+    store_audio_event,
+)
 from scripts.greatest_hits_cache import frozen_events
 from scripts.greatest_hits_features import prepared_audio_tokens
 from scripts.greatest_hits_inputs import crop_audio, resample_direct
@@ -204,6 +209,7 @@ def main():
         result.update(expected_events=len(events), expected_queries=len(queries),
             expected_parents=len({e['parent'] for e in events}),
             expected_questions=sum(e['questions'] for e in events),
+            expected_old_audio_matches=expected_reference_matches(events, old_events),
             speech_revision=ac['speech_revision'], event_revision=ac['event_revision'],
             language_revision=lc['model_revision'])
         import av
@@ -375,7 +381,7 @@ def main():
                 or result['completed_questions'] != result['expected_questions']
                 or result['completed_parents'] != result['expected_parents']
                 or result['matched_review_events'] != 21
-                or result['matched_old_audio_events'] != (2 if args.phase == 'smoke' else 3)
+                or result['matched_old_audio_events'] != result['expected_old_audio_matches']
                 or smoke and result['matched_smoke_events'] != 21):
             raise ValueError('incomplete coverage or encoder state changed')
         if reference:
