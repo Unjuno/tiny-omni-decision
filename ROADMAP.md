@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 native candidate integration measured:** The same original-pretrained
+composition accepts native text/image/audio/video and supplied conditions/options,
+with **196,254,874 actual parameters before quantization**. All 21 arrays and eight
+JSON decisions reproduce exactly in a fresh process. Its new 889,345-parameter
+readout has zero training updates; quality, text-free task mode, joint/temporal/OOD,
+calibration and packaged deployment remain open. This closes the functional
+integration unit, not R2. Next freeze native data/task/retention gates and learn
+this readout before considering a further architecture change or compression.
+[Measured inputs, resources and hashes](docs/pretrained_reuse/R2_NATIVE_CONDITIONAL_CANDIDATE_20261016.md) ·
+[Current strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261016.md).
+
 **2026-10-16 matched supervision comparison:** Both1024-update fits complete,
 with exact reload and all original source/input pins unchanged. Both endpoints
 reach100% on new16 validation slices; no trained checkpoint retains all47

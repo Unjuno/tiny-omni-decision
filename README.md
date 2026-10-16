@@ -1,5 +1,15 @@
 # Tiny Omni Decision
 
+**Native candidate actually integrated (2026-10-16):** One original-pretrained
+encoder composition totals **196,254,874 parameters before quantization** and
+produces JSON from native text/image/audio/video. Fresh-process replay matches
+all 21 arrays and eight JSON outputs exactly. The new 889,345-parameter readout
+is **untrained**: no task accuracy, calibration or release claim. Next freeze
+common native supervision/evaluation and train the readout with retention;
+all required-task 95–98%, joint/temporal/OOD and package gates remain open.
+[Measured integration and limits](docs/pretrained_reuse/R2_NATIVE_CONDITIONAL_CANDIDATE_20261016.md) ·
+[Current strategy](docs/pretrained_reuse/NEXT_STRATEGY_20261016.md).
+
 **Matched condition-relevance fits completed (2026-10-16):** Both arms finish
 1,024 updates with 18,432 unique questions and exact selected reload. New16-slice
 minimum Accuracy is100% in both, but all trained checkpoints fail47-slice
