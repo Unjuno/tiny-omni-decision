@@ -1,5 +1,14 @@
 # Tiny Omni Decision
 
+**Unique-coverage control completed (2026-10-16):** Both fresh-initialized arms
+finish2,048 updates with exact best/final/complete TRAIN replay. Replacing repeats
+with6,144 unused nonVideo TRAIN questions improves Image29.05→31.54% and
+Audio53.03→54.92%, but Video37.50→32.75% fails retention. Do not adopt; preserve
+both results. Video exposure is identical, so next diagnose shared-readout
+optimization on fixed TRAIN before choosing a small branch or optimizer change.
+No capacity ceiling, xLSTM gain, product promotion or95–98% claim.
+[Full comparison, curves and uncertainty](docs/pretrained_reuse/R2_NATIVE_COVERAGE_RESULTS_20261016.md).
+
 **Actual consumed TRAIN measured (2026-10-16):** All6,656 distinct consumed
 questions and all five initial/fixed-endpoint arrays reproduce exactly. The
 attention baseline reaches only25.87% Text,21.92% Image and42.19% Video on TRAIN.

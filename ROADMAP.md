@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 matched-budget unique coverage completed:** Both arms finish2,048
+updates and exact full replay. Fresh nonVideo questions improve Image/Audio but
+reduce Video37.50→32.75% (paired scene95% interval for difference−8.5 to−1.0pp).
+Macro NLL improves, macro Accuracy does not; the predefined retention rule fails.
+Keep both artifacts without adoption or a clean-plateau/capacity-ceiling claim.
+Next use a fixed TRAIN-only gradient audit to distinguish shared-head conflict
+and clipping from other optimization limits before a bounded readout change.
+No automatic extra seed/budget, recurrence expansion, audit or product promotion.
+[All metrics, consumption and limitations](docs/pretrained_reuse/R2_NATIVE_COVERAGE_RESULTS_20261016.md).
+
 **2026-10-16 actual consumed TRAIN evaluation completed:** Five immutable
 initial/endpoints, all6,656 questions and exact full replay. TRAIN quality is
 also weak; this does not identify capacity versus optimization/coverage.
