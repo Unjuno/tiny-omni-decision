@@ -29,7 +29,6 @@ def main():
     # Optional decoder packages are needed only by this explicit physical probe.
     import av
     import numpy as np
-    from PIL import Image, ImageDraw
 
     receipt = json.loads((args.probe / "result.json").read_text())
     if receipt["status"] != "PASS_FIXED_TRAIN_MEMBER_ACQUISITION":
@@ -109,7 +108,7 @@ def main():
                         info.update(width=frame.width, height=frame.height,
                                     average_rate=str(stream.average_rate))
                         if next_thumb < 5 and stamp >= duration * next_thumb / 5:
-                            thumbs.append((stamp, Image.fromarray(data)))
+                            thumbs.append((stamp, data))
                             next_thumb += 1
             if not pts or not finite:
                 raise ValueError("empty or nonfinite stream")
@@ -125,12 +124,19 @@ def main():
             result["streams"].append(info)
             (args.output / (kind + "-timestamps.json")).write_text(
                 json.dumps(dict(pts=pts, ends=ends)), encoding="utf-8")
-        canvas = Image.new("RGB", (456, 280 * len(thumbs)), "white")
-        draw = ImageDraw.Draw(canvas)
-        for i, (stamp, picture) in enumerate(thumbs):
-            canvas.paste(picture, (0, 280 * i))
-            draw.text((3, 280 * i + 258), f"TRAIN raw frame PTS {stamp:.3f}s", fill="black")
-        canvas.save(args.output / "raw-train-frames.png")
+        result["raw_frame_previews"] = []
+        for i, (stamp, pixels) in enumerate(thumbs):
+            name = f"raw-train-frame-{i:02d}.png"
+            with av.open(str(args.output / name), mode="w", format="image2") as output:
+                stream = output.add_stream("png", rate=1)
+                stream.width, stream.height = pixels.shape[1], pixels.shape[0]
+                stream.pix_fmt = "rgb24"
+                for packet in stream.encode(av.VideoFrame.from_ndarray(pixels, format="rgb24")):
+                    output.mux(packet)
+                for packet in stream.encode():
+                    output.mux(packet)
+            result["raw_frame_previews"].append(dict(file=name, pts=stamp,
+                                                       sha256=sha(args.output / name)))
         first_rows = result["annotations"][selected[0]]["rows"]
         result["first_parent_annotation_times_within_both_streams"] = all(
             s["first_pts"] <= r["seconds"] < s["decoded_end"]
