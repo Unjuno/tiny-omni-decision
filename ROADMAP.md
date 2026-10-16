@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 full-extent AV encoder path executed:** All 21 fixed TRAIN events,
+105-payload fresh-process replay, and the new decoder-to-bank smoke pass exactly.
+Frozen weights and 8,437 earlier artifacts are unchanged. Begin complete CPU video
+caching for all 11,151 immutable development events / 32,582 questions, with fixed
+8-hour/8GiB/16GiB-reserve guards. This cache is live, not complete; inspect its
+actual session/PID. Next finish it, bind independent audio/query features with
+actual event-clock positions, then freeze matched Attention/exchange/gate learning.
+No quality improvement, product promotion or audit use is claimed.
+[Measured runs and live cache handles](docs/pretrained_reuse/R2_GREATEST_HITS_FULL_EXTENT_RESULTS_20261017.md).
+
 **2026-10-17 fixed TRAIN source review completed:** Decode and inspect one fixed
 event from each of 21 TRAIN dates (315 frames, 84 payloads). Preserve all labels,
 including ambiguous material/reaction and edge-contact cases. Admit only scoped
