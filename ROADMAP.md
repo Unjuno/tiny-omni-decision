@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 matched AV preflight executed:** Fix32,768 updates,4 joint plus1 per
+existing modality, whole-stream coverage before repeats and validation retention
+eligibility. Execute all262,144 planned presentations/108,187 unique questions and
+complete candidate permutations. Shared fitted control step8192 copies exactly
+into all five arms;945 real TRAIN initial outputs agree. All9,695 earlier files
+are unchanged. Video rehearsal still repeats512 questions64 times; bell has no
+TRAIN positive. Do not call observed-label coverage adequate data or product
+quality. Full video is live; full trainer, full-path cost and matched fits remain
+to execute. [Actual preflight and remaining work](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_PREFLIGHT_RESULTS_20261017.md).
+
 **2026-10-17 conditional AV learning mechanics executed:** C0 and all four
 exchange/gate arms complete8 updates on the same32 unique TRAIN questions each.
 Enabled gradients, inactive-state preservation and945 checkpoint-reload decisions

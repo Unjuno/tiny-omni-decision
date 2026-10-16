@@ -61,13 +61,14 @@ states, hashes and a terminal receipt; it refuses an existing output directory.
 
 - [x] Write and run RED initialization tests for all five arms, baseline parity,
   disabled policies, malformed/nonfinite control, nonzero correction and budget.
-- [ ] Implement initialization and preflight; run tests GREEN, full CPU suite,
+- [x] Implement initialization and preflight; run tests GREEN, full CPU suite,
   Ruff and existing manifest commands. Expected: no failures.
-- [ ] Commit execution source, run actual full metadata preflight into new output,
+- [x] Commit execution source, run actual full metadata preflight into new output,
   independently check counts/IDs/states and saved hashes. Expected: deterministic
   full plan, valid frozen source linkage, retained states, no optimizer updates.
-- [ ] Fresh whole-change review, fix material findings with tests, publish measured
-  evidence and confirm exact pushed-commit CI. Do not claim full training completed.
+- [x] Fresh whole-change review: no actionable material findings in fe79994..4f90bbd.
+- [ ] Publish measured evidence and confirm exact pushed-commit CI in the external
+  verification receipt. Do not claim full training completed.
 
 ## Execution ledger
 
