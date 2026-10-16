@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 data/pipeline priority correction:** The user requests scrutiny of
+data and the actual learning path. Audit source semantics, consumed label support,
+feature transport, spatial/temporal information loss and loss/gradient equivalence
+before the proposed regularization fit. Preserve all completed runs. A reproducible
+cache is not evidence that the task's information survives preprocessing.
+[Audit protocol](docs/pretrained_reuse/R2_NATIVE_PIPELINE_AUDIT_PROTOCOL_20261016.md).
+
 **2026-10-16 long learning curve completed:** One fixed native attention run
 finishes 32,768 updates, followed by exact full best/final replay. Within-run
 2,048→32,768 macro Accuracy improves 32.83→45.70%, while NLL worsens 1.740→4.848;
