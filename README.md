@@ -1,5 +1,10 @@
 # Tiny Omni Decision
 
+**Common training preparation (2026-10-16):** All456 existing development video
+scenes now have persistent8-frame full tokens, exactly matching historical hashes.
+Source audit identifies long-text handling and audio-profile gaps before fitting.
+No new training or quality result. [Measured preparation](docs/pretrained_reuse/R2_NATIVE_TRAINING_PREPARATION_20261016.md).
+
 **Native candidate actually integrated (2026-10-16):** One original-pretrained
 encoder composition totals **196,254,874 parameters before quantization** and
 produces JSON from native text/image/audio/video. Fresh-process replay matches

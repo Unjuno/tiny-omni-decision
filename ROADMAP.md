@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 common training preparation executed:** Persisted all256train/
+200development-validation eight-frame token arrays; all456 historical hashes
+and fresh file rechecks pass. Shared-source audit finds38 long text states,
+speech-cache numerical mismatch and incomplete combined audio features. Resolve
+these input gaps, then freeze common fit/retention rules; no model update, quality
+claim or R2 completion. [Evidence and next unit](docs/pretrained_reuse/R2_NATIVE_TRAINING_PREPARATION_20261016.md).
+
 **2026-10-16 native candidate integration measured:** The same original-pretrained
 composition accepts native text/image/audio/video and supplied conditions/options,
 with **196,254,874 actual parameters before quantization**. All 21 arrays and eight
