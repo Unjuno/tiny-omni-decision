@@ -1,5 +1,15 @@
 # Tiny Omni Decision
 
+**Native baseline/LSTM comparison completed (2026-10-16):** Both models finish
+2,048 updates and reproduce best/final predictions exactly in fresh processes.
+Total parameters are196.255M /197.291M. Fixed-endpoint temporal-video Accuracy
+is33.5% for both; LSTM worsens macro NLL and image Accuracy. Do not adopt it or
+infer a recurrent-memory benefit. STARSS Accuracy83.38% comes from all-no outputs,
+with zero positive recall. Preserve these baselines; prioritize native-value
+readout and unique training coverage before expanding architecture search.
+All-task95–98%, joint/OOD and deployment gates remain open.
+[Measured comparison, curves and next priorities](docs/pretrained_reuse/R2_NATIVE_TEMPORAL_FIT_RESULTS_20261016.md).
+
 **Temporal memory candidate (2026-10-16):** A separate LSTM residual path now
 preserves native video spatial tokens and speech timelines. Total197,291,290
 parameters; actual GPU plumbing and fresh-process replay pass. Task quality is

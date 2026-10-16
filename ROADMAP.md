@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 common native fits completed:** Attention baseline and residual
+LSTM each finish2,048 updates on identical data/order, with exact full best/final
+replay. Temporal-video endpoint Accuracy remains33.5% in both. LSTM's small
+all-video gain does not establish a memory benefit; macro NLL/image regress.
+Keep both research artifacts, adopt neither as a qualified product, and defer
+xLSTM expansion. Next resolve native-value readout/unique-coverage limitations;
+only then use temporal interventions and a nonrecurrent capacity control to
+isolate memory. STARSS all-no predictions remain a failure despite83.38% Accuracy.
+No audit, quantization, legacy artifact modification or R2 completion.
+[Full results and evidence limits](docs/pretrained_reuse/R2_NATIVE_TEMPORAL_FIT_RESULTS_20261016.md).
+
 **2026-10-16 temporal state extension:** User-authorized architecture flexibility
 adds an optional LSTM residual candidate at197.291M total parameters. Native
 feature/GPU/gradient/replay checks pass; the existing baseline is preserved.
