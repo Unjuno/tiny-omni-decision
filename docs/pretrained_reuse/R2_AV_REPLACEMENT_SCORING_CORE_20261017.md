@@ -42,12 +42,44 @@ commands are preserved under
 `C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-replacement-scoring-verification-01/`.
 No GPU execution or development-validation model scoring was performed here.
 
-## Remaining execution gate
+## Selected-model entry point
 
-This is a scoring **core**, not a guarded production CLI or a trained-model result.
-The production entry point still needs selected-run/checkpoint/input/inventory hash
-admission, exact natural-reference ID/option alignment, fresh immutable output paths,
-before/after source/input/checkpoint verification and terminal failure receipts.
+`scripts/score_greatest_hits_replacements.py` adds the guarded execution entry point.
+It requires `--selection-set`, `--selection-set-sha256`, `--audit`, `--arm` and
+`--max-seconds`. The selection JSON maps exactly C0/E0G0/E0G1/E1G0/E1G1 to objects
+with `path` (completed matched run directory) and `result_sha256`. Construct and
+hash this immutable selection record only after all five runs finish selection.
+The CLI refuses smoke/incomplete runs, missing arms, differing training sources,
+runtime versions, inputs or non-arm training configuration. It does not select
+a model itself or accept an alternate checkpoint override.
+
+The selected run's complete artifact ledger, best checkpoint/step/config/sampler,
+input audit and frozen inventory are verified. Shared executed Python files and
+the training protocol must match the selected run's source hashes in the diagnostic
+checkout. Natural reference arrays are aligned by ID with exact option order and
+padding checks, then compared exactly during inference. The original common TRAIN
+and validation payloads are not re-evaluated by this diagnostic.
+
+Each arm writes once to
+`C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-selected-replacements-<ARM>-01`.
+An existing destination is rejected, including a failed attempt; no automatic
+retry, deletion or overwrite is provided. Incomplete attempts retain error and
+traceback receipts. Predictions are streamed as JSONL, all 44,375 forwards and
+17,750 exact self checks are required, and source/input hashes are verified again
+before success. Resource allowance is explicit, with 10 GiB host/6 GiB GPU guards
+and 16 GiB free-disk reserve. Occupied GPUs are rejected before model allocation.
+
+CPU tests cover selected-run/config/sampler binding, completed-five-arm admission,
+natural-reference identities/options/padding, and actual CLI rejection receipts
+and output preservation. CLI rejection tests stub only Git metadata; real fixture
+receipt hashes are checked. The previously described scoring tests use actual
+readout architectures. The full admitted CLI path with real selected checkpoints
+and CUDA has **not yet run**; no end-to-end diagnostic result is claimed.
+
+Entry-point verification: Ruff passed; full CPU suite 2,412 passed, 1 skipped in
+69.20 seconds; all 25 manifest commands passed. Exact commands/logs are under
+`C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-replacement-cli-verification-01/`.
+
 Do not invoke it on development validation until matched model selection is frozen.
 Do not use initial or smoke models as selected-model quality evidence. Full frozen
 validation scoring for all five selected arms remains pending.
