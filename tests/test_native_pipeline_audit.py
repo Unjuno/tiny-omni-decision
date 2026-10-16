@@ -7,6 +7,7 @@ from scripts.native_pipeline_audit import (
     annotation_counts,
     crop_geometry,
     independent_feature_slice,
+    independent_metrics,
     label_coverage,
     pair_digest,
     semantic_text_target,
@@ -78,6 +79,16 @@ def test_slice_rejects_negative_offsets_and_overrun():
     for change in (dict(offset=-1), dict(tokens=4), dict(index=-1)):
         with pytest.raises(ValueError):
             independent_feature_slice(value, spec | change)
+
+
+def test_independent_metrics_analytic_cases_and_nonfinite_rejection():
+    value = independent_metrics([[0, 0], [0, 0]], np.array([0, 1]))
+    assert value["accuracy"] == .5 and value["ece"] == 0
+    assert value["nll"] == pytest.approx(np.log(2)) and value["brier"] == .5
+    wrong = independent_metrics([[1000, -1000]], np.array([1]))
+    assert wrong["nll"] == 2000 and wrong["ece"] == 1 and wrong["brier"] == 2
+    with pytest.raises(ValueError):
+        independent_metrics([[float("nan"), 0]], np.array([0]))
 
 
 def test_accumulated_permuted_loss_gradient_matches_mean_batch_loss():

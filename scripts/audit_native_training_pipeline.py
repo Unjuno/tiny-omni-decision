@@ -6,6 +6,7 @@ import hashlib
 import importlib.metadata
 import json
 import os
+import struct
 import subprocess
 import sys
 import time
@@ -288,6 +289,24 @@ def main():
             duplicate_query_vectors=duplicate_vectors, query_addresses_unique=True)
         first_batch = [rows["train"][i] for i in order[0]]
         report["actual_gradient_path"] = real_gradient_check(store, first_batch, fit / "initial.pt")
+
+        image_root = ROOT / "videoprism-spatial-image-cache-01"
+        image_receipt = read(image_root / "result.json")
+        image_records = read(pin(image_root / "records.json", image_receipt["records_sha256"]))
+        image_geometry = Counter()
+        for split, records in image_records.items():
+            path = Path(config["files"]["image"]["train" if split == "train" else "validation"])
+            for row in records:
+                media_path = path.parent / split / "images" / (row["id"] + ".png")
+                pin(media_path, row["sha256"])
+                with media_path.open("rb") as handle:
+                    header = handle.read(24)
+                if header[:8] != b"\x89PNG\r\n\x1a\n" or header[12:16] != b"IHDR":
+                    raise ValueError("original PNG geometry required")
+                width, height = struct.unpack(">II", header[16:24])
+                image_geometry[(split, width, height)] += 1
+        report["image_input"] = [dict(split=s, assets=n, crop=crop_geometry(w, h))
+                                 for (s, w, h), n in sorted(image_geometry.items())]
 
         import av
 

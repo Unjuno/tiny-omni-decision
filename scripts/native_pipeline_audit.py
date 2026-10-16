@@ -179,3 +179,27 @@ def independent_feature_slice(array, spec):
     if value.shape != (count, width) or value.dtype != np.float32 or not np.isfinite(value).all():
         raise ValueError("invalid feature values")
     return value
+
+
+def independent_metrics(logits, targets):
+    """Independent probability/15-bin top-label calibration recomputation."""
+    logits, targets = np.asarray(logits, dtype=np.float64), np.asarray(targets)
+    if (logits.ndim != 2 or not len(logits) or not np.isfinite(logits).all()
+            or targets.shape != (len(logits),) or targets.dtype.kind not in "iu"
+            or (targets < 0).any() or (targets >= logits.shape[1]).any()):
+        raise ValueError("finite logits and aligned valid integer targets required")
+    relative = logits - np.max(logits, axis=1)[:, None]
+    log_z = np.log(np.sum(np.exp(relative), axis=1))
+    probability = np.exp(relative - log_z[:, None])
+    correct = logits.argmax(1) == targets
+    confidence = probability.max(1)
+    squared = np.square(probability).sum(1) + 1 - 2 * probability[np.arange(len(targets)), targets]
+    ece = 0.0
+    for b in range(15):
+        selected = (confidence >= b / 15) & (
+            confidence < (b + 1) / 15 if b < 14 else confidence <= 1)
+        if selected.any():
+            ece += abs(float(correct[selected].sum() - confidence[selected].sum())) / len(targets)
+    return dict(count=len(targets), accuracy=float(correct.mean()),
+                nll=float((log_z - relative[np.arange(len(targets)), targets]).mean()),
+                brier=float(squared.mean()), ece=ece, mean_confidence=float(confidence.mean()))
