@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 positive-support experiment fixed:** Compare one TRAIN-only STARSS
+support-floor policy against the completed32,768-update control. Replace292
+negative questions with unused positives, retaining every existing positive and
+all non-STARSS occurrence slots. Same6656 unique rows,262144 presentations, model,
+LR horizon, selector and full validation. Bell support remains unresolved. Run a
+separate smoke, full fit and exact replay; no crop/frame change in this comparison.
+[Prospective protocol](docs/pretrained_reuse/R2_NATIVE_SUPPORT_PROTOCOL_20261016.md).
+
 **2026-10-16 データ／学習パイプライン監査完了:** 消費した音声イベント5種類は正例0。
 うち4種類は元TRAINの正例をsamplerが未使用だった。画像は中央75%、動画は中央66.67%の
 視野だけを保持し、動画128→8フレームの最大間隔は0.76秒。全件の入力対応・特徴transport・
