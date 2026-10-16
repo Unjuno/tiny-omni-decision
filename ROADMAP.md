@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 input execution:** Lossless-token language windows and unified
+speech/event preprocessing pass actual model smokes; all6 audio arrays reproduce
+exactly in a fresh process. Full language caching stops before model loading at
+the fixed disk-reserve gate and remains incomplete. Shared-readout fitting has
+not started. [Evidence and restart conditions](docs/pretrained_reuse/R2_NATIVE_LANGUAGE_AUDIO_RESULTS_20261016.md).
+
 **2026-10-16 common training preparation executed:** Persisted all256train/
 200development-validation eight-frame token arrays; all456 historical hashes
 and fresh file rechecks pass. Shared-source audit finds38 long text states,

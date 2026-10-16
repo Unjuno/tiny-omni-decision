@@ -1,5 +1,10 @@
 # Tiny Omni Decision
 
+**Input execution (2026-10-16):** Long-text and common speech/event preprocessing
+pass real-model smokes; all6 audio arrays reproduce exactly in a fresh process.
+Full language caching remains incomplete at the fixed disk-capacity gate; common
+readout training has not started. [Results and restart conditions](docs/pretrained_reuse/R2_NATIVE_LANGUAGE_AUDIO_RESULTS_20261016.md).
+
 **Common training preparation (2026-10-16):** All456 existing development video
 scenes now have persistent8-frame full tokens, exactly matching historical hashes.
 Source audit identifies long-text handling and audio-profile gaps before fitting.

@@ -7,6 +7,9 @@
 固定転移評価は2026-10-16 02:22 JSTに完了し、独立した出力検証も通った。
 [転移結果](R2_CONDITION_RELEVANCE_TRANSFER_RESULTS_20261016.md)を踏まえ、段階2の実入力接続を実行した。
 **現在は段階3：一つの候補の学習・評価条件を揃える。**
+長文入力と音声共通処理を実装し、実モデルsmoke・音声fresh replayは成功。
+言語全件cacheは容量検査で停止し未完了。容量確保後に新出力先で全件抽出へ戻る。
+[実行結果・停止箇所・再開条件](R2_NATIVE_LANGUAGE_AUDIO_RESULTS_20261016.md)。
 [実入力接続の結果](R2_NATIVE_CONDITIONAL_CANDIDATE_20261016.md)は機能確認であり、判断層は未学習。
 
 **段階3の実行更新:** 同じ256 train／200 validation動画の8-frame全tokenを保存し、
