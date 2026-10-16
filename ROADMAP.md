@@ -6,6 +6,10 @@ retention-gated best/final saves and reload are implemented. Real466 rehearsal
 banks/6.22GB pass hash/shape/finiteness/split audit. Full video remains live;
 full AV admission, measured full-path GPU cost and five matched fits still pending.
 [Evidence and execution boundary](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_RUNNER_20261017.md).
+Freeze all8875 label-blind cross-date input replacements before selected-model
+scoring. Independent assignment audit and75 real TRAIN mechanics forwards pass;
+30 self-replacement checks agree exactly. This is not complementary-quality evidence.
+[Replacement inventory and mechanics](docs/pretrained_reuse/R2_GREATEST_HITS_INPUT_REPLACEMENT_RESULTS_20261017.md).
 
 **2026-10-17 matched AV preflight executed:** Fix32,768 updates,4 joint plus1 per
 existing modality, whole-stream coverage before repeats and validation retention

@@ -4,6 +4,8 @@
 best/final再評価の経路を実装。既存466特徴bank約6.22GBの実物検査が通過。
 全件映像抽出・GPUコスト測定・本学習は未完了。精度改善はまだ未判定。
 [実行済み検証と残作業](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_RUNNER_20261017.md)。
+入力依存性を調べる全8,875問の入替条件も固定し、実TRAIN特徴75推論で自己入替30条件の
+完全一致を確認。[入替診断の固定・検証](docs/pretrained_reuse/R2_GREATEST_HITS_INPUT_REPLACEMENT_RESULTS_20261017.md)。
 
 **2026-10-17 AV本比較の実samplerを検証:** 32,768更新分を実データで生成し、予定262,144提示／
 108,187種類の質問と全選択肢の対応を確認。学習済み基準から5構成を作り、945初期出力が一致。
