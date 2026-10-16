@@ -1,0 +1,13 @@
+{
+  "id": "native-state-dependence-v1",
+  "seed": 17,
+  "pairs_per_task_and_stratum": 8,
+  "fit": "C:/CodexArtifacts/pretrained-reuse-r2/native-common-baseline-fit-01",
+  "corpus": "C:/CodexArtifacts/pretrained-reuse-r2/native-common-corpus-02",
+  "queries": "C:/CodexArtifacts/pretrained-reuse-r2/native-common-queries-cache-01",
+  "pins": {
+    "C:/CodexArtifacts/pretrained-reuse-r2/native-common-baseline-fit-01/result.json": "aaa1fe96a4be85a71ce146981c6b2e8b58e1308d91fc110e1ece6804b4d8048c",
+    "C:/CodexArtifacts/pretrained-reuse-r2/native-common-corpus-02/result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:/CodexArtifacts/pretrained-reuse-r2/native-common-queries-cache-01/result.json": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e"
+  }
+}
