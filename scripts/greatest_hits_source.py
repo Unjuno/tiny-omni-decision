@@ -89,9 +89,12 @@ def member_bytes(entry, read):
 class CurlRangeSource:
     """IPv4/TLS with an exact response contract; no redirect, retry or full download."""
 
-    def __init__(self, url, size, etag, directory):
+    def __init__(self, url, size, etag, directory, *, request_seconds=25):
         if not url.startswith("https://"):
             raise ValueError("HTTPS required")
+        if type(request_seconds) is not int or not 1 <= request_seconds <= 90:
+            raise ValueError("integer request bound in1..90 seconds required")
+        self.request_seconds = request_seconds
         self.url, self.size, self.etag = url, size, etag
         self.directory = directory
         directory.mkdir(exist_ok=False)
@@ -109,11 +112,13 @@ class CurlRangeSource:
         self.requested += count
         try:
             cmd = ["curl.exe", "-4", "--fail", "--silent", "--show-error", "--proto", "=https",
-                   "--connect-timeout", "10", "--max-time", "25", "--max-filesize", str(count),
+                   "--connect-timeout", "10", "--max-time", str(self.request_seconds),
+                   "--max-filesize", str(count),
                    "--range", f"{start}-{start + count - 1}", "--header", "If-Match: " + self.etag,
                    "--header", "Accept-Encoding: identity", "--dump-header", str(header),
                    "--output", str(body), self.url]
-            run = subprocess.run(cmd, capture_output=True, text=True, timeout=30, check=False)
+            run = subprocess.run(cmd, capture_output=True, text=True,
+                                 timeout=self.request_seconds + 5, check=False)
             if run.returncode:
                 raise RuntimeError(run.stderr)
             data = body.read_bytes()

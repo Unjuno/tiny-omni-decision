@@ -2,6 +2,7 @@ import io
 import json
 import zipfile
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -126,3 +127,26 @@ def test_published_probe_does_not_admit_training_or_claim_full_archive_hash():
     assert all(sum(c.values()) == annotations["rows"]
                for c in annotations["raw_label_field_counts"])
     assert {s["type"] for s in data["decoded_streams"]} == {"video", "audio"}
+
+
+def test_explicit_media_timeout_keeps_annotation_default(tmp_path, monkeypatch):
+    from scripts.greatest_hits_source import CurlRangeSource
+
+    calls = []
+
+    def fail(cmd, **kwargs):
+        calls.append((cmd, kwargs))
+        return SimpleNamespace(returncode=1, stderr="fixture failure")
+
+    monkeypatch.setattr("scripts.greatest_hits_source.subprocess.run", fail)
+    for index, options in enumerate([{}, {"request_seconds": 90}]):
+        source = CurlRangeSource("https://invalid", 100, '"fixed"', tmp_path / str(index),
+                                 **options)
+        with pytest.raises(RuntimeError, match="fixture failure"):
+            source.read(0, 1)
+    assert [c[0][c[0].index("--max-time") + 1] for c in calls] == ["25", "90"]
+    assert [c[1]["timeout"] for c in calls] == [30, 95]
+    for invalid in [0, 91, 1.5, True]:
+        with pytest.raises(ValueError):
+            CurlRangeSource("https://invalid", 100, '"fixed"', tmp_path / "invalid",
+                            request_seconds=invalid)
