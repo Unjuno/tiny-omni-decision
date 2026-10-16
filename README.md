@@ -1,5 +1,14 @@
 # Tiny Omni Decision
 
+**Actual consumed TRAIN measured (2026-10-16):** All6,656 distinct consumed
+questions and all five initial/fixed-endpoint arrays reproduce exactly. The
+attention baseline reaches only25.87% Text,21.92% Image and42.19% Video on TRAIN.
+There are43 common tasks,48 TRAIN-only and28 validation-only: full macro averages
+are not a direct generalization gap. Next compare repeat versus unused-TRAIN
+coverage with matched compute/source/task/option counts; Video has no unused rows
+in this frozen corpus. No architecture ceiling, promotion or95–98% claim.
+[Full measurements and next decision](docs/pretrained_reuse/R2_NATIVE_CONSUMED_RESULTS_20261016.md).
+
 **Matched-batch comparison completed (2026-10-16):** Both independent/matched
 arms finish1,024 updates on the identical8,192-occurrence pool, with exact full
 best/final and TRAIN-contrast replay. Matched macro Accuracy30.36%→31.61% does

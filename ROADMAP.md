@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 actual consumed TRAIN evaluation completed:** Five immutable
+initial/endpoints, all6,656 questions and exact full replay. TRAIN quality is
+also weak; this does not identify capacity versus optimization/coverage.
+Separate43 common tasks from48 TRAIN-only/28 validation-only tasks. Next test
+repeat versus unused-TRAIN replacement at equal2,048 updates/eight microbatches,
+with exact source/task/option-count quotas, fresh initialization and all existing
+validation gates. NonVideo can add6,144 unique rows; frozen Video has none unused.
+This prospective comparison is not yet executed; all prior artifacts remain fixed.
+[Measured reachability and limits](docs/pretrained_reuse/R2_NATIVE_CONSUMED_RESULTS_20261016.md).
+
 **2026-10-16 matched-state batch comparison completed:** Both controls finish
 1,024 updates with identical sample multiplicities, candidate permutations,
 initialization and full validation. Best/final/contrast fresh replay is exact.
