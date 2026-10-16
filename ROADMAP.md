@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 explicit AV transport executed:** Complete-cache admission and saved
+physical-position transport now have18 new tests. Real21 TRAIN events /63 questions
+pass C0 plus four residual arms in joint/audio/video views,945 outputs per process.
+Candidate-order logits and same-policy reload are exact; full fresh-process replay
+matches all seven payloads. Earlier8,808 artifacts are unchanged. Full extraction
+continues; do not admit partial caches or interpret random readout JSON as quality.
+Next complete/audit caches and freeze matched learning/retention/selection rules.
+[Measured transport and replay](docs/pretrained_reuse/R2_GREATEST_HITS_TRANSPORT_RESULTS_20261017.md).
+
 **2026-10-17 audio/query cache path executed:** The fixed 21 TRAIN events and
 24 original question/candidate pairs pass real frozen encoders and exact
 fresh-process replay (45 tensors plus plan). All 21 event IDs/clocks match the

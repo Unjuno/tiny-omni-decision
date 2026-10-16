@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "experiment": "greatest-hits-transport-20261017",
+  "execution_source_commit": "5499eeecf0765284a44da874f8a58ed1bfc46197",
+  "audit_receipt_sha256": "4ab92aa054ad03948ad4a5b596ab47f06da9379c3510cf5d0f97fac885d8cf15",
+  "audit_script_sha256": "3fec9c576fcff88136c17387767c83b650fb499d922daf1219c5a70f2a7881c9",
+  "artifact_ledger_sha256": "f9321f8692d2ce82e5857b8ef46d7a17f7d6e9d7d42598b34387d52e90dc1754",
+  "status": "PASS_REAL_FEATURE_TRANSPORT_REPLAY_AUDIT",
+  "completed_utc": "2026-10-16T19:08:59.168318+00:00",
+  "source_sha256": "3fec9c576fcff88136c17387767c83b650fb499d922daf1219c5a70f2a7881c9",
+  "preserved_previous_files": 8808,
+  "verified_new_files": 16,
+  "exact_fresh_process_payload_pairs": 7,
+  "independent_json_decisions": 945,
+  "events": 21,
+  "questions": 63,
+  "scopes": [
+    "joint",
+    "audio",
+    "video"
+  ],
+  "arms": [
+    "C0",
+    "E0G0",
+    "E0G1",
+    "E1G0",
+    "E1G1"
+  ],
+  "receipts": {
+    "greatest-hits-transport-smoke-01": {
+      "seconds": 100.09656219999306,
+      "prediction_seconds": 88.93334740001592,
+      "load_seconds": 8.346817099984037,
+      "peak_working_set_bytes": 732246016,
+      "started_utc": "2026-10-16T19:03:42.559148+00:00",
+      "finished_utc": "2026-10-16T19:05:22.592439+00:00",
+      "sha256": "7f6b60c0d4dfa40cb9a86096301f6e5757a0e57ab6b3975b19d74ae4db8167d3"
+    },
+    "greatest-hits-transport-replay-01": {
+      "seconds": 95.64626350000617,
+      "prediction_seconds": 85.12860269998782,
+      "load_seconds": 8.698969299992314,
+      "peak_working_set_bytes": 732942336,
+      "started_utc": "2026-10-16T19:07:01.568422+00:00",
+      "finished_utc": "2026-10-16T19:08:37.150154+00:00",
+      "sha256": "6c6bb69f2f7b2f62e8ae70467dc6f7243e80b23e39c85977f370f45fd0dec48e"
+    }
+  },
+  "optimizer_updates": 0,
+  "quality_evaluated": false,
+  "product_goal_complete": false,
+  "parameters": {
+    "C0": {
+      "readout": 889345,
+      "encoder_inclusive": 196254874
+    },
+    "E0G0": {
+      "readout": 1732420,
+      "encoder_inclusive": 197097949,
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1373570,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    },
+    "E0G1": {
+      "readout": 1732420,
+      "encoder_inclusive": 197097949,
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1435204,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    },
+    "E1G0": {
+      "readout": 1732420,
+      "encoder_inclusive": 197097949,
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1670786,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    },
+    "E1G1": {
+      "readout": 1732420,
+      "encoder_inclusive": 197097949,
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1732420,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    }
+  },
+  "versions": {
+    "torch": "2.6.0+cu124",
+    "numpy": "2.4.6"
+  },
+  "full_caches": "RUNNING; not admitted for training",
+  "verification": {
+    "ruff": "PASS",
+    "cpu_tests": "2293 passed, 1 skipped",
+    "manifest_commands": 25
+  },
+  "ci_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-transport-verification-01\\ci.json"
+}
