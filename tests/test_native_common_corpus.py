@@ -164,6 +164,15 @@ def test_complete_deterministic_join_and_targets():
                 assert row["target_index"] == 1
 
 
+def test_original_image_val_spelling_maps_only_to_validation():
+    from scripts.native_common_corpus import build_corpus
+
+    data = fixture()
+    data["images"]["validation"][0]["split"] = "val"
+    result = build_corpus(**data)
+    assert len([r for r in result["rows"]["validation"] if r["modality"] == "image"]) == 4
+
+
 @pytest.mark.parametrize(
     "case",
     [

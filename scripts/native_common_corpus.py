@@ -159,7 +159,10 @@ def build_corpus(
         for i, (row, cache) in enumerate(
             zip(images[split], image_records[cache_split], strict=True)
         ):
-            if row["split"] != split or cache["split"] != cache_split:
+            # The frozen Clevr-4 source uses "val"; normalize only this known
+            # boundary alias, while preserving the original files and hashes.
+            row_split = "validation" if row["split"] == "val" else row["split"]
+            if row_split != split or cache["split"] != cache_split:
                 raise ValueError("image split differs")
             truth = oracle_state(row)
             ident = "image:" + row["id"]
