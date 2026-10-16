@@ -79,6 +79,15 @@ def require_video(receipt):
         raise ValueError("complete immutable full video cache required; producer stays untouched")
 
 
+def require_video_inventory(value):
+    names = {parent["parent"] for parent in value["parents"]}
+    expected = {
+        parent + "-" + kind + ".npy" for parent in names for kind in ("video", "positions", "pts")
+    }
+    if not names or len(names) != len(value["parents"]) or set(value["artifacts"]) != expected:
+        raise ValueError("complete exact video/positions/pts hash ledger required")
+
+
 def receipt(pins, folder, expected=None):
     pins.add(folder / "result.json", expected)
     value = read(folder / "result.json")
@@ -112,7 +121,9 @@ def common_banks():
 
 def audit(pins, guard=lambda: None):
     # Check the terminal receipt before touching a live producer's feature banks.
-    require_video(read(VIDEO / "result.json"))
+    terminal = read(VIDEO / "result.json")
+    require_video(terminal)
+    require_video_inventory(terminal)
     preflight = receipt(
         pins, PREFLIGHT, "d0dc5e585b00a45cfdc17773b42cd40a0e4b9b08015127af014ab8ce5e7b5ac1"
     )
@@ -127,6 +138,10 @@ def audit(pins, guard=lambda: None):
     smoke = receipt(
         pins, VIDEO_SMOKE, "d0ee01083f70a98be68b3a71c0a9abd68ac9b4b82759cc089e0232ff32bd38db"
     )
+    require_video_inventory(video)
+    require_video_inventory(smoke)
+    pins.add(VIDEO / "plan.json", video["plan_sha256"])
+    pins.add(VIDEO_SMOKE / "plan.json", smoke["plan_sha256"])
     if (
         preflight["status"] != "PASS_MATCHED_AV_PREFLIGHT"
         or common["status"] != "PASS_COMPLETE_NATIVE_COMMON_CORPUS"

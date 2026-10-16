@@ -45,6 +45,41 @@ def test_video_admission_accepts_complete_receipt():
     require_video(video_receipt())
 
 
+def test_incomplete_video_ledger_rejected_before_any_input_hashing(monkeypatch):
+    from scripts import greatest_hits_matched_inputs as inputs
+
+    value = dict(
+        video_receipt(),
+        parents=[{"parent": "parent"}],
+        artifacts={"parent-positions.npy": "a" * 64, "parent-pts.npy": "b" * 64},
+    )
+    monkeypatch.setattr(inputs, "read", lambda path: value)
+
+    class NoPin:
+        def add(self, *args):
+            raise AssertionError("incomplete video must be rejected before input hashing")
+
+    with pytest.raises(ValueError, match="ledger"):
+        inputs.audit(NoPin())
+
+
+@pytest.mark.parametrize("change", ["missing_video", "missing_positions", "missing_pts", "extra"])
+def test_exact_complete_video_inventory(change):
+    from scripts.greatest_hits_matched_inputs import require_video_inventory
+
+    value = dict(
+        parents=[{"parent": "parent"}],
+        artifacts={"parent-" + key + ".npy": "a" * 64 for key in ("video", "positions", "pts")},
+    )
+    require_video_inventory(value)
+    if change == "extra":
+        value["artifacts"]["unknown.npy"] = "a" * 64
+    else:
+        value["artifacts"].pop("parent-" + change.removeprefix("missing_") + ".npy")
+    with pytest.raises(ValueError, match="ledger"):
+        require_video_inventory(value)
+
+
 def test_pin_verifies_original_bytes_and_catches_cached_changes(tmp_path):
     from scripts.greatest_hits_matched_inputs import Pins
     from scripts.native_video_cache import sha
