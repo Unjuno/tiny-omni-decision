@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 joint-source encoder probe completed:** Three fixed TRAIN event
+windows pass frozen Whisper/EfficientAT/VideoPrism forwards and21-payload exact
+fresh-process replay. Weights and prior artifacts are unchanged; measured audio
+peak allocation200,990,208bytes, VideoPrism CPU host peak approximately4.14GB.
+Physical time coordinates are saved without claiming local feature semantics.
+No task fit or fusion gain. Next review TRAIN source labels/contact timing/grouping
+and admit or reject a defensible comparison scope before full caching and learning.
+Keep the original Attention/control policies and all product gates unchanged.
+[Actual encoder results and limits](docs/pretrained_reuse/R2_GREATEST_HITS_ENCODER_RESULTS_20261017.md).
+
 **2026-10-17 joint-source decode/tasks/input completed:** All409 development media
 decode,17,932 windows pass, and23,707 TRAIN /8,875 validation questions rebuild
 exactly. Three fixed TRAIN events produce18 exactly replayed input payloads:
