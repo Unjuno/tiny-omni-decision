@@ -1,8 +1,19 @@
 """A single full-extent bilinear/black-padding policy; historical preprocessing is unchanged."""
 
+import importlib.metadata
+
 import numpy as np
 
 POLICY = "full-extent-bilinear-centered-black-pad-288-v1"
+
+
+def encoder_distribution_versions(version=importlib.metadata.version):
+    result = {name: version(name) for name in ("jax", "jaxlib", "numpy", "av", "psutil")}
+    try:
+        result["tensorflow"] = version("tensorflow")
+    except importlib.metadata.PackageNotFoundError:
+        result["tensorflow_cpu"] = version("tensorflow_cpu")
+    return result
 
 
 def full_extent_geometry(height, width, size=288):

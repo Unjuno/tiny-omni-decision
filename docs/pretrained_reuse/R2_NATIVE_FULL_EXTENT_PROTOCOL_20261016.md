@@ -43,6 +43,12 @@ encoder tuning, calibration or sealed audit access in this comparison.
    identities before a separate training smoke and one full seed17 fit.
 
 Only local compute; existing JAX0.6.2/TF2.18.1 environment first, no upgrades.
+The first smoke (`native-full-extent-smoke-01`, source4d11f0e) stopped after6.89s,
+before any extraction, because environment recording requested the `tensorflow`
+distribution while this Windows environment installs `tensorflow_cpu`2.18.1.
+Preserve that failed receipt. Correct only distribution-name reporting, with CPU
+regression tests; rerun the same smoke in a new output directory. No dependency,
+preprocessing, cohort, or parity threshold change is authorized by this fix.
 Immutable new feature/config/output paths. Do not edit executing source. Record
 the exact source bytes and config/input/artifact hashes. No historical cache,
 checkpoint, corpus, Teacher/QAT artifact or user worktree is modified.

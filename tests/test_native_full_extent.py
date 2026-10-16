@@ -65,3 +65,34 @@ def test_all_four_corners_survive_and_padding_is_separate(frames):
 def test_preprocess_requires_original_rgb_uint8(value):
     with pytest.raises(ValueError, match="RGB uint8"):
         preprocess_full_extent(value, None)
+
+
+@pytest.mark.parametrize("tensorflow_distribution", ["tensorflow", "tensorflow_cpu"])
+def test_encoder_versions_records_actual_tensorflow_distribution(tensorflow_distribution):
+    from importlib.metadata import PackageNotFoundError
+
+    from scripts.native_full_extent import encoder_distribution_versions
+
+    def version(name):
+        if name == "tensorflow" and tensorflow_distribution == "tensorflow_cpu":
+            raise PackageNotFoundError(name)
+        return "2.18.1" if name == tensorflow_distribution else "test-version"
+
+    result = encoder_distribution_versions(version)
+    assert result[tensorflow_distribution] == "2.18.1"
+    assert len(result) == 6
+    assert set(result) == {"jax", "jaxlib", "numpy", "av", "psutil", tensorflow_distribution}
+
+
+def test_encoder_versions_does_not_hide_missing_tensorflow():
+    from importlib.metadata import PackageNotFoundError
+
+    from scripts.native_full_extent import encoder_distribution_versions
+
+    def version(name):
+        if name.startswith("tensorflow"):
+            raise PackageNotFoundError(name)
+        return "test-version"
+
+    with pytest.raises(PackageNotFoundError):
+        encoder_distribution_versions(version)

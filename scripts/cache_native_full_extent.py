@@ -1,7 +1,6 @@
 """New CPU VideoPrism caches with full spatial extent; never overwrites historical files."""
 
 import argparse
-import importlib.metadata
 import json
 import shutil
 import subprocess
@@ -16,7 +15,7 @@ import psutil
 
 from scripts.extract_frozen_videoprism_clevr4_features import _preprocess_rgb_image
 from scripts.extract_frozen_videoprism_features import _decode_video, _preprocess
-from scripts.native_full_extent import POLICY, preprocess_full_extent
+from scripts.native_full_extent import POLICY, encoder_distribution_versions, preprocess_full_extent
 from scripts.native_video_cache import sha
 from tiny_omni_decision.dinov2_features import require_image_splits
 from tiny_omni_decision.video_token_grid import token_grid
@@ -193,10 +192,7 @@ def main():
             )[1]["spatial_features"]
         )
         encode_video = jax.jit(lambda x: model.apply(variables, x, train=False))
-        versions = {
-            p: importlib.metadata.version(p)
-            for p in ("jax", "jaxlib", "numpy", "av", "tensorflow", "psutil")
-        }
+        versions = encoder_distribution_versions()
         if reference and reference["versions"] != versions:
             raise ValueError("smoke/full dependency environment differs")
         result.update(
