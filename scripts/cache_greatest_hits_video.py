@@ -69,7 +69,8 @@ def main():
             ['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip(),
         started_utc=datetime.now(UTC).isoformat(), completed_events=0, completed_parents=0,
         completed_questions=0, matched_reference_events=0, optimizer_updates=0,
-        device='cpu', dtype='float32', validation_loaded=args.phase == 'full',
+        device='cpu', dtype='float32', validation_task_metadata_loaded=True,
+        validation_media_loaded=args.phase == 'full',
         sealed_audit_loaded=False, calibration_loaded=False, quality_evaluated=False,
         cloud_cost=0, artifacts={}, parents=[])
     pins = {}
