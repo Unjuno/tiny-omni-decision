@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "experiment": "greatest-hits-audio-query-20261017",
+  "execution_source_commit": "61530adc76935e4b5dbfbabf582ef1ec03cd1405",
+  "audit_receipt_sha256": "3862842c64bdf96dd08b14a472626921b0e8af0a03b3935465ce04f94f078fdb",
+  "audit_script_sha256": "3a8b40aaddd6c1cfcf07c055c32648617f15ed980fdf88bb4959390bac3f1914",
+  "artifact_ledger_sha256": "6a0b005e4fbd1a3a3dacef968224fc45e28d3fa57fc3f1e67c229ca8386f859e",
+  "status": "PASS_AUDIO_QUERY_SMOKE_REPLAY_AUDIT",
+  "completed_utc": "2026-10-16T18:49:01.119087+00:00",
+  "source_sha256": "3a8b40aaddd6c1cfcf07c055c32648617f15ed980fdf88bb4959390bac3f1914",
+  "preserved_previous_files": 8714,
+  "verified_new_files": 94,
+  "exact_fresh_process_tensor_pairs": 45,
+  "exact_plan_pairs": 1,
+  "exact_video_smoke_event_clock_bindings": 21,
+  "exact_prior_audio_events": 2,
+  "receipts": {
+    "greatest-hits-audio-query-smoke-01": {
+      "seconds": 31.300833499990404,
+      "load_and_query_seconds": 23.339621699997224,
+      "audio_forward_seconds": 2.504541999864159,
+      "audio_decode_seconds": 2.0462363000260666,
+      "query_forward_seconds": 2.5413343000109307,
+      "peak_working_set_bytes": 2170822656,
+      "peak_vram_bytes": 485888000,
+      "started_utc": "2026-10-16T18:46:05.658121+00:00",
+      "finished_utc": "2026-10-16T18:46:36.897401+00:00",
+      "sha256": "95686ac92f430a980d453f3602b8bdd7404c49914393eeaab404fe6c4b68bfea"
+    },
+    "greatest-hits-audio-query-smoke-replay-01": {
+      "seconds": 29.97758010000689,
+      "load_and_query_seconds": 22.12686190000386,
+      "audio_forward_seconds": 2.124464299995452,
+      "audio_decode_seconds": 2.1641570000210777,
+      "query_forward_seconds": 1.7885477999807335,
+      "peak_working_set_bytes": 2175139840,
+      "peak_vram_bytes": 485888000,
+      "started_utc": "2026-10-16T18:46:54.854273+00:00",
+      "finished_utc": "2026-10-16T18:47:24.768632+00:00",
+      "sha256": "5bbbdbd64ab9f516a45d7ea32f229b7591fc4d12db5fb85e2e8a0fd5d89e03e0"
+    }
+  },
+  "optimizer_updates": 0,
+  "quality_evaluated": false,
+  "product_goal_complete": false,
+  "model_parameters": {
+    "speech": 8208384,
+    "event": 1961239,
+    "mel": 0,
+    "language": 70830722
+  },
+  "model_versions": {
+    "torch": "2.6.0+cu124",
+    "torchaudio": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "numpy": "2.4.6",
+    "safetensors": "0.8.0",
+    "av": "18.1.0"
+  },
+  "full_cache": {
+    "output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-audio-query-cache-01",
+    "completion": "NOT_ESTABLISHED; inspect live process/result",
+    "expected_events": 11151,
+    "expected_questions": 32582,
+    "expected_parents": 409
+  },
+  "verification": {
+    "ruff": "PASS",
+    "cpu_tests": "2275 passed, 1 skipped",
+    "manifest_commands": 25
+  },
+  "ci_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-audio-query-verification-01\\ci.json"
+}

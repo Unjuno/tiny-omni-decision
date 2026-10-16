@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 audio/query cache path executed:** The fixed 21 TRAIN events and
+24 original question/candidate pairs pass real frozen encoders and exact
+fresh-process replay (45 tensors plus plan). All 21 event IDs/clocks match the
+passing video smoke; 8,714 earlier artifacts remain unchanged. Full audio caching
+now runs independently on the local GPU while video caching continues on CPU.
+Both complete caches and explicit-position readout transport remain to be verified
+before matched Attention/exchange/gate learning. No quality gain is claimed.
+[Execution, hashes and live handles](docs/pretrained_reuse/R2_GREATEST_HITS_AUDIO_QUERY_RESULTS_20261017.md).
+
 **2026-10-17 full-extent AV encoder path executed:** All 21 fixed TRAIN events,
 105-payload fresh-process replay, and the new decoder-to-bank smoke pass exactly.
 Frozen weights and 8,437 earlier artifacts are unchanged. Begin complete CPU video
