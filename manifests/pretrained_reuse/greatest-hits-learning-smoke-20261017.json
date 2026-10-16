@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "experiment": "greatest-hits-learning-smoke-20261017",
+  "execution_source_commit": "304f28f568f0fe0dd3984ac23ed4ec2f7cd47578",
+  "audit_receipt_sha256": "76b11efd8cf47ffbd9269f544bb31447308998b151000d6f8858f878e527a2b7",
+  "audit_script_sha256": "24170ab00e7e7ac470936980cff9c7dd4617dc14c6d3e187b38525f8c78483e0",
+  "artifact_ledger_sha256": "fcea9f5ce6b97953c26699a73fab825e35020426bfab141e4e31ef498bfa609a",
+  "status": "PASS_AV_LEARNING_SMOKE_REPLAY_AUDIT",
+  "completed_utc": "2026-10-16T19:48:25.837842+00:00",
+  "source_sha256": "24170ab00e7e7ac470936980cff9c7dd4617dc14c6d3e187b38525f8c78483e0",
+  "preserved_previous_files": 9649,
+  "verified_new_files": 46,
+  "exact_fresh_process_payload_pairs": 22,
+  "independent_json_decisions": 1890,
+  "updates_per_arm": 8,
+  "train_questions_per_arm": 32,
+  "arms": [
+    "C0",
+    "E0G0",
+    "E0G1",
+    "E1G0",
+    "E1G1"
+  ],
+  "receipts": {
+    "greatest-hits-learning-smoke-01": {
+      "seconds": 42.583013999974355,
+      "load_seconds": 9.712621599988779,
+      "peak_working_set_bytes": 1492492288,
+      "peak_vram_bytes": 214010368,
+      "started_utc": "2026-10-16T19:45:56.329396+00:00",
+      "finished_utc": "2026-10-16T19:46:38.846058+00:00",
+      "sha256": "147621282f441751740ce3c3dedb4355cf4d450443449696a10f699e46b118a6",
+      "arms": {
+        "C0": {
+          "training_seconds": 1.9685884000209626,
+          "prediction_seconds": 2.7988610999891534,
+          "mean_update_seconds": 0.24607355000262032,
+          "median_forward_backward_seconds": 0.1270818499760935,
+          "max_group_gradient_norms": {
+            "projections": 0.43822176981066957,
+            "modality": 0.02637882681432983,
+            "position": 0.02225372861770073,
+            "memory_norm": 0.06776694469427556,
+            "query": 4.848607884428525,
+            "attention": 1.1642406768278164,
+            "score": 3.7202755701623067
+          }
+        },
+        "E0G0": {
+          "training_seconds": 1.576147099985974,
+          "prediction_seconds": 4.04431409999961,
+          "mean_update_seconds": 0.19701838749824674,
+          "median_forward_backward_seconds": 0.17247084999689832,
+          "max_group_gradient_norms": {
+            "audio_latents": 2.1235842166717215e-05,
+            "video_latents": 1.1762173313131275e-06,
+            "baseline": 6.413239122922444,
+            "pool": 0.017113754976660425,
+            "candidate_attention": 0.014936124641133969,
+            "correction": 1.0405110627076226
+          }
+        },
+        "E0G1": {
+          "training_seconds": 1.6324260999972466,
+          "prediction_seconds": 4.109319500013953,
+          "mean_update_seconds": 0.20405326249965583,
+          "median_forward_backward_seconds": 0.1759293999930378,
+          "max_group_gradient_norms": {
+            "audio_latents": 2.1314695825135574e-05,
+            "video_latents": 1.0568780770155905e-06,
+            "baseline": 6.390906584884316,
+            "pool": 0.016948223364913754,
+            "candidate_attention": 0.01372932021995238,
+            "gate": 0.014357857708371469,
+            "correction": 0.9099907506461107
+          }
+        },
+        "E1G0": {
+          "training_seconds": 1.6326625000219792,
+          "prediction_seconds": 4.124481299979379,
+          "mean_update_seconds": 0.2040828125027474,
+          "median_forward_backward_seconds": 0.17627929999434855,
+          "max_group_gradient_norms": {
+            "audio_latents": 1.755629728236656e-06,
+            "video_latents": 4.107032688053535e-07,
+            "baseline": 6.4266088633525005,
+            "pool": 0.005102893054508937,
+            "audio_from_video": 0.0016666002516321718,
+            "video_from_audio": 0.0014982667110177786,
+            "audio_norm": 0.00019211546499738866,
+            "video_norm": 0.0002590835211056162,
+            "candidate_attention": 0.00841093425729019,
+            "correction": 1.1444327946334827
+          }
+        },
+        "E1G1": {
+          "training_seconds": 1.6969959000125527,
+          "prediction_seconds": 4.328539699985413,
+          "mean_update_seconds": 0.2121244875015691,
+          "median_forward_backward_seconds": 0.17491610000433866,
+          "max_group_gradient_norms": {
+            "audio_latents": 2.553633818335045e-06,
+            "video_latents": 2.6019742737699763e-07,
+            "baseline": 6.425845646248792,
+            "pool": 0.00659686981899736,
+            "audio_from_video": 0.0027791487007430625,
+            "video_from_audio": 0.001642159744012465,
+            "audio_norm": 0.0006970805316546064,
+            "video_norm": 0.00046108121689776636,
+            "candidate_attention": 0.013509631378154701,
+            "gate": 0.015425983215274998,
+            "correction": 1.115363186425506
+          }
+        }
+      }
+    },
+    "greatest-hits-learning-replay-01": {
+      "seconds": 42.22349559998838,
+      "load_seconds": 10.127870500000427,
+      "peak_working_set_bytes": 1462140928,
+      "peak_vram_bytes": 214010368,
+      "started_utc": "2026-10-16T19:47:06.890208+00:00",
+      "finished_utc": "2026-10-16T19:47:49.059214+00:00",
+      "sha256": "cd528908ba47e8bb95f06244d788bd5efea6e0886091a97d4b24af96f3f91ef2",
+      "arms": {
+        "C0": {
+          "training_seconds": 1.7272137999825645,
+          "prediction_seconds": 2.6931242999853566,
+          "mean_update_seconds": 0.21590172499782057,
+          "median_forward_backward_seconds": 0.11805560000357218,
+          "max_group_gradient_norms": {
+            "projections": 0.43822176981066957,
+            "modality": 0.02637882681432983,
+            "position": 0.02225372861770073,
+            "memory_norm": 0.06776694469427556,
+            "query": 4.848607884428525,
+            "attention": 1.1642406768278164,
+            "score": 3.7202755701623067
+          }
+        },
+        "E0G0": {
+          "training_seconds": 1.3751827999949455,
+          "prediction_seconds": 4.067320599977393,
+          "mean_update_seconds": 0.1718978499993682,
+          "median_forward_backward_seconds": 0.1571795499912696,
+          "max_group_gradient_norms": {
+            "audio_latents": 2.1235842166717215e-05,
+            "video_latents": 1.1762173313131275e-06,
+            "baseline": 6.413239122922444,
+            "pool": 0.017113754976660425,
+            "candidate_attention": 0.014936124641133969,
+            "correction": 1.0405110627076226
+          }
+        },
+        "E0G1": {
+          "training_seconds": 1.3944776999996975,
+          "prediction_seconds": 4.279601600021124,
+          "mean_update_seconds": 0.1743097124999622,
+          "median_forward_backward_seconds": 0.1542032500001369,
+          "max_group_gradient_norms": {
+            "audio_latents": 2.1314695825135574e-05,
+            "video_latents": 1.0568780770155905e-06,
+            "baseline": 6.390906584884316,
+            "pool": 0.016948223364913754,
+            "candidate_attention": 0.01372932021995238,
+            "gate": 0.014357857708371469,
+            "correction": 0.9099907506461107
+          }
+        },
+        "E1G0": {
+          "training_seconds": 1.6727731999999378,
+          "prediction_seconds": 4.43594419999863,
+          "mean_update_seconds": 0.20909664999999222,
+          "median_forward_backward_seconds": 0.1732664000010118,
+          "max_group_gradient_norms": {
+            "audio_latents": 1.755629728236656e-06,
+            "video_latents": 4.107032688053535e-07,
+            "baseline": 6.4266088633525005,
+            "pool": 0.005102893054508937,
+            "audio_from_video": 0.0016666002516321718,
+            "video_from_audio": 0.0014982667110177786,
+            "audio_norm": 0.00019211546499738866,
+            "video_norm": 0.0002590835211056162,
+            "candidate_attention": 0.00841093425729019,
+            "correction": 1.1444327946334827
+          }
+        },
+        "E1G1": {
+          "training_seconds": 1.6624548000108916,
+          "prediction_seconds": 3.5169195999915246,
+          "mean_update_seconds": 0.20780685000136145,
+          "median_forward_backward_seconds": 0.1779367999988608,
+          "max_group_gradient_norms": {
+            "audio_latents": 2.553633818335045e-06,
+            "video_latents": 2.6019742737699763e-07,
+            "baseline": 6.425845646248792,
+            "pool": 0.00659686981899736,
+            "audio_from_video": 0.0027791487007430625,
+            "video_from_audio": 0.001642159744012465,
+            "audio_norm": 0.0006970805316546064,
+            "video_norm": 0.00046108121689776636,
+            "candidate_attention": 0.013509631378154701,
+            "gate": 0.015425983215274998,
+            "correction": 1.115363186425506
+          }
+        }
+      }
+    }
+  },
+  "accounting": {
+    "consumed": 32,
+    "unique_questions": 32,
+    "unique_events": 18,
+    "unique_assets": 18,
+    "repeated_questions": 0,
+    "tasks": {
+      "material": 11,
+      "action": 9,
+      "reaction": 12
+    },
+    "source": "greatest-hits",
+    "split": "train"
+  },
+  "quality_evaluated": false,
+  "product_goal_complete": false,
+  "versions": {
+    "torch": "2.6.0+cu124",
+    "numpy": "2.4.6"
+  },
+  "config": {
+    "seed": 17,
+    "updates": 8,
+    "microbatches_per_update": 4,
+    "optimizer": "AdamW",
+    "lr": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "scheduler": "constant smoke only",
+    "dtype": "float32",
+    "arms": [
+      "C0",
+      "E0G0",
+      "E0G1",
+      "E1G0",
+      "E1G1"
+    ],
+    "accounting": {
+      "consumed": 32,
+      "unique_questions": 32,
+      "unique_events": 18,
+      "unique_assets": 18,
+      "repeated_questions": 0,
+      "tasks": {
+        "material": 11,
+        "action": 9,
+        "reaction": 12
+      },
+      "source": "greatest-hits",
+      "split": "train"
+    }
+  },
+  "attention_backend_policy": {
+    "flash": true,
+    "memory_efficient": true,
+    "math": true,
+    "cudnn": true,
+    "selection": "PyTorch automatic"
+  },
+  "full_learning_admitted": false,
+  "pending": "Complete video, full binding, fixed learning protocol",
+  "verification": {
+    "ruff": "PASS",
+    "cpu_tests": "2315 passed, 1 skipped",
+    "manifest_commands": 25
+  },
+  "ci_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-learning-smoke-verification-01\\ci.json"
+}

@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 conditional AV learning mechanics executed:** C0 and all four
+exchange/gate arms complete8 updates on the same32 unique TRAIN questions each.
+Enabled gradients, inactive-state preservation and945 checkpoint-reload decisions
+pass. Fresh-process replay matches all22 payloads, including optimizer state and
+histories;9,649 older files are unchanged. Explicit independently verified audio
+admission preserves the failed producer receipt. Full video remains live.
+Next complete full cache/binding and freeze sufficient matched learning/retention
+conditions. The8-update cost probe neither ranks quality nor establishes a ceiling;
+joint benefit, calibrated quality and product95–98% gates remain open.
+[Measured learning smoke and limitations](docs/pretrained_reuse/R2_GREATEST_HITS_LEARNING_SMOKE_RESULTS_20261017.md).
+
 **2026-10-17 full audio cache independently revalidated:** The producer saved all
 11,151 events but exited1 at an erroneous three-reference count: the third old
 probe has all missing labels and no frozen task row. Fix future expected counts
