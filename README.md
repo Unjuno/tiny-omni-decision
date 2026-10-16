@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-17 画角保持の長期比較完了:** 同じ条件で32,768更新を完走し、best/finalの
+全予測の再現も一致。選択checkpointではImage35.40→38.13%、Video33.75→38.00%だが、
+Audio61.27→58.18%、macro NLL1.630→1.674となり、採用条件は未達。
+動画のAccuracy差の区間は0を含む。元controlと全結果を保持し、95–98%の製品目標は未達。
+[全曲線・同条件比較・不確かさ](docs/pretrained_reuse/R2_NATIVE_FULL_EXTENT_RESULTS_20261016.md)。
+
 **2026-10-16 正例被覆の比較学習完了:** 292問の音声イベント負例を未使用の正例へ置換し、
 他の提示位置・モデル・予算を固定して32,768更新を完走。best/finalの別プロセス再現も一致。
 非speech balanced Accuracyは50.00→54.11%だが、選択checkpointのmacro NLLは

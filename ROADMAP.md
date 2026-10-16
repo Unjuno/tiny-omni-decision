@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 full-extent comparison completed:** All8936 Image/456 Video caches,
+32768 updates, exact best/final replay and saved-prediction audit PASS. Selected
+Image/Video Accuracy improves, but Audio falls3.096pp and macro NLL1.630→1.674;
+the predefined retention rule fails. Preserve this result without adoption or
+geometry/seed search. Video's Accuracy interval includes0 and its NLL worsens.
+Next preregister one matched32768-update unique-coverage comparison using the
+already-frozen fresh TRAIN pool and original crop/control. The earlier coverage
+comparison only measured2048 updates. Keep model/LR/selector/validation fixed;
+record Video's unchanged256-scene coverage. This next comparison is not yet run.
+Temporal/LSTM/xLSTM, joint/OOD, calibration and95–98% product gates remain open.
+[Measured results](docs/pretrained_reuse/R2_NATIVE_FULL_EXTENT_RESULTS_20261016.md).
+
 **2026-10-16 full-extent comparison registered:** Keep the original control's
 sampling/model/long budget and replace only Image/Video center crop with one
 288px full-extent bilinear/black-pad policy. Geometry tests precede real CPU
