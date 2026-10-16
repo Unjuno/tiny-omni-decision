@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 strategy refresh, 14:35 JST:** Keep the 196.25M candidate and focus
+the next work on common inputs/run contract, one shared-readout baseline fit,
+then one evidence-directed repair. The readout still has zero updates. C: free
+space now measures10.38GB; recheck each run's reserve instead of assuming the
+old disk blocker persists. No new fit or quality result in this strategy review.
+[Execution priorities and decision rules](docs/pretrained_reuse/STRATEGY_REVIEW_20261016.md).
+
 **2026-10-16 input execution:** Lossless-token language windows and unified
 speech/event preprocessing pass actual model smokes; all6 audio arrays reproduce
 exactly in a fresh process. Full language caching stops before model loading at
