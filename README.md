@@ -1,5 +1,14 @@
 # Tiny Omni Decision
 
+**Native state dependence measured (2026-10-16):** Fixed TRAIN contrasts now
+compare identical questions/options across different inputs and correct answers.
+All1,250pairs reproduce exactly. The2048 endpoint answers both sides correctly
+on0/442 consumed text pairs and1/16 consumed video pairs; image predictions
+respond to inputs but remain inaccurate. These are constructed TRAIN diagnostics,
+not test accuracy or an encoder ceiling. Next compare matched-state batching
+with an equal-data/equal-budget control before expanding temporal architecture.
+[Evidence, missing conditions and next experiment](docs/pretrained_reuse/R2_NATIVE_STATE_DEPENDENCE_RESULTS_20261016.md).
+
 **Native baseline/LSTM comparison completed (2026-10-16):** Both models finish
 2,048 updates and reproduce best/final predictions exactly in fresh processes.
 Total parameters are196.255M /197.291M. Fixed-endpoint temporal-video Accuracy

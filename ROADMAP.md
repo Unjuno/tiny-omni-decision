@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-16 fixed TRAIN state diagnostic completed:**1,250 exact-question/full-
+candidate pairs pass full fresh replay with frozen initial/2048 weights. Both-
+correct rates are0/442 consumed text pairs and1/16 consumed video pairs; image
+sensitivity does not imply correct value readout. Preserve17 unpairable task
+strata, including unavailable unconsumed video. No training or audit access.
+Next test matched-state batch grouping against an independent-batch control
+with the same sample multiset, architecture, loss, optimizer and update budget;
+retain unpairable rows and the full validation/retention scope. This comparison
+is not yet run. No xLSTM expansion, product promotion or R2 completion.
+[Measured diagnostic and interpretation](docs/pretrained_reuse/R2_NATIVE_STATE_DEPENDENCE_RESULTS_20261016.md).
+
 **2026-10-16 common native fits completed:** Attention baseline and residual
 LSTM each finish2,048 updates on identical data/order, with exact full best/final
 replay. Temporal-video endpoint Accuracy remains33.5% in both. LSTM's small
