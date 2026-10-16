@@ -8403,7 +8403,7 @@
   },
   "figure_hashes": {
     "png": "554bdd5707e7adae9e7465a92d5054051f722e4017e3c81bfc81aba79ca4d3ae",
-    "svg": "17894a1a034198fc2140b173265e0c561ace6bf1b001737ab672b53af8daf4d6"
+    "svg": "23d5c6fa72fcd1807f2538ee0b19ec1f90abe2bd38736c5611cb68ff4156afdf"
   },
   "compute": {
     "six_process_wall_seconds_excluding_imports": 2040.4939429000078,
@@ -8431,5 +8431,10 @@
       "conclusion": "success",
       "url": "https://github.com/Unjuno/tiny-omni-decision/actions/runs/38866031704"
     }
-  }
+  },
+  "original_figure_hashes": {
+    "png": "554bdd5707e7adae9e7465a92d5054051f722e4017e3c81bfc81aba79ca4d3ae",
+    "svg": "17894a1a034198fc2140b173265e0c561ace6bf1b001737ab672b53af8daf4d6"
+  },
+  "svg_publication_note": "Removed trailing line whitespace from published SVG only; XML elements/normalized attributes/text match original. Original plot artifact and hashes preserved."
 }
