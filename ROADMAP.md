@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 joint-source physical probe:** Greatest Hits official TRAIN labels
+and one real AV clip were acquired with bounded version-checked ranges; full CPU
+decode passed.98 annotation rows include54 complete/37 wholly missing/7 partial
+labels. Official split IDs share55 timestamp prefixes, so source grouping remains
+unresolved despite zero exact-ID overlap. Preserve missing labels and leave TEST
+media/labels closed. Next inventory TRAIN labels/groups and establish task/alignment
+before matched gate learning. No new fit or quality claim; AVC rights conflict is
+REVIEW. [Actual source evidence](docs/pretrained_reuse/R2_JOINT_SOURCE_ADMISSION_20261017.md).
+
 **2026-10-17 conditional AV interaction:** Add an opt-in residual with parallel
 audio/video exchange and query/candidate-conditioned independent gates; preserve
 the current Attention baseline and all trainer defaults. Four gate/exchange

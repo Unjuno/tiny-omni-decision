@@ -1,5 +1,7 @@
 import io
+import json
 import zipfile
+from pathlib import Path
 
 import pytest
 
@@ -86,3 +88,41 @@ def test_times_rejects_bad_schema_and_timestamps(payload):
 
     with pytest.raises(ValueError):
         parse_times(payload)
+
+
+def test_range_source_bounds_fail_before_network(tmp_path, monkeypatch):
+    from scripts.greatest_hits_source import CurlRangeSource
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("must not invoke curl")
+
+    monkeypatch.setattr("scripts.greatest_hits_source.subprocess.run", forbidden)
+    with pytest.raises(ValueError, match="HTTPS"):
+        CurlRangeSource("http://invalid", 100, '"fixed"', tmp_path / "insecure")
+    source = CurlRangeSource("https://invalid", 100_000_000, '"fixed"', tmp_path / "ranges")
+    for start, count in [(-1, 1), (0, 0), (100_000_000, 1), (0, 65 * 2**20)]:
+        with pytest.raises(ValueError):
+            source.read(start, count)
+    source.requested = 64 * 2**20
+    with pytest.raises(ValueError):
+        source.read(0, 1)
+    assert not source.requests
+
+
+def test_published_probe_does_not_admit_training_or_claim_full_archive_hash():
+    repo = Path(__file__).resolve().parents[1]
+    data = json.loads((repo / "manifests/pretrained_reuse/greatest-hits-probe-20261017.json")
+                      .read_text(encoding="utf-8"))
+    assert data["policy"] == "REVIEW" and data["training_admission"] == "NOT_ADMITTED"
+    assert data["source_version"]["full_archive_sha256"] is None
+    assert not data["test_media_or_labels_opened"] and not data["sealed_audit_opened"]
+    assert not data["model_loaded"] and data["optimizer_updates"] == 0
+    assert data["parent_inventory"]["train"] + data["parent_inventory"]["test"] == 977
+    assert data["parent_inventory"]["exact_id_overlap"] == 0
+    assert data["grouping"]["timestamp_prefix"]["shared"] == 55
+    annotations = data["annotations"]
+    assert annotations["rows"] == 98 and annotations["complete"] == 54
+    assert sum(annotations["missing_fields_histogram"].values()) == annotations["rows"]
+    assert all(sum(c.values()) == annotations["rows"]
+               for c in annotations["raw_label_field_counts"])
+    assert {s["type"] for s in data["decoded_streams"]} == {"video", "audio"}

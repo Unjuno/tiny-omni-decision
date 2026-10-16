@@ -1,5 +1,10 @@
 # Tiny Omni Decision
 
+**2026-10-17 AV融合の準備:** 条件付き相互作用ゲートは総197.10Mで実装済み。
+共通corpusにAV同時入力が0件のため、Greatest HitsのTRAIN注釈と実動画を取得・全区間
+デコードした。欠損ラベルと分割IDの接頭辞重複があり、学習用の分割・課題は未確定。
+ゲートの精度改善は未検証。 [実物確認の結果](docs/pretrained_reuse/R2_JOINT_SOURCE_ADMISSION_20261017.md)。
+
 **2026-10-17 画角保持の長期比較完了:** 同じ条件で32,768更新を完走し、best/finalの
 全予測の再現も一致。選択checkpointではImage35.40→38.13%、Video33.75→38.00%だが、
 Audio61.27→58.18%、macro NLL1.630→1.674となり、採用条件は未達。
