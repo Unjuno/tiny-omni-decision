@@ -330,8 +330,87 @@ observed normal automatic-yield path; it is not a prerequisite for continuing.
 
 The saved effective config retains seed17,32,768 updates, all eight microbatches,
 the original mixture/schedule, shared fitted initial weights with fresh optimizer,
-all ten evaluation points and the same selector. Initial full evaluation is in
-progress; no optimizer updates or passing full E0G0 result are claimed yet.
+all ten evaluation points and the same selector. This is only a historical launch
+snapshot; the subsequent partial curve and safety-stop evidence are recorded
+below. The earlier `result.json` status `RUNNING` is stale partial metadata, not
+evidence that the process is still active or that the fit completed.
+
+## E0G0 attempt 01: finite-gradient anomaly safety stop
+
+E0G0 attempt 01 launched from source commit
+`8a5440da334e74e970d80a7059ca5bb99a7248cb` at 2026-10-17 16:39:02 JST,
+using the registered E0G0 smoke receipt, audit receipt and fixed 32,768-update
+configuration. It was stopped after the training history had flushed step 5,385
+(43,080 presentations; 38,207 unique sample IDs; 4,873 repeated presentations).
+The last flushed row is 2026-10-17 17:58:38 JST. This is an incomplete safety
+stop, not a completed fit or a quality failure. No interrupted-run resume is
+implemented or claimed.
+
+Scheduled evaluations at 0, 512, 1,024, 2,048 and 4,096 completed all six views.
+The fixed selector selected step 4,096 (joint task-macro NLL 1.237779); the
+checkpoint and `best.pt` SHA-256 are both
+`7e73ca5a5cdd8efde8277e37876dd2b604aa840e0dafe6566cc3afa856f0e87f`. Its
+validation metrics and step-0 reference are:
+
+| Step | Joint Accuracy | Joint NLL | Joint Brier | Joint ECE | Common macro Accuracy | Common macro NLL | Eligible |
+|---:|---:|---:|---:|---:|---:|---:|:---:|
+| 0 | 0.202201 | 2.350688 | 0.957725 | 0.291036 | 0.374174 | 1.630249 | yes |
+| 512 | 0.384734 | 1.721417 | 0.726431 | 0.123635 | 0.366801 | 1.675231 | no |
+| 1,024 | 0.447312 | 1.465125 | 0.657264 | 0.070476 | 0.375487 | 1.629756 | yes |
+| 2,048 | 0.434491 | 1.471382 | 0.655596 | 0.110044 | 0.375006 | 1.643310 | no |
+| 4,096 | 0.504430 | 1.237779 | 0.608518 | 0.077226 | 0.384831 | 1.602487 | yes, selected |
+
+At the selected checkpoint, common validation Accuracy/NLL/Brier/ECE by modality
+were Audio `0.621440/1.038984/0.467401/0.073174`, Image
+`0.378906/1.708743/0.711993/0.051964`, Text
+`0.213846/2.205371/0.854465/0.124989`, and Video
+`0.360000/1.372134/0.708042/0.106573`. Step 4,096 consumed 32,768 planned
+presentations, 29,184 unique questions, 3,584 repeats, 15,384 unique observations,
+5,220 unique media assets and 4,958 groups. Do not conflate this selected-step
+accounting with the run's later partial total.
+
+The safety signal was not NaN/Inf: all 5,385 flushed mean-CE and pre-clip gradient
+norm values were finite. It was a severe, task-local instability. The first
+pre-clip norm above 1,000 was step 4,149; the first above 100,000 and first mean CE
+above 100 were step 4,234. The maximum was 4,681,888.5 at step 4,553, with maximum
+mean CE 32,832.91 at step 4,542. There were 652 updates above norm 1,000, 301 above
+100,000, and 264 with mean CE above 100. These extreme losses occurred only in the
+four Greatest Hits AV-joint microbatches; the four single-modality rehearsal
+microbatches remained below mean CE 16.184. Maximum individual AV-joint
+microbatch CE was 252,174.41 at step 4,573. The configured clip norm was 1.0, but
+the extreme pre-clip values and joint-only loss spike met the safety-stop condition.
+This localizes the observed failure to the AV-joint path during this run; it does
+not identify a unique cause or establish a general architecture limit.
+
+The external `safety-stop.json` is the termination receipt. The runner's
+`result.json` remains a raw partial record with status `RUNNING` and its last
+periodic step 5,376; the independently flushed history ends at 5,385. No final
+checkpoint or best-reload verification exists. The saved step-4,096 candidate is
+preserved for diagnosis only and is not an adopted model. External files and
+hashes are under `C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-matched-train-E0G0-01/`;
+weights, media and optimizer-state artifacts are not added to Git.
+
+The exact CLI and process arguments are preserved in the external launch receipt.
+Effective config SHA-256 is
+`68e977f59eb2d18ac5cd97a377d127fd7889acb85b15530b2a9774bee914e65d`. Runtime
+was local Python3.11.9, PyTorch2.6.0+cu124, CUDA12.4, NumPy2.4.6 on an RTX 3080
+Laptop with16,384 MiB. The flushed history sums to899.24 seconds of update time;
+the five complete scheduled evaluations used3,780.03 seconds. Peak PyTorch CUDA
+allocation was303,525,888 bytes, peak process working set6,308,413,440 bytes and
+cloud cost was$0. The last full metadata write was step4,096, so its cumulative
+training time must not be mistaken for the later partial total.
+
+Key external hashes (SHA-256):
+
+| Artifact | SHA-256 |
+|---|---|
+| Launch receipt | `dd81a017d2b083ddf058de9c5e5db75c766798871a9ef12c066173550f00d0c2` |
+| Effective config | `68e977f59eb2d18ac5cd97a377d127fd7889acb85b15530b2a9774bee914e65d` |
+| Partial result metadata | `02a1f0658f4223442cfd08c5456a1a90ac08217258bf4553d9cf3c00a1fc8e7f` |
+| Training history | `543a6f252103b27687b4c90c35b50b81968bcb92c858b27914d67a0f83b329a5` |
+| Learning curve | `62a4695c0502cba94ed52c7a3036189902647c19cb40f2f78c178baff2948956` |
+| Safety-stop receipt | `3336177f51fa894b14257665dcb1b30153d684d043e08652e2010b4f109f3d3e` |
+| Step-4,096 best/checkpoint | `7e73ca5a5cdd8efde8277e37876dd2b604aa840e0dafe6566cc3afa856f0e87f` |
 
 ## Remaining requirements
 
@@ -373,7 +452,13 @@ exactly-one gates when active. Mixed sentinel/range/padding corruption is reject
 These are descriptive gate diagnostics, not calibrated reliability, global input
 importance or evidence of complementary correctness. They never enter selection.
 
-After all five training runs complete, invoke the module with five explicit
+The first factorial fit stopped before its budget after the gradient anomaly above.
+Do not treat this as a completed comparison or proceed directly to a product
+claim. Preserve the other four arms as not run. Diagnose the joint-AV instability
+from this saved history/checkpoint and make any new training protocol an explicitly
+versioned experiment; do not resume this run or silently change its registered
+conditions. After a valid set of five complete matched runs exists, invoke the
+module with five explicit
 `--run ARM=<completed-directory>` arguments and a fresh `--output` directory.
 For example, `--run C0=.../greatest-hits-matched-train-C0-03` binds the C0 run;
 the other four arguments must bind their own completed arm, not the smoke or
@@ -381,8 +466,9 @@ another arm's directory. No aggregate production result has been produced yet.
 The analyzer performs no model inference, fitting or fresh-process model reload;
 it checks the training-process endpoint reload evidence already saved on disk.
 
-Finish all five fixed 32,768-update curves sequentially, verify selected and final
-reloads, and compare fixed equal steps and retention-eligible selected checkpoints.
+Complete the five fixed 32,768-update curves under a numerically stable, documented
+protocol, verify selected and final reloads, and compare fixed equal steps and
+retention-eligible selected checkpoints.
 Retain all failed/ineligible outcomes and the full TRAIN/validation gaps. Follow
 with the already-frozen input interventions; replacement sensitivity does not
 supply correctness labels for both-required or conflict reasoning. Sparse Video

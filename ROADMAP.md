@@ -1,25 +1,27 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-17 normal automatic yield observed; E0G0 launched:** User clarified the
-Orbitune coexistence policy. Its trainer exited0 and supervisor waits on our
-PID19988; no manual external intervention. E0G0 attempt01 is running its initial
-evaluation with all frozen conditions preserved. Remaining matched fits and
-five-arm quality comparison are incomplete.
+**2026-10-17 E0G0 stopped for AV-joint gradient instability:** The authorized
+normal Orbitune yield path was observed. E0G0 attempt01 completed fixed evaluations
+through step4,096, selected that checkpoint by validation, then recorded extreme
+finite pre-clip gradient norms and AV-joint losses beginning at step4,234. Its own
+PID was stopped after step5,385 had flushed; the run is incomplete, not a quality
+failure. The best checkpoint is preserved, but no final reload was verified.
+Remaining factorial fits and the five-arm comparison are incomplete.
 [Actual launch and automatic-yield evidence](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_ADMISSION_20261017.md).
 
 **2026-10-17 first matched full fit C0 PASS:** All32,768 updates, all ten complete
 six-view evaluations, best/final reloads and91 artifact hashes pass. Independent
 CPU saved-score recomputation also passes. Fixed retention selects12,288;
 the final endpoint's higher Joint Accuracy does not pass common-NLL retention.
-Four factorial fits remain pending; E0G0 launch was gated by an unrelated GPU
-trainer, with intervention permission requested and no external run changed.
+Four factorial fits remain pending. A later normal automatic-yield path allowed
+E0G0 to launch; its incomplete numerical-instability outcome is recorded above.
 [Complete curve, coverage, terminal evidence and limits](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_ADMISSION_20261017.md).
 
 **2026-10-17 saved-result comparator CPU verified:** Require five terminal matched
 fits, identical initial outputs/ordered metadata, all artifact/gate/reload hashes,
 full raw-score metric recomputation and replay of the fixed selector.35 CPU tests
 cover complete tiny CPU fixtures and refusal paths; actual five-arm comparison
-remains pending while C0 is live. Equal-step/selected factorial contrasts are
+remains pending after the E0G0 safety stop. Equal-step/selected factorial contrasts are
 descriptive. Gate distributions distinguish candidate/question weighting, padding
 and missing-stream bypass; grouped uncertainty, interventions and product gates stay open.
 [Implemented boundary and tests](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_ADMISSION_20261017.md).
