@@ -14,6 +14,19 @@ fixed-checkpoint replacement diagnostic. That no-training diagnostic has only
 GPU job; its partial output is not a metric. See the [matched gated fit and
 uncertainty report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
 
+**2026-10-18 AV replacement diagnostic preflight:** Before retrying the
+inference-only replacement diagnostic, the separate `codex/r2-av-postnorm-stability`
+branch was updated at `7fa2a062a9f1a256cdf59cf67d3d89ad6e6cdda1`. Its runner
+now polls CUDA process IDs at most every two seconds instead of launching
+`nvidia-smi` before every one of 44,375 forwards, and records baseline,
+query-only and full-residual logits/sensitivity from each diagnostic forward.
+The 109/44,375 attempt remains incomplete and preserved; no new GPU scoring was
+run. Focused tests (35) and the full CPU suite (2,388 passed, 11 skipped) pass,
+and changed Python files pass Ruff. The RTX 3080 is occupied by an unrelated
+Orbitune job; live process inspection suggests its idle monitor may classify a
+CUDA child of its own trainer as foreign. No external process or file was
+changed. See the [runner preflight and limits](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_REPLACEMENT_RUNNER_PREFLIGHT_20261018.md).
+
 **2026-10-18 R0 live-state reconciliation:** PR #15 remains draft/open; the
 roadmap worktree is clean and synchronized with its remote. The only manifest
 hash change from the original R0 snapshot is the intended LibriSpeech
