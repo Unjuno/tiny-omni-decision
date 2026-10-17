@@ -60,7 +60,10 @@ run, or causal truth label.
   that imports the PyTorch-dependent training runner lacked an optional-Torch
   skip. The same failure was present on parent commit `d2055f5`. The test now
   explicitly skips when Torch is unavailable; local full-suite verification
-  remains 2,388 passed, 11 skipped. The follow-up CI run is pending.
+  remains 2,388 passed, 11 skipped. GitHub Actions for commit
+  `a5012efd5921a6c769e232cef87cd2d774735b7f` passed. The earlier failure was
+  also present on parent `d2055f5` and was not caused by the AV diagnostic
+  changes.
 
 ## Live compute observation and next step
 
