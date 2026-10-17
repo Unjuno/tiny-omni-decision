@@ -1,5 +1,22 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 conditional AV gate long fit completed:** E0G1 finished the
+fixed32,768-update run with best/final reload checks. It uses the same initial
+tensors, seed, sampler, validation IDs, schedule and selector as postnorm E0G0.
+The gate is only61,634 parameters (about0.031% of the197.10M pre-quantized
+system), so size is not the concern. Both learned sigmoid gates collapsed
+below0.01 for every valid candidate option by update512 and stayed near zero.
+At matched step32,768, joint-view Accuracy improves5.07pp but the parent-scene
+bootstrap interval for NLL still includes zero; video-only Accuracy falls3.83pp
+with a negative paired interval. Four-modality macro changes little. The base
+path still consumes inputs and the residual correction receives the query, so
+the gain does not prove gate-mediated complementary reasoning. Do not extend or
+promote this gate run. Next use the selected/final checkpoint for frozen
+inference ablations of query-only correction versus AV evidence, plus the
+already-fixed audio/video replacement conditions, before any gate-objective
+change or further fitting. No sealed audit, quantization, or product promotion.
+[Full curve, metrics, hashes and cost](docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is

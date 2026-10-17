@@ -1,5 +1,14 @@
 # Tiny Omni Decision
 
+**2026-10-18 conditional AV gate long fit completed:** E0G1 finished all
+32,768 updates and best/final reloads. Its 61.6K-parameter gate is small, but
+all valid-option audio/video gates collapsed below0.01 by update512 and stayed
+there. At the matched final step, joint AV Accuracy improved5.07pp while the
+video-only view regressed3.83pp; the four-modality macro changed little. This
+does not show that the learned gate used complementary evidence. No promotion,
+quantization, or sealed-audit evaluation.
+[Full learning curve, paired uncertainty, gate behavior and resources](docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
+
 **2026-10-17 AV本比較runnerを実装・CPU検証:** 全件入力監査、固定32,768更新、保持条件付きbest選択、
 best/final再評価の経路を実装。既存466特徴bank約6.22GBの実物検査が通過。
 全件映像抽出・GPUコスト測定・本学習は未完了。精度改善はまだ未判定。
