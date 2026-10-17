@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 first matched full fit C0 PASS:** All32,768 updates, all ten complete
+six-view evaluations, best/final reloads and91 artifact hashes pass. Independent
+CPU saved-score recomputation also passes. Fixed retention selects12,288;
+the final endpoint's higher Joint Accuracy does not pass common-NLL retention.
+Four factorial fits remain pending; E0G0 launch was gated by an unrelated GPU
+trainer, with intervention permission requested and no external run changed.
+[Complete curve, coverage, terminal evidence and limits](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_ADMISSION_20261017.md).
+
 **2026-10-17 saved-result comparator CPU verified:** Require five terminal matched
 fits, identical initial outputs/ordered metadata, all artifact/gate/reload hashes,
 full raw-score metric recomputation and replay of the fixed selector.35 CPU tests

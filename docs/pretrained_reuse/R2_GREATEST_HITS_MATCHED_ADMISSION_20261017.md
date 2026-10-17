@@ -226,6 +226,37 @@ The endpoint/selector observation is
 It explicitly leaves best/final reload and full-run success pending. The live
 training source and all legacy runs were unchanged by these CPU observations.
 
+## C0 terminal verification
+
+The pending C0 checks above subsequently completed. Attempt03 ended with
+`PASS_MATCHED_AV_TRAIN`, `best_final_reload_verified=true` and no error at
+2026-10-17T04:35:32.636966Z (13:35:32 JST). PID1320 exited. Wall time was
+12,699.576 seconds (3.528hours), training updates4,337.067 seconds and
+evaluation/reloads8,093.611 seconds. No cloud compute was used.
+
+Independent CPU checks verified all91 ledger artifacts and all12 endpoint
+score-file hashes against the original scheduled outputs. The production
+comparator's single-run validator then recomputed all summaries from all ten
+points and six complete score matrices per point; selector replay, endpoint
+bindings and both reloads pass. This single-run invocation does not bypass the
+CLI's requirement for five completed arms or claim a five-arm comparison.
+
+Terminal training-receipt SHA-256:
+`3192d0f3665fbd4558ae3094747af105a1c7441a036151b023e2c2663e94f200`.
+Independent receipts and reproducible CPU audit code are under
+`greatest-hits-matched-C0-terminal-verification-01/` and
+`greatest-hits-matched-C0-saved-metric-audit-01/`. The latter pins analysis
+commit a1b8e66767f8819168715506d91c51b57c6f7461. Selected best remains12,288;
+final remains32,768. Successful execution does not imply product-quality admission.
+
+E0G0 launch admission was rejected before process/output creation because the
+unrelated Orbitune idle trainer automatically occupied the GPU after C0 exited.
+Neither a retry during another trainer's initialization nor intervention in that
+trainer is authorized by the existing process-protection rule. Permission for its
+existing checkpoint-saving STOP/yield mechanism has been requested; no STOP/YIELD,
+kill, code change or external checkpoint mutation was performed. E0G0 and the
+other three factorial full fits remain unstarted at this observation.
+
 ## Remaining requirements
 
 The CPU-only `scripts/summarize_greatest_hits_matched.py` now implements the
