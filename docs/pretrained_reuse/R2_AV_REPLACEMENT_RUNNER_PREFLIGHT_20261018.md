@@ -68,8 +68,8 @@ the prior selected run receipt and checkpoint are unchanged.
   training-pinned test file is unchanged. A small optional-dependency pytest
   plugin marks just that source-path test skipped when Torch is not installed;
   its behavior has a CPU-only unit test. GitHub Actions passed for the
-  intermediate test fix commit `a5012efd5921a6c769e232cef87cd2d774735b7f`;
-  CI for the final source-pin-preserving runner adjustment is pending.
+  final source-pin-preserving code commit
+  `db39767bf3a9008fa31e1387a404173c059e4dd1`.
 
 ## Live compute observation and next step
 
