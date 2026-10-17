@@ -1,5 +1,20 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 text-free audio Decision probe completed:** A CPU-trained linear
+head over the existing frozen Whisper feature cache classifies the fixed
+10-keyword Speech Commands taxonomy without question/candidate text or a text
+encoder. On the previously observed 640-row validation split it scores 96.56%
+Accuracy / 0.2834 NLL / 0.0986 Brier / 0.1515 ECE; the previous Audio+Text
+readout scored 95.31% / 0.1624 / 0.0661 / 0.0377 on those same IDs. Thus the
+text-free head is slightly more accurate but substantially less calibrated in
+this narrow development task. It uses 3,850 trainable readout parameters and
+passes exact save/reload; no blind, open-vocabulary or product claim follows.
+This partially addresses R2 M-0/M-1 audio only; image/video/screen/sensor and the
+required metadata task battery remain open. Clarification: 61,634 parameters are
+the conditional gate MLP itself; 843,075 counts the full new AV residual path.
+No AV joint task has yet justified training that path. See
+[text-free audio Decision report](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_DECISION_20261017.md).
+
 **2026-10-17 frozen AV cache and long-fit evidence verified:** The full video bank
 finished all 11,151 events / 409 parents / 32,582 questions; a read-only rehash
 matched all 1,227 stored files (70,430,943,552 bytes) and the 21-event reference
