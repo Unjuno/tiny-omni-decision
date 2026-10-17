@@ -14,11 +14,14 @@ from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
 from tiny_omni_decision.native_candidate import NativeCandidateReadout
 
 
-def create_model(arm):
+def create_model(arm, *, candidate_output_norm=False):
     if arm not in ARMS:
         raise ValueError('registered factorial arm required')
+    if candidate_output_norm and arm == 'C0':
+        raise ValueError('candidate output normalization requires an AV residual arm')
     return NativeCandidateReadout() if arm == 'C0' else ConditionalAVReadout(
-        exchange=arm[1] == '1', gated=arm[3] == '1')
+        exchange=arm[1] == '1', gated=arm[3] == '1',
+        candidate_output_norm=candidate_output_norm)
 
 
 def metric_rows(rows):

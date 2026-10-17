@@ -55,10 +55,10 @@ PROBE_COUNTS = {"joint": 23707, "common": 84480}
 SMOKE_STEPS = 32
 
 
-def configuration(arm):
-    if arm not in ARMS:
+def configuration(arm, *, candidate_output_norm=False):
+    if arm not in ARMS or (candidate_output_norm and arm == "C0"):
         raise ValueError("registered factorial arm required")
-    return dict(
+    result = dict(
         arm=arm,
         seed=17,
         max_steps=MAX_STEPS,
@@ -83,6 +83,27 @@ def configuration(arm):
         selection="retention eligible; lowest joint task macro NLL; min_delta1e-5; earliest tie",
         probe="full planned consumed TRAIN union; fixed across all scheduled evaluations",
     )
+    if candidate_output_norm:
+        result["candidate_output_norm"] = True
+    return result
+
+
+def load_initial_model(model, initial, *, arm, candidate_output_norm=False):
+    """Load the pinned legacy fixture, explicitly adding only identity LayerNorm state."""
+    if not candidate_output_norm:
+        model.load_state_dict(initial, strict=True)
+        return
+    legacy_policy = {"schema": 1, "exchange": arm[1] == "1", "gated": arm[3] == "1"}
+    if arm == "C0" or initial.get("_extra_state") != legacy_policy:
+        raise ValueError("legacy same-arm initialization required for norm ablation")
+    current = model.state_dict()
+    added = {"candidate_norm.weight", "candidate_norm.bias"}
+    if set(initial) | added != set(current) or not added.isdisjoint(initial):
+        raise ValueError("norm ablation state layout differs")
+    state = dict(initial)
+    state["_extra_state"] = model.get_extra_state()
+    state.update({key: current[key] for key in added})
+    model.load_state_dict(state, strict=True)
 
 
 class Selection:
@@ -134,6 +155,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=["audit", "smoke", "train", "replay"], required=True)
     parser.add_argument("--arm", choices=ARMS)
+    parser.add_argument("--candidate-output-norm", action="store_true",
+                        help="apply a shared LayerNorm after query-conditioned AV attention")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--audit", type=Path)
     parser.add_argument("--audit-sha256")
@@ -258,7 +281,8 @@ def main():
             for path, expected in proof["input_pins"].items():
                 input_pins.add(path, expected)
                 guard()
-            config = configuration(args.arm)
+            config = configuration(args.arm,
+                                   candidate_output_norm=args.candidate_output_norm)
             config.update(
                 plan_sha256=sha(PREFLIGHT / "sampling.json"), protocol_sha256=sha(PROTOCOL)
             )
@@ -296,15 +320,17 @@ def main():
             if not torch.cuda.is_available():
                 raise RuntimeError("existing local CUDA required")
             torch.cuda.reset_peak_memory_stats()
-            model = create_model(args.arm)
-            model.load_state_dict(
-                torch.load(
-                    PREFLIGHT / (args.arm + "-initial.pt"), weights_only=True, map_location="cpu"
-                ),
-                strict=True,
+            model = create_model(args.arm,
+                                 candidate_output_norm=args.candidate_output_norm)
+            initial = torch.load(
+                PREFLIGHT / (args.arm + "-initial.pt"), weights_only=True, map_location="cpu"
             )
+            load_initial_model(model, initial, arm=args.arm,
+                               candidate_output_norm=args.candidate_output_norm)
             count = sum(p.numel() for p in model.parameters())
-            if count != (889345 if args.arm == "C0" else 1732420) or 195365529 + count > 200000000:
+            expected_count = (889345 if args.arm == "C0" else
+                              1732420 + (384 if args.candidate_output_norm else 0))
+            if count != expected_count or 195365529 + count > 200000000:
                 raise ValueError("encoder-inclusive parameter ledger differs")
             model.cuda()
             optimizer = torch.optim.AdamW(

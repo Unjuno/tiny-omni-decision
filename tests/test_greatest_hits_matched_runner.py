@@ -135,6 +135,7 @@ def test_model_only_warm_start_and_exact_fixed_config():
     assert config["microbatches"] == 8
     assert config["seed"] == 17
     assert config["initialization"] == "fitted control8192 model; fresh optimizer"
+    assert "candidate_output_norm" not in config
     assert config["performance_early_stopping"] is False
     assert config["evaluation_steps"] == [
         0,
@@ -150,6 +151,40 @@ def test_model_only_warm_start_and_exact_fixed_config():
     ]
     with pytest.raises(ValueError):
         configuration("unknown")
+    norm_config = configuration("E0G0", candidate_output_norm=True)
+    assert norm_config["candidate_output_norm"] is True
+    with pytest.raises(ValueError):
+        configuration("C0", candidate_output_norm=True)
+    from scripts.greatest_hits_matched_runtime import create_model
+    with pytest.raises(ValueError):
+        create_model("C0", candidate_output_norm=True)
+
+
+def test_norm_ablation_initializes_only_new_identity_state():
+    torch = pytest.importorskip("torch")
+    from scripts.greatest_hits_matched_runtime import create_model
+    from scripts.train_greatest_hits_matched import load_initial_model
+
+    torch.manual_seed(17)
+    legacy = create_model("E0G0")
+    original = {key: value.clone() if isinstance(value, torch.Tensor) else copy.deepcopy(value)
+                for key, value in legacy.state_dict().items()}
+    torch.manual_seed(17)
+    normalized = create_model("E0G0", candidate_output_norm=True)
+    load_initial_model(normalized, original, arm="E0G0", candidate_output_norm=True)
+    loaded = normalized.state_dict()
+    assert loaded["_extra_state"] == {
+        "schema": 2, "exchange": False, "gated": False,
+        "candidate_output_norm": True,
+    }
+    for key, value in original.items():
+        if isinstance(value, torch.Tensor):
+            torch.testing.assert_close(value, loaded[key], rtol=0, atol=0)
+        else:
+            assert value["schema"] == 1 and loaded[key] != value
+    assert torch.equal(loaded["candidate_norm.weight"], torch.ones(192))
+    assert torch.equal(loaded["candidate_norm.bias"], torch.zeros(192))
+    assert sum(p.numel() for p in normalized.parameters()) == 1_732_804
 
 
 @pytest.mark.parametrize("changed", ["arm", "source_commit", "input_digest", "config", "status"])

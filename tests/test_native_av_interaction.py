@@ -178,3 +178,57 @@ def test_gates_can_both_open_or_close_and_same_seed_arms_share_tensors():
         for key, value in original.state_dict().items():
             if isinstance(value, torch.Tensor):
                 torch.testing.assert_close(value, other.state_dict()[key], rtol=0, atol=0)
+
+
+def test_candidate_output_norm_is_opt_in_parameter_bounded_and_checkpoint_bound():
+    from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
+
+    raw, blocks, queries = fixture(exchange=False, gated=False, nonzero=True)
+    torch.manual_seed(17)
+    normalized = ConditionalAVReadout(
+        exchange=False, gated=False, candidate_output_norm=True
+    )
+    common = {k: v for k, v in raw.state_dict().items() if k != "_extra_state"}
+    state = normalized.state_dict()
+    state.update(common)
+    normalized.load_state_dict(state, strict=True)
+    assert normalized.get_extra_state() == {
+        "schema": 2, "exchange": False, "gated": False,
+        "candidate_output_norm": True,
+    }
+    ledger = normalized.parameter_ledger()
+    assert ledger["allocated_readout_parameters"] == 1_732_804
+    assert ledger["reference_total_parameters"] == 197_098_333
+
+    scores, details = normalized(blocks, queries, diagnostics=True)
+    assert details["candidate_output_norm"] is True
+    assert torch.isfinite(scores).all()
+    scores.log_softmax(0)[0].neg().backward()
+    for parameter in normalized.candidate_norm.parameters():
+        assert parameter.grad is not None and torch.isfinite(parameter.grad).all()
+        assert parameter.grad.abs().sum() > 0
+
+    with pytest.raises(ValueError, match="policy"):
+        raw.load_state_dict(normalized.state_dict(), strict=False)
+
+
+def test_candidate_output_norm_false_preserves_legacy_state_schema_and_count():
+    from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
+
+    torch.manual_seed(23)
+    legacy = ConditionalAVReadout(exchange=False, gated=False)
+    torch.manual_seed(23)
+    explicit_legacy = ConditionalAVReadout(
+        exchange=False, gated=False, candidate_output_norm=False
+    )
+    assert legacy.get_extra_state() == {
+        "schema": 1, "exchange": False, "gated": False,
+    }
+    assert set(legacy.state_dict()) == set(explicit_legacy.state_dict())
+    for key, value in legacy.state_dict().items():
+        actual = explicit_legacy.state_dict()[key]
+        if isinstance(value, torch.Tensor):
+            torch.testing.assert_close(value, actual, rtol=0, atol=0)
+        else:
+            assert value == actual
+    assert sum(p.numel() for p in explicit_legacy.parameters()) == 1_732_420
