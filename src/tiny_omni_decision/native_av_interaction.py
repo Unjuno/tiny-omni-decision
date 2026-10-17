@@ -105,14 +105,11 @@ class ConditionalAVReadout(nn.Module):
     def forward(self, blocks, queries, *, diagnostics=False):
         # Run the unchanged validator and baseline path first. The repeated
         # projection for the residual is an explicit cost, not claimed free.
-        baseline_scores = self.baseline(blocks, queries)
+        scores = self.baseline(blocks, queries)
         audio = [b for b in blocks if b.kind in ("speech", "event_audio")]
         video = [b for b in blocks if b.kind == "video"]
         if not audio or not video:
-            return (baseline_scores, {"active": False, "gates": None,
-                                      "baseline_scores": baseline_scores,
-                                      "query_only_scores": baseline_scores}) if diagnostics \
-                else baseline_scores
+            return (scores, {"active": False, "gates": None}) if diagnostics else scores
         a = self._attend(self.pool, self.audio_latents, self._memory(audio))
         v = self._attend(self.pool, self.video_latents, self._memory(video))
         if self._exchange:
@@ -127,17 +124,9 @@ class ConditionalAVReadout(nn.Module):
         gates = self.gate(self._features(q, a, v)) if self._gated else q.new_ones((len(q), 2))
         a, v = gates[:, :1] * a, gates[:, 1:] * v
         delta = self.correction(self._features(q, a, v)).squeeze(-1)
-        scores = baseline_scores + delta
+        scores = scores + delta
         if not torch.isfinite(scores).all() or not torch.isfinite(gates).all():
             raise ValueError("nonfinite conditional AV output")
-        query_only = None
-        if diagnostics:
-            zero = torch.zeros_like(q)
-            query_only = baseline_scores + self.correction(
-                self._features(q, zero, zero)
-            ).squeeze(-1)
         return (scores, {"active": True, "gates": gates, "correction": delta,
-                         "candidate_output_norm": self._candidate_output_norm,
-                         "baseline_scores": baseline_scores,
-                         "query_only_scores": query_only}) if diagnostics \
+                         "candidate_output_norm": self._candidate_output_norm}) if diagnostics \
             else scores

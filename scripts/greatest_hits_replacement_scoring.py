@@ -35,6 +35,25 @@ def aggregate(records):
     return result
 
 
+def diagnostic_forward(model, blocks, queries):
+    """Capture baseline output without changing the pinned model implementation."""
+    baseline_outputs = []
+    handle = model.baseline.register_forward_hook(
+        lambda _module, _inputs, output: baseline_outputs.append(output)
+    )
+    try:
+        values, detail = model(blocks, queries, diagnostics=True)
+    finally:
+        handle.remove()
+    if len(baseline_outputs) != 1:
+        raise ValueError("exactly one baseline forward is required")
+    baseline = baseline_outputs[0]
+    q = model.baseline.query(queries)
+    zero = torch.zeros_like(q)
+    query_only = baseline + model.correction(model._features(q, zero, zero)).squeeze(-1)
+    return values, detail, baseline, query_only
+
+
 def score(model, store, rows, inventory, *, emit, expected_natural=None, guard=lambda: None):
     """Emit all five views and return target-free paired sensitivity summaries.
 
@@ -73,7 +92,9 @@ def score(model, store, rows, inventory, *, emit, expected_natural=None, guard=l
                     donor = pair["id"] if kind == "self" else pair["donor_id"]
                     blocks, q = inputs(store, pair["id"], donor, modality)
                 if diagnostic:
-                    values, detail = model(blocks, q, diagnostics=True)
+                    values, detail, baseline_scores, query_only_scores = diagnostic_forward(
+                        model, blocks, q
+                    )
                     gate = detail["gates"]
                     if (not detail["active"] or gate is None
                             or gate.shape != (len(row["options"]), 2)
@@ -82,8 +103,8 @@ def score(model, store, rows, inventory, *, emit, expected_natural=None, guard=l
                         raise ValueError("complete finite active joint gates required")
                     gates = gate.cpu().numpy().copy()
                     readouts = {
-                        "baseline": detail["baseline_scores"].cpu().numpy().copy(),
-                        "query_only": detail["query_only_scores"].cpu().numpy().copy(),
+                        "baseline": baseline_scores.cpu().numpy().copy(),
+                        "query_only": query_only_scores.cpu().numpy().copy(),
                         "full_residual": values.cpu().numpy().copy(),
                     }
                 else:

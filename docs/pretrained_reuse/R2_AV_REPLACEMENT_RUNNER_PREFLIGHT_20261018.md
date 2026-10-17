@@ -32,17 +32,23 @@ inventory and number of model forwards are unchanged.
 
 The earlier diagnostic brief also called for separating the baseline,
 query-only correction and complete residual. The prior runner recorded only
-the complete model output. Diagnostic mode now returns the baseline score and
-the query-only correction score alongside the unchanged complete residual
-score from the same model call. The scorer records baseline/query-only/full
-residual logits for each original/self/donor input view and reports separate
-donor-audio and donor-video sensitivity summaries for baseline and query-only.
-The full residual's existing sensitivity summary remains. The fixed E0G1
-checkpoint's sigmoid gates remain observable in each full-residual record.
-This avoids repeating the baseline and cross-modal attention forward, but adds
-one small correction-MLP evaluation per view for the query-only output. This is
-a readout decomposition of one trained checkpoint, not a new model, training
-run, or causal truth label.
+the complete model output. The scorer now uses a temporary forward hook to
+capture the baseline result from the original pinned model implementation. It
+calculates the query-only output from that baseline and the existing correction
+MLP, then records baseline/query-only/full-residual logits for each
+original/self/donor input view. It reports separate donor-audio and donor-video
+sensitivity summaries for baseline and query-only; the full residual's
+existing sensitivity summary remains. The fixed E0G1 checkpoint's sigmoid
+gates remain observable in each full-residual record. No full cross-modal
+forward is repeated; one small correction-MLP evaluation is added per view.
+This is a readout decomposition of one trained checkpoint, not a new model,
+training run, or causal truth label.
+
+Before retrying the runner, its required 1,115 training-time Python source
+hashes were recomputed. All match after restoring the model implementation and
+the preexisting pinned test fixture to their exact training-time versions.
+Diagnostic-only code and tests live in new files or previously unpinned files;
+the prior selected run receipt and checkpoint are unchanged.
 
 ## Verification
 
@@ -52,18 +58,18 @@ run, or causal truth label.
   outputs were absent, then passed using actual fixture tensors. It verifies
   baseline and query-only values against direct readout calculations and checks
   that full-residual logits equal the original output.
-- Scoring and AV-interaction tests: 35 passed.
-- Full CPU suite: 2,388 passed, 11 skipped.
+- Scoring, AV-interaction and optional-Torch hook tests: 37 passed.
+- Full CPU suite: 2,389 passed, 11 skipped.
 - Ruff on changed Python files: passed.
 - No GPU test or scoring attempt was started during this code change.
 - The first GitHub Actions run also exposed an existing CPU-CI issue: a test
   that imports the PyTorch-dependent training runner lacked an optional-Torch
-  skip. The same failure was present on parent commit `d2055f5`. The test now
-  explicitly skips when Torch is unavailable; local full-suite verification
-  remains 2,388 passed, 11 skipped. GitHub Actions for commit
-  `a5012efd5921a6c769e232cef87cd2d774735b7f` passed. The earlier failure was
-  also present on parent `d2055f5` and was not caused by the AV diagnostic
-  changes.
+  skip. The same failure was present on parent commit `d2055f5`. The original
+  training-pinned test file is unchanged. A small optional-dependency pytest
+  plugin marks just that source-path test skipped when Torch is not installed;
+  its behavior has a CPU-only unit test. GitHub Actions passed for the
+  intermediate test fix commit `a5012efd5921a6c769e232cef87cd2d774735b7f`;
+  CI for the final source-pin-preserving runner adjustment is pending.
 
 ## Live compute observation and next step
 
