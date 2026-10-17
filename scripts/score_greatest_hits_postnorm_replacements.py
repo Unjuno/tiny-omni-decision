@@ -5,6 +5,7 @@ import argparse
 import importlib.metadata
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -58,19 +59,28 @@ CHECKPOINT_SHA256 = {
     "E0G1": "9df53a55e610f4e473dc5f56528edd86610a72683c8f6c40145e9d87d899d87d",
 }
 OUTPUT_PREFIX = "greatest-hits-postnorm-replacements-"
-OUTPUT_ATTEMPT = "-04"
+
+
+def active_gpu_pids():
+    report = subprocess.check_output(["nvidia-smi"], text=True)
+    return {
+        int(match.group(1))
+        for line in report.splitlines()
+        if (match := re.match(r"\|\s+\d+\s+N/A\s+N/A\s+(\d+)\s+C\s+", line))
+    }
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--arm", choices=tuple(RUNS), required=True)
+    parser.add_argument("--attempt", type=int, required=True)
     parser.add_argument("--max-seconds", type=int, required=True)
     args = parser.parse_args()
-    if args.max_seconds <= 0 or subprocess.check_output(
+    if args.max_seconds <= 0 or args.attempt < 1 or subprocess.check_output(
         ["git", "status", "--porcelain"], cwd=REPO
     ).strip():
         raise ValueError("positive resource limit and clean committed source required")
-    output = ROOT / (OUTPUT_PREFIX + args.arm + OUTPUT_ATTEMPT)
+    output = ROOT / (OUTPUT_PREFIX + args.arm + f"-{args.attempt:02d}")
     output.mkdir(exist_ok=False)
     started = time.perf_counter()
     pins, sources = Pins(), Pins()
@@ -110,6 +120,9 @@ def main():
             or psutil.disk_usage(str(output)).free < 16 * 2**30
         ):
             raise RuntimeError("resource guard; preserve incomplete diagnostic")
+        others = active_gpu_pids() - {os.getpid()}
+        if others:
+            raise RuntimeError(f"GPU contention from other compute process(es): {sorted(others)}")
         if elapsed - last_check >= 15:
             pins.check()
             sources.check()
@@ -185,16 +198,8 @@ def main():
             row["id"]: expected_scores[i, : len(by_id[row["id"]]["options"])].copy()
             for i, row in enumerate(saved_rows)
         }
-        usage = subprocess.check_output(
-            [
-                "nvidia-smi",
-                "--query-gpu=memory.used,utilization.gpu",
-                "--format=csv,noheader,nounits",
-            ],
-            text=True,
-        ).strip()
-        memory, utilization = [int(value.strip()) for value in usage.split(",")]
-        if memory > 512 or utilization > 5:
+        gpu_pids = active_gpu_pids()
+        if gpu_pids:
             raise RuntimeError("GPU occupied; scoring not started")
         if not torch.cuda.is_available():
             raise RuntimeError("existing local CUDA device required")
@@ -231,7 +236,7 @@ def main():
             },
             cuda=torch.version.cuda,
             device=torch.cuda.get_device_name(),
-            preflight_gpu=usage,
+            preflight_gpu_processes=sorted(gpu_pids),
         )
         with (output / "predictions.jsonl").open("x", encoding="utf8") as stream:
             def emit(record):
