@@ -7,12 +7,14 @@ for all valid options by update 512 and stayed near zero; the added gate has
 capacity is not the issue. E0G1 gained 5.07 pp joint-view Accuracy over E0G0,
 but the paired NLL interval includes zero and its video-only Accuracy fell
 3.83 pp. The correction path still receives the query, so these results do not
-show active gate-based AV evidence use. Do not train another gate variant yet;
-first isolate baseline, query-only, and gated residual contributions with the
-fixed-checkpoint replacement diagnostic. That no-training diagnostic has only
-109/44,375 forwards so far and was safely interrupted by the separate Orbitune
-GPU job; its partial output is not a metric. See the [matched gated fit and
-uncertainty report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
+show active gate-based AV evidence use. A fixed-checkpoint replacement
+diagnostic is now complete: donor-audio/video substitutions changed the
+argmax on38.01%/56.19% of8,875 validation questions. The query-only and full-
+residual sensitivities match at aggregate precision; this establishes output
+sensitivity, not correctness or causal AV use. Do not train another gate
+variant from this result alone. See the [matched gated fit and uncertainty
+report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md)
+and [replacement diagnostic with hashes and per-task results](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
 
 **2026-10-18 AV replacement diagnostic preflight:** Before retrying the
 inference-only replacement diagnostic, the separate `codex/r2-av-postnorm-stability`
@@ -24,18 +26,22 @@ training-pinned model implementation; all 1,115 run-time source hashes still
 match. The 109/44,375 attempt remains incomplete and preserved; no new GPU
 scoring was run. The full CPU suite passes 2,389 tests (11 skipped), Ruff passes,
 and GitHub Actions passed for code commit `db39767bf3a9008fa31e1387a404173c059e4dd1`.
-The RTX 3080 has been occupied intermittently by an unrelated Orbitune job; the
-diagnostic is not started while its supervisor/trainer may resume. No external
-process or file was changed. See the [runner preflight and limits](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_REPLACEMENT_RUNNER_PREFLIGHT_20261018.md).
+The runner completed attempt11 after cooperative GPU yield, checking all44,375
+forwards,17,750 exact self replacements,2,755 input pins and1,120 source pins.
+Peak VRAM was116.8MB; no optimizer update or sealed-audit access occurred.
+Attempts08–10 remain preserved. See the [runner preflight and limits](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_REPLACEMENT_RUNNER_PREFLIGHT_20261018.md)
+and [completed result](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
 
 **2026-10-18 R0 live-state reconciliation:** PR #15 remains draft/open; the
 roadmap worktree is clean and synchronized with its remote. The only manifest
 hash change from the original R0 snapshot is the intended LibriSpeech
 hard-negative evaluation-catalog entry; Open-Jev test metadata is unchanged.
-The RTX 3080 is currently occupied by a separate Orbitune training process.
-No process was interrupted and no new GPU run was started: the current AV
-corpus still has no admitted both-required paired task, and R0 device/task
-acceptance criteria remain open. See the [dated audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261018.md).
+At the06:44 JST audit snapshot, the RTX 3080 was idle while Orbitune's
+supervisor remained alive. Later, the fixed AV inference-only diagnostic used
+the authorized cooperative yield path; no Orbitune process or file was
+interrupted or modified. The current AV corpus still has no admitted
+both-required paired task, and R0 device/task acceptance criteria remain open.
+See the [dated audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261018.md).
 
 **2026-10-18 text-free CLEVRER temporal probe completed:** One fixed-seed
 mean-MLP/BiLSTM comparison completed 2,048 updates per arm. Selected temporal
