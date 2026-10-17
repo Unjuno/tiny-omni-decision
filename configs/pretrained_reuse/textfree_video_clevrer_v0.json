@@ -18,6 +18,7 @@
     "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
     "checkpoint": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz",
     "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "encoder_parameter_count": 114365184,
     "frames": 8,
     "feature_width": 768,
     "temporal_profile": "8 uniformly sampled endpoint-inclusive frames; spatial-token mean per time index"

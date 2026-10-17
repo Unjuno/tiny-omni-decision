@@ -43,6 +43,7 @@ DATASET_REVISION = "98b842082ba4f7c18b6b9e3f39145871782a65ef"
 VIDEO_REVISION = "be719a406d563b66f0ac969e7c94bab8e997c81a"
 VIDEO_SOURCE_COMMIT = "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
 VIDEO_CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+VIDEO_ENCODER_PARAMETER_COUNT = 114_365_184
 TAXONOMIES = ("count", "exist", "query_color", "query_material", "query_shape")
 QUESTION_TYPES = ("temporal_descriptive", "static_descriptive")
 
@@ -191,6 +192,7 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         or feature_report.get("model_revision") != VIDEO_REVISION
         or feature_report.get("upstream_source_commit") != VIDEO_SOURCE_COMMIT
         or feature_report.get("checkpoint_sha256") != VIDEO_CHECKPOINT_SHA256
+        or feature_config.get("encoder_parameter_count") != VIDEO_ENCODER_PARAMETER_COUNT
         or feature_report.get("frame_count") != 8
         or feature_report.get("feature_dimension") != 768
     ):
@@ -616,6 +618,7 @@ def _run_variant(
     best_epoch: int | None = None
     best_state: dict[str, Tensor] | None = None
     best_validation_logits: Tensor | None = None
+    best_train_metrics: dict[str, Any] | None = None
     started = time.perf_counter()
     training_seconds = 0.0
     evaluation_seconds = 0.0
@@ -681,10 +684,20 @@ def _run_variant(
                     name: value.detach().cpu().clone() for name, value in model.state_dict().items()
                 }
                 best_validation_logits = validation_result["logits"].detach().cpu().clone()
+                best_train_metrics = {
+                    key: value
+                    for key, value in train_result.items()
+                    if key not in {"logits", "row_indexes"}
+                }
                 temp = output_dir / f"best-{variant}.pt.tmp"
                 torch.save({"epoch": epoch, "state_dict": best_state}, temp)
                 temp.replace(output_dir / f"best-{variant}.pt")
-    if best_state is None or best_epoch is None or best_validation_logits is None:
+    if (
+        best_state is None
+        or best_epoch is None
+        or best_validation_logits is None
+        or best_train_metrics is None
+    ):
         raise RuntimeError(f"no best checkpoint selected for {variant}")
     final_state = {name: value.detach().cpu().clone() for name, value in model.state_dict().items()}
     final_epoch = EPOCHS
@@ -750,6 +763,7 @@ def _run_variant(
     )
     final_model.load_state_dict(final_payload["state_dict"], strict=True)
     final_logits = _model_prediction(final_model, validation)
+    final_train_metrics = _evaluate(final_model, train, train_rows)
     final_metrics = _evaluate(final_model, validation, validation_rows)
     _write_predictions(
         output_dir / f"final-validation-{variant}.jsonl",
@@ -780,16 +794,36 @@ def _run_variant(
             for key, value in best_metrics.items()
             if key not in {"logits", "row_indexes"}
         },
+        "selected_train_metrics": best_train_metrics,
         "selected_validation_controls": controls,
         "final_validation_metrics": {
             key: value
             for key, value in final_metrics.items()
             if key not in {"logits", "row_indexes"}
         },
+        "final_train_metrics": {
+            key: value
+            for key, value in final_train_metrics.items()
+            if key not in {"logits", "row_indexes"}
+        },
+        "overfitting_warning": (
+            "training macro NLL decreased after the selected epoch while validation macro NLL rose"
+            if final_train_metrics["macro_question_type"]["nll"]
+            < best_train_metrics["macro_question_type"]["nll"]
+            and final_metrics["macro_question_type"]["nll"]
+            > best_metrics["macro_question_type"]["nll"]
+            else None
+        ),
         "trainable_parameters": parameter_count,
+        "frozen_encoder_parameters": VIDEO_ENCODER_PARAMETER_COUNT,
+        "isolated_video_path_parameters_prequantization": (
+            VIDEO_ENCODER_PARAMETER_COUNT + parameter_count
+        ),
         "model_parameter_dtype": str(next(model.parameters()).dtype),
         "selected_checkpoint_sha256": _sha256(output_dir / f"best-{variant}.pt"),
+        "selected_checkpoint_bytes": (output_dir / f"best-{variant}.pt").stat().st_size,
         "final_checkpoint_sha256": _sha256(output_dir / f"final-{variant}.pt"),
+        "final_checkpoint_bytes": (output_dir / f"final-{variant}.pt").stat().st_size,
         "selected_prediction_sha256": _sha256(output_dir / f"selected-validation-{variant}.jsonl"),
         "final_prediction_sha256": _sha256(output_dir / f"final-validation-{variant}.jsonl"),
         "training_seconds": training_seconds,
