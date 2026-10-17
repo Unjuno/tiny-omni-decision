@@ -9,6 +9,13 @@ does not show that the learned gate used complementary evidence. No promotion,
 quantization, or sealed-audit evaluation.
 [Full learning curve, paired uncertainty, gate behavior and resources](docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
 
+**2026-10-18 AV gate cost and follow-up:** the gate adds only61,634 parameters
+(0.031% of the pre-quantized system); collapse to near-zero is the substantive
+concern. The frozen replacement scorer is CPU-tested, but the local GPU was
+occupied by Orbitune, so the first E0G0 inference attempt stopped after500 of
+44,375 forwards and produced no aggregate result. No training was run.
+[Recorded evidence and safe continuation](docs/pretrained_reuse/R2_AV_GATE_PARAMETER_AND_INPUT_DIAGNOSTIC_20261018.md).
+
 **2026-10-17 AV本比較runnerを実装・CPU検証:** 全件入力監査、固定32,768更新、保持条件付きbest選択、
 best/final再評価の経路を実装。既存466特徴bank約6.22GBの実物検査が通過。
 全件映像抽出・GPUコスト測定・本学習は未完了。精度改善はまだ未判定。

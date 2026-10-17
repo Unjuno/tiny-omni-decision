@@ -17,6 +17,15 @@ already-fixed audio/video replacement conditions, before any gate-objective
 change or further fitting. No sealed audit, quantization, or product promotion.
 [Full curve, metrics, hashes and cost](docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
 
+**2026-10-18 follow-up status:** the gate's 61.6K parameters are not a material
+size cost; its near-zero learned outputs are the open functional question. The
+fixed E0G0/E0G1 input-replacement diagnostic is implemented and CPU-tested, but
+it is not complete: Orbitune used about15.8GiB of the local16GiB GPU and our
+E0G0 scorer was stopped after500 forwards, with no summary metrics. Keep the
+partial run out of quality comparisons. Resume only after GPU preflight reports
+no other compute process; do not start a new training run for this diagnostic.
+[Execution log and next step](docs/pretrained_reuse/R2_AV_GATE_PARAMETER_AND_INPUT_DIAGNOSTIC_20261018.md).
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is
