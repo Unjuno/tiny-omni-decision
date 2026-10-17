@@ -159,6 +159,73 @@ The audit made no optimizer updates, model inference, GPU work or
 audit/test/calibration reads. The live source remains pinned to8a5440d and was
 not edited; this documentation belongs to the separate evidence branch.
 
+## C0 full update history and fixed endpoint
+
+C0 attempt03 completed all32,768 optimizer updates and262,144 presentations.
+The complete actual-history CPU audit and a separate-process replay both pass:
+108,187 unique questions,153,957 repeated presentations,25,318 observations,
+12,992 media assets and11,369 source-qualified groups. Actual ID order, complete
+candidate permutations/targets, LR, finite losses/gradients and coverage match the
+pinned plan. The terminal LR is0. This proves the update history; endpoint model
+reload and the terminal run receipt are separate requirements.
+
+| Stream | Presentations | Unique questions | Repeated presentations |
+|---|---:|---:|---:|
+| Joint AV |131,072|23,707|107,365|
+| Text rehearsal |32,768|18,432|14,336|
+| Image rehearsal |32,768|32,768|0|
+| Audio rehearsal |32,768|32,768|0|
+| Video rehearsal |32,768|512|32,256|
+
+Every stream exhausts its pool before repetition. Joint AV completes five full
+cycles plus a partial sixth; Text one plus a partial second; Video64 complete
+cycles. Image and Audio do not complete a full cycle. This matches the prospectively
+fixed plan and does not establish sufficient unique Video coverage.
+
+All ten scheduled evaluations were saved. Joint metrics below are equal-task
+macro development-validation metrics; common NLL uses the existing hierarchical
+macro over four modalities. Eligibility also includes the per-modality2pp
+Accuracy retention checks, so a lower common NLL alone does not imply eligibility.
+
+| Update | Joint Accuracy | Joint NLL | Joint Brier | Joint ECE | Common NLL | Eligible |
+|---|---:|---:|---:|---:|---:|---|
+|0|0.202201|2.350688|0.957725|0.291036|1.630249|yes|
+|512|0.441697|1.476249|0.653523|0.056221|1.678375|no|
+|1,024|0.434247|1.452946|0.659974|0.086683|1.622150|no|
+|2,048|0.433302|1.774114|0.706696|0.192031|1.676056|no|
+|4,096|0.489557|1.419100|0.614460|0.061961|1.624888|no|
+|8,192|0.530774|1.303677|0.592235|0.092065|1.659337|no|
+|12,288|0.623088|1.060826|0.508792|0.074996|1.589784|yes, selected|
+|16,384|0.635102|1.016177|0.485637|0.065976|1.654453|no|
+|24,576|0.673963|1.008571|0.461208|0.083666|1.735700|no|
+|32,768|0.669907|1.026744|0.461959|0.097250|1.776433|no|
+
+The final endpoint improves Joint metrics over the selected checkpoint but fails
+the fixed common-NLL retention gate. Selected best remains12,288. Replaying every
+selection decision matches the saved curve. Both checkpoint pairs have matching
+hashes: `best.pt` equals `checkpoint-12288.pt` with the hash above; `final.pt`
+equals `checkpoint-32768.pt` with SHA-256
+`924e64a6cb9b7610d35e3845eca94f66b8b5bfe9a1c81af241952aede2f9247c`.
+
+In particular, common Video Accuracy rises from0.3375 to0.3825, while its NLL
+worsens from1.501657 to2.766735, Brier from0.755560 to0.931019 and ECE from0.196529
+to0.381354. Thus higher Accuracy does not establish improved probability quality.
+The other final modality Accuracies are Audio0.629198, Image0.527832 and
+Text0.219582. These are scoped development results, far below the product target;
+they do not determine a representation-capacity ceiling or a gate benefit.
+
+External full-history evidence is
+`greatest-hits-matched-C0-full-history-audit-01/` (`audit.py`, immutable
+`history-prefix.jsonl`, `result.json`, `stream-coverage.json`). Audit result SHA-256:
+`3255ab2454dd892b852c79c5fea2f60ddcd15526ec3aa5ed4c8e71131839df0c`;
+stream result SHA-256:
+`0fd37610d406e4791350dc5857e9ff1cbacbecd4494252c40d3fc4b318377442`.
+The endpoint/selector observation is
+`greatest-hits-matched-C0-step32768-observation-01/result.json`, SHA-256
+`c7a6bb09898121c885538c62d19693e42865198e3111102e8d7d551e1ccaef57`.
+It explicitly leaves best/final reload and full-run success pending. The live
+training source and all legacy runs were unchanged by these CPU observations.
+
 ## Remaining requirements
 
 The CPU-only `scripts/summarize_greatest_hits_matched.py` now implements the
