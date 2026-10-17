@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 text-free CLEVRER temporal probe completed:** One fixed-seed
+mean-MLP/BiLSTM comparison completed 2,048 updates per arm. Selected temporal
+NLL/Brier modestly favor BiLSTM; its Accuracy difference is uncertain, static
+metrics do not establish a gain, and both arms show severe late overfitting.
+This is a narrow typed-program video probe, not multimodal product evidence.
+Keep the recurrent block unadopted pending replication and a representative
+task mix. See the [full report](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_TEMPORAL_RESULTS_20261018.md).
+
 **2026-10-17 text-free audio Decision probe completed:** A CPU-trained linear
 head over the existing frozen Whisper feature cache classifies the fixed
 10-keyword Speech Commands taxonomy without question/candidate text or a text

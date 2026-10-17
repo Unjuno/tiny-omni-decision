@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-10-18 text-free CLEVRER temporal probe completed:** A matched 2,048-update
+mean-MLP/BiLSTM comparison completed on 512 unique train questions and 400
+development validation questions. Best-selected BiLSTM improves temporal NLL
+and Brier modestly, while its Accuracy interval includes zero and static results
+are uncertain. Both arms overfit heavily by the final checkpoint. This narrow
+video-only result does not support general xLSTM adoption or product promotion.
+[Full curves, uncertainty, hashes and limits](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_TEMPORAL_RESULTS_20261018.md).
+
 **2026-10-17 AV画角保持の実行・再現確認:** 固定21イベントの105ファイルが別プロセスで
 完全一致。元動画から特徴bankへの経路も同じ21例で一致したため、全11,151イベントの
 映像キャッシュをローカルCPUで実行開始。完了・ゲート学習・精度改善はまだ未確認。
