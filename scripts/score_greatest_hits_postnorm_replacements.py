@@ -130,6 +130,11 @@ def main():
 
     try:
         write(output / "result.json", result)
+        gpu_pids = active_gpu_pids()
+        result["preflight_gpu_processes"] = sorted(gpu_pids)
+        write(output / "result.json", result)
+        if gpu_pids:
+            raise RuntimeError("GPU occupied; scoring not started")
         for name in subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0"):
