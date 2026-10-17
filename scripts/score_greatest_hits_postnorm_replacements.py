@@ -59,6 +59,7 @@ CHECKPOINT_SHA256 = {
     "E0G1": "9df53a55e610f4e473dc5f56528edd86610a72683c8f6c40145e9d87d899d87d",
 }
 OUTPUT_PREFIX = "greatest-hits-postnorm-replacements-"
+GPU_PROCESS_POLL_SECONDS = 2.0
 
 
 def active_gpu_pids():
@@ -68,6 +69,13 @@ def active_gpu_pids():
         for line in report.splitlines()
         if (match := re.match(r"\|\s+\d+\s+N/A\s+N/A\s+(\d+)\s+C\s+", line))
     }
+
+
+def refresh_gpu_pids(now, checked_at, cached):
+    """Reuse the last GPU-process snapshot for a short bounded interval."""
+    if now - checked_at >= GPU_PROCESS_POLL_SECONDS:
+        return active_gpu_pids(), now
+    return cached, checked_at
 
 
 def main():
@@ -103,9 +111,11 @@ def main():
         max_seconds=args.max_seconds,
     )
     last_check = 0.0
+    last_gpu_check = float("-inf")
+    cached_gpu_pids = set()
 
     def guard():
-        nonlocal last_check
+        nonlocal last_check, last_gpu_check, cached_gpu_pids
         elapsed = time.perf_counter() - started
         peak_vram = torch.cuda.max_memory_allocated() if torch.cuda.is_initialized() else 0
         result.update(
@@ -120,7 +130,10 @@ def main():
             or psutil.disk_usage(str(output)).free < 16 * 2**30
         ):
             raise RuntimeError("resource guard; preserve incomplete diagnostic")
-        others = active_gpu_pids() - {os.getpid()}
+        cached_gpu_pids, last_gpu_check = refresh_gpu_pids(
+            elapsed, last_gpu_check, cached_gpu_pids
+        )
+        others = cached_gpu_pids - {os.getpid()}
         if others:
             raise RuntimeError(f"GPU contention from other compute process(es): {sorted(others)}")
         if elapsed - last_check >= 15:

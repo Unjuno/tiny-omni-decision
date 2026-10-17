@@ -53,12 +53,16 @@ def score(model, store, rows, inventory, *, emit, expected_natural=None, guard=l
         raise ValueError("natural reference identities differ")
     diagnostic = isinstance(model, ConditionalAVReadout)
     changes = {key: [] for key in ("donor_audio", "donor_video")}
+    ablation_changes = {
+        mode: {key: [] for key in ("donor_audio", "donor_video")}
+        for mode in ("baseline", "query_only")
+    }
     calls, exact = 0, 0
     model.eval()
     with torch.inference_mode():
         for pair in inventory["pairs"]:
             row = by_id[pair["id"]]
-            natural, natural_gates = None, None
+            natural, natural_gates, natural_readouts = None, None, None
             for view in inventory["views"]:
                 guard()
                 donor = None
@@ -77,14 +81,20 @@ def score(model, store, rows, inventory, *, emit, expected_natural=None, guard=l
                             or ((gate < 0) | (gate > 1)).any()):
                         raise ValueError("complete finite active joint gates required")
                     gates = gate.cpu().numpy().copy()
+                    readouts = {
+                        "baseline": detail["baseline_scores"].cpu().numpy().copy(),
+                        "query_only": detail["query_only_scores"].cpu().numpy().copy(),
+                        "full_residual": values.cpu().numpy().copy(),
+                    }
                 else:
                     values, gates = model(blocks, q), None
+                    readouts = None
                 calls += 1
                 if values.shape != (len(row["options"]),) or not torch.isfinite(values).all():
                     raise ValueError("complete finite replacement logits required")
                 logits = values.cpu().numpy().copy()
                 if view == "natural":
-                    natural, natural_gates = logits, gates
+                    natural, natural_gates, natural_readouts = logits, gates, readouts
                     if expected_natural is not None and not np.array_equal(
                             logits, expected_natural[pair["id"]]):
                         raise ValueError("natural logits differ from selected model reference")
@@ -92,18 +102,40 @@ def score(model, store, rows, inventory, *, emit, expected_natural=None, guard=l
                     if not np.array_equal(natural, logits) or not np.array_equal(
                             natural_gates, gates):
                         raise ValueError("self replacement changed logits or gates")
+                    if diagnostic and any(not np.array_equal(
+                            natural_readouts[mode], readouts[mode]
+                    ) for mode in natural_readouts):
+                        raise ValueError("self replacement changed an ablated readout")
                     exact += 1
                 else:
                     measures = sensitivity(natural[None], logits[None])["per_example"]
                     changes[view].append(dict(
                         pair, **{key: value[0] for key, value in measures.items()}))
-                emit(dict(pair, view=view, input_donor_id=donor, options=list(row["options"]),
-                          logits=logits.tolist(), gates=None if gates is None else gates.tolist()))
+                    if diagnostic:
+                        for mode in ablation_changes:
+                            measures = sensitivity(
+                                natural_readouts[mode][None], readouts[mode][None]
+                            )["per_example"]
+                            ablation_changes[mode][view].append(
+                                dict(pair, **{key: value[0] for key, value in measures.items()})
+                            )
+                record = dict(pair, view=view, input_donor_id=donor,
+                              options=list(row["options"]), logits=logits.tolist(),
+                              gates=None if gates is None else gates.tolist())
+                if diagnostic:
+                    record["readout_logits"] = {
+                        mode: value.tolist() for mode, value in readouts.items()
+                    }
+                emit(record)
     guard()
     return dict(
         questions=len(rows), model_forwards=calls, self_replacements_exact=exact,
         pairs_sha256=inventory["pairs_sha256"], optimizer_updates=0,
         counterfactual_truth_verified=False,
         sensitivity={key: aggregate(items) for key, items in changes.items()},
+        ablation_sensitivity={
+            mode: {key: aggregate(items) for key, items in per_mode.items()}
+            for mode, per_mode in ablation_changes.items()
+        } if diagnostic else {},
         per_example=changes,
     )
