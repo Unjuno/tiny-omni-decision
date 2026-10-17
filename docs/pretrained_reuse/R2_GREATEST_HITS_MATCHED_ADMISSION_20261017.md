@@ -312,6 +312,27 @@ and `5c0da700f913b7c306cbd6d936338bdba7e002b041c0b940a56cec6135233f5d`,
 respectively. Both reports pin the terminal training receipt and their audit code;
 the input-omission report also verifies all used score/metadata artifact hashes.
 
+## E0G0 launch after normal automatic yield
+
+The user clarified that Orbitune yields automatically when this experiment starts
+and authorized normal launch. E0G0 attempt01 launched at2026-10-17 16:39:02 JST,
+PID19988, from the unchanged8a5440d source into the new external directory
+`greatest-hits-matched-train-E0G0-01/`. Its passing smoke reference hash is the
+E0G0 hash in the admission table. CLI arguments, start identity and the user's
+normal-launch instruction are preserved in
+`greatest-hits-matched-train-E0G0-01.launch.json` outside the run directory.
+
+At16:40:51 JST, Orbitune's existing supervisor recorded its trainer exit0 and
+`waiting_for_idle` with foreign PID19988. A subsequent GPU process query showed
+only19988. No manual STOP/YIELD, process kill or external code/checkpoint change
+was made. The earlier manual-stop permission question is superseded by this
+observed normal automatic-yield path; it is not a prerequisite for continuing.
+
+The saved effective config retains seed17,32,768 updates, all eight microbatches,
+the original mixture/schedule, shared fitted initial weights with fresh optimizer,
+all ten evaluation points and the same selector. Initial full evaluation is in
+progress; no optimizer updates or passing full E0G0 result are claimed yet.
+
 ## Remaining requirements
 
 The CPU-only `scripts/summarize_greatest_hits_matched.py` now implements the

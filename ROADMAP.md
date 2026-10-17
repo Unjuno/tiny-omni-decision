@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 normal automatic yield observed; E0G0 launched:** User clarified the
+Orbitune coexistence policy. Its trainer exited0 and supervisor waits on our
+PID19988; no manual external intervention. E0G0 attempt01 is running its initial
+evaluation with all frozen conditions preserved. Remaining matched fits and
+five-arm quality comparison are incomplete.
+[Actual launch and automatic-yield evidence](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_ADMISSION_20261017.md).
+
 **2026-10-17 first matched full fit C0 PASS:** All32,768 updates, all ten complete
 six-view evaluations, best/final reloads and91 artifact hashes pass. Independent
 CPU saved-score recomputation also passes. Fixed retention selects12,288;
