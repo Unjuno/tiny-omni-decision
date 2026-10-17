@@ -1,0 +1,57 @@
+{
+  "id": "textfree-video-clevrer-typed-program-v0",
+  "source": {
+    "dataset": "MIT-IBM/CLEVRER",
+    "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+    "license": "CC0-1.0",
+    "sample_dir": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-expanded-seed17-256train-200val",
+    "train_manifest_sha256": "5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d",
+    "validation_manifest_sha256": "53aa6f01447a43337a601279daf620c0df91d807773522cc92230fcab173db7c",
+    "fetch_report_sha256": "75f0511bb94df2abd7e2734c0881af0282ed3797ec7b725cc07fa7dc8fd84a44",
+    "pretraining_gate_sha256": "43dfa8f2c1589b6569ec75a546193cdeda63ff2e891564d9b7bf2353f5627174"
+  },
+  "features": {
+    "cache": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-framewise-typed-v0/framewise-features.npz",
+    "cache_report": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-framewise-typed-v0/cache-report.json",
+    "model_id": "google/videoprism-base-f16r288",
+    "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "frames": 8,
+    "feature_width": 768,
+    "temporal_profile": "8 uniformly sampled endpoint-inclusive frames; spatial-token mean per time index"
+  },
+  "task": {
+    "input_fields": ["video_features", "typed_program", "taxonomy", "supplied_options"],
+    "excluded_fields": ["natural_language_question", "sample_id", "scene_id", "media_hash"],
+    "supervision_only_fields": ["target"],
+    "question_types": ["temporal_descriptive", "static_descriptive"],
+    "decision_output": "JSON probabilities normalized over supplied candidate options"
+  },
+  "comparison": {
+    "variants": ["mean_mlp", "bilstm"],
+    "seed": 17,
+    "epochs": 256,
+    "batch_size": 64,
+    "updates_per_epoch": 8,
+    "max_optimizer_updates": 2048,
+    "epoch_order_seed_rule": "numpy.default_rng(seed + zero_based_epoch).permutation(train_rows)",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "scheduler": "constant",
+    "validation_interval_epochs": 1,
+    "selector": "minimum mean validation NLL across question-type-by-taxonomy groups present in validation; ties choose earlier epoch",
+    "early_stopping": false,
+    "trainable_temporal_block_parameter_tolerance": 0.01
+  },
+  "integrity": {
+    "group_key": "scene_group_id",
+    "asset_key": "media_sha256",
+    "content_key": "casefolded normalized question plus sorted normalized options",
+    "sealed_audit_loaded": false,
+    "validation_role": "development-only checkpoint selection; no sealed-audit claim"
+  }
+}
