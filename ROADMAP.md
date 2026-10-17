@@ -1,5 +1,19 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 conditional AV gate fit reviewed:** A separate branch completed a
+matched seed-17, 32,768-update E0G1 run. The gate outputs collapsed below 0.01
+for all valid options by update 512 and stayed near zero; the added gate has
+61,634 parameters (about 0.031% of the pre-quantization system), so compute
+capacity is not the issue. E0G1 gained 5.07 pp joint-view Accuracy over E0G0,
+but the paired NLL interval includes zero and its video-only Accuracy fell
+3.83 pp. The correction path still receives the query, so these results do not
+show active gate-based AV evidence use. Do not train another gate variant yet;
+first isolate baseline, query-only, and gated residual contributions with the
+fixed-checkpoint replacement diagnostic. That no-training diagnostic has only
+109/44,375 forwards so far and was safely interrupted by the separate Orbitune
+GPU job; its partial output is not a metric. See the [matched gated fit and
+uncertainty report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
+
 **2026-10-18 R0 live-state reconciliation:** PR #15 remains draft/open; the
 roadmap worktree is clean and synchronized with its remote. The only manifest
 hash change from the original R0 snapshot is the intended LibriSpeech

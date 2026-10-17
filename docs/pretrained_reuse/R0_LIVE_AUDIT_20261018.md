@@ -79,6 +79,34 @@ audit does not start another AV-gate quality run on unsupported labels. The
 61,634-parameter gate itself is not the material compute bottleneck; dataset
 validity and full encoder execution dominate.
 
+### Supplemental cross-branch reconciliation (06:14 JST)
+
+After the first publication, the existing `codex/r2-av-postnorm-stability`
+branch was inspected before deciding whether to train. It already contains a
+matched E0G1 conditional-gate fit: seed 17, 32,768 updates, selected step
+24,576, fresh optimizer from the fitted E0G0-8192 start, and exact best/final
+reload verification. The run used the separate exploratory Greatest Hits AV
+corpus; this is distinct from the common corpus, which still has zero paired
+audio/video observations. The source review admits the former only for scoped
+native-field exploration, not as a both-required or precise-synchrony benchmark.
+
+The gate outputs were below 0.01 for every valid option by step 512 and remained
+near zero. At step 32,768, joint-view Accuracy was +5.07 pp versus the E0G0
+control, but the paired scene-bootstrap interval for joint NLL included zero;
+video-only Accuracy was -3.83 pp with worse NLL. Since the residual also has a
+query path, the gain does not demonstrate gate-based AV evidence use. The full
+report and learning curve are on the [separate experiment branch](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md).
+
+The report's next action is inference-only ablation and fixed input
+replacement, not another training variant. A fresh guarded scoring attempt
+started on that branch, completed 109 of 44,375 forwards, then stopped when
+Orbitune PID 10324 acquired the GPU. Its partial output is preserved but has no
+complete sensitivity summary and is not used as evidence. Other attempts either
+failed their GPU preflight or stopped before a complete result. At 06:14 JST,
+`nvidia-smi` showed no CUDA process, while the Orbitune supervisor/trainer
+processes remained present and could resume. No user process was stopped or
+modified.
+
 ## Current decision and open R0/R2 gates
 
 The next action is not to repeat an existing run or to use the sealed audit.
