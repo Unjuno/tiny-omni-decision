@@ -120,3 +120,27 @@ def test_scene_bootstrap_pairs_same_questions_and_reports_subtasks() -> None:
     }
     assert report["candidate_minus_baseline"]["all"]["accuracy"]["lower_95"] == 0.0
     assert report["candidate_minus_baseline"]["all"]["nll"]["upper_95"] == 0.0
+    assert report["candidate_minus_baseline"]["all"]["brier"]["upper_95"] == 0.0
+    assert report["candidate_minus_baseline"]["all"]["ece_15_bins"]["lower_95"] == 0.0
+
+
+def test_scene_bootstrap_covers_brier_and_ece_differences() -> None:
+    rows = []
+    for scene in range(4):
+        for kind in ("static_descriptive", "temporal_descriptive"):
+            rows.append({
+                "id": f"validation-{scene}-{kind}",
+                "scene_index": scene,
+                "question_type": kind,
+                "target": "1",
+                "prediction": "1",
+                "options": ["0", "1"],
+                "probabilities": [0.1, 0.9],
+            })
+    candidate = [{**row, "probabilities": [0.2, 0.8]} for row in rows]
+
+    report = _bootstrap_difference(rows, candidate, resamples=25, seed=17)
+    overall = report["candidate_minus_baseline"]["all"]
+
+    assert overall["brier"]["point"] == pytest.approx(0.06)
+    assert overall["ece_15_bins"]["point"] == pytest.approx(0.1)

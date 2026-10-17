@@ -353,11 +353,33 @@ def _bootstrap_difference(
                     ]
                 )
             )
+        probabilities = np.asarray([row["probabilities"] for row in rows], dtype=np.float64)
+        targets = np.asarray(
+            [row["options"].index(row["target"]) for row in rows], dtype=np.int64
+        )
+        if key == "brier":
+            one_hot = np.eye(probabilities.shape[1], dtype=np.float64)[targets]
+            return float(np.square(probabilities - one_hot).sum(axis=1).mean())
+        if key == "ece_15_bins":
+            confidence = probabilities.max(axis=1)
+            correct = probabilities.argmax(axis=1) == targets
+            ece = 0.0
+            for index in range(15):
+                low, high = index / 15, (index + 1) / 15
+                selected = (confidence >= low) & (
+                    confidence < high if index < 14 else confidence <= high
+                )
+                if selected.any():
+                    ece += selected.mean() * abs(
+                        float(correct[selected].mean() - confidence[selected].mean())
+                    )
+            return float(ece)
         raise ValueError(f"unsupported bootstrap metric: {key}")
 
     subsets = ["all", "static_descriptive", "temporal_descriptive"]
     differences: dict[str, dict[str, list[float]]] = {
-        subset: {"accuracy": [], "nll": []} for subset in subsets
+        subset: {"accuracy": [], "nll": [], "brier": [], "ece_15_bins": []}
+        for subset in subsets
     }
     for _ in range(resamples):
         sampled = rng.choice(scenes, size=len(scenes), replace=True).tolist()
