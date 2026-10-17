@@ -107,6 +107,19 @@ failed their GPU preflight or stopped before a complete result. At 06:14 JST,
 processes remained present and could resume. No user process was stopped or
 modified.
 
+### Supplemental checkpoint integrity check (06:18 JST)
+
+With `CUDA_VISIBLE_DEVICES` empty, both saved E0G1 checkpoints were rehashed
+and loaded on CPU. Hashes match the separate branch report: `best.pt`
+`9df53a55e610f4e473dc5f56528edd86610a72683c8f6c40145e9d87d899d87d`,
+`final.pt` `452f1edc552e5a9129be524ba3f41e55bf2895e0732d8c171bea7ee64a00d0cd`,
+effective config `65864faf3ab7f9187d929cc22ff172c4521acbd2e024385272f4de4325570afa`,
+and run receipt `a8617ac91db29c269b6adbc6e2ea149b9a2755b91541748d1c0c367ac9ed4520`.
+CPU load confirms steps 24,576 and 32,768 respectively, 1,732,804 model-state
+tensor elements in each, and finite values throughout. The run receipt records
+successful best/final reload verification and `sealed_audit_loaded=false`.
+This is an integrity recheck, not a new inference or quality result.
+
 ## Current decision and open R0/R2 gates
 
 The next action is not to repeat an existing run or to use the sealed audit.
