@@ -96,6 +96,14 @@ labels; then compare on a fixed learning protocol. The long unique-coverage
 question remains separate and unexecuted. No audit or product promotion.
 [Implementation, exact counts and limits](docs/pretrained_reuse/R2_CONDITIONAL_AV_INTERACTION_20261017.md).
 
+**2026-10-18 AVA Active Speaker source screen:** Official train/validation
+annotations provide per-face speaking/audibility labels and are described as
+CC BY 4.0, making them a relevant candidate for bounded voice-to-face association.
+Underlying YouTube media rights, local archive hashes and video/person split
+integrity remain unresolved; no data was downloaded or used. Keep the candidate
+`REVIEW`; this does not admit it as a both-required benchmark or justify gate
+training. See `docs/pretrained_reuse/R2_AVA_ACTIVE_SPEAKER_SOURCE_SCREEN_20261018.md`.
+
 **2026-10-17 full-extent comparison completed:** All8936 Image/456 Video caches,
 32768 updates, exact best/final replay and saved-prediction audit PASS. Selected
 Image/Video Accuracy improves, but Audio falls3.096pp and macro NLL1.630→1.674;
