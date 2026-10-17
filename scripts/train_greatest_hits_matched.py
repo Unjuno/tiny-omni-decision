@@ -1,4 +1,5 @@
 """Guarded full-input audit, matched-path cost smoke, fixed learning and exact replay."""
+# ruff: noqa: E402 - pin this worktree's src/ before importing project modules.
 
 import argparse
 import importlib.metadata
@@ -13,6 +14,12 @@ import time
 import traceback
 from datetime import UTC, datetime
 from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+LOCAL_SOURCE = str(REPO / "src")
+if LOCAL_SOURCE in sys.path:
+    sys.path.remove(LOCAL_SOURCE)
+sys.path.insert(0, LOCAL_SOURCE)
 
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
@@ -49,7 +56,6 @@ from scripts.native_long_budget import EVALUATION_STEPS, MAX_STEPS
 from scripts.native_video_cache import sha
 from scripts.train_native_long_budget import write
 
-REPO = Path(__file__).resolve().parents[1]
 PROTOCOL = REPO / "docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_LEARNING_PROTOCOL_20261017.md"
 PROBE_COUNTS = {"joint": 23707, "common": 84480}
 SMOKE_STEPS = 32

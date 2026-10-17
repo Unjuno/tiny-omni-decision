@@ -6,8 +6,10 @@ row-norms258–622 and residual corrections up to1,761. A post-attention shared
 LayerNorm reduces these to about13.9 and4.2 respectively, while the four CE
 values remain nearly unchanged. Added an opt-in, checkpoint-policy-bound norm
 ablation (+384 parameters); default path and old artifacts remain unchanged.
-Targeted CPU suite:50 passed. No GPU smoke/training or validation result yet;
-local GPU was occupied at last check. [Diagnostic and implementation limits](docs/pretrained_reuse/R2_GREATEST_HITS_POSTNORM_STABILITY_20261017.md).
+Targeted CPU suite:51 passed. Two smoke starts stopped before model/GPU load and
+before any updates (one hash-format mismatch; one stale installed-package import,
+now regression-tested and fixed). No GPU smoke/training or validation result yet;
+Orbitune reoccupied the GPU at last check. [Diagnostic and implementation limits](docs/pretrained_reuse/R2_GREATEST_HITS_POSTNORM_STABILITY_20261017.md).
 
 **2026-10-17 matched AV runner implemented and CPU verified:** Complete-bank
 admission, fixed32768-update execution, full validation/consumed-TRAIN evaluation,

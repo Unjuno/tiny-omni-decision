@@ -75,6 +75,18 @@ and matched runtime. They cover legacy-default state compatibility, policy-bound
 checkpoint loading, candidate parameter accounting, and finite gradients through
 the new norm. Ruff and `git diff --check` are run after formatting.
 
+Two subsequent GPU-smoke invocations were safely incomplete at step0 with zero
+optimizer updates. Smoke-01 (`...postnorm-smoke-01/result.json`, SHA256
+`6bb883e02e589cab58e2d7e467989a1049f1238fb32447cbeb00d4db2708bbc7`) supplied
+the correct admission hash in uppercase; the fail-closed pin verifier compares
+canonical lowercase strings and rejected it. Smoke-02 (`...postnorm-smoke-02/`,
+result SHA256 `94d99cea6ced3df0b006e2387b898e12d908af5e05ca9d5265389edfaa0a460f`)
+passed input hashing but exposed that this Python environment imported the
+installed package from another worktree. The candidate CLI now prepends its own
+`src/` before project imports; a fresh-process regression test confirms this.
+After that correction, the targeted CPU suite passes51 tests and Ruff passes.
+Neither failed invocation loaded the model onto CUDA or changed any weights.
+
 Next, wait for the local GPU to become available through its configured yield
 behavior, then run a separate candidate smoke in a fresh output directory. The
 smoke must verify actual end-to-end numerical stability, peak VRAM, and measured

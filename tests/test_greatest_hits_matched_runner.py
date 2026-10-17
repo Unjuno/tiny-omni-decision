@@ -187,6 +187,27 @@ def test_norm_ablation_initializes_only_new_identity_state():
     assert sum(p.numel() for p in normalized.parameters()) == 1_732_804
 
 
+def test_training_cli_prefers_its_local_src_over_an_installed_other_worktree():
+    import os
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    from scripts.train_greatest_hits_matched import REPO
+
+    env = dict(os.environ)
+    env.pop("PYTHONPATH", None)
+    check = subprocess.run(
+        [sys.executable, "-c",
+         "import scripts.train_greatest_hits_matched; import inspect; "
+         "from tiny_omni_decision.native_av_interaction "
+         "import ConditionalAVReadout; print(inspect.getfile(ConditionalAVReadout))"],
+        cwd=REPO, env=env, check=True, capture_output=True, text=True,
+    )
+    expected = (Path(REPO) / "src/tiny_omni_decision/native_av_interaction.py").resolve()
+    assert Path(check.stdout.strip()).resolve() == expected
+
+
 @pytest.mark.parametrize("changed", ["arm", "source_commit", "input_digest", "config", "status"])
 def test_train_reference_rejects_wrong_smoke(changed):
     pytest.importorskip("torch")
