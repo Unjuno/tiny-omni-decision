@@ -58,7 +58,7 @@ CHECKPOINT_SHA256 = {
     "E0G1": "9df53a55e610f4e473dc5f56528edd86610a72683c8f6c40145e9d87d899d87d",
 }
 OUTPUT_PREFIX = "greatest-hits-postnorm-replacements-"
-OUTPUT_ATTEMPT = "-03"
+OUTPUT_ATTEMPT = "-04"
 
 
 def main():
@@ -107,7 +107,7 @@ def main():
             elapsed > args.max_seconds
             or result["peak_working_set_bytes"] > 10 * 2**30
             or peak_vram > 6 * 2**30
-            or psutil.disk_usage(output).free < 16 * 2**30
+            or psutil.disk_usage(str(output)).free < 16 * 2**30
         ):
             raise RuntimeError("resource guard; preserve incomplete diagnostic")
         if elapsed - last_check >= 15:
