@@ -110,6 +110,42 @@ worktree with CUDA hidden. No runtime implementation or training source changed.
 
 ## Remaining requirements
 
+The CPU-only `scripts/summarize_greatest_hits_matched.py` now implements the
+post-run saved-prediction comparison. It requires all five complete32,768-update
+training receipts with verified best/final reloads, matching source/input/audit
+and shared config, exact ordered evaluation metadata and identical step-0 score
+matrices. It verifies the complete artifact ledger, including gate/reload arrays,
+recomputes every scheduled TRAIN/validation metric from the raw FP32 scores, and
+replays the fixed retention/min_delta/earliest-tie rule. A better ineligible
+checkpoint cannot become selected. The output retains every curve and reports
+fixed equal-step and selected-checkpoint contrasts, resources and code hashes.
+
+The six signed contrasts are E1G1−C0, E0G0−C0, E1G0−E0G0, E1G1−E0G1,
+E0G1−E0G0 and E1G1−E1G0, plus E1G1−E1G0−E0G1+E0G0 interaction. Positive
+Accuracy deltas and negative NLL/Brier/ECE deltas indicate improvement. Selected
+checkpoints can have unequal steps. These descriptive comparisons do not replace
+grouped uncertainty analysis, gate-distribution review, input interventions or
+the unresolved complementary-task/OOD/product requirements.
+
+Twenty-eight new CPU tests cover rejection of unfinished/mismatched runs, the
+fixed selector, factorial signs, raw-score/padding/metric integrity, required
+gate files, and complete synthetic five-arm disk/CLI execution. A self-consistent
+but different initial output first escaped detection (RED), then was rejected
+after the initial-parity gate was added. The fixture reduces counts only by
+test-process monkeypatching; the production CLI retains all six full counts and
+all ten fixed evaluation points. Full local checks:2,396 passed,11 skipped with
+CUDA hidden; final focused tests:28 passed. Ruff passes. Logs remain under
+`greatest-hits-matched-summary-verification-01/` in the external artifact root.
+The fixture is implementation evidence, not a real five-arm quality result.
+
+After all five training runs complete, invoke the module with five explicit
+`--run ARM=<completed-directory>` arguments and a fresh `--output` directory.
+For example, `--run C0=.../greatest-hits-matched-train-C0-03` binds the C0 run;
+the other four arguments must bind their own completed arm, not the smoke or
+another arm's directory. No aggregate production result has been produced yet.
+The analyzer performs no model inference, fitting or fresh-process model reload;
+it checks the training-process endpoint reload evidence already saved on disk.
+
 Finish all five fixed 32,768-update curves sequentially, verify selected and final
 reloads, and compare fixed equal steps and retention-eligible selected checkpoints.
 Retain all failed/ineligible outcomes and the full TRAIN/validation gaps. Follow

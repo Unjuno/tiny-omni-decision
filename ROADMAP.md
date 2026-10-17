@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 saved-result comparator CPU verified:** Require five terminal matched
+fits, identical initial outputs/ordered metadata, all artifact/gate/reload hashes,
+full raw-score metric recomputation and replay of the fixed selector.28 new tests
+cover complete tiny CPU fixtures and refusal paths; actual five-arm comparison
+remains pending while C0 is live. Equal-step/selected factorial contrasts are
+descriptive; grouped uncertainty, input interventions and product gates stay open.
+[Implemented boundary and tests](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_ADMISSION_20261017.md).
+
 **2026-10-17 complete AV admission and five smokes PASS:** All11,151 video events,
 409 parents and32,582 questions complete; the independent input audit and all five
 32-update full-path smokes/reloads pass the same pinned input digest. C0 has
