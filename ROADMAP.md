@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
+post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
+schedule, with best/final reload checks passing. The selected checkpoint is
+step16,384. On the fixed 8,875-example video validation view, Accuracy rose
+from38.45% at512 to60.42% at the selected point; final Accuracy was61.84% but
+Video NLL/calibration regressed after the selected point. Four-modality macro
+NLL did not improve over initialization at the final point. This is a
+single-run development-validation result only; no quantization, product
+promotion, sealed audit, or other matched-arm fit was done. See [full results](docs/pretrained_reuse/R2_AV_POSTNORM_LONG_FIT_20261017.md).
+
 **2026-10-17 AV scale investigation:** A CPU probe of E0G0 step 4,096 on four
 already-consumed TRAIN examples finds candidate-attention outputs with mean
 row-norms258–622 and residual corrections up to1,761. A post-attention shared

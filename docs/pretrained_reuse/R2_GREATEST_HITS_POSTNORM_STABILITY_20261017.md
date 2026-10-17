@@ -9,12 +9,12 @@ flushed optimizer updates; its selected checkpoint is step 4,096, SHA256
 `7e73ca5a5cdd8efde8277e37876dd2b604aa840e0dafe6566cc3afa856f0e87f`. Existing
 runs and checkpoints were read only.
 
-This report records a CPU diagnostic and an opt-in code candidate. No optimizer
-updates, GPU model loads, validation evaluations, sealed-audit reads, or cloud
-compute occurred in this stage. At the time of the environment check, an
-unrelated Orbitune process occupied about 15.3 GiB of the local GPU; therefore no
-new GPU run was started. The result below is not a quality result and does not
-retroactively repair E0G0.
+The initial report stage recorded a CPU diagnostic and an opt-in code candidate
+without starting a GPU fit because Orbitune occupied the device. After the user
+clarified its automatic yield behavior, a separate postnorm long fit was run;
+the full results and limits are recorded in
+[`R2_AV_POSTNORM_LONG_FIT_20261017.md`](R2_AV_POSTNORM_LONG_FIT_20261017.md).
+That follow-up does not modify or retroactively repair the interrupted E0G0 run.
 
 ## Exact saved-checkpoint probe
 
@@ -60,8 +60,8 @@ The candidate adds 384 trainable parameters:
 
 The optional runner path copies the exact legacy same-arm initial tensors and
 adds only the identity-initialized norm state; it retains fresh optimizer state.
-The effective config records this policy, so a candidate smoke/training reference
-must use the same setting. No such smoke or training run has been performed yet.
+The effective config records this policy. The follow-up run verified initial
+tensor equality except for the new norm's weight/bias and used a fresh optimizer.
 
 The separate gate head remains small at 61,634 parameters and 61,568 MACs per
 option. That arithmetic supports treating its parameter/compute cost as small
@@ -87,11 +87,11 @@ installed package from another worktree. The candidate CLI now prepends its own
 After that correction, the targeted CPU suite passes51 tests and Ruff passes.
 Neither failed invocation loaded the model onto CUDA or changed any weights.
 
-Next, wait for the local GPU to become available through its configured yield
-behavior, then run a separate candidate smoke in a fresh output directory. The
-smoke must verify actual end-to-end numerical stability, peak VRAM, and measured
-runtime before any long fit is considered. If stable, compare the norm candidate
-against the same E0G0 protocol on the unchanged data/order and report the safety
-stop as the prior incomplete run. Preserve the existing E0G0 artifacts and all
-other matched arms; do not claim a capacity limit, model quality gain, R2
-completion, or product readiness from this ablation.
+After the user clarified Orbitune's automatic-yield behavior, a separate smoke
+passed and the matched postnorm long fit completed. See
+[`R2_AV_POSTNORM_LONG_FIT_20261017.md`](R2_AV_POSTNORM_LONG_FIT_20261017.md)
+for its actual run command, artifacts, same-ID comparisons, learning curves,
+paired video bootstrap, limitations, and decision. The earlier E0G0 and other
+matched-arm artifacts remain unchanged. The result is development-validation
+evidence only; it does not establish product readiness or a model-family
+capacity limit.
