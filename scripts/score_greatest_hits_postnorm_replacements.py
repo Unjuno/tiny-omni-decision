@@ -1,4 +1,5 @@
 """Score the frozen target-free AV replacement inventory for E0G0 and E0G1."""
+# ruff: noqa: E402 - pin this worktree's src/ before importing project modules.
 
 import argparse
 import importlib.metadata
@@ -10,6 +11,12 @@ import time
 import traceback
 from datetime import UTC, datetime
 from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+LOCAL_SOURCE = str(REPO / "src")
+if LOCAL_SOURCE in sys.path:
+    sys.path.remove(LOCAL_SOURCE)
+sys.path.insert(0, LOCAL_SOURCE)
 
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
@@ -34,7 +41,6 @@ from scripts.greatest_hits_transport_store import ExplicitEventStore
 from scripts.native_video_cache import sha
 from scripts.train_greatest_hits_matched import write
 
-REPO = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "greatest-hits-replacement-inventory-01"
 INVENTORY_SHA256 = "f12690080072e7cb0c60e0528394367114afc296f8c9cbe3d281425937687c62"
 AUDIT = ROOT / "greatest-hits-matched-input-audit-01"
@@ -52,7 +58,7 @@ CHECKPOINT_SHA256 = {
     "E0G1": "9df53a55e610f4e473dc5f56528edd86610a72683c8f6c40145e9d87d899d87d",
 }
 OUTPUT_PREFIX = "greatest-hits-postnorm-replacements-"
-OUTPUT_ATTEMPT = "-02"
+OUTPUT_ATTEMPT = "-03"
 
 
 def main():
