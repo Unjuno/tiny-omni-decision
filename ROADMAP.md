@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 R0 live-state reconciliation:** PR #15 remains draft/open; the
+roadmap worktree is clean and synchronized with its remote. The only manifest
+hash change from the original R0 snapshot is the intended LibriSpeech
+hard-negative evaluation-catalog entry; Open-Jev test metadata is unchanged.
+The RTX 3080 is currently occupied by a separate Orbitune training process.
+No process was interrupted and no new GPU run was started: the current AV
+corpus still has no admitted both-required paired task, and R0 device/task
+acceptance criteria remain open. See the [dated audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261018.md).
+
 **2026-10-18 text-free CLEVRER temporal probe completed:** One fixed-seed
 mean-MLP/BiLSTM comparison completed 2,048 updates per arm. Selected temporal
 NLL/Brier modestly favor BiLSTM; its Accuracy difference is uncertain, static
