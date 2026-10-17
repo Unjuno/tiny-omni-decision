@@ -257,6 +257,61 @@ existing checkpoint-saving STOP/yield mechanism has been requested; no STOP/YIEL
 kill, code change or external checkpoint mutation was performed. E0G0 and the
 other three factorial full fits remain unstarted at this observation.
 
+## C0 fixed TRAIN/validation gap and input omissions
+
+Additional CPU audits use only the terminal receipt and its hash-bound saved
+development scores. Separate-process replays reproduce both reports exactly.
+The Joint gap uses the same three task definitions, equal task weighting and
+fixed23,707-question TRAIN /8,875-question validation probes at every point.
+The TRAIN probe is the full planned question union, including questions not yet
+consumed at early points; these are not rolling losses or prefix-only TRAIN metrics.
+Actual consumed/unique counts remain separately recorded in the learning curve.
+
+| Update | TRAIN Accuracy | Validation Accuracy | TRAIN NLL | Validation NLL |
+|---|---:|---:|---:|---:|
+|0|0.143216|0.202201|2.932021|2.350688|
+|512|0.576386|0.441697|1.196397|1.476249|
+|1,024|0.575549|0.434247|1.130088|1.452946|
+|2,048|0.589984|0.433302|1.188742|1.774114|
+|4,096|0.650933|0.489557|0.995720|1.419100|
+|8,192|0.666261|0.530774|0.935538|1.303677|
+|12,288|0.750026|0.623088|0.732355|1.060826|
+|16,384|0.796588|0.635102|0.610064|1.016177|
+|24,576|0.826757|0.673963|0.532555|1.008571|
+|32,768|0.837649|0.669907|0.494030|1.026744|
+
+From24,576 to32,768, TRAIN NLL falls while validation NLL rises and validation
+Accuracy falls. This is a descriptive late-overfitting warning, not a proof of
+cause, architectural capacity ceiling or future impossibility. The final
+Accuracy gap is0.167742 and validation-minus-TRAIN NLL gap0.532714. Class/date
+distribution differences and grouped uncertainty remain unresolved. No stopping,
+selection or future-arm budget was changed from these observed outcomes.
+
+Input omissions preserve the same ordered8,875 validation questions, candidate
+options and original event labels. Values below are task-macro Accuracy / NLL:
+
+| Update | Joint AV | Audio only | Video only |
+|---|---:|---:|---:|
+|0|0.202201 /2.350688|0.295624 /2.068511|0.203799 /2.413838|
+|12,288 selected|0.623088 /1.060826|0.475197 /1.823997|0.412305 /2.171099|
+|32,768 final, ineligible|0.669907 /1.026744|0.478865 /3.325394|0.409378 /3.064722|
+
+At selected best, paired pooled question counts are1,989 Joint-only-correct vs
+679 Audio-only-correct, and2,424 Joint-only-correct vs546 Video-only-correct.
+These paired counts are not equal-task macro deltas. They describe the same
+jointly trained model under input omission, not separately trained unimodal
+controls, certified single-stream answerability, replacement sensitivity or
+both-required reasoning. No new model inference or counterfactual labels were
+introduced. No significance or independent OOD claim is made.
+
+External reproducible scripts and reports are
+`greatest-hits-matched-C0-gap-audit-01/{audit.py,result.json}` and
+`greatest-hits-matched-C0-ablation-audit-01/{audit.py,result.json}`. Report hashes:
+`15e67c839e1932f9a7db409a7557b71cc29034aea095c4ba214eecbd6863918e`
+and `5c0da700f913b7c306cbd6d936338bdba7e002b041c0b940a56cec6135233f5d`,
+respectively. Both reports pin the terminal training receipt and their audit code;
+the input-omission report also verifies all used score/metadata artifact hashes.
+
 ## Remaining requirements
 
 The CPU-only `scripts/summarize_greatest_hits_matched.py` now implements the
