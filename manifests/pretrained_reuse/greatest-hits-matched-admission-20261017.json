@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "experiment": "greatest-hits-matched-admission-20261017",
+  "status": "PASS_INPUT_AUDIT_AND_FIVE_SMOKES_FULL_TRAINING_PENDING",
+  "execution_source_commit": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+  "input_digest": "00aa90bed282446e77ae834afc4d9b1d1c1adeedcbaf73e47a49f084c1838868",
+  "video_cache": {
+    "status": "PASS_COMPLETE_VIDEO_CACHE",
+    "events": 11151,
+    "parents": 409,
+    "questions": 32582,
+    "result_sha256": "9fdb5bfcf75a35c73d3b3634e1affbeb0373074b8cc9240f6567548aba8922ce"
+  },
+  "independent_input_audit": {
+    "status": "PASS_MATCHED_AV_INPUT_AUDIT",
+    "verified_video_events": 11151,
+    "video_smoke_matches": 21,
+    "seconds": 293.0904915999854,
+    "result_sha256": "69a489b4fa4c81ed155d83328b816409326666f587add8392ea21a4e704efdad",
+    "admission_sha256": "b62adbe352752d1d8b376414210d906f2493187c629e4da9a2dbbad9cf6dbe30"
+  },
+  "smokes": [
+    {
+      "arm": "C0",
+      "receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-matched-smoke-C0-01\\result.json",
+      "sha256": "946ac1bfbc77904f40f535016aedc1362fd82d712f8c0783b11fb60bbf70c104",
+      "status": "PASS_MATCHED_AV_SMOKE",
+      "updates": 32,
+      "reload_verified": true,
+      "config_sha256": "ef670629f2137026d104461acf0fc0906c10c5975463d719a48c101c72104dcf",
+      "encoder_inclusive_parameters": 196254874,
+      "seconds": 1601.0595356999838,
+      "training_seconds": 25.074930199974915,
+      "evaluation_seconds": 1358.2696310000028,
+      "peak_vram_bytes": 272823808,
+      "projected_full_seconds": 33497.66159820414,
+      "minimum_resource_allowance_seconds": 50247.0
+    },
+    {
+      "arm": "E0G0",
+      "receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-matched-smoke-E0G0-01\\result.json",
+      "sha256": "e5fe6fdaec7c35ab1fc42005fa62e81beb8d743405c0d7fcd8cfe8d3fe824645",
+      "status": "PASS_MATCHED_AV_SMOKE",
+      "updates": 32,
+      "reload_verified": true,
+      "config_sha256": "68e977f59eb2d18ac5cd97a377d127fd7889acb85b15530b2a9774bee914e65d",
+      "encoder_inclusive_parameters": 197097949,
+      "seconds": 1753.2383217999886,
+      "training_seconds": 26.622290900006192,
+      "evaluation_seconds": 1506.4290504000091,
+      "peak_vram_bytes": 292531712,
+      "projected_full_seconds": 35726.32417605532,
+      "minimum_resource_allowance_seconds": 53590.0
+    },
+    {
+      "arm": "E0G1",
+      "receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-matched-smoke-E0G1-01\\result.json",
+      "sha256": "4312cb224fd88115807e3e5705d6534441d86d4cf401fd725db750cf4946c3b6",
+      "status": "PASS_MATCHED_AV_SMOKE",
+      "updates": 32,
+      "reload_verified": true,
+      "config_sha256": "9e070e8d93d9aab7292604081dd6ed1400c11c84caeb716c79076a943d0ff74b",
+      "encoder_inclusive_parameters": 197097949,
+      "seconds": 1769.2304662000097,
+      "training_seconds": 27.141901899885852,
+      "evaluation_seconds": 1522.9207798000134,
+      "peak_vram_bytes": 293273600,
+      "projected_full_seconds": 36356.58704171886,
+      "minimum_resource_allowance_seconds": 54535.0
+    },
+    {
+      "arm": "E1G0",
+      "receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-matched-smoke-E1G0-01\\result.json",
+      "sha256": "024cd58e420f72df2322fbc489f1e25ba7d10e2a4106e6c81971fbf12faab35a",
+      "status": "PASS_MATCHED_AV_SMOKE",
+      "updates": 32,
+      "reload_verified": true,
+      "config_sha256": "238cdc69781084a6658e12ac59d09a13b57dd02bae115504573d25f044b98fcb",
+      "encoder_inclusive_parameters": 197097949,
+      "seconds": 1809.5601365000184,
+      "training_seconds": 26.286103600083152,
+      "evaluation_seconds": 1555.5885850999912,
+      "peak_vram_bytes": 296104448,
+      "projected_full_seconds": 35566.73033862322,
+      "minimum_resource_allowance_seconds": 53351.0
+    },
+    {
+      "arm": "E1G1",
+      "receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-matched-smoke-E1G1-01\\result.json",
+      "sha256": "bc6f2ca9e59554e43b5a3e48112849d808ed2ed663b49000171ee8dffa12a581",
+      "status": "PASS_MATCHED_AV_SMOKE",
+      "updates": 32,
+      "reload_verified": true,
+      "config_sha256": "555954c47244eba3f0d56c4bf4f9c75c0e0c646627545ae08a0f0693f2f91f55",
+      "encoder_inclusive_parameters": 197097949,
+      "seconds": 1855.7213717999985,
+      "training_seconds": 27.018144600093365,
+      "evaluation_seconds": 1607.5623832999845,
+      "peak_vram_bytes": 296846336,
+      "projected_full_seconds": 36328.490664775934,
+      "minimum_resource_allowance_seconds": 54493.0
+    }
+  ],
+  "summary_sha256": "7c06bf4ea765bdbd3f6b5527f612dc6646efefd62713bc7a69141e172cf83d28",
+  "smoke_quality_used_for_selection": false,
+  "full_training_complete": false,
+  "active_training_at_snapshot": {
+    "arm": "C0",
+    "output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-matched-train-C0-03",
+    "pid": 1320,
+    "started_local": "2026-10-17T10:03:49+09:00",
+    "max_seconds": 72000,
+    "optimizer_updates_at_snapshot": 0
+  },
+  "launch_history": [
+    {
+      "output": "greatest-hits-matched-train-C0-01",
+      "status": "INCOMPLETE_BEFORE_TRAINING",
+      "details": "Initial import path failure was corrected with PYTHONPATH; subsequent reference path failed before optimizer updates because --reference expects the smoke directory, not result.json."
+    },
+    {
+      "output": "greatest-hits-matched-train-C0-02",
+      "status": "INCOMPLETE_EXTERNAL_GPU_CONTENTION",
+      "step": 0,
+      "optimizer_updates": 0,
+      "receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-matched-train-C0-02\\interruption.json"
+    },
+    {
+      "output": "greatest-hits-matched-train-C0-03",
+      "status": "LAUNCHED",
+      "pid": 1320,
+      "maximum_seconds": 72000
+    }
+  ],
+  "verification": {
+    "cpu_runner_runtime_tests": 30,
+    "seconds": 5.72
+  },
+  "sealed_audit_loaded": false,
+  "calibration_loaded": false,
+  "cloud_cost": 0,
+  "product_promoted": false
+}

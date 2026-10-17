@@ -1,0 +1,121 @@
+# Matched AV admission: complete inputs and five full-path smokes
+
+**Input audit and all five smokes PASS. Full learning curves remain pending.**
+Execution source is `8a5440da334e74e970d80a7059ca5bb99a7248cb`. These results admit the fixed
+[matched protocol](R2_GREATEST_HITS_MATCHED_LEARNING_PROTOCOL_20261017.md); they
+supply mechanics, reload and local cost evidence. The 32-update smoke scores are
+not used to rank architectures, select hyperparameters or claim joint quality.
+
+## Complete input evidence
+
+The original CPU video producer completed normally: 11,151 events, 409 parents,
+32,582 development questions and 21 matched smoke events. Frozen encoder state
+before/after agrees. Its terminal status is `PASS_COMPLETE_VIDEO_CACHE` and wall time is
+13655.7 seconds. The earlier independently revalidated audio remains
+admitted through its explicit pinned receipt; its original failed producer receipt
+is preserved.
+
+The separate CPU input audit took 293.1 seconds and passed all
+11,151 video events, actual clock/feature bindings and 21 exact smoke references,
+alongside complete audio/query/common rehearsal input admission. Canonical input
+digest: `00aa90bed282446e77ae834afc4d9b1d1c1adeedcbaf73e47a49f084c1838868`. Hash/identity/shape/clock integrity does not establish
+adequate semantic labels, physical AV synchronization or actor/site independence.
+No optimizer or encoder update was performed in this audit.
+
+## Full-path smoke measurements
+
+Each arm used the same pinned data, fitted initial model, exact sampling prefix
+and 32 optimizer updates, then evaluated all six full TRAIN/validation views.
+Saving and reloading the checkpoint reproduced every saved score/gate matrix
+exactly. All five terminal statuses are `PASS_MATCHED_AV_SMOKE` with no error.
+
+| Arm | Encoder-inclusive parameters | Smoke wall seconds | Peak CUDA allocation bytes | Projected full hours |
+|---|---:|---:|---:|---:|
+| C0 | 196,254,874 | 1601.1 | 272,823,808 | 9.30 |
+| E0G0 | 197,097,949 | 1753.2 | 292,531,712 | 9.92 |
+| E0G1 | 197,097,949 | 1769.2 | 293,273,600 | 10.10 |
+| E1G0 | 197,097,949 | 1809.6 | 296,104,448 | 9.88 |
+| E1G1 | 197,097,949 | 1855.7 | 296,846,336 | 10.09 |
+
+Hardware: local RTX 3080 Laptop, 16,384 MiB. These CUDA allocation peaks exclude
+host RAM, driver reservations and other applications. Full projections combine
+measured update time, setup and twelve full evaluation/reload passes; they are
+estimates from short timing samples, not completed training times. Each arm's
+exact backend, versions, config, per-update timing and all output hashes remain
+in its external receipt. The training allowance must cover at least 1.5 times
+that arm's projection; the current C0 allowance is 72,000 seconds.
+
+## Launch outcomes and actual boundary
+
+All attempted launches remain recorded. The first C0 launch failed at import
+because the repo was absent from `PYTHONPATH`. After correcting only that launch
+environment, C0 attempt 01 failed before optimizer updates because `--reference`
+expects a smoke **directory**, not its `result.json` file. The corrected command
+uses the directory with the SHA-256 of that directory's receipt.
+
+C0 attempt 02 reached initial step-0 evaluation but an unrelated GPU training
+process appeared after launch. Only this newly launched C0 process was stopped,
+with zero optimizer updates; its partial predictions and `interruption.json`
+remain preserved. No external process was stopped. This incomplete attempt is
+neither a quality failure nor a fully resumable training checkpoint.
+
+After the other GPU job ended and an authoritative process/GPU check confirmed
+idle hardware, C0 attempt 03 launched on 2026-10-17 at 10:03:49 JST (PID 1320).
+At this report's snapshot it is RUNNING in initial evaluation, with zero optimizer
+updates; this is a historical observation, not a promise that the PID stays live.
+Inspect the real process and receipt before continuing. No other matched arm has
+started full training. The runner does not implement interrupted-run resume.
+
+The full train command is:
+
+```powershell
+$env:PYTHONPATH='C:/Users/junny/.codex/worktrees/r2-av-transport/tiny-omni-decision'
+& 'C:/Users/junny/AppData/Local/Programs/Python/Python311/python.exe' `
+  'C:/Users/junny/.codex/worktrees/r2-av-transport/tiny-omni-decision/scripts/train_greatest_hits_matched.py' `
+  --phase train --arm C0 `
+  --output C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-matched-train-C0-03 `
+  --audit C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-matched-input-audit-01 `
+  --audit-sha256 69a489b4fa4c81ed155d83328b816409326666f587add8392ea21a4e704efdad `
+  --reference C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-matched-smoke-C0-01 `
+  --reference-sha256 946ac1bfbc77904f40f535016aedc1362fd82d712f8c0783b11fb60bbf70c104 --max-seconds 72000
+```
+
+It starts from the protocol's fitted step-8192 model with a fresh optimizer.
+This is model warm start, not random initialization or an exact training resume.
+The smoke-trained 32-update checkpoint is only an admission reference, not the
+initial model for full training.
+
+## Evidence and verification
+
+External root: `C:/CodexArtifacts/pretrained-reuse-r2/`. Complete input admission
+is `greatest-hits-matched-input-audit-01/`; smokes are
+`greatest-hits-matched-smoke-<arm>-01/`. The compact independently rechecked summary
+is `greatest-hits-matched-admission-summary-01/result.json`. The repository
+[manifest](../../manifests/pretrained_reuse/greatest-hits-matched-admission-20261017.json)
+stores exact paths, config hashes, every smoke result hash and failed launches.
+Thirty CPU runner/runtime tests passed in 5.72 seconds in the separate evidence
+worktree with CUDA hidden. No runtime implementation or training source changed.
+
+| Evidence | SHA-256 |
+|---|---|
+| Full video result | `9fdb5bfcf75a35c73d3b3634e1affbeb0373074b8cc9240f6567548aba8922ce` |
+| Independent input audit result | `69a489b4fa4c81ed155d83328b816409326666f587add8392ea21a4e704efdad` |
+| Input admission | `b62adbe352752d1d8b376414210d906f2493187c629e4da9a2dbbad9cf6dbe30` |
+| C0 smoke result | `946ac1bfbc77904f40f535016aedc1362fd82d712f8c0783b11fb60bbf70c104` |
+| E0G0 smoke result | `e5fe6fdaec7c35ab1fc42005fa62e81beb8d743405c0d7fcd8cfe8d3fe824645` |
+| E0G1 smoke result | `4312cb224fd88115807e3e5705d6534441d86d4cf401fd725db750cf4946c3b6` |
+| E1G0 smoke result | `024cd58e420f72df2322fbc489f1e25ba7d10e2a4106e6c81971fbf12faab35a` |
+| E1G1 smoke result | `bc6f2ca9e59554e43b5a3e48112849d808ed2ed663b49000171ee8dffa12a581` |
+| Admission summary | `7c06bf4ea765bdbd3f6b5527f612dc6646efefd62713bc7a69141e172cf83d28` |
+
+## Remaining requirements
+
+Finish all five fixed 32,768-update curves sequentially, verify selected and final
+reloads, and compare fixed equal steps and retention-eligible selected checkpoints.
+Retain all failed/ineligible outcomes and the full TRAIN/validation gaps. Follow
+with the already-frozen input interventions; replacement sensitivity does not
+supply correctness labels for both-required or conflict reasoning. Sparse Video
+rehearsal, zero bell TRAIN positives, source/task ambiguity and domain shift remain
+explicit limitations. No audit/test/calibration access, cloud cost or product
+promotion occurred. Four-modality 95–98% quality, independent OOD/complementarity,
+package/latency and the remaining R0–R8 release gates are still unmet.

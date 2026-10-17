@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-17 complete AV admission and five smokes PASS:** All11,151 video events,
+409 parents and32,582 questions complete; the independent input audit and all five
+32-update full-path smokes/reloads pass the same pinned input digest. C0 has
+196,254,874 parameters; residual arms197,097,949. Measured full-run projections are
+9.3–10.1hours per arm. Initial launch errors and a zero-update GPU-contention stop
+are preserved; C0 attempt03 is launched, with full curves/results still pending.
+Smoke quality is not used for selection. No product/audit/calibration claim.
+[Receipts, costs, exact command and remaining gates](docs/pretrained_reuse/R2_GREATEST_HITS_MATCHED_ADMISSION_20261017.md).
+
+
 **2026-10-17 matched AV runner implemented and CPU verified:** Complete-bank
 admission, fixed32768-update execution, full validation/consumed-TRAIN evaluation,
 retention-gated best/final saves and reload are implemented. Real466 rehearsal
