@@ -81,9 +81,8 @@ PID and supervisor PID, not descendants. Its watchdog log repeatedly reports
 consistent with the monitor treating a trainer child as foreign; no Orbitune
 process or file was changed here. The outer supervisor/trainer are still live.
 
-Therefore the full fixed-checkpoint diagnostic remains unrun. Attempt 08 is
-preserved unchanged. The next run must use a new output directory and the
-updated committed runner, only after the GPU safety gate is genuinely clear and
-the existing process handoff is within the user's authorization. It must still
-complete all 44,375 forwards and exact self-replacement checks before any
-sensitivity summary is interpreted.
+At the time of this preflight report, the full fixed-checkpoint diagnostic was
+still unrun. That statement is superseded by the completed attempt 11 recorded
+in [R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md](R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
+Attempt 08 and the failed preflight attempts remain preserved; only attempt 11
+completed all 44,375 forwards and exact self-replacement checks.
