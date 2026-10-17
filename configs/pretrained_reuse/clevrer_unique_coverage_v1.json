@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "experiment_id": "clevrer-videoprism-unique-scene-coverage-v1",
-  "hypothesis": "At a fixed 2048-update budget, adding 512 previously unused CLEVRER training scenes to the existing 256-scene pool improves validation decisions on the same 256 previously unused validation scenes.",
+  "hypothesis": "At a fixed 2048-update budget, adding 512 previously unused CLEVRER training scenes to the existing 256-scene pool improves validation decisions on the same 96 previously unused validation scenes.",
   "seed": 17,
   "data": {
     "dataset": "MIT-IBM/CLEVRER",
@@ -12,7 +12,7 @@
     "baseline_train_scenes": 256,
     "additional_train_scenes": 512,
     "candidate_total_train_scenes": 768,
-    "fresh_validation_scenes": 256,
+    "fresh_validation_scenes": 96,
     "scene_and_media_identity_overlap": 0,
     "official_test_or_sealed_audit_loaded": false
   },
@@ -55,7 +55,7 @@
   "runtime": {
     "local_compute_only": true,
     "cloud_cost_usd": 0,
-    "preflight_output_directory": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-coverage-512train-256val-v1",
+    "preflight_output_directory": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-coverage-512train-96val-v1",
     "existing_samples_caches_and_checkpoints_read_only": true
   }
 }

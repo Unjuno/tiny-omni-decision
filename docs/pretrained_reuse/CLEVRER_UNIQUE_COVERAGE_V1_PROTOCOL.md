@@ -22,7 +22,12 @@ blind audit set.
   `static_descriptive` and one `temporal_descriptive` question.
 - Baseline train pool: existing 256 scenes / 512 questions; read-only.
 - Expanded-only train data: 512 new scenes / 1,024 questions.
-- Shared validation: 256 new scenes / 512 questions.
+- Shared validation: 96 new scenes / 192 questions. The preregistered request
+  for 256 scenes was not feasible: deterministic source selection found only
+  96 unused validation scenes with both question types after excluding prior
+  scenes and train question content. This was discovered before downloading
+  any media or observing experiment metrics; the validation pool was reduced
+  without replacement, and uncertainty is consequently wider.
 - No sealed audit, official test, or previously used scene is loaded.
 - VideoPrism: pinned model revision, 8 frames, 288px, frozen cached features.
 - MiniLM: pinned revision, frozen encoder.
@@ -69,6 +74,6 @@ ceiling follows from this experiment.
 Local RTX 3080 Laptop only; no cloud compute or paid services. All preexisting
 corpora, caches, models, checkpoints and run directories are read-only. New
 sample, feature, run and report files go under
-`C:/CodexArtifacts/pretrained-reuse-r2/clevrer-coverage-512train-256val-v1`
+`C:/CodexArtifacts/pretrained-reuse-r2/clevrer-coverage-512train-96val-v1`
 or explicitly named sibling directories. This experiment does not load or
 modify any sealed audit data.
