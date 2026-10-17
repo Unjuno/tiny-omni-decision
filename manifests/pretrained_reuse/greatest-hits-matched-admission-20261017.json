@@ -143,11 +143,12 @@
   "post_run_comparison_tool": {
     "status": "CPU_VERIFIED_REAL_FIVE_ARM_COMPARISON_PENDING",
     "script": "scripts/summarize_greatest_hits_matched.py",
-    "new_cpu_tests": 28,
-    "local_full_tests_passed": 2396,
+    "new_cpu_tests": 35,
+    "local_full_tests_passed": 2403,
     "local_full_tests_skipped": 11,
     "real_five_arm_comparison_executed": false,
     "model_inference_performed": false,
-    "training_source_modified": false
+    "training_source_modified": false,
+    "gate_diagnostics": "CPU_VERIFIED_REAL_FACTORIAL_OUTPUTS_PENDING"
   }
 }

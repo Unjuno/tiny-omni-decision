@@ -127,16 +127,26 @@ checkpoints can have unequal steps. These descriptive comparisons do not replace
 grouped uncertainty analysis, gate-distribution review, input interventions or
 the unresolved complementary-task/OOD/product requirements.
 
-Twenty-eight new CPU tests cover rejection of unfinished/mismatched runs, the
+Thirty-five CPU tests cover rejection of unfinished/mismatched runs, the
 fixed selector, factorial signs, raw-score/padding/metric integrity, required
 gate files, and complete synthetic five-arm disk/CLI execution. A self-consistent
 but different initial output first escaped detection (RED), then was rejected
 after the initial-parity gate was added. The fixture reduces counts only by
 test-process monkeypatching; the production CLI retains all six full counts and
-all ten fixed evaluation points. Full local checks:2,396 passed,11 skipped with
-CUDA hidden; final focused tests:28 passed. Ruff passes. Logs remain under
+all ten fixed evaluation points. Full local checks:2,403 passed,11 skipped with
+CUDA hidden; final focused tests:35 passed. Ruff passes. Logs remain under
 `greatest-hits-matched-summary-verification-01/` in the external artifact root.
 The fixture is implementation evidence, not a real five-arm quality result.
+
+For every factorial arm/view/step, the analyzer also describes the added-residual
+audio/video gates: mean, population standard deviation and0/5/50/95/100 percentiles,
+both candidate-weighted and with each active question weighted equally. It reports
+target/distractor and source-task distributions separately. Valid-candidate gates
+must lie in[0,1]; padding and whole-question bypass use the exact-1 sentinel.
+Missing-stream views must bypass; joint views must be active. E0G0/E1G0 must use
+exactly-one gates when active. Mixed sentinel/range/padding corruption is rejected.
+These are descriptive gate diagnostics, not calibrated reliability, global input
+importance or evidence of complementary correctness. They never enter selection.
 
 After all five training runs complete, invoke the module with five explicit
 `--run ARM=<completed-directory>` arguments and a fresh `--output` directory.

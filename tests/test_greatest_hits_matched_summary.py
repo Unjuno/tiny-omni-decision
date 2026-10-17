@@ -15,6 +15,7 @@ from scripts.summarize_greatest_hits_matched import (
     ARMS,
     STEPS,
     contrasts,
+    gate_summary,
     required_artifacts,
     validate_curve,
     validate_receipts,
@@ -219,7 +220,7 @@ def test_saved_logits_are_recomputed_and_changed_predictions_or_padding_rejected
         verify_prediction(rows, payload(scores.astype(np.float64)), expected)
 
 
-def completed_fixture(tmp_path, monkeypatch, *, different_initial=False):
+def completed_fixture(tmp_path, monkeypatch, *, different_initial=False, bad_fixed_gate=False):
     """Exercise real CPU disk/CLI paths; tiny counts are only injected in this test."""
     monkeypatch.setattr(summary, "STEPS", (0, 32768))
     counts = {k: 4 if "common" in k else 2 for k in summary.COUNTS}
@@ -265,7 +266,10 @@ def completed_fixture(tmp_path, monkeypatch, *, different_initial=False):
                 metrics_by_view[label] = summarize(view, scores)
                 if arm != "C0" and "common" not in label:
                     gates = np.full((len(view), 40, 2), -1, dtype=np.float32)
-                    gates[:, :2] = 0.5
+                    if label not in ("validation-audio", "validation-video"):
+                        gates[:, :2] = 1 if arm in ("E0G0", "E1G0") else 0.5
+                        if bad_fixed_gate and arm == "E0G0":
+                            gates[:, :2] = 0.5
                     np.save(folder / f"step-{step:05}-{label}-gates.npy", gates)
             points.append(
                 dict(
@@ -343,3 +347,51 @@ def test_self_consistent_but_different_initial_outputs_cannot_be_compared(tmp_pa
     with pytest.raises(ValueError, match="initial prediction matrices differ"):
         invoke_summary(monkeypatch, folders, output)
     assert not output.exists()
+
+
+def test_disabled_gate_control_cannot_silently_use_half_weights(tmp_path, monkeypatch):
+    folders = completed_fixture(tmp_path, monkeypatch, bad_fixed_gate=True)
+    output = tmp_path / "comparison"
+    with pytest.raises(ValueError, match="disabled gates must remain exactly one"):
+        invoke_summary(monkeypatch, folders, output)
+    assert not output.exists()
+
+
+def test_gate_diagnostics_distinguish_candidate_weight_and_question_weight():
+    rows = [
+        dict(options=["a", "b"], target_index=0, source="s", task="two"),
+        dict(options=["a", "b", "c"], target_index=2, source="s", task="three"),
+    ]
+    gates = np.full((2, 40, 2), -1, dtype=np.float32)
+    gates[0, :2] = 0.2
+    gates[1, :3] = 0.8
+    result = gate_summary(rows, gates)
+    assert result["active_questions"] == 2 and result["inactive_questions"] == 0
+    assert result["candidate_weighted"]["audio_residual"]["mean"] == pytest.approx(0.56)
+    assert result["question_weighted"]["audio_residual"]["mean"] == pytest.approx(0.5)
+    assert result["target_candidates"]["video_residual"]["mean"] == pytest.approx(0.5)
+    assert set(result["per_task"]) == {"s:two", "s:three"}
+
+
+def test_missing_stream_gate_bypass_has_no_fabricated_zero_weights():
+    rows = [dict(options=["a", "b"], target_index=0, source="s", task="t")]
+    result = gate_summary(rows, np.full((1, 40, 2), -1, dtype=np.float32))
+    assert result["active_questions"] == 0 and result["inactive_questions"] == 1
+    assert result["candidate_weighted"] is None and result["target_candidates"] is None
+
+
+@pytest.mark.parametrize("failure", ["padding", "mixed_bypass", "range", "nan"])
+def test_corrupt_gate_payload_is_rejected(failure):
+    rows = [dict(options=["a", "b"], target_index=0, source="s", task="t")]
+    gates = np.full((1, 40, 2), -1, dtype=np.float32)
+    gates[0, :2] = 0.5
+    if failure == "padding":
+        gates[0, 3] = 0.5
+    elif failure == "mixed_bypass":
+        gates[0, 0, 0] = -1
+    elif failure == "range":
+        gates[0, 0, 0] = 1.2
+    else:
+        gates[0, 0, 0] = np.nan
+    with pytest.raises(ValueError):
+        gate_summary(rows, gates)

@@ -192,6 +192,90 @@ def verify_prediction(rows, payload, expected):
     equal_summary(expected, summarize(rows, scores))
 
 
+def gate_summary(rows, gates):
+    """Describe added-residual gates; -1 is bypass/padding, never a zero weight."""
+    require(
+        bool(rows)
+        and gates.shape == (len(rows), 40, 2)
+        and gates.dtype == np.float32
+        and np.isfinite(gates).all(),
+        "complete finite FP32 gate matrix required",
+    )
+    active = []
+    for i, row in enumerate(rows):
+        n = len(row["options"])
+        require(
+            2 <= n <= 40 and 0 <= row["target_index"] < n,
+            "valid gate option/target binding required",
+        )
+        values = gates[i, :n]
+        require(np.all(gates[i, n:] == -1), "gate padding sentinel differs")
+        if np.all(values == -1):
+            active.append(False)
+        else:
+            require(np.all((values >= 0) & (values <= 1)), "mixed bypass or invalid gate range")
+            active.append(True)
+
+    def stats(values):
+        result = {}
+        for k, name in enumerate(("audio_residual", "video_residual")):
+            column = np.asarray(values, dtype=np.float64)[:, k]
+            quantiles = np.quantile(column, [0, 0.05, 0.5, 0.95, 1], method="linear")
+            result[name] = dict(
+                mean=float(column.mean()),
+                std=float(column.std(ddof=0)),
+                **{
+                    n: float(v)
+                    for n, v in zip(("min", "q05", "median", "q95", "max"), quantiles, strict=True)
+                },
+            )
+        return result
+
+    def pool(indices):
+        enabled = [i for i in indices if active[i]]
+        result = dict(
+            active_questions=len(enabled),
+            inactive_questions=len(indices) - len(enabled),
+            active_candidates=sum(len(rows[i]["options"]) for i in enabled),
+        )
+        names = (
+            "candidate_weighted",
+            "question_weighted",
+            "target_candidates",
+            "distractor_candidates",
+        )
+        if not enabled:
+            return dict(result, **dict.fromkeys(names))
+        values = [gates[i, : len(rows[i]["options"])] for i in enabled]
+        result.update(
+            candidate_weighted=stats(np.concatenate(values)),
+            question_weighted=stats([v.mean(axis=0, dtype=np.float64) for v in values]),
+            target_candidates=stats([gates[i, rows[i]["target_index"]] for i in enabled]),
+            distractor_candidates=stats(
+                np.concatenate(
+                    [
+                        np.delete(
+                            gates[i, : len(rows[i]["options"])], rows[i]["target_index"], axis=0
+                        )
+                        for i in enabled
+                    ]
+                )
+            ),
+        )
+        return result
+
+    result = pool(list(range(len(rows))))
+    tasks = sorted({r["source"] + ":" + r["task"] for r in rows})
+    result["per_task"] = {
+        task: pool([i for i, r in enumerate(rows) if r["source"] + ":" + r["task"] == task])
+        for task in tasks
+    }
+    result["interpretation"] = (
+        "Added-residual gates, not global modality importance or reliability."
+    )
+    return result
+
+
 def load_curve(folder, receipt):
     required = required_artifacts(receipt["arm"], receipt["best_step"])
     verify_artifacts(folder, receipt, required)
@@ -224,12 +308,39 @@ def load_curve(folder, receipt):
     best = validate_curve(curve, receipt["best_step"])
     for p in curve:
         require(set(p["metrics"]) == set(COUNTS), "all recorded views required")
+        diagnostics = {}
         for label in COUNTS:
             verify_prediction(
                 rows[label],
                 bound_bytes(folder, receipt, f"step-{p['step']:05}-{label}.npy"),
                 p["metrics"][label],
             )
+            if receipt["arm"] != "C0" and "common" not in label:
+                gates = np.load(
+                    io.BytesIO(
+                        bound_bytes(folder, receipt, f"step-{p['step']:05}-{label}-gates.npy")
+                    ),
+                    allow_pickle=False,
+                )
+                diagnostics[label] = gate_summary(rows[label], gates)
+                expected_active = (
+                    0 if label in ("validation-audio", "validation-video") else len(rows[label])
+                )
+                require(
+                    diagnostics[label]["active_questions"] == expected_active,
+                    "joint/missing-stream gate bypass differs",
+                )
+                gated = receipt["arm"] in ("E0G1", "E1G1")
+                diagnostics[label]["policy"] = "candidate_conditioned" if gated else "fixed_one"
+                if not gated and expected_active:
+                    require(
+                        all(
+                            v["min"] == v["max"] == 1
+                            for v in diagnostics[label]["candidate_weighted"].values()
+                        ),
+                        "disabled gates must remain exactly one",
+                    )
+        p["gate_diagnostics"] = diagnostics
     best_record = bound_json(folder, receipt, "best.json")
     require(
         best_record["step"] == best
