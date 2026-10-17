@@ -1,14 +1,24 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-17 full-extent AV encoder path executed:** All 21 fixed TRAIN events,
-105-payload fresh-process replay, and the new decoder-to-bank smoke pass exactly.
-Frozen weights and 8,437 earlier artifacts are unchanged. Begin complete CPU video
-caching for all 11,151 immutable development events / 32,582 questions, with fixed
-8-hour/8GiB/16GiB-reserve guards. This cache is live, not complete; inspect its
-actual session/PID. Next finish it, bind independent audio/query features with
-actual event-clock positions, then freeze matched Attention/exchange/gate learning.
-No quality improvement, product promotion or audit use is claimed.
-[Measured runs and live cache handles](docs/pretrained_reuse/R2_GREATEST_HITS_FULL_EXTENT_RESULTS_20261017.md).
+**2026-10-17 frozen AV cache and long-fit evidence verified:** The full video bank
+finished all 11,151 events / 409 parents / 32,582 questions; a read-only rehash
+matched all 1,227 stored files (70,430,943,552 bytes) and the 21-event reference
+replay. The audio/query producer's terminal receipt is `INCOMPLETE` because its
+expected smoke-reference count was wrong; a separate full revalidation passed
+all inputs and 22,302 stored audio-feature digests, while explicitly not claiming
+a full fresh-encoder replay. The 21-event audio smoke replay and real feature
+transport replay passed. A separate 32,768-update post-attention-normalization
+candidate improved the fixed video validation view from 38.45% at step 512 to
+61.84% at final (selected step 16,384); its final four-modality macro NLL was
+worse than initialization, and this is not evidence that a learned AV gate helps.
+No sealed audit, quantization or product promotion occurred. Preserve the cache
+and run; next admit genuinely both-required, independently grouped AV tasks and
+define task/device release thresholds before another quality-selected run.
+[Cache completion, integrity, run references and open gates](docs/pretrained_reuse/R2_GREATEST_HITS_CACHE_COMPLETION_20261017.md).
+
+The original 21-event smoke and full-cache protocol/results remain preserved:
+[full-extent protocol](docs/pretrained_reuse/R2_GREATEST_HITS_FULL_EXTENT_PROTOCOL_20261017.md) ·
+[historical launch and early progress record](docs/pretrained_reuse/R2_GREATEST_HITS_FULL_EXTENT_RESULTS_20261017.md).
 
 **2026-10-17 fixed TRAIN source review completed:** Decode and inspect one fixed
 event from each of 21 TRAIN dates (315 frames, 84 payloads). Preserve all labels,
