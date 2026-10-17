@@ -5,6 +5,7 @@ from scripts.train_clevrer_unique_coverage import (
     _bootstrap_difference,
     _group_metrics,
     _sample_batches,
+    _sampler_audit,
     _validate_row_groups,
 )
 
@@ -67,6 +68,21 @@ def test_step_sampler_is_deterministic_and_covers_each_complete_pass() -> None:
 def test_step_sampler_rejects_partial_pool_passes() -> None:
     with pytest.raises(ValueError, match="divisible by batch_size"):
         list(_sample_batches(sample_count=10, batch_size=4, steps=1, seed=17))
+
+
+def test_sampler_audit_counts_presentations_unique_scenes_and_media() -> None:
+    rows = _scene(1) + _scene(2) + _scene(3) + _scene(4)
+
+    report = _sampler_audit(rows, batch_size=8, steps=4, seed=17, prefix_presentations=16)
+
+    assert report["total_presentations"] == 32
+    assert report["unique_questions_consumed"] == 8
+    assert report["repeated_presentations"] == 24
+    assert report["unique_scenes_consumed"] == 4
+    assert report["unique_media_consumed"] == 4
+    assert report["prefix_presentations"] == 16
+    assert report["prefix_unique_scenes"] == 4
+    assert sum(report["prefix_question_type_counts"].values()) == 16
 
 
 def test_group_metrics_reports_both_temporal_and_static_tasks() -> None:

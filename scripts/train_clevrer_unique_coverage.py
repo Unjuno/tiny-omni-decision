@@ -235,6 +235,50 @@ def _sample_batches(
         cursor += batch_size
 
 
+def _sampler_audit(
+    rows: list[dict[str, Any]], batch_size: int, steps: int, seed: int,
+    prefix_presentations: int = 8192,
+) -> dict[str, Any]:
+    digest = hashlib.sha256()
+    consumed_ids: set[str] = set()
+    consumed_scenes: set[int] = set()
+    consumed_media: set[str] = set()
+    prefix_ids: set[str] = set()
+    prefix_scenes: set[int] = set()
+    prefix_media: set[str] = set()
+    prefix_types: dict[str, int] = defaultdict(int)
+    presentations = 0
+    prefix_count = 0
+    for batch in _sample_batches(len(rows), batch_size, steps, seed):
+        for index in batch:
+            row = rows[index]
+            identifier = str(row["id"])
+            digest.update(identifier.encode("utf-8") + b"\n")
+            consumed_ids.add(identifier)
+            consumed_scenes.add(int(row["scene_index"]))
+            consumed_media.add(str(row["media_sha256"]))
+            if prefix_count < prefix_presentations:
+                prefix_count += 1
+                prefix_ids.add(identifier)
+                prefix_scenes.add(int(row["scene_index"]))
+                prefix_media.add(str(row["media_sha256"]))
+                prefix_types[str(row["question_type"])] += 1
+        presentations += len(batch)
+    return {
+        "sampler_order_sha256": digest.hexdigest(),
+        "total_presentations": presentations,
+        "unique_questions_consumed": len(consumed_ids),
+        "repeated_presentations": presentations - len(consumed_ids),
+        "unique_scenes_consumed": len(consumed_scenes),
+        "unique_media_consumed": len(consumed_media),
+        "prefix_presentations": prefix_count,
+        "prefix_unique_questions": len(prefix_ids),
+        "prefix_unique_scenes": len(prefix_scenes),
+        "prefix_unique_media": len(prefix_media),
+        "prefix_question_type_counts": dict(sorted(prefix_types.items())),
+    }
+
+
 def _tensor_state_hash(state: dict[str, torch.Tensor]) -> str:
     digest = hashlib.sha256()
     for key in sorted(state):
@@ -389,6 +433,8 @@ def _fit_arm(
     best_state: dict[str, torch.Tensor] | None = None
     history = []
     consumed_ids: set[str] = set()
+    consumed_scenes: set[int] = set()
+    consumed_media: set[str] = set()
     presentations = 0
     started = time.perf_counter()
     window_losses: list[float] = []
@@ -401,6 +447,8 @@ def _fit_arm(
         batch_targets = [train_targets[index] for index in indexes]
         for index in indexes:
             consumed_ids.add(str(train_rows[index]["id"]))
+            consumed_scenes.add(int(train_rows[index]["scene_index"]))
+            consumed_media.add(str(train_rows[index]["media_sha256"]))
         presentations += len(indexes)
         widths = [item.shape[0] for item in batch]
         flat_scores = scorer(torch.cat(batch))
@@ -423,6 +471,7 @@ def _fit_arm(
         window_grad_norms.append(float(gradient_norm.detach().cpu()))
 
         if step % interval == 0 or step == steps:
+            evaluation_started = time.perf_counter()
             fixed_train_logits = _predict_for_rows(scorer, train_features, device)
             validation_logits = _predict_for_rows(scorer, validation_features, device)
             train_metrics = _group_metrics(fixed_train_logits, train_targets, train_rows)
@@ -435,6 +484,8 @@ def _fit_arm(
                 "training_presentations_total": presentations,
                 "training_unique_questions_consumed": len(consumed_ids),
                 "training_repeated_presentations": presentations - len(consumed_ids),
+                "training_unique_scenes_consumed": len(consumed_scenes),
+                "training_unique_media_consumed": len(consumed_media),
                 "rolling_train_ce": float(np.mean(window_losses)),
                 "rolling_gradient_norm_mean": float(np.mean(window_grad_norms)),
                 "rolling_gradient_norm_max": float(np.max(window_grad_norms)),
@@ -443,6 +494,7 @@ def _fit_arm(
                 "validation_metrics": validation_metrics,
                 "selection_score_macro_nll": score,
                 "best_step_before_update": best_step,
+                "evaluation_seconds": time.perf_counter() - evaluation_started,
                 "elapsed_training_seconds": time.perf_counter() - started,
             }
             history.append(record)
@@ -470,6 +522,7 @@ def _fit_arm(
     best_metrics = _group_metrics(best_validation_logits, validation_targets, validation_rows)
     if abs(best_metrics["macro"]["nll"] - best_score) > 1e-7:
         raise AssertionError(f"best checkpoint reload metric mismatch for {name}")
+    selected_history = next(record for record in history if record["step"] == best_step)
     best_train_predictions = _prediction_rows(train_rows, best_train_logits, train_targets)
     best_validation_predictions = _prediction_rows(
         validation_rows, best_validation_logits, validation_targets
@@ -496,6 +549,15 @@ def _fit_arm(
         "training_presentations": presentations,
         "training_unique_questions_consumed": len(consumed_ids),
         "training_repeated_presentations": presentations - len(consumed_ids),
+        "training_unique_scenes_consumed": len(consumed_scenes),
+        "training_unique_media_consumed": len(consumed_media),
+        "selected_checkpoint_consumption": {
+            "presentations": selected_history["training_presentations_total"],
+            "unique_questions": selected_history["training_unique_questions_consumed"],
+            "repeated_presentations": selected_history["training_repeated_presentations"],
+            "unique_scenes": selected_history["training_unique_scenes_consumed"],
+            "unique_media": selected_history["training_unique_media_consumed"],
+        },
         "selected_step": best_step,
         "selected_validation_metrics": best_metrics,
         "selected_fixed_train_metrics": _group_metrics(
@@ -624,9 +686,11 @@ def main() -> None:
         raise ValueError("local MiniLM model.safetensors does not match the pinned checkpoint")
 
     all_train_rows = baseline_train + additional_train
+    text_feature_device = torch.device("cpu")
     text_tokenizer = AutoTokenizer.from_pretrained(text_model_path, local_files_only=True)
     text_encoder = (
-        AutoModel.from_pretrained(text_model_path, local_files_only=True).eval().to(device)
+        AutoModel.from_pretrained(text_model_path, local_files_only=True)
+        .eval().to(text_feature_device)
     )
     for parameter in text_encoder.parameters():
         parameter.requires_grad_(False)
@@ -641,13 +705,13 @@ def main() -> None:
         np.stack([feature_map[str(row["media_sha256"])] for row in validation]).copy()
     )
     baseline_text, baseline_targets = _text_features(
-        baseline_train, text_tokenizer, text_encoder, device
+        baseline_train, text_tokenizer, text_encoder, text_feature_device
     )
     additional_text, additional_targets = _text_features(
-        additional_train, text_tokenizer, text_encoder, device
+        additional_train, text_tokenizer, text_encoder, text_feature_device
     )
     validation_text, validation_targets = _text_features(
-        validation, text_tokenizer, text_encoder, device
+        validation, text_tokenizer, text_encoder, text_feature_device
     )
     del text_encoder, text_tokenizer
     if device.type == "cuda":
@@ -660,6 +724,16 @@ def main() -> None:
     candidate_features = baseline_features + additional_features
 
     torch.manual_seed(int(config["seed"]))
+    batch_size = int(config["training"]["batch_questions"])
+    steps = int(config["training"]["optimizer_updates"])
+    sampler_audits = {
+        "baseline": _sampler_audit(
+            baseline_train, batch_size, steps, int(config["seed"])
+        ),
+        "expanded": _sampler_audit(
+            all_train_rows, batch_size, steps, int(config["seed"])
+        ),
+    }
     template = CandidateScorer(candidate_features[0].shape[-1])
     initial_state = {
         key: value.detach().cpu().clone() for key, value in template.state_dict().items()
@@ -667,6 +741,45 @@ def main() -> None:
     del template
     output.mkdir(parents=True, exist_ok=False)
     (output / "effective-config.json").write_bytes(config_bytes)
+    preflight = {
+        "status": "preflight_pass_before_readout_training",
+        "experiment_id": config["experiment_id"],
+        "source_commit": subprocess.run(
+            ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
+        ).stdout.strip(),
+        "config_sha256": hashlib.sha256(config_bytes).hexdigest(),
+        "runner_sha256": sha256_file(Path(__file__).resolve()),
+        "sample_hashes": {
+            "baseline_train_jsonl": sha256_file(baseline_dir / "train.jsonl"),
+            "baseline_validation_jsonl": sha256_file(baseline_dir / "validation.jsonl"),
+            "baseline_fetch_report": sha256_file(baseline_dir / "fetch-report.json"),
+            "expanded_train_jsonl": sha256_file(expanded_dir / "train.jsonl"),
+            "validation_jsonl": sha256_file(expanded_dir / "validation.jsonl"),
+            "expanded_fetch_report": sha256_file(expanded_dir / "fetch-report.json"),
+        },
+        "feature_cache_hashes": {
+            "baseline": sha256_file(baseline_cache),
+            "baseline_report": sha256_file(baseline_report),
+            "expanded": sha256_file(expanded_cache),
+            "expanded_report": sha256_file(expanded_report),
+        },
+        "text_checkpoint_sha256": sha256_file(text_weights),
+        "scene_and_media_accounting": counts,
+        "cache_coverage": cache_coverage,
+        "validation_id_order_sha256": hashlib.sha256(
+            "\n".join(str(row["id"]) for row in validation).encode()
+        ).hexdigest(),
+        "sampler_audits": sampler_audits,
+        "readout_initial_state_sha256": _tensor_state_hash(initial_state),
+        "text_feature_preprocessing_device": str(text_feature_device),
+        "training_device": str(device),
+        "sealed_audit_loaded": False,
+        "official_test_loaded": False,
+    }
+    (output / "preflight.json").write_text(
+        json.dumps(preflight, indent=2, sort_keys=True, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
     arms = {}
     for name, train_rows, train_features, targets in (
         ("baseline", baseline_train, baseline_features, baseline_targets),
@@ -743,7 +856,7 @@ def main() -> None:
             "readout_parameters": sum(parameter.numel() for parameter in CandidateScorer(
                 candidate_features[0].shape[-1]
             ).parameters()),
-            "resident_parameter_totals_before_quantization": {
+            "component_parameter_inventory_not_simultaneously_resident": {
                 "baseline": 114_365_184 + text_encoder_parameters + sum(
                     parameter.numel() for parameter in CandidateScorer(
                         baseline_features[0].shape[-1]
