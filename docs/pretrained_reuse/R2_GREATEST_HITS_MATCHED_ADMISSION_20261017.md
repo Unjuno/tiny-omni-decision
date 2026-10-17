@@ -108,6 +108,57 @@ worktree with CUDA hidden. No runtime implementation or training source changed.
 | E1G1 smoke result | `bc6f2ca9e59554e43b5a3e48112849d808ed2ed663b49000171ee8dffa12a581` |
 | Admission summary | `7c06bf4ea765bdbd3f6b5527f612dc6646efefd62713bc7a69141e172cf83d28` |
 
+## C0 midpoint: actual-history integrity and coverage
+
+An independent CPU audit of the immutable first16,384 updates checked131,072
+presentations against the pinned sampling and LR plans. Every actual question ID,
+full candidate permutation, target association, loss aggregation and finite-value
+check passed. Complete accounting equals both the preflight coverage receipt and
+the saved step16,384 curve. This verifies the executed prefix, not completion of
+the32,768-update run or the remaining four arms.
+
+| Stream | Presentations | Unique questions | Repeated presentations | Available questions |
+|---|---:|---:|---:|---:|
+| Joint AV |65,536|23,707|41,829|23,707|
+| Text rehearsal |16,384|16,384|0|18,432|
+| Image rehearsal |16,384|16,384|0|33,696|
+| Audio rehearsal |16,384|16,384|0|47,940|
+| Video rehearsal |16,384|512|15,872|512|
+| Total |131,072|73,371|57,701|—|
+
+The prefix contains24,010 unique observations,11,685 media assets and10,789
+source-qualified groups. The independent stream audit verifies uniqueness before
+each whole-stream reset: joint AV completed two cycles and Video rehearsal32.
+Repeated questions therefore follow the preregistered exhaustion rule, but the
+small Video rehearsal pool remains a data-coverage limitation. More presentations
+must not be described as more unique training data. No sampling change was made.
+
+At step12,288, C0 first passed all fixed retention gates: joint task-macro
+Accuracy0.623087637 and NLL1.060826095; common hierarchical macro NLL1.589783653.
+Step16,384 had higher joint Accuracy0.635101809 and lower joint NLL1.016177447,
+but failed Audio retention and common-NLL gates (common NLL1.654452839).
+The selected best therefore remained12,288. These are development-validation
+observations within an ongoing run, not a final result or evidence for gates.
+
+External evidence is `greatest-hits-matched-C0-midpoint-history-audit-01/`:
+`audit.py` replays the immutable `history-prefix.jsonl`; `result.json` records
+the pinned inputs and complete accounting; `stream-coverage.json` records cycle
+checks. SHA-256 values:
+
+| Evidence | SHA-256 |
+|---|---|
+| History prefix | `53dad695d99cf1e6fd89f00948ead28d3852b4116b495d6df7d2b2d307691ac7` |
+| Audit code | `670d49e6c558ce1a772edf18cd402cbaa8bc8ab14e9521c82317c90a6246346f` |
+| Audit result | `44eb2fb6a2d30ad3155f3cf80e8ae063b689e94386bf41970790a939b901034b` |
+| Stream coverage | `6e02d11367f1aa17aa026bce897bb2fe65fec75631e815285b2d709aa57fa267` |
+
+The selected checkpoint hash was independently checked against `best.json` and
+`checkpoint-12288.pt`:
+`3b98db3cee66fd5bd6a13f7f11dbfb8732d9b56e8d93af276a2a41215b5d16fd`.
+The audit made no optimizer updates, model inference, GPU work or
+audit/test/calibration reads. The live source remains pinned to8a5440d and was
+not edited; this documentation belongs to the separate evidence branch.
+
 ## Remaining requirements
 
 The CPU-only `scripts/summarize_greatest_hits_matched.py` now implements the
