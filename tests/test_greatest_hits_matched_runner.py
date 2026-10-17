@@ -188,6 +188,7 @@ def test_norm_ablation_initializes_only_new_identity_state():
 
 
 def test_training_cli_prefers_its_local_src_over_an_installed_other_worktree():
+    pytest.importorskip("torch")
     import os
     import subprocess
     import sys

@@ -56,6 +56,11 @@ run, or causal truth label.
 - Full CPU suite: 2,388 passed, 11 skipped.
 - Ruff on changed Python files: passed.
 - No GPU test or scoring attempt was started during this code change.
+- The first GitHub Actions run also exposed an existing CPU-CI issue: a test
+  that imports the PyTorch-dependent training runner lacked an optional-Torch
+  skip. The same failure was present on parent commit `d2055f5`. The test now
+  explicitly skips when Torch is unavailable; local full-suite verification
+  remains 2,388 passed, 11 skipped. The follow-up CI run is pending.
 
 ## Live compute observation and next step
 
