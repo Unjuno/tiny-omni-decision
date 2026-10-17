@@ -705,7 +705,6 @@ def main() -> None:
     if device.type == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but unavailable")
     if device.type == "cuda":
-        torch.cuda.reset_peak_memory_stats(device)
         torch.set_num_threads(4)
 
     text_weights = text_model_path / "model.safetensors"
