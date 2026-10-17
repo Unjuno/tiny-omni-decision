@@ -59,9 +59,46 @@ or promotion decision.
 | Artifacts and datasets | Checkpoints, media, feature caches, predictions. | Store outside Git under the dedicated artifact root. Preserve existing corpus, checkpoints, worktrees, runs, and PRs read-only unless a later explicit work item says otherwise. |
 | Cloud | None for current R0/R1/R2 work. | $0 cloud spend. Any future paid compute requires a separate approved decision. |
 
-R0 remains open for: target deployment device, per-task quality floors and
-confidence bounds, and allowed elapsed time/cost. The parameter and package
-figures above may guide isolated engineering experiments, but they are not a
-release pass/fail gate until the device and task-specific criteria are set.
-This file makes the candidate and execution constraints reviewable without
-silently setting those product decisions.
+## Addendum — provisional engineering contract (2026-10-18)
+
+The user confirmed the roadmap parameter/package targets as provisional. For
+planning and experiment reporting, apply them to the **complete pre-quantized
+inference system**: count every resident encoder, tokenizer/embedding,
+projection, fusion/readout, normalization and adapter parameter. Do not count
+parameter reduction from quantization toward the pre-quantization cap. Record
+post-quantization package bytes separately; the provisional package target is
+<=200 MB including weights, scales, exceptions, tokenizer/preprocessing assets,
+metadata and runtime-required adapters.
+
+The current Windows 11 / RTX 3080 Laptop (16 GiB) machine is an **engineering
+reference host only**, not a selected end-user deployment device. Experiments
+must record this host and actual resource use; do not infer mobile/edge latency,
+RAM, energy or thermals from it. The user-authorized local-compute policy is
+cloud spend $0 and no hardware purchases. User-approved cooperative yielding of
+the Orbitune GPU workload permits a ready, justified local training job to
+request its normal yield behavior; it does not justify starting a GPU job before
+data, safety and acceptance preflights pass.
+
+For each predeclared required task, keep >=95% Accuracy as the required product
+goal and 98% as the aspiration, never as a pooled four-modality substitute.
+These are not yet a release pass: the task battery, sample/group counts,
+independent test protocol, confidence-bound rule and risk-specific abstention
+policy have not been frozen. Report task-wise Accuracy, NLL, Brier and ECE;
+also report group-aware uncertainty and coverage when abstention is used. Do
+not select on sealed-audit results. For joint tasks, a task is eligible only
+when labels establish which information is sufficient/necessary; input
+sensitivity alone is not such evidence.
+
+Before every fit, preregister a bounded wall-time and output-space budget from
+the measured dry run. Record elapsed wall time, GPU/CPU/RAM/VRAM, output bytes,
+and local energy only if measured. A universal latency, energy or elapsed-time
+release threshold remains **unset** until the end-user device and named tasks
+are selected. Retain p50/p95 cold and warm end-to-end latency measurements as
+engineering evidence, with cache-hit and encoder-only timings clearly
+separated.
+
+Thus R0 is **partly specified, not closed**: provisional size, local-only/$0
+compute, current reference host, and per-task aspiration are recorded; final
+device, task battery, independent-test confidence bounds, calibration policy,
+latency/energy limits and release thresholds remain open. No product pass is
+implied by this addendum.

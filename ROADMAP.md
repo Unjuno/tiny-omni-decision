@@ -1,5 +1,19 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
+workstation is now recorded as an engineering reference host, not the selected
+deployment device. Preserve the full pre-quantization <=200M parameter target
+and separately account for the provisional <=200MB complete quantized package;
+quantization does not reduce the parameter count. For each predeclared required
+task, >=95% Accuracy remains the product goal and 98% the aspiration, but this
+is not a release gate until the task battery, independent-test uncertainty,
+calibration/abstention policy and target device are frozen. Compute remains
+local with $0 cloud spend; each run must preregister measured time/storage
+budgets and report device use. No universal latency/energy limit is invented.
+Joint-task admission requires truth-bearing evidence of complementary input
+necessity; replacement-induced output changes establish sensitivity only. R0
+remains partly open. See the [provisional contract](docs/pretrained_reuse/R0_DECISION_MATRIX_20261011.md).
+
 **2026-10-18 conditional AV gate fit reviewed:** A separate branch completed a
 matched seed-17, 32,768-update E0G1 run. The gate outputs collapsed below 0.01
 for all valid options by update 512 and stayed near zero; the added gate has
