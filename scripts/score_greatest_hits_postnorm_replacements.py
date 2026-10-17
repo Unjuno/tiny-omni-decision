@@ -38,7 +38,7 @@ REPO = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "greatest-hits-replacement-inventory-01"
 INVENTORY_SHA256 = "f12690080072e7cb0c60e0528394367114afc296f8c9cbe3d281425937687c62"
 AUDIT = ROOT / "greatest-hits-matched-input-audit-01"
-AUDIT_SHA256 = "69a489b4fa4c81ed155c76ae210500aa746f6d70cc2729495432e301a582546"
+AUDIT_SHA256 = "69a489b4fa4c81ed155d83328b816409326666f587add8392ea21a4e704efdad"
 RUNS = {
     "E0G0": ROOT / "greatest-hits-matched-postnorm-train-01",
     "E0G1": ROOT / "greatest-hits-matched-postnorm-train-E0G1-01",
@@ -52,6 +52,7 @@ CHECKPOINT_SHA256 = {
     "E0G1": "9df53a55e610f4e473dc5f56528edd86610a72683c8f6c40145e9d87d899d87d",
 }
 OUTPUT_PREFIX = "greatest-hits-postnorm-replacements-"
+OUTPUT_ATTEMPT = "-02"
 
 
 def main():
@@ -63,7 +64,7 @@ def main():
         ["git", "status", "--porcelain"], cwd=REPO
     ).strip():
         raise ValueError("positive resource limit and clean committed source required")
-    output = ROOT / (OUTPUT_PREFIX + args.arm + "-01")
+    output = ROOT / (OUTPUT_PREFIX + args.arm + OUTPUT_ATTEMPT)
     output.mkdir(exist_ok=False)
     started = time.perf_counter()
     pins, sources = Pins(), Pins()
