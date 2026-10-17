@@ -417,6 +417,8 @@ def _fit_arm(
     output: Path,
     config: dict[str, Any],
 ) -> dict[str, Any]:
+    if device.type == "cuda":
+        torch.cuda.reset_peak_memory_stats(device)
     scorer = CandidateScorer(train_features[0].shape[-1]).to(device)
     scorer.load_state_dict(initial_state, strict=True)
     optimizer = torch.optim.AdamW(
@@ -574,6 +576,9 @@ def _fit_arm(
         "final_checkpoint_sha256": sha256_file(final_path),
         "best_reload_exact_prediction_parity": True,
         "training_seconds": time.perf_counter() - started,
+        "evaluation_seconds_total": sum(record["evaluation_seconds"] for record in history),
+        "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(device)
+        if device.type == "cuda" else None,
         "history_file": f"{name}-history.jsonl",
         "best_validation_predictions_file": f"{name}-best-validation-predictions.jsonl",
         "final_validation_predictions_file": f"{name}-final-validation-predictions.jsonl",
@@ -895,8 +900,10 @@ def main() -> None:
             "numpy": np.__version__,
             "cuda_version": torch.version.cuda,
             "gpu": torch.cuda.get_device_name(device) if device.type == "cuda" else None,
-            "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(device)
-            if device.type == "cuda" else None,
+            "peak_cuda_allocated_bytes": max(
+                (arm["peak_cuda_allocated_bytes"] or 0 for arm in arms.values()),
+                default=0,
+            ) if device.type == "cuda" else None,
             "sealed_audit_loaded": False,
             "official_test_loaded": False,
             "cloud_cost_usd": 0,
