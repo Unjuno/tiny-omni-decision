@@ -193,3 +193,20 @@ def test_cpu_training_does_not_call_cuda_memory_api(monkeypatch):
 
     monkeypatch.setattr(torch.cuda, "reset_peak_memory_stats", unexpected_cuda_call)
     _reset_peak_memory_stats(torch.device("cpu"))
+
+
+def test_coverage_arms_validate_on_same_optimizer_update_interval():
+    from scripts.train_textfree_video_probe import _validation_interval_updates
+
+    assert _validation_interval_updates(
+        train_count=1024,
+        batch_size=64,
+        validation_interval_epochs=1,
+        epochs=128,
+    ) == 16
+    assert _validation_interval_updates(
+        train_count=512,
+        batch_size=64,
+        validation_interval_epochs=2,
+        epochs=256,
+    ) == 16

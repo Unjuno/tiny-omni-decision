@@ -105,6 +105,14 @@ def _training_schedule(
     }
 
 
+def _validation_interval_updates(
+    *, train_count: int, batch_size: int, validation_interval_epochs: int, epochs: int
+) -> int:
+    if validation_interval_epochs < 1 or epochs < 1 or epochs % validation_interval_epochs:
+        raise ValueError("validation interval must be positive and divide the training epochs")
+    return math.ceil(train_count / batch_size) * validation_interval_epochs
+
+
 def _source_rows_gate(
     rows: list[dict[str, Any]], sample_dir: Path, split: str, revision: str
 ) -> dict[str, Any]:
@@ -249,9 +257,11 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         raise ValueError("framewise feature provenance does not match the frozen config")
     if (
         feature_report.get("train_manifest_sha256", {}).get("train.jsonl")
-        != source["train_manifest_sha256"]
+        != feature_config.get("source_train_manifest_sha256", source["train_manifest_sha256"])
         or feature_report.get("evaluation_manifest_sha256", {}).get("validation.jsonl")
-        != source["validation_manifest_sha256"]
+        != feature_config.get(
+            "source_validation_manifest_sha256", source["validation_manifest_sha256"]
+        )
     ):
         raise ValueError("feature cache was not extracted from the pinned sample manifests")
     if feature_report.get("feature_cache_sha256") != _sha256(feature_path):
@@ -275,9 +285,10 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         features_by_media
     ):
         raise ValueError("framewise cache does not cover every pinned train/validation asset")
-    if (
-        set(feature_report.get("train_media_hashes", [])) != train_media
-        or set(feature_report.get("evaluation_media_hashes", [])) != validation_media
+    feature_train_media = set(feature_report.get("train_media_hashes", []))
+    feature_validation_media = set(feature_report.get("evaluation_media_hashes", []))
+    if not train_media.issubset(feature_train_media) or (
+        feature_validation_media != validation_media
     ):
         raise ValueError("feature report media identity list does not match the sample manifests")
 
@@ -661,6 +672,7 @@ def _run_variant(
     *,
     epochs: int,
     batch_size: int,
+    validation_interval_epochs: int,
 ) -> dict[str, Any]:
     variant_started_utc = datetime.now(UTC).isoformat()
     torch.manual_seed(SEED)
@@ -712,6 +724,8 @@ def _run_variant(
             if device.type == "cuda":
                 torch.cuda.synchronize(device)
             training_seconds += time.perf_counter() - epoch_started
+            if epoch % validation_interval_epochs:
+                continue
             eval_started = time.perf_counter()
             train_result = _evaluate(model, train, train_rows)
             validation_result = _evaluate(model, validation, validation_rows)
@@ -959,6 +973,15 @@ def main() -> None:
     epochs = int(config["comparison"].get("epochs", EPOCHS))
     batch_size = int(config["comparison"].get("batch_size", BATCH_SIZE))
     max_updates = int(config["comparison"].get("max_optimizer_updates", 2048))
+    validation_interval_epochs = int(
+        config["comparison"].get("validation_interval_epochs", 1)
+    )
+    validation_interval_updates = _validation_interval_updates(
+        train_count=len(train_rows),
+        batch_size=batch_size,
+        validation_interval_epochs=validation_interval_epochs,
+        epochs=epochs,
+    )
     schedule = _training_schedule(
         train_count=len(train_rows),
         batch_size=batch_size,
@@ -989,6 +1012,11 @@ def main() -> None:
                 text=True,
             ).stdout.strip(),
             "command": [sys.executable, *sys.argv],
+            "training_schedule": {
+                **schedule,
+                "validation_interval_epochs": validation_interval_epochs,
+                "validation_interval_optimizer_updates": validation_interval_updates,
+            },
             "source_hashes": {
                 "training_script_sha256": _sha256(Path(__file__).resolve()),
                 "readout_implementation_sha256": _sha256(
@@ -1033,6 +1061,7 @@ def main() -> None:
             epoch_orders,
             epochs=epochs,
             batch_size=batch_size,
+            validation_interval_epochs=validation_interval_epochs,
         )
     selected_predictions = {
         variant: _load_row_metrics(output_dir / f"selected-validation-{variant}.jsonl")
@@ -1090,6 +1119,8 @@ def main() -> None:
         "command": [sys.executable, *sys.argv],
         "train_examples_per_epoch": len(train_rows),
         "updates_per_epoch": schedule["updates_per_epoch"],
+        "validation_interval_epochs": validation_interval_epochs,
+        "validation_interval_optimizer_updates": validation_interval_updates,
         "epochs_completed_per_variant": epochs,
         "batch_size": batch_size,
         "train_unique_example_count": len({row["id"] for row in train_rows}),

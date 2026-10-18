@@ -1,0 +1,106 @@
+{
+  "id": "textfree-video-clevrer-coverage-256matched-control-v1",
+  "hypothesis": "At equal seed, architecture, initialization, 2,048 optimizer updates, 131,072 example presentations and ordered 512-question validation, compare a deterministic 256-scene subset against the already completed 512-scene text-free arms. The 256-scene control is a subset of the 512-scene training pool; this is a matched coverage comparison for this specific frozen VideoPrism readout only.",
+  "source": {
+    "dataset": "MIT-IBM/CLEVRER",
+    "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+    "license": "CC0-1.0",
+    "sample_dir": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-coverage-256train-256val-textfree-control-v1\\sample",
+    "train_manifest_sha256": "44c2442770a839390f58f3df1752d39cbde0cde557788d654e2adac428f2ffb0",
+    "validation_manifest_sha256": "8ab8f75fdc88adc87d33f8ac730e7483aad4d4d7f664305ca563516204707d6e",
+    "fetch_report_sha256": "434660e199f300243b411f1c43be3be769884de2afa17643332d6af5a66b41a7",
+    "integrity_report_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-coverage-256train-256val-textfree-control-v1\\sample\\media-integrity-v2.json",
+    "integrity_report_sha256": "1d51b16c093af2bea956e348bb11343d59c9d0456aa84f678528548529ff3916"
+  },
+  "features": {
+    "cache": "C:/CodexArtifacts/pretrained-reuse-r2/textfree-video-coverage-512train-256val-v1-attempt-01/framewise-features.npz",
+    "cache_report": "C:/CodexArtifacts/pretrained-reuse-r2/textfree-video-coverage-512train-256val-v1-attempt-01/cache-report.json",
+    "model_id": "google/videoprism-base-f16r288",
+    "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "encoder_parameter_count": 114365184,
+    "frames": 8,
+    "feature_width": 768,
+    "temporal_profile": "8 endpoint-inclusive frame positions; spatial tokens averaged separately per frame",
+    "source_train_manifest_sha256": "2691c4494141c9685805977fdb42690269952061f7924cb90ccac3d7580ee62b",
+    "source_validation_manifest_sha256": "322859a0e8885e228daff1f463aa5a2f14bf8d873aa54f8bea972926c6a58d34"
+  },
+  "expected": {
+    "train_rows": 512,
+    "validation_rows": 512,
+    "feature_assets": 768
+  },
+  "integrity": {
+    "group_key": "scene_group_id",
+    "asset_key": "media_sha256",
+    "allow_normalized_question_option_overlap": true,
+    "reported_question_template_overlap_is_not_media_or_scene_overlap": true,
+    "official_test_or_sealed_audit_loaded": false,
+    "validation_role": "development-only checkpoint selection",
+    "selection_policy": "deterministic subset: rank parent train scene_group_id by SHA256(\"17:\" + scene_group_id), retain all examples from first 256 scenes in parent manifest order",
+    "selected_scene_ids_sha256": "fae11faf3cac0b2a88bf8ac05e7ca964cc2f6b62cfc0ba8663d5d81f8fa48908",
+    "parent_training_manifest_sha256": "2691c4494141c9685805977fdb42690269952061f7924cb90ccac3d7580ee62b"
+  },
+  "task": {
+    "input_fields": [
+      "video_features",
+      "typed_program",
+      "taxonomy",
+      "supplied_options"
+    ],
+    "excluded_fields": [
+      "natural_language_question",
+      "sample_id",
+      "scene_id",
+      "media_hash"
+    ],
+    "supervision_only_fields": [
+      "target"
+    ],
+    "question_types": [
+      "temporal_descriptive",
+      "static_descriptive"
+    ],
+    "decision_output": "JSON probabilities normalized over supplied candidate options"
+  },
+  "comparison": {
+    "variants": [
+      "mean_mlp",
+      "bilstm"
+    ],
+    "seed": 17,
+    "epochs": 256,
+    "batch_size": 64,
+    "max_optimizer_updates": 2048,
+    "expected_updates_per_epoch": 8,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "scheduler": "constant",
+    "validation_interval_epochs": 2,
+    "selector": "minimum macro question-type NLL over temporal and static descriptive; earliest tie",
+    "early_stopping": false,
+    "same_total_example_exposures_per_arm": 131072,
+    "uncertainty": "paired scene-cluster bootstrap; seed 17; 5000 resamples; percentile 95% interval",
+    "validation_used_for_checkpoint_selection": true,
+    "claim_scope": "single-seed development comparison on a new scene pool; no product promotion",
+    "validation_interval_optimizer_updates": 16,
+    "matched_arm_reference": {
+      "output_dir": "C:\\CodexArtifacts\\pretrained-reuse-r2\\textfree-video-coverage-512train-256val-v1-attempt-01\\fit-attempt-02",
+      "run_report_sha256": "1be45aabb46530f1a126dceae5d1cf3708ba845311d5cc726dc8828b7b1ee23f",
+      "ordered_validation_sample_id_sha256": "9f3868d727568904ca55dac48aff6bc3c0dd656853dce1c87bd08f303f396804",
+      "source_config_sha256": "c427639be852c5fdf1e0a329a66cb3633b949698de7f874619b09a4394c5687c"
+    }
+  },
+  "runtime": {
+    "feature_extraction_device": "CPU only",
+    "training_device": "CPU only; current GPU may be occupied by a separate user process",
+    "local_compute_only": true,
+    "cloud_cost_usd": 0,
+    "existing_samples_caches_and_checkpoints_read_only": true,
+    "output_directory_must_not_exist": true
+  }
+}
