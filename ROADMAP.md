@@ -97,6 +97,11 @@ videos: 786/818 eligible events passed source/frame/candidate-box joins, while
 TRAIN/VALID split and crop-join gates. The VALID join is still pending; see the
 [partial TRAIN audit receipt](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md#partial-train-annotation-to-crop-join-audit-2026-10-18).
 
+TRAIN acquisition has since reached 400/400 and the terminal-manifest crop-join
+audit passed all 818 eligible events. VALID acquisition/crop joins and the
+two-split decoded-PTS and final integrity gates are still required before
+feature extraction or fitting. [TRAIN audit receipt](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md#complete-train-crop-join-gate-2026-10-18).
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is

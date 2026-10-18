@@ -498,3 +498,28 @@ The auditor is
 This covers only the acquired TRAIN snapshot. The corresponding VALID join,
 complete two-split PTS coverage, stable terminal-manifest audit, and all
 feature extraction remain pending.
+
+## Complete TRAIN crop-join gate (2026-10-18)
+
+After TRAIN acquisition reached its terminal `PASS_ACQUISITION_NOT_DECODE`
+state, the complete 400-video manifest was copied to an immutable audit
+snapshot and rechecked against the pinned plan and TRAIN annotation source. All
+818 eligible TRAIN events across all 400 videos passed media-hash, resolution,
+source-object, selected-frame and candidate-box join validation; no eligible
+event remains waiting for media. This closes the TRAIN crop-join gate only.
+
+- Manifest snapshot SHA-256:
+  `5ac15ab7ef7efda29a803f783b4a3a13fd3895ebaecbdf9c9c7e0282b9195918`.
+- Audit receipt:
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-train-crop-final-01\result.json`
+  (SHA-256 `360ec9be151c33d9385de6171397543b6e15f860bdbd9ffb6b114dd37cfe49a1`).
+- Snapshot runner:
+  `C:\CodexArtifacts\pretrained-reuse-r2\audit-perception-av-event-train-crop-final.py`
+  (SHA-256 `8dc00d82b31653b9aa1b9bbe09dd29b8ceaff40d08f09e8c8e50b9843d882007`).
+- The audit was CPU-only, from source commit `e79fb9f189946b2a51fad7504bc7bb15cd7ffe83`;
+  it loaded no model, did no training, evaluated no quality, and opened no TEST
+  data.
+
+The VALID acquisition and crop-join audit, plus complete two-split decoded PTS
+and leakage checks, remain required before any feature extraction or readout
+fit.
