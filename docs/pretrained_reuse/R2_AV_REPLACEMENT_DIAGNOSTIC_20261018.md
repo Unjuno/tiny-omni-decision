@@ -46,7 +46,7 @@ Output directory: `C:\CodexArtifacts\pretrained-reuse-r2\greatest-hits-postnorm-
 | `predictions.jsonl` | `eea8d109d90032800b198cca87b3dd9dfd0206f02d42115153c0799027ad016e` |
 | `sensitivity.json` | `f6287e4c6437d70ce1142db82347fd8a652b76e5ebb1ecbab70cbc2c3c040454` |
 
-`predictions.jsonl` contains exactly 44,375 rows, and both self-replacement checks passed for all 17,750 required self cases. Existing attempts 08–10 remain preserved; only attempt 11 is a complete scorer run.
+`predictions.jsonl` contains exactly 44,375 rows, and both self-replacement checks passed for all 17,750 required self cases. Existing attempts 08–10 remain preserved; attempt 11 is the original complete scorer run.
 
 ### Authorized retry attempt 12
 
@@ -80,6 +80,27 @@ Its `result.json` SHA-256 is
 `8439b7ee52f55463619557cdd9ba9399c270cddb3243de7db37d4f0902590593`. The
 current runner moves GPU acquisition until after CPU preflight and waits for a
 clear device window, so attempt 13 is not being reused or overwritten.
+
+### Reproducibility retry attempt 14
+
+The corrected committed runner completed the authorized inference-only retry
+on the same fixed E0G1 step-24,576 checkpoint. Attempt 14 passed all 44,375
+forwards, all 17,750 exact self-replacement checks, and final verification of
+2,755 input pins and 1,120 source pins. It made zero optimizer/encoder updates;
+sealed audit and calibration remained unloaded. Wall time was 749.59 seconds,
+peak CUDA allocation 116,765,184 bytes, and peak working set 1,960,009,728
+bytes. Its paired inventory and input digests exactly match attempt 11.
+Output directory:
+`C:\CodexArtifacts\pretrained-reuse-r2\greatest-hits-postnorm-replacements-E0G1-14`.
+
+The saved `predictions.jsonl` SHA-256 is again
+`eea8d109d90032800b198cca87b3dd9dfd0206f02d42115153c0799027ad016e`, and
+`sensitivity.json` is again
+`f6287e4c6437d70ce1142db82347fd8a652b76e5ebb1ecbab70cbc2c3c040454`.
+Attempt 14's `result.json` SHA-256 is
+`74838d459ec9d612ca6351f24bf49e9919cef47867fa4716a140edeb776d611c`.
+The exact equality with attempt 11 confirms a reproducible runner replay; it
+does not add an independent quality estimate or alter the interpretation above.
 
 ## Interpretation and next step
 

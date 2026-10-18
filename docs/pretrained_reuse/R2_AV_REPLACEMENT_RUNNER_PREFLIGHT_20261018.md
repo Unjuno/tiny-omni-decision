@@ -107,7 +107,11 @@ timeout. Input/source stamp checks, periodic GPU checks, the 2-hour run limit,
 and final full hash verification remain enabled.
 
 Regression tests cover cooperative yield and timeout. The full local CPU suite
-passes (2,391 passed, 11 skipped), and Ruff passes. This scheduling change does
+passes (2,392 passed, 11 skipped), and Ruff passes. Attempt 14 completed with
+`PASS_POSTNORM_AV_REPLACEMENTS`; all 44,375 predictions and 17,750 exact
+self-replacements match attempt 11 byte-for-byte in the saved prediction and
+sensitivity files. Final input and source hashes passed. This scheduling change does
 not alter the checkpoint, data, labels, views, replacement pairing, model
-parameters, or number of forwards. A fresh attempt is needed to produce any
-new diagnostic result; attempt 12 is preserved as the failed pre-change run.
+parameters, or number of forwards. Attempt 14 confirms reproducibility and is
+not an independent quality estimate; attempts 12 and 13 remain preserved as
+failed earlier runs.
