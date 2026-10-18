@@ -54,6 +54,9 @@ evaluation controls are documented in
 [`R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md`](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md).
 Pinned media acquisition is in progress; no feature extraction, model
 evaluation, or training has started, and no quality result is claimed.
+Partial CPU PTS audit covered 176 events with full decoded-audio overlap; media
+metadata has frame/sample/rate mismatches, so the complete PTS audit remains a
+pre-feature gate.
 
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17

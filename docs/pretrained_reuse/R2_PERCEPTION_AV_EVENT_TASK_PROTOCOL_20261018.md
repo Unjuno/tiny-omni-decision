@@ -96,17 +96,38 @@ CPU-side tests. If the task or frozen feature pair cannot distinguish source
 matching beyond controls, record that result and stop rather than redefining
 the task after observing VALID outcomes.
 
-## Current execution boundary (snapshot 2026-10-18 03:35:57 UTC)
+## Current execution boundary (snapshot 2026-10-18 04:01:15 UTC)
 
 The feasibility audit and media plan used CPU/network metadata only. Media
 acquisition then started from source commit `b18340a04d2b9f3a0fceb06cbce2ad0a39c63a3c`
 in fresh split-specific directories using the exact plan hash above. The
 acquisition runner SHA-256 is
 `39e7b3c51fa3b527b69ebb8283e4993cd4cd92ad2e48efa1d5348a22df814818`.
-TRAIN started at 03:27:33 UTC and has 14/400 verified clips (182,200,905
-bytes); VALID started at 03:28:00 UTC and has 16/400 verified clips
-(177,662,174 bytes). Both manifests say RUNNING with no error. About 308 GiB
+TRAIN started at 03:27:33 UTC and has 62/400 verified clips (844,253,578
+bytes); VALID started at 03:28:00 UTC and has 62/400 verified clips
+(837,091,947 bytes). Both manifests say RUNNING with no error. About 312 GiB
 remains free. These are live snapshot counts, not completion claims.
+
+A CPU-only partial PTS audit decoded the 46 TRAIN / 55 VALID videos in its
+manifest snapshot that contain selected events: 76 and 100 events respectively. All 176
+event windows were fully covered by the decoded audio PTS; none had zero or
+partial overlap. The receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-decoder-pts-smoke-04\result.json`
+(SHA-256 `5c37848b3f2786808bec0c2118e53634bce658f60b913fda4f0c5c90ba268395`),
+using PTS audit script SHA-256
+`1c5392ee54d2337758339317a3526fe1ee17e581be62d4c52ebcba2fc9b9e6eb`.
+
+In those decoded videos, metadata differed from media for frame count in 1/46
+TRAIN and 0/55 VALID videos; audio sample count in 38/46 TRAIN and 53/55 VALID;
+and audio sample rate in 10/46 TRAIN and 19/55 VALID. One observed video had
+825 metadata frames versus 824 decoded frames, but its selected event's frame
+indices remained present. Audio intervals must therefore use actual decoded
+video PTS and actual decoded audio rate/duration, not annotation-average FPS
+or nominal sample count. A separate metadata-only estimate flagged 15 TRAIN
+and 11 VALID event tails; of these, 2 TRAIN and 1 VALID events were present in
+the PTS snapshot, and all 3 were fully covered under actual PTS. Do not
+extrapolate the partial audit to all 800 planned videos. The full PTS audit
+remains a gate before feature extraction.
 
 No feature extraction, model load, training, GPU evaluation, or TEST access
 has occurred. The GPU is occupied by another process; this acquisition uses no
