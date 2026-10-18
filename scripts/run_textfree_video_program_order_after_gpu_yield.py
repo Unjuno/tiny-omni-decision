@@ -34,6 +34,22 @@ def active_gpu_pids() -> set[int]:
     return pids
 
 
+def gpu_telemetry() -> tuple[float, int]:
+    result = subprocess.run(
+        [
+            "nvidia-smi",
+            "--query-gpu=utilization.gpu,memory.used",
+            "--format=csv,noheader,nounits",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    first = result.stdout.strip().splitlines()[0]
+    utilization, memory_mib = (value.strip() for value in first.split(",", maxsplit=1))
+    return float(utilization), int(memory_mib)
+
+
 def wait_for_yield(max_wait_seconds: int = 300) -> dict[str, Any]:
     os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     if not torch.cuda.is_available():
@@ -50,15 +66,26 @@ def wait_for_yield(max_wait_seconds: int = 300) -> dict[str, Any]:
     )
     while time.monotonic() < deadline:
         other_pids = active_gpu_pids() - {process_id}
-        if other_pids:
+        utilization, memory_mib = gpu_telemetry()
+        if other_pids or utilization >= 5.0 or memory_mib >= 2200:
             idle_since = None
-            print(f"waiting for GPU processes {sorted(other_pids)}", flush=True)
+            print(
+                "waiting for GPU to clear: "
+                f"processes={sorted(other_pids)}, utilization={utilization:.0f}%, "
+                f"memory={memory_mib}MiB",
+                flush=True,
+            )
         else:
             idle_since = idle_since or time.monotonic()
             stable = time.monotonic() - idle_since
             print(f"GPU clear except reservation; stable={stable:.1f}s", flush=True)
             if stable >= 5.0:
-                return {"reservation": reservation, "stable_idle_seconds": stable}
+                return {
+                    "reservation": reservation,
+                    "stable_idle_seconds": stable,
+                    "idle_gpu_utilization_percent": utilization,
+                    "idle_gpu_memory_used_mib": memory_mib,
+                }
         time.sleep(2.0)
     del reservation
     raise TimeoutError("no cooperative GPU yield observed; training was not started")
