@@ -102,6 +102,30 @@ Attempt 14's `result.json` SHA-256 is
 The exact equality with attempt 11 confirms a reproducible runner replay; it
 does not add an independent quality estimate or alter the interpretation above.
 
+### Authorized reproducibility retry attempt 15
+
+The later inference-only authorization was executed from a clean detached
+worktree at source commit `e1a40d1087667c234270d10c242c636c96b3f80f`. Attempt
+09 already existed as an earlier incomplete preflight, and attempts 10–14 were
+preserved, so the new run used attempt 15 without overwriting any output. It
+completed all 44,375 forwards, 17,750 exact self replacements, and final input
+and source pin verification. Status: `PASS_POSTNORM_AV_REPLACEMENTS`; optimizer
+and encoder updates were zero, and neither sealed audit nor calibration data
+was loaded. The run took 743.87 seconds, with 116,765,184 bytes peak CUDA
+allocation and 1,994,301,440 bytes peak working set.
+
+The checkpoint, input digest and pairing digest match the earlier runs. The
+prediction SHA-256 again equals attempt 11/14
+(`eea8d109d90032800b198cca87b3dd9dfd0206f02d42115153c0799027ad016e`), as does
+the sensitivity SHA-256
+(`f6287e4c6437d70ce1142db82347fd8a652b76e5ebb1ecbab70cbc2c3c040454`). Its
+`result.json` SHA-256 is
+`58f53e48cd83111d5d6faf8c64a54e5041a21c68742b2183a0d4a5e44c57b6e9`.
+Output directory:
+`C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-postnorm-replacements-E0G1-15`.
+This exact replay confirms execution reproducibility, not correctness, causal
+validity, or an independent quality estimate.
+
 ## Interpretation and next step
 
 This result weakens the narrow hypothesis that E0G1 ignores AV inputs entirely, but it does not answer whether the inputs are used *correctly*. The next useful test is a truth-bearing, source-paired task evaluation or a carefully constructed modality ablation where the replacement has a known expected outcome. Do not use these replacement flip rates as accuracy or as grounds to claim multimodal quality.

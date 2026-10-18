@@ -27,22 +27,21 @@ no other compute process; do not start a new training run for this diagnostic.
 [Execution log and next step](docs/pretrained_reuse/R2_AV_GATE_PARAMETER_AND_INPUT_DIAGNOSTIC_20261018.md).
 
 **2026-10-18 diagnostic completion update:** the authorized frozen E0G1
-replacement scorer completed in attempt 14 after the GPU-aware runner change.
-All 44,375 forwards, 17,750 self-replacement checks, and 2,755 input / 1,120
-source pin checks passed. Its predictions and sensitivity summaries exactly
-reproduce attempt 11. Replacement sensitivity is not correctness or evidence
-that AV information improves decisions; the planned query-only versus AV-evidence
-quality distinction remains unresolved. Do not start the next GPU diagnostic
-while Orbitune occupies 15,821 / 16,384 MiB. [Reproducible result and limits](docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
+replacement scorer completed in attempt 15 from a clean worktree. All 44,375
+forwards and 17,750 self-replacement checks passed; predictions and sensitivity
+summaries match attempts 11 and 14 byte-for-byte. This adds reproducibility
+evidence only. Replacement sensitivity is not correctness or evidence that AV
+information improves decisions; query-only versus AV-evidence quality remains
+unresolved. [Reproducible result and limits](docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
 
 **2026-10-18 Perception Test task feasibility:** a pinned TRAIN-only CPU audit
-retained all 25,757 sound segments and found 2,594 non-muted, single-source
-visible events with at least one simultaneous competing object track across
-1,139 videos.
-This is a correspondence-task candidate count, not an AV quality result or
-training admission; choice/frame encoding and validation coverage remain open.
-Unknown, multi-source, cut-crossing and no-competitor rows remain explicitly
-held. The audit is in `scripts/audit_perception_av_correspondence.py`, with
+retained all 25,757 sound segments and found 2,551 candidate events across
+1,129 videos using a fixed, label-blind midpoint-frame rule. Options are
+supplied ground-truth object tracks (2–48 per event), so this is conditional
+AV source selection rather than autonomous detection. It is not an AV quality
+result or training admission; object encoding, controls, and validation
+coverage remain open. Unknown, multi-source, cut-crossing and other held rows
+remain explicit. The audit is in `scripts/audit_perception_av_correspondence.py`, with
 results and source/grouping limits in
 [`R2_PERCEPTION_AV_CORRESPONDENCE_FEASIBILITY_20261018.md`](docs/pretrained_reuse/R2_PERCEPTION_AV_CORRESPONDENCE_FEASIBILITY_20261018.md).
 

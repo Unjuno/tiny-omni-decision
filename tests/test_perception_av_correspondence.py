@@ -32,11 +32,12 @@ def objects(*, source_visible=True, competitor_visible=True):
 
 def test_single_visible_parent_with_competitor_is_candidate():
     result = event_candidate(sound(), objects(), cut_frame=10)
-    assert result["status"] == "candidate"
-    assert result["candidate_frames"] == [
-        {"frame_id": 0, "candidate_count": 2},
-        {"frame_id": 5, "candidate_count": 2},
-    ]
+    assert result == {
+        "status": "candidate",
+        "reason": None,
+        "selected_frame": 0,
+        "candidate_track_ids": [1, 2],
+    }
 
 
 @pytest.mark.parametrize(
@@ -57,7 +58,12 @@ def test_single_visible_parent_with_competitor_is_candidate():
 )
 def test_ambiguous_or_ineligible_rows_are_held(event, tracks, cut, reason):
     result = event_candidate(event, tracks, cut)
-    assert result == {"status": "held", "reason": reason, "candidate_frames": []}
+    assert result == {
+        "status": "held",
+        "reason": reason,
+        "selected_frame": None,
+        "candidate_track_ids": [],
+    }
 
 
 def test_misaligned_track_arrays_fail_closed():
@@ -78,5 +84,26 @@ def test_competitors_at_different_times_do_not_form_a_joint_option_set():
     assert event_candidate(sound(), tracks, cut_frame=10) == {
         "status": "held",
         "reason": "no_shared_visible_competitor_frame",
-        "candidate_frames": [],
+        "selected_frame": None,
+        "candidate_track_ids": [],
+    }
+
+
+def test_fixed_midpoint_frame_does_not_search_for_a_frame_containing_the_target():
+    tracks = objects()
+    tracks[0]["is_masked"] = [1, 0]
+    tracks.append(
+        {
+            "id": 3,
+            "frame_ids": [0, 5],
+            "bounding_boxes": [[0.4, 0.4, 0.6, 0.6], [0.4, 0.4, 0.6, 0.6]],
+            "is_masked": [0, 1],
+        }
+    )
+    result = event_candidate(sound(), tracks, cut_frame=10)
+    assert result == {
+        "status": "held",
+        "reason": "source_absent_at_fixed_frame",
+        "selected_frame": None,
+        "candidate_track_ids": [],
     }

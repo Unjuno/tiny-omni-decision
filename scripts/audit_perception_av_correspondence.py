@@ -83,20 +83,38 @@ def event_candidate(sound, tracks, cut_frame):
                     x0, y0, x1, y1 = box
                     if is_masked == 0 and x1 > x0 and y1 > y0:
                         visible_by_frame[frame].add(track["id"])
-            candidate_frames = [
-                {"frame_id": frame, "candidate_count": len(visible_ids)}
-                for frame, visible_ids in sorted(visible_by_frame.items())
-                if parents[0] in visible_ids and len(visible_ids) >= 2
+            competitor_frames = [
+                frame for frame, visible_ids in visible_by_frame.items() if len(visible_ids) >= 2
             ]
-            if candidate_frames:
-                return {"status": "candidate", "reason": None, "candidate_frames": candidate_frames}
-            reason = "no_shared_visible_competitor_frame"
-    return {"status": "held", "reason": reason, "candidate_frames": []}
+            if not competitor_frames:
+                reason = "no_shared_visible_competitor_frame"
+            else:
+                midpoint = (start + end) / 2
+                selected_frame = min(
+                    competitor_frames, key=lambda frame: (abs(frame - midpoint), frame)
+                )
+                candidate_track_ids = sorted(visible_by_frame[selected_frame])
+                if parents[0] not in candidate_track_ids:
+                    reason = "source_absent_at_fixed_frame"
+                else:
+                    return {
+                        "status": "candidate",
+                        "reason": None,
+                        "selected_frame": selected_frame,
+                        "candidate_track_ids": candidate_track_ids,
+                    }
+    return {
+        "status": "held",
+        "reason": reason,
+        "selected_frame": None,
+        "candidate_track_ids": [],
+    }
 
 
 def summarize(data, cuts):
     counts = collections.Counter()
     by_label = collections.Counter()
+    option_counts = collections.Counter()
     candidate_videos = set()
     records = []
     for video_id, row in sorted(data.items()):
@@ -120,6 +138,7 @@ def summarize(data, cuts):
             if decision["status"] == "candidate":
                 candidate_videos.add(video_id)
                 by_label[sound["label"]] += 1
+                option_counts[len(decision["candidate_track_ids"])] += 1
             records.append(
                 {
                     "video_id": video_id,
@@ -136,6 +155,7 @@ def summarize(data, cuts):
         "counts": dict(sorted(counts.items())),
         "candidate_video_count": len(candidate_videos),
         "eligible_by_sound_label": dict(sorted(by_label.items())),
+        "option_count_distribution": dict(sorted(option_counts.items())),
         "records": records,
     }
 
@@ -182,12 +202,14 @@ def main():
         "task_status": "candidate feasibility only; not training-admitted",
         "candidate_rule": (
             "known single parent, is_visible=1, sound interval ends before any annotated cut, "
-            "and source plus at least one competitor unmasked with nonempty boxes "
-            "at a shared annotation frame within the sound segment"
+            "not Muted, and parent is among at least two visible tracks at the "
+            "label-blind frame nearest the interval midpoint"
         ),
         "frame_selection_status": (
-            "all qualifying frames are counted; no model input frame or option encoding is frozen"
+            "choose among annotated in-interval frames with at least two visible tracks by "
+            "distance to interval midpoint, ties to earlier frame; held if source is absent"
         ),
+        "option_scope": "supplied ground-truth object tracks; not autonomous object detection",
         "split_scope": "official TRAIN only; video identity is the grouping unit",
         "participant_disjointness": "UNKNOWN; participant IDs are absent from inspected metadata",
     }
