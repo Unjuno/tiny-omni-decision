@@ -5,10 +5,39 @@ import io
 import pytest
 
 from tiny_omni_decision.clevr4_data import (
+    read_annotations_for_split,
     read_training_annotations,
     require_disjoint_media,
     split_records_by_asset,
 )
+
+
+def test_requested_official_split_decodes_only_matching_label_values() -> None:
+    payload = (
+        b'{"val-image":{"split":"val","color":"blue","texture":"metal",'
+        b'"count":3,"shape":"sphere"},'
+        b'"test-image":{"split":"test","color":unopened_test_label},'
+        b'"train-image":{"split":"train","color":"unopened_train_label"}}'
+    )
+
+    rows, split_counts = read_annotations_for_split(io.BytesIO(payload), requested_split="val")
+
+    assert split_counts == {"val": 1, "test": 1, "train": 1}
+    assert rows == [
+        {
+            "id": "val-image",
+            "split": "val",
+            "color": "blue",
+            "texture": "metal",
+            "count": 3,
+            "shape": "sphere",
+        }
+    ]
+
+
+def test_requested_official_split_rejects_train() -> None:
+    with pytest.raises(ValueError, match="non-training split"):
+        read_annotations_for_split(io.BytesIO(b"{}"), requested_split="train")
 
 
 def test_training_annotation_reader_skips_heldout_label_values() -> None:

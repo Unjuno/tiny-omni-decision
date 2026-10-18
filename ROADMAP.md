@@ -22,6 +22,16 @@ trainable head. Details: [protocol](docs/pretrained_reuse/R2_CLEVR4_100K_READOUT
 [results](docs/pretrained_reuse/R2_CLEVR4_100K_READOUT_RESULTS_20261019.md),
 and [GPU/acquisition log](docs/pretrained_reuse/R2_DINOV2_GPU_SMOKE_CLEVR4_100K_20261019.md).
 
+**2026-10-19 R2 fixed public-val replay:** The epoch-8 readout was evaluated
+once, without updates or selection, on all 19,988 official public-val images
+(79,952 decisions). Macro Accuracy/NLL/Brier/ECE were 90.24% / 0.2444 / 0.1314
+/ 0.0109, close to the internal split. Color/Texture/Count/Shape Accuracy was
+98.93% / 94.42% / 67.77% / 99.86%; Count remains the bottleneck, and this is
+still synthetic taxonomy classification rather than broad image or multimodal
+quality. Inputs and prediction rows were hash-checked; the result is public,
+not sealed. No training or promotion. See the
+[fixed-checkpoint result](docs/pretrained_reuse/R2_CLEVR4_PUBLIC_VAL_FIXED_READOUT_RESULTS_20261019.md).
+
 **2026-10-19 R2 AVQA source screen:** The official AVQA task is a strong
 semantic fit for joint audio/video questions: it provides manually annotated
 multiple-choice questions with `View`, `Sound`, and `Both` relation labels.

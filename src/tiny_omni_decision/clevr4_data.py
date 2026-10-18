@@ -183,6 +183,59 @@ def read_training_annotations(stream: BinaryIO) -> tuple[list[dict[str, object]]
     return train_rows, dict(split_counts)
 
 
+def read_annotations_for_split(
+    stream: BinaryIO, *, requested_split: str
+) -> tuple[list[dict[str, object]], dict[str, int]]:
+    """Decode labels only for one explicitly requested official split.
+
+    Other split payloads remain opaque while the top-level ``split`` field is
+    inspected. This is intended for one-time evaluation of a named public
+    split after the evaluated model and procedure are frozen.
+    """
+    if not requested_split or requested_split == "train":
+        raise ValueError("requested_split must name a non-training split")
+
+    reader = _ByteReader(stream)
+    if reader.skip_whitespace() != ord("{"):
+        raise ValueError("annotation document must be a JSON object")
+
+    requested_rows: list[dict[str, object]] = []
+    split_counts: Counter[str] = Counter()
+    while True:
+        first = reader.skip_whitespace()
+        if first == ord("}"):
+            break
+        if first is None:
+            raise ValueError("annotation document ended unexpectedly")
+        image_id, _ = reader.read_string(first)
+        if reader.skip_whitespace() != ord(":"):
+            raise ValueError("expected colon after annotation identity")
+        object_first = reader.skip_whitespace()
+        if object_first != ord("{"):
+            raise ValueError("annotation value must be a JSON object")
+        raw_object = reader.read_compound_value(object_first)
+        split = _read_split_field(raw_object)
+        split_counts[split] += 1
+        if split == requested_split:
+            try:
+                annotation = json.loads(raw_object)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"invalid {requested_split} annotation for {image_id}") from exc
+            if annotation.get("split") != requested_split:
+                raise ValueError("parsed requested split changed during validation")
+            requested_rows.append({"id": image_id, **annotation})
+
+        separator = reader.skip_whitespace()
+        if separator == ord("}"):
+            break
+        if separator != ord(","):
+            raise ValueError("expected comma between image annotations")
+
+    if reader.skip_whitespace() is not None:
+        raise ValueError("unexpected trailing data after annotation document")
+    return requested_rows, dict(split_counts)
+
+
 def split_records_by_asset(
     records: Iterable[Mapping[str, object]],
     *,
