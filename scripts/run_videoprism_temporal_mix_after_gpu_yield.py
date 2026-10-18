@@ -119,7 +119,7 @@ def main() -> None:
     child_environment["TINY_OMNI_GPU_GATE_RESERVED_MIB"] = str(reserve_mib)
     child_environment["TINY_OMNI_GPU_GATE_FREE_MIB"] = str(free_mib)
     child_environment["TINY_OMNI_GPU_GATE_TOTAL_MIB"] = str(total_mib)
-    child_environment["TINY_OMNI_GPU_GATE_UTILIZATION_PCT"] = str(utilization)
+    child_environment["TINY_OMNI_GPU_GATE_UTILIZATION_PCT"] = str(int(utilization))
     child_environment["TINY_OMNI_GPU_GATE_BLOCK_IF_FREE_MIB"] = str(args.block_if_free_mib)
     child_environment["TINY_OMNI_GPU_GATE_MIN_CHILD_FREE_MIB"] = str(args.min_child_free_mib)
     print(
