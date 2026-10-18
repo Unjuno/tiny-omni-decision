@@ -12,6 +12,8 @@ from pathlib import Path
 from typing import Any
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from tiny_omni_decision.clevrer import TAXONOMIES, classify
 
@@ -41,6 +43,19 @@ class RangeFile(io.RawIOBase):
         self.position = 0
         self.bytes_read = 0
         self.session = requests.Session()
+        retry = Retry(
+            total=5,
+            connect=5,
+            read=5,
+            status=5,
+            backoff_factor=0.5,
+            status_forcelist=(429, 500, 502, 503, 504),
+            allowed_methods=frozenset({"GET", "HEAD"}),
+            respect_retry_after_header=True,
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
         head = self.session.head(url, allow_redirects=True, timeout=30)
         head.raise_for_status()
         if int(head.headers.get("Content-Length", -1)) != expected_bytes:
