@@ -61,7 +61,12 @@ feature extraction, readout fitting, and task evaluation have not started; no
 quality result is claimed. The latest partial CPU PTS audit covered 213 TRAIN
 and 237 VALID events with full decoded-audio overlap. Metadata has
 frame/sample/rate mismatches, so the complete PTS and split-integrity audit
-remains a pre-feature gate.
+remains a pre-feature gate. A separate partial annotation-to-crop audit also
+validated the acquired-file hashes, selected-frame candidate boxes, and frozen
+video-group partition for 361/818 TRAIN and 349/901 VALID events. Acquisition
+is still running; no feature-bank fitting has started. See the protocol's
+crop-join audit section for the receipt and the initial denominator bug that
+was corrected before reporting these counts.
 
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17

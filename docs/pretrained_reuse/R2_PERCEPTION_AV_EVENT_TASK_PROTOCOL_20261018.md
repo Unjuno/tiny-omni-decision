@@ -229,6 +229,37 @@ TRAIN and 129/400 VALID clips; both manifests have zero acquisition errors.
 The GPU is not used by these CPU audits. No fitting, task scoring, or TEST
 access has started.
 
+## Partial annotation-to-crop join audit (2026-10-18 05:00 UTC)
+
+Added `scripts/audit_perception_av_event_crop_joins.py` to validate the pinned
+TRAIN/VALID event rows against ordered candidate track IDs, selected-frame
+boxes, normalized crop coordinates, media resolution, acquired-file hashes,
+and video-group partitions. The report keeps the source candidate's option
+index in a separate label-join field; this audit does not expose it to either
+encoder and computes no task score.
+
+The first run's `eligible_events_total` denominator accidentally included
+candidate events from all source videos, not only the frozen 400-video plan
+(receipt SHA-256 `fab721db0b7431ed0511fc5b4dbe5c6e84a9c33dd57251dc68e1644008279358`).
+That summary is invalid and must not be used. The corrected runner filters to
+planned video IDs and asserts that event totals match the plan before reporting.
+Attempt 02 confirmed corrected event accounting; attempt 03 additionally
+verifies the exact 240 fit / 60 selection / 100 calibration / 400 development
+validation video partition. All attempt outputs are preserved outside Git.
+
+Authoritative partial receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-crop-join-audit-03\result.json`
+(SHA-256 `4d3a57ebabcb830ceec2b30dbd4b1a0d1877d73f11892eaf9dabb00b462d2942`),
+using audit script SHA-256
+`d08b54cbf38fd6e5f2ae462695cb31d03bf41d3ac0ba0520d59d43abf1c7bb4c`.
+It hash-checked all acquired files and validated crop joins for 361/818 TRAIN
+and 349/901 development-VALID eligible events. The other 457 TRAIN and 552
+VALID events belong to not-yet-acquired videos, not crop failures. Video IDs
+remain split-disjoint; the exact nested video group counts match the frozen
+plan. Ruff passes; full CPU suite: 2,449 passed, 11 skipped. Since media
+acquisition is incomplete, this is still a partial gate and no feature-bank
+fit or quality evaluation has started.
+
 ## Long-event CLAP window smoke
 
 A second TRAIN-only audio smoke covers `video_8679` / `sound_id=0` (IDs used
