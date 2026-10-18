@@ -200,8 +200,9 @@ hash-pinned. All 220 source groups now have pinned audio/video features with
 exact fresh-process replay. The fixed readout comparison completed on CPU: joint
 AV was 53.57% calibrated validation Accuracy over only 28 independent clusters,
 with a severe train/validation gap and paired intervals including no improvement.
-This is a low-power same-recording diagnostic, not a general quality or product
-result. See `docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md`
+Fresh-process reload reproduced all 336 saved validation probability rows
+exactly. This is a low-power same-recording diagnostic, not a general quality or
+product result. See `docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md`
 and `docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_READOUT_RESULTS_20261018.md`.
 
 **2026-10-17 full-extent comparison completed:** All8936 Image/456 Video caches,

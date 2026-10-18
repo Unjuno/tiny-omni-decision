@@ -191,6 +191,10 @@ the balanced marginal construction. This is a low-power overfit result, not
 general AV quality or product evidence. Full metrics, hashes, failures, runtime,
 and the per-example prediction record are documented in
 [`R2_GREATEST_HITS_AV_MATCH_READOUT_RESULTS_20261018.md`](R2_GREATEST_HITS_AV_MATCH_READOUT_RESULTS_20261018.md).
+An independent CPU process reloaded all three selected checkpoints; all 336
+validation probability rows matched the saved predictions exactly (maximum
+absolute difference 0.0), with exact argmax parity. Its verifier and receipt
+hashes are in the result report.
 
 ## HotUGPU handoff race and guard
 

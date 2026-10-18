@@ -87,6 +87,22 @@ Final run metadata:
 - All artifacts are outside Git. No existing model, corpus, sealed-audit data,
   Teacher, or Orbitune process was changed; no GPU job was launched.
 
+## Fresh-process save/reload verification
+
+A separate CPU process loaded each saved best checkpoint and recomputed all 112
+ordered validation probability vectors after verifying the run receipt, source
+config digest, effective-config values, corpus manifests, feature receipts,
+feature payload hashes and selected checkpoint hashes. For audio-only,
+video-only and joint AV, the maximum absolute probability difference from the
+saved run output was exactly `0.0`; argmax outputs matched exactly. Recomputed
+Accuracy/NLL/Brier/ECE also matched the selected calibrated metrics above.
+
+- Verifier source commit: `55ea93f7838f81a27632e1ed7d58e3dcf4c9f940`.
+- Verifier SHA-256: `2ca6cee5f99fb7caffc875f692df8adf8ccb1e0971d036081753a5a64175eec9`.
+- Audit receipt: `C:\CodexArtifacts\pretrained-reuse-r2\gh-av-match-readouts-reload-audit-02`.
+- Audit JSON SHA-256: `52439f2a32bb2d92c1f60da4f5cdcc66a5459a5d2a091a675000a2e88d3c1def`.
+- Verification performed no training, optimizer updates, GPU work or sealed-audit access.
+
 ## Decision
 
 This comparison does not support product adoption or a general 95–98% claim.
