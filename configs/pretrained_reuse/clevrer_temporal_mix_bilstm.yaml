@@ -54,6 +54,12 @@ training:
   deterministic_algorithms: true
   bootstrap_replicates: 10000
   bootstrap_seed: 17
+gpu_gate:
+  required: true
+  block_if_free_mib: 14000
+  min_child_free_mib: 8000
+  min_reserved_mib: 3200
+  max_start_utilization_pct: 5
 outputs:
   preflight: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-bilstm-v0/preflight.json
   run_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-bilstm-v0

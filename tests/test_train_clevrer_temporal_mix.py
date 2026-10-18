@@ -110,3 +110,32 @@ def test_paired_scene_bootstrap_is_zero_for_identical_predictions():
 
     assert result["macro_question_type"]["accuracy"] == [0.0, 0.0]
     assert result["by_question_type"]["predictive"]["nll"] == [0.0, 0.0]
+
+
+def test_fit_requires_valid_hotugpu_handoff(monkeypatch):
+    from scripts.train_clevrer_temporal_mix import GPU_GATE_ENV, _require_gpu_gate
+
+    config = {
+        "gpu_gate": {
+            "required": True,
+            "block_if_free_mib": 14000,
+            "min_child_free_mib": 8000,
+            "min_reserved_mib": 3200,
+            "max_start_utilization_pct": 5,
+        }
+    }
+    for key, value in {
+        "reserved_mib": "3200",
+        "free_mib": "13000",
+        "total_mib": "16384",
+        "utilization_pct": "0",
+        "block_if_free_mib": "14000",
+        "min_child_free_mib": "8000",
+    }.items():
+        monkeypatch.setenv(GPU_GATE_ENV[key], value)
+
+    assert _require_gpu_gate(config)["reserved_mib"] == 3200
+
+    monkeypatch.delenv(GPU_GATE_ENV["reserved_mib"])
+    with pytest.raises(RuntimeError, match="HotUGPU gate"):
+        _require_gpu_gate(config)

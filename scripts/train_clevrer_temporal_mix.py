@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import importlib.metadata
 import json
+import os
 import platform
 import random
 import subprocess
@@ -30,6 +31,14 @@ from tiny_omni_decision.temporal_candidate import (
 )
 
 QUESTION_TYPES = ("temporal_descriptive", "explanatory", "predictive", "counterfactual")
+GPU_GATE_ENV = {
+    "reserved_mib": "TINY_OMNI_GPU_GATE_RESERVED_MIB",
+    "free_mib": "TINY_OMNI_GPU_GATE_FREE_MIB",
+    "total_mib": "TINY_OMNI_GPU_GATE_TOTAL_MIB",
+    "utilization_pct": "TINY_OMNI_GPU_GATE_UTILIZATION_PCT",
+    "block_if_free_mib": "TINY_OMNI_GPU_GATE_BLOCK_IF_FREE_MIB",
+    "min_child_free_mib": "TINY_OMNI_GPU_GATE_MIN_CHILD_FREE_MIB",
+}
 TEXT_REVISION = "4ca70771034acceecb2e72475f72050fcdde4ddc"
 TEXT_PARAMETER_COUNT = 17_389_824
 VIDEO_REVISION = "be719a406d563b66f0ac969e7c94bab8e997c81a"
@@ -53,6 +62,35 @@ def _ordered_ids_hash(rows: list[dict[str, Any]]) -> str:
 
 def _counts(rows: list[dict[str, Any]]) -> dict[str, int]:
     return {kind: sum(row["question_type"] == kind for row in rows) for kind in QUESTION_TYPES}
+
+
+def _require_gpu_gate(config: dict[str, Any]) -> dict[str, int]:
+    policy = config.get("gpu_gate", {})
+    if policy.get("required") is not True:
+        raise ValueError("GPU gate must remain required for this experiment")
+    gate = {}
+    for key, variable in GPU_GATE_ENV.items():
+        value = os.environ.get(variable)
+        if value is None:
+            raise RuntimeError(f"GPU run must be launched through the HotUGPU gate ({variable})")
+        try:
+            gate[key] = int(value)
+        except ValueError as exc:
+            raise ValueError(f"invalid HotUGPU telemetry in {variable}") from exc
+    if gate["reserved_mib"] < int(policy["min_reserved_mib"]):
+        raise RuntimeError("HotUGPU VRAM reservation is below the configured minimum")
+    if gate["free_mib"] >= int(policy["block_if_free_mib"]):
+        raise RuntimeError("HotUGPU reservation did not close Orbitune's free-memory gate")
+    if gate["free_mib"] < int(policy["min_child_free_mib"]):
+        raise RuntimeError("HotUGPU reservation leaves too little VRAM for the child")
+    if gate["utilization_pct"] >= int(policy["max_start_utilization_pct"]):
+        raise RuntimeError("GPU utilization was too high at HotUGPU handoff")
+    if (
+        gate["block_if_free_mib"] != int(policy["block_if_free_mib"])
+        or gate["min_child_free_mib"] != int(policy["min_child_free_mib"])
+    ):
+        raise RuntimeError("HotUGPU handoff thresholds differ from the frozen experiment policy")
+    return gate
 
 
 def _validate(config_path: Path, config: dict[str, Any]) -> dict[str, Any]:
@@ -669,6 +707,7 @@ def main() -> None:
         preflight_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(report, indent=2))
         return
+    gpu_gate = _require_gpu_gate(config)
     if not preflight_path.is_file() or run_dir.exists():
         raise FileNotFoundError("a completed preflight is required and run_dir must be new")
     saved = json.loads(preflight_path.read_text(encoding="utf-8"))
@@ -852,6 +891,7 @@ def main() -> None:
             "transformers_version": importlib.metadata.version("transformers"),
             "deterministic_algorithms": True,
         },
+        "gpu_gate": gpu_gate,
         "variants": {"text_only": text_result, "videoprism_bilstm_text": temporal_result},
         "paired_validation_scene_bootstrap": paired_bootstrap,
         "note": (

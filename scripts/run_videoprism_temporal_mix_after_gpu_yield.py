@@ -116,6 +116,12 @@ def main() -> None:
     child_environment["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
     child_environment["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
     child_environment.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+    child_environment["TINY_OMNI_GPU_GATE_RESERVED_MIB"] = str(reserve_mib)
+    child_environment["TINY_OMNI_GPU_GATE_FREE_MIB"] = str(free_mib)
+    child_environment["TINY_OMNI_GPU_GATE_TOTAL_MIB"] = str(total_mib)
+    child_environment["TINY_OMNI_GPU_GATE_UTILIZATION_PCT"] = str(utilization)
+    child_environment["TINY_OMNI_GPU_GATE_BLOCK_IF_FREE_MIB"] = str(args.block_if_free_mib)
+    child_environment["TINY_OMNI_GPU_GATE_MIN_CHILD_FREE_MIB"] = str(args.min_child_free_mib)
     print(
         f"HotUGPU reservation active: {reserve_mib}MiB reserved, free={free_mib}MiB; "
         "launching child while Orbitune's configured free-memory gate is closed",
