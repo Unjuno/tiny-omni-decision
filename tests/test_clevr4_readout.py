@@ -1,7 +1,11 @@
-import pytest
-import torch
+from importlib import import_module
 
-from tiny_omni_decision.clevr4_readout import build_candidate_features, classification_quality
+import pytest
+
+torch = pytest.importorskip("torch", reason="readout tensor tests require the optional ML extra")
+_readout = import_module("tiny_omni_decision.clevr4_readout")
+build_candidate_features = _readout.build_candidate_features
+classification_quality = _readout.classification_quality
 
 
 def test_candidate_features_reuse_image_for_supplied_options():
