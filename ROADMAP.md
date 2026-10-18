@@ -74,6 +74,16 @@ This is a narrow typed-program video probe, not multimodal product evidence.
 Keep the recurrent block unadopted pending replication and a representative
 task mix. See the [full report](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_TEMPORAL_RESULTS_20261018.md).
 
+**2026-10-18 text-free CLEVRER scene coverage completed:** A deterministic
+256-scene subset and the full 512-scene pool were fit with the same frozen
+VideoPrism readouts, seed, 2,048 updates, 131,072 presentations, and ordered
+512-question validation set. Static descriptive NLL/Brier improve for both
+readouts; temporal differences remain uncertain. Training CE reaches near zero
+while validation NLL/calibration degrade late, so retain best checkpoints and
+do not extend this budget on these scenes. The original 512-scene-only run is
+not treated as a coverage test; the matched control is what supports this
+limited conclusion. No product promotion. See [full report](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_RESULTS_20261018.md).
+
 **2026-10-17 text-free audio Decision probe completed:** A CPU-trained linear
 head over the existing frozen Whisper feature cache classifies the fixed
 10-keyword Speech Commands taxonomy without question/candidate text or a text

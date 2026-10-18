@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-18 text-free CLEVRER coverage control:** At equal seed, 2,048 updates
+and 131,072 presentations, expanding the train pool from a deterministic 256 to
+512 scenes improved static descriptive NLL/Brier for both mean-MLP and BiLSTM;
+temporal differences remain uncertain. Both readouts overfit sharply late in
+training. This result is specific to the frozen VideoPrism text-free probe and
+is not product evidence. [Paired results, hashes, curves and limits](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_RESULTS_20261018.md).
+
 **2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
 scenes from 256 to 768 improved selected pooled development Accuracy and NLL
 at the same 2,048-update budget, primarily on static descriptive questions.
