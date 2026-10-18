@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-18 video coverage follow-up:** A matched text-free CLEVRER readout
+comparison found a static-question NLL/Brier benefit from 512 vs 256 unique
+train scenes, but temporal gains remained uncertain and both runs overfit late.
+This development result does not meet the video or multimodal product gates.
+[Results and limits](https://github.com/Unjuno/tiny-omni-decision/blob/codex/textfree-video-coverage-v1/docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_RESULTS_20261018.md).
+
 **2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
 scenes from 256 to 768 improved selected pooled development Accuracy and NLL
 at the same 2,048-update budget, primarily on static descriptive questions.

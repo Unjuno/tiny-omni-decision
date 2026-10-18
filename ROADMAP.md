@@ -1,5 +1,22 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 text-free CLEVRER unique-scene coverage comparison:** A separate
+branch compared 256 vs 512 train scenes for matched VideoPrism + text-free
+typed-program readouts (mean-MLP and BiLSTM), with the same 2,048 updates,
+131,072 example presentations per arm, and 256 held-out development scenes.
+More scenes improved static descriptive NLL/Brier for both readouts; static
+Accuracy improved clearly only for the BiLSTM contrast. Temporal Accuracy/NLL/
+Brier intervals included zero for both, and both arms overfit sharply after
+early checkpoints. Thus scene coverage helps some static decisions in this
+narrow probe but does not resolve temporal reasoning. The validation reused
+question templates and selected checkpoints; it is not independent or blind.
+Do not repeat these fits on the same scenes. The next video experiment needs
+genuinely temporal supervision, a new scene-grouped selection split, and an
+input representation that preserves the candidate criterion without silently
+requiring natural-language questions. [Protocol, full curves, paired intervals,
+and artifacts](https://github.com/Unjuno/tiny-omni-decision/blob/codex/textfree-video-coverage-v1/docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_RESULTS_20261018.md)
+(`codex/textfree-video-coverage-v1`, source commit `74e2094`).
+
 **2026-10-18 CLEVRER temporal error attribution:** A read-only audit of the
 selected text-free MLP/BiLSTM predictions found that 181/200 temporal validation
 questions (90.5%) use exact typed-program sequences absent from the 256-row
