@@ -417,3 +417,34 @@ single paired manifest snapshot. The improved runner now hashes the exact
 manifest bytes it parsed and rejects duplicate or unplanned video IDs. Its
 regression tests pass; use it for the final full audit after acquisition is
 terminal. No model, GPU, training, or TEST data was used.
+
+## CPU Path A readout runner (implementation only; no task fit yet)
+
+`scripts/train_av_event_source.py` now consumes a JSONL feature manifest whose
+rows carry event/video IDs, split, target index, candidate count, deterministic
+candidate-order hash, media and annotation identities, feature paths, and
+SHA-256 hashes. It checks feature hashes before loading them, rejects
+event/video/media identity leakage across
+fit, selection, calibration, and development-validation splits, and requires
+the pinned encoder output shapes. DINOv2 outputs one CLS token followed by 256
+patch tokens; the runner currently uses the CLS vector per crop and preserves
+candidate order. This is the first baseline pooling choice, not a measured
+winner.
+
+Training uses `fit` rows only. Checkpoint selection uses video-disjoint
+`selection` rows only (minimum NLL, strict absolute `min_delta`, earliest tie),
+with seed 17, AdamW, learning rate 1e-3, maximum 100 epochs, patience 20, and
+`min_delta=1e-4` as the first fixed engineering schedule. Best and final
+weights are kept separately. The saved best file is reloaded and its selection
+predictions are verified before metrics and per-example probabilities are
+written for calibration and development-validation rows. The `video_only`
+condition freezes unused audio/gate/joint parameters. Audio-only remains
+uniform because opaque candidate IDs provide no audio-side option features.
+
+Eight CPU tests cover CLS pooling/order, video and media split separation,
+feature-label bounds, selection logic, separate best/final files, saved-best
+reload, and development-validation outputs. Targeted tests and Ruff pass. This
+is training/evaluation plumbing only: no full feature manifest, readout fit,
+validation quality result, calibration, or GPU run exists yet. The complete
+media acquisition and frozen integrity gates remain mandatory before creating
+the feature manifest.

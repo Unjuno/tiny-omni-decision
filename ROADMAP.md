@@ -1126,6 +1126,14 @@ at hidden size 128). It is CPU-tested but untrained and has no quality result.
 M-0/M-1 and M-2 remain open; feature extraction and fitting wait for the full
 media integrity gates documented in the task protocol.
 
+The event-source Path A runner (`scripts/train_av_event_source.py`) now
+implements hashed feature-manifest admission, video/media split leakage
+rejection, a CLS-pooled DINO baseline, fit-only training, selection-only best
+checkpoint choice, best-file reload verification, and separate calibration /
+development-validation metrics. Its CPU tests and repository Ruff pass. The
+run is still unexecuted: frozen feature extraction and task metrics remain
+blocked on completion of the pinned media acquisition and full integrity gates.
+
 
 Source follow-up: STARSS23's official MIT release supplies a synchronized
 environmental audio/video candidate. The bounded source/decoding probe and
