@@ -265,3 +265,59 @@ window-feature SHA-256
 At this snapshot, original acquisitions were at 153/400 TRAIN and 139/400
 VALID clips, both still running with zero recorded acquisition errors. This
 does not close the full media/PTS/split audit gate.
+
+## Candidate crop join and streamed-frame smokes
+
+The vision smoke now accepts a provenance-only TRAIN event key through the
+shared `select_training_event` helper, and retains only the selected decoded
+RGB frame rather than holding every decoded frame in RAM. Unit tests require
+the key to match exactly one candidate event. On the 1,051-frame
+`video_8679` / `sound_id=0` event, the streamed implementation produced 14
+finite DINOv2 crop feature tensors and repeated bitwise-identically. Its
+feature SHA-256 (`0046d75584fd87be044c0dc3269bdec89b0dba0adee7064ceb1733ee47e544a2`)
+exactly matches the earlier all-frames-in-memory smoke, demonstrating output
+parity while avoiding retention of the full decoded clip. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-vision-smoke-05-streamed-long\result.json`
+(SHA-256 `545bfbb0bda6e15c904fe676f9fa74b8e05f7b827a718358cab08923c08d4152`).
+
+The streamed path also passed on `video_10372` / `sound_id=9`, where annotation
+metadata says 825 frames and actual decode yields 824. Selected frame 510 lies
+inside the event interval and decoded stream; all 8 DINO candidate crops were
+finite and bitwise-repeatable. The resulting feature SHA matches the earlier
+smoke on this same event. The runner records the one-frame discrepancy instead
+of rejecting the usable selected frame. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-vision-smoke-04-streamed-decode\result.json`
+(SHA-256 `01c69fa4f68244c24eb25b7cc47a105758cc54b3e1f7116e696745f552177456`).
+
+Ruff passed; full CPU suite: 2,443 passed, 11 skipped. Neither smoke scored
+task correctness, trained a readout, used the GPU, or accessed TEST. The
+acquisition manifests at this update show 164/400 TRAIN and 151/400 VALID
+clips, still RUNNING with zero recorded errors. Full acquisition and the
+complete PTS/split gate remain open.
+
+## Streamed selected-frame follow-up (2026-10-18 04:53 UTC)
+
+The candidate event join is now shared between the audio and vision smoke
+runners via `scripts/perception_av_event_protocol.py`; it fails closed unless
+the provenance key selects exactly one eligible TRAIN event. The DINO runner
+was changed to decode sequentially while retaining only the chosen RGB frame,
+and now records `decoded_video_frames - metadata_video_frames` rather than
+requiring equality.
+
+For the 1,051-frame `video_8679` event, streamed decoding yields the exact same
+candidate feature file hash as the earlier implementation that retained every
+decoded frame: `0046d75584fd87be044c0dc3269bdec89b0dba0adee7064ceb1733ee47e544a2`.
+The 14-candidate output is at
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-vision-smoke-05-streamed-long\result.json`
+(receipt SHA-256 `545bfbb0bda6e15c904fe676f9fa74b8e05f7b827a718358cab08923c08d4152`).
+
+The 824-decoded/825-metadata frame case also passes streamed decoding. It
+selects actual decoded frame 510 inside the annotated interval and produces
+the same eight candidate features as the prior smoke; no metadata-only frame
+was indexed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-vision-smoke-04-streamed-decode\result.json`
+(receipt SHA-256 `01c69fa4f68244c24eb25b7cc47a105758cc54b3e1f7116e696745f552177456`).
+Ruff passes and the full CPU suite passes: 2,443 passed, 11 skipped. This is
+feature-pipeline parity/integrity evidence, not task quality. The live
+acquisition snapshot is 167/400 TRAIN and 152/400 VALID, both RUNNING with no
+recorded acquisition errors; the complete pre-feature audit remains pending.

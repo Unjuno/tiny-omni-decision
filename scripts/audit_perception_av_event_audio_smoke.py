@@ -16,6 +16,7 @@ from scripts.audit_perception_av_event_task import (
     summarize_split,
 )
 from scripts.clap_full_clip import duration_weighted_feature, window_spans
+from scripts.perception_av_event_protocol import select_training_event
 
 PLAN_SHA256 = "9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25"
 WEIGHT_SHA256 = "d190141ffd119b9096d9f3e096b2285f8ce6fa401cdb666d6f53911a2517fee3"
@@ -23,21 +24,6 @@ CONFIG_SHA256 = "f7a374a0dc4907b3a30a4e9964286055929c42d932d5abd0619f7b1a20438dd
 FRONTEND_SHA256 = "9739f58296aa6f9ac18008fd0150fb2649bc554985fbde86d0a4041c882ac753"
 MAX_SAMPLES = 480_000
 TARGET_RATE = 48_000
-
-
-def select_training_event(rows, video_id, sound_id):
-    if not isinstance(video_id, str) or not video_id or isinstance(sound_id, bool):
-        raise ValueError("a nonempty TRAIN video ID and integer sound ID are required")
-    if not isinstance(sound_id, int) or sound_id < 0:
-        raise ValueError("sound ID must be a nonnegative integer")
-    matches = [
-        row
-        for row in rows
-        if row.get("video_id") == video_id and row.get("sound_id") == sound_id
-    ]
-    if len(matches) != 1:
-        raise ValueError("TRAIN event key must identify exactly one eligible event")
-    return matches[0]
 
 
 def event_sample_bounds(event_start, event_end, audio_start, sample_rate, sample_count):

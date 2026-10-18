@@ -12,7 +12,10 @@ from scripts.audit_perception_av_event_task import (
     load_annotations,
     summarize_split,
 )
-from scripts.perception_av_event_protocol import deterministic_candidate_order
+from scripts.perception_av_event_protocol import (
+    deterministic_candidate_order,
+    select_training_event,
+)
 
 PLAN_SHA256 = "9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25"
 VISION_WEIGHT_SHA256 = "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1"
@@ -58,7 +61,29 @@ def track_box_at_frame(track, frame_id):
     return boxes[index]
 
 
-def run_smoke(train_source, media_manifest_path, model_dir, output_dir):
+def validate_selected_frame(frame_id, frame_interval, decoded_frame_count):
+    if (
+        type(frame_id) is not int
+        or len(frame_interval) != 2
+        or any(type(value) is not int for value in frame_interval)
+        or frame_interval[0] < 0
+        or frame_interval[1] < frame_interval[0]
+        or not frame_interval[0] <= frame_id <= frame_interval[1]
+        or type(decoded_frame_count) is not int
+        or not 0 <= frame_id < decoded_frame_count
+    ):
+        raise ValueError("selected annotation frame is outside the decoded event interval")
+    return frame_id
+
+
+def run_smoke(
+    train_source,
+    media_manifest_path,
+    model_dir,
+    output_dir,
+    video_id="video_11362",
+    sound_id=4,
+):
     import av
     import numpy as np
     import torch
@@ -75,9 +100,9 @@ def run_smoke(train_source, media_manifest_path, model_dir, output_dir):
     if media_manifest.get("split") != "train" or media_manifest.get("plan_sha256") != PLAN_SHA256:
         raise ValueError("expected pinned TRAIN media manifest")
     clips = {clip["video_id"]: clip for clip in media_manifest.get("clips", [])}
-    if "video_11362" not in clips:
-        raise ValueError("fixed training smoke video is not yet acquired")
-    clip = clips["video_11362"]
+    if video_id not in clips:
+        raise ValueError("requested TRAIN smoke video is not yet acquired")
+    clip = clips[video_id]
     media_path = Path(clip["path"])
     if sha256_file(media_path) != clip.get("sha256"):
         raise ValueError("smoke media SHA-256 mismatch")
@@ -100,11 +125,7 @@ def run_smoke(train_source, media_manifest_path, model_dir, output_dir):
         },
     )
     candidates = summarize_split(data, cuts, "train")["candidate_records"]
-    event = next(
-        row
-        for row in candidates
-        if row["video_id"] == "video_11362" and row["sound_id"] == 4
-    )
+    event = select_training_event(candidates, video_id, sound_id)
     metadata = data[event["video_id"]]["metadata"]
     tracks_by_id = {
         track["id"]: track for track in data[event["video_id"]]["object_tracking"]
@@ -114,11 +135,18 @@ def run_smoke(train_source, media_manifest_path, model_dir, output_dir):
     )
     started = time.perf_counter()
     with av.open(str(media_path)) as container:
-        video_frames = list(container.decode(video=0))
-    if len(video_frames) != metadata["num_frames"]:
-        raise ValueError("decoded frame count differs from annotation metadata")
-    frame = video_frames[event["selected_frame"]]
-    array = frame.to_ndarray(format="rgb24")
+        decoded_video_frames = 0
+        selected_rgb = None
+        for frame_index, decoded_frame in enumerate(container.decode(video=0)):
+            decoded_video_frames = frame_index + 1
+            if frame_index == event["selected_frame"]:
+                selected_rgb = decoded_frame.to_ndarray(format="rgb24")
+    validate_selected_frame(
+        event["selected_frame"], event["frame_interval"], decoded_video_frames
+    )
+    if selected_rgb is None:
+        raise ValueError("selected annotation frame was not decoded")
+    array = selected_rgb
     height, width = array.shape[:2]
     expected_height, expected_width = metadata["resolution"]
     if (height, width) != (expected_height, expected_width):
@@ -162,7 +190,9 @@ def run_smoke(train_source, media_manifest_path, model_dir, output_dir):
         "sound_id_for_join_only": event["sound_id"],
         "candidate_count": len(crops),
         "selected_frame_id": event["selected_frame"],
-        "decoded_video_frames": len(video_frames),
+        "decoded_video_frames": decoded_video_frames,
+        "metadata_video_frames": metadata["num_frames"],
+        "video_frame_count_delta": decoded_video_frames - metadata["num_frames"],
         "decoded_frame_shape": list(array.shape),
         "candidate_crop_pixel_boxes_in_deterministic_order": crop_boxes,
         "model_repo": "facebook/dinov2-small",
@@ -199,10 +229,19 @@ def main():
     parser.add_argument("--media-manifest", type=Path, required=True)
     parser.add_argument("--model-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--video-id", default="video_11362")
+    parser.add_argument("--sound-id", type=int, default=4)
     args = parser.parse_args()
     print(
         json.dumps(
-            run_smoke(args.train_source, args.media_manifest, args.model_dir, args.output_dir),
+            run_smoke(
+                args.train_source,
+                args.media_manifest,
+                args.model_dir,
+                args.output_dir,
+                args.video_id,
+                args.sound_id,
+            ),
             sort_keys=True,
         )
     )

@@ -3,6 +3,7 @@ import pytest
 from scripts.perception_av_event_protocol import (
     deterministic_candidate_order,
     model_selection_video_ids,
+    select_training_event,
 )
 
 
@@ -32,3 +33,15 @@ def test_candidate_order_rejects_invalid_candidates():
         deterministic_candidate_order("video_1", 0, [])
     with pytest.raises(ValueError, match="nonnegative integers"):
         deterministic_candidate_order("video_1", 0, [1, -2])
+
+
+def test_training_event_selection_requires_one_exact_join_key():
+    records = [
+        {"video_id": "video_1", "sound_id": 3},
+        {"video_id": "video_2", "sound_id": 3},
+    ]
+    assert select_training_event(records, "video_2", 3) == records[1]
+    with pytest.raises(ValueError, match="exactly one"):
+        select_training_event(records, "video_3", 3)
+    with pytest.raises(ValueError, match="exactly one"):
+        select_training_event(records + [records[1]], "video_2", 3)

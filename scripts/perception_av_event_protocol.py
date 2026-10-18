@@ -3,6 +3,20 @@
 import hashlib
 
 
+def select_training_event(candidate_records, video_id, sound_id):
+    """Select one frozen TRAIN event by its provenance-only join key."""
+    if not isinstance(video_id, str) or not video_id or type(sound_id) is not int or sound_id < 0:
+        raise ValueError("a nonempty video ID and nonnegative integer sound ID are required")
+    matches = [
+        row
+        for row in candidate_records
+        if row.get("video_id") == video_id and row.get("sound_id") == sound_id
+    ]
+    if len(matches) != 1:
+        raise ValueError("TRAIN event key must identify exactly one eligible event")
+    return matches[0]
+
+
 def model_selection_video_ids(video_ids, selection_count=60):
     ids = list(video_ids)
     if len(ids) != len(set(ids)):
