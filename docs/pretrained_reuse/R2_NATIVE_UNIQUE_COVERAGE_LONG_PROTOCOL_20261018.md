@@ -27,7 +27,8 @@ four-modality product goal, prove a capability ceiling, or justify promotion.
   quotas; no labels or validation scores choose new rows.
 - Repeat control: 6,656 unique TRAIN questions. Fresh arm: 12,800 unique
   questions, adding 6,144 rows from Text, Image and Audio; it adds no Video
-  questions. Video's 256-question coverage remains unchanged. The pool contains
+  questions. Both arms retain 512 CLEVRER question rows grouped into 256 video
+  scenes. The pool contains
   16,384 occurrences and is repeated for 16 cycles, totaling 262,144
   microbatches / 32,768 updates. Unique and repeated counts are recorded
   separately.
@@ -77,6 +78,11 @@ predeclared selector. Treat this as low-power repeatedly observed development
 validation, not an independent blind test. Mixed or negative results are
 retained; no automatic budget or seed extension follows.
 
-The initial implementation and tests are prepared, but the new smoke/training
-run is **not yet started**. At the preflight snapshot the RTX 3080 was occupied
-by Orbitune; the HotUGPU wrapper will wait for a cooperative handoff.
+## Run status
+
+The pre-run snapshot above was historical. Smoke attempt 03 passed after a
+cooperative Orbitune yield; fresh fit 01 completed 32,768 updates and replay 01
+passed. Smoke attempts 01 and 02 were interrupted before the documented yield
+completed and are retained as blocked. See the
+[results report](R2_NATIVE_UNIQUE_COVERAGE_LONG_RESULTS_20261018.md) for
+receipts, SHA-256 values, comparison metrics and caveats.

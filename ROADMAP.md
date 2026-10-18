@@ -24,10 +24,21 @@ artifacts were changed. [Exact paths and digests](docs/pretrained_reuse/R1_LOCAL
 **2026-10-18 native unique-coverage long comparison preregistered:** Keep the
 completed 32,768-update repeat control fixed and prepare one matching fresh-pool
 arm, adding 6,144 unique Text/Image/Audio questions while Video coverage remains
-256 questions. The immutable new config pins the control result and validation
-IDs. Tests cover the fixed 32,768 schedule and HotUGPU handoff contract. The
-RTX 3080 is currently occupied by Orbitune; no new smoke or training has started.
-[Protocol and run state](docs/pretrained_reuse/R2_NATIVE_UNIQUE_COVERAGE_LONG_PROTOCOL_20261018.md).
+512 CLEVRER question rows grouped into 256 video scenes. The immutable new
+config pins the control result and validation IDs. Tests cover the fixed
+32,768 schedule and HotUGPU handoff
+contract. The pre-run GPU snapshot found Orbitune active; the preregistration
+and safety gates are in the
+[protocol](docs/pretrained_reuse/R2_NATIVE_UNIQUE_COVERAGE_LONG_PROTOCOL_20261018.md).
+
+**2026-10-19 long unique-coverage result:** The fresh arm completed 32,768
+updates and exact replay, selecting step 8,192. At selection it did not beat the
+repeat control on macro NLL or Accuracy. At the final endpoint Accuracy rose,
+but macro NLL/ECE showed severe overfitting in both arms. Added unique coverage
+helped some endpoint metrics but does not support a clean selected-checkpoint
+gain. One seed, observed validation only; no promotion, audit, extra seed or
+budget extension. See the
+[complete result and artifact hashes](docs/pretrained_reuse/R2_NATIVE_UNIQUE_COVERAGE_LONG_RESULTS_20261018.md).
 
 **2026-10-18 conditional AV gate fit reviewed:** A separate branch completed a
 matched seed-17, 32,768-update E0G1 run. The gate outputs collapsed below 0.01

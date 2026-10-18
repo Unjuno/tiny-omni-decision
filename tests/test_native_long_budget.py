@@ -83,3 +83,45 @@ def test_unique_coverage_policies_have_fixed_probe_sizes():
     assert unique_probe_row_count("fresh") == 12800
     with pytest.raises(ValueError):
         unique_probe_row_count("unknown")
+
+
+def test_long_coverage_comparison_delta_is_fresh_minus_repeat_per_group():
+    from scripts.analyze_native_unique_coverage_long import summarize_deltas, unique_row_summary
+
+    control = {
+        "macro": {key: 1.0 for key in ("accuracy", "nll", "brier", "ece")},
+        **{
+            group: {"video": {key: 1.0 for key in ("accuracy", "nll", "brier", "ece")}}
+            for group in ("modalities", "sources", "tasks")
+        },
+    }
+    fresh = {
+        "macro": {key: 1.25 for key in ("accuracy", "nll", "brier", "ece")},
+        **{
+            group: {"video": {key: 0.75 for key in ("accuracy", "nll", "brier", "ece")}}
+            for group in ("modalities", "sources", "tasks")
+        },
+    }
+
+    delta = summarize_deltas(control, fresh)
+
+    assert delta["macro"]["accuracy"] == pytest.approx(0.25)
+    assert delta["modalities"]["video"]["nll"] == pytest.approx(-0.25)
+    assert delta["sources"]["video"]["brier"] == pytest.approx(-0.25)
+    assert delta["tasks"]["video"]["ece"] == pytest.approx(-0.25)
+
+    summary = unique_row_summary(
+        [
+            {"id": "text-1", "modality": "text", "source": "synthetic", "task": "rank"},
+            {"id": "image-1", "modality": "image", "source": "clevr4", "task": "count"},
+        ],
+        ["text-1", "image-1"],
+    )
+    assert summary == {
+        "total": 2,
+        "by_modality": {"image": 1, "text": 1},
+        "by_source": {"clevr4": 1, "synthetic": 1},
+        "by_source_task": {"clevr4:count": 1, "synthetic:rank": 1},
+    }
+    with pytest.raises(ValueError, match="unique TRAIN"):
+        unique_row_summary([], ["missing"])
