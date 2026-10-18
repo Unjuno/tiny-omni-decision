@@ -44,7 +44,13 @@ def load_feature_bank(path: Path, modality: str) -> tuple[list[str], np.ndarray,
         raise ValueError(f"{modality} feature IDs must be unique and nonempty")
     if not np.isfinite(features).all():
         raise ValueError(f"{modality} feature bank contains non-finite values")
-    for field in ("model_id", "revision", "weights_sha256", "preprocessing"):
+    for field in (
+        "model_id",
+        "revision",
+        "weights_sha256",
+        "loaded_weights_sha256",
+        "preprocessing",
+    ):
         if not isinstance(metadata.get(field), str) or not metadata[field]:
             raise ValueError(f"{modality} bank lacks pinned {field}")
     if len(metadata["weights_sha256"]) != 64:

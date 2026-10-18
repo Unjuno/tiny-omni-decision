@@ -116,7 +116,13 @@ audio decode end. This is source-format/timing proof for one recording, not
 task-quality evidence or proof that all sessions are aligned. The full fixed
 36.12 GB pitch-shifted selection is now downloading into a separate attempt
 directory with per-file range/ETag/size/SHA checks. The latest observed
-progress is 64/367 files (5,180,567,023 bytes); this is not the final receipt.
+progress is 87/367 files (8,359,267,270 bytes, observed 2026-10-18 23:17 UTC);
+this is not the final receipt.
+The repository extraction decoder was also exercised on the verified probe:
+the first causal 30-second window yielded 480,000 finite 16 kHz audio samples
+(RMS 0.00655, peak 0.405) and eight finite 504x896 RGB video frames. This
+verifies timestamped PyAV decode/resampling and 8-frame selection for one
+window only; it is not a full bank or encoder-quality result.
 
 Feature extraction, event decoding, and dataset training or quality evaluation
 have not run. C: had over 200 GB free; no cloud compute was used. GPU execution
@@ -178,6 +184,18 @@ revision `4ca70771034acceecb2e72475f72050fcdde4ddc`. These encoder settings and
 task text preprocessing are now explicit in the experiment config; the
 preprocessing still must be exercised on the complete selected corpus before
 the run can start.
+
+The raw-media feature extractor is implemented in
+`scripts/extract_holoassist_frozen_features.py`. It verifies the selected
+media SHA-256 values, the pinned 160/207 selection hash, and the
+AV-validation/event/window receipts before decoding, binds resumable progress
+to the exact ordered IDs, windows, model
+hashes, configuration, source commit, script hash, software versions, and
+device, and writes progress atomically. Its CUDA audio path now uses the
+shared HotUGPU preflight: it fails closed on an occupied GPU unless the
+reservation handoff is valid. CPU tests cover progress reload/mismatch and
+the HotUGPU telemetry path. The decoder has only been smoke-tested on one
+training session; no full feature bank has been produced.
 
 Metadata-only window preflight on the fixed pilot yields 1,551 train / 1,977
 validation windows (median sequence lengths 8 / 7). Of these, 1,464 / 1,896

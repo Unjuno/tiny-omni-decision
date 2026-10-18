@@ -143,8 +143,17 @@ def validate_feature_receipt(
         raise ValueError("receipt must pin video, audio, and text feature banks")
     for modality, expected in expected_encoders.items():
         recorded = receipt["input_feature_banks"][modality]["model"]
-        for field in ("model_id", "revision", "weights_sha256"):
-            if recorded.get(field) != expected[field]:
+        fields = (
+            "model_id",
+            "revision",
+            "weights_sha256",
+            "loaded_weights_sha256",
+            "processor_sha256",
+            "upstream_source_commit",
+            "preprocessing",
+        )
+        for field in fields:
+            if field in expected and recorded.get(field) != expected[field]:
                 raise ValueError(f"{modality} model {field} differs from frozen config")
 
 

@@ -13,6 +13,7 @@ def metadata(name: str) -> dict[str, str]:
         "model_id": name,
         "revision": "fixed-revision",
         "weights_sha256": "0" * 64,
+        "loaded_weights_sha256": "0" * 64,
         "preprocessing": "deterministic test fixture",
     }
 

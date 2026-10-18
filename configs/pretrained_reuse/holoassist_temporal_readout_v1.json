@@ -7,6 +7,8 @@
       "model_id": "google/videoprism-base-f16r288",
       "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
       "weights_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "loaded_weights_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "upstream_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
       "parameters": 114365184,
       "window_frames": 8,
       "preprocessing": "uniform endpoint-inclusive frames within each causal window; resize-short-side, center crop 288, RGB float32 [0,1]; mean all output tokens to 768D"
@@ -15,6 +17,8 @@
       "model_id": "openai/whisper-tiny",
       "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
       "weights_sha256": "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395",
+      "loaded_weights_sha256": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8",
+      "processor_sha256": "3e4dc53c73e7e3954fc4435034f5027733c61d7c123b38bbd1461598fd8503ef",
       "parameters": 8208384,
       "preprocessing": "decode mono 48kHz AAC by PyAV; resample to 16kHz; Whisper 30s log-mel; mean valid encoder tokens to 384D"
     },
@@ -22,6 +26,8 @@
       "model_id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
       "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
       "weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "loaded_weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "processor_sha256": "1c9cc30099243da1f4b287a315c03814279467a6316929f0d16e7f9940b52b0f",
       "parameters": 17389824,
       "preprocessing": "frozen masked-mean embedding of each window's exact task question to 384D"
     }
