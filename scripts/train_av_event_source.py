@@ -313,7 +313,16 @@ def fit_readout(
     model.eval()
     final_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
     _atomic_torch_save(
-        {"state_dict": final_state, "condition": condition, "seed": seed, "epoch": epoch},
+        {
+            "state_dict": final_state,
+            "condition": condition,
+            "seed": seed,
+            "epoch": epoch,
+            "hidden_size": hidden_size,
+            "trainable_parameters": sum(
+                parameter.numel() for parameter in model.parameters() if parameter.requires_grad
+            ),
+        },
         Path(output_dir) / "final.pt",
     )
     if best_state is None or best_predictions is None:

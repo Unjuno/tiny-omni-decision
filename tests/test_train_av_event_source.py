@@ -180,6 +180,9 @@ def test_fit_readout_keeps_best_and_final_checkpoints_separate(tmp_path):
     assert result["trainable_parameters"] == 1565
     assert (output / "best.pt").is_file()
     assert (output / "final.pt").is_file()
+    final_checkpoint = torch.load(output / "final.pt", map_location="cpu", weights_only=True)
+    assert final_checkpoint["hidden_size"] == 4
+    assert final_checkpoint["epoch"] == 1
     assert (output / "history.json").is_file()
     assert (output / "best-selection-predictions.jsonl").is_file()
     assert (output / "development-validation-predictions.jsonl").is_file()
