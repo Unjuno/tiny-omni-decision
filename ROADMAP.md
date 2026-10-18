@@ -196,9 +196,13 @@ CPU decoder smoke observed 96 kHz audio (resampled to 24 kHz) and 1,018 monotoni
 video frames. Full CPU decoding and a separate reload audit passed for all 220
 source groups; normalized audio and full decoded-video content each have 220
 unique hashes, with zero raw or normalized cross-split overlap. The arrays are
-hash-pinned. Frozen feature extraction and readout comparison remain pending; no
-quality metrics exist. See
-`docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md`.
+hash-pinned. All 220 source groups now have pinned audio/video features with
+exact fresh-process replay. The fixed readout comparison completed on CPU: joint
+AV was 53.57% calibrated validation Accuracy over only 28 independent clusters,
+with a severe train/validation gap and paired intervals including no improvement.
+This is a low-power same-recording diagnostic, not a general quality or product
+result. See `docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md`
+and `docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_READOUT_RESULTS_20261018.md`.
 
 **2026-10-17 full-extent comparison completed:** All8936 Image/456 Video caches,
 32768 updates, exact best/final replay and saved-prediction audit PASS. Selected

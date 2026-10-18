@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from scripts.train_greatest_hits_av_match_readouts import fit_temperature, probability_metrics
+from scripts.verify_greatest_hits_av_match_readouts import compare_probabilities
 
 
 def test_preregistered_readout_config_is_valid_json_and_cpu_only():
@@ -47,3 +48,10 @@ def test_temperature_fit_accepts_logits_created_in_inference_mode():
 
     assert math.isfinite(temperature)
     assert temperature > 0
+
+
+def test_fresh_reload_probability_parity_checks_ordered_option_values():
+    check = compare_probabilities([[0.2, 0.8], [0.7, 0.3]], [[0.2, 0.8], [0.7, 0.3]])
+    assert check["max_abs_delta"] == 0
+    with pytest.raises(ValueError, match="exceed tolerance"):
+        compare_probabilities([[0.2, 0.8]], [[0.8, 0.2]])
