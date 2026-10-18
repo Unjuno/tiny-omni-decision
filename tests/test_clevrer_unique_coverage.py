@@ -1,6 +1,6 @@
 import pytest
 
-torch = pytest.importorskip("torch")
+pytest.importorskip("torch")
 
 from scripts.train_clevrer_unique_coverage import (
     _bootstrap_difference,
@@ -9,7 +9,8 @@ from scripts.train_clevrer_unique_coverage import (
     _sampler_audit,
     _validate_previous_scene_exclusions,
     _validate_row_groups,
-)  # noqa: E402
+    torch,
+)
 
 
 def _row(scene: int, kind: str, *, split: str = "train") -> dict:
