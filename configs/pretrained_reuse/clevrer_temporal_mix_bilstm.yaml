@@ -1,0 +1,58 @@
+schema_version: 1
+experiment_id: clevrer-temporal-mix-videoprism-bilstm-v0-seed17
+claim_scope: >-
+  CLEVRER temporal descriptive, explanatory, predictive and counterfactual
+  candidate decisions on a fresh scene-grouped development split; validation
+  is for development and checkpoint selection, not a blind benchmark.
+seed: 17
+source:
+  dataset_id: MIT-IBM/CLEVRER
+  revision: 98b842082ba4f7c18b6b9e3f39145871782a65ef
+  license: CC0-1.0
+  split_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-split-v3
+  sample_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-media-v1
+  train_question_types: [temporal_descriptive, explanatory, predictive, counterfactual]
+  validation_question_types: [temporal_descriptive, explanatory, predictive, counterfactual]
+  split_group: video_scene
+  validation_scene_count_per_question_type: 200
+  sealed_audit_loaded: false
+features:
+  cache: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-videoprism-framewise-v1/framewise-features.npz
+  cache_report: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-videoprism-framewise-v1/cache-report.json
+  model_id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  frame_count: 8
+  feature_shape: [8, 768]
+  pooling: VideoPrism frame-position tokens; bidirectional LSTM readout
+text_encoder:
+  model_path: C:/CodexArtifacts/pretrained-reuse-r2/models/text-minilm-en
+  model_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  weights_sha256: cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433
+  frozen: true
+  question_format: question including candidate statement for CLEVRER reasoning tasks
+model:
+  text_feature_size: 3072
+  video_feature_size: 768
+  temporal_hidden_size: 128
+  scorer_hidden_size: 128
+  video_encoder_frozen: true
+  trainable_components: [bidirectional_lstm, candidate_scorer]
+training:
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.001
+  epochs: 64
+  batch_questions: 32
+  max_optimizer_updates: 2048
+  sampling: every frozen train row once per epoch, shuffled with seed 17
+  loss_weighting: realized 20/30/30/20 task mix, unweighted examples
+  selector: minimum validation macro question-type NLL; ties keep earlier epoch
+  early_stopping: false
+  bootstrap_replicates: 10000
+  bootstrap_seed: 17
+outputs:
+  preflight: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-bilstm-v0/preflight.json
+  run_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-bilstm-v0
