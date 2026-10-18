@@ -190,9 +190,12 @@ audio/video same-recording Decision corpus is frozen at 252 train / 76 calibrati
 112 validation rows, with 0 source-group overlap and balanced audio/video target
 marginals. The 28 validation pair clusters are low-power. Metadata-only selection
 references 440 raw media files (934 MB compressed / 1.91 GB expanded); media and
-weights remain unopened. No fitting or quality metrics exist. Next validate CRC/SHA,
-decoded-content disjointness, stream timing and feature replay before any readout
-comparison. See `docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md`.
+weights remain unopened. The fixed media acquisition has now passed CRC/size/SHA
+checks for all 440 files with no cross-split exact hash overlap. One train-only
+CPU decoder smoke observed 96 kHz audio (resampled to 24 kHz) and 1,018 monotonic
+video frames. Full decoded-content disjointness, frozen feature replay, and any
+readout comparison remain pending; no quality metrics exist. See
+`docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md`.
 
 **2026-10-17 full-extent comparison completed:** All8936 Image/456 Video caches,
 32768 updates, exact best/final replay and saved-prediction audit PASS. Selected

@@ -122,3 +122,24 @@ duration/stream validation, and feature replay.
 The frozen files are in
 `C:\CodexArtifacts\pretrained-reuse-r2\gh-av-match-preflight-02`; the
 metadata-only builder refuses to overwrite an existing output directory.
+
+## TRAIN media acquisition and decoder smoke
+
+All 440 predeclared assets were acquired from the pinned archive using exact
+HTTPS range responses with the pinned ETag. Local ZIP member names, decompressed
+sizes and CRC-32 passed; the acquisition manifest records a SHA-256 for every
+asset and a source-group/split assignment. The complete media manifest SHA-256
+is `2949ee916c40bed3d0495409075d0122ca471b1da8b7bc343fe16e8171f0b120`.
+Acquisition took 738.172 seconds and requested 933,897,889 range bytes; 440
+expanded media files total 1,910,230,808 bytes. No official validation,
+quarantine, test, or sealed-audit media was acquired. Exact raw-file hash overlap
+across splits is zero.
+
+A CPU-only decoder smoke on the first fixed TRAIN group succeeded: the WAV
+decoder observed 96 kHz and produced 815,214 finite 24 kHz mono samples; the
+video decoder observed 1,018 increasing-PTS frames and selected eight endpoint-
+inclusive indices `[0, 145, 291, 436, 581, 726, 872, 1017]`. This verifies the
+actual sample rate handling path; it does not represent every asset. The full
+220-group decode, normalized-content overlap audit, frozen feature extraction,
+and any readout fit remain pending. No model weights, optimizer, GPU, or quality
+metric was used.
