@@ -32,6 +32,13 @@ quality. Inputs and prediction rows were hash-checked; the result is public,
 not sealed. No training or promotion. See the
 [fixed-checkpoint result](docs/pretrained_reuse/R2_CLEVR4_PUBLIC_VAL_FIXED_READOUT_RESULTS_20261019.md).
 
+**2026-10-19 R2 EuroSAT RGB source screen:** The official 27k-image RGB
+archive was hash-verified; all file hashes are unique. The JPEG package has no
+per-image coordinates, acquisition IDs, or official split, so a random image
+split cannot guarantee spatial isolation. No EuroSAT split, features, training,
+or evaluation was performed. Keep this RGB package out of the quality pipeline
+unless a complete source-to-footprint mapping is verified; see the
+[screen record](docs/pretrained_reuse/R2_EUROSAT_SPATIAL_SPLIT_SCREEN_20261019.md).
 **2026-10-19 R2 AVQA source screen:** The official AVQA task is a strong
 semantic fit for joint audio/video questions: it provides manually annotated
 multiple-choice questions with `View`, `Sound`, and `Both` relation labels.
