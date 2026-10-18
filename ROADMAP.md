@@ -177,12 +177,14 @@ training probe verified non-silent 48 kHz mono AAC plus H.264 video, both at
 PTS 0, with 14.5 ms stream-duration difference from each other and the
 compressed-video companion. The earlier compressed-only attempt stopped at
 108/367 files after 8.28 GB; all complete and partial files are preserved.
-The pitch-shifted download progress snapshot is 20/367 files (1.83 GB). A new
+The latest observed pitch-shifted download progress is 64/367 files (5.18 GB). A new
 whole-selection AV validator now checks stream layout/timing, annotation
 duration, and every downloaded media SHA; event-corpus generation requires
 that passing report and exact selection/manifest/media hashes. Real-data
 VideoPrism, encoder-only Whisper, and MiniLM feature smokes produced finite
-features, but no task feature cache, training, or quality evaluation exists.
+features. Hash-bound feature packing and a matched audio-only/video-only/joint
+2,048-step LSTM readout runner are now implemented and CPU-tested; no real task
+feature cache, fitting, or quality evaluation exists.
 The proposed encoder-only parameter inventory is 140.34M; VideoPrism's
 checkpoint alone is about 457 MB, so the provisional 200 MB bundle target is
 not met. Details and timings are in

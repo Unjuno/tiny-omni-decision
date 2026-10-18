@@ -147,9 +147,9 @@
     "media_archive_video_payload_opened_or_decoded": true,
     "selected_train_validation_media_download_in_progress": true,
     "pitchshifted_media_download_progress_snapshot": {
-      "completed_files": 20,
+      "completed_files": 64,
       "expected_files": 367,
-      "completed_bytes": 1825585076,
+      "completed_bytes": 5180567023,
       "captured_at_utc": "2026-10-19",
       "note": "Live download continues; this is a progress snapshot, not a completed-media receipt."
     },
@@ -168,8 +168,9 @@
   },
   "reasons_not_admitted": [
     "Train/validation are disjoint by recording session, but the release metadata does not expose instructor/performer identity; participant-independent validation cannot be established.",
-    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes; a progress snapshot reached 20/367 files (1,825,585,076 bytes), while full-media integrity and window extraction remain pending.",
+    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes; a progress snapshot reached 64/367 files (5,180,567,023 bytes), while full-media integrity and window extraction remain pending.",
     "One selected training-session AV file passes stream/timing checks; separate encoder smokes show finite outputs but do not measure HoloAssist task quality.",
+    "Hash-bound feature packing and matched 2,048-step readout tooling are implemented but have not been run on HoloAssist features.",
     "Wrong/not-corrected validation support is only 11 intervals, so the five-way label must not be treated as a balanced or well-powered evaluation task.",
     "Five reversed fine-action intervals were found in train/validation metadata; a future adapter must exclude them deterministically and report counts."
   ],

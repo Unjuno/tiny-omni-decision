@@ -115,7 +115,8 @@ duration differs by 14.5 ms; decoded AAC tail padding accounts for the longer
 audio decode end. This is source-format/timing proof for one recording, not
 task-quality evidence or proof that all sessions are aligned. The full fixed
 36.12 GB pitch-shifted selection is now downloading into a separate attempt
-directory with per-file range/ETag/size/SHA checks.
+directory with per-file range/ETag/size/SHA checks. The latest observed
+progress is 64/367 files (5,180,567,023 bytes); this is not the final receipt.
 
 Feature extraction, event decoding, and dataset training or quality evaluation
 have not run. C: had over 200 GB free; no cloud compute was used. GPU execution
@@ -153,6 +154,30 @@ video-only, and audio-only controls on the same windows; preserve natural
 validation prevalence and report Accuracy, NLL, Brier, ECE, PR-AUC, and
 session-clustered uncertainty. Do not treat windows from the same recording as
 independent replicates.
+
+The frozen-feature packer and matched training runner are now implemented in
+`scripts/pack_holoassist_feature_cache.py` and
+`scripts/train_holoassist_temporal_readout.py`. The packer requires each
+modality bank to match the exact train-then-validation window ID sequence,
+keeps empty windows as unlabeled recurrent context, binds model revisions and
+weight hashes, and rejects session/media overlap. The runner checks those
+receipts against `configs/pretrained_reuse/holoassist_temporal_readout_v1.json`,
+then fits video-only, audio-only, and joint 128-hidden-unit LSTM readouts with
+seed 17 and 2,048 updates per arm. It does not early-stop; it saves both best
+validation-NLL and final checkpoints, fixed-step predictions, and a history
+every 64 updates. The selected checkpoint is reloaded and its saved validation
+probabilities must match within 1e-6. This is a development-validation
+selection protocol, not a blind evaluation. Synthetic CPU tests exercise the
+packing, training, and checkpoint-reload code; no real frozen feature banks or
+HoloAssist task-fitting run exist yet.
+
+The frozen encoders are pinned to VideoPrism-B revision
+`be719a406d563b66f0ac969e7c94bab8e997c81a` (8 frames/window), Whisper Tiny
+encoder revision `169d4a4341b33bc18d8881c4b69c2e104e1cc0af`, and MiniLM-L3
+revision `4ca70771034acceecb2e72475f72050fcdde4ddc`. These encoder settings and
+task text preprocessing are now explicit in the experiment config; the
+preprocessing still must be exercised on the complete selected corpus before
+the run can start.
 
 Metadata-only window preflight on the fixed pilot yields 1,551 train / 1,977
 validation windows (median sequence lengths 8 / 7). Of these, 1,464 / 1,896
