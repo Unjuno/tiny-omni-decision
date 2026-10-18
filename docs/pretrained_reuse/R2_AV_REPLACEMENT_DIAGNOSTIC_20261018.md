@@ -48,6 +48,26 @@ Output directory: `C:\CodexArtifacts\pretrained-reuse-r2\greatest-hits-postnorm-
 
 `predictions.jsonl` contains exactly 44,375 rows, and both self-replacement checks passed for all 17,750 required self cases. Existing attempts 08–10 remain preserved; only attempt 11 is a complete scorer run.
 
+### Authorized retry attempt 12
+
+The later authorization requested a fresh inference-only retry named attempt 09.
+That output directory already existed as a preserved `INCOMPLETE` preflight
+from 2026-10-17 with zero forwards, so it was not overwritten. A new directory,
+`C:\CodexArtifacts\pretrained-reuse-r2\greatest-hits-postnorm-replacements-E0G1-12`,
+was used instead. The committed scorer started its CPU integrity preflight,
+then failed closed before model inference when a foreign GPU process appeared:
+`GPU occupied; scoring not started`. Receipt: `INCOMPLETE`, 0/44,375 forwards,
+0 optimizer updates, 0 encoder updates, `sealed_audit_loaded=false`,
+`checkpoint_selection=false`, and cloud cost 0. The `result.json` SHA-256 is
+`07b834fa9870829686ed191819009e726740af32776150b84d288c757b722c1`.
+
+The Windows Orbitune monitor log shows the trainer cooperatively yielded after
+detecting external GPU activity. No process was stopped or restarted manually,
+and no checkpoint, training data, or prior attempt was changed. This retry adds
+no model-sensitivity evidence. It can be resumed only in a GPU window where the
+full pinned-input CPU preflight can finish before Orbitune reacquires the GPU,
+or after the user authorizes a temporary pause of that supervisor.
+
 ## Interpretation and next step
 
 This result weakens the narrow hypothesis that E0G1 ignores AV inputs entirely, but it does not answer whether the inputs are used *correctly*. The next useful test is a truth-bearing, source-paired task evaluation or a carefully constructed modality ablation where the replacement has a known expected outcome. Do not use these replacement flip rates as accuracy or as grounds to claim multimodal quality.
