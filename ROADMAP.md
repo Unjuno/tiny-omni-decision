@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-19 R2 MAVD-traffic source screen:** The CC BY 4.0 synchronized
+urban AV source is retained as review-only. The official train/validation
+annotations overlap on three conservative site-day groups, and audio event
+labels do not establish visual truth or both-input necessity. Test annotation
+payloads and all media remain unopened. No catalog admission or model run was
+made. See the [source screen](docs/pretrained_reuse/R2_MAVD_TRAFFIC_SOURCE_SCREEN_20261019.md).
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target

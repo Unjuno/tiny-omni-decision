@@ -1,0 +1,73 @@
+schema_version: 1
+dataset_id: Zinemanas2019/MAVD-traffic
+revision: 10535651685f7a4f6f2205263951a929775e9450
+subset: official-train-validation-test-annotations-and-synchronized-media
+split: official-file-splits-with-train-validation-site-day-overlap
+modalities: [audio, video]
+upstream_url: https://zenodo.org/records/4741232
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "Pablo Zinemanas, Pablo Cancela, and Martín Rocamora; cite MAVD: A Dataset for Sound Event Detection in Urban Environments (DCASE 2019)."
+source_citation: https://dcase.community/documents/workshop2019/proceedings/DCASE2019Workshop_Zinemanas_70.pdf
+usage: evaluation
+trust_status: review
+source_components:
+  - component_id: event-annotations-and-recording-metadata
+    url: https://zenodo.org/records/4741232
+    license: CC-BY-4.0
+    commercial_use: true
+    derivative_model_training_allowed: true
+    redistribution_allowed: true
+    media_redistribution_allowed: true
+    attribution: "MAVD authors; cite the dataset paper and preserve the CC BY 4.0 notice."
+    modalities: [text]
+    trust_status: review
+  - component_id: synchronized-urban-audio-video-recordings
+    url: https://zenodo.org/records/4741232
+    license: CC-BY-4.0
+    commercial_use: true
+    derivative_model_training_allowed: true
+    redistribution_allowed: true
+    media_redistribution_allowed: true
+    modalities: [audio, video]
+    trust_status: review
+notes:
+  zenodo_record_version: "0.1.1"
+  zenodo_record_id: 4741232
+  zenodo_api_metadata_license: cc-by-4.0
+  revision_pin_method: >-
+    SHA-1 over the newline-joined SHA-256 digests of the five locally screened
+    source files, in this order: annotations_train.zip,
+    annotations_validate.zip, annotations_test.zip, metadata.txt, README.
+    This content pin is not an upstream Git revision; the immutable upstream
+    Zenodo version and per-file SHA-256 digests are recorded separately.
+  official_record_files_total_bytes: 1327320789
+  official_record_media_bytes: 1327276703
+  local_metadata_sha256: e68000ebe59980987da7df3b7a26515944492bd9cf818efc6f6901a6967c3a42
+  local_readme_sha256: 224da69f332a4bfd068d3d0b8ee11b1e2295604fbd534ed9b9366fba62e3938e
+  source_audit_script: scripts/audit_mavd_traffic_source.py
+  source_audit_output: C:/CodexArtifacts/pretrained-reuse-r2/mavd-source-screen-01/source-audit.json
+  train_annotation_sha256: 7ec998fb8c579cbf22be51f36e699396eafe1f4671b53b09c6b5ee226463d761
+  validation_annotation_sha256: 89120b4386685995a9295671b86cdb1788b6005bd0b6b3cfb40cf6249adf41c5
+  test_annotation_archive_sha256: 1a1fcfff934a3c8175edec3921a15c6ee8ead07fcd4a13fe4f31beaa1f78233b
+  test_annotation_payloads_read: false
+  audio_video_media_downloaded_or_opened: false
+  split_audit: >-
+    Official TRAIN has 24 annotation files, VALIDATION 7, and TEST 16. TRAIN
+    and VALIDATION share three conservative site-day groups; TRAIN and
+    VALIDATION files also come only from the Rivera site, while TEST file names
+    identify three other sites. Test label contents were not read. The official
+    development split is not independent under site-day grouping and must not
+    be used for model selection without a new grouped split.
+  label_scope: >-
+    Audio event intervals use a hierarchical traffic ontology and may overlap.
+    The dataset does not provide an independently verified visual object/event
+    label for each audio interval in the base MAVD-traffic record. Audio/video
+    presence alone does not establish a both-required Decision task.
+  trust_limitation: >-
+    License metadata is CC BY 4.0 in the Zenodo API, the record README, and the
+    DCASE catalogue. Raw video was not inspected for people or license plates;
+    privacy and the product-specific media-use gate remain REVIEW.
