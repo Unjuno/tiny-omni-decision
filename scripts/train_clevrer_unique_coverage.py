@@ -66,11 +66,13 @@ def _read_json(path: Path) -> dict[str, Any]:
 def _validate_row_groups(
     baseline_train: list[dict[str, Any]],
     additional_train: list[dict[str, Any]],
+    baseline_validation: list[dict[str, Any]],
     validation: list[dict[str, Any]],
 ) -> dict[str, Any]:
     for name, rows in (
         ("baseline_train", baseline_train),
         ("additional_train", additional_train),
+        ("baseline_validation", baseline_validation),
         ("validation", validation),
     ):
         if not rows:
@@ -94,15 +96,29 @@ def _validate_row_groups(
 
     baseline_scenes = {int(row["scene_index"]) for row in baseline_train}
     additional_scenes = {int(row["scene_index"]) for row in additional_train}
+    baseline_validation_scenes = {
+        int(row["scene_index"]) for row in baseline_validation
+    }
     validation_scenes = {int(row["scene_index"]) for row in validation}
     baseline_media = {str(row["media_sha256"]) for row in baseline_train}
     additional_media = {str(row["media_sha256"]) for row in additional_train}
+    baseline_validation_media = {
+        str(row["media_sha256"]) for row in baseline_validation
+    }
     validation_media = {str(row["media_sha256"]) for row in validation}
     if baseline_scenes & additional_scenes or baseline_media & additional_media:
         raise ValueError("baseline and additional training identities overlap")
-    if (baseline_scenes | additional_scenes) & validation_scenes:
+    if baseline_scenes & baseline_validation_scenes:
+        raise ValueError("baseline train and validation scene identities overlap")
+    if baseline_media & baseline_validation_media:
+        raise ValueError("baseline train and validation media identities overlap")
+    if (
+        baseline_scenes | additional_scenes | baseline_validation_scenes
+    ) & validation_scenes:
         raise ValueError("training and validation scene identities overlap")
-    if (baseline_media | additional_media) & validation_media:
+    if (
+        baseline_media | additional_media | baseline_validation_media
+    ) & validation_media:
         raise ValueError("training and validation media identities overlap")
     if len({str(row["id"]) for row in baseline_train + additional_train}) != (
         len(baseline_train) + len(additional_train)
@@ -121,6 +137,12 @@ def _validate_row_groups(
             "scenes": len(baseline_scenes),
             "unique_media": len(baseline_media),
             "question_type_counts": counts(baseline_train),
+        },
+        "baseline_validation": {
+            "questions": len(baseline_validation),
+            "scenes": len(baseline_validation_scenes),
+            "unique_media": len(baseline_validation_media),
+            "question_type_counts": counts(baseline_validation),
         },
         "additional": {
             "questions": len(additional_train),
@@ -143,6 +165,8 @@ def _validate_row_groups(
         "baseline_additional_scene_overlap": 0,
         "train_validation_scene_overlap": 0,
         "train_validation_media_overlap": 0,
+        "baseline_validation_scene_overlap": 0,
+        "baseline_validation_media_overlap": 0,
         "train_question_content_overlap": len(
             {
                 (str(row["question"]).casefold().strip(), tuple(sorted(row["options"])))
@@ -154,6 +178,33 @@ def _validate_row_groups(
             }
         ),
     }
+
+
+def _validate_previous_scene_exclusions(
+    additional_train: list[dict[str, Any]],
+    validation: list[dict[str, Any]],
+    baseline_train: list[dict[str, Any]],
+    baseline_validation: list[dict[str, Any]],
+    previously_excluded: dict[str, list[int]],
+) -> None:
+    if set(previously_excluded) != {"train", "validation"}:
+        raise ValueError("previous scene exclusion report must contain both splits")
+    excluded_train = {int(scene) for scene in previously_excluded["train"]}
+    excluded_validation = {int(scene) for scene in previously_excluded["validation"]}
+    baseline_train_scenes = {int(row["scene_index"]) for row in baseline_train}
+    baseline_validation_scenes = {
+        int(row["scene_index"]) for row in baseline_validation
+    }
+    if not baseline_train_scenes <= excluded_train:
+        raise ValueError("previous-scene manifest omitted baseline training scenes")
+    if not baseline_validation_scenes <= excluded_validation:
+        raise ValueError("previous-scene manifest omitted baseline validation scenes")
+    additional_scenes = {int(row["scene_index"]) for row in additional_train}
+    validation_scenes = {int(row["scene_index"]) for row in validation}
+    if additional_scenes & excluded_train:
+        raise ValueError("additional training includes a previously used scene")
+    if validation_scenes & excluded_validation:
+        raise ValueError("new validation includes a previously used scene")
 
 
 def _load_feature_map(
@@ -353,16 +404,22 @@ def _bootstrap_difference(
                     ]
                 )
             )
-        probabilities = np.asarray([row["probabilities"] for row in rows], dtype=np.float64)
-        targets = np.asarray(
-            [row["options"].index(row["target"]) for row in rows], dtype=np.int64
-        )
         if key == "brier":
-            one_hot = np.eye(probabilities.shape[1], dtype=np.float64)[targets]
-            return float(np.square(probabilities - one_hot).sum(axis=1).mean())
+            losses = []
+            for row in rows:
+                probabilities = np.asarray(row["probabilities"], dtype=np.float64)
+                target = row["options"].index(row["target"])
+                one_hot = np.zeros_like(probabilities)
+                one_hot[target] = 1.0
+                losses.append(float(np.square(probabilities - one_hot).sum()))
+            return float(np.mean(losses))
         if key == "ece_15_bins":
-            confidence = probabilities.max(axis=1)
-            correct = probabilities.argmax(axis=1) == targets
+            confidence = np.asarray(
+                [max(row["probabilities"]) for row in rows], dtype=np.float64
+            )
+            correct = np.asarray(
+                [row["prediction"] == row["target"] for row in rows], dtype=bool
+            )
             ece = 0.0
             for index in range(15):
                 low, high = index / 15, (index + 1) / 15
@@ -644,7 +701,10 @@ def main() -> None:
         raise FileExistsError(f"refusing to overwrite output directory: {output}")
     config_bytes = config_path.read_bytes()
     config = json.loads(config_bytes)
-    if config.get("experiment_id") != "clevrer-videoprism-unique-scene-coverage-v1":
+    if config.get("experiment_id") not in {
+        "clevrer-videoprism-unique-scene-coverage-v1",
+        "clevrer-videoprism-unique-scene-coverage-v2",
+    }:
         raise ValueError("unexpected unique-coverage experiment config")
     if config.get("model", {}).get("video_checkpoint_sha256") != CHECKPOINT_SHA256:
         raise ValueError("pinned VideoPrism checkpoint differs from config")
@@ -658,9 +718,12 @@ def main() -> None:
         raise ValueError("CLEVRER revision differs from registered config")
 
     baseline_train = _load_rows(baseline_dir / "train.jsonl")
+    baseline_validation = _load_rows(baseline_dir / "validation.jsonl")
     additional_train = _load_rows(expanded_dir / "train.jsonl")
     validation = _load_rows(expanded_dir / "validation.jsonl")
-    counts = _validate_row_groups(baseline_train, additional_train, validation)
+    counts = _validate_row_groups(
+        baseline_train, additional_train, baseline_validation, validation
+    )
     expected = config["data"]
     if counts["baseline"]["scenes"] != expected["baseline_train_scenes"]:
         raise ValueError("baseline training scene count differs from frozen config")
@@ -671,10 +734,13 @@ def main() -> None:
     if counts["candidate"]["scenes"] != expected["candidate_total_train_scenes"]:
         raise ValueError("candidate training scene count differs from frozen config")
     previously_excluded = expanded_fetch.get("previous_scenes_excluded", {})
-    previously_used_validation = set(previously_excluded.get("validation", []))
-    validation_scene_ids = {int(row["scene_index"]) for row in validation}
-    if previously_used_validation & validation_scene_ids:
-        raise ValueError("fresh validation contains a previously excluded scene")
+    _validate_previous_scene_exclusions(
+        additional_train,
+        validation,
+        baseline_train,
+        baseline_validation,
+        previously_excluded,
+    )
 
     baseline_map = _load_feature_map(baseline_cache, baseline_report, baseline_dir)
     expanded_map = _load_feature_map(expanded_cache, expanded_report, expanded_dir)
@@ -854,6 +920,7 @@ def main() -> None:
         "expanded_sample": str(expanded_dir),
         "sample_hashes": {
             "baseline_train_jsonl": sha256_file(baseline_dir / "train.jsonl"),
+            "baseline_validation_jsonl": sha256_file(baseline_dir / "validation.jsonl"),
             "baseline_fetch_report": sha256_file(baseline_dir / "fetch-report.json"),
             "expanded_train_jsonl": sha256_file(expanded_dir / "train.jsonl"),
             "validation_jsonl": sha256_file(expanded_dir / "validation.jsonl"),

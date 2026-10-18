@@ -5,7 +5,7 @@ np = pytest.importorskip("numpy")
 pytest.importorskip("transformers")
 pytest.importorskip("av")
 
-from scripts.fetch_clevrer_probe import choose  # noqa: E402
+from scripts.fetch_clevrer_probe import choose, choose_validation  # noqa: E402
 from scripts.train_frozen_video_probe import _uniform_indices, _video_features  # noqa: E402
 
 
@@ -70,6 +70,35 @@ def test_validation_scene_selector_excludes_train_question_content():
     }
 
     assert not train_content & validation_content
+
+
+def test_validation_template_overlap_can_be_allowed_while_scene_groups_stay_disjoint():
+    train = choose(_rows(), "train", per_type=2, seed=17)
+    train_content = {
+        (row["question"].casefold().strip(), tuple(sorted(row["options"]))) for row in train
+    }
+    validation_rows = [
+        {**row, "scene_index": int(row["scene_index"]) + 10_000}
+        for row in _rows()
+    ]
+
+    validation = choose_validation(
+        validation_rows,
+        per_type=2,
+        seed=17,
+        train_content=train_content,
+        excluded_scenes=set(),
+        allow_question_template_overlap=True,
+    )
+
+    assert {row["scene_index"] for row in validation}.isdisjoint(
+        {row["scene_index"] for row in train}
+    )
+    validation_content = {
+        (row["question"].casefold().strip(), tuple(sorted(row["options"])))
+        for row in validation
+    }
+    assert train_content & validation_content
 
 
 def test_scene_selector_excludes_previously_consumed_scenes_deterministically():

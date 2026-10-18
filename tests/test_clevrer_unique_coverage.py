@@ -6,6 +6,7 @@ from scripts.train_clevrer_unique_coverage import (
     _group_metrics,
     _sample_batches,
     _sampler_audit,
+    _validate_previous_scene_exclusions,
     _validate_row_groups,
 )
 
@@ -33,25 +34,86 @@ def _scene(scene: int, *, split: str = "train") -> list[dict]:
 def test_group_accounting_keeps_scenes_and_media_disjoint() -> None:
     baseline = _scene(1) + _scene(2)
     additional = _scene(3) + _scene(4)
+    baseline_validation = _scene(7, split="validation") + _scene(8, split="validation")
     validation = _scene(5, split="validation") + _scene(6, split="validation")
 
-    report = _validate_row_groups(baseline, additional, validation)
+    report = _validate_row_groups(baseline, additional, baseline_validation, validation)
 
     assert report["baseline"]["scenes"] == 2
     assert report["additional"]["scenes"] == 2
     assert report["candidate"]["scenes"] == 4
+    assert report["baseline_validation"]["scenes"] == 2
     assert report["validation"]["scenes"] == 2
     assert report["baseline_additional_scene_overlap"] == 0
     assert report["train_validation_media_overlap"] == 0
 
 
+def test_paired_bootstrap_supports_variable_option_counts() -> None:
+    baseline = [
+        {
+            "id": "q1", "scene_index": 1, "question_type": "static_descriptive",
+            "options": ["0", "1"], "target": "1", "prediction": "1",
+            "probabilities": [0.2, 0.8],
+        },
+        {
+            "id": "q2", "scene_index": 2, "question_type": "temporal_descriptive",
+            "options": ["before", "same", "after"], "target": "after",
+            "prediction": "same", "probabilities": [0.1, 0.6, 0.3],
+        },
+        {
+            "id": "q3", "scene_index": 1, "question_type": "temporal_descriptive",
+            "options": ["before", "same", "after"], "target": "before",
+            "prediction": "before", "probabilities": [0.7, 0.2, 0.1],
+        },
+        {
+            "id": "q4", "scene_index": 2, "question_type": "static_descriptive",
+            "options": ["0", "1"], "target": "0", "prediction": "0",
+            "probabilities": [0.9, 0.1],
+        },
+    ]
+    candidate = [
+        {**baseline[0], "prediction": "0", "probabilities": [0.6, 0.4]},
+        {**baseline[1], "prediction": "after", "probabilities": [0.1, 0.2, 0.7]},
+        {**baseline[2], "prediction": "before", "probabilities": [0.8, 0.1, 0.1]},
+        {**baseline[3], "prediction": "1", "probabilities": [0.3, 0.7]},
+    ]
+
+    result = _bootstrap_difference(baseline, candidate, resamples=20, seed=17)
+
+    assert result["groups"] == 2
+    assert result["candidate_minus_baseline"]["all"]["brier"]["point"] == pytest.approx(0.2)
+
+
 def test_group_accounting_rejects_validation_scene_reuse() -> None:
     baseline = _scene(1)
     additional = _scene(2)
+    baseline_validation = _scene(7, split="validation")
     validation = _scene(2, split="validation")
 
     with pytest.raises(ValueError, match="scene identities overlap"):
-        _validate_row_groups(baseline, additional, validation)
+        _validate_row_groups(baseline, additional, baseline_validation, validation)
+
+
+def test_previous_scene_gate_requires_baseline_scenes_and_rejects_reuse() -> None:
+    baseline_train = _scene(10)
+    additional = _scene(11)
+    baseline_validation = _scene(10_010, split="validation")
+    validation = _scene(10_011, split="validation")
+    exclusions = {"train": [10], "validation": [10_010]}
+
+    _validate_previous_scene_exclusions(
+        additional, validation, baseline_train, baseline_validation, exclusions
+    )
+
+    with pytest.raises(ValueError, match="omitted baseline training"):
+        _validate_previous_scene_exclusions(
+            additional, validation, baseline_train, baseline_validation,
+            {"train": [], "validation": [10_010]},
+        )
+    with pytest.raises(ValueError, match="previously used scene"):
+        _validate_previous_scene_exclusions(
+            baseline_train, validation, baseline_train, baseline_validation, exclusions
+        )
 
 
 def test_step_sampler_is_deterministic_and_covers_each_complete_pass() -> None:

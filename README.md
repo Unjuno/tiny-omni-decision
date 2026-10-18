@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
+scenes from 256 to 768 improved selected pooled development Accuracy and NLL
+at the same 2,048-update budget, primarily on static descriptive questions.
+Temporal improvement remains uncertain; validation shares repeated question
+templates and is not a blind audit. No product promotion.
+[Full results and limits](docs/pretrained_reuse/CLEVRER_UNIQUE_COVERAGE_V2_RESULTS.md).
+
 **2026-10-18 text-free CLEVRER temporal probe completed:** A matched 2,048-update
 mean-MLP/BiLSTM comparison completed on 512 unique train questions and 400
 development validation questions. Best-selected BiLSTM improves temporal NLL

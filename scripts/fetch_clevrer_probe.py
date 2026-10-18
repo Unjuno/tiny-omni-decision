@@ -168,6 +168,24 @@ def choose(
     return sorted(selected, key=lambda item: (item["scene_index"], item["question_id"]))
 
 
+def choose_validation(
+    rows: list[dict[str, Any]],
+    per_type: int,
+    seed: int,
+    train_content: set[tuple[str, tuple[str, ...]]],
+    excluded_scenes: set[int],
+    allow_question_template_overlap: bool = False,
+) -> list[dict[str, Any]]:
+    return choose(
+        rows,
+        "validation",
+        per_type,
+        seed,
+        excluded_content=None if allow_question_template_overlap else train_content,
+        excluded_scenes=excluded_scenes,
+    )
+
+
 def _args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--train-questions", type=Path, required=True)
@@ -180,6 +198,14 @@ def _args() -> argparse.Namespace:
         "--exclude-scenes-json",
         type=Path,
         help="optional JSON mapping train/validation to excluded scene IDs",
+    )
+    parser.add_argument(
+        "--allow-question-template-overlap",
+        action="store_true",
+        help=(
+            "allow normalized question templates across scene-disjoint splits; "
+            "the report counts shared templates"
+        ),
     )
     return parser.parse_args()
 
@@ -227,18 +253,19 @@ def main() -> None:
     train_content = {
         (row["question"].casefold().strip(), tuple(sorted(row["options"]))) for row in train
     }
-    validation = choose(
+    validation = choose_validation(
         val_rows,
-        "validation",
         args.validation_per_type,
         args.seed,
-        excluded_content=train_content,
-        excluded_scenes=excluded_scenes["validation"],
+        train_content,
+        excluded_scenes["validation"],
+        allow_question_template_overlap=args.allow_question_template_overlap,
     )
     validation_content = {
         (row["question"].casefold().strip(), tuple(sorted(row["options"]))) for row in validation
     }
-    if train_content & validation_content:
+    question_content_overlap = train_content & validation_content
+    if question_content_overlap and not args.allow_question_template_overlap:
         raise ValueError("normalized CLEVRER question content overlaps across splits")
     train_scenes = {item["scene_index"] for item in train}
     val_scenes = {item["scene_index"] for item in validation}
@@ -336,7 +363,15 @@ def main() -> None:
         "train_scene_count": len(train_scenes),
         "validation_scene_count": len(val_scenes),
         "scene_overlap": 0,
-        "normalized_question_content_overlap": 0,
+        "normalized_question_content_overlap": len(question_content_overlap),
+        "validation_rows_with_shared_question_template": sum(
+            (
+                str(row["question"]).casefold().strip(),
+                tuple(sorted(row["options"])),
+            ) in train_content
+            for row in validation
+        ),
+        "question_template_overlap_allowed": args.allow_question_template_overlap,
         "media_hash_overlap": 0,
         "previous_scenes_excluded": {
             split: sorted(PREVIOUSLY_USED_SCENES[split] | excluded_scenes[split])
@@ -356,7 +391,10 @@ def main() -> None:
         "limitations": [
             "selected media hashes are verified; SHA-256 is not computed over either full "
             "video archive"
-        ],
+        ] + ([
+            "normalized question templates repeat across train and validation; "
+            "scene and media identities remain disjoint"
+        ] if question_content_overlap else []),
     }
     (output / "fetch-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))

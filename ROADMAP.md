@@ -57,6 +57,15 @@ interrupted or modified. The current AV corpus still has no admitted
 both-required paired task, and R0 device/task acceptance criteria remain open.
 See the [dated audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261018.md).
 
+**2026-10-18 CLEVRER unique-scene coverage comparison completed:** At a fixed
+2,048 updates, expanding the frozen VideoPrism + MiniLM readout's train pool
+from 256 to 768 unique scenes improved selected macro Accuracy 38.9%→45.9%
+and NLL 1.183→1.132 on the same 256-scene development validation set. Paired
+scene-bootstrap intervals support the pooled change, driven by static
+descriptive questions; temporal metrics remain uncertain. Exact question
+templates recur across scenes, so this is not template-independent or blind
+validation. No promotion; [full results and retained failures](docs/pretrained_reuse/CLEVRER_UNIQUE_COVERAGE_V2_RESULTS.md).
+
 **2026-10-18 text-free CLEVRER temporal probe completed:** One fixed-seed
 mean-MLP/BiLSTM comparison completed 2,048 updates per arm. Selected temporal
 NLL/Brier modestly favor BiLSTM; its Accuracy difference is uncertain, static

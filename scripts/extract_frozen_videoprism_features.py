@@ -35,7 +35,12 @@ def uniform_indices(frame_count: int, requested: int = FRAME_COUNT) -> list[int]
     return [round(index * step) for index in range(requested)]
 
 
-def validate_split_rows(train: list[dict[str, Any]], validation: list[dict[str, Any]]) -> None:
+def validate_split_rows(
+    train: list[dict[str, Any]],
+    validation: list[dict[str, Any]],
+    *,
+    allow_question_template_overlap: bool = False,
+) -> int:
     for name, rows in (("train", train), ("validation", validation)):
         if not rows or any(row.get("split") != name for row in rows):
             raise ValueError(f"empty or incorrectly marked {name} split")
@@ -60,8 +65,10 @@ def validate_split_rows(train: list[dict[str, Any]], validation: list[dict[str, 
     val_content = {
         (row["question"].casefold().strip(), tuple(sorted(row["options"]))) for row in validation
     }
-    if train_content & val_content:
+    overlap = train_content & val_content
+    if overlap and not allow_question_template_overlap:
         raise ValueError("normalized question content overlaps between splits")
+    return len(overlap)
 
 
 def _args() -> argparse.Namespace:
@@ -72,6 +79,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--expected-sha256", default=CHECKPOINT_SHA256)
     parser.add_argument("--temporal-order", choices=("forward", "reverse"), default="forward")
+    parser.add_argument("--allow-question-template-overlap", action="store_true")
     return parser.parse_args()
 
 
@@ -149,7 +157,11 @@ def main() -> None:
         raise ValueError(f"unexpected VideoPrism source commit: {upstream_commit}")
     train = _read_rows(sample_dir / "train.jsonl")
     validation = _read_rows(sample_dir / "validation.jsonl")
-    validate_split_rows(train, validation)
+    question_content_overlap = validate_split_rows(
+        train,
+        validation,
+        allow_question_template_overlap=args.allow_question_template_overlap,
+    )
     for rows in (train, validation):
         for row in rows:
             media = sample_dir / row["media_path"]
@@ -245,6 +257,8 @@ def main() -> None:
         "jax_version": jax.__version__,
         "devices": [str(device) for device in jax.devices()],
         "validation_scene_overlap": 0,
+        "normalized_question_content_overlap": question_content_overlap,
+        "question_template_overlap_allowed": args.allow_question_template_overlap,
     }
     (output_dir / "cache-report.json").write_text(
         json.dumps(cache_report, indent=2) + "\n", encoding="utf-8"
