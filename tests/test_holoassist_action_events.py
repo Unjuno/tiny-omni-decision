@@ -136,6 +136,18 @@ def test_av_validation_gate_requires_exact_selected_media_hashes() -> None:
             },
         )
 
+    report["media"].append(report["media"][0])
+    with pytest.raises(ValueError, match="missing or duplicate"):
+        validate_av_validation_report(
+            report,
+            selection_sha256="selection",
+            media_manifest_sha256="manifest",
+            expected_media={
+                ("train", "tr-1", "sha-tr"),
+                ("validation", "va-1", "sha-va"),
+            },
+        )
+
 
 def test_builder_verifies_media_sha_before_emitting_rows(tmp_path) -> None:
     records, splits, selected, files, media_root = fixture(tmp_path)

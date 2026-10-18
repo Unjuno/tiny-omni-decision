@@ -63,6 +63,8 @@ def validate_av_validation_report(
         for row in rows
         if isinstance(row, dict)
     }
+    if len(rows) != len(expected_media) or len(validated) != len(rows):
+        raise ValueError("AV validation report has missing or duplicate media rows")
     if validated != expected_media:
         raise ValueError("AV validation report does not exactly cover selected media hashes")
 
