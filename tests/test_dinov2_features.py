@@ -1,7 +1,6 @@
 import numpy as np
 import pytest
 
-from tiny_omni_decision.cellwise_readout import CellwiseCandidateScorer, trainable_parameter_count
 from tiny_omni_decision.dinov2_features import (
     cls_patch_mean,
     readout_features,
@@ -62,7 +61,11 @@ def test_split_identity_rejections():
 
 
 def test_cellwise_candidate_scorer_parameter_count_and_candidate_shape():
-    import torch
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.cellwise_readout import (
+        CellwiseCandidateScorer,
+        trainable_parameter_count,
+    )
 
     scorer = CellwiseCandidateScorer()
     assert trainable_parameter_count(scorer) == 180736
@@ -71,7 +74,8 @@ def test_cellwise_candidate_scorer_parameter_count_and_candidate_shape():
 
 
 def test_cellwise_candidate_scorer_rejects_bad_width():
-    import torch
+    torch = pytest.importorskip("torch")
+    from tiny_omni_decision.cellwise_readout import CellwiseCandidateScorer
 
     with pytest.raises(ValueError):
         CellwiseCandidateScorer()(torch.zeros(1, 6911))
