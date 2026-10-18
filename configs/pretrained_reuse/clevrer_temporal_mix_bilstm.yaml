@@ -51,6 +51,7 @@ training:
   loss_weighting: realized 20/30/30/20 task mix, unweighted examples
   selector: minimum validation macro question-type NLL; ties keep earlier epoch
   early_stopping: false
+  deterministic_algorithms: true
   bootstrap_replicates: 10000
   bootstrap_seed: 17
 outputs:

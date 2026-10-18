@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
+import platform
 import random
 import subprocess
 import time
@@ -623,6 +625,8 @@ def main() -> None:
     args = parser.parse_args()
     config_path = args.config.resolve(strict=True)
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    if config["training"].get("deterministic_algorithms") is not True:
+        raise ValueError("this run requires deterministic PyTorch algorithms")
     if (
         config["training"]["epochs"]
         * (
@@ -695,6 +699,9 @@ def main() -> None:
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
+    torch.use_deterministic_algorithms(True)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
     torch.cuda.reset_peak_memory_stats(device)
     model_path = Path(config["text_encoder"]["model_path"]).resolve(strict=True)
     text_started = time.perf_counter()
@@ -838,8 +845,12 @@ def main() -> None:
             "device": str(device),
             "gpu_name": torch.cuda.get_device_name(device),
             "peak_vram_bytes": torch.cuda.max_memory_allocated(device),
+            "peak_vram_reserved_bytes": torch.cuda.max_memory_reserved(device),
             "torch_version": torch.__version__,
             "cuda_version": torch.version.cuda,
+            "python_version": platform.python_version(),
+            "transformers_version": importlib.metadata.version("transformers"),
+            "deterministic_algorithms": True,
         },
         "variants": {"text_only": text_result, "videoprism_bilstm_text": temporal_result},
         "paired_validation_scene_bootstrap": paired_bootstrap,

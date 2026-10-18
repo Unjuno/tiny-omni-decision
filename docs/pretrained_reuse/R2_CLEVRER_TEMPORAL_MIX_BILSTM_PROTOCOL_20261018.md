@@ -48,6 +48,8 @@ this experiment's component only, not the full product model.
 - 64 epochs, batch size 32 questions, no performance early stopping; at most
   2,048 optimizer updates per arm.
 - Each frozen training row is visited once per epoch, shuffled with seed 17.
+- PyTorch deterministic algorithms and deterministic cuDNN mode are enabled;
+  the GPU gate sets `CUBLAS_WORKSPACE_CONFIG=:4096:8` before the child starts.
 - Checkpoint selection is minimum validation macro question-type NLL; strict
   ties retain the earlier epoch. Final and selected checkpoints are saved
   separately, and the selected checkpoint is reloaded and compared exactly.
