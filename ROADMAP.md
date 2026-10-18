@@ -26,6 +26,15 @@ partial run out of quality comparisons. Resume only after GPU preflight reports
 no other compute process; do not start a new training run for this diagnostic.
 [Execution log and next step](docs/pretrained_reuse/R2_AV_GATE_PARAMETER_AND_INPUT_DIAGNOSTIC_20261018.md).
 
+**2026-10-18 diagnostic completion update:** the authorized frozen E0G1
+replacement scorer completed in attempt 14 after the GPU-aware runner change.
+All 44,375 forwards, 17,750 self-replacement checks, and 2,755 input / 1,120
+source pin checks passed. Its predictions and sensitivity summaries exactly
+reproduce attempt 11. Replacement sensitivity is not correctness or evidence
+that AV information improves decisions; the planned query-only versus AV-evidence
+quality distinction remains unresolved. Do not start the next GPU diagnostic
+while Orbitune occupies 15,821 / 16,384 MiB. [Reproducible result and limits](docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is
