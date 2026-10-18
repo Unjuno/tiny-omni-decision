@@ -45,6 +45,16 @@ remain explicit. The audit is in `scripts/audit_perception_av_correspondence.py`
 results and source/grouping limits in
 [`R2_PERCEPTION_AV_CORRESPONDENCE_FEASIBILITY_20261018.md`](docs/pretrained_reuse/R2_PERCEPTION_AV_CORRESPONDENCE_FEASIBILITY_20261018.md).
 
+**2026-10-18 AV event-source selection:** froze a separate audio-event to
+visible-object-track task and a fresh 400 TRAIN / 400 development-VALID video
+media plan. Candidate proposals are annotation-provided (conditional source
+selection, not autonomous detection); official VALID annotations were already
+inspected and are not blind. Plan hash, split isolation, exclusions and
+evaluation controls are documented in
+[`R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md`](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md).
+Media acquisition and model evaluation have not started; no quality result is
+claimed.
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is
