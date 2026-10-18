@@ -34,6 +34,16 @@ evidence only. Replacement sensitivity is not correctness or evidence that AV
 information improves decisions; query-only versus AV-evidence quality remains
 unresolved. [Reproducible result and limits](docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
 
+**2026-10-18 saved-output ablation quality:** post-process the attempt-15 natural
+logits for baseline, query-only correction and full residual on the same 8,875
+development-validation questions. Full residual and query-only predictions
+have identical Accuracy (0.67076) and near-identical NLL/Brier; the AV residual
+adds no measurable decision change. Query-only is 1.07pp below baseline
+Accuracy, with mixed calibration/loss tradeoffs and a 3.26pp Reaction Accuracy
+drop. This uses existing saved inference, not a new GPU run; it is
+post-selection validation, not blind quality evidence. [Metrics, grouped
+uncertainty and hashes](docs/pretrained_reuse/R2_AV_ABLATION_QUALITY_20261018.md).
+
 **2026-10-18 Perception Test task feasibility:** a pinned TRAIN-only CPU audit
 retained all 25,757 sound segments and found 2,551 candidate events across
 1,129 videos using a fixed, label-blind midpoint-frame rule. Options are
