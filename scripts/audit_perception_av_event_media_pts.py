@@ -55,6 +55,31 @@ def event_window_from_pts(frame_times, frame_durations, frame_interval):
     return start, end
 
 
+def event_window_from_pts_with_single_frame_tail_censor(
+    frame_times, frame_durations, frame_interval
+):
+    """Allow one absent annotated tail frame and report that right-censoring.
+
+    This is an explicit media-boundary policy: only an interval whose inclusive
+    end is exactly one frame beyond the decoded stream can be clipped to the
+    actual media end. All other invalid intervals remain fail-closed.
+    """
+    start_idx, end_idx = frame_interval
+    if end_idx == len(frame_times) and 0 <= start_idx < len(frame_times):
+        if len(frame_durations) != len(frame_times):
+            raise ValueError("decoded video frame timestamps/durations differ in length")
+        duration = frame_durations[-1]
+        if duration is None or duration <= 0:
+            raise ValueError("last decoded frame has no duration for tail censoring")
+        start = frame_times[start_idx]
+        end = frame_times[-1] + duration
+        if not (math.isfinite(start) and math.isfinite(end) and end > start):
+            raise ValueError("decoded censored event PTS window is invalid")
+        return start, end, True
+    start, end = event_window_from_pts(frame_times, frame_durations, frame_interval)
+    return start, end, False
+
+
 def overlap_samples(event_start, event_end, audio_start, audio_end, sample_rate):
     if sample_rate <= 0 or event_end <= event_start or audio_end <= audio_start:
         raise ValueError("invalid audio/event time interval")
@@ -159,7 +184,7 @@ def audit_split(split, source_root, media_dir, plan):
         timing = decode_timing(path)
         metadata = selected_rows[video_id]["metadata"]
         for event in events_by_video[video_id]:
-            start, end = event_window_from_pts(
+            start, end, right_censored = event_window_from_pts_with_single_frame_tail_censor(
                 timing["video_frame_times"],
                 timing["video_frame_durations"],
                 event["frame_interval"],
@@ -178,6 +203,8 @@ def audit_split(split, source_root, media_dir, plan):
                     "frame_interval": event["frame_interval"],
                     "selected_frame": event["selected_frame"],
                     "candidate_count": len(event["candidate_track_ids"]),
+                    "right_censored_at_media_end": right_censored,
+                    "right_censored_annotated_frames": int(right_censored),
                     "event_start_seconds": start,
                     "event_end_seconds": end,
                     "audio_sample_start": sample_start,
@@ -211,7 +238,12 @@ def audit_split(split, source_root, media_dir, plan):
         raise ValueError("complete media inventory lacks terminal acquisition receipt")
     return {
         "split": split,
-        "status": manifest["status"],
+        "status": (
+            "PASS_WITH_EXPLICIT_RIGHT_CENSOR"
+            if any(record["right_censored_at_media_end"] for record in records)
+            else "PASS"
+        ),
+        "acquisition_status": manifest["status"],
         "source_hashes": source_hashes,
         "media_manifest_sha256": manifest_sha256,
         "acquired_videos": len(clips),
@@ -225,6 +257,9 @@ def audit_split(split, source_root, media_dir, plan):
         ),
         "partial_audio_overlap_events": sum(
             record["audio_coverage_fraction"] < 1 for record in records
+        ),
+        "right_censored_tail_events": sum(
+            record["right_censored_at_media_end"] for record in records
         ),
         "minimum_audio_coverage_fraction": min(
             (record["audio_coverage_fraction"] for record in records), default=None

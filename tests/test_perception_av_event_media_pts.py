@@ -1,5 +1,6 @@
 import pytest
 
+import scripts.audit_perception_av_event_media_pts as pts
 from scripts.audit_perception_av_event_media_pts import (
     event_window_from_pts,
     load_pinned_media_manifest,
@@ -28,6 +29,20 @@ def test_bad_or_missing_frame_duration_fails_closed():
         event_window_from_pts([0.0], [0.1], [1, 1])
     with pytest.raises(ValueError, match="no duration"):
         event_window_from_pts([0.0, 0.1], [0.1, None], [1, 1])
+
+
+def test_single_missing_annotated_tail_frame_is_explicitly_censored_at_media_end():
+    start, end, right_censored = pts.event_window_from_pts_with_single_frame_tail_censor(
+        [0.0, 0.1, 0.23], [0.1, 0.13, 0.11], [1, 3]
+    )
+    assert start == pytest.approx(0.1)
+    assert end == pytest.approx(0.34)
+    assert right_censored is True
+
+    with pytest.raises(ValueError, match="outside decoded video"):
+        pts.event_window_from_pts_with_single_frame_tail_censor(
+            [0.0, 0.1, 0.23], [0.1, 0.13, 0.11], [1, 4]
+        )
 
 
 def test_audio_window_maps_to_clamped_sample_offsets():

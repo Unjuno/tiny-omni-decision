@@ -520,6 +520,58 @@ event remains waiting for media. This closes the TRAIN crop-join gate only.
   it loaded no model, did no training, evaluated no quality, and opened no TEST
   data.
 
-The VALID acquisition and crop-join audit, plus complete two-split decoded PTS
-and leakage checks, remain required before any feature extraction or readout
-fit.
+The VALID acquisition/crop-join and complete two-split decoded PTS gates are
+recorded below. Cross-split media-identity overlap is zero; see the complete
+PTS audit section before feature extraction or readout fitting.
+
+## Complete two-split PTS and event-boundary audit (2026-10-18)
+
+After both acquisitions reached terminal success, the strict full PTS audit
+stopped on TRAIN `video_4792`, event `sound_id=16`: the annotation interval is
+inclusive `[866, 930]`, but PyAV decodes 930 frames (indices 0–929). The
+acquired file matches the pinned archive/member CRC and SHA-256
+`8a2a3b0716d53b9b859f8d811ab3280c77e48bc9cefefb1739add965548f91af`; its
+annotated metadata reports 931 frames. The selected image frame 900 is
+present. The cause (annotation/media boundary discrepancy versus decoder
+behavior) is unresolved because no independent FFmpeg/ffprobe executable was
+available; TorchVision used the same PyAV decoder and was not an independent
+check.
+
+A separate full-manifest CPU diagnostic continued through all events instead
+of aborting at the first boundary error. It verified media hashes and decoded
+all 400 TRAIN and 400 development-VALID videos. The immutable input pins were:
+
+- Plan SHA-256: `9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25`
+- TRAIN manifest snapshot SHA-256: `5ac15ab7ef7efda29a803f783b4a3a13fd3895ebaecbdf9c9c7e0282b9195918`
+- VALID manifest snapshot SHA-256: `26d941165f30922d17a528225a004d7eaa1522f5ca557a16f8512e319f0fb6b4`
+- Annotation/cut source hashes are preserved in the complete diagnostic receipt.
+
+| Split | Videos decoded | Candidate events | Normal PTS windows | One-frame right-censored | Zero/partial audio coverage | Videos with metadata frame-count difference |
+|---|---:|---:|---:|---:|---:|---:|
+| TRAIN | 400/400 | 818 | 817 | 1 | 0 / 0 | 12 |
+| Development VALID | 400/400 | 901 | 901 | 0 | 0 / 0 | 14 |
+
+The one TRAIN boundary event can be represented without inventing frames by
+using the actual decoded video end as the exclusive event endpoint and
+recording `right_censored_at_media_end=true` and one missing annotated frame.
+This yields the decoded interval `[28.6897466, 30.8100050]` seconds and 100%
+overlap with actual audio samples `[1377108, 1478880)`. This is an explicit,
+reviewable right-censor policy, not silent clipping or event removal. Any
+interval extending more than one frame beyond the decoded media, or starting
+outside the media, still fails closed. All other 1,717 event windows were
+within decoded video PTS and had 100% audio coverage. TRAIN and VALID have
+zero overlapping media SHA-256 identities.
+
+The narrow right-censor helper is separate from the strict window function;
+it returns an explicit flag and has regression tests for the one-frame case
+and larger overruns. A complete diagnostic receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-pts-all-diagnostic-01\result.json`
+(SHA-256
+`84caf4ad089dc6d5ed0aa4fc6ebce2014201031fa31d53b040be9fad0ed217ed`); its
+standalone runner SHA-256 is
+`e8a521d808f6905fb357091b280f4a702b56a26d2c527a699c67dbd4e3512572`. It ran
+with Python 3.11.9 / PyAV 18.1.0 and decoded media on CPU. It loaded no model,
+did no training or GPU evaluation, and opened no TEST data. The receipt
+preserves each event's ID, candidate count, source media hash, decoded and
+metadata frame counts, PTS window or boundary status, and audio coverage. No
+feature extraction or readout fitting has yet been performed.
