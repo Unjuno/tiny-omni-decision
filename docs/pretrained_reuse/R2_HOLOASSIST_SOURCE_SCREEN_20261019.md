@@ -116,11 +116,11 @@ audio decode end. This is source-format/timing proof for one recording, not
 task-quality evidence or proof that all sessions are aligned. The full fixed
 36.12 GB pitch-shifted selection is now downloading into a separate attempt
 directory with per-file range/ETag/size/SHA checks. The latest observed
-progress is 99/367 files (9,857,496,961 bytes, observed 2026-10-18 23:21:54
+progress is 123/367 files (12,299,956,688 bytes, observed 2026-10-18 23:34:00
 UTC); this is not the final receipt. A read-only partial-journal audit matched
-all 99 unique records to the pinned selection, archive ETag, planned sizes,
+all 123 unique records to the pinned selection, archive ETag, planned sizes,
 expected output paths, and on-disk file sizes; it found zero identity errors.
-The audit did not re-hash the media contents, and 268 selected files remain
+The audit did not re-hash the media contents; 244 selected files remain
 unlogged.
 The repository extraction decoder was also exercised on the verified probe:
 the first causal 30-second window yielded 480,000 finite 16 kHz audio samples
@@ -128,9 +128,9 @@ the first causal 30-second window yielded 480,000 finite 16 kHz audio samples
 verifies timestamped PyAV decode/resampling and 8-frame selection for one
 window only; it is not a full bank or encoder-quality result.
 
-Feature extraction, event decoding, and dataset training or quality evaluation
-have not run. C: had over 200 GB free; no cloud compute was used. GPU execution
-was only through the local HotUGPU guard. The CPU JAX VideoPrism path decoded a
+Full-corpus feature extraction, event decoding, and dataset training or task
+quality evaluation have not run. C: had over 200 GB free; no cloud compute was
+used. GPU execution was only through the local HotUGPU guard. The CPU JAX VideoPrism path decoded a
 selected train MP4 and returned finite `[1, 2048, 768]` tokens. A later
 pitch-shifted-video smoke sampled eight frames from the first 30 seconds and
 returned finite `[1, 2048, 768]` tokens; the 504x896 decoded frames were
@@ -203,6 +203,18 @@ the shared HotUGPU preflight and fails closed on an occupied GPU unless the
 reservation handoff is valid. CPU tests cover progress reload/mismatch and
 the HotUGPU telemetry path. The decoder has only been smoke-tested on one
 training session; no full feature bank has been produced.
+
+The committed Whisper encoder path was then exercised end to end through the
+shared HotUGPU wrapper on the same verified train recording and first 30-second
+window. It produced one finite 384D vector in 0.547 seconds of extraction
+loop time (190,619,136 bytes peak allocated, 211,812,352 bytes reserved); the
+saved feature reloaded and matched SHA-256
+`8532f85881c5c6cc65c54edec902077516b586b06a05b70c76f237417bfbfd92`. The full
+GPU reservation was 3,200 MiB. A Windows allocator warning said
+`expandable_segments` is unsupported; the run completed. This remains a
+single-window systems smoke, not task-quality evidence or a real feature bank.
+The output is preserved in
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-extractor-audio-smoke-attempt-01`.
 
 Metadata-only window preflight on the fixed pilot yields 1,551 train / 1,977
 validation windows (median sequence lengths 8 / 7). Of these, 1,464 / 1,896
