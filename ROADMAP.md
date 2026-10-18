@@ -16,13 +16,18 @@ selection/evaluation. No media or challenge-test archive was fetched; AVA
 remains REVIEW pending rights, schema, and clean validation resolution. See
 the [audit](docs/pretrained_reuse/R2_AVA_ACTIVE_SPEAKER_LABEL_AUDIT_20261019.md).
 
-**2026-10-19 R2 direct no-text probe reconciliation:** Existing Path A probes
-cover audio, image, video and sensor alone; screen-only remains the missing
-M-0/M-1 input. These are narrow development tasks, not a unified-product pass:
-audio Accuracy is 96.56% but ECE-15 is 0.1515; CLEVR-4 image macro Accuracy is
-88.30%; CLEVRER video macro Accuracy is 42.00%; HARTH sensor Accuracy is
-93.87% but Balanced Accuracy is 69.80% on only three validation subjects.
-Keep each task and its uncertainty separate. See the [audio](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_DECISION_20261017.md),
+**2026-10-19 R2 direct no-text probe reconciliation:** Path A has standalone
+audio, image, video and sensor probes, plus screen-region category probes.
+The screen results use oracle-localized crops and coarse labels; the expanded
+DINOv2 probe reaches 41.36% Accuracy / 27.31% Balanced Accuracy, below a
+48.69% train-frequency-prior Accuracy, while TinyCLIP has near-chance balanced
+recall. This is a failed screen-perception prerequisite, not a native full-screen
+action-selection pass; screen M1-U remains unproven. These are narrow development
+tasks, not a unified-product pass: audio Accuracy is 96.56% but ECE-15 is 0.1515;
+CLEVR-4 image macro Accuracy is 88.30%; CLEVRER video macro Accuracy is 42.00%;
+HARTH sensor Accuracy is 93.87% but Balanced Accuracy is 69.80% on only three
+validation subjects. Keep each task and its uncertainty separate. See the [screen-region](docs/pretrained_reuse/R2M_SCREEN_CLASSIFIER_RESULTS_20261012.md),
+[audio](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_DECISION_20261017.md),
 [image](docs/pretrained_reuse/R2_TEXTFREE_IMAGE_DECISION_20261017.md),
 [video](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_TEMPORAL_RESULTS_20261018.md),
 and [sensor](docs/pretrained_reuse/R2M_SENSOR_SUBJECT_RESULTS_20261012.md)
@@ -1144,7 +1149,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 **Mandatory design correction — R2-M modality-native and sensor-inclusive fusion experiments (2026-10-12).** This is the next architecture/evaluation workstream, superseding the earlier text-question-first assumption. See [R2-M experiment protocol](docs/pretrained_reuse/R2_MODALITY_NATIVE_FUSION_PROTOCOL_20261012.md). The independently scoped <=10M audio-only experiment was **withdrawn by the user on 2026-10-12**, not put on hold. The archived research proposal is retained solely for provenance, and its training, deployment and integration work are no longer active. The main <=200M Omni model still includes native audio as a required modality. All preserved legacy experiments remain valid in their original scope.
 
 - [ ] **M-0/M-1:** Build direct text-free audio-only, video-only, image-only, screen-only and sensor-only decision probes (plus text-only control) with typed action/option IDs, time/unit/missingness metadata, and no hidden text question or mandatory text encoder. Treat existing Audio+Text, Video+Text and sensor-embedding-only results as *non-equivalent* controls.
-  Direct text-free audio, image, video and sensor probes now exist, but their narrow-task results do not meet the overall quality gate and screen-only remains unimplemented. CLEVR-4 image taxonomy: seed-17 512-epoch run selected at epoch 502 reached 88.30% macro Accuracy on an internal split of official training images; count was 58.19%. The 128→502 comparison has identical first-128 curves and supports a modest training-budget effect. The other per-task metrics and limits are in the dated reconciliation above and linked reports. None is blind evidence or a unified-product result.
+  Standalone audio, image, video and sensor probes exist. Screen-region category probes also exist, but require an oracle crop and classify coarse element categories; their expanded DINOv2 accuracy (41.36%) remains below the train-prior baseline (48.69%), and the TinyCLIP reference collapses on balanced recall. They do not establish full-screen task decisions or autonomous action selection. These narrow-task results do not meet the overall quality gate. CLEVR-4 image taxonomy: seed-17 512-epoch run selected at epoch 502 reached 88.30% macro Accuracy on an internal split of official training images; count was 58.19%. The 128→502 comparison has identical first-128 curves and supports a modest training-budget effect. The other per-task metrics and limits are in the dated reconciliation above and linked reports. None is blind evidence or a unified-product result.
 - [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Include matched best-unimodal baselines, all missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
 - [ ] **M-3–M-6:** Add optional text/spoken conditions without making them compulsory, then evaluate individual and combined task quality, <=200M loaded parameters **including the sensor path**, and actual post-quantization >=95% recovery on the same locked task battery. Do not claim general 95–98% world understanding from unrelated narrow benchmarks; lock evaluation before training/selection.
 
