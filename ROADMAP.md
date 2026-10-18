@@ -124,6 +124,19 @@ to spatial/object readout and generalization; it is not a new quality result
 and did not inspect development, official validation, or sealed-audit rows.
 See the [diagnostic and hashes](docs/pretrained_reuse/R2_CLEVR4_COUNT_TRAINING_DIAGNOSTIC_20261019.md).
 
+**2026-10-19 CLEVR-4 matched spatial-cell diagnostic:** A frozen DINOv2
+CLS-plus-4×4-cell representation was compared with a same-size global-pooling
+control using identical initialization, question order and eight-epoch
+training. On the already-exposed internal development split, spatial pooling
+raised macro Accuracy by 0.80 points and Count Accuracy by 3.14 points, with
+paired image-cluster intervals favoring the spatial arm. Texture fell 0.15
+points; epoch 8 also regressed after epoch 7, so the selected epoch-7 weights
+were kept. This is development-only evidence on synthetic taxonomy questions;
+it does not establish an independent quality gain or product readiness. Keep
+the spatial path as a candidate, do not quantize/promote it, and move quality
+claims to a new independent asset-grouped task/split. See the
+[protocol, curves, hashes and uncertainty report](docs/pretrained_reuse/R2_CLEVR4_SPATIAL_READOUT_DIAGNOSTIC_20261019.md).
+
 **2026-10-19 UAV-DualCog source screen:** The public card advertises CC BY 4.0
 and 4,096 image / 2,048 video QA samples, but explicitly says all released
 task files are test-only and there are no public train/validation task splits.
