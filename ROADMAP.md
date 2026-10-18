@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-19 R2 AVQA source screen:** The official AVQA task is a strong
+semantic fit for joint audio/video questions: it provides manually annotated
+multiple-choice questions with `View`, `Sound`, and `Both` relation labels.
+However, the published terms permit personal/classroom use only, and the video
+assets originate from VGG-Sound/YouTube. It is therefore REVIEW-only and is not
+admitted to product-model training or evaluation. No annotations, media, or
+features were downloaded or opened for this screen. See the
+[source review](docs/pretrained_reuse/R2_AVQA_SOURCE_SCREEN_20261019.md).
+
 **2026-10-19 R2 MAVD-traffic source screen:** The CC BY 4.0 synchronized
 urban AV source is retained as review-only. The official train/validation
 annotations overlap on three conservative site-day groups, and audio event
