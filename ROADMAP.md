@@ -51,6 +51,13 @@ to spatial/object readout and generalization; it is not a new quality result
 and did not inspect development, official validation, or sealed-audit rows.
 See the [diagnostic and hashes](docs/pretrained_reuse/R2_CLEVR4_COUNT_TRAINING_DIAGNOSTIC_20261019.md).
 
+**2026-10-19 UAV-DualCog source screen:** The public card advertises CC BY 4.0
+and 4,096 image / 2,048 video QA samples, but explicitly says all released
+task files are test-only and there are no public train/validation task splits.
+No files were downloaded or opened; keep this source review-only until a clean
+training/validation task corpus and underlying asset rights are established.
+See the [source screen](docs/pretrained_reuse/R2_UAV_DUALCOG_SOURCE_SCREEN_20261019.md).
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target
