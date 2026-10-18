@@ -164,9 +164,9 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         fetch_path: source["fetch_report_sha256"],
         gate_path: source.get("integrity_report_sha256", source.get("pretraining_gate_sha256")),
     }
-    for path, expected in expected_hashes.items():
+    for path, expected_hash in expected_hashes.items():
         actual = _sha256(path)
-        if actual != expected:
+        if actual != expected_hash:
             raise ValueError(f"pinned input hash mismatch: {path}")
     if source["revision"] != DATASET_REVISION or source["license"] != "CC0-1.0":
         raise ValueError("unexpected data revision or license")
