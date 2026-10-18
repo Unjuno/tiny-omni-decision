@@ -59,6 +59,8 @@ initial split conclusion, without changing the historical record in the
 - Frozen encoder: `facebook/dinov2-small`, revision
   `ed25f3a31f01632728cabb09d1542f84ab7b0056`, weight SHA-256
   `ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1`.
+  The exact pinned official model card declares Apache-2.0. This is distinct
+  from the dataset imagery's EuroSAT/Copernicus source terms.
 - Representation: 768-dimensional concatenation of the CLS token and mean of
   256 patch tokens; resize to 224x224 using the pinned processor.
 - Readout: one linear classifier over the fixed ten EuroSAT class IDs; 7,690
@@ -176,6 +178,7 @@ report were added to the worktree.
 ## Source references
 
 - [EuroSAT official author repository and license](https://github.com/phelber/EuroSAT)
+- [DINOv2-small exact pinned official model card](https://huggingface.co/facebook/dinov2-small/tree/ed25f3a31f01632728cabb09d1542f84ab7b0056)
 - [EuroSAT v2 archive record](https://zenodo.org/records/7711810)
 - [TorchGeo v0.8.0 EuroSAT geographic split implementation](https://github.com/torchgeo/torchgeo/blob/v0.8.0/torchgeo/datasets/eurosat.py)
 - [Pinned TorchGeo split-file revision](https://huggingface.co/datasets/torchgeo/eurosat/commit/1c11c73a87b40b0485d103231a97829991b8e22f)

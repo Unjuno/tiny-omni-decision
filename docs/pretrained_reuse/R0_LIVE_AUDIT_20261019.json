@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-18T19:42:35Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "local_snapshot": {
+    "branch": "codex/r2-independent-joint-task",
+    "head": "f4bfa766b3c1e3ea1da57638e41fe84d32424dd2",
+    "working_tree_clean_at_audit_start": true
+  },
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_branch": "43974fb2f6b070e0182465edca12d061b65ed8dd",
+    "branch_count": 34,
+    "branches": [
+      {
+        "sha": "6c2abb842b448e248573e2f729670e1a1080ae98",
+        "ref": "refs/heads/codex/clevr4-image-candidate"
+      },
+      {
+        "sha": "24d7fab171524aea51b3ba82726d33c728407d50",
+        "ref": "refs/heads/codex/decision-head-validation"
+      },
+      {
+        "sha": "fbb1dced2f6b6a0272ca29325dfb0b54da7e5c58",
+        "ref": "refs/heads/codex/durable-decision-teacher"
+      },
+      {
+        "sha": "ac44d457073df83d7a0c2f8d6c5e4490f725014b",
+        "ref": "refs/heads/codex/fix-speechcommands-parquet"
+      },
+      {
+        "sha": "c5b0c5020f77018fbce8d6f0880a079a3bd51281",
+        "ref": "refs/heads/codex/phase1-reproducible-smoke"
+      },
+      {
+        "sha": "b8057ec534b3792ab54ee136465544fa9c26d925",
+        "ref": "refs/heads/codex/phase2-audio-video"
+      },
+      {
+        "sha": "b02180f7f2bd6f2876958a1e5c6018fc6bdc9927",
+        "ref": "refs/heads/codex/phase2-dataset-gates"
+      },
+      {
+        "sha": "30bcf23c510b9db724c0b17b07f284139105ee44",
+        "ref": "refs/heads/codex/phase3-high-precision-omni"
+      },
+      {
+        "sha": "92fc57f2a28d82b7afad5533f2df66a4042d67a0",
+        "ref": "refs/heads/codex/postquant-cache-preparation"
+      },
+      {
+        "sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+        "ref": "refs/heads/codex/postquant-numerical-core"
+      },
+      {
+        "sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+        "ref": "refs/heads/codex/postquant-teacher-cache"
+      },
+      {
+        "sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+        "ref": "refs/heads/codex/postquant-worker-entrypoints"
+      },
+      {
+        "sha": "c50f0eb364d963bbcb3144a83305705880d9d426",
+        "ref": "refs/heads/codex/qat-groupwise-performance"
+      },
+      {
+        "sha": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+        "ref": "refs/heads/codex/r2-av-audio-cache"
+      },
+      {
+        "sha": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+        "ref": "refs/heads/codex/r2-av-matched-evidence"
+      },
+      {
+        "sha": "809c0f8226a780039a89c8066709d15d39a53f8a",
+        "ref": "refs/heads/codex/r2-av-postnorm-stability"
+      },
+      {
+        "sha": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+        "ref": "refs/heads/codex/r2-av-replacement"
+      },
+      {
+        "sha": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+        "ref": "refs/heads/codex/r2-av-transport"
+      },
+      {
+        "sha": "f4bfa766b3c1e3ea1da57638e41fe84d32424dd2",
+        "ref": "refs/heads/codex/r2-independent-joint-task"
+      },
+      {
+        "sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277",
+        "ref": "refs/heads/codex/roadmap-compression-video-specialization"
+      },
+      {
+        "sha": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+        "ref": "refs/heads/codex/teacher-quality-clean-dev-v1"
+      },
+      {
+        "sha": "c5f120857bc5c4f392e1605895a614760cef12a1",
+        "ref": "refs/heads/codex/teacher-quality-next"
+      },
+      {
+        "sha": "740ec0a7d2d8ba870b384a130c8b0821537b9626",
+        "ref": "refs/heads/codex/teacher-quality-physionpp"
+      },
+      {
+        "sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+        "ref": "refs/heads/codex/teacher-quality-v1"
+      },
+      {
+        "sha": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+        "ref": "refs/heads/codex/ternary-student-recovery"
+      },
+      {
+        "sha": "74e2094c51af6a8738dd67d42d018442b979cd75",
+        "ref": "refs/heads/codex/textfree-video-coverage-v1"
+      },
+      {
+        "sha": "87ed587ee847b83531b6be186f8694685124b731",
+        "ref": "refs/heads/codex/textfree-video-program-order"
+      },
+      {
+        "sha": "7b13057a38e7d84019d802129c70ee5350185db7",
+        "ref": "refs/heads/codex/textfree-video-task-error-audit"
+      },
+      {
+        "sha": "6b15fcbb2546ac153c0313af0d63be86f41ff885",
+        "ref": "refs/heads/codex/video-teacher-v2"
+      },
+      {
+        "sha": "ac93eddd289bf207b70b55759a922b070132d0d2",
+        "ref": "refs/heads/codex/video-teacher-v2-long-budget"
+      },
+      {
+        "sha": "43974fb2f6b070e0182465edca12d061b65ed8dd",
+        "ref": "refs/heads/docs/pretrained-reuse-roadmap-20261010"
+      },
+      {
+        "sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+        "ref": "refs/heads/feat/ternary-student-recovery"
+      },
+      {
+        "sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+        "ref": "refs/heads/fix/student-qat-training-handoff"
+      },
+      {
+        "sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+        "ref": "refs/heads/main"
+      }
+    ]
+  },
+  "open_pull_requests": [
+    {
+      "number": 15,
+      "draft": true,
+      "head": "docs/pretrained-reuse-roadmap-20261010",
+      "head_sha": "43974fb2f6b070e0182465edca12d061b65ed8dd",
+      "base": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "updated_at": "2026-10-18T00:06:32Z"
+    },
+    {
+      "number": 14,
+      "draft": true,
+      "head": "fix/student-qat-training-handoff",
+      "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "base": "codex/ternary-student-recovery",
+      "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c",
+      "updated_at": "2026-10-08T10:54:56Z"
+    },
+    {
+      "number": 13,
+      "draft": false,
+      "head": "feat/ternary-student-recovery",
+      "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "base": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "updated_at": "2026-10-08T02:27:05Z"
+    },
+    {
+      "number": 12,
+      "draft": true,
+      "head": "codex/postquant-teacher-cache",
+      "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "base": "codex/postquant-numerical-core",
+      "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "updated_at": "2026-10-06T17:54:48Z"
+    },
+    {
+      "number": 11,
+      "draft": true,
+      "head": "codex/postquant-numerical-core",
+      "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "base": "codex/postquant-worker-entrypoints",
+      "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "updated_at": "2026-10-06T17:19:22Z"
+    },
+    {
+      "number": 10,
+      "draft": true,
+      "head": "codex/postquant-worker-entrypoints",
+      "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "base": "codex/roadmap-compression-video-specialization",
+      "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277",
+      "updated_at": "2026-10-06T15:33:14Z"
+    },
+    {
+      "number": 9,
+      "draft": true,
+      "head": "codex/teacher-quality-v1",
+      "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "base": "main",
+      "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c",
+      "updated_at": "2026-10-04T10:04:40Z"
+    }
+  ],
+  "pr15": {
+    "state": "open",
+    "draft": true,
+    "head": "43974fb2f6b070e0182465edca12d061b65ed8dd",
+    "base": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "inline_review_comment_count": 0,
+    "review_count": 0
+  },
+  "worktree_count": 18,
+  "worktrees": [
+    {
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "branch": "codex/teacher-quality-clean-dev-v1",
+      "detached": false,
+      "dirty_entries": 4,
+      "clean": false
+    },
+    {
+      "head": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "branch": "codex/decision-head-validation",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "branch": null,
+      "detached": true,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "branch": "fix/student-qat-training-handoff",
+      "detached": false,
+      "dirty_entries": 2,
+      "clean": false
+    },
+    {
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "branch": "codex/textfree-video-program-order",
+      "detached": false,
+      "dirty_entries": 2,
+      "clean": false
+    },
+    {
+      "head": "c50f0eb364d963bbcb3144a83305705880d9d426",
+      "branch": "codex/qat-groupwise-performance",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "f4bfa766b3c1e3ea1da57638e41fe84d32424dd2",
+      "branch": "codex/r2-independent-joint-task",
+      "detached": false,
+      "dirty_entries": 1,
+      "clean": false
+    },
+    {
+      "head": "74e2094c51af6a8738dd67d42d018442b979cd75",
+      "branch": "codex/textfree-video-coverage-v1",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "branch": "codex/textfree-video-coverage-v2",
+      "detached": false,
+      "dirty_entries": 10,
+      "clean": false
+    },
+    {
+      "head": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+      "branch": "codex/r2-av-audio-cache",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+      "branch": "codex/r2-av-matched-evidence",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "809c0f8226a780039a89c8066709d15d39a53f8a",
+      "branch": "codex/r2-av-postnorm-stability",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+      "branch": "codex/r2-av-replacement",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+      "branch": "codex/r2-av-transport",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "branch": "codex/video-teacher-v2-long-budget",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "740ec0a7d2d8ba870b384a130c8b0821537b9626",
+      "branch": "codex/teacher-quality-physionpp",
+      "detached": false,
+      "dirty_entries": 1,
+      "clean": false
+    },
+    {
+      "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "branch": "codex/ternary-student-recovery",
+      "detached": false,
+      "dirty_entries": 0,
+      "clean": true
+    },
+    {
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "branch": "codex/ternary-student-recovery-updated",
+      "detached": false,
+      "dirty_entries": 11,
+      "clean": false
+    }
+  ],
+  "manifest_sha256": {
+    "manifests/durable-training-corpus.yaml": "365e154310f6c1c16199f511bc0a83959d250d1308ade853b4a0d8f5f6010829",
+    "manifests/candidates/speech-commands-validation.yaml": "c416e1a1af57387397d73d6f4ac66a02d481dc9cbc44477c25c2375112bdaf24",
+    "manifests/candidates/onejev.yaml": "ca7e7e0a2b4b1651ada9b7d3d8e1c071721f95f2bf6bdfdf613a4dea8b4386bb",
+    "manifests/candidates/mmau-test-mini.yaml": "ed4ab92e6ab4e2ec9fd93b895ff02603323fd276e61dac0400e929e9c935a6cf",
+    "manifests/pretrained_reuse/greatest-hits-full-extent-20261017.json": "48940ebe38996adb4e10687055b04e9c0150dae1a67c7373d4062c56dfd67168",
+    "manifests/dataset.example.yaml": "60c29a1efc4d93179422cf5acc7c2f38949b603efce5dc7a5073a36cd3e3ccdd",
+    "manifests/training-candidates.yaml": "4a2aec4747e4b8fbc17cb20e14dc00c278d0d545219d5e8adf775ece02796f22",
+    "manifests/durable-heldout-corpus.yaml": "10e7b191edf318882585f5c7cf38863be35b6c825a18f8ed3b36d1d43d4788b1",
+    "manifests/candidates/jamcqa-v2-dev.yaml": "8e7100be4a2aebf4ffba78aab65e8e371ccce2469c5062c86d81faf7299fd01f",
+    "manifests/phase3-evaluation-corpus.yaml": "49b0ac3c133a5041241bbc3cee85989cd696f6aee388814bc28984490f3bb0c2",
+    "manifests/pretrained_reuse/greatest-hits-source-review-20261017.json": "553daf8dc87d78957daf0ddc6bcb28b850b20e770fa03149c86f05e9b35a948a",
+    "manifests/pretrained_reuse/greatest-hits-development-20261017.json": "1b8640b8e3348799bb9e3a0046efce999c65535985fbe394ae10b1603a91645b",
+    "manifests/candidates/onejev-licenses.csv": "27b0b90e143b5abd4116c0a81438253d9250f99ea2699c16e974c8f5d142f9a8",
+    "manifests/candidates/speech-commands.yaml": "109984b9304ab0335c9e0b973bea3b828e3e0c901d9e46cfcbbf581459df03e2",
+    "manifests/pretrained_reuse/lombard-grid-source-20261014.json": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+    "manifests/pretrained_reuse/greatest-hits-encoders-20261017.json": "3ee6b7d650ebf119bc039511ff30e2110e1a3358e89e8a4fe8774ed0c98b70e1",
+    "manifests/pretrained_reuse/greatest-hits-inventory-20261017.json": "9febf9f1d4f0e665b92203fcbdb3ced79526ccf959617fe242caad042c2a633e",
+    "manifests/candidates/clevrer-validation.yaml": "ad2047bf40707f514cda825e1f409c7e19ace4fec5e313f6d9899bd5badce0c4",
+    "manifests/candidates/clevr4-validation.yaml": "ba524e02c7474e4b31cd52bbd3ecb9705979b9ead9e1fd5b46b5d6fdd9c81f12",
+    "manifests/candidates/mavd-traffic.yaml": "31419ba9c4ee8738e6f7d5e33c1b2efbbb6f2fbcf5cfb9604eabd2f03d51c526",
+    "manifests/candidates/speech-commands-test.yaml": "0b557bc44742d96ed1c5fa227726cc858fbf688ec26083952c70559492acfe58",
+    "manifests/candidates/librispeech-dev-clean.yaml": "7ec6040833bafd29e1d4cbd132e849c50fc365982e32021190d3c0c5d39c6019",
+    "manifests/candidates/open-jev.yaml": "966290c414f5e3d467814afeb48bee0a7f3c11a7b07617ecc6b42d9f4ca0fec9",
+    "manifests/candidates/unav100.yaml": "6adb3dc92793f486f0e0616421705549b729b18bd6440d6174ff9329df470d5a",
+    "manifests/base-model.example.yaml": "3073b756114904fbec8b8b590c087484aa6769dc510f8f95939509e6657fbfca",
+    "manifests/evaluation-candidates.yaml": "2787c66d920d01dee53e3df4aa0f52eb9097f52e5fb8a35f2994b6eaba089f56",
+    "manifests/candidates/ava-active-speaker.yaml": "09e15926a6cff5a433648b3f3aa87915703f9635d310bb845267e52eaff1797c",
+    "manifests/teachers/durable-teacher-v0.json": "9af2616684dd00c557941cf790b7e2d65fbe8100e9ae8be7296bc250c2ec2d94",
+    "manifests/pretrained_reuse/greatest-hits-probe-20261017.json": "4b87f99bc4309cada393be87e76f31ac7ba75326e31309ddda04bf4fd58caf57",
+    "manifests/candidates/mvbench.yaml": "a886fdf6ce866b38bbfc82639a7b1ed39c5a9211f3d584c0f746d788b4f4cd37",
+    "manifests/candidates/yt-ntu-avq.yaml": "9e21beecbe206739a491739aa5274a714d8bfcee847da5968ccb6584aa12f98d",
+    "manifests/candidates/open-jev-test.yaml": "dc83003fee71451a3342f3d7bebca0032936566e050f2ecceb268412676d9f47",
+    "manifests/candidates/clevr4.yaml": "9b2b6aaffb03f1a800607e598902cb9d893223c412ab025d06b4a15f8d3cadae",
+    "manifests/pretrained_reuse/clevrer-heldout-video-excluded-scenes-20261011.json": "2ffd21da252fa1f8a544c66d0d1f6c66b44ca26af79e8e6db3b2613cc9f4cb6c",
+    "manifests/candidates/clevrer.yaml": "a87bd6834a94b8ed481a36e7088ee8d5391319fc271fed80497530f055dcbdf2",
+    "manifests/candidates/open-jev-validation.yaml": "43b0c948f5316494db5499711b657aa4a791ae8e934b434524bab9ef604cf916",
+    "manifests/phase3-training-corpus.yaml": "8c34a80c513eebc30791e0e9f68de5dbbf4f1fc11d2027acbc17b4cc79949656",
+    "manifests/candidates/typed-synth-validation.yaml": "f203eb5bae312e80586bfd92ec9a7bf39918d110ed6441291a4dc64fa53bf51a"
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "utilization_percent": 0,
+    "memory_used_mib": 0,
+    "memory_total_mib": 16384,
+    "compute_process_pids": []
+  },
+  "related_external_processes": [
+    {
+      "pid": 26124,
+      "parent_pid": 28260,
+      "process": "python.exe",
+      "started": "2026-10-17T10:42:10.63911+09:00",
+      "project": "external Orbitune/MIDI",
+      "command_role": "GPU watchdog"
+    },
+    {
+      "pid": 6452,
+      "parent_pid": 26124,
+      "process": "python.exe",
+      "started": "2026-10-17T10:42:10.677466+09:00",
+      "project": "external Orbitune/MIDI",
+      "command_role": "GPU watchdog"
+    },
+    {
+      "pid": 14116,
+      "parent_pid": 6452,
+      "process": "python.exe",
+      "started": "2026-10-19T04:42:34.176359+09:00",
+      "project": "external Orbitune/MIDI",
+      "command_role": "training child"
+    },
+    {
+      "pid": 23656,
+      "parent_pid": 14116,
+      "process": "python.exe",
+      "started": "2026-10-19T04:42:34.192961+09:00",
+      "project": "external Orbitune/MIDI",
+      "command_role": "training child"
+    },
+    {
+      "pid": 21980,
+      "parent_pid": 10288,
+      "process": "pwsh.exe",
+      "started": "2026-10-19T04:42:35.315398+09:00",
+      "project": "external Orbitune/MIDI",
+      "command_role": "GPU watchdog"
+    }
+  ],
+  "artifact_checks": [
+    {
+      "path": "eurosat-source-screen-01/EuroSAT_RGB.zip",
+      "exists": true,
+      "bytes": 94658721,
+      "sha256": "b4f5b234ecb7d7ff9c6cddb046543b4717c53fd6e9815be6c0e80cc614f51b90"
+    },
+    {
+      "path": "eurosat-spatial-preflight-attempt-01/preflight.json",
+      "exists": true,
+      "bytes": 2179,
+      "sha256": "57c179243bd650448ae782bfa179da5e0cb27920b3dc1cbe97afa544e155912a"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-features-attempt-01/result.json",
+      "exists": true,
+      "bytes": 2587,
+      "sha256": "0cd84e1b62413d5c06a62ff161a218943a3c30a77b82eefca719ec2b64f6423c"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-readout-attempt-01/config.json",
+      "exists": true,
+      "bytes": 1232,
+      "sha256": "bf8f798cdcffa7221b3f5591e09a61ad23f8f3225fe9c8c329375818341978a5"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-readout-attempt-01/result.json",
+      "exists": true,
+      "bytes": 9330,
+      "sha256": "1dbe132c6b02e180c9b520519a582ee6c8edbfac42a1e6fee898dabb82668a9d"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-readout-attempt-01/training-history.jsonl",
+      "exists": true,
+      "bytes": 89620,
+      "sha256": "84b859debb6752a85c5f42c7202624b907da299c3352fabdc3715dc8c99a4cb4"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-readout-attempt-01/best-readout.pt",
+      "exists": true,
+      "bytes": 38904,
+      "sha256": "1f439b3c50c076ae97ebb225b4c9bd3beb71706859234a7f3b3f0cde0c45d88d"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-readout-attempt-01/final-readout.pt",
+      "exists": true,
+      "bytes": 38912,
+      "sha256": "08150dffc46512259acd1e996b7e490c298cd475ae38cf155b8834c4c2c26d4e"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-test-attempt-02/config.json",
+      "exists": true,
+      "bytes": 1505,
+      "sha256": "19ca3d2a314877e4e06a8cb022ea7aef34c55ab1813dca5aa7bac594ead53ef2"
+    },
+    {
+      "path": "dinov2-eurosat-spatial-test-attempt-02/result.json",
+      "exists": true,
+      "bytes": 4402,
+      "sha256": "a256cd7552df987c51aaff054272c505bb84a73dd330a8f275a46c52d6170d8e"
+    }
+  ],
+  "sealed_audit_opened": false,
+  "cloud_compute_spend_usd": 0,
+  "legacy_worktrees_or_checkpoints_modified": false
+}

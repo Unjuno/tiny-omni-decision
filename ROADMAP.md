@@ -2,7 +2,8 @@
 
 **2026-10-19 R2 EuroSAT spatial transfer:** Corrected the initial source-screen
 conclusion after finding TorchGeo's pinned longitude-based split manifests.
-With frozen DINOv2-small (22.06M pre-quantization parameters) and a 7,690-
+The exact DINOv2-small checkpoint is Apache-2.0 per its pinned official card.
+With this frozen image encoder (22.06M pre-quantization parameters) and a 7,690-
 parameter linear readout, the selected epoch 17 reached 95.59% Accuracy /
 94.44% macro Accuracy on validation. Its one-time public spatial-test result
 was 93.83% / 90.93% macro Accuracy, NLL 0.1879, Brier 0.0942 and ECE 0.0159.
@@ -10,6 +11,17 @@ Pasture is weak at 61.74%; validation-selected training showed late overfitting.
 This is a fixed-label image transfer result, not arbitrary-option reasoning or
 multimodal product evidence. The test is public, not sealed, and was used once.
 No promotion or quantization. See the [spatial readout report](docs/pretrained_reuse/R2_EUROSAT_SPATIAL_READOUT_20261019.md) and the [corrected initial screen](docs/pretrained_reuse/R2_EUROSAT_SPATIAL_SPLIT_SCREEN_20261019.md).
+
+**2026-10-19 R0 current-state reconciliation:** PR #15 remains draft/open; 18
+registered worktrees and 34 remote branches were enumerated, and 38 dataset
+manifest hashes were captured. Existing worktrees and user changes were
+preserved. The RTX 3080 was idle while Orbitune supervisor/training processes
+remained alive; no GPU work was started during this audit. R0's end-user device,
+release task battery, confidence/calibration rule and latency/energy bounds
+remain open. R1's DINOv2 audit strengthens only image-feature feasibility; it
+does not close the temporal, joint-task or per-modality quality gates. See the
+[live R0 audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261019.md) and its
+[machine-readable snapshot](docs/pretrained_reuse/R0_LIVE_AUDIT_20261019.json).
 
 **2026-10-19 R2 DINOv2 / Clevr-4 100k:** The pinned 22.06M-parameter
 DINOv2-small checkpoint passed HotUGPU-gated CUDA inference on synthetic and

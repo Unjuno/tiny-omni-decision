@@ -700,8 +700,38 @@
         "https://huggingface.co/PekingU/rtdetr_v2_r18vd/tree/5650961749fa93567c0d46fc7f43ea4f9e914107",
         "https://github.com/lyuwenyu/RT-DETR"
       ]
+    },
+    {
+      "id": "dinov2-small",
+      "modality": [
+        "image"
+      ],
+      "model_revision": "facebook/dinov2-small@ed25f3a31f01632728cabb09d1542f84ab7b0056",
+      "checkpoint_sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1",
+      "checkpoint_bytes": 88249960,
+      "parameters": 22056576,
+      "parameter_tensor_bytes": 88226304,
+      "license": "Apache-2.0 per exact pinned official HF model card; EuroSAT source-data terms are separate",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/facebook/dinov2-small/tree/ed25f3a31f01632728cabb09d1542f84ab7b0056"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "verified local strict checkpoint and processor load; finite features from 21,600 real EuroSAT train/validation images and one-time 5,400-image spatial-test inference on local CUDA",
+      "task_quality_status": "fixed ten-class EuroSAT spatial transfer; selected macro Accuracy 94.44% validation / 90.93% public test; not arbitrary-option or product evidence",
+      "decision": "ALLOW image research candidate; frozen feature/readout is useful for scoped transfer only; no video-temporal or multimodal capability claim",
+      "report": "docs/pretrained_reuse/R2_EUROSAT_SPATIAL_READOUT_20261019.md",
+      "audit_date": "2026-10-19",
+      "primary_citations": [
+        "https://huggingface.co/facebook/dinov2-small/tree/ed25f3a31f01632728cabb09d1542f84ab7b0056",
+        "https://github.com/phelber/EuroSAT",
+        "https://zenodo.org/records/7711810"
+      ]
     }
   ],
-  "incremental_update_date": "2026-10-14",
-  "incremental_update_scope": "append pinned RTDETRv2 R18 actual CPU/fresh component audit; earlier candidate records preserved"
+  "incremental_update_date": "2026-10-19",
+  "incremental_update_scope": "append pinned RTDETRv2 R18 and DINOv2-small actual checkpoint/runtime audits; earlier candidate records preserved"
 }
