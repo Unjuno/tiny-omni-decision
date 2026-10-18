@@ -1,0 +1,67 @@
+{
+    "experiment_id": "greatest-hits-av-match-readouts-v0",
+    "seed": 17,
+    "source": "Greatest Hits official TRAIN only; fixed seed-17 material/action strata",
+    "dataset": {
+        "preflight": "C:/CodexArtifacts/pretrained-reuse-r2/gh-av-match-preflight-02",
+        "inputs": "C:/CodexArtifacts/pretrained-reuse-r2/gh-av-match-inputs-01",
+        "input_audit": "C:/CodexArtifacts/pretrained-reuse-r2/gh-av-match-inputs-audit-01",
+        "audio_features": "C:/CodexArtifacts/pretrained-reuse-r2/gh-av-match-audio-features-03",
+        "video_features": "C:/CodexArtifacts/pretrained-reuse-r2/gh-av-match-video-features-01",
+        "audio_replay": "C:/CodexArtifacts/pretrained-reuse-r2/gh-av-match-audio-feature-replay-01",
+        "video_replay": "C:/CodexArtifacts/pretrained-reuse-r2/gh-av-match-video-feature-replay-01",
+        "train_rows": 252,
+        "calibration_rows": 76,
+        "validation_rows": 112,
+        "validation_pair_clusters": 28
+    },
+    "encoders": {
+        "audio": {
+            "name": "EfficientAT DyMN-0.4 AudioSet",
+            "revision": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+            "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+            "parameters": 1961239,
+            "feature_size": 384
+        },
+        "video": {
+            "name": "Google VideoPrism-B",
+            "revision": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+            "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+            "parameters": 114365184,
+            "feature_size": 768,
+            "frames": 8
+        }
+    },
+    "readouts": {
+        "audio_only": "Linear(384, 2)",
+        "video_only": "Linear(768, 2)",
+        "joint_av": "bias-free Linear(384, 64) and Linear(768, 64), L2-normalized cosine score, logits [-s/0.1, s/0.1]",
+        "joint_trainable_parameters": 73728,
+        "trainable_encoders": false
+    },
+    "optimizer": {
+        "name": "AdamW",
+        "learning_rate": 0.001,
+        "weight_decay": 0.01,
+        "epochs": 100,
+        "batching": "one four-row pair cluster per update; seed-17 permutation each epoch",
+        "device": "cpu",
+        "early_stopping": false,
+        "checkpoint_selection": "earliest minimum uncalibrated validation NLL across epochs 0..100"
+    },
+    "calibration": {
+        "method": "one scalar positive temperature fitted with calibration split NLL after checkpoint selection",
+        "calibration_split_is_not_used_for_checkpoint_selection": true
+    },
+    "evaluation": {
+        "options_order": ["mismatch", "match"],
+        "metrics": ["accuracy", "nll", "brier", "ece_15", "mean_confidence"],
+        "paired_bootstrap_unit": "pair_cluster_id",
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 17,
+        "interval": "percentile 95%",
+        "low_power_if_clusters_below": 200,
+        "sealed_audit_opened": false
+    },
+    "selection_scope": "development validation only; no product promotion or general 95-98% claim"
+}
