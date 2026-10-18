@@ -92,6 +92,15 @@ def wait_for_gpu_clear(own_pid, timeout_seconds, poll_seconds=1.0):
         time.sleep(min(poll_seconds, remaining))
 
 
+def reserve_cuda_after_idle(timeout_seconds):
+    """Acquire this process's CUDA context only in a clear GPU window."""
+    if not torch.cuda.is_available():
+        raise RuntimeError("existing local CUDA device required")
+    wait_for_gpu_clear(os.getpid(), timeout_seconds, poll_seconds=0.5)
+    torch.cuda.init()
+    wait_for_gpu_clear(os.getpid(), timeout_seconds, poll_seconds=0.5)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--arm", choices=tuple(RUNS), required=True)
@@ -176,13 +185,6 @@ def main():
         gpu_pids = active_gpu_pids()
         result["preflight_gpu_processes"] = sorted(gpu_pids)
         write(output / "result.json", result)
-        if gpu_pids:
-            raise RuntimeError("GPU occupied; scoring not started")
-        if not torch.cuda.is_available():
-            raise RuntimeError("existing local CUDA device required")
-        # Reserve a CUDA context during the long CPU integrity preflight so the
-        # configured local supervisor can cooperatively yield before inference.
-        torch.cuda.init()
         for name in subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0"):
@@ -252,7 +254,7 @@ def main():
             for i, row in enumerate(saved_rows)
         }
         remaining = args.max_seconds - (time.perf_counter() - started)
-        wait_for_gpu_clear(os.getpid(), min(GPU_YIELD_WAIT_SECONDS, max(0.0, remaining)))
+        reserve_cuda_after_idle(min(GPU_YIELD_WAIT_SECONDS, max(0.0, remaining)))
         gpu_pids = active_gpu_pids()
         torch.set_num_threads(4)
         torch.set_num_interop_threads(1)
@@ -265,7 +267,11 @@ def main():
         model.load_state_dict(checkpoint["model"], strict=True)
         if sum(param.numel() for param in model.parameters()) != 1732804:
             raise ValueError("registered postnorm parameter count differs")
+        remaining = args.max_seconds - (time.perf_counter() - started)
+        wait_for_gpu_clear(os.getpid(), min(GPU_YIELD_WAIT_SECONDS, max(0.0, remaining)))
         model.cuda()
+        remaining = args.max_seconds - (time.perf_counter() - started)
+        wait_for_gpu_clear(os.getpid(), min(GPU_YIELD_WAIT_SECONDS, max(0.0, remaining)))
         store = ExplicitEventStore(
             proof["binding"],
             dict(audio=AUDIO, video=VIDEO),

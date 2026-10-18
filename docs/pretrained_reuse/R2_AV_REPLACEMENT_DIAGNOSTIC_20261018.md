@@ -66,11 +66,20 @@ detecting external GPU activity. No process was stopped or restarted manually,
 and no checkpoint, training data, or prior attempt was changed. This retry adds
 no model-sensitivity evidence. It can be resumed only in a GPU window where the
 full pinned-input CPU preflight can finish before Orbitune reacquires the GPU.
-The follow-up runner change reserves its own CUDA context before this preflight
-and waits for Orbitune's cooperative yield; details are in
+The follow-up runner change moves the CUDA acquisition to after CPU preflight,
+then waits for Orbitune's cooperative yield before model transfer and scoring;
+details are in
 [`R2_AV_REPLACEMENT_RUNNER_PREFLIGHT_20261018.md`](R2_AV_REPLACEMENT_RUNNER_PREFLIGHT_20261018.md).
 Attempt 12 remains unchanged; a fresh attempt is required to execute with the
 updated runner.
+
+The first scheduler retry, attempt 13, also remains preserved. It stopped at
+the initial GPU gate in 0.10 seconds after observing Orbitune trainer PID
+`6744`; it performed zero forwards and did not enter the input-pin preflight.
+Its `result.json` SHA-256 is
+`8439b7ee52f55463619557cdd9ba9399c270cddb3243de7db37d4f0902590593`. The
+current runner moves GPU acquisition until after CPU preflight and waits for a
+clear device window, so attempt 13 is not being reused or overwritten.
 
 ## Interpretation and next step
 

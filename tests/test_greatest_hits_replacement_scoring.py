@@ -222,6 +222,26 @@ def test_gpu_clear_timeout_fails_closed(monkeypatch):
     assert clock["now"] == 2.0
 
 
+def test_cuda_context_is_reserved_only_after_foreign_gpu_clears(monkeypatch):
+    from scripts import score_greatest_hits_postnorm_replacements as runner
+
+    clock = {"now": 0.0}
+    events = []
+    snapshots = iter(({202}, set(), set()))
+    monkeypatch.setattr(runner, "active_gpu_pids", lambda: next(snapshots))
+    monkeypatch.setattr(runner.time, "monotonic", lambda: clock["now"])
+    monkeypatch.setattr(runner.time, "sleep", lambda seconds: clock.__setitem__(
+        "now", clock["now"] + seconds
+    ))
+    monkeypatch.setattr(runner.torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(runner.torch.cuda, "init", lambda: events.append("init"))
+
+    runner.reserve_cuda_after_idle(timeout_seconds=5)
+
+    assert events == ["init"]
+    assert clock["now"] == 0.5
+
+
 @pytest.mark.parametrize("change", ["nan", "short", "guard"])
 def test_bad_scores_and_safety_abort_are_not_success(change):
     from scripts.greatest_hits_replacement_scoring import score
