@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-import pytest
-import torch
+from importlib import import_module
 
-from tiny_omni_decision.temporal_decision import CausalGatedTemporalDecision, probability_json
+import pytest
+
+torch = pytest.importorskip("torch")
+temporal_decision = import_module("tiny_omni_decision.temporal_decision")
+CausalGatedTemporalDecision = temporal_decision.CausalGatedTemporalDecision
+probability_json = temporal_decision.probability_json
 
 
 def test_joint_model_returns_finite_causal_logits_and_gate_probabilities() -> None:
