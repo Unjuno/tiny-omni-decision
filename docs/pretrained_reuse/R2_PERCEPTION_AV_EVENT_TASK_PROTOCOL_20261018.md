@@ -96,12 +96,20 @@ CPU-side tests. If the task or frozen feature pair cannot distinguish source
 matching beyond controls, record that result and stop rather than redefining
 the task after observing VALID outcomes.
 
-## Current execution boundary
+## Current execution boundary (snapshot 2026-10-18 03:35:57 UTC)
 
-The feasibility audit and media plan used CPU/network metadata only. No media
-payload has been acquired for this task; no feature extraction, model load,
-training, GPU evaluation, or TEST access has occurred. The acquisition runner
-requires the exact plan hash, writes to fresh split-specific directories,
-checks archive/member pins and CRCs, hashes every extracted clip, and preserves
-an incomplete manifest on failure. Existing datasets, model artifacts, runs,
-and checkpoints are unchanged.
+The feasibility audit and media plan used CPU/network metadata only. Media
+acquisition then started from source commit `b18340a04d2b9f3a0fceb06cbce2ad0a39c63a3c`
+in fresh split-specific directories using the exact plan hash above. The
+acquisition runner SHA-256 is
+`39e7b3c51fa3b527b69ebb8283e4993cd4cd92ad2e48efa1d5348a22df814818`.
+TRAIN started at 03:27:33 UTC and has 14/400 verified clips (182,200,905
+bytes); VALID started at 03:28:00 UTC and has 16/400 verified clips
+(177,662,174 bytes). Both manifests say RUNNING with no error. About 308 GiB
+remains free. These are live snapshot counts, not completion claims.
+
+No feature extraction, model load, training, GPU evaluation, or TEST access
+has occurred. The GPU is occupied by another process; this acquisition uses no
+GPU. The runner checks archive/member pins and CRCs, hashes every extracted
+clip, and preserves an incomplete manifest on failure. Existing datasets,
+model artifacts, runs, and checkpoints are unchanged.
