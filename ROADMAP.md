@@ -165,6 +165,24 @@ No files were downloaded or opened; keep this source review-only until a clean
 training/validation task corpus and underlying asset rights are established.
 See the [source screen](docs/pretrained_reuse/R2_UAV_DUALCOG_SOURCE_SCREEN_20261019.md).
 
+**2026-10-19 HoloAssist decision-task source screen:** The official recording-
+session split is disjoint (1,466 train / 207 validation / 438 test sessions),
+and train/validation annotations contain synchronized action-correctness,
+video, and audio metadata. Participant identity is not exposed, so person-
+disjointness is unknown; validation rare-class support is small. A verified
+range indexes contain only train/validation member paths. The fixed seed-17
+160-train/207-validation pilot is bound to the official pitch-shifted archive
+(36.12 GB); its full selective download is now in progress. A same-session
+training probe verified non-silent 48 kHz mono AAC plus H.264 video, both at
+PTS 0, with 14.5 ms stream-duration difference from each other and the
+compressed-video companion. The earlier compressed-only attempt stopped at
+108/367 files after 8.28 GB; all complete and partial files are preserved.
+Feature extraction, event decoding and model fitting have not run. Sparse
+index ranges may have incidentally returned adjacent payload bytes, not saved
+or decoded; exact split-payload overlap is unknown. No test labels/media were
+opened. See the
+[source screen](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target

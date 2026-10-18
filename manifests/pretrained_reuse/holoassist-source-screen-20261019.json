@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "record_type": "pretrained_reuse_source_screen",
+  "dataset_id": "microsoft/holoassist",
+  "official_source": "https://holoassist.github.io/",
+  "source_revision": {
+    "trainval_annotation_sha256": "cc7898b49958a62fe021ae2ffa53a709c3fd6f45fd3f893960b8aac6d13dfe9c",
+    "official_split_archive_sha256": "e10674e7ac32957386d5e88afa60acf3335251b92ba2f8cfb97a736dc85e1621",
+    "trainval_media_member_index_sha256": "4f8c49c4ec68335904f0f61616a04ee08fab3cce9d5df66f9924620056bbb5ac",
+    "video_compress_etag": "\"0x8DC8C9DE268AE31\"",
+    "video_pitch_shifted_archive_size_bytes": 197783674880,
+    "video_pitch_shifted_etag": "\"0x8DC8C9DD88CD02E\"",
+    "imu_etag": "\"0x8DC8C9DD94B2BA2\""
+  },
+  "checked_at": "2026-10-19",
+  "disposition": "REVIEW_NOT_ADMITTED",
+  "license": "CDLA-Permissive-2.0",
+  "commercial_use": true,
+  "derivative_model_training_allowed": true,
+  "redistribution_allowed": true,
+  "media_redistribution_allowed": true,
+  "modalities": [
+    "video",
+    "audio",
+    "sensor",
+    "text"
+  ],
+  "source_facts": {
+    "task_fit": "egocentric task assistance; fine-grained action correctness and instructor correction labels",
+    "annotation_records": 1758,
+    "official_train_sessions": 1466,
+    "official_validation_sessions": 207,
+    "official_test_sessions": 438,
+    "unassigned_annotation_records_excluded": 85,
+    "train_action_intervals": 124759,
+    "validation_action_intervals": 17905,
+    "train_audio_video_metadata": "All 52 probed compressed videos lack audio; one same-session official Video_pitchshift.mp4 has H.264 video plus non-silent AAC mono 48 kHz audio. Both streams start at PTS 0; AV duration difference is 0.0145 s against the compressed video duration.",
+    "remote_archive_sizes_bytes": {
+      "video_compress_tar": 155285145600,
+      "imu_tar": 4971059200
+    },
+    "range_index": {
+      "scanned_tar_members": 8444,
+      "persisted_train_validation_members": 6692,
+      "verified_range_requests": 4442,
+      "metadata_bytes_fetched": 291063808,
+      "train_validation_compressed_video_count": 1673,
+      "train_validation_compressed_video_bytes": 119346824532
+    },
+    "fine_action_label_counts": {
+      "train": {
+        "correct": 118482,
+        "wrong_corrected_by_instructor_verbal": 3328,
+        "wrong_corrected_by_performer": 2593,
+        "wrong_not_corrected": 81,
+        "otherwise": 275
+      },
+      "validation": {
+        "correct": 16966,
+        "wrong_corrected_by_instructor_verbal": 540,
+        "wrong_corrected_by_performer": 359,
+        "wrong_not_corrected": 11,
+        "otherwise": 29
+      }
+    },
+    "reversed_fine_action_intervals": {
+      "train": 4,
+      "validation": 1
+    },
+    "out_of_range_fine_action_intervals": {
+      "train": 0,
+      "validation": 0
+    },
+    "pitchshifted_archive_range_index": {
+      "scanned_tar_members": 8444,
+      "persisted_allowed_train_validation_members": 6692,
+      "persisted_video_members": 1673,
+      "persisted_audio_members": 0,
+      "verified_range_requests": 4458,
+      "metadata_bytes_fetched": 292118528,
+      "index_sha256": "ad5a3843e6592d4be8eab1b187f36ff69f4fab90a9be57c06be2c0ce5fd2f8dc"
+    },
+    "pitchshifted_selection": {
+      "seed": 17,
+      "train_sessions": 160,
+      "validation_sessions": 207,
+      "selected_media_bytes": 36117365135,
+      "selection_sha256": "577adbafe6be869de3aff3b814acf91db7be582a42e0a7a83e7ee773dde0e8b7"
+    },
+    "single_train_av_probe": {
+      "session_id": "R130-25Aug-RAM",
+      "pitchshifted_media_bytes": 132569947,
+      "pitchshifted_media_sha256": "d4a6356ffecb8eb8198fb568e03df6e7130dbb161a275ca70a962af1c81bf890",
+      "video_codec": "h264",
+      "video_frames": 5960,
+      "video_start_pts": 0,
+      "video_duration_seconds": 205.65549764546796,
+      "audio_codec": "aac",
+      "audio_channels": 1,
+      "audio_sample_rate_hz": 48000,
+      "audio_start_pts": 0,
+      "audio_decoded_samples": 9872384,
+      "audio_non_silent": true,
+      "audio_rms": 0.004130016376140547,
+      "audio_duration_seconds": 205.67466666666667,
+      "paired_compressed_video_sha256": "60ccc66e9bf67a7b3f296680a9804ef2a187c1705ed80835419e0a0112b5300f",
+      "paired_compressed_video_frames": 5960,
+      "paired_compressed_video_duration_seconds": 205.65907522429262,
+      "audio_video_duration_delta_seconds": 0.01450333333334273,
+      "scope": "one selected training recording; synchronization/source-format proof only, not model quality"
+    },
+    "compressed_attempt_04": {
+      "status": "stopped after companion AV probe passed; files preserved",
+      "completed_files": 108,
+      "expected_files": 367,
+      "completed_bytes": 8280764703,
+      "partial_file_count": 8,
+      "partial_bytes": 369098752
+    }
+  },
+  "split": {
+    "official_train_validation_test": true,
+    "grouping_required": "recording session; participant-level grouping cannot be verified",
+    "session_id_overlap_counts": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "train_session_id_set_sha256": "c7bebf4a1b3bfebcfcde4daf91e8e6115b7aafb13f3d5055bf0c1d6bb5570b39",
+    "validation_session_id_set_sha256": "9bb029aedbf1937b4325e64c3fa1da8d10ccf9e854b34936cb6a4904e8f71127",
+    "test_session_id_set_sha256": "4beb27ed615f29a1917d69ccbcf682506a4d68c872517148be9aaa7900c145b1",
+    "identity_fields_in_annotation": [
+      "video_name",
+      "taskId",
+      "batch",
+      "taskType"
+    ],
+    "participant_identity_available": false
+  },
+  "access": {
+    "split_metadata_downloaded": true,
+    "trainval_annotations_downloaded_and_opened": true,
+    "test_labels_downloaded_or_opened": false,
+    "test_media_opened_or_decoded": false,
+    "test_media_archive_member_names_persisted": false,
+    "train_validation_media_archive_headers_range_indexed": true,
+    "media_archive_video_payload_opened_or_decoded": true,
+    "selected_train_validation_media_download_in_progress": true,
+    "selected_plan_sha256": "62dbf808356c4566ad94df8780d3efac694234406298da5b7b0bf7d1b3f1f751",
+    "selected_plan_sessions": {
+      "train": 160,
+      "validation": 207
+    },
+    "selected_plan_video_bytes": 28228194803,
+    "selected_pitchshifted_plan_sha256": "577adbafe6be869de3aff3b814acf91db7be582a42e0a7a83e7ee773dde0e8b7",
+    "selected_pitchshifted_plan_sessions": {
+      "train": 160,
+      "validation": 207
+    },
+    "selected_pitchshifted_plan_video_bytes": 36117365135
+  },
+  "reasons_not_admitted": [
+    "Train/validation are disjoint by recording session, but the release metadata does not expose instructor/performer identity; participant-independent validation cannot be established.",
+    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes and is being downloaded to a new directory; one training-session AV probe passes stream and timing checks, but full-media integrity and window extraction remain pending.",
+    "Wrong/not-corrected validation support is only 11 intervals, so the five-way label must not be treated as a balanced or well-powered evaluation task.",
+    "Five reversed fine-action intervals were found in train/validation metadata; a future adapter must exclude them deterministically and report counts."
+  ],
+  "next_admission_requirements": [
+    "Finish the selected pitch-shifted 160-train/207-validation download and verify every file size/SHA-256 against the immutable plan; do not download test or unassigned media.",
+    "Verify audio/video alignment and causal 30-second action-window decoding on training and validation files, using no future correction context.",
+    "Use only official train and validation session IDs; exclude all 85 unassigned annotation records and never load test labels or media.",
+    "Start with a predeclared binary correct-vs-wrong action task, exclude otherwise/reversed intervals, and preserve natural prevalence in validation.",
+    "Compare video-only, audio-only, and joint inputs on identical session groups with temporal cutoff and modality-shuffle controls.",
+    "Report session-clustered uncertainty and explicitly limit claims to session-disjoint evaluation unless participant identity can be independently resolved."
+  ],
+  "citation": "Wang et al., HoloAssist: an Egocentric Human Interaction Dataset for Interactive AI Assistants in the Real World, ICCV 2023, https://openaccess.thecvf.com/content/ICCV2023/html/Wang_HoloAssist_an_Egocentric_Human_Interaction_Dataset_for_Interactive_AI_Assistants_ICCV_2023_paper.html"
+}
