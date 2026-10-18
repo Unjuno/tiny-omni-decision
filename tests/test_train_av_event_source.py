@@ -122,6 +122,22 @@ def test_best_epoch_applies_absolute_min_delta_like_checkpoint_selector():
     assert select_best_epoch(history, min_delta=0.10) == 1
 
 
+def test_fit_readout_requires_calibration_and_development_validation_splits(tmp_path):
+    rows = [
+        {"id": "fit", "video_id": "video_fit", "split": "fit"},
+        {"id": "selection", "video_id": "video_selection", "split": "selection"},
+    ]
+    with pytest.raises(ValueError, match="calibration and development-validation"):
+        fit_readout(
+            rows,
+            tmp_path / "run",
+            condition="video_only",
+            epochs=1,
+            patience=1,
+            hidden_size=4,
+        )
+
+
 def test_fit_readout_keeps_best_and_final_checkpoints_separate(tmp_path):
     rows = [
         {
@@ -163,6 +179,16 @@ def test_fit_readout_keeps_best_and_final_checkpoints_separate(tmp_path):
             "candidate_order_sha256": "f" * 64,
             "audio": np.full(512, -0.5, dtype=np.float32),
             "visual": np.full((2, 384), -0.5, dtype=np.float32),
+        },
+        {
+            "id": "cal-a",
+            "video_id": "video_calibration_a",
+            "split": "calibration",
+            "target_index": 0,
+            "candidate_count": 2,
+            "candidate_order_sha256": "1" * 64,
+            "audio": np.full(512, -1.0, dtype=np.float32),
+            "visual": np.full((2, 384), -1.0, dtype=np.float32),
         },
     ]
     output = tmp_path / "run"

@@ -232,6 +232,10 @@ def fit_readout(
     selection_rows = [row for row in rows if row["split"] == "selection"]
     if not fit_rows or not selection_rows:
         raise ValueError("fit and video-disjoint selection rows are both required")
+    if not any(row["split"] == "calibration" for row in rows) or not any(
+        row["split"] == "development_validation" for row in rows
+    ):
+        raise ValueError("calibration and development-validation splits are both required")
     if {row["video_id"] for row in fit_rows} & {
         row["video_id"] for row in selection_rows
     }:

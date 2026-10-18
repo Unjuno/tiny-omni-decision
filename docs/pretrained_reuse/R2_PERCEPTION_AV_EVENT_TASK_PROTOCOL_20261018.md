@@ -437,11 +437,12 @@ with seed 17, AdamW, learning rate 1e-3, maximum 100 epochs, patience 20, and
 `min_delta=1e-4` as the first fixed engineering schedule. Best and final
 weights are kept separately. The saved best file is reloaded and its selection
 predictions are verified before metrics and per-example probabilities are
-written for calibration and development-validation rows. The `video_only`
+written for calibration and development-validation rows; the runner refuses a
+fit when either held-out split is missing. The `video_only`
 condition freezes unused audio/gate/joint parameters. Audio-only remains
 uniform because opaque candidate IDs provide no audio-side option features.
 
-Eight CPU tests cover CLS pooling/order, video and media split separation,
+Nine CPU tests cover CLS pooling/order, video and media split separation,
 feature-label bounds, selection logic, separate best/final files, saved-best
 reload, and development-validation outputs. Targeted tests and Ruff pass. This
 is training/evaluation plumbing only: no full feature manifest, readout fit,
