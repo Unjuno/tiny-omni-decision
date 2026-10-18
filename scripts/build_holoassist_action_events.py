@@ -37,6 +37,36 @@ def load_official_splits(path: Path) -> dict[str, set[str]]:
     return result
 
 
+def validate_av_validation_report(
+    report: dict,
+    *,
+    selection_sha256: str,
+    media_manifest_sha256: str,
+    expected_media: set[tuple[str, str, str]],
+) -> None:
+    """Require a successful AV probe for every selected media file."""
+    if report.get("status") != "PASS_HOLOASSIST_TRAINVAL_AV_MEDIA":
+        raise ValueError("AV media validation report is missing or not passing")
+    if report.get("selection_sha256") != selection_sha256:
+        raise ValueError("AV validation report uses a different selection plan")
+    if report.get("media_manifest_sha256") != media_manifest_sha256:
+        raise ValueError("AV validation report uses a different downloaded-media manifest")
+    rows = report.get("media")
+    if not isinstance(rows, list):
+        raise ValueError("AV validation report has no per-file results")
+    validated = {
+        (
+            str(row.get("split")),
+            str(row.get("session_id")),
+            str(row.get("media_sha256")),
+        )
+        for row in rows
+        if isinstance(row, dict)
+    }
+    if validated != expected_media:
+        raise ValueError("AV validation report does not exactly cover selected media hashes")
+
+
 def build_event_rows(
     *,
     records: list[dict],
@@ -181,6 +211,7 @@ def main() -> None:
     parser.add_argument("--selection", type=Path, required=True)
     parser.add_argument("--media-root", type=Path, required=True)
     parser.add_argument("--media-manifest", type=Path, required=True)
+    parser.add_argument("--av-validation-report", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--pre-context-seconds", type=float, default=0.5)
     args = parser.parse_args()
@@ -202,6 +233,18 @@ def main() -> None:
     }
     if set(media_files) != expected_media:
         raise ValueError("downloaded media manifest does not exactly match selected sessions")
+    media_manifest_hash = sha256_file(args.media_manifest)
+    av_validation_report = json.loads(args.av_validation_report.read_text(encoding="utf-8"))
+    expected_media_hashes = {
+        (split, session_id, str(media_files[(split, session_id)]["sha256"]))
+        for split, session_id in expected_media
+    }
+    validate_av_validation_report(
+        av_validation_report,
+        selection_sha256=selection_hash,
+        media_manifest_sha256=media_manifest_hash,
+        expected_media=expected_media_hashes,
+    )
     records = json.loads(args.annotation.read_text(encoding="utf-8"))
     splits = load_official_splits(args.splits)
     rows, report = build_event_rows(
@@ -228,6 +271,7 @@ def main() -> None:
         "annotation_sha256": sha256_file(args.annotation),
         "official_split_zip_sha256": sha256_file(args.splits),
         "media_manifest_sha256": sha256_file(args.media_manifest),
+        "av_validation_report_sha256": sha256_file(args.av_validation_report),
         "media_root": str(args.media_root.resolve(strict=True)),
         "options": OPTION_TEXT,
         "pre_action_context_seconds": args.pre_context_seconds,

@@ -4,7 +4,10 @@ import hashlib
 
 import pytest
 
-from scripts.build_holoassist_action_events import build_event_rows
+from scripts.build_holoassist_action_events import (
+    build_event_rows,
+    validate_av_validation_report,
+)
 
 
 def event(event_id: int, label: str, start: float = 1.0, end: float = 2.0) -> dict:
@@ -98,6 +101,39 @@ def test_builder_rejects_test_annotation_rows(tmp_path) -> None:
             selected_sessions=selected,
             media_files=files,
             media_root=media_root,
+        )
+
+
+def test_av_validation_gate_requires_exact_selected_media_hashes() -> None:
+    report = {
+        "status": "PASS_HOLOASSIST_TRAINVAL_AV_MEDIA",
+        "selection_sha256": "selection",
+        "media_manifest_sha256": "manifest",
+        "media": [
+            {"split": "train", "session_id": "tr-1", "media_sha256": "sha-tr"},
+            {"split": "validation", "session_id": "va-1", "media_sha256": "sha-va"},
+        ],
+    }
+    validate_av_validation_report(
+        report,
+        selection_sha256="selection",
+        media_manifest_sha256="manifest",
+        expected_media={
+            ("train", "tr-1", "sha-tr"),
+            ("validation", "va-1", "sha-va"),
+        },
+    )
+
+    report["media"].pop()
+    with pytest.raises(ValueError, match="exactly cover"):
+        validate_av_validation_report(
+            report,
+            selection_sha256="selection",
+            media_manifest_sha256="manifest",
+            expected_media={
+                ("train", "tr-1", "sha-tr"),
+                ("validation", "va-1", "sha-va"),
+            },
         )
 
 

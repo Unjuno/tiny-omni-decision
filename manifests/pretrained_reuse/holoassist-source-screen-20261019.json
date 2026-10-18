@@ -146,6 +146,13 @@
     "train_validation_media_archive_headers_range_indexed": true,
     "media_archive_video_payload_opened_or_decoded": true,
     "selected_train_validation_media_download_in_progress": true,
+    "pitchshifted_media_download_progress_snapshot": {
+      "completed_files": 20,
+      "expected_files": 367,
+      "completed_bytes": 1825585076,
+      "captured_at_utc": "2026-10-19",
+      "note": "Live download continues; this is a progress snapshot, not a completed-media receipt."
+    },
     "selected_plan_sha256": "62dbf808356c4566ad94df8780d3efac694234406298da5b7b0bf7d1b3f1f751",
     "selected_plan_sessions": {
       "train": 160,
@@ -161,12 +168,14 @@
   },
   "reasons_not_admitted": [
     "Train/validation are disjoint by recording session, but the release metadata does not expose instructor/performer identity; participant-independent validation cannot be established.",
-    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes and is being downloaded to a new directory; one training-session AV probe passes stream and timing checks, but full-media integrity and window extraction remain pending.",
+    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes; a progress snapshot reached 20/367 files (1,825,585,076 bytes), while full-media integrity and window extraction remain pending.",
+    "One selected training-session AV file passes stream/timing checks; separate encoder smokes show finite outputs but do not measure HoloAssist task quality.",
     "Wrong/not-corrected validation support is only 11 intervals, so the five-way label must not be treated as a balanced or well-powered evaluation task.",
     "Five reversed fine-action intervals were found in train/validation metadata; a future adapter must exclude them deterministically and report counts."
   ],
   "next_admission_requirements": [
     "Finish the selected pitch-shifted 160-train/207-validation download and verify every file size/SHA-256 against the immutable plan; do not download test or unassigned media.",
+    "Run the immutable whole-selection AV validation report and require its exact per-file media hashes before building event/window corpora.",
     "Verify audio/video alignment and causal 30-second action-window decoding on training and validation files, using no future correction context.",
     "Use only official train and validation session IDs; exclude all 85 unassigned annotation records and never load test labels or media.",
     "Start with a predeclared binary correct-vs-wrong action task, exclude otherwise/reversed intervals, and preserve natural prevalence in validation.",

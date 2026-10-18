@@ -118,20 +118,28 @@ task-quality evidence or proof that all sessions are aligned. The full fixed
 directory with per-file range/ETag/size/SHA checks.
 
 Feature extraction, event decoding, and dataset training or quality evaluation
-have not run. C: had over 200 GB free; no cloud compute was used. GPU use so far
-was limited to the two HotUGPU-gated runtime/trainability smokes described
-below. The CPU JAX VideoPrism path decoded one selected train MP4 and returned
-finite `[1, 2048, 768]` tokens. First compiled forward took 7.74s; three
-same-shape repeats took 1.20–1.42s (median 1.29s), implying about 76 minutes
-of model-forward time for the 3,528 planned windows, before media decode and
-cache writes. HotUGPU yielded the RTX 3080 for a Whisper Tiny 30-second shape
-smoke (`[1, 1500, 384]`, 0.49s, 227 MiB peak allocation) and a 32-update
-synthetic readout forward/backward smoke (379,652 trainable parameters, 0.56s,
-79 MiB peak). The proposed pre-quantization total for frozen VideoPrism
-(114,365,184) + Whisper Tiny (37,760,640) + MiniLM L3 (17,390,336) and this
-readout (379,652) is 169,895,812 parameters. This is an architectural
-inventory, not a packaged/runtime residency measurement. These are
-throughput/integrity checks only, not task quality or training evidence.
+have not run. C: had over 200 GB free; no cloud compute was used. GPU execution
+was only through the local HotUGPU guard. The CPU JAX VideoPrism path decoded a
+selected train MP4 and returned finite `[1, 2048, 768]` tokens. A later
+pitch-shifted-video smoke sampled eight frames from the first 30 seconds and
+returned finite `[1, 2048, 768]` tokens; the 504x896 decoded frames were
+preprocessed to 288x288. Its cold compile+forward was 6.62s; steady-state
+timing is not yet measured for that exact path. HotUGPU yielded the RTX 3080
+for a Whisper Tiny 30-second smoke (`[1, 1500, 384]`, 0.49s, 227 MiB peak
+allocation) and a 32-update synthetic readout smoke (379,652 trainable
+parameters, 0.56s, 79 MiB peak). A separate encoder-only Whisper run used PyAV
+resampling (no environment upgrade because `torchaudio` is absent):
+`[1,80,3000]` to `[1,1500,384]`, about 0.73s forward, 182 MiB peak
+allocation, 204 MiB peak reserved. MiniLM L3 loaded locally (17,389,824
+parameters; revision `4ca70771034acceecb2e72475f72050fcdde4ddc`) and encoded the
+fixed task query in 0.122s on CPU. The proposed pre-quantization configuration
+uses encoder-only Whisper (8,208,384), not the full 37,760,640-parameter
+Whisper Tiny model. Together with VideoPrism (114,365,184), MiniLM L3
+(17,389,824), and this readout (379,652), the inventory is 140,343,044
+parameters. This is not a packaged/runtime residency measurement; the
+VideoPrism checkpoint alone is about 457 MB, so the provisional 200 MB bundle
+goal is not met. These are throughput/integrity checks only, not task quality
+or training evidence.
 
 If all selected companion files pass integrity and synchronization checks, the
 proposed task is
