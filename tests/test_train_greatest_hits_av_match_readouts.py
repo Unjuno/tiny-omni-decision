@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.train_greatest_hits_av_match_readouts import probability_metrics
+from scripts.train_greatest_hits_av_match_readouts import fit_temperature, probability_metrics
 
 
 def test_preregistered_readout_config_is_valid_json_and_cpu_only():
@@ -36,3 +36,14 @@ def test_uniform_probabilities_are_calibrated_and_bad_vectors_fail_closed():
     assert metrics["ece_15"] == 0.0
     with pytest.raises(ValueError, match="sum to one"):
         probability_metrics([0], [[0.4, 0.4]])
+
+
+def test_temperature_fit_accepts_logits_created_in_inference_mode():
+    import torch
+
+    with torch.inference_mode():
+        logits = torch.tensor([[3.0, -3.0], [-1.0, 1.0], [0.5, -0.5]])
+    temperature = fit_temperature(logits, torch.tensor([0, 1, 0]))
+
+    assert math.isfinite(temperature)
+    assert temperature > 0

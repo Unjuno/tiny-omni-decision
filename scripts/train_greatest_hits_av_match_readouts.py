@@ -72,6 +72,31 @@ def metric_for_rows(rows: list[dict[str, Any]], indices: list[int]) -> dict[str,
     )
 
 
+def fit_temperature(logits, targets) -> float:
+    import torch
+    from torch.nn import functional as F
+    from torch.optim import LBFGS
+
+    # Clone logits produced under inference_mode so autograd can save them while
+    # differentiating the scalar temperature.
+    calibration_logits = logits.clone()
+    log_temperature = torch.nn.Parameter(torch.zeros((), dtype=torch.float32))
+    optimizer = LBFGS([log_temperature], max_iter=100, line_search_fn="strong_wolfe")
+
+    def closure():
+        optimizer.zero_grad()
+        temperature = log_temperature.exp().clamp(0.05, 20.0)
+        loss = F.cross_entropy(calibration_logits / temperature, targets)
+        loss.backward()
+        return loss
+
+    optimizer.step(closure)
+    temperature = float(log_temperature.detach().exp().clamp(0.05, 20.0))
+    if not math.isfinite(temperature) or temperature <= 0:
+        raise ValueError("calibration temperature is invalid")
+    return temperature
+
+
 def paired_cluster_bootstrap(
     rows_a: list[dict[str, Any]], rows_b: list[dict[str, Any]], replicates: int, seed: int
 ) -> dict[str, Any]:
@@ -167,7 +192,7 @@ def train_experiment(config_path: Path, output_dir: Path) -> dict[str, Any]:
     import torch
     from torch import nn
     from torch.nn import functional as F
-    from torch.optim import LBFGS, AdamW
+    from torch.optim import AdamW
 
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite output directory: {output_dir}")
@@ -454,27 +479,7 @@ def train_experiment(config_path: Path, output_dir: Path) -> dict[str, Any]:
             cal_rows, cal_audio, cal_video, cal_targets, _ = tensorized["calibration"]
             with torch.inference_mode():
                 cal_logits = logits_for(model, condition, cal_audio, cal_video).detach()
-            log_temperature = torch.nn.Parameter(torch.zeros((), dtype=torch.float32))
-            temperature_optimizer = LBFGS(
-                [log_temperature], max_iter=100, line_search_fn="strong_wolfe"
-            )
-
-            def temperature_closure(
-                optimizer=temperature_optimizer,
-                log_temp=log_temperature,
-                logits=cal_logits,
-                targets=cal_targets,
-            ):
-                optimizer.zero_grad()
-                temperature = log_temp.exp().clamp(0.05, 20.0)
-                calibration_loss = F.cross_entropy(logits / temperature, targets)
-                calibration_loss.backward()
-                return calibration_loss
-
-            temperature_optimizer.step(temperature_closure)
-            temperature = float(log_temperature.detach().exp().clamp(0.05, 20.0))
-            if not math.isfinite(temperature) or temperature <= 0:
-                raise ValueError("calibration temperature is invalid")
+            temperature = fit_temperature(cal_logits, cal_targets)
             calibrated_val_probabilities = (
                 torch.softmax(best_val_logits / temperature, dim=1).cpu().tolist()
             )
