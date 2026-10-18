@@ -55,6 +55,19 @@ quality. Inputs and prediction rows were hash-checked; the result is public,
 not sealed. No training or promotion. See the
 [fixed-checkpoint result](docs/pretrained_reuse/R2_CLEVR4_PUBLIC_VAL_FIXED_READOUT_RESULTS_20261019.md).
 
+**2026-10-19 R2 one-time paired public-val readout check:** On the same
+19,988 already-exposed public validation images, the previously selected
+epoch-7 spatial-cell head scored 92.25% macro Accuracy / 0.1949 NLL versus
+91.37% / 0.2108 for its matched global-pooling head. The spatial result gains
+mostly on Count (+3.40 pp) while Texture falls 0.44 pp; Count remains weak.
+Paired image intervals favor spatial for Accuracy/NLL/Brier, but this public
+split is not blind and cannot establish an independent quality gain. The head
+is permutation-invariant across its 16 cells, so it does not encode absolute
+cell positions. No training, tuning, promotion or quantization occurred. A
+post-inference manifest-key error was recovered by CPU-only validation of all
+79,952 saved predictions; no GPU rerun was done. See the [paired report,
+intervals, hashes and execution record](docs/pretrained_reuse/R2_CLEVR4_SPATIAL_PUBLIC_PAIRED_20261019.md).
+
 **2026-10-19 R2 EuroSAT RGB source screen:** The official 27k-image RGB
 archive was hash-verified; all file hashes are unique. The JPEG package has no
 per-image coordinates, acquisition IDs, or official split, so a random image

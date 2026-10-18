@@ -435,6 +435,7 @@ def run(args: argparse.Namespace) -> dict:
                         "id": row["id"],
                         "asset_id": row["id"],
                         "bytes_sha256": digest,
+                        "media_sha256": digest,
                         "source_split": "official-public-val",
                     }
                 )
