@@ -1,0 +1,72 @@
+{
+  "id": "textfree-video-program-order-v1",
+  "source": {
+    "dataset": "MIT-IBM/CLEVRER",
+    "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+    "license": "CC0-1.0",
+    "sample_dir": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-program-order-v1-attempt-03",
+    "expected_train_rows": 512,
+    "expected_validation_rows": 90,
+    "train_manifest_sha256": "5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d",
+    "validation_manifest_sha256": "28a4670c16495a3fffed3a7ebf5c884197c67713194ed778787cd072c059961e",
+    "fetch_report_sha256": "cfc0b5dbbc1c9256125a61e73d9e83a0afeab34f526738932b314c7249cc642e",
+    "pretraining_gate_sha256": "96cbd6f677a10f067ae9ee21df7790a13086260276f53facf01a276486df6611"
+  },
+  "features": {
+    "cache": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-program-order-features-v1/framewise-features.npz",
+    "cache_report": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-program-order-features-v1/cache-report.json",
+    "model_id": "google/videoprism-base-f16r288",
+    "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "encoder_parameter_count": 114365184,
+    "frames": 8,
+    "feature_width": 768,
+    "temporal_profile": "8 uniformly sampled endpoint-inclusive frames; spatial-token mean per time index"
+  },
+  "task": {
+    "input_fields": [
+      "video_features",
+      "typed_program",
+      "taxonomy",
+      "supplied_options"
+    ],
+    "excluded_fields": ["natural_language_question", "sample_id", "scene_id", "media_hash"],
+    "supervision_only_fields": ["target"],
+    "question_types": ["temporal_descriptive", "static_descriptive"],
+    "decision_output": "JSON probabilities normalized over supplied candidate options"
+  },
+  "comparison": {
+    "seed": 17,
+    "epochs": 256,
+    "batch_size": 64,
+    "updates_per_epoch": 8,
+    "max_optimizer_updates": 2048,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "early_stopping": false,
+    "selector": "minimum mean validation NLL across question-type-by-taxonomy groups present; ties choose earlier epoch",
+    "arms": [
+      {
+        "id": "bilstm_mean_program",
+        "temporal_mode": "bilstm",
+        "program_pooling": "mean"
+      },
+      {
+        "id": "bilstm_position_program",
+        "temporal_mode": "bilstm",
+        "program_pooling": "sinusoidal_position"
+      }
+    ]
+  },
+  "integrity": {
+    "group_key": "scene_group_id",
+    "asset_key": "media_sha256",
+    "content_key": "casefolded normalized question plus sorted normalized options",
+    "sealed_audit_loaded": false,
+    "validation_role": "development-only checkpoint selection; no blind-audit claim"
+  }
+}

@@ -199,11 +199,19 @@ def encode_video_rows(
 class TextFreeVideoReadout(nn.Module):
     """Score supplied choices from frozen video features and typed criteria."""
 
-    def __init__(self, vocab: VideoVocab, temporal_mode: str) -> None:
+    def __init__(
+        self,
+        vocab: VideoVocab,
+        temporal_mode: str,
+        program_pooling: str = "mean",
+    ) -> None:
         super().__init__()
         if temporal_mode not in {"mean_mlp", "bilstm"}:
             raise ValueError("temporal_mode must be 'mean_mlp' or 'bilstm'")
+        if program_pooling not in {"mean", "sinusoidal_position"}:
+            raise ValueError("program_pooling must be 'mean' or 'sinusoidal_position'")
         self.temporal_mode = temporal_mode
+        self.program_pooling = program_pooling
         self.video_projection = nn.Sequential(
             nn.Linear(FEATURE_WIDTH, VIDEO_WIDTH),
             nn.LayerNorm(VIDEO_WIDTH),
@@ -233,6 +241,30 @@ class TextFreeVideoReadout(nn.Module):
                 bidirectional=True,
             )
             self.temporal_norm = nn.LayerNorm(VIDEO_WIDTH)
+
+    def _program_context(self, program_ids: Tensor) -> Tensor:
+        program_mask = program_ids.ne(0)
+        program_features = self.program_embedding(program_ids)
+        if self.program_pooling == "sinusoidal_position":
+            length = program_ids.shape[1]
+            positions = torch.arange(
+                length, dtype=program_features.dtype, device=program_features.device
+            ).unsqueeze(1)
+            dimensions = torch.arange(
+                0,
+                program_features.shape[-1],
+                2,
+                dtype=program_features.dtype,
+                device=program_features.device,
+            )
+            scales = torch.exp(dimensions * (-9.210340371976184 / program_features.shape[-1]))
+            angles = positions * scales.unsqueeze(0)
+            positional = torch.zeros_like(program_features)
+            positional[..., 0::2] = torch.sin(angles)
+            positional[..., 1::2] = torch.cos(angles)
+            program_features = program_features + positional
+        program_features = program_features * program_mask.unsqueeze(-1)
+        return program_features.sum(dim=1) / program_mask.sum(dim=1, keepdim=True).clamp_min(1)
 
     def forward(
         self,
@@ -269,10 +301,7 @@ class TextFreeVideoReadout(nn.Module):
             temporal = self.temporal_norm(temporal)
         video_context = temporal.mean(dim=1)
 
-        program_mask = program_ids.ne(0)
-        program_features = self.program_embedding(program_ids)
-        program_context = (program_features * program_mask.unsqueeze(-1)).sum(dim=1)
-        program_context = program_context / program_mask.sum(dim=1, keepdim=True).clamp_min(1)
+        program_context = self._program_context(program_ids)
         taxonomy_context = self.taxonomy_embedding(taxonomy_ids)
         option_context = self.option_embedding(option_ids)
         candidate_count = option_ids.shape[1]

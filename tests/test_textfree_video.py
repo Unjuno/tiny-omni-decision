@@ -131,6 +131,31 @@ def test_candidate_order_permutation_preserves_option_scores():
     assert torch.allclose(first_logits[:, [2, 0, 1]], permuted_logits, atol=1e-6, rtol=0)
 
 
+def test_position_program_pooling_retains_typed_operator_order_without_new_parameters():
+    model_type, build_vocab, _ = _api()
+    row = _rows()[0]
+    vocab = build_vocab([row])
+    torch.manual_seed(17)
+    mean_model = model_type(vocab, temporal_mode="bilstm", program_pooling="mean").eval()
+    ordered_model = model_type(
+        vocab, temporal_mode="bilstm", program_pooling="sinusoidal_position"
+    ).eval()
+    ordered_model.load_state_dict(mean_model.state_dict(), strict=True)
+    ids = torch.tensor([[vocab.program_to_id[token] for token in row["program"]]])
+    reversed_ids = ids.flip(dims=(1,))
+
+    mean_context = mean_model._program_context(ids)
+    mean_reversed_context = mean_model._program_context(reversed_ids)
+    ordered_context = ordered_model._program_context(ids)
+    ordered_reversed_context = ordered_model._program_context(reversed_ids)
+
+    assert torch.allclose(mean_context, mean_reversed_context, atol=1e-7, rtol=0)
+    assert not torch.allclose(ordered_context, ordered_reversed_context, atol=1e-7, rtol=0)
+    assert sum(p.numel() for p in mean_model.parameters()) == sum(
+        p.numel() for p in ordered_model.parameters()
+    )
+
+
 def test_video_split_gate_rejects_scene_media_and_normalized_content_overlap():
     from tiny_omni_decision.textfree_video import validate_video_splits
 

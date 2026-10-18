@@ -166,7 +166,9 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
 
     train_rows, validation_rows = _read_rows(train_path), _read_rows(validation_path)
     validate_video_splits(train_rows, validation_rows)
-    if len(train_rows) != 512 or len(validation_rows) != 400:
+    if len(train_rows) != int(source.get("expected_train_rows", 512)) or len(
+        validation_rows
+    ) != int(source.get("expected_validation_rows", 400)):
         raise ValueError("unexpected frozen CLEVRER sample cardinality")
     train_report = _source_rows_gate(train_rows, sample_dir, "train", DATASET_REVISION)
     validation_report = _source_rows_gate(
@@ -209,8 +211,12 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     with np.load(feature_path, allow_pickle=False) as archive:
         media_hashes = archive["media_sha256"].astype(str).tolist()
         values = archive["features"]
-        if values.shape != (456, 8, 768) or values.dtype != np.float32:
-            raise ValueError("expected [456,8,768] float32 framewise features")
+        expected_media_count = len(
+            set(train_report["verified_media_sha256"])
+            | set(validation_report["verified_media_sha256"])
+        )
+        if values.shape != (expected_media_count, 8, 768) or values.dtype != np.float32:
+            raise ValueError(f"expected [{expected_media_count},8,768] float32 framewise features")
         if not np.isfinite(values).all() or len(media_hashes) != len(set(media_hashes)):
             raise ValueError("feature cache contains non-finite values or duplicate media")
         features_by_media = {
@@ -600,6 +606,9 @@ def _run_variant(
     output_dir: Path,
     device: torch.device,
     epoch_orders: list[np.ndarray],
+    *,
+    temporal_mode: str | None = None,
+    program_pooling: str = "mean",
 ) -> dict[str, Any]:
     variant_started_utc = datetime.now(UTC).isoformat()
     torch.manual_seed(SEED)
@@ -608,7 +617,10 @@ def _run_variant(
         torch.cuda.reset_peak_memory_stats(device)
     random.seed(SEED)
     np.random.seed(SEED)
-    model = TextFreeVideoReadout(vocab, temporal_mode=variant).to(device)
+    selected_temporal_mode = temporal_mode or variant
+    model = TextFreeVideoReadout(
+        vocab, temporal_mode=selected_temporal_mode, program_pooling=program_pooling
+    ).to(device)
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
     train = _move(train, device)
@@ -705,7 +717,9 @@ def _run_variant(
     torch.save({"epoch": final_epoch, "state_dict": final_state}, final_path)
     final_path.replace(output_dir / f"final-{variant}.pt")
 
-    best_model = TextFreeVideoReadout(vocab, temporal_mode=variant).to(device)
+    best_model = TextFreeVideoReadout(
+        vocab, temporal_mode=selected_temporal_mode, program_pooling=program_pooling
+    ).to(device)
     best_payload = torch.load(
         output_dir / f"best-{variant}.pt", map_location=device, weights_only=True
     )
@@ -757,7 +771,9 @@ def _run_variant(
         vocab.option_to_id,
     )
 
-    final_model = TextFreeVideoReadout(vocab, temporal_mode=variant).to(device)
+    final_model = TextFreeVideoReadout(
+        vocab, temporal_mode=selected_temporal_mode, program_pooling=program_pooling
+    ).to(device)
     final_payload = torch.load(
         output_dir / f"final-{variant}.pt", map_location=device, weights_only=True
     )
@@ -775,6 +791,8 @@ def _run_variant(
     peak_vram = torch.cuda.max_memory_allocated(device) if device.type == "cuda" else 0
     return {
         "variant": variant,
+        "temporal_mode": selected_temporal_mode,
+        "program_pooling": program_pooling,
         "started_utc": variant_started_utc,
         "finished_utc": datetime.now(UTC).isoformat(),
         "seed": SEED,
