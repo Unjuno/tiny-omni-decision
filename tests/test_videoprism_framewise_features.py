@@ -5,11 +5,39 @@ import pytest
 np = pytest.importorskip("numpy")
 
 from scripts.extract_videoprism_framewise_features import (  # noqa: E402
+    _gpu_gate_metadata,
     _unique_asset_rows,
     _validate_cross_sample,
     center_framewise_features,
     pool_framewise_tokens,
 )
+
+
+def test_framewise_extraction_requires_hotugpu_telemetry(monkeypatch: pytest.MonkeyPatch) -> None:
+    gate_env = {
+        "reserved_mib": "TINY_OMNI_GPU_GATE_RESERVED_MIB",
+        "free_mib": "TINY_OMNI_GPU_GATE_FREE_MIB",
+        "total_mib": "TINY_OMNI_GPU_GATE_TOTAL_MIB",
+        "utilization_pct": "TINY_OMNI_GPU_GATE_UTILIZATION_PCT",
+        "block_if_free_mib": "TINY_OMNI_GPU_GATE_BLOCK_IF_FREE_MIB",
+        "min_child_free_mib": "TINY_OMNI_GPU_GATE_MIN_CHILD_FREE_MIB",
+    }
+
+    with pytest.raises(RuntimeError, match="requires HotUGPU gate"):
+        _gpu_gate_metadata()
+
+    values = {
+        "reserved_mib": "3200",
+        "free_mib": "13000",
+        "total_mib": "16384",
+        "utilization_pct": "0",
+        "block_if_free_mib": "14000",
+        "min_child_free_mib": "8000",
+    }
+    for key, value in values.items():
+        monkeypatch.setenv(gate_env[key], value)
+
+    assert _gpu_gate_metadata()["free_mib"] == 13000
 
 
 def test_framewise_pooling_preserves_time_and_matches_global_mean() -> None:

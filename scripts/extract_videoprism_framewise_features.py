@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -23,6 +24,36 @@ from scripts.extract_frozen_videoprism_features import (
     _preprocess,
     sha256_file,
 )
+
+
+def _gpu_gate_metadata() -> dict[str, int]:
+    variables = {
+        "reserved_mib": "TINY_OMNI_GPU_GATE_RESERVED_MIB",
+        "free_mib": "TINY_OMNI_GPU_GATE_FREE_MIB",
+        "total_mib": "TINY_OMNI_GPU_GATE_TOTAL_MIB",
+        "utilization_pct": "TINY_OMNI_GPU_GATE_UTILIZATION_PCT",
+        "block_if_free_mib": "TINY_OMNI_GPU_GATE_BLOCK_IF_FREE_MIB",
+        "min_child_free_mib": "TINY_OMNI_GPU_GATE_MIN_CHILD_FREE_MIB",
+    }
+    result = {}
+    for key, variable in variables.items():
+        value = os.environ.get(variable)
+        if value is None:
+            raise RuntimeError(f"VideoPrism extraction requires HotUGPU gate ({variable})")
+        try:
+            result[key] = int(value)
+        except ValueError as exc:
+            raise ValueError(f"invalid HotUGPU telemetry in {variable}") from exc
+    if (
+        result["reserved_mib"] < 3200
+        or result["free_mib"] >= result["block_if_free_mib"]
+        or result["free_mib"] < result["min_child_free_mib"]
+        or result["utilization_pct"] >= 5
+        or result["block_if_free_mib"] != 14000
+        or result["min_child_free_mib"] != 8000
+    ):
+        raise RuntimeError("HotUGPU reservation telemetry does not meet the frozen policy")
+    return result
 
 
 def _args() -> argparse.Namespace:
@@ -114,6 +145,7 @@ def _unique_asset_rows(
 
 def main() -> None:
     args = _args()
+    gpu_gate = _gpu_gate_metadata()
     train_dir = args.train_sample_dir.resolve(strict=True)
     evaluation_dir = args.evaluation_sample_dir.resolve(strict=True)
     checkpoint = args.checkpoint.resolve(strict=True)
@@ -230,6 +262,7 @@ def main() -> None:
         "rss_end_bytes": process.memory_info().rss,
         "jax_version": jax.__version__,
         "devices": [str(device) for device in jax.devices()],
+        "gpu_gate": gpu_gate,
         "feature_cache_file": cache_path.name,
         "feature_cache_sha256": sha256_file(cache_path),
         "feature_cache_bytes": cache_path.stat().st_size,
