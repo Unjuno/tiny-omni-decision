@@ -211,29 +211,14 @@
   ],
   "live_acquisition_processes": [
     {
-      "pid": 7696,
-      "started": "2026-10-18T03:27:32.2510250Z",
-      "command": "\"C:\\Users\\junny\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\npython -m scripts.acquire_perception_av_event_media --plan 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json' --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split train --output 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-train-media-01'\""
-    },
-    {
       "pid": 8040,
       "started": "2026-10-18T03:27:32.6778350Z",
       "command": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -m scripts.acquire_perception_av_event_media --plan C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split train --output C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-train-media-01"
     },
     {
-      "pid": 29624,
-      "started": "2026-10-18T03:27:59.2640730Z",
-      "command": "\"C:\\Users\\junny\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\npython -m scripts.acquire_perception_av_event_media --plan 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json' --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split valid --output 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-valid-media-01'\""
-    },
-    {
       "pid": 6700,
       "started": "2026-10-18T03:27:59.6490570Z",
       "command": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -m scripts.acquire_perception_av_event_media --plan C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split valid --output C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-valid-media-01"
-    },
-    {
-      "pid": 18632,
-      "started": "2026-10-18T05:03:22.3475310Z",
-      "command": "\"C:\\Users\\junny\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\n$ErrorActionPreference='Stop'; $base='https://api.github.com/repos/Unjuno/tiny-omni-decision'; $h=@{Accept='application/vnd.github+json';'User-Agent'='Codex'}; $branches=Invoke-RestMethod -Uri \\\"$base/branches?per_page=100\\\" -Headers $h; $prs=Invoke-RestMethod -Uri \\\"$base/pulls?state=open&per_page=100\\\" -Headers $h; $checks=Invoke-RestMethod -Uri \\\"$base/commits/ce053096e1615b20cd801e242fe4130cd97631be/check-runs\\\" -Headers $h; $proc=Get-CimInstance Win32_Process | Where-Object {$_.CommandLine -match 'acquire_perception_av_event_media'}; $procRows=@(foreach($p in $proc){[pscustomobject]@{pid=$p.ProcessId;started=$p.CreationDate.ToUniversalTime().ToString('o');command=$p.CommandLine}}); $manifestRows=@(foreach($s in @('train','valid')){$path=\\\"C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-$s-media-01\\manifest.json\\\";$m=Get-Content $path -Raw | ConvertFrom-Json;$clips=@($m.clips);$present=0;foreach($c in $clips){if((Test-Path $c.path) -and -not $c.path.EndsWith('.partial')){$present++}};[pscustomobject]@{split=$s;status=$m.status;manifest_rows=$clips.Count;files_present=$present;observed_at=(Get-Item $path).LastWriteTime.ToUniversalTime().ToString('o')}}); $report=[ordered]@{captured_at_utc='2026-10-18T05:03:10Z';repository='Unjuno/tiny-omni-decision';local=[ordered]@{branch='codex/r2-av-postnorm-stability';head='ce053096e1615b20cd801e242fe4130cd97631be';worktree_clean=$true};open_pull_requests=@(foreach($p in $prs){[ordered]@{number=$p.number;title=$p.title;draft=$p.draft;head_ref=$p.head.ref;head_sha=$p.head.sha;base_ref=$p.base.ref;base_sha=$p.base.sha}});remote_branches=@(foreach($b in $branches){[ordered]@{name=$b.name;sha=$b.commit.sha}});current_commit_checks=@(foreach($c in $checks.check_runs){[ordered]@{name=$c.name;status=$c.status;conclusion=$c.conclusion;url=$c.html_url}});live_acquisition_processes=$procRows;mutable_acquisition_manifests=$manifestRows;constraints=@{no_process_intervention=$true;no_gpu_training_or_cloud=$true;sealed_audit_not_opened=$true}}; $out=Join-Path (Get-Location) 'docs/pretrained_reuse/R0_REMOTE_REFRESH_20261018.json'; $report | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $out -Encoding utf8; Get-FileHash -LiteralPath $out -Algorithm SHA256 | Select-Object Path,Hash | Format-List; (Get-Item $out).Length\""
     }
   ],
   "mutable_acquisition_manifests": [
@@ -257,4 +242,4 @@
     "sealed_audit_not_opened": true,
     "no_process_intervention": true
   }
-}
+}\n
