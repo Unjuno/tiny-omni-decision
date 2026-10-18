@@ -70,8 +70,27 @@ limits cannot both be met. It does not stop or modify Orbitune. If the GPU does
 not yield, the job does not launch. Sealed audit, existing Teacher artifacts
 and prior runs remain read-only.
 
-## Results
+## Execution status (in progress)
 
-Pending local media verification, frozen VideoPrism feature extraction, and the
-two matched readout fits. Do not interpret the protocol or preflight as a model
-quality result.
+- Materialization completed for 1,024 training rows / 614 train videos and 1,400
+  validation rows / 800 validation videos. Per-video hashes were recorded;
+  scene, media-hash and normalized question/options overlap were all zero.
+- Frozen-feature preflight passed with 1,414 unique media and no sealed audit.
+  Train and validation ordered-ID hashes are in the external preflight.
+- The VideoPrism extraction environment exposed `TFRT_CPU_0` only. It therefore
+  extracted the fixed eight-frame features on CPU in 1,844.892 seconds. The
+  resulting 32,421,494-byte feature cache SHA-256 is
+  `a57b15480444dff2db80feed639c51d59e4e6bf0119bb33ff6af4ffcb8959a00`.
+  The first run attempt held a GPU reservation unnecessarily; it did not use
+  the GPU for feature computation. The readout fit remains CUDA-gated.
+- A preflight/run-directory path collision was found before training. The first
+  preflight is preserved; the corrected v1 config writes preflight and run
+  output to separate new directories.
+- Orbitune's existing idle supervisor detected this job as a foreign GPU
+  process and yielded cleanly at step 287890 after writing its checkpoint. Its
+  trainer was not stopped, modified, or resumed by this work.
+
+Pending: corrected-config preflight, two matched CUDA readout fits, learning
+curves, validation comparison and paired scene bootstrap. Do not interpret the
+current protocol, data preflight, or frozen feature cache as a model-quality
+result.
