@@ -164,3 +164,36 @@ has occurred. The GPU is occupied by another process; this acquisition uses no
 GPU. The runner checks archive/member pins and CRCs, hashes every extracted
 clip, and preserves an incomplete manifest on failure. Existing datasets,
 model artifacts, runs, and checkpoints are unchanged.
+
+## Follow-up execution snapshot (2026-10-18 04:18 UTC)
+
+The two original acquisition processes remain active in their original
+split-specific output directories. Their manifests currently contain 95/400
+TRAIN and 92/400 VALID verified clips; no new acquisition process was started.
+These are live snapshot counts. Full acquisition and full PTS/integrity audit
+remain incomplete, so model fitting is still gated.
+
+Before fitting, CPU encoder plumbing was smoke-tested on one fixed TRAIN event
+(`video_11362`, with `sound_id=4` used only for provenance joins). DINOv2-small
+produced 9 deterministic finite candidate vectors from decoder frame 390 at
+1080x1920, with no labels passed to the image encoder. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-vision-smoke-01\result.json`;
+feature SHA-256 `6d58275a384c4f480de283f1bac81422d3ab728489ce72c5d6576381a3176d2b`;
+script SHA-256 `a075fa088b7a1c95f8a02b28d721de45292e3197e6d28e22c0ea16f6fe80859c`.
+
+The pinned CLAP audio branch was also exercised on that TRAIN event using its
+actual decoded video PTS interval [12.6944575, 13.3679036] seconds and decoded
+audio timeline. PyAV resampled to 48 kHz, yielding 32,325 event samples and one
+512-dimensional normalized event vector. Repeated CPU inference was bitwise
+equal and finite. No task score, training, GPU use, or TEST access was
+involved. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-audio-smoke-02\result.json`;
+feature SHA-256 `e7ad3c64a35fcad18e276fbf19026d5a75f1799087927eb3c1f3268cdecad7ac`;
+receipt SHA-256 `6d58ac808fcfa5428710eefc453d7939b719bb4b1ae653581e2e74190b683142`;
+script SHA-256 `17237851552a8def4f4e8557a213d4cb6725a98adc42970e9905363bb6df2b1f`.
+The smoke uses PyAV's resampler and did not upgrade or add runtime packages.
+CPU smoke tests: 13 passed.
+
+These one-event encoder smokes do not substitute for the complete media,
+PTS, split-integrity, and annotation/crop join gates. No readout fitting or
+quality evaluation has started.
