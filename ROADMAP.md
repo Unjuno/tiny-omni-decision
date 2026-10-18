@@ -87,6 +87,17 @@ selection/evaluation. No media or challenge-test archive was fetched; AVA
 remains REVIEW pending rights, schema, and clean validation resolution. See
 the [audit](docs/pretrained_reuse/R2_AVA_ACTIVE_SPEAKER_LABEL_AUDIT_20261019.md).
 
+**2026-10-19 R2 independent AV admission gate:** Reconciled AVQA, AVA
+ActiveSpeaker, MAVD, UnAV-100, AVE/AudioSet, AV-SyncBench, STARSS23 and the
+Greatest Hits correspondence probe. None currently provides both resolved rights and
+independent, truth-bearing joint-input validation suitable for another
+quality-selected GPU run. The E0G1 fixed-checkpoint replacement diagnostic is
+already reproducible across attempts 11/14/15 and measures sensitivity only;
+it is not a quality result. Keep the existing outcomes and audit partitions
+fixed. Re-enter GPU fitting only after a candidate passes the documented source,
+grouping, label-validity and overlap gates. See the
+[candidate reconciliation](docs/pretrained_reuse/R2_AV_INDEPENDENT_TASK_SCREEN_20261019.md).
+
 **2026-10-19 R2 direct no-text probe reconciliation:** Path A has standalone
 audio, image, video and sensor probes, plus screen-region category probes.
 The screen results use oracle-localized crops and coarse labels; the expanded
