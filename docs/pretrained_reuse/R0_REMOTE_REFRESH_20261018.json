@@ -1,0 +1,260 @@
+{
+  "captured_at_utc": "2026-10-18T05:03:10Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "local": {
+    "branch": "codex/r2-av-postnorm-stability",
+    "head": "ce053096e1615b20cd801e242fe4130cd97631be",
+    "worktree_clean": true
+  },
+  "open_pull_requests": [
+    {
+      "number": 15,
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "draft": true,
+      "head_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "head_sha": "43974fb2f6b070e0182465edca12d061b65ed8dd",
+      "base_ref": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    },
+    {
+      "number": 14,
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "draft": true,
+      "head_ref": "fix/student-qat-training-handoff",
+      "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "base_ref": "codex/ternary-student-recovery",
+      "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c"
+    },
+    {
+      "number": 13,
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "draft": false,
+      "head_ref": "feat/ternary-student-recovery",
+      "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "base_ref": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    },
+    {
+      "number": 12,
+      "title": "feat: add strict postquant teacher cache boundary",
+      "draft": true,
+      "head_ref": "codex/postquant-teacher-cache",
+      "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "base_ref": "codex/postquant-numerical-core",
+      "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"
+    },
+    {
+      "number": 11,
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "draft": true,
+      "head_ref": "codex/postquant-numerical-core",
+      "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "base_ref": "codex/postquant-worker-entrypoints",
+      "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"
+    },
+    {
+      "number": 10,
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "draft": true,
+      "head_ref": "codex/postquant-worker-entrypoints",
+      "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "base_ref": "codex/roadmap-compression-video-specialization",
+      "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"
+    },
+    {
+      "number": 9,
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "draft": true,
+      "head_ref": "codex/teacher-quality-v1",
+      "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "base_ref": "main",
+      "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c"
+    }
+  ],
+  "remote_branches": [
+    {
+      "name": "codex/clevr4-image-candidate",
+      "sha": "6c2abb842b448e248573e2f729670e1a1080ae98"
+    },
+    {
+      "name": "codex/decision-head-validation",
+      "sha": "24d7fab171524aea51b3ba82726d33c728407d50"
+    },
+    {
+      "name": "codex/durable-decision-teacher",
+      "sha": "fbb1dced2f6b6a0272ca29325dfb0b54da7e5c58"
+    },
+    {
+      "name": "codex/fix-speechcommands-parquet",
+      "sha": "ac44d457073df83d7a0c2f8d6c5e4490f725014b"
+    },
+    {
+      "name": "codex/phase1-reproducible-smoke",
+      "sha": "c5b0c5020f77018fbce8d6f0880a079a3bd51281"
+    },
+    {
+      "name": "codex/phase2-audio-video",
+      "sha": "b8057ec534b3792ab54ee136465544fa9c26d925"
+    },
+    {
+      "name": "codex/phase2-dataset-gates",
+      "sha": "b02180f7f2bd6f2876958a1e5c6018fc6bdc9927"
+    },
+    {
+      "name": "codex/phase3-high-precision-omni",
+      "sha": "30bcf23c510b9db724c0b17b07f284139105ee44"
+    },
+    {
+      "name": "codex/postquant-cache-preparation",
+      "sha": "92fc57f2a28d82b7afad5533f2df66a4042d67a0"
+    },
+    {
+      "name": "codex/postquant-numerical-core",
+      "sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"
+    },
+    {
+      "name": "codex/postquant-teacher-cache",
+      "sha": "c79a50bd937de9266fb1277efd68fd24b3989a61"
+    },
+    {
+      "name": "codex/postquant-worker-entrypoints",
+      "sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"
+    },
+    {
+      "name": "codex/qat-groupwise-performance",
+      "sha": "c50f0eb364d963bbcb3144a83305705880d9d426"
+    },
+    {
+      "name": "codex/r2-av-audio-cache",
+      "sha": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14"
+    },
+    {
+      "name": "codex/r2-av-matched-evidence",
+      "sha": "57593a1a29328d238edc8436162ebd2cbac2ea86"
+    },
+    {
+      "name": "codex/r2-av-postnorm-stability",
+      "sha": "ce053096e1615b20cd801e242fe4130cd97631be"
+    },
+    {
+      "name": "codex/r2-av-replacement",
+      "sha": "328e935c7bf1e94e2f7e51907393d4514de4e5fa"
+    },
+    {
+      "name": "codex/r2-av-transport",
+      "sha": "8a5440da334e74e970d80a7059ca5bb99a7248cb"
+    },
+    {
+      "name": "codex/roadmap-compression-video-specialization",
+      "sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"
+    },
+    {
+      "name": "codex/teacher-quality-clean-dev-v1",
+      "sha": "041c5954b37ba74dc9286d1d37d8bfe029dc6414"
+    },
+    {
+      "name": "codex/teacher-quality-next",
+      "sha": "c5f120857bc5c4f392e1605895a614760cef12a1"
+    },
+    {
+      "name": "codex/teacher-quality-physionpp",
+      "sha": "740ec0a7d2d8ba870b384a130c8b0821537b9626"
+    },
+    {
+      "name": "codex/teacher-quality-v1",
+      "sha": "8bf351c9b2537e03780d55edf12c45ad09819134"
+    },
+    {
+      "name": "codex/ternary-student-recovery",
+      "sha": "acd20f04f3410900689098d7b50eeb10c5d4c52f"
+    },
+    {
+      "name": "codex/textfree-video-coverage-v1",
+      "sha": "74e2094c51af6a8738dd67d42d018442b979cd75"
+    },
+    {
+      "name": "codex/textfree-video-task-error-audit",
+      "sha": "7b13057a38e7d84019d802129c70ee5350185db7"
+    },
+    {
+      "name": "codex/video-teacher-v2-long-budget",
+      "sha": "ac93eddd289bf207b70b55759a922b070132d0d2"
+    },
+    {
+      "name": "codex/video-teacher-v2",
+      "sha": "6b15fcbb2546ac153c0313af0d63be86f41ff885"
+    },
+    {
+      "name": "docs/pretrained-reuse-roadmap-20261010",
+      "sha": "43974fb2f6b070e0182465edca12d061b65ed8dd"
+    },
+    {
+      "name": "feat/ternary-student-recovery",
+      "sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd"
+    },
+    {
+      "name": "fix/student-qat-training-handoff",
+      "sha": "c3391a0c689d69df3300686d9c287546b741e7c8"
+    },
+    {
+      "name": "main",
+      "sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    }
+  ],
+  "current_commit_checks": [
+    {
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/actions/runs/39099103506/job/117591511854"
+    }
+  ],
+  "live_acquisition_processes": [
+    {
+      "pid": 7696,
+      "started": "2026-10-18T03:27:32.2510250Z",
+      "command": "\"C:\\Users\\junny\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\npython -m scripts.acquire_perception_av_event_media --plan 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json' --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split train --output 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-train-media-01'\""
+    },
+    {
+      "pid": 8040,
+      "started": "2026-10-18T03:27:32.6778350Z",
+      "command": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -m scripts.acquire_perception_av_event_media --plan C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split train --output C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-train-media-01"
+    },
+    {
+      "pid": 29624,
+      "started": "2026-10-18T03:27:59.2640730Z",
+      "command": "\"C:\\Users\\junny\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\npython -m scripts.acquire_perception_av_event_media --plan 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json' --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split valid --output 'C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-valid-media-01'\""
+    },
+    {
+      "pid": 6700,
+      "started": "2026-10-18T03:27:59.6490570Z",
+      "command": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -m scripts.acquire_perception_av_event_media --plan C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-media-plan-02\\plan.json --plan-sha256 9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25 --split valid --output C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-valid-media-01"
+    },
+    {
+      "pid": 18632,
+      "started": "2026-10-18T05:03:22.3475310Z",
+      "command": "\"C:\\Users\\junny\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\n$ErrorActionPreference='Stop'; $base='https://api.github.com/repos/Unjuno/tiny-omni-decision'; $h=@{Accept='application/vnd.github+json';'User-Agent'='Codex'}; $branches=Invoke-RestMethod -Uri \\\"$base/branches?per_page=100\\\" -Headers $h; $prs=Invoke-RestMethod -Uri \\\"$base/pulls?state=open&per_page=100\\\" -Headers $h; $checks=Invoke-RestMethod -Uri \\\"$base/commits/ce053096e1615b20cd801e242fe4130cd97631be/check-runs\\\" -Headers $h; $proc=Get-CimInstance Win32_Process | Where-Object {$_.CommandLine -match 'acquire_perception_av_event_media'}; $procRows=@(foreach($p in $proc){[pscustomobject]@{pid=$p.ProcessId;started=$p.CreationDate.ToUniversalTime().ToString('o');command=$p.CommandLine}}); $manifestRows=@(foreach($s in @('train','valid')){$path=\\\"C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-av-event-$s-media-01\\manifest.json\\\";$m=Get-Content $path -Raw | ConvertFrom-Json;$clips=@($m.clips);$present=0;foreach($c in $clips){if((Test-Path $c.path) -and -not $c.path.EndsWith('.partial')){$present++}};[pscustomobject]@{split=$s;status=$m.status;manifest_rows=$clips.Count;files_present=$present;observed_at=(Get-Item $path).LastWriteTime.ToUniversalTime().ToString('o')}}); $report=[ordered]@{captured_at_utc='2026-10-18T05:03:10Z';repository='Unjuno/tiny-omni-decision';local=[ordered]@{branch='codex/r2-av-postnorm-stability';head='ce053096e1615b20cd801e242fe4130cd97631be';worktree_clean=$true};open_pull_requests=@(foreach($p in $prs){[ordered]@{number=$p.number;title=$p.title;draft=$p.draft;head_ref=$p.head.ref;head_sha=$p.head.sha;base_ref=$p.base.ref;base_sha=$p.base.sha}});remote_branches=@(foreach($b in $branches){[ordered]@{name=$b.name;sha=$b.commit.sha}});current_commit_checks=@(foreach($c in $checks.check_runs){[ordered]@{name=$c.name;status=$c.status;conclusion=$c.conclusion;url=$c.html_url}});live_acquisition_processes=$procRows;mutable_acquisition_manifests=$manifestRows;constraints=@{no_process_intervention=$true;no_gpu_training_or_cloud=$true;sealed_audit_not_opened=$true}}; $out=Join-Path (Get-Location) 'docs/pretrained_reuse/R0_REMOTE_REFRESH_20261018.json'; $report | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $out -Encoding utf8; Get-FileHash -LiteralPath $out -Algorithm SHA256 | Select-Object Path,Hash | Format-List; (Get-Item $out).Length\""
+    }
+  ],
+  "mutable_acquisition_manifests": [
+    {
+      "split": "train",
+      "status": "RUNNING",
+      "manifest_rows": 186,
+      "files_present": 186,
+      "observed_at": "2026-10-18T05:02:49.3177283Z"
+    },
+    {
+      "split": "valid",
+      "status": "RUNNING",
+      "manifest_rows": 172,
+      "files_present": 172,
+      "observed_at": "2026-10-18T05:03:23.0544162Z"
+    }
+  ],
+  "constraints": {
+    "no_gpu_training_or_cloud": true,
+    "sealed_audit_not_opened": true,
+    "no_process_intervention": true
+  }
+}
