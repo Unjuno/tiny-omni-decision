@@ -181,3 +181,15 @@ def test_training_schedule_rejects_budget_mismatch():
             epochs=128,
             max_optimizer_updates=2047,
         )
+
+
+def test_cpu_training_does_not_call_cuda_memory_api(monkeypatch):
+    import torch
+
+    from scripts.train_textfree_video_probe import _reset_peak_memory_stats
+
+    def unexpected_cuda_call(*args, **kwargs):
+        raise AssertionError("CPU path must not call CUDA memory APIs")
+
+    monkeypatch.setattr(torch.cuda, "reset_peak_memory_stats", unexpected_cuda_call)
+    _reset_peak_memory_stats(torch.device("cpu"))

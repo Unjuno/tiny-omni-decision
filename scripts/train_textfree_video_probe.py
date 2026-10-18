@@ -337,10 +337,15 @@ def _choose_device(requested: str) -> torch.device:
         free, total = torch.cuda.mem_get_info(device)
         if free < 512 * 1024 * 1024:
             raise RuntimeError(f"less than 512 MiB free before training ({free} bytes)")
-        torch.cuda.reset_peak_memory_stats(device)
+        _reset_peak_memory_stats(device)
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
     return device
+
+
+def _reset_peak_memory_stats(device: torch.device) -> None:
+    if device.type == "cuda":
+        torch.cuda.reset_peak_memory_stats(device)
 
 
 def _move(batch: EncodedVideoRows, device: torch.device) -> EncodedVideoRows:
@@ -659,9 +664,9 @@ def _run_variant(
 ) -> dict[str, Any]:
     variant_started_utc = datetime.now(UTC).isoformat()
     torch.manual_seed(SEED)
-    if torch.cuda.is_available():
+    if device.type == "cuda":
         torch.cuda.manual_seed_all(SEED)
-        torch.cuda.reset_peak_memory_stats(device)
+        _reset_peak_memory_stats(device)
     random.seed(SEED)
     np.random.seed(SEED)
     model = TextFreeVideoReadout(vocab, temporal_mode=variant).to(device)
