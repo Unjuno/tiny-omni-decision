@@ -190,26 +190,28 @@
     "media_archive_video_payload_opened_or_decoded": true,
     "selected_train_validation_media_download_in_progress": true,
     "pitchshifted_media_download_progress_snapshot": {
-      "completed_files": 147,
+      "completed_files": 152,
       "expected_files": 367,
-      "completed_bytes": 15218753953,
-      "captured_at_utc": "2026-10-18T23:45:06Z",
+      "completed_bytes": 15618036223,
+      "captured_at_utc": "2026-10-18T23:47:50Z",
       "note": "Live download continues; this is a progress snapshot, not a completed-media receipt."
     },
     "pitchshifted_partial_journal_audit": {
       "status": "PASS_PARTIAL_JOURNAL_IDENTITY",
-      "captured_at_utc": "2026-10-18T23:45:06Z",
+      "captured_at_utc": "2026-10-18T23:47:50Z",
       "selection_sha256": "577adbafe6be869de3aff3b814acf91db7be582a42e0a7a83e7ee773dde0e8b7",
       "archive_etag": "\"0x8DC8C9DD88CD02E\"",
-      "journal_rows": 147,
-      "unique_journal_rows": 147,
+      "journal_rows": 152,
+      "unique_journal_rows": 152,
       "expected_selected_files": 367,
-      "unlogged_expected_files": 220,
-      "completed_bytes": 15218753953,
+      "unlogged_expected_files": 215,
+      "completed_bytes": 15618036223,
       "partial_files": 8,
-      "partial_bytes": 348127232,
+      "partial_bytes": 578813952,
       "identity_errors": 0,
-      "recomputed_media_hashes": false
+      "recomputed_media_hashes": false,
+      "audit_artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-download-audit-attempt-01\\partial-audit-20261018T2347Z.json",
+      "audit_artifact_sha256": "CC035E4F117D6C08AAC6AB099F093F8F33A51922EF4F6CC6645EB5006DC1D8C2"
     },
     "selected_plan_sha256": "62dbf808356c4566ad94df8780d3efac694234406298da5b7b0bf7d1b3f1f751",
     "selected_plan_sessions": {
@@ -226,7 +228,7 @@
   },
   "reasons_not_admitted": [
     "Train/validation are disjoint by recording session, but the release metadata does not expose instructor/performer identity; participant-independent validation cannot be established.",
-    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes; the 2026-10-18T23:45:06Z progress snapshot reached 147/367 files (15,218,753,953 bytes), with 8 partial files totaling 348,127,232 bytes. The executable partial journal audit found zero selection/ETag/size/offset/path errors without recomputing media hashes; full-media integrity and window extraction remain pending.",
+    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes; the 2026-10-18T23:47:50Z progress snapshot reached 152/367 files (15,618,036,223 bytes), with 8 partial files totaling 578,813,952 bytes. The executable partial journal audit found zero selection/ETag/size/offset/path errors without recomputing media hashes; full-media integrity and window extraction remain pending.",
     "One selected training-session AV file passes stream/timing checks; separate encoder smokes show finite outputs but do not measure HoloAssist task quality.",
     "Hash-bound feature packing and matched 2,048-step readout tooling are implemented but have not been run on HoloAssist features.",
     "Wrong/not-corrected validation support is only 11 intervals, so the five-way label must not be treated as a balanced or well-powered evaluation task.",
