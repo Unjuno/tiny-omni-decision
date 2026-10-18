@@ -476,3 +476,25 @@ decode media timestamps, validate annotation-to-crop joins, or admit any rows
 to feature extraction. The acquisition jobs were left untouched. Repeat the
 full integrity/PTS/crop-join gates against stable terminal manifests before
 extracting features.
+
+## Partial TRAIN annotation-to-crop join audit (2026-10-18)
+
+A second CPU-only check froze a later TRAIN manifest snapshot (380 acquired
+videos; SHA-256
+`6ecec75fb1a03cb0f63ea6b67999230ead3006162a7b0658931fe56506c22671`) in a
+separate directory while the original downloader continued. Of the 818
+eligible events in these planned TRAIN videos, 786 events across 380 acquired
+videos passed the source-object/frame/candidate-box join checks; 32 events
+remain tied to videos still awaiting download. The candidate-count distribution
+and per-event joins are preserved in the receipt. No labels were used for model
+fitting or feature extraction.
+
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-train-crop-snapshot-01\result.json`
+(SHA-256 `3a255f4c77a9a1951413da8837d736276030f4f901fad784034e995c6f5701d3`).
+The auditor is
+`C:\CodexArtifacts\pretrained-reuse-r2\audit-perception-av-event-train-crop-snapshot.py`
+(SHA-256 `bb31abdbd2dc9f07f926b8d3eb1948335964d120998ccc122c1c6f1981d7dd9e`).
+This covers only the acquired TRAIN snapshot. The corresponding VALID join,
+complete two-split PTS coverage, stable terminal-manifest audit, and all
+feature extraction remain pending.

@@ -91,6 +91,12 @@ download PIDs remained active; full acquisition and final manifest-pinned gates
 are still required before feature extraction. Receipt and hashes:
 [interim audit](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md#independent-acquired-media-snapshot-audit-2026-10-18).
 
+A later TRAIN-only, manifest-snapshotted crop-join audit covered 380 acquired
+videos: 786/818 eligible events passed source/frame/candidate-box joins, while
+32 wait for not-yet-acquired media. This does not replace the complete PTS,
+TRAIN/VALID split and crop-join gates. The VALID join is still pending; see the
+[partial TRAIN audit receipt](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md#partial-train-annotation-to-crop-join-audit-2026-10-18).
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is
