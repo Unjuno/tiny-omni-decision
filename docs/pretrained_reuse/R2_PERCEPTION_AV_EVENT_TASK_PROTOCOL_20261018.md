@@ -278,6 +278,30 @@ and the 240/60/100 TRAIN and 400-video VALID group partition. Status remains
 `PASS_PARTIAL_CROP_JOIN_AUDIT`; full acquisition, complete PTS and split gates,
 and all model fitting remain pending.
 
+## Frozen-feature Decision readout implementation (2026-10-18)
+
+Added `tiny_omni_decision.av_event.AVEventSourceScorer` as the task-specific
+Path A readout for the later, gate-authorized feature bank. The default
+hidden-128 scorer has 246,658 trainable parameters. Together with the pinned
+22,056,576-parameter DINOv2-small and 28,190,872-parameter CLAP audio branch,
+the intended task components total 50,494,106 parameters. This is not a full
+Omni resident-model or package-size count.
+
+The module has explicit `video_only`, `joint`, and `audio_only` conditions.
+The joint branch uses an option-conditioned learned gate; the video-only
+branch receives crop features only. With opaque candidate IDs and no option
+text or visual features, audio-only has no candidate-specific evidence and
+therefore returns uniform probabilities by construction. Inputs contain only
+frozen numeric features and supplied option order; the module cannot accept
+question text, transcripts, filenames, candidate IDs, or labels. CPU tests
+cover option permutation equivariance, modality isolation, finite scores, and
+gate bounds (6 passed; Ruff passes).
+
+This is implementation evidence only: no feature extraction, fitting,
+checkpoint selection, calibration, GPU use, or task-quality evaluation has
+occurred. Extraction and training remain blocked on complete pinned-media
+PTS, split, and candidate-crop gates.
+
 ## Long-event CLAP window smoke
 
 A second TRAIN-only audio smoke covers `video_8679` / `sound_id=0` (IDs used

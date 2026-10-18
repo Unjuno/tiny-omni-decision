@@ -1119,6 +1119,13 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 - [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Include matched best-unimodal baselines, all missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
 - [ ] **M-3–M-6:** Add optional text/spoken conditions without making them compulsory, then evaluate individual and combined task quality, <=200M loaded parameters **including the sensor path**, and actual post-quantization >=95% recovery on the same locked task battery. Do not claim general 95–98% world understanding from unrelated narrow benchmarks; lock evaluation before training/selection.
 
+Path A implementation progress: a text-free frozen-feature AV event Decision
+readout now provides video-only, gated joint, and uniform audio-only
+conditions (`src/tiny_omni_decision/av_event.py`; 246,658 trainable parameters
+at hidden size 128). It is CPU-tested but untrained and has no quality result.
+M-0/M-1 and M-2 remain open; feature extraction and fitting wait for the full
+media integrity gates documented in the task protocol.
+
 
 Source follow-up: STARSS23's official MIT release supplies a synchronized
 environmental audio/video candidate. The bounded source/decoding probe and
