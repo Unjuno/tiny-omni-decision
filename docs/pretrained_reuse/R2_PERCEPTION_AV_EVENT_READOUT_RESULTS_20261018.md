@@ -61,6 +61,11 @@ reload is checked. Calibration and development validation are scored once on
 the selected checkpoint; neither is used to choose it. Calibration metrics
 below are held-out scores, not post-hoc calibrated probabilities.
 
+The follow-up condition was predeclared by matching video-only readout size to
+the joint readout. A hidden size of 339 gives 246,115 trainable parameters,
+within 0.22% of joint's 246,658. It uses the same seed, data, selector and
+optimizer schedule; only hidden size changes from the original video-only arm.
+
 The conditions are a trainable joint audio+visual readout and a visual-only
 readout. Their capacities differ: 246,658 and 65,921 trainable parameters.
 Consequently, a joint-vs-video difference cannot be attributed to audio alone.
@@ -72,8 +77,9 @@ Attempt `perception-av-event-readout-joint-01` performed the first fit epoch
 (525 optimizer updates), then stopped when selection evaluation encountered
 variable-length candidate logits. It saved no checkpoint. Its failure receipt
 is preserved. The metric code now scores each event's own option vector without
-padding. The corrected joint and video-only runs completed on CPU; no GPU
-training was used. All three run result JSON files are outside Git.
+padding. The corrected joint, original video-only and capacity-matched
+video-only runs completed on CPU; no GPU training was used. Run outputs are
+outside Git.
 
 ## Results
 
@@ -84,28 +90,43 @@ comparisons.
 | Condition | Best epoch (completed) | Trainable params | Selection | Calibration | Development validation |
 |---|---:|---:|---|---|---|
 | Joint audio+visual | 2 (22) | 246,658 | 0.324 / 1.983 / 0.788 / 0.136 | 0.431 / 1.832 / 0.753 / 0.067 | 0.388 / 1.897 / 0.763 / 0.058 |
-| Visual only | 8 (28) | 65,921 | 0.352 / 1.974 / 0.805 / 0.085 | 0.335 / 2.193 / 0.850 / 0.106 | 0.327 / 2.178 / 0.829 / 0.083 |
+| Visual only, hidden 128 | 8 (28) | 65,921 | 0.352 / 1.974 / 0.805 / 0.085 | 0.335 / 2.193 / 0.850 / 0.106 | 0.327 / 2.178 / 0.829 / 0.083 |
+| Visual only, capacity-matched hidden 339 | 3 (23) | 246,115 | 0.362 / 1.995 / 0.787 / 0.093 | 0.410 / 1.918 / 0.783 / 0.110 | 0.363 / 1.990 / 0.797 / 0.117 |
 | Uniform over each event's candidates | — | 0 | — | — | 0.091 / 2.669 / 0.924 / 0.017 |
 | Fit candidate-position prior | — | 0 | — | — | 0.072 / 2.754 / 0.938 / 0.054 |
 
-On the 901 development events, joint minus visual-only Accuracy is +0.061
-(95% video-cluster percentile interval +0.024 to +0.099); NLL difference is
-−0.282 (interval −0.368 to −0.198). The paired bootstrap resamples 400 video
-IDs with replacement for 10,000 draws using seed 17. This is one fixed
-development comparison, not a new blind estimate. Candidate-count strata,
-probabilities and all prediction rows are saved in the analysis artifact.
+On the 901 development events, joint minus the smaller visual-only Accuracy is
++0.061 (95% video-cluster percentile interval +0.024 to +0.099); NLL difference
+is −0.282 (interval −0.368 to −0.198). That comparison confounds modality and
+capacity. A predeclared follow-up matched visual-only readout used hidden size
+339: 246,115 trainable parameters versus 246,658 for joint (0.22% difference).
+Joint minus matched visual-only Accuracy is +0.0255, but its video-cluster
+interval (−0.0079 to +0.0588) includes zero. Joint NLL is lower by 0.0935
+(interval −0.1551 to −0.0335); Brier and ECE are also lower for joint on these
+same development IDs. Each paired bootstrap resamples 400 video IDs with
+replacement for 10,000 draws using seed 17. The matched model size was fixed
+from the parameter equation before fitting; its checkpoint is still selected
+only on selection NLL. The development videos have already been observed and
+used in an earlier candidate comparison, so neither bootstrap is an independent
+blind estimate. Candidate-count strata, probabilities and per-example outputs
+are saved in both analysis artifacts.
 
 Overfitting was visible. Joint training CE fell from 1.976 at epoch 1 to 0.001
 at epoch 22 while the selection NLL rose to 6.979; selected epoch 2 had training
 CE 1.517. Visual-only training CE fell from 1.986 to 0.279 by epoch 28 while
 selection NLL reached 5.978; selected epoch 8 had training CE 1.231. Patience
-stopped both runs; neither final checkpoint replaced the best checkpoint.
+stopped these runs; neither final checkpoint replaced the best checkpoint.
+The matched visual-only arm also overfit: training CE fell from 1.986 to 0.188
+by epoch 23 while selection NLL reached 7.685; selected epoch 3 had training CE
+1.577. Its best checkpoint was reload-verified and kept separate from final.
 
 | Artifact | Result SHA-256 | Wall time |
 |---|---|---:|
 | `perception-av-event-readout-joint-02/result.json` | `1a88c7fb791bd8edbc3be2642f53ff56fed832c12fbcb2beb4e4428c9fe96434` | 46.82 s |
 | `perception-av-event-readout-video-only-01/result.json` | `66ea019f5259af72c7d49dfea3f618dfb3e03008c9175900f6bbeb2825fb1f20` | 28.39 s |
 | `perception-av-event-readout-analysis-01/analysis.json` | `59858ee6a3c333167dbc19882ed3576cb61cd2cd8cb7af1f307ac9866b6c1699` | under 4 s |
+| `perception-av-event-readout-video-only-matched-01/result.json` | `a602a3de51e0031628dfe55f04f3b5b5987725c357d6dab4e04801255e9d8354` | 33.87 s |
+| `perception-av-event-readout-analysis-02/analysis.json` | `5504551590706dabb81006fdb70df14f2443fe4d48260ff13018aa9e029a7519` | under 4 s |
 
 The training runner did not measure peak host memory; it is `UNKNOWN`. Feature
 extraction used the local RTX 3080 Laptop, float32, peak CUDA allocation
@@ -115,20 +136,23 @@ compute or cloud cost was used.
 
 ## Interpretation and next gate
 
-The joint configuration outperforms both uniform and the fit-derived position
-prior, and on this development set it also outperforms the smaller video-only
-readout. This supports continuing this narrow AV correspondence line. It does
-not prove that audio itself caused the difference because model capacities
-differ, nor that the scorer generalizes beyond this source/task. Accuracy is
-far from the product target, calibration varies by split, candidate counts are
-unequal, and the sharp train/selection divergence shows limited data and
-overfitting. No 95–98% claim or product promotion is justified.
+The joint configuration clearly outperforms uniform and the fit-derived
+position prior. Against the much smaller video-only model it also improves the
+fixed development metrics, but that comparison confounds capacity. The
+parameter-matched video-only arm narrows the gap: joint has +2.55 points
+Accuracy, whose video-cluster interval includes zero, and lower NLL/Brier/ECE.
+This is suggestive evidence for the joint configuration on this task, not proof
+that audio alone caused the difference or that the scorer generalizes beyond
+this source/task. Accuracy remains far from the product target, candidate
+counts are unequal, and the sharp train/selection divergence shows overfitting.
+No 95–98% claim or product promotion is justified.
 
-Next, preserve these runs and define a prospective capacity-matched
-audio-ablation/readout comparison or improve data/task coverage without touching
-the development split. Do not sweep seeds or tune against the displayed
-development metrics. Keep the broader four-modality and ≤200M pre-quantization
-goals unchanged.
+The task still lacks truth-bearing missing/shuffled/stale/timing-offset
+counterfactual controls and a new independent validation cohort. Do not sweep
+seeds or alter this model from the observed development scores. The next gate
+should use new, video-disjoint source records for a prospective input-ablation
+comparison. Keep the broader four-modality and ≤200M pre-quantization goals
+unchanged.
 
 The fixed E0G1 GPU sensitivity diagnostic was not repeated in this work: later
 authorized attempts 11, 14 and 15 already passed all 44,375 forwards on the same

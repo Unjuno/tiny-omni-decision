@@ -2091,8 +2091,11 @@ searches. Old selected0 and all prior failure records remain unchanged.
 ### Perception AV event-source readout (2026-10-18)
 
 The corrected frozen features now group all questions by video into fit,
-selection, calibration, and development-validation splits. Joint audio+visual
-readout exceeds video-only on the one fixed development comparison, but the
-parameter counts differ; both candidates overfit early and remain far below the
-product objective. Keep this as a narrow AV diagnostic, with no product promotion.
+selection, calibration, and development-validation splits. The capacity-matched
+video-only control (246,115 trainable parameters) is within 0.22% of joint
+(246,658): joint Accuracy is +2.55pp with a video-bootstrap interval including
+zero, while NLL improves by 0.094 with its interval below zero. This is one
+previously observed development set; both arms overfit, and task-specific quality
+is far below the product objective. Keep it as a narrow AV diagnostic, with no
+product promotion or blind/general-quality claim.
 [Protocol, results, hashes and limits](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_READOUT_RESULTS_20261018.md).

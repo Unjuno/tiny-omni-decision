@@ -595,3 +595,26 @@ joint run has higher dev Accuracy than the smaller visual-only baseline, but
 the capacity mismatch prevents attributing the gain to audio alone. These are
 narrow source-matching results, not general Omni quality or product evidence.
 See [the complete report, metrics, hashes and limits](R2_PERCEPTION_AV_EVENT_READOUT_RESULTS_20261018.md).
+
+## Parameter-matched video-only follow-up (2026-10-18)
+
+To address the joint-vs-video capacity confound, one video-only candidate was
+predeclared from the parameter equation: hidden size 339 gives 246,115 trainable
+parameters, 0.22% below the joint hidden-128 scorer's 246,658. It uses the same
+seed 17, fit/selection video IDs, AdamW schedule, patience and selector; only
+video-only hidden size changes. Training completed 23 epochs / 12,075 updates
+on CPU in 33.87 seconds; best epoch 3 passed reload verification. Its trainable
+state and held-out predictions are in
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-readout-video-only-matched-01`.
+
+On the same 901 previously observed development events, joint minus matched
+video-only Accuracy is +2.55pp (400-video paired bootstrap, 10,000 draws, seed
+17; 95% interval −0.79 to +5.88pp). NLL improves by 0.0935 (95% interval
+−0.1551 to −0.0335); Brier/ECE also improve. Accuracy uncertainty includes
+zero, and this is not a new independent validation cohort. The candidate was
+selected only on the existing 60-video selection split; do not treat these
+development results as blind or tune further on them. This comparison narrows
+the parameter-count confound but does not isolate audio as the sole causal
+factor or close M-2: truth-bearing missing, shuffled, stale and timing-offset
+controls and independent task data remain required. Full report and artifact
+hashes are in the linked results note above.
