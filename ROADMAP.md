@@ -35,6 +35,17 @@ that AV information improves decisions; the planned query-only versus AV-evidenc
 quality distinction remains unresolved. Do not start the next GPU diagnostic
 while Orbitune occupies 15,821 / 16,384 MiB. [Reproducible result and limits](docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
 
+**2026-10-18 Perception Test task feasibility:** a pinned TRAIN-only CPU audit
+retained all 25,757 sound segments and found 2,594 non-muted, single-source
+visible events with at least one simultaneous competing object track across
+1,139 videos.
+This is a correspondence-task candidate count, not an AV quality result or
+training admission; choice/frame encoding and validation coverage remain open.
+Unknown, multi-source, cut-crossing and no-competitor rows remain explicitly
+held. The audit is in `scripts/audit_perception_av_correspondence.py`, with
+results and source/grouping limits in
+[`R2_PERCEPTION_AV_CORRESPONDENCE_FEASIBILITY_20261018.md`](docs/pretrained_reuse/R2_PERCEPTION_AV_CORRESPONDENCE_FEASIBILITY_20261018.md).
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is

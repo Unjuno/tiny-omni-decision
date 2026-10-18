@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "experiment": "perception-av-correspondence-feasibility-20261018",
+  "execution_source_commit": "19c1b1652a8660300b6ec93337ed19e3e199c193",
+  "runner": "scripts/audit_perception_av_correspondence.py",
+  "runner_sha256": "5c28dd332ef64ac4a01ed5ed4645d235c998662ea100f2f4c2caf80ca40b64c1",
+  "status": "TRAIN_ONLY_AV_CORRESPONDENCE_FEASIBILITY",
+  "task_status": "candidate feasibility only; not training-admitted",
+  "source_revision": "3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf",
+  "source_sha256": {
+    "train_annotations.zip": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78",
+    "cut_frame_mapping_train.json": "cbea6c721fd150f861ec6fe8e7ff005792f754df1359b1364349b5abcaab6cc4"
+  },
+  "canonical_attempt": "C:/CodexArtifacts/pretrained-reuse-r2/perception-av-correspondence-feasibility-05",
+  "result_sha256": "2cd15b09fb25b5af959584c366848478e9e7a08b774ef3432d90b934e2cf0c35",
+  "records_sha256": "bb0fb9aa144cd2a768abc2b3a2e14ddfeb1305a9fcf2007a2d7f651448b6236c",
+  "all_sound_segments": 25757,
+  "candidate_sound_segments": 2594,
+  "candidate_videos": 1139,
+  "held_sound_segments": 23163,
+  "validation_opened": false,
+  "test_opened": false,
+  "media_downloaded": false,
+  "model_loaded": false,
+  "optimizer_updates": 0,
+  "gpu_used": false,
+  "participant_disjointness": "UNKNOWN",
+  "product_goal_complete": false
+}
