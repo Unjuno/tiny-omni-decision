@@ -1,6 +1,7 @@
 """Audit annotated event windows against decoded video and audio PTS."""
 
 import argparse
+import hashlib
 import json
 import math
 from collections import defaultdict
@@ -15,6 +16,26 @@ from scripts.audit_perception_av_event_task import (
 )
 
 PLAN_SHA256 = "9ed4f44f3a0cc85465c5a2955706a957326ef36694311c25b4ee51e3c9f18a25"
+
+
+def load_pinned_media_manifest(manifest_path, split, planned_video_ids):
+    """Read one immutable manifest snapshot and return its exact content hash."""
+    raw = Path(manifest_path).read_bytes()
+    manifest_sha256 = hashlib.sha256(raw).hexdigest()
+    manifest = json.loads(raw)
+    if manifest.get("split") != split or manifest.get("plan_sha256") != PLAN_SHA256:
+        raise ValueError("media manifest split/plan pin mismatch")
+    if manifest.get("status") not in {"RUNNING", "PASS_ACQUISITION_NOT_DECODE"}:
+        raise ValueError("media acquisition manifest is not in a recognized state")
+    clips = manifest.get("clips", [])
+    clip_ids = [row.get("video_id") for row in clips]
+    if any(not isinstance(video_id, str) for video_id in clip_ids):
+        raise ValueError("media manifest contains a missing/invalid video ID")
+    if len(clip_ids) != len(set(clip_ids)):
+        raise ValueError("media manifest contains duplicate video IDs")
+    if not set(clip_ids) <= set(planned_video_ids):
+        raise ValueError("media manifest contains unplanned video IDs")
+    return manifest, manifest_sha256
 
 
 def event_window_from_pts(frame_times, frame_durations, frame_interval):
@@ -109,7 +130,7 @@ def audit_split(split, source_root, media_dir, plan):
     source_pins = {"train": TRAIN_SOURCE_SHA256, "valid": VALID_SOURCE_SHA256}[split]
     annotation_path = source_root / f"{split}_annotations.zip"
     cut_path = source_root / f"cut_frame_mapping_{split}.json"
-    data, cuts, _ = load_annotations(
+    data, cuts, source_hashes = load_annotations(
         annotation_path,
         cut_path,
         split,
@@ -121,11 +142,9 @@ def audit_split(split, source_root, media_dir, plan):
         if event["video_id"] in selected_rows:
             events_by_video[event["video_id"]].append(event)
     manifest_path = media_dir / "manifest.json"
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("split") != split or manifest.get("plan_sha256") != PLAN_SHA256:
-        raise ValueError("media manifest split/plan pin mismatch")
-    if manifest.get("status") not in {"RUNNING", "PASS_ACQUISITION_NOT_DECODE"}:
-        raise ValueError("media acquisition manifest is not in a recognized state")
+    manifest, manifest_sha256 = load_pinned_media_manifest(
+        manifest_path, split, selected_rows
+    )
     clips = {row["video_id"]: row for row in manifest.get("clips", [])}
     records = []
     missing_media = sorted(set(events_by_video) - set(clips))
@@ -193,6 +212,9 @@ def audit_split(split, source_root, media_dir, plan):
     return {
         "split": split,
         "status": manifest["status"],
+        "source_hashes": source_hashes,
+        "media_manifest_sha256": manifest_sha256,
+        "acquired_videos": len(clips),
         "selected_videos": len(selected_rows),
         "decoded_videos": len(set(record["video_id"] for record in records)),
         "expected_events": expected_events,

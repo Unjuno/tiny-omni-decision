@@ -352,3 +352,26 @@ Ruff passes and the full CPU suite passes: 2,443 passed, 11 skipped. This is
 feature-pipeline parity/integrity evidence, not task quality. The live
 acquisition snapshot is 167/400 TRAIN and 152/400 VALID, both RUNNING with no
 recorded acquisition errors; the complete pre-feature audit remains pending.
+
+## Expanded partial PTS audit (2026-10-18 05:08–05:27 UTC)
+
+CPU-only attempt 07 decoded a partial acquisition snapshot against the pinned
+plan. The receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-decoder-pts-smoke-07\result.json`
+(SHA-256 `f5dc3cd585da036ef02d12e1a75b22978c9b5d0dce10ff11305f8533c60eca39`),
+using audit-script SHA-256
+`1c5392ee54d2337758339317a3526fe1ee17e581be62d4c52ebcba2fc9b9e6eb` and
+PyAV 18.1.0. It decoded 199 videos per split and 417 TRAIN / 428 VALID events.
+All decoded event windows had full decoded-audio PTS coverage (minimum 1.0;
+zero/partial overlaps 0). Metadata differed for video frame counts in 7 TRAIN
+/ 4 VALID videos, decoded audio sample counts in 167 / 176, and sample rates
+in 52 / 49.
+
+This remains a partial diagnostic, not a pass for the complete acquisition.
+The acquisition manifests were mutable while the two split scans ran, and the
+older runner did not include their exact byte hashes in the receipt; each
+split's result therefore pins the plan and individual media hashes but not a
+single paired manifest snapshot. The improved runner now hashes the exact
+manifest bytes it parsed and rejects duplicate or unplanned video IDs. Its
+regression tests pass; use it for the final full audit after acquisition is
+terminal. No model, GPU, training, or TEST data was used.

@@ -58,10 +58,13 @@ without truncation and decoded 44.1 kHz audio resampled to 48 kHz. DINO now
 streams the selected frame and exactly matches the prior full-frame-buffer
 feature hash, including a case with a one-frame metadata discrepancy. Full
 feature extraction, readout fitting, and task evaluation have not started; no
-quality result is claimed. The latest partial CPU PTS audit covered 213 TRAIN
-and 237 VALID events with full decoded-audio overlap. Metadata has
-frame/sample/rate mismatches, so the complete PTS and split-integrity audit
-remains a pre-feature gate. A separate partial annotation-to-crop audit also
+quality result is claimed. The latest partial CPU PTS audit decoded 199 videos
+per split and covered 417 TRAIN / 428 VALID events, all with full audio PTS
+coverage; metadata frame/sample/rate mismatches remain. That attempt did not
+pin the mutable manifest bytes, so it is diagnostic only; the updated runner
+records manifest hashes for the final full audit. The complete PTS and
+split-integrity audit remains a pre-feature gate. A separate partial
+annotation-to-crop audit also
 validated the acquired-file hashes, selected-frame candidate boxes, and frozen
 video-group partition for 361/818 TRAIN and 349/901 VALID events. Acquisition
 is still running; no feature-bank fitting has started. See the protocol's
