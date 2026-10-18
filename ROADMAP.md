@@ -1992,6 +1992,17 @@ independent quality, full four-modality/package or release qualification. Retain
 this runnable reference while independent task/OOD quality coverage stays open.
 [Measured runtime, resources, correction and hashes](docs/pretrained_reuse/R5_NATIVE_AV_CORRESPONDENCE_RESULTS_20261015.md).
 
+### Greatest Hits AV match diagnostic (2026-10-18)
+
+Frozen audio/video features replay exactly, but the fixed train-only readout
+comparison is low-power and overfits: joint AV selected epoch 1 and achieved
+53.57% calibrated validation accuracy over only 28 independent clusters; at
+epoch 100 it memorized train (100%) while validation NLL rose to 2.61. Paired
+cluster intervals include no gain. Keep this as a narrow same-recorded-event
+diagnostic, not evidence for general multimodal quality or product adoption.
+Do not expand model capacity or resweep these validation IDs; expand independent
+task coverage before another comparison. [Protocol](docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md) and [results](docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_READOUT_RESULTS_20261018.md).
+
 ### Fixed TRAIN-only AV reliability coefficients (2026-10-15)
 
 Six nonnegative slot coefficients, original encoders/heads/data/catalogs unchanged,

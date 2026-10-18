@@ -168,9 +168,29 @@ frozen in `C:\CodexArtifacts\pretrained-reuse-r2\gh-av-match-inputs-01`.
 The frozen feature runner is committed at `8874103c2124cb8f3ff2cbf22024f56bc6cffe51`.
 It uses the pinned EfficientAT DyMN-0.4 and VideoPrism-B checkpoints read-only,
 repeats every forward, and verifies each input/feature hash. VideoPrism remains
-CPU-pinned. EfficientAT CUDA extraction uses the HotUGPU cooperative handoff;
-the readout fit itself is small enough to use CPU. Feature extraction is the next
-gate; no task quality result exists yet.
+CPU-pinned. EfficientAT CUDA extraction was attempted through the HotUGPU
+cooperative handoff, but Orbitune resumed while the child was active; the child
+alone yielded and the final audio extraction completed on CPU. The readout fit
+also ran on CPU.
+
+## Frozen features and readout result
+
+All 220 audio and 220 video source-group features are now frozen and pass fresh-
+process replay; both replay maximum absolute deltas are exactly zero. CUDA audio
+extraction was not used in the final path because Orbitune resumed while our
+child was active; the child alone yielded and audio extraction was completed on
+CPU. Orbitune was not stopped or signaled. A fixed CPU-only seed-17 comparison
+then completed fresh audio-only, video-only, and paired AV readouts. It chose
+checkpoints by earliest minimum uncalibrated validation NLL, and fit temperature
+only on the separate calibration split. Joint AV selected epoch 1, reached
+100% train accuracy at epoch 100, and validation NLL rose to 2.6145 with 55.36%
+accuracy. The calibrated selected joint checkpoint was 53.57% validation
+accuracy and 0.69305 NLL; its paired 28-cluster bootstrap intervals include no
+improvement. Audio/video-only validation remained at chance as expected from
+the balanced marginal construction. This is a low-power overfit result, not
+general AV quality or product evidence. Full metrics, hashes, failures, runtime,
+and the per-example prediction record are documented in
+[`R2_GREATEST_HITS_AV_MATCH_READOUT_RESULTS_20261018.md`](R2_GREATEST_HITS_AV_MATCH_READOUT_RESULTS_20261018.md).
 
 ## HotUGPU handoff race and guard
 
