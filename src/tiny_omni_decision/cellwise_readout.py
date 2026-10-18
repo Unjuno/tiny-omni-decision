@@ -24,3 +24,7 @@ class CellwiseCandidateScorer(nn.Module):
         visual = self.observation(torch.cat([cls, pooled], -1))
         candidate = self.candidate(features[..., 6528:])
         return (visual * candidate).sum(-1) / math.sqrt(128)
+
+
+def trainable_parameter_count(model: nn.Module) -> int:
+    return sum(parameter.numel() for parameter in model.parameters() if parameter.requires_grad)
