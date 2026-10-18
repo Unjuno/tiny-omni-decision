@@ -81,6 +81,16 @@ are awaiting acquisition. No feature-bank fitting has started. See the
 protocol's crop-join audit section for receipt hashes and prior denominator
 correction.
 
+**2026-10-18 acquired-media integrity update:** while acquisition remained live,
+an independent CPU audit hash-verified all completed files in the atomic
+manifest snapshots: TRAIN 367/400 and development-VALID 348/400. Plan metadata,
+split IDs, exact byte sizes and receipt SHA-256 values matched, with no completed
+cross-split video overlap; one `.partial` remained per split. This is only an
+interim file/split-integrity snapshot, not a PTS or crop-join pass. The two
+download PIDs remained active; full acquisition and final manifest-pinned gates
+are still required before feature extraction. Receipt and hashes:
+[interim audit](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_TASK_PROTOCOL_20261018.md#independent-acquired-media-snapshot-audit-2026-10-18).
+
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17
 schedule, with best/final reload checks passing. The selected checkpoint is

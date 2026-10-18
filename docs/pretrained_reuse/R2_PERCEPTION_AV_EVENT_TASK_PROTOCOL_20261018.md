@@ -449,3 +449,30 @@ is training/evaluation plumbing only: no full feature manifest, readout fit,
 validation quality result, calibration, or GPU run exists yet. The complete
 media acquisition and frozen integrity gates remain mandatory before creating
 the feature manifest.
+
+## Independent acquired-media snapshot audit (2026-10-18)
+
+While the pinned TRAIN and VALID media-acquisition processes were still live
+(PIDs 8040 and 6700), an independent CPU-only snapshot audit verified every
+completed file in the two atomic manifest snapshots. It confirmed the pinned
+plan SHA-256, unique planned IDs, plan row metadata, split separation, exact
+file sizes, and each file's SHA-256 against the acquisition receipt. Both
+manifests remained byte-stable during their respective snapshots. The in-flight
+`.partial` file in each directory was excluded.
+
+| Split | Verified completed / planned videos | Verified bytes | Manifest snapshot SHA-256 | In-flight partials |
+|---|---:|---:|---|---:|
+| TRAIN | 367 / 400 | 4,841,516,285 | `7f076ab6a3f0f31692945a27c0be4c8b11c2b46d4b62a504de9c04c82b9b162e` | 1 |
+| VALID | 348 / 400 | 4,861,970,073 | `64e2cef1cc877b1b115f581fdc1f9f4edb7b183e34fb9fbed84371625dabcae4` | 1 |
+
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-media-snapshot-audit-01\audit.json`
+(SHA-256 `8251d50204c51b4ad77af5aa3307c020479616c5dadf894b1cf50ab01a020f5d`).
+The standalone auditor is
+`C:\CodexArtifacts\pretrained-reuse-r2\audit-acquired-perception-av-media-snapshot.py`
+(SHA-256 `a676a158336e0d3feafb78dec9fd883b4e9c8b84ca5fa229c416894ce81ba340b`).
+This verifies only acquired-file identity and split membership; it does not
+decode media timestamps, validate annotation-to-crop joins, or admit any rows
+to feature extraction. The acquisition jobs were left untouched. Repeat the
+full integrity/PTS/crop-join gates against stable terminal manifests before
+extracting features.
