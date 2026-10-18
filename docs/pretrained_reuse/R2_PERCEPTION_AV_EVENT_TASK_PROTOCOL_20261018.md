@@ -1,8 +1,9 @@
 # Perception Test AV event-to-object task protocol
 
-Status: frozen protocol and media plan; media acquisition and model evaluation
-have not started. This is a development task for R2, not a product-quality
-claim or a blind test.
+Status: frozen protocol and media plan; pinned TRAIN/VALID media acquisition
+is in progress. Single-event CPU feature-pipeline smokes passed, but full
+feature extraction, readout fitting, and task evaluation have not started. This
+is a development task for R2, not a product-quality claim or a blind test.
 
 ## Question and scope
 
