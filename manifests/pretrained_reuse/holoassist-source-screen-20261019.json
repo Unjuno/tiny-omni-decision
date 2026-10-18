@@ -161,11 +161,24 @@
     "media_archive_video_payload_opened_or_decoded": true,
     "selected_train_validation_media_download_in_progress": true,
     "pitchshifted_media_download_progress_snapshot": {
-      "completed_files": 87,
+      "completed_files": 99,
       "expected_files": 367,
-      "completed_bytes": 8359267270,
-      "captured_at_utc": "2026-10-18T23:17:09Z",
+      "completed_bytes": 9857496961,
+      "captured_at_utc": "2026-10-18T23:21:54Z",
       "note": "Live download continues; this is a progress snapshot, not a completed-media receipt."
+    },
+    "pitchshifted_partial_journal_audit": {
+      "status": "PASS_PARTIAL_JOURNAL_IDENTITY",
+      "captured_at_utc": "2026-10-18T23:21:54Z",
+      "selection_sha256": "577adbafe6be869de3aff3b814acf91db7be582a42e0a7a83e7ee773dde0e8b7",
+      "archive_etag": "\"0x8DC8C9DD88CD02E\"",
+      "journal_rows": 99,
+      "unique_journal_rows": 99,
+      "expected_selected_files": 367,
+      "unlogged_expected_files": 268,
+      "completed_bytes": 9857496961,
+      "identity_errors": 0,
+      "recomputed_media_hashes": false
     },
     "selected_plan_sha256": "62dbf808356c4566ad94df8780d3efac694234406298da5b7b0bf7d1b3f1f751",
     "selected_plan_sessions": {
@@ -182,7 +195,7 @@
   },
   "reasons_not_admitted": [
     "Train/validation are disjoint by recording session, but the release metadata does not expose instructor/performer identity; participant-independent validation cannot be established.",
-    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes; the 2026-10-18T23:17:09Z progress snapshot reached 87/367 files (8,359,267,270 bytes), while full-media integrity and window extraction remain pending.",
+    "The exact 160-train/207-validation pitch-shifted plan totals 36,117,365,135 bytes; the 2026-10-18T23:21:54Z progress snapshot reached 99/367 files (9,857,496,961 bytes), and a partial journal identity/size audit found zero errors without recomputing media hashes; full-media integrity and window extraction remain pending.",
     "One selected training-session AV file passes stream/timing checks; separate encoder smokes show finite outputs but do not measure HoloAssist task quality.",
     "Hash-bound feature packing and matched 2,048-step readout tooling are implemented but have not been run on HoloAssist features.",
     "Wrong/not-corrected validation support is only 11 intervals, so the five-way label must not be treated as a balanced or well-powered evaluation task.",

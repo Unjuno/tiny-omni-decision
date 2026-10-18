@@ -177,8 +177,9 @@ training probe verified non-silent 48 kHz mono AAC plus H.264 video, both at
 PTS 0, with 14.5 ms stream-duration difference from each other and the
 compressed-video companion. The earlier compressed-only attempt stopped at
 108/367 files after 8.28 GB; all complete and partial files are preserved.
-The latest observed pitch-shifted download progress is 87/367 files (8.36 GB,
-2026-10-18T23:17:09Z). A new
+The latest observed pitch-shifted download progress is 99/367 files (9.86 GB,
+2026-10-18T23:21:54Z); a partial journal-to-plan/filesystem identity audit
+found zero errors (media hashes were not recomputed). A new
 whole-selection AV validator now checks stream layout/timing, annotation
 duration, and every downloaded media SHA; event-corpus generation requires
 that passing report and exact selection/manifest/media hashes. Real-data

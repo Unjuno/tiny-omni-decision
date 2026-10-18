@@ -116,8 +116,12 @@ audio decode end. This is source-format/timing proof for one recording, not
 task-quality evidence or proof that all sessions are aligned. The full fixed
 36.12 GB pitch-shifted selection is now downloading into a separate attempt
 directory with per-file range/ETag/size/SHA checks. The latest observed
-progress is 87/367 files (8,359,267,270 bytes, observed 2026-10-18 23:17 UTC);
-this is not the final receipt.
+progress is 99/367 files (9,857,496,961 bytes, observed 2026-10-18 23:21:54
+UTC); this is not the final receipt. A read-only partial-journal audit matched
+all 99 unique records to the pinned selection, archive ETag, planned sizes,
+expected output paths, and on-disk file sizes; it found zero identity errors.
+The audit did not re-hash the media contents, and 268 selected files remain
+unlogged.
 The repository extraction decoder was also exercised on the verified probe:
 the first causal 30-second window yielded 480,000 finite 16 kHz audio samples
 (RMS 0.00655, peak 0.405) and eight finite 504x896 RGB video frames. This
