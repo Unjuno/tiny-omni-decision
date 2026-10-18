@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "record_type": "pretrained_reuse_source_screen",
+  "dataset_id": "utdallas/c-mhad",
+  "official_source": "https://personal.utdallas.edu/~kehtar/C-MHAD.html",
+  "source_revision": null,
+  "checked_at": "2026-10-19",
+  "disposition": "REVIEW_NOT_ADMITTED",
+  "license": "UNKNOWN",
+  "commercial_use": null,
+  "derivative_model_training_allowed": null,
+  "redistribution_allowed": null,
+  "media_redistribution_allowed": null,
+  "modalities": ["video", "sensor"],
+  "source_facts": {
+    "participants": 12,
+    "streams": 240,
+    "stream_duration_minutes": 2,
+    "video": {"width": 640, "height": 480, "fps": 15},
+    "sensor": {"type": "Shimmer3", "channels": 6, "sample_rate_hz": 50},
+    "tasks": ["smart-TV gestures", "transition movements"],
+    "labels": "manually annotated action start/end times",
+    "synchronization": "timestamp mechanism; 30-40 initial IMU samples may be missing"
+  },
+  "split": {
+    "official_train_validation_test": false,
+    "grouping_required": "participant",
+    "independent_participant_count": 12
+  },
+  "access": {
+    "dataset_archive_linked": true,
+    "archive_downloaded": false,
+    "media_opened_or_decoded": false,
+    "annotations_opened": false
+  },
+  "reasons_not_admitted": [
+    "Official project page does not state dataset-level license or derivative-model-training rights.",
+    "No official model-selection split is documented.",
+    "Twelve participants limit independent validation uncertainty."
+  ],
+  "next_admission_requirements": [
+    "Obtain explicit dataset-level rights from the authors/source.",
+    "Pin the dataset archive and component hashes.",
+    "Predeclare participant-grouped train/calibration/validation partitions.",
+    "Define event-window treatment around missing initial IMU samples.",
+    "Compare video-only, sensor-only, and joint decisions with missing/shuffle/time-offset controls."
+  ],
+  "citation": "Wei, Chopada, and Kehtarnavaz, C-MHAD: Continuous Multimodal Human Action Dataset of Simultaneous Video and Inertial Sensing, Sensors 20(10), 2905 (2020). https://doi.org/10.3390/s20102905"
+}

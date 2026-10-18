@@ -98,6 +98,14 @@ fixed. Re-enter GPU fitting only after a candidate passes the documented source,
 grouping, label-validity and overlap gates. See the
 [candidate reconciliation](docs/pretrained_reuse/R2_AV_INDEPENDENT_TASK_SCREEN_20261019.md).
 
+**2026-10-19 R2 video+sensor source screen:** C-MHAD offers synchronized
+continuous action video and 50-Hz inertial streams with manually annotated
+event intervals, making it relevant to temporal multimodal decisions. The
+official page does not specify a dataset license or model-training rights and
+does not publish a selection split; 12 participants also limit independent
+uncertainty. It remains REVIEW / NOT_ADMITTED; no data were fetched or opened.
+See the [source screen](docs/pretrained_reuse/R2_CMHAD_SENSOR_VIDEO_SOURCE_SCREEN_20261019.md).
+
 **2026-10-19 R2 direct no-text probe reconciliation:** Path A has standalone
 audio, image, video and sensor probes, plus screen-region category probes.
 The screen results use oracle-localized crops and coarse labels; the expanded
