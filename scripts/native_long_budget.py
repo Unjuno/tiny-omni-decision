@@ -41,3 +41,11 @@ def extend_plan(pool, batches, max_steps=MAX_STEPS):
             json.dumps(payload, separators=(",", ":")).encode()
         ).hexdigest(),
     )
+
+
+def unique_probe_row_count(policy):
+    if policy == "repeat":
+        return 6656
+    if policy == "fresh":
+        return 12800
+    raise ValueError("fixed repeat or fresh coverage policy required")

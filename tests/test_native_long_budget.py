@@ -74,3 +74,12 @@ def test_long_curve_bootstrap_nll_stays_finite_for_confident_wrong_answers():
     for name, vector in values.items():
         assert np.isfinite(vector).all()
         assert float(vector.mean()) == pytest.approx(expected[name], abs=1e-12)
+
+
+def test_unique_coverage_policies_have_fixed_probe_sizes():
+    from scripts.native_long_budget import unique_probe_row_count
+
+    assert unique_probe_row_count("repeat") == 6656
+    assert unique_probe_row_count("fresh") == 12800
+    with pytest.raises(ValueError):
+        unique_probe_row_count("unknown")

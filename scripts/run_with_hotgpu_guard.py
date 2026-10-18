@@ -138,6 +138,25 @@ def reserve_after_yield(
     raise TimeoutError("GPU did not yield before the deadline; child was not started")
 
 
+def build_child_environment(
+    base_environment: dict[str, str],
+    parent_pid: int,
+    slot: dict[str, int],
+    block_if_free_mib: int,
+    min_child_free_mib: int,
+) -> dict[str, str]:
+    environment = base_environment.copy()
+    environment["TINY_OMNI_GPU_GATE_RESERVED_MIB"] = str(slot["reserved_mib"])
+    environment["TINY_OMNI_GPU_GATE_PARENT_PID"] = str(parent_pid)
+    environment["TINY_OMNI_GPU_GATE_FREE_MIB"] = str(slot["free_mib"])
+    environment["TINY_OMNI_GPU_GATE_TOTAL_MIB"] = str(slot["total_mib"])
+    environment["TINY_OMNI_GPU_GATE_UTILIZATION_PCT"] = str(slot["utilization_pct"])
+    environment["TINY_OMNI_GPU_GATE_BLOCK_IF_FREE_MIB"] = str(block_if_free_mib)
+    environment["TINY_OMNI_GPU_GATE_MIN_CHILD_FREE_MIB"] = str(min_child_free_mib)
+    environment.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+    return environment
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--max-wait-seconds", type=int, default=3600)
@@ -176,14 +195,13 @@ def main() -> None:
             args.block_if_free_mib,
             args.min_child_free_mib,
         )
-        environment = os.environ.copy()
-        environment["TINY_OMNI_GPU_GATE_RESERVED_MIB"] = str(slot["reserved_mib"])
-        environment["TINY_OMNI_GPU_GATE_FREE_MIB"] = str(slot["free_mib"])
-        environment["TINY_OMNI_GPU_GATE_TOTAL_MIB"] = str(slot["total_mib"])
-        environment["TINY_OMNI_GPU_GATE_UTILIZATION_PCT"] = str(slot["utilization_pct"])
-        environment["TINY_OMNI_GPU_GATE_BLOCK_IF_FREE_MIB"] = str(args.block_if_free_mib)
-        environment["TINY_OMNI_GPU_GATE_MIN_CHILD_FREE_MIB"] = str(args.min_child_free_mib)
-        environment.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+        environment = build_child_environment(
+            os.environ.copy(),
+            os.getpid(),
+            slot,
+            args.block_if_free_mib,
+            args.min_child_free_mib,
+        )
         print(
             f"HotUGPU reservation active: {slot['reserved_mib']}MiB reserved, "
             f"free={slot['free_mib']}MiB; child starting under the free-memory gate",

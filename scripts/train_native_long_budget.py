@@ -19,6 +19,7 @@ import numpy as np
 import psutil
 import torch
 
+from scripts.hotgpu_preflight import validate_gpu_preflight
 from scripts.native_consumed_evaluation import common_task_gap
 from scripts.native_coverage import make_pool
 from scripts.native_fit import (
@@ -28,7 +29,13 @@ from scripts.native_fit import (
     summarize,
 )
 from scripts.native_fit_runtime import FeatureStore
-from scripts.native_long_budget import EVALUATION_STEPS, MAX_STEPS, extend_plan, learning_rate
+from scripts.native_long_budget import (
+    EVALUATION_STEPS,
+    MAX_STEPS,
+    extend_plan,
+    learning_rate,
+    unique_probe_row_count,
+)
 from scripts.native_matched_batches import build_plan
 from scripts.native_state_dependence import summarize as summarize_pairs
 from scripts.native_video_cache import sha
@@ -55,7 +62,8 @@ def verify(pins):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=["smoke", "train", "replay"], required=True)
-    parser.add_argument("--policy", choices=["repeat"], required=True)
+    parser.add_argument("--policy", choices=["repeat", "fresh"], required=True)
+    parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference", type=Path)
     parser.add_argument("--reference-sha256")
@@ -67,12 +75,31 @@ def main():
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO).strip():
         raise ValueError("clean committed source required")
     usage = subprocess.check_output(
-        ["nvidia-smi", "--query-gpu=memory.used,utilization.gpu", "--format=csv,noheader,nounits"],
+        [
+            "nvidia-smi",
+            "--query-gpu=memory.used,utilization.gpu,memory.total",
+            "--format=csv,noheader,nounits",
+        ],
         text=True,
     ).strip()
-    memory, utilization = [int(v.strip()) for v in usage.split(",")]
-    if memory > 512 or utilization > 5:
-        raise RuntimeError("GPU occupied; do not compete")
+    memory, utilization, total_mib = [int(v.strip()) for v in usage.split(",")]
+    pid_output = subprocess.check_output(
+        ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader,nounits"],
+        text=True,
+    )
+    active_pids = {
+        int(line.strip())
+        for line in pid_output.splitlines()
+        if line.strip() and line.strip().casefold() != "no running processes found"
+    }
+    gpu_slot = validate_gpu_preflight(
+        memory_used_mib=memory,
+        utilization_pct=utilization,
+        total_mib=total_mib,
+        active_pids=active_pids,
+        own_pid=os.getpid(),
+        environment=os.environ,
+    )
     args.output.mkdir(exist_ok=False)
     started = time.perf_counter()
     result = dict(
@@ -84,7 +111,7 @@ def main():
         source_commit=subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=REPO, text=True
         ).strip(),
-        config_sha256=sha(CONFIG),
+        config_sha256=sha(args.config),
         started_utc=datetime.now(UTC).isoformat(),
         step=0,
         best_step=None,
@@ -94,11 +121,12 @@ def main():
         validation_loaded=args.phase != "smoke",
         encoder_updates=0,
         gpu_preflight=usage,
+        gpu_slot=gpu_slot,
     )
     write(args.output / "result.json", result)
     try:
-        config = json.loads(CONFIG.read_text())
-        shutil.copyfile(CONFIG, args.output / "effective-config.json")
+        config = json.loads(args.config.read_text())
+        shutil.copyfile(args.config, args.output / "effective-config.json")
         if config["training"] != {
             "seed": 17,
             "max_steps": MAX_STEPS,
@@ -114,12 +142,41 @@ def main():
         }:
             raise ValueError("configuration differs from the implemented fixed schedule")
         pins = dict(config["input_pins"])
-        pins[str(CONFIG)] = sha(CONFIG)
+        pins[str(args.config)] = sha(args.config)
         source_names = subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0")
         pins.update({str(REPO / name): sha(REPO / name) for name in source_names if name})
         verify(pins)
+        baseline_control = None
+        if args.policy == "fresh":
+            contract = config.get("comparison_control")
+            if not contract or sha(Path(contract["result"])) != contract["result_sha256"]:
+                raise ValueError("hash-matched repeat control receipt is required for fresh policy")
+            baseline_control = json.loads(Path(contract["result"]).read_text(encoding="utf-8"))
+            if (
+                baseline_control.get("status") != "PASS_NATIVE_LONG_BUDGET_TRAIN"
+                or baseline_control.get("policy") != "repeat"
+                or baseline_control.get("step") != MAX_STEPS
+                or baseline_control.get("best_step") != contract["best_step"]
+                or baseline_control.get("source_commit") != contract["source_commit"]
+                or sha(Path(contract["validation_ids"])) != contract["validation_ids_sha256"]
+                or baseline_control.get("artifacts", {}).get("validation-ids.json")
+                != contract["validation_ids_sha256"]
+            ):
+                raise ValueError("registered repeat control identity or validation IDs changed")
+            for path, digest in config["input_pins"].items():
+                if path in (contract["result"], contract["validation_ids"]):
+                    continue
+                if baseline_control.get("validated_hashes", {}).get(path) != digest:
+                    raise ValueError("repeat control does not share this experiment's pinned input")
+            result["comparison_control"] = {
+                "result_sha256": contract["result_sha256"],
+                "source_commit": contract["source_commit"],
+                "best_step": contract["best_step"],
+                "validation_ids_sha256": contract["validation_ids_sha256"],
+            }
+            write(args.output / "result.json", result)
         corpus = Path(config["corpus"])
         queries = Path(config["queries"])
         receipt = json.loads((corpus / "result.json").read_text())
@@ -144,7 +201,7 @@ def main():
             if (
                 reference["status"] != expected
                 or reference["validated_hashes"] != pins
-                or reference["config_sha256"] != sha(CONFIG)
+                or reference["config_sha256"] != sha(args.config)
                 or reference["policy"] != args.policy
             ):
                 raise ValueError("matching completed reference required")
@@ -216,8 +273,11 @@ def main():
         ):
             raise ValueError("reference sampler order/accounting differs")
         probe = [train[i] for i in long_plan["unique_row_indices"]]
-        if len(probe) != 6656:
-            raise ValueError("all and only 6656 fixed consumed TRAIN questions required")
+        expected_probe_rows = unique_probe_row_count(args.policy)
+        if len(probe) != expected_probe_rows or set(long_plan["unique_row_indices"]) != set(pool):
+            raise ValueError(
+                f"all and only {expected_probe_rows} fixed policy TRAIN questions required"
+            )
         write(args.output / "train-probe-ids.json", [r["id"] for r in probe])
         write(args.output / "lr-plan.json", [learning_rate(s) for s in range(1, MAX_STEPS + 1)])
         if validation:
@@ -299,7 +359,7 @@ def main():
                 python_rng=random.getstate(),
                 numpy_rng=(rng[0], rng[1].tolist(), *rng[2:]),
                 sampler_file_sha256=sha(args.output / "sampling.json"),
-                config_sha256=sha(CONFIG),
+                config_sha256=sha(args.config),
             )
             path = args.output / f"checkpoint-{step:04}.pt"
             torch.save(value, path)
@@ -350,7 +410,7 @@ def main():
             item = dict(
                 step=step,
                 train_probe=train_metrics,
-                train_probe_scope="all 6656 unique questions in the fixed training pool",
+                train_probe_scope=f"all {len(probe)} unique questions in the fixed training pool",
                 common_task_gap=common_task_gap(probe, probe_scores, validation, scores),
                 parameter_l2_norms={
                     name: float(p.detach().norm()) for name, p in model.named_parameters()
