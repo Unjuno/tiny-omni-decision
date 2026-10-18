@@ -63,13 +63,13 @@ per split and covered 417 TRAIN / 428 VALID events, all with full audio PTS
 coverage; metadata frame/sample/rate mismatches remain. That attempt did not
 pin the mutable manifest bytes, so it is diagnostic only; the updated runner
 records manifest hashes for the final full audit. The complete PTS and
-split-integrity audit remains a pre-feature gate. A separate partial
-annotation-to-crop audit also
-validated the acquired-file hashes, selected-frame candidate boxes, and frozen
-video-group partition for 361/818 TRAIN and 349/901 VALID events. Acquisition
-is still running; no feature-bank fitting has started. See the protocol's
-crop-join audit section for the receipt and the initial denominator bug that
-was corrected before reporting these counts.
+split-integrity audit remains a pre-feature gate. A later byte-pinned partial
+annotation-to-crop audit validated acquired-file hashes, selected-frame
+candidate boxes, and the frozen video-group partition for 509/818 TRAIN and
+481/901 VALID events (manifest snapshots: 249 / 225 videos). Remaining events
+are awaiting acquisition. No feature-bank fitting has started. See the
+protocol's crop-join audit section for receipt hashes and prior denominator
+correction.
 
 **2026-10-17 postnorm long fit completed:** the opt-in E0G0 shared
 post-attention LayerNorm candidate completed32,768 updates on the fixed seed17

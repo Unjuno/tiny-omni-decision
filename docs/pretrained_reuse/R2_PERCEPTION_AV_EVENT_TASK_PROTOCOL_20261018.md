@@ -260,6 +260,24 @@ plan. Ruff passes; full CPU suite: 2,449 passed, 11 skipped. Since media
 acquisition is incomplete, this is still a partial gate and no feature-bank
 fit or quality evaluation has started.
 
+### Expanded pinned crop-join snapshot (attempt 04)
+
+The next partial crop audit used byte-for-byte copies of the parsed live
+manifests, kept outside Git, so later downloads cannot change its inputs.
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-crop-join-audit-04\result.json`
+(SHA-256 `ffa3e3f154a06555b17032c6a9dd99bfbcc6bce1837f1dca9aab8b7f53968c34`).
+Manifest snapshot hashes are TRAIN
+`685685c456140ab2f64d2ec2cb1aeaf9f6334ba78bfa768d002852ee6c5935e0` (249
+videos) and VALID
+`3b682a806ae7dcab02c9173a82a1a57480fc2b3724778319018dd445695576ce` (225
+videos). It validated 509/818 TRAIN and 481/901 development-VALID event crop
+joins, with 309 and 420 events respectively waiting for media; those are
+unacquired-plan rows, not join failures. It rechecked all per-video file hashes
+and the 240/60/100 TRAIN and 400-video VALID group partition. Status remains
+`PASS_PARTIAL_CROP_JOIN_AUDIT`; full acquisition, complete PTS and split gates,
+and all model fitting remain pending.
+
 ## Long-event CLAP window smoke
 
 A second TRAIN-only audio smoke covers `video_8679` / `sound_id=0` (IDs used
