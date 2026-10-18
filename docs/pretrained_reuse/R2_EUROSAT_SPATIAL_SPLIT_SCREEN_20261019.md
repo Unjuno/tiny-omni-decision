@@ -1,5 +1,14 @@
 # EuroSAT source and split screen — 2026-10-19
 
+> Historical correction (2026-10-19): the initial screen below concluded that
+> the RGB archive lacked a defensible split. A subsequent source audit found
+> TorchGeo's pinned geographic split manifests, which map the RGB basenames to
+> explicit longitude-based train/validation/test partitions. The initial
+> conclusion was therefore too broad. The source-screen observations remain
+> valid, but the decision and “no run” statement below describe only the state
+> at the time of that first screen. A fixed readout experiment was later run;
+> see [the spatial readout report](R2_EUROSAT_SPATIAL_READOUT_20261019.md).
+
 ## Decision
 
 Do not use the RGB EuroSAT archive for a training/validation split in this
