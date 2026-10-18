@@ -11,6 +11,7 @@ fit_readout = _runner.fit_readout
 load_feature_rows = _runner.load_feature_rows
 pool_dinov2_patch_tokens = _runner.pool_dinov2_patch_tokens
 select_best_epoch = _runner.select_best_epoch
+metric_summary = _runner._metric_summary
 validate_video_splits = _runner.validate_video_splits
 
 
@@ -120,6 +121,15 @@ def test_best_epoch_applies_absolute_min_delta_like_checkpoint_selector():
         {"epoch": 3, "selection_nll": 0.40},
     ]
     assert select_best_epoch(history, min_delta=0.10) == 1
+
+
+def test_metric_summary_supports_events_with_different_candidate_counts():
+    logits = [torch.tensor([3.0, 0.0]), torch.tensor([0.0, 3.0, 1.0])]
+    metrics = metric_summary(logits, [0, 1])
+    assert metrics["accuracy"] == 1.0
+    assert np.isfinite(metrics["nll"])
+    assert np.isfinite(metrics["brier"])
+    assert np.isfinite(metrics["ece"])
 
 
 def test_fit_readout_requires_calibration_and_development_validation_splits(tmp_path):

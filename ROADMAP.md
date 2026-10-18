@@ -2087,3 +2087,12 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### Perception AV event-source readout (2026-10-18)
+
+The corrected frozen features now group all questions by video into fit,
+selection, calibration, and development-validation splits. Joint audio+visual
+readout exceeds video-only on the one fixed development comparison, but the
+parameter counts differ; both candidates overfit early and remain far below the
+product objective. Keep this as a narrow AV diagnostic, with no product promotion.
+[Protocol, results, hashes and limits](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_READOUT_RESULTS_20261018.md).

@@ -575,3 +575,23 @@ did no training or GPU evaluation, and opened no TEST data. The receipt
 preserves each event's ID, candidate count, source media hash, decoded and
 metadata frame counts, PTS window or boundary status, and audio coverage. No
 feature extraction or readout fitting has yet been performed.
+
+## Executed frozen-feature readout update (2026-10-18)
+
+The subsequent full CPU feature extraction and readout comparison are complete.
+The first scored fit exposed a split-label error: the raw extraction manifest
+retained `train` for 300 acquisition-plan model-training videos, so its original
+summary reports fit=0 and selection=0. The frozen arrays were not recomputed.
+A separate finalizer applied the pinned 240/60 SHA video assignment and wrote a
+new manifest; only row `split` values changed, verified across all 1,719 rows.
+The extractor was also fixed for future manifests. A second runtime defect in
+metrics (stacking events with different choice counts) was fixed and covered by
+a regression test. Attempt 01 completed one 525-update epoch before that metric
+failure; its incomplete receipt and output directory are preserved.
+
+The corrected joint and visual-only fits completed with best-checkpoint reload
+verified, and the development comparison was run once. Both overfit early; the
+joint run has higher dev Accuracy than the smaller visual-only baseline, but
+the capacity mismatch prevents attributing the gain to audio alone. These are
+narrow source-matching results, not general Omni quality or product evidence.
+See [the complete report, metrics, hashes and limits](R2_PERCEPTION_AV_EVENT_READOUT_RESULTS_20261018.md).

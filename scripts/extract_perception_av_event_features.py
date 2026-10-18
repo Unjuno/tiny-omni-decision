@@ -48,7 +48,10 @@ from scripts.audit_perception_av_event_vision_smoke import (
     track_box_at_frame,
 )
 from scripts.clap_full_clip import duration_weighted_feature, window_spans
-from scripts.perception_av_event_protocol import deterministic_candidate_order
+from scripts.perception_av_event_protocol import (
+    deterministic_candidate_order,
+    model_selection_video_ids,
+)
 
 
 def target_index_for_candidate_order(ordered_candidate_ids, source_parent_id):
@@ -251,6 +254,14 @@ def extract_features(
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
     if hashlib.sha256(plan_path.read_bytes()).hexdigest() != PLAN_SHA256:
         raise ValueError("media plan hash differs from pinned plan")
+    train_video_ids = {
+        row["video_id"]
+        for row in plan["splits"]["train"]["rows"]
+        if row["model_split"] == "train"
+    }
+    if len(train_video_ids) != 300:
+        raise ValueError("pinned plan must contain exactly 300 model-training videos")
+    selection_video_ids = model_selection_video_ids(train_video_ids, selection_count=60)
     pts = json.loads(pts_receipt.read_text(encoding="utf-8"))
     if pts.get("plan_sha256") != PLAN_SHA256 or len(pts.get("reports", [])) != 2:
         raise ValueError("complete PTS diagnostic receipt is not pinned to this plan")
@@ -351,7 +362,13 @@ def extract_features(
                         "id": f"{split}:{video_id}:{event['sound_id']}",
                         "video_id": video_id,
                         "sound_id": event["sound_id"],
-                        "split": plan_rows[video_id]["model_split"],
+                        "split": (
+                            "selection"
+                            if video_id in selection_video_ids
+                            else "fit"
+                            if plan_rows[video_id]["model_split"] == "train"
+                            else plan_rows[video_id]["model_split"]
+                        ),
                         "target_index": target_index,
                         "candidate_count": len(ordered_ids),
                         "candidate_order_sha256": candidate_digest,
@@ -383,6 +400,9 @@ def extract_features(
     ids = [row["id"] for row in all_rows]
     if len(ids) != len(set(ids)):
         raise ValueError("feature event IDs are not unique")
+    allowed_splits = {"fit", "selection", "calibration", "development_validation"}
+    if any(row["split"] not in allowed_splits for row in all_rows):
+        raise ValueError("feature rows contain an unrecognized model split")
     manifest_path = output_dir / "features.jsonl"
     with manifest_path.open("w", encoding="utf-8", newline="\n") as stream:
         for row in all_rows:

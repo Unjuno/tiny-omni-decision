@@ -143,12 +143,30 @@ def select_best_epoch(history: list[dict[str, Any]], min_delta: float = 0.0) -> 
 
 
 def _metric_summary(logits: list[torch.Tensor], targets: list[int]) -> dict[str, float]:
-    values = torch.stack([item.detach().float().cpu() for item in logits])
+    if not logits or len(logits) != len(targets):
+        raise ValueError("metrics require one target for every nonempty event-logit vector")
+    probabilities = [item.detach().float().cpu().softmax(dim=-1) for item in logits]
+    if any(item.ndim != 1 or item.numel() < 2 for item in probabilities):
+        raise ValueError("each event must have logits for at least two candidates")
+    if any(type(target) is not int or not 0 <= target < item.numel()
+           for item, target in zip(probabilities, targets, strict=True)):
+        raise ValueError("event target is outside its candidate range")
+    confidence = torch.stack([item.max() for item in probabilities])
+    prediction = torch.tensor([int(item.argmax()) for item in probabilities], dtype=torch.long)
     target_tensor = torch.tensor(targets, dtype=torch.long)
-    probabilities = values.softmax(dim=-1)
-    one_hot = F.one_hot(target_tensor, num_classes=values.shape[-1]).float()
-    confidence, prediction = probabilities.max(dim=-1)
     correct = prediction.eq(target_tensor)
+    nll = torch.stack(
+        [-torch.log(item[target].clamp_min(torch.finfo(item.dtype).tiny))
+         for item, target in zip(probabilities, targets, strict=True)]
+    ).mean()
+    brier = torch.stack(
+        [
+            (item - F.one_hot(torch.tensor(target), num_classes=item.numel()).float())
+            .square()
+            .sum()
+            for item, target in zip(probabilities, targets, strict=True)
+        ]
+    ).mean()
     ece = 0.0
     for lower in torch.linspace(0.0, 0.9, 10):
         upper = lower + 0.1
@@ -159,8 +177,6 @@ def _metric_summary(logits: list[torch.Tensor], targets: list[int]) -> dict[str,
             ece += float(mask.float().mean()) * abs(
                 float(confidence[mask].mean()) - float(correct[mask].float().mean())
             )
-    nll = F.cross_entropy(values, target_tensor)
-    brier = (probabilities - one_hot).square().sum(dim=-1).mean()
     return {
         "accuracy": float(correct.float().mean()),
         "nll": float(nll),
