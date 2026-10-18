@@ -23,6 +23,29 @@ def _active_gpu_pids() -> set[int]:
     }
 
 
+def _orbitune_training_pids() -> set[int]:
+    """Detect a pending Orbitune trainer before it has acquired a CUDA context."""
+    if os.name != "nt":
+        return set()
+    query = (
+        "$ErrorActionPreference='Stop'; "
+        "Get-CimInstance Win32_Process | "
+        "Where-Object { $_.CommandLine -match '(?i)compound_cfe_train\\.py\\s+train' } | "
+        "ForEach-Object { $_.ProcessId }"
+    )
+    result = subprocess.run(
+        ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", query],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return _parse_process_ids(result.stdout)
+
+
+def _parse_process_ids(output: str) -> set[int]:
+    return {int(line.strip()) for line in output.splitlines() if line.strip()}
+
+
 def _telemetry() -> tuple[float, int, int]:
     result = subprocess.run(
         [
@@ -46,11 +69,13 @@ def _wait_for_idle(max_wait_seconds: int, quiet_seconds: float = 5.0) -> None:
     idle_since = None
     while time.monotonic() < deadline:
         pids = _active_gpu_pids() - {own_pid}
+        orbitune_pids = _orbitune_training_pids()
         utilization, used_mib, _ = _telemetry()
-        if pids or utilization >= 5 or used_mib >= 2200:
+        if pids or orbitune_pids or utilization >= 5 or used_mib >= 2200:
             idle_since = None
             print(
-                f"waiting for cooperative yield: pids={sorted(pids)}, "
+                "waiting for cooperative yield: "
+                f"gpu_pids={sorted(pids)}, orbitune_trainers={sorted(orbitune_pids)}, "
                 f"util={utilization:.0f}%, memory={used_mib}MiB",
                 flush=True,
             )
@@ -108,10 +133,13 @@ def main() -> None:
             f"required <{args.block_if_free_mib}MiB and >={args.min_child_free_mib}MiB"
         )
     other_pids = _active_gpu_pids() - {process_id}
-    if other_pids or utilization >= 5:
+    orbitune_pids = _orbitune_training_pids()
+    if other_pids or orbitune_pids or utilization >= 5:
         del reservation
         torch.cuda.empty_cache()
-        raise RuntimeError("another GPU process appeared during the reservation handoff")
+        raise RuntimeError(
+            "another GPU process or pending Orbitune trainer appeared during reservation"
+        )
     child_environment = os.environ.copy()
     child_environment["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
     child_environment["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
@@ -128,11 +156,32 @@ def main() -> None:
         flush=True,
     )
     try:
-        completed = subprocess.run(command, check=False, env=child_environment)
+        child = subprocess.Popen(command, env=child_environment)
+        while child.poll() is None:
+            orbitune_pids = _orbitune_training_pids()
+            if orbitune_pids:
+                print(
+                    "Orbitune trainer appeared during the GPU job; stopping only "
+                    f"our child process tree (Orbitune PIDs: {sorted(orbitune_pids)})",
+                    flush=True,
+                )
+                if os.name == "nt":
+                    subprocess.run(
+                        ["taskkill.exe", "/PID", str(child.pid), "/T", "/F"],
+                        check=False,
+                        capture_output=True,
+                        text=True,
+                    )
+                else:
+                    child.terminate()
+                child.wait(timeout=30)
+                raise RuntimeError("GPU child stopped after Orbitune trainer reappeared")
+            time.sleep(2)
+        return_code = child.wait()
     finally:
         del reservation
         torch.cuda.empty_cache()
-    raise SystemExit(completed.returncode)
+    raise SystemExit(return_code)
 
 
 if __name__ == "__main__":

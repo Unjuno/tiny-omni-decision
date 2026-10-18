@@ -139,3 +139,9 @@ def test_fit_requires_valid_hotugpu_handoff(monkeypatch):
     monkeypatch.delenv(GPU_GATE_ENV["reserved_mib"])
     with pytest.raises(RuntimeError, match="HotUGPU gate"):
         _require_gpu_gate(config)
+
+
+def test_hotugpu_gate_parses_active_orbitune_process_ids():
+    from scripts.run_videoprism_temporal_mix_after_gpu_yield import _parse_process_ids
+
+    assert _parse_process_ids("\r\n1234\r\n5678\r\n") == {1234, 5678}
