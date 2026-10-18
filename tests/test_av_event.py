@@ -1,7 +1,9 @@
 import pytest
-import torch
 
-from tiny_omni_decision.av_event import AVEventSourceScorer
+torch = pytest.importorskip("torch")
+AVEventSourceScorer = pytest.importorskip(
+    "tiny_omni_decision.av_event"
+).AVEventSourceScorer
 
 
 def test_audio_only_is_uniform_over_opaque_options():
