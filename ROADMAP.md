@@ -1,14 +1,26 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-19 R2 DINOv2 GPU feasibility and Clevr-4 100k acquisition:** The
-pinned 22.06M-parameter DINOv2-small checkpoint passed HotUGPU-gated CUDA
-inference on 64 synthetic images and eight hash-verified, previously used
-Clevr-4 train images (inference only; no fitting or selection). The real-image
-forward produced `[8,257,384]` at 42.50 images/s and 163 MiB peak allocated
-VRAM. An official Oxford Clevr-4 100k CC BY 4.0 archive download is being
-resumed in eight verified HTTP ranges; as of 01:27 JST, five of 69 chunks had
-completed and 3.125 GiB of range data had been written. No new data has been extracted or trained on, and the
-official test split remains unopened. See the [GPU and acquisition log](docs/pretrained_reuse/R2_DINOV2_GPU_SMOKE_CLEVR4_100K_20261019.md).
+**2026-10-19 R2 DINOv2 / Clevr-4 100k:** The pinned 22.06M-parameter
+DINOv2-small checkpoint passed HotUGPU-gated CUDA inference on synthetic and
+real images. The official Oxford Clevr-4 100k CC BY 4.0 archive is fully
+downloaded and matches the published SHA-512. Inspection found 80,012 train
+and 19,988 public validation assets (there is no official test split). Only
+train annotations were decoded; official validation labels and media remain
+untouched. Seed-17 split of official train has 72,010 train and 8,002 internal
+validation images. All selected media were SHA-256 checked; train/validation
+overlap is zero, and overlap against the prior 8,424-image train manifest is
+zero. A frozen DINOv2 / MiniLM candidate scorer trained eight epochs on
+72,010 images with the prior runner's 64-question updates selected epoch 8 at
+macro Accuracy 90.10%, NLL 0.2478, Brier 0.1331, ECE 0.0120. On the same
+8,002-image validation, the prior readout scored 84.30% / 0.4021 NLL. Count is
+still only 67.48%. A separate grouped/clipped attempt scored 91.04%; preserve
+it, but do not use it as the optimizer-matched comparison. This is narrow
+synthetic taxonomy evidence, not broad image reasoning or multimodal product
+quality. The 39.59M encoder-plus-readout stack has a 147,713-parameter
+trainable head. Details: [protocol](docs/pretrained_reuse/R2_CLEVR4_100K_READOUT_PROTOCOL_20261019.md),
+[matched follow-up](docs/pretrained_reuse/R2_CLEVR4_100K_MATCHED_READOUT_PROTOCOL_20261019.md),
+[results](docs/pretrained_reuse/R2_CLEVR4_100K_READOUT_RESULTS_20261019.md),
+and [GPU/acquisition log](docs/pretrained_reuse/R2_DINOV2_GPU_SMOKE_CLEVR4_100K_20261019.md).
 
 **2026-10-19 R2 AVQA source screen:** The official AVQA task is a strong
 semantic fit for joint audio/video questions: it provides manually annotated
