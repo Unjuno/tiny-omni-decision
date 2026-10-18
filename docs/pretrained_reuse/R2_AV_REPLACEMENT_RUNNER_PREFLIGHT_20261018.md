@@ -86,3 +86,24 @@ still unrun. That statement is superseded by the completed attempt 11 recorded
 in [R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md](R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
 Attempt 08 and the failed preflight attempts remain preserved; only attempt 11
 completed all 44,375 forwards and exact self-replacement checks.
+
+### Cooperative scheduling correction (attempt 12 follow-up)
+
+Attempt 12 (`greatest-hits-postnorm-replacements-E0G1-12`) began while the GPU
+was idle but stopped before its first forward after the Orbitune trainer
+reacquired the GPU during CPU preflight. It took 80.2 seconds to validate the
+2,755 frozen input pins; attempt 12 remains `INCOMPLETE` with zero forwards.
+The scorer now initializes its own lightweight CUDA context immediately after
+the initial idle-GPU gate, before these long CPU checks. This lets the existing
+Orbitune monitor observe the authorized diagnostic and request its normal
+cooperative yield. After preflight, and between inference batches if another
+GPU process appears, the scorer waits up to 900 seconds for that process to
+exit; it performs no forwards while another CUDA PID is present and fails
+closed on timeout. Input/source stamp checks, periodic GPU checks, the 2-hour
+run limit, and final full hash verification remain enabled.
+
+Regression tests cover cooperative yield and timeout. The full local CPU suite
+passes (2,391 passed, 11 skipped), and Ruff passes. This scheduling change does
+not alter the checkpoint, data, labels, views, replacement pairing, model
+parameters, or number of forwards. A fresh attempt is needed to produce any
+new diagnostic result; attempt 12 is preserved as the failed pre-change run.

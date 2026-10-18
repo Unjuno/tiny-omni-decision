@@ -65,8 +65,12 @@ The Windows Orbitune monitor log shows the trainer cooperatively yielded after
 detecting external GPU activity. No process was stopped or restarted manually,
 and no checkpoint, training data, or prior attempt was changed. This retry adds
 no model-sensitivity evidence. It can be resumed only in a GPU window where the
-full pinned-input CPU preflight can finish before Orbitune reacquires the GPU,
-or after the user authorizes a temporary pause of that supervisor.
+full pinned-input CPU preflight can finish before Orbitune reacquires the GPU.
+The follow-up runner change reserves its own CUDA context before this preflight
+and waits for Orbitune's cooperative yield; details are in
+[`R2_AV_REPLACEMENT_RUNNER_PREFLIGHT_20261018.md`](R2_AV_REPLACEMENT_RUNNER_PREFLIGHT_20261018.md).
+Attempt 12 remains unchanged; a fresh attempt is required to execute with the
+updated runner.
 
 ## Interpretation and next step
 

@@ -190,6 +190,38 @@ def test_gpu_process_snapshot_is_reused_only_within_bounded_poll_interval(monkey
     assert checked_at == 2.0
 
 
+def test_gpu_clear_waits_for_cooperative_foreign_process_yield(monkeypatch):
+    from scripts import score_greatest_hits_postnorm_replacements as runner
+
+    clock = {"now": 0.0}
+    snapshots = iter(({101, 202}, {101, 202}, {101}))
+    monkeypatch.setattr(runner, "active_gpu_pids", lambda: next(snapshots))
+    monkeypatch.setattr(runner.time, "monotonic", lambda: clock["now"])
+    monkeypatch.setattr(runner.time, "sleep", lambda seconds: clock.__setitem__(
+        "now", clock["now"] + seconds
+    ))
+
+    runner.wait_for_gpu_clear(own_pid=101, timeout_seconds=5, poll_seconds=1)
+
+    assert clock["now"] == 2.0
+
+
+def test_gpu_clear_timeout_fails_closed(monkeypatch):
+    from scripts import score_greatest_hits_postnorm_replacements as runner
+
+    clock = {"now": 0.0}
+    monkeypatch.setattr(runner, "active_gpu_pids", lambda: {101, 202})
+    monkeypatch.setattr(runner.time, "monotonic", lambda: clock["now"])
+    monkeypatch.setattr(runner.time, "sleep", lambda seconds: clock.__setitem__(
+        "now", clock["now"] + seconds
+    ))
+
+    with pytest.raises(RuntimeError, match="GPU yield timeout.*202"):
+        runner.wait_for_gpu_clear(own_pid=101, timeout_seconds=2, poll_seconds=1)
+
+    assert clock["now"] == 2.0
+
+
 @pytest.mark.parametrize("change", ["nan", "short", "guard"])
 def test_bad_scores_and_safety_abort_are_not_success(change):
     from scripts.greatest_hits_replacement_scoring import score

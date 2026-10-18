@@ -60,6 +60,7 @@ CHECKPOINT_SHA256 = {
 }
 OUTPUT_PREFIX = "greatest-hits-postnorm-replacements-"
 GPU_PROCESS_POLL_SECONDS = 2.0
+GPU_YIELD_WAIT_SECONDS = 900
 
 
 def active_gpu_pids():
@@ -76,6 +77,19 @@ def refresh_gpu_pids(now, checked_at, cached):
     if now - checked_at >= GPU_PROCESS_POLL_SECONDS:
         return active_gpu_pids(), now
     return cached, checked_at
+
+
+def wait_for_gpu_clear(own_pid, timeout_seconds, poll_seconds=1.0):
+    """Wait for cooperative GPU users to yield; never overlap their work."""
+    deadline = time.monotonic() + timeout_seconds
+    while True:
+        others = active_gpu_pids() - {own_pid}
+        if not others:
+            return
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise RuntimeError(f"GPU yield timeout; other process(es) remain: {sorted(others)}")
+        time.sleep(min(poll_seconds, remaining))
 
 
 def main():
@@ -118,14 +132,10 @@ def main():
         nonlocal last_check, last_gpu_check, cached_gpu_pids
         elapsed = time.perf_counter() - started
         peak_vram = torch.cuda.max_memory_allocated() if torch.cuda.is_initialized() else 0
-        result.update(
-            peak_working_set_bytes=psutil.Process().memory_info().peak_wset,
-            peak_vram_bytes=peak_vram,
-            model_forwards=result.get("model_forwards", 0),
-        )
+        peak_working_set = psutil.Process().memory_info().peak_wset
         if (
             elapsed > args.max_seconds
-            or result["peak_working_set_bytes"] > 10 * 2**30
+            or peak_working_set > 10 * 2**30
             or peak_vram > 6 * 2**30
             or psutil.disk_usage(str(output)).free < 16 * 2**30
         ):
@@ -135,7 +145,27 @@ def main():
         )
         others = cached_gpu_pids - {os.getpid()}
         if others:
-            raise RuntimeError(f"GPU contention from other compute process(es): {sorted(others)}")
+            remaining = args.max_seconds - elapsed
+            wait_for_gpu_clear(
+                os.getpid(), min(GPU_YIELD_WAIT_SECONDS, max(0.0, remaining))
+            )
+            cached_gpu_pids = active_gpu_pids()
+            last_gpu_check = time.perf_counter() - started
+        elapsed = time.perf_counter() - started
+        peak_vram = torch.cuda.max_memory_allocated() if torch.cuda.is_initialized() else 0
+        peak_working_set = psutil.Process().memory_info().peak_wset
+        result.update(
+            peak_working_set_bytes=peak_working_set,
+            peak_vram_bytes=peak_vram,
+            model_forwards=result.get("model_forwards", 0),
+        )
+        if (
+            elapsed > args.max_seconds
+            or peak_working_set > 10 * 2**30
+            or peak_vram > 6 * 2**30
+            or psutil.disk_usage(str(output)).free < 16 * 2**30
+        ):
+            raise RuntimeError("resource guard; preserve incomplete diagnostic")
         if elapsed - last_check >= 15:
             pins.check()
             sources.check()
@@ -148,6 +178,11 @@ def main():
         write(output / "result.json", result)
         if gpu_pids:
             raise RuntimeError("GPU occupied; scoring not started")
+        if not torch.cuda.is_available():
+            raise RuntimeError("existing local CUDA device required")
+        # Reserve a CUDA context during the long CPU integrity preflight so the
+        # configured local supervisor can cooperatively yield before inference.
+        torch.cuda.init()
         for name in subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0"):
@@ -216,11 +251,9 @@ def main():
             row["id"]: expected_scores[i, : len(by_id[row["id"]]["options"])].copy()
             for i, row in enumerate(saved_rows)
         }
+        remaining = args.max_seconds - (time.perf_counter() - started)
+        wait_for_gpu_clear(os.getpid(), min(GPU_YIELD_WAIT_SECONDS, max(0.0, remaining)))
         gpu_pids = active_gpu_pids()
-        if gpu_pids:
-            raise RuntimeError("GPU occupied; scoring not started")
-        if not torch.cuda.is_available():
-            raise RuntimeError("existing local CUDA device required")
         torch.set_num_threads(4)
         torch.set_num_interop_threads(1)
         torch.use_deterministic_algorithms(True)
