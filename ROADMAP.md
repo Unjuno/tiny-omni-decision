@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-19 R2 DINOv2 GPU feasibility and Clevr-4 100k acquisition:** The
+pinned 22.06M-parameter DINOv2-small checkpoint passed HotUGPU-gated CUDA
+inference on 64 synthetic images and eight hash-verified, previously used
+Clevr-4 train images (inference only; no fitting or selection). The real-image
+forward produced `[8,257,384]` at 42.50 images/s and 163 MiB peak allocated
+VRAM. An official Oxford Clevr-4 100k CC BY 4.0 archive download is being
+resumed in eight verified HTTP ranges; as of 01:27 JST, five of 69 chunks had
+completed and 3.125 GiB of range data had been written. No new data has been extracted or trained on, and the
+official test split remains unopened. See the [GPU and acquisition log](docs/pretrained_reuse/R2_DINOV2_GPU_SMOKE_CLEVR4_100K_20261019.md).
+
 **2026-10-19 R2 AVQA source screen:** The official AVQA task is a strong
 semantic fit for joint audio/video questions: it provides manually annotated
 multiple-choice questions with `View`, `Sound`, and `Both` relation labels.
