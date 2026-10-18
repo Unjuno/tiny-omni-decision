@@ -17,6 +17,17 @@ requiring natural-language questions. [Protocol, full curves, paired intervals,
 and artifacts](https://github.com/Unjuno/tiny-omni-decision/blob/codex/textfree-video-coverage-v1/docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_RESULTS_20261018.md)
 (`codex/textfree-video-coverage-v1`, source commit `74e2094`).
 
+**2026-10-18 CLEVRER typed-program order probe:** A matched seed-17 comparison
+tested fixed sinusoidal positions before typed-program mean pooling against the
+existing order-invariant mean, with the same 512-row/256-scene training data and
+2,048 updates per arm. The positional candidate did not improve the fixed
+selector or macro Accuracy; paired scene intervals for temporal and static
+Accuracy/NLL/Brier all included zero. Both arms overfit strongly after early
+checkpoints on a 45-scene, two-task development validation set. Do not adopt the
+positional pooling change or infer that order is irrelevant. Next prioritize
+broader temporal supervision and a fresh scene-grouped selection set before
+another fit. [Protocol and measured results](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_PROGRAM_ORDER_RESULTS_20261018.md).
+
 **2026-10-18 CLEVRER temporal error attribution:** A read-only audit of the
 selected text-free MLP/BiLSTM predictions found that 181/200 temporal validation
 questions (90.5%) use exact typed-program sequences absent from the 256-row
