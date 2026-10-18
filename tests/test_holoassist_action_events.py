@@ -125,7 +125,7 @@ def test_av_validation_gate_requires_exact_selected_media_hashes() -> None:
     )
 
     report["media"].pop()
-    with pytest.raises(ValueError, match="exactly cover"):
+    with pytest.raises(ValueError, match="missing or duplicate|exactly cover"):
         validate_av_validation_report(
             report,
             selection_sha256="selection",
