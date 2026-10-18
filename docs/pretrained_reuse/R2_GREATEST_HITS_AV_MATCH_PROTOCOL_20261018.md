@@ -140,6 +140,35 @@ decoder observed 96 kHz and produced 815,214 finite 24 kHz mono samples; the
 video decoder observed 1,018 increasing-PTS frames and selected eight endpoint-
 inclusive indices `[0, 145, 291, 436, 581, 726, 872, 1017]`. This verifies the
 actual sample rate handling path; it does not represent every asset. The full
-220-group decode, normalized-content overlap audit, frozen feature extraction,
-and any readout fit remain pending. No model weights, optimizer, GPU, or quality
-metric was used.
+220-group decode and normalized-content overlap audit have since completed.
+No model weights, optimizer, GPU, or quality metric was used during this stage.
+
+## Full input preparation and independent reload audit
+
+The pinned TRAIN-only source groups were fully decoded on CPU under source
+commit `e4eb77a5e5881c54ec3b7c30de09e6df7ddb4701`. All 220 paired groups
+produced one normalized mono float32 24 kHz audio array and eight uint8
+288x288 RGB frames. The decoder processed 205,402,615 normalized audio samples
+and saved 914,919,543 bytes of NPZ inputs. The `groups.jsonl` SHA-256 is
+`dfc6f4130a4de547a89ed47b3f58cb009361662f74f1be384002093788e1d724`; the
+input-preparation receipt SHA-256 is
+`f5a784f206298c0b357e291e9bbf36c25bd6eb8375f209f6d2e06b2b5588745c`.
+
+A fresh-process audit reloaded all 220 NPZ files, checked their SHA-256,
+shape/dtype/finiteness, and reconstructed expected source groups from the
+frozen train/calibration/validation Decision JSONL. It found 220 distinct
+normalized audio and 220 distinct full decoded-video contents, zero normalized
+cross-split overlaps, zero raw-media cross-split hash overlaps, and exact split
+counts `126/38/56`. Audit receipt SHA-256:
+`1c6ddbb77888bf149e6994f86e4f3d0ed890e5f8a9e3a241b56eb53abf56c540`.
+This rules out exact byte/decoded-content leakage for the selected media, not
+near-duplicate scenes or shared recording environments. The input arrays are
+frozen in `C:\CodexArtifacts\pretrained-reuse-r2\gh-av-match-inputs-01`.
+
+The frozen feature runner is committed at `8874103c2124cb8f3ff2cbf22024f56bc6cffe51`.
+It uses the pinned EfficientAT DyMN-0.4 and VideoPrism-B checkpoints read-only,
+repeats every forward, and verifies each input/feature hash. VideoPrism remains
+CPU-pinned. Any optional EfficientAT CUDA extraction must run under the existing
+HotUGPU cooperative handoff/reservation wrapper; the readout fit itself is small
+enough to use CPU. Feature extraction is the next gate; no task quality result
+exists yet.
