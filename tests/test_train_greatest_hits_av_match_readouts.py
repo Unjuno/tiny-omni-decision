@@ -39,7 +39,7 @@ def test_uniform_probabilities_are_calibrated_and_bad_vectors_fail_closed():
 
 
 def test_temperature_fit_accepts_logits_created_in_inference_mode():
-    import torch
+    torch = pytest.importorskip("torch", reason="PyTorch is an optional ML dependency")
 
     with torch.inference_mode():
         logits = torch.tensor([[3.0, -3.0], [-1.0, 1.0], [0.5, -0.5]])
