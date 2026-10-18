@@ -1,5 +1,6 @@
 import pytest
-import torch
+
+torch = pytest.importorskip("torch")
 
 from scripts.train_clevrer_unique_coverage import (
     _bootstrap_difference,
