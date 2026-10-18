@@ -168,7 +168,20 @@ frozen in `C:\CodexArtifacts\pretrained-reuse-r2\gh-av-match-inputs-01`.
 The frozen feature runner is committed at `8874103c2124cb8f3ff2cbf22024f56bc6cffe51`.
 It uses the pinned EfficientAT DyMN-0.4 and VideoPrism-B checkpoints read-only,
 repeats every forward, and verifies each input/feature hash. VideoPrism remains
-CPU-pinned. Any optional EfficientAT CUDA extraction must run under the existing
-HotUGPU cooperative handoff/reservation wrapper; the readout fit itself is small
-enough to use CPU. Feature extraction is the next gate; no task quality result
-exists yet.
+CPU-pinned. EfficientAT CUDA extraction uses the HotUGPU cooperative handoff;
+the readout fit itself is small enough to use CPU. Feature extraction is the next
+gate; no task quality result exists yet.
+
+## HotUGPU handoff race and guard
+
+The earlier wrapper's first attempt waited for Orbitune PID 9412 to yield. After
+the process exited, its five-second quiet interval left a restart race: another
+GPU process appeared at the final reservation check. The wrapper rejected the
+launch and released its small guard; the audio feature child never started, and
+no process was stopped or signaled. A separate focused implementation,
+`scripts/run_with_hotgpu_guard.py`, reserves VRAM immediately after the first
+idle sample, checks for external PIDs/utilization/free-memory again, and waits
+again if a race occurs. It launches only when no external compute PID remains,
+utilization is below 5%, and free memory is in `[8,000, 14,000)` MiB after the
+reservation. It is covered by CPU tests; the real feature job is its first
+end-to-end use. No Orbitune process or files are modified.
