@@ -228,3 +228,40 @@ At 04:38 UTC the original acquisition processes remain active with 141/400
 TRAIN and 129/400 VALID clips; both manifests have zero acquisition errors.
 The GPU is not used by these CPU audits. No fitting, task scoring, or TEST
 access has started.
+
+## Long-event CLAP window smoke
+
+A second TRAIN-only audio smoke covers `video_8679` / `sound_id=0` (IDs used
+only for provenance joins), whose decoded video PTS event interval is
+1.0666–35.0310 seconds. The 33.9644-second event yielded 1,630,291 samples at
+48 kHz and four non-overlapping CLAP windows: three full 480,000-sample
+windows and a 190,291-sample tail. All four 512-dimensional window features
+were finite and bitwise-identical on replay; the duration-weighted pooled
+feature was finite. No truncation, task scoring, training, or GPU use occurred.
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-audio-smoke-03-long\result.json`
+(SHA-256 `5a21386f04b4d420f66094b87c45157bef46ba946d6fb21a0751479ff15e6f86`);
+window feature SHA-256
+`57be08970b404179d15a530edb6a250f49e509ed2301a8a513b1c719f223efa3`;
+runner SHA-256 `31096a825fd487303a3ce3490f3e38e9b5b20cb9085c1ae6282e1e86d0643613`.
+The event-key helper requires exactly one eligible TRAIN record; targeted
+CPU tests: 14 passed; full CPU suite: 2,442 passed, 11 skipped, with Ruff
+passing.
+
+The same runner was then exercised on a 20.3-second TRAIN event with decoded
+native audio at 44.1 kHz (`video_2116` / `sound_id=8`, provenance joins only).
+It used PyAV's decoder resampler to produce 974,400 event samples at 48 kHz,
+then encoded two full windows and a 14,400-sample tail. Audio and video PTS
+covered the complete event; all three window vectors were finite and repeated
+bitwise-identically. No labels were passed to the encoder, and no scoring,
+training, GPU use, or TEST access occurred. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-audio-smoke-04-44100\result.json`
+(SHA-256 `26bf4210d40bf7f839235f388c360c04a411415cc0b9a3f31fcb8bafd6f1c6e7`);
+event-feature SHA-256
+`ac467e78cbde7c86f60e3dfd807b2c2da95765f476c1f0dea4e2cc2d62dded81`;
+window-feature SHA-256
+`40a1d03a73804ec911f3be66c9b2d27c1759f216ef1545b615ef18474ae4f97f`.
+
+At this snapshot, original acquisitions were at 153/400 TRAIN and 139/400
+VALID clips, both still running with zero recorded acquisition errors. This
+does not close the full media/PTS/split audit gate.
