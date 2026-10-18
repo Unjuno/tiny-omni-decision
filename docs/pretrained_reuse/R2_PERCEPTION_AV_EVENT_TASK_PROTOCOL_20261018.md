@@ -70,13 +70,37 @@ must not be described as blind.
 
 ## Evaluation and decision rules
 
-The first model candidate is a frozen-feature Path A system using pinned,
-licensed pretrained audio and visual encoders after their R1 compatibility,
-license, runtime, and input-contract audits. Train only a small decision
-module on the 300 TRAIN videos; use the 100 TRAIN calibration videos only for
-predeclared probability calibration. Select a checkpoint/hyperparameters on
-TRAIN fit/calibration only, then report the selected candidate once on the 400
-official VALID development videos. Keep all attempts and failures.
+The first candidate is a task-specific frozen-feature Path A system using the
+already audited `facebook/dinov2-small` at revision
+`ed25f3a31f01632728cabb09d1542f84ab7b0056` (22,056,576 parameters,
+Apache-2.0) for object crops and the `laion/clap-htsat-unfused` audio branch at
+revision `8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a` (28,190,872 parameters
+including audio projection, Apache-2.0 model card; preserve distinct CC0 code
+notice). Their combined frozen encoder count is 50,247,448 parameters before
+the small Decision readout; this is only the component count for this task,
+not the full Omni model or the final product size. These encoders were not
+pretrained as a joint audio-visual pair, so the readout must learn the task
+alignment. The CLAP processor has a 10-second limit; determine and test a
+deterministic whole-event windowing/resampling path against decoded PTS before
+using it. Do not accept its default random truncation. Metadata-based duration
+estimates put 20/818 TRAIN and 17/901 development-VALID events over 10 seconds
+(TRAIN median 1.351s, max 35.003s; VALID median 1.235s, max 30.692s); final
+counts must be recomputed from actual decoded PTS. See the pinned R1 audits for
+the checkpoint and runtime evidence.
+
+Derive a nested selection split from the plan's 300 TRAIN videos before model
+fitting: SHA-256 order by
+`perception-av-event-v1:model-selection:17:{video_id}`, first 60 videos for
+model selection and the remaining 240 for parameter fitting. Keep all videos
+grouped. Use the separate 100 TRAIN calibration videos only for a predeclared
+probability calibration fit after selecting the readout. Select architecture,
+training budget, and checkpoint using fit/selection TRAIN groups only; report
+the selected candidate once on the 400 official VALID development videos.
+Keep all attempts and failures. Candidate order is deterministically permuted
+by sorting track IDs on SHA-256 of
+`perception-av-event-v1:17:{video_id}:{sound_id}:{track_id}`; use this order
+for every comparison arm and do not expose identifiers or permutation seeds to
+the model.
 
 Evaluate the exact same events and randomized candidate lists in three
 conditions: visual-only, audio-only, and joint audio+visual. Also include
@@ -96,16 +120,16 @@ CPU-side tests. If the task or frozen feature pair cannot distinguish source
 matching beyond controls, record that result and stop rather than redefining
 the task after observing VALID outcomes.
 
-## Current execution boundary (snapshot 2026-10-18 04:01:15 UTC)
+## Current execution boundary (snapshot 2026-10-18 04:08:05 UTC)
 
 The feasibility audit and media plan used CPU/network metadata only. Media
 acquisition then started from source commit `b18340a04d2b9f3a0fceb06cbce2ad0a39c63a3c`
 in fresh split-specific directories using the exact plan hash above. The
 acquisition runner SHA-256 is
 `39e7b3c51fa3b527b69ebb8283e4993cd4cd92ad2e48efa1d5348a22df814818`.
-TRAIN started at 03:27:33 UTC and has 62/400 verified clips (844,253,578
-bytes); VALID started at 03:28:00 UTC and has 62/400 verified clips
-(837,091,947 bytes). Both manifests say RUNNING with no error. About 312 GiB
+TRAIN started at 03:27:33 UTC and has 74/400 verified clips (991,192,038
+bytes); VALID started at 03:28:00 UTC and has 78/400 verified clips
+(991,316,915 bytes). Both manifests say RUNNING with no error. About 312 GiB
 remains free. These are live snapshot counts, not completion claims.
 
 A CPU-only partial PTS audit decoded the 46 TRAIN / 55 VALID videos in its
@@ -128,6 +152,12 @@ and 11 VALID event tails; of these, 2 TRAIN and 1 VALID events were present in
 the PTS snapshot, and all 3 were fully covered under actual PTS. Do not
 extrapolate the partial audit to all 800 planned videos. The full PTS audit
 remains a gate before feature extraction.
+
+The metadata-only event-duration audit receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-audio-coverage-estimate-01\result.json`
+(SHA-256 `9de0ce9493e8e1508b46bb7419c8cc3ec534a651d2f4f3513ee244956bebda65`).
+The frozen nested video-group split and candidate-order implementation is
+`scripts/perception_av_event_protocol.py`, with CPU regression tests.
 
 No feature extraction, model load, training, GPU evaluation, or TEST access
 has occurred. The GPU is occupied by another process; this acquisition uses no
