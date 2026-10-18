@@ -31,6 +31,22 @@ def _rows_and_features():
     return rows, text, targets, torch.stack(videos)
 
 
+def test_text_feature_width_is_derived_from_local_minilm_config(tmp_path):
+    from scripts.train_clevrer_temporal_mix import _expected_text_feature_size
+
+    (tmp_path / "config.json").write_text('{"hidden_size": 384}', encoding="utf-8")
+    assert _expected_text_feature_size(tmp_path) == 1536
+
+
+def test_preflight_rejects_mismatched_text_feature_width_before_fit(tmp_path):
+    from scripts.train_clevrer_temporal_mix import _validate_text_feature_size
+
+    (tmp_path / "config.json").write_text('{"hidden_size": 384}', encoding="utf-8")
+    with pytest.raises(ValueError, match="expected 1536, got 3072"):
+        _validate_text_feature_size(tmp_path, 3072)
+    _validate_text_feature_size(tmp_path, 1536)
+
+
 def test_temporal_fit_saves_selected_checkpoint_and_variable_choice_predictions(tmp_path):
     from scripts.train_clevrer_temporal_mix import _fit_variant
     from tiny_omni_decision.temporal_candidate import TemporalCandidateScorer

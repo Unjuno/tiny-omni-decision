@@ -36,9 +36,11 @@ bidirectional LSTM followed by a shared candidate MLP. A text-only candidate MLP
 is the matched reference. Both models score the same frozen train and validation
 rows and return softmax probabilities over each row's supplied options.
 
-The planned VideoPrism+MiniLM+BiLSTM+candidate-readout total is 133,100,801
-pre-quantization parameters (VideoPrism 114,365,184; MiniLM 17,389,824; trainable
-readout 1,345,793), under the provisional 200M target. This accounting is for
+The configured MiniLM-L3 hidden width is 384. Candidate text features
+concatenate four 384-wide vectors, so their width is 1,536. The
+VideoPrism+MiniLM+BiLSTM+candidate-readout total is 133,244,193 pre-quantization
+parameters (VideoPrism 114,365,184; MiniLM 17,389,824; trainable temporal
+readout 1,149,185), under the provisional 200M target. This accounting is for
 this experiment's component only, not the full product model.
 
 ## Fixed fit and selection
@@ -83,14 +85,19 @@ and prior runs remain read-only.
   `a57b15480444dff2db80feed639c51d59e4e6bf0119bb33ff6af4ffcb8959a00`.
   The first run attempt held a GPU reservation unnecessarily; it did not use
   the GPU for feature computation. The readout fit remains CUDA-gated.
-- A preflight/run-directory path collision was found before training. The first
-  preflight is preserved; the corrected v1 config writes preflight and run
-  output to separate new directories.
+- The first CUDA readout attempt used the v1 output directory and stopped before
+  any optimizer update: effective config requested 3,072 text features, while
+  the four-vector MiniLM representation is 1,536 wide. Its directory is
+  preserved with only `effective-config.yaml` and `preflight-used.json`; it is
+  not a model-quality result. A preflight assertion now checks configured
+  width against the pinned local MiniLM `config.json`. The corrected v2 config
+  uses new, separate preflight and run directories and the same frozen data and
+  feature cache.
 - Orbitune's existing idle supervisor detected this job as a foreign GPU
   process and yielded cleanly at step 287890 after writing its checkpoint. Its
   trainer was not stopped, modified, or resumed by this work.
 
-Pending: corrected-config preflight, two matched CUDA readout fits, learning
+Pending: corrected-config preflight, the matched CUDA readout fit, learning
 curves, validation comparison and paired scene bootstrap. Do not interpret the
 current protocol, data preflight, or frozen feature cache as a model-quality
 result.

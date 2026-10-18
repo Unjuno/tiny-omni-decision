@@ -64,6 +64,24 @@ def _counts(rows: list[dict[str, Any]]) -> dict[str, int]:
     return {kind: sum(row["question_type"] == kind for row in rows) for kind in QUESTION_TYPES}
 
 
+def _expected_text_feature_size(text_model: Path) -> int:
+    model_config = json.loads((text_model / "config.json").read_text(encoding="utf-8"))
+    hidden_size = model_config.get("hidden_size")
+    if not isinstance(hidden_size, int) or hidden_size <= 0:
+        raise ValueError("MiniLM config must declare a positive hidden_size")
+    # _text_features concatenates question, option, absolute difference, and product.
+    return 4 * hidden_size
+
+
+def _validate_text_feature_size(text_model: Path, configured_size: int) -> None:
+    expected = _expected_text_feature_size(text_model)
+    if int(configured_size) != expected:
+        raise ValueError(
+            "configured text_feature_size does not match MiniLM candidate features: "
+            f"expected {expected}, got {configured_size}"
+        )
+
+
 def _require_gpu_gate(config: dict[str, Any]) -> dict[str, int]:
     policy = config.get("gpu_gate", {})
     if policy.get("required") is not True:
@@ -100,6 +118,7 @@ def _validate(config_path: Path, config: dict[str, Any]) -> dict[str, Any]:
     feature_path = Path(config["features"]["cache"]).resolve(strict=True)
     feature_report_path = Path(config["features"]["cache_report"]).resolve(strict=True)
     text_model = Path(config["text_encoder"]["model_path"]).resolve(strict=True)
+    _validate_text_feature_size(text_model, config["model"]["text_feature_size"])
     expected_split_report = json.loads((split_dir / "preflight.json").read_text(encoding="utf-8"))
     for name, expected in expected_split_report["counts"]["split_file_sha256"].items():
         if sha256_file(split_dir / name) != expected:

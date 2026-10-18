@@ -1,5 +1,5 @@
 schema_version: 1
-experiment_id: clevrer-temporal-mix-videoprism-bilstm-v1-seed17
+experiment_id: clevrer-temporal-mix-videoprism-bilstm-v2-seed17
 claim_scope: >-
   CLEVRER temporal descriptive, explanatory, predictive and counterfactual
   candidate decisions on a fresh scene-grouped development split; validation
@@ -34,7 +34,7 @@ text_encoder:
   frozen: true
   question_format: question including candidate statement for CLEVRER reasoning tasks
 model:
-  text_feature_size: 3072
+  text_feature_size: 1536
   video_feature_size: 768
   temporal_hidden_size: 128
   scorer_hidden_size: 128
@@ -61,5 +61,5 @@ gpu_gate:
   min_reserved_mib: 3200
   max_start_utilization_pct: 5
 outputs:
-  preflight: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-bilstm-v1-preflight/preflight.json
-  run_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-videoprism-bilstm-v1
+  preflight: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-bilstm-v2-preflight/preflight.json
+  run_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-temporal-mix-videoprism-bilstm-v2
