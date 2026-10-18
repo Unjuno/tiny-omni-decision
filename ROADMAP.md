@@ -42,6 +42,15 @@ validation subjects. Keep each task and its uncertainty separate. See the [scree
 and [sensor](docs/pretrained_reuse/R2M_SENSOR_SUBJECT_RESULTS_20261012.md)
 records.
 
+**2026-10-19 CLEVR-4 count training-only diagnosis:** Rehashed inputs and the
+selected readout, reconstructed the seed-17 split, and analyzed only 7,582
+training images on CPU. Count errors concentrate on adjacent values; the
+saved linear head scores 69.12% in-sample versus 10.55% majority prior, while
+nearest-centroid classification scores 41.16%. This narrows the next question
+to spatial/object readout and generalization; it is not a new quality result
+and did not inspect development, official validation, or sealed-audit rows.
+See the [diagnostic and hashes](docs/pretrained_reuse/R2_CLEVR4_COUNT_TRAINING_DIAGNOSTIC_20261019.md).
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target
