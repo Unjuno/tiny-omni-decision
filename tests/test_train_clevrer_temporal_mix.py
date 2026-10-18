@@ -139,4 +139,3 @@ def test_fit_requires_valid_hotugpu_handoff(monkeypatch):
     monkeypatch.delenv(GPU_GATE_ENV["reserved_mib"])
     with pytest.raises(RuntimeError, match="HotUGPU gate"):
         _require_gpu_gate(config)
-
