@@ -1,0 +1,274 @@
+{
+  "parent": {
+    "status": "COMPLETE_FIXED_FACTORIAL",
+    "metrics": {
+      "combined": {
+        "count": 2048,
+        "accuracy": 0.4287109375,
+        "nll": 2.7882187366485596,
+        "brier": 0.8960873484611511,
+        "ece_15_bins": 0.3711961513981805,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          22,
+          113,
+          115,
+          116,
+          104,
+          119,
+          111,
+          112,
+          138,
+          184,
+          914
+        ]
+      },
+      "control": {
+        "count": 2048,
+        "accuracy": 0.84619140625,
+        "nll": 0.36311012506484985,
+        "brier": 0.206932932138443,
+        "ece_15_bins": 0.013474869512720034,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          10,
+          46,
+          100,
+          110,
+          94,
+          100,
+          98,
+          107,
+          105,
+          187,
+          1091
+        ]
+      },
+      "extrapolation": {
+        "count": 2048,
+        "accuracy": 0.41845703125,
+        "nll": 3.1548023223876953,
+        "brier": 0.9327247142791748,
+        "ece_15_bins": 0.4020529867193545,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          4,
+          61,
+          90,
+          111,
+          120,
+          128,
+          116,
+          143,
+          147,
+          176,
+          952
+        ]
+      },
+      "interpolation": {
+        "count": 2048,
+        "accuracy": 0.7099609375,
+        "nll": 0.8028908371925354,
+        "brier": 0.40211841464042664,
+        "ece_15_bins": 0.12354977603536099,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          8,
+          41,
+          84,
+          116,
+          95,
+          126,
+          121,
+          129,
+          137,
+          169,
+          1022
+        ]
+      },
+      "wording": {
+        "count": 2048,
+        "accuracy": 0.8369140625,
+        "nll": 0.3862082064151764,
+        "brier": 0.21806254982948303,
+        "ece_15_bins": 0.012248701343196444,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          15,
+          52,
+          109,
+          118,
+          99,
+          78,
+          76,
+          114,
+          132,
+          162,
+          1093
+        ]
+      }
+    },
+    "seconds": 40.38413759996183,
+    "peak_vram": 193472000,
+    "source_checkpoint_unchanged": true,
+    "artifacts": {
+      "combined-predictions.json": "1677187de50d3d597d88186530319ba550604046479fca7aa0acab4061976b81",
+      "control-predictions.json": "34dd5f6854554f75fbf88f388aa72fc81f3c83af378f5653ea229113476b6acb",
+      "extrapolation-predictions.json": "13cb0b0f370a56954e1760fb42cc5fd2fea44bfb9aaf085489409b2bdfdac53a",
+      "interpolation-predictions.json": "3bd7f8b2ad97827f5f0696d780507d842626e626952e5a3c39a25a84acb9d0b1",
+      "protocol.json": "09f6bc8dca0ae793b20cb1d56661c022d31a970d95871919f6c06a1a11cfbde9",
+      "wording-predictions.json": "879a2d031291891ccfd195d5db3cbdd675a8c72191bbd4179f050f3b4e6a0686"
+    }
+  },
+  "soft": {
+    "status": "COMPLETE_FIXED_FACTORIAL",
+    "metrics": {
+      "combined": {
+        "count": 2048,
+        "accuracy": 0.4423828125,
+        "nll": 2.61984920501709,
+        "brier": 0.8801852464675903,
+        "ece_15_bins": 0.3603531188782654,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          23,
+          101,
+          141,
+          99,
+          120,
+          107,
+          101,
+          114,
+          118,
+          188,
+          936
+        ]
+      },
+      "control": {
+        "count": 2048,
+        "accuracy": 0.865234375,
+        "nll": 0.39565226435661316,
+        "brier": 0.1965290904045105,
+        "ece_15_bins": 0.04171322470938321,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          6,
+          48,
+          87,
+          92,
+          55,
+          49,
+          53,
+          62,
+          71,
+          87,
+          1438
+        ]
+      },
+      "extrapolation": {
+        "count": 2048,
+        "accuracy": 0.4326171875,
+        "nll": 3.0317165851593018,
+        "brier": 0.9007140398025513,
+        "ece_15_bins": 0.37600806333648507,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          1,
+          22,
+          71,
+          123,
+          137,
+          136,
+          85,
+          96,
+          104,
+          138,
+          184,
+          951
+        ]
+      },
+      "interpolation": {
+        "count": 2048,
+        "accuracy": 0.71923828125,
+        "nll": 0.7831403017044067,
+        "brier": 0.39223992824554443,
+        "ece_15_bins": 0.10451086093962658,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          1,
+          16,
+          55,
+          124,
+          128,
+          105,
+          101,
+          91,
+          119,
+          125,
+          139,
+          1044
+        ]
+      },
+      "wording": {
+        "count": 2048,
+        "accuracy": 0.85107421875,
+        "nll": 0.38362395763397217,
+        "brier": 0.20558172464370728,
+        "ece_15_bins": 0.0419196479342645,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          14,
+          42,
+          83,
+          88,
+          59,
+          76,
+          49,
+          63,
+          82,
+          95,
+          1397
+        ]
+      }
+    },
+    "seconds": 40.627861699904315,
+    "peak_vram": 193472000,
+    "source_checkpoint_unchanged": true,
+    "artifacts": {
+      "combined-predictions.json": "65ee646f28ab6a8cb8b2f37933c5a87df4be91918c96f66091845eb5edbc5512",
+      "control-predictions.json": "3d2326660d72a657bc6014807ef00c159f0f074fe8e568cf079e7819fa2d36b8",
+      "extrapolation-predictions.json": "8a50f1fb65822c4acd0011335917e428761c0300699a836d848b021611b458c8",
+      "interpolation-predictions.json": "98a710d7b5c24430cc4d0afd9fe3860b061f29ee140a9b3c1b0ce19d493aeafa",
+      "protocol.json": "4dbed3eef8be4be8417447dcd9e3e7e412110f193491ebd677c1569b2801b1e3",
+      "wording-predictions.json": "52a42ea0c000687528f9be9f074538d15db2fdf02a0a3964b174c1d26c470c32"
+    }
+  }
+}

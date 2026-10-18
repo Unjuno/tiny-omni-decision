@@ -1,0 +1,38 @@
+schema_version: 1
+experiment_id: path-a-audio-multiquery-speech-commands-v0
+seed: 17
+source:
+  sample_dir: C:/CodexArtifacts/pretrained-reuse-r2/speech-commands-sample-seed17-128-64-retry2
+  feature_cache: C:/CodexArtifacts/pretrained-reuse-r2/audio-probe-v0-retry3/audio-features.pt
+  train_manifest_sha256: 02a43981e153b0f63bd55192f614fe504114f05f212ca0f4da37e2d91480a9da
+  validation_manifest_sha256: 18520e5d422fa4a129aa1c9ef3295acd4f00c97c0ca3493cb972c28aafa7d0bb
+  feature_cache_sha256: ace323458e7f443daf63382d2d41d99151d2a5801c671d30b0df68d52338ae64
+encoder:
+  audio_id: openai/whisper-tiny
+  audio_model_path: C:/CodexArtifacts/pretrained-reuse-r2/models/audio-whisper-tiny
+  audio_revision: 169d4a4341b33bc18d8881c4b69c2e104e1cc0af
+  audio_weights_sha256: 7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395
+  audio_parameters: 37760640
+  audio_frozen: true
+  text_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  text_revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  text_model_path: C:/CodexArtifacts/pretrained-reuse-r2/models/text-minilm-en
+  text_weights_sha256: cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433
+  text_parameters: 17389824
+  text_frozen: true
+readout:
+  hidden_size: 128
+  epochs: 8
+  batch_queries: 32
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  checkpoint_selection: minimum_macro_validation_nll
+  query_types: [keyword_identity, direction_presence, response_presence, switch_presence]
+device: cuda
+sealed_audit_loaded: false
+test_split_loaded: false
+notes:
+  - The existing train/validation media split and audio feature cache are immutable inputs.
+  - Four deterministic question types are derived from each keyword label; every clip stays in one split.
+  - This is a development validation experiment on Speech Commands, not general speech QA.
+  - No audio encoder execution is needed after loading the frozen feature cache.

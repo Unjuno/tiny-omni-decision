@@ -1,0 +1,48 @@
+{
+  "id": "conditional-native-component-budget-v1",
+  "components": {
+    "visual_encoder": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz",
+      "sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+    },
+    "semantic_core": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\model.safetensors",
+      "sha256": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080"
+    },
+    "speech_encoder": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\encoder.safetensors",
+      "sha256": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8"
+    },
+    "event_audio": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\efficientat-audit-v1\\dymn04_as.pt",
+      "sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e"
+    },
+    "image_head": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\0.01\\final.pt",
+      "sha256": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5"
+    },
+    "audio_head": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\audio\\best.pt",
+      "sha256": "ade277dc1adf24bd621c838ebb8be8a7cbf26380889d45a3893400b4723a491a"
+    },
+    "video_head": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\video_ordered\\best.pt",
+      "sha256": "4261a296711b0cfac2a7681bc250ddc4c2d59d8265119f0143e798e2936397d9"
+    },
+    "audio_normalizer": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\audio\\normalizer.npz",
+      "sha256": "13e3c7367c9c0a079c29f4acdff5ce4263883cfaeffd1714f646210b0698c289"
+    },
+    "video_normalizer": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\video_ordered\\normalizer.npz",
+      "sha256": "13e3c7367c9c0a079c29f4acdff5ce4263883cfaeffd1714f646210b0698c289"
+    }
+  },
+  "calibration_metadata": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-correspondence-02\\result.json",
+    "sha256": "9638d06b7fe4c0e3c53e0a0080d38b350eb135fd8cf819e2e3fcfdbf8e977516"
+  },
+  "scope": "File-level upper bound; includes integer buffers; no combined runtime or quality claim",
+  "optional_sensor_included": false,
+  "extra_language_encoder_included": false
+}

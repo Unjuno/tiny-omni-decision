@@ -1,0 +1,48 @@
+{
+  "source": "https://zenodo.org/records/6473207",
+  "downloads": {
+    "clotho_aqa_metadata.csv": {
+      "sha256": "7505ba93c291d344b31e5c33e872b95d84255852cff93278bbdf549402acc1f5",
+      "checksum": "md5:e555d8a5a4b275ca7c437a33c0739d65",
+      "bytes": 427441
+    },
+    "clotho_aqa_train.csv": {
+      "sha256": "237c692e21e015a3e9b4391edd716b1387d7eb2d068d7ecdb5a6d6ead7e7a992",
+      "checksum": "md5:508513b91001ab17e641eaaa162ca045",
+      "bytes": 1453735
+    },
+    "LICENSE.txt": {
+      "sha256": "3194248833935838e6e6365f4e25d0132c1f2db427f58b0cd9bd707089fb2eb4",
+      "checksum": "md5:41460130242fbd61fa2615a0e6622d3a",
+      "bytes": 1467
+    }
+  },
+  "train_rows": 21132,
+  "train_clips": 1174,
+  "counts": {
+    "questions": 7037,
+    "binary_questions": 4691,
+    "binary_annotation_count_3": 4690,
+    "binary_unanimous": 2762,
+    "eligible_yes": 1953,
+    "eligible_no": 1469,
+    "binary_disagreement": 1929,
+    "binary_existing_fsd_uploader": 464,
+    "unresolved_filename_questions": 6,
+    "binary_disallowed_license": 800,
+    "binary_annotation_count_6": 1,
+    "eligible_invalid_vote_count": 1,
+    "binary_existing_fsd_id": 4
+  },
+  "question_license_counts": {
+    "http://creativecommons.org/licenses/by/3.0/": 2616,
+    "http://creativecommons.org/publicdomain/zero/1.0/": 3221,
+    "http://creativecommons.org/licenses/by-nc/3.0/": 954,
+    "http://creativecommons.org/licenses/sampling+/1.0/": 228,
+    "": 18
+  },
+  "eligible_clips": 856,
+  "eligible_uploaders": 564,
+  "scope": "official train only; no validation/test questions or media loaded",
+  "status": "metadata candidate only, no finalized split or media acquisition"
+}

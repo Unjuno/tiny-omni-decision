@@ -1,0 +1,392 @@
+{
+  "status": "PASS_EIGHT_CLIP_DERIVED_MASK_INPUT_NOT_QUALITY",
+  "source_commit": "7f187a4635c15958839877be46d2f6d893552190",
+  "artifacts": [
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\result.json",
+      "sha256": "521602ff3fb26f4f4b1732c7b8567da89a0ccdcab2fb506f0a0fa7e7e38c3d90",
+      "report": {
+        "status": "PASS_EIGHT_CLIP_MASK_FEATURE_INPUT_CORPUS_NOT_QUALITY",
+        "source_commit": "7f187a4635c15958839877be46d2f6d893552190",
+        "config_sha256": "55fd81403f546167b919f49aaf2dd43b80eb7ef0cfdc8bca4b2ef8a8d5381eb6",
+        "rows": [
+          {
+            "video_id": "video_10103",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_10103.npz",
+            "sha256": "357abf5c23b9e39695ca1d55761e7310c8bd6fcde57f47580e8cfce5756f8d4b",
+            "file_bytes": 4820210,
+            "frames": 32,
+            "proposals": 1731,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 13.461302499985322
+          },
+          {
+            "video_id": "video_10186",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_10186.npz",
+            "sha256": "3ca1e60d79d7cbabb542e84205eef33c7e5f5ab0851f2e0918f4e351963ff994",
+            "file_bytes": 10784814,
+            "frames": 32,
+            "proposals": 3876,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 28.32361750002019
+          },
+          {
+            "video_id": "video_10212",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_10212.npz",
+            "sha256": "b7e2c171e60cba4f64b3cd204d80f5566be183a6dc5b6922efc6f93a61b2d65c",
+            "file_bytes": 5091894,
+            "frames": 32,
+            "proposals": 1839,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 13.910020400071517
+          },
+          {
+            "video_id": "video_10387",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_10387.npz",
+            "sha256": "aa1ab97c839ed745298ccb520dcd9003207e302555fa18444b02bd1eb456a20f",
+            "file_bytes": 8890746,
+            "frames": 32,
+            "proposals": 3210,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 23.369162200018764
+          },
+          {
+            "video_id": "video_1087",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_1087.npz",
+            "sha256": "f1a830fa6ae23c63f76e93da4da83c9376698a2c588f6f4f9a77203a943c16c9",
+            "file_bytes": 6071025,
+            "frames": 32,
+            "proposals": 2189,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 16.15667229995597
+          },
+          {
+            "video_id": "video_10886",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_10886.npz",
+            "sha256": "c8063aef6d543da7ee3fb32ad091c027fe06e00826509c8d55ba7869e6bf46e3",
+            "file_bytes": 6392688,
+            "frames": 32,
+            "proposals": 2303,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 16.871619099983945
+          },
+          {
+            "video_id": "video_10894",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_10894.npz",
+            "sha256": "a5287a3d0b4e4d7a20257cf9c5719df35afef60da48e5a10f5bbce702ed2652b",
+            "file_bytes": 6062170,
+            "frames": 32,
+            "proposals": 2223,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 16.69923180004116
+          },
+          {
+            "video_id": "video_10903",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-eight-01\\video_10903.npz",
+            "sha256": "7901504a234dbfaecd327f2ca55646ee040e7b04630a4cdc43cc5d9600c0caa4",
+            "file_bytes": 2976880,
+            "frames": 32,
+            "proposals": 1070,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 8.56366700003855
+          }
+        ],
+        "media_assets": 8,
+        "observation_frames": 256,
+        "proposals": 18441,
+        "feature_channels": 384,
+        "added_registered_parameters": 0,
+        "annotations_loaded": false,
+        "quality_evaluated": false,
+        "training": false,
+        "gpu_or_model_loaded": false,
+        "validation_opened": false,
+        "sealed_audit_opened": false,
+        "fresh_replay_bitwise": false,
+        "all_readback_exact": true,
+        "pilot_all_nine_arrays_exact": true,
+        "numpy_rng_unchanged": true,
+        "reference_result_sha256": null,
+        "protected_sources_unchanged": true,
+        "cloud_cost": 0,
+        "seconds": 140.10722849995364
+      }
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\result.json",
+      "sha256": "840c89a94d41fbd52ae7086a1f5bde4752b67b7d2f008fd94043aaf58940e22e",
+      "report": {
+        "status": "PASS_EIGHT_CLIP_MASK_FEATURE_INPUT_CORPUS_NOT_QUALITY",
+        "source_commit": "7f187a4635c15958839877be46d2f6d893552190",
+        "config_sha256": "55fd81403f546167b919f49aaf2dd43b80eb7ef0cfdc8bca4b2ef8a8d5381eb6",
+        "rows": [
+          {
+            "video_id": "video_10103",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_10103.npz",
+            "sha256": "c10466d30d075c9cf3d82193196725dd866a05e0ff7763527d0f45d84ef61daf",
+            "file_bytes": 4820210,
+            "frames": 32,
+            "proposals": 1731,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 13.681417600018904
+          },
+          {
+            "video_id": "video_10186",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_10186.npz",
+            "sha256": "2b3a3ee73b32ff57de3bb62e353c306626a1ef63308ef883bf4166ef8eb8e61b",
+            "file_bytes": 10784814,
+            "frames": 32,
+            "proposals": 3876,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 28.60712840000633
+          },
+          {
+            "video_id": "video_10212",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_10212.npz",
+            "sha256": "c93e41ad22f0912a5aff9fca667e071972f974663e88f13a5c77abe5e83ea7f0",
+            "file_bytes": 5091894,
+            "frames": 32,
+            "proposals": 1839,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 14.518913800013252
+          },
+          {
+            "video_id": "video_10387",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_10387.npz",
+            "sha256": "bf1a26df2ea1eecc942ef9999517623242be99be0d2df6cdda1319b5bcb828e3",
+            "file_bytes": 8890746,
+            "frames": 32,
+            "proposals": 3210,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 24.011464299983345
+          },
+          {
+            "video_id": "video_1087",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_1087.npz",
+            "sha256": "934888e024655414b6dc4d8f1cfb8d3edfc2fe065ef787b46dcdf59dd4adb475",
+            "file_bytes": 6071025,
+            "frames": 32,
+            "proposals": 2189,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 16.33526730001904
+          },
+          {
+            "video_id": "video_10886",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_10886.npz",
+            "sha256": "6a77708b77dd8ae046045aed63f2ea6749ae79fa7f6b304952a8fd2d344ed639",
+            "file_bytes": 6392688,
+            "frames": 32,
+            "proposals": 2303,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 17.407158100046217
+          },
+          {
+            "video_id": "video_10894",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_10894.npz",
+            "sha256": "3b05d89ca5fa0f5ef6c85908a7142d1443e36503edc4c0297d0bd8bc8747cf15",
+            "file_bytes": 6062170,
+            "frames": 32,
+            "proposals": 2223,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 16.897736600018106
+          },
+          {
+            "video_id": "video_10903",
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-fresh-01\\video_10903.npz",
+            "sha256": "82415723bc74f6e0c48647408523e162ce98b5996f13bfe898a007e33be190a3",
+            "file_bytes": 2976880,
+            "frames": 32,
+            "proposals": 1070,
+            "empty_masks": 0,
+            "golden_objects_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0,
+            "seconds": 8.756581099936739
+          }
+        ],
+        "media_assets": 8,
+        "observation_frames": 256,
+        "proposals": 18441,
+        "feature_channels": 384,
+        "added_registered_parameters": 0,
+        "annotations_loaded": false,
+        "quality_evaluated": false,
+        "training": false,
+        "gpu_or_model_loaded": false,
+        "validation_opened": false,
+        "sealed_audit_opened": false,
+        "fresh_replay_bitwise": true,
+        "all_readback_exact": true,
+        "pilot_all_nine_arrays_exact": true,
+        "numpy_rng_unchanged": true,
+        "reference_result_sha256": "521602ff3fb26f4f4b1732c7b8567da89a0ccdcab2fb506f0a0fa7e7e38c3d90",
+        "protected_sources_unchanged": true,
+        "cloud_cost": 0,
+        "seconds": 142.9024254999822
+      }
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-mask-feature-corpus-independent-audit-01.json",
+      "sha256": "013bb382ae9679af1ec76e18f8a8906fb8d686eb9ce3dc14944802b21feba9d8",
+      "report": {
+        "status": "PASS_INDEPENDENT_EIGHT_CLIP_MASK_FEATURE_AUDIT_NOT_QUALITY",
+        "script_sha256": "9e22f6451fbcdf9a520cc77d486788071896420aeb877c89f1fe8a23b1b1b75b",
+        "primary_result_sha256": "521602ff3fb26f4f4b1732c7b8567da89a0ccdcab2fb506f0a0fa7e7e38c3d90",
+        "fresh_result_sha256": "840c89a94d41fbd52ae7086a1f5bde4752b67b7d2f008fd94043aaf58940e22e",
+        "rows": [
+          {
+            "video_id": "video_10103",
+            "proposals": 1731,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          },
+          {
+            "video_id": "video_10186",
+            "proposals": 3876,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          },
+          {
+            "video_id": "video_10212",
+            "proposals": 1839,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          },
+          {
+            "video_id": "video_10387",
+            "proposals": 3210,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          },
+          {
+            "video_id": "video_1087",
+            "proposals": 2189,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          },
+          {
+            "video_id": "video_10886",
+            "proposals": 2303,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          },
+          {
+            "video_id": "video_10894",
+            "proposals": 2223,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          },
+          {
+            "video_id": "video_10903",
+            "proposals": 1070,
+            "frames": 32,
+            "arrays_compared": 9,
+            "numerical_rows_checked": 8,
+            "golden_mean_max_abs": 0.0,
+            "golden_std_max_abs": 0.0
+          }
+        ],
+        "media_assets": 8,
+        "frames": 256,
+        "proposals": 18441,
+        "arrays_compared": 72,
+        "numerical_rows_checked": 64,
+        "all_rows_numerically_recomputed": false,
+        "annotations_loaded": false,
+        "gpu_or_model_loaded": false,
+        "training": false,
+        "quality_evaluated": false,
+        "seconds": 13.933641999959946
+      }
+    }
+  ],
+  "all_archive_bytes": 51090427,
+  "total_measured_body_seconds": 296.9432959998958,
+  "feature_vector_channels": {
+    "mean": 384,
+    "std": 384
+  },
+  "added_registered_parameters": 0,
+  "local_verification": {
+    "ruff": "PASS",
+    "cpu_tests_passed": 1321,
+    "cpu_tests_skipped": 1,
+    "cpu_test_seconds": 17.3,
+    "model_dataset_manifests": "PASS",
+    "four_catalogs": "PASS",
+    "dataset_policy": "ALLOW"
+  },
+  "limitations": [
+    "8 previously known train assets, not independent validation.",
+    "Only64 numerical reference rows, not all18441 independently recomputed.",
+    "Zero added parameters does not exclude resident pretrained encoders from product accounting.",
+    "No readout fit or semantic/QA/calibration quality.",
+    "CPU allocator peak and isolated product latency not measured."
+  ]
+}

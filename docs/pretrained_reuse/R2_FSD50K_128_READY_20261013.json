@@ -1,0 +1,2996 @@
+{
+  "acquisition": {
+    "status": "PASS",
+    "selection": [
+      {
+        "event": "Bell",
+        "id": "29792",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "stomachache"
+      },
+      {
+        "event": "Bell",
+        "id": "127552",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "romulofs"
+      },
+      {
+        "event": "Bell",
+        "id": "72621",
+        "known_positive_labels": "Chime,Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "j1987"
+      },
+      {
+        "event": "Bell",
+        "id": "99624",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "tec studios"
+      },
+      {
+        "event": "Bell",
+        "id": "135772",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "arseniiv"
+      },
+      {
+        "event": "Bell",
+        "id": "90567",
+        "known_positive_labels": "Cowbell,Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Suicidity"
+      },
+      {
+        "event": "Bell",
+        "id": "173450",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "elrobotijo"
+      },
+      {
+        "event": "Bell",
+        "id": "10431",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "batchku"
+      },
+      {
+        "event": "Bell",
+        "id": "22597",
+        "known_positive_labels": "Church_bell,Bell",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Charel Sytze"
+      },
+      {
+        "event": "Bell",
+        "id": "432465",
+        "known_positive_labels": "Walk_and_footsteps,Run,Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Vortichez"
+      },
+      {
+        "event": "Bell",
+        "id": "414565",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "pjcohen"
+      },
+      {
+        "event": "Bell",
+        "id": "372346",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "SSS_Samples"
+      },
+      {
+        "event": "Bell",
+        "id": "216305",
+        "known_positive_labels": "Bell",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "RSilveira_88"
+      },
+      {
+        "event": "Bell",
+        "id": "50405",
+        "known_positive_labels": "Wind_chime,Chime,Bell",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "dADDoiT"
+      },
+      {
+        "event": "Bell",
+        "id": "263527",
+        "known_positive_labels": "Church_bell,Traffic_noise_and_roadway_noise,Bell,Motor_vehicle_(road),Vehicle",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Alcappuccino"
+      },
+      {
+        "event": "Bell",
+        "id": "89060",
+        "known_positive_labels": "Wind_chime,Chime,Bell",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "cmusounddesign"
+      },
+      {
+        "event": "Clapping",
+        "id": "432910",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Kyanite_"
+      },
+      {
+        "event": "Clapping",
+        "id": "180751",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "toiletrolltube"
+      },
+      {
+        "event": "Clapping",
+        "id": "164435",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "martinimeniscus"
+      },
+      {
+        "event": "Clapping",
+        "id": "198034",
+        "known_positive_labels": "Clapping,Drum_kit,Percussion,Musical_instrument,Music,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Fiditg"
+      },
+      {
+        "event": "Clapping",
+        "id": "131779",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "crispydinner"
+      },
+      {
+        "event": "Clapping",
+        "id": "15650",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "dobroide"
+      },
+      {
+        "event": "Clapping",
+        "id": "160130",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "jorickhoofd"
+      },
+      {
+        "event": "Clapping",
+        "id": "371625",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "AcousticMemory"
+      },
+      {
+        "event": "Clapping",
+        "id": "361715",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "lafashion"
+      },
+      {
+        "event": "Clapping",
+        "id": "175049",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "wuola"
+      },
+      {
+        "event": "Clapping",
+        "id": "73087",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "LG"
+      },
+      {
+        "event": "Clapping",
+        "id": "161239",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "qubodup"
+      },
+      {
+        "event": "Clapping",
+        "id": "202158",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "ecfike"
+      },
+      {
+        "event": "Clapping",
+        "id": "387756",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Jagadamba"
+      },
+      {
+        "event": "Clapping",
+        "id": "112281",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "edbles"
+      },
+      {
+        "event": "Clapping",
+        "id": "123805",
+        "known_positive_labels": "Clapping,Hands",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "kendallbear"
+      },
+      {
+        "event": "Telephone",
+        "id": "38229",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Charliefarley"
+      },
+      {
+        "event": "Telephone",
+        "id": "122272",
+        "known_positive_labels": "Ringtone,Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "zimbot"
+      },
+      {
+        "event": "Telephone",
+        "id": "257949",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Kane53126"
+      },
+      {
+        "event": "Telephone",
+        "id": "71234",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Handfan"
+      },
+      {
+        "event": "Telephone",
+        "id": "254186",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "lauriemc"
+      },
+      {
+        "event": "Telephone",
+        "id": "170573",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Ryan_kuke"
+      },
+      {
+        "event": "Telephone",
+        "id": "351548",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "RICHERlandTV"
+      },
+      {
+        "event": "Telephone",
+        "id": "76927",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "muses212"
+      },
+      {
+        "event": "Telephone",
+        "id": "432313",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "1tmsounds"
+      },
+      {
+        "event": "Telephone",
+        "id": "249515",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "kwahmah_02"
+      },
+      {
+        "event": "Telephone",
+        "id": "31299",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "FreqMan"
+      },
+      {
+        "event": "Telephone",
+        "id": "242000",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "poison x"
+      },
+      {
+        "event": "Telephone",
+        "id": "175039",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Cabeeno Rossley"
+      },
+      {
+        "event": "Telephone",
+        "id": "21680",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Anton"
+      },
+      {
+        "event": "Telephone",
+        "id": "60844",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Adam_Joseph"
+      },
+      {
+        "event": "Telephone",
+        "id": "77723",
+        "known_positive_labels": "Telephone,Alarm",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "cs272"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "233384",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "laiaoreka"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "215137",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "THEWULFMAN"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "210195",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Augdog"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "166275",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "niittymaa"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "195017",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "punpcklbw"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "340225",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "kingof_thelab"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "422745",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "KieranKeegan"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "427419",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "thef1like"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "378398",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "13FPanska_Stranska_Michaela"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "269847",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "iujhu"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "79874",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "RoofDog"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "62303",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "thesecretmachine"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "268884",
+        "known_positive_labels": "Squeak,Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "lukas_p"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "166297",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Fantozzi"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "348355",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Natty23"
+      },
+      {
+        "event": "Walk_and_footsteps",
+        "id": "273384",
+        "known_positive_labels": "Walk_and_footsteps",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "sturmankin"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "239746",
+        "known_positive_labels": "Bass_guitar,Guitar,Plucked_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "quartertone"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "128818",
+        "known_positive_labels": "Electric_guitar,Guitar,Plucked_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "mtcband"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "268259",
+        "known_positive_labels": "Electric_guitar,Guitar,Plucked_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "bergice"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "92098",
+        "known_positive_labels": "Snare_drum,Drum,Percussion,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "sandyrb"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "13456",
+        "known_positive_labels": "Wind_instrument_and_woodwind_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "uauaua"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "358509",
+        "known_positive_labels": "Wind_instrument_and_woodwind_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "MTG"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "252351",
+        "known_positive_labels": "Acoustic_guitar,Human_voice,Guitar,Plucked_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "GrowingUp"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "61859",
+        "known_positive_labels": "Scratching_(performance_technique),Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "NoiseCollector"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "405904",
+        "known_positive_labels": "Keyboard_(musical),Musical_instrument,Music",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "penetrermind"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "211845",
+        "known_positive_labels": "Guitar,Plucked_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "nyonk"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "44619",
+        "known_positive_labels": "Guitar,Plucked_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "uiop"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "373881",
+        "known_positive_labels": "Bowed_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Samulis"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "234434",
+        "known_positive_labels": "Drum_kit,Percussion,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "mitchelk"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "99256",
+        "known_positive_labels": "Ratchet_and_pawl,Percussion,Mechanisms,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "soundbytez"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "324053",
+        "known_positive_labels": "Electric_guitar,Guitar,Plucked_string_instrument,Musical_instrument,Music",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Corsica_S"
+      },
+      {
+        "event": "Musical_instrument",
+        "id": "116893",
+        "known_positive_labels": "Harmonica,Musical_instrument,Music",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "CBeeching"
+      },
+      {
+        "event": "Knock",
+        "id": "209222",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "mark646"
+      },
+      {
+        "event": "Knock",
+        "id": "211498",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Taira Komori"
+      },
+      {
+        "event": "Knock",
+        "id": "412857",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "SoundsForHim"
+      },
+      {
+        "event": "Knock",
+        "id": "148950",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Adam_N"
+      },
+      {
+        "event": "Knock",
+        "id": "137083",
+        "known_positive_labels": "Knock,Slam,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "chaosportal"
+      },
+      {
+        "event": "Knock",
+        "id": "138323",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Tdude9000"
+      },
+      {
+        "event": "Knock",
+        "id": "193841",
+        "known_positive_labels": "Knock,Wood,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Ligidium"
+      },
+      {
+        "event": "Knock",
+        "id": "218980",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "bcimmet"
+      },
+      {
+        "event": "Knock",
+        "id": "365902",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "univ_lyon3"
+      },
+      {
+        "event": "Knock",
+        "id": "367129",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "pfranzen"
+      },
+      {
+        "event": "Knock",
+        "id": "274814",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "BarkersPinhead"
+      },
+      {
+        "event": "Knock",
+        "id": "133889",
+        "known_positive_labels": "Knock,Door,Wood,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "aroth4"
+      },
+      {
+        "event": "Knock",
+        "id": "182023",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Omar Alvarado"
+      },
+      {
+        "event": "Knock",
+        "id": "190020",
+        "known_positive_labels": "Knock,Door,Wood,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Aiwha"
+      },
+      {
+        "event": "Knock",
+        "id": "336390",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "ghaelen"
+      },
+      {
+        "event": "Knock",
+        "id": "120331",
+        "known_positive_labels": "Knock,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "cemagar"
+      },
+      {
+        "event": "Door",
+        "id": "381966",
+        "known_positive_labels": "Sliding_door,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "stiffman"
+      },
+      {
+        "event": "Door",
+        "id": "367221",
+        "known_positive_labels": "Slam,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "elliottmoo"
+      },
+      {
+        "event": "Door",
+        "id": "130044",
+        "known_positive_labels": "Squeak,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "MaxDemianAGL"
+      },
+      {
+        "event": "Door",
+        "id": "425847",
+        "known_positive_labels": "Slam,Truck,Car,Motor_vehicle_(road),Vehicle,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Soundholder"
+      },
+      {
+        "event": "Door",
+        "id": "332914",
+        "known_positive_labels": "Squeak,Slam,Alarm,Wood,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "ProjectsU012"
+      },
+      {
+        "event": "Door",
+        "id": "191947",
+        "known_positive_labels": "Sliding_door,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Aiyumi"
+      },
+      {
+        "event": "Door",
+        "id": "175669",
+        "known_positive_labels": "Slam,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "simpsi"
+      },
+      {
+        "event": "Door",
+        "id": "335278",
+        "known_positive_labels": "Sliding_door,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Mivori"
+      },
+      {
+        "event": "Door",
+        "id": "156602",
+        "known_positive_labels": "Squeak,Slam,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "davidkyoku"
+      },
+      {
+        "event": "Door",
+        "id": "254952",
+        "known_positive_labels": "Sliding_door,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "thecityrings"
+      },
+      {
+        "event": "Door",
+        "id": "214232",
+        "known_positive_labels": "Sliding_door,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "kd_jack"
+      },
+      {
+        "event": "Door",
+        "id": "318892",
+        "known_positive_labels": "Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "el-bee"
+      },
+      {
+        "event": "Door",
+        "id": "70376",
+        "known_positive_labels": "Cupboard_open_or_close,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "beskhu"
+      },
+      {
+        "event": "Door",
+        "id": "261090",
+        "known_positive_labels": "Slam,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "JakLocke"
+      },
+      {
+        "event": "Door",
+        "id": "144226",
+        "known_positive_labels": "Slam,Microwave_oven,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "D W"
+      },
+      {
+        "event": "Door",
+        "id": "331213",
+        "known_positive_labels": "Sliding_door,Door,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Yoyodaman234"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "273222",
+        "known_positive_labels": "Sink_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "BoxerDave92"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "268579",
+        "known_positive_labels": "Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "7h3_lark"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "271335",
+        "known_positive_labels": "Drip,Water_tap_and_faucet,Liquid,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "InspectorJ"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "151911",
+        "known_positive_labels": "Water_tap_and_faucet,Water,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "carroll27"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "433710",
+        "known_positive_labels": "Fill_(with_liquid),Water_tap_and_faucet,Liquid,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "dersuperanton"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "152977",
+        "known_positive_labels": "Water_tap_and_faucet,Liquid,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "dianser72"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "202019",
+        "known_positive_labels": "Bathtub_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "ryancacophony"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "171076",
+        "known_positive_labels": "Water_tap_and_faucet,Water,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "ate m hes"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "348809",
+        "known_positive_labels": "Sink_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "Fuzzy_Pause"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "413283",
+        "known_positive_labels": "Sink_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Timmeh515"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "372545",
+        "known_positive_labels": "Sink_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Glitchedtones"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "365479",
+        "known_positive_labels": "Sink_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "Caitlin_100"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "264989",
+        "known_positive_labels": "Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "sethlind"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "178531",
+        "known_positive_labels": "Sink_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "uploader": "edmspencerpoole"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "114282",
+        "known_positive_labels": "Water_tap_and_faucet,Liquid,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "plingativator"
+      },
+      {
+        "event": "Water_tap_and_faucet",
+        "id": "262611",
+        "known_positive_labels": "Sink_(filling_or_washing),Water_tap_and_faucet,Domestic_sounds_and_home_sounds",
+        "license": "http://creativecommons.org/licenses/by/3.0/",
+        "uploader": "nattomac"
+      }
+    ],
+    "files": [
+      {
+        "id": "29792",
+        "bytes": 194290,
+        "sha256": "aa2ec47d5a4d7e952328865e1670753c76480ed71ed230636d5d2a736690abb0",
+        "zip_crc32": 3979798272,
+        "disk": 4,
+        "reused_from": "C:\\CodexArtifacts\\pretrained-reuse-r2\\fsd50k-training-128-01"
+      },
+      {
+        "id": "127552",
+        "bytes": 493080,
+        "sha256": "8378e5ff0698f397443e1d75da95e01ec26283547a9b20f0e4c40d504bb61a35",
+        "zip_crc32": 3463978256,
+        "disk": 1,
+        "reused_from": "C:\\CodexArtifacts\\pretrained-reuse-r2\\fsd50k-training-128-01"
+      },
+      {
+        "id": "72621",
+        "bytes": 718168,
+        "sha256": "08069061a12acb0032e0db08ad5a441fae2909fc00cb00e449aaaf5b5ca894fe",
+        "zip_crc32": 3879635731,
+        "disk": 4,
+        "reused_from": "C:\\CodexArtifacts\\pretrained-reuse-r2\\fsd50k-training-128-01"
+      },
+      {
+        "id": "99624",
+        "bytes": 705678,
+        "sha256": "ac448beb4878dac6f8bb2eb349d8a076c2d61df83f1f4bc66d1e79fe014008d1",
+        "zip_crc32": 4092967240,
+        "disk": 0,
+        "reused_from": "C:\\CodexArtifacts\\pretrained-reuse-r2\\fsd50k-training-128-01"
+      },
+      {
+        "id": "135772",
+        "bytes": 188004,
+        "sha256": "154ecf59f7acefd9a69627c188b536b7f0d7d1eb3daace6cabd20837c22dc170",
+        "zip_crc32": 595870335,
+        "disk": 1,
+        "reused_from": "C:\\CodexArtifacts\\pretrained-reuse-r2\\fsd50k-training-128-01"
+      },
+      {
+        "id": "90567",
+        "bytes": 175894,
+        "sha256": "d7cb21c0e7009fbab0a150c90fff0d97818dfc01b291696966bd1b3ebf0d3054",
+        "zip_crc32": 2829596931,
+        "disk": 5,
+        "reused_from": "C:\\CodexArtifacts\\pretrained-reuse-r2\\fsd50k-training-128-01"
+      },
+      {
+        "id": "173450",
+        "bytes": 419406,
+        "sha256": "542032481e3373decff09a39d4fd343863d33d2b02cc2c81b04c7aa83001ede9",
+        "zip_crc32": 1745232694,
+        "disk": 4
+      },
+      {
+        "id": "10431",
+        "bytes": 452880,
+        "sha256": "dff7ef7c07df2be25b1602d5dc8cd41a474df64167c031939c420fcf8438e6e3",
+        "zip_crc32": 450478547,
+        "disk": 5
+      },
+      {
+        "id": "22597",
+        "bytes": 2211918,
+        "sha256": "6baadba61472f9071728e40a48189ad521a4ba621a068c2591034abd9a53071e",
+        "zip_crc32": 2420526457,
+        "disk": 1
+      },
+      {
+        "id": "432465",
+        "bytes": 592168,
+        "sha256": "b5d89c15b6e79802db1a372851cb1d2486347b1a8cd9a45faed8dcfe9d6c5188",
+        "zip_crc32": 3704647705,
+        "disk": 3
+      },
+      {
+        "id": "414565",
+        "bytes": 137764,
+        "sha256": "9c7b3ff94e97473ad011c9bfade11f625d067b2cf2c1bb78a9ebd5f937ea99b0",
+        "zip_crc32": 1376257853,
+        "disk": 5
+      },
+      {
+        "id": "372346",
+        "bytes": 157154,
+        "sha256": "a7a040bef62efb930b7d975690d8d2e4600e0eea10a1ded33210d6c044022e2a",
+        "zip_crc32": 1752331124,
+        "disk": 0
+      },
+      {
+        "id": "216305",
+        "bytes": 176442,
+        "sha256": "572f8cd870ea10633994b4141d9e4e77db249a52313687043bf3b63545612a8d",
+        "zip_crc32": 2474033873,
+        "disk": 3
+      },
+      {
+        "id": "50405",
+        "bytes": 1490892,
+        "sha256": "bb0ab27414c23f9ddd402eadc412977cbc329d62523ae10a64f88858f9512e9e",
+        "zip_crc32": 1770647669,
+        "disk": 4
+      },
+      {
+        "id": "263527",
+        "bytes": 1915782,
+        "sha256": "a60549ca9707b82ae9b8f5c70f9220b596fc15c7c95a3bf8dc65db627b63d795",
+        "zip_crc32": 1087077816,
+        "disk": 1
+      },
+      {
+        "id": "89060",
+        "bytes": 1675878,
+        "sha256": "ec216c70f5d664aa64322fd9bf0f8710df2e00c3417510b644e4f3dac9c76e59",
+        "zip_crc32": 2349185258,
+        "disk": 3
+      },
+      {
+        "id": "432910",
+        "bytes": 99406,
+        "sha256": "95bf5ae943f36ede2ea62998406190ff8177b630202a425af34f14885b546cf6",
+        "zip_crc32": 3043371653,
+        "disk": 0
+      },
+      {
+        "id": "180751",
+        "bytes": 73150,
+        "sha256": "f148a5a4cc34e8fe97071a5a3d84f917dc22c66575e62399de0724144dfee81c",
+        "zip_crc32": 3365518871,
+        "disk": 5
+      },
+      {
+        "id": "164435",
+        "bytes": 1045656,
+        "sha256": "45f6e1cc0c2ba280f08d17b4b002aa05605c0fc75f8373b2d2e82171a8b1d2fc",
+        "zip_crc32": 3097314454,
+        "disk": 4
+      },
+      {
+        "id": "198034",
+        "bytes": 198528,
+        "sha256": "135a12607c09e5f379769eea8145661530c4d64e856ea17ab203bbbfc1d94e94",
+        "zip_crc32": 495398258,
+        "disk": 4
+      },
+      {
+        "id": "131779",
+        "bytes": 32758,
+        "sha256": "7f6c7e5abae9f0edfa5a590addc5280fc71dbb63e824b8def7eb8d76f3d13064",
+        "zip_crc32": 3320878233,
+        "disk": 0
+      },
+      {
+        "id": "15650",
+        "bytes": 735638,
+        "sha256": "75961738ef990d5faaa9c2b7b6e401080acf2f1d0a22004b42b6a198ed1bc1d8",
+        "zip_crc32": 1229789998,
+        "disk": 4
+      },
+      {
+        "id": "160130",
+        "bytes": 471672,
+        "sha256": "b5a37fae91f9a11fdb900fafe931a852e6577812d3914caa8545ebb5a5ebc839",
+        "zip_crc32": 657188878,
+        "disk": 0
+      },
+      {
+        "id": "371625",
+        "bytes": 485766,
+        "sha256": "c8667b2bd8ca51ebcf443a9860bb4e7210e86296b319aebd77eb1d18bac06d60",
+        "zip_crc32": 198105049,
+        "disk": 4
+      },
+      {
+        "id": "361715",
+        "bytes": 123724,
+        "sha256": "5cd03267f780106eda63f5bd76399382d5321cae786afc663f202785d6d1cc23",
+        "zip_crc32": 485152452,
+        "disk": 5
+      },
+      {
+        "id": "175049",
+        "bytes": 78090,
+        "sha256": "4663d32bf89cea574c64b95ec329fd93afc3ed74e7472d1d10c180c6d9e0e093",
+        "zip_crc32": 2217363996,
+        "disk": 3
+      },
+      {
+        "id": "73087",
+        "bytes": 178836,
+        "sha256": "a04d4dbaa01b3dfed1547b56d632929b0b72f1ea4130904518fc4337f440ab58",
+        "zip_crc32": 3728313816,
+        "disk": 0
+      },
+      {
+        "id": "161239",
+        "bytes": 369394,
+        "sha256": "282bd7f9dcdeeba2b2c9ac642a5f0f5cabdd652bd8ead1f8f0b274275e50a118",
+        "zip_crc32": 1582233104,
+        "disk": 5
+      },
+      {
+        "id": "202158",
+        "bytes": 336078,
+        "sha256": "dc54933714f0ca42729d4b012bef4e5ac17be03544a4c174910c17d63c4539ab",
+        "zip_crc32": 789830351,
+        "disk": 5
+      },
+      {
+        "id": "387756",
+        "bytes": 39240,
+        "sha256": "bd53de4681d15cbc7a4cf4513e4c733d65969ffe031d4c5d52a05271bbc08e24",
+        "zip_crc32": 1263591246,
+        "disk": 4
+      },
+      {
+        "id": "112281",
+        "bytes": 582990,
+        "sha256": "cf7650479abc5e7174bda9d8ab07262a3457cc7638264f88aa0b708ae9055c68",
+        "zip_crc32": 2926417222,
+        "disk": 1
+      },
+      {
+        "id": "123805",
+        "bytes": 126078,
+        "sha256": "e2117edf3517eed8d7f5f80561383467635636880bfd068cbcd506e162384347",
+        "zip_crc32": 2314797093,
+        "disk": 2
+      },
+      {
+        "id": "38229",
+        "bytes": 502462,
+        "sha256": "bc17ebd25928b581cc56a91336290664e488f42da07338e55c644192df923f78",
+        "zip_crc32": 290973973,
+        "disk": 3
+      },
+      {
+        "id": "122272",
+        "bytes": 39744,
+        "sha256": "04e455cddc8bf26843c40b79e2df37107a41aee03530c0d492acb890ac20c911",
+        "zip_crc32": 4266218006,
+        "disk": 4
+      },
+      {
+        "id": "257949",
+        "bytes": 408004,
+        "sha256": "14e542f5cb065003a7b74125824dbd912628acc16613caffa24547a66c006ee3",
+        "zip_crc32": 1020227364,
+        "disk": 0
+      },
+      {
+        "id": "71234",
+        "bytes": 1746438,
+        "sha256": "5011dff5a95c4a721ae8d8bcc6add174d3eacaf0fdd8cc7dcc8c30d1b5952961",
+        "zip_crc32": 965121069,
+        "disk": 3
+      },
+      {
+        "id": "254186",
+        "bytes": 493998,
+        "sha256": "19af2797ede8f7b23e91b1eb47564ae78838bffd9e15a09ed6a6fe83bebd2398",
+        "zip_crc32": 3083797705,
+        "disk": 4
+      },
+      {
+        "id": "170573",
+        "bytes": 91342,
+        "sha256": "e985a4b533768554a5b2cdeaeab8ebe939d2a940ddbba9307791c757837a4406",
+        "zip_crc32": 3786527317,
+        "disk": 5
+      },
+      {
+        "id": "351548",
+        "bytes": 77902,
+        "sha256": "08e056119aa67166a5579e10cc375a628191674c3048a4171b149d6e9a772a32",
+        "zip_crc32": 57454263,
+        "disk": 3
+      },
+      {
+        "id": "76927",
+        "bytes": 903246,
+        "sha256": "b0e0617771994a00a7a4245087e59a8f2ccc8399b39d9d1cd68af3edb586cfd1",
+        "zip_crc32": 235598892,
+        "disk": 3
+      },
+      {
+        "id": "432313",
+        "bytes": 330320,
+        "sha256": "5fd9d19249b05217a3bd3e87ee75d546c3737bd305bd4ea0a798145d7fb0766b",
+        "zip_crc32": 2867356547,
+        "disk": 4
+      },
+      {
+        "id": "249515",
+        "bytes": 362874,
+        "sha256": "4a34ea710e15c9db0f104be8812ddf9cadcab1618e3608f23eb2411bf407d256",
+        "zip_crc32": 4022371836,
+        "disk": 3
+      },
+      {
+        "id": "31299",
+        "bytes": 2569038,
+        "sha256": "adf1e16ae6435d0683ff68de30473ec84fd3ab291474337a5a48e8cffa5f13d8",
+        "zip_crc32": 1688952699,
+        "disk": 4
+      },
+      {
+        "id": "242000",
+        "bytes": 363904,
+        "sha256": "5075655a8ed116951f55a26d1ed8e0a0cf30ed142e85366e56504af12bba952f",
+        "zip_crc32": 2541287257,
+        "disk": 1
+      },
+      {
+        "id": "175039",
+        "bytes": 1131382,
+        "sha256": "2a33a0ca926dac24523ea5c99b23ed51e9cb9bbc17008b1e41d1c717e0563ca0",
+        "zip_crc32": 3172758780,
+        "disk": 4
+      },
+      {
+        "id": "21680",
+        "bytes": 471540,
+        "sha256": "df12fbf4f4aa85dd46a3317faadb50a2ae5f6673581de64b0e9cbf79e5833a75",
+        "zip_crc32": 178982102,
+        "disk": 3
+      },
+      {
+        "id": "60844",
+        "bytes": 51902,
+        "sha256": "ce61ef8cad581aa2f7792645cb7405811aca8876277304bb02f44fa762b8fff7",
+        "zip_crc32": 1219646497,
+        "disk": 1
+      },
+      {
+        "id": "77723",
+        "bytes": 774222,
+        "sha256": "e5db034d2ea6979c41a9a0eede7323ffa9fd9c85941a0e29457add2e8647186e",
+        "zip_crc32": 2255021615,
+        "disk": 3
+      },
+      {
+        "id": "233384",
+        "bytes": 766466,
+        "sha256": "aaf66d3e8df5f35f064cebaa54fd943bbe71ee9070306518721f3ea89481c91c",
+        "zip_crc32": 3239683325,
+        "disk": 1
+      },
+      {
+        "id": "215137",
+        "bytes": 881358,
+        "sha256": "e71c0187f5cbdf448e238e1d6e65be50df08865f596a9c7f93d3747755a06a35",
+        "zip_crc32": 2444877117,
+        "disk": 5
+      },
+      {
+        "id": "210195",
+        "bytes": 237306,
+        "sha256": "6830601b62b3db3c7288f9b16d3adead2b9e04331bd6b6494a231489de64f5bb",
+        "zip_crc32": 2964980140,
+        "disk": 1
+      },
+      {
+        "id": "166275",
+        "bytes": 825564,
+        "sha256": "18ce9aeb57722e1524ead096c3b5df017b3f8a8734f8ee52b9504f9b688ab794",
+        "zip_crc32": 3632673117,
+        "disk": 0
+      },
+      {
+        "id": "195017",
+        "bytes": 28484,
+        "sha256": "d538aeea4c39871fa17ef586ec57e8a4daab032336b4441d55fa4489042a0cd2",
+        "zip_crc32": 1491242883,
+        "disk": 2
+      },
+      {
+        "id": "340225",
+        "bytes": 301468,
+        "sha256": "eb4ce6b9d9576acfd4ac1ef567706f6360480c4b9cd649c72442dfbcaadee8ab",
+        "zip_crc32": 2131428702,
+        "disk": 0
+      },
+      {
+        "id": "422745",
+        "bytes": 94730,
+        "sha256": "3b7eea925bf09fbb6f3ea7c5a48f69f2fb0391ef36e290ffbdf698672af5624a",
+        "zip_crc32": 935335078,
+        "disk": 4
+      },
+      {
+        "id": "427419",
+        "bytes": 532430,
+        "sha256": "04327b4e9b424973fd5bdc8094eece83d4a70da2a158d177e9d0776be15d2010",
+        "zip_crc32": 1390662325,
+        "disk": 0
+      },
+      {
+        "id": "378398",
+        "bytes": 677454,
+        "sha256": "8cebeea69b5cc98ecf492509e0f15176bd2455f301a424d2d99682cd826230a0",
+        "zip_crc32": 2900262996,
+        "disk": 1
+      },
+      {
+        "id": "269847",
+        "bytes": 54114,
+        "sha256": "c94f15ca73682029fe8c3cbe5cc92ce9d8dc960925f42244c52b57d799894967",
+        "zip_crc32": 3001803754,
+        "disk": 5
+      },
+      {
+        "id": "79874",
+        "bytes": 872726,
+        "sha256": "20cc483160756894f4971eb4f074a4116a333e0e4cdd97f6514ab6eca6d1eae1",
+        "zip_crc32": 2451326515,
+        "disk": 5
+      },
+      {
+        "id": "62303",
+        "bytes": 791730,
+        "sha256": "81c6d51b678e8c1fa203986199530c3f66fc3bb00f55d43dee04f5cc3366be60",
+        "zip_crc32": 4252615251,
+        "disk": 0
+      },
+      {
+        "id": "268884",
+        "bytes": 846246,
+        "sha256": "f29f5e9a89175bb4fe585186da4ed656cf0c61a28ba200262a09b1fa57ba094c",
+        "zip_crc32": 1584298271,
+        "disk": 3
+      },
+      {
+        "id": "166297",
+        "bytes": 281528,
+        "sha256": "93582c0aef38eb07106668c5260824df718a433250b92bef3ff0d17fb9f92407",
+        "zip_crc32": 2105474612,
+        "disk": 0
+      },
+      {
+        "id": "348355",
+        "bytes": 42166,
+        "sha256": "7eeba50651547af271ef08c1e7b01cb41e50c616afb645ad171be32cdfa1ba82",
+        "zip_crc32": 259936161,
+        "disk": 3
+      },
+      {
+        "id": "273384",
+        "bytes": 2622334,
+        "sha256": "80ace45265c0cafefdd0faa4ee53c10d3c6d7a1c83afea41f95ce1ffc09bb301",
+        "zip_crc32": 2394801821,
+        "disk": 2
+      },
+      {
+        "id": "239746",
+        "bytes": 551328,
+        "sha256": "b5c2f40a0a9814680519be2ec9bc7766281395133943d62956def4e45fe554fc",
+        "zip_crc32": 230946172,
+        "disk": 4
+      },
+      {
+        "id": "128818",
+        "bytes": 167658,
+        "sha256": "db12c1fd3289bcaf50aaef5dad7441d87e80da727835a0c85c55700ce0cee6d8",
+        "zip_crc32": 3927491038,
+        "disk": 1
+      },
+      {
+        "id": "268259",
+        "bytes": 235278,
+        "sha256": "aacf2a70a088fe267d4444f67d66adf89e7d8336dbf59357494e88189d589236",
+        "zip_crc32": 2822328867,
+        "disk": 3
+      },
+      {
+        "id": "92098",
+        "bytes": 114774,
+        "sha256": "2d05abaedc73a561e6327e27f92d8b23dd236ed8032a35a0452edac95c71706b",
+        "zip_crc32": 1066669793,
+        "disk": 5
+      },
+      {
+        "id": "13456",
+        "bytes": 465770,
+        "sha256": "28b1fbaaae53ebcb0b04aeb63612aa69380a0579c13d5213afa6616b5d89f047",
+        "zip_crc32": 632799061,
+        "disk": 3
+      },
+      {
+        "id": "358509",
+        "bytes": 452810,
+        "sha256": "ecf910ab53df026389b0a7dcbae6d5e5ca4669bf16b958a233c98c99c14b1093",
+        "zip_crc32": 2169228582,
+        "disk": 1
+      },
+      {
+        "id": "252351",
+        "bytes": 707406,
+        "sha256": "e2fa2704ca25809359cd1ad49db010999c8757d9f11067bf72725a5e777a1a0c",
+        "zip_crc32": 1947764292,
+        "disk": 1
+      },
+      {
+        "id": "61859",
+        "bytes": 45588,
+        "sha256": "4765f553308c5211fa29b440fa2d28ba6cb6281a67e313169d16a4078e9f7506",
+        "zip_crc32": 1748684068,
+        "disk": 4
+      },
+      {
+        "id": "405904",
+        "bytes": 104342,
+        "sha256": "80ef42d37a5b126771c118cf3bcf7fba1372d65ac4b3fc1bdd1b825d38025957",
+        "zip_crc32": 3493574379,
+        "disk": 3
+      },
+      {
+        "id": "211845",
+        "bytes": 189256,
+        "sha256": "c27cd35a6134df74daed25957922ab3ed58cd8de5781e3f39116e8ffa8b1e509",
+        "zip_crc32": 2794781766,
+        "disk": 3
+      },
+      {
+        "id": "44619",
+        "bytes": 426416,
+        "sha256": "87b55ad706d0eda88076f53106d20c64d85858576853ddda3ec12582b8080791",
+        "zip_crc32": 295624764,
+        "disk": 4
+      },
+      {
+        "id": "373881",
+        "bytes": 171954,
+        "sha256": "a00229309a17cf0d2e54c33b91ca3cb7ffedba54d7d592fcbb8edeb65be0b38c",
+        "zip_crc32": 1718838881,
+        "disk": 1
+      },
+      {
+        "id": "234434",
+        "bytes": 529278,
+        "sha256": "41d12a3786ff13b9e5a092e8d55bcf3a3551927d413a6aa64e29754418744ecf",
+        "zip_crc32": 3196096567,
+        "disk": 3
+      },
+      {
+        "id": "99256",
+        "bytes": 35358,
+        "sha256": "3732433b9ab7e28797b6d51bb03d72110b168eb8699a540562f961421b3c7078",
+        "zip_crc32": 4079931757,
+        "disk": 5
+      },
+      {
+        "id": "324053",
+        "bytes": 490782,
+        "sha256": "f724ba01352e207f0a755185c50cbe46a87be85cb53a9a4c8f800ab55dac14b9",
+        "zip_crc32": 946334225,
+        "disk": 3
+      },
+      {
+        "id": "116893",
+        "bytes": 475438,
+        "sha256": "7d6ff3beb856f09f0531b16159b475ba938ed9094901e94fb7ecdb15496ff750",
+        "zip_crc32": 3739146223,
+        "disk": 2
+      },
+      {
+        "id": "209222",
+        "bytes": 171466,
+        "sha256": "d1992a303283fc962f22e6d76ce1980366254a9a096804e1efc2ff3c3a9c7c71",
+        "zip_crc32": 3786843980,
+        "disk": 2
+      },
+      {
+        "id": "211498",
+        "bytes": 180006,
+        "sha256": "a1c43c5a57e768c684a8f09d2695a6851928c8f2945efc9ead0775a57138511c",
+        "zip_crc32": 2849451548,
+        "disk": 4
+      },
+      {
+        "id": "412857",
+        "bytes": 414798,
+        "sha256": "f427ab8968c1ce9219cf6f4343d32921180b6084d7777174dfa016a32144800e",
+        "zip_crc32": 3639002695,
+        "disk": 1
+      },
+      {
+        "id": "148950",
+        "bytes": 288156,
+        "sha256": "d977c1c146a8a4e222580b02c3ad6e75dbe6890f486bce23271f058a627aecdc",
+        "zip_crc32": 3074856772,
+        "disk": 4
+      },
+      {
+        "id": "137083",
+        "bytes": 110670,
+        "sha256": "d703abc9fd53facbef7df9d4686e10abfa91b0e5ba69acfcb9aeb17c64c0bff0",
+        "zip_crc32": 2130327889,
+        "disk": 0
+      },
+      {
+        "id": "138323",
+        "bytes": 112732,
+        "sha256": "de9930c5360015d2a913b67259517863fbc1393971c6ea6bf5461692904d7a46",
+        "zip_crc32": 4090435803,
+        "disk": 2
+      },
+      {
+        "id": "193841",
+        "bytes": 193686,
+        "sha256": "bd25733ee3ccc9033c5cb24e61be2884bb0009391358178e90f3d4508346c70f",
+        "zip_crc32": 2298019279,
+        "disk": 4
+      },
+      {
+        "id": "218980",
+        "bytes": 308778,
+        "sha256": "13f3871387b8d784f4211a06e471d9b6c2ee487ca434102915ff3e8789dd724f",
+        "zip_crc32": 925716122,
+        "disk": 4
+      },
+      {
+        "id": "365902",
+        "bytes": 116608,
+        "sha256": "84816f6a8ec482f3f57eb26a5bd846190ef6d58b223f18a91f5f7165289479c1",
+        "zip_crc32": 2654512598,
+        "disk": 1
+      },
+      {
+        "id": "367129",
+        "bytes": 1328078,
+        "sha256": "2dcc29b846d889d223ef2289b379cbf5c2bbe4e5c74c7e646bddd330a9ef27c5",
+        "zip_crc32": 3731867696,
+        "disk": 3
+      },
+      {
+        "id": "274814",
+        "bytes": 576078,
+        "sha256": "e929d33f303195c75c01f1f21301675296259501c2201193ddac7f41cde11493",
+        "zip_crc32": 2547909158,
+        "disk": 4
+      },
+      {
+        "id": "133889",
+        "bytes": 253006,
+        "sha256": "41393d29e879a795fce619b2eb79111aae08baa140380dde8cc0ba2749e26e7e",
+        "zip_crc32": 2807678168,
+        "disk": 5
+      },
+      {
+        "id": "182023",
+        "bytes": 275258,
+        "sha256": "d7e1d8537db0f9355c196cdf265f304ba78bfd6cd25c2b4d00374fa1c189cca2",
+        "zip_crc32": 3645604177,
+        "disk": 5
+      },
+      {
+        "id": "190020",
+        "bytes": 39318,
+        "sha256": "2df1d1465c6546edb870f7dff3b50b5a78f06606f13a7a941ce4ddf3eef604ef",
+        "zip_crc32": 3118662966,
+        "disk": 0
+      },
+      {
+        "id": "336390",
+        "bytes": 209742,
+        "sha256": "643492843d730ab0fead89389092879f4ac2c26bf7eaf1868655d688b063d6a1",
+        "zip_crc32": 3929260709,
+        "disk": 4
+      },
+      {
+        "id": "120331",
+        "bytes": 1625782,
+        "sha256": "99871665f8bbdade96a7b5b9d69587f2c76f6931df71288d035f1d13b7a92423",
+        "zip_crc32": 5875632,
+        "disk": 3
+      },
+      {
+        "id": "381966",
+        "bytes": 282318,
+        "sha256": "89565f659cfd1a9e7a09f80fb436480808aa96d64dc0f9a3b70beec011edbe6f",
+        "zip_crc32": 3924063816,
+        "disk": 1
+      },
+      {
+        "id": "367221",
+        "bytes": 274968,
+        "sha256": "fece394efd265eca888f3ad02b68492a90f8299cdc55c18556fed8d2c132fe79",
+        "zip_crc32": 2000843489,
+        "disk": 1
+      },
+      {
+        "id": "130044",
+        "bytes": 274510,
+        "sha256": "4b60ae124d87dffb28980b5b2510ef947498dc0265777955e95877017adfad8e",
+        "zip_crc32": 168177235,
+        "disk": 1
+      },
+      {
+        "id": "425847",
+        "bytes": 818046,
+        "sha256": "fdc8155a4d125e7345acb8b69af3b1adcfbfc389fb075bd8aed0be2678177188",
+        "zip_crc32": 2114763081,
+        "disk": 0
+      },
+      {
+        "id": "332914",
+        "bytes": 710734,
+        "sha256": "b2d2fe5f8cf1b30674c1cf656dcb71283579a1857bc4180bf4f2384c65e252d5",
+        "zip_crc32": 1901788934,
+        "disk": 0
+      },
+      {
+        "id": "191947",
+        "bytes": 566250,
+        "sha256": "cd0cb8d777b715bcc0f2a1314865516b4c8481c06c3e6400e37a96093a68e907",
+        "zip_crc32": 2352852824,
+        "disk": 1
+      },
+      {
+        "id": "175669",
+        "bytes": 168762,
+        "sha256": "27f7735438d6b2efa70afd986e347bce60373143ff892b30dc5f1c4de9130cee",
+        "zip_crc32": 3864305994,
+        "disk": 3
+      },
+      {
+        "id": "335278",
+        "bytes": 758094,
+        "sha256": "f2c9f7130ed108533f5a85c3cb4d0c2b9e1aa572f5dc7cdaecb8323137f6c870",
+        "zip_crc32": 2091451823,
+        "disk": 4
+      },
+      {
+        "id": "156602",
+        "bytes": 469382,
+        "sha256": "beb8d5bb72c5c6aec6a601e8af099e78dc8ba27bfde3defe8d7269f78efc950f",
+        "zip_crc32": 1322325694,
+        "disk": 4
+      },
+      {
+        "id": "254952",
+        "bytes": 1625782,
+        "sha256": "b18c4b39a9ef696afcfdf520bd4ee3c7fbb704ca99019d49024505b204f5e744",
+        "zip_crc32": 3149962314,
+        "disk": 5
+      },
+      {
+        "id": "214232",
+        "bytes": 445580,
+        "sha256": "2274c42d7bb889da5adf7a3daa5067b89d4f35ab1ae91069697d691d9954ab95",
+        "zip_crc32": 3686308480,
+        "disk": 3
+      },
+      {
+        "id": "318892",
+        "bytes": 708884,
+        "sha256": "12fe4e14143e8889debeffd5487aecce7df420ce95ad0fa711ed1b2907e1632d",
+        "zip_crc32": 3155307468,
+        "disk": 4
+      },
+      {
+        "id": "70376",
+        "bytes": 29838,
+        "sha256": "3b039a43625cabd4dfa4d62fdf4e5776ede25df604e5954f1e49f036b43e3c24",
+        "zip_crc32": 2166961727,
+        "disk": 4
+      },
+      {
+        "id": "261090",
+        "bytes": 387150,
+        "sha256": "90bc91ec858330c6fdf89bc36752f391f0f5c037f1a4b724206f6c677aebcd06",
+        "zip_crc32": 4118351167,
+        "disk": 0
+      },
+      {
+        "id": "144226",
+        "bytes": 57834,
+        "sha256": "d1df6b5c64c95b799fe093c8a5ca8b02d4e642f98499bd362963d3eb5425de92",
+        "zip_crc32": 1171575502,
+        "disk": 2
+      },
+      {
+        "id": "331213",
+        "bytes": 389752,
+        "sha256": "97219010263e71cfc14d27bfb180879c86be7f553be6c01e623c3cc020c083e8",
+        "zip_crc32": 2980945205,
+        "disk": 2
+      },
+      {
+        "id": "273222",
+        "bytes": 1797240,
+        "sha256": "7196e0e5f56687f0d7075e99c101ffaa380eef25a4622b983bf957bc1f03a75b",
+        "zip_crc32": 2458736208,
+        "disk": 3
+      },
+      {
+        "id": "268579",
+        "bytes": 1356154,
+        "sha256": "0242ec68c9adc54191e8ed565e63ec5e29452d42a0c31a8fa19b843ee1ce6a8f",
+        "zip_crc32": 2112471573,
+        "disk": 3
+      },
+      {
+        "id": "271335",
+        "bytes": 1592142,
+        "sha256": "308c314ef518df11b52f61a9c5b9a3cd92c27fdd7db41b347674c60cdd49cf63",
+        "zip_crc32": 4109594459,
+        "disk": 1
+      },
+      {
+        "id": "151911",
+        "bytes": 152868,
+        "sha256": "ae51746e94760dbea178766c673eba7642a94ffffa8a0a3bf90da9a083cb1735",
+        "zip_crc32": 2193600408,
+        "disk": 4
+      },
+      {
+        "id": "433710",
+        "bytes": 907088,
+        "sha256": "32d18d58d76ed00edac09e3c046679727a13e1c9fa496839a38e0fb9d91fe5e0",
+        "zip_crc32": 1650072267,
+        "disk": 3
+      },
+      {
+        "id": "152977",
+        "bytes": 504036,
+        "sha256": "3392535ee35df6ee4cf44681f012bf0cab84561862f4c4c22f05863fd54237a8",
+        "zip_crc32": 2544931834,
+        "disk": 2
+      },
+      {
+        "id": "202019",
+        "bytes": 1506262,
+        "sha256": "10b35a9eb8c621c9f38ac474a2cd6b822a61d0aee30d2e673c090574258824ff",
+        "zip_crc32": 3975031075,
+        "disk": 1
+      },
+      {
+        "id": "171076",
+        "bytes": 455160,
+        "sha256": "05f220bb0ef32ae35bb92219c084be87bf754bfb193dd634de135a67ba3e6f7e",
+        "zip_crc32": 337740218,
+        "disk": 4
+      },
+      {
+        "id": "348809",
+        "bytes": 1719978,
+        "sha256": "061446f7b71433152fa8e555c41c412fdd916250070e62978d28b0f30e1d89b0",
+        "zip_crc32": 2505288339,
+        "disk": 0
+      },
+      {
+        "id": "413283",
+        "bytes": 391452,
+        "sha256": "f01418f43a8741043eb38dba1affc8877c43ea4c69029985d24c6840f88d0b55",
+        "zip_crc32": 1373758119,
+        "disk": 4
+      },
+      {
+        "id": "372545",
+        "bytes": 682460,
+        "sha256": "8bf385c69a2f340cc0aed22097d4556f542f047a826579ae38042a1b706d22ef",
+        "zip_crc32": 3278523729,
+        "disk": 4
+      },
+      {
+        "id": "365479",
+        "bytes": 645198,
+        "sha256": "53b14bbc3c3c49afdc3438631c6b705609a0a3781421df2c60037864ef617373",
+        "zip_crc32": 2698751481,
+        "disk": 5
+      },
+      {
+        "id": "264989",
+        "bytes": 1773648,
+        "sha256": "6746cd3778a39331cc673bef936817e14c17c2803153679086e2b33f2f08d38d",
+        "zip_crc32": 1885619612,
+        "disk": 5
+      },
+      {
+        "id": "178531",
+        "bytes": 1203228,
+        "sha256": "dbb6cc271d504bfa5873914413b8de8b02c825fb2190fd96eec0c6f10f4945d4",
+        "zip_crc32": 2253644120,
+        "disk": 1
+      },
+      {
+        "id": "114282",
+        "bytes": 2259918,
+        "sha256": "1f83f722280872d23f6065273939e58efbf01f60da35c76c07366275bf2de925",
+        "zip_crc32": 2354741733,
+        "disk": 1
+      },
+      {
+        "id": "262611",
+        "bytes": 854866,
+        "sha256": "2929260e259941b4962c1ac35736c77d5de743442294b56a5caa33c18834dfc8",
+        "zip_crc32": 2529568230,
+        "disk": 3
+      }
+    ],
+    "whole_archive_md5_verified": false,
+    "eval_opened": false,
+    "directory_sha256": "a52c8e77acf8c01e5108a3872461a65f2a583b2ddc3e0bb6554e51dc7ae12c5f",
+    "transferred_bytes": 57243798
+  },
+  "features": {
+    "status": "PASS",
+    "rows": [
+      {
+        "id": "29792",
+        "samples_32k": 70463,
+        "nearest_starss": {
+          "id": "fold3_room21_mix028:t0065-0070",
+          "split": "validation",
+          "cosine": 0.7531381845474243
+        }
+      },
+      {
+        "id": "127552",
+        "samples_32k": 178867,
+        "nearest_starss": {
+          "id": "fold3_room21_mix027:t0065-0070",
+          "split": "validation",
+          "cosine": 0.748426079750061
+        }
+      },
+      {
+        "id": "72621",
+        "samples_32k": 260532,
+        "nearest_starss": {
+          "id": "fold3_room21_mix028:t0070-0075",
+          "split": "validation",
+          "cosine": 0.8958894610404968
+        }
+      },
+      {
+        "id": "99624",
+        "samples_32k": 256000,
+        "nearest_starss": {
+          "id": "fold3_room21_mix028:t0025-0030",
+          "split": "validation",
+          "cosine": 0.7757830619812012
+        }
+      },
+      {
+        "id": "135772",
+        "samples_32k": 68182,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0095-0100",
+          "split": "train",
+          "cosine": 0.7567981481552124
+        }
+      },
+      {
+        "id": "90567",
+        "samples_32k": 63789,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0070-0075",
+          "split": "train",
+          "cosine": 0.5627515316009521
+        }
+      },
+      {
+        "id": "173450",
+        "samples_32k": 152138,
+        "nearest_starss": {
+          "id": "fold3_room21_mix023:t0085-0090",
+          "split": "validation",
+          "cosine": 0.6475140452384949
+        }
+      },
+      {
+        "id": "10431",
+        "samples_32k": 164282,
+        "nearest_starss": {
+          "id": "fold3_room4_mix001:t0115-0120",
+          "split": "train",
+          "cosine": 0.7733896970748901
+        }
+      },
+      {
+        "id": "22597",
+        "samples_32k": 802482,
+        "nearest_starss": {
+          "id": "fold3_room21_mix020:t0095-0100",
+          "split": "validation",
+          "cosine": 0.6908705234527588
+        }
+      },
+      {
+        "id": "432465",
+        "samples_32k": 214818,
+        "nearest_starss": {
+          "id": "fold3_room12_mix003:t0075-0080",
+          "split": "train",
+          "cosine": 0.8281533718109131
+        }
+      },
+      {
+        "id": "414565",
+        "samples_32k": 49955,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0060-0065",
+          "split": "train",
+          "cosine": 0.7531021237373352
+        }
+      },
+      {
+        "id": "372346",
+        "samples_32k": 56990,
+        "nearest_starss": {
+          "id": "fold3_room12_mix010:t0015-0020",
+          "split": "train",
+          "cosine": 0.7809664607048035
+        }
+      },
+      {
+        "id": "216305",
+        "samples_32k": 63987,
+        "nearest_starss": {
+          "id": "fold3_room21_mix027:t0065-0070",
+          "split": "validation",
+          "cosine": 0.7197537422180176
+        }
+      },
+      {
+        "id": "50405",
+        "samples_32k": 540885,
+        "nearest_starss": {
+          "id": "fold3_room21_mix027:t0080-0085",
+          "split": "validation",
+          "cosine": 0.7992546558380127
+        }
+      },
+      {
+        "id": "263527",
+        "samples_32k": 695040,
+        "nearest_starss": {
+          "id": "fold3_room22_mix007:t0030-0035",
+          "split": "train",
+          "cosine": 0.5804526209831238
+        }
+      },
+      {
+        "id": "89060",
+        "samples_32k": 608000,
+        "nearest_starss": {
+          "id": "fold3_room21_mix028:t0005-0010",
+          "split": "validation",
+          "cosine": 0.7515489459037781
+        }
+      },
+      {
+        "id": "432910",
+        "samples_32k": 36038,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0165-0170",
+          "split": "calibration",
+          "cosine": 0.8652324080467224
+        }
+      },
+      {
+        "id": "180751",
+        "samples_32k": 26512,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.7596282958984375
+        }
+      },
+      {
+        "id": "164435",
+        "samples_32k": 379349,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0165-0170",
+          "split": "calibration",
+          "cosine": 0.8566330075263977
+        }
+      },
+      {
+        "id": "198034",
+        "samples_32k": 72000,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0010-0015",
+          "split": "train",
+          "cosine": 0.7616878151893616
+        }
+      },
+      {
+        "id": "131779",
+        "samples_32k": 11857,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.6478967666625977
+        }
+      },
+      {
+        "id": "15650",
+        "samples_32k": 266870,
+        "nearest_starss": {
+          "id": "fold3_room21_mix025:t0215-0220",
+          "split": "validation",
+          "cosine": 0.6974235773086548
+        }
+      },
+      {
+        "id": "160130",
+        "samples_32k": 171100,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.7284711003303528
+        }
+      },
+      {
+        "id": "371625",
+        "samples_32k": 176214,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0080-0085",
+          "split": "calibration",
+          "cosine": 0.9123955965042114
+        }
+      },
+      {
+        "id": "361715",
+        "samples_32k": 44861,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0015-0020",
+          "split": "train",
+          "cosine": 0.8127484321594238
+        }
+      },
+      {
+        "id": "175049",
+        "samples_32k": 28304,
+        "nearest_starss": {
+          "id": "fold3_room4_mix001:t0000-0005",
+          "split": "train",
+          "cosine": 0.7841217517852783
+        }
+      },
+      {
+        "id": "73087",
+        "samples_32k": 64856,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.7866500616073608
+        }
+      },
+      {
+        "id": "161239",
+        "samples_32k": 133993,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.6777760982513428
+        }
+      },
+      {
+        "id": "202158",
+        "samples_32k": 121905,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0165-0170",
+          "split": "calibration",
+          "cosine": 0.88274747133255
+        }
+      },
+      {
+        "id": "387756",
+        "samples_32k": 14209,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.689540445804596
+        }
+      },
+      {
+        "id": "112281",
+        "samples_32k": 211488,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0075-0080",
+          "split": "calibration",
+          "cosine": 0.6983912587165833
+        }
+      },
+      {
+        "id": "123805",
+        "samples_32k": 45715,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.8356051445007324
+        }
+      },
+      {
+        "id": "38229",
+        "samples_32k": 182271,
+        "nearest_starss": {
+          "id": "fold3_room9_mix001:t0145-0150",
+          "split": "calibration",
+          "cosine": 0.7381225824356079
+        }
+      },
+      {
+        "id": "122272",
+        "samples_32k": 14392,
+        "nearest_starss": {
+          "id": "fold3_room13_mix006:t0165-0170",
+          "split": "train",
+          "cosine": 0.6865536570549011
+        }
+      },
+      {
+        "id": "257949",
+        "samples_32k": 148001,
+        "nearest_starss": {
+          "id": "fold3_room14_mix001:t0100-0105",
+          "split": "validation",
+          "cosine": 0.8846557140350342
+        }
+      },
+      {
+        "id": "71234",
+        "samples_32k": 633600,
+        "nearest_starss": {
+          "id": "fold3_room22_mix008:t0080-0085",
+          "split": "train",
+          "cosine": 0.7539056539535522
+        }
+      },
+      {
+        "id": "254186",
+        "samples_32k": 179200,
+        "nearest_starss": {
+          "id": "fold3_room9_mix001:t0145-0150",
+          "split": "calibration",
+          "cosine": 0.8954304456710815
+        }
+      },
+      {
+        "id": "170573",
+        "samples_32k": 33112,
+        "nearest_starss": {
+          "id": "fold3_room4_mix001:t0000-0005",
+          "split": "train",
+          "cosine": 0.7577035427093506
+        }
+      },
+      {
+        "id": "351548",
+        "samples_32k": 28236,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.7576836943626404
+        }
+      },
+      {
+        "id": "76927",
+        "samples_32k": 327680,
+        "nearest_starss": {
+          "id": "fold3_room9_mix001:t0145-0150",
+          "split": "calibration",
+          "cosine": 0.798611044883728
+        }
+      },
+      {
+        "id": "432313",
+        "samples_32k": 119816,
+        "nearest_starss": {
+          "id": "fold3_room9_mix001:t0145-0150",
+          "split": "calibration",
+          "cosine": 0.7852576375007629
+        }
+      },
+      {
+        "id": "249515",
+        "samples_32k": 131627,
+        "nearest_starss": {
+          "id": "fold3_room4_mix005:t0025-0030",
+          "split": "train",
+          "cosine": 0.7359907627105713
+        }
+      },
+      {
+        "id": "31299",
+        "samples_32k": 932049,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0095-0100",
+          "split": "train",
+          "cosine": 0.7672145366668701
+        }
+      },
+      {
+        "id": "242000",
+        "samples_32k": 132001,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.7040048837661743
+        }
+      },
+      {
+        "id": "175039",
+        "samples_32k": 410451,
+        "nearest_starss": {
+          "id": "fold3_room9_mix001:t0145-0150",
+          "split": "calibration",
+          "cosine": 0.7579073309898376
+        }
+      },
+      {
+        "id": "21680",
+        "samples_32k": 171052,
+        "nearest_starss": {
+          "id": "fold3_room4_mix007:t0100-0105",
+          "split": "train",
+          "cosine": 0.7303396463394165
+        }
+      },
+      {
+        "id": "60844",
+        "samples_32k": 18803,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0165-0170",
+          "split": "calibration",
+          "cosine": 0.7270136475563049
+        }
+      },
+      {
+        "id": "77723",
+        "samples_32k": 280869,
+        "nearest_starss": {
+          "id": "fold3_room7_mix005:t0215-0220",
+          "split": "train",
+          "cosine": 0.8254116177558899
+        }
+      },
+      {
+        "id": "233384",
+        "samples_32k": 278055,
+        "nearest_starss": {
+          "id": "fold3_room22_mix010:t0010-0015",
+          "split": "train",
+          "cosine": 0.8487086296081543
+        }
+      },
+      {
+        "id": "215137",
+        "samples_32k": 319739,
+        "nearest_starss": {
+          "id": "fold3_room22_mix011:t0045-0050",
+          "split": "train",
+          "cosine": 0.6637756824493408
+        }
+      },
+      {
+        "id": "210195",
+        "samples_32k": 86070,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0165-0170",
+          "split": "calibration",
+          "cosine": 0.8867803812026978
+        }
+      },
+      {
+        "id": "166275",
+        "samples_32k": 299497,
+        "nearest_starss": {
+          "id": "fold3_room21_mix027:t0095-0100",
+          "split": "validation",
+          "cosine": 0.737533688545227
+        }
+      },
+      {
+        "id": "195017",
+        "samples_32k": 10307,
+        "nearest_starss": {
+          "id": "fold3_room13_mix006:t0165-0170",
+          "split": "train",
+          "cosine": 0.6645873785018921
+        }
+      },
+      {
+        "id": "340225",
+        "samples_32k": 109348,
+        "nearest_starss": {
+          "id": "fold3_room4_mix001:t0095-0100",
+          "split": "train",
+          "cosine": 0.8216673135757446
+        }
+      },
+      {
+        "id": "422745",
+        "samples_32k": 34341,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0015-0020",
+          "split": "train",
+          "cosine": 0.7433428764343262
+        }
+      },
+      {
+        "id": "427419",
+        "samples_32k": 193144,
+        "nearest_starss": {
+          "id": "fold3_room22_mix010:t0010-0015",
+          "split": "train",
+          "cosine": 0.7726500034332275
+        }
+      },
+      {
+        "id": "378398",
+        "samples_32k": 245760,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0030-0035",
+          "split": "calibration",
+          "cosine": 0.9044394493103027
+        }
+      },
+      {
+        "id": "269847",
+        "samples_32k": 19605,
+        "nearest_starss": {
+          "id": "fold3_room13_mix006:t0165-0170",
+          "split": "train",
+          "cosine": 0.6989022493362427
+        }
+      },
+      {
+        "id": "79874",
+        "samples_32k": 316607,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0105-0110",
+          "split": "calibration",
+          "cosine": 0.804445207118988
+        }
+      },
+      {
+        "id": "62303",
+        "samples_32k": 287221,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0105-0110",
+          "split": "calibration",
+          "cosine": 0.7456399202346802
+        }
+      },
+      {
+        "id": "268884",
+        "samples_32k": 307000,
+        "nearest_starss": {
+          "id": "fold3_room22_mix010:t0010-0015",
+          "split": "train",
+          "cosine": 0.7185835838317871
+        }
+      },
+      {
+        "id": "166297",
+        "samples_32k": 102114,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0105-0110",
+          "split": "calibration",
+          "cosine": 0.7833689451217651
+        }
+      },
+      {
+        "id": "348355",
+        "samples_32k": 15271,
+        "nearest_starss": {
+          "id": "fold3_room12_mix010:t0015-0020",
+          "split": "train",
+          "cosine": 0.6815840005874634
+        }
+      },
+      {
+        "id": "273384",
+        "samples_32k": 951386,
+        "nearest_starss": {
+          "id": "fold3_room22_mix010:t0020-0025",
+          "split": "train",
+          "cosine": 0.8051211833953857
+        }
+      },
+      {
+        "id": "239746",
+        "samples_32k": 200000,
+        "nearest_starss": {
+          "id": "fold3_room6_mix005:t0220-0225",
+          "split": "train",
+          "cosine": 0.7585603594779968
+        }
+      },
+      {
+        "id": "128818",
+        "samples_32k": 60800,
+        "nearest_starss": {
+          "id": "fold3_room6_mix005:t0125-0130",
+          "split": "train",
+          "cosine": 0.8541384339332581
+        }
+      },
+      {
+        "id": "268259",
+        "samples_32k": 85334,
+        "nearest_starss": {
+          "id": "fold3_room6_mix005:t0110-0115",
+          "split": "train",
+          "cosine": 0.7718223929405212
+        }
+      },
+      {
+        "id": "92098",
+        "samples_32k": 41614,
+        "nearest_starss": {
+          "id": "fold3_room7_mix005:t0255-0260",
+          "split": "train",
+          "cosine": 0.6648877263069153
+        }
+      },
+      {
+        "id": "13456",
+        "samples_32k": 168959,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.6636962890625
+        }
+      },
+      {
+        "id": "358509",
+        "samples_32k": 164257,
+        "nearest_starss": {
+          "id": "fold3_room9_mix005:t0160-0165",
+          "split": "calibration",
+          "cosine": 0.7086042165756226
+        }
+      },
+      {
+        "id": "252351",
+        "samples_32k": 256627,
+        "nearest_starss": {
+          "id": "fold3_room6_mix007:t0100-0105",
+          "split": "train",
+          "cosine": 0.7623796463012695
+        }
+      },
+      {
+        "id": "61859",
+        "samples_32k": 16512,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.6506035327911377
+        }
+      },
+      {
+        "id": "405904",
+        "samples_32k": 37829,
+        "nearest_starss": {
+          "id": "fold3_room6_mix007:t0105-0110",
+          "split": "train",
+          "cosine": 0.7167558670043945
+        }
+      },
+      {
+        "id": "211845",
+        "samples_32k": 68637,
+        "nearest_starss": {
+          "id": "fold3_room13_mix005:t0030-0035",
+          "split": "train",
+          "cosine": 0.7711793184280396
+        }
+      },
+      {
+        "id": "44619",
+        "samples_32k": 154681,
+        "nearest_starss": {
+          "id": "fold3_room12_mix010:t0025-0030",
+          "split": "train",
+          "cosine": 0.7725358009338379
+        }
+      },
+      {
+        "id": "373881",
+        "samples_32k": 62359,
+        "nearest_starss": {
+          "id": "fold3_room6_mix002:t0220-0225",
+          "split": "train",
+          "cosine": 0.7468622922897339
+        }
+      },
+      {
+        "id": "234434",
+        "samples_32k": 192000,
+        "nearest_starss": {
+          "id": "fold3_room13_mix005:t0035-0040",
+          "split": "train",
+          "cosine": 0.8236937522888184
+        }
+      },
+      {
+        "id": "99256",
+        "samples_32k": 12800,
+        "nearest_starss": {
+          "id": "fold3_room21_mix022:t0055-0060",
+          "split": "validation",
+          "cosine": 0.7538266181945801
+        }
+      },
+      {
+        "id": "324053",
+        "samples_32k": 178034,
+        "nearest_starss": {
+          "id": "fold3_room6_mix002:t0085-0090",
+          "split": "train",
+          "cosine": 0.7074759006500244
+        }
+      },
+      {
+        "id": "116893",
+        "samples_32k": 172467,
+        "nearest_starss": {
+          "id": "fold3_room9_mix005:t0160-0165",
+          "split": "calibration",
+          "cosine": 0.6122837662696838
+        }
+      },
+      {
+        "id": "209222",
+        "samples_32k": 62182,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0025-0030",
+          "split": "calibration",
+          "cosine": 0.8341353535652161
+        }
+      },
+      {
+        "id": "211498",
+        "samples_32k": 65280,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.8246728181838989
+        }
+      },
+      {
+        "id": "412857",
+        "samples_32k": 150466,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0165-0170",
+          "split": "calibration",
+          "cosine": 0.8661565780639648
+        }
+      },
+      {
+        "id": "148950",
+        "samples_32k": 104519,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0025-0030",
+          "split": "calibration",
+          "cosine": 0.8423824906349182
+        }
+      },
+      {
+        "id": "137083",
+        "samples_32k": 40125,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0060-0065",
+          "split": "train",
+          "cosine": 0.7526583671569824
+        }
+      },
+      {
+        "id": "138323",
+        "samples_32k": 40873,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.819890558719635
+        }
+      },
+      {
+        "id": "193841",
+        "samples_32k": 70244,
+        "nearest_starss": {
+          "id": "fold3_room21_mix027:t0010-0015",
+          "split": "validation",
+          "cosine": 0.8662691712379456
+        }
+      },
+      {
+        "id": "218980",
+        "samples_32k": 112000,
+        "nearest_starss": {
+          "id": "fold3_room14_mix002:t0005-0010",
+          "split": "validation",
+          "cosine": 0.8609040975570679
+        }
+      },
+      {
+        "id": "365902",
+        "samples_32k": 42279,
+        "nearest_starss": {
+          "id": "fold3_room7_mix005:t0255-0260",
+          "split": "train",
+          "cosine": 0.8123129606246948
+        }
+      },
+      {
+        "id": "367129",
+        "samples_32k": 481815,
+        "nearest_starss": {
+          "id": "fold3_room21_mix018:t0000-0005",
+          "split": "validation",
+          "cosine": 0.8271527886390686
+        }
+      },
+      {
+        "id": "274814",
+        "samples_32k": 208980,
+        "nearest_starss": {
+          "id": "fold3_room14_mix002:t0005-0010",
+          "split": "validation",
+          "cosine": 0.8261489272117615
+        }
+      },
+      {
+        "id": "133889",
+        "samples_32k": 91766,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0025-0030",
+          "split": "calibration",
+          "cosine": 0.8223378658294678
+        }
+      },
+      {
+        "id": "182023",
+        "samples_32k": 99839,
+        "nearest_starss": {
+          "id": "fold3_room14_mix002:t0005-0010",
+          "split": "validation",
+          "cosine": 0.815001904964447
+        }
+      },
+      {
+        "id": "190020",
+        "samples_32k": 14237,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.7046276330947876
+        }
+      },
+      {
+        "id": "336390",
+        "samples_32k": 76069,
+        "nearest_starss": {
+          "id": "fold3_room9_mix008:t0165-0170",
+          "split": "calibration",
+          "cosine": 0.8206527829170227
+        }
+      },
+      {
+        "id": "120331",
+        "samples_32k": 589825,
+        "nearest_starss": {
+          "id": "fold3_room21_mix018:t0000-0005",
+          "split": "validation",
+          "cosine": 0.7306280136108398
+        }
+      },
+      {
+        "id": "381966",
+        "samples_32k": 102400,
+        "nearest_starss": {
+          "id": "fold3_room4_mix005:t0030-0035",
+          "split": "train",
+          "cosine": 0.7707310914993286
+        }
+      },
+      {
+        "id": "367221",
+        "samples_32k": 99734,
+        "nearest_starss": {
+          "id": "fold3_room6_mix003:t0315-0320",
+          "split": "train",
+          "cosine": 0.867878794670105
+        }
+      },
+      {
+        "id": "130044",
+        "samples_32k": 99568,
+        "nearest_starss": {
+          "id": "fold3_room9_mix002:t0130-0135",
+          "split": "calibration",
+          "cosine": 0.6070734262466431
+        }
+      },
+      {
+        "id": "425847",
+        "samples_32k": 296769,
+        "nearest_starss": {
+          "id": "fold3_room6_mix003:t0315-0320",
+          "split": "train",
+          "cosine": 0.8930419087409973
+        }
+      },
+      {
+        "id": "332914",
+        "samples_32k": 257835,
+        "nearest_starss": {
+          "id": "fold3_room6_mix006:t0090-0095",
+          "split": "train",
+          "cosine": 0.7584523558616638
+        }
+      },
+      {
+        "id": "191947",
+        "samples_32k": 205414,
+        "nearest_starss": {
+          "id": "fold3_room21_mix027:t0005-0010",
+          "split": "validation",
+          "cosine": 0.6834489107131958
+        }
+      },
+      {
+        "id": "175669",
+        "samples_32k": 61201,
+        "nearest_starss": {
+          "id": "fold3_room6_mix003:t0315-0320",
+          "split": "train",
+          "cosine": 0.815799355506897
+        }
+      },
+      {
+        "id": "335278",
+        "samples_32k": 275018,
+        "nearest_starss": {
+          "id": "fold3_room12_mix007:t0000-0005",
+          "split": "train",
+          "cosine": 0.8646163940429688
+        }
+      },
+      {
+        "id": "156602",
+        "samples_32k": 170270,
+        "nearest_starss": {
+          "id": "fold3_room4_mix005:t0095-0100",
+          "split": "train",
+          "cosine": 0.6919463276863098
+        }
+      },
+      {
+        "id": "254952",
+        "samples_32k": 589825,
+        "nearest_starss": {
+          "id": "fold3_room7_mix002:t0315-0320",
+          "split": "train",
+          "cosine": 0.7627577781677246
+        }
+      },
+      {
+        "id": "214232",
+        "samples_32k": 161634,
+        "nearest_starss": {
+          "id": "fold3_room4_mix005:t0020-0025",
+          "split": "train",
+          "cosine": 0.7313064336776733
+        }
+      },
+      {
+        "id": "318892",
+        "samples_32k": 257164,
+        "nearest_starss": {
+          "id": "fold3_room22_mix003:t0020-0025",
+          "split": "train",
+          "cosine": 0.6785775423049927
+        }
+      },
+      {
+        "id": "70376",
+        "samples_32k": 10798,
+        "nearest_starss": {
+          "id": "fold3_room9_mix004:t0115-0120",
+          "split": "calibration",
+          "cosine": 0.6625473499298096
+        }
+      },
+      {
+        "id": "261090",
+        "samples_32k": 140435,
+        "nearest_starss": {
+          "id": "fold3_room9_mix003:t0035-0040",
+          "split": "calibration",
+          "cosine": 0.8783465623855591
+        }
+      },
+      {
+        "id": "144226",
+        "samples_32k": 20955,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0015-0020",
+          "split": "train",
+          "cosine": 0.6832321882247925
+        }
+      },
+      {
+        "id": "331213",
+        "samples_32k": 141379,
+        "nearest_starss": {
+          "id": "fold3_room12_mix008:t0175-0180",
+          "split": "train",
+          "cosine": 0.8269973993301392
+        }
+      },
+      {
+        "id": "273222",
+        "samples_32k": 652032,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0120-0125",
+          "split": "train",
+          "cosine": 0.7811905145645142
+        }
+      },
+      {
+        "id": "268579",
+        "samples_32k": 492001,
+        "nearest_starss": {
+          "id": "fold3_room4_mix001:t0060-0065",
+          "split": "train",
+          "cosine": 0.8117527365684509
+        }
+      },
+      {
+        "id": "271335",
+        "samples_32k": 577620,
+        "nearest_starss": {
+          "id": "fold3_room6_mix002:t0180-0185",
+          "split": "train",
+          "cosine": 0.7759155035018921
+        }
+      },
+      {
+        "id": "151911",
+        "samples_32k": 55435,
+        "nearest_starss": {
+          "id": "fold3_room4_mix001:t0035-0040",
+          "split": "train",
+          "cosine": 0.8086606860160828
+        }
+      },
+      {
+        "id": "433710",
+        "samples_32k": 329074,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0025-0030",
+          "split": "train",
+          "cosine": 0.6614053845405579
+        }
+      },
+      {
+        "id": "152977",
+        "samples_32k": 182842,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0125-0130",
+          "split": "train",
+          "cosine": 0.813946008682251
+        }
+      },
+      {
+        "id": "202019",
+        "samples_32k": 546462,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0055-0060",
+          "split": "train",
+          "cosine": 0.796949028968811
+        }
+      },
+      {
+        "id": "171076",
+        "samples_32k": 165110,
+        "nearest_starss": {
+          "id": "fold3_room4_mix001:t0060-0065",
+          "split": "train",
+          "cosine": 0.7767924070358276
+        }
+      },
+      {
+        "id": "348809",
+        "samples_32k": 624000,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0120-0125",
+          "split": "train",
+          "cosine": 0.7580074071884155
+        }
+      },
+      {
+        "id": "413283",
+        "samples_32k": 141996,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0025-0030",
+          "split": "train",
+          "cosine": 0.7468005418777466
+        }
+      },
+      {
+        "id": "372545",
+        "samples_32k": 247577,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0125-0130",
+          "split": "train",
+          "cosine": 0.8224242925643921
+        }
+      },
+      {
+        "id": "365479",
+        "samples_32k": 234058,
+        "nearest_starss": {
+          "id": "fold3_room4_mix004:t0050-0055",
+          "split": "train",
+          "cosine": 0.7564687728881836
+        }
+      },
+      {
+        "id": "264989",
+        "samples_32k": 643473,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0120-0125",
+          "split": "train",
+          "cosine": 0.7874370813369751
+        }
+      },
+      {
+        "id": "178531",
+        "samples_32k": 436517,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0120-0125",
+          "split": "train",
+          "cosine": 0.7732579112052917
+        }
+      },
+      {
+        "id": "114282",
+        "samples_32k": 819897,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0120-0125",
+          "split": "train",
+          "cosine": 0.8017617464065552
+        }
+      },
+      {
+        "id": "262611",
+        "samples_32k": 310128,
+        "nearest_starss": {
+          "id": "fold3_room4_mix008:t0125-0130",
+          "split": "train",
+          "cosine": 0.7612510919570923
+        }
+      }
+    ],
+    "seconds": 11.588404399924912,
+    "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+    "source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+    "feature_sha256": "50712dc9e2ee1fdbbde85f8c46c37c79550d15acec48ef46d153545778a88212",
+    "media_report_sha256": "1394204206eeb9101b478f1f1234661e3063bf8f8e922a2ca613b9bfc19701bd",
+    "reference_features_sha256": "7b633d8316d6a3c9e7cd6305072dc492036276fad35fb937d63aa96ea7cac860",
+    "script_sha256": "67791cee000a43caab425af80aeecbc86bcd12882ae8a3f62cc25155e75c202f",
+    "parameters": 1961239,
+    "device": "cpu",
+    "training": false,
+    "torch": "2.6.0+cu124",
+    "preprocessing": "native mono float; torchaudio native->32k; official eval mel",
+    "limitation": "Whole clips versus 5s windows. Cosine is not a duplication test."
+  },
+  "waveform_screen": {
+    "status": "COMPLETE",
+    "rate": 2000,
+    "review_threshold": 0.99,
+    "training": false,
+    "device": "cpu",
+    "media_report_sha256": "1394204206eeb9101b478f1f1234661e3063bf8f8e922a2ca613b9bfc19701bd",
+    "runner_sha256": "d1f376cb07d8e00380a9d5fa26c07df06ac8dc2d81f744be855ee63d51b7f9fb",
+    "limitations": "Whole-template, gain/offset/polarity invariance only; not proof against mixing, edits or shorter reused excerpts.",
+    "exact_resampled_duplicates": [],
+    "pairs": 9984,
+    "flagged_pairs": 0,
+    "maximum_correlation": 0.8058045460803156,
+    "seconds": 349.53502519999165
+  }
+}

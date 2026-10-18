@@ -1,0 +1,55 @@
+{
+  "status": "PASS_SOURCE_METADATA_FEASIBILITY_ONLY",
+  "source": "RoboMNIST",
+  "doi": "10.6084/m9.figshare.28179383.v1",
+  "license": {
+    "value": 52,
+    "name": "CC BY",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "released_media_rights": "ALLOW: official dataset CC BY4.0; retain attribution",
+  "training_admission": "NOT_ADMITTED: split/content/sync and complementarity gates open",
+  "upstream_commit": "70f5e6393acf6128a7ceb7afacf4463060626ca3",
+  "released_archives": 60,
+  "released_bytes": 56403232879,
+  "missing_computed_md5": [
+    "31_Ar2_Vmed_Ac1.zip"
+  ],
+  "inspected_archive": "00_Ar1_Vhigh_Ac0.zip",
+  "inspected_classes": 1,
+  "inspected_real_members": 272,
+  "inspected_repetition_groups": 34,
+  "actual_member_extensions": {
+    ".json": 68,
+    ".mp4": 102,
+    ".wav": 102
+  },
+  "macos_resource_forks_excluded": 273,
+  "transferred_directory_bytes": 75450,
+  "repetition_grouping": "same class/repetition/uncertainty, all cameras/mics/CSI together",
+  "position_member_policy": "supervision only; never runtime input",
+  "prospective_decisions": [
+    "which robot moved",
+    "which digit trajectory",
+    "which speed level"
+  ],
+  "limits": [
+    "Single controlled robot lab; no general Omni or cross-household quality claim",
+    "Only one archive directory inspected; other59 group completeness UNKNOWN",
+    "Payload timing/schema/content/session grouping and OOD splits unverified",
+    "No joint advantage assumed; require singleton, question-only, shuffle controls"
+  ],
+  "training": false,
+  "model_inference": false,
+  "media_members_opened": false,
+  "quality_measured": false,
+  "sealed_audit_opened": false,
+  "validated_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-source-audit-01\\article.json": "953ddfa78f8160ea8839365b24f5c8d2dab4d215cee2888f05c474e5ee753584",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-source-audit-01\\article-version-1.json": "18ef8b20c82056747c58572d24f262b2d12c9284e4ffd83c245ae64eca2ab120",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-source-audit-01\\source-receipt.json": "8093769eecd659fc752555cdd756827508244c34c990dd0a2f9701db44773a0c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-source-audit-01\\upstream-README.md": "c52498df14cdb61fe2eab2ebf5742dc3cb282d15f51347e8b1a587f0a2db6b82",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-source-audit-01\\first-archive-directory.json": "4b431b2ab7f31ca86d0ed29880ead753c955c7e2eb285415a7b7a589da5949c9"
+  },
+  "auditor_sha256": "8fc48b9fecee666643d80b85673ced0a9212c498a213d2f23a69c9c8b80b677a"
+}

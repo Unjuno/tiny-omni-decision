@@ -1,0 +1,33 @@
+schema_version: 1
+experiment_id: path-a-text-minilm-typed-synth-v0
+modality: text
+source:
+  dataset_id: n4ze3m/typed-decisions-synth
+  revision: 5ece89a225b23c4cd5c4bab5735a0819d61dd7d5
+  train_file: C:/CodexArtifacts/pretrained-reuse-r2/text/train.jsonl
+  validation_file: C:/CodexArtifacts/pretrained-reuse-r2/text/validation.jsonl
+  split_group: state_id
+  content_overlap_check: true
+  audit_data_loaded: false
+encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  frozen: true
+  pooling: attention_masked_mean
+readout:
+  architecture: shared_candidate_mlp
+  input_features: [context, option, absolute_difference, elementwise_product]
+  hidden_size: 128
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: minimum_validation_nll
+seed: 17
+sequence_length: 256
+device: cuda
+notes:
+  - Synthetic English development proxy only; not a real-world text benchmark.
+  - Validation selects the checkpoint; report all epochs and do not call it blind.
+  - No sealed or legacy evaluation data are read.

@@ -1,0 +1,392 @@
+{
+  "records": [
+    {
+      "app": "OpenBoard",
+      "path": "data/OpenBoard/012531a225bc8bef397d1f0e2215e4126010cb3f6371ad2d8b25e1a97b26ad48.json",
+      "sha256": "09abd7d4b6a7a44a3b66adfbca00ee807cfbc3002b99fd2d873841c854bcb9f5",
+      "regions": 77,
+      "categories": {
+        "Button": 66,
+        "Input Elements": 2,
+        "Navigation": 2,
+        "Visual Elements": 2,
+        "Menu": 4,
+        "Others": 1
+      }
+    },
+    {
+      "app": "OpenBoard",
+      "path": "data/OpenBoard/02af0cc6ec1887fb29687e59674e7d77013ea0446fa17b9135f409fd1b028a76.json",
+      "sha256": "071b60bdcd6ddcd7d19b4e686365e08572c4ee409989ec573e2130470b72a9f7",
+      "regions": 63,
+      "categories": {
+        "": 63
+      }
+    },
+    {
+      "app": "OpenBoard",
+      "path": "data/OpenBoard/02c179db906f86fa658ef4e7e17bbefbb6d81dc75ac2c5f01957f020e43b2693.json",
+      "sha256": "eb73e4bc26254f19bfbbc537fc7e06d5a2d2d68fdb37034fba348aef59fa75e8",
+      "regions": 47,
+      "categories": {
+        "Navigation": 14,
+        "Button": 13,
+        "Information Display": 2,
+        "Menu": 16,
+        "Sidebar": 2
+      }
+    },
+    {
+      "app": "OpenBoard",
+      "path": "data/OpenBoard/055072ec8cb560de8af1431c128c53717a95ab610ef959ef0d7710ad269b386a.json",
+      "sha256": "dc381a0b1a5e487658c61e51abb88abb94cdc5b91eda1874dd5f4fd382ce8c37",
+      "regions": 32,
+      "categories": {
+        "": 32
+      }
+    },
+    {
+      "app": "WordPress",
+      "path": "data/WordPress/006ad84c55d24145b6d74ac5f79df882c18162d8aa52a0ff38feee356759221c.json",
+      "sha256": "84db83aa80fd0aff53c90436b0ff1376b24931a4dca9369f9efb5486f84b7d8b",
+      "regions": 35,
+      "categories": {
+        "Navigation": 5,
+        "Button": 19,
+        "Information Display": 5,
+        "Input Elements": 1,
+        "Menu": 5
+      }
+    },
+    {
+      "app": "WordPress",
+      "path": "data/WordPress/014f0e6b0d858e4eef0cb193ebda2d0a159ccb5fc977a154da4586454dd265d6.json",
+      "sha256": "fbf6c4a2dbbe6ed06ca35710958c5b66a7cae55bc3a964b55f3a4f25134ae675",
+      "regions": 35,
+      "categories": {
+        "": 30,
+        "Others": 5
+      }
+    },
+    {
+      "app": "WordPress",
+      "path": "data/WordPress/023831de304a8773914f51c1cd28099440aa48ca991cf583d252c682c2ef9e82.json",
+      "sha256": "32086824cb565568fc23e99d9352ff5b708cfe90d5219a6ab78f586481863580",
+      "regions": 49,
+      "categories": {
+        "Navigation": 2,
+        "Information Display": 8,
+        "Visual Elements": 6,
+        "Others": 5,
+        "Button": 26,
+        "Input Elements": 2
+      }
+    },
+    {
+      "app": "WordPress",
+      "path": "data/WordPress/025cbb01a3578d444804943ff2c5d052d5ca59814fb121c67cb4553db0bc7329.json",
+      "sha256": "1ddfa6f7be15f15a14bd955f803d80a094fb20664326eee3217b55b905425251",
+      "regions": 33,
+      "categories": {
+        "": 33
+      }
+    },
+    {
+      "app": "Signal",
+      "path": "data/Signal/0051edac53df19c1420c228f299656f9db4b42624e41d94b9b249ae4f73175fe.json",
+      "sha256": "46dff6ac3338d8754c1604511986bdf9689b4bee2fc1c6cd48420cfcac6c18fe",
+      "regions": 16,
+      "categories": {
+        "": 15,
+        "Others": 1
+      }
+    },
+    {
+      "app": "Signal",
+      "path": "data/Signal/00fc537f6aaf1489eac8f242091fa06411bfbcc5778ad410b477ff08ffc1d7b0.json",
+      "sha256": "2a66e1633ea91e376a625823bfea27ed2a114c5dd504af41b88b6cdd531c734c",
+      "regions": 46,
+      "categories": {
+        "Information Display": 3,
+        "Button": 35,
+        "Navigation": 2,
+        "Input Elements": 4,
+        "Sidebar": 2
+      }
+    },
+    {
+      "app": "Signal",
+      "path": "data/Signal/016a1e178687b0b266fe1ab624593a5b6c1a83f4031c26e8777c9745c66457cb.json",
+      "sha256": "0ccbbe59189ed76372f1b27ac721cce76d6a68cb53448e0491c01b08a8af30e3",
+      "regions": 14,
+      "categories": {
+        "": 14
+      }
+    },
+    {
+      "app": "Signal",
+      "path": "data/Signal/017764532decf1826ba5b5aeb228f7d100748659953040b8ad8d619f2850f120.json",
+      "sha256": "271038547317d08848d951400d77893101952679b9e036f24e69f9d34c721007",
+      "regions": 43,
+      "categories": {
+        "Information Display": 8,
+        "Button": 20,
+        "Input Elements": 2,
+        "Menu": 5,
+        "Sidebar": 6,
+        "Navigation": 2
+      }
+    },
+    {
+      "app": "FontForge",
+      "path": "data/FontForge/00099964277e06bf6ba2a6bb48dafa45cf4610ad2e536ef67c9a4c19061ea52f.json",
+      "sha256": "adffbf33120ec8e632ccd5eb88ef3a57afacd77cb510b43de0ea1f3b2e464e3a",
+      "regions": 62,
+      "categories": {
+        "": 47,
+        "Others": 15
+      }
+    },
+    {
+      "app": "FontForge",
+      "path": "data/FontForge/00565c339fb010239afec3ba7e62e6ed0787ac05c73c403a1916aace676de4d6.json",
+      "sha256": "cb92aec61e6e114a0a90e9a85d4755c9233c393104f5281ca12894dba585f352",
+      "regions": 64,
+      "categories": {
+        "Navigation": 3,
+        "Visual Elements": 1,
+        "Menu": 12,
+        "Button": 32,
+        "Information Display": 11,
+        "Input Elements": 5
+      }
+    },
+    {
+      "app": "FontForge",
+      "path": "data/FontForge/018556a54b1ce6abb372714ffb00b0e5aa596ef64f35db292280c48baea732ac.json",
+      "sha256": "cb26af044866b3655173e92bb8b55c3fca837696eef1c1ea0ee1e43cd4bd6864",
+      "regions": 69,
+      "categories": {
+        "Menu": 21,
+        "Button": 8,
+        "Information Display": 4,
+        "Input Elements": 5,
+        "Visual Elements": 3,
+        "Navigation": 25,
+        "Others": 3
+      }
+    },
+    {
+      "app": "FontForge",
+      "path": "data/FontForge/01a3bf664972071e6888030d8485c8644532ca8ea35718fa48736d827c7b27cf.json",
+      "sha256": "44e4504397fb30c04c869b0c7ec9481ca97d94c0c9f2913abb69c18db5657d71",
+      "regions": 46,
+      "categories": {
+        "": 38,
+        "Others": 8
+      }
+    },
+    {
+      "app": "Chromium",
+      "path": "data/Chromium/000ab2c72cf9281e184cf22bc55697ffeb0d9439c5ee09023791f1c8a2049213.json",
+      "sha256": "8a90b57794d403c18703992d104e8fc3606d1459435bb8027385d3ee5f8d71b6",
+      "regions": 43,
+      "categories": {
+        "Visual Elements": 1,
+        "Sidebar": 14,
+        "Navigation": 2,
+        "Information Display": 5,
+        "Menu": 8,
+        "Input Elements": 1,
+        "Button": 12
+      }
+    },
+    {
+      "app": "Chromium",
+      "path": "data/Chromium/003d7925bcdf9d537af345ec7be7f7b47887dbc33dfbc1527206377d92b55aab.json",
+      "sha256": "f891af7af7eb3b9559e49e08eb9b3af92563a5ba9d538fac8effe9b2a5818cb7",
+      "regions": 27,
+      "categories": {
+        "Button": 15,
+        "Menu": 3,
+        "Navigation": 5,
+        "Input Elements": 2,
+        "Visual Elements": 1,
+        "Sidebar": 1
+      }
+    },
+    {
+      "app": "Chromium",
+      "path": "data/Chromium/010cc08929f928996014573ea9cd7d4cbd8aca8f991cad8468cb8bae455bc5da.json",
+      "sha256": "81aa47bcbd0029e0bd44b8ca75dd42efe1b40256f05b24797f178bbe282baed3",
+      "regions": 26,
+      "categories": {
+        "Information Display": 1,
+        "Input Elements": 6,
+        "Sidebar": 1,
+        "Navigation": 10,
+        "Button": 7,
+        "Visual Elements": 1
+      }
+    },
+    {
+      "app": "Chromium",
+      "path": "data/Chromium/013231a0483b3d7ebfa55154d7cb583501005ff7f34f01fb7a760a5ce62cb5ea.json",
+      "sha256": "1af6ff141e8f72a7fd1f88f1c9c4ffef5016914ea08df287100c54a351b30c48",
+      "regions": 50,
+      "categories": {
+        "Information Display": 3,
+        "Menu": 14,
+        "Button": 12,
+        "Navigation": 4,
+        "Others": 17
+      }
+    },
+    {
+      "app": "OnlyOffice Calendar",
+      "path": "data/OnlyOffice Calendar/006ec3068212081a6af986451c7a214acb9bd44150765b5482f3bbcf9de3f72e.json",
+      "sha256": "5930e4f39e9d1077a1bfb17f3efc144b6110316de8c4c9125e847b4be722b286",
+      "regions": 71,
+      "categories": {
+        "": 58,
+        "Others": 13
+      }
+    },
+    {
+      "app": "OnlyOffice Calendar",
+      "path": "data/OnlyOffice Calendar/0097601e65b4c4e7c19975916f53a6c6e271c9e44cb459c5c13cdfc99cfe0278.json",
+      "sha256": "5f90f7c1f2daab51003e040758a09949d8749912cfff18ac75ff108ea949b4ce",
+      "regions": 54,
+      "categories": {
+        "": 40,
+        "Others": 14
+      }
+    },
+    {
+      "app": "OnlyOffice Calendar",
+      "path": "data/OnlyOffice Calendar/00b9a4984c1db75dffe8cc1d9cf0313c7ebc3458c13a5f5801d15bee73cf0ab6.json",
+      "sha256": "527e36e910d3e0879d84591ec4849f72e40d8482a62ae7e8e5a5e9b4d1ca1cb0",
+      "regions": 41,
+      "categories": {
+        "": 40,
+        "Others": 1
+      }
+    },
+    {
+      "app": "OnlyOffice Calendar",
+      "path": "data/OnlyOffice Calendar/01dab62a6bd16553186dfc57f56cc844870045900ea1437dcf82d90ec24d692f.json",
+      "sha256": "fd67a36acec41324db93c40cbcc903409f1c6e58f8d203fbeb9c1ce5ffee7de1",
+      "regions": 41,
+      "categories": {
+        "": 40,
+        "Others": 1
+      }
+    },
+    {
+      "app": "DuckDuckGo",
+      "path": "data/DuckDuckGo/022db0f891fd5897aa7f926fcb149a0dd22f5b0356f07d4a7e1c7b7715cd53f2.json",
+      "sha256": "30b390cd2c3d4c016084642284b74a63a68e4446d181a40e788c9a5a6cd5cc6a",
+      "regions": 36,
+      "categories": {
+        "Information Display": 7,
+        "Menu": 7,
+        "Navigation": 5,
+        "Input Elements": 2,
+        "Button": 13,
+        "Others": 2
+      }
+    },
+    {
+      "app": "DuckDuckGo",
+      "path": "data/DuckDuckGo/034b9c798b239b29a0c14fb009225586278315a14742f230f3147e146d5bf9e6.json",
+      "sha256": "0745c396e1f6c71366c125b15e37d71d9bcd0f1a4bce21fc2ae5fd8de0bc45f3",
+      "regions": 35,
+      "categories": {
+        "Information Display": 9,
+        "Navigation": 12,
+        "Input Elements": 6,
+        "Button": 6,
+        "Visual Elements": 2
+      }
+    },
+    {
+      "app": "DuckDuckGo",
+      "path": "data/DuckDuckGo/0370d747562caebb7e2d358b35eb3ae4d5fcd30cda4145dcf1022c0055784ca6.json",
+      "sha256": "70ef2c26a21cf84cd74d4acb112862c5fc97377e84ea0d33a9153c462e6e3a3d",
+      "regions": 39,
+      "categories": {
+        "Button": 27,
+        "Navigation": 5,
+        "Visual Elements": 1,
+        "Information Display": 4,
+        "Input Elements": 2
+      }
+    },
+    {
+      "app": "DuckDuckGo",
+      "path": "data/DuckDuckGo/03e85638655a6bdc6afd15c0a4d70b6af8295edacdb699620c681390043192f3.json",
+      "sha256": "6d7f4208eb4376644a1871e554b25be890957e2a20bf487416fc33cf62525b70",
+      "regions": 21,
+      "categories": {
+        "Button": 14,
+        "Input Elements": 1,
+        "Navigation": 3,
+        "Visual Elements": 1,
+        "Information Display": 1,
+        "Menu": 1
+      }
+    },
+    {
+      "app": "LibreOffice Impress",
+      "path": "data/LibreOffice Impress/005355283d9648ae99460cd49455cebbed7f64a88628b5ac270cca26629ab5fe.json",
+      "sha256": "575cee0137d9bdb4a82fbcb6d9f583cbe9bcf2a297fb08ef3493b4130039a0de",
+      "regions": 63,
+      "categories": {
+        "": 53,
+        "Others": 10
+      }
+    },
+    {
+      "app": "LibreOffice Impress",
+      "path": "data/LibreOffice Impress/008fae33df85c7380837bd698ee6c32f42a36589093647a287b4a1a523d001cd.json",
+      "sha256": "f09db2c8640a3f7fbacc2754f1950799e80b96f227c5c762574052cbcd5e0756",
+      "regions": 132,
+      "categories": {
+        "": 128,
+        "Others": 4
+      }
+    },
+    {
+      "app": "LibreOffice Impress",
+      "path": "data/LibreOffice Impress/0096c13c14e5d62b925bd0a809db336c9ae15c5227a0b6e8df87d8498b5ea474.json",
+      "sha256": "e744746e90b6bfad5d770820299da98229d8ed5fa2e78e9e50185256e76ccbd1",
+      "regions": 51,
+      "categories": {
+        "": 1,
+        "Menu": 10,
+        "Button": 32,
+        "Information Display": 4,
+        "Navigation": 3,
+        "Visual Elements": 1
+      }
+    },
+    {
+      "app": "LibreOffice Impress",
+      "path": "data/LibreOffice Impress/00a2cd006b95838a676e14257f76c3650019bcda9eb1ff1d08801cf0be54e58b.json",
+      "sha256": "237fa871ca8ed381b6239d9df3668cadb8507fa61943fba1b1010d4ae3c03930",
+      "regions": 91,
+      "categories": {
+        "Navigation": 3,
+        "Information Display": 10,
+        "Others": 1,
+        "Menu": 10,
+        "Button": 66,
+        "Input Elements": 1
+      }
+    }
+  ],
+  "selection_sha256": "e320e919a0aa00a7d4abeccf541c4f3e18e972164332ba739069c882bedb0524",
+  "regions": 1552,
+  "blank": 632,
+  "media_acquired": false
+}

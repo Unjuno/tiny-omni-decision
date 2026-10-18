@@ -1,0 +1,41 @@
+schema_version: 1
+experiment_id: path-a-audio-whisper-speech-commands-v0
+modality: audio
+source:
+  dataset_id: google/speech_commands
+  revision: a751309c0fd613e8a5d30d77900f30e8b42bc2da
+  subset: v0.02
+  train_split: train
+  validation_split: validation
+  sample_dir: C:/CodexArtifacts/pretrained-reuse-r2/speech-commands-sample-seed17-128-64-retry2
+  train_per_class: 128
+  validation_per_class: 64
+  labels: [yes, no, up, down, left, right, on, off, stop, go]
+  split_group: speaker_id
+  audit_data_loaded: false
+encoder:
+  repo_id: openai/whisper-tiny
+  revision: 169d4a4341b33bc18d8881c4b69c2e104e1cc0af
+  frozen: true
+  pooling: mean_valid_encoder_tokens
+  sample_rate: 16000
+readout:
+  text_candidate_encoder: sentence-transformers/paraphrase-MiniLM-L3-v2
+  text_candidate_revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  architecture: shared_candidate_mlp
+  hidden_size: 128
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: minimum_validation_nll
+seed: 17
+feature_batch_size: 8
+device: cuda
+notes:
+  - English keyword recognition proxy only; not general speech understanding or Japanese ASR.
+  - Sample is fixed, balanced by keyword, and speaker-grouped between the official train and validation splits.
+  - Local dataset extraction uses the separately pinned MIT hyparquet 1.31.3 package; it reads only selected Parquet row groups.
+  - Validation selects the checkpoint; this is development validation, not sealed evaluation.
+  - No sealed or test split is loaded.

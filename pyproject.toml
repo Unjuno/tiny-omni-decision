@@ -20,7 +20,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+  "numpy>=1.26,<3",
   "pytest>=8.3,<9",
+  "requests>=2.32,<3",
   "ruff>=0.9,<1",
 ]
 ml = [
@@ -43,6 +45,7 @@ packages = ["src/tiny_omni_decision"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src", "."]
 
 [tool.ruff]
 target-version = "py311"
@@ -50,3 +53,10 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+# Preserve the hash-bound executed first publisher; v2 fixes explicit zip length checks.
+[tool.ruff.lint.per-file-ignores]
+"scripts/report_lombard_correspondence.py" = ["B905"]
+# Retain physically hash-bound executed correction and its original literal fixture.
+"scripts/correct_native_av_publication.py" = ["E501"]
+"tests/test_native_av_reference_correction.py" = ["E501"]

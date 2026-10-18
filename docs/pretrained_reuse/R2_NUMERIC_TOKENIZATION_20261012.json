@@ -1,0 +1,58 @@
+{
+  "reports": {
+    "conditional-curriculum-01": {
+      "source_sha256": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+      "states": 1024,
+      "occurrences": 12288,
+      "unique_numeric_values": 199,
+      "contextual_token_counts": {
+        "1": 12288
+      },
+      "by_scale": {
+        "1": {
+          "1": 12288
+        }
+      },
+      "multi_token_fraction": 0.0,
+      "unknown_token_occurrences": 0
+    },
+    "numeric-range-curriculum-01": {
+      "source_sha256": "95f4edc33711a6ac334fff77cb08300a45bbe2bc8acefad1e8591b069c076101",
+      "states": 1024,
+      "occurrences": 12288,
+      "unique_numeric_values": 583,
+      "contextual_token_counts": {
+        "1": 8259,
+        "2": 4029
+      },
+      "by_scale": {
+        "4": {
+          "1": 1411,
+          "2": 1661
+        },
+        "8": {
+          "1": 1001,
+          "2": 2071
+        },
+        "1": {
+          "1": 3072
+        },
+        "2": {
+          "1": 2775,
+          "2": 297
+        }
+      },
+      "multi_token_fraction": 0.327880859375,
+      "unknown_token_occurrences": 0
+    }
+  },
+  "runner_sha256": "d863eb2cc1689b3ab46e514ed961715815d8ed421f3dbb8273be5ef3e8fe60d1",
+  "tokenizer_files": {
+    "config.json": "380e02c93f431831be65d99a4e7e5f67c133985bf2e77d9d4eba46847190bacc",
+    "special_tokens_map.json": "3c3507f36dff57bce437223db3b3081d1e2b52ec3e56ee55438193ecb2c94dd6",
+    "tokenizer.json": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+    "tokenizer_config.json": "a5c2e5a7b1a29a0702cd28c08a399b5ecc110c263009d17f7e3b415f25905fd8",
+    "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+  },
+  "limitation": "Magnitude and vocabulary change together; not causal proof."
+}

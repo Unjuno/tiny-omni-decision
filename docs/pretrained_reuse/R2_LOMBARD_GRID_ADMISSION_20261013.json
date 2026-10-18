@@ -1,0 +1,681 @@
+{
+  "status": "MEDIA_SMOKE_PASS_LABEL_AND_SPLIT_REVIEW",
+  "source": "https://spandh.dcs.shef.ac.uk/avlombard/",
+  "license_declared": "CC BY 4.0 entire corpus",
+  "page_sha256": "19534c74e4e18bd3c3069984b9c28b1a2de6a5bac9401a48cf95f17b0521f4bc",
+  "metadata_archive_sha256": "1de3299baaa6a13d8bcd458a688c94f2288a0ecca8b5a6817a055b393f5a98a6",
+  "immutable_upstream_revision": "UNKNOWN; saved SHA snapshots only",
+  "metadata_records": 5340,
+  "official_nominal_records": 5400,
+  "speaker_metadata_shortfalls": {
+    "s31": 50,
+    "s51": 90
+  },
+  "speakers": 54,
+  "conditions": {
+    "p": 2661,
+    "l": 2679
+  },
+  "annotation_status": {
+    "CORRECT": 5271,
+    "WRONG": 69
+  },
+  "irregular_intended_codes": 4,
+  "duplicate_speaker_condition_intended_code_groups": 1,
+  "speaker_alias_groups": [
+    [
+      6,
+      29
+    ],
+    [
+      25,
+      26
+    ]
+  ],
+  "provisional_speaker_split": {
+    "train": 40,
+    "validation": 10,
+    "calibration": 4
+  },
+  "provisional_split_seed": 17,
+  "split_not_frozen": true,
+  "intended_phrase_cross_split_count": 50,
+  "wrong_actual_transcriptions_need_resolution": true,
+  "smoke": {
+    "files": 8,
+    "bytes": 1119667,
+    "acquisition_seconds": 14.771338499966078,
+    "decode": {
+      "status": "PASS",
+      "scope": "four official paired utterances from train-assigned speakers only; no model/quality evaluation",
+      "files": [
+        {
+          "name": "s22_p_sgbe5s.wav",
+          "sha256": "d20870f17d2da0818ee56a4d1ec04d9f327d641c62d874445d8bf67cff0ebeb3",
+          "streams": [
+            {
+              "type": "audio",
+              "codec": "pcm_f32le",
+              "time_base": "1/16000",
+              "start_time": null,
+              "duration": 34080,
+              "frames_declared": 0
+            }
+          ],
+          "samples": 34080,
+          "rate": 16000,
+          "seconds": 2.13,
+          "finite_nonzero": true
+        },
+        {
+          "name": "s22_p_sgbe5s.mov",
+          "sha256": "a3b283956a36bd6cb4084d20c3a8bdb84324cb0e7c3557f73b0e9409916002ac",
+          "streams": [
+            {
+              "type": "video",
+              "codec": "h264",
+              "time_base": "1/12288",
+              "start_time": 0,
+              "duration": 26624,
+              "frames_declared": 52
+            }
+          ],
+          "frames": 52,
+          "sizes": [
+            [
+              720,
+              480
+            ]
+          ],
+          "first_pts_seconds": 0.0,
+          "last_pts_seconds": 2.125,
+          "fps": "24",
+          "unique_timestamps": true
+        },
+        {
+          "name": "s22_l_sgbe5s.wav",
+          "sha256": "9603c6644aa3fd6a01f00c308a490ab648a4e7c2373ddf2f34cb9175b37ca27d",
+          "streams": [
+            {
+              "type": "audio",
+              "codec": "pcm_f32le",
+              "time_base": "1/16000",
+              "start_time": null,
+              "duration": 38400,
+              "frames_declared": 0
+            }
+          ],
+          "samples": 38400,
+          "rate": 16000,
+          "seconds": 2.4,
+          "finite_nonzero": true
+        },
+        {
+          "name": "s22_l_sgbe5s.mov",
+          "sha256": "59588a014518aa3909ecc1fae843751c5a860009500fec7aad2f44cef9e2bd54",
+          "streams": [
+            {
+              "type": "video",
+              "codec": "h264",
+              "time_base": "1/12288",
+              "start_time": 0,
+              "duration": 30208,
+              "frames_declared": 59
+            }
+          ],
+          "frames": 59,
+          "sizes": [
+            [
+              720,
+              480
+            ]
+          ],
+          "first_pts_seconds": 0.0,
+          "last_pts_seconds": 2.4166666666666665,
+          "fps": "24",
+          "unique_timestamps": true
+        },
+        {
+          "name": "s16_p_bgah2n.wav",
+          "sha256": "fe5a3bea6fbf846caf326885ff3a7e3b2a90746903571748eea1026e0ab26f0f",
+          "streams": [
+            {
+              "type": "audio",
+              "codec": "pcm_f32le",
+              "time_base": "1/16000",
+              "start_time": null,
+              "duration": 34560,
+              "frames_declared": 0
+            }
+          ],
+          "samples": 34560,
+          "rate": 16000,
+          "seconds": 2.16,
+          "finite_nonzero": true
+        },
+        {
+          "name": "s16_p_bgah2n.mov",
+          "sha256": "9aeb5333c71f21b71e124d9c62ff4559a0f83257467b677de33603853c8761fa",
+          "streams": [
+            {
+              "type": "video",
+              "codec": "h264",
+              "time_base": "1/18496",
+              "start_time": 0,
+              "duration": 39936,
+              "frames_declared": 52
+            }
+          ],
+          "frames": 52,
+          "sizes": [
+            [
+              720,
+              480
+            ]
+          ],
+          "first_pts_seconds": 0.0,
+          "last_pts_seconds": 2.1176470588235294,
+          "fps": "289/12",
+          "unique_timestamps": true
+        },
+        {
+          "name": "s16_l_bgah2n.wav",
+          "sha256": "c61905276ee578ab244f529fe032d783cf23c21d52242c99f806d90dca089eae",
+          "streams": [
+            {
+              "type": "audio",
+              "codec": "pcm_f32le",
+              "time_base": "1/16000",
+              "start_time": null,
+              "duration": 37440,
+              "frames_declared": 0
+            }
+          ],
+          "samples": 37440,
+          "rate": 16000,
+          "seconds": 2.34,
+          "finite_nonzero": true
+        },
+        {
+          "name": "s16_l_bgah2n.mov",
+          "sha256": "baff71b2e2a1936c0cd3714c50d013cf7178fb8a8575d4d9c836f2383e4ce92b",
+          "streams": [
+            {
+              "type": "video",
+              "codec": "h264",
+              "time_base": "1/18496",
+              "start_time": 0,
+              "duration": 44544,
+              "frames_declared": 58
+            }
+          ],
+          "frames": 58,
+          "sizes": [
+            [
+              720,
+              480
+            ]
+          ],
+          "first_pts_seconds": 0.0,
+          "last_pts_seconds": 2.366782006920415,
+          "fps": "289/12",
+          "unique_timestamps": true
+        }
+      ],
+      "synchronization": "same official utterance identity; actual AV alignment not independently established",
+      "seconds": 0.6781532000750303,
+      "av": "18.1.0"
+    }
+  },
+  "metadata_archive_members": [
+    {
+      "name": "lombardgrid/json/s10.json",
+      "bytes": 21522,
+      "crc32": 99453996,
+      "sha256": "ff6a8b4ac684deeba2675cace4e2d27f1b4cc28bcba78a165ac9868e4c7b6d6b",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s11.json",
+      "bytes": 21522,
+      "crc32": 2232050607,
+      "sha256": "921b57a0e818cc944a370dde7deb3c5f94335f49623ca6c4bc0d9c929add7dea",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s12.json",
+      "bytes": 21522,
+      "crc32": 4237576635,
+      "sha256": "28f43258dc801243dbf444fcbbde2336334aecedd239dbe29b53b3105ab605fb",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s13.json",
+      "bytes": 21577,
+      "crc32": 2512759288,
+      "sha256": "8bb02c55905ea811ff7e523377305ddb7e244b59221b108be3e06527758d6d10",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s14.json",
+      "bytes": 21525,
+      "crc32": 3471617261,
+      "sha256": "904fda7028e86a39f842d8b26c874532490252145a131aac655ae1485ec64280",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s15.json",
+      "bytes": 21525,
+      "crc32": 2896947372,
+      "sha256": "102e37e630e8f34a4bf7c7fef5b0d77814383df17445f8b92f7994bd2d71d6d2",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s16.json",
+      "bytes": 21522,
+      "crc32": 1144700549,
+      "sha256": "ef52875c97b4c2c9918db5902e3b66a2f2b63b3ef96f4e420083e8e80776313c",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s17.json",
+      "bytes": 21525,
+      "crc32": 1618109596,
+      "sha256": "0cbc771bff5583ecbd6c2b07e41a0f56545497c61385341b991f70be4ede84f8",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s18.json",
+      "bytes": 21537,
+      "crc32": 1108569109,
+      "sha256": "d9e26610272d6fa1e734f064f4cdecd429d54de1136e6cb1536266eea18b55fc",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s19.json",
+      "bytes": 21522,
+      "crc32": 3974175394,
+      "sha256": "b3b14f70db6a090a45754400c5a577e7d5d8184781638fd157009ffd6705fb5e",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s2.json",
+      "bytes": 21422,
+      "crc32": 1971552271,
+      "sha256": "8a6a66301c3e4064366288511b21d35f4597e4d1bb5633d551959a4a2de6ff97",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s20.json",
+      "bytes": 21522,
+      "crc32": 546588032,
+      "sha256": "0caef374782268b56a0ccd12f149223bc507cc0b4fa93fd87b8110af278d660b",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s21.json",
+      "bytes": 21528,
+      "crc32": 3611741143,
+      "sha256": "1eabc685849048ee9e35d7d32b2236c751b1cef87b1539a55e25ce8ae74c5016",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s22.json",
+      "bytes": 21525,
+      "crc32": 1113773788,
+      "sha256": "914488c5bcff4fa598bf639c5a3d869e9f59aa509cad918ba9d389493f52dae6",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s23.json",
+      "bytes": 21522,
+      "crc32": 3952471031,
+      "sha256": "be29147e3a8ae8ade4646e90c74f9d04f1d968696b95afb2352c25fced2c9406",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s24.json",
+      "bytes": 21537,
+      "crc32": 3562771355,
+      "sha256": "f4d02757a36938c9ee3a4487f88dec69bfe4197c0f3610301ec3a777eb15c157",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s25.json",
+      "bytes": 21522,
+      "crc32": 4173400978,
+      "sha256": "82d901ebd5aeda669502d1de0bd780335987953b2549db9a743e90ce2a855968",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s26.json",
+      "bytes": 21522,
+      "crc32": 1678297739,
+      "sha256": "d73336242f95261e53a964ca44454dc8b5c196d5fcd3c75fbe268490408b7855",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s27.json",
+      "bytes": 21522,
+      "crc32": 3807554223,
+      "sha256": "2ee273f3f3ebe1cfa4d76f438ba5dd8e2a314c6cce32250c5f4b9947e96bc412",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s28.json",
+      "bytes": 21528,
+      "crc32": 943508237,
+      "sha256": "312eb1c47dc9df10be862a8932871b36f01484257a6e144f3f277da01948cc7f",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s29.json",
+      "bytes": 21522,
+      "crc32": 1999291216,
+      "sha256": "d43370461dda59f6f8291b209f47babf90df7eb3a124b01dfd2e61912044aaee",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s3.json",
+      "bytes": 21452,
+      "crc32": 1012505300,
+      "sha256": "ab984512e536b40abc907793fccf4f61a689faececeab3fc0abd238f10cf0f7d",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s30.json",
+      "bytes": 21528,
+      "crc32": 1543936747,
+      "sha256": "0c10ecebdb30f7e9edbbbfa995002977b369e143873ba71d8d14fb3a354c89dc",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s31.json",
+      "bytes": 10765,
+      "crc32": 2123899065,
+      "sha256": "f153fcc55050199620c535cec9551e16107cd75b6784a909e24c95b38d8f0fc1",
+      "json_type": "list",
+      "count": 50
+    },
+    {
+      "name": "lombardgrid/json/s32.json",
+      "bytes": 21522,
+      "crc32": 313456668,
+      "sha256": "4361c171c87b31d12d11532291d9626f2f304341abc0ac5b69c8e7f48918515d",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s33.json",
+      "bytes": 21530,
+      "crc32": 550725673,
+      "sha256": "c36e0482160bcef990619083db33e726b3610a94069734e9a54d09d368a2e905",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s34.json",
+      "bytes": 21522,
+      "crc32": 1143036505,
+      "sha256": "a45efe209f65d89ca20a7a857c832ad81aa2f1a8669be374a4efcc2b21f8e65d",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s35.json",
+      "bytes": 21522,
+      "crc32": 4104437768,
+      "sha256": "680a285651e467f143f84a4ee3d98d6e52ed68f9f4cf1f7566ddf65df54549ca",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s36.json",
+      "bytes": 21528,
+      "crc32": 1631030104,
+      "sha256": "5e8cf152cc40cb4139723e57030643980e4b12e811b3747e2e8e844e97998e04",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s37.json",
+      "bytes": 21532,
+      "crc32": 91417598,
+      "sha256": "0102434c9d5b3a2b8630880565000e9d6caab2f8eccaeb09848a7681ac326503",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s38.json",
+      "bytes": 21522,
+      "crc32": 2756260376,
+      "sha256": "81920f19c4696f55af26cd3f688b631e4625de7683176eb5a9930b88b58da136",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s39.json",
+      "bytes": 21525,
+      "crc32": 2996660008,
+      "sha256": "83dc60513860f1809af319a1dd4fcd3aa0464804402d8a9336bcde084922ecd2",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s4.json",
+      "bytes": 21425,
+      "crc32": 3273389433,
+      "sha256": "bcdcda3ac1980d9896acc859d96677842810c18482d4d8884135b8de35d1e8a5",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s40.json",
+      "bytes": 21522,
+      "crc32": 1751911899,
+      "sha256": "30cd59557bdabe012a75195efa350a54224c983b7248b12270f5e3e4d41953b1",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s41.json",
+      "bytes": 21522,
+      "crc32": 1564436624,
+      "sha256": "f206482b1a72a11a56a95ab5f5248f54473036580ac033e0ad5253b50aa67e9f",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s42.json",
+      "bytes": 21522,
+      "crc32": 1663885138,
+      "sha256": "442c1d0d944a33f03a562f57bfda57ee92b5b6088e24333d3a171325e540f69b",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s43.json",
+      "bytes": 21522,
+      "crc32": 1574797808,
+      "sha256": "a27159a4387cd4bf46454f5168c5d9cb55be3bcab029724c2e7f3684fa801c92",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s44.json",
+      "bytes": 21525,
+      "crc32": 1550010896,
+      "sha256": "9aa984a277f10faff890ed1725f5229ccac27d4017016e89c2c1b2b68aae1ee5",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s45.json",
+      "bytes": 21522,
+      "crc32": 3030686961,
+      "sha256": "d27d6da37eaa262bba035ea42e32e049dbfad7944ffceda2157295b86e83e17e",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s46.json",
+      "bytes": 21535,
+      "crc32": 1918536630,
+      "sha256": "504931fb9768609b5bb9820675da2e1989d3724df9497e096f59a990ad24afe1",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s47.json",
+      "bytes": 21522,
+      "crc32": 2510940175,
+      "sha256": "3efa77ed24009d45448141d9c9764a7bbe32e5f523d421453f29b1e6a738671a",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s48.json",
+      "bytes": 21522,
+      "crc32": 3442595715,
+      "sha256": "2078cd5df7a75d06cf935e6c56ce2661139c8fa15e81a8b7c9156d6776bcb12d",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s49.json",
+      "bytes": 21522,
+      "crc32": 2187714811,
+      "sha256": "856052aa2c0b92e6ac0abad9696494dc3d8621d94b103b0665490ffca1975088",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s5.json",
+      "bytes": 21425,
+      "crc32": 3384172168,
+      "sha256": "303e0b94abe24bd06512d0b511af67bafcc95de0cac8b540151929b9f43a9287",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s50.json",
+      "bytes": 21522,
+      "crc32": 1637158656,
+      "sha256": "b249aaa63ad7a098df0a9e3d3a912c279f99e7759c0b0d208142ff811abecd84",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s51.json",
+      "bytes": 19361,
+      "crc32": 2533459035,
+      "sha256": "f0d11677f2b285f8a3c5300a4cbbedf63676508ded6a66d88a99257831117e95",
+      "json_type": "list",
+      "count": 90
+    },
+    {
+      "name": "lombardgrid/json/s52.json",
+      "bytes": 21530,
+      "crc32": 3329899170,
+      "sha256": "6c349278712010896bdac61cfc64b2eb73ce64f2efc68edfb9cd914983d69b75",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s53.json",
+      "bytes": 21532,
+      "crc32": 3540861496,
+      "sha256": "0650c3a2c0b9af8bc2866b879450be03f623d576114a91048df8c8779c375d48",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s54.json",
+      "bytes": 21522,
+      "crc32": 2054344347,
+      "sha256": "ab09cdf3b93dc13809a132c9d619e96e634b0c4715ee4b53bbcce61dc0a67a75",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s55.json",
+      "bytes": 21528,
+      "crc32": 2097226112,
+      "sha256": "d5bda61f2c52ed8149a37c386136a7b323842ff2d28f2ad169dee0075b21ade4",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s6.json",
+      "bytes": 21454,
+      "crc32": 2741098105,
+      "sha256": "a697a7e0e6a5d7c26b6b2a21ec4acc2cd7b45a916b24b1753ab2fee5d7f741c2",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s7.json",
+      "bytes": 21425,
+      "crc32": 2490053774,
+      "sha256": "198c3d263ba33e9a44560d60486b855c4a51e6f91dbb5ac9f59890ea6248efdb",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s8.json",
+      "bytes": 21428,
+      "crc32": 2247622343,
+      "sha256": "52acd8d1e222202769798aa5c331d39812a2b91902407c1fb3f935d55f935fd0",
+      "json_type": "list",
+      "count": 100
+    },
+    {
+      "name": "lombardgrid/json/s9.json",
+      "bytes": 21422,
+      "crc32": 1827982011,
+      "sha256": "65aabd2f911bb76b266d498d07f0ba822d94e534b8ab5dfbb56712e4bbfd2647",
+      "json_type": "list",
+      "count": 100
+    }
+  ],
+  "sensor_available": false,
+  "model_metrics_evaluated": false,
+  "sealed_audit_accessed": false,
+  "pretraining_overlap": "UNKNOWN",
+  "artifacts": [
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-admission-01",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-media-smoke-01"
+  ],
+  "runner_sha256": {
+    "lombard_grid_admission.py": "02a07f43640253eaa323f2143b058f1a60c7f3505650a941ada53ce74050f32f",
+    "lombard_grid_metadata_audit.py": "9c74f602060cc50c7d3385c945da7404870e5a1a177dfdbe543e6c297ab7bee8",
+    "lombard_grid_media_smoke.py": "3dd18f6e6411293fc5b1fd001db9b4d8f78592532e94cf68a28a1c1675245268",
+    "lombard_grid_decode_audit.py": "bc24b069d48479794222170d7ff2f7ccca28ea440641c79ddde408ee8d48a298"
+  },
+  "future_task_candidate": "speaker-disjoint audiovisual spoken-command slot decisions, native options; gain must be measured without contrived degradation",
+  "next_gate": "resolve actual utterance labels/archive identities and repeated sentence grouping before corpus freeze or learning",
+  "cloud_cost": 0
+}

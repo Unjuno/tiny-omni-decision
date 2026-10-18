@@ -1,0 +1,58 @@
+schema_version: 1
+experiment_id: path-a-starss23-events-v1
+status: preregistered_not_executed
+seed: 17
+source_revision: doi:10.5281/zenodo.7880637
+split_summary: docs/pretrained_reuse/R2_STARSS23_SPLITS_20261011.json
+split_summary_sha256: 209423b79c3bf1b98ce926aabf92a7f1f8262a5a8dea69e619f893fe9e1357b6
+task:
+  kind: annotated_prominent_event_presence
+  event_count: 12
+  options: ["no", "yes"]
+  speech_labels_merged: true
+  retain_zero_positive_training_classes: true
+  window_seconds: 5
+  selection: all_complete_nonoverlapping_windows
+  split_group: room
+conditions: [audio_only, video_only, audio_video]
+readout:
+  implementation: tiny_omni_decision.decision.FrozenFeatureCandidateScorer
+  feature_size: 1166  # 384 audio + 768 video + 12 event IDs + 2 option IDs
+  hidden_size: 64
+  standardization: train_mean_and_std_only
+  missing_modality: zero_after_standardization
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.001
+  epochs: 24
+  batch_questions: 128
+  sampling: seeded_shuffle_all_training_queries_without_resampling
+  checkpoint_selection: minimum_uncalibrated_validation_macro_event_nll
+  checkpoint_tie: earliest_epoch
+calibration:
+  split: calibration
+  method: single_temperature_per_condition
+  candidates: geometric_17_values_from_0.25_to_4
+  selection: minimum_calibration_macro_event_nll
+  fit_after_checkpoint_selection: true
+controls:
+  prior: laplace_smoothed_training_event_prevalence
+  video_mismatch: fixed_joint_checkpoint_with_different_recording_permutation
+  permutation_seed: 17
+  preserve_video_marginal: true
+  missing_modality: zero_standardized_audio_or_video_at_joint_inference
+  option_permutation: reverse_then_restore_original_order
+metrics:
+  per_event: [accuracy, balanced_accuracy, nll, brier, ece, positive_count, negative_count]
+  ece_bins: 15
+  brier: sum_squared_error_over_both_options
+  bootstrap_unit: room
+  bootstrap_replicates: 10000
+  bootstrap_seed: 17
+  confidence_interval: percentile_95
+limits:
+  training_bell_positives: 0
+  validation_rooms: 2
+  low_power: true
+  blind_audit: false
+  product_promotion: false
