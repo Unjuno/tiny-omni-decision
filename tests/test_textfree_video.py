@@ -144,7 +144,40 @@ def test_video_split_gate_rejects_scene_media_and_normalized_content_overlap():
     with pytest.raises(ValueError, match="normalized question/options overlap"):
         validate_video_splits(train, validation)
 
+    validate_video_splits(train, validation, allow_normalized_content_overlap=True)
+
     validation[0]["question"] = "How many blue objects collide?"
     validation[0]["media_sha256"] = train[0]["media_sha256"]
     with pytest.raises(ValueError, match="scene group overlap|media identity overlap"):
         validate_video_splits(train, validation)
+
+
+def test_training_schedule_preserves_fixed_updates_when_unique_rows_increase():
+    from scripts.train_textfree_video_probe import _training_schedule
+
+    schedule = _training_schedule(
+        train_count=1024,
+        batch_size=64,
+        epochs=128,
+        max_optimizer_updates=2048,
+    )
+
+    assert schedule == {
+        "epochs": 128,
+        "batch_size": 64,
+        "updates_per_epoch": 16,
+        "total_optimizer_updates": 2048,
+        "full_run_example_exposures": 131072,
+    }
+
+
+def test_training_schedule_rejects_budget_mismatch():
+    from scripts.train_textfree_video_probe import _training_schedule
+
+    with pytest.raises(ValueError, match="do not match"):
+        _training_schedule(
+            train_count=1024,
+            batch_size=64,
+            epochs=128,
+            max_optimizer_updates=2047,
+        )

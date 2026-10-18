@@ -84,6 +84,27 @@ def _ordered_ids_sha256(rows: list[dict[str, Any]]) -> str:
     return hashlib.sha256("\n".join(str(row["id"]) for row in rows).encode()).hexdigest()
 
 
+def _training_schedule(
+    *, train_count: int, batch_size: int, epochs: int, max_optimizer_updates: int
+) -> dict[str, int]:
+    if train_count < 1 or batch_size < 1 or epochs < 1 or max_optimizer_updates < 1:
+        raise ValueError("training schedule values must be positive")
+    updates_per_epoch = math.ceil(train_count / batch_size)
+    total_updates = epochs * updates_per_epoch
+    if total_updates != max_optimizer_updates:
+        raise ValueError(
+            "configured epochs and batch size do not match max_optimizer_updates: "
+            f"{epochs} * {updates_per_epoch} != {max_optimizer_updates}"
+        )
+    return {
+        "epochs": epochs,
+        "batch_size": batch_size,
+        "updates_per_epoch": updates_per_epoch,
+        "total_optimizer_updates": total_updates,
+        "full_run_example_exposures": epochs * train_count,
+    }
+
+
 def _source_rows_gate(
     rows: list[dict[str, Any]], sample_dir: Path, split: str, revision: str
 ) -> dict[str, Any]:
@@ -129,14 +150,19 @@ def _source_rows_gate(
 def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any]:
     source = config["source"]
     feature_config = config["features"]
+    expected = config.get("expected", {})
+    integrity = config.get("integrity", {})
     sample_dir = Path(source["sample_dir"]).resolve(strict=True)
     train_path, validation_path = sample_dir / "train.jsonl", sample_dir / "validation.jsonl"
-    fetch_path, gate_path = sample_dir / "fetch-report.json", sample_dir / "pretraining-gate.json"
+    fetch_path = sample_dir / "fetch-report.json"
+    gate_path = Path(
+        source.get("integrity_report_path", sample_dir / "pretraining-gate.json")
+    ).resolve(strict=True)
     expected_hashes = {
         train_path: source["train_manifest_sha256"],
         validation_path: source["validation_manifest_sha256"],
         fetch_path: source["fetch_report_sha256"],
-        gate_path: source["pretraining_gate_sha256"],
+        gate_path: source.get("integrity_report_sha256", source.get("pretraining_gate_sha256")),
     }
     for path, expected in expected_hashes.items():
         actual = _sha256(path)
@@ -156,17 +182,41 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     ):
         raise ValueError("repository source manifest does not admit this CLEVRER training use")
     gate = json.loads(gate_path.read_text(encoding="utf-8"))
-    if (
-        gate.get("status") != "pretraining_gate_pass"
-        or gate.get("media_sha_overlap") != 0
-        or gate.get("normalized_question_overlap") != 0
-        or gate.get("archive_sha256_verified") is not False
-    ):
-        raise ValueError("frozen CLEVRER pretraining gate does not match the recorded policy")
+    if gate.get("status") == "pretraining_gate_pass":
+        if (
+            gate.get("media_sha_overlap") != 0
+            or gate.get("normalized_question_overlap") != 0
+            or gate.get("archive_sha256_verified") is not False
+        ):
+            raise ValueError("frozen CLEVRER pretraining gate does not match the recorded policy")
+    elif gate.get("status") == "passed" and "group_integrity" in gate:
+        groups = gate["group_integrity"]
+        if (
+            gate.get("all_media_sha256_verified") is not True
+            or groups.get("train_validation_scene_overlap") != 0
+            or groups.get("train_validation_media_overlap") != 0
+            or gate.get("sample_hashes", {}).get("train_jsonl")
+            != source["train_manifest_sha256"]
+            or gate.get("sample_hashes", {}).get("validation_jsonl")
+            != source["validation_manifest_sha256"]
+        ):
+            raise ValueError(
+                "CLEVRER media/split integrity receipt does not match the frozen sample"
+            )
+    else:
+        raise ValueError("unsupported CLEVRER sample integrity receipt")
 
     train_rows, validation_rows = _read_rows(train_path), _read_rows(validation_path)
-    validate_video_splits(train_rows, validation_rows)
-    if len(train_rows) != 512 or len(validation_rows) != 400:
+    validate_video_splits(
+        train_rows,
+        validation_rows,
+        allow_normalized_content_overlap=bool(
+            integrity.get("allow_normalized_question_option_overlap", False)
+        ),
+    )
+    if len(train_rows) != expected.get("train_rows", 512) or len(validation_rows) != expected.get(
+        "validation_rows", 400
+    ):
         raise ValueError("unexpected frozen CLEVRER sample cardinality")
     train_report = _source_rows_gate(train_rows, sample_dir, "train", DATASET_REVISION)
     validation_report = _source_rows_gate(
@@ -175,7 +225,7 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     content_overlap = {_normalized_content(row) for row in train_rows} & {
         _normalized_content(row) for row in validation_rows
     }
-    if content_overlap:
+    if content_overlap and not integrity.get("allow_normalized_question_option_overlap", False):
         raise ValueError("normalized question/options overlap remains across splits")
     if set(train_report["question_type_counts"]) != set(QUESTION_TYPES) or set(
         validation_report["question_type_counts"]
@@ -209,8 +259,11 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     with np.load(feature_path, allow_pickle=False) as archive:
         media_hashes = archive["media_sha256"].astype(str).tolist()
         values = archive["features"]
-        if values.shape != (456, 8, 768) or values.dtype != np.float32:
-            raise ValueError("expected [456,8,768] float32 framewise features")
+        expected_feature_count = int(expected.get("feature_assets", 456))
+        if values.shape != (expected_feature_count, 8, 768) or values.dtype != np.float32:
+            raise ValueError(
+                f"expected [{expected_feature_count},8,768] float32 framewise features"
+            )
         if not np.isfinite(values).all() or len(media_hashes) != len(set(media_hashes)):
             raise ValueError("feature cache contains non-finite values or duplicate media")
         features_by_media = {
@@ -259,7 +312,7 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         "sample_id_overlap": 0,
         "scene_group_overlap": 0,
         "media_identity_overlap": 0,
-        "normalized_question_option_overlap": 0,
+        "normalized_question_option_overlap": len(content_overlap),
         "validation_program_unknown_token_count": program_unknown,
         "validation_option_unknown_token_count": option_unknown,
         "program_vocabulary_size": len(vocab.program_to_id),
@@ -600,6 +653,9 @@ def _run_variant(
     output_dir: Path,
     device: torch.device,
     epoch_orders: list[np.ndarray],
+    *,
+    epochs: int,
+    batch_size: int,
 ) -> dict[str, Any]:
     variant_started_utc = datetime.now(UTC).isoformat()
     torch.manual_seed(SEED)
@@ -628,9 +684,9 @@ def _run_variant(
             epoch_started = time.perf_counter()
             grad_norms: list[float] = []
             loss_total = 0.0
-            for start in range(0, len(order), BATCH_SIZE):
+            for start in range(0, len(order), batch_size):
                 batch_indexes = torch.tensor(
-                    order[start : start + BATCH_SIZE].copy(), dtype=torch.long, device=device
+                    order[start : start + batch_size].copy(), dtype=torch.long, device=device
                 )
                 batch = _subset(train, batch_indexes)
                 optimizer.zero_grad(set_to_none=True)
@@ -660,7 +716,7 @@ def _run_variant(
             selector = float(validation_result["selector_score_macro_nll"])
             history_row = {
                 "epoch": epoch,
-                "optimizer_updates": epoch * len(epoch_orders[0]) // BATCH_SIZE,
+                "optimizer_updates": epoch * math.ceil(len(epoch_orders[0]) / batch_size),
                 "learning_rate": LEARNING_RATE,
                 "train_ce": loss_total / len(train_rows),
                 "train_gradient_norm_mean": float(np.mean(grad_norms)),
@@ -700,7 +756,7 @@ def _run_variant(
     ):
         raise RuntimeError(f"no best checkpoint selected for {variant}")
     final_state = {name: value.detach().cpu().clone() for name, value in model.state_dict().items()}
-    final_epoch = EPOCHS
+    final_epoch = epochs
     final_path = output_dir / f"final-{variant}.pt.tmp"
     torch.save({"epoch": final_epoch, "state_dict": final_state}, final_path)
     final_path.replace(output_dir / f"final-{variant}.pt")
@@ -778,11 +834,11 @@ def _run_variant(
         "started_utc": variant_started_utc,
         "finished_utc": datetime.now(UTC).isoformat(),
         "seed": SEED,
-        "epochs_completed": EPOCHS,
-        "updates_per_epoch": len(epoch_orders[0]) // BATCH_SIZE,
-        "total_optimizer_updates": EPOCHS * len(epoch_orders[0]) // BATCH_SIZE,
+        "epochs_completed": epochs,
+        "updates_per_epoch": math.ceil(len(epoch_orders[0]) / batch_size),
+        "total_optimizer_updates": epochs * math.ceil(len(epoch_orders[0]) / batch_size),
         "best_epoch": best_epoch,
-        "best_step": best_epoch * len(epoch_orders[0]) // BATCH_SIZE,
+        "best_step": best_epoch * math.ceil(len(epoch_orders[0]) / batch_size),
         "selected_checkpoint_example_exposures": best_epoch * len(train_rows),
         "selected_checkpoint_unique_examples": len({row["id"] for row in train_rows}),
         "selected_checkpoint_repeat_exposures": (best_epoch - 1) * len(train_rows),
@@ -895,11 +951,15 @@ def main() -> None:
     output_dir = args.output_dir.resolve()
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite video readout output: {output_dir}")
-    if (
-        config["comparison"]["epochs"] != EPOCHS
-        or config["comparison"]["max_optimizer_updates"] != 2048
-    ):
-        raise ValueError("the paired fit budget is fixed at 256 epochs / 2,048 updates")
+    epochs = int(config["comparison"].get("epochs", EPOCHS))
+    batch_size = int(config["comparison"].get("batch_size", BATCH_SIZE))
+    max_updates = int(config["comparison"].get("max_optimizer_updates", 2048))
+    schedule = _training_schedule(
+        train_count=len(train_rows),
+        batch_size=batch_size,
+        epochs=epochs,
+        max_optimizer_updates=max_updates,
+    )
     if device.type == "cuda":
         torch.use_deterministic_algorithms(True)
         torch.cuda.synchronize(device)
@@ -950,7 +1010,7 @@ def main() -> None:
         json.dumps(preflight, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     epoch_orders = [
-        np.random.default_rng(SEED + epoch).permutation(len(train_rows)) for epoch in range(EPOCHS)
+        np.random.default_rng(SEED + epoch).permutation(len(train_rows)) for epoch in range(epochs)
     ]
     run_started = datetime.now(UTC)
     run_started_counter = time.perf_counter()
@@ -966,6 +1026,8 @@ def main() -> None:
             output_dir,
             device,
             epoch_orders,
+            epochs=epochs,
+            batch_size=batch_size,
         )
     selected_predictions = {
         variant: _load_row_metrics(output_dir / f"selected-validation-{variant}.jsonl")
@@ -1019,15 +1081,20 @@ def main() -> None:
         "gpu_name": torch.cuda.get_device_name(device) if device.type == "cuda" else None,
         "feature_extraction_seconds": preflight["feature_extraction_seconds"],
         "feature_extraction_devices": preflight["feature_extraction_devices"],
-        "optimizer_updates_per_variant": EPOCHS * len(epoch_orders[0]) // BATCH_SIZE,
+        "optimizer_updates_per_variant": schedule["total_optimizer_updates"],
         "command": [sys.executable, *sys.argv],
         "train_examples_per_epoch": len(train_rows),
+        "updates_per_epoch": schedule["updates_per_epoch"],
+        "epochs_completed_per_variant": epochs,
+        "batch_size": batch_size,
         "train_unique_example_count": len({row["id"] for row in train_rows}),
         "train_unique_scene_count": len({row["scene_group_id"] for row in train_rows}),
         "train_unique_media_count": len({row["media_sha256"] for row in train_rows}),
-        "full_run_example_exposures_per_variant": EPOCHS * len(train_rows),
+        "full_run_example_exposures_per_variant": schedule["full_run_example_exposures"],
         "unique_examples_consumed_per_variant": len({row["id"] for row in train_rows}),
-        "repeat_exposures_per_variant_after_first_use": (EPOCHS - 1) * len(train_rows),
+        "repeat_exposures_per_variant_after_first_use": (
+            schedule["full_run_example_exposures"] - len({row["id"] for row in train_rows})
+        ),
         "validation_examples": len(validation_rows),
         "validation_unique_scenes": len({row["scene_group_id"] for row in validation_rows}),
         "validation_used_for_checkpoint_selection": True,
