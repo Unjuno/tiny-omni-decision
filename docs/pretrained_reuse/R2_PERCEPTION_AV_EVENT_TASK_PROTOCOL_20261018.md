@@ -197,3 +197,33 @@ CPU smoke tests: 13 passed.
 These one-event encoder smokes do not substitute for the complete media,
 PTS, split-integrity, and annotation/crop join gates. No readout fitting or
 quality evaluation has started.
+
+## Partial PTS audit follow-up (2026-10-18 04:38 UTC)
+
+An initial attempt (`perception-av-event-decoder-pts-smoke-05`) completed its
+TRAIN scan but ended before writing a receipt because the VALID annotation
+source path was incorrectly pointed at the TRAIN-only source directory. The
+exception was `FileNotFoundError` for `valid_annotations.zip`; this is an
+operator path error, not an audit finding. No files in the source or media
+directories were changed. The corrected attempt used the separately pinned
+VALID source and is recorded at
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-decoder-pts-smoke-06\result.json`
+(SHA-256 `a515f984ef3389b16f86c2031fb3d4f40da1b9b9e0d24b39988e35eb06c4dff0`),
+with the existing PTS audit script SHA-256
+`1c5392ee54d2337758339317a3526fe1ee17e581be62d4c52ebcba2fc9b9e6eb`.
+
+This corrected `--allow-partial` snapshot decoded 111 TRAIN videos / 213
+events and 115 VALID videos / 237 events. Every scanned event had full decoded
+audio coverage (minimum 1.0; zero and partial overlaps both 0). Three scanned
+videos per split differed from metadata frame counts; decoded audio sample
+rates differed in 30 TRAIN and 29 VALID videos, and decoded sample counts
+differed in 93 TRAIN and 104 VALID videos. The actual PTS path handled these
+metadata differences; they reinforce that nominal metadata must not be used
+for event slicing. The remaining planned media had not yet been acquired when
+this snapshot was taken, so `PASS_PARTIAL_PTS_AUDIT` is not the full integrity
+gate.
+
+At 04:38 UTC the original acquisition processes remain active with 141/400
+TRAIN and 129/400 VALID clips; both manifests have zero acquisition errors.
+The GPU is not used by these CPU audits. No fitting, task scoring, or TEST
+access has started.
