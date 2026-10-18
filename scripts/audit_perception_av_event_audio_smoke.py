@@ -25,6 +25,21 @@ MAX_SAMPLES = 480_000
 TARGET_RATE = 48_000
 
 
+def select_training_event(rows, video_id, sound_id):
+    if not isinstance(video_id, str) or not video_id or isinstance(sound_id, bool):
+        raise ValueError("a nonempty TRAIN video ID and integer sound ID are required")
+    if not isinstance(sound_id, int) or sound_id < 0:
+        raise ValueError("sound ID must be a nonnegative integer")
+    matches = [
+        row
+        for row in rows
+        if row.get("video_id") == video_id and row.get("sound_id") == sound_id
+    ]
+    if len(matches) != 1:
+        raise ValueError("TRAIN event key must identify exactly one eligible event")
+    return matches[0]
+
+
 def event_sample_bounds(event_start, event_end, audio_start, sample_rate, sample_count):
     """Map an actual-PTS event interval to a half-open decoded waveform slice."""
     if (
@@ -41,7 +56,14 @@ def event_sample_bounds(event_start, event_end, audio_start, sample_rate, sample
     return start, end
 
 
-def run_smoke(train_source, media_manifest_path, model_root, output_dir):
+def run_smoke(
+    train_source,
+    media_manifest_path,
+    model_root,
+    output_dir,
+    video_id="video_11362",
+    sound_id=4,
+):
     import av
     import torch
     import transformers
@@ -59,9 +81,8 @@ def run_smoke(train_source, media_manifest_path, model_root, output_dir):
     if manifest.get("split") != "train" or manifest.get("plan_sha256") != PLAN_SHA256:
         raise ValueError("expected pinned TRAIN media manifest")
     clips = {clip["video_id"]: clip for clip in manifest.get("clips", [])}
-    video_id, sound_id = "video_11362", 4
     if video_id not in clips:
-        raise ValueError("fixed TRAIN smoke video is not acquired")
+        raise ValueError("requested TRAIN smoke video is not acquired")
     clip = clips[video_id]
     media_path = Path(clip["path"])
     if sha256_file(media_path) != clip.get("sha256"):
@@ -83,10 +104,8 @@ def run_smoke(train_source, media_manifest_path, model_root, output_dir):
             "cuts": TRAIN_SOURCE_SHA256["cuts"],
         },
     )
-    event = next(
-        row
-        for row in summarize_split(data, cuts, "train")["candidate_records"]
-        if row["video_id"] == video_id and row["sound_id"] == sound_id
+    event = select_training_event(
+        summarize_split(data, cuts, "train")["candidate_records"], video_id, sound_id
     )
     timing = decode_timing(media_path)
     event_start, event_end = event_window_from_pts(
@@ -228,6 +247,8 @@ def main():
     parser.add_argument("--media-manifest", type=Path, required=True)
     parser.add_argument("--model-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--video-id", default="video_11362")
+    parser.add_argument("--sound-id", type=int, default=4)
     args = parser.parse_args()
     print(
         json.dumps(
@@ -236,6 +257,8 @@ def main():
                 args.media_manifest,
                 args.model_root,
                 args.output_dir,
+                args.video_id,
+                args.sound_id,
             ),
             sort_keys=True,
         )
