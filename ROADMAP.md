@@ -14,6 +14,13 @@ Joint-task admission requires truth-bearing evidence of complementary input
 necessity; replacement-induced output changes establish sensitivity only. R0
 remains partly open. See the [provisional contract](docs/pretrained_reuse/R0_DECISION_MATRIX_20261011.md).
 
+**2026-10-18 R1 local checkpoint identities rechecked:** Eight local pinned
+artifacts, including the VideoPrism/MiniLM Path A copies, Whisper encoder-only
+export, optional sensor checkpoint and V-JEPA research reference, match the
+expected byte counts and SHA-256 digests. This is identity evidence only; task
+quality and the V-JEPA rights review remain open. No model weights or external
+artifacts were changed. [Exact paths and digests](docs/pretrained_reuse/R1_LOCAL_WEIGHT_RECHECK_20261018.md).
+
 **2026-10-18 conditional AV gate fit reviewed:** A separate branch completed a
 matched seed-17, 32,768-update E0G1 run. The gate outputs collapsed below 0.01
 for all valid options by update 512 and stayed near zero; the added gate has
@@ -177,6 +184,15 @@ Underlying YouTube media rights, local archive hashes and video/person split
 integrity remain unresolved; no data was downloaded or used. Keep the candidate
 `REVIEW`; this does not admit it as a both-required benchmark or justify gate
 training. See `docs/pretrained_reuse/R2_AVA_ACTIVE_SPEAKER_SOURCE_SCREEN_20261018.md`.
+
+**2026-10-18 independent joint-task preflight:** A new Greatest Hits TRAIN-only
+audio/video same-recording Decision corpus is frozen at 252 train / 76 calibration /
+112 validation rows, with 0 source-group overlap and balanced audio/video target
+marginals. The 28 validation pair clusters are low-power. Metadata-only selection
+references 440 raw media files (934 MB compressed / 1.91 GB expanded); media and
+weights remain unopened. No fitting or quality metrics exist. Next validate CRC/SHA,
+decoded-content disjointness, stream timing and feature replay before any readout
+comparison. See `docs/pretrained_reuse/R2_GREATEST_HITS_AV_MATCH_PROTOCOL_20261018.md`.
 
 **2026-10-17 full-extent comparison completed:** All8936 Image/456 Video caches,
 32768 updates, exact best/final replay and saved-prediction audit PASS. Selected
