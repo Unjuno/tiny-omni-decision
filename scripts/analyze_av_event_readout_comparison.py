@@ -10,7 +10,6 @@ from pathlib import Path
 import numpy as np
 
 from scripts.audit_perception_av_correspondence import sha256_file
-from scripts.train_av_event_source import read_rows
 
 
 def score_rows(rows: list[dict]) -> dict[str, float]:
@@ -155,6 +154,11 @@ def analyze(joint_path: Path, video_only_path: Path, features_path: Path, output
     joint = _read_predictions(joint_path)
     video_only = _read_predictions(video_only_path)
     _assert_matched(joint, video_only)
+    # Keep this analysis module importable in the standard CPU-only [dev] CI
+    # environment; the fixed-model runner (and its optional Torch dependency)
+    # is needed only when the comparison is actually executed.
+    from scripts.train_av_event_source import read_rows
+
     feature_rows = read_rows(features_path)
     fit_rows = [row for row in feature_rows if row["split"] == "fit"]
     dev = {row["id"]: row for row in feature_rows if row["split"] == "development_validation"}

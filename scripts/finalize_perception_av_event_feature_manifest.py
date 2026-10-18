@@ -11,7 +11,32 @@ from pathlib import Path
 from scripts.audit_perception_av_correspondence import sha256_file
 from scripts.audit_perception_av_event_media_pts import PLAN_SHA256
 from scripts.perception_av_event_protocol import model_selection_video_ids
-from scripts.train_av_event_source import validate_video_splits
+
+
+def validate_video_splits(rows: list[dict]) -> None:
+    """Check event, video and media identity isolation without ML dependencies."""
+    event_ids: set[str] = set()
+    video_splits: dict[str, str] = {}
+    media_splits: dict[str, str] = {}
+    for row in rows:
+        event_id, video_id, split = row.get("id"), row.get("video_id"), row.get("split")
+        if not isinstance(event_id, str) or not event_id or event_id in event_ids:
+            raise ValueError("event IDs must be nonempty and unique")
+        if not isinstance(video_id, str) or not video_id:
+            raise ValueError("every event must have a nonempty video ID")
+        if split not in {"fit", "selection", "calibration", "development_validation"}:
+            raise ValueError("every event must have a recognized split")
+        event_ids.add(event_id)
+        if video_id in video_splits and video_splits[video_id] != split:
+            raise ValueError("video appears in multiple splits")
+        video_splits[video_id] = split
+        media_hash = row.get("media_sha256")
+        if media_hash is not None:
+            if not isinstance(media_hash, str) or len(media_hash) != 64:
+                raise ValueError("media identity must be a SHA-256 digest")
+            if media_hash in media_splits and media_splits[media_hash] != split:
+                raise ValueError("media identity appears in multiple splits")
+            media_splits[media_hash] = split
 
 
 def assign_model_split(
