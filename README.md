@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-10-18 CLEVRER temporal-mix BiLSTM probe:** A matched 2,048-update
+MiniLM-only vs. frozen 8-frame VideoPrism/BiLSTM comparison completed. The
+selected temporal arm improved macro validation Accuracy by 0.31 pp and NLL by
+0.004, with scene-bootstrap intervals including zero; both arms overfit late.
+This narrow development result is not product evidence. The first CUDA attempt
+failed before an update due a feature-width config error and remains preserved.
+[Full curves, metrics, hashes and handoff caveat](docs/pretrained_reuse/R2_CLEVRER_TEMPORAL_MIX_BILSTM_PROTOCOL_20261018.md).
+
 **2026-10-18 video coverage follow-up:** A matched text-free CLEVRER readout
 comparison found a static-question NLL/Brier benefit from 512 vs 256 unique
 train scenes, but temporal gains remained uncertain and both runs overfit late.

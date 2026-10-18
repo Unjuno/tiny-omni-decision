@@ -40,6 +40,15 @@ def _telemetry() -> tuple[float, int, int]:
     return float(utilization), used, total
 
 
+def _create_handoff_guard(torch_module):
+    """Expose a CUDA PID before Orbitune's yielding trainer exits."""
+    torch_module.cuda.init()
+    guard = torch_module.empty(1, dtype=torch_module.uint8, device="cuda")
+    guard.fill_(1)
+    torch_module.cuda.synchronize()
+    return guard
+
+
 def _wait_for_idle(max_wait_seconds: int, quiet_seconds: float = 5.0) -> None:
     deadline = time.monotonic() + max_wait_seconds
     own_pid = os.getpid()
@@ -88,8 +97,10 @@ def main() -> None:
 
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA is unavailable; child GPU job will not start")
-    torch.cuda.init()
+    handoff_guard = _create_handoff_guard(torch)
     process_id = os.getpid()
+    # Keep this tiny CUDA allocation alive while Orbitune's trainer cooperatively
+    # exits, so its supervisor sees our PID before deciding whether to relaunch.
     _wait_for_idle(args.max_wait_seconds)
     _, _, total_mib = _telemetry()
     reserve_mib = max(args.reserve_mib, total_mib - args.block_if_free_mib + 256)
@@ -131,6 +142,7 @@ def main() -> None:
         completed = subprocess.run(command, check=False, env=child_environment)
     finally:
         del reservation
+        del handoff_guard
         torch.cuda.empty_cache()
     raise SystemExit(completed.returncode)
 

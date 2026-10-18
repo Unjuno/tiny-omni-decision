@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 CLEVRER temporal-mix BiLSTM probe:** The matched fresh-readout
+comparison completed 2,048 updates for text-only and frozen 8-frame
+VideoPrism/BiLSTM arms on the same scene-grouped 1,024-row train and 1,400-row
+development validation. The temporal arm's selected macro Accuracy/NLL were
+0.4606/0.8466 vs. 0.4575/0.8506; paired scene intervals included zero. Both
+arms overfit sharply after early checkpoints, so the result does not establish
+a temporal modeling benefit. No audit or product promotion. A corrected
+HotUGPU handoff guard is in place for future runs. [Full report, curves, hashes,
+and limits](docs/pretrained_reuse/R2_CLEVRER_TEMPORAL_MIX_BILSTM_PROTOCOL_20261018.md).
+
 **2026-10-18 text-free CLEVRER unique-scene coverage comparison:** A separate
 branch compared 256 vs 512 train scenes for matched VideoPrism + text-free
 typed-program readouts (mean-MLP and BiLSTM), with the same 2,048 updates,
