@@ -7,6 +7,15 @@ labels do not establish visual truth or both-input necessity. Test annotation
 payloads and all media remain unopened. No catalog admission or model run was
 made. See the [source screen](docs/pretrained_reuse/R2_MAVD_TRAFFIC_SOURCE_SCREEN_20261019.md).
 
+**2026-10-19 R2 AVA ActiveSpeaker label audit:** TRAIN labels are pinned
+(120 videos, 2,676,314 rows), but their class strings differ from the official
+page's schema. The archive linked as validation contains test-named members;
+the first CSV member (22,807 rows) was inadvertently parsed during format
+discovery, so that archive is quarantined and excluded from all
+selection/evaluation. No media or challenge-test archive was fetched; AVA
+remains REVIEW pending rights, schema, and clean validation resolution. See
+the [audit](docs/pretrained_reuse/R2_AVA_ACTIVE_SPEAKER_LABEL_AUDIT_20261019.md).
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target

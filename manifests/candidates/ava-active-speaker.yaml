@@ -1,7 +1,7 @@
 schema_version: 1
 dataset_id: google-research/ava-active-speaker
 revision: 70340626184cbde175cb1359bdf5af6f75e28231
-subset: train-validation-labels-only-no-local-media
+subset: train-labels-plus-quarantined-validation-link-no-media
 split: official-train-validation-split-not-yet-verified
 modalities: [audio, video]
 upstream_url: https://research.google.com/ava/download/
@@ -35,27 +35,45 @@ source_components:
     modalities: [audio, video]
     trust_status: review
 notes:
-  official_page_checked: "2026-10-18"
+  official_page_checked: "2026-10-19"
   pinned_reference_commit: >-
     cvdfoundation/ava-dataset@70340626184cbde175cb1359bdf5af6f75e28231 pins the
     public download instructions only; it is not a label/media archive revision.
   annotation_release_urls:
     train: https://research.google.com/ava/download/ava_activespeaker_train_v1.0.tar.bz2
     validation: https://research.google.com/ava/download/ava_activespeaker_val_v1.0.tar.bz2
-  label_fields: [SPEAKING_AND_AUDIBLE, SPEAKING_BUT_NOT_AUDIBLE, NOT_SPEAKING]
+  documented_label_fields: [SPEAKING_AND_AUDIBLE, SPEAKING_BUT_NOT_AUDIBLE, NOT_SPEAKING]
+  observed_train_label_fields: [NOT_SPEAKING, SPEAKING_AUDIBLE, SPEAKING_NOT_AUDIBLE]
   upstream_data_revision: UNKNOWN
-  local_archive_hashes: UNKNOWN
+  train_archive_sha256: 528594517178b2d04ab28914d35c95c3e2bdca5c46e7af359921968bef60c3d5
+  train_archive_bytes: 18187972
+  train_member_count: 120
+  train_annotation_rows: 2676314
+  val_link_archive_sha256: ced431ed2006deacdacd8954d309c5b780179866b0f63d5d17d4df8a8ec81622
+  val_link_archive_bytes: 5097948
+  val_archive_disposition: >-
+    QUARANTINED: its internal member paths use ava_activespeaker_test_v1.0; the
+    first CSV member (22,807 rows) was inadvertently parsed during format
+    inspection. Do not use this archive for selection, evaluation, or validation.
+    No other member payload or challenge-test archive was opened.
+  train_audit_script: scripts/audit_ava_active_speaker_train_labels.py
+  train_audit_result: C:/CodexArtifacts/pretrained-reuse-r2/ava-activespeaker-label-screen-01/train-label-audit.json
   source_identity_grouping: >-
     Official documentation says the label split follows AVA Actions and provides a
-    per-video CSV with a within-video entity_id. Train/validation video-ID disjointness,
-    exact content overlap and actor/site grouping have not been checked from downloaded
-    annotations. Do not claim independent groups until those checks pass.
+    per-video CSV with a within-video entity_id. The official train label archive has
+    120 video members, but no safe validation archive is currently established. The
+    archive linked as validation contains internal test-named members, and one of its
+    labels was inadvertently observed; treat it as contaminated and never use it for
+    model selection or evaluation. Train/validation video-ID disjointness, exact content
+    overlap and actor/site grouping remain unverified.
   license_limitation: >-
-    Google Research labels the AVA datasets CC BY 4.0. The referenced media are
-    original YouTube movie/video assets; the relationship between that dataset-level
-    statement and rights in each underlying recording has not been resolved. No video,
-    audio or annotation archive was downloaded. Keep media PER-SOURCE/REVIEW and do not
-    use any media until source-level rights are established.
+    Google Research labels the AVA datasets CC BY 4.0. Only the official TRAIN and
+    validation-link annotation archives were downloaded; no audio/video media was
+    fetched. The validation-link archive is quarantined as described above. The
+    referenced media are original YouTube movie/video assets; the relationship between
+    the dataset-level statement and rights in each underlying recording remains
+    unresolved. Keep media PER-SOURCE/REVIEW and do not use media until source-level
+    rights are established.
   proposed_task_scope: >-
     Candidate for active-speaker association: given a synchronized video segment,
     audio window, and an externally supplied face-track proposal, score whether that
