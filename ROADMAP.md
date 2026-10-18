@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-18 CLEVRER temporal error attribution:** A read-only audit of the
+selected text-free MLP/BiLSTM predictions found that 181/200 temporal validation
+questions (90.5%) use exact typed-program sequences absent from the 256-row
+temporal train split; all operators are present in training, but the tested
+readout mean-pools program-token embeddings and discards their order. Temporal
+color and count predictions also collapse toward `blue` and `1`. Because the
+same validation selected the checkpoints, this is a task/data-encoding hypothesis,
+not new independent performance evidence. Do not fit another candidate on this
+validation; freeze a task-encoding intervention or representative task mix and
+new selection identities first. [Saved-prediction audit](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_ERROR_ATTRIBUTION_20261018.md).
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target
