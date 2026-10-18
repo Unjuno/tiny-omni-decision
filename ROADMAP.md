@@ -2099,3 +2099,11 @@ previously observed development set; both arms overfit, and task-specific qualit
 is far below the product objective. Keep it as a narrow AV diagnostic, with no
 product promotion or blind/general-quality claim.
 [Protocol, results, hashes and limits](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_READOUT_RESULTS_20261018.md).
+
+A CPU-only fixed-checkpoint control exactly reproduced natural predictions,
+then compared zeroed, cross-video-shuffled, and previous-event audio.
+Cross-video shuffling reduced Accuracy/NLL with video-cluster intervals
+excluding zero; zero-audio and previous-event intervals include zero. The
+previous-event windows can overlap. This supports limited sensitivity to
+audio-video pairing only; semantic use and independent task performance remain
+unproven. See the report for donor/result hashes and full limitations.

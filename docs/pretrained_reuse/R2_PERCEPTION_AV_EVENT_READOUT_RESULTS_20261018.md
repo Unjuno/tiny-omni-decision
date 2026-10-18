@@ -134,6 +134,44 @@ extraction used the local RTX 3080 Laptop, float32, peak CUDA allocation
 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2 and PyAV 18.1.0. No cloud
 compute or cloud cost was used.
 
+## Fixed-checkpoint audio input sensitivity
+
+Without fitting or selecting another checkpoint, the joint hidden-128 best
+checkpoint was reloaded and replayed on the same 901 already-observed
+development events. Natural replay matched the saved predictions exactly.
+Corruptions were zero audio, a deterministic cross-video audio derangement
+(every donor came from a different video), and the preceding event's audio
+within the same video. The preceding event is ordered by decoded
+`audio_sample_start`; its window may overlap the current event, so it is an
+event-order substitution, not a guaranteed non-overlapping time offset.
+
+| Input condition | Events | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|---:|
+| Natural joint input | 901 | 0.3885 | 1.8966 | 0.7629 | 0.0576 |
+| Zero audio vector | 901 | 0.3618 | 1.9368 | 0.7808 | 0.0470 |
+| Cross-video shuffled audio | 901 | 0.3385 | 2.0617 | 0.8109 | 0.0968 |
+| Previous-event audio, matched subset | 501 / 240 videos | 0.3593 | 1.9321 | 0.7756 | 0.0752 |
+
+Natural minus zero-audio differences are +2.66 Accuracy points (95% paired
+video-bootstrap interval −0.44 to +5.82) and −0.040 NLL (−0.087 to +0.004); both
+intervals include zero. Natural minus cross-video-shuffled differences are
++4.99 points (+1.77 to +8.31) and −0.165 NLL (−0.235 to −0.099). On the 501-row
+previous-event subset, natural minus previous-event differences are +2.59 points
+(−0.80 to +6.03) and −0.038 NLL (−0.092 to +0.015), also uncertain. All intervals
+use 10,000 video-cluster draws with seed 17.
+
+This fixed checkpoint is sensitive to cross-video audio replacement, but zero
+audio and previous-event comparisons do not show a clear degradation. That is
+not proof of semantic audio use or correct synchronization: audio-only
+substitution can change difficulty, and the development set is already
+observed. The diagnostic is explicitly not an independent quality estimate or
+a tuning signal. It used CPU inference in about 22.2 seconds, zero optimizer or
+encoder updates, and no GPU. Peak host memory was not measured. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-input-controls-01\result.json`
+(SHA-256 `30a142fb8cd18bd63c1a3121f4d61a8e0b9e6cf44d1b3332f3ceade2f72c04bf`);
+the fixed audio donor map SHA-256 is
+`e66470db87e45fc9868f849c961e72eefa011793770b282ae3ac6efad4947e64`.
+
 ## Interpretation and next gate
 
 The joint configuration clearly outperforms uniform and the fit-derived
@@ -147,12 +185,13 @@ this source/task. Accuracy remains far from the product target, candidate
 counts are unequal, and the sharp train/selection divergence shows overfitting.
 No 95–98% claim or product promotion is justified.
 
-The task still lacks truth-bearing missing/shuffled/stale/timing-offset
-counterfactual controls and a new independent validation cohort. Do not sweep
-seeds or alter this model from the observed development scores. The next gate
-should use new, video-disjoint source records for a prospective input-ablation
-comparison. Keep the broader four-modality and ≤200M pre-quantization goals
-unchanged.
+The fixed-checkpoint controls show a clear score drop only for cross-video audio
+replacement; zero audio and the prior event audio have uncertain changes. These
+corruptions do not yet provide truth-bearing, synchronized counterfactuals. Do
+not sweep seeds or alter this model from observed development scores. The next
+gate should use new, video-disjoint source records and construct a prospective
+input-ablation comparison with explicit timing semantics. Keep the broader
+four-modality and ≤200M pre-quantization goals unchanged.
 
 The fixed E0G1 GPU sensitivity diagnostic was not repeated in this work: later
 authorized attempts 11, 14 and 15 already passed all 44,375 forwards on the same

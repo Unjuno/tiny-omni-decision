@@ -618,3 +618,19 @@ the parameter-count confound but does not isolate audio as the sole causal
 factor or close M-2: truth-bearing missing, shuffled, stale and timing-offset
 controls and independent task data remain required. Full report and artifact
 hashes are in the linked results note above.
+
+## Fixed-checkpoint audio input controls (2026-10-18)
+
+The saved joint best checkpoint was reloaded on CPU and its natural-input
+predictions reproduced exactly. On the same 901 development events, zeroing
+audio and deterministic cross-video audio shuffling both reduced scores;
+the cross-video shuffle difference had video-cluster paired-bootstrap
+intervals excluding zero for Accuracy and NLL. Zero-audio and previous-event
+audio comparisons had intervals including zero. Previous-event windows can
+overlap, so this is a chronological donor control, not a guaranteed stale
+time-offset control. The donor-map SHA256 is
+`e66470db87e45fc9868f849c961e72eefa011793770b282ae3ac6efad4947e64`; the
+result SHA256 is
+`30a142fb8cd18bd63c1a3121f4d61a8e0b9e6cf44d1b3332f3ceade2f72c04bf`.
+These fixed-checkpoint perturbations show some sensitivity to audio-video
+pairing, not semantic correctness, generalization, or blind product quality.
