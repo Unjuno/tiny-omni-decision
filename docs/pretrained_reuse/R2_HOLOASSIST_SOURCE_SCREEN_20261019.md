@@ -193,10 +193,13 @@ The raw-media feature extractor is implemented in
 `scripts/extract_holoassist_frozen_features.py`. It verifies the selected
 media SHA-256 values, the pinned 160/207 selection hash, and the
 AV-validation/event/window receipts before decoding, binds resumable progress
-to the exact ordered IDs, windows, model
-hashes, configuration, source commit, script hash, software versions, and
-device, and writes progress atomically. Its CUDA audio path now uses the
-shared HotUGPU preflight: it fails closed on an occupied GPU unless the
+to the exact ordered IDs, windows, model and processor hashes, configuration,
+source commit, script hash, software versions, and
+device, and writes progress atomically. It requires the pinned VideoPrism
+commit with no tracked source edits; existing untracked build/egg-info/cache
+outputs are preserved and do not affect the source-tree check. Corpus, model,
+and progress checks run before the CUDA path waits for a slot. CUDA audio uses
+the shared HotUGPU preflight and fails closed on an occupied GPU unless the
 reservation handoff is valid. CPU tests cover progress reload/mismatch and
 the HotUGPU telemetry path. The decoder has only been smoke-tested on one
 training session; no full feature bank has been produced.

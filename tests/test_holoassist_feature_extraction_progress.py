@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import os
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -8,9 +10,13 @@ import pytest
 import scripts.extract_holoassist_frozen_features as extraction
 from scripts.extract_holoassist_frozen_features import (
     HOLOASSIST_SELECTION_SHA256,
+    WHISPER_ENCODER_SHA256,
+    WHISPER_PROCESSOR_SHA256,
+    WHISPER_SOURCE_WEIGHTS_SHA256,
     _load_progress,
     _require_frozen_selection,
     _save_progress,
+    _validate_whisper_runtime,
 )
 
 
@@ -18,6 +24,33 @@ def test_holoassist_extraction_binds_the_selected_media_plan():
     _require_frozen_selection({"selection_sha256": HOLOASSIST_SELECTION_SHA256})
     with pytest.raises(ValueError, match="frozen HoloAssist selection"):
         _require_frozen_selection({"selection_sha256": "0" * 64})
+
+
+def test_whisper_runtime_hashes_are_checked_before_extraction(tmp_path, monkeypatch):
+    model_dir = tmp_path / "whisper-runtime"
+    model_dir.mkdir()
+    receipt = {
+        "status": "PASS",
+        "reference_revision": "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+        "reference_files": {"model.safetensors": WHISPER_SOURCE_WEIGHTS_SHA256},
+        "encoder_sha256": WHISPER_ENCODER_SHA256,
+        "processor_sha256": WHISPER_PROCESSOR_SHA256,
+    }
+    (model_dir / "result.json").write_text(json.dumps(receipt), encoding="utf-8")
+    (model_dir / "encoder.safetensors").touch()
+    (model_dir / "preprocessor_config.json").touch()
+    hashes = {
+        "encoder.safetensors": WHISPER_ENCODER_SHA256,
+        "preprocessor_config.json": WHISPER_PROCESSOR_SHA256,
+    }
+    monkeypatch.setattr(extraction, "sha256_file", lambda path: hashes[Path(path).name])
+
+    assert _validate_whisper_runtime(model_dir) == model_dir.resolve()
+
+    receipt["encoder_sha256"] = "0" * 64
+    (model_dir / "result.json").write_text(json.dumps(receipt), encoding="utf-8")
+    with pytest.raises(ValueError, match="does not bind to pinned source weights"):
+        _validate_whisper_runtime(model_dir)
 
 
 def test_cuda_feature_extraction_uses_shared_hotgpu_preflight(monkeypatch):

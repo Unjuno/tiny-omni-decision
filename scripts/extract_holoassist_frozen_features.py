@@ -318,6 +318,26 @@ def _save_progress(
     temporary.replace(path)
 
 
+def _validate_whisper_runtime(model_dir: Path) -> Path:
+    model_dir = model_dir.resolve(strict=True)
+    runtime_receipt = json.loads((model_dir / "result.json").read_text(encoding="utf-8"))
+    if (
+        runtime_receipt.get("status") != "PASS"
+        or runtime_receipt.get("reference_revision")
+        != "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
+        or runtime_receipt.get("reference_files", {}).get("model.safetensors")
+        != WHISPER_SOURCE_WEIGHTS_SHA256
+        or runtime_receipt.get("encoder_sha256") != WHISPER_ENCODER_SHA256
+        or runtime_receipt.get("processor_sha256") != WHISPER_PROCESSOR_SHA256
+    ):
+        raise ValueError("Whisper runtime receipt does not bind to pinned source weights")
+    if sha256_file(model_dir / "encoder.safetensors") != WHISPER_ENCODER_SHA256:
+        raise ValueError("extracted Whisper encoder file hash differs from pinned runtime")
+    if sha256_file(model_dir / "preprocessor_config.json") != WHISPER_PROCESSOR_SHA256:
+        raise ValueError("Whisper processor config hash differs from pinned revision")
+    return model_dir
+
+
 def _extract_video(args, config, rows, media_root, features, completed, persist):
     os.environ["JAX_PLATFORMS"] = "cpu"
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
@@ -338,13 +358,13 @@ def _extract_video(args, config, rows, media_root, features, completed, persist)
     if commit != VIDEO_SOURCE_COMMIT:
         raise ValueError(f"unexpected VideoPrism source commit: {commit}")
     source_dirty = subprocess.run(
-        ["git", "-C", str(source), "status", "--porcelain"],
+        ["git", "-C", str(source), "status", "--porcelain", "--untracked-files=no"],
         check=True,
         capture_output=True,
         text=True,
     ).stdout
     if source_dirty.strip():
-        raise ValueError("VideoPrism upstream source checkout must be clean")
+        raise ValueError("tracked VideoPrism source files differ from the pinned commit")
     checkpoint = args.checkpoint.resolve(strict=True)
     if sha256_file(checkpoint) != VIDEO_CHECKPOINT_SHA256:
         raise ValueError("VideoPrism checkpoint hash differs from frozen config")
@@ -423,22 +443,7 @@ def _extract_audio(args, config, rows, media_root, features, completed, persist)
     from transformers import WhisperConfig, WhisperFeatureExtractor
     from transformers.models.whisper.modeling_whisper import WhisperEncoder
 
-    model_dir = args.model_dir.resolve(strict=True)
-    runtime_receipt = json.loads((model_dir / "result.json").read_text(encoding="utf-8"))
-    if (
-        runtime_receipt.get("status") != "PASS"
-        or runtime_receipt.get("reference_revision")
-        != "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
-        or runtime_receipt.get("reference_files", {}).get("model.safetensors")
-        != WHISPER_SOURCE_WEIGHTS_SHA256
-        or runtime_receipt.get("encoder_sha256") != WHISPER_ENCODER_SHA256
-        or runtime_receipt.get("processor_sha256") != WHISPER_PROCESSOR_SHA256
-    ):
-        raise ValueError("Whisper runtime receipt does not bind to pinned source weights")
-    if sha256_file(model_dir / "encoder.safetensors") != WHISPER_ENCODER_SHA256:
-        raise ValueError("extracted Whisper encoder file hash differs from pinned runtime")
-    if sha256_file(model_dir / "preprocessor_config.json") != WHISPER_PROCESSOR_SHA256:
-        raise ValueError("Whisper processor config hash differs from pinned revision")
+    model_dir = _validate_whisper_runtime(args.model_dir)
     device = torch.device(args.device)
     if device.type == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but unavailable")
@@ -584,7 +589,18 @@ def main() -> None:
     args = parser.parse_args()
     if args.device == "cuda" and args.modality != "audio":
         raise ValueError("only the frozen Whisper audio encoder supports CUDA extraction")
-    gpu_slot = require_gpu_slot() if args.device == "cuda" else None
+    if args.modality == "video" and (
+        args.device != "cpu" or args.checkpoint is None or args.upstream_source is None
+    ):
+        raise ValueError("VideoPrism extraction requires CPU JAX, checkpoint and source root")
+    if args.modality == "audio":
+        if args.model_dir is None:
+            raise ValueError("Whisper encoder model directory is required")
+        args.model_dir = _validate_whisper_runtime(args.model_dir)
+    elif args.modality == "text":
+        if args.device != "cpu" or args.model_dir is None:
+            raise ValueError("MiniLM extraction requires a local model directory and CPU")
+        args.model_dir = args.model_dir.resolve(strict=True)
     output_bank = args.output_bank.resolve()
     if output_bank.exists():
         raise FileExistsError(f"refusing to overwrite feature bank: {output_bank}")
@@ -665,6 +681,7 @@ def main() -> None:
         fingerprint=fingerprint,
         resume=args.resume,
     )
+    gpu_slot = require_gpu_slot() if args.device == "cuda" else None
 
     def persist_progress() -> None:
         _save_progress(
@@ -676,20 +693,14 @@ def main() -> None:
         )
 
     if args.modality == "video":
-        if args.device != "cpu" or args.checkpoint is None or args.upstream_source is None:
-            raise ValueError("VideoPrism extraction requires CPU JAX, checkpoint and source root")
         features, model_metadata = _extract_video(
             args, config, rows, media_root, features, completed, persist_progress
         )
     elif args.modality == "audio":
-        if args.model_dir is None:
-            raise ValueError("Whisper encoder model directory is required")
         features, model_metadata = _extract_audio(
             args, config, rows, media_root, features, completed, persist_progress
         )
     else:
-        if args.device != "cpu" or args.model_dir is None:
-            raise ValueError("MiniLM extraction requires a local model directory and CPU")
         features, model_metadata = _extract_text(
             args, config, rows, features, completed, persist_progress
         )
