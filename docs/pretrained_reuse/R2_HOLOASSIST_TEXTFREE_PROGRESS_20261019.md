@@ -591,3 +591,15 @@ previous record commit `a3f3204` passed at run
 [39215655105](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215655105).
 The dataset and GPU gates remain unchanged: full media and AV validation first,
 then frozen feature extraction and matched validation-only readout evaluation.
+
+## Acquisition verification refresh (2026-10-19 07:26 UTC)
+
+The active journal has 188 completed train recordings (18,797,678,575 bytes).
+A fresh full-prefix audit verified all 188 file hashes and selection/split/
+archive/path/size metadata with zero mismatches. No validation files have been
+completed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T072631Z.json`
+(SHA-256 `b4bb05d522f8647e7bace10560eb75e0c8ec0a683797377fef5f9021f515b50d`).
+The external preflight points to this receipt. CI for the previous report
+commit `0896e58` completed successfully at run
+[39215849783](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215849783).
