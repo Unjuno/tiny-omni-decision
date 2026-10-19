@@ -604,20 +604,26 @@ The external preflight points to this receipt. CI for the previous report
 commit `0896e58` completed successfully at run
 [39215849783](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215849783).
 
-## Acquisition and HotUGPU handoff update (2026-10-19 07:56 UTC)
+## Acquisition and HotUGPU handoff update (2026-10-19 07:58 UTC)
 
 The unchanged PID 23276 downloader remains active with its original four
-workers. The journal reached 236 completed train videos (23,468,533,742 bytes);
+workers. The journal reached 237 completed train videos (23,544,079,829 bytes);
 validation remains at zero. The latest chained audit confirmed that the
 previously audited journal byte-prefix is unchanged, then recomputed SHA-256
-for the four newly completed files and rechecked selection/split, pinned ETag,
-archive offsets, paths and sizes. The cumulative 236-file chain passed with no
+for the newly completed file and rechecked selection/split, pinned ETag,
+archive offset, path and size. The cumulative 237-file chain passed with no
 errors. Receipt:
-`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T075628Z-chained.json`
-(SHA-256 `6e64814d9514bcc427e402212afac6519576fb4c70c890b35beecc2c94aaf9bd`).
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T075815Z-chained.json`
+(SHA-256 `e06c556023cf9eb6c20bc9e1c74d4015c25e211ee84cc0e91286ae35203374b1`).
 The external `run-preflight.json` points to this receipt. Training media was
 read only for hash verification; no validation files have been downloaded,
 and no test or sealed-audit media has been opened.
+
+At 16:58 JST, C: had 159,740,268,544 bytes free (148.77 GiB). The selected
+media has 93,530,800,323 bytes remaining at the audited prefix. Applying the
+downloader's 1.2x free-space check to that remainder requires about 112.24 GB,
+leaving about 47.50 GB measured headroom. This is a point-in-time capacity
+check; it does not change the downloader or guarantee future free space.
 
 One intermediate audit attempt was invalid because its checker incorrectly
 expected the archive ETag inside `selection.json`; the downloader pins that
@@ -648,3 +654,5 @@ Commit `bf91480` passed CI at run
 [39218815925](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39218815925).
 Commit `286663c` passed CI at run
 [39219028511](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39219028511).
+Commit `6272473` passed CI at run
+[39219344491](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39219344491).
