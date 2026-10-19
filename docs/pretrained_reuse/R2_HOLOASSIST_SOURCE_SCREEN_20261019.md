@@ -246,6 +246,26 @@ remained active. Snapshot:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T001939Z.json`
 (SHA-256 `A62DE7DAFCDD2BB4B8790A819464A26948975DDF4560E5EF8F51C8423907D0FE`).
 Full AV validation and feature extraction still require all selected media.
+At 2026-10-19 00:22:26 UTC, the live download audit recorded 230/367
+selected MP4s (23,492,216,471 completed bytes), 137 not-yet-logged files, and
+eight partial files (687,865,856 bytes). No identity, offset, path, or disk
+size mismatch was found; media hashes were not recomputed. PID 16496 remained
+active. Snapshot:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T002226Z.json`
+(SHA-256 `4121454D97E8B5B2703BFEBAABC24A6CEA4146043222C2F9FFF18A250AA293D3`).
+
+A second single-window Whisper smoke used selected train session
+`R203-7Nov-Belt`, whose full file hash matched the download journal. The pinned
+Whisper Tiny encoder produced a finite 384D feature in 0.513 seconds on the
+RTX 3080 Laptop GPU (peak allocated/reserved 190,619,136/211,812,352 bytes).
+HotUGPU waited through an active Orbitune compute PID, then reserved 3,200 MiB
+for the child and released it on completion. No training or test data use.
+Result JSON SHA-256 is
+`9D20404B6425C4EB4F132D1AD3228870992243D67C5AAC3DEB78AA953BC30B3F`; output
+is preserved in
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-extractor-audio-smoke-attempt-02`.
+This is encoder plumbing evidence, not task-quality evidence or a real feature
+bank.
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)

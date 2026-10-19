@@ -10,6 +10,12 @@ has not started. The audit snapshot and SHA-256 are recorded in the
 reached 223/367 selected videos (22.97 GB) at 00:19:40 UTC; PID 16496 remained
 active. Eight transfers were partial. Full AV validation has not started; the
 snapshot is recorded in the [source-screen log](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
+**2026-10-19 R2 HoloAssist encoder smoke:** A second selected training video
+passed one-window pinned Whisper extraction through HotUGPU (0.513 s encoder
+loop, finite 384D output). The guard waited for Orbitune's GPU use to yield,
+then reserved 3,200 MiB and released it after the smoke. This validates encoder
+plumbing only; full media validation and task fitting remain pending. Details
+are in the [HoloAssist source-screen log](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
 **2026-10-19 R2 EuroSAT spatial transfer:** Corrected the initial source-screen
 conclusion after finding TorchGeo's pinned longitude-based split manifests.
 The exact DINOv2-small checkpoint is Apache-2.0 per its pinned official card.
