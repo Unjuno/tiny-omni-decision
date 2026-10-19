@@ -360,3 +360,22 @@ and performed no fitting or checkpoint selection. This verifies encoder plumbing
 only; it is not a full feature bank or quality result. The first wrapper attempt
 used a Python environment without Torch and exited before the child started; the
 existing Python 3.11/Torch runtime then completed the smoke without upgrades.
+
+## Live acquisition update (2026-10-19 06:50 UTC)
+
+The fixed downloader remains active as PID 23276 with its original four-worker
+command and pinned selection; it has not been restarted or reconfigured. The
+journal reached 137 completed train files (13,579,254,871 bytes); all 137 were
+rechecked against selection membership, split, archive ETag/offset, expected
+size, output path, and recomputed SHA-256 with zero mismatches. The immutable
+receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T064958Z.json`
+(SHA-256 `33d4a056c5d0b63c4b5a82b75572a7db8cad163e650637f08e7ff0bdf95a7db8`).
+All completed files are still from the selected train partition; validation
+media has not yet been reached. The attempt's `run-preflight.json` points to
+this passing receipt. The separate OneDrive checkout has user changes and was
+not touched; this update is in the clean dedicated worktree. GPU remains an
+RTX 3080 Laptop with 15,821/16,384 MiB reported used at the last sample, but
+only 1% utilization. The prior one-window Whisper smoke already passed under
+HotUGPU; full feature extraction waits until complete media validation.
+No training, fitting, test/audit access, or artifact promotion occurred.
