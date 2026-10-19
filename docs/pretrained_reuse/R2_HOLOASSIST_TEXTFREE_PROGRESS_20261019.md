@@ -285,3 +285,13 @@ independent prefix audit with zero mismatches. Receipt:
 (SHA-256 `a0305dbc6a8678e557e99ebc44d88062570b3e88e5c395fb2dd28740d532ace0`).
 GitHub Actions run [39208996114](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39208996114)
 for source commit `1fe6bb64314b6063f12e3f69215c5e2ab78f69a9` passed.
+
+At 2026-10-19 06:20 UTC, the selection-aware audit (now checking train and
+validation membership by split) covered 107 train files (9,398,670,355 bytes)
+with zero hash or metadata errors; no validation files are in the downloaded
+prefix yet. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T062047Z.json`
+(SHA-256 `4e5154b2cc869e1c53741a9a216e801544456c9d86312b930e3ce47cd7c0af44`).
+An earlier ad-hoc audit invocation used the wrong ETag field and emitted a
+FAIL receipt; rerunning with the pinned CLI ETag passed. The failed receipt is
+preserved, and the active preflight points to this passing receipt.
