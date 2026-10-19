@@ -261,3 +261,9 @@ size, or SHA-256 mismatches. Receipt:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T060942Z.json`
 (SHA-256 `19b22f5178458e5b8b59435f20e87ab7ad44a60ad850f3328d34ac6dc13858aa`).
 The downloader remains live and the full 1,306-video corpus is still pending.
+
+At 2026-10-19 06:11 UTC, the independently verified prefix reached 94 files
+(7,854,610,672 bytes). Selection identity, train split, pinned archive ETag,
+member offsets/sizes and every local SHA-256 matched; zero errors. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T061127Z.json`
+(SHA-256 `fe5fdc1bf4641424cb89528e2655d75bbce7e1254e76a53407a22e558659a316`).
