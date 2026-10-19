@@ -1704,3 +1704,20 @@ matched selected IDs and expected sizes, six partials remained, and the official
 journal still had 467 rows. Do not promote this local count to a verified
 archive prefix or begin extraction until the journal/source-integrity gate is
 reconciled.
+
+At 2026-10-19 12:00 UTC, a further CPU-only delta audit hashed and checked
+seven selected, finalized files not covered by the prior receipt set. All seven
+passed local ID/size, stable SHA, AV metadata, and annotation-timing gates.
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1700Z.json`
+(SHA-256 `44A30597680AB2070C3DE4C9D2165E50EE2A55A10D51B93A737B528954050A94`).
+A separate identity-set reconciliation at 12:00 UTC found 642 finalized MP4s,
+467 journaled files, and 175 unjournaled files; the existing local-diagnostic
+receipts now cover exactly those 175 unique unjournaled identities. Cumulative
+local outcomes are 174 passes plus the previously known timing-boundary failure.
+No additional media were hashed by the identity-set reconciliation. This does
+not extend independent archive hash authentication beyond the 467-row journal.
+PID 23276 remained active, six partials totaled 46,137,344 bytes, and the
+original live journal remained at 467 rows; neither downloader nor data was
+modified. Feature extraction remains gated on completing and reconciling the
+pinned source-integrity chain.

@@ -2334,3 +2334,11 @@ currently source-hash authenticated; local diagnostic hashes do not extend that
 proof. Downloader PID 23276 is still active and untouched. No feature extraction
 or fitting has started. See the detailed [timestamped progress and provenance
 limits](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:00 UTC):** The live attempt
+has 642 finalized selected MP4s, of which 467 are in the source-hash-authenticated
+downloader journal and 175 remain unjournaled. Separate local diagnostic receipts
+cover all 175 unjournaled IDs: 174 pass and the known timing-boundary file fails
+the unchanged gate. Local hashes do not authenticate against the archive. Six
+partial transfers remain; PID 23276 is active and untouched. No extraction or
+fit has begun. See the detailed [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
