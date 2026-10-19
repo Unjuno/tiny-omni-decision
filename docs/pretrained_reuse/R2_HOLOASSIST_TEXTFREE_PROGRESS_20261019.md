@@ -1060,3 +1060,25 @@ At 2026-10-19 19:31 JST, PID 23276 remained active with four TLS connections. It
 At 2026-10-19 19:36 JST, the downloader still ran with active archive connections. Its journal remained at 467 rows while 513 complete train MP4s were visible (46 unjournaled); there was no final media manifest. A CPU-only diagnostic covered nine files newly visible since the prior diagnostic and all nine passed selection-ID/size and AV stream-metadata checks. Across the 46 unjournaled files, 45 pass the AV metadata gate and one (`z092-july-11-22-marius_assemble`) narrowly fails by about 0.9 ms. Receipt: `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T103634Z.json`, SHA-256 `2afb64484b3db8ffe4ed49fa56f542c587f6056a5a4cba9f2939a37697324f0a`.
 
 To determine whether that timing boundary came from local transfer corruption, one exact selected-train byte range for the flagged video was streamed from the official archive with pinned ETag and Content-Range, without writing a second media file. The 70,796,254-byte remote range SHA-256 exactly matched the local file (`c0a117970456273d727382c978becd898ea135c037ac77238a9783bc5549e191`); throughput for this single range was 442,585 B/s over 159.96 s while the downloader was active. Source-range receipt: `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\source-range-hash-audit-20261019T103608Z.json`, SHA-256 `ce67a97b12d23768484e021de6bfe5b4a7150aef72e8c2e07ec911bd407f6e48`. This confirms the narrow AV duration discrepancy is present in the pinned source bytes, but it does not justify changing the existing tolerance or mark the other 45 local files source-verified. The chained verified prefix remains 467/1,306; the cause of the journal lag remains unknown. No active process was controlled, and no GPU, model training, validation, test, or sealed-audit media were used.
+
+At 2026-10-19 19:44 JST, PID 23276 was still active and downloading. The media
+directory contained 523 complete files (48,592,166,894 bytes) and six partial
+files (46,137,344 bytes). The journal still contained 467 rows (43,019,820,009
+bytes; SHA-256
+`4814de90b0ffff9cb32ac63b38f7aa8f3401d30598e7a1f56b6ddf8d573de8bc`), with
+the same length and modification time before and after a shared-read hash.
+Fifty-six complete files were absent from the journal; all 56 names were in the
+frozen selection and matched its expected byte sizes, but this is not a
+content-hash/source-integrity check. Ten files appeared since the 10:36 UTC
+metadata-delta receipt and remain uninspected. The observation receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-integrity-observation-20261019T104425Z.json`
+(SHA-256
+`c0532b496a46cca2cc48e71f480c84804b85de141596e3b8c8d6a527bff0c79a`). The
+receipt also records the active downloader command and confirms no unexpected
+session IDs or size mismatches. The downloader's open journal prevented the
+standard `Get-FileHash` path from opening it; a read-shared stream produced the
+hash above. This observation does not explain why journal appends have not
+advanced. No manifest exists yet. CPU-only HotUGPU and HoloAssist media/journal
+tests passed (25 tests); GitHub Actions run #2172 for source commit `42c7685`
+completed successfully. No process was stopped, no GPU job was launched, and no
+feature extraction or training was performed.
