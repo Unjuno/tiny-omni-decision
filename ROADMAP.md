@@ -2572,3 +2572,11 @@ pass; one known timing-boundary failure), with no uncovered/unselected IDs or
 size/hash conflicts. Source hash authentication remains at the 467 pinned
 journal rows; PID 23276 is still present. CI for `fe9c07c` is green. See the
 [reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:53 UTC):** 733/1,042 train
+MP4s are finalized; validation remains 0/264. All 266 unjournaled IDs have
+local receipts (265 pass; one known timing-boundary failure), with no
+uncovered/unselected IDs or size/hash conflicts. Only 467 are source-hash
+authenticated by the pinned journal. PID 23276 remains active and seven
+partials remain; its journal has not changed since 10:07Z. CI for `5028f51` is
+green. See the [reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

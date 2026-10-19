@@ -2148,3 +2148,16 @@ local pass is recorded in `unlogged-media-delta-20261019T125110Z.json` (SHA-256
 `4bbe00110bddec8437a46b57c7c25b6386ff0626c08aca1d27922d22fc990392`). PID
 23276 remained present. The fixed journal snapshot is still the only source
 hash-authenticated segment. CI for `fe9c07c` completed successfully.
+
+At 12:53:10Z, the all-receipts reconciliation
+`live-receipt-reconciliation-20261019T125233Z.json` (SHA-256
+`d6cbc1c5a6a1afa2581175d69fda60ca771511338cc0da428d800a1aa74a369b`)
+matched 733 finalized MP4s to the frozen selection (733 train, zero validation,
+zero unselected, zero size mismatches, and zero uncovered unjournaled IDs).
+The pinned journal remains 467 rows; local receipts cover all 266 unjournaled
+files (265 pass and the one known timing-boundary failure). Three latest
+locally passing rows are in `unlogged-media-delta-20261019T125233Z.json` (SHA-256
+`2d93ebb1ef36cd7ee679b558310f74d724c8861ad7647a70f137b65d3d98c539`). Seven
+partial files remain. PID 23276 is still present and the live progress journal
+is unchanged at 218,310 bytes / 10:07:15Z, so source authentication remains
+limited to the pinned 467 rows. CI for commit `5028f51` completed successfully.
