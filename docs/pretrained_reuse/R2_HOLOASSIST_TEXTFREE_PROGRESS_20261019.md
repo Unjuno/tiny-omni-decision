@@ -246,3 +246,11 @@ offset, member size, and pinned ETag; all 88 passed. Receipt:
 The downloader remained active (PID 23276); no test/audit media was opened.
 CI run [39207608187](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39207608187)
 for source commit `f1694b2933f086a33176eeab91bc904328b5e221` passed.
+
+At 2026-10-19 06:07 UTC, the independent audit covered 91 completed videos
+(7,465,849,342 bytes), with no selection, split, offset, size, or SHA-256
+mismatches. The count advanced from 90 while hashing. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T060753Z.json`
+(SHA-256 `ee24f298ea802475e6bb8f70fced5c7860e7288b8341bc2b78e27106966c3bf6`).
+CI for the preceding report-only commit `a8c202e0ce00e827776a181d8b92d24ca04b484a`
+passed (run [39207929069](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39207929069)).
