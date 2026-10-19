@@ -228,6 +228,16 @@ lengths are 43 / 41. These counts are derived only from selected train and
 validation annotation rows; actual media duration, audio availability, and
 decoder alignment remain pending.
 
+At 2026-10-19 00:12:34 UTC, the live download journal audit recorded 206/367
+selected MP4s (20,969,834,469 completed bytes), 161 not-yet-logged files, and
+eight partial files (926,941,184 bytes). No selection, archive identity,
+offset, path, or on-disk-size mismatch was found; this audit did not recompute
+media content hashes. PID 16496 remained active. The immutable audit snapshot
+is `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T001234Z.json`
+(SHA-256 `7E4F5546E53409BC7BD7B7C2C3A990CB8628F8541B921E43D83D9A79260513A7`).
+Full AV validation and feature extraction remain gated on the complete selected
+media set.
+
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)
