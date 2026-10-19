@@ -1952,3 +1952,20 @@ completion or restart the downloader from them. Local diagnostic coverage is
 214 unjournaled IDs (213 local passes and the known timing-boundary failure),
 subject to a fresh reconciliation after acquisition stops.
 
+At 12:22:47Z, one incremental audit script omitted the immediately prior
+receipt from its already-seen set, so its four-row delta included two IDs that
+had been checked before. This receipt was preserved and not counted as four
+new IDs. Subsequent audits included the missing receipt and deduplicated IDs.
+The corrected cumulative diagnostic coverage at 12:24 UTC is 219 unjournaled
+IDs (218 local passes and the one known timing-boundary failure), matching the
+latest pinned-snapshot audit: 467 journal-authenticated files plus 219 files
+not represented in that snapshot. The audit output
+`audit-live-snapshot-20261019T122332Z.json` has SHA-256
+`A00265B99D674FCA7FD1B7E6F601FC7F928F57DFF53207F3BADFF3CC7F6D7AB2` and
+records six partial files totaling 432,013,312 bytes. One additional media
+file passed local checks in
+`unlogged-media-delta-20261019T122400Z.json` (SHA-256
+`e25e28456af5f2654f3f04eb7a07969d91d3ff7c4e9cb17ff2c55133cbc2b2a2`).
+PID 23276 remained active at 12:24 UTC. Acquisition is still in progress;
+archive authentication is still limited to the 467 pinned journal rows.
+

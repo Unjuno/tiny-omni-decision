@@ -2467,3 +2467,10 @@ passes and one known timing-boundary failure). Six partials remain and PID
 23276 is active. This is not a final manifest, and local checks do not extend
 archive authentication. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:24 UTC):** 686 MP4s are
+present, 467 journal-authenticated and 219 unjournaled. Deduplicated local
+receipts cover all 219 unjournaled IDs (218 pass and one known timing-boundary
+failure). Six partials remain; PID 23276 is active. Acquisition is not complete
+and local diagnostics do not extend archive authentication. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
