@@ -2493,3 +2493,19 @@ local passes are in `unlogged-media-delta-20261019T133900Z.json` (SHA-256
 `315c5f8c41b7f1a6524b3f6bde3e32884dc0f9cad7e0ee07cdfaa7d6c084f74f`). The
 467-row pinned journal remains the only source-hash-authenticated set. PID
 23276 remains active. CI run 39261769269 for `532fcbb` completed successfully.
+
+At 13:43:03Z, the first reconciliation snapshot raced with two newly finalized
+downloads and correctly reported them uncovered. A follow-up local diagnostic
+covered both files, then the stable full-receipt reconciliation
+`live-receipt-reconciliation-20261019T134255Z.json` (SHA-256
+`9aec6f36cd880ebf63915134bd5f81d0e08eee2136c7d34c1817dafbc96f4889`) matched
+830 finalized MP4s, all train, to the frozen selection (validation 0/264).
+The result had no unselected files, size mismatches, uncovered IDs, or receipt
+hash conflicts. Local receipts cover all 363 files outside the pinned journal
+(362 pass; one known timing-boundary failure). Two new local passes are in
+`unlogged-media-delta-20261019T134255Z.json` (SHA-256
+`757848d10b11da3df6b56ed42253a7e5736bcca32e26f1e986078e3070e3d73c`). The
+467-row pinned journal remains the only source-hash-authenticated set. Seven
+partial files were present; PID 23276 remained active. A 15-second process
+sample observed 46,137,344 additional bytes written before this audit, so the
+downloader was still progressing despite no journal update since 10:07:15Z.
