@@ -252,6 +252,7 @@ def test_evaluator_reports_fixed_validation_predictions_for_each_intervention(tm
         )
         assert metrics["count"] == 9
         assert set(metrics["by_task_type"]) == {"cut", "stir"}
+        assert set(metrics["mean_gate_weights"]) == {"video", "audio"}
         assert len(predictions) == 9
         assert set(prediction["id"] for prediction in predictions) == set(
             map(str, data["sample_id"])
@@ -260,6 +261,10 @@ def test_evaluator_reports_fixed_validation_predictions_for_each_intervention(tm
         observed_ids.append([prediction["id"] for prediction in predictions])
         if intervention == "audio_shuffle_session":
             assert details == {"eligible_session_count": 2, "shuffle_group_count": 1}
+        elif intervention == "audio_missing":
+            assert metrics["mean_gate_weights"]["audio"] == 0.0
+        elif intervention == "video_missing":
+            assert metrics["mean_gate_weights"]["video"] == 0.0
     assert all(ids == observed_ids[0] for ids in observed_ids[1:])
 
 
@@ -287,7 +292,14 @@ def test_intervention_baseline_matches_training_validation_path(tmp_path):
         seed=17,
     )
 
-    assert actual_metrics == expected_metrics
+    actual_metric_core = {
+        key: value for key, value in actual_metrics.items() if key != "mean_gate_weights"
+    }
+    actual_metric_core["by_task_type"] = {
+        task: {key: value for key, value in metrics.items() if key != "mean_gate_weights"}
+        for task, metrics in actual_metrics["by_task_type"].items()
+    }
+    assert actual_metric_core == expected_metrics
     for expected, actual in zip(expected_predictions, actual_predictions, strict=True):
         assert {key: expected[key] for key in expected if key != "probabilities"} == {
             key: actual[key] for key in actual if key != "probabilities"

@@ -116,11 +116,13 @@ hash, fixed task vocabulary and all three arm results before loading only the
 joint best checkpoint. It compares baseline replay, missing audio, missing
 video, within-session audio time reversal, within-session video time reversal,
 and audio reassignment between validation sessions matched on task type and
-window count. It writes its own six per-example prediction files and metrics;
-the baseline must replay the saved probabilities within 1e-6. Sealed audit and
-official test data are not loaded. A dedicated watcher waits for the existing
-pipeline to finish and then runs this evaluation through HotUGPU in a new
-output directory; it does not overlap the three-arm fitting run.
+window count. It records mean video/audio gate weights overall and per task as
+an auxiliary diagnostic. It writes its own six per-example prediction files
+and metrics; the baseline must replay the saved probabilities within 1e-6.
+Sealed audit and official test data are not loaded. A dedicated watcher waits
+for the existing pipeline to finish and then runs this evaluation through
+HotUGPU in a new output directory; it does not overlap the three-arm fitting
+run.
 
 A second watcher waits for the intervention evaluator and then computes seven
 paired session-cluster bootstrap comparisons (joint vs each unimodal arm, plus

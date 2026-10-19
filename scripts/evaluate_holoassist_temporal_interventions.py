@@ -50,8 +50,10 @@ def evaluate_intervention(
     altered = apply_feature_intervention(data, intervention, seed=seed)
     view = dict(data, video=altered.video, audio=altered.audio)
     logits_rows: list[torch.Tensor] = []
+    gate_rows: list[torch.Tensor] = []
     target_rows: list[int] = []
     task_type_rows: list[str] = []
+    gate_rows_by_task_type: dict[str, list[torch.Tensor]] = {}
     predictions: list[dict[str, Any]] = []
     order = sorted(range(len(data["session_names"])), key=lambda i: str(data["session_names"][i]))
     model.eval()
@@ -96,10 +98,13 @@ def evaluate_intervention(
                     target = int(targets[row, step].item())
                     task_type = str(data["task_type"][index])
                     logits = output.logits[row, step].detach().float().cpu()
+                    gates = output.modality_weights[row, step].detach().float().cpu()
                     probabilities = torch.softmax(logits, dim=-1).tolist()
                     logits_rows.append(logits)
+                    gate_rows.append(gates)
                     target_rows.append(target)
                     task_type_rows.append(task_type)
+                    gate_rows_by_task_type.setdefault(task_type, []).append(gates)
                     predictions.append(
                         {
                             "id": str(data["sample_id"][index]),
@@ -127,6 +132,17 @@ def evaluate_intervention(
             bins=ece_bins,
         )
     all_metrics["by_task_type"] = by_task_type
+    gate_values = torch.stack(gate_rows)
+    all_metrics["mean_gate_weights"] = {
+        "video": float(gate_values[:, 0].mean().item()),
+        "audio": float(gate_values[:, 1].mean().item()),
+    }
+    for task_type, values in by_task_type.items():
+        task_gates = torch.stack(gate_rows_by_task_type[task_type])
+        values["mean_gate_weights"] = {
+            "video": float(task_gates[:, 0].mean().item()),
+            "audio": float(task_gates[:, 1].mean().item()),
+        }
     all_metrics["task_type_macro"] = {
         metric: float(np.mean([row[metric] for row in by_task_type.values()]))
         for metric in ("accuracy", "nll", "brier", "ece")
