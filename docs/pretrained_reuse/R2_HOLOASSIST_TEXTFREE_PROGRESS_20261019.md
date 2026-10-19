@@ -965,3 +965,14 @@ duration checks; full decode has not started:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T093728Z.json`
 (SHA-256 `1bcfaa64d818a80de7be8072e13097ac7e24a6c382ea3ea04209ee5a3c689385`).
 No validation/test media were opened.
+
+At 2026-10-19 18:40 JST, the verified prefix reached 419/1,306 train videos
+(38,755,693,690 bytes). Four additional files passed independent SHA-256 and
+frozen metadata gates. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T094059Z-chained.json`
+(SHA-256 `fd7ee05ac0bc64bc4a185ad710bea35af47a3cb6fd40a1b5d02cb1fae3925306`).
+The same files passed incremental CPU AV stream and annotation-duration checks;
+this is not full media decoding:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T094110Z.json`
+(SHA-256 `49ffe30d39b627b5fa092d220957f3d59703c5dcd8e4dea1a2acb9d6a32db0ba`).
+No validation/test media were opened.
