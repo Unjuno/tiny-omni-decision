@@ -79,7 +79,15 @@ def migrate_progress_file(
     expected_legacy_fingerprint["extractor_source_commit"] = legacy_source_commit
     expected_legacy_fingerprint["extractor_script_sha256"] = legacy_script_sha256
     if source_fingerprint != expected_legacy_fingerprint:
-        raise ValueError("source progress fingerprint differs beyond the approved code revision")
+        changed_fields = sorted(
+            key
+            for key in set(source_fingerprint) | set(expected_legacy_fingerprint)
+            if source_fingerprint.get(key) != expected_legacy_fingerprint.get(key)
+        )
+        raise ValueError(
+            "source progress fingerprint differs beyond the approved code revision: "
+            + ", ".join(changed_fields)
+        )
 
     source_sha256 = sha256_file(source_progress)
     destination_progress.parent.mkdir(parents=True, exist_ok=True)
