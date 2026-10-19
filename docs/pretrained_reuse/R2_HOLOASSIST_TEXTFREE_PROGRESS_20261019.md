@@ -1904,3 +1904,13 @@ and 201 unjournaled IDs. Receipts cover all 201 (200 local passes and one
 known timing-boundary failure), with no uncovered IDs. Six partials totaled
 46,137,344 bytes. PID 23276 remained active; archive authentication remains
 limited to the 467 journaled entries.
+
+At 2026-10-19 12:17 UTC, two additional selected media files passed the
+local diagnostic gates. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1218Z.json`
+(SHA-256 `7401F486B7EFEC784093316C1DB8C25EE0BF11C595E58D914FF6B0B569AC2F31`).
+The latest reconciliation found 670 finalized selected files, 467 journal rows,
+and 203 unjournaled files. Existing receipt chains cover all 203 unique IDs:
+202 local passes and the one known timing-boundary failure, with no uncovered
+IDs. Six partials totaled 46,137,344 bytes. PID 23276 remains active; archive
+hash authentication still covers only the 467 journaled rows.

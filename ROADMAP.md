@@ -2445,3 +2445,9 @@ videos are finalized, 467 journaled and 201 unjournaled. Local receipts cover
 all 201 IDs (200 pass; one known timing-boundary failure), but do not extend
 archive authentication. PID 23276 remains active. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:17 UTC):** 670 selected
+videos finalized, 467 journaled, and 203 unjournaled. Local receipts cover all
+203 IDs (202 pass; one known timing-boundary failure), but do not extend archive
+hash authentication. PID 23276 remains active. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
