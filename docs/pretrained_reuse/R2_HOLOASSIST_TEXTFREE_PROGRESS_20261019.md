@@ -1530,3 +1530,11 @@ one known timing-boundary failure. Delta receipt:
 As before, local hashes are not an independent source archive comparison. GPU
 was idle at this sample, but recent samples have varied sharply, so any GPU
 child remains HotUGPU-gated.
+
+At 2026-10-19 11:41 UTC, a read-only `psutil` inspection of PID 23276
+confirmed the downloader process was running, had the progress journal open,
+held three `.part` files open, and had four established archive HTTPS
+connections. The journal handle being open does not prove the completion loop
+is healthy: it is also consistent with the executor context waiting for
+workers after a future error. The exception/main-thread state is still
+unknown; no debugger or process intervention was used.
