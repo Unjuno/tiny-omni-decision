@@ -1256,3 +1256,18 @@ completed successfully. The downloader was still alive at the 11:09 UTC
 observation with 563 files and four established archive connections; its
 journal remained 467 rows, last written at 10:07:15 UTC. This does not resolve
 the unjournaled-progress inconsistency.
+
+At 2026-10-19 11:10:35 UTC, two more complete files appeared and passed the
+CPU-only local delta audit (selection ID/size, local SHA-256, AV stream and
+annotation timing). Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1140Z.json`
+(SHA-256 `53fcf2395e00f8205136f0867047f3e2b5de4cfa4b7e043c7b0f949b045452a9`).
+The unjournaled set is now 98 files: 97 pass the metadata gates and one is the
+known source-verified boundary failure. The 97 passing local hashes remain
+uncompared with source ranges.
+
+The downloader was alive at 11:10:35 UTC with 565 complete files
+(52,255,143,559 bytes); the journal remained at 467 rows with its 10:07:15 UTC
+mtime. No GPU process, feature extraction, or training was started. The latest
+branch CI at the preceding source snapshot (#2180) was green; #2181 for
+`fe6bba9` was in progress at the time of observation.
