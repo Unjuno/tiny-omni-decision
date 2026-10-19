@@ -2077,3 +2077,22 @@ are deduplicated. Three new local passes were recorded in
 `ea987125addd72c9e2ba4bc1916720072fd2129622b467836438121b27757f79`). Six
 partial files remain, PID 23276 is active, and the prior commit `2ead8bd` CI
 is green. Unjournaled media still lacks archive source-hash authentication.
+
+At 12:44:58Z, the all-receipts reconciliation output
+`live-receipt-reconciliation-20261019T124443Z.json` (SHA-256
+`c9e092a854f6eff044677bbf7667293040817941f7899ddcfa05401a306f34bf`)
+matched 721 finalized MP4s to selected train IDs (721/1,042 train; 0/264
+validation; zero unselected files, wrong sizes, conflicting receipt hashes or
+uncovered unjournaled IDs). It covered 254 unjournaled IDs with local
+receipts (253 local passes and the known timing-boundary failure). Four newly
+observed files passed local checks in
+`unlogged-media-delta-20261019T124443Z.json` (SHA-256
+`01d32a86a38da84742ec2b989c86910f0f799d41abf882a990e144f4e48b9f2a`).
+The download process PID 23276 is alive, has the progress journal open, holds
+four `.part` files open and has four established HTTPS connections to the
+archive endpoint. The live journal's length/mtime remain 218,310 bytes and
+2026-10-19 10:07:15Z despite the later finalized files. The cause is UNKNOWN;
+this is a provenance/reproducibility concern, so the 254 locally checked files
+are not claimed to have source-archive hash authentication. Do not stop or
+restart the active downloader on this evidence alone. The journal snapshot
+pinned at 10:55Z still authenticates 467 files. CI for `19c3920` passed.
