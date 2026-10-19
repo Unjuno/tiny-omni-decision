@@ -932,3 +932,14 @@ full decode remains pending:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T092954Z.json`
 (SHA-256 `52073b4f999f7d964c975561b6b00914e8dab82ad52a7176d8a69b5728a50770`).
 No validation/test media were accessed.
+
+At 2026-10-19 18:32 JST, the chained media audit reached 405/1,306 train
+videos (37,675,561,053 bytes). Five appended clips independently passed SHA-256
+and immutable-selection, split, ETag, archive-offset, path and size checks:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T093201Z-chained.json`
+(SHA-256 `327dd46300adcad4f6f0f84a487dc1cf04fbe528b2b032898a7a5c80511c2472`).
+All five also passed incremental CPU PyAV stream-metadata and annotation-duration
+checks (not full decode):
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T093211Z.json`
+(SHA-256 `b7678cf6c76249c6aa03213063c5f7a0491ba5f0c29222611dbdb5c44237c871`).
+No validation/test media were opened.
