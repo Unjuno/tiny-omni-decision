@@ -844,3 +844,14 @@ checks; full-corpus decode remains pending:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T090502Z.json`
 (SHA-256 `841b921a4de0489eb6499839a8e816ff3317281033a6f431fedb39e21dd6d27b`).
 No validation/test media were opened.
+
+At 2026-10-19 18:07 JST, the chained download prefix reached 367/1,306
+train videos (33,725,554,445 bytes). Four newly completed videos passed
+selection, split, ETag, offset, path, length and SHA-256 checks. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T090647Z-chained.json`
+(SHA-256 `a27b19d130a85e082d8ce1b042d9cc59b95d3306da244aa85a07a6dca537894a`).
+Incremental CPU PyAV stream metadata and annotation-duration validation also
+passed on those four files; this does not substitute for full decode:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T090708Z.json`
+(SHA-256 `3feb50d1c876b2dda8f482d52209dd7f6751adbb845b431312df04266ff1dfa5`).
+No validation/test media were opened; the original downloader remains active.
