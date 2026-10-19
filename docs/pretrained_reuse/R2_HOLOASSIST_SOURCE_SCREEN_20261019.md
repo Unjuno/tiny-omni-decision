@@ -369,3 +369,26 @@ At the latest check on 2026-10-19, the selected-window frozen-feature work had t
 - Video attempt-01: stopped at a clean saved boundary after 256/3,527 rows. Its progress file SHA-256 is `d41c09e283a76ae0d287b317f1086ea593a7f0b9cfa7af4c933fb970fb7b5839`. It used source commit `92829c98623c16328534b20de066ba40618055b5`, VideoPrism weights SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`, and the pinned CPU/JAX environment. The partial remains preserved; it was not loaded as a finished bank.
 
 A decoder optimization was introduced for the separate output attempt-02. Instead of converting every decoded frame to RGB, it converts only frames selected by the same endpoint-inclusive eight-frame rule (plus a fallback frame only if end padding is needed). Its synthetic tests cover high-rate sampling and end-padding parity. It matched the previous pixel arrays exactly on four real train/validation windows and was 1.49–2.24x faster across those samples. This is a local benchmark, not a broad runtime guarantee. The source change passed 8 targeted tests and Ruff; CI for commit `076a9a5` passed. Attempt-02 started from the pinned pretrained VideoPrism checkpoint in the original CPU/JAX environment and at 11:05 local had persisted 64/3,527 rows (progress SHA-256 `3ff96b2cb24abbe5c87c23283c7c3dbd7fa0d562019321b973f17d89656d50b8`; extractor source commit `076a9a5a51ae90dc8ce7133d5973100dbc802a3b`; script SHA-256 `67f852d307789ee91b2f736eca1e9f77b730483d82f3d1a4a19bd1f358914554`). No cache has been packed and no readout has been fitted. Test data remains unopened.
+
+## Frozen feature extraction and readout completion
+
+The optimized video attempt-02 subsequently completed all 3,527 windows on
+CPU/JAX in 10,153.17 seconds. Its 3,527 x 768 bank SHA-256 is
+`a67abc38d733d54bc875ac2cc5aead43c62ec112ceafa3c815cd5799cba48102` and it
+matches the frozen train-then-validation ID hash. A first cache-pack call
+exposed a split-level/full-bank ID comparison bug; the packer now slices the
+globally verified bank into train and validation order before its split-local
+checks. Four focused tests, Ruff, and the full CPU suite (2,433 passed, 11
+skipped) passed after that correction.
+
+The resulting frozen cache trained three 379,652-parameter readouts (video
+only, audio only, joint AV; text question embeddings in all arms) for the full
+2,048 updates each on the local RTX 3080 via HotUGPU. Validation-NLL-selected
+accuracy was 71.31%, 73.79%, and 73.05%; best steps were 192, 320, and 128.
+All three endpoints were substantially overfit, with final NLLs 2.574, 2.076,
+and 2.409. Joint AV did not improve over audio-only. The saved per-example
+predictions, training histories, and checkpoints live outside Git under
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-video-pilot-160-207-seed17-pitchshifted-attempt-01`.
+Test data was not opened. See the
+[readout result report](R2_HOLOASSIST_TEMPORAL_READOUT_RESULTS_20261019.md)
+and its machine-readable [curves and hashes](R2_HOLOASSIST_TEMPORAL_READOUT_RESULTS_20261019.json).
