@@ -1451,3 +1451,20 @@ was 0% at the sampled instant, while it varied substantially in earlier
 samples; no GPU training was started. Use HotUGPU's wait/reservation behavior
 before any GPU task so a transient idle sample does not permit a competing
 Orbitune workload to start alongside it.
+
+At 2026-10-19 11:31 UTC, the live audit receipt
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1131Z.json`
+(SHA-256 `4804d36671611218c8441b4f5f40f01082f506c2b722fb9cf0e4f3f3f6cd0aad`)
+reports 467/1,306 journal rows, 127 complete unjournaled files, and six
+partials totaling 486,539,264 bytes. Five newly complete files passed local
+selection ID/size, recomputed SHA, AV metadata and annotation timing checks.
+Cumulative local diagnostics cover 127 unjournaled files: 126 metadata passes
+and the same one timing-boundary failure already source-range verified. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1410Z.json`
+(SHA-256 `85b3bdc8daf0916dd65ac517470d4504730d0452811e8f6b4f6e1b446e360ff3`).
+The local hashes do not authenticate those records against the archive. The
+journal's last write remains 10:07:15 UTC while complete files continue to
+appear; the cause is not established. The downloader process and its four
+HTTPS connections remained live. GPU readings oscillated from 83% / 15,821 MiB
+to idle within adjacent snapshots, confirming HotUGPU must wait for a safe
+reservation instead of launching on a momentarily idle reading.
