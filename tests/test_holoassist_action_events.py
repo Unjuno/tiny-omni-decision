@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import hashlib
+import zipfile
 
 import pytest
 
 from scripts.build_holoassist_action_events import (
     build_event_rows,
+    load_official_train_only,
     validate_av_validation_report,
 )
 
@@ -47,6 +49,16 @@ def fixture(tmp_path):
         )
     splits = {"train": {"tr-1"}, "validation": {"va-1"}, "test": {"te-1"}}
     return records, splits, selected, files, tmp_path
+
+
+def test_internal_validation_split_reader_does_not_read_other_split_payloads(tmp_path):
+    path = tmp_path / "splits.zip"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("train-v1_2.txt", "train-a\ntrain-b\n")
+        archive.writestr("val-v1_2.txt", b"\xff\xfe")
+        archive.writestr("test-v1_2.txt", b"\xff\xfe")
+
+    assert load_official_train_only(path) == {"train-a", "train-b"}
 
 
 def test_builder_keeps_modalities_aligned_and_excludes_future_context(tmp_path) -> None:

@@ -94,9 +94,13 @@ def _selected_rows(windows_dir: Path) -> tuple[list[dict], dict[str, list[dict]]
     return ordered, rows, receipt
 
 
-def _require_frozen_selection(av_report: dict) -> None:
-    if av_report.get("selection_sha256") != HOLOASSIST_SELECTION_SHA256:
-        raise ValueError("AV validation report is not for the frozen HoloAssist selection")
+def _require_frozen_selection(
+    av_report: dict, expected_sha256: str = HOLOASSIST_SELECTION_SHA256
+) -> None:
+    if len(expected_sha256) != 64 or any(c not in "0123456789abcdef" for c in expected_sha256):
+        raise ValueError("an explicit lowercase SHA-256 selection pin is required")
+    if av_report.get("selection_sha256") != expected_sha256:
+        raise ValueError("AV validation report does not match the explicitly pinned selection")
 
 
 def _verify_provenance(
@@ -106,8 +110,9 @@ def _verify_provenance(
     av_report_path: Path,
     rows_by_split: dict[str, list[dict]],
     av_report: dict,
+    selection_sha256: str = HOLOASSIST_SELECTION_SHA256,
 ) -> dict:
-    _require_frozen_selection(av_report)
+    _require_frozen_selection(av_report, selection_sha256)
     event_receipt = json.loads((events_dir / "receipt.json").read_text(encoding="utf-8"))
     window_receipt = json.loads((windows_dir / "receipt.json").read_text(encoding="utf-8"))
     if event_receipt.get("av_validation_report_sha256") != sha256_file(av_report_path):
@@ -600,6 +605,7 @@ def main() -> None:
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--upstream-source", type=Path)
     parser.add_argument("--config", type=Path, default=CONFIG)
+    parser.add_argument("--selection-sha256", default=HOLOASSIST_SELECTION_SHA256)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--output-bank", type=Path, required=True)
     parser.add_argument("--resume", action="store_true")
@@ -647,6 +653,7 @@ def main() -> None:
         av_report_path=args.av_validation_report.resolve(strict=True),
         rows_by_split=rows_by_split,
         av_report=av_report,
+        selection_sha256=args.selection_sha256,
     )
     media_root = args.media_root.resolve(strict=True)
     _media_paths(rows, media_root)

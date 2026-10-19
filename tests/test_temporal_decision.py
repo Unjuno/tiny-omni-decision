@@ -8,6 +8,7 @@ torch = pytest.importorskip("torch")
 temporal_decision = import_module("tiny_omni_decision.temporal_decision")
 CausalGatedTemporalDecision = temporal_decision.CausalGatedTemporalDecision
 probability_json = temporal_decision.probability_json
+TaskConditionedTemporalDecision = temporal_decision.TaskConditionedTemporalDecision
 
 
 def test_joint_model_returns_finite_causal_logits_and_gate_probabilities() -> None:
@@ -90,3 +91,47 @@ def test_probability_json_returns_normalized_probabilities_over_options() -> Non
         "At least one incorrect action",
     ]
     assert sum(item["probability"] for item in payload["probabilities"]) == pytest.approx(1.0)
+
+
+def test_typed_task_conditioned_readout_has_no_text_input_and_is_causal() -> None:
+    torch.manual_seed(37)
+    model = TaskConditionedTemporalDecision(task_count=3, hidden_size=16).eval()
+    video = torch.randn(2, 5, 768)
+    audio = torch.randn(2, 5, 384)
+    task_ids = torch.tensor([0, 2])
+    result = model(video, audio, task_ids, lengths=torch.tensor([5, 3]))
+    assert result.logits.shape == (2, 5, 2)
+    assert torch.equal(result.logits[1, 3:], torch.zeros(2, 2))
+    assert torch.isfinite(result.logits).all()
+    assert not any("text" in name for name, _ in model.named_parameters())
+    assert model.trainable_parameter_count < 1_000_000
+
+
+@pytest.mark.parametrize(
+    ("mode", "changed_modality"),
+    [("video_only", "audio"), ("audio_only", "video")],
+)
+def test_task_conditioned_single_modality_arm_ignores_other_sensor(
+    mode: str, changed_modality: str
+) -> None:
+    model = TaskConditionedTemporalDecision(
+        task_count=2, hidden_size=16, modality_mode=mode
+    ).eval()
+    video = torch.randn(1, 4, 768)
+    audio = torch.randn(1, 4, 384)
+    task_ids = torch.tensor([1])
+    baseline = model(video, audio, task_ids)
+    if changed_modality == "audio":
+        changed = model(video, audio + 100, task_ids)
+        ignored_gate = baseline.modality_weights[..., 1]
+    else:
+        changed = model(video + 100, audio, task_ids)
+        ignored_gate = baseline.modality_weights[..., 0]
+    assert torch.equal(baseline.logits, changed.logits)
+    assert torch.equal(ignored_gate, torch.zeros_like(ignored_gate))
+
+
+def test_task_conditioned_readout_rejects_unknown_task_ids():
+    model = TaskConditionedTemporalDecision(task_count=2, hidden_size=16)
+    with pytest.raises(ValueError, match="shape/value is invalid"):
+        model(torch.randn(1, 2, 768), torch.randn(1, 2, 384), torch.tensor([2]))

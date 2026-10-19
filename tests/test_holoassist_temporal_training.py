@@ -202,3 +202,37 @@ def test_fixed_budget_run_keeps_best_and_final_checkpoints_separate(tmp_path) ->
     assert (tmp_path / "result" / "best-checkpoint.pt").is_file()
     assert (tmp_path / "result" / "final-checkpoint.pt").is_file()
     assert (tmp_path / "result" / "training-history.json").is_file()
+
+
+def test_task_type_conditioned_run_trains_without_text_features(tmp_path) -> None:
+    train_path = tmp_path / "train.npz"
+    validation_path = tmp_path / "validation.npz"
+    write_features(train_path, [("train-a", 2, 0), ("train-b", 2, 1)])
+    write_features(validation_path, [("validation-a", 2, 0)])
+    train = load_feature_split(train_path)
+    validation = load_feature_split(validation_path)
+    config = {
+        "seed": 17,
+        "hidden_size": 8,
+        "batch_sessions": 1,
+        "max_optimizer_steps": 2,
+        "evaluation_interval_steps": 1,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0,
+        "ece_bins": 5,
+    }
+
+    result = train_arm(
+        arm="joint",
+        train=train,
+        validation=validation,
+        config=config,
+        device=torch.device("cpu"),
+        output=tmp_path / "task-conditioned",
+        task_type_to_id={"synthetic task": 0},
+    )
+
+    assert result["optimizer_steps"] == 2
+    assert result["text_features_used"] is False
+    assert result["task_type_vocabulary"] == {"synthetic task": 0}
+    assert result["best_reload_max_probability_delta"] <= 1e-6

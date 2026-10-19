@@ -21,7 +21,10 @@ import torch
 from torch.nn import functional as F
 
 from scripts.audit_holoassist_metadata import sha256_file
-from tiny_omni_decision.temporal_decision import CausalGatedTemporalDecision
+from tiny_omni_decision.temporal_decision import (
+    CausalGatedTemporalDecision,
+    TaskConditionedTemporalDecision,
+)
 
 CONFIG = Path("configs/pretrained_reuse/holoassist_temporal_readout_v1.json")
 FEATURE_FIELDS = ("video", "audio", "text")
@@ -225,11 +228,12 @@ def _write_json(path: Path, value: Any) -> None:
 
 
 def _evaluate(
-    model: CausalGatedTemporalDecision,
+    model: CausalGatedTemporalDecision | TaskConditionedTemporalDecision,
     data: dict[str, Any],
     device: torch.device,
     batch_sessions: int,
     ece_bins: int,
+    task_type_to_id: dict[str, int] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     model.eval()
     logits_rows, target_rows, task_type_rows, prediction_rows = [], [], [], []
@@ -238,7 +242,20 @@ def _evaluate(
         for start in range(0, len(order), batch_sessions):
             selected = order[start : start + batch_sessions]
             video, audio, text, lengths, targets, mask = collate_sessions(data, selected, device)
-            output = model(video, audio, text, lengths=lengths)
+            if task_type_to_id is None:
+                output = model(video, audio, text, lengths=lengths)
+            else:
+                task_ids = torch.tensor(
+                    [
+                        task_type_to_id[
+                            str(data["task_type"][data["session_indices"][position][0]])
+                        ]
+                        for position in selected
+                    ],
+                    dtype=torch.int64,
+                    device=device,
+                )
+                output = model(video, audio, task_ids, lengths=lengths)
             batch, steps = targets.shape
             for row in range(batch):
                 valid_count = int(lengths[row].item())
@@ -301,6 +318,7 @@ def train_arm(
     config: dict[str, Any],
     device: torch.device,
     output: Path,
+    task_type_to_id: dict[str, int] | None = None,
 ) -> dict[str, Any]:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite readout attempt: {output}")
@@ -313,9 +331,16 @@ def train_arm(
     torch.manual_seed(seed)
     if device.type == "cuda":
         torch.cuda.manual_seed_all(seed)
-    model = CausalGatedTemporalDecision(
-        hidden_size=int(config["hidden_size"]), modality_mode=arm
-    ).to(device)
+    if task_type_to_id is None:
+        model = CausalGatedTemporalDecision(
+            hidden_size=int(config["hidden_size"]), modality_mode=arm
+        ).to(device)
+    else:
+        model = TaskConditionedTemporalDecision(
+            task_count=len(task_type_to_id),
+            hidden_size=int(config["hidden_size"]),
+            modality_mode=arm,
+        ).to(device)
     optimizer = torch.optim.AdamW(
         model.parameters(),
         lr=float(config["learning_rate"]),
@@ -344,7 +369,9 @@ def train_arm(
     started = time.perf_counter()
     train_order = list(range(len(train["session_names"])))
     initial_eval_started = time.perf_counter()
-    validation0, predictions0 = _evaluate(model, validation, device, batch_size, ece_bins)
+    validation0, predictions0 = _evaluate(
+        model, validation, device, batch_size, ece_bins, task_type_to_id
+    )
     best_nll = float(validation0["nll"])
     best_step = 0
     history.append(
@@ -381,7 +408,20 @@ def train_arm(
             )
             model.train()
             optimizer.zero_grad(set_to_none=True)
-            output_batch = model(video, audio, text, lengths=lengths)
+            if task_type_to_id is None:
+                output_batch = model(video, audio, text, lengths=lengths)
+            else:
+                task_ids = torch.tensor(
+                    [
+                        task_type_to_id[
+                            str(train["task_type"][train["session_indices"][position][0]])
+                        ]
+                        for position in selected
+                    ],
+                    dtype=torch.int64,
+                    device=device,
+                )
+                output_batch = model(video, audio, task_ids, lengths=lengths)
             mask = loss_mask & (targets >= 0)
             if not mask.any():
                 raise ValueError("training batch has no labelled windows")
@@ -404,7 +444,7 @@ def train_arm(
             if step % eval_interval == 0 or step == max_steps:
                 evaluation_started = time.perf_counter()
                 validation_metrics, predictions = _evaluate(
-                    model, validation, device, batch_size, ece_bins
+                    model, validation, device, batch_size, ece_bins, task_type_to_id
                 )
                 record = {
                     "step": step,
@@ -448,14 +488,16 @@ def train_arm(
     final_path = output / "final-checkpoint.pt.tmp"
     torch.save(model.state_dict(), final_path)
     final_path.replace(output / "final-checkpoint.pt")
-    final_metrics, final_predictions = _evaluate(model, validation, device, batch_size, ece_bins)
+    final_metrics, final_predictions = _evaluate(
+        model, validation, device, batch_size, ece_bins, task_type_to_id
+    )
     _write_json(output / f"predictions-step-{step:06d}-final.json", final_predictions)
     best_state = torch.load(
         output / "best-checkpoint.pt", map_location=device, weights_only=True
     )
     model.load_state_dict(best_state, strict=True)
     reloaded_metrics, reloaded_predictions = _evaluate(
-        model, validation, device, batch_size, ece_bins
+        model, validation, device, batch_size, ece_bins, task_type_to_id
     )
     selected_predictions_path = output / f"predictions-step-{best_step:06d}.json"
     selected_predictions = json.loads(selected_predictions_path.read_text(encoding="utf-8"))
@@ -510,6 +552,8 @@ def train_arm(
         "repeated_train_window_occurrences": consumed_window_occurrences
         - len(consumed_sample_ids),
         "trainable_parameters": model.trainable_parameter_count,
+        "text_features_used": task_type_to_id is None,
+        "task_type_vocabulary": task_type_to_id,
         "peak_cuda_allocated_bytes": (
             torch.cuda.max_memory_allocated(device) if device.type == "cuda" else None
         ),
@@ -594,6 +638,18 @@ def main() -> None:
     }
     _write_json(args.output_dir / "run-metadata.json", metadata)
     results = []
+    task_type_to_id = None
+    if config.get("conditioning", "text") == "task_type_id":
+        task_types = sorted(set(map(str, train["task_type"])))
+        validation_task_types = set(map(str, validation["task_type"]))
+        if not validation_task_types <= set(task_types):
+            raise ValueError("validation task type is absent from the training vocabulary")
+        task_type_to_id = {task_type: index for index, task_type in enumerate(task_types)}
+        metadata["conditioning"] = (
+            "typed task category ID; text feature values not passed to model"
+        )
+        metadata["task_type_vocabulary"] = task_type_to_id
+        _write_json(args.output_dir / "run-metadata.json", metadata)
     for arm in config["arms"]:
         result = train_arm(
             arm=arm,
@@ -602,6 +658,7 @@ def main() -> None:
             config=config,
             device=device,
             output=args.output_dir / arm,
+            task_type_to_id=task_type_to_id,
         )
         results.append(result)
         metadata["results"] = results

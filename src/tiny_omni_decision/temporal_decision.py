@@ -172,3 +172,113 @@ class CausalGatedTemporalDecision(nn.Module):
         if not torch.isfinite(logits).all() or not torch.isfinite(weights).all():
             raise ValueError("temporal decision produced non-finite logits or gates")
         return TemporalDecisionOutput(logits=logits, modality_weights=weights, state=next_state)
+
+
+class TaskConditionedTemporalDecision(nn.Module):
+    """Text-free causal AV readout conditioned only on a typed task category."""
+
+    def __init__(
+        self,
+        *,
+        task_count: int,
+        video_size: int = 768,
+        audio_size: int = 384,
+        hidden_size: int = 128,
+        modality_mode: str = "joint",
+    ) -> None:
+        super().__init__()
+        if min(task_count, video_size, audio_size, hidden_size) < 1:
+            raise ValueError("task, feature, and hidden dimensions must be positive")
+        if modality_mode not in {"joint", "video_only", "audio_only"}:
+            raise ValueError("modality_mode must be joint, video_only, or audio_only")
+        self.video_size = video_size
+        self.audio_size = audio_size
+        self.task_count = task_count
+        self.hidden_size = hidden_size
+        self.modality_mode = modality_mode
+        self.video_projection = nn.Linear(video_size, hidden_size)
+        self.audio_projection = nn.Linear(audio_size, hidden_size)
+        self.task_embedding = nn.Embedding(task_count, hidden_size)
+        self.gate = nn.Linear(hidden_size * 3, 2)
+        self.fusion = nn.Sequential(
+            nn.Linear(hidden_size * 3, hidden_size),
+            nn.GELU(),
+            nn.LayerNorm(hidden_size),
+        )
+        self.temporal = nn.LSTM(hidden_size, hidden_size, batch_first=True)
+        self.classifier = nn.Linear(hidden_size, 2)
+
+    @property
+    def trainable_parameter_count(self) -> int:
+        return sum(parameter.numel() for parameter in self.parameters() if parameter.requires_grad)
+
+    def forward(
+        self,
+        video: Tensor,
+        audio: Tensor,
+        task_ids: Tensor,
+        *,
+        lengths: Tensor | None = None,
+    ) -> TemporalDecisionOutput:
+        if video.ndim != 3 or audio.ndim != 3 or task_ids.ndim != 1:
+            raise ValueError("video/audio must be [batch,time,feature] and task_ids [batch]")
+        batch, steps, width = video.shape
+        if (
+            batch < 1
+            or steps < 1
+            or width != self.video_size
+            or audio.shape != (batch, steps, self.audio_size)
+            or task_ids.shape != (batch,)
+            or task_ids.dtype not in (torch.int32, torch.int64)
+            or torch.any(task_ids < 0)
+            or torch.any(task_ids >= self.task_count)
+        ):
+            raise ValueError("video, audio, or task ID shape/value is invalid")
+        if not torch.isfinite(video).all() or not torch.isfinite(audio).all():
+            raise ValueError("input features must be finite")
+        video_mask = torch.ones((batch, steps), dtype=torch.bool, device=video.device)
+        audio_mask = torch.ones_like(video_mask)
+        if self.modality_mode == "video_only":
+            audio_mask.zero_()
+        elif self.modality_mode == "audio_only":
+            video_mask.zero_()
+
+        video_hidden = torch.tanh(self.video_projection(video)) * video_mask.unsqueeze(-1)
+        audio_hidden = torch.tanh(self.audio_projection(audio)) * audio_mask.unsqueeze(-1)
+        task_hidden = self.task_embedding(task_ids.to(video.device))
+        task_sequence = task_hidden.unsqueeze(1).expand(-1, steps, -1)
+        gate_logits = self.gate(torch.cat([video_hidden, audio_hidden, task_sequence], dim=-1))
+        gate_logits = gate_logits.masked_fill(
+            ~torch.stack([video_mask, audio_mask], dim=-1), torch.finfo(gate_logits.dtype).min
+        )
+        weights = torch.softmax(gate_logits, dim=-1)
+        weighted = weights[..., :1] * video_hidden + weights[..., 1:] * audio_hidden
+        interaction = video_hidden * audio_hidden
+        fused = self.fusion(torch.cat([weighted, task_sequence, interaction], dim=-1))
+        if lengths is None:
+            temporal_output, next_state = self.temporal(fused)
+        else:
+            if (
+                lengths.shape != (batch,)
+                or lengths.dtype not in (torch.int32, torch.int64)
+                or torch.any(lengths < 1)
+                or torch.any(lengths > steps)
+            ):
+                raise ValueError("lengths must contain one valid positive length per row")
+            packed = pack_padded_sequence(
+                fused, lengths.cpu(), batch_first=True, enforce_sorted=False
+            )
+            packed_output, next_state = self.temporal(packed)
+            temporal_output, _ = pad_packed_sequence(
+                packed_output, batch_first=True, total_length=steps
+            )
+        logits = self.classifier(temporal_output)
+        if lengths is not None:
+            valid = torch.arange(steps, device=video.device).unsqueeze(0) < lengths.to(
+                video.device
+            ).unsqueeze(1)
+            logits = logits.masked_fill(~valid.unsqueeze(-1), 0.0)
+            weights = weights.masked_fill(~valid.unsqueeze(-1), 0.0)
+        if not torch.isfinite(logits).all() or not torch.isfinite(weights).all():
+            raise ValueError("temporal decision produced non-finite logits or gates")
+        return TemporalDecisionOutput(logits=logits, modality_weights=weights, state=next_state)

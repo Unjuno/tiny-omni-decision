@@ -22,7 +22,10 @@ from scripts.extract_holoassist_frozen_features import (
 
 def test_holoassist_extraction_binds_the_selected_media_plan():
     _require_frozen_selection({"selection_sha256": HOLOASSIST_SELECTION_SHA256})
-    with pytest.raises(ValueError, match="frozen HoloAssist selection"):
+    _require_frozen_selection({"selection_sha256": "a" * 64}, "a" * 64)
+    with pytest.raises(ValueError, match="explicitly pinned selection"):
+        _require_frozen_selection({"selection_sha256": "b" * 64}, "a" * 64)
+    with pytest.raises(ValueError, match="explicitly pinned selection"):
         _require_frozen_selection({"selection_sha256": "0" * 64})
 
 

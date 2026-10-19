@@ -38,6 +38,19 @@ def load_official_splits(path: Path) -> dict[str, set[str]]:
     return result
 
 
+def load_official_train_only(path: Path) -> set[str]:
+    """Read only the official train session list for an internal dev split."""
+    with zipfile.ZipFile(path) as archive:
+        members = [name for name in archive.namelist() if Path(name).name == SPLIT_FILES["train"]]
+        if len(members) != 1:
+            raise ValueError("official train split list must occur exactly once")
+        return {
+            line.strip()
+            for line in archive.read(members[0]).decode("utf-8").splitlines()
+            if line.strip()
+        }
+
+
 def validate_av_validation_report(
     report: dict,
     *,
@@ -249,6 +262,11 @@ def main() -> None:
     parser.add_argument("--av-validation-report", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--pre-context-seconds", type=float, default=0.5)
+    parser.add_argument(
+        "--internal-validation-from-train",
+        action="store_true",
+        help="Use only the official train split; validation is a held-out train partition.",
+    )
     args = parser.parse_args()
     if args.output_dir.exists():
         raise FileExistsError(f"refusing to overwrite event corpus: {args.output_dir}")
@@ -282,7 +300,11 @@ def main() -> None:
     )
     media_video_durations = video_durations_from_av_report(av_validation_report)
     records = json.loads(args.annotation.read_text(encoding="utf-8"))
-    splits = load_official_splits(args.splits)
+    if args.internal_validation_from_train:
+        train_ids = load_official_train_only(args.splits)
+        splits = {"train": train_ids, "validation": train_ids, "test": set()}
+    else:
+        splits = load_official_splits(args.splits)
     rows, report = build_event_rows(
         records=records,
         split_ids=splits,
