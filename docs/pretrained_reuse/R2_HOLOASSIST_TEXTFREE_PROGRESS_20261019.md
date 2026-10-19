@@ -2371,3 +2371,16 @@ in `unlogged-media-delta-20261019T132200Z.json` (SHA-256
 unchanged pinned journal authenticates 467 source hashes. PID 23276 remains
 active with four established HTTPS connections at a subsequent poll. CI run
 39259299140 for `f9e2079` completed successfully.
+
+At 13:22:27Z, full-receipt reconciliation
+`live-receipt-reconciliation-20261019T132600Z.json` (SHA-256
+`bebb79197d99c832030e7a9981b4ca3747bc09d88763ba4453aa2ce8f435d55f`) matched
+796 finalized MP4s, all train, to the frozen selection (validation 0/264). No
+unselected files, size mismatches, uncovered journal-external IDs or receipt
+hash conflicts were found. Local receipts cover 329 files outside the pinned
+journal (328 pass; one known timing-boundary failure). Three newly observed
+files passed local checks in `unlogged-media-delta-20261019T132600Z.json`
+(SHA-256 `40e88f4ab47bc914119da7c93c548d7c73bb0f1af7b31ddac97cce74800cd314`).
+The 467-row journal is still the only archive-source-hash-authenticated set.
+PID 23276 remains active. CI run 39259537046 for `fb9b41f` completed
+successfully.
