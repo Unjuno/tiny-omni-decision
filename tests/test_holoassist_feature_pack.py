@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 
 import numpy as np
 import pytest
@@ -9,6 +10,9 @@ from scripts.pack_holoassist_feature_cache import (
     load_feature_bank,
     pack_split,
     select_split_banks,
+)
+from scripts.pack_holoassist_feature_cache import (
+    main as pack_main,
 )
 
 
@@ -65,6 +69,30 @@ def test_pack_split_aligns_frozen_banks_and_masks_unlabelled_context() -> None:
     assert report["unlabelled_context_window_count"] == 1
 
 
+def test_pack_split_supports_text_free_video_audio_banks() -> None:
+    rows = make_rows()
+    ids = [row["id"] for row in rows]
+    banks = {
+        "video": (ids, np.ones((2, 768), dtype=np.float32), metadata("video")),
+        "audio": (ids, np.ones((2, 384), dtype=np.float32), metadata("audio")),
+    }
+
+    packed, report = pack_split(rows, banks, "train")
+
+    assert set(packed) == {
+        "video",
+        "audio",
+        "target",
+        "loss_mask",
+        "sample_id",
+        "session_id",
+        "window_index",
+        "media_sha256",
+        "task_type",
+    }
+    assert report["session_count"] == 1
+
+
 def test_pack_split_rejects_encoder_order_mismatch() -> None:
     rows = make_rows()
     ids = [row["id"] for row in rows]
@@ -104,3 +132,64 @@ def test_feature_bank_loader_requires_finite_pinned_embedding(tmp_path) -> None:
 
     with pytest.raises(ValueError, match="non-finite"):
         load_feature_bank(path, "video")
+
+
+def test_packer_cli_emits_text_free_cache_and_receipt(tmp_path, monkeypatch):
+    windows = tmp_path / "windows"
+    windows.mkdir()
+    rows = {
+        "train": {
+            "id": "train-a:window-0000",
+            "split": "train",
+            "session_id": "train-a",
+            "window_index": 0,
+            "target": 0,
+            "media_sha256": "a" * 64,
+            "task_type": "assemble",
+        },
+        "validation": {
+            "id": "validation-a:window-0000",
+            "split": "validation",
+            "session_id": "validation-a",
+            "window_index": 0,
+            "target": 1,
+            "media_sha256": "b" * 64,
+            "task_type": "assemble",
+        },
+    }
+    for split, row in rows.items():
+        (windows / f"{split}.jsonl").write_text(json.dumps(row) + "\n", encoding="utf-8")
+    ids = [rows["train"]["id"], rows["validation"]["id"]]
+    video_path = tmp_path / "video.npz"
+    audio_path = tmp_path / "audio.npz"
+    for path, name, width in ((video_path, "video", 768), (audio_path, "audio", 384)):
+        np.savez_compressed(
+            path,
+            sample_id=np.asarray(ids, dtype=str),
+            features=np.ones((2, width), dtype=np.float32),
+            metadata_json=np.asarray(json.dumps(metadata(name))),
+        )
+    output = tmp_path / "packed"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "pack_holoassist_feature_cache",
+            "--windows-dir",
+            str(windows),
+            "--video-bank",
+            str(video_path),
+            "--audio-bank",
+            str(audio_path),
+            "--without-text",
+            "--output-dir",
+            str(output),
+        ],
+    )
+
+    pack_main()
+
+    receipt = json.loads((output / "receipt.json").read_text(encoding="utf-8"))
+    assert set(receipt["input_feature_banks"]) == {"video", "audio"}
+    with np.load(output / "train.npz", allow_pickle=False) as archive:
+        assert "text" not in archive.files

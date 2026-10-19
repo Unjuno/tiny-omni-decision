@@ -1,3 +1,13 @@
+**2026-10-19 R2 HoloAssist text-free follow-up (in progress):** The prior
+pilot's text-conditioned modality arms and exposed official validation set are
+not reused. A fresh task-stratified 1,042-train / 264-development-validation
+partition from the 1,306 unused official-train sessions is pinned (seed
+20261019; 117.07 GB pitch-shifted AV download). At the recorded snapshot,
+21/1,306 videos were verified. The text-free typed-task AV model, feature
+packing and internal-validation path are implemented; CPU suite is green.
+No new model fit or quality result yet. See the
+[progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
 **2026-10-19 R2 HoloAssist temporal readout:** All 3,527 text/audio/video frozen features are packed and the fixed 2,048-step video-only, audio-only, and joint readout runs completed on the local RTX 3080. Validation-selected best accuracies were 71.31%, 73.79%, and 73.05%, respectively; each arm's NLL/calibration regressed sharply by the fixed endpoint. Joint input did not improve on audio-only, so fusion benefit is not supported by this pilot. No test or sealed-audit data were loaded. [Protocol/results](docs/pretrained_reuse/R2_HOLOASSIST_TEMPORAL_READOUT_RESULTS_20261019.md); detailed curves and hashes are in its linked JSON.
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 **2026-10-19 R2 HoloAssist full-media gate:** The fixed 160-train / 207-

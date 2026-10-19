@@ -19,27 +19,28 @@ from scripts.train_holoassist_temporal_readout import (  # noqa: E402
 )
 
 
-def write_features(path, sessions):
+def write_features(path, sessions, *, include_text=True):
     rows = []
     for session, count, target_offset in sessions:
         for window in range(count):
             rows.append((session, window, (window + target_offset) % 2))
-    np.savez_compressed(
-        path,
-        video=np.zeros((len(rows), 768), dtype=np.float32),
-        audio=np.ones((len(rows), 384), dtype=np.float32),
-        text=np.asarray(
+    arrays = {
+        "video": np.zeros((len(rows), 768), dtype=np.float32),
+        "audio": np.ones((len(rows), 384), dtype=np.float32),
+        "target": np.asarray([row[2] for row in rows], dtype=np.int64),
+        "loss_mask": np.ones(len(rows), dtype=np.bool_),
+        "sample_id": np.asarray([f"{row[0]}:window-{row[1]}" for row in rows], dtype=str),
+        "session_id": np.asarray([row[0] for row in rows], dtype=str),
+        "window_index": np.asarray([row[1] for row in rows], dtype=np.int64),
+        "media_sha256": np.asarray([f"sha-{row[0]}" for row in rows], dtype=str),
+        "task_type": np.asarray(["synthetic task" for _ in rows], dtype=str),
+    }
+    if include_text:
+        arrays["text"] = np.asarray(
             [np.full(384, 2.0 if row[0].startswith("train") else 3.0) for row in rows],
             dtype=np.float32,
-        ),
-        target=np.asarray([row[2] for row in rows], dtype=np.int64),
-        loss_mask=np.ones(len(rows), dtype=np.bool_),
-        sample_id=np.asarray([f"{row[0]}:window-{row[1]}" for row in rows], dtype=str),
-        session_id=np.asarray([row[0] for row in rows], dtype=str),
-        window_index=np.asarray([row[1] for row in rows], dtype=np.int64),
-        media_sha256=np.asarray([f"sha-{row[0]}" for row in rows], dtype=str),
-        task_type=np.asarray(["synthetic task" for _ in rows], dtype=str),
-    )
+        )
+    np.savez_compressed(path, **arrays)
 
 
 def test_split_groups_sessions_and_collates_chronological_windows(tmp_path) -> None:
@@ -207,10 +208,10 @@ def test_fixed_budget_run_keeps_best_and_final_checkpoints_separate(tmp_path) ->
 def test_task_type_conditioned_run_trains_without_text_features(tmp_path) -> None:
     train_path = tmp_path / "train.npz"
     validation_path = tmp_path / "validation.npz"
-    write_features(train_path, [("train-a", 2, 0), ("train-b", 2, 1)])
-    write_features(validation_path, [("validation-a", 2, 0)])
-    train = load_feature_split(train_path)
-    validation = load_feature_split(validation_path)
+    write_features(train_path, [("train-a", 2, 0), ("train-b", 2, 1)], include_text=False)
+    write_features(validation_path, [("validation-a", 2, 0)], include_text=False)
+    train = load_feature_split(train_path, require_text=False)
+    validation = load_feature_split(validation_path, require_text=False)
     config = {
         "seed": 17,
         "hidden_size": 8,

@@ -39,15 +39,17 @@ METADATA_FIELDS = (
 )
 
 
-def load_feature_split(path: Path) -> dict[str, np.ndarray]:
+def load_feature_split(path: Path, *, require_text: bool = True) -> dict[str, np.ndarray]:
     with np.load(path, allow_pickle=False) as archive:
         data = {key: archive[key] for key in archive.files}
-    required = {*FEATURE_FIELDS, *METADATA_FIELDS}
+    feature_fields = set(FEATURE_FIELDS) if require_text else {"video", "audio"}
+    required = {*feature_fields, *METADATA_FIELDS}
     if set(data) != required:
         raise ValueError(f"feature archive keys differ: expected={sorted(required)}")
     count = len(data["sample_id"])
     expected_dims = {"video": 768, "audio": 384, "text": 384}
-    for name, width in expected_dims.items():
+    for name in feature_fields:
+        width = expected_dims[name]
         if data[name].shape != (count, width) or data[name].dtype != np.float32:
             raise ValueError(f"invalid {name} feature shape/dtype")
         if not np.isfinite(data[name]).all():
@@ -142,8 +144,8 @@ def validate_feature_receipt(
         raise ValueError("feature receipt reports train/validation media overlap")
     if receipt.get("test_data_loaded") is not False:
         raise ValueError("test data must not be present in a development feature receipt")
-    if set(receipt.get("input_feature_banks", {})) != {"video", "audio", "text"}:
-        raise ValueError("receipt must pin video, audio, and text feature banks")
+    if set(receipt.get("input_feature_banks", {})) != set(expected_encoders):
+        raise ValueError("receipt feature-bank set differs from the explicitly expected modalities")
     for modality, expected in expected_encoders.items():
         recorded = receipt["input_feature_banks"][modality]["model"]
         fields = (
@@ -161,7 +163,11 @@ def validate_feature_receipt(
 
 
 def collate_sessions(
-    data: dict[str, Any], selected: list[int], device: torch.device
+    data: dict[str, Any],
+    selected: list[int],
+    device: torch.device,
+    *,
+    include_text: bool = True,
 ) -> tuple[torch.Tensor, ...]:
     groups = [data["session_indices"][index] for index in selected]
     lengths = torch.tensor([len(group) for group in groups], dtype=torch.int64, device=device)
@@ -176,12 +182,16 @@ def collate_sessions(
         length = len(group)
         video[row, :length] = torch.from_numpy(data["video"][group]).to(device)
         audio[row, :length] = torch.from_numpy(data["audio"][group]).to(device)
-        text[row] = torch.from_numpy(data["text"][group[0]]).to(device)
+        if include_text:
+            text[row] = torch.from_numpy(data["text"][group[0]]).to(device)
         targets[row, :length] = torch.from_numpy(data["target"][group]).to(device)
         loss_mask[row, :length] = torch.from_numpy(data["loss_mask"][group]).to(device)
-        repeated_text = np.repeat(data["text"][group[:1]], length, axis=0)
-        if not np.array_equal(data["text"][group], repeated_text):
-            raise ValueError(f"text feature changes within session {data['session_id'][group[0]]}")
+        if include_text:
+            repeated_text = np.repeat(data["text"][group[:1]], length, axis=0)
+            if not np.array_equal(data["text"][group], repeated_text):
+                raise ValueError(
+                    f"text feature changes within session {data['session_id'][group[0]]}"
+                )
     return video, audio, text, lengths, targets, loss_mask
 
 
@@ -241,7 +251,9 @@ def _evaluate(
     with torch.inference_mode():
         for start in range(0, len(order), batch_sessions):
             selected = order[start : start + batch_sessions]
-            video, audio, text, lengths, targets, mask = collate_sessions(data, selected, device)
+            video, audio, text, lengths, targets, mask = collate_sessions(
+                data, selected, device, include_text=task_type_to_id is None
+            )
             if task_type_to_id is None:
                 output = model(video, audio, text, lengths=lengths)
             else:
@@ -404,7 +416,7 @@ def train_arm(
                 consumed_media_hashes.update(map(str, train["media_sha256"][indices]))
                 consumed_task_type_occurrences.update(map(str, train["task_type"][indices]))
             video, audio, text, lengths, targets, loss_mask = collate_sessions(
-                train, selected, device
+                train, selected, device, include_text=task_type_to_id is None
             )
             model.train()
             optimizer.zero_grad(set_to_none=True)
@@ -580,8 +592,9 @@ def main() -> None:
     if args.output_dir.exists():
         raise FileExistsError(f"refusing to overwrite readout output: {args.output_dir}")
     config = json.loads(args.config.read_text(encoding="utf-8"))
-    train = load_feature_split(args.train_features)
-    validation = load_feature_split(args.validation_features)
+    require_text = config.get("conditioning", "text") != "task_type_id"
+    train = load_feature_split(args.train_features, require_text=require_text)
+    validation = load_feature_split(args.validation_features, require_text=require_text)
     validate_split_identity(train, validation)
     feature_receipt = json.loads(args.feature_receipt.read_text(encoding="utf-8"))
     validate_feature_receipt(
@@ -590,7 +603,11 @@ def main() -> None:
         validation_path=args.validation_features,
         train=train,
         validation=validation,
-        expected_encoders=config["encoders"],
+        expected_encoders=(
+            {name: config["encoders"][name] for name in ("video", "audio")}
+            if not require_text
+            else config["encoders"]
+        ),
     )
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but unavailable")

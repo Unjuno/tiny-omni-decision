@@ -142,19 +142,18 @@ def main() -> None:
     parser.add_argument("--windows-dir", type=Path, required=True)
     parser.add_argument("--video-bank", type=Path, required=True)
     parser.add_argument("--audio-bank", type=Path, required=True)
-    parser.add_argument("--text-bank", type=Path, required=True)
+    parser.add_argument("--text-bank", type=Path)
+    parser.add_argument("--without-text", action="store_true")
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     if args.output_dir.exists():
         raise FileExistsError(f"refusing to overwrite packed features: {args.output_dir}")
-    banks = {
-        name: load_feature_bank(path, name)
-        for name, path in (
-            ("video", args.video_bank),
-            ("audio", args.audio_bank),
-            ("text", args.text_bank),
-        )
-    }
+    if args.without_text == (args.text_bank is not None):
+        raise ValueError("provide --text-bank for text features or --without-text, not both")
+    bank_paths = {"video": args.video_bank, "audio": args.audio_bank}
+    if args.text_bank is not None:
+        bank_paths["text"] = args.text_bank
+    banks = {name: load_feature_bank(path, name) for name, path in bank_paths.items()}
     rows = {
         split: read_jsonl(args.windows_dir / f"{split}.jsonl")
         for split in ("train", "validation")
@@ -198,11 +197,7 @@ def main() -> None:
                 "sha256": sha256_file(path),
                 "model": banks[name][2],
             }
-            for name, path in (
-                ("video", args.video_bank),
-                ("audio", args.audio_bank),
-                ("text", args.text_bank),
-            )
+            for name, path in bank_paths.items()
         },
         "train_validation_session_overlap": 0,
         "train_validation_media_overlap": 0,
