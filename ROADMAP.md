@@ -2762,3 +2762,12 @@ seven partial files stayed at 100,663,296 bytes total. Process CPU increased by
 0.1875 seconds; reported process disk read/write deltas were zero. This is a
 transient no-progress observation, not evidence that the downloader exited or
 that acquisition completed. Do not restart or intervene.
+
+**2026-10-19 R2 HoloAssist acquisition update (13:31 UTC):** Full receipt
+reconciliation matched 811 finalized train MP4s (811/1,042; validation 0/264)
+to selection. The 344 files outside the pinned journal all have local receipts
+(343 pass; one known timing-boundary failure), with no unselected files, size
+mismatches, uncovered IDs, or receipt hash conflicts. Only 467 source hashes
+are authenticated by the pinned journal. PID 23276 remains active. CI for
+`dfe96cd` is green. See the [progress record]
+(docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

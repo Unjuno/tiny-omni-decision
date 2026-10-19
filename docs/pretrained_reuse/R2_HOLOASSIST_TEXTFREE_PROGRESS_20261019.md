@@ -2429,3 +2429,16 @@ interval showed no media change for about 45 seconds. Counts remained 808 MP4s
 and seven partials totaling 100,663,296 bytes. This supports only a transient
 quiet interval; the live handle remains authoritative and the downloader must
 not be treated as finished or restarted.
+
+At 13:31:33Z, all-receipts reconciliation
+`live-receipt-reconciliation-20261019T133130Z.json` (SHA-256
+`3df139e24d7e60656ea6ed41a6bbc55fef24b9938bc623c72595f7d466e1a0b9`) matched
+811 finalized MP4s, all train, to selection (validation 0/264). No unselected
+files, size mismatches, uncovered journal-external IDs, or local receipt hash
+conflicts were found. Local receipts cover all 344 journal-external files
+(343 pass; one known timing-boundary failure). Five new files passed local
+checks in `unlogged-media-delta-20261019T133130Z.json` (SHA-256
+`c7f5320cae658b86e14184c279bc2e5ac450bc9cca5ebe616933c02279f1fec5`). The
+pinned journal remains the only source-hash-authenticated set and has 467 rows.
+PID 23276 remains active with four HTTPS connections. CI run 39260671335 for
+`dfe96cd` completed successfully.
