@@ -102,15 +102,15 @@ stable disambiguation of repeated upstream event IDs.
 ## Ongoing frozen extraction and AV intervention follow-up
 
 The pinned VideoPrism extractor is running as attempt-03 under the cooperative
-HotUGPU reservation. At 2026-10-20 05:33 JST it had saved 2,048 / 12,261
+HotUGPU reservation. At 2026-10-20 05:38 JST it had saved 2,176 / 12,261
 development-window embeddings; all completed rows are finite. The progress NPZ
-is 5,953,637 bytes and its embedded fingerprint binds the frozen selection,
+is 6,320,143 bytes and its embedded fingerprint binds the frozen selection,
 corpus receipts, VideoPrism revision, checkpoint hash, preprocessing, and
 extractor source. An auxiliary `progress-fingerprint.json` still says 192 rows
 and is stale; it is not used as the progress authority. The completed-row count
 comes from the NPZ `completed` mask. A read-only integrity check matched every
 stored sample ID and its order to the frozen train+validation JSONLs and matched
-the recorded ordered-ID hash; the 2,048 completed flags form a contiguous
+the recorded ordered-ID hash; the 2,176 completed flags form a contiguous
 prefix. Completed vectors are finite, nonzero, and nonconstant (L2 norm
 15.97–16.70 in this checkpoint).
 
@@ -119,9 +119,9 @@ The extraction remains on the frozen CPU/JAX path. The extractor itself sets
 though HotUGPU reserves 6,000 MiB (6,169 MiB observed in use) and the RTX 3080
 reports 0% utilization. The same guard, extractor, post-extraction continuation,
 and two evaluation watchers remain alive; none has been restarted or altered.
-Across the saved intervals 1,920→1,984 and 1,984→2,048, throughput was about
-24 embeddings/minute (roughly 2.5 seconds per window). A naive projection at
-that short-run rate leaves about 7.0 hours for the remaining rows; this is a
+Across the saved intervals 2,048→2,112 and 2,112→2,176, throughput was about
+25 embeddings/minute (roughly 2.4 seconds per window). A naive projection at
+that short-run rate leaves about 6.8 hours for the remaining rows; this is a
 planning estimate, not a runtime guarantee. Audio extraction, cache packing,
 and the three matched readout arms have not started yet; the existing
 continuation waits for the completed atomic video bank.
