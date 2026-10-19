@@ -225,3 +225,9 @@ other workers progressed; no active download was stopped or restarted.
 GitHub Actions run
 [39207225084](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39207225084)
 for source commit `c7b2bde002123cdc4917f41eaa9af7f19d7fe9f0` passed.
+
+At 2026-10-19 06:00 UTC, the independently verified prefix reached 85 files
+(6,133,002,174 bytes) with zero mismatches. Current receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T060033Z.json`
+(SHA-256 `f8b9eb9e4b5a5f17bd9ba5f595e3fe55f0eacf34d212ed04777d5ec994ead918`),
+referenced from `run-preflight.json`.
