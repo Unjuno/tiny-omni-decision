@@ -604,17 +604,17 @@ The external preflight points to this receipt. CI for the previous report
 commit `0896e58` completed successfully at run
 [39215849783](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215849783).
 
-## Acquisition and HotUGPU handoff update (2026-10-19 07:42 UTC)
+## Acquisition and HotUGPU handoff update (2026-10-19 07:46 UTC)
 
 The unchanged PID 23276 downloader remains active with its original four
-workers. The journal reached 214 completed train videos (21,468,982,769 bytes);
+workers. The journal reached 217 completed train videos (21,878,064,572 bytes);
 validation remains at zero. The latest chained audit confirmed that the
 previously audited journal byte-prefix is unchanged, then recomputed SHA-256
 for all three newly completed files and rechecked selection/split, pinned ETag,
-archive offsets, paths and sizes. The cumulative 214-file chain passed with no
+archive offsets, paths and sizes. The cumulative 217-file chain passed with no
 errors. Receipt:
-`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T074254Z-chained.json`
-(SHA-256 `395d39b024780174ff5052f8921b72ac3ad462dffa84d78c261e0be7409bf99b`).
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T074613Z-chained.json`
+(SHA-256 `6f21737efffe07b5dbc24e402ce71b93551b1c895eab70140ce002e128381646`).
 The external `run-preflight.json` points to this receipt. Training media was
 read only for hash verification; no validation files have been downloaded,
 and no test or sealed-audit media has been opened.
@@ -636,3 +636,5 @@ The follow-up audit-record commit `c8790e9` also passed CI at run
 [39217234351](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39217234351).
 Commit `6c1855d` passed CI at run
 [39217626921](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39217626921).
+Commit `3fad664` passed CI at run
+[39217826460](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39217826460).
