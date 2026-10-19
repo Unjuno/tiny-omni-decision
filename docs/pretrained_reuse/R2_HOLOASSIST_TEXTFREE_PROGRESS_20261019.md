@@ -1313,3 +1313,19 @@ mtime remained 10:07:15 UTC. The audit-tool fix therefore resolves only its
 ETag input contract; the live journal lag remains a separate unresolved
 behavior. No restart or process intervention was performed. CI #2183 for
 e7eab64 was still running at the last check.
+At 2026-10-19 11:19 UTC, the live repository audit still passed its partial
+journal gate with the explicit pinned ETag: 467/1,306 journal rows, 109
+complete unlogged files on disk, six partials totaling 754,974,720 bytes, and
+839 expected files not yet present in the journal. The new two-file delta since
+the 12:00Z receipt passed local SHA, selection ID/size, AV metadata and
+annotation-timing checks. Cumulative unjournaled-file diagnostics now cover 109
+files: 108 metadata passes and the same one timing-boundary failure; the 108
+local hashes are not source-authenticated. Receipt:
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1220Z.json
+(SHA-256 7ef3c4e7878af4b5508de5df8bdb098a93aac73ffbbd88f6d5bf33b56c6f556a).
+
+A 20-second read-only process sample captured six growing .part files while
+PID 23276 remained alive. Complete media count was 576 at 11:19:10 UTC
+(53,324,598,946 bytes), with the journal still at 467 rows / last write
+10:07:15 UTC. This confirms active transfer, but does not explain why journal
+rows have not advanced. No process or GPU intervention was made.
