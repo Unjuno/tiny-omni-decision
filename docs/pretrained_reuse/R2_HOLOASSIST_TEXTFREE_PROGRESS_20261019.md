@@ -1980,3 +1980,16 @@ IDs passed local checks in
 write; this observation measured 75,497,472 bytes. CI for the documentation
 commit `2b07dbd25de3d000aec0af30022e41f62a403bc9` completed successfully.
 
+
+At 12:27:12Z, the latest pinned-snapshot audit recorded 692 finalized MP4s,
+467 journal-authenticated and 225 not represented by the pinned journal. Its
+SHA-256 is `8DCCD6EF528C48EE7EB2027060F623833AFBE1E028B991A3BEFC6DEA0E7858FD`.
+Deduplicated local diagnostics cover all 225 unjournaled IDs (224 pass, one
+known timing-boundary failure). Three newly found IDs passed in
+`unlogged-media-delta-20261019T122659Z.json` (SHA-256
+`2f199f0a779688ac93b3dbf9b5b327c30499926d899a5eef370459c3e87a26a7`). Six
+partial files totaled 260,046,848 bytes at the audit snapshot. The downloader
+was confirmed alive at 12:26:59Z; the subsequent process query returned no row,
+so its state after that time is UNKNOWN and must be checked again before any
+assumption about termination. The latest repository commit is `2176f31` and
+its CI was queued at the time of this note.

@@ -2481,3 +2481,11 @@ matches all 222 (221 pass; one known timing-boundary failure). Six partials
 remain and PID 23276 is active. CI for commit `2b07dbd` is green. Acquisition
 is incomplete; local checks do not extend archive authentication. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:27 UTC):** Latest pinned
+snapshot: 692 MP4s, 467 journal-authenticated and 225 unjournaled. Local
+diagnostics cover all unjournaled IDs (224 pass; one known timing-boundary
+failure). Six partials remain. Downloader state after 12:26:59Z is UNKNOWN;
+verify before concluding it stopped. CI for `2176f31` was queued. Acquisition
+is not complete; local checks do not extend archive authentication. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
