@@ -1606,3 +1606,19 @@ live receipt:
 (SHA-256 `d58df232605a862a0caf159ec04d71a8eae3e188a863c75d3d99e9ae2dd4d402`).
 Six partial files totaled 369,098,752 bytes. GPU was idle at the latest point
 sample, but task start remains gated by corpus integrity and HotUGPU.
+
+At 2026-10-19 11:50 UTC, the HoloAssist/HotUGPU focused CPU suite passed
+(86 tests) and Ruff passed for the selected extraction, corpus, audit, and
+HotUGPU scripts. No code was changed by this verification. PID 23276 remained
+alive with four HTTPS connections; one additional completed MP4 passed local
+diagnostics. The live receipt
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1150Z.json`
+(SHA-256 `cde22f6e8bf0e54131061ff7b90dc61351f714fbe77de4c710fbd08a6e95ee0f`)
+records 625 complete files on disk, of which 158 are not in the 467-row journal,
+and six partials totaling 591,396,864 bytes. Cumulative local diagnostics cover
+157 of the 158 unjournaled files: 156 metadata passes and one known
+source-range-verified timing-boundary failure. The new delta receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1600Z.json`
+(SHA-256 `567e77cb272a4e5b850367a7ecc5b4f03be1f0d25b09305c3735f15b67ea82d0`).
+GPU was idle on the last sample, but feature extraction remains gated on a
+complete, reconciled media corpus.
