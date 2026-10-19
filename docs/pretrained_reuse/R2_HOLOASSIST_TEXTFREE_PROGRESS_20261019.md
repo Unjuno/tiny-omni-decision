@@ -731,3 +731,11 @@ Receipt:
 (SHA-256 `253eb074a326cdbaffbe5e418a6130f83820d3f3d74049781297faad8f8d8758`).
 PID 23276 remains live with four partial transfers. C: had 138.16 GiB free and
 39.33 GiB headroom using the conservative remaining-download estimate.
+
+At 2026-10-19 17:34 JST, the chained audit verified 311/1,306 train videos
+(29,013,035,363 bytes). Five appended media SHA-256 values and their pinned
+selection metadata passed with zero errors. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T083426Z-chained.json`
+(SHA-256 `21de6930b0432984f1d635ff4acfc8cd4e8eb90c7d645f08ab251bb1bf2e7dd0`).
+The same four-worker PID 23276 is live; four partial files are still active.
+C: had 143.52 GiB free and 45.10 GiB headroom above the conservative estimate.
