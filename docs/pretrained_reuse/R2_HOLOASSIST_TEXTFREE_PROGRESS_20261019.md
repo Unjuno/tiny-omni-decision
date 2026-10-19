@@ -2531,3 +2531,18 @@ spot-check receipt is
 it authenticates this one file only. PID 23276 remained active and the journal
 mtime remained 10:07:15Z. No media corpus completion or feature extraction is
 claimed.
+
+At 13:56:40Z, full-receipt reconciliation
+`live-receipt-reconciliation-20261019T135630Z.json` (SHA-256
+`04411cdb833ac6e485ceda97b4c966c9417c0bf6334c172619ed54059e4d6ed0`) matched
+849 finalized MP4s, all train, to the frozen selection (validation 0/264). No
+unselected files, size mismatches, uncovered IDs, or receipt hash conflicts
+were found. Local receipts cover all 382 files outside the pinned journal
+(381 pass; one known timing-boundary failure); ten new files passed diagnostics
+in `unlogged-media-delta-20261019T135630Z.json` (SHA-256
+`449a5dc1d55e971e6d8418517dc143fc4d872dddd390d1f6f3cd4c50e60b1fc7`). The
+pinned 467-row journal remains the only full-set source-hash-authenticated
+receipt; a separate direct archive-range comparison still covers only the one
+file recorded above. PID 23276 remained active with seven partial files. The
+journal mtime remained 10:07:15Z. No corpus-wide AV validation or feature
+extraction is claimed.
