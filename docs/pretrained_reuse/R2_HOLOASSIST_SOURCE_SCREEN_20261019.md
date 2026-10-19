@@ -266,6 +266,13 @@ is preserved in
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-extractor-audio-smoke-attempt-02`.
 This is encoder plumbing evidence, not task-quality evidence or a real feature
 bank.
+At 2026-10-19 00:28:06 UTC, the live journal audit recorded 240/367 selected
+MP4s (24,556,305,185 completed bytes), 127 unlogged files, and eight partial
+files (931,135,488 bytes); no identity, offset, path, or size mismatch was
+found, and content hashes were not recomputed. PID 16496 remained active.
+Snapshot:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T002806Z.json`
+(SHA-256 `EEE008631CD41E158E07F279D0F621C8817B2D2A4A1481D99A3FB507B32E47B1`).
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)

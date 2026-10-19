@@ -16,6 +16,10 @@ loop, finite 384D output). The guard waited for Orbitune's GPU use to yield,
 then reserved 3,200 MiB and released it after the smoke. This validates encoder
 plumbing only; full media validation and task fitting remain pending. Details
 are in the [HoloAssist source-screen log](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
+**2026-10-19 R2 HoloAssist acquisition progress:** 240/367 selected videos
+(24.56 GB) were recorded at 00:28:06 UTC; PID 16496 remained active, with
+127 files outstanding and eight partial transfers. The latest audit snapshot
+is in the [HoloAssist source-screen log](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
 **2026-10-19 R2 EuroSAT spatial transfer:** Corrected the initial source-screen
 conclusion after finding TorchGeo's pinned longitude-based split manifests.
 The exact DINOv2-small checkpoint is Apache-2.0 per its pinned official card.
