@@ -23,8 +23,10 @@ def probability_json(logits: Tensor, options: Sequence[str], sample_id: str) -> 
     """Serialize one decision as an option-probability JSON object."""
     if logits.ndim != 1 or logits.numel() != len(options) or len(options) < 2:
         raise ValueError("one logit per supplied option is required")
-    if not sample_id or any(not option.strip() for option in options) or len(set(options)) != len(
-        options
+    if (
+        not sample_id
+        or any(not option.strip() for option in options)
+        or len(set(options)) != len(options)
     ):
         raise ValueError("sample ID and unique, nonempty options are required")
     if not torch.isfinite(logits).all():
@@ -118,8 +120,8 @@ class CausalGatedTemporalDecision(nn.Module):
                 raise ValueError(f"{name} must be a boolean [batch,time] tensor")
             return value.to(video.device)
 
-        video_mask = presence_mask(video_present, "video_present")
-        audio_mask = presence_mask(audio_present, "audio_present")
+        video_mask = presence_mask(video_present, "video_present").clone()
+        audio_mask = presence_mask(audio_present, "audio_present").clone()
         if self.modality_mode == "video_only":
             audio_mask = torch.zeros_like(audio_mask)
         elif self.modality_mode == "audio_only":
@@ -135,9 +137,7 @@ class CausalGatedTemporalDecision(nn.Module):
             ~torch.stack([video_mask, audio_mask], dim=-1), torch.finfo(gate_logits.dtype).min
         )
         weights = torch.softmax(gate_logits, dim=-1)
-        weighted_modalities = (
-            weights[..., 0:1] * video_hidden + weights[..., 1:2] * audio_hidden
-        )
+        weighted_modalities = weights[..., 0:1] * video_hidden + weights[..., 1:2] * audio_hidden
         interaction = video_hidden * audio_hidden
         fused = self.fusion(torch.cat([weighted_modalities, text_hidden, interaction], dim=-1))
 
@@ -219,6 +219,8 @@ class TaskConditionedTemporalDecision(nn.Module):
         task_ids: Tensor,
         *,
         lengths: Tensor | None = None,
+        video_present: Tensor | None = None,
+        audio_present: Tensor | None = None,
     ) -> TemporalDecisionOutput:
         if video.ndim != 3 or audio.ndim != 3 or task_ids.ndim != 1:
             raise ValueError("video/audio must be [batch,time,feature] and task_ids [batch]")
@@ -236,12 +238,22 @@ class TaskConditionedTemporalDecision(nn.Module):
             raise ValueError("video, audio, or task ID shape/value is invalid")
         if not torch.isfinite(video).all() or not torch.isfinite(audio).all():
             raise ValueError("input features must be finite")
-        video_mask = torch.ones((batch, steps), dtype=torch.bool, device=video.device)
-        audio_mask = torch.ones_like(video_mask)
+
+        def presence_mask(value: Tensor | None, name: str) -> Tensor:
+            if value is None:
+                return torch.ones((batch, steps), dtype=torch.bool, device=video.device)
+            if value.shape != (batch, steps) or value.dtype != torch.bool:
+                raise ValueError(f"{name} must be a boolean [batch,time] tensor")
+            return value.to(video.device)
+
+        video_mask = presence_mask(video_present, "video_present").clone()
+        audio_mask = presence_mask(audio_present, "audio_present").clone()
         if self.modality_mode == "video_only":
             audio_mask.zero_()
         elif self.modality_mode == "audio_only":
             video_mask.zero_()
+        if not torch.all(video_mask | audio_mask):
+            raise ValueError("each time step requires at least one available modality")
 
         video_hidden = torch.tanh(self.video_projection(video)) * video_mask.unsqueeze(-1)
         audio_hidden = torch.tanh(self.audio_projection(audio)) * audio_mask.unsqueeze(-1)

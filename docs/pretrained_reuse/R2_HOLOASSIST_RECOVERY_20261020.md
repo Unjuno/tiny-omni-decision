@@ -98,3 +98,35 @@ The source split, annotations, media, feature banks, and readout checkpoints
 remain external to Git and were not overwritten. The updated tests cover the
 actual selection schema, explicit ETag pin, AAC packet timing allowance, and
 stable disambiguation of repeated upstream event IDs.
+
+## Ongoing frozen extraction and AV intervention follow-up
+
+The pinned VideoPrism extractor is running as attempt-03 under the cooperative
+HotUGPU reservation. At 2026-10-20 04:39 JST it had saved 768 / 12,261
+development-window embeddings, all finite. It remains on the frozen CPU/JAX
+path: 6,169 / 16,384 MiB is reserved and the RTX 3080 reports 0% utilization.
+The active process and continuation process are left untouched. Audio
+extraction, cache packing and the three matched readout arms have not started
+yet; the existing continuation waits for the completed atomic video bank.
+
+The readout's joint arm is followed by a separate fixed-validation intervention
+evaluator, `scripts/evaluate_holoassist_temporal_interventions.py`. It checks
+the completed run, exact train/validation feature hashes, receipt, checkpoint
+hash, fixed task vocabulary and all three arm results before loading only the
+joint best checkpoint. It compares baseline replay, missing audio, missing
+video, within-session audio time reversal, within-session video time reversal,
+and audio reassignment between validation sessions matched on task type and
+window count. It writes its own six per-example prediction files and metrics;
+the baseline must replay the saved probabilities within 1e-6. Sealed audit and
+official test data are not loaded. A dedicated watcher waits for the existing
+pipeline to finish and then runs this evaluation through HotUGPU in a new
+output directory; it does not overlap the three-arm fitting run.
+
+CPU tests cover modality-mask behavior and immutability, deterministic
+session-level interventions, fixed sample-ID coverage, replay parity against
+the training evaluator, and receipt/hash-bound loading. The full CPU suite
+passed (2,487 passed, 1 skipped); Ruff lint passed and the four changed Python
+files are formatted. `ruff format --check .` still reports 379 pre-existing
+unformatted repository files, which were not bulk-reformatted. These code and
+runtime checks do not constitute HoloAssist quality results. This task-specific
+AV study alone does not close the broader R2-M matrix or R0-R8 quality gates.
