@@ -531,3 +531,14 @@ size, path, or SHA mismatches. No validation media has completed. Receipt:
 `run-preflight.json` now records both the current prefix receipt and pinned
 source-input hash recheck. The HoloAssist source annotation and split archive
 are unchanged; test labels/media remain unopened.
+
+## Live media prefix refresh (2026-10-19 07:16 UTC)
+
+The active downloader reached 179 completed train assets (17,370,208,026
+bytes). A new full-prefix audit validated all 179 selection IDs/splits, the
+pinned archive ETag and offsets, file paths and sizes, and recomputed media
+SHA-256 values with zero errors. No validation media has completed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T071639Z.json`
+(SHA-256 `19c21f36174860e378287eff2990f461c10bd4277d7eb28ad64716d56f757367`).
+The external preflight now points to this full audit. Orbitune was using about
+15.8 GiB of VRAM at the last sample, so no new GPU task was launched.
