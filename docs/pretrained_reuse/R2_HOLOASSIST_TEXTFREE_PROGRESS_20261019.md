@@ -1295,3 +1295,21 @@ selected-media download) passes 19 tests; Ruff passes on the changed auditor
 and test. No GPU work or model fitting was started, and PID 23276 remains
 untouched. The commit containing this repair and the observation will receive
 its own CI run after push.
+At 2026-10-19 11:15 UTC, the live repository auditor (with the pinned ETag)
+again passed its partial-download integrity gate: 467/1,306 journal rows, 107
+complete unlogged files on disk, six partials, and 839 selected files not yet
+journal-completed. It intentionally does not hash media. The local-delta audit
+then covered the three files newly visible since the 11:55Z receipt; all three
+passed ID/size, local hash, AV metadata and timing checks. The cumulative 107
+unjournaled completed files now have local diagnostics: 106 metadata passes and
+the single known, exact-range-verified timing-boundary failure. The other 106
+hashes remain unverified against archive ranges. Delta receipt:
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1200Z.json
+(SHA-256 6d2038051c655ccca7ae1243951bea0021afd828c57baed5f8ed9101d207bf01).
+
+The 11:15 UTC observation found 574 complete files (53,121,978,680 bytes) and
+a still-live PID 23276. Media writes continued, but the 467-row journal's
+mtime remained 10:07:15 UTC. The audit-tool fix therefore resolves only its
+ETag input contract; the live journal lag remains a separate unresolved
+behavior. No restart or process intervention was performed. CI #2183 for
+e7eab64 was still running at the last check.
