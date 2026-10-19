@@ -682,3 +682,15 @@ capacity check. A later check during the same active download measured 140.39
 GiB free and 38.40 GB headroom above the 1.2x remaining-download estimate.
 AV validation and model fitting remain gated on the complete
 selected corpus; no GPU work was started in this turn.
+
+At 2026-10-19 17:18 JST, a second chained audit extended the verified prefix
+to 276/1,306 train videos (26,418,035,506 bytes). It rehashed six newly
+completed media files and verified the exact preceding 270-line journal
+prefix, with zero errors. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T081844Z-chained.json`
+(SHA-256 `1cad8b195b5275d0dcb80fa0279f17039c52a19e9ef47ff7efbf9aead75ea35c`).
+Downloader PID 23276 remained active on the pinned four-worker command. A
+capacity snapshot measured 145.72 GiB free with 44.41 GiB headroom above the
+1.2x remaining-download estimate. The pushed documentation commit
+`9eba0d0` passed CI run
+[39221729023](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39221729023).
