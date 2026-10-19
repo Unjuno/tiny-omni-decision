@@ -496,3 +496,22 @@ No validation files have completed. Receipt:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T071058Z.json`
 (SHA-256 `59b6550d11862bad3ecf90ead13fd215f56fb5bcf4d519afcab16b913e4b99c7`).
 The attempt preflight now records this receipt and the three-window smoke.
+
+## Live media audit refresh (2026-10-19 07:13 UTC)
+
+The active downloader (PID 23276, original four-worker command) reached 175
+completed records / 17,089,550,898 bytes. A fresh full-prefix audit verified all
+175 against frozen selection identity, split, ETag, archive offset, destination,
+size, and recomputed SHA-256; zero mismatches. They are all selected train
+files; no validation media has completed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T071316Z.json`
+(SHA-256 `51a605ca25577979e0d45287bbb647fea067361fab645e87fc68de375921357e`).
+`run-preflight.json` points to the receipt. This is about 14.6% of the selected
+AV byte total, so full corpus validation and learning remain gated on further
+acquisition.
+
+The latest read-only GPU sample shows Orbitune training active at roughly
+15.8/16 GiB and 96% utilization. No local feature or fit job was launched while
+it occupied the GPU; the previous HotUGPU-gated CPU VideoPrism throughput smoke
+is separately recorded above. The latest repository CI passed for commit
+`8b62e33` (run [39214399656](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39214399656)).
