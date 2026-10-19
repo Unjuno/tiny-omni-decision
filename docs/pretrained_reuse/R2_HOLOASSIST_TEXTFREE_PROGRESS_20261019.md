@@ -2509,3 +2509,25 @@ hash conflicts. Local receipts cover all 363 files outside the pinned journal
 partial files were present; PID 23276 remained active. A 15-second process
 sample observed 46,137,344 additional bytes written before this audit, so the
 downloader was still progressing despite no journal update since 10:07:15Z.
+
+At 13:50:43Z, full-receipt reconciliation
+`live-receipt-reconciliation-20261019T135028Z.json` (SHA-256
+`08e8b425a490864c0d6b5c3c6c86c478134f3a4519014019f66436e13a09df1c`) matched
+839 finalized MP4s, all train, to the frozen selection (validation 0/264). No
+unselected files, size mismatches, uncovered IDs, or receipt hash conflicts
+were found. Local receipts cover all 372 files outside the pinned journal
+(371 pass; one known timing-boundary failure); nine new files passed local
+diagnostics in `unlogged-media-delta-20261019T135028Z.json` (SHA-256
+`9273706d32b44bc289b2746e03ed285056f3d7b0a00062c559a2ced3646f5f55`).
+The pinned journal remains the only source-hash-authenticated corpus receipt,
+with 467 rows. Independently, the smallest locally receipted journal-external
+file, train session `z091-july-08-22-printer_small` (7,368,126 bytes), was
+re-read from its exact archive range with HTTP 206, the pinned ETag and exact
+Content-Range. Local and source-range SHA-256 both equaled
+`d6ef75461c07977ed4242f6f4fd8d143c59bd07fa51e37a87804a2123203969f`. The
+spot-check receipt is
+`source-range-spotcheck-z091-july-08-22-printer_small-20261019T134900Z.json`
+(SHA-256 `98691cd37f5e37579099657899947782a93f52e685f49887bb1d0d07b8fc1fed`);
+it authenticates this one file only. PID 23276 remained active and the journal
+mtime remained 10:07:15Z. No media corpus completion or feature extraction is
+claimed.

@@ -2,20 +2,16 @@
 pilot's text-conditioned modality arms and exposed official validation set are
 not reused. A fresh task-stratified 1,042-train / 264-development-validation
 partition from the 1,306 unused official-train sessions is pinned (seed
-20261019; 117.07 GB pitch-shifted AV download). At 10:18 UTC, 467/1,306
-videos (43.02 GB) passed an independent SHA-256, selection, and split audit.
-One selected train clip passed a full CPU AV decode smoke (3,071 video frames and
-5,091,328 audio samples in 5.35 seconds); corpus-wide decode remains pending.
-At 11:01 UTC downloader PID 23276 remained active. The media directory showed
-556 complete files (50.87 GB), but its journal still had 467 rows (43.02 GB),
-leaving 89 unjournaled files. The chained independently verified prefix remains
-467/1,306. All 467 verified media were rehashed and passed AV stream-metadata
-and annotation-timing gates. Local diagnostics cover all 89 unjournaled files:
-their IDs/sizes match the frozen selection and 88 pass metadata checks. The
-remaining file is the previously source-confirmed marginal timing miss. The 88
-local hashes do not prove archive identity. No media manifest, feature
-extraction, or training is available yet. See the timestamped progress record
-and external audit receipts.
+20261019; 117.07 GB pitch-shifted AV download). One selected train clip passed
+a full CPU AV decode smoke (3,071 video frames and 5,091,328 audio samples in
+5.35 seconds); corpus-wide decode remains pending. At 13:50 UTC downloader PID
+23276 remained active with 839/1,042 train files finalized, no validation files
+yet, and seven partial files. The pinned journal still authenticates 467
+source hashes. Local receipts cover the other 372 files (371 pass; one known
+timing-boundary failure); one journal-external file also passed a direct exact
+archive-range SHA-256 spot-check. No media manifest, feature extraction, or
+training is available yet. See the timestamped progress record and external
+audit receipts.
 The text-free typed-task AV model, feature
 packing and internal-validation path are implemented; CPU suite is green.
 No new model fit or quality result yet. See the
@@ -2816,3 +2812,13 @@ size mismatches, uncovered IDs, or receipt hash conflicts were found. Source
 hash authentication remains limited to the 467 pinned journal rows. Seven
 partial files were present and downloader PID 23276 remained active. See the
 [progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (13:50 UTC):** Full-receipt
+reconciliation matched 839 finalized train MP4s (839/1,042; validation 0/264)
+to the frozen selection. All 372 files outside the pinned journal have local
+receipts (371 pass; one known timing-boundary failure); no unselected files,
+size mismatches, uncovered IDs, or receipt hash conflicts were found. Source
+hash authentication remains limited to 467 pinned journal rows. One separate
+direct archive-range SHA-256 spot-check passed for an unlogged selected train
+clip. PID 23276 remained active. See the [progress record]
+(docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
