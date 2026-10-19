@@ -604,25 +604,25 @@ The external preflight points to this receipt. CI for the previous report
 commit `0896e58` completed successfully at run
 [39215849783](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215849783).
 
-## Acquisition and HotUGPU handoff update (2026-10-19 08:04 UTC)
+## Acquisition and HotUGPU handoff update (2026-10-19 08:06 UTC)
 
 The unchanged PID 23276 downloader remains active with its original four
-workers. The journal reached 248 completed train videos (24,437,473,003 bytes);
+workers. The journal reached 253 completed train videos (24,905,655,254 bytes);
 validation remains at zero. The latest chained audit confirmed that the
 previously audited journal byte-prefix is unchanged, then recomputed SHA-256
 for the five newly completed files and rechecked selection/split, pinned ETag,
-archive offsets, paths and sizes. The cumulative 248-file chain passed with no
+archive offsets, paths and sizes. The cumulative 253-file chain passed with no
 errors. Receipt:
-`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T080423Z-chained.json`
-(SHA-256 `1f2cd5edf4020b7d5d2795707cec16962a52b100b5f8355b571b74393e99a253`).
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T080626Z-chained.json`
+(SHA-256 `e314b81e173f8d900b69c5c7032c47e1e4c62d2545fd809ac5dee20c86970a62`).
 The external `run-preflight.json` points to this receipt. Training media was
 read only for hash verification; no validation files have been downloaded,
 and no test or sealed-audit media has been opened.
 
-At 17:04 JST, C: had 152,875,708,416 bytes free (142.38 GiB). The selected
-media has 92,637,407,149 bytes remaining at the audited prefix. Applying the
-downloader's 1.2x free-space check to that remainder requires about 111.16 GB,
-leaving about 41.71 GB measured headroom. This is a point-in-time capacity
+At 17:06 JST, C: had 152,485,642,240 bytes free (142.01 GiB). The selected
+media has 92,169,224,898 bytes remaining at the audited prefix. Applying the
+downloader's 1.2x free-space check to that remainder requires about 110.60 GB,
+leaving about 41.88 GB measured headroom. This is a point-in-time capacity
 check; it does not change the downloader or guarantee future free space.
 
 One intermediate audit attempt was invalid because its checker incorrectly
@@ -660,3 +660,5 @@ Commit `83a923b` passed CI at run
 [39219561706](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39219561706).
 Commit `ae1ca66` passed CI at run
 [39219933597](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39219933597).
+Commit `a02b7d1` passed CI at run
+[39220267847](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39220267847).
