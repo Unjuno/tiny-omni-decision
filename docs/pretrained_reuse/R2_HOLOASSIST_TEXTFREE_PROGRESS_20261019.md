@@ -1808,3 +1808,15 @@ with no unselected/uncovered files; cumulative local diagnostic outcomes are
 186 passes plus the one known timing-boundary failure. Six partials totaled
 46,137,344 bytes and PID 23276 remained active. Archive hash authentication
 still covers only journaled rows; no process or media was modified.
+
+At 2026-10-19 12:08 UTC, the newly finalized `z129-aug-11-22-gopro` passed
+local ID/size, stable SHA-256, AV stream metadata, and annotation-timing gates.
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1840Z.json`
+(SHA-256 `4B475CDF826A67E4DE56DC0CA0E599AEF088AF439458456C1441C5A00DC68C37`).
+The reconciled snapshot found 656 finalized selected files, 467 journal rows,
+and 189 unjournaled files. Local diagnostic receipts cover all 189 unique
+unjournaled IDs (188 pass plus the known timing-boundary failure), with no
+unselected IDs. Six partials totaled 46,137,344 bytes at the scan, and PID
+23276 remained active. This does not create source hash receipts for unjournaled
+files; process and media remain untouched.
