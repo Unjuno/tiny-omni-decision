@@ -1371,3 +1371,18 @@ diagnostics: 113 pass AV metadata gates, one is the known source-range-verified
 timing-boundary failure. Local hashes do not authenticate the other 113
 against the archive. No live process was stopped or restarted; no GPU job was
 started.
+At 2026-10-19 11:24 UTC, the downloader remained live with four archive
+connections. A new two-file local delta passed selection ID/size, local SHA,
+AV metadata and annotation timing checks:
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1300Z.json
+(SHA-256 fa27b0344502a95258b764c0bac1a40aedebfb9cd6334e84fb3f7cab56e05c56).
+
+The persisted live journal audit
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1124Z.json
+(SHA-256 06f7cafeacb951d7f14323bd8a685f6e993d5098d87e5c7a86b2b99c68c5d8a5)
+reports 467/1,306 journal rows, 116 complete unlogged files, six partials,
+and 839 selected records not yet journal-completed. The 116 unjournaled files
+have local diagnostics: 115 metadata passes and one known source-range-verified
+timing-boundary failure. The 115 local hashes are not source-authenticated.
+GPU showed 54% utilization / 15,821 MiB at the live snapshot; no GPU work was
+started and no live process was modified.
