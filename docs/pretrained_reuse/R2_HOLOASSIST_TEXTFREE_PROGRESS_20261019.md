@@ -1565,3 +1565,17 @@ the live audit is
 The journal remains at 467 rows, last written 10:07:15 UTC, and six partials
 totaled 331,350,016 bytes. GPU use was 15,821/16,384 MiB at 38% on the follow-up
 sample; no GPU work was launched.
+
+At 2026-10-19 11:45 UTC, two additional complete files appeared and passed
+local diagnostics. The pinned audit now reports 151 unjournaled complete files
+and six partials totaling 314,572,800 bytes; 150 unjournaled files have local
+metadata passes, with one known timing-boundary failure. Receipts:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1530Z.json`
+(SHA-256 `aa5dae88cddfc6e196679f1fd26b9ca344b60228e45163d376486c446739d07d`) and
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1145Z.json`
+(SHA-256 `340ab9ffc6f5fe1cda5851226bc98d1e52d3bd849e9a2ff30b7a2540ec030711`).
+Code inspection of the downloader confirms `--resume` rejects a destination
+MP4 absent from the progress journal. If the process exits with this divergence,
+do not rerun `--resume` directly; preserve the original journal and reconcile
+files through a separate verified recovery artifact first. PID 23276 remained
+live with four connections; no intervention was made.
