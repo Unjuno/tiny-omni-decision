@@ -2489,3 +2489,11 @@ failure). Six partials remain. Downloader state after 12:26:59Z is UNKNOWN;
 verify before concluding it stopped. CI for `2176f31` was queued. Acquisition
 is not complete; local checks do not extend archive authentication. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:29 UTC):** 695 MP4s are
+present, of which 467 are journal-authenticated and 228 are unjournaled.
+Deduplicated local diagnostics cover all 228 (227 pass; one known
+timing-boundary failure). Six partial files remain; PID 23276 is active. CI
+for `95ec716` is green. Acquisition remains incomplete, and local diagnostics
+do not extend archive authentication. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

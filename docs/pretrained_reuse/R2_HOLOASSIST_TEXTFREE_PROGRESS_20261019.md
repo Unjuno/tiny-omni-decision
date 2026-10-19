@@ -1993,3 +1993,16 @@ was confirmed alive at 12:26:59Z; the subsequent process query returned no row,
 so its state after that time is UNKNOWN and must be checked again before any
 assumption about termination. The latest repository commit is `2176f31` and
 its CI was queued at the time of this note.
+
+At 12:29:20Z, a fresh audit of the pinned journal snapshot recorded 467
+journal-authenticated files and 228 finalized media files outside that
+snapshot, matching 695 MP4s in the live tree. Snapshot SHA-256:
+`1292FF0453A937E01EA0EB125F46ADAF910068DC38279443220F74E736CED5F7`.
+Deduplicated local diagnostic receipts cover all 228 unjournaled IDs (227
+passes; one known timing-boundary failure). The latest two delta receipts added
+three IDs total, all locally passing; one receipt rechecked two IDs also found
+by the immediately preceding receipt, and coverage counts are deduplicated by
+session ID. Six `.part` files remained; their total size fluctuates as workers
+write (260,046,848 bytes at the pinned audit). PID 23276 remained alive at
+12:29 UTC. CI for commit `95ec716782a6692d2129554a1eba0b84e604bdde` completed
+successfully.
