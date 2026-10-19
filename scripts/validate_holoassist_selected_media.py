@@ -26,11 +26,19 @@ def inspect_av_file(path: Path) -> dict:
         audio_start = float(audio_stream.start_time * audio_stream.time_base)
         video_duration = float(video_stream.duration * video_stream.time_base)
         audio_duration = float(audio_stream.duration * audio_stream.time_base)
+        video_rate = float(
+            video_stream.average_rate or video_stream.guessed_rate or video_stream.base_rate or 0
+        )
+        if video_rate <= 0:
+            raise ValueError(f"video frame rate metadata is missing: {path}")
+        video_frame_interval = 1.0 / video_rate
+        av_duration_tolerance = 2.0 * video_frame_interval
         channels = int(audio_stream.codec_context.channels or 0)
         sample_rate = int(audio_stream.rate or 0)
         if abs(video_start - audio_start) > 0.05:
             raise ValueError(f"audio/video start-time mismatch: {path}")
-        if abs(video_duration - audio_duration) > 0.05:
+        av_duration_difference = abs(video_duration - audio_duration)
+        if av_duration_difference > av_duration_tolerance:
             raise ValueError(f"audio/video duration mismatch: {path}")
         if channels != 1 or sample_rate != 48_000:
             raise ValueError(f"expected mono 48 kHz audio: {path}")
@@ -38,12 +46,15 @@ def inspect_av_file(path: Path) -> dict:
             "video_codec": video_stream.codec_context.name,
             "video_start_seconds": video_start,
             "video_duration_seconds": video_duration,
+            "video_frame_interval_seconds": video_frame_interval,
             "video_frame_count": int(video_stream.frames or 0),
             "video_width": int(video_stream.codec_context.width),
             "video_height": int(video_stream.codec_context.height),
             "audio_codec": audio_stream.codec_context.name,
             "audio_start_seconds": audio_start,
             "audio_duration_seconds": audio_duration,
+            "audio_video_duration_difference_seconds": av_duration_difference,
+            "audio_video_duration_tolerance_seconds": av_duration_tolerance,
             "audio_channels": channels,
             "audio_sample_rate_hz": sample_rate,
         }
@@ -103,8 +114,8 @@ def validate_selected_media(
         if annotation_duration is None:
             raise ValueError(f"invalid annotation duration for {session_id}")
         facts = inspect_av_file(path)
-        if abs(facts["video_duration_seconds"] - annotation_duration) > 0.15:
-            raise ValueError(f"media/annotation duration mismatch for {session_id}")
+        if abs(facts["audio_duration_seconds"] - annotation_duration) > 0.15:
+            raise ValueError(f"audio/annotation duration mismatch for {session_id}")
         reports.append(
             {
                 "split": split,
@@ -123,12 +134,17 @@ def validate_selected_media(
         "media_manifest_sha256": media_manifest_sha256,
         "train_session_count": len(train_ids),
         "validation_session_count": len(validation_ids),
-        "video_duration_difference_seconds_median": statistics.median(
-            abs(row["video_duration_seconds"] - row["annotation_duration_seconds"])
+        "audio_annotation_duration_difference_seconds_median": statistics.median(
+            abs(row["audio_duration_seconds"] - row["annotation_duration_seconds"])
             for row in reports
         ),
         "audio_video_duration_difference_seconds_max": max(
             abs(row["audio_duration_seconds"] - row["video_duration_seconds"])
+            for row in reports
+        ),
+        "audio_video_duration_difference_max_video_frames": max(
+            row["audio_video_duration_difference_seconds"]
+            / row["video_frame_interval_seconds"]
             for row in reports
         ),
         "media": reports,

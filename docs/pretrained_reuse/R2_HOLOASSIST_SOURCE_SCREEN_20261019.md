@@ -301,6 +301,37 @@ found; content hashes were not recomputed. PID 16496 remained active.
 Snapshot:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T010506Z.json`
 (SHA-256 `0E6A9AC682A0C859D01FD4A8A450205F54BD59EF288337A678D0FFB2F9159BB2`).
+## Full media validation and timeline reconciliation
+
+The selected pitch-shifted archive download completed with 367/367 files and
+36,117,365,135 bytes. All 367 local media SHA-256 values matched the immutable
+download manifest; train and validation contain 160 and 207 sessions. No test
+media or labels were opened. Initial validation stopped on a 63.8 ms audio/video
+endpoint difference, just above the old 50 ms rule. A read-only scan of all
+selected files found zero start-time offsets, a maximum AV endpoint difference
+of 64.6 ms (1.914 video frames), and a maximum annotation-to-audio endpoint
+difference of 121 ms. The validator now accepts an AV endpoint difference up
+to two measured video-frame intervals and checks annotation duration against
+the audio endpoint, preserving the prior 150 ms annotation tolerance. This is
+tied to measured stream timing and does not waive start alignment, stream
+count, codec, channel, sample-rate, media-hash, or split checks.
+
+Action construction now uses the validated video end rather than rounded
+annotation duration. It excluded two validation intervals that ended after the
+actual video; neither interval was truncated or relabeled. The output contains
+12,954 train / 17,873 validation action events. Thirty-second causal windows
+contain 1,550 train / 1,977 validation windows, including 86 / 81 unlabeled
+context windows; 1,464 / 1,896 windows are labeled. Validation has 544 positive
+and 1,352 negative labeled windows. No test data or media were used.
+
+The validator, event corpus, and temporal-window receipts are preserved under
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-video-pilot-160-207-seed17-pitchshifted-attempt-01`.
+Their SHA-256 values are respectively `ED8DBEB89A43EFFFCA709F969DE30AC308189C3CB5A06430014C84F16F25D090`,
+`BB08BB9D1BAFBA843A0FBD66D0816F41262EBAA2CF27BA5F59804C679D59ABEA`, and
+`7DE0224AE0739EEF67CCA74636D9F37949C7FB7D5EDCB74A406C47E0DAC8DB78`.
+The media manifest SHA-256 is `E1BC330C0DB3325090FFC628C5CFCCBBD5DA9BC0D452A9129EC56172A66501D1`.
+The corpus still requires frozen-feature extraction and matched readout
+training; no HoloAssist task-quality result exists yet.
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)

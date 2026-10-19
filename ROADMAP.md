@@ -1,4 +1,10 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-10-19 R2 HoloAssist full-media gate:** The fixed 160-train / 207-
+validation pitch-shifted pilot is fully downloaded and all 367 media SHA-256
+values passed. AV timing was reconciled with measured frame granularity; two
+validation action intervals extending beyond actual video end were excluded.
+Causal windows are built; frozen-feature extraction and task fitting remain
+pending. See the [validation and corpus log](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
 
 **2026-10-19 R2 HoloAssist acquisition progress:** The integrity-checked live
 download advanced to 206/367 selected videos (20.97 GB) at 00:12:34 UTC;

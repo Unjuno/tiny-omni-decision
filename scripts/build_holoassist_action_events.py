@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import zipfile
 from collections import Counter
 from datetime import UTC, datetime
@@ -67,6 +68,25 @@ def validate_av_validation_report(
         raise ValueError("AV validation report has missing or duplicate media rows")
     if validated != expected_media:
         raise ValueError("AV validation report does not exactly cover selected media hashes")
+    if any(
+        not isinstance(row, dict)
+        or not isinstance(row.get("video_duration_seconds"), (int, float))
+        or not math.isfinite(float(row["video_duration_seconds"]))
+        or float(row["video_duration_seconds"]) <= 0
+        for row in rows
+    ):
+        raise ValueError("AV validation report has missing or invalid video durations")
+
+
+def video_durations_from_av_report(report: dict) -> dict[tuple[str, str], float]:
+    """Read exact media-end timestamps from a validated per-file AV report."""
+    durations = {
+        (str(row["split"]), str(row["session_id"])): float(row["video_duration_seconds"])
+        for row in report["media"]
+    }
+    if len(durations) != len(report["media"]):
+        raise ValueError("AV validation report contains duplicate video durations")
+    return durations
 
 
 def build_event_rows(
@@ -76,6 +96,7 @@ def build_event_rows(
     selected_sessions: dict[str, list[dict]],
     media_files: dict[tuple[str, str], dict],
     media_root: Path,
+    media_video_durations: dict[tuple[str, str], float] | None = None,
     pre_context_seconds: float = 0.5,
 ) -> tuple[dict[str, list[dict]], dict[str, dict]]:
     if pre_context_seconds < 0:
@@ -120,6 +141,17 @@ def build_event_rows(
             )
             if duration is None:
                 raise ValueError(f"invalid raw duration for {session_id}")
+            media_duration = (
+                media_video_durations.get((split, session_id))
+                if media_video_durations is not None
+                else duration
+            )
+            if (
+                media_duration is None
+                or not math.isfinite(float(media_duration))
+                or media_duration <= 0
+            ):
+                raise ValueError(f"missing or invalid verified video duration for {session_id}")
 
             for event_position, event in enumerate(record.get("events", [])):
                 if event.get("label") != "Fine grained action":
@@ -142,8 +174,8 @@ def build_event_rows(
                 if end < start:
                     reasons["reversed_interval_excluded"] += 1
                     continue
-                if start < 0 or end - duration > 0.05:
-                    reasons["out_of_range_interval_excluded"] += 1
+                if start < 0 or end > media_duration:
+                    reasons["out_of_media_interval_excluded"] += 1
                     continue
                 event_id = str(event.get("id", event_position))
                 example_id = f"{record['taskId']}:{event_id}"
@@ -175,7 +207,8 @@ def build_event_rows(
                         "target_name": label_name,
                         "action_start_seconds": float(start),
                         "action_end_seconds": float(end),
-                        "video_duration_seconds": duration,
+                        "video_duration_seconds": float(media_duration),
+                        "annotation_duration_seconds": duration,
                         "clip_start_seconds": clip_start,
                         "clip_end_seconds": clip_end,
                         "future_context_seconds": 0.0,
@@ -247,6 +280,7 @@ def main() -> None:
         media_manifest_sha256=media_manifest_hash,
         expected_media=expected_media_hashes,
     )
+    media_video_durations = video_durations_from_av_report(av_validation_report)
     records = json.loads(args.annotation.read_text(encoding="utf-8"))
     splits = load_official_splits(args.splits)
     rows, report = build_event_rows(
@@ -258,6 +292,7 @@ def main() -> None:
         },
         media_files=media_files,
         media_root=args.media_root,
+        media_video_durations=media_video_durations,
         pre_context_seconds=args.pre_context_seconds,
     )
     args.output_dir.mkdir(parents=True)

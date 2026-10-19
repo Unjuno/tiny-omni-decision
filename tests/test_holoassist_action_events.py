@@ -90,6 +90,24 @@ def test_builder_rejects_cross_split_session_leakage(tmp_path) -> None:
         )
 
 
+def test_builder_uses_verified_video_duration_to_exclude_tail_event(tmp_path) -> None:
+    records, splits, selected, files, media_root = fixture(tmp_path)
+    records[0]["events"].append(event(5, "Correct Action", 2.1, 2.3))
+
+    rows, report = build_event_rows(
+        records=records,
+        split_ids=splits,
+        selected_sessions=selected,
+        media_files=files,
+        media_root=media_root,
+        media_video_durations={("train", "tr-1"): 2.2, ("validation", "va-1"): 3.25},
+    )
+
+    assert len(rows["train"]) == 2
+    assert rows["train"][0]["video_duration_seconds"] == 2.2
+    assert report["train"]["excluded_event_counts"]["out_of_media_interval_excluded"] == 1
+
+
 def test_builder_rejects_test_annotation_rows(tmp_path) -> None:
     records, splits, selected, files, media_root = fixture(tmp_path)
     records.append({"video_name": "te-1"})
@@ -111,9 +129,15 @@ def test_av_validation_gate_requires_exact_selected_media_hashes() -> None:
         "media_manifest_sha256": "manifest",
         "media": [
             {"split": "train", "session_id": "tr-1", "media_sha256": "sha-tr"},
-            {"split": "validation", "session_id": "va-1", "media_sha256": "sha-va"},
+            {
+                "split": "validation",
+                "session_id": "va-1",
+                "media_sha256": "sha-va",
+                "video_duration_seconds": 3.25,
+            },
         ],
     }
+    report["media"][0]["video_duration_seconds"] = 3.25
     validate_av_validation_report(
         report,
         selection_sha256="selection",
@@ -146,6 +170,30 @@ def test_av_validation_gate_requires_exact_selected_media_hashes() -> None:
                 ("train", "tr-1", "sha-tr"),
                 ("validation", "va-1", "sha-va"),
             },
+        )
+
+
+def test_av_validation_gate_requires_verified_video_durations() -> None:
+    report = {
+        "status": "PASS_HOLOASSIST_TRAINVAL_AV_MEDIA",
+        "selection_sha256": "selection",
+        "media_manifest_sha256": "manifest",
+        "media": [
+            {
+                "split": "train",
+                "session_id": "tr-1",
+                "media_sha256": "sha-tr",
+                "video_duration_seconds": float("nan"),
+            }
+        ],
+    }
+
+    with pytest.raises(ValueError, match="missing or invalid video durations"):
+        validate_av_validation_report(
+            report,
+            selection_sha256="selection",
+            media_manifest_sha256="manifest",
+            expected_media={("train", "tr-1", "sha-tr")},
         )
 
 

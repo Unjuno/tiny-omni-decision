@@ -10,17 +10,21 @@ import pytest
 from scripts.validate_holoassist_selected_media import validate_selected_media
 
 
-def media_facts(monkeypatch, *, audio_duration: float = 3.25):
+def media_facts(
+    monkeypatch, *, video_duration: float = 3.25, audio_duration: float = 3.25
+):
     def stream(kind: str, duration: float):
         return SimpleNamespace(
             type=kind,
             start_time=0,
             duration=int(duration * 1000),
             time_base=Fraction(1, 1000),
+            average_rate=Fraction(30, 1) if kind == "video" else None,
             frames=94 if kind == "video" else 153,
             rate=48_000 if kind == "audio" else None,
             codec_context=SimpleNamespace(
                 channels=1 if kind == "audio" else None,
+                frame_size=1024 if kind == "audio" else None,
                 name="aac" if kind == "audio" else "h264",
                 width=640 if kind == "video" else None,
                 height=360 if kind == "video" else None,
@@ -28,7 +32,7 @@ def media_facts(monkeypatch, *, audio_duration: float = 3.25):
         )
 
     class Container:
-        streams = [stream("video", 3.25), stream("audio", audio_duration)]
+        streams = [stream("video", video_duration), stream("audio", audio_duration)]
 
         def __enter__(self):
             return self
@@ -95,6 +99,57 @@ def test_media_validation_rejects_av_duration_mismatch(tmp_path, monkeypatch):
     selection, manifest, annotations = fixture(tmp_path)
 
     with pytest.raises(ValueError, match="audio/video duration mismatch"):
+        validate_selected_media(
+            selection=selection,
+            media_manifest=manifest,
+            annotations=annotations,
+            media_root=tmp_path,
+            selection_sha256="selection",
+            media_manifest_sha256="manifest",
+        )
+
+
+def test_media_validation_allows_two_video_frame_endpoint_difference(tmp_path, monkeypatch):
+    media_facts(monkeypatch, audio_duration=3.314)
+    selection, manifest, annotations = fixture(tmp_path)
+
+    report = validate_selected_media(
+        selection=selection,
+        media_manifest=manifest,
+        annotations=annotations,
+        media_root=tmp_path,
+        selection_sha256="selection",
+        media_manifest_sha256="manifest",
+    )
+
+    assert report["status"] == "PASS_HOLOASSIST_TRAINVAL_AV_MEDIA"
+    assert report["media"][0]["audio_video_duration_difference_seconds"] == pytest.approx(0.064)
+    assert report["media"][0]["audio_video_duration_tolerance_seconds"] == pytest.approx(2 / 30)
+
+
+def test_media_validation_compares_annotation_duration_to_audio_endpoint(tmp_path, monkeypatch):
+    media_facts(monkeypatch, video_duration=3.2, audio_duration=3.25)
+    selection, manifest, annotations = fixture(tmp_path)
+
+    report = validate_selected_media(
+        selection=selection,
+        media_manifest=manifest,
+        annotations=annotations,
+        media_root=tmp_path,
+        selection_sha256="selection",
+        media_manifest_sha256="manifest",
+    )
+
+    assert report["media"][0]["video_duration_seconds"] == pytest.approx(3.2)
+    assert report["media"][0]["audio_duration_seconds"] == pytest.approx(3.25)
+
+
+def test_media_validation_rejects_annotation_duration_mismatch(tmp_path, monkeypatch):
+    media_facts(monkeypatch)
+    selection, manifest, annotations = fixture(tmp_path)
+    annotations[0]["videoMetadata"]["duration"]["raw"] = "00:00:03.00"
+
+    with pytest.raises(ValueError, match="audio/annotation duration mismatch"):
         validate_selected_media(
             selection=selection,
             media_manifest=manifest,
