@@ -6,17 +6,16 @@ partition from the 1,306 unused official-train sessions is pinned (seed
 videos (43.02 GB) passed an independent SHA-256, selection, and split audit.
 One selected train clip passed a full CPU AV decode smoke (3,071 video frames and
 5,091,328 audio samples in 5.35 seconds); corpus-wide decode remains pending.
-At 10:58 UTC downloader PID 23276 remained active. The media directory showed
-554 complete files (50.72 GB), but its journal still had 467 rows (43.02 GB),
-leaving 87 unjournaled files. The chained independently verified prefix remains
+At 11:01 UTC downloader PID 23276 remained active. The media directory showed
+556 complete files (50.87 GB), but its journal still had 467 rows (43.02 GB),
+leaving 89 unjournaled files. The chained independently verified prefix remains
 467/1,306. All 467 verified media were rehashed and passed AV stream-metadata
-and annotation-timing gates. Local diagnostics now cover 86 unjournaled files:
-all checked IDs/sizes matched the frozen selection, 85 passed metadata checks,
-and the same one source-confirmed marginal timing miss remained. The other 85
-local hashes are not archive-hash verified. One file from the latest live
-snapshot is still unaudited. No media manifest, feature extraction, or training
-is available yet. See the timestamped progress record and external audit
-receipts.
+and annotation-timing gates. Local diagnostics cover all 89 unjournaled files:
+their IDs/sizes match the frozen selection and 88 pass metadata checks. The
+remaining file is the previously source-confirmed marginal timing miss. The 88
+local hashes do not prove archive identity. No media manifest, feature
+extraction, or training is available yet. See the timestamped progress record
+and external audit receipts.
 The text-free typed-task AV model, feature
 packing and internal-validation path are implemented; CPU suite is green.
 No new model fit or quality result yet. See the

@@ -1159,3 +1159,26 @@ the live snapshot has not yet been audited. No media manifest exists. GPU usage
 was 15,821/16,384 MiB at 9% utilization, so no HotUGPU reservation was
 attempted. CI #2175 for `6455750` completed successfully. No process was stopped
 or restarted; feature extraction and training remain unstarted.
+
+At 2026-10-19 20:01 JST, local diagnostics covered all 89 complete files absent
+from the 467-row journal. Together, the 82-file audit, 4-file delta, and
+3-file delta recomputed each local SHA-256 and checked frozen selection ID,
+expected size, AV stream metadata, and annotation timing. All 89 IDs/sizes
+matched; 88 passed metadata gates. The sole metadata failure remains
+`z092-july-11-22-marius_assemble`, whose pinned exact archive range was already
+verified to have the same SHA-256 as the local file. Thus its ~2.027-frame AV
+duration difference is source data. The other 88 local hashes have not been
+compared to official archive ranges. Delta receipt for the final three files:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1102Z.json`
+(SHA-256 `47690dde2bfb328357baa0ff0d9bb25413201e1f9fca4431ba98510192f36161`);
+external audit script SHA-256
+`1b3faeb5af0eac8aa6768e595a55d4bf127dfe28b885dceb735e56668ff22356`.
+
+At 2026-10-19 11:01:30 UTC, downloader PID 23276 remained live with four
+archive connections and its journal open. It had 556 complete MP4s
+(50,866,823,097 bytes), six partials, and 467 journal rows (43,019,820,009
+bytes; last write still 10:07:15 UTC); no final manifest existed. The verified
+prefix remains 467/1,306. GPU was idle at this sample, but no GPU task was
+started because the corpus is incomplete and most local hashes lack archive
+comparison. CI #2176 for `4bd12c2` completed successfully. No live process was
+stopped or restarted, and no feature extraction or training was performed.
