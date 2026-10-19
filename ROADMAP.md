@@ -2,8 +2,8 @@
 pilot's text-conditioned modality arms and exposed official validation set are
 not reused. A fresh task-stratified 1,042-train / 264-development-validation
 partition from the 1,306 unused official-train sessions is pinned (seed
-20261019; 117.07 GB pitch-shifted AV download). At 09:53 UTC, 442/1,306
-videos (40.86 GB) passed an independent SHA-256, selection, and split audit.
+20261019; 117.07 GB pitch-shifted AV download). At 09:55 UTC, 444/1,306
+videos (41.10 GB) passed an independent SHA-256, selection, and split audit.
 The text-free typed-task AV model, feature
 packing and internal-validation path are implemented; CPU suite is green.
 No new model fit or quality result yet. See the
