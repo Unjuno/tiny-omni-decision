@@ -2564,3 +2564,11 @@ suggests a possible uncaught future exception could end journaling while the
 executor drains work, but the exception is unobserved and the cause UNKNOWN.
 Do not intervene in the live process. CI for `0068294` is green. See the
 [reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:51 UTC):** Full-receipt
+reconciliation matched 730 finalized train MP4s (730/1,042; validation 0/264)
+to the frozen selection. All 263 unjournaled IDs have local diagnostics (262
+pass; one known timing-boundary failure), with no uncovered/unselected IDs or
+size/hash conflicts. Source hash authentication remains at the 467 pinned
+journal rows; PID 23276 is still present. CI for `fe9c07c` is green. See the
+[reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

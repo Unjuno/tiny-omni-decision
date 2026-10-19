@@ -2136,3 +2136,15 @@ observed combination, but the actual exception and whether this exact path was
 taken are UNKNOWN because the original terminal output is unavailable. Keep
 PID 23276 untouched; verify its terminal state before any restart or recovery.
 CI for commit `0068294` completed successfully.
+
+At 12:51:25Z, all-receipt reconciliation
+`live-receipt-reconciliation-20261019T125110Z.json` (SHA-256
+`dcc07efc682f53b1693d89be71c88dbe2553854042f52273469e88bb401036b4`)
+matched 730 current MP4s to the frozen selection: 730 train, zero validation,
+zero unselected, zero wrong-sized, and zero uncovered unjournaled IDs. The
+pinned journal remains 467 rows, leaving 263 unjournaled files with local
+receipts (262 passes and the one known timing-boundary failure). One additional
+local pass is recorded in `unlogged-media-delta-20261019T125110Z.json` (SHA-256
+`4bbe00110bddec8437a46b57c7c25b6386ff0626c08aca1d27922d22fc990392`). PID
+23276 remained present. The fixed journal snapshot is still the only source
+hash-authenticated segment. CI for `fe9c07c` completed successfully.
