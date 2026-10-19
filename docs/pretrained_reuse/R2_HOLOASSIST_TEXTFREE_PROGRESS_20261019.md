@@ -1773,3 +1773,14 @@ no unselected or uncovered IDs: 182 local passes and the single known
 source-range-confirmed timing-boundary failure. Six partial files totaled
 46,137,344 bytes at this scan. PID 23276 remained active. Archive authentication
 still covers only the official journaled prefix; no process/data was changed.
+
+At 2026-10-19 12:06 UTC, one additional finalized selected MP4 passed the
+local diagnostic gates. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1800Z.json`
+(SHA-256 `59BA2EFB021C532C20DEC7C22775AF573D8ABBC3E9F59C033D5CC5C5D7D6A23D`).
+Identity-set reconciliation found 651 finalized files, 467 journaled and 184
+unjournaled; receipts cover all 184 unique IDs, with no unselected/uncovered
+files. Cumulative local diagnostics are 183 passes plus one known timing-
+boundary failure. Six partials totaled 46,137,344 bytes; PID 23276 remained
+active. This does not extend source-archive authentication past the 467 journal
+rows. No process or media was modified.
