@@ -810,3 +810,15 @@ reports zero errors:
 (SHA-256 `26941db786264512f4af45e3280f4671717be0b42c50840afed4e43b42355a12`).
 PID 23276 remains active with four established connections. No validation/test
 media were accessed.
+
+At 2026-10-19 18:01 JST, chained media verification reached 355/1,306 train
+videos (33,042,720,663 bytes); three appended videos passed SHA-256 and frozen
+selection/split/ETag/offset/path/length checks. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T090117Z-chained.json`
+(SHA-256 `31d095eda709427ec84ed9027f9ea903b3a88ff9d86b26dafb4f94babdd9dafe`).
+An additional CPU PyAV stream-metadata/duration check passed for the three
+files in the preceding receipt (not a full-corpus decode):
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T090046Z.json`
+(SHA-256 `6cff34cbbd61c114ba5f2371230e87a12dc8e22159671b59742c3dfc03017e6c`).
+No validation/test media were opened; PID 23276 continues with the original
+command and four workers.
