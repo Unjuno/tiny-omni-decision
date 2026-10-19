@@ -177,10 +177,10 @@ training probe verified non-silent 48 kHz mono AAC plus H.264 video, both at
 PTS 0, with 14.5 ms stream-duration difference from each other and the
 compressed-video companion. The earlier compressed-only attempt stopped at
 108/367 files after 8.28 GB; all complete and partial files are preserved.
-The latest observed pitch-shifted download progress is 188/367 files
-(19.29 GB, 2026-10-19T00:02:45Z); the read-only partial journal audit found
+The latest observed pitch-shifted download progress is 201/367 files
+(20.41 GB, 2026-10-19T00:09:04Z); the read-only partial journal audit found
 zero selection/ETag/size/offset/path errors without recomputing media hashes.
-Eight additional files totaling 411,041,792 bytes were still in progress;
+Eight additional files totaling 679,477,248 bytes were still in progress;
 full-media validation remains pending. The pinned Whisper
 encoder also produced one finite 384D train-window feature through HotUGPU
 (0.55s extraction loop; 182 MiB peak allocated / 202 MiB reserved), with a

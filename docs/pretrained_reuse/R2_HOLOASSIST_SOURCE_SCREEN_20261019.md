@@ -116,16 +116,16 @@ audio decode end. This is source-format/timing proof for one recording, not
 task-quality evidence or proof that all sessions are aligned. The full fixed
 36.12 GB pitch-shifted selection is now downloading into a separate attempt
 directory with per-file range/ETag/size/SHA checks. The latest observed
-progress is 188/367 files (19,289,326,867 bytes, observed 2026-10-19 00:02:45
+progress is 201/367 files (20,413,622,420 bytes, observed 2026-10-19 00:09:04
 UTC); this is not the final receipt. The new read-only
-`scripts.audit_holoassist_download_progress` tool matched all 188 unique
+`scripts.audit_holoassist_download_progress` tool matched all 201 unique
 journal records to the pinned selection, archive ETag, planned sizes/offsets,
 expected output paths, and on-disk file sizes. It found zero errors and 8
-in-progress partial files totaling 411,041,792 bytes; 179 selected files
+in-progress partial files totaling 679,477,248 bytes; 166 selected files
 remain unlogged. The tool does not re-hash media contents, and does not admit
 the partial download as a validated media corpus. The saved report is at
-`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T0002Z.json`
-(SHA-256 `30A172A39FE848F0FB33EEC5656F4D2C6D276D1CA482793CAC05ED55D7F6C2B5`).
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T0008Z.json`
+(SHA-256 `46668969BA0C4D684C7B2B420DBEB1DC55B14F1E77CBB9430B9560A26D40AC11`).
 The repository extraction decoder was also exercised on the verified probe:
 the first causal 30-second window yielded 480,000 finite 16 kHz audio samples
 (RMS 0.00655, peak 0.405) and eight finite 504x896 RGB video frames. This
