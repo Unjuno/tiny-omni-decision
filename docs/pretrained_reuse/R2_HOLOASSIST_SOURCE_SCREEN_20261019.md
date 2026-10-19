@@ -362,10 +362,10 @@ and 11 skipped.
 
 ## Frozen feature extraction continuation
 
-At 2026-10-19 10:49 local time, the selected-window frozen-feature work had these states:
+At the latest check on 2026-10-19, the selected-window frozen-feature work had these states:
 
 - Text: complete, 3,527/3,527. The bank SHA-256 is `53bbce5ef42345dbe7431fd2369766716b16e51105f8f4adf5208b523492f9a3`.
 - Audio: complete, 3,527/3,527. The 3,527 x 384 float32 bank SHA-256 is `0eafa0a03898d52647f8b8bf7895564e488c41a826cdd01167b16dcf4e4a13c4`; finite values and exact train-then-validation sample ID order were verified against the frozen windows. Whisper Tiny ran on the RTX 3080 Laptop GPU in 444.63 seconds, peak allocated/reserved memory 192,923,136/213,909,504 bytes, through `scripts.run_with_hotgpu_guard`. The gate waited for active GPU PID 26292 to yield, then reserved 3,200 MiB before starting the extractor; it released its reservation on completion. No training or checkpoint update occurred.
-- Video: 192/3,527 persisted windows. It runs in the pinned VideoPrism environment on CPU/JAX with CUDA explicitly disabled. The full video bank receipt/hash is not yet available.
+- Video attempt-01: stopped at a clean saved boundary after 256/3,527 rows. Its progress file SHA-256 is `d41c09e283a76ae0d287b317f1086ea593a7f0b9cfa7af4c933fb970fb7b5839`. It used source commit `92829c98623c16328534b20de066ba40618055b5`, VideoPrism weights SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`, and the pinned CPU/JAX environment. The partial remains preserved; it was not loaded as a finished bank.
 
-Both feature runs use new output paths under the selected HoloAssist attempt and leave the frozen media, windows, text bank, prior model artifacts, and test data untouched. Video progress is saved every 64 rows, so the count is a persisted checkpoint, not a per-window live counter. No feature cache has been packed and no readout has been fitted. Audio and video throughput are not directly comparable because their encoders and workloads differ.
+A decoder optimization was introduced for the next, separate output attempt. Instead of converting every decoded frame to RGB, it converts only frames selected by the same endpoint-inclusive eight-frame rule (plus a fallback frame only if end padding is needed). Its synthetic tests cover high-rate sampling and end-padding parity. It matched the previous pixel arrays exactly on four real train/validation windows and was 1.49–2.24x faster across those samples. This is a local benchmark, not a broad runtime guarantee. The source change passed 8 targeted tests and Ruff. No cache has been packed and no readout has been fitted. Test data remains unopened.

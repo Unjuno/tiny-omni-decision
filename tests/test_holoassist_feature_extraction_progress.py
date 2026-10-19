@@ -169,3 +169,108 @@ def test_feature_progress_requires_explicit_resume_and_rejects_stale_temp(tmp_pa
             completed=completed,
             fingerprint=fingerprint,
         )
+
+
+class _FakeVideoFrame:
+    def __init__(self, pts, time_base, value, counter):
+        self.pts = pts
+        self.time_base = time_base
+        self.value = value
+        self.counter = counter
+
+    def to_ndarray(self, *, format):
+        assert format == "rgb24"
+        self.counter["conversions"] += 1
+        return np.full((2, 3, 3), self.value, dtype=np.uint8)
+
+
+class _FakeVideoContainer:
+    def __init__(self, frames, stream):
+        self.streams = [stream]
+        self.frames = frames
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        return False
+
+    def seek(self, *_args, **_kwargs):
+        return None
+
+    def decode(self, _stream):
+        return iter(self.frames)
+
+
+def _legacy_video_window_reference(frames, start, end):
+    targets = np.linspace(start, end, num=8, endpoint=True)
+    selected = []
+    previous = None
+    for frame in frames:
+        if frame.pts is None:
+            continue
+        stamp = float(frame.pts * frame.time_base)
+        if stamp < start:
+            continue
+        if stamp > end:
+            if previous is not None:
+                while len(selected) < 8:
+                    selected.append(previous)
+            break
+        current = (stamp, frame.to_ndarray(format="rgb24"))
+        while len(selected) < 8 and stamp >= targets[len(selected)]:
+            selected.append(current)
+        previous = current
+        if len(selected) == 8:
+            break
+    if len(selected) < 8:
+        if previous is None:
+            raise ValueError("no frame in window")
+        selected.extend([previous] * (8 - len(selected)))
+    return np.stack([item[1] for item in selected])
+
+
+def test_video_window_decoder_only_converts_selected_frames_and_preserves_pixels(monkeypatch):
+    from fractions import Fraction
+    from types import SimpleNamespace
+
+    counter = {"conversions": 0}
+    stream = SimpleNamespace(type="video", time_base=Fraction(1, 30))
+    frames = [
+        _FakeVideoFrame(index, stream.time_base, index % 255, counter)
+        for index in range(901)
+    ]
+    container = _FakeVideoContainer(frames, stream)
+    monkeypatch.setitem(
+        __import__("sys").modules,
+        "av",
+        SimpleNamespace(open=lambda _path: container),
+    )
+
+    optimized = extraction.decode_video_window(Path("fake.mp4"), 0.0, 30.0)
+    optimized_conversions = counter["conversions"]
+    reference = _legacy_video_window_reference(frames, 0.0, 30.0)
+
+    np.testing.assert_array_equal(optimized, reference)
+    assert optimized_conversions == 8
+    assert counter["conversions"] > 8
+
+
+def test_video_window_decoder_keeps_end_padding_semantics(monkeypatch):
+    from fractions import Fraction
+    from types import SimpleNamespace
+
+    counter = {"conversions": 0}
+    stream = SimpleNamespace(type="video", time_base=Fraction(1, 1))
+    frames = [_FakeVideoFrame(index, stream.time_base, index, counter) for index in range(9)]
+    container = _FakeVideoContainer(frames, stream)
+    monkeypatch.setitem(
+        __import__("sys").modules,
+        "av",
+        SimpleNamespace(open=lambda _path: container),
+    )
+
+    optimized = extraction.decode_video_window(Path("fake.mp4"), 0.0, 10.0)
+    reference = _legacy_video_window_reference(frames, 0.0, 10.0)
+
+    np.testing.assert_array_equal(optimized, reference)

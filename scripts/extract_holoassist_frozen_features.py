@@ -179,8 +179,8 @@ def decode_video_window(path: Path, start: float, end: float, frame_count: int =
         time_base = float(stream.time_base)
         container.seek(max(0, int(start / time_base)), stream=stream, backward=True)
         target_times = np.linspace(start, end, num=frame_count, endpoint=True)
-        selected: list[tuple[float, np.ndarray]] = []
-        previous: tuple[float, np.ndarray] | None = None
+        selected: list[np.ndarray] = []
+        previous = None
         for frame in container.decode(stream):
             if frame.pts is None:
                 continue
@@ -189,20 +189,27 @@ def decode_video_window(path: Path, start: float, end: float, frame_count: int =
                 continue
             if stamp > end:
                 if previous is not None:
-                    while len(selected) < frame_count:
-                        selected.append(previous)
+                    previous_pixels = previous.to_ndarray(format="rgb24")
+                    selected.extend([previous_pixels] * (frame_count - len(selected)))
                 break
-            current = (stamp, frame.to_ndarray(format="rgb24"))
-            while len(selected) < frame_count and stamp >= target_times[len(selected)]:
-                selected.append(current)
-            previous = current
+            crossed_targets = 0
+            while (
+                len(selected) + crossed_targets < frame_count
+                and stamp >= target_times[len(selected) + crossed_targets]
+            ):
+                crossed_targets += 1
+            if crossed_targets:
+                pixels = frame.to_ndarray(format="rgb24")
+                selected.extend([pixels] * crossed_targets)
+            previous = frame
             if len(selected) == frame_count:
                 break
         if len(selected) < frame_count:
             if previous is None:
                 raise ValueError(f"no video frame decoded inside window: {path} {start}:{end}")
-            selected.extend([previous] * (frame_count - len(selected)))
-        frames = np.stack([item[1] for item in selected])
+            previous_pixels = previous.to_ndarray(format="rgb24")
+            selected.extend([previous_pixels] * (frame_count - len(selected)))
+        frames = np.stack(selected)
     return frames
 
 
