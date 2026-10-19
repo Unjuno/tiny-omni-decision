@@ -2474,3 +2474,10 @@ receipts cover all 219 unjournaled IDs (218 pass and one known timing-boundary
 failure). Six partials remain; PID 23276 is active. Acquisition is not complete
 and local diagnostics do not extend archive authentication. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:25 UTC):** 689 MP4s are
+present, 467 journal-authenticated and 222 unjournaled. Local receipt coverage
+matches all 222 (221 pass; one known timing-boundary failure). Six partials
+remain and PID 23276 is active. CI for commit `2b07dbd` is green. Acquisition
+is incomplete; local checks do not extend archive authentication. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

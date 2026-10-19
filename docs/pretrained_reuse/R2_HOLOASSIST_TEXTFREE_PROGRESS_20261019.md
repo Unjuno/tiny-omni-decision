@@ -1969,3 +1969,14 @@ file passed local checks in
 PID 23276 remained active at 12:24 UTC. Acquisition is still in progress;
 archive authentication is still limited to the 467 pinned journal rows.
 
+At 12:25:28Z the live media tree had 689 MP4 files and six partial files.
+The pinned-journal audit therefore found 222 finalized files without archive
+journal authentication; deduplicated local diagnostic coverage matches all
+222 (221 pass and the one known timing-boundary failure). Three newly observed
+IDs passed local checks in
+`unlogged-media-delta-20261019T122528Z.json` (SHA-256
+`0217296d4e8bc701231f080a0a5b718626d3a11fc9a5d00d6eda7efc1f4b79ce`). PID
+23276 remained active. The partial-file byte total is transient while workers
+write; this observation measured 75,497,472 bytes. CI for the documentation
+commit `2b07dbd25de3d000aec0af30022e41f62a403bc9` completed successfully.
+
