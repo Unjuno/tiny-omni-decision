@@ -604,17 +604,17 @@ The external preflight points to this receipt. CI for the previous report
 commit `0896e58` completed successfully at run
 [39215849783](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215849783).
 
-## Acquisition and HotUGPU handoff update (2026-10-19 07:51 UTC)
+## Acquisition and HotUGPU handoff update (2026-10-19 07:53 UTC)
 
 The unchanged PID 23276 downloader remains active with its original four
-workers. The journal reached 226 completed train videos (22,775,955,533 bytes);
+workers. The journal reached 232 completed train videos (23,228,668,747 bytes);
 validation remains at zero. The latest chained audit confirmed that the
 previously audited journal byte-prefix is unchanged, then recomputed SHA-256
-for the five newly completed files and rechecked selection/split, pinned ETag,
-archive offsets, paths and sizes. The cumulative 226-file chain passed with no
+for the six newly completed files and rechecked selection/split, pinned ETag,
+archive offsets, paths and sizes. The cumulative 232-file chain passed with no
 errors. Receipt:
-`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T075143Z-chained.json`
-(SHA-256 `225bdb9ccd758199c6f24bb1fb972da8b61af4ec1604779453e5a0675b37b1b3`).
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T075348Z-chained.json`
+(SHA-256 `4a9ab0dfc53757965505f07295be180703d0bd24f6e6c54c94157333702ff308`).
 The external `run-preflight.json` points to this receipt. Training media was
 read only for hash verification; no validation files have been downloaded,
 and no test or sealed-audit media has been opened.
@@ -644,3 +644,5 @@ Commit `0a696b2` passed CI at run
 [39218387165](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39218387165).
 Commit `ca46251` passed CI at run
 [39218679757](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39218679757).
+Commit `bf91480` passed CI at run
+[39218815925](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39218815925).
