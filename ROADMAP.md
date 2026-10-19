@@ -2607,3 +2607,12 @@ timing-boundary failure) and found no unselected files, size mismatches,
 uncovered IDs or receipt hash conflicts. PID 23276 remains active; seven
 partials total about 72 MiB after transfer activity. Only 467 files are
 source-hash authenticated by the pinned journal. See the [progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (13:02 UTC):** Full receipt
+reconciliation matched 749 finalized train MP4s to the frozen selection
+(749/1,042; validation 0/264). All 282 IDs outside the pinned journal have
+local receipts (281 pass; one known timing-boundary failure); there are no
+unselected files, size mismatches, uncovered IDs, or receipt hash conflicts.
+Only 467 rows remain source-hash authenticated by the journal. PID 23276 is
+active with seven partials. CI for `1e7ac47` is green. See the [progress
+record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
