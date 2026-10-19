@@ -2592,3 +2592,16 @@ three-arm readout config only if each prior stage succeeds and all new output
 paths remain absent. Its external script, state, and log are in the attempt-03
 directory; this orchestration does not alter the repository or any prior
 artifact.
+
+### Active extraction check (2026-10-20 04:21 JST)
+
+The same HotUGPU guard (PID 21928), extractor (PID 15344), and continuation
+process (PID 26820) are still live. Attempt-03 has atomically saved 448 / 12,261
+features; all saved rows are finite, and the next checkpoint is at row 512.
+Recent checkpoints are 64 rows apart and imply about 21 rows/minute (roughly
+9.5 hours remaining at this observed rate; an estimate, not a completion
+promise). The extractor is explicitly running JAX on CPU, while the RTX 3080
+shows 6,169 / 16,384 MiB occupied by the 6,000 MiB HotUGPU reservation and 0%
+utilization. No GPU workload, process restart, or configuration change was
+made. GitHub Actions run `39308947071` for documentation commit
+`b1f21c1da70761532de2b23ecc6c98b58afd953a` completed successfully.
