@@ -666,3 +666,19 @@ Commit `09c4399` passed CI at run
 [39220509202](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39220509202).
 Commit `49560bd` passed CI at run
 [39220792117](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39220792117).
+
+At 2026-10-19 17:16 JST, downloader PID 23276 was still active with the
+original pinned selection, ETag, output directory, and four workers. The
+download journal had advanced to 270/1,306 selected train videos. A chained
+audit independently rehashed the five newly completed files and verified the
+prior 265-line journal prefix, selection SHA-256, split, ETag, archive offsets,
+paths, and sizes. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T081605Z-chained.json`
+(SHA-256 `a525fad074fcea46da3639d326ffaf95ede8dd27f2ed362afe46d66f31559471`),
+covering 25,836,984,085 bytes; zero hash errors and no validation/test/audit
+media opened. The journal was opened with shared read access because the active
+downloader holds it exclusively. C: had 145.99 GiB free at the follow-up
+capacity check. A later check during the same active download measured 140.39
+GiB free and 38.40 GB headroom above the 1.2x remaining-download estimate.
+AV validation and model fitting remain gated on the complete
+selected corpus; no GPU work was started in this turn.
