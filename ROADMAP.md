@@ -2512,3 +2512,10 @@ finalized MP4s, all from train (700/1,042); no validation media is finalized.
 remaining files (232 pass; one known timing-boundary failure). Six partials
 remain and PID 23276 is active. CI for `789968e` is green. This is not a final
 media manifest. See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:35 UTC):** 704 train MP4s
+are finalized (out of 1,042); validation has not started. 467 rows are
+journal-authenticated and 237 unjournaled IDs have local diagnostics (236 pass;
+one known timing-boundary failure). Six partials remain; PID 23276 is active.
+CI for `5cb2f84` is green. This is a live snapshot, not final reconciliation.
+See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

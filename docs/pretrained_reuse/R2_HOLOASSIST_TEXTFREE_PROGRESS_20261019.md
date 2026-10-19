@@ -2033,3 +2033,16 @@ partial files totaled 562,036,736 bytes during the audit. PID 23276 was still
 active. CI for repository commit `789968eca7f80dcb6416e922f070bdd2036e25c9`
 completed successfully. Only the pinned 467 journal rows are source-hash
 authenticated.
+
+At 12:35:24Z the pinned-journal snapshot audit observed 704 finalized selected
+files, 467 journal-authenticated and 237 unjournaled. Audit SHA-256:
+`8D9E1394B35DDB02540C8E2F26E504D392411261D8B9C85CB8E88D7EAEBFEE71`.
+Its transient partial count was five (423,624,704 bytes). The tree changed while
+workers were running: at 12:35:48Z it showed 704 MP4s and six partial files.
+All 237 unjournaled IDs now have deduplicated local diagnostic coverage (236
+pass; the known timing-boundary failure remains). The newly added local pass is
+`unlogged-media-delta-20261019T123548Z.json` (SHA-256
+`ecfcf56e78f5b0b2eb82068480390a1863b0356e3900992493c41d271bed3d0d`). PID
+23276 remained active. The latest prior documentation commit `5cb2f84` CI is
+green; current unjournaled items remain unauthenticated against the source
+archive.
