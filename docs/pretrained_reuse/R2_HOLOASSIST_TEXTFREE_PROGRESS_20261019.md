@@ -319,3 +319,8 @@ files (10,691,586,251 bytes), all train split, with zero mismatches. Receipt:
 (SHA-256 `9a2393ec3a00af974c9bdf5315df6d9aa175c79a0c5d76f22aeb5c55693a52f8`).
 The active download journal can move ahead by a few files during hashing; this
 receipt covers exactly 118 completed entries.
+
+At 2026-10-19 06:33 UTC, an independent selection-aware audit verified 120
+completed train files (10,984,233,623 bytes) with zero mismatches. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T063352Z.json`
+(SHA-256 `225b7f3e19b45af7dffcc34fc0d0c31d64b3ea2a7522b3fe75f664483e8e66b0`).
