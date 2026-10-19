@@ -1116,3 +1116,26 @@ tests remain 25/25 passing, and CI #2173 for `863d0b3` is green. The GPU was
 observed idle briefly but no GPU task was launched because the incomplete,
 partially unjournaled corpus is not ready for feature extraction or training.
 No live process was stopped or restarted.
+
+At 2026-10-19 19:55 JST, a CPU-only local diagnostic covered the 82 complete
+MP4s absent from the pinned 467-row journal snapshot. It recomputed all 82 local
+SHA-256 values, checked IDs/sizes against the frozen selection, parsed AV stream
+metadata, and compared audio duration with train/validation annotation duration.
+All IDs and sizes matched; 81 passed the AV metadata gates. The sole failure is
+`z092-july-11-22-marius_assemble`: AV duration differs by 2.027 video frames,
+while audio/annotation duration differs by 0.094 s. Its exact 70,796,254-byte
+range had already been fetched from the official archive with pinned ETag and
+Content-Range and its SHA matched the local file, so the timing boundary is in
+the source bytes. Local hashes for the other 81 files do not establish archive
+identity. No media were decoded beyond stream metadata. The report is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-audit-20261019T1055Z.json`
+(SHA-256 `3b56d8cfd349451f17d7d534040619f70066d32467285711246d20bee97a3fa8`); the
+external audit script SHA-256 is
+`4f9da69888dac470c469f524eb80639646460887c886ddf568f5bbebff0c6712`.
+
+At 2026-10-19 19:56 JST, PID 23276 was still live. There were 550 complete
+media files (50,393,667,446 bytes), 467 journal rows (43,019,820,009 bytes),
+and no final media manifest. The most recent 82-file diagnostic predates one
+newly visible unjournaled file; that file remains unaudited. CI #2174 for
+`b1e46fc` completed successfully. No live process was controlled, and no GPU
+feature extraction or model fit was started.

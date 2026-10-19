@@ -6,17 +6,16 @@ partition from the 1,306 unused official-train sessions is pinned (seed
 videos (43.02 GB) passed an independent SHA-256, selection, and split audit.
 One selected train clip passed a full CPU AV decode smoke (3,071 video frames and
 5,091,328 audio samples in 5.35 seconds); corpus-wide decode remains pending.
-At 10:53 UTC downloader PID 23276 remained active. The media directory showed
-547 complete files (50.22 GB), but the append journal still had only 467 rows
-(43.02 GB), leaving 80 unjournaled files. A read-only snapshot verified all 80
-names map to the frozen selection and their byte sizes match; their content
-hashes are not established by that check. Separately, all 467 journaled media
-were rehashed and passed AV stream-metadata and annotation-timing checks. The
-earlier AV metadata diagnostic covers 46 unjournaled files (45 pass; one
-source-confirmed marginal timing miss); 34 newly visible files remain
-uninspected. The chained independently verified prefix remains 467/1,306. No
-media manifest, feature extraction, or training is available yet. See the
-timestamped progress record and external audit receipts linked below.
+At 10:56 UTC downloader PID 23276 remained active. The media directory showed
+550 complete files (50.39 GB), but its journal still had 467 rows (43.02 GB),
+leaving 83 unjournaled files. The chained independently verified prefix remains
+467/1,306. All 467 verified media were rehashed and passed AV stream-metadata
+and annotation-timing gates. A separate local diagnostic covered 82 unjournaled
+files: all IDs/sizes matched the frozen selection, 81 passed metadata checks,
+and the same one source-confirmed marginal timing miss remained. Its content was
+not archive-hash verified. One file visible in the latest live snapshot was
+newer than that audit. No media manifest, feature extraction, or training is
+available yet. See the timestamped progress record and external audit receipts.
 The text-free typed-task AV model, feature
 packing and internal-validation path are implemented; CPU suite is green.
 No new model fit or quality result yet. See the
