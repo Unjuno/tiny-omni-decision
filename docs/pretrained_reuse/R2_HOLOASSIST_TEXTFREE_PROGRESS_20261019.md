@@ -254,3 +254,10 @@ mismatches. The count advanced from 90 while hashing. Receipt:
 (SHA-256 `ee24f298ea802475e6bb8f70fced5c7860e7288b8341bc2b78e27106966c3bf6`).
 CI for the preceding report-only commit `a8c202e0ce00e827776a181d8b92d24ca04b484a`
 passed (run [39207929069](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39207929069)).
+
+At 2026-10-19 06:09 UTC, the independent prefix audit reached 92 completed
+train videos (7,637,328,627 bytes), with zero selection, train-split, offset,
+size, or SHA-256 mismatches. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T060942Z.json`
+(SHA-256 `19b22f5178458e5b8b59435f20e87ab7ad44a60ad850f3328d34ac6dc13858aa`).
+The downloader remains live and the full 1,306-video corpus is still pending.
