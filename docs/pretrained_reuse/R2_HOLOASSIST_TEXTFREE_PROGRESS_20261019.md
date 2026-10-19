@@ -1762,3 +1762,14 @@ checks. Partial-file count varied between concurrent scans (five then six), so
 it is a point-in-time transfer count, not a stable total. The journal remains
 source-authenticated only for its 467 rows; no archive authentication is
 inferred from local hashes. No data or process was modified.
+
+At 2026-10-19 12:05 UTC, one additional finalized selected MP4 passed the
+local diagnostic gates. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1750Z.json`
+(SHA-256 `EA2361E9C396F7CE96A486720900DE346F1D7FC48BC694B6DD8BC5E8181681AB`).
+The current identity-set snapshot found 650 finalized files, 467 journal rows,
+and 183 unjournaled IDs. All 183 are covered by local diagnostic receipts with
+no unselected or uncovered IDs: 182 local passes and the single known
+source-range-confirmed timing-boundary failure. Six partial files totaled
+46,137,344 bytes at this scan. PID 23276 remained active. Archive authentication
+still covers only the official journaled prefix; no process/data was changed.

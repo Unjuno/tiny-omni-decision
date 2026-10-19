@@ -2366,3 +2366,10 @@ failure), with no unselected IDs. Partial-file count fluctuates during active
 writes. Only the 467 journaled items have source-hash authentication; no feature
 extraction or fitting has begun. Downloader PID 23276 remains active and
 untouched. See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:05 UTC):** 650 selected
+videos are finalized, 467 journaled, and 183 unjournaled. Local diagnostic
+receipts cover all 183 IDs (182 pass; one known timing-boundary failure); they
+do not provide archive authentication. Six partials remain and PID 23276 is
+active. No feature extraction or fitting has started. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
