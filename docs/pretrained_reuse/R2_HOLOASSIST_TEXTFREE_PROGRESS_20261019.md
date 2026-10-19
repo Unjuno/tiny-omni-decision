@@ -1246,3 +1246,13 @@ visible during the recent observation window while journal reconciliation
 remains unresolved. No process was interrupted, no GPU child was launched,
 and no model work began. The next GPU-bound step still requires a validated,
 reconciled corpus and the HotUGPU reservation wrapper.
+
+At 2026-10-19 11:10 UTC, the CPU-only regression command
+`python -m pytest -q tests/test_hotgpu_preflight.py tests/test_run_with_hotgpu_guard.py tests/test_holoassist_download_progress_audit.py tests/test_holoassist_selected_media_download.py`
+passed all 19 tests. This covers HotUGPU launch/wait-gate behavior and the
+selected-media download/journal audit paths; no GPU job was started. GitHub
+Actions run #2180 for commit `c51c61c288ea1762ff7e0f0f1f7e4df87c86b623`
+completed successfully. The downloader was still alive at the 11:09 UTC
+observation with 563 files and four established archive connections; its
+journal remained 467 rows, last written at 10:07:15 UTC. This does not resolve
+the unjournaled-progress inconsistency.
