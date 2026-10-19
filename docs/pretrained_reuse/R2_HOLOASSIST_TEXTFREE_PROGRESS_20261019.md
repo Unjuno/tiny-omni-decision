@@ -1501,3 +1501,17 @@ stale journal are consistent with a downloader main-thread/future error while
 executor workers finish queued media, but this remains an unverified
 hypothesis because the process output is not attached. The process remains
 untouched; wait for its natural exit before considering any recovery.
+
+At 2026-10-19 11:38 UTC, PID 23276 remained live with four HTTPS connections.
+The journal was still at 467 rows (mtime 10:07:15 UTC); the on-disk complete
+set had grown to 603 files, including 136 unjournaled files. Six partials
+occupied 352,321,536 bytes. Two new files passed local diagnostics, bringing
+cumulative coverage to 135 metadata passes and one known timing-boundary
+failure. Delta receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1450Z.json`
+(SHA-256 `52bf354b3bbe36ff353b58ed952619b16005722499580da7a97028e0896ab69a`);
+live receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1137Z.json`
+(SHA-256 `208abd51c20d9959a4be0ce75dd4400d73d72978d1c79dd4aa3eea56f67c616e`).
+GPU was idle at this sample, but no feature extraction started because the
+full corpus manifest and integrity validation remain prerequisites.
