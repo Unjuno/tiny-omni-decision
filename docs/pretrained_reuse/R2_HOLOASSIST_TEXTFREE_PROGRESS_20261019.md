@@ -379,3 +379,39 @@ RTX 3080 Laptop with 15,821/16,384 MiB reported used at the last sample, but
 only 1% utilization. The prior one-window Whisper smoke already passed under
 HotUGPU; full feature extraction waits until complete media validation.
 No training, fitting, test/audit access, or artifact promotion occurred.
+
+## Live acquisition update and VideoPrism smoke (2026-10-19 07:00 UTC)
+
+The pinned downloader remains active on PID 23276 with its original command,
+selection, four workers, ETag, and output path unchanged. At 06:59 UTC its
+journal contained 154 completed train videos (15,306,439,461 bytes); an
+independent full-prefix audit recomputed every SHA and checked selection ID,
+split, archive offset/ETag, output path, and exact size with zero mismatches.
+The passing receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T065910Z.json`
+(SHA-256 `59801ed0b3026de990a760ad84e17fb17614adf6e23ec19de4e8312d73d3f54f`).
+All completed items remain train split; no validation media has been reached.
+The attempt's external `run-preflight.json` points to this receipt.
+
+A one-window CPU VideoPrism smoke was attempted on selected train session
+`R005-7July-GoPro` using the already-pinned JAX 0.6.2 / TensorFlow 2.18.1
+runtime, exact 8-frame / 288px preprocessing, pinned source and checkpoint.
+It failed before feature output while JAX serialized its compilation cache key
+(`MemoryError` at `_serialize_ir` / `write_bytecode`). A post-failure system
+sample showed 47.965 GB committed against a 48.242 GB commit limit (about
+277 MB remaining), despite roughly 10 GB physically available. This strongly
+suggests system commit pressure, but the exact failure-time counters were not
+captured, so root cause remains likely rather than proven. Failure receipt and
+script are preserved at
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-extractor-video-smoke-attempt-04`
+(receipt SHA-256 `349c1c307ee1f834d3cc2ee90aaf97c94aa98727cb43161729cd8ab761945d12`;
+the receipt hash was refreshed after adding the exact script-start time).
+No output feature, model update, fit, checkpoint selection, or test/audit read
+occurred; no retry or system setting change was made.
+
+The local RTX 3080 was observed alternating between idle and Orbitune training.
+No live process was stopped or modified. The prior frozen Whisper one-window
+smoke remains a pass through HotUGPU; any further GPU-bound task will start
+through that reservation guard, which waits for external GPU use to yield before
+reserving VRAM and launching the child. Full-corpus VideoPrism extraction,
+validation, feature packing, and readout fitting remain pending.
