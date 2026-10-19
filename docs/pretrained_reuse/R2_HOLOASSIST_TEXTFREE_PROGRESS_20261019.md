@@ -1515,3 +1515,18 @@ live receipt:
 (SHA-256 `208abd51c20d9959a4be0ce75dd4400d73d72978d1c79dd4aa3eea56f67c616e`).
 GPU was idle at this sample, but no feature extraction started because the
 full corpus manifest and integrity validation remain prerequisites.
+
+At 2026-10-19 11:40 UTC, PID 23276 was still active with four HTTPS
+connections. Complete files increased to 607; the journal remained at 467 rows
+(last write 10:07:15 UTC), leaving 140 complete files unjournaled. The latest
+live audit is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1140Z.json`
+(SHA-256 `2e79096c7c2025020090d626dee4888f018d3339982d55a9bbef9f9642a1a4fc`),
+with six partial files totaling 331,350,016 bytes. Four newly completed files
+passed local gates; cumulative unjournaled diagnostics are now 139 passes and
+one known timing-boundary failure. Delta receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1500Z.json`
+(SHA-256 `0154522d78949b8024914d5fdb92eb101bfba0e6d5a18c0f4ea512b0816455f1`).
+As before, local hashes are not an independent source archive comparison. GPU
+was idle at this sample, but recent samples have varied sharply, so any GPU
+child remains HotUGPU-gated.
