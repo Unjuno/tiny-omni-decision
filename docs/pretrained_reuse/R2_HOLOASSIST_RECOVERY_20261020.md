@@ -108,7 +108,11 @@ is 4,491,151 bytes and its embedded fingerprint binds the frozen selection,
 corpus receipts, VideoPrism revision, checkpoint hash, preprocessing, and
 extractor source. An auxiliary `progress-fingerprint.json` still says 192 rows
 and is stale; it is not used as the progress authority. The completed-row count
-comes from the NPZ `completed` mask.
+comes from the NPZ `completed` mask. A read-only integrity check matched every
+stored sample ID and its order to the frozen train+validation JSONLs and matched
+the recorded ordered-ID hash; the 1,536 completed flags form a contiguous
+prefix. Completed vectors are finite, nonzero, and nonconstant (L2 norm
+15.97–16.70 in this checkpoint).
 
 The extraction remains on the frozen CPU/JAX path. The extractor itself sets
 `JAX_PLATFORMS=cpu` and hides CUDA for VideoPrism; this is not a GPU job even
