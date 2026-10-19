@@ -2580,3 +2580,13 @@ uncovered/unselected IDs or size/hash conflicts. Only 467 are source-hash
 authenticated by the pinned journal. PID 23276 remains active and seven
 partials remain; its journal has not changed since 10:07Z. CI for `5028f51` is
 green. See the [reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:55 UTC):** Full receipt
+reconciliation matched 738 finalized MP4s to the frozen selection (738/1,042
+train; validation 0/264). All 271 unjournaled IDs are covered by local
+receipts (270 local passes; one known timing-boundary failure); there are no
+uncovered/unselected IDs, size mismatches, or receipt hash conflicts. The
+pinned journal still authenticates only 467 files. PID 23276 remains active;
+seven partials were seen by the reconciliation (six in a subsequent live
+count), so the count is race-sensitive. CI for `5430e9b` is green. Acquisition
+is incomplete. See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

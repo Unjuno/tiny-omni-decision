@@ -2161,3 +2161,21 @@ locally passing rows are in `unlogged-media-delta-20261019T125233Z.json` (SHA-25
 partial files remain. PID 23276 is still present and the live progress journal
 is unchanged at 218,310 bytes / 10:07:15Z, so source authentication remains
 limited to the pinned 467 rows. CI for commit `5028f51` completed successfully.
+
+At 12:55:03Z, the all-receipts reconciliation
+`live-receipt-reconciliation-20261019T125500Z.json` (SHA-256
+`6517556d09320372117df0aac5e1cb8f87527709f3ae85187106257161b059b7`)
+matched 738 finalized MP4s to the frozen selection (738 train, zero validation,
+zero unselected, zero size mismatches, and zero uncovered unjournaled IDs).
+The pinned journal remains unchanged at 467 rows; all 271 unjournaled files
+have local receipts (270 pass, one known timing-boundary failure). Five new
+files locally passed metadata diagnostics in
+`unlogged-media-delta-20261019T125500Z.json` (SHA-256
+`f6153fdaeddb73f7056c95c106d874587dad57f84c6255968e5d7b7df93a3c90`). The
+receipt directory contained no conflicting local hashes. The reconciler saw
+seven partial files, while a later live count saw six, confirming these counts
+are race-sensitive. PID 23276 remains active and the live journal remains
+218,310 bytes with mtime 10:07:15Z. Therefore source-content authentication is
+still limited to the 467 pinned journal rows; local receipts are not official
+archive hashes. CI for `5430e9b` completed successfully. Acquisition is
+incomplete; do not intervene in the downloader while it remains live.
