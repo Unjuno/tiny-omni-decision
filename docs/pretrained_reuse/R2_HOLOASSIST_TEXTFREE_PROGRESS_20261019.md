@@ -2546,3 +2546,41 @@ receipt; a separate direct archive-range comparison still covers only the one
 file recorded above. PID 23276 remained active with seven partial files. The
 journal mtime remained 10:07:15Z. No corpus-wide AV validation or feature
 extraction is claimed.
+
+## Unused-train text-free recovery update (2026-10-20)
+
+The fresh 1,042-train / 264-development-validation selection remains pinned at
+SHA-256
+`66f578b89ddb1757477b6c75e31b9d3fb7320d6832ae3d23dcd72ad67be17498`. The
+recovery directory contains all 1,306 selected media files (117,074,880,152
+bytes), each bound to the frozen manifest; the whole train/validation AV gate
+passed. The report SHA-256 is
+`fbc6fced29f7a87b9bdc5fbb3c64a18b3f140ae5058eb36db80c5f27d8cc85db`.
+
+The action-event and 30-second causal-window corpora were built without
+reading official validation/test payloads. Duplicate upstream event IDs are
+preserved and disambiguated by stable record position. The new action and
+window receipt hashes, counts, media-timeline gate changes, and one-window
+VideoPrism smoke are documented in
+[`R2_HOLOASSIST_RECOVERY_20261020.md`](R2_HOLOASSIST_RECOVERY_20261020.md).
+
+The full VideoPrism bank is running under the existing HotUGPU cooperative
+reservation on the RTX 3080 Laptop. Orbitune yielded; it was not stopped or
+modified. At 2026-10-20 04:06 JST, attempt-03 had atomically saved 128 / 12,261
+window features to
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\video-features-v1-attempt-03\video-features.progress.npz`.
+The GPU showed 6,169 / 16,384 MiB used (6,000 MiB HotUGPU reservation) and 0%
+utilization; the feature child is pinned to CPU JAX. Attempts 01/02 are
+preserved with their pre-extraction launch errors (missing repository
+`PYTHONPATH`, then wrong child Python runtime); neither produced feature rows.
+The active extraction binds source commit `637794f4f56352ec79f2fbd1ba3e5782fad94f5f`,
+the pinned VideoPrism source/checkpoint, and the frozen selection. No training,
+test-set access, or quality claim has occurred for this recovery corpus yet.
+
+Commit `637794f4f56352ec79f2fbd1ba3e5782fad94f5f` is pushed to
+`codex/r2-holoassist-textfree`; GitHub Actions run `39306480958` completed
+successfully. Ruff, the full CPU suite (2,470 passed, 1 skipped), and model and
+dataset example manifest validation passed. The CI virtual environment has a
+UTF-8 editable `.pth` path that fails under the host's cp932 locale; CPU tests
+were therefore invoked from the existing working ML environment with the
+repository `src` path explicitly set. No environment was modified.

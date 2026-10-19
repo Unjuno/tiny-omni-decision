@@ -1,21 +1,17 @@
-**2026-10-19 R2 HoloAssist text-free follow-up (in progress):** The prior
+**2026-10-20 R2 HoloAssist text-free recovery (in progress):** The prior
 pilot's text-conditioned modality arms and exposed official validation set are
-not reused. A fresh task-stratified 1,042-train / 264-development-validation
-partition from the 1,306 unused official-train sessions is pinned (seed
-20261019; 117.07 GB pitch-shifted AV download). One selected train clip passed
-a full CPU AV decode smoke (3,071 video frames and 5,091,328 audio samples in
-5.35 seconds); corpus-wide decode remains pending. At 13:56 UTC downloader PID
-23276 remained active with 849/1,042 train files finalized, no validation files
-yet, and seven partial files. The pinned journal still authenticates 467
-source hashes. Local receipts cover the other 382 files (381 pass; one known
-timing-boundary failure); one journal-external file also passed a direct exact
-archive-range SHA-256 spot-check. No media manifest, feature extraction, or
-training is available yet. See the timestamped progress record and external
-audit receipts.
-The text-free typed-task AV model, feature
-packing and internal-validation path are implemented; CPU suite is green.
-No new model fit or quality result yet. See the
-[progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+not reused. The frozen 1,042-train / 264-development-validation selection from
+1,306 unused official-train sessions is unchanged (seed 20261019; 117.07 GB
+pitch-shifted AV). All 1,306 files are present and match the media manifest;
+full train/validation AV validation passed. The action corpus has 88,762 train
+/ 22,761 validation events; 30-second causal windows have 9,763 / 2,498 rows.
+VideoPrism CPU/JAX extraction is running in a separate attempt under HotUGPU;
+128 / 12,261 windows were saved at the latest check. No task-quality result or
+training is claimed yet. The media-gate and repeated-event-ID fixes, receipts,
+hashes, and run status are in the
+[recovery report](docs/pretrained_reuse/R2_HOLOASSIST_RECOVERY_20261020.md).
+The text-free typed-task AV readout and internal-validation path remain in
+place; prior pilot artifacts and metrics are unchanged.
 
 **2026-10-19 R2 HoloAssist temporal readout:** All 3,527 text/audio/video frozen features are packed and the fixed 2,048-step video-only, audio-only, and joint readout runs completed on the local RTX 3080. Validation-selected best accuracies were 71.31%, 73.79%, and 73.05%, respectively; each arm's NLL/calibration regressed sharply by the fixed endpoint. Joint input did not improve on audio-only, so fusion benefit is not supported by this pilot. No test or sealed-audit data were loaded. [Protocol/results](docs/pretrained_reuse/R2_HOLOASSIST_TEMPORAL_READOUT_RESULTS_20261019.md); detailed curves and hashes are in its linked JSON.
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
