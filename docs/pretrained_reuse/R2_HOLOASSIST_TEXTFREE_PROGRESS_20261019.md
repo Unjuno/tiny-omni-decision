@@ -1593,3 +1593,16 @@ and delta receipt
 (SHA-256 `6084b4721ee92748006492396ef9f1998b2504cdacc3d4aad41e1aeb37812102`)
 were saved externally. Six partials occupied 247,463,936 bytes at the audit.
 GPU utilization was 74% at the state check, so no GPU task was started.
+
+At 2026-10-19 11:48 UTC, the downloader remained live with four HTTPS
+connections. The complete set reached 624 files; 157 are not yet represented in
+the unchanged 467-row journal. Three newly complete files passed local
+diagnostics, so cumulative coverage is 156 passes and one known
+source-range-verified timing-boundary failure. Delta receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1550Z.json`
+(SHA-256 `4e1031b7177b6d9d1f482c0b3a35160e1f621ebb4813b8b1f69f221e8244b0d4`);
+live receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1148Z.json`
+(SHA-256 `d58df232605a862a0caf159ec04d71a8eae3e188a863c75d3d99e9ae2dd4d402`).
+Six partial files totaled 369,098,752 bytes. GPU was idle at the latest point
+sample, but task start remains gated by corpus integrity and HotUGPU.
