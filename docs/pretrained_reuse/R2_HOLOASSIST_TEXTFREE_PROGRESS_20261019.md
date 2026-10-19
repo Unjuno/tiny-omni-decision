@@ -542,3 +542,15 @@ SHA-256 values with zero errors. No validation media has completed. Receipt:
 (SHA-256 `19c21f36174860e378287eff2990f461c10bd4277d7eb28ad64716d56f757367`).
 The external preflight now points to this full audit. Orbitune was using about
 15.8 GiB of VRAM at the last sample, so no new GPU task was launched.
+
+## Live acquisition verification (2026-10-19 07:18 UTC)
+
+The download journal now has 180 completed selected train videos, totaling
+17,446,110,088 bytes. An independent full-prefix audit checked selection
+identity/split, pinned archive ETag/offset, exact output path and size, and
+recomputed every SHA-256; all 180 passed with zero mismatches. No validation
+media has completed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T071853Z.json`
+(SHA-256 `c9291c30f1ca8f38a341491d4d8b32c7950c83d56a5a830f769c5187488db34e`).
+The attempt preflight points to this receipt. The local GPU was occupied by
+Orbitune at the last read; no GPU work was started.
