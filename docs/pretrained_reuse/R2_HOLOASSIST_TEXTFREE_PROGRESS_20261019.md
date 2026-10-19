@@ -1182,3 +1182,33 @@ prefix remains 467/1,306. GPU was idle at this sample, but no GPU task was
 started because the corpus is incomplete and most local hashes lack archive
 comparison. CI #2176 for `4bd12c2` completed successfully. No live process was
 stopped or restarted, and no feature extraction or training was performed.
+
+At 2026-10-19 11:05 UTC, a CPU-only delta audit covered the three files that
+appeared after the 11:02Z receipt. All three local SHA-256 values were
+recomputed; their IDs and sizes matched the frozen selection, and AV stream
+metadata plus annotation-duration checks passed. These are local integrity
+diagnostics only; their hashes have not been compared with official archive
+ranges. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1115Z.json`
+(SHA-256 `ef476aad564c1f559165027f164ce61fca6ae1f93a8f6049c65eee3b96695445`).
+
+At 2026-10-19 11:05 UTC, PID 23276 was still the sole matching downloader
+process, with four established archive connections. The output contained 561
+complete MP4s (51,647,096,776 bytes) and six partial files (163,577,856
+bytes). The journal was still 467 rows / 218,310 bytes, with last-write time
+10:07:15 UTC. A 15-second read-only sample saw 561 files at both ends and no
+growth in the six partials; the process CPU advanced by only 0.06 seconds in
+that interval. This indicates the downloader is currently making little or no
+observable progress, but does not identify whether the bottleneck is the
+remote archive, a stalled worker, or another I/O condition. The journal lag is
+unresolved; do not treat later files as journal-verified or resume/restart this
+live process without explicit approval. At least two files appeared after the
+previous 559-file sample and remain outside the completed AV audit receipts.
+
+The RTX 3080 was occupied at 93% utilization with 15,821/16,384 MiB in use at
+the same observation. No GPU work was started. Any future GPU-bound child must
+be launched through `scripts/run_with_hotgpu_guard.py` with the repository
+preflight so it waits for a cooperative yield and reserves memory before the
+child process starts. The C: volume had 116.13 GiB free. GitHub Actions run
+#2177 for commit `52908e3e83517a54c54819fca0ed7c5443648bac` was still queued;
+the worktree remained clean and its branch matched `origin`.
