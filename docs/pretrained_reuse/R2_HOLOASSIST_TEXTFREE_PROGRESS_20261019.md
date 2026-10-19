@@ -1202,8 +1202,8 @@ that interval. This indicates the downloader is currently making little or no
 observable progress, but does not identify whether the bottleneck is the
 remote archive, a stalled worker, or another I/O condition. The journal lag is
 unresolved; do not treat later files as journal-verified or resume/restart this
-live process without explicit approval. At least two files appeared after the
-previous 559-file sample and remain outside the completed AV audit receipts.
+live process without explicit approval. Two files that appeared after the
+previous 559-file sample were subsequently checked by the 11:20Z receipt below.
 
 The RTX 3080 was occupied at 93% utilization with 15,821/16,384 MiB in use at
 the same observation. No GPU work was started. Any future GPU-bound child must
@@ -1212,3 +1212,19 @@ preflight so it waits for a cooperative yield and reserves memory before the
 child process starts. The C: volume had 116.13 GiB free. GitHub Actions run
 #2177 for commit `52908e3e83517a54c54819fca0ed7c5443648bac` was still queued;
 the worktree remained clean and its branch matched `origin`.
+
+At 2026-10-19 11:06:17 UTC, all 94 complete files absent from the 467-row
+journal had local hashes and AV metadata checks recorded: the previous 89-file
+set, the three-file 11:15Z delta, and this two-file delta. All IDs and sizes
+match the frozen selection; 93 pass the metadata gates and the one failure is
+the already source-range-verified timing-boundary asset
+`z092-july-11-22-marius_assemble`. The remaining unjournaled files' local
+hashes are not archive-authenticated. Receipt for the two-file delta:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1120Z.json`
+(SHA-256 `273ff7c917804b995f0c6ec2a04977b617a64191804513c0ac7773fdd743110b`).
+
+At 11:06:17 UTC the downloader remained live, with 561 complete files
+(51,647,096,776 bytes), six partials, and the unchanged 467-row journal (last
+write 10:07:15 UTC). No final manifest exists. No GPU job or model training
+was started; R2 feature extraction remains gated on a reconciled, complete
+media manifest and the required task-quality checks.
