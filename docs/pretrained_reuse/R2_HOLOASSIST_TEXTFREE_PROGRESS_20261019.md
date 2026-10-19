@@ -145,3 +145,13 @@ The pinned local VideoPrism NPZ (457,475,296 bytes) and Whisper encoder export
 (32,839,984 bytes) also match the exact hashes recorded for extraction. These
 are artifact identity checks only, not quality results. The downloader remains
 live; GPU feature extraction has not begun.
+
+At 2026-10-19 05:43 UTC, the downloader journal had advanced to 63 completed
+files (3,724,124,825 bytes); the saved independent prefix audit currently
+covers the first 60 completed entries, so the additional entries are covered
+by the downloader's own checks but not yet by a refreshed independent receipt.
+After the config correction, the full CPU test suite passed (2,448 passed,
+11 skipped in 35.94 s) and `ruff check .` passed. GitHub Actions run
+[39205909345](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39205909345)
+for source commit `fd83baf36d5aac8fa1e681fec2103aa6f0577f82` completed
+successfully.
