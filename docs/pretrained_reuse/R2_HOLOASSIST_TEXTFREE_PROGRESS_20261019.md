@@ -1648,3 +1648,16 @@ failure. The new two-file local delta is
 The parent PowerShell has no open log/output or attempt-artifact handle, and
 Codex exposes no attached terminal for this process, so the downloader's
 exception output remains unavailable. It remains live and untouched.
+
+At 2026-10-19 11:52 UTC, PID 23276 remained live with four HTTPS workers.
+The latest persisted audit
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1153Z.json`
+(SHA-256 `87e9b9b6bbe445d5e15ab3aa316afca01c62b76634e1c09a1ebf3e57929ef9bb`)
+records 631 complete files on disk, 164 unjournaled, and six partials totaling
+150,994,944 bytes; the official progress journal remains at 467 rows. Two
+additional local delta files passed ID/size, local SHA, AV metadata, and
+annotation timing checks. Cumulative local diagnostics cover 163 passes and
+the one known timing-boundary failure. Delta receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1630Z.json`
+(SHA-256 `2702baaa463efd18c64746c62ec1fc676afc794d271620c7fd587f6f79626f7e`).
+The local hashes are not source-archive authenticated. No process was modified.
