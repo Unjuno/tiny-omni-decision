@@ -2380,3 +2380,11 @@ journal, and 184 unjournaled. Local receipts cover all 184 IDs (183 pass, one
 known timing-boundary failure), but do not authenticate them against the source
 archive. Six partials remain; PID 23276 is active. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:06 UTC):** The corrected
+identity reconciliation found 652 finalized selected videos, 467 journaled and
+185 unjournaled; local receipts cover all 185 IDs (184 pass, one known
+timing-boundary failure), with no unselected IDs. The prior receipt scan used
+an incomplete timestamp filter and was corrected. Local hashes are not archive
+authentication. PID 23276 remains active; see the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
