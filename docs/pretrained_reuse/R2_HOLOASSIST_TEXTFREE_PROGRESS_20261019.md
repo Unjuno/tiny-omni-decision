@@ -1358,3 +1358,16 @@ metadata passes and the one source-range-verified timing-boundary failure.
 The 111 passing local hashes do not prove archive identity. PID 23276 remains
 live with four archive connections. GPU was idle at the 11:21:02 UTC sample;
 no GPU task was launched.
+At 2026-10-19 11:23 UTC, two more complete train files appeared; the
+CPU-only local audit passed for both. Receipt:
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1250Z.json
+(SHA-256 ae366fb86a68b3c468106496d6f9cd5c8a26839635fa167d1000e89fbddf23b7).
+The machine-readable live journal audit is
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1123Z.json
+(SHA-256 654a6f8d5029d1b7538824ae156c8444a87c1713de18523765d29f03044069f2):
+467 journaled rows, 114 complete unlogged files, six partials, 839 selected
+records not yet journal-completed. The 114 unjournaled files now have local
+diagnostics: 113 pass AV metadata gates, one is the known source-range-verified
+timing-boundary failure. Local hashes do not authenticate the other 113
+against the archive. No live process was stopped or restarted; no GPU job was
+started.
