@@ -5,7 +5,11 @@ import json
 import numpy as np
 import pytest
 
-from scripts.pack_holoassist_feature_cache import load_feature_bank, pack_split
+from scripts.pack_holoassist_feature_cache import (
+    load_feature_bank,
+    pack_split,
+    select_split_banks,
+)
 
 
 def metadata(name: str) -> dict[str, str]:
@@ -72,6 +76,21 @@ def test_pack_split_rejects_encoder_order_mismatch() -> None:
 
     with pytest.raises(ValueError, match="ID order"):
         pack_split(rows, banks, "train")
+
+
+def test_select_split_banks_slices_global_bank_in_window_order() -> None:
+    train_rows = make_rows()
+    validation_id = "validation-a:window-0000"
+    global_ids = [row["id"] for row in train_rows] + [validation_id]
+    global_features = np.arange(3 * 768, dtype=np.float32).reshape(3, 768)
+    banks = {
+        "video": (global_ids, global_features, metadata("video")),
+    }
+
+    selected = select_split_banks(train_rows, banks)
+
+    assert selected["video"][0] == [row["id"] for row in train_rows]
+    np.testing.assert_array_equal(selected["video"][1], global_features[:2])
 
 
 def test_feature_bank_loader_requires_finite_pinned_embedding(tmp_path) -> None:

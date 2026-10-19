@@ -118,6 +118,25 @@ def pack_split(
     return arrays, report
 
 
+def select_split_banks(
+    rows: list[dict[str, Any]], banks: dict[str, tuple[list[str], np.ndarray, dict]]
+) -> dict[str, tuple[list[str], np.ndarray, dict]]:
+    """Select split rows from the globally ordered train+validation feature banks."""
+    ids = [str(row["id"]) for row in rows]
+    selected = {}
+    for modality, (bank_ids, features, metadata) in banks.items():
+        positions = {sample_id: index for index, sample_id in enumerate(bank_ids)}
+        missing = set(ids) - positions.keys()
+        if missing:
+            raise ValueError(f"{modality} feature bank is missing split IDs: {sorted(missing)[:3]}")
+        selected[modality] = (
+            ids,
+            np.ascontiguousarray(features[[positions[sample_id] for sample_id in ids]]),
+            metadata,
+        )
+    return selected
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--windows-dir", type=Path, required=True)
@@ -153,7 +172,8 @@ def main() -> None:
     packed = {}
     report = {}
     for split in ("train", "validation"):
-        packed[split], report[split] = pack_split(rows[split], banks, split)
+        split_banks = select_split_banks(rows[split], banks)
+        packed[split], report[split] = pack_split(rows[split], split_banks, split)
     train_sessions = set(map(str, packed["train"]["session_id"]))
     validation_sessions = set(map(str, packed["validation"]["session_id"]))
     train_assets = set(map(str, packed["train"]["media_sha256"]))
