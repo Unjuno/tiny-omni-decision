@@ -603,3 +603,29 @@ completed. Receipt:
 The external preflight points to this receipt. CI for the previous report
 commit `0896e58` completed successfully at run
 [39215849783](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215849783).
+
+## Acquisition and HotUGPU handoff update (2026-10-19 07:33 UTC)
+
+The unchanged PID 23276 downloader remains active with four established HTTPS
+connections to the pinned archive endpoint. The journal reached 199 completed
+train videos (20,351,203,385 bytes); validation remains at zero. A full
+independent audit recomputed every completed media SHA-256 and rechecked
+selection identity/split, pinned ETag, archive offsets, paths and sizes with no
+errors. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T073343Z-verified.json`
+(SHA-256 `eaedf35595be5317a786c4f17aa259914c1bb90307c88e1cc14deda1c8688ac0`).
+The external `run-preflight.json` now points to this receipt. The training
+media was read only for SHA-256 verification; no validation files have been
+downloaded, and no test or sealed-audit media has been opened.
+
+One intermediate audit attempt was invalid because its checker incorrectly
+expected the archive ETag inside `selection.json`; the downloader pins that
+ETag in its command line. That check failed before opening any media. The
+invalid receipt is preserved and marked superseded in the external preflight;
+the corrected full audit above passed.
+
+HotUGPU policy was clarified: any later CUDA feature extraction must be
+launched through `scripts/run_with_hotgpu_guard.py`, whose reservation and
+free-memory gate prevent the Orbitune supervisor from starting its GPU job
+while the guarded child is active. No GPU work is appropriate yet because the
+selected corpus is incomplete and validation media has not been acquired.
