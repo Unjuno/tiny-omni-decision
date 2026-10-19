@@ -58,15 +58,21 @@ feature packer supports a video/audio cache with no text bank, and the
 extractor accepts the new attempt's SHA-bound selection explicitly while
 preserving the old pinned-selection default.
 
-Checks for the first pushed commit: 2,443 passed / 11 skipped in the full CPU
-suite; focused Ruff passed; GitHub Actions run
+The first pushed implementation commit `ecca87093e4c610f4258fbc9c6d6e2fd35cdbc60`
+passed 2,443 tests / 11 skipped and GitHub Actions run
 [39203925505](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39203925505)
 passed. The text-free cache commit
 `e0524e8742e193556e32b22dbd3ef8600d870a42` passed 2,445 tests / 11 skipped,
 Ruff, and GitHub Actions run
 [39204423670](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39204423670).
-The additional class-balance and paired-bootstrap diagnostics are being
-tested separately before their next commit; no model fit has started.
+The class-balance and paired session-bootstrap commit
+`dbf54dbbceea581ad06a40814fbbf8cf0c5854d8` passed 2,447 tests / 11 skipped,
+Ruff, and GitHub Actions run
+[39204939791](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39204939791).
+The latest receipt-provenance commit is `418bd359f8d5226a7a572c8a04cf8c8ae241af87`;
+its focused 17-test set and Ruff pass locally, with GitHub Actions run
+[39205023515](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39205023515)
+queued at the time of this report. No model fit has started.
 
 ## Remaining gates
 
