@@ -1858,3 +1858,14 @@ so the actual failure remains UNKNOWN. The artifact names ending `T1700Z` throug
 JSON `created_at_utc` and filesystem timestamps. New receipts now use actual UTC
 names. No source-authentication claim is added for the 193 unjournaled files;
 no process or media was changed.
+
+At 2026-10-19 12:12 UTC, two additional finalized selected files passed the
+local diagnostic gates. Receipt (named using its actual UTC capture time):
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1212Z.json`
+(SHA-256 `B15EA048353DBDB49A3C1294830620512F5F1565B88E722D0766BF8763EC8C45`).
+The reconciled snapshot found 662 finalized MP4s, 467 entries in the pinned
+journal snapshot, and 195 unjournaled IDs. The cumulative receipt chain covers
+all 195 (194 local passes, the known timing-boundary failure), with no
+uncovered IDs. Six partials totaled 46,137,344 bytes. PID 23276 remained active;
+the live journal is still held open by the downloader and its hash was not
+retried. Archive authentication remains bounded to the pinned journal rows.

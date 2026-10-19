@@ -2419,3 +2419,10 @@ by executor drain may explain the stale journal but is unconfirmed without the
 process exception. Artifact suffixes T1700Z–T1850Z were sequential labels, not
 actual UTC times; JSON capture times are authoritative. PID 23276 remains active.
 See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:12 UTC):** 662 selected
+videos are finalized, 467 in the pinned journal snapshot, and 195 unjournaled.
+Local receipts cover all 195 IDs (194 pass, one known timing-boundary failure).
+The downloader holds the live journal open; its hash was not retried. Local
+hashes do not extend archive authentication. PID 23276 remains active. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
