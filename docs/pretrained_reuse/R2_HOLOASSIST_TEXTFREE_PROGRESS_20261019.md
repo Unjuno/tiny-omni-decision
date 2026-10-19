@@ -921,3 +921,14 @@ checks; full-corpus decoding is pending:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T092555Z.json`
 (SHA-256 `1db69086fd152c169d727a489a4f1b7c593d39848afd8a69a75be9167f03e5cb`).
 No validation/test media were opened.
+
+At 2026-10-19 18:29 JST, 399/1,306 train clips (36,832,591,795 bytes)
+were verified in the chained prefix. Four new files passed SHA-256 and frozen
+selection/split/ETag/offset/path/length checks:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T092942Z-chained.json`
+(SHA-256 `367018285c664e279107347a2a627f2e90e2fbd0909dbbb91d801ca54e10a47e`).
+All four passed the incremental CPU AV stream and annotation-duration check;
+full decode remains pending:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T092954Z.json`
+(SHA-256 `52073b4f999f7d964c975561b6b00914e8dab82ad52a7176d8a69b5728a50770`).
+No validation/test media were accessed.
