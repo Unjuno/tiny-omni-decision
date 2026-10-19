@@ -1329,3 +1329,20 @@ PID 23276 remained alive. Complete media count was 576 at 11:19:10 UTC
 (53,324,598,946 bytes), with the journal still at 467 rows / last write
 10:07:15 UTC. This confirms active transfer, but does not explain why journal
 rows have not advanced. No process or GPU intervention was made.
+At 2026-10-19 11:20:06 UTC, the live selection contained 578 complete train
+videos (53,870,747,487 bytes) and no validation videos yet. The source plan has
+1,042 train / 264 validation videos (117,074,880,152 bytes total); 114.11 GiB
+was free on C:, exceeding the estimated 75.85 GB safety requirement for the
+remaining selected bytes at this observation. The journal auditor passed its
+partial gate: 467 journal rows, 111 complete files on disk but not journaled,
+six partials, and 839 selected items not journal-completed. A two-file local
+delta passed; cumulative unjournaled diagnostics cover 111 files, with 110
+metadata passes and the one known boundary failure. The 110 passing local
+hashes are not source-authenticated. Receipt:
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1230Z.json
+(SHA-256 0252cd098cba5c031430d12019287f9932bb1d1ced17cc047033f334f1c21774).
+
+The GPU was 86% utilized with 15,821/16,384 MiB in use at this observation;
+no GPU job was started. The corrected audit code remains covered by the green
+CI run #2183 for e7eab64; the later documentation-only commits did not change
+that code.
