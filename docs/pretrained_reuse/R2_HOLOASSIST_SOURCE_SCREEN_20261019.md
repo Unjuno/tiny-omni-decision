@@ -280,6 +280,13 @@ found; content hashes were not recomputed. PID 16496 remained active.
 Snapshot:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T003851Z.json`
 (SHA-256 `2BD4AA862975254FC0BD0900A69BCFA466D7F2A3297AA3F7D3623AC44009BB75`).
+At 2026-10-19 00:48:24 UTC, the live journal audit recorded 287/367 selected
+MP4s (29,851,608,731 completed bytes), 80 unlogged files, and eight partial
+files (562,036,736 bytes). No identity, offset, path, or size mismatch was
+found; content hashes were not recomputed. PID 16496 remained active.
+Snapshot:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T004824Z.json`
+(SHA-256 `57DFAA1CAC7778E9797B74E24FD36FCCE136AB81DDE57923BC2EAB3ED141ABD5`).
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)
