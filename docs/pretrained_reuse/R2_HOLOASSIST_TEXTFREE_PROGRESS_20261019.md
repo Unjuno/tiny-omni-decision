@@ -2193,3 +2193,16 @@ PID 23276 remains active. The 467-row pinned journal is unchanged, so official
 source-content authentication remains limited to those 467 rows. Seven partial
 files totaling 128 MiB were present. CI run 39255891055 for `17b3d0c` completed
 successfully.
+
+At 13:00:06Z, full-receipt reconciliation
+`live-receipt-reconciliation-20261019T130020Z.json` (SHA-256
+`b22143fb7aaf432adb836f8db95e11cfa7d5f7aeded804d588d46872fd7d04cd`) matched
+744 finalized MP4s, all from train, to the frozen selection. There are zero
+validation MP4s, unselected files, size mismatches, uncovered unjournaled IDs,
+or local receipt hash conflicts. Local receipts cover all 277 IDs outside the
+pinned journal (276 pass, one known timing-boundary failure); only 467 files
+are source-hash authenticated by the journal. Three new local passes are in
+`unlogged-media-delta-20261019T130020Z.json` (SHA-256
+`fa61b7703c99b911d93cf17a361d382541aede5ab1f9fe5c418096635f08b93f`). PID
+23276 remains active; seven partial files total about 72 MiB, down from 128 MiB
+at 12:59. CI for `7e0c392` was still in progress at the last check.
