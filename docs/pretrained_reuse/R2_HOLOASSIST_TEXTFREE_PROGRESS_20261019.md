@@ -2046,3 +2046,20 @@ pass; the known timing-boundary failure remains). The newly added local pass is
 23276 remained active. The latest prior documentation commit `5cb2f84` CI is
 green; current unjournaled items remain unauthenticated against the source
 archive.
+
+At 12:39:01Z a robust reconciliation scanned every `unlogged-media-*.json`
+receipt in the attempt directory rather than relying on the incremental
+scripts' manually extended receipt lists. The reconciler output
+`live-receipt-reconciliation-20261019T123843Z.json` has SHA-256
+`04cedf695de50ec6d2b0dfaa356d23a15ba124d0c76253d030a7c151d28290ef`. It
+matched 711 current MP4s to the frozen selection: 711 train, zero validation,
+zero unselected, and no selected-size mismatches. The pinned journal remains
+467 rows; 244 currently unjournaled media IDs are all covered by deduplicated
+local receipts (243 passes and the one known timing-boundary failure). The
+reconciler collapsed 23 repeated receipt rows and found no conflicting local
+hashes or uncovered IDs. Two files discovered after the prior delta chain were
+locally checked in `unlogged-media-delta-20261019T123843Z.json` (SHA-256
+`e1d7d50540007f7de117e757bb0b4087e70a8d390eabbc5a6e5c4d03feb91881`). This
+local identity/size/media check does not authenticate those 244 files against
+the source archive. PID 23276 remains active; validation downloads and the
+full media gate remain incomplete.

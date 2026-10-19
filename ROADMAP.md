@@ -2519,3 +2519,11 @@ journal-authenticated and 237 unjournaled IDs have local diagnostics (236 pass;
 one known timing-boundary failure). Six partials remain; PID 23276 is active.
 CI for `5cb2f84` is green. This is a live snapshot, not final reconciliation.
 See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:39 UTC):** Full-directory
+receipt reconciliation matched all 711 live MP4s to the frozen train selection
+(711/1,042 train; 0/264 validation). The pinned journal authenticates 467;
+all 244 unjournaled files have local diagnostics (243 pass; one known
+timing-boundary failure), with no uncovered/unselected IDs or size/hash
+conflicts. PID 23276 remains active. Local checks do not extend source archive
+authentication. See the [reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
