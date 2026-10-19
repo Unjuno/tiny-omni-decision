@@ -1271,3 +1271,27 @@ The downloader was alive at 11:10:35 UTC with 565 complete files
 mtime. No GPU process, feature extraction, or training was started. The latest
 branch CI at the preceding source snapshot (#2180) was green; #2181 for
 `fe6bba9` was in progress at the time of observation.
+
+At 2026-10-19 11:14 UTC, the repository journal-audit CLI was corrected after
+reproducing its documented historical precondition failure. `selection.json`
+does not contain `archive_etag`; download code receives the archive ETag as a
+separate pinned CLI argument. The audit CLI now requires `--archive-etag` and
+compares each journal row with that value. Its regression fixture now uses the
+actual selection shape. This was an audit-tool contract defect, not a newly
+identified media failure; the earlier no-ETag error is superseded by the
+existing corrected prefix receipts and by this tested CLI path.
+
+The corrected CPU-only CLI ran against the live selection, media directory and
+journal with the pinned ETag and returned `PASS_PARTIAL_HOLOASSIST_DOWNLOAD_AUDIT`:
+467 journal rows / 43,019,820,009 journal-verified bytes, 1,306 selected files,
+104 complete unlogged files on disk and six partial files. The command checks
+identity/path/size/journal structure; it does not rehash media. Separately,
+local-delta receipts now cover all 104 unlogged complete files: 103 pass the
+AV metadata gates and one remains the exact source-range-verified timing-boundary
+failure. The 103 passing local hashes are not archive-authenticated.
+
+The focused regression suite (HotUGPU gates, HoloAssist journal audit and
+selected-media download) passes 19 tests; Ruff passes on the changed auditor
+and test. No GPU work or model fitting was started, and PID 23276 remains
+untouched. The commit containing this repair and the observation will receive
+its own CI run after push.

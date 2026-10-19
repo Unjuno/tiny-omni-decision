@@ -53,6 +53,7 @@ def audit_download_progress(
     *,
     selection: dict,
     selection_sha256: str,
+    expected_archive_etag: str,
     journal_bytes: bytes,
     media_root: Path,
 ) -> dict:
@@ -84,7 +85,7 @@ def audit_download_progress(
             raise ValueError(f"unselected progress-journal entry: {key}")
         if item.get("selection_sha256") != selection_sha256:
             raise ValueError(f"selection hash mismatch for {key}")
-        if item.get("archive_etag") != selection.get("archive_etag"):
+        if item.get("archive_etag") != expected_archive_etag:
             raise ValueError(f"archive ETag mismatch for {key}")
         if item.get("size_bytes") != int(row["size_bytes"]):
             raise ValueError(f"planned size mismatch for {key}")
@@ -140,7 +141,7 @@ def audit_download_progress(
         "status": "PASS_PARTIAL_HOLOASSIST_DOWNLOAD_AUDIT",
         "captured_at_utc": datetime.now(UTC).isoformat(),
         "selection_sha256": selection_sha256,
-        "archive_etag": selection.get("archive_etag"),
+        "archive_etag": expected_archive_etag,
         "expected_files": len(expected),
         "journal_rows": len(completed),
         "unique_journal_rows": len(completed),
@@ -160,12 +161,14 @@ def main() -> None:
     parser.add_argument("--selection", type=Path, required=True)
     parser.add_argument("--media-root", type=Path, required=True)
     parser.add_argument("--journal", type=Path, required=True)
+    parser.add_argument("--archive-etag", required=True)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     selection_bytes = args.selection.read_bytes()
     report = audit_download_progress(
         selection=json.loads(selection_bytes),
         selection_sha256=hashlib.sha256(selection_bytes).hexdigest(),
+        expected_archive_etag=args.archive_etag,
         journal_bytes=args.journal.read_bytes(),
         media_root=args.media_root,
     )

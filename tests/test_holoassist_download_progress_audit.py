@@ -10,7 +10,6 @@ def test_partial_download_audit_reports_verified_identity_without_rehashing_medi
     tmp_path,
 ) -> None:
     selection = {
-        "archive_etag": '"pinned"',
         "selection": {
             "all_selected_video_bytes": 4,
             "train": {
@@ -55,6 +54,8 @@ def test_partial_download_audit_reports_verified_identity_without_rehashing_medi
             str(media_root),
             "--journal",
             str(journal),
+            "--archive-etag",
+            '"pinned"',
         ],
         check=False,
         capture_output=True,
@@ -113,6 +114,8 @@ def test_partial_download_audit_rejects_wrong_size_for_completed_media(tmp_path)
             str(media_root),
             "--journal",
             str(journal),
+            "--archive-etag",
+            '"pinned"',
         ],
         check=False,
         capture_output=True,
@@ -158,6 +161,8 @@ def test_partial_download_audit_ignores_only_incomplete_tail_and_counts_partial_
             str(media_root),
             "--journal",
             str(journal),
+            "--archive-etag",
+            '"pinned"',
         ],
         check=False,
         capture_output=True,
