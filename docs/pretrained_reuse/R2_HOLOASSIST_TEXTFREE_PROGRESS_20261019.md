@@ -715,3 +715,11 @@ the immutable selection metadata. The latest receipt is
 zero errors. The downloader remains live with its original four-worker
 settings. C: had 138.92 GiB free and 39.33 GiB headroom over the conservative
 remaining-download estimate. No validation/test media were opened.
+
+At 2026-10-19 17:29 JST, the prefix reached 300/1,306 train videos and
+28,197,925,603 bytes. Five new entries passed full file rehash and chained
+journal/selection checks with zero errors. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T082918Z-chained.json`
+(SHA-256 `7cba58fef0598ac503f69bbcaa382538323b2085f3178bf792e9cfc38b3b53bc`).
+The live downloader remains PID 23276 with four partial files. C: had 138.74
+GiB free; the conservative remaining-download estimate leaves 39.41 GiB.
