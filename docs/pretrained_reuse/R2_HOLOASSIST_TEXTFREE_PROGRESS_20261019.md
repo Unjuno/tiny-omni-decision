@@ -465,3 +465,34 @@ mismatches and no validation media in the completed prefix. Receipt:
 The external `run-preflight.json` now references this audit. The downloader is
 still active with its immutable original command; no files or settings were
 changed.
+
+## VideoPrism steady-state smoke and audit refresh (2026-10-19 07:11 UTC)
+
+A three-window CPU-JAX extraction ran in one process under HotUGPU reservation
+on three selected train recordings (`R012-7July-Nespresso`,
+`R035-12July-Nespresso`, `R031-12July-SmallPrinter`). All three features were
+finite 768D vectors and exact after save/reload. The pinned 114,365,184-parameter
+VideoPrism checkpoint and preprocessing were unchanged. End-to-end time was
+20.225s across three windows (6.742s/window including first compile); encoder
+loop time was 14.676s and peak RSS 4,159,377,408 bytes. This small throughput
+sample includes model initialization/compile and is not a full-run time
+projection. Result SHA-256
+`0adcd4647b76d3ac32a80dfa8b0253b5e88637b93e42b0de4a0929b53081d866`; features
+SHA-256 `47c9d8aec297399afc7e2aa8698ba7abea37fcf137564ae4070a5f864a216ff1`.
+No fitting, test/audit access, or checkpoint selection occurred.
+
+The HotUGPU guard released reservations during several high-utilization races,
+then acquired 6,000MiB and launched only with 10,215MiB free. After the child
+exited, the RTX 3080 returned to 15,117MiB used / 100% utilization in the next
+sample, with Orbitune trainer PID 16832 observed. No process was stopped or
+modified. This confirms the reservation blocks startup only while our guarded
+child holds it; future GPU work must remain inside the gate for its full
+GPU-critical duration.
+
+At 07:10 UTC, the live download had 171 completed train files (16,888,173,999
+bytes). The refreshed full-prefix audit verified every selection ID, split,
+ETag, archive offset, destination path, size, and SHA-256 with zero mismatches.
+No validation files have completed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T071058Z.json`
+(SHA-256 `59b6550d11862bad3ecf90ead13fd215f56fb5bcf4d519afcab16b913e4b99c7`).
+The attempt preflight now records this receipt and the three-window smoke.
