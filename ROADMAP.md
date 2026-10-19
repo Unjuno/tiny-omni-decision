@@ -2358,6 +2358,7 @@ one known timing-boundary failure) with no uncovered or unselected identities.
 Six partials remain and PID 23276 is active. Local hashes do not authenticate
 against the archive; extraction/fitting have not started. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
 **2026-10-19 R2 HoloAssist acquisition update (12:03 UTC):** A live identity
 scan found 649 selected finalized videos, 467 journaled, and 182 unjournaled.
 Local diagnostic receipts cover all 182 IDs (181 pass, one known timing-boundary
