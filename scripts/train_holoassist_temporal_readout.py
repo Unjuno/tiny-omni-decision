@@ -197,7 +197,7 @@ def collate_sessions(
 
 def metric_summary(
     logits: torch.Tensor, targets: torch.Tensor, bins: int = 15
-) -> dict[str, float | int]:
+) -> dict[str, float | int | None]:
     if logits.ndim != 2 or logits.shape != (targets.numel(), 2) or not targets.numel():
         raise ValueError("metrics require nonempty [N,2] logits and [N] targets")
     if bins < 1 or not torch.all((targets == 0) | (targets == 1)):
@@ -208,6 +208,18 @@ def metric_summary(
     prediction = probabilities.argmax(dim=-1)
     confidence = probabilities.max(dim=-1).values
     correct = prediction.eq(targets)
+    positive = targets == 1
+    negative = targets == 0
+    positive_recall = (
+        float((prediction[positive] == 1).float().mean().item())
+        if positive.any()
+        else None
+    )
+    negative_recall = (
+        float((prediction[negative] == 0).float().mean().item())
+        if negative.any()
+        else None
+    )
     nll = F.cross_entropy(logits.float(), targets, reduction="none")
     one_hot = F.one_hot(targets, num_classes=2).float()
     brier = (probabilities - one_hot).square().sum(dim=-1)
@@ -224,6 +236,16 @@ def metric_summary(
     return {
         "count": int(targets.numel()),
         "accuracy": float(correct.float().mean().item()),
+        "positive_count": int(positive.sum().item()),
+        "negative_count": int(negative.sum().item()),
+        "positive_prevalence": float(positive.float().mean().item()),
+        "sensitivity": positive_recall,
+        "specificity": negative_recall,
+        "balanced_accuracy": (
+            (positive_recall + negative_recall) / 2
+            if positive_recall is not None and negative_recall is not None
+            else None
+        ),
         "nll": float(nll.mean().item()),
         "brier": float(brier.mean().item()),
         "ece": float(ece.item()),
@@ -319,6 +341,10 @@ def _evaluate(
             bins=ece_bins,
         )
     summary["by_task_type"] = task_type_metrics
+    summary["task_type_macro"] = {
+        metric: float(np.mean([values[metric] for values in task_type_metrics.values()]))
+        for metric in ("accuracy", "nll", "brier", "ece")
+    }
     return summary, prediction_rows
 
 

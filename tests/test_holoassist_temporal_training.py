@@ -163,6 +163,10 @@ def test_metrics_are_finite_and_use_labelled_examples() -> None:
     result = metric_summary(torch.tensor([[4.0, 0.0], [0.0, 4.0]]), torch.tensor([0, 1]))
     assert result["count"] == 2
     assert result["accuracy"] == 1.0
+    assert result["sensitivity"] == 1.0
+    assert result["specificity"] == 1.0
+    assert result["balanced_accuracy"] == 1.0
+    assert result["positive_prevalence"] == 0.5
     assert result["nll"] < 0.02
     assert result["brier"] < 0.01
     assert result["ece"] < 0.02
@@ -200,6 +204,12 @@ def test_fixed_budget_run_keeps_best_and_final_checkpoints_separate(tmp_path) ->
     assert result["early_stopping"] is False
     assert result["best_reload_max_probability_delta"] <= 1e-6
     assert result["final_validation"]["by_task_type"]["synthetic task"]["count"] == 2
+    assert set(result["final_validation"]["task_type_macro"]) == {
+        "accuracy",
+        "nll",
+        "brier",
+        "ece",
+    }
     assert (tmp_path / "result" / "best-checkpoint.pt").is_file()
     assert (tmp_path / "result" / "final-checkpoint.pt").is_file()
     assert (tmp_path / "result" / "training-history.json").is_file()

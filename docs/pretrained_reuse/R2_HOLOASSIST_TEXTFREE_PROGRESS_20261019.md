@@ -35,6 +35,13 @@ Acquisition is active; this is not a completed media corpus or a training run.
 The current C: free-space reading was approximately 172 GB after acquisition
 had begun; no existing artifacts were deleted.
 
+The latest verified downloader snapshot in this work segment is 38/1,306 files
+(2.09 GB; journal mtime 2026-10-19 05:29 UTC). The downloader process remains
+live. A train-only source preflight estimates 9,768 30-second train windows
+over 77.2 h of media and 2,498 development-validation windows over 19.8 h;
+these are metadata-derived estimates before media timing and event filtering,
+not final corpus counts.
+
 ## Implementation now in branch
 
 Branch `codex/r2-holoassist-textfree`, commit `ecca87093e4c610f4258fbc9c6d6e2fd35cdbc60`
@@ -42,16 +49,24 @@ adds a text-free causal AV LSTM readout. It receives frozen video and audio
 features plus a typed task-category ID shared by the modality arms; it does
 not receive natural-language text or a text embedding. The video-only and
 audio-only arms mask the other sensor, and CPU tests verify invariance to
-changes in that masked input. A new internal-validation event path reads only
-the official train split member. The feature packer now supports a video/audio
-cache with no text bank, and the extractor accepts the new attempt's SHA-bound
-selection explicitly while preserving the old pinned-selection default.
+changes in that masked input. Per-task macro metrics and a deterministic
+10,000-replicate paired session bootstrap (seed 1701; percentile 95% interval)
+are now part of the comparison plan; bootstrap uncertainty is descriptive and
+selection-biased because validation selects checkpoints. A new
+internal-validation event path reads only the official train split member. The
+feature packer supports a video/audio cache with no text bank, and the
+extractor accepts the new attempt's SHA-bound selection explicitly while
+preserving the old pinned-selection default.
 
 Checks for the first pushed commit: 2,443 passed / 11 skipped in the full CPU
 suite; focused Ruff passed; GitHub Actions run
 [39203925505](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39203925505)
-passed. The subsequent no-text-only-cache refinements are not yet committed or
-CI-checked; their focused 42-test set currently passes.
+passed. The text-free cache commit
+`e0524e8742e193556e32b22dbd3ef8600d870a42` passed 2,445 tests / 11 skipped,
+Ruff, and GitHub Actions run
+[39204423670](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39204423670).
+The additional class-balance and paired-bootstrap diagnostics are being
+tested separately before their next commit; no model fit has started.
 
 ## Remaining gates
 
