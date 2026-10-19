@@ -2401,3 +2401,11 @@ all 189 IDs (188 pass, one known timing-boundary failure), with no unselected
 IDs; these local hashes do not authenticate against the archive. Six partials
 remain and PID 23276 is active. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:09 UTC):** 657 finalized
+selected videos; 467 in the pinned journal and 190 unjournaled. Local receipts
+cover all 190 (189 pass, one known timing-boundary failure), with no unselected
+IDs. A read-only live-journal hash read was refused while the downloader held
+the file; no retry was made. The unchanged pinned snapshot remains the audit
+basis. PID 23276 is active; local hashes do not extend source authentication.
+See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

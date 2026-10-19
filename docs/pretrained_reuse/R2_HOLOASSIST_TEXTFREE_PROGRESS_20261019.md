@@ -1820,3 +1820,17 @@ unjournaled IDs (188 pass plus the known timing-boundary failure), with no
 unselected IDs. Six partials totaled 46,137,344 bytes at the scan, and PID
 23276 remained active. This does not create source hash receipts for unjournaled
 files; process and media remain untouched.
+
+At 2026-10-19 12:09 UTC, one new selected MP4 (`z129-aug-11-22-marius_assemble`)
+passed the local diagnostic gates. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1850Z.json`
+(SHA-256 `29A895D44C5E386F2BEC2BC72E1B179FFFDE83C3A26A40636ED59BFDBBE8950A`).
+The file-set reconciliation found 657 finalized files and 190 unjournaled files;
+all 190 unjournaled IDs are covered by local diagnostic receipts, and no
+unselected IDs were present. Cumulative local outcome is 189 passes plus the
+one known timing-boundary failure. A read-only SHA attempt against the live
+progress journal was denied because another process held the file; no retry
+was made. The pinned 467-row journal snapshot remained the reconciliation
+basis, and the live journal's observed size/mtime were unchanged. PID 23276
+remained active; six partials totaled 46,137,344 bytes. No process or data was
+modified; local receipts are not archive-hash authentication.
