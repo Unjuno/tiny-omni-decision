@@ -2700,3 +2700,12 @@ to selection. All 320 IDs outside the pinned journal have local receipts
 mismatches, uncovered IDs, or receipt hash conflicts were found. Only 467 source
 hashes are authenticated by the pinned journal. PID 23276 remains active. CI for
 `33b1418` is green. See the [progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (13:20 UTC):** Full-receipt
+reconciliation matched 790 finalized train MP4s (790/1,042; validation 0/264)
+to selection. All 323 IDs outside the pinned journal have local receipts
+(322 pass; one known timing-boundary failure), with no unselected files, size
+mismatches, uncovered IDs, or receipt hash conflicts. Only 467 source hashes
+are authenticated by the pinned journal. PID 23276 remains active. CI for
+`1394430` is green. See the [progress record]
+(docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
