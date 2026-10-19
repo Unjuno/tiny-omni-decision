@@ -1228,3 +1228,21 @@ At 11:06:17 UTC the downloader remained live, with 561 complete files
 write 10:07:15 UTC). No final manifest exists. No GPU job or model training
 was started; R2 feature extraction remains gated on a reconciled, complete
 media manifest and the required task-quality checks.
+
+At 2026-10-19 11:08:26 UTC, two additional complete files were observed and
+passed the same CPU-only local audit. Their IDs/sizes matched the frozen
+selection and AV metadata/timing checks passed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1130Z.json`
+(SHA-256 `ae53dadf8bd8ca2448d0a153bb22aa0d2d37ed9043e9950ce5ba4dcb8562fd4a`).
+Across the 96 complete files still missing from the 467-row journal, all 96
+now have a recorded local digest and metadata check: 95 pass, and the sole
+failure is the already archive-range-verified timing-boundary file. The other
+95 local digests are not official-archive authenticated.
+
+At 11:08:26 UTC, PID 23276 remained live and had four established archive
+connections. There were 563 complete files (51,929,026,344 bytes); the journal
+remained at 467 rows, with unchanged 10:07:15 UTC mtime. Thus two files became
+visible during the recent observation window while journal reconciliation
+remains unresolved. No process was interrupted, no GPU child was launched,
+and no model work began. The next GPU-bound step still requires a validated,
+reconciled corpus and the HotUGPU reservation wrapper.
