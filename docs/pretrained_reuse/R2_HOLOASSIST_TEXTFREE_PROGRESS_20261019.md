@@ -129,5 +129,8 @@ corrected without changing the frozen selection, AV encoder revisions, readout,
 sampling, or optimizer settings. A regression test now checks that the config
 contains only video/audio encoders and documents the internal validation
 source. The focused training/config tests pass (8 passed), and Ruff passes.
-The attempt's external `run-preflight.json` must be updated to the corrected
-config hash and resulting source commit before any feature extraction or fit.
+The attempt's external `run-preflight.json` now records corrected config SHA-256
+`c023a3d4a8a86ddcb3964503241691717af3bd6aa6b9fb2165110596e7ab504f`, previous
+config hash, correction reason, and source commit
+`607deea5c2f8d1386d82abbb334deb31a4bcfa10` before any feature extraction or
+fit.
