@@ -566,3 +566,15 @@ size; all 182 passed with zero mismatches. Validation remains 0 files. Receipt:
 (SHA-256 `0e2eb67293c093d789c267af607f18dac943160fc13ba88346d17a5b369bb09d`).
 The attempt preflight points to this audit. RTX 3080 was occupied by Orbitune
 at the most recent sample; no training or feature extraction was launched.
+
+## Live media prefix audit (2026-10-19 07:22 UTC)
+
+The unchanged downloader reached 185 completed train videos (18,651,095,324
+bytes). The refreshed full-prefix SHA audit verified all 185 selected identities,
+split memberships, archive ETags/offsets, exact paths/sizes, and recomputed file
+hashes with zero errors. No validation media has completed yet. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T072246Z.json`
+(SHA-256 `5150fa363ef38a06aa96c23a63d022ed6aaf4778584aabcb61c3d18f9e7dc5db`).
+The external preflight points to the passing receipt. At the latest GPU sample,
+usage was 0 MiB / 16,384 MiB; no GPU job was started because full-corpus AV
+validation remains gated on the unfinished acquisition.
