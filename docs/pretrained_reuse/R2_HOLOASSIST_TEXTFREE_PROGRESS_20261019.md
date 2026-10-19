@@ -340,3 +340,23 @@ or SHA-256 mismatches. Receipt:
 (SHA-256 `cc7b4f97e818555ba634fa368291343c2b60f9b3df5e8bb843b35a13bfe464bf`).
 No validation media has been reached yet; the downloader is processing train
 first according to its fixed selection order.
+
+At 2026-10-19 06:46 UTC, the selection-aware SHA-256 audit covered 135 train
+files (13,105,348,737 bytes), with zero mismatches. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T064608Z.json`
+(SHA-256 `d2c96480098788baac9c706b81140423caaf385d5509fc5a0ae31a292d8cd001`).
+
+A separate GPU encoder smoke on selected train session `R012-7July-Nespresso`
+ran the frozen Whisper Tiny encoder over the 0–30s window. HotUGPU waited for
+the external compute PID to yield, then reserved 6,000 MiB; the child produced
+a finite 384D feature in 0.5445 s, using 190,619,136 peak allocated and
+211,812,352 peak reserved bytes. Save/reload matched exactly. The feature and
+result are retained at
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-extractor-audio-smoke-attempt-03`
+(result SHA-256 `a028b8882b7d1187ed4497ffaf7b3cf50dc93524469412b5b9805eea5060949d`,
+feature SHA-256 `ece17d8ed7ef1b96e47f7d2b58108bdf91173f7a3523f8ea77c849ac1ee12767`).
+The smoke used the pinned selection/config and model hashes, opened no test data,
+and performed no fitting or checkpoint selection. This verifies encoder plumbing
+only; it is not a full feature bank or quality result. The first wrapper attempt
+used a Python environment without Torch and exited before the child started; the
+existing Python 3.11/Torch runtime then completed the smoke without upgrades.
