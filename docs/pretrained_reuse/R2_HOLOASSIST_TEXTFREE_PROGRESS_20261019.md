@@ -2063,3 +2063,17 @@ locally checked in `unlogged-media-delta-20261019T123843Z.json` (SHA-256
 local identity/size/media check does not authenticate those 244 files against
 the source archive. PID 23276 remains active; validation downloads and the
 full media gate remain incomplete.
+
+At 12:41:21Z, an all-receipts reconciliation confirmed 716 finalized selected
+MP4s, all in train, with no validation files yet. Output:
+`live-receipt-reconciliation-20261019T124114Z.json` (SHA-256
+`dae09001d86f1183e7c24c28433d3be0c65b0b8c39e2a50e1e0a61a5ec4ee8a6`). Of
+these files, 467 are represented in the pinned journal and all 249 unjournaled
+IDs have deduplicated local diagnostic receipts (248 pass, one known
+timing-boundary failure). It reports zero unselected IDs, size mismatches,
+receipt hash conflicts, or uncovered unjournaled IDs; repeated receipt rows
+are deduplicated. Three new local passes were recorded in
+`unlogged-media-delta-20261019T124056Z.json` (SHA-256
+`ea987125addd72c9e2ba4bc1916720072fd2129622b467836438121b27757f79`). Six
+partial files remain, PID 23276 is active, and the prior commit `2ead8bd` CI
+is green. Unjournaled media still lacks archive source-hash authentication.
