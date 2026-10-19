@@ -2321,3 +2321,15 @@ passes are in `unlogged-media-delta-20261019T131340Z.json` (SHA-256
 `ec58b0dbdab9331f4c35e7e89d5badf64b3f678a5a664439258fa658e5f78cdb`). PID
 23276 remains active. The public Actions run 39258112400 for `b8db4a9` is now
 green.
+
+At 13:14:59Z, full-receipt reconciliation
+`live-receipt-reconciliation-20261019T131500Z.json` (SHA-256
+`a654ea78419eaa26552c5fb9c68c96ccc502a2ff9b0d691fb6e2d3bb7eda9e5a`) matched
+784 finalized MP4s, all train, to selection (validation 0/264). No unselected
+files, size mismatches, uncovered journal-external IDs, or local receipt hash
+conflicts were found. All 317 files outside the pinned journal have receipts
+(316 pass; one known timing-boundary failure). Three newly checked files passed
+local diagnostics in `unlogged-media-delta-20261019T131500Z.json` (SHA-256
+`d1b5b42a7a8d9f6f97608a7b788f6e24696b656ae97fdb2b0f5cfba6e1726575`). The
+pinned journal is unchanged at 467 source-hash-authenticated rows. PID 23276
+remains active. CI run 39258384882 for `1da21c2` completed successfully.
