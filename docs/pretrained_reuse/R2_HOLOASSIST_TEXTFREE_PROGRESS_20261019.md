@@ -1468,3 +1468,20 @@ appear; the cause is not established. The downloader process and its four
 HTTPS connections remained live. GPU readings oscillated from 83% / 15,821 MiB
 to idle within adjacent snapshots, confirming HotUGPU must wait for a safe
 reservation instead of launching on a momentarily idle reading.
+
+At 2026-10-19 11:33 UTC, another CPU-only delta audit covered four newly
+completed local files; all four passed the local gates. Its receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1420Z.json`
+(SHA-256 `925128b0399a405f15bfdece6fcc44fe3edb048f1fd4162bba4174da88d8871c`).
+The pinned live journal audit
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1132Z.json`
+(SHA-256 `0ea7af0222bbda23af8d30411ac85a3aafb1ae0af8bb85b97db60492f89e6495`)
+now sees 131 unjournaled complete files (130 local metadata passes and one
+known source-range-verified timing-boundary failure), while the official
+journal remains at 467/1,306 rows. Six partials totaled 264,241,152 bytes at
+that audit. PID 23276 was still alive at the follow-up process check; GPU then
+showed 15,821/16,384 MiB used at 12% utilization. A code review of
+`run_with_hotgpu_guard.py` confirms it waits while another compute PID exists
+or utilization is at least 5%, allocates a reservation, rechecks the free
+memory threshold, and starts the child only after the reservation succeeds.
+No training child has been launched: corpus integrity remains the gating item.
