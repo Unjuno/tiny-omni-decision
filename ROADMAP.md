@@ -32,6 +32,10 @@ are in the [HoloAssist source-screen log](docs/pretrained_reuse/R2_HOLOASSIST_SO
 (32.25 GB) were recorded at 00:57:48 UTC; 58 files remained unlogged and
 eight transfers were partial. PID 16496 remained active. See the latest audit
 in the [HoloAssist source-screen log](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
+**2026-10-19 R2 HoloAssist acquisition progress:** 335/367 selected videos
+(34.02 GB) were journaled at 01:05:07 UTC; 32 remained unlogged and eight
+files were partial. PID 16496 remained active. See the current integrity
+snapshot in the [HoloAssist source-screen log](docs/pretrained_reuse/R2_HOLOASSIST_SOURCE_SCREEN_20261019.md).
 **2026-10-19 R2 EuroSAT spatial transfer:** Corrected the initial source-screen
 conclusion after finding TorchGeo's pinned longitude-based split manifests.
 The exact DINOv2-small checkpoint is Apache-2.0 per its pinned official card.
