@@ -42,6 +42,15 @@ over 77.2 h of media and 2,498 development-validation windows over 19.8 h;
 these are metadata-derived estimates before media timing and event filtering,
 not final corpus counts.
 
+An annotation-only preflight (after the session split was frozen, before media
+validation) found 88,763 valid train action events with 4.79% wrong labels and
+22,763 development-validation events with 5.10% wrong labels. Under the
+predeclared “any incorrect action in the 30-second window” label, estimated
+positive rates are 28.36% (2,652/9,351 labelled train windows) and 30.30%
+(719/2,373 labelled development-validation windows). Invalid intervals,
+media-end discrepancies, and AV timing checks may change these counts; the
+final event/window receipts remain authoritative.
+
 ## Implementation now in branch
 
 Branch `codex/r2-holoassist-textfree`, commit `ecca87093e4c610f4258fbc9c6d6e2fd35cdbc60`
