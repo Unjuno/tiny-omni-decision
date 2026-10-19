@@ -162,3 +162,14 @@ ETag, selection-hash, or media-hash mismatches. Its receipt is
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T054501Z.json`
 (SHA-256 `ff666c91208adfee4553c7be711701ed1cd7b6091307bb09b23be9e5ff657896`)
 and is the current receipt referenced from `run-preflight.json`.
+
+At 2026-10-19 05:48 UTC, a 4 MiB range probe at the offset of the long-lived
+Navvis member request returned HTTP 206 with the pinned ETag in 9.58 s
+(0.438 MB/s); it wrote to `NUL` and did not alter the active downloader. The
+original request remains live, while other workers continue completing files.
+At 05:49 UTC, one newly selected train video (`R005-7July-GoPro`) passed a
+single-file PyAV decode smoke: H.264 896x504, eight decoded frames, mono AAC
+48 kHz with finite non-silent audio. This is a media/runtime smoke only, not
+full-corpus validation or model quality. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\new-selection-av-decode-smoke-20261019T0549Z.json`
+(SHA-256 `8927bfd18c48a29e77cf36c0880fb584c38723a82613f433b2d8360872beea09`).
