@@ -987,3 +987,14 @@ checks; full decode is pending:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T094521Z.json`
 (SHA-256 `90f7d57924d83f91f9eed3611baa8ba617bfee73f2de58fbe41f4eed9414ca4f`).
 No validation/test media were opened.
+
+At 2026-10-19 18:46 JST, 429/1,306 train videos (39,943,951,996 bytes)
+passed the chained media-integrity checks. Four new files were rehashed against
+the frozen selection and journal; zero errors were reported:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T094658Z-chained.json`
+(SHA-256 `00fbdf6aed0e31c14441a775205c4ad9777deca16aeaf20f722f2332fbf6d4d1`).
+The same four passed CPU AV stream metadata and annotation-duration checks; this
+is not full decode:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T094711Z.json`
+(SHA-256 `8202cba9a0a3064727322674fa79ff2873048a1e4ed3a4fbe7330389d169bc86`).
+No validation/test media were opened.
