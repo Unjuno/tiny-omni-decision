@@ -1433,3 +1433,21 @@ job was started and the downloader was not modified or stopped. Future GPU
 work will use the repository HotUGPU guard so unrelated GPU workloads do not
 start concurrently; corpus completeness and integrity gates still precede
 training.
+
+At 2026-10-19 11:29 UTC, the downloader was still alive and held four
+established HTTPS connections to the pinned archive endpoint. The latest
+persisted live audit
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1129Z.json`
+(SHA-256 `120efbccda111f5cd7a92c0f351c263edc26218752be6e3c8dd4aff3d5002d52`)
+still reports 467/1,306 journal rows and 122 complete unjournaled files;
+six partial files had grown to 612,368,384 bytes. One additional complete
+file passed the CPU-only local diagnostic, bringing cumulative unjournaled
+coverage to 121 local metadata passes plus the known timing-boundary failure.
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1350Z.json`
+(SHA-256 `97b87127a451b5c881e5d5b882a3a7fdc0fde1a25209b9944d7e65e843f80047`).
+These local hashes do not establish archive-content authenticity. GPU usage
+was 0% at the sampled instant, while it varied substantially in earlier
+samples; no GPU training was started. Use HotUGPU's wait/reservation behavior
+before any GPU task so a transient idle sample does not permit a competing
+Orbitune workload to start alongside it.
