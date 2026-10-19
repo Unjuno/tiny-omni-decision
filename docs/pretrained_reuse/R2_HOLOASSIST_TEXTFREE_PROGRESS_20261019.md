@@ -822,3 +822,14 @@ files in the preceding receipt (not a full-corpus decode):
 (SHA-256 `6cff34cbbd61c114ba5f2371230e87a12dc8e22159671b59742c3dfc03017e6c`).
 No validation/test media were opened; PID 23276 continues with the original
 command and four workers.
+
+At 2026-10-19 18:03 JST, the chained download audit reached 359/1,306
+train videos (33,243,894,585 bytes). Four newly appended files passed SHA-256
+and frozen-selection integrity checks. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T090249Z-chained.json`
+(SHA-256 `172f47a5e71d91637c106fcdf162b9aa92748e671c4eb39d0a1c72a99f53c713`).
+All four also passed the incremental CPU PyAV stream-metadata and annotation
+duration check (not full decode):
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\incremental-av-audit-20261019T090301Z.json`
+(SHA-256 `0871f1825ee16e352f57ee62a772c2b696577f56d3e0c336baa8d6d0a7611b03`).
+No validation/test media were opened; acquisition remains on PID 23276.
