@@ -236,3 +236,13 @@ At 2026-10-19 06:01 UTC, an independent recheck covered 86 files
 (6,370,016,891 bytes) with zero mismatches. Current receipt:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T060146Z.json`
 (SHA-256 `f10ca75ed5dc0f868aa0704e910363adbc7815d536bfe4840378f45a8ef3c358`).
+
+At 2026-10-19 06:05 UTC, acquisition reached 88 completed train videos
+(6,718,302,588 bytes). I recomputed SHA-256 for every completed file and
+matched each journal row against the frozen selection ID, train split, archive
+offset, member size, and pinned ETag; all 88 passed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T060502Z.json`
+(SHA-256 `fe8fbbc134317db768a8ad56f7646bef935e1010dc91bca0a8be132de5a082f6`).
+The downloader remained active (PID 23276); no test/audit media was opened.
+CI run [39207608187](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39207608187)
+for source commit `f1694b2933f086a33176eeab91bc904328b5e221` passed.
