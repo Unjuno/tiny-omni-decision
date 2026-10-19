@@ -2179,3 +2179,17 @@ are race-sensitive. PID 23276 remains active and the live journal remains
 still limited to the 467 pinned journal rows; local receipts are not official
 archive hashes. CI for `5430e9b` completed successfully. Acquisition is
 incomplete; do not intervene in the downloader while it remains live.
+
+At 12:58:58Z, the all-receipts reconciliation
+`live-receipt-reconciliation-20261019T125900Z.json` (SHA-256
+`9ab0090d2a2b7061d9d5772372c2d223a1a9b1922c8f43082c2c460c7e82286f`)
+matched 741 finalized MP4s (all train; zero validation) to the frozen selection.
+It found no unselected files, wrong sizes, uncovered unjournaled IDs, or local
+receipt hash conflicts. The 274 files outside the pinned journal are covered by
+local receipts: 273 pass, one is the known timing-boundary failure. Three new
+local diagnostics passed in `unlogged-media-delta-20261019T125900Z.json`
+(SHA-256 `03781cdaf010991d748f3976a19725aefedcc6fae818a868fe569b7d9a4d0745`).
+PID 23276 remains active. The 467-row pinned journal is unchanged, so official
+source-content authentication remains limited to those 467 rows. Seven partial
+files totaling 128 MiB were present. CI run 39255891055 for `17b3d0c` completed
+successfully.

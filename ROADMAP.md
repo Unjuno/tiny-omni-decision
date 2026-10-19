@@ -2590,3 +2590,12 @@ pinned journal still authenticates only 467 files. PID 23276 remains active;
 seven partials were seen by the reconciliation (six in a subsequent live
 count), so the count is race-sensitive. CI for `5430e9b` is green. Acquisition
 is incomplete. See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:59 UTC):** Acquisition
+resumed making observable progress: 741/1,042 train MP4s are finalized and
+validation remains 0/264. Reconciliation covered all 274 unjournaled IDs with
+local receipts (273 pass; the same known timing-boundary failure), and found
+no unselected/wrong-sized files, uncovered IDs, or receipt hash conflicts.
+Only 467 entries remain source-hash authenticated by the pinned journal. PID
+23276 remains active; seven partials total 128 MiB. CI for `17b3d0c` is green.
+The dataset is incomplete; see the [progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
