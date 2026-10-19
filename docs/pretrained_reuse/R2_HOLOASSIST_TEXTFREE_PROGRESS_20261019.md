@@ -206,3 +206,12 @@ now referenced by `run-preflight.json`. GitHub Actions run
 [39206659213](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39206659213)
 for source commit `c60d6a3d2f0db9b32f9494ef0ea6484a4d28a450` completed
 successfully.
+
+At 2026-10-19 05:57 UTC, the active long-range request for
+`R106-4Aug-Switch` completed after remaining open for several minutes. A
+separate 4 MiB probe at that exact member offset returned HTTP 206 with the
+pinned ETag in 10.36 s (0.405 MB/s); no media file was written by the probe.
+The downloader did not need intervention. The independent prefix receipt now
+covers 82 completed files (5,584,575,501 bytes), zero errors:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T055700Z.json`
+(SHA-256 `11f95c8a1fa83255b2f5239f704bfe73cdebfaea09ad1f2e24b846c97ababb65`).
