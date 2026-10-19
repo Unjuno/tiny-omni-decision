@@ -1485,3 +1485,19 @@ showed 15,821/16,384 MiB used at 12% utilization. A code review of
 or utilization is at least 5%, allocates a reservation, rechecks the free
 memory threshold, and starts the child only after the reservation succeeds.
 No training child has been launched: corpus integrity remains the gating item.
+
+At 2026-10-19 11:36 UTC, PID 23276 remained alive with four established
+HTTPS connections. The journal still had 467 rows (last write 10:07:15 UTC),
+while 134 complete media files were present without journal entries. A new
+three-file local delta passed all metadata gates; cumulative diagnostics cover
+133 passes and the one known timing-boundary failure. Delta receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1435Z.json`
+(SHA-256 `2b3884d91a20a3471292ca325fd8cd8b819370e5439ab57ba226397eb3e1cf90`).
+Live audit:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1135Z.json`
+(SHA-256 `59918fe2d4f7658ad71a5b402c8185a017e58f1f3d38e75ce2c72b1de43dd0a8`),
+with six partials at 285,212,672 bytes. The growing complete-file set and
+stale journal are consistent with a downloader main-thread/future error while
+executor workers finish queued media, but this remains an unverified
+hypothesis because the process output is not attached. The process remains
+untouched; wait for its natural exit before considering any recovery.
