@@ -1735,3 +1735,17 @@ failure. The pinned live journal SHA remains
 The downloader PID remained active; six `.part` files totaled 46,137,344 bytes.
 This is identity and local-media validation only; source-authenticated archive
 hash coverage remains the 467 journaled rows. No data or process was modified.
+
+At 2026-10-19 12:02 UTC, two incremental CPU audits checked three additional
+finalized files; all three passed the existing local media gates. Receipts:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1720Z.json`
+(SHA-256 `EFBC7D7FEE78FB8E353652C41718EC1E039F76CD8831109FCFDCD6A6463CB694`) and
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1730Z.json`
+(SHA-256 `15D19198E8D2D2D61C12D63645DF63FF0AE0D1E9FA1CE5EA5043937C9CDBA970`).
+The second identity-set reconciliation found 646 finalized selected videos,
+467 source-hash-authenticated journal rows, and 179 unjournaled videos. Existing
+local diagnostic receipts cover exactly those 179 unique IDs, with no uncovered
+or unselected files; 178 local diagnostic passes and the single known
+source-range-confirmed timing-boundary failure remain. Six partial files remain
+(46,137,344 bytes). PID 23276 is still running; no process or media was
+modified. Local hashes do not extend archive authentication beyond the journal.
