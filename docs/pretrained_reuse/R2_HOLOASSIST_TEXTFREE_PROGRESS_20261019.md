@@ -1411,3 +1411,25 @@ selected rows not yet journal-completed. Cumulative diagnostics cover all 119:
 The 118 passing local hashes are not archive-authenticated. PID 23276 remained
 alive with four connections. GPU was 46% utilized / 15,309 MiB; no GPU work
 started and no process was modified.
+
+At 2026-10-19 11:27 UTC, PID 23276 and its PowerShell parent were still
+running the pinned-ETag four-worker download. The persisted journal audit
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1127Z.json`
+(SHA-256 `f7afa1b6f15b6df35791f9f3da92a37fd1c7ec11ca8cdbeb1aedccbfec547c7`)
+reports 467 journaled records out of 1,306, 588 complete files on disk (121
+not yet journaled), six partial files (264,241,152 bytes), and 839 selected
+records not yet journal-completed. A CPU-only diagnostic of the two newly
+appeared complete files passed local ID/size, AV metadata, and annotation
+timing gates. Its receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1340Z.json`
+(SHA-256 `08b10a530c7600807157b3ae45fa6bb1ce170721baf50374bb47048405a294e1`).
+Cumulative local diagnostics now cover the 121 unjournaled files: 120 metadata
+gate passes and the one known source-range-verified timing-boundary failure.
+The 120 passing local SHA-256 values are not archive-authenticated. The
+journal was unchanged at the snapshot; the newest complete file was written at
+11:26:27 UTC and a partial at 11:26:53 UTC. The observed GPU sample was idle
+(0% utilization, 0/16,384 MiB); this is only a point-in-time reading. No GPU
+job was started and the downloader was not modified or stopped. Future GPU
+work will use the repository HotUGPU guard so unrelated GPU workloads do not
+start concurrently; corpus completeness and integrity gates still precede
+training.
