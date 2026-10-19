@@ -1139,3 +1139,23 @@ and no final media manifest. The most recent 82-file diagnostic predates one
 newly visible unjournaled file; that file remains unaudited. CI #2174 for
 `b1e46fc` completed successfully. No live process was controlled, and no GPU
 feature extraction or model fit was started.
+
+At 2026-10-19 19:59 JST, the four newly completed files beyond the previous
+82-file local diagnostic were checked independently. All four IDs and sizes
+matched the frozen selection; each local SHA-256 was recorded, and all four
+passed the AV stream-metadata and annotation-duration gates. Their local hashes
+do not establish archive content identity. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1100Z.json`
+(SHA-256 `0f18988c0236d9da8e46dcfd89e4190344b7ac0dc7c3b0f12d3a312bdf647807`);
+script SHA-256
+`882e3af73c6c8c78fd53d0cb40d425de10e1501221644110e0d7462fa7ea1f3d`.
+
+At 2026-10-19 19:58:55 JST, downloader PID 23276 was still live with archive
+connections. The media directory contained 554 complete files (50,721,770,225
+bytes), while the journal remained at 467 rows (43,019,820,009 bytes; unchanged
+mtime 10:07:15 UTC). Thus 87 complete files were absent from the journal. The
+82-file diagnostic plus this four-file delta cover 86; the last file visible in
+the live snapshot has not yet been audited. No media manifest exists. GPU usage
+was 15,821/16,384 MiB at 9% utilization, so no HotUGPU reservation was
+attempted. CI #2175 for `6455750` completed successfully. No process was stopped
+or restarted; feature extraction and training remain unstarted.
