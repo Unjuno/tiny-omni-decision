@@ -2111,3 +2111,28 @@ partial files were present, and PID 23276 remained active. The journal's size
 and mtime are still unchanged at 218,310 bytes / 10:07:15Z while the process
 holds it open; the cause remains UNKNOWN. CI for `ed35df0` completed
 successfully. Unjournaled local checks still do not authenticate source bytes.
+
+At 12:48:20Z the all-receipts reconciliation
+`live-receipt-reconciliation-20261019T124806Z.json` (SHA-256
+`0291ea94153b9141ded3ea641cd9803440335361c87f77e58ffb1cb857ee40e1`)
+matched 727 finalized train MP4s (727/1,042 train; 0/264 validation) to the
+frozen selection. It found no unselected files, size mismatches, receipt hash
+conflicts or uncovered unjournaled IDs. The journal still authenticates 467;
+260 files have local receipts (259 pass, one known timing-boundary failure).
+Two new local passes are in
+`unlogged-media-delta-20261019T124753Z.json` (SHA-256
+`48d3b0958f9b752828f3e67bb7be433b711cd24a75299b60297eab4f725200d0`).
+At 12:48 UTC PID 23276 remained running, held the progress journal and four
+`.part` files open, and had four established HTTPS connections. The journal
+remained 218,310 bytes with mtime 10:07:15Z.
+
+A code-path hypothesis for the stale journal is now recorded, not treated as
+confirmed: `scripts/download_holoassist_selected_media.py:224-229` iterates
+`as_completed` but calls `future.result()` without per-future exception
+handling. A failed future would unwind the result/journal loop; the executor
+context then waits for remaining submitted tasks, which may continue writing
+media without the parent loop recording their results. This matches the
+observed combination, but the actual exception and whether this exact path was
+taken are UNKNOWN because the original terminal output is unavailable. Keep
+PID 23276 untouched; verify its terminal state before any restart or recovery.
+CI for commit `0068294` completed successfully.

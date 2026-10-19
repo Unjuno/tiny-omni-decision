@@ -2554,3 +2554,13 @@ files remain source-hash authenticated by the pinned journal. PID 23276 is
 active with seven partials; its open progress journal is still stale at
 218,310 bytes since 10:07Z (cause UNKNOWN). CI for `ed35df0` is green. See the
 [reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:48 UTC):** 727/1,042 train
+MP4s are finalized; validation remains 0/264. All 260 unjournaled files have
+local receipts (259 pass; one known timing-boundary failure), but only 467 are
+source-hash authenticated. PID 23276 is active with four HTTPS transfers and
+four open partials; its journal remains unchanged since 10:07Z. Code review
+suggests a possible uncaught future exception could end journaling while the
+executor drains work, but the exception is unobserved and the cause UNKNOWN.
+Do not intervene in the live process. CI for `0068294` is green. See the
+[reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
