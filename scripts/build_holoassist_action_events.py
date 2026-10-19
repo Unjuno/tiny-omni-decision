@@ -332,6 +332,12 @@ def main() -> None:
         "media_manifest_sha256": sha256_file(args.media_manifest),
         "av_validation_report_sha256": sha256_file(args.av_validation_report),
         "media_root": str(args.media_root.resolve(strict=True)),
+        "development_validation_source": (
+            "held-out sessions from unused official train split"
+            if args.internal_validation_from_train
+            else "official validation split"
+        ),
+        "official_test_split_member_read": not args.internal_validation_from_train,
         "options": OPTION_TEXT,
         "pre_action_context_seconds": args.pre_context_seconds,
         "decision_cutoff": "action interval end; no post-action/future audio or video",
