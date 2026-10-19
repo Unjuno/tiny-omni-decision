@@ -452,3 +452,16 @@ occurred. Full media validation and the actual frozen train/validation feature
 banks remain pending.
 
 The preceding documentation commit 13d67f passed GitHub Actions run [39213226246](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39213226246).
+
+## Download prefix audit refresh (2026-10-19 07:08 UTC)
+
+The live journal advanced to 167 completed files while the previous audit was
+being checked. A fresh full-prefix SHA-256 audit covered exactly 167 selected
+train files (16,503,928,877 bytes), validating selection ID/split, pinned ETag
+and archive offset, destination path, exact size, and digest; there were zero
+mismatches and no validation media in the completed prefix. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T070750Z.json`
+(SHA-256 `b701da8164db0d6d3e6eb6a784f7584759337adf38357616d2b5837490f7a2f7`).
+The external `run-preflight.json` now references this audit. The downloader is
+still active with its immutable original command; no files or settings were
+changed.
