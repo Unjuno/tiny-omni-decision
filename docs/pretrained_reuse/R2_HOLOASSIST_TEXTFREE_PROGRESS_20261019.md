@@ -1749,3 +1749,16 @@ or unselected files; 178 local diagnostic passes and the single known
 source-range-confirmed timing-boundary failure remain. Six partial files remain
 (46,137,344 bytes). PID 23276 is still running; no process or media was
 modified. Local hashes do not extend archive authentication beyond the journal.
+
+At 2026-10-19 12:03 UTC, three additional selected media files passed the
+existing CPU-only local diagnostics. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1740Z.json`
+(SHA-256 `8902238F08BCB0026715FE170D6ECECF622A241FFA11BEED536D3A4A52BD1116`).
+A subsequent identity-set scan found 649 finalized files, 467 journal rows, and
+182 unjournaled files; all 182 IDs are now covered by local diagnostic receipts
+with no unselected or uncovered file. Cumulative local outcome is 181 passes
+and the one known timing-boundary failure. The process was alive during both
+checks. Partial-file count varied between concurrent scans (five then six), so
+it is a point-in-time transfer count, not a stable total. The journal remains
+source-authenticated only for its 467 rows; no archive authentication is
+inferred from local hashes. No data or process was modified.
