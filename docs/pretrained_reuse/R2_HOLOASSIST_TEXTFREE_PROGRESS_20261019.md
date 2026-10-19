@@ -2421,3 +2421,11 @@ are in `unlogged-media-delta-20261019T132740Z.json` (SHA-256
 pinned journal remains the only source-hash-authenticated set and has 467 rows.
 PID 23276 remains active. CI run 39260131456 for `7c2426d` completed
 successfully.
+
+At 13:29 UTC a read-only poll again found PID 23276 alive, with four established
+HTTPS sockets. Over the observed 20-second process-I/O sample, CPU increased
+0.1875 seconds and process disk read/write counters did not change; the broader
+interval showed no media change for about 45 seconds. Counts remained 808 MP4s
+and seven partials totaling 100,663,296 bytes. This supports only a transient
+quiet interval; the live handle remains authoritative and the downloader must
+not be treated as finished or restarted.

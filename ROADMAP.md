@@ -2754,3 +2754,11 @@ IDs, or receipt hash conflicts were found. Source-hash authentication remains
 limited to 467 pinned journal rows. PID 23276 remains active. CI for `7c2426d`
 is green. See the [progress record]
 (docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist transfer observation (13:29 UTC):** During an
+approximate 45-second read-only interval, PID 23276 remained alive with four
+established HTTPS connections, but the finalized count stayed at 808 and the
+seven partial files stayed at 100,663,296 bytes total. Process CPU increased by
+0.1875 seconds; reported process disk read/write deltas were zero. This is a
+transient no-progress observation, not evidence that the downloader exited or
+that acquisition completed. Do not restart or intervene.
