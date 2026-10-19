@@ -295,3 +295,9 @@ prefix yet. Receipt:
 An earlier ad-hoc audit invocation used the wrong ETag field and emitted a
 FAIL receipt; rerunning with the pinned CLI ETag passed. The failed receipt is
 preserved, and the active preflight points to this passing receipt.
+
+At 2026-10-19 06:24 UTC, an independent train/validation-aware audit verified
+112 downloaded files (10,076,870,554 bytes; all currently from train) with zero
+mismatches. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T062410Z.json`
+(SHA-256 `c5bbab4166541533380bd24ce2f88c61dd43256b494a404a6c3213a710ea8b01`).
