@@ -100,3 +100,23 @@ queued at the time of this report. No model fit has started.
 
 No new quality claim, product promotion, quantization, cloud use, or test/audit
 evaluation has occurred in this attempt.
+
+## Live acquisition update (2026-10-19 05:35 UTC)
+
+The allow-listed range downloader (PID 23276, started 14:14 JST) is still
+running with its pinned selection, four workers, ETag, and per-file hashes.
+Its journal contains 54 complete media files (3.02 GB); four in-flight `.part`
+files are present. This is about 2.58% of the 117.07 GB selection. Observed
+mean throughput is approximately 2.3 MB/s, implying roughly 14 hours remain if
+that rate holds; this is only a live estimate. C: had approximately 165.5 GB
+free at the observation. No GPU work has started. Orbitune's supervisor and
+trainer remain present, so subsequent GPU work will use the repository's
+HotUGPU reservation wrapper with the 6,000 MiB reservation and 14,000 MiB free
+memory launch-block threshold recorded in `run-preflight.json`.
+
+The branch is clean and synchronized with its remote at
+`1f2a796de11032d6bc16ccfe96c21d4b2caa32c1`. GitHub Actions run
+[39205159873](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39205159873)
+for that commit completed successfully. This live update records acquisition
+and CI status only; feature extraction, model fitting, and quality evaluation
+remain pending.
