@@ -1346,3 +1346,15 @@ The GPU was 86% utilized with 15,821/16,384 MiB in use at this observation;
 no GPU job was started. The corrected audit code remains covered by the green
 CI run #2183 for e7eab64; the later documentation-only commits did not change
 that code.
+At 2026-10-19 11:21 UTC, one new complete train file appeared and passed
+the local delta checks (SHA-256, frozen selection ID/size, AV metadata and
+annotation timing). Receipt:
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1240Z.json
+(SHA-256 d5559ee6d5a9a410c5b0b6201710c32e64da05e045538a961e718b5fe9cf8873).
+The latest live journal audit reports 467 journaled rows, 112 complete
+unlogged files, six partials, and 839 selected rows not yet journal-completed.
+Cumulative local diagnostics cover all 112 complete unlogged files: 111
+metadata passes and the one source-range-verified timing-boundary failure.
+The 111 passing local hashes do not prove archive identity. PID 23276 remains
+live with four archive connections. GPU was idle at the 11:21:02 UTC sample;
+no GPU task was launched.
