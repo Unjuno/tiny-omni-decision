@@ -134,3 +134,14 @@ The attempt's external `run-preflight.json` now records corrected config SHA-256
 config hash, correction reason, and source commit
 `607deea5c2f8d1386d82abbb334deb31a4bcfa10` before any feature extraction or
 fit.
+
+At 2026-10-19 05:42 UTC, a CPU audit recomputed hashes for all 60 completed
+downloads (3,320,250,818 bytes); every session/split, size, selection SHA,
+archive ETag, and per-file SHA matched, with zero errors. The receipt is saved
+outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T054142Z.json`
+(SHA-256 `14b6a057f0b2fc3d999447c32576d7d8e448cc0e429f55dc616371f8b9aca3c6`).
+The pinned local VideoPrism NPZ (457,475,296 bytes) and Whisper encoder export
+(32,839,984 bytes) also match the exact hashes recorded for extraction. These
+are artifact identity checks only, not quality results. The downloader remains
+live; GPU feature extraction has not begun.
