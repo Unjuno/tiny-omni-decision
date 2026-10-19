@@ -78,10 +78,7 @@ def _hash_bundle(root: Path, names: list[str]) -> str:
 
 
 def _selected_rows(windows_dir: Path) -> tuple[list[dict], dict[str, list[dict]], dict]:
-    rows = {
-        split: read_jsonl(windows_dir / f"{split}.jsonl")
-        for split in ("train", "validation")
-    }
+    rows = {split: read_jsonl(windows_dir / f"{split}.jsonl") for split in ("train", "validation")}
     receipt = json.loads((windows_dir / "receipt.json").read_text(encoding="utf-8"))
     for split in ("train", "validation"):
         receipt_key = "train_jsonl_sha256" if split == "train" else "validation_jsonl_sha256"
@@ -144,6 +141,53 @@ def _verify_provenance(
     }
 
 
+def build_feature_fingerprint(
+    *,
+    modality: str,
+    device: str,
+    config_path: Path,
+    windows_dir: Path,
+    rows: list[dict],
+    provenance: dict[str, Any],
+    model_spec: dict[str, Any],
+) -> dict[str, Any]:
+    source_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    software_versions = {
+        "python": sys.version.split()[0],
+        "av": importlib.metadata.version("av"),
+    }
+    if modality == "video":
+        software_versions.update(
+            jax=importlib.metadata.version("jax"),
+            tensorflow=tensorflow_distribution_version(),
+        )
+    else:
+        software_versions.update(
+            torch=importlib.metadata.version("torch"),
+            transformers=importlib.metadata.version("transformers"),
+        )
+    return {
+        "modality": modality,
+        "device": device,
+        "config_sha256": sha256_file(config_path),
+        "model_spec": model_spec,
+        "ordered_sample_ids_sha256": ordered_id_hash([str(row["id"]) for row in rows]),
+        "source_window_hashes": {
+            split: sha256_file(windows_dir / f"{split}.jsonl") for split in ("train", "validation")
+        },
+        "av_data_provenance": provenance,
+        "extractor_source_commit": source_commit,
+        "extractor_script_sha256": sha256_file(Path(__file__)),
+        "software_versions": software_versions,
+    }
+
+
 def _media_paths(rows: list[dict], media_root: Path) -> dict[str, Path]:
     paths: dict[str, Path] = {}
     for row in rows:
@@ -191,6 +235,10 @@ def decode_video_window(path: Path, start: float, end: float, frame_count: int =
                 continue
             stamp = float(frame.pts * frame.time_base)
             if stamp < start:
+                # Keep the nearest preceding frame so duration-rounding tails
+                # with no presentation timestamp inside the interval can still
+                # represent the latest observed visual state.
+                previous = frame
                 continue
             if stamp > end:
                 if previous is not None:
@@ -222,12 +270,7 @@ def decode_audio_window(path: Path, start: float, end: float) -> tuple[np.ndarra
     import av
 
     rate = 16_000
-    if (
-        not math.isfinite(start + end)
-        or start < 0
-        or end <= start
-        or end - start > 30.0
-    ):
+    if not math.isfinite(start + end) or start < 0 or end <= start or end - start > 30.0:
         raise ValueError("audio window must be finite, positive, and at most 30 seconds")
     desired_samples = round((end - start) * rate)
     pcm = np.zeros(desired_samples, dtype=np.float32)
@@ -424,9 +467,9 @@ def _extract_video(args, config, rows, media_root, features, completed, persist)
         video = jnp.asarray(np.asarray(prepared, dtype=np.float32)[None] / 255.0)
         result = encode(video)
         jax.tree_util.tree_map(
-            lambda value: value.block_until_ready()
-            if hasattr(value, "block_until_ready")
-            else value,
+            lambda value: (
+                value.block_until_ready() if hasattr(value, "block_until_ready") else value
+            ),
             result,
         )
         tokens = result[0] if isinstance(result, tuple) else result
@@ -491,9 +534,9 @@ def _extract_audio(args, config, rows, media_root, features, completed, persist)
             float(row["window_end_seconds"]),
         )
         padded = np.pad(pcm, (0, max(0, 480_000 - len(pcm))))[:480_000]
-        inputs = processor(
-            padded, sampling_rate=16_000, return_tensors="pt"
-        ).input_features.to(device)
+        inputs = processor(padded, sampling_rate=16_000, return_tensors="pt").input_features.to(
+            device
+        )
         with torch.inference_mode():
             tokens = encoder(inputs).last_hidden_state[0]
         valid_tokens = min(tokens.shape[0], math.ceil(valid_samples / 320))
@@ -545,9 +588,11 @@ def _extract_text(args, config, rows, features, completed, persist):
     if _hash_bundle(model_dir, tokenizer_files) != MINILM_PROCESSOR_SHA256:
         raise ValueError("MiniLM tokenizer/config bundle differs from pinned revision")
     tokenizer = AutoTokenizer.from_pretrained(model_dir, local_files_only=True)
-    encoder = AutoModel.from_pretrained(
-        model_dir, local_files_only=True, dtype=torch.float32
-    ).eval().requires_grad_(False)
+    encoder = (
+        AutoModel.from_pretrained(model_dir, local_files_only=True, dtype=torch.float32)
+        .eval()
+        .requires_grad_(False)
+    )
     if sum(parameter.numel() for parameter in encoder.parameters()) != 17_389_824:
         raise ValueError("unexpected MiniLM parameter count")
     cache: dict[str, np.ndarray] = {}
@@ -558,9 +603,7 @@ def _extract_text(args, config, rows, features, completed, persist):
         question = str(row["question"])
         if question in cache:
             continue
-        encoded = tokenizer(
-            question, padding=False, truncation=False, return_tensors="pt"
-        )
+        encoded = tokenizer(question, padding=False, truncation=False, return_tensors="pt")
         if encoded["input_ids"].shape[1] > 512:
             raise ValueError(f"task question exceeds 512 tokens: {row['id']}")
         with torch.inference_mode():
@@ -635,13 +678,6 @@ def main() -> None:
     ).stdout
     if dirty.strip():
         raise ValueError("commit the feature extraction pipeline before extracting task features")
-    source_commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
     config = json.loads(args.config.read_text(encoding="utf-8"))
     rows, rows_by_split, window_receipt = _selected_rows(args.windows_dir.resolve(strict=True))
     av_report = json.loads(args.av_validation_report.read_text(encoding="utf-8"))
@@ -658,43 +694,16 @@ def main() -> None:
     media_root = args.media_root.resolve(strict=True)
     _media_paths(rows, media_root)
     model_spec = config["encoders"][args.modality]
-    source_commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
-    script_hash = sha256_file(Path(__file__))
-    software_versions = {
-        "python": sys.version.split()[0],
-        "av": importlib.metadata.version("av"),
-    }
-    if args.modality == "video":
-        software_versions.update(
-            jax=importlib.metadata.version("jax"),
-            tensorflow=tensorflow_distribution_version(),
-        )
-    else:
-        software_versions.update(
-            torch=importlib.metadata.version("torch"),
-            transformers=importlib.metadata.version("transformers"),
-        )
-    fingerprint = {
-        "modality": args.modality,
-        "device": args.device,
-        "config_sha256": sha256_file(args.config),
-        "model_spec": model_spec,
-        "ordered_sample_ids_sha256": ordered_id_hash([str(row["id"]) for row in rows]),
-        "source_window_hashes": {
-            split: sha256_file(args.windows_dir / f"{split}.jsonl")
-            for split in ("train", "validation")
-        },
-        "av_data_provenance": provenance,
-        "extractor_source_commit": source_commit,
-        "extractor_script_sha256": script_hash,
-        "software_versions": software_versions,
-    }
+    fingerprint = build_feature_fingerprint(
+        modality=args.modality,
+        device=args.device,
+        config_path=args.config,
+        windows_dir=args.windows_dir,
+        rows=rows,
+        provenance=provenance,
+        model_spec=model_spec,
+    )
+    source_commit = fingerprint["extractor_source_commit"]
     width = {"video": 768, "audio": 384, "text": 384}[args.modality]
     progress_path = output_bank.with_suffix(".progress.npz")
     args.output_bank.parent.mkdir(parents=True, exist_ok=True)

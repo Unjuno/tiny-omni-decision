@@ -18,6 +18,7 @@ from scripts.extract_holoassist_frozen_features import (
     _save_progress,
     _validate_whisper_runtime,
 )
+from scripts.migrate_holoassist_feature_progress import migrate_progress_file
 
 
 def test_holoassist_extraction_binds_the_selected_media_plan():
@@ -240,8 +241,7 @@ def test_video_window_decoder_only_converts_selected_frames_and_preserves_pixels
     counter = {"conversions": 0}
     stream = SimpleNamespace(type="video", time_base=Fraction(1, 30))
     frames = [
-        _FakeVideoFrame(index, stream.time_base, index % 255, counter)
-        for index in range(901)
+        _FakeVideoFrame(index, stream.time_base, index % 255, counter) for index in range(901)
     ]
     container = _FakeVideoContainer(frames, stream)
     monkeypatch.setitem(
@@ -277,3 +277,116 @@ def test_video_window_decoder_keeps_end_padding_semantics(monkeypatch):
     reference = _legacy_video_window_reference(frames, 0.0, 10.0)
 
     np.testing.assert_array_equal(optimized, reference)
+
+
+def test_video_window_decoder_repeats_last_frame_for_empty_tail_window(monkeypatch):
+    from fractions import Fraction
+    from types import SimpleNamespace
+
+    counter = {"conversions": 0}
+    stream = SimpleNamespace(type="video", time_base=Fraction(1, 1000))
+    frames = [
+        _FakeVideoFrame(1000, stream.time_base, 10, counter),
+        _FakeVideoFrame(2000, stream.time_base, 20, counter),
+        _FakeVideoFrame(2998, stream.time_base, 30, counter),
+    ]
+    container = _FakeVideoContainer(frames, stream)
+    monkeypatch.setitem(
+        __import__("sys").modules,
+        "av",
+        SimpleNamespace(open=lambda _path: container),
+    )
+
+    decoded = extraction.decode_video_window(Path("fake.mp4"), 3.0, 3.016)
+
+    assert decoded.shape == (8, 2, 3, 3)
+    np.testing.assert_array_equal(decoded, np.full((8, 2, 3, 3), 30, dtype=np.uint8))
+
+
+def test_migrate_holoassist_progress_rebinds_only_approved_code_identity(tmp_path):
+    from scripts.extract_holoassist_frozen_features import _save_progress
+
+    ids = [f"window-{index}" for index in range(5)]
+    features = np.zeros((5, 768), dtype=np.float32)
+    features[:3] = 0.25
+    completed = np.array([True, True, True, False, False])
+    new_fingerprint = {
+        "modality": "video",
+        "device": "cpu",
+        "config_sha256": "c" * 64,
+        "extractor_source_commit": "new-commit",
+        "extractor_script_sha256": "e" * 64,
+    }
+    old_fingerprint = {
+        **new_fingerprint,
+        "extractor_source_commit": "old-commit",
+        "extractor_script_sha256": "d" * 64,
+    }
+    source = tmp_path / "attempt-03.progress.npz"
+    destination = tmp_path / "attempt-04" / "video-features.progress.npz"
+    _save_progress(
+        source,
+        ids=ids,
+        features=features,
+        completed=completed,
+        fingerprint=old_fingerprint,
+    )
+
+    receipt = migrate_progress_file(
+        source,
+        destination,
+        expected_ids=ids,
+        expected_fingerprint=new_fingerprint,
+        legacy_source_commit="old-commit",
+        legacy_script_sha256="d" * 64,
+    )
+
+    assert receipt["status"] == "PASS"
+    assert receipt["reused_completed_rows"] == 3
+    with np.load(destination, allow_pickle=False) as archive:
+        np.testing.assert_array_equal(archive["sample_id"].tolist(), ids)
+        np.testing.assert_array_equal(archive["features"], features)
+        np.testing.assert_array_equal(archive["completed"], completed)
+        assert json.loads(str(archive["fingerprint_json"].item())) == new_fingerprint
+
+
+def test_migrate_holoassist_progress_rejects_unapproved_fingerprint_change(tmp_path):
+    from scripts.extract_holoassist_frozen_features import _save_progress
+
+    ids = ["window-0", "window-1"]
+    features = np.zeros((2, 768), dtype=np.float32)
+    features[0] = 0.5
+    completed = np.array([True, False])
+    expected = {
+        "modality": "video",
+        "device": "cpu",
+        "config_sha256": "c" * 64,
+        "extractor_source_commit": "new-commit",
+        "extractor_script_sha256": "e" * 64,
+    }
+    legacy = {
+        **expected,
+        "config_sha256": "f" * 64,
+        "extractor_source_commit": "old-commit",
+        "extractor_script_sha256": "d" * 64,
+    }
+    source = tmp_path / "attempt-03.progress.npz"
+    destination = tmp_path / "attempt-04" / "video-features.progress.npz"
+    _save_progress(
+        source,
+        ids=ids,
+        features=features,
+        completed=completed,
+        fingerprint=legacy,
+    )
+
+    with pytest.raises(ValueError, match="fingerprint differs beyond"):
+        migrate_progress_file(
+            source,
+            destination,
+            expected_ids=ids,
+            expected_fingerprint=expected,
+            legacy_source_commit="old-commit",
+            legacy_script_sha256="d" * 64,
+        )
+    assert not destination.exists()
