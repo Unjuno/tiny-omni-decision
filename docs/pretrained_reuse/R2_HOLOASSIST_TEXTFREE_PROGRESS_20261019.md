@@ -1397,3 +1397,17 @@ The 117 local hashes are not archive-authenticated. Delta receipt:
 C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1310Z.json
 (SHA-256 c05726f4b34afc731b070348f11df0bfffacbcfa11a44ed6c533c7645d81802b).
 The downloader remained alive, with no process intervention and no GPU job.
+At 2026-10-19 11:26 UTC, one more complete file appeared and passed the
+local delta checks (selection ID/size, SHA-256, AV metadata and annotation
+timing). Receipt:
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1320Z.json
+(SHA-256 0fa57e613647984911707e7df4b50670f9ff9306e5361c110087450b4878055b).
+The live journal audit receipt
+C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1126Z.json
+(SHA-256 9aef1792407a95a4bd22e9e3ca7b39ecc5838868112fe73db6c2723c6dbd9490)
+shows 467 journaled rows, 119 complete unlogged files, six partials, and 839
+selected rows not yet journal-completed. Cumulative diagnostics cover all 119:
+118 metadata passes, one known source-range-verified timing-boundary failure.
+The 118 passing local hashes are not archive-authenticated. PID 23276 remained
+alive with four connections. GPU was 46% utilized / 15,309 MiB; no GPU work
+started and no process was modified.
