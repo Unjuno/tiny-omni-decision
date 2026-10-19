@@ -415,3 +415,40 @@ smoke remains a pass through HotUGPU; any further GPU-bound task will start
 through that reservation guard, which waits for external GPU use to yield before
 reserving VRAM and launching the child. Full-corpus VideoPrism extraction,
 validation, feature packing, and readout fitting remain pending.
+
+## HotUGPU and VideoPrism runtime update (2026-10-19 07:04 UTC)
+
+The same one-window VideoPrism smoke that previously hit JAX `MemoryError`
+completed when system commit headroom recovered. Through HotUGPU, the wrapper
+waited for Orbitune PID 24056 to yield; after a reservation race it secured
+6,000 MiB, left 10,215 MiB free, and launched the CPU-JAX child while keeping
+the launch threshold blocked. No Orbitune trainer was stopped. With unchanged
+selection, config, media, 8 frames, preprocessing, pinned model source and
+checkpoint, VideoPrism produced a finite `[1, 768]` feature. Encoder time was
+8.463 s, end-to-end smoke time 13.776 s, peak RSS 4,156,661,760 bytes, and
+save/reload matched exactly. Result SHA-256
+`1901a46575bd1ecd19e3b3f0b709073ad48118b8c360d0a03b57afab0a7f76af`; feature
+SHA-256 `92ac2cb06be9974df505f1676985b6d1b66742c5d7f2c7b64d38b4e5b2d1dcd7`.
+This is encoder plumbing only, not model quality. It supports (but does not prove)
+that the earlier compile failure was caused by near-exhausted system commit.
+The first HotUGPU retry remains recorded separately as an invocation mistake:
+the wrapper worked, but its child was mistakenly Python311 rather than the
+pinned JAX environment and exited before model forward.
+
+The downloader is still PID 23276 with original parameters. At 07:03 UTC the
+journal had 162 completed train assets (15,743,353,057 bytes); a fresh full
+prefix hash/selection/split/offset/size audit passed all 162 with zero errors.
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T070346Z.json`
+(SHA-256 `d9c8685b74b550e6306dcaa05ca47f599716011a21d004ce8223c9cbc64f957b`).
+Three newer journal files were not included in this receipt at the time last
+observed. Validation media is not yet reached.
+
+Audio remains a separate GPU-bound step and will use HotUGPU as well. After the
+smoke the RTX 3080 returned to 0 MiB / 0% at the sampled instant; Orbitune's
+supervisor remains present and may relaunch when the reservation is released.
+No fitting, checkpoint selection, test/audit access, or product promotion has
+occurred. Full media validation and the actual frozen train/validation feature
+banks remain pending.
+
+The preceding documentation commit 13d67f passed GitHub Actions run [39213226246](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39213226246).
