@@ -1661,3 +1661,28 @@ the one known timing-boundary failure. Delta receipt:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1630Z.json`
 (SHA-256 `2702baaa463efd18c64746c62ec1fc676afc794d271620c7fd587f6f79626f7e`).
 The local hashes are not source-archive authenticated. No process was modified.
+
+At 2026-10-19 11:55 UTC, an external read-only provenance snapshot was saved at
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\downloader-provenance-live-20261019T1154Z.json`
+(SHA-256 `E6ACA3A4FACEC376179213ED3D6C478330B027473EDB8FD3E3D5E6C5B4BD5836`).
+It captured a stable snapshot of 637 finalized MP4s: all were selected, matched
+the expected byte sizes, and had Windows creation times after PID 23276 started.
+The fresh media directory was created 0.220 seconds after that process started.
+The process command showed the pinned archive ETag and no `--resume`; the current
+downloader source blob matches the recorded source commit
+`c60ef8c6c02a345f89ab79c3836b671de3780ed8`. In that code path, HTTP 206,
+Content-Range, ETag, and expected size are checked before atomic `.part` to
+`.mp4` rename, while per-file SHA and journal append happen after rename. This
+supports source-range provenance by execution path for unjournaled files, but
+there is no persisted per-file response-header receipt; treat this as a strong
+inference, not direct per-file HTTP evidence. The snapshot did not recompute
+media hashes.
+
+A follow-up read-only check at 11:56 UTC confirmed PID 23276 was still running
+(the apparent absence in one intermediate process query was transient). There
+are now 639 MP4s, six partials totaling 46,137,344 bytes, and the unchanged
+467-row journal (last written 10:07:15 UTC). All 639 files matched a selected
+train/validation ID and expected size. The downloader and original journal
+remain untouched. GPU utilization was 0% at one instantaneous sample; this is
+not authorization to start GPU work. Any future GPU task remains subject to the
+HotUGPU guard and corpus reconciliation.
