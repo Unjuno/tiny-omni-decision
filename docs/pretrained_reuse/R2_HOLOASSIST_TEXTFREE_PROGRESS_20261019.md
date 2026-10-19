@@ -332,3 +332,11 @@ train media files (11,625,611,393 bytes) with zero mismatches. Receipt:
 A 15:36 JST read-only GPU sample showed the 16 GiB RTX 3080 occupied by an
 external Orbitune training process (3.6 GiB reported, 36% utilization); no new
 GPU work was started. The HotUGPU gate will wait for that work to yield.
+
+At 2026-10-19 06:39 UTC, the selection-aware independent audit verified 126
+train files (12,252,290,780 bytes), with zero selection, split, archive, size,
+or SHA-256 mismatches. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T063912Z.json`
+(SHA-256 `cc7b4f97e818555ba634fa368291343c2b60f9b3df5e8bb843b35a13bfe464bf`).
+No validation media has been reached yet; the downloader is processing train
+first according to its fixed selection order.
