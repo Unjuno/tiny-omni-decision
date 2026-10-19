@@ -2566,7 +2566,7 @@ VideoPrism smoke are documented in
 
 The full VideoPrism bank is running under the existing HotUGPU cooperative
 reservation on the RTX 3080 Laptop. Orbitune yielded; it was not stopped or
-modified. At 2026-10-20 04:06 JST, attempt-03 had atomically saved 128 / 12,261
+modified. At 2026-10-20 04:11 JST, attempt-03 had atomically saved 256 / 12,261
 window features to
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\video-features-v1-attempt-03\video-features.progress.npz`.
 The GPU showed 6,169 / 16,384 MiB used (6,000 MiB HotUGPU reservation) and 0%
@@ -2584,3 +2584,11 @@ dataset example manifest validation passed. The CI virtual environment has a
 UTF-8 editable `.pth` path that fails under the host's cp932 locale; CPU tests
 were therefore invoked from the existing working ML environment with the
 repository `src` path explicitly set. No environment was modified.
+
+A hidden local continuation process (PID 26820) now waits for the validated
+video bank to finish. It will then run Whisper audio extraction through
+HotUGPU, pack the text-free video/audio cache, and run the existing fixed
+three-arm readout config only if each prior stage succeeds and all new output
+paths remain absent. Its external script, state, and log are in the attempt-03
+directory; this orchestration does not alter the repository or any prior
+artifact.
