@@ -2283,3 +2283,16 @@ files are recorded in `unlogged-media-delta-20261019T131000Z.json` (SHA-256
 source-hash authentication remains limited to 467 journal rows. PID 23276
 remains active. A subsequent live count was 768. CI run 39257573719 for
 `581ae49` completed successfully.
+
+At 13:09:12Z, full-receipt reconciliation
+`live-receipt-reconciliation-20261019T131000Z.json` (SHA-256
+`2e069833e5a1fd9715553a6773196285b94ec32b6900d278846f9b3f84858e61`) matched
+767 finalized MP4s, all train, to selection. Validation remains 0/264. The 300
+IDs outside the pinned 467-row journal have local receipts (299 pass, one known
+timing-boundary failure); there are no unselected files, size mismatches,
+uncovered IDs or receipt hash conflicts. Three new local passes are recorded in
+`unlogged-media-delta-20261019T131000Z.json` (SHA-256
+`c9bd9899c647ec47b3ff9db7435328d1ad3e03e7e8a496e1e7e2068395c087f1`). PID
+23276 remains active. A later live count was 768. CI for `9ed49d8` was shown as
+queued in the public Actions UI; the unauthenticated REST endpoint was rate
+limited.
