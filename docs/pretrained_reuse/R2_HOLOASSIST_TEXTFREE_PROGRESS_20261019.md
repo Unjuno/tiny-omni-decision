@@ -155,3 +155,10 @@ After the config correction, the full CPU test suite passed (2,448 passed,
 [39205909345](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39205909345)
 for source commit `fd83baf36d5aac8fa1e681fec2103aa6f0577f82` completed
 successfully.
+
+At 2026-10-19 05:45 UTC, an updated independent audit recomputed the full
+prefix at 64 completed files (3,779,974,279 bytes) with zero identity, size,
+ETag, selection-hash, or media-hash mismatches. Its receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T054501Z.json`
+(SHA-256 `ff666c91208adfee4553c7be711701ed1cd7b6091307bb09b23be9e5ff657896`)
+and is the current receipt referenced from `run-preflight.json`.
