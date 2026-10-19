@@ -25,15 +25,6 @@
       "processor_sha256": "3e4dc53c73e7e3954fc4435034f5027733c61d7c123b38bbd1461598fd8503ef",
       "parameters": 8208384,
       "preprocessing": "decode mono 48kHz AAC by PyAV; resample to 16kHz; Whisper 30s log-mel; mean valid encoder tokens to 384D"
-    },
-    "text": {
-      "model_id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
-      "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
-      "weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
-      "loaded_weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
-      "processor_sha256": "1c9cc30099243da1f4b287a315c03814279467a6316929f0d16e7f9940b52b0f",
-      "parameters": 17389824,
-      "preprocessing": "frozen masked-mean embedding of each window's exact task question to 384D"
     }
   },
   "hidden_size": 128,
@@ -49,7 +40,7 @@
   "training_sampling": "uniform shuffle of training sessions; each session used once per epoch",
   "loss": "unweighted cross entropy over labelled windows; natural prevalence retained",
   "unlabelled_windows": "retained as causal LSTM context; excluded from loss and metrics",
-  "validation": "fixed official validation sessions; evaluate all labelled windows; no test split",
+  "validation": "fixed session-disjoint held-out partition of previously unused official training sessions; official validation and test payloads are not read",
   "scope": "text-free sensor comparison; typed task category condition; development validation only",
   "conditioning": "task_type_id"
 }

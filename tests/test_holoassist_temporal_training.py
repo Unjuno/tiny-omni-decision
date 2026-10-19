@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -17,6 +19,21 @@ from scripts.train_holoassist_temporal_readout import (  # noqa: E402
     validate_feature_receipt,
     validate_split_identity,
 )
+
+
+def test_unused_train_textfree_config_matches_split_and_input_policy() -> None:
+    config_path = (
+        Path(__file__).parents[1]
+        / "configs"
+        / "pretrained_reuse"
+        / "holoassist_textfree_unused_train_v1.json"
+    )
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+
+    assert set(config["encoders"]) == {"video", "audio"}
+    assert config["conditioning"] == "task_type_id"
+    assert "previously unused official training sessions" in config["validation"]
+    assert "official validation and test payloads are not read" in config["validation"]
 
 
 def write_features(path, sessions, *, include_text=True):

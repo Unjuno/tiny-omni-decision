@@ -120,3 +120,14 @@ The branch is clean and synchronized with its remote at
 for that commit completed successfully. This live update records acquisition
 and CI status only; feature extraction, model fitting, and quality evaluation
 remain pending.
+
+Before feature extraction, a config review found stale descriptive metadata: the
+new run's validation is a held-out partition of previously unused official
+training sessions, not the legacy official validation split, and its text-free
+configuration still listed the unused MiniLM encoder. Both entries were
+corrected without changing the frozen selection, AV encoder revisions, readout,
+sampling, or optimizer settings. A regression test now checks that the config
+contains only video/audio encoders and documents the internal validation
+source. The focused training/config tests pass (8 passed), and Ruff passes.
+The attempt's external `run-preflight.json` must be updated to the corrected
+config hash and resulting source commit before any feature extraction or fit.
