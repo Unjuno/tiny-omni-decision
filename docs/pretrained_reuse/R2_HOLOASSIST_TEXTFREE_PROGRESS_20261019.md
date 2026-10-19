@@ -694,3 +694,14 @@ capacity snapshot measured 145.72 GiB free with 44.41 GiB headroom above the
 1.2x remaining-download estimate. The pushed documentation commit
 `9eba0d0` passed CI run
 [39221729023](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39221729023).
+
+At 2026-10-19 17:21 JST, the chained audit advanced again to 282/1,306 train
+videos (27,060,505,296 bytes), rehashing two appended files with zero errors.
+Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T082155Z-chained.json`
+(SHA-256 `7124800c17cea5a8f3af5858dfcd1456fb84b594a7eb360068c95629cad1416c`).
+The pinned downloader PID 23276 remains active. The latest capacity check
+measured 145.22 GiB free, with 44.62 GiB headroom above the conservative 1.2x
+estimate. Validation media have not been downloaded or opened. GPU extraction
+and model fitting remain gated on completion and integrity verification of
+the selected corpus; subsequent CUDA work will be launched with HotUGPU.
