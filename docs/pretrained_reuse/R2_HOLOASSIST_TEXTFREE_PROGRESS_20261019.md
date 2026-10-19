@@ -604,17 +604,17 @@ The external preflight points to this receipt. CI for the previous report
 commit `0896e58` completed successfully at run
 [39215849783](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215849783).
 
-## Acquisition and HotUGPU handoff update (2026-10-19 07:36 UTC)
+## Acquisition and HotUGPU handoff update (2026-10-19 07:39 UTC)
 
 The unchanged PID 23276 downloader remains active with its original four
-workers. The journal reached 203 completed train videos (20,657,475,823 bytes);
+workers. The journal reached 208 completed train videos (21,033,891,172 bytes);
 validation remains at zero. The latest chained audit confirmed that the
 previously audited journal byte-prefix is unchanged, then recomputed SHA-256
-for all four newly completed files and rechecked selection/split, pinned ETag,
-archive offsets, paths and sizes. The cumulative 203-file chain passed with no
+for all five newly completed files and rechecked selection/split, pinned ETag,
+archive offsets, paths and sizes. The cumulative 208-file chain passed with no
 errors. Receipt:
-`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T073640Z-chained.json`
-(SHA-256 `86545be3a7838a14241922bf9e9a9d887911986d64f72ab94edfe0f4647d8c0d`).
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T073917Z-chained.json`
+(SHA-256 `2d921d71f390519ecb0c83d54497f0e5167c7b856c0e1b50e78726e37f383ff6`).
 The external `run-preflight.json` points to this receipt. Training media was
 read only for hash verification; no validation files have been downloaded,
 and no test or sealed-audit media has been opened.
@@ -632,3 +632,5 @@ while the guarded child is active. No GPU work is appropriate yet because the
 selected corpus is incomplete and validation media has not been acquired.
 CI for the preceding status-only commit `4c31f4b` passed at run
 [39216975277](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39216975277).
+The follow-up audit-record commit `c8790e9` also passed CI at run
+[39217234351](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39217234351).
