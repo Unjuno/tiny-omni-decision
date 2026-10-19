@@ -1933,3 +1933,22 @@ named `unlogged-media-delta-20261019T1220Z.json` had its own earlier
 `created_at_utc`; it was preserved and not overwritten or substituted for a
 current-time receipt. Archive authentication remains limited to journaled rows.
 
+At 2026-10-19 12:21 UTC, five more finalized media files passed the local
+diagnostic gates in two incremental receipts:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T122034Z.json`
+(SHA-256 `900daf4be73944c061091786dc391b6f0cd9915ef7f2c7e7420fa8220073e632`)
+and
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T122121Z.json`
+(SHA-256 `1968bd7545faf46b355eff8610cc4ca2bae75a88c742a57b1599753d8c9e3120`).
+Together they add five previously unseen media IDs; all pass local hashing and
+metadata checks. The pinned journal snapshot still has 467 rows, so archive
+byte authenticity remains established only for those rows. A partial audit of
+the pinned snapshot at 12:20:54Z observed 680 finalized files and 213 files not
+represented by that snapshot; the live tree then continued changing. At
+12:21:40Z the live media tree had 681 MP4 files and six `.part` files totaling
+318,767,104 bytes. PID 23276 was still present at 12:21:44Z. These live counts
+are observations during acquisition, not a final manifest; do not infer
+completion or restart the downloader from them. Local diagnostic coverage is
+214 unjournaled IDs (213 local passes and the known timing-boundary failure),
+subject to a fresh reconciliation after acquisition stops.
+

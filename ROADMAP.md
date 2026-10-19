@@ -2459,3 +2459,11 @@ PID 23276 is active. A pre-existing legacy receipt with the sequential suffix
 `T1220Z` was preserved; its internal capture time is authoritative. No local
 hash extends archive authentication. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:21 UTC):** Five additional
+finalized videos passed local diagnostics. Live observation: 681 MP4s, 467
+journal-authenticated and 214 unjournaled; receipts cover those 214 (213 local
+passes and one known timing-boundary failure). Six partials remain and PID
+23276 is active. This is not a final manifest, and local checks do not extend
+archive authentication. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
