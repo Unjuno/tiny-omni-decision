@@ -2650,3 +2650,11 @@ passes; one known timing-boundary failure). No unselected files, size
 mismatches, uncovered IDs or receipt hash conflicts were found. Archive hash
 authentication remains limited to 467 journal rows. PID 23276 is active with
 seven partials. See the [progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (13:09 UTC):** Full-receipt
+reconciliation matched 767 finalized train MP4s to selection (767/1,042;
+validation 0/264). All 300 IDs outside the pinned journal have local receipts
+(299 pass; one known timing-boundary failure), with no unselected files, size
+mismatches, uncovered IDs or receipt hash conflicts. The journal authenticates
+467 source hashes. PID 23276 remains active. CI for `581ae49` is green. See the
+[progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
