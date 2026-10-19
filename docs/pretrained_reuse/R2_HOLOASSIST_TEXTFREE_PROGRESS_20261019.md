@@ -1635,3 +1635,16 @@ failure. Delta receipt:
 (SHA-256 `95fb825163a7e7d6a72b781d143a8785136b23feb40de7b4d06da5408782f5f9`).
 GPU usage was 15,821/16,384 MiB at the follow-up sample, so no GPU work was
 launched.
+
+At 2026-10-19 11:51 UTC, PID 23276 remained active with four archive
+connections. The latest live receipt
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1152Z.json`
+(SHA-256 `82642afc86ac146a3a38ae1cd52ff47fcc1ff988aa460075926b214b6db89036`)
+records 629 complete files and 162 unjournaled files; 161 partial-media
+records are locally diagnosed as passing and one is the known timing-boundary
+failure. The new two-file local delta is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1620Z.json`
+(SHA-256 `24af8f4c5107d0dd56ddc1c45b6622282689387f50ec036802a4476c625bf6ec`).
+The parent PowerShell has no open log/output or attempt-artifact handle, and
+Codex exposes no attached terminal for this process, so the downloader's
+exception output remains unavailable. It remains live and untouched.
