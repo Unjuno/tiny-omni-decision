@@ -1082,3 +1082,37 @@ advanced. No manifest exists yet. CPU-only HotUGPU and HoloAssist media/journal
 tests passed (25 tests); GitHub Actions run #2172 for source commit `42c7685`
 completed successfully. No process was stopped, no GPU job was launched, and no
 feature extraction or training was performed.
+
+At 2026-10-19 19:52 JST, the exact 467-row downloader journal snapshot was
+checked against the 80-receipt integrity chain and re-read from disk. The
+shared-read snapshot hash matched the pinned latest prefix receipt. Each of the
+467 selected-train MP4s was then rehashed against its journal SHA-256 and had
+its PyAV stream metadata checked. All 467 passed: H.264/AAC, mono 48 kHz audio,
+start alignment, AV duration difference within two video frames, and audio vs
+annotation duration difference within 0.15 seconds. Maximum observed AV
+mismatch was 1.973 frames; maximum audio/annotation difference was 0.120 s.
+This was a full media-hash and stream-metadata audit of the verified prefix,
+not full frame/audio decode and not a validation-quality result. No validation,
+test, or sealed-audit media was opened. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\verified-prefix-av-audit-v2-20261019T1051Z.json`
+(SHA-256 `ed0d32e758db5b23c4b595e20161f31a1839743e0a2e5bf631fda46c3358465e`);
+external audit script SHA-256
+`51123dab9f10d6e7c6fecbd0fa949ce34d4c823cec55a5901045c7cd9a7fda80`.
+The first audit helper attempt had a duration-string parser defect and is
+retained as a failed tool attempt; the corrected v2 parser uses the repository's
+`HH:MM:SS.fraction` format and produced the passing receipt.
+
+At 2026-10-19 19:53 JST, a separate read-only snapshot showed 547 complete files
+(50,215,561,073 bytes), six partial files (96,468,992 bytes), and the unchanged
+467-row journal (43,019,820,009 bytes). Eighty complete files were unjournaled;
+all 80 names and sizes matched the immutable selection, but their content
+hashes were not verified by this observation. Thirty-four of these files are
+newer than the prior 46-file AV diagnostic and have not yet had metadata
+checked. The snapshot is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-integrity-observation-20261019T105358Z.json`
+(SHA-256 `42af08d5f3a9dfa768fc243d625e84bfd04ed999848c3aa88b5472efac19f072`).
+The downloader remains live; no manifest exists. CPU-only HotUGPU/media/journal
+tests remain 25/25 passing, and CI #2173 for `863d0b3` is green. The GPU was
+observed idle briefly but no GPU task was launched because the incomplete,
+partially unjournaled corpus is not ready for feature extraction or training.
+No live process was stopped or restarted.
