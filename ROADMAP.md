@@ -2324,3 +2324,13 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (11:57 UTC):** The live attempt
+has 639 finalized selected MP4s on disk, six partial transfers, and an unchanged
+467-row official downloader journal. All 639 visible files match a selected
+train/validation ID and expected byte size; the two latest unjournaled files
+passed local SHA/AV/timing diagnostics. Only the 467 journaled prefix is
+currently source-hash authenticated; local diagnostic hashes do not extend that
+proof. Downloader PID 23276 is still active and untouched. No feature extraction
+or fitting has started. See the detailed [timestamped progress and provenance
+limits](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

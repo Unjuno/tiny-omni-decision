@@ -1686,3 +1686,21 @@ train/validation ID and expected size. The downloader and original journal
 remain untouched. GPU utilization was 0% at one instantaneous sample; this is
 not authorization to start GPU work. Any future GPU task remains subject to the
 HotUGPU guard and corpus reconciliation.
+
+At 2026-10-19 11:54 UTC, the latest two newly finalized files also passed the
+existing local-diagnostic gates (selection ID/size, stable local SHA-256, AV
+stream metadata, and annotation duration). Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1650Z.json`
+(SHA-256 `3A0F1C5373268DADE88123998BA2EE06070F9DAA6E646626ADE1873347544D75`).
+The receipt is bound to selection SHA-256
+`66f578b89ddb1757477b6c75e31b9d3fb7320d6832ae3d23dcd72ad67be17498` and
+journal snapshot SHA-256
+`4814de90b0ffff9cb32ac63b38f7aa8f3401d30598e7a1f56b6ddf8d573de8bc`.
+Cumulative local diagnostics then cover 168 unjournaled files: 167 pass and the
+one known source-range-confirmed timing-boundary case fails the unchanged local
+timing threshold. The 167 local hashes remain unauthenticated against the
+archive. At 11:57 UTC the same live process remained active; 639 complete files
+matched selected IDs and expected sizes, six partials remained, and the official
+journal still had 467 rows. Do not promote this local count to a verified
+archive prefix or begin extraction until the journal/source-integrity gate is
+reconciled.
