@@ -2505,3 +2505,10 @@ unlogged train files are covered by local diagnostics (230 pass; one known
 timing-boundary failure). Six partial files remain and PID 23276 is active.
 Archive authentication remains limited to journaled files. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:34 UTC):** 700/1,306
+finalized MP4s, all from train (700/1,042); no validation media is finalized.
+467 are authenticated by the pinned journal; local diagnostics cover the 233
+remaining files (232 pass; one known timing-boundary failure). Six partials
+remain and PID 23276 is active. CI for `789968e` is green. This is not a final
+media manifest. See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

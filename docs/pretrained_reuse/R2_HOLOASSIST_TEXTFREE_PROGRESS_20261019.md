@@ -2020,3 +2020,16 @@ A new ID passed local checks in
 partial files remained (406,847,488 bytes at the audit instant); PID 23276
 was active. Archive hash authentication still covers only the 467 pinned
 journal rows.
+
+At 12:34:12Z the pinned-journal audit saw 700 finalized MP4s: 467 in the
+pinned journal and 233 not represented there. Audit SHA-256:
+`6D3323D7776C54EADA70FB2EBA23E23D515378984475D6AF98D1E2A63DBC9A83`.
+Deduplicated local diagnostics cover all 233 unjournaled IDs (232 pass; one
+known timing-boundary failure). The live tree held 700/1,042 train MP4s and
+0/264 validation MP4s, with no unselected IDs. Two new local passes are in
+`unlogged-media-delta-20261019T123330Z.json` (SHA-256
+`00dccceae2374ff09260ea102160c005528a32cf3f8e02e111f5214cc9c0729d`). Six
+partial files totaled 562,036,736 bytes during the audit. PID 23276 was still
+active. CI for repository commit `789968eca7f80dcb6416e922f070bdd2036e25c9`
+completed successfully. Only the pinned 467 journal rows are source-hash
+authenticated.
