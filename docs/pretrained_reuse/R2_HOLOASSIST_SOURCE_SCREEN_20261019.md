@@ -348,9 +348,9 @@ creating an output bank: the pinned local environment provides the
 `tensorflow-cpu` distribution, while the extractor queried the `tensorflow`
 distribution name. The extractor now resolves either distribution name and a
 regression test covers the locked CPU package. No existing environment or
-checkpoint was modified. The current CPU/JAX VideoPrism run has not yet
-started. Latest CPU checks: Ruff passes; pytest reports 2,430 passed and 11
-skipped.
+checkpoint was modified. The CPU/JAX VideoPrism run was active as of 10:49 local with 192/3,527
+persisted windows. Latest CPU checks: Ruff passes; pytest reports 2,430 passed
+and 11 skipped.
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)
@@ -359,3 +359,13 @@ skipped.
 - [CDLA-Permissive 2.0 FAQ](https://cdla.dev/faq-resources/faq/)
 - [HoloAssist ICCV 2023 paper](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_HoloAssist_An_Egocentric_Human_Interaction_Dataset_for_Interactive_AI_Assistants_in_ICCV_2023_paper.html)
 - [HoloAssist ICCV 2023 supplementary material](https://openaccess.thecvf.com/content/ICCV2023/supplemental/Wang_HoloAssist_an_Egocentric_ICCV_2023_supplemental.pdf)
+
+## Frozen feature extraction continuation
+
+At 2026-10-19 10:49 local time, the selected-window frozen-feature work had these states:
+
+- Text: complete, 3,527/3,527. The bank SHA-256 is `53bbce5ef42345dbe7431fd2369766716b16e51105f8f4adf5208b523492f9a3`.
+- Audio: complete, 3,527/3,527. The 3,527 x 384 float32 bank SHA-256 is `0eafa0a03898d52647f8b8bf7895564e488c41a826cdd01167b16dcf4e4a13c4`; finite values and exact train-then-validation sample ID order were verified against the frozen windows. Whisper Tiny ran on the RTX 3080 Laptop GPU in 444.63 seconds, peak allocated/reserved memory 192,923,136/213,909,504 bytes, through `scripts.run_with_hotgpu_guard`. The gate waited for active GPU PID 26292 to yield, then reserved 3,200 MiB before starting the extractor; it released its reservation on completion. No training or checkpoint update occurred.
+- Video: 192/3,527 persisted windows. It runs in the pinned VideoPrism environment on CPU/JAX with CUDA explicitly disabled. The full video bank receipt/hash is not yet available.
+
+Both feature runs use new output paths under the selected HoloAssist attempt and leave the frozen media, windows, text bank, prior model artifacts, and test data untouched. Video progress is saved every 64 rows, so the count is a persisted checkpoint, not a per-window live counter. No feature cache has been packed and no readout has been fitted. Audio and video throughput are not directly comparable because their encoders and workloads differ.
