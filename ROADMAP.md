@@ -6,16 +6,14 @@ partition from the 1,306 unused official-train sessions is pinned (seed
 videos (43.02 GB) passed an independent SHA-256, selection, and split audit.
 One selected train clip passed a full CPU AV decode smoke (3,071 video frames and
 5,091,328 audio samples in 5.35 seconds); corpus-wide decode remains pending.
-At 10:31 UTC downloader PID 23276 was still transferring, but its journal
-remained at 467 rows while 504 complete files were visible (37 absent from the
-journal). CPU-only diagnostics covered the five files added since the prior
-snapshot; all five passed the AV metadata gate. Of the 37 observed unlogged
-files, 36 pass that gate and one narrowly misses it. The process still has the
-journal and four `.part` files open with active TLS connections, confirming
-ongoing transfer; why completed-file records are not appearing in the journal
-is unresolved. None of these files has a source-linked receipt, so the verified
-prefix remains 467/1,306. Reconcile journal/source integrity before extraction;
-no training has started.
+At 10:36 UTC downloader PID 23276 was still transferring, but its journal
+remained at 467 rows while 513 complete files were visible (46 absent from the
+journal). CPU-only diagnostics cover all 46 observed unlogged files: 45 pass
+the AV metadata gate and one narrowly misses it. A pinned full-range hash check
+of that one file matches the official archive exactly, confirming its timing
+boundary is in the source media rather than a local transfer error. The
+journal/source-record discrepancy is still unresolved; the verified chained
+prefix remains 467/1,306. No feature extraction or training has started.
 The text-free typed-task AV model, feature
 packing and internal-validation path are implemented; CPU suite is green.
 No new model fit or quality result yet. See the
