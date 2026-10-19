@@ -2296,3 +2296,16 @@ uncovered IDs or receipt hash conflicts. Three new local passes are recorded in
 23276 remains active. A later live count was 768. CI for `9ed49d8` was shown as
 queued in the public Actions UI; the unauthenticated REST endpoint was rate
 limited.
+
+At 13:11:38Z, all-receipts reconciliation
+`live-receipt-reconciliation-20261019T131400Z.json` (SHA-256
+`a24f955777a4ebed6a26ecf22649b68801b59020f6263ebc75d83fc12fb4c22d`) matched
+774 finalized MP4s, all train, to selection (validation 0/264). There are no
+unselected files, size mismatches, uncovered journal-external IDs, or receipt
+hash conflicts. Local receipts cover all 307 journal-external files (306 pass;
+one known timing-boundary failure); seven newly observed media passed local
+checks in `unlogged-media-delta-20261019T131400Z.json` (SHA-256
+`374d221596112872b99d7e480f67a05d6f284f073a739b1b8644a1e97a8d777f`). The
+pinned journal remains unchanged at 467 rows, the only source-hash-authenticated
+segment. PID 23276 remains active. The public Actions page for `9460805` still
+showed pending when checked.
