@@ -1834,3 +1834,27 @@ was made. The pinned 467-row journal snapshot remained the reconciliation
 basis, and the live journal's observed size/mtime were unchanged. PID 23276
 remained active; six partials totaled 46,137,344 bytes. No process or data was
 modified; local receipts are not archive-hash authentication.
+
+At 2026-10-19 12:11 UTC, two additional finalized files passed local
+diagnostics. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1211Z.json`
+(SHA-256 `E6DDA777D15C4429E50E7AC20A344D9BE887C3F5C4EC30F4509103D4C4F0998B`).
+Reconciliation through the explicit cumulative report list found 660 finalized
+selected MP4s, 467 journal rows and 193 unjournaled files. Local receipts cover
+all 193 unique unjournaled IDs, with 192 local passes and the one known
+source-range-confirmed timing-boundary failure; no unselected IDs were found.
+Six partials totaled 46,137,344 bytes. PID 23276 was active.
+
+**Downloader journal-lock interpretation correction:** source inspection of the
+identical pinned/current script blob (`f3b3f60f38ebab1c662741452b2f16ab7f17ab07`)
+shows `download-progress.jsonl` is opened at line 218 around the whole executor
+at lines 219–237, so another process's inability to read it is expected while
+the downloader is alive. A `future.result()` exception at line 225 would exit
+the append loop while `ThreadPoolExecutor.__exit__` waits for already-submitted
+work, which could explain growing finalized files with a stale journal. This is
+a code-supported hypothesis only; the process exception output is unavailable,
+so the actual failure remains UNKNOWN. The artifact names ending `T1700Z` through
+`T1850Z` were sequential labels, not their actual UTC capture times; use each
+JSON `created_at_utc` and filesystem timestamps. New receipts now use actual UTC
+names. No source-authentication claim is added for the 193 unjournaled files;
+no process or media was changed.

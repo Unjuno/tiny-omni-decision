@@ -2409,3 +2409,13 @@ IDs. A read-only live-journal hash read was refused while the downloader held
 the file; no retry was made. The unchanged pinned snapshot remains the audit
 basis. PID 23276 is active; local hashes do not extend source authentication.
 See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:11 UTC):** 660 selected
+videos are finalized, 467 journaled, and 193 unjournaled. Local receipts cover
+all 193 (192 pass, one known source-verified timing-boundary failure); local
+hashes do not extend source authentication. Code review found the downloader
+holds the journal open for its full executor lifetime; a failed future followed
+by executor drain may explain the stale journal but is unconfirmed without the
+process exception. Artifact suffixes T1700Z–T1850Z were sequential labels, not
+actual UTC times; JSON capture times are authoritative. PID 23276 remains active.
+See the [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
