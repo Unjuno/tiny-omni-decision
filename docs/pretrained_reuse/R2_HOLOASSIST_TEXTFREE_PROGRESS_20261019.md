@@ -705,3 +705,13 @@ measured 145.22 GiB free, with 44.62 GiB headroom above the conservative 1.2x
 estimate. Validation media have not been downloaded or opened. GPU extraction
 and model fitting remain gated on completion and integrity verification of
 the selected corpus; subsequent CUDA work will be launched with HotUGPU.
+
+The next chained receipt advanced the verified prefix to 295/1,306 train
+videos (27,965,684,519 bytes). Eight newly appended files across the latest two
+audit links were rehashed; each chain checked its prior journal-byte prefix and
+the immutable selection metadata. The latest receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T082717Z-chained.json`
+(SHA-256 `db6fb4cfe9d950140fb6dd8a40d28a1db12dc7dfde1b59c6c2beac88e3742429`);
+zero errors. The downloader remains live with its original four-worker
+settings. C: had 138.92 GiB free and 39.33 GiB headroom over the conservative
+remaining-download estimate. No validation/test media were opened.
