@@ -1538,3 +1538,16 @@ connections. The journal handle being open does not prove the completion loop
 is healthy: it is also consistent with the executor context waiting for
 workers after a future error. The exception/main-thread state is still
 unknown; no debugger or process intervention was used.
+
+At 2026-10-19 11:43 UTC, a 60-second verified wait showed PID 23276 still
+live with four HTTPS connections. Five more complete files appeared; all five
+passed local diagnostics. The live audit
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\live-progress-audit-20261019T1142Z.json`
+(SHA-256 `93770932ac3e39c5873423e6431fc20c2b9ee9633154fec63884732646264157`)
+records 467 journal rows, 146 unjournaled complete files, and five partials
+totaling 192,937,984 bytes. Cumulative local diagnostics now cover 145 of the
+146: 144 metadata passes and the known timing-boundary failure. Delta receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1510Z.json`
+(SHA-256 `c8a84f19542dd54263f976cb93ca3a997f285e63dab1ff7929d69ffb31499382`).
+One newly unjournaled file is not yet covered by the local delta audit. The
+journal remains stale; the Python process and HTTP workers remain active.
