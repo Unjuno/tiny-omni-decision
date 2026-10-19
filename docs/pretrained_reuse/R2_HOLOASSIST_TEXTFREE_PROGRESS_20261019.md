@@ -301,3 +301,8 @@ At 2026-10-19 06:24 UTC, an independent train/validation-aware audit verified
 mismatches. Receipt:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T062410Z.json`
 (SHA-256 `c5bbab4166541533380bd24ce2f88c61dd43256b494a404a6c3213a710ea8b01`).
+
+At 2026-10-19 06:25 UTC, the independent selection-aware audit verified 114
+files (10,231,973,262 bytes), all train split, with zero mismatches. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T062558Z.json`
+(SHA-256 `04b898137da4f295dce2bd2aeae1f0c79f72a228dc9e77be214a810b02e56340`).
