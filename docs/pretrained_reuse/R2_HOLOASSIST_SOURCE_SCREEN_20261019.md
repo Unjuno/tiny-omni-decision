@@ -238,6 +238,14 @@ is `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\p
 Full AV validation and feature extraction remain gated on the complete selected
 media set.
 
+At 2026-10-19 00:19:40 UTC, the live download journal audit recorded 223/367
+selected MP4s (22,974,607,734 completed bytes), 144 not-yet-logged files, and
+eight partial files (591,396,864 bytes). The audit found no identity, offset,
+path, or on-disk-size mismatches and did not recompute media hashes. PID 16496
+remained active. Snapshot:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-download-audit-attempt-01\partial-audit-20261019T001939Z.json`
+(SHA-256 `A62DE7DAFCDD2BB4B8790A819464A26948975DDF4560E5EF8F51C8423907D0FE`).
+Full AV validation and feature extraction still require all selected media.
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)
