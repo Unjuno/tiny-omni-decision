@@ -2006,3 +2006,17 @@ session ID. Six `.part` files remained; their total size fluctuates as workers
 write (260,046,848 bytes at the pinned audit). PID 23276 remained alive at
 12:29 UTC. CI for commit `95ec716782a6692d2129554a1eba0b84e604bdde` completed
 successfully.
+
+At 12:31:47Z the pinned-journal audit recorded 467 journal rows and 231
+finalized media files not represented by that journal (audit SHA-256
+`89BC4C0BD1D3CDAB5BBDDB48DF1FBB6B4E089B04DD029CC23BF8FDDD5CE39167`). The
+live file tree contained 698 MP4s, all selected from the 1,042-record train
+partition; none of the 264 validation assets had finalized yet, and no
+unselected IDs were found. Deduplicated local receipts cover all 231
+unjournaled train IDs (230 local passes and one known timing-boundary failure).
+A new ID passed local checks in
+`unlogged-media-delta-20261019T123147Z.json` (SHA-256
+`06734761e07da45e2c5d20423199e02cc1e241e66527638e0314983b63c8e92f`). Six
+partial files remained (406,847,488 bytes at the audit instant); PID 23276
+was active. Archive hash authentication still covers only the 467 pinned
+journal rows.
