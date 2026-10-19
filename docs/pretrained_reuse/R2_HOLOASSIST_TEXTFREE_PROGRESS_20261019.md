@@ -578,3 +578,16 @@ hashes with zero errors. No validation media has completed yet. Receipt:
 The external preflight points to the passing receipt. At the latest GPU sample,
 usage was 0 MiB / 16,384 MiB; no GPU job was started because full-corpus AV
 validation remains gated on the unfinished acquisition.
+
+## Acquisition and CI update (2026-10-19 07:24 UTC)
+
+The downloader remains live and has completed 187 selected train assets,
+totaling 18,768,257,715 bytes. All 187 passed a fresh full-prefix hash and
+metadata audit with zero errors; validation remains 0. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T072442Z.json`
+(SHA-256 `abcaa934b1d78659cf38790d718df01d2737b2dbc660d381649267cc6e8446c8`).
+The updated receipt is referenced by the external run preflight. CI for the
+previous record commit `a3f3204` passed at run
+[39215655105](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39215655105).
+The dataset and GPU gates remain unchanged: full media and AV validation first,
+then frozen feature extraction and matched validation-only readout evaluation.
