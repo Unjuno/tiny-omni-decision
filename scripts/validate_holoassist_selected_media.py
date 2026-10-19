@@ -32,9 +32,13 @@ def inspect_av_file(path: Path) -> dict:
         if video_rate <= 0:
             raise ValueError(f"video frame rate metadata is missing: {path}")
         video_frame_interval = 1.0 / video_rate
-        av_duration_tolerance = 2.0 * video_frame_interval
         channels = int(audio_stream.codec_context.channels or 0)
         sample_rate = int(audio_stream.rate or 0)
+        audio_frame_size = int(audio_stream.codec_context.frame_size or 0)
+        if sample_rate <= 0 or audio_frame_size <= 0:
+            raise ValueError(f"audio packet duration metadata is missing: {path}")
+        audio_packet_interval = audio_frame_size / sample_rate
+        av_duration_tolerance = 2.0 * video_frame_interval + audio_packet_interval
         if abs(video_start - audio_start) > 0.05:
             raise ValueError(f"audio/video start-time mismatch: {path}")
         av_duration_difference = abs(video_duration - audio_duration)
@@ -47,6 +51,7 @@ def inspect_av_file(path: Path) -> dict:
             "video_start_seconds": video_start,
             "video_duration_seconds": video_duration,
             "video_frame_interval_seconds": video_frame_interval,
+            "audio_packet_interval_seconds": audio_packet_interval,
             "video_frame_count": int(video_stream.frames or 0),
             "video_width": int(video_stream.codec_context.width),
             "video_height": int(video_stream.codec_context.height),
@@ -66,11 +71,14 @@ def validate_selected_media(
     media_manifest: dict,
     annotations: list[dict],
     media_root: Path,
+    expected_archive_etag: str,
     selection_sha256: str,
     media_manifest_sha256: str,
 ) -> dict:
     if media_manifest.get("selection_sha256") != selection_sha256:
         raise ValueError("download receipt is for a different immutable selection")
+    if media_manifest.get("archive_etag") != expected_archive_etag:
+        raise ValueError("download receipt uses a different pinned archive ETag")
     selected = selection["selection"]
     expected: dict[tuple[str, str], dict] = {}
     for split in ("train", "validation"):
@@ -96,7 +104,7 @@ def validate_selected_media(
     for key, selected_row in expected.items():
         split, session_id = key
         item = actual[key]
-        if item.get("archive_etag") != selection.get("archive_etag"):
+        if item.get("archive_etag") != expected_archive_etag:
             raise ValueError(f"archive ETag mismatch for {session_id}")
         expected_size = int(selected_row["size_bytes"])
         path = (media_root / split / f"{session_id}.mp4").resolve(strict=True)
@@ -142,6 +150,9 @@ def validate_selected_media(
             abs(row["audio_duration_seconds"] - row["video_duration_seconds"])
             for row in reports
         ),
+        "audio_video_duration_tolerance_seconds_max": max(
+            row["audio_video_duration_tolerance_seconds"] for row in reports
+        ),
         "audio_video_duration_difference_max_video_frames": max(
             row["audio_video_duration_difference_seconds"]
             / row["video_frame_interval_seconds"]
@@ -155,6 +166,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--selection", type=Path, required=True)
     parser.add_argument("--media-manifest", type=Path, required=True)
+    parser.add_argument("--archive-etag", required=True)
     parser.add_argument("--annotation", type=Path, required=True)
     parser.add_argument("--media-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -171,6 +183,7 @@ def main() -> None:
         media_manifest=media_manifest,
         annotations=annotations,
         media_root=args.media_root,
+        expected_archive_etag=args.archive_etag,
         selection_sha256=selection_hash,
         media_manifest_sha256=media_hash,
     )

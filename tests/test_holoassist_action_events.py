@@ -120,6 +120,26 @@ def test_builder_uses_verified_video_duration_to_exclude_tail_event(tmp_path) ->
     assert report["train"]["excluded_event_counts"]["out_of_media_interval_excluded"] == 1
 
 
+def test_builder_disambiguates_reused_upstream_event_ids_by_record_position(tmp_path) -> None:
+    records, splits, selected, files, media_root = fixture(tmp_path)
+    records[0]["events"].append(
+        event(1, "Wrong Action, corrected by instructor verbally", 2.1, 2.3)
+    )
+
+    rows, _ = build_event_rows(
+        records=records,
+        split_ids=splits,
+        selected_sessions=selected,
+        media_files=files,
+        media_root=media_root,
+    )
+
+    assert [row["id"] for row in rows["train"] if row["id"].startswith("task-tr-1:1:")] == [
+        "task-tr-1:1:0",
+        "task-tr-1:1:4",
+    ]
+
+
 def test_builder_rejects_test_annotation_rows(tmp_path) -> None:
     records, splits, selected, files, media_root = fixture(tmp_path)
     records.append({"video_name": "te-1"})

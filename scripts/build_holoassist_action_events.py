@@ -191,7 +191,10 @@ def build_event_rows(
                     reasons["out_of_media_interval_excluded"] += 1
                     continue
                 event_id = str(event.get("id", event_position))
-                example_id = f"{record['taskId']}:{event_id}"
+                # Upstream event IDs can repeat across distinct fine-grained actions
+                # (and across action/conversation labels). Preserve the source ID and
+                # disambiguate with its stable position in the source record.
+                example_id = f"{record['taskId']}:{event_id}:{event_position}"
                 if example_id in seen_ids:
                     raise ValueError(f"duplicate action example ID: {example_id}")
                 seen_ids.add(example_id)

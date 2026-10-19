@@ -45,7 +45,6 @@ def media_facts(
 
 def fixture(tmp_path):
     selection = {
-        "archive_etag": '"pinned"',
         "selection": {
             "train": {"videos": [{"session_id": "tr-1", "size_bytes": 7}]},
             "validation": {"videos": [{"session_id": "va-1", "size_bytes": 7}]},
@@ -72,7 +71,11 @@ def fixture(tmp_path):
                 "videoMetadata": {"duration": {"raw": "00:00:03.25"}},
             }
         )
-    return selection, {"selection_sha256": "selection", "files": files}, annotations
+    return (
+        selection,
+        {"selection_sha256": "selection", "archive_etag": '"pinned"', "files": files},
+        annotations,
+    )
 
 
 def test_media_validation_requires_av_timing_and_exact_selected_ids(tmp_path, monkeypatch):
@@ -84,6 +87,7 @@ def test_media_validation_requires_av_timing_and_exact_selected_ids(tmp_path, mo
         media_manifest=manifest,
         annotations=annotations,
         media_root=tmp_path,
+        expected_archive_etag='"pinned"',
         selection_sha256="selection",
         media_manifest_sha256="manifest",
     )
@@ -104,6 +108,7 @@ def test_media_validation_rejects_av_duration_mismatch(tmp_path, monkeypatch):
             media_manifest=manifest,
             annotations=annotations,
             media_root=tmp_path,
+            expected_archive_etag='"pinned"',
             selection_sha256="selection",
             media_manifest_sha256="manifest",
         )
@@ -118,13 +123,36 @@ def test_media_validation_allows_two_video_frame_endpoint_difference(tmp_path, m
         media_manifest=manifest,
         annotations=annotations,
         media_root=tmp_path,
+        expected_archive_etag='"pinned"',
         selection_sha256="selection",
         media_manifest_sha256="manifest",
     )
 
     assert report["status"] == "PASS_HOLOASSIST_TRAINVAL_AV_MEDIA"
     assert report["media"][0]["audio_video_duration_difference_seconds"] == pytest.approx(0.064)
-    assert report["media"][0]["audio_video_duration_tolerance_seconds"] == pytest.approx(2 / 30)
+    assert report["media"][0]["audio_video_duration_tolerance_seconds"] == pytest.approx(
+        2 / 30 + 1024 / 48_000
+    )
+
+
+def test_media_validation_allows_aac_packet_rounding_after_two_video_frames(
+    tmp_path, monkeypatch
+):
+    media_facts(monkeypatch, audio_duration=3.318)
+    selection, manifest, annotations = fixture(tmp_path)
+
+    report = validate_selected_media(
+        selection=selection,
+        media_manifest=manifest,
+        annotations=annotations,
+        media_root=tmp_path,
+        expected_archive_etag='"pinned"',
+        selection_sha256="selection",
+        media_manifest_sha256="manifest",
+    )
+
+    assert report["status"] == "PASS_HOLOASSIST_TRAINVAL_AV_MEDIA"
+    assert report["media"][0]["audio_packet_interval_seconds"] == pytest.approx(1024 / 48_000)
 
 
 def test_media_validation_compares_annotation_duration_to_audio_endpoint(tmp_path, monkeypatch):
@@ -136,6 +164,7 @@ def test_media_validation_compares_annotation_duration_to_audio_endpoint(tmp_pat
         media_manifest=manifest,
         annotations=annotations,
         media_root=tmp_path,
+        expected_archive_etag='"pinned"',
         selection_sha256="selection",
         media_manifest_sha256="manifest",
     )
@@ -155,6 +184,7 @@ def test_media_validation_rejects_annotation_duration_mismatch(tmp_path, monkeyp
             media_manifest=manifest,
             annotations=annotations,
             media_root=tmp_path,
+            expected_archive_etag='"pinned"',
             selection_sha256="selection",
             media_manifest_sha256="manifest",
         )
@@ -171,6 +201,7 @@ def test_media_validation_rejects_manifest_for_other_selection(tmp_path, monkeyp
             media_manifest=manifest,
             annotations=annotations,
             media_root=tmp_path,
+            expected_archive_etag='"pinned"',
             selection_sha256="selection",
             media_manifest_sha256="manifest",
         )
