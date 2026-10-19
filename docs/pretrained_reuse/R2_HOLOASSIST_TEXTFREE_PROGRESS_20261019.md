@@ -554,3 +554,15 @@ media has completed. Receipt:
 (SHA-256 `c9291c30f1ca8f38a341491d4d8b32c7950c83d56a5a830f769c5187488db34e`).
 The attempt preflight points to this receipt. The local GPU was occupied by
 Orbitune at the last read; no GPU work was started.
+
+## Live media audit update (2026-10-19 07:20 UTC)
+
+The fixed download process remains active with its original selection and
+parameters. During the latest read it reached 182 completed train media files
+(17,647,483,758 bytes). A full-prefix independent audit recomputed the hashes
+and checked each selection identity, split, ETag, archive offset, path, and
+size; all 182 passed with zero mismatches. Validation remains 0 files. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T072055Z.json`
+(SHA-256 `0e2eb67293c093d789c267af607f18dac943160fc13ba88346d17a5b369bb09d`).
+The attempt preflight points to this audit. RTX 3080 was occupied by Orbitune
+at the most recent sample; no training or feature extraction was launched.
