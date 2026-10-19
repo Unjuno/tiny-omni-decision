@@ -2342,3 +2342,11 @@ cover all 175 unjournaled IDs: 174 pass and the known timing-boundary file fails
 the unchanged gate. Local hashes do not authenticate against the archive. Six
 partial transfers remain; PID 23276 is active and untouched. No extraction or
 fit has begun. See the detailed [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:01 UTC):** 644 selected
+videos are finalized locally; the source-hash-authenticated journal still covers
+467 and 177 are unjournaled. Local diagnostic receipts cover all 177 unique
+IDs (176 pass, one known timing-boundary failure); they do not authenticate
+those bytes against the archive. Six partial files remain and downloader PID
+23276 is still active. No feature extraction or fitting has started. See the
+[progress and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).

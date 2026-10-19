@@ -1721,3 +1721,17 @@ PID 23276 remained active, six partials totaled 46,137,344 bytes, and the
 original live journal remained at 467 rows; neither downloader nor data was
 modified. Feature extraction remains gated on completing and reconciling the
 pinned source-integrity chain.
+
+At 2026-10-19 12:01 UTC, two more newly finalized files passed the same
+CPU-only local gates. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1710Z.json`
+(SHA-256 `9AE44C24EC74F4C66FF29D5A812DEA931BECF44558F7DA048E5C7BA9D6DF991A`).
+A fresh identity-set reconciliation found 644 selected finalized MP4s, 467
+journal rows and 177 unjournaled files. The receipt set covers exactly 177
+unique unjournaled IDs, with no uncovered or unselected file; cumulative local
+diagnostic outcomes are now 176 passes and the one known timing-boundary
+failure. The pinned live journal SHA remains
+`4814de90b0ffff9cb32ac63b38f7aa8f3401d30598e7a1f56b6ddf8d573de8bc`.
+The downloader PID remained active; six `.part` files totaled 46,137,344 bytes.
+This is identity and local-media validation only; source-authenticated archive
+hash coverage remains the 467 journaled rows. No data or process was modified.
