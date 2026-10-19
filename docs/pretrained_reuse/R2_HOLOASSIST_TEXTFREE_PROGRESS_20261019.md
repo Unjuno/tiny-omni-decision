@@ -173,3 +173,13 @@ single-file PyAV decode smoke: H.264 896x504, eight decoded frames, mono AAC
 full-corpus validation or model quality. Receipt:
 `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\new-selection-av-decode-smoke-20261019T0549Z.json`
 (SHA-256 `8927bfd18c48a29e77cf36c0880fb584c38723a82613f433b2d8360872beea09`).
+
+At 2026-10-19 05:51 UTC, the long-lived Navvis range request completed and its
+full 505,664,476-byte media file was journaled and recomputed against its SHA.
+The downloader remains live with 75 completed files (5,108,356,544 bytes).
+An independent prefix audit verified all 75 files with zero errors; current
+receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T055047Z.json`
+(SHA-256 `cc964bd3ee40d08096fa2b90db08b909f4016d550a1b4b8c896d402bb6fcbb1c`).
+The 4 MiB probe was diagnostic only; it did not require restarting or modifying
+the long-running downloader.
