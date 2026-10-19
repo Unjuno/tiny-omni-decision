@@ -515,3 +515,19 @@ The latest read-only GPU sample shows Orbitune training active at roughly
 it occupied the GPU; the previous HotUGPU-gated CPU VideoPrism throughput smoke
 is separately recorded above. The latest repository CI passed for commit
 `8b62e33` (run [39214399656](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39214399656)).
+
+## Frozen input and media recheck (2026-10-19 07:15 UTC)
+
+The annotation JSON and official train/validation split archive were rehashed
+against the source-screen manifest immediately before the full media pipeline:
+annotation SHA-256 `cc7898b49958a62fe021ae2ffa53a709c3fd6f45fd3f893960b8aac6d13dfe9c`
+and split archive SHA-256 `e10674e7ac32957386d5e88afa60acf3335251b92ba2f8cfb97a736dc85e1621`; both match. Only file hashes were read in this recheck.
+
+The downloader reached 176 complete train files (17,154,179,785 bytes). A full
+prefix audit verified all 176 with zero selection, split, archive metadata,
+size, path, or SHA mismatches. No validation media has completed. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T071528Z.json`
+(SHA-256 `6c536a9e77003a78af3f839fbd2b556b20f276ff200921ee6f999b632241a600`).
+`run-preflight.json` now records both the current prefix receipt and pinned
+source-input hash recheck. The HoloAssist source annotation and split archive
+are unchanged; test labels/media remain unopened.
