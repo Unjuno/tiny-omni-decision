@@ -791,3 +791,13 @@ selection/split/ETag/offset checks with zero errors. Receipt:
 (SHA-256 `fcc41255b0024527a54066de33d6f3bbc77ef88a26917d8177f88305b985d46a`).
 PID 23276 remains active with four partials. C: had 135.41 GiB free and 40.17
 GiB headroom under the conservative remaining-download estimate.
+
+At 2026-10-19 17:57 JST, the chained download audit reached 349/1,306
+train videos (32,243,114,659 bytes). Two newly completed files were independently
+SHA-256 checked against the journal and frozen selection; the chained audit
+reports zero errors. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\media-prefix-audit-20261019T085722Z-chained.json`
+(SHA-256 `1534c19b396e957f0ff0b5b0e176fe56a167a9392bb52af4f79c89a143f11a23`).
+PID 23276 remains active with its original four-worker command. C: had 140.26
+GiB free and an estimated 45.45 GiB headroom after applying the 1.2x factor
+to remaining selected bytes. No validation/test media were opened.
