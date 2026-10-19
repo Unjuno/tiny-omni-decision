@@ -332,6 +332,25 @@ Their SHA-256 values are respectively `ED8DBEB89A43EFFFCA709F969DE30AC308189C3CB
 The media manifest SHA-256 is `E1BC330C0DB3325090FFC628C5CFCCBBD5DA9BC0D452A9129EC56172A66501D1`.
 The corpus still requires frozen-feature extraction and matched readout
 training; no HoloAssist task-quality result exists yet.
+
+The pinned MiniLM text bank completed on CPU for all 3,527 train-then-validation
+windows (3,527 x 384; 20 unique questions) in 2.55 seconds. Bank SHA-256:
+`53BBCE5EF42345DBE7431FD2369766716B16E51105F8F4ADF5208B523492F9A3`.
+The bank is at
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-video-pilot-160-207-seed17-pitchshifted-attempt-01\text-features-v1`.
+Its ordered sample-ID hash is
+`4abb55fb867a4307928f5237c85d253be21039e470bd3278c9777b40c80b203b`; the
+receipt binds to the exact window and AV-report hashes above. No fitting or
+test data use occurred.
+
+The first VideoPrism launch exposed a software-metadata naming mismatch before
+creating an output bank: the pinned local environment provides the
+`tensorflow-cpu` distribution, while the extractor queried the `tensorflow`
+distribution name. The extractor now resolves either distribution name and a
+regression test covers the locked CPU package. No existing environment or
+checkpoint was modified. The current CPU/JAX VideoPrism run has not yet
+started. Latest CPU checks: Ruff passes; pytest reports 2,430 passed and 11
+skipped.
 ## Sources
 
 - [Official HoloAssist overview and download links](https://holoassist.github.io/)

@@ -32,6 +32,16 @@ MINILM_WEIGHTS_SHA256 = "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596
 MINILM_PROCESSOR_SHA256 = "1c9cc30099243da1f4b287a315c03814279467a6316929f0d16e7f9940b52b0f"
 
 
+def tensorflow_distribution_version() -> str:
+    """Resolve TensorFlow's installed distribution name for pinned CPU builds."""
+    for distribution in ("tensorflow-cpu", "tensorflow"):
+        try:
+            return importlib.metadata.version(distribution)
+        except importlib.metadata.PackageNotFoundError:
+            pass
+    raise importlib.metadata.PackageNotFoundError("tensorflow-cpu or tensorflow")
+
+
 def require_gpu_slot() -> dict[str, int | str]:
     usage = subprocess.check_output(
         [
@@ -649,7 +659,7 @@ def main() -> None:
     if args.modality == "video":
         software_versions.update(
             jax=importlib.metadata.version("jax"),
-            tensorflow=importlib.metadata.version("tensorflow"),
+            tensorflow=tensorflow_distribution_version(),
         )
     else:
         software_versions.update(

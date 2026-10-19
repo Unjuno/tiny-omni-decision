@@ -26,6 +26,21 @@ def test_holoassist_extraction_binds_the_selected_media_plan():
         _require_frozen_selection({"selection_sha256": "0" * 64})
 
 
+def test_video_runtime_records_the_tensorflow_cpu_distribution(monkeypatch):
+    calls = []
+
+    def version(name):
+        calls.append(name)
+        if name == "tensorflow-cpu":
+            return "2.18.1"
+        raise extraction.importlib.metadata.PackageNotFoundError(name)
+
+    monkeypatch.setattr(extraction.importlib.metadata, "version", version)
+
+    assert extraction.tensorflow_distribution_version() == "2.18.1"
+    assert calls == ["tensorflow-cpu"]
+
+
 def test_whisper_runtime_hashes_are_checked_before_extraction(tmp_path, monkeypatch):
     model_dir = tmp_path / "whisper-runtime"
     model_dir.mkdir()
