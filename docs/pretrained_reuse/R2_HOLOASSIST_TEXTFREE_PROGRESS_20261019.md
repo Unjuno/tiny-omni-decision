@@ -2096,3 +2096,18 @@ this is a provenance/reproducibility concern, so the 254 locally checked files
 are not claimed to have source-archive hash authentication. Do not stop or
 restart the active downloader on this evidence alone. The journal snapshot
 pinned at 10:55Z still authenticates 467 files. CI for `19c3920` passed.
+
+At 12:46:19Z, all-receipt reconciliation
+`live-receipt-reconciliation-20261019T124600Z.json` (SHA-256
+`65cbf62913cd9c6f830967750ac5f91a3ddcaf5920a38ada06c1592e7daba39e`)
+matched 723 MP4s to selected train records (723/1,042 train; 0/264 validation)
+with no unselected files, size mismatches, receipt-hash conflicts or uncovered
+IDs. The pinned journal remains 467 rows; local receipts cover 256 unjournaled
+files (255 passes, the known timing-boundary failure unchanged). Two newly
+observed videos passed local checks in
+`unlogged-media-delta-20261019T124600Z.json` (SHA-256
+`81f60327dfcfa34905a8b4f402a74a42fdfc3b11132d9987a1c87d0bad0be484`). Seven
+partial files were present, and PID 23276 remained active. The journal's size
+and mtime are still unchanged at 218,310 bytes / 10:07:15Z while the process
+holds it open; the cause remains UNKNOWN. CI for `ed35df0` completed
+successfully. Unjournaled local checks still do not authenticate source bytes.

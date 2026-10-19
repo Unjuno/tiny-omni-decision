@@ -2545,3 +2545,12 @@ is active with four archive connections, but its open journal remains stale
 at 218,310 bytes since 10:07Z; cause UNKNOWN. Do not assume the unjournaled
 files are source-authenticated. CI for `19c3920` is green. See the
 [reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:46 UTC):** 723/1,042 train
+MP4s are finalized; validation remains 0/264. All 256 unjournaled files have
+deduplicated local receipts (255 pass; one known timing-boundary failure),
+with no uncovered/unselected IDs, size mismatches or hash conflicts. Only 467
+files remain source-hash authenticated by the pinned journal. PID 23276 is
+active with seven partials; its open progress journal is still stale at
+218,310 bytes since 10:07Z (cause UNKNOWN). CI for `ed35df0` is green. See the
+[reconciliation and provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
