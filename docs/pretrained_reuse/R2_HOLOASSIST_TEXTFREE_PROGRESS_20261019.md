@@ -1914,3 +1914,22 @@ and 203 unjournaled files. Existing receipt chains cover all 203 unique IDs:
 202 local passes and the one known timing-boundary failure, with no uncovered
 IDs. Six partials totaled 46,137,344 bytes. PID 23276 remains active; archive
 hash authentication still covers only the 467 journaled rows.
+
+At 2026-10-19 12:18 UTC, four additional finalized files passed local gates
+across three new delta receipts:
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T1219Z.json`
+(SHA-256 `347C7C25878CB6A49056194D6FE0F4CFF8B455363865E7AA24BD39E49E4A6CE4`),
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T121816Z.json`
+(SHA-256 `F3938DE8566FB975357978EC33DAAEB0C8641E751E3930D793497094FF3D069A`),
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T121832Z.json`
+(SHA-256 `17B7F7D9F89B3B36EF050B8526E8C661F9781A8705C358B69C07A8D936B136FA`),
+and `C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-attempt-01\unlogged-media-delta-20261019T121848Z.json`
+(SHA-256 `E2BA141F46ABB26DBE18A34700128ACE16B06BBDEE772C2C4F4EE7D70E6131DA`).
+The reconciled snapshot found 676 selected finalized files, 467 journal rows, and
+209 unjournaled IDs. The cumulative receipt chain covers all 209, with 208 local
+passes and the known timing-boundary failure; no uncovered IDs. Six partials
+totaled 46,137,344 bytes. PID 23276 remained active. An existing legacy file
+named `unlogged-media-delta-20261019T1220Z.json` had its own earlier
+`created_at_utc`; it was preserved and not overwritten or substituted for a
+current-time receipt. Archive authentication remains limited to journaled rows.
+

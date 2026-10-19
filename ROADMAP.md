@@ -2451,3 +2451,11 @@ videos finalized, 467 journaled, and 203 unjournaled. Local receipts cover all
 203 IDs (202 pass; one known timing-boundary failure), but do not extend archive
 hash authentication. PID 23276 remains active. See the
 [progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (12:18 UTC):** 676 selected
+videos are finalized, 467 journaled and 209 unjournaled. Local receipts cover
+all 209 IDs (208 pass, one known timing-boundary failure). Six partials remain;
+PID 23276 is active. A pre-existing legacy receipt with the sequential suffix
+`T1220Z` was preserved; its internal capture time is authoritative. No local
+hash extends archive authentication. See the
+[progress/provenance record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
