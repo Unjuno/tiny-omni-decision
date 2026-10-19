@@ -122,6 +122,14 @@ official test data are not loaded. A dedicated watcher waits for the existing
 pipeline to finish and then runs this evaluation through HotUGPU in a new
 output directory; it does not overlap the three-arm fitting run.
 
+A second watcher waits for the intervention evaluator and then computes seven
+paired session-cluster bootstrap comparisons (joint vs each unimodal arm, plus
+joint vs each fixed intervention), with 10,000 replicates and seed 1701. Each
+report records the paired prediction hash and percentile interval. These are
+validation-only diagnostic intervals; because checkpoint selection used the
+same validation sessions, they are not independent confirmation and cannot
+support a product promotion claim.
+
 CPU tests cover modality-mask behavior and immutability, deterministic
 session-level interventions, fixed sample-ID coverage, replay parity against
 the training evaluator, and receipt/hash-bound loading. The full CPU suite
