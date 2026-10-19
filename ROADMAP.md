@@ -2625,3 +2625,12 @@ failure); there are no unselected files, size mismatches, uncovered IDs, or
 receipt hash conflicts. Official archive-content hash authentication remains
 limited to 467 journal rows. PID 23276 is active with seven partials. CI for
 `0b876b8` is green. See the [progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-19 R2 HoloAssist acquisition update (13:05 UTC):** Full-receipt
+reconciliation matched 757 finalized train MP4s (757/1,042; validation 0/264)
+to the frozen selection. All 290 journal-external IDs are covered by local
+receipts (289 pass; one known timing-boundary failure), with zero unselected
+files, size mismatches, uncovered IDs, or receipt hash conflicts. The pinned
+journal authenticates 467 source hashes. PID 23276 remains active with seven
+partials. CI for `cb3e850` is green. Acquisition remains incomplete; see the
+[progress record](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
