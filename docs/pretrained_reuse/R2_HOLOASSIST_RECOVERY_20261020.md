@@ -102,12 +102,25 @@ stable disambiguation of repeated upstream event IDs.
 ## Ongoing frozen extraction and AV intervention follow-up
 
 The pinned VideoPrism extractor is running as attempt-03 under the cooperative
-HotUGPU reservation. At 2026-10-20 04:39 JST it had saved 768 / 12,261
-development-window embeddings, all finite. It remains on the frozen CPU/JAX
-path: 6,169 / 16,384 MiB is reserved and the RTX 3080 reports 0% utilization.
-The active process and continuation process are left untouched. Audio
-extraction, cache packing and the three matched readout arms have not started
-yet; the existing continuation waits for the completed atomic video bank.
+HotUGPU reservation. At 2026-10-20 04:50 JST it had saved 1,024 / 12,261
+development-window embeddings; all completed rows are finite. The progress NPZ
+is 3,027,305 bytes and its embedded fingerprint binds the frozen selection,
+corpus receipts, VideoPrism revision, checkpoint hash, preprocessing, and
+extractor source. An auxiliary `progress-fingerprint.json` still says 192 rows
+and is stale; it is not used as the progress authority. The completed-row count
+comes from the NPZ `completed` mask.
+
+The extraction remains on the frozen CPU/JAX path. The extractor itself sets
+`JAX_PLATFORMS=cpu` and hides CUDA for VideoPrism; this is not a GPU job even
+though HotUGPU reserves 6,000 MiB (6,169 MiB observed in use) and the RTX 3080
+reports 0% utilization. The same guard, extractor, post-extraction continuation,
+and two evaluation watchers remain alive; none has been restarted or altered.
+Across the saved intervals 896→960 and 960→1,024, throughput was about 20
+embeddings/minute (roughly 3.2 seconds per window). A naive projection at that
+short-run rate leaves about 9.8 hours for the remaining rows; this is a planning
+estimate, not a runtime guarantee. Audio extraction, cache packing, and the
+three matched readout arms have not started yet; the existing continuation
+waits for the completed atomic video bank.
 
 The readout's joint arm is followed by a separate fixed-validation intervention
 evaluator, `scripts/evaluate_holoassist_temporal_interventions.py`. It checks
