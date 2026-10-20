@@ -2921,3 +2921,13 @@ not meet the product quality target, and does not justify a capacity ceiling
 claim. Keep it diagnostic; proceed to a grounded, task-matched modality-use
 gate. See the [protocol](docs/pretrained_reuse/R2_CLEVRER_TEMPORAL_COVERAGE_PROTOCOL_20261020.md)
 and [complete results](docs/pretrained_reuse/R2_CLEVRER_TEMPORAL_COVERAGE_RESULTS_20261020.md).
+
+**2026-10-20 CLEVRER data audit:** The frozen coverage cohort and selected
+BiLSTM predictions pass scene/media/content and ID-integrity checks, but no
+training or validation example has target `count=5` even though `5` remains a
+supplied option. Color-query Accuracy is 15.5% on 58 selected-validation rows.
+Treat this task as incompletely covered; before another fit, prepare a new
+immutable grouped candidate split with positive support for every answer or
+explicitly revise task scope from source semantics, without synthetic
+oversampling or reuse of this development validation. See the
+[data/error audit](docs/pretrained_reuse/R2_CLEVRER_TEMPORAL_DATA_AUDIT_20261020.md).
