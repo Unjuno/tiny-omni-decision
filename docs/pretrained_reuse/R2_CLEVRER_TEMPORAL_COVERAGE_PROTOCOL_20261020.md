@@ -2,11 +2,11 @@
 
 ## Status
 
-CPU-only cohort construction and integrity preflight passed. Media acquisition
-is running to a separate artifact directory. No VideoPrism feature extraction
-or model fitting has started in this branch yet. Orbitune still owns the local
-GPU; any later CUDA job must use `scripts/run_with_hotgpu_guard.py` and wait for
-its cooperative handoff.
+CPU-only cohort construction and media integrity preflight passed. Media
+acquisition is complete; framewise feature extraction is running with the
+existing pinned CPU JAX environment. No model fitting has started. Orbitune
+still owns the local GPU; any later CUDA job must use
+`scripts/run_with_hotgpu_guard.py` and wait for its cooperative handoff.
 
 This is an additional development cohort for the R2 text-free video path. It
 does not replace the existing 512-question / 400-question reference fit or
@@ -53,8 +53,36 @@ is `b450fcfcb6004a0f1678bd0b6994e9a613a86dd38c94ef859a2db29b1655204b`.
 The split scene hashes are `c6b5e43943dbc3a8b371786ccec8084c426e09f5a5be95647fad3b505bda476a`
 (train) and `17332aee3f034e9918ba6c00b456b3b80fdfadec600c788eebdcc85a86624612`
 (validation). Preflight binds the source questions, scene-exposure receipt and
-all candidate annotation hashes. Video bytes and their hashes are not yet
-included in the preflight artifact.
+all candidate annotation hashes.
+
+## Media acquisition receipt
+
+Selected media were fetched by ZIP byte ranges from the pinned CLEVRER train
+archive. The archive had 20,020 directory entries and the expected size and
+ETag. The complete archive SHA-256 was not computed; each selected MP4 was
+individually extracted, checked for an MP4 signature and SHA-256 hashed.
+
+- Artifact directory:
+  `C:/CodexArtifacts/pretrained-reuse-r2/clevrer-textfree-temporal-media-v1-attempt-01/`
+- Verified files: 405 (324 train, 81 validation), 518,188,187 uncompressed
+  bytes.
+- ZIP range bytes read: 416,251,058 for train members and 104,067,467 for
+  validation members; elapsed time 1,366.63 seconds.
+- Train/validation media SHA-256 overlap: zero.
+- Media-hash-list digests: train
+  `cdd88baf0428ecdfd66db8967ab854234676036220d9403022f7fbf30cac4863`,
+  validation
+  `a49db7042629411b9a98505fae5495a57491aba12e215f342c6b8196a7bc421d`.
+- Frozen media manifests: `train.jsonl` SHA-256
+  `282174947f96cb8e33f8ada4226b4eda15a16c82ba4d45656e7cfb64b3958ed9`,
+  `validation.jsonl` SHA-256
+  `84f87d52bd612375314602a74295da4af7af2e8142065b47cb1612bd28efca38`.
+- `fetch-report.json` SHA-256:
+  `7b8deb1a4b8ca2694801233fe11c007037be11278ee2641af1a9d35bcce72425`.
+
+The fetch report binds the prepared corpus manifests to the media-bearing
+manifests. The separate CPU preflight report also binds the scene partition to
+the source questions and annotation receipt.
 
 ## Planned readout comparison
 
