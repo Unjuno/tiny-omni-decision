@@ -125,3 +125,15 @@ epoch 3 with 246,115 active trainable parameters. Both result receipts attest
 SHA-256 `d92e4c91c236c69548f8fa0b58826e8afc853372ebf7a59b1e64567034f8df57`,
 and their recorded `best.pt` hashes match the present files. No checkpoint or
 fit result was modified.
+
+A second partial CPU PTS audit covered a stable atomic manifest snapshot of 80
+complete videos / 204 events while acquisition continued. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-fresh-holdout-pts-smoke-03\result.json`, SHA-256
+`18513ad3d318a9b13e68cf3f1302ef6d406ab9faf4f1bb46248ffce0be81c8c`. It reports
+`PASS_PARTIAL_FRESH_HOLDOUT_PTS_SMOKE`, zero incomplete audio intervals, zero
+right-censored events, and 1,671 exact unique media hashes including prior
+manifests. The audited media manifest snapshot SHA-256 is
+`db95782c3bbaa17f2e3f7a39dbc32f91e83fd57a30f3ee50638cef9b6673dfc1`. At the
+post-audit check, acquisition was still `RUNNING` and had advanced to 87 videos.
+This is an incremental integrity check only; it does not authorize model feature
+extraction or replace the required complete 200-video audit.
