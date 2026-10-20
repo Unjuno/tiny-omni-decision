@@ -214,6 +214,23 @@ The candidate remains unadmitted. Any future use needs an explicit visibility
 filter/QA, a decision about clips without a uniquely framed participant, and
 synchronization checks before feature extraction or a GPU run.
 
+### Candidate-wide train-only frame materialization
+
+To avoid treating the 24-row diagnostic as representative, a deterministic
+CPU-only screen materialized target-camera frames at 15%, 50%, and 85% for all
+213 SA candidate windows that pass the 80% same-agent segment-union threshold.
+The one below-threshold IS1000c window was excluded as already quarantined. The
+result is 639 requested target-camera views across 12 contact sheets. This is
+only a review aid: the frames have not received a row-by-row categorical review,
+do not validate speaker identity or AV synchronization, and do not admit AMI for
+feature extraction or model use. No validation/test or SC media was opened.
+
+External receipt: `C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\train-visual-qa-all-sa-20261021\manifest.json`
+(SHA-256 `5a1bf48d478c889002c2c238e0ced7f376f2494ef490848a54a01c8fa2b61882`).
+It pins both preflight inputs, the segment-join receipt, every sample ID/time,
+the builder script, and all contact-sheet hashes. Media-derived frames remain
+outside Git.
+
 ## Decision
 
 Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow,

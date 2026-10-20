@@ -149,7 +149,9 @@
       "train_visual_qa_script_sha256": "2968f158e288469adbb971b0e0503b064ab73c9d0a2a53bb6cdc68b5caca832d",
       "train_visual_qa_contact_sheet_01_sha256": "25742864f306570c6b9bfe4e1de039a5b8f0d5c22b23c2c1d61185705b2efee5",
       "train_visual_qa_contact_sheet_02_sha256": "b1eec24b7af9a98e6b5e60dd1e1ec9ce0d2414b996b7ac21904aeb61bb940e33",
-      "train_visual_qa_detail_sheet_sha256": "cffb1fbb6de48fa853865358ecba5f403840e8b33e8802e57bd848df3d363e91"
+      "train_visual_qa_detail_sheet_sha256": "cffb1fbb6de48fa853865358ecba5f403840e8b33e8802e57bd848df3d363e91",
+      "train_visual_qa_all_sa_receipt_sha256": "5a1bf48d478c889002c2c238e0ced7f376f2494ef490848a54a01c8fa2b61882",
+      "train_visual_qa_all_sa_builder_sha256": "0da948a76f8fe09e95275cd91262393b737901862b4624e93ea2f2bb8929e2b7"
     },
     "third_party_mirror_used": false,
     "resolution": "official selector and official AMI mirror used for selected files where available; selector response for TS3004a was stale and not applied; TS3006a and IS1000a–d were acquired from official mirror URLs after per-file HEAD checks; manual v1.6.2 members were selectively extracted; no third-party mirror",
@@ -176,12 +178,17 @@
     "train_visual_qa_clear_target_views": 18,
     "train_visual_qa_no_clear_person": 2,
     "train_visual_qa_limited_or_ambiguous": 4,
-    "train_visual_qa_is_prevalence_estimate": false
+    "train_visual_qa_is_prevalence_estimate": false,
+    "train_visual_qa_all_sa_candidates_materialized": 213,
+    "train_visual_qa_all_sa_requested_views": 639,
+    "train_visual_qa_all_sa_contact_sheets": 12,
+    "train_visual_qa_all_sa_row_review_complete": false
   },
   "blockers": [
     "four SA parent sets and all five SB parent sets are screened, but SA coverage is uneven: ES2002/2005/2006 have only submeeting a while IS1000 includes a–d",
     "214 preliminary train candidates and 111 validation candidates remain weakly labeled; union-overlap segment audit passes 213/214 SA candidates, with one IS1000c window quarantined at 76.7%",
     "a deterministic seed-17 train-only visual-presence screen of 24 windows found 18 clear target views, 2 with no clear person, and 4 limited/ambiguous; this is not a prevalence estimate or speaker-label validation",
+    "all 213 segment-join-passing SA train candidates now have three target-camera frames materialized for review, but row-by-row review is pending and no visibility/synchronization admission claim follows",
     "audio/video clock synchronization and active-speaker truth remain unverified; 28 fully decoded streams are each one frame below AVI declaration, while five earlier meetings only have sampled decode",
     "SA/SB participant IDs are disjoint in official metadata, but media identity, normalized content and near-duplicate cross-split audits remain incomplete",
     "ES2005a media spans about 8 minutes while meeting metadata says 958 seconds; investigate source/time coverage",
