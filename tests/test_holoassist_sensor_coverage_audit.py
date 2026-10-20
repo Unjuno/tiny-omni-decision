@@ -16,6 +16,7 @@ def _rows() -> list[dict]:
             "window_count": 2,
             "target": 1,
             "action_count": 4,
+            "incorrect_action_count": 1,
         },
         {
             "id": "session-a:window-0001",
@@ -25,6 +26,7 @@ def _rows() -> list[dict]:
             "window_count": 2,
             "target": 0,
             "action_count": 1,
+            "incorrect_action_count": 0,
         },
     ]
 
@@ -46,6 +48,7 @@ def test_audit_separates_zero_padding_from_zero_observed_coverage() -> None:
         25 / 26 * 100
     )
     assert result["labeled_window_groups"]["final_window"]["mean_padded_bins"] == 25
+    assert result["labeled_window_groups"]["nonfinal_window"]["incorrect_action_rate"] == 0.25
 
 
 def test_audit_rejects_misaligned_sample_ids() -> None:

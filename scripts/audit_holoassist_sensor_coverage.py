@@ -79,6 +79,21 @@ def audit_split(rows: list[dict], sample_ids: np.ndarray, features: np.ndarray) 
             "mean_action_count": float(
                 np.asarray([int(rows[index]["action_count"]) for index in indices]).mean()
             ),
+            "incorrect_action_count": int(
+                sum(int(rows[index]["incorrect_action_count"]) for index in indices)
+            ),
+            "total_action_count": int(
+                sum(int(rows[index]["action_count"]) for index in indices)
+            ),
+            "incorrect_action_rate": float(
+                sum(int(rows[index]["incorrect_action_count"]) for index in indices)
+                / sum(int(rows[index]["action_count"]) for index in indices)
+            ),
+            "incorrect_actions_per_100_window_seconds": float(
+                100.0
+                * sum(int(rows[index]["incorrect_action_count"]) for index in indices)
+                / sum(durations[index] for index in indices)
+            ),
         }
 
     total_zero = int(zero_coverage.sum())

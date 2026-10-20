@@ -22,7 +22,7 @@ start/end times and verifies the feature row IDs match the JSONL IDs in order.
 
 The audit script is `scripts/audit_holoassist_sensor_coverage.py`. Its output
 is stored outside Git at
-`C:/CodexArtifacts/pretrained-reuse-r2/holoassist-textfree-unused-train-recovery-02/coverage-audit-attempt-01/coverage-audit.json`.
+`C:/CodexArtifacts/pretrained-reuse-r2/holoassist-textfree-unused-train-recovery-02/coverage-audit-attempt-02/coverage-audit.json`.
 The output states `sealed_audit_loaded: false`. Input SHA-256 values are
 recorded in that JSON:
 
@@ -39,6 +39,11 @@ recorded in that JSON:
 | Train | 14,543 | 99.732% | 39 / 278,386 valid bins | 12.26% (873 windows) | 30.02% (8,478 windows) |
 | Development validation | 3,709 | 99.757% | 9 / 71,240 valid bins | 13.90% (223 windows) | 32.00% (2,150 windows) |
 
+| Split | Final-window action error rate | Full-window action error rate | Final-window errors / 100 sec | Full-window errors / 100 sec |
+|---|---:|---:|---:|---:|
+| Train | 2.57% (138 / 5,363) | 4.94% (4,116 / 83,399) | 0.894 | 1.618 |
+| Development validation | 2.73% (36 / 1,319) | 5.25% (1,126 / 21,442) | 0.930 | 1.746 |
+
 All three sensor coverage channels are exactly identical in the stored
 features. Every padding bin has zero coverage. The remaining valid zero
 coverage bins are rare (0.0140% of valid train bins and 0.0126% of valid
@@ -47,11 +52,14 @@ validation bins) and are consistent with genuinely unobserved 1-second bins.
 The final windows average 17.67 seconds in train and 17.36 seconds in
 validation; each has about 11.8–12.1 padded bins. They also contain fewer
 actions on average (6.14 train / 5.91 validation) than the full windows
-(9.84 / 9.97). Since the target is positive when **any** action in the window
-is incorrect, shorter windows naturally have less opportunity to receive a
-positive label. Thus the coverage vector exposes window duration/final-window
-status, which correlates with label prevalence. This is a data/task-design
-confound, not proof of leakage or the sole cause of the AVS result.
+(9.84 / 9.97). The action-level incorrect rate is lower in the final windows
+too (2.57% vs 4.94% train; 2.73% vs 5.25% validation), so the lower
+window-positive prevalence cannot be attributed to shorter exposure alone.
+The error rate per 100 window-seconds is also lower in final windows, so this
+dataset's final tails differ in both exposure and observed event composition.
+Coverage nevertheless reveals duration/final-window status, which is
+associated with target prevalence. This is a data/task-design confound, not
+proof of leakage or the sole cause of the AVS result.
 
 ## Interpretation and follow-up
 
@@ -74,7 +82,7 @@ its artifacts unchanged as the historical baseline.
 python -m scripts.audit_holoassist_sensor_coverage `
   --windows-dir C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\temporal-windows-v2 `
   --imu-dir C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\imu-features-attempt-01 `
-  --output C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\coverage-audit-attempt-01\coverage-audit.json
+  --output C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\coverage-audit-attempt-02\coverage-audit.json
 ```
 
 Three CPU unit tests cover padding-vs-valid zero accounting, sample-ID order
