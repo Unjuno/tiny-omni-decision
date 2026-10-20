@@ -97,6 +97,9 @@ def test_coverage_schedules_match_updates_and_validation_opportunities(
 
     assert schedule["total_optimizer_updates"] == 2048
     assert schedule["full_run_example_exposures"] == 131072
+    assert schedule["repeat_example_exposures_after_first_use"] == (
+        (epochs - 1) * train_count
+    )
     assert validation_updates == 32
 
 

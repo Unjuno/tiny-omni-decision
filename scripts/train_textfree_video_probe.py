@@ -118,6 +118,7 @@ def _training_schedule(
         "updates_per_epoch": updates_per_epoch,
         "total_optimizer_updates": total_updates,
         "full_run_example_exposures": epochs * train_count,
+        "repeat_example_exposures_after_first_use": (epochs - 1) * train_count,
     }
 
 
@@ -1175,7 +1176,9 @@ def main() -> None:
         "train_unique_media_count": len({row["media_sha256"] for row in train_rows}),
         "full_run_example_exposures_per_variant": schedule["full_run_example_exposures"],
         "unique_examples_consumed_per_variant": len({row["id"] for row in train_rows}),
-        "repeat_exposures_per_variant_after_first_use": (EPOCHS - 1) * len(train_rows),
+        "repeat_exposures_per_variant_after_first_use": schedule[
+            "repeat_example_exposures_after_first_use"
+        ],
         "validation_examples": len(validation_rows),
         "validation_unique_scenes": len({row["scene_group_id"] for row in validation_rows}),
         "validation_used_for_checkpoint_selection": True,
