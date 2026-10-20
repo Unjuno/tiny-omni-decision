@@ -12,6 +12,16 @@ loaded, and no prior pilot, Teacher, QAT or checkpoint artifact was changed.
 See the [completed readout and intervention report](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_READOUT_RESULTS_20261020.md)
 and the [corpus recovery report](docs/pretrained_reuse/R2_HOLOASSIST_RECOVERY_20261020.md).
 
+**2026-10-20 R2 FineVideo source screen:** FineVideo's official card describes
+43,751 CC-BY-attributed YouTube-Commons videos with transcripts, time-coded
+annotations and generated QA, but exposes only a `train` split and requires
+gated access, source-level attribution/removal checks, and a fresh
+video-grouped development split. Its generated QA does not yet prove that a
+decision requires both audio and video. Keep it at **REVIEW** pending a pinned
+revision, row-level rights/provenance audit, and an independently checked
+both-stream task. No data or media were loaded and no GPU job was started.
+See the [FineVideo source screen](docs/pretrained_reuse/R2_FINEVIDEO_SOURCE_SCREEN_20261020.md).
+
 **2026-10-20 R2 HoloAssist synchronized IMU diagnostic:** Added official
 train/development-validation IMU features and completed matched AV, sensor-only,
 and AV+sensor readouts. AV remained best on selected validation checkpoints.
