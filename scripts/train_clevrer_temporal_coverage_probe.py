@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import platform
 import random
 import subprocess
@@ -461,6 +462,7 @@ def main() -> None:
     if args.preflight_only:
         print(json.dumps(preflight, indent=2, sort_keys=True))
         return
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     if args.device == "auto":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else:
