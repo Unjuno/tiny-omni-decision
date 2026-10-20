@@ -1,16 +1,18 @@
-# AMI cross-modal speaker-to-face task screen — 2026-10-21
+# AMI audio/video source and task screen — 2026-10-21
 
 ## Decision
 
-Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow audio/video
-speaker-to-face matching task. The official corpus page states CC BY 4.0 for the
-corpus and annotations, and its recommended scenario-only split provides separate
-training and development meeting groups. This is materially more promising for an
-input-complementarity probe than a generic video QA source. It is **not admitted**
-for training or quality claims yet: no media or annotations were downloaded,
-split-level participant disjointness has not been checked from the actual metadata,
-and the official download workflow has not been exercised. The unseen SC evaluation
-partition and its annotations were not opened or used.
+Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow, meeting-local
+audio/video task. The official corpus and annotation pages state CC BY 4.0, and the
+recommended scenario-only split separates train (SA), development (SB), and unseen
+evaluation (SC) by parent recording sets. We exercised the official selector and
+downloaded one SA meeting and one SB meeting. Hashes, selected word annotations, and
+camera/channel mappings are recorded in an external receipt. The selected meetings'
+participant IDs are disjoint, but one parent set per partition is not a split-wide
+overlap audit. The candidate is **not admitted** for training or quality claims:
+stream durations differ, exact synchronization has not been validated, word times
+are alignment-derived, and privacy/governance plus broader split integrity remain
+open. No SC annotation member was extracted or read.
 
 ## Candidate Decision task
 
@@ -25,9 +27,10 @@ not general meeting understanding or biometric identification across recordings.
 This construction makes the modalities structurally complementary: audio-only has
 no visible candidates, while video-only has no voice reference. It still needs
 empirical controls: a model might exploit camera layout, repeated session structure,
-visible speaking activity, option order, or recording artifacts. Each proposed row
-must be checked for those shortcuts. Do not claim useful fusion from input
-sensitivity alone.
+option order, or recording artifacts. Same-time active-camera attribution is a
+lower-risk alternative, but video-only mouth-motion cues may solve it; require
+audio-only, video-only, and shuffled-alignment controls before claiming both inputs
+are useful. Do not claim useful fusion from input sensitivity alone.
 
 Potential labels can be derived from manual speaker-tagged word intervals and the
 official meeting-level camera/audio-channel map. The official transcription page
@@ -53,64 +56,78 @@ recognition, or cross-meeting identity matching.
   SB as 20 development meetings in 5 sets, and SC as 20 unseen evaluation meetings
   in 5 sets. A set is the four submeetings `a`–`d` from one recording session. Keep
   the full set together. Use SA for train and SB for validation; leave SC and all
-  its labels untouched. The actual participant-ID disjointness and content hashes
-  still need to be verified from the selected SA/SB metadata before admission.
-- The official signal documentation reports 16 kHz audio, per-channel WAVs, a
-  mixed headset recording, repaired synchronized video, low-resolution 350×280
-  research video, and a machine-readable camera/channel-to-participant mapping in
-  `corpusResources/meetings.xml`. These are upstream descriptions, not local media
-  integrity or sync measurements.
-- Official per-meeting size estimates are about 400 MB for low-size DivX video and
-  30 MB for the headset mix. A bounded one-SA/one-SB media probe is therefore about
-  860 MB before annotations and derived artifacts. The current C: free space was
-  about 26.6 GB at this screen; this is ample for a bounded probe but not the full
-  corpus.
+  its labels untouched. For selected meetings ES2002a (SA) and ES2003a (SB), the
+  participant-ID intersection is empty and each has four speaker-to-camera/channel
+  mappings. This covers one parent set per partition, not split-wide separation.
+- The official signal documentation reports 16 kHz audio, a mixed headset recording,
+  repaired synchronized video, and a machine-readable camera/channel-to-participant
+  mapping in `corpusResources/meetings.xml`. Locally, both headset WAVs are mono
+  16 kHz PCM and all eight AVI files are MPEG-4 at 352×288 and 25 fps. Start/mid/90%-
+  point samples decoded in every selected file; this is not a full decode or a sync
+  proof.
+- ES2002a has 1,272.64 s of audio and 1,230.40–1,248.72 s across four camera streams
+  (meeting metadata: 1,242 s). ES2003a has 1,139.77 s of audio and 1,125.80–1,128.28
+  s of video (metadata: 1,124 s). A word interval in ES2003a extends beyond the
+  shortest camera stream. Exclude unsafe boundaries and verify sync before clipping.
+- The official chooser estimated 636 MB for the chosen meeting/stream selection.
+  We downloaded only four close-ups and one headset mix per meeting: 373,953,060
+  bytes total. Other streams were not downloaded.
 - The official transcription page says each meeting has a word-level NXT transcript
   synchronized to audio, but the word/phoneme timings are forced-alignment outputs;
-  it also lists known transcript/transform errors. Any derived event labels need
-  TRAIN-only alignment QA and explicit uncertainty filtering.
+  it also lists known transcript/transform errors. Selected archive contents also
+  include speaker segment XML with `transcriber_start`/`transcriber_end`. The exact
+  relation between these segment intervals and the media clocks still needs QA.
 - The consent/ethics page describes the original project review process and
   provides a blank participant consent form. Public release terms do not remove
   privacy concerns around recognizable faces and voices. Keep any future probe
   within meeting-local matching, avoid publishing media or identity outputs, and
   complete a purpose-specific governance review before any product claim.
 
-## Access attempt and current blocker
+## Acquisition and current blocker
 
-At 2026-10-21, a read-only GET of the official download chooser from the local
-PowerShell environment returned HTTP 403. Direct HTTP HEAD checks against the
-official mirror returned 200 for `ES2002a.Closeup1.avi` and
-`ES2002a.Mix-Headset.wav` (SA training), but 403 for the corresponding
-`ES2003a.Closeup1.avi` and `ES2003a.Mix-Headset.wav` (SB development). The official
-SA directory index lists the four low-resolution close-up videos at approximately
-37–58 MB each. No media or annotation bytes were downloaded, no annotation archive
-was opened, and no host outside the official AMI domain was used. This does not
-prove the source is globally unavailable; it means the local official route cannot
-currently provide matched train/validation inputs. Do not work around that response
-with a third-party mirror.
+The official chooser was used to select ES2002a (SA) and ES2003a (SB), submeeting
+`a`, low-size close-up video, and headset mix. It generated the official 636 MB
+estimate, manifest, and Windows download script. Only the eight close-ups and two
+headset WAVs were downloaded from the official AMI mirror; all 10 byte counts and
+SHA-256 values match the external download receipt. An optional overview file
+returned 403 and was not required. The official manual annotation archive v1.6.2
+was downloaded (22,887,865 bytes; SHA-256
+`b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d`). Only the
+eight word XML files for ES2002a/ES2003a and `corpusResources/meetings.xml` were
+extracted. The original all-split archive remains intact; no SC annotation member
+was extracted or read. No third-party mirror was used.
 
-The GPU was occupied by the unrelated Orbitune training process during this screen.
-No GPU job was started. A future real encoder smoke must use the repository's
-`scripts/run_with_hotgpu_guard.py` cooperative reservation path after source
-eligibility, selected media integrity, and an exact smoke command are fixed.
+The selected word files contain 3,218 timed entries for ES2002a and 2,461 for
+ES2003a; the selected segment files contain 277 and 134 segments respectively. A
+strict preliminary screen (1–8 s, no other annotated speaker overlap, fully within
+the shortest audio/video duration with a 2 s boundary margin) leaves 29 SA and 35 SB
+candidate windows. These are not frozen examples or quality metrics; they show that
+more parent sets are needed before training or model selection. Exact asset hashes,
+annotation hashes, and sampled media metadata are in
+`C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021`; media and labels
+were kept outside Git.
+
+The RTX 3080 Laptop GPU remains occupied by the unrelated Orbitune training process
+(last observed at 15,821/16,384 MiB and 66% utilization). No GPU job was started.
+Any later GPU smoke must start through `scripts/run_with_hotgpu_guard.py`, which
+holds the child from launch until the device yields. The current data/synchrony gate
+is not sufficient to justify an encoder run.
 
 ## Admission gates before any model run
 
-1. Obtain only a permitted official selector-based download for fixed SA and SB
-   meetings. Do not download or inspect SC signals, annotations, or predictions.
-2. Pin the official manual-annotation release and hash; extract only the named SA
-   and SB entries. Keep the all-split archive sealed or avoid acquiring it if a
-   split-selective official source exists.
-3. Verify every selected annotation interval joins to a valid speaker and camera
-   mapping; verify audio/video duration, synchronization, missing streams, and
-   selected-file SHA-256 values.
-4. Prove zero meeting-session, participant, media, normalized-content, and
+1. Expand to more than one parent set per SA/SB partition before assessing
+   train/validation generalization. Keep all `a`–`d` sessions from a parent set
+   together. Do not download or inspect SC signals, annotations, or predictions.
+2. Verify every selected annotation interval joins to a valid speaker and camera
+   mapping; reconcile audio/video durations and synchronization; full-decode only
+   selected files; and retain file hashes.
+3. Prove zero meeting-session, participant, media, normalized-content, and
    near-duplicate overlap between SA and SB. Group all `a`–`d` sessions by parent
    set. Exclude the task if the official split does not provide actor disjointness.
-5. Freeze a balanced task manifest and answer-generation rule before encoding.
+4. Freeze a balanced task manifest and answer-generation rule before encoding.
    Include same-meeting hard negatives, randomized candidate order, temporal
    non-overlap between reference and candidate clips, and task-leakage checks.
-6. Compare audio+video with structurally valid audio-only, video-only, and shuffled
+5. Compare audio+video with structurally valid audio-only, video-only, and shuffled
    alignment controls. Report per-meeting and per-set Accuracy, NLL, Brier, ECE,
    uncertainty by parent set, coverage, and calibration. Five SB groups are too
    few for a strong independent quality claim; this is initially a feasibility
@@ -118,17 +135,19 @@ eligibility, selected media integrity, and an exact smoke command are fixed.
 
 ## Result of this screen
 
-AMI is a **better-structured candidate to investigate next**, not an admitted
-dataset. The next meaningful action is to resolve official split-selective access
-and prove SA/SB participant disjointness. If either fails, stop this source path
-without training. No Teacher, checkpoint, sealed audit, existing corpus, or model
-artifact was modified.
+AMI is a **usable source for a bounded integrity probe**, not an admitted training
+or evaluation dataset. Next validate timestamp synchronization and label quality
+on training-only examples, then obtain additional SA/SB parent sets through the
+official selector and prove group-level separation. If synchronization or
+participant separation fails, stop this source path without training. No Teacher,
+checkpoint, sealed audit, existing corpus, or model artifact was modified.
 
 ## Official sources
 
 - [AMI Meeting Corpus home](https://groups.inf.ed.ac.uk/ami/)
 - [AMI corpus license](https://groups.inf.ed.ac.uk/ami/corpus/license.shtml)
 - [Official download page](https://groups.inf.ed.ac.uk/ami/download/)
+- [Official manual annotation archive v1.6.2](https://groups.inf.ed.ac.uk/ami/AMICorpusAnnotations/ami_public_manual_1.6.2.zip)
 - [Recommended training/development/unseen split](https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml)
 - [Audio/video signal formats and camera/channel mapping](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
 - [Transcription format and timing caveats](https://groups.inf.ed.ac.uk/ami/corpus/transcription.shtml)

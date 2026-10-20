@@ -1,12 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
 **2026-10-21 AMI cross-modal task screen:** AMI is a review-only candidate for
-meeting-local voice-to-face matching. Official CC BY 4.0 terms and scenario-only
-SA/SB/SC group definitions are documented, but no data was downloaded and
-participant disjointness was not verified. Local HEAD checks returned 200 for one
-SA audio/video pair but 403 for the matched SB pair; the download chooser also
-returned 403. Keep SC unseen and do not start a model run until permitted official
-acquisition and SA/SB integrity gates pass. See
+meeting-local voice-to-face matching. Official CC BY 4.0 acquisition supplied one
+SA and one SB meeting (10 media files, 373,953,060 bytes) and selected v1.6.2 word
+annotations; file hashes and sampled decoding passed. The two selected meetings'
+participant IDs do not overlap, but this is not a split-wide proof. Audio/video
+durations differ, exact synchronization and label quality remain unverified, and no
+GPU run was started. Keep SC annotations unopened and the source at REVIEW. See
 [`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
 
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched

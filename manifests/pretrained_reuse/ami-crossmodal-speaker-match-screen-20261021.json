@@ -14,11 +14,15 @@
     "split_page": "https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml",
     "signals_page": "https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml",
     "ethics_page": "https://groups.inf.ed.ac.uk/ami/corpus/ethicsandconsent.shtml",
-    "annotation_release": "manual annotations v1.6.2 (official page states 22 MB)",
-    "source_revision": null,
-    "archive_sha256": null,
-    "local_media": false,
-    "local_annotations": false
+    "annotation_release": "manual annotations v1.6.2",
+    "source_revision": "official selector-generated media manifest amiBuild-214757-Tue-Oct-20-2026; manual annotations v1.6.2",
+    "archive_sha256": "b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d",
+    "archive_bytes": 22887865,
+    "media_manifest_sha256": "E6AE323CB8B078E0E578A17DE5054DFA5BC3058235479E47615FE2D68E9F3750",
+    "local_media": true,
+    "local_annotations": true,
+    "external_artifact_root": "C:/CodexArtifacts/pretrained-reuse-r2/ami-av-probe-20261021",
+    "annotation_extraction_policy": "only ES2002a and ES2003a word/segment XML files plus corpusResources/meetings.xml; no SC annotation members extracted or read"
   },
   "proposed_task": {
     "name": "meeting_local_voice_to_face_matching",
@@ -36,33 +40,50 @@
     "validation": {"partition": "SB", "meetings": 20, "sets": 5},
     "sealed_unseen": {"partition": "SC", "meetings": 20, "sets": 5, "accessed": false},
     "participant_disjointness_verified": false,
+    "selected_meetings": ["ES2002a", "ES2003a"],
+    "selected_meeting_participant_overlap": false,
     "media_overlap_verified": false
   },
   "access": {
-    "official_download_chooser_http_status": 403,
-    "official_asset_head_checks": {
+    "official_download_chooser_http_status": 200,
+    "pre_selector_single_slash_head_checks": {
       "SA_ES2002a_Closeup1_avi": 200,
       "SA_ES2002a_Mix_Headset_wav": 200,
       "SB_ES2003a_Closeup1_avi": 403,
       "SB_ES2003a_Mix_Headset_wav": 403
     },
+    "selector_generated_asset_downloads_succeeded": true,
     "official_train_video_index_checked": true,
-    "media_annotation_bytes_downloaded": 0,
+    "official_selector_manifest_estimated_bytes": 636000000,
+    "selected_media_bytes_downloaded": 373953060,
+    "selected_annotation_bytes_extracted": 673712,
+    "all_selected_media_hashes_verified": true,
+    "sampled_audio_and_video_decode": true,
+    "annotation_members_extracted": 17,
+    "sc_annotation_content_accessed": false,
+    "external_receipts": {
+      "media_download_receipt_sha256": "06C0CEFBFF0C4B0C94289F97DF48E5F54A273E4FD531C8D4C745B1697C48076E",
+      "media_annotation_preflight_sha256": "12032F62BA00BEB7C4571F79F5C710DCD7A29BA8D13F7F7A8F0E74FD2C586267",
+      "annotation_extraction_receipt_sha256": "11EA84202DAAB2C5A073A8A080E0E6F15F7AED6455272B8D33322A14AF02350B"
+    },
     "third_party_mirror_used": false,
-    "resolution": "pending; no alternate-host workaround"
+    "resolution": "official selector and official AMI mirror succeeded for selected media; official manual annotation archive downloaded and selectively extracted; no third-party mirror"
   },
   "resource_estimates": {
     "official_low_size_video_mb_per_meeting_approx": 400,
     "official_headset_mix_mb_per_meeting_approx": 30,
-    "one_train_plus_one_validation_meeting_mb_approx": 860,
-    "local_free_disk_gb_at_screen_approx": 26.6,
+    "one_train_plus_one_validation_meeting_mb_approx": 636,
+    "local_selected_media_bytes": 373953060,
+    "local_annotation_archive_bytes": 22887865,
     "gpu_job_started": false,
+    "gpu_status_at_last_check": "Orbitune active; 15821/16384 MiB used; 66% utilization",
     "hotgpu_required_for_future_gpu_smoke": true
   },
   "blockers": [
-    "official split-selective acquisition path is not verified",
-    "SA/SB participant disjointness has not been verified from selected metadata",
-    "media hashes, synchronization, annotations and label joins are unverified",
+    "only one parent set was checked per SA/SB partition; split-wide participant/media overlap remains unverified",
+    "audio and video durations differ and exact synchronization is unverified",
+    "word timing is alignment-derived; label quality needs train-only QA",
+    "full media decode and annotation-to-camera label-row audit remain incomplete",
     "five SB parent sets support feasibility only, not a strong quality claim",
     "privacy/governance review is required before product claims"
   ],
