@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 MAVAD source screen:** The official Zenodo API says CC BY 4.0,
+but the included metadata PDF says "no commercial use"; this rights conflict
+keeps the dataset at REVIEW. The PDF also says short clips were trimmed from
+five-minute snippets without publishing their parent mapping. Its paper reports
+small AV-over-zero-audio gains under repeated within-scene random splits, but
+parent-session isolation and a both-required task are unproven. No media archive
+was downloaded or opened. See the [source screen](docs/pretrained_reuse/R2_MAVAD_SOURCE_SCREEN_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%

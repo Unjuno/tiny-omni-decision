@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "screen_date": "2026-10-21",
+  "dataset": {
+    "name": "MARVEL - Malta Audio Visual Anomaly Dataset (MAVAD)",
+    "zenodo_record": 7950008,
+    "doi": "10.5281/zenodo.7950008",
+    "concept_doi": "10.5281/zenodo.7950007",
+    "api_license_id": "cc-by-4.0",
+    "metadata_pdf_rights_text": "Creative commons licence (by attribution, no commercial use)",
+    "license_status": "REVIEW_CONFLICTING_RIGHTS_STATEMENTS",
+    "access_right": "open",
+    "record_created": "2023-06-01T19:39:23.958782+09:00",
+    "record_updated": "2024-07-12T11:06:31.450004+09:00",
+    "media_archive_bytes": 11978755278,
+    "total_bytes_including_metadata_pdf": 11978855585,
+    "files": [
+      {
+        "key": "Masked_Mgarr.zip",
+        "bytes": 5498240496,
+        "md5": "b47ce8fe6a93d25ae6213410580edb78"
+      },
+      {
+        "key": "Masked_Zejtun_Field.zip",
+        "bytes": 4659232563,
+        "md5": "94fb5d37c362d82ef14785ac6944c8a6"
+      },
+      {
+        "key": "Masked_Zejtun_Scrapyard.zip",
+        "bytes": 1821282219,
+        "md5": "3cca413c94ffc5b6800aa6daa26fafae"
+      },
+      {
+        "key": "MARVEL_AV_AD_Metadata.pdf",
+        "bytes": 100307,
+        "md5": "e70d6dd2eeeb03936bd9fb9038d807fd",
+        "retrieved_sha256": "83f1d2d671f8f8373e04bae6dfbd55d656b2e8fc9f0215bae371df8ae5a4060e"
+      }
+    ]
+  },
+  "paper": {
+    "zenodo_record": 8086926,
+    "doi": "10.5281/zenodo.8086926",
+    "arxiv": "2305.15084v1",
+    "api_license_id": "cc-by-4.0"
+  },
+  "source_claims": {
+    "videos": 764,
+    "camera_locations": 3,
+    "classes": 11,
+    "video_fps": [25, 30],
+    "audio_sample_rate_hz": 48000,
+    "audio_channels": 2,
+    "paper_split": "three repeated per-class randomized 60/20/20 splits within each scene",
+    "metadata_pdf_clip_construction": "annotators trimmed 5-minute snippets into shorter class-labeled clips",
+    "metadata_pdf_filename_label_encoding": true,
+    "metadata_pdf_parent_snippet_mapping": "not provided in the metadata PDF",
+    "metadata_pdf_audio_anonymization": "not stated; paper says audio is not anonymized"
+  },
+  "disposition": "REVIEW_CANDIDATE_NOT_ADMITTED",
+  "blockers": [
+    "Zenodo API says CC BY 4.0 while the included metadata PDF says no commercial use; rights holder clarification is required.",
+    "The metadata PDF says short labeled clips were trimmed from five-minute snippets, but no parent-snippet mapping is provided.",
+    "Parent recording/session identities and temporal overlap are not yet established.",
+    "No independent location/session grouped split has been verified.",
+    "Published audio gains do not establish that both modalities are required for the task.",
+    "Audio was not anonymized; privacy treatment needs scoped review before use."
+  ],
+  "downloaded_media": false,
+  "annotation_payload_opened": false,
+  "gpu_started": false,
+  "training_or_model_selection": false
+}
