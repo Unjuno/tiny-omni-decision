@@ -28,6 +28,7 @@ def test_dinov2_pooling_uses_class_token_without_mixing_candidates():
     pooled = pool_dinov2_patch_tokens(tokens)
     assert pooled.shape == (2, 384)
     assert np.array_equal(pooled[:, 0], np.array([3.0, -2.0], dtype=np.float32))
+    assert np.array_equal(pool_dinov2_patch_tokens(tokens[:, 0, :]), pooled)
 
 
 def test_video_split_validation_rejects_same_scene_in_fit_and_selection():
@@ -224,3 +225,55 @@ def test_fit_readout_keeps_best_and_final_checkpoints_separate(tmp_path):
     assert (output / "development-validation-predictions.jsonl").is_file()
     assert result["checkpoint_reload_verified"] is True
     assert result["development_validation_metrics"]["nll"] >= 0
+
+
+def test_fit_readout_honors_fixed_update_budget_and_validation_interval(tmp_path):
+    rows = []
+    for split, suffix, target in (
+        ("fit", "fit", 0),
+        ("selection", "selection", 1),
+        ("calibration", "calibration", 0),
+        ("development_validation", "validation", 1),
+    ):
+        rows.append(
+            {
+                "id": suffix,
+                "video_id": f"video_{suffix}",
+                "split": split,
+                "target_index": target,
+                "candidate_count": 2,
+                "candidate_order_sha256": "a" * 64,
+                "audio": np.full(512, float(target), dtype=np.float32),
+                "visual": np.full((2, 384), float(target), dtype=np.float32),
+            }
+        )
+    output = tmp_path / "fixed-run"
+    result = fit_readout(
+        rows,
+        output,
+        condition="video_only",
+        seed=17,
+        epochs=10,
+        patience=4,
+        hidden_size=4,
+        max_updates=6,
+        evaluation_interval=2,
+    )
+    history = json.loads((output / "history.json").read_text(encoding="utf-8"))
+    final = torch.load(output / "final.pt", map_location="cpu", weights_only=True)
+    assert result["optimizer_updates"] == 6
+    assert result["best_optimizer_updates"] in {2, 4, 6}
+    assert result["evaluation_interval"] == 2
+    assert [row["optimizer_updates"] for row in history] == [2, 4, 6]
+    assert final["optimizer_updates"] == 6
+    assert result["checkpoint_reload_verified"] is True
+
+
+def test_fit_readout_requires_fixed_updates_and_interval_together(tmp_path):
+    with pytest.raises(ValueError, match="must be supplied together"):
+        fit_readout(
+            [],
+            tmp_path / "run",
+            condition="joint",
+            max_updates=10,
+        )

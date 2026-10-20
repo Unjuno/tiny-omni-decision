@@ -29,8 +29,16 @@ DINOV2_TOKENS = 257
 def pool_dinov2_patch_tokens(features: np.ndarray) -> np.ndarray:
     """Use the pretrained CLS representation, keeping candidate order intact."""
     values = np.asarray(features, dtype=np.float32)
+    if values.ndim == 2 and values.shape[1:] == (VISUAL_SIZE,):
+        if values.shape[0] < 2 or not np.isfinite(values).all():
+            raise ValueError(
+                "pooled DINOv2 candidate features must be finite with at least two options"
+            )
+        return values.copy()
     if values.ndim != 3 or values.shape[1:] != (DINOV2_TOKENS, VISUAL_SIZE):
-        raise ValueError("DINOv2 features must have shape [candidates, 257, 384]")
+        raise ValueError(
+            "DINOv2 features must have shape [candidates, 384] or [candidates, 257, 384]"
+        )
     if values.shape[0] < 2 or not np.isfinite(values).all():
         raise ValueError("DINOv2 candidate features must be finite with at least two options")
     pooled = values[:, 0, :].copy()
@@ -148,16 +156,20 @@ def _metric_summary(logits: list[torch.Tensor], targets: list[int]) -> dict[str,
     probabilities = [item.detach().float().cpu().softmax(dim=-1) for item in logits]
     if any(item.ndim != 1 or item.numel() < 2 for item in probabilities):
         raise ValueError("each event must have logits for at least two candidates")
-    if any(type(target) is not int or not 0 <= target < item.numel()
-           for item, target in zip(probabilities, targets, strict=True)):
+    if any(
+        type(target) is not int or not 0 <= target < item.numel()
+        for item, target in zip(probabilities, targets, strict=True)
+    ):
         raise ValueError("event target is outside its candidate range")
     confidence = torch.stack([item.max() for item in probabilities])
     prediction = torch.tensor([int(item.argmax()) for item in probabilities], dtype=torch.long)
     target_tensor = torch.tensor(targets, dtype=torch.long)
     correct = prediction.eq(target_tensor)
     nll = torch.stack(
-        [-torch.log(item[target].clamp_min(torch.finfo(item.dtype).tiny))
-         for item, target in zip(probabilities, targets, strict=True)]
+        [
+            -torch.log(item[target].clamp_min(torch.finfo(item.dtype).tiny))
+            for item, target in zip(probabilities, targets, strict=True)
+        ]
     ).mean()
     brier = torch.stack(
         [
@@ -236,6 +248,8 @@ def fit_readout(
     learning_rate: float = 1e-3,
     min_delta: float = 1e-4,
     hidden_size: int = 128,
+    max_updates: int | None = None,
+    evaluation_interval: int | None = None,
 ) -> dict[str, Any]:
     if condition not in {"joint", "video_only"}:
         raise ValueError("only trainable joint/video_only conditions are supported")
@@ -243,6 +257,12 @@ def fit_readout(
         raise ValueError("fresh output directory required")
     if epochs < 1 or patience < 1 or learning_rate <= 0 or min_delta < 0:
         raise ValueError("invalid training schedule")
+    if (max_updates is None) != (evaluation_interval is None):
+        raise ValueError("max_updates and evaluation_interval must be supplied together")
+    if max_updates is not None and (
+        max_updates < 1 or evaluation_interval is None or evaluation_interval < 1
+    ):
+        raise ValueError("fixed-update training requires positive updates and validation interval")
     validate_video_splits(rows)
     fit_rows = [row for row in rows if row["split"] == "fit"]
     selection_rows = [row for row in rows if row["split"] == "selection"]
@@ -252,9 +272,7 @@ def fit_readout(
         row["split"] == "development_validation" for row in rows
     ):
         raise ValueError("calibration and development-validation splits are both required")
-    if {row["video_id"] for row in fit_rows} & {
-        row["video_id"] for row in selection_rows
-    }:
+    if {row["video_id"] for row in fit_rows} & {row["video_id"] for row in selection_rows}:
         raise ValueError("fit and selection videos overlap")
     Path(output_dir).mkdir(parents=True, exist_ok=False)
 
@@ -264,9 +282,7 @@ def fit_readout(
     model = AVEventSourceScorer(hidden_size=hidden_size)
     active_prefixes = ("visual_projection.", "video_head.")
     for name, parameter in model.named_parameters():
-        parameter.requires_grad_(
-            condition == "joint" or name.startswith(active_prefixes)
-        )
+        parameter.requires_grad_(condition == "joint" or name.startswith(active_prefixes))
     optimizer = torch.optim.AdamW(
         (parameter for parameter in model.parameters() if parameter.requires_grad),
         lr=learning_rate,
@@ -277,13 +293,61 @@ def fit_readout(
     best_epoch = None
     best_state = None
     best_predictions = None
+    best_step = None
     stale_epochs = 0
     started = time.perf_counter()
+    update_limit = max_updates if max_updates is not None else epochs * len(fit_rows)
+    validation_interval = evaluation_interval if evaluation_interval is not None else len(fit_rows)
+    optimizer_updates = 0
+    interval_loss_sum = 0.0
+    interval_loss_count = 0
+
+    def validate(epoch: int) -> None:
+        nonlocal best_nll, best_epoch, best_state, best_predictions
+        nonlocal best_step, stale_epochs, interval_loss_sum, interval_loss_count
+        selection_metrics, predictions = _score_rows(model, selection_rows, condition)
+        row_history = {
+            "epoch": epoch,
+            "optimizer_updates": optimizer_updates,
+            "train_ce": interval_loss_sum / interval_loss_count,
+            "train_ce_interval_updates": interval_loss_count,
+            "selection_nll": selection_metrics["nll"],
+            "selection_metrics": selection_metrics,
+        }
+        history.append(row_history)
+        improved = selection_metrics["nll"] < best_nll - min_delta
+        if improved:
+            best_nll = selection_metrics["nll"]
+            best_epoch = epoch
+            best_step = optimizer_updates
+            best_state = {
+                key: value.detach().cpu().clone() for key, value in model.state_dict().items()
+            }
+            best_predictions = predictions
+            stale_epochs = 0
+            _atomic_torch_save(
+                {
+                    "state_dict": best_state,
+                    "condition": condition,
+                    "seed": seed,
+                    "epoch": epoch,
+                    "optimizer_updates": optimizer_updates,
+                    "hidden_size": hidden_size,
+                    "selector": "minimum video-disjoint selection NLL; min_delta applied",
+                },
+                Path(output_dir) / "best.pt",
+            )
+        else:
+            stale_epochs += 1
+        interval_loss_sum = 0.0
+        interval_loss_count = 0
+
     for epoch in range(1, epochs + 1):
         model.train()
         order = torch.randperm(len(fit_rows), generator=generator).tolist()
-        train_loss_sum = 0.0
         for index in order:
+            if optimizer_updates >= update_limit:
+                break
             row = fit_rows[index]
             optimizer.zero_grad(set_to_none=True)
             kwargs = {"visual_features": torch.from_numpy(row["visual"])}
@@ -295,40 +359,17 @@ def fit_readout(
                 raise FloatingPointError("non-finite training loss")
             loss.backward()
             optimizer.step()
-            train_loss_sum += float(loss.detach())
-        selection_metrics, predictions = _score_rows(model, selection_rows, condition)
-        row_history = {
-            "epoch": epoch,
-            "train_ce": train_loss_sum / len(fit_rows),
-            "selection_nll": selection_metrics["nll"],
-            "selection_metrics": selection_metrics,
-        }
-        history.append(row_history)
-        improved = selection_metrics["nll"] < best_nll - min_delta
-        if improved:
-            best_nll = selection_metrics["nll"]
-            best_epoch = epoch
-            best_state = {
-                key: value.detach().cpu().clone()
-                for key, value in model.state_dict().items()
-            }
-            best_predictions = predictions
-            stale_epochs = 0
-            _atomic_torch_save(
-                {
-                    "state_dict": best_state,
-                    "condition": condition,
-                    "seed": seed,
-                    "epoch": epoch,
-                    "hidden_size": hidden_size,
-                    "selector": "minimum video-disjoint selection NLL; min_delta applied",
-                },
-                Path(output_dir) / "best.pt",
-            )
-        else:
-            stale_epochs += 1
-        if stale_epochs >= patience:
+            optimizer_updates += 1
+            interval_loss_sum += float(loss.detach())
+            interval_loss_count += 1
+            if optimizer_updates % validation_interval == 0 or optimizer_updates == update_limit:
+                validate(epoch)
+                if stale_epochs >= patience:
+                    break
+        if optimizer_updates >= update_limit or stale_epochs >= patience:
             break
+    if max_updates is not None and optimizer_updates < update_limit and stale_epochs < patience:
+        raise RuntimeError("fixed update budget was not completed")
 
     model.eval()
     final_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
@@ -338,6 +379,7 @@ def fit_readout(
             "condition": condition,
             "seed": seed,
             "epoch": epoch,
+            "optimizer_updates": optimizer_updates,
             "hidden_size": hidden_size,
             "trainable_parameters": sum(
                 parameter.numel() for parameter in model.parameters() if parameter.requires_grad
@@ -350,7 +392,11 @@ def fit_readout(
     best_checkpoint = torch.load(
         Path(output_dir) / "best.pt", map_location="cpu", weights_only=True
     )
-    if best_checkpoint["condition"] != condition or best_checkpoint["epoch"] != best_epoch:
+    if (
+        best_checkpoint["condition"] != condition
+        or best_checkpoint["epoch"] != best_epoch
+        or best_checkpoint["optimizer_updates"] != best_step
+    ):
         raise RuntimeError("saved best checkpoint metadata differs from selector state")
     model.load_state_dict(best_checkpoint["state_dict"], strict=True)
     replay_metrics, replay_predictions = _score_rows(model, selection_rows, condition)
@@ -388,6 +434,7 @@ def fit_readout(
         "fit_videos": len({row["video_id"] for row in fit_rows}),
         "selection_videos": len({row["video_id"] for row in selection_rows}),
         "best_epoch": best_epoch,
+        "best_optimizer_updates": best_step,
         "best_selection_metrics": replay_metrics,
         "calibration_metrics": held_out_metrics.get("calibration"),
         "development_validation_metrics": held_out_metrics.get("development_validation"),
@@ -397,7 +444,12 @@ def fit_readout(
         "trainable_parameters": sum(
             parameter.numel() for parameter in model.parameters() if parameter.requires_grad
         ),
-        "optimizer_updates": len(fit_rows) * epoch,
+        "optimizer_updates": optimizer_updates,
+        "max_updates": max_updates,
+        "evaluation_interval": validation_interval,
+        "train_ce_semantics": (
+            "mean over optimizer updates since the previous validation; not a fixed-example gap"
+        ),
         "stopped_by_patience": stale_epochs >= patience,
         "early_stopping": {"patience": patience, "min_delta": min_delta},
         "selection_rule": "minimum video-disjoint selection NLL with strict absolute min_delta",
@@ -424,6 +476,8 @@ def _main() -> None:
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--min-delta", type=float, default=1e-4)
     parser.add_argument("--hidden-size", type=int, default=128)
+    parser.add_argument("--max-updates", type=int)
+    parser.add_argument("--evaluation-interval", type=int)
     args = parser.parse_args()
     rows = load_feature_rows(args.features)
     result = fit_readout(
@@ -436,6 +490,8 @@ def _main() -> None:
         learning_rate=args.learning_rate,
         min_delta=args.min_delta,
         hidden_size=args.hidden_size,
+        max_updates=args.max_updates,
+        evaluation_interval=args.evaluation_interval,
     )
     result["feature_manifest_sha256"] = sha256_file(args.features)
     result["source_commit"] = subprocess.check_output(
@@ -451,6 +507,8 @@ def _main() -> None:
         "learning_rate": args.learning_rate,
         "min_delta": args.min_delta,
         "hidden_size": args.hidden_size,
+        "max_updates": args.max_updates,
+        "evaluation_interval": args.evaluation_interval,
         "device": "cpu",
         "optimizer": "AdamW",
         "selection_split": "video-disjoint selection",

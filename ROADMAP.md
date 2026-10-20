@@ -1,5 +1,22 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-20 Perception AV coverage-scale cohort frozen; acquisition in
+progress.** A separate 388-video / 908-event cohort was fixed from official
+TRAIN video IDs that were absent from prior media manifests and from the
+already-scored 200-video fixed-checkpoint cohort. The video-level split is
+233 fit / 58 selection / 39 calibration / 58 development-validation videos
+(550 / 121 / 91 / 146 events). The pinned plan is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-scale-plan-03\plan.json`
+(SHA-256 `43dda454adf45352dee281680f51698ecf38d60731d33311a6ded139de167461`).
+Planned uncompressed media is 5.69 GB; the 1.2x disk requirement is 6.83 GB.
+Acquisition uses a separate `media-02` attempt because `media-01` was stopped
+after a source-commit provenance typo was caught; its partial files are
+preserved and excluded from modeling. This narrow conditional audio-event to
+visible-object source task is development evidence only. PTS/crop/media gates,
+feature extraction, matched old-data versus expanded-data fits, and quality
+results remain pending. GPU work will use HotUGPU; no GPU process was started
+while Orbitune occupied the RTX 3080.
+
 **2026-10-18 conditional AV gate long fit completed:** E0G1 finished the
 fixed32,768-update run with best/final reload checks. It uses the same initial
 tensors, seed, sampler, validation IDs, schedule and selector as postnorm E0G0.
