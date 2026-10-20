@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 AMI cross-modal task screen:** AMI is a review-only candidate for
+meeting-local voice-to-face matching. Official CC BY 4.0 terms and scenario-only
+SA/SB/SC group definitions are documented, but no data was downloaded, participant
+disjointness was not verified, and the local official download chooser returned
+HTTP 403. Keep SC unseen and do not start a model run until permitted official
+acquisition and SA/SB integrity gates pass. See
+[`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%

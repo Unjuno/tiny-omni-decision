@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ami-crossmodal-speaker-match-screen-20261021",
+  "status": "REVIEW",
+  "decision": "NOT_ADMITTED",
+  "screened_at": "2026-10-21",
+  "repository_base_commit": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+  "source": {
+    "name": "AMI Meeting Corpus",
+    "homepage": "https://groups.inf.ed.ac.uk/ami/",
+    "license_page": "https://groups.inf.ed.ac.uk/ami/corpus/license.shtml",
+    "declared_license": "CC-BY-4.0",
+    "download_page": "https://groups.inf.ed.ac.uk/ami/download/",
+    "split_page": "https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml",
+    "signals_page": "https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml",
+    "ethics_page": "https://groups.inf.ed.ac.uk/ami/corpus/ethicsandconsent.shtml",
+    "annotation_release": "manual annotations v1.6.2 (official page states 22 MB)",
+    "source_revision": null,
+    "archive_sha256": null,
+    "local_media": false,
+    "local_annotations": false
+  },
+  "proposed_task": {
+    "name": "meeting_local_voice_to_face_matching",
+    "input_modalities": ["audio", "video"],
+    "choices": 4,
+    "question": "Which candidate video shows the person who spoke in the audio reference?",
+    "audio_source": "mixed headset audio only; never individual lapel/headset channel identity",
+    "video_source": "four duration-matched closeup clips from a separate time in the same meeting",
+    "labels": "manual speaker intervals joined with official camera/channel mapping",
+    "task_scope": "within-meeting cross-modal association; not cross-recording identity recognition"
+  },
+  "split": {
+    "policy": "official scenario-only partition, grouped by 4-meeting parent set",
+    "train": {"partition": "SA", "meetings": 98, "sets": 25},
+    "validation": {"partition": "SB", "meetings": 20, "sets": 5},
+    "sealed_unseen": {"partition": "SC", "meetings": 20, "sets": 5, "accessed": false},
+    "participant_disjointness_verified": false,
+    "media_overlap_verified": false
+  },
+  "access": {
+    "official_download_chooser_http_status": 403,
+    "media_annotation_bytes_downloaded": 0,
+    "third_party_mirror_used": false,
+    "resolution": "pending; no alternate-host workaround"
+  },
+  "resource_estimates": {
+    "official_low_size_video_mb_per_meeting_approx": 400,
+    "official_headset_mix_mb_per_meeting_approx": 30,
+    "one_train_plus_one_validation_meeting_mb_approx": 860,
+    "local_free_disk_gb_at_screen_approx": 26.6,
+    "gpu_job_started": false,
+    "hotgpu_required_for_future_gpu_smoke": true
+  },
+  "blockers": [
+    "official split-selective acquisition path is not verified",
+    "SA/SB participant disjointness has not been verified from selected metadata",
+    "media hashes, synchronization, annotations and label joins are unverified",
+    "five SB parent sets support feasibility only, not a strong quality claim",
+    "privacy/governance review is required before product claims"
+  ],
+  "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md"
+}
