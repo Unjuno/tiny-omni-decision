@@ -22,6 +22,14 @@ revision, row-level rights/provenance audit, and an independently checked
 both-stream task. No data or media were loaded and no GPU job was started.
 See the [FineVideo source screen](docs/pretrained_reuse/R2_FINEVIDEO_SOURCE_SCREEN_20261020.md).
 
+**2026-10-20 R2 DCASE 2025 Stereo SELD screen:** The 30,000 development clips
+are converted from STARSS23 recordings already used by the R2 STARSS23 probe;
+on/off-screen labels are derived from sound-source direction and camera FOV,
+so this does not establish that both input streams are required. The DCASE
+page also gives no separate license grant for the processed release. Keep it
+REVIEW / NOT ADMITTED as a fresh joint task; no media or labels were opened.
+See [the source screen](docs/pretrained_reuse/R2_DCASE2025_STEREO_SELD_SOURCE_SCREEN_20261020.md).
+
 **2026-10-20 R2 HoloAssist synchronized IMU diagnostic:** Added official
 train/development-validation IMU features and completed matched AV, sensor-only,
 and AV+sensor readouts. AV remained best on selected validation checkpoints.
