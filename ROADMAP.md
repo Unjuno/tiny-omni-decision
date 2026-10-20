@@ -12,6 +12,16 @@ loaded, and no prior pilot, Teacher, QAT or checkpoint artifact was changed.
 See the [completed readout and intervention report](docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_READOUT_RESULTS_20261020.md)
 and the [corpus recovery report](docs/pretrained_reuse/R2_HOLOASSIST_RECOVERY_20261020.md).
 
+**2026-10-20 R2 HoloAssist synchronized IMU diagnostic:** Added official
+train/development-validation IMU features and completed matched AV, sensor-only,
+and AV+sensor readouts. AV remained best on selected validation checkpoints.
+On the fixed AVS checkpoint, zeroing IMU reduced accuracy by 1.9 points, while
+same-task/same-length session reassignment had small, uncertain effects. This
+shows the sensor path influences outputs but does not establish useful
+session-specific complementarity; late fixed-budget training also overfit.
+No test/sealed audit was loaded and no model was promoted. See the
+[training and intervention results](docs/pretrained_reuse/R2_HOLOASSIST_SENSOR_FUSION_RESULTS_20261020.md).
+
 **2026-10-19 R2 HoloAssist temporal readout:** All 3,527 text/audio/video frozen features are packed and the fixed 2,048-step video-only, audio-only, and joint readout runs completed on the local RTX 3080. Validation-selected best accuracies were 71.31%, 73.79%, and 73.05%, respectively; each arm's NLL/calibration regressed sharply by the fixed endpoint. Joint input did not improve on audio-only, so fusion benefit is not supported by this pilot. No test or sealed-audit data were loaded. [Protocol/results](docs/pretrained_reuse/R2_HOLOASSIST_TEMPORAL_READOUT_RESULTS_20261019.md); detailed curves and hashes are in its linked JSON.
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 **2026-10-19 R2 HoloAssist full-media gate:** The fixed 160-train / 207-
