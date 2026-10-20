@@ -196,9 +196,11 @@ A deterministic screen selected one segment-join-passing example for each
 nonempty `(meeting, agent)` stratum from the seven SA meetings, using seed 17
 (24 examples total). The review sheet shows three target-camera frames at 15%,
 50%, and 85% of each word window, plus a midpoint frame from each other camera.
-In this coarse visual-presence check, 18 target views show one clearly framed
-face, 2 show no clear person/face, and 4 are limited or ambiguous (distant,
-back-facing, cropped, or multiple people). This is a diagnostic of those 24
+In this coarse visual-presence check, 17 target views show one clearly framed
+face, 2 show no clear person/face, and 5 are limited or ambiguous (distant,
+back-facing, cropped, or multiple people). A later full-set review reclassified
+IS1000a-D-s17 from clear to limited because its face was not sufficiently clear
+across the sampled frames. This is a diagnostic of those 24
 preselected train examples only, not a corpus prevalence estimate. It does not
 confirm that the visible person is the annotated speaker, that the AV clocks are
 synchronized, or that audio and video jointly improve decisions; no audio was
@@ -207,29 +209,36 @@ played and no model was evaluated.
 The sample manifest SHA-256 is
 `ecc37d77490b28afe16dd17b5f9e5fc56c69c55889c0f5e52ffb61f91557584d`; the
 qualitative review receipt is
-`f5a35fa256ef5677ab67e554f391791ce23368d1fa333f40b3b884c8186b111a`. Both, the
+`cadbfa3cd6d00584670a75c5314eec57ee6d6a83146afcd520f8035f9aab5461`. Both, the
 selection script, and contact-sheet hashes are stored under
 `C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\train-visual-qa-seed17-20261021`.
 The candidate remains unadmitted. Any future use needs an explicit visibility
 filter/QA, a decision about clips without a uniquely framed participant, and
 synchronization checks before feature extraction or a GPU run.
 
-### Candidate-wide train-only frame materialization
+### Candidate-wide train-only visual-presence review
 
 To avoid treating the 24-row diagnostic as representative, a deterministic
 CPU-only screen materialized target-camera frames at 15%, 50%, and 85% for all
 213 SA candidate windows that pass the 80% same-agent segment-union threshold.
 The one below-threshold IS1000c window was excluded as already quarantined. The
-result is 639 requested target-camera views across 12 contact sheets. This is
-only a review aid: the frames have not received a row-by-row categorical review,
-do not validate speaker identity or AV synchronization, and do not admit AMI for
-feature extraction or model use. No validation/test or SC media was opened.
+result is 639 requested target-camera views across 12 contact sheets. The
+row-by-row, single-reviewer labels are: 168 with a clearly framed face, 21
+limited/ambiguous, and 24 with no clear person in the mapped camera. These
+counts are exact for the 213 screened windows, but are not a population estimate
+outside the selected meetings. The screen does not verify that the visible
+person is the annotated speaker, AV synchronization, or AV decision quality;
+it does not admit AMI for feature extraction or model use. No validation/test or
+SC media was opened. The seed-17 subset was reconciled to the full review with
+24/24 category agreement after one conservative reclassification.
 
-External receipt: `C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\train-visual-qa-all-sa-20261021\manifest.json`
+External frame manifest: `C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\train-visual-qa-all-sa-20261021\manifest.json`
 (SHA-256 `5a1bf48d478c889002c2c238e0ced7f376f2494ef490848a54a01c8fa2b61882`).
-It pins both preflight inputs, the segment-join receipt, every sample ID/time,
-the builder script, and all contact-sheet hashes. Media-derived frames remain
-outside Git.
+External review receipt: `train-visual-qa-review-all-sa-20261021.json` (SHA-256
+`e344e81bc6b60da0d65c5a96387225c47c5a0f7afd6f2bd5dc43e4ef096f971f`). The
+manifest pins preflight inputs, join receipt, sample IDs/times, builder and
+contact-sheet hashes; the review receipt pins the manifest, sheets and every
+row label. Media-derived frames remain outside Git.
 
 ## Decision
 

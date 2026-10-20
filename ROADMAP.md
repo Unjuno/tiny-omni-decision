@@ -13,11 +13,11 @@ These remain weak labels and uneven by speaker/meeting. All 28 video streams in
 the TS3004a/IS1008a/TS3006a/IS1000a–d full-decode subset return one frame below
 their declarations. ES2005a spans about 8 minutes against 958 seconds in
 metadata. Audio/video synchronization and visual label quality remain unverified.
-A seed-17 train-only visual screen found 18/24 clearly framed target views, 2
-absent and 4 ambiguous; it is not an AV quality result. No GPU run was started.
-Target-camera frames at 15/50/85% are now materialized for all 213
-segment-join-passing SA training candidates; row-by-row visual review is pending,
-so this adds no visibility or synchronization pass claim.
+A single-reviewer visual screen of all 213 segment-join-passing SA train
+candidates found 168 with a clearly framed face, 21 limited/ambiguous and 24
+with no clear person in the mapped camera at 15/50/85% samples. This is a
+presence screen, not speaker-identity, synchronization or AV-quality evidence.
+No GPU run was started.
 Keep SC annotations unopened and the source at REVIEW.
 See
 [`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
