@@ -2107,3 +2107,12 @@ excluding zero; zero-audio and previous-event intervals include zero. The
 previous-event windows can overlap. This supports limited sensitivity to
 audio-video pairing only; semantic use and independent task performance remain
 unproven. See the report for donor/result hashes and full limitations.
+
+### Audio alignment intervention diagnostic (2026-10-20)
+
+A fixed-checkpoint CPU intervention on the same 504-event TRAIN holdout shows
+lower NLL with aligned audio than zeroed or cross-video audio; cross-video
+swapping also lowers Accuracy. The zero-audio Accuracy interval includes zero.
+This is post-hoc sensitivity evidence only: semantic mismatch and the OOD zero
+vector prevent claims that both modalities are required. No training or checkpoint
+selection. [Protocol and receipts](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_AUDIO_ALIGNMENT_DIAGNOSTIC_20261020.md).
