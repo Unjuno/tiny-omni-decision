@@ -23,6 +23,7 @@ from torch.nn import functional as F
 from scripts.audit_holoassist_metadata import sha256_file
 from tiny_omni_decision.temporal_decision import (
     CausalGatedTemporalDecision,
+    TaskConditionedAVSensorTemporalDecision,
     TaskConditionedTemporalDecision,
 )
 
@@ -117,6 +118,75 @@ def validate_split_identity(
             raise ValueError(f"train/validation {field} overlap: {sorted(overlap)[:3]}")
 
 
+def attach_imu_features(
+    data: dict[str, Any], feature_path: Path, *, split: str, receipt: dict[str, Any]
+) -> dict[str, Any]:
+    """Join flattened 1-second IMU windows only after exact ID and metadata checks."""
+    expected_receipt = receipt.get("splits", {}).get(split, {})
+    if (
+        expected_receipt.get("sha256") != sha256_file(feature_path)
+        or expected_receipt.get("sample_count") != len(data["sample_id"])
+    ):
+        raise ValueError(f"{split} IMU feature hash differs from its receipt")
+    with np.load(feature_path, allow_pickle=False) as archive:
+        if set(archive.files) != {
+            "sample_id",
+            "features",
+            "flattened_features",
+            "metadata_json",
+        }:
+            raise ValueError("unexpected IMU feature archive fields")
+        sample_ids = archive["sample_id"]
+        features = archive["flattened_features"]
+        sequences = archive["features"]
+        metadata = json.loads(str(archive["metadata_json"].item()))
+    if (
+        sample_ids.shape != data["sample_id"].shape
+        or not np.array_equal(sample_ids, data["sample_id"])
+        or features.shape != (len(sample_ids), 30 * 21)
+        or features.dtype != np.float32
+        or sequences.shape != (len(sample_ids), 30, 21)
+        or sequences.dtype != np.float32
+        or not np.array_equal(features, sequences.reshape(len(sample_ids), -1))
+        or not np.isfinite(features).all()
+        or len(metadata) != len(sample_ids)
+    ):
+        raise ValueError(f"{split} IMU feature IDs/order/shape differ from AV cache")
+    fields = (
+        "split",
+        "id",
+        "session_id",
+        "window_index",
+        "target",
+        "loss_mask",
+        "media_sha256",
+        "task_type",
+    )
+    sample_id_hash = hashlib.sha256("\n".join(map(str, sample_ids)).encode()).hexdigest()
+    if expected_receipt.get("unique_sample_id_order_sha256") != sample_id_hash:
+        raise ValueError(f"{split} IMU sample ID hash differs from its receipt")
+    for index, row in enumerate(metadata):
+        target = -1 if row["target"] is None else int(row["target"])
+        expected = {
+            "split": split,
+            "id": str(data["sample_id"][index]),
+            "session_id": str(data["session_id"][index]),
+            "window_index": int(data["window_index"][index]),
+            "target": int(data["target"][index]),
+            "loss_mask": bool(data["loss_mask"][index]),
+            "media_sha256": str(data["media_sha256"][index]),
+            "task_type": str(data["task_type"][index]),
+        }
+        observed = {field: target if field == "target" else row[field] for field in fields}
+        if observed != expected:
+            raise ValueError(f"{split} IMU metadata differs from the AV corpus at row {index}")
+    joined = dict(data)
+    joined["sensor"] = features.copy()
+    if joined["sensor"].shape[1] != 630:
+        raise ValueError("IMU sensor feature dimension must be 630")
+    return joined
+
+
 def validate_feature_receipt(
     receipt: dict[str, Any],
     *,
@@ -168,6 +238,7 @@ def collate_sessions(
     device: torch.device,
     *,
     include_text: bool = True,
+    include_sensor: bool = False,
 ) -> tuple[torch.Tensor, ...]:
     groups = [data["session_indices"][index] for index in selected]
     lengths = torch.tensor([len(group) for group in groups], dtype=torch.int64, device=device)
@@ -176,12 +247,20 @@ def collate_sessions(
     video = torch.zeros(batch, steps, 768, dtype=torch.float32, device=device)
     audio = torch.zeros(batch, steps, 384, dtype=torch.float32, device=device)
     text = torch.zeros(batch, 384, dtype=torch.float32, device=device)
+    sensor = (
+        torch.zeros(batch, steps, 630, dtype=torch.float32, device=device)
+        if include_sensor
+        else None
+    )
     targets = torch.full((batch, steps), -1, dtype=torch.int64, device=device)
     loss_mask = torch.zeros(batch, steps, dtype=torch.bool, device=device)
     for row, group in enumerate(groups):
         length = len(group)
         video[row, :length] = torch.from_numpy(data["video"][group]).to(device)
         audio[row, :length] = torch.from_numpy(data["audio"][group]).to(device)
+        if include_sensor:
+            assert sensor is not None
+            sensor[row, :length] = torch.from_numpy(data["sensor"][group]).to(device)
         if include_text:
             text[row] = torch.from_numpy(data["text"][group[0]]).to(device)
         targets[row, :length] = torch.from_numpy(data["target"][group]).to(device)
@@ -192,6 +271,9 @@ def collate_sessions(
                 raise ValueError(
                     f"text feature changes within session {data['session_id'][group[0]]}"
                 )
+    if include_sensor:
+        assert sensor is not None
+        return video, audio, text, sensor, lengths, targets, loss_mask
     return video, audio, text, lengths, targets, loss_mask
 
 
@@ -260,7 +342,11 @@ def _write_json(path: Path, value: Any) -> None:
 
 
 def _evaluate(
-    model: CausalGatedTemporalDecision | TaskConditionedTemporalDecision,
+    model: (
+        CausalGatedTemporalDecision
+        | TaskConditionedTemporalDecision
+        | TaskConditionedAVSensorTemporalDecision
+    ),
     data: dict[str, Any],
     device: torch.device,
     batch_sessions: int,
@@ -273,9 +359,17 @@ def _evaluate(
     with torch.inference_mode():
         for start in range(0, len(order), batch_sessions):
             selected = order[start : start + batch_sessions]
-            video, audio, text, lengths, targets, mask = collate_sessions(
-                data, selected, device, include_text=task_type_to_id is None
+            batch = collate_sessions(
+                data,
+                selected,
+                device,
+                include_text=task_type_to_id is None,
+                include_sensor="sensor" in data,
             )
+            if "sensor" in data:
+                video, audio, text, sensor, lengths, targets, mask = batch
+            else:
+                video, audio, text, lengths, targets, mask = batch
             if task_type_to_id is None:
                 output = model(video, audio, text, lengths=lengths)
             else:
@@ -289,7 +383,10 @@ def _evaluate(
                     dtype=torch.int64,
                     device=device,
                 )
-                output = model(video, audio, task_ids, lengths=lengths)
+                if isinstance(model, TaskConditionedAVSensorTemporalDecision):
+                    output = model(video, audio, sensor, task_ids, lengths=lengths)
+                else:
+                    output = model(video, audio, task_ids, lengths=lengths)
             batch, steps = targets.shape
             for row in range(batch):
                 valid_count = int(lengths[row].item())
@@ -310,17 +407,20 @@ def _evaluate(
                     logits_rows.append(scores)
                     target_rows.append(target)
                     task_type_rows.append(task_type)
-                    prediction_rows.append(
-                        {
-                            "id": sample_id,
-                            "session_id": str(data["session_names"][selected[row]]),
-                            "task_type": task_type,
-                            "window_index": step,
-                            "target": target,
-                            "prediction": int(np.argmax(probabilities)),
-                            "probabilities": probabilities,
-                        }
-                    )
+                    prediction = {
+                        "id": sample_id,
+                        "session_id": str(data["session_names"][selected[row]]),
+                        "task_type": task_type,
+                        "window_index": step,
+                        "target": target,
+                        "prediction": int(np.argmax(probabilities)),
+                        "probabilities": probabilities,
+                    }
+                    if isinstance(model, TaskConditionedAVSensorTemporalDecision):
+                        prediction["modality_weights"] = (
+                            output.modality_weights[row, step].detach().float().cpu().tolist()
+                        )
+                    prediction_rows.append(prediction)
     summary = metric_summary(
         torch.stack(logits_rows).to(device),
         torch.tensor(target_rows, dtype=torch.int64, device=device),
@@ -360,8 +460,27 @@ def train_arm(
 ) -> dict[str, Any]:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite readout attempt: {output}")
-    if arm not in {"video_only", "audio_only", "joint"}:
+    sensor_model = "sensor" in train
+    if sensor_model != ("sensor" in validation):
+        raise ValueError("train and validation must both contain the same modality set")
+    if sensor_model:
+        for split_name, data in (("train", train), ("validation", validation)):
+            sensor = data["sensor"]
+            if (
+                sensor.shape != (len(data["sample_id"]), 630)
+                or sensor.dtype != np.float32
+                or not np.isfinite(sensor).all()
+            ):
+                raise ValueError(f"invalid {split_name} IMU feature matrix")
+    valid_arms = {"av", "sensor_only", "avs"} if sensor_model else {
+        "video_only",
+        "audio_only",
+        "joint",
+    }
+    if arm not in valid_arms:
         raise ValueError(f"unknown modality arm: {arm}")
+    if sensor_model and task_type_to_id is None:
+        raise ValueError("AV/sensor readouts require typed task conditioning")
     output.mkdir(parents=True)
     seed = int(config["seed"])
     random.seed(seed)
@@ -369,7 +488,13 @@ def train_arm(
     torch.manual_seed(seed)
     if device.type == "cuda":
         torch.cuda.manual_seed_all(seed)
-    if task_type_to_id is None:
+    if sensor_model:
+        model = TaskConditionedAVSensorTemporalDecision(
+            task_count=len(task_type_to_id),
+            hidden_size=int(config["hidden_size"]),
+            modality_mode=arm,
+        ).to(device)
+    elif task_type_to_id is None:
         model = CausalGatedTemporalDecision(
             hidden_size=int(config["hidden_size"]), modality_mode=arm
         ).to(device)
@@ -402,6 +527,7 @@ def train_arm(
     consumed_task_type_occurrences: Counter[str] = Counter()
     consumed_session_occurrences = 0
     consumed_window_occurrences = 0
+    observed_parameters_with_gradients: set[int] = set()
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
     started = time.perf_counter()
@@ -441,9 +567,17 @@ def train_arm(
                 consumed_session_ids.add(str(train["session_names"][session_position]))
                 consumed_media_hashes.update(map(str, train["media_sha256"][indices]))
                 consumed_task_type_occurrences.update(map(str, train["task_type"][indices]))
-            video, audio, text, lengths, targets, loss_mask = collate_sessions(
-                train, selected, device, include_text=task_type_to_id is None
+            batch = collate_sessions(
+                train,
+                selected,
+                device,
+                include_text=task_type_to_id is None,
+                include_sensor=sensor_model,
             )
+            if sensor_model:
+                video, audio, text, sensor, lengths, targets, loss_mask = batch
+            else:
+                video, audio, text, lengths, targets, loss_mask = batch
             model.train()
             optimizer.zero_grad(set_to_none=True)
             if task_type_to_id is None:
@@ -459,7 +593,10 @@ def train_arm(
                     dtype=torch.int64,
                     device=device,
                 )
-                output_batch = model(video, audio, task_ids, lengths=lengths)
+                if isinstance(model, TaskConditionedAVSensorTemporalDecision):
+                    output_batch = model(video, audio, sensor, task_ids, lengths=lengths)
+                else:
+                    output_batch = model(video, audio, task_ids, lengths=lengths)
             mask = loss_mask & (targets >= 0)
             if not mask.any():
                 raise ValueError("training batch has no labelled windows")
@@ -469,6 +606,13 @@ def train_arm(
             if not torch.isfinite(loss):
                 raise ValueError(f"non-finite loss at optimizer step {step + 1}")
             loss.backward()
+            observed_parameters_with_gradients.add(
+                sum(
+                    parameter.numel()
+                    for parameter in model.parameters()
+                    if parameter.grad is not None
+                )
+            )
             grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             if not torch.isfinite(grad_norm):
                 raise ValueError(f"non-finite gradient norm at optimizer step {step + 1}")
@@ -505,6 +649,7 @@ def train_arm(
                     "evaluation_seconds": time.perf_counter() - evaluation_started,
                     "elapsed_seconds": time.perf_counter() - started,
                     "learning_rate": float(optimizer.param_groups[0]["lr"]),
+                    "parameters_with_gradients": max(observed_parameters_with_gradients),
                 }
                 history.append(record)
                 train_loss_window.clear()
@@ -590,7 +735,9 @@ def train_arm(
         "repeated_train_window_occurrences": consumed_window_occurrences
         - len(consumed_sample_ids),
         "trainable_parameters": model.trainable_parameter_count,
+        "parameters_with_gradients": max(observed_parameters_with_gradients),
         "text_features_used": task_type_to_id is None,
+        "sensor_features_used": arm in {"sensor_only", "avs"},
         "task_type_vocabulary": task_type_to_id,
         "peak_cuda_allocated_bytes": (
             torch.cuda.max_memory_allocated(device) if device.type == "cuda" else None
@@ -611,6 +758,9 @@ def main() -> None:
     parser.add_argument("--train-features", type=Path, required=True)
     parser.add_argument("--validation-features", type=Path, required=True)
     parser.add_argument("--feature-receipt", type=Path, required=True)
+    parser.add_argument("--imu-train-features", type=Path)
+    parser.add_argument("--imu-validation-features", type=Path)
+    parser.add_argument("--imu-receipt", type=Path)
     parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
@@ -635,6 +785,67 @@ def main() -> None:
             else config["encoders"]
         ),
     )
+    sensor_fusion = bool(config.get("sensor_fusion", False))
+    sensor_normalization = None
+    imu_receipt = None
+    if sensor_fusion:
+        if not all(
+            path is not None
+            for path in (
+                args.imu_train_features,
+                args.imu_validation_features,
+                args.imu_receipt,
+            )
+        ):
+            raise ValueError("sensor_fusion config requires both IMU splits and their receipt")
+        imu_receipt = json.loads(args.imu_receipt.read_text(encoding="utf-8"))
+        av_window_receipts = {
+            bank["model"]["av_data_provenance"]["windows_receipt_sha256"]
+            for bank in feature_receipt.get("input_feature_banks", {}).values()
+        }
+        if (
+            imu_receipt.get("sealed_audit_loaded") is not False
+            or imu_receipt.get("future_sensor_samples_used") is not False
+            or av_window_receipts != {imu_receipt.get("window_receipt_sha256")}
+            or any(
+                imu_receipt.get("splits", {}).get(split, {}).get(
+                    "unique_sample_id_order_sha256"
+                )
+                != feature_receipt.get("report", {}).get(split, {}).get(
+                    "ordered_sample_ids_sha256"
+                )
+                for split in ("train", "validation")
+            )
+        ):
+            raise ValueError("IMU feature receipt is not cleanly bound to this frozen window set")
+        train = attach_imu_features(
+            train, args.imu_train_features, split="train", receipt=imu_receipt
+        )
+        validation = attach_imu_features(
+            validation,
+            args.imu_validation_features,
+            split="validation",
+            receipt=imu_receipt,
+        )
+        mean = train["sensor"].mean(axis=0, dtype=np.float64)
+        std = train["sensor"].std(axis=0, dtype=np.float64)
+        std = np.maximum(std, 1e-6)
+        train["sensor"] = np.clip((train["sensor"] - mean) / std, -10.0, 10.0).astype(
+            np.float32
+        )
+        validation["sensor"] = np.clip(
+            (validation["sensor"] - mean) / std, -10.0, 10.0
+        ).astype(np.float32)
+        sensor_normalization = {"mean": mean.tolist(), "std": std.tolist()}
+        if set(config.get("arms", [])) != {"av", "sensor_only", "avs"}:
+            raise ValueError(
+                "sensor-fusion run must compare exactly AV, sensor-only, and AV+sensor"
+            )
+    elif any(
+        path is not None
+        for path in (args.imu_train_features, args.imu_validation_features, args.imu_receipt)
+    ):
+        raise ValueError("IMU features may only be supplied by an explicit sensor_fusion config")
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but unavailable")
     torch.use_deterministic_algorithms(True)
@@ -656,6 +867,8 @@ def main() -> None:
     ).stdout.strip()
     device = torch.device(args.device)
     args.output_dir.mkdir(parents=True)
+    if sensor_normalization is not None:
+        _write_json(args.output_dir / "imu-normalization.json", sensor_normalization)
     metadata = {
         "status": "running",
         "started_at_utc": datetime.now(UTC).isoformat(),
@@ -670,6 +883,18 @@ def main() -> None:
         "train_features_sha256": sha256_file(args.train_features),
         "validation_features_sha256": sha256_file(args.validation_features),
         "feature_receipt_sha256": sha256_file(args.feature_receipt),
+        "imu_train_features_sha256": (
+            sha256_file(args.imu_train_features) if args.imu_train_features else None
+        ),
+        "imu_validation_features_sha256": (
+            sha256_file(args.imu_validation_features) if args.imu_validation_features else None
+        ),
+        "imu_receipt_sha256": sha256_file(args.imu_receipt) if args.imu_receipt else None,
+        "imu_normalization_sha256": (
+            sha256_file(args.output_dir / "imu-normalization.json")
+            if sensor_normalization is not None
+            else None
+        ),
         "encoder_pins": feature_receipt["input_feature_banks"],
         "train_sample_ids_sha256": hashlib.sha256(
             "\n".join(map(str, train["sample_id"])).encode()

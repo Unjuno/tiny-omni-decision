@@ -9,6 +9,7 @@ temporal_decision = import_module("tiny_omni_decision.temporal_decision")
 CausalGatedTemporalDecision = temporal_decision.CausalGatedTemporalDecision
 probability_json = temporal_decision.probability_json
 TaskConditionedTemporalDecision = temporal_decision.TaskConditionedTemporalDecision
+TaskConditionedAVSensorTemporalDecision = temporal_decision.TaskConditionedAVSensorTemporalDecision
 
 
 def test_joint_model_returns_finite_causal_logits_and_gate_probabilities() -> None:
@@ -135,3 +136,46 @@ def test_task_conditioned_readout_rejects_unknown_task_ids():
     model = TaskConditionedTemporalDecision(task_count=2, hidden_size=16)
     with pytest.raises(ValueError, match="shape/value is invalid"):
         model(torch.randn(1, 2, 768), torch.randn(1, 2, 384), torch.tensor([2]))
+
+
+def test_task_conditioned_av_sensor_model_gates_three_inputs_and_masks_padding():
+    torch.manual_seed(41)
+    model = TaskConditionedAVSensorTemporalDecision(task_count=3, hidden_size=16).eval()
+    result = model(
+        torch.randn(2, 4, 768),
+        torch.randn(2, 4, 384),
+        torch.randn(2, 4, 630),
+        torch.tensor([0, 2]),
+        lengths=torch.tensor([4, 2]),
+    )
+    assert result.logits.shape == (2, 4, 2)
+    assert result.modality_weights.shape == (2, 4, 3)
+    assert torch.allclose(
+        result.modality_weights.sum(dim=-1),
+        torch.tensor([[1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 0.0, 0.0]]),
+        atol=1e-6,
+    )
+    assert torch.equal(result.logits[1, 2:], torch.zeros(2, 2))
+    assert model.trainable_parameter_count < 1_000_000
+
+
+@pytest.mark.parametrize(
+    ("mode", "changed"),
+    [("av", "sensor"), ("sensor_only", "av")],
+)
+def test_av_sensor_ablation_does_not_read_masked_modalities(mode: str, changed: str):
+    model = TaskConditionedAVSensorTemporalDecision(
+        task_count=2, hidden_size=16, modality_mode=mode
+    ).eval()
+    video = torch.randn(1, 3, 768)
+    audio = torch.randn(1, 3, 384)
+    sensor = torch.randn(1, 3, 630)
+    task_ids = torch.tensor([1])
+    baseline = model(video, audio, sensor, task_ids)
+    if changed == "sensor":
+        result = model(video, audio, sensor + 100, task_ids)
+        assert torch.equal(baseline.modality_weights[..., 2], torch.zeros(1, 3))
+    else:
+        result = model(video + 100, audio - 100, sensor, task_ids)
+        assert torch.equal(baseline.modality_weights[..., :2], torch.zeros(1, 3, 2))
+    assert torch.equal(baseline.logits, result.logits)
