@@ -190,6 +190,30 @@ not accessed SC media or annotations. The independent-test and privacy/governanc
 gates remain open. The recommended scenario-only groups are listed on the
 [official AMI split page](https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml).
 
+## Train-only camera visibility screen — seed 17 — 2026-10-21
+
+A deterministic screen selected one segment-join-passing example for each
+nonempty `(meeting, agent)` stratum from the seven SA meetings, using seed 17
+(24 examples total). The review sheet shows three target-camera frames at 15%,
+50%, and 85% of each word window, plus a midpoint frame from each other camera.
+In this coarse visual-presence check, 18 target views show one clearly framed
+face, 2 show no clear person/face, and 4 are limited or ambiguous (distant,
+back-facing, cropped, or multiple people). This is a diagnostic of those 24
+preselected train examples only, not a corpus prevalence estimate. It does not
+confirm that the visible person is the annotated speaker, that the AV clocks are
+synchronized, or that audio and video jointly improve decisions; no audio was
+played and no model was evaluated.
+
+The sample manifest SHA-256 is
+`ecc37d77490b28afe16dd17b5f9e5fc56c69c55889c0f5e52ffb61f91557584d`; the
+qualitative review receipt is
+`f5a35fa256ef5677ab67e554f391791ce23368d1fa333f40b3b884c8186b111a`. Both, the
+selection script, and contact-sheet hashes are stored under
+`C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\train-visual-qa-seed17-20261021`.
+The candidate remains unadmitted. Any future use needs an explicit visibility
+filter/QA, a decision about clips without a uniquely framed participant, and
+synchronization checks before feature extraction or a GPU run.
+
 ## Decision
 
 Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow,

@@ -143,7 +143,13 @@
       "is1000a_d_segment_join_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6",
       "all_sa_word_segment_join_audit_sha256": "e457bc9ff7d940f385d9a153e7441a634e1d661480db905ba1c2f2a1f3330a19",
       "all_sa_word_segment_join_audit_script_sha256": "ebbf2fa483f55a06391b506f09290306d1b40e8e8f2e5390c440baad6f1eed89",
-      "is1000_single_segment_audit_interim_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
+      "is1000_single_segment_audit_interim_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6",
+      "train_visual_qa_sample_manifest_sha256": "ecc37d77490b28afe16dd17b5f9e5fc56c69c55889c0f5e52ffb61f91557584d",
+      "train_visual_qa_review_sha256": "f5a35fa256ef5677ab67e554f391791ce23368d1fa333f40b3b884c8186b111a",
+      "train_visual_qa_script_sha256": "2968f158e288469adbb971b0e0503b064ab73c9d0a2a53bb6cdc68b5caca832d",
+      "train_visual_qa_contact_sheet_01_sha256": "25742864f306570c6b9bfe4e1de039a5b8f0d5c22b23c2c1d61185705b2efee5",
+      "train_visual_qa_contact_sheet_02_sha256": "b1eec24b7af9a98e6b5e60dd1e1ec9ce0d2414b996b7ac21904aeb61bb940e33",
+      "train_visual_qa_detail_sheet_sha256": "cffb1fbb6de48fa853865358ecba5f403840e8b33e8802e57bd848df3d363e91"
     },
     "third_party_mirror_used": false,
     "resolution": "official selector and official AMI mirror used for selected files where available; selector response for TS3004a was stale and not applied; TS3006a and IS1000a–d were acquired from official mirror URLs after per-file HEAD checks; manual v1.6.2 members were selectively extracted; no third-party mirror",
@@ -165,15 +171,21 @@
     "all_sa_windows_with_segment_union_overlap_ge_80pct": 213,
     "all_sa_windows_below_segment_union_overlap_threshold": 1,
     "is1000_batch_windows_with_segment_union_overlap_ge_80pct": 181,
-    "is1000_batch_windows_below_segment_union_overlap_threshold": 1
+    "is1000_batch_windows_below_segment_union_overlap_threshold": 1,
+    "train_visual_qa_samples": 24,
+    "train_visual_qa_clear_target_views": 18,
+    "train_visual_qa_no_clear_person": 2,
+    "train_visual_qa_limited_or_ambiguous": 4,
+    "train_visual_qa_is_prevalence_estimate": false
   },
   "blockers": [
     "four SA parent sets and all five SB parent sets are screened, but SA coverage is uneven: ES2002/2005/2006 have only submeeting a while IS1000 includes a–d",
-    "214 preliminary train candidates and 111 validation candidates remain weakly labeled; a union-overlap segment audit passes 213/214 SA candidates, while one IS1000c window is quarantined at 76.7%",
-    "audio/video clock synchronization and visible-speaker ground truth remain unverified; 28 fully decoded streams are each one frame below their AVI declaration, while five earlier meetings only have sampled decode",
+    "214 preliminary train candidates and 111 validation candidates remain weakly labeled; union-overlap segment audit passes 213/214 SA candidates, with one IS1000c window quarantined at 76.7%",
+    "a deterministic seed-17 train-only visual-presence screen of 24 windows found 18 clear target views, 2 with no clear person, and 4 limited/ambiguous; this is not a prevalence estimate or speaker-label validation",
+    "audio/video clock synchronization and active-speaker truth remain unverified; 28 fully decoded streams are each one frame below AVI declaration, while five earlier meetings only have sampled decode",
     "SA/SB participant IDs are disjoint in official metadata, but media identity, normalized content and near-duplicate cross-split audits remain incomplete",
     "ES2005a media spans about 8 minutes while meeting metadata says 958 seconds; investigate source/time coverage",
-    "freeze balanced task manifest, hard-negative rule, candidate-order policy and train-only visual label QA before feature extraction",
+    "freeze balanced task manifest, hard-negative rule, candidate-order policy and comprehensive train-only visual label QA before feature extraction",
     "privacy/governance review is required before product claims"
   ],
   "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md",
