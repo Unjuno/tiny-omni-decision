@@ -103,6 +103,15 @@ registered for those two summaries. Candidate counts range from 2 to 48 and
 were not truncated; metrics by exact candidate count and every event's
 prediction/probabilities are retained in the external result directory.
 
+An independent CPU integrity replay joined both prediction files back to all
+504 unique feature-manifest event IDs and checked video ID, sound ID, target,
+candidate count, candidate-order hash, probability-vector length, finiteness,
+normalization and target bounds. It independently recomputed Accuracy, NLL,
+Brier and the evaluator's fixed 10-bin ECE for both checkpoints; all values
+matched the receipt within `1e-10`. Both prediction files cover exactly 200
+unique videos, with no duplicate event IDs. This replay confirmed result
+integrity; it adds no new evaluation sample or quality claim.
+
 ## Interpretation
 
 On this previously unused TRAIN subset, the fixed joint readout transfers with
