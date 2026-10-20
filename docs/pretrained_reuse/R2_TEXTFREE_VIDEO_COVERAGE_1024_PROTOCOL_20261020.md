@@ -1,6 +1,6 @@
 # Text-free CLEVRER scene-coverage extension protocol
 
-**Status: preregistered; preflight and CUDA smoke passed; matched training pending.** This is a narrow
+**Status: matched 512/1,024-scene runs completed.** This is a narrow
 frozen-feature Path A development study. It does not evaluate audio, image,
 multimodal fusion, open-ended video reasoning, or product quality.
 
@@ -101,9 +101,14 @@ was stopped or signalled.
 The first frozen-receipt preflight exposed a runner key mismatch (`validation.jsonl`
 versus the recorded `validation_jsonl`). The reader was corrected to match the
 fetch receipt schema and a regression test was added. No receipt or dataset was
-changed. Both 512 and 1,024 scene preflights and CPU smoke checks now pass; their
-JSON receipts are stored with the external attempt artifacts. GPU smoke output
-is also retained externally. Full matched fitting has not started yet.
+changed. Both arms passed CPU preflight/smoke and a guarded CUDA smoke. The first
+full-run launcher was safely rejected twice on reservation handoff races; the
+next handoff ran both arms. A PowerShell stderr policy then aborted an earlier
+zero-update attempt when PyTorch emitted its Windows allocator warning. That
+partial output directory was preserved as attempt 01. A corrected launcher and
+new output directory completed both arms without changing their configurations.
+The detailed results, curves, hashes, overfitting evidence, and paired scene
+bootstrap are in the [completed results report](R2_TEXTFREE_VIDEO_COVERAGE_1024_RESULTS_20261020.md).
 
 The existing 256-scene/200-scene baseline preflight also passed after the
 runner was corrected to import this worktree's own `src/` before any globally

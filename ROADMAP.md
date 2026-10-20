@@ -1,3 +1,21 @@
+**2026-10-20 R2 text-free CLEVRER coverage extension (completed video-only
+diagnostic):** At the same 2,048 optimizer updates and 131,072 example
+presentations per readout, training coverage increased from 512 to 1,024
+scene-grouped CLEVRER train scenes with the same 256-scene validation. The
+selected MLP improved macro question-type Accuracy by 7.79 points and NLL by
+0.058; the paired 5,000-resample scene interval for Accuracy was +3.91 to
++11.52 points. The BiLSTM gain was smaller and uncertain (+2.11 points,
+interval −1.76 to +6.05). All four readouts overfit before 2,048 updates.
+This supports unique-data coverage as one useful video-only lever, not a
+multimodal or product result; the development validation also selected each
+checkpoint. See the [protocol](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_1024_PROTOCOL_20261020.md)
+and [results](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_1024_RESULTS_20261020.md).
+Selected video ablations show visual-content sensitivity for static questions,
+but frame-order reversal did not reduce temporal-question Accuracy; temporal
+sequence use remains unproven. The source also has 130/159 permitted
+cross-split normalized question/option template matches, which limits claims
+about question-template transfer.
+
 **2026-10-20 R2 HoloAssist text-free recovery (completed diagnostic):** The
 frozen 1,042-train / 264-development-validation selection and 30-second causal
 windows are unchanged. Full VideoPrism and Whisper feature banks were built,
