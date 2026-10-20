@@ -149,3 +149,20 @@ previous manifests. Snapshot manifest SHA-256:
 acquirer remained live at 112/200 after this audit. As above, this partial gate
 does not authorize feature extraction; the complete fixed holdout audit remains
 required.
+
+## Frozen feature-model preflight (2026-10-20)
+
+Before feature extraction, all six locally cached DINOv2-small / CLAP model and
+frontend files were rehashed against the constants enforced by the extractor;
+every file matched. Exact SHA-256 values are: DINO weights
+`ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1`, DINO
+config `1809f83e3bdb1609a501a610ad4a742f4fd8ae44d72ca4aa0df52d1f2ac8628d`,
+DINO processor `14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828`,
+CLAP audio weights
+`d190141ffd119b9096d9f3e096b2285f8ce6fa401cdb666d6f53911a2517fee3`, CLAP
+audio config `f7a374a0dc4907b3a30a4e9964286055929c42d932d5abd0619f7b1a20438dd3`,
+and CLAP frontend `9739f58296aa6f9ac18008fd0150fb2649bc554985fbde86d0a4041c882ac753`.
+The pinned runtime inventory is 22,056,576 DINO parameters and 28,190,872 CLAP
+audio parameters, frozen. This read-only file check does not claim a new model
+load or forward; runtime feature execution remains gated on complete media/PTS
+validation and HotUGPU availability.
