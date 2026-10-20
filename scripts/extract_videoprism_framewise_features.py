@@ -32,6 +32,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--frame-count", type=int, default=FRAME_COUNT)
     return parser.parse_args()
 
 
@@ -72,9 +73,7 @@ def _read_rows(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
-def _validate_cross_sample(
-    train: list[dict[str, Any]], evaluation: list[dict[str, Any]]
-) -> None:
+def _validate_cross_sample(train: list[dict[str, Any]], evaluation: list[dict[str, Any]]) -> None:
     for name, rows, expected_split in (
         ("training", train, "train"),
         ("evaluation", evaluation, "validation"),
@@ -119,6 +118,8 @@ def main() -> None:
     checkpoint = args.checkpoint.resolve(strict=True)
     source_root = args.source_root.resolve(strict=True)
     output = args.output_dir.resolve()
+    if args.frame_count < 1:
+        raise ValueError("frame count must be positive")
     if output.exists():
         raise FileExistsError(f"refusing to overwrite framewise feature directory: {output}")
     if sha256_file(checkpoint) != CHECKPOINT_SHA256:
@@ -138,9 +139,7 @@ def main() -> None:
     if not train_rows or not evaluation_rows:
         raise ValueError("train and evaluation splits must be non-empty")
     _validate_cross_sample(train_rows, evaluation_rows)
-    unique_rows = _unique_asset_rows(
-        [(train_dir, train_rows), (evaluation_dir, evaluation_rows)]
-    )
+    unique_rows = _unique_asset_rows([(train_dir, train_rows), (evaluation_dir, evaluation_rows)])
 
     sys.path.insert(0, str(source_root))
     import jax
@@ -160,7 +159,7 @@ def main() -> None:
     features_by_media: dict[str, np.ndarray] = {}
     per_video_seconds = []
     for media_hash, (media, row) in unique_rows.items():
-        frames = _apply_temporal_order(_decode_video(media), "forward")
+        frames = _apply_temporal_order(_decode_video(media, requested=args.frame_count), "forward")
         video = jnp.asarray(_preprocess(frames, tf)[None, ...])
         forward_started = time.perf_counter()
         result = encode(video)
@@ -172,7 +171,7 @@ def main() -> None:
         )
         per_video_seconds.append(time.perf_counter() - forward_started)
         tokens = result[0] if isinstance(result, tuple) else result
-        features = pool_framewise_tokens(np.asarray(tokens))
+        features = pool_framewise_tokens(np.asarray(tokens), frame_count=args.frame_count)
         pooled = features.mean(axis=0)
         if pooled.shape != (768,) or not np.isfinite(pooled).all():
             raise ValueError(f"invalid pooled feature for {row['id']}")
@@ -193,7 +192,7 @@ def main() -> None:
         "upstream_source_commit": source_commit,
         "checkpoint_sha256": sha256_file(checkpoint),
         "dataset_revision": "MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef",
-        "frame_count": FRAME_COUNT,
+        "frame_count": args.frame_count,
         "frame_size": FRAME_SIZE,
         "feature_dimension": 768,
         "feature_layout": "[unique_media, temporal_position, hidden_dimension]",
@@ -215,13 +214,9 @@ def main() -> None:
         "train_ids": [row["id"] for row in train_rows],
         "evaluation_ids": [row["id"] for row in evaluation_rows],
         "train_scene_ids": sorted({int(row["scene_index"]) for row in train_rows}),
-        "evaluation_scene_ids": sorted(
-            {int(row["scene_index"]) for row in evaluation_rows}
-        ),
+        "evaluation_scene_ids": sorted({int(row["scene_index"]) for row in evaluation_rows}),
         "train_media_hashes": sorted({str(row["media_sha256"]) for row in train_rows}),
-        "evaluation_media_hashes": sorted(
-            {str(row["media_sha256"]) for row in evaluation_rows}
-        ),
+        "evaluation_media_hashes": sorted({str(row["media_sha256"]) for row in evaluation_rows}),
         "unique_video_count": len(features_by_media),
         "per_unique_video_forward_seconds": per_video_seconds,
         "extraction_seconds": time.perf_counter() - started,
@@ -235,9 +230,7 @@ def main() -> None:
         "feature_cache_bytes": cache_path.stat().st_size,
         "validation_scene_overlap": 0,
     }
-    (output / "cache-report.json").write_text(
-        json.dumps(report, indent=2) + "\n", encoding="utf-8"
-    )
+    (output / "cache-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
 
 

@@ -89,7 +89,7 @@ def _read_rows(path: Path) -> list[dict[str, Any]]:
     ]
 
 
-def _decode_video(path: Path) -> Any:
+def _decode_video(path: Path, requested: int = FRAME_COUNT) -> Any:
     import av
     import numpy as np
 
@@ -100,20 +100,20 @@ def _decode_video(path: Path) -> Any:
         stream = streams[0]
         total = int(stream.frames or 0)
         if total > 0:
-            indices = set(uniform_indices(total))
+            indices = set(uniform_indices(total, requested))
             selected = []
             for index, frame in enumerate(container.decode(stream)):
                 if index in indices:
                     selected.append(frame.to_ndarray(format="rgb24"))
                 if index >= max(indices):
                     break
-            if len(selected) != FRAME_COUNT:
-                raise ValueError(f"decoder returned {len(selected)}/{FRAME_COUNT} frames: {path}")
+            if len(selected) != requested:
+                raise ValueError(f"decoder returned {len(selected)}/{requested} frames: {path}")
         else:
             decoded = [frame.to_ndarray(format="rgb24") for frame in container.decode(stream)]
             if not decoded:
                 raise ValueError(f"video contains no decodable frames: {path}")
-            selected = [decoded[index] for index in uniform_indices(len(decoded))]
+            selected = [decoded[index] for index in uniform_indices(len(decoded), requested)]
     return np.stack(selected)
 
 

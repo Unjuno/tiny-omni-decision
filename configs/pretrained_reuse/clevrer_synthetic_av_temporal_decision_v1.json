@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "experiment_id": "clevrer-synthetic-av-temporal-decision-v1",
+  "protocol_sha256": "82b76e813455061769883b6a46517dbfb3a7a54f7593c1093ab92d8cc261fab7",
+  "seed": 17,
+  "training": {
+    "max_optimizer_updates_per_candidate": 2048,
+    "evaluation_interval": 128,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "early_stopping": false,
+    "checkpoint_selector": "minimum validation NLL",
+    "candidate_order": [
+      "joint_lstm",
+      "audio_only_lstm",
+      "video_only_lstm",
+      "joint_mean_pooled"
+    ]
+  },
+  "readout": {
+    "implementation": "tiny_omni_decision.temporal_decision.CausalGatedTemporalDecision",
+    "hidden_size": 32,
+    "video_size": 768,
+    "audio_size": 1,
+    "text_size": 384,
+    "options": ["sound before collision", "sound after collision"],
+    "mean_pooled_control": "repeat the temporal mean of both AV streams at all 16 steps"
+  },
+  "frozen_encoders": {
+    "video": {
+      "model_id": "google/videoprism-base-f16r288",
+      "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "frame_count": 16,
+      "feature_width": 768
+    },
+    "text": {
+      "model_id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+      "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+      "checkpoint_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "feature_width": 384,
+      "pooling": "attention-mask mean"
+    },
+    "audio": {
+      "kind": "synthetic waveform-derived feature",
+      "sample_rate": 16000,
+      "tone_hz": 880,
+      "tone_duration_ms": 80,
+      "feature": "normalized squared energy in 16 bins aligned to 8 video frames"
+    },
+    "all_encoders_frozen": true
+  },
+  "validation": {
+    "selection_split": "development validation from official CLEVRER train scenes",
+    "cluster_unit": "video scene",
+    "sealed_audit_opened": false,
+    "bootstrap_repetitions": 5000
+  }
+}

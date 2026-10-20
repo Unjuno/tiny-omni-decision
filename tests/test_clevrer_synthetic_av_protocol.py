@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from pathlib import Path
 
 import pytest
 
@@ -87,6 +88,19 @@ def test_per_scene_shifts_are_stable_independent_and_bounded() -> None:
         for scene in ids
     }
     assert all(0 <= shift <= 255 for shift in first.values())
+
+
+def test_frozen_video_encoder_preserves_sixteen_temporal_positions() -> None:
+    config = json.loads(
+        Path("configs/pretrained_reuse/clevrer_synthetic_av_timing_v1.json").read_text()
+    )
+
+    video = config["video_feature_extraction"]
+    assert video["frame_count"] == 16
+    assert video["temporal_pooling"] == "none; preserve all 16 positions"
+    assert video["checkpoint_sha256"] == (
+        "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+    )
 
 
 def test_build_protocol_keeps_paired_variants_and_scene_groups_together(

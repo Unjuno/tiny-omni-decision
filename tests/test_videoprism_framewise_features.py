@@ -22,6 +22,15 @@ def test_framewise_pooling_preserves_time_and_matches_global_mean() -> None:
     assert not np.array_equal(framewise[0], framewise[-1])
 
 
+def test_framewise_pooling_preserves_sixteen_temporal_positions() -> None:
+    tokens = np.arange(1 * 16 * 2 * 768, dtype=np.float32).reshape(1, 16 * 2, 768)
+
+    framewise = pool_framewise_tokens(tokens, frame_count=16)
+
+    assert framewise.shape == (16, 768)
+    np.testing.assert_allclose(framewise.mean(axis=0), tokens.mean(axis=1)[0], atol=1e-4)
+
+
 @pytest.mark.parametrize(
     "tokens",
     [
@@ -49,9 +58,7 @@ def test_centering_reproduces_reference_mean_without_changing_time_differences()
 
 def test_cross_sample_validation_rejects_scene_and_media_overlap() -> None:
     train = [{"id": "train", "split": "train", "scene_index": 1, "media_sha256": "a"}]
-    evaluation = [
-        {"id": "eval", "split": "validation", "scene_index": 1, "media_sha256": "b"}
-    ]
+    evaluation = [{"id": "eval", "split": "validation", "scene_index": 1, "media_sha256": "b"}]
 
     with pytest.raises(ValueError, match="scene or media identity overlap"):
         _validate_cross_sample(train, evaluation)
@@ -64,8 +71,7 @@ def test_unique_asset_rows_deduplicates_multiple_questions(tmp_path) -> None:
 
     digest = sha256_file(media)
     rows = [
-        {"id": f"q{index}", "media_path": media.name, "media_sha256": digest}
-        for index in range(2)
+        {"id": f"q{index}", "media_path": media.name, "media_sha256": digest} for index in range(2)
     ]
 
     assets = _unique_asset_rows([(tmp_path, rows)])

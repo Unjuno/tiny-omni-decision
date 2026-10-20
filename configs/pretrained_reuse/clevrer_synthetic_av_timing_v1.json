@@ -37,6 +37,19 @@
     "text_only_pair_control": "paired samples share question/options and have opposite targets",
     "video_only_pair_control": "paired samples share video and have opposite targets"
   },
+  "video_feature_extraction": {
+    "model_id": "google/videoprism-base-f16r288",
+    "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "upstream_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "license": "Apache-2.0 model card; CC-BY-4.0 released checkpoint materials; preserve attribution",
+    "frame_count": 16,
+    "frame_sampling": "uniform endpoint-inclusive over the 128 source frames",
+    "input_resolution": 288,
+    "output_layout": "[temporal_position, 768], spatial tokens averaged within each frame position",
+    "temporal_pooling": "none; preserve all 16 positions",
+    "validation": "CPU synthetic and 401-video real-media extraction passed; 16-frame temporal outputs retained"
+  },
   "temporal_encoding": {
     "fps": 25.6,
     "video_frames": 128,
