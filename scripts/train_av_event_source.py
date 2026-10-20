@@ -18,9 +18,9 @@ import torch
 from torch.nn import functional as F
 
 from scripts.audit_perception_av_correspondence import sha256_file
+from scripts.av_event_split_validation import validate_video_splits
 from tiny_omni_decision.av_event import AVEventSourceScorer
 
-SPLITS = {"fit", "selection", "calibration", "development_validation"}
 AUDIO_SIZE = 512
 VISUAL_SIZE = 384
 DINOV2_TOKENS = 257
@@ -45,34 +45,6 @@ def pool_dinov2_patch_tokens(features: np.ndarray) -> np.ndarray:
     if not np.isfinite(pooled).all():
         raise ValueError("pooled DINOv2 features are non-finite")
     return pooled
-
-
-def validate_video_splits(rows: list[dict[str, Any]]) -> None:
-    """Reject duplicate event IDs and any video assigned to multiple splits."""
-    seen_ids: set[str] = set()
-    video_splits: dict[str, str] = {}
-    media_splits: dict[str, str] = {}
-    for row in rows:
-        row_id, video_id, split = row.get("id"), row.get("video_id"), row.get("split")
-        if not isinstance(row_id, str) or not row_id or row_id in seen_ids:
-            raise ValueError("event IDs must be nonempty and unique")
-        if not isinstance(video_id, str) or not video_id or split not in SPLITS:
-            raise ValueError("each row needs a video ID and recognized split")
-        seen_ids.add(row_id)
-        previous = video_splits.setdefault(video_id, split)
-        if previous != split:
-            raise ValueError("video appears in multiple splits")
-        media_hash = row.get("media_sha256")
-        if media_hash is not None:
-            if (
-                not isinstance(media_hash, str)
-                or len(media_hash) != 64
-                or any(char not in "0123456789abcdef" for char in media_hash)
-            ):
-                raise ValueError("media_sha256 must be a lowercase SHA-256 digest")
-            previous_media_split = media_splits.setdefault(media_hash, split)
-            if previous_media_split != split:
-                raise ValueError("media identity appears in multiple splits")
 
 
 def read_rows(path: Path) -> list[dict[str, Any]]:

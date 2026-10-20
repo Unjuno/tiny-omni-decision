@@ -8,7 +8,7 @@ from collections import Counter
 from pathlib import Path
 
 from scripts.audit_perception_av_correspondence import sha256_file
-from scripts.train_av_event_source import validate_video_splits
+from scripts.av_event_split_validation import validate_video_splits
 
 OLD_FEATURE_MANIFEST_SHA256 = "d92e4c91c236c69548f8fa0b58826e8afc853372ebf7a59b1e64567034f8df57"
 SCALE_PLAN_SHA256 = "43dda454adf45352dee281680f51698ecf38d60731d33311a6ded139de167461"
