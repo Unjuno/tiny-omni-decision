@@ -23,7 +23,7 @@
     "local_media": true,
     "local_annotations": true,
     "external_artifact_root": "C:/CodexArtifacts/pretrained-reuse-r2/ami-av-probe-20261021",
-    "annotation_extraction_policy": "only ES2002a, ES2003a, ES2005a, ES2006a, ES2011a word/segment XML files plus corpusResources/meetings.xml; no SC annotation members extracted or read"
+    "annotation_extraction_policy": "only ES2002a, ES2003a, ES2005a, ES2006a, ES2011a, and TS3004a word/segment XML files plus corpusResources/meetings.xml; no SC annotation members extracted or read"
   },
   "proposed_task": {
     "name": "meeting_local_voice_to_face_matching",
@@ -41,9 +41,9 @@
     "validation": {"partition": "SB", "meetings": 20, "sets": 5},
     "sealed_unseen": {"partition": "SC", "meetings": 20, "sets": 5, "accessed": false},
     "participant_disjointness_verified": false,
-    "selected_meetings": ["ES2002a", "ES2003a", "ES2005a", "ES2006a", "ES2011a"],
+    "selected_meetings": ["ES2002a", "ES2003a", "ES2005a", "ES2006a", "ES2011a", "TS3004a"],
     "selected_train_meetings": ["ES2002a", "ES2005a", "ES2006a"],
-    "selected_validation_meetings": ["ES2003a", "ES2011a"],
+    "selected_validation_meetings": ["ES2003a", "ES2011a", "TS3004a"],
     "selected_meeting_participant_overlap": false,
     "media_overlap_verified": false
   },
@@ -58,11 +58,11 @@
     "selector_generated_asset_downloads_succeeded": true,
     "official_train_video_index_checked": true,
     "official_selector_manifest_estimated_bytes": 636000000,
-    "selected_media_bytes_downloaded": 825256200,
-    "selected_annotation_bytes_extracted": 1424288,
+    "selected_media_bytes_downloaded": 1075610186,
+    "selected_annotation_bytes_extracted": 1828912,
     "all_selected_media_hashes_verified": true,
     "sampled_audio_and_video_decode": true,
-    "annotation_members_extracted": 41,
+    "annotation_members_extracted": 49,
     "sc_annotation_content_accessed": false,
     "external_receipts": {
       "media_download_receipt_sha256": "06C0CEFBFF0C4B0C94289F97DF48E5F54A273E4FD531C8D4C745B1697C48076E",
@@ -70,33 +70,57 @@
       "annotation_extraction_receipt_sha256": "11EA84202DAAB2C5A073A8A080E0E6F15F7AED6455272B8D33322A14AF02350B",
       "expanded_media_download_receipt_sha256": "3bb1bb16dde2f73aa227e68d371ddaa64ec967d966e14b7b834b580589b451db",
       "expanded_media_annotation_preflight_sha256": "bbead20d61d57429cbf7a5358bfb5ac890e6da108a35c20e6ad8621cd67a9b4b",
-      "expanded_annotation_extraction_receipt_sha256": "8f82eade6d08f098d61d16e1a815f8f028a019ec83317b5077c595817974deb0"
+      "expanded_annotation_extraction_receipt_sha256": "8f82eade6d08f098d61d16e1a815f8f028a019ec83317b5077c595817974deb0",
+      "ts3004a_media_receipt_sha256": "2469bba07b96f36b4bc0531a6233461c11f6206c23c9258475f6cbada0932fdb",
+      "ts3004a_annotation_receipt_sha256": "1f9d834bc58ddedc79c84d2009ed6b4a84a61dcf87674a7fb645fa04a5ce5ae3",
+      "ts3004a_preflight_sha256": "94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452",
+      "ts3004a_selection_note_sha256": "76f2cfd8acd100c1dd4d29c064a78eac89042e52b22506939d006fd0ee2815aa"
     },
     "third_party_mirror_used": false,
-    "resolution": "official selector and official AMI mirror succeeded for selected media; official manual annotation archive downloaded and selectively extracted; no third-party mirror"
+    "resolution": "official selector and official AMI mirror succeeded for the initial selected media; for TS3004a, the chooser response returned the previous IS1008a selection, so its response was not applied; the five policy-approved TS3004a official mirror URLs were independently HEAD-checked and retrieved; official manual annotation archive selectively extracted; no third-party mirror"
   },
   "resource_estimates": {
     "official_low_size_video_mb_per_meeting_approx": 400,
     "official_headset_mix_mb_per_meeting_approx": 30,
     "one_train_plus_one_validation_meeting_mb_approx": 636,
-    "local_selected_media_bytes": 825256200,
+    "local_selected_media_bytes": 1075610186,
     "expanded_selector_manifest_estimated_bytes": 1384000000,
     "selected_train_preliminary_windows": 32,
-    "selected_validation_preliminary_windows": 38,
+    "selected_validation_preliminary_windows": 68,
     "local_annotation_archive_bytes": 22887865,
     "gpu_job_started": false,
     "gpu_status_at_last_check": "Orbitune active; 15821/16384 MiB used; latest utilization snapshot 89%",
     "hotgpu_required_for_future_gpu_smoke": true
   },
   "blockers": [
-    "only three SA and two SB parent sets were screened; split-wide participant/media overlap remains unverified",
-    "preliminary filtered windows total 32 train and 38 validation, too few for a meaningful quality run",
+    "only three SA and three SB parent sets were screened; split-wide participant/media overlap remains unverified",
+    "preliminary filtered windows total 32 train and 68 validation, with the TS3004a addition dominated by one speaker; too few for a meaningful quality run",
     "ES2005a media spans about 8 minutes while meeting metadata says 958 seconds; investigate source/time coverage",
     "audio and video durations differ and exact synchronization is unverified",
     "word timing is alignment-derived; label quality needs train-only QA",
-    "full media decode and annotation-to-camera label-row audit remain incomplete",
-    "five SB parent sets support feasibility only, not a strong quality claim",
+    "TS3004a full decode returned one fewer frame than container declarations in each camera stream; other selected media full decode and annotation-to-camera label-row audit remain incomplete",
+    "only three of five official SB parent sets were selected; this screen supports feasibility only, not a strong quality claim",
     "privacy/governance review is required before product claims"
   ],
-  "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md"
+  "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md",
+  "additional_selected_sb_meeting": {
+    "meeting": "TS3004a",
+    "official_selector_response": "selector returned prior IS1008a selection; response not used for TS3004a",
+    "acquisition": "five policy-approved files fetched from official AMI mirror after per-file HEAD checks",
+    "media_bytes": 250353986,
+    "preliminary_validation_windows_added": 30,
+    "validation_windows_after_addition": 68,
+    "participant_overlap_with_selected_sa_sb": false,
+    "decoded_frames_vs_declared": {
+      "Closeup1": "33337/33338",
+      "Closeup2": "33306/33307",
+      "Closeup3": "33266/33267",
+      "Closeup4": "33451/33452"
+    },
+    "provenance_note": "amiBuild-224157 manifest is the preserved IS1008a manifest; it is not a TS3004a manifest. TS3004a direct URL and acquisition evidence is in the external selection note and receipts.",
+    "selection_note_sha256": "76f2cfd8acd100c1dd4d29c064a78eac89042e52b22506939d006fd0ee2815aa",
+    "media_receipt_sha256": "2469bba07b96f36b4bc0531a6233461c11f6206c23c9258475f6cbada0932fdb",
+    "annotation_receipt_sha256": "1f9d834bc58ddedc79c84d2009ed6b4a84a61dcf87674a7fb645fa04a5ce5ae3",
+    "preflight_sha256": "94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452"
+  }
 }

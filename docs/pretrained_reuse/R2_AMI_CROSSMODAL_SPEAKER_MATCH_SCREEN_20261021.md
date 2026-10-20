@@ -44,6 +44,48 @@ The expanded receipts are:
 - `annotations-expanded-20261021/extraction-receipt.json` — SHA-256
   `8f82eade6d08f098d61d16e1a815f8f028a019ec83317b5077c595817974deb0`
 
+## Additional SB parent-set screen — TS3004a — 2026-10-21
+
+To broaden the selected SB screen, TS3004a was selected in the official AMI
+chooser. The chooser-generated response returned to the previous IS1008a
+selection instead of TS3004a, so its manifest was **not** applied to TS3004a.
+For this meeting, only the five policy-approved URLs (Closeup1–4 and
+Mix-Headset) were fetched directly from the official AMI mirror after independent
+HEAD checks. The selector page itself was unresponsive during follow-up. All
+five files match their official `Content-Length`; the media receipt is
+`media-download-receipt-ts3004a-20261021.json` (SHA-256
+`2469bba07b96f36b4bc0531a6233461c11f6206c23c9258475f6cbada0932fdb`). The
+selected four word files and four segment files were selectively extracted from
+the already-hashed manual v1.6.2 archive; no SC member was opened. The
+extraction receipt SHA-256 is
+`1f9d834bc58ddedc79c84d2009ed6b4a84a61dcf87674a7fb645fa04a5ce5ae3`. The complete preflight, including media and
+annotation hashes, is `preflight-ts3004a-20261021.json` (SHA-256
+`94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452`).
+
+TS3004a is in SB/development. Its four participant IDs do not intersect the
+previously selected ES2003a/ES2011a SB subset or selected SA subset. This is
+still not a split-wide proof. Applying the same preliminary word-window filter
+adds 30 candidate windows (20 from agent A, 4 each from B/C, and 2 from D),
+bringing the selected SB screen from 38 to 68 windows. This remains heavily
+imbalanced by speaker and is not a frozen task set or quality metric.
+
+All four TS3004a AVIs fully decoded to within exactly one frame of the
+container-declared frame count (declared/decoded: 33338/33337, 33307/33306,
+33267/33266, 33452/33451). The decoded frames span 1330.68–1338.08 seconds;
+the mono 16 kHz headset WAV is 1345.323 seconds and the meeting metadata says
+1345.324 seconds. This close duration agreement is useful but does not establish
+timestamp synchronization or prove the forced-alignment word labels match visible
+speakers. The standalone TS3004a preflight receipt hash is
+`94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452`.
+
+No GPU run was started. This finding improves source coverage but leaves the
+admission blockers intact: no selected speaker-visibility QA, no audio/video
+clock synchronization proof, no split-wide participant/media/near-duplicate
+audit, only three selected SB parent sets, and a 30-window addition dominated
+by one speaker. IS1008a and TS3006a remain unacquired and unassessed. The
+selector-generated IS1008a manifest remains preserved and must not be mistaken
+for a TS3004a manifest.
+
 The official scenario-only split assigns ES2002/2005/2006 to SA and ES2003/2011
 to SB; the other official SB parent sets are IS1008, TS3004, and TS3006. We have
 not accessed SC media or annotations. The independent-test and privacy/governance

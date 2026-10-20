@@ -1,15 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
 **2026-10-21 AMI cross-modal task screen:** AMI remains a review-only candidate for
-meeting-local voice-to-face matching. The expanded official-source screen now
-covers three SA parent sets and two SB parent sets (25 selected media files,
-825,256,200 bytes); selected v1.6.2 word/segment annotations and hashes are
-recorded externally. The selected train/validation participant IDs are disjoint,
-but this is not a split-wide proof. Preliminary filtered windows total only 32
-train and 38 validation; ES2005a media spans about 8 minutes against 958 seconds
-in meeting metadata. Audio/video durations differ, synchronization and label
-quality remain unverified, and no GPU run was started. Keep SC annotations
-unopened and the source at REVIEW. See
+meeting-local voice-to-face matching. The selected source screen now covers three
+SA and three SB parent sets (30 selected media files, 1,075,610,186 bytes);
+selected v1.6.2 word/segment annotations and hashes are recorded externally.
+The selected train/validation participant IDs are disjoint, but this is not a
+split-wide proof. Preliminary filtered windows total 32 train and 68 validation;
+the TS3004a addition is speaker-imbalanced and each camera stream decoded one
+frame below its declared count. ES2005a spans about 8 minutes against 958 seconds
+in metadata. Audio/video synchronization and label quality remain unverified,
+and no GPU run was started. Keep SC annotations unopened and the source at REVIEW.
+See
 [`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
 
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
