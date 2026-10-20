@@ -1,5 +1,14 @@
 **2026-10-19 R2 HoloAssist temporal readout:** All 3,527 text/audio/video frozen features are packed and the fixed 2,048-step video-only, audio-only, and joint readout runs completed on the local RTX 3080. Validation-selected best accuracies were 71.31%, 73.79%, and 73.05%, respectively; each arm's NLL/calibration regressed sharply by the fixed endpoint. Joint input did not improve on audio-only, so fusion benefit is not supported by this pilot. No test or sealed-audit data were loaded. [Protocol/results](docs/pretrained_reuse/R2_HOLOASSIST_TEMPORAL_READOUT_RESULTS_20261019.md); detailed curves and hashes are in its linked JSON.
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+
+**2026-10-21 R2 CaptainCook4D task screen:** the official Apache-2.0 dataset
+offers a provisional step-text + video conformance task. The supplied
+person-based train/validation split has one shared participant; dropping the
+single overlapping train recording removes person overlap, but recipes and
+environments remain shared and validation has only two participant IDs.
+Labels do not establish that audio is required, so this is not joint AV
+complementarity evidence. No media, test metrics, model, or GPU were used.
+See docs/pretrained_reuse/R2_CAPTAINCOOK4D_TASK_SCREEN_20261021.md.
 **2026-10-19 R2 HoloAssist full-media gate:** The fixed 160-train / 207-
 validation pitch-shifted pilot is fully downloaded and all 367 media SHA-256
 values passed. AV timing was reconciled with measured frame granularity; two
