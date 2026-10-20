@@ -49,7 +49,8 @@ output directory. The first pushed CI run passed lint but failed at test
 collection because the intervention test imported the heavyweight PyTorch
 runner in the dev-only CI environment. The session-derangement helper was
 separated into a NumPy-only module; the measured intervention behavior is
-unchanged and the CI suite is being rerun on that fix.
+unchanged. The rerun passed all checks: 2,483 tests passed, 11 were skipped,
+and lint plus manifest validation passed.
 
 ## Fixed-budget training
 
