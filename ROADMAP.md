@@ -1,14 +1,13 @@
-**2026-10-20 R2 CLEVRER synthetic AV timing diagnostic in progress:** A seed-17,
-scene-grouped split was frozen over 405 metadata-screened official train videos;
-the verified media receipt covers 324/81 scenes. Eligible events produce
-1,596/390 examples across 322/79 scenes after event filters. All 401 referenced
-videos now have pinned 16-frame VideoPrism features, and frozen MiniLM plus
-waveform-derived tone-energy inputs are materialized. A train-fit absolute
-audio-onset threshold reaches 56.67% validation, so a learned audio-only arm is
-required beside the gated-LSTM joint model. The matched 2,048-update readout
-has not run yet. This remains a synthetic temporal-binding diagnostic, not
-natural AV or 95–98% product evidence. See the
-[protocol report](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_PROTOCOL_20261020.md).
+**2026-10-20 R2 CLEVRER synthetic AV timing diagnostic (completed):** Four
+matched seed-17 readouts completed 2,048 updates each on the local RTX 3080 via
+HotUGPU. Selected joint gated-LSTM validation reached 78.97% Accuracy / 0.4566
+NLL at step 512, versus 72.31% / 0.5051 for audio-only; video-only and
+mean-pooled controls remained at chance. Joint validation NLL worsened to
+0.9432 by step 2,048 while full-train Accuracy reached 98.06%, indicating
+substantial overfit. This narrow synthetic timing result does not establish
+natural AV capability or the 95–98% product target. No sealed audit or product
+promotion occurred. See the [protocol](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_PROTOCOL_20261020.md)
+and [results](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_TEMPORAL_DECISION_RESULTS_20261020.md).
 
 **2026-10-20 R2 CLEVRER synthetic AV exposure audit:** Expanded the earlier
 preflight to all 23 worktrees and the R2 artifact root. Metadata and filename
