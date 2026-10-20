@@ -11,6 +11,16 @@ product-size or 95–98% target is claimed. A separate 28-participant holdout
 was not opened. R2-M-2 remains open. See the
 [protocol and full result](docs/pretrained_reuse/R2_PCH_MOMENT_SENSOR_PROBE_20261021.md).
 
+**2026-10-21 optional temporal-readout follow-up:** A one-layer, 18,834-parameter
+LSTM over raw PCH accelerometer windows reached 65.08% Accuracy / 62.22% macro
+Accuracy on the same 63 development recordings, three more correct than frozen
+MOMENT plus a linear readout (60.32% / 59.72%). Paired participant-bootstrap
+intervals include zero; the selected epoch was 31 and validation worsened by
+epoch 41 while training accuracy kept rising. This only supports a compact
+sensor-window candidate for further study; it does not establish long-range
+temporal reasoning, modality fusion, or the 95% goal. The same validation set
+selected the checkpoint. See [the temporal probe report](docs/pretrained_reuse/R2_PCH_LSTM_TEMPORAL_PROBE_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
