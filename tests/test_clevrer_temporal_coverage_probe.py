@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import importlib
 import json
 
-from scripts.train_clevrer_temporal_coverage_probe import (
-    _prediction_map,
-    _scene_bootstrap_difference,
-)
+import pytest
+
+pytest.importorskip("torch", reason="PyTorch is an optional training dependency")
+_probe = importlib.import_module("scripts.train_clevrer_temporal_coverage_probe")
 
 
 def test_prediction_map_reads_serialized_classification_options(tmp_path) -> None:
@@ -27,7 +28,7 @@ def test_prediction_map_reads_serialized_classification_options(tmp_path) -> Non
         encoding="utf-8",
     )
 
-    result = _prediction_map(path)["sample-1"]
+    result = _probe._prediction_map(path)["sample-1"]
 
     assert result["scene_group_id"] == "scene-1"
     assert result["accuracy"] == 0.0
@@ -55,8 +56,8 @@ def test_scene_bootstrap_pairs_by_scene_and_is_seeded() -> None:
         for sample_id, row in left.items()
     }
 
-    result = _scene_bootstrap_difference(left, right, "left", "right", "accuracy")
-    repeated = _scene_bootstrap_difference(left, right, "left", "right", "accuracy")
+    result = _probe._scene_bootstrap_difference(left, right, "left", "right", "accuracy")
+    repeated = _probe._scene_bootstrap_difference(left, right, "left", "right", "accuracy")
 
     assert result == repeated
     assert result["difference"] == 0.5
