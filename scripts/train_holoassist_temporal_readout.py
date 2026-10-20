@@ -20,8 +20,12 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 
-from scripts.audit_holoassist_metadata import sha256_file
-from tiny_omni_decision.temporal_decision import (
+# Prefer this checkout's package over a globally installed editable worktree.
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPOSITORY_ROOT / "src"))
+
+from scripts.audit_holoassist_metadata import sha256_file  # noqa: E402
+from tiny_omni_decision.temporal_decision import (  # noqa: E402
     CausalGatedTemporalDecision,
     TaskConditionedAVSensorTemporalDecision,
     TaskConditionedTemporalDecision,
@@ -852,7 +856,7 @@ def main() -> None:
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
     torch.backends.cudnn.benchmark = False
-    repository = Path(__file__).resolve().parents[1]
+    repository = REPOSITORY_ROOT
     dirty = subprocess.run(
         ["git", "status", "--porcelain"], cwd=repository, check=True, capture_output=True
     ).stdout
@@ -874,6 +878,9 @@ def main() -> None:
         "started_at_utc": datetime.now(UTC).isoformat(),
         "command": [str(item) for item in __import__("sys").argv],
         "source_commit": source_commit,
+        "decision_module_path": str(
+            Path(sys.modules[TaskConditionedAVSensorTemporalDecision.__module__].__file__).resolve()
+        ),
         "python_executable": sys.executable,
         "python": platform.python_version(),
         "torch": torch.__version__,
