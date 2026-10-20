@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R0 live delta:** PR #15 remains draft/open at `71c4db1`; the RTX
+3080 is occupied by Orbitune CUDA PID 24160. The HotUGPU wait/reservation
+wrapper remains in the separate HoloAssist results branch, not this PR head; it
+waits for cooperative yield and never stops the active process. R0 device/task/
+quality/latency gates remain open, and no new GPU fit was started. See the
+[live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021.md).
+
 **2026-10-21 R2 MAVAD source screen:** The official Zenodo API says CC BY 4.0,
 but the included metadata PDF says "no commercial use"; this rights conflict
 keeps the dataset at REVIEW. The PDF also says short clips were trimmed from
