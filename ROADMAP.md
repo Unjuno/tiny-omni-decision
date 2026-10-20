@@ -1,3 +1,11 @@
+# 2026-10-21 R2 HoloAssist window-exposure diagnostic: stratifying the already
+# saved AV, sensor-only, and AVS validation predictions showed different
+# AVS-minus-AV behavior on full 30s windows and partial tails. Full-window AVS
+# was worse on NLL/Brier; tail NLL/Brier favored AVS but came from only 223
+# windows (31 positives). This is post-hoc on checkpoint-selection validation,
+# not independent evidence or proof of sensor utility. No inference or training
+# was run. See [stratified report](docs/pretrained_reuse/R2_HOLOASSIST_WINDOW_EXPOSURE_STRATIFICATION_20261021.md).
+
 **2026-10-20 R2 HoloAssist text-free recovery (completed diagnostic):** The
 frozen 1,042-train / 264-development-validation selection and 30-second causal
 windows are unchanged. Full VideoPrism and Whisper feature banks were built,
