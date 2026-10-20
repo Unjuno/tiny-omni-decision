@@ -110,3 +110,18 @@ the PTS audit script SHA-256 is
 This partial receipt is only a smoke test. The acquisition process was still
 running when checked; GPU feature extraction and full-holdout evaluation have
 not started.
+
+## Immutable checkpoint preflight
+
+Before evaluating any fresh-holdout features, the existing checkpoint/result
+pairs were read and rehashed (2026-10-20). The joint checkpoint is 991,540
+bytes, SHA-256
+`be9a09f1c57c679b176d69c9a14825d4d38d053bee4b2ea5818ee108b7da8a36`, selected
+epoch 2 with 246,658 trainable parameters. The matched video-only checkpoint
+is 4,906,740 bytes, SHA-256
+`208b283eff144f300c9d726c67eb5a063947eac87f8d4b6295764042e991cabb`, selected
+epoch 3 with 246,115 active trainable parameters. Both result receipts attest
+`checkpoint_reload_verified=true`, name the pinned source-feature manifest
+SHA-256 `d92e4c91c236c69548f8fa0b58826e8afc853372ebf7a59b1e64567034f8df57`,
+and their recorded `best.pt` hashes match the present files. No checkpoint or
+fit result was modified.
