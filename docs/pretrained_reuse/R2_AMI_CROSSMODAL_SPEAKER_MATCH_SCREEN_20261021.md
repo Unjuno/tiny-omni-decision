@@ -336,6 +336,21 @@ Git. Only selected SA/SB members and the global `meetings.xml` metadata were
 read; no SC annotation or signal content was opened, and no third-party mirror
 was used.
 
+### Exact cross-split media identity check
+
+The repository runner `scripts/audit_ami_media_hash_overlap.py` rechecked each
+media file against all five acquisition receipts, normalized both receipt schema
+shapes, and deduplicated repeated receipt entries by meeting/file identity. The
+60 unique files comprise 35 selected SA training files and 25 selected SB
+validation files. All receipt sizes and SHA-256 values matched, with zero exact
+cross-split file-hash duplicates. The external result is
+`C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\ami-cross-split-identity-audit-02\result.json`
+(SHA-256 `f08587d84f22e9e3b1fb7ea65efe92b68cd7642b7f56ac5e82c452039217d712`).
+This exact-byte check is not a perceptual or near-duplicate audit and applies
+only to the selected SA/SB media, not every file in those official partitions.
+The runner's three CPU tests pass. No media, annotations, validation predictions,
+or model weights were changed or added to Git.
+
 The preliminary filter produces 214 train and 111 validation candidate
 windows. A corrected union-overlap audit finds 213/214 train candidates at or above the
 80% same-agent segment-coverage threshold. One IS1000c agent-B window remains
@@ -377,9 +392,9 @@ open, so there is not yet a justified encoder run.
    each decode one frame below AVI declarations; the earlier five meetings have
    sampled decode only.
 3. The metadata-only global participant-ID check passes for all 98 SA and 20 SB
-   meetings. Still prove zero meeting-session, media, normalized-content, and
-   near-duplicate overlap. Exclude the task if split integrity or actor separation
-   fails.
+   meetings. The selected media pass exact-file-hash comparison, but normalized-
+   content/perceptual overlap outside exact hashes remains unverified. Exclude the
+   task if split integrity or actor separation fails.
 4. Freeze a balanced task manifest and answer-generation rule before encoding.
    Include same-meeting hard negatives, randomized candidate order, temporal
    non-overlap between reference and candidate clips, and task-leakage checks.

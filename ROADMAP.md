@@ -21,6 +21,11 @@ No GPU run was started.
 Keep SC annotations unopened and the source at REVIEW.
 See
 [`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
+The 35 selected SA and 25 selected SB media files were rehashed against all
+five acquisition receipts; no exact cross-split SHA-256 duplicate was found.
+This does not rule out perceptual near-duplicates or close the open task/privacy
+gates. Reproduce with `scripts/audit_ami_media_hash_overlap.py`; output stays
+outside Git.
 
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
