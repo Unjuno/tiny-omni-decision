@@ -88,6 +88,17 @@ interval train CE (not a fixed-example generalization gap), validates at update
   now retry the identical pinned range with bounded exponential backoff.
   At the last observation it had reached 20/388 videos. Every row validates
   plan member length/CRC and cross-artifact media SHA-256.
+- A CPU-only extraction preflight on 2026-10-21 verified all six local DINOv2 / CLAP
+  artifacts against the hashes enforced by `_load_feature_models`; no model was
+  loaded and no GPU was initialized:
+  - DINOv2 weights `ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1`,
+    config `1809f83e3bdb1609a501a610ad4a742f4fd8ae44d72ca4aa0df52d1f2ac8628d`,
+    processor `14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828`;
+  - CLAP weights `d190141ffd119b9096d9f3e096b2285f8ce6fa401cdb666d6f53911a2517fee3`,
+    config `f7a374a0dc4907b3a30a4e9964286055929c42d932d5abd0619f7b1a20438dd3`,
+    frontend `9739f58296aa6f9ac18008fd0150fb2649bc554985fbde86d0a4041c882ac753`.
+  The local runtime reported Python 3.11.9, PyTorch 2.6.0+cu124, Transformers
+  5.6.2, and PyAV 18.1.0.
 - The RTX 3080 is currently occupied by Orbitune. No model, encoder, GPU test,
   or training process was started. Feature extraction requires the HotUGPU
   reservation environment and fails closed without it.
