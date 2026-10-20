@@ -2116,3 +2116,16 @@ swapping also lowers Accuracy. The zero-audio Accuracy interval includes zero.
 This is post-hoc sensitivity evidence only: semantic mismatch and the OOD zero
 vector prevent claims that both modalities are required. No training or checkpoint
 selection. [Protocol and receipts](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_AUDIO_ALIGNMENT_DIAGNOSTIC_20261020.md).
+
+
+### HoloAssist action-label timing audit (2026-10-20)
+
+An independent CPU audit reproduces all selected train/validation action-to-window
+joins and finds that 312/544 positive validation windows (57.4%) contain
+annotation-linked instructor speech explicitly marked as correcting a wrong action.
+On the already-selected checkpoints, audio-only positive recall is 41.3% with
+that cue versus 16.8% without it; joint AV is 55.4% versus 22.4%. This is a
+post-hoc validation stratum, not blind quality or proof of fusion. The direct
+label-correlated speech explains why this pilot cannot establish autonomous
+video/audio complementarity. Do not rerun on these IDs; prospectively define a
+feedback-free task and new session groups. [Audit and hashes](docs/pretrained_reuse/R2_HOLOASSIST_WINDOW_LABEL_AUDIT_20261020.md).
