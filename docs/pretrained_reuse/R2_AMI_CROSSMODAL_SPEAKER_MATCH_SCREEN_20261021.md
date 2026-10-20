@@ -78,13 +78,105 @@ timestamp synchronization or prove the forced-alignment word labels match visibl
 speakers. The standalone TS3004a preflight receipt hash is
 `94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452`.
 
-No GPU run was started. This finding improves source coverage but leaves the
-admission blockers intact: no selected speaker-visibility QA, no audio/video
-clock synchronization proof, no split-wide participant/media/near-duplicate
-audit, only three selected SB parent sets, and a 30-window addition dominated
-by one speaker. IS1008a and TS3006a remain unacquired and unassessed. The
-selector-generated IS1008a manifest remains preserved and must not be mistaken
-for a TS3004a manifest.
+No GPU run was started. The selector-generated IS1008a manifest remains
+preserved and must not be mistaken for a TS3004a manifest.
+
+## Remaining SB parent-set screen — IS1008a and TS3006a — 2026-10-21
+
+The two remaining official SB parent sets were added using only Closeup1–4 and
+the common Mix-Headset WAV. IS1008a has a selector-generated manifest
+(`amiBuild-224046-Tue-Oct-20-2026`, SHA-256
+`94c72e0a13ca99823062c19b96f5b521bb50bf1a6c8e8f915680fd8c45fecfd0`). The
+selector was not successfully queried for TS3006a in this pass; its five
+official mirror URLs were independently HEAD-checked (HTTP 200) before download.
+All ten media files matched their HEAD content lengths and were hashed. The
+combined media receipt SHA-256 is
+`d68f6feb9cd8bff843e8b77a1bf26662398c573ce392a57061ffd2618773922f`; media
+bytes total 380,769,551. Only the sixteen selected word/segment XML members for
+these two meetings were extracted from manual annotations v1.6.2. Their receipt
+SHA-256 is `cf5d4a2ff904cecaf8ad72231b367e943b4dd170e301c3955db746827aca66cb`.
+No SC signal or annotation content was accessed.
+
+The same preliminary filter adds 16 windows for IS1008a and 27 for TS3006a,
+bringing the five selected SB parent sets to 111 windows against 32 selected SA
+training windows. IS1008a is imbalanced (9 agent-A, 4 agent-D, 3 agent-C, 0
+agent-B); TS3006a is less skewed (10/8/5/4 across agents A/D/C/B). These rows
+are not frozen examples and the counts do not establish answer quality. All four
+AVI files in each meeting decode to one frame below the container declaration.
+IS1008a audio is 943.833 s while its video range is 926.32–939.72 s and metadata
+duration is 931 s. TS3006a audio is 1252.864 s while video is 1241.12–1248.12 s
+and metadata duration is 1252.865 s. This is duration consistency only, not a
+clock-sync validation.
+
+One stronger split result is now available without reading any SC content. The
+existing manual-annotation `corpusResources/meetings.xml` contains official
+speaker-to-global-participant metadata for 98 SA and 20 SB meetings. Across all
+of those SA/SB metadata records, there are 100 unique SA and 20 unique SB
+participant IDs, with an empty intersection. The metadata file SHA-256 is
+`8ab6cdcf03ed863e839418f31c7380392397a2eed892d73b9bc1b438c7ec520a`; the audit
+receipt SHA-256 is
+`b14e1d787e409ccbcb13e3124dc839f7a27fc3ab6e16b92104cb5e162e462fcb`. This
+closes participant-ID split separation at the official metadata level. It does
+not prove media identity/near-duplicate separation, synchronization, visibility,
+or label correctness.
+
+The combined two-meeting preflight (including all video decode counts, durations,
+candidate windows and media hashes) is
+`preflight-is1008a-ts3006a-20261021.json`, SHA-256
+`9fe028d09e7b8d69a4e8749f61a788bbbba0de7a4aa59c91f2c2a8a8096698d8`. The
+selection provenance note SHA-256 is
+`283446a3ab2073f66ab3170fbde495f1e2df02b6973a074c19d791bb1ec082a0`.
+
+At the point immediately after this SB expansion, the SA pool still contained
+only 32 preliminary utterance windows from three selected SA sets. The later
+IS1000a–d section below records the subsequent train-only coverage expansion.
+The 111 SB windows remain weakly labeled. Timestamp synchronization and
+visible-speaker labeling remain unverified; participant separation is only one
+part of split integrity. No encoder, training, or quality-evaluation process
+was started; the GPU was not used.
+
+## SA training-coverage expansion — IS1000a–d — 2026-10-21
+
+To address the 32-window SA training bottleneck, the metadata-only inventory
+read word XML members from the 98 SA sessions only (no SB/SC words or signal
+content) and ranked parent sets by the same preliminary window rule, using
+meeting duration as a loose upper bound. IS1000 was the top parent set at 182
+possible windows across its four sessions, with counts by session of 36, 31, 32
+and 83. The ranking is only a source selection screen; actual media durations
+must gate final windows.
+
+All four IS1000 sessions are in SA/training, so the complete `a`–`d` parent set
+was selected together. Only Closeup1–4 and Mix-Headset for each session were
+downloaded: 20 files, 1,435,495,016 bytes. All 20 matched official HEAD content
+lengths; the local SHA-256 receipt is
+`media-download-receipt-is1000-20261021.json` (SHA-256
+`11c7d6b306b4da2a36e7d2964da8d2591d9017ef440aeaac1491c251c4adc844`). The
+official HEAD preflight SHA-256 is
+`6ff6f95fb217f2fe48cf3b4f991b71b276b7a232780725a3e47e08ee925581f4`. Only the
+32 IS1000a–d word/segment annotation members were extracted; receipt SHA-256
+`396a2f727d991561035615f118e15cd15fafadada5c0386430c8d1602931be75`. No SC
+annotation or media content was accessed.
+
+Full decode and window recomputation retain 182 preliminary windows. For each
+meeting, every camera stream decodes to one frame below its container's declared
+frame count, consistent with the previously observed terminal-frame behavior.
+Audio/video duration differences are small for IS1000b/c/d; IS1000a audio is
+1582.67 s while the four videos span 1504.36–1579.56 s. The resulting candidate
+window counts by meeting and speaker are in
+`preflight-is1000-20261021.json` (SHA-256
+`41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73`). A
+separate join audit finds 180 of 182 candidate windows overlap the corresponding
+same-agent `segments` interval by at least 80%; two need review and should not be
+silently accepted. Join-audit SHA-256:
+`97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6`.
+
+Across the current selected source screen there are now 60 media files and
+2,891,874,753 bytes, all rehashed against their receipts. Preliminary windows
+are 214 train (32 earlier + 182 IS1000) and 111 validation across all five SB
+parent sets. This materially improves train coverage, but still does not
+establish visible-speaker correctness or clock synchronization. The resulting
+speaker-matching corpus remains a source candidate, not an admitted quality task;
+no model training or evaluation has started.
 
 The official scenario-only split assigns ES2002/2005/2006 to SA and ES2003/2011
 to SB; the other official SB parent sets are IS1008, TS3004, and TS3006. We have
@@ -94,17 +186,19 @@ gates remain open. The recommended scenario-only groups are listed on the
 
 ## Decision
 
-Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow, meeting-local
-audio/video task. The official corpus and annotation pages state CC BY 4.0, and the
-recommended scenario-only split separates train (SA), development (SB), and unseen
-evaluation (SC) by parent recording sets. We exercised the official selector and
-downloaded one SA meeting and one SB meeting. Hashes, selected word annotations, and
-camera/channel mappings are recorded in an external receipt. The selected meetings'
-participant IDs are disjoint, but one parent set per partition is not a split-wide
-overlap audit. The candidate is **not admitted** for training or quality claims:
-stream durations differ, exact synchronization has not been validated, word times
-are alignment-derived, and privacy/governance plus broader split integrity remain
-open. No SC annotation member was extracted or read.
+Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow,
+meeting-local audio/video task. The official corpus and annotation pages state
+CC BY 4.0, and the recommended scenario-only split separates train (SA),
+development (SB), and unseen evaluation (SC) by parent recording sets. The
+current screen contains four selected SA parent sets (ES2002, ES2005, ES2006,
+and IS1000) and all five SB parent sets; it includes all `a`–`d` submeetings for
+IS1000 and one selected submeeting from each other set. Global official metadata
+shows no participant-ID overlap between all 98 SA and 20 SB meetings. Hashes,
+selected word annotations, and camera/channel mappings are recorded in
+external receipts. The candidate is **not admitted** for training or quality
+claims: stream synchronization and visible-speaker labels have not been
+validated, word times are alignment-derived, media/near-duplicate overlap and
+privacy/governance remain open. No SC annotation member was extracted or read.
 
 ## Candidate Decision task
 
@@ -177,62 +271,79 @@ recognition, or cross-meeting identity matching.
 
 ## Acquisition and current blocker
 
-The official chooser was used to select ES2002a (SA) and ES2003a (SB), submeeting
-`a`, low-size close-up video, and headset mix. It generated the official 636 MB
-estimate, manifest, and Windows download script. Only the eight close-ups and two
-headset WAVs were downloaded from the official AMI mirror; all 10 byte counts and
-SHA-256 values match the external download receipt. An optional overview file
-returned 403 and was not required. The official manual annotation archive v1.6.2
-was downloaded (22,887,865 bytes; SHA-256
-`b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d`). Only the
-eight word XML files for ES2002a/ES2003a and `corpusResources/meetings.xml` were
-extracted. The original all-split archive remains intact; no SC annotation member
-was extracted or read. No third-party mirror was used.
+Across the selected SA/SB meetings, 60 media files total 2,891,874,753 bytes.
+All 60 were rechecked against the external download receipts (size and SHA-256);
+no partial-download files remain. The 97 distinct selected annotation members
+total 5,173,336 bytes and were also rechecked against their extraction receipts.
+The original 22,887,865-byte manual annotation v1.6.2 archive remains outside
+Git. Only selected SA/SB members and the global `meetings.xml` metadata were
+read; no SC annotation or signal content was opened, and no third-party mirror
+was used.
 
-The selected word files contain 3,218 timed entries for ES2002a and 2,461 for
-ES2003a; the selected segment files contain 277 and 134 segments respectively. A
-strict preliminary screen (1–8 s, no other annotated speaker overlap, fully within
-the shortest audio/video duration with a 2 s boundary margin) leaves 29 SA and 35 SB
-candidate windows. These are not frozen examples or quality metrics; they show that
-more parent sets are needed before training or model selection. Exact asset hashes,
-annotation hashes, and sampled media metadata are in
-`C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021`; media and labels
-were kept outside Git.
+The preliminary filter produces 214 train and 111 validation candidate
+windows. In the newly added IS1000 batch, 180/182 windows meet the 80%
+same-agent segment-interval overlap check; two remain unresolved. The earlier
+32 train windows still need that join audit. These counts are not a frozen task
+set or quality results. Audio/video clock alignment, visible-speaker truth,
+media/near-duplicate split isolation, and privacy/governance remain open.
 
-The RTX 3080 Laptop GPU remains occupied by the unrelated Orbitune training process
-(last observed at 15,821/16,384 MiB and 66% utilization). No GPU job was started.
-Any later GPU smoke must start through `scripts/run_with_hotgpu_guard.py`, which
-holds the child from launch until the device yields. The current data/synchrony gate
-is not sufficient to justify an encoder run.
+## GPU handoff review — HotUGPU
+
+The current observation was 15,821/16,384 MiB used on the RTX 3080 Laptop GPU,
+with Orbitune CUDA worker PID 24160 active (27% utilization). I left its process,
+watchdog, sentinel, run files, and checkpoints untouched. I reviewed the
+cooperative wrapper `scripts/run_with_hotgpu_guard.py` from the sibling
+`codex/r2-clevrer-coverage-20261020` worktree at commit
+`e914ba220ba1dbbb0822af4933db79638354f364`; the wrapper file SHA-256 is
+`ae3ca95654a2f57e6652455f9cf3cf6a9639ec0f456d4f24318ce146130ecde8` and its
+source commit is `2b052cf939485ba0c17d1848ad7e18563079ae1c`.
+
+The wrapper initializes a small CUDA guard, waits until external CUDA PIDs are
+gone and utilization is below 5%, reserves VRAM so the Orbitune idle-start gate
+stays closed, then launches the child. Its CPU-only regression tests passed
+(10 passed). It does not terminate or signal Orbitune; the existing idle
+supervisor sees the foreign CUDA process and performs its own cooperative yield.
+The AMI screen worktree does not contain this wrapper, so any future GPU command
+must invoke the reviewed copy or add the pinned implementation first. No GPU
+child was launched: the source-admission and synchronization gates are still
+open, so there is not yet a justified encoder run.
 
 ## Admission gates before any model run
 
-1. Expand to more than one parent set per SA/SB partition before assessing
-   train/validation generalization. Keep all `a`–`d` sessions from a parent set
-   together. Do not download or inspect SC signals, annotations, or predictions.
-2. Verify every selected annotation interval joins to a valid speaker and camera
-   mapping; reconcile audio/video durations and synchronization; full-decode only
-   selected files; and retain file hashes.
-3. Prove zero meeting-session, participant, media, normalized-content, and
-   near-duplicate overlap between SA and SB. Group all `a`–`d` sessions by parent
-   set. Exclude the task if the official split does not provide actor disjointness.
+1. Four SA parent sets and all five SB parent sets are selected. The screen
+   contains ES2002a, ES2005a, ES2006a, all IS1000a–d meetings, and one selected
+   submeeting from each SB parent set. Keep parent sets together and do not
+   download or inspect SC signals, annotations, or predictions.
+2. Join every selected annotation interval to a valid speaker and camera mapping;
+   reconcile audio/video durations and synchronization; full-decode selected files;
+   and retain hashes. The 28 streams from TS3004a, IS1008a, TS3006a, and IS1000a–d
+   each decode one frame below AVI declarations; the earlier five meetings have
+   sampled decode only.
+3. The metadata-only global participant-ID check passes for all 98 SA and 20 SB
+   meetings. Still prove zero meeting-session, media, normalized-content, and
+   near-duplicate overlap. Exclude the task if split integrity or actor separation
+   fails.
 4. Freeze a balanced task manifest and answer-generation rule before encoding.
    Include same-meeting hard negatives, randomized candidate order, temporal
    non-overlap between reference and candidate clips, and task-leakage checks.
 5. Compare audio+video with structurally valid audio-only, video-only, and shuffled
    alignment controls. Report per-meeting and per-set Accuracy, NLL, Brier, ECE,
-   uncertainty by parent set, coverage, and calibration. Five SB groups are too
-   few for a strong independent quality claim; this is initially a feasibility
-   screen only, not a 95–98% product benchmark.
+   uncertainty by parent set, coverage, and calibration. Even all five SB groups
+   are a feasibility screen, not a strong independent quality claim or a 95–98%
+   product benchmark.
 
 ## Result of this screen
 
-AMI is a **usable source for a bounded integrity probe**, not an admitted training
-or evaluation dataset. Next validate timestamp synchronization and label quality
-on training-only examples, then obtain additional SA/SB parent sets through the
-official selector and prove group-level separation. If synchronization or
-participant separation fails, stop this source path without training. No Teacher,
-checkpoint, sealed audit, existing corpus, or model artifact was modified.
+AMI remains a **review-only source candidate**, not an admitted training or
+evaluation dataset. Four SA parent sets and all five SB parent sets have been
+screened; preliminary counts are 214 train candidates and 111 validation
+candidates. Two IS1000 candidate windows fall below the 80% same-agent segment
+overlap check and remain unresolved; the earlier 32 SA candidates still need
+that same join audit. Global SA/SB participant-ID disjointness is verified from
+official metadata. Next validate timestamp synchronization and visible-speaker
+labels on train-only samples, and audit media identity/content overlap. Stop
+this source path without training if these gates fail. No Teacher, checkpoint,
+sealed audit, existing corpus, or model artifact was modified.
 
 ## Official sources
 

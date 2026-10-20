@@ -15,19 +15,27 @@
     "signals_page": "https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml",
     "ethics_page": "https://groups.inf.ed.ac.uk/ami/corpus/ethicsandconsent.shtml",
     "annotation_release": "manual annotations v1.6.2",
-    "source_revision": "official selector-generated media manifests amiBuild-214757-Tue-Oct-20-2026, amiBuild-221837-Tue-Oct-20-2026, amiBuild-221911-Tue-Oct-20-2026, amiBuild-221931-Tue-Oct-20-2026; manual annotations v1.6.2",
+    "source_revision": "official selector-generated media manifests amiBuild-214757-Tue-Oct-20-2026, amiBuild-221837-Tue-Oct-20-2026, amiBuild-221911-Tue-Oct-20-2026, amiBuild-221931-Tue-Oct-20-2026, amiBuild-224046-Tue-Oct-20-2026; direct official-mirror URLs for TS3004a, TS3006a and IS1000a–d; manual annotations v1.6.2",
     "archive_sha256": "b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d",
     "archive_bytes": 22887865,
     "media_manifest_sha256": "E6AE323CB8B078E0E578A17DE5054DFA5BC3058235479E47615FE2D68E9F3750",
-    "additional_media_manifest_sha256": {"amiBuild-221837-Tue-Oct-20-2026.manifest.txt": "8c07e0d28c82c7e1660235481a3e56f0243a6cf0633e8ecd645a856e4516f9f6", "amiBuild-221911-Tue-Oct-20-2026.manifest.txt": "c32b35cc28acdc07c088da5691b2993c13df758452f26f35f6cef97205d15754", "amiBuild-221931-Tue-Oct-20-2026.manifest.txt": "ccdf63efc807976ab49eba00b3d85ecd67e83254112bdeaa28d77e7496336dfb"},
+    "additional_media_manifest_sha256": {
+      "amiBuild-221837-Tue-Oct-20-2026.manifest.txt": "8c07e0d28c82c7e1660235481a3e56f0243a6cf0633e8ecd645a856e4516f9f6",
+      "amiBuild-221911-Tue-Oct-20-2026.manifest.txt": "c32b35cc28acdc07c088da5691b2993c13df758452f26f35f6cef97205d15754",
+      "amiBuild-221931-Tue-Oct-20-2026.manifest.txt": "ccdf63efc807976ab49eba00b3d85ecd67e83254112bdeaa28d77e7496336dfb",
+      "amiBuild-224046-Tue-Oct-20-2026.manifest.txt": "94c72e0a13ca99823062c19b96f5b521bb50bf1a6c8e8f915680fd8c45fecfd0"
+    },
     "local_media": true,
     "local_annotations": true,
     "external_artifact_root": "C:/CodexArtifacts/pretrained-reuse-r2/ami-av-probe-20261021",
-    "annotation_extraction_policy": "only ES2002a, ES2003a, ES2005a, ES2006a, ES2011a, and TS3004a word/segment XML files plus corpusResources/meetings.xml; no SC annotation members extracted or read"
+    "annotation_extraction_policy": "only selected SA/SB meeting word and segment XML members plus corpusResources/meetings.xml; no SC annotation members extracted or read"
   },
   "proposed_task": {
     "name": "meeting_local_voice_to_face_matching",
-    "input_modalities": ["audio", "video"],
+    "input_modalities": [
+      "audio",
+      "video"
+    ],
     "choices": 4,
     "question": "Which candidate video shows the person who spoke in the audio reference?",
     "audio_source": "mixed headset audio only; never individual lapel/headset channel identity",
@@ -37,15 +45,64 @@
   },
   "split": {
     "policy": "official scenario-only partition, grouped by 4-meeting parent set",
-    "train": {"partition": "SA", "meetings": 98, "sets": 25},
-    "validation": {"partition": "SB", "meetings": 20, "sets": 5},
-    "sealed_unseen": {"partition": "SC", "meetings": 20, "sets": 5, "accessed": false},
-    "participant_disjointness_verified": false,
-    "selected_meetings": ["ES2002a", "ES2003a", "ES2005a", "ES2006a", "ES2011a", "TS3004a"],
-    "selected_train_meetings": ["ES2002a", "ES2005a", "ES2006a"],
-    "selected_validation_meetings": ["ES2003a", "ES2011a", "TS3004a"],
+    "train": {
+      "partition": "SA",
+      "meetings": 98,
+      "sets": 25
+    },
+    "validation": {
+      "partition": "SB",
+      "meetings": 20,
+      "sets": 5
+    },
+    "sealed_unseen": {
+      "partition": "SC",
+      "meetings": 20,
+      "sets": 5,
+      "accessed": false
+    },
+    "participant_disjointness_verified": true,
+    "selected_meetings": [
+      "ES2002a",
+      "ES2003a",
+      "ES2005a",
+      "ES2006a",
+      "ES2011a",
+      "TS3004a",
+      "IS1008a",
+      "TS3006a",
+      "IS1000a",
+      "IS1000b",
+      "IS1000c",
+      "IS1000d"
+    ],
+    "selected_train_meetings": [
+      "ES2002a",
+      "ES2005a",
+      "ES2006a",
+      "IS1000a",
+      "IS1000b",
+      "IS1000c",
+      "IS1000d"
+    ],
+    "selected_validation_meetings": [
+      "ES2003a",
+      "ES2011a",
+      "TS3004a",
+      "IS1008a",
+      "TS3006a"
+    ],
     "selected_meeting_participant_overlap": false,
-    "media_overlap_verified": false
+    "media_overlap_verified": false,
+    "metadata_scope_participant_disjointness": {
+      "sa_meetings": 98,
+      "sb_meetings": 20,
+      "sa_unique_participant_ids": 100,
+      "sb_unique_participant_ids": 20,
+      "participant_id_intersection_count": 0,
+      "metadata_sha256": "8ab6cdcf03ed863e839418f31c7380392397a2eed892d73b9bc1b438c7ec520a",
+      "audit_receipt_sha256": "b14e1d787e409ccbcb13e3124dc839f7a27fc3ab6e16b92104cb5e162e462fcb"
+    }
   },
   "access": {
     "official_download_chooser_http_status": 200,
@@ -58,11 +115,11 @@
     "selector_generated_asset_downloads_succeeded": true,
     "official_train_video_index_checked": true,
     "official_selector_manifest_estimated_bytes": 636000000,
-    "selected_media_bytes_downloaded": 1075610186,
-    "selected_annotation_bytes_extracted": 1828912,
+    "selected_media_bytes_downloaded": 2891874753,
+    "selected_annotation_bytes_extracted": 5173336,
     "all_selected_media_hashes_verified": true,
     "sampled_audio_and_video_decode": true,
-    "annotation_members_extracted": 49,
+    "annotation_members_extracted": 97,
     "sc_annotation_content_accessed": false,
     "external_receipts": {
       "media_download_receipt_sha256": "06C0CEFBFF0C4B0C94289F97DF48E5F54A273E4FD531C8D4C745B1697C48076E",
@@ -74,32 +131,43 @@
       "ts3004a_media_receipt_sha256": "2469bba07b96f36b4bc0531a6233461c11f6206c23c9258475f6cbada0932fdb",
       "ts3004a_annotation_receipt_sha256": "1f9d834bc58ddedc79c84d2009ed6b4a84a61dcf87674a7fb645fa04a5ce5ae3",
       "ts3004a_preflight_sha256": "94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452",
-      "ts3004a_selection_note_sha256": "76f2cfd8acd100c1dd4d29c064a78eac89042e52b22506939d006fd0ee2815aa"
+      "ts3004a_selection_note_sha256": "76f2cfd8acd100c1dd4d29c064a78eac89042e52b22506939d006fd0ee2815aa",
+      "is1008a_ts3006a_media_receipt_sha256": "d68f6feb9cd8bff843e8b77a1bf26662398c573ce392a57061ffd2618773922f",
+      "is1008a_ts3006a_annotation_receipt_sha256": "cf5d4a2ff904cecaf8ad72231b367e943b4dd170e301c3955db746827aca66cb",
+      "is1008a_ts3006a_preflight_sha256": "9fe028d09e7b8d69a4e8749f61a788bbbba0de7a4aa59c91f2c2a8a8096698d8",
+      "is1008a_ts3006a_selection_note_sha256": "283446a3ab2073f66ab3170fbde495f1e2df02b6973a074c19d791bb1ec082a0",
+      "is1000a_d_media_receipt_sha256": "11c7d6b306b4da2a36e7d2964da8d2591d9017ef440aeaac1491c251c4adc844",
+      "is1000a_d_head_preflight_sha256": "6ff6f95fb217f2fe48cf3b4f991b71b276b7a232780725a3e47e08ee925581f4",
+      "is1000a_d_annotation_receipt_sha256": "396a2f727d991561035615f118e15cd15fafadada5c0386430c8d1602931be75",
+      "is1000a_d_preflight_sha256": "41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73",
+      "is1000a_d_segment_join_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
     },
     "third_party_mirror_used": false,
-    "resolution": "official selector and official AMI mirror succeeded for the initial selected media; for TS3004a, the chooser response returned the previous IS1008a selection, so its response was not applied; the five policy-approved TS3004a official mirror URLs were independently HEAD-checked and retrieved; official manual annotation archive selectively extracted; no third-party mirror"
+    "resolution": "official selector and official AMI mirror used for selected files where available; selector response for TS3004a was stale and not applied; TS3006a and IS1000a–d were acquired from official mirror URLs after per-file HEAD checks; manual v1.6.2 members were selectively extracted; no third-party mirror",
+    "full_decode_selected_video_streams": 28
   },
   "resource_estimates": {
     "official_low_size_video_mb_per_meeting_approx": 400,
     "official_headset_mix_mb_per_meeting_approx": 30,
     "one_train_plus_one_validation_meeting_mb_approx": 636,
-    "local_selected_media_bytes": 1075610186,
-    "expanded_selector_manifest_estimated_bytes": 1384000000,
-    "selected_train_preliminary_windows": 32,
-    "selected_validation_preliminary_windows": 68,
+    "local_selected_media_bytes": 2891874753,
+    "initial_expanded_selector_manifest_estimated_bytes": 1384000000,
+    "selected_train_preliminary_windows": 214,
+    "selected_validation_preliminary_windows": 111,
     "local_annotation_archive_bytes": 22887865,
     "gpu_job_started": false,
-    "gpu_status_at_last_check": "Orbitune active; 15821/16384 MiB used; latest utilization snapshot 89%",
-    "hotgpu_required_for_future_gpu_smoke": true
+    "gpu_status_at_last_check": "2026-10-21 08:19 local: RTX 3080 Laptop 15821/16384 MiB used, 27% utilization; Orbitune PID 24160 active; no Tiny Omni GPU job started",
+    "hotgpu_required_for_future_gpu_smoke": true,
+    "is1000_batch_train_windows_with_segment_overlap_ge_80pct": 180,
+    "is1000_batch_train_windows_below_segment_overlap_threshold": 2
   },
   "blockers": [
-    "only three SA and three SB parent sets were screened; split-wide participant/media overlap remains unverified",
-    "preliminary filtered windows total 32 train and 68 validation, with the TS3004a addition dominated by one speaker; too few for a meaningful quality run",
+    "four SA parent sets and all five SB parent sets are screened, but SA coverage is uneven: ES2002/2005/2006 have only submeeting a while IS1000 includes a–d",
+    "214 preliminary train candidates and 111 validation candidates remain weakly labeled; two IS1000 windows fail the 80% same-agent segment-join threshold and the earlier 32 train windows have not received this join audit",
+    "audio/video clock synchronization and visible-speaker ground truth remain unverified; 28 fully decoded streams are each one frame below their AVI declaration, while five earlier meetings only have sampled decode",
+    "SA/SB participant IDs are disjoint in official metadata, but media identity, normalized content and near-duplicate cross-split audits remain incomplete",
     "ES2005a media spans about 8 minutes while meeting metadata says 958 seconds; investigate source/time coverage",
-    "audio and video durations differ and exact synchronization is unverified",
-    "word timing is alignment-derived; label quality needs train-only QA",
-    "TS3004a full decode returned one fewer frame than container declarations in each camera stream; other selected media full decode and annotation-to-camera label-row audit remain incomplete",
-    "only three of five official SB parent sets were selected; this screen supports feasibility only, not a strong quality claim",
+    "freeze balanced task manifest, hard-negative rule, candidate-order policy and train-only label QA before feature extraction",
     "privacy/governance review is required before product claims"
   ],
   "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md",
@@ -117,10 +185,63 @@
       "Closeup3": "33266/33267",
       "Closeup4": "33451/33452"
     },
-    "provenance_note": "amiBuild-224157 manifest is the preserved IS1008a manifest; it is not a TS3004a manifest. TS3004a direct URL and acquisition evidence is in the external selection note and receipts.",
+    "provenance_note": "amiBuild-224157 manifest is the preserved IS1008a manifest; it is not a TS3004a manifest. TS3004a direct URL and acquisition evidence is in external note and receipts.",
     "selection_note_sha256": "76f2cfd8acd100c1dd4d29c064a78eac89042e52b22506939d006fd0ee2815aa",
     "media_receipt_sha256": "2469bba07b96f36b4bc0531a6233461c11f6206c23c9258475f6cbada0932fdb",
     "annotation_receipt_sha256": "1f9d834bc58ddedc79c84d2009ed6b4a84a61dcf87674a7fb645fa04a5ce5ae3",
     "preflight_sha256": "94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452"
+  },
+  "additional_selected_sb_meetings": {
+    "meetings": [
+      "IS1008a",
+      "TS3006a"
+    ],
+    "media_bytes": 380769551,
+    "preliminary_validation_windows_added": 43,
+    "official_selector_manifest": "amiBuild-224046-Tue-Oct-20-2026.manifest.txt for IS1008a; TS3006a selected by direct official URLs after HEAD checks",
+    "media_receipt_sha256": "d68f6feb9cd8bff843e8b77a1bf26662398c573ce392a57061ffd2618773922f",
+    "annotation_receipt_sha256": "cf5d4a2ff904cecaf8ad72231b367e943b4dd170e301c3955db746827aca66cb",
+    "preflight_sha256": "9fe028d09e7b8d69a4e8749f61a788bbbba0de7a4aa59c91f2c2a8a8096698d8",
+    "selection_note_sha256": "283446a3ab2073f66ab3170fbde495f1e2df02b6973a074c19d791bb1ec082a0"
+  },
+  "additional_selected_sa_parent_set": {
+    "meetings": [
+      "IS1000a",
+      "IS1000b",
+      "IS1000c",
+      "IS1000d"
+    ],
+    "media_files": 20,
+    "media_bytes": 1435495016,
+    "preliminary_train_windows_added": 182,
+    "windows_by_meeting": {
+      "IS1000a": 36,
+      "IS1000b": 31,
+      "IS1000c": 32,
+      "IS1000d": 83
+    },
+    "same_agent_segment_overlap_ge_80pct": 180,
+    "below_80pct_examples": [
+      {
+        "meeting": "IS1000c",
+        "agent": "B",
+        "start_s": 1664.2,
+        "end_s": 1666.2,
+        "overlap_fraction": 0.588
+      },
+      {
+        "meeting": "IS1000d",
+        "agent": "B",
+        "start_s": 132.24,
+        "end_s": 136.24,
+        "overlap_fraction": 0.462
+      }
+    ],
+    "all_28_video_streams_decode_one_frame_below_declared_count": true,
+    "media_receipt_sha256": "11c7d6b306b4da2a36e7d2964da8d2591d9017ef440aeaac1491c251c4adc844",
+    "head_preflight_sha256": "6ff6f95fb217f2fe48cf3b4f991b71b276b7a232780725a3e47e08ee925581f4",
+    "annotation_receipt_sha256": "396a2f727d991561035615f118e15cd15fafadada5c0386430c8d1602931be75",
+    "media_preflight_sha256": "41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73",
+    "segment_join_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
   }
 }

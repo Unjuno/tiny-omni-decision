@@ -1,14 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
 **2026-10-21 AMI cross-modal task screen:** AMI remains a review-only candidate for
-meeting-local voice-to-face matching. The selected source screen now covers three
-SA and three SB parent sets (30 selected media files, 1,075,610,186 bytes);
+meeting-local voice-to-face matching. The selected source screen now covers four
+SA and all five SB parent sets (60 selected media files, 2,891,874,753 bytes);
 selected v1.6.2 word/segment annotations and hashes are recorded externally.
-The selected train/validation participant IDs are disjoint, but this is not a
-split-wide proof. Preliminary filtered windows total 32 train and 68 validation;
-the TS3004a addition is speaker-imbalanced and each camera stream decoded one
-frame below its declared count. ES2005a spans about 8 minutes against 958 seconds
-in metadata. Audio/video synchronization and label quality remain unverified,
+The official meeting metadata shows zero global participant-ID overlap across
+all 98 SA and 20 SB sessions. Preliminary filtered windows total 32 train and
+111 validation; IS1000a–d add 182 preliminary training windows, with 180/182
+meeting word windows overlapping same-agent segment annotations by at least 80%.
+These remain weak labels and uneven by speaker/meeting. All 28 video streams in
+the TS3004a/IS1008a/TS3006a/IS1000a–d full-decode subset return one frame below
+their declarations. ES2005a spans about 8 minutes against 958 seconds in
+metadata. Audio/video synchronization and visual label quality remain unverified,
 and no GPU run was started. Keep SC annotations unopened and the source at REVIEW.
 See
 [`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
