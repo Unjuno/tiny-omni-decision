@@ -330,6 +330,7 @@ def run_interventions(
         _write_json(output_dir / "run-metadata.json", {**metadata, "results": results})
     result = {
         "status": "complete_fixed_validation_interventions",
+        "sealed_audit_loaded": False,
         "elapsed_seconds": time.perf_counter() - started,
         "results": results,
     }

@@ -422,6 +422,7 @@ def test_intervention_runner_checks_run_hashes_and_writes_separate_outputs(tmp_p
     )
 
     assert result["status"] == "complete_fixed_validation_interventions"
+    assert result["sealed_audit_loaded"] is False
     assert result["results"]["baseline"]["saved_checkpoint_replay_max_probability_delta"] == 0
     assert result["results"]["audio_shuffle_session"]["eligible_session_count"] == 2
     assert (output_dir / "run-metadata.json").is_file()

@@ -99,7 +99,12 @@ remain external to Git and were not overwritten. The updated tests cover the
 actual selection schema, explicit ETag pin, AAC packet timing allowance, and
 stable disambiguation of repeated upstream event IDs.
 
-## Ongoing frozen extraction and AV intervention follow-up
+## In-progress snapshot (2026-10-20 05:54 JST; superseded)
+
+The extraction and evaluation state below is preserved as a dated snapshot.
+The completed feature extraction, fixed-budget readout, intervention, and
+bootstrap results supersede its pending-status statements; see
+[`R2_HOLOASSIST_TEXTFREE_READOUT_RESULTS_20261020.md`](R2_HOLOASSIST_TEXTFREE_READOUT_RESULTS_20261020.md).
 
 The pinned VideoPrism extractor is running as attempt-03 under the cooperative
 HotUGPU reservation. At 2026-10-20 05:54 JST it had saved 2,560 / 12,261
