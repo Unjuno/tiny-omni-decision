@@ -359,6 +359,25 @@ windows pass. These counts are not a frozen task set or quality results.
 Audio/video clock alignment, visible-speaker truth, media/near-duplicate split
 isolation, and privacy/governance remain open.
 
+### Train-only AV timing preflight — 2026-10-21
+
+A separate CPU-only runner generated two contact sheets for the frozen 24-row
+seed-17 SA sample. Each row contains 12 target-camera frames with actual PTS and
+a 24-bin normalized RMS trace from the common mixed-headset WAV. Every sampled
+input was rechecked against the exact-hash audit. Result:
+`C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\train-av-sync-coarse-seed17-20261021-03\result.json`
+(SHA-256 `45fb9ea3ec815a991477cb39ca31dfe8bcd1ccac7bb1a42c9b183eb6a8615886`).
+The contact-sheet SHA-256 values are `a7be89359024651b1e309bcb2ec98a09fa1697f2f99048c4a3181b5714122bd3`
+and `4c0149ad6ec37a786680ce218b5d57cb8fc9ada5e5f95ab7323a28145d79f646`.
+
+This is only a timing preflight, not a synchronization result. The RMS signal
+comes from a mixed recording and cannot isolate the annotated speaker; the
+frames do not quantify lip-sync. The fixed sample's prior presence receipt
+remains 17 clear, 5 limited/ambiguous, and 2 not visible. I did not assign
+active-speaker labels or claim clock synchronization. No SB/SC media, model, or
+GPU was used. The synchronization and visible-speaker truth gates remain open.
+Six CPU tests and Ruff pass for the runner.
+
 ## GPU handoff review — HotUGPU
 
 The current observation was 15,821/16,384 MiB used on the RTX 3080 Laptop GPU,

@@ -26,6 +26,7 @@ five acquisition receipts; no exact cross-split SHA-256 duplicate was found.
 This does not rule out perceptual near-duplicates or close the open task/privacy
 gates. Reproduce with `scripts/audit_ami_media_hash_overlap.py`; output stays
 outside Git.
+A CPU-only 24-row train timing preflight added PTS frame strips and mixed-audio RMS; it did not establish synchronization, and the AMI candidate remains unadmitted.
 
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
