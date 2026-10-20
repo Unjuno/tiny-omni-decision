@@ -1,3 +1,10 @@
+**2026-10-21 R2 BatVision source screen:** The official synchronized
+audio/RGB-D dataset is CC BY-SA 4.0 and provides site-specific train/validation/test
+metadata, but its five archive shards total 168.5 GB while local free space is
+28.0 GB. It remains REVIEW; no media/labels were opened or downloaded. Paired
+timestamps do not establish that both signals are required, and route/room-level
+split integrity still needs verification. See the [source screen](docs/pretrained_reuse/R2_BATVISION_SOURCE_SCREEN_20261021.md).
+
 **2026-10-20 R2 CLEVRER synthetic AV timing diagnostic (completed):** Four
 matched seed-17 readouts completed 2,048 updates each on the local RTX 3080 via
 HotUGPU. Selected joint gated-LSTM validation reached 78.97% Accuracy / 0.4566
