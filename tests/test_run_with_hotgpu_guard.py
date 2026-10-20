@@ -1,6 +1,7 @@
 from scripts.run_with_hotgpu_guard import (
     build_child_environment,
     launch_conditions_met,
+    post_reservation_action,
     reservation_size,
 )
 
@@ -27,6 +28,18 @@ def test_launch_gate_requires_quiet_gpu_no_external_pid_and_safe_free_memory():
     assert not launch_conditions_met({100}, own, 5, 12000, 14000, 8000)
     assert not launch_conditions_met({100}, own, 0, 14000, 14000, 8000)
     assert not launch_conditions_met({100}, own, 0, 7000, 14000, 8000)
+
+
+def test_hotgpu_holds_reservation_while_post_allocation_utilization_settles():
+    assert post_reservation_action(set(), 34, 11095, 14000, 8000, 0) == "wait"
+    assert post_reservation_action(set(), 0, 11095, 14000, 8000, 1) == "wait"
+    assert post_reservation_action(set(), 0, 11095, 14000, 8000, 2) == "launch"
+
+
+def test_hotgpu_releases_reservation_when_external_pid_or_memory_gate_appears():
+    assert post_reservation_action({200}, 0, 11095, 14000, 8000, 2) == "release"
+    assert post_reservation_action(set(), 0, 7500, 14000, 8000, 2) == "release"
+    assert post_reservation_action(set(), 0, 14000, 14000, 8000, 2) == "release"
 
 
 def test_child_environment_identifies_the_reserving_parent_process():

@@ -61,6 +61,22 @@ def launch_conditions_met(
     )
 
 
+def post_reservation_action(
+    external_pids: set[int],
+    utilization: int,
+    free_mib: int,
+    block_free_mib: int,
+    min_child_free_mib: int,
+    quiet_samples: int,
+    required_quiet_samples: int = 2,
+) -> str:
+    if external_pids or not min_child_free_mib <= free_mib < block_free_mib:
+        return "release"
+    if utilization >= 5 or quiet_samples < required_quiet_samples:
+        return "wait"
+    return "launch"
+
+
 def reserve_after_yield(
     torch_module,
     handoff_guard,
@@ -105,36 +121,54 @@ def reserve_after_yield(
             time.sleep(2)
             continue
 
-        utilization_after, used_after, total_after = telemetry()
-        free_after = total_after - used_after
-        pids_after = active_gpu_pids() - {own_pid}
-        if not launch_conditions_met(
-            pids_after,
-            {own_pid},
-            utilization_after,
-            free_after,
-            block_free_mib,
-            min_child_free_mib,
-        ):
-            del reservation
-            torch_module.cuda.empty_cache()
+        quiet_samples = 0
+        released = False
+        while time.monotonic() < deadline:
+            utilization_after, used_after, total_after = telemetry()
+            free_after = total_after - used_after
+            pids_after = active_gpu_pids() - {own_pid}
+            quiet_samples = quiet_samples + 1 if utilization_after < 5 else 0
+            action = post_reservation_action(
+                pids_after,
+                utilization_after,
+                free_after,
+                block_free_mib,
+                min_child_free_mib,
+                quiet_samples,
+            )
+            if action == "launch":
+                return (
+                    handoff_guard,
+                    reservation,
+                    {
+                        "reserved_mib": amount_mib,
+                        "free_mib": free_after,
+                        "total_mib": total_after,
+                        "utilization_pct": utilization_after,
+                    },
+                )
+            if action == "release":
+                print(
+                    f"handoff raced: pids={sorted(pids_after)}, util={utilization_after}%, "
+                    f"free={free_after}MiB; reservation released",
+                    flush=True,
+                )
+                del reservation
+                torch_module.cuda.empty_cache()
+                time.sleep(2)
+                released = True
+                break
             print(
-                f"handoff raced: pids={sorted(pids_after)}, util={utilization_after}%, "
-                f"free={free_after}MiB; released reservation and will wait again",
+                f"holding GPU reservation while telemetry settles: "
+                f"util={utilization_after}%, quiet_samples={quiet_samples}, "
+                f"free={free_after}MiB",
                 flush=True,
             )
-            time.sleep(2)
-            continue
-        return (
-            handoff_guard,
-            reservation,
-            {
-                "reserved_mib": amount_mib,
-                "free_mib": free_after,
-                "total_mib": total_after,
-                "utilization_pct": utilization_after,
-            },
-        )
+            time.sleep(1)
+        if not released:
+            del reservation
+            torch_module.cuda.empty_cache()
+            raise TimeoutError("GPU reservation was held but a quiet handoff was not observed")
     raise TimeoutError("GPU did not yield before the deadline; child was not started")
 
 
