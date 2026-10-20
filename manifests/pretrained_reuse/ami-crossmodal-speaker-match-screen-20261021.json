@@ -40,6 +40,13 @@
   },
   "access": {
     "official_download_chooser_http_status": 403,
+    "official_asset_head_checks": {
+      "SA_ES2002a_Closeup1_avi": 200,
+      "SA_ES2002a_Mix_Headset_wav": 200,
+      "SB_ES2003a_Closeup1_avi": 403,
+      "SB_ES2003a_Mix_Headset_wav": 403
+    },
+    "official_train_video_index_checked": true,
     "media_annotation_bytes_downloaded": 0,
     "third_party_mirror_used": false,
     "resolution": "pending; no alternate-host workaround"

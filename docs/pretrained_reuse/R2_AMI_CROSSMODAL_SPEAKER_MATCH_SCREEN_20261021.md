@@ -78,11 +78,16 @@ recognition, or cross-meeting identity matching.
 ## Access attempt and current blocker
 
 At 2026-10-21, a read-only GET of the official download chooser from the local
-PowerShell environment returned HTTP 403. No media or annotation bytes were
-downloaded, no annotation archive was opened, and no mirror or alternate host was
-used. This does not prove the official source is unavailable; it means the intended
-official acquisition path still needs a permitted, reproducible access procedure.
-Do not work around that response with a third-party mirror.
+PowerShell environment returned HTTP 403. Direct HTTP HEAD checks against the
+official mirror returned 200 for `ES2002a.Closeup1.avi` and
+`ES2002a.Mix-Headset.wav` (SA training), but 403 for the corresponding
+`ES2003a.Closeup1.avi` and `ES2003a.Mix-Headset.wav` (SB development). The official
+SA directory index lists the four low-resolution close-up videos at approximately
+37–58 MB each. No media or annotation bytes were downloaded, no annotation archive
+was opened, and no host outside the official AMI domain was used. This does not
+prove the source is globally unavailable; it means the local official route cannot
+currently provide matched train/validation inputs. Do not work around that response
+with a third-party mirror.
 
 The GPU was occupied by the unrelated Orbitune training process during this screen.
 No GPU job was started. A future real encoder smoke must use the repository's

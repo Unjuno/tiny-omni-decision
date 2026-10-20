@@ -2,9 +2,10 @@
 
 **2026-10-21 AMI cross-modal task screen:** AMI is a review-only candidate for
 meeting-local voice-to-face matching. Official CC BY 4.0 terms and scenario-only
-SA/SB/SC group definitions are documented, but no data was downloaded, participant
-disjointness was not verified, and the local official download chooser returned
-HTTP 403. Keep SC unseen and do not start a model run until permitted official
+SA/SB/SC group definitions are documented, but no data was downloaded and
+participant disjointness was not verified. Local HEAD checks returned 200 for one
+SA audio/video pair but 403 for the matched SB pair; the download chooser also
+returned 403. Keep SC unseen and do not start a model run until permitted official
 acquisition and SA/SB integrity gates pass. See
 [`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
 
