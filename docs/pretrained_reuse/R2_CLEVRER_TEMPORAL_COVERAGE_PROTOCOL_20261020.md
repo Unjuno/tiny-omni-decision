@@ -2,9 +2,10 @@
 
 ## Status
 
-CPU-only cohort construction, media acquisition, and framewise feature
-extraction passed. No model fitting has started. Orbitune
-still owns the local GPU; any later CUDA job must use
+CPU-only cohort construction, media acquisition, feature extraction, and the
+matched temporal-readout fit passed. Orbitune
+yielded cooperatively through HotUGPU; no process was stopped or signaled. Any
+later CUDA job must use
 `scripts/run_with_hotgpu_guard.py` and wait for its cooperative handoff.
 
 This is an additional development cohort for the R2 text-free video path. It
@@ -83,16 +84,17 @@ The fetch report binds the prepared corpus manifests to the media-bearing
 manifests. The separate CPU preflight report also binds the scene partition to
 the source questions and annotation receipt.
 
-## Planned readout comparison
+## Readout comparison design
 
-After selected media hashes are verified and the pinned VideoPrism-B framewise
-features are generated, a fresh seed-17 comparison will fit the existing
-`mean_mlp` and `bilstm` readouts on the same 3,526 examples and evaluate at each
-epoch on the same 321 held-out development examples. The planned budget is
-2,016 optimizer updates per readout (36 epochs, 56 batches per epoch at batch
-size 64). Checkpoint selection uses macro taxonomy validation NLL. Scene-paired
-bootstrap and video-zeroed, scene-shuffled, and temporal-reversal controls will
-be reported. This validation is used for selection and is not a blind audit.
+After selected media hashes were verified and pinned VideoPrism-B framewise
+features generated, a seed-17 comparison fit `mean_mlp` and `bilstm` readouts
+on the same 3,526 examples and evaluated each epoch on the same 321 held-out
+development examples. The fixed budget was 2,016 optimizer updates per readout
+(36 epochs, 56 batches per epoch at batch size 64). Checkpoint selection used
+macro taxonomy validation NLL. Scene-paired bootstrap and video-zeroed,
+scene-shuffled, and temporal-reversal controls were completed. Validation was
+used for selection and is not a blind audit. See the
+[result report](R2_CLEVRER_TEMPORAL_COVERAGE_RESULTS_20261020.md).
 
 ## Frozen feature cache
 
@@ -120,7 +122,9 @@ preflight passed: 3,526 training rows / 324 scenes and 321 validation rows /
 81 scenes, with zero normalized-content or media overlap. A separate CPU smoke
 passed for both readout variants (226,865 mean-MLP and 227,377 BiLSTM trainable
 parameters; finite logits and loss). The smoke did not train or use validation
-for selection. The matched readout fit has not started yet.
+for selection. The matched fit completed both variants with separate best and
+final checkpoints; detailed metrics and verified artifact hashes are in the
+[result report](R2_CLEVRER_TEMPORAL_COVERAGE_RESULTS_20261020.md).
 
 No capacity increase, sensor/audio data, sealed audit, or product promotion is
 part of this experiment. Results will be added only after the run finishes and

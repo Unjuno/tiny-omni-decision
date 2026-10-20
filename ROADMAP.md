@@ -2908,3 +2908,16 @@ size mismatches, uncovered IDs, or receipt hash conflicts were found. Source
 hash authentication remains limited to 467 pinned journal rows. Seven partial
 files and active downloader PID 23276 remained. See the [progress record]
 (docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-20 R2 CLEVRER temporal-only coverage probe:** A fresh approved
+CC0 cohort completed with 3,526 train questions / 324 scenes and 321
+development-validation questions / 81 scenes. Pinned VideoPrism-B features
+and media hashes passed preflight. Mean-MLP and BiLSTM completed matched
+2,016-update fits through HotUGPU; selected macro-taxonomy Accuracy was 37.1%
+and 39.6%, respectively. Final NLL/ECE degradation shows overfitting, and the
+paired scene-bootstrap difference between readouts includes zero. This does
+not isolate a causal data-coverage effect from the older mixed-task run, does
+not meet the product quality target, and does not justify a capacity ceiling
+claim. Keep it diagnostic; proceed to a grounded, task-matched modality-use
+gate. See the [protocol](docs/pretrained_reuse/R2_CLEVRER_TEMPORAL_COVERAGE_PROTOCOL_20261020.md)
+and [complete results](docs/pretrained_reuse/R2_CLEVRER_TEMPORAL_COVERAGE_RESULTS_20261020.md).
