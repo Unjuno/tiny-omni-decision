@@ -137,3 +137,15 @@ manifests. The audited media manifest snapshot SHA-256 is
 post-audit check, acquisition was still `RUNNING` and had advanced to 87 videos.
 This is an incremental integrity check only; it does not authorize model feature
 extraction or replace the required complete 200-video audit.
+
+The halfway CPU audit covered a stable snapshot of 101 complete videos / 246
+events. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-fresh-holdout-pts-smoke-04\result.json`, SHA-256
+`5f23351dbdd59b1acfb9355e099fce401b87e76a2907d304c6a62047abfa4dd6`. It
+reports `PASS_PARTIAL_FRESH_HOLDOUT_PTS_SMOKE`, zero incomplete audio intervals,
+zero right-censored events, and 1,692 exact unique media hashes including
+previous manifests. Snapshot manifest SHA-256:
+`4a9d6cef7edbd817151fe4c13fb78051d6c320f985150ad1be1eb06488c1fee5`. The
+acquirer remained live at 112/200 after this audit. As above, this partial gate
+does not authorize feature extraction; the complete fixed holdout audit remains
+required.
