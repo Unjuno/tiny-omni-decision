@@ -1,5 +1,29 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
+expanded-fit comparison added 233 fit videos / 550 events while retaining the
+same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
+(-0.7 pp; paired video-bootstrap interval spans zero); NLL improved by 0.041,
+while Brier/ECE worsened. Parameter-matched video-only Accuracy rose 4.8 pp,
+but its interval also spans zero and calibration worsened. A separate
+fixed-checkpoint intervention found worse NLL when audio came from another
+video or the previous event; zero-audio change was uncertain. This establishes
+some alignment sensitivity, not correct audio-semantic use or general fusion
+benefit. Both diagnostics use development cohorts and are not blind. Reports:
+[coverage scale](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-perception-av-scale-v1/docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_SCALE_RESULTS_20261021.md)
+and [fixed-checkpoint input controls](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-perception-av-scale-v1/docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_INPUT_CONTROLS_SCALE_20261021.md).
+
+**2026-10-21 R2 audiovisual source screens:** BatVision remains REVIEW: its
+five CC-BY-SA 4.0 shards total 168.5 GB; group integrity and a both-required
+task remain unproven. TAU Urban Audio-Visual Scenes 2021 also remains REVIEW:
+the official Zenodo metadata says `other-nc`, and its development archive is
+107.7 GB. Neither source was downloaded. See the
+[BatVision screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-batvision-source-screen/docs/pretrained_reuse/R2_BATVISION_SOURCE_SCREEN_20261021.md)
+and [TAU screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-batvision-source-screen/docs/pretrained_reuse/R2_TAU_AVSC_SOURCE_SCREEN_20261021.md).
+R2 M-2 remains open; synchronized media or prediction sensitivity alone is not
+enough to admit a joint-quality run. Continue with rights-cleared, independently
+grouped data and a task-level test that requires multiple inputs.
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target
