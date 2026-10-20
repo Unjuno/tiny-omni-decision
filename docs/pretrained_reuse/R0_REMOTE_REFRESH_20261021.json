@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-20T19:28:50Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "local": {
+    "branch": "codex/r2-perception-av-scale-v1",
+    "head": "d7aa880738cbdf9036cef40fad7947e1f5b0a319",
+    "worktree_clean": true
+  },
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_branch": {
+      "name": "docs/pretrained-reuse-roadmap-20261010",
+      "head": "43974fb2f6b070e0182465edca12d061b65ed8dd",
+      "open_draft_pr": 15
+    },
+    "branch_count_including_main": 45,
+    "open_pull_requests": [
+      {"number": 15, "draft": true, "head": "docs/pretrained-reuse-roadmap-20261010", "head_sha": "43974fb2f6b070e0182465edca12d061b65ed8dd", "base": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+      {"number": 14, "draft": true, "head": "fix/student-qat-training-handoff", "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8", "base": "codex/ternary-student-recovery", "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c"},
+      {"number": 13, "draft": false, "head": "feat/ternary-student-recovery", "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd", "base": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+      {"number": 12, "draft": true, "head": "codex/postquant-teacher-cache", "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61", "base": "codex/postquant-numerical-core", "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"},
+      {"number": 11, "draft": true, "head": "codex/postquant-numerical-core", "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5", "base": "codex/postquant-worker-entrypoints", "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"},
+      {"number": 10, "draft": true, "head": "codex/postquant-worker-entrypoints", "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932", "base": "codex/roadmap-compression-video-specialization", "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"},
+      {"number": 9, "draft": true, "head": "codex/teacher-quality-v1", "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134", "base": "main", "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c"}
+    ],
+    "current_commit_ci": {
+      "sha": "d7aa880738cbdf9036cef40fad7947e1f5b0a319",
+      "run_id": 39483507872,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/actions/runs/39483507872"
+    }
+  },
+  "local_worktrees": {
+    "count": 24,
+    "dirty_count": 6,
+    "dirty_branches": [
+      "codex/teacher-quality-clean-dev-v1",
+      "fix/student-qat-training-handoff",
+      "codex/textfree-video-program-order",
+      "codex/textfree-video-coverage-v2",
+      "codex/teacher-quality-physionpp",
+      "codex/ternary-student-recovery-updated"
+    ],
+    "inspected_read_only": true,
+    "other_worktrees_modified": false
+  },
+  "hardware_and_processes": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "vram_total_mib": 16384,
+    "vram_used_mib": 15821,
+    "vram_free_mib": 355,
+    "utilization_percent": 100,
+    "compute_processes": [
+      {"pid": 23536, "role": "Orbitune compound CFE training child", "gpu_memory_mib": null, "started_local": "2026-10-21T04:15:58+09:00"}
+    ],
+    "orbitune_watchdog_present": true,
+    "tiny_omni_decision_gpu_process_detected": false,
+    "intervention_performed": false,
+    "gpu_reservation_required_before_future_gpu_work": true
+  },
+  "artifact_and_data_state": {
+    "av_scale_result_commit": "d7aa880738cbdf9036cef40fad7947e1f5b0a319",
+    "av_media_features_and_model_checkpoints_stay_outside_git": true,
+    "sealed_audit_opened": false,
+    "legacy_configs_checkpoints_and_runs_modified": false,
+    "local_and_remote_main_unchanged": true
+  },
+  "constraints_and_open_r0_gate": {
+    "paid_compute_used": false,
+    "training_or_process_intervention_during_this_refresh": false,
+    "provisional_engineering_targets": {"parameters": "100-200M", "package_mb_max": 200},
+    "deployment_device": "UNSET",
+    "task_specific_quality_and_confidence_floors": "UNSET",
+    "time_and_money_criteria": "local-only; no paid compute; numeric time budget UNSET"
+  }
+}
