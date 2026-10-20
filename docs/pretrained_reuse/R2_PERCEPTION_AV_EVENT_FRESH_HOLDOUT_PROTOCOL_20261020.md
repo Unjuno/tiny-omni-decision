@@ -166,3 +166,13 @@ The pinned runtime inventory is 22,056,576 DINO parameters and 28,190,872 CLAP
 audio parameters, frozen. This read-only file check does not claim a new model
 load or forward; runtime feature execution remains gated on complete media/PTS
 validation and HotUGPU availability.
+
+A later incremental CPU audit covered 129 complete videos / 323 events. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-fresh-holdout-pts-smoke-05\result.json`, SHA-256
+`67c6c7e262a6eb9fbcdda6b8fb907c6ce4583ee7d8ad13f4ca12f40f4d6ec74d`.
+It reports `PASS_PARTIAL_FRESH_HOLDOUT_PTS_SMOKE`, zero audio coverage gaps,
+zero right-censored events, and 1,720 unique exact media hashes including prior
+artifacts. Its pinned media-manifest snapshot SHA-256 is
+`d60d8c40a63a097f04dc76e2b4e7d9ba491d7eb67da4bdf80df5c69f337370bb`. At the
+post-audit check the acquisition was still live and had reached 139/200 videos.
+This does not substitute for complete audit.
