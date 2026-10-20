@@ -169,7 +169,10 @@ An initial audit using the largest single segment interval flagged two windows;
 that method undercounted candidates spanning adjacent speech segments. A corrected
 union-overlap audit finds 181/182 IS1000 windows at or above 80%, with one IS1000c
 agent-B window at 76.7% (1664.2–1666.2 s) left unresolved. The full SA audit
-passes 213/214 candidates, including all 32 earlier candidates. Script SHA-256:
+passes 213/214 candidates, including all 32 earlier candidates. The external
+replay script is `C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\audit_sa_word_segment_joins_20261021.py`;
+it reads SA preflight windows and corresponding SA segment XML only. Script
+SHA-256:
 `EBBF2FA483F55A06391B506F09290306D1B40E8E8F2E5390C440BAAD6F1EED89`; receipt
 SHA-256: `E457BC9FF7D940F385D9A153E7441A634E1D661480DB905BA1C2F2A1F3330A19`.
 
