@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 Perception AV fixed-checkpoint input control:** On the expanded-fit
+joint readout's 146-event / 58-video development cohort, a single CPU-only
+intervention showed worse NLL under cross-video or previous-event audio
+replacement, while zero-audio change was uncertain. This supports alignment
+sensitivity, not correct semantic reliance or a general AV gain. No tuning or
+updates occurred. See the [fixed-checkpoint diagnostic](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_INPUT_CONTROLS_SCALE_20261021.md).
+
 **2026-10-21 Perception AV coverage-scale experiment completed.** The separate
 388-video / 908-event cohort passed PTS/media integrity, gated frozen feature
 extraction, and four matched CPU readout fits. Each fit completed 2,048 updates;
