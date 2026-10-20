@@ -18,6 +18,7 @@ from typing import Any
 
 import numpy as np
 import torch
+import yaml
 from torch import Tensor
 from torch.nn import functional as F
 
@@ -199,6 +200,18 @@ def _preflight(
     ):
         raise ValueError("config must define the frozen text-free temporal task")
     sample_dir = Path(config["source"]["sample_dir"]).resolve(strict=True)
+    repository_root = Path(__file__).resolve().parents[1]
+    source_manifest_path = repository_root / "manifests" / "candidates" / "clevrer.yaml"
+    source_manifest = yaml.safe_load(source_manifest_path.read_text(encoding="utf-8"))
+    if (
+        source_manifest.get("revision") != config["source"].get("revision")
+        or source_manifest.get("license") != "CC0-1.0"
+        or source_manifest.get("derivative_model_training_allowed") is not True
+        or source_manifest.get("usage") != "training"
+        or source_manifest.get("trust_status") != "trusted"
+        or _sha256(source_manifest_path) != config["source"].get("source_manifest_sha256")
+    ):
+        raise ValueError("repository CLEVRER license/training gate changed or was not admitted")
     train_rows = _read_jsonl(sample_dir / "train.jsonl")
     validation_rows = _read_jsonl(sample_dir / "validation.jsonl")
     validate_video_splits(train_rows, validation_rows)
@@ -206,6 +219,9 @@ def _preflight(
         raise ValueError(
             "temporal coverage corpus must contain temporal descriptive questions only"
         )
+    expected_source = f"MIT-IBM/CLEVRER@{config['source']['revision']}"
+    if any(row.get("source") != expected_source for row in train_rows + validation_rows):
+        raise ValueError("sample rows do not match the pinned CLEVRER revision")
     for split_name, rows in (("train", train_rows), ("validation", validation_rows)):
         expected = config["source"][f"{split_name}_rows"]
         if len(rows) != expected:
@@ -222,7 +238,12 @@ def _preflight(
     if _sha256(corpus_preflight_path) != config["source"]["corpus_preflight_sha256"]:
         raise ValueError("frozen CPU corpus-preflight hash mismatch")
     if (
-        corpus_preflight.get("candidate_scene_ids_sha256")
+        corpus_preflight.get("source", {}).get("dataset") != "MIT-IBM/CLEVRER"
+        or corpus_preflight.get("source", {}).get("revision") != config["source"].get("revision")
+        or corpus_preflight.get("source", {}).get("license") != "CC0-1.0"
+        or corpus_preflight.get("candidate_scene_count")
+        != config["source"].get("candidate_scene_count")
+        or corpus_preflight.get("candidate_scene_ids_sha256")
         != config["source"]["candidate_scene_ids_sha256"]
         or corpus_preflight.get("train_scene_ids_sha256")
         != config["source"]["train_scene_ids_sha256"]
@@ -282,6 +303,7 @@ def _preflight(
         "config_path": str(config_path),
         "config_sha256": _sha256(config_path),
         "sample_dir": str(sample_dir),
+        "source_manifest_sha256": _sha256(source_manifest_path),
         "corpus_preflight_sha256": _sha256(corpus_preflight_path),
         "train_examples": len(train_rows),
         "validation_examples": len(validation_rows),
