@@ -1,5 +1,12 @@
 # CLEVRER synthetic audio-video task feasibility preflight — 2026-10-20
 
+> **Superseded scope note:** this was an initial limited scan. The later
+> [scene exposure audit](R2_CLEVRER_SCENE_EXPOSURE_AUDIT_20261020.md) checked
+> all registered worktrees and relevant artifact metadata, then screened
+> train annotation coverage. Its 405 candidate IDs are still not certified
+> untouched media or a frozen split. Keep the historical counts below as the
+> original preflight result, not as the current exposure total.
+
 ## Decision
 
 CLEVRER is a possible rights-clean base for a controlled audio-video binding

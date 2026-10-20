@@ -1,9 +1,12 @@
-**2026-10-20 R2 CLEVRER synthetic AV feasibility preflight:** A metadata-only
-scan found 2,423 train scenes represented in cached CLEVRER run manifests, but
-its arithmetic remainder is only an upper bound, not proof of untouched data.
-CLEVRER itself contains no audio; any overlay would support only a controlled
-synthetic alignment diagnostic. No split was created and no GPU run started.
-See the [preflight and limitations](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_FEASIBILITY_20261020.md).
+**2026-10-20 R2 CLEVRER synthetic AV exposure audit:** Expanded the earlier
+preflight to all 23 worktrees and the R2 artifact root. Metadata and filename
+screening leaves 405 candidate train scenes after 9,589 exposed scene IDs and
+6,045 locally cached video IDs are excluded. The 405 train annotations contain
+1,052 valid collision events, but candidate IDs are not yet a certified split:
+normalized question-template reuse is common, and media content hashes remain
+unchecked. CLEVRER has no audio; any overlay would be a synthetic temporal
+alignment diagnostic, not natural AV evidence. No video, model fit, or GPU job
+was started. See the [exposure and task feasibility audit](docs/pretrained_reuse/R2_CLEVRER_SCENE_EXPOSURE_AUDIT_20261020.md).
 
 **2026-10-20 R2 HoloAssist text-free recovery (completed diagnostic):** The
 frozen 1,042-train / 264-development-validation selection and 30-second causal
