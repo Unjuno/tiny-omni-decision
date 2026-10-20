@@ -1,3 +1,10 @@
+**2026-10-20 R2 CLEVRER synthetic AV feasibility preflight:** A metadata-only
+scan found 2,423 train scenes represented in cached CLEVRER run manifests, but
+its arithmetic remainder is only an upper bound, not proof of untouched data.
+CLEVRER itself contains no audio; any overlay would support only a controlled
+synthetic alignment diagnostic. No split was created and no GPU run started.
+See the [preflight and limitations](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_FEASIBILITY_20261020.md).
+
 **2026-10-20 R2 HoloAssist text-free recovery (completed diagnostic):** The
 frozen 1,042-train / 264-development-validation selection and 30-second causal
 windows are unchanged. Full VideoPrism and Whisper feature banks were built,
