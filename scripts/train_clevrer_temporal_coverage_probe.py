@@ -217,6 +217,20 @@ def _preflight(
     }
     if actual_hashes != expected_hashes:
         raise ValueError("frozen media manifest hash mismatch")
+    corpus_preflight_path = Path(config["source"]["corpus_preflight_path"]).resolve(strict=True)
+    corpus_preflight = json.loads(corpus_preflight_path.read_text(encoding="utf-8"))
+    if _sha256(corpus_preflight_path) != config["source"]["corpus_preflight_sha256"]:
+        raise ValueError("frozen CPU corpus-preflight hash mismatch")
+    if (
+        corpus_preflight.get("candidate_scene_ids_sha256")
+        != config["source"]["candidate_scene_ids_sha256"]
+        or corpus_preflight.get("train_scene_ids_sha256")
+        != config["source"]["train_scene_ids_sha256"]
+        or corpus_preflight.get("validation_scene_ids_sha256")
+        != config["source"]["validation_scene_ids_sha256"]
+        or corpus_preflight.get("normalized_question_option_overlap") != 0
+    ):
+        raise ValueError("scene split or normalized-content preflight differs from config")
     fetch_report = json.loads((sample_dir / "fetch-report.json").read_text(encoding="utf-8"))
     if (
         fetch_report.get("status") != "complete_verified_clevrer_temporal_media"
@@ -268,6 +282,7 @@ def _preflight(
         "config_path": str(config_path),
         "config_sha256": _sha256(config_path),
         "sample_dir": str(sample_dir),
+        "corpus_preflight_sha256": _sha256(corpus_preflight_path),
         "train_examples": len(train_rows),
         "validation_examples": len(validation_rows),
         "unique_train_scenes": len({row["scene_group_id"] for row in train_rows}),
