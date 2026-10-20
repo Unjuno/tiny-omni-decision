@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-20T06:58:08Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "snapshot_scope": "Read-only delta snapshot; no process, worktree, data, model, PR, or checkpoint was modified.",
+  "local_checkout": {
+    "path": "C:\\CodexWorktrees\\r2-holoassist-results-20261020",
+    "branch": "codex/r2-holoassist-results-20261020",
+    "head": "acc4bc377e92055af95ed2154d2a2b6fabfc719f",
+    "upstream": "origin/codex/r2-holoassist-results-20261020",
+    "working_tree_clean_at_capture": true
+  },
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "open_pull_requests": [
+      {"number": 15, "draft": true, "head_branch": "docs/pretrained-reuse-roadmap-20261010", "head_sha": "43974fb2f6b070e0182465edca12d061b65ed8dd", "base_branch": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+      {"number": 14, "draft": true, "head_branch": "fix/student-qat-training-handoff", "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8", "base_branch": "codex/ternary-student-recovery", "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c"},
+      {"number": 13, "draft": false, "head_branch": "feat/ternary-student-recovery", "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd", "base_branch": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+      {"number": 12, "draft": true, "head_branch": "codex/postquant-teacher-cache", "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61", "base_branch": "codex/postquant-numerical-core", "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"},
+      {"number": 11, "draft": true, "head_branch": "codex/postquant-numerical-core", "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5", "base_branch": "codex/postquant-worker-entrypoints", "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"},
+      {"number": 10, "draft": true, "head_branch": "codex/postquant-worker-entrypoints", "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932", "base_branch": "codex/roadmap-compression-video-specialization", "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"},
+      {"number": 9, "draft": true, "head_branch": "codex/teacher-quality-v1", "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134", "base_branch": "main", "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c"}
+    ]
+  },
+  "worktrees": {
+    "registered_count": 20,
+    "dirty_worktree_count": 6,
+    "current_worktree_dirty_entries": 0,
+    "peer_worktree_contents_read": false,
+    "peer_worktrees_modified": false
+  },
+  "manifest_integrity": {
+    "tracked_manifest_file_count": 41,
+    "compared_to_snapshot": "R0_LIVE_AUDIT_20261020.json",
+    "changed_sha256_count": 0
+  },
+  "compute": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "total_mib": 16384,
+    "used_mib": 15821,
+    "utilization_pct": 99,
+    "temperature_c": 63,
+    "power_w": 35.74,
+    "active_compute_pid": 18152,
+    "active_workload": "Orbitune compound_cfe_train; local Orbitune dataset/checkpoint paths; steps=0 with epoch sampler and yield sentinel",
+    "process_creation_time_local": "2026-10-20 15:26:53",
+    "process_or_checkpoint_intervened": false,
+    "tiny_omni_gpu_job_started": false,
+    "disk_c_free_bytes": 46108168192,
+    "cloud_cost_usd": 0,
+    "hotgpu_guard": {
+      "path": "scripts/run_with_hotgpu_guard.py",
+      "sha256": "ae3ca95654a2f57e6652455f9cf3cf6a9639ec0f456d4f24318ce146130ecde8",
+      "behavior": "Waits for cooperative idle, reserves VRAM before child launch, and releases reservation after child exit; does not signal the existing process."
+    }
+  },
+  "holoassist_source_capacity": {
+    "official_train_sessions": 1466,
+    "prior_pilot_excluded_sessions": 160,
+    "new_recovery_selection_sessions": 1306,
+    "new_recovery_train_sessions": 1042,
+    "new_recovery_development_validation_sessions": 264,
+    "all_official_train_sessions_allocated": true,
+    "prior_pilot_used_official_validation_sessions": 207,
+    "official_test_split_or_labels_read": false,
+    "fresh_unused_holoassist_session_split_available_from_this_release": false
+  },
+  "r0_gates": {
+    "deployment_device": "OPEN",
+    "task_battery": "OPEN; narrow task probes exist but no locked product battery",
+    "task_level_quality_and_confidence_thresholds": "OPEN",
+    "confidence_abstention_and_calibration_policy": "OPEN",
+    "latency_energy_and_time_cost_criteria": "OPEN",
+    "pre_quantization_parameter_and_package_targets": "PROVISIONAL: 100-200M parameters and <=200 MB package"
+  },
+  "next_gate": {
+    "path": "R2 M-2",
+    "status": "NOT_ADMITTED",
+    "reason": "No newly screened, rights-cleared, group-disjoint both-required AV data source is admitted. HoloAssist official train sessions are exhausted across prior pilot and frozen train/development split; prior development validation has already been observed.",
+    "do_not_start_gpu_fit": true,
+    "requirements": [
+      "Pinned source and per-component rights scope",
+      "Fresh independent session/video grouped train and development split",
+      "Both-stream-required or valid predeclared counterfactual labels",
+      "Matching unimodal and joint input/target manifests"
+    ]
+  }
+}
