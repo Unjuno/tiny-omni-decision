@@ -22,6 +22,7 @@ from scripts.analyze_holoassist_paired_bootstrap import (  # noqa: E402
 from scripts.audit_holoassist_metadata import sha256_file  # noqa: E402
 from scripts.holoassist_sensor_intervention_utils import (  # noqa: E402
     derange_sensor_sessions,
+    reverse_sensor_time_within_sessions,
 )
 from scripts.train_holoassist_temporal_readout import (  # noqa: E402
     _configured_hidden_size,
@@ -144,12 +145,14 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
         missing = dict(validation)
         missing["sensor"] = np.zeros_like(validation["sensor"])
         shuffled, shuffle_counts = derange_sensor_sessions(validation)
+        reversed_sensor, reverse_counts = reverse_sensor_time_within_sessions(validation)
         interventions = {
             "baseline_replay": (validation, baseline_metrics, baseline_rows),
         }
         for name, altered in (
             ("sensor_missing_zero", missing),
             ("sensor_same_task_session_derangement", shuffled),
+            ("sensor_time_reversed_within_session", reversed_sensor),
         ):
             metrics, rows = _evaluate(
                 model,
@@ -170,6 +173,7 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
                 "predictions_sha256": sha256_file(prediction_path),
             }
         results["same_task_derangement"] = shuffle_counts
+        results["within_session_time_reversal"] = reverse_counts
         results["paired_session_bootstrap"] = {
             name: paired_session_bootstrap(
                 all_predictions["baseline_replay"],
@@ -177,7 +181,11 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
                 replicates=10_000,
                 seed=1701,
             )
-            for name in ("sensor_missing_zero", "sensor_same_task_session_derangement")
+            for name in (
+                "sensor_missing_zero",
+                "sensor_same_task_session_derangement",
+                "sensor_time_reversed_within_session",
+            )
         }
         weights = np.asarray([row["modality_weights"] for row in baseline_rows], dtype=np.float64)
         results["baseline_gate_weights"] = {

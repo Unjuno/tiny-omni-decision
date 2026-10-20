@@ -42,3 +42,23 @@ def derange_sensor_sessions(data: dict[str, Any]) -> tuple[dict[str, Any], dict[
             len(members) for members in groups.values() if len(members) < 2
         ),
     }
+
+
+def reverse_sensor_time_within_sessions(
+    data: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, int]]:
+    """Reverse each session's IMU-window order while preserving its values."""
+    result = dict(data)
+    result["sensor"] = np.asarray(data["sensor"]).copy()
+    changed = 0
+    for indices in data["session_indices"]:
+        reversed_values = data["sensor"][indices[::-1]]
+        if np.array_equal(data["sensor"][indices], reversed_values):
+            continue
+        result["sensor"][indices] = reversed_values
+        changed += 1
+    return result, {
+        "sessions_total": len(data["session_indices"]),
+        "sessions_changed": changed,
+        "sessions_unchanged": len(data["session_indices"]) - changed,
+    }

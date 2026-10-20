@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-20T06:43:53.0026524Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "snapshot_scope": "read-only current-state audit; includes this checkout changes already made before snapshot; no peer worktree was modified",
+  "local_checkout": {
+    "path": "C:\\CodexWorktrees\\r2-holoassist-results-20261020",
+    "branch": "codex/r2-holoassist-results-20261020",
+    "head": "4a813840a2c8442b9a5aef584fd4cf74424c408b",
+    "upstream": "origin/codex/r2-holoassist-results-20261020",
+    "working_tree_status": "research changes in progress in this dedicated worktree"
+  },
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "open_pull_requests": [
+      {
+        "number": 15,
+        "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+        "draft": true,
+        "head_branch": "docs/pretrained-reuse-roadmap-20261010",
+        "head_sha": "43974fb2f6b070e0182465edca12d061b65ed8dd",
+        "base_branch": "main",
+        "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+        "updated_at": "2026-10-18T00:06:32Z"
+      },
+      {
+        "number": 14,
+        "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+        "draft": true,
+        "head_branch": "fix/student-qat-training-handoff",
+        "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+        "base_branch": "codex/ternary-student-recovery",
+        "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c",
+        "updated_at": "2026-10-08T10:54:56Z"
+      },
+      {
+        "number": 13,
+        "title": "feat: ternary-first student recovery with conditional LoRA",
+        "draft": false,
+        "head_branch": "feat/ternary-student-recovery",
+        "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+        "base_branch": "main",
+        "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+        "updated_at": "2026-10-08T02:27:05Z"
+      },
+      {
+        "number": 12,
+        "title": "feat: add strict postquant teacher cache boundary",
+        "draft": true,
+        "head_branch": "codex/postquant-teacher-cache",
+        "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+        "base_branch": "codex/postquant-numerical-core",
+        "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+        "updated_at": "2026-10-06T17:54:48Z"
+      },
+      {
+        "number": 11,
+        "title": "feat: postquant numerical core and CPU checker (no model execution)",
+        "draft": true,
+        "head_branch": "codex/postquant-numerical-core",
+        "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+        "base_branch": "codex/postquant-worker-entrypoints",
+        "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+        "updated_at": "2026-10-06T17:19:22Z"
+      },
+      {
+        "number": 10,
+        "title": "feat: safe postquant worker entrypoints (no training launch)",
+        "draft": true,
+        "head_branch": "codex/postquant-worker-entrypoints",
+        "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+        "base_branch": "codex/roadmap-compression-video-specialization",
+        "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277",
+        "updated_at": "2026-10-06T15:33:14Z"
+      },
+      {
+        "number": 9,
+        "title": "Teacher v1: leakage-safe quality pipeline",
+        "draft": true,
+        "head_branch": "codex/teacher-quality-v1",
+        "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+        "base_branch": "main",
+        "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c",
+        "updated_at": "2026-10-04T10:04:40Z"
+      }
+    ]
+  },
+  "worktrees": [
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "branch": "refs/heads/codex/teacher-quality-clean-dev-v1",
+      "dirty_count": 4,
+      "status_sample": [
+        " M ROADMAP.md",
+        " M docs/VIDEO_TEACHER_V2_LONG_BUDGET.md",
+        "?? docs/pretrained_reuse/",
+        "?? scripts/resume_teacher_quality_clean_dev_v2.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/decision-head-validation",
+      "head": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "branch": "refs/heads/codex/decision-head-validation",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat",
+      "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "branch": "DETACHED",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat-latest",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "branch": "refs/heads/fix/student-qat-training-handoff",
+      "dirty_count": 2,
+      "status_sample": [
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt06_pr14_legacybest_warmstart.yaml",
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt07_pr14_legacybest_warmstart.yaml"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-omni",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "branch": "refs/heads/codex/textfree-video-program-order",
+      "dirty_count": 2,
+      "status_sample": [
+        " M scripts/train_textfree_video_probe.py",
+        " M tests/test_train_textfree_video_probe.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/qat-groupwise-performance",
+      "head": "c50f0eb364d963bbcb3144a83305705880d9d426",
+      "branch": "refs/heads/codex/qat-groupwise-performance",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-holoassist-results-20261020",
+      "head": "4a813840a2c8442b9a5aef584fd4cf74424c408b",
+      "branch": "refs/heads/codex/r2-holoassist-results-20261020",
+      "dirty_count": 6,
+      "status_sample": [
+        " M ROADMAP.md",
+        " M docs/pretrained_reuse/R2_HOLOASSIST_SENSOR_FUSION_RESULTS_20261020.md",
+        " M scripts/evaluate_holoassist_av_sensor_interventions.py",
+        " M scripts/holoassist_sensor_intervention_utils.py",
+        " M tests/test_holoassist_av_sensor_interventions.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-independent-joint-task",
+      "head": "c36ce369e8687205fcc2d7670ab3e12a3b226fd3",
+      "branch": "refs/heads/codex/r2-independent-joint-task",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage",
+      "head": "74e2094c51af6a8738dd67d42d018442b979cd75",
+      "branch": "refs/heads/codex/textfree-video-coverage-v1",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage-v2",
+      "head": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "branch": "refs/heads/codex/textfree-video-coverage-v2",
+      "dirty_count": 10,
+      "status_sample": [
+        " M scripts/fetch_clevrer_probe.py",
+        "MM scripts/train_textfree_video_probe.py",
+        "M  src/tiny_omni_decision/textfree_video.py",
+        " M tests/test_fetch_clevrer_probe.py",
+        "MM tests/test_textfree_video.py"
+      ]
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-audio-cache/tiny-omni-decision",
+      "head": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+      "branch": "refs/heads/codex/r2-av-audio-cache",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-matched-evidence/tiny-omni-decision",
+      "head": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+      "branch": "refs/heads/codex/r2-av-matched-evidence",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-postnorm-stability",
+      "head": "809c0f8226a780039a89c8066709d15d39a53f8a",
+      "branch": "refs/heads/codex/r2-av-postnorm-stability",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-replacement/tiny-omni-decision",
+      "head": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+      "branch": "refs/heads/codex/r2-av-replacement",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-transport/tiny-omni-decision",
+      "head": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+      "branch": "refs/heads/codex/r2-av-transport",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-holoassist-textfree/tiny-omni-decision",
+      "head": "39b1a7057c4ec0afaa04b3dbc09e1989d2fa654b",
+      "branch": "refs/heads/codex/r2-holoassist-textfree",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-long-budget",
+      "head": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "branch": "refs/heads/codex/video-teacher-v2-long-budget",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp",
+      "head": "740ec0a7d2d8ba870b384a130c8b0821537b9626",
+      "branch": "refs/heads/codex/teacher-quality-physionpp",
+      "dirty_count": 1,
+      "status_sample": [
+        "?? scripts/resume_teacher_quality_physionpp_clean_dev_v3_step1152.py"
+      ]
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-ternary-student",
+      "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "branch": "refs/heads/codex/ternary-student-recovery",
+      "dirty_count": 0,
+      "status_sample": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery",
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "branch": "refs/heads/codex/ternary-student-recovery-updated",
+      "dirty_count": 11,
+      "status_sample": [
+        " M configs/student/ternary_first.example.json",
+        " M docs/STUDENT.md",
+        " M src/tiny_omni_decision/student/__main__.py",
+        " M src/tiny_omni_decision/student/model.py",
+        " M src/tiny_omni_decision/student/recovery.py"
+      ]
+    }
+  ],
+  "dataset_and_source_manifest_sha256": {
+    "manifests/base-model.example.yaml": "3073b756114904fbec8b8b590c087484aa6769dc510f8f95939509e6657fbfca",
+    "manifests/dataset.example.yaml": "60c29a1efc4d93179422cf5acc7c2f38949b603efce5dc7a5073a36cd3e3ccdd",
+    "manifests/durable-heldout-corpus.yaml": "10e7b191edf318882585f5c7cf38863be35b6c825a18f8ed3b36d1d43d4788b1",
+    "manifests/durable-training-corpus.yaml": "365e154310f6c1c16199f511bc0a83959d250d1308ade853b4a0d8f5f6010829",
+    "manifests/evaluation-candidates.yaml": "2787c66d920d01dee53e3df4aa0f52eb9097f52e5fb8a35f2994b6eaba089f56",
+    "manifests/phase3-evaluation-corpus.yaml": "49b0ac3c133a5041241bbc3cee85989cd696f6aee388814bc28984490f3bb0c2",
+    "manifests/phase3-training-corpus.yaml": "8c34a80c513eebc30791e0e9f68de5dbbf4f1fc11d2027acbc17b4cc79949656",
+    "manifests/training-candidates.yaml": "4a2aec4747e4b8fbc17cb20e14dc00c278d0d545219d5e8adf775ece02796f22",
+    "manifests/candidates/ava-active-speaker.yaml": "09e15926a6cff5a433648b3f3aa87915703f9635d310bb845267e52eaff1797c",
+    "manifests/candidates/clevr4-validation.yaml": "ba524e02c7474e4b31cd52bbd3ecb9705979b9ead9e1fd5b46b5d6fdd9c81f12",
+    "manifests/candidates/clevr4.yaml": "9b2b6aaffb03f1a800607e598902cb9d893223c412ab025d06b4a15f8d3cadae",
+    "manifests/candidates/clevrer-validation.yaml": "ad2047bf40707f514cda825e1f409c7e19ace4fec5e313f6d9899bd5badce0c4",
+    "manifests/candidates/clevrer.yaml": "a87bd6834a94b8ed481a36e7088ee8d5391319fc271fed80497530f055dcbdf2",
+    "manifests/candidates/jamcqa-v2-dev.yaml": "8e7100be4a2aebf4ffba78aab65e8e371ccce2469c5062c86d81faf7299fd01f",
+    "manifests/candidates/librispeech-dev-clean.yaml": "7ec6040833bafd29e1d4cbd132e849c50fc365982e32021190d3c0c5d39c6019",
+    "manifests/candidates/mavd-traffic.yaml": "44955bf04b76369a5e0bb25195fcb60cf9af4158ab6d3576c94e13f103c708a7",
+    "manifests/candidates/mmau-test-mini.yaml": "ed4ab92e6ab4e2ec9fd93b895ff02603323fd276e61dac0400e929e9c935a6cf",
+    "manifests/candidates/mvbench.yaml": "a886fdf6ce866b38bbfc82639a7b1ed39c5a9211f3d584c0f746d788b4f4cd37",
+    "manifests/candidates/onejev-licenses.csv": "27b0b90e143b5abd4116c0a81438253d9250f99ea2699c16e974c8f5d142f9a8",
+    "manifests/candidates/onejev.yaml": "ca7e7e0a2b4b1651ada9b7d3d8e1c071721f95f2bf6bdfdf613a4dea8b4386bb",
+    "manifests/candidates/open-jev-test.yaml": "dc83003fee71451a3342f3d7bebca0032936566e050f2ecceb268412676d9f47",
+    "manifests/candidates/open-jev-validation.yaml": "43b0c948f5316494db5499711b657aa4a791ae8e934b434524bab9ef604cf916",
+    "manifests/candidates/open-jev.yaml": "966290c414f5e3d467814afeb48bee0a7f3c11a7b07617ecc6b42d9f4ca0fec9",
+    "manifests/candidates/speech-commands-test.yaml": "0b557bc44742d96ed1c5fa227726cc858fbf688ec26083952c70559492acfe58",
+    "manifests/candidates/speech-commands-validation.yaml": "c416e1a1af57387397d73d6f4ac66a02d481dc9cbc44477c25c2375112bdaf24",
+    "manifests/candidates/speech-commands.yaml": "109984b9304ab0335c9e0b973bea3b828e3e0c901d9e46cfcbbf581459df03e2",
+    "manifests/candidates/typed-synth-validation.yaml": "f203eb5bae312e80586bfd92ec9a7bf39918d110ed6441291a4dc64fa53bf51a",
+    "manifests/candidates/unav100.yaml": "6adb3dc92793f486f0e0616421705549b729b18bd6440d6174ff9329df470d5a",
+    "manifests/candidates/yt-ntu-avq.yaml": "9e21beecbe206739a491739aa5274a714d8bfcee847da5968ccb6584aa12f98d",
+    "manifests/pretrained_reuse/.gitattributes": "a23cc73caeec9684ceb08743c7ab485bd5aebf235e526484ce66b712f8907c10",
+    "manifests/pretrained_reuse/c-mhad-source-screen-20261019.json": "a15146d7d67c31084b599c2aa35c3bccaba42699f1b3851ff99f2c037e8cd7a1",
+    "manifests/pretrained_reuse/clevrer-heldout-video-excluded-scenes-20261011.json": "2ffd21da252fa1f8a544c66d0d1f6c66b44ca26af79e8e6db3b2613cc9f4cb6c",
+    "manifests/pretrained_reuse/greatest-hits-development-20261017.json": "1b8640b8e3348799bb9e3a0046efce999c65535985fbe394ae10b1603a91645b",
+    "manifests/pretrained_reuse/greatest-hits-encoders-20261017.json": "3ee6b7d650ebf119bc039511ff30e2110e1a3358e89e8a4fe8774ed0c98b70e1",
+    "manifests/pretrained_reuse/greatest-hits-full-extent-20261017.json": "48940ebe38996adb4e10687055b04e9c0150dae1a67c7373d4062c56dfd67168",
+    "manifests/pretrained_reuse/greatest-hits-inventory-20261017.json": "9febf9f1d4f0e665b92203fcbdb3ced79526ccf959617fe242caad042c2a633e",
+    "manifests/pretrained_reuse/greatest-hits-probe-20261017.json": "4b87f99bc4309cada393be87e76f31ac7ba75326e31309ddda04bf4fd58caf57",
+    "manifests/pretrained_reuse/greatest-hits-source-review-20261017.json": "553daf8dc87d78957daf0ddc6bcb28b850b20e770fa03149c86f05e9b35a948a",
+    "manifests/pretrained_reuse/holoassist-source-screen-20261019.json": "ad532eec3cadd10fda9697da0bf22308ad411a5a5d9ba03800dcfcb62da6e7f8",
+    "manifests/pretrained_reuse/lombard-grid-source-20261014.json": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+    "manifests/teachers/durable-teacher-v0.json": "9af2616684dd00c557941cf790b7e2d65fbe8100e9ae8be7296bc250c2ec2d94"
+  },
+  "compute": {
+    "gpu_snapshot": "NVIDIA GeForce RTX 3080 Laptop GPU, 16384 MiB, 15821 MiB, 46 %, 63, 40.86 W",
+    "compute_apps": [
+      "18152, C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe, [N/A]"
+    ],
+    "identified_orbitune_processes": [
+      {
+        "pid": 4696,
+        "started": "2026-10-20T01:46:00.6224040+09:00",
+        "executable": "C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\venv_cuda\\Scripts\\python.exe",
+        "command_line": "\"C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\venv_cuda\\Scripts\\python.exe\" -W ignore tools\\idle_train.py --watchdog C:\\orbitune-production\\epoch_a2_watchdog.py --gpu-index 0 --util-threshold 5 --min-free-mib 14000 --max-cpu-percent 0 --idle-seconds 60 --poll-seconds 20 --yield-after-busy-seconds 40 --graceful-timeout 900 --startup-timeout-seconds 300 --no-progress-backoff 120 --heartbeat-seconds 600 --max-failures 5 "
+      },
+      {
+        "pid": 23856,
+        "started": "2026-10-20T01:46:00.6567120+09:00",
+        "executable": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "command_line": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -W ignore tools\\idle_train.py --watchdog C:\\orbitune-production\\epoch_a2_watchdog.py --gpu-index 0 --util-threshold 5 --min-free-mib 14000 --max-cpu-percent 0 --idle-seconds 60 --poll-seconds 20 --yield-after-busy-seconds 40 --graceful-timeout 900 --startup-timeout-seconds 300 --no-progress-backoff 120 --heartbeat-seconds 600 --max-failures 5 "
+      },
+      {
+        "pid": 27640,
+        "started": "2026-10-20T15:26:53.5637430+09:00",
+        "executable": "C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\venv_cuda\\Scripts\\python.exe",
+        "command_line": "C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\venv_cuda\\Scripts\\python.exe C:\\orbitune-production\\epoch_a2_source\\scripts\\compound_cfe_train.py train --train-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\train,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\train --validation-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\validation,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\validation --checkpoint C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --resume C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --steps 0 --sampler epoch --epoch-seed 2026 --weighted-loss --batch-size 64 --seq-len 512 --encode-semantics a2 --precision bf16 --learning-rate 0.0003 --weight-decay 0.01 --grad-clip 1.0 --checkpoint-every-events 30000000 --eval-every-events 20000000 --log-every 50 --yield-sentinel C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\YIELD"
+      },
+      {
+        "pid": 18152,
+        "started": "2026-10-20T15:26:53.5827970+09:00",
+        "executable": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "command_line": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" C:\\orbitune-production\\epoch_a2_source\\scripts\\compound_cfe_train.py train --train-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\train,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\train --validation-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\validation,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\validation --checkpoint C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --resume C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --steps 0 --sampler epoch --epoch-seed 2026 --weighted-loss --batch-size 64 --seq-len 512 --encode-semantics a2 --precision bf16 --learning-rate 0.0003 --weight-decay 0.01 --grad-clip 1.0 --checkpoint-every-events 30000000 --eval-every-events 20000000 --log-every 50 --yield-sentinel C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\YIELD"
+      }
+    ],
+    "free_c_drive_bytes": 46122848256,
+    "cuda_training_for_this_project_started": false,
+    "cloud_spend_usd": 0
+  },
+  "holoassist_sensor_run": {
+    "run_metadata_sha256": "ad9e0c0dd83225f8b6e50057e09d855b526cea79ab97070aae5170d6ec664dfd",
+    "imu_receipt_sha256": "5520afc81e28e1ee8f9675b284d23202b21b9cfc9b8daab8f61de32bb2118e41",
+    "imu_train_features_sha256": "25e4d45a332df418e1934ee0a5e5d2a1ee72ef0ec7dfb1a3d884250ad1f628b5",
+    "imu_validation_features_sha256": "2a3b79e6ffb72815e5943ad2820d395a5ae874832d32f3417b2009db06ea082d",
+    "avs_best_checkpoint_sha256": "c6b76be597950ad372a6edc6d95d16a8649b72417113303974051b2dbdb3ff9e",
+    "sealed_audit_loaded": false
+  },
+  "r0_gates": {
+    "R0": "partly open: deployment device/task acceptance/calibration/latency-energy criteria not frozen",
+    "R1": "executable VideoPrism/DINOv2/MOMENT paths audited; V-JEPA rights remain REVIEW",
+    "R2": "task-scoped Path A evidence exists; single coherent four-modality and joint-quality release gate remains open",
+    "R3": "conditional, not started",
+    "R4": "conditional; approved both-required dataset not yet admitted",
+    "R5": "observation cache evidence exists; persistent temporal state remains open",
+    "R6": "optional, not justified by positive evidence yet",
+    "R7": "quality-gated; package and device runtime gates remain open",
+    "R8": "not started: locked release evaluation/handoff"
+  }
+}

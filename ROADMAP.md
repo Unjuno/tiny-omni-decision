@@ -18,7 +18,10 @@ and AV+sensor readouts. AV remained best on selected validation checkpoints.
 On the fixed AVS checkpoint, zeroing IMU reduced accuracy by 1.9 points, while
 same-task/same-length session reassignment had small, uncertain effects. This
 shows the sensor path influences outputs but does not establish useful
-session-specific complementarity; late fixed-budget training also overfit.
+session-specific complementarity. A follow-up within-session IMU time reversal
+reduced Accuracy 3.7 points with a session-paired interval excluding zero;
+this is exploratory sensitivity on the same selected validation, not an
+independent quality result. Late fixed-budget training also overfit.
 No test/sealed audit was loaded and no model was promoted. See the
 [training and intervention results](docs/pretrained_reuse/R2_HOLOASSIST_SENSOR_FUSION_RESULTS_20261020.md).
 

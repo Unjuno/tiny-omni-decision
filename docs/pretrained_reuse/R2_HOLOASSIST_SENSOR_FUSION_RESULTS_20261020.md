@@ -114,13 +114,18 @@ IMU set to zero, and (3) whole IMU sequences cyclically reassigned between
 validation sessions matched on task type and exact session window count. The
 derangement changed 213 of 264 sessions; the other 51 were singleton
 task/length groups and stayed unchanged. This constraint preserves task and
-sequence length but limits the intervention's coverage.
+sequence length but limits the intervention's coverage. A follow-up
+exploratory condition reversed the IMU-window order within each session,
+retaining all values while changing their alignment to unchanged AV windows.
+This changed all 264 sessions; it is a post-hoc development diagnostic, not
+independent confirmation.
 
 | Condition | Accuracy | Balanced accuracy | NLL | Brier | ECE-15 |
 |---|---:|---:|---:|---:|---:|
 | Baseline replay | 0.7370 | 0.6502 | 0.5498 | 0.3665 | 0.0188 |
 | IMU missing (zero) | 0.7181 | 0.6279 | 0.5742 | 0.3862 | 0.0319 |
 | Same-task IMU reassigned | 0.7366 | 0.6452 | 0.5563 | 0.3718 | 0.0217 |
+| IMU time reversed within session | 0.7000 | 0.6086 | 0.5978 | 0.4059 | 0.0315 |
 
 Paired session-cluster bootstrap (10,000 replicates, seed 1701, percentile
 95% intervals) gives these candidate-minus-baseline differences:
@@ -129,12 +134,17 @@ Paired session-cluster bootstrap (10,000 replicates, seed 1701, percentile
 |---|---:|---:|---:|---:|
 | IMU missing | -0.0189 `[-0.0298,-0.0081]` | +0.0245 `[+0.0133,+0.0360]` | +0.0197 `[+0.0105,+0.0289]` | -0.0221 `[-0.0341,-0.0107]` |
 | Same-task IMU reassigned | -0.0004 `[-0.0091,+0.0082]` | +0.0065 `[-0.0004,+0.0135]` | +0.0052 `[-0.0005,+0.0111]` | -0.0050 `[-0.0147,+0.0050]` |
+| IMU time reversed within session | -0.0371 `[-0.0501,-0.0247]` | +0.0480 `[+0.0339,+0.0631]` | +0.0394 `[+0.0281,+0.0515]` | -0.0416 `[-0.0572,-0.0266]` |
 
 On these validation IDs, setting IMU to zero reliably degrades predictions,
 showing the learned path uses the supplied sensor representation. But the
 matched reassignment differences are small and their intervals include zero;
-this does not establish strong session-specific IMU complementarity. The
-zero-input effect may partly reflect an out-of-distribution intervention,
+this does not establish strong session-specific IMU complementarity. Reversing
+IMU-window order also degrades the metrics, indicating development-set
+sensitivity to temporal alignment within a session. Because checkpoint
+selection used these same IDs and reversal was selected after seeing other
+intervention results, treat this as exploratory alignment-sensitivity
+evidence only. The zero-input effect may partly reflect an out-of-distribution intervention,
 because zero after train normalization is not guaranteed to mimic naturally
 missing IMU. Together with AVS trailing AV at its selected checkpoint, the
 evidence is that this sensor path has measurable influence but useful added
@@ -159,15 +169,32 @@ python -m scripts.evaluate_holoassist_av_sensor_interventions `
   --output-dir C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\avs-readout-attempt-02\sensor-interventions-cpu-attempt-01
 ```
 
+The follow-up used the identical command and inputs, changing only the output
+directory to
+`C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\avs-readout-attempt-02\sensor-interventions-cpu-attempt-02`.
+The saved reversal predictions were then analyzed without model inference:
+
+```powershell
+python -m scripts.analyze_holoassist_paired_bootstrap `
+  --baseline C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\avs-readout-attempt-02\sensor-interventions-cpu-attempt-02\predictions-baseline_replay.json `
+  --candidate C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\avs-readout-attempt-02\sensor-interventions-cpu-attempt-02\predictions-sensor_time_reversed_within_session.json `
+  --output C:\CodexArtifacts\pretrained-reuse-r2\holoassist-textfree-unused-train-recovery-02\avs-readout-attempt-02\sensor-interventions-cpu-attempt-02\paired-bootstrap-sensor-time-reversal.json `
+  --replicates 10000 --seed 1701
+```
+
 Intervention output metadata SHA-256:
 `6a7cf9a6e36a55da920b8748174ca8889a204c10ea4c430578a2ff21c5aa0dcd`.
+Follow-up attempt-02 metadata SHA-256:
+`abb90a3b4f33e5fca62af7de38fb551999feae64af06522a7ae8381d3465416c`.
+Its standalone paired-bootstrap record for time reversal SHA-256:
+`3d64d86c710d66b2e2d8f8b1d326e7f78e9f1aec90b86b71cbcd6a2cc4f30173`.
 Training metadata SHA-256:
 `ad9e0c0dd83225f8b6e50057e09d855b526cea79ab97070aae5170d6ec664dfd`.
-The final intervention evaluator SHA-256 is
-`fe368fb2ce7aff87fd7206e653f82c39a0881b67d684d388c1cf118ee6c91621`; after
-the run, only a behavior-preserving move of the NumPy-only derangement helper
-was made so CI tests do not import PyTorch. Its tests are in
-`tests/test_holoassist_av_sensor_interventions.py`.
+The evaluator SHA-256 is
+`5b05c8bc8c059b3c52f3d10855a3dc6b9207c8adf4e0378753c5810212c9d9a6` and the
+NumPy-only intervention utility SHA-256 is
+`4ab3a40bb62ae62936ddd9af62e02c25113775b0d0b86b7facb6fb3135c2108c`. Its
+tests are in `tests/test_holoassist_av_sensor_interventions.py`.
 The run, checkpoints, predictions, and all media/features remain in
 `C:/CodexArtifacts/pretrained-reuse-r2/holoassist-textfree-unused-train-recovery-02/`;
 no large artifacts were added to Git.

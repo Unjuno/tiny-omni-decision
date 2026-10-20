@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import numpy as np
 
-from scripts.holoassist_sensor_intervention_utils import derange_sensor_sessions
+from scripts.holoassist_sensor_intervention_utils import (
+    derange_sensor_sessions,
+    reverse_sensor_time_within_sessions,
+)
 
 
 def _fixture() -> dict[str, object]:
@@ -47,3 +50,16 @@ def test_derangement_is_deterministic_and_never_crosses_task_or_length() -> None
 
     assert np.array_equal(first["sensor"], second["sensor"])
     assert np.array_equal(first["sensor"][6:], data["sensor"][6:])
+
+
+def test_sensor_time_reversal_preserves_values_and_only_reverses_within_session() -> None:
+    data = _fixture()
+
+    altered, counts = reverse_sensor_time_within_sessions(data)
+
+    assert counts == {"sessions_total": 4, "sessions_changed": 3, "sessions_unchanged": 1}
+    assert np.array_equal(altered["sensor"][:2], data["sensor"][1::-1])
+    assert np.array_equal(altered["sensor"][2:4], data["sensor"][3:1:-1])
+    assert np.array_equal(altered["sensor"][4:6], data["sensor"][5:3:-1])
+    assert np.array_equal(altered["sensor"][6:], data["sensor"][6:])
+    assert sorted(altered["sensor"].reshape(-1)) == sorted(data["sensor"].reshape(-1))
