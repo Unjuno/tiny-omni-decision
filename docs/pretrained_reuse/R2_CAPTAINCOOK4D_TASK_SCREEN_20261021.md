@@ -66,6 +66,13 @@ for 185/204 train and 57/84 validation recordings. These are link-availability
 counts; they do not verify local media contents, audio streams, timing, or
 annotation-to-frame alignment.
 
+On 2026-10-21, read-only HTTP HEAD checks of the listed GoPro 360p links for
+training recording `10_16` (person 5) and validation recording `10_31`
+(person 8) both returned HTTP 404 from Box. No media bytes were downloaded.
+Therefore the metadata availability counts above do not establish that the
+media is currently reachable. The media-alignment smoke is blocked until the
+project provides working official links or an authorized mirror.
+
 The original split and labels were used only for this source screen. The
 combined split JSON was parsed as a whole, but the audit code only reads its
 `train` and `val` keys; it does not inspect the `test` key. The shared step

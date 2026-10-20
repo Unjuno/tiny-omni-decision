@@ -8,6 +8,7 @@ single overlapping train recording removes person overlap, but recipes and
 environments remain shared and validation has only two participant IDs.
 Labels do not establish that audio is required, so this is not joint AV
 complementarity evidence. No media, test metrics, model, or GPU were used.
+Two sampled GoPro links returned HTTP 404, blocking the media-alignment smoke.
 See docs/pretrained_reuse/R2_CAPTAINCOOK4D_TASK_SCREEN_20261021.md.
 **2026-10-19 R2 HoloAssist full-media gate:** The fixed 160-train / 207-
 validation pitch-shifted pilot is fully downloaded and all 367 media SHA-256
