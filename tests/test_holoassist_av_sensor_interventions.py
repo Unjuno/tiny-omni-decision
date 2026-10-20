@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from scripts.evaluate_holoassist_av_sensor_interventions import derange_sensor_sessions
+from scripts.holoassist_sensor_intervention_utils import derange_sensor_sessions
 
 
 def _fixture() -> dict[str, object]:

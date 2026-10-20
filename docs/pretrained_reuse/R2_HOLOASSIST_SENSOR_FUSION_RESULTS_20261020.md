@@ -45,7 +45,11 @@ build and its receipt were created afterward. One initial training attempt also
 failed before model construction or optimizer updates because the config's
 `hidden_size` was nested under `model`; that lookup was corrected and covered
 with tests. It is retained as a failed attempt; the successful run used a new
-output directory.
+output directory. The first pushed CI run passed lint but failed at test
+collection because the intervention test imported the heavyweight PyTorch
+runner in the dev-only CI environment. The session-derangement helper was
+separated into a NumPy-only module; the measured intervention behavior is
+unchanged and the CI suite is being rerun on that fix.
 
 ## Fixed-budget training
 
@@ -159,9 +163,9 @@ Intervention output metadata SHA-256:
 Training metadata SHA-256:
 `ad9e0c0dd83225f8b6e50057e09d855b526cea79ab97070aae5170d6ec664dfd`.
 The final intervention evaluator SHA-256 is
-`fff4fc4e88ffc556557d4c6b79b8ec6339e0de7d718ef6f17b7005212252d7fa`; after
-the run, one unused helper was removed without changing execution behavior.
-Its tests are in
+`fe368fb2ce7aff87fd7206e653f82c39a0881b67d684d388c1cf118ee6c91621`; after
+the run, only a behavior-preserving move of the NumPy-only derangement helper
+was made so CI tests do not import PyTorch. Its tests are in
 `tests/test_holoassist_av_sensor_interventions.py`.
 The run, checkpoints, predictions, and all media/features remain in
 `C:/CodexArtifacts/pretrained-reuse-r2/holoassist-textfree-unused-train-recovery-02/`;

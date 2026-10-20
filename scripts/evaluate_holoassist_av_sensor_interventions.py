@@ -20,6 +20,9 @@ from scripts.analyze_holoassist_paired_bootstrap import (  # noqa: E402
     paired_session_bootstrap,
 )
 from scripts.audit_holoassist_metadata import sha256_file  # noqa: E402
+from scripts.holoassist_sensor_intervention_utils import (  # noqa: E402
+    derange_sensor_sessions,
+)
 from scripts.train_holoassist_temporal_readout import (  # noqa: E402
     _configured_hidden_size,
     _evaluate,
@@ -29,43 +32,6 @@ from scripts.train_holoassist_temporal_readout import (  # noqa: E402
 from tiny_omni_decision.temporal_decision import (  # noqa: E402
     TaskConditionedAVSensorTemporalDecision,
 )
-
-
-def derange_sensor_sessions(data: dict[str, Any]) -> tuple[dict[str, Any], dict[str, int]]:
-    """Rotate whole IMU sequences within exact task and session-length groups."""
-    result = dict(data)
-    result["sensor"] = np.asarray(data["sensor"]).copy()
-    groups: dict[tuple[str, int], list[int]] = {}
-    for index, indices in enumerate(data["session_indices"]):
-        first = int(indices[0])
-        key = (str(data["task_type"][first]), len(indices))
-        groups.setdefault(key, []).append(index)
-    changed = 0
-    eligible = 0
-    for members in groups.values():
-        members.sort(key=lambda item: str(data["session_names"][item]))
-        if len(members) < 2:
-            continue
-        eligible += len(members)
-        donor_map = {
-            member: members[(position + 1) % len(members)]
-            for position, member in enumerate(members)
-        }
-        for receiver in members:
-            receiver_rows = data["session_indices"][receiver]
-            donor_rows = data["session_indices"][donor_map[receiver]]
-            if np.array_equal(data["sensor"][receiver_rows], data["sensor"][donor_rows]):
-                continue
-            result["sensor"][receiver_rows] = data["sensor"][donor_rows]
-            changed += 1
-    return result, {
-        "sessions_total": len(data["session_indices"]),
-        "sessions_eligible": eligible,
-        "sessions_changed": changed,
-        "singleton_task_length_groups": sum(
-            len(members) for members in groups.values() if len(members) < 2
-        ),
-    }
 
 
 def evaluate(args: argparse.Namespace) -> dict[str, Any]:
