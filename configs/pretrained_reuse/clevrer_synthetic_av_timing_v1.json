@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "experiment_id": "clevrer-synthetic-av-timing-v1",
+  "protocol_status": "frozen_pre_media",
+  "protocol_path": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-synthetic-av-protocol-v1-attempt-01/protocol.json",
+  "protocol_sha256": "82b76e813455061769883b6a46517dbfb3a7a54f7593c1093ab92d8cc261fab7",
+  "source": {
+    "dataset": "MIT-IBM/CLEVRER",
+    "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+    "license": "CC0-1.0",
+    "split": "train only",
+    "question_source_sha256": "11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4",
+    "exposure_receipt_sha256": "0fc99660e3ea05095856696540ace7bbc5dc9899a4e4b612893a4edb69e65f38",
+    "annotation_receipt_sha256": "26c178bbfcbc06f38828d47592e7cce7a545c0372f4f9b7f676e7322a6e41485",
+    "candidate_scene_ids_sha256": "33bb4408f20ec95a64ed657da5e860588dccfd5378b95c52101ab0768baba4e8"
+  },
+  "split": {
+    "seed": 17,
+    "group_key": "underlying video scene_index",
+    "validation_fraction": 0.2,
+    "train_scenes": 324,
+    "validation_scenes": 81,
+    "train_scene_ids_sha256": "0a31b5cf0ab973939e7ee238db6ae142b8d67a434ebc127051399691c8187425",
+    "validation_scene_ids_sha256": "10c1a4a7943e65103f5cc2d49159bd83e30d8074dfc707f509007f2df12de702",
+    "scene_overlap": 0
+  },
+  "task": {
+    "name": "synthetic sound before/after CLEVRER collision",
+    "collision_frame_range_inclusive": [16, 111],
+    "sound_offset_frames": 16,
+    "train_events": 798,
+    "validation_events": 195,
+    "train_examples": 1596,
+    "validation_examples": 390,
+    "all_event_variants_same_scene_split": true,
+    "labels": ["sound before collision", "sound after collision"],
+    "text_only_pair_control": "paired samples share question/options and have opposite targets",
+    "video_only_pair_control": "paired samples share video and have opposite targets"
+  },
+  "temporal_encoding": {
+    "fps": 25.6,
+    "video_frames": 128,
+    "sequence_frames": 384,
+    "scene_time_shift_frames": [0, 255],
+    "audio_sample_rate_hz": 16000,
+    "samples_per_frame": 625,
+    "waveform": "880 Hz, 80 ms Hann-windowed sine burst, peak 0.3"
+  },
+  "preflight_audio_onset_threshold": {
+    "threshold_chosen_on_train_only": 268,
+    "train_accuracy": 0.5701754385964912,
+    "validation_accuracy": 0.5666666666666667,
+    "validation_count": 390
+  },
+  "limitations": [
+    "This is a synthetic temporal-binding diagnostic; CLEVRER has no natural audio.",
+    "The absolute-onset shortcut reaches 56.67% on development validation and must be compared with a learned audio-only arm.",
+    "The exposure scan screened metadata and filenames but did not hash all previously cached media contents.",
+    "This does not establish natural multimodal quality or product readiness."
+  ]
+}

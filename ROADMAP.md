@@ -1,3 +1,13 @@
+**2026-10-20 R2 CLEVRER synthetic AV timing protocol frozen:** A seed-17,
+scene-grouped train/development split over the 405 metadata-screened, official
+train candidates yields 324/81 scenes and 1,596/390 paired examples. A train-fit
+absolute audio-onset threshold reaches 56.67% validation, exposing a modest
+audio-only shortcut that must be measured against a learned audio-only arm.
+This is a synthetic temporal-binding diagnostic only. The 405 pinned train
+videos are being fetched to a new external attempt; feature extraction and model
+evaluation have not started. See the
+[protocol report](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_PROTOCOL_20261020.md).
+
 **2026-10-20 R2 CLEVRER synthetic AV exposure audit:** Expanded the earlier
 preflight to all 23 worktrees and the R2 artifact root. Metadata and filename
 screening leaves 405 candidate train scenes after 9,589 exposed scene IDs and
