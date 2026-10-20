@@ -6,6 +6,13 @@ targets. This does **not** approve a deployment device, task thresholds,
 confidence bounds, or time/money limits; those remain open before any product
 selection or promotion decision.
 
+Later user clarification (2026-10-21) confirms the <=200M figure refers to the
+complete **pre-quantization parameter count**, prefers typed-option probability
+JSON, and sets >=95% Accuracy per required task (98% aspiration). This guides
+engineering but does not freeze the task battery or release thresholds. See
+[the dated intent supplement](R0_USER_INTENT_20261021.md); this matrix's
+historical snapshot is retained.
+
 ## Candidate matrix
 
 | Candidate/path | Evidence available | Fit and unresolved gate | Next permitted action |
