@@ -51,6 +51,15 @@ page also gives no separate license grant for the processed release. Keep it
 REVIEW / NOT ADMITTED as a fresh joint task; no media or labels were opened.
 See [the source screen](docs/pretrained_reuse/R2_DCASE2025_STEREO_SELD_SOURCE_SCREEN_20261020.md).
 
+**2026-10-20 R2 MEVA source screen:** Official MEVA train-level (1,443) and
+evaluation-level (769) annotation paths share all seven capture dates, and
+142/146 evaluation date-camera groups also occur in train. The metadata-only
+check found no exact clip-name overlap, but clip-level splitting would not
+establish independent scene/session evidence. Keep MEVA REVIEW / NOT ADMITTED
+pending a fresh, date/session/scenario-grouped split, task/privacy review, and
+bounded data plan. No annotation contents, media, NIST test partition, or
+sealed audit were read. See [the source screen](docs/pretrained_reuse/R2_MEVA_SOURCE_SCREEN_20261020.md).
+
 **2026-10-20 R2 HoloAssist synchronized IMU diagnostic:** Added official
 train/development-validation IMU features and completed matched AV, sensor-only,
 and AV+sensor readouts. AV remained best on selected validation checkpoints.
