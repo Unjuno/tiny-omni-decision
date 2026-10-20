@@ -176,3 +176,13 @@ artifacts. Its pinned media-manifest snapshot SHA-256 is
 `d60d8c40a63a097f04dc76e2b4e7d9ba491d7eb67da4bdf80df5c69f337370bb`. At the
 post-audit check the acquisition was still live and had reached 139/200 videos.
 This does not substitute for complete audit.
+
+The 75%-progress CPU audit covered 151 complete videos / 376 events. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-fresh-holdout-pts-smoke-06\result.json`, SHA-256
+`e06499309aff6188a09972e077fa07b28b968ae86390e4011b25e19a24b58d94`. It
+reports `PASS_PARTIAL_FRESH_HOLDOUT_PTS_SMOKE`, zero incomplete audio intervals,
+zero right-censored events, and 1,742 unique exact media hashes including prior
+artifacts. Audited media manifest SHA-256:
+`88c1ed0e97d3422c5ce5a3aca71c495527e3beba29cf535bbbf5c8d4176ea38e`. After
+this audit the live acquisition had reached 166/200. Full-holdout integrity and
+model evaluation remain outstanding.
