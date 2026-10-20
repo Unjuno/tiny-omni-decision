@@ -2,7 +2,7 @@
 
 ## Status
 
-**In progress.** This is a narrow development experiment, not a general
+**Completed 2026-10-21; execution passed, quality conclusion remains uncertain.** This is a narrow development experiment, not a general
 multimodal benchmark and not evidence that the four-modality product target has
 been reached. The question is whether more unique video groups improve the
 existing conditional audio-event to visible-object-source task.
@@ -75,7 +75,7 @@ readout input. The fixed-update mode in `train_av_event_source.py` records
 interval train CE (not a fixed-example generalization gap), validates at update
 512/1,024/1,536/2,048, and keeps selected and final checkpoints separate.
 
-## Execution gates and current observations
+## Execution gates and observations
 
 - Plan creation used CPU only. Plan and acquisition validation tests pass.
 - Acquisition attempt 01 failed closed on a manually transcribed existing
@@ -99,11 +99,27 @@ interval train CE (not a fixed-example generalization gap), validates at update
     frontend `9739f58296aa6f9ac18008fd0150fb2649bc554985fbde86d0a4041c882ac753`.
   The local runtime reported Python 3.11.9, PyTorch 2.6.0+cu124, Transformers
   5.6.2, and PyAV 18.1.0.
-- The RTX 3080 is currently occupied by Orbitune. No model, encoder, GPU test,
-  or training process was started. Feature extraction requires the HotUGPU
-  reservation environment and fails closed without it.
-- The PTS audit, crop joins, feature extraction, matched fits, paired uncertainty
-  analysis, CI and push are pending. No quality result is claimed here.
+- The full PTS audit passed: 388 videos, 908 events, no right-censored clips or
+  events with partial/zero audio overlap. Audit SHA-256:
+  `785c6c75648f9cd1a85cddbed868bf35235a803b9f1439ceb8a651c9081f53b5`.
+- Crop joins and frozen feature extraction passed for all videos/events. The
+  gated RTX 3080 extraction took 867.59 seconds; no Orbitune process was
+  stopped. Feature result SHA-256 is
+  `7907a617c97037fcabb001d46be70a2dc48c5487156c85d46b1463a3d8d0dd43`.
+- Four CPU fits (joint/video-only × old-only/expanded fit coverage) each
+  completed 2,048 updates, retained best and final checkpoints separately, and
+  passed best-checkpoint reload checks. All used seed 17 and identical
+  selection, calibration and development-validation IDs. Best steps were
+  1,536, 2,048, 512 and 2,048 respectively.
+- Paired video-cluster bootstrap (10,000 draws, seed 17) found intervals
+  spanning zero for both Accuracy and NLL deltas in both readouts. Joint
+  development Accuracy changed -0.7pp; video-only changed +4.8pp, with its
+  Brier/ECE worsening. These are uncertain task-specific development results,
+  not evidence of a general quality gain.
+- The implementation tests and repository checks are being run for the
+  recording commit. Full curves, metrics, artifact hashes, environment and
+  limitations are in
+  [`R2_PERCEPTION_AV_EVENT_SCALE_RESULTS_20261021.md`](R2_PERCEPTION_AV_EVENT_SCALE_RESULTS_20261021.md).
 
 The prior fixed-checkpoint 200-video comparison remains available in
 [`R2_PERCEPTION_AV_EVENT_FRESH_HOLDOUT_20261020.md`](R2_PERCEPTION_AV_EVENT_FRESH_HOLDOUT_20261020.md)

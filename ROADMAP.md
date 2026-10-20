@@ -1,7 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-20 Perception AV coverage-scale cohort frozen; acquisition in
-progress.** A separate 388-video / 908-event cohort was fixed from official
+**2026-10-21 Perception AV coverage-scale experiment completed.** The separate
+388-video / 908-event cohort passed PTS/media integrity, gated frozen feature
+extraction, and four matched CPU readout fits. Each fit completed 2,048 updates;
+selection and reload checks passed. On the 146-event / 58-video development
+set, joint Accuracy changed -0.7pp with extra fit coverage; parameter-matched
+video-only Accuracy changed +4.8pp, but video-cluster bootstrap intervals for
+Accuracy and NLL in both readouts include zero, and calibration worsened in the
+expanded arms. This is uncertain, narrow development evidence, not a general
+AV quality result or model-promotion decision. The previously scored 200-video
+holdout and test partition were not opened. See
+[`R2_PERCEPTION_AV_EVENT_SCALE_RESULTS_20261021.md`](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_SCALE_RESULTS_20261021.md)
+for curves, hashes, resource use, and limitations. The separate 388-video cohort was fixed from official
 TRAIN video IDs that were absent from prior media manifests and from the
 already-scored 200-video fixed-checkpoint cohort. The video-level split is
 233 fit / 58 selection / 39 calibration / 58 development-validation videos
@@ -12,10 +22,9 @@ Planned uncompressed media is 5.69 GB; the 1.2x disk requirement is 6.83 GB.
 Acquisition uses a separate `media-02` attempt because `media-01` was stopped
 after a source-commit provenance typo was caught; its partial files are
 preserved and excluded from modeling. This narrow conditional audio-event to
-visible-object source task is development evidence only. PTS/crop/media gates,
-feature extraction, matched old-data versus expanded-data fits, and quality
-results remain pending. GPU work will use HotUGPU; no GPU process was started
-while Orbitune occupied the RTX 3080.
+visible-object source task is development evidence only. Original plan and
+receipts remain in
+[`R2_PERCEPTION_AV_EVENT_SCALE_20261020.md`](docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_SCALE_20261020.md).
 
 **2026-10-18 conditional AV gate long fit completed:** E0G1 finished the
 fixed32,768-update run with best/final reload checks. It uses the same initial
