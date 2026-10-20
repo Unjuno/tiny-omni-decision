@@ -257,6 +257,11 @@ def _preflight(
         fetch_report.get("status") != "complete_verified_clevrer_temporal_media"
         or fetch_report.get("media_sha256_overlap") != 0
         or fetch_report.get("dataset_revision") != config["source"]["revision"]
+        or fetch_report.get("train_rows") != config["source"]["train_rows"]
+        or fetch_report.get("validation_rows") != config["source"]["validation_rows"]
+        or fetch_report.get("train_unique_videos") != config["source"]["train_unique_videos"]
+        or fetch_report.get("validation_unique_videos")
+        != config["source"]["validation_unique_videos"]
     ):
         raise ValueError("frozen media acquisition receipt failed")
     features_path = Path(config["features"]["cache"]).resolve(strict=True)
@@ -273,6 +278,8 @@ def _preflight(
         or config["features"].get("feature_dimension") != 768
         or config["features"].get("model_revision") != EXPECTED_VIDEO_REVISION
         or config["features"].get("checkpoint_sha256") != EXPECTED_VIDEO_CHECKPOINT_SHA256
+        or config["features"].get("cache_sha256") != _sha256(features_path)
+        or config["features"].get("cache_report_sha256") != _sha256(feature_report_path)
         or feature_report.get("feature_cache_sha256") != _sha256(features_path)
     ):
         raise ValueError("VideoPrism framewise feature provenance/hash mismatch")
@@ -329,6 +336,9 @@ def _preflight(
         "normalized_content_overlap": 0,
         "feature_cache_sha256": feature_report["feature_cache_sha256"],
         "feature_count": len(media_hashes),
+        "feature_extraction_seconds": feature_report["extraction_seconds"],
+        "feature_extraction_devices": feature_report["devices"],
+        "feature_extraction_peak_working_set_bytes": feature_report.get("peak_working_set_bytes"),
         "video_model_revision": feature_report["model_revision"],
         "video_checkpoint_sha256": feature_report["checkpoint_sha256"],
         "sealed_audit_loaded": False,

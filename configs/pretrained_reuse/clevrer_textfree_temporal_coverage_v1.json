@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "clevrer-textfree-temporal-coverage-v1",
+  "source": {
+    "dataset": "MIT-IBM/CLEVRER",
+    "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+    "license": "CC0-1.0",
+    "sample_dir": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-textfree-temporal-media-v1-attempt-01",
+    "train_rows": 3526,
+    "validation_rows": 321,
+    "train_unique_videos": 324,
+    "validation_unique_videos": 81,
+    "candidate_scene_count": 405,
+    "source_manifest_sha256": "a87bd6834a94b8ed481a36e7088ee8d5391319fc271fed80497530f055dcbdf2",
+    "manifest_sha256": {
+      "train.jsonl": "282174947f96cb8e33f8ada4226b4eda15a16c82ba4d45656e7cfb64b3958ed9",
+      "validation.jsonl": "84f87d52bd612375314602a74295da4af7af2e8142065b47cb1612bd28efca38",
+      "fetch-report.json": "7b8deb1a4b8ca2694801233fe11c007037be11278ee2641af1a9d35bcce72425"
+    },
+    "corpus_preflight_path": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-textfree-temporal-coverage-v1-attempt-01/corpus-preflight.json",
+    "corpus_preflight_sha256": "9052ea3fff5f601236862481ebf0f70cae800ebd0086ee9b63648c54dffc9367",
+    "candidate_scene_ids_sha256": "33bb4408f20ec95a64ed657da5e860588dccfd5378b95c52101ab0768baba4e8",
+    "train_scene_ids_sha256": "c6b5e43943dbc3a8b371786ccec8084c426e09f5a5be95647fad3b505bda476a",
+    "validation_scene_ids_sha256": "17332aee3f034e9918ba6c00b456b3b80fdfadec600c788eebdcc85a86624612"
+  },
+  "features": {
+    "cache": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-textfree-temporal-features-v1-attempt-01/framewise-features.npz",
+    "cache_report": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-textfree-temporal-features-v1-attempt-01/cache-report.json",
+    "cache_sha256": "e3008bfa3c672fb52f3c21b4dcdd8f9f7b5c383f9f774a8afec042429c1cbbcb",
+    "cache_report_sha256": "7707c75033e234c5efe217c06eea1d438e172f70c8a03fb65a02aba45ce5c643",
+    "model_id": "google/videoprism-base-f16r288",
+    "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "frame_count": 8,
+    "feature_dimension": 768,
+    "temporal_profile": "8 uniformly sampled endpoint-inclusive frames; spatial-token mean per time index"
+  },
+  "task": {
+    "question_types": ["temporal_descriptive"],
+    "input_fields": ["framewise_video_features", "typed_program", "taxonomy", "supplied_options"],
+    "natural_language_question_as_input": false,
+    "target_field": "official CLEVRER descriptive answer",
+    "decision_output": "probabilities normalized over supplied options"
+  },
+  "training": {
+    "seed": 17,
+    "variants": ["mean_mlp", "bilstm"],
+    "epochs": 36,
+    "batch_size": 64,
+    "expected_optimizer_updates": 2016,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "scheduler": "constant",
+    "early_stopping": false,
+    "selection": "minimum macro taxonomy validation NLL; earliest tie"
+  },
+  "integrity": {
+    "group_key": "CLEVRER scene_group_id",
+    "asset_key": "media_sha256",
+    "content_key": "normalized question plus sorted normalized supplied options",
+    "train_validation_scene_overlap": 0,
+    "train_validation_media_overlap": 0,
+    "train_validation_content_overlap": 0,
+    "sealed_audit_loaded": false,
+    "validation_role": "development-only checkpoint selection; not blind evaluation"
+  },
+  "runtime": {
+    "local_only": true,
+    "cloud_cost_usd": 0,
+    "existing_features_and_teacher_artifacts_read_only": true,
+    "output_directory": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-textfree-temporal-readout-v1-attempt-01"
+  }
+}

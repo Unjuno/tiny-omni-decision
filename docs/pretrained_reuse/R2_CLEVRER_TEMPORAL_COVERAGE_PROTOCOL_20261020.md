@@ -2,9 +2,8 @@
 
 ## Status
 
-CPU-only cohort construction and media integrity preflight passed. Media
-acquisition is complete; framewise feature extraction is running with the
-existing pinned CPU JAX environment. No model fitting has started. Orbitune
+CPU-only cohort construction, media acquisition, and framewise feature
+extraction passed. No model fitting has started. Orbitune
 still owns the local GPU; any later CUDA job must use
 `scripts/run_with_hotgpu_guard.py` and wait for its cooperative handoff.
 
@@ -94,6 +93,34 @@ epoch on the same 321 held-out development examples. The planned budget is
 size 64). Checkpoint selection uses macro taxonomy validation NLL. Scene-paired
 bootstrap and video-zeroed, scene-shuffled, and temporal-reversal controls will
 be reported. This validation is used for selection and is not a blind audit.
+
+## Frozen feature cache
+
+VideoPrism-B extracted features for all 405 verified videos using the existing
+CPU JAX environment (`jax 0.6.2`, TensorFlow CPU `2.18.1`, NumPy `1.26.4`,
+PyAV `18.1.0`, Python 3.11). The source checkout was at pinned commit
+`c6eba0ece3dd49a24ffc44582966997a4a59f1d8`, and the checkpoint SHA-256 was
+`61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`.
+
+- Artifact directory:
+  `C:/CodexArtifacts/pretrained-reuse-r2/clevrer-textfree-temporal-features-v1-attempt-01/`
+- Device: `TFRT_CPU_0`; extraction time 604.89 seconds; peak working set
+  4,174,123,008 bytes.
+- Feature shape `[405, 8, 768]`, float32; cache size 9,287,473 bytes.
+- Cache SHA-256:
+  `e3008bfa3c672fb52f3c21b4dcdd8f9f7b5c383f9f774a8afec042429c1cbbcb`.
+- Cache-report SHA-256:
+  `7707c75033e234c5efe217c06eea1d438e172f70c8a03fb65a02aba45ce5c643`.
+- The extraction report independently binds both split manifests, the pinned
+  checkpoint/source revision, all 405 media hashes and zero scene overlap.
+
+The experiment config is
+`configs/pretrained_reuse/clevrer_textfree_temporal_coverage_v1.json`. Its
+preflight passed: 3,526 training rows / 324 scenes and 321 validation rows /
+81 scenes, with zero normalized-content or media overlap. A separate CPU smoke
+passed for both readout variants (226,865 mean-MLP and 227,377 BiLSTM trainable
+parameters; finite logits and loss). The smoke did not train or use validation
+for selection. The matched readout fit has not started yet.
 
 No capacity increase, sensor/audio data, sealed audit, or product promotion is
 part of this experiment. Results will be added only after the run finishes and
