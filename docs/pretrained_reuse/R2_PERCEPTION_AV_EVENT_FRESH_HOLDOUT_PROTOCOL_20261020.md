@@ -1,8 +1,8 @@
 # Perception AV event fresh holdout protocol — 2026-10-20
 
-Status: preregistered fixed-checkpoint inference comparison; source media
-acquisition is running. This protocol adds no training, checkpoint selection,
-architecture search, or sealed/test-set access.
+Status: preregistered fixed-checkpoint inference comparison; full media and PTS
+integrity gates passed, frozen-feature extraction is next. This protocol adds
+no training, checkpoint selection, architecture search, or sealed/test-set access.
 
 ## Question
 
@@ -186,3 +186,35 @@ artifacts. Audited media manifest SHA-256:
 `88c1ed0e97d3422c5ce5a3aca71c495527e3beba29cf535bbbf5c8d4176ea38e`. After
 this audit the live acquisition had reached 166/200. Full-holdout integrity and
 model evaluation remain outstanding.
+
+## Complete acquisition and PTS gates
+
+The pinned acquisition terminated with `PASS_ACQUIRED_UNVERIFIED_DECODE`. A
+separate read-only revalidation matched all 200 planned IDs, each archive
+member's planned byte count and CRC, every raw file SHA-256, and all exclusions
+against previous media manifests. The 200 files contain 2,917,471,792 bytes,
+with 200 unique hashes and no prior/current exact-byte overlap. The final media
+manifest SHA-256 is
+`8591dbb0c173c70780c6d6066f18b2d7e3f29ba43c215ae0b2a251a07e2ac118`.
+
+The complete CPU PTS receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-fresh-holdout-pts-full-01\result.json`, SHA-256
+`bdc269632ce31d8dd3070effea96ee70d0993d63cf1e445301a45f679e3f5374`. It
+reports `PASS_COMPLETE_FRESH_HOLDOUT_PTS_AUDIT` for all 200 videos / 504 events,
+zero events with incomplete audio coverage, zero events censored at media end,
+1,791 distinct exact media hashes across previous artifacts and this holdout,
+and `test_opened=false`, `training=false`, `gpu_used=false`. Its plan SHA-256 is
+`887a1eea4b5a7b82d441025842465a09d0ffb33c97787073042ad1a1680f8eb3`, its
+media-manifest SHA matches the complete acquisition receipt, and the source
+annotation/cut-map hashes match the pinned protocol.
+
+The holdout integrity gate is now complete. The result is still a previously
+unused official TRAIN subset with already-inspected annotations, not a blind
+validation or sealed audit. No feature extraction has started yet. At the
+post-audit GPU check, the Orbitune workload remained active; the next action is
+fixed frozen-feature extraction through the hash-pinned cooperative HotUGPU
+guard from the clean sibling worktree (`r2-holoassist-results-20261020`,
+commit `5c0bae773f9d4ec983ff3ac58fc13b1dd24bc47a`, guard SHA-256
+`ae3ca95654a2f57e6652455f9cf3cf6a9639ec0f456d4f24318ce146130ecde8`). The
+guard does not signal the existing process and will not start the child until
+CUDA has no other active process and utilization is below 5%.
