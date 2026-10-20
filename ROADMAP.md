@@ -25,6 +25,16 @@ independent quality result. Late fixed-budget training also overfit.
 No test/sealed audit was loaded and no model was promoted. See the
 [training and intervention results](docs/pretrained_reuse/R2_HOLOASSIST_SENSOR_FUSION_RESULTS_20261020.md).
 
+**2026-10-20 R2 HoloAssist IMU coverage audit:** A CPU-only check of the
+unchanged train/development-validation windows found that 99.7% of zero
+coverage bins are padding in partial final windows. Those windows also have
+lower positive-label prevalence (12.3% train / 13.9% validation) than full
+windows (30.0% / 32.0%), consistent with shorter exposure to incorrect
+actions. This creates a duration/label confound in the coverage features; it
+does not by itself explain the model results or establish sensor utility.
+No data, model, or run was changed. See the
+[coverage audit](docs/pretrained_reuse/R2_HOLOASSIST_SENSOR_COVERAGE_AUDIT_20261020.md).
+
 **2026-10-19 R2 HoloAssist temporal readout:** All 3,527 text/audio/video frozen features are packed and the fixed 2,048-step video-only, audio-only, and joint readout runs completed on the local RTX 3080. Validation-selected best accuracies were 71.31%, 73.79%, and 73.05%, respectively; each arm's NLL/calibration regressed sharply by the fixed endpoint. Joint input did not improve on audio-only, so fusion benefit is not supported by this pilot. No test or sealed-audit data were loaded. [Protocol/results](docs/pretrained_reuse/R2_HOLOASSIST_TEMPORAL_READOUT_RESULTS_20261019.md); detailed curves and hashes are in its linked JSON.
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 **2026-10-19 R2 HoloAssist full-media gate:** The fixed 160-train / 207-
