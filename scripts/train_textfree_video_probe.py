@@ -17,6 +17,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
 import numpy as np
 import torch
 import yaml
@@ -74,6 +76,20 @@ def _read_rows(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
+def _validate_media_integrity_report(gate: dict[str, Any], source: dict[str, Any]) -> None:
+    if (
+        gate.get("status") != "passed"
+        or gate.get("all_media_sha256_verified") is not True
+        or gate.get("sample_hashes", {}).get("train_jsonl")
+        != source["train_manifest_sha256"]
+        or gate.get("sample_hashes", {}).get("validation_jsonl")
+        != source["validation_manifest_sha256"]
+        or gate.get("group_integrity", {}).get("train_validation_scene_overlap") != 0
+        or gate.get("group_integrity", {}).get("train_validation_media_overlap") != 0
+    ):
+        raise ValueError("frozen CLEVRER media integrity report does not match policy")
+
+
 def _normalized_content(row: dict[str, Any]) -> tuple[str, tuple[str, ...]]:
     question = " ".join(str(row["question"]).casefold().split())
     options = tuple(sorted(" ".join(str(value).casefold().split()) for value in row["options"]))
@@ -82,6 +98,38 @@ def _normalized_content(row: dict[str, Any]) -> tuple[str, tuple[str, ...]]:
 
 def _ordered_ids_sha256(rows: list[dict[str, Any]]) -> str:
     return hashlib.sha256("\n".join(str(row["id"]) for row in rows).encode()).hexdigest()
+
+
+def _training_schedule(
+    *, train_count: int, batch_size: int, epochs: int, max_optimizer_updates: int
+) -> dict[str, int]:
+    if min(train_count, batch_size, epochs, max_optimizer_updates) < 1:
+        raise ValueError("training schedule values must be positive")
+    updates_per_epoch = math.ceil(train_count / batch_size)
+    total_updates = epochs * updates_per_epoch
+    if total_updates != max_optimizer_updates:
+        raise ValueError(
+            "configured epochs and batch size do not match max_optimizer_updates: "
+            f"{epochs} * {updates_per_epoch} != {max_optimizer_updates}"
+        )
+    return {
+        "epochs": epochs,
+        "batch_size": batch_size,
+        "updates_per_epoch": updates_per_epoch,
+        "total_optimizer_updates": total_updates,
+        "full_run_example_exposures": epochs * train_count,
+    }
+
+
+def _validation_interval_updates(
+    *, train_count: int, batch_size: int, validation_interval_epochs: int, epochs: int
+) -> int:
+    if (
+        min(train_count, batch_size, validation_interval_epochs, epochs) < 1
+        or epochs % validation_interval_epochs
+    ):
+        raise ValueError("validation interval must be positive and divide the epoch budget")
+    return math.ceil(train_count / batch_size) * validation_interval_epochs
 
 
 def _source_rows_gate(
@@ -131,12 +179,14 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     feature_config = config["features"]
     sample_dir = Path(source["sample_dir"]).resolve(strict=True)
     train_path, validation_path = sample_dir / "train.jsonl", sample_dir / "validation.jsonl"
-    fetch_path, gate_path = sample_dir / "fetch-report.json", sample_dir / "pretraining-gate.json"
+    fetch_path = sample_dir / "fetch-report.json"
+    integrity_filename = source.get("integrity_report_filename", "pretraining-gate.json")
+    gate_path = sample_dir / integrity_filename
     expected_hashes = {
         train_path: source["train_manifest_sha256"],
         validation_path: source["validation_manifest_sha256"],
         fetch_path: source["fetch_report_sha256"],
-        gate_path: source["pretraining_gate_sha256"],
+        gate_path: source.get("integrity_report_sha256", source.get("pretraining_gate_sha256")),
     }
     for path, expected in expected_hashes.items():
         actual = _sha256(path)
@@ -156,17 +206,27 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     ):
         raise ValueError("repository source manifest does not admit this CLEVRER training use")
     gate = json.loads(gate_path.read_text(encoding="utf-8"))
-    if (
-        gate.get("status") != "pretraining_gate_pass"
-        or gate.get("media_sha_overlap") != 0
-        or gate.get("normalized_question_overlap") != 0
-        or gate.get("archive_sha256_verified") is not False
-    ):
-        raise ValueError("frozen CLEVRER pretraining gate does not match the recorded policy")
+    if integrity_filename == "pretraining-gate.json":
+        if (
+            gate.get("status") != "pretraining_gate_pass"
+            or gate.get("media_sha_overlap") != 0
+            or gate.get("normalized_question_overlap") != 0
+            or gate.get("archive_sha256_verified") is not False
+        ):
+            raise ValueError("frozen CLEVRER pretraining gate does not match the recorded policy")
+    else:
+        _validate_media_integrity_report(gate, source)
 
     train_rows, validation_rows = _read_rows(train_path), _read_rows(validation_path)
-    validate_video_splits(train_rows, validation_rows)
-    if len(train_rows) != 512 or len(validation_rows) != 400:
+    allow_content_overlap = bool(source.get("allow_normalized_content_overlap", False))
+    validate_video_splits(
+        train_rows,
+        validation_rows,
+        allow_normalized_content_overlap=allow_content_overlap,
+    )
+    if len(train_rows) != source.get("train_examples", 512) or len(
+        validation_rows
+    ) != source.get("validation_examples", 400):
         raise ValueError("unexpected frozen CLEVRER sample cardinality")
     train_report = _source_rows_gate(train_rows, sample_dir, "train", DATASET_REVISION)
     validation_report = _source_rows_gate(
@@ -175,7 +235,7 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     content_overlap = {_normalized_content(row) for row in train_rows} & {
         _normalized_content(row) for row in validation_rows
     }
-    if content_overlap:
+    if content_overlap and not allow_content_overlap:
         raise ValueError("normalized question/options overlap remains across splits")
     if set(train_report["question_type_counts"]) != set(QUESTION_TYPES) or set(
         validation_report["question_type_counts"]
@@ -197,9 +257,12 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         or feature_report.get("feature_dimension") != 768
     ):
         raise ValueError("framewise feature provenance does not match the frozen config")
+    expected_feature_train_manifest = feature_config.get(
+        "training_manifest_sha256", source["train_manifest_sha256"]
+    )
     if (
         feature_report.get("train_manifest_sha256", {}).get("train.jsonl")
-        != source["train_manifest_sha256"]
+        != expected_feature_train_manifest
         or feature_report.get("evaluation_manifest_sha256", {}).get("validation.jsonl")
         != source["validation_manifest_sha256"]
     ):
@@ -209,8 +272,8 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
     with np.load(feature_path, allow_pickle=False) as archive:
         media_hashes = archive["media_sha256"].astype(str).tolist()
         values = archive["features"]
-        if values.shape != (456, 8, 768) or values.dtype != np.float32:
-            raise ValueError("expected [456,8,768] float32 framewise features")
+        if values.shape != (len(media_hashes), 8, 768) or values.dtype != np.float32:
+            raise ValueError("expected [unique_media,8,768] float32 framewise features")
         if not np.isfinite(values).all() or len(media_hashes) != len(set(media_hashes)):
             raise ValueError("feature cache contains non-finite values or duplicate media")
         features_by_media = {
@@ -222,11 +285,49 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         features_by_media
     ):
         raise ValueError("framewise cache does not cover every pinned train/validation asset")
+    report_train_media = set(feature_report.get("train_media_hashes", []))
+    report_validation_media = set(feature_report.get("evaluation_media_hashes", []))
     if (
-        set(feature_report.get("train_media_hashes", [])) != train_media
-        or set(feature_report.get("evaluation_media_hashes", [])) != validation_media
+        len(media_hashes) != int(feature_report.get("unique_video_count", -1))
+        or set(media_hashes) != report_train_media | report_validation_media
     ):
+        raise ValueError("framewise feature identities do not match the extraction receipt")
+    allow_feature_train_superset = bool(feature_config.get("allow_training_media_subset", False))
+    train_identity_matches = (
+        train_media <= report_train_media
+        if allow_feature_train_superset
+        else train_media == report_train_media
+    )
+    if not train_identity_matches or report_validation_media != validation_media:
         raise ValueError("feature report media identity list does not match the sample manifests")
+
+    comparison = config["comparison"]
+    if (
+        comparison.get("optimizer", "AdamW") != "AdamW"
+        or comparison.get("scheduler", "constant") != "constant"
+        or comparison.get("early_stopping", False) is not False
+        or comparison.get("variants", ["mean_mlp", "bilstm"])
+        != ["mean_mlp", "bilstm"]
+    ):
+        raise ValueError("comparison settings differ from the frozen optimizer/variant policy")
+    epochs = int(comparison.get("epochs", EPOCHS))
+    batch_size = int(comparison.get("batch_size", BATCH_SIZE))
+    max_updates = int(comparison.get("max_optimizer_updates", 2048))
+    validation_interval_epochs = int(comparison.get("validation_interval_epochs", 1))
+    schedule = _training_schedule(
+        train_count=len(train_rows),
+        batch_size=batch_size,
+        epochs=epochs,
+        max_optimizer_updates=max_updates,
+    )
+    validation_interval_updates = _validation_interval_updates(
+        train_count=len(train_rows),
+        batch_size=batch_size,
+        validation_interval_epochs=validation_interval_epochs,
+        epochs=epochs,
+    )
+    if max_updates % validation_interval_updates:
+        raise ValueError("validation intervals must divide the fixed optimizer-update budget")
 
     vocab = build_video_vocab(train_rows)
     train_encoded = encode_video_rows(train_rows, features_by_media, vocab)
@@ -246,7 +347,8 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         "train_jsonl_sha256": _sha256(train_path),
         "validation_jsonl_sha256": _sha256(validation_path),
         "fetch_report_sha256": _sha256(fetch_path),
-        "pretraining_gate_sha256": _sha256(gate_path),
+        "integrity_report_filename": integrity_filename,
+        "integrity_report_sha256": _sha256(gate_path),
         "feature_cache": str(feature_path),
         "feature_cache_sha256": _sha256(feature_path),
         "feature_cache_report_sha256": _sha256(feature_report_path),
@@ -259,7 +361,8 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         "sample_id_overlap": 0,
         "scene_group_overlap": 0,
         "media_identity_overlap": 0,
-        "normalized_question_option_overlap": 0,
+        "normalized_question_option_overlap": len(content_overlap),
+        "normalized_question_option_overlap_allowed": allow_content_overlap,
         "validation_program_unknown_token_count": program_unknown,
         "validation_option_unknown_token_count": option_unknown,
         "program_vocabulary_size": len(vocab.program_to_id),
@@ -271,6 +374,8 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         "unique_validation_assets": len(validation_media),
         "archive_full_sha256_verified": False,
         "sealed_audit_loaded": False,
+        "training_schedule": schedule,
+        "validation_interval_optimizer_updates": validation_interval_updates,
     }
 
 
@@ -600,6 +705,13 @@ def _run_variant(
     output_dir: Path,
     device: torch.device,
     epoch_orders: list[np.ndarray],
+    *,
+    epochs: int,
+    batch_size: int,
+    learning_rate: float,
+    weight_decay: float,
+    grad_clip_norm: float,
+    validation_interval_epochs: int,
 ) -> dict[str, Any]:
     variant_started_utc = datetime.now(UTC).isoformat()
     torch.manual_seed(SEED)
@@ -610,7 +722,9 @@ def _run_variant(
     np.random.seed(SEED)
     model = TextFreeVideoReadout(vocab, temporal_mode=variant).to(device)
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
-    optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+    optimizer = torch.optim.AdamW(
+        model.parameters(), lr=learning_rate, weight_decay=weight_decay
+    )
     train = _move(train, device)
     validation = _move(validation, device)
     history_path = output_dir / f"training-history-{variant}.jsonl"
@@ -628,9 +742,9 @@ def _run_variant(
             epoch_started = time.perf_counter()
             grad_norms: list[float] = []
             loss_total = 0.0
-            for start in range(0, len(order), BATCH_SIZE):
+            for start in range(0, len(order), batch_size):
                 batch_indexes = torch.tensor(
-                    order[start : start + BATCH_SIZE].copy(), dtype=torch.long, device=device
+                    order[start : start + batch_size].copy(), dtype=torch.long, device=device
                 )
                 batch = _subset(train, batch_indexes)
                 optimizer.zero_grad(set_to_none=True)
@@ -639,7 +753,7 @@ def _run_variant(
                 if not bool(torch.isfinite(loss)):
                     raise FloatingPointError(f"non-finite loss in {variant} epoch {epoch}")
                 loss.backward()
-                norm = torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP_NORM)
+                norm = torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip_norm)
                 if not bool(torch.isfinite(norm)) or any(
                     parameter.grad is not None and not bool(torch.isfinite(parameter.grad).all())
                     for parameter in model.parameters()
@@ -653,31 +767,43 @@ def _run_variant(
             training_seconds += time.perf_counter() - epoch_started
             eval_started = time.perf_counter()
             train_result = _evaluate(model, train, train_rows)
-            validation_result = _evaluate(model, validation, validation_rows)
+            should_validate = epoch % validation_interval_epochs == 0 or epoch == epochs
+            validation_result = (
+                _evaluate(model, validation, validation_rows) if should_validate else None
+            )
             if device.type == "cuda":
                 torch.cuda.synchronize(device)
             evaluation_seconds += time.perf_counter() - eval_started
-            selector = float(validation_result["selector_score_macro_nll"])
+            selector = (
+                float(validation_result["selector_score_macro_nll"])
+                if validation_result is not None
+                else None
+            )
             history_row = {
                 "epoch": epoch,
-                "optimizer_updates": epoch * len(epoch_orders[0]) // BATCH_SIZE,
-                "learning_rate": LEARNING_RATE,
+                "optimizer_updates": epoch * len(epoch_orders[0]) // batch_size,
+                "learning_rate": learning_rate,
                 "train_ce": loss_total / len(train_rows),
                 "train_gradient_norm_mean": float(np.mean(grad_norms)),
+                "validation_performed": validation_result is not None,
                 "train": {
                     key: value
                     for key, value in train_result.items()
                     if key not in {"logits", "row_indexes"}
                 },
-                "validation": {
-                    key: value
-                    for key, value in validation_result.items()
-                    if key not in {"logits", "row_indexes"}
-                },
+                "validation": (
+                    {
+                        key: value
+                        for key, value in validation_result.items()
+                        if key not in {"logits", "row_indexes"}
+                    }
+                    if validation_result is not None
+                    else None
+                ),
             }
             history.write(json.dumps(history_row, allow_nan=False) + "\n")
             history.flush()
-            if selector < best_score - 1e-12:
+            if selector is not None and selector < best_score - 1e-12:
                 best_score = selector
                 best_epoch = epoch
                 best_state = {
@@ -700,7 +826,7 @@ def _run_variant(
     ):
         raise RuntimeError(f"no best checkpoint selected for {variant}")
     final_state = {name: value.detach().cpu().clone() for name, value in model.state_dict().items()}
-    final_epoch = EPOCHS
+    final_epoch = epochs
     final_path = output_dir / f"final-{variant}.pt.tmp"
     torch.save({"epoch": final_epoch, "state_dict": final_state}, final_path)
     final_path.replace(output_dir / f"final-{variant}.pt")
@@ -778,9 +904,9 @@ def _run_variant(
         "started_utc": variant_started_utc,
         "finished_utc": datetime.now(UTC).isoformat(),
         "seed": SEED,
-        "epochs_completed": EPOCHS,
-        "updates_per_epoch": len(epoch_orders[0]) // BATCH_SIZE,
-        "total_optimizer_updates": EPOCHS * len(epoch_orders[0]) // BATCH_SIZE,
+        "epochs_completed": epochs,
+        "updates_per_epoch": len(epoch_orders[0]) // batch_size,
+        "total_optimizer_updates": epochs * len(epoch_orders[0]) // batch_size,
         "best_epoch": best_epoch,
         "best_step": best_epoch * len(epoch_orders[0]) // BATCH_SIZE,
         "selected_checkpoint_example_exposures": best_epoch * len(train_rows),
@@ -895,11 +1021,22 @@ def main() -> None:
     output_dir = args.output_dir.resolve()
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite video readout output: {output_dir}")
+    comparison = config["comparison"]
     if (
-        config["comparison"]["epochs"] != EPOCHS
-        or config["comparison"]["max_optimizer_updates"] != 2048
+        comparison.get("optimizer", "AdamW") != "AdamW"
+        or comparison.get("scheduler", "constant") != "constant"
+        or comparison.get("early_stopping", False) is not False
+        or comparison.get("variants", ["mean_mlp", "bilstm"])
+        != ["mean_mlp", "bilstm"]
     ):
-        raise ValueError("the paired fit budget is fixed at 256 epochs / 2,048 updates")
+        raise ValueError("comparison settings differ from the frozen optimizer/variant policy")
+    epochs = int(comparison.get("epochs", EPOCHS))
+    batch_size = int(comparison.get("batch_size", BATCH_SIZE))
+    learning_rate = float(comparison.get("learning_rate", LEARNING_RATE))
+    weight_decay = float(comparison.get("weight_decay", WEIGHT_DECAY))
+    grad_clip_norm = float(comparison.get("gradient_clip_norm", GRAD_CLIP_NORM))
+    validation_interval_epochs = int(comparison.get("validation_interval_epochs", 1))
+    schedule = preflight["training_schedule"]
     if device.type == "cuda":
         torch.use_deterministic_algorithms(True)
         torch.cuda.synchronize(device)
@@ -950,7 +1087,7 @@ def main() -> None:
         json.dumps(preflight, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     epoch_orders = [
-        np.random.default_rng(SEED + epoch).permutation(len(train_rows)) for epoch in range(EPOCHS)
+        np.random.default_rng(SEED + epoch).permutation(len(train_rows)) for epoch in range(epochs)
     ]
     run_started = datetime.now(UTC)
     run_started_counter = time.perf_counter()
@@ -966,6 +1103,12 @@ def main() -> None:
             output_dir,
             device,
             epoch_orders,
+            epochs=epochs,
+            batch_size=batch_size,
+            learning_rate=learning_rate,
+            weight_decay=weight_decay,
+            grad_clip_norm=grad_clip_norm,
+            validation_interval_epochs=validation_interval_epochs,
         )
     selected_predictions = {
         variant: _load_row_metrics(output_dir / f"selected-validation-{variant}.jsonl")
@@ -1017,15 +1160,20 @@ def main() -> None:
         "total_wall_seconds": time.perf_counter() - run_started_counter,
         "device": str(device),
         "gpu_name": torch.cuda.get_device_name(device) if device.type == "cuda" else None,
+        "optimizer_schedule_per_variant": schedule,
+        "validation_interval_epochs": validation_interval_epochs,
+        "validation_interval_optimizer_updates": preflight[
+            "validation_interval_optimizer_updates"
+        ],
         "feature_extraction_seconds": preflight["feature_extraction_seconds"],
         "feature_extraction_devices": preflight["feature_extraction_devices"],
-        "optimizer_updates_per_variant": EPOCHS * len(epoch_orders[0]) // BATCH_SIZE,
+        "optimizer_updates_per_variant": schedule["total_optimizer_updates"],
         "command": [sys.executable, *sys.argv],
         "train_examples_per_epoch": len(train_rows),
         "train_unique_example_count": len({row["id"] for row in train_rows}),
         "train_unique_scene_count": len({row["scene_group_id"] for row in train_rows}),
         "train_unique_media_count": len({row["media_sha256"] for row in train_rows}),
-        "full_run_example_exposures_per_variant": EPOCHS * len(train_rows),
+        "full_run_example_exposures_per_variant": schedule["full_run_example_exposures"],
         "unique_examples_consumed_per_variant": len({row["id"] for row in train_rows}),
         "repeat_exposures_per_variant_after_first_use": (EPOCHS - 1) * len(train_rows),
         "validation_examples": len(validation_rows),

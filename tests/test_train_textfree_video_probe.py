@@ -70,6 +70,75 @@ def test_scene_bootstrap_uses_paired_scene_units_and_fixed_seed():
     assert result["bootstrap_seed"] == 17
 
 
+@pytest.mark.parametrize(
+    ("train_count", "epochs", "validation_interval_epochs"),
+    [(1024, 128, 2), (2048, 64, 1)],
+)
+def test_coverage_schedules_match_updates_and_validation_opportunities(
+    train_count, epochs, validation_interval_epochs
+):
+    from scripts.train_textfree_video_probe import (
+        _training_schedule,
+        _validation_interval_updates,
+    )
+
+    schedule = _training_schedule(
+        train_count=train_count,
+        batch_size=64,
+        epochs=epochs,
+        max_optimizer_updates=2048,
+    )
+    validation_updates = _validation_interval_updates(
+        train_count=train_count,
+        batch_size=64,
+        validation_interval_epochs=validation_interval_epochs,
+        epochs=epochs,
+    )
+
+    assert schedule["total_optimizer_updates"] == 2048
+    assert schedule["full_run_example_exposures"] == 131072
+    assert validation_updates == 32
+
+
+def test_training_schedule_rejects_budget_that_does_not_match_epoch_order():
+    from scripts.train_textfree_video_probe import _training_schedule
+
+    with pytest.raises(ValueError, match="do not match"):
+        _training_schedule(
+            train_count=2048,
+            batch_size=64,
+            epochs=128,
+            max_optimizer_updates=2048,
+        )
+
+
+def test_media_integrity_receipt_accepts_frozen_fetch_report_schema():
+    from scripts.train_textfree_video_probe import _validate_media_integrity_report
+
+    source = {
+        "train_manifest_sha256": "train-hash",
+        "validation_manifest_sha256": "validation-hash",
+    }
+    receipt = {
+        "status": "passed",
+        "all_media_sha256_verified": True,
+        "sample_hashes": {
+            "train_jsonl": "train-hash",
+            "validation_jsonl": "validation-hash",
+        },
+        "group_integrity": {
+            "train_validation_scene_overlap": 0,
+            "train_validation_media_overlap": 0,
+        },
+    }
+
+    _validate_media_integrity_report(receipt, source)
+
+    receipt["sample_hashes"]["validation_jsonl"] = "wrong-hash"
+    with pytest.raises(ValueError, match="integrity report"):
+        _validate_media_integrity_report(receipt, source)
+
+
 def test_prediction_receipt_uses_typed_json_and_normalized_option_probabilities(tmp_path):
     import json
 

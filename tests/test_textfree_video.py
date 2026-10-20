@@ -69,6 +69,30 @@ def test_video_input_builder_ignores_natural_language_question_text():
     assert torch.equal(original.targets, altered.targets)
 
 
+def test_video_split_can_allow_cross_scene_question_templates_explicitly():
+    from tiny_omni_decision.textfree_video import validate_video_splits
+
+    train = _rows()
+    validation = [
+        {
+            **train[0],
+            "id": "scene-b-q1",
+            "media_sha256": "b" * 64,
+            "scene_group_id": "scene-b",
+            "split": "validation",
+        }
+    ]
+
+    with pytest.raises(ValueError, match="normalized question/option"):
+        validate_video_splits(train, validation)
+
+    validate_video_splits(train, validation, allow_normalized_content_overlap=True)
+
+    validation[0]["media_sha256"] = train[0]["media_sha256"]
+    with pytest.raises(ValueError, match="scene or media"):
+        validate_video_splits(train, validation, allow_normalized_content_overlap=True)
+
+
 def test_validation_only_program_and_option_tokens_map_to_unknown():
     _, build_vocab, encode_rows = _api()
     vocab = build_vocab(_rows())

@@ -1,0 +1,65 @@
+{
+  "id": "textfree-video-clevrer-coverage-1024-v1",
+  "source": {
+    "dataset": "MIT-IBM/CLEVRER",
+    "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+    "license": "CC0-1.0",
+    "sample_dir": "C:/CodexArtifacts/pretrained-reuse-r2/textfree-video-coverage-1024train-256val-v2/sample-1024-attempt-04",
+    "train_manifest_sha256": "61e4ca966dc431e3cce6832860ed54cc861945ab1e1876614367304eb0adadd3",
+    "validation_manifest_sha256": "2ff03047e7c763cadb975058b842e88102fa96d1327e4c2fa32dfef3c60b0cb5",
+    "fetch_report_sha256": "9f51132faa546410186728038e838ccdb609b9b7a8d6a0938a443411a896dcf4",
+    "integrity_report_filename": "media-integrity-v2.json",
+    "integrity_report_sha256": "35ee8217b67e6c513b67aa62beb1da9d91644d3897642c7cb9839e042f13e42a",
+    "train_examples": 2048,
+    "validation_examples": 512,
+    "allow_normalized_content_overlap": true
+  },
+  "features": {
+    "cache": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-coverage-1024-framewise-features-01/framewise-features.npz",
+    "cache_report": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-coverage-1024-framewise-features-01/cache-report.json",
+    "model_id": "google/videoprism-base-f16r288",
+    "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "encoder_parameter_count": 114365184,
+    "frames": 8,
+    "feature_width": 768,
+    "training_manifest_sha256": "61e4ca966dc431e3cce6832860ed54cc861945ab1e1876614367304eb0adadd3",
+    "allow_training_media_subset": false,
+    "temporal_profile": "8 uniformly sampled endpoint-inclusive frames; spatial-token mean per time index"
+  },
+  "task": {
+    "input_fields": ["video_features", "typed_program", "taxonomy", "supplied_options"],
+    "excluded_fields": ["natural_language_question", "sample_id", "scene_id", "media_hash"],
+    "supervision_only_fields": ["target"],
+    "question_types": ["temporal_descriptive", "static_descriptive"],
+    "decision_output": "JSON probabilities normalized over supplied candidate options"
+  },
+  "comparison": {
+    "variants": ["mean_mlp", "bilstm"],
+    "seed": 17,
+    "epochs": 64,
+    "batch_size": 64,
+    "updates_per_epoch": 32,
+    "max_optimizer_updates": 2048,
+    "epoch_order_seed_rule": "numpy.default_rng(seed + zero_based_epoch).permutation(train_rows)",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "scheduler": "constant",
+    "validation_interval_epochs": 1,
+    "selector": "minimum mean validation NLL across question-type-by-taxonomy groups present in validation; ties choose earlier epoch",
+    "early_stopping": false,
+    "trainable_temporal_block_parameter_tolerance": 0.01
+  },
+  "integrity": {
+    "group_key": "scene_group_id",
+    "asset_key": "media_sha256",
+    "content_key": "casefolded normalized question plus sorted normalized options",
+    "allow_cross_scene_question_template_recurrence": true,
+    "sealed_audit_loaded": false,
+    "validation_role": "development-only checkpoint selection; no sealed-audit claim"
+  }
+}

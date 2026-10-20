@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import hashlib
 import io
 import json
 import time
 import zipfile
+import zlib
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +27,8 @@ TRAIN_QUESTIONS_SHA256 = "11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98
 VALIDATION_QUESTIONS_SHA256 = "fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d"
 REVISION = "98b842082ba4f7c18b6b9e3f39145871782a65ef"
 PREVIOUSLY_USED_SCENES = {"train": {0, 1, 2}, "validation": {10_000, 10_001, 10_002}}
+RANGE_READ_AHEAD_BYTES = 1024 * 1024
+DEFAULT_DOWNLOAD_WORKERS = 4
 
 
 def sha256(data: bytes) -> str:
@@ -40,6 +44,9 @@ class RangeFile(io.RawIOBase):
         self.etag = expected_etag
         self.position = 0
         self.bytes_read = 0
+        self.range_request_count = 0
+        self.buffer_start = 0
+        self.buffer = b""
         self.session = requests.Session()
         head = self.session.head(url, allow_redirects=True, timeout=30)
         head.raise_for_status()
@@ -74,7 +81,15 @@ class RangeFile(io.RawIOBase):
         if size == 0 or self.position >= self.size:
             return b""
         count = self.size - self.position if size < 0 else min(size, self.size - self.position)
-        end = self.position + count - 1
+        buffer_offset = self.position - self.buffer_start
+        if 0 <= buffer_offset < len(self.buffer):
+            available = min(count, len(self.buffer) - buffer_offset)
+            data = self.buffer[buffer_offset : buffer_offset + available]
+            self.position += len(data)
+            return data
+
+        fetch_count = max(count, RANGE_READ_AHEAD_BYTES)
+        end = min(self.position + fetch_count - 1, self.size - 1)
         response = self.session.get(
             self.url,
             headers={"Range": f"bytes={self.position}-{end}", "Accept-Encoding": "identity"},
@@ -91,10 +106,15 @@ class RangeFile(io.RawIOBase):
             raise RuntimeError("CLEVRER video archive ETag changed during range reads")
         data = response.content
         if len(data) != count:
-            raise RuntimeError("CLEVRER range response size mismatch")
-        self.position += len(data)
+            if len(data) != end - self.position + 1:
+                raise RuntimeError("CLEVRER range response size mismatch")
+        self.buffer_start = self.position
+        self.buffer = data
+        returned = data[:count]
+        self.position += len(returned)
         self.bytes_read += len(data)
-        return data
+        self.range_request_count += 1
+        return returned
 
 
 def choose(
@@ -194,6 +214,12 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--train-per-type", type=int, default=16)
     parser.add_argument("--validation-per-type", type=int, default=8)
     parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument("--download-workers", type=int, default=DEFAULT_DOWNLOAD_WORKERS)
+    parser.add_argument(
+        "--resume-partial",
+        action="store_true",
+        help="reuse only existing selected MP4s that match pinned ZIP size and CRC",
+    )
     parser.add_argument(
         "--exclude-scenes-json",
         type=Path,
@@ -210,10 +236,150 @@ def _args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _extract_archive_chunk(
+    records: list[dict[str, Any]],
+    source: dict[str, Any],
+    output: Path,
+    split: str,
+    *,
+    resume_partial: bool = False,
+) -> tuple[dict[int, tuple[str, int, str]], int, int, int]:
+    archive_file = RangeFile(source["url"], source["bytes"], source["etag"])
+    extracted: dict[int, tuple[str, int, str]] = {}
+    reused_media = 0
+    with zipfile.ZipFile(archive_file) as archive:
+        names_by_basename: dict[str, list[str]] = {}
+        for name in archive.namelist():
+            if name.lower().endswith(".mp4"):
+                names_by_basename.setdefault(Path(name).name, []).append(name)
+        for record in records:
+            matches = names_by_basename.get(record["video_filename"], [])
+            if len(matches) != 1:
+                raise ValueError(
+                    "expected one archive member for "
+                    f"{record['video_filename']}, found {len(matches)}"
+                )
+            member = matches[0]
+            media_dir = output / "media" / split
+            media_dir.mkdir(parents=True, exist_ok=True)
+            path = media_dir / record["video_filename"]
+            if path.exists():
+                if not resume_partial:
+                    raise FileExistsError(
+                        f"existing selected media requires --resume-partial: {path}"
+                    )
+                info = archive.getinfo(member)
+                media = path.read_bytes()
+                if (
+                    len(media) != info.file_size
+                    or zlib.crc32(media) & 0xFFFFFFFF != info.CRC
+                ):
+                    raise ValueError(f"partial media does not match pinned ZIP entry: {path}")
+                reused_media += 1
+            else:
+                media = archive.read(member)
+            if len(media) < 16 or b"ftyp" not in media[:16]:
+                raise ValueError(f"invalid MP4 media bytes for {member}")
+            if not path.exists():
+                with path.open("xb") as stream:
+                    stream.write(media)
+            extracted[int(record["scene_index"])] = (member, len(media), sha256(media))
+    return extracted, archive_file.bytes_read, archive_file.range_request_count, reused_media
+
+
+def _merge_archive_worker_results(
+    results: list[tuple[dict[int, tuple[str, int, str]], int, int, int]],
+) -> dict[str, Any]:
+    media_by_scene: dict[int, tuple[str, int, str]] = {}
+    for extracted, _, _, _ in results:
+        duplicate_scenes = set(media_by_scene) & set(extracted)
+        if duplicate_scenes:
+            raise ValueError(f"archive workers extracted duplicate scenes: {duplicate_scenes}")
+        media_by_scene.update(extracted)
+    return {
+        "media_by_scene": media_by_scene,
+        "range_bytes_read": sum(result[1] for result in results),
+        "range_request_count": sum(result[2] for result in results),
+        "reused_media_count": sum(result[3] for result in results),
+    }
+
+
+def _write_integrity_receipt(
+    output: Path,
+    train: list[dict[str, Any]],
+    validation: list[dict[str, Any]],
+    *,
+    allow_question_template_overlap: bool,
+) -> Path:
+    scene_media: dict[str, dict[str, str]] = {"train": {}, "validation": {}}
+    media_hashes: dict[str, set[str]] = {"train": set(), "validation": set()}
+    ids: dict[str, set[str]] = {"train": set(), "validation": set()}
+    content: dict[str, set[tuple[str, tuple[str, ...]]]] = {"train": set(), "validation": set()}
+    verified_media: set[str] = set()
+    for split, rows in (("train", train), ("validation", validation)):
+        for row in rows:
+            if row["split"] != split or row["source"] != f"MIT-IBM/CLEVRER@{REVISION}":
+                raise ValueError(f"incorrect split/source identity for {row['id']}")
+            sample_id = str(row["id"])
+            if sample_id in ids[split]:
+                raise ValueError(f"duplicate sample id: {sample_id}")
+            ids[split].add(sample_id)
+            scene = str(row["scene_group_id"])
+            media_hash = str(row["media_sha256"])
+            if scene in scene_media[split] and scene_media[split][scene] != media_hash:
+                raise ValueError(f"scene group maps to multiple media assets: {scene}")
+            scene_media[split][scene] = media_hash
+            media_hashes[split].add(media_hash)
+            path = (output / str(row["media_path"])).resolve(strict=True)
+            try:
+                path.relative_to(output.resolve(strict=True))
+            except ValueError as error:
+                raise ValueError(f"media path escapes frozen sample directory: {path}") from error
+            if media_hash not in verified_media:
+                if sha256(path.read_bytes()) != media_hash:
+                    raise ValueError(f"post-write media hash mismatch for {sample_id}")
+                verified_media.add(media_hash)
+            content[split].add(
+                (str(row["question"]).casefold().strip(), tuple(sorted(row["options"])))
+            )
+    scene_overlap = set(scene_media["train"]) & set(scene_media["validation"])
+    media_overlap = media_hashes["train"] & media_hashes["validation"]
+    content_overlap = content["train"] & content["validation"]
+    sample_id_overlap = ids["train"] & ids["validation"]
+    if scene_overlap or media_overlap or sample_id_overlap:
+        raise ValueError("train/validation scene or media identity overlap")
+    if content_overlap and not allow_question_template_overlap:
+        raise ValueError("normalized question/options overlap across splits")
+    gate = {
+        "status": "passed",
+        "all_media_sha256_verified": True,
+        "group_integrity": {
+            "train_validation_scene_overlap": len(scene_overlap),
+            "train_validation_media_overlap": len(media_overlap),
+            "train_unique_scenes": len(scene_media["train"]),
+            "validation_unique_scenes": len(scene_media["validation"]),
+        },
+        "sample_hashes": {
+            "train_jsonl": hashlib.sha256((output / "train.jsonl").read_bytes()).hexdigest(),
+            "validation_jsonl": hashlib.sha256(
+                (output / "validation.jsonl").read_bytes()
+            ).hexdigest(),
+        },
+        "sample_id_overlap": len(sample_id_overlap),
+        "normalized_question_option_overlap": len(content_overlap),
+        "train_unique_media": len(media_hashes["train"]),
+        "validation_unique_media": len(media_hashes["validation"]),
+        "sealed_audit_loaded": False,
+    }
+    receipt = output / "media-integrity-v2.json"
+    receipt.write_text(json.dumps(gate, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return receipt
+
+
 def main() -> None:
     args = _args()
     output = args.output_dir.resolve()
-    if output.exists() and any(output.iterdir()):
+    if output.exists() and any(output.iterdir()) and not args.resume_partial:
         raise FileExistsError(f"refusing to overwrite non-empty output directory: {output}")
     if args.train_per_type < 1 or args.validation_per_type < 1:
         raise ValueError("per-type sample sizes must be positive")
@@ -271,6 +437,23 @@ def main() -> None:
     val_scenes = {item["scene_index"] for item in validation}
     if train_scenes & val_scenes:
         raise ValueError("CLEVRER scene overlap across train and validation")
+    expected_media_paths = {
+        Path("media") / split / record["video_filename"]
+        for split, records in (("train", train), ("validation", validation))
+        for record in records
+    }
+    if args.resume_partial and output.exists():
+        existing_files = {
+            path.relative_to(output)
+            for path in output.rglob("*")
+            if path.is_file()
+        }
+        unexpected_files = existing_files - expected_media_paths
+        if unexpected_files:
+            raise ValueError(
+                "partial output contains non-media or unselected files: "
+                f"{sorted(map(str, unexpected_files))[:5]}"
+            )
     output.mkdir(parents=True, exist_ok=True)
     started = time.perf_counter()
     archive_sources = {
@@ -282,55 +465,52 @@ def main() -> None:
         },
     }
     archive_bytes_read = {}
+    archive_range_request_count = {}
+    resumed_media_count = {}
+    if args.download_workers < 1 or args.download_workers > 8:
+        raise ValueError("download-workers must be between 1 and 8")
     for split, records in (("train", train), ("validation", validation)):
         source = archive_sources[split]
-        archive_file = RangeFile(source["url"], source["bytes"], source["etag"])
-        with zipfile.ZipFile(archive_file) as archive:
-            names_by_basename: dict[str, list[str]] = {}
-            for name in archive.namelist():
-                if name.lower().endswith(".mp4"):
-                    names_by_basename.setdefault(Path(name).name, []).append(name)
-            extracted_by_scene: dict[int, tuple[str, int, str]] = {}
-            for record in records:
-                if record["scene_index"] in extracted_by_scene:
-                    member, media_size, media_hash = extracted_by_scene[record["scene_index"]]
-                    record.update(
-                        {
-                            "source": f"MIT-IBM/CLEVRER@{REVISION}",
-                            "scene_group_id": f"clevrer:{split}:{record['scene_index']}",
-                            "media_path": f"media/{split}/{record['video_filename']}",
-                            "media_bytes": media_size,
-                            "media_sha256": media_hash,
-                            "archive_member": member,
-                        }
-                    )
-                    continue
-                matches = names_by_basename.get(record["video_filename"], [])
-                if len(matches) != 1:
-                    raise ValueError(
-                        "expected one archive member for "
-                        f"{record['video_filename']}, found {len(matches)}"
-                    )
-                member = matches[0]
-                media = archive.read(member)
-                if len(media) < 16 or b"ftyp" not in media[:16]:
-                    raise ValueError(f"invalid MP4 media bytes for {member}")
-                media_dir = output / "media" / split
-                media_dir.mkdir(parents=True, exist_ok=True)
-                path = media_dir / record["video_filename"]
-                path.write_bytes(media)
-                record.update(
-                    {
-                        "source": f"MIT-IBM/CLEVRER@{REVISION}",
-                        "scene_group_id": f"clevrer:{split}:{record['scene_index']}",
-                        "media_path": path.relative_to(output).as_posix(),
-                        "media_bytes": len(media),
-                        "media_sha256": sha256(media),
-                        "archive_member": member,
-                    }
+        unique_records = {
+            int(record["scene_index"]): record
+            for record in records
+        }
+        worker_count = min(args.download_workers, len(unique_records))
+        chunks = [
+            list(unique_records.values())[offset::worker_count]
+            for offset in range(worker_count)
+        ]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=worker_count) as executor:
+            futures = [
+                executor.submit(
+                    _extract_archive_chunk,
+                    chunk,
+                    source,
+                    output,
+                    split,
+                    resume_partial=args.resume_partial,
                 )
-                extracted_by_scene[record["scene_index"]] = (member, len(media), sha256(media))
-        archive_bytes_read[split] = archive_file.bytes_read
+                for chunk in chunks
+            ]
+            results = [future.result() for future in futures]
+        merged_results = _merge_archive_worker_results(results)
+        extracted_by_scene = merged_results["media_by_scene"]
+        archive_bytes_read[split] = merged_results["range_bytes_read"]
+        archive_range_request_count[split] = merged_results["range_request_count"]
+        resumed_media_count[split] = merged_results["reused_media_count"]
+        for record in records:
+            member, media_size, media_hash = extracted_by_scene[int(record["scene_index"])]
+            path = output / "media" / split / record["video_filename"]
+            record.update(
+                {
+                    "source": f"MIT-IBM/CLEVRER@{REVISION}",
+                    "scene_group_id": f"clevrer:{split}:{record['scene_index']}",
+                    "media_path": path.relative_to(output).as_posix(),
+                    "media_bytes": media_size,
+                    "media_sha256": media_hash,
+                    "archive_member": member,
+                }
+            )
     all_hashes = {
         split: {item["media_sha256"] for item in records}
         for split, records in (("train", train), ("validation", validation))
@@ -350,6 +530,8 @@ def main() -> None:
             "validation": VALIDATION_QUESTIONS_SHA256,
         },
         "seed": args.seed,
+        "download_workers": args.download_workers,
+        "resumed_media_count": resumed_media_count,
         "train_count": len(train),
         "validation_count": len(validation),
         "train_question_type_counts": {
@@ -383,6 +565,7 @@ def main() -> None:
                 "size_bytes": source["bytes"],
                 "etag": source["etag"],
                 "range_bytes_read": archive_bytes_read[split],
+                "range_request_count": archive_range_request_count[split],
             }
             for split, source in archive_sources.items()
         },
@@ -396,7 +579,20 @@ def main() -> None:
             "scene and media identities remain disjoint"
         ] if question_content_overlap else []),
     }
-    (output / "fetch-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    fetch_report_path = output / "fetch-report.json"
+    fetch_report_path.write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    )
+    integrity_path = _write_integrity_receipt(
+        output,
+        train,
+        validation,
+        allow_question_template_overlap=args.allow_question_template_overlap,
+    )
+    report["integrity_report_sha256"] = sha256(integrity_path.read_bytes())
+    fetch_report_path.write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    )
     print(json.dumps(report, indent=2))
 
 

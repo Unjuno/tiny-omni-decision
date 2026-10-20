@@ -37,8 +37,10 @@ class EncodedVideoRows:
 def validate_video_splits(
     training_rows: Sequence[Mapping[str, object]],
     validation_rows: Sequence[Mapping[str, object]],
+    *,
+    allow_normalized_content_overlap: bool = False,
 ) -> None:
-    """Reject scene, media, sample-ID or normalized question/option overlap."""
+    """Reject identity leakage and, by default, repeated normalized content."""
     if not training_rows or not validation_rows:
         raise ValueError("training and validation splits must be nonempty")
 
@@ -82,8 +84,8 @@ def validate_video_splits(
     if train_scenes & val_scenes:
         raise ValueError("train/validation scene group overlap")
     if train_media & val_media:
-        raise ValueError("train/validation media identity overlap")
-    if train_content & val_content:
+        raise ValueError("train/validation scene or media identity overlap")
+    if train_content & val_content and not allow_normalized_content_overlap:
         raise ValueError("normalized question/options overlap across splits")
 
 
