@@ -21,7 +21,6 @@ EXPECTED_RATE_HZ = 30.0
 def add_sensor_rows(path: Path, *, duration: float, sensor_index: int, totals, squares, counts):
     """Accumulate one sensor stream into one-second bins; reject malformed or noncausal rows."""
     previous_seconds = -math.inf
-    previous_timestamp = -1
     row_count = 0
     with path.open("r", encoding="utf-8-sig", newline="") as source:
         for line_number, line in enumerate(source, start=1):
@@ -38,14 +37,13 @@ def add_sensor_rows(path: Path, *, duration: float, sensor_index: int, totals, s
                 not math.isfinite(seconds)
                 or seconds < 0
                 or seconds <= previous_seconds
-                or timestamp <= previous_timestamp
+                or timestamp < 0
                 or not np.isfinite(values).all()
             ):
                 raise ValueError(f"non-finite or non-monotone IMU row at {path}:{line_number}")
             if seconds > duration + 1.0:
                 raise ValueError(f"IMU timestamp exceeds session duration: {path}:{line_number}")
             previous_seconds = seconds
-            previous_timestamp = timestamp
             row_count += 1
             if seconds > duration:
                 continue

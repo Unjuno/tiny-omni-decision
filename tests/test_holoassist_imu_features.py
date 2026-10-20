@@ -13,7 +13,7 @@ from scripts.build_holoassist_imu_features import (
 def write_sensor(path, *, values):
     path.write_text(
         "".join(
-            f"{time}\t{1_000_000 + int(time * 1000)}\t{value}\t{value + 1}\t{value + 2}\n"
+            f"{time}\t1000000\t{value}\t{value + 1}\t{value + 2}\n"
             for time, value in values
         ),
         encoding="utf-8",
