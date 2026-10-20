@@ -20,8 +20,6 @@ SOURCE_FEATURE_HASH = "d92e4c91c236c69548f8fa0b58826e8afc853372ebf7a59b1e6456703
 
 
 def _load_features(path: Path) -> list[dict]:
-    from scripts.train_av_event_source import _load_array, pool_dinov2_patch_tokens
-
     rows = [
         json.loads(line)
         for line in path.read_text(encoding="utf-8").splitlines()
@@ -34,14 +32,30 @@ def _load_features(path: Path) -> list[dict]:
     video_splits = {row["video_id"]: row["split"] for row in rows}
     if len(video_splits) < 2:
         raise ValueError("holdout must contain multiple video clusters")
+
+    def load_array(path_value: str, expected_sha256: str, name: str) -> np.ndarray:
+        feature_path = Path(path_value)
+        if not feature_path.is_file() or sha256_file(feature_path) != expected_sha256:
+            raise ValueError(f"{name} feature file is missing or hash-mismatched")
+        values = np.load(feature_path, allow_pickle=False)
+        if not np.issubdtype(values.dtype, np.number) or not np.isfinite(values).all():
+            raise ValueError(f"{name} features must be finite numeric arrays")
+        return np.asarray(values, dtype=np.float32)
+
     loaded = []
     for row in rows:
-        audio = _load_array(row["audio_feature_path"], row["audio_feature_sha256"], "audio")
-        vision_tokens = _load_array(
+        audio = load_array(row["audio_feature_path"], row["audio_feature_sha256"], "audio")
+        vision_tokens = load_array(
             row["visual_feature_path"], row["visual_feature_sha256"], "visual"
         )
-        visual = pool_dinov2_patch_tokens(vision_tokens)
-        if audio.shape != (512,) or visual.shape != (row["candidate_count"], 384):
+        if vision_tokens.ndim != 3 or vision_tokens.shape[1:] != (257, 384):
+            raise ValueError("DINOv2 features must have shape [candidates, 257, 384]")
+        visual = vision_tokens[:, 0, :].copy()
+        if (
+            audio.shape != (512,)
+            or visual.shape != (row["candidate_count"], 384)
+            or visual.shape[0] < 2
+        ):
             raise ValueError("feature shapes do not match the pinned readout architecture")
         if not 0 <= row["target_index"] < row["candidate_count"]:
             raise ValueError("target is outside supplied candidates")
