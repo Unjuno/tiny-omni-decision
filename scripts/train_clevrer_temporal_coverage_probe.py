@@ -191,6 +191,12 @@ def _preflight(
     list[dict[str, Any]],
     list[dict[str, Any]],
 ]:
+    if (
+        config.get("schema_version") != 1
+        or config.get("task", {}).get("question_types") != ["temporal_descriptive"]
+        or config.get("task", {}).get("natural_language_question_as_input") is not False
+    ):
+        raise ValueError("config must define the frozen text-free temporal task")
     sample_dir = Path(config["source"]["sample_dir"]).resolve(strict=True)
     train_rows = _read_jsonl(sample_dir / "train.jsonl")
     validation_rows = _read_jsonl(sample_dir / "validation.jsonl")
@@ -227,6 +233,10 @@ def _preflight(
         or feature_report.get("checkpoint_sha256") != EXPECTED_VIDEO_CHECKPOINT_SHA256
         or feature_report.get("frame_count") != 8
         or feature_report.get("feature_dimension") != 768
+        or config["features"].get("frame_count") != 8
+        or config["features"].get("feature_dimension") != 768
+        or config["features"].get("model_revision") != EXPECTED_VIDEO_REVISION
+        or config["features"].get("checkpoint_sha256") != EXPECTED_VIDEO_CHECKPOINT_SHA256
         or feature_report.get("feature_cache_sha256") != _sha256(features_path)
     ):
         raise ValueError("VideoPrism framewise feature provenance/hash mismatch")
@@ -491,6 +501,20 @@ def main() -> None:
     batch_size = int(config["training"]["batch_size"])
     if epochs < 1 or batch_size < 1:
         raise ValueError("epochs and batch_size must be positive")
+    expected_training = {
+        "seed": 17,
+        "variants": list(VARIANTS),
+        "learning_rate": LEARNING_RATE,
+        "weight_decay": WEIGHT_DECAY,
+        "gradient_clip_norm": GRAD_CLIP_NORM,
+        "scheduler": "constant",
+        "early_stopping": False,
+        "selection": "minimum macro taxonomy validation NLL; earliest tie",
+        "optimizer": "AdamW",
+    }
+    for key, expected in expected_training.items():
+        if config["training"].get(key) != expected:
+            raise ValueError(f"training config mismatch for {key}: {config['training'].get(key)!r}")
     updates_per_epoch = (len(train_rows) + batch_size - 1) // batch_size
     expected_updates = epochs * updates_per_epoch
     if expected_updates != config["training"]["expected_optimizer_updates"]:
