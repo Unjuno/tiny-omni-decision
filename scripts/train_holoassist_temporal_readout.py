@@ -346,6 +346,16 @@ def _write_json(path: Path, value: Any) -> None:
     temporary.replace(path)
 
 
+def _configured_hidden_size(config: dict[str, Any]) -> int:
+    model_config = config.get("model", {})
+    if not isinstance(model_config, dict):
+        raise ValueError("config model section must be an object")
+    value = config.get("hidden_size", model_config.get("hidden_size"))
+    if not isinstance(value, int) or value < 1:
+        raise ValueError("config must define a positive model hidden_size")
+    return value
+
+
 def _evaluate(
     model: (
         CausalGatedTemporalDecision
@@ -496,17 +506,17 @@ def train_arm(
     if sensor_model:
         model = TaskConditionedAVSensorTemporalDecision(
             task_count=len(task_type_to_id),
-            hidden_size=int(config["hidden_size"]),
+            hidden_size=_configured_hidden_size(config),
             modality_mode=arm,
         ).to(device)
     elif task_type_to_id is None:
         model = CausalGatedTemporalDecision(
-            hidden_size=int(config["hidden_size"]), modality_mode=arm
+            hidden_size=_configured_hidden_size(config), modality_mode=arm
         ).to(device)
     else:
         model = TaskConditionedTemporalDecision(
             task_count=len(task_type_to_id),
-            hidden_size=int(config["hidden_size"]),
+            hidden_size=_configured_hidden_size(config),
             modality_mode=arm,
         ).to(device)
     optimizer = torch.optim.AdamW(
@@ -773,6 +783,7 @@ def main() -> None:
     if args.output_dir.exists():
         raise FileExistsError(f"refusing to overwrite readout output: {args.output_dir}")
     config = json.loads(args.config.read_text(encoding="utf-8"))
+    effective_hidden_size = _configured_hidden_size(config)
     require_text = config.get("conditioning", "text") != "task_type_id"
     train = load_feature_split(args.train_features, require_text=require_text)
     validation = load_feature_split(args.validation_features, require_text=require_text)
@@ -900,6 +911,7 @@ def main() -> None:
             else None
         ),
         "config": config,
+        "effective_hidden_size": effective_hidden_size,
         "config_sha256": sha256_file(args.config),
         "train_features_sha256": sha256_file(args.train_features),
         "validation_features_sha256": sha256_file(args.validation_features),
@@ -939,20 +951,31 @@ def main() -> None:
         )
         metadata["task_type_vocabulary"] = task_type_to_id
         _write_json(args.output_dir / "run-metadata.json", metadata)
-    for arm in config["arms"]:
-        result = train_arm(
-            arm=arm,
-            train=train,
-            validation=validation,
-            config=config,
-            device=device,
-            output=args.output_dir / arm,
-            task_type_to_id=task_type_to_id,
-        )
-        results.append(result)
-        metadata["results"] = results
-        metadata["completed_arms"] = len(results)
+    try:
+        for arm in config["arms"]:
+            result = train_arm(
+                arm=arm,
+                train=train,
+                validation=validation,
+                config=config,
+                device=device,
+                output=args.output_dir / arm,
+                task_type_to_id=task_type_to_id,
+            )
+            results.append(result)
+            metadata["results"] = results
+            metadata["completed_arms"] = len(results)
+            _write_json(args.output_dir / "run-metadata.json", metadata)
+    except Exception as error:
+        metadata["status"] = "failed"
+        metadata["finished_at_utc"] = datetime.now(UTC).isoformat()
+        metadata["failure"] = {
+            "type": type(error).__name__,
+            "message": str(error),
+            "completed_arms": len(results),
+        }
         _write_json(args.output_dir / "run-metadata.json", metadata)
+        raise
     metadata["status"] = "complete"
     metadata["finished_at_utc"] = datetime.now(UTC).isoformat()
     _write_json(args.output_dir / "run-metadata.json", metadata)

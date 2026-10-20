@@ -217,7 +217,7 @@ def test_fixed_budget_run_keeps_best_and_final_checkpoints_separate(tmp_path) ->
     validate_split_identity(train, validation)
     config = {
         "seed": 17,
-        "hidden_size": 8,
+        "model": {"hidden_size": 8},
         "batch_sessions": 1,
         "max_optimizer_steps": 2,
         "evaluation_interval_steps": 1,
@@ -259,7 +259,7 @@ def test_task_type_conditioned_run_trains_without_text_features(tmp_path) -> Non
     validation = load_feature_split(validation_path, require_text=False)
     config = {
         "seed": 17,
-        "hidden_size": 8,
+        "model": {"hidden_size": 8},
         "batch_sessions": 1,
         "max_optimizer_steps": 2,
         "evaluation_interval_steps": 1,
@@ -365,7 +365,7 @@ def test_imu_features_require_exact_sample_order_and_metadata(tmp_path) -> None:
     )
     config = {
         "seed": 17,
-        "hidden_size": 8,
+        "model": {"hidden_size": 8},
         "batch_sessions": 1,
         "max_optimizer_steps": 1,
         "evaluation_interval_steps": 1,
