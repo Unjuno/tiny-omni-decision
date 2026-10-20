@@ -44,7 +44,7 @@
   "failed_preflight": {
     "attempted_group_rule": "MAVD physical site prefix; deterministic hash order from IDs only; provisional train=templete+acevedo, validation=magallanes, audit candidate=rivera",
     "invalidation": "The rivera holdout is contaminated: underlying rivera0922/0923/1015/1016 labels were separately inspected in official MAVD train/validation annotation archives. Other sites are not proven disjoint from upstream test or unpublished source material. Do not use this split or its provisional label counts for fitting, selection, or audit.",
-    "upstream_split_issue": "Official MAVD train and validation archives both contain clips from the same parent recording sessions (rivera0923, rivera1015, rivera1016), so the published split is not group-safe at session granularity.",
+    "upstream_split_issue": "Official MAVD TRAIN and VALIDATION source lists share rivera0923, rivera1015, rivera1016 site/date prefixes. The metadata records adjacent five-minute chunks for some prefixes, but exact parent-session identity is not fully established. Treat the released split as unsafe for session-level evaluation until source grouping is resolved.",
     "task_limit": "Potential label is same vehicle-class event active in audio and visible in a video frame. Labels do not identify which exact visible track emitted the sound; this is class-level temporal co-occurrence only.",
     "sealed_audit_status": "NONE; the provisional audit assignment is invalid and no sealed metrics were computed."
   },

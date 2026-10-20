@@ -14,7 +14,7 @@ Sources: [MAVD Zenodo record](https://zenodo.org/records/4741232), [DCASE MAVD c
 
 ## Split and label-integrity findings
 
-The MAVD original TRAIN annotation archive lists 24 five-minute source files; VALIDATION lists 7. Both contain source-session prefixes `rivera0923`, `rivera1015`, and `rivera1016`. The official split therefore leaks at the parent recording-session level and cannot be reused as an independent split for this project.
+The MAVD original TRAIN annotation archive lists 24 five-minute source files; VALIDATION lists 7. Both contain the site/date prefixes `rivera0923`, `rivera1015`, and `rivera1016`. Metadata shows adjacent five-minute chunks for some prefixes, but does not fully establish parent-session identity. Treat the official split as unsafe for session-level evaluation until that grouping is resolved; do not assume it is independent.
 
 The Urbansas annotations contain 540 MAVD-labeled 10-second clip identities and 15,639 video annotation rows across four location families. A filename-only hash split was briefly preflighted, assigning two locations to train, one to validation, and one to a candidate holdout. That preflight is **invalidated**: the holdout location, Rivera, overlaps source labels inspected separately in official MAVD train/validation files. Other Urbansas locations have not been demonstrated disjoint from upstream test or unpublished source material. Do not use the provisional split or its exploratory counts for fitting, selection, or audit.
 
