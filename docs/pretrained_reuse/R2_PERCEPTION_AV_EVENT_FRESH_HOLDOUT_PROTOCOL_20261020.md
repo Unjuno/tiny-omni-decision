@@ -1,8 +1,10 @@
 # Perception AV event fresh holdout protocol — 2026-10-20
 
-Status: preregistered fixed-checkpoint inference comparison; full media and PTS
-integrity gates passed, frozen-feature extraction is next. This protocol adds
-no training, checkpoint selection, architecture search, or sealed/test-set access.
+Status: preregistered fixed-checkpoint inference comparison completed. Full
+media/PTS integrity, frozen feature extraction, fixed-checkpoint replay, and
+CPU scoring passed. This protocol adds no training, checkpoint selection,
+architecture search, or sealed/test-set access. Results and limits are in
+[`R2_PERCEPTION_AV_EVENT_FRESH_HOLDOUT_RESULTS_20261020.md`](R2_PERCEPTION_AV_EVENT_FRESH_HOLDOUT_RESULTS_20261020.md).
 
 ## Question
 
