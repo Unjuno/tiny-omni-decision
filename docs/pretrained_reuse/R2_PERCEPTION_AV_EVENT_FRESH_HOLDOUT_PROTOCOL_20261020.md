@@ -90,3 +90,23 @@ open-world Omni decision quality.
 If a gate fails, keep the incomplete attempt and stop this evaluation. Do not
 select easier events, change candidate counts, refit, or use these results to
 modify the checkpoints.
+
+## Partial CPU PTS smoke (not a release gate)
+
+A partial decode audit was run on the first 40 acquired plan entries while
+media acquisition continued. Receipt:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-event-fresh-holdout-pts-smoke-02\result.json`
+with SHA-256
+`CD8D2C813FB0B02F4F8AEDAC570099B6454C740C8F09D8C69584AD6FA5A8E062`.
+It reports `PASS_PARTIAL_FRESH_HOLDOUT_PTS_SMOKE`, 40/200 videos and 97/504
+events, zero events with zero/partial audio coverage, zero right-censored
+events, and 1,631 distinct exact media hashes across prior manifests plus
+these 40 files. The receipt pins plan SHA-256
+`887a1eea4b5a7b82d441025842465a09d0ffb33c97787073042ad1a1680f8eb3`;
+its media-manifest snapshot SHA-256 is
+`4dfa6f3597dc6d421c799d05600eb625a6fea3fb37110faeece311a0e16d6a17`, and
+the PTS audit script SHA-256 is
+`3444e67c4a1acf90dc02c0cae6e72d9f0cfb2a2cc6685c61658e820db82f2568`.
+This partial receipt is only a smoke test. The acquisition process was still
+running when checked; GPU feature extraction and full-holdout evaluation have
+not started.

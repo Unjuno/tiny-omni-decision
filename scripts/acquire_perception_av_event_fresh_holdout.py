@@ -26,6 +26,7 @@ from scripts.plan_perception_av_event_media import MEDIA_MANIFESTS
 
 RESERVE_BYTES = 8_000_000_000
 CHUNK_BYTES = 1024 * 1024
+FRESH_PLAN_SHA256 = "887a1eea4b5a7b82d441025842465a09d0ffb33c97787073042ad1a1680f8eb3"
 
 
 def write_receipt(path: Path, value: dict) -> None:
@@ -34,7 +35,11 @@ def write_receipt(path: Path, value: dict) -> None:
     temporary.replace(path)
 
 
-def validate_plan(plan_path: Path, expected_sha256: str) -> dict:
+def validate_plan(
+    plan_path: Path, expected_sha256: str, pinned_sha256: str = FRESH_PLAN_SHA256
+) -> dict:
+    if expected_sha256 != pinned_sha256:
+        raise ValueError("command plan hash differs from preregistered plan")
     if sha256_file(plan_path) != expected_sha256:
         raise ValueError("fresh holdout plan hash mismatch")
     plan = json.loads(plan_path.read_text(encoding="utf-8"))

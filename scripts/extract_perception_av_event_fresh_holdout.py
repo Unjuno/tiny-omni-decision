@@ -29,6 +29,8 @@ from scripts.extract_perception_av_event_features import (
 from scripts.perception_av_event_protocol import deterministic_candidate_order
 from scripts.plan_perception_av_event_fresh_holdout import ANNOTATION_SHA256
 
+FRESH_PLAN_SHA256 = "887a1eea4b5a7b82d441025842465a09d0ffb33c97787073042ad1a1680f8eb3"
+
 
 def extract(
     *,
@@ -50,7 +52,7 @@ def extract(
         raise ValueError("fresh feature output directory required")
     if image_batch_size < 1:
         raise ValueError("image batch size must be positive")
-    if sha256_file(plan_path) != plan_sha256:
+    if plan_sha256 != FRESH_PLAN_SHA256 or sha256_file(plan_path) != plan_sha256:
         raise ValueError("holdout plan hash mismatch")
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
     manifest_path = media_dir / "manifest.json"

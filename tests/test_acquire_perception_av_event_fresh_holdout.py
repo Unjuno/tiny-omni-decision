@@ -37,13 +37,15 @@ def _write_plan(path, *, test_opened=False):
 def test_acquisition_plan_requires_exact_hash_and_train_only_contract(tmp_path):
     path = tmp_path / "plan.json"
     digest = _write_plan(path)
-    assert len(validate_plan(path, digest)["rows"]) == 200
-    with pytest.raises(ValueError, match="hash mismatch"):
-        validate_plan(path, "0" * 64)
+    assert len(validate_plan(path, digest, pinned_sha256=digest)["rows"]) == 200
+    with pytest.raises(ValueError, match="preregistered"):
+        validate_plan(path, digest)
+    with pytest.raises(ValueError, match="plan hash differs"):
+        validate_plan(path, "0" * 64, pinned_sha256=digest)
 
 
 def test_acquisition_plan_rejects_test_access(tmp_path):
     path = tmp_path / "plan.json"
     digest = _write_plan(path, test_opened=True)
     with pytest.raises(ValueError, match="fixed, inference-only"):
-        validate_plan(path, digest)
+        validate_plan(path, digest, pinned_sha256=digest)
