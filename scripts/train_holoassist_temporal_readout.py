@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import platform
 import random
 import subprocess
@@ -885,6 +886,19 @@ def main() -> None:
         "python": platform.python_version(),
         "torch": torch.__version__,
         "device": torch.cuda.get_device_name() if device.type == "cuda" else "cpu",
+        "hotgpu_reservation": (
+            {
+                "mode": "hotgpu_reserved",
+                "reserved_mib": int(os.environ["TINY_OMNI_GPU_GATE_RESERVED_MIB"]),
+                "parent_pid": int(os.environ["TINY_OMNI_GPU_GATE_PARENT_PID"]),
+                "free_mib": int(os.environ["TINY_OMNI_GPU_GATE_FREE_MIB"]),
+                "total_mib": int(os.environ["TINY_OMNI_GPU_GATE_TOTAL_MIB"]),
+                "utilization_pct": int(os.environ["TINY_OMNI_GPU_GATE_UTILIZATION_PCT"]),
+            }
+            if device.type == "cuda"
+            and "TINY_OMNI_GPU_GATE_RESERVED_MIB" in os.environ
+            else None
+        ),
         "config": config,
         "config_sha256": sha256_file(args.config),
         "train_features_sha256": sha256_file(args.train_features),
