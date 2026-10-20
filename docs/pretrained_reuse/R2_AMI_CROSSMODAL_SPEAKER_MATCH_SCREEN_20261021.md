@@ -1,5 +1,55 @@
 # AMI audio/video source and task screen — 2026-10-21
 
+## Expanded official-source follow-up — 2026-10-21
+
+To check whether the first one-meeting-per-partition screen had too little data,
+we selected two additional SA parent sets (ES2005a, ES2006a) and one additional
+SB parent set (ES2011a) through the official selector. The combined sample now
+contains three unique SA parent sets and two unique SB parent sets. Only each
+selected meeting's four Closeup AVI streams and `Mix-Headset.wav` were downloaded;
+optional views and all SC media/annotation members were excluded. The 25 files
+total 825,256,200 bytes. SHA-256 values, selector-manifest hashes, and the
+selective annotation extraction receipt are stored outside Git under
+`C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021`.
+
+The selected meeting metadata lists 12 SA participants and 8 SB participants,
+with no participant ID overlap across these selected groups. This is only a
+selected-subset check, not a full split-wide identity/media proof. All 20 video
+files opened and decoded sample frames at the beginning, middle, and 90% point;
+the five mixed-headset WAVs are mono 16 kHz PCM. Full-stream decode and exact
+audio/video clock synchronization remain unverified.
+
+Applying the same word-window screen to all five meetings yields 32 preliminary
+SA windows and 38 preliminary SB windows. ES2005a supplies only 2 of the 32 SA
+windows: its WAV is 477.88 s, its four videos are 467.96–473.88 s, while the
+meeting metadata reports 958 s. The media clock is internally close for that
+meeting, but the large metadata discrepancy needs source/timing clarification.
+This small, uneven window set is insufficient for a meaningful quality run and
+does not justify starting a GPU process. No model was trained or evaluated.
+
+| Meeting | Split | Audio (s) | Closeup video range (s) | Metadata (s) | Preliminary windows |
+| --- | --- | ---: | ---: | ---: | ---: |
+| ES2002a | SA | 1,272.64 | 1,230.40–1,248.72 | 1,242 | 16 |
+| ES2005a | SA | 477.88 | 467.96–473.88 | 958 | 2 |
+| ES2006a | SA | 1,284.34 | 1,275.76–1,280.16 | 1,290 | 14 |
+| ES2003a | SB | 1,139.77 | 1,125.80–1,128.28 | 1,124 | 22 |
+| ES2011a | SB | 1,113.85 | 1,113.96–1,114.32 | 1,128 | 16 |
+
+The expanded receipts are:
+
+- `media-download-receipt-expanded.json` — SHA-256
+  `3bb1bb16dde2f73aa227e68d371ddaa64ec967d966e14b7b834b580589b451db`
+- `media-and-annotation-preflight-expanded-20261021.json` — SHA-256
+  `bbead20d61d57429cbf7a5358bfb5ac890e6da108a35c20e6ad8621cd67a9b4b`
+- `annotations-expanded-20261021/extraction-receipt.json` — SHA-256
+  `8f82eade6d08f098d61d16e1a815f8f028a019ec83317b5077c595817974deb0`
+
+The official scenario-only split assigns ES2002/2005/2006 to SA and ES2003/2011
+to SB; the other official SB parent sets are IS1008, TS3004, and TS3006. We have
+not accessed SC media or annotations. The independent-test and privacy/governance
+gates remain open. The recommended scenario-only groups are listed on the
+[official AMI split page](https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml).
+
 ## Decision
 
 Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow, meeting-local
