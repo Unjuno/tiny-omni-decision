@@ -165,10 +165,13 @@ Audio/video duration differences are small for IS1000b/c/d; IS1000a audio is
 window counts by meeting and speaker are in
 `preflight-is1000-20261021.json` (SHA-256
 `41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73`). A
-separate join audit finds 180 of 182 candidate windows overlap the corresponding
-same-agent `segments` interval by at least 80%; two need review and should not be
-silently accepted. Join-audit SHA-256:
-`97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6`.
+An initial audit using the largest single segment interval flagged two windows;
+that method undercounted candidates spanning adjacent speech segments. A corrected
+union-overlap audit finds 181/182 IS1000 windows at or above 80%, with one IS1000c
+agent-B window at 76.7% (1664.2–1666.2 s) left unresolved. The full SA audit
+passes 213/214 candidates, including all 32 earlier candidates. Script SHA-256:
+`EBBF2FA483F55A06391B506F09290306D1B40E8E8F2E5390C440BAAD6F1EED89`; receipt
+SHA-256: `E457BC9FF7D940F385D9A153E7441A634E1D661480DB905BA1C2F2A1F3330A19`.
 
 Across the current selected source screen there are now 60 media files and
 2,891,874,753 bytes, all rehashed against their receipts. Preliminary windows
@@ -281,11 +284,12 @@ read; no SC annotation or signal content was opened, and no third-party mirror
 was used.
 
 The preliminary filter produces 214 train and 111 validation candidate
-windows. In the newly added IS1000 batch, 180/182 windows meet the 80%
-same-agent segment-interval overlap check; two remain unresolved. The earlier
-32 train windows still need that join audit. These counts are not a frozen task
-set or quality results. Audio/video clock alignment, visible-speaker truth,
-media/near-duplicate split isolation, and privacy/governance remain open.
+windows. A corrected union-overlap audit finds 213/214 train candidates at or above the
+80% same-agent segment-coverage threshold. One IS1000c agent-B window remains
+below threshold (76.7%) and is quarantined pending review; all 32 earlier train
+windows pass. These counts are not a frozen task set or quality results.
+Audio/video clock alignment, visible-speaker truth, media/near-duplicate split
+isolation, and privacy/governance remain open.
 
 ## GPU handoff review — HotUGPU
 
@@ -337,9 +341,9 @@ open, so there is not yet a justified encoder run.
 AMI remains a **review-only source candidate**, not an admitted training or
 evaluation dataset. Four SA parent sets and all five SB parent sets have been
 screened; preliminary counts are 214 train candidates and 111 validation
-candidates. Two IS1000 candidate windows fall below the 80% same-agent segment
-overlap check and remain unresolved; the earlier 32 SA candidates still need
-that same join audit. Global SA/SB participant-ID disjointness is verified from
+candidates. A corrected union-coverage join audit passes 213/214 train windows;
+one IS1000c agent-B window remains quarantined at 76.7%. Global SA/SB
+participant-ID disjointness is verified from
 official metadata. Next validate timestamp synchronization and visible-speaker
 labels on train-only samples, and audit media identity/content overlap. Stop
 this source path without training if these gates fail. No Teacher, checkpoint,

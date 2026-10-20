@@ -140,7 +140,10 @@
       "is1000a_d_head_preflight_sha256": "6ff6f95fb217f2fe48cf3b4f991b71b276b7a232780725a3e47e08ee925581f4",
       "is1000a_d_annotation_receipt_sha256": "396a2f727d991561035615f118e15cd15fafadada5c0386430c8d1602931be75",
       "is1000a_d_preflight_sha256": "41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73",
-      "is1000a_d_segment_join_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
+      "is1000a_d_segment_join_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6",
+      "all_sa_word_segment_join_audit_sha256": "e457bc9ff7d940f385d9a153e7441a634e1d661480db905ba1c2f2a1f3330a19",
+      "all_sa_word_segment_join_audit_script_sha256": "ebbf2fa483f55a06391b506f09290306d1b40e8e8f2e5390c440baad6f1eed89",
+      "is1000_single_segment_audit_interim_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
     },
     "third_party_mirror_used": false,
     "resolution": "official selector and official AMI mirror used for selected files where available; selector response for TS3004a was stale and not applied; TS3006a and IS1000a–d were acquired from official mirror URLs after per-file HEAD checks; manual v1.6.2 members were selectively extracted; no third-party mirror",
@@ -158,16 +161,19 @@
     "gpu_job_started": false,
     "gpu_status_at_last_check": "2026-10-21 08:19 local: RTX 3080 Laptop 15821/16384 MiB used, 27% utilization; Orbitune PID 24160 active; no Tiny Omni GPU job started",
     "hotgpu_required_for_future_gpu_smoke": true,
-    "is1000_batch_train_windows_with_segment_overlap_ge_80pct": 180,
-    "is1000_batch_train_windows_below_segment_overlap_threshold": 2
+    "all_sa_candidate_windows": 214,
+    "all_sa_windows_with_segment_union_overlap_ge_80pct": 213,
+    "all_sa_windows_below_segment_union_overlap_threshold": 1,
+    "is1000_batch_windows_with_segment_union_overlap_ge_80pct": 181,
+    "is1000_batch_windows_below_segment_union_overlap_threshold": 1
   },
   "blockers": [
     "four SA parent sets and all five SB parent sets are screened, but SA coverage is uneven: ES2002/2005/2006 have only submeeting a while IS1000 includes a–d",
-    "214 preliminary train candidates and 111 validation candidates remain weakly labeled; two IS1000 windows fail the 80% same-agent segment-join threshold and the earlier 32 train windows have not received this join audit",
+    "214 preliminary train candidates and 111 validation candidates remain weakly labeled; a union-overlap segment audit passes 213/214 SA candidates, while one IS1000c window is quarantined at 76.7%",
     "audio/video clock synchronization and visible-speaker ground truth remain unverified; 28 fully decoded streams are each one frame below their AVI declaration, while five earlier meetings only have sampled decode",
     "SA/SB participant IDs are disjoint in official metadata, but media identity, normalized content and near-duplicate cross-split audits remain incomplete",
     "ES2005a media spans about 8 minutes while meeting metadata says 958 seconds; investigate source/time coverage",
-    "freeze balanced task manifest, hard-negative rule, candidate-order policy and train-only label QA before feature extraction",
+    "freeze balanced task manifest, hard-negative rule, candidate-order policy and train-only visual label QA before feature extraction",
     "privacy/governance review is required before product claims"
   ],
   "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md",
@@ -220,21 +226,13 @@
       "IS1000c": 32,
       "IS1000d": 83
     },
-    "same_agent_segment_overlap_ge_80pct": 180,
     "below_80pct_examples": [
       {
         "meeting": "IS1000c",
         "agent": "B",
         "start_s": 1664.2,
         "end_s": 1666.2,
-        "overlap_fraction": 0.588
-      },
-      {
-        "meeting": "IS1000d",
-        "agent": "B",
-        "start_s": 132.24,
-        "end_s": 136.24,
-        "overlap_fraction": 0.462
+        "union_overlap_fraction": 0.767
       }
     ],
     "all_28_video_streams_decode_one_frame_below_declared_count": true,
@@ -242,6 +240,10 @@
     "head_preflight_sha256": "6ff6f95fb217f2fe48cf3b4f991b71b276b7a232780725a3e47e08ee925581f4",
     "annotation_receipt_sha256": "396a2f727d991561035615f118e15cd15fafadada5c0386430c8d1602931be75",
     "media_preflight_sha256": "41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73",
-    "segment_join_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
+    "same_agent_segment_union_overlap_ge_80pct": 181,
+    "single_segment_method_interim_overlap_ge_80pct": 180,
+    "all_sa_join_audit_receipt_sha256": "e457bc9ff7d940f385d9a153e7441a634e1d661480db905ba1c2f2a1f3330a19",
+    "all_sa_join_audit_script_sha256": "ebbf2fa483f55a06391b506f09290306d1b40e8e8f2e5390c440baad6f1eed89",
+    "single_segment_method_interim_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
   }
 }

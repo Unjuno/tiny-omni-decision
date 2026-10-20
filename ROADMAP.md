@@ -6,8 +6,9 @@ SA and all five SB parent sets (60 selected media files, 2,891,874,753 bytes);
 selected v1.6.2 word/segment annotations and hashes are recorded externally.
 The official meeting metadata shows zero global participant-ID overlap across
 all 98 SA and 20 SB sessions. Preliminary filtered windows total 32 train and
-111 validation; IS1000a–d add 182 preliminary training windows, with 180/182
-meeting word windows overlapping same-agent segment annotations by at least 80%.
+111 validation; IS1000a–d add 182 preliminary training windows. A corrected
+union-overlap audit passes 213/214 selected SA windows at the 80% segment
+coverage threshold, leaving one IS1000c window quarantined.
 These remain weak labels and uneven by speaker/meeting. All 28 video streams in
 the TS3004a/IS1008a/TS3006a/IS1000a–d full-decode subset return one frame below
 their declarations. ES2005a spans about 8 minutes against 958 seconds in
