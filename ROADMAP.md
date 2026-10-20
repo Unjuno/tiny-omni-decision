@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 optional sensor development probe:** On PCH Data 2017, a frozen
+MOMENT-1-small embedding plus a 9,234-parameter linear readout reached 60.32%
+Accuracy / 59.72% macro Accuracy on 63 participant-held-out development
+recordings; the same readout over fixed statistics reached 26.98% / 24.17%.
+The paired participant-bootstrap interval favored MOMENT, but the task remains
+one-modality activity classification, not sensor fusion or general Omni
+quality. The 35.35M-parameter, 151.6 MB FP32 encoder is not quantized; no
+product-size or 95–98% target is claimed. A separate 28-participant holdout
+was not opened. R2-M-2 remains open. See the
+[protocol and full result](docs/pretrained_reuse/R2_PCH_MOMENT_SENSOR_PROBE_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
