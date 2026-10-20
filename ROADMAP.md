@@ -5,6 +5,12 @@ metadata, but its five archive shards total 168.5 GB while local free space is
 timestamps do not establish that both signals are required, and route/room-level
 split integrity still needs verification. See the [source screen](docs/pretrained_reuse/R2_BATVISION_SOURCE_SCREEN_20261021.md).
 
+**2026-10-21 R2 TAU-UAVS source screen:** The synchronized urban-scene dataset
+is open to download but its official Zenodo metadata marks it `other-nc`; the
+development archive is 107.7 GB and its scene labels do not establish that
+every decision requires both streams. It remains REVIEW and was not acquired.
+See the [source screen](docs/pretrained_reuse/R2_TAU_AVSC_SOURCE_SCREEN_20261021.md).
+
 **2026-10-20 R2 CLEVRER synthetic AV timing diagnostic (completed):** Four
 matched seed-17 readouts completed 2,048 updates each on the local RTX 3080 via
 HotUGPU. Selected joint gated-LSTM validation reached 78.97% Accuracy / 0.4566
