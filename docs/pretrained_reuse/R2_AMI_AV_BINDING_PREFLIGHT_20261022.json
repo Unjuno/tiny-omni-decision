@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "status": "PRECHECK_PASS_MEDIA_BLOCKED_NOT_ADMITTED",
+  "dataset": "edinburghcstr/ami",
+  "revision": "46f28f2503e2ec48f8867a84eef356c70476beab",
+  "config": "ihm",
+  "source_split": "train",
+  "new_candidate_split": {
+    "train": [
+      "TS3009a",
+      "ES2010b",
+      "IS1004b"
+    ],
+    "validation": [
+      "TS3005b",
+      "ES2008b",
+      "IS1006b"
+    ]
+  },
+  "speaker_identity_overlap": [],
+  "metadata_rows_by_meeting": {
+    "IS1004b": 632,
+    "TS3009a": 636,
+    "ES2008b": 688,
+    "IS1006b": 677,
+    "ES2010b": 582,
+    "TS3005b": 1018
+  },
+  "duration_counts_by_meeting": {
+    "IS1004b": {
+      "total": 632,
+      "ge_1s": 448,
+      "ge_2s": 339,
+      "ge_5s": 166
+    },
+    "TS3009a": {
+      "total": 636,
+      "ge_1s": 412,
+      "ge_2s": 287,
+      "ge_5s": 96
+    },
+    "ES2008b": {
+      "total": 688,
+      "ge_1s": 430,
+      "ge_2s": 307,
+      "ge_5s": 141
+    },
+    "IS1006b": {
+      "total": 677,
+      "ge_1s": 437,
+      "ge_2s": 322,
+      "ge_5s": 155
+    },
+    "ES2010b": {
+      "total": 582,
+      "ge_1s": 383,
+      "ge_2s": 271,
+      "ge_5s": 101
+    },
+    "TS3005b": {
+      "total": 1018,
+      "ge_1s": 640,
+      "ge_2s": 423,
+      "ge_5s": 159
+    }
+  },
+  "metadata_columns_only": [
+    "meeting_id",
+    "audio_id",
+    "begin_time",
+    "end_time",
+    "microphone_id",
+    "speaker_id"
+  ],
+  "text_read": false,
+  "parquet_audio_read": false,
+  "new_candidate_media_downloaded": false,
+  "existing_train_wiring_check": {
+    "audio_status": "PASS_SELECTED_TRAIN_AUDIO_FETCH",
+    "rows": 20,
+    "frozen_clip_ids": 17,
+    "audio_bytes": 3397640,
+    "audio_receipt_sha256": "bdd5de50892445d8e3cfdc4e404a767c47a5e6a47259bee2add027317600e6b4",
+    "av_join_status": "PASS_TRAIN_AUDIO_VIDEO_TIME_JOIN",
+    "joined_intervals": 20,
+    "frames_per_interval": 4,
+    "max_frame_delta_seconds": 0.039999,
+    "sync_receipt_sha256": "73289f21ae79ada796dbd863ddd2388b2710a72c65fe2a903796c8fd33420ab9"
+  },
+  "full_train_footer_index_sha256": "27e04c2e23215eb70ea0c90920f32233ef7dbaf42207e70512b35a72210dc2b6",
+  "selected_metadata_receipt_sha256": "3f7a18daaee4864b71279335b263df02919c5912658da97175b68ecdcb6b38e8",
+  "media_access": "official AMI media host HTTP and HTTPS HEAD checks timed out; no video bytes fetched",
+  "sealed_audit_accessed": false,
+  "model_training_or_evaluation": false,
+  "gpu_used": false,
+  "cloud_cost": 0,
+  "decision": "Do not train until new paired media is acquired, visibility/sync are audited, and grouped independent coverage is adequate."
+}
