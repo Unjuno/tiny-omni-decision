@@ -46,6 +46,17 @@ Keep the readout closed; pursue independent task/data diagnosis before larger
 model work. Full protocol, uncertainty, hashes, and logging caveat in
 [the source screen report](docs/pretrained_reuse/R2_PERCEPTION_TEST_SOURCE_SCREEN_20261021.md).
 
+**2026-10-21 R2 AV label-support audit:** A hash-pinned CPU-only join of saved
+predictions and source annotations found strong event-category/visibility
+associations in the balanced 256-video development cohort. In the full source
+annotation sets, only 240 train and 190 official-validation videos contain both
+visibility states across their annotated sound events, and those are not
+adjudicated counterfactual pairs. This strengthens the warning that the current
+readout cannot establish both-input necessity; no fitting, selection, media
+decode or test access occurred. Keep the task exploratory until a fresh,
+predeclared video-grouped conditional design is available. See the
+[additive label-support report](docs/pretrained_reuse/R2_PERCEPTION_AV_LABEL_STRATA_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
