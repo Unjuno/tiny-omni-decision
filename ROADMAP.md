@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 FLARE joint-AV task/source screen:** FLARE's 53,580
+hard-bimodal retrieval queries are a useful task-design lead: the benchmark
+reports that vision-only and audio-only retrieval fail while joint AV retrieval
+succeeds. It is not admitted for model training or evaluation. The release
+contains media clips derived from Video-MME, whose official terms prohibit
+commercial use and restrict copying/distribution; FLARE's dataset-level CC BY
+declaration does not resolve underlying video rights. The viewer also presents
+only a single `test` split for the inspected subset, without an established
+group-disjoint train/validation/audit protocol. A few public preview caption
+rows appeared during screening but were not retained or used. See the
+[`FLARE source screen`](docs/pretrained_reuse/R2_FLARE_SOURCE_SCREEN_20261022.md).
+
 **2026-10-22 R2 Ego4D Social public license-draft review:** The public draft
 license now clarifies that qualifying derived models may be used commercially
 after the applicable agreement is executed, while the dataset itself remains
