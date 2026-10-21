@@ -30,6 +30,18 @@ from launching a new child while the reservation is held, but does not stop a
 currently running Orbitune child. Continue CPU-only work until the GPU yields;
 any later CUDA job must use the guard and a separate artifact directory.
 
+**2026-10-21 R2 AMI selected-video full-decode follow-up:** On the
+AMI source-screen branch, CPU-decoded all 20 AVI streams from the first five
+selected SA/SB meetings that previously had only sampled-frame checks. File
+size/SHA-256 matched the pinned preflight for all 20; there were no internal
+PTS gaps, and all 70 current candidate windows end before their mapped camera's
+last decoded frame. Three files have 18/49/47 fewer terminal frames than their
+container declarations; these are recorded, not silently normalized. Together
+with the prior 28 streams, this accounts for all 48 selected AVI streams, but
+does not prove AV synchronization or visible-speaker labels. AMI remains
+review-only; no GPU/model/SC access. Report and artifact hashes are in
+[AMI screen commit `bbd1cb9`](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-ami-av-source-screen-20261021/docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
+
 **2026-10-21 R1 PR review follow-up:** The unresolved PR #16 review finding
 on PE-Core T16 release access was corrected in the dedicated PR branch at
 `afea6624dfe247350ecbb704d61099304009f2a0`. The pinned checkpoint and hash
