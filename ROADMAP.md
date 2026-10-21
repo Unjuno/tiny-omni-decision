@@ -1,5 +1,20 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 Perception Test source and matched-input screen:** A fixed
+seed-17, 128/class, video-disjoint cohort of 256 train / 256 validation AV events
+passed acquisition, synchronization, and cross-split media/feature hash gates.
+EfficientAT audio and VideoPrism video frozen features were evaluated with one
+fixed small linear readout each and a joint readout. Balanced validation Accuracy
+was 56.25% audio, 57.81% video, and 64.84% joint; all three fit 100% train
+Accuracy, signaling severe overfit. Joint predictions react to both streams, but
+this single narrow visibility task does not establish general multimodal
+complementarity; NLL/Brier evidence versus audio is uncertain. This candidate
+falls far short of the 95–98% aspiration and is not a product candidate. No
+training of encoders, quantization, test evaluation, or sealed-audit access.
+Keep the readout closed; pursue independent task/data diagnosis before larger
+model work. Full protocol, uncertainty, hashes, and logging caveat in
+[the source screen report](docs/pretrained_reuse/R2_PERCEPTION_TEST_SOURCE_SCREEN_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
