@@ -1,5 +1,20 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 HoloAssist AV/IMU evidence reconciliation:** A separate,
+clean research branch completed the text-free AV readout and a later AVS
+window-exposure audit. On the same previously used development IDs, joint AV
+Accuracy was 74.93% versus 75.09% audio-only and 71.05% video-only; the small
+loss/calibration changes do not establish a meaningful raw-Accuracy gain over
+audio. On full 30-second windows, adding IMU reduced Accuracy by 1.02 points
+and worsened NLL/Brier; apparent tail-window improvements came from only 223
+windows with 31 positives and are confounded by duration/prevalence. These are
+selection-biased development diagnostics, not independent validation or proof
+of sensor complementarity. Do not tune again on these IDs. HoloAssist train
+coverage is exhausted for this task; the remaining path requires a new
+rights-cleared, session-grouped task/split. The readout and exposure reports
+remain on the [HoloAssist research branch](https://github.com/Unjuno/tiny-omni-decision/tree/codex/r2-holoassist-exposure-strata/docs/pretrained_reuse), including the [AV readout](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-holoassist-exposure-strata/docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_READOUT_RESULTS_20261020.md)
+and [AVS exposure analysis](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-holoassist-exposure-strata/docs/pretrained_reuse/R2_HOLOASSIST_WINDOW_EXPOSURE_STRATIFICATION_20261021.md).
+
 **2026-10-21 R2 AV benchmark admission screen:** Screened official AVI-Bench
 and MUSIC-AVQA materials without downloading or opening data. AVI-Bench's
 binding anti-training terms rule out model fitting and batch download; frozen
