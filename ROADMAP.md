@@ -53,6 +53,12 @@ was accessed. Keep REVIEW until access, rights provenance, meeting-level split
 coverage, and both-required semantics are established. See the
 [`AMI-derived AV event screen`](docs/pretrained_reuse/R2_AMI_DERIVED_AV_EVENTS_SOURCE_SCREEN_20261022.md).
 
+**2026-10-22 R2 AMI official-host recheck:** The next six-meeting candidate's
+official media index timed out both through normal HTTPS and a pinned-IPv4
+connection before TLS. No media or labels were acquired and no fitting ran;
+keep the source unadmitted until media, synchronization, and visibility gates
+can be checked. See the [bounded connectivity receipt](docs/pretrained_reuse/R2_AMI_OFFICIAL_CONNECTIVITY_RECHECK_20261022.md).
+
 **2026-10-22 R2 AMI speaker-channel preflight:** The local candidate builder
 uses one mono `Mix-Headset.wav` per meeting; the 24 train-only timing rows share
 one full-file audio hash within each of seven meetings. This is a mixed meeting
