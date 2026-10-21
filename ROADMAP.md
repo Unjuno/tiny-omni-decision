@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 21:18 JST R0 live recheck:** PR #15 is still Draft/Open at
+`e92dbbd` with both CI checks green. Forty worktrees are registered and six
+remain dirty; the primary Teacher worktree was left untouched. Orbitune's
+cooperatively supervised BF16 training process still owns 15,821 MiB of the
+RTX 3080 Laptop's 16,384 MiB, so no Tiny Omni GPU job was started. The current
+source screens still have not admitted a sufficiently grouped, rights-cleared
+task that proves both synchronized inputs are necessary. Continue CPU-only
+work until this data/task gate and GPU availability permit the next preregistered
+fit. [Snapshot](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021_2118JST.md).
+
 **2026-10-21 R2 CaptainCook4D media/group recheck:** The text+video step
 consistency task remains provisional. Five sampled training GoPro links and two
 sampled synchronized HoloLens PV links returned 404. One previously acquired
