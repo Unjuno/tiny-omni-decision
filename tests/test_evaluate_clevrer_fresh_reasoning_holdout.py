@@ -3,6 +3,9 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+pytest.importorskip("torch")
+pytest.importorskip("transformers")
+
 from scripts.evaluate_clevrer_fresh_reasoning_holdout import paired_scene_bootstrap
 
 
