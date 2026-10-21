@@ -231,6 +231,15 @@ R2 M-2 remains open; synchronized media or prediction sensitivity alone is not
 enough to admit a joint-quality run. Continue with rights-cleared, independently
 grouped data and a task-level test that requires multiple inputs.
 
+**2026-10-21 MAVD / Urbansas screen:** MAVD media and Urbansas annotations are
+listed CC BY 4.0, but do not admit this source yet. Official MAVD TRAIN and
+VALIDATION annotations share parent session prefixes; a provisional Urbansas
+site split was invalidated after source-identity overlap was found, and other
+sites are not mapped away from upstream TEST/unpublished records. The possible
+same-class audible-and-visible task is not individual sound-to-track attribution.
+No media or upstream TEST annotations were opened; no sealed split or quality
+result exists. See `docs/pretrained_reuse/R2_MAVD_URBANSAS_SOURCE_SCREEN_20261021.md`.
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target

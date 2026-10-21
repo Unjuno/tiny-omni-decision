@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-21",
+  "status": "NOT_ADMITTED",
+  "candidate": "MAVD-traffic / Urbansas v1.0 MAVD subset",
+  "source_records": [
+    {
+      "id": "zenodo:4741232",
+      "revision": 2,
+      "version": "0.1.1",
+      "record_license": "CC BY 4.0",
+      "scope": "MAVD-traffic audio/video and annotations"
+    },
+    {
+      "id": "zenodo:6658386",
+      "revision": 2,
+      "version": "1.0",
+      "record_license": "CC BY 4.0",
+      "scope": "Urbansas annotations; media license remains subset-specific"
+    }
+  ],
+  "rights": {
+    "MAVD_media": "CC BY 4.0 per official MAVD Zenodo API and Urbansas LICENSES.txt",
+    "Urbansas_annotations": "CC BY 4.0 per LICENSES.txt",
+    "TAU_media": "NONCOMMERCIAL; excluded",
+    "unpublished_or_other_media": "not admitted; provenance to original MAVD train/validation/test split not resolved for all source IDs",
+    "media_downloaded": false,
+    "annotations_downloaded_for_screening": true
+  },
+  "observed_metadata": {
+    "mavd_subset_annotated_clips": 540,
+    "duration_from_540_ten_second_clip_ids_seconds": 5400,
+    "mavd_video_annotation_rows": 15639,
+    "official_mavd_source_files": 47,
+    "official_mavd_duration_minutes": 235,
+    "original_mavd_official_train_annotation_files": 24,
+    "original_mavd_official_validation_annotation_files": 7,
+    "official_train_validation_shared_parent_sessions": [
+      "rivera0923",
+      "rivera1015",
+      "rivera1016"
+    ]
+  },
+  "failed_preflight": {
+    "attempted_group_rule": "MAVD physical site prefix; deterministic hash order from IDs only; provisional train=templete+acevedo, validation=magallanes, audit candidate=rivera",
+    "invalidation": "The rivera holdout is contaminated: underlying rivera0922/0923/1015/1016 labels were separately inspected in official MAVD train/validation annotation archives. Other sites are not proven disjoint from upstream test or unpublished source material. Do not use this split or its provisional label counts for fitting, selection, or audit.",
+    "upstream_split_issue": "Official MAVD TRAIN and VALIDATION source lists share rivera0923, rivera1015, rivera1016 site/date prefixes. The metadata records adjacent five-minute chunks for some prefixes, but exact parent-session identity is not fully established. Treat the released split as unsafe for session-level evaluation until source grouping is resolved.",
+    "task_limit": "Potential label is same vehicle-class event active in audio and visible in a video frame. Labels do not identify which exact visible track emitted the sound; this is class-level temporal co-occurrence only.",
+    "sealed_audit_status": "NONE; the provisional audit assignment is invalid and no sealed metrics were computed."
+  },
+  "external_evidence": {
+    "artifact_directory": "C:/CodexArtifacts/pretrained-reuse-r2/mavd-source-screen-20261021",
+    "zenodo_4741232_api_sha256": "8f37473a50ba2c125e51d1389c48cfa1223f9d7693d240fb573cf3d16794bd2d",
+    "zenodo_6658386_api_sha256": "70813b0a833e317ca21e02030423ea92e629105b3693401d45e29fc37360cd68",
+    "mavd_train_annotations_sha256": "7ec998fb8c579cbf22be51f36e699396eafe1f4671b53b09c6b5ee226463d761",
+    "mavd_validation_annotations_sha256": "89120b4386685995a9295671b86cdb1788b6005bd0b6b3cfb40cf6249adf41c5",
+    "urbansas_licenses_sha256": "0d5827dffe487b28d32534333901d243131d32cf00d582e915754cfe6b408250",
+    "urbansas_readme_sha256": "96ea6cfd18f68e8baaa1532f69e5e00ab5d09e2d14fd9f2bb5743c15234b2eb3",
+    "urbansas_annotations_sha256": "5d1266f040f0ed9379e2396ad185128007b4a178e000d54df1ef8fd427034c50",
+    "provisional_group_preflight_sha256": "c31eead8d5af880a4e1c004d6a8b54136099bc049078b0efde4315a153a3ca45",
+    "provisional_group_preflight_directory": "C:/CodexArtifacts/pretrained-reuse-r2/urbansas-mavd-screen-20261021"
+  },
+  "execution": {
+    "gpu_used": false,
+    "training_run": false,
+    "raw_media_accessed": false,
+    "upstream_test_annotations_opened": false,
+    "sealed_metrics_computed": false
+  },
+  "next_gate": "Do not admit this source. A new candidate needs source-level provenance that excludes upstream test/unpublished records, at least two independent TRAIN session groups and a separate VALIDATION group, and task labels that do not overclaim exact audiovisual source-to-track binding."
+}
