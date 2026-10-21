@@ -1,6 +1,9 @@
 import numpy as np
 import pytest
 
+from scripts.extract_perception_temporal_match_efficientat import (
+    completed_run_metadata as completed_audio_run_metadata,
+)
 from scripts.extract_perception_temporal_match_videoprism import completed_run_metadata
 from tiny_omni_decision.temporal_tokens import (
     pool_spatial_tokens_per_frame,
@@ -79,4 +82,25 @@ def test_completed_run_metadata_closes_running_state_with_result_receipt():
         "examples": 1,
         "elapsed_seconds": 8.5,
         "feature_layout": "per_frame_mean",
+    }
+
+
+def test_completed_audio_run_metadata_records_terminal_result_receipt():
+    initial = {"status": "RUNNING", "manifest_sha256": "manifest"}
+    result = {
+        "status": "PASS_TEMPORAL_MATCH_EFFICIENTAT_FEATURES",
+        "examples": 128,
+        "candidate_audio_windows": 256,
+        "elapsed_seconds": 7.5,
+    }
+
+    completed = completed_audio_run_metadata(initial, result, result_sha256="result-hash")
+
+    assert completed == {
+        "status": "PASS_TEMPORAL_MATCH_EFFICIENTAT_FEATURES",
+        "manifest_sha256": "manifest",
+        "result_sha256": "result-hash",
+        "examples": 128,
+        "candidate_audio_windows": 256,
+        "elapsed_seconds": 7.5,
     }

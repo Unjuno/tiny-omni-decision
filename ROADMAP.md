@@ -14,8 +14,15 @@ The extractor now has opt-in `per_frame_mean` (`[T,768]`) and
 `spatiotemporal_tokens` (`[T,N,768]`) feature layouts; legacy global pooling
 remains the default. A one-row, label-free CPU model smoke generated `[8,768]`
 and validated terminal run metadata. Unit tests cover ordering, shapes, finite
-values, and compatibility with the old pooling path. Bulk feature extraction
-and temporal-head fitting have not started.
+values, and compatibility with the old pooling path. A fresh official-TRAIN
+same-video AV temporal matching holdout was then extracted and fit with matched
+audio-only, pooled-AV, and LSTM sequence heads. All three heads memorized 96
+training groups by step 32; validation NLL worsened and the fixed selector
+retained initialization (step 0). The sequence head did not establish a
+temporal-order or generalization gain over pooling. This small, validation-
+selected development study does not establish a representation ceiling or
+product quality. Preserve its weak/inconclusive result and do not tune on its
+32 validation groups. [Protocol, curves, metrics, controls and hashes](docs/pretrained_reuse/R2_AV_TEMPORAL_MATCH_READOUT_20261021.md).
 
 **2026-10-21 22:26 JST R0 live recheck:** Refreshed origin and checked all
 40 registered worktrees plus open PRs #9–#20 without editing other checkouts.

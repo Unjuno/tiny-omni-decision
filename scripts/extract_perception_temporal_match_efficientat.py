@@ -37,6 +37,20 @@ def atomic_json(path: Path, value: Any) -> None:
     temporary.replace(path)
 
 
+def completed_run_metadata(
+    initial: dict[str, Any], result: dict[str, Any], result_sha256: str
+) -> dict[str, Any]:
+    """Publish terminal status only after the complete feature receipt is durable."""
+    return {
+        **initial,
+        "status": result["status"],
+        "result_sha256": result_sha256,
+        "examples": result["examples"],
+        "candidate_audio_windows": result["candidate_audio_windows"],
+        "elapsed_seconds": result["elapsed_seconds"],
+    }
+
+
 def read_audio_window(path: Path, window: list[float], torchaudio: Any, torch: Any):
     start_s, end_s = map(float, window)
     if end_s <= start_s or abs((end_s - start_s) - 2.0) > 1e-5:
@@ -180,28 +194,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     rows = [row for split in ("train", "validation") for row in manifest[split]]
     candidate_count = sum(len(row["options"]) for row in rows)
     output.mkdir(parents=True)
-    atomic_json(
-        output / "run.json",
-        {
-            "status": "RUNNING",
-            "manifest_sha256": sha256_file(manifest_path),
-            "weights_sha256": WEIGHTS_SHA256,
-            "source_commit": commit,
-            "parameters": parameters,
-            "device": torch.cuda.get_device_name(0),
-            "dtype": str(next(model.parameters()).dtype),
-            "source_rate_hz_after_resample": SAMPLE_RATE,
-            "input_window_seconds": 2.0,
-            "examples": len(rows),
-            "candidate_audio_windows": candidate_count,
-            "gpu_gate": {
-                key: value
-                for key, value in os.environ.items()
-                if key.startswith("TINY_OMNI_GPU_GATE_")
-            },
-            "validation_scope": "development-only",
+    run_metadata = {
+        "status": "RUNNING",
+        "manifest_sha256": sha256_file(manifest_path),
+        "weights_sha256": WEIGHTS_SHA256,
+        "source_commit": commit,
+        "parameters": parameters,
+        "device": torch.cuda.get_device_name(0),
+        "dtype": str(next(model.parameters()).dtype),
+        "source_rate_hz_after_resample": SAMPLE_RATE,
+        "input_window_seconds": 2.0,
+        "examples": len(rows),
+        "candidate_audio_windows": candidate_count,
+        "gpu_gate": {
+            key: value for key, value in os.environ.items() if key.startswith("TINY_OMNI_GPU_GATE_")
         },
-    )
+        "validation_scope": "development-only",
+    }
+    atomic_json(output / "run.json", run_metadata)
     metadata = []
     started = time.perf_counter()
     for row in rows:
@@ -313,7 +323,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "records": metadata,
         "validation_scope": "development-only; not blind evaluation",
     }
-    atomic_json(output / "result.json", result)
+    result_path = output / "result.json"
+    atomic_json(result_path, result)
+    atomic_json(
+        output / "run.json",
+        completed_run_metadata(run_metadata, result, sha256_file(result_path)),
+    )
     return result
 
 
