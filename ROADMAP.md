@@ -6,6 +6,13 @@ was left untouched. Orbitune still owns the RTX 3080 (15,821/16,384 MiB, PID
 CLEVRER AV v2 result is +8.35 pp over audio-only, but its synthetic cue and
 development validation do not close the natural AV gate. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_1503JST.md).
 
+**2026-10-22 R2 synthetic CLEVRER AV v2 prediction replay:** Independently
+recomputed the saved joint/audio-only metrics and 5,000-replicate scene
+bootstrap from the external PR #21 prediction files; results match the run
+record at displayed precision. This is a CPU-only artifact audit, not a new
+model evaluation, and does not remove the synthetic-audio or validation
+exposure limitations. See the [replay record](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_SAVED_PREDICTION_REPLAY_20261022.md).
+
 **2026-10-22 R2 OSSL-v2 soundtrack matching source screen:** The pinned public
 train ID list has 31,011 clips across 1,655 movie groups, suggesting a possible
 video-conditioned soundtrack-choice task. Keep REVIEW: item-level film/music
