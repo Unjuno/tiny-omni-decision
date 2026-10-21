@@ -102,6 +102,23 @@ identity audit, and fresh-valid-media hashes are respectively:
 | `media-identity-audit.json` | `68edf4c9bf26601ee27dc7d67d450f71a5403e42a67c8b1de77458dbdd82ab30` |
 | `fresh-valid-media-report.json` | `0927cb71f1941b30b422b98fba311373793be438d47f32b480e93ace91ae2fb0` |
 
+A read-only post-fit check of the frozen task construction found that the
+positive audio window exactly matches the video interval in all 288 examples;
+the same-video, same-label negative overlaps the video interval in zero
+examples. Mean/median absolute window-center gap is 7.62/6.70 seconds. Target
+position counts are 127/97 (option 0/1) in train and 30/34 in validation. The
+dominant semantic label is similar across splits (139/224 vs 40/64), while
+several minority labels have only one to five groups. Across extracted
+VideoPrism features, mean adjacent-frame cosine is 0.9921 (2,016 adjacent
+pairs), indicating that adjacent per-frame pooled vectors are highly similar
+on this sample. Positive-vs-negative EfficientAT audio vectors have mean
+cosine 0.832 over the 288 matched pairs. These are descriptive signals: they
+suggest the task asks the readout to separate acoustically similar, same-label
+events while the frame vectors change only modestly, but they do not diagnose
+the cause of overfitting by themselves. Full read-only audit:
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-temporal-scale-v2-20261021-01\readouts-scale-v2-20261022-02-checkpoint-audit\task-data-audit.json`,
+SHA-256 `47c3e62b8b06f0d3c1961a8dadea4e453369542b4996ccd105302afad327390b`.
+
 Media acquisition read 4,186,443,932 bytes for train and 1,067,810,737 bytes
 for validation. VideoPrism extracted 288 eight-frame feature sequences on CPU
 in 675.96 seconds. EfficientAT extracted features for 288 examples / 576
@@ -238,10 +255,11 @@ promote any candidate or claim the broader four-modality quality target is
 closer.
 
 Before another fit, inspect the task's negative construction and train/valid
-feature-label dependence, then use a training schedule that avoids 32-step
-memorization or a more structured split/task. Freeze a new protocol and fresh
-video-group validation cohort before model selection. Do not re-tune on these
-64 validation videos. Teacher v1, prior v2 artifacts, external media and all
+feature-label dependence more deeply; the immediate next modeling comparison
+should change task/readout or regularization under a new frozen protocol rather
+than merely extend this already-worsening curve. Use a fresh video-group
+validation cohort before new model selection. Do not re-tune on these 64
+validation videos. Teacher v1, prior v2 artifacts, external media and all
 checkpoints were left unchanged; no main merge or product promotion occurred.
 
 The six best/final checkpoint hashes (best is always step 0) are:
