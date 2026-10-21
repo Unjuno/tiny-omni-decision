@@ -135,6 +135,13 @@ codec support, camera coverage, and synchronization have not yet been verified.
 The network timeout remains the active blocker; storage need not block the small
 RealMedia experiment if those streams are available.
 
+The official web index for validation meeting `ES2008b` is now confirmed to
+list all four `Closeup1.rm`–`Closeup4.rm` streams at 13 MB each (about 52 MB
+total). This is listing metadata accessed through the web reader, not a media
+download; payload hashes, playable durations, and decoder support remain
+unknown. Exact indexes for the other five candidate meetings are still not
+confirmed in this pass.
+
 Before any training:
 
 1. Retry the official per-camera RealMedia streams when the host is reachable;
@@ -164,4 +171,5 @@ modified.
 - [Official AMI data-problems table, including ES2008b video truncation and synchronization notes](https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml)
 - [Official TS3004a per-camera media index showing AVI and low-size RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/TS3004a/video/)
 - [Official IN1009 per-camera media index showing 7.7 MB RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IN1009/video/)
+- [Official ES2008b per-camera media index listing all four 13 MB RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/ES2008b/video/)
 - [Pinned University of Edinburgh AMI dataset revision](https://huggingface.co/datasets/edinburghcstr/ami/tree/46f28f2503e2ec48f8867a84eef356c70476beab)

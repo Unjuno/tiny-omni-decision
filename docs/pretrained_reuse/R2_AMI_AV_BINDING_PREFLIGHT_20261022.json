@@ -107,7 +107,15 @@
     "payload_hashes": "NOT_AVAILABLE",
     "codec_decode_sync": "NOT_TESTED",
     "current_free_disk_bytes": 2238205952,
-    "host_access": "HTTP HTTPS IPv4 TCP and Edge navigation timed out"
+    "host_access": "HTTP HTTPS IPv4 TCP and Edge navigation timed out",
+    "web_index_confirmed_meetings": {
+      "ES2008b": {
+        "streams": ["ES2008b.Closeup1.rm", "ES2008b.Closeup2.rm", "ES2008b.Closeup3.rm", "ES2008b.Closeup4.rm"],
+        "listed_size_mb_each": [13, 13, 13, 13],
+        "payload_downloaded": false,
+        "source": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/ES2008b/video/"
+      }
+    }
   },
   "official_source_quality": {
     "source": "https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml",
