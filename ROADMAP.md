@@ -6,7 +6,10 @@ on the already-inspected 640-example Speech Commands development split, while
 NLL/Brier/ECE moved from 0.3346/0.1170/0.1885 to 0.1435/0.0559/0.0245.
 This is a focused calibration result, not blind evidence or general speech
 understanding. The calibration-trained readout saw 1,016 rather than the prior
-model's 1,280 training examples. See the [protocol and result](docs/pretrained_reuse/R2_TEXT_FREE_AUDIO_TEMPERATURE_20261021.md).
+model's 1,280 training examples. A retrospective 10,000-resample, 206-speaker
+bootstrap on that previously inspected validation set has NLL/Brier/ECE
+improvement intervals excluding zero; Accuracy is unchanged by construction.
+See the [protocol and result](docs/pretrained_reuse/R2_TEXT_FREE_AUDIO_TEMPERATURE_20261021.md).
 
 **2026-10-21 R0 task-battery draft:** Existing text/image/audio/video and
 synchronized AV evidence is mapped to candidate task slices, group rules and
