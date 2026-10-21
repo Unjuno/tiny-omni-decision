@@ -33,6 +33,7 @@ readout:
   weight_decay: 0.0001
   epochs: 8
   batch_questions: 64
+  image_batch_size: 16
   checkpoint_selection: minimum_NLL_on_fixed_512_image_validation
   final_reporting: once_after_selection_freeze_on_disjoint_1595_image_reporting_subset
 resource_policy:

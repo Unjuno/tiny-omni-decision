@@ -16,6 +16,16 @@ prompt search, training, or blind-audit claim was made. GPU remained occupied;
 no GPU work was started. See the [protocol](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_ZERO_SHOT_PROTOCOL_20261021.md)
 and [result](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_ZERO_SHOT_RESULTS_20261021.md).
 
+**2026-10-21 R2 PE-Core frozen readout probe:** A preregistered 131,329-parameter
+shared candidate scorer trained over frozen T16 image/text features reached
+79.95% macro Accuracy on the existing reporting slice, up from 42.81% zero-shot
+but below historical Path A's 88.06%. Color/texture/shape were 98.75/93.10/98.68%;
+count remained 29.28%. Validation NLL improved through all eight epochs. This is
+development-only, not product promotion or blind evaluation. Keep this probe
+separate and do not infer an encoder ceiling from the count failure. See the
+[protocol](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_READOUT_PROTOCOL_20261021.md)
+and [full report](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_READOUT_RESULTS_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
