@@ -1,5 +1,7 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 optional sensor source gate:** UCI PAMAP2 metadata was screened without downloading the archive. UCI states CC BY 4.0, but the dataset has only 9 subjects and the audited MOMENT materials do not provide a complete pretraining item manifest that proves PAMAP2 was excluded. Overlap is UNKNOWN; no MOMENT score on PAMAP2 may select a candidate. Keep sensor work optional and research-only until a sufficiently grouped, provenance-auditable task is found. See the [PAMAP2 admission screen](docs/pretrained_reuse/R2_PAMAP2_SENSOR_ADMISSION_SCREEN_20261021.md).
+
 **2026-10-21 R2 synthetic AV timing pilot reconciled:** A seed-17, four-arm
 frozen-feature run completed 2,048 updates per arm on 1,596 paired train rows
 and 390 development rows grouped by CLEVRER scene. On the generated-tone task,
