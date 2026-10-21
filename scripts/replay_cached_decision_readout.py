@@ -11,10 +11,8 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
 
 from scripts.semantic_state_diagnostic import metrics
-from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 
 EXPECTED_RUN_REPORT_SHA256 = "d9a8aa50d66ff13ea81071416789c9c34b989c78de13c16a30437f0e735642bf"
 EXPECTED_FEATURE_CACHE_SHA256 = "6dbe639194d172d4223abeb768baadb6c1a89e0fa631907afcc49c962692d344"
@@ -42,6 +40,10 @@ def pad_score_rows(rows: list[np.ndarray]) -> np.ndarray:
 def replay(
     feature_path: Path, readout_path: Path, run_report_path: Path
 ) -> dict[str, Any]:
+    import torch
+
+    from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
+
     for path in (feature_path, readout_path, run_report_path):
         path.resolve(strict=True)
     hashes = {
