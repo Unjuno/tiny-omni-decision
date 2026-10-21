@@ -205,6 +205,44 @@ def _inventory_hash(directory: Path) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def balance_candidate_order(
+    rows: list[dict[str, Any]], seed: int = SEED
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, int]]]:
+    """Balance positive-option positions within source labels without duplicating rows."""
+    by_label: dict[str, list[int]] = defaultdict(list)
+    for index, row in enumerate(rows):
+        by_label[str(row["label_name"])].append(index)
+
+    balanced = [dict(row) for row in rows]
+    counts: dict[str, dict[str, int]] = {}
+    for label, indices in sorted(by_label.items()):
+        ordered = sorted(
+            indices,
+            key=lambda index: hashlib.sha256(
+                f"{seed}\0{rows[index]['sample_id']}".encode()
+            ).hexdigest(),
+        )
+        positions: Counter[int] = Counter()
+        for rank, index in enumerate(ordered):
+            row = rows[index]
+            old_target = int(row["target"])
+            new_target = rank % 2
+            candidates = np.asarray(row["audio"])
+            positive = candidates[old_target]
+            negative = candidates[1 - old_target]
+            balanced[index]["audio"] = (
+                np.stack((positive, negative))
+                if new_target == 0
+                else np.stack((negative, positive))
+            )
+            balanced[index]["target"] = new_target
+            positions[new_target] += 1
+        counts[label] = {str(position): positions[position] for position in (0, 1)}
+        if abs(positions[0] - positions[1]) > 1:
+            raise RuntimeError(f"candidate order is not balanced within label: {label}")
+    return balanced, counts
+
+
 def _score(model: torch.nn.Module, arm: str, data) -> np.ndarray:
     video, audio, _ = data
     model.eval()
@@ -216,17 +254,38 @@ def _score(model: torch.nn.Module, arm: str, data) -> np.ndarray:
     return values
 
 
-def run(manifest_path: Path, video_dir: Path, audio_dir: Path, output: Path) -> dict[str, Any]:
+def run(
+    manifest_path: Path,
+    video_dir: Path,
+    audio_dir: Path,
+    output: Path,
+    *,
+    balance_option_order: bool = False,
+) -> dict[str, Any]:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite output: {output}")
     torch.set_num_threads(1)
     rows = load_train_only(manifest_path, video_dir, audio_dir)
     assignment = assign_group_folds(rows)
+    balanced_target_counts = None
+    if balance_option_order:
+        rows, balanced_target_counts = balance_candidate_order(rows)
     labels = np.asarray([row["target"] for row in rows], dtype=np.int64)
     output.mkdir(parents=True)
     metadata = {
         "status": "RUNNING",
         "protocol": "train-only 5-fold video-group OOF; fixed 32 updates; no checkpoint selection",
+        "candidate_order_mode": (
+            "balanced within source label; deterministic seed 17"
+            if balance_option_order
+            else "frozen source manifest order"
+        ),
+        "option_order_sha256": hashlib.sha256(
+            json.dumps(
+                [(row["sample_id"], int(row["target"])) for row in rows],
+                separators=(",", ":"),
+            ).encode()
+        ).hexdigest(),
         "seed": SEED,
         "folds": FOLDS,
         "updates_per_fold_arm": UPDATES,
@@ -256,6 +315,8 @@ def run(manifest_path: Path, video_dir: Path, audio_dir: Path, output: Path) -> 
         "validation_rows_used": False,
         "gpu_used": False,
     }
+    if balanced_target_counts is not None:
+        metadata["balanced_source_label_target_counts"] = balanced_target_counts
     (output / "run.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     arms = ("audio_only", "pooled_av", "sequence_av")
     oof_scores = {arm: np.full((len(rows), 2), np.nan, dtype=np.float64) for arm in arms}
@@ -332,6 +393,8 @@ def run(manifest_path: Path, video_dir: Path, audio_dir: Path, output: Path) -> 
     summary = {
         "status": "PASS_TRAIN_ONLY_GROUPED_OOF",
         "protocol": metadata["protocol"],
+        "candidate_order_mode": metadata["candidate_order_mode"],
+        "option_order_sha256": metadata["option_order_sha256"],
         "manifest_sha256": metadata["manifest_sha256"],
         "train_rows_sha256": metadata["train_rows_sha256"],
         "video_train_inventory_sha256": metadata["video_train_inventory_sha256"],
@@ -339,6 +402,7 @@ def run(manifest_path: Path, video_dir: Path, audio_dir: Path, output: Path) -> 
         "unique_video_groups": len(rows),
         "target_counts": dict(Counter(str(value) for value in labels)),
         "source_label_target_counts": _source_label_target_counts(rows),
+        "balanced_source_label_target_counts": balanced_target_counts,
         "target0_majority_baseline": float(max(Counter(labels).values()) / len(labels)),
         "label_only_oof_baseline": _label_only_baseline(rows, assignment),
         "fold_assignment_sha256": hashlib.sha256(
@@ -360,6 +424,7 @@ def run(manifest_path: Path, video_dir: Path, audio_dir: Path, output: Path) -> 
                 {
                     "sample_id": row["sample_id"],
                     "video_id": row["video_id"],
+                    "fold": assignment[row["video_id"]],
                     "source_label": row["label_name"],
                     "target": int(row["target"]),
                     "prediction": int(scores[i].argmax()),
@@ -451,8 +516,19 @@ def main() -> None:
     parser.add_argument("--video-train-dir", type=Path, required=True)
     parser.add_argument("--audio-train-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--balance-candidate-order",
+        action="store_true",
+        help="Balance positive option position within each source event label.",
+    )
     args = parser.parse_args()
-    run(args.manifest, args.video_train_dir, args.audio_train_dir, args.output)
+    run(
+        args.manifest,
+        args.video_train_dir,
+        args.audio_train_dir,
+        args.output,
+        balance_option_order=args.balance_candidate_order,
+    )
 
 
 if __name__ == "__main__":

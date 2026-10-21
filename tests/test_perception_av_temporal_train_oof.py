@@ -9,6 +9,7 @@ pytest.importorskip("torch")
 from scripts.audit_perception_av_temporal_train_oof import (  # noqa: E402
     _group_bootstrap,
     assign_group_folds,
+    balance_candidate_order,
     load_train_only,
 )
 
@@ -91,3 +92,25 @@ def test_group_bootstrap_is_fixed_seed_and_uses_video_rows():
     assert first == second
     assert first["unit"] == "video group; one row per group"
     assert first["replicates"] == 5000
+
+
+def test_candidate_order_balances_each_label_and_keeps_positive_feature():
+    rows = []
+    for index, old_target in enumerate((1, 1, 0, 0, 0)):
+        audio = np.asarray([[index * 10.0], [index * 10.0 + 1.0]])
+        rows.append(
+            {
+                "sample_id": f"sample-{index}",
+                "video_id": f"video-{index}",
+                "label_name": "shared-label",
+                "target": old_target,
+                "audio": audio,
+            }
+        )
+    balanced, counts = balance_candidate_order(rows)
+    assert counts == {"shared-label": {"0": 3, "1": 2}}
+    assert all(
+        np.array_equal(row["audio"][row["target"]], source["audio"][source["target"]])
+        for row, source in zip(balanced, rows, strict=True)
+    )
+    assert [row["sample_id"] for row in balanced] == [row["sample_id"] for row in rows]

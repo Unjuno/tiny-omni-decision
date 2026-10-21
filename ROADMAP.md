@@ -101,9 +101,13 @@ audio-only / pooled AV / sequence AV reached 45.54% / 47.32% / 47.32% OOF
 Accuracy, below the 56.70% option-position majority and 58.04% fold-local
 source-label baselines; NLL/ECE show overconfidence. This indicates poor
 group-transfer for this task and a mild event-label/option-position association,
-not media leakage or a general AV ceiling. Do not extend this fit or tune the
-exposed validation. A new AV quality attempt needs a distinct task/readout,
-balanced candidate order, and newly frozen group-disjoint validation. See the
+not media leakage or a general AV ceiling. A train-only candidate-order control
+balanced positive position within each label while holding groups/folds fixed;
+semantic probabilities and NLL/Brier stayed within floating-point tolerance,
+with one exact argmax tie accounting for a 0.45-point Accuracy change. Order
+balancing does not repair the weak group transfer. Do not extend this fit or
+tune the exposed validation. A new AV quality attempt needs a distinct
+task/readout and newly frozen group-disjoint validation. See the
 [train-only OOF report](docs/pretrained_reuse/R2_AV_TEMPORAL_TRAIN_OOF_20261022.md).
 
 **2026-10-22 R2 HoloAssist fixed-checkpoint replay:** Replayed the already
