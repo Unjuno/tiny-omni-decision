@@ -1,5 +1,21 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 13:37 JST R0 live-state recheck:** The roadmap/continuation
+worktree is at `dc60ad9` before this audit; PR #15 remains draft/open at
+`71c4db1`. PRs #16–#19 are also open for the PE-Core audit, MAVD source screen,
+CaptainCook4D screen and AMI source screen. Existing Teacher/QAT PRs #9–#14
+remain open and untouched. The separate user checkout is on
+`codex/teacher-quality-clean-dev-v1` with pre-existing modified/untracked files;
+this audit did not edit them. Orbitune's supervisor PIDs 4696/23856 and its
+training PIDs 22580/17812 were live. The RTX 3080 reported 15,821/16,384 MiB
+used, 355 MiB free and 77% utilization; C: had 20.60 GiB free. No process was
+signalled, no GPU experiment was launched, and no live checkpoint was read or
+hashed. R0 still lacks a selected end-user device and frozen release battery;
+R2 M-2 still lacks an admitted both-required task. Continue source/task admission
+and CPU-only validation until those gates and GPU availability permit a
+preregistered run. Full process commands, PR SHAs and snapshot evidence are in
+[`R0_LIVE_AUDIT_20261021_1337JST.md`](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021_1337JST.md).
+
 **2026-10-21 R7 Path A image runtime full-validation parity:** Replayed all
 2,048 saved decisions across the 512-image checkpoint-selection validation
 slice using the manifest-only image runtime bundle on JAX CPU. There were zero
