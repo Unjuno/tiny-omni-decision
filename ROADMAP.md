@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R1/R2 VideoPrism temporal-token runtime probe:** The pinned
+VideoPrism-B CPU forward on one fixed 8-frame development-train clip returned
+finite `[1, 2048, 768]` tokens, i.e. 256 spatial tokens per frame after its
+temporal encoder. The existing AV extractor mean-pools all 2,048 tokens to
+`[768]`, so the earlier small-readout results did not test an explicit
+sequence-preserving readout. This proves the representation can be exposed,
+not that a recurrent/gated head will improve task quality. No predictions,
+metrics, fitting, or validation selection were run. Full audit and retained
+attempts: [VideoPrism temporal-token probe](docs/pretrained_reuse/R1_VIDEOPRISM_TEMPORAL_TOKEN_SHAPE_20261021.md).
+
 **2026-10-21 22:26 JST R0 live recheck:** Refreshed origin and checked all
 40 registered worktrees plus open PRs #9–#20 without editing other checkouts.
 Six worktrees remain dirty, including the user's primary Teacher checkout; all
