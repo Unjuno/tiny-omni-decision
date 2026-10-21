@@ -14,7 +14,7 @@
 
 ## Metadata inspected
 
-Only training and validation split metadata was downloaded and parsed. No media, official test split, or sealed audit was opened. The metadata-only receipt is external to Git:
+Only training and validation split metadata was downloaded and parsed. After that metadata audit, exactly one train pair (`000383`) was downloaded into a separate external attempt directory and fully decoded as an input-path preflight. No validation media, official test split, or sealed audit was opened. The original metadata-only receipt remains external to Git:
 
 `C:\CodexArtifacts\pretrained-reuse-r2\fair-play-split-audit-attempt-01\metadata-only-screen.json`
 
@@ -25,6 +25,14 @@ At the pinned FAIR-Play revision, each of its ten original random partitions lis
 At the pinned PseudoBinaural revision, each of five `new_splits` partitions lists 1,497 train and 187 validation IDs, with zero within-partition ID overlap. These are also re-partitions of the same asset pool (union across folds: 1,866 train IDs and 744 validation IDs). Select one split only; other folds are not independent replications. The authors state the new splits reduce scene overlap, and their paper describes scene-grouped construction. This screen did not independently establish scene grouping from media or source scene IDs.
 
 The receipt contains per-list byte counts, row counts, ordered ID lists, and SHA-256 digests. Split-list validity is not media integrity: file existence, decoded duration, alignment, scene identity, and normalized media hash overlap remain unknown.
+
+### One-pair train media preflight
+
+- Source: `facebookresearch/FAIR-Play@2666d6caf2d126ae43a84841e94e0c9ae24b3e2d`, ID `000383`, included in the inspected PseudoBinaural split1 train list and original FAIR-Play split1 train list.
+- Downloaded only `videos/000383.mp4` (56,478,825 bytes) and `binaural_audios/000383.wav` (1,921,102 bytes). Both SHA-256 values matched their Git LFS object IDs exactly.
+- PyAV 18.1.0 fully decoded all streams: video H.264, 1280×720, 60000/1001 fps, 9.5429 s, 572 frames; embedded AAC stereo 48 kHz, 9.984 s, 468 audio frames; paired WAV PCM s16le stereo 48 kHz, 10.0053 s, 118 audio frames. The paired-audio and embedded-audio duration delta was 21.3 ms for this one clip. This validates access and decode for one train pair, not global synchronization or scene grouping.
+- External output: `C:\CodexArtifacts\pretrained-reuse-r2\fair-play-train-media-preflight-attempt-01\`; machine-readable receipt SHA-256 `4f43989c2f83684f2b37faf7c3f3bc3f44a6d54d90b35719812973236528a82c`.
+- C: free space was 3,579,658,240 bytes before and 3,512,111,104 bytes after. One sampled validation pair's LFS pointers imply about 55.7 MB for its video+paired audio, but its media was not downloaded; this small sample is not a full-split size estimate. No model was loaded and no feature extraction, GPU work, fitting, or quality evaluation was performed.
 
 ## Candidate Decision task (not yet frozen or run)
 
@@ -41,6 +49,6 @@ Required controls before fitting:
 
 ## Practical gate and next action
 
-At the check on 2026-10-22, local C: free space was approximately 3.37 GiB, while the full dataset is described as approximately 100 GB. No media are cached in the receipt, no model features were extracted, and the local RTX 3080 was occupied by another process. Do not launch media acquisition, extraction, or GPU training until the selected subset's actual media sizes and the available encoder path are verified. No existing model, run, checkpoint, or teacher was changed.
+At the check on 2026-10-22, local C: free space was approximately 3.27 GiB after retaining the one-pair train preflight, while the full dataset is described as approximately 100 GB. No model features were extracted, and the local RTX 3080 was occupied by another process. Do not launch bulk media acquisition, extraction, or GPU training until the selected subset's actual media sizes and the available encoder path are verified. No existing model, run, checkpoint, or teacher was changed.
 
 If the metadata-to-media preflight clears these gates, proceed only with a small CPU/metadata dry-run and a new external output directory, then use the cooperative local GPU reservation path for a bounded frozen-feature experiment. Report it strictly as narrow music-performance A/V matching; it cannot satisfy the broad four-modality or 95–98% product target by itself.
