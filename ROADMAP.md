@@ -12,6 +12,12 @@ joint Accuracy (+0.78 points over Video; paired interval -4.30 to +5.86), so
 the M-2 both-required task gate remains open. Full snapshot and exact dirty
 worktree paths: [R0 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021_2226JST.md).
 
+**2026-10-21 R2 typed Decision JSON foundation:** Ported the stable, caller-ID
+based `choice` / `yes_no` / `ordinal_score` serializer and schema note from the
+independent PR #20 into this roadmap branch. The legacy serializer is retained;
+the interface adds no model parameters and does not claim calibration or task
+quality. Targeted tests (17) and Ruff pass. PR #20 remains open and untouched.
+
 **2026-10-21 R2 Perception Test fixed-readout train-transfer diagnostic:** The
 frozen Audio, Video, and Joint readouts were scored once on 256 new,
 video-disjoint official-train groups (128 per visibility label). Accuracy was
