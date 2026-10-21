@@ -1,11 +1,16 @@
-import torch
+import pytest
 
-from scripts.run_conditional_clevrer_av_readout import (
+torch = pytest.importorskip("torch")
+
+from scripts.run_conditional_clevrer_av_readout import (  # noqa: E402
     _baseline_batched,
     _batch_blocks,
     _make_positions,
 )
-from tiny_omni_decision.native_candidate import NativeCandidateReadout, NativeTokenBlock
+from tiny_omni_decision.native_candidate import (  # noqa: E402
+    NativeCandidateReadout,
+    NativeTokenBlock,
+)
 
 
 def test_synthetic_event_audio_adapter_preserves_scalar_and_temporal_alignment():

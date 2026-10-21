@@ -1,7 +1,9 @@
-import torch
+import pytest
 
-from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
-from tiny_omni_decision.native_candidate import NativeTokenBlock
+torch = pytest.importorskip("torch")
+
+from tiny_omni_decision.native_av_interaction import ConditionalAVReadout  # noqa: E402
+from tiny_omni_decision.native_candidate import NativeTokenBlock  # noqa: E402
 
 
 def _inputs(batch=2):
