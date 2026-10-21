@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 CaptainCook4D media/group recheck:** The text+video step
+consistency task remains provisional. Five sampled training GoPro links and two
+sampled synchronized HoloLens PV links returned 404. One previously acquired
+training video still passes a hash-checked CPU frame-decoding smoke, but official
+training has only six participant groups (203 recordings after removing the
+known train/validation identity overlap), and validation has two participants.
+No quality fit or test evaluation is justified from the current accessible data.
+Do not use test records to fill the group gap; seek a working official media
+source and a new participant-held-out development design, otherwise continue
+the R2 source search. [Recheck](docs/pretrained_reuse/R2_CAPTAINCOOK4D_MEDIA_GROUP_RECHECK_20261021.md).
+
 **2026-10-21 R2 Perception Test temporal-match experiment:** Built a
 video-grouped, development-only two-choice task from the pinned Perception Test
 train/validation annotations: choose the same-video/same-label audio window that
