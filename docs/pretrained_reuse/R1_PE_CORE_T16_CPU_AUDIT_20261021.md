@@ -38,6 +38,22 @@ External audit artifacts (not committed):
 
 No forward pass was attempted. `timm` and `open_clip` are absent in the active Python environment, while importing the official implementation would cross its separately stated noncommercial terms. Transformers is installed, but compatibility with this checkpoint has not been established. Therefore `runtime_supported=false`; image/video/text task quality is unmeasured. PE Core remains an interesting small image/video feature candidate, but it is not yet a product-cleared candidate and it does not provide audio.
 
+### Follow-up: independent Transformers compatibility screen
+
+A read-only CPU inspection was performed after this report was drafted. It confirms that the checkpoint has an OpenCLIP-like ViT/text-transformer layout, but **does not directly fit stock `transformers.CLIPModel`**:
+
+- Text tower dimensions are 12 layers, width 512, 8 heads, context length 32, with a 49,408-token embedding table.
+- Vision tower dimensions are 12 layers, width 192, 3 heads, 384 px input and 16 px patches. The state dict has a learned class embedding and a 577-entry position table (one class token plus a 24×24 patch grid). The pinned config sets `use_cls_token=True`, while the pinned README says only the L and B models additionally have a class token; this T16 documentation discrepancy must be resolved against a permitted reference before claiming parity.
+- The checkpoint also includes `visual.attn_pool.*`: an 8-head learned pooling block with a learned probe, attention projections, layer norm, MLP and output projection. The stock Transformers CLIP vision model inspected here exposes the standard class-token pooler, not this PE pooling block.
+- `visual.ln_post.*` and `visual.attn_pool.layernorm.*` are distinct learned norms. A faithful independent adapter must establish and reproduce their ordering, and implement PE attention pooling; substituting the stock CLIP pooled output would not be an exact checkpoint runtime.
+- The text and vision transformer block tensors use fused QKV weights (`attn.in_proj_*`), while Transformers stores separate Q/K/V projections. This can be split deterministically, but the forward parity still needs verification. The pinned model repository has no usable model config to settle activation and preprocessing details by itself.
+
+The official PE configuration documents the T16 dimensions and the 8-head attention pooler, but the pinned config and README differ on the class-token setting. This makes an independently implemented adapter technically plausible, but this screen did **not** implement it or validate numerical parity. `runtime_supported` remains `false`; no task-quality claims follow from shape compatibility. Before relying on the checkpoint, next work would need an independent adapter, tokenizer/preprocessing pins, tensor-complete strict mapping, finite CPU forward checks and parity against a reference whose usage terms are cleared. If a suitable reference cannot be used, output parity remains unverified and must be reported as such.
+
+Pinned architecture references: [official PE T16 config](https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/core/vision_encoder/config.py) and [official PE Core model description](https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md). These references are documentation only; their availability does not change the separate implementation-license review above.
+
+This follow-up used only CPU deserialization and shape/key inspection. It did not import or execute `perception_models`, access task datasets, run inference, train, use the GPU, or change the checkpoint. The project environment was not modified.
+
 ## Safety and scope
 
 No GPU was initialized or used; no training, dataset access, checkpoint mutation, or sealed-audit access occurred. The active unrelated GPU job remained untouched. The existing PE checkpoint and official implementation checkout were read-only; only this branch's inventory/report files were changed.
