@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-21T09:34:03Z",
+  "local_timezone": "Asia/Tokyo",
+  "sources": [
+    "git ls-remote and git worktree status",
+    "GitHub REST API open pull requests and workflow runs",
+    "nvidia-smi and read-only Windows process metadata",
+    "existing R0/R1/R2 source and result records"
+  ],
+  "repository": "Unjuno/tiny-omni-decision",
+  "main_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+  "roadmap_pr": {
+    "number": 15,
+    "state": "open",
+    "draft": true,
+    "head_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+    "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+  },
+  "current_branch": {
+    "name": "codex/r2-clevrer-fresh-reasoning-20261021",
+    "sha": "154cedec547772d940d73afa7816efee307f221a",
+    "pull_request": null,
+    "ci_run_id": 39576963637,
+    "ci_conclusion": "success"
+  },
+  "open_pull_requests": [
+    {"number": 9, "state": "open", "draft": true, "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134", "base_ref": "main", "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c"},
+    {"number": 10, "state": "open", "draft": true, "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932", "base_ref": "codex/roadmap-compression-video-specialization", "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"},
+    {"number": 11, "state": "open", "draft": true, "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5", "base_ref": "codex/postquant-worker-entrypoints", "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"},
+    {"number": 12, "state": "open", "draft": true, "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61", "base_ref": "codex/postquant-numerical-core", "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"},
+    {"number": 13, "state": "open", "draft": false, "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd", "base_ref": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+    {"number": 14, "state": "open", "draft": true, "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8", "base_ref": "codex/ternary-student-recovery", "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c"},
+    {"number": 15, "state": "open", "draft": true, "head_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c", "base_ref": "main", "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"},
+    {"number": 16, "state": "open", "draft": false, "head_sha": "afea6624dfe247350ecbb704d61099304009f2a0", "base_ref": "docs/pretrained-reuse-roadmap-20261010", "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"},
+    {"number": 17, "state": "open", "draft": false, "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5", "base_ref": "docs/pretrained-reuse-roadmap-20261010", "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"},
+    {"number": 18, "state": "open", "draft": true, "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a", "base_ref": "docs/pretrained-reuse-roadmap-20261010", "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"},
+    {"number": 19, "state": "open", "draft": true, "head_sha": "406f003a128a7991ec39dcb15608b381f003add4", "base_ref": "docs/pretrained-reuse-roadmap-20261010", "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"},
+    {"number": 20, "state": "open", "draft": true, "head_sha": "7c4ac37fbeb8b18445e05882baa4282d65901189", "base_ref": "codex/r0-r2-continuation-20261021", "api_base_sha": "9037a5b425adda83ddd09b2312532a470cc78701", "current_base_sha": "801c6dc70ea42ac425c4fa7c22c5f33c107aa51a", "current_base_ahead_by": 10, "mergeable_at_snapshot": true, "mergeable_state_at_snapshot": "clean", "ci_conclusions": ["success", "success"], "review_submissions": 0, "issue_comments": 0}
+  ],
+  "worktrees": {
+    "registered_count": 39,
+    "dirty_count": 7,
+    "dirty": [
+      {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision", "branch": "codex/teacher-quality-clean-dev-v1"},
+      {"path": "C:/CodexWorktrees/pr14-review-qat-latest", "branch": "fix/student-qat-training-handoff"},
+      {"path": "C:/CodexWorktrees/pretrained-reuse-omni", "branch": "codex/textfree-video-program-order"},
+      {"path": "C:/CodexWorktrees/r2-clevrer-fresh-reasoning-20261021", "branch": "codex/r2-clevrer-fresh-reasoning-20261021", "changes": "intended additive R0 documentation edits"},
+      {"path": "C:/CodexWorktrees/textfree-video-coverage-v2", "branch": "codex/textfree-video-coverage-v2"},
+      {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp", "branch": "codex/teacher-quality-physionpp"},
+      {"path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery", "branch": "codex/ternary-student-recovery-updated"}
+    ],
+    "preserved": true
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "total_mib": 16384,
+    "used_mib": 15821,
+    "free_mib": 355,
+    "utilization_percent": 48,
+    "active_process_pid": 21224,
+    "parent_pid": 30708,
+    "owner": "Orbitune",
+    "command": "compound_cfe_train.py train",
+    "live_process_interrupted": false
+  },
+  "resources": {
+    "c_drive_free_gib": 17.87,
+    "system_ram_free_gib": 11.26,
+    "cloud_cost_usd": 0
+  },
+  "quality_gates": {
+    "sealed_audit_opened": false,
+    "r0_complete": false,
+    "r1_complete": false,
+    "r2_complete": false,
+    "task_battery_locked": false,
+    "deployment_device_selected": false
+  }
+}

@@ -11,6 +11,14 @@ gate retained all same-label rows and reported 121 duplicate-content rows.
 Details and hashes are in the
 [protocol/results](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_OFFICIAL_TEST_PROTOCOL_20261021.md).
 
+**2026-10-21 R0 evening live audit:** `main` remains `09246d7`; PR #15 is still
+Draft/Open at `71c4db1`. Read-only reconciliation found 39 worktrees, six with
+dirty user/experiment state, all preserved. RTX 3080 PID 21224 is the live
+Orbitune trainer and remains untouched. PR #20 is Draft with passing CI but
+references a base SHA ten commits behind its current continuation branch; its
+diff needs reconciliation before merge. R0 task/device thresholds remain open.
+See [evening audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021_EVENING.md).
+
 **2026-10-21 R2 fresh CLEVRER reasoning execution:** The pinned VideoPrism
 extractor ran CPU-only over 400 train/development videos; the 200-scene train
 and 200-scene development split passed scene/media/content gates. A seed-17
