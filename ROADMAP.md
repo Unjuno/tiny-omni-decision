@@ -1,4 +1,10 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-10-21 R2 CaptainCook4D source screen:** official labels support a
+provisional step-text + video conformance task but do not establish that audio
+is required. The supplied train/validation split has a shared participant and
+only two validation participants; two sampled GoPro links returned HTTP 404.
+No media or model was used. This does not admit an audiovisual joint task. See
+[the source screen](docs/pretrained_reuse/R2_CAPTAINCOOK4D_TASK_SCREEN_20261021.md).
 
 **2026-10-21 R0 task-battery evidence reconciliation:** The task-battery
 proposal now records the one-time Speech Commands official-test comparison
