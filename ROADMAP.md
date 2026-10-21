@@ -54,6 +54,19 @@ CPU manifest builder and tests are in commit `406f003` on the AMI source-screen
 branch; the [detailed screen report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-ami-av-source-screen-20261021/docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md)
 contains hashes and limits.
 
+**2026-10-21 R2 native sensor results reconciliation:** The existing seed-17
+HARTH subject-disjoint sensor-only fits were located and their selected saved
+predictions independently recomputed; no duplicate run was started. Mean-pooled
+temporal Conv1d achieved 91.47% Accuracy / 73.26% balanced Accuracy, while a
+smaller static-statistics control achieved 93.87% / 69.80% on the same 12,763
+windows from only three validation subjects. The temporal model dropped to
+84.64% Accuracy after within-window time shuffle; the static control was
+unchanged. Class-2 recall and mixed-transition performance remain poor, and
+validation selected the checkpoints. This is a narrow engineering result, not
+independent sensor quality; no calibration/sealed cohort was accessed. Full
+metrics, learning curves, hashes and limitations are in
+[`R2_NATIVE_SENSOR_SUBJECT_RESULTS_20261012.md`](docs/pretrained_reuse/R2_NATIVE_SENSOR_SUBJECT_RESULTS_20261012.md).
+
 **2026-10-21 R1 PR review follow-up:** The unresolved PR #16 review finding
 on PE-Core T16 release access was corrected in the dedicated PR branch at
 `afea6624dfe247350ecbb704d61099304009f2a0`. The pinned checkpoint and hash
@@ -1255,8 +1268,8 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 **Mandatory design correction — R2-M modality-native and sensor-inclusive fusion experiments (2026-10-12).** This is the next architecture/evaluation workstream, superseding the earlier text-question-first assumption. See [R2-M experiment protocol](docs/pretrained_reuse/R2_MODALITY_NATIVE_FUSION_PROTOCOL_20261012.md). The independently scoped <=10M audio-only experiment was **withdrawn by the user on 2026-10-12**, not put on hold. The archived research proposal is retained solely for provenance, and its training, deployment and integration work are no longer active. The main <=200M Omni model still includes native audio as a required modality. All preserved legacy experiments remain valid in their original scope.
 
-- [ ] **M-0/M-1:** Build direct text-free audio-only, video-only, image-only, screen-only and sensor-only decision probes (plus text-only control) with typed action/option IDs, time/unit/missingness metadata, and no hidden text question or mandatory text encoder. Treat existing Audio+Text, Video+Text and sensor-embedding-only results as *non-equivalent* controls.
-  Direct text-free CLEVR-4 image taxonomy readout is now implemented: a fresh seed-17 512-epoch run selected at epoch 502 reached 88.30% macro Accuracy on an internal split of official training images; count was 58.19%. The 128→502 comparison has identical first-128 curves and supports a modest training-budget effect, while count remains weak and this is neither blind evidence nor a product result. Other direct M-0/M-1 probes remain open. See [R2 text-free image Decision probe](docs/pretrained_reuse/R2_TEXTFREE_IMAGE_DECISION_20261017.md).
+- [ ] **M-0/M-1:** Build direct text-free audio-only, video-only, image-only, screen-only and sensor-only decision probes (plus text-only control) with typed action/option IDs, time/unit/missingness metadata, and no hidden text question or mandatory text encoder. Audio, video, image and sensor each have a narrow direct probe; screen-only and a balanced source-only text control remain open. Treat Audio+Text, Video+Text and sensor-embedding-only results as *non-equivalent* controls.
+  Direct text-free CLEVR-4 image taxonomy readout reached 88.30% macro Accuracy on an internal split; count was 58.19%. A separate CLEVRER video-only temporal probe and HARTH sensor comparison are also recorded. These are synthetic/narrow development tasks, not blind product results. The sensor result is especially imbalanced and class-2 recall is weak. See [image](docs/pretrained_reuse/R2_TEXTFREE_IMAGE_DECISION_20261017.md), [video](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_TEMPORAL_RESULTS_20261018.md), [audio](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_DECISION_20261017.md), and [sensor](docs/pretrained_reuse/R2_NATIVE_SENSOR_SUBJECT_RESULTS_20261012.md) reports.
 - [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Include matched best-unimodal baselines, all missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
 - [ ] **M-3–M-6:** Add optional text/spoken conditions without making them compulsory, then evaluate individual and combined task quality, <=200M loaded parameters **including the sensor path**, and actual post-quantization >=95% recovery on the same locked task battery. Do not claim general 95–98% world understanding from unrelated narrow benchmarks; lock evaluation before training/selection.
 
