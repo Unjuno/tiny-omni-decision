@@ -22,7 +22,6 @@ import numpy as np
 from tiny_omni_decision.dataset import SPEECH_COMMAND_LABELS, sha256_file
 from tiny_omni_decision.io import load_structured_file
 from tiny_omni_decision.schema import DatasetManifest
-from tiny_omni_decision.textfree_audio import TextFreeAudioReadout, speaker_group_split
 
 REVISION = "a751309c0fd613e8a5d30d77900f30e8b42bc2da"
 ENCODER_REVISION = "169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
@@ -158,6 +157,33 @@ def _metrics(logits, targets) -> dict[str, float | int]:
         "ece_15_bins": ece,
         "mean_confidence": confidence.mean().item(),
     }
+
+
+def _speaker_group_split(
+    speaker_group_ids: list[str], *, seed: int = 17, calibration_fraction: float = 0.2
+) -> tuple[list[int], list[int]]:
+    if (
+        not speaker_group_ids
+        or any(not isinstance(value, str) or not value for value in speaker_group_ids)
+        or not math.isfinite(calibration_fraction)
+        or not 0 < calibration_fraction < 1
+    ):
+        raise ValueError("invalid speaker groups or calibration fraction")
+    groups = sorted(set(speaker_group_ids))
+    if len(groups) < 2:
+        raise ValueError("at least two speaker groups are required")
+    ranked = sorted(
+        groups,
+        key=lambda group: hashlib.sha256(f"{seed}:calibration:{group}".encode()).hexdigest(),
+    )
+    calibration_groups = set(ranked[: math.ceil(len(ranked) * calibration_fraction)])
+    calibration = [
+        index for index, group in enumerate(speaker_group_ids) if group in calibration_groups
+    ]
+    fit = [
+        index for index, group in enumerate(speaker_group_ids) if group not in calibration_groups
+    ]
+    return fit, calibration
 
 
 def _decode_pcm(payload: bytes) -> np.ndarray:
@@ -320,6 +346,8 @@ def run(
     import torch
     from transformers import WhisperFeatureExtractor, WhisperModel
 
+    from tiny_omni_decision.textfree_audio import TextFreeAudioReadout
+
     paths = [
         p.resolve()
         for p in (
@@ -417,7 +445,7 @@ def run(
     train_rows = _load_rows(sample_dir / "train.jsonl", "train", sample_dir)
     validation_rows = _load_rows(sample_dir / "validation.jsonl", "validation", sample_dir)
     all_train_groups = sorted({row["speaker_group_sha256"] for row in train_rows})
-    fit_indices, calibration_indices = speaker_group_split(
+    fit_indices, calibration_indices = _speaker_group_split(
         [row["speaker_group_sha256"] for row in train_rows], seed=17, calibration_fraction=0.2
     )
     fit_groups = {train_rows[i]["speaker_group_sha256"] for i in fit_indices}

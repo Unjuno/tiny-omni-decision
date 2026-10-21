@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from scripts.evaluate_textfree_audio_official_test import (
+    _speaker_group_split,
     build_test_records,
     grouped_bootstrap,
     verify_disjoint,
@@ -89,8 +90,19 @@ def test_official_test_requires_zero_asset_and_speaker_overlap():
         verify_disjoint(records, train, validation, {records[0]["speaker_group_sha256"]})
 
 
+def test_frozen_calibration_split_is_deterministic_and_speaker_grouped():
+    speaker_groups = ["speaker-a", "speaker-b", "speaker-a", "speaker-c", "speaker-d"]
+    first = _speaker_group_split(speaker_groups)
+    second = _speaker_group_split(speaker_groups)
+    assert first == second
+    fit, calibration = first
+    assert {speaker_groups[index] for index in fit}.isdisjoint(
+        {speaker_groups[index] for index in calibration}
+    )
+
+
 def test_speaker_group_bootstrap_is_deterministic_and_paired():
-    import torch
+    torch = pytest.importorskip("torch")
 
     records = [{"speaker_group_sha256": f"speaker-{index}"} for index in range(len(CLASSES))]
     targets = torch.arange(len(CLASSES))
