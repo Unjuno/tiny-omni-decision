@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R0 live-state refresh:** Current `main` remains `09246d7`; PR #15
+remains Draft/Open and the research branch is separate. Thirty-four worktrees
+were inventoried; six are dirty, including the user's primary Teacher worktree,
+which was left untouched. RTX 3080 Laptop is currently occupied by Orbitune
+(15,373/16,384 MiB); no Tiny Omni GPU work was started. The current audit also
+reconciles the existing 388-video Perception source-correspondence results and
+PCH recording-LSTM result; do not duplicate them. Path A v4 remains 170.50M
+parameters / 687.25MB, so the provisional 200MB package target is unverified.
+Task battery, per-task quality/calibration gates, deployment device and local
+runtime limits remain open. See [the additive R0 snapshot](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021.md)
+and [machine-readable inventory](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021.json).
+
+
 **2026-10-21 R2 Perception Test source and matched-input screen:** A fixed
 seed-17, 128/class, video-disjoint cohort of 256 train / 256 validation AV events
 passed acquisition, synchronization, and cross-split media/feature hash gates.
