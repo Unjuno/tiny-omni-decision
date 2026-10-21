@@ -28,7 +28,14 @@ from scripts.native_fit import (
     summarize,
 )
 from scripts.native_fit_runtime import FeatureStore
-from scripts.native_long_budget import EVALUATION_STEPS, MAX_STEPS, extend_plan, learning_rate
+from scripts.native_long_budget import (
+    EVALUATION_STEPS,
+    MAX_STEPS,
+    extend_plan,
+    fixed_parent_probe_indices,
+    learning_rate,
+    verify_pins,
+)
 from scripts.native_matched_batches import build_plan
 from scripts.native_state_dependence import summarize as summarize_pairs
 from scripts.native_video_cache import sha
@@ -47,19 +54,19 @@ def write(path, value):
 
 
 def verify(pins):
-    for path, digest in pins.items():
-        if sha(Path(path)) != digest:
-            raise ValueError("changed input/source: " + path)
+    verify_pins(pins, repo_root=REPO)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=["smoke", "train", "replay"], required=True)
-    parser.add_argument("--policy", choices=["repeat"], required=True)
+    parser.add_argument("--policy", choices=["repeat", "fresh"], required=True)
+    parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference", type=Path)
     parser.add_argument("--reference-sha256")
     args = parser.parse_args()
+    config_path = args.config.resolve(strict=True)
     if (args.phase != "smoke") != bool(args.reference) or bool(args.reference) != bool(
         args.reference_sha256
     ):
@@ -84,7 +91,8 @@ def main():
         source_commit=subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=REPO, text=True
         ).strip(),
-        config_sha256=sha(CONFIG),
+        config_sha256=sha(config_path),
+        config_path=str(config_path),
         started_utc=datetime.now(UTC).isoformat(),
         step=0,
         best_step=None,
@@ -97,8 +105,8 @@ def main():
     )
     write(args.output / "result.json", result)
     try:
-        config = json.loads(CONFIG.read_text())
-        shutil.copyfile(CONFIG, args.output / "effective-config.json")
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+        shutil.copyfile(config_path, args.output / "effective-config.json")
         if config["training"] != {
             "seed": 17,
             "max_steps": MAX_STEPS,
@@ -114,7 +122,9 @@ def main():
         }:
             raise ValueError("configuration differs from the implemented fixed schedule")
         pins = dict(config["input_pins"])
-        pins[str(CONFIG)] = sha(CONFIG)
+        if args.policy not in config["pools"] or args.policy not in config["plans"]:
+            raise ValueError("selected coverage policy must have pinned pool and plan files")
+        pins[str(config_path)] = sha(config_path)
         source_names = subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0")
@@ -134,7 +144,8 @@ def main():
         pins.update(
             {str(queries / name): digest for name, digest in query_receipt["artifacts"].items()}
         )
-        verify(pins)
+        source_commits = [receipt["source_commit"], query_receipt["source_commit"]]
+        verify_pins(pins, source_commits=source_commits, repo_root=REPO)
         reference = None
         if args.reference:
             if sha(args.reference / "result.json") != args.reference_sha256:
@@ -144,7 +155,7 @@ def main():
             if (
                 reference["status"] != expected
                 or reference["validated_hashes"] != pins
-                or reference["config_sha256"] != sha(CONFIG)
+                or reference["config_sha256"] != sha(config_path)
                 or reference["policy"] != args.policy
             ):
                 raise ValueError("matching completed reference required")
@@ -215,9 +226,12 @@ def main():
             and sha(args.output / "sampling.json") != reference["artifacts"]["sampling.json"]
         ):
             raise ValueError("reference sampler order/accounting differs")
-        probe = [train[i] for i in long_plan["unique_row_indices"]]
-        if len(probe) != 6656:
-            raise ValueError("all and only 6656 fixed consumed TRAIN questions required")
+        probe_indices = fixed_parent_probe_indices(long_plan, original_pool)
+        probe = [train[i] for i in probe_indices]
+        if len(probe) != len(set(original_pool)):
+            raise ValueError(
+                "all and only original-pool questions must form the shared TRAIN probe"
+            )
         write(args.output / "train-probe-ids.json", [r["id"] for r in probe])
         write(args.output / "lr-plan.json", [learning_rate(s) for s in range(1, MAX_STEPS + 1)])
         if validation:
@@ -299,7 +313,7 @@ def main():
                 python_rng=random.getstate(),
                 numpy_rng=(rng[0], rng[1].tolist(), *rng[2:]),
                 sampler_file_sha256=sha(args.output / "sampling.json"),
-                config_sha256=sha(CONFIG),
+                config_sha256=sha(config_path),
             )
             path = args.output / f"checkpoint-{step:04}.pt"
             torch.save(value, path)
@@ -350,7 +364,9 @@ def main():
             item = dict(
                 step=step,
                 train_probe=train_metrics,
-                train_probe_scope="all 6656 unique questions in the fixed training pool",
+                train_probe_scope=(
+                    "fixed original-pool questions shared by repeat and fresh conditions"
+                ),
                 common_task_gap=common_task_gap(probe, probe_scores, validation, scores),
                 parameter_l2_norms={
                     name: float(p.detach().norm()) for name, p in model.named_parameters()
@@ -566,7 +582,7 @@ def main():
                 actual_accounting=accounting([train[i] for b in order[:limit] for i in b]),
             )
         guard()
-        verify(pins)
+        verify_pins(pins, source_commits=source_commits, repo_root=REPO)
         result.update(
             status="PASS_NATIVE_LONG_BUDGET_" + args.phase.upper(),
             training_seconds=training_seconds,

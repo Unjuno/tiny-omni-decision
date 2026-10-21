@@ -1,3 +1,4 @@
+import subprocess
 from collections import Counter
 
 import pytest
@@ -37,6 +38,108 @@ def test_repeated_plan_preserves_prefix_counts_and_global_occurrences():
     assert Counter(i for b in plan["order"] for i in b) == Counter(pool * 3)
     assert plan["unique_row_indices"] == sorted(set(pool))
     assert plan["cycles"] == 3
+
+
+def test_fixed_parent_probe_is_identical_for_repeated_and_fresh_long_pools():
+    from scripts.native_coverage import make_pool
+    from scripts.native_long_budget import extend_plan, fixed_parent_probe_indices
+    from scripts.native_matched_batches import build_plan
+
+    rows, parent_pool = [], []
+    for modality in ("text", "image", "audio", "video"):
+        count = 2 if modality == "video" else 4
+        for index in range(count):
+            row_index = len(rows)
+            rows.append(
+                dict(
+                    id=f"{modality}:{index}",
+                    split="train",
+                    modality=modality,
+                    source=modality,
+                    task="choose",
+                    question=f"question {modality} {index}",
+                    observation=f"{modality}:{index}",
+                    group=f"{modality}:{index}",
+                    options=["a", "b"],
+                    queries=["query a", "query b"],
+                    target_index=index % 2,
+                )
+            )
+            if index < 2:
+                parent_pool.append(row_index)
+
+    probes = []
+    for policy in ("repeat", "fresh"):
+        coverage = make_pool(rows, parent_pool, policy)
+        plan = build_plan(rows, coverage["pool"], "independent")
+        long_plan = extend_plan(coverage["pool"], plan["occurrences"], max_steps=4)
+        probes.append(fixed_parent_probe_indices(long_plan, parent_pool))
+
+    assert probes[0] == probes[1] == sorted(set(parent_pool))
+
+
+def test_fixed_parent_probe_rejects_missing_or_duplicate_parent_rows():
+    from scripts.native_long_budget import fixed_parent_probe_indices
+
+    with pytest.raises(ValueError, match="retain every original-pool"):
+        fixed_parent_probe_indices({"unique_row_indices": [1]}, [1, 2])
+    with pytest.raises(ValueError, match="complete unique"):
+        fixed_parent_probe_indices({"unique_row_indices": [1, 1]}, [1])
+
+
+def test_historical_source_pin_can_be_verified_against_its_recorded_git_blob(tmp_path):
+    import hashlib
+
+    from scripts.native_long_budget import verify_pins
+
+    repo = tmp_path / "source-repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.com",
+            "commit",
+            "--allow-empty",
+            "-qm",
+            "seed",
+        ],
+        cwd=repo,
+        check=True,
+    )
+    source = repo / "scripts" / "extractor.py"
+    source.parent.mkdir()
+    source.write_bytes(b"pinned extractor source\n")
+    subprocess.run(["git", "add", "scripts/extractor.py"], cwd=repo, check=True)
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.com",
+            "commit",
+            "-qm",
+            "source",
+        ],
+        cwd=repo,
+        check=True,
+    )
+    commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
+    path = r"C:\CodexWorktrees\pretrained-reuse-omni\scripts\extractor.py"
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+
+    evidence = verify_pins({path: digest}, source_commits=[commit], repo_root=repo)
+
+    assert evidence[path] == {
+        "method": "pinned_git_blob_sha256",
+        "commit": commit,
+        "path": "scripts/extractor.py",
+        "sha256": digest,
+    }
 
 
 @pytest.mark.parametrize("case", ["partial", "duplicate", "missing", "width", "negative", "empty"])
