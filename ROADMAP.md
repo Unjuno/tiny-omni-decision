@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 Perception Test fixed-readout train-transfer diagnostic:** The
+frozen Audio, Video, and Joint readouts were scored once on 256 new,
+video-disjoint official-train groups (128 per visibility label). Accuracy was
+53.52% Audio, 65.23% Video, and 66.02% Joint. Joint minus Video was +0.78
+points (paired 95% bootstrap interval -4.30 to +5.86); this does not establish
+an Accuracy gain over Video alone. Joint NLL/Brier/ECE were better on this
+selected cohort, but calibration remained poor. This is nonblind, same-source
+train transfer, not independent validation or product evidence. Attempt 01's
+250ms margin failed to guarantee the fixed 2s window; the corrected attempt 02
+requires 1s context and retains the first attempt. Full protocol, metrics, and
+hashes: [transfer report](docs/pretrained_reuse/R2_PERCEPTION_VISIBILITY_TRAIN_TRANSFER_20261021.md).
+
 **2026-10-21 R2 AVQA rights recheck:** Tsinghua's official AVQA page describes
 four-choice `View`/`Sound`/`Both` questions across 57,335 manually annotated
 items, making it a strong task-design lead. At pinned official repository
