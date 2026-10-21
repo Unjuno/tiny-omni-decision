@@ -49,6 +49,21 @@ crops, visible speaking status, or model performance. The mix-based alternative
 remains unverified. The previous network block is therefore cleared for this
 single-row smoke only, not for a model comparison.
 
+A subsequent read-only `/rows` metadata lookup at the same pinned revision
+matched individual headset rows to **17 of the 24 frozen train clip intervals**
+across the selected seven meetings. Meeting-level counts were ES2002a 4/4,
+ES2005a 0/1, ES2006a 2/3, IS1000a 1/4, IS1000b 4/4, IS1000c 2/4, and IS1000d
+4/4. The matches include adjacent rows where the target interval spans a row
+boundary. This improves evidence that the source can supply participant-channel
+inputs, but does not establish that the corresponding audio bytes were
+retrieved, decoded, or synchronized to video for those 17 crops. Seven
+nonmatches are only “not found in the bounded rows inspected”; they are not
+claims that the source lacks those utterances. The exact metadata-only receipt,
+including row IDs and its scope limitations, is stored outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\ami-hf-channel-cohort-scan-20261022-attempt-04\channel-row-availability.json`,
+SHA-256 `5ab45da75a0d23019316b317aeeed770ea905535c78c550e7a0b40c1aec9960a`.
+No additional audio was downloaded, and no signed URL was saved.
+
 A CPU-only audit of the already acquired train word annotations then checked
 the frozen 24 timing rows against each target agent's own word intervals. The
 target speaker had positive-duration annotated speech covering 100% of each
@@ -69,7 +84,7 @@ SHA-256 `c0174176be975ca3b28fbb17225afdaa77249308b8a2ffb81f47f63a1496965e`.
 - Existing visual contact sheets were viewed for train rows only. They show a mixture of clear, small, and absent target people; they do not prove who is speaking or establish lip synchronization.
 - Official AMI sources: [audio/video signals and channel mappings](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml), [meeting-room synchronization](https://groups.inf.ed.ac.uk/ami/corpus/meetingrooms.shtml), [known data problems](https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml), [download index](https://groups.inf.ed.ac.uk/ami/download/).
 - Official University of Edinburgh mirror: [`edinburghcstr/ami` pinned revision](https://huggingface.co/datasets/edinburghcstr/ami/tree/46f28f2503e2ec48f8867a84eef356c70476beab). Read-only Viewer discovery scanned 339 train rows; the acquired row and decode receipt are in `C:\CodexArtifacts\pretrained-reuse-r2\ami-hf-channel-smoke-20261022-attempt-03\receipt.json` (audio SHA-256 above).
-- Viewer `/search` and `/filter` returned HTTP 500 for this dataset during the follow-up cohort lookup; a throttled `/rows` range search then received HTTP 429 and was stopped. The 24-row annotation audit above therefore uses the already acquired local train annotations and does not imply that 24 individual-channel files were fetched.
+- Viewer `/search` and `/filter` returned HTTP 500. The later throttled `/rows` metadata lookup was limited to the frozen train clips and bounded meeting-index ranges; it found 17/24 intervals, with seven nonmatches remaining unresolved. The receipt records availability metadata only and does not imply that 17 individual-channel files were fetched.
 
 No held-out split, unseen meeting, or sealed audit was opened. The only newly
 opened utterance was the single official-train row listed above; the Viewer
