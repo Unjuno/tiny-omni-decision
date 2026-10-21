@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 multimodal source admission screen:** Screened official ZOD
+and IIT Audio-Visually Indicated Actions materials without downloading media.
+ZOD has camera/LiDAR/radar/IMU but requires an emailed access request and its
+sequence annotations are central-frame only; no both-required task or encoder
+pretraining overlap is established. IIT's 378 synchronized AV sequences cover
+9 participants and access is limited to institution-linked noncommercial
+research requests; its action labels are intentionally audio-distinctive.
+Neither is admitted for a local quality run. See the [source screen](docs/pretrained_reuse/R2_MULTIMODAL_SOURCE_ADMISSION_SCREEN_20261021.md).
+
 **2026-10-21 R2 optional sensor source gate:** UCI PAMAP2 metadata was screened without downloading the archive. UCI states CC BY 4.0, but the dataset has only 9 subjects and the audited MOMENT materials do not provide a complete pretraining item manifest that proves PAMAP2 was excluded. Overlap is UNKNOWN; no MOMENT score on PAMAP2 may select a candidate. Keep sensor work optional and research-only until a sufficiently grouped, provenance-auditable task is found. See the [PAMAP2 admission screen](docs/pretrained_reuse/R2_PAMAP2_SENSOR_ADMISSION_SCREEN_20261021.md).
 
 **2026-10-21 R2 synthetic AV timing pilot reconciled:** A seed-17, four-arm
