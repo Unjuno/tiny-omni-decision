@@ -97,6 +97,25 @@ The table lists no additional issue for the other five selected meetings in
 its searchable entries; absence from that table is not proof of complete media
 or unobstructed target visibility.
 
+The pre-existing local `meetings.xml` resource also resolves participant to
+microphone-channel/close-up mapping for all six candidate meetings. Its
+SHA-256 is `8ab6cdcf03ed863e839418f31c7380392397a2eed892d73b9bc1b438c7ec520a`.
+This is a mapping receipt only; its prior acquisition provenance and exact
+release lineage were not independently established in this pass.
+
+| Split | Meeting | Participant → channel → camera |
+|---|---|---|
+| Train | TS3009a | MTD033PM:0:Closeup2; MTD034ID:2:Closeup4; MTD035UID:1:Closeup3; MTD036ME:3:Closeup1 |
+| Train | ES2010b | FEE037:0:Closeup4; FEE038:1:Closeup2; FEE039:2:Closeup3; FEE040:3:Closeup1 |
+| Train | IS1004b | MIO047:3:Closeup4; MIE090:1:Closeup2; MIO019:0:Closeup1; MIO022:2:Closeup3 |
+| Validation | TS3005b | MTD017PM:0:Closeup2; MTD018ID:2:Closeup4; FTD019UID:1:Closeup3; MTD020ME:3:Closeup1 |
+| Validation | ES2008b | FEE029:0:Closeup4; FEE030:1:Closeup2; MEE031:2:Closeup3; FEE032:3:Closeup1 |
+| Validation | IS1006b | MIO008:3:Closeup4; MIO040:1:Closeup2; FIO041:0:Closeup1; MIO078:2:Closeup3 |
+
+The channel-to-camera order varies by meeting, so a global mapping must not be
+assumed. The corpus builder must join the meeting-specific mapping by speaker
+identity and preserve candidate randomization.
+
 ## Blocking conditions and next gate
 
 The official AMI media host timed out on HTTP and HTTPS requests from this

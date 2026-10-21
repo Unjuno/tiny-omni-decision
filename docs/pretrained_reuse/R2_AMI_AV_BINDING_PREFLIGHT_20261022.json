@@ -121,6 +121,16 @@
     "ami_tno_video_sync_status": "officially manually processed to acceptable synchronization quality; exact candidate media still untested",
     "ami_e_i_video_frame_drop_status": "officially processed and synchronized with audio; exact candidate media still untested",
     "metadata_only": true,
-    "media_downloaded": false
+    "media_downloaded": false,
+    "local_meetings_xml_sha256": "8ab6cdcf03ed863e839418f31c7380392397a2eed892d73b9bc1b438c7ec520a",
+    "local_meetings_xml_release_lineage_independently_verified": false,
+    "per_meeting_channel_camera_mapping": {
+      "TS3009a": ["MTD033PM:0:Closeup2", "MTD034ID:2:Closeup4", "MTD035UID:1:Closeup3", "MTD036ME:3:Closeup1"],
+      "ES2010b": ["FEE037:0:Closeup4", "FEE038:1:Closeup2", "FEE039:2:Closeup3", "FEE040:3:Closeup1"],
+      "IS1004b": ["MIO047:3:Closeup4", "MIE090:1:Closeup2", "MIO019:0:Closeup1", "MIO022:2:Closeup3"],
+      "TS3005b": ["MTD017PM:0:Closeup2", "MTD018ID:2:Closeup4", "FTD019UID:1:Closeup3", "MTD020ME:3:Closeup1"],
+      "ES2008b": ["FEE029:0:Closeup4", "FEE030:1:Closeup2", "MEE031:2:Closeup3", "FEE032:3:Closeup1"],
+      "IS1006b": ["MIO008:3:Closeup4", "MIO040:1:Closeup2", "FIO041:0:Closeup1", "MIO078:2:Closeup3"]
+    }
   }
 }
