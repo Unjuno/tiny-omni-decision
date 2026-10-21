@@ -1,12 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-21 R2 text-free audio official-test attempt stopped before inference:**
-HotUGPU reservation succeeded and the pinned Speech Commands test shard loaded,
-but the pre-inference integrity gate found duplicate WAV-byte hashes among
-retained rows. No model predictions or metrics were produced. The dataset has
-now been opened; preserve the failed attempt and require a documented
-integrity-policy correction before any new one-time evaluation. This remains a
-narrow English keyword task, not general speech evidence. See the
+**2026-10-21 R2 text-free audio official-test preflight correction:** The first
+HotUGPU-reserved attempt loaded the pinned Speech Commands shard and stopped
+before inference because identical WAV-byte hashes occur among retained rows;
+it produced no predictions or metrics. The integrity gate now preserves and
+counts same-label duplicate rows while rejecting conflicting-label duplicates,
+without changing which source-ID rows are evaluated. A single inference attempt
+remains pending CI and the cooperative GPU gate. This is a narrow English
+keyword task, not general speech evidence. See the
 [protocol and attempt record](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_OFFICIAL_TEST_PROTOCOL_20261021.md).
 
 **2026-10-21 R2 fresh CLEVRER reasoning execution:** The pinned VideoPrism

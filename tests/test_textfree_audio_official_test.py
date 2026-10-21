@@ -56,12 +56,26 @@ def test_official_test_rows_reject_duplicates_or_unpinned_label_names(mutator, m
         build_test_records(rows, SPEECH_COMMAND_LABELS)
 
 
-def test_official_test_rows_reject_duplicate_audio_content():
+def test_official_test_rows_keep_same_label_duplicate_audio_and_count_rows():
+    rows = [
+        _row(label, f"sample-{index}", f"speaker-{index}") for index, label in enumerate(CLASSES)
+    ]
+    duplicate = _row("yes", "duplicate", "speaker-duplicate")
+    duplicate["audio"]["bytes"] = rows[0]["audio"]["bytes"]
+    rows.append(duplicate)
+    records = build_test_records(rows, SPEECH_COMMAND_LABELS)
+    assert len(records) == len(CLASSES) + 1
+    assert records[-1]["media_sha256"] == records[0]["media_sha256"]
+
+
+def test_official_test_rows_reject_duplicate_audio_with_conflicting_labels():
     rows = [
         _row(label, f"sample-{index}", f"speaker-{index}") for index, label in enumerate(CLASSES)
     ]
     rows[1]["audio"]["bytes"] = rows[0]["audio"]["bytes"]
-    with pytest.raises(ValueError, match="duplicate official test audio content"):
+    with pytest.raises(
+        ValueError, match="duplicate official test audio content has conflicting labels"
+    ):
         build_test_records(rows, SPEECH_COMMAND_LABELS)
 
 

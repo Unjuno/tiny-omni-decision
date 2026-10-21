@@ -82,8 +82,11 @@ def build_test_records(rows: list[dict[str, Any]], class_names: list[str]) -> li
         raise ValueError("official test split has no recognized ten-keyword examples")
     if len({row["id_sha256"] for row in records}) != len(records):
         raise ValueError("duplicate official test source IDs")
-    if len({row["media_sha256"] for row in records}) != len(records):
-        raise ValueError("duplicate official test audio content")
+    labels_by_media: dict[str, set[str]] = {}
+    for row in records:
+        labels_by_media.setdefault(row["media_sha256"], set()).add(row["target"])
+    if any(len(labels) != 1 for labels in labels_by_media.values()):
+        raise ValueError("duplicate official test audio content has conflicting labels")
     if set(Counter(row["target"] for row in records)) != set(LABELS):
         raise ValueError("official test split does not contain all ten fixed classes")
     return records
@@ -596,6 +599,9 @@ def run(
         "official_test_raw_rows": len(raw_rows),
         "omitted_nonkeyword_rows": len(raw_rows) - len(records),
         "test_examples": len(records),
+        "test_unique_media_contents": len({r["media_sha256"] for r in records}),
+        "test_duplicate_content_rows": len(records)
+        - len({r["media_sha256"] for r in records}),
         "test_id_order_sha256": sha256_bytes("\n".join(r["id_sha256"] for r in records).encode()),
         "test_media_order_sha256": sha256_bytes(
             "\n".join(r["media_sha256"] for r in records).encode()

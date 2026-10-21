@@ -12,7 +12,13 @@ feature extraction because retained rows had duplicate WAV-byte SHA-256 values
 No logits, predictions, or test metrics were generated; no checkpoint,
 temperature, or preprocessing was changed. The official test has been opened,
 so this attempt must be disclosed in any later protocol. Do not reuse this
-output directory or describe this as a completed evaluation.
+output directory or describe this as a completed evaluation. The duplicate
+check was narrowed before inference: distinct official rows with identical WAV
+bytes and the same label remain in the full test set and are counted;
+identical bytes paired with conflicting labels still fail closed. This changes
+no model, threshold, preprocessing, or row inclusion rule. A single inference
+attempt may proceed only from a new output directory after this correction is
+tested and committed.
 
 ## Question
 
@@ -35,8 +41,10 @@ Decision model.
   count and per-class counts; do not rebalance or subsample the official test.
 - The full source shard hash must match before rows are decoded. Every retained
   recording is content-hashed; sample IDs and speaker identifiers are stored
-  only as hashes. Test speaker and media hashes must be disjoint from the
-  frozen train, validation, and calibration groups.
+  only as hashes. Preserve every official row by source ID; report exact-content
+  duplicate rows rather than dropping them, and reject repeated WAV bytes if
+  their target labels conflict. Test speaker and media hashes must be disjoint
+  from the frozen train, validation, and calibration groups.
 
 ## Frozen systems and comparison
 
@@ -56,9 +64,9 @@ Neither readout, temperature, nor preprocessing can be changed after test
 rows are read. No test-driven fitting, checkpoint selection, class balancing,
 or prompt/search iterations are allowed. The test is intended to be evaluated
 once, with a unique output directory whose `run-lock.json` prevents reuse after
-an interrupted attempt. This attempt did not reach model inference; any
-follow-up requires a documented integrity-policy correction before a new
-one-time evaluation, with model and preprocessing choices still frozen.
+an interrupted attempt. The first attempt stopped before model inference; after
+the narrowly scoped duplicate-content correction, only one new inference
+attempt is permitted, with all model and preprocessing choices still frozen.
 
 The candidate and legacy baseline are not a perfectly matched fit: the
 calibration candidate reserves 264 training examples for speaker-held-out
@@ -97,7 +105,7 @@ py -3.11 scripts/run_with_hotgpu_guard.py --max-wait-seconds 3600 --reserve-mib 
   --sample-dir C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-sample-seed17-128-64-retry2 `
   --encoder-dir C:\CodexArtifacts\pretrained-reuse-r2\models\audio-whisper-tiny `
   --source-dir C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-official-test-source-v1 `
-  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-official-test-eval-v1-attempt-01
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-official-test-eval-v1-attempt-02
 ```
 
 This protocol does not open a sealed audit, change any training run, or close
