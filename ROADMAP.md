@@ -26,6 +26,14 @@ scoring only. The frozen encoder was not run, the validation is previously used,
 and 49.37% Accuracy remains weak synthetic-only quality. See the
 [CPU replay record](docs/pretrained_reuse/R2_PATH_A_TEXT_READOUT_CPU_REPLAY_20261021.md).
 
+**2026-10-21 R7 Path A package integrity recheck:** All 42 manifest-listed
+files (687.25 MB, 170.50M unique parameters) revalidated by size and SHA-256.
+Strict package verification finds two unlisted Python bytecode cache files
+under the image runtime; their origin is unknown and existing package contents
+were preserved. The provisional 200 MB target remains unmet. A hypothetical
+storage-only INT8 estimate is not a quantized runtime or a quality result. See
+the [package integrity record](docs/pretrained_reuse/R7_PATH_A_PACKAGE_INTEGRITY_RECHECK_20261021.md).
+
 **2026-10-21 R0 live-state refresh:** Current `main` remains `09246d7`; PR #15
 remains Draft/Open and the research branch is separate. Thirty-four worktrees
 were inventoried; six are dirty, including the user's primary Teacher worktree,
