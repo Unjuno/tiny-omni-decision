@@ -42,6 +42,18 @@ does not prove AV synchronization or visible-speaker labels. AMI remains
 review-only; no GPU/model/SC access. Report and artifact hashes are in
 [AMI screen commit `bbd1cb9`](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-ami-av-source-screen-20261021/docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
 
+**2026-10-21 R2 AMI development visibility gate:** A development-only,
+three-frame-per-window review covers all 111 preliminary SB candidates from
+ES2003a, ES2011a, IS1008a, TS3004a and TS3006a. Results: 69 clear faces, 6
+limited views, 2 visible people without a clear face, and 34 samples with no
+clear person in the target camera. TS3004a and TS3006a account for 14/30 and
+18/27 no-person samples. This weakens the current weak-label construction;
+AMI stays review-only pending stronger visible-speaker and synchronization
+evidence. No SC material or audio was opened and no GPU run was started. The
+CPU manifest builder and tests are in commit `406f003` on the AMI source-screen
+branch; the [detailed screen report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-ami-av-source-screen-20261021/docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md)
+contains hashes and limits.
+
 **2026-10-21 R1 PR review follow-up:** The unresolved PR #16 review finding
 on PE-Core T16 release access was corrected in the dedicated PR branch at
 `afea6624dfe247350ecbb704d61099304009f2a0`. The pinned checkpoint and hash
