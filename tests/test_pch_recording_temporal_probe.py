@@ -51,7 +51,7 @@ def _required_function(name: str):
 
 def test_attempt_config_uses_its_external_output_directory_name() -> None:
     config = _required_function("effective_config_for_attempt")(
-        probe.Path(r"C:\CodexArtifacts\attempt-03")
+        probe.Path("attempt-03")
     )
     assert config["experiment_id"] == "attempt-03"
     assert config["seed"] == probe.CONFIG["seed"]
