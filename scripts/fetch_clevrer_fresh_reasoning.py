@@ -38,6 +38,12 @@ def _selected_partition_names(holdout_only: bool) -> tuple[str, ...]:
     return ("holdout",) if holdout_only else ("train", "development")
 
 
+def _is_train_media_overlap(
+    media_hashes_by_partition: dict[str, set[str]], digest: str
+) -> bool:
+    return "train" in media_hashes_by_partition and digest in media_hashes_by_partition["train"]
+
+
 def _write_json(path: Path, value: Any) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
@@ -201,7 +207,7 @@ def fetch(
                                 }
                             )
                             media_hashes_by_partition[partition].add(digest)
-                    if digest in media_hashes_by_partition["train"]:
+                    if _is_train_media_overlap(media_hashes_by_partition, digest):
                         # The first insertion is valid for the train partition;
                         # cross-partition collisions are checked after all splits.
                         pass

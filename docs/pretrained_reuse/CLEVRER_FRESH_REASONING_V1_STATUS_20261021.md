@@ -1,8 +1,9 @@
 # Fresh CLEVRER Reasoning v1 — preparation and execution status
 
-**Status: BLOCKED before feature extraction/training.** This is an engineering
-status record, not a model-quality result. No checkpoint was trained or
-selected, and no holdout media or labels were loaded.
+**Current status: development readout trained; one-time holdout media fetch is
+in progress.** This is an engineering status record, not a general model-quality
+claim. The initial snapshot below is historical; see the execution update at
+the end for completed training and holdout handling.
 
 ## Work completed
 
@@ -78,10 +79,66 @@ quality conclusion can be drawn from this attempt.
 - Training, checkpoint selection, holdout fetch, and holdout evaluation: not
   run.
 
-Resume only after providing a compatible local GPU execution environment for
-the pinned VideoPrism revision (or an already-supported GPU extractor that
-produces the same pinned feature contract). Re-run the feature extractor under
-HotGPU, validate the resulting cache, then perform the frozen-readout
-preflight/training. Fetch and evaluate the isolated holdout only after the
-development-selected checkpoint is frozen. Do not change the split, config,
-selector, or model based on holdout observations.
+The initial blocker was resolved by using the same pinned VideoPrism extractor
+with its GPU explicitly hidden. The later execution details follow.
+
+## Execution update — 2026-10-21
+
+### Frozen feature cache and development selection
+
+The initial HotGPU attempt confirmed that the pinned VideoPrism environment had
+no CUDA backend. The same frozen extraction was therefore rerun with
+`CUDA_VISIBLE_DEVICES=-1` and `JAX_PLATFORMS=cpu`; it completed on
+`TFRT_CPU_0` without using the GPU. The 400 train/development videos produced a
+768-dimensional cache in 573.25 seconds. Peak working set was 4,178,378,752
+bytes. The external cache is
+`C:\CodexArtifacts\pretrained-reuse-r2\clevrer-fresh-reasoning-v1-attempt-01-features-cpu\`.
+
+- Feature cache SHA-256: `4f9116d41f0d68d6b0db043b7f8b68f782874d4f5fbe51fd1a3d17c7604b1f60`
+- Cache report SHA-256: `893a7dddb2f435b82e15786d5c751440dde4f142bd03359a6e7ab6949c9cc167`
+- Cache validation: 400 unique video assets; scene overlap 0; normalized
+  question/candidate content overlap 0; train/development manifests match the
+  pinned hashes above.
+
+A new explicit local config
+`configs/pretrained_reuse/path_a_videoprism_clevrer_fresh_reasoning_v1_cpu_local.yaml`
+points at that cache and uses fresh `*-cpu-cache` preflight/run directories; it
+does not alter the original config. Config SHA-256 is
+`37147fca815f0c17f4433a80ef4f6db1ca49f53410fdad5300abc69605311693`.
+The trainer preflight passed with 2,632 train choices, 2,792 development
+choices, 200 scenes per split, 400 unique videos, and zero scene/media/content
+overlap. No sealed audit was loaded.
+
+The frozen MiniLM text encoder and VideoPrism encoder fed the existing 295,169
+parameter shared candidate readout. Training was launched through
+`scripts/run_with_hotgpu_guard.py`; it waited while external CUDA PID 26064 was
+active, reserved 3,200 MiB after the process yielded, then launched the child
+with about 13,015 MiB free. It completed 24 epochs / 1,008 optimizer updates:
+63,168 presentations of 2,632 unique train choices (60,536 repeated
+presentations). Best validation macro question-type NLL was selected at epoch
+10. Readout training took 12.92 seconds; peak CUDA allocation was 154,231,296
+bytes. Existing Teacher v0 and v2 artifacts were not modified.
+
+Run output:
+`C:\CodexArtifacts\pretrained-reuse-r2\clevrer-fresh-reasoning-v1-attempt-01-model-run-cpu-cache\`.
+The run report and validation predictions are preserved there. On 2,792
+development choices, macro-by-type Accuracy was 0.5153, NLL 0.6930, Brier
+0.4999, and ECE 0.0131. Per type: explanatory 0.5269 / 0.6928 NLL, predictive
+0.5194 / 0.6927 NLL, and counterfactual 0.4996 / 0.6935 NLL. The validation
+scene-cluster bootstrap (10,000 replicates, seed 17) gives a 95% interval for
+macro Accuracy of [0.4916, 0.5386]. This is near binary chance and does not
+support a useful reasoning capability claim. It is a completed
+development-selected checkpoint, not a product result.
+
+### Holdout fetch and one-time comparison
+
+After freezing the development-selected epoch-10 readout, the post-selection
+holdout media fetch was started in a separate output directory. The first
+attempt exposed a `--holdout-only` bug: the fetch loop unconditionally looked
+up a `train` partition that is intentionally absent in holdout-only mode. It
+stopped after writing one clip. A regression test was added, and the minimal
+guard was fixed; the same output directory was resumed with its existing media
+hash checked and reused. The isolated holdout labels have not been evaluated.
+Once the 200 holdout videos and identity checks finish, the frozen v0 and v1
+readouts will be compared once with the existing paired scene-bootstrap
+evaluator. No tuning will follow from those holdout results.

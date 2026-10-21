@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import pytest
 
-from scripts.fetch_clevrer_fresh_reasoning import _selected_partition_names
+from scripts.fetch_clevrer_fresh_reasoning import (
+    _is_train_media_overlap,
+    _selected_partition_names,
+)
 from scripts.prepare_clevrer_fresh_reasoning import select_fresh_splits, source_scene_ids
 from tiny_omni_decision.clevrer import clevrer_binary_choice_content_key
 
@@ -51,6 +54,11 @@ def test_source_scene_identity_uses_media_and_decision_ids_not_unrelated_numbers
 def test_training_media_preparation_does_not_load_the_holdout_manifest():
     assert _selected_partition_names(False) == ("train", "development")
     assert _selected_partition_names(True) == ("holdout",)
+
+
+def test_holdout_only_fetch_does_not_assume_train_partition_exists():
+    assert not _is_train_media_overlap({"holdout": set()}, "media-hash")
+    assert _is_train_media_overlap({"train": {"media-hash"}}, "media-hash")
 
 
 def test_fresh_split_selection_is_deterministic_and_scene_content_disjoint():
