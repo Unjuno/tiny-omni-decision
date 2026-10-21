@@ -17,7 +17,12 @@ A single-reviewer visual screen of all 213 segment-join-passing SA train
 candidates found 168 with a clearly framed face, 21 limited/ambiguous and 24
 with no clear person in the mapped camera at 15/50/85% samples. This is a
 presence screen, not speaker-identity, synchronization or AV-quality evidence.
-No GPU run was started.
+The same development-only visibility pass covers 111 SB candidates: 69 clear,
+6 limited, 2 visible-person/no-clear-face, and 34 no-clear-person in target-camera
+samples. TS3004a and TS3006a are especially weak (14/30 and 18/27 with no clear
+person); this further weakens the current weak-label task proposal. It still does
+not verify speaker identity or synchronization. No GPU run was started. See
+[`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
 Keep SC annotations unopened and the source at REVIEW.
 See
 [`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).

@@ -240,6 +240,31 @@ manifest pins preflight inputs, join receipt, sample IDs/times, builder and
 contact-sheet hashes; the review receipt pins the manifest, sheets and every
 row label. Media-derived frames remain outside Git.
 
+### Candidate-wide SB development visual-presence review
+
+The same fixed three-frame-per-window screen was applied to all 111 preliminary
+SB development candidates from ES2003a, ES2011a, IS1008a, TS3004a and TS3006a.
+Only each candidate's mapped Closeup camera was read; no headset audio was
+opened. Candidate videos were checked against the preflight and selected-media
+identity audit before frame extraction. The single-reviewer labels are 69 clear
+faces, 6 limited views, 2 intervals with a visible person but no clear face, and
+34 intervals with no clear person in the sampled target-camera frames. By meeting,
+clear/limited/no-clear-face/no-person counts are ES2003a 15/4/2/1, ES2011a
+15/0/0/1, IS1008a 16/0/0/0, TS3004a 15/1/0/14, and TS3006a 8/1/0/18.
+
+These are visual-presence labels over sparse samples, not speech-attribution
+accuracy. The low visibility in TS3004a and TS3006a weakens the current weak-label
+construction and should be addressed before any task-quality run. The screen
+does not validate AV synchronization, prove a visible person spoke, or establish
+that both modalities are needed. No SC media/annotations were opened and no GPU
+run was started. External frame manifest SHA-256 is
+`466975275a3ffeb6f9252ed90d43c26e2f2013a8481eaea8c4cff870cfd6dbdc`; the manual
+review receipt SHA-256 is
+`c1d8775e92374139129a38fd51154278c03229f20f138b8940bc54f7dc26c1a5`; its per-sheet
+hashes are under
+`C:\CodexArtifacts\pretrained-reuse-r2\ami-av-development-visual-review-attempt-03`.
+The receipt status is development-only and not a frozen evaluation battery.
+
 ## Decision
 
 Keep the AMI Meeting Corpus as a **review-only candidate** for a narrow,
