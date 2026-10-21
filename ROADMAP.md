@@ -10,6 +10,15 @@ candidate, not an admitted benchmark. See [preflight](docs/pretrained_reuse/R2_A
 and [machine summary](docs/pretrained_reuse/R2_AMI_AV_BINDING_PREFLIGHT_20261022.json).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 MAVC100 task/source screen:** MAVC100's distinct audio-event
+and target-anchor audiovisual labels make it a strong task-design lead for
+audio-to-visible-speaker binding. However, the author README says original
+videos are Internet-sourced and research-use-only, and the dataset-level CC BY
+label does not resolve rights to those underlying videos. No media or labels
+were accessed. Keep it review-only; original-media rights and grouped split
+adequacy must be resolved before admission. See the
+[`MAVC100 source screen`](docs/pretrained_reuse/R2_MAVC100_SOURCE_SCREEN_20261022.md).
+
 **2026-10-22 R2 AMI speaker-channel preflight:** The local candidate builder
 uses one mono `Mix-Headset.wav` per meeting; the 24 train-only timing rows share
 one full-file audio hash within each of seven meetings. This is a mixed meeting
