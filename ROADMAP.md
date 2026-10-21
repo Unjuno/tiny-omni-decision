@@ -19,6 +19,17 @@ were accessed. Keep it review-only; original-media rights and grouped split
 adequacy must be resolved before admission. See the
 [`MAVC100 source screen`](docs/pretrained_reuse/R2_MAVC100_SOURCE_SCREEN_20261022.md).
 
+**2026-10-22 R2 AMI-derived AV event segment source screen:** A public hosted
+card describes 35,731 speaker/event-centered AMI audio/video segments, including
+469 laughter events (450 with video and 346 with lip video). This may support a
+speaker/event binding probe, but sample counts are not independent meetings and
+audio-only laughter detection may solve the task. Files require agreement to
+share contact details; the derivative Apache-2.0 badge does not explain
+component-level rights for the underlying AMI CC BY 4.0 clips. No gated content
+was accessed. Keep REVIEW until access, rights provenance, meeting-level split
+coverage, and both-required semantics are established. See the
+[`AMI-derived AV event screen`](docs/pretrained_reuse/R2_AMI_DERIVED_AV_EVENTS_SOURCE_SCREEN_20261022.md).
+
 **2026-10-22 R2 AMI speaker-channel preflight:** The local candidate builder
 uses one mono `Mix-Headset.wav` per meeting; the 24 train-only timing rows share
 one full-file audio hash within each of seven meetings. This is a mixed meeting
