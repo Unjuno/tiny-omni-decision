@@ -1,3 +1,11 @@
+**2026-10-22 15:03 JST R0 live-state reconciliation:** Main remains `09246d7`;
+PR #15 remains draft/open and PRs #9–#22 remain open. Forty-four worktrees were
+listed; the user-facing Teacher checkout has pre-existing uncommitted work and
+was left untouched. Orbitune still owns the RTX 3080 (15,821/16,384 MiB, PID
+22868); no Tiny Omni GPU work was launched. PR #21's scene-disjoint synthetic
+CLEVRER AV v2 result is +8.35 pp over audio-only, but its synthetic cue and
+development validation do not close the natural AV gate. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_1503JST.md).
+
 **2026-10-22 R2 OSSL-v2 soundtrack matching source screen:** The pinned public
 train ID list has 31,011 clips across 1,655 movie groups, suggesting a possible
 video-conditioned soundtrack-choice task. Keep REVIEW: item-level film/music
