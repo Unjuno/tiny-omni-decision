@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 AV benchmark admission screen:** Screened official AVI-Bench
+and MUSIC-AVQA materials without downloading or opening data. AVI-Bench's
+binding anti-training terms rule out model fitting and batch download; frozen
+model evaluation may be permitted after upstream rights and access conditions
+are checked. MUSIC-AVQA describes AVQA tasks useful for designing temporal
+complementarity controls, but its reviewed materials do not establish rights
+to the underlying YouTube media, so it remains review-only. Existing Perception
+Test AV results remain exploratory and low quality. See the [source admission
+screen](docs/pretrained_reuse/R2_AV_BENCHMARK_ADMISSION_SCREEN_20261021.md).
+
 **2026-10-21 R2 text-free audio official-test evaluation completed:** On all
 4,074 retained rows and 239 speakers, the legacy readout scored 97.72% Accuracy
 / 0.2684 NLL / 0.0909 Brier / 0.1692 ECE. The frozen-temperature candidate
