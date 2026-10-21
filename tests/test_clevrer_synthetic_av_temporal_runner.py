@@ -10,6 +10,7 @@ temporal_runner = import_module("scripts.train_clevrer_synthetic_av_temporal_dec
 _metrics = temporal_runner._metrics
 _run_candidate = temporal_runner._run_candidate
 _pair_donor_indices = temporal_runner._pair_donor_indices
+_validate_experiment_config = temporal_runner._validate_experiment_config
 
 
 def _rows(split: str, scene: int) -> list[dict[str, object]]:
@@ -37,6 +38,20 @@ def test_metrics_report_accuracy_nll_brier_and_calibration() -> None:
     assert metrics["nll"] < 0.1
     assert metrics["brier"] < 0.02
     assert metrics["ece_15_bins"] < 0.1
+
+
+def test_protocol_validation_accepts_frozen_v1_and_v2_only() -> None:
+    for experiment_id, protocol_sha256 in temporal_runner.PROTOCOL_SHA256_BY_EXPERIMENT.items():
+        _validate_experiment_config(
+            {"experiment_id": experiment_id, "protocol_sha256": protocol_sha256}
+        )
+    with pytest.raises(ValueError, match="frozen synthetic AV protocol"):
+        _validate_experiment_config(
+            {
+                "experiment_id": "clevrer-synthetic-av-temporal-decision-v2",
+                "protocol_sha256": "wrong",
+            }
+        )
 
 
 def test_audio_intervention_swaps_only_within_the_same_paired_event() -> None:
