@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 synthetic AV temporal interaction follow-up (remote branch):**
+The four-arm, frozen-feature CLEVRER collision/tone development study reports
+83.51% Accuracy / 0.3534 NLL for its selected joint gated LSTM versus 75.14% /
+0.4577 for audio-only on 1,110 task-specific validation examples. The
+scene-paired joint-minus-audio Accuracy interval was +5.89 to +10.83 points
+(5,000 bootstrap replicates). This is bounded evidence that a temporal AV
+readout can use a synthetic timing relation; it is not natural AV, blind
+validation, or product quality. Its validation media occur in other CLEVRER
+tasks and 349 question-template overlaps were reported. Preserve the result
+without retuning those IDs. It advances only the synthetic interaction
+diagnostic; natural both-required AV task admission and the R2-M matrix remain
+open. See the [full v2 result and provenance](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-clevrer-synthetic-av-coverage-20261022/docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_COVERAGE_V2_RESULTS_20261022.md).
+
 **2026-10-22 R2 HarmonySet / RealSync source screen:** HarmonySet is a useful
 video-music semantic-alignment task lead, but the inspected card exposes only
 train/test annotation files, gives a YouTube-backed example, and does not
