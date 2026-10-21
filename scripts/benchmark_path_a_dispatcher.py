@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import platform
 import shutil
@@ -16,7 +17,7 @@ from typing import Any
 
 from tiny_omni_decision.dataset import iter_local_rows, normalize_jsonl, sha256_file
 from tiny_omni_decision.io import load_structured_file
-from tiny_omni_decision.runtime_dispatch import PathARuntimeDispatcher
+from tiny_omni_decision.runtime_dispatch import PathARuntimeDispatcher, TypedDecisionSpec
 from tiny_omni_decision.schema import DatasetManifest
 
 
@@ -263,7 +264,9 @@ def _choose_video(artifact_root: Path) -> dict[str, Any]:
 
 
 def _compare_output(
-    task_spec: dict[str, Any], response: dict[str, Any]
+    task_spec: dict[str, Any],
+    response: dict[str, Any],
+    decision_specs: list[TypedDecisionSpec],
 ) -> dict[str, Any]:
     reference = task_spec["reference"]
     if task_spec["task"] == "audio":
@@ -271,6 +274,8 @@ def _compare_output(
         reference_decisions = reference["decisions"]
         if len(decisions) != len(reference_decisions):
             raise ValueError("audio multi-query result count differs from the reference")
+        if len(response.get("decision_json", [])) != len(decision_specs):
+            raise ValueError("audio typed JSON result count differs from its query count")
         comparisons = [
             {
                 "question_type": expected["question_type"],
@@ -284,13 +289,21 @@ def _compare_output(
                         actual["probabilities"], expected["probabilities"], strict=True
                     )
                 ),
+                "typed_json_matches_runtime": _typed_json_matches(
+                    actual["decision_json"], actual, spec
+                ),
             }
-            for actual, expected in zip(decisions, reference_decisions, strict=True)
+            for actual, expected, spec in zip(
+                decisions, reference_decisions, decision_specs, strict=True
+            )
         ]
         return {
             "sample_id": reference["sample_id"],
             "comparisons": comparisons,
             "prediction_mismatches": sum(not row["prediction_match"] for row in comparisons),
+            "typed_json_mismatches": sum(
+                not row["typed_json_matches_runtime"] for row in comparisons
+            ),
             "max_probability_absolute_delta": max(
                 row["max_probability_absolute_delta"] for row in comparisons
             ),
@@ -302,16 +315,82 @@ def _compare_output(
         raise ValueError(f"{task_spec['task']} output size differs from the reference")
     prediction_index = int(response["prediction_index"])
     reference_index = int(reference["prediction_index"])
+    typed_json_matches = _typed_json_matches(
+        response.get("decision_json"), response, decision_specs[0]
+    )
     return {
         "sample_id": reference["sample_id"],
         "runtime_prediction_index": prediction_index,
         "reference_prediction_index": reference_index,
         "prediction_mismatches": int(prediction_index != reference_index),
+        "typed_json_matches_runtime": typed_json_matches,
         "max_probability_absolute_delta": max(
             abs(left - right)
             for left, right in zip(probabilities, reference_probabilities, strict=True)
         ),
     }
+
+
+def _typed_json_matches(
+    record: Any,
+    response: dict[str, Any],
+    spec: TypedDecisionSpec,
+) -> bool:
+    if not isinstance(record, dict):
+        return False
+    options = record.get("options")
+    probabilities = response.get("probabilities")
+    prediction_index = response.get("prediction_index")
+    if (
+        not isinstance(options, list)
+        or not isinstance(probabilities, list)
+        or not isinstance(prediction_index, int)
+        or len(options) != len(spec.option_ids)
+        or len(probabilities) != len(spec.option_ids)
+        or not 0 <= prediction_index < len(spec.option_ids)
+    ):
+        return False
+    return (
+        record.get("request_id") == spec.request_id
+        and record.get("selected_option_id") == spec.option_ids[prediction_index]
+        and [item.get("id") for item in options] == list(spec.option_ids)
+        and [item.get("text") for item in options] == list(spec.option_texts)
+        and all(
+            math.isclose(float(item.get("probability")), float(probability), abs_tol=1e-7)
+            for item, probability in zip(options, probabilities, strict=True)
+        )
+    )
+
+
+def _decision_specs(
+    task_spec: dict[str, Any], payload: dict[str, Any], *, phase: str
+) -> list[TypedDecisionSpec]:
+    task = str(task_spec["task"])
+    sample_id = str(task_spec["reference"]["sample_id"])
+    if task == "audio":
+        return [
+            TypedDecisionSpec(
+                request_id=f"{sample_id}:{phase}:query-{index}",
+                decision_type="choice",
+                option_ids=tuple(f"option-{choice}" for choice in range(len(query["options"]))),
+                option_texts=tuple(str(option) for option in query["options"]),
+            )
+            for index, query in enumerate(payload["queries"])
+        ]
+    if task in {"text", "image"}:
+        option_texts = tuple(str(option) for option in payload["options"])
+    elif task == "video":
+        option_texts = ("wrong", "correct")
+    else:
+        raise ValueError(f"unsupported Path A typed task: {task}")
+    return [
+        TypedDecisionSpec(
+            request_id=f"{sample_id}:{phase}",
+            decision_type="choice",
+            option_ids=tuple(f"option-{index}" for index in range(len(option_texts))),
+            option_texts=option_texts,
+        )
+    ]
 
 
 def _measure_task(
@@ -321,15 +400,19 @@ def _measure_task(
     is_service_cold_start: bool,
 ) -> dict[str, Any]:
     task = str(task_spec["task"])
-    first = dispatcher.dispatch(task, task_spec["payload"])
+    first_specs = _decision_specs(task_spec, task_spec["payload"], phase="first")
+    first = dispatcher.dispatch_typed(
+        task, task_spec["payload"], decision_specs=first_specs
+    )
     warm_spec = {
         **task_spec,
         "payload": task_spec.get("warm_payload", task_spec["payload"]),
         "reference": task_spec.get("warm_reference", task_spec["reference"]),
     }
-    warm = dispatcher.dispatch(task, warm_spec["payload"])
-    first_comparison = _compare_output(task_spec, first)
-    warm_comparison = _compare_output(warm_spec, warm)
+    warm_specs = _decision_specs(warm_spec, warm_spec["payload"], phase="warm")
+    warm = dispatcher.dispatch_typed(task, warm_spec["payload"], decision_specs=warm_specs)
+    first_comparison = _compare_output(task_spec, first, first_specs)
+    warm_comparison = _compare_output(warm_spec, warm, warm_specs)
     def request_resources(response: dict[str, Any]) -> dict[str, Any]:
         if task == "image":
             return response.get("encoder_metrics", {})
@@ -375,6 +458,11 @@ def _measure_task(
         "parity_passed": all(
             result["prediction_mismatches"] == 0
             and result["max_probability_absolute_delta"] <= 1e-5
+            for result in (first_comparison, warm_comparison)
+        ),
+        "typed_json_passed": all(
+            result.get("typed_json_mismatches", 0) == 0
+            and result.get("typed_json_matches_runtime", True)
             for result in (first_comparison, warm_comparison)
         ),
     }
@@ -458,6 +546,13 @@ def main() -> None:
         "status": "passed_parity"
         if all(result["parity_passed"] for result in results)
         else "failed_parity",
+        "typed_json_status": "passed"
+        if all(result["typed_json_passed"] for result in results)
+        else "failed",
+        "runtime_gate_passed": all(
+            result["parity_passed"] and result["typed_json_passed"]
+            for result in results
+        ),
         "scope": (
             "first and warm request timing on frozen development-validation inputs: "
             "same Video scene with a second candidate, same image with a second taxonomy, "
@@ -537,6 +632,7 @@ def main() -> None:
                     {
                         "task": row["task"],
                         "parity_passed": row["parity_passed"],
+                        "typed_json_passed": row["typed_json_passed"],
                         "first_request_seconds": row["first_request"][
                             "dispatch_wall_seconds"
                         ],

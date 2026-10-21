@@ -9,10 +9,23 @@ import subprocess
 import sys
 import threading
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from tiny_omni_decision.decision_json import decision_json_record
 from tiny_omni_decision.modular_bundle import verify_modular_bundle
+
+
+@dataclass(frozen=True)
+class TypedDecisionSpec:
+    """Caller-owned output IDs and labels for one existing Path A score."""
+
+    request_id: str
+    decision_type: str
+    option_ids: tuple[str, ...]
+    option_texts: tuple[str, ...]
+    ordinal_values: tuple[float, ...] | None = None
 
 
 class JsonLineWorker:
@@ -284,6 +297,81 @@ class PathARuntimeDispatcher:
             "worker_startup_wall_seconds": startup_wall,
         }
 
+    def dispatch_typed(
+        self,
+        task: str,
+        payload: dict[str, Any],
+        *,
+        decision_specs: list[TypedDecisionSpec],
+    ) -> dict[str, Any]:
+        """Return the raw Path A response plus typed JSON records for its scores.
+
+        Audio accepts one spec per query; every other task returns one score and
+        therefore requires exactly one spec. This adapter preserves the original
+        dispatcher API and adds no model parameters or calibration.
+        """
+
+        if not isinstance(decision_specs, list) or not all(
+            isinstance(item, TypedDecisionSpec) for item in decision_specs
+        ):
+            raise ValueError("decision_specs must be a list of TypedDecisionSpec")
+        if task == "audio":
+            queries = payload.get("queries")
+            if not isinstance(queries, list) or len(decision_specs) != len(queries):
+                raise ValueError("audio requires one decision spec per audio query")
+            for query, spec in zip(queries, decision_specs, strict=True):
+                query_options = query.get("options") if isinstance(query, dict) else None
+                if not isinstance(query_options, (list, tuple)) or tuple(
+                    query_options
+                ) != spec.option_texts:
+                    raise ValueError("audio decision option texts must match query order")
+        else:
+            if len(decision_specs) != 1:
+                raise ValueError("non-audio Path A tasks require exactly one decision spec")
+            spec = decision_specs[0]
+            if task in {"text", "image"}:
+                payload_options = payload.get("options")
+                if not isinstance(payload_options, (list, tuple)) or tuple(
+                    payload_options
+                ) != spec.option_texts:
+                    raise ValueError("decision option texts must match payload order")
+
+        for spec in decision_specs:
+            decision_json_record(
+                request_id=spec.request_id,
+                decision_type=spec.decision_type,
+                option_ids=spec.option_ids,
+                option_texts=spec.option_texts,
+                probabilities=(
+                    [1.0 / len(spec.option_ids)] * len(spec.option_ids)
+                    if spec.option_ids
+                    else []
+                ),
+                ordinal_values=spec.ordinal_values,
+            )
+
+        response = self.dispatch(task, payload)
+        if task == "audio":
+            scored = response.get("decisions")
+            if not isinstance(scored, list) or len(scored) != len(decision_specs):
+                raise RuntimeError("audio worker score count did not match its query count")
+            typed_scores = [
+                {
+                    **item,
+                    "decision_json": _typed_record(item, spec),
+                }
+                for item, spec in zip(scored, decision_specs, strict=True)
+            ]
+            return {
+                **response,
+                "decisions": typed_scores,
+                "decision_json": [item["decision_json"] for item in typed_scores],
+            }
+        return {
+            **response,
+            "decision_json": _typed_record(response, decision_specs[0]),
+        }
+
     def close(self) -> None:
         for worker in (self._torch_worker, self._videoprism_worker):
             if worker is not None:
@@ -296,3 +384,19 @@ class PathARuntimeDispatcher:
 
     def __exit__(self, exc_type: Any, exc: Any, traceback: Any) -> None:
         self.close()
+
+
+def _typed_record(result: dict[str, Any], spec: TypedDecisionSpec) -> dict[str, object]:
+    try:
+        return decision_json_record(
+            request_id=spec.request_id,
+            decision_type=spec.decision_type,
+            option_ids=spec.option_ids,
+            option_texts=spec.option_texts,
+            probabilities=result["probabilities"],
+            predicted_index=result["prediction_index"],
+            confidence=result["confidence"],
+            ordinal_values=spec.ordinal_values,
+        )
+    except KeyError as error:
+        raise RuntimeError(f"Path A worker response is missing {error.args[0]!r}") from error
