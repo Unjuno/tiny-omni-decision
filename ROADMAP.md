@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 AVID-Bench source screen:** AVID offers a relevant audio-visual
+inconsistency task, but the exact source-media rights and a pinned TRAIN-only
+release are not verified; accessible Hugging Face metadata currently lists test
+annotations only. The README estimates 84 GB for test media and 415 GB for the
+full dataset, so no media or test annotations were downloaded or opened. Keep
+the source `REVIEW`; do not treat its model results as this project's evidence.
+Reopen only with exact media rights, a hash-pinned TRAIN release, and a small
+local subset. [Source screen and gate](docs/pretrained_reuse/R2_AVID_SOURCE_SCREEN_20261021.md).
+
 **2026-10-21 13:37 JST R0 live-state recheck:** The roadmap/continuation
 worktree is at `dc60ad9` before this audit; PR #15 remains draft/open at
 `71c4db1`. PRs #16–#19 are also open for the PE-Core audit, MAVD source screen,
