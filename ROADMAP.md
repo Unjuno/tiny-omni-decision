@@ -1,3 +1,12 @@
+**2026-10-22 R2 scalar-audio projection diagnostic:** The matched C0 and
+exchange/gate arms each completed 2,048 updates after adding a learned
+scalar-to-192 audio projection. Both selected checkpoints remained at 50.0%
+validation Accuracy / 0.6931 NLL; the exchange/gate arm briefly reached
+50.27% at step 1,920 before returning to chance. No sustained gain over the
+zero-padded control was found. This remains synthetic, exposed development
+validation, not natural AV/product evidence. See the
+[diagnostic report](docs/pretrained_reuse/R2_SCALAR_AUDIO_PROJECTION_DIAGNOSTIC_20261022.md).
+
 **2026-10-22 R2 conditional AV readout development comparison:** Five matched
 seed-17 arms (native Attention plus the 2×2 exchange/gate ablation) completed
 2,048 updates on frozen synthetic CLEVRER tone/video features. All selected
