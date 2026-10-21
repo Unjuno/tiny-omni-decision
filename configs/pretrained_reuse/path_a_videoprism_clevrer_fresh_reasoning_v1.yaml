@@ -1,0 +1,64 @@
+schema_version: 1
+experiment_id: path-a-videoprism-clevrer-fresh-reasoning-v1
+claim_scope: >-
+  CLEVRER explanatory, predictive, and counterfactual binary-choice decisions
+  on 200 scene-disjoint training scenes and 200 development scenes selected
+  outside the recoverable prior exposure inventory, with conservative alias
+  exclusions; one-time 200-scene holdout is isolated until model selection.
+  This is a bounded
+  development task, not a general-world or blind-audit claim.
+seed: 17
+source:
+  dataset_id: MIT-IBM/CLEVRER
+  revision: 98b842082ba4f7c18b6b9e3f39145871782a65ef
+  sample_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-fresh-reasoning-v1-attempt-01-data
+  train_questions: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-sample-seed17/train-questions.json
+  validation_questions: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-sample-seed17/validation-questions.json
+  question_sha256:
+    train: 11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4
+    validation: fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d
+  question_types: [explanatory, predictive, counterfactual]
+  split_group: video_scene
+  content_key: normalized_question_and_candidate_statement
+  validation_content_overlap_policy: exclude_exact_train_duplicates
+  validation_previously_used: false
+  sealed_audit_loaded: false
+  development_validation_previously_used_for_descriptive_readout_selection: false
+features:
+  cache: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-fresh-reasoning-v1-attempt-01-features/video-features.npz
+  cache_report: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-fresh-reasoning-v1-attempt-01-features/cache-report.json
+  model_id: google/videoprism-base-f16r288
+  model_revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  frame_count: 8
+  resolution: 288
+  feature_shape: [768]
+  pooling: mean_spatiotemporal_tokens
+text_encoder:
+  model_path: C:/CodexArtifacts/pretrained-reuse-r2/models/text-minilm-en
+  model_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  weights_sha256: cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433
+  pooling: masked_mean_last_hidden_state_float32
+decision:
+  options: [wrong, correct]
+  question_format: original_question_plus_candidate_statement
+  target: upstream_choice_answer
+  encoder_frozen: true
+  readout: shared_candidate_mlp
+  hidden_size: 128
+training:
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.001
+  epochs: 24
+  batch_examples: 64
+  sampling: every_unique_choice_each_epoch
+  loss_weighting: equal_question_type_then_equal_scene
+  selector: minimum_validation_macro_question_type_nll
+  bootstrap_replicates: 10000
+  bootstrap_seed: 17
+outputs:
+  preflight_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-fresh-reasoning-v1-attempt-01-model-preflight
+  run_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-fresh-reasoning-v1-attempt-01-model-run

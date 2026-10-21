@@ -64,6 +64,32 @@ def _task_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
     return {kind: sum(row["question_type"] == kind for row in rows) for kind in QUESTION_TYPES}
 
 
+def _validation_was_previously_used(config: dict[str, Any]) -> bool:
+    return bool(config.get("source", {}).get("validation_previously_used", True))
+
+
+def _validate_fetch_report(
+    fetch_report: dict[str, Any],
+    *,
+    source_revision: str,
+    train_scenes: set[int],
+    validation_scenes: set[int],
+    train_media: set[str],
+    validation_media: set[str],
+) -> None:
+    if fetch_report.get("revision", fetch_report.get("source_revision")) != source_revision:
+        raise ValueError("sample fetch report revision mismatch")
+    scene_overlap = fetch_report.get("scene_overlap", len(train_scenes & validation_scenes))
+    media_overlap = fetch_report.get("media_hash_overlap")
+    if media_overlap is None:
+        partition_overlaps = fetch_report.get("cross_partition_media_hash_overlap", {})
+        media_overlap = sum(len(values) for values in partition_overlaps.values())
+    if scene_overlap != 0 or media_overlap != 0:
+        raise ValueError("sample fetch report has scene/media overlap")
+    if train_scenes & validation_scenes or train_media & validation_media:
+        raise ValueError("sample manifests overlap despite fetch report")
+
+
 def _macro(metrics_by_type: dict[str, dict[str, Any]]) -> dict[str, float]:
     keys = ("accuracy", "nll", "brier", "ece_15_bins")
     return {
@@ -154,10 +180,14 @@ def _validate_inputs(config_path: Path, config: dict[str, Any]) -> dict[str, Any
         raise ValueError("CLEVRER scene or video media overlap across source splits")
 
     fetch_report = json.loads(paths["fetch_report"].read_text(encoding="utf-8"))
-    if fetch_report.get("revision") != source["revision"]:
-        raise ValueError("sample fetch report revision mismatch")
-    if fetch_report.get("scene_overlap") != 0 or fetch_report.get("media_hash_overlap") != 0:
-        raise ValueError("sample fetch report has scene/media overlap")
+    _validate_fetch_report(
+        fetch_report,
+        source_revision=source["revision"],
+        train_scenes=train_scenes,
+        validation_scenes=validation_scenes,
+        train_media=train_media,
+        validation_media=validation_media,
+    )
 
     feature_report = json.loads(feature_report_path.read_text(encoding="utf-8"))
     expected_report = {
@@ -698,9 +728,10 @@ def main() -> None:
     report = {
         "schema_version": 1,
         "status": "complete_frozen_clevrer_binary_reasoning_readout",
-        "claim_scope": (
+        "claim_scope": config.get(
+            "claim_scope",
             "CLEVRER explanatory/predictive/counterfactual binary-choice task on reused "
-            "development validation scenes; not a blind or general-world benchmark"
+            "development validation scenes; not a blind or general-world benchmark",
         ),
         "experiment_id": config["experiment_id"],
         "source_commit": subprocess.run(
@@ -740,7 +771,9 @@ def main() -> None:
             ],
             "normalized_question_candidate_overlap_after_filter": 0,
             "sealed_audit_loaded": False,
-            "validation_previously_used_for_descriptive_readout_selection": True,
+            "validation_previously_used_for_descriptive_readout_selection": (
+                _validation_was_previously_used(config)
+            ),
         },
         "sample_accounting": {
             "unique_train_choice_examples": len(train_rows),

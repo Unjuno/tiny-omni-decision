@@ -80,6 +80,11 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--expected-sha256", default=CHECKPOINT_SHA256)
     parser.add_argument("--temporal-order", choices=("forward", "reverse"), default="forward")
     parser.add_argument("--allow-question-template-overlap", action="store_true")
+    parser.add_argument(
+        "--holdout-only",
+        action="store_true",
+        help="extract a post-selection one-time holdout without loading train/development",
+    )
     return parser.parse_args()
 
 
@@ -87,6 +92,35 @@ def _read_rows(path: Path) -> list[dict[str, Any]]:
     return [
         json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
     ]
+
+
+def _rows_for_extraction(
+    sample_dir: Path,
+    *,
+    holdout_only: bool,
+    allow_question_template_overlap: bool = False,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
+    if holdout_only:
+        holdout = _read_rows(sample_dir / "holdout.jsonl")
+        if not holdout or any(row.get("partition") != "holdout" for row in holdout):
+            raise ValueError("holdout-only extraction requires a nonempty isolated holdout.jsonl")
+        if len({row["id"] for row in holdout}) != len(holdout):
+            raise ValueError("duplicate sample ID in holdout split")
+        scenes_by_hash: dict[int, str] = {}
+        for row in holdout:
+            scene = int(row["scene_index"])
+            media_hash = str(row["media_sha256"])
+            if scenes_by_hash.setdefault(scene, media_hash) != media_hash:
+                raise ValueError(f"scene {scene} maps to multiple media identities")
+        return [], holdout, 0
+    train = _read_rows(sample_dir / "train.jsonl")
+    validation = _read_rows(sample_dir / "validation.jsonl")
+    overlap = validate_split_rows(
+        train,
+        validation,
+        allow_question_template_overlap=allow_question_template_overlap,
+    )
+    return train, validation, overlap
 
 
 def _decode_video(path: Path) -> Any:
@@ -155,11 +189,9 @@ def main() -> None:
     ).stdout.strip()
     if upstream_commit != SOURCE_COMMIT:
         raise ValueError(f"unexpected VideoPrism source commit: {upstream_commit}")
-    train = _read_rows(sample_dir / "train.jsonl")
-    validation = _read_rows(sample_dir / "validation.jsonl")
-    question_content_overlap = validate_split_rows(
-        train,
-        validation,
+    train, validation, question_content_overlap = _rows_for_extraction(
+        sample_dir,
+        holdout_only=args.holdout_only,
         allow_question_template_overlap=args.allow_question_template_overlap,
     )
     for rows in (train, validation):
@@ -225,11 +257,17 @@ def main() -> None:
         "checkpoint_sha256": args.expected_sha256,
         "checkpoint_bytes": checkpoint.stat().st_size,
         "dataset_revision": "MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef",
-        "sample_manifest_sha256": {
-            "train": sha256_file(sample_dir / "train.jsonl"),
-            "validation": sha256_file(sample_dir / "validation.jsonl"),
-            "fetch_report": sha256_file(sample_dir / "fetch-report.json"),
-        },
+        "sample_manifest_sha256": (
+            {"holdout": sha256_file(sample_dir / "holdout.jsonl")}
+            if args.holdout_only
+            else {
+                "train": sha256_file(sample_dir / "train.jsonl"),
+                "validation": sha256_file(sample_dir / "validation.jsonl"),
+                "fetch_report": sha256_file(sample_dir / "fetch-report.json"),
+            }
+        ),
+        "holdout_only": args.holdout_only,
+        "holdout_fetched_after_selection": args.holdout_only,
         "train_ids": [row["id"] for row in train],
         "validation_ids": [row["id"] for row in validation],
         "train_scene_ids": [row["scene_index"] for row in train],

@@ -9,6 +9,8 @@ from scripts.train_frozen_clevrer_binary_reasoning import (  # noqa: E402
     QUESTION_TYPES,
     _metrics_by_scene_bootstrap,
     _sample_weights,
+    _validate_fetch_report,
+    _validation_was_previously_used,
 )
 
 
@@ -64,3 +66,40 @@ def test_scene_bootstrap_is_reproducible_and_reports_independent_groups():
         for interval in metrics.values():
             assert len(interval) == 2
             assert interval[0] <= interval[1]
+
+
+def test_validation_history_status_is_read_from_the_experiment_config():
+    never_used = {"source": {"validation_previously_used": False}}
+    previously_used = {"source": {"validation_previously_used": True}}
+    assert _validation_was_previously_used(never_used) is False
+    assert _validation_was_previously_used(previously_used) is True
+
+
+def test_new_media_fetch_report_schema_passes_scene_and_asset_gates():
+    _validate_fetch_report(
+        {
+            "source_revision": "pinned-revision",
+            "cross_partition_media_hash_overlap": {"train_development": []},
+        },
+        source_revision="pinned-revision",
+        train_scenes={1},
+        validation_scenes={2},
+        train_media={"train-hash"},
+        validation_media={"validation-hash"},
+    )
+
+
+def test_fetch_report_gate_rejects_media_overlap_from_either_schema():
+    with pytest.raises(ValueError, match="scene/media overlap"):
+        _validate_fetch_report(
+            {
+                "revision": "pinned-revision",
+                "scene_overlap": 0,
+                "media_hash_overlap": 1,
+            },
+            source_revision="pinned-revision",
+            train_scenes={1},
+            validation_scenes={2},
+            train_media={"train-hash"},
+            validation_media={"validation-hash"},
+        )

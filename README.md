@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-21 fresh CLEVRER reasoning preparation:** Fixed scene-disjoint
+train/development/one-time holdout manifests and fetched 400 train/development
+videos with zero known historical-media overlap. Model fitting is blocked
+before feature extraction because the pinned Windows VideoPrism environment
+has no CUDA-enabled JAX backend; no quality claim or holdout evaluation was
+made. [Preparation record and hashes](docs/pretrained_reuse/CLEVRER_FRESH_REASONING_V1_STATUS_20261021.md).
+
 **2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
 scenes from 256 to 768 improved selected pooled development Accuracy and NLL
 at the same 2,048-update budget, primarily on static descriptive questions.

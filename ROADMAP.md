@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 fresh CLEVRER reasoning preparation:** Deterministic
+scene-disjoint train/development/one-time holdout splits and 400 train/dev
+videos are ready with zero known media overlap. GPU feature extraction was
+blocked because the pinned Windows VideoPrism environment lacks a CUDA-enabled
+JAX backend. No training or holdout evaluation occurred; the result does not
+change model-quality status. See the [preparation record](docs/pretrained_reuse/CLEVRER_FRESH_REASONING_V1_STATUS_20261021.md).
+
 **2026-10-21 R7 Path A image runtime full-validation parity:** Replayed all
 2,048 saved decisions across the 512-image checkpoint-selection validation
 slice using the manifest-only image runtime bundle on JAX CPU. There were zero
