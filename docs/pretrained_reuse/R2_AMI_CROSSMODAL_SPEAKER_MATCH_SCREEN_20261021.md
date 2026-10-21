@@ -359,6 +359,39 @@ windows pass. These counts are not a frozen task set or quality results.
 Audio/video clock alignment, visible-speaker truth, media/near-duplicate split
 isolation, and privacy/governance remain open.
 
+### Full decode of the previously sample-checked AVI streams — 2026-10-21
+
+A CPU-only audit fully decoded the 20 AVI files from the first five selected
+meetings (three SA training and two SB development) that had previously only
+been sampled at three timestamps. Each file's size and SHA-256 matched the
+pinned expanded preflight. PyAV 18.1.0 decoded all files to end-of-stream with
+no exceptions, missing PTS, nonmonotonic PTS, or internal PTS gaps. Seventeen
+streams yielded one fewer frame than the AVI declaration; three had larger
+terminal count differences:
+
+| Meeting / stream | Declared | Decoded | Terminal difference | Last decoded PTS |
+| --- | ---: | ---: | ---: | ---: |
+| ES2002a Closeup4 | 31,212 | 31,194 | 18 frames (0.72 s) | 1,247.72 s |
+| ES2003a Closeup1 | 28,146 | 28,097 | 49 frames (1.96 s) | 1,123.84 s |
+| ES2006a Closeup3 | 31,917 | 31,870 | 47 frames (1.88 s) | 1,274.76 s |
+
+PTS remained contiguous through each decoded stream; these differences are at
+the terminal end relative to the AVI frame-count declaration. All 70
+preliminary candidate word windows in these five meetings end before the last
+decoded timestamp of the mapped speaker camera. This is file/decode and current
+candidate-bound evidence only; it does not establish audio/video synchronization,
+that the visible face is the annotated speaker, or valid task labels. Across the
+12 selected meetings, the prior 28-stream full-decode evidence plus this audit
+cover all 48 selected AVI streams. Audio/video clock alignment and governance
+remain open.
+
+External artifacts (media remain outside Git):
+
+- Script: `C:\CodexArtifacts\pretrained-reuse-r2\ami-av-full-video-decode-train-dev-attempt-02\audit_full_decode.py`, SHA-256 `d52a09b67ffea9ba45eccd9887f9c6f92db274415b8eb34752b9665dab047bd5`.
+- Result: `C:\CodexArtifacts\pretrained-reuse-r2\ami-av-full-video-decode-train-dev-attempt-02\result.json`, SHA-256 `9d6bad1aba06ee12e7712947bb5f2c20b5fd199b1faa151d2c5f608a8ca1688e`.
+- Source preflight SHA-256: `bbead20d61d57429cbf7a5358bfb5ac890e6da108a35c20e6ad8621cd67a9b4b`.
+- Runtime: Python 3.11.9, PyAV 18.1.0, `CUDA_VISIBLE_DEVICES=-1`; elapsed 29.5 s. No training, model, GPU, SC media, or test data was accessed.
+
 ### Train-only AV timing preflight — 2026-10-21
 
 A separate CPU-only runner generated two contact sheets for the frozen 24-row
