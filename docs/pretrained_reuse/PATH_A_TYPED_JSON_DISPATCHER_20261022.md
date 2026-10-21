@@ -41,7 +41,9 @@ typed JSON checks as optional and runs them only when typed decision specs are
 provided; raw reference parity behavior remains unchanged. After this
 compatibility fix, the complete local CPU suite passed: 2,380 passed, 11
 skipped. Ruff and `git diff --check` also passed. The resulting CI run is being
-checked separately after push.
+checked separately after push. Commit `6b16d9983c96c7fb0edfef975c007815abdf0850`
+then passed both push CI run #2527 (`39633471979`) and PR CI run #2528
+(`39633480668`), including Lint, Test, and manifest validation.
 
 ## Verification limits
 
