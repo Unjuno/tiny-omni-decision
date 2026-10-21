@@ -46,6 +46,42 @@ blind evaluation. No labels or predictions were used. No existing feature,
 checkpoint, run, split, or dataset file was modified. No training or
 checkpoint selection occurred.
 
+## Opt-in sequence-preserving extractor
+
+The existing extractor now accepts `--feature-layout` with three options:
+
+- `pooled` (default): preserves the legacy `[768]` global token mean and may
+  reuse only an exact-window cached pooled feature.
+- `per_frame_mean`: reshapes the pinned output to `[B,T,N,D]`, averages the
+  spatial token axis only, and stores `[T,D]`.
+- `spatiotemporal_tokens`: stores the complete `[T,N,D]` output without
+  spatial pooling.
+
+Temporal modes never reuse a legacy `[D]` feature cache. Their result metadata
+records feature layout, shape, and (for full tokens) tokens per frame. The run
+ledger is switched from `RUNNING` to the result status only after an atomic
+result write, with the result SHA-256 included. The first one-row smoke exposed
+that the previous implementation left `run.json` stuck at `RUNNING`; that
+immutable first smoke is retained, and a second smoke verified the corrected
+terminal ledger.
+
+The second smoke used the same single hash-verified video but a manifest that
+contains no target/options. It wrote an `[8,768]` feature. Its manifest SHA-256
+is `f45bf417b9f5543615798e62b61e24e4f8471557a4dc09c093f1bd03f480c87a`, feature
+SHA-256 is `6a8de418d998e5031a043e009d586d1b96d384fee5905d153a1304286796040e`,
+and completed result SHA-256 is
+`c79863cc98f44a136acc2a41517f65f58b64b1d4fc24b9023b75e1ada74b13b1`. The
+receipt is at
+`C:\CodexArtifacts\pretrained-reuse-r2\videoprism-temporal-feature-layout-smoke-20261021-02\features`.
+
+The reshape/pooling helpers passed 11 CPU tests, including the legacy-pooling
+parity path. These checks establish output integrity, not decision quality.
+No full temporal feature cache or temporal Decision model has been trained.
+After the opt-in extractor and run-ledger changes, full repository verification
+passed: `pytest -q` reported 2,347 passed / 11 skipped, `ruff check .` passed,
+and `git diff --check` passed. At the 22:36 JST resource check, Orbitune PID
+28928 still owned 15,821/16,384 MiB of VRAM; no GPU job was started.
+
 ## Next evidence needed
 
 The result supports testing a small temporal readout only after obtaining or
@@ -54,6 +90,7 @@ pooling `[T,D]` with the current global mean and a parameter-matched temporal
 control; retain best-unimodal and modality-shuffle controls. Keep the current
 validation cohort closed to repeated tuning. Full token extraction would use
 about 6.29 MB per 8-frame clip in float32 before metadata, or about 3.22 GB for
-512 clips; this cost and its CPU impact need a measured preflight before any
-bulk run. Orbitune still owned the GPU at the last live check, so no bulk
-feature extraction or GPU work was started.
+512 clips; the per-frame-mean path uses about 24.6 KB per clip. This cost and
+its CPU impact need a measured preflight before any bulk run. Orbitune still
+owned the GPU at the last live check, so no bulk feature extraction or GPU work
+was started.

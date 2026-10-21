@@ -10,6 +10,13 @@ not that a recurrent/gated head will improve task quality. No predictions,
 metrics, fitting, or validation selection were run. Full audit and retained
 attempts: [VideoPrism temporal-token probe](docs/pretrained_reuse/R1_VIDEOPRISM_TEMPORAL_TOKEN_SHAPE_20261021.md).
 
+The extractor now has opt-in `per_frame_mean` (`[T,768]`) and
+`spatiotemporal_tokens` (`[T,N,768]`) feature layouts; legacy global pooling
+remains the default. A one-row, label-free CPU model smoke generated `[8,768]`
+and validated terminal run metadata. Unit tests cover ordering, shapes, finite
+values, and compatibility with the old pooling path. Bulk feature extraction
+and temporal-head fitting have not started.
+
 **2026-10-21 22:26 JST R0 live recheck:** Refreshed origin and checked all
 40 registered worktrees plus open PRs #9–#20 without editing other checkouts.
 Six worktrees remain dirty, including the user's primary Teacher checkout; all

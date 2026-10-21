@@ -13,6 +13,8 @@ from typing import Any
 
 import numpy as np
 
+from tiny_omni_decision.temporal_tokens import videoprism_features_by_layout
+
 SOURCE_COMMIT = "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
 CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
 MODEL_PARAMETERS = 114_365_184
@@ -30,6 +32,20 @@ def atomic_json(path: Path, value: Any) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
+
+
+def completed_run_metadata(
+    initial: dict[str, Any], result: dict[str, Any], result_sha256: str
+) -> dict[str, Any]:
+    """Publish terminal status only after the result receipt has been written."""
+    return {
+        **initial,
+        "status": result["status"],
+        "result_sha256": result_sha256,
+        "examples": result["examples"],
+        "elapsed_seconds": result["elapsed_seconds"],
+        "feature_layout": result["feature_layout"],
+    }
 
 
 def media_and_hash(
@@ -167,9 +183,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise ValueError(f"unexpected VideoPrism parameter count: {parameters}")
     encode = jax.jit(lambda batch: model.apply(variables, batch, train=False))
     output.mkdir(parents=True)
-    atomic_json(
-        output / "run.json",
-        {
+    run_metadata = {
             "status": "RUNNING",
             "manifest_sha256": sha256_file(manifest_path),
             "checkpoint_sha256": CHECKPOINT_SHA256,
@@ -177,10 +191,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "parameters": parameters,
             "device": "CPU",
             "frames": 8,
-            "pooling": "mean over VideoPrism tokens",
+            "feature_layout": args.feature_layout,
+            "pooling": (
+                "mean over VideoPrism tokens"
+                if args.feature_layout == "pooled"
+                else "mean spatial tokens per frame"
+                if args.feature_layout == "per_frame_mean"
+                else "unpooled spatiotemporal tokens"
+            ),
             "validation_scope": "development-only",
-        },
-    )
+        }
+    atomic_json(output / "run.json", run_metadata)
 
     from scripts.extract_frozen_videoprism_features import _preprocess
 
@@ -206,7 +227,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             (output / split_name).mkdir(exist_ok=True)
             cache_path = args.old_feature_root / media_split / f"{row['video_id']}.npy"
             cache_meta_path = cache_path.with_suffix(".json")
-            if cache_path.is_file() and cache_meta_path.is_file():
+            if (
+                args.feature_layout == "pooled"
+                and cache_path.is_file()
+                and cache_meta_path.is_file()
+            ):
                 meta = json.loads(cache_meta_path.read_text(encoding="utf-8"))
                 vector = np.load(cache_path, allow_pickle=False)
                 cached_times = meta.get("video_target_frame_times_s", [])
@@ -233,6 +258,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         "media_video_sha256": expected_media_hash,
                         "feature_sha256": hashlib.sha256(vector.tobytes()).hexdigest(),
                         "feature_dim": 768,
+                        "feature_shape": list(vector.shape),
+                        "feature_layout": "pooled",
                         "feature_path": str(cache_path),
                         "reused_existing_exact_window": True,
                     }
@@ -251,8 +278,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 encoded,
             )
             tokens = encoded[0] if isinstance(encoded, tuple) else encoded
-            vector = np.asarray(tokens).mean(axis=1).squeeze(0).astype(np.float32)
-            if vector.shape != (768,) or not np.isfinite(vector).all():
+            features = videoprism_features_by_layout(
+                np.asarray(tokens), len(row["video_frame_times_s"]), args.feature_layout
+            )
+            vector = features.squeeze(0).astype(np.float32)
+            if (
+                vector.ndim not in {1, 2, 3}
+                or vector.shape[-1] != 768
+                or (args.feature_layout == "pooled" and vector.shape != (768,))
+                or (
+                    args.feature_layout == "per_frame_mean"
+                    and vector.shape != (len(row["video_frame_times_s"]), 768)
+                )
+                or (
+                    args.feature_layout == "spatiotemporal_tokens"
+                    and vector.shape[0] != len(row["video_frame_times_s"])
+                )
+                or not np.isfinite(vector).all()
+            ):
                 raise ValueError(f"invalid feature for {row['sample_id']}")
             digest = hashlib.sha256(vector.tobytes()).hexdigest()
             with feature_path.open("xb") as target:
@@ -268,7 +311,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "max_frame_time_error_s": max_error,
                 "media_video_sha256": expected_media_hash,
                 "feature_sha256": digest,
-                "feature_dim": 768,
+                "feature_dim": int(vector.shape[-1]),
+                "feature_shape": list(vector.shape),
+                "feature_layout": args.feature_layout,
+                "tokens_per_frame": (
+                    int(vector.shape[1]) if vector.ndim == 3 else None
+                ),
                 "feature_path": str(feature_path),
                 "device": "CPU",
                 "reused_existing_exact_window": False,
@@ -300,10 +348,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "model_parameters": parameters,
         "checkpoint_sha256": CHECKPOINT_SHA256,
         "source_commit": commit,
+        "feature_layout": args.feature_layout,
         "records": records,
         "validation_scope": "development-only; not blind evaluation",
     }
-    atomic_json(output / "result.json", result)
+    result_path = output / "result.json"
+    atomic_json(result_path, result)
+    atomic_json(
+        output / "run.json",
+        completed_run_metadata(run_metadata, result, sha256_file(result_path)),
+    )
     return result
 
 
@@ -319,6 +373,12 @@ def main() -> None:
     parser.add_argument("--train-acquisition", type=Path, required=True)
     parser.add_argument("--fresh-valid-media-report", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--feature-layout",
+        choices=("pooled", "per_frame_mean", "spatiotemporal_tokens"),
+        default="pooled",
+        help="Keep the legacy global mean or preserve per-frame/per-token VideoPrism features.",
+    )
     args = parser.parse_args()
     print(json.dumps(run(args), indent=2), flush=True)
 
