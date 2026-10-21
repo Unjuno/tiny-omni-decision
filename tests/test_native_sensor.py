@@ -110,3 +110,80 @@ def test_center_runtime_timing_and_full_taxonomy(tmp_path):
         clock_id="relative",
     )
     assert missing["status"] == "abstain"
+
+
+def test_sensor_window_json_preserves_caller_ids_time_and_abstention(tmp_path):
+    from tiny_omni_decision.native_sensor import ACTIVITY_CODES
+    from tiny_omni_decision.native_sensor_runtime import (
+        StaticSensor,
+        decide_sensor_window,
+        sensor_window_decision_json,
+    )
+
+    data = request(tmp_path).model_dump()
+    data["options"] = [
+        dict(option_id=f"activity-{code}", attributes={"activity_code": code})
+        for code in ACTIVITY_CODES
+    ]
+    batch = ObservationBatch.model_validate(data)
+    texts = [f"activity {code}" for code in ACTIVITY_CODES]
+    model = StaticSensor().eval()
+    selected = decide_sensor_window(model, batch, query_time_ms=2540, clock_id="relative")
+    record = sensor_window_decision_json(
+        selected,
+        request_id="sensor-17",
+        option_ids=[option.option_id for option in batch.options],
+        option_texts=texts,
+    )
+    assert record["status"] == "selected"
+    assert record["selected_option_id"] == selected["selected_option_id"]
+    assert record["temporal_scope"] == selected["temporal_scope"]
+    assert [option["id"] for option in record["options"]] == [
+        option.option_id for option in batch.options
+    ]
+    json.dumps(record, allow_nan=False)
+
+    observation = batch.observations[0].model_copy(update={"valid_mask": (False,) * 128})
+    missing = decide_sensor_window(
+        model,
+        batch.model_copy(update={"observations": (observation,)}),
+        query_time_ms=2540,
+        clock_id="relative",
+    )
+    abstention = sensor_window_decision_json(
+        missing,
+        request_id="sensor-missing",
+        option_ids=[option.option_id for option in batch.options],
+        option_texts=texts,
+    )
+    assert abstention["status"] == "abstain"
+    assert abstention["selected_option_id"] is None
+    assert abstention["temporal_scope"] == missing["temporal_scope"]
+    assert all(option["probability"] is None for option in abstention["options"])
+
+
+def test_sensor_window_json_rejects_option_reordering(tmp_path):
+    from tiny_omni_decision.native_sensor import ACTIVITY_CODES
+    from tiny_omni_decision.native_sensor_runtime import (
+        StaticSensor,
+        decide_sensor_window,
+        sensor_window_decision_json,
+    )
+
+    data = request(tmp_path).model_dump()
+    data["options"] = [
+        dict(option_id=f"activity-{code}", attributes={"activity_code": code})
+        for code in ACTIVITY_CODES
+    ]
+    batch = ObservationBatch.model_validate(data)
+    result = decide_sensor_window(
+        StaticSensor().eval(), batch, query_time_ms=2540, clock_id="relative"
+    )
+    option_ids = [option.option_id for option in batch.options]
+    with pytest.raises(ValueError, match="order"):
+        sensor_window_decision_json(
+            result,
+            request_id="sensor-order",
+            option_ids=option_ids[::-1],
+            option_texts=["activity"] * len(option_ids),
+        )

@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 optional sensor typed JSON adapter:** The existing HARTH
+sensor-window result now maps to the caller-ID Decision JSON contract while
+preserving central-label timing and explicit abstention for incomplete input.
+This is an API/runtime change only; no training or new quality evaluation was
+performed, and the optional sensor route does not close any required modality
+or joint-fusion gate. See
+[`sensor typed JSON adapter`](docs/pretrained_reuse/R2_NATIVE_SENSOR_TYPED_JSON_20261022.md).
+
 **2026-10-22 R2 Path A typed JSON runtime adapter:** The Path A dispatcher can
 wrap existing text, image, audio, and video option probabilities in the stable
 caller-ID Decision JSON contract without changing scoring or adding model

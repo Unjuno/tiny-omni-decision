@@ -5,6 +5,10 @@ import math
 import torch
 from torch import nn
 
+from tiny_omni_decision.decision_json import (
+    decision_json_abstention_record,
+    decision_json_record,
+)
 from tiny_omni_decision.native_sensor import ACTIVITY_CODES, decide_sensor
 from tiny_omni_decision.observations import ObservationBatch
 
@@ -62,3 +66,63 @@ def decide_sensor_window(model, batch: ObservationBatch, *, query_time_ms, clock
         future_evidence_ms=times[-1] - times[64],
     )
     return result
+
+
+def sensor_window_decision_json(
+    result: dict,
+    *,
+    request_id: str,
+    option_ids: list[str],
+    option_texts: list[str],
+) -> dict[str, object]:
+    """Adapt a sensor-window result to the stable caller-ID JSON contract.
+
+    An incomplete window remains an abstention with null probabilities; it is
+    never represented as a uniform distribution or a low-confidence answer.
+    """
+    if not isinstance(result, dict):
+        raise ValueError("sensor result must be an object")
+    rows = result.get("options")
+    if not isinstance(rows, list) or len(rows) != len(option_ids):
+        raise ValueError("sensor result options must match caller options")
+    if len(option_ids) != len(option_texts):
+        raise ValueError("caller option IDs and texts must have matching lengths")
+    for row, option_id in zip(rows, option_ids, strict=True):
+        if not isinstance(row, dict) or row.get("option_id") != option_id:
+            raise ValueError("sensor result option order must match caller option order")
+
+    status = result.get("status")
+    if status == "abstain":
+        if result.get("selected_option_id") is not None:
+            raise ValueError("abstaining sensor result cannot select an option")
+        if any(row.get("probability") is not None for row in rows):
+            raise ValueError("abstaining sensor result cannot contain probabilities")
+        record = decision_json_abstention_record(
+            request_id=request_id,
+            decision_type="choice",
+            option_ids=option_ids,
+            option_texts=option_texts,
+            reason=result.get("reason"),
+        )
+    elif status == "selected":
+        selected_option_id = result.get("selected_option_id")
+        if selected_option_id not in option_ids:
+            raise ValueError("selected sensor option is not in caller options")
+        record = decision_json_record(
+            request_id=request_id,
+            decision_type="choice",
+            option_ids=option_ids,
+            option_texts=option_texts,
+            probabilities=[row.get("probability") for row in rows],
+            predicted_index=option_ids.index(selected_option_id),
+        )
+        record["status"] = "selected"
+    else:
+        raise ValueError("unsupported sensor result status")
+
+    temporal_scope = result.get("temporal_scope")
+    if temporal_scope is not None:
+        if not isinstance(temporal_scope, dict):
+            raise ValueError("temporal_scope must be an object")
+        record["temporal_scope"] = temporal_scope
+    return record

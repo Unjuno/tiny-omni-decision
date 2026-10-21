@@ -4,7 +4,10 @@ import json
 
 import pytest
 
-from tiny_omni_decision.decision_json import decision_json_record
+from tiny_omni_decision.decision_json import (
+    decision_json_abstention_record,
+    decision_json_record,
+)
 
 
 def test_decision_json_record_preserves_caller_ids_text_order_and_probabilities() -> None:
@@ -50,6 +53,35 @@ def test_decision_json_record_supports_binary_and_ordinal_decisions() -> None:
 
     assert binary["selected_option_id"] == "yes"
     assert ordinal["expected_score"] == pytest.approx(1.3)
+
+
+def test_decision_json_record_accepts_an_explicit_maximum_probability_tie() -> None:
+    record = decision_json_record(
+        request_id="tie",
+        decision_type="choice",
+        option_ids=["first", "second"],
+        option_texts=["First", "Second"],
+        probabilities=[0.5, 0.5],
+        predicted_index=1,
+    )
+
+    assert record["selected_option_id"] == "second"
+
+
+def test_abstention_json_has_no_fake_probability_distribution() -> None:
+    record = decision_json_abstention_record(
+        request_id="missing-sensor",
+        decision_type="choice",
+        option_ids=["walk", "sit"],
+        option_texts=["walking", "sitting"],
+        reason="incomplete_sensor_window",
+    )
+
+    assert record["status"] == "abstain"
+    assert record["selected_option_id"] is None
+    assert record["confidence"] is None
+    assert [option["probability"] for option in record["options"]] == [None, None]
+    assert json.loads(json.dumps(record, allow_nan=False)) == record
 
 
 @pytest.mark.parametrize(

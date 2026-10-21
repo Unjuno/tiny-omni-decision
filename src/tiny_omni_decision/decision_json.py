@@ -66,7 +66,9 @@ def decision_json_record(
         or not 0 <= predicted_index < len(values)
     ):
         raise ValueError("predicted_index is outside the supplied option range")
-    if predicted_index != selected_index:
+    if not math.isclose(
+        values[predicted_index], values[selected_index], rel_tol=0.0, abs_tol=1e-12
+    ):
         raise ValueError("predicted_index does not match the probability maximum")
 
     selected_probability = values[predicted_index]
@@ -96,6 +98,44 @@ def decision_json_record(
             probability * score
             for probability, score in zip(values, numeric_ordinal_values, strict=True)
         )
+    return record
+
+
+def decision_json_abstention_record(
+    *,
+    request_id: str,
+    decision_type: str,
+    option_ids: Sequence[str],
+    option_texts: Sequence[str],
+    reason: str,
+) -> dict[str, object]:
+    """Build a JSON record for a decision that intentionally has no distribution."""
+
+    if not isinstance(reason, str) or not reason.strip():
+        raise ValueError("abstention reason must be a nonempty string")
+    if not isinstance(decision_type, str) or decision_type not in {"choice", "yes_no"}:
+        raise ValueError("abstention supports choice and yes_no decisions only")
+    # Reuse the selected-record validator for request and option identity checks,
+    # then replace its synthetic uniform probabilities with explicit nulls.
+    record = decision_json_record(
+        request_id=request_id,
+        decision_type=decision_type,
+        option_ids=option_ids,
+        option_texts=option_texts,
+        probabilities=(
+            [1.0 / len(option_ids)] * len(option_ids) if len(option_ids) else []
+        ),
+    )
+    record.update(
+        status="abstain",
+        selected_option_id=None,
+        confidence=None,
+        reason=reason,
+        options=[
+            {"id": option_id, "text": option_text, "probability": None}
+            for option_id, option_text in zip(option_ids, option_texts, strict=True)
+        ],
+    )
     return record
 
 
