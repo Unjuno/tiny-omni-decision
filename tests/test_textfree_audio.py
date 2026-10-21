@@ -48,6 +48,53 @@ def test_textfree_audio_readout_supports_supplied_subset():
     assert sum(item["probability"] for item in result["options"]) == pytest.approx(1.0)
 
 
+def test_textfree_audio_readout_temperature_changes_probabilities_not_option_ids():
+    model = _readout_class()(3, CLASSES).eval()
+    with torch.no_grad():
+        model.classifier.weight.zero_()
+        model.classifier.bias.zero_()
+        model.classifier.bias[0] = 4.0
+    options = _options(["yes", "no", "up"])
+    default = model.decide(torch.zeros(3), options)
+    calibrated = model.decide(torch.zeros(3), options, temperature=2.0)
+    assert calibrated["selected_option_id"] == default["selected_option_id"]
+    assert calibrated["options"][0]["probability"] < default["options"][0]["probability"]
+
+
+@pytest.mark.parametrize("temperature", [0.0, -1.0, float("nan"), float("inf")])
+def test_textfree_audio_readout_rejects_invalid_temperature(temperature):
+    model = _readout_class()(3, CLASSES).eval()
+    with pytest.raises(ValueError, match="temperature"):
+        model.decide(torch.zeros(3), _options(CLASSES), temperature=temperature)
+
+
+def test_scalar_temperature_fits_without_changing_logits():
+    from tiny_omni_decision.textfree_audio import fit_scalar_temperature
+
+    logits = torch.tensor([[4.0, 0.0]] * 20)
+    targets = torch.tensor([0] * 18 + [1] * 2)
+    original = logits.clone()
+    temperature = fit_scalar_temperature(logits, targets)
+    before = torch.nn.functional.cross_entropy(logits, targets)
+    after = torch.nn.functional.cross_entropy(logits / temperature, targets)
+    assert temperature > 1.0
+    assert after < before
+    assert torch.equal(logits, original)
+
+
+def test_speaker_group_split_is_deterministic_and_keeps_groups_together():
+    from tiny_omni_decision.textfree_audio import speaker_group_split
+
+    groups = ["speaker-a", "speaker-b", "speaker-a", "speaker-c", "speaker-d"]
+    first_fit, first_calibration = speaker_group_split(groups, seed=17)
+    second_fit, second_calibration = speaker_group_split(groups, seed=17)
+    assert (first_fit, first_calibration) == (second_fit, second_calibration)
+    fit_groups = {groups[index] for index in first_fit}
+    calibration_groups = {groups[index] for index in first_calibration}
+    assert fit_groups.isdisjoint(calibration_groups)
+    assert sorted(first_fit + first_calibration) == list(range(len(groups)))
+
+
 def test_textfree_audio_readout_save_reload_preserves_logits(tmp_path):
     torch.manual_seed(17)
     model = _readout_class()(3, CLASSES).eval()

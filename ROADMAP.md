@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 text-free audio calibration check:** A speaker-disjoint
+temperature fit on 264 train-only examples left Accuracy unchanged at 96.56%
+on the already-inspected 640-example Speech Commands development split, while
+NLL/Brier/ECE moved from 0.3346/0.1170/0.1885 to 0.1435/0.0559/0.0245.
+This is a focused calibration result, not blind evidence or general speech
+understanding. The calibration-trained readout saw 1,016 rather than the prior
+model's 1,280 training examples. See the [protocol and result](docs/pretrained_reuse/R2_TEXT_FREE_AUDIO_TEMPERATURE_20261021.md).
+
 **2026-10-21 R0 live-state refresh:** Current `main` remains `09246d7`; PR #15
 remains Draft/Open and the research branch is separate. Thirty-four worktrees
 were inventoried; six are dirty, including the user's primary Teacher worktree,
