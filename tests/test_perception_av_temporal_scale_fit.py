@@ -5,6 +5,8 @@ import json
 import numpy as np
 import pytest
 
+pytest.importorskip("torch")
+
 from scripts.fit_perception_av_temporal_scale import (
     _data_for_arm,
     _set_effective_config_status,

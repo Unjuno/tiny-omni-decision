@@ -214,6 +214,12 @@ normalization, selector, cohort sizes, feature source revisions, and checkpoint
 pins. The exact original shell command and Python/PyTorch package lock were not
 persisted; these omissions are explicit, not inferred away.
 
+The first PR CI run failed during test collection because the new readout test
+imported the optional `torch` package, while normal CI installs only the `dev`
+extra. The test module now follows the repository's existing `importorskip`
+pattern for torch-dependent tests. Local full-suite verification passes; the
+updated PR CI result is tracked separately and must be green before merge.
+
 ## Interpretation and next step
 
 **Scale hypothesis:** NOT SUPPORTED WITHIN THIS BUDGET for this readout/task.
