@@ -223,7 +223,7 @@
       ],
       "model_revision": "facebook/PE-Core-T16-384@8b4722741a516c18e7d311f158f13c600fea6c78",
       "checkpoint_bytes": 278284008,
-      "parameters": 50000000,
+      "parameters": null,
       "license": "Official PE Core docs state released checkpoint weights are Apache-2.0; repository implementation package separately declares FAIR Noncommercial Research License",
       "license_allowed": null,
       "license_status": "REVIEW",
@@ -234,16 +234,22 @@
       "passed_load": false,
       "has_real_weights": true,
       "runtime_supported": false,
-      "runtime_evidence": "Official model card and checkpoint are listed; anonymous Hub API audit returned HTTP 401, so no download/load was independently verified. The official repository package setup.py declares FAIR Noncommercial Research; keep implementation/product rights under REVIEW.",
-      "task_quality_status": "unmeasured",
-      "decision": "pretrained checkpoint is listed with Apache-2.0 weight terms, but anonymous asset access was not verified; official implementation package declares FAIR Noncommercial Research, so product use needs license-clean implementation or resolution",
-      "parameter_tensor_bytes": null,
+      "runtime_evidence": "Pinned checkpoint at 8b4722741a516c18e7d311f158f13c600fea6c78 downloaded; SHA-256 and byte count match HF LFS metadata. CPU-only torch.load(weights_only=True,map_location=cpu) inspected 313 finite float32 tensors (69,545,601 elements) without CUDA initialization. No model forward/runtime test: timm/open_clip absent; official perception_models package setup.py declares FAIR Noncommercial Research License. Checkpoint Apache-2.0 and implementation license are separate.",
+      "task_quality_status": "unmeasured; checkpoint mechanics only, no task forward/quality evaluation",
+      "decision": "checkpoint integrity and safe CPU state-dict loading verified. Keep product/runtime rights REVIEW until an independently license-clean inference implementation and task-quality evaluation are demonstrated.",
+      "parameter_tensor_bytes": 278182404,
       "primary_citations": [
         "https://huggingface.co/facebook/PE-Core-T16-384",
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
       ],
-      "release_status": "unknown"
+      "release_status": "pretrained and accessible",
+      "parameter_count_basis": "exact instantiated model parameter count UNKNOWN; observed sum of checkpoint state-dict tensors is 69,545,601 and includes both visual/text towers and projections",
+      "checkpoint_sha256": "868f89f066b7c1ae51add02d2cb7b925fd051076282773f2ec3c71359fbdaf3b",
+      "audit_date": "2026-10-21",
+      "audit_report": "docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md",
+      "observed_state_dict_elements": 69545601,
+      "state_dict_audit_status": "PASS_CPU_SAFE_STATE_DICT_AUDIT"
     },
     {
       "id": "pe-av-small",
@@ -702,6 +708,6 @@
       ]
     }
   ],
-  "incremental_update_date": "2026-10-14",
-  "incremental_update_scope": "append pinned RTDETRv2 R18 actual CPU/fresh component audit; earlier candidate records preserved"
+  "incremental_update_date": "2026-10-21",
+  "incremental_update_scope": "append pinned PE-Core-T16 checkpoint hash and CPU-safe state-dict audit; prior candidate evidence preserved"
 }

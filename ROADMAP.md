@@ -1,5 +1,31 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R1 PE-Core T16 runtime follow-up:** Corrected the earlier
+runtime-unknown result. OpenCLIP 3.3.0 loaded the pinned Apache-licensed T16
+converted weights and returned finite 512-d image/text embeddings on CPU; runtime
+count is 69,546,113 parameters. This is a runtime smoke only: no task quality,
+full tensor parity, Decision head, audio path or product suitability is claimed.
+See the [additive checkpoint/runtime audit](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md).
+
+**2026-10-21 R2 PE-Core CLEVR-4 one-pass zero-shot screen:** On the existing
+1,595-image development reporting subset, fixed prompt/image-text similarity
+scored 42.81% macro Accuracy (NLL 1.7280, Brier 0.7046), far below historical
+Path A's 88.06% on the same IDs/options. This rejects direct zero-shot scoring
+for this task, not a frozen representation with a learned small readout. No
+prompt search, training, or blind-audit claim was made. GPU remained occupied;
+no GPU work was started. See the [protocol](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_ZERO_SHOT_PROTOCOL_20261021.md)
+and [result](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_ZERO_SHOT_RESULTS_20261021.md).
+
+**2026-10-21 R2 PE-Core frozen readout probe:** A preregistered 131,329-parameter
+shared candidate scorer trained over frozen T16 image/text features reached
+79.95% macro Accuracy on the existing reporting slice, up from 42.81% zero-shot
+but below historical Path A's 88.06%. Color/texture/shape were 98.75/93.10/98.68%;
+count remained 29.28%. Validation NLL improved through all eight epochs. This is
+development-only, not product promotion or blind evaluation. Keep this probe
+separate and do not infer an encoder ceiling from the count failure. See the
+[protocol](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_READOUT_PROTOCOL_20261021.md)
+and [full report](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_READOUT_RESULTS_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
@@ -1085,6 +1111,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 - [x] Load and hash Ruri v3-30m as one small Japanese text candidate; a single zero-shot JamC-QA-V2 dev diagnostic was near uniform chance. It is not a Decision-head result, has unresolved training-data contamination risk, and JamC-QA remains `REVIEW` under this repository's license policy; see `docs/pretrained_reuse/R2_PATH_A_PROBES.md`. This does not close the broader language-candidate audit.
 - [x] Test the selected compact local candidate forwards for preprocessing, shape, parameter count and memory. VideoPrism-B's official loader and pinned checkpoint were exercised on a deterministic 8-frame input; ViT-Lens original-backbone execution remains untested and is outside the initial small model budget.
 - [x] Create compact source-of-truth inventory with `passed_load`, `license_allowed`, `has_real_weights`, `runtime_supported`, parameter tensor bytes, source revision and primary citations in `docs/pretrained_reuse/R1_CANDIDATE_INVENTORY.json`. The minimum executable/legal video-candidate gate is now met by VideoPrism-B; task quality, model package fit and broader candidate screening remain open. V-JEPA 2.1 itself stays REVIEW.
+- [x] Independently verify the pinned PE-Core-T16 checkpoint bytes/hash and CPU-safe state-dict load; the exact state dict contains 69,545,601 float32 elements across image/text components. No forward or task-quality test was run, and the official package noncommercial license keeps runtime/product use under REVIEW. See `docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md`.
 - [x] Screen the small sensor checkpoint MOMENT-1-small as a frozen feature-source candidate. Its pinned MIT checkpoint passed a local 128-sample × 6-channel CUDA embedding smoke; no task quality was measured. UCI HAR was not used for model selection because MOMENT pretraining includes UCR/UEA and the available official sources do not identify every constituent dataset, leaving overlap UNKNOWN. See `docs/pretrained_reuse/R1_MOMENT_SENSOR_20261011.md` and the candidate inventory. This does not close the sensor quality or deployment gate.
 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
