@@ -32,6 +32,17 @@ Its item-level evidence shows typed JSON consistency for each modality; future
 reports expose `typed_json_status` independently from saved-output `status`.
 The attempt remains preserved and was not rewritten.
 
+## CI follow-up
+
+The first push passed lint but failed 3 tests in
+`tests/test_observation_update_probe.py`: two existing raw-dispatch probes call
+the shared comparison helper without typed JSON metadata. The helper now treats
+typed JSON checks as optional and runs them only when typed decision specs are
+provided; raw reference parity behavior remains unchanged. After this
+compatibility fix, the complete local CPU suite passed: 2,380 passed, 11
+skipped. Ruff and `git diff --check` also passed. The resulting CI run is being
+checked separately after push.
+
 ## Verification limits
 
 Targeted CPU tests cover the JSON schema, validation rules, runtime dispatcher

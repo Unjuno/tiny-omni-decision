@@ -266,7 +266,7 @@ def _choose_video(artifact_root: Path) -> dict[str, Any]:
 def _compare_output(
     task_spec: dict[str, Any],
     response: dict[str, Any],
-    decision_specs: list[TypedDecisionSpec],
+    decision_specs: list[TypedDecisionSpec] | None = None,
 ) -> dict[str, Any]:
     reference = task_spec["reference"]
     if task_spec["task"] == "audio":
@@ -274,10 +274,16 @@ def _compare_output(
         reference_decisions = reference["decisions"]
         if len(decisions) != len(reference_decisions):
             raise ValueError("audio multi-query result count differs from the reference")
-        if len(response.get("decision_json", [])) != len(decision_specs):
+        if decision_specs is not None and len(response.get("decision_json", [])) != len(
+            decision_specs
+        ):
             raise ValueError("audio typed JSON result count differs from its query count")
-        comparisons = [
-            {
+        specs = decision_specs if decision_specs is not None else [None] * len(decisions)
+        comparisons = []
+        for actual, expected, spec in zip(
+            decisions, reference_decisions, specs, strict=True
+        ):
+            row = {
                 "question_type": expected["question_type"],
                 "runtime_prediction_index": int(actual["prediction_index"]),
                 "reference_prediction_index": int(expected["prediction_index"]),
@@ -289,25 +295,25 @@ def _compare_output(
                         actual["probabilities"], expected["probabilities"], strict=True
                     )
                 ),
-                "typed_json_matches_runtime": _typed_json_matches(
-                    actual["decision_json"], actual, spec
-                ),
             }
-            for actual, expected, spec in zip(
-                decisions, reference_decisions, decision_specs, strict=True
-            )
-        ]
-        return {
+            if spec is not None:
+                row["typed_json_matches_runtime"] = _typed_json_matches(
+                    actual["decision_json"], actual, spec
+                )
+            comparisons.append(row)
+        result = {
             "sample_id": reference["sample_id"],
             "comparisons": comparisons,
             "prediction_mismatches": sum(not row["prediction_match"] for row in comparisons),
-            "typed_json_mismatches": sum(
-                not row["typed_json_matches_runtime"] for row in comparisons
-            ),
             "max_probability_absolute_delta": max(
                 row["max_probability_absolute_delta"] for row in comparisons
             ),
         }
+        if decision_specs is not None:
+            result["typed_json_mismatches"] = sum(
+                not row["typed_json_matches_runtime"] for row in comparisons
+            )
+        return result
 
     probabilities = [float(value) for value in response["probabilities"]]
     reference_probabilities = [float(value) for value in reference["probabilities"]]
@@ -315,20 +321,21 @@ def _compare_output(
         raise ValueError(f"{task_spec['task']} output size differs from the reference")
     prediction_index = int(response["prediction_index"])
     reference_index = int(reference["prediction_index"])
-    typed_json_matches = _typed_json_matches(
-        response.get("decision_json"), response, decision_specs[0]
-    )
-    return {
+    result = {
         "sample_id": reference["sample_id"],
         "runtime_prediction_index": prediction_index,
         "reference_prediction_index": reference_index,
         "prediction_mismatches": int(prediction_index != reference_index),
-        "typed_json_matches_runtime": typed_json_matches,
         "max_probability_absolute_delta": max(
             abs(left - right)
             for left, right in zip(probabilities, reference_probabilities, strict=True)
         ),
     }
+    if decision_specs is not None:
+        result["typed_json_matches_runtime"] = _typed_json_matches(
+            response.get("decision_json"), response, decision_specs[0]
+        )
+    return result
 
 
 def _typed_json_matches(
