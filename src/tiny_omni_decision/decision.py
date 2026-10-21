@@ -16,6 +16,86 @@ class DecisionOutput:
     predicted_index: int
     confidence: float
 
+    def to_decision_json(
+        self,
+        request_id: str,
+        decision_type: str,
+        option_ids: list[str],
+        option_texts: list[str],
+        ordinal_values: list[float] | None = None,
+    ) -> str:
+        """Serialize a typed choice result while preserving supplied option IDs/order."""
+        if not isinstance(request_id, str) or not request_id.strip():
+            raise ValueError("request_id must be a nonempty string")
+        if not isinstance(decision_type, str) or decision_type not in {
+            "choice", "yes_no", "ordinal_score"
+        }:
+            raise ValueError("unsupported decision_type")
+        if len(option_ids) < 2 or len(option_ids) != len(option_texts):
+            raise ValueError("option IDs and texts must have matching lengths of at least two")
+        if (
+            any(not isinstance(value, str) or not value.strip() for value in option_ids)
+            or len(set(option_ids)) != len(option_ids)
+        ):
+            raise ValueError("option IDs must be nonempty unique strings")
+        if any(not isinstance(value, str) or not value.strip() for value in option_texts):
+            raise ValueError("option texts must be nonempty strings")
+        if decision_type == "yes_no" and len(option_ids) != 2:
+            raise ValueError("yes_no decisions require exactly two options")
+        if decision_type == "ordinal_score":
+            if ordinal_values is None or len(ordinal_values) != len(option_ids):
+                raise ValueError("ordinal_score requires one numeric value per option")
+            if (
+                any(
+                    isinstance(value, bool)
+                    or not isinstance(value, (int, float))
+                    or not math.isfinite(value)
+                    for value in ordinal_values
+                )
+                or any(left >= right for left, right in zip(
+                    ordinal_values[:-1], ordinal_values[1:], strict=True
+                ))
+            ):
+                raise ValueError("ordinal values must be finite and strictly increasing")
+        elif ordinal_values is not None:
+            raise ValueError("ordinal_values are only valid for ordinal_score decisions")
+        if self.probabilities.ndim != 1 or self.probabilities.numel() != len(option_ids):
+            raise ValueError("probability vector must match the supplied option count")
+        if not 0 <= self.predicted_index < len(option_ids):
+            raise ValueError("predicted_index is outside the supplied option range")
+        probabilities = self.probabilities.detach().cpu().tolist()
+        if (
+            any(not math.isfinite(value) or value < 0 or value > 1 for value in probabilities)
+            or not math.isclose(sum(probabilities), 1.0, abs_tol=1e-5)
+        ):
+            raise ValueError("invalid probability distribution")
+        if self.predicted_index != max(range(len(probabilities)), key=probabilities.__getitem__):
+            raise ValueError("predicted_index does not match the probability maximum")
+        if not math.isfinite(self.confidence) or not math.isclose(
+            self.confidence, probabilities[self.predicted_index], abs_tol=1e-5
+        ):
+            raise ValueError("confidence does not match the selected-option probability")
+        selected = option_ids[self.predicted_index]
+        result = {
+            "schema_version": 1,
+            "request_id": request_id,
+            "decision_type": decision_type,
+            "selected_option_id": selected,
+            "confidence": probabilities[self.predicted_index],
+            "options": [
+                {"id": option_id, "text": option_text, "probability": probability}
+                for option_id, option_text, probability in zip(
+                    option_ids, option_texts, probabilities, strict=True
+                )
+            ],
+        }
+        if ordinal_values is not None:
+            result["expected_score"] = sum(
+                probability * value
+                for probability, value in zip(probabilities, ordinal_values, strict=True)
+            )
+        return json.dumps(result, ensure_ascii=False, allow_nan=False)
+
     def to_json(self, question_name: str, option_names: list[str]) -> str:
         """Serialize existing probabilities without generation or recalibration."""
         if not isinstance(question_name, str) or not question_name.strip():
