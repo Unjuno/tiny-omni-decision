@@ -101,7 +101,12 @@ checkpoint selection.
   pending agreement review and a frozen group/split audit. Official sources:
   [AVD task](https://ego4d-data.org/docs/benchmarks/av-diarization/),
   [Social task](https://ego4d-data.org/docs/benchmarks/social/),
-  [access terms](https://ego4d-data.org/docs/start-here/).
+  [access terms](https://ego4d-data.org/docs/start-here/). A pinned public-code
+  follow-up found that TTM expects AVD train/validation annotations and face
+  tracks, while its older repository README still says benchmark data details
+  are forthcoming. The AVD v1 clip counts are not verified TTM counts. Exact
+  revisions, README hashes, and this discrepancy are captured in
+  [`R2_EGO4D_SOCIAL_SOURCE_SCREEN_20261022.md`](R2_EGO4D_SOCIAL_SOURCE_SCREEN_20261022.md).
 
 ## Product target and measurement scope
 

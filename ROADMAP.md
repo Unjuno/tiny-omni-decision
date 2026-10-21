@@ -6,8 +6,12 @@ combining audio and video. Its official task uses active-speaker/face tracks
 and labels whether speech is directed to the camera wearer, but data and
 annotation access requires acceptance of an agreement whose terms were not
 available in this screen. We did not access annotations or media. Exact usable
-groups, rights, revision hashes and local subset availability remain unknown;
-no training or evaluation is admitted. See the AV7 entry in
+groups, rights and local subset availability remain unknown. Pinned code review
+found the TTM branch expects AVD train/validation annotations, while its README
+still says benchmark data details are forthcoming; old AVD v1 counts are not
+verified TTM counts. No training or evaluation is admitted. See the
+[source screen](docs/pretrained_reuse/R2_EGO4D_SOCIAL_SOURCE_SCREEN_20261022.md)
+and AV7 entry in
 [`R0_TASK_BATTERY_DRAFT_20261021.md`](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md).
 
 **2026-10-22 R2 AV temporal readout scale follow-up:** Compared audio-only,
