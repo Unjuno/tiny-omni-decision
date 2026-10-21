@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R1 PE-Core T16 runtime follow-up:** Corrected the earlier
+runtime-unknown result. OpenCLIP 3.3.0 loaded the pinned Apache-licensed T16
+converted weights and returned finite 512-d image/text embeddings on CPU; runtime
+count is 69,546,113 parameters. This is a runtime smoke only: no task quality,
+full tensor parity, Decision head, audio path or product suitability is claimed.
+See the [additive checkpoint/runtime audit](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
