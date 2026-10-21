@@ -1,11 +1,20 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-21 R2 fresh CLEVRER reasoning preparation:** Deterministic
-scene-disjoint train/development/one-time holdout splits and 400 train/dev
-videos are ready with zero known media overlap. GPU feature extraction was
-blocked because the pinned Windows VideoPrism environment lacks a CUDA-enabled
-JAX backend. No training or holdout evaluation occurred; the result does not
-change model-quality status. See the [preparation record](docs/pretrained_reuse/CLEVRER_FRESH_REASONING_V1_STATUS_20261021.md).
+**2026-10-21 R2 fresh CLEVRER reasoning execution:** The pinned VideoPrism
+extractor ran CPU-only over 400 train/development videos; the 200-scene train
+and 200-scene development split passed scene/media/content gates. A seed-17
+295,169-parameter readout, with VideoPrism and MiniLM frozen, selected epoch 10
+after 24 epochs. Development macro-by-question-type Accuracy/NLL/Brier/ECE-15
+were `0.5153/0.6930/0.4999/0.0131`. After selection, a distinct 200-scene,
+2,843-choice holdout comparison completed against the existing v0 checkpoint;
+a first invocation hit a software-ordering error before producing a report:
+candidate macro metrics were `0.4966/0.6934/0.5002/0.0145`, versus
+`0.4933/0.6953/0.5022/0.0313` for v0. Paired scene-bootstrap intervals include
+zero for every difference; both models are near binary chance. This is not a
+useful Video reasoning result and does not justify more tuning on this
+holdout. The holdout-only fetch and CLI ordering defects found during execution
+were fixed with regression tests. Full run provenance, confidence intervals,
+and recovery notes are in the [execution record](docs/pretrained_reuse/CLEVRER_FRESH_REASONING_V1_STATUS_20261021.md).
 
 **2026-10-21 R7 Path A image runtime full-validation parity:** Replayed all
 2,048 saved decisions across the 512-image checkpoint-selection validation
