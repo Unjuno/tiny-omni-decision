@@ -19,6 +19,17 @@ the source `REVIEW`; do not treat its model results as this project's evidence.
 Reopen only with exact media rights, a hash-pinned TRAIN release, and a small
 local subset. [Source screen and gate](docs/pretrained_reuse/R2_AVID_SOURCE_SCREEN_20261021.md).
 
+**2026-10-21 14:43 JST R0 live GPU / HotUGPU recheck:** Orbitune
+training PID 10912 (parent 24896; supervisors 4696 and 23856) is still
+running. RTX 3080 Laptop reports 15,821/16,384 MiB used, 355 MiB free, and
+100% utilization. No Tiny Omni GPU job was launched, and no Orbitune process,
+checkpoint, or data was touched. The existing HotUGPU guard waits for the GPU
+to yield, reserves VRAM, then starts its child under a minimum-free-memory
+gate; this can block Orbitune's configured 14,000 MiB free-memory watchdog
+from launching a new child while the reservation is held, but does not stop a
+currently running Orbitune child. Continue CPU-only work until the GPU yields;
+any later CUDA job must use the guard and a separate artifact directory.
+
 **2026-10-21 13:37 JST R0 live-state recheck:** The roadmap/continuation
 worktree is at `dc60ad9` before this audit; PR #15 remains draft/open at
 `71c4db1`. PRs #16–#19 are also open for the PE-Core audit, MAVD source screen,
