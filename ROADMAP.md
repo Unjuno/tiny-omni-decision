@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
+synchronized streams and temporal event boundaries, but its labels do not
+establish that both modalities are necessary. The authors also do not own its
+YouTube movie clips, and the official materials reviewed do not grant rights
+for the underlying media or derivative training. No data was accessed. Keep
+AVE review-only; it does not close the synchronized-AV task gate. See the
+[`AVE source screen`](docs/pretrained_reuse/R2_AVE_SOURCE_SCREEN_20261022.md).
+
 **2026-10-22 R2 FLARE joint-AV task/source screen:** FLARE's 53,580
 hard-bimodal retrieval queries are a useful task-design lead: the benchmark
 reports that vision-only and audio-only retrieval fail while joint AV retrieval
