@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 22:26 JST R0 live recheck:** Refreshed origin and checked all
+40 registered worktrees plus open PRs #9–#20 without editing other checkouts.
+Six worktrees remain dirty, including the user's primary Teacher checkout; all
+were preserved. PR #15 remains Draft/Open at `e38447c`; PR #16–#20 remain open
+on their independent branches. Orbitune's supervised training child PID 28928
+is still active on the RTX 3080 Laptop (15,821/16,384 MiB used, 39% utilization);
+no Tiny Omni GPU job was launched. C: has 12,294,930,432 bytes free. The latest
+R2 Perception Test audio-video transfer result remains weak/inconclusive for
+joint Accuracy (+0.78 points over Video; paired interval -4.30 to +5.86), so
+the M-2 both-required task gate remains open. Full snapshot and exact dirty
+worktree paths: [R0 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261021_2226JST.md).
+
 **2026-10-21 R2 Perception Test fixed-readout train-transfer diagnostic:** The
 frozen Audio, Video, and Joint readouts were scored once on 256 new,
 video-disjoint official-train groups (128 per visibility label). Accuracy was
