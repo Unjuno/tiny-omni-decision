@@ -10,31 +10,33 @@ contract before any model run.
 
 ## Findings
 
-The current local AMI selection is **not ready for a speaker-correspondence
-run**. Its candidate builder reads one `Mix-Headset.wav` per meeting. The 24-row
-train-only timing receipt has exactly one full-file audio hash within each of
-seven meetings, shared across all candidate agents in that meeting. The WAV is
-mono. It is a mixed meeting signal, not a speaker-specific audio channel. A
-speaker-to-camera target inferred from the transcript does not make this input
-speaker-isolated.
+The current local AMI selection does **not establish a speaker-isolated audio
+input**. Its candidate builder reads one `Mix-Headset.wav` per meeting. The
+24-row train-only timing receipt has exactly one full-file audio hash within
+each of seven meetings, shared across all candidate agents in that meeting.
+This shows that the source is a mixed meeting signal; it does not prove whether
+each annotation-aligned crop is dominated by the annotated speaker.
 
 The official signal documentation describes 24 WAV channels per meeting and
-provides microphone/camera mappings in `corpusResources/meetings.xml`. That
-supports a better bounded design: use the mapped participant headset channel
-plus the participant's synchronized close-up video, and compare against
-audio-only, video-only, shuffled-time, and candidate-order controls. The
-selected E/I recordings have an official common-clock synchronization account;
-TNO has looser, human-checked synchronization and should be excluded from the
-first strict-timing cohort. The official sources also document frame-drop
-repair for E/I videos.
+provides microphone/camera mappings in `corpusResources/meetings.xml`. A
+participant headset channel plus that participant's synchronized close-up
+video is the cleanest first input. If the design instead uses annotation-aligned
+crops from the mixed WAV, it first needs a train-only check that the target
+speaker dominates those crops. Either input design must compare audio-only,
+video-only, shuffled-time, and candidate-order controls. The selected E/I
+recordings have an official common-clock synchronization account; TNO has
+looser, human-checked synchronization and should be excluded from the first
+strict-timing cohort. The official sources also document frame-drop repair for
+E/I videos.
 
 The local annotation metadata contains participant, camera and channel fields.
 However, the selected local media directory contains the mixed WAV and videos,
 not the required individual `Headset-N.wav` streams. The official index lists
 individual headset streams, but direct network access from this host timed out
 over both default and IPv4 curl, and an in-app browser navigation also timed out.
-No channel media was downloaded. This is an environment/network block, not a
-negative model result.
+No channel media was downloaded. This blocks the stricter channel-isolated
+design here; the mix-based alternative remains unverified. This is an
+environment/data-gate block, not a negative model result.
 
 ## Evidence and scope
 
@@ -53,11 +55,12 @@ check).
 
 ## Decision
 
-Do not train from the current mixed-audio input under a speaker-correspondence
-label. The source remains a **conditional feasibility candidate**, not an
-admitted quality benchmark. A future continuation can resume only after the
-individual, hash-pinned participant audio channels are available locally and
-the channel-to-participant mapping is verified against the official metadata.
-The existing five development parent groups remain low-power feasibility data,
-not a 95–98% product-quality gate. No product or modality claim follows from
-this preflight.
+Do not describe the current mixed-audio input as speaker-isolated, or begin a
+model comparison before choosing and freezing one of these input contracts:
+(a) individual participant channels, with hash-pinned files and
+channel-to-participant mapping verified against official metadata; or (b)
+annotation-aligned mixed-WAV crops, with train-only evidence that target speech
+dominates and a fixed overlap policy. The source remains a **conditional
+feasibility candidate**, not an admitted quality benchmark. The existing five
+development parent groups remain low-power feasibility data, not a 95–98%
+product-quality gate. No product or modality claim follows from this preflight.
