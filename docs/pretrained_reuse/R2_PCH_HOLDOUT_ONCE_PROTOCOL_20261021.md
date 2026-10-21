@@ -18,7 +18,7 @@ The only candidates are frozen before access to the holdout:
 The exact PCH archive is 98,272,925 bytes with SHA-256
 `7814f871c834725d0108192cc9265b1abd2db8ead96815d82c828202f1e55ba9`. The
 heldout participant ID set is fixed by the seed-17 source split and has SHA-256
-`4dc5a3e76d3fcb19ef2ff19a18c92db88269a077ca6b180866e99c4be2bd901` (28
+`4dc5a3e76d3fcb19ef2cff19a18c92db88269a077ca6b180866e99c4be2bd901` (28
 participants). The source inventory has 423 CSV recordings; 84 belong to those
 participants. The participant assignment is preserved after deterministic
 fit-only validation coverage swaps.
