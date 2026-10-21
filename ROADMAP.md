@@ -30,9 +30,10 @@ and 49.37% Accuracy remains weak synthetic-only quality. See the
 files (687.25 MB, 170.50M unique parameters) revalidated by size and SHA-256.
 Strict package verification finds two unlisted Python bytecode cache files
 under the image runtime; their origin is unknown and existing package contents
-were preserved. The provisional 200 MB target remains unmet. A hypothetical
-storage-only INT8 estimate is not a quantized runtime or a quality result. See
-the [package integrity record](docs/pretrained_reuse/R7_PATH_A_PACKAGE_INTEGRITY_RECHECK_20261021.md).
+were preserved. A separate manifest-only copy has the same manifest hash and
+passes strict verification. The provisional 200 MB target remains unmet. A
+hypothetical storage-only INT8 estimate is not a quantized runtime or a quality
+result. See the [package integrity record](docs/pretrained_reuse/R7_PATH_A_PACKAGE_INTEGRITY_RECHECK_20261021.md).
 
 **2026-10-21 R0 live-state refresh:** Current `main` remains `09246d7`; PR #15
 remains Draft/Open and the research branch is separate. Thirty-four worktrees
