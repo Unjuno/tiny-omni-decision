@@ -21,6 +21,15 @@ sensor-window candidate for further study; it does not establish long-range
 temporal reasoning, modality fusion, or the 95% goal. The same validation set
 selected the checkpoint. See [the temporal probe report](docs/pretrained_reuse/R2_PCH_LSTM_TEMPORAL_PROBE_20261021.md).
 
+**2026-10-21 recording-level temporal-order protocol staged:** A separate
+seed-17 comparison will feed the frozen selected window-LSTM embeddings into a
+small recording-level LSTM, against a fixed within-recording shuffle control.
+The preflight pins the same 276 fit / 63 validation recordings and baseline
+artifacts; the 28-participant holdout stays unopened. This is a development-only
+sensor diagnostic, not a multimodal or product result. CPU tests and Ruff pass;
+HotUGPU will gate the one local run after the protocol commit.
+See [the frozen protocol](docs/pretrained_reuse/R2_PCH_RECORDING_TEMPORAL_PROTOCOL_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
