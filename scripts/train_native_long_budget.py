@@ -19,6 +19,7 @@ import numpy as np
 import psutil
 import torch
 
+from scripts.hotgpu_preflight import validate_gpu_preflight
 from scripts.native_consumed_evaluation import common_task_gap
 from scripts.native_coverage import make_pool
 from scripts.native_fit import (
@@ -73,13 +74,32 @@ def main():
         raise ValueError("train needs smoke receipt; replay needs train receipt and SHA")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO).strip():
         raise ValueError("clean committed source required")
-    usage = subprocess.check_output(
-        ["nvidia-smi", "--query-gpu=memory.used,utilization.gpu", "--format=csv,noheader,nounits"],
+    utilization, memory, total = subprocess.check_output(
+        [
+            "nvidia-smi",
+            "--query-gpu=utilization.gpu,memory.used,memory.total",
+            "--format=csv,noheader,nounits",
+        ],
         text=True,
-    ).strip()
-    memory, utilization = [int(v.strip()) for v in usage.split(",")]
-    if memory > 512 or utilization > 5:
-        raise RuntimeError("GPU occupied; do not compete")
+    ).strip().split(",")
+    utilization, memory, total = (int(v.strip()) for v in (utilization, memory, total))
+    active_pids = subprocess.check_output(
+        ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader,nounits"],
+        text=True,
+    ).splitlines()
+    active_pids = {
+        int(value.strip())
+        for value in active_pids
+        if value.strip() and value.strip().casefold() != "no running processes found"
+    }
+    gpu_preflight = validate_gpu_preflight(
+        memory_used_mib=memory,
+        utilization_pct=utilization,
+        total_mib=total,
+        active_pids=active_pids,
+        own_pid=os.getpid(),
+        environment=os.environ,
+    )
     args.output.mkdir(exist_ok=False)
     started = time.perf_counter()
     result = dict(
@@ -101,7 +121,7 @@ def main():
         cloud_cost=0,
         validation_loaded=args.phase != "smoke",
         encoder_updates=0,
-        gpu_preflight=usage,
+        gpu_preflight=gpu_preflight,
     )
     write(args.output / "result.json", result)
     try:
