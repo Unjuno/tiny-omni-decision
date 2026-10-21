@@ -142,6 +142,17 @@ download; payload hashes, playable durations, and decoder support remain
 unknown. Exact indexes for the other five candidate meetings are still not
 confirmed in this pass.
 
+## Alternate distribution route check
+
+OpenSLR SLR16 is not a video mirror: its official description says it mirrors
+AMI acoustic speech data and metadata only. Its listed license is a modified
+CC BY-NC-SA 2.0, different from the AMI website's CC BY 4.0 release. It does
+not unblock this audiovisual task and was not used. The AMI download page also
+describes a meeting-level RealMedia package (about 40 MB per meeting) plus a
+SMIL file, but these are still served by the same official host that times out
+locally. The per-camera RM index remains the more direct source for the four
+participant views required here.
+
 Before any training:
 
 1. Retry the official per-camera RealMedia streams when the host is reachable;
@@ -169,6 +180,7 @@ modified.
 - [Official AMI synchronization and cameras](https://groups.inf.ed.ac.uk/ami/corpus/meetingrooms.shtml)
 - [Official AMI download sizes and CC BY 4.0 release](https://groups.inf.ed.ac.uk/ami/download/)
 - [Official AMI data-problems table, including ES2008b video truncation and synchronization notes](https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml)
+- [Official OpenSLR SLR16 listing, audio-only scope and modified CC BY-NC-SA 2.0 license](https://openslr.org/16/)
 - [Official TS3004a per-camera media index showing AVI and low-size RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/TS3004a/video/)
 - [Official IN1009 per-camera media index showing 7.7 MB RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IN1009/video/)
 - [Official ES2008b per-camera media index listing all four 13 MB RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/ES2008b/video/)

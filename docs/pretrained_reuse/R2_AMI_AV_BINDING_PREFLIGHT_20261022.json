@@ -117,6 +117,22 @@
       }
     }
   },
+  "alternate_distribution_routes": {
+    "openslr_slr16": {
+      "status": "NOT_A_VIDEO_MIRROR",
+      "official_scope": "acoustic speech data and metadata only",
+      "listed_license": "modified CC BY-NC-SA 2.0",
+      "used": false,
+      "reason": "No video; license differs from AMI CC BY 4.0 distribution",
+      "source": "https://openslr.org/16/"
+    },
+    "ami_meeting_level_realmedia": {
+      "official_average_size_mb": 40,
+      "requires_smil": true,
+      "source_host": "groups.inf.ed.ac.uk",
+      "local_access": "blocked by same host timeout"
+    }
+  },
   "official_source_quality": {
     "source": "https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml",
     "es2008b_video_end_seconds_approx": 2085,
