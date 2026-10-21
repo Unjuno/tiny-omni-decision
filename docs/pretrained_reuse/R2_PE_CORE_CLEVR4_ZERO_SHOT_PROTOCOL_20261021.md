@@ -17,10 +17,18 @@ used for prior reporting; it is not the sealed audit. No sealed audit is opened.
   a separate `pip --target` directory; the project environment and dependency
   files are unchanged.
 - Data: the existing CLEVR-4 official validation reporting slice from
-  `image-videoprism-clevr4-full-seed17`; exactly 1,595 unique image IDs and
-  6,380 decisions, four taxonomies per image. Read only row ID, image ID,
-  taxonomy, target and options from the saved JSONL; ignore its old prediction
-  and probability fields. Use the existing local PNG bytes read-only.
+  `C:\CodexArtifacts\pretrained-reuse-r2\image-videoprism-clevr4-full-seed17\reporting-validation-predictions.jsonl`;
+  exactly 1,595 unique image IDs and 6,380 decisions, four taxonomies per
+  image. Read only row ID, image ID, taxonomy, target and options from the saved
+  JSONL; ignore its old prediction and probability fields. Cross-check targets
+  against `C:\CodexArtifacts\pretrained-reuse-r2\clevr4-full-coverage-seed17\val-labels.jsonl`.
+- Media: PNGs under
+  `C:\CodexArtifacts\pretrained-reuse-r2\clevr4-full-coverage-seed17\val\images`,
+  checked byte-for-byte against `val-image-manifest.jsonl` before inference.
+- Split check: the reporting IDs and the prior
+  `checkpoint-selection-predictions.jsonl` IDs were compared by image identity
+  before run: 1,595 reporting images, 512 selection images, zero overlap, 2,107
+  distinct validation images in union.
 - Ordering: preserve first-seen image order from the saved reporting JSONL;
   within each image use `color, texture, shape, count`. Preserve each row's
   supplied ten-option order. The runner hashes ordered image IDs, decision IDs,

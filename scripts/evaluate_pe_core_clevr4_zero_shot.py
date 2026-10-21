@@ -44,11 +44,29 @@ def load_image(path: Path, preprocess) -> torch.Tensor:
         return preprocess(image.convert("RGB"))
 
 
-def read_examples(path: Path, image_dir: Path) -> tuple[list[str], dict, dict, dict, dict]:
+def read_examples(
+    path: Path,
+    image_dir: Path,
+    manifest_path: Path,
+    labels_path: Path,
+    selection_rows_path: Path,
+) -> tuple[list[str], dict, dict, dict]:
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+    manifest = {
+        row["id"]: row
+        for row in (json.loads(line) for line in manifest_path.read_text(encoding="utf-8").splitlines() if line)
+    }
+    labels = {
+        row["id"]: row
+        for row in (json.loads(line) for line in labels_path.read_text(encoding="utf-8").splitlines() if line)
+    }
+    selected_ids = {
+        str(json.loads(line)["image_id"])
+        for line in selection_rows_path.read_text(encoding="utf-8").splitlines()
+        if line
+    }
     by_image: dict[str, dict] = defaultdict(dict)
     options_by_taxonomy: dict[str, list[str]] = {}
-    labels_by_taxonomy: dict[str, set[str]] = defaultdict(set)
     ids: list[str] = []
     for row in rows:
         image_id = str(row["image_id"])
@@ -67,7 +85,6 @@ def read_examples(path: Path, image_dir: Path) -> tuple[list[str], dict, dict, d
         if target not in options:
             raise ValueError(f"Target is absent from options: {row['id']}")
         by_image[image_id][taxonomy] = {"id": row["id"], "target": target}
-        labels_by_taxonomy[taxonomy].update(options)
         ids.append(str(row["id"]))
     image_ids = list(dict.fromkeys(str(row["image_id"]) for row in rows))
     if len(image_ids) != 1595 or len(rows) != 6380:
@@ -76,13 +93,25 @@ def read_examples(path: Path, image_dir: Path) -> tuple[list[str], dict, dict, d
         raise ValueError("Every image must have exactly the four fixed taxonomies")
     media_hashes = {}
     for image_id in image_ids:
+        if image_id in selected_ids:
+            raise ValueError(f"Reporting image overlaps checkpoint-selection image: {image_id}")
+        if image_id not in manifest or manifest[image_id].get("split") != "val":
+            raise ValueError(f"Missing validation image manifest row: {image_id}")
+        if image_id not in labels or labels[image_id].get("split") != "val":
+            raise ValueError(f"Missing validation label row: {image_id}")
         media = image_dir / f"{image_id}.png"
         if not media.is_file():
             raise FileNotFoundError(media)
-        media_hashes[image_id] = sha256_file(media)
+        actual_hash = sha256_file(media)
+        if actual_hash != manifest[image_id]["sha256"] or media.stat().st_size != manifest[image_id]["bytes"]:
+            raise ValueError(f"Validation media does not match pinned manifest: {image_id}")
+        media_hashes[image_id] = actual_hash
+        for taxonomy in TAXONOMIES:
+            if str(labels[image_id][taxonomy]) != by_image[image_id][taxonomy]["target"]:
+                raise ValueError(f"Target mismatch against validation labels: {image_id}/{taxonomy}")
     if len(set(media_hashes.values())) != len(media_hashes):
         raise ValueError("Duplicate image bytes detected in fixed reporting slice")
-    return image_ids, by_image, options_by_taxonomy, labels_by_taxonomy, media_hashes
+    return image_ids, by_image, options_by_taxonomy, media_hashes
 
 
 def metrics(probabilities: np.ndarray, targets: np.ndarray) -> dict[str, float]:
@@ -130,6 +159,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", type=Path, required=True, help="Existing reporting JSONL; prediction columns are ignored")
     parser.add_argument("--images", type=Path, required=True)
+    parser.add_argument("--manifest", type=Path, required=True, help="Pinned validation image manifest")
+    parser.add_argument("--labels", type=Path, required=True, help="Pinned validation labels")
+    parser.add_argument("--selection-rows", type=Path, required=True, help="Rows used for prior checkpoint selection; IDs only")
     parser.add_argument("--weights", type=Path, required=True, help="Pinned OpenCLIP-converted PE-Core safetensors")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--batch-size", type=int, default=8)
@@ -139,7 +171,9 @@ def main() -> None:
 
     torch.set_num_threads(2)
     torch.set_num_interop_threads(1)
-    image_ids, by_image, options, _, media_hashes = read_examples(args.rows, args.images)
+    image_ids, by_image, options, media_hashes = read_examples(
+        args.rows, args.images, args.manifest, args.labels, args.selection_rows
+    )
     row_ids = [by_image[image_id][taxonomy]["id"] for image_id in image_ids for taxonomy in TAXONOMIES]
     targets = np.zeros((len(image_ids), len(TAXONOMIES)), dtype=np.int64)
     text_options: dict[str, list[str]] = {}
@@ -224,6 +258,12 @@ def main() -> None:
             "image_hashes_sha256": hashlib.sha256(
                 json.dumps(media_hashes, sort_keys=True, separators=(",", ":")).encode("utf-8")
             ).hexdigest(),
+            "input_file_sha256": {
+                "reporting_rows": sha256_file(args.rows),
+                "selection_rows_ids_only": sha256_file(args.selection_rows),
+                "validation_media_manifest": sha256_file(args.manifest),
+                "validation_labels": sha256_file(args.labels),
+            },
             "per_image_hashes": media_hashes,
         },
         "protocol": {
