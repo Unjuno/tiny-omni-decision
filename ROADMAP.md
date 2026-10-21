@@ -1,5 +1,38 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 AMI cross-modal task screen:** AMI remains a review-only candidate for
+meeting-local voice-to-face matching. The selected source screen now covers four
+SA and all five SB parent sets (60 selected media files, 2,891,874,753 bytes);
+selected v1.6.2 word/segment annotations and hashes are recorded externally.
+The official meeting metadata shows zero global participant-ID overlap across
+all 98 SA and 20 SB sessions. Preliminary filtered windows total 32 train and
+111 validation; IS1000a–d add 182 preliminary training windows. A corrected
+union-overlap audit passes 213/214 selected SA windows at the 80% segment
+coverage threshold, leaving one IS1000c window quarantined.
+These remain weak labels and uneven by speaker/meeting. All 28 video streams in
+the TS3004a/IS1008a/TS3006a/IS1000a–d full-decode subset return one frame below
+their declarations. ES2005a spans about 8 minutes against 958 seconds in
+metadata. Audio/video synchronization and visual label quality remain unverified.
+A single-reviewer visual screen of all 213 segment-join-passing SA train
+candidates found 168 with a clearly framed face, 21 limited/ambiguous and 24
+with no clear person in the mapped camera at 15/50/85% samples. This is a
+presence screen, not speaker-identity, synchronization or AV-quality evidence.
+The same development-only visibility pass covers 111 SB candidates: 69 clear,
+6 limited, 2 visible-person/no-clear-face, and 34 no-clear-person in target-camera
+samples. TS3004a and TS3006a are especially weak (14/30 and 18/27 with no clear
+person); this further weakens the current weak-label task proposal. It still does
+not verify speaker identity or synchronization. No GPU run was started. See
+[`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
+Keep SC annotations unopened and the source at REVIEW.
+See
+[`R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md).
+The 35 selected SA and 25 selected SB media files were rehashed against all
+five acquisition receipts; no exact cross-split SHA-256 duplicate was found.
+This does not rule out perceptual near-duplicates or close the open task/privacy
+gates. Reproduce with `scripts/audit_ami_media_hash_overlap.py`; output stays
+outside Git.
+A CPU-only 24-row train timing preflight added PTS frame strips and mixed-audio RMS; it did not establish synchronization, and the AMI candidate remains unadmitted.
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
