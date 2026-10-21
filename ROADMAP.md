@@ -8,9 +8,7 @@ joint gated LSTM scored 78.97% Accuracy / 0.4566 NLL versus audio-only 72.31% /
 79-scene bootstrap supports a development-set gain, but the same validation
 selected checkpoints, the synthetic audio carries only binned energy, and final
 joint training overfit (98.06% train Accuracy; final validation NLL 0.9432).
-Treat this only as controlled synthetic temporal-binding evidence. Next increase
-unique eligible scenes and create a fresh train-only grouped development slice
-before fitting again. [Protocol and full metrics](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_RESULTS_20261020.md).
+Treat this only as controlled synthetic temporal-binding evidence. The exposure scan found 405 untouched candidate scenes and the pilot consumed them; any expansion must reuse previously-seen official-train scenes or screen another source. [Protocol and full metrics](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_RESULTS_20261020.md).
 
 **2026-10-21 R2 AVID-Bench source screen:** AVID offers a relevant audio-visual
 inconsistency task, but the exact source-media rights and a pinned TRAIN-only
