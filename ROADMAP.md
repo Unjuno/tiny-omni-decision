@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 AVQA rights recheck:** Tsinghua's official AVQA page describes
+four-choice `View`/`Sound`/`Both` questions across 57,335 manually annotated
+items, making it a strong task-design lead. At pinned official repository
+revision `a5056c1`, GitHub reports no repository license and the root tree has
+no dataset license file; underlying clips come from VGGSound/YouTube. Keep it
+`REVIEW`; no annotation contents or media were fetched, and no fit is admitted.
+[Rights recheck](docs/pretrained_reuse/R2_AVQA_RIGHTS_RECHECK_20261021.md).
+
 **2026-10-21 21:18 JST R0 live recheck:** PR #15 is still Draft/Open at
 `e92dbbd` with both CI checks green. Forty worktrees are registered and six
 remain dirty; the primary Teacher worktree was left untouched. Orbitune's
