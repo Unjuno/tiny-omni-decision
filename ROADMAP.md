@@ -1,14 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-21 R2 text-free audio official-test preflight correction:** The first
-HotUGPU-reserved attempt loaded the pinned Speech Commands shard and stopped
-before inference because identical WAV-byte hashes occur among retained rows;
-it produced no predictions or metrics. The integrity gate now preserves and
-counts same-label duplicate rows while rejecting conflicting-label duplicates,
-without changing which source-ID rows are evaluated. A single inference attempt
-remains pending CI and the cooperative GPU gate. This is a narrow English
-keyword task, not general speech evidence. See the
-[protocol and attempt record](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_OFFICIAL_TEST_PROTOCOL_20261021.md).
+**2026-10-21 R2 text-free audio official-test evaluation completed:** On all
+4,074 retained rows and 239 speakers, the legacy readout scored 97.72% Accuracy
+/ 0.2684 NLL / 0.0909 Brier / 0.1692 ECE. The frozen-temperature candidate
+scored 97.86% / 0.0946 / 0.0372 / 0.0237; paired speaker bootstrap showed no
+clear Accuracy difference, with better calibration metrics. This is only the
+fixed 10-keyword English task, not general speech or multimodal evidence. The
+initial run stopped before inference on internal duplicate audio; the corrected
+gate retained all same-label rows and reported 121 duplicate-content rows.
+Details and hashes are in the
+[protocol/results](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_OFFICIAL_TEST_PROTOCOL_20261021.md).
 
 **2026-10-21 R2 fresh CLEVRER reasoning execution:** The pinned VideoPrism
 extractor ran CPU-only over 400 train/development videos; the 200-scene train

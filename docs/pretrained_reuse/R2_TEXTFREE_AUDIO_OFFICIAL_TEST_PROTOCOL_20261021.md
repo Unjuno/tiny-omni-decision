@@ -1,6 +1,6 @@
 # Frozen text-free audio official-test evaluation protocol
 
-Status: **opened; pre-inference integrity gate failed; no predictions or metrics were produced**.
+Status: **completed once after a pre-inference integrity correction; fixed test predictions and metrics are saved**.
 
 ## Attempt record (2026-10-21)
 
@@ -16,9 +16,9 @@ output directory or describe this as a completed evaluation. The duplicate
 check was narrowed before inference: distinct official rows with identical WAV
 bytes and the same label remain in the full test set and are counted;
 identical bytes paired with conflicting labels still fail closed. This changes
-no model, threshold, preprocessing, or row inclusion rule. A single inference
-attempt may proceed only from a new output directory after this correction is
-tested and committed.
+no model, threshold, preprocessing, or row inclusion rule. The one inference
+attempt proceeded from a new output directory after the correction passed CPU
+tests and CI. No output from the failed first attempt was reused.
 
 ## Question
 
@@ -64,9 +64,9 @@ Neither readout, temperature, nor preprocessing can be changed after test
 rows are read. No test-driven fitting, checkpoint selection, class balancing,
 or prompt/search iterations are allowed. The test is intended to be evaluated
 once, with a unique output directory whose `run-lock.json` prevents reuse after
-an interrupted attempt. The first attempt stopped before model inference; after
-the narrowly scoped duplicate-content correction, only one new inference
-attempt is permitted, with all model and preprocessing choices still frozen.
+an interrupted attempt. The first attempt stopped before model inference; one
+new inference attempt then completed after the narrowly scoped duplicate-
+content correction, with all model and preprocessing choices frozen.
 
 The candidate and legacy baseline are not a perfectly matched fit: the
 calibration candidate reserves 264 training examples for speaker-held-out
@@ -90,6 +90,53 @@ already present. The process must be launched through
 reservation. If HotUGPU does not cooperatively yield, the child must not start.
 No other GPU process is stopped or signaled. No training or cloud compute is
 used.
+
+## Completed evaluation (attempt-02, 2026-10-21)
+
+The run used source commit `6bd3acfd7ca7d97974f1a2b2cb5ce18e91d52edf`, CI
+run [39576351342](https://github.com/Unjuno/tiny-omni-decision/actions/runs/39576351342)
+(success), Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2, Datasets
+4.8.5, and the local NVIDIA RTX 3080 Laptop GPU (16 GB). It took 31.7 seconds
+wall time; frozen Whisper feature extraction took 26.3 seconds and peaked at
+725,862,400 allocated CUDA bytes. Cloud compute/cost: none / $0.
+
+Of 4,890 official rows, 816 non-keyword rows were omitted per the frozen
+manifest and all 4,074 keyword rows were evaluated. The set has 239 speakers,
+3,953 unique WAV payloads, and 121 repeated-content rows across 119 payloads;
+all repeats were within the same speaker and had consistent labels. There were
+zero train/validation/calibration media or speaker overlaps. No row was
+deduplicated. The saved prediction file includes only hashed IDs and speakers.
+
+| Frozen system | Accuracy | NLL | Brier | ECE-15 | Mean confidence |
+|---|---:|---:|---:|---:|---:|
+| Legacy baseline | 0.9772 | 0.2684 | 0.0909 | 0.1692 | 0.8080 |
+| Calibration candidate, raw | 0.9786 | 0.3228 | 0.1119 | 0.2095 | 0.7691 |
+| Calibration candidate, temperature 0.4270248 | 0.9786 | 0.0946 | 0.0372 | 0.0237 | 0.9557 |
+
+Paired bootstrap resampling used whole speaker groups (10,000 repetitions,
+seed 17). The raw candidate's Accuracy difference from legacy had a 95%
+interval of -0.0002 to +0.0034, while NLL, Brier, and ECE were worse (difference
+intervals +0.0510 to +0.0581, +0.0189 to +0.0232, and +0.0385 to +0.0424).
+With the frozen temperature, Accuracy was unchanged (same interval), while
+NLL, Brier, and ECE improved (difference intervals -0.1917 to -0.1559,
+-0.0621 to -0.0458, and -0.1557 to -0.1342). Every per-class Accuracy after
+temperature scaling was at least 0.9571; the lowest class was `on` (0.9571)
+and the highest `yes` (0.9881). Full per-class Accuracy/NLL/Brier/ECE and
+per-example probabilities are in the local report and prediction artifacts.
+
+The calibration candidate is not fit-matched to legacy: it used 1,016 fit
+examples plus 264 train-only temperature-calibration examples, while legacy
+used 1,280 training examples and a previously observed development-selected
+checkpoint. This supports the frozen scalar temperature for this fixed
+comparison; it does not isolate calibration as the only cause, establish
+general speech understanding, or validate other audio tasks. It is not evidence
+for multimodal model quality.
+
+Artifacts (outside Git):
+
+- `C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-official-test-eval-v1-attempt-02\report.json` — SHA-256 `98e081439592874e84f26d381cd3c25f9b5e1f61ccad3f999375d908e54a5295`.
+- `C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-official-test-eval-v1-attempt-02\official-test-predictions.jsonl` — SHA-256 `6932809a5efedc9d0dfd8cf683c456c43b9da5fa833013c0dddb719d7ff2b09d`.
+- `C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-official-test-eval-v1-attempt-02\run-lock.json` — completed one-shot lock.
 
 ## Reproduction command
 
