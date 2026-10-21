@@ -42,6 +42,24 @@ checkpoint selection.
   install, lint, tests, and manifest validation all passed. This verifies the
   PR head, not the scientific quality gates below.
 
+## Additive evidence update — 2026-10-22
+
+- **HoloAssist fixed-checkpoint AV replay:** The already-selected joint,
+  audio-only, and video-only readouts were replayed once on the same 1,896
+  labelled windows from 207 official-validation sessions. This validation is
+  **not blind** because an earlier HoloAssist pilot used these sessions for
+  checkpoint selection. Joint AV scored Accuracy/NLL/Brier/ECE-15
+  `0.7711/0.5034/0.3291/0.0182`, audio-only
+  `0.7600/0.5061/0.3325/0.0166`, and video-only
+  `0.7194/0.5628/0.3795/0.0228`. Session-paired bootstrap intervals for
+  audio-only minus joint include zero; video-only is lower on the paired
+  comparison. Thus this replay does not establish that both inputs are
+  necessary, does not approach the per-task quality target, and must not be
+  used for tuning or selection. All official train and validation groups in
+  this HoloAssist line have been exposed; do not run another HoloAssist
+  selection experiment. The official test/sealed audit remained closed. Full
+  hashes and protocol: [fixed-checkpoint replay](R2_HOLOASSIST_OFFICIAL_VALIDATION_FROZEN_REPLAY_20261022.md).
+
 ## Product target and measurement scope
 
 - Product objective: a local, small Decision system accepting typed JSON inputs
@@ -76,6 +94,7 @@ checkpoint selection.
 | V1 | Video + question + choices, with static and temporal subsets reported separately | CLEVRER `MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef` (CC0-1.0) | Fresh selected VideoPrism + MiniLM readout and legacy v0 were near binary chance on a one-time 200-scene holdout; paired intervals include zero. Separate long-budget descriptive results show severe late NLL/ECE degradation and no additional unique Video questions. | Use only as a synthetic temporal reasoning challenge. Group every question and choice by video. Report question types separately. The already observed holdout and validations are closed to further selection; admit new authorized, scene-disjoint Video supervision before another quality fit. |
 | AV1 | Time-localized audio + synchronized video; decide whether the sound source is visible | Google DeepMind Perception Test `3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf`; exploratory materials CC-BY-4.0 per pinned official repo | 512 selected media pairs and frozen features are integrity-checked. The 128/class pilot's tiny heads reached 100% train and only 56–65% validation balanced Accuracy. Official full splits are strongly imbalanced: visible share 74.4% train vs 91.3% validation. A separate fresh independent-group task result has not qualified fusion. | Candidate for M-2 only after timing/label audit and a predeclared group-held-out cohort. Compare audio-only, video-only and joint on identical video groups; include missing, shuffled, stale and timing-offset controls. Require a measured joint improvement and evidence both inputs are useful before calling this complementary AV quality. |
 | AV2 (exploratory, not admitted) | Given an 8-frame video interval, choose its synchronized audio window from two same-video, same-label event windows | Perception Test `3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf`; annotation-derived target, no official test split | One fixed seed-17 development corpus has 190 train and 313 validation video groups. Pooled joint Accuracy was 47.60% versus audio-only 50.80%; paired group interval included zero. A 19,009-parameter conditional gate overfit by update 32 and its minimum-NLL selector chose step 0. The readout used pooled features, so it is not a temporal architecture test; validation labels/source were already inspected. | Keep as a negative development diagnostic, not a product task or fusion pass. Do not continue tuning on these IDs. A future both-required task needs independently verified labels, sequence-level inputs and a new predeclared group split. Full metrics and hashes: `docs/pretrained_reuse/R2_PERCEPTION_AV_TEMPORAL_MATCH_20261021.md`. |
+| AV3 (exploratory replay; closed to selection) | HoloAssist synchronized audio/video + task category; predict the annotated action-state window label | HoloAssist official train/validation release; exact source/cache identities and hashes are in the linked replay report | Joint AV reached 77.11% Accuracy on 1,896 labelled windows / 207 validation sessions; audio-only reached 76.00%, video-only 71.94%. Audio-only versus joint paired session intervals include zero. The validation was previously exposed by an earlier pilot; all groups in this source line are now exposed. | Historical transfer evidence only. It does not prove both modalities are required and cannot qualify broad audio, video, or AV quality. Do not tune, select, or rerun on these groups. Official test/sealed audit remains closed. See `R2_HOLOASSIST_OFFICIAL_VALIDATION_FROZEN_REPLAY_20261022.md`. |
 | S1 (optional) | Time-stamped sensor window + question/options; explicit units, missingness and observation-end time | VIDIMU only if its acquisition and split provenance remain verified; do not substitute UCI HAR while MOMENT pretraining overlap is unknown | Current pilot has only 39 development trials / 3 participants and no independent high-powered quality evidence. Sensor-label mapping and group coverage are insufficient for a release task. | Keep optional and research-only until >=200 independent subjects/scenes are available or a justified low-power protocol is approved. Never pool it with the four required modalities. |
 
 ## Common acceptance protocol proposal
@@ -116,8 +135,10 @@ checkpoint selection.
 - The fixed-seed audio calibration candidate has now received its one-time
   official-test comparison. Keep the measured result in its narrow scope; do
   not retune against that test or describe it as broad audio quality.
-- Next work remains a source/task gate, not another architecture fit: audit the
-  AV1 cohort's event truth and video-grouped evaluation support, and select one
-  untouched, representative task per required modality before any product
-  claim or quality-selected training. Do not open sealed audits to decide among
-  candidates.
+- Next work remains a source/task gate, not another architecture fit. The
+  HoloAssist source line is closed to further selection, and AVQA remains
+  rights-blocked. Continue the AV1 event-truth and video-group admission audit;
+  in parallel, identify untouched, representative, rights-cleared task sources
+  for each required modality. Freeze a grouped development/selection design
+  before any quality-selected training. Do not open sealed audits to decide
+  among candidates.
