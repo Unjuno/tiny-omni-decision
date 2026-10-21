@@ -73,6 +73,20 @@ checkpoint selection.
   new media or annotations were accessed for this update. See the [AMI source
   screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-ami-av-source-screen-20261021/docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md)
   and [AVQA rights recheck](R2_AVQA_RIGHTS_RECHECK_20261021.md).
+- **Greatest Hits conditional-AV gate result:** The approved bidirectional
+  exchange/gate design was already implemented and evaluated in the separate
+  `codex/r2-av-postnorm-stability` workstream. Its seed-17 E0G1 run completed
+  32,768 updates and selected step 24,576. Gate outputs collapsed below 0.01 by
+  step 512. Although joint-view Accuracy was 5.07 points above E0G0, paired NLL
+  uncertainty included zero and video-only Accuracy fell 3.83 points. In a
+  fixed 8,875-question replay, the E0G1 full residual and query-only arm had
+  identical Accuracy, with metric deltas around 1e-8. This is
+  evidence against another gate fit on the same source and IDs, not evidence
+  that the model family cannot fuse modalities. Greatest Hits remains a narrow
+  exploratory task: native labels do not prove both-input necessity, and
+  physical sync plus actor/site generalization remain unresolved. See the
+  [matched-fit report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md)
+  and [fixed-checkpoint diagnostic](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
 
 ## Product target and measurement scope
 
@@ -111,6 +125,7 @@ checkpoint selection.
 | AV3 (exploratory replay; closed to selection) | HoloAssist synchronized audio/video + task category; predict the annotated action-state window label | HoloAssist official train/validation release; exact source/cache identities and hashes are in the linked replay report | Joint AV reached 77.11% Accuracy on 1,896 labelled windows / 207 validation sessions; audio-only reached 76.00%, video-only 71.94%. Audio-only versus joint paired session intervals include zero. The validation was previously exposed by an earlier pilot; all groups in this source line are now exposed. | Historical transfer evidence only. It does not prove both modalities are required and cannot qualify broad audio, video, or AV quality. Do not tune, select, or rerun on these groups. Official test/sealed audit remains closed. See `R2_HOLOASSIST_OFFICIAL_VALIDATION_FROZEN_REPLAY_20261022.md`. |
 | AV4 (review-only) | AMI synchronized conversation audio/video; decide which candidate face is the active speaker for a time-localized utterance | AMI Meeting Corpus, using complete parent meetings and official SA/SB grouping | A source-screen subset has 214 preliminary train and 111 development windows; 213/214 train joins pass, with one quarantined. Metadata supports SA/SB participant separation, but exact A/V synchronization, visible-speaker truth, and content-overlap proof remain incomplete. | Do not fit or call this a joint task yet. Admit only after synchronization and visible-speaker labels are independently verified, media/content overlap is audited, and grouped task construction is frozen. Details are on the [AMI source-screen branch](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-ami-av-source-screen-20261021/docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md). |
 | AV5 (rights-blocked) | AVQA `Both` questions: answer a multiple-choice question whose annotation says audio and visual information are related | AVQA annotations over VGG-Sound/YouTube clips | The official task description contains a useful `View` / `Sound` / `Both` relation, but reviewed annotation terms and original clip rights do not establish machine-learning use rights. | Do not fetch annotations/media, train, or evaluate until the relevant rights are explicit. Keep only as task-design reference; see `R2_AVQA_RIGHTS_RECHECK_20261021.md`. |
+| AV6 (exploratory; gate comparison complete) | Audio + video event; choose released material/action/reaction fields | Greatest Hits official release, CC BY 4.0; development partition grouped by recording date | The matched seed-17 E0G1 gate run completed 32,768 updates (best step 24,576); gate values collapsed below 0.01 by step 512. The joint-view Accuracy gain over E0G0 was +5.07 points, but paired NLL uncertainty included zero and video-only Accuracy declined 3.83 points. Full residual and query-only arms had identical Accuracy, with metric deltas around 1e-8, in a fixed 8,875-question replay. | Do not repeat this gate run or use its labels as proof of both-input-required truth. Keep as scoped development evidence. A follow-up requires a fresh admitted task with defensible synchronization, group independence and truth-bearing modality controls. Reports: `R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md` and `R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md` on branch `codex/r2-av-postnorm-stability`. |
 | S1 (optional) | Time-stamped sensor window + question/options; explicit units, missingness and observation-end time | VIDIMU only if its acquisition and split provenance remain verified; do not substitute UCI HAR while MOMENT pretraining overlap is unknown | Current pilot has only 39 development trials / 3 participants and no independent high-powered quality evidence. Sensor-label mapping and group coverage are insufficient for a release task. | Keep optional and research-only until >=200 independent subjects/scenes are available or a justified low-power protocol is approved. Never pool it with the four required modalities. |
 
 ## Common acceptance protocol proposal
