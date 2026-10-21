@@ -234,10 +234,6 @@ def main() -> None:
     )
 
 
-if __name__ == "__main__":
-    main()
-
-
 def paired_scene_bootstrap(
     rows: list[dict[str, Any]],
     targets: list[int] | np.ndarray,
@@ -330,3 +326,7 @@ def paired_scene_bootstrap(
         "difference_definition": "candidate minus reference",
         "resampling_unit": "scene within question type; paired predictions",
     }
+
+
+if __name__ == "__main__":
+    main()

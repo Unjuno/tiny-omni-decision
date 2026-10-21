@@ -138,7 +138,12 @@ attempt exposed a `--holdout-only` bug: the fetch loop unconditionally looked
 up a `train` partition that is intentionally absent in holdout-only mode. It
 stopped after writing one clip. A regression test was added, and the minimal
 guard was fixed; the same output directory was resumed with its existing media
-hash checked and reused. The isolated holdout labels have not been evaluated.
-Once the 200 holdout videos and identity checks finish, the frozen v0 and v1
-readouts will be compared once with the existing paired scene-bootstrap
-evaluator. No tuning will follow from those holdout results.
+hash checked and reused. The first paired-evaluation invocation loaded the
+isolated labels and computed both frozen models' predictions, but stopped
+before writing results because the CLI called `main()` before defining its
+bootstrap helper. No metric output or predictions from that failed invocation
+were inspected or saved. The function order was corrected and covered by a
+regression test. The identical comparison is being rerun only to complete its
+report; checkpoint, preprocessing, holdout, and bootstrap conditions are
+unchanged. This recovery attempt is recorded explicitly and will not be used
+for tuning.
