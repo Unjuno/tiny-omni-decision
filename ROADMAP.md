@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 AVA Active Speaker label/split follow-up:** Explicit train and
+validation archives contain 120 and 33 video groups, with 2,676,314 and
+768,307 annotation rows, respectively; train/validation video overlap is zero.
+The 33-group validation is below the proposed 200-group quality gate, and
+underlying YouTube media rights remain unresolved, so no fit or quality
+evaluation is admitted. An inventory wildcard inadvertently enumerated metadata
+for an additional test-named archive; no member payloads or labels were read or
+used, and that archive is excluded from this work and cannot serve as a blind
+audit here. See the [label and split audit](docs/pretrained_reuse/R2_AVA_ACTIVE_SPEAKER_LABELS_SPLIT_AUDIT_20261022.md).
+
 **2026-10-22 R2 synchronized-AV source screen:** Ego4D Social `Talking to me`
 is now recorded as a review-only candidate for a supplied-face-track decision
 combining audio and video. Its official task uses active-speaker/face tracks
