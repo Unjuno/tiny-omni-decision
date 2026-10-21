@@ -17,7 +17,6 @@ import numpy as np
 import torch
 from PIL import Image
 
-
 TAXONOMIES = ("color", "texture", "shape", "count")
 PROMPTS = {
     "color": "In this synthetic 3D image, an object's color is {option}.",
@@ -54,11 +53,19 @@ def read_examples(
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
     manifest = {
         row["id"]: row
-        for row in (json.loads(line) for line in manifest_path.read_text(encoding="utf-8").splitlines() if line)
+        for row in (
+            json.loads(line)
+            for line in manifest_path.read_text(encoding="utf-8").splitlines()
+            if line
+        )
     }
     labels = {
         row["id"]: row
-        for row in (json.loads(line) for line in labels_path.read_text(encoding="utf-8").splitlines() if line)
+        for row in (
+            json.loads(line)
+            for line in labels_path.read_text(encoding="utf-8").splitlines()
+            if line
+        )
     }
     selected_ids = {
         str(json.loads(line)["image_id"])
@@ -88,7 +95,10 @@ def read_examples(
         ids.append(str(row["id"]))
     image_ids = list(dict.fromkeys(str(row["image_id"]) for row in rows))
     if len(image_ids) != 1595 or len(rows) != 6380:
-        raise ValueError(f"Expected fixed 1,595-image/6,380-row reporting slice, got {len(image_ids)}/{len(rows)}")
+        raise ValueError(
+            "Expected fixed 1,595-image/6,380-row reporting slice, "
+            f"got {len(image_ids)}/{len(rows)}"
+        )
     if any(set(by_image[image_id]) != set(TAXONOMIES) for image_id in image_ids):
         raise ValueError("Every image must have exactly the four fixed taxonomies")
     media_hashes = {}
@@ -103,12 +113,17 @@ def read_examples(
         if not media.is_file():
             raise FileNotFoundError(media)
         actual_hash = sha256_file(media)
-        if actual_hash != manifest[image_id]["sha256"] or media.stat().st_size != manifest[image_id]["bytes"]:
+        if (
+            actual_hash != manifest[image_id]["sha256"]
+            or media.stat().st_size != manifest[image_id]["bytes"]
+        ):
             raise ValueError(f"Validation media does not match pinned manifest: {image_id}")
         media_hashes[image_id] = actual_hash
         for taxonomy in TAXONOMIES:
             if str(labels[image_id][taxonomy]) != by_image[image_id][taxonomy]["target"]:
-                raise ValueError(f"Target mismatch against validation labels: {image_id}/{taxonomy}")
+                raise ValueError(
+                    f"Target mismatch against validation labels: {image_id}/{taxonomy}"
+                )
     if len(set(media_hashes.values())) != len(media_hashes):
         raise ValueError("Duplicate image bytes detected in fixed reporting slice")
     return image_ids, by_image, options_by_taxonomy, media_hashes
@@ -124,9 +139,13 @@ def metrics(probabilities: np.ndarray, targets: np.ndarray) -> dict[str, float]:
     for bin_index in range(15):
         lower = bin_index / 15
         upper = (bin_index + 1) / 15
-        in_bin = (confidence >= lower) & (confidence < upper if bin_index < 14 else confidence <= upper)
+        in_bin = (confidence >= lower) & (
+            confidence < upper if bin_index < 14 else confidence <= upper
+        )
         if in_bin.any():
-            ece += float(in_bin.mean()) * abs(float(correct[in_bin].mean()) - float(confidence[in_bin].mean()))
+            ece += float(in_bin.mean()) * abs(
+                float(correct[in_bin].mean()) - float(confidence[in_bin].mean())
+            )
     return {
         "accuracy": float(correct.mean()),
         "nll": float(-np.log(np.clip(selected, 1e-12, 1.0)).mean()),
@@ -136,10 +155,14 @@ def metrics(probabilities: np.ndarray, targets: np.ndarray) -> dict[str, float]:
     }
 
 
-def group_bootstrap(probabilities: np.ndarray, targets: np.ndarray, seed: int = 17, draws: int = 10_000) -> dict:
+def group_bootstrap(
+    probabilities: np.ndarray, targets: np.ndarray, seed: int = 17, draws: int = 10_000
+) -> dict:
     rng = np.random.default_rng(seed)
     correct = (probabilities.argmax(axis=2) == targets).astype(np.float64)
-    nll = -np.log(np.clip(np.take_along_axis(probabilities, targets[..., None], axis=2)[..., 0], 1e-12, 1.0))
+    nll = -np.log(
+        np.clip(np.take_along_axis(probabilities, targets[..., None], axis=2)[..., 0], 1e-12, 1.0)
+    )
     one_hot = np.eye(probabilities.shape[2], dtype=np.float64)[targets]
     brier = ((probabilities - one_hot) ** 2).sum(axis=2)
     samples = {"accuracy": [], "nll": [], "brier": []}
@@ -157,12 +180,26 @@ def group_bootstrap(probabilities: np.ndarray, targets: np.ndarray, seed: int = 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--rows", type=Path, required=True, help="Existing reporting JSONL; prediction columns are ignored")
+    parser.add_argument(
+        "--rows",
+        type=Path,
+        required=True,
+        help="Existing reporting JSONL; prediction columns are ignored",
+    )
     parser.add_argument("--images", type=Path, required=True)
-    parser.add_argument("--manifest", type=Path, required=True, help="Pinned validation image manifest")
+    parser.add_argument(
+        "--manifest", type=Path, required=True, help="Pinned validation image manifest"
+    )
     parser.add_argument("--labels", type=Path, required=True, help="Pinned validation labels")
-    parser.add_argument("--selection-rows", type=Path, required=True, help="Rows used for prior checkpoint selection; IDs only")
-    parser.add_argument("--weights", type=Path, required=True, help="Pinned OpenCLIP-converted PE-Core safetensors")
+    parser.add_argument(
+        "--selection-rows",
+        type=Path,
+        required=True,
+        help="Rows used for prior checkpoint selection; IDs only",
+    )
+    parser.add_argument(
+        "--weights", type=Path, required=True, help="Pinned OpenCLIP-converted PE-Core safetensors"
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--batch-size", type=int, default=8)
     args = parser.parse_args()
@@ -174,12 +211,16 @@ def main() -> None:
     image_ids, by_image, options, media_hashes = read_examples(
         args.rows, args.images, args.manifest, args.labels, args.selection_rows
     )
-    row_ids = [by_image[image_id][taxonomy]["id"] for image_id in image_ids for taxonomy in TAXONOMIES]
+    row_ids = [
+        by_image[image_id][taxonomy]["id"] for image_id in image_ids for taxonomy in TAXONOMIES
+    ]
     targets = np.zeros((len(image_ids), len(TAXONOMIES)), dtype=np.int64)
     text_options: dict[str, list[str]] = {}
-    for taxonomy_index, taxonomy in enumerate(TAXONOMIES):
+    for taxonomy in TAXONOMIES:
         taxonomy_options = options[taxonomy]
-        text_options[taxonomy] = [PROMPTS[taxonomy].format(option=option) for option in taxonomy_options]
+        text_options[taxonomy] = [
+            PROMPTS[taxonomy].format(option=option) for option in taxonomy_options
+        ]
 
     import open_clip
 
@@ -201,7 +242,12 @@ def main() -> None:
         predictions = []
         for start in range(0, len(image_ids), args.batch_size):
             current_ids = image_ids[start : start + args.batch_size]
-            batch = torch.stack([load_image(args.images / f"{image_id}.png", preprocess) for image_id in current_ids])
+            batch = torch.stack(
+                [
+                    load_image(args.images / f"{image_id}.png", preprocess)
+                    for image_id in current_ids
+                ]
+            )
             image_features = torch.nn.functional.normalize(model.encode_image(batch), dim=-1)
             for taxonomy_index, taxonomy in enumerate(TAXONOMIES):
                 scores = scale * image_features @ text_features[taxonomy].T
@@ -240,7 +286,9 @@ def main() -> None:
     }
     result = {
         "status": "CPU_ZERO_SHOT_DEV_EVALUATION_COMPLETE",
-        "evaluation_scope": "Previously observed CLEVR-4 development reporting subset; not a blind audit.",
+        "evaluation_scope": (
+            "Previously observed CLEVR-4 development reporting subset; not a blind audit."
+        ),
         "model": {
             "hub_repo": "timm/PE-Core-T-16-384",
             "hub_revision": "7fe539ed578ac49a1c2b4f946e4b0747704c825a",
@@ -250,7 +298,8 @@ def main() -> None:
             "logit_scale": scale,
         },
         "data": {
-            "source": "CLEVR-4 reporting-validation subset from image-videoprism-clevr4-full-seed17",
+            "source": "CLEVR-4 reporting-validation subset from "
+            "image-videoprism-clevr4-full-seed17",
             "image_count": len(image_ids),
             "decision_count": len(predictions),
             "image_id_order_sha256": ordered_hash(image_ids),
@@ -269,8 +318,13 @@ def main() -> None:
         "protocol": {
             "prompt_templates": PROMPTS,
             "selection": "No prompt search, calibration, training or checkpoint selection.",
-            "probabilities": "softmax(exp(checkpoint logit_scale) * cosine(image,text)) over the supplied 10 options.",
-            "bootstrap": {"unit": "image group; all four taxonomies stay together", "seed": 17, "draws": 10_000, "interval": "linear percentile 95%"},
+            "probabilities": "softmax(exp(logit_scale) * cosine(image,text)); 10 supplied options.",
+            "bootstrap": {
+                "unit": "image group; all four taxonomies stay together",
+                "seed": 17,
+                "draws": 10_000,
+                "interval": "linear percentile 95%",
+            },
         },
         "metrics_by_taxonomy": per_taxonomy,
         "macro_metrics": macro,
@@ -284,8 +338,26 @@ def main() -> None:
         "predictions": predictions,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(json.dumps({key: result[key] for key in ("status", "model", "data", "metrics_by_taxonomy", "macro_metrics", "macro_group_bootstrap_95ci", "runtime")}, indent=2))
+    args.output.write_text(
+        json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    print(
+        json.dumps(
+            {
+                key: result[key]
+                for key in (
+                    "status",
+                    "model",
+                    "data",
+                    "metrics_by_taxonomy",
+                    "macro_metrics",
+                    "macro_group_bootstrap_95ci",
+                    "runtime",
+                )
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

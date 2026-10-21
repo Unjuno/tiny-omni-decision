@@ -14,6 +14,8 @@ audit was loaded.
 - Git HEAD at start: `fde8f873cafde64ddd1b98e608102ebd1df6188c`.
 - The runner was uncommitted at launch; its executed-file SHA-256, retained in
   run metadata, is `94ab3a03b26d4353d0189c182aeb9df6d70ea06f6bcd18c657175452bcb9482d`.
+- The prompt/image preprocessing helper from the run's source commit has SHA-256
+  `4c4af2545b81c4f360aebecc3af6fba80a2df831c24cabf2305458d2bc912c7d`.
 - Effective config SHA-256: `6f4bcb004d88775d088a172554ce5659d80cdb554904c18b01f8cdff891f7104`.
 - Encoder: PE-Core T16 at revision `7fe539ed578ac49a1c2b4f946e4b0747704c825a`,
   weight SHA-256 `477b7507c79e3484195f4e389af6d044b5d56f42ce503d6b0eb7e99439b545e5`.
@@ -81,8 +83,8 @@ matched exactly. The directory retains the best and last-epoch readouts,
 FP16 frozen feature cache, eight-epoch JSONL history, selection and reporting
 probabilities, effective config, and run metadata. Key hashes:
 
-- `run-report.json`: `494a7b4b9cbfd6306534152a21c915d654df9ad8d57099afc3bc7642be26f73e`
-- `run-metadata.json`: `8bdf9ddb4eb69d3a024e4690db1f4558524951e0ef9a715f99e29a82d1728fdd`
+- `run-report.json`: `7a1278d601d418bac8ef7d20719a11989febaa6532160ac17574872eba253b18`
+- `run-metadata.json`: `ab455afece9f2cbb6c194a212ec42ad50649848a7ecd85a0caf9138d58fa225f`
 - `best-readout.pt`: `261ceae2e75fca2d2d6b9a03ef4106783261fcc9ae7306af0b98809aef5b6e1d`
 - `frozen-features.npz`: `c90307c024e7a60f3208230dcac366b5b9ec9cf81e00ece2926bcdf7a86848eb`
 - `training-history.jsonl`: `7199501f9d341e8bc93d552e30eb17365b36d2d259e83ea8328523dc8c9e455c`
