@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 AV temporal readout scale follow-up:** Compared audio-only,
+pooled AV, and eight-frame LSTM AV readouts on nested 96/224-group training
+cohorts and the same 64 fresh video groups. All six fixed 2,048-update runs
+completed on CPU; all selected initialization at step 0 after the heads
+memorized training data by step 32 and validation NLL degraded. Increasing to
+224 groups did not prevent the overfit, and sequence AV did not establish a
+gain over pooling. The paired 5,000-resample intervals include zero. Treat this
+as a narrow development-task result, not a model-family ceiling or product
+quality result. No official test/sealed audit was opened. See the
+[frozen protocol and results](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_RESULTS_20261022.md)
+and [learning curves](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_CURVES_20261022.csv).
+
 **2026-10-21 R1/R2 VideoPrism temporal-token runtime probe:** The pinned
 VideoPrism-B CPU forward on one fixed 8-frame development-train clip returned
 finite `[1, 2048, 768]` tokens, i.e. 256 spatial tokens per frame after its
