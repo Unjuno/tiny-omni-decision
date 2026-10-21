@@ -8,6 +8,7 @@ import json
 import os
 import platform
 import subprocess
+import sys
 import tempfile
 import time
 import zipfile
@@ -58,6 +59,46 @@ BASELINE_HASHES = {
         "0d6128df7ba3ca8931460927d5c574891917f801c087bf3310c65631eef622fa"
     ),
 }
+
+
+def effective_config_for_attempt(output_dir: Path) -> dict[str, Any]:
+    """Bind each immutable external output directory to its own experiment ID."""
+    return CONFIG | {"experiment_id": output_dir.name}
+
+
+def hotgpu_command_text(
+    archive_path: Path, baseline_dir: Path, output_dir: Path, *, python: str = sys.executable
+) -> str:
+    """Render the exact Windows command with the active absolute Python path."""
+    child = [
+        python,
+        "-m",
+        "scripts.pch_recording_temporal_probe",
+        "run",
+        "--archive",
+        str(archive_path.resolve()),
+        "--baseline-dir",
+        str(baseline_dir.resolve()),
+        "--output-dir",
+        str(output_dir.resolve()),
+    ]
+    return subprocess.list2cmdline(
+        [
+            python,
+            "-m",
+            "scripts.run_with_hotgpu_guard",
+            "--max-wait-seconds",
+            "3600",
+            "--reserve-mib",
+            "5120",
+            "--block-if-free-mib",
+            "14000",
+            "--min-child-free-mib",
+            "8000",
+            "--",
+            *child,
+        ]
+    ) + "\n"
 
 
 def paired_subject_bootstrap(
@@ -591,7 +632,10 @@ def prepare_preflight(archive_path: Path, baseline_dir: Path, output_dir: Path) 
         raise ValueError("PCH archive size/SHA-256 differs from the acquired official source")
     old_preflight, baseline_result, baseline_rows = _load_baseline_artifacts(baseline_dir)
     records, split, fit, validation, window_order_sha256 = _load_training_validation(archive_path)
-    inventory = preflight_inventory(records, split, batch_size=CONFIG["feature_window_batch_size"])
+    effective_config = effective_config_for_attempt(output_dir)
+    inventory = preflight_inventory(
+        records, split, batch_size=effective_config["feature_window_batch_size"]
+    )
     if window_order_sha256 != old_preflight["window_order_sha256"]:
         raise ValueError("ordered fit/validation windows differ from the frozen baseline")
     if (
@@ -653,7 +697,7 @@ def prepare_preflight(archive_path: Path, baseline_dir: Path, output_dir: Path) 
         "baseline_validation_sample_id_order_sha256": expected_validation_hash,
         "validation_sample_ids": validation_ids,
         "conditions": CONFIG["conditions"],
-        "effective_config": CONFIG,
+        "effective_config": effective_config,
         "heldout_payload_opened": False,
         "sealed_audit_loaded": False,
     }
@@ -662,14 +706,10 @@ def prepare_preflight(archive_path: Path, baseline_dir: Path, output_dir: Path) 
         json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     (output_dir / "effective-config.json").write_text(
-        json.dumps(CONFIG, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(effective_config, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     (output_dir / "command.txt").write_text(
-        "python -m scripts.run_with_hotgpu_guard --max-wait-seconds 3600 "
-        "--reserve-mib 5120 --block-if-free-mib 14000 --min-child-free-mib 8000 -- "
-        "<Python 3.11> -m scripts.pch_recording_temporal_probe run "
-        f"--archive {archive_path.resolve()} --baseline-dir {baseline_dir.resolve()} "
-        f"--output-dir {output_dir.resolve()}\n",
+        hotgpu_command_text(archive_path, baseline_dir, output_dir),
         encoding="utf-8",
     )
     return result
@@ -749,7 +789,11 @@ def run_experiment(archive_path: Path, baseline_dir: Path, output_dir: Path) -> 
         raise ValueError("baseline pins differ from the immutable preflight")
     if str(baseline_dir.resolve()) != preflight.get("baseline_dir"):
         raise ValueError("baseline directory differs from the immutable preflight")
-    if json.loads((output_dir / "effective-config.json").read_text(encoding="utf-8")) != CONFIG:
+    expected_config = effective_config_for_attempt(output_dir)
+    actual_config = json.loads(
+        (output_dir / "effective-config.json").read_text(encoding="utf-8")
+    )
+    if actual_config != expected_config:
         raise ValueError("effective config differs from the pinned experiment config")
     guard_path = Path(__file__).resolve().with_name("run_with_hotgpu_guard.py")
     if sha256_file(guard_path) != preflight.get("existing_hotgpu_guard_sha256"):

@@ -49,6 +49,27 @@ def _required_function(name: str):
     return function
 
 
+def test_attempt_config_uses_its_external_output_directory_name() -> None:
+    config = _required_function("effective_config_for_attempt")(
+        probe.Path(r"C:\CodexArtifacts\attempt-03")
+    )
+    assert config["experiment_id"] == "attempt-03"
+    assert config["seed"] == probe.CONFIG["seed"]
+
+
+def test_hotgpu_command_uses_absolute_python_and_concrete_paths() -> None:
+    command = _required_function("hotgpu_command_text")(
+        probe.Path("source.zip"),
+        probe.Path("baseline"),
+        probe.Path("attempt-03"),
+        python=r"C:\Python311\python.exe",
+    )
+    assert r"C:\Python311\python.exe" in command
+    assert "<Python 3.11>" not in command
+    assert "attempt-03" in command
+    assert "run_with_hotgpu_guard" in command
+
+
 def test_flat_window_embeddings_are_split_by_exact_record_lengths() -> None:
     embeddings = [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
     sequences = _required_function("split_window_embeddings")(embeddings, [2, 3])
