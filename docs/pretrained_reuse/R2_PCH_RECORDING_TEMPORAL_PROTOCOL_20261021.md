@@ -57,6 +57,26 @@ No explicit elapsed-time or gap embedding is added, so this does not test
 long-range timing across irregular gaps. Validation improvement, if any, remains
 exploratory until a separately frozen evaluation on untouched participants.
 
+
+## Preserved attempt-01 correction
+
+The attempt-01 source preflight passed and pins the original train/validation
+IDs. Its first HotUGPU invocation rejected a bare `python` token before launch
+because the wrapper requires a resolvable executable path. The corrected
+absolute-path invocation waited for cooperative GPU yield and reserved 5,120
+MiB. Before any optimizer update, an independent CPU smoke found that the
+window-encoder loader stripped the checkpoint's required `lstm.` state-dict
+prefix. I interrupted only this task's own guard/child. The wrapper released its
+reservation; Orbitune was not signaled or stopped. Attempt-01 remains preserved
+with preflight/config/command only and must not be resumed because its pinned
+script hash is stale.
+
+A new regression test exercises the checkpoint's `lstm.*` keys, and the corrected
+loader now passes a CPU-only smoke using the real PCH train/validation archive
+and the frozen attempt-04 checkpoint. That smoke embedded eight train/validation
+records, trained a two-epoch temporary readout, and exactly reproduced its
+selected checkpoint predictions. The 28-person holdout remained unopened.
+
 ## Implementation and execution record
 
 - Code: `scripts/pch_recording_temporal_probe.py`
@@ -67,7 +87,10 @@ exploratory until a separately frozen evaluation on untouched participants.
   wrapper. It waits for external GPU processes to yield and reserves local VRAM
   before starting the child; it does not stop or signal Orbitune.
 - Output directory: `C:\CodexArtifacts\pretrained-reuse-r2\pch-recording-temporal-attempt-01`
-- Status at protocol freeze: `ruff check .` passes and the full CPU suite passes
-  2,326 tests (11 skipped). The real-source preflight remains to be run; no new
-  training process has been launched.
+- Status at protocol freeze: `ruff check .` passed and the full CPU suite passed
+  2,326 tests (11 skipped). The attempt-01 real-source preflight passed, but its
+  guarded child was interrupted before any optimizer update after a CPU smoke
+  exposed a checkpoint-key prefix bug. Its directory is preserved; it has no
+  candidate checkpoint, feature cache, or training history. A regression test
+  and corrected CPU smoke now pass. The corrected code will use attempt-02.
 

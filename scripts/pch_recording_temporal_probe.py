@@ -155,6 +155,16 @@ def build_window_encoder(torch, hidden_size: int):
     return WindowEncoder()
 
 
+def load_window_encoder_from_checkpoint(torch, checkpoint_state: dict[str, Any], hidden_size: int):
+    """Load the baseline's LSTM-prefixed tensors and ignore its output head."""
+    encoder = build_window_encoder(torch, hidden_size=hidden_size)
+    encoder_state = {
+        key: value for key, value in checkpoint_state.items() if key.startswith("lstm.")
+    }
+    encoder.load_state_dict(encoder_state, strict=True)
+    return encoder
+
+
 def split_window_embeddings(embeddings: Any, lengths: list[int]) -> list[np.ndarray]:
     """Split flat window embeddings without changing their within-record order."""
     values = np.asarray(embeddings, dtype=np.float32)
@@ -671,11 +681,7 @@ def _encode_windows(torch, records, checkpoint_path: Path, *, device: str, batch
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     state = checkpoint["state_dict"]
     hidden_size = int(state["lstm.weight_hh_l0"].shape[1])
-    encoder = build_window_encoder(torch, hidden_size=hidden_size).to(device)
-    encoder_state = {
-        key.removeprefix("lstm."): value for key, value in state.items() if key.startswith("lstm.")
-    }
-    encoder.load_state_dict(encoder_state, strict=True)
+    encoder = load_window_encoder_from_checkpoint(torch, state, hidden_size=hidden_size).to(device)
     encoder.eval()
     for parameter in encoder.parameters():
         parameter.requires_grad_(False)

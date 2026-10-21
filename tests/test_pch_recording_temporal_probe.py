@@ -214,3 +214,19 @@ def test_metrics_report_class_support_and_accuracy() -> None:
     )
     assert metrics["class_counts"] == {"0": 2, "1": 1}
     assert metrics["class_accuracy"] == {"0": 1.0, "1": 1.0}
+
+
+def test_window_encoder_loads_only_the_prefixed_lstm_checkpoint_weights() -> None:
+    torch = pytest.importorskip("torch")
+    source = _required_function("build_window_encoder")(torch, hidden_size=4)
+    checkpoint_state = {key: value.clone() for key, value in source.state_dict().items()}
+    checkpoint_state["classifier.weight"] = torch.zeros((18, 4))
+    checkpoint_state["classifier.bias"] = torch.zeros(18)
+    loaded = _required_function("load_window_encoder_from_checkpoint")(
+        torch, checkpoint_state, hidden_size=4
+    )
+    inputs = torch.arange(2 * 128 * 3, dtype=torch.float32).reshape(2, 128, 3) / 100.0
+    with torch.inference_mode():
+        expected = source(inputs)
+        actual = loaded(inputs)
+    assert torch.equal(actual, expected)
