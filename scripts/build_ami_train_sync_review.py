@@ -9,10 +9,7 @@ import wave
 from pathlib import Path
 from typing import Any
 
-import av
 import numpy as np
-import PIL
-from PIL import Image, ImageDraw, ImageFont
 
 FRAME_COUNT = 12
 RMS_BIN_COUNT = 24
@@ -65,7 +62,9 @@ def wav_rms_bins(
     return [float(value / peak) if peak > 0 else 0.0 for value in rms]
 
 
-def _frame_at(path: Path, timestamp_s: float) -> tuple[Image.Image, float]:
+def _frame_at(path: Path, timestamp_s: float) -> tuple[Any, float]:
+    import av
+
     container = av.open(str(path))
     try:
         stream = next(item for item in container.streams if item.type == "video")
@@ -91,6 +90,8 @@ def _frame_at(path: Path, timestamp_s: float) -> tuple[Image.Image, float]:
 
 
 def _render_page(samples: list[dict[str, Any]], output_path: Path, page_index: int) -> None:
+    from PIL import Image, ImageDraw, ImageFont
+
     font = ImageFont.load_default()
     width = LABEL_WIDTH + FRAME_COUNT * CELL_WIDTH
     height = 34 + len(samples) * ROW_HEIGHT
@@ -244,6 +245,9 @@ def build_review(
                 "sample_ids": [sample["sample_id"] for sample in page_samples],
             }
         )
+    import av as pyav
+    import PIL as pil
+
     result = {
         "schema_version": 1,
         "purpose": "train-only AV timing preflight; no model inference or selection",
@@ -254,7 +258,11 @@ def build_review(
         "frame_count_per_sample": FRAME_COUNT,
         "audio_rms_bin_count": RMS_BIN_COUNT,
         "audio_rms_note": "Normalized mixed-headset RMS; not speaker diarization.",
-        "environment": {"pyav": av.__version__, "numpy": np.__version__, "pillow": PIL.__version__},
+        "environment": {
+            "pyav": pyav.__version__,
+            "numpy": np.__version__,
+            "pillow": pil.__version__,
+        },
         "pages": pages,
         "samples": [
             {

@@ -376,7 +376,7 @@ frames do not quantify lip-sync. The fixed sample's prior presence receipt
 remains 17 clear, 5 limited/ambiguous, and 2 not visible. I did not assign
 active-speaker labels or claim clock synchronization. No SB/SC media, model, or
 GPU was used. The synchronization and visible-speaker truth gates remain open.
-Six CPU tests and Ruff pass for the runner.
+The initial GitHub Actions run for commit `74cada5` passed Install and Lint but failed in Test; job-log download is restricted to repository admins in this environment. Code and workflow inspection exposed a portability issue: CI installs only `.[dev]`, while the runner imported PyAV/Pillow at module load even though those media extras are not declared in `dev`. The media imports are now lazy and a subprocess regression test blocks `av`/`PIL` during helper import. Local `ruff check .` passes and the full suite passes 2,296 tests (11 skipped); the follow-up Linux CI result is pending.
 
 ## GPU handoff review — HotUGPU
 

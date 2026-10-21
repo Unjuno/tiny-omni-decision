@@ -1,3 +1,5 @@
+import subprocess
+import sys
 import wave
 from pathlib import Path
 
@@ -43,3 +45,18 @@ def test_wav_rms_bins_reject_non_mono_audio(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="mono"):
         wav_rms_bins(wav_path, 0.0, 0.05)
+
+
+def test_helper_import_does_not_require_media_extras() -> None:
+    code = """
+import builtins
+original_import = builtins.__import__
+def guarded_import(name, *args, **kwargs):
+    if name == "av" or name == "PIL" or name.startswith("PIL."):
+        raise ModuleNotFoundError(name)
+    return original_import(name, *args, **kwargs)
+builtins.__import__ = guarded_import
+from scripts.build_ami_train_sync_review import sample_times
+assert sample_times(0.0, 1.0, 2) == [0.0, 1.0]
+"""
+    subprocess.run([sys.executable, "-c", code], check=True, capture_output=True, text=True)
