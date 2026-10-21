@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R7 Path A image runtime full-validation parity:** Replayed all
+2,048 saved decisions across the 512-image checkpoint-selection validation
+slice using the manifest-only image runtime bundle on JAX CPU. There were zero
+prediction mismatches and maximum absolute probability delta was 4.98e-6
+(within 1e-5); inference took 547.27 seconds and peak working set was about
+4.26 GB. This confirms packaging/runtime parity only on previously inspected
+validation data, not independent image quality. See the
+[replay record](docs/pretrained_reuse/R7_PATH_A_IMAGE_FULL_VALIDATION_RUNTIME_PARITY_20261021.md).
+
 **2026-10-21 R2 text-free audio calibration check:** A speaker-disjoint
 temperature fit on 264 train-only examples left Accuracy unchanged at 96.56%
 on the already-inspected 640-example Speech Commands development split, while
