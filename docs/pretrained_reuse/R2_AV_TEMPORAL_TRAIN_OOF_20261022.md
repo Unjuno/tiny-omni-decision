@@ -77,12 +77,12 @@ association between event category and which candidate occupies the target
 position. This is not evidence of media leakage; it is a task-construction
 shortcut that a model could exploit if trained on it.
 
-| Fixed 32-update OOF arm | Accuracy (95% group bootstrap CI) | NLL (95% CI) | Brier | ECE-10 |
-|---|---:|---:|---:|---:|
-| Audio-only | 45.54% [39.29%, 52.23%] | 1.2472 [1.0862, 1.4109] | 0.7790 | 0.3314 |
-| Pooled AV | 47.32% [41.07%, 54.02%] | 1.6222 [1.3831, 1.8718] | 0.8326 | 0.3779 |
-| Sequence AV | 47.32% [41.07%, 54.02%] | 1.5326 [1.3136, 1.7593] | 0.8218 | 0.3421 |
-| Source-label-only, fold-local mode | 58.04% | not probabilistic | — | — |
+| Fixed 32-update OOF arm | Parameters | Accuracy (95% group bootstrap CI) | NLL (95% CI) | Brier | ECE-10 |
+|---|---:|---:|---:|---:|---:|
+| Audio-only | 12,353 | 45.54% [39.29%, 52.23%] | 1.2472 [1.0862, 1.4109] | 0.7790 | 0.3314 |
+| Pooled AV | 50,625 | 47.32% [41.07%, 54.02%] | 1.6222 [1.3831, 1.8718] | 0.8326 | 0.3779 |
+| Sequence AV | 50,625 | 47.32% [41.07%, 54.02%] | 1.5326 [1.3136, 1.7593] | 0.8218 | 0.3421 |
+| Source-label-only, fold-local mode | — | 58.04% | not probabilistic | — | — |
 
 The fixed trained readouts do not transfer above the simple option-position or
 source-label baselines. Their confidence intervals overlap one another and
