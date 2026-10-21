@@ -2,7 +2,7 @@
 
 Date: 2026-10-21
 
-Repository source commit: `cf55f6aac383e54afa2579eda60d25fd927fe16d`  
+Repository source commit: `cf55f6aac383e54afa2579eda60d25fd927fe16d`
 Purpose: verify that the manifest-listed image runtime reproduces the already
 saved checkpoint-selection predictions across the full existing 512-image
 development validation set. This is packaging/runtime parity only. It is not a

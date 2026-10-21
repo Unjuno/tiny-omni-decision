@@ -1,6 +1,6 @@
 # Speaker-held-out calibration check for text-free audio
 
-Date: 2026-10-21  
+Date: 2026-10-21
 Scope: CPU-only development comparison; no encoder inference, GPU use, or sealed-audit access.
 
 ## Question
