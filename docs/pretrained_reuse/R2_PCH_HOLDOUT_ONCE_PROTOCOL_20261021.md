@@ -62,8 +62,30 @@ checkpoint selection.
 
 ## Reproduction
 
-The runner is `scripts/evaluate_pch_holdout_once.py`. First create a fresh
-preflight directory without opening holdout labels/payloads; then commit the
-preflight hash and invoke the runner once through `scripts/run_with_hotgpu_guard.py`.
-The exact run receipt, prediction hash and result will be appended below after
-the frozen execution.
+The runner is `scripts/evaluate_pch_holdout_once.py`. The completed CPU
+preflight did not open holdout labels/payloads; it pinned the inputs before the
+single guarded run described below.
+
+## Attempt 01 — blocked before inference
+
+The preregistered run was launched once through the cooperative HotUGPU guard
+using the immutable preflight receipt with SHA-256
+`43603d836f03ff66d3956605b52742d86edf35d6f03a965d788ed56ea633da74`. The
+guard waited for Orbitune PID 10912 to yield, reserved 5,120 MiB after GPU
+utilization reached 0%, and observed 11,095 MiB free for the child. It did not
+stop or signal Orbitune. The reservation was released when the child exited.
+
+Before loading either model or running a forward pass, the decoder rejected
+the first heldout CSV because a row had fewer than seven columns (timestamp and
+calibrated axes were missing). One heldout recording payload was opened and its
+filename label parsed. No model was loaded, no inference forward or optimizer
+update occurred, and no prediction or quality metric was produced. The
+external failure receipt is at
+`C:\\CodexArtifacts\\pretrained-reuse-r2\\pch-holdout-once-failure-01\\failure.json`.
+
+Per the preregistered stop rule, this attempt is not retried and the decoder is
+not adapted to this cohort. These participants are now considered observed
+development evidence, not an untouched blind holdout. Consequently this
+protocol produced no model comparison and cannot support a transfer-quality
+claim. A future attempt would require a different untouched cohort and a
+separately reviewed protocol.
