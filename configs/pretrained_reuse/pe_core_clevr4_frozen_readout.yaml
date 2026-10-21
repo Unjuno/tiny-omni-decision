@@ -1,0 +1,42 @@
+schema_version: 1
+experiment_id: pe-core-t16-clevr4-frozen-readout-seed17
+status: preregistered_development_probe
+seed: 17
+encoder:
+  repo_id: timm/PE-Core-T-16-384
+  revision: 7fe539ed578ac49a1c2b4f946e4b0747704c825a
+  converted_weights_sha256: 477b7507c79e3484195f4e389af6d044b5d56f42ce503d6b0eb7e99439b545e5
+  parameters: 69546113
+  frozen: true
+  image_size: 384
+  image_embedding_size: 512
+  text_embedding_size: 512
+  embedding_normalization: l2
+task:
+  source: CLEVR-4
+  source_revision: sgvaze/clevr4@cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
+  training_images: 8424
+  checkpoint_selection_validation_images: 512
+  one_time_reporting_images: 1595
+  sealed_audit_loaded: false
+  options_per_task: 10
+  prompts: fixed_in_R2_PE_CORE_CLEVR4_ZERO_SHOT_PROTOCOL_20261021
+readout:
+  architecture: shared_candidate_mlp
+  input: concatenate_l2_normalized_image_and_candidate_text_embeddings
+  input_size: 1024
+  hidden_size: 128
+  activation: GELU
+  trainable_parameters: 131329
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: minimum_NLL_on_fixed_512_image_validation
+  final_reporting: once_after_selection_freeze_on_disjoint_1595_image_reporting_subset
+resource_policy:
+  compute: local_only
+  gpu_launcher: cooperative_HotUGPU_reservation_wrapper
+  output_dir: C:/CodexArtifacts/pretrained-reuse-r1/pe-core-t16-r1-attempt-04-clevr4-readout
+  overwrite_existing_output: false
