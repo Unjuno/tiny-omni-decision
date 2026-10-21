@@ -1,3 +1,11 @@
+**2026-10-22 R2 OSSL-v2 soundtrack matching source screen:** The pinned public
+train ID list has 31,011 clips across 1,655 movie groups, suggesting a possible
+video-conditioned soundtrack-choice task. Keep REVIEW: item-level film/music
+rights are unverified, both-required semantics are unproven, and the 195 GB
+corpus is not locally feasible. Only train IDs were fetched; public test-path
+metadata was incidentally exposed by the Hub tree API, so the publisher test
+split is excluded from blind-audit use. See the [source screen](docs/pretrained_reuse/R2_OSSL_V2_SOURCE_SCREEN_20261022.md).
+
 **2026-10-22 R2 AMI audiovisual speaker-binding preflight:** A new train-only
 metadata split spans three train and three validation meeting families with zero
 participant identity overlap (4,233 audio-segment metadata rows). The previously
