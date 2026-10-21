@@ -108,5 +108,19 @@
     "codec_decode_sync": "NOT_TESTED",
     "current_free_disk_bytes": 2238205952,
     "host_access": "HTTP HTTPS IPv4 TCP and Edge navigation timed out"
+  },
+  "official_source_quality": {
+    "source": "https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml",
+    "es2008b_video_end_seconds_approx": 2085,
+    "es2008b_audio_end_seconds_approx": 2231,
+    "es2008b_metadata_rows": 688,
+    "es2008b_rows_begin_after_video_end": 57,
+    "es2008b_rows_cross_video_end": 1,
+    "es2008b_rows_fully_before_video_end": 630,
+    "es2008b_rows_ge_1s_fully_before_video_end": 397,
+    "ami_tno_video_sync_status": "officially manually processed to acceptable synchronization quality; exact candidate media still untested",
+    "ami_e_i_video_frame_drop_status": "officially processed and synchronized with audio; exact candidate media still untested",
+    "metadata_only": true,
+    "media_downloaded": false
   }
 }

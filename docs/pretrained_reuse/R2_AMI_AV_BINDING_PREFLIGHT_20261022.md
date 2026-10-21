@@ -75,6 +75,28 @@ The all-train footer index is at
 (SHA-256 `27e04c2e23215eb70ea0c90920f32233ef7dbaf42207e70512b35a72210dc2b6`).
 A compact summary is checked in alongside this report.
 
+## Official source-quality notes
+
+The official AMI data-problems table flags `ES2008b`: its video files end at
+about 34:45 (2,085 s), while audio continues to about 37:11. The metadata
+receipt contains 688 candidate utterances for this meeting. By those published
+endpoints, 57 utterances begin after video ends, one crosses the endpoint, and
+630 end before it. Of the 430 utterances at least one second long, 397 are
+fully inside the video interval. These counts are metadata-only and do not
+establish that all four close-ups are decodable or that the speaker is visible.
+Any later frozen corpus must either predefine and apply the common audio/video
+intersection or drop the affected intervals with an auditable accounting;
+audio-only tail rows cannot be scored as AV binding examples.
+
+The same official data-problems table states that TNO (`TS*`) video is not
+perfectly synchronized but was manually processed to acceptable synchronization
+quality, and that E/I (`ES*`/`IS*`) frame drops were processed and are now
+synchronized with audio. This is source-level assurance, not a substitute for
+checking the exact six selected media files and their actual PTS after decode.
+The table lists no additional issue for the other five selected meetings in
+its searchable entries; absence from that table is not proof of complete media
+or unobstructed target visibility.
+
 ## Blocking conditions and next gate
 
 The official AMI media host timed out on HTTP and HTTPS requests from this
@@ -117,6 +139,7 @@ modified.
 - [Official AMI signals and channel mappings](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
 - [Official AMI synchronization and cameras](https://groups.inf.ed.ac.uk/ami/corpus/meetingrooms.shtml)
 - [Official AMI download sizes and CC BY 4.0 release](https://groups.inf.ed.ac.uk/ami/download/)
+- [Official AMI data-problems table, including ES2008b video truncation and synchronization notes](https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml)
 - [Official TS3004a per-camera media index showing AVI and low-size RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/TS3004a/video/)
 - [Official IN1009 per-camera media index showing 7.7 MB RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IN1009/video/)
 - [Pinned University of Edinburgh AMI dataset revision](https://huggingface.co/datasets/edinburghcstr/ami/tree/46f28f2503e2ec48f8867a84eef356c70476beab)
