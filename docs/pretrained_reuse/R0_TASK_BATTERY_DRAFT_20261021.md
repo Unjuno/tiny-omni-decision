@@ -37,6 +37,10 @@ checkpoint selection.
   narrow and overfit, not as a general architecture ceiling or authorization
   to tune on the reused validation. Details: [matched long-budget
   results](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-native-coverage-long-20261021/docs/pretrained_reuse/R2_NATIVE_COVERAGE_LONG_RESULTS_20261021.md).
+- **CI for the reconciled roadmap evidence:** GitHub Actions runs `39589674150`
+  and `39589667615` both completed successfully on `ae5ac12ace1446ea6d0cdfd747482d82099eda2f`;
+  install, lint, tests, and manifest validation all passed. This verifies the
+  PR head, not the scientific quality gates below.
 
 ## Product target and measurement scope
 
