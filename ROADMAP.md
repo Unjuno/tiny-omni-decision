@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 HarmonySet / RealSync source screen:** HarmonySet is a useful
+video-music semantic-alignment task lead, but the inspected card exposes only
+train/test annotation files, gives a YouTube-backed example, and does not
+establish underlying media rights or group-disjoint validation. RealSync has
+explicit source-video train/validation/test counts for an AV offset task, but
+the release does not redistribute source videos and the reviewed materials do
+not establish training rights or fully resolved timestamp reconstruction.
+Neither source is admitted for fitting or quality evaluation. Continue the
+source/task gate; do not start another architecture fit on exposed AV
+development IDs. See the [source screen](docs/pretrained_reuse/R2_HARMONYSET_REALSYNC_SOURCE_SCREEN_20261022.md).
+
 **2026-10-22 R2 scalar-audio projection diagnostic:** Matched C0 and
 exchange/gate arms each completed 2,048 updates after adding a learned
 scalar-to-192 audio projection. Both selected checkpoints remained at 50.0%
