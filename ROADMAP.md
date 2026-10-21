@@ -94,6 +94,18 @@ quality result. No official test/sealed audit was opened. See the
 [frozen protocol and results](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_RESULTS_20261022.md)
 and [learning curves](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_CURVES_20261022.csv).
 
+**2026-10-22 R2 AV temporal train-only grouped OOF follow-up:** A fixed
+five-fold, video-grouped CPU probe used only the 224 frozen training groups;
+the exposed 64-video validation cohort was not scored or used. At 32 updates,
+audio-only / pooled AV / sequence AV reached 45.54% / 47.32% / 47.32% OOF
+Accuracy, below the 56.70% option-position majority and 58.04% fold-local
+source-label baselines; NLL/ECE show overconfidence. This indicates poor
+group-transfer for this task and a mild event-label/option-position association,
+not media leakage or a general AV ceiling. Do not extend this fit or tune the
+exposed validation. A new AV quality attempt needs a distinct task/readout,
+balanced candidate order, and newly frozen group-disjoint validation. See the
+[train-only OOF report](docs/pretrained_reuse/R2_AV_TEMPORAL_TRAIN_OOF_20261022.md).
+
 **2026-10-22 R2 HoloAssist fixed-checkpoint replay:** Replayed the already
 selected 1,042-session-train joint, audio-only, and video-only readouts on the
 same 207 official-validation sessions used in the earlier pilot. This was
