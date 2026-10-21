@@ -7,6 +7,15 @@ count is 69,546,113 parameters. This is a runtime smoke only: no task quality,
 full tensor parity, Decision head, audio path or product suitability is claimed.
 See the [additive checkpoint/runtime audit](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md).
 
+**2026-10-21 R2 PE-Core CLEVR-4 one-pass zero-shot screen:** On the existing
+1,595-image development reporting subset, fixed prompt/image-text similarity
+scored 42.81% macro Accuracy (NLL 1.7280, Brier 0.7046), far below historical
+Path A's 88.06% on the same IDs/options. This rejects direct zero-shot scoring
+for this task, not a frozen representation with a learned small readout. No
+prompt search, training, or blind-audit claim was made. GPU remained occupied;
+no GPU work was started. See the [protocol](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_ZERO_SHOT_PROTOCOL_20261021.md)
+and [result](docs/pretrained_reuse/R2_PE_CORE_CLEVR4_ZERO_SHOT_RESULTS_20261021.md).
+
 **2026-10-21 R2 Perception AV scale and input-use follow-up:** The matched
 expanded-fit comparison added 233 fit videos / 550 events while retaining the
 same 2,048-update budget. Joint development Accuracy changed 33.56%→32.88%
