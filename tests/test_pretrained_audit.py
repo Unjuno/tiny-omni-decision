@@ -83,6 +83,25 @@ def test_machine_readable_candidate_inventory_is_explicit_and_conservative():
     assert videomae["license_allowed"] is False
     assert videomae["passed_load"] is False
 
+    pe_core_openclip = next(
+        candidate for candidate in candidates if candidate["id"] == "pe-core-t16-openclip"
+    )
+    assert pe_core_openclip["model_revision"] == (
+        "timm/PE-Core-T-16-384@7fe539ed578ac49a1c2b4f946e4b0747704c825a"
+    )
+    assert pe_core_openclip["implementation_revision"] == (
+        "mlfoundations/open_clip@30573618fc375b12f094ef64cb3a1391cf611c45"
+    )
+    assert pe_core_openclip["checkpoint_bytes"] == 278219132
+    assert pe_core_openclip["checkpoint_sha256"] == (
+        "477b7507c79e3484195f4e389af6d044b5d56f42ce503d6b0eb7e99439b545e5"
+    )
+    assert pe_core_openclip["parameters"] == 69546113
+    assert pe_core_openclip["license_status"] == "ALLOW"
+    assert pe_core_openclip["passed_load"] is True
+    assert pe_core_openclip["runtime_supported"] is True
+    assert pe_core_openclip["task_quality_status"].startswith("unmeasured;")
+
     moment = next(
         candidate for candidate in candidates if candidate["id"] == "moment-1-small-sensor"
     )
