@@ -25,6 +25,14 @@ from scripts.hotgpu_preflight import validate_gpu_preflight
 from tiny_omni_decision.temporal_decision import CausalGatedTemporalDecision, probability_json
 
 CONFIG_DEFAULT = Path("configs/pretrained_reuse/clevrer_synthetic_av_temporal_decision_v1.json")
+PROTOCOL_SHA256_BY_EXPERIMENT = {
+    "clevrer-synthetic-av-temporal-decision-v1": (
+        "82b76e813455061769883b6a46517dbfb3a7a54f7593c1093ab92d8cc261fab7"
+    ),
+    "clevrer-synthetic-av-temporal-decision-v2": (
+        "ad803d4ff87bc8b444eba7f4001d6b36f010486a70edbcfb1abd0fc85dd845b1"
+    ),
+}
 
 
 def _sha256(path: Path) -> str:
@@ -56,6 +64,12 @@ def _read_rows(path: Path, expected_split: str) -> list[dict[str, Any]]:
 
 def _ordered_ids_sha256(rows: list[dict[str, Any]]) -> str:
     return hashlib.sha256("\n".join(str(row["id"]) for row in rows).encode()).hexdigest()
+
+
+def _validate_experiment_config(config: dict[str, Any]) -> None:
+    expected_sha256 = PROTOCOL_SHA256_BY_EXPERIMENT.get(str(config.get("experiment_id")))
+    if expected_sha256 is None or config.get("protocol_sha256") != expected_sha256:
+        raise ValueError("experiment config does not match a frozen synthetic AV protocol")
 
 
 def _validate_pairs(rows: list[dict[str, Any]]) -> dict[str, list[int]]:
@@ -678,11 +692,7 @@ def main() -> None:
     args = _args()
     config_path = args.config.resolve(strict=True)
     config = json.loads(config_path.read_text(encoding="utf-8"))
-    if (
-        config.get("protocol_sha256")
-        != "82b76e813455061769883b6a46517dbfb3a7a54f7593c1093ab92d8cc261fab7"
-    ):
-        raise ValueError("experiment config does not match the frozen AV timing protocol")
+    _validate_experiment_config(config)
     train_rows, validation_rows, tensors, input_report = _load_inputs(
         config,
         args.feature_dir.resolve(strict=True),
