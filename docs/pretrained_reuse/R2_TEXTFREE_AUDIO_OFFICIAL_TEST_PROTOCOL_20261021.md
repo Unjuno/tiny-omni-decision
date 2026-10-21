@@ -1,6 +1,18 @@
 # Frozen text-free audio official-test evaluation protocol
 
-Status: **pre-registered; evaluation has not started**.
+Status: **opened; pre-inference integrity gate failed; no predictions or metrics were produced**.
+
+## Attempt record (2026-10-21)
+
+The fixed run launched through HotUGPU after cooperative reservation. The
+pinned Parquet shard was loaded, but `build_test_records` stopped before
+feature extraction because retained rows had duplicate WAV-byte SHA-256 values
+(`duplicate official test audio content`). The run lock is preserved at
+`C:\CodexArtifacts\pretrained-reuse-r2\speech-commands-official-test-eval-v1-attempt-01\run-lock.json`.
+No logits, predictions, or test metrics were generated; no checkpoint,
+temperature, or preprocessing was changed. The official test has been opened,
+so this attempt must be disclosed in any later protocol. Do not reuse this
+output directory or describe this as a completed evaluation.
 
 ## Question
 
@@ -42,9 +54,11 @@ Whisper weights are pinned by SHA-256
 `7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395`.
 Neither readout, temperature, nor preprocessing can be changed after test
 rows are read. No test-driven fitting, checkpoint selection, class balancing,
-or prompt/search iterations are allowed. The test is evaluated once, with a
-unique output directory whose `run-lock.json` prevents reuse after an
-interrupted attempt.
+or prompt/search iterations are allowed. The test is intended to be evaluated
+once, with a unique output directory whose `run-lock.json` prevents reuse after
+an interrupted attempt. This attempt did not reach model inference; any
+follow-up requires a documented integrity-policy correction before a new
+one-time evaluation, with model and preprocessing choices still frozen.
 
 The candidate and legacy baseline are not a perfectly matched fit: the
 calibration candidate reserves 264 training examples for speaker-held-out

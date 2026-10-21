@@ -1,13 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-21 R2 text-free audio official-test protocol frozen:** Before
-opening the official Speech Commands test split, pinned the 10-keyword filter,
-Parquet/checkpoint/calibration hashes, Whisper preprocessing, and one-time
-paired comparison of the legacy readout against the calibration readout with
-temperature frozen at 0.4270. CPU integrity tests pass; this remains a narrow
-English keyword task, not general speech evidence. The test evaluation is
-pending a cooperative HotUGPU handoff; no test rows or metrics have been read.
-See the [frozen protocol](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_OFFICIAL_TEST_PROTOCOL_20261021.md).
+**2026-10-21 R2 text-free audio official-test attempt stopped before inference:**
+HotUGPU reservation succeeded and the pinned Speech Commands test shard loaded,
+but the pre-inference integrity gate found duplicate WAV-byte hashes among
+retained rows. No model predictions or metrics were produced. The dataset has
+now been opened; preserve the failed attempt and require a documented
+integrity-policy correction before any new one-time evaluation. This remains a
+narrow English keyword task, not general speech evidence. See the
+[protocol and attempt record](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_OFFICIAL_TEST_PROTOCOL_20261021.md).
 
 **2026-10-21 R2 fresh CLEVRER reasoning execution:** The pinned VideoPrism
 extractor ran CPU-only over 400 train/development videos; the 200-scene train
