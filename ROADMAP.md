@@ -9,6 +9,16 @@ pretraining overlap is established. IIT's 378 synchronized AV sequences cover
 research requests; its action labels are intentionally audio-distinctive.
 Neither is admitted for a local quality run. See the [source screen](docs/pretrained_reuse/R2_MULTIMODAL_SOURCE_ADMISSION_SCREEN_20261021.md).
 
+**2026-10-21 R2 synchronized sensor/video source screen:** Compared CUHK-X,
+C-MHAD, and XRFv2 Plus from official publisher materials. CUHK-X is the most
+promising bounded research candidate (seven aligned modalities, 64,267 samples,
+30 participants), but it requires a noncommercial, non-redistributable DUA and
+does not yet establish a both-input task; 30 participants also falls below the
+provisional 200-group floor. C-MHAD has 12 participants and no separate data
+license on its publisher page. XRFv2 Plus has 16 volunteers and an unspecified
+dataset license. No data was accessed and none is admitted to fitting. See the
+[source screen](docs/pretrained_reuse/R2_SENSOR_VIDEO_SOURCE_SCREEN_20261021.md).
+
 **2026-10-21 R2 optional sensor source gate:** UCI PAMAP2 metadata was screened without downloading the archive. UCI states CC BY 4.0, but the dataset has only 9 subjects and the audited MOMENT materials do not provide a complete pretraining item manifest that proves PAMAP2 was excluded. Overlap is UNKNOWN; no MOMENT score on PAMAP2 may select a candidate. Keep sensor work optional and research-only until a sufficiently grouped, provenance-auditable task is found. See the [PAMAP2 admission screen](docs/pretrained_reuse/R2_PAMAP2_SENSOR_ADMISSION_SCREEN_20261021.md).
 
 **2026-10-21 R2 synthetic AV timing pilot reconciled:** A seed-17, four-arm
