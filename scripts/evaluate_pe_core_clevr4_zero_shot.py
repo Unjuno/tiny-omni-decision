@@ -191,6 +191,9 @@ def main() -> None:
                             "probabilities": [float(value) for value in prob],
                         }
                     )
+            completed = start + len(current_ids)
+            if completed == len(image_ids) or completed % (args.batch_size * 50) == 0:
+                print(f"encoded_images={completed}/{len(image_ids)}", flush=True)
     elapsed = time.perf_counter() - started
 
     per_taxonomy = {
