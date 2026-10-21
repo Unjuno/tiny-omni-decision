@@ -188,4 +188,15 @@ it does not show that the model understands natural AV content.
 All v1 checkpoints, original v1 data, prior v2 artifacts, and unrelated runs
 were left unchanged. No model checkpoint, media, or feature cache is committed
 to Git. The result report and code fix are committed separately from the
-protocol; push and exact-commit CI status are recorded in the follow-up below.
+protocol.
+
+## Publication verification
+
+- Results commit `21bf9a21db4387549f4fa41ee1787cbd6048c8aa` was pushed to
+  `codex/r2-clevrer-synthetic-av-coverage-20261022`.
+- Draft PR [#21](https://github.com/Unjuno/tiny-omni-decision/pull/21) targets
+  `codex/r2-clevrer-synthetic-av-protocol` so the review contains only the two
+  v2 follow-up commits. It is reviewable and mergeable; it has not been merged.
+- GitHub Actions workflow run `#2545` (`39648461451`) completed successfully on
+  the PR head. Install, Ruff, pytest, and manifest/catalog validation all
+  passed.
