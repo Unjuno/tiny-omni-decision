@@ -1,5 +1,19 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 Perception Test temporal-match experiment:** Built a
+video-grouped, development-only two-choice task from the pinned Perception Test
+train/validation annotations: choose the same-video/same-label audio window that
+matches an 8-frame video interval. The frozen pooled joint readout scored 47.60%
+on 313 previously inspected validation videos, below audio-only at 50.80%; the
+paired 2,000-resample video-group interval for the difference included zero.
+Within-label feature shuffles and mean-imputed video did not hurt the pooled
+joint readout. One 19,009-parameter conditional gate completed 2,048 updates but
+overfit by step 32; its fixed selector chose initialization at step 0. This
+does not test a temporal gate: the readout received pooled feature vectors and
+discarded temporal tokens. The task does not demonstrate complementary AV
+quality and leaves R2 M-2 open. The validation is not blind, and no sealed audit
+or official test split was used. [Protocol and full results](docs/pretrained_reuse/R2_PERCEPTION_AV_TEMPORAL_MATCH_20261021.md).
+
 **2026-10-21 R0 task-battery evidence reconciliation:** The task-battery
 proposal now records the one-time Speech Commands official-test comparison
 (97.72% baseline / 97.86% train-only temperature candidate; no clear Accuracy
