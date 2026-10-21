@@ -124,6 +124,9 @@
     "media_downloaded": false,
     "local_meetings_xml_sha256": "8ab6cdcf03ed863e839418f31c7380392397a2eed892d73b9bc1b438c7ec520a",
     "local_meetings_xml_release_lineage_independently_verified": false,
+    "metadata_rows_joined_to_meeting_speaker_map": 4233,
+    "metadata_rows_unmapped": 0,
+    "unique_metadata_speakers_per_meeting": 4,
     "per_meeting_channel_camera_mapping": {
       "TS3009a": ["MTD033PM:0:Closeup2", "MTD034ID:2:Closeup4", "MTD035UID:1:Closeup3", "MTD036ME:3:Closeup1"],
       "ES2010b": ["FEE037:0:Closeup4", "FEE038:1:Closeup2", "FEE039:2:Closeup3", "FEE040:3:Closeup1"],

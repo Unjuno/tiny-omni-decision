@@ -114,7 +114,10 @@ release lineage were not independently established in this pass.
 
 The channel-to-camera order varies by meeting, so a global mapping must not be
 assumed. The corpus builder must join the meeting-specific mapping by speaker
-identity and preserve candidate randomization.
+identity and preserve candidate randomization. A local row-level join check
+found all 4,233 metadata rows mapped to one of the four participants in their
+meeting; all six meetings had four unique metadata speakers and zero unmapped
+rows. This check inherits the local XML lineage limitation above.
 
 ## Blocking conditions and next gate
 
