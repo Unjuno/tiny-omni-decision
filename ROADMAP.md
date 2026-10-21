@@ -4,13 +4,15 @@
 uses one mono `Mix-Headset.wav` per meeting; the 24 train-only timing rows share
 one full-file audio hash within each of seven meetings. This is a mixed meeting
 signal, and target-speaker dominance in annotation-aligned crops is unverified.
-Official AMI documentation describes individual audio channels and common-clock
-recording for the E/I sites, but those individual files are absent locally and
-direct host access timed out. No model run was started. Before fitting, freeze
-either a hash-pinned participant-channel input with verified mapping or a
-mixed-WAV crop contract with train-only target-dominance evidence. The existing
-five development parent groups are low-power feasibility data, not a
-product-quality benchmark. See the [speaker-channel preflight](docs/pretrained_reuse/R2_AMI_SPEAKER_CHANNEL_PREFLIGHT_20261022.md).
+Direct AMI host access timed out, but the official University of Edinburgh
+Hugging Face mirror provided one hash-pinned individual-headset train segment
+with verified speaker/channel/camera/time mapping and successful PyAV decode.
+This establishes an acquisition path, not cohort coverage or model evidence.
+Before fitting, extend the frozen participant-channel contract to the candidate
+cohort and document missing/overlap handling, or validate target-speaker
+dominance in mixed-WAV crops. The existing five development parent groups are
+low-power feasibility data, not a product-quality benchmark. See the
+[speaker-channel preflight](docs/pretrained_reuse/R2_AMI_SPEAKER_CHANNEL_PREFLIGHT_20261022.md).
 
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
