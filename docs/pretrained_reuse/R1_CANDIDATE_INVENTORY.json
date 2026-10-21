@@ -243,7 +243,7 @@
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
       ],
-      "release_status": "unknown",
+      "release_status": "pretrained and accessible",
       "parameter_count_basis": "exact instantiated model parameter count UNKNOWN; observed sum of checkpoint state-dict tensors is 69,545,601 and includes both visual/text towers and projections",
       "checkpoint_sha256": "868f89f066b7c1ae51add02d2cb7b925fd051076282773f2ec3c71359fbdaf3b",
       "audit_date": "2026-10-21",

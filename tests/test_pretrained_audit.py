@@ -76,6 +76,11 @@ def test_machine_readable_candidate_inventory_is_explicit_and_conservative():
     assert vivit["passed_load"] is False
     assert vivit["parameters"] is None
 
+    pe_core_t16 = next(candidate for candidate in candidates if candidate["id"] == "pe-core-t16")
+    assert pe_core_t16["release_status"] == "pretrained and accessible"
+    assert pe_core_t16["license_status"] == "REVIEW"
+    assert pe_core_t16["runtime_supported"] is False
+
     videomae = next(
         candidate for candidate in candidates if candidate["id"] == "mcg-nju-videomae-base"
     )
