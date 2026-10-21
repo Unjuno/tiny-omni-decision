@@ -243,7 +243,12 @@ def _run_candidate(
         model = baseline
     else:
         torch.manual_seed(seed)
-        model = ConditionalAVReadout(baseline, exchange=policy["exchange"], gated=policy["gated"])
+        model = ConditionalAVReadout(
+            baseline,
+            exchange=policy["exchange"],
+            gated=policy["gated"],
+            scalar_event_audio=bool(config["readout"].get("scalar_event_audio", False)),
+        )
     model = model.to(device)
     trainable_parameters = [
         parameter for parameter in model.parameters() if parameter.requires_grad
@@ -398,7 +403,10 @@ def _run_candidate(
     reloaded = _make_baseline(seed)
     if name != "c0_native_attention":
         reloaded = ConditionalAVReadout(
-            reloaded, exchange=policy["exchange"], gated=policy["gated"]
+            reloaded,
+            exchange=policy["exchange"],
+            gated=policy["gated"],
+            scalar_event_audio=bool(config["readout"].get("scalar_event_audio", False)),
         )
     reloaded.load_state_dict(
         torch.load(output_dir / f"best-{name}.pt", map_location="cpu", weights_only=False)[
@@ -461,7 +469,10 @@ def main() -> None:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     base_config = json.loads(V2_CONFIG.read_text(encoding="utf-8"))
     if (
-        config["experiment_id"] != "conditional-clevrer-synthetic-av-readout-v1"
+        config["experiment_id"] not in {
+            "conditional-clevrer-synthetic-av-readout-v1",
+            "conditional-clevrer-synthetic-av-scalar-audio-v1",
+        }
         or config["source_experiment_id"] != base_config["experiment_id"]
     ):
         raise ValueError("conditional AV config must identify the frozen v2 source")

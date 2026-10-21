@@ -20,13 +20,16 @@ class ConditionalAVReadout(nn.Module):
     invalid blocks retain the baseline's strict rejection semantics.
     """
 
-    def __init__(self, baseline=None, *, exchange=True, gated=True):
+    def __init__(self, baseline=None, *, exchange=True, gated=True, scalar_event_audio=False):
         super().__init__()
         if (type(exchange) is not bool or type(gated) is not bool
+                or type(scalar_event_audio) is not bool
                 or (baseline is not None and type(baseline) is not NativeCandidateReadout)):
             raise ValueError("native baseline and explicit boolean policies required")
         self.baseline = NativeCandidateReadout() if baseline is None else baseline
         self._exchange, self._gated = exchange, gated
+        self._scalar_event_audio = scalar_event_audio
+        self.scalar_event_audio_projection = nn.Linear(1, 192) if scalar_event_audio else None
         self.audio_latents = nn.Parameter(torch.randn(8, 192) * 0.02)
         self.video_latents = nn.Parameter(torch.randn(8, 192) * 0.02)
         self.pool = nn.MultiheadAttention(192, 4, dropout=0, batch_first=True)
@@ -43,7 +46,10 @@ class ConditionalAVReadout(nn.Module):
                 dtype=self.baseline.modality.weight.dtype)
 
     def get_extra_state(self):
-        return {"schema": 1, "exchange": self._exchange, "gated": self._gated}
+        state = {"schema": 1, "exchange": self._exchange, "gated": self._gated}
+        if self._scalar_event_audio:
+            state["scalar_event_audio"] = True
+        return state
 
     def set_extra_state(self, state):
         if state != self.get_extra_state():
@@ -84,10 +90,15 @@ class ConditionalAVReadout(nn.Module):
     def _features(q, a, v):
         return torch.cat([q, a, v, a * v, (a - v).abs()], dim=-1)
 
+    def _project_av(self, kind, values):
+        if self._scalar_event_audio and kind == "event_audio":
+            return self.scalar_event_audio_projection(values[..., :1])
+        return self.baseline.projections[kind](values)
+
     def _memory(self, blocks):
         b = self.baseline
         return b.memory_norm(torch.cat([
-            b.projections[block.kind](block.values[block.valid])
+            self._project_av(block.kind, block.values[block.valid])
             + b.position(block.positions[block.valid])
             + b.modality.weight[list(WIDTHS).index(block.kind)]
             for block in blocks
@@ -210,7 +221,7 @@ class ConditionalAVReadout(nn.Module):
                 selected_valid = valid.index_select(0, row_indices)
                 kind_index = list(WIDTHS).index(kind)
                 projected.append(
-                    self.baseline.projections[kind](selected_values)
+                    self._project_av(kind, selected_values)
                     + self.baseline.position(selected_positions)
                     + self.baseline.modality.weight[kind_index]
                 )

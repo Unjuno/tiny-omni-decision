@@ -115,9 +115,12 @@ def test_checkpoint_policy_fails_before_mutation_and_baseline_ownership():
     for key, value in base.state_dict().items():
         torch.testing.assert_close(value, before[key], rtol=0, atol=0)
     foreign, _, _ = fixture()
+    scalar_foreign = ConditionalAVReadout(scalar_event_audio=True)
     for strict in (False, True):
         with pytest.raises(ValueError, match="policy"):
             model.load_state_dict(foreign.state_dict(), strict=strict)
+        with pytest.raises(ValueError, match="policy"):
+            model.load_state_dict(scalar_foreign.state_dict(), strict=strict)
         for key, value in base.state_dict().items():
             torch.testing.assert_close(value, before[key], rtol=0, atol=0)
     with pytest.raises(ValueError, match="policy"):
@@ -178,3 +181,79 @@ def test_gates_can_both_open_or_close_and_same_seed_arms_share_tensors():
         for key, value in original.state_dict().items():
             if isinstance(value, torch.Tensor):
                 torch.testing.assert_close(value, other.state_dict()[key], rtol=0, atol=0)
+
+
+def test_scalar_event_audio_projection_is_opt_in_and_differentiable():
+    from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
+
+    torch.manual_seed(5)
+    scalar = ConditionalAVReadout(exchange=True, gated=True, scalar_event_audio=True)
+    with torch.no_grad():
+        scalar.correction[-1].weight.normal_(0, 0.02)
+    audio = torch.zeros(2, 4, 384)
+    audio[..., 0] = torch.randn(2, 4)
+    video = torch.randn(2, 4, 768)
+    positions = torch.randn(2, 4, 3)
+    valid = torch.ones(2, 4, dtype=torch.bool)
+    queries = torch.randn(2, 2, 384)
+    logits, details = scalar.forward_batched(
+        {
+            "event_audio": (audio, positions, valid),
+            "video": (video, positions, valid),
+        },
+        queries,
+        diagnostics=True,
+    )
+    assert details["active"].all()
+    assert scalar.scalar_event_audio_projection.in_features == 1
+    assert scalar.scalar_event_audio_projection.out_features == 192
+    assert scalar.parameter_ledger()["reference_total_parameters"] == 197_098_333
+    assert scalar.parameter_ledger()["reference_total_parameters"] < 200_000_000
+    logits.log_softmax(-1)[:, 0].sum().neg().backward()
+    gradient = scalar.scalar_event_audio_projection.weight.grad
+    assert gradient is not None and torch.isfinite(gradient).all()
+    assert gradient.abs().sum() > 0
+    stream = io.BytesIO()
+    torch.save(scalar.state_dict(), stream)
+    stream.seek(0)
+    restored = ConditionalAVReadout(exchange=True, gated=True, scalar_event_audio=True)
+    restored.load_state_dict(torch.load(stream, weights_only=True), strict=True)
+    payload = {
+        "event_audio": (audio, positions, valid),
+        "video": (video, positions, valid),
+    }
+    torch.testing.assert_close(
+        scalar.forward_batched(payload, queries),
+        restored.forward_batched(payload, queries),
+        rtol=0,
+        atol=0,
+    )
+
+
+def test_scalar_event_audio_projection_uses_only_channel_zero():
+    from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
+
+    model = ConditionalAVReadout(scalar_event_audio=True)
+    values = torch.randn(2, 4, 384)
+    altered = values.clone()
+    altered[..., 1:] = torch.randn_like(altered[..., 1:]) * 10
+    torch.testing.assert_close(
+        model._project_av("event_audio", values),
+        model._project_av("event_audio", altered),
+        rtol=0,
+        atol=0,
+    )
+
+
+def test_scalar_event_audio_projection_preserves_missing_stream_bypass():
+    from tiny_omni_decision.native_av_interaction import ConditionalAVReadout
+
+    _, blocks, queries = fixture()
+    model = ConditionalAVReadout(scalar_event_audio=True)
+    blocks = [block for block in blocks if block.kind not in ("speech", "event_audio")]
+    with torch.no_grad():
+        model.correction[-1].weight.fill_(0.01)
+    scores, details = model(blocks, queries, diagnostics=True)
+    torch.testing.assert_close(scores, model.baseline(blocks, queries), rtol=0, atol=0)
+    assert details["active"] is False
+    assert details["gates"] is None
