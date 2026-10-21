@@ -88,6 +88,7 @@ def evaluate_transfer(
                 tensors["video"][train_count:],
                 tensors["audio"][train_count:],
                 tensors["text"][train_count:],
+                mean_pooled=False,
             ).float()
         metrics = _metrics(logits, validation_targets)
         pairs = _scene_pair_metrics(rows_validation, logits, validation_targets)
