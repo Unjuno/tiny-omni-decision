@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 Path A typed JSON runtime adapter:** The Path A dispatcher can
+wrap existing text, image, audio, and video option probabilities in the stable
+caller-ID Decision JSON contract without changing scoring or adding model
+parameters. Targeted CPU tests passed (51); the later compatibility fix kept
+raw-dispatch parity probes working, and the full suite passed (2,380 passed,
+11 skipped). A one-observation-per-modality CPU runtime replay found typed JSON
+consistent with runtime outputs for all four paths. Audio's saved-reference
+probability delta exceeded the CUDA-oriented `1e-5` parity limit on CPU, despite
+matching predictions; this is runtime numeric parity, not a quality finding.
+This does not establish calibration or cross-modal reasoning. Full detail:
+[`Path A typed JSON replay`](docs/pretrained_reuse/PATH_A_TYPED_JSON_DISPATCHER_20261022.md).
+
 **2026-10-22 R2 AVA Active Speaker label/split follow-up:** Explicit train and
 validation archives contain 120 and 33 video groups, with 2,676,314 and
 768,307 annotation rows, respectively; train/validation video overlap is zero.
