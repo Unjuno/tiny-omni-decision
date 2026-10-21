@@ -19,6 +19,16 @@ the source `REVIEW`; do not treat its model results as this project's evidence.
 Reopen only with exact media rights, a hash-pinned TRAIN release, and a small
 local subset. [Source screen and gate](docs/pretrained_reuse/R2_AVID_SOURCE_SCREEN_20261021.md).
 
+**2026-10-21 R2 AVQA source screen:** The official task design has hand-annotated
+multiple-choice questions tagged `View`, `Sound`, or `Both`, making it a strong
+candidate for a joint-task screen. It is not admitted: AVQA's posted permission
+notice does not clearly grant model-training rights, and its source clips are
+YouTube videos whose original owners retain copyright. Its official download
+redirected to sign-in; no annotation, media, or test payload was fetched. Keep
+`REVIEW` until annotation/media rights and source-video grouping are verified;
+`val_qa.json` is described as test annotations and remains closed. See
+[`R2_AVQA_SOURCE_SCREEN_20261021.md`](docs/pretrained_reuse/R2_AVQA_SOURCE_SCREEN_20261021.md).
+
 **2026-10-21 14:43 JST R0 live GPU / HotUGPU recheck:** Orbitune
 training PID 10912 (parent 24896; supervisors 4696 and 23856) is still
 running. RTX 3080 Laptop reports 15,821/16,384 MiB used, 355 MiB free, and

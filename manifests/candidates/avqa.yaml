@@ -1,0 +1,61 @@
+schema_version: 1
+dataset_id: AVQA
+revision: 91a4356c58e9f5176c511f2e392d58442eb751bb
+subset: candidate-screen-only-no-local-assets
+split: official-train-test-metadata-unverified
+modalities: [audio, video, text]
+upstream_url: https://mn.cs.tsinghua.edu.cn/avqa/
+license: ACM-personal-classroom-permission; original component rights retained
+commercial_use: false
+derivative_model_training_allowed: null
+redistribution_allowed: false
+media_redistribution_allowed: null
+attribution: "Pinci Yang et al.; cite AVQA: A Dataset for Audio-Visual Question Answering on Videos (ACM Multimedia 2022)."
+source_citation: https://mn.cs.tsinghua.edu.cn/avqa/
+usage: evaluation
+trust_status: review
+source_components:
+  - component_id: avqa-annotations-and-question-relation-labels
+    url: https://mn.cs.tsinghua.edu.cn/avqa/
+    license: ACM-personal-classroom-permission
+    commercial_use: false
+    derivative_model_training_allowed: null
+    redistribution_allowed: false
+    media_redistribution_allowed: null
+    modalities: [text]
+    trust_status: review
+  - component_id: original-vgg-sound-youtube-audio-video
+    url: https://www.robots.ox.ac.uk/~vgg/data/vggsound/
+    license: CC-BY-4.0-dataset-statement; original-video-rights-retained
+    commercial_use: null
+    derivative_model_training_allowed: null
+    redistribution_allowed: null
+    media_redistribution_allowed: null
+    modalities: [audio, video]
+    trust_status: review
+notes:
+  official_page_snapshot_date: "2026-10-21"
+  official_dataset_revision: UNKNOWN
+  official_page_snapshot_sha256: ba761adbdef59e4c644c053e531dc9d5ebf7ec615216b8e6e56561cb6e2dd8b9
+  vggsound_page_snapshot_sha256: 33d2c7dd5d8dcc878d772f485380cbe2b56b04fd54be9929612dfd892c602e8e
+  revision_field_semantics: >-
+    SHA-1 of the exact fetched AVQA HTML metadata page, used only because the
+    manifest schema requires a 40-hex revision; upstream dataset revision is
+    unknown and this is not a data release revision.
+  download_link: >-
+    Official AVQA page's SharePoint link redirected to Microsoft sign-in;
+    no access was requested or accepted and no data files were fetched.
+  task_scope: >-
+    Official page defines question_relation values View, Sound, and Both and
+    gives an example that requires relating audio and visual evidence. This is
+    a promising task shape, not verified instance-level complementarity.
+  split_limitation: >-
+    The page describes YouTube ID, timestamp, and train/test metadata but no
+    source-video grouping audit was performed. It calls val_qa.json test
+    annotations; keep them closed during development.
+  rights_limitation: >-
+    AVQA's posted permission notice is limited to personal/classroom copies
+    and requires honoring third-party copyrights; it does not clearly grant
+    model-training rights. VGG-Sound states original video owners retain
+    copyright and current download links are unavailable. Source remains
+    REVIEW and is excluded from every catalog.
