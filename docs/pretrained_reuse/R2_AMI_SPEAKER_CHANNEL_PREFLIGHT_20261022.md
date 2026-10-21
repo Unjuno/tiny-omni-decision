@@ -49,6 +49,17 @@ crops, visible speaking status, or model performance. The mix-based alternative
 remains unverified. The previous network block is therefore cleared for this
 single-row smoke only, not for a model comparison.
 
+A CPU-only audit of the already acquired train word annotations then checked
+the frozen 24 timing rows against each target agent's own word intervals. The
+target speaker had positive-duration annotated speech covering 100% of each
+crop in 24/24 rows; other-speaker word intervals overlapped in 7/24. This
+supports that the clips contain the intended speaker's speech, but because the
+clips were selected around speech, it is not an independent estimate of target
+dominance in the mixed waveform and does not establish visible speaking status.
+The machine-readable result is
+`C:\CodexArtifacts\pretrained-reuse-r2\ami-av-probe-20261021\ami-target-speech-overlap-audit-20261022.json`,
+SHA-256 `c0174176be975ca3b28fbb17225afdaa77249308b8a2ffb81f47f63a1496965e`.
+
 ## Evidence and scope
 
 - Source commit: `0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a` (PR #15 roadmap head).
@@ -58,6 +69,7 @@ single-row smoke only, not for a model comparison.
 - Existing visual contact sheets were viewed for train rows only. They show a mixture of clear, small, and absent target people; they do not prove who is speaking or establish lip synchronization.
 - Official AMI sources: [audio/video signals and channel mappings](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml), [meeting-room synchronization](https://groups.inf.ed.ac.uk/ami/corpus/meetingrooms.shtml), [known data problems](https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml), [download index](https://groups.inf.ed.ac.uk/ami/download/).
 - Official University of Edinburgh mirror: [`edinburghcstr/ami` pinned revision](https://huggingface.co/datasets/edinburghcstr/ami/tree/46f28f2503e2ec48f8867a84eef356c70476beab). Read-only Viewer discovery scanned 339 train rows; the acquired row and decode receipt are in `C:\CodexArtifacts\pretrained-reuse-r2\ami-hf-channel-smoke-20261022-attempt-03\receipt.json` (audio SHA-256 above).
+- Viewer `/search` and `/filter` returned HTTP 500 for this dataset during the follow-up cohort lookup; a throttled `/rows` range search then received HTTP 429 and was stopped. The 24-row annotation audit above therefore uses the already acquired local train annotations and does not imply that 24 individual-channel files were fetched.
 
 No annotation or media outside the already acquired selected SA/SB subset was
 opened; the one additional audio segment came from the official train split.
@@ -68,11 +80,12 @@ remains occupied by PID 12596 (15,821/16,384 MiB at the final read-only check).
 ## Decision
 
 Do not describe the current mixed-audio input as speaker-isolated. The
-individual-channel contract is now demonstrated for one hash-pinned train
-row; before model comparison, extend the acquisition to the frozen candidate
-cohort, verify every channel-to-participant mapping, and freeze missing/overlap
-handling. Alternatively, validate target-speaker dominance for mixed-WAV
-crops. The source remains a **conditional feasibility candidate**, not an
-admitted quality benchmark. The existing five development parent groups remain
-low-power feasibility data, not a 95–98% product-quality gate. No product or
-modality claim follows from this preflight.
+individual-channel contract is demonstrated for one hash-pinned train row and
+the selected mixed-WAV crops do contain target-speaker speech, but cohort-wide
+individual-channel acquisition or target dominance remains unverified. Before
+model comparison, obtain the frozen cohort's participant channels or validate
+dominance using an appropriate train-only signal-level/diarization method, then
+freeze missing/overlap handling. The source remains a **conditional feasibility
+candidate**, not an admitted quality benchmark. The existing five development
+parent groups remain low-power feasibility data, not a 95–98% product-quality
+gate. No product or modality claim follows from this preflight.

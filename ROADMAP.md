@@ -7,11 +7,15 @@ signal, and target-speaker dominance in annotation-aligned crops is unverified.
 Direct AMI host access timed out, but the official University of Edinburgh
 Hugging Face mirror provided one hash-pinned individual-headset train segment
 with verified speaker/channel/camera/time mapping and successful PyAV decode.
-This establishes an acquisition path, not cohort coverage or model evidence.
-Before fitting, extend the frozen participant-channel contract to the candidate
-cohort and document missing/overlap handling, or validate target-speaker
-dominance in mixed-WAV crops. The existing five development parent groups are
-low-power feasibility data, not a product-quality benchmark. See the
+The existing train-only word annotations also place target-speaker speech
+through all 24/24 selected clip intervals, with other-speaker overlap in 7/24;
+this confirms annotation overlap, not mixed-waveform dominance or visible
+speaking status. Viewer search/filter failed and a throttled range lookup hit
+HTTP 429, so cohort channel files are not yet available. Before fitting, extend
+the frozen participant-channel contract to the candidate cohort or independently
+validate target dominance in mixed-WAV crops, and document missing/overlap
+handling. The existing five development parent groups are low-power feasibility
+data, not a product-quality benchmark. See the
 [speaker-channel preflight](docs/pretrained_reuse/R2_AMI_SPEAKER_CHANNEL_PREFLIGHT_20261022.md).
 
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
