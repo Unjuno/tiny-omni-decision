@@ -2103,3 +2103,17 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### Matched 32,768-update native unique-coverage comparison (2026-10-21)
+
+The seed-17 fresh-coverage arm completed the full 32,768-update cosine horizon
+against the matched repeat control and passed exact best/final replay. The new
+pool doubled unique questions from6,656 to12,800 and added Text/Image/Audio
+coverage, but no new Video questions. The selected fresh checkpoint (step8,192)
+was slightly worse than the repeat control on macro Accuracy/NLL/Brier/ECE.
+At the fixed endpoint, macro Accuracy was higher, while macro calibration and
+NLL were poor in both arms. Video Accuracy differences remain uncertain under
+scene-paired bootstrap; Video NLL/ECE rose sharply, with a large train/validation
+gap and no new unique video data. Do not extend or promote this run. A future
+video arm needs more unique, scene-disjoint supervision and task diversity.
+[Protocol, full learning curve, per-modality metrics, bootstrap and hashes](docs/pretrained_reuse/R2_NATIVE_COVERAGE_LONG_RESULTS_20261021.md).
