@@ -1,0 +1,179 @@
+{
+  "status": "PASS_RESIDENCY_SMOKE",
+  "torch_models": {
+    "components": {
+      "minilm": {
+        "logical_parameters": 17389824,
+        "incremental_parameters": 17389824,
+        "incremental_bytes": 69559296
+      },
+      "crossencoder": {
+        "logical_parameters": 22713601,
+        "incremental_parameters": 22713601,
+        "incremental_bytes": 90854404
+      },
+      "whisper": {
+        "logical_parameters": 37760640,
+        "incremental_parameters": 37760640,
+        "incremental_bytes": 151042560
+      },
+      "audio_events": {
+        "logical_parameters": 1961239,
+        "incremental_parameters": 1961239,
+        "incremental_bytes": 7844956
+      }
+    },
+    "total_parameters": 79825304,
+    "tensor_bytes": 319301216
+  },
+  "checkpoint_head_upper_bounds": {
+    "image": {
+      "elements": 61480,
+      "bytes": 491840
+    },
+    "video": {
+      "elements": 400128,
+      "bytes": 1600512
+    },
+    "sensor": {
+      "elements": 2380,
+      "bytes": 9520
+    },
+    "fusion": {
+      "elements": 421995,
+      "bytes": 1687980
+    },
+    "audio_readout": {
+      "elements": 344321,
+      "bytes": 1377284
+    }
+  },
+  "combined_parameter_upper_bound": 195420792,
+  "remaining_to_200M": 4579208,
+  "workers_live_at_snapshot": true,
+  "replacement_elements_not_added": 10647169,
+  "replacement_applied_in_memory_only": true,
+  "visual_process_pid": 64212,
+  "launcher_pid": 52112,
+  "memory_snapshot": {
+    "torch": {
+      "rss": 878641152,
+      "vms": 1943134208,
+      "num_page_faults": 314618,
+      "peak_wset": 879423488,
+      "wset": 878641152,
+      "peak_paged_pool": 8920152,
+      "paged_pool": 8754408,
+      "peak_nonpaged_pool": 100680,
+      "nonpaged_pool": 87304,
+      "pagefile": 1943134208,
+      "peak_pagefile": 1970782208,
+      "private": 1943134208
+    },
+    "visual": {
+      "rss": 924098560,
+      "vms": 1513009152,
+      "num_page_faults": 653921,
+      "peak_wset": 1026281472,
+      "wset": 924098560,
+      "peak_paged_pool": 2927616,
+      "paged_pool": 2927120,
+      "peak_nonpaged_pool": 90840,
+      "nonpaged_pool": 89480,
+      "pagefile": 1513009152,
+      "peak_pagefile": 1615798272,
+      "private": 1513009152
+    },
+    "launcher": {
+      "rss": 6115328,
+      "vms": 1011712,
+      "num_page_faults": 1618,
+      "peak_wset": 6176768,
+      "wset": 6115328,
+      "peak_paged_pool": 110752,
+      "paged_pool": 102480,
+      "peak_nonpaged_pool": 19816,
+      "nonpaged_pool": 6264,
+      "pagefile": 1011712,
+      "peak_pagefile": 1019904,
+      "private": 1011712
+    }
+  },
+  "summed_rss": 1808855040,
+  "visual": {
+    "pid": 64212,
+    "parameters": 114365184,
+    "tensor_bytes": 457460736,
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "source": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "memory": {
+      "rss": 987041792,
+      "vms": 1603760128,
+      "num_page_faults": 653921,
+      "peak_wset": 1026281472,
+      "wset": 987041792,
+      "peak_paged_pool": 2927616,
+      "paged_pool": 2927120,
+      "peak_nonpaged_pool": 90840,
+      "nonpaged_pool": 89752,
+      "pagefile": 1603760128,
+      "peak_pagefile": 1615798272,
+      "private": 1603760128
+    },
+    "forwards": {
+      "image": {
+        "shape": [
+          1,
+          17,
+          768
+        ],
+        "seconds": 0.49141030001919717
+      },
+      "video": {
+        "shape": [
+          1,
+          8,
+          768
+        ],
+        "seconds": 1.5754954000003636
+      }
+    }
+  },
+  "synthetic_forwards": {
+    "minilm": [
+      1,
+      2,
+      384
+    ],
+    "crossencoder": [
+      1,
+      1
+    ],
+    "whisper": [
+      1,
+      1,
+      51865
+    ],
+    "audio_events": [
+      1,
+      527
+    ]
+  },
+  "inputs": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\path-a-audio-multiquery-runtime-bundle-v2\\models\\text-minilm-en\\model.safetensors": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\model.safetensors": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\path-a-audio-multiquery-runtime-bundle-v2\\models\\audio-whisper-tiny\\model.safetensors": "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\efficientat-audit-v1\\dymn04_as.pt": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\0.01\\final.pt": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\video-token-readout-01\\attention\\best.pt": "ee4b46156e7e99149a1b8dca2701a786431cf09f0dbafbe9e247104ead16ba62",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\sensor-subject-training-01\\static\\best.pt": "5780b04c5022de2f6a085c27032de05c5f86e84a6c638b02a93ed91a9b7db40d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\vidimu-gated-fusion-budget-01\\best.pt": "21a3e6066a3b141e74d5468348fec953725e09ce7da3ad814ab0408159aedc57",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-deterministic-control-01\\best-delta.pt": "0b785581bc5db5db01a9b39494af41b32d26fc6958d2c6191ccd74edcf016882",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\path-a-audio-multiquery-runtime-bundle-v2\\readout\\best-readout.pt": "4efa7939a686ad97b38f9eec0b8171e6e62d125ba4eb373e5d83e33ac4df42c7"
+  },
+  "source_commit": "bdfd6026b67ec5c35943618681e3161a080880c2",
+  "runner_sha256": "96a360969596e4db9136fd3695ffa7892b9d2df14925dc146d2d35f253019899",
+  "complete_omni_runtime": false,
+  "quality_evaluation": false,
+  "sealed_audit": false
+}

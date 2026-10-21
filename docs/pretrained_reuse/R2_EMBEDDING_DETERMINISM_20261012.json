@@ -1,0 +1,39 @@
+{
+  "results": {
+    "False": {
+      "unique_gradient_hashes": 1,
+      "max_abs": 0.0,
+      "repeats": 30,
+      "first_gradient_sha256": "14bc908521ddd734157dac68e61bcbc7ee4e33fe67d71c5df96346136721d47f"
+    },
+    "True": {
+      "unique_gradient_hashes": 1,
+      "max_abs": 0.0,
+      "repeats": 30,
+      "first_gradient_sha256": "14bc908521ddd734157dac68e61bcbc7ee4e33fe67d71c5df96346136721d47f"
+    }
+  },
+  "input_shape": [
+    25,
+    512
+  ],
+  "input_sha256": "85de6bcc2cf236c1f13e29bbeceb2d5f89165a71586f727b69f99d73769ebff6",
+  "upstream_sha256": "8b29fb0264698d56431843790bca817d1805d1504846aa0894f75f8a63b05430",
+  "training_ids": [
+    "n4ze3m/typed-decisions-synth:synth-c6f6e90a5dc25f01:q3",
+    "n4ze3m/typed-decisions-synth:synth-20480eac5a8cd283:q3",
+    "n4ze3m/typed-decisions-synth:synth-dd1429012971de7c:security_concern",
+    "n4ze3m/typed-decisions-synth:synth-b5ad5cb32c0b722a:deductible_applies",
+    "aa4ff9a73ca8a1341322eeb456bd7848c1521a90bd35548d6b6bc48059806ebd:3",
+    "6ad1b8d0102448e377ba02e6adc9ff7617ce22cf130ecae29f6d4dd0093c6bb6:5",
+    "07be01c0072add71857ca97973c48a5ea32bef191572ea56449cb94df329703d:0",
+    "747b0d303357d0d3df2dc3442f0055a2fae74fe76039dabf24936302e7b60668:7"
+  ],
+  "synthetic_upstream_gradient": true,
+  "optimizer_updates": 0,
+  "model_quality_evaluated": false,
+  "torch": "2.6.0+cu124",
+  "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+  "cublas_workspace": ":4096:8",
+  "script_sha256": "a6a5f1a1f2bcad5b678dcfce400cf7a43afb5871b5b240540af4bbb047ce05e0"
+}

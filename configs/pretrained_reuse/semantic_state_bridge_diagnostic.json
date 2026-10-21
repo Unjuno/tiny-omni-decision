@@ -1,0 +1,26 @@
+{
+  "experiment_id": "clevr4-frozen-semantic-state-bridge-seed17",
+  "seed": 17,
+  "images": 256,
+  "smoke_images": 4,
+  "pair_batch_size": 64,
+  "max_seconds": 900,
+  "max_vram_bytes": 4294967296,
+  "max_host_bytes": 4294967296,
+  "max_output_bytes": 134217728,
+  "min_free_disk_bytes": 1073741824,
+  "native_parity_absolute_tolerance": 1e-10,
+  "root": "C:/CodexArtifacts/pretrained-reuse-r2",
+  "base_directory": "C:/CodexArtifacts/pretrained-reuse-r1/crossencoder-minilm-l6-audit-01",
+  "base_audit_sha256": "b3ff45ab20ffae8c19bcbe02d206bc8546e5687599aa9635c42c84f5fddf8d6a",
+  "inputs": {
+    "clevr4-full-coverage-seed17/train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
+    "clevr4-full-coverage-seed17/train-image-manifest.jsonl": "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010",
+    "videoprism-spatial-image-cache-01/train-cells.npy": "0355ae96cfadf421266452cca5df950ba6d0a09e3bbbfc10d71c356bc556fa5b",
+    "videoprism-spatial-image-cache-01/config.json": "02f1051ad9be39f1dae95d65bff52993d59b06c5d074191a09d695ab646e92f8",
+    "shared-affine-regularized-01/config.json": "dec046cee59a4b17188dd2ccd466b7a8148fe452b500813c0d1566084ff258c9",
+    "shared-affine-regularized-01/0.01/final.pt": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5",
+    "shared-affine-regularized-01/0.01/final-training-logits.npy": "96a10d07c144f256b79b8dfb47eb75041d280c5e03d2a795e7bac78d26bb39d0",
+    "text-coverage-training-01/best-delta.pt": "b063f124e59c8a4c1b09c7bf2a8423846f73489d7ce8cd6649735745bc6cebf5"
+  }
+}

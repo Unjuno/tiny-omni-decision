@@ -1,0 +1,312 @@
+{
+  "r1": {
+    "candidate_inventory_sha256": "48EDA0997F9603ECA118E137E1A5E72C812DD915C1C140E3934BA721D0BB218D",
+    "pe_core_t16": "Separate PR #16 audit; preserved, not adopted",
+    "v_jepa_2_1_license": "REVIEW",
+    "candidate_count": 23,
+    "license_status": "ALLOW per pinned upstream Google sources; see R1 inventory",
+    "candidate_inventory_path": "docs/pretrained_reuse/R1_CANDIDATE_INVENTORY.json",
+    "video_candidate": "google-videoprism-base-f16r288",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "parameters": 114365184
+  },
+  "captured_at_local": "2026-10-21T11:16:05+09:00",
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_branch": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"
+  },
+  "repository": "https://github.com/Unjuno/tiny-omni-decision",
+  "schema_version": 1,
+  "pull_requests": [
+    {
+      "updated_at": "2026-10-21T00:00:46Z",
+      "title": "Screen AMI for cross-modal speaker-to-face matching",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "number": 19,
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "state": "open",
+      "head_sha": "529296db36217e2a7114be580cf0cb42070f603b",
+      "head_branch": "codex/r2-ami-av-source-screen-20261021"
+    },
+    {
+      "updated_at": "2026-10-20T21:35:21Z",
+      "title": "Screen CaptainCook4D for a procedural step-text video task",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "number": 18,
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "state": "open",
+      "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "head_branch": "codex/r2-captaincook4d-screen-20261021"
+    },
+    {
+      "updated_at": "2026-10-20T21:19:28Z",
+      "title": "Screen MAVD Urbansas audiovisual source integrity",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": false,
+      "number": 17,
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "state": "open",
+      "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "head_branch": "codex/r2-mavd-source-screen-20261021"
+    },
+    {
+      "updated_at": "2026-10-20T21:11:51Z",
+      "title": "Record PE-Core T16 checkpoint CPU audit",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": false,
+      "number": 16,
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "state": "open",
+      "head_sha": "9af24a3f8910d49e79d8ae6279d941340711de6b",
+      "head_branch": "codex/r1-pe-core-audit-20261021"
+    },
+    {
+      "updated_at": "2026-10-20T19:57:57Z",
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "base_branch": "main",
+      "draft": true,
+      "number": 15,
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "state": "open",
+      "head_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "head_branch": "docs/pretrained-reuse-roadmap-20261010"
+    },
+    {
+      "updated_at": "2026-10-08T10:54:56Z",
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "base_branch": "codex/ternary-student-recovery",
+      "draft": true,
+      "number": 14,
+      "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c",
+      "state": "open",
+      "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "head_branch": "fix/student-qat-training-handoff"
+    },
+    {
+      "updated_at": "2026-10-08T02:27:05Z",
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "base_branch": "main",
+      "draft": false,
+      "number": 13,
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "state": "open",
+      "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "head_branch": "feat/ternary-student-recovery"
+    },
+    {
+      "updated_at": "2026-10-06T17:54:48Z",
+      "title": "feat: add strict postquant teacher cache boundary",
+      "base_branch": "codex/postquant-numerical-core",
+      "draft": true,
+      "number": 12,
+      "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "state": "open",
+      "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "head_branch": "codex/postquant-teacher-cache"
+    },
+    {
+      "updated_at": "2026-10-06T17:19:22Z",
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "base_branch": "codex/postquant-worker-entrypoints",
+      "draft": true,
+      "number": 11,
+      "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "state": "open",
+      "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "head_branch": "codex/postquant-numerical-core"
+    },
+    {
+      "updated_at": "2026-10-06T15:33:14Z",
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "base_branch": "codex/roadmap-compression-video-specialization",
+      "draft": true,
+      "number": 10,
+      "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277",
+      "state": "open",
+      "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "head_branch": "codex/postquant-worker-entrypoints"
+    },
+    {
+      "updated_at": "2026-10-04T10:04:40Z",
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "base_branch": "main",
+      "draft": true,
+      "number": 9,
+      "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c",
+      "state": "open",
+      "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "head_branch": "codex/teacher-quality-v1"
+    }
+  ],
+  "compute": {
+    "gpu_utilization_percent": 16,
+    "tiny_omni_process": false,
+    "vram_total_mib": 16384,
+    "temperature_c": 66,
+    "new_gpu_work_started": false,
+    "vram_used_mib": 15373,
+    "hotgpu": "Cooperative reservation guard only; not invoked because GPU has 803 MiB free and Orbitune is active",
+    "observed_processes": [
+      {
+        "parent_pid": 3276,
+        "workload": "Orbitune cooperative idle supervisor",
+        "pid": 4696,
+        "started": "2026-10-20T01:46:00.622404+09:00",
+        "intervened": false
+      },
+      {
+        "parent_pid": 4696,
+        "workload": "Orbitune cooperative idle supervisor",
+        "pid": 23856,
+        "started": "2026-10-20T01:46:00.656712+09:00",
+        "intervened": false
+      },
+      {
+        "parent_pid": 23856,
+        "workload": "Orbitune compound_cfe_train",
+        "pid": 7388,
+        "started": "2026-10-21T10:46:33.159685+09:00",
+        "intervened": false
+      },
+      {
+        "parent_pid": 7388,
+        "workload": "Orbitune compound_cfe_train",
+        "pid": 29180,
+        "started": "2026-10-21T10:46:33.178316+09:00",
+        "intervened": false
+      }
+    ],
+    "cloud_cost_usd": 0,
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "disk_c_free_bytes": 19487416320,
+    "ram_free_bytes": 9388072960,
+    "vram_free_mib": 803
+  },
+  "r0_gates": {
+    "quality": "95-98% retained as aspiration; no locked cross-modality task battery",
+    "package_target": "<=200MB provisional; historical Path A v4 package 687,254,772 bytes, therefore unmet",
+    "time_energy": "no paid/cloud compute; local time/energy cap not specified",
+    "confidence_calibration": "task-level NLL/Brier/ECE/confidence and abstention thresholds not specified",
+    "data_policy": "PR15 roadmap; preserve sealed and legacy sets; test labels remain unopened",
+    "deployment_device": "Local Windows PC; RTX 3080 Laptop 16 GiB is available but shared; CPU remains usable for low-memory work",
+    "parameter_target": "100-200M pre-quantization parameters provisional engineering target"
+  },
+  "worktrees": {
+    "existing_count": 34,
+    "user_primary_worktree": {
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "modified": false,
+      "branch": "codex/teacher-quality-clean-dev-v1",
+      "dirty": true
+    },
+    "dirty_count": 6,
+    "dirty_branches": [
+      "codex/teacher-quality-clean-dev-v1",
+      "fix/student-qat-training-handoff",
+      "codex/textfree-video-program-order",
+      "codex/textfree-video-coverage-v2",
+      "codex/teacher-quality-physionpp",
+      "codex/ternary-student-recovery-updated"
+    ],
+    "registered_count": 34
+  },
+  "local_research_worktree": {
+    "pull_request_created": false,
+    "base": "PR #15 head 71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+    "remote_head": "8b6d657c2377e07f4bf80672c22be72b0631ce18",
+    "working_tree_clean": true,
+    "path": "C:\\CodexWorktrees\\pretrained-reuse-next-20261021",
+    "head": "8b6d657c2377e07f4bf80672c22be72b0631ce18",
+    "branch": "codex/r0-r2-continuation-20261021"
+  },
+  "scope": "Read-only R0/R1/R2 continuation snapshot. No live process, user worktree, source corpus, model checkpoint, or sealed audit modified.",
+  "r2_artifacts": {
+    "ami_screen": {
+      "validation_candidates": 111,
+      "status": "screen only; sync/visible-speaker gates open; no model fit",
+      "train_candidates": 214
+    },
+    "captaincook4d": {
+      "status": "media blocked",
+      "audio_video_complementarity": "not established",
+      "official_gopro_head_responses": "HTTP 404 in observed sample"
+    },
+    "path_a_reference": {
+      "package_target_met": false,
+      "parameters": 170499716,
+      "payload_bytes": 687254772,
+      "document": "docs/pretrained_reuse/R2_PATH_A_MODULAR_RUNTIME_20261011.md",
+      "note": "historical v4 modular runtime record; not a unified general-quality model",
+      "package_target_bytes": 209715200
+    },
+    "pch_temporal": {
+      "result_sha256": "94b4be48cd28cd300016b0f2decdbc16bf8157a5e491e34f83d6b98914bff112",
+      "attempt": "attempt-04",
+      "status": "completed development comparison; no clear temporal-LSTM gain",
+      "holdout_opened": false
+    },
+    "perception_av": {
+      "efficientat_features_sha256": "5bf796579ecfeb65cad19fe0f20fb55ffe1c16b50ecb91261cb9b0883a9cf9c6",
+      "status": "exploratory low-quality; strong overfit; no promotion",
+      "videoprism_features_sha256": "bf2755c5f609819f6acf508b3cc2bd63f7946a688547fb06f523ad7b8218cc55",
+      "train_accuracy": 1.0,
+      "cohort_sha256": "dd8c9de6d8970eb1105cb81551e386fca563eb174b8bcda5b09dcc8a16e567be",
+      "balanced_validation_accuracy": {
+        "video": 0.578125,
+        "joint": 0.6484375,
+        "audio": 0.5625
+      },
+      "media_receipt_sha256": "f29bcfee3465164bf2165240ad2b76821a86d043656b2b7b76a71ee8dadc7641",
+      "matched_readout_sha256": "95ee830089d9211f2b7d68929eda2020e02be958b77331ebd18c29636986a224"
+    },
+    "perception_event_source": {
+      "branch": "codex/r2-perception-av-scale-v1",
+      "head": "58633f10a6010f31dc5a17c59ce9a7c09b462db9",
+      "scale_report": "docs/pretrained_reuse/R2_PERCEPTION_AV_EVENT_SCALE_RESULTS_20261021.md",
+      "scale_result_sha256": "4de1f6288f2680695226dc2e54822b956f0a668ea7ce4208ce1189e4c14b4e05",
+      "fit_coverage": {
+        "old_only": "525 fit events / 240 videos",
+        "expanded": "1075 fit events / 473 videos"
+      },
+      "matched_budget_updates": 2048,
+      "development_validation": "146 events / 58 videos",
+      "fresh_train_transfer": "504 events / 200 previously unused official TRAIN videos",
+      "joint_validation": {
+        "accuracy": 0.3288,
+        "nll": 2.0322
+      },
+      "joint_fresh_train_transfer": {
+        "accuracy": 0.3948,
+        "nll": 1.8466
+      },
+      "matched_video_only_transfer": {
+        "accuracy": 0.3532,
+        "nll": 2.0045
+      },
+      "interpretation": "joint NLL advantage on fresh TRAIN subset; Accuracy interval includes zero; narrow nonblind transfer only; do not repeat"
+    },
+    "pch_temporal_result_detail": {
+      "source_branch": "codex/r2-pch-recording-temporal-20261021",
+      "source_head": "fe82f5cd854cb305cc13eb715eb7a92b40dbd976",
+      "result_sha256": "94b4be48cd28cd300016b0f2decdbc16bf8157a5e491e34f83d6b98914bff112",
+      "validation_records": 63,
+      "validation_participants": 21,
+      "chronological_accuracy": 0.6349,
+      "chronological_nll": 1.2019,
+      "shuffled_accuracy": 0.6508,
+      "frozen_window_lstm_accuracy": 0.6508,
+      "frozen_window_lstm_nll": 1.0117,
+      "holdout_opened": false
+    }
+  },
+  "preservation": {
+    "user_primary_worktree_modified": false,
+    "paid_compute_used": false,
+    "peer_worktrees_modified": false,
+    "sealed_audit_opened": false,
+    "legacy_prs_modified": false,
+    "existing_checkpoints_modified": false
+  }
+}

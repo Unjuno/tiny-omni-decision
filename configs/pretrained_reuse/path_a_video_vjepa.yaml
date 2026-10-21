@@ -1,0 +1,52 @@
+schema_version: 1
+experiment_id: path-a-video-vjepa-clevrer-v0
+modality: video
+source:
+  dataset_id: MIT-IBM/CLEVRER
+  revision: 98b842082ba4f7c18b6b9e3f39145871782a65ef
+  train_split: train
+  validation_split: validation
+  question_sha256:
+    train: 11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4
+    validation: fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d
+  sample_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-video-probe-v0-retry3
+  seed: 17
+  train_scenes: 16
+  validation_scenes: 8
+  questions_per_scene: 2
+  question_types: [temporal_descriptive, static_descriptive]
+  previously_used_scene_ids_excluded: true
+  split_group: video_scene
+  normalized_question_content_overlap: 0
+  sealed_audit_loaded: false
+encoder:
+  repo_id: facebook/vjepa2
+  source_commit: 204698b45b3712590f06245fbfba32d3be539812
+  checkpoint: C:/CodexArtifacts/pretrained-reuse-r1/vjepa2_1_vitb_dist_vitG_384.pt
+  checkpoint_sha256: 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d
+  frozen: true
+  frame_count: 8
+  resolution: 384
+  pooling: mean_spatiotemporal_tokens
+  media_decoder: PyAV
+  checkpoint_rights: REVIEW
+candidate_text_encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  frozen: true
+readout:
+  architecture: shared_candidate_mlp
+  hidden_size: 128
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.001
+  epochs: 24
+  batch_questions: 8
+  checkpoint_selection: minimum_validation_nll
+seed: 17
+device: cuda
+notes:
+  - This is a tiny synthetic descriptive task probe, not general video understanding.
+  - One temporal and one static question reuse each scene's cached frozen video feature.
+  - Full train and validation video archive hashes are not computed; selected media hashes are recorded.
+  - The V-JEPA checkpoint rights status remains REVIEW; this probe is research-only.

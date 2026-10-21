@@ -1,0 +1,1062 @@
+{
+  "records": [
+    {
+      "split": "train",
+      "app": "7-Zip",
+      "annotation": "data/7-Zip/001f0079a489909eb94e47c2374b7bf36ab1842e314592ce30a34d18a54eb1df.json",
+      "local_index": 0,
+      "image_path": "images/7-Zip/001f0079a489909eb94e47c2374b7bf36ab1842e314592ce30a34d18a54eb1df.png",
+      "image_sha256": "00c630883539931f243cf3e690f607cad74fe8837e6277dd878575280b2b45ec",
+      "pixel_sha256": "74085985672a371e4633e097c10b12d5a07d2667aeb3d0a0086a4d8202243139",
+      "annotation_sha256": "e421e609ad0345d6cc390c4b2242b9a36e646288d24bdf841309b2d3c438e985",
+      "size": [
+        1366,
+        720
+      ],
+      "category_counts": {
+        "Others": 26,
+        "Button": 11,
+        "Information Display": 12,
+        "Menu": 7
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "7-Zip",
+      "annotation": "data/7-Zip/00c58a7b4035af0da3a509c13f4eab252de41799b932ad5c5346576aa2bf51e9.json",
+      "local_index": 1,
+      "image_path": "images/7-Zip/00c58a7b4035af0da3a509c13f4eab252de41799b932ad5c5346576aa2bf51e9.png",
+      "image_sha256": "a35496db244b97fe0b03744fd25b8c0c5c922ccf20240dbda5d061cc219232ec",
+      "pixel_sha256": "cd799404b9d66d340de6f1905d8d6a18c6f2daf53486dc1a08ed4b04a6669968",
+      "annotation_sha256": "bf45987e7949dbbbbc2298b28a3e123a73fcc7ece8980d7192594cf6ec099fcf",
+      "size": [
+        1920,
+        1020
+      ],
+      "category_counts": {
+        "": 22,
+        "Others": 28
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "7-Zip",
+      "annotation": "data/7-Zip/00f2a5c8f94f74564d8d360f5d05aab7d94a458a741c5fb472062553ccf21075.json",
+      "local_index": 2,
+      "image_path": "images/7-Zip/00f2a5c8f94f74564d8d360f5d05aab7d94a458a741c5fb472062553ccf21075.png",
+      "image_sha256": "d494ff12c9afad2cd56193e10ca82aca6648ea19c937c0ec8134a32bf51d207f",
+      "pixel_sha256": "e6d78de683c19ad89e2eaf247b69e525f93fee98233bf729213628cf69ba48e6",
+      "annotation_sha256": "a74148adf22b7eea7e5b8daab35d98ce294c34dc111b8f007edf07e8dd2488e9",
+      "size": [
+        1920,
+        1020
+      ],
+      "category_counts": {
+        "Information Display": 38,
+        "Navigation": 8,
+        "Button": 22,
+        "Menu": 11,
+        "Visual Elements": 1
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "7-Zip",
+      "annotation": "data/7-Zip/01252a1ccdb5f50d08460fbdf89190db8af4151b0e83aed7b815c158ce1ac7fd.json",
+      "local_index": 3,
+      "image_path": "images/7-Zip/01252a1ccdb5f50d08460fbdf89190db8af4151b0e83aed7b815c158ce1ac7fd.png",
+      "image_sha256": "7710f3e08727f8c090d3289ab37f4dd10411bcaab2fb7778e5d43a66c29259f1",
+      "pixel_sha256": "e62e48aea29cf658c8cfcae25ab3bad79eab00b81c33838115b3f2510b205731",
+      "annotation_sha256": "73b9a70433a689f9c118325f7d69f8b8cb584dc425e1a8da286d0da54d8205c2",
+      "size": [
+        1092,
+        614
+      ],
+      "category_counts": {
+        "": 46,
+        "Others": 16
+      },
+      "invalid_bbox_ids": [
+        "a1597554-843a-48fe-8a1d-9575ae35fd4f"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "Anki",
+      "annotation": "data/Anki/003d96821b9e89aebcd9eba7148be878208dc0999c9156b5bf66666ebe4cab96.json",
+      "local_index": 4,
+      "image_path": "images/Anki/003d96821b9e89aebcd9eba7148be878208dc0999c9156b5bf66666ebe4cab96.png",
+      "image_sha256": "de78b8831a31c71a8b08b67be15c377733249ec46d3c03c7cf91bd54762e29b3",
+      "pixel_sha256": "840aef422862ede3aeea651969bd9c26f25458f08b048513e96c003c479dbc65",
+      "annotation_sha256": "7251b848ba6c61448d04646ee26d15a79a7f7d9f3937d7d6b581c7bd840a9656",
+      "size": [
+        1920,
+        990
+      ],
+      "category_counts": {
+        "": 47,
+        "Others": 9
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Anki",
+      "annotation": "data/Anki/01821e0e6040c8d59da70964bfd829e7a70b3eee47401880a40b23160802dd2e.json",
+      "local_index": 5,
+      "image_path": "images/Anki/01821e0e6040c8d59da70964bfd829e7a70b3eee47401880a40b23160802dd2e.png",
+      "image_sha256": "e1987846c0be451a49bf53f1a580e5e1c5490028a49debd7568be17acef58288",
+      "pixel_sha256": "df000bb681f121c8def2239b8083087f30d47bea834528f0cec92acd05f0bb86",
+      "annotation_sha256": "651a0abc4565235abba6ccca2cff1fe2cf4fed43fa324bea09599edc7a333c8d",
+      "size": [
+        1920,
+        1020
+      ],
+      "category_counts": {
+        "": 23,
+        "Others": 33
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Anki",
+      "annotation": "data/Anki/0195e5d3e3b58b60d402dca508aa65eead4a035a9db080ce1bd7c528d2dcc181.json",
+      "local_index": 6,
+      "image_path": "images/Anki/0195e5d3e3b58b60d402dca508aa65eead4a035a9db080ce1bd7c528d2dcc181.png",
+      "image_sha256": "6e40f94ce783fff05691a0bb5015923d7f78254d56d3134adfab4466bb4a630d",
+      "pixel_sha256": "adfff67f3488d0c9cff81f100d9c5c08e33a6825ebe14489c4a083e6b70bc604",
+      "annotation_sha256": "83dd4f7db0210a37c21e885fe92e3b327b1349417ee46b03dab3c323424814be",
+      "size": [
+        1280,
+        720
+      ],
+      "category_counts": {
+        "": 27,
+        "Others": 7
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Anki",
+      "annotation": "data/Anki/01b93b0caf0acd13c2c68cd098cdd7ec7c5005b2141f43979b737da549665457.json",
+      "local_index": 7,
+      "image_path": "images/Anki/01b93b0caf0acd13c2c68cd098cdd7ec7c5005b2141f43979b737da549665457.png",
+      "image_sha256": "0ca453a0a94f15cf97d9539d50820937f735075f5585cdb01f6bcdb5f94b909b",
+      "pixel_sha256": "40987009aaa8787874eca559cdc26103f786a0c02994d7cc5261bee3bc408fa3",
+      "annotation_sha256": "6cf185536961c6c055de815dceec9710ddb168a9f07f459e87d8a8c98ce6584d",
+      "size": [
+        1920,
+        990
+      ],
+      "category_counts": {
+        "": 36,
+        "Others": 2
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Audacity",
+      "annotation": "data/Audacity/00c48e3451f03dedc6e160d75733617edaa9eb2ba360095d291a53384477c42f.json",
+      "local_index": 8,
+      "image_path": "images/Audacity/00c48e3451f03dedc6e160d75733617edaa9eb2ba360095d291a53384477c42f.png",
+      "image_sha256": "35e8545326b98b3f4b66692488685a2f6f8c057178751a3539f1af552255c4aa",
+      "pixel_sha256": "8c99b17aa6f7f6dea7f7d32bf3a44773cd050a324f76faf53db6df756efe4350",
+      "annotation_sha256": "b567ca4ac5caeb3b82f27db95d3eb2d93e618620a17d14cb5e421aefbc44ad8e",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "Menu": 18,
+        "Button": 38,
+        "Navigation": 3,
+        "Visual Elements": 1,
+        "Information Display": 9
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Audacity",
+      "annotation": "data/Audacity/013df852d1801a60baaf660ff7601617e4d200e1f7672ebaf9944482f0ad6a6a.json",
+      "local_index": 9,
+      "image_path": "images/Audacity/013df852d1801a60baaf660ff7601617e4d200e1f7672ebaf9944482f0ad6a6a.png",
+      "image_sha256": "5dd52bfb8927b7ff714b4dfa14e71f65e668b7bbb957a811233fa75ddd8ea538",
+      "pixel_sha256": "2c3055452c30e1ed4bb0ad2bda5ce1a21dd0cd27aef101f337b3627ff9e67974",
+      "annotation_sha256": "7a0ecb45e05d4ffe52dfbf05e0f8eea2919a4a7e862e7b758f5bf07f0a23d4ae",
+      "size": [
+        1920,
+        1024
+      ],
+      "category_counts": {
+        "": 101,
+        "Others": 19
+      },
+      "invalid_bbox_ids": [
+        "00b4b210-9071-4571-a33a-d0084e96d3e8",
+        "2be439d0-2ee9-40df-9679-de4659166eed"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "Audacity",
+      "annotation": "data/Audacity/01c84be0eed8718b02419039948a72f4e7d03e68788199b2d7c1ed1ac85c91b8.json",
+      "local_index": 10,
+      "image_path": "images/Audacity/01c84be0eed8718b02419039948a72f4e7d03e68788199b2d7c1ed1ac85c91b8.png",
+      "image_sha256": "9190606d5bf256ab89e4e376aa37b4db45d313a1feb30c0f142ce759b93227df",
+      "pixel_sha256": "815d81570be67e8e3956bed22583f7c718c1e17a7a99d0d507a9597b5d494bb2",
+      "annotation_sha256": "ba8c4a071b12d71c0d5462eb733dc3252059ca87f9bb9ed7d00994740238ffdb",
+      "size": [
+        1092,
+        614
+      ],
+      "category_counts": {
+        "": 78,
+        "Navigation": 1,
+        "Information Display": 4,
+        "Others": 13
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Audacity",
+      "annotation": "data/Audacity/01cfc3ca69beb47c17e2ac22e76aebe08f8e175d78e6520137d7a4146e2d5f65.json",
+      "local_index": 11,
+      "image_path": "images/Audacity/01cfc3ca69beb47c17e2ac22e76aebe08f8e175d78e6520137d7a4146e2d5f65.png",
+      "image_sha256": "2836dbf3e0668c8f856d410d89804cc2649c680a865d18f6914bbfffbfdf24be",
+      "pixel_sha256": "7850bd3848c11acda6201ba26ce5a29a78ea76e08c21bc91ac2455af872ffb10",
+      "annotation_sha256": "d67ed8f1362ffdf3934894c8a0115ea8558ea8aa6f1ff68dec3dd70c505a8c16",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "Menu": 18,
+        "Button": 38,
+        "Navigation": 4,
+        "Visual Elements": 1,
+        "Information Display": 9
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Ubuntu Terminal",
+      "annotation": "data/Ubuntu Terminal/0033cc431e453fd54b174186f7a008535265abcc4918326c185ee8d1535bcb28.json",
+      "local_index": 12,
+      "image_path": "images/Ubuntu Terminal/0033cc431e453fd54b174186f7a008535265abcc4918326c185ee8d1535bcb28.png",
+      "image_sha256": "fcac6a7c8398a02695524c7cc9c5cacbfca33f60f1f502b53219a8fffd882d25",
+      "pixel_sha256": "8d58e28f9a75ca00a2412077e7b80cf967ac2cb7bbe4771bf478d431feab487a",
+      "annotation_sha256": "27f1de3acd5a2755edaddf165369f142deb723b2852c183ae70ce161179900eb",
+      "size": [
+        1908,
+        808
+      ],
+      "category_counts": {
+        "Input Elements": 1,
+        "Navigation": 1,
+        "Information Display": 1,
+        "Button": 3,
+        "Menu": 1
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Ubuntu Terminal",
+      "annotation": "data/Ubuntu Terminal/01292a0aa6345f108b6e77644afacc09bda9a492e287636468b949d6baf4ce94.json",
+      "local_index": 13,
+      "image_path": "images/Ubuntu Terminal/01292a0aa6345f108b6e77644afacc09bda9a492e287636468b949d6baf4ce94.png",
+      "image_sha256": "af00ae6f140388897c53dae1111e3833f60dd0e4b34e31fbc83610fb1a0aacbe",
+      "pixel_sha256": "f3a890a5182df601078305de96aa80138f77874bcc81a8419119fd9ef0e5a637",
+      "annotation_sha256": "23560ce1fe16d42cf2046d545f0719e3dc0523ba63fef3911f5ee728f326a05d",
+      "size": [
+        2780,
+        1768
+      ],
+      "category_counts": {
+        "Input Elements": 5,
+        "Information Display": 1,
+        "Others": 4
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Ubuntu Terminal",
+      "annotation": "data/Ubuntu Terminal/013c04494ed9ee44693c78a632100572be7f6cad77f7738a8b45f2d95a61fe4e.json",
+      "local_index": 14,
+      "image_path": "images/Ubuntu Terminal/013c04494ed9ee44693c78a632100572be7f6cad77f7738a8b45f2d95a61fe4e.png",
+      "image_sha256": "9cfe05c6a8374f644821efb12ef86238a036d46c459ab6a0fd36842e9d9495fb",
+      "pixel_sha256": "529c0edc896257c7926f2bb1f01b9979b8e67e747403fdc4a80f12c4b89406a2",
+      "annotation_sha256": "5d3e135634bba43d6f99a20caa1f8da6f26a4afde8396b2e344c630f9459582c",
+      "size": [
+        1920,
+        910
+      ],
+      "category_counts": {
+        "Input Elements": 2,
+        "Button": 5,
+        "Information Display": 2,
+        "Menu": 3,
+        "Navigation": 2
+      },
+      "invalid_bbox_ids": [
+        "f76294c7-6081-4a07-8e0d-623f299a79a1"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "Ubuntu Terminal",
+      "annotation": "data/Ubuntu Terminal/02af272f0856ba8a42719d8953e864189148f0c35f61f879b0fc28ec61bb4c83.json",
+      "local_index": 15,
+      "image_path": "images/Ubuntu Terminal/02af272f0856ba8a42719d8953e864189148f0c35f61f879b0fc28ec61bb4c83.png",
+      "image_sha256": "6d9657e3ef4d5dcbf143672b6c901bcab5fb500c00d39162ac89b2dd4d83d678",
+      "pixel_sha256": "9b0b8362406b96985f9fe7be99a04ae03332ba61d812acf6c830a6832acad40b",
+      "annotation_sha256": "5ea72631549bc8bfbe52ffcf22c0533e8cb1ce207940c43415904812410cdc53",
+      "size": [
+        2796,
+        1768
+      ],
+      "category_counts": {
+        "Information Display": 2,
+        "Navigation": 3,
+        "Input Elements": 6,
+        "Visual Elements": 2
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "GrassGIS",
+      "annotation": "data/GrassGIS/005d9c90b629166309ce060a5e3bd3241ec5beb904e5458a7ca4db80e4e3a4f7.json",
+      "local_index": 16,
+      "image_path": "images/GrassGIS/005d9c90b629166309ce060a5e3bd3241ec5beb904e5458a7ca4db80e4e3a4f7.png",
+      "image_sha256": "9e773e61390a4b9918f355a04de00d9e271fd9b385523c7ef3460052ec6c66df",
+      "pixel_sha256": "f2fc40876dfc96dbacfd7968fd39e03cee5befdab9428a5674f51549335f22e4",
+      "annotation_sha256": "5e3b941cf11043cd279fa8e1ac4d5e667bb5d73203b6d28d8ba300d77a664157",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "": 137,
+        "Others": 19
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "GrassGIS",
+      "annotation": "data/GrassGIS/074b9b32bc5b6cc12c26ed58580a521282967f232e6f5ab06fbe1055b727d683.json",
+      "local_index": 17,
+      "image_path": "images/GrassGIS/074b9b32bc5b6cc12c26ed58580a521282967f232e6f5ab06fbe1055b727d683.png",
+      "image_sha256": "efaee0a645e64797a0c28b446d9ce3871dc10071ef109f39654a837a75832201",
+      "pixel_sha256": "49f30a601ba7c139e6c2c31011471d226aa953616f3688f26bb744f7dddeb18c",
+      "annotation_sha256": "d813a545c2c92eb35d8ef22e9b3709d9d657cf5bc845e904406b56c202d7a922",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "": 108,
+        "Others": 26
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "GrassGIS",
+      "annotation": "data/GrassGIS/1aa572a2350455240dbc2fbcb8dbc17c4a05beb0034cc26882f49faf95c6be3b.json",
+      "local_index": 18,
+      "image_path": "images/GrassGIS/1aa572a2350455240dbc2fbcb8dbc17c4a05beb0034cc26882f49faf95c6be3b.png",
+      "image_sha256": "40937a512a98b9242a7ad61780477c5b65a1b604a235bfd74557621933814830",
+      "pixel_sha256": "3e2e855ad0b40ac23046c52c7a09dbeda432dc11e4caf3a4589097cda05080e5",
+      "annotation_sha256": "62b5e5ba074e96279d01a994debb3fcaace3aba9a257a5a6c42d4a0490ffe924",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "": 136,
+        "Others": 56
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "GrassGIS",
+      "annotation": "data/GrassGIS/1d9fa994cc09607a9466821685adcf1a123d20385dd1181abd43212a769fbaef.json",
+      "local_index": 19,
+      "image_path": "images/GrassGIS/1d9fa994cc09607a9466821685adcf1a123d20385dd1181abd43212a769fbaef.png",
+      "image_sha256": "74a2af043dad92e6cd46b10fb77f0267c3a039076e59e98c5a3240cfb5011083",
+      "pixel_sha256": "28e6dec384e6ed62f69a5fb4a5cc5b40d84fbee7d672fd15b645c5757e51714a",
+      "annotation_sha256": "00d5d3d3d4078b013419c2c94c8735bf2f04747cc29a0a063b9bfb4b184e1d65",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "": 110,
+        "Others": 6
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Komodo Edit",
+      "annotation": "data/Komodo Edit/004c55e37fd4c26152f882a659361fe173f8469d50094b48a203d0324bb6a50a.json",
+      "local_index": 20,
+      "image_path": "images/Komodo Edit/004c55e37fd4c26152f882a659361fe173f8469d50094b48a203d0324bb6a50a.png",
+      "image_sha256": "8bac227237aa2a2bc903cf79ceed1cf112f9a095d137ccc13ea287ca17f6022e",
+      "pixel_sha256": "7f58a5bd2b91a7ee357af7adef758510d7039f712f3eb97e6f30d4f83e3c0026",
+      "annotation_sha256": "b1dcd8d15660ab9d71cf7949882dd6d860d11ee16e7ad0f592e136183d6fa040",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "Information Display": 14,
+        "Button": 32,
+        "Input Elements": 12,
+        "Others": 1,
+        "Navigation": 3,
+        "Menu": 19,
+        "": 5
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Komodo Edit",
+      "annotation": "data/Komodo Edit/00fd7bc498e219bc49112bca0b5fac35964b98d3327eea3ec6bf279e92d6c882.json",
+      "local_index": 21,
+      "image_path": "images/Komodo Edit/00fd7bc498e219bc49112bca0b5fac35964b98d3327eea3ec6bf279e92d6c882.png",
+      "image_sha256": "41e05e0755ffac66d7ff63a2f7d75a243d118e9725beaf59a35ed5e73672a573",
+      "pixel_sha256": "6b3705b3a430eeb48ae6a44f886237f91c4ebf57471b6a198e5600ebf4857189",
+      "annotation_sha256": "2695f522a15c18bc58c036eb66540ab65d5e88dfffd44daa6a39bae18f356f1c",
+      "size": [
+        1366,
+        720
+      ],
+      "category_counts": {
+        "": 51,
+        "Others": 1
+      },
+      "invalid_bbox_ids": [
+        "2fde8d99-8ef0-415d-af16-38db7b6a6bfa",
+        "bdb1c052-81c7-445c-b171-0cf266bc9a15"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "Komodo Edit",
+      "annotation": "data/Komodo Edit/0391791b83b2ea93d003f186c178c2fe259ad81af2ab1588024a9294eda90a98.json",
+      "local_index": 22,
+      "image_path": "images/Komodo Edit/0391791b83b2ea93d003f186c178c2fe259ad81af2ab1588024a9294eda90a98.png",
+      "image_sha256": "63a1bcc5dd9f2274c7b175518cbf2af17f1169a0df48113fff32b0626b80c004",
+      "pixel_sha256": "84fe2ac45561b4b89b5d80dc41fa7c4e3c99b35e24c8b06ff20cb9e6f83f464b",
+      "annotation_sha256": "0bafa467a306c2eceeaf681ad83bbdf51ba2a9d3399631f2195c7db5affcca40",
+      "size": [
+        1366,
+        722
+      ],
+      "category_counts": {
+        "": 43,
+        "Button": 3,
+        "Menu": 8,
+        "Others": 1
+      },
+      "invalid_bbox_ids": [
+        "6e88a986-f789-4bd1-8096-eca7671969eb",
+        "f535f715-7e62-4fda-93e0-f7ebc10aa010"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "Komodo Edit",
+      "annotation": "data/Komodo Edit/04f38a0ca0be346fae00a66630b9a246f98ec81f69d669333fb906b625a9784b.json",
+      "local_index": 23,
+      "image_path": "images/Komodo Edit/04f38a0ca0be346fae00a66630b9a246f98ec81f69d669333fb906b625a9784b.png",
+      "image_sha256": "ea2c273014fca0a314ae33fa58c84dc60c22f6acc2ad6d3f2a3953327d4a3746",
+      "pixel_sha256": "011bcc0f5cf2d8ead1343f767b7a148593d5751298f5c217833bc438dcd353b2",
+      "annotation_sha256": "5b0129fa681332e52f6d8cf637d68bf91da3b25a7632aecda19dd4e3ee7cfd76",
+      "size": [
+        1364,
+        722
+      ],
+      "category_counts": {
+        "": 34,
+        "Others": 2
+      },
+      "invalid_bbox_ids": [
+        "fe4ef046-6bba-4164-94e6-f6d26ca07ad5",
+        "cd952573-8df9-4fa2-b51d-9853844f7599",
+        "d4ffbb1e-0e98-4efe-8dab-3f60f643ad7b"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "LibreOffice Writer",
+      "annotation": "data/LibreOffice Writer/000455fd1b32e0e76e529196d651c13ebc9ddea2f5dc566f8988a7ce4befc04c.json",
+      "local_index": 24,
+      "image_path": "images/LibreOffice Writer/000455fd1b32e0e76e529196d651c13ebc9ddea2f5dc566f8988a7ce4befc04c.png",
+      "image_sha256": "905b1c88f09ca2eb264eacb158f5b837f0719c97e4bf8621d5b0b9b9d37d3724",
+      "pixel_sha256": "ab4b82b86247e3be6edd8c015c78a4e46b63d4bdffea6c720b2f9c524bfb35bd",
+      "annotation_sha256": "0b5b450e0720cfd352556ddf48df3cff6087b766770ba45f887bdeced9fc141f",
+      "size": [
+        1366,
+        722
+      ],
+      "category_counts": {
+        "": 74,
+        "Others": 2
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "LibreOffice Writer",
+      "annotation": "data/LibreOffice Writer/001a3c74ea41d0f31d0fd13377e25fa884ba836c89eb673c3852ee3e514bdee1.json",
+      "local_index": 25,
+      "image_path": "images/LibreOffice Writer/001a3c74ea41d0f31d0fd13377e25fa884ba836c89eb673c3852ee3e514bdee1.png",
+      "image_sha256": "9e0a46a4252a77011bca8f7629d8372e7bd078cffe3d4b32a7c2300e53667697",
+      "pixel_sha256": "f0be9a4438142539dfbae7b4153075651f423f9f3d52ee40d70ecf70dbe097b6",
+      "annotation_sha256": "884df6b644d727032bc1ad1ac27b351b37a6a5e114f477c9d02940859c1a4707",
+      "size": [
+        1366,
+        722
+      ],
+      "category_counts": {
+        "Input Elements": 3,
+        "Information Display": 17,
+        "Button": 47,
+        "Navigation": 4,
+        "Menu": 10,
+        "Visual Elements": 3
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "LibreOffice Writer",
+      "annotation": "data/LibreOffice Writer/00274f5f5beb4f300e625402bb54e410aea7713cc161b7e8a39aaf7bd615c5ad.json",
+      "local_index": 26,
+      "image_path": "images/LibreOffice Writer/00274f5f5beb4f300e625402bb54e410aea7713cc161b7e8a39aaf7bd615c5ad.png",
+      "image_sha256": "628364d51e7a7f0eac5295eb116a4e6a5b55771bcd0b70850c8ed6d7b7a7b4c2",
+      "pixel_sha256": "e4e5ece057b7c8545348e32ea5262dc64fa6bc2f33d45af8a3b02af2e7a4372f",
+      "annotation_sha256": "38d7d5724cf8bc496e8c0f85f5c37564e002e4e01c484b7ec117724694bde5df",
+      "size": [
+        1366,
+        722
+      ],
+      "category_counts": {
+        "": 2,
+        "Information Display": 21,
+        "Button": 71,
+        "Navigation": 3,
+        "Menu": 11,
+        "Input Elements": 9
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "LibreOffice Writer",
+      "annotation": "data/LibreOffice Writer/008d31901a8a420ed5eec582ccf62a231e8fd1ac5e0aa825ea654b620103a8a2.json",
+      "local_index": 27,
+      "image_path": "images/LibreOffice Writer/008d31901a8a420ed5eec582ccf62a231e8fd1ac5e0aa825ea654b620103a8a2.png",
+      "image_sha256": "c24768024958ab84127c7d3cc1f545dd4f918ae81d92a9b03adfe371367bd21e",
+      "pixel_sha256": "e81ee66551a87a6153fbaa221b12989e8e499a5997050ca49ba7e2867a4edcfe",
+      "annotation_sha256": "7f8d323e1b3d2bef40e1de90303e312fa6f5689150e4f1954b4b8026f14670b6",
+      "size": [
+        1366,
+        720
+      ],
+      "category_counts": {
+        "": 76,
+        "Others": 16
+      },
+      "invalid_bbox_ids": [
+        "99fd143f-e464-4927-9191-727f899ff79f"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "Joplin",
+      "annotation": "data/Joplin/00021a82365b17a9bdf1a1f3f2837f673401860a7753e4c6983aecda00091d5f.json",
+      "local_index": 28,
+      "image_path": "images/Joplin/00021a82365b17a9bdf1a1f3f2837f673401860a7753e4c6983aecda00091d5f.png",
+      "image_sha256": "222ccfe075e25fd9b99ae42c046dddeb7abbdf0d6504b54328de309012c8b3a5",
+      "pixel_sha256": "5c1503d0b80254e4474d471c8e0912a4101cac80c2b37cfe58774d7e4138f18b",
+      "annotation_sha256": "5aaf27d37e1508305ca8ba99f17c67f8c913cdc936953832749bc48fbfb3c399",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "": 34
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Joplin",
+      "annotation": "data/Joplin/008b6069c815e5bdbc9a53865a1030cca808807cc12c792f602f11624b796db1.json",
+      "local_index": 29,
+      "image_path": "images/Joplin/008b6069c815e5bdbc9a53865a1030cca808807cc12c792f602f11624b796db1.png",
+      "image_sha256": "95f53c111e08183034edf7022bbef91644c066ee34fc686cd4690a5d70e05860",
+      "pixel_sha256": "6c2893bdde60da56c7d1a5487774620b9bbe556530959a25529c47bc30d3de46",
+      "annotation_sha256": "c15d2f3564d2f3965151263e27540ec048567bb61d71e0129fdb7c58c490725e",
+      "size": [
+        1920,
+        1020
+      ],
+      "category_counts": {
+        "Navigation": 1,
+        "Information Display": 7,
+        "Button": 33,
+        "Input Elements": 1,
+        "Menu": 8,
+        "Visual Elements": 1
+      },
+      "invalid_bbox_ids": [
+        "f8d88d55-e3e2-47f7-86de-047dee61dd5b"
+      ]
+    },
+    {
+      "split": "train",
+      "app": "Joplin",
+      "annotation": "data/Joplin/008c9ca60736e3e7b34b5b464f7b8a509ffa458b4dfe3b0b4ab98d8f780039bf.json",
+      "local_index": 30,
+      "image_path": "images/Joplin/008c9ca60736e3e7b34b5b464f7b8a509ffa458b4dfe3b0b4ab98d8f780039bf.png",
+      "image_sha256": "d12e679d1a8b6d3e3372e0c41628613c3938abec44530c79e4cb3be86ff145bb",
+      "pixel_sha256": "e78dcbdeca378b70481efe217831050614f7bf173aa707123309cd26214330f1",
+      "annotation_sha256": "f95ee6069213620ff4e86fe43efe3565eedb43d4051be7e2a7bd9e34601116a2",
+      "size": [
+        1920,
+        1032
+      ],
+      "category_counts": {
+        "Input Elements": 30,
+        "Navigation": 3,
+        "Information Display": 14,
+        "Visual Elements": 1,
+        "Menu": 1,
+        "Button": 1,
+        "Others": 1
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "train",
+      "app": "Joplin",
+      "annotation": "data/Joplin/00a5ea33295fee0b6a13a70f26253f93d2537eb14c993d36761d8d3ff7480f0a.json",
+      "local_index": 31,
+      "image_path": "images/Joplin/00a5ea33295fee0b6a13a70f26253f93d2537eb14c993d36761d8d3ff7480f0a.png",
+      "image_sha256": "83145b32d6b0485e03ea3eca5cfa39bfbf7bf70ef06b06a7b6749b5806d9f334",
+      "pixel_sha256": "e243fb2fc1feab23a44636bfa7650b31a2cd1d054796014eee137bb7a15bb827",
+      "annotation_sha256": "560ad67d3b30b5ab30c73da83cabfa2b0d75b72ca6a0afe8ae16992efc23bc0b",
+      "size": [
+        1920,
+        1030
+      ],
+      "category_counts": {
+        "Navigation": 2,
+        "Information Display": 13,
+        "Input Elements": 8,
+        "Button": 10,
+        "Sidebar": 13,
+        "Menu": 2,
+        "Others": 1
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "QGIS",
+      "annotation": "data/QGIS/01297892b8e6d5a0be5df03ff0b0e7d7f32b95fc8210925ab05fb3dbe74a7cc8.json",
+      "local_index": 32,
+      "image_path": "images/QGIS/01297892b8e6d5a0be5df03ff0b0e7d7f32b95fc8210925ab05fb3dbe74a7cc8.png",
+      "image_sha256": "bca5e37ac44a9e3ab3a48e491715d0f996adf82091652392fed649abbfc708c4",
+      "pixel_sha256": "ededd24eaf42bd4a77162aaa6a0664eab2b5e6cdfccdb7bb3d687423a0f643d1",
+      "annotation_sha256": "5f88f55eba1bde4d6777d53fbffc31f4d185731f40ac6fe2f171d84b14a42087",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "Button": 80,
+        "Menu": 11,
+        "Navigation": 1,
+        "Information Display": 12,
+        "Input Elements": 6,
+        "Visual Elements": 3,
+        "": 1,
+        "Others": 2
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "QGIS",
+      "annotation": "data/QGIS/0161cc0e8b16e370e433ba937ff5d80e3f05fd2b567ccc1d3de148875d694ed2.json",
+      "local_index": 33,
+      "image_path": "images/QGIS/0161cc0e8b16e370e433ba937ff5d80e3f05fd2b567ccc1d3de148875d694ed2.png",
+      "image_sha256": "ce80bfb2034d83337969771e447791fe725f9b5716d780aee946b59c699ea007",
+      "pixel_sha256": "6e16621d03cf078d5b63ca3a7e8f83711698f8e9c3ba7173268a7bbb4bfe19b2",
+      "annotation_sha256": "dba73d6df8002be18b69095204c154d8461f1b9bb0b578ff89196e7731bbe675",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "Navigation": 2,
+        "Menu": 26,
+        "Button": 45,
+        "Information Display": 7,
+        "Input Elements": 3,
+        "Visual Elements": 2
+      },
+      "invalid_bbox_ids": [
+        "fd020c96-a67c-4ab6-a58b-e546c0b45415",
+        "d0a4d5c3-dd2b-44ba-9a3c-de45d5f4d036",
+        "7545c006-044a-4cd4-a30c-9e40e76ef155",
+        "3f2012a0-a7f1-4614-924b-ae9892dad1d5",
+        "f291a461-4ff2-43e2-a244-35822c417589",
+        "0f24a700-5996-47db-a139-01ac745ad907",
+        "157ae31e-0bfb-4642-8289-462e27d925ae",
+        "7ab2a86a-261b-4770-b4f1-77d68eaa3a62",
+        "07209f50-c3f5-4961-8a38-f2d80204d6db"
+      ]
+    },
+    {
+      "split": "validation",
+      "app": "QGIS",
+      "annotation": "data/QGIS/01cf1e9b3145601690b39e8ffe16a0b25c89affd5ab1ee82ef263be4ab274886.json",
+      "local_index": 34,
+      "image_path": "images/QGIS/01cf1e9b3145601690b39e8ffe16a0b25c89affd5ab1ee82ef263be4ab274886.png",
+      "image_sha256": "942a3d9f15bdcca3a7ac94f3354b82d7b0044dfc4a5308f48bbed5d52befa13a",
+      "pixel_sha256": "04908aa6a19274ae426190d71b0d59b03a9ae2a9139cc06c37191f9332f0d767",
+      "annotation_sha256": "3b4cda8415596bb4dbd61ce0d0a40acae26fee20937b6ca1a6aa4473e39e87e9",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "Input Elements": 7,
+        "Menu": 21,
+        "Button": 59,
+        "Information Display": 2,
+        "Navigation": 11
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "QGIS",
+      "annotation": "data/QGIS/02b815d8474de39b0d9d930835417b948643790296e4513a54b1a050ec01de57.json",
+      "local_index": 35,
+      "image_path": "images/QGIS/02b815d8474de39b0d9d930835417b948643790296e4513a54b1a050ec01de57.png",
+      "image_sha256": "6ebb8736e6d5af86da9094874209b9075c59f7df980747feeb42641657f238b5",
+      "pixel_sha256": "de4daace4778f9952003dbbb89980341a4abe0ba84e67f224ed6de4c4d6b473e",
+      "annotation_sha256": "1ffaa035523e0d281357159551515f828ce6e622df3e53f966b34ad1d8136d2f",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "": 120,
+        "Others": 1
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "VLC Media Player",
+      "annotation": "data/VLC Media Player/00f4fd1cb54f4d808884192539aa8208f8420b9b7ecf82c181270f35861446ab.json",
+      "local_index": 36,
+      "image_path": "images/VLC Media Player/00f4fd1cb54f4d808884192539aa8208f8420b9b7ecf82c181270f35861446ab.png",
+      "image_sha256": "946ec9777bdfee5e3c971ea1ec2ff1431ceca06865bab4ada35e7068066f82b1",
+      "pixel_sha256": "329ddef217b6d9e25fa1308cf81aebe84d6a37c2a325c9a239b8f94cf6a22837",
+      "annotation_sha256": "bf90895a5a9f6e3d942731eaff80ff1f8ae51659bee3e4373b8b73f62ca18ed4",
+      "size": [
+        1920,
+        1020
+      ],
+      "category_counts": {
+        "Navigation": 7,
+        "Button": 23,
+        "Information Display": 2,
+        "Input Elements": 2,
+        "Menu": 7,
+        "Visual Elements": 2
+      },
+      "invalid_bbox_ids": [
+        "eca6a8f9-dab3-4874-ad4f-9abf82268069",
+        "acb425e4-0df8-40d8-a285-70a055abbede",
+        "3cb400cc-5069-4c4e-b37a-43ecd187dd9f"
+      ]
+    },
+    {
+      "split": "validation",
+      "app": "VLC Media Player",
+      "annotation": "data/VLC Media Player/01a47483524a7b106963fa2516bf61cea20fc621c6315cf2c5376ac4c2bea863.json",
+      "local_index": 37,
+      "image_path": "images/VLC Media Player/01a47483524a7b106963fa2516bf61cea20fc621c6315cf2c5376ac4c2bea863.png",
+      "image_sha256": "dbc15388876dec1703e7d7763f9f0ea60b5b8baefbfe41a67f21d99c9c3da5fe",
+      "pixel_sha256": "7b0416744259dcc313c91a57da63b65f265997804a60d114f659d2e50b37579c",
+      "annotation_sha256": "6624c32fdf6aadc1de8381d1f23673c42dcb1940f883459cb3fb3841c9561253",
+      "size": [
+        1680,
+        1044
+      ],
+      "category_counts": {
+        "": 22,
+        "Others": 4
+      },
+      "invalid_bbox_ids": [
+        "8358f6bf-4c73-4a99-a5bb-47fee38e58a1"
+      ]
+    },
+    {
+      "split": "validation",
+      "app": "VLC Media Player",
+      "annotation": "data/VLC Media Player/01f3502dcc3a91a3fd2e44e02075df37b11df32602c5c552975e6a760598e4fe.json",
+      "local_index": 38,
+      "image_path": "images/VLC Media Player/01f3502dcc3a91a3fd2e44e02075df37b11df32602c5c552975e6a760598e4fe.png",
+      "image_sha256": "ffb092d4e1cb34773b9778323e591e7ee34fc8125a53788ee946e3b0531031d0",
+      "pixel_sha256": "41f8f68a86b9e6b526fa41978d1daa9b40d4da7d27d5727f591358c526e04fa2",
+      "annotation_sha256": "1b630a4c8a199e99c191ac9c90829b91e894118ba8aab0c5a2c72d25f5eaa51a",
+      "size": [
+        1366,
+        722
+      ],
+      "category_counts": {
+        "Navigation": 7,
+        "Information Display": 10,
+        "Button": 47,
+        "Visual Elements": 2,
+        "Menu": 12,
+        "Others": 1
+      },
+      "invalid_bbox_ids": [
+        "5f8de546-ca09-4e16-b77c-ff856428cfd7",
+        "921fb87e-2413-49d0-a677-fd723f5c9f16",
+        "e73a685a-1d59-4171-80de-4ecfe51e7fe0"
+      ]
+    },
+    {
+      "split": "validation",
+      "app": "VLC Media Player",
+      "annotation": "data/VLC Media Player/02170b2599e76105307072cd1f87b479c6b41e0546f389af6a15029bd6b59b83.json",
+      "local_index": 39,
+      "image_path": "images/VLC Media Player/02170b2599e76105307072cd1f87b479c6b41e0546f389af6a15029bd6b59b83.png",
+      "image_sha256": "5d99aac89f2a635eb3530d86b12b180aab7cfb1f3041c94495c1bfb5f1fb3ef8",
+      "pixel_sha256": "2f84c3cabd2c493b65775681196621ffb165a62a97e8f5754142e34cc499f2ab",
+      "annotation_sha256": "fc68d40effafe6a735c648b9c2c53e278452e73096d2c38ed8771bfd26839f1d",
+      "size": [
+        1280,
+        676
+      ],
+      "category_counts": {
+        "Menu": 7,
+        "Button": 24,
+        "Visual Elements": 2,
+        "Input Elements": 14,
+        "Navigation": 1,
+        "Information Display": 3
+      },
+      "invalid_bbox_ids": [
+        "ce9f3b3a-331e-42ba-a496-15a59fdd4695"
+      ]
+    },
+    {
+      "split": "validation",
+      "app": "KDevelop",
+      "annotation": "data/KDevelop/04ce2ba879fe5afad0000941d4ffef0619d6c3a5503c9fdf3d9c03963b3a6a55.json",
+      "local_index": 40,
+      "image_path": "images/KDevelop/04ce2ba879fe5afad0000941d4ffef0619d6c3a5503c9fdf3d9c03963b3a6a55.png",
+      "image_sha256": "b0419a5340c99020f4eb1920fe8f282489156a3c545aea827e0d585619edb57f",
+      "pixel_sha256": "20a7fcd936df7fdca66837205ab7988fe41e83ac7cf483341aee0e8cfb187c4a",
+      "annotation_sha256": "175ada6a1f8f78417c418062dbcdbfdf3d6f26823fafb0588421f0d644120048",
+      "size": [
+        1536,
+        810
+      ],
+      "category_counts": {
+        "": 2,
+        "Navigation": 1,
+        "Button": 12,
+        "Information Display": 3,
+        "Menu": 13
+      },
+      "invalid_bbox_ids": [
+        "85a80da4-78c3-4bb3-9eb1-9d87c6fef8e9"
+      ]
+    },
+    {
+      "split": "validation",
+      "app": "KDevelop",
+      "annotation": "data/KDevelop/05401f22acb9c4af7017c94f842651409bf5ffc8989eae233c3de6dea54934c9.json",
+      "local_index": 41,
+      "image_path": "images/KDevelop/05401f22acb9c4af7017c94f842651409bf5ffc8989eae233c3de6dea54934c9.png",
+      "image_sha256": "87acaf0d5b2daafc654d924b7c826113adbc54cd3ec423977c8477c26fd5a5fa",
+      "pixel_sha256": "1928552179ddb6c203bbd87a1ace1dd6c28eb2bbbe6f55cbc5c9b4764eeb7aa8",
+      "annotation_sha256": "e4e28802e4a4b62a404b587931ff4b1333a5b07531c2d40595baa28d5c0ca740",
+      "size": [
+        1520,
+        804
+      ],
+      "category_counts": {
+        "Navigation": 1,
+        "": 5,
+        "Button": 21,
+        "Input Elements": 2,
+        "Menu": 12,
+        "Information Display": 5
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "KDevelop",
+      "annotation": "data/KDevelop/07ca72400894e32b37e4b1c39a4d52c649492521feba13b95a2f457e17dc6bb4.json",
+      "local_index": 42,
+      "image_path": "images/KDevelop/07ca72400894e32b37e4b1c39a4d52c649492521feba13b95a2f457e17dc6bb4.png",
+      "image_sha256": "ce947248eadbae33c0f454262ba589fa8c23b8696fddacbf73cfc1efc482141f",
+      "pixel_sha256": "12d77e6b6e9395acecd2cdd291296e7c5ce586c5b43695beaa45d9ef5089d8c8",
+      "annotation_sha256": "cca62d26cafbe7c32ee4b74c71199a45007823b1be0e2463cc86dab456a7b2a4",
+      "size": [
+        1920,
+        1080
+      ],
+      "category_counts": {
+        "Menu": 19,
+        "Button": 8,
+        "Navigation": 8,
+        "Information Display": 2,
+        "Sidebar": 5,
+        "Visual Elements": 1,
+        "Input Elements": 1
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "KDevelop",
+      "annotation": "data/KDevelop/095bb66ae5883fa15aaae743efea5699d309965c02354ae83da84d7f5d9e992f.json",
+      "local_index": 43,
+      "image_path": "images/KDevelop/095bb66ae5883fa15aaae743efea5699d309965c02354ae83da84d7f5d9e992f.png",
+      "image_sha256": "ba44e3a555c7288f9b08c1c3b21d7a8f348b3be48a574be71b467a7a1effe1ee",
+      "pixel_sha256": "5141ee5e52fbaea4c9da5b98decf01d32c6c8c75b146e3755eb81fbd59b7879c",
+      "annotation_sha256": "0d4c0bb94fb49b987d09a643d6fed6dfa758f7c1db0cb6889c4ac8630f4345d8",
+      "size": [
+        1918,
+        1016
+      ],
+      "category_counts": {
+        "": 44,
+        "Others": 5
+      },
+      "invalid_bbox_ids": [
+        "5edf8b75-5ea1-4efe-94aa-80bd684b96a5"
+      ]
+    },
+    {
+      "split": "validation",
+      "app": "Matrix",
+      "annotation": "data/Matrix/00f2aabc13ae39a19cb54ed1eb8d2cb4a2d29d22ffcee28d797889ea1c3fcfec.json",
+      "local_index": 44,
+      "image_path": "images/Matrix/00f2aabc13ae39a19cb54ed1eb8d2cb4a2d29d22ffcee28d797889ea1c3fcfec.png",
+      "image_sha256": "ee39434aec7fd2904dc8937d6b7d34bb5e079c3aea379b2668751747333bf339",
+      "pixel_sha256": "db06c6a305cf8a211839196ac7da4511ea5c9925f3c2654bcc3fef8b2c2fd809",
+      "annotation_sha256": "493106a9df0e39567a8c78b7e30709c4469b9a39101dd9c2ebe516456e0f3ddb",
+      "size": [
+        1366,
+        690
+      ],
+      "category_counts": {
+        "": 41,
+        "Others": 2
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "Matrix",
+      "annotation": "data/Matrix/01efb6112aa78f5247e736f1876575e483576f9c7fc04c4bf4abe8653d423bbe.json",
+      "local_index": 45,
+      "image_path": "images/Matrix/01efb6112aa78f5247e736f1876575e483576f9c7fc04c4bf4abe8653d423bbe.png",
+      "image_sha256": "51d136e765ff5b848c318a9ea00a4d95fff81d8b483b057f1746f7f0f83c8077",
+      "pixel_sha256": "9eaf639ea0a3ed2c67596edb67a69cce2bb1e0bbf5ded6ae8f3a3a7c8459bacf",
+      "annotation_sha256": "07cfebc40390cdb36e46d1863e46c782cfeb67e843067d6e17b0333fb19379f9",
+      "size": [
+        1366,
+        768
+      ],
+      "category_counts": {
+        "Input Elements": 17,
+        "Information Display": 2,
+        "Others": 15,
+        "Navigation": 12,
+        "Visual Elements": 2
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "Matrix",
+      "annotation": "data/Matrix/02086e5c4c685e3175b00637fa1c626fca68294ee525adacea491e7bf358b107.json",
+      "local_index": 46,
+      "image_path": "images/Matrix/02086e5c4c685e3175b00637fa1c626fca68294ee525adacea491e7bf358b107.png",
+      "image_sha256": "4d61eed4c28b3f2a32165a8c76282ddd1fb31fdcfe835f0935724d97f6a5a9ad",
+      "pixel_sha256": "694e1ab1ceb02ce7a46d41d00967230741037563280129b50f10eda0b3715998",
+      "annotation_sha256": "fbfa33cc7b1aa7cb203991ef5b32aee7d8989eddf91ec8160776b81ba0357c95",
+      "size": [
+        1920,
+        942
+      ],
+      "category_counts": {
+        "Input Elements": 7,
+        "Navigation": 16,
+        "Button": 10,
+        "Information Display": 11,
+        "Sidebar": 2
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "split": "validation",
+      "app": "Matrix",
+      "annotation": "data/Matrix/022ce630b5d431636270935f9f992ade63f2161a512c1e223f00c77f8e6deb50.json",
+      "local_index": 47,
+      "image_path": "images/Matrix/022ce630b5d431636270935f9f992ade63f2161a512c1e223f00c77f8e6deb50.png",
+      "image_sha256": "bedbfe405323af43bcd1ac1bf3895a5388e5d40fc7ff086ad66827880e59064b",
+      "pixel_sha256": "183f3fd0b239bb73609d75c52443357752c80e629741e8243fb375a1ce5c2083",
+      "annotation_sha256": "2c91dfb257c1a78a26588b9e28b590a143591b13d950e884ae23f77dfbe0c362",
+      "size": [
+        1366,
+        768
+      ],
+      "category_counts": {
+        "Button": 32,
+        "Information Display": 4,
+        "Input Elements": 8,
+        "Visual Elements": 1,
+        "Menu": 1,
+        "Navigation": 1
+      },
+      "invalid_bbox_ids": []
+    }
+  ],
+  "exact_cross_split_pixel_overlap": 0,
+  "selection_sha256": "af93e3bfa1cf9115ea0195603270eddeaee48ca6fb873a23068fe4b30cf95385"
+}

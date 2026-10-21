@@ -1,0 +1,24 @@
+{
+  "status": "PASS_LOCAL_UNTIED_OUTPUT_LOAD_SMOKE_NOT_QUALITY",
+  "parameters": 76961152,
+  "input_embeddings_shared": true,
+  "output_embedding_untied": true,
+  "scale_decoder_outputs": false,
+  "checkpoint_tensors_exact": true,
+  "repeat_exact": true,
+  "reload_exact": true,
+  "logit_shape": [
+    2,
+    1,
+    32128
+  ],
+  "seconds": 1.5588437999831513,
+  "device": "cpu",
+  "dtype": "float32",
+  "torch": "2.6.0+cu124",
+  "script_sha256": "6286765156f246f915604e7260e62699f52477a2f4b7c94776f34d87f191658f",
+  "top_tokens": [
+    "no",
+    "2"
+  ]
+}

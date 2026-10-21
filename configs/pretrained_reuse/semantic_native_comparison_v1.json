@@ -1,0 +1,27 @@
+{
+  "id": "deberta-fixed-semantic-native-comparison-v1",
+  "artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2",
+  "images": 256,
+  "smoke_images": 2,
+  "protocol_path": "docs/pretrained_reuse/R2_SEMANTIC_NATIVE_COMPARISON_PROTOCOL_20261015.md",
+  "probe_score_absolute_tolerance": 1e-05,
+  "max_seconds": 7200,
+  "max_host_bytes": 12884901888,
+  "max_vram_bytes": 15032385536,
+  "max_output_bytes": 536870912,
+  "min_free_disk_bytes": 4294967296,
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\decision-semantic-fit-01\\result.json": "6994298f92aea987dda2c4c11922dcda6447432ef7c5c661de2749b205bc28df",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\decision-semantic-selected-replay-01\\result.json": "2e8a8e5cc82e92849484c91064dc716bffe083078a461d0446927adf0d5541f6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\decision-semantic-independent-verification-01.json": "bf5601f7fa6874bd82ca871e3c153e6e0a0987e0d928266802dfa38597a8bf50",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-bridge-admission-01.json": "475c51a1dd50a49c1957b4801f909a444da412188b160c75489bc519752ecb58",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-bridge-state-check-01.json": "df21558e048f2d0f9c3b54245938330db297e355a3071d85dd6053ef36f7fbbc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-control-inputs-01.json": "e4eb078fd7c0219e835e8d7423cedbfe1ac484ac2c54fb3476197f051fe7da9f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-state-bridge-01\\result.json": "e497e1139b6ee7660f620f1f1d93bef7c1d502e01327d1e778990123a47a56ea",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-state-bridge-01\\selection.json": "8a7ac8d6513c48d198d14c4be345d1081f4e1b9be7ff573fa23adf49c44a4b76",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-state-bridge-01\\states.json": "e7e7bc2c90ac815279df0f7b772cffa9330d3db5d61ca0a32bc65f66f2d6ea5e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-state-bridge-01\\targets.npy": "fc4756dfb5325c799b1394e74ffd9742fa6e9e6ee5f2d2cb389498e758e7b04f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-state-bridge-01\\native-logits.npy": "57d1be2f6dffbfc28b937ce8f0ca7ca11935dfb75ad8777f828b6a3dc07c63ee",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-state-bridge-01\\effective-config.json": "00ddadcfd175c4fa4ab8ec3f18a189950d865efae52f13f9d372b88e036680a4"
+  }
+}

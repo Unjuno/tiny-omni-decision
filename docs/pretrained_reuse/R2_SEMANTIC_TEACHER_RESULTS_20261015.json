@@ -1,0 +1,600 @@
+{
+  "status": "PASS_EXECUTION_TEACHER_NOT_ADMITTED",
+  "teacher_screen_pass": false,
+  "product_complete": false,
+  "student_training_started": false,
+  "source_commit": "1c05f29ea10a8798a3b3ca879a4987759d86866d",
+  "config": {
+    "experiment_id": "gemma4-semantic-teacher-train-probe-v1",
+    "model_id": "google/gemma-4-E2B-it-qat-q4_0-unquantized",
+    "revision": "6befbaca7398925921802abd1f277b495b78b738",
+    "model_path": "C:/Users/junny/.cache/huggingface/hub/models--google--gemma-4-E2B-it-qat-q4_0-unquantized/snapshots/6befbaca7398925921802abd1f277b495b78b738",
+    "model_weight_sha256": "33fe0cece08fb527ffefbd1a3a9ce73bd71073727993a283506293e5c6bf0137",
+    "train_files": {
+      "C:/CodexArtifacts/pretrained-reuse-r2/condition-binding-corpus-01/train.jsonl": "1c560d88082070f8fec6102278b2f914260ef771ea55a05aeff5846e9147c223",
+      "C:/CodexArtifacts/pretrained-reuse-r2/conditional-curriculum-01/train.jsonl": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe"
+    },
+    "groups_per_source": 32,
+    "seed": 17,
+    "batch_size": 1,
+    "dtype": "bfloat16",
+    "attention": "sdpa_math",
+    "windows_loader": "process_local_safe_open_pread",
+    "enable_thinking": false,
+    "temperature": 1.0,
+    "max_sequence_length": 2048,
+    "max_seconds": 2400,
+    "max_vram_bytes": 16106127360,
+    "max_host_bytes": 25769803776,
+    "min_free_disk_bytes": 8589934592,
+    "max_output_bytes": 67108864,
+    "replay_atol": 1e-05,
+    "teacher_screen_accuracy_floor": 0.95,
+    "teacher_screen_ece_ceiling": 0.1,
+    "reversal_agreement_floor": 0.99,
+    "scope": "TRAIN-side prerequisite only; no student fit, native modality quality, blind audit or product adoption"
+  },
+  "input_pins": {
+    "C:/CodexArtifacts/pretrained-reuse-r2/condition-binding-corpus-01/train.jsonl": "1c560d88082070f8fec6102278b2f914260ef771ea55a05aeff5846e9147c223",
+    "C:/CodexArtifacts/pretrained-reuse-r2/conditional-curriculum-01/train.jsonl": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-teacher-corpus-04\\rows.json": "8b674f8cda7ac74e34aaf643bae2d40b6e534b2b1fd980fb3d8cacc1411229a2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-teacher-corpus-04\\tokens.json": "210dd1c7f11f6e2a22885bf15f5ea2c2a5856955fbc613f1d8bacfa1eac496a6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-teacher-corpus-04\\result.json": "73ef542fccf9d82388a008a5b9c9402b3886ea7424d4dd3c4ed3585ff7b97cde"
+  },
+  "code_pins": {
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\configs\\pretrained_reuse\\semantic_teacher_probe_v1.json": "68b864cc393a46260693b5249494cbc9972a8cc2036af9a749b3645c1845b479",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\evaluate_semantic_teacher.py": "4eaf76467ff53dc98b6db0d0ff36fa8a249ceb109273e3d1ee730e263776c7a7",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\semantic_teacher_probe.py": "92590835ff02cd563935b3b3ffc43fea46e47ab97cf32cca603cc9d7e323c0e5",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\build_conditional_curriculum.py": "bacdca8834c7fbaaa5f817f00c7a95c936890877952d30ef5599e569bcef62de",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_binding_corpus.py": "adf77f03c3328b3191dfaaef89b09910d9dfceb9562caeb7ce63291f9d8dd787",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\semantic_state_diagnostic.py": "2185c2685c72ce88c8f759fb91c7e6ca74b90735f66a2efd61bd691b45a594b7",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\evaluate_semantic_state_bridge.py": "b831fcdb8b29314b3370e50f8b1c0135653955d6a15d2c9b21c4cf1c371e7f09",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\decision_math.py": "03061b7733a399901e0092c9312b624b21388b1a7d7a591f8b27bcd5090c7073",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\dataset.py": "995cee33352f58f9dd927fdabbc74491abc0ee02aab7221a1700025bfc71893a",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\tests\\test_semantic_teacher_probe.py": "28614715d9a70712e4cc91efc324eeee14bd5878c7d721e39d2bf28ff29fc78c",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\docs\\pretrained_reuse\\R2_SEMANTIC_TEACHER_PROTOCOL_20261015.md": "fcf2a04c4dc927d74f3ccb05fd54455315c8693142e76351d794a6898009770c"
+  },
+  "model_pins": {
+    "C:\\Users\\junny\\.cache\\huggingface\\hub\\models--google--gemma-4-E2B-it-qat-q4_0-unquantized\\snapshots\\6befbaca7398925921802abd1f277b495b78b738\\chat_template.jinja": "0a2c8073c878ab1da004bee933a998606537bbb62016310352c7285c3f01c5b5",
+    "C:\\Users\\junny\\.cache\\huggingface\\hub\\models--google--gemma-4-E2B-it-qat-q4_0-unquantized\\snapshots\\6befbaca7398925921802abd1f277b495b78b738\\config.json": "bbeff1e2fd3fe282536e7ace02309d43e0dbd9b6ac4b6a149b97e3ab6942a878",
+    "C:\\Users\\junny\\.cache\\huggingface\\hub\\models--google--gemma-4-E2B-it-qat-q4_0-unquantized\\snapshots\\6befbaca7398925921802abd1f277b495b78b738\\generation_config.json": "b69207f9be617e982d13cc273cce6fd88c98dda99a4bdc5e2d52ffe0a0d9f0a9",
+    "C:\\Users\\junny\\.cache\\huggingface\\hub\\models--google--gemma-4-E2B-it-qat-q4_0-unquantized\\snapshots\\6befbaca7398925921802abd1f277b495b78b738\\model.safetensors": "33fe0cece08fb527ffefbd1a3a9ce73bd71073727993a283506293e5c6bf0137",
+    "C:\\Users\\junny\\.cache\\huggingface\\hub\\models--google--gemma-4-E2B-it-qat-q4_0-unquantized\\snapshots\\6befbaca7398925921802abd1f277b495b78b738\\processor_config.json": "32bdf45d2ad4cc29a0822ddd157a182de76644f0419a6228d151495256e9813c",
+    "C:\\Users\\junny\\.cache\\huggingface\\hub\\models--google--gemma-4-E2B-it-qat-q4_0-unquantized\\snapshots\\6befbaca7398925921802abd1f277b495b78b738\\tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+    "C:\\Users\\junny\\.cache\\huggingface\\hub\\models--google--gemma-4-E2B-it-qat-q4_0-unquantized\\snapshots\\6befbaca7398925921802abd1f277b495b78b738\\tokenizer_config.json": "3ab5c7b94dc97d65ca7064496fa69b88ff875378e1cb7ee3e43070c3a8170999"
+  },
+  "environment": {
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "cuda": "12.4",
+    "packages": {
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.22.2",
+      "numpy": "2.4.6",
+      "psutil": "7.2.2"
+    },
+    "platform": "win32",
+    "disk_free_bytes": 13307863040,
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU, 16384 MiB, 0 MiB, 616.92"
+  },
+  "metrics": {
+    "conditions": {
+      "binding/direct": {
+        "overall": {
+          "count": 128,
+          "accuracy": 0.984375,
+          "nll": 0.05552740898374197,
+          "brier": 0.020229680097173564,
+          "ece": 0.04565899222340597,
+          "mean_confidence": 0.9577105218880873
+        },
+        "tasks": {
+          "color": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.0010454272130071287,
+            "brier": 3.9501157234140094e-06,
+            "ece": 0.0010440635000332835,
+            "mean_confidence": 0.9989559364999667
+          },
+          "count": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.058678389665667074,
+            "brier": 0.008678776643751503,
+            "ece": 0.05482510416127477,
+            "mean_confidence": 0.9451748958387253
+          },
+          "shape": {
+            "count": 32,
+            "accuracy": 0.9375,
+            "nll": 0.15217484045659668,
+            "brier": 0.07116877419637731,
+            "ece": 0.11701245997725279,
+            "mean_confidence": 0.89646559646872
+          },
+          "texture": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.010210978599696918,
+            "brier": 0.0010672194328420097,
+            "ece": 0.009754341255063026,
+            "mean_confidence": 0.990245658744937
+          }
+        },
+        "macro": {
+          "accuracy": 0.984375,
+          "nll": 0.05552740898374195,
+          "brier": 0.020229680097173557,
+          "ece": 0.04565899222340597
+        },
+        "pair_count": 192,
+        "pair_both_correct": 0.96875
+      },
+      "binding/exclusion": {
+        "overall": {
+          "count": 128,
+          "accuracy": 0.8125,
+          "nll": 0.7228470715891094,
+          "brier": 0.2956126045331674,
+          "ece": 0.05971299177324244,
+          "mean_confidence": 0.8315784230734958
+        },
+        "tasks": {
+          "color": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.06142922981889649,
+            "brier": 0.012927218607112904,
+            "ece": 0.056697159472420586,
+            "mean_confidence": 0.9433028405275795
+          },
+          "count": {
+            "count": 32,
+            "accuracy": 0.78125,
+            "nll": 0.7185708498529177,
+            "brier": 0.3501706773505002,
+            "ece": 0.1794766106137619,
+            "mean_confidence": 0.7414020719633627
+          },
+          "shape": {
+            "count": 32,
+            "accuracy": 0.75,
+            "nll": 1.1809980179602935,
+            "brier": 0.41291235313037805,
+            "ece": 0.12827268327885225,
+            "mean_confidence": 0.8554376428798931
+          },
+          "texture": {
+            "count": 32,
+            "accuracy": 0.71875,
+            "nll": 0.9303901887243308,
+            "brier": 0.4064401690446781,
+            "ece": 0.1865467708620505,
+            "mean_confidence": 0.786171136923148
+          }
+        },
+        "macro": {
+          "accuracy": 0.8125,
+          "nll": 0.7228470715891097,
+          "brier": 0.29561260453316734,
+          "ece": 0.13774830605677132
+        },
+        "pair_count": 192,
+        "pair_both_correct": 0.6458333333333334
+      },
+      "binding/switched": {
+        "overall": {
+          "count": 128,
+          "accuracy": 0.984375,
+          "nll": 0.04820575899974605,
+          "brier": 0.0166308140327789,
+          "ece": 0.039876446147796646,
+          "mean_confidence": 0.9632146945641435
+        },
+        "tasks": {
+          "color": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.0012610467130185034,
+            "brier": 1.0031311662359878e-05,
+            "ece": 0.0012579915208286094,
+            "mean_confidence": 0.9987420084791714
+          },
+          "count": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.06330015912049818,
+            "brier": 0.00943581266186192,
+            "ece": 0.05928899259494326,
+            "mean_confidence": 0.9407110074050568
+          },
+          "shape": {
+            "count": 32,
+            "accuracy": 0.9375,
+            "nll": 0.11415106443661478,
+            "brier": 0.0546340682253599,
+            "ece": 0.08602848907290889,
+            "mean_confidence": 0.9263360737748518
+          },
+          "texture": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.014110765728852859,
+            "brier": 0.002443343932231465,
+            "ece": 0.012930311402505834,
+            "mean_confidence": 0.9870696885974942
+          }
+        },
+        "macro": {
+          "accuracy": 0.984375,
+          "nll": 0.048205758999746086,
+          "brier": 0.01663081403277891,
+          "ece": 0.039876446147796646
+        },
+        "pair_count": 192,
+        "pair_both_correct": 0.96875
+      },
+      "binding/reverse_exclusion": {
+        "overall": {
+          "count": 128,
+          "accuracy": 0.4296875,
+          "nll": 2.4773746710754367,
+          "brier": 0.9104679602442485,
+          "ece": 0.41104985231173496,
+          "mean_confidence": 0.8313565371522078
+        },
+        "tasks": {
+          "color": {
+            "count": 32,
+            "accuracy": 0.53125,
+            "nll": 2.353556240672812,
+            "brier": 0.7948895351597223,
+            "ece": 0.41979520692275923,
+            "mean_confidence": 0.841583471817533
+          },
+          "count": {
+            "count": 32,
+            "accuracy": 0.0625,
+            "nll": 4.047912405104476,
+            "brier": 1.491533039218817,
+            "ece": 0.7655700533883475,
+            "mean_confidence": 0.8016048409517869
+          },
+          "shape": {
+            "count": 32,
+            "accuracy": 0.8125,
+            "nll": 0.4361686658920833,
+            "brier": 0.20069526278679387,
+            "ece": 0.1369272776849635,
+            "mean_confidence": 0.8775088818946593
+          },
+          "texture": {
+            "count": 32,
+            "accuracy": 0.3125,
+            "nll": 3.0718613726323767,
+            "brier": 1.1547540038116617,
+            "ece": 0.554960926725879,
+            "mean_confidence": 0.8047289539448521
+          }
+        },
+        "macro": {
+          "accuracy": 0.4296875,
+          "nll": 2.477374671075437,
+          "brier": 0.9104679602442487,
+          "ece": 0.4693133661804873
+        },
+        "pair_count": 192,
+        "pair_both_correct": 0.15625
+      },
+      "binding/no_question": {
+        "overall": {
+          "count": 128,
+          "accuracy": 0.25,
+          "nll": 5.63270610065289,
+          "brier": 1.3949666949523956,
+          "ece": 0.6796623867007134,
+          "mean_confidence": 0.9296623867007132
+        },
+        "tasks": {
+          "color": {
+            "count": 32,
+            "accuracy": 1.0,
+            "nll": 0.07704203815288815,
+            "brier": 0.018156830714182264,
+            "ece": 0.07033761329928676,
+            "mean_confidence": 0.9296623867007132
+          },
+          "count": {
+            "count": 32,
+            "accuracy": 0.0,
+            "nll": 8.61219828815289,
+            "brier": 1.8761937355405975,
+            "ece": 0.9296623867007131,
+            "mean_confidence": 0.9296623867007132
+          },
+          "shape": {
+            "count": 32,
+            "accuracy": 0.0,
+            "nll": 7.662979538152889,
+            "brier": 1.86684086890925,
+            "ece": 0.9296623867007131,
+            "mean_confidence": 0.9296623867007132
+          },
+          "texture": {
+            "count": 32,
+            "accuracy": 0.0,
+            "nll": 6.178604538152889,
+            "brier": 1.818675344645554,
+            "ece": 0.9296623867007131,
+            "mean_confidence": 0.9296623867007132
+          }
+        },
+        "macro": {
+          "accuracy": 0.25,
+          "nll": 5.632706100652889,
+          "brier": 1.3949666949523958,
+          "ece": 0.7148311933503565
+        },
+        "pair_count": 192,
+        "pair_both_correct": 0.0
+      },
+      "numeric/original": {
+        "overall": {
+          "count": 256,
+          "accuracy": 0.546875,
+          "nll": 1.354481535783548,
+          "brier": 0.6762795144653694,
+          "ece": 0.23650327288467277,
+          "mean_confidence": 0.7785817374120566
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 32,
+            "accuracy": 0.5,
+            "nll": 1.569732551613291,
+            "brier": 0.7078167808524253,
+            "ece": 0.2315458028509374,
+            "mean_confidence": 0.6033838700063086
+          },
+          "count": {
+            "count": 32,
+            "accuracy": 0.3125,
+            "nll": 2.1957799345632654,
+            "brier": 1.0124359186767589,
+            "ece": 0.3983966722991152,
+            "mean_confidence": 0.7108966722991151
+          },
+          "extremum": {
+            "count": 128,
+            "accuracy": 0.6171875,
+            "nll": 1.135465034283038,
+            "brier": 0.5805192621745555,
+            "ece": 0.2180040614937961,
+            "mean_confidence": 0.8316991868333323
+          },
+          "temporal_order": {
+            "count": 64,
+            "accuracy": 0.546875,
+            "nll": 1.2642398314798344,
+            "brier": 0.6839531837477721,
+            "ece": 0.29695048455933687,
+            "mean_confidence": 0.7937883048288502
+          }
+        },
+        "macro": {
+          "accuracy": 0.494140625,
+          "nll": 1.541304337984857,
+          "brier": 0.7461812863628781,
+          "ece": 0.2862242553007964
+        },
+        "pair_count": 738,
+        "pair_both_correct": 0.28319783197831977
+      },
+      "numeric/reverse": {
+        "overall": {
+          "count": 256,
+          "accuracy": 0.53515625,
+          "nll": 1.380628784235355,
+          "brier": 0.6815950787457967,
+          "ece": 0.2427638254458716,
+          "mean_confidence": 0.7746754705767533
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 32,
+            "accuracy": 0.40625,
+            "nll": 1.9287090054293936,
+            "brier": 0.8830142598376071,
+            "ece": 0.3516765609275588,
+            "mean_confidence": 0.6372598833003467
+          },
+          "count": {
+            "count": 32,
+            "accuracy": 0.3125,
+            "nll": 2.1284136739869655,
+            "brier": 1.0012905656893478,
+            "ece": 0.42280362962629564,
+            "mean_confidence": 0.6981877612109998
+          },
+          "extremum": {
+            "count": 128,
+            "accuracy": 0.6484375,
+            "nll": 1.0154807613460923,
+            "brier": 0.5193294794553525,
+            "ece": 0.18219001752483896,
+            "mean_confidence": 0.8211783631018719
+          },
+          "temporal_order": {
+            "count": 64,
+            "accuracy": 0.484375,
+            "nll": 1.4629922745410548,
+            "brier": 0.7455689433090043,
+            "ece": 0.3492211978496243,
+            "mean_confidence": 0.7886213338475969
+          }
+        },
+        "macro": {
+          "accuracy": 0.462890625,
+          "nll": 1.6338989288258765,
+          "brier": 0.7873008120728279,
+          "ece": 0.32647285148207944
+        },
+        "pair_count": 738,
+        "pair_both_correct": 0.27100271002710025
+      }
+    },
+    "reversal": {
+      "binding": {
+        "count": 128,
+        "answer_agreement": 0.4140625,
+        "maximum_probability_difference": 0.9929336829015804
+      },
+      "numeric": {
+        "count": 256,
+        "answer_agreement": 0.51953125,
+        "maximum_probability_difference": 0.9700294414217313
+      }
+    }
+  },
+  "allowed_label_mass": {
+    "binding/direct": {
+      "minimum": 0.9956974983215332,
+      "median": 0.9996772110462189,
+      "mean": 0.9994497084990144
+    },
+    "binding/exclusion": {
+      "minimum": 0.9088343977928162,
+      "median": 0.9987911581993103,
+      "mean": 0.9965675775893033
+    },
+    "binding/switched": {
+      "minimum": 0.9914416670799255,
+      "median": 0.9997366368770599,
+      "mean": 0.9994388255290687
+    },
+    "binding/reverse_exclusion": {
+      "minimum": 0.9591471552848816,
+      "median": 0.9991431534290314,
+      "mean": 0.9980397252365947
+    },
+    "binding/no_question": {
+      "minimum": 0.9991196393966675,
+      "median": 0.9996702373027802,
+      "mean": 0.9996132515370846
+    },
+    "numeric/original": {
+      "minimum": 0.704253077507019,
+      "median": 0.9875515699386597,
+      "mean": 0.9696238501928747
+    },
+    "numeric/reverse": {
+      "minimum": 0.6500453948974609,
+      "median": 0.9887477457523346,
+      "mean": 0.9722513169981539
+    }
+  },
+  "train_screen_eligible_by_task": {
+    "binding/direct": {
+      "color": true,
+      "count": true,
+      "shape": false,
+      "texture": true
+    },
+    "binding/exclusion": {
+      "color": true,
+      "count": false,
+      "shape": false,
+      "texture": false
+    },
+    "binding/switched": {
+      "color": true,
+      "count": true,
+      "shape": false,
+      "texture": true
+    },
+    "numeric/original": {
+      "conditional_selection": false,
+      "count": false,
+      "extremum": false,
+      "temporal_order": false
+    }
+  },
+  "reversal_pass": {
+    "binding": false,
+    "numeric": false
+  },
+  "paired_reversal": {
+    "binding": {
+      "unit": "TRAIN source-qualified state",
+      "groups": 32,
+      "draws": 10000,
+      "seed": 17,
+      "estimand": "reversed minus original Accuracy",
+      "point": -0.3828125,
+      "percentile95": [
+        -0.4609375,
+        -0.296875
+      ],
+      "blind_evaluation": false
+    },
+    "numeric": {
+      "unit": "TRAIN source-qualified state",
+      "groups": 32,
+      "draws": 10000,
+      "seed": 17,
+      "estimand": "reversed minus original Accuracy",
+      "point": -0.01171875,
+      "percentile95": [
+        -0.09375,
+        0.07421875
+      ],
+      "blind_evaluation": false
+    }
+  },
+  "replay_rows": 36,
+  "replay_exact": true,
+  "no_question_equal_quartets": 32,
+  "total_parameters": 5104297504,
+  "trainable_parameters": 0,
+  "full_start_utc": "2026-10-15T06:48:20.617198+00:00",
+  "full_end_utc": "2026-10-15T06:52:00.071986+00:00",
+  "resources": {
+    "semantic-teacher-corpus-04": {
+      "elapsed_seconds": 42.01197899999897,
+      "load_seconds": null,
+      "inference_seconds": null,
+      "peak_vram_bytes": null,
+      "peak_host_bytes": 1000026112
+    },
+    "semantic-teacher-smoke-01": {
+      "elapsed_seconds": 41.475429899997835,
+      "load_seconds": 9.818069500001002,
+      "inference_seconds": 6.420471599998564,
+      "peak_vram_bytes": 10366723584,
+      "peak_host_bytes": 11988971520
+    },
+    "semantic-teacher-full-01": {
+      "elapsed_seconds": 219.45987070000047,
+      "load_seconds": 8.778075599999283,
+      "inference_seconds": 185.40280599999824,
+      "peak_vram_bytes": 10367032320,
+      "peak_host_bytes": 11186249728
+    },
+    "semantic-teacher-replay-01": {
+      "elapsed_seconds": 41.292989900000975,
+      "load_seconds": 9.454336799994053,
+      "inference_seconds": 6.104951399996935,
+      "peak_vram_bytes": 10366723584,
+      "peak_host_bytes": 12001640448
+    }
+  },
+  "run_manifest_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-teacher-corpus-04\\result.json": "73ef542fccf9d82388a008a5b9c9402b3886ea7424d4dd3c4ed3585ff7b97cde",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-teacher-smoke-01\\result.json": "182587a9a45057393f863b8cee93553f00ca138b8c6fa6648fcf4a2cc98641f4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-teacher-full-01\\result.json": "94d28aec4f15a05a09275aa1c30ee540428c20fa8deda31769435029655016ac",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-teacher-replay-01\\result.json": "9b77592d4ad03d0732474f4942d307836464b16d2e3d0f3996fde2d9d2d42c6f"
+  },
+  "cloud_cost": 0
+}

@@ -1,0 +1,43 @@
+{
+  "status": "PASS_PLUMBING_ONLY",
+  "parameters": 22713601,
+  "added_parameters": 0,
+  "repeated_logits_exact": true,
+  "warm_batch_seconds": 0.007153899990953505,
+  "peak_vram_bytes": 102366208,
+  "lengths": [
+    71,
+    78
+  ],
+  "truncation": [
+    {
+      "state_tokens": 51,
+      "kept_state_tokens": 51,
+      "state_truncated": false
+    },
+    {
+      "state_tokens": 51,
+      "kept_state_tokens": 51,
+      "state_truncated": false
+    }
+  ],
+  "responses": [
+    {
+      "question_0": {
+        "A": 0.479381799697876,
+        "B": 0.5206181406974792
+      }
+    },
+    {
+      "question_1": {
+        "A": 0.33566659688949585,
+        "B": 0.327311635017395,
+        "C": 0.3370217978954315
+      }
+    }
+  ],
+  "training": false,
+  "quality_claim": false,
+  "source_delta_sha256": "b063f124e59c8a4c1b09c7bf2a8423846f73489d7ce8cd6649735745bc6cebf5",
+  "runner_sha256": "c57e4eb0991b5c3e5a5db21a405e2447e2e9615f043d6b7070f35feb871a5746"
+}

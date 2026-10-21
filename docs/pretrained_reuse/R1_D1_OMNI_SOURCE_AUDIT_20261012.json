@@ -1,0 +1,68 @@
+{
+  "parameter_audit": {
+    "revision": "02b55d7076f15129e59ab3f94783f32c4b088674",
+    "header_sha256": "f458399741ff996722a31d8293e2231f6e7426caae77c61380c44a28649c0250",
+    "header_bytes": 130000,
+    "parameters_by_prefix": {
+      "audio": 112194065,
+      "encoder": 354483968,
+      "head": 26248193,
+      "vision": 94234880
+    },
+    "total_parameters": 587161106,
+    "method": "pinned safetensors header shapes; no tensor payload downloaded or model loaded"
+  },
+  "source_manifest": {
+    "revision": "02b55d7076f15129e59ab3f94783f32c4b088674",
+    "files": {
+      "config.json": {
+        "bytes": 1993,
+        "sha256": "dfccae241822f81752426629c88c8b8d7efdd03dd19418b6645c604fad43d619"
+      },
+      "README.md": {
+        "bytes": 10384,
+        "sha256": "6577bee7b8cb23b595a90e99aa82007f57214d447f0ebcdfb2e812a7123d57bf"
+      },
+      "LICENSE": {
+        "bytes": 10572,
+        "sha256": "9953509cbd8c1c6ce7b06ddf74fcc204a892692316201dd8f7400a84790d4120"
+      },
+      "modeling_d1.py": {
+        "bytes": 8655,
+        "sha256": "2b71a5c909ec5d3aa6307378a41a0fd24af1e17d5c1c1f8d510582147051a686"
+      },
+      "encoder.py": {
+        "bytes": 7732,
+        "sha256": "5f2e20319ee42a7367febf06c7653d7b3f9b28ef99a64cb9ec7739563dcfcffe"
+      },
+      "prompt.py": {
+        "bytes": 6309,
+        "sha256": "a6b29a55ec8345f1fc1fdbfcc4b64d80d473dc4316f095a62c51cb6cce1194cf"
+      },
+      "audio.py": {
+        "bytes": 11829,
+        "sha256": "c5ff09d52d6a079e79d0505c89dbd0582ba2bc9abf2b26595d8d5b1d0c347bdf"
+      },
+      "vision.py": {
+        "bytes": 5233,
+        "sha256": "43ad71029f82e20fd26b97574627773d47639d7a3742c8b04fe5bf55f41c4c28"
+      }
+    },
+    "executed_remote_code": false,
+    "downloaded_weights": false
+  },
+  "rights_status": "REVIEW: custom LFM Open License v1.0; no code/weight incorporation",
+  "loaded": false,
+  "weights_downloaded": false,
+  "quality_measured": false,
+  "remote_code_executed": false,
+  "observations": {
+    "binary_and_multichoice_share_head": true,
+    "options_jointly_encoded": true,
+    "questions_separate_trunk_rows": true,
+    "media_prefix_reused_before_trunk": true,
+    "image_audio_simultaneous_rejected": true,
+    "text_temperature_only": true,
+    "video_temporal_quality": "UNMEASURED"
+  }
+}

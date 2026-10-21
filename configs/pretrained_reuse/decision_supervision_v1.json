@@ -1,0 +1,71 @@
+{
+  "id": "decision-supervision-v1-seed17",
+  "root": "C:/CodexArtifacts/pretrained-reuse-r2",
+  "seed": 17,
+  "binding_counts": [
+    512,
+    128,
+    256
+  ],
+  "numeric_counts": [
+    1024,
+    256,
+    256
+  ],
+  "binding_exclusion_ids": "factorized-condition-corpus-01/excluded-identities.json",
+  "binding_observed_states": "factorized-condition-corpus-01/states.json",
+  "numeric_sources": [
+    "conditional-curriculum-01/train.jsonl",
+    "conditional-curriculum-01/validation.jsonl",
+    "numeric-range-curriculum-01/train.jsonl",
+    "numeric-range-curriculum-01/transfer.jsonl",
+    "condition-transfer-controls-01/inputs.jsonl",
+    "range-generalization-inputs-01/inputs.jsonl",
+    "lexical-range-curriculum-01/train.jsonl",
+    "lexical-transfer-inputs-01/inputs.jsonl",
+    "comparative-word-inputs-01/inputs.jsonl",
+    "comparison-vocabulary-curriculum-01/train.jsonl",
+    "vocabulary-transfer-inputs-01/inputs.jsonl",
+    "decoder-transfer-inputs-01/inputs.jsonl",
+    "transfer-factorial-inputs-01/inputs.jsonl",
+    "context-robustness-corpus-01/train.jsonl",
+    "context-robustness-corpus-01/development.jsonl",
+    "paired-wording-training-views-02/train-views.jsonl",
+    "text-prefix-factorial-01/inputs.jsonl"
+  ],
+  "retention_train": "binding-replay-coverage-corpus-01/replay.jsonl",
+  "retention_validation": [
+    "condition-binding-corpus-01/original.jsonl",
+    "condition-binding-corpus-01/curriculum.jsonl",
+    "condition-binding-corpus-01/validation.jsonl"
+  ],
+  "expected_exclusions": {
+    "binding": 7612,
+    "numeric": 3328
+  },
+  "source_pins": {
+    "factorized-condition-corpus-01/excluded-identities.json": "7ee4c7b620cf7f8dd19e67630df4437ddd6c1eb39a59b40caf461337560b0fec",
+    "factorized-condition-corpus-01/states.json": "dec6210db18f7736d28f3a29ca749c51832956329a491a71472f4b15dcf98bac",
+    "conditional-curriculum-01/train.jsonl": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+    "conditional-curriculum-01/validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+    "numeric-range-curriculum-01/train.jsonl": "95f4edc33711a6ac334fff77cb08300a45bbe2bc8acefad1e8591b069c076101",
+    "numeric-range-curriculum-01/transfer.jsonl": "41df283d98a6e251482f9fedfed468e00231d179b32ae6891eadbe2bb820d16a",
+    "condition-transfer-controls-01/inputs.jsonl": "a1bad72fff10e9a264b66557e9b2c1079954d508aa6f07972060804dd0c6221b",
+    "range-generalization-inputs-01/inputs.jsonl": "7be0e5e6398a313051527122c95b928629b774080336c4a03e628b11c188a2a6",
+    "lexical-range-curriculum-01/train.jsonl": "91c4b3f9ff81a3d01c5f4a9db0c83d548b33daab44a9ee879b236a5ded136645",
+    "lexical-transfer-inputs-01/inputs.jsonl": "39866689aa62fd2118e64d7b6c5a33232705070239034aeaf0cf2ef44b3dc3c6",
+    "comparative-word-inputs-01/inputs.jsonl": "49593515a179956af2b64dac7af79e63ea3d1d87be7163d87c2cd7d7effee27c",
+    "comparison-vocabulary-curriculum-01/train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+    "vocabulary-transfer-inputs-01/inputs.jsonl": "1a825b413e32f319dead47ccbef07ef3b36f2c391ca2c197a694aaeb4ed54dd2",
+    "decoder-transfer-inputs-01/inputs.jsonl": "dc5871692646473f8eac216aa7e0e9ee065040a4c5c9f6e3e22c0a16099ef51d",
+    "transfer-factorial-inputs-01/inputs.jsonl": "6fcead8721c40534fa994981a63403112df057b8f19daee11016836b7ab6878e",
+    "context-robustness-corpus-01/train.jsonl": "a0116e4e2c5024fe39e113461c3b286da3d76b1f8b11940dc195fd5594c2982b",
+    "context-robustness-corpus-01/development.jsonl": "310a0c7d3daad92dddb807a58d9e1483d06fd1b14bca67b4b29e9293520d8e4c",
+    "paired-wording-training-views-02/train-views.jsonl": "3e7722c5bd8494aa5b6f714b55f40f2ee551f82014007687bdb543a3977bb3de",
+    "text-prefix-factorial-01/inputs.jsonl": "ebd762bdae9ff43b3f4f45d16c370d16a6f0550fd5aa5fba9111ff17e138f159",
+    "binding-replay-coverage-corpus-01/replay.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+    "condition-binding-corpus-01/original.jsonl": "7f699763f931b753a954d613782aed571528dd00937bb60437f463a22c394d74",
+    "condition-binding-corpus-01/curriculum.jsonl": "ce93c5951d9f8cbd189a7756348f809a4bd82bf4ea599f2930b1db4f1326b50d",
+    "condition-binding-corpus-01/validation.jsonl": "e73d39a9a5b41c75c67e782fec6346e5a9d4abc3ee1f7745fa5b56dcbe49e1c0"
+  }
+}

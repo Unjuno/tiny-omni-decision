@@ -1,0 +1,65 @@
+{
+  "scope": "eight smoke clips against each embedding-nearest full recording only",
+  "sample_rate": 2000,
+  "high_correlation_review_threshold": 0.99,
+  "results": [
+    {
+      "fsd_id": "29792",
+      "starss_recording": "fold3_room21_mix028",
+      "starss_media_sha256": "0b115eb52195fa176556e39a0f11c74f750a87531f58bae7df0bd7458688ca9b",
+      "absolute_correlation": 0.05380459089154168,
+      "offset_samples": 20974
+    },
+    {
+      "fsd_id": "432910",
+      "starss_recording": "fold3_room9_mix008",
+      "starss_media_sha256": "7242b9ac314bb9398888e0f78cd0a1938c197a302b3df78bd0269a81ec5f1fe4",
+      "absolute_correlation": 0.24557658081180325,
+      "offset_samples": 75357
+    },
+    {
+      "fsd_id": "38229",
+      "starss_recording": "fold3_room9_mix001",
+      "starss_media_sha256": "1c74ccd1eea092f0703bbe73206daef427a81d2e6a497a4340ed82d9733f3df6",
+      "absolute_correlation": 0.014417434695100907,
+      "offset_samples": 335016
+    },
+    {
+      "fsd_id": "233384",
+      "starss_recording": "fold3_room22_mix010",
+      "starss_media_sha256": "c06a607b98e886fad1e3bc5ec8d54dc671cde8863285ea74d677f61b33479f5b",
+      "absolute_correlation": 0.0790410447744416,
+      "offset_samples": 19002
+    },
+    {
+      "fsd_id": "239746",
+      "starss_recording": "fold3_room6_mix005",
+      "starss_media_sha256": "5f146b70a7de950803cd41e32dfa5f2b6abdb62830b6ebcb7dc27b908c4b4ffe",
+      "absolute_correlation": 0.1690789268999387,
+      "offset_samples": 249845
+    },
+    {
+      "fsd_id": "209222",
+      "starss_recording": "fold3_room9_mix003",
+      "starss_media_sha256": "2ab269ed14a5ada4d33254bec5fbd7b4b81c011789d6653899f1d7a1c560a540",
+      "absolute_correlation": 0.0399429913891213,
+      "offset_samples": 318762
+    },
+    {
+      "fsd_id": "319041",
+      "starss_recording": "fold3_room6_mix005",
+      "starss_media_sha256": "5f146b70a7de950803cd41e32dfa5f2b6abdb62830b6ebcb7dc27b908c4b4ffe",
+      "absolute_correlation": 0.06252316506301037,
+      "offset_samples": 145901
+    },
+    {
+      "fsd_id": "273222",
+      "starss_recording": "fold3_room4_mix008",
+      "starss_media_sha256": "3edd9590b0919f0d83ef9e89cdd0ed7a72cc4c989f92cdac03987646224f83d8",
+      "absolute_correlation": 0.3032762575826862,
+      "offset_samples": 46966
+    }
+  ],
+  "all_source_duplicate_gate_passed": false,
+  "training": false
+}

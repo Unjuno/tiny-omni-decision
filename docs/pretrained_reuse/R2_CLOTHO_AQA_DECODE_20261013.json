@@ -1,0 +1,169 @@
+{
+  "status": "PASS",
+  "count": 16,
+  "transferred": 26300804,
+  "seconds": 362.09843537414963,
+  "clips": [
+    {
+      "id": "155281",
+      "rate": 44100,
+      "shape": [
+        1,
+        1132430
+      ],
+      "duration": 25.678684807256236,
+      "decoded_sha256": "3177815acc2f5da9ba9692395c06ed19c793f507b7eb97be945073f3745ddef9"
+    },
+    {
+      "id": "43357",
+      "rate": 44100,
+      "shape": [
+        1,
+        1017357
+      ],
+      "duration": 23.069319727891155,
+      "decoded_sha256": "d6954dedaba3317069f8fd9c8867c89e1badedefba9402014184b0403e9ae174"
+    },
+    {
+      "id": "217919",
+      "rate": 44100,
+      "shape": [
+        1,
+        1150395
+      ],
+      "duration": 26.086054421768708,
+      "decoded_sha256": "fb8d48c5b1713b9dc050b3a2293d8812214268ae250b44c49ec15665b261d80b"
+    },
+    {
+      "id": "94146",
+      "rate": 44100,
+      "shape": [
+        1,
+        953963
+      ],
+      "duration": 21.631814058956916,
+      "decoded_sha256": "bd796bc759e45c3aa3448a33e28ea6bd95cb98dd7fab0e563c9fda0a0e7d7c0a"
+    },
+    {
+      "id": "180963",
+      "rate": 44100,
+      "shape": [
+        1,
+        1266878
+      ],
+      "duration": 28.727392290249433,
+      "decoded_sha256": "e862ff407c8431d2d72b0cfc9272f50603e34db02188b66da19621abb97e7a1f"
+    },
+    {
+      "id": "273649",
+      "rate": 44100,
+      "shape": [
+        1,
+        962004
+      ],
+      "duration": 21.814149659863947,
+      "decoded_sha256": "943a73d81215cd157f56103728a1c2884a4d207ca40caec54e5423f575d26819"
+    },
+    {
+      "id": "139958",
+      "rate": 44100,
+      "shape": [
+        1,
+        662528
+      ],
+      "duration": 15.023310657596372,
+      "decoded_sha256": "8099c5a2a336f075399132d7dc2fa58fa021390308fd6b629c8d79688bdfaaa6"
+    },
+    {
+      "id": "360729",
+      "rate": 44100,
+      "shape": [
+        1,
+        748544
+      ],
+      "duration": 16.973786848072564,
+      "decoded_sha256": "3a2620457589d711c053e7649751b0e1028632390f8484b87730c1a5c622b95f"
+    },
+    {
+      "id": "259626",
+      "rate": 44100,
+      "shape": [
+        1,
+        1090821
+      ],
+      "duration": 24.735170068027212,
+      "decoded_sha256": "c7a27051e8bad29ab6e3fd29bcd360f2f1f7e32a5d234521c3ef3c8ad0eb88b0"
+    },
+    {
+      "id": "18894",
+      "rate": 44100,
+      "shape": [
+        1,
+        1254455
+      ],
+      "duration": 28.445691609977324,
+      "decoded_sha256": "a49bcd0738dcffe6a04d442ffef8f6a6279ae48987b20a9ee9bc12ee6341f386"
+    },
+    {
+      "id": "121965",
+      "rate": 44100,
+      "shape": [
+        1,
+        1233630
+      ],
+      "duration": 27.973469387755102,
+      "decoded_sha256": "4b4daae089290573d09abe678c590c4a8526f58cedcf262e12b26ec3037fc52c"
+    },
+    {
+      "id": "155806",
+      "rate": 44100,
+      "shape": [
+        1,
+        1176588
+      ],
+      "duration": 26.68,
+      "decoded_sha256": "9312b385c1de8f11f4c3025c9ee7943934f7d98912bebc9b0eb75d6548ac3306"
+    },
+    {
+      "id": "57586",
+      "rate": 44100,
+      "shape": [
+        1,
+        790888
+      ],
+      "duration": 17.933968253968253,
+      "decoded_sha256": "db076d2d44c8034d312ee63ad6734f0f90c8008a3fdd8a144a26730d7d6117f3"
+    },
+    {
+      "id": "337791",
+      "rate": 44100,
+      "shape": [
+        1,
+        776018
+      ],
+      "duration": 17.596780045351473,
+      "decoded_sha256": "32c161640d53fabdd8c4aa460c3be977d51ea2bc16da8f3b28aa2ccced929323"
+    },
+    {
+      "id": "150183",
+      "rate": 44100,
+      "shape": [
+        1,
+        665066
+      ],
+      "duration": 15.080861678004535,
+      "decoded_sha256": "3c6527f5e6badcc0801b93b37226e247018f3ba30ec8329d6a3b05f517eebe62"
+    },
+    {
+      "id": "238650",
+      "rate": 44100,
+      "shape": [
+        1,
+        1086976
+      ],
+      "duration": 24.647981859410432,
+      "decoded_sha256": "17875702cff8aafa06a448e13170036582a2ce0f4868394c1fcca0cd7be656cf"
+    }
+  ],
+  "claim": "decode and exact duplicate check only, not waveform near-duplicate screening"
+}

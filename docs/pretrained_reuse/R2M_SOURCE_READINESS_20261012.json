@@ -1,0 +1,308 @@
+{
+  "uci341-readiness.json": {
+    "status": "REVIEW_NOT_ADMITTED",
+    "archive_sha256": "4ac4ae064227c07045a99551876b54d204837e995e298b6488559e209b3deb09",
+    "readme_sha256": "76c9005ce568e84f5a12b3cda29a1d54846af41ab2c96d64999daae220963160",
+    "readme_encoding": "latin-1",
+    "archive_license_statement": "Any commercial use is prohibited.",
+    "official_catalog_license": "CC BY 4.0",
+    "official_catalog_url": "https://archive.ics.uci.edu/dataset/341/smartphone%2Bbased%2Brecognition%2Bof%2Bhuman%2Bactivities%2Band%2Bpostur",
+    "verified_date": "2026-10-12",
+    "reason": "Unresolved catalog/archive license conflict; do not assume precedence.",
+    "train_subjects": [
+      1,
+      3,
+      5,
+      6,
+      7,
+      8,
+      11,
+      14,
+      15,
+      16,
+      17,
+      19,
+      21,
+      22,
+      23,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30
+    ],
+    "train_subject_count": 21,
+    "raw_signal_members_present": true,
+    "units": {
+      "acceleration": "g",
+      "angular_velocity": "rad/s"
+    },
+    "sample_rate_hz": 50,
+    "raw_signal_contents_read": false,
+    "test_contents_read": false,
+    "labels_contents_read": false,
+    "expected_video_sensor_pairs": "NOT ESTABLISHED; recording for annotation does not establish available paired video"
+  },
+  "existing-api-audit.json": {
+    "status": "READ_ONLY_COMPATIBILITY_AUDIT",
+    "starss23": {
+      "runner": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\train_starss23_readouts.py",
+      "runner_sha256": "9ccd9df51b1658be3580cebf28a907356f85accbabc60d19aa33959508253b40",
+      "evidence": "candidate_inputs concatenates observation, one-hot event ID and two one-hot options; no tokenization in this function",
+      "result_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-readout-comparison-v1\\result.json",
+      "result_sha256": "3c6ff7fa1d7995c1a88fee731cc299a82a1c96d4b967bd15298e320fda5df07c",
+      "reusable": "typed event-conditioned no-text cached-feature baseline",
+      "not_established": [
+        "criterion-free learned task routing",
+        "explicit absent-versus-zero modality mask",
+        "timestamp-aware fusion",
+        "sensor/video pairing",
+        "representative M2 benefit"
+      ]
+    },
+    "api_gaps": [
+      "ObservationFeatureKey lacks screen modality",
+      "DecisionOutput JSON requires a question name",
+      "No ObservationBatch with per-token timestamps, units, calibration and valid mask was found in current source search"
+    ],
+    "claim": "Existing narrow baselines are partial reusable controls, not completion of new R2-M matrix"
+  },
+  "harth/readiness.json": {
+    "repository": "ntnu-ai-lab/harth-ml-experiments",
+    "revision": "dad2cfbe89a26f72f19770419469ac037de200df",
+    "subjects": 31,
+    "aggregate_csv_bytes": 1016486465,
+    "repository_version": "v2.0 according to pinned README",
+    "uci_version": "v1.2 per same README",
+    "license_status": "REVIEW",
+    "reason": "Pinned repository MIT license uses Software wording; UCI CC BY 4.0 pertains to older v1.2. Verify dataset v2.0 coverage rather than silently transfer license.",
+    "metadata_only": true,
+    "data_downloaded": false,
+    "paired_video_sensor_availability": "NOT ESTABLISHED",
+    "next_action": "Inspect official UCI v1.2 release license artifacts or explicit v2.0 dataset grant before ingestion"
+  },
+  "harth-uci-v12/archive-inventory.json": {
+    "source_url": "https://archive.ics.uci.edu/static/public/779/harth.zip",
+    "bytes": 310795012,
+    "sha256": "2ab54d6b11467ddbe998dfb60355f9f1ae181b0af7a89e7c78bb7af2cf16b64a",
+    "headers": {
+      "Server": "nginx/1.31.4",
+      "Date": "Mon, 12 Oct 2026 03:36:01 GMT",
+      "Transfer-Encoding": "chunked",
+      "Connection": "keep-alive"
+    },
+    "seconds": 465.0240464999806,
+    "members": [
+      {
+        "name": "harth/",
+        "size": 0,
+        "compressed_size": 0,
+        "crc32": 0
+      },
+      {
+        "name": "harth/S017.csv",
+        "size": 52265446,
+        "compressed_size": 20078308,
+        "crc32": 3363671500
+      },
+      {
+        "name": "harth/S009.csv",
+        "size": 22161722,
+        "compressed_size": 8929319,
+        "crc32": 1736703024
+      },
+      {
+        "name": "harth/S016.csv",
+        "size": 50797778,
+        "compressed_size": 19383178,
+        "crc32": 1596727297
+      },
+      {
+        "name": "harth/S021.csv",
+        "size": 46869503,
+        "compressed_size": 18062934,
+        "crc32": 4095987150
+      },
+      {
+        "name": "harth/S010.csv",
+        "size": 50314696,
+        "compressed_size": 19922950,
+        "crc32": 3476887516
+      },
+      {
+        "name": "harth/S028.csv",
+        "size": 16949909,
+        "compressed_size": 4309745,
+        "crc32": 610942304
+      },
+      {
+        "name": "harth/S024.csv",
+        "size": 16722098,
+        "compressed_size": 3763621,
+        "crc32": 2501221082
+      },
+      {
+        "name": "harth/S015.csv",
+        "size": 62410313,
+        "compressed_size": 24010456,
+        "crc32": 1670408408
+      },
+      {
+        "name": "harth/S026.csv",
+        "size": 18844878,
+        "compressed_size": 4760720,
+        "crc32": 89267550
+      },
+      {
+        "name": "harth/S008.csv",
+        "size": 59837464,
+        "compressed_size": 23264739,
+        "crc32": 556577767
+      },
+      {
+        "name": "harth/S029.csv",
+        "size": 16742233,
+        "compressed_size": 4368263,
+        "crc32": 672572405
+      },
+      {
+        "name": "harth/S013.csv",
+        "size": 52955349,
+        "compressed_size": 20419908,
+        "crc32": 4255885531
+      },
+      {
+        "name": "harth/S019.csv",
+        "size": 42611164,
+        "compressed_size": 16361853,
+        "crc32": 1121826491
+      },
+      {
+        "name": "harth/S023.csv",
+        "size": 12914135,
+        "compressed_size": 3342050,
+        "crc32": 3736593167
+      },
+      {
+        "name": "harth/S020.csv",
+        "size": 32941261,
+        "compressed_size": 9484160,
+        "crc32": 4096255169
+      },
+      {
+        "name": "harth/S025.csv",
+        "size": 21695989,
+        "compressed_size": 5367833,
+        "crc32": 897472067
+      },
+      {
+        "name": "harth/S022.csv",
+        "size": 48467406,
+        "compressed_size": 18770697,
+        "crc32": 111235485
+      },
+      {
+        "name": "harth/S012.csv",
+        "size": 56062032,
+        "compressed_size": 21506720,
+        "crc32": 1144228653
+      },
+      {
+        "name": "harth/S014.csv",
+        "size": 53364698,
+        "compressed_size": 20650256,
+        "crc32": 2600209062
+      },
+      {
+        "name": "harth/S006.csv",
+        "size": 58097651,
+        "compressed_size": 22122739,
+        "crc32": 1213413190
+      },
+      {
+        "name": "harth/S027.csv",
+        "size": 15873565,
+        "compressed_size": 4101658,
+        "crc32": 3675208008
+      },
+      {
+        "name": "harth/S018.csv",
+        "size": 46068295,
+        "compressed_size": 17809311,
+        "crc32": 271309706
+      }
+    ],
+    "contents_opened": [],
+    "official_license": "CC BY 4.0",
+    "license_source": "https://archive.ics.uci.edu/dataset/779/harth"
+  },
+  "harth-uci-v12/frozen-subject-splits.json": {
+    "seed": 17,
+    "algorithm": "sorted member names then Python Random(17).shuffle",
+    "archive_sha256": "2ab54d6b11467ddbe998dfb60355f9f1ae181b0af7a89e7c78bb7af2cf16b64a",
+    "group": "subject file",
+    "splits": {
+      "train": [
+        "harth/S025.csv",
+        "harth/S028.csv",
+        "harth/S009.csv",
+        "harth/S022.csv",
+        "harth/S020.csv",
+        "harth/S018.csv",
+        "harth/S015.csv",
+        "harth/S029.csv",
+        "harth/S023.csv",
+        "harth/S012.csv",
+        "harth/S026.csv",
+        "harth/S014.csv",
+        "harth/S010.csv",
+        "harth/S006.csv"
+      ],
+      "calibration": [
+        "harth/S008.csv",
+        "harth/S016.csv"
+      ],
+      "validation": [
+        "harth/S013.csv",
+        "harth/S027.csv",
+        "harth/S019.csv"
+      ],
+      "sealed_audit": [
+        "harth/S017.csv",
+        "harth/S021.csv",
+        "harth/S024.csv"
+      ]
+    },
+    "contents_opened_before_split": false,
+    "policy": "No sealed audit access; no model selection from audit"
+  },
+  "harth-uci-v12/train-format-smoke.json": {
+    "status": "TRAIN_SOURCE_FORMAT_PASS",
+    "member": "harth/S025.csv",
+    "member_sha256": "1768410a124abc54df63971050463eca773fee4b36cc429c05aeed8f7867d5d6",
+    "member_bytes": 21695989,
+    "crc_verified": true,
+    "observed_rows": 128,
+    "columns": [
+      "timestamp",
+      "back_x",
+      "back_y",
+      "back_z",
+      "thigh_x",
+      "thigh_y",
+      "thigh_z",
+      "label"
+    ],
+    "delta_seconds_min": 0.02,
+    "delta_seconds_max": 1.54,
+    "label_values_first_128": [
+      "3",
+      "6"
+    ],
+    "units": "g per official UCI metadata; not inferred from values",
+    "audit_or_validation_or_calibration_contents_opened": false,
+    "split_manifest_sha256": "0259363d0dde5255a7c2ba2925959aad12df78007c60d26db855b009fca04695",
+    "claim": "Format check only, not quality, sample-representativeness or fusion evidence"
+  }
+}

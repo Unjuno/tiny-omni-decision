@@ -1,0 +1,12 @@
+{
+  "status": "REVIEW_NOT_TRAINING_ADMITTED",
+  "questions": 780,
+  "counts": {
+    "fit": 624,
+    "development": 156
+  },
+  "archive_sha256": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78",
+  "split_sha256": "dd8d05c45fab8cbf243753c5e7d405c61b556b0965e382ba5c4cf6676bece54f",
+  "corpus_sha256": "b68a05264ac853b705528ef7851d0f1e770164eb7c299ea893d4723142ace65a",
+  "script_sha256": "c2eb459e85f5084503a713934ac469e8c1f620c8d6f6922d8ac0c5c74ab597a8"
+}

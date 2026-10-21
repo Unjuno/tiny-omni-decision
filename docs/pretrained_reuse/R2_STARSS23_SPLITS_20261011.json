@@ -1,0 +1,104 @@
+{
+  "source_revision": "doi:10.5281/zenodo.7880637",
+  "metadata_sha256": "2fa848545a520b4a9d490459de7f079aa49ae16daf0affc859c016f5146981d6",
+  "source_probe_sha256": "b3807ca4484bc011835dff3fcd46d9ec3330c58d0ad15b36f71efa70c3081513",
+  "seed": 17,
+  "exposed_rooms_forced_train": [
+    "tau:room12",
+    "tau:room13"
+  ],
+  "assignment": "SHA256 canonical JSON [17,room]; first unseen cal, next two val",
+  "splits": {
+    "train": {
+      "recordings": 49,
+      "rooms": [
+        "sony:room22",
+        "tau:room12",
+        "tau:room13",
+        "tau:room4",
+        "tau:room6",
+        "tau:room7"
+      ],
+      "sha256": "571c2b537a809b2f92c9289fd932c20e0169ca1c0e38f4dc0f4c6ad6ef2ac978"
+    },
+    "calibration": {
+      "recordings": 8,
+      "rooms": [
+        "tau:room9"
+      ],
+      "sha256": "0c0961a7c4eb33dddec6fe904b4fca26881a8e015a885ce2f6d3594c182f440f"
+    },
+    "validation": {
+      "recordings": 21,
+      "rooms": [
+        "sony:room21",
+        "tau:room14"
+      ],
+      "sha256": "e1dd3789abd2c909fc66bf67aea26e8d1afa044458818a262470e54848d90b50"
+    }
+  },
+  "training_annotation_coverage": [
+    {
+      "event": "speech",
+      "active_ticks": 62321,
+      "recordings": 47
+    },
+    {
+      "event": "clapping",
+      "active_ticks": 126,
+      "recordings": 6
+    },
+    {
+      "event": "telephone",
+      "active_ticks": 664,
+      "recordings": 11
+    },
+    {
+      "event": "laughter",
+      "active_ticks": 3313,
+      "recordings": 39
+    },
+    {
+      "event": "domestic sounds",
+      "active_ticks": 12015,
+      "recordings": 10
+    },
+    {
+      "event": "footsteps",
+      "active_ticks": 2360,
+      "recordings": 31
+    },
+    {
+      "event": "door",
+      "active_ticks": 855,
+      "recordings": 22
+    },
+    {
+      "event": "music",
+      "active_ticks": 16591,
+      "recordings": 11
+    },
+    {
+      "event": "instrument",
+      "active_ticks": 3270,
+      "recordings": 3
+    },
+    {
+      "event": "water tap",
+      "active_ticks": 861,
+      "recordings": 6
+    },
+    {
+      "event": "bell",
+      "active_ticks": 0,
+      "recordings": 0
+    },
+    {
+      "event": "knock",
+      "active_ticks": 58,
+      "recordings": 7
+    }
+  ],
+  "calibration_validation_labels_read": false,
+  "dev_test_contents_read": false
+}

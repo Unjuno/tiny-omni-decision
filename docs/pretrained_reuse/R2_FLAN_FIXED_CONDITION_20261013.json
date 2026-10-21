@@ -1,0 +1,46 @@
+{
+  "status": "COMPLETE_FIXED_DIAGNOSTIC_NOT_PRODUCT",
+  "metrics": {
+    "count": 256,
+    "accuracy": 0.3046875,
+    "nll": 1.1519668102264404,
+    "brier": 0.7045587301254272,
+    "ece_15_bins": 0.1590562250930816,
+    "ece_bin_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      25,
+      144,
+      87,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "condition_pairs_both_correct": 0,
+  "condition_pairs_changed": 0,
+  "pairs": 128,
+  "prediction_counts": {
+    "0": 256,
+    "1": 0,
+    "2": 0
+  },
+  "mean_unconstrained_option_mass": 0.9877718412317336,
+  "max_tokens": 113,
+  "seconds": 4.784793700091541,
+  "weights_unchanged": true,
+  "parameters": 76961152,
+  "artifacts": {
+    "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+    "predictions.json": "86c0ba8be12228b5404fe88452c18bceb5cb296b49cf98c000c93d0025109da8",
+    "prompts.json": "92e34333eff17e47e2944e766ea16e0a6d80967a7c948a99d2651fced4d6052c",
+    "protocol.json": "9124b3e59e391fd28f213545a372f818ccbbea33e96e10f37672821ac29ffe2d"
+  }
+}

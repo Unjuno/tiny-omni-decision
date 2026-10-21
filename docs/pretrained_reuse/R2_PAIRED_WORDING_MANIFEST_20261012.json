@@ -1,0 +1,17 @@
+{
+  "source_sha256": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+  "output_sha256": "3e7722c5bd8494aa5b6f714b55f40f2ee551f82014007687bdb543a3977bb3de",
+  "builder_sha256": "8992aefe57f8a4f3c4dfebac24c498425e3d3c3569aa9d278046780778fb694e",
+  "rows": 26624,
+  "unique_parent_questions": 8192,
+  "unique_states": 1024,
+  "views_by_task": {
+    "extremum": 16384,
+    "temporal_order": 8192,
+    "count": 1024,
+    "conditional_selection": 1024
+  },
+  "training_started": false,
+  "scope": "Train-only views; no new unique states",
+  "sampling_warning": "Sample parents first; uniform view sampling changes task weights."
+}

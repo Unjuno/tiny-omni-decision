@@ -1,0 +1,33 @@
+{
+  "comparisons": {
+    "physical_mirror": {
+      "difference": -0.05078125,
+      "percentile_95_interval": [
+        -0.0859375,
+        -0.01953125
+      ],
+      "groups": 64,
+      "seed": 17,
+      "replicates": 10000
+    },
+    "cell_reversal": {
+      "difference": -0.0390625,
+      "percentile_95_interval": [
+        -0.07421875,
+        -0.00390625
+      ],
+      "groups": 64,
+      "seed": 17,
+      "replicates": 10000
+    }
+  },
+  "hashes": {
+    "cell_reversal-cells.npy": "22d4070fdae4f6473293d424309319f4bbd15739a09e25e438f6ce4be7ecf991",
+    "cell_reversal-predictions.json": "029dfc3b048ea69bff9953f631c0506c813a81be70a936e61fd83ce4ca32f9a2",
+    "identity-cells.npy": "c92f4c81b7ed9e0019efd633e0df2af7b0437d2a8e41e5c4f79683c0e36450f9",
+    "identity-predictions.json": "729e8a925119cca2b9a61a4376e5ce2a7f973215976a8ae278fbfce65755315e",
+    "physical_mirror-cells.npy": "d4da02b50fa9adb3c96c3768c1153d79ca655f54f9fcc2498891a157af66a7d7",
+    "physical_mirror-predictions.json": "896c6d686467cf65be8921a912f716ecf1b958853675d4db13bc8efe50946071",
+    "result.json": "a6a49e1ec28b5b53315425829ba56e731827729b80df9a535c1e466d419a4327"
+  }
+}

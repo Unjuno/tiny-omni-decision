@@ -1,0 +1,48 @@
+{
+  "status": "SOURCE_ROLE_COVERAGE_MEASURED_ONLY",
+  "source_commit": "551a70ad3035d44930c5583e41ea78cd7fce9b53",
+  "source_revision": "3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf",
+  "runner_sha256": "3f169ba2f4025ca255abc976270da2c16a27f81659f9871fb99c9b368fae872e",
+  "annotation_sha256": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78",
+  "pairs_sha256": "8869bb903591af3a0995eeca0eeae1b50b990c8b08752a6e5d4d549f8a356fd7",
+  "clips": 99,
+  "questions": 198,
+  "rows_without_label_issues": 99,
+  "issue_counts": {},
+  "group_size_counts": {
+    "2": 18,
+    "3": 78,
+    "4": 3
+  },
+  "hidden_first_after_zero": 13,
+  "missing_shuffle_annotation": 13,
+  "changed_target_pairs": 53,
+  "seconds": 4.374923099996522,
+  "model_inference": false,
+  "training": false,
+  "validation_opened": false,
+  "sealed_audit_opened": false,
+  "gpu_seconds": 0,
+  "cloud_cost": 0,
+  "limitations": [
+    "annotation consistency does not prove visible target cue or deployable selector",
+    "no example removed and no task/split changed",
+    "source roles are candidate training supervision, never inference inputs",
+    "no fresh validation or Decision quality measurement"
+  ],
+  "pair_rebuild_exact": true,
+  "source_answer_comparison": "correct option text after canonical sort/remap, not upstream integer index",
+  "previous_attempt": "audit01 mistakenly compared upstream option order/index literally; its mismatch counts are invalid; original files preserved",
+  "artifact_sha256": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-role-supervision-audit-02\\result.json": "052f23f3282aafb3d7f4ed1a7775d6d9ad133954be465e6a1394898e7265d9b3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-role-supervision-audit-01\\result.json": "896905cffa8e15863144d52d865e7872180bcfe5f316bc79a146475901b92cd4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_role_supervision_audit_01.py": "a1cc449094c9f3146f0c037904c795d2f0d14cc92b3a3c90c5bd7e7d0a173e48",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_role_supervision_audit_02.py": "3f169ba2f4025ca255abc976270da2c16a27f81659f9871fb99c9b368fae872e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\prepare_role_supervision_audit02.py": "9186ead6b66bf19fce9f3beb86478fcb659c4893ba88240e5345360a5aac9a0b"
+  },
+  "commands": [
+    "python C:/CodexArtifacts/pretrained-reuse-r2/perception_role_supervision_audit_02.py",
+    "python -m pytest -q tests/test_occlusion_pairs.py"
+  ],
+  "verification": "answer-remapping regression: 1 passed in0.05s; full99-pair rebuild exact"
+}
