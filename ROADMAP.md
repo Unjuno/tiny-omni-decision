@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 optional sensor holdout evaluation preregistered:** A frozen
+inference-only comparison is prepared for the seed-17 PCH participant holdout:
+the selected 18,834-parameter window LSTM versus the selected frozen
+MOMENT-1-small readout. The 28-participant / 84-recording heldout labels and
+signal payloads remain unopened. Before their one-time evaluation, the CPU
+preflight will pin both model artifacts and verify raw and normalized-content
+disjointness against fit/validation. Any model inference waits behind the
+cooperative HotUGPU reservation; no Orbitune process is stopped or signalled.
+Protocol and gate code:
+[`R2_PCH_HOLDOUT_ONCE_PROTOCOL_20261021.md`](docs/pretrained_reuse/R2_PCH_HOLDOUT_ONCE_PROTOCOL_20261021.md).
+
 **2026-10-21 optional sensor development probe:** On PCH Data 2017, a frozen
 MOMENT-1-small embedding plus a 9,234-parameter linear readout reached 60.32%
 Accuracy / 59.72% macro Accuracy on 63 participant-held-out development
