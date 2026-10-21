@@ -71,11 +71,13 @@ SHA-256 `c0174176be975ca3b28fbb17225afdaa77249308b8a2ffb81f47f63a1496965e`.
 - Official University of Edinburgh mirror: [`edinburghcstr/ami` pinned revision](https://huggingface.co/datasets/edinburghcstr/ami/tree/46f28f2503e2ec48f8867a84eef356c70476beab). Read-only Viewer discovery scanned 339 train rows; the acquired row and decode receipt are in `C:\CodexArtifacts\pretrained-reuse-r2\ami-hf-channel-smoke-20261022-attempt-03\receipt.json` (audio SHA-256 above).
 - Viewer `/search` and `/filter` returned HTTP 500 for this dataset during the follow-up cohort lookup; a throttled `/rows` range search then received HTTP 429 and was stopped. The 24-row annotation audit above therefore uses the already acquired local train annotations and does not imply that 24 individual-channel files were fetched.
 
-No annotation or media outside the already acquired selected SA/SB subset was
-opened; the one additional audio segment came from the official train split.
-No predictions, fitting, checkpoint selection, audit evaluation, feature
-extraction, GPU process, or existing artifact was touched. The current GPU
-remains occupied by PID 12596 (15,821/16,384 MiB at the final read-only check).
+No held-out split, unseen meeting, or sealed audit was opened. The only newly
+opened utterance was the single official-train row listed above; the Viewer
+metadata scan was confined to its train split. CPU annotation interval analysis
+and audio decode were performed, but no model inference, model feature
+extraction, fitting, checkpoint selection, or audit evaluation occurred. No
+GPU process or existing model artifact was touched. The GPU remained occupied
+by PID 12596 (15,821/16,384 MiB at the final read-only check).
 
 ## Decision
 
