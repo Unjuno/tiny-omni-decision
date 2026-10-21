@@ -87,6 +87,21 @@ checkpoint selection.
   physical sync plus actor/site generalization remain unresolved. See the
   [matched-fit report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md)
   and [fixed-checkpoint diagnostic](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-av-postnorm-stability/docs/pretrained_reuse/R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md).
+- **Ego4D Social `Talking to me` source screen (2026-10-22):** This is a more
+  task-aligned AV Decision candidate than the event-presence screens: given a
+  synchronized segment and an annotated face track, decide whether that person
+  is speaking to the camera wearer. The official task builds on speech-activity
+  and face-track annotations and adds a directed-to-wearer label. Ego4D requires
+  an accepted license agreement before annotations or media access; the public
+  agreement endpoint was not readable in this screen, so permitted training,
+  derivative-model and product use remain UNKNOWN. The public full-scale release
+  is over 5 TB, although the official CLI supports benchmark-scoped subsets.
+  Exact task group counts, current revision hashes, rights, and locally available
+  assets have not been verified. Keep as REVIEW; do not acquire, fit or evaluate
+  pending agreement review and a frozen group/split audit. Official sources:
+  [AVD task](https://ego4d-data.org/docs/benchmarks/av-diarization/),
+  [Social task](https://ego4d-data.org/docs/benchmarks/social/),
+  [access terms](https://ego4d-data.org/docs/start-here/).
 
 ## Product target and measurement scope
 
@@ -126,6 +141,7 @@ checkpoint selection.
 | AV4 (review-only) | AMI synchronized conversation audio/video; decide which candidate face is the active speaker for a time-localized utterance | AMI Meeting Corpus, using complete parent meetings and official SA/SB grouping | A source-screen subset has 214 preliminary train and 111 development windows; 213/214 train joins pass, with one quarantined. Metadata supports SA/SB participant separation, but exact A/V synchronization, visible-speaker truth, and content-overlap proof remain incomplete. | Do not fit or call this a joint task yet. Admit only after synchronization and visible-speaker labels are independently verified, media/content overlap is audited, and grouped task construction is frozen. Details are on the [AMI source-screen branch](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-ami-av-source-screen-20261021/docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md). |
 | AV5 (rights-blocked) | AVQA `Both` questions: answer a multiple-choice question whose annotation says audio and visual information are related | AVQA annotations over VGG-Sound/YouTube clips | The official task description contains a useful `View` / `Sound` / `Both` relation, but reviewed annotation terms and original clip rights do not establish machine-learning use rights. | Do not fetch annotations/media, train, or evaluate until the relevant rights are explicit. Keep only as task-design reference; see `R2_AVQA_RIGHTS_RECHECK_20261021.md`. |
 | AV6 (exploratory; gate comparison complete) | Audio + video event; choose released material/action/reaction fields | Greatest Hits official release, CC BY 4.0; development partition grouped by recording date | The matched seed-17 E0G1 gate run completed 32,768 updates (best step 24,576); gate values collapsed below 0.01 by step 512. The joint-view Accuracy gain over E0G0 was +5.07 points, but paired NLL uncertainty included zero and video-only Accuracy declined 3.83 points. Full residual and query-only arms had identical Accuracy, with metric deltas around 1e-8, in a fixed 8,875-question replay. | Do not repeat this gate run or use its labels as proof of both-input-required truth. Keep as scoped development evidence. A follow-up requires a fresh admitted task with defensible synchronization, group independence and truth-bearing modality controls. Reports: `R2_AV_GATED_POSTNORM_LONG_FIT_20261018.md` and `R2_AV_REPLACEMENT_DIAGNOSTIC_20261018.md` on branch `codex/r2-av-postnorm-stability`. |
+| AV7 (review-only; access/rights gate open) | Given an audio-video conversation segment and a supplied visible-person track, choose whether that person is talking to the camera wearer | Ego4D Social `Talking to me`, built on AV Diarization annotations; public license agreement required before annotation or media access | The official task combines visible-face tracks, active-speaker annotations and a directed-to-wearer label. The Ego4D release covers 926 camera wearers, but usable Social-task groups/counts, exact source revision, terms, and local media availability remain unverified. Full-scale data is >5 TB; the official CLI supports benchmark-scoped subsets. | Strong candidate for a supplied-track AV Decision task, not admitted. Do not fetch or fit until the actual license agreement is reviewed and accepted by the user/rights holder, then verify group-video/participant splits, media identity, synchronization and availability. Compare matched audio-only, video-only and joint controls; the task label alone does not prove both streams are indispensable. Official sources: [AVD](https://ego4d-data.org/docs/benchmarks/av-diarization/), [Social](https://ego4d-data.org/docs/benchmarks/social/), [access](https://ego4d-data.org/docs/start-here/). |
 | S1 (optional) | Time-stamped sensor window + question/options; explicit units, missingness and observation-end time | VIDIMU only if its acquisition and split provenance remain verified; do not substitute UCI HAR while MOMENT pretraining overlap is unknown | Current pilot has only 39 development trials / 3 participants and no independent high-powered quality evidence. Sensor-label mapping and group coverage are insufficient for a release task. | Keep optional and research-only until >=200 independent subjects/scenes are available or a justified low-power protocol is approved. Never pool it with the four required modalities. |
 
 ## Common acceptance protocol proposal
@@ -169,7 +185,9 @@ checkpoint selection.
 - Next work remains a source/task gate, not another architecture fit. The
   Perception Test visibility readout and HoloAssist line are closed to further
   selection; AVQA is rights-blocked, and AMI still lacks verified synchronization
-  and visible-speaker truth. Continue only with a source whose rights, task truth,
-  and fresh group-disjoint development records can be established. Freeze the
-  task and selection design before quality-selected training. Do not open sealed
-  audits to decide among candidates.
+  and visible-speaker truth. Ego4D Social `Talking to me` is now a promising
+  review-only task, but its license agreement and accessible split/media are
+  unresolved. Continue only after rights, task truth, and fresh group-disjoint
+  development records are established. Freeze the task and selection design
+  before quality-selected training. Do not open sealed audits to decide among
+  candidates.

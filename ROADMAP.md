@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 synchronized-AV source screen:** Ego4D Social `Talking to me`
+is now recorded as a review-only candidate for a supplied-face-track decision
+combining audio and video. Its official task uses active-speaker/face tracks
+and labels whether speech is directed to the camera wearer, but data and
+annotation access requires acceptance of an agreement whose terms were not
+available in this screen. We did not access annotations or media. Exact usable
+groups, rights, revision hashes and local subset availability remain unknown;
+no training or evaluation is admitted. See the AV7 entry in
+[`R0_TASK_BATTERY_DRAFT_20261021.md`](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md).
+
 **2026-10-22 R2 AV temporal readout scale follow-up:** Compared audio-only,
 pooled AV, and eight-frame LSTM AV readouts on nested 96/224-group training
 cohorts and the same 64 fresh video groups. All six fixed 2,048-update runs
