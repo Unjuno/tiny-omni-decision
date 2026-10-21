@@ -3,8 +3,9 @@ metadata split spans three train and three validation meeting families with zero
 participant identity overlap (4,233 audio-segment metadata rows). The previously
 seen 20-row audio/video wiring check decodes and joins to the mapped camera with
 <=40 ms PTS difference, but some target people are not visible. New video
-acquisition is blocked by official-host timeouts and current local disk headroom;
-no fitting or quality evaluation occurred. Keep this as a conditional source
+acquisition is blocked by official-host timeouts. Official indexes reveal a
+smaller per-camera RealMedia candidate, but the six selected streams have not
+been fetched or decoded; no fitting or quality evaluation occurred. Keep this as a conditional source
 candidate, not an admitted benchmark. See [preflight](docs/pretrained_reuse/R2_AMI_AV_BINDING_PREFLIGHT_20261022.md)
 and [machine summary](docs/pretrained_reuse/R2_AMI_AV_BINDING_PREFLIGHT_20261022.json).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)

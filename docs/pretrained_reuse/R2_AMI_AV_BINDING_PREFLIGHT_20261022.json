@@ -94,5 +94,19 @@
   "model_training_or_evaluation": false,
   "gpu_used": false,
   "cloud_cost": 0,
-  "decision": "Do not train until new paired media is acquired, visibility/sync are audited, and grouped independent coverage is adequate."
+  "decision": "Do not train until exact four-camera media is reachable, source hashes and sync are verified, visibility is audited, and grouped independent coverage is adequate.",
+  "media_path_followup": {
+    "status": "LOW_SIZE_PER_CAMERA_RM_CANDIDATE_FOUND_NOT_FETCHED",
+    "official_download_page_average_divx_avi_mb_per_meeting": 400,
+    "official_index_examples_rm_mb_per_camera": {
+      "TS3004a": 8.2,
+      "IN1009": 7.7,
+      "IN1014": 23
+    },
+    "individual_four_camera_coverage_for_six_selected_meetings": "UNKNOWN",
+    "payload_hashes": "NOT_AVAILABLE",
+    "codec_decode_sync": "NOT_TESTED",
+    "current_free_disk_bytes": 2238205952,
+    "host_access": "HTTP HTTPS IPv4 TCP and Edge navigation timed out"
+  }
 }

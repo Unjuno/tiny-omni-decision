@@ -77,19 +77,26 @@ A compact summary is checked in alongside this report.
 
 ## Blocking conditions and next gate
 
-The official AMI media host timed out on both HTTP and HTTPS HEAD checks from
-this local environment. No video bytes were downloaded. At the time of the
-check, C: had 2,245,009,408 bytes free. The official download page estimates
-400 MB per meeting for the four low-size DivX camera videos; six meetings would
-exceed current free space. Its listed 40 MB RealMedia option is not yet shown
-to expose all four synchronized close-up candidates, so it cannot be substituted
-without a stream-layout and decode check.
+The official AMI media host timed out on HTTP and HTTPS requests from this
+local environment; an IPv4 TCP check to its resolved address also timed out.
+The ordinary Edge browser navigation to the index timed out, so no video bytes
+were downloaded. The full low-size DivX AVI set is large (the download page
+quotes an average 400 MB per meeting), but a smaller candidate route exists:
+official mirror indexes list per-camera `Closeup1.rm` through `Closeup4.rm`
+files. Examples show 8.2 MB per closeup for TS3004a, 7.7 MB for IN1009, and
+23 MB for IN1014. The download page describes RealMedia as low-bitrate combined
+A/V. This indicates a possible four-camera route that fits current disk headroom
+(2,238,205,952 bytes), but the exact six selected meeting files, payload hashes,
+codec support, camera coverage, and synchronization have not yet been verified.
+The network timeout remains the active blocker; storage need not block the small
+RealMedia experiment if those streams are available.
 
 Before any training:
 
-1. Obtain the six new meeting videos through an accessible official source with
-   hashes and licensing recorded, or reject this candidate if that cannot be
-   done within local storage.
+1. Retry the official per-camera RealMedia streams when the host is reachable;
+   pin exact file sizes/hashes and confirm all four streams exist for the six
+   selected meetings. Reject the route if its camera layout or license cannot be
+   verified.
 2. Verify per-meeting camera mapping, synchronization, and target visibility
    using a fixed, label-blind frame review rule; retain all failures in the
    coverage accounting.
@@ -110,4 +117,6 @@ modified.
 - [Official AMI signals and channel mappings](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
 - [Official AMI synchronization and cameras](https://groups.inf.ed.ac.uk/ami/corpus/meetingrooms.shtml)
 - [Official AMI download sizes and CC BY 4.0 release](https://groups.inf.ed.ac.uk/ami/download/)
+- [Official TS3004a per-camera media index showing AVI and low-size RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/TS3004a/video/)
+- [Official IN1009 per-camera media index showing 7.7 MB RM streams](https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/IN1009/video/)
 - [Pinned University of Edinburgh AMI dataset revision](https://huggingface.co/datasets/edinburghcstr/ami/tree/46f28f2503e2ec48f8867a84eef356c70476beab)
