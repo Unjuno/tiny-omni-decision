@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "experiment_id": "conditional-clevrer-synthetic-av-readout-v1",
+  "source_experiment_id": "clevrer-synthetic-av-temporal-decision-v2",
+  "seed": 17,
+  "training": {
+    "max_optimizer_updates_per_candidate": 2048,
+    "evaluation_interval": 128,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "early_stopping": false,
+    "checkpoint_selector": "minimum validation NLL",
+    "candidate_order": [
+      "c0_native_attention",
+      "no_exchange_no_gate",
+      "no_exchange_gate",
+      "exchange_no_gate",
+      "exchange_gate"
+    ]
+  },
+  "readout": {
+    "implementation": "tiny_omni_decision.native_av_interaction.ConditionalAVReadout",
+    "options": ["sound before collision", "sound after collision"],
+    "question_features": "pinned MiniLM mean pooled question embedding from frozen feature cache",
+    "candidate_features": "pinned MiniLM mean pooled option embeddings",
+    "audio_adapter": "synthetic normalized tone-energy scalar in channel 0 of 384-wide event_audio tokens; remaining channels zero",
+    "positions": "x=y=0; 16 evenly spaced normalized temporal bins shared by audio and video"
+  },
+  "frozen_encoders": {
+    "video": {
+      "model_id": "google/videoprism-base-f16r288",
+      "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "frame_count": 16,
+      "feature_width": 768
+    },
+    "text": {
+      "model_id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+      "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+      "checkpoint_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "feature_width": 384,
+      "pooling": "attention-mask mean"
+    }
+  },
+  "validation": {
+    "selection_split": "previously used task-specific development validation from official CLEVRER train scenes",
+    "cluster_unit": "video scene",
+    "sealed_audit_opened": false,
+    "bootstrap_repetitions": 5000
+  },
+  "scope": {
+    "synthetic_audio_only": true,
+    "natural_av_or_product_claim": false,
+    "quality_interpretation": "development-only architecture diagnosis; no product promotion"
+  }
+}

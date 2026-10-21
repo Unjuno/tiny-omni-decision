@@ -1,3 +1,12 @@
+**2026-10-22 R2 conditional AV readout development comparison:** Five matched
+seed-17 arms (native Attention plus the 2×2 exchange/gate ablation) completed
+2,048 updates on frozen synthetic CLEVRER tone/video features. All selected
+readouts stayed at chance (50.0%, NLL 0.6931); no adoption. A train-derived
+audio peak threshold retained 75.32% validation Accuracy, so the feature has a
+usable signal while this readout path did not learn it. This is synthetic,
+reused development validation only, not natural AV or product evidence. See
+[the full comparison](docs/pretrained_reuse/R2_CONDITIONAL_CLEVRER_AV_READOUT_20261022.md).
+
 **2026-10-22 R2 CLEVRER synthetic AV coverage v2 (completed development diagnostic):** Expanded the scene-disjoint task to 3,696 training examples across 773 scenes and 1,110 development-validation examples across 240 scenes, then completed four matched seed-17 readout runs at 2,048 updates each. Selected joint gated-LSTM validation reached 83.51% Accuracy / 0.3534 NLL at step 1,792; audio-only reached 75.14% / 0.4577, while video-only and mean-pooled controls remained at chance. Scene-paired bootstrap favored joint over audio-only on this synthetic tone/collision timing task. Train/validation scene and media overlap are zero, but validation is task-specific, cross-task media-exposed, and not blind; CLEVRER has no audio. Late joint overfitting is present. This does not establish natural AV, general four-modality quality, or the 95–98% product target. No sealed audit or product promotion occurred. See the [protocol](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_COVERAGE_V2_PROTOCOL.md) and [results](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_COVERAGE_V2_RESULTS_20261022.md).
 
 **2026-10-20 R2 CLEVRER synthetic AV timing diagnostic (completed):** Four
