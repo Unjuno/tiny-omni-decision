@@ -18,6 +18,14 @@ end-user device and release calibration/latency thresholds remain undecided.
 This draft does not freeze a release battery or authorize a new fit. See the
 [task-battery proposal](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md).
 
+**2026-10-21 R2 Path A text readout CPU replay:** Re-loaded the pinned
+196,865-parameter Decision readout and rescored all 2,540 existing cached
+validation feature rows on CPU. Accuracy/NLL/Brier/ECE-15 matched the selected
+run within 1.1e-7 absolute; this verifies head serialization and cached-feature
+scoring only. The frozen encoder was not run, the validation is previously used,
+and 49.37% Accuracy remains weak synthetic-only quality. See the
+[CPU replay record](docs/pretrained_reuse/R2_PATH_A_TEXT_READOUT_CPU_REPLAY_20261021.md).
+
 **2026-10-21 R0 live-state refresh:** Current `main` remains `09246d7`; PR #15
 remains Draft/Open and the research branch is separate. Thirty-four worktrees
 were inventoried; six are dirty, including the user's primary Teacher worktree,
