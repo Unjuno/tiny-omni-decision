@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R0 task-battery evidence reconciliation:** The task-battery
+proposal now records the one-time Speech Commands official-test comparison
+(97.72% baseline / 97.86% train-only temperature candidate; no clear Accuracy
+difference), the fresh CLEVRER reasoning holdout result (both candidates near
+binary chance with paired intervals including zero), and the matched
+32,768-update coverage comparison (selected fresh arm slightly worse on macro
+metrics; late endpoint overfit; no new Video questions). These splits are
+observed and closed to further model selection. The narrow audio result does
+not establish general speech, and the video results do not establish a model
+family ceiling. See the additive [task-battery update](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md).
+
 **2026-10-21 R2 multimodal source admission screen:** Screened official ZOD
 and IIT Audio-Visually Indicated Actions materials without downloading media.
 ZOD has camera/LiDAR/radar/IMU but requires an emailed access request and its
