@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R1 PE-Core T16 runtime follow-up (separate audit branch):** The
+separate `codex/r1-pe-core-audit-20261021` report records a CPU OpenCLIP
+image/text forward using the pinned converted T16 weights and a measured
+69,546,113 runtime parameters. It is a feature-extraction smoke only: no
+Decision task quality, full mapping parity, or final-runtime integration was
+measured. That branch's machine-readable inventory still carries the earlier
+`runtime_supported: false` entry, so reconcile the inventory before adopting
+this candidate. A follow-on serialization parity attempt in this branch did
+not produce output and was stopped with only 268 MB free on C:; no model
+failure is inferred. See the [attempt record](docs/pretrained_reuse/R1_PE_CORE_RELOAD_PARITY_ATTEMPT_20261022.md)
+and the [separate audit report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r1-pe-core-audit-20261021/docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md).
+
 **2026-10-22 R2 synthetic AV temporal interaction follow-up (remote branch):**
 The four-arm, frozen-feature CLEVRER collision/tone development study reports
 83.51% Accuracy / 0.3534 NLL for its selected joint gated LSTM versus 75.14% /
