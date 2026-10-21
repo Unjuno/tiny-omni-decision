@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 07:09 JST R0 live refresh:** The roadmap branch is clean and
+synchronized at `bae5d688`. PR #23 checks are green. C: has 265,768,960 bytes
+free; the RTX 3080 Laptop has 15,821 / 16,384 MiB allocated to compute PID
+30196, which was left untouched. The PE-Core reload attempt remains empty and
+is not being repeated under the same resource state. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_0709JST.md).
+
 **2026-10-22 R1 PE-Core T16 runtime follow-up (separate audit branch):** The
 separate `codex/r1-pe-core-audit-20261021` report records a CPU OpenCLIP
 image/text forward using the pinned converted T16 weights and a measured
