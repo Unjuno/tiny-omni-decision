@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 AMI speaker-channel preflight:** The local candidate builder
+uses one mono `Mix-Headset.wav` per meeting; the 24 train-only timing rows share
+one full-file audio hash within each of seven meetings, so this acquisition
+cannot support speaker-specific audio/video correspondence. Official AMI
+documentation describes individual audio channels and common-clock recording
+for the E/I sites, but those per-speaker files are absent locally and direct
+host access timed out. No model run was started. Keep AMI conditional on
+hash-pinned individual channels and verified participant mapping; do not treat
+the existing five development parent groups as a product-quality benchmark.
+See the [speaker-channel preflight](docs/pretrained_reuse/R2_AMI_SPEAKER_CHANNEL_PREFLIGHT_20261022.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
