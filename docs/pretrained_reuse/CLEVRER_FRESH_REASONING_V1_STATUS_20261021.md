@@ -142,8 +142,48 @@ hash checked and reused. The first paired-evaluation invocation loaded the
 isolated labels and computed both frozen models' predictions, but stopped
 before writing results because the CLI called `main()` before defining its
 bootstrap helper. No metric output or predictions from that failed invocation
-were inspected or saved. The function order was corrected and covered by a
-regression test. The identical comparison is being rerun only to complete its
-report; checkpoint, preprocessing, holdout, and bootstrap conditions are
-unchanged. This recovery attempt is recorded explicitly and will not be used
+were inspected or saved. The function order was corrected, covered by a
+regression test, and the identical comparison was rerun to produce the report.
+This recovery rerun was a software repair only: checkpoint, preprocessing,
+holdout, and bootstrap conditions were unchanged, and the result was not used
 for tuning.
+
+The successful one-time report is at
+`C:\CodexArtifacts\pretrained-reuse-r2\clevrer-fresh-reasoning-v1-attempt-01-holdout-eval\report.json`
+(SHA-256 `f6cbca5f0798ba2aab2c0c43f90f3fbf70fc60cc86a884222dc96b0564027ae7`).
+It contains 2,843 decisions over 200 scenes, confirms that validation-only
+selection preceded holdout fetch, and confirms that no sealed audit was loaded.
+
+| Metric (macro by question type) | Legacy v0 | Candidate v1 | Candidate − legacy |
+| --- | ---: | ---: | ---: |
+| Accuracy | 0.4933 | 0.4966 | +0.0033 |
+| NLL | 0.6953 | 0.6934 | −0.0020 |
+| Brier | 0.5022 | 0.5002 | −0.0020 |
+| ECE (15 bins) | 0.0313 | 0.0145 | −0.0167 |
+
+| Question type | Legacy count | Legacy Acc. / NLL / Brier / ECE | Candidate count | Candidate Acc. / NLL / Brier / ECE |
+| --- | ---: | --- | ---: | --- |
+| Explanatory | 1,268 | 0.4968 / 0.6933 / 0.5001 / 0.0313 | 1,268 | 0.4724 / 0.6940 / 0.5008 / 0.0337 |
+| Predictive | 236 | 0.4788 / 0.6985 / 0.5054 / 0.0431 | 236 | 0.5042 / 0.6931 / 0.4999 / 0.0036 |
+| Counterfactual | 1,339 | 0.5041 / 0.6942 / 0.5010 / 0.0194 | 1,339 | 0.5131 / 0.6930 / 0.4999 / 0.0063 |
+
+Paired scene bootstrap (2,000 replicates, seed 17) gives the Accuracy
+difference a 95% percentile interval of [−0.0322, +0.0389]. Intervals for NLL
+[−0.00499, +0.00094], Brier [−0.00498, +0.00094], and ECE
+[−0.0393, +0.0113] also include zero. Candidate Accuracy by question type was
+0.4724 explanatory, 0.5042 predictive, and 0.5131 counterfactual, versus
+legacy 0.4968, 0.4788, and 0.5041. Changes are mixed and small; neither model
+demonstrates CLEVRER reasoning above binary chance on this holdout. Candidate
+validation macro Accuracy (0.5153) fell to 0.4966 on holdout, indicating weak
+generalization after checkpoint selection.
+
+The holdout fetch report SHA-256 is
+`894bfab7fd3b8d83a0aa6e0cbabfb247cd641c763e6ec71b32c9ad8992a48b50`; it records
+200 unique media, zero overlap with 4,591 historical media identities and
+previous train/development media, and `sealed_audit_loaded=false`. The holdout
+feature file SHA-256 is
+`ff1425149b500c185701a25449f9c7064c51b59846d8bf1c715abfbaef5d03a8`; its
+provenance report SHA-256 is
+`922f7a89ef1b2a4ceee59c9db3127a90effdd0d3297c98cabb12dde84f4c15f5`. Frozen
+feature extraction took 292.91 seconds on CPU. No further holdout evaluation
+or model tuning is planned for this candidate.
