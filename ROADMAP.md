@@ -30,6 +30,15 @@ from launching a new child while the reservation is held, but does not stop a
 currently running Orbitune child. Continue CPU-only work until the GPU yields;
 any later CUDA job must use the guard and a separate artifact directory.
 
+**2026-10-21 R1 PR review follow-up:** The unresolved PR #16 review finding
+on PE-Core T16 release access was corrected in the dedicated PR branch at
+`afea6624dfe247350ecbb704d61099304009f2a0`. The pinned checkpoint and hash
+are verified, so its inventory release field now says `pretrained and
+accessible`; license status remains `REVIEW` and runtime support remains
+conservative. Targeted pytest passed (7 tests) and Ruff passed. GitHub returned
+no status checks for the commit; the inline review thread is outdated but still
+unresolved. No other PR/worktree was changed.
+
 **2026-10-21 13:37 JST R0 live-state recheck:** The roadmap/continuation
 worktree is at `dc60ad9` before this audit; PR #15 remains draft/open at
 `71c4db1`. PRs #16–#19 are also open for the PE-Core audit, MAVD source screen,
