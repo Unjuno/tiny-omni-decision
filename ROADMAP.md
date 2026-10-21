@@ -12,6 +12,19 @@ quality result. No official test/sealed audit was opened. See the
 [frozen protocol and results](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_RESULTS_20261022.md)
 and [learning curves](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_CURVES_20261022.csv).
 
+**2026-10-22 R2 HoloAssist fixed-checkpoint replay:** Replayed the already
+selected 1,042-session-train joint, audio-only, and video-only readouts on the
+same 207 official-validation sessions used in the earlier pilot. This was
+external to the candidate's train and selection groups (zero session/media
+overlap), but is not blind because the earlier pilot selected checkpoints on
+these sessions. Joint AV reached 77.11% Accuracy / 0.5034 NLL versus audio-only
+76.00% / 0.5061; paired session intervals include zero. Joint is clearly better
+than video-only, but the result does not show that video is required or reach
+the quality goal. No fit or tuning occurred, and official test/sealed audit
+remained closed. All official train and validation groups in this line are now
+exposed, so new HoloAssist experiments require a different admitted source.
+See the [fixed-checkpoint replay report](docs/pretrained_reuse/R2_HOLOASSIST_OFFICIAL_VALIDATION_FROZEN_REPLAY_20261022.md).
+
 **2026-10-21 R1/R2 VideoPrism temporal-token runtime probe:** The pinned
 VideoPrism-B CPU forward on one fixed 8-frame development-train clip returned
 finite `[1, 2048, 768]` tokens, i.e. 256 spatial tokens per frame after its
