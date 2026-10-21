@@ -56,6 +56,7 @@ def summarize_strata(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 def summarize_source_support(annotation_rows: dict[str, Any]) -> dict[str, Any]:
     """Count label support by event label, keeping videos as the group unit."""
+    videos_with_both_any_label: set[str] = set()
     strata: dict[str, dict[str, Any]] = defaultdict(
         lambda: {
             "segments": 0,
@@ -67,7 +68,7 @@ def summarize_source_support(annotation_rows: dict[str, Any]) -> dict[str, Any]:
             "videos_with_both_labels": 0,
         }
     )
-    for _video_id, video in annotation_rows.items():
+    for video_id, video in annotation_rows.items():
         labels_by_video: dict[str, set[bool]] = defaultdict(set)
         for segment in video["sound_localisation"]:
             label = segment["label"]
@@ -82,8 +83,11 @@ def summarize_source_support(annotation_rows: dict[str, Any]) -> dict[str, Any]:
             summary["visible_videos"] += int(True in labels)
             summary["not_visible_videos"] += int(False in labels)
             summary["videos_with_both_labels"] += int(len(labels) == 2)
+            if len(labels) == 2:
+                videos_with_both_any_label.add(video_id)
     return dict(
         videos=len(annotation_rows),
+        videos_with_both_labels_any_category=len(videos_with_both_any_label),
         source_label_strata={
             label: summary
             for label, summary in sorted(

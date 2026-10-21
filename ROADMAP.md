@@ -48,10 +48,10 @@ model work. Full protocol, uncertainty, hashes, and logging caveat in
 
 **2026-10-21 R2 AV label-support audit:** A hash-pinned CPU-only join of saved
 predictions and source annotations found strong event-category/visibility
-associations in the balanced 256-video development cohort. In the full source
-annotation sets, only 240 train and 190 official-validation videos contain both
-visibility states across their annotated sound events, and those are not
-adjudicated counterfactual pairs. This strengthens the warning that the current
+associations in the balanced 256-video development cohort. A corrected
+distinct-video count in the full source annotation sets finds 229 train and 190
+official-validation videos containing both visibility states within an event
+category; these are not adjudicated counterfactual pairs. This strengthens the warning that the current
 readout cannot establish both-input necessity; no fitting, selection, media
 decode or test access occurred. Keep the task exploratory until a fresh,
 predeclared video-grouped conditional design is available. See the

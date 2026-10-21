@@ -26,8 +26,9 @@ agreement for every saved prediction before calculating category summaries.
   `4f0e602ba8f97313aca7d84805334a73edd94fa6f56d80b945954cd32327c141`.
 - Matched-readout result, SHA-256
   `95ee830089d9211f2b7d68929eda2020e02be958b77331ebd18c29636986a224`.
-- Analysis report: `C:\CodexArtifacts\pretrained-reuse-r2\perception-test-av-v1\posthoc-category-error-audit-02\report.json`, SHA-256
-  `55d44338460156a21af3f1a323b2ad3ece20eb79343a6de7bed532d5d055baba`.
+- Analysis report (corrected distinct-video aggregation):
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-test-av-v1\posthoc-category-error-audit-03\report.json`, SHA-256
+  `125efde0cd46c3f6301b7d9f3d84bfeb279966b9b537d1e905643d8f55c81c56`.
 - Command (from the repository root):
 
   ```powershell
@@ -70,13 +71,20 @@ independent, yields:
 | Interaction:rolling | 566 / 1 | 232 / 1 / 0 | 1,451 / 6 | 574 / 4 / 2 |
 | Human:Sound(clapping) | 452 / 3 | 135 / 3 / 0 | 1,225 / 3 | 353 / 3 / 0 |
 
-Across all source labels, 240 train videos and 190 official-validation videos
-contain both visibility states somewhere among their sound segments. These are
+Across all source labels, 229 distinct train videos and 190 distinct
+official-validation videos contain both visibility states within at least one
+event category. These are
 not necessarily matched or independently adjudicated counterfactuals. Only a
 minority of categories provide substantial same-video support; most observed
 class variation is between videos. The audio/video task therefore needs a
 stronger, predeclared conditional design before it can support a both-inputs-
 required claim.
+
+Correction note: the initial additive memo summed per-category video counts
+and reported 240 train videos. Videos spanning multiple categories were counted
+more than once in that sum. The corrected report computes distinct video IDs
+across categories; the correct total is 229. Category-specific counts are
+unchanged.
 
 The earlier 256-example matched readout remains unchanged: accuracy was 56.25%
 audio-only, 57.81% video-only, and 64.84% joint. Its 2,000-replicate paired

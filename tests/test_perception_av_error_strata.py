@@ -55,6 +55,7 @@ def test_source_support_counts_video_groups_not_just_segments():
                 {"label": "speech", "is_visible": 1},
                 {"label": "speech", "is_visible": 1},
                 {"label": "animal", "is_visible": 0},
+                {"label": "animal", "is_visible": 1},
             ]
         },
         "video-b": {
@@ -74,3 +75,4 @@ def test_source_support_counts_video_groups_not_just_segments():
     assert speech["visible_videos"] == 1
     assert speech["not_visible_videos"] == 1
     assert speech["videos_with_both_labels"] == 0
+    assert result["videos_with_both_labels_any_category"] == 1
