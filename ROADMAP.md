@@ -8,6 +8,13 @@ This is a focused calibration result, not blind evidence or general speech
 understanding. The calibration-trained readout saw 1,016 rather than the prior
 model's 1,280 training examples. See the [protocol and result](docs/pretrained_reuse/R2_TEXT_FREE_AUDIO_TEMPERATURE_20261021.md).
 
+**2026-10-21 R0 task-battery draft:** Existing text/image/audio/video and
+synchronized AV evidence is mapped to candidate task slices, group rules and
+the per-task >=95% target. The Windows/RTX 3080 remains an engineering host;
+end-user device and release calibration/latency thresholds remain undecided.
+This draft does not freeze a release battery or authorize a new fit. See the
+[task-battery proposal](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md).
+
 **2026-10-21 R0 live-state refresh:** Current `main` remains `09246d7`; PR #15
 remains Draft/Open and the research branch is separate. Thirty-four worktrees
 were inventoried; six are dirty, including the user's primary Teacher worktree,
