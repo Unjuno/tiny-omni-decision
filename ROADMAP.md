@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 Ego4D Social public license-draft review:** The public draft
+license now clarifies that qualifying derived models may be used commercially
+after the applicable agreement is executed, while the dataset itself remains
+restricted from redistribution or embedding in products. It is not an executed
+license and does not authorize data access. The applicable licensor agreement,
+TTM group counts, revisions, and media availability remain unresolved; no data
+was accessed. Keep the source REVIEW. See the
+[`license-draft review`](docs/pretrained_reuse/R2_EGO4D_SOCIAL_LICENSE_DRAFT_REVIEW_20261022.md).
+
 **2026-10-22 R2 optional sensor typed JSON adapter:** The existing HARTH
 sensor-window result now maps to the caller-ID Decision JSON contract while
 preserving central-label timing and explicit abstention for incomplete input.

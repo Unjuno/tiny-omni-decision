@@ -107,6 +107,15 @@ checkpoint selection.
   are forthcoming. The AVD v1 clip counts are not verified TTM counts. Exact
   revisions, README hashes, and this discrepancy are captured in
   [`R2_EGO4D_SOCIAL_SOURCE_SCREEN_20261022.md`](R2_EGO4D_SOCIAL_SOURCE_SCREEN_20261022.md).
+- **Ego4D license-draft follow-up (2026-10-22):** The official site's linked
+  public draft is now readable. The reviewed agreement templates state that
+  qualifying derived software/models may be used commercially, but access is
+  granted only after the applicable non-transferable agreement is executed;
+  the database itself cannot be redistributed or embedded in a product. This
+  resolves the prior draft-availability uncertainty, not authorization to
+  access the TTM data. Exact licensor/subset mapping, executed terms, counts,
+  and usable split provenance remain open. No data was accessed. Keep AV7 in
+  REVIEW. Details: [`license-draft review`](R2_EGO4D_SOCIAL_LICENSE_DRAFT_REVIEW_20261022.md).
 
 ## Product target and measurement scope
 
