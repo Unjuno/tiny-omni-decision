@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-21 R2 synthetic AV timing pilot reconciled:** A seed-17, four-arm
+frozen-feature run completed 2,048 updates per arm on 1,596 paired train rows
+and 390 development rows grouped by CLEVRER scene. On the generated-tone task,
+joint gated LSTM scored 78.97% Accuracy / 0.4566 NLL versus audio-only 72.31% /
+0.5051; text-only, video-only and temporal-mean controls were at chance. The paired
+79-scene bootstrap supports a development-set gain, but the same validation
+selected checkpoints, the synthetic audio carries only binned energy, and final
+joint training overfit (98.06% train Accuracy; final validation NLL 0.9432).
+Treat this only as controlled synthetic temporal-binding evidence. Next increase
+unique eligible scenes and create a fresh train-only grouped development slice
+before fitting again. [Protocol and full metrics](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_RESULTS_20261020.md).
+
 **2026-10-21 R2 AVID-Bench source screen:** AVID offers a relevant audio-visual
 inconsistency task, but the exact source-media rights and a pinned TRAIN-only
 release are not verified; accessible Hugging Face metadata currently lists test
