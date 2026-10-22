@@ -82,7 +82,7 @@ def test_split_audit_normalizes_ids_and_compares_random_validation_to_group_spli
     }
 
 
-def test_split_audit_reports_cross_split_reuse_without_calling_it_independent_folds():
+def test_split_audit_reports_validation_overlap_and_cross_fold_train_exposure():
     from scripts.audit_fairplay_pseudobinaural_splits import audit_splits
 
     report = audit_splits(
@@ -90,8 +90,25 @@ def test_split_audit_reports_cross_split_reuse_without_calling_it_independent_fo
         {"split": "PseudoBinaural split1 train only", "ids": ["000001"]},
     )
 
-    assert report["cross_split_policy"] == "overlapping split variants; not independent folds"
-    assert report["pseudobinaural_splits"]["1"]["other_splits_overlap_ids"] > 0
+    assert report["cross_split_policy"] == (
+        "overlapping train/validation assignments; not independent evaluation replicates"
+    )
+    assert (
+        report["pseudobinaural_splits"]["1"][
+            "other_split_train_validation_asset_overlap_count"
+        ]
+        > 0
+    )
+    assert report["pairwise_validation_id_overlap"]["1-2"] == 1
+    assert report["validation_to_other_split_train_id_overlap"]["1-val_in_2-train"] == 1
+    assert report["validation_union_summary"] == {
+        "total_validation_rows_across_variants": 10,
+        "unique_validation_asset_ids": 5,
+        "unique_validation_ids_in_split1_train": 3,
+        "unique_validation_ids_outside_split1_train_and_validation": 0,
+        "split1_train_ids_after_excluding_validation_union": 1,
+        "policy": "descriptive only; do not pool without group and sealed-test reconciliation",
+    }
 
 
 def test_split_audit_fails_if_train_and_validation_share_a_normalized_asset_id():

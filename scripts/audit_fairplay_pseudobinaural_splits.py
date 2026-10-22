@@ -114,12 +114,16 @@ def audit_splits(metadata: dict[str, Any], preflight: dict[str, Any]) -> dict[st
             "train_order_sha256": _order_sha256(train_order),
             "validation_order_sha256": _order_sha256(val_order),
             "train_validation_overlap_count": 0,
-            "other_splits_overlap_ids": len((train | val) & other_ids),
+            "other_split_train_validation_asset_overlap_count": len(
+                (train | val) & other_ids
+            ),
             "preflight_ids_all_in_train": preflight_set <= train if split_id == "1" else None,
             "preflight_ids_in_validation": sorted(preflight_set & val) if split_id == "1" else None,
         }
 
     pairwise_overlap: dict[str, int] = {}
+    pairwise_validation_overlap: dict[str, int] = {}
+    validation_to_other_train_overlap: dict[str, int] = {}
     for left in sorted(parsed, key=int):
         left_ids = parsed[left]["train"][1] | parsed[left]["val"][1]
         for right in sorted(parsed, key=int):
@@ -127,6 +131,23 @@ def audit_splits(metadata: dict[str, Any], preflight: dict[str, Any]) -> dict[st
                 continue
             right_ids = parsed[right]["train"][1] | parsed[right]["val"][1]
             pairwise_overlap[f"{left}-{right}"] = len(left_ids & right_ids)
+            pairwise_validation_overlap[f"{left}-{right}"] = len(
+                parsed[left]["val"][1] & parsed[right]["val"][1]
+            )
+
+    for validation_split, validation_parts in parsed.items():
+        validation_ids = validation_parts["val"][1]
+        for train_split, train_parts in parsed.items():
+            if validation_split == train_split:
+                continue
+            validation_to_other_train_overlap[
+                f"{validation_split}-val_in_{train_split}-train"
+            ] = len(validation_ids & train_parts["train"][1])
+
+    validation_union = set().union(*(parts["val"][1] for parts in parsed.values()))
+    split1_train = parsed["1"]["train"][1]
+    split1_known_train_validation = split1_train | parsed["1"]["val"][1]
+    validation_union_in_split1_train = validation_union & split1_train
 
     pseudo_train = parsed["1"]["train"][1]
     pseudo_val = parsed["1"]["val"][1]
@@ -144,7 +165,6 @@ def audit_splits(metadata: dict[str, Any], preflight: dict[str, Any]) -> dict[st
         "original_val_in_pseudo_train_count": len(original_val & pseudo_train),
         "original_val_in_pseudo_val_count": len(original_val & pseudo_val),
     }
-    variants_overlap = any(value > 0 for value in pairwise_overlap.values())
     return {
         "status": "PASS_ROW_LEVEL_SPLIT_AUDIT_WITH_SCENE_LIMIT",
         "source_revisions": {
@@ -154,11 +174,27 @@ def audit_splits(metadata: dict[str, Any], preflight: dict[str, Any]) -> dict[st
         "test_content_read": False,
         "media_read_by_this_audit": False,
         "pseudobinaural_splits": split_reports,
-        "pairwise_cross_split_total_id_overlap": pairwise_overlap,
+        "pairwise_cross_split_train_validation_asset_overlap": pairwise_overlap,
+        "pairwise_validation_id_overlap": pairwise_validation_overlap,
+        "validation_to_other_split_train_id_overlap": validation_to_other_train_overlap,
+        "validation_union_summary": {
+            "total_validation_rows_across_variants": sum(
+                len(parts["val"][1]) for parts in parsed.values()
+            ),
+            "unique_validation_asset_ids": len(validation_union),
+            "unique_validation_ids_in_split1_train": len(validation_union_in_split1_train),
+            "unique_validation_ids_outside_split1_train_and_validation": len(
+                validation_union - split1_known_train_validation
+            ),
+            "split1_train_ids_after_excluding_validation_union": len(
+                split1_train - validation_union
+            ),
+            "policy": (
+                "descriptive only; do not pool without group and sealed-test reconciliation"
+            ),
+        },
         "cross_split_policy": (
-            "overlapping split variants; not independent folds"
-            if variants_overlap
-            else "no exact ID overlap observed across variants"
+            "overlapping train/validation assignments; not independent evaluation replicates"
         ),
         "original_random_split1_vs_pseudobinaural_split1": cross_source,
         "validation_group_gate": {
