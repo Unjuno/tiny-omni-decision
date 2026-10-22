@@ -10,6 +10,14 @@ Pooling the lists is not admitted: 53 IDs are outside split 1's exposed
 train+validation lists, and split 1's sealed test was not inspected. No test
 content or media was opened. See the [corrected split audit](docs/pretrained_reuse/R2_FAIRPLAY_PSEUDOBINAURAL_SPLIT_AUDIT_20261022.md).
 
+**2026-10-22 R2 FAIR-Play source license:** The pinned upstream dataset README
+and LICENSE file both declare CC BY 4.0 (LICENSE Git blob
+`a6d7fd364bcc113164fb923e4eb53ae6fd75cae4`). This resolves the repository-level
+license declaration gate, not scene grouping, physical synchronization, or
+both-input task validity. Keep it as a research candidate for bounded train-only
+task construction; do not launch quality fitting yet. See the
+[license and group follow-up](docs/pretrained_reuse/R2_FAIRPLAY_LICENSE_AND_GROUP_FOLLOWUP_20261022.md).
+
 **2026-10-22 R1 PE-Core T16 CPU state-dict round-trip:** A second, isolated
 CPU attempt loaded the pinned 278,219,132-byte checkpoint into the 69,546,113-
 parameter OpenCLIP model, encoded one deterministic synthetic image and two
