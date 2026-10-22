@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R2 FAIR-Play / PseudoBinaural split reconciliation:** A new
+train/validation-only metadata audit found zero row-ID overlap within each
+PseudoBinaural split, but only 187 validation records (below the proposed
+200-independent-group floor) and no locally verifiable original-scene keys.
+The five split variants share 1,510–1,607 of 1,684 asset IDs pairwise, so they
+are not independent folds. Although original FAIR-Play split 1 and PseudoBinaural
+split 1 both list 1,684 rows, they share only 1,518 asset IDs; 148/187 original
+validation IDs occur in PseudoBinaural train. No test content, media, model or
+features were read. Do not begin quality-selected AV fitting on this source
+until group identity and the both-input task are verified. See the
+[split audit](docs/pretrained_reuse/R2_FAIRPLAY_PSEUDOBINAURAL_SPLIT_AUDIT_20261022.md).
+
 **2026-10-22 R1 PE-Core T16 CPU state-dict round-trip:** A second, isolated
 CPU attempt loaded the pinned 278,219,132-byte checkpoint into the 69,546,113-
 parameter OpenCLIP model, encoded one deterministic synthetic image and two
