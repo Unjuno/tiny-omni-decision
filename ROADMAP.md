@@ -25,6 +25,14 @@ measure physical AV synchronization or certify original-scene grouping. No
 quality fitting is admitted; details and hashes are in the
 [audio pair report](docs/pretrained_reuse/R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md).
 
+**2026-10-22 12:54 JST R0 live refresh:** PR #23 remote head is
+`26ac9a385c1dd9e26d59c22776929caae7f94670`, with both CI checks successful.
+The local checkout is still at its parent because C: has zero free bytes; its
+five pending paths match the committed content hashes. The unrelated Orbitune
+PID 30196 remains live and reserves 15,821/16,384 MiB on the RTX 3080 Laptop;
+the single utilization sample was 0%. No GPU work was started and no process
+was signaled. See the [R0 refresh](docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_1254JST.md).
+
 **2026-10-22 R1 PE-Core T16 CPU state-dict round-trip:** A second, isolated
 CPU attempt loaded the pinned 278,219,132-byte checkpoint into the 69,546,113-
 parameter OpenCLIP model, encoded one deterministic synthetic image and two
