@@ -25,6 +25,14 @@ measure physical AV synchronization or certify original-scene grouping. No
 quality fitting is admitted; details and hashes are in the
 [audio pair report](docs/pretrained_reuse/R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md).
 
+**2026-10-22 AMI timing receipt interpretation:** A pre-existing train-only
+receipt maps 20 speech-interval midpoints across six meetings to 80 video frames
+within one 25 fps frame period. Its code selects the first PTS at/after each
+requested time, so this demonstrates frame lookup coverage, not an independently
+measured A/V clock offset or visible-speaker truth. AMI remains review-only;
+details are in the [timestamp-join review](docs/pretrained_reuse/R2_AMI_TIMESTAMP_JOIN_REVIEW_20261022.md)
+and AV4 of the [task battery](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md).
+
 **2026-10-22 12:54 JST R0 live refresh:** PR #23 remote head is
 `26ac9a385c1dd9e26d59c22776929caae7f94670`, with both CI checks successful.
 The local checkout is still at its parent because C: has zero free bytes; its
