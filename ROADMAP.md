@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-22 R1 PE-Core T16 CPU state-dict round-trip:** A second, isolated
+CPU attempt loaded the pinned 278,219,132-byte checkpoint into the 69,546,113-
+parameter OpenCLIP model, encoded one deterministic synthetic image and two
+fixed texts, serialized the state dict in memory, then strict-loaded it into a
+fresh model. Image and text embeddings matched bit-for-bit (max absolute delta
+0); no benchmark data, GPU, network, or large temporary file was used. This
+verifies state-dict round-trip parity for that path, not package installation,
+official preprocessing, Decision quality, or the 200 MB product-package target.
+See the [round-trip audit](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_SAVE_RELOAD_PARITY_20261022.md)
+and preserved local [attempt-04 artifacts](C:/CodexArtifacts/pretrained-reuse-r1/pe-core-t16-r1-attempt-04-memory-reload/).
+
 **2026-10-22 07:09 JST R0 live refresh:** The roadmap branch is clean and
 synchronized at `bae5d688`. PR #23 checks are green. C: has 265,768,960 bytes
 free; the RTX 3080 Laptop has 15,821 / 16,384 MiB allocated to compute PID
