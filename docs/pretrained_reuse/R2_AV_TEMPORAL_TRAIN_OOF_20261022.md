@@ -136,6 +136,45 @@ SHA-256
 The fit used the same 480 optimizer updates and 86,016 repeated group-visits
 as the initial OOF run; this was a fixed control, not a seed or budget search.
 
+## Train-only timestamp shortcut audit
+
+A separate metadata-only audit checked whether the frozen task can be solved
+from candidate timestamps without inspecting media features. It read the
+`train` rows from the same task manifest (SHA-256
+`9147e598a4ac9e8412204b472ac6b32a019517ff682b8587379f23605672dbef`) and
+counted one row for each of the 224 unique training video groups. The validation
+split was not used in the calculations. The audit command was:
+
+```powershell
+python scripts/audit_perception_av_temporal_metadata_shortcut.py `
+  --manifest C:\CodexArtifacts\pretrained-reuse-r2\perception-av-temporal-scale-v2-20261021-01\task_manifest.json `
+  --output C:\CodexArtifacts\pretrained-reuse-r2\perception-av-temporal-scale-v2-20261021-01\train-only-oof-20261022-05-metadata-audit\report.json
+```
+
+The target audio interval exactly equalled the video interval in 224/224 rows.
+Choosing the audio option with the nearest interval center also reached 224/224;
+choosing the option with greatest interval overlap did the same. There were no
+ties. The corrected machine-readable report is at
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-av-temporal-scale-v2-20261021-01\train-only-oof-20261022-05-metadata-audit\report.json`,
+SHA-256 `586b48871a19ec1f4d5fca96269de11317d7439ecdd3502e07aaf9c854326f2d`.
+It records `validation_rows_used: false`; the earlier attempt-04 output is
+preserved, but its `validation_read` field was imprecise because the JSON
+parser loads the full manifest before the audit function accesses only `train`.
+Runner SHA-256 is
+`c84a7146bb087b921fd9a589f6f9b39ef46cb8ef7e1ec399deffd1cd16f1c6c41`; targeted
+test SHA-256 is
+`c6e92b6f36c44ef244dacf10bd2037b26b3dd16b0983e69c3937a80e910d84ea`.
+
+This is a **task-construction shortcut**, not evidence that the saved readouts
+used timestamps: the fit runner scores only the frozen audio/video feature
+arrays and target index. It does mean that a runtime receiving the manifest's
+time metadata can answer this task without pretrained representations, so the
+task cannot qualify temporal world understanding or learned AV complementarity.
+Future AV tasks should either make time offsets unavailable to the decision
+rule or construct examples where timing alone is insufficient and content-based
+matched controls remain valid. No model, encoder, media, validation split,
+sealed audit, or prior run was changed or re-evaluated.
+
 ## Interpretation and next step
 
 This provides additional evidence that the current small Perception Test

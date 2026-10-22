@@ -152,6 +152,16 @@ tune the exposed validation. A new AV quality attempt needs a distinct
 task/readout and newly frozen group-disjoint validation. See the
 [train-only OOF report](docs/pretrained_reuse/R2_AV_TEMPORAL_TRAIN_OOF_20261022.md).
 
+**2026-10-22 R2 AV temporal task-construction audit:** On only the 224 training
+groups, the target audio interval exactly matched the video interval in 224/224
+examples. A nearest-center or maximum-overlap timestamp-only rule also selects
+the correct option in 224/224, with no ties. The frozen readout did not receive
+timestamps, so this is not feature leakage into its scores; it shows that a
+runtime with interval metadata can solve this narrow task without learned AV
+representations. Do not use this task as evidence of temporal understanding or
+AV complementarity. The audit did not score validation and did not modify any
+existing run. See the train-only audit subsection in the report above.
+
 **2026-10-22 R2 HoloAssist fixed-checkpoint replay:** Replayed the already
 selected 1,042-session-train joint, audio-only, and video-only readouts on the
 same 207 official-validation sessions used in the earlier pilot. This was
