@@ -216,6 +216,43 @@
       "release_status": "pretrained and accessible"
     },
     {
+      "id": "pe-core-t16-openclip",
+      "modality": [
+        "image",
+        "text"
+      ],
+      "model_revision": "timm/PE-Core-T-16-384@7fe539ed578ac49a1c2b4f946e4b0747704c825a",
+      "source_model_revision": "facebook/PE-Core-T16-384@8b4722741a516c18e7d311f158f13c600fea6c78",
+      "checkpoint_bytes": 278219132,
+      "parameters": 69546113,
+      "license": "Apache-2.0 for the pinned converted weights per the pinned Hub card; MIT for the OpenCLIP implementation at commit 30573618fc375b12f094ef64cb3a1391cf611c45. The official Meta perception_models package has separate FAIR Noncommercial Research terms and was not executed by this runtime.",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/timm/PE-Core-T-16-384/tree/7fe539ed578ac49a1c2b4f946e4b0747704c825a",
+        "https://github.com/mlfoundations/open_clip/blob/30573618fc375b12f094ef64cb3a1391cf611c45/LICENSE"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "CPU OpenCLIP 3.3.0 / timm 1.0.25 profile loaded the pinned safetensors checkpoint and produced finite [1,512] image and [2,512] text embeddings on fixed synthetic inputs. Selected tensors were spot-checked against the original checkpoint; full tensor/forward parity and save/reload parity remain unverified. No task data or CUDA was used.",
+      "task_quality_status": "unmeasured; CPU smoke inputs only and no Decision task dataset was opened",
+      "decision": "Eligible for a matched image/text frozen-feature Decision probe under this converted-weight/OpenCLIP profile; not a product candidate until task quality, full mapping parity, package/reload, and target-device costs are measured.",
+      "parameter_tensor_bytes": 278184452,
+      "checkpoint_sha256": "477b7507c79e3484195f4e389af6d044b5d56f42ce503d6b0eb7e99439b545e5",
+      "checkpoint_url": "https://huggingface.co/timm/PE-Core-T-16-384/resolve/7fe539ed578ac49a1c2b4f946e4b0747704c825a/open_clip_model.safetensors",
+      "implementation_revision": "mlfoundations/open_clip@30573618fc375b12f094ef64cb3a1391cf611c45",
+      "implementation_version": "open_clip_torch 3.3.0; timm 1.0.25",
+      "report": "https://github.com/Unjuno/tiny-omni-decision/blob/codex/r1-pe-core-audit-20261021/docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md",
+      "audit_date": "2026-10-22",
+      "release_status": "pretrained and accessible",
+      "primary_citations": [
+        "https://huggingface.co/timm/PE-Core-T-16-384/tree/7fe539ed578ac49a1c2b4f946e4b0747704c825a",
+        "https://github.com/mlfoundations/open_clip/tree/30573618fc375b12f094ef64cb3a1391cf611c45",
+        "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/setup.py"
+      ]
+    },
+    {
       "id": "pe-core-t16",
       "modality": [
         "image",
@@ -702,6 +739,6 @@
       ]
     }
   ],
-  "incremental_update_date": "2026-10-14",
-  "incremental_update_scope": "append pinned RTDETRv2 R18 actual CPU/fresh component audit; earlier candidate records preserved"
+  "incremental_update_date": "2026-10-22",
+  "incremental_update_scope": "append pinned PE-Core T16 OpenCLIP runtime profile from the separate CPU audit; retain original Meta-runtime review record and all earlier candidates"
 }
