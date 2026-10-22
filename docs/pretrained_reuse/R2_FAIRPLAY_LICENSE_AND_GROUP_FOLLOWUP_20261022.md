@@ -34,9 +34,9 @@ does not by itself prove that both modalities are necessary.
   preserved under
   `C:/CodexArtifacts/pretrained-reuse-r2/fair-play-train-group-preflight-attempt-01/`.
   No new media was downloaded, decoded, or modified in this follow-up.
-- At inspection, C: had 0.22 GB free and the RTX 3080 Laptop had 15,821 / 16,384
-  MiB allocated to external PID 30196. No GPU work or full-corpus acquisition
-  was started.
+- At inspection before the audio check, C: had 0.22 GB free and the RTX 3080
+  Laptop had 15,821 / 16,384 MiB allocated to external PID 30196. No GPU work
+  or full-corpus acquisition was started.
 - The five train/validation manifests have row-level separation per split.
   Their validation lists overlap and no machine-readable scene IDs are
   present. See the [corrected split audit](R2_FAIRPLAY_PSEUDOBINAURAL_SPLIT_AUDIT_20261022.md).
@@ -51,13 +51,15 @@ does not by itself prove that both modalities are necessary.
 | Gate | Status | Evidence / remaining work |
 |---|---|---|
 | Upstream dataset license declaration | **Verified: CC BY 4.0** | Pinned README and LICENSE path/blob at the release revision |
-| Exact audio/video asset pair relation | **Partial** | README says same-index clips are roughly aligned; physical offset was not remeasured here |
+| Exact audio/video asset pair relation | **Partial** | README says same-index clips are roughly aligned; eight train-only WAV/MP4 audio waveforms now show a detectable pairwise match, but no physical AV sync or original scene identity is proven |
 | Train/validation row separation | **Verified** | Existing pinned manifests and corrected metadata audit |
 | Original-scene group count | **Unknown** | No group key in the audited lists; author-reported construction only |
 | Both-input-required Decision task | **Not established** | Freeze hard negatives and verify unimodal controls on train only |
 | Full media acquisition / model fitting | **Not started** | Disk capacity and current task/data gates do not justify it |
 
-Next admissible work is a bounded **train-only** task-construction and timing
-preflight using the existing sample, followed by a no-write disk-capacity plan.
-Do not read test IDs or media, select on exposed validation, or call this source
-an AV-quality result until grouping and both-input necessity are evidenced.
+The [CPU waveform audit](R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md) compares
+only eight already acquired train WAV/MP4 audio streams. It does not establish
+physical AV synchronization, original-scene grouping, task quality, or that a
+Decision task requires both modalities. Keep FAIR-Play blocked from quality
+fitting until grouping and both-input necessity are evidenced. Do not read test
+IDs/media or select on exposed validation.

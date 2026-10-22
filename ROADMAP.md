@@ -18,6 +18,13 @@ both-input task validity. Keep it as a research candidate for bounded train-only
 task construction; do not launch quality fitting yet. See the
 [license and group follow-up](docs/pretrained_reuse/R2_FAIRPLAY_LICENSE_AND_GROUP_FOLLOWUP_20261022.md).
 
+**2026-10-22 FAIR-Play train audio pair check:** CPU waveform matching on eight
+already acquired split1 train-only pairs found related embedded-AAC/paired-WAV
+signals, but zero-lag correlations were low and peak lags varied. This does not
+measure physical AV synchronization or certify original-scene grouping. No
+quality fitting is admitted; details and hashes are in the
+[audio pair report](docs/pretrained_reuse/R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md).
+
 **2026-10-22 R1 PE-Core T16 CPU state-dict round-trip:** A second, isolated
 CPU attempt loaded the pinned 278,219,132-byte checkpoint into the 69,546,113-
 parameter OpenCLIP model, encoded one deterministic synthetic image and two
