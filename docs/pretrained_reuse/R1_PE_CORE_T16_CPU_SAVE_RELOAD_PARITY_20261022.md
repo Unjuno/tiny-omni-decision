@@ -11,6 +11,14 @@ runtime integrity smoke, not a Decision-task quality evaluation.
   `7fe539ed578ac49a1c2b4f946e4b0747704c825a`.
 - Local safetensors checkpoint: 278,219,132 bytes;
   SHA-256 `477b7507c79e3484195f4e389af6d044b5d56f42ce503d6b0eb7e99439b545e5`.
+- Published licensing declarations: the pinned Hugging Face model card labels
+  the PE-Core checkpoint Apache-2.0, Meta's `LICENSE.PE` is the Apache License
+  2.0, and the executed OpenCLIP v3.3.0 source is MIT licensed. These are the
+  repositories' published software/checkpoint terms; this check does not make
+  a separate claim about the provenance or rights of the pretraining data.
+  Sources: [pinned PE-Core model card](https://huggingface.co/timm/PE-Core-T-16-384/tree/7fe539ed578ac49a1c2b4f946e4b0747704c825a),
+  [Meta PE license](https://github.com/facebookresearch/perception_models/blob/main/LICENSE.PE),
+  [OpenCLIP v3.3.0 license](https://github.com/mlfoundations/open_clip/blob/v3.3.0/LICENSE).
 - Runtime: Python 3.11.9, PyTorch 2.6.0+cu124, OpenCLIP 3.3.0,
   safetensors 0.8.0, CPU with four PyTorch threads. `CUDA_VISIBLE_DEVICES=-1`
   was set; CUDA was unavailable and remained uninitialized. Hub access was
