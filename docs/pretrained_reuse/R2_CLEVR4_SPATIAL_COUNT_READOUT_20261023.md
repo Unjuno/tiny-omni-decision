@@ -91,8 +91,10 @@ The CPU-only VideoPrism extraction path passed a 2-image-per-split smoke and a
 seconds including initial compilation; measured rates were 0.679 images/s for
 train and 0.786 images/s for validation. At that observed rate the full 35,000
 images are projected to take about 13.4 hours, with machine-dependent
-variation. The smoke outputs are marked `smoke_complete` and cannot be used by
-the trainer.
+variation before yielding to other processes. The full extractor was assigned
+BelowNormal process priority to keep the unrelated training workload favored,
+so actual wall time may be longer. The smoke outputs are marked
+`smoke_complete` and cannot be used by the trainer.
 
 The matched trainer also passed a separate synthetic-fixture smoke using only
 2 train and 2 development images. It completed both eight-epoch arms, wrote
