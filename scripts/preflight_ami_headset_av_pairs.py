@@ -12,7 +12,6 @@ from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlparse
 
-import av
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -142,6 +141,8 @@ def current_dataset_revision(session: requests.Session) -> str:
 
 
 def nearest_video_frame(path: Path, target_seconds: float) -> tuple[float, int, int]:
+    import av
+
     with av.open(str(path)) as container:
         stream = next(s for s in container.streams if s.type == "video")
         container.seek(
@@ -184,6 +185,8 @@ def fetch_decode_audio(
     video_paths: dict[tuple[str, str], Path],
     speaker_map: dict[str, dict[str, dict[str, object]]],
 ) -> dict[str, object]:
+    import av
+
     offset = int(row["source_row_idx"])
     response = session.get(
         ROWS_URL,
