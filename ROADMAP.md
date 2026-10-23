@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-23 R0 live-state refresh:** 49 worktrees, 75 remote branches, and 16
+open PRs were captured without changing them; the shared Teacher checkout has
+user changes and remains untouched. An unrelated Orbitune worker occupies the
+local RTX 3080 Laptop (15,821/16,384 MiB in use), so no Tiny Omni GPU work was
+started. The Storytime metadata-only follow-up passed its GitHub Actions check.
+Device/task/calibration/latency gates remain open, and no synchronized AV task
+has yet passed rights, grouping, and both-input-necessity admission. See the
+[live R0 snapshot](docs/pretrained_reuse/R0_LIVE_AUDIT_20261023.md) and
+[machine-readable state](docs/pretrained_reuse/R0_LIVE_AUDIT_20261023.json).
+
 **2026-10-23 R2 Storytime OSF metadata follow-up:** A read-only public API
 check resolved the source-level license and score schema after the OSF web
 page returned 403. The node explicitly reports CC BY 4.0; the score CSV's

@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-10-23T13:11:56.7488333Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "latest_roadmap_branch": {
+    "ref": "origin/docs/pretrained-reuse-roadmap-20261010",
+    "head": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a"
+  },
+  "storytime_followup": {
+    "branch": "codex/r2-storytime-api-followup-20261023",
+    "head": "4039513ac1aba5265294de3327e5a58d864ed903",
+    "github_check": "success"
+  },
+  "git_inventory": {
+    "registered_worktrees": 49,
+    "remote_branches": 75,
+    "open_pull_requests": 16,
+    "open_pr_details": [
+      {
+        "number": 9,
+        "title": "Teacher v1: leakage-safe quality pipeline",
+        "draft": true,
+        "head_branch": "codex/teacher-quality-v1",
+        "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+        "base_branch": "main"
+      },
+      {
+        "number": 10,
+        "title": "feat: safe postquant worker entrypoints (no training launch)",
+        "draft": true,
+        "head_branch": "codex/postquant-worker-entrypoints",
+        "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+        "base_branch": "codex/roadmap-compression-video-specialization"
+      },
+      {
+        "number": 11,
+        "title": "feat: postquant numerical core and CPU checker (no model execution)",
+        "draft": true,
+        "head_branch": "codex/postquant-numerical-core",
+        "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+        "base_branch": "codex/postquant-worker-entrypoints"
+      },
+      {
+        "number": 12,
+        "title": "feat: add strict postquant teacher cache boundary",
+        "draft": true,
+        "head_branch": "codex/postquant-teacher-cache",
+        "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+        "base_branch": "codex/postquant-numerical-core"
+      },
+      {
+        "number": 13,
+        "title": "feat: ternary-first student recovery with conditional LoRA",
+        "draft": false,
+        "head_branch": "feat/ternary-student-recovery",
+        "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+        "base_branch": "main"
+      },
+      {
+        "number": 14,
+        "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+        "draft": true,
+        "head_branch": "fix/student-qat-training-handoff",
+        "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+        "base_branch": "codex/ternary-student-recovery"
+      },
+      {
+        "number": 15,
+        "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+        "draft": true,
+        "head_branch": "docs/pretrained-reuse-roadmap-20261010",
+        "head_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+        "base_branch": "main"
+      },
+      {
+        "number": 16,
+        "title": "Record PE-Core T16 checkpoint CPU audit",
+        "draft": false,
+        "head_branch": "codex/r1-pe-core-audit-20261021",
+        "head_sha": "afea6624dfe247350ecbb704d61099304009f2a0",
+        "base_branch": "docs/pretrained-reuse-roadmap-20261010"
+      },
+      {
+        "number": 17,
+        "title": "Screen MAVD Urbansas audiovisual source integrity",
+        "draft": false,
+        "head_branch": "codex/r2-mavd-source-screen-20261021",
+        "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+        "base_branch": "docs/pretrained-reuse-roadmap-20261010"
+      },
+      {
+        "number": 18,
+        "title": "Screen CaptainCook4D for a procedural step-text video task",
+        "draft": true,
+        "head_branch": "codex/r2-captaincook4d-screen-20261021",
+        "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+        "base_branch": "docs/pretrained-reuse-roadmap-20261010"
+      },
+      {
+        "number": 19,
+        "title": "Screen AMI for cross-modal speaker-to-face matching",
+        "draft": true,
+        "head_branch": "codex/r2-ami-av-source-screen-20261021",
+        "head_sha": "406f003a128a7991ec39dcb15608b381f003add4",
+        "base_branch": "docs/pretrained-reuse-roadmap-20261010"
+      },
+      {
+        "number": 20,
+        "title": "Add stable typed Decision JSON output",
+        "draft": true,
+        "head_branch": "codex/r2-json-decision-contract-20261021",
+        "head_sha": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+        "base_branch": "codex/r0-r2-continuation-20261021"
+      },
+      {
+        "number": 21,
+        "title": "R2: CLEVRER synthetic AV coverage v2 results",
+        "draft": true,
+        "head_branch": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+        "head_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+        "base_branch": "codex/r2-clevrer-synthetic-av-protocol"
+      },
+      {
+        "number": 22,
+        "title": "docs: screen FAIR-Play for R2 AV matching",
+        "draft": true,
+        "head_branch": "codex/r2-fair-play-source-screen-20261022",
+        "head_sha": "936a9837299b25095c0f0703768f1079af24b424",
+        "base_branch": "codex/r2-clevrer-synthetic-av-coverage-20261022"
+      },
+      {
+        "number": 23,
+        "title": "R2: record scalar audio projection diagnostic",
+        "draft": true,
+        "head_branch": "codex/roadmap-scalar-audio-update-20261022",
+        "head_sha": "df4ac9b02b66b60a3231df7f765c82bb436c908f",
+        "base_branch": "docs/pretrained-reuse-roadmap-20261010"
+      },
+      {
+        "number": 24,
+        "title": "Record CLEVR-4 100k fixed-readout transfer results",
+        "draft": true,
+        "head_branch": "codex/clevr4-100k-transfer-eval-20261023",
+        "head_sha": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+        "base_branch": "docs/pretrained-reuse-roadmap-20261010"
+      }
+    ]
+  },
+  "local_machine": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "vram_total_mib": 16384,
+    "vram_used_mib": 15821,
+    "gpu_utilization_percent": 33,
+    "gpu_temperature_c": 66,
+    "c_drive_free_gib": 48.95
+  },
+  "unrelated_gpu_work": {
+    "state": "RUNNING",
+    "project": "Orbitune",
+    "supervisor_pid": 4696,
+    "supervisor_child_pid": 23856,
+    "worker_pid": 7664,
+    "worker_child_pid": 15584,
+    "gpu_process_pid": 15584,
+    "command_line_published": false,
+    "intervention": "none"
+  },
+  "shared_primary_checkout": {
+    "branch": "codex/teacher-quality-clean-dev-v1",
+    "has_uncommitted_changes": true,
+    "modified_or_untracked": [
+      "ROADMAP.md",
+      "docs/VIDEO_TEACHER_V2_LONG_BUDGET.md",
+      "docs/pretrained_reuse/",
+      "scripts/resume_teacher_quality_clean_dev_v2.py"
+    ],
+    "we_modified_shared_checkout": false
+  },
+  "compute": {
+    "new_gpu_work_started": false,
+    "cloud_compute_used": false,
+    "cloud_cost_usd": 0
+  }
+}
