@@ -2901,3 +2901,5 @@ size mismatches, uncovered IDs, or receipt hash conflicts were found. Source
 hash authentication remains limited to 467 pinned journal rows. Seven partial
 files and active downloader PID 23276 remained. See the [progress record]
 (docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-23 R2 CLEVRER temporal-LSTM TRAIN dependency audit:** The saved joint LSTM reacts to both streams on its 3,696 historical TRAIN rows: accuracy 87.26% falls to 66.29% with video zero and 50.00% with audio zero; reversing video/audio order lowers it to 71.24% / 33.69%. Audio-only remains 75.62%; video-only is 50%. This verifies TRAIN sensitivity only on synthetic-tone CLEVRER data, not natural AV or unseen quality. The old validation was not re-evaluated. See [the input-dependency report](docs/pretrained_reuse/R2_CLEVRER_LSTM_TRAIN_INPUT_DEPENDENCY_20261023.md).
