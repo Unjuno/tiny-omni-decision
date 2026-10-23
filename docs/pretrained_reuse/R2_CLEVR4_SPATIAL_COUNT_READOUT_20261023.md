@@ -94,6 +94,12 @@ images are projected to take about 13.4 hours, with machine-dependent
 variation. The smoke outputs are marked `smoke_complete` and cannot be used by
 the trainer.
 
+The matched trainer also passed a separate synthetic-fixture smoke using only
+2 train and 2 development images. It completed both eight-epoch arms, wrote
+distinct best/final checkpoints and predictions, and reproduced the selected
+macro NLL after reloading the best checkpoint. Those fixture metrics are only
+an execution-path check and are excluded from the model-quality results.
+
 The full extraction is running as a separate CPU-only process in
 `C:\CodexArtifacts\pretrained-reuse-r2\clevr4-spatial-count-readout-features-01`.
 It reads only the frozen train/dev manifests and the archive, emits float16
