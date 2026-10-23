@@ -1,0 +1,50 @@
+schema_version: 1
+experiment_id: path-a-image-videoprism-spatial-count-seed17
+seed: 17
+source:
+  dataset: sgvaze/clevr4
+  revision: cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
+  license: CC-BY-4.0
+  task: synthetic image taxonomy choice classification
+  taxonomies: [color, texture, count, shape]
+split:
+  source_pool: previously unused subset of official train assets
+  train_images: 30000
+  validation_images: 5000
+  group_key: image_id
+  old_train_validation_ids_and_media_hashes_excluded: true
+encoder:
+  repo_id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  parameters: 114365184
+  frozen: true
+  frames: 8
+  image_mode: repeat_image_across_all_frames
+  pooling: mean_time_keep_ordered_8x8_spatial_grid
+candidate_embeddings:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  dimension: 384
+  source: reuse exact frozen CLEVR-4 option embeddings from prior VideoPrism bundle
+  trainable: false
+comparison:
+  baseline: mean_pool_64_spatial_cells_then_shared_candidate_mlp
+  candidate: option_conditioned_attention_over_64_spatial_cells
+  seed: 17
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: minimum_macro_validation_nll_across_four_taxonomies
+  independent_models_from_scratch: true
+  validation_only_for_checkpoint_selection: true
+  sealed_audit_loaded: false
+reporting:
+  metrics: [accuracy, nll, brier, ece_15_equal_width]
+  by_taxonomy: true
+  macro_across_taxonomies: true
+  fixed_train_diagnostic_images: 2048
+  video_temporal_claim: false

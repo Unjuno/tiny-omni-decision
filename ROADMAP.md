@@ -10,6 +10,15 @@ multimodal fusion, or a sealed audit. No training or model selection occurred.
 The fixed candidate and validation must not be retuned against this exposed
 split. See the [complete transfer protocol and metrics](docs/pretrained_reuse/R2_CLEVR4_100K_TRANSFER_EVAL_20261023.md).
 
+**2026-10-23 R2 spatial count readout follow-up (in progress):** The exposed
+official validation remains closed. A fresh seed-17 split of 30,000 train and
+5,000 development images was drawn from unused official-train media after
+excluding previous train/validation IDs and hashes. A matched mean-pool MLP
+versus option-conditioned spatial readout is being evaluated on frozen
+VideoPrism features. CPU-only feature extraction is running because the local
+RTX 3080 is occupied. No fresh model result is available yet; this does not
+change R0/R2 quality gates. See the [protocol and execution state](docs/pretrained_reuse/R2_CLEVR4_SPATIAL_COUNT_READOUT_20261023.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
