@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-10-23 CLEVR-4 100k fixed-readout transfer replay:** The frozen
+VideoPrism-B image readout scored 87.41% macro Accuracy on 79,952 decisions
+from the complete official 19,988-image validation split. Color/shape were
+near 99.5%, texture 90.28%, while count was 60.44%. This is static synthetic
+attribute classification only; it is not evidence for general image/video or
+multimodal reasoning, and the exposed validation is not a sealed audit.
+[Protocol, hashes, all metrics, and limits](docs/pretrained_reuse/R2_CLEVR4_100K_TRANSFER_EVAL_20261023.md).
+
 **2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
 scenes from 256 to 768 improved selected pooled development Accuracy and NLL
 at the same 2,048-update budget, primarily on static descriptive questions.
