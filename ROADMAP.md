@@ -2919,3 +2919,15 @@ size mismatches, uncovered IDs, or receipt hash conflicts were found. Source
 hash authentication remains limited to 467 pinned journal rows. Seven partial
 files and active downloader PID 23276 remained. See the [progress record]
 (docs/pretrained_reuse/R2_HOLOASSIST_TEXTFREE_PROGRESS_20261019.md).
+
+**2026-10-23 R2 AV training-pipeline diagnosis:** The conditional AV readout has
+been trained; its earlier "untrained" status was stale. A TRAIN-only CPU
+comparison completed 2,048 updates per arm: row shuffle 75.38% / NLL 0.461588,
+whole-pair shuffle 75.62% / 0.458694. Pairing accelerates initial learning but
+provides no substantial endpoint gain. Replacing video with another scene
+changes zero choices across all 3,696 TRAIN rows in both arms; audio removal
+returns both to 50%. This is audio-dominated fitting, not demonstrated AV
+complementarity. Preserve all artifacts, close this sampler comparison, and
+require stronger video/condition-binding controls before further quality runs.
+CPU/GPU fitting discrepancy remains unresolved; no validation or sealed audit
+was scored. [Protocol, complete results and hashes](docs/pretrained_reuse/R2_AV_TRAINING_SIGNAL_20261023.md).

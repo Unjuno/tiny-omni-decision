@@ -1168,3 +1168,7 @@ NLL.4133→.3983; random Accuracy and Brier worsen, so the combined prospective
 gate fails. Keep equal weights and close this coefficient comparison; no new
 runtime/Teacher promotion. The four-modality95–98% objective remains unmet.
 [Curves, paired intervals, all attempts and hashes](docs/pretrained_reuse/R2_AV_SLOT_WEIGHTS_RESULTS_20261015.md).
+
+2026-10-23: [TRAIN-only AV pipeline diagnostics](docs/pretrained_reuse/R2_AV_TRAINING_SIGNAL_20261023.md)
+completed; paired sampling learns sooner, but video swaps preserve all final
+choices. These results do not qualify multimodal quality or a product model.

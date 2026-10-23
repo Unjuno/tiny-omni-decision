@@ -100,7 +100,7 @@ verified before and after, with no changes.
 | diagnostic-final-original.pt | b54ff42e5c9bce0fd2cc885e7b9da590da054ead4c753db99bdf23439d8505ee |
 | diagnostic-final-fixed_query.pt | b32ae91d80d2747f5b40bca26059bc3a474fa8971a8cbff5c02abbcbcc665313 |
 
-## Prospective sampler follow-up
+## Matched sampler follow-up: completed
 
 The small full-batch fit differs from the original large-corpus experiment in
 several ways, so it does not establish that batching caused collapse. The next
@@ -109,4 +109,116 @@ scalar adapter, optimizer and2,048-update budget. It compares only independent
 row shuffling with whole-pair shuffling, both at batch64. Every pair contains
 opposite targets under the same question/video. Validation remains unused for
 fitting/scoring; all training curves and final weights are retained. No result
-will be treated as generalization quality or grounds for product promotion.
+is treated as generalization quality or grounds for product promotion.
+
+Both arms completed 2,048 updates / 130,512 example exposures / 3,696 unique
+rows from 773 scenes and 1,848 event pairs. Same 1,732,804 allocated/trainable
+readout parameters; encoders remain frozen. Only final weights were saved, with
+exact full-TRAIN logit reload. No best-checkpoint selection or validation scoring.
+
+| Updates | Row shuffle TRAIN Acc. | Row shuffle NLL | Whole-pair TRAIN Acc. | Whole-pair NLL |
+|---|---:|---:|---:|---:|
+| 0 | 50.00% | 0.693203 | 50.00% | 0.693203 |
+| 128 | 50.00% | 0.693147 | 73.27% | 0.653448 |
+| 256 | 50.00% | 0.693147 | 74.76% | 0.476114 |
+| 512 | 50.00% | 0.693228 | 75.35% | 0.465391 |
+| 1024 | 50.00% | 0.693145 | 75.05% | 0.494656 |
+| 1152 | 75.62% | 0.498248 | 75.62% | 0.467649 |
+| 1536 | 75.38% | 0.462991 | 76.06% | 0.456969 |
+| 1920 | 76.11% | 0.457813 | 75.35% | 0.539141 |
+| 2048 | 75.38% | 0.461588 | 75.62% | 0.458694 |
+
+Final Brier is 0.317146 / 0.316194; ECE-15 is 0.037916 / 0.024378. Whole-pair
+batching learns sooner in this single CPU seed, but its endpoint difference is
+only 9/3,696 rows (+0.24 percentage points). Do not select or promote an arm from
+TRAIN results. NLL is not monotonic; neither convergence nor a quality ceiling
+is established. Row shuffle's late departure from chance is a fitting transition,
+not evidence of grokking on unseen data.
+
+The reference comparison independently confirms exact feature, option-vector,
+readout-source, and consumed-order hashes for row shuffle. The latter is
+`74724968a38753e3358d77b34a88108706c9e547d48c716cabb375863d607b1f`,
+the original GPU experiment's 130,512-index order. Yet this CPU run learns while
+the old GPU run stayed near chance. Backend/numerical behavior is a material
+confound for comparisons with the old run. The diagnostic runner and evaluation
+schedule also differ (TRAIN measurements and gradient probes instead of
+validation selection). No matched CPU/CUDA replay isolated the cause, so do not
+attribute the old failure solely to batching or claim exact training replay.
+
+## Fixed final-weight input controls
+
+The final checkpoints were reloaded in a new CPU process. Original full-TRAIN
+logits matched the saved arrays bit for bit. Controls leave weights/targets
+unchanged: zero a stream, or replace video/question using a fixed half-cohort
+cyclic shift. Every donor comes from a different scene. These mismatched-input
+scores are dependency diagnostics, not valid new task labels or quality scores.
+
+| Input condition | Row shuffle Acc. / NLL | Whole-pair Acc. / NLL |
+|---|---:|---:|
+| Original | 75.38% / 0.461588 | 75.62% / 0.458694 |
+| Zero audio | 50.00% / 0.795533 | 50.00% / 1.048511 |
+| Zero video | 75.38% / 0.464064 | 75.62% / 0.458694 |
+| Different-scene video | 75.38% / 0.462748 | 75.62% / 0.458694 |
+| Different-scene question | 75.38% / 0.461588 | 75.60% / 0.460586 |
+
+Zeroing or swapping video changes **zero** final choices in either arm across
+3,696 rows. Row-shuffle probabilities do respond to video (maximum change 0.155
+for swapped video); whole-pair probabilities barely respond (maximum 1.37e-6).
+Thus distinguish unchanged argmax from exact numerical invariance. Question
+swaps change 0 choices in row shuffle and 13 in whole-pair. Audio removal returns
+both arms to 50%. The learned decision remains dominated by audio timing.
+These models do not demonstrate the requested AV evidence binding, even on
+TRAIN. Faster fitting is insufficient grounds for adopting the sampler/model.
+
+## Sampler execution, artifacts and next action
+
+Source commit `39e4b0b`; full code hashes and exact arguments are in the protocol.
+Local Intel i7-12700H, Python 3.11.9 / PyTorch 2.6.0+cu124, CPU FP32, two fitting
+threads. Option encoding remains 14 threads. Start/end:
+2026-10-23T05:39:11.173026Z / 05:48:56.833353Z. Arm times including measurements
+and reload are 283.80 / 301.62 seconds. Controls take 16.76 seconds. These are
+program wall times on a shared host, not isolated throughput benchmarks; peak
+RAM was not instrumented. GPU/cloud compute and monetary cost are zero.
+
+```powershell
+$env:PYTHONPATH='src;.'
+python -m scripts.audit_av_paired_sampler `
+  --features C:/CodexArtifacts/pretrained-reuse-r2/clevrer-synthetic-av-coverage-v2-decision-features-attempt-01/decision-features.npz `
+  --text-model-dir C:/CodexArtifacts/pretrained-reuse-r2/conditional-av-minilm-pinned-cache-01 `
+  --output C:/CodexArtifacts/pretrained-reuse-r2/conditional-av-paired-sampler-20261023-01
+python -m scripts.audit_av_sampler_controls `
+  --run C:/CodexArtifacts/pretrained-reuse-r2/conditional-av-paired-sampler-20261023-01 `
+  --output C:/CodexArtifacts/pretrained-reuse-r2/conditional-av-paired-sampler-controls-20261023-01
+```
+
+| File (under sampler output unless specified) | SHA-256 |
+|---|---|
+| run-metadata.json | 91f67ad293dedf74ae7ce9d96c65e2509be422969632c7bfdd204b7ffb888cd2 |
+| results.json | 0566081b4e02d7d0a679859ee752ae70c5ed77b02965f67641742e6c3a8a0d87 |
+| history-original.json | f21e3db6d32855d822bd8848cdc1c434a9a41723d270f9d996de03f36f79b68b |
+| history-paired.json | ec4f13550ea1e26c596d06adaaf95571674330e9a4745e72dd57c111ec449ee4 |
+| diagnostic-final-original.pt | d10b654d4c9f6715cbf0bba28514d9cfc73388c8a30541bb2f42fd0ab152f6b7 |
+| diagnostic-final-paired.pt | 6f291111b4603b0154772d2c0b98384e154fc72f504c8fed64fe1052ee381fa7 |
+| controls output/report.json | 50b9eeb49b0f9300b0a85acfdd58b63420756c82db20f55154daca30c500bf32 |
+
+All final weights, predictions, complete curves, input identities and hashes
+remain in new external artifact directories. Nothing overwrites prior v1/v2/QAT
+models or corpus data. Orbitune was left running; no GPU reservation was needed.
+
+Close this sampler comparison. Next, require a train-side task/control where
+audio timing alone is insufficient and the requested collision/object binding
+requires video, before another quality run. Preserve the temporal LSTM reference
+and compare temporal binding paths only under such controls. A separate fixed
+CPU/CUDA numerical replay could investigate the old collapse when the GPU is
+cooperatively available; it must not tune to the exposed validation. No new
+natural-AV quality, four-modality 95–98% claim, quantization, release qualification,
+or product promotion follows from these diagnostics.
+
+## Verification
+
+The complete local CPU test suite passed: **2,551 passed, 11 skipped** (37.28s),
+with CUDA hidden in the test process. Seven new tests cover TRAIN-only paired
+selection, exact arm initialization/freeze policy, pair samplers, and immutable
+input controls. Ruff passed for the whole repository. All 27 manifest/catalog
+validation and audit commands from the CI workflow passed locally. GitHub Actions status is
+reported against the published commit rather than inferred from local tests.
