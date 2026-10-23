@@ -111,6 +111,15 @@ for the underlying media or derivative training. No data was accessed. Keep
 AVE review-only; it does not close the synchronized-AV task gate. See the
 [`AVE source screen`](docs/pretrained_reuse/R2_AVE_SOURCE_SCREEN_20261022.md).
 
+**2026-10-23 R2 A2D2 sensor/video source screen:** Audi's A2D2 provides
+synchronized camera, LiDAR and vehicle-bus streams under CC BY-ND 4.0, but
+the sequential portion described in the official paper contains only three
+urban drives. Reviewed sources do not resolve model-distribution use under the
+NoDerivatives term, provide a frozen grouped train/validation split, or
+establish a both-input-required Decision target. No data was downloaded or
+opened; do not start a quality run from this screen. See the
+[source-screen report](docs/pretrained_reuse/R2_A2D2_SENSOR_SOURCE_SCREEN_20261023.md).
+
 **2026-10-22 R2 FLARE joint-AV task/source screen:** FLARE's 53,580
 hard-bimodal retrieval queries are a useful task-design lead: the benchmark
 reports that vision-only and audio-only retrieval fail while joint AV retrieval
