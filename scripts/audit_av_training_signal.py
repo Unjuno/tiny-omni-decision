@@ -196,7 +196,9 @@ def main():
         raise FileExistsError("new diagnostic output required")
     if sha(args.features) != FEATURE_SHA:
         raise ValueError("frozen feature bank hash differs")
-    torch.set_num_threads(2)
+    # Match the original CPU option encoder's reduction order before hashing.
+    # The small fitting experiment uses two threads only after this boundary.
+    torch.set_num_threads(14)
     torch.set_num_interop_threads(1)
     with np.load(args.features, allow_pickle=False) as bank:
         indexes = select_train_pairs(bank, pairs=16, seed=17)
@@ -210,6 +212,7 @@ def main():
     query = query.clone()  # convert inference tensor to an ordinary frozen feature
     if hashlib.sha256(query.numpy().astype("<f4").tobytes()).hexdigest() != QUERY_SHA:
         raise ValueError("pinned option embedding hash differs")
+    torch.set_num_threads(2)
     protected = [args.features, args.reference_run / "effective-config.json"] + [
         args.reference_run / f"{stage}-{arm}.pt" for stage in ["best", "final"]
         for arm in ["c0_native_attention", "exchange_gate"]]
@@ -219,7 +222,8 @@ def main():
         "status": "running", "scope": "TRAIN fitting diagnostic; not validation quality",
         "utc_start": __import__("datetime").datetime.now(__import__("datetime").UTC).isoformat(),
         "device": "cpu", "torch": torch.__version__, "python": platform.python_version(),
-        "cpu_threads": 2, "source_commit": subprocess.check_output(
+        "cpu_threads": 2, "option_encoder_cpu_threads": 14,
+        "candidate_query_sha256": QUERY_SHA, "source_commit": subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "runner_sha256": sha(__file__), "readout_sha256": sha(
             ROOT / "src/tiny_omni_decision/native_av_interaction.py"),
