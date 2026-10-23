@@ -10,6 +10,16 @@ audio/video alignment, or benchmark quality; AMI remains review-only. No
 training, scoring, GPU use, or sealed/unseen data access occurred. See the
 [AMI media preflight](docs/pretrained_reuse/R2_AMI_RM_MEDIA_PREFLIGHT_20261023.md).
 
+**2026-10-23 R2 AMI headset-audio pairing screen:** A frozen 24-row sample
+(one participant per speaker in each of three train and three validation
+meetings) was fetched at the pinned dataset revision. Audio decoded as mono
+16 kHz WAV, and nearest midpoint PTS across all four cameras was within 40 ms.
+A train-only blind frame screen found two of twelve mapped target cameras
+empty at all three sampled instants, so metadata mapping alone yields invalid
+positive labels. No rows were changed and no model was trained or scored. AMI
+remains inadmissible for quality evaluation pending a visibility gate and more
+independent meetings. See the [headset AV preflight](docs/pretrained_reuse/R2_AMI_HEADSET_AV_PREFLIGHT_20261023.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
