@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-23 R2 AMI low-bitrate media preflight:** Acquired and SHA-256
+verified all four official close-up RealMedia streams for each of the three
+candidate train meetings and three candidate validation meetings. All 24
+streams open and sampled frames decode on CPU; they are RV40 360×284 at nominal
+15 fps and contain no audio tracks. This resolves media availability and a
+sampled-decode gate only. It does not establish visible-speaker labels, exact
+audio/video alignment, or benchmark quality; AMI remains review-only. No
+training, scoring, GPU use, or sealed/unseen data access occurred. See the
+[AMI media preflight](docs/pretrained_reuse/R2_AMI_RM_MEDIA_PREFLIGHT_20261023.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
