@@ -39,8 +39,9 @@ The earlier fixed-readout corpus has 8,424 train and 2,107 validation images
 archive's train split in 5,440 cases (4,339 earlier train and 1,101 earlier
 validation), but overlap the new official validation in zero cases. The complete
 new validation also has zero SHA-256 media overlap with either earlier split.
-This is a clean held-out transfer evaluation at the image level, while sharing
-the CLEVR-4 source family and synthetic task design.
+All 19,988 validation IDs and image SHA-256 values are unique within that
+split. This is a clean held-out transfer evaluation at the image level, while
+sharing the CLEVR-4 source family and synthetic task design.
 
 The frozen, sorted validation ID order hash is
 `4287f25d9bcdcf1333fe48159eeaf1c7fc212e17ca8e05e475c7c124bfbf4525`; the
