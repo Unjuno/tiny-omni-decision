@@ -2576,3 +2576,9 @@ GitHub Actions check runs passed. RTX 3080 Laptop is occupied by Orbitune PID
 implemented but untrained. Existing CLEVRER synthetic AV validation is exposed
 and must not be reused for selection. No fresh admitted AV split was found, so
 no new GPU work was started. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261023_1415JST.md).
+**2026-10-23 R7 Path A package recheck:** All 42 listed files in v4 match their
+manifest hashes (170,499,716 parameters; 687,254,772 bytes). Strict validation
+still rejects the original directory because of two unlisted image-runtime
+`.pyc` files; the separate manifest-only copy passes. The 182,018,983-byte INT8
+number remains a storage-only estimate; no weights were quantized or evaluated.
+See the [current package audit](docs/pretrained_reuse/R7_PATH_A_MODULAR_PACKAGE_CURRENT_RECHECK_20261023.md).
