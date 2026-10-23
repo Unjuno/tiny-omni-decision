@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-23 R2 CLEVR-4 100k fixed-readout transfer evaluation:** One frozen
+VideoPrism-B plus MLP readout completed the full 19,988-image official
+validation once on CPU, with 79,952 decisions. Macro Accuracy is 87.41%; color
+and shape are 99.48% and 99.45%, texture 90.28%, and count 60.44%. The weak
+count result rules out treating the high aggregate as uniformly strong image
+reasoning. This is a static synthetic attribute benchmark, not temporal video,
+multimodal fusion, or a sealed audit. No training or model selection occurred.
+The fixed candidate and validation must not be retuned against this exposed
+split. See the [complete transfer protocol and metrics](docs/pretrained_reuse/R2_CLEVR4_100K_TRANSFER_EVAL_20261023.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its

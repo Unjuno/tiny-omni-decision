@@ -64,6 +64,15 @@ per-image validation manifest hash is
 - Output: `C:\CodexArtifacts\pretrained-reuse-r2\clevr4-100k-videoprism-transfer-eval-attempt-02`.
 - Run metadata and per-image predictions are written incrementally. The
   effective config and exact data/model hashes are saved before inference.
+- Source base: `0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a`. The run started
+  before its runner commit was created; the executed runner's SHA-256 matches
+  the file blob later committed as `0794b5407006cc19ec5a386f9d689096453dc3c7`
+  (and remains identical at `7dc8fe07bdb351604e345c74324f821895346b49`). The
+  exact command was:
+
+  ```powershell
+  C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\venv\Scripts\python.exe -u scripts/evaluate_clevr4_100k_videoprism_transfer.py --archive C:\CodexArtifacts\pretrained-reuse-r2\clevr4-100k-videoprism-v0\clevr_4_100k_v1.full.zip --source-preflight C:\CodexArtifacts\pretrained-reuse-r2\clevr4-100k-videoprism-v0\preflight.json --old-manifest C:\CodexArtifacts\pretrained-reuse-r2\clevr4-full-coverage-seed17\train-image-manifest.jsonl --old-manifest C:\CodexArtifacts\pretrained-reuse-r2\clevr4-full-coverage-seed17\val-image-manifest.jsonl --bundle C:\CodexArtifacts\pretrained-reuse-r2\path-a-image-videoprism-clevr4-runtime-bundle-v2 --source-root C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\source --output-dir C:\CodexArtifacts\pretrained-reuse-r2\clevr4-100k-videoprism-transfer-eval-attempt-02
+  ```
 
 The first attempt completed archive, annotation, media-hash, vocabulary, and
 runtime preflight, then was stopped before model inference; its predictions
@@ -74,12 +83,58 @@ rechecks all selected validation media against the old media hashes, and runs
 the full validation once. Neither attempt modifies the archive, readout,
 encoder, or prior training outputs.
 
-## Results (pending)
+## Results
 
-The complete evaluation has not finished. Accuracy, NLL, multiclass Brier,
-15-bin equal-width ECE, mean confidence, runtime, and prediction hashes will be
-recorded here after the single full replay completes. No partial model-quality
-metrics will be used for decisions.
+The one-shot CPU replay completed all 19,988 official validation images and
+79,952 supplied-choice decisions from 2026-10-23 15:24:38 to 21:40:27 JST in
+22,549 seconds (6 h 15 m 49 s). The prediction file contains exactly 19,988 unique IDs in the frozen manifest
+order; all four taxonomies contain 19,988 rows each. Every row has ten options,
+finite nonnegative probabilities summing to one within `1e-5`, and a prediction
+matching the maximum-probability option. No ID, shape, label, or probability
+validation errors were found. The prediction SHA-256 in run metadata matches
+the complete file hash:
 
-This official validation is not a sealed or blind audit. After observing these
-results, it must not be reused as a fresh holdout for another tuned candidate.
+`fdd0ff5a7ff524af68ba8c92e800999956935d617a6314f6896c70b7e96826b0`
+
+The run-metadata file SHA-256 is
+`b805544d252b371e835b059ac4711e41542c6e8ee812347e2f31b6a271046bcb`, and the
+effective-config file SHA-256 is
+`cf3f322d637983fe563abb7752f00400aa8cf0a5c408124ca02f172a67dcf0cb`. Its
+canonical effective-config hash recorded by the runner is
+`4308ab93929af9874a3c6926cd5c80adbb501b2909ac0f922a171234a025998d`.
+
+| CLEVR-4 taxonomy | N | Accuracy | NLL | Brier | ECE (15 equal-width bins) | Mean confidence |
+|---|---:|---:|---:|---:|---:|---:|
+| Color | 19,988 | 0.99485 | 0.02994 | 0.01034 | 0.01864 | 0.97624 |
+| Texture | 19,988 | 0.90279 | 0.27437 | 0.13692 | 0.01092 | 0.89877 |
+| Count | 19,988 | 0.60436 | 0.89736 | 0.49178 | 0.02179 | 0.60444 |
+| Shape | 19,988 | 0.99450 | 0.02000 | 0.00926 | 0.00572 | 0.98888 |
+| Macro across taxonomies | 79,952 decisions | 0.87412 | 0.30542 | 0.16207 | 0.01427 | 0.86708 |
+
+The result is highly uneven: color and shape transfer strongly, texture is
+moderate, and object count remains difficult. The model does not clear 90%
+macro Accuracy, and this result does not establish generalized image reasoning.
+It measures four fixed ten-way CLEVR-4 attribute readouts on repeated static
+images only. It says nothing about arbitrary option wording, temporal video,
+audio, text, sensors, or modality fusion. No quality metric was examined before
+the full run completed, and the result did not select or tune a model.
+
+For reproduction, the effective config SHA-256 is
+`4308ab93929af9874a3c6926cd5c80adbb501b2909ac0f922a171234a025998d`; the
+runner SHA-256 is
+`2d0c4be6047baafe61dd743f1a85e4af065132b9252d972dbd8ae61b64e99008`. The
+validation manifest SHA-256 is
+`6afb7ca40309d7a107f277bc567f8c71c855ecdff2c30eb37e24cb2e45435a9a`. Run
+metadata is at
+`C:\CodexArtifacts\pretrained-reuse-r2\clevr4-100k-videoprism-transfer-eval-attempt-02\run-metadata.json`;
+the full per-image predictions are in the same output directory. All 19,988
+validation images had unique media hashes, and their media hashes and IDs had
+zero overlap with the prior train/validation manifests.
+
+The runtime was Python 3.11.16, JAX 0.6.2, TensorFlow 2.18.1, and NumPy 1.26.4
+on Windows CPU. No GPU, cloud compute, model training, calibration, or
+checkpoint selection was used. CPU elapsed time was approximately 6.26
+single-core hours; compute cost was $0. This was the official validation split,
+not a blind or sealed audit, and it must not be reused to tune a candidate.
+Prior release-holdout results use a different split and are not a matched
+comparison; no claim of improvement over that result is made here.
