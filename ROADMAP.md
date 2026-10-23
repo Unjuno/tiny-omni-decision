@@ -2569,3 +2569,10 @@ Multi-Modal-Wireless provide useful sensor/video leads but no audio stream for
 the AV interaction test. No data was fetched or opened. No new AV quality run is
 admitted until rights, group-disjoint records, measured alignment, and modality-
 necessity controls are established. See the [source follow-up](docs/pretrained_reuse/R2_CONDITIONAL_AV_SOURCE_FOLLOWUP_20261023.md).
+**2026-10-23 14:15 JST R0 live refresh:** PR #15 remains an open draft on target
+branch `docs/pretrained-reuse-roadmap-20261010` at `0bbb5d1`; both current
+GitHub Actions check runs passed. RTX 3080 Laptop is occupied by Orbitune PID
+15584 (15,821/16,384 MiB); it was left untouched. The conditional AV readout is
+implemented but untrained. Existing CLEVRER synthetic AV validation is exposed
+and must not be reused for selection. No fresh admitted AV split was found, so
+no new GPU work was started. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261023_1415JST.md).
