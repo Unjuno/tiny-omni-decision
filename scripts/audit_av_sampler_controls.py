@@ -11,7 +11,14 @@ import numpy as np
 import torch
 
 from scripts.audit_av_paired_sampler import evaluate
-from scripts.audit_av_training_signal import FEATURE_SHA, QUERY_SHA, ROOT, make_model, sha, write_json
+from scripts.audit_av_training_signal import (
+    FEATURE_SHA,
+    QUERY_SHA,
+    ROOT,
+    make_model,
+    sha,
+    write_json,
+)
 from scripts.run_conditional_clevrer_av_readout import _encode_options
 from scripts.train_clevrer_synthetic_av_temporal_decision import _metrics
 
