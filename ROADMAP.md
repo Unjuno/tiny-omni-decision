@@ -20,6 +20,15 @@ positive labels. No rows were changed and no model was trained or scored. AMI
 remains inadmissible for quality evaluation pending a visibility gate and more
 independent meetings. See the [headset AV preflight](docs/pretrained_reuse/R2_AMI_HEADSET_AV_PREFLIGHT_20261023.md).
 
+**2026-10-23 R2 AMI multi-point timestamp audit:** Rechecked the same 24 audio
+clips against all four cameras at 10%, 50%, and 90% of each clip (288 decoded
+PTS observations). Maximum nearest-frame offset was 40 ms; none exceeded one
+nominal 15-fps frame period. This supports local timestamp-grid proximity only,
+not waveform sync or visible-speaker validity. The previous empty-room label
+failures remain unresolved, so AMI is still not admitted for model-quality
+training/evaluation. No model, labels, or validation content were inspected.
+See the [multi-point audit](docs/pretrained_reuse/R2_AMI_MULTIPOINT_ALIGNMENT_20261023.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
