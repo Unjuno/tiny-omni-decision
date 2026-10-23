@@ -1,5 +1,7 @@
 # Tiny Omni Decision
 
+**2026-10-23 R2 status:** The approved fresh CLEVRER reasoning run was already complete: its one-time 200-scene holdout showed 49.66% candidate Accuracy vs. 49.33% legacy, with a paired interval spanning zero. Storytime is a rights/task lead only; its linked OSF archive was inaccessible during screening and was not downloaded. [Details and next gates](docs/pretrained_reuse/R2_CLEVRER_REASONING_RECONCILIATION_AND_STORYTIME_SCREEN_20261023.md).
+
 **2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
 scenes from 256 to 768 improved selected pooled development Accuracy and NLL
 at the same 2,048-update budget, primarily on static descriptive questions.
