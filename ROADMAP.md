@@ -2562,7 +2562,9 @@ searches. Old selected0 and all prior failure records remain unchanged.
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
 
 **2026-10-23 R2 conditional AV source follow-up:** The approved bidirectional
-interaction/readout remains implemented but untrained. AVIA has synchronized
+interaction/readout has completed synthetic CLEVRER fits, including the scalar-
+audio diagnostic (2,048 updates per arm, selected Accuracy 50%). Natural AV
+quality remains unverified. AVIA has synchronized
 streams, but access is non-commercial research/education only, with 9
 participants and no established both-required Decision labels. M3ED and
 Multi-Modal-Wireless provide useful sensor/video leads but no audio stream for
@@ -2573,7 +2575,9 @@ necessity controls are established. See the [source follow-up](docs/pretrained_r
 branch `docs/pretrained-reuse-roadmap-20261010` at `0bbb5d1`; both current
 GitHub Actions check runs passed. RTX 3080 Laptop is occupied by Orbitune PID
 15584 (15,821/16,384 MiB); it was left untouched. The conditional AV readout is
-implemented but untrained. Existing CLEVRER synthetic AV validation is exposed
+trained on synthetic CLEVRER, with no demonstrated conditional-readout gain.
+The earlier "untrained" statement was corrected after checking the October 22
+run artifacts. Existing CLEVRER synthetic AV validation is exposed
 and must not be reused for selection. No fresh admitted AV split was found, so
 no new GPU work was started. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261023_1415JST.md).
 **2026-10-23 R7 Path A package recheck:** All 42 listed files in v4 match their
