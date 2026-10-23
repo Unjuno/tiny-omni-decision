@@ -2560,3 +2560,12 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+**2026-10-23 R2 conditional AV source follow-up:** The approved bidirectional
+interaction/readout remains implemented but untrained. AVIA has synchronized
+streams, but access is non-commercial research/education only, with 9
+participants and no established both-required Decision labels. M3ED and
+Multi-Modal-Wireless provide useful sensor/video leads but no audio stream for
+the AV interaction test. No data was fetched or opened. No new AV quality run is
+admitted until rights, group-disjoint records, measured alignment, and modality-
+necessity controls are established. See the [source follow-up](docs/pretrained_reuse/R2_CONDITIONAL_AV_SOURCE_FOLLOWUP_20261023.md).
