@@ -13,7 +13,7 @@ were not changed.
 
 | Source | Verified from official material | Why it does not admit the proposed run |
 |---|---|---|
-| Audio-Visually Indicated Actions (AVIA) | 378 synchronized RGB/raw-audio sequences; 9 participants, 14 actions, 3 scenarios | Access is limited to non-commercial research/education and requires an institutional request. That does not authorize the intended general product path. Action labels alone do not demonstrate which examples require both modalities; nine participants also cannot satisfy a provisional 200-independent-group quality gate. |
+| Audio-Visually Indicated Actions (AVIA) | 378 synchronized RGB/raw-audio sequences; 9 participants, 14 actions, 3 scenarios | Access is limited to non-commercial research/education and requires an institutional request. That does not authorize the intended general product path. Action labels alone do not demonstrate which examples require both modalities; nine participants also provide limited evidence for participant-independent generalization. |
 | M3ED | Synchronized event/RGB/gray/LiDAR/IMU/RTK sensing; CC BY-SA 4.0 | The listed sensor suite does not include audio, so it cannot train or evaluate the proposed audio/video interaction. No Decision task contract was established in this screen. |
 | Multi-Modal-Wireless | CC BY 4.0 simulated CSI, LiDAR, RGB/depth, IMU and radar; 161,400 frames over four virtual towns | It has no audio stream and is designed for sensing/communications. It could be a future sensor/video task lead, but does not test AV complementarity or a product-relevant Decision task. |
 
