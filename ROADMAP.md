@@ -1,5 +1,19 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-23 R2 Storytime OSF metadata follow-up:** A read-only public API
+check resolved the source-level license and score schema after the OSF web
+page returned 403. The node explicitly reports CC BY 4.0; the score CSV's
+20,258-byte payload hash matches OSF metadata and contains 160 clip rows with
+aggregated overall/audio/video subjective scores. Its 160 clips form only 40
+story-part groups across four stories, and participant-level ratings/splits
+are absent from that CSV. A metadata-only manifest records file sizes and
+source SHA-256 values for all 160 MP4s (1.076 GiB total); no media was
+downloaded. Keep Storytime REVIEW / NOT ADMITTED pending a defensible
+group-independent protocol and resolution of participant/privacy scope. This
+is a narrow AV-quality lead, not general multimodal decision evidence. See the
+[metadata follow-up](docs/pretrained_reuse/R2_CLEVRER_REASONING_RECONCILIATION_AND_STORYTIME_SCREEN_20261023.md)
+and [OSF inventory](docs/pretrained_reuse/STORYTIME_OSF_METADATA_MANIFEST_20261023.json).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its

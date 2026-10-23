@@ -1,0 +1,1388 @@
+{
+  "schema_version": 1,
+  "snapshot_utc": "2026-10-23T13:08:41.3884598Z",
+  "source": {
+    "osf_node": "cyb8w",
+    "title": "The Storytime Dataset",
+    "node_modified": "2024-02-28T02:11:33.137623",
+    "metadata_api": "https://api.osf.io/v2/nodes/cyb8w/",
+    "license": "CC-By Attribution 4.0 International",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode"
+  },
+  "inventory": {
+    "file_count": 163,
+    "video_count": 160,
+    "video_total_bytes": 1155739709,
+    "unique_video_sha256_count": 160,
+    "score_csv_path": "/Selected Clip Scores.csv",
+    "score_csv_bytes": 20258,
+    "score_csv_sha256_osf": "03b56852f9f223b742d6e30dfe23dca0e93732d54416e1110849396dc4775c0a",
+    "score_csv_sha256_fetched": "03b56852f9f223b742d6e30dfe23dca0e93732d54416e1110849396dc4775c0a",
+    "score_csv_rows": 160,
+    "unique_story_part_groups": 40,
+    "unique_story_part_quality_tuples": 160,
+    "quality_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "groups_not_exactly_four_quality_levels": 0,
+    "missing_subjective_channel_scores": 0,
+    "score_csv_columns": [
+      "story",
+      "part",
+      "quality",
+      "vmaf",
+      "freeze_ratio",
+      "real_frame_rate",
+      "real_frame_count",
+      "mos_score",
+      "missed_voice",
+      "subj_samples",
+      "subj_overall_qual",
+      "subj_v_qual",
+      "subj_a_qual",
+      "subj_correct_response_ratio"
+    ],
+    "ratings_per_clip_min": 2.0,
+    "ratings_per_clip_max": 11.0,
+    "media_downloaded": false
+  },
+  "subjective_means_by_quality": [
+    {
+      "quality": 1,
+      "rows": 40,
+      "mean_subjective_overall": 6.407152,
+      "mean_subjective_audio": 6.372107,
+      "mean_subjective_video": 6.48414
+    },
+    {
+      "quality": 2,
+      "rows": 40,
+      "mean_subjective_overall": 4.636555,
+      "mean_subjective_audio": 5.046762,
+      "mean_subjective_video": 4.325429
+    },
+    {
+      "quality": 3,
+      "rows": 40,
+      "mean_subjective_overall": 1.954874,
+      "mean_subjective_audio": 2.257523,
+      "mean_subjective_video": 1.870508
+    },
+    {
+      "quality": 4,
+      "rows": 40,
+      "mean_subjective_overall": 1.385023,
+      "mean_subjective_audio": 1.398817,
+      "mean_subjective_video": 1.399506
+    }
+  ],
+  "files": [
+    {
+      "path": "/Clips Story 1/Story1_Part1_1.mp4",
+      "bytes": 13118530,
+      "sha256": "b0003ef3a249bf373ec18e325f85686dd6e7de6078fea7ac00ee1cfe55beadf7",
+      "osf_file_id": "62b5909e604ec402787ae834",
+      "guid": "d6rkn",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part1_2.mp4",
+      "bytes": 5835414,
+      "sha256": "8d84e606a2f2b86e41c34ea96bc5f96813c3e7fc4c473bf71b00c120d5d1822d",
+      "osf_file_id": "62b59079465aa402a01d4d0b",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part1_3.mp4",
+      "bytes": 2084827,
+      "sha256": "886f933cb1107955939013c44fd113637320f1c53e86a17f0bfabd18c706037a",
+      "osf_file_id": "62b59079465aa4029c1d5a2c",
+      "guid": "ft5hn",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part1_4.mp4",
+      "bytes": 4361336,
+      "sha256": "7517ac5a142067f341ea1c23a9786e87505ae495d364d4cb6b831167fc9bce2a",
+      "osf_file_id": "62b59079604ec4027c7ae556",
+      "guid": "qfxkv",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part10_1.mp4",
+      "bytes": 14499300,
+      "sha256": "d23f0122506ec7192d84172cf930f94d1a30104a840f364073e038315d3bcef7",
+      "osf_file_id": "62b590c0ca8174022eba3f16",
+      "guid": "ztj45",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part10_2.mp4",
+      "bytes": 6262286,
+      "sha256": "7a913b8b12ff0d628f83eb35474e8d885170f3138ff3296a1a51e129b235e74e",
+      "osf_file_id": "62b590c37b42d9022bf147b3",
+      "guid": "snvr3",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part10_3.mp4",
+      "bytes": 2893807,
+      "sha256": "9e25576d8947c7161df13bfb7ba76ca8662ced3c6fc8b389cbd96ab4c5dd12dd",
+      "osf_file_id": "62b590c7604ec4027c7ae634",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part10_4.mp4",
+      "bytes": 1965567,
+      "sha256": "17c2d52695edd6e05a84d80c43a6f47f1e5d57d66cb85c64345d0a221646d69e",
+      "osf_file_id": "62b590c7465aa4025f1d5f0e",
+      "guid": "dfcw6",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part2_1.mp4",
+      "bytes": 13479229,
+      "sha256": "e6c62a4c4f1f340773000d620e6241e626006e60bbae0201f2867cfad93473de",
+      "osf_file_id": "62b5907c465aa402a01d4d18",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part2_2.mp4",
+      "bytes": 5518768,
+      "sha256": "1e2ac676f24bd874ed3f35652d7dcca03ed59ec684637d598b9433b13b5d360f",
+      "osf_file_id": "62b59086604ec402787ae7fb",
+      "guid": "afj68",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part2_3.mp4",
+      "bytes": 3496301,
+      "sha256": "8b788516ab4f7aadac8afef8c4dc011809ff2483f96205dd886d392854577a73",
+      "osf_file_id": "62b5907fca8174022cba3440",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part2_4.mp4",
+      "bytes": 1840163,
+      "sha256": "c66664de4131f475f80e39d2e24bb8e3bafa359c05e5aff971e76123bc9238fd",
+      "osf_file_id": "62b590807b42d90254f15e69",
+      "guid": "uvfa4",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part3_1.mp4",
+      "bytes": 17589421,
+      "sha256": "6ec76777619ace131453362e506bb5e97acd6f6f71e441a3ad45fad8d0a0908f",
+      "osf_file_id": "62b59086604ec4027c7ae57e",
+      "guid": "8yma5",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part3_2.mp4",
+      "bytes": 7064090,
+      "sha256": "9dea161145fc24faa90b675dc222e68cd0a3dd08ed53b087014395513ba039e9",
+      "osf_file_id": "62b59086ca81740265ba34aa",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part3_3.mp4",
+      "bytes": 5577249,
+      "sha256": "e8c25868106394499c883c52c5c1a4d61ae43253b828a3e08d90f489bd4a491c",
+      "osf_file_id": "62b5908bca81740265ba34b8",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part3_4.mp4",
+      "bytes": 2750843,
+      "sha256": "af3bc3b5cad15c25e1a27e55c22d23a678905c0feaea9c645a971c0edeecb458",
+      "osf_file_id": "62b5908d604ec402737aef15",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part4_1.mp4",
+      "bytes": 13674800,
+      "sha256": "046a2d7278653d3bec6a1fb5ab110bc03c80e39e3dfcc20b4cc3d33308fd6f02",
+      "osf_file_id": "62b5909a7b42d9025cf14877",
+      "guid": "khvp9",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part4_2.mp4",
+      "bytes": 6070016,
+      "sha256": "3575b258c39d57d13af0de11305a2e99b31ef9160339e535291a0942c35120c5",
+      "osf_file_id": "62b5908e465aa402a01d4d58",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part4_3.mp4",
+      "bytes": 5066335,
+      "sha256": "b2a56fd1e4690382e4543b212cf0307724c345a3e5893de205eab1d726b433ba",
+      "osf_file_id": "62b59091604ec402787ae818",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part4_4.mp4",
+      "bytes": 3657594,
+      "sha256": "622aa2c06c9b505f86ced8b42fb855252bfdb6a1d257b5663b2d73e3da6c4c56",
+      "osf_file_id": "62b59094465aa402a01d4d6b",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part5_1.mp4",
+      "bytes": 15417722,
+      "sha256": "80d60d4d76b082c5995dc040044748447e49f048d16cd7b13cfb68723e071e2b",
+      "osf_file_id": "62b59096604ec402667af8fb",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part5_2.mp4",
+      "bytes": 7622882,
+      "sha256": "e742dac00857c09a58e26739cff945f5e6765574d27b6e43a0b303fe337a0cbf",
+      "osf_file_id": "62b5909c7b42d90261f155ba",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part5_3.mp4",
+      "bytes": 3328962,
+      "sha256": "8a98c7d8ebac0fce63a62f085f2e3b390adf9407a2367cea0c69ea3cfa021dcd",
+      "osf_file_id": "62b5909bca8174026bba2757",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part5_4.mp4",
+      "bytes": 2409894,
+      "sha256": "aebebae6eb1781ea849977e361edf18ff806978f0297cac15770d61aed539b93",
+      "osf_file_id": "62b5909c7b42d90254f15e7b",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part6_1.mp4",
+      "bytes": 14387821,
+      "sha256": "e8799f6e9f05cb8bb418d069d4162395117c6ba77bb63bf2337489286020fac5",
+      "osf_file_id": "62b590a2465aa402a01d4d9c",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part6_2.mp4",
+      "bytes": 6724588,
+      "sha256": "08569280560414055c0bf90ca11e5576ecae2c097c87cd838861228cfb06d692",
+      "osf_file_id": "62b590ac604ec402787ae858",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part6_3.mp4",
+      "bytes": 4554308,
+      "sha256": "24d7ad693a828fcf6470463a06f3cb17c2d7420908717726514647e1a6a9e561",
+      "osf_file_id": "62b590a87b42d9025ff14ebd",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part6_4.mp4",
+      "bytes": 3395612,
+      "sha256": "7a0b365f782db817dc1a86ef4d7fb2980de5878c2c99bb089e9b7dbbb4e80fc5",
+      "osf_file_id": "62b590a3465aa402a01d4da2",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part7_1.mp4",
+      "bytes": 14159315,
+      "sha256": "ab38d3a085ae961dedfa2599cc688c9df09a01c90d81019f0231bdc58e393638",
+      "osf_file_id": "62b590a8ca8174026bba277d",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part7_2.mp4",
+      "bytes": 6835307,
+      "sha256": "351cf8d117ce0b9882aef96a4299092d71718f4430bc2de0ba2456ce2b7cf4d3",
+      "osf_file_id": "62b590b1465aa4029c1d5aa1",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part7_3.mp4",
+      "bytes": 3306978,
+      "sha256": "a832f597862ed33669d69799955b9530405322c3c59904ac40989b7ca4233ee4",
+      "osf_file_id": "62b590b2604ec402737aef4e",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part7_4.mp4",
+      "bytes": 2446025,
+      "sha256": "bd9cf5307bade82dda2a17ac0a478b897ac35e3d5ac01d75246cb0f62f66953a",
+      "osf_file_id": "62b590ae465aa402a01d4dc8",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part8_1.mp4",
+      "bytes": 16025286,
+      "sha256": "4d265d227bd309ca76fc95c6947f0b49779ee5853b5a8eb8b49a8957fd550ca5",
+      "osf_file_id": "62b590b9465aa402991d52ee",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part8_2.mp4",
+      "bytes": 8418695,
+      "sha256": "6aa89b0acdd247871719488a083a68bc5202d14a12ffa0539188b8af209e1532",
+      "osf_file_id": "62b590b2ca8174026bba279f",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part8_3.mp4",
+      "bytes": 3561639,
+      "sha256": "69b5f5e19cf35b77ae77199ff27ee99a50de89adabbb4a5a7aa91cc3c14e5dff",
+      "osf_file_id": "62b590b37b42d9025ff14ed9",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part8_4.mp4",
+      "bytes": 4018761,
+      "sha256": "76cc2efac4e927d427eae80f348f65c6939027d3348fb812ef553b8de92894a0",
+      "osf_file_id": "62b590b8465aa402a01d4de4",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part9_1.mp4",
+      "bytes": 12769263,
+      "sha256": "47027073d1e9904274ab26d127a9448525f76ac9cbe4ad8572d8ea0ba476bc54",
+      "osf_file_id": "62b590c5465aa402a01d4e18",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part9_2.mp4",
+      "bytes": 5828376,
+      "sha256": "544e0a3c09d1d7af2be8702e3000d39815649d6cc588d223a1e150181cb8eeb6",
+      "osf_file_id": "62b590bf7b42d9025ff14efb",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part9_3.mp4",
+      "bytes": 4516096,
+      "sha256": "19c4e79402011d5113c8b0a4cce3e1720e216aaf54e3a955e369c9d33f0ca906",
+      "osf_file_id": "62b590b9604ec402787ae881",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 1/Story1_Part9_4.mp4",
+      "bytes": 2041248,
+      "sha256": "5d62ce45ff44af864eadf7323a772b4a41e667edcd75856ede369e8cf15a5340",
+      "osf_file_id": "62b590bf465aa4029c1d5abe",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part1_1.mp4",
+      "bytes": 15234933,
+      "sha256": "7e0ec601ea31529d5c796b82948cd51abe23ff2a431a85f94c5c1f0b2d7d9896",
+      "osf_file_id": "62b590ed604ec4023b7ae28b",
+      "guid": "3hg24",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part1_2.mp4",
+      "bytes": 10378174,
+      "sha256": "875d469a5ce8412447315f6f7b9aac6762ed63e5150ba020dd2c1c045d999e60",
+      "osf_file_id": "62b590e3465aa402991d5320",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part1_3.mp4",
+      "bytes": 10216443,
+      "sha256": "5202e3754a37372ad285e02c44eccb10cb98e6104e11a0874025750f90cc0aa1",
+      "osf_file_id": "62b590e5ca8174026bba2825",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part1_4.mp4",
+      "bytes": 4871796,
+      "sha256": "a1bb9d7572ca5b8ccbfb5c940c8b450a0a5de9c61d0c488880bbd7c28c8722df",
+      "osf_file_id": "62b590da7b42d90261f15657",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part10_1.mp4",
+      "bytes": 14549816,
+      "sha256": "9cf2949ee9f74564a0f7ebccd1147d599363c3caefa01349d0468bc9ef8db462",
+      "osf_file_id": "62b5a06e7b42d90270f1502f",
+      "guid": "yqr38",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part10_2.mp4",
+      "bytes": 9758875,
+      "sha256": "a31726b1482ecc37434f5efffb1978adf1f08dc57be13443944094135cbd8e37",
+      "osf_file_id": "62b5a06a604ec402a07ae22a",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part10_3.mp4",
+      "bytes": 5415663,
+      "sha256": "bef7e6235aabab9962ac1b171b828e885da8e9f3bd1c1421d04f0dbe41a64d72",
+      "osf_file_id": "62b5a0697b42d9026ef144e5",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part10_4.mp4",
+      "bytes": 2250095,
+      "sha256": "4cb57aee555f139d6e7a5039e8023a8b25e57d765fdf58eb9970ef720a529f14",
+      "osf_file_id": "62b5a06eca81740281ba3a0b",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part2_1.mp4",
+      "bytes": 13424604,
+      "sha256": "e62115dabdba489a1889fe0b3940291d247b18d54b7b467e6c5b670892b283aa",
+      "osf_file_id": "62b590db604ec402787ae8be",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part2_2.mp4",
+      "bytes": 8709686,
+      "sha256": "70e6e4b1f6abbed82ebac56d9da15e7c3379f6b5b57eb437bba75342ce81ed5a",
+      "osf_file_id": "62b590e17b42d90261f15668",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part2_3.mp4",
+      "bytes": 3944351,
+      "sha256": "954c238965bfa74a12a2fd550e374b8d5c600a9320f325f7309156ee6938740a",
+      "osf_file_id": "62b590f0ca81740262ba3013",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part2_4.mp4",
+      "bytes": 6764255,
+      "sha256": "e4dc3026d00b6d9b89583ade548be835d9ad13271abbf53793a91882ed6c5ef5",
+      "osf_file_id": "62b590f7ca8174026bba284d",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part3_1.mp4",
+      "bytes": 14765972,
+      "sha256": "9425f1ba85f9c5e14a20ce178882a49d157dbe74346b0232db512c684a2f7756",
+      "osf_file_id": "62b5a0177b42d90270f14f21",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part3_2.mp4",
+      "bytes": 8985612,
+      "sha256": "29ec280762ef962f6e8978a09301f09bcf1379dd468190ec524ee756c9a0b068",
+      "osf_file_id": "62b590ec604ec402787ae8e1",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part3_3.mp4",
+      "bytes": 5240134,
+      "sha256": "32307f0fd5348e77e6f947022d32ca9a39fa7ca43fa84dd31281093989b99b75",
+      "osf_file_id": "62b5a01e7b42d90270f14f35",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part3_4.mp4",
+      "bytes": 2807220,
+      "sha256": "1dc32854cf9553d87013a42c452e7ef0e93c7a08492df308cb7dad52e39abcd0",
+      "osf_file_id": "62b5a01d7b42d90270f14f2e",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part4_1.mp4",
+      "bytes": 11009965,
+      "sha256": "2bc01c89597c2ec80f9f90623a45fb024094a612dffbbcac6b62e906e2be2783",
+      "osf_file_id": "62b590f7604ec402787ae8f2",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part4_2.mp4",
+      "bytes": 7096442,
+      "sha256": "f4acb1c3c58243d2ff2d8688f76cb145100f175e7fd5700a9829f38bbd361154",
+      "osf_file_id": "62b5a032ca8174027eba2b07",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part4_3.mp4",
+      "bytes": 3191190,
+      "sha256": "fbf478cc3c7a1a4c848e9b776ef0b84ba7ef04890860c5b983644950e333d1e1",
+      "osf_file_id": "62b590fd7b42d9025cf148f8",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part4_4.mp4",
+      "bytes": 1745626,
+      "sha256": "a69aa512d642ac45d6cff58968578a9610cadee2c7bd8fb1a7847d6ca22d1dd4",
+      "osf_file_id": "62b5a032ca81740281ba3980",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part5_1.mp4",
+      "bytes": 13682962,
+      "sha256": "2833df942eef238128e0061068e1afa3977ba8784a39a85cbf2376d3642faeed",
+      "osf_file_id": "62b5a05b604ec402937ae2f9",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part5_2.mp4",
+      "bytes": 10927511,
+      "sha256": "9ee77e88c9c12afb8eec1e9085412d3101ae035be9958bc15f08986a7742e48b",
+      "osf_file_id": "62b5a067465aa402bb1d47cd",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part5_3.mp4",
+      "bytes": 3015064,
+      "sha256": "d2ed610757a755573bf046364a99be456f8fcb7fd00c81b241aeb3adcb2db7a1",
+      "osf_file_id": "62b5a03c7b42d90270f14f90",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part5_4.mp4",
+      "bytes": 2178361,
+      "sha256": "8be88342e15bc186623bd3e93ddf56b22215389678ef59a01dfa8162b6e2e932",
+      "osf_file_id": "62b5a03cca8174027dba28ed",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part6_1.mp4",
+      "bytes": 12338382,
+      "sha256": "f6768872dbd38a6d27e6d314cd446a2053dc440d0e10a3cc45e183fbf9afd541",
+      "osf_file_id": "62b5a03d7b42d90270f14f98",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part6_2.mp4",
+      "bytes": 8460489,
+      "sha256": "e629ba974b9ce81fd3029811682b52f1d7f0d410b35129e94255336a32a294eb",
+      "osf_file_id": "62b5a042465aa402bb1d4787",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part6_3.mp4",
+      "bytes": 3703539,
+      "sha256": "92dcd539fa48424a0298909f6d95fcbed04ddc1ddfd379b146094f8265706e05",
+      "osf_file_id": "62b5a042465aa402bd1d4d3f",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part6_4.mp4",
+      "bytes": 4034582,
+      "sha256": "3787dc6bdeedc87d88e92e42ad7a5a81de23e6b7175202b5de9454c0b72739bc",
+      "osf_file_id": "62b5a0437b42d90270f14fa9",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part7_1.mp4",
+      "bytes": 14352491,
+      "sha256": "517f049ef2591cb36c91fd14f5028d99463864fff2df65f0d10d6e53a99c6958",
+      "osf_file_id": "62b5a049604ec4029d7ae507",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part7_2.mp4",
+      "bytes": 10033469,
+      "sha256": "2267c3ec4db3403646fee5e6fc4b4fb1984cefe1f936a90bdfc0baef52aee42c",
+      "osf_file_id": "62b5a04d604ec402917adc3e",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part7_3.mp4",
+      "bytes": 4072265,
+      "sha256": "8c2c9d41718b72dd46cc22dbbc17fc3784a2a7adcadb46681c79aabf74528d0b",
+      "osf_file_id": "62b5a04d7b42d90270f14fd0",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part7_4.mp4",
+      "bytes": 1124849,
+      "sha256": "4f205af3009b488c72785833d457cb3faae7a551ce606dd28393b117abe21c0e",
+      "osf_file_id": "62b5a050465aa402bd1d4d6a",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part8_1.mp4",
+      "bytes": 13557667,
+      "sha256": "2afb87af57e65eaa34777ddfc307da400d96ce982c68d563a341547a0706cde8",
+      "osf_file_id": "62b5a054465aa402a71d48ed",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part8_2.mp4",
+      "bytes": 10127061,
+      "sha256": "8632348d8a29cc3b66330bec20fe62c8defa949159e54f51e9d4f6911aff9fc3",
+      "osf_file_id": "62b5a05a465aa402b51d4db2",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part8_3.mp4",
+      "bytes": 6581561,
+      "sha256": "a436bfe5a878fe962bd0bb9a57e5b79cbc7158ba6f9a07a7c1d323c5b21c69d7",
+      "osf_file_id": "62b5a057ca81740281ba39d0",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part8_4.mp4",
+      "bytes": 2374597,
+      "sha256": "a6b4b481467415f8794fcf89ef8837440edc8486033677c7f059085f3b4fa585",
+      "osf_file_id": "62b5a05a604ec402a07ae1fe",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part9_1.mp4",
+      "bytes": 14320375,
+      "sha256": "e5cef05a7454d259bd7de346cacee65cd6481e75f749cd9befd0d4930436f64b",
+      "osf_file_id": "62b5a06e7b42d9026ff14a17",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part9_2.mp4",
+      "bytes": 9907531,
+      "sha256": "11145569ab6a1dc3119dbebdbea094d6348d5280649036ab9faf870387ea60ad",
+      "osf_file_id": "62b5a062604ec402a07ae215",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part9_3.mp4",
+      "bytes": 3859458,
+      "sha256": "afb28b06699b9b14203713644353d8eba11c261f498be707a4fc9c3ea66ab0ca",
+      "osf_file_id": "62b5a061465aa402a71d48fa",
+      "guid": "g6m3d",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 2/Story2_Part9_4.mp4",
+      "bytes": 3873770,
+      "sha256": "7a002a6bb34463f965d5155166d033af74fc782f819d52cd8f4426bcbc998601",
+      "osf_file_id": "62b5a062465aa402bd1d4da0",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part1_1.mp4",
+      "bytes": 16022891,
+      "sha256": "926a1b068896f340e121b7acdc03b52f1f6f77b764f92842b29140c4c5887d2d",
+      "osf_file_id": "62b5a0bb465aa402a71d4938",
+      "guid": "u9kqa",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part1_2.mp4",
+      "bytes": 6386475,
+      "sha256": "fd3e905959033d33c610fafbae84999518ff934062915e1e4a825e1900ecac81",
+      "osf_file_id": "62b5a0bb7b42d90270f150dd",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part1_3.mp4",
+      "bytes": 3103654,
+      "sha256": "9a3fd838658c9b66ce7faf072ac49682cab7d841e9f7295b0e65073547296cc7",
+      "osf_file_id": "62b5a0a87b42d90267f14683",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part1_4.mp4",
+      "bytes": 3549404,
+      "sha256": "701a3508e4ffe85d772d58227ca314edb65bbbc0bb55f8ad2d0da67ade928c95",
+      "osf_file_id": "62b5a0aeca81740281ba3aaf",
+      "guid": "hufv2",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part10_1.mp4",
+      "bytes": 13330409,
+      "sha256": "17388dcd1bdbe76125208e6def33d78c1ab2d513b29bc1d220f1405476f80227",
+      "osf_file_id": "62b5a0f1604ec402a07ae37b",
+      "guid": "p2hmr",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part10_2.mp4",
+      "bytes": 5492207,
+      "sha256": "dfcdb18272b2579e452f421560d347c5a7a5b021e0130bb4e2c7c8655523b525",
+      "osf_file_id": "62b5a0f7465aa402bb1d48e1",
+      "guid": "4bd9x",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part10_3.mp4",
+      "bytes": 4790843,
+      "sha256": "20e291fed3274dc8bdfd5cd491d16649a5b7c6045da365d4cd5ddc0a784ce7c2",
+      "osf_file_id": "62b5a0f7604ec4029d7ae637",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part10_4.mp4",
+      "bytes": 2597031,
+      "sha256": "ec5631731e68560775d9f313613862cfa0bb3cc98f019ed8c2ff2ad32fc3adc9",
+      "osf_file_id": "62b5a0f8ca81740281ba3b65",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part2_1.mp4",
+      "bytes": 16971974,
+      "sha256": "f73d409f6b0eeebb15a67179f0549458c95f24e24f0b487efe05406430c3a057",
+      "osf_file_id": "62b5a0a7604ec4029d7ae5a9",
+      "guid": "jpyrt",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part2_2.mp4",
+      "bytes": 7961976,
+      "sha256": "f7acbc5762d4a67b735bea6bdad8b46e6c9072f9b8060423509c8e648ac9e575",
+      "osf_file_id": "62b5a0ae7b42d9026ff14a7e",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part2_3.mp4",
+      "bytes": 3989102,
+      "sha256": "056874deb550275de3c753de2c95635c8d7a26c8346553bc6873b7caf160443f",
+      "osf_file_id": "62b5a0af7b42d9026ef14536",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part2_4.mp4",
+      "bytes": 1109544,
+      "sha256": "f58ee382d57c97e76d83a812e3c9671a5d659f8ebf1b136f902d0ffcb9e4e84c",
+      "osf_file_id": "62b5a0b7ca81740280ba33bd",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part3_1.mp4",
+      "bytes": 16574499,
+      "sha256": "c07be37881353656e5ae76c6086dcc4e8bac9d84b3bc065e7b94af2d9e0a1b27",
+      "osf_file_id": "62b5a0bb7b42d90266f142b1",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part3_2.mp4",
+      "bytes": 7864040,
+      "sha256": "2a0a531f252f869296b76ce6f8e792803085a208ccb32262d5f9dceba9c917fe",
+      "osf_file_id": "62b5a0b4604ec4029d7ae5bc",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part3_3.mp4",
+      "bytes": 5313904,
+      "sha256": "547897f9bcc4d596a7a5a0010e1d685fe1252a0f70bcc15fad0ce7d3b0d5fc55",
+      "osf_file_id": "62b5a0bb465aa402bb1d486d",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part3_4.mp4",
+      "bytes": 3217748,
+      "sha256": "688b9ac918e7023af67543fcc3e154f94dc29f96a45f1622ab604b50186aac0b",
+      "osf_file_id": "62b5a0bd465aa402bb1d4872",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part4_1.mp4",
+      "bytes": 15982478,
+      "sha256": "e7734181fefe8f599340b08ee2fb10ab7431406c8d79a88da995679c8fe6cad9",
+      "osf_file_id": "62b5a0c4604ec402a07ae301",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part4_2.mp4",
+      "bytes": 6944980,
+      "sha256": "950fcb53bf9b46ec3e201fa5627c5bd8cd4d04586e0cf7f66cddaa8a1ec7e0e5",
+      "osf_file_id": "62b5a0dcca81740280ba340c",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part4_3.mp4",
+      "bytes": 4404636,
+      "sha256": "302cc28c2f2935edfe36175a246b67368ea6c534336b8c38febed8b8bbe344e2",
+      "osf_file_id": "62b5a0c17b42d9026ef1454c",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part4_4.mp4",
+      "bytes": 2841025,
+      "sha256": "1322ac49fd5707c8681833b74be0aa4829d530e9dd61add5c10bd475acc3e09a",
+      "osf_file_id": "62b5a0ca7b42d90270f1510e",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part5_1.mp4",
+      "bytes": 16278658,
+      "sha256": "e52a7ee6f3f6c08def3245214ee4a38e02e6d9397533c1b7c15ab13df451d056",
+      "osf_file_id": "62b5a0c8465aa402bb1d488c",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part5_2.mp4",
+      "bytes": 6887567,
+      "sha256": "95830fa808bd5163e8ee1596e9da8229e23f0d0bbaf7ac9a2bba9765b845ca41",
+      "osf_file_id": "62b5a0de604ec402a07ae347",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part5_3.mp4",
+      "bytes": 3265401,
+      "sha256": "20124e88d4d18c89f4e1c7b2e028c360645e1f59c44f0be0a5b7c10e02b46e50",
+      "osf_file_id": "62b5a0cd465aa402a71d494d",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part5_4.mp4",
+      "bytes": 2765172,
+      "sha256": "e5806d6a8c8b7c0f8c043f8a263759f75fd8f29b1f34dd27760a8a2bafd0d6da",
+      "osf_file_id": "62b5a0ce604ec402937ae377",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part6_1.mp4",
+      "bytes": 14743923,
+      "sha256": "0b6213f7c8a2cb37a9731dbb84fc81f1f1712aa7deace90975c25eb2abd34c05",
+      "osf_file_id": "62b5a0d3ca81740281ba3b05",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part6_2.mp4",
+      "bytes": 7323422,
+      "sha256": "982c9573af2ea07146366fd1709c3cbe68af67ecc509440997d8080a9a7de07c",
+      "osf_file_id": "62b5a0d37b42d90270f15129",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part6_3.mp4",
+      "bytes": 4136542,
+      "sha256": "4997bdeaf9f610cdb24e0b018351188222eafd5502f76f745f085c9fb3b3b5e4",
+      "osf_file_id": "62b5a0d57b42d90270f15135",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part6_4.mp4",
+      "bytes": 2525981,
+      "sha256": "e3f575a50ac1e7e8b40ae94d9334e524768b3b7daf4d70de3bf386ee5e827ecf",
+      "osf_file_id": "62b5a0db465aa402bd1d4ecc",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part7_1.mp4",
+      "bytes": 12394864,
+      "sha256": "828e091098b40a8e303e075cba1172af6fe0f4bde3b8ea5141d588d31d7c9520",
+      "osf_file_id": "62b5a0daca81740280ba3401",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part7_2.mp4",
+      "bytes": 5997757,
+      "sha256": "ee74e405421429112f66d16cfba7ef641990b707ab20e053f94aa10783fbcac6",
+      "osf_file_id": "62b5a0ddca81740280ba3410",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part7_3.mp4",
+      "bytes": 2416426,
+      "sha256": "5ddccd7d5afe120ada4d24f2b9cd40bb583073d48218e71341988ebe3f7ac8dd",
+      "osf_file_id": "62b5a0e0465aa402bb1d48b1",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part7_4.mp4",
+      "bytes": 1579022,
+      "sha256": "66ce8388012a650b1124438c115672455fbb33720538f4a424da6af3343e284b",
+      "osf_file_id": "62b5a0e1465aa402a51d4215",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part8_1.mp4",
+      "bytes": 14130064,
+      "sha256": "7c44cc50ea01f520020865bd6ecba7e45fd267b966c8a5bf5d04e9a0b6798408",
+      "osf_file_id": "62b5a0f07b42d9026ff14af8",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part8_2.mp4",
+      "bytes": 6427594,
+      "sha256": "76a32ff651ecfdbb77e9384d65fda727a7716e547998e6eefb2b907d9abf62b8",
+      "osf_file_id": "62b5a0e4ca81740281ba3b32",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part8_3.mp4",
+      "bytes": 5897269,
+      "sha256": "5b63e788febcc15779c639c11051611a30258a8d7da2ff81687657fe5cdf8e68",
+      "osf_file_id": "62b5a0e5465aa402b51d4e41",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part8_4.mp4",
+      "bytes": 3052136,
+      "sha256": "835896c4b0432ee1451c49967402df74f241aca0179d201de42a483c59a19ddb",
+      "osf_file_id": "62b5a0f2465aa402a71d4968",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part9_1.mp4",
+      "bytes": 12191810,
+      "sha256": "95e535dc1c8f5d105a0c5010def7c755e2c71f54f893c9315972c8d68ace24af",
+      "osf_file_id": "62b5a0e9465aa402a71d495f",
+      "guid": "vyb5x",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part9_2.mp4",
+      "bytes": 5236428,
+      "sha256": "734a0247b9eefb72d97dfe71f291a6323d2422f5dcee8c09a9171f6c1cfff0a1",
+      "osf_file_id": "62b5a0ea7b42d90270f1516d",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part9_3.mp4",
+      "bytes": 3518607,
+      "sha256": "d93041b326223531d45e424ce8f89d55c22251e4a94b68b39a3f04488213ed45",
+      "osf_file_id": "62b5a0f5465aa402b51d4e5d",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 3/Story3_Part9_4.mp4",
+      "bytes": 3899048,
+      "sha256": "712a079e786d35d8f94f85765b32403762ee1b9c6b4b51931bc1df6ca7161b48",
+      "osf_file_id": "62b5a0f0465aa402bb1d48d3",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part1_1.mp4",
+      "bytes": 14144435,
+      "sha256": "7bd6b5be3da117058db33bf16548eb76f65de9d244d057e4ac78f515d12e0be2",
+      "osf_file_id": "62b5a10cca81740280ba3464",
+      "guid": "6jng2",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part1_2.mp4",
+      "bytes": 7042177,
+      "sha256": "f7dd8c2eb08d31bed8f5c8feccbbd26247b441918cd46b576ea0103def39d4a3",
+      "osf_file_id": "62b5a10f465aa402bb1d490f",
+      "guid": "3ntgr",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part1_3.mp4",
+      "bytes": 5010586,
+      "sha256": "3b4baac1ace236b1381b1f5a01a183ca6204b0d0901de89b7c9cfbd6da315212",
+      "osf_file_id": "62b5a10d465aa402bd1d4f50",
+      "guid": "jq8w9",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part1_4.mp4",
+      "bytes": 1983748,
+      "sha256": "370bf6049248003102a41ab2c93cfd0a9762e66c1eec208c2e31273034b6b095",
+      "osf_file_id": "62b5a10f465aa402b51d4e7f",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part10_1.mp4",
+      "bytes": 12003282,
+      "sha256": "25c31850204308f6b6d396cea3718cc2bfcda62405fc61a5d6ba593ba1ab4a29",
+      "osf_file_id": "62b5a1587b42d90270f1529b",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part10_2.mp4",
+      "bytes": 6134020,
+      "sha256": "0ed4e3bd741334e09b5c8820b596f7f4d41b24edb5bb209144759d9b580529d7",
+      "osf_file_id": "62b5a158604ec402937ae411",
+      "guid": "jcwz2",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part10_3.mp4",
+      "bytes": 2925887,
+      "sha256": "e970cbfbb725955ee6d711140e56c6b43e0db2108b55a2148b3f672a80b6bd59",
+      "osf_file_id": "62b5a159604ec4029d7ae6e0",
+      "guid": "nqwav",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part10_4.mp4",
+      "bytes": 2304920,
+      "sha256": "e799cb558659aa375c4361779aa6fdb50b6be6a653e8dcb890231e7fd2895975",
+      "osf_file_id": "62b5a15e604ec402937ae419",
+      "guid": "chb9n",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part2_1.mp4",
+      "bytes": 14036039,
+      "sha256": "bd9fbf2ac343e295f5457ff8b9554889dd1cacf2666b57b8785e20d554558dab",
+      "osf_file_id": "62b5a1177b42d9026ff14b41",
+      "guid": "9agwy",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part2_2.mp4",
+      "bytes": 7447377,
+      "sha256": "c51d7503da89d8be08c6153082e393f93899bb22ea0ba65f5ddd5a5f62fb0b90",
+      "osf_file_id": "62b5a11f465aa402bd1d4f87",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part2_3.mp4",
+      "bytes": 3066529,
+      "sha256": "d63c278d2106c6cafcce690036d2c78d894e7d68fd92b5b6e3471a14ccfcd198",
+      "osf_file_id": "62b5a1207b42d90270f151f2",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part2_4.mp4",
+      "bytes": 1598942,
+      "sha256": "ab31fbeb7c680b499c7971f8fe5aca1bb502e5c404eefc192919de7242962cb4",
+      "osf_file_id": "62b5a119465aa402bd1d4f74",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part3_1.mp4",
+      "bytes": 12233524,
+      "sha256": "517c8f81ab794e93bc1e18db1934a6c91dd586fc10dc0e81b1d80a52163910d4",
+      "osf_file_id": "62b5a1167b42d90270f151d5",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part3_2.mp4",
+      "bytes": 5089103,
+      "sha256": "984a8e785c5376af7105072fc97ee9cb93a62ee0cebcfc6b5c2125200a40cff7",
+      "osf_file_id": "62b5a11cca81740280ba347c",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part3_3.mp4",
+      "bytes": 4370202,
+      "sha256": "2b8bacfb9b99ca25b5a5f4ffffff9f8b5bb8f9263a1c83a1fb005c69cbbe64b1",
+      "osf_file_id": "62b5a11e7b42d90270f151ec",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part3_4.mp4",
+      "bytes": 2883812,
+      "sha256": "dad0488cf0df3fbafa067fb9401b4e984bcdb151f3462f57a95a7f482090601f",
+      "osf_file_id": "62b5a1257b42d9026ef145b5",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part4_1.mp4",
+      "bytes": 12485185,
+      "sha256": "490e4f10f93719d42c74a559ee8ea2ed1c4a80669c00a108e6c54eff36a87312",
+      "osf_file_id": "62b5a1247b42d9026ef145b0",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part4_2.mp4",
+      "bytes": 6464121,
+      "sha256": "0551d18c0fbeb026a9a29b1ff9acbb1930928dcfaa6b6b3ef88622a5ab39c992",
+      "osf_file_id": "62b5a1267b42d9026ef145bb",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part4_3.mp4",
+      "bytes": 2556709,
+      "sha256": "bc6d32fcf6bc122275577c7d077595e3993d3a028ae863fb23fae8f7e7611158",
+      "osf_file_id": "62b5a127465aa402a71d498f",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part4_4.mp4",
+      "bytes": 1050741,
+      "sha256": "4b11453728b12c3b265c5a91cee54bc0be4ce0b20a137f414e1bb319f770a246",
+      "osf_file_id": "62b5a128465aa402bd1d4f9c",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part5_1.mp4",
+      "bytes": 18100332,
+      "sha256": "09338ff556103b5ed07ee7de9a3ea91f42e4949729266e9f55e24d54387bc0d0",
+      "osf_file_id": "62b5a12eca81740281ba3c01",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part5_2.mp4",
+      "bytes": 9174315,
+      "sha256": "896129fd55b811d84ed385bae4d5b1ad27cdd8bf122b49ee3504604b01804360",
+      "osf_file_id": "62b5a1347b42d90270f15229",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part5_3.mp4",
+      "bytes": 3765581,
+      "sha256": "5c0b2bf8048b58b8783ece0aa9125db2e9297e1c47ed48b5c2a803889ebc5282",
+      "osf_file_id": "62b5a12d604ec4029d7ae691",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part5_4.mp4",
+      "bytes": 2682571,
+      "sha256": "614f087c4c94ee3e61acea65711ab5df124177e9c0740f7b0fe47355d43f2070",
+      "osf_file_id": "62b5a12d465aa402bd1d4fac",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part6_1.mp4",
+      "bytes": 13197569,
+      "sha256": "7a654facf94264ac3156f5d5661a3326b58adbdfc71151612a27e58e99556d7b",
+      "osf_file_id": "62b5a132465aa402a71d4999",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part6_2.mp4",
+      "bytes": 5907099,
+      "sha256": "eebcc5ff6409fd13e613f3395fef2d681728e83be0162d5401e3a5144bc84b05",
+      "osf_file_id": "62b5a1517b42d90270f15285",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part6_3.mp4",
+      "bytes": 4641366,
+      "sha256": "5c1f5a31d20736daf48d1b3942c21dd488840fe143bf94e4363c14a8b7cd6eb6",
+      "osf_file_id": "62b5a1447b42d90270f1525f",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part6_4.mp4",
+      "bytes": 2978449,
+      "sha256": "efe1d201df4f62d8f1a1bcf07391b8a68d812489106824815748d7fb78c54642",
+      "osf_file_id": "62b5a134ca8174027dba2933",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part7_1.mp4",
+      "bytes": 13288293,
+      "sha256": "8ee6cc1a3c8703e01c1742c04dd8c6ef1aab54e328de47db5b23dc7d0732c10a",
+      "osf_file_id": "62b5a13d465aa402b51d4ec0",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part7_2.mp4",
+      "bytes": 5835740,
+      "sha256": "8ca5b6a925b618cdb23a603db06e3baa1dec860560e10b5977b8a4ba6367fdf6",
+      "osf_file_id": "62b5a13aca81740281ba3c25",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part7_3.mp4",
+      "bytes": 3225706,
+      "sha256": "d33c723bae5abd43a04d395799e18d05df24f2f01ae1e2bdaf4be777955b81cf",
+      "osf_file_id": "62b5a13b7b42d9026ef145d2",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part7_4.mp4",
+      "bytes": 1595854,
+      "sha256": "43130cae30a74d174d2ab7c303595104efb99ffd4e05efaa4b1e90163b13c7d5",
+      "osf_file_id": "62b5a144465aa402bd1d4fe8",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part8_1.mp4",
+      "bytes": 17257192,
+      "sha256": "5344e34219b21a1c723a63e4e66d6d8f8189c20e51a387b99d76df36334a35a4",
+      "osf_file_id": "62b5a14d7b42d9026ff14bb4",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part8_2.mp4",
+      "bytes": 7408519,
+      "sha256": "4688968e24aef89ac2421a8e6b33933120c1063ce6da43511b29c625cf2f1c90",
+      "osf_file_id": "62b5a143465aa402a71d49aa",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part8_3.mp4",
+      "bytes": 7050093,
+      "sha256": "5d3e0d07768234270cf18eb54c9b1ed7d12555bde5c27d112535b243e8914225",
+      "osf_file_id": "62b5a14cca81740280ba34d1",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part8_4.mp4",
+      "bytes": 4959937,
+      "sha256": "dc503e2ce23d493314baad0c02c2d3217ec441d41ae19a879c7435454dc46b4b",
+      "osf_file_id": "62b5a15aca8174027fba2f35",
+      "guid": "d3bke",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part9_1.mp4",
+      "bytes": 15531296,
+      "sha256": "3007b1fd080d2e8b500e089c547280f5ef5a1516806e4ba1a16aadb12100df48",
+      "osf_file_id": "62b5a14b604ec402a07ae46a",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part9_2.mp4",
+      "bytes": 7625530,
+      "sha256": "81896b26d93ef65ad0909c69cd818b555a2f0928202721a360fd27df8aeabaf5",
+      "osf_file_id": "62b5a152465aa402b51d4ee1",
+      "guid": "d8gue",
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part9_3.mp4",
+      "bytes": 5463918,
+      "sha256": "f5c914db4f8969bd52ab2a1ddaa232dd20def0671707d99cb9c87199da6d3292",
+      "osf_file_id": "62b5a1537b42d9026ef145f2",
+      "guid": null,
+      "version": 1
+    },
+    {
+      "path": "/Clips Story 4/Story4_Part9_4.mp4",
+      "bytes": 6641009,
+      "sha256": "671cc0c362cde10eba605508a6d33b6e9e6f5c0c4e228c9d97f4e0a891a0c1c7",
+      "osf_file_id": "62b5a15a465aa402bb1d4998",
+      "guid": "2t4sf",
+      "version": 1
+    },
+    {
+      "path": "/Dataset Scripts DE.pdf",
+      "bytes": 90408,
+      "sha256": "61e7620dce7c82a27b417ac31aa98fee313bc2ca7ada310aaba0823ddd0b125c",
+      "osf_file_id": "62b58ff8ca81740259ba4a56",
+      "guid": "gq6n9",
+      "version": 1
+    },
+    {
+      "path": "/Response Evaluation DE.pdf",
+      "bytes": 85074,
+      "sha256": "89cd57cdfd5789b034c8587a6f93c7132a3b2fa5bb3b6b528019b98d3ae89bb0",
+      "osf_file_id": "62b59021604ec402787ae71b",
+      "guid": "vw354",
+      "version": 1
+    },
+    {
+      "path": "/Selected Clip Scores.csv",
+      "bytes": 20258,
+      "sha256": "03b56852f9f223b742d6e30dfe23dca0e93732d54416e1110849396dc4775c0a",
+      "osf_file_id": "62b59ff7604ec402927adf13",
+      "guid": "ztfch",
+      "version": 1
+    }
+  ]
+}
