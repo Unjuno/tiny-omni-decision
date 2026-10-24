@@ -117,6 +117,23 @@ checkpoint selection.
   and usable split provenance remain open. No data was accessed. Keep AV7 in
   REVIEW. Details: [`license-draft review`](R2_EGO4D_SOCIAL_LICENSE_DRAFT_REVIEW_20261022.md).
 
+## Additive evidence update — 2026-10-25
+
+- **CLEVRER plus generated-tone timing v2:** The frozen four-arm, seed-17
+  development run used 3,696 training rows across 773 scenes and 1,110
+  task-specific validation rows across 240 scenes. The selected joint gated
+  LSTM reached 83.51% Accuracy / 0.3534 NLL; matched audio-only reached 75.14%
+  / 0.4577, with joint-minus-audio-only Accuracy difference +8.35 points
+  (scene-paired 95% interval +5.89 to +10.83). Video-only and mean-pooled
+  controls remained at chance. This is evidence of temporal AV interaction for
+  this synthetic collision/tone task, not natural AV understanding: CLEVRER is
+  silent, the audio is generated, and the validation media were already present
+  in other CLEVRER tasks. The task-specific validation is exposed and must not
+  be reused for fitting or checkpoint selection. The observed result narrows
+  the R2-M question but does not close its both-input-required gate for natural
+  multimodal quality or the broader matrix. Preserve the run as development
+  evidence; see the complete [v2 protocol and result](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-clevrer-synthetic-av-coverage-20261022/docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_COVERAGE_V2_RESULTS_20261022.md).
+
 ## Product target and measurement scope
 
 - Product objective: a local, small Decision system accepting typed JSON inputs
