@@ -20,6 +20,8 @@ annotations were loaded, no media was decoded, and no model was fitted.
   `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-preflight-20261024-05\`.
 - Generated JSONL SHA-256:
   `613daa46964f7595568fb32311e50fe59d0e88a4f02ce77be22a24aee9f03b16`.
+- Generated manifest SHA-256:
+  `2d41b7bb0dccf01298f4218d2ff3fd88110a350d1ba093a855314a191a7a4274`.
 - Adapter SHA-256:
   `2d89893026a043ec6dcbe24d52ee5ffb2568766ad124e22312de14fd1f928d7a`.
 - Corpus builder SHA-256:
@@ -65,8 +67,8 @@ no crops or media tensors are in the current corpus.
 
 The deterministic preflight adapter processed all 25,757 annotated sound
 intervals across 2,184 train videos. It held all 247 events whose end exceeded
-the metadata audio or video duration; 15 of the otherwise eligible candidates
-were removed by this endpoint gate:
+metadata audio duration (none exceeded the metadata video duration); 15 of the
+otherwise eligible candidates were removed by this endpoint gate:
 
 | Status | Events |
 |---|---:|
@@ -91,12 +93,24 @@ covering 2,339 of the current candidate events across all 400 candidate groups.
 This confirms file presence only. Those files were not decoded or scored, and
 their duration/synchronization checks remain outstanding for this task.
 
+A separate deterministic CPU-only smoke selected eight candidate events from
+eight distinct official-train video groups (seed 17) in that existing media
+directory. All eight MP4 sizes and SHA-256 values matched the acquisition
+receipt. PyAV decoded all 24 requested bbox frame IDs; decoded presentation
+times fell within the annotated event interval with a two-frame tolerance. The
+audio decoder covered all 20.509947 seconds of the eight annotated intervals.
+The report is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-media-smoke-20261025-02\media-smoke.json`,
+SHA-256 `e6b47dd1010608eb4ca34d21f2c5601da83173e21a6d5f7ad1fead97f538584a`.
+This checks only eight files, does not decode candidate crops or calculate
+model metrics, and is not a representative sample.
+
 ## Remaining gates before model work
 
 1. Match the remaining candidate videos to licensed local media and verify
    decoded duration, synchronization, and event boundaries. Existing local
-   train media covers 400 candidate groups; filename presence is not a media
-   integrity check.
+   train media covers 400 candidate groups; only eight have passed the current
+   CPU integrity smoke.
 2. Freeze a new video-grouped train/validation partition before fitting. Do not
    use previously inspected validation cohorts or any sealed audit annotations.
 3. Define audio-only, video-only, question/label-prior, candidate-order-shuffle,
@@ -119,5 +133,6 @@ complementarity result, or evidence toward the 95–98% product target.
 
 - Adapter: `src/tiny_omni_decision/perception_source_candidate.py`.
 - Deterministic writer: `scripts/build_perception_source_candidate_corpus.py`.
+- CPU media smoke: `scripts/preflight_perception_source_candidate_media.py`.
 - Regression tests: `tests/test_perception_source_candidate.py`.
 - Existing visibility-proposal format remains unchanged and separate.

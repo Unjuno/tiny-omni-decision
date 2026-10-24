@@ -6,12 +6,14 @@ audio-event intervals with unmasked object proposals from the same video. Of
 25,757 train events, 10,139 pass the conservative parent, distractor, and
 media-duration gates across 1,982 videos; option counts range from 2 to 49.
 Existing train-only media files cover 400 candidate video groups (2,339 events)
-by filename match, without decode or synchronization checks. The deterministic
+by filename match. A seeded CPU smoke verified file hashes and decoded all
+requested event audio intervals and bbox frames in eight train groups. The
+remaining media has not passed decode/synchronization checks. The deterministic
 corpus and source/adapter/builder hashes are recorded outside Git. This remains
-annotation feasibility only: no model fit, validation/audit access or quality
-claim. Oracle event windows and object proposals remain deployment shortcuts,
-so modality-necessity controls and complete media-boundary checks must pass
-before any readout run. This distinct task format does not reopen the closed
+annotation/media feasibility only: no model fit, validation/audit access or
+quality claim. Oracle event windows and object proposals remain deployment
+shortcuts, so modality-necessity controls and complete media-boundary checks
+must pass before any readout run. This distinct task format does not reopen the closed
 visibility or temporal-match cohorts and does not close R2 M-2. See the
 [`source-candidate preflight`](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_PREFLIGHT_20261024.md).
 
