@@ -1,5 +1,25 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 cross-workstream reconciliation:** Recent open PRs add two
+relevant results and more source gates. The matched CLEVRER/generated-tone AV
+diagnostic selected a gated temporal LSTM at 83.51% Accuracy / 0.3534 NLL on
+1,110 task-specific validation rows, versus 75.14% for matched audio-only; the
+paired scene interval for the Accuracy difference was +5.89 to +10.83 points.
+This is a synthetic timing task with cross-task media reuse and exposed
+development validation; video-only remained at chance, so it does not close
+natural-AV or four-modality quality. A separate TRAIN-only perturbation shows
+the selected LSTM responds to both streams and order, but is not generalization
+evidence. The CSQA2 frozen MiniLM transfer probe reached 51.79% on its official
+development split, equal to majority-class accuracy, with 93.5% of predictions
+on “no”; do not treat this as useful general text quality. New AVSBench,
+ASAPS, KilometerAudio, EvaOmni and AVI-Bench screens admit no new product
+training source because of rights/access or split/task gaps. Details: [synthetic
+AV comparison PR #21](https://github.com/Unjuno/tiny-omni-decision/pull/21),
+[TRAIN dependency PR #26](https://github.com/Unjuno/tiny-omni-decision/pull/26),
+[source reconciliation PR #27](https://github.com/Unjuno/tiny-omni-decision/pull/27),
+[CSQA2 text probe PR #29](https://github.com/Unjuno/tiny-omni-decision/pull/29),
+and [AVSBench/ASAPS source gate PR #30](https://github.com/Unjuno/tiny-omni-decision/pull/30).
+
 **2026-10-25 R2 crop × coverage factorial analysis:** Added a CPU-only
 hash-pinned analyzer for the four fixed-endpoint cells (center/full extent ×
 repeat/fresh coverage), with per-modality Accuracy/NLL/Brier/ECE, macro metrics,
