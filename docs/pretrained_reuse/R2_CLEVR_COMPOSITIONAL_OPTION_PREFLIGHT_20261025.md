@@ -163,8 +163,16 @@ be mixed into its metrics. See [the earlier fixed-taxonomy report](R2_VILT_IMAGE
 ## Current execution gate
 
 The RTX 3080 Laptop was observed at 16,124/16,384 MiB and 99% utilization,
-with PIDs `15928` and `26920` reported by `nvidia-smi`. No new GPU job was
-started, and the live run and its code/artifacts were not changed. The full CPU
+with PIDs `15928` and `26920` reported by `nvidia-smi`. At 08:50 JST, read-only
+process inspection identified them as the HotUGPU supervisor and child for
+`teacher-quality-clean-dev-v2-resume-20261025-attempt-01`; the child command
+resumes the existing clean-dev-v2 checkpoint at step 896. Its latest persisted
+training-history record was step 1,408, while trainer state/best remained at
+step 1,280 (trainer-state timestamp 07:59 JST, history timestamp 08:18 JST).
+The step-1,408 record showed 8.70 s/step, LR 1.18e-5, and gradient norm 42.28;
+this is a rolling one-step training metric, not fixed-set generalization.
+No new GPU job was started, and the live run and its code/artifacts were not
+changed. The full CPU
 suite passes (2,418 passed, 11 skipped), and Ruff passes. The ViLT input and
 controls smokes ran on CPU. A matched full feature/readout run must wait for
 GPU capacity.
@@ -190,7 +198,7 @@ passed Ruff and pytest (1,808 passed, 154 skipped).
 The manifest builder, selective media downloader, frozen-feature extractor,
 and CPU readout runner are implemented. The approved 20,480-image acquisition
 is running from the pinned ZIP using 8 workers and a 2 GiB disk reserve. At
-2026-10-25 08:47 JST, 2,176/20,480 files (all validation so far) were saved and
+2026-10-25 08:50 JST, 2,591/20,480 files (all validation so far) were saved and
 verified. They are outside Git at
 `C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-media-seed17-attempt-01/`.
 Next: finish media acquisition, extract full ViLT features and controls through
