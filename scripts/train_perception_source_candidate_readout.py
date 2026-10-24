@@ -289,6 +289,141 @@ def score_batch(model, video, audio, candidate_mask, *, video_mode="joint"):
     return torch.cat((candidate_logits, none_logits), dim=1)
 
 
+def candidate_order_delta(model, example, *, seed=SEED):
+    permutation = np.random.default_rng(seed).permutation(len(example.candidate_ids))
+    if len(permutation) < 2:
+        return 0.0
+    video = torch.from_numpy(example.visual_mean_delta[None, :, :])
+    audio = torch.from_numpy(example.audio[None, :])
+    mask = torch.ones((1, len(permutation)), dtype=torch.bool)
+    with torch.inference_mode():
+        base_scores = (
+            score_batch(model, video, audio, mask)[0, : len(permutation)]
+            .detach()
+            .cpu()
+            .numpy()
+        )
+        permuted_scores = (
+            score_batch(model, video[:, permutation], audio, mask)[0, : len(permutation)]
+            .detach()
+            .cpu()
+            .numpy()
+        )
+    aligned_scores = base_scores[permutation]
+    if not np.allclose(aligned_scores, permuted_scores, rtol=1e-6, atol=2e-6):
+        raise AssertionError("candidate scores changed beyond FP32 reorder tolerance")
+    return float(np.max(np.abs(aligned_scores - permuted_scores)))
+
+
+def assert_prediction_replay_matches(saved_rows, replay_rows):
+    if len(saved_rows) != len(replay_rows):
+        raise ValueError("saved prediction count differs from checkpoint replay")
+    max_probability_delta = 0.0
+    max_scalar_delta = 0.0
+    changed_decisions = 0
+    float_fields = (
+        "top1_confidence",
+        "target_probability_mass",
+        "nll",
+        "none_visible_probability",
+    )
+    for saved, replay in zip(saved_rows, replay_rows, strict=True):
+        identity_fields = (
+            "record_id",
+            "video_id",
+            "candidate_ids",
+            "target_candidate_ids",
+            "none_visible",
+        )
+        for field in identity_fields:
+            if saved[field] != replay[field]:
+                raise ValueError(f"checkpoint replay changed discrete prediction field: {field}")
+        changed_decisions += int(
+            saved["predicted"] != replay["predicted"]
+            or saved["top1_correct"] != replay["top1_correct"]
+        )
+        if saved["candidate_probabilities"].keys() != replay["candidate_probabilities"].keys():
+            raise ValueError("checkpoint replay changed candidate probability identities")
+        probability_deltas = [
+            abs(
+                saved["candidate_probabilities"][candidate_id]
+                - replay["candidate_probabilities"][candidate_id]
+            )
+            for candidate_id in saved["candidate_probabilities"]
+        ]
+        max_probability_delta = max(max_probability_delta, *probability_deltas)
+        if not np.allclose(
+            [saved["candidate_probabilities"][key] for key in saved["candidate_probabilities"]],
+            [replay["candidate_probabilities"][key] for key in saved["candidate_probabilities"]],
+            rtol=1e-6,
+            atol=5e-7,
+        ):
+            raise ValueError("saved candidate probabilities differ beyond FP32 replay tolerance")
+        for field in float_fields:
+            delta = abs(saved[field] - replay[field])
+            max_scalar_delta = max(max_scalar_delta, delta)
+            if not math.isclose(saved[field], replay[field], rel_tol=1e-6, abs_tol=1e-6):
+                raise ValueError(
+                    f"saved prediction scalar differs beyond FP32 replay tolerance: {field}"
+                )
+    return max_probability_delta, max_scalar_delta, changed_decisions
+
+
+def metrics_from_predictions(rows):
+    if not rows:
+        raise ValueError("prediction artifact is empty")
+    correctness = [bool(row["top1_correct"]) for row in rows]
+    confidence = [float(row["top1_confidence"]) for row in rows]
+    nlls = [float(row["nll"]) for row in rows]
+    briers = []
+    uniform_hit_probabilities = []
+    aps = []
+    visible = 0
+    visible_hits = 0
+    none_count = 0
+    none_hits = 0
+    for row in rows:
+        candidate_ids = row["candidate_ids"]
+        targets = set(row["target_candidate_ids"])
+        probabilities = [row["candidate_probabilities"][key] for key in candidate_ids]
+        probabilities.append(row["none_visible_probability"])
+        positive = [key in targets for key in candidate_ids] + [row["none_visible"]]
+        positives = sum(positive)
+        if positives == 0:
+            raise ValueError(f"saved prediction has no target class: {row['record_id']}")
+        target_distribution = np.asarray(positive, dtype=np.float64) / positives
+        briers.append(float(np.square(np.asarray(probabilities) - target_distribution).sum()))
+        uniform_hit_probabilities.append(positives / (len(candidate_ids) + 1))
+        if targets:
+            visible += 1
+            visible_hits += int(row["top1_correct"])
+            scores = np.asarray([row["candidate_probabilities"][key] for key in candidate_ids])
+            is_positive = np.asarray([key in targets for key in candidate_ids])
+            aps.append(average_precision(scores, is_positive))
+        else:
+            none_count += 1
+            none_hits += int(row["predicted"] == "none_visible")
+    return {
+        "records": len(rows),
+        "none_visible_records": none_count,
+        "visible_source_records": visible,
+        "top1_set_accuracy": float(np.mean(correctness)),
+        "uniform_random_expected_top1_set_accuracy": float(np.mean(uniform_hit_probabilities)),
+        "none_visible_accuracy": none_hits / none_count if none_count else None,
+        "visible_source_hit_at_1": visible_hits / visible if visible else None,
+        "mean_set_nll": float(np.mean(nlls)),
+        "mean_multiclass_brier": float(np.mean(briers)),
+        "top1_ece_10_bins": expected_calibration_error(confidence, correctness),
+        "visible_source_candidate_macro_average_precision": float(np.mean(aps)) if aps else None,
+    }
+
+
+def load_model_state(path):
+    model = CrossModalCandidateScorer().eval()
+    model.load_state_dict(torch.load(path, map_location="cpu", weights_only=True))
+    return model
+
+
 def grouped_nll(logits, targets):
     log_probabilities = torch.log_softmax(logits, dim=1)
     return -torch.logsumexp(log_probabilities.masked_fill(~targets, -torch.inf), dim=1)
@@ -618,33 +753,8 @@ def run(args: argparse.Namespace):
             "predictions_sha256": sha256_file(prediction_path),
         }
 
-    # The readout scores each candidate independently; verify candidate-order invariance.
-    first = development_examples[0]
-    permutation = np.random.default_rng(SEED).permutation(len(first.candidate_ids))
-    if len(permutation) < 2:
-        order_invariance_delta = 0.0
-    else:
-        video = torch.from_numpy(first.visual_mean_delta[None, :, :])
-        audio = torch.from_numpy(first.audio[None, :])
-        mask = torch.ones((1, len(permutation)), dtype=torch.bool)
-        with torch.inference_mode():
-            base_scores = (
-                score_batch(model, video, audio, mask)[0, : len(permutation)]
-                .detach()
-                .cpu()
-                .numpy()
-            )
-            permuted_scores = (
-                score_batch(model, video[:, permutation], audio, mask)[0, : len(permutation)]
-                .detach()
-                .cpu()
-                .numpy()
-            )
-        order_invariance_delta = float(
-            np.max(np.abs(base_scores[permutation] - permuted_scores))
-        )
-        if order_invariance_delta > 1e-7:
-            raise AssertionError("candidate scores changed under candidate reordering")
+    # Separate batched GEMM layouts can differ by a few FP32 ulps.
+    order_invariance_delta = candidate_order_delta(model, development_examples[0])
 
     model_config = {
         **effective_config,
@@ -689,6 +799,174 @@ def run(args: argparse.Namespace):
     return model_config
 
 
+def finalize_existing(args: argparse.Namespace):
+    """Finalize a completed training attempt from its saved states and predictions."""
+    run_path = args.output / "run.json"
+    if not args.output.is_dir() or not run_path.is_file():
+        raise FileNotFoundError(f"readout attempt metadata not found: {args.output}")
+    if (args.output / "result.json").exists():
+        raise FileExistsError(
+            f"refusing to overwrite finalized result: {args.output / 'result.json'}"
+        )
+    run_record = json.loads(run_path.read_text(encoding="utf-8"))
+    if run_record.get("status") != "RUNNING" or run_record.get("last_completed_epoch") != EPOCHS:
+        raise ValueError("saved attempt is not a complete, unfinalized 80-epoch run")
+    effective_config = run_record["effective_config"]
+    recorded_hashes = effective_config["input_artifact_hashes"]
+    current_hashes = input_artifact_hashes(args)
+    # This recovery finalizer is a new source file revision; all data/model helper inputs
+    # must still match the hashes recorded when the trained checkpoints were produced.
+    for name, recorded_hash in recorded_hashes.items():
+        if name == "runner":
+            continue
+        if current_hashes.get(name) != recorded_hash:
+            raise ValueError(f"fixed training input changed since run: {name}")
+
+    train_examples, _ = load_examples(
+        args.plan, args.train_labels, args.train_video_features, args.train_audio_features
+    )
+    development_examples, _ = load_examples(
+        args.plan,
+        args.development_labels,
+        args.development_video_features,
+        args.development_audio_features,
+    )
+    train_ids = {row.record_id for row in train_examples}
+    development_ids = {row.record_id for row in development_examples}
+    train_videos = {row.video_id for row in train_examples}
+    development_videos = {row.video_id for row in development_examples}
+    if train_ids & development_ids or train_videos & development_videos:
+        raise ValueError("fixed train/development split now overlaps")
+    offset_examples = [row for row in development_examples if row.offset_audio is not None]
+    development_audio = {row.record_id: row.audio for row in development_examples}
+    controls = (
+        ("joint", "source", "joint", development_audio, development_examples),
+        ("zero_audio", "zero", "joint", development_audio, development_examples),
+        ("zero_video", "source", "zero", development_audio, development_examples),
+        ("shuffled_audio", "shuffle", "joint", development_audio, development_examples),
+        ("joint_offset_eligible", "source", "joint", development_audio, offset_examples),
+        ("offset_audio", "offset", "joint", development_audio, offset_examples),
+        (
+            "reverse_temporal_delta",
+            "source",
+            "reverse_temporal",
+            development_audio,
+            development_examples,
+        ),
+    )
+    history_path = args.output / "training-history.jsonl"
+    history = read_jsonl(history_path)
+    if len(history) != EPOCHS or [row["epoch"] for row in history] != list(range(1, EPOCHS + 1)):
+        raise ValueError("saved training history is incomplete or out of order")
+    best_epoch = run_record.get("best_epoch")
+    if not isinstance(best_epoch, int) or not 1 <= best_epoch <= EPOCHS:
+        raise ValueError("saved best epoch is invalid")
+    if min(history, key=lambda row: row["development_grouped_nll"])["epoch"] != best_epoch:
+        raise ValueError("saved best epoch does not match validation history minimum")
+
+    best_path = args.output / "best-readout-state.pt"
+    final_path = args.output / "final-readout-state.pt"
+    if not best_path.is_file() or not final_path.is_file():
+        raise FileNotFoundError("saved best/final readout checkpoint is missing")
+    model = load_model_state(best_path)
+    evaluation = {}
+    replay_max_probability_delta = 0.0
+    replay_max_scalar_delta = 0.0
+    replay_changed_decisions = {}
+    for name, audio_mode, video_mode, donor, examples_for_control in controls:
+        metrics = evaluate(
+            model,
+            examples_for_control,
+            audio_mode=audio_mode,
+            video_mode=video_mode,
+            donor_audio=donor,
+        )
+        predictions = metrics.pop("predictions")
+        prediction_path = args.output / f"predictions-{name}.jsonl"
+        saved_predictions = read_jsonl(prediction_path)
+        probability_delta, scalar_delta, changed_decisions = assert_prediction_replay_matches(
+            saved_predictions, predictions
+        )
+        replay_max_probability_delta = max(replay_max_probability_delta, probability_delta)
+        replay_max_scalar_delta = max(replay_max_scalar_delta, scalar_delta)
+        evaluation[name] = {
+            **metrics_from_predictions(saved_predictions),
+            "predictions_sha256": sha256_file(prediction_path),
+        }
+        replay_changed_decisions[name] = changed_decisions
+    best_nll = float(evaluation["joint"]["mean_set_nll"])
+    if not math.isclose(
+        best_nll,
+        float(run_record["best_development_nll"]),
+        rel_tol=0,
+        abs_tol=1e-12,
+    ):
+        raise ValueError("best checkpoint NLL differs from the recorded selector value")
+    order_delta = candidate_order_delta(model, development_examples[0])
+    final_model = load_model_state(final_path)
+    final_metrics = evaluate(final_model, development_examples)
+    final_metrics.pop("predictions")
+    trainable_parameters = sum(
+        parameter.numel() for parameter in model.parameters() if parameter.requires_grad
+    )
+    latest_prediction_mtime = max(
+        (args.output / f"predictions-{name}.jsonl").stat().st_mtime for name, *_ in controls
+    )
+    training_completed_at = datetime.fromtimestamp(latest_prediction_mtime, UTC).isoformat()
+    finalization_completed_at = datetime.now(UTC).isoformat()
+    model_config = {
+        **effective_config,
+        "config_sha256": run_record["config_sha256"],
+        "trainable_parameters": trainable_parameters,
+        "best_epoch": best_epoch,
+        "best_development_nll": best_nll,
+        "candidate_order_max_abs_score_delta": order_delta,
+        "candidate_order_fp32_tolerance": {"rtol": 1e-6, "atol": 2e-6},
+        "saved_prediction_replay_max_probability_delta": replay_max_probability_delta,
+        "saved_prediction_replay_max_scalar_delta": replay_max_scalar_delta,
+        "saved_prediction_replay_fp32_tolerance": {"rtol": 1e-6, "atol": 5e-7},
+        "saved_prediction_replay_changed_decisions_by_control": replay_changed_decisions,
+        "best_readout_state_sha256": sha256_file(best_path),
+        "final_readout_state_sha256": sha256_file(final_path),
+        "training_history_sha256": sha256_file(history_path),
+        "training_runner_sha256": recorded_hashes["runner"],
+        "finalization_runner_sha256": current_hashes["runner"],
+        "started_at_utc": run_record["started_at_utc"],
+        "training_completed_at_utc": training_completed_at,
+        "finalization_completed_at_utc": finalization_completed_at,
+        "training_elapsed_seconds": history[-1]["elapsed_seconds"],
+        "python": platform.python_version(),
+        "torch": torch.__version__,
+        "numpy": np.__version__,
+        "device": "CPU",
+        "cuda_initialized": torch.cuda.is_initialized(),
+        "video_group_split_overlap": 0,
+        "sealed_audit_read": False,
+        "validation_is_blind": False,
+        "status": "PASS_FROZEN_FEATURE_READOUT_DIAGNOSTIC",
+        "evaluation": evaluation,
+        "final_checkpoint_joint_validation": final_metrics,
+    }
+    atomic_json(args.output / "result.json", model_config)
+    atomic_json(args.output / "input-hashes.json", recorded_hashes)
+    atomic_json(
+        run_path,
+        {
+            "status": model_config["status"],
+            "effective_config": effective_config,
+            "config_sha256": run_record["config_sha256"],
+            "started_at_utc": run_record["started_at_utc"],
+            "training_completed_at_utc": training_completed_at,
+            "finalization_completed_at_utc": finalization_completed_at,
+            "last_completed_epoch": EPOCHS,
+            "best_epoch": best_epoch,
+            "best_development_nll": best_nll,
+            "result_sha256": sha256_file(args.output / "result.json"),
+        },
+    )
+    return model_config
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, required=True)
@@ -700,7 +978,9 @@ def main():
     parser.add_argument("--development-audio-features", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--epochs", type=int, default=EPOCHS)
-    result = run(parser.parse_args())
+    parser.add_argument("--finalize-existing", action="store_true")
+    args = parser.parse_args()
+    result = finalize_existing(args) if args.finalize_existing else run(args)
     print(json.dumps(result, indent=2), flush=True)
 
 

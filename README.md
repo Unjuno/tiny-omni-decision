@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-25 AV source-candidate readout diagnostic:** A seed-17 frozen-feature
+readout completed on a fixed, non-blind 320/80 video-group train/development
+split. The selected joint result is 56.93% set Accuracy; audio/video ablations
+show both streams affect this narrow oracle-candidate task, while the learning
+curve overfits after epoch 7. This is not a product result or a text/image
+quality result. [Metrics, controls, hashes, and limits](docs/pretrained_reuse/R2_PERCEPTION_AV_SOURCE_CANDIDATE_READOUT_20261025.md).
+
 **2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
 scenes from 256 to 768 improved selected pooled development Accuracy and NLL
 at the same 2,048-update budget, primarily on static descriptive questions.
