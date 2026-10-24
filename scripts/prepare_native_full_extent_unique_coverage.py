@@ -24,7 +24,7 @@ PERMUTATION = "seed17:pool-occurrence-index:original-row-id SHA256-seeded Python
 
 
 def write(path, value):
-    path.write_text(serialize(value), encoding="utf-8")
+    path.write_bytes(serialize(value).encode("utf-8"))
 
 
 def serialize(value):
