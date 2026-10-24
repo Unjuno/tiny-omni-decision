@@ -151,12 +151,19 @@ be mixed into its metrics. See [the earlier fixed-taxonomy report](R2_VILT_IMAGE
 The RTX 3080 Laptop was observed at 16,124/16,384 MiB and 99% utilization,
 with PIDs `15928` and `26920` reported by `nvidia-smi`. No new GPU job was
 started, and the live run and its code/artifacts were not changed. The full CPU
-suite passes (2,416 passed, 11 skipped), and Ruff passes. The two-row ViLT
+suite passes (2,417 passed, 11 skipped), and Ruff passes. The two-row ViLT
 forward ran on CPU. A matched feature/readout run must wait for GPU capacity.
 CPU unit tests use synthetic pooled features and do not constitute
 model-quality evidence.
 There is no quality result yet, no product promotion, and no claim toward the
 95–98% objective.
+
+The first push's three GitHub Actions runs failed during `Test`. The CPU-only
+CI environment installs the `dev` extra without optional PyTorch; the new
+annotation-only dataset module had imported it transitively. PyTorch is now
+loaded only in the probability routine that requires it, with a subprocess
+regression test that blocks all `torch` imports while loading the dataset
+builder. The corrected push's CI result is pending.
 
 The manifest builder, selective media downloader, frozen-feature extractor,
 and CPU readout runner are now implemented. Next: acquire only selected

@@ -9,6 +9,7 @@ import json
 import shutil
 import struct
 import time
+import urllib.error
 import urllib.request
 import zipfile
 import zlib
@@ -44,15 +45,26 @@ def fetch_range(start: int, end: int) -> bytes:
             "User-Agent": "tiny-omni-clevr-vqa/1",
         },
     )
-    with urllib.request.urlopen(request, timeout=90) as response:
-        expected_range = f"bytes {start}-{end}/{SOURCE_BYTES}"
-        if response.status != 206:
-            raise OSError(f"expected HTTP 206, got {response.status}")
-        if response.headers.get("Content-Range") != expected_range:
-            raise OSError("CLEVR archive Content-Range did not match requested bytes")
-        if response.headers.get("ETag") != SOURCE_ETAG:
-            raise OSError("CLEVR archive ETag did not match the pinned source")
-        payload = response.read()
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(request, timeout=90) as response:
+                expected_range = f"bytes {start}-{end}/{SOURCE_BYTES}"
+                if response.status != 206:
+                    raise OSError(f"expected HTTP 206, got {response.status}")
+                if response.headers.get("Content-Range") != expected_range:
+                    raise OSError("CLEVR archive Content-Range did not match requested bytes")
+                if response.headers.get("ETag") != SOURCE_ETAG:
+                    raise OSError("CLEVR archive ETag did not match the pinned source")
+                payload = response.read()
+            break
+        except urllib.error.HTTPError as exc:
+            if exc.code not in {429, 500, 502, 503, 504} or attempt == 3:
+                raise
+            time.sleep(2**attempt)
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 3:
+                raise
+            time.sleep(2**attempt)
     if len(payload) != end - start + 1:
         raise OSError("short CLEVR archive byte-range response")
     return payload
@@ -166,12 +178,18 @@ def main() -> None:
             except KeyError as exc:
                 raise ValueError(f"image missing from pinned source archive: {name}") from exc
         expanded_bytes = sum(info.file_size for info in infos.values())
+        compressed_bytes = sum(info.compress_size for info in infos.values())
         free_bytes = shutil.disk_usage(args.output.parent).free
         if free_bytes < expanded_bytes + MIN_FREE_RESERVE_BYTES:
             raise OSError(
                 f"need {expanded_bytes + MIN_FREE_RESERVE_BYTES} bytes including disk reserve; "
                 f"only {free_bytes} bytes are free"
             )
+        print(
+            f"preflight passed: images={len(infos)}, compressed={compressed_bytes} bytes, "
+            f"expanded={expanded_bytes} bytes, free={free_bytes} bytes",
+            flush=True,
+        )
 
         jobs = []
         for split, rows in rows_by_split.items():
@@ -231,6 +249,7 @@ def main() -> None:
         "train_images": len(train),
         "validation_images": len(validation),
         "expanded_bytes": expanded_bytes,
+        "compressed_bytes": compressed_bytes,
         "image_sha256_ordered": ordered_records,
     }
     (args.output / "acquisition.json").write_text(

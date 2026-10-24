@@ -5,8 +5,10 @@ from __future__ import annotations
 import hashlib
 import random
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
-import torch
+if TYPE_CHECKING:
+    import torch
 
 ANSWER_VOCABULARIES: dict[str, tuple[str, ...]] = {
     "boolean": ("no", "yes"),
@@ -58,6 +60,8 @@ def option_probabilities(
     options: Sequence[str],
 ) -> torch.Tensor:
     """Softmax only the supplied CLEVR answer options, preserving their order."""
+    import torch
+
     if answer_logits.ndim != 1 or answer_logits.numel() != len(ANSWER_LABELS):
         raise ValueError(f"expected one logit per {len(ANSWER_LABELS)} CLEVR answer labels")
     if not torch.isfinite(answer_logits).all():

@@ -1,5 +1,9 @@
 import json
+import os
+import subprocess
+import sys
 import zipfile
+from pathlib import Path
 
 import pytest
 
@@ -30,6 +34,24 @@ def test_streams_json_questions_array_from_zip(tmp_path):
         )
     with zipfile.ZipFile(archive_path) as archive:
         assert list(iter_question_array(archive, "questions.json")) == rows
+
+
+def test_annotation_dataset_import_does_not_require_torch():
+    root = Path(__file__).resolve().parents[1]
+    environment = os.environ.copy()
+    environment["PYTHONPATH"] = os.pathsep.join((str(root / "src"), str(root)))
+    code = """
+import builtins
+original = builtins.__import__
+def guarded(name, *args, **kwargs):
+    if name == 'torch' or name.startswith('torch.'):
+        raise ImportError('torch intentionally unavailable')
+    return original(name, *args, **kwargs)
+builtins.__import__ = guarded
+from tiny_omni_decision.clevr_vqa_dataset import select_one_question_per_image
+assert callable(select_one_question_per_image)
+"""
+    subprocess.run([sys.executable, "-c", code], check=True, env=environment)
 
 
 def test_selection_is_deterministic_and_groups_by_image():
