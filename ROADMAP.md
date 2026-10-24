@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-24 R2 AVSBench source gate:** Audio-Visual Segmentation is a
+cross-modal sounding-object task with official train/validation/test splits, but
+the data page licenses the dataset CC BY-NC 4.0, processed media requires a
+request, original clips are YouTube sourced, group integrity is unaudited, and
+pixel masks do not directly match caller-option Decision output. No data were
+accessed; keep it REVIEW and do not treat it as a product-quality gate. See the
+[metadata-only source gate](docs/pretrained_reuse/R2_AVSBENCH_SOURCE_GATE_20261024.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
