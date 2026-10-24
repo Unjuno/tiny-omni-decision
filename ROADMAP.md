@@ -34,6 +34,22 @@ distinct. Revalidation details and hashes are in
 [`PE-Core T16 CPU revalidation`](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_REVALIDATION_20261025.md);
 the detailed task protocols/results remain linked from that report.
 
+**2026-10-25 R2 Perception Test source-candidate diagnostic:** The independent
+`codex/r2-perception-source-candidate` branch completed a seed-17 frozen-feature
+readout for oracle event intervals and candidate object tracks: 56.93% top-1
+set Accuracy / 1.2748 NLL on 606 development events from 80 videos. The selected
+checkpoint was epoch 7; train loss continued falling while development NLL
+rose after selection. Paired 10,000-resample video-group controls support
+input dependence in this narrow task, including source-aligned versus offset
+audio, but zero-video decisions are tie-sensitive. The partition comes from
+the official training source, was inspected during preparation, has only 80
+development videos, and does not establish participant independence or blind
+generalization. This is exploratory oracle-assisted evidence; it does not close
+the joint-modality gate or support product promotion. The saved best/final
+states, training history and paired-bootstrap hashes were rechecked against
+the report. See the [protocol and complete readout](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-perception-source-candidate/docs/pretrained_reuse/R2_PERCEPTION_AV_SOURCE_CANDIDATE_READOUT_20261025.md)
+and [source preflight](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-perception-source-candidate/docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_PREFLIGHT_20261024.md).
+
 **2026-10-25 R2 crop × coverage factorial analysis:** Added a CPU-only
 hash-pinned analyzer for the four fixed-endpoint cells (center/full extent ×
 repeat/fresh coverage), with per-modality Accuracy/NLL/Brier/ECE, macro metrics,
