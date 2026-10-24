@@ -1,0 +1,983 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-24T18:58:15Z",
+  "repository": "https://github.com/Unjuno/tiny-omni-decision",
+  "current_worktree": {
+    "path": "C:\\Users\\junny\\.codex\\worktrees\\r2-perception-source-candidate\\tiny-omni-decision",
+    "branch": "codex/r2-perception-source-candidate",
+    "head": "8d6cf24453aae59b64c368b17c58e95142f48e5b",
+    "tracking": "origin/codex/r2-perception-source-candidate",
+    "clean": true
+  },
+  "remote_heads": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_pr15": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+    "current_branch": "8d6cf24453aae59b64c368b17c58e95142f48e5b"
+  },
+  "pull_requests": [
+    {
+      "number": 30,
+      "title": "Record AVSBench source and rights gate",
+      "draft": true,
+      "head_ref": "codex/r2-avsbench-source-screen-20261024",
+      "head_sha": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:41:09Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/30"
+    },
+    {
+      "number": 29,
+      "title": "Add CommonsenseQA 2.0 text Decision transfer probe",
+      "draft": true,
+      "head_ref": "codex/r2-csqa2-text-decision-20261024",
+      "head_sha": "f057a031ffe271c51c138b439800cae2863a9149",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:28:13Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/29"
+    },
+    {
+      "number": 28,
+      "title": "docs: refresh R0 repository and live GPU audit",
+      "draft": true,
+      "head_ref": "codex/r0-live-audit-20261024",
+      "head_sha": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:13:23Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/28"
+    },
+    {
+      "number": 27,
+      "title": "docs: reconcile AV source screen with completed synthetic run",
+      "draft": true,
+      "head_ref": "codex/r2-joint-av-source-screen-20261024",
+      "head_sha": "e2c05dc5f0d0aee681345e723147df47ac307392",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:09:23Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/27"
+    },
+    {
+      "number": 26,
+      "title": "Record pinned native shared-readout gradient diagnostic",
+      "draft": true,
+      "head_ref": "codex/r2-shared-gradient-audit-20261024",
+      "head_sha": "8eb702a126a512b269fd3fd083b7f973478a6947",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:00:42Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/26"
+    },
+    {
+      "number": 25,
+      "title": "docs: add RoboPro and otoSpeech R2 source screens",
+      "draft": true,
+      "head_ref": "codex/r2-robopro-source-screen-20261024",
+      "head_sha": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T13:31:13Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/25"
+    },
+    {
+      "number": 24,
+      "title": "Record CLEVR-4 100k fixed-readout transfer results",
+      "draft": true,
+      "head_ref": "codex/clevr4-100k-transfer-eval-20261023",
+      "head_sha": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-23T12:45:23Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/24"
+    },
+    {
+      "number": 23,
+      "title": "R2: record scalar audio projection diagnostic",
+      "draft": true,
+      "head_ref": "codex/roadmap-scalar-audio-update-20261022",
+      "head_sha": "df4ac9b02b66b60a3231df7f765c82bb436c908f",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-22T03:59:54Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/23"
+    },
+    {
+      "number": 22,
+      "title": "docs: screen FAIR-Play for R2 AV matching",
+      "draft": true,
+      "head_ref": "codex/r2-fair-play-source-screen-20261022",
+      "head_sha": "936a9837299b25095c0f0703768f1079af24b424",
+      "base_ref": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "base_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+      "updated_at": "2026-10-21T19:33:18Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/22"
+    },
+    {
+      "number": 21,
+      "title": "R2: CLEVRER synthetic AV coverage v2 results",
+      "draft": true,
+      "head_ref": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "head_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+      "base_ref": "codex/r2-clevrer-synthetic-av-protocol",
+      "base_sha": "83c4750aba663743bb5c2be3c0c8a90b8e8ead44",
+      "updated_at": "2026-10-21T17:59:37Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/21"
+    },
+    {
+      "number": 20,
+      "title": "Add stable typed Decision JSON output",
+      "draft": true,
+      "head_ref": "codex/r2-json-decision-contract-20261021",
+      "head_sha": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "base_ref": "codex/r0-r2-continuation-20261021",
+      "base_sha": "9037a5b425adda83ddd09b2312532a470cc78701",
+      "updated_at": "2026-10-21T05:23:30Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/20"
+    },
+    {
+      "number": 19,
+      "title": "Screen AMI for cross-modal speaker-to-face matching",
+      "draft": true,
+      "head_ref": "codex/r2-ami-av-source-screen-20261021",
+      "head_sha": "406f003a128a7991ec39dcb15608b381f003add4",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-21T06:02:01Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/19"
+    },
+    {
+      "number": 18,
+      "title": "Screen CaptainCook4D for a procedural step-text video task",
+      "draft": true,
+      "head_ref": "codex/r2-captaincook4d-screen-20261021",
+      "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-20T21:35:21Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/18"
+    },
+    {
+      "number": 17,
+      "title": "Screen MAVD Urbansas audiovisual source integrity",
+      "draft": false,
+      "head_ref": "codex/r2-mavd-source-screen-20261021",
+      "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-20T21:19:28Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/17"
+    },
+    {
+      "number": 16,
+      "title": "Record PE-Core T16 checkpoint CPU audit",
+      "draft": false,
+      "head_ref": "codex/r1-pe-core-audit-20261021",
+      "head_sha": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-21T05:46:12Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/16"
+    },
+    {
+      "number": 15,
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "draft": true,
+      "head_ref": "docs/pretrained-reuse-roadmap-20261010",
+      "head_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "base_ref": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "updated_at": "2026-10-21T16:49:15Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/15"
+    },
+    {
+      "number": 14,
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "draft": true,
+      "head_ref": "fix/student-qat-training-handoff",
+      "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "base_ref": "codex/ternary-student-recovery",
+      "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c",
+      "updated_at": "2026-10-08T10:54:56Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/14"
+    },
+    {
+      "number": 13,
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "draft": false,
+      "head_ref": "feat/ternary-student-recovery",
+      "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "base_ref": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "updated_at": "2026-10-08T02:27:05Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/13"
+    },
+    {
+      "number": 12,
+      "title": "feat: add strict postquant teacher cache boundary",
+      "draft": true,
+      "head_ref": "codex/postquant-teacher-cache",
+      "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "base_ref": "codex/postquant-numerical-core",
+      "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "updated_at": "2026-10-06T17:54:48Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/12"
+    },
+    {
+      "number": 11,
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "draft": true,
+      "head_ref": "codex/postquant-numerical-core",
+      "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "base_ref": "codex/postquant-worker-entrypoints",
+      "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "updated_at": "2026-10-06T17:19:22Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/11"
+    },
+    {
+      "number": 10,
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "draft": true,
+      "head_ref": "codex/postquant-worker-entrypoints",
+      "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "base_ref": "codex/roadmap-compression-video-specialization",
+      "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277",
+      "updated_at": "2026-10-06T15:33:14Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/10"
+    },
+    {
+      "number": 9,
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "draft": true,
+      "head_ref": "codex/teacher-quality-v1",
+      "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "base_ref": "main",
+      "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c",
+      "updated_at": "2026-10-04T10:04:40Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/9"
+    }
+  ],
+  "worktree_count": 59,
+  "dirty_worktree_count": 6,
+  "worktrees": [
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "branch": "refs/heads/codex/teacher-quality-clean-dev-v1",
+      "dirty": true,
+      "dirty_status": [
+        " M ROADMAP.md",
+        " M docs/VIDEO_TEACHER_V2_LONG_BUDGET.md",
+        "?? docs/pretrained_reuse/",
+        "?? scripts/resume_teacher_quality_clean_dev_v2.py",
+        "?? tests/test_freeze_perception_source_candidate_controls.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/clevr4-100k-transfer-eval-20261023",
+      "head": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "branch": "refs/heads/codex/clevr4-100k-transfer-eval-20261023",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/clevrer-coverage-1024",
+      "head": "e914ba220ba1dbbb0822af4933db79638354f364",
+      "branch": "refs/heads/codex/r2-clevrer-coverage-20261020",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/clevrer-synthetic-av-followup-20261022",
+      "head": "6b2ae96d47727ea9c83cdee7dc2fde57abae8e53",
+      "branch": "refs/heads/codex/r2-lstm-train-input-dependency-20261023",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/decision-head-validation",
+      "head": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "branch": "refs/heads/codex/decision-head-validation",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/native-coverage-run-source-20261024",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "branch": "",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat",
+      "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "branch": "",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat-latest",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "branch": "refs/heads/fix/student-qat-training-handoff",
+      "dirty": true,
+      "dirty_status": [
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt06_pr14_legacybest_warmstart.yaml",
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt07_pr14_legacybest_warmstart.yaml"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-next-20261021",
+      "head": "33afecdc749f213cf023f4389bc5c30ebac8931e",
+      "branch": "refs/heads/codex/r2-native-coverage-long-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-omni",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "branch": "refs/heads/codex/textfree-video-program-order",
+      "dirty": true,
+      "dirty_status": [
+        " M scripts/train_textfree_video_probe.py",
+        " M tests/test_train_textfree_video_probe.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-roadmap-20261022",
+      "head": "bf44a5f2c2eca51d41543ac905dfcf238ee94b4b",
+      "branch": "refs/heads/codex/roadmap-scalar-audio-update-20261022",
+      "dirty": true,
+      "dirty_status": [
+        " M ROADMAP.md",
+        " M docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md",
+        " M docs/pretrained_reuse/R2_FAIRPLAY_LICENSE_AND_GROUP_FOLLOWUP_20261022.md",
+        "?? docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_1254JST.md",
+        "?? docs/pretrained_reuse/R2_A2D2_SENSOR_SOURCE_SCREEN_20261023.md",
+        "?? docs/pretrained_reuse/R2_AMI_TIMESTAMP_JOIN_REVIEW_20261022.md",
+        "?? docs/pretrained_reuse/R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md",
+        "?? scripts/audit_fairplay_audio_pair_alignment.py",
+        "?? tests/test_fairplay_audio_pair_alignment.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/qat-groupwise-performance",
+      "head": "c50f0eb364d963bbcb3144a83305705880d9d426",
+      "branch": "refs/heads/codex/qat-groupwise-performance",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-av-source-gate-20261020",
+      "head": "758ec16f3003940e6f37b6101156571aa4499529",
+      "branch": "refs/heads/codex/r2-batvision-source-screen",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-live-audit-20261024",
+      "head": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+      "branch": "refs/heads/codex/r0-live-audit-20261024",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-r2-continuation-audit-20261021",
+      "head": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "branch": "refs/heads/codex/r0-r2-continuation-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r1-pe-core-audit",
+      "head": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "branch": "refs/heads/codex/r1-pe-core-audit-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-a2d2-source-screen-20261023",
+      "head": "6540c9f181a4de423f4b9e975f1373861b83b95c",
+      "branch": "refs/heads/codex/r2-av-task-source-screen-20261023",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-ami-av-source-screen-20261021",
+      "head": "406f003a128a7991ec39dcb15608b381f003add4",
+      "branch": "refs/heads/codex/r2-ami-av-source-screen-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-avqa-source-screen-20261021",
+      "head": "9e8a8a991aac46531488691603a914b0be5757d6",
+      "branch": "refs/heads/codex/r2-avqa-source-screen-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-avsbench-source-screen-20261024",
+      "head": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+      "branch": "refs/heads/codex/r2-avsbench-source-screen-20261024",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-clevrer-fresh-reasoning-20261021",
+      "head": "016face5ece2dd11835af641b1759104e1646a1a",
+      "branch": "refs/heads/codex/r2-clevrer-fresh-reasoning-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-conditional-av-readout-20261022",
+      "head": "443d058a8d256322a8d1417e7602fc957b3d0540",
+      "branch": "refs/heads/codex/r2-av-training-signal-20261023",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-csqa2-text-decision-20261024",
+      "head": "f057a031ffe271c51c138b439800cae2863a9149",
+      "branch": "refs/heads/codex/r2-csqa2-text-decision-20261024",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-fair-play-source-screen-20261022",
+      "head": "936a9837299b25095c0f0703768f1079af24b424",
+      "branch": "refs/heads/codex/r2-fair-play-source-screen-20261022",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-holoassist-exposure-strata",
+      "head": "6baf4ab60f8acefc75d4d4c63961b3cb0c33f24d",
+      "branch": "refs/heads/codex/r2-holoassist-exposure-strata",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-holoassist-results-20261020",
+      "head": "5c0bae773f9d4ec983ff3ac58fc13b1dd24bc47a",
+      "branch": "refs/heads/codex/r2-holoassist-results-20261020",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-independent-joint-task",
+      "head": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "branch": "refs/heads/codex/r2-captaincook4d-screen-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-mavad-source-screen",
+      "head": "07c504c958816fd2e9d70c279702b71b6e55e749",
+      "branch": "refs/heads/codex/r2-mavad-source-screen-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-mavd-source-screen",
+      "head": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "branch": "refs/heads/codex/r2-mavd-source-screen-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-observation-batch",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "branch": "refs/heads/codex/r2-observation-batch",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-otospeech-source-screen-20261024",
+      "head": "46e92ec5b3a4bb0a105ca8e79e0bdc0768d09ed4",
+      "branch": "refs/heads/codex/r2-otospeech-source-screen-20261024",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pamap2-admission-screen-20261021",
+      "head": "e3fa96e7b0c5a0bf78253ef595fda4ffbeb525d6",
+      "branch": "refs/heads/codex/r2-pamap2-admission-screen-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pch-heldout-eval-20261021",
+      "head": "d825251d3baea690dfa17602c28fc81096ab1575",
+      "branch": "refs/heads/codex/r2-pch-heldout-eval-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pch-recording-temporal-20261021",
+      "head": "fe82f5cd854cb305cc13eb715eb7a92b40dbd976",
+      "branch": "refs/heads/codex/r2-pch-recording-temporal-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-perception-fresh-holdout",
+      "head": "ddf6a106675f3a15feb66b5123ee7431539c27bf",
+      "branch": "refs/heads/codex/holoassist-label-window-audit",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-robopro-source-screen-20261024",
+      "head": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+      "branch": "refs/heads/codex/r2-robopro-source-screen-20261024",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-shared-gradient-audit-20261024",
+      "head": "8eb702a126a512b269fd3fd083b7f973478a6947",
+      "branch": "refs/heads/codex/r2-shared-gradient-audit-20261024",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage",
+      "head": "74e2094c51af6a8738dd67d42d018442b979cd75",
+      "branch": "refs/heads/codex/textfree-video-coverage-v1",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage-v2",
+      "head": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "branch": "refs/heads/codex/textfree-video-coverage-v2",
+      "dirty": true,
+      "dirty_status": [
+        " M scripts/fetch_clevrer_probe.py",
+        "MM scripts/train_textfree_video_probe.py",
+        "M  src/tiny_omni_decision/textfree_video.py",
+        " M tests/test_fetch_clevrer_probe.py",
+        "MM tests/test_textfree_video.py",
+        "?? docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_1024_PROTOCOL_20261018.md",
+        "?? scripts/compare_textfree_video_coverage.py",
+        "?? scripts/derive_nested_clevrer_sample.py",
+        "?? tests/test_compare_textfree_video_coverage.py",
+        "?? tests/test_nested_clevrer_source_import.py"
+      ]
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/decision-json-contract/tiny-omni-decision",
+      "head": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "branch": "refs/heads/codex/r2-json-decision-contract-20261021",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/patha-r2-continuation/tiny-omni-decision",
+      "head": "cb020322a229ea31a7d2773717ba6487a622a376",
+      "branch": "refs/heads/codex/r2-ami-speaker-channel-preflight-20261022",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/pr15-r2-progress-update/tiny-omni-decision",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "branch": "refs/heads/codex/r2-pch-moment-probe",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-ami-rm-media-preflight/tiny-omni-decision",
+      "head": "329b525f2a504c2c77a30f48c8ae88c0b23467f5",
+      "branch": "refs/heads/codex/r2-spatial-count-readout-20261023",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-audio-cache/tiny-omni-decision",
+      "head": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+      "branch": "refs/heads/codex/r2-av-audio-cache",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-matched-evidence/tiny-omni-decision",
+      "head": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+      "branch": "refs/heads/codex/r2-av-matched-evidence",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-postnorm-stability",
+      "head": "809c0f8226a780039a89c8066709d15d39a53f8a",
+      "branch": "refs/heads/codex/r2-av-postnorm-stability",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-replacement/tiny-omni-decision",
+      "head": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+      "branch": "refs/heads/codex/r2-av-replacement",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-transport/tiny-omni-decision",
+      "head": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+      "branch": "refs/heads/codex/r2-av-transport",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-crossmodal-binding-design/tiny-omni-decision",
+      "head": "cafb040c467bba6783ff30c6cc327db928cdfad5",
+      "branch": "refs/heads/codex/r2-clevrer-reasoning-storytime-screen-20261023",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-holoassist-textfree/tiny-omni-decision",
+      "head": "39b1a7057c4ec0afaa04b3dbc09e1989d2fa654b",
+      "branch": "refs/heads/codex/r2-holoassist-textfree",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-next-joint-av-source-screen/tiny-omni-decision",
+      "head": "e2c05dc5f0d0aee681345e723147df47ac307392",
+      "branch": "refs/heads/codex/r2-joint-av-source-screen-20261024",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-pch-sensor-probe/tiny-omni-decision",
+      "head": "07eb437a79e11fede0b6544b75631560d7fd22a9",
+      "branch": "refs/heads/codex/r2-pch-temporal-readout-v1",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-perception-av-scale-v1/tiny-omni-decision",
+      "head": "58633f10a6010f31dc5a17c59ce9a7c09b462db9",
+      "branch": "refs/heads/codex/r2-perception-av-scale-v1",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-perception-source-candidate/tiny-omni-decision",
+      "head": "8d6cf24453aae59b64c368b17c58e95142f48e5b",
+      "branch": "refs/heads/codex/r2-perception-source-candidate",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-storytime-api-followup/tiny-omni-decision",
+      "head": "aff0452f27496e3c991ead1e64dbcbe8a8007935",
+      "branch": "refs/heads/codex/r2-storytime-api-followup-20261023",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-long-budget",
+      "head": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "branch": "refs/heads/codex/video-teacher-v2-long-budget",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp",
+      "head": "506a049142f09f6aa5e34e20778f662e680eb93d",
+      "branch": "refs/heads/codex/teacher-quality-physionpp",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-ternary-student",
+      "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "branch": "refs/heads/codex/ternary-student-recovery",
+      "dirty": false,
+      "dirty_status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery",
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "branch": "refs/heads/codex/ternary-student-recovery-updated",
+      "dirty": true,
+      "dirty_status": [
+        " M configs/student/ternary_first.example.json",
+        " M docs/STUDENT.md",
+        " M src/tiny_omni_decision/student/__main__.py",
+        " M src/tiny_omni_decision/student/model.py",
+        " M src/tiny_omni_decision/student/recovery.py",
+        " M src/tiny_omni_decision/student/teacher_cache.py",
+        " M tests/test_student_model_cli.py",
+        " M tests/test_student_recovery.py",
+        "?? configs/student/ternary_recovery_local_1215.json",
+        "?? scripts/repackage_frozen_teacher_predictions.py",
+        "?? tests/test_student_teacher_cache_repack.py"
+      ]
+    }
+  ],
+  "manifest_hashes": [
+    {
+      "path": "manifests/base-model.example.yaml",
+      "sha256": "3073b756114904fbec8b8b590c087484aa6769dc510f8f95939509e6657fbfca"
+    },
+    {
+      "path": "manifests/candidates/ava-active-speaker.yaml",
+      "sha256": "049733bd9bc63dcb814d7105cbf161c6f5683ee71733bb402201271388a92ee7"
+    },
+    {
+      "path": "manifests/candidates/clevr4-validation.yaml",
+      "sha256": "ba524e02c7474e4b31cd52bbd3ecb9705979b9ead9e1fd5b46b5d6fdd9c81f12"
+    },
+    {
+      "path": "manifests/candidates/clevr4.yaml",
+      "sha256": "9b2b6aaffb03f1a800607e598902cb9d893223c412ab025d06b4a15f8d3cadae"
+    },
+    {
+      "path": "manifests/candidates/clevrer-validation.yaml",
+      "sha256": "ad2047bf40707f514cda825e1f409c7e19ace4fec5e313f6d9899bd5badce0c4"
+    },
+    {
+      "path": "manifests/candidates/clevrer.yaml",
+      "sha256": "a87bd6834a94b8ed481a36e7088ee8d5391319fc271fed80497530f055dcbdf2"
+    },
+    {
+      "path": "manifests/candidates/jamcqa-v2-dev.yaml",
+      "sha256": "8e7100be4a2aebf4ffba78aab65e8e371ccce2469c5062c86d81faf7299fd01f"
+    },
+    {
+      "path": "manifests/candidates/librispeech-dev-clean.yaml",
+      "sha256": "7ec6040833bafd29e1d4cbd132e849c50fc365982e32021190d3c0c5d39c6019"
+    },
+    {
+      "path": "manifests/candidates/mmau-test-mini.yaml",
+      "sha256": "ed4ab92e6ab4e2ec9fd93b895ff02603323fd276e61dac0400e929e9c935a6cf"
+    },
+    {
+      "path": "manifests/candidates/mvbench.yaml",
+      "sha256": "a886fdf6ce866b38bbfc82639a7b1ed39c5a9211f3d584c0f746d788b4f4cd37"
+    },
+    {
+      "path": "manifests/candidates/onejev-licenses.csv",
+      "sha256": "27b0b90e143b5abd4116c0a81438253d9250f99ea2699c16e974c8f5d142f9a8"
+    },
+    {
+      "path": "manifests/candidates/onejev.yaml",
+      "sha256": "ca7e7e0a2b4b1651ada9b7d3d8e1c071721f95f2bf6bdfdf613a4dea8b4386bb"
+    },
+    {
+      "path": "manifests/candidates/open-jev-test.yaml",
+      "sha256": "dc83003fee71451a3342f3d7bebca0032936566e050f2ecceb268412676d9f47"
+    },
+    {
+      "path": "manifests/candidates/open-jev-validation.yaml",
+      "sha256": "43b0c948f5316494db5499711b657aa4a791ae8e934b434524bab9ef604cf916"
+    },
+    {
+      "path": "manifests/candidates/open-jev.yaml",
+      "sha256": "966290c414f5e3d467814afeb48bee0a7f3c11a7b07617ecc6b42d9f4ca0fec9"
+    },
+    {
+      "path": "manifests/candidates/speech-commands-test.yaml",
+      "sha256": "0b557bc44742d96ed1c5fa227726cc858fbf688ec26083952c70559492acfe58"
+    },
+    {
+      "path": "manifests/candidates/speech-commands-validation.yaml",
+      "sha256": "c416e1a1af57387397d73d6f4ac66a02d481dc9cbc44477c25c2375112bdaf24"
+    },
+    {
+      "path": "manifests/candidates/speech-commands.yaml",
+      "sha256": "109984b9304ab0335c9e0b973bea3b828e3e0c901d9e46cfcbbf581459df03e2"
+    },
+    {
+      "path": "manifests/candidates/typed-synth-validation.yaml",
+      "sha256": "f203eb5bae312e80586bfd92ec9a7bf39918d110ed6441291a4dc64fa53bf51a"
+    },
+    {
+      "path": "manifests/candidates/unav100.yaml",
+      "sha256": "6adb3dc92793f486f0e0616421705549b729b18bd6440d6174ff9329df470d5a"
+    },
+    {
+      "path": "manifests/candidates/yt-ntu-avq.yaml",
+      "sha256": "9e21beecbe206739a491739aa5274a714d8bfcee847da5968ccb6584aa12f98d"
+    },
+    {
+      "path": "manifests/dataset.example.yaml",
+      "sha256": "60c29a1efc4d93179422cf5acc7c2f38949b603efce5dc7a5073a36cd3e3ccdd"
+    },
+    {
+      "path": "manifests/durable-heldout-corpus.yaml",
+      "sha256": "10e7b191edf318882585f5c7cf38863be35b6c825a18f8ed3b36d1d43d4788b1"
+    },
+    {
+      "path": "manifests/durable-training-corpus.yaml",
+      "sha256": "365e154310f6c1c16199f511bc0a83959d250d1308ade853b4a0d8f5f6010829"
+    },
+    {
+      "path": "manifests/evaluation-candidates.yaml",
+      "sha256": "2787c66d920d01dee53e3df4aa0f52eb9097f52e5fb8a35f2994b6eaba089f56"
+    },
+    {
+      "path": "manifests/phase3-evaluation-corpus.yaml",
+      "sha256": "49b0ac3c133a5041241bbc3cee85989cd696f6aee388814bc28984490f3bb0c2"
+    },
+    {
+      "path": "manifests/phase3-training-corpus.yaml",
+      "sha256": "8c34a80c513eebc30791e0e9f68de5dbbf4f1fc11d2027acbc17b4cc79949656"
+    },
+    {
+      "path": "manifests/pretrained_reuse/.gitattributes",
+      "sha256": "a23cc73caeec9684ceb08743c7ab485bd5aebf235e526484ce66b712f8907c10"
+    },
+    {
+      "path": "manifests/pretrained_reuse/clevrer-heldout-video-excluded-scenes-20261011.json",
+      "sha256": "2ffd21da252fa1f8a544c66d0d1f6c66b44ca26af79e8e6db3b2613cc9f4cb6c"
+    },
+    {
+      "path": "manifests/pretrained_reuse/greatest-hits-development-20261017.json",
+      "sha256": "1b8640b8e3348799bb9e3a0046efce999c65535985fbe394ae10b1603a91645b"
+    },
+    {
+      "path": "manifests/pretrained_reuse/greatest-hits-encoders-20261017.json",
+      "sha256": "3ee6b7d650ebf119bc039511ff30e2110e1a3358e89e8a4fe8774ed0c98b70e1"
+    },
+    {
+      "path": "manifests/pretrained_reuse/greatest-hits-full-extent-20261017.json",
+      "sha256": "48940ebe38996adb4e10687055b04e9c0150dae1a67c7373d4062c56dfd67168"
+    },
+    {
+      "path": "manifests/pretrained_reuse/greatest-hits-inventory-20261017.json",
+      "sha256": "9febf9f1d4f0e665b92203fcbdb3ced79526ccf959617fe242caad042c2a633e"
+    },
+    {
+      "path": "manifests/pretrained_reuse/greatest-hits-probe-20261017.json",
+      "sha256": "4b87f99bc4309cada393be87e76f31ac7ba75326e31309ddda04bf4fd58caf57"
+    },
+    {
+      "path": "manifests/pretrained_reuse/greatest-hits-source-review-20261017.json",
+      "sha256": "553daf8dc87d78957daf0ddc6bcb28b850b20e770fa03149c86f05e9b35a948a"
+    },
+    {
+      "path": "manifests/pretrained_reuse/lombard-grid-source-20261014.json",
+      "sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d"
+    },
+    {
+      "path": "manifests/pretrained_reuse/perception-test-sound-visibility-20261021.json",
+      "sha256": "dc3148f5d85b8f8748c4420343c29fb0d43ee94291a914a62a21d15043955208"
+    },
+    {
+      "path": "manifests/teachers/durable-teacher-v0.json",
+      "sha256": "9af2616684dd00c557941cf790b7e2d65fbe8100e9ae8be7296bc250c2ec2d94"
+    },
+    {
+      "path": "manifests/training-candidates.yaml",
+      "sha256": "4a2aec4747e4b8fbc17cb20e14dc00c278d0d545219d5e8adf775ece02796f22"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-preflight-20261025-07\\source_candidate_records.jsonl",
+      "bytes": 65902665,
+      "sha256": "11cd4c758b04e36702969d168a9987dde8028d75733bb95a0a684d7f712a19d6"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-feature-plan-20261025-02\\feature-plan.json",
+      "bytes": 42624714,
+      "sha256": "9cf2fae738270a14e632b745b8a0f78214440eb057de76f0ba825d4413824247"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-dev-split-20261025-03\\train.jsonl",
+      "bytes": 11146767,
+      "sha256": "c5a8396a6b47a8635033e445c67233c76a6ecb17d27f4e6943a153fd3598600d"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-dev-split-20261025-03\\validation.jsonl",
+      "bytes": 2558510,
+      "sha256": "701bd1ab203e54fae5fcb7cc8e5987c2d903bd23b5d2fbf736c2132e953ebcda"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-dev-split-20261025-03\\split-manifest.json",
+      "missing": true
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-videoprism-train-attempt-01\\candidate_frame_roi_features.npy",
+      "bytes": 216216704,
+      "sha256": "59e7339c9c210cb942475c82032f93dd272f95d0e0a061b30a665f120b755980"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-videoprism-development-attempt-01\\candidate_frame_roi_features.npy",
+      "bytes": 49689728,
+      "sha256": "13b5206867f67f1dddfea4a188e172653ad3d217dd0c6de65c27b3825dfc04a5"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-audio-train-attempt-01\\audio_window_features.npy",
+      "bytes": 14722688,
+      "sha256": "e92f8f62a546e147fe234e7c385857de8dbbe816ff9939060264cd65298e96fc"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-audio-development-attempt-02\\audio_window_features.npy",
+      "bytes": 3320960,
+      "sha256": "c3476ba844f311b01c81558d7b3b10e269a6c353799aadd3a3c14ebeaef3a4ec"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-readout-attempt-02\\best-readout-state.pt",
+      "bytes": 1250472,
+      "sha256": "63390ba7532348bbd600f64ed796e92a3daf13b1f44ba0b18e83b1fd304780bf"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-readout-attempt-02\\final-readout-state.pt",
+      "bytes": 1250448,
+      "sha256": "e24332897044dcd42ac373490aaa1ffcbe75152bdaefde05daea30ec56ecd53b"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-readout-attempt-02\\training-history.jsonl",
+      "bytes": 19775,
+      "sha256": "7255e8f4fc24047ff18a4c87aaa8925772a650f46a412b82fd4c91992523e361"
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-candidate-readout-attempt-02\\result.json",
+      "bytes": 10721,
+      "sha256": "e63217dbfef66476140a4d47ed76ff4ff6425851ca0eafce03fa27b977aca083"
+    }
+  ],
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "vram_total_mib": 16384,
+    "vram_used_mib": 15373,
+    "vram_free_mib": 803,
+    "gpu_utilization_percent": 100,
+    "gpu_temperature_c": 65,
+    "disk_c_free_bytes": 46810673152,
+    "ram_total_kib": 33288572,
+    "ram_free_kib": 13287148
+  },
+  "active_external_gpu_job": {
+    "name": "Orbitune compound CFE training",
+    "watchdog_pids": [
+      4696,
+      23856
+    ],
+    "trainer_pid": 9404,
+    "compute_pid": 29312,
+    "started_at_local": "2026-10-25T02:51:27+09:00",
+    "repository": "separate MIDI-GPT/orbitune checkout",
+    "action_taken": "none; processes not signaled, restarted, or modified"
+  },
+  "preservation": {
+    "live_worktrees_modified": [],
+    "legacy_manifests_or_checkpoints_modified": false,
+    "sealed_audit_opened": false,
+    "paid_compute_used": false,
+    "new_GPU_run_started": false,
+    "process_intervention": false
+  },
+  "r0_status": {
+    "machine_inventory": "refreshed",
+    "remaining": "deployment device/task-specific release gates and time/money criteria not fully frozen",
+    "prior_live_audit": "docs/pretrained_reuse/R0_LIVE_AUDIT_20261024_2312JST.md"
+  }
+}

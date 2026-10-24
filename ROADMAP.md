@@ -41,6 +41,34 @@ source-label semantics and remaining modality-necessity gates must be addressed
 before a readout run. See the
 [`source-candidate preflight`](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_PREFLIGHT_20261024.md).
 
+**2026-10-25 R2 Perception Test AV source-candidate readout:** A seed-17
+frozen VideoPrism-B + EfficientAT readout completed all 80 epochs on the
+corrected, fixed 2,593-record / 320-video training split. Its selected epoch 7
+reached 56.93% set Accuracy, NLL 1.2748, Brier 0.5039, and ECE 0.0675 on 606
+records / 80 video groups drawn from the official training source. Audio/video
+zeroing and audio shuffling changed results, and source-aligned audio beat a
+one-second offset on its fixed 570-record subset. The curve overfit after epoch
+7; the internal development partition is non-blind, and the task uses oracle
+event intervals/object tracks. This is useful narrow AV input-dependence
+evidence, not a product-quality or independent-validation result. R2's
+multi-input gate remains open; do not proceed to R3–R8 on this basis. Full
+metrics, controls, hashes, compute, and limits are in the
+[`AV source-candidate report`](docs/pretrained_reuse/R2_PERCEPTION_AV_SOURCE_CANDIDATE_READOUT_20261025.md).
+
+**2026-10-25 R2 paired-control uncertainty:** A CPU-only paired bootstrap
+resampled the 606 saved joint/control predictions as 80 whole video groups
+(seed 17, 10,000 replicates). Joint input beat zero-audio and zero-video
+controls in Accuracy/NLL/Brier; source-aligned audio beat its one-second offset
+on the same 570-record subset. The uncertainty check preserves the same
+non-blind 80-video development limitation and oracle-label caveats; it does not
+close R2. Exact intervals and hashes are in the AV report and external summary.
+
+**2026-10-25 R0 live audit refresh:** GitHub has 22 open PRs (#9–#30), 59
+registered worktrees (six already dirty), and the RTX 3080 Laptop is occupied
+by an external Orbitune training process. All were inspected read-only; no
+existing worktree or process was changed. See the [R0 snapshot](docs/pretrained_reuse/R0_LIVE_AUDIT_20261025_0358JST.md)
+and [machine-readable inventory](docs/pretrained_reuse/R0_LIVE_AUDIT_20261025_0358JST.json).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its

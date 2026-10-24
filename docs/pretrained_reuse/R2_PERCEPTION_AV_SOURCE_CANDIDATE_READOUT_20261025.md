@@ -136,6 +136,43 @@ The run's original training runner SHA-256 is
 recovery finalizer records its own code hash separately. The matching source
 commit before this recovery change was `d8088ad`.
 
+## Paired video-group uncertainty diagnostic
+
+To account for questions clustered within the same video, the saved fixed-
+checkpoint prediction files were paired by record ID, video ID, candidate
+order, target IDs, and `none_visible` label, then resampled by whole video
+groups. This was CPU-only and did not reload a model, refit a checkpoint, or
+access an audit set. The diagnostic used seed 17 and 10,000 paired percentile
+bootstrap replicates. Differences below are joint minus control; positive
+Accuracy and negative NLL/Brier/ECE favor joint input. Intervals are two-sided
+95% percentile intervals.
+
+| Paired comparison | Records / videos | Accuracy difference [95% CI] | NLL difference [95% CI] | Brier difference [95% CI] | ECE difference [95% CI] |
+|---|---:|---:|---:|---:|---:|
+| Joint vs zero audio | 606 / 80 | +0.208 [0.147, 0.269] | -0.278 [-0.392, -0.146] | -0.078 [-0.116, -0.041] | -0.024 [-0.073, +0.017] |
+| Joint vs shuffled audio | 606 / 80 | +0.122 [0.077, 0.170] | -0.399 [-0.525, -0.286] | -0.141 [-0.180, -0.103] | -0.056 [-0.100, +0.001] |
+| Joint vs zero video | 606 / 80 | +0.424 [0.365, 0.483] | -1.089 [-1.255, -0.885] | -0.205 [-0.251, -0.158] | -0.005 [-0.040, +0.052] |
+| Joint vs reversed temporal delta | 606 / 80 | +0.068 [0.036, 0.101] | -0.192 [-0.279, -0.105] | -0.070 [-0.101, -0.045] | -0.015 [-0.060, +0.029] |
+| Source-aligned vs offset audio (same subset) | 570 / 80 | +0.063 [0.028, 0.098] | -0.146 [-0.204, -0.091] | -0.048 [-0.071, -0.027] | -0.002 [-0.046, +0.044] |
+
+These paired intervals support a measurable dependence on both audio and video
+features and on source-aligned audio for this narrow oracle-assisted task. ECE
+differences remain uncertain. The 80 development videos are below the
+roadmap's provisional 200-scene floor, and the same non-blind development set
+was used for checkpoint selection, so this is exploratory diagnosis rather
+than blind confirmation. The bootstrap does not cure source/task limitations,
+oracle annotations, possible participant grouping or cross-video pixel-level
+duplicate gaps, or the observed overfit. It does not close R2's multimodal
+generalization gate.
+
+The exact summary is external at
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-readout-attempt-02\paired-group-bootstrap-seed17-10000.json`
+(SHA-256 `7ee9752b3ac6fe0241cfba58b2e7b5f8835cfa1479eb4bd6c447584c8e75bef7`).
+Its seven input prediction hashes are embedded in the JSON. The CPU-only
+bootstrap implementation and validation tests are
+[`bootstrap_perception_source_candidate_controls.py`](../../scripts/bootstrap_perception_source_candidate_controls.py)
+and [`test_bootstrap_perception_source_candidate_controls.py`](../../tests/test_bootstrap_perception_source_candidate_controls.py).
+
 ## Decision and next work
 
 This is useful evidence that the frozen AV features contain signal for the
