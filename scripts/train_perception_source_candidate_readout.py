@@ -29,6 +29,10 @@ HIDDEN_SIZE = 128
 LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 MIN_DELTA = 1e-4
+VIDEOPRISM_CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+VIDEOPRISM_SOURCE_COMMIT = "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
+EFFICIENTAT_WEIGHTS_SHA256 = "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e"
+EFFICIENTAT_SOURCE_COMMIT = "a425fdce92572e602a1d5634799bd9f1f2efa806"
 
 
 def sha256_file(path: Path) -> str:
@@ -55,6 +59,7 @@ def input_artifact_hashes(args):
         "train_video_feature_index": sha256_file(
             args.train_video_features / "feature_index.jsonl"
         ),
+        "train_video_feature_run": sha256_file(args.train_video_features / "run.json"),
         "train_video_feature_result": sha256_file(args.train_video_features / "result.json"),
         "train_audio_features": sha256_file(
             args.train_audio_features / "audio_window_features.npy"
@@ -66,6 +71,7 @@ def input_artifact_hashes(args):
             args.train_audio_features / "record_window_references.jsonl"
         ),
         "train_audio_feature_result": sha256_file(args.train_audio_features / "result.json"),
+        "train_audio_feature_run": sha256_file(args.train_audio_features / "run.json"),
         "development_video_features": sha256_file(
             args.development_video_features / "candidate_frame_roi_features.npy"
         ),
@@ -74,6 +80,9 @@ def input_artifact_hashes(args):
         ),
         "development_video_feature_result": sha256_file(
             args.development_video_features / "result.json"
+        ),
+        "development_video_feature_run": sha256_file(
+            args.development_video_features / "run.json"
         ),
         "development_audio_features": sha256_file(
             args.development_audio_features / "audio_window_features.npy"
@@ -86,6 +95,9 @@ def input_artifact_hashes(args):
         ),
         "development_audio_feature_result": sha256_file(
             args.development_audio_features / "result.json"
+        ),
+        "development_audio_feature_run": sha256_file(
+            args.development_audio_features / "run.json"
         ),
         "video_feature_extractor": sha256_file(
             repository / "scripts" / "extract_perception_source_candidate_video_features.py"
@@ -126,6 +138,55 @@ def load_examples(plan_path: Path, corpus_split_path: Path, video_root: Path, au
     video_values = np.load(video_root / "candidate_frame_roi_features.npy", mmap_mode="r")
     audio_index = read_jsonl(audio_root / "record_window_references.jsonl")
     audio_values = np.load(audio_root / "audio_window_features.npy", mmap_mode="r")
+    video_result = json.loads((video_root / "run.json").read_text(encoding="utf-8"))
+    audio_result = json.loads((audio_root / "run.json").read_text(encoding="utf-8"))
+    video_features_path = video_root / "candidate_frame_roi_features.npy"
+    audio_features_path = audio_root / "audio_window_features.npy"
+    if (
+        video_result.get("status") != "PASS_SOURCE_CANDIDATE_VIDEO_FEATURES"
+        or not video_result.get("complete_split")
+        or video_result.get("split") != split_name
+        or video_result.get("plan_sha256") != sha256_file(plan_path)
+        or video_result.get("acquisition_manifest_sha256")
+        != plan.get("acquisition_manifest_sha256")
+        or video_result.get("media_report_sha256")
+        != plan.get(f"{split_name}_media_report_sha256")
+        or video_result.get("record_count") != len(plan_rows)
+        or video_result.get("feature_sha256") != sha256_file(video_features_path)
+        or video_result.get("feature_shape") != list(video_values.shape)
+        or video_result.get("checkpoint_sha256") != VIDEOPRISM_CHECKPOINT_SHA256
+        or video_result.get("source_commit") != VIDEOPRISM_SOURCE_COMMIT
+        or video_result.get("labels_loaded")
+        or video_result.get("metrics_computed")
+        or video_result.get("gpu_used")
+    ):
+        raise ValueError(f"VideoPrism feature result failed provenance checks: {video_root}")
+    if (
+        audio_result.get("status") != "PASS_SOURCE_CANDIDATE_AUDIO_FEATURES"
+        or audio_result.get("split") != split_name
+        or audio_result.get("plan_sha256") != sha256_file(plan_path)
+        or audio_result.get("acquisition_manifest_sha256")
+        != plan.get("acquisition_manifest_sha256")
+        or audio_result.get("media_report_sha256")
+        != plan.get(f"{split_name}_media_report_sha256")
+        or audio_result.get("records") != len(plan_rows)
+        or audio_result.get("feature_sha256") != sha256_file(audio_features_path)
+        or audio_result.get("feature_shape") != list(audio_values.shape)
+        or audio_result.get("weights_sha256") != EFFICIENTAT_WEIGHTS_SHA256
+        or audio_result.get("source_commit") != EFFICIENTAT_SOURCE_COMMIT
+        or audio_result.get("model_state_sha256_before")
+        != audio_result.get("model_state_sha256_after")
+        or audio_result.get("labels_loaded")
+        or audio_result.get("metrics_computed")
+        or not audio_result.get("gpu_gate", {}).get("TINY_OMNI_GPU_GATE_RESERVED_MIB")
+    ):
+        raise ValueError(f"EfficientAT feature result failed provenance checks: {audio_root}")
+    if len(video_index) != len(video_values) or len(audio_index) != audio_result.get(
+        "audio_references"
+    ):
+        raise ValueError("feature arrays and their index files differ in length")
+    if len(read_jsonl(audio_root / "unique_window_index.jsonl")) != len(audio_values):
+        raise ValueError("audio feature array and unique-window index differ in length")
     visual = pool_video_candidate_features(plan_rows, video_index, video_values)
     source_audio = pool_audio_features(audio_index, audio_values, variant="source")
     offset_audio = pool_audio_features(audio_index, audio_values, variant="offset")
@@ -489,13 +550,17 @@ def run(args: argparse.Namespace):
             donor_audio=donor,
         )
         predictions = metrics.pop("predictions")
-        evaluation[name] = metrics
         args.output.mkdir(parents=True, exist_ok=True)
-        with (args.output / f"predictions-{name}.jsonl").open(
+        prediction_path = args.output / f"predictions-{name}.jsonl"
+        with prediction_path.open(
             "x", encoding="utf-8", newline="\n"
         ) as stream:
             for row in predictions:
                 stream.write(json.dumps(row, sort_keys=True) + "\n")
+        evaluation[name] = {
+            **metrics,
+            "predictions_sha256": sha256_file(prediction_path),
+        }
 
     # The readout scores each candidate independently; verify candidate-order invariance.
     first = development_examples[0]
@@ -531,6 +596,9 @@ def run(args: argparse.Namespace):
         "best_epoch": best_epoch,
         "best_development_nll": best_nll,
         "candidate_order_max_abs_score_delta": order_invariance_delta,
+        "best_readout_state_sha256": sha256_file(args.output / "best-readout-state.pt"),
+        "final_readout_state_sha256": sha256_file(args.output / "final-readout-state.pt"),
+        "training_history_sha256": sha256_file(args.output / "training-history.jsonl"),
         "started_at_utc": started,
         "ended_at_utc": datetime.now(UTC).isoformat(),
         "elapsed_seconds": time.perf_counter() - timer,
