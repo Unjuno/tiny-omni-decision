@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 full-extent × unique-coverage long comparison:** Added a
+separate, hash-pinned fresh-sampling config and extended the full-extent runner
+without changing its legacy default. CPU-only checks regenerate the same
+32,768-step sample/LR schedule as the completed center-crop fresh arm, with the
+same ordered validation and common 6,656-row parent probe. This adds 2,048
+unique Text, Image and Audio questions but no Video questions. Tests and Ruff
+pass; the GPU fit is pending because live PID26920 occupies the RTX 3080 Laptop.
+No model-quality result is claimed. See
+[`R2 full-extent unique-coverage long comparison`](docs/pretrained_reuse/R2_FULL_EXTENT_UNIQUE_COVERAGE_LONG_20261025.md).
+
 **2026-10-25 R2 UnAV-100 source/task screen:** UnAV-100 is a relevant
 audio-visual event-localization task-design lead, but its official page says
 raw video is retrieved from YouTube and that copyright remains with original

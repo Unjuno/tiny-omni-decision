@@ -28,6 +28,7 @@ from scripts.native_fit import (
     summarize,
 )
 from scripts.native_fit_runtime import FeatureStore
+from scripts.native_full_extent import parent_probe
 from scripts.native_full_extent_binding import bind_visual_banks
 from scripts.native_long_budget import EVALUATION_STEPS, MAX_STEPS, extend_plan, learning_rate
 from scripts.native_matched_batches import build_plan
@@ -56,11 +57,13 @@ def verify(pins):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=["smoke", "train", "replay"], required=True)
-    parser.add_argument("--policy", choices=["repeat"], required=True)
+    parser.add_argument("--policy", choices=["repeat", "fresh"], required=True)
+    parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference", type=Path)
     parser.add_argument("--reference-sha256")
     args = parser.parse_args()
+    config_path = args.config.resolve()
     if (args.phase != "smoke") != bool(args.reference) or bool(args.reference) != bool(
         args.reference_sha256
     ):
@@ -85,7 +88,8 @@ def main():
         source_commit=subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=REPO, text=True
         ).strip(),
-        config_sha256=sha(CONFIG),
+        config_path=str(config_path),
+        config_sha256=sha(config_path),
         started_utc=datetime.now(UTC).isoformat(),
         step=0,
         best_step=None,
@@ -101,8 +105,8 @@ def main():
     )
     write(args.output / "result.json", result)
     try:
-        config = json.loads(CONFIG.read_text())
-        shutil.copyfile(CONFIG, args.output / "effective-config.json")
+        config = json.loads(config_path.read_text())
+        shutil.copyfile(config_path, args.output / "effective-config.json")
         if config["training"] != {
             "seed": 17,
             "max_steps": MAX_STEPS,
@@ -118,7 +122,7 @@ def main():
         }:
             raise ValueError("configuration differs from the implemented fixed schedule")
         pins = dict(config["input_pins"])
-        pins[str(CONFIG)] = sha(CONFIG)
+        pins[str(config_path)] = sha(config_path)
         source_names = subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0")
@@ -177,7 +181,7 @@ def main():
             if (
                 reference["status"] != expected
                 or reference["validated_hashes"] != pins
-                or reference["config_sha256"] != sha(CONFIG)
+                or reference["config_sha256"] != sha(config_path)
                 or reference["policy"] != args.policy
             ):
                 raise ValueError("matching completed reference required")
@@ -268,12 +272,24 @@ def main():
             and sha(args.output / "sampling.json") != reference["artifacts"]["sampling.json"]
         ):
             raise ValueError("reference sampler order/accounting differs")
-        if sha(args.output / "sampling.json") != control["artifacts"]["sampling.json"]:
-            raise ValueError("whole sampler/accounting must be byte-identical to control")
-        result["control_sampling_exact"] = True
-        probe = [train[i] for i in long_plan["unique_row_indices"]]
+        sampling_sha = sha(args.output / "sampling.json")
+        if args.policy == "repeat":
+            if sampling_sha != control["artifacts"]["sampling.json"]:
+                raise ValueError("repeat sampler/accounting must be byte-identical to control")
+            result["control_sampling_exact"] = True
+        else:
+            fresh_control_fit = Path(config["fresh_control_fit"])
+            fresh_control = json.loads((fresh_control_fit / "result.json").read_text())
+            if (
+                fresh_control["status"] != "PASS_NATIVE_LONG_BUDGET_TRAIN"
+                or fresh_control["step"] != MAX_STEPS
+                or sampling_sha != fresh_control["artifacts"]["sampling.json"]
+            ):
+                raise ValueError("fresh sampler must match the pinned completed fresh control")
+            result["fresh_control_sampling_exact"] = True
+        probe = parent_probe(train, original_pool)
         if len(probe) != 6656:
-            raise ValueError("all and only 6656 fixed consumed TRAIN questions required")
+            raise ValueError("common parent TRAIN probe must contain exactly 6656 questions")
         write(args.output / "train-probe-ids.json", [r["id"] for r in probe])
         write(args.output / "lr-plan.json", [learning_rate(s) for s in range(1, MAX_STEPS + 1)])
         if validation:
@@ -360,7 +376,7 @@ def main():
                 python_rng=random.getstate(),
                 numpy_rng=(rng[0], rng[1].tolist(), *rng[2:]),
                 sampler_file_sha256=sha(args.output / "sampling.json"),
-                config_sha256=sha(CONFIG),
+                config_sha256=sha(config_path),
             )
             path = args.output / f"checkpoint-{step:04}.pt"
             torch.save(value, path)
@@ -418,7 +434,7 @@ def main():
             item = dict(
                 step=step,
                 train_probe=train_metrics,
-                train_probe_scope="all 6656 unique questions in the fixed training pool",
+                train_probe_scope="common original-parent pool of 6656 TRAIN questions",
                 common_task_gap=common_task_gap(probe, probe_scores, validation, scores),
                 parameter_l2_norms={
                     name: float(p.detach().norm()) for name, p in model.named_parameters()

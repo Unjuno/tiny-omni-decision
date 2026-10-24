@@ -7,6 +7,19 @@ import numpy as np
 POLICY = "full-extent-bilinear-centered-black-pad-288-v1"
 
 
+def parent_probe(rows, occurrences):
+    """Return the fixed original-pool TRAIN rows in corpus order for both arms."""
+    if (
+        not rows
+        or not occurrences
+        or any(type(i) is not int or i < 0 or i >= len(rows) for i in occurrences)
+        or any(row.get("split") != "train" or not row.get("id") for row in rows)
+        or len({row["id"] for row in rows}) != len(rows)
+    ):
+        raise ValueError("unique TRAIN rows and valid parent occurrences required")
+    return [rows[i] for i in sorted(set(occurrences))]
+
+
 def encoder_distribution_versions(version=importlib.metadata.version):
     result = {name: version(name) for name in ("jax", "jaxlib", "numpy", "av", "psutil")}
     try:
