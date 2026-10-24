@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 CLEVR-4 full-validation transfer reconciliation:** Recomputed
+metrics from the saved, one-shot VideoPrism-B fixed-readout predictions for all
+19,988 official 100k validation images; all 79,952 decisions were valid and
+per-taxonomy Accuracy/NLL/Brier/ECE matched the report. Macro Accuracy is
+87.41%, with Count at 60.44%; the runtime's 114.5M resident parameters fit the
+provisional parameter range, but its 458 MB payload exceeds the provisional
+200 MB package target. This is a fixed synthetic taxonomy
+transfer result; the validation is exposed, so it is closed to tuning. Local
+metadata says the run completed and its prediction SHA matches, although the
+source report's opening status sentence still says the replay is running. See
+the [task battery update](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md)
+and [transfer report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/clevr4-100k-transfer-eval-20261023/docs/pretrained_reuse/R2_CLEVR4_100K_TRANSFER_EVAL_20261023.md).
+
 **2026-10-25 07:26 JST R0 live recheck:** The continuation worktree is clean
 at `f754d28`; all three public GitHub checks for that commit are green. The
 existing Teacher process (PID 26920, supervisor 15928) remains active and owns
