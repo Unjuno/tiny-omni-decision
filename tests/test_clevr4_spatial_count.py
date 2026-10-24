@@ -100,6 +100,88 @@ def test_extractor_retains_spatial_grid_and_averages_repeated_frame_axis() -> No
     assert np.allclose(pooled[..., 1], 3.0)
 
 
+def test_resume_prefix_stops_at_first_zero_feature_row() -> None:
+    np = pytest.importorskip("numpy")
+    extractor = _load_module(EXTRACT_PATH, "extract_spatial_count_features")
+    features = np.zeros((5, 2, 3), dtype=np.float16)
+    features[:3] = 1.0
+
+    assert extractor._find_completed_prefix(features) == 3
+
+
+def test_resume_prefix_rejects_nonzero_rows_after_first_unwritten_row() -> None:
+    np = pytest.importorskip("numpy")
+    extractor = _load_module(EXTRACT_PATH, "extract_spatial_count_features")
+    features = np.zeros((5, 2, 3), dtype=np.float16)
+    features[0] = 1.0
+    features[2] = 1.0
+
+    with pytest.raises(ValueError, match="non-contiguous"):
+        extractor._find_completed_prefix(features)
+
+
+def test_resume_feature_store_replays_rows_after_durable_checkpoint(tmp_path: Path) -> None:
+    np = pytest.importorskip("numpy")
+    extractor = _load_module(EXTRACT_PATH, "extract_spatial_count_features")
+    path = tmp_path / "train-spatial-features.npy"
+    saved = np.zeros((5, 2, 3), dtype=np.float16)
+    saved[:2] = 1.0
+    saved[2:] = 2.0
+    np.save(path, saved)
+
+    features, start = extractor._open_feature_store(
+        path,
+        expected_shape=(5, 2, 3),
+        resume_start=2,
+    )
+
+    assert start == 2
+    assert np.all(features[:2] == 1.0)
+    assert np.all(features[2:] == 2.0)
+    features[2:] = 3.0
+    features.flush()
+    reopened = np.load(path, mmap_mode="r")
+    assert np.all(reopened[2:] == 3.0)
+
+
+def test_resume_progress_checkpoint_is_written_atomically(tmp_path: Path) -> None:
+    import json
+
+    extractor = _load_module(EXTRACT_PATH, "extract_spatial_count_features")
+    path = tmp_path / "resume-progress.json"
+
+    extractor._write_json_atomically(path, {"train": 10_000, "validation": 0})
+
+    assert json.loads(path.read_text(encoding="utf-8")) == {"train": 10_000, "validation": 0}
+    assert not path.with_suffix(".json.tmp").exists()
+
+
+def test_resume_metadata_rejects_checkpoint_or_split_mismatch(tmp_path: Path) -> None:
+    extractor = _load_module(EXTRACT_PATH, "extract_spatial_count_features")
+    metadata = {
+        "status": "starting",
+        "input_split_dir": str(tmp_path),
+        "checkpoint_sha256_expected": extractor.CHECKPOINT_SHA256,
+        "model_revision": extractor.MODEL_REVISION,
+        "frame_count": 8,
+        "output_shape_per_image": [64, 768],
+        "output_dtype": "float16",
+        "backend_policy": "CPU only; does not acquire GPU memory",
+        "full_corpus": True,
+        "smoke_image_limit_per_split": None,
+    }
+
+    extractor._validate_resume_metadata(metadata, split_dir=tmp_path)
+
+    for changed in (
+        {**metadata, "checkpoint_sha256_expected": "wrong"},
+        {**metadata, "input_split_dir": str(tmp_path / "other")},
+        {**metadata, "full_corpus": False},
+    ):
+        with pytest.raises(ValueError, match="resume metadata"):
+            extractor._validate_resume_metadata(changed, split_dir=tmp_path)
+
+
 def test_candidate_conditioned_spatial_scorer_is_option_permutation_equivariant() -> None:
     torch = pytest.importorskip("torch")
     model_module = _load_module(MODEL_PATH, "spatial_count")

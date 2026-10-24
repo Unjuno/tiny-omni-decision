@@ -2441,3 +2441,15 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### CLEVR-4 frozen spatial readout follow-up — execution status (2026-10-24)
+
+The matched spatial-count readout implementation remains in progress. Its
+CPU-only full feature extraction was interrupted with a contiguous 10,044/30,000
+train-image prefix; the validation split and both readout fits have not run.
+Resume guards and durable 1,000-image progress markers are implemented and
+covered by CPU tests. The existing VideoPrism runtime is currently blocked by
+Windows Application Control, so no extraction restart or quality result is
+claimed. Preserve the partial cache and frozen split; resume only when an
+approved local runtime can load the pinned JAX/TensorFlow stack.
+[Execution record](docs/pretrained_reuse/R2_CLEVR4_SPATIAL_COUNT_READOUT_20261023.md).

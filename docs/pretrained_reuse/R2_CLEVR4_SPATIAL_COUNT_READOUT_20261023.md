@@ -102,14 +102,84 @@ distinct best/final checkpoints and predictions, and reproduced the selected
 macro NLL after reloading the best checkpoint. Those fixture metrics are only
 an execution-path check and are excluded from the model-quality results.
 
-The full extraction is running as a separate CPU-only process in
+The first full extraction was run as a separate CPU-only process in
 `C:\CodexArtifacts\pretrained-reuse-r2\clevr4-spatial-count-readout-features-01`.
 It reads only the frozen train/dev manifests and the archive, emits float16
 `[N, 64, 768]` features to memory-mapped files, and validates every image hash.
-The RTX 3080 remains occupied by an unrelated Orbitune process (15,821 MiB
-reported), so this experiment does not request GPU memory. At the last hardware
-check, system RAM had about 3.7 GiB free; the CPU extraction smoke peaked near
-2 GiB working set. Disk had over 48 GiB free before extraction.
+The attempt ended incomplete; its exact state and safe-resume controls are below.
+The RTX 3080 was occupied by an unrelated Orbitune process (15,821 MiB reported),
+so this experiment did not request GPU memory. Disk had over 46 GiB free.
+
+## Interrupted extraction and resume state (2026-10-24)
+
+The full extraction process (PID 15804, batch size 2, CPU-only) was absent at the
+next state check. Windows Application log records the Codex Sandbox Service
+receiving a stop request at 18:04:44 JST and starting again at 18:07:52 JST.
+This timing is consistent with the process interruption, but no process-specific
+Python traceback or crash event was retained, so the exact termination cause is
+not proven. The image archive entries around the output boundary still match
+their frozen SHA-256 values.
+
+The observed initial command was:
+
+```powershell
+& 'C:\Users\junny\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\python.exe' -u scripts/extract_clevr4_spatial_count_features.py `
+  --archive C:\CodexArtifacts\pretrained-reuse-r2\clevr4-100k-videoprism-v0\clevr_4_100k_v1.full.zip `
+  --split-dir C:\CodexArtifacts\pretrained-reuse-r2\clevr4-spatial-count-readout-attempt-02 `
+  --checkpoint C:\CodexArtifacts\pretrained-reuse-r2\path-a-image-videoprism-clevr4-runtime-bundle-v2\videoprism-base-f16r288.npz `
+  --source-root C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\source `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\clevr4-spatial-count-readout-features-01 `
+  --batch-size 2
+```
+
+The partial train feature file is shape `(30000, 64, 768)`, float16, and its
+SHA-256 is `495f066859cb3879d9371b1c797b24e5acdd47cb88b3e9d34c973acfa2a1bb460`.
+Streaming validation found a contiguous nonzero prefix of 10,044 rows followed
+by zero rows. Resume starts at the conservative 10,000-image boundary and
+recomputes from there. The validation feature file does not exist. Metadata is
+still `starting`; this is an incomplete cache and must not be used for training
+or reported as a completed extraction. Frozen train/validation image-manifest
+hashes remain `feec0f9de345ab432d7e486fd0d9a8d58e7c92db6a07be1a2df4183ce96c474a`
+and `100237bc05991db7cc4d7410f613d602e94ab3fe9a313752f30619ff74cf2a4b`.
+
+The interrupted attempt-01 directory is preserved. Its metadata and partial
+feature file were copied without modification into
+`C:\CodexArtifacts\pretrained-reuse-r2\clevr4-spatial-count-readout-features-02`
+for continuation. The copied feature file has the same SHA-256 as attempt 01;
+attempt 02 is also incomplete and is not a trainer input yet.
+
+The extractor now has a guarded `--resume` path. It checks the incomplete-run
+metadata, pinned manifest and ID-order hashes, checkpoint/revision settings,
+feature dtype/shape and the committed prefix before opening files read-write.
+Legacy partial output requires an explicit resume count; for this cache it is
+`--resume-train-images 10000`. New runs flush features and atomically persist a
+resume marker every 1,000 images, so later interruptions replay from the last
+durable boundary. Ten focused CPU tests pass, including contiguous-prefix,
+hole detection, replay-from-marker and frozen-metadata mismatch checks.
+
+The continuation command line keeps the input and frozen data paths, points to
+the copied attempt-02 output, and adds resume arguments. It has not been run;
+the required runtime activation is unresolved because of Application Control:
+
+```powershell
+& 'C:\Users\junny\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\python.exe' -u scripts/extract_clevr4_spatial_count_features.py `
+  --archive C:\CodexArtifacts\pretrained-reuse-r2\clevr4-100k-videoprism-v0\clevr_4_100k_v1.full.zip `
+  --split-dir C:\CodexArtifacts\pretrained-reuse-r2\clevr4-spatial-count-readout-attempt-02 `
+  --checkpoint C:\CodexArtifacts\pretrained-reuse-r2\path-a-image-videoprism-clevr4-runtime-bundle-v2\videoprism-base-f16r288.npz `
+  --source-root C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\source `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\clevr4-spatial-count-readout-features-02 `
+  --batch-size 2 `
+  --resume --resume-train-images 10000
+```
+
+The intended existing runtime package metadata reports Python 3.11.16, JAX and
+jaxlib 0.6.2, TensorFlow CPU 2.18.1, and NumPy 1.26.4, but the incomplete run did
+not save its final environment metadata. Resumption is currently blocked by
+Windows Application Control: launching the existing VideoPrism environment's
+Python executable was denied, and an offline pinned-package import probe was
+also denied when loading TensorFlow's native runtime DLL. No policy bypass,
+cloud compute, GPU run, or dependency upgrade was attempted. The extraction has
+not resumed; no readout training or fresh development metrics exist yet.
 
 ## Results and next gates
 
