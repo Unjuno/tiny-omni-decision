@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 UnAV-100 source/task screen:** UnAV-100 is a relevant
+audio-visual event-localization task-design lead, but its official page says
+raw video is retrieved from YouTube and that copyright remains with original
+owners. No owner grant for model training was established, and the event labels
+do not prove both audio and video are necessary. No data was accessed. Keep
+REVIEW-only; it does not close the synchronized-AV gate. See the
+[`UnAV-100 screen`](docs/pretrained_reuse/R2_UNAV100_SOURCE_TASK_SCREEN_20261025.md).
+
 **2026-10-25 R2 SlideSpeech source/task screen:** SlideSpeech is a plausible
 audio-plus-slide task-design lead for recognizing domain-specific spoken terms
 with visual context. The official OpenSLR listing says CC BY-SA 4.0, but the
