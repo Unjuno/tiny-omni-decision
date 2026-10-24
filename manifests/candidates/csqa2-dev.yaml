@@ -1,0 +1,27 @@
+schema_version: 1
+dataset_id: allenai/csqa2
+revision: 3f57a4a6a1d51fe6a9b462b59be67c08d41fdc39
+subset: official-dev
+split: validation
+modalities: [text]
+upstream_url: https://github.com/allenai/csqa2
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: Allen Institute for AI, CommonsenseQA 2.0, CC BY 4.0
+source_citation: https://github.com/allenai/csqa2
+usage: evaluation
+trust_status: trusted
+schema:
+  state: ""
+  question: question
+  options: answer
+  target: answer
+notes:
+  data_file: CSQA2_dev.json.gz (newline-delimited JSON in gzip container)
+  rows: 2541
+  local_sha256: 2804671317521BB79784037482B7E84E891C707F6AC369607209059B3DF3B884
+  adapter: csqa2
+  limitation: Official development split used for checkpoint selection; not a blind audit.
