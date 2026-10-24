@@ -188,6 +188,62 @@ clean independent validation or sealed audit.
 The 1,732 other candidate-bearing train groups without local media are not in
 this pilot and were not assigned to either partition.
 
+## Corrected fixed development split and label-blind controls (2026-10-25)
+
+After the corrected corpus identity audit, the seed-17 split was regenerated
+from only the 400 locally acquired official-train video groups. It contains 320
+train groups / 2,593 examples and 80 internal development groups / 606
+examples. Video and exact-media-hash overlap are zero. The development group
+is a non-blind internal split because the official-train source and other
+labels from these videos have been examined; it is not a new validation or
+audit set.
+
+A label-blind, deterministic intervention manifest was frozen before any
+feature extraction or fit. It maps every fixed example ID to a different-video
+audio donor within its own partition, a one-second same-video audio shift when
+the complete shifted interval remains inside the audio/video/reveal-cut bounds,
+a deterministic candidate permutation, first-frame-only candidate views, and
+reversed candidate-frame order. It also names audio-only and video-only
+ablations. Donor mappings are group derangements, so no donor video equals the
+recipient video. Candidate IDs are retained so predictions can be joined back
+without changing the answer key. The manifest contains no labels, model
+predictions, or scores and records no model load or metric computation.
+
+The frozen manifest covers all 2,593 train and 606 development rows. A bounded
+one-second offset is available for 2,431/2,593 train rows and 570/606
+development rows; other rows are retained in the primary condition and marked
+ineligible for this particular offset intervention. The cross-video shuffle
+tests dependence on synchronized audio but does not guarantee semantic
+contradiction. No contradiction control, quality gate, or task-semantic
+validation is claimed yet. The next model experiment remains blocked on full
+corrected-train CPU media preflight, feature/input parity, and explicit source
+label review. No model has been loaded or fitted.
+
+- Corrected split directory:
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-dev-split-20261025-03\`.
+- Train JSONL SHA-256:
+  `c5a8396a6b47a8635033e445c67233c76a6ecb17d27f4e6943a153fd3598600d`.
+- Development JSONL SHA-256:
+  `701bd1ab203e54fae5fcb7cc8e5987c2d903bd23b5d2fbf736c2132e953ebcda`.
+- Split manifest SHA-256:
+  `28b0bf9177d1ff2d2b89adb0c7d2916fc01180aef1d51da5b65356849ffd53aa`.
+- Control manifest:
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-controls-20261025-01\control-manifest.json`.
+- Control manifest SHA-256:
+  `0b57f4a2a58935a97a22be2b52578ce36587b57360c498a04a7424b0d8fc4163`.
+- Control manifest generator SHA-256:
+  `8463df1430b9e6042d5d93e8e46f5c278ecca85263685de094518d1f76e9ce20`.
+- Control generator tests SHA-256:
+  `ec65a3db7d94bbd2b651523d7fab041513fe51a2bc089d96629376a7d96febe5`.
+- Targeted result: 5 control-manifest tests passed; Ruff passes for the
+  generator and its tests.
+
+The full corrected train media check is running on CPU against all 2,593 fixed
+train rows. At this report update, it had decoded through row 320; this is an
+in-progress check, not a pass. The development media check remains the prior
+complete 606-row report above. GPU work and learning remain gated on a terminal
+train-media result and the remaining protocol gates.
+
 ## Input identity audit and corrected corpus
 
 The first-generation corpus was audited before any model training. Its 14,741
