@@ -419,3 +419,63 @@ all work in this preflight used CPU.
   `tests/test_freeze_perception_source_candidate_split.py`, and
   `tests/test_perception_source_candidate_media.py`.
 - Existing visibility-proposal format remains separate and unchanged.
+
+## 2026-10-25 complete fixed-split media preflight and feature plan
+
+The earlier development media report (attempt 08) remains an intact historical
+artifact. It predates the explicit terminal-frame status field, so the fixed
+feature-plan gate was tightened to require fresh, hash-pinned media reports for
+both fixed splits. The train media preflight was grouped by video to decode
+each selected file's video and audio streams once while still checking every
+record's requested frames, event interval, cut-frame rule, receipt hash, and
+candidate-specific terminal correction. The first ungrouped CPU attempt was
+stopped after 64/2,593 rows and wrote no report. The grouped pass completed.
+
+| Split | Records / videos | Requested / decoded frames | Audio duration / covered | Media report SHA-256 | Status |
+|---|---:|---:|---:|---|---|
+| Train | 2,593 / 320 | 7,836 / 7,835 | 8,689.414515 / 8,689.414515 sec | `7b9491b3f67ddf95fe213f519a2d0313237ce8ffacfffee22f8eaaa2dbec505e` | `PASS_WITH_EXPLICIT_TERMINAL_FRAME_REPAIR` |
+| Development | 606 / 80 | 1,840 / 1,840 | 1,921.820085 / 1,921.820085 sec | `2329df0013373ad4d648f1fcad0e3359cf928806081617e169432951abab79c5` | `PASS` |
+
+Both reports matched all 400 selected media hashes to the acquisition
+manifest. The sole train discrepancy is `video_4792:sound:16`: the receipt
+declares 931 frames while the exact-hash local MP4 decodes frames 0–929. The
+unavailable terminal frame 930 is referenced by 17 of that record's 19
+candidates. The feature plan removes only that missing frame reference from
+those candidates; it retains all candidates, the original target, and at least
+one usable frame per candidate. The two unaffected candidates retain their
+frame sets. No corpus row, split, candidate, or label was changed.
+
+Fixed media inputs:
+
+- Corrected train-only source corpus SHA-256:
+  `11cd4c758b04e36702969d168a9987dde8028d75733bb95a0a684d7f712a19d6`.
+- Train split JSONL SHA-256:
+  `c5a8396a6b47a8635033e445c67233c76a6ecb17d27f4e6943a153fd3598600d`.
+- Development split JSONL SHA-256:
+  `701bd1ab203e54fae5fcb7cc8e5987c2d903bd23b5d2fbf736c2132e953ebcda`.
+- Split manifest SHA-256:
+  `28b0bf9177d1ff2d2b89adb0c7d2916fc01180aef1d51da5b65356849ffd53aa`.
+- Acquisition manifest SHA-256:
+  `5ac15ab7ef7efda29a803f783b4a3a13fd3895ebaecbdf9c9c7e0282b9195918`.
+- Frozen control manifest SHA-256:
+  `5f7ee054a31eceafd6a21855e3d4c4569c93c50ee2a51ccaee472c8f1268d93`.
+
+The new label-free feature plan is at
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-feature-plan-20261025-02\feature-plan.json`
+(42,624,714 bytes; SHA-256
+`9cf2fae738270a14e632b745b8a0f78214440eb057de76f0ba825d4413824247`). It
+contains 2,593 train records / 320 videos / 6,118 unique annotated frames /
+1,335 VideoPrism clips / 5,852 audio windows and 606 development records /
+80 videos / 1,528 frames / 335 clips / 1,319 audio windows. Labels are absent.
+The prior feature-plan attempt 01 predates required media reports and is
+superseded for any model work; it remains unchanged.
+
+The train and development media reports are in their attempt-10 and attempt-09
+artifact directories respectively. The plan command required temporary
+`PYTHONPATH=src` because the package is not installed into the worktree's
+Python environment; no dependency was upgraded. Ruff passes and the full CPU
+suite reports 2,447 passed / 11 skipped. The RTX 3080 snapshot during this
+work showed 15,821 / 16,384 MiB allocated and 74% utilization. No GPU encoder
+was loaded, and no features, readout, quality metrics, sealed audit, or model
+training have been run. Next work must inspect and validate the feature
+extraction path and remain behind the cooperative HotUGPU guard.

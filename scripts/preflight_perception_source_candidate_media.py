@@ -89,8 +89,7 @@ def select_records_by_id(records, clips, record_ids):
     by_id = {
         record["record_id"]: record
         for record in records
-        if record.get("status") == "candidate"
-        and record.get("group_id") in clips
+        if record.get("status") == "candidate" and record.get("group_id") in clips
     }
     missing = [record_id for record_id in ordered_ids if record_id not in by_id]
     if missing:
@@ -143,6 +142,44 @@ def _frame_seconds(frame):
     return float(frame.pts * frame.time_base)
 
 
+def describe_terminal_frame_repair(
+    record, *, missing_frame_ids, declared_frame_count, decoded_frame_count
+):
+    """Describe a one-frame tail repair without dropping a candidate or target."""
+    missing = sorted(set(missing_frame_ids))
+    if (
+        len(missing) != 1
+        or type(decoded_frame_count) is not int
+        or type(declared_frame_count) is not int
+        or decoded_frame_count < 1
+        or declared_frame_count != decoded_frame_count + 1
+        or missing[0] != decoded_frame_count
+    ):
+        raise ValueError("repair requires one missing declared terminal frame")
+
+    candidate_ids = []
+    retained_counts = {}
+    for candidate in record["request"]["candidates"]:
+        candidate_id = candidate["candidate_id"]
+        frame_ids = [box["frame_id"] for box in candidate["frame_boxes"]]
+        retained = sum(frame_id not in missing for frame_id in frame_ids)
+        if retained < 1:
+            raise ValueError("terminal frame repair leaves a candidate with no usable frames")
+        retained_counts[candidate_id] = retained
+        if missing[0] in frame_ids:
+            candidate_ids.append(candidate_id)
+    if not candidate_ids:
+        raise ValueError("terminal frame repair does not affect any candidate")
+    return {
+        "record_id": record["record_id"],
+        "frame_id": missing[0],
+        "candidate_ids": candidate_ids,
+        "retained_frame_count_by_candidate": retained_counts,
+        "declared_frame_count": declared_frame_count,
+        "decoded_frame_count": decoded_frame_count,
+    }
+
+
 def inspect_record(record, clip, media_dir):
     import av
 
@@ -167,7 +204,9 @@ def inspect_record(record, clip, media_dir):
             for box in candidate["frame_boxes"]
         }
     )
+    requested_frame_ids = list(wanted_frames)
     frame_times = {}
+    decoded_frame_count = 0
     with av.open(str(path)) as container:
         if not container.streams.video or not container.streams.audio:
             raise ValueError(f"audio/video stream missing: {video_id}")
@@ -175,6 +214,7 @@ def inspect_record(record, clip, media_dir):
         max_frame = max(wanted_frames)
         decoded_frames = {}
         for index, frame in enumerate(container.decode(video_stream)):
+            decoded_frame_count = index + 1
             if index in wanted_frames:
                 frame_time = _frame_seconds(frame)
                 decoded_frames[index] = {
@@ -187,8 +227,17 @@ def inspect_record(record, clip, media_dir):
             if index >= max_frame:
                 break
     missing = sorted(set(wanted_frames) - decoded_frames.keys())
+    frame_repair = None
     if missing:
-        raise ValueError(f"requested bbox frame IDs absent in decoded media: {video_id} {missing}")
+        frame_repair = describe_terminal_frame_repair(
+            record,
+            missing_frame_ids=missing,
+            declared_frame_count=metadata["num_frames"],
+            decoded_frame_count=decoded_frame_count,
+        )
+        wanted_frames = [frame_id for frame_id in wanted_frames if frame_id not in missing]
+        frame_times = {frame_id: frame_times[frame_id] for frame_id in wanted_frames}
+        decoded_frames = {frame_id: decoded_frames[frame_id] for frame_id in wanted_frames}
     if len(frame_times) != len(decoded_frames):
         raise ValueError(f"decoded candidate frame has no presentation timestamp: {video_id}")
 
@@ -246,9 +295,12 @@ def inspect_record(record, clip, media_dir):
         "media_bytes": clip["bytes"],
         "media_sha256": actual_hash,
         "candidate_count": len(record["request"]["candidates"]),
-        "requested_frame_count": len(wanted_frames),
+        "requested_frame_count": len(requested_frame_ids),
         "decoded_frame_count": len(decoded_frames),
         "decoded_frame_ids": wanted_frames,
+        "requested_frame_ids": requested_frame_ids,
+        "media_actual_frame_count": decoded_frame_count if frame_repair else None,
+        "terminal_frame_repair": frame_repair,
         "decoded_frame_times_s": {
             str(frame_id): frame_times[frame_id] for frame_id in sorted(frame_times)
         },
@@ -259,6 +311,161 @@ def inspect_record(record, clip, media_dir):
         "decoded_audio_coverage_s": coverage,
         "audio_interval_duration_s": target_duration,
     }
+
+
+def inspect_video_group(records, clip, media_dir):
+    """Decode one acquisition video once for all fixed-cohort records using it."""
+    import av
+
+    if not records:
+        return []
+    video_id = clip["metadata"]["video_id"]
+    path = Path(media_dir) / f"{video_id}.mp4"
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    if path.stat().st_size != clip["bytes"]:
+        raise ValueError(f"file size differs from acquisition receipt: {video_id}")
+    actual_hash = sha256_file(path)
+    if actual_hash != clip["sha256"]:
+        raise ValueError(f"file SHA-256 differs from acquisition receipt: {video_id}")
+
+    requested_by_record = {}
+    all_frame_ids = set()
+    max_audio_end_s = 0.0
+    for record in records:
+        cut_frame = record.get("provenance", {}).get("upstream_cut_frame")
+        if type(cut_frame) is not int or cut_frame != clip.get("cut_frame"):
+            raise ValueError(f"record and media receipt cut-frame mapping differ: {video_id}")
+        if record.get("media_reference", {}).get("video_id") != video_id:
+            raise ValueError(f"record media reference mismatch: {record['record_id']}")
+        frames = sorted(
+            {
+                box["frame_id"]
+                for candidate in record["request"]["candidates"]
+                for box in candidate["frame_boxes"]
+            }
+        )
+        if not frames:
+            raise ValueError(f"record has no candidate frames: {record['record_id']}")
+        requested_by_record[record["record_id"]] = frames
+        all_frame_ids.update(frames)
+        max_audio_end_s = max(
+            max_audio_end_s, record["request"]["audio_interval_us"][1] / 1e6
+        )
+
+    decoded_frames = {}
+    decoded_frame_count = 0
+    max_frame = max(all_frame_ids)
+    with av.open(str(path)) as container:
+        if not container.streams.video or not container.streams.audio:
+            raise ValueError(f"audio/video stream missing: {video_id}")
+        for index, frame in enumerate(container.decode(container.streams.video[0])):
+            decoded_frame_count = index + 1
+            if index in all_frame_ids:
+                decoded_frames[index] = {
+                    "time_s": _frame_seconds(frame),
+                    "width": frame.width,
+                    "height": frame.height,
+                }
+            if index >= max_frame:
+                break
+
+    audio_intervals = []
+    with av.open(str(path)) as container:
+        for frame in container.decode(container.streams.audio[0]):
+            frame_start = _frame_seconds(frame)
+            if frame_start is None or not frame.sample_rate:
+                raise ValueError(f"audio frame has no timing/rate: {video_id}")
+            frame_end = frame_start + frame.samples / frame.sample_rate
+            audio_intervals.append((frame_start, frame_end))
+            if frame_end >= max_audio_end_s:
+                break
+
+    metadata = clip["metadata"]
+    results = []
+    for record in records:
+        cut_frame = record["provenance"]["upstream_cut_frame"]
+        requested_frame_ids = requested_by_record[record["record_id"]]
+        missing = sorted(set(requested_frame_ids) - decoded_frames.keys())
+        frame_repair = None
+        frame_ids = list(requested_frame_ids)
+        if missing:
+            frame_repair = describe_terminal_frame_repair(
+                record,
+                missing_frame_ids=missing,
+                declared_frame_count=metadata["num_frames"],
+                decoded_frame_count=decoded_frame_count,
+            )
+            frame_ids = [frame_id for frame_id in frame_ids if frame_id not in missing]
+        frame_times = {
+            frame_id: decoded_frames[frame_id]["time_s"] for frame_id in frame_ids
+        }
+        if any(frame_time is None for frame_time in frame_times.values()):
+            raise ValueError(f"decoded candidate frame has no presentation timestamp: {video_id}")
+
+        interval = record["request"]["audio_interval_us"]
+        cut_time_s = (
+            metadata["num_frames"] / metadata["frame_rate"]
+            if cut_frame == -1
+            else cut_frame / metadata["frame_rate"]
+        )
+        if interval[1] / 1e6 > cut_time_s:
+            raise ValueError(f"audio interval exceeds upstream cut frame: {video_id}")
+        if cut_frame >= 0 and any(frame_id >= cut_frame for frame_id in frame_ids):
+            raise ValueError(f"candidate frame ID reaches upstream cut frame: {video_id}")
+        frame_tolerance_s = 2 / metadata["frame_rate"]
+        out_of_interval_frames = [
+            frame_id
+            for frame_id, frame_time in frame_times.items()
+            if not interval[0] / 1e6 - frame_tolerance_s
+            <= frame_time
+            <= interval[1] / 1e6 + frame_tolerance_s
+        ]
+        if out_of_interval_frames:
+            raise ValueError(
+                f"decoded candidate frame timestamps fall outside event interval: "
+                f"{video_id} {out_of_interval_frames}"
+            )
+
+        coverage = audio_interval_coverage(interval, audio_intervals)
+        duration = (interval[1] - interval[0]) / 1e6
+        if coverage < duration - 0.001:
+            raise ValueError(
+                f"decoded audio does not cover full annotated interval: {video_id} "
+                f"{coverage:.6f}/{duration:.6f}s"
+            )
+        frame_shapes = sorted(
+            {
+                (decoded_frames[frame_id]["height"], decoded_frames[frame_id]["width"])
+                for frame_id in frame_ids
+            }
+        )
+        results.append(
+            {
+                "record_id": record["record_id"],
+                "video_id": video_id,
+                "source_split": metadata["split"],
+                "upstream_cut_frame": cut_frame,
+                "none_visible": record["supervision"]["none_visible"],
+                "media_bytes": clip["bytes"],
+                "media_sha256": actual_hash,
+                "candidate_count": len(record["request"]["candidates"]),
+                "requested_frame_count": len(requested_frame_ids),
+                "decoded_frame_count": len(frame_ids),
+                "decoded_frame_ids": frame_ids,
+                "requested_frame_ids": requested_frame_ids,
+                "media_actual_frame_count": decoded_frame_count if frame_repair else None,
+                "terminal_frame_repair": frame_repair,
+                "decoded_frame_times_s": {
+                    str(frame_id): frame_times[frame_id] for frame_id in sorted(frame_times)
+                },
+                "decoded_frame_shapes": frame_shapes,
+                "audio_interval_us": interval,
+                "decoded_audio_coverage_s": coverage,
+                "audio_interval_duration_s": duration,
+            }
+        )
+    return results
 
 
 def preflight(
@@ -316,12 +523,24 @@ def preflight(
         selection = "explicit_ordered_record_ids"
         selection_source_jsonl_sha256 = sha256_file(record_ids_path)
 
-    results = []
-    for index, record in enumerate(selected, start=1):
-        results.append(inspect_record(record, clips[record["group_id"]], media_dir))
-        if index % progress_interval == 0 or index == len(selected):
-            print(f"media preflight {index}/{len(selected)} records", flush=True)
+    records_by_video = {}
+    for record in selected:
+        records_by_video.setdefault(record["group_id"], []).append(record)
+    results_by_id = {}
+    completed = 0
+    for video_id, video_records in records_by_video.items():
+        rows = inspect_video_group(video_records, clips[video_id], media_dir)
+        results_by_id.update({row["record_id"]: row for row in rows})
+        completed += len(rows)
+        if completed % progress_interval < len(rows) or completed == len(selected):
+            print(f"media preflight {completed}/{len(selected)} records", flush=True)
+    results = [results_by_id[record["record_id"]] for record in selected]
     return {
+        "status": (
+            "PASS_WITH_EXPLICIT_TERMINAL_FRAME_REPAIR"
+            if any(row.get("terminal_frame_repair") for row in results)
+            else "PASS"
+        ),
         "protocol": "perception_test_source_candidate_cpu_media_smoke_v1",
         "source_split": "official train only",
         "selection": selection,
@@ -338,6 +557,11 @@ def preflight(
         "model_loaded": False,
         "metrics_computed": False,
         "records": results,
+        "terminal_frame_repairs": [
+            row["terminal_frame_repair"]
+            for row in results
+            if row.get("terminal_frame_repair") is not None
+        ],
     }
 
 
@@ -354,8 +578,7 @@ def main():
     parser.add_argument(
         "--record-ids-jsonl",
         help=(
-            "explicit ordered JSONL cohort containing record_id fields; "
-            "checks every listed record"
+            "explicit ordered JSONL cohort containing record_id fields; checks every listed record"
         ),
     )
     parser.add_argument("--progress-interval", type=int, default=64)

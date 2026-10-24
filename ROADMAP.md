@@ -11,22 +11,31 @@ duplicate provenance markers, across 2,131 candidate videos. The post-gate
 audit found zero repeated or contradictory inputs and zero partially targeted
 identical-crop rows. A seed-17 grouped split covers 320 train videos / 80
 development videos (2,593 / 606 candidates, no video or exact media-hash
-overlap). All 606 internal development records passed CPU media checks:
-1,840/1,840 frames decoded, 1,921.820 seconds of audio fully covered, and
-80/80 media hashes matched. The development partition is non-blind and comes
+overlap). Full CPU media preflight passed for all 2,593 train records / 320
+videos and all 606 development records / 80 videos. Train decoded 7,835/7,836
+requested frames and covered all 8,689.415 seconds of annotated audio;
+development decoded 1,840/1,840 frames and covered all 1,921.820 seconds.
+Every media hash matched its acquisition receipt. One explicit source
+metadata discrepancy remains: video_4792 declares 931 frames but decodes 930.
+Only the unavailable frame-930 references are removed from 17 affected
+candidates in the new feature plan; all 19 candidates and the target are
+retained, and every candidate keeps at least one frame. A label-free fixed
+feature plan covers 1,335 train / 335 development VideoPrism windows and
+5,852 / 1,319 audio windows. The development partition is non-blind and comes
 from official-train media; participant grouping and cross-video pixel-level
-duplicates remain unchecked. Full corrected train-media preflight is running
-on CPU and had reached 1,088/2,593 fixed rows at the latest update. A seed-17,
+duplicates remain unchecked. A seed-17,
 label-blind control manifest is frozen for within-split cross-video audio
 shuffle, bounded one-second offsets, candidate permutations, static-first-frame
 and reversed-frame controls; it does not yet supply a semantic-contradiction
 control. The stock VideoPrism center crop would fully hide all frames for 84
 train and 20 development positive candidates; a CPU-tested letterbox/ROI token
-pooling utility is in place, but feature extraction and model evaluation are
-not. A fixed 2-second audio-window utility now covers the variable source
+pooling utility is in place, but encoder feature extraction and model
+evaluation have not started. A fixed 2-second audio-window utility covers the variable source
 intervals without overlap or out-of-interval audio; its fixed-cohort expansion
-is 5,852 train / 1,319 development windows. No model fit, quality metrics,
-validation/audit access, or product claim.
+is 5,852 train / 1,319 development windows. No feature encoder was loaded, no
+model fit or quality metrics were run, and there was no validation-score
+selection, sealed-audit access, or product claim. The RTX 3080 remained
+occupied; encoder work must remain behind the HotUGPU gate.
 Oracle event windows/object proposals remain deployment shortcuts;
 source-label semantics and remaining modality-necessity gates must be addressed
 before a readout run. See the
