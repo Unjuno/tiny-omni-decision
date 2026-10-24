@@ -108,7 +108,7 @@ be mixed into its metrics. See [the earlier fixed-taxonomy report](R2_VILT_IMAGE
 
 ## Current execution gate
 
-The RTX 3080 Laptop was observed with 16,124/16,384 MiB allocated and 99%
+The RTX 3080 Laptop was observed with 16,124/16,384 MiB allocated and 100%
 utilization by the existing Teacher process (`26920`, supervisor `15928`). No
 new GPU job was started and no live run, code, or artifact was changed. A
 matched full-corpus feature/readout run must wait until that GPU is available.
