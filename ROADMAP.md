@@ -1,5 +1,22 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 CLEVR compositional option-task preflight:** The official
+CLEVR v1.0 CC BY 4.0 annotation archive is pinned locally; the 19.02 GB image
+archive was inspected through ZIP metadata-only HTTP ranges. The candidate
+asks image + question → probabilities over supplied, same-answer-kind choices,
+using all 28 CLEVR answers rather than the earlier fixed CLEVR-4 taxonomies.
+A pinned 117.59M ViLT VQAv2 checkpoint passed one CPU forward on a real
+official-train image/question, but no quality score or fitting has run. Its
+closed VQA head lacks `cyan`, `cube`, and `sphere`, so the candidate replaces
+that head with a 28-answer readout. An exploratory internal train reserve was
+opened while counting labels and is explicitly disqualified as a blind audit;
+CoGenT-B validation remains unopened for a prospective one-time project-held-
+out audit. The 28-answer mapping / supplied-option softmax now has CPU tests
+(4 passed; Ruff clean). No bulk media or model checkpoint was created. The
+RTX 3080 is still occupied by the existing Teacher run (16,124/16,384 MiB,
+100% utilization at 08:12 JST), so no GPU fit has started. Details and hashes:
+[`CLEVR compositional option preflight`](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
+
 **2026-10-25 R2 CLEVR-4 full-validation transfer reconciliation:** Recomputed
 metrics from the saved, one-shot VideoPrism-B fixed-readout predictions for all
 19,988 official 100k validation images; all 79,952 decisions were valid and
