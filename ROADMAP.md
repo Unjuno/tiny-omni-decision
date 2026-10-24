@@ -16,14 +16,17 @@ overlap). All 606 internal development records passed CPU media checks:
 80/80 media hashes matched. The development partition is non-blind and comes
 from official-train media; participant grouping and cross-video pixel-level
 duplicates remain unchecked. Full corrected train-media preflight is running
-on CPU and had reached 896/2,593 fixed rows at the latest update. A seed-17,
+on CPU and had reached 1,024/2,593 fixed rows at the latest update. A seed-17,
 label-blind control manifest is frozen for within-split cross-video audio
 shuffle, bounded one-second offsets, candidate permutations, static-first-frame
 and reversed-frame controls; it does not yet supply a semantic-contradiction
 control. The stock VideoPrism center crop would fully hide all frames for 84
 train and 20 development positive candidates; a CPU-tested letterbox/ROI token
 pooling utility is in place, but feature extraction and model evaluation are
-not. No model fit, quality metrics, validation/audit access, or product claim.
+not. A fixed 2-second audio-window utility now covers the variable source
+intervals without overlap or out-of-interval audio; its fixed-cohort expansion
+is 5,852 train / 1,319 development windows. No model fit, quality metrics,
+validation/audit access, or product claim.
 Oracle event windows/object proposals remain deployment shortcuts;
 source-label semantics and remaining modality-necessity gates must be addressed
 before a readout run. See the

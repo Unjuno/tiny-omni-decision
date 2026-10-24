@@ -236,6 +236,21 @@ short-interval padding and long-interval multiwindow policy, applied identically
 to train and development. The existing fixed two-second extractor cannot be
 silently reused as if these durations were already two seconds.
 
+The audio window policy is now explicit and CPU-tested: intervals up to two
+seconds become one window with centered zero padding; longer intervals are
+split into ordered, nonoverlapping two-second windows, with only the final
+partial window padded. The concatenated source intervals cover every annotated
+microsecond exactly once, without adding audio outside the event interval. The
+fixed split produces 5,852 train and 1,319 development windows (maximum 18 per
+example). The nine unit tests cover short/long splits, full fixed-length sample
+materialization, and out-of-media rejection. This policy is preprocessing
+infrastructure only; no audio embeddings or model metrics have been produced.
+
+- Audio window module SHA-256:
+  `75240df7f46d74618b557c1c52d5e21f945f047066ad68b7fb8d832f5b87df88`.
+- Audio window test SHA-256:
+  `6dc8d82a827b61499664fb58ecf41b29f79f4b482826097c773b211a16ca690a`.
+
 The pinned VideoPrism preprocessing center-crops square input after resizing
 the shorter image side to 288px. A label-coverage audit against the frozen
 object boxes found that this would fully crop 190/5,172 positive train boxes
@@ -275,7 +290,7 @@ extractor and feature-parity checks are still required.
   generator and its tests.
 
 The full corrected train media check is running on CPU against all 2,593 fixed
-train rows. At this report update, it had decoded through row 896; this is an
+train rows. At this report update, it had decoded through row 1,024; this is an
 in-progress check, not a pass. The development media check remains the prior
 complete 606-row report above. GPU work and learning remain gated on a terminal
 train-media result and the remaining protocol gates.
