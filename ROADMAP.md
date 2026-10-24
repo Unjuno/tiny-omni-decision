@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 SlideSpeech source/task screen:** SlideSpeech is a plausible
+audio-plus-slide task-design lead for recognizing domain-specific spoken terms
+with visual context. The official OpenSLR listing says CC BY-SA 4.0, but the
+project site scopes that license to metadata; the official downloader retrieves
+the underlying recordings from YouTube and no reviewed source grants rights to
+those recordings for model training. The current release also lacks a proven
+group-disjoint decision-task split. No data was accessed. Keep it REVIEW-only;
+it does not close the both-input-required AV gate. See the
+[`SlideSpeech source screen`](docs/pretrained_reuse/R2_SLIDESPEECH_SOURCE_SCREEN_20261025.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
