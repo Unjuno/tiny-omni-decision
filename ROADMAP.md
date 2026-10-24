@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 07:26 JST R0 live recheck:** The continuation worktree is clean
+at `f754d28`; all three public GitHub checks for that commit are green. The
+existing Teacher process (PID 26920, supervisor 15928) remains active and owns
+16,122/16,384 MiB on the RTX 3080 Laptop. Its history reaches step 1280, while
+the persisted trainer state and best checkpoint remain at 1152; the exact
+operation after the latest history record is unknown. The separately queued
+full-extent × fresh-coverage run (worker PID 33712) is still waiting for an idle
+GPU and has created no outputs. No process or artifact was changed, and no
+factorial estimate is available. See the
+[`07:26 JST live audit`](docs/pretrained_reuse/R0_LIVE_AUDIT_20261025_0726JST.md).
+
 **2026-10-25 R2 cross-workstream reconciliation:** Recent open PRs add two
 relevant results and more source gates. The matched CLEVRER/generated-tone AV
 diagnostic selected a gated temporal LSTM at 83.51% Accuracy / 0.3534 NLL on
