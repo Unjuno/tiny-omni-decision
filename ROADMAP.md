@@ -12,12 +12,14 @@ files cover 400 candidate video groups (3,219 events) by filename match. CPU
 preflight verified file hashes and one selected event in every group, including
 1,264/1,264 requested bbox frames, 1,438.767 seconds of fully covered event
 audio, 122 none-visible examples, and all four locally available cut-frame
-groups. This samples one event per group, not all 3,219 events; the other 2,819
-events in the local media cohort have not been decoded. The deterministic corpus and a
-seed-17 group split were frozen outside Git (320 train groups / 80 development
-groups; 2,608 / 611 events, with zero video or exact media-hash overlap). This
-split is not blind, participant grouping is unknown, and normalized
-near-duplicates were not checked. This remains annotation/media feasibility
+groups. All 611 records in the 80-group internal development partition were
+then checked: 1,927/1,927 frames decoded and 2,026.274 seconds of event audio
+fully covered. This adds 531 unique records because 80 overlap the original
+sample; 931 of the 3,219 local candidate events are now checked, leaving 2,288.
+The deterministic corpus and a seed-17 group split were frozen outside Git
+(320 train groups / 80 development groups; 2,608 / 611 events, with zero video
+or exact media-hash overlap). This split is not blind, participant grouping is
+unknown, and normalized near-duplicates were not checked. This remains annotation/media feasibility
 only: no model fit, validation/audit access or quality claim. Oracle event
 windows and object proposals remain deployment shortcuts, so
 modality-necessity controls and complete media-boundary checks must pass before

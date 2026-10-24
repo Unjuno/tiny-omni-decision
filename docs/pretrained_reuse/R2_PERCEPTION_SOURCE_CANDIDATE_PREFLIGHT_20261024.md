@@ -135,6 +135,31 @@ candidate events in these local videos remain unchecked.
   with seed 17, limit 400, eight required none-visible cases, and all four
   required cut-frame groups.
 
+### Full frozen development-record check (2026-10-25)
+
+The explicit-record path checked all 611 records from the frozen internal
+development JSONL across 80 video groups, preserving the JSONL record order.
+All 1,927 requested bbox frames decoded, and 2,026.274091 seconds of event
+audio had complete decoded coverage. All 80 local media hashes matched; 176
+records were none-visible. This cohort has no cut-frame videos. It is a
+non-blind, train-source internal development partition, not official
+validation or sealed audit. The 611 records overlap 80 records in the earlier
+400-video sample, so 931 distinct records have been checked across both
+reports. Of 3,219 candidate events in the 400 local videos, 2,288 remain
+unchecked.
+
+- Report:
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-dev-media-preflight-attempt-07\media-preflight.json`.
+- Report SHA-256:
+  `522ec41de11bc3c23aeba7172e4e3a8614415a357d987cc513461a0c5c571075`.
+- Selection source is the frozen development JSONL, SHA-256
+  `51fc3ee12471e6d884a8808e5d84fce42d4d3de0214b325176bc6d374b455f89`.
+  In this report the field name `selected_record_ids_sha256` refers to the
+  source JSONL file hash, not a separately serialized ID-only list.
+- The executed media checker was based on source commit
+  `d0fd6865ce2faf83bfb840cbd3bd96081350eb45`; its executed script SHA-256 was
+  `32fee67b9ea122dd8ff355980ea3febf0624ac71c83c30910ee3c1b8600a4e7e`.
+
 ## Provisional development split
 
 A seed-17 deterministic hash split was frozen over the 400 candidate-bearing
@@ -162,12 +187,12 @@ this pilot and were not assigned to either partition.
 
 ## Remaining gates before model work
 
-1. The full local-media cohort has one-event-per-video decode, audio coverage,
-   hash, and cut-frame checks. Decode the remaining 2,819 candidate events in
-   the 400 local videos before treating all annotations as media-verified.
-   There is no local media for the other 1,732 candidate-bearing groups. Do not
-   load previously inspected official validation or any sealed-audit
-   annotations.
+1. One event per video was decoded across all 400 local media groups, and every
+   record in the 80-group internal development partition was checked. Decode
+   the remaining 2,288 candidate events in these 400 videos before treating
+   all local annotations as media-verified. There is no local media for the
+   other 1,732 candidate-bearing groups. Do not load previously inspected
+   official validation or any sealed-audit annotations.
 2. Freeze matched audio-only, video-only, event-label-prior, candidate-order,
    audio-shuffle, stale-window, and interval-offset controls before selecting a
    model. Match candidate sets and report multi-label and none-visible metrics.

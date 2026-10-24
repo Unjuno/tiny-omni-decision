@@ -1,6 +1,13 @@
+import json
+
+import pytest
+
 from scripts.preflight_perception_source_candidate_media import (
     audio_interval_coverage,
+    preflight,
+    select_records_by_id,
     select_smoke_records,
+    sha256_file,
 )
 
 
@@ -58,3 +65,63 @@ def test_smoke_selection_can_require_none_visible_and_cut_frame_groups():
     assert any(item["supervision"]["none_visible"] for item in selected)
     assert any(item["provenance"]["upstream_cut_frame"] >= 0 for item in selected)
     assert len({item["group_id"] for item in selected}) == 3
+
+
+def test_explicit_record_selection_preserves_all_rows_and_requested_order():
+    rows = [record("v1", 0), record("v1", 1), record("v2", 0)]
+    selected = select_records_by_id(rows, {"v1", "v2"}, ["v1:sound:1", "v1:sound:0"])
+    assert [item["record_id"] for item in selected] == ["v1:sound:1", "v1:sound:0"]
+    assert [item["group_id"] for item in selected] == ["v1", "v1"]
+
+
+def test_explicit_record_selection_fails_closed_for_missing_or_duplicate_ids():
+    rows = [record("v1", 0)]
+    with pytest.raises(ValueError, match="absent from local candidate media"):
+        select_records_by_id(rows, {"v1"}, ["v2:sound:0"])
+    with pytest.raises(ValueError, match="contains duplicates"):
+        select_records_by_id(rows, {"v1"}, ["v1:sound:0", "v1:sound:0"])
+
+
+def test_explicit_cohort_report_hashes_selection_jsonl(tmp_path, monkeypatch):
+    rows = [record("v1", 0), record("v1", 1), record("v2", 0)]
+    corpus_path = tmp_path / "corpus.jsonl"
+    corpus_path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+    clips_path = tmp_path / "clips.json"
+    clips_path.write_text(
+        json.dumps(
+            {
+                "clips": [
+                    {"metadata": {"video_id": video_id, "split": "train"}}
+                    for video_id in ("v1", "v2")
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    cohort_path = tmp_path / "development.jsonl"
+    cohort_path.write_text(
+        json.dumps(rows[0]) + "\n" + json.dumps(rows[1]) + "\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(
+        "scripts.preflight_perception_source_candidate_media.inspect_record",
+        lambda row, _clip, _media: {
+            "record_id": row["record_id"],
+            "video_id": row["group_id"],
+            "none_visible": False,
+            "upstream_cut_frame": -1,
+        },
+    )
+
+    report = preflight(
+        corpus_path,
+        clips_path,
+        tmp_path,
+        record_ids_path=cohort_path,
+        progress_interval=2,
+    )
+
+    assert report["selection"] == "explicit_ordered_record_ids"
+    assert report["selected_record_count"] == 2
+    assert report["video_group_count"] == 1
+    assert report["selection_source_jsonl_sha256"] == sha256_file(cohort_path)
+    assert "selected_record_ids_sha256" not in report

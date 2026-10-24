@@ -81,6 +81,25 @@ def select_smoke_records(
     return selected + remaining[: limit - len(selected)]
 
 
+def select_records_by_id(records, clips, record_ids):
+    """Select an explicit ordered record cohort without collapsing video groups."""
+    ordered_ids = list(record_ids)
+    if len(ordered_ids) != len(set(ordered_ids)):
+        raise ValueError("explicit record ID list contains duplicates")
+    by_id = {
+        record["record_id"]: record
+        for record in records
+        if record.get("status") == "candidate"
+        and record.get("group_id") in clips
+    }
+    missing = [record_id for record_id in ordered_ids if record_id not in by_id]
+    if missing:
+        raise ValueError(
+            f"explicit record IDs are absent from local candidate media: {missing[:5]}"
+        )
+    return [by_id[record_id] for record_id in ordered_ids]
+
+
 def audio_interval_coverage(interval_us, decoded_intervals):
     """Return the union coverage in seconds for decoded audio-frame intervals."""
     start, end = (float(value) / 1e6 for value in interval_us)
@@ -251,6 +270,8 @@ def preflight(
     seed=17,
     require_none_visible=0,
     require_cut_frame=0,
+    record_ids_path=None,
+    progress_interval=64,
 ):
     corpus_path = Path(corpus_path)
     acquisition_manifest_path = Path(acquisition_manifest_path)
@@ -265,23 +286,50 @@ def preflight(
         clips[video_id] = clip
 
     records = [json.loads(line) for line in corpus_path.read_text(encoding="utf-8").splitlines()]
-    selected = select_smoke_records(
-        records,
-        clips,
-        limit=limit,
-        seed=seed,
-        require_none_visible=require_none_visible,
-        require_cut_frame=require_cut_frame,
-    )
-    if len(selected) < limit:
-        raise ValueError(f"only {len(selected)} media groups available for requested smoke size")
-    results = [inspect_record(record, clips[record["group_id"]], media_dir) for record in selected]
+    if progress_interval < 1:
+        raise ValueError("progress interval must be positive")
+    selection = "seeded_one_record_per_video"
+    selection_source_jsonl_sha256 = None
+    if record_ids_path is None:
+        selected = select_smoke_records(
+            records,
+            clips,
+            limit=limit,
+            seed=seed,
+            require_none_visible=require_none_visible,
+            require_cut_frame=require_cut_frame,
+        )
+        if len(selected) < limit:
+            raise ValueError(
+                f"only {len(selected)} media groups available for requested smoke size"
+            )
+    else:
+        record_ids_path = Path(record_ids_path)
+        requested_ids = [
+            json.loads(line)["record_id"]
+            for line in record_ids_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        selected = select_records_by_id(records, clips, requested_ids)
+        if not selected:
+            raise ValueError("explicit record ID list is empty")
+        selection = "explicit_ordered_record_ids"
+        selection_source_jsonl_sha256 = sha256_file(record_ids_path)
+
+    results = []
+    for index, record in enumerate(selected, start=1):
+        results.append(inspect_record(record, clips[record["group_id"]], media_dir))
+        if index % progress_interval == 0 or index == len(selected):
+            print(f"media preflight {index}/{len(selected)} records", flush=True)
     return {
         "protocol": "perception_test_source_candidate_cpu_media_smoke_v1",
         "source_split": "official train only",
+        "selection": selection,
         "seed": seed,
-        "video_group_count": len(results),
+        "selected_record_count": len(results),
+        "video_group_count": len({row["video_id"] for row in results}),
         "unique_video_count": len({row["video_id"] for row in results}),
+        "selection_source_jsonl_sha256": selection_source_jsonl_sha256,
         "none_visible_event_count": sum(row.get("none_visible", False) for row in results),
         "cut_frame_video_count": sum(row["upstream_cut_frame"] >= 0 for row in results),
         "source_corpus_sha256": sha256_file(corpus_path),
@@ -303,6 +351,14 @@ def main():
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--require-none-visible", type=int, default=0)
     parser.add_argument("--require-cut-frame", type=int, default=0)
+    parser.add_argument(
+        "--record-ids-jsonl",
+        help=(
+            "explicit ordered JSONL cohort containing record_id fields; "
+            "checks every listed record"
+        ),
+    )
+    parser.add_argument("--progress-interval", type=int, default=64)
     args = parser.parse_args()
     output = Path(args.output)
     if output.exists():
@@ -315,6 +371,8 @@ def main():
         seed=args.seed,
         require_none_visible=args.require_none_visible,
         require_cut_frame=args.require_cut_frame,
+        record_ids_path=args.record_ids_jsonl,
+        progress_interval=args.progress_interval,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
