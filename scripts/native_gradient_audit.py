@@ -23,6 +23,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+sys.dont_write_bytecode = True
+
 RUN = Path(r"C:\CodexArtifacts\pretrained-reuse-r2\native-coverage-repeat-fit-01")
 REPO = Path(__file__).resolve().parents[1]
 SOURCE_SNAPSHOT = REPO / "docs/pretrained_reuse/source_snapshots/native_coverage_repeat_fit_01"
