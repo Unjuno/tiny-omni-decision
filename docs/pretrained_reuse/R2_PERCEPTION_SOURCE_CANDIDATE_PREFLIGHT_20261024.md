@@ -17,18 +17,20 @@ annotations were loaded, no media was decoded, and no model was fitted.
   `9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78`.
 - The annotation archive and generated corpus stay outside Git.
 - Generated corpus manifest and JSONL are under
-  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-preflight-20261024-04\`.
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-preflight-20261024-05\`.
 - Generated JSONL SHA-256:
-  `d20f0b7256503d7486fa9c4e439a4a8e70398c2dbfd8396db7ee0a45f98394c4`.
+  `613daa46964f7595568fb32311e50fe59d0e88a4f02ce77be22a24aee9f03b16`.
 - Adapter SHA-256:
-  `3a239d1fc092bd6242357500214c2b7ce47af48add4493d987ad9403d4c7f1d1`.
+  `2d89893026a043ec6dcbe24d52ee5ffb2568766ad124e22312de14fd1f928d7a`.
 - Corpus builder SHA-256:
   `7b53b2b63c99d4626d5c183526a14247dfccd6a033e38a4ee0f2ef5103488fb8`.
 
 The dataset describes sound intervals with inclusive start/end frame IDs and
 microsecond audio timestamps. Each tracked object has frame-aligned normalized
-bounding boxes. The adapter validates frame/box/mask alignment and rejects
-malformed values.
+bounding boxes. The adapter validates frame/box/mask alignment, rejects
+malformed values, and holds every event whose end exceeds the shorter of the
+metadata audio and video durations. This matches the existing source audit's
+boundary warning; no media was decoded in this step.
 
 ## Task definition
 
@@ -62,12 +64,14 @@ no crops or media tensors are in the current corpus.
 ## Train-only annotation yield
 
 The deterministic preflight adapter processed all 25,757 annotated sound
-intervals across 2,184 train videos:
+intervals across 2,184 train videos. It held all 247 events whose end exceeded
+the metadata audio or video duration; 15 of the otherwise eligible candidates
+were removed by this endpoint gate:
 
 | Status | Events |
 |---|---:|
-| Candidate | 10,154 |
-| Held | 15,603 |
+| Candidate | 10,139 |
+| Held | 15,618 |
 
 Candidates span 1,982 videos. Candidate set sizes range from 2 to 49 objects.
 The candidate-set distribution and positive-count distribution are in the
@@ -75,16 +79,24 @@ external generated manifest. There are 3,255 single-parent events, 5,618 with
 two parents, and a long tail through 11 parents. These are source annotation
 counts, not accuracy results.
 
-The earlier exploratory count of 10,156 used a less strict bbox eligibility
-check. This adapter excludes masked boxes, which reduces the eligible count by
-two. The stricter count is used here. It also refuses unknown `-1` parent IDs
-instead of treating them as negatives.
+An earlier exploratory count of 10,156 used a less strict bbox eligibility
+check. This adapter excludes masked boxes and media-boundary violations and
+refuses unknown `-1` parent IDs instead of treating them as negatives. Its
+initial pre-boundary count was 10,154; applying the endpoint gate removes 15
+otherwise eligible events.
+
+Read-only filename matching against the existing Perception Test
+`perception-av-event-train-media-01` directory found 400 local train videos
+covering 2,339 of the current candidate events across all 400 candidate groups.
+This confirms file presence only. Those files were not decoded or scored, and
+their duration/synchronization checks remain outstanding for this task.
 
 ## Remaining gates before model work
 
-1. The source inventory must identify the corresponding audio/video files and
-   prove every event crop lies within the decoded media duration. The current
-   source archive alone does not establish that.
+1. Match the remaining candidate videos to licensed local media and verify
+   decoded duration, synchronization, and event boundaries. Existing local
+   train media covers 400 candidate groups; filename presence is not a media
+   integrity check.
 2. Freeze a new video-grouped train/validation partition before fitting. Do not
    use previously inspected validation cohorts or any sealed audit annotations.
 3. Define audio-only, video-only, question/label-prior, candidate-order-shuffle,

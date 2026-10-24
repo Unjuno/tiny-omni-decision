@@ -14,6 +14,9 @@ def row():
             "split": "train",
             "video_id": "v1",
             "num_frames": 20,
+            "frame_rate": 10.0,
+            "audio_sample_rate": 100.0,
+            "audio_samples": 2_000,
             "is_cup_game": 0,
         },
         "sound_localisation": [
@@ -104,6 +107,24 @@ def test_holds_unknown_missing_or_unobservable_parent_and_no_distractor():
     data = row()
     data["object_tracking"] = data["object_tracking"][:1]
     assert list(source_candidate_records("v1", data))[0]["status"] == "held"
+
+
+def test_holds_event_whose_timestamp_exceeds_video_duration():
+    data = row()
+    data["sound_localisation"][0]["timestamps"] = [100_000, 2_100_000]
+    record = list(source_candidate_records("v1", data))[0]
+    assert record["status"] == "held"
+    assert "event_interval_exceeds_media_duration" in record["hold_reasons"]
+
+
+def test_holds_event_whose_timestamp_exceeds_audio_duration_only():
+    data = row()
+    data["metadata"]["num_frames"] = 100
+    data["metadata"]["audio_samples"] = 200
+    data["sound_localisation"][0]["timestamps"] = [100_000, 2_100_000]
+    record = list(source_candidate_records("v1", data))[0]
+    assert record["status"] == "held"
+    assert "event_interval_exceeds_media_duration" in record["hold_reasons"]
 
     data = row()
     data["object_tracking"] = [data["object_tracking"][0]]

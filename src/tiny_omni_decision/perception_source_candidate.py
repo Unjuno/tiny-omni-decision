@@ -36,6 +36,22 @@ def source_candidate_records(video_id, row):
         raise ValueError("train-only matching video identity required")
     if type(metadata.get("num_frames")) is not int or metadata["num_frames"] <= 0:
         raise ValueError("positive integer video frame count required")
+    frame_rate = metadata.get("frame_rate")
+    audio_rate = metadata.get("audio_sample_rate")
+    audio_samples = metadata.get("audio_samples")
+    if (
+        type(frame_rate) not in (float, int)
+        or not math.isfinite(frame_rate)
+        or frame_rate <= 0
+        or type(audio_rate) not in (float, int)
+        or not math.isfinite(audio_rate)
+        or audio_rate <= 0
+        or type(audio_samples) is not int
+        or audio_samples <= 0
+    ):
+        raise ValueError("positive finite media rates and audio sample count required")
+    audio_duration_us = audio_samples / audio_rate * 1e6
+    video_duration_us = metadata["num_frames"] / frame_rate * 1e6
 
     objects = row.get("object_tracking", [])
     by_id = {obj["id"]: obj for obj in objects}
@@ -103,6 +119,8 @@ def source_candidate_records(video_id, row):
             hold_reasons.append("unknown_or_empty_source_annotation")
         if len(set(parent_ids)) != len(parent_ids):
             hold_reasons.append("duplicate_parent_object_id")
+        if sound["timestamps"][1] > min(audio_duration_us, video_duration_us):
+            hold_reasons.append("event_interval_exceeds_media_duration")
 
         candidates = []
         candidate_object_ids = set()
