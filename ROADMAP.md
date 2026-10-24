@@ -2422,3 +2422,16 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### Shared native readout gradient diagnostic (2026-10-24)
+
+A pinned TRAIN-only, 32-update gradient audit over the fixed native shared-readout
+checkpoint completed without changing weights or optimizer state. It measured 256
+presentations (253 unique examples) across all four modalities; validation and
+sealed audit were not loaded. Pairwise gradient-cosine means were near zero with
+wide step-to-step variance, so persistent directional conflict was not established.
+Image had the largest mean gradient norm/projection share, and the original global
+clip threshold would have activated on 31/32 updates. This motivates a separately
+controlled gradient-scale/clipping study, not a quality or model-ceiling claim.
+The pinned source snapshot preserves the validated runtime bytes because their
+historical commit provenance could not be established. See [protocol and results](docs/pretrained_reuse/R2_NATIVE_SHARED_GRADIENT_AUDIT_RESULTS_20261024.md).

@@ -1,0 +1,1250 @@
+[
+  {
+    "optimizer_step": 1,
+    "row_indices": [
+      5703,
+      13410,
+      49729,
+      43341,
+      64949,
+      56052,
+      100390,
+      100455
+    ],
+    "occurrence_ids": [
+      8756,
+      10264,
+      15837,
+      285,
+      8626,
+      2130,
+      15927,
+      15219
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:477227f9612d98f86c7974bef16cd08ba235f8403db28f78ec4e13ee52e0e051:train:texture:5:sentence",
+      "text:decision-supervision-v1:train:fece35686003a40d536e7158b4e83d6d7f8869d4977dbad9b2d813f16331610c:numeric:extremum:risk:minimum:0",
+      "image:CLEVR_new_007824:texture",
+      "image:CLEVR_new_006227:texture",
+      "lombard:s34_l_swbr3n:adverb",
+      "lombard:s19_p_bwac4p:command",
+      "video:clevrer-train-06359-q006",
+      "video:clevrer-train-07251-q006"
+    ]
+  },
+  {
+    "optimizer_step": 67,
+    "row_indices": [
+      1218,
+      12847,
+      39104,
+      39181,
+      90264,
+      82061,
+      100416,
+      100431
+    ],
+    "occurrence_ids": [
+      12320,
+      188,
+      9889,
+      525,
+      9134,
+      518,
+      2055,
+      12671
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:110763f9e7db08eb77d89edc8f8f0dce7ccb0efe32346f145b24af5cdc0ad109:train:color:4:key_value",
+      "text:decision-supervision-v1:train:f5dd07ef05eb7c8d1743e33a8c892140a8e9d9c5f09f97eac6d50a6b71c37429:numeric:filter_min_cost:0",
+      "image:CLEVR_new_005168:color",
+      "image:CLEVR_new_005187:texture",
+      "starss:fold3_room4_mix004:t0005-0010:speech",
+      "starss:fold3_room13_mix001:t0095-0100:footsteps",
+      "video:clevrer-train-06755-q001",
+      "video:clevrer-train-06982-q009"
+    ]
+  },
+  {
+    "optimizer_step": 133,
+    "row_indices": [
+      3887,
+      5113,
+      24529,
+      37576,
+      69674,
+      92612,
+      100178,
+      100467
+    ],
+    "occurrence_ids": [
+      4452,
+      13556,
+      1021,
+      6321,
+      13850,
+      13998,
+      327,
+      2687
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:b236b2ba94bca3cfad82d9329504040e3cc7a5e9223ebd9cf6f997159740438a:train:shape:5:sentence",
+      "text:condition-relevance-v1:train:f77ca35e136719f912e5634c34212829e2c057562deba3a81139162599a375c1:train:count:1:sentence",
+      "image:CLEVR_new_001524:texture",
+      "image:CLEVR_new_004786:color",
+      "lombard:s43_l_priy3a:preposition",
+      "starss:fold3_room6_mix001:t0155-0160:instrument",
+      "video:clevrer-train-01921-q005",
+      "video:clevrer-train-07447-q008"
+    ]
+  },
+  {
+    "optimizer_step": 199,
+    "row_indices": [
+      5871,
+      16630,
+      51242,
+      45009,
+      86907,
+      79536,
+      100367,
+      100176
+    ],
+    "occurrence_ids": [
+      5556,
+      9924,
+      11157,
+      4061,
+      446,
+      2862,
+      14659,
+      15847
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:3abd64d5d9d1023850820de76049dbbb6079aff12c935b033a02ce9b544a834f:train:shape:3:sentence",
+      "text:3340c3fee2a1d24f5c7a14a71f1bec6fb3b1b18329b79e2e066499f36fa3e14a:1",
+      "image:CLEVR_new_008202:count",
+      "image:CLEVR_new_006644:texture",
+      "starss:fold3_room13_mix009:t0375-0380:laughter",
+      "starss:fold3_room12_mix005:t0065-0070:speech",
+      "video:clevrer-train-06072-q010",
+      "video:clevrer-train-01878-q002"
+    ]
+  },
+  {
+    "optimizer_step": 265,
+    "row_indices": [
+      11599,
+      2609,
+      35575,
+      19342,
+      56377,
+      55686,
+      100479,
+      100396
+    ],
+    "occurrence_ids": [
+      9244,
+      8804,
+      11209,
+      11829,
+      15642,
+      3186,
+      6703,
+      4159
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:fe51ccf828d38d73ed4c0bed691013992d77ea07fa4fb2123defb31a382cee5c:numeric:filter_min_cost:0",
+      "text:condition-relevance-v1:train:665be8e1e5665e6c5fc276463a51a23ee8b680ef2f4769d1542f6cd0d62d6f33:train:color:1:sentence",
+      "image:CLEVR_new_004285:shape",
+      "image:CLEVR_new_000227:count",
+      "lombard:s20_l_brwn1n:color",
+      "lombard:s16_p_swai6n:command",
+      "video:clevrer-train-07762-q009",
+      "video:clevrer-train-06472-q005"
+    ]
+  },
+  {
+    "optimizer_step": 331,
+    "row_indices": [
+      15146,
+      5551,
+      49636,
+      45520,
+      56795,
+      55412,
+      100539,
+      100394
+    ],
+    "occurrence_ids": [
+      14392,
+      15500,
+      4017,
+      1233,
+      14530,
+      6666,
+      10435,
+      6551
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:5dcf70e5c4eac95c562ba700125b340071051c175cbad3f40ede6a34340dc538:numeric:extremum:risk:minimum:0",
+      "text:condition-relevance-v1:train:1edb8599a152739067b423a7eafc44a9030d960a28a8ea094f14ec9f6c2bef20:train:shape:4:sentence",
+      "image:CLEVR_new_007801:color",
+      "image:CLEVR_new_006772:color",
+      "lombard:s20_p_pbip3p:adverb",
+      "lombard:s16_p_bbam1a:preposition",
+      "video:clevrer-train-09088-q010",
+      "video:clevrer-train-06466-q008"
+    ]
+  },
+  {
+    "optimizer_step": 397,
+    "row_indices": [
+      15174,
+      9265,
+      38558,
+      23300,
+      53521,
+      63047,
+      100166,
+      100265
+    ],
+    "occurrence_ids": [
+      2792,
+      13588,
+      5189,
+      3185,
+      6154,
+      12946,
+      13607,
+      10251
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:ddd36f2f4d84ea1b60a258646498d558a21a66222cb2a1a7efc9c092e5aed9bd:numeric:count:0",
+      "text:decision-supervision-v1:train:1b40fcf5d601eeb451ace0b7d598fa64c20b3987bce341f7df4be607e74a25e4:numeric:extremum:cost:maximum:0",
+      "image:CLEVR_new_005031:count",
+      "image:CLEVR_new_001217:color",
+      "lombard:s13_l_pway1a:color",
+      "lombard:s30_l_pgam3s:adverb",
+      "video:clevrer-train-01606-q000",
+      "video:clevrer-train-03580-q007"
+    ]
+  },
+  {
+    "optimizer_step": 463,
+    "row_indices": [
+      17005,
+      17681,
+      30021,
+      41933,
+      63012,
+      74616,
+      100154,
+      100137
+    ],
+    "occurrence_ids": [
+      1648,
+      2668,
+      11885,
+      13325,
+      210,
+      5586,
+      4203,
+      987
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:29f455786c844d2173cbda9b686d1eb21cf088be719605d64ea18350ccde59bc:2",
+      "text:1b61d681d1e34d097fec10230ae06ae5d93998ad3384f27a8f654cf3aa26fc86:0",
+      "image:CLEVR_new_002897:texture",
+      "image:CLEVR_new_005875:texture",
+      "lombard:s30_l_lwbhza:command",
+      "lombard:s55_p_lbir7a:command",
+      "video:clevrer-train-01390-q007",
+      "video:clevrer-train-01086-q006"
+    ]
+  },
+  {
+    "optimizer_step": 529,
+    "row_indices": [
+      5756,
+      775,
+      26283,
+      39751,
+      58314,
+      88808,
+      100568,
+      100234
+    ],
+    "occurrence_ids": [
+      7248,
+      13892,
+      3849,
+      14089,
+      13634,
+      14670,
+      13271,
+      13751
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:c4dff144091f4dc9298c3d22d505c849809b4fdfde50c5b0aa927ada941c3ecc:train:shape:2:key_value",
+      "text:condition-relevance-v1:train:ce428be43eea4a377e6b1b83e202e785efc49c1368ab9bc7dbc3b502c950b2fd:train:texture:3:sentence",
+      "image:CLEVR_new_001962:shape",
+      "image:CLEVR_new_005329:shape",
+      "lombard:s23_l_pwbe9n:command",
+      "starss:fold3_room22_mix009:t0015-0020:instrument",
+      "video:clevrer-train-09668-q003",
+      "video:clevrer-train-03008-q002"
+    ]
+  },
+  {
+    "optimizer_step": 595,
+    "row_indices": [
+      4072,
+      11672,
+      29510,
+      39028,
+      70848,
+      78507,
+      100088,
+      100160
+    ],
+    "occurrence_ids": [
+      4800,
+      9664,
+      6293,
+      5105,
+      5298,
+      11902,
+      12063,
+      6291
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:9b71c712dc2ef93fa29077ec67b324d7482778209312f06f043135816bf185ee:train:count:2:key_value",
+      "text:decision-supervision-v1:train:ad9e205c47af457e39369e4661f44cef8d67e246aadd34e5b5220092f352722f:numeric:extremum:cost:minimum:0",
+      "image:CLEVR_new_002769:count",
+      "image:CLEVR_new_005149:color",
+      "lombard:s47_l_pgwm3s:command",
+      "starss:fold3_room12_mix003:t0320-0325:laughter",
+      "video:clevrer-train-00352-q007",
+      "video:clevrer-train-01434-q008"
+    ]
+  },
+  {
+    "optimizer_step": 661,
+    "row_indices": [
+      10538,
+      9655,
+      28091,
+      42554,
+      76714,
+      61251,
+      100532,
+      100109
+    ],
+    "occurrence_ids": [
+      16024,
+      5756,
+      15673,
+      2181,
+      870,
+      14074,
+      13815,
+      7675
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:37b19a6eae2c26bdecd875172568fb0b5fbd5f5360fb4b3ff8a9c1e7d9c47c29:numeric:extremum:risk:minimum:0",
+      "text:decision-supervision-v1:train:d0c6d3836cffd9498cc390dd948bbd4c94d8a1afad84ba3621f360bdf757a536:numeric:filter_min_cost:0",
+      "image:CLEVR_new_002414:shape",
+      "image:CLEVR_new_006030:count",
+      "starss:fold3_room12_mix001:t0040-0045:bell",
+      "lombard:s28_l_lrwb1s:letter",
+      "video:clevrer-train-09025-q004",
+      "video:clevrer-train-00640-q010"
+    ]
+  },
+  {
+    "optimizer_step": 727,
+    "row_indices": [
+      7488,
+      10096,
+      24601,
+      23471,
+      59028,
+      70042,
+      100374,
+      100180
+    ],
+    "occurrence_ids": [
+      8768,
+      5408,
+      9421,
+      377,
+      7266,
+      15378,
+      4767,
+      16263
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:586b0a274c0f4dd65a274b46780db9fc81723d33a6a9c5e61c7c39c1a39a0bc6:train:color:0:key_value",
+      "text:decision-supervision-v1:train:9026e347152700e85f02d6d545958c557d493e60442e59e5a7cd3639e90eb318:numeric:extremum:cost:minimum:0",
+      "image:CLEVR_new_001542:texture",
+      "image:CLEVR_new_001259:shape",
+      "lombard:s24_p_brbpzn:command",
+      "lombard:s43_p_sriu2n:number",
+      "video:clevrer-train-06173-q006",
+      "video:clevrer-train-01939-q003"
+    ]
+  },
+  {
+    "optimizer_step": 793,
+    "row_indices": [
+      8444,
+      11308,
+      31230,
+      49809,
+      69527,
+      71819,
+      100371,
+      100565
+    ],
+    "occurrence_ids": [
+      15760,
+      9424,
+      10069,
+      6333,
+      7250,
+      242,
+      1947,
+      9499
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:6d91a2e144ef58295f7f6e20eab6f47781ed5417ff532d56c121e7472d8f6970:numeric:extremum:time:minimum:0",
+      "text:decision-supervision-v1:train:9d322e36798605e754c6586522e610c3585a0d1b57760c03ec3f2ea69f41d9bd:numeric:extremum:time:minimum:0",
+      "image:CLEVR_new_003199:count",
+      "image:CLEVR_new_007844:texture",
+      "lombard:s43_l_bwapzs:adverb",
+      "lombard:s49_p_srac5n:adverb",
+      "video:clevrer-train-06097-q009",
+      "video:clevrer-train-09627-q010"
+    ]
+  },
+  {
+    "optimizer_step": 859,
+    "row_indices": [
+      12941,
+      18210,
+      48426,
+      23517,
+      63519,
+      89039,
+      100078,
+      100229
+    ],
+    "occurrence_ids": [
+      13348,
+      9288,
+      10805,
+      9229,
+      12010,
+      16310,
+      8015,
+      12347
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:7384c8f61de840f275ecd9dd79445402a1846e0f1576688bd295578419432f2d:numeric:extremum:time:maximum:0",
+      "text:a9bdde75c912ca906dd5f4ffb83c10629b6a499e98844475f0b6048bea3bdf1a:6",
+      "image:CLEVR_new_007498:count",
+      "image:CLEVR_new_001271:texture",
+      "lombard:s32_l_bgib6n:letter",
+      "starss:fold3_room22_mix010:t0025-0030:knock",
+      "video:clevrer-train-00205-q006",
+      "video:clevrer-train-02942-q010"
+    ]
+  },
+  {
+    "optimizer_step": 925,
+    "row_indices": [
+      8663,
+      18194,
+      44794,
+      25235,
+      62324,
+      79624,
+      100203,
+      100182
+    ],
+    "occurrence_ids": [
+      6716,
+      14868,
+      15253,
+      9449,
+      6426,
+      13686,
+      12759,
+      10283
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:97e9768d8d32233703a2c26f13b5c71ef980dfc31294e46107bc66fc4abc65a4:numeric:filter_min_cost:0",
+      "text:c0cddbab85729bdfb21ea67ec3779a52f6e528ee403faeeb1d32826de1ddad6c:5",
+      "image:CLEVR_new_006590:count",
+      "image:CLEVR_new_001700:shape",
+      "lombard:s2_l_bgwv9n:preposition",
+      "starss:fold3_room12_mix006:t0010-0015:domestic sounds",
+      "video:clevrer-train-02434-q010",
+      "video:clevrer-train-01953-q007"
+    ]
+  },
+  {
+    "optimizer_step": 991,
+    "row_indices": [
+      9197,
+      10381,
+      41015,
+      23282,
+      89023,
+      81150,
+      100463,
+      100261
+    ],
+    "occurrence_ids": [
+      16036,
+      9508,
+      7193,
+      7045,
+      4198,
+      11966,
+      11419,
+      6827
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:1d82b995d678a235d1d8504bdb0b36e650516d899bb8c4a52ae5498926d852ce:numeric:extremum:time:maximum:0",
+      "text:decision-supervision-v1:train:2253fd5ba3d22a8f9bf10caf26a8f88fe84056ee309292cad43653956769928c:numeric:extremum:time:maximum:0",
+      "image:CLEVR_new_005645:shape",
+      "image:CLEVR_new_001212:count",
+      "starss:fold3_room22_mix010:t0020-0025:music",
+      "starss:fold3_room12_mix009:t0005-0010:door",
+      "video:clevrer-train-07410-q006",
+      "video:clevrer-train-03495-q010"
+    ]
+  },
+  {
+    "optimizer_step": 1057,
+    "row_indices": [
+      17065,
+      17671,
+      20782,
+      36957,
+      67048,
+      91567,
+      100521,
+      100474
+    ],
+    "occurrence_ids": [
+      13404,
+      1444,
+      9493,
+      2509,
+      4018,
+      9318,
+      16027,
+      12343
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:c579ad1ebb2aac4a294647cf97d29a31ba6066666c2b8aef45cb40e2006be67f:2",
+      "text:n4ze3m/typed-decisions-synth:synth-25b57a9b28779df9:q2",
+      "image:CLEVR_new_000587:count",
+      "image:CLEVR_new_004631:texture",
+      "lombard:s39_p_swbq7a:number",
+      "starss:fold3_room4_mix007:t0105-0110:music",
+      "video:clevrer-train-08663-q009",
+      "video:clevrer-train-07669-q002"
+    ]
+  },
+  {
+    "optimizer_step": 1123,
+    "row_indices": [
+      4685,
+      13163,
+      46918,
+      47053,
+      60292,
+      77397,
+      100430,
+      100485
+    ],
+    "occurrence_ids": [
+      1476,
+      6860,
+      4725,
+      7517,
+      11154,
+      2302,
+      5707,
+      6547
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:24e221cd9459910a128a1e7d59f21f10da52a9f095d5d1c93cb1e0fdc825e203:train:shape:1:sentence",
+      "text:decision-supervision-v1:train:59aed71a18637563f3571c251d5a41772567b95b0b85d382e50cc590e51a6a78:numeric:extremum:risk:maximum:0",
+      "image:CLEVR_new_007121:count",
+      "image:CLEVR_new_007155:texture",
+      "lombard:s26_p_lrim1a:number",
+      "starss:fold3_room12_mix002:t0075-0080:water tap",
+      "video:clevrer-train-06982-q006",
+      "video:clevrer-train-07968-q010"
+    ]
+  },
+  {
+    "optimizer_step": 1189,
+    "row_indices": [
+      17989,
+      7554,
+      25206,
+      23961,
+      99007,
+      62739,
+      100537,
+      100441
+    ],
+    "occurrence_ids": [
+      3232,
+      7584,
+      5877,
+      6957,
+      9894,
+      14794,
+      15323,
+      9579
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:2573c27381c61937d8c646c62f6c1f3e11c2016cfc3f9c174901b02e1052f4a7:2",
+      "text:condition-relevance-v1:train:4612e842471c5cb3a6902b4cac4dc3e389d4c3a39934eace6698ba309b46d351:train:color:4:key_value",
+      "image:CLEVR_new_001693:count",
+      "image:CLEVR_new_001382:texture",
+      "starss:fold3_room7_mix005:t0150-0155:music",
+      "lombard:s2_p_pbbe7p:letter",
+      "video:clevrer-train-09078-q010",
+      "video:clevrer-train-07085-q010"
+    ]
+  },
+  {
+    "optimizer_step": 1255,
+    "row_indices": [
+      9561,
+      17863,
+      23307,
+      48976,
+      93315,
+      67621,
+      100293,
+      100502
+    ],
+    "occurrence_ids": [
+      10996,
+      15252,
+      1129,
+      3201,
+      13630,
+      4666,
+      8695,
+      13167
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:74dad8e70f1595bb45b103cb04c3673aff87c40dc23d1cd1c588c50c4099d499:numeric:extremum:cost:maximum:0",
+      "text:b3a7e26396e9f478dd8790d71ef504b32c14021f45c8cca93db3ca2dc8ff963b:2",
+      "image:CLEVR_new_001218:shape",
+      "image:CLEVR_new_007636:color",
+      "starss:fold3_room6_mix002:t0235-0240:laughter",
+      "lombard:s3_p_srwjza:color",
+      "video:clevrer-train-04114-q009",
+      "video:clevrer-train-08462-q003"
+    ]
+  },
+  {
+    "optimizer_step": 1321,
+    "row_indices": [
+      16657,
+      11279,
+      40493,
+      37954,
+      98889,
+      80339,
+      100141,
+      100468
+    ],
+    "occurrence_ids": [
+      7612,
+      9340,
+      7469,
+      373,
+      15582,
+      14006,
+      7219,
+      1015
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:f7e587edc6cb6becb4b58586ffbe27d433775d056bf69faa102ec600291ae217:4",
+      "text:decision-supervision-v1:train:5db04c6b2e52079fcb88fab149de459a04b85b4826b679531f2f21ad06c36a50:numeric:filter_min_cost:0",
+      "image:CLEVR_new_005515:texture",
+      "image:CLEVR_new_004880:count",
+      "starss:fold3_room7_mix005:t0100-0105:water tap",
+      "starss:fold3_room12_mix007:t0155-0160:knock",
+      "video:clevrer-train-01145-q007",
+      "video:clevrer-train-07552-q002"
+    ]
+  },
+  {
+    "optimizer_step": 1387,
+    "row_indices": [
+      6319,
+      3492,
+      20689,
+      50534,
+      56276,
+      60245,
+      100169,
+      100405
+    ],
+    "occurrence_ids": [
+      396,
+      4512,
+      4749,
+      15413,
+      5946,
+      4082,
+      7171,
+      8099
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:adf6e365b18856a6b67178ee96f3a5c9120f5d2baad66012efe3e050be4f677d:train:shape:4:sentence",
+      "text:condition-relevance-v1:train:c7491e3f760a390103cdade06c701856520eef9290252641494c107ef7843954:train:texture:2:key_value",
+      "image:CLEVR_new_000564:texture",
+      "image:CLEVR_new_008025:count",
+      "lombard:s19_p_srivzs:preposition",
+      "lombard:s26_p_bwah8p:adverb",
+      "video:clevrer-train-01618-q008",
+      "video:clevrer-train-06595-q008"
+    ]
+  },
+  {
+    "optimizer_step": 1453,
+    "row_indices": [
+      17011,
+      2289,
+      42278,
+      41795,
+      97823,
+      95749,
+      100480,
+      100210
+    ],
+    "occurrence_ids": [
+      1708,
+      8124,
+      13909,
+      281,
+      7350,
+      11470,
+      8799,
+      15679
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:n4ze3m/typed-decisions-synth:synth-860f4bd7b7959eab:q2",
+      "text:condition-relevance-v1:train:e5293afe6dcf654f329168fe7acb77fbd77a05ef104a2932b002ce3f24de6467:train:color:2:sentence",
+      "image:CLEVR_new_005961:count",
+      "image:CLEVR_new_005840:shape",
+      "starss:fold3_room7_mix003:t0195-0200:knock",
+      "starss:fold3_room6_mix007:t0020-0025:clapping",
+      "video:clevrer-train-07816-q001",
+      "video:clevrer-train-02604-q004"
+    ]
+  },
+  {
+    "optimizer_step": 1519,
+    "row_indices": [
+      95,
+      11664,
+      25959,
+      25033,
+      84295,
+      71004,
+      100318,
+      100088
+    ],
+    "occurrence_ids": [
+      2148,
+      5600,
+      553,
+      14845,
+      11142,
+      5106,
+      9331,
+      8495
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:683c16c99086af153736b964ec4ded89bba1b8e6673f9d2eaa30fbce67848b29:train:shape:5:sentence",
+      "text:decision-supervision-v1:train:5ad706e3bdc537a42789cce751118e22676df89449daef019fbe461499dfa612:numeric:extremum:cost:minimum:0",
+      "image:CLEVR_new_001881:shape",
+      "image:CLEVR_new_001650:texture",
+      "starss:fold3_room13_mix006:t0065-0070:music",
+      "lombard:s47_p_brib9n:command",
+      "video:clevrer-train-04767-q006",
+      "video:clevrer-train-00352-q007"
+    ]
+  },
+  {
+    "optimizer_step": 1585,
+    "row_indices": [
+      15162,
+      4666,
+      33698,
+      42299,
+      61074,
+      88775,
+      100172,
+      100354
+    ],
+    "occurrence_ids": [
+      12376,
+      792,
+      13701,
+      7833,
+      11090,
+      1398,
+      12411,
+      2319
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:f35c143845570d981c5f6a6b3b59dc788ef5d9870f81a33fd1d50897af919ee7:numeric:extremum:risk:minimum:0",
+      "text:condition-relevance-v1:train:b2e3271ff7f94ad45677e82a42740ab641839aabedaeb53883c5a129fe0fc778:train:count:3:key_value",
+      "image:CLEVR_new_003816:count",
+      "image:CLEVR_new_005966:shape",
+      "lombard:s27_p_srwr6s:command",
+      "starss:fold3_room22_mix009:t0000-0005:knock",
+      "video:clevrer-train-01669-q006",
+      "video:clevrer-train-05846-q005"
+    ]
+  },
+  {
+    "optimizer_step": 1651,
+    "row_indices": [
+      16518,
+      7267,
+      20707,
+      40044,
+      61195,
+      66610,
+      100285,
+      100234
+    ],
+    "occurrence_ids": [
+      15924,
+      7596,
+      2201,
+      2689,
+      13962,
+      9186,
+      2591,
+      11015
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:0b0a383b8b507e4f2fe83243209af9c99f2effdd4f534e027831acaf16bd71f9:5",
+      "text:condition-relevance-v1:train:4226f90ddf9f79590c0fefbcb73abbcc26dbb062e188f3300696a2eec2e27419:train:color:4:sentence",
+      "image:CLEVR_new_000568:shape",
+      "image:CLEVR_new_005403:color",
+      "lombard:s28_l_lbbf5s:color",
+      "lombard:s39_l_lwbs5s:number",
+      "video:clevrer-train-03951-q009",
+      "video:clevrer-train-03008-q002"
+    ]
+  },
+  {
+    "optimizer_step": 1717,
+    "row_indices": [
+      11992,
+      17757,
+      31186,
+      24320,
+      86284,
+      61395,
+      100226,
+      100074
+    ],
+    "occurrence_ids": [
+      608,
+      5272,
+      14325,
+      11409,
+      1366,
+      5498,
+      13695,
+      2855
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:532c368764372f7f23277a88b6880df0944e575a86868111bc9f56e4a14060a0:numeric:extremum:cost:minimum:0",
+      "text:n4ze3m/typed-decisions-synth:synth-105a6ff7b4b2c761:foreign_fee_action",
+      "image:CLEVR_new_003188:count",
+      "image:CLEVR_new_001472:color",
+      "starss:fold3_room13_mix009:t0115-0120:domestic sounds",
+      "lombard:s28_p_bbin9n:letter",
+      "video:clevrer-train-02883-q004",
+      "video:clevrer-train-00074-q008"
+    ]
+  },
+  {
+    "optimizer_step": 1783,
+    "row_indices": [
+      12387,
+      16934,
+      37799,
+      28283,
+      56914,
+      82235,
+      100071,
+      100326
+    ],
+    "occurrence_ids": [
+      12364,
+      8856,
+      7817,
+      5145,
+      1426,
+      4758,
+      3067,
+      13647
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:3d61f236b138cfc3a0405c31bbc25a3e58b0e87491f6ef3f9faa38d26be168bd:numeric:extremum:risk:maximum:0",
+      "text:ff99f3b5cc8fb4638686f060b3ef93e8d3f7c244a14d1d8071b2445fbdf51f24:7",
+      "image:CLEVR_new_004841:shape",
+      "image:CLEVR_new_002462:shape",
+      "lombard:s21_l_bbbn9a:number",
+      "starss:fold3_room13_mix001:t0165-0170:knock",
+      "video:clevrer-train-00037-q010",
+      "video:clevrer-train-05103-q001"
+    ]
+  },
+  {
+    "optimizer_step": 1849,
+    "row_indices": [
+      11353,
+      12533,
+      36206,
+      36804,
+      80309,
+      54994,
+      100566,
+      100400
+    ],
+    "occurrence_ids": [
+      4052,
+      7748,
+      4981,
+      10657,
+      1670,
+      754,
+      10287,
+      4127
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:decision-supervision-v1:train:4d57833f8398925ff8ba9b2ce8a163f0eae7b9ecbaf44a264d9c24aa18dfb4e0:numeric:extremum:cost:maximum:0",
+      "text:decision-supervision-v1:train:869a16cda866a706d027e29af958a3e73a1fd27a0c9e3cbd091cd221dba96ce2:numeric:extremum:time:maximum:0",
+      "image:CLEVR_new_004443:count",
+      "image:CLEVR_new_004593:color",
+      "starss:fold3_room12_mix007:t0145-0150:footsteps",
+      "lombard:s15_p_pbay2a:number",
+      "video:clevrer-train-09665-q004",
+      "video:clevrer-train-06553-q000"
+    ]
+  },
+  {
+    "optimizer_step": 1915,
+    "row_indices": [
+      5365,
+      17804,
+      46320,
+      28889,
+      59841,
+      58102,
+      100141,
+      100187
+    ],
+    "occurrence_ids": [
+      5676,
+      6100,
+      193,
+      14797,
+      11194,
+      6946,
+      459,
+      12307
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:185c48489d3444b5b748c0cd9cbbb93f2f996f2c60909db64b8fec353acfa8f2:train:texture:2:sentence",
+      "text:25a02a9d809858bed6b2820cd79ff6ea17b4a1b770a6282203400b9eef1d954f:0",
+      "image:CLEVR_new_006972:color",
+      "image:CLEVR_new_002614:texture",
+      "lombard:s25_p_sgav7s:letter",
+      "lombard:s22_p_swws1n:number",
+      "video:clevrer-train-01145-q007",
+      "video:clevrer-train-02092-q006"
+    ]
+  },
+  {
+    "optimizer_step": 1981,
+    "row_indices": [
+      182,
+      16827,
+      44843,
+      26471,
+      86698,
+      79526,
+      100231,
+      100259
+    ],
+    "occurrence_ids": [
+      1128,
+      5176,
+      11385,
+      8665,
+      6630,
+      11158,
+      9459,
+      11379
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:7c494ea83b47f0e684c3eea156d6a88e0e8ac02e95e81e4438135471a0ccac88:train:texture:5:key_value",
+      "text:07be01c0072add71857ca97973c48a5ea32bef191572ea56449cb94df329703d:0",
+      "image:CLEVR_new_006602:shape",
+      "image:CLEVR_new_002009:shape",
+      "starss:fold3_room13_mix009:t0285-0290:bell",
+      "starss:fold3_room12_mix005:t0060-0065:telephone",
+      "video:clevrer-train-02973-q006",
+      "video:clevrer-train-03438-q007"
+    ]
+  },
+  {
+    "optimizer_step": 2048,
+    "row_indices": [
+      3589,
+      2987,
+      25929,
+      31578,
+      65577,
+      75290,
+      100370,
+      100449
+    ],
+    "occurrence_ids": [
+      10412,
+      9572,
+      8653,
+      4341,
+      11434,
+      14186,
+      11511,
+      11019
+    ],
+    "counts_by_modality": {
+      "text": 2,
+      "image": 2,
+      "audio": 2,
+      "video": 2
+    },
+    "sample_ids": [
+      "text:condition-relevance-v1:train:f29e0705ba84ba30341b2d5f832a0ce1b3eb4a8df83a2f265d1e5f49d64835cf:train:texture:2:sentence",
+      "text:condition-relevance-v1:train:8f8c24155aaa8c89ea850ec3ce0f5f7ffc3a2e05046b76a4c68d78e13a817652:train:count:3:sentence",
+      "image:CLEVR_new_001874:texture",
+      "image:CLEVR_new_003286:count",
+      "lombard:s35_p_bgbp5a:letter",
+      "lombard:s6_p_pbie3a:preposition",
+      "video:clevrer-train-06097-q001",
+      "video:clevrer-train-07167-q007"
+    ]
+  }
+]
