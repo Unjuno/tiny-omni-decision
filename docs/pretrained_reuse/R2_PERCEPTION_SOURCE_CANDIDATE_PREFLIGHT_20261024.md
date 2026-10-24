@@ -236,6 +236,25 @@ short-interval padding and long-interval multiwindow policy, applied identically
 to train and development. The existing fixed two-second extractor cannot be
 silently reused as if these durations were already two seconds.
 
+The pinned VideoPrism preprocessing center-crops square input after resizing
+the shorter image side to 288px. A label-coverage audit against the frozen
+object boxes found that this would fully crop 190/5,172 positive train boxes
+and 44/1,237 positive development boxes; 84 train and 20 development positive
+candidate tracks would have every supplied frame box fully outside the crop.
+This is a representation/preprocessing failure, not a reason to drop those
+examples. A CPU-only geometry utility now maps full-frame boxes through square
+letterbox coordinates into the VideoPrism 16x16 token grid and computes
+area-weighted ROI means, including boxes smaller than one token cell. Five
+unit tests cover wide/tall edge boxes, token overlap weighting, and malformed
+or nonfinite inputs. This utility does not itself preprocess frames, load
+VideoPrism, extract features, or establish model quality; a letterbox feature
+extractor and feature-parity checks are still required.
+
+- ROI geometry module SHA-256:
+  `84c50392563c122dbf9b1bb435fb404e81bb238966677084f50c42c3a5cea8a5`.
+- ROI geometry test SHA-256:
+  `d75bc68e5e5804767736aa8acabab64a92e35f74cd4054bda84d5abe758bc1e030`.
+
 - Corrected split directory:
   `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-dev-split-20261025-03\`.
 - Train JSONL SHA-256:
@@ -256,7 +275,7 @@ silently reused as if these durations were already two seconds.
   generator and its tests.
 
 The full corrected train media check is running on CPU against all 2,593 fixed
-train rows. At this report update, it had decoded through row 640; this is an
+train rows. At this report update, it had decoded through row 896; this is an
 in-progress check, not a pass. The development media check remains the prior
 complete 606-row report above. GPU work and learning remain gated on a terminal
 train-media result and the remaining protocol gates.
