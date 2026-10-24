@@ -223,6 +223,19 @@ validation is claimed yet. The next model experiment remains blocked on full
 corrected-train CPU media preflight, feature/input parity, and explicit source
 label review. No model has been loaded or fitted.
 
+Fixed-split structure is uneven and must be represented explicitly in any
+readout: train has 692/2,593 `none_visible` rows and 1,901 visible-source rows
+with one to six positive candidates; development has 172/606 `none_visible`
+rows and 434 visible-source rows. Mean candidate counts are 14.70 (train) and
+14.45 (development), with a range of 2–35. The source audio interval duration
+is not a fixed model window: the train median is 1.002 seconds (range
+0.067–35.029 seconds; 225 intervals exceed 10 seconds), and the development
+median is 0.935 seconds (range 0.099–35.017 seconds; 49 exceed 10 seconds).
+Any EfficientAT input adaptation therefore needs a fixed, documented
+short-interval padding and long-interval multiwindow policy, applied identically
+to train and development. The existing fixed two-second extractor cannot be
+silently reused as if these durations were already two seconds.
+
 - Corrected split directory:
   `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-dev-split-20261025-03\`.
 - Train JSONL SHA-256:
@@ -243,7 +256,7 @@ label review. No model has been loaded or fitted.
   generator and its tests.
 
 The full corrected train media check is running on CPU against all 2,593 fixed
-train rows. At this report update, it had decoded through row 512; this is an
+train rows. At this report update, it had decoded through row 640; this is an
 in-progress check, not a pass. The development media check remains the prior
 complete 606-row report above. GPU work and learning remain gated on a terminal
 train-media result and the remaining protocol gates.
