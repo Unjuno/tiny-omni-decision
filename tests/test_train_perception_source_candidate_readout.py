@@ -1,14 +1,18 @@
 import math
 
-import torch
+import pytest
 
-from scripts.train_perception_source_candidate_readout import (
+torch = pytest.importorskip("torch")
+
+from scripts.train_perception_source_candidate_readout import (  # noqa: E402
     CrossModalCandidateScorer,
     evaluate,
     grouped_nll,
     score_batch,
 )
-from tiny_omni_decision.perception_source_candidate_readout import CandidateFeatureExample
+from tiny_omni_decision.perception_source_candidate_readout import (  # noqa: E402
+    CandidateFeatureExample,
+)
 
 
 def test_candidate_scores_are_invariant_to_candidate_order():

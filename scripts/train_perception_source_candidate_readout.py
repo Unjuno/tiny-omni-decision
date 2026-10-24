@@ -238,6 +238,7 @@ def evaluate(model, examples, *, audio_mode="source", video_mode="joint", donor_
     model.eval()
     per_record = []
     nlls, briers, confidences, correctness, aps = [], [], [], [], []
+    uniform_hit_probabilities = []
     visible_correct, visible_total, none_correct, none_total = 0, 0, 0, 0
     with torch.inference_mode():
         for start in range(0, len(examples), BATCH_SIZE):
@@ -255,6 +256,9 @@ def evaluate(model, examples, *, audio_mode="source", video_mode="joint", donor_
                 pred_index = int(np.argmax(probability))
                 is_correct = bool(positive[pred_index])
                 positive_mass = float(probability[positive].sum())
+                uniform_hit_probabilities.append(
+                    float(positive.sum()) / (len(example.candidate_ids) + 1)
+                )
                 target_distribution = positive.astype(np.float64) / int(positive.sum())
                 nlls.append(float(nll_values[local]))
                 briers.append(float(np.square(probability - target_distribution).sum()))
@@ -305,6 +309,9 @@ def evaluate(model, examples, *, audio_mode="source", video_mode="joint", donor_
         "none_visible_records": none_total,
         "visible_source_records": visible_total,
         "top1_set_accuracy": float(np.mean(correctness)),
+        "uniform_random_expected_top1_set_accuracy": float(
+            np.mean(uniform_hit_probabilities)
+        ),
         "none_visible_accuracy": none_correct / none_total if none_total else None,
         "visible_source_hit_at_1": visible_correct / visible_total if visible_total else None,
         "mean_set_nll": float(np.mean(nlls)),
