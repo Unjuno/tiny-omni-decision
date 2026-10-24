@@ -98,3 +98,19 @@ def test_validation_selection_can_exclude_normalized_train_question_content():
     )
     assert len(validation) == 4
     assert not train_content & {normalize_question(row["question"]) for row in validation}
+
+
+def test_grouped_shuffle_is_deterministic_deranged_and_split_local():
+    from tiny_omni_decision.clevr_vqa_dataset import grouped_shuffle_indices
+
+    rows = [
+        {"split": split, "image_filename": f"{split}-{index}.png"}
+        for split in ("train", "validation")
+        for index in range(8)
+    ]
+    mapping = grouped_shuffle_indices(rows, seed=17)
+    assert mapping == grouped_shuffle_indices(rows, seed=17)
+    assert all(index != other for index, other in enumerate(mapping))
+    assert all(rows[index]["split"] == rows[other]["split"] for index, other in enumerate(mapping))
+    with pytest.raises(ValueError, match="at least two"):
+        grouped_shuffle_indices([{"split": "validation"}], seed=17)

@@ -99,7 +99,9 @@ def evaluate_readout(
         raise ValueError("features must have one [width] row per source question")
     if batch_size <= 0:
         raise ValueError("batch_size must be positive")
-    candidates, counts, targets, metadata = prepare_option_tensors(rows)
+    candidates, counts, targets, metadata = prepare_option_tensors(
+        rows, device=features.device
+    )
     model.eval()
     probability_parts = []
     for start in range(0, len(rows), batch_size):
@@ -123,11 +125,26 @@ def evaluate_readout(
         }
 
     per_kind = grouped(indices_by_kind)
+    valid_options = (
+        torch.arange(4, device=probabilities.device)[None, :] < counts[:, None]
+    )
+    uniform_probabilities = valid_options.to(probabilities.dtype) / counts[:, None].to(
+        probabilities.dtype
+    )
+    uniform_per_kind = {
+        kind: quality_metrics(uniform_probabilities[indices], targets[indices])
+        for kind, indices in sorted(indices_by_kind.items())
+    }
     metrics: dict[str, object] = {
         "overall": overall,
         "per_kind": per_kind,
         "macro_by_kind": macro_by_kind(per_kind),
         "per_outer_program": grouped(indices_by_program),
+        "uniform_choice_baseline": {
+            "overall": quality_metrics(uniform_probabilities, targets),
+            "per_kind": uniform_per_kind,
+            "macro_by_kind": macro_by_kind(uniform_per_kind),
+        },
     }
     predictions = []
     for index, row in enumerate(metadata):
@@ -154,6 +171,7 @@ def fit_readout(
     learning_rate: float = 1e-3,
     seed: int = 17,
     device: torch.device | str = "cpu",
+    validation_controls: dict[str, torch.Tensor] | None = None,
 ) -> dict[str, object]:
     """Fit a small answer head; preserve validation-best and terminal states."""
     if output_dir.exists():
@@ -166,6 +184,9 @@ def fit_readout(
         raise ValueError("non-empty validation features must be [validation questions, 768]")
     if not torch.isfinite(train_features).all() or not torch.isfinite(validation_features).all():
         raise FloatingPointError("feature matrix contains non-finite values")
+    for name, values in (validation_controls or {}).items():
+        if values.shape != validation_features.shape or not torch.isfinite(values).all():
+            raise ValueError(f"validation control {name!r} has invalid features")
 
     output_dir.mkdir(parents=True)
     torch.manual_seed(seed)
@@ -200,12 +221,19 @@ def fit_readout(
             loss_total += float(loss.detach()) * len(ids)
             count_total += len(ids)
         val_metrics, predictions = evaluate_readout(model, val_x, validation_rows)
+        control_results = {
+            name: evaluate_readout(model, values.to(target_device), validation_rows)
+            for name, values in (validation_controls or {}).items()
+        }
         macro = val_metrics["macro_by_kind"]
         key = (float(macro["nll"]), float(macro["brier"]))  # type: ignore[index]
         epoch_row = {
             "epoch": epoch,
             "train_option_ce": loss_total / count_total,
             "validation": val_metrics,
+            "validation_controls": {
+                name: metrics for name, (metrics, _control_predictions) in control_results.items()
+            },
             "selected": False,
         }
         if best_key is None or key < best_key:
@@ -219,6 +247,14 @@ def fit_readout(
                 ),
                 encoding="utf-8",
             )
+            for name, (_control_metrics, control_predictions) in control_results.items():
+                (output_dir / f"best-{name}-predictions.jsonl").write_text(
+                    "".join(
+                        json.dumps(row, sort_keys=True) + "\n"
+                        for row in control_predictions
+                    ),
+                    encoding="utf-8",
+                )
         history.append(epoch_row)
         (output_dir / "history.json").write_text(
             json.dumps(history, indent=2, sort_keys=True) + "\n",

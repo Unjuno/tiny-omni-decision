@@ -9,9 +9,11 @@ overlap (attempt-03). Two selected media files passed range/ZIP CRC checks, and
 a CPU ViLT forward produced `[2,768]` frozen features; this remains an
 input-path smoke. Manifest hashes and answer/question-type counts are recorded in the
 [`CLEVR compositional preflight`](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
-CPU tests pass (2,417 passed, 11 skipped), Ruff passes; the corrected push is
-green on GitHub Actions. The selected-media range fetch is underway (927/20,480
-images at 08:40 JST); no full feature cache or quality score exists. GPU
+CPU tests pass (2,418 passed, 11 skipped), Ruff passes; the corrected push is
+green on GitHub Actions. Fixed gray-image and split-local shuffled-image
+controls now pass CPU feature-extraction smoke. The selected-media range fetch
+is underway (2,176/20,480 images at 08:47 JST); no full feature cache or
+quality score exists. GPU
 feature extraction/fitting waits on the existing RTX 3080 run, which occupies
 16,124/16,384 MiB. CoGenT-B remains unopened.
 

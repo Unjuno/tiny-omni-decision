@@ -66,12 +66,19 @@ def test_frozen_feature_fit_keeps_best_and_terminal_checkpoint(tmp_path):
         epochs=2,
         batch_size=3,
         seed=17,
+        validation_controls={
+            "blank_image": features[6:] * 0,
+            "shuffled_image": features[6:].flip(0),
+        },
     )
     assert result["epochs_completed"] == 2
     assert result["trainable_parameters"] == 28 * 768 + 28
     assert 1 <= result["best_epoch"] <= 2
     assert (output / "best-readout.pt").is_file()
     assert (output / "terminal-readout.pt").is_file()
+    assert (output / "best-blank_image-predictions.jsonl").is_file()
+    assert (output / "best-shuffled_image-predictions.jsonl").is_file()
+    assert "blank_image" in result["history"][0]["validation_controls"]
     predictions = [
         json.loads(line) for line in (output / "best-predictions.jsonl").read_text().splitlines()
     ]
@@ -84,6 +91,9 @@ def test_frozen_feature_fit_keeps_best_and_terminal_checkpoint(tmp_path):
     model.load_state_dict(torch.load(output / "best-readout.pt", weights_only=True))
     metrics, reloaded_predictions = evaluate_readout(model, features[6:], rows[6:])
     assert metrics["overall"]["count"] == 2
+    assert metrics["uniform_choice_baseline"]["overall"]["nll"] == pytest.approx(
+        torch.log(torch.tensor(4.0)).item()
+    )
     assert [row["prediction"] for row in reloaded_predictions] == [
         row["prediction"] for row in predictions
     ]

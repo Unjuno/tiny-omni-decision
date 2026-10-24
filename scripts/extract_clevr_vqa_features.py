@@ -16,6 +16,7 @@ import torch
 from PIL import Image
 from transformers import ViltConfig, ViltForQuestionAnswering, ViltProcessor
 
+from tiny_omni_decision.clevr_vqa_dataset import grouped_shuffle_indices
 from tiny_omni_decision.vilt_compat import remove_legacy_position_ids
 
 EXPECTED_WEIGHTS_SHA256 = "4d5f3409947b0369487ece7c5868f0040ceb67d25735dbb4ac5e99e03bab3a19"
@@ -41,6 +42,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--device", choices=("cpu", "cuda"), required=True)
+    parser.add_argument("--controls", action="store_true")
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError(args.output)
@@ -75,6 +77,10 @@ def main() -> None:
 
     image_hashes: list[str] = []
     features: list[np.ndarray] = []
+    blank_features: list[np.ndarray] = []
+    shuffled_features: list[np.ndarray] = []
+    shuffled_image_hashes: list[str] = []
+    shuffle_indices = grouped_shuffle_indices(rows) if args.controls else None
     feature_start = time.perf_counter()
     if args.device == "cuda":
         torch.cuda.reset_peak_memory_stats()
@@ -101,6 +107,53 @@ def main() -> None:
             if values.shape != (len(batch), 768) or not np.isfinite(values).all():
                 raise FloatingPointError("invalid frozen feature batch")
             features.append(values)
+            if shuffle_indices is not None:
+                blank_images = [
+                    Image.new("RGB", image.size, color=(127, 127, 127)) for image in images
+                ]
+                other_images = []
+                for index in range(start, start + len(batch)):
+                    other_row = rows[shuffle_indices[index]]
+                    other_path = (
+                        args.images_root
+                        / str(other_row["split"])
+                        / str(other_row["image_filename"])
+                    )
+                    shuffled_image_hashes.append(sha256(other_path))
+                    with Image.open(other_path) as other_source:
+                        other_images.append(other_source.convert("RGB"))
+                try:
+                    blank_inputs = processor(
+                        images=blank_images,
+                        text=[str(row["question"]) for row in batch],
+                        padding=True,
+                        truncation=False,
+                        return_tensors="pt",
+                    ).to(args.device)
+                    other_inputs = processor(
+                        images=other_images,
+                        text=[str(row["question"]) for row in batch],
+                        padding=True,
+                        truncation=False,
+                        return_tensors="pt",
+                    ).to(args.device)
+                    with torch.inference_mode():
+                        blank_pooled = model.vilt(**blank_inputs).pooler_output
+                        other_pooled = model.vilt(**other_inputs).pooler_output
+                    blank_values = blank_pooled.float().cpu().numpy()
+                    other_values = other_pooled.float().cpu().numpy()
+                    if (
+                        blank_values.shape != (len(batch), 768)
+                        or other_values.shape != (len(batch), 768)
+                        or not np.isfinite(blank_values).all()
+                        or not np.isfinite(other_values).all()
+                    ):
+                        raise FloatingPointError("invalid control feature batch")
+                    blank_features.append(blank_values)
+                    shuffled_features.append(other_values)
+                finally:
+                    for image in (*blank_images, *other_images):
+                        image.close()
         finally:
             for image in images:
                 image.close()
@@ -108,11 +161,34 @@ def main() -> None:
             print(f"features {min(start + len(batch), len(rows))}/{len(rows)}", flush=True)
 
     matrix = np.concatenate(features, axis=0)
+    if shuffle_indices is not None and shuffled_image_hashes != [
+        image_hashes[index] for index in shuffle_indices
+    ]:
+        raise ValueError("shuffled source media changed during feature extraction")
     args.output.mkdir(parents=True)
     feature_path = args.output / "pooled-features.npy"
     np.save(feature_path, matrix, allow_pickle=False)
     if not np.array_equal(np.load(feature_path, allow_pickle=False), matrix):
         raise OSError("feature cache read-after-write mismatch")
+    control_hashes = {}
+    if shuffle_indices is not None:
+        control_arrays = {
+            "blank-image-features.npy": np.concatenate(blank_features, axis=0),
+            "shuffled-image-features.npy": np.concatenate(shuffled_features, axis=0),
+        }
+        for filename, values in control_arrays.items():
+            if values.shape != matrix.shape or not np.isfinite(values).all():
+                raise FloatingPointError(f"invalid control cache {filename}")
+            path = args.output / filename
+            np.save(path, values, allow_pickle=False)
+            if not np.array_equal(np.load(path, allow_pickle=False), values):
+                raise OSError(f"control feature cache read-after-write mismatch: {filename}")
+            control_hashes[filename] = sha256(path)
+        permutation_path = args.output / "shuffled-image-index-map.json"
+        permutation_path.write_text(
+            json.dumps(shuffle_indices, separators=(",", ":")) + "\n", encoding="utf-8"
+        )
+        control_hashes[permutation_path.name] = sha256(permutation_path)
     metadata = {
         "status": "FROZEN_FEATURES_READY",
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
@@ -134,6 +210,14 @@ def main() -> None:
         "feature_shape": list(matrix.shape),
         "feature_dtype": str(matrix.dtype),
         "image_sha256_in_manifest_order": image_hashes,
+        "controls": {
+            "enabled": shuffle_indices is not None,
+            "blank_image_rgb": [127, 127, 127],
+            "control_sha256": control_hashes,
+            "shuffled_source_image_hashes": shuffled_image_hashes or None,
+            "shuffle_scope": "within official split only",
+            "shuffle_seed": 17,
+        },
         "trainable_encoder_parameters": 0,
         "loaded_model_parameters": sum(parameter.numel() for parameter in model.parameters()),
         "versions": {

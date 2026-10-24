@@ -62,9 +62,11 @@ or used.
   split.
 - Metrics: Accuracy, NLL, Brier, and ECE over supplied options; macro results
   across the six answer kinds; and per-kind and per-outer-program results.
-  Report a uniform-choice baseline and paired image-question controls (question
-  with a blank image and a shuffled image). No calibration or option-wording
-  search on CoGenT-B.
+  The implementation also reports a uniform-choice baseline and paired
+  image-question controls (same question with a fixed gray image and with a
+  different image from the same split). The normal-image validation NLL alone
+  selects the checkpoint; controls are diagnostics only. No calibration or
+  option-wording search on CoGenT-B.
 - Selection: fixed-validation macro NLL, with a predeclared tie-break on macro
   Brier. Preserve the learning curve and best checkpoint separately from the
   terminal checkpoint.
@@ -119,6 +121,18 @@ This is an input-path smoke only: it did not calculate answer metrics or fit a
 readout. Its feature and metadata files are under
 `C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-feature-smoke-20261025-attempt-01/`.
 
+A separate four-image CPU controls smoke used two train and two validation
+examples. It produced finite `[4,768]` features for the original, fixed-gray,
+and same-split shuffled-image inputs; the Sattolo permutation had no fixed
+points or split crossings. Feature extraction took 1.793 s. The original,
+blank, shuffled, and permutation-map SHA-256 values are
+`555af155963d37f8e0ce9d99d91e3a5cd7c49ecc5c608724e5d87353c7e31c38`,
+`684e85e61cf1fb6fba8446df5bf51910bc5b40e3f611d416d2a483ef62b80f75`,
+`0de339489fee4303ed8709a846eedb302021eca68d6895b7c5e4c277b8b008ce`, and
+`ea537c1f81bb8e7b5262c17accd84c572fcd02715aaff17c7d691d6671c666a7`.
+It computed no quality metrics. Its files are under
+`C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-controls-feature-smoke-20261025-attempt-01/`.
+
 The source archive SHA-256 is
 `d4435dceab30022b64f7d34b3ec217162bfc1c2950c79999784750ced22674c4`.
 `train-examples.jsonl` SHA-256 is
@@ -151,8 +165,9 @@ be mixed into its metrics. See [the earlier fixed-taxonomy report](R2_VILT_IMAGE
 The RTX 3080 Laptop was observed at 16,124/16,384 MiB and 99% utilization,
 with PIDs `15928` and `26920` reported by `nvidia-smi`. No new GPU job was
 started, and the live run and its code/artifacts were not changed. The full CPU
-suite passes (2,417 passed, 11 skipped), and Ruff passes. The two-row ViLT
-forward ran on CPU. A matched feature/readout run must wait for GPU capacity.
+suite passes (2,418 passed, 11 skipped), and Ruff passes. The ViLT input and
+controls smokes ran on CPU. A matched full feature/readout run must wait for
+GPU capacity.
 CPU unit tests use synthetic pooled features and do not constitute
 model-quality evidence.
 There is no quality result yet, no product promotion, and no claim toward the
@@ -175,10 +190,10 @@ passed Ruff and pytest (1,808 passed, 154 skipped).
 The manifest builder, selective media downloader, frozen-feature extractor,
 and CPU readout runner are implemented. The approved 20,480-image acquisition
 is running from the pinned ZIP using 8 workers and a 2 GiB disk reserve. At
-2026-10-25 08:40 JST, 927/20,480 files (all validation so far) were saved and
+2026-10-25 08:47 JST, 2,176/20,480 files (all validation so far) were saved and
 verified. They are outside Git at
 `C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-media-seed17-attempt-01/`.
-Next: finish media acquisition, extract ViLT features through the cooperative
-HotUGPU reservation, fit the readout, and add paired blank-image/shuffled-image
-controls before selecting a candidate. Keep CoGenT-B unopened through model
-selection.
+Next: finish media acquisition, extract full ViLT features and controls through
+the cooperative HotUGPU reservation, fit the readout, then assess per-answer
+and per-program metrics without opening CoGenT-B. Keep the prospective held-out
+split sealed until model selection is frozen.

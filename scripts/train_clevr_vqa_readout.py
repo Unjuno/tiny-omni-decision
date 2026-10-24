@@ -43,6 +43,7 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
+    parser.add_argument("--validation-control-root", type=Path)
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError(args.output)
@@ -62,6 +63,27 @@ def main() -> None:
     validation_images = {str(row["image_filename"]) for row in validation_rows}
     if train_images & validation_images:
         raise ValueError("train and validation share CLEVR image identities")
+
+    control_features = {}
+    control_summary = None
+    if args.validation_control_root is not None:
+        control_summary = json.loads(
+            (args.validation_control_root / "metadata.json").read_text(encoding="utf-8")
+        )
+        if control_summary.get("manifest_sha256") != sha256(args.validation_manifest):
+            raise ValueError("validation control metadata does not match validation manifest")
+        hashes = control_summary.get("controls", {}).get("control_sha256", {})
+        for name, filename in (
+            ("blank_image", "blank-image-features.npy"),
+            ("shuffled_image", "shuffled-image-features.npy"),
+        ):
+            path = args.validation_control_root / filename
+            if hashes.get(filename) != sha256(path):
+                raise ValueError(f"validation control feature hash mismatch: {path}")
+            values = np.load(path, allow_pickle=False)
+            if values.shape != validation_features.shape or not np.isfinite(values).all():
+                raise ValueError(f"invalid validation control feature matrix: {path}")
+            control_features[name] = torch.from_numpy(values.astype(np.float32, copy=False))
 
     args.output.mkdir(parents=True)
     started = datetime.now(UTC)
@@ -88,6 +110,9 @@ def main() -> None:
             "train": train_metadata,
             "validation": validation_metadata,
         },
+        "validation_control_features": (
+            control_summary.get("controls") if control_summary is not None else None
+        ),
         "train_examples": len(train_rows),
         "validation_examples": len(validation_rows),
         "unique_train_images": len(train_images),
@@ -110,6 +135,7 @@ def main() -> None:
         learning_rate=args.learning_rate,
         seed=17,
         device="cpu",
+        validation_controls=control_features,
     )
     result["completed_utc"] = datetime.now(UTC).isoformat()
     (args.output / "result.json").write_text(

@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import random
 import zipfile
 from collections.abc import Iterable, Iterator
 from typing import Any
@@ -73,6 +74,33 @@ def _hash_int(value: str) -> int:
 def normalize_question(question: str) -> str:
     """Normalize generated CLEVR question text for the cross-split content gate."""
     return " ".join(question.casefold().split())
+
+
+def grouped_shuffle_indices(rows: list[dict[str, Any]], seed: int = 17) -> list[int]:
+    """Return a deterministic within-split derangement of image row indices."""
+    groups: dict[str, list[int]] = {}
+    for index, row in enumerate(rows):
+        split = row.get("split")
+        if not isinstance(split, str):
+            raise ValueError("every row must identify its split")
+        groups.setdefault(split, []).append(index)
+    mapping = list(range(len(rows)))
+    for split, indices in sorted(groups.items()):
+        if len(indices) < 2:
+            raise ValueError(f"split {split!r} needs at least two images for shuffling")
+        rng = random.Random(f"clevr-image-shuffle-v1|{seed}|{split}")
+        permutation = list(indices)
+        for position in range(len(permutation) - 1, 0, -1):
+            other = rng.randrange(position)
+            permutation[position], permutation[other] = permutation[other], permutation[position]
+        if any(
+            original == shuffled
+            for original, shuffled in zip(indices, permutation, strict=True)
+        ):
+            raise RuntimeError("Sattolo shuffle unexpectedly produced a fixed point")
+        for original, shuffled in zip(indices, permutation, strict=True):
+            mapping[original] = shuffled
+    return mapping
 
 
 def select_one_question_per_image(
