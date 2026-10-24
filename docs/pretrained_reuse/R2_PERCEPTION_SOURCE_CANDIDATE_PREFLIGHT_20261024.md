@@ -115,6 +115,26 @@ metrics.
 - Media smoke script SHA-256:
   `9a2969bd288d69a471a74bceecbbfc63c69398b1ea3462345a335997f2034d44`.
 
+### Full local-media cohort check (2026-10-25)
+
+A second seeded CPU preflight sampled one candidate event from each of the 400
+locally available candidate-bearing official-train videos. It required at least
+eight none-visible cases and all four available cut-frame groups. All selected
+media hashes matched the acquisition receipt; 1,264 of 1,264 requested bbox
+frames decoded, and 1,438.766637 seconds of requested event audio had complete
+decoded coverage. The report records 122 none-visible examples and four
+cut-frame videos. No model was loaded, no metrics were computed, and no GPU was
+used. This checks one event per video, not every annotation: the other 2,819
+candidate events in these local videos remain unchecked.
+
+- Report:
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-media-preflight-attempt-06\media-preflight.json`.
+- Report SHA-256:
+  `a0d171258361a55531ee6acf92306c54809bb0d87ad61507c760c41e54c39230`.
+- Command used `scripts/preflight_perception_source_candidate_media.py`
+  with seed 17, limit 400, eight required none-visible cases, and all four
+  required cut-frame groups.
+
 ## Provisional development split
 
 A seed-17 deterministic hash split was frozen over the 400 candidate-bearing
@@ -142,9 +162,12 @@ this pilot and were not assigned to either partition.
 
 ## Remaining gates before model work
 
-1. Verify decoded duration, synchronization, and event boundaries for the
-   remaining 368 pilot videos. Do not load previously inspected official
-   validation or any sealed-audit annotations.
+1. The full local-media cohort has one-event-per-video decode, audio coverage,
+   hash, and cut-frame checks. Decode the remaining 2,819 candidate events in
+   the 400 local videos before treating all annotations as media-verified.
+   There is no local media for the other 1,732 candidate-bearing groups. Do not
+   load previously inspected official validation or any sealed-audit
+   annotations.
 2. Freeze matched audio-only, video-only, event-label-prior, candidate-order,
    audio-shuffle, stale-window, and interval-offset controls before selecting a
    model. Match candidate sets and report multi-label and none-visible metrics.
@@ -165,7 +188,7 @@ all work in this preflight used CPU.
 - Adapter: `src/tiny_omni_decision/perception_source_candidate.py`.
 - Deterministic corpus writer: `scripts/build_perception_source_candidate_corpus.py`.
 - Group split freezer: `scripts/freeze_perception_source_candidate_split.py`.
-- CPU media smoke: `scripts/preflight_perception_source_candidate_media.py`.
+- CPU media preflight: `scripts/preflight_perception_source_candidate_media.py`.
 - Tests: `tests/test_perception_source_candidate.py`,
   `tests/test_freeze_perception_source_candidate_split.py`, and
   `tests/test_perception_source_candidate_media.py`.
