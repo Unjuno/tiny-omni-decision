@@ -79,17 +79,21 @@ distinct. Revalidation details and hashes are in
 the detailed task protocols/results remain linked from that report.
 
 **2026-10-25 R2 CLEVR-4 spatial Count candidate audit:** An independent
-VideoPrism spatial-token readout branch uses a fresh seed-17 split of 30,000
-official-train images and 5,000 development images, excluding the 10,531 prior
-train/validation identities and media hashes. A read-only manifest audit
-confirmed zero train/development ID or media overlap and zero overlap with the
-exclusion manifests. The CPU spatial-feature cache is incomplete: its
-validation array is absent and prior contiguous-prefix validation found only
-10,044 complete training rows. No readout fit or quality metrics exist. The
-branch report records Windows Application Control blocking the required
-VideoPrism Python environment; do not bypass that control or use the partial
-cache. Continue only if an already authorized compatible CPU runtime becomes
-available, or a separately validated feature implementation is approved. See
+VideoPrism spatial-token readout branch prepared a seed-17 split of 30,000
+official-train images and 5,000 development images, excluding the prior
+8,424/2,107 and 1,024/512 Path-A partitions. A new cross-experiment audit found
+that **all 30,000 train and all 5,000 development IDs were included in an
+earlier DINOv2 readout's 72,010-image supervised training set** (config train-ID
+order SHA-256 `cc0c59c90ab363e46abfabd5910f7eab06d79c418da52650d741436f3df0d96c`).
+Thus the files are identity-disjoint from the older Path-A split but are not
+project-level unseen validation; do not use the 5,000 rows for independent
+quality claims or candidate selection. The VideoPrism spatial-feature cache is
+also incomplete: its validation array is absent and its training prefix stops
+at 10,044 complete rows. No readout fit or quality metrics exist. The branch
+report records Windows Application Control blocking its required VideoPrism
+Python environment; do not bypass that control or use the partial cache. A new
+independent task/split is required before another CLEVR-4 spatial-readout
+selection. See
 [`spatial Count readout report`](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-spatial-count-readout-20261023/docs/pretrained_reuse/R2_CLEVR4_SPATIAL_COUNT_READOUT_20261023.md).
 
 **2026-10-25 R2 Perception Test source-candidate diagnostic:** The independent
