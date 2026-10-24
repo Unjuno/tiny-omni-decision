@@ -9,6 +9,7 @@ import torch
 from scripts.native_gradient_audit import (
     SAMPLED_STEPS,
     cosine_and_norms,
+    flatten_gradients,
     option_order,
     selected_updates,
     sha_file,
@@ -66,6 +67,17 @@ def test_gradient_summary_reports_actual_global_clip_factor():
     assert result["unclipped_mean_batch_gradient_norm"] == 4.0
     assert result["clip_factor_at_training_max_norm_1"] == 0.25
     assert result["would_clip"] is True
+
+
+def test_unused_modality_parameters_contribute_exact_zero_gradients():
+    used = torch.tensor([1.0, 2.0], requires_grad=True)
+    unused = torch.tensor([3.0, 4.0], requires_grad=True)
+    gradients = torch.autograd.grad(used.square().sum(), (used, unused), allow_unused=True)
+
+    assert gradients[1] is None
+    assert torch.equal(
+        flatten_gradients(gradients, (used, unused)), torch.tensor([2.0, 4.0, 0.0, 0.0])
+    )
 
 
 def test_option_order_is_deterministic_and_is_a_permutation():

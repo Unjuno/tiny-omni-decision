@@ -30,7 +30,7 @@ REPO = Path(__file__).resolve().parents[1]
 SOURCE_SNAPSHOT = REPO / "docs/pretrained_reuse/source_snapshots/native_coverage_repeat_fit_01"
 CONFIG = RUN / "effective-config.json"
 CHECKPOINT = RUN / "best.pt"
-OUTPUT_DEFAULT = Path(r"C:\CodexArtifacts\pretrained-reuse-r2\native-shared-gradient-audit-01")
+OUTPUT_DEFAULT = Path(r"C:\CodexArtifacts\pretrained-reuse-r2\native-shared-gradient-audit-02")
 FROZEN_MANIFEST = REPO / "configs/pretrained_reuse/native_shared_gradient_audit_v1.json"
 MODALITIES = ("text", "image", "audio", "video")
 MAX_STEPS = 2048
@@ -184,6 +184,20 @@ def cosine_and_norms(gradients: dict[str, torch.Tensor]) -> dict:
         "would_clip": batch_gradient_norm > 1.0,
         "modality_projection_shares": projections,
     }
+
+
+def flatten_gradients(
+    gradients: tuple[torch.Tensor | None, ...],
+    parameters: tuple[torch.Tensor, ...],
+) -> torch.Tensor:
+    if len(gradients) != len(parameters) or not parameters:
+        raise ValueError("gradient and parameter tuples must be nonempty and aligned")
+    return torch.cat(
+        [
+            (torch.zeros_like(parameter) if gradient is None else gradient).reshape(-1)
+            for gradient, parameter in zip(gradients, parameters, strict=True)
+        ]
+    )
 
 
 def validate_hotgpu_gate() -> dict:
@@ -535,11 +549,11 @@ def audit(output: Path) -> dict:
                 if len(modality_losses) != 2:
                     raise ValueError("expected two sampled examples per modality/update")
                 gradients_tuple = torch.autograd.grad(
-                    torch.stack(modality_losses).mean(), parameter_list
+                    torch.stack(modality_losses).mean(),
+                    parameter_list,
+                    allow_unused=True,
                 )
-                gradients[modality] = torch.cat(
-                    [grad.reshape(-1) for grad in gradients_tuple]
-                ).detach()
+                gradients[modality] = flatten_gradients(gradients_tuple, parameter_list).detach()
             stats = cosine_and_norms(gradients)
             stats["optimizer_step"] = update["optimizer_step"]
             stats["sample_ids"] = update["sample_ids"]
