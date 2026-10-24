@@ -78,6 +78,20 @@ distinct. Revalidation details and hashes are in
 [`PE-Core T16 CPU revalidation`](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_REVALIDATION_20261025.md);
 the detailed task protocols/results remain linked from that report.
 
+**2026-10-25 R2 CLEVR-4 spatial Count candidate audit:** An independent
+VideoPrism spatial-token readout branch uses a fresh seed-17 split of 30,000
+official-train images and 5,000 development images, excluding the 10,531 prior
+train/validation identities and media hashes. A read-only manifest audit
+confirmed zero train/development ID or media overlap and zero overlap with the
+exclusion manifests. The CPU spatial-feature cache is incomplete: its
+validation array is absent and prior contiguous-prefix validation found only
+10,044 complete training rows. No readout fit or quality metrics exist. The
+branch report records Windows Application Control blocking the required
+VideoPrism Python environment; do not bypass that control or use the partial
+cache. Continue only if an already authorized compatible CPU runtime becomes
+available, or a separately validated feature implementation is approved. See
+[`spatial Count readout report`](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-spatial-count-readout-20261023/docs/pretrained_reuse/R2_CLEVR4_SPATIAL_COUNT_READOUT_20261023.md).
+
 **2026-10-25 R2 Perception Test source-candidate diagnostic:** The independent
 `codex/r2-perception-source-candidate` branch completed a seed-17 frozen-feature
 readout for oracle event intervals and candidate object tracks: 56.93% top-1
