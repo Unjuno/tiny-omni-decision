@@ -70,10 +70,10 @@ cannot close the required audio-video or audio-video-sensor fusion gate.
 
 ## Next gate
 
-Keep RoboPro at **REVIEW**. Before any download or model run, create a small,
-metadata-only episode manifest from the pinned revision, reconcile the stated
-duplicate and row-count mismatch, determine scene/task/variant group identities,
-and estimate selected media sizes. Then specify a discrete candidate-action
+Keep RoboPro at **REVIEW**. The metadata-only episode audit is complete. Before
+any media download or model run, establish scene/task/variant group identities
+from authoritative metadata, independently resolve the declared duplicate's
+media identity, and estimate selected media sizes. Then specify a discrete candidate-action
 task whose labels are mechanically derived from the source, whose candidates
 are available to the model, and whose evaluation can show that video and
 proprioception are both needed. Use episode/scene-group-disjoint development
@@ -81,6 +81,35 @@ and held-out evaluation splits; include video-only, sensor-only, missing,
 shuffled, stale-state, and prompt-only controls. If a defensible split and
 both-input task cannot be built, reject this source for Decision evaluation
 without spending GPU time.
+
+## Metadata-only follow-up — 2026-10-24
+
+The pinned public revision was inspected without downloading video, Parquet, or
+action payloads. Only `info.json` (3,235 bytes), `episodes.jsonl` (1,443,285
+bytes), and `tasks.jsonl` (110,465 bytes) were retrieved into the isolated
+local artifact directory
+`C:\CodexArtifacts\pretrained-reuse-r2\robopro-metadata-screen-01`.
+The reproducible auditor is
+[`audit_robopro_metadata.py`](../../scripts/audit_robopro_metadata.py); its
+machine-readable summary is
+[`R2_ROBOPRO_METADATA_AUDIT_20261024.json`](R2_ROBOPRO_METADATA_AUDIT_20261024.json).
+
+The pinned `info.json` resolves the repository-card count discrepancy for
+this revision: it declares 16,000 rows, indices 0–15,999, 3,728,773 frames,
+1,622 tasks, 48,000 videos, and only `train: 0:16000`. The current README's
+15,999 / 3,728,445 figures are stale relative to this pinned metadata. The
+source-declared duplicate episode 15,999 has the same task prompt and length
+(328) as episode 12,000; media bytes were not compared. After excluding that
+known duplicate, at most 15,999 distinct demonstrations remain.
+
+All 1,622 exact instruction-prompt groups contain multiple episodes (2–79,
+median 9), but those prompt groups do not identify scene/configuration groups.
+Thus they cannot be used as a scene-independent split. The metadata audit
+confirms there is no declared validation or test split. The source remains
+REVIEW; no training or quality evaluation is admitted. The raw three metadata
+files and their SHA-256 hashes are preserved in the local attempt directory;
+the committed JSON summary records their hashes, counts, duplicate claim, and
+scope.
 
 ## Primary sources
 

@@ -1,0 +1,55 @@
+{
+  "declared_duplicate": {
+    "duplicate_of_episode_index": 12000,
+    "episode_index": 15999,
+    "media_bytes_compared": false,
+    "metadata_rows_equal": {
+      "length": true,
+      "task_prompts": true
+    },
+    "source_declared_duplicate": true
+  },
+  "declared_totals": {
+    "episodes": 16000,
+    "fps": 50,
+    "frames": 3728773,
+    "tasks": 1622,
+    "videos": 48000
+  },
+  "observed": {
+    "episode_index_max": 15999,
+    "episode_index_min": 0,
+    "episode_rows": 16000,
+    "episodes_per_exact_prompt": {
+      "groups_with_one_episode": 0,
+      "max": 79,
+      "median": 9.0,
+      "min": 2
+    },
+    "task_rows": 1622,
+    "unique_episode_indices": 16000,
+    "unique_exact_prompt_groups": 1622,
+    "unique_task_indices": 1622
+  },
+  "schema_version": 1,
+  "scope": {
+    "action_values_read": false,
+    "media_downloaded": false,
+    "parquet_payloads_downloaded": false,
+    "training_or_inference_run": false
+  },
+  "source_files_sha256": {
+    "episodes.jsonl": "88492784987d483618b5144f37bac8c3036bdaaa11d2df730f7b26a804b68658",
+    "info.json": "91c7d161a416685b08f9db5b195a6ba02f7047d966fa188e0262f854af386cfe",
+    "tasks.jsonl": "8e114f65fd235eeac8fcd1b32e3c95a859613c6e4af119179366394b976d65bc"
+  },
+  "source_revision": "90ec789bf4018eb9c0f75da9f69aab5c185f0fd0",
+  "split_audit": {
+    "declared_splits": {
+      "train": "0:16000"
+    },
+    "independent_validation_split_present": false,
+    "note": "Exact prompt groups do not identify underlying scene groups.",
+    "quality_evaluation_admitted": false
+  }
+}
