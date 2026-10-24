@@ -255,6 +255,8 @@ def collate_examples(examples, indices, *, audio_variant="source", donor_audio=N
         if audio_variant == "source":
             audio[row_index] = example.audio
         elif audio_variant == "offset":
+            if example.offset_audio is None:
+                raise ValueError(f"offset audio missing for fixed control row: {example.record_id}")
             audio[row_index] = example.offset_audio
         elif audio_variant == "shuffle":
             if donor_audio is None or example.donor_record_id not in donor_audio:
@@ -460,6 +462,9 @@ def run(args: argparse.Namespace):
         raise ValueError("fixed split is empty")
     train_audio = {row.record_id: row.audio for row in train_examples}
     development_audio = {row.record_id: row.audio for row in development_examples}
+    offset_examples = [row for row in development_examples if row.offset_audio is not None]
+    if not offset_examples:
+        raise ValueError("fixed development split has no offset-audio control rows")
     if any(row.donor_record_id not in train_audio for row in train_examples):
         raise ValueError("training audio-shuffle donor crosses or escapes the frozen split")
     if any(row.donor_record_id not in development_audio for row in development_examples):
@@ -487,11 +492,13 @@ def run(args: argparse.Namespace):
             "zero_audio",
             "zero_video",
             "shuffled_audio",
+            "joint_offset_eligible",
             "offset_audio",
             "reverse_temporal_delta",
         ],
         "train_records": len(train_examples),
         "development_records": len(development_examples),
+        "development_offset_control_records": len(offset_examples),
         "train_video_groups": len(train_videos),
         "development_video_groups": len(development_videos),
         "input_artifact_hashes": input_hashes,
@@ -542,17 +549,24 @@ def run(args: argparse.Namespace):
     model.load_state_dict(best_state)
 
     evaluation = {}
-    for name, audio_mode, video_mode, donor in (
-        ("joint", "source", "joint", development_audio),
-        ("zero_audio", "zero", "joint", development_audio),
-        ("zero_video", "source", "zero", development_audio),
-        ("shuffled_audio", "shuffle", "joint", development_audio),
-        ("offset_audio", "offset", "joint", development_audio),
-        ("reverse_temporal_delta", "source", "reverse_temporal", development_audio),
+    for name, audio_mode, video_mode, donor, examples_for_control in (
+        ("joint", "source", "joint", development_audio, development_examples),
+        ("zero_audio", "zero", "joint", development_audio, development_examples),
+        ("zero_video", "source", "zero", development_audio, development_examples),
+        ("shuffled_audio", "shuffle", "joint", development_audio, development_examples),
+        ("joint_offset_eligible", "source", "joint", development_audio, offset_examples),
+        ("offset_audio", "offset", "joint", development_audio, offset_examples),
+        (
+            "reverse_temporal_delta",
+            "source",
+            "reverse_temporal",
+            development_audio,
+            development_examples,
+        ),
     ):
         metrics = evaluate(
             model,
-            development_examples,
+            examples_for_control,
             audio_mode=audio_mode,
             video_mode=video_mode,
             donor_audio=donor,

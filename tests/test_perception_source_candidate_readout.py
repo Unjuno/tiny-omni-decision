@@ -72,3 +72,30 @@ def test_build_examples_rejects_cross_split_or_missing_candidate_labels():
             {"r1": np.zeros(384)},
             {"r1": np.zeros(384)},
         )
+
+
+def test_build_examples_keeps_unavailable_offset_control_missing():
+    row = {
+        "record_id": "r1",
+        "video_id": "v1",
+        "audio_shuffle_donor_record_id": "r2",
+        "audio_shuffle_donor_video_id": "v2",
+        "shifted_audio_windows": None,
+        "candidates": [{"candidate_id": "c1"}],
+    }
+    labels = {
+        "r1": {
+            "request": {"candidates": [{"candidate_id": "c1"}]},
+            "supervision": {"none_visible": False, "target_candidate_ids": ["c1"]},
+        }
+    }
+
+    result = build_feature_examples(
+        [row],
+        labels,
+        {"r1": {"c1": np.zeros(1536)}},
+        {"r1": np.zeros(384)},
+        {},
+    )
+
+    assert result[0].offset_audio is None

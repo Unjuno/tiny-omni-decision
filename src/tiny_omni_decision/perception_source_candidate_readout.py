@@ -14,7 +14,7 @@ class CandidateFeatureExample:
     candidate_ids: tuple[str, ...]
     visual_mean_delta: np.ndarray
     audio: np.ndarray
-    offset_audio: np.ndarray
+    offset_audio: np.ndarray | None
     donor_record_id: str
     target_candidate_ids: frozenset[str]
     none_visible: bool
@@ -118,15 +118,18 @@ def build_feature_examples(
         visual = video_candidate_features.get(record_id)
         if visual is None or set(visual) != set(candidate_ids):
             raise ValueError(f"visual candidates differ from plan: {record_id}")
-        if record_id not in source_audio_by_id or record_id not in offset_audio_by_id:
-            raise ValueError(f"audio source/offset features missing: {record_id}")
+        if record_id not in source_audio_by_id:
+            raise ValueError(f"source audio feature missing: {record_id}")
         if any(np.asarray(visual[key]).shape != (1536,) for key in candidate_ids):
             raise ValueError(
                 f"visual feature dimension differs from VideoPrism ROI contract: {record_id}"
             )
         if (
             np.asarray(source_audio_by_id[record_id]).shape != (384,)
-            or np.asarray(offset_audio_by_id[record_id]).shape != (384,)
+            or (
+                record_id in offset_audio_by_id
+                and np.asarray(offset_audio_by_id[record_id]).shape != (384,)
+            )
         ):
             raise ValueError(
                 f"audio feature dimension differs from EfficientAT contract: {record_id}"
@@ -144,7 +147,11 @@ def build_feature_examples(
                 candidate_ids=candidate_ids,
                 visual_mean_delta=np.stack([visual[key] for key in candidate_ids]),
                 audio=np.asarray(source_audio_by_id[record_id], dtype=np.float32),
-                offset_audio=np.asarray(offset_audio_by_id[record_id], dtype=np.float32),
+                offset_audio=(
+                    np.asarray(offset_audio_by_id[record_id], dtype=np.float32)
+                    if record_id in offset_audio_by_id
+                    else None
+                ),
                 donor_record_id=row["audio_shuffle_donor_record_id"],
                 target_candidate_ids=targets,
                 none_visible=none_visible,
@@ -154,6 +161,11 @@ def build_feature_examples(
             raise ValueError(f"audio shuffle donor is from the same video: {record_id}")
     if plan_ids != set(labels_by_id):
         raise ValueError("feature-plan IDs and fixed split label IDs differ")
-    if plan_ids != set(source_audio_by_id) or plan_ids != set(offset_audio_by_id):
-        raise ValueError("audio feature IDs and fixed split IDs differ")
+    if plan_ids != set(source_audio_by_id):
+        raise ValueError("source audio feature IDs and fixed split IDs differ")
+    expected_offset_ids = {
+        row["record_id"] for row in plan_records if row.get("shifted_audio_windows")
+    }
+    if expected_offset_ids != set(offset_audio_by_id):
+        raise ValueError("offset audio feature IDs differ from fixed plan availability")
     return result
