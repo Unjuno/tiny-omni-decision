@@ -2422,3 +2422,17 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### Synchronized AV source follow-up (2026-10-24)
+
+New official leads do not clear the R2-M-2 training gate: KilometerAudio has
+only validation/test splits and no explicit underlying YouTube-media grant;
+EvaOmni's referenced dataset license was unavailable; AVI-Bench prohibits
+training and retains upstream media terms. No data or labels were accessed.
+The already-completed CLEVRER synthetic AV v2 run and TRAIN-only dependency
+audit cover the permitted synthetic path; do not duplicate those fits or
+reopen the exposed development validation for selection. This synthetic path is
+not media-unseen or natural AV evidence. No newly screened source is admitted
+for natural-AV development fitting; require explicit media rights, adequate
+train/dev groups, and a task demonstrably requiring both inputs before another
+quality run. [Source screen and reconciliation](docs/pretrained_reuse/R2_JOINT_AV_SOURCE_SCREEN_20261024.md).
