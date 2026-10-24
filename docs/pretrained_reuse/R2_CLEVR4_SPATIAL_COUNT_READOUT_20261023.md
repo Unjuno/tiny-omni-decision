@@ -178,8 +178,16 @@ not save its final environment metadata. Resumption is currently blocked by
 Windows Application Control: launching the existing VideoPrism environment's
 Python executable was denied, and an offline pinned-package import probe was
 also denied when loading TensorFlow's native runtime DLL. No policy bypass,
-cloud compute, GPU run, or dependency upgrade was attempted. The extraction has
-not resumed; no readout training or fresh development metrics exist yet.
+cloud compute, GPU run, or dependency upgrade was attempted. The Codex-bundled
+Python runtime was also inspected: it has NumPy/Pillow but no JAX, jaxlib, or
+TensorFlow, so it cannot run the encoder.
+
+The existing `clevr4-full-videoprism-features-v0/features.npz` cache is not a
+substitute: its arrays are pooled `(8424, 768)` train and `(2107, 768)`
+validation features for the previously used split, not the 64-cell spatial
+grid. Those 10,531 identities/media hashes are explicitly excluded from the
+new split. It was left unchanged. The extraction has not resumed; no readout
+training or fresh development metrics exist yet.
 
 ## Results and next gates
 

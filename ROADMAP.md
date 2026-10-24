@@ -2450,6 +2450,8 @@ train-image prefix; the validation split and both readout fits have not run.
 Resume guards and durable 1,000-image progress markers are implemented and
 covered by CPU tests. The existing VideoPrism runtime is currently blocked by
 Windows Application Control, so no extraction restart or quality result is
-claimed. Preserve the partial cache and frozen split; resume only when an
-approved local runtime can load the pinned JAX/TensorFlow stack.
+claimed. The prior pooled cache covers only the excluded 10,531 identities and
+does not contain spatial grids; the bundled Python runtime lacks JAX/TensorFlow.
+Preserve the partial cache and frozen split; resume only when an approved local
+runtime can load the pinned JAX/TensorFlow stack.
 [Execution record](docs/pretrained_reuse/R2_CLEVR4_SPATIAL_COUNT_READOUT_20261023.md).
