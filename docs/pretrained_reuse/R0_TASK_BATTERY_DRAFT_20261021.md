@@ -119,6 +119,23 @@ checkpoint selection.
 
 ## Additive evidence update — 2026-10-25
 
+- **CLEVR-4 100k fixed-readout transfer:** The pinned VideoPrism-B + frozen
+  readout was replayed once, without training or checkpoint selection, on all
+  19,988 images / 79,952 choices in the official validation split. Independent
+  recomputation from the saved per-image predictions matched the report:
+  Color `99.485%` Accuracy, Texture `90.279%`, Count `60.436%`, Shape
+  `99.450%`; macro Accuracy `87.412%`, macro NLL `0.30542`, macro Brier
+  `0.16207`, macro ECE-15 `0.01427`. Count remains the clear weak slice. The
+  fixed 114,512,897-parameter runtime is below the provisional parameter range,
+  but its 458,143,789-byte payload exceeds the provisional 200 MB package
+  target. This is source-family transfer on fixed synthetic ten-way image
+  taxonomies, not arbitrary image reasoning or a blind audit. The official
+  validation is now observed and closed to selection. Artifact hashes and full
+  protocol: [CLEVR-4 100k transfer report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/clevr4-100k-transfer-eval-20261023/docs/pretrained_reuse/R2_CLEVR4_100K_TRANSFER_EVAL_20261023.md).
+  Local `run-metadata.json` says `complete`; the saved 19,988-row prediction
+  file hash matches the report (`fdd0ff5a7ff524af68ba8c92e800999956935d617a6314f6896c70b7e96826b0`).
+  The linked report's opening status sentence still says the replay is running,
+  so that prose is stale relative to the complete result section and artifact.
 - **CLEVRER plus generated-tone timing v2:** The frozen four-arm, seed-17
   development run used 3,696 training rows across 773 scenes and 1,110
   task-specific validation rows across 240 scenes. The selected joint gated
@@ -162,7 +179,7 @@ checkpoint selection.
 | ID | Inputs and decision | Candidate pinned source | Evidence and current limitation | Proposed gate use |
 |---|---|---|---|---|
 | T1 | Text state + question + 3–5 supplied choices; return option probabilities | Typed Decisions Synth `n4ze3m/typed-decisions-synth@5ece89a225b23c4cd5c4bab5735a0819d61dd7d5` (MIT); Open-Jev only after access is restored and source groups are verified | Current 58.11% adapted Cross-Encoder result is synthetic. Open-Jev access returned HTTP 401 in the recorded audit. | Keep as controlled text/pipeline diagnostic; it cannot alone qualify factual/general text understanding. Require an independent state/template/content-held-out set before product evaluation. |
-| I1 | Image + fixed taxonomy question; choose among supplied attributes/count options | CLEVR-4 `sgvaze/clevr4@cddc78fb2a8359dc958987b2c750bfdd4bfd2c73` (CC-BY-4.0) | Best reported full-coverage result is synthetic; macro Accuracy 88.06% on a one-time existing validation subset, with count at 61.19%. Other image readouts and spatial controls also leave counting weak. | Keep as a reproducible visual attribute/count challenge. Report each taxonomy independently; no natural-image claim. Existing validation is no longer blind. |
+| I1 | Image + fixed taxonomy question; choose among supplied attributes/count options | CLEVR-4 `sgvaze/clevr4@cddc78fb2a8359dc958987b2c750bfdd4bfd2c73` (CC-BY-4.0) | The one-shot complete 100k official-validation transfer scored 87.412% macro Accuracy: Color 99.485%, Texture 90.279%, Count 60.436%, Shape 99.450%. It used the fixed 114,512,897-parameter readout without selection; zero validation media overlap with the earlier training/validation manifests. Its 458 MB payload exceeds the provisional 200 MB package target. Earlier 88.06% on a smaller validation subset is a different, non-matched split. | Keep as a reproducible visual attribute/count challenge. Report each taxonomy independently; no natural-image claim. Both inspected validation sets are closed to further selection. |
 | TV1 (provisional, no quality fit) | Step text + observed cooking video; choose consistent / inconsistent | CaptainCook4D official annotations `a8a920a3293c4db27099a20ddbe3a3a9be1283e3` and downloader metadata `cf248fe2139fc6e37f9737141ec719948fbd1747` (Apache-2.0) | The 203 non-overlapping official-train recordings contain 2,956 labeled steps from only six participants. Five sampled train GoPro URLs and two sampled synced HoloLens PV URLs returned 404; one old local training recording decodes. Validation has only two participants. No model quality result. | Keep as a text+video plumbing candidate only. Require working authorized media and a participant-held-out development design with adequate independent groups before a quality fit; never use official test to repair group counts. Details: `docs/pretrained_reuse/R2_CAPTAINCOOK4D_MEDIA_GROUP_RECHECK_20261021.md`. |
 | A1 | Audio-only, closed 10-way keyword choice | Speech Commands v0.02 `google/speech_commands@a751309c0fd613e8a5d30d77900f30e8b42bc2da` (CC-BY-4.0) | One-time official-test comparison is now observed: frozen baseline 97.72% Accuracy, train-only temperature candidate 97.86%; speaker-bootstrap Accuracy difference includes zero. Calibration improved, but the task remains fixed-vocabulary keyword recognition. LibriSpeech four-choice transcript transfer is near chance. | Keep as a narrow audio reference, closed to tuning. Do not generalize to speech understanding; evaluate any future frozen candidate only on a newly sourced, independently grouped task. |
 | V1 | Video + question + choices, with static and temporal subsets reported separately | CLEVRER `MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef` (CC0-1.0) | Fresh selected VideoPrism + MiniLM readout and legacy v0 were near binary chance on a one-time 200-scene holdout; paired intervals include zero. Separate long-budget descriptive results show severe late NLL/ECE degradation and no additional unique Video questions. | Use only as a synthetic temporal reasoning challenge. Group every question and choice by video. Report question types separately. The already observed holdout and validations are closed to further selection; admit new authorized, scene-disjoint Video supervision before another quality fit. |
