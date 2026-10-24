@@ -58,8 +58,8 @@ def test_evaluation_handles_visible_and_none_visible_records():
         CandidateFeatureExample(
             record_id="r2",
             video_id="v2",
-            candidate_ids=("c3", "c4"),
-            visual_mean_delta=torch.zeros((2, 1536)).numpy(),
+            candidate_ids=("c3",),
+            visual_mean_delta=torch.zeros((1, 1536)).numpy(),
             audio=torch.zeros(384).numpy(),
             offset_audio=torch.zeros(384).numpy(),
             donor_record_id="r1",

@@ -44,6 +44,7 @@ def read_jsonl(path: Path) -> list[dict]:
 
 
 def input_artifact_hashes(args):
+    repository = Path(__file__).resolve().parents[1]
     return {
         "feature_plan": sha256_file(args.plan),
         "train_labels": sha256_file(args.train_labels),
@@ -85,6 +86,21 @@ def input_artifact_hashes(args):
         ),
         "development_audio_feature_result": sha256_file(
             args.development_audio_features / "result.json"
+        ),
+        "video_feature_extractor": sha256_file(
+            repository / "scripts" / "extract_perception_source_candidate_video_features.py"
+        ),
+        "audio_feature_extractor": sha256_file(
+            repository / "scripts" / "extract_perception_source_candidate_audio_features.py"
+        ),
+        "feature_readout_helpers": sha256_file(
+            repository / "src" / "tiny_omni_decision" / "perception_source_candidate_readout.py"
+        ),
+        "video_preprocessing_helpers": sha256_file(
+            repository / "src" / "tiny_omni_decision" / "perception_video_preprocessing.py"
+        ),
+        "audio_window_helpers": sha256_file(
+            repository / "src" / "tiny_omni_decision" / "perception_source_candidate_audio.py"
         ),
         "runner": sha256_file(Path(__file__).resolve()),
     }
@@ -277,10 +293,10 @@ def evaluate(model, examples, *, audio_mode="source", video_mode="joint", donor_
                     visible_correct += int(is_correct)
                 else:
                     none_total += 1
-                    none_correct += int(pred_index == len(example.candidate_ids))
+                    none_correct += int(pred_index == len(probability) - 1)
                 predicted = (
                     "none_visible"
-                    if pred_index == len(example.candidate_ids)
+                    if pred_index == len(probability) - 1
                     else example.candidate_ids[pred_index]
                 )
                 per_record.append(
@@ -299,7 +315,7 @@ def evaluate(model, examples, *, audio_mode="source", video_mode="joint", donor_
                             candidate_id: float(probability[index])
                             for index, candidate_id in enumerate(example.candidate_ids)
                         },
-                        "none_visible_probability": float(probability[len(example.candidate_ids)]),
+                        "none_visible_probability": float(probability[-1]),
                     }
                 )
     if len(per_record) != len(examples):

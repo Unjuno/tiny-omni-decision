@@ -108,6 +108,13 @@ def build_feature_examples(
         candidate_ids = tuple(candidate["candidate_id"] for candidate in row["candidates"])
         if len(candidate_ids) != len(set(candidate_ids)):
             raise ValueError(f"duplicate candidate ID: {record_id}")
+        label_candidate_ids = tuple(
+            candidate["candidate_id"] for candidate in label["request"]["candidates"]
+        )
+        if len(label_candidate_ids) != len(candidate_ids) or set(label_candidate_ids) != set(
+            candidate_ids
+        ):
+            raise ValueError(f"feature-plan candidate set differs from frozen labels: {record_id}")
         visual = video_candidate_features.get(record_id)
         if visual is None or set(visual) != set(candidate_ids):
             raise ValueError(f"visual candidates differ from plan: {record_id}")

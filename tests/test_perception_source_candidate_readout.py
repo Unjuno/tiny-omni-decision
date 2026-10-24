@@ -58,7 +58,10 @@ def test_build_examples_rejects_cross_split_or_missing_candidate_labels():
         "candidates": [{"candidate_id": "c1"}],
     }
     labels = {
-        "r1": {"supervision": {"none_visible": False, "target_candidate_ids": ["wrong"]}}
+        "r1": {
+            "request": {"candidates": [{"candidate_id": "c1"}]},
+            "supervision": {"none_visible": False, "target_candidate_ids": ["wrong"]},
+        }
     }
 
     with pytest.raises(ValueError, match="target candidates"):
