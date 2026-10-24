@@ -1,0 +1,749 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-24T21:59:30+09:00",
+  "repository": "https://github.com/Unjuno/tiny-omni-decision",
+  "source_branch": "docs/pretrained-reuse-roadmap-20261010",
+  "source_head": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+  "pr15": {
+    "number": 15,
+    "state": "open",
+    "draft": true,
+    "head": "docs/pretrained-reuse-roadmap-20261010",
+    "head_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+    "base": "main",
+    "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "updated_at": "2026-10-21T16:49:15Z",
+    "ci": [
+      "39638204074: success",
+      "39638195875: success"
+    ]
+  },
+  "open_pull_requests": [
+    {
+      "number": 24,
+      "title": "Record CLEVR-4 100k fixed-readout transfer results",
+      "state": "open",
+      "draft": true,
+      "head": "codex/clevr4-100k-transfer-eval-20261023",
+      "head_sha": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a"
+    },
+    {
+      "number": 23,
+      "title": "R2: record scalar audio projection diagnostic",
+      "state": "open",
+      "draft": true,
+      "head": "codex/roadmap-scalar-audio-update-20261022",
+      "head_sha": "df4ac9b02b66b60a3231df7f765c82bb436c908f",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a"
+    },
+    {
+      "number": 22,
+      "title": "docs: screen FAIR-Play for R2 AV matching",
+      "state": "open",
+      "draft": true,
+      "head": "codex/r2-fair-play-source-screen-20261022",
+      "head_sha": "936a9837299b25095c0f0703768f1079af24b424",
+      "base": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "base_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705"
+    },
+    {
+      "number": 21,
+      "title": "R2: CLEVRER synthetic AV coverage v2 results",
+      "state": "open",
+      "draft": true,
+      "head": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "head_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+      "base": "codex/r2-clevrer-synthetic-av-protocol",
+      "base_sha": "83c4750aba663743bb5c2be3c0c8a90b8e8ead44"
+    },
+    {
+      "number": 20,
+      "title": "Add stable typed Decision JSON output",
+      "state": "open",
+      "draft": true,
+      "head": "codex/r2-json-decision-contract-20261021",
+      "head_sha": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "base": "codex/r0-r2-continuation-20261021",
+      "base_sha": "9037a5b425adda83ddd09b2312532a470cc78701"
+    },
+    {
+      "number": 19,
+      "title": "Screen AMI for cross-modal speaker-to-face matching",
+      "state": "open",
+      "draft": true,
+      "head": "codex/r2-ami-av-source-screen-20261021",
+      "head_sha": "406f003a128a7991ec39dcb15608b381f003add4",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"
+    },
+    {
+      "number": 18,
+      "title": "Screen CaptainCook4D for a procedural step-text video task",
+      "state": "open",
+      "draft": true,
+      "head": "codex/r2-captaincook4d-screen-20261021",
+      "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"
+    },
+    {
+      "number": 17,
+      "title": "Screen MAVD Urbansas audiovisual source integrity",
+      "state": "open",
+      "draft": false,
+      "head": "codex/r2-mavd-source-screen-20261021",
+      "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"
+    },
+    {
+      "number": 16,
+      "title": "Record PE-Core T16 checkpoint CPU audit",
+      "state": "open",
+      "draft": false,
+      "head": "codex/r1-pe-core-audit-20261021",
+      "head_sha": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c"
+    },
+    {
+      "number": 15,
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "state": "open",
+      "draft": true,
+      "head": "docs/pretrained-reuse-roadmap-20261010",
+      "head_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "base": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    },
+    {
+      "number": 14,
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "state": "open",
+      "draft": true,
+      "head": "fix/student-qat-training-handoff",
+      "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "base": "codex/ternary-student-recovery",
+      "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c"
+    },
+    {
+      "number": 13,
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "state": "open",
+      "draft": false,
+      "head": "feat/ternary-student-recovery",
+      "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "base": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c"
+    },
+    {
+      "number": 12,
+      "title": "feat: add strict postquant teacher cache boundary",
+      "state": "open",
+      "draft": true,
+      "head": "codex/postquant-teacher-cache",
+      "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "base": "codex/postquant-numerical-core",
+      "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"
+    },
+    {
+      "number": 11,
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "state": "open",
+      "draft": true,
+      "head": "codex/postquant-numerical-core",
+      "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "base": "codex/postquant-worker-entrypoints",
+      "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"
+    },
+    {
+      "number": 10,
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "state": "open",
+      "draft": true,
+      "head": "codex/postquant-worker-entrypoints",
+      "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "base": "codex/roadmap-compression-video-specialization",
+      "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277"
+    },
+    {
+      "number": 9,
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "state": "open",
+      "draft": true,
+      "head": "codex/teacher-quality-v1",
+      "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "base": "main",
+      "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c"
+    }
+  ],
+  "worktree_count": 51,
+  "dirty_worktrees": [
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+      "branch": "codex/teacher-quality-clean-dev-v1",
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "dirty": true,
+      "status": [
+        " M ROADMAP.md",
+        " M docs/VIDEO_TEACHER_V2_LONG_BUDGET.md",
+        "?? docs/pretrained_reuse/",
+        "?? scripts/resume_teacher_quality_clean_dev_v2.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat-latest",
+      "branch": "fix/student-qat-training-handoff",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "dirty": true,
+      "status": [
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt06_pr14_legacybest_warmstart.yaml",
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt07_pr14_legacybest_warmstart.yaml"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-omni",
+      "branch": "codex/textfree-video-program-order",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "dirty": true,
+      "status": [
+        " M scripts/train_textfree_video_probe.py",
+        " M tests/test_train_textfree_video_probe.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-roadmap-20261022",
+      "branch": "codex/roadmap-scalar-audio-update-20261022",
+      "head": "bf44a5f2c2eca51d41543ac905dfcf238ee94b4b",
+      "dirty": true,
+      "status": [
+        " M ROADMAP.md",
+        " M docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md",
+        " M docs/pretrained_reuse/R2_FAIRPLAY_LICENSE_AND_GROUP_FOLLOWUP_20261022.md",
+        "?? docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_1254JST.md",
+        "?? docs/pretrained_reuse/R2_A2D2_SENSOR_SOURCE_SCREEN_20261023.md",
+        "?? docs/pretrained_reuse/R2_AMI_TIMESTAMP_JOIN_REVIEW_20261022.md",
+        "?? docs/pretrained_reuse/R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md",
+        "?? scripts/audit_fairplay_audio_pair_alignment.py",
+        "?? tests/test_fairplay_audio_pair_alignment.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage-v2",
+      "branch": "codex/textfree-video-coverage-v2",
+      "head": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "dirty": true,
+      "status": [
+        " M scripts/fetch_clevrer_probe.py",
+        "MM scripts/train_textfree_video_probe.py",
+        "M  src/tiny_omni_decision/textfree_video.py",
+        " M tests/test_fetch_clevrer_probe.py",
+        "MM tests/test_textfree_video.py",
+        "?? docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_1024_PROTOCOL_20261018.md",
+        "?? scripts/compare_textfree_video_coverage.py",
+        "?? scripts/derive_nested_clevrer_sample.py",
+        "?? tests/test_compare_textfree_video_coverage.py",
+        "?? tests/test_nested_clevrer_source_import.py"
+      ]
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery",
+      "branch": "codex/ternary-student-recovery-updated",
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "dirty": true,
+      "status": [
+        " M configs/student/ternary_first.example.json",
+        " M docs/STUDENT.md",
+        " M src/tiny_omni_decision/student/__main__.py",
+        " M src/tiny_omni_decision/student/model.py",
+        " M src/tiny_omni_decision/student/recovery.py",
+        " M src/tiny_omni_decision/student/teacher_cache.py",
+        " M tests/test_student_model_cli.py",
+        " M tests/test_student_recovery.py",
+        "?? configs/student/ternary_recovery_local_1215.json",
+        "?? scripts/repackage_frozen_teacher_predictions.py",
+        "?? tests/test_student_teacher_cache_repack.py"
+      ]
+    }
+  ],
+  "worktrees": [
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+      "branch": "codex/teacher-quality-clean-dev-v1",
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "dirty": true,
+      "status": [
+        " M ROADMAP.md",
+        " M docs/VIDEO_TEACHER_V2_LONG_BUDGET.md",
+        "?? docs/pretrained_reuse/",
+        "?? scripts/resume_teacher_quality_clean_dev_v2.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/clevr4-100k-transfer-eval-20261023",
+      "branch": "codex/clevr4-100k-transfer-eval-20261023",
+      "head": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/clevrer-coverage-1024",
+      "branch": "codex/r2-clevrer-coverage-20261020",
+      "head": "e914ba220ba1dbbb0822af4933db79638354f364",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/clevrer-synthetic-av-followup-20261022",
+      "branch": "codex/r2-lstm-train-input-dependency-20261023",
+      "head": "6b2ae96d47727ea9c83cdee7dc2fde57abae8e53",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/decision-head-validation",
+      "branch": "codex/decision-head-validation",
+      "head": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat",
+      "branch": null,
+      "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat-latest",
+      "branch": "fix/student-qat-training-handoff",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "dirty": true,
+      "status": [
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt06_pr14_legacybest_warmstart.yaml",
+        "?? configs/student/embeddinggemma2_ternary_qat_v0_attempt07_pr14_legacybest_warmstart.yaml"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-next-20261021",
+      "branch": "codex/r2-native-coverage-long-20261021",
+      "head": "33afecdc749f213cf023f4389bc5c30ebac8931e",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-omni",
+      "branch": "codex/textfree-video-program-order",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "dirty": true,
+      "status": [
+        " M scripts/train_textfree_video_probe.py",
+        " M tests/test_train_textfree_video_probe.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-roadmap-20261022",
+      "branch": "codex/roadmap-scalar-audio-update-20261022",
+      "head": "bf44a5f2c2eca51d41543ac905dfcf238ee94b4b",
+      "dirty": true,
+      "status": [
+        " M ROADMAP.md",
+        " M docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md",
+        " M docs/pretrained_reuse/R2_FAIRPLAY_LICENSE_AND_GROUP_FOLLOWUP_20261022.md",
+        "?? docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_1254JST.md",
+        "?? docs/pretrained_reuse/R2_A2D2_SENSOR_SOURCE_SCREEN_20261023.md",
+        "?? docs/pretrained_reuse/R2_AMI_TIMESTAMP_JOIN_REVIEW_20261022.md",
+        "?? docs/pretrained_reuse/R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md",
+        "?? scripts/audit_fairplay_audio_pair_alignment.py",
+        "?? tests/test_fairplay_audio_pair_alignment.py"
+      ]
+    },
+    {
+      "path": "C:/CodexWorktrees/qat-groupwise-performance",
+      "branch": "codex/qat-groupwise-performance",
+      "head": "c50f0eb364d963bbcb3144a83305705880d9d426",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-av-source-gate-20261020",
+      "branch": "codex/r2-batvision-source-screen",
+      "head": "758ec16f3003940e6f37b6101156571aa4499529",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-live-audit-20261024",
+      "branch": "codex/r0-live-audit-20261024",
+      "head": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-r2-continuation-audit-20261021",
+      "branch": "codex/r0-r2-continuation-20261021",
+      "head": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r1-pe-core-audit",
+      "branch": "codex/r1-pe-core-audit-20261021",
+      "head": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-a2d2-source-screen-20261023",
+      "branch": "codex/r2-av-task-source-screen-20261023",
+      "head": "6540c9f181a4de423f4b9e975f1373861b83b95c",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-ami-av-source-screen-20261021",
+      "branch": "codex/r2-ami-av-source-screen-20261021",
+      "head": "406f003a128a7991ec39dcb15608b381f003add4",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-avqa-source-screen-20261021",
+      "branch": "codex/r2-avqa-source-screen-20261021",
+      "head": "9e8a8a991aac46531488691603a914b0be5757d6",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-clevrer-fresh-reasoning-20261021",
+      "branch": "codex/r2-clevrer-fresh-reasoning-20261021",
+      "head": "016face5ece2dd11835af641b1759104e1646a1a",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-conditional-av-readout-20261022",
+      "branch": "codex/r2-av-training-signal-20261023",
+      "head": "443d058a8d256322a8d1417e7602fc957b3d0540",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-fair-play-source-screen-20261022",
+      "branch": "codex/r2-fair-play-source-screen-20261022",
+      "head": "936a9837299b25095c0f0703768f1079af24b424",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-holoassist-exposure-strata",
+      "branch": "codex/r2-holoassist-exposure-strata",
+      "head": "6baf4ab60f8acefc75d4d4c63961b3cb0c33f24d",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-holoassist-results-20261020",
+      "branch": "codex/r2-holoassist-results-20261020",
+      "head": "5c0bae773f9d4ec983ff3ac58fc13b1dd24bc47a",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-independent-joint-task",
+      "branch": "codex/r2-captaincook4d-screen-20261021",
+      "head": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-mavad-source-screen",
+      "branch": "codex/r2-mavad-source-screen-20261021",
+      "head": "07c504c958816fd2e9d70c279702b71b6e55e749",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-mavd-source-screen",
+      "branch": "codex/r2-mavd-source-screen-20261021",
+      "head": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-observation-batch",
+      "branch": "codex/r2-observation-batch",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pamap2-admission-screen-20261021",
+      "branch": "codex/r2-pamap2-admission-screen-20261021",
+      "head": "e3fa96e7b0c5a0bf78253ef595fda4ffbeb525d6",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pch-heldout-eval-20261021",
+      "branch": "codex/r2-pch-heldout-eval-20261021",
+      "head": "d825251d3baea690dfa17602c28fc81096ab1575",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pch-recording-temporal-20261021",
+      "branch": "codex/r2-pch-recording-temporal-20261021",
+      "head": "fe82f5cd854cb305cc13eb715eb7a92b40dbd976",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-perception-fresh-holdout",
+      "branch": "codex/holoassist-label-window-audit",
+      "head": "ddf6a106675f3a15feb66b5123ee7431539c27bf",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage",
+      "branch": "codex/textfree-video-coverage-v1",
+      "head": "74e2094c51af6a8738dd67d42d018442b979cd75",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage-v2",
+      "branch": "codex/textfree-video-coverage-v2",
+      "head": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "dirty": true,
+      "status": [
+        " M scripts/fetch_clevrer_probe.py",
+        "MM scripts/train_textfree_video_probe.py",
+        "M  src/tiny_omni_decision/textfree_video.py",
+        " M tests/test_fetch_clevrer_probe.py",
+        "MM tests/test_textfree_video.py",
+        "?? docs/pretrained_reuse/R2_TEXTFREE_VIDEO_COVERAGE_1024_PROTOCOL_20261018.md",
+        "?? scripts/compare_textfree_video_coverage.py",
+        "?? scripts/derive_nested_clevrer_sample.py",
+        "?? tests/test_compare_textfree_video_coverage.py",
+        "?? tests/test_nested_clevrer_source_import.py"
+      ]
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/decision-json-contract/tiny-omni-decision",
+      "branch": "codex/r2-json-decision-contract-20261021",
+      "head": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/patha-r2-continuation/tiny-omni-decision",
+      "branch": "codex/r2-ami-speaker-channel-preflight-20261022",
+      "head": "cb020322a229ea31a7d2773717ba6487a622a376",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/pr15-r2-progress-update/tiny-omni-decision",
+      "branch": "codex/r2-pch-moment-probe",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-ami-rm-media-preflight/tiny-omni-decision",
+      "branch": "codex/r2-spatial-count-readout-20261023",
+      "head": "329b525f2a504c2c77a30f48c8ae88c0b23467f5",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-audio-cache/tiny-omni-decision",
+      "branch": "codex/r2-av-audio-cache",
+      "head": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-matched-evidence/tiny-omni-decision",
+      "branch": "codex/r2-av-matched-evidence",
+      "head": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-postnorm-stability",
+      "branch": "codex/r2-av-postnorm-stability",
+      "head": "809c0f8226a780039a89c8066709d15d39a53f8a",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-replacement/tiny-omni-decision",
+      "branch": "codex/r2-av-replacement",
+      "head": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-transport/tiny-omni-decision",
+      "branch": "codex/r2-av-transport",
+      "head": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-crossmodal-binding-design/tiny-omni-decision",
+      "branch": "codex/r2-clevrer-reasoning-storytime-screen-20261023",
+      "head": "cafb040c467bba6783ff30c6cc327db928cdfad5",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-holoassist-textfree/tiny-omni-decision",
+      "branch": "codex/r2-holoassist-textfree",
+      "head": "39b1a7057c4ec0afaa04b3dbc09e1989d2fa654b",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-pch-sensor-probe/tiny-omni-decision",
+      "branch": "codex/r2-pch-temporal-readout-v1",
+      "head": "07eb437a79e11fede0b6544b75631560d7fd22a9",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-perception-av-scale-v1/tiny-omni-decision",
+      "branch": "codex/r2-perception-av-scale-v1",
+      "head": "58633f10a6010f31dc5a17c59ce9a7c09b462db9",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-storytime-api-followup/tiny-omni-decision",
+      "branch": "codex/r2-storytime-api-followup-20261023",
+      "head": "aff0452f27496e3c991ead1e64dbcbe8a8007935",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-long-budget",
+      "branch": "codex/video-teacher-v2-long-budget",
+      "head": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp",
+      "branch": "codex/teacher-quality-physionpp",
+      "head": "506a049142f09f6aa5e34e20778f662e680eb93d",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-ternary-student",
+      "branch": "codex/ternary-student-recovery",
+      "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "dirty": false,
+      "status": []
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery",
+      "branch": "codex/ternary-student-recovery-updated",
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "dirty": true,
+      "status": [
+        " M configs/student/ternary_first.example.json",
+        " M docs/STUDENT.md",
+        " M src/tiny_omni_decision/student/__main__.py",
+        " M src/tiny_omni_decision/student/model.py",
+        " M src/tiny_omni_decision/student/recovery.py",
+        " M src/tiny_omni_decision/student/teacher_cache.py",
+        " M tests/test_student_model_cli.py",
+        " M tests/test_student_recovery.py",
+        "?? configs/student/ternary_recovery_local_1215.json",
+        "?? scripts/repackage_frozen_teacher_predictions.py",
+        "?? tests/test_student_teacher_cache_repack.py"
+      ]
+    }
+  ],
+  "manifest_sha256": {
+    "manifests/base-model.example.yaml": "3073b756114904fbec8b8b590c087484aa6769dc510f8f95939509e6657fbfca",
+    "manifests/candidates/ava-active-speaker.yaml": "049733bd9bc63dcb814d7105cbf161c6f5683ee71733bb402201271388a92ee7",
+    "manifests/candidates/clevr4-validation.yaml": "ba524e02c7474e4b31cd52bbd3ecb9705979b9ead9e1fd5b46b5d6fdd9c81f12",
+    "manifests/candidates/clevr4.yaml": "9b2b6aaffb03f1a800607e598902cb9d893223c412ab025d06b4a15f8d3cadae",
+    "manifests/candidates/clevrer-validation.yaml": "ad2047bf40707f514cda825e1f409c7e19ace4fec5e313f6d9899bd5badce0c4",
+    "manifests/candidates/clevrer.yaml": "a87bd6834a94b8ed481a36e7088ee8d5391319fc271fed80497530f055dcbdf2",
+    "manifests/candidates/jamcqa-v2-dev.yaml": "8e7100be4a2aebf4ffba78aab65e8e371ccce2469c5062c86d81faf7299fd01f",
+    "manifests/candidates/librispeech-dev-clean.yaml": "7ec6040833bafd29e1d4cbd132e849c50fc365982e32021190d3c0c5d39c6019",
+    "manifests/candidates/mmau-test-mini.yaml": "ed4ab92e6ab4e2ec9fd93b895ff02603323fd276e61dac0400e929e9c935a6cf",
+    "manifests/candidates/mvbench.yaml": "a886fdf6ce866b38bbfc82639a7b1ed39c5a9211f3d584c0f746d788b4f4cd37",
+    "manifests/candidates/onejev-licenses.csv": "27b0b90e143b5abd4116c0a81438253d9250f99ea2699c16e974c8f5d142f9a8",
+    "manifests/candidates/onejev.yaml": "ca7e7e0a2b4b1651ada9b7d3d8e1c071721f95f2bf6bdfdf613a4dea8b4386bb",
+    "manifests/candidates/open-jev-test.yaml": "dc83003fee71451a3342f3d7bebca0032936566e050f2ecceb268412676d9f47",
+    "manifests/candidates/open-jev-validation.yaml": "43b0c948f5316494db5499711b657aa4a791ae8e934b434524bab9ef604cf916",
+    "manifests/candidates/open-jev.yaml": "966290c414f5e3d467814afeb48bee0a7f3c11a7b07617ecc6b42d9f4ca0fec9",
+    "manifests/candidates/speech-commands-test.yaml": "0b557bc44742d96ed1c5fa227726cc858fbf688ec26083952c70559492acfe58",
+    "manifests/candidates/speech-commands-validation.yaml": "c416e1a1af57387397d73d6f4ac66a02d481dc9cbc44477c25c2375112bdaf24",
+    "manifests/candidates/speech-commands.yaml": "109984b9304ab0335c9e0b973bea3b828e3e0c901d9e46cfcbbf581459df03e2",
+    "manifests/candidates/typed-synth-validation.yaml": "f203eb5bae312e80586bfd92ec9a7bf39918d110ed6441291a4dc64fa53bf51a",
+    "manifests/candidates/unav100.yaml": "6adb3dc92793f486f0e0616421705549b729b18bd6440d6174ff9329df470d5a",
+    "manifests/candidates/yt-ntu-avq.yaml": "9e21beecbe206739a491739aa5274a714d8bfcee847da5968ccb6584aa12f98d",
+    "manifests/dataset.example.yaml": "60c29a1efc4d93179422cf5acc7c2f38949b603efce5dc7a5073a36cd3e3ccdd",
+    "manifests/durable-heldout-corpus.yaml": "10e7b191edf318882585f5c7cf38863be35b6c825a18f8ed3b36d1d43d4788b1",
+    "manifests/durable-training-corpus.yaml": "365e154310f6c1c16199f511bc0a83959d250d1308ade853b4a0d8f5f6010829",
+    "manifests/evaluation-candidates.yaml": "2787c66d920d01dee53e3df4aa0f52eb9097f52e5fb8a35f2994b6eaba089f56",
+    "manifests/phase3-evaluation-corpus.yaml": "49b0ac3c133a5041241bbc3cee85989cd696f6aee388814bc28984490f3bb0c2",
+    "manifests/phase3-training-corpus.yaml": "8c34a80c513eebc30791e0e9f68de5dbbf4f1fc11d2027acbc17b4cc79949656",
+    "manifests/pretrained_reuse/.gitattributes": "a23cc73caeec9684ceb08743c7ab485bd5aebf235e526484ce66b712f8907c10",
+    "manifests/pretrained_reuse/clevrer-heldout-video-excluded-scenes-20261011.json": "2ffd21da252fa1f8a544c66d0d1f6c66b44ca26af79e8e6db3b2613cc9f4cb6c",
+    "manifests/pretrained_reuse/greatest-hits-development-20261017.json": "1b8640b8e3348799bb9e3a0046efce999c65535985fbe394ae10b1603a91645b",
+    "manifests/pretrained_reuse/greatest-hits-encoders-20261017.json": "3ee6b7d650ebf119bc039511ff30e2110e1a3358e89e8a4fe8774ed0c98b70e1",
+    "manifests/pretrained_reuse/greatest-hits-full-extent-20261017.json": "48940ebe38996adb4e10687055b04e9c0150dae1a67c7373d4062c56dfd67168",
+    "manifests/pretrained_reuse/greatest-hits-inventory-20261017.json": "9febf9f1d4f0e665b92203fcbdb3ced79526ccf959617fe242caad042c2a633e",
+    "manifests/pretrained_reuse/greatest-hits-probe-20261017.json": "4b87f99bc4309cada393be87e76f31ac7ba75326e31309ddda04bf4fd58caf57",
+    "manifests/pretrained_reuse/greatest-hits-source-review-20261017.json": "553daf8dc87d78957daf0ddc6bcb28b850b20e770fa03149c86f05e9b35a948a",
+    "manifests/pretrained_reuse/lombard-grid-source-20261014.json": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+    "manifests/pretrained_reuse/perception-test-sound-visibility-20261021.json": "dc3148f5d85b8f8748c4420343c29fb0d43ee94291a914a62a21d15043955208",
+    "manifests/teachers/durable-teacher-v0.json": "9af2616684dd00c557941cf790b7e2d65fbe8100e9ae8be7296bc250c2ec2d94",
+    "manifests/training-candidates.yaml": "4a2aec4747e4b8fbc17cb20e14dc00c278d0d545219d5e8adf775ece02796f22"
+  },
+  "reference_artifact_sha256": {
+    "docs/pretrained_reuse/R1_CANDIDATE_INVENTORY.json": "48eda0997f9603eca118e137e1a5e72c812dd915c1c140e3934ba721d0bb218d",
+    "docs/pretrained_reuse/R1_AUDIT.md": "9ac6ad6e291fc937f1390316fc72d3c2ae0175894bf8c401703a7414661481d9",
+    "docs/pretrained_reuse/R0_INVENTORY.json": "a7e53c012b6ac57c7a0de9467e08f7fa1c64fd18153f6d2d57ae7aaf8c997913"
+  },
+  "host": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU, 16384 MiB, 15821 MiB, 355 MiB, 56 %, 62",
+    "gpu_process": {
+      "pid": 15584,
+      "parent_pid": 7664,
+      "started": "2026-10-23T13:50:11.200727+09:00",
+      "working_set_bytes": 16431427584,
+      "command_line": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" C:\\orbitune-production\\epoch_a2_source\\scripts\\compound_cfe_train.py train --train-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\train,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\train --validation-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\validation,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\validation --checkpoint C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --resume C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --steps 0 --sampler epoch --epoch-seed 2026 --weighted-loss --batch-size 64 --seq-len 512 --encode-semantics a2 --precision bf16 --learning-rate 0.0003 --weight-decay 0.01 --grad-clip 1.0 --checkpoint-every-events 30000000 --eval-every-events 20000000 --log-every 50 --yield-sentinel C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\YIELD"
+    },
+    "c_drive_free_bytes": 48969859072,
+    "python_active_for_tiny_omni": false,
+    "orbitune_gpu_job_active": true,
+    "paid_compute_used": false
+  },
+  "constraints": [
+    "Do not terminate or modify the Orbitune process or its files.",
+    "Do not start Tiny Omni GPU work while the RTX 3080 Laptop GPU is occupied.",
+    "Keep all existing dirty worktrees and PR branches unchanged.",
+    "Do not open sealed audit data or load model weights during this audit."
+  ],
+  "preservation": {
+    "existing_processes_stopped": false,
+    "existing_worktrees_modified": false,
+    "existing_prs_modified": false,
+    "legacy_data_or_checkpoints_modified": false,
+    "sealed_audit_opened": false,
+    "model_training_started": false
+  }
+}
