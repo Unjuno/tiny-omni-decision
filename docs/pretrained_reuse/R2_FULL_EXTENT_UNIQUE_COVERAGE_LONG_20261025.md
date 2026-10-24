@@ -53,17 +53,36 @@ to a new output directory. The new config is
 
 ## Current status
 
-The test-first implementation passed its targeted tests (26 passed) and Ruff.
-The independent CPU sampler check regenerated 16,384 pool occurrences with
-12,800 unique questions, including 2,048 additional unique rows each for Text,
-Image, and Audio, no new Video rows, and 2,048 repeated occurrences within the
-pool. Two full pool cycles yield 262,144 example presentations. The sample-order
+The test-first implementation passed its targeted tests (28 passed) and Ruff.
+The CPU-only pinned preflight passed at
+`C:\CodexArtifacts\pretrained-reuse-r2\native-full-extent-fresh-long-preflight-02`.
+Its result SHA-256 is
+`346a99beb7e6bde990c38212d57fe3abe39c1b541074a2bbda71d5a6f9f73847`; source
+commit `eecb2c076016f63c2f27e8f68c05eba612d4b3df`; effective config SHA-256
+`7758008edcfcedee819a6ed15b1f546f865568b2bfb56cc57a42ac2202138cb5`. All five
+preflight artifact hashes were rechecked against the saved files with zero
+mismatches. The independent CPU sampler check regenerated 16,384 pool
+occurrences with 12,800 unique questions, including 2,048 additional unique
+rows each for Text, Image, and Audio, no new Video rows, and 2,048 repeated
+occurrences within the pool. Two full pool cycles yield 262,144 example
+presentations. The sample-order
 SHA-256 matches the completed center-crop fresh run exactly. The LR SHA-256 is
 `14234584342acb62df7d3987fdc835ec7beec3b04f5070ae864a9eac0c6becc9`; validation
 IDs SHA-256 is
 `db7d0f1d09319a48a7725ed36ccb515cdcc85a409f019400cf0062be38768f30`; the common
 parent-probe SHA-256 is
 `d6293594fc44a9cb6d1bf251d08b1815550d555388214927cf2937a30fc76c96`.
+
+Preflight attempt-01 at
+`C:\CodexArtifacts\pretrained-reuse-r2\native-full-extent-fresh-long-preflight-01`
+is preserved but invalid: a Windows text-writer newline conversion caused the
+receipt's predicted hashes to differ from the files. No model or GPU was loaded
+in that attempt. The writer now writes the exact pre-hashed bytes, with a
+regression test; attempt-02 is the valid receipt above. The CPU preflight pins
+the full-extent cache receipt but does not inspect its bank metadata or
+stream/hash all 3.3GB of visual feature arrays. During the separate GPU smoke,
+before model load, the runner checks each bank's path, SHA, shape, dtype, and
+finite values.
 
 No GPU fit has started. At the time of this record, unrelated live process
 PID26920 was responsive on the RTX 3080 Laptop and occupied 16,122/16,384 MiB;
