@@ -553,6 +553,16 @@ R2 M-2 remains open; synchronized media or prediction sensitivity alone is not
 enough to admit a joint-quality run. Continue with rights-cleared, independently
 grouped data and a task-level test that requires multiple inputs.
 
+**2026-10-25 R2 synthetic AV input controls:** A fixed-checkpoint CPU replay
+and five input perturbations on the already exposed CLEVRER synthetic AV v2
+development validation showed sensitivity to video presence, scene identity,
+temporal order, and audio timing. The 240-scene paired bootstrap intervals for
+Accuracy and NLL differences excluded zero for all interventions. This remains
+post-selection synthetic sensitivity evidence, not blind or natural-AV
+validation; R2 M-2 stays open pending a rights-cleared task that establishes
+multi-input necessity. See
+[`R2_CLEVRER_SYNTHETIC_AV_CONTROLS_20261025.md`](docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_CONTROLS_20261025.md).
+
 **2026-10-18 R0 provisional engineering contract:** The RTX 3080 Laptop
 workstation is now recorded as an engineering reference host, not the selected
 deployment device. Preserve the full pre-quantization <=200M parameter target
