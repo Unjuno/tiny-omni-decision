@@ -2432,3 +2432,11 @@ degraded. The selected scorer predicted the majority `no` label for 93.5% of dev
 rows. This does not establish a general text or encoder ceiling; keep it as a
 negative transfer reference and do not extend training or tune on the same dev
 split. [Protocol, full curve, hashes and limits](docs/pretrained_reuse/R2_CSQA2_TEXT_DECISION_20261024.md).
+
+### AVRT-20K synchronized AV source gate (2026-10-24)
+
+The AVRT-20K annotation mirror is not admitted: its card declares CC BY 4.0 for
+annotations, but requires separately acquired AVQA videos whose rights remain
+unresolved; it exposes one unsplit 40,182-row partition and teacher-generated
+reasoning that needs leakage controls. No data/media were downloaded. Keep the
+R2-M both-input-required gate open. [Metadata-only source review](docs/pretrained_reuse/R2_AVRT20K_SOURCE_GATE_20261024.md).
