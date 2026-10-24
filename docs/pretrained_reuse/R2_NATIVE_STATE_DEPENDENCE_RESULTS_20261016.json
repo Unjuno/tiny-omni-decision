@@ -1,6 +1,6 @@
 {
   "status": "PASS_FIXED_TRAIN_STATE_DIAGNOSTIC",
-  "decision": "Weak state-to-answer binding remains; no model promotion or encoder-capacity claim. Next compare matched-state batching against a matched independent-batch control, without changing model/labels/candidate sets.",
+  "decision": "Weak state-to-answer binding remains; no model promotion or encoder-capacity claim. The proposed matched-state batching versus independent-batch comparison was completed at 1,024 updates with identical sample multiplicities and full validation; macro NLL and consumed text/video both-correct criteria did not support the intervention. See R2_NATIVE_MATCHED_BATCH_RESULTS_20261016.md; do not repeat it.",
   "runs": {
     "plan": {
       "status": "PASS_NATIVE_STATE_PREPARE",

@@ -732,10 +732,12 @@ candidate pairs pass full fresh replay with frozen initial/2048 weights. Both-
 correct rates are0/442 consumed text pairs and1/16 consumed video pairs; image
 sensitivity does not imply correct value readout. Preserve17 unpairable task
 strata, including unavailable unconsumed video. No training or audit access.
-Next test matched-state batch grouping against an independent-batch control
-with the same sample multiset, architecture, loss, optimizer and update budget;
-retain unpairable rows and the full validation/retention scope. This comparison
-is not yet run. No xLSTM expansion, product promotion or R2 completion.
+The proposed matched-state grouping comparison was already executed in the
+matched-state batch study above: both arms used the same 8,192 occurrence
+multiset, initialization, architecture, loss, optimizer and 1,024-update budget;
+all unpairable rows and full validation/retention scope were preserved. Its
+macro NLL and text/video both-correct criteria did not support the intervention,
+so do not repeat it. No xLSTM expansion, product promotion or R2 completion.
 [Measured diagnostic and interpretation](docs/pretrained_reuse/R2_NATIVE_STATE_DEPENDENCE_RESULTS_20261016.md).
 
 **2026-10-16 common native fits completed:** Attention baseline and residual

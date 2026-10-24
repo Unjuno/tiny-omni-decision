@@ -79,3 +79,7 @@ python -u -m scripts.probe_native_state_dependence --phase replay --output <new-
 ## 検証
 
 11件の回帰テスト追加。全CPU2,074 passed / 1 skipped（30.44秒）、Ruff PASS。実行sourceのCI #1823 success（manifest検証含む）。最終公開commitのCIもpush後に確認する。
+
+## 2026-10-25の追補
+
+この節末の「次の一手」は、2026-10-16時点の計画記録であり、現在の未実施作業を示さない。提案していた同じ質問・候補で異なる正解を持つ状態を同一batchへまとめる比較は、同日付の[matched-state batch比較](R2_NATIVE_MATCHED_BATCH_RESULTS_20261016.md)で実行済み。固定8,192 occurrence、同一初期値、モデル、loss、optimizer、1,024 updates、全validation、非成立行の保持を確認した。結果はmacro NLLと消費済みText/Videoの両正答条件を満たさず、この介入は不採用で終了している。重複実験は行わない。
