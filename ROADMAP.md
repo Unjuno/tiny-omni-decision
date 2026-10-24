@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 CLEVR option-readout/data implementation:** Added a
+deterministic image-grouped subset builder, frozen-feature 28-answer readout,
+supplied-option loss, per-kind/program metrics, and separate best/terminal
+readout saves. The pinned official annotation archive produced 16,384 train
+and 4,096 official-validation examples with zero image and normalized-question
+overlap (attempt-03). Two selected media files passed range/ZIP CRC checks, and
+a CPU ViLT forward produced `[2,768]` frozen features; this remains an
+input-path smoke. Manifest hashes and answer/question-type counts are recorded in the
+[`CLEVR compositional preflight`](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
+CPU tests pass (2,416 passed, 11 skipped), Ruff passes. No bulk media cache or
+quality score exists; GPU feature extraction/fitting is deferred while the
+existing RTX 3080 run occupies 16,124/16,384 MiB. CoGenT-B remains unopened.
+
 **2026-10-25 R2 CLEVR compositional option-task preflight:** The official
 CLEVR v1.0 CC BY 4.0 annotation archive is pinned locally; the 19.02 GB image
 archive was inspected through ZIP metadata-only HTTP ranges. The candidate

@@ -1,0 +1,155 @@
+"""Deterministic image-grouped examples for the official CLEVR VQA task."""
+
+from __future__ import annotations
+
+import hashlib
+import io
+import json
+import zipfile
+from collections.abc import Iterable, Iterator
+from typing import Any
+
+from tiny_omni_decision.clevr_vqa_options import answer_kind, make_options
+
+ANNOTATION_MEMBERS = {
+    "train": "CLEVR_v1.0/questions/CLEVR_train_questions.json",
+    "validation": "CLEVR_v1.0/questions/CLEVR_val_questions.json",
+}
+
+
+def iter_question_array(archive: zipfile.ZipFile, member: str) -> Iterator[dict[str, Any]]:
+    """Stream objects from a top-level JSON ``questions`` array in a ZIP member."""
+    decoder = json.JSONDecoder()
+    stream = io.TextIOWrapper(archive.open(member), encoding="utf-8")
+    buffer = ""
+    position = 0
+    started = False
+    while True:
+        if not started:
+            chunk = stream.read(65536)
+            if not chunk:
+                raise ValueError(f"missing questions array in {member}")
+            buffer += chunk
+            marker = buffer.find('"questions"')
+            if marker < 0:
+                continue
+            start = buffer.find("[", marker)
+            while start < 0:
+                more = stream.read(65536)
+                if not more:
+                    raise ValueError(f"missing questions array in {member}")
+                buffer += more
+                start = buffer.find("[", marker)
+            position = start + 1
+            started = True
+        while True:
+            while position < len(buffer) and (
+                buffer[position].isspace() or buffer[position] == ","
+            ):
+                position += 1
+            if position < len(buffer) and buffer[position] == "]":
+                return
+            try:
+                row, end = decoder.raw_decode(buffer, position)
+                position = end
+                if not isinstance(row, dict):
+                    raise ValueError("question array contains a non-object row")
+                yield row
+                break
+            except json.JSONDecodeError as exc:
+                more = stream.read(65536)
+                if not more:
+                    if not buffer[position:].strip():
+                        return
+                    raise ValueError(f"truncated questions array in {member}") from exc
+                buffer = buffer[position:] + more
+                position = 0
+
+
+def _hash_int(value: str) -> int:
+    return int.from_bytes(hashlib.sha256(value.encode("utf-8")).digest()[:8], "big")
+
+
+def normalize_question(question: str) -> str:
+    """Normalize generated CLEVR question text for the cross-split content gate."""
+    return " ".join(question.casefold().split())
+
+
+def select_one_question_per_image(
+    rows: Iterable[dict[str, Any]],
+    *,
+    split: str,
+    image_limit: int,
+    seed: int = 17,
+    excluded_normalized_questions: set[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Select one hash-ranked source question per image, preserving image grouping."""
+    if split not in ANNOTATION_MEMBERS:
+        raise ValueError("split must be train or validation")
+    if image_limit <= 0:
+        raise ValueError("image_limit must be positive")
+    best_by_image: dict[str, tuple[int, dict[str, Any]]] = {}
+    for row in rows:
+        filename = row.get("image_filename")
+        question_index = row.get("question_index")
+        answer = row.get("answer")
+        question = row.get("question")
+        if not isinstance(filename, str) or not isinstance(question_index, int):
+            raise ValueError("source row lacks image identity or question index")
+        if not isinstance(answer, str) or not isinstance(question, str):
+            raise ValueError("source row lacks answer or question")
+        if excluded_normalized_questions and normalize_question(question) in (
+            excluded_normalized_questions
+        ):
+            continue
+        score = _hash_int(f"CLEVR-VQA-question|{seed}|{filename}|{question_index}")
+        if filename not in best_by_image or score < best_by_image[filename][0]:
+            best_by_image[filename] = (score, row)
+    selected_images = sorted(
+        best_by_image,
+        key=lambda filename: (_hash_int(f"CLEVR-VQA-image|{seed}|{split}|{filename}"), filename),
+    )[:image_limit]
+    result = []
+    for filename in selected_images:
+        source = best_by_image[filename][1]
+        options = make_options(
+            image_filename=filename,
+            question_index=source["question_index"],
+            answer=source["answer"],
+            seed=seed,
+        )
+        result.append(
+            {
+                "sample_id": f"{filename}:{source['question_index']}",
+                "split": split,
+                "image_filename": filename,
+                "question_index": source["question_index"],
+                "question": source["question"],
+                "answer": source["answer"],
+                "answer_kind": answer_kind(source["answer"]),
+                "outer_program": (
+                    source["program"][-1].get("function", "unknown")
+                    if isinstance(source.get("program"), list)
+                    and source["program"]
+                    and isinstance(source["program"][-1], dict)
+                    else "unknown"
+                ),
+                "options": list(options),
+                "target_position": options.index(source["answer"]),
+            }
+        )
+    return result
+
+
+def require_group_disjoint(
+    train: Iterable[dict[str, Any]], validation: Iterable[dict[str, Any]]
+) -> None:
+    """Reject sample or underlying-image overlap between train and validation."""
+    train_rows = list(train)
+    validation_rows = list(validation)
+    for field in ("sample_id", "image_filename"):
+        train_values = {str(row[field]) for row in train_rows}
+        validation_values = {str(row[field]) for row in validation_rows}
+        overlap = train_values & validation_values
+        if overlap:
+            raise ValueError(f"train/validation {field} overlap: {sorted(overlap)[:3]}")

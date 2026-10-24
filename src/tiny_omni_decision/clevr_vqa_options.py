@@ -39,11 +39,12 @@ def make_options(
     image_filename: str,
     question_index: int,
     answer: str,
+    seed: int = OPTION_SEED,
 ) -> tuple[str, ...]:
     """Make a deterministic 2–4-way option set from the answer's semantic type."""
     kind = answer_kind(answer)
     vocabulary = ANSWER_VOCABULARIES[kind]
-    key = f"clevr-options-v1|{OPTION_SEED}|{image_filename}|{question_index}".encode()
+    key = f"clevr-options-v1|{seed}|{image_filename}|{question_index}".encode()
     rng_seed = int.from_bytes(hashlib.sha256(key).digest()[:8], "big")
     rng = random.Random(rng_seed)
     distractors = [label for label in vocabulary if label != answer]
