@@ -3,18 +3,22 @@
 **2026-10-24 R2 Perception Test source-candidate adapter preflight:** Added a
 train-only, multi-positive candidate-reranking format that pairs annotated
 audio-event intervals with unmasked object proposals from the same video. Of
-25,757 train events, 10,139 pass the conservative parent, distractor, and
-media-duration gates across 1,982 videos; option counts range from 2 to 49.
-Existing train-only media files cover 400 candidate video groups (2,339 events)
-by filename match. A seeded CPU smoke verified file hashes and decoded all
-requested event audio intervals and bbox frames in 32 train groups. The
-remaining media has not passed decode/synchronization checks. The deterministic
-corpus and a seed-17 group split were frozen outside Git (320 train groups / 80
-development groups; 1,904 / 435 events, with zero video or exact media-hash
-overlap). This split is not blind, participant grouping is unknown, and
-normalized near-duplicates were not checked. This remains annotation/media
-feasibility only: no model fit, validation/audit access or quality claim. Oracle
-event windows and object proposals remain deployment shortcuts, so
+25,757 train events, 14,741 pass the conservative parent, distractor,
+visibility, duration, and upstream cut-frame gates across 2,132 videos; option
+counts range from 2 to 49. Invisible-source events use an explicit
+`none_visible` target only when at least two visual candidates exist; visible
+events with missing or unknown parents are held. Existing train-only media
+files cover 400 candidate video groups (3,219 events) by filename match. A
+seeded CPU smoke verified file hashes and decoded all requested event audio
+intervals and bbox frames in 32 train groups, including 14 none-visible events
+and all four locally available cut-frame groups. The remaining 368 media groups
+have not passed decode/synchronization checks. The deterministic corpus and a
+seed-17 group split were frozen outside Git (320 train groups / 80 development
+groups; 2,608 / 611 events, with zero video or exact media-hash overlap). This
+split is not blind, participant grouping is unknown, and normalized
+near-duplicates were not checked. This remains annotation/media feasibility
+only: no model fit, validation/audit access or quality claim. Oracle event
+windows and object proposals remain deployment shortcuts, so
 modality-necessity controls and complete media-boundary checks must pass before
 any readout run. This distinct task format does not reopen the closed
 visibility or temporal-match cohorts and does not close R2 M-2. See the

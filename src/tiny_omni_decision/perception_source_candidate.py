@@ -23,7 +23,7 @@ def _sample_frames(frames, limit=4):
     return [frames[index] for index in indices]
 
 
-def source_candidate_records(video_id, row):
+def source_candidate_records(video_id, row, cut_frame=None):
     """Yield candidate-reranking records; annotation labels stay in supervision only.
 
     `frame_ids` on sound annotations are inclusive interval bounds. Candidate object
@@ -36,6 +36,8 @@ def source_candidate_records(video_id, row):
         raise ValueError("train-only matching video identity required")
     if type(metadata.get("num_frames")) is not int or metadata["num_frames"] <= 0:
         raise ValueError("positive integer video frame count required")
+    if type(cut_frame) is not int or not -1 <= cut_frame < metadata["num_frames"]:
+        raise ValueError("explicit valid upstream cut frame required")
     frame_rate = metadata.get("frame_rate")
     audio_rate = metadata.get("audio_sample_rate")
     audio_samples = metadata.get("audio_samples")
@@ -52,6 +54,9 @@ def source_candidate_records(video_id, row):
         raise ValueError("positive finite media rates and audio sample count required")
     audio_duration_us = audio_samples / audio_rate * 1e6
     video_duration_us = metadata["num_frames"] / frame_rate * 1e6
+    cut_duration_us = (
+        video_duration_us if cut_frame == -1 else cut_frame / frame_rate * 1e6
+    )
 
     objects = row.get("object_tracking", [])
     by_id = {obj["id"]: obj for obj in objects}
@@ -113,14 +118,15 @@ def source_candidate_records(video_id, row):
         start, end = sound["frame_ids"]
         parent_ids = sound["parent_objects"]
         hold_reasons = []
-        if sound["is_visible"] != 1:
-            hold_reasons.append("source_not_annotated_visible")
-        if not parent_ids or -1 in parent_ids:
+        source_visible = sound["is_visible"] == 1
+        if source_visible and (not parent_ids or -1 in parent_ids):
             hold_reasons.append("unknown_or_empty_source_annotation")
-        if len(set(parent_ids)) != len(parent_ids):
+        if source_visible and len(set(parent_ids)) != len(parent_ids):
             hold_reasons.append("duplicate_parent_object_id")
-        if sound["timestamps"][1] > min(audio_duration_us, video_duration_us):
-            hold_reasons.append("event_interval_exceeds_media_duration")
+        if sound["timestamps"][1] > min(audio_duration_us, video_duration_us, cut_duration_us):
+            hold_reasons.append("event_interval_exceeds_media_duration_or_cut")
+        if cut_frame >= 0 and end >= cut_frame:
+            hold_reasons.append("event_frame_range_reaches_answer_reveal_cut")
 
         candidates = []
         candidate_object_ids = set()
@@ -128,7 +134,8 @@ def source_candidate_records(video_id, row):
             frames = []
             for index, frame_id in enumerate(obj["frame_ids"]):
                 mask_flags = obj.get("is_masked", [0] * len(obj["frame_ids"]))
-                if start <= frame_id <= end and mask_flags[index] == 0:
+                before_cut = cut_frame == -1 or frame_id < cut_frame
+                if start <= frame_id <= end and before_cut and mask_flags[index] == 0:
                     frames.append(
                         {
                             "frame_id": frame_id,
@@ -148,10 +155,13 @@ def source_candidate_records(video_id, row):
                     }
                 )
 
-        if not set(parent_ids).issubset(candidate_object_ids):
-            hold_reasons.append("source_object_lacks_visible_interval_box")
-        if not candidate_object_ids.difference(parent_ids):
-            hold_reasons.append("no_non_source_visual_distractor")
+        if source_visible:
+            if not set(parent_ids).issubset(candidate_object_ids):
+                hold_reasons.append("source_object_lacks_visible_interval_box")
+            if not candidate_object_ids.difference(parent_ids):
+                hold_reasons.append("no_non_source_visual_distractor")
+        elif len(candidate_object_ids) < 2:
+            hold_reasons.append("insufficient_visual_candidates_for_none_visible")
         status = "held" if hold_reasons else "candidate"
         record = {
             "record_id": f"{video_id}:sound:{sound_id}",
@@ -175,15 +185,25 @@ def source_candidate_records(video_id, row):
                 )
             record["request"] = {
                 "task": "audio_visual_source_candidate_reranking",
-                "instruction": "Select every visual candidate that produced the audio event.",
+                "instruction": (
+                    "Select every visual candidate that caused the audio event; "
+                    "if none is visible, select none_visible."
+                ),
                 "audio_interval_us": list(sound["timestamps"]),
                 "candidates": request_candidates,
+                "none_visible_option_id": "none_visible",
             }
             record["media_reference"] = {
                 "video_id": video_id,
                 "sound_annotation_id": sound_id,
             }
             record["supervision"] = {
-                "target_candidate_ids": sorted(object_to_option[parent] for parent in parent_ids)
+                "target_candidate_ids": (
+                    sorted(object_to_option[parent] for parent in parent_ids)
+                    if source_visible
+                    else []
+                ),
+                "none_visible": not source_visible,
             }
+            record["provenance"] = {"upstream_cut_frame": cut_frame}
         yield record

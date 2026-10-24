@@ -10,26 +10,75 @@ def _digest(value):
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def select_smoke_records(records, media_video_ids, *, limit=8, seed=17):
+def select_smoke_records(
+    records,
+    media_video_ids,
+    *,
+    limit=8,
+    seed=17,
+    require_none_visible=0,
+    require_cut_frame=0,
+):
     """Choose at most one train candidate per video in deterministic hash order."""
     if type(limit) is not int or limit <= 0:
         raise ValueError("limit must be a positive integer")
+    if type(require_none_visible) is not int or require_none_visible < 0:
+        raise ValueError("required none-visible group count must be nonnegative")
+    if type(require_cut_frame) is not int or require_cut_frame < 0:
+        raise ValueError("required cut-frame group count must be nonnegative")
+    if require_none_visible + require_cut_frame > limit:
+        raise ValueError("required strata exceed smoke size")
     per_video = {}
+    records_by_video = {}
     for record in records:
         if record.get("status") != "candidate":
             continue
         video_id = record.get("group_id")
         if video_id not in media_video_ids:
             continue
+        records_by_video.setdefault(video_id, []).append(record)
         current = per_video.get(video_id)
         rank = _digest(f"{seed}:{record['record_id']}")
         if current is None or rank < current[0]:
             per_video[video_id] = (rank, record)
-    ordered = sorted(
-        (record for _, record in per_video.values()),
+    selected = []
+    selected_video_ids = set()
+
+    def add_required(predicate, count, tag):
+        available = []
+        for video_id, group_records in records_by_video.items():
+            if video_id in selected_video_ids:
+                continue
+            matching = [record for record in group_records if predicate(record)]
+            if matching:
+                chosen = min(matching, key=lambda item: _digest(f"{seed}:{item['record_id']}"))
+                available.append((video_id, chosen))
+        available.sort(key=lambda item: _digest(f"{seed}:{tag}:{item[0]}"))
+        if len(available) < count:
+            raise ValueError(f"only {len(available)} groups satisfy required stratum {tag}")
+        for video_id, record in available[:count]:
+            selected.append(record)
+            selected_video_ids.add(video_id)
+
+    add_required(
+        lambda record: record.get("supervision", {}).get("none_visible") is True,
+        require_none_visible,
+        "none-visible",
+    )
+    add_required(
+        lambda record: record.get("provenance", {}).get("upstream_cut_frame", -1) >= 0,
+        require_cut_frame,
+        "cut-frame",
+    )
+    remaining = sorted(
+        (
+            record
+            for video_id, (_, record) in per_video.items()
+            if video_id not in selected_video_ids
+        ),
         key=lambda record: _digest(f"{seed}:{record['group_id']}"),
     )
-    return ordered[:limit]
+    return selected + remaining[: limit - len(selected)]
 
 
 def audio_interval_coverage(interval_us, decoded_intervals):
@@ -88,6 +137,9 @@ def inspect_record(record, clip, media_dir):
     if actual_hash != clip["sha256"]:
         raise ValueError(f"file SHA-256 differs from acquisition receipt: {video_id}")
     metadata = clip["metadata"]
+    cut_frame = record.get("provenance", {}).get("upstream_cut_frame")
+    if type(cut_frame) is not int or cut_frame != clip.get("cut_frame"):
+        raise ValueError(f"record and media receipt cut-frame mapping differ: {video_id}")
 
     wanted_frames = sorted(
         {
@@ -123,6 +175,15 @@ def inspect_record(record, clip, media_dir):
 
     interval = record["request"]["audio_interval_us"]
     interval_start_s, interval_end_s = (value / 1e6 for value in interval)
+    cut_time_s = (
+        metadata["num_frames"] / metadata["frame_rate"]
+        if cut_frame == -1
+        else cut_frame / metadata["frame_rate"]
+    )
+    if interval_end_s > cut_time_s:
+        raise ValueError(f"audio interval exceeds upstream cut frame: {video_id}")
+    if cut_frame >= 0 and any(frame_id >= cut_frame for frame_id in wanted_frames):
+        raise ValueError(f"candidate frame ID reaches upstream cut frame: {video_id}")
     frame_tolerance_s = 2 / metadata["frame_rate"]
     out_of_interval_frames = [
         frame_id
@@ -161,6 +222,8 @@ def inspect_record(record, clip, media_dir):
         "record_id": record["record_id"],
         "video_id": video_id,
         "source_split": metadata["split"],
+        "upstream_cut_frame": cut_frame,
+        "none_visible": record["supervision"]["none_visible"],
         "media_bytes": clip["bytes"],
         "media_sha256": actual_hash,
         "candidate_count": len(record["request"]["candidates"]),
@@ -179,7 +242,16 @@ def inspect_record(record, clip, media_dir):
     }
 
 
-def preflight(corpus_path, acquisition_manifest_path, media_dir, *, limit=8, seed=17):
+def preflight(
+    corpus_path,
+    acquisition_manifest_path,
+    media_dir,
+    *,
+    limit=8,
+    seed=17,
+    require_none_visible=0,
+    require_cut_frame=0,
+):
     corpus_path = Path(corpus_path)
     acquisition_manifest_path = Path(acquisition_manifest_path)
     manifest = json.loads(acquisition_manifest_path.read_text(encoding="utf-8"))
@@ -193,7 +265,14 @@ def preflight(corpus_path, acquisition_manifest_path, media_dir, *, limit=8, see
         clips[video_id] = clip
 
     records = [json.loads(line) for line in corpus_path.read_text(encoding="utf-8").splitlines()]
-    selected = select_smoke_records(records, clips, limit=limit, seed=seed)
+    selected = select_smoke_records(
+        records,
+        clips,
+        limit=limit,
+        seed=seed,
+        require_none_visible=require_none_visible,
+        require_cut_frame=require_cut_frame,
+    )
     if len(selected) < limit:
         raise ValueError(f"only {len(selected)} media groups available for requested smoke size")
     results = [inspect_record(record, clips[record["group_id"]], media_dir) for record in selected]
@@ -203,6 +282,8 @@ def preflight(corpus_path, acquisition_manifest_path, media_dir, *, limit=8, see
         "seed": seed,
         "video_group_count": len(results),
         "unique_video_count": len({row["video_id"] for row in results}),
+        "none_visible_event_count": sum(row.get("none_visible", False) for row in results),
+        "cut_frame_video_count": sum(row["upstream_cut_frame"] >= 0 for row in results),
         "source_corpus_sha256": sha256_file(corpus_path),
         "acquisition_manifest_sha256": sha256_file(acquisition_manifest_path),
         "gpu_used": False,
@@ -220,6 +301,8 @@ def main():
     parser.add_argument("--output", required=True)
     parser.add_argument("--limit", type=int, default=8)
     parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument("--require-none-visible", type=int, default=0)
+    parser.add_argument("--require-cut-frame", type=int, default=0)
     args = parser.parse_args()
     output = Path(args.output)
     if output.exists():
@@ -230,6 +313,8 @@ def main():
         args.media_dir,
         limit=args.limit,
         seed=args.seed,
+        require_none_visible=args.require_none_visible,
+        require_cut_frame=args.require_cut_frame,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")

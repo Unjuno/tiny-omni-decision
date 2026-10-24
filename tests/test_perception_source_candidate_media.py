@@ -4,12 +4,14 @@ from scripts.preflight_perception_source_candidate_media import (
 )
 
 
-def record(video_id, sound_id):
+def record(video_id, sound_id, *, none_visible=False, cut_frame=-1):
     return {
         "status": "candidate",
         "record_id": f"{video_id}:sound:{sound_id}",
         "group_id": video_id,
         "media_reference": {"video_id": video_id},
+        "supervision": {"none_visible": none_visible},
+        "provenance": {"upstream_cut_frame": cut_frame},
     }
 
 
@@ -36,3 +38,23 @@ def test_audio_interval_coverage_clips_and_unions_decoded_frames():
 def test_audio_interval_coverage_reports_missing_samples():
     coverage = audio_interval_coverage([0, 1_000_000], [(0.0, 0.4), (0.6, 1.0)])
     assert coverage == 0.8
+
+
+def test_smoke_selection_can_require_none_visible_and_cut_frame_groups():
+    records = [
+        record("visible", 0),
+        record("none", 0, none_visible=True),
+        record("cut", 0, cut_frame=25),
+        record("other", 0),
+    ]
+    selected = select_smoke_records(
+        records,
+        {"visible", "none", "cut", "other"},
+        limit=3,
+        seed=17,
+        require_none_visible=1,
+        require_cut_frame=1,
+    )
+    assert any(item["supervision"]["none_visible"] for item in selected)
+    assert any(item["provenance"]["upstream_cut_frame"] >= 0 for item in selected)
+    assert len({item["group_id"] for item in selected}) == 3

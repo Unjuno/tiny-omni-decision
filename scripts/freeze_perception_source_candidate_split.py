@@ -33,8 +33,35 @@ def freeze_split(records, media_clips, *, validation_group_count, seed):
             raise ValueError("candidate corpus contains a non-train record")
         if record.get("media_reference", {}).get("video_id") != video_id:
             raise ValueError("media reference and video grouping identity differ")
-        if video_id in by_video:
-            candidates_by_video.setdefault(video_id, []).append(record)
+        if video_id not in by_video:
+            continue
+        cut_frame = record.get("provenance", {}).get("upstream_cut_frame")
+        metadata = media_clips[video_id]["metadata"]
+        if type(cut_frame) is not int or not -1 <= cut_frame < metadata["num_frames"]:
+            raise ValueError("candidate record lacks valid upstream cut provenance")
+        if cut_frame != media_clips[video_id].get("cut_frame"):
+            raise ValueError("candidate and media receipt cut-frame mappings differ")
+        cut_duration_us = (
+            metadata["num_frames"] / metadata["frame_rate"] * 1e6
+            if cut_frame == -1
+            else cut_frame / metadata["frame_rate"] * 1e6
+        )
+        audio_duration_us = metadata["audio_samples"] / metadata["audio_sample_rate"] * 1e6
+        media_limit_us = min(
+            cut_duration_us,
+            metadata["num_frames"] / metadata["frame_rate"] * 1e6,
+            audio_duration_us,
+        )
+        if record["request"]["audio_interval_us"][1] > media_limit_us:
+            raise ValueError("candidate interval extends past media or upstream cut boundary")
+        frame_ids = [
+            frame["frame_id"]
+            for candidate in record["request"]["candidates"]
+            for frame in candidate["frame_boxes"]
+        ]
+        if cut_frame >= 0 and any(frame_id >= cut_frame for frame_id in frame_ids):
+            raise ValueError("candidate visual proposal extends past upstream cut frame")
+        candidates_by_video.setdefault(video_id, []).append(record)
     video_ids = sorted(candidates_by_video)
     if not 1 <= validation_group_count < len(video_ids):
         raise ValueError("validation group count must be between 1 and group_count - 1")

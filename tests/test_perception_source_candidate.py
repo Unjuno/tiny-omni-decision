@@ -50,7 +50,7 @@ def row():
 
 
 def test_record_has_hidden_multi_candidate_targets_and_only_train_identity():
-    records = list(source_candidate_records("v1", row()))
+    records = list(source_candidate_records("v1", row(), cut_frame=-1))
     assert len(records) == 1
     record = records[0]
     assert record["status"] == "candidate"
@@ -67,13 +67,17 @@ def test_record_has_hidden_multi_candidate_targets_and_only_train_identity():
         index for index, (_, object_id) in enumerate(hashed_order) if object_id == 9
     )
     expected_target = f"option_{target_index}"
-    assert record["supervision"] == {"target_candidate_ids": [expected_target]}
+    assert record["supervision"] == {
+        "target_candidate_ids": [expected_target],
+        "none_visible": False,
+    }
     serialized_request = json.dumps(record["request"])
     assert "cup" not in serialized_request
     assert "opening" not in serialized_request
     assert "v1" not in serialized_request
     assert "object:9" not in serialized_request
     assert "target" not in serialized_request
+    assert record["request"]["none_visible_option_id"] == "none_visible"
     assert record["group_id"] == "v1"
     assert record["split"] == "train"
 
@@ -85,7 +89,7 @@ def test_multiple_parents_are_preserved_without_single_winner_collapse():
     distractor["id"] = 3
     distractor["label"] = "plate"
     data["object_tracking"].append(distractor)
-    record = list(source_candidate_records("v1", data))[0]
+    record = list(source_candidate_records("v1", data, cut_frame=-1))[0]
     assert len(record["supervision"]["target_candidate_ids"]) == 2
     assert len(set(record["supervision"]["target_candidate_ids"])) == 2
 
@@ -96,25 +100,47 @@ def test_refuses_nontrain_or_mismatched_video(split, video_id):
     data["metadata"]["split"] = split
     data["metadata"]["video_id"] = video_id
     with pytest.raises(ValueError):
-        list(source_candidate_records("v1", data))
+        list(source_candidate_records("v1", data, cut_frame=-1))
+
+
+def test_invisible_source_has_explicit_none_visible_target():
+    data = row()
+    data["sound_localisation"][0]["is_visible"] = 0
+    data["sound_localisation"][0]["parent_objects"] = [-1]
+    record = list(source_candidate_records("v1", data, cut_frame=-1))[0]
+    assert record["status"] == "candidate"
+    assert record["supervision"] == {"target_candidate_ids": [], "none_visible": True}
+    assert record["request"]["none_visible_option_id"] == "none_visible"
+
+
+def test_cut_frame_is_mandatory_and_events_reaching_it_are_held():
+    with pytest.raises(ValueError, match="explicit valid upstream cut frame"):
+        list(source_candidate_records("v1", row()))
+    data = row()
+    data["sound_localisation"][0]["timestamps"] = [1_400_000, 1_600_000]
+    data["sound_localisation"][0]["frame_ids"] = [14, 16]
+    record = list(source_candidate_records("v1", data, cut_frame=15))[0]
+    assert record["status"] == "held"
+    assert "event_interval_exceeds_media_duration_or_cut" in record["hold_reasons"]
+    assert "event_frame_range_reaches_answer_reveal_cut" in record["hold_reasons"]
 
 
 def test_holds_unknown_missing_or_unobservable_parent_and_no_distractor():
     data = row()
     data["sound_localisation"][0]["parent_objects"] = [-1]
-    assert list(source_candidate_records("v1", data))[0]["status"] == "held"
+    assert list(source_candidate_records("v1", data, cut_frame=-1))[0]["status"] == "held"
 
     data = row()
     data["object_tracking"] = data["object_tracking"][:1]
-    assert list(source_candidate_records("v1", data))[0]["status"] == "held"
+    assert list(source_candidate_records("v1", data, cut_frame=-1))[0]["status"] == "held"
 
 
 def test_holds_event_whose_timestamp_exceeds_video_duration():
     data = row()
     data["sound_localisation"][0]["timestamps"] = [100_000, 2_100_000]
-    record = list(source_candidate_records("v1", data))[0]
+    record = list(source_candidate_records("v1", data, cut_frame=-1))[0]
     assert record["status"] == "held"
-    assert "event_interval_exceeds_media_duration" in record["hold_reasons"]
+    assert "event_interval_exceeds_media_duration_or_cut" in record["hold_reasons"]
 
 
 def test_holds_event_whose_timestamp_exceeds_audio_duration_only():
@@ -122,37 +148,42 @@ def test_holds_event_whose_timestamp_exceeds_audio_duration_only():
     data["metadata"]["num_frames"] = 100
     data["metadata"]["audio_samples"] = 200
     data["sound_localisation"][0]["timestamps"] = [100_000, 2_100_000]
-    record = list(source_candidate_records("v1", data))[0]
+    record = list(source_candidate_records("v1", data, cut_frame=-1))[0]
     assert record["status"] == "held"
-    assert "event_interval_exceeds_media_duration" in record["hold_reasons"]
+    assert "event_interval_exceeds_media_duration_or_cut" in record["hold_reasons"]
 
     data = row()
     data["object_tracking"] = [data["object_tracking"][0]]
-    assert list(source_candidate_records("v1", data))[0]["status"] == "held"
+    assert list(source_candidate_records("v1", data, cut_frame=-1))[0]["status"] == "held"
 
 
 def test_frame_box_alignment_is_validated_and_masked_proposals_are_excluded():
     data = row()
     data["object_tracking"][1]["is_masked"] = [1, 1, 1]
-    record = list(source_candidate_records("v1", data))[0]
+    record = list(source_candidate_records("v1", data, cut_frame=-1))[0]
     assert record["status"] == "held"
     assert "no_non_source_visual_distractor" in record["hold_reasons"]
 
     data = row()
     data["object_tracking"][0]["bounding_boxes"].pop()
     with pytest.raises(ValueError):
-        list(source_candidate_records("v1", data))
+        list(source_candidate_records("v1", data, cut_frame=-1))
 
 
 def test_corpus_writer_is_deterministic_train_only_and_keeps_labels_out_of_request(
     tmp_path, monkeypatch
 ):
     source = tmp_path / "train.zip"
+    cut_map_path = tmp_path / "cut_map.json"
     with zipfile.ZipFile(source, "w") as archive:
         archive.writestr("all_train.json", json.dumps({"v1": row()}))
+    cut_map_path.write_text(json.dumps({"nid": -1, "v1": -1}), encoding="utf-8")
     monkeypatch.setattr(corpus_builder, "EXPECTED_TRAIN_SHA256", corpus_builder.sha256(source))
-    first = corpus_builder.build(source, tmp_path / "out-a")
-    second = corpus_builder.build(source, tmp_path / "out-b")
+    monkeypatch.setattr(
+        corpus_builder, "EXPECTED_CUT_MAP_SHA256", corpus_builder.sha256(cut_map_path)
+    )
+    first = corpus_builder.build(source, cut_map_path, tmp_path / "out-a")
+    second = corpus_builder.build(source, cut_map_path, tmp_path / "out-b")
     assert first["row_count"] == 1
     assert first["candidate_examples"] == 1
     assert first["record_file_sha256"] == second["record_file_sha256"]
@@ -164,9 +195,14 @@ def test_corpus_writer_is_deterministic_train_only_and_keeps_labels_out_of_reque
     assert '"target_candidate_ids"' in records
 
 
-def test_corpus_writer_rejects_unpinned_archive_hash(tmp_path):
+def test_corpus_writer_rejects_unpinned_archive_hash(tmp_path, monkeypatch):
     source = tmp_path / "train.zip"
+    cut_map_path = tmp_path / "cut_map.json"
     with zipfile.ZipFile(source, "w") as archive:
         archive.writestr("all_train.json", json.dumps({"v1": row()}))
+    cut_map_path.write_text(json.dumps({"nid": -1, "v1": -1}), encoding="utf-8")
+    monkeypatch.setattr(
+        corpus_builder, "EXPECTED_CUT_MAP_SHA256", corpus_builder.sha256(cut_map_path)
+    )
     with pytest.raises(ValueError, match="archive hash differs"):
-        corpus_builder.build(source, tmp_path / "out")
+        corpus_builder.build(source, cut_map_path, tmp_path / "out")

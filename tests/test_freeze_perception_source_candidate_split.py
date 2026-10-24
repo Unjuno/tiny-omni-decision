@@ -12,6 +12,8 @@ def sample(video_id, record_num):
         "group_id": video_id,
         "split": "train",
         "media_reference": {"video_id": video_id},
+        "provenance": {"upstream_cut_frame": -1},
+        "request": {"audio_interval_us": [100_000, 200_000], "candidates": []},
     }
 
 
@@ -19,7 +21,14 @@ def clips(video_ids):
     return {
         video_id: {
             "sha256": hashlib.sha256(video_id.encode()).hexdigest(),
-            "metadata": {"split": "train"},
+            "cut_frame": -1,
+            "metadata": {
+                "split": "train",
+                "num_frames": 10,
+                "frame_rate": 10.0,
+                "audio_samples": 1_000,
+                "audio_sample_rate": 100.0,
+            },
         }
         for video_id in video_ids
     }
