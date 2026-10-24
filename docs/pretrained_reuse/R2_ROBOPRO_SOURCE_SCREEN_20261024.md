@@ -111,6 +111,15 @@ files and their SHA-256 hashes are preserved in the local attempt directory;
 the committed JSON summary records their hashes, counts, duplicate claim, and
 scope.
 
+## Verification
+
+- Auditor-focused unit tests: 2 passed.
+- Full repository CPU test suite with `CUDA_VISIBLE_DEVICES=-1`: 2,386 passed,
+  11 skipped in 36.18 seconds (exit code 0). Log:
+  `C:\CodexArtifacts\pretrained-reuse-r2\robopro-metadata-screen-01\pytest-fullsuite-02.log`.
+- `python -m ruff check .`: passed.
+- No model load, feature extraction, training, inference, or GPU compute was run.
+
 ## Primary sources
 
 - [RoboPro dataset card and license metadata](https://huggingface.co/datasets/Hoshipu/RoboPro)
