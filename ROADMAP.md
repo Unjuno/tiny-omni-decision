@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-24 R2 RoboPro video+sensor source screen:** RoboPro is a useful
+temporal robotics task-design lead (video, joint state/action, language), but
+its native target is continuous action, the public viewer exposes only a train
+split, official metadata contains a duplicate episode and conflicting counts,
+and neither an option-probability task nor both-input necessity is established.
+Keep it REVIEW; no payload was accessed and no GPU work was run. See the
+[`RoboPro source screen`](docs/pretrained_reuse/R2_ROBOPRO_SOURCE_SCREEN_20261024.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
