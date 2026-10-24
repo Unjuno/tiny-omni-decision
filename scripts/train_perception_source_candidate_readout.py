@@ -156,6 +156,9 @@ def load_examples(plan_path: Path, corpus_split_path: Path, video_root: Path, au
         or video_result.get("feature_shape") != list(video_values.shape)
         or video_result.get("checkpoint_sha256") != VIDEOPRISM_CHECKPOINT_SHA256
         or video_result.get("source_commit") != VIDEOPRISM_SOURCE_COMMIT
+        or video_result.get("model_parameters") != 114_365_184
+        or video_result.get("feature_index_sha256")
+        != sha256_file(video_root / "feature_index.jsonl")
         or video_result.get("labels_loaded")
         or video_result.get("metrics_computed")
         or video_result.get("gpu_used")
@@ -174,6 +177,11 @@ def load_examples(plan_path: Path, corpus_split_path: Path, video_root: Path, au
         or audio_result.get("feature_shape") != list(audio_values.shape)
         or audio_result.get("weights_sha256") != EFFICIENTAT_WEIGHTS_SHA256
         or audio_result.get("source_commit") != EFFICIENTAT_SOURCE_COMMIT
+        or audio_result.get("model_parameters") != 1_961_239
+        or audio_result.get("unique_index_sha256")
+        != sha256_file(audio_root / "unique_window_index.jsonl")
+        or audio_result.get("reference_index_sha256")
+        != sha256_file(audio_root / "record_window_references.jsonl")
         or audio_result.get("model_state_sha256_before")
         != audio_result.get("model_state_sha256_after")
         or audio_result.get("labels_loaded")
