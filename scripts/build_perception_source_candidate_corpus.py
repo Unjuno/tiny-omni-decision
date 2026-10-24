@@ -7,7 +7,10 @@ import json
 import zipfile
 from pathlib import Path
 
-from tiny_omni_decision.perception_source_candidate import source_candidate_records
+from tiny_omni_decision.perception_source_candidate import (
+    consolidate_source_candidate_records,
+    source_candidate_records,
+)
 
 SOURCE_REVISION = "3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf"
 EXPECTED_TRAIN_SHA256 = "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78"
@@ -48,6 +51,7 @@ def build(input_zip, cut_map_path, output_dir):
     output_dir.mkdir(parents=True)
     destination = output_dir / "source_candidate_records.jsonl"
     counts = collections.Counter()
+    counts_before_identity_gates = collections.Counter()
     candidate_videos = set()
     candidate_counts = collections.Counter()
     positive_counts = collections.Counter()
@@ -59,7 +63,14 @@ def build(input_zip, cut_map_path, output_dir):
             video_id = row["metadata"]["video_id"]
             sounds = {sound["id"]: sound for sound in row.get("sound_localisation", [])}
             cut_frame = cut_map[video_id]
-            for record in source_candidate_records(video_id, row, cut_frame=cut_frame):
+            source_records = list(
+                source_candidate_records(video_id, row, cut_frame=cut_frame)
+            )
+            counts_before_identity_gates.update(
+                record["status"] for record in source_records
+            )
+            records = consolidate_source_candidate_records(source_records)
+            for record in records:
                 counts[record["status"]] += 1
                 hold_reason_counts.update(record["hold_reasons"])
                 if record["status"] == "candidate":
@@ -85,10 +96,17 @@ def build(input_zip, cut_map_path, output_dir):
         "builder_sha256": sha256(__file__),
         "source_member": "all_train.json",
         "split_policy": "official train only; cut map enforced; grouped by video_id",
+        "input_identity_policy": (
+            "identical model inputs with identical labels coalesced; contradictions, "
+            "coincident unresolved annotations, and indistinguishable positive crops held"
+        ),
         "row_count": sum(counts.values()),
+        "source_annotation_count": sum(counts_before_identity_gates.values()),
+        "pre_identity_status_counts": dict(sorted(counts_before_identity_gates.items())),
         "status_counts": dict(sorted(counts.items())),
         "candidate_video_count": len(candidate_videos),
         "candidate_examples": counts["candidate"],
+        "duplicate_examples": counts["duplicate"],
         "none_visible_examples": none_visible_count,
         "hold_reason_counts": dict(sorted(hold_reason_counts.items())),
         "candidate_count_distribution": dict(sorted(candidate_counts.items())),

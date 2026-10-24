@@ -195,6 +195,69 @@ def test_corpus_writer_is_deterministic_train_only_and_keeps_labels_out_of_reque
     assert '"target_candidate_ids"' in records
 
 
+def test_corpus_builder_coalesces_identical_model_inputs_with_same_targets(tmp_path, monkeypatch):
+    source_row = row()
+    duplicate = dict(source_row["sound_localisation"][0])
+    duplicate["id"] = 5
+    source_row["sound_localisation"].append(duplicate)
+    source = tmp_path / "train.zip"
+    cut_map_path = tmp_path / "cut_map.json"
+    with zipfile.ZipFile(source, "w") as archive:
+        archive.writestr("all_train.json", json.dumps({"v1": source_row}))
+    cut_map_path.write_text(json.dumps({"nid": -1, "v1": -1}), encoding="utf-8")
+    monkeypatch.setattr(corpus_builder, "EXPECTED_TRAIN_SHA256", corpus_builder.sha256(source))
+    monkeypatch.setattr(
+        corpus_builder, "EXPECTED_CUT_MAP_SHA256", corpus_builder.sha256(cut_map_path)
+    )
+
+    manifest = corpus_builder.build(source, cut_map_path, tmp_path / "out")
+    records = [
+        json.loads(line)
+        for line in (tmp_path / "out" / manifest["record_file"]).read_text().splitlines()
+    ]
+
+    assert manifest["source_annotation_count"] == 2
+    assert manifest["candidate_examples"] == 1
+    assert manifest["duplicate_examples"] == 1
+    assert manifest["pre_identity_status_counts"] == {"candidate": 2}
+    assert [item["status"] for item in records] == ["candidate", "duplicate"]
+    assert records[0]["provenance"]["coalesced_sound_annotation_ids"] == [4, 5]
+
+
+def test_corpus_builder_holds_contradictory_identical_interval_inputs(tmp_path, monkeypatch):
+    source_row = row()
+    invisible = dict(source_row["sound_localisation"][0])
+    invisible.update(
+        {
+            "id": 5,
+            "label_id": 13,
+            "label": "Other:background sound",
+            "is_visible": 0,
+            "parent_objects": [-1],
+        }
+    )
+    source_row["sound_localisation"].append(invisible)
+    source = tmp_path / "train.zip"
+    cut_map_path = tmp_path / "cut_map.json"
+    with zipfile.ZipFile(source, "w") as archive:
+        archive.writestr("all_train.json", json.dumps({"v1": source_row}))
+    cut_map_path.write_text(json.dumps({"nid": -1, "v1": -1}), encoding="utf-8")
+    monkeypatch.setattr(corpus_builder, "EXPECTED_TRAIN_SHA256", corpus_builder.sha256(source))
+    monkeypatch.setattr(
+        corpus_builder, "EXPECTED_CUT_MAP_SHA256", corpus_builder.sha256(cut_map_path)
+    )
+
+    manifest = corpus_builder.build(source, cut_map_path, tmp_path / "out")
+    records = [
+        json.loads(line)
+        for line in (tmp_path / "out" / manifest["record_file"]).read_text().splitlines()
+    ]
+
+    assert manifest["candidate_examples"] == 0
+    assert manifest["status_counts"]["held"] == 2
+    assert all("contradictory_identical_model_input" in item["hold_reasons"] for item in records)
+
+
 def test_corpus_writer_rejects_unpinned_archive_hash(tmp_path, monkeypatch):
     source = tmp_path / "train.zip"
     cut_map_path = tmp_path / "cut_map.json"

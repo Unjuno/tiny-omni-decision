@@ -1,7 +1,151 @@
 """Train-only adapter for audio-event to visual-source candidate matching."""
 
 import hashlib
+import json
 import math
+from collections import Counter, defaultdict
+
+
+def _frame_box_fingerprint(frame_boxes):
+    payload = json.dumps(frame_boxes, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def source_candidate_input_identity(record):
+    """Hash inference-visible interval and candidate boxes, ignoring option IDs/order."""
+    request = record["request"]
+    fingerprints = sorted(
+        _frame_box_fingerprint(candidate["frame_boxes"])
+        for candidate in request["candidates"]
+    )
+    payload = {
+        "task": request["task"],
+        "instruction": request["instruction"],
+        "video_id": record["media_reference"]["video_id"],
+        "audio_interval_us": request["audio_interval_us"],
+        "candidate_frame_box_fingerprints": fingerprints,
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def _target_signature(record):
+    request = record["request"]
+    fingerprints = {
+        candidate["candidate_id"]: _frame_box_fingerprint(candidate["frame_boxes"])
+        for candidate in request["candidates"]
+    }
+    targets = sorted(
+        fingerprints[candidate_id]
+        for candidate_id in record["supervision"]["target_candidate_ids"]
+    )
+    return {
+        "target_frame_box_fingerprints": targets,
+        "none_visible": record["supervision"]["none_visible"],
+    }
+
+
+def _partially_targeted_duplicate_crop(record):
+    request = record["request"]
+    fingerprints = {
+        candidate["candidate_id"]: _frame_box_fingerprint(candidate["frame_boxes"])
+        for candidate in request["candidates"]
+    }
+    candidate_counts = Counter(fingerprints.values())
+    target_counts = Counter(
+        fingerprints[candidate_id]
+        for candidate_id in record["supervision"]["target_candidate_ids"]
+    )
+    return any(
+        0 < target_counts[fingerprint] < count
+        for fingerprint, count in candidate_counts.items()
+    )
+
+
+def _as_held(record, reason):
+    held = dict(record)
+    held["hold_reasons"] = sorted(set(record.get("hold_reasons", [])) | {reason})
+    held["provenance"] = dict(record.get("provenance", {}))
+    held.pop("request", None)
+    held.pop("media_reference", None)
+    held.pop("supervision", None)
+    held["status"] = "held"
+    return held
+
+
+def consolidate_source_candidate_records(records):
+    """Deduplicate exact examples and hold incomplete or input-ambiguous labels."""
+    rows = list(records)
+    held_intervals = {
+        (
+            record.get("media_reference", {}).get("video_id", record["group_id"]),
+            tuple(record.get("provenance", {}).get("audio_interval_us", [])),
+        )
+        for record in rows
+        if record.get("status") == "held"
+    }
+    groups = defaultdict(list)
+    for record in rows:
+        if record.get("status") == "candidate":
+            groups[source_candidate_input_identity(record)].append(record)
+
+    output_by_id = {}
+    for record in rows:
+        if record.get("status") == "held":
+            output_by_id[record["record_id"]] = record
+
+    for grouped in groups.values():
+        interval_keys = {
+            (
+                row["media_reference"]["video_id"],
+                tuple(row["request"]["audio_interval_us"]),
+            )
+            for row in grouped
+        }
+        if any(key in held_intervals for key in interval_keys):
+            for row in grouped:
+                output_by_id[row["record_id"]] = _as_held(
+                    row, "coincident_unresolved_sound_annotation"
+                )
+            continue
+
+        if any(_partially_targeted_duplicate_crop(row) for row in grouped):
+            for row in grouped:
+                output_by_id[row["record_id"]] = _as_held(
+                    row, "indistinguishable_positive_candidate_crops"
+                )
+            continue
+
+        target_signatures = {
+            json.dumps(_target_signature(row), sort_keys=True, separators=(",", ":"))
+            for row in grouped
+        }
+        if len(target_signatures) > 1:
+            for row in grouped:
+                output_by_id[row["record_id"]] = _as_held(
+                    row, "contradictory_identical_model_input"
+                )
+            continue
+
+        ordered = sorted(grouped, key=lambda row: row["record_id"])
+        primary = dict(ordered[0])
+        primary["provenance"] = dict(primary.get("provenance", {}))
+        primary["provenance"]["coalesced_sound_annotation_ids"] = sorted(
+            row["provenance"]["sound_annotation_id"] for row in ordered
+        )
+        output_by_id[primary["record_id"]] = primary
+        for duplicate in ordered[1:]:
+            marker = dict(duplicate)
+            marker["status"] = "duplicate"
+            marker["hold_reasons"] = ["duplicate_identical_model_input"]
+            marker["provenance"] = dict(marker.get("provenance", {}))
+            marker["provenance"]["coalesced_into_record_id"] = primary["record_id"]
+            marker.pop("request", None)
+            marker.pop("media_reference", None)
+            marker.pop("supervision", None)
+            output_by_id[marker["record_id"]] = marker
+
+    return [output_by_id.get(row["record_id"], row) for row in rows]
 
 
 def _valid_box(box):
@@ -169,6 +313,11 @@ def source_candidate_records(video_id, row, cut_frame=None):
             "split": "train",
             "status": status,
             "hold_reasons": hold_reasons,
+            "provenance": {
+                "upstream_cut_frame": cut_frame,
+                "sound_annotation_id": sound_id,
+                "audio_interval_us": list(sound["timestamps"]),
+            },
         }
         if status == "candidate":
             candidates.sort(key=lambda candidate: candidate["_order_key"])
@@ -205,5 +354,4 @@ def source_candidate_records(video_id, row, cut_frame=None):
                 ),
                 "none_visible": not source_visible,
             }
-            record["provenance"] = {"upstream_cut_frame": cut_frame}
         yield record

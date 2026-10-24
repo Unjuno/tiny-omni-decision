@@ -69,7 +69,7 @@ features. Up to four evenly spaced visible boxes per track are retained; this
 sampling policy has not been validated. No crops or model tensors are in the
 corpus.
 
-## Train-only annotation yield
+## First-generation cut-aware annotation yield (superseded)
 
 The pinned adapter processed all 25,757 sound intervals across 2,184 train
 videos:
@@ -87,9 +87,12 @@ source annotations, 247 event intervals exceed audio duration and none exceed
 video duration; additional events are held by cut-frame rules. These are
 annotation counts, not accuracy results.
 
-This replaces the earlier narrower exploratory subset, which omitted invisible
-events and did not enforce the pinned cut map. The held visible events with
-unknown parent IDs remain unknown rather than becoming `none_visible`.
+This first-generation corpus replaced the earlier narrower exploratory subset,
+which omitted invisible events and did not enforce the pinned cut map. It was
+subsequently found to contain repeated inference inputs and label conflicts;
+it is preserved for provenance and must not be used for training. The held
+visible events with unknown parent IDs remain unknown rather than becoming
+`none_visible`.
 
 ## Local train media and CPU smoke
 
@@ -185,14 +188,86 @@ clean independent validation or sealed audit.
 The 1,732 other candidate-bearing train groups without local media are not in
 this pilot and were not assigned to either partition.
 
+## Input identity audit and corrected corpus
+
+The first-generation corpus was audited before any model training. Its 14,741
+candidate annotations contained 71 repeated model-input groups (146 records),
+including two contradictory groups (four records). The input signature ignored
+event-specific candidate IDs and option order and compared exact video/time
+identity plus hashes of each normalized candidate frame-box sequence. It also
+found 32 records where a positive and distractor candidate had identical frame
+box sequences, and two candidate intervals coincided with unresolved held
+annotations. The source annotation audit showed the contradictory cases paired
+a visible source with an invisible-source annotation over the same interval.
+No sound class or event identity was provided to inference, so those per-event
+targets could not be distinguished by the model input.
+
+The builder now applies fixed identity gates before model use:
+
+- coalesce 73 repeated rows from 69 groups when the exact model input and target
+  agree, retaining their annotation IDs as provenance;
+- hold all four rows in the two contradictory groups;
+- hold two otherwise-candidate rows that share an interval with a different
+  unresolved held annotation;
+- hold 32 rows where a positive candidate crop is visually indistinguishable
+  from a distractor under the frozen box input.
+
+All 25,757 source annotations remain represented as candidate, held, or
+duplicate provenance rows. The corrected corpus has 14,630 candidate examples,
+11,054 held examples, and 73 duplicate markers. A second identity audit found
+14,630 unique model inputs, zero repeated groups, zero contradictory groups,
+and zero partially targeted identical-crop rows. This is a predeclared input
+integrity gate, not performance-based example filtering. Cross-video
+pixel-level duplicate crops and the annotation's source-label semantics remain
+unverified.
+
+- Corrected corpus directory:
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-preflight-20261025-07\`.
+- Corpus JSONL SHA-256:
+  `11cd4c758b04e36702969d168a9987dde8028d75733bb95a0a684d7f712a19d6`.
+- Corpus manifest SHA-256:
+  `655713c9f1dd61970081b28d0ebbc0f7ddb001b8ccea68576c237b8239d21430`.
+- Pre-consolidation identity audit report SHA-256:
+  `0ac3a82b64553fde0f77d49ac91b675062665d5cc75c213d51fce8c1c8fc9def`.
+- Post-consolidation identity audit report SHA-256:
+  `67d51826d373370f19cbf5a99bd9c541ee0cfbbcc969489364dad8e093784ab5`.
+- Identity auditor SHA-256:
+  `971feac98efd727a38bf867dc3fcae08e15ac105219430c27bd48aae12380682`.
+- Adapter SHA-256:
+  `b231b269b55614ef8d1b1a308472dbbcea0442eac43148bee2396e23aaecdd34`.
+- Corpus builder SHA-256:
+  `36288d2e7aa0f0bd07702b3925aaf280ee35743625c11eb83eaf3d975e27e7e4`.
+
+A replacement seed-17 split was frozen from the corrected corpus, with the
+same 320/80 video groups but 2,593 train and 606 development records. Video ID
+and exact media SHA overlap remain zero. The development JSONL is still
+non-blind and inherited from official-train videos; its SHA-256 is
+`701bd1ab203e54fae5fcb7cc8e5987c2d903bd23b5d2fbf736c2132e953ebcda`.
+
+All 606 corrected development records were then decoded on CPU. The check
+covered 1,840/1,840 requested frames and 1,921.820085 seconds of event audio,
+with 80/80 media hashes matching the acquisition receipt and 172 none-visible
+records. It loaded no model and computed no quality metrics.
+
+- Replacement split manifest SHA-256:
+  `28b0bf9177d1ff2d2b89adb0c7d2916fc01180aef1d51da5b65356849ffd53aa`.
+- Replacement train JSONL SHA-256:
+  `c5a8396a6b47a8635033e445c67233c76a6ecb17d27f4e6943a153fd3598600d`.
+- Development media report:
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-dev-media-preflight-attempt-08\media-preflight.json`.
+- Development media report SHA-256:
+  `a18a0fe1c346f20165cd5f1fbfaa993eb68616edc535bee2d5b35332bda12c94`.
+- Development media checker SHA-256:
+  `ac8a1088de6b855006546c42afc988710ffe084773e898d49518f8c124e7bf8e`.
+
 ## Remaining gates before model work
 
-1. One event per video was decoded across all 400 local media groups, and every
-   record in the 80-group internal development partition was checked. Decode
-   the remaining 2,288 candidate events in these 400 videos before treating
-   all local annotations as media-verified. There is no local media for the
-   other 1,732 candidate-bearing groups. Do not load previously inspected
-   official validation or any sealed-audit annotations.
+1. Every record in the 80-group internal development partition was checked.
+   The corrected 320-group train partition has 2,593 candidate records; a
+   current-corpus train media check is still required before feature extraction
+   or fitting. There is no local media for the other 1,731 candidate-bearing
+   groups in the corrected corpus. Do not load previously inspected official
+   validation or any sealed-audit annotations.
 2. Freeze matched audio-only, video-only, event-label-prior, candidate-order,
    audio-shuffle, stale-window, and interval-offset controls before selecting a
    model. Match candidate sets and report multi-label and none-visible metrics.

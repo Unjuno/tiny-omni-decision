@@ -1,30 +1,25 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-24 R2 Perception Test source-candidate adapter preflight:** Added a
-train-only, multi-positive candidate-reranking format that pairs annotated
-audio-event intervals with unmasked object proposals from the same video. Of
-25,757 train events, 14,741 pass the conservative parent, distractor,
-visibility, duration, and upstream cut-frame gates across 2,132 videos; option
-counts range from 2 to 49. Invisible-source events use an explicit
-`none_visible` target only when at least two visual candidates exist; visible
-events with missing or unknown parents are held. Existing train-only media
-files cover 400 candidate video groups (3,219 events) by filename match. CPU
-preflight verified file hashes and one selected event in every group, including
-1,264/1,264 requested bbox frames, 1,438.767 seconds of fully covered event
-audio, 122 none-visible examples, and all four locally available cut-frame
-groups. All 611 records in the 80-group internal development partition were
-then checked: 1,927/1,927 frames decoded and 2,026.274 seconds of event audio
-fully covered. This adds 531 unique records because 80 overlap the original
-sample; 931 of the 3,219 local candidate events are now checked, leaving 2,288.
-The deterministic corpus and a seed-17 group split were frozen outside Git
-(320 train groups / 80 development groups; 2,608 / 611 events, with zero video
-or exact media-hash overlap). This split is not blind, participant grouping is
-unknown, and normalized near-duplicates were not checked. This remains annotation/media feasibility
-only: no model fit, validation/audit access or quality claim. Oracle event
-windows and object proposals remain deployment shortcuts, so
-modality-necessity controls and complete media-boundary checks must pass before
-any readout run. This distinct task format does not reopen the closed
-visibility or temporal-match cohorts and does not close R2 M-2. See the
+**2026-10-25 R2 Perception Test source-candidate preflight:** Added a train-only,
+multi-positive candidate-reranking format pairing sound intervals with
+unmasked object proposals. A pre-fit input-identity audit found two
+contradictory groups, 73 duplicate rows, 32 positive crops indistinguishable
+from distractors, and two candidate intervals with coincident unresolved
+annotations. The corrected corpus applies these integrity gates: of 25,757
+source annotations, 14,630 are unique candidates, 11,054 are held, and 73 are
+duplicate provenance markers, across 2,131 candidate videos. The post-gate
+audit found zero repeated or contradictory inputs and zero partially targeted
+identical-crop rows. A seed-17 grouped split covers 320 train videos / 80
+development videos (2,593 / 606 candidates, no video or exact media-hash
+overlap). All 606 internal development records passed CPU media checks:
+1,840/1,840 frames decoded, 1,921.820 seconds of audio fully covered, and
+80/80 media hashes matched. The development partition is non-blind and comes
+from official-train media; participant grouping and cross-video pixel-level
+duplicates remain unchecked. The corrected 2,593-record train partition still
+needs full media preflight. No model fit, quality metrics, validation/audit
+access, or product claim. Oracle event windows/object proposals remain
+deployment shortcuts; matched modality-necessity controls and source-label
+semantics must be addressed before any readout run. See the
 [`source-candidate preflight`](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_PREFLIGHT_20261024.md).
 
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
