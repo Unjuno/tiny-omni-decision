@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-24 R2 Perception Test source-candidate adapter preflight:** Added a
+train-only, multi-positive candidate-reranking format that pairs annotated
+audio-event intervals with unmasked object proposals from the same video. Of
+25,757 train events, 10,154 pass the conservative parent-and-distractor gate
+across 1,982 videos; option counts range from 2 to 49. The deterministic corpus
+and source/adapter/builder hashes are recorded outside Git. This is annotation
+feasibility only: no media decode, model fit, validation/audit access or quality
+claim. Oracle event windows and object proposals remain deployment shortcuts,
+so modality-necessity controls and media-boundary checks must pass before any
+readout run. This distinct task format does not reopen the closed visibility or
+temporal-match cohorts and does not close R2 M-2. See the
+[`source-candidate preflight`](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_PREFLIGHT_20261024.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
