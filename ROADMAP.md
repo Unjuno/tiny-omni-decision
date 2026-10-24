@@ -12,8 +12,9 @@ input-path smoke. Manifest hashes and answer/question-type counts are recorded i
 CPU tests pass (2,418 passed, 11 skipped), Ruff passes; the corrected push is
 green on GitHub Actions. Fixed gray-image and split-local shuffled-image
 controls now pass CPU feature-extraction smoke. The selected-media range fetch
-is underway (2,591/20,480 images at 08:50 JST); no full feature cache or
-quality score exists. GPU
+is underway (2,591/20,480 images at 08:50 JST); a separate 08:53 CPU check
+decoded all 3,177 then-downloaded validation PNGs and matched them to the
+frozen manifest. No full feature cache or quality score exists. GPU
 feature extraction/fitting waits on the existing RTX 3080 run, which occupies
 16,124/16,384 MiB. CoGenT-B remains unopened.
 

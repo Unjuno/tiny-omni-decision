@@ -201,6 +201,11 @@ is running from the pinned ZIP using 8 workers and a 2 GiB disk reserve. At
 2026-10-25 08:50 JST, 2,591/20,480 files (all validation so far) were saved and
 verified. They are outside Git at
 `C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-media-seed17-attempt-01/`.
+At 08:53 JST, a separate CPU verification found 3,177 downloaded validation
+PNGs, all named in the pinned validation manifest, all decodable at 480x320;
+none failed image verification. The manifest SHA-256 remained
+`ed3ea2d6af987a3486860f4a4766b18fd309905626e49479561675883eef0d82`. This is
+a partial-cache integrity check, not feature or quality evaluation.
 Next: finish media acquisition, extract full ViLT features and controls through
 the cooperative HotUGPU reservation, fit the readout, then assess per-answer
 and per-program metrics without opening CoGenT-B. Keep the prospective held-out
