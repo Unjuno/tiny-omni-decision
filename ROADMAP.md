@@ -20,6 +20,20 @@ AV comparison PR #21](https://github.com/Unjuno/tiny-omni-decision/pull/21),
 [CSQA2 text probe PR #29](https://github.com/Unjuno/tiny-omni-decision/pull/29),
 and [AVSBench/ASAPS source gate PR #30](https://github.com/Unjuno/tiny-omni-decision/pull/30).
 
+**2026-10-25 R1/R2 PE-Core T16 evidence reconciliation:** The independent
+`codex/r1-pe-core-audit-20261021` branch's pinned checkpoint and CLEVR-4
+artifacts were rechecked locally without touching that branch. A fresh isolated
+CPU forward from the converted checkpoint returned finite image/text embeddings
+and counted 69,546,113 parameters; this is runtime evidence, not task quality.
+On the already observed synthetic CLEVR-4 reporting IDs, zero-shot similarity
+scored 42.81% macro Accuracy and a frozen-feature candidate scorer reached
+79.95%, with Count at 29.28%, below the historical Path A 88.06% macro result.
+These are development-only results; no candidate promotion follows. Keep PE-Core
+license status REVIEW because checkpoint and implementation grants remain
+distinct. Revalidation details and hashes are in
+[`PE-Core T16 CPU revalidation`](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_REVALIDATION_20261025.md);
+the detailed task protocols/results remain linked from that report.
+
 **2026-10-25 R2 crop × coverage factorial analysis:** Added a CPU-only
 hash-pinned analyzer for the four fixed-endpoint cells (center/full extent ×
 repeat/fresh coverage), with per-modality Accuracy/NLL/Brier/ECE, macro metrics,

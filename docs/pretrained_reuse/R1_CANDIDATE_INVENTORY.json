@@ -223,7 +223,7 @@
       ],
       "model_revision": "facebook/PE-Core-T16-384@8b4722741a516c18e7d311f158f13c600fea6c78",
       "checkpoint_bytes": 278284008,
-      "parameters": 50000000,
+      "parameters": 69546113,
       "license": "Official PE Core docs state released checkpoint weights are Apache-2.0; repository implementation package separately declares FAIR Noncommercial Research License",
       "license_allowed": null,
       "license_status": "REVIEW",
@@ -231,19 +231,32 @@
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
       ],
-      "passed_load": false,
+      "passed_load": true,
       "has_real_weights": true,
-      "runtime_supported": false,
-      "runtime_evidence": "Official model card and checkpoint are listed; anonymous Hub API audit returned HTTP 401, so no download/load was independently verified. The official repository package setup.py declares FAIR Noncommercial Research; keep implementation/product rights under REVIEW.",
-      "task_quality_status": "unmeasured",
-      "decision": "pretrained checkpoint is listed with Apache-2.0 weight terms, but anonymous asset access was not verified; official implementation package declares FAIR Noncommercial Research, so product use needs license-clean implementation or resolution",
-      "parameter_tensor_bytes": null,
+      "runtime_supported": true,
+      "runtime_evidence": "Revalidated in isolated CPU-only OpenCLIP 3.3.0 using pinned timm safetensors revision 7fe539ed578ac49a1c2b4f946e4b0747704c825a (SHA-256 477b7507c79e3484195f4e389af6d044b5d56f42ce503d6b0eb7e99439b545e): finite [1,512] image and [2,512] text embeddings, 69,546,113 instantiated parameters, CUDA not initialized. Revalidation receipt is C:/CodexArtifacts/pretrained-reuse-r1/pe-core-t16-r1-attempt-05-runtime-revalidation/result.json. This proves an isolated CPU forward path, not project integration or release suitability.",
+      "task_quality_status": "measured only on synthetic CLEVR-4 development reporting IDs: zero-shot macro Accuracy 42.81%; learned frozen-feature readout 79.95%, with Count 29.28%. Below the existing Path A comparison and not blind or product quality.",
+      "decision": "checkpoint is accessible and a pinned OpenCLIP CPU forward is reproducible; keep license status REVIEW and do not adopt from synthetic CLEVR-4 evidence, where the learned readout remains below Path A overall and Count is a severe bottleneck",
+      "parameter_tensor_bytes": 278182404,
       "primary_citations": [
         "https://huggingface.co/facebook/PE-Core-T16-384",
+        "https://huggingface.co/timm/PE-Core-T-16-384",
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/apps/pe/README.md",
         "https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE"
       ],
-      "release_status": "unknown"
+      "release_status": "pretrained and accessible",
+      "parameter_count_basis": "sum(model.parameters()) from the instantiated OpenCLIP 3.3.0 PE-Core-T-16-384 CPU runtime; includes 512 zero-initialized visual.trunk.head.bias parameters absent from the original checkpoint state dict",
+      "checkpoint_sha256": "868f89f066b7c1ae51add02d2cb7b925fd051076282773f2ec3c71359fbdaf3b",
+      "audit_date": "2026-10-25",
+      "audit_report": "docs/pretrained_reuse/R1_PE_CORE_T16_CPU_REVALIDATION_20261025.md",
+      "runtime_smoke_status": "PASS_CPU_FORWARD_REVALIDATION",
+      "runtime_smoke_result_sha256": "65da96409b5414ce02d0373846bc980a3d3d8cf9b7f709e5f63613503a367c4a",
+      "observed_state_dict_elements": 69545601,
+      "state_dict_audit_status": "PASS_CPU_SAFE_STATE_DICT_AUDIT",
+      "task_result_reports": [
+        "https://github.com/Unjuno/tiny-omni-decision/blob/codex/r1-pe-core-audit-20261021/docs/pretrained_reuse/R2_PE_CORE_CLEVR4_ZERO_SHOT_RESULTS_20261021.md",
+        "https://github.com/Unjuno/tiny-omni-decision/blob/codex/r1-pe-core-audit-20261021/docs/pretrained_reuse/R2_PE_CORE_CLEVR4_READOUT_RESULTS_20261021.md"
+      ]
     },
     {
       "id": "pe-av-small",
