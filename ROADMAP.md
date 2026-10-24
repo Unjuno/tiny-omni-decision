@@ -20,6 +20,17 @@ AV comparison PR #21](https://github.com/Unjuno/tiny-omni-decision/pull/21),
 [CSQA2 text probe PR #29](https://github.com/Unjuno/tiny-omni-decision/pull/29),
 and [AVSBench/ASAPS source gate PR #30](https://github.com/Unjuno/tiny-omni-decision/pull/30).
 
+**2026-10-25 R2 additional source-gate reconciliation:** Recent independent
+metadata-only screens do not admit AVRT-20K, RoboPro, or otoSpeech as training
+or quality-evaluation sources. AVRT-20K has one published split and unresolved
+media rights; RoboPro exposes only a train split and continuous robot commands,
+not the frozen option-probability target; otoSpeech has unresolved participant
+and stimulus permissions plus only 18 sessions / ten reported scene pairs, so
+group-independent evaluation is not established. No labels or media were
+accessed. See the [AVRT-20K screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-csqa2-text-decision-20261024/docs/pretrained_reuse/R2_AVRT20K_SOURCE_GATE_20261024.md),
+[RoboPro screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-robopro-source-screen-20261024/docs/pretrained_reuse/R2_ROBOPRO_SOURCE_SCREEN_20261024.md), and
+[otoSpeech screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-robopro-source-screen-20261024/docs/pretrained_reuse/R2_OTOSPEECH_TASK_SOURCE_SCREEN_20261024.md).
+
 **2026-10-25 R1/R2 PE-Core T16 evidence reconciliation:** The independent
 `codex/r1-pe-core-audit-20261021` branch's pinned checkpoint and CLEVR-4
 artifacts were rechecked locally without touching that branch. A fresh isolated
