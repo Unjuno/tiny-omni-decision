@@ -508,6 +508,20 @@ def run(args: argparse.Namespace):
     ).hexdigest()
     started = datetime.now(UTC).isoformat()
     timer = time.perf_counter()
+    args.output.mkdir(parents=True, exist_ok=False)
+    run_path = args.output / "run.json"
+    history_path = args.output / "training-history.jsonl"
+    best_state_path = args.output / "best-readout-state.pt"
+    atomic_json(
+        run_path,
+        {
+            "status": "RUNNING",
+            "effective_config": effective_config,
+            "config_sha256": config_hash,
+            "started_at_utc": started,
+        },
+    )
+    history_path.write_text("", encoding="utf-8")
     model = CrossModalCandidateScorer()
     trainable_parameters = sum(
         parameter.numel() for parameter in model.parameters() if parameter.requires_grad
@@ -543,9 +557,29 @@ def run(args: argparse.Namespace):
                 name: value.detach().cpu().clone()
                 for name, value in model.state_dict().items()
             }
+            temporary_best = best_state_path.with_suffix(".pt.tmp")
+            torch.save(best_state, temporary_best)
+            temporary_best.replace(best_state_path)
+        with history_path.open("a", encoding="utf-8", newline="\n") as stream:
+            stream.write(json.dumps(row, sort_keys=True) + "\n")
+            stream.flush()
+        atomic_json(
+            run_path,
+            {
+                "status": "RUNNING",
+                "effective_config": effective_config,
+                "config_sha256": config_hash,
+                "started_at_utc": started,
+                "last_completed_epoch": epoch,
+                "best_epoch": best_epoch,
+                "best_development_nll": best_nll,
+            },
+        )
     if best_state is None:
         raise RuntimeError("validation selector did not retain a checkpoint")
     final_state = {name: value.detach().cpu().clone() for name, value in model.state_dict().items()}
+    final_state_path = args.output / "final-readout-state.pt"
+    torch.save(final_state, final_state_path)
     model.load_state_dict(best_state)
 
     evaluation = {}
@@ -593,24 +627,25 @@ def run(args: argparse.Namespace):
         video = torch.from_numpy(first.visual_mean_delta[None, :, :])
         audio = torch.from_numpy(first.audio[None, :])
         mask = torch.ones((1, len(permutation)), dtype=torch.bool)
-        base_scores = score_batch(model, video, audio, mask)[0, : len(permutation)].numpy()
-        permuted_scores = score_batch(
-            model, video[:, permutation], audio, mask
-        )[0, : len(permutation)].numpy()
+        with torch.inference_mode():
+            base_scores = (
+                score_batch(model, video, audio, mask)[0, : len(permutation)]
+                .detach()
+                .cpu()
+                .numpy()
+            )
+            permuted_scores = (
+                score_batch(model, video[:, permutation], audio, mask)[0, : len(permutation)]
+                .detach()
+                .cpu()
+                .numpy()
+            )
         order_invariance_delta = float(
             np.max(np.abs(base_scores[permutation] - permuted_scores))
         )
         if order_invariance_delta > 1e-7:
             raise AssertionError("candidate scores changed under candidate reordering")
 
-    args.output.mkdir(parents=True, exist_ok=True)
-    torch.save(best_state, args.output / "best-readout-state.pt")
-    torch.save(final_state, args.output / "final-readout-state.pt")
-    with (args.output / "training-history.jsonl").open(
-        "x", encoding="utf-8", newline="\n"
-    ) as stream:
-        for row in history:
-            stream.write(json.dumps(row, sort_keys=True) + "\n")
     model_config = {
         **effective_config,
         "config_sha256": config_hash,
@@ -637,6 +672,20 @@ def run(args: argparse.Namespace):
     }
     atomic_json(args.output / "result.json", model_config)
     atomic_json(args.output / "input-hashes.json", input_hashes)
+    atomic_json(
+        run_path,
+        {
+            "status": model_config["status"],
+            "effective_config": effective_config,
+            "config_sha256": config_hash,
+            "started_at_utc": started,
+            "ended_at_utc": model_config["ended_at_utc"],
+            "last_completed_epoch": EPOCHS,
+            "best_epoch": best_epoch,
+            "best_development_nll": best_nll,
+            "result_sha256": sha256_file(args.output / "result.json"),
+        },
+    )
     return model_config
 
 
