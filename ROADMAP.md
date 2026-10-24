@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-24 R2 RoboPro video+sensor source screen:** Pinned metadata resolves
+the release counts at 16,000 rows / 3,728,773 frames, including a declared
+duplicate episode, but exposes only a train split and no scene-group IDs.
+RoboPro remains a temporal robotics task-design lead; its native target is
+continuous action, not option probabilities, and both-input necessity is
+unproved. Keep it REVIEW; no media or action payload was accessed and no GPU
+work was run. See the [source screen](docs/pretrained_reuse/R2_ROBOPRO_SOURCE_SCREEN_20261024.md)
+and [metadata audit](docs/pretrained_reuse/R2_ROBOPRO_METADATA_AUDIT_20261024.json).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
@@ -1498,6 +1507,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 - [ ] **M-0/M-1:** Build direct text-free audio-only, video-only, image-only, screen-only and sensor-only decision probes (plus text-only control) with typed action/option IDs, time/unit/missingness metadata, and no hidden text question or mandatory text encoder. Audio, video, image and sensor each have narrow direct probes. Screen has only oracle-region category pilots that lost to a frequency prior; full screenshot-to-action selection is open. Typed criterion-to-option text control coverage is also incomplete. Treat Audio+Text, Video+Text and sensor-embedding-only results as *non-equivalent* controls.
   Direct text-free CLEVR-4 image taxonomy readout reached 88.30% macro Accuracy on an internal split; count was 58.19%. A separate CLEVRER video-only temporal probe and HARTH sensor comparison are also recorded. These are synthetic/narrow development tasks, not blind product results. The sensor result is imbalanced and transition/class-2 recall is weak. See [image](docs/pretrained_reuse/R2_TEXTFREE_IMAGE_DECISION_20261017.md), [video](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_TEMPORAL_RESULTS_20261018.md), [audio](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_DECISION_20261017.md), [sensor](docs/pretrained_reuse/R2_NATIVE_SENSOR_SUBJECT_RESULTS_20261012.md), and [screen pilots](docs/pretrained_reuse/R2M_SCREEN_CLASSIFIER_RESULTS_20261012.md).
 - [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Include matched best-unimodal baselines, all missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
+  **2026-10-24 source screen:** otoSpeech Task is a potential audio+screen benchmark (`Spot the Difference`: 18 sessions, ten scene pairs, asymmetric views and task answers), but the data is manually gated and no split or media was accessed. It is not video input and remains REVIEW; see [`R2 source screen`](docs/pretrained_reuse/R2_OTOSPEECH_TASK_SOURCE_SCREEN_20261024.md). This does not close M-2.
 - [ ] **M-3–M-6:** Add optional text/spoken conditions without making them compulsory, then evaluate individual and combined task quality, <=200M loaded parameters **including the sensor path**, and actual post-quantization >=95% recovery on the same locked task battery. Do not claim general 95–98% world understanding from unrelated narrow benchmarks; lock evaluation before training/selection.
 
 
