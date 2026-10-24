@@ -182,11 +182,11 @@ Evaluate:
 
 ### Teacher handoff
 
-Finish the current Teacher run under its existing configuration, select the best checkpoint using validation, verify reload, then freeze the Master Teacher and its provenance. This is a handoff requirement, not a claim that the current local run has completed. Do not restart or alter the active Teacher run for this plan change. Keep different experiment series separate.
+The seed-17 clean-dev-v3 Teacher run has completed its planned 2,048 updates under the frozen configuration after exact resume; validation selected step 1,664 and checkpoint reload was verified. Retain it as development evidence only, not a promoted Master Teacher. Keep different experiment series separate.
 
 The separate 90%-per-modality Teacher quality objective remains unfulfilled by the recorded Gemma 4 experiments. A frozen-reference check on a new, development-only Physion++ split found 54.1% Video Accuracy for Teacher v1 and 57.4% for E-long's selected checkpoint; the paired scene/seed interval includes zero and E-long has worse NLL/Brier. This does not change the ternary-first student sequence or promote either Teacher. See [docs/PHYSIONPP_VIDEO_REFERENCE.md](docs/PHYSIONPP_VIDEO_REFERENCE.md).
 
-The subsequent seed-17 clean-dev-v3 Teacher run is incomplete: the process was safety-stopped after the last exact checkpoint at step 256 because active Windows pagefile growth left less disk space than the next checkpoint required. The complete stop record and a conditional exact-resume path are in [docs/TEACHER_QUALITY_PHYSIONPP_CLEAN_DEV_V3.md](docs/TEACHER_QUALITY_PHYSIONPP_CLEAN_DEV_V3.md).
+The clean-dev-v3 run initially stopped under pagefile/disk pressure, then resumed exactly from a verified step-1,152 snapshot and completed at step 2,048. The selected checkpoint is step 1,664. Its 326-example-per-modality validation selector is development evidence (all video examples are temporal descriptive); Video Accuracy is 50.92% at the selected checkpoint and 53.68% at the terminal checkpoint, while the selector keeps step 1,664. No sealed audit or product promotion occurred. Full curve, hashes, metrics and limits are in [docs/TEACHER_QUALITY_PHYSIONPP_CLEAN_DEV_V3.md](docs/TEACHER_QUALITY_PHYSIONPP_CLEAN_DEV_V3.md).
 
 ## Phase 6 — EmbeddingGemma 2: ternary first
 

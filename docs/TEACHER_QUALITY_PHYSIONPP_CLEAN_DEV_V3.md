@@ -1,6 +1,6 @@
 # Teacher Quality: Physion++ Clean Development v3
 
-Status: **incomplete; safety-stopped for local disk/pagefile pressure**. This is not a quality-based rejection and is not a Teacher promotion. No sealed/final audit was loaded.
+Status: **2,048 optimizer updates completed after exact resume; selected-checkpoint reload verified.** The initial attempt was safety-stopped for local disk/pagefile pressure. That interruption and a later checkpoint-serialization failure are retained below; neither changed the experiment conditions. This remains development-selector evidence, not a Teacher promotion. No sealed/final audit was loaded.
 
 ## Run definition and provenance
 
@@ -44,4 +44,107 @@ Run files remain outside Git at `C:\CodexArtifacts\tqpp\physionpp-clean-dev-v3-g
 
 ## Decision
 
-This run is **blocked/incomplete for infrastructure reasons**. It does not support a conclusion that longer training is ineffective. The fresh-audit gate remains untouched and unmet; all four modalities must still reach at least 90% on a future sealed audit.
+The initial attempt was incomplete for infrastructure reasons; the exact continuation below resolved the run-completion gate without changing its conditions. The completed run still does not establish a model-family ceiling or product quality. The fresh-audit gate remains untouched and unmet; all four modalities must still reach at least 90% on a future sealed audit.
+
+## Exact continuation and completed learning curve (2026-10-08)
+
+The step-256 stop above was not treated as a quality result. An exact continuation
+first resumed the verified step-256 snapshot and reached step 1,280; its next
+checkpoint serialization failed under local storage pressure. Its latest exact
+snapshot was step 1,152. A separate continuation then passed the existing exact-
+resume preflight from that snapshot and completed the same seed-17 experiment
+through step 2,048. It used the same base, frozen corpus, config, source code,
+validation IDs/order, sampler, optimizer, cosine scheduler, selector and RNG
+state. The uncheckpointed tail after step 1,152 was replayed; no fresh seed or
+hyperparameter run was started. The original attempts and files remain intact.
+
+The durable continuation output is
+`C:\CodexArtifacts\tqpp\physionpp-clean-dev-v3-generation-02\run-seed17-2048-resume-step1152-exact\`.
+Its `resume-preflight.json` records matching config, corpus-manifest and code
+hashes, optimizer/scheduler/adapter/RNG presence, consumed sampler order,
+selected-adapter hash and validation-selector order. The preflight records
+resume step 1,152/sample index 4,608, and the run summary records the resumed
+run reaching step 2,048. Trainer state ends at sample index 8,192;
+all 8,192 training examples were unique. The selected checkpoint is step 1,664,
+and the terminal step-2,048 adapter is separate. The trainer's saved
+`checkpoint_reload_verified` value is true.
+
+The following checkpoints share the same 1,304-example development selector
+(326 examples per modality). All 326 video questions are temporal descriptive;
+this result cannot establish other video task types. The selector was used for
+checkpoint choice, so these are not blind-test estimates.
+
+| Step | Macro Accuracy | Minimum modality Accuracy | Macro NLL | Video Accuracy | Video NLL | Selector score |
+|---:|---:|---:|---:|---:|---:|---:|
+| 512 | 0.7416 | 0.4939 | 0.6748 | 0.4939 | 0.6815 | 0.43369 |
+| 768 | 0.7661 | 0.5061 | 0.6749 | 0.5061 | 0.6878 | 0.42350 |
+| 1,024 | 0.7722 | 0.5123 | 0.7836 | 0.5123 | 0.7899 | 0.53690 |
+| 1,152 | 0.7676 | 0.5092 | 0.6108 | 0.5092 | 0.7136 | 0.35697 |
+| 1,280 | 0.7661 | 0.4816 | 0.5861 | 0.4816 | 0.6939 | 0.33625 |
+| 1,536 | 0.7853 | 0.5092 | 0.5527 | 0.5092 | 0.7118 | 0.28965 |
+| **1,664 selected** | **0.7876** | **0.5092** | **0.5371** | **0.5092** | **0.6969** | **0.27100** |
+| 1,920 | 0.7906 | 0.5276 | 0.5515 | 0.5276 | 0.7080 | 0.28096 |
+| 2,048 final | 0.7922 | 0.5368 | 0.5508 | 0.5368 | 0.7078 | 0.27805 |
+
+Selected step 1,664 macro Accuracy/NLL/Brier/ECE was
+`0.7876 / 0.5371 / 0.2621 / 0.0567`. Per-modality Accuracy/NLL/Brier/ECE:
+
+| Modality | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|
+| Audio | 1.0000 | 0.000215 | 0.0000003 | 0.000215 |
+| Image | 0.8650 | 0.4173 | 0.2003 | 0.0498 |
+| Text | 0.7761 | 1.0340 | 0.3445 | 0.1158 |
+| Video | 0.5092 | 0.6969 | 0.5036 | 0.0610 |
+
+At the terminal step 2,048, macro Accuracy/NLL/Brier/ECE was
+`0.7922 / 0.5508 / 0.2658 / 0.0633`. Video Accuracy increased to 0.5368, but
+the fixed selector score was worse than at step 1,664, so the best checkpoint
+was retained. Text and Image NLL/ECE also worsened from the selected checkpoint.
+This is a validation trade-off, not permission to select the final weights.
+
+The same-selector Teacher v1 reference had macro
+Accuracy/NLL/Brier/ECE `0.7247 / 0.8932 / 0.3765 / 0.1206`; modality Accuracy
+was Audio 1.0000, Image 0.7730, Text 0.6104 and Video 0.5153. The selected
+candidate improves macro metrics and Image/Text Accuracy on this development
+selector, while Video Accuracy is 0.61 percentage points lower than the v1
+reference. The terminal checkpoint is 2.15 points above the reference on Video
+Accuracy, but has worse macro NLL than the selected step. This one seed and
+selection-touched selector do not prove broad transfer or 90% video quality.
+
+At step 2,048 the run had consumed 8,192 examples with no repeats, 5,391 unique
+assets, and 319 CLEVRER scenes. Source counts were CLEVRER 2,512; Physion++
+Readout 219; Clevr-4 2,048; and 683 each from Typed Decisions Synth, MASSIVE,
+LibriSpeech and Open-Jev, plus 682 Speech Commands. Video-task counts were 555
+counterfactual, 914 explanatory, 488 predictive and 774 temporal descriptive.
+The selected step-1,664 checkpoint corresponds to 6,656 consumed examples.
+
+The selected adapter SHA-256 is
+`397be9640c79c10f9a56cdf00c2e9c76da743271f3c0271c0a7386353a194ee7`; the
+step-2,048 final adapter SHA-256 is
+`71fa0fb1d61214c8367943315a3079e8d82dbf7f796c9b0cca22e1fa4f1aff78`.
+The run manifest SHA-256 is
+`9e398496a37b89ddadf9dc548627d39ec824d29d380e5678b353137b903e4cda`, training
+history SHA-256 is
+`5800a48fe79fb73e1a24c28711761a25637e0405d38afeccc91d3a7b6a3c79ce`, and
+the final metrics/predictions SHA-256 values are respectively
+`91bbb5fae93dff26fe1ee510240b13f0f3fb1a1934e260d0a7e97ec1c3ea2be3` and
+`6452174009a8addb6cbafe82f66c6a085f200333146ad645c239b0ae6219a4fa`.
+
+The source commit recorded by the run is
+`740ec0a7d2d8ba870b384a130c8b0821537b9626`; config SHA-256 is
+`40ac489e1f5b06b18bdd296a02993c9e80764fb8e1d442718298d3db858715d0`, effective
+config SHA-256 is
+`8ea1ff704071e99cc3cbfd7c04e3fd40419399a02544f406d5e0838ca1ba0b71`, and the
+train/validation corpus hashes remain those listed above. The pinned base and
+processor revision is `6befbaca7398925921802abd1f277b495b78b738`.
+
+The continuation used only the local RTX 3080 Laptop GPU, BF16, PyTorch
+2.6.0+cu124, CUDA 12.4, Transformers 5.6.2, PEFT 0.21.2, Accelerate 1.15.0,
+Python 3.11.9 and the math SDP backend. The selected adapter is 96,693,360 bytes
+with 24,158,208 trainable LoRA parameters; the complete Teacher remains a
+5,128,455,712-parameter research model. Peak allocated VRAM was 11,954,854,912
+bytes. The exact continuation reports 26,230 seconds wall time; the cumulative
+run metadata reports 59,103 seconds including prior attempts and evaluations.
+Cloud cost was $0. No sealed audit, ternary conversion, adapter merge or product
+promotion occurred. The 90%-per-modality quality gate remains unmet, with
+Physion++ Video the weakest modality at 50.92% for the selected checkpoint.
