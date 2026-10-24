@@ -212,8 +212,12 @@ predictions, or scores and records no model load or metric computation.
 The frozen manifest covers all 2,593 train and 606 development rows. A bounded
 one-second offset is available for 2,431/2,593 train rows and 570/606
 development rows; other rows are retained in the primary condition and marked
-ineligible for this particular offset intervention. The cross-video shuffle
-tests dependence on synchronized audio but does not guarantee semantic
+ineligible for this particular offset intervention. The candidate ordering is
+non-identity for every row (2,593/2,593 train; 606/606 development). Frame
+reversal is informative for 1,179 train and 271 development examples with at
+least one multi-frame candidate; other rows remain in the main conditions. The
+cross-video shuffle tests dependence on synchronized audio but does not
+guarantee semantic
 contradiction. No contradiction control, quality gate, or task-semantic
 validation is claimed yet. The next model experiment remains blocked on full
 corrected-train CPU media preflight, feature/input parity, and explicit source
@@ -228,18 +232,18 @@ label review. No model has been loaded or fitted.
 - Split manifest SHA-256:
   `28b0bf9177d1ff2d2b89adb0c7d2916fc01180aef1d51da5b65356849ffd53aa`.
 - Control manifest:
-  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-controls-20261025-01\control-manifest.json`.
+  `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-controls-20261025-03\control-manifest.json`.
 - Control manifest SHA-256:
-  `0b57f4a2a58935a97a22be2b52578ce36587b57360c498a04a7424b0d8fc4163`.
+  `5f7ee054a31eceafd6a21855e3d4c4569c93c50ee2a51ccaee472c8f1268d93`.
 - Control manifest generator SHA-256:
-  `8463df1430b9e6042d5d93e8e46f5c278ecca85263685de094518d1f76e9ce20`.
+  `df33a54b66869a62678e54fc6f918fa9853c5d7830e0a13ccd907c26541d414c`.
 - Control generator tests SHA-256:
-  `ec65a3db7d94bbd2b651523d7fab041513fe51a2bc089d96629376a7d96febe5`.
+  `5cc73aaede16ec33ff6bdfef9c19d03fa915c3a01c1987f0847c8057cd7c4244c`.
 - Targeted result: 5 control-manifest tests passed; Ruff passes for the
   generator and its tests.
 
 The full corrected train media check is running on CPU against all 2,593 fixed
-train rows. At this report update, it had decoded through row 320; this is an
+train rows. At this report update, it had decoded through row 512; this is an
 in-progress check, not a pass. The development media check remains the prior
 complete 606-row report above. GPU work and learning remain gated on a terminal
 train-media result and the remaining protocol gates.

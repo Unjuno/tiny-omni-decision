@@ -103,12 +103,15 @@ def build_split_controls(records, clips, *, seed, split_name, source_sha256):
                     break
 
             candidates = record["request"]["candidates"]
+            original_order = [candidate["candidate_id"] for candidate in candidates]
             permuted = sorted(
-                (candidate["candidate_id"] for candidate in candidates),
+                original_order,
                 key=lambda candidate_id: _rank(
                     seed, f"{split_name}:{record['record_id']}:{candidate_id}"
                 ),
             )
+            if len(permuted) > 1 and permuted == original_order:
+                permuted = permuted[1:] + permuted[:1]
             static_frames = {
                 candidate["candidate_id"]: candidate["frame_boxes"][0]["frame_id"]
                 for candidate in candidates
@@ -147,6 +150,19 @@ def build_split_controls(records, clips, *, seed, split_name, source_sha256):
         "audio_shuffle_derangement": True,
         "offset_eligible_count": sum(
             row["offset_audio_interval_us"] is not None for row in serialized_records
+        ),
+        "candidate_order_changed_count": sum(
+            row["candidate_order"]
+            != [candidate["candidate_id"] for candidate in record["request"]["candidates"]]
+            for row, record in zip(
+                serialized_records,
+                sorted(records, key=lambda item: (item["group_id"], item["record_id"])),
+                strict=True,
+            )
+        ),
+        "frame_reversal_eligible_count": sum(
+            any(len(candidate["frame_boxes"]) > 1 for candidate in record["request"]["candidates"])
+            for record in records
         ),
         "records": serialized_records,
         "source_jsonl_sha256": source_sha256,

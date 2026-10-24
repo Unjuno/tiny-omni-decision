@@ -16,7 +16,7 @@ overlap). All 606 internal development records passed CPU media checks:
 80/80 media hashes matched. The development partition is non-blind and comes
 from official-train media; participant grouping and cross-video pixel-level
 duplicates remain unchecked. Full corrected train-media preflight is running
-on CPU and had reached 320/2,593 fixed rows at the latest update. A seed-17,
+on CPU and had reached 512/2,593 fixed rows at the latest update. A seed-17,
 label-blind control manifest is frozen for within-split cross-video audio
 shuffle, bounded one-second offsets, candidate permutations, static-first-frame
 and reversed-frame controls; it does not yet supply a semantic-contradiction

@@ -55,12 +55,20 @@ def test_split_controls_are_deterministic_and_label_free():
         records, clips, seed=17, split_name="train", source_sha256="b" * 64
     )
     assert first == second
-    for row in first["records"]:
+    for row, source in zip(
+        first["records"],
+        sorted(records, key=lambda item: (item["group_id"], item["record_id"])),
+        strict=True,
+    ):
         assert row["video_id"] != row["audio_shuffle_donor_video_id"]
         assert "supervision" not in row
         assert set(row["candidate_order"]) == set(row["static_frame_id_by_candidate"])
         assert set(row["candidate_order"]) == set(row["reversed_frame_ids_by_candidate"])
+        original_order = [item["candidate_id"] for item in source["request"]["candidates"]]
+        assert row["candidate_order"] != original_order
         assert row["offset_audio_interval_us"] in ([0, 500_000], [2_000_000, 2_500_000])
+    assert first["candidate_order_changed_count"] == len(records)
+    assert first["frame_reversal_eligible_count"] == len(records)
 
 
 def test_audio_shuffle_donor_is_different_video():
