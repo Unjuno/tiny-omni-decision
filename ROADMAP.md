@@ -7,13 +7,16 @@ audio-event intervals with unmasked object proposals from the same video. Of
 media-duration gates across 1,982 videos; option counts range from 2 to 49.
 Existing train-only media files cover 400 candidate video groups (2,339 events)
 by filename match. A seeded CPU smoke verified file hashes and decoded all
-requested event audio intervals and bbox frames in eight train groups. The
+requested event audio intervals and bbox frames in 32 train groups. The
 remaining media has not passed decode/synchronization checks. The deterministic
-corpus and source/adapter/builder hashes are recorded outside Git. This remains
-annotation/media feasibility only: no model fit, validation/audit access or
-quality claim. Oracle event windows and object proposals remain deployment
-shortcuts, so modality-necessity controls and complete media-boundary checks
-must pass before any readout run. This distinct task format does not reopen the closed
+corpus and a seed-17 group split were frozen outside Git (320 train groups / 80
+development groups; 1,904 / 435 events, with zero video or exact media-hash
+overlap). This split is not blind, participant grouping is unknown, and
+normalized near-duplicates were not checked. This remains annotation/media
+feasibility only: no model fit, validation/audit access or quality claim. Oracle
+event windows and object proposals remain deployment shortcuts, so
+modality-necessity controls and complete media-boundary checks must pass before
+any readout run. This distinct task format does not reopen the closed
 visibility or temporal-match cohorts and does not close R2 M-2. See the
 [`source-candidate preflight`](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_PREFLIGHT_20261024.md).
 

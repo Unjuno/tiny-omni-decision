@@ -93,36 +93,62 @@ covering 2,339 of the current candidate events across all 400 candidate groups.
 This confirms file presence only. Those files were not decoded or scored, and
 their duration/synchronization checks remain outstanding for this task.
 
-A separate deterministic CPU-only smoke selected eight candidate events from
-eight distinct official-train video groups (seed 17) in that existing media
-directory. All eight MP4 sizes and SHA-256 values matched the acquisition
-receipt. PyAV decoded all 24 requested bbox frame IDs; decoded presentation
-times fell within the annotated event interval with a two-frame tolerance. The
-audio decoder covered all 20.509947 seconds of the eight annotated intervals.
-The report is
-`C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-media-smoke-20261025-02\media-smoke.json`,
-SHA-256 `e6b47dd1010608eb4ca34d21f2c5601da83173e21a6d5f7ad1fead97f538584a`.
-This checks only eight files, does not decode candidate crops or calculate
-model metrics, and is not a representative sample.
+A deterministic CPU-only smoke selected 32 candidate events from 32 distinct
+official-train video groups (seed 17) in that existing media directory. All 32
+MP4 sizes and SHA-256 values matched the acquisition receipt. PyAV decoded all
+77 requested bbox frame IDs; decoded presentation times fell within the
+annotated event interval with a two-frame tolerance. The audio decoder covered
+all 66.536017 seconds of the 32 annotated intervals, with less than 1e-9 seconds
+aggregate difference. The report is
+`C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-media-smoke-20261025-03\media-smoke.json`,
+SHA-256 `9d557f74fc97e459a63c6fe40edcd38e9ade15723e848210801b2c2a89660a98`.
+This checks 32 of 400 files; it does not decode candidate crops or calculate
+model metrics and is not a representative sample.
+
+## Provisional development split
+
+Before fitting, a seed-17 deterministic hash split was frozen over the 400
+candidate-bearing official-train videos with local media. The 80 held-out
+groups contain 435 events; the 320 training groups contain 1,904 events. Video
+ID overlap and exact media SHA-256 overlap are both zero. This is a
+development-only split of a previously inspected source, not a blind validation
+or audit. The prior source/task work used the same video media for other labels;
+participant-level grouping is unavailable, and normalized near-duplicate
+content has not been checked.
+
+External artifacts:
+
+- Directory: `C:\CodexArtifacts\pretrained-reuse-r2\perception-source-candidate-dev-split-20261025-01\`.
+- Manifest SHA-256:
+  `506fe453cff369885dc543774ee224db50f59b881e58d5768f17b67c11b693d7`.
+- Train JSONL SHA-256:
+  `a979f9dce76e52f74b4295dab5fd0e59feddf7fbe6f460de5b4cf020b490f0cb`.
+- Development validation JSONL SHA-256:
+  `8d2a159b21fe24fe91ce5ff30ac7d8f3a62c0c669e09e7a010271bec5ea8ad1c`.
+- Splitter script SHA-256:
+  `c5a713fd3af6b5bdb10c81fe4a45e723a4888ea143c54d5a4e76d0d1b5417947`.
+- CPU media smoke script SHA-256:
+  `2fda873f9aebc27e2ae607f7d084878514ff2926acacca1ca33bf9aa8aa9ed7c`.
+
+The remaining 1,582 candidate-bearing official-train video groups without
+matching local media are excluded from this frozen pilot; they were not
+silently assigned to either partition.
 
 ## Remaining gates before model work
 
-1. Match the remaining candidate videos to licensed local media and verify
-   decoded duration, synchronization, and event boundaries. Existing local
-   train media covers 400 candidate groups; only eight have passed the current
-   CPU integrity smoke.
-2. Freeze a new video-grouped train/validation partition before fitting. Do not
-   use previously inspected validation cohorts or any sealed audit annotations.
-3. Define audio-only, video-only, question/label-prior, candidate-order-shuffle,
+1. Verify decoded duration, synchronization, and event boundaries for the
+   remaining 368 videos in this pilot. Do not use previously inspected
+   validation cohorts or sealed audit annotations.
+2. Define audio-only, video-only, question/label-prior, candidate-order-shuffle,
    audio-shuffle, stale-window, and interval-offset baselines/controls before
    model selection. Match the candidate universe across modalities.
-4. Verify the task does not reduce to sound-category or object-order priors.
+3. Verify the task does not reduce to sound-category or object-order priors.
    Candidate count is highly variable (2–49), and the 15 observed sound labels
    are imbalanced; stratified source reporting and balanced metrics are needed.
-5. Establish whether annotated parent objects have consistent causal/source
+4. Establish whether annotated parent objects have consistent causal/source
    semantics for the intended decision. A positive association is not itself a
    counterfactual proof that both modalities are necessary.
-6. Reuse only media explicitly admitted for this train-only purpose; do not
+5. Reuse only media explicitly admitted for this train-only purpose; do not
    decode old validation media or begin GPU work as part of this preflight.
 
 Only after these gates pass should a small frozen-feature readout be considered.
@@ -134,5 +160,6 @@ complementarity result, or evidence toward the 95–98% product target.
 - Adapter: `src/tiny_omni_decision/perception_source_candidate.py`.
 - Deterministic writer: `scripts/build_perception_source_candidate_corpus.py`.
 - CPU media smoke: `scripts/preflight_perception_source_candidate_media.py`.
+- Group split freezer: `scripts/freeze_perception_source_candidate_split.py`.
 - Regression tests: `tests/test_perception_source_candidate.py`.
 - Existing visibility-proposal format remains unchanged and separate.
