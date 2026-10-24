@@ -163,11 +163,22 @@ CI environment installs the `dev` extra without optional PyTorch; the new
 annotation-only dataset module had imported it transitively. PyTorch is now
 loaded only in the probability routine that requires it, with a subprocess
 regression test that blocks all `torch` imports while loading the dataset
-builder. The corrected push's CI result is pending.
+builder. The corrected push passed all three public CI runs: [PR branch run
+40143569784](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40143569784),
+[continuation run
+40143566335](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40143566335),
+and [second PR event run
+40143566252](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40143566252).
+A fresh isolated environment with only the `dev` extra and no PyTorch also
+passed Ruff and pytest (1,808 passed, 154 skipped).
 
 The manifest builder, selective media downloader, frozen-feature extractor,
-and CPU readout runner are now implemented. Next: acquire only selected
-official train/development media, verify each media hash, then extract ViLT
-features through the cooperative HotUGPU reservation and fit the readout. Add
-paired blank-image/shuffled-image controls before selecting a candidate. Keep
-CoGenT-B unopened through model selection.
+and CPU readout runner are implemented. The approved 20,480-image acquisition
+is running from the pinned ZIP using 8 workers and a 2 GiB disk reserve. At
+2026-10-25 08:40 JST, 927/20,480 files (all validation so far) were saved and
+verified. They are outside Git at
+`C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-media-seed17-attempt-01/`.
+Next: finish media acquisition, extract ViLT features through the cooperative
+HotUGPU reservation, fit the readout, and add paired blank-image/shuffled-image
+controls before selecting a candidate. Keep CoGenT-B unopened through model
+selection.

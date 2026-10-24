@@ -9,9 +9,11 @@ overlap (attempt-03). Two selected media files passed range/ZIP CRC checks, and
 a CPU ViLT forward produced `[2,768]` frozen features; this remains an
 input-path smoke. Manifest hashes and answer/question-type counts are recorded in the
 [`CLEVR compositional preflight`](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
-CPU tests pass (2,417 passed, 11 skipped), Ruff passes. No bulk media cache or
-quality score exists; GPU feature extraction/fitting is deferred while the
-existing RTX 3080 run occupies 16,124/16,384 MiB. CoGenT-B remains unopened.
+CPU tests pass (2,417 passed, 11 skipped), Ruff passes; the corrected push is
+green on GitHub Actions. The selected-media range fetch is underway (927/20,480
+images at 08:40 JST); no full feature cache or quality score exists. GPU
+feature extraction/fitting waits on the existing RTX 3080 run, which occupies
+16,124/16,384 MiB. CoGenT-B remains unopened.
 
 **2026-10-25 R2 CLEVR compositional option-task preflight:** The official
 CLEVR v1.0 CC BY 4.0 annotation archive is pinned locally; the 19.02 GB image
