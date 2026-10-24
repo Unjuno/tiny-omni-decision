@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-24 R2 NIST ASAPS source gate:** ASAPS is relevant to multimodal
+public-safety decision support, but participant audio/video consent is for
+research use and access requires a signed data-use agreement and NIST approval.
+The agreement, task semantics, split/group integrity, and commercial model-use
+rights remain unverified; no account or data access was attempted. Keep REVIEW;
+it does not close R2 M-2. See the
+[metadata-only source gate](docs/pretrained_reuse/R2_NIST_ASAPS_SOURCE_GATE_20261024.md).
+
 **2026-10-24 R2 AVSBench source gate:** Audio-Visual Segmentation is a
 cross-modal sounding-object task with official train/validation/test splits, but
 the data page licenses the dataset CC BY-NC 4.0, processed media requires a
