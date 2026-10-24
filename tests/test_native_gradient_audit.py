@@ -4,9 +4,10 @@ import random
 from pathlib import Path
 
 import pytest
-import torch
 
-from scripts.native_gradient_audit import (
+torch = pytest.importorskip("torch")
+
+from scripts.native_gradient_audit import (  # noqa: E402
     SAMPLED_STEPS,
     cosine_and_norms,
     flatten_gradients,
