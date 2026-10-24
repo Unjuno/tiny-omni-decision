@@ -126,9 +126,16 @@ checkpoint selection.
   Color `99.485%` Accuracy, Texture `90.279%`, Count `60.436%`, Shape
   `99.450%`; macro Accuracy `87.412%`, macro NLL `0.30542`, macro Brier
   `0.16207`, macro ECE-15 `0.01427`. Count remains the clear weak slice. The
-  fixed 114,512,897-parameter runtime is below the provisional parameter range,
-  but its 458,143,789-byte payload exceeds the provisional 200 MB package
-  target. This is source-family transfer on fixed synthetic ten-way image
+  fixed prediction correctness vectors also received a 10,000-resample,
+  seed-17 iid image bootstrap (percentile 95% interval): Color
+  `[99.385%, 99.585%]`, Texture `[89.859%, 90.699%]`, Count
+  `[59.756%, 61.127%]`, Shape `[99.345%, 99.550%]`, and macro Accuracy
+  `[87.216%, 87.611%]`. The source reports unique image IDs/media hashes but no
+  higher-level group IDs in the reviewed report; these are image-level, not
+  scene/group, intervals. The fixed runtime has 114,512,897 resident
+  parameters, within the provisional parameter budget; its 458,143,789-byte
+  payload exceeds the provisional 200 MB package target. This is source-family
+  transfer on fixed synthetic ten-way image
   taxonomies, not arbitrary image reasoning or a blind audit. The official
   validation is now observed and closed to selection. Artifact hashes and full
   protocol: [CLEVR-4 100k transfer report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/clevr4-100k-transfer-eval-20261023/docs/pretrained_reuse/R2_CLEVR4_100K_TRANSFER_EVAL_20261023.md).
