@@ -2,6 +2,12 @@ schema_version: 1
 manifest_type: candidate_catalog
 purpose: training
 sources:
+  - manifest: candidates/csqa2-train.yaml
+    subset: official-train
+    split: train
+    adapter: csqa2
+    include: true
+    note: Text-only yes/no commonsense decision; CC BY 4.0, pinned source revision.
   - manifest: candidates/typed-synth-validation.yaml
     include: false
     reason: evaluation split is held out

@@ -2422,3 +2422,21 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### Real text binary Decision transfer probe (2026-10-24)
+
+An 8-epoch CPU Path A readout fit on pinned CommonsenseQA 2.0 train/dev did not
+beat the dev majority baseline: 51.79% accuracy, NLL .6925, Brier .4994, ECE
+.0116; best dev NLL was epoch 1. Train CE decreased while dev NLL/Brier/ECE
+degraded. The selected scorer predicted the majority `no` label for 93.5% of dev
+rows. This does not establish a general text or encoder ceiling; keep it as a
+negative transfer reference and do not extend training or tune on the same dev
+split. [Protocol, full curve, hashes and limits](docs/pretrained_reuse/R2_CSQA2_TEXT_DECISION_20261024.md).
+
+### AVRT-20K synchronized AV source gate (2026-10-24)
+
+The AVRT-20K annotation mirror is not admitted: its card declares CC BY 4.0 for
+annotations, but requires separately acquired AVQA videos whose rights remain
+unresolved; it exposes one unsplit 40,182-row partition and teacher-generated
+reasoning that needs leakage controls. No data/media were downloaded. Keep the
+R2-M both-input-required gate open. [Metadata-only source review](docs/pretrained_reuse/R2_AVRT20K_SOURCE_GATE_20261024.md).

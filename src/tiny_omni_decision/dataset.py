@@ -18,6 +18,7 @@ from typing import Any
 from .schema import DatasetManifest, DecisionExample, LicenseProvenance, MediaRef
 
 KNOWN_PERMISSIVE = {"CC0-1.0", "CC-BY-4.0", "MIT", "Apache-2.0", "BSD-3-Clause"}
+CSQA2_OPTIONS = ["no", "yes"]
 CLEVR4_TAXONOMIES = {
     "color": [
         "gray",
@@ -843,6 +844,31 @@ def adapt_row(
             source_component=row.get("source_component"),
             trust_status=str(row.get("trust_status", manifest.trust_status)),
         )
+    if adapter == "csqa2":
+        answer = row.get("answer")
+        question = row.get("question")
+        source_id = row.get("id")
+        if answer not in CSQA2_OPTIONS:
+            raise ValueError("CSQA2 answer must be yes or no")
+        if not isinstance(question, str) or not question.strip():
+            raise ValueError("CSQA2 row needs a nonempty question")
+        if not isinstance(source_id, str) or not source_id.strip():
+            raise ValueError("CSQA2 row needs a stable id")
+        return _base_example(
+            **common,
+            options=CSQA2_OPTIONS,
+            target=answer,
+            state="",
+            question=question,
+            media=[],
+            license_name=manifest.license,
+            commercial_use=manifest.commercial_use,
+            derivative_model_training_allowed=manifest.derivative_model_training_allowed,
+            redistribution_allowed=manifest.redistribution_allowed,
+            media_redistribution_allowed=manifest.media_redistribution_allowed,
+            attribution=manifest.attribution,
+            trust_status=manifest.trust_status,
+        )
     raise ValueError(f"Unsupported dataset adapter: {adapter}")
 
 
@@ -876,8 +902,14 @@ def load_component_csv(path: str | Path) -> dict[str, dict[str, Any]]:
 
 def iter_local_rows(path: str | Path) -> Iterator[dict[str, Any]]:
     file_path = Path(path)
-    if file_path.suffix.lower() == ".jsonl":
-        with file_path.open(encoding="utf-8") as handle:
+    if file_path.name.lower().endswith((".jsonl.gz", ".json.gz")):
+        handle_context = gzip.open(file_path, "rt", encoding="utf-8")
+    elif file_path.suffix.lower() == ".jsonl":
+        handle_context = file_path.open(encoding="utf-8")
+    else:
+        handle_context = None
+    if handle_context is not None:
+        with handle_context as handle:
             for line_number, line in enumerate(handle, start=1):
                 if line.strip():
                     row = json.loads(line)
@@ -896,7 +928,7 @@ def iter_local_rows(path: str | Path) -> Iterator[dict[str, Any]]:
         else:
             raise ValueError("JSON dataset input must be an array or object of records")
     else:
-        raise ValueError("Local dataset input must be .json or .jsonl")
+        raise ValueError("Local dataset input must be .json, .jsonl, .jsonl.gz, or .json.gz")
 
 
 def iter_hub_rows(manifest: DatasetManifest) -> Iterator[dict[str, Any]]:
@@ -1009,6 +1041,8 @@ def normalize_jsonl(
         if adapter in {"clevrer", "clevrer-video"}:
             if not _clevrer_row_matches_split(row, manifest.split):
                 continue
+        if adapter == "csqa2" and row.get("split", manifest.split) != manifest.split:
+            continue
         if limit is not None and source_rows >= limit:
             break
         source_rows += 1
