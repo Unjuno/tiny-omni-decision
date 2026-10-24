@@ -265,6 +265,25 @@ or nonfinite inputs. This utility does not itself preprocess frames, load
 VideoPrism, extract features, or establish model quality; a letterbox feature
 extractor and feature-parity checks are still required.
 
+For the fixed VideoPrism eight-frame runtime shape, a CPU-only planner now
+groups unique requested frames per video into chronological windows of eight
+with stride four and an end-aligned final window. Every source frame maps to
+one window/slot nearest that window's temporal center; only short final windows
+repeat the last frame to satisfy the encoder shape. On the frozen split this
+plans 1,335 train and 335 development encoder clips for 6,119 and 1,528 unique
+annotated frames, respectively. This reduces repeated full-video forwards but
+does not establish that sparse, annotation-driven frame spacing matches
+VideoPrism's pretraining distribution. No model or media feature was loaded by
+the planner. Its three tests verify coverage, stable slot mapping, padding, and
+invalid-input rejection.
+
+- Video frame planner SHA-256:
+  `ae87bbdb9f936a14c6d7e02cb38698e5d5f0b4114f9880b7a637578278768bd8`.
+- Video frame planner test SHA-256:
+  `8e220b59d99f8b24a001e036e17160e2314f3709fa5d6b08c9a9aeb82fdc9df4`.
+- Audio window module/test hashes are recorded above; they were exercised by
+  nine targeted unit tests.
+
 - ROI geometry module SHA-256:
   `84c50392563c122dbf9b1bb435fb404e81bb238966677084f50c42c3a5cea8a5`.
 - ROI geometry test SHA-256:
@@ -290,7 +309,7 @@ extractor and feature-parity checks are still required.
   generator and its tests.
 
 The full corrected train media check is running on CPU against all 2,593 fixed
-train rows. At this report update, it had decoded through row 1,024; this is an
+train rows. At this report update, it had decoded through row 1,088; this is an
 in-progress check, not a pass. The development media check remains the prior
 complete 606-row report above. GPU work and learning remain gated on a terminal
 train-media result and the remaining protocol gates.
