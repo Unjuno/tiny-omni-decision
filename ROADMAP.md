@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 crop × coverage factorial analysis:** Added a CPU-only
+hash-pinned analyzer for the four fixed-endpoint cells (center/full extent ×
+repeat/fresh coverage), with per-modality Accuracy/NLL/Brier/ECE, macro metrics,
+simple effects and an interaction contrast. It fails closed on missing cells,
+changed validation IDs/order, prediction hash mismatch, or a non-endpoint run;
+the incomplete preflight records no factorial metrics. Three existing 32,768-step
+cells pass hash and shared-validation checks. The full-extent fresh fit is still
+missing because the live GPU run owns the device; no new GPU job was started.
+The full CPU suite passes (2,397 passed, 11 skipped); Ruff and manifest/catalog
+validation pass. See the
+[`crop × coverage factorial record`](docs/pretrained_reuse/R2_CROP_COVERAGE_FACTORIAL_20261025.md).
+
 **2026-10-25 R2 full-extent × unique-coverage long comparison:** Added a
 separate, hash-pinned fresh-sampling config and extended the full-extent runner
 without changing its legacy default. The CPU-only pinned preflight regenerated
