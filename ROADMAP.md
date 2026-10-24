@@ -24,6 +24,15 @@ GPU and has created no outputs. No process or artifact was changed, and no
 factorial estimate is available. See the
 [`07:26 JST live audit`](docs/pretrained_reuse/R0_LIVE_AUDIT_20261025_0726JST.md).
 
+**2026-10-25 07:46 JST R0 live recheck:** PR #15 remains Draft/Open and both
+remote research refs are at `82b3d8c`; all three CI runs for that commit are
+green. The Teacher process is still alive and accumulated about 11 CPU seconds
+over a 12-second observation interval while GPU utilization varied 0–99%; its
+last history/state artifacts remain step 1280/1152, respectively. The HotGPU
+queue remains `WAITING_FOR_IDLE_GPU`, with no experiment outputs created. No
+process or artifact was modified. See the
+[`07:46 JST live audit`](docs/pretrained_reuse/R0_LIVE_AUDIT_20261025_0746JST.md).
+
 **2026-10-25 R2 cross-workstream reconciliation:** Recent open PRs add two
 relevant results and more source gates. The matched CLEVRER/generated-tone AV
 diagnostic selected a gated temporal LSTM at 83.51% Accuracy / 0.3534 NLL on
