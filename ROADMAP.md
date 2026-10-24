@@ -2452,6 +2452,7 @@ covered by CPU tests. The existing VideoPrism runtime is currently blocked by
 Windows Application Control, so no extraction restart or quality result is
 claimed. The prior pooled cache covers only the excluded 10,531 identities and
 does not contain spatial grids; the bundled Python runtime lacks JAX/TensorFlow.
-Preserve the partial cache and frozen split; resume only when an approved local
-runtime can load the pinned JAX/TensorFlow stack.
+The experimental Torch port failed its real-input full-token parity gate and is
+not an extraction fallback. Preserve the partial cache and frozen split; resume
+only when an approved local runtime can load the pinned JAX/TensorFlow stack.
 [Execution record](docs/pretrained_reuse/R2_CLEVR4_SPATIAL_COUNT_READOUT_20261023.md).

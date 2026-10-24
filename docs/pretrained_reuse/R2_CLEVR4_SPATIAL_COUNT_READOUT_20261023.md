@@ -182,6 +182,14 @@ cloud compute, GPU run, or dependency upgrade was attempted. The Codex-bundled
 Python runtime was also inspected: it has NumPy/Pillow but no JAX, jaxlib, or
 TensorFlow, so it cannot run the encoder.
 
+The repository's experimental PyTorch VideoPrism port is not a fallback: its
+predeclared full-token parity gate failed on real inputs (see
+[`R1_VIDEOPRISM_TORCH_20261014.md`](R1_VIDEOPRISM_TORCH_20261014.md)). The
+port was explicitly not qualified for corpus extraction. On the latest
+read-only hardware check (2026-10-24), the RTX 3080 reported 15,821/16,384 MiB
+used at 100% utilization; no matching feature-extraction process was present.
+No GPU workload was started.
+
 The existing `clevr4-full-videoprism-features-v0/features.npz` cache is not a
 substitute: its arrays are pooled `(8424, 768)` train and `(2107, 768)`
 validation features for the previously used split, not the 64-cell spatial
