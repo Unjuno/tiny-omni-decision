@@ -1,0 +1,182 @@
+{
+  "status": "PASS_TRAIN_ONLY_SHARED_GRADIENT_AUDIT",
+  "started_utc": "2026-10-24T13:50:52.191022+00:00",
+  "source_commit": "f833d189cd1ec6cd79afbe455f04afde51f88f0c",
+  "source_tree_clean": true,
+  "run_id": "native-coverage-repeat-fit-01",
+  "checkpoint": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-coverage-repeat-fit-01\\best.pt",
+  "checkpoint_sha256": "94d4e452314d0f41f43c4f1711711837c38b60e9eea7816c2149ad3636d888f2",
+  "checkpoint_step": 2048,
+  "checkpoint_selector": "repeat-run best by frozen validation macro NLL; validation not loaded here",
+  "validation_loaded": false,
+  "sealed_audit_loaded": false,
+  "optimizer_updates": 0,
+  "cloud_cost": 0,
+  "run_reported_source_commit": "b3b7bb3abc4d27b6da51aa05032d2ff14704362f",
+  "run_source_commit_caveat": "5 validated dependency files differ from the tree at the reported source commit; the exact validated bytes are bundled and hashed",
+  "run_source_snapshot_hashes": {
+    "scripts/native_fit.py": "62315a27e37c9b3c2837ee66c2d462c4285b4aca1a739fb769974c3330f8951b",
+    "scripts/native_fit_runtime.py": "63598df78a632b6a2a49c4d70f9c9e07a945f94793e07cb4144ec2234f346abe",
+    "scripts/native_candidate_inputs.py": "372e8c3664fbfa8627a9bba4ff4c7ab3c0f3fc92d8a0c5df3e8011b1a45cd7f3",
+    "scripts/native_video_cache.py": "62ffe34c6db4a52ed93310c36939a74f356729db338a7aea49406f1cdfe58039",
+    "src/tiny_omni_decision/native_candidate.py": "cd2ab4e45de5c5e3e037531bf8a9e967365f8ef2a60b5b20cddd0ba3e336a974"
+  },
+  "finished_utc": "2026-10-24T13:50:59.911238+00:00",
+  "sampled_optimizer_steps": [
+    1,
+    67,
+    133,
+    199,
+    265,
+    331,
+    397,
+    463,
+    529,
+    595,
+    661,
+    727,
+    793,
+    859,
+    925,
+    991,
+    1057,
+    1123,
+    1189,
+    1255,
+    1321,
+    1387,
+    1453,
+    1519,
+    1585,
+    1651,
+    1717,
+    1783,
+    1849,
+    1915,
+    1981,
+    2048
+  ],
+  "model_weight_updates": 0,
+  "examples_evaluated": 256,
+  "unique_examples": 253,
+  "trainable_parameters": 889345,
+  "total_parameters": 196254874,
+  "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+  "dtype": "float32",
+  "python": "3.11.9",
+  "torch": "2.6.0+cu124",
+  "numpy": "2.4.6",
+  "cuda": "12.4",
+  "attention_backend": "torch eager MultiheadAttention",
+  "hotgpu_gate": {
+    "mode": "hotgpu_reserved",
+    "parent_pid": 6696,
+    "active_compute_pids": [
+      6696
+    ],
+    "utilization_pct": 0,
+    "memory_used_mib": 3369,
+    "memory_free_mib": 13015,
+    "memory_total_mib": 16384,
+    "reserved_mib": 3200
+  },
+  "elapsed_seconds": 7.72067159996368,
+  "peak_cuda_bytes": 226318848,
+  "summary": {
+    "cosine:text|image": {
+      "mean": 0.00020477708112067068,
+      "median": -0.01355214523889466,
+      "std": 0.13895949873240515,
+      "min": -0.4277011336902436,
+      "max": 0.299545332455789,
+      "negative_fraction": 0.5625,
+      "n": 32
+    },
+    "cosine:text|audio": {
+      "mean": 0.0008748734421341522,
+      "median": -0.012622840942929717,
+      "std": 0.07920869157698793,
+      "min": -0.14949135421190762,
+      "max": 0.21536527545448664,
+      "negative_fraction": 0.625,
+      "n": 32
+    },
+    "cosine:text|video": {
+      "mean": -0.008386564462397838,
+      "median": -0.014536686621979954,
+      "std": 0.12299709169705662,
+      "min": -0.2587401926487637,
+      "max": 0.37926426253199,
+      "negative_fraction": 0.59375,
+      "n": 32
+    },
+    "cosine:image|audio": {
+      "mean": 0.008467273427907922,
+      "median": 0.006742463198626886,
+      "std": 0.09782656862410015,
+      "min": -0.17472050844948317,
+      "max": 0.24979809645738574,
+      "negative_fraction": 0.46875,
+      "n": 32
+    },
+    "cosine:image|video": {
+      "mean": -0.015003388895606944,
+      "median": -0.0009593400919349525,
+      "std": 0.09808410434022574,
+      "min": -0.20048989475359938,
+      "max": 0.23563940854958562,
+      "negative_fraction": 0.5,
+      "n": 32
+    },
+    "cosine:audio|video": {
+      "mean": 0.04560295006483253,
+      "median": 0.048941001729831096,
+      "std": 0.13230221080760254,
+      "min": -0.20998448090868582,
+      "max": 0.3009632764803652,
+      "negative_fraction": 0.3125,
+      "n": 32
+    },
+    "clip_factor": {
+      "mean": 0.6223359506596847,
+      "median": 0.5772445241556174,
+      "std": 0.20259168155695606,
+      "min": 0.26429141732036876,
+      "max": 1.0,
+      "negative_fraction": null,
+      "n": 32
+    },
+    "global_norm": {
+      "mean": 1.800832699984312,
+      "median": 1.7330567240715027,
+      "std": 0.6588774561537681,
+      "min": 0.9773958921432495,
+      "max": 3.7837021350860596,
+      "negative_fraction": null,
+      "n": 32
+    },
+    "cancellation_ratio": {
+      "mean": 0.602863381046813,
+      "median": 0.6075473571304533,
+      "std": 0.07007334970778853,
+      "min": 0.4830263186560629,
+      "max": 0.7815638576379829,
+      "negative_fraction": null,
+      "n": 32
+    },
+    "would_clip": {
+      "mean": 0.96875,
+      "median": 1.0,
+      "std": 0.1767766952966369,
+      "min": 0.0,
+      "max": 1.0,
+      "negative_fraction": null,
+      "n": 32
+    }
+  },
+  "artifacts": {
+    "preflight.json": "4410e83938105fa85f343cad235bcb62abfef1f73bf6d9d8670d16a44002fbc4",
+    "selected-train-occurrences.json": "2e3720ab13b7a36fababcad2f3349a13e6b979627867a02523b56179f00ff776",
+    "measurements.jsonl": "21efbc431549763570b1eb562dc32f5be2d3971d403425daa761f2c1b1002ff6"
+  }
+}
