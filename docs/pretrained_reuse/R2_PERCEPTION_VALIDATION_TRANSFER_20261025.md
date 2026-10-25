@@ -54,6 +54,15 @@ the continuation branch. Public GitHub Actions runs for code commits
 per commit). The unauthenticated local GitHub CLI was bypassed with the public
 Actions API.
 
+The CPU execution path was added to the EfficientAT extractor while preserving
+the CUDA default and its reservation gate. It was verified with an isolated
+CPU/GPU same-input feature comparison and unit tests that fail if the CPU path
+queries `torch.cuda`. The full local suite now passes **2,442 tests, 11 skipped**;
+Ruff, `git diff --check`, model/dataset manifest validation, dataset-catalog
+validation, and the example manifest audit pass. EfficientAT CPU environment:
+Python 3.11.9, PyTorch/torchaudio 2.6.0+cu124, NumPy 2.4.6. CUDA was not
+initialized by the CPU extraction process.
+
 The effective inference manifest is stored at
 `C:/CodexArtifacts/pretrained-reuse-r2/perception-test-av-v2-extension-eval-20261025-attempt-01/inference_manifest.json`,
 SHA-256 `4569b23116691dfb99c614be2b3b51ee9d7b6e9a087f43db3ca7e0a2916c5539`.
@@ -74,21 +83,74 @@ used a malformed temporary manifest newline; a second attempt reached Python
 but lacked the repository root in `PYTHONPATH`. The corrected two-example
 smoke passed in `videoprism-smoke-02`; no quality metrics were computed.
 
-## Audio extraction state
+## Audio extraction and one-time frozen-readout result
 
-Audio inference has **not started**. At the latest read-only GPU snapshot,
-2026-10-25 19:46:32 JST, the unrelated Orbitune process PID 16364 (parent
-31916) remained active, using 15,821/16,384 MiB. It was not stopped or changed.
-A CPU-only wait loop is checking for no compute PIDs, utilization below 5%, and
-at least 14,000 MiB free for two consecutive samples. Only then does it invoke
-the existing HotUGPU reservation wrapper (SHA-256
-`59b038dcc61317263cb972b3098ecf99b6b3fa111c6bc2d0ffe752fc93c5a06a`) to start
-the pinned EfficientAT extractor. It does not initialize CUDA while the
-unrelated process is active. The wrapper must still obtain its reservation and
-its child must pass the extractor's own gate. Until then, no audio feature
-receipt, head metrics, input-ablation metrics, or bootstrap result exists.
+The unrelated Orbitune worker PID 16364 remained active throughout the
+diagnostic (RTX 3080 Laptop: 15,821/16,384 MiB used, 355 MiB free in the last
+snapshot). It was not stopped, changed, or accessed by the experiment. Rather
+than start a CUDA context while it was active, the pinned EfficientAT extractor
+was extended with an explicit `--device cpu` path. The existing default remains
+CUDA and still requires the HotUGPU reservation environment variable. An
+exact-input backend check against an existing CUDA feature produced cosine
+similarity 0.99999994 and maximum absolute feature difference 4.62e-7. This is
+one input only; it does not substitute for general cross-backend validation.
+
+Three immutable CPU attempts were preserved. Attempt 01 stopped before audio
+lookup because the media-root argument was one directory too deep. Attempt 02
+extracted 32/200 windows before a progress logger attempted to aggregate null
+CUDA memory values. Attempt 03 completed 200/200 windows in 9.002 seconds;
+EfficientAT had 1,961,239 parameters and its state hash was unchanged. Its
+manifest SHA is `4569b23116691dfb99c614be2b3b51ee9d7b6e9a087f43db3ca7e0a2916c5539`,
+weights SHA is `49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e`,
+source commit is `a425fdce92572e602a1d5634799bd9f1f2efa806`, and feature-result
+SHA is `390cdda100245e922916fb8b31434043ccc4a61b9394c72cd80ab9fa8a35a832`.
+Per-record media/window identities and all 200 feature hashes were rechecked.
+
+The frozen evaluator was then run once on the fixed, label-balanced cohort.
+The 200 records contain 100 visible and 100 not-visible examples; three
+two-second windows were boundary-shifted only enough to fit the media. The
+evaluation receipt is
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-test-av-v2-extension-eval-20261025-attempt-01/evaluation-result-01.json`,
+SHA-256 `f36a413db72c68393aff2dd147052081f2fd89343ca98b0f03f0ad5611a13c04`.
+
+| Frozen head / control | Accuracy | NLL | Brier | ECE (15 bins) |
+|---|---:|---:|---:|---:|
+| Audio | 0.570 | 1.3568 | 0.3390 | 0.2941 |
+| Video | 0.580 | 1.3719 | 0.3307 | 0.2985 |
+| Joint Audio+Video | 0.665 | 1.1568 | 0.2869 | 0.2648 |
+| Audio zero input | 0.500 | 0.6931 | 0.2500 | 0.0008 |
+| Video zero input | 0.500 | 0.7162 | 0.2613 | 0.1061 |
+| Joint, audio zeroed | 0.555 | 1.2418 | 0.3334 | 0.3065 |
+| Joint, video zeroed | 0.600 | 0.8875 | 0.2744 | 0.2216 |
+| Joint, audio shuffled | 0.615 | 1.3907 | 0.3190 | 0.2845 |
+
+The paired video bootstrap used 10,000 repetitions, seed 17, and percentile
+intervals. Joint minus Audio Accuracy was +0.095 (95% interval +0.015 to
++0.175), with NLL delta -0.200 (interval -0.494 to +0.088) and Brier delta
+-0.052 (interval -0.115 to +0.010). Joint minus Video Accuracy was +0.085
+(+0.015 to +0.160), NLL delta -0.215 (-0.447 to +0.011), and Brier delta
+-0.044 (-0.095 to +0.007). Thus the point Accuracy gain over either single
+head is supported in this cohort; calibration gains remain uncertain.
+
+Input ablations are mixed. In the joint head, restoring audio over a zero-audio
+input improved Accuracy by 0.110 (interval +0.045 to +0.175) and Brier by
+-0.047 (interval -0.092 to -0.003), while its NLL interval crossed zero. Adding
+video over the audio-only joint-head control improved Accuracy by 0.065 but
+its interval crossed zero; NLL worsened by 0.269 (interval +0.044 to +0.510).
+Replacing audio with a deterministic derangement changed Accuracy by +0.050
+for the aligned input, but the interval crossed zero; the corresponding NLL
+and Brier intervals also crossed zero. This does not establish that each stream
+is reliably necessary for this decision.
+
+The deliberately balanced cohort has 50% positive prevalence, unlike the
+source's roughly 91.3% visible prevalence (about 94.3% among boundary-eligible
+examples). Therefore these NLL/Brier/ECE values are conditional on the balanced
+probe and are not source-prevalence calibration estimates. Selection used
+already inspected official-validation labels; this is a nonblind exploratory
+transfer diagnostic, not a sealed audit or product-quality result. The official
+test split remained unopened. No training, calibration, checkpoint selection,
+or sealed-audit evaluation occurred. The old Audio/Video/Joint readout,
+normalization, manifest, corpus, and model weights were not modified.
 
 Fresh output root (large weights/media remain outside Git):
 `C:/CodexArtifacts/pretrained-reuse-r2/perception-test-av-v2-extension-eval-20261025-attempt-01/`.
-Do not call this diagnostic complete until the gated audio extraction,
-single frozen-head evaluation, hash validation, and final report are finished.

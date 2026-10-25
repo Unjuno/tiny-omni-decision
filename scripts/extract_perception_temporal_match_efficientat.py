@@ -145,8 +145,18 @@ def state_sha(model: Any) -> str:
     return digest.hexdigest()
 
 
+def device_name(torch: Any, device: Any) -> str:
+    return torch.cuda.get_device_name(device) if device.type == "cuda" else "cpu"
+
+
+def cuda_memory_metrics(torch: Any, device: Any) -> tuple[int | None, int | None]:
+    if device.type != "cuda":
+        return None, None
+    return torch.cuda.max_memory_allocated(device), torch.cuda.max_memory_reserved(device)
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
-    if not os.environ.get("TINY_OMNI_GPU_GATE_RESERVED_MIB"):
+    if args.device == "cuda" and not os.environ.get("TINY_OMNI_GPU_GATE_RESERVED_MIB"):
         raise RuntimeError("audio feature extraction must run under run_with_hotgpu_guard.py")
     manifest_path = args.manifest.resolve(strict=True)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -171,9 +181,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     import torch
     import torchaudio
 
-    if not torch.cuda.is_available():
-        raise RuntimeError("CUDA unavailable; refusing audio feature extraction")
-    torch.cuda.set_device(0)
+    device = torch.device(args.device)
+    if device.type == "cuda":
+        if not torch.cuda.is_available():
+            raise RuntimeError("CUDA unavailable; refusing GPU audio feature extraction")
+        torch.cuda.set_device(0)
     torch.set_num_threads(4)
     torch.set_num_interop_threads(1)
     sys.path.insert(0, str(source))
@@ -185,8 +197,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     parameters = sum(parameter.numel() for parameter in model.parameters())
     if parameters != MODEL_PARAMETERS:
         raise ValueError(f"unexpected EfficientAT parameter count: {parameters}")
-    model.eval().requires_grad_(False).cuda()
-    mel = AugmentMelSTFT(freqm=0, timem=0).eval().requires_grad_(False).cuda()
+    model.eval().requires_grad_(False).to(device)
+    mel = AugmentMelSTFT(freqm=0, timem=0).eval().requires_grad_(False).to(device)
     before_state = state_sha(model)
     old_hashes, train_hashes, fresh_hashes = load_hash_maps(
         args.old_media, args.train_acquisition, args.fresh_valid_media_report
@@ -200,7 +212,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "weights_sha256": WEIGHTS_SHA256,
         "source_commit": commit,
         "parameters": parameters,
-        "device": torch.cuda.get_device_name(0),
+        "device": device_name(torch, device),
         "dtype": str(next(model.parameters()).dtype),
         "source_rate_hz_after_resample": SAMPLE_RATE,
         "input_window_seconds": 2.0,
@@ -208,7 +220,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "candidate_audio_windows": candidate_count,
         "gpu_gate": {
             key: value for key, value in os.environ.items() if key.startswith("TINY_OMNI_GPU_GATE_")
-        },
+        } if device.type == "cuda" else None,
         "validation_scope": "development-only",
     }
     atomic_json(output / "run.json", run_metadata)
@@ -243,14 +255,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             crop_sha = hashlib.sha256(
                 waveform.squeeze(0).contiguous().numpy().astype("<f4", copy=False).tobytes()
             ).hexdigest()
-            mel_input = mel(waveform.cuda()).unsqueeze(1)
+            mel_input = mel(waveform.to(device)).unsqueeze(1)
             if not torch.isfinite(mel_input).all():
                 raise ValueError(f"non-finite mel input: {row['sample_id']}:{option['event_id']}")
-            torch.cuda.reset_peak_memory_stats()
+            if device.type == "cuda":
+                torch.cuda.reset_peak_memory_stats(device)
             tick = time.perf_counter()
             with torch.inference_mode():
                 logits, embedding = model(mel_input)
-            torch.cuda.synchronize()
+            if device.type == "cuda":
+                torch.cuda.synchronize(device)
             elapsed = time.perf_counter() - tick
             vector = embedding.squeeze(0).float().cpu().numpy()
             if logits.shape != (1, 527) or vector.shape != (384,) or not np.isfinite(vector).all():
@@ -258,6 +272,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     f"invalid EfficientAT output: {row['sample_id']}:{option['event_id']}"
                 )
             feature_hash = hashlib.sha256(vector.tobytes()).hexdigest()
+            peak_allocated, peak_reserved = cuda_memory_metrics(torch, device)
             with feature_path.open("xb") as target:
                 np.save(target, vector, allow_pickle=False)
             record = {
@@ -275,8 +290,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "feature_dim": 384,
                 "feature_path": str(feature_path),
                 "forward_seconds": elapsed,
-                "peak_allocated_bytes": torch.cuda.max_memory_allocated(),
-                "peak_reserved_bytes": torch.cuda.max_memory_reserved(),
+                "peak_allocated_bytes": peak_allocated,
+                "peak_reserved_bytes": peak_reserved,
             }
             atomic_json(meta_path, record)
             metadata.append(record)
@@ -293,7 +308,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                             "latest_sample_id": row["sample_id"],
                             "peak_allocated_bytes": max(
                                 item["peak_allocated_bytes"] for item in metadata
-                            ),
+                                if item["peak_allocated_bytes"] is not None
+                            ) if device.type == "cuda" else None,
                         }
                     ),
                     flush=True,
@@ -306,20 +322,26 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "manifest_sha256": sha256_file(manifest_path),
         "weights_sha256": WEIGHTS_SHA256,
         "source_commit": commit,
-        "device": torch.cuda.get_device_name(0),
+        "device": device_name(torch, device),
         "parameters": parameters,
         "model_state_sha256_before": before_state,
         "model_state_sha256_after": after_state,
         "examples": len(rows),
         "candidate_audio_windows": len(metadata),
         "expected_candidate_audio_windows": candidate_count,
-        "peak_allocated_bytes": max(item["peak_allocated_bytes"] for item in metadata),
-        "peak_reserved_bytes": max(item["peak_reserved_bytes"] for item in metadata),
+        "peak_allocated_bytes": max(
+            item["peak_allocated_bytes"] for item in metadata
+            if item["peak_allocated_bytes"] is not None
+        ) if device.type == "cuda" else None,
+        "peak_reserved_bytes": max(
+            item["peak_reserved_bytes"] for item in metadata
+            if item["peak_reserved_bytes"] is not None
+        ) if device.type == "cuda" else None,
         "mean_forward_seconds": float(np.mean([item["forward_seconds"] for item in metadata])),
         "elapsed_seconds": time.perf_counter() - started,
         "gpu_gate": {
             key: value for key, value in os.environ.items() if key.startswith("TINY_OMNI_GPU_GATE_")
-        },
+        } if device.type == "cuda" else None,
         "records": metadata,
         "validation_scope": "development-only; not blind evaluation",
     }
@@ -343,6 +365,7 @@ def main() -> None:
     parser.add_argument("--train-acquisition", type=Path, required=True)
     parser.add_argument("--fresh-valid-media-report", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
     args = parser.parse_args()
     print(json.dumps(run(args), indent=2), flush=True)
 
