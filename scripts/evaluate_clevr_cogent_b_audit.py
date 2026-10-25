@@ -3,17 +3,28 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
-import torch
 
-from scripts.extract_clevr_vqa_features import read_rows, sha256
-from tiny_omni_decision.clevr_vqa_probe import evaluate_readout
-from tiny_omni_decision.clevr_vqa_readout import ClevrAnswerReadout
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def read_rows(path: Path) -> list[dict[str, object]]:
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+    if not rows or len({row.get("sample_id") for row in rows}) != len(rows):
+        raise ValueError(f"manifest must contain unique non-empty sample IDs: {path}")
+    return rows
 
 
 def paired_bootstrap(
@@ -98,6 +109,11 @@ def _load_feature(path: Path, metadata_path: Path, manifest_path: Path) -> np.nd
 
 
 def main() -> None:
+    import torch
+
+    from tiny_omni_decision.clevr_vqa_probe import evaluate_readout
+    from tiny_omni_decision.clevr_vqa_readout import ClevrAnswerReadout
+
     parser = argparse.ArgumentParser(description=__doc__)
     for name in (
         "audit-manifest",
