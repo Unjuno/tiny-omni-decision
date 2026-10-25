@@ -34,16 +34,19 @@ readout files are read-only.
 
 ## Code and preflight
 
-Source commit before inference: `5601703` (`Add fixed Perception validation
-transfer diagnostic`). It adds a validation-only manifest builder and evaluator
-with frozen artifact/hash gates, per-example receipts, zero-input and
-deterministic audio-shuffle controls, and a paired video-level bootstrap.
+Pipeline commit: `5601703` (`Add fixed Perception validation transfer
+diagnostic`). The evaluator's final media-identity and exact-frame checks were
+added in `8912066` (`Verify media identity in frozen transfer evaluation`)
+before any frozen-head scoring. The pipeline includes a validation-only manifest
+builder, per-example receipts, zero-input and deterministic audio-shuffle
+controls, and a paired video-level bootstrap.
 Unit tests verify cohort integrity, boundary retention, and deterministic
 paired intervals. The full suite passed **2,440 tests, 11 skipped**; Ruff and
 `git diff --check` passed. The commit was pushed to the roadmap PR branch and
-the continuation branch. Public GitHub Actions runs for both code commit
-`56017039639df111d53df61213c826e9b92a0b43` and report commit
-`9fc7504cc5abc02773165787a119d51e1d5b5cd9` completed successfully (two CI runs
+the continuation branch. Public GitHub Actions runs for code commits
+`56017039639df111d53df61213c826e9b92a0b43` and
+`8912066efa1c1cd94d43176559af7f4ba3015c77`, and report commit
+`9fc7504cc5abc02773165787a119d51e1d5b5cd9`, completed successfully (two CI runs
 per commit). The unauthenticated local GitHub CLI was bypassed with the public
 Actions API.
 
