@@ -251,13 +251,14 @@ images remained.
 At 09:31 JST, a CPU verification covered 4,950 train images; every filename
 belonged to the frozen manifest and every PNG decoded at 480x320. No invalid
 files were found; 11,434 train images remained to download.
-At 10:05 JST, a CPU verification covered 10,100 train images, with zero
+At 10:18 JST, a CPU verification covered 12,126 train images, with zero
 unexpected files or decode/dimension failures and the frozen manifest hash;
-6,284 train images remained. The Teacher v2 resume process and older GPU queue
-were still alive. The resume's persisted history remained at step 1,536
-(09:13:49 JST); the process retained GPU memory and reported varying device
-utilization, so no inference is made about its current operation and it was
-left untouched.
+4,258 train images remained. The Teacher v2 resume process and older GPU queue
+were still alive. The latest training-history row was step 1,664 (file updated
+10:10:49 JST), while durable trainer state still recorded global/best step
+1,536 and sample index 6,144. The process retained GPU memory and reported
+varying device utilization, so no inference is made about its current
+operation and it was left untouched.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
