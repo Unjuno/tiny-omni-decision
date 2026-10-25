@@ -259,6 +259,12 @@ were still alive. The latest training-history row was step 1,664 (file updated
 1,536 and sample index 6,144. The process retained GPU memory and reported
 varying device utilization, so no inference is made about its current
 operation and it was left untouched.
+At 10:26 JST, a later CPU verification covered 13,217 train images with zero
+unexpected files or decode/dimension failures; 3,167 remained. The latest
+history row and modification time were still step 1,664 / 10:10:49 JST, while
+durable trainer state remained at global/best step 1,536 and sample index
+6,144. The process remained alive with GPU memory allocated; no intervention
+was made.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
