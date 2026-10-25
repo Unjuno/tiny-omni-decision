@@ -1,12 +1,14 @@
-import torch
+import pytest
 
-from scripts.train_inaturalist_frozen_image_readout import (
+torch = pytest.importorskip("torch")
+
+from scripts.train_inaturalist_frozen_image_readout import (  # noqa: E402
     _class_weights,
     _metrics,
     _option_order_is_stable,
     _option_order_max_delta,
 )
-from tiny_omni_decision.textfree_image import TextFreeImageReadout
+from tiny_omni_decision.textfree_image import TextFreeImageReadout  # noqa: E402
 
 
 def test_inverse_frequency_weights_equalize_class_total_and_mean_one():
