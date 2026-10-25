@@ -1,7 +1,9 @@
 from collections import Counter, defaultdict
+from pathlib import Path
 
 import pytest
 
+from scripts.prepare_synthetic_av_readout import render_assets
 from tiny_omni_decision.synthetic_av_task import build_manifest, validate_manifest
 
 
@@ -45,3 +47,27 @@ def test_manifest_rejects_missing_pair_examples():
     manifest["examples"].pop()
     with pytest.raises(ValueError, match="every group must have exactly eight examples"):
         validate_manifest(manifest)
+
+
+def test_renderer_is_deterministic_and_persists_verified_av_assets(tmp_path: Path):
+    manifest = build_manifest(train_groups=1, validation_groups=1, seed=17)
+    first = render_assets(manifest, tmp_path / "first")
+    second = render_assets(manifest, tmp_path / "second")
+    first_assets = first["assets"]
+    second_assets = second["assets"]
+    assert first_assets == second_assets
+    assert len(first_assets["videos"]) == 4
+    assert len(first_assets["audio"]) == 4
+    assert len(first["examples"]) == 16
+    assert all(item["frame_count"] == 8 for item in first_assets["videos"].values())
+    assert all(item["sample_rate_hz"] == 32_000 for item in first_assets["audio"].values())
+    audio_paths = (tmp_path / "first" / item["path"] for item in first_assets["audio"].values())
+    assert all(path.is_file() for path in audio_paths)
+
+
+def test_renderer_refuses_to_overwrite_an_existing_output(tmp_path: Path):
+    output = tmp_path / "occupied"
+    output.mkdir()
+    manifest = build_manifest(train_groups=1, validation_groups=1, seed=17)
+    with pytest.raises(FileExistsError, match="refusing to overwrite"):
+        render_assets(manifest, output)
