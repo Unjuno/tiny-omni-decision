@@ -4,9 +4,12 @@
 MiniLM scorer made the exact same top-1 predictions on all 168 development
 validation questions with aligned, zeroed, and deranged image features. Its
 79.17% score is not evidence of image-grounded choice quality; validation was
-used for model selection. The probe remains a task/input-sensitivity diagnostic.
+used for model selection. A separately trained smaller text-only control scored
+75.60% on the same exposed split. The probe remains a task/input-sensitivity
+diagnostic.
 [Initial result](docs/pretrained_reuse/R2_OPENIMAGES_VIDEOPRISM_PROBE_20261026.md)
-and [input controls](docs/pretrained_reuse/R2_OPENIMAGES_INPUT_CONTROLS_20261026.md).
+and [input controls](docs/pretrained_reuse/R2_OPENIMAGES_INPUT_CONTROLS_20261026.md),
+plus the [text-only control](docs/pretrained_reuse/R2_OPENIMAGES_TEXT_ONLY_CONTROL_20261026.md).
 
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and

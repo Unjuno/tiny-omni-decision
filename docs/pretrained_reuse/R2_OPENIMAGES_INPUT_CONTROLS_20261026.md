@@ -41,7 +41,10 @@ signatures in training. Only 11/168 validation questions had a signature seen
 in training; majority target lookup was correct on 7/11 of those. This specific
 lookup does not explain the full validation result. Other candidate-set/text
 regularities remain possible and have not been isolated. A separately trained
-text-only scorer has not been evaluated.
+MiniLM-only readout reached 75.60% on this same exposed validation set at a
+fixed final epoch; its smaller capacity and fixed endpoint make that a
+diagnostic, not a matched architecture comparison. See the
+[text-only control report](R2_OPENIMAGES_TEXT_ONLY_CONTROL_20261026.md).
 
 ## Frozen protocol and integrity
 

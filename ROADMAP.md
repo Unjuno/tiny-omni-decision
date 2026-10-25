@@ -3,11 +3,14 @@ VideoPrism-B + MiniLM readout scored 79.17% Accuracy on 168 development
 validation choices, but a fixed input ablation gave exactly the same top-1
 prediction for every row when image features were zeroed or deranged. Treat the
 score as a task/input-sensitivity diagnostic, not image-grounded quality.
-Validation was used for model selection, individual image ownership was not
-verified, and uncompressed weights total 527.6MB. The 131.90M parameter count
-does not close R2 or the 95–98% multimodal target. See the
+One separately fitted smaller MiniLM-only readout reached 75.60% at a fixed
+eight-epoch endpoint on the same exposed validation split; it is not a matched
+capacity or blind comparison. Validation was used for model selection,
+individual image ownership was not verified, and uncompressed weights total
+527.6MB. The 131.90M parameter count does not close R2 or the 95–98% target. See the
 [initial probe](docs/pretrained_reuse/R2_OPENIMAGES_VIDEOPRISM_PROBE_20261026.md)
-and [fixed controls](docs/pretrained_reuse/R2_OPENIMAGES_INPUT_CONTROLS_20261026.md).
+and [fixed controls](docs/pretrained_reuse/R2_OPENIMAGES_INPUT_CONTROLS_20261026.md),
+plus the [text-only diagnostic](docs/pretrained_reuse/R2_OPENIMAGES_TEXT_ONLY_CONTROL_20261026.md).
 
 **2026-10-26 R2 Open Images V6 landing-page audit:** Read-only checks of the
 440 selected Flickr pages found 347 current page declarations matching CC BY

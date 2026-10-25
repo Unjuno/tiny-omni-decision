@@ -22,8 +22,10 @@ remained 79.17% in all three conditions. The aligned image slightly changed
 confidence metrics, but did not change any choice. Do not interpret the result
 above as evidence that the choices were image-grounded. The scorer's decision
 ranking may come from text/candidate regularities; a separately trained
-text-only scorer was not tested. See the
-[fixed input controls](R2_OPENIMAGES_INPUT_CONTROLS_20261026.md).
+text-only scorer reached 75.60% with a smaller readout and fixed final epoch.
+This is a diagnostic on the same exposed split, not a matched comparison. See
+the [fixed input controls](R2_OPENIMAGES_INPUT_CONTROLS_20261026.md) and
+[text-only control](R2_OPENIMAGES_TEXT_ONLY_CONTROL_20261026.md).
 
 ## Data gate and fixed splits
 
