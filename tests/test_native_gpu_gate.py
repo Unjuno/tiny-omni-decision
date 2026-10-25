@@ -41,7 +41,41 @@ def test_accepts_only_the_live_hotgpu_parent_reservation():
         "status": "PASS_HOTGPU_RESERVED",
         "parent_pid": 700,
         "free_mib": 13744,
+        "verified_ui_pids": [],
     }
+
+
+def test_guarded_gpu_allows_only_verified_cursor_renderer():
+    result = _validate_gpu_preflight(
+        _reservation(),
+        active_pids={700, 701},
+        memory_used_mib=2640,
+        memory_total_mib=16384,
+        utilization_pct=0,
+        parent_command=["python.exe", "scripts/run_with_hotgpu_guard.py"],
+        active_process_commands={
+            700: ("python.exe", ["python.exe", "scripts/run_with_hotgpu_guard.py"]),
+            701: ("Cursor.exe", ["Cursor.exe", "--type=gpu-process"]),
+        },
+    )
+
+    assert result["verified_ui_pids"] == [701]
+
+
+def test_guarded_gpu_rejects_unrecognized_auxiliary_process():
+    with pytest.raises(RuntimeError, match="other process"):
+        _validate_gpu_preflight(
+            _reservation(),
+            active_pids={700, 701},
+            memory_used_mib=2640,
+            memory_total_mib=16384,
+            utilization_pct=0,
+            parent_command=["python.exe", "scripts/run_with_hotgpu_guard.py"],
+            active_process_commands={
+                700: ("python.exe", ["python.exe", "scripts/run_with_hotgpu_guard.py"]),
+                701: ("python.exe", ["python.exe", "other_training.py"]),
+            },
+        )
 
 
 def test_accepts_idle_gpu_without_hotgpu_metadata():

@@ -208,8 +208,10 @@ at step 0 before model load because six files in the visual-cache provenance
 receipt were compared against a newer checkout instead of the receipt's pinned
 Git commit. All six expected hashes were independently verified from that exact
 commit; no external worktree file was changed. The runner now records this
-commit-blob verification and recognizes only a sole, capacity-checked HotGPU
-parent reservation. A full-extent × fresh-coverage fit has still not run; see
+commit-blob verification and recognizes a capacity-checked HotGPU parent
+reservation. Its only allowed auxiliary GPU PID is the verified Cursor GPU
+renderer; unknown processes still block launch. A full-extent × fresh-coverage
+fit has still not run; see
 the report for the failure receipt and rerun conditions.
 
 **2026-10-25 R2 UnAV-100 source/task screen:** UnAV-100 is a relevant

@@ -30,7 +30,7 @@ from scripts.native_fit import (
 from scripts.native_fit_runtime import FeatureStore
 from scripts.native_full_extent import parent_probe
 from scripts.native_full_extent_binding import bind_visual_banks
-from scripts.native_gpu_gate import GATE_VARIABLES, validate_gpu_preflight
+from scripts.native_gpu_gate import GATE_VARIABLES, process_command, validate_gpu_preflight
 from scripts.native_long_budget import EVALUATION_STEPS, MAX_STEPS, extend_plan, learning_rate
 from scripts.native_matched_batches import build_plan
 from scripts.native_source_pins import verify_pins
@@ -104,6 +104,7 @@ def main():
         memory_total_mib=total_memory,
         utilization_pct=utilization,
         parent_command=gate_parent_command,
+        active_process_commands={pid: process_command(pid) for pid in active_pids},
     )
     args.output.mkdir(exist_ok=False)
     started = time.perf_counter()

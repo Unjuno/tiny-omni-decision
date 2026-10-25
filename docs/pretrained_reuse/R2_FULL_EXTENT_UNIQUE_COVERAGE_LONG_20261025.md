@@ -114,13 +114,15 @@ mismatches, and all six matched the exact committed blobs. No file in that
 external worktree was changed.
 
 The runner now verifies changed external source files against the visual-cache
-receipt's pinned commit and records each Git-blob fallback. It also accepts a
-HotGPU reservation only when its guard process is the sole compute PID and the
-measured free memory satisfies the child minimum; ordinary occupied-GPU states
-still fail closed. The next queue will use HotGPU's 14,000 MiB free-memory block
-threshold (above the 12,288 MiB child minimum) so Orbitune's configured
-14,000 MiB restart threshold remains blocked for the whole smoke/train/replay
-sequence. The live Orbitune process remains untouched.
+receipt's pinned commit and records each Git-blob fallback. Its local HotGPU
+guard permits only the guard process and the verified Cursor GPU renderer;
+unknown GPU processes and active utilization still block launch. The measured
+free memory must remain below 14,000 MiB and at least 12,288 MiB. The guard
+reserves enough memory to keep Orbitune's 14,000 MiB restart threshold blocked
+for the whole smoke/train/replay sequence and keeps that reservation for all
+three phases. The live Orbitune
+process remains untouched. Tests cover the UI-process exception and rejection
+of any unrecognized auxiliary PID.
 
 No training fit has started and no model-quality result exists from this
 attempt. The provenance/gate fix is being tested before a new CPU preflight and
