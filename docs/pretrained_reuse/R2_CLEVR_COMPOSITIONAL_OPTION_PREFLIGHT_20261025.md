@@ -248,6 +248,9 @@ hash; 12,724 train images remained to fetch.
 At 09:27 JST, the latest scan covered 4,287 train images with zero unexpected
 names or decode/dimension failures and the same manifest hash; 12,097 train
 images remained.
+At 09:31 JST, a CPU verification covered 4,950 train images; every filename
+belonged to the frozen manifest and every PNG decoded at 480x320. No invalid
+files were found; 11,434 train images remained to download.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
