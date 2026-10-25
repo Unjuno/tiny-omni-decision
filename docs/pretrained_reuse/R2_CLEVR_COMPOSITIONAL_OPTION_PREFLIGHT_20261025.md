@@ -206,6 +206,10 @@ PNGs, all named in the pinned validation manifest, all decodable at 480x320;
 none failed image verification. The manifest SHA-256 remained
 `ed3ea2d6af987a3486860f4a4766b18fd309905626e49479561675883eef0d82`. This is
 a partial-cache integrity check, not feature or quality evaluation.
+At 09:00 JST, all 4,096 validation images had arrived; an independent CPU pass
+matched every filename to that manifest, decoded every PNG at 480x320, and
+found zero missing, unexpected, or invalid files. The training portion of the
+download had then begun (66/16,384 images); the full cache remains incomplete.
 Next: finish media acquisition, extract full ViLT features and controls through
 the cooperative HotUGPU reservation, fit the readout, then assess per-answer
 and per-program metrics without opening CoGenT-B. Keep the prospective held-out
