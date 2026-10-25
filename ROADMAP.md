@@ -22,6 +22,15 @@ produced. See the [`LOCATA source screen`](docs/pretrained_reuse/R2_LOCATA_SENSO
 **2026-10-26 R2 MAVC100 source gate:** MAVC100 has a relevant anchor-vocalization AV label, but the official dataset terms describe internet-sourced original videos, research-only use, and removal of potentially infringing backups; no per-video reuse grant was established. The code repository's MIT license does not grant rights to those videos. No labels or media were accessed, and the candidate is not admitted for product-aligned training or quality evaluation pending rights evidence. See the [MAVC100 source gate](docs/pretrained_reuse/R2_MAVC100_AV_VAD_SOURCE_GATE_20261026.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R0 live-state refresh:** the current R2 branch is clean and
+synced, CI is green, 60 worktrees and 22 open PRs are preserved, and six
+worktrees remain dirty (including the primary Teacher worktree, untouched).
+The RTX 3080 was idle at the snapshot; Orbitune's idle supervisor remains
+running, so GPU work still requires HotUGPU. Current Path A and narrow AV
+results do not meet the per-task 95% target; no admitted independent natural
+AV/AV-sensor task closes M-2. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261026.md)
+and its [machine-readable snapshot](docs/pretrained_reuse/R0_LIVE_AUDIT_20261026.json).
+
 **2026-10-25 R2 synthetic AV temporal/readout comparison complete:** On a
 generated, group-disjoint sequence-matching task, the seed-17 temporal LSTM
 showed a delayed transition after step 3,584 and reached 100% on 1,024

@@ -1,0 +1,705 @@
+{
+  "snapshot_local": "2026-10-26T02:47:46+09:00",
+  "repository": "Unjuno/tiny-omni-decision",
+  "current_branch": "codex/r2-synthetic-av-gated-temporal-20261026",
+  "head": "dd1f7fe3487c6474ab8a0eb60b9884966407b544",
+  "upstream_head": "dd1f7fe3487c6474ab8a0eb60b9884966407b544",
+  "worktree_count": 60,
+  "dirty_worktree_count": 6,
+  "worktrees": [
+    {
+      "index": 1,
+      "branch": "codex/teacher-quality-clean-dev-v1",
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "detached": false,
+      "dirty": true
+    },
+    {
+      "index": 2,
+      "branch": "codex/clevr4-100k-transfer-eval-20261023",
+      "head": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 3,
+      "branch": "codex/r2-clevrer-coverage-20261020",
+      "head": "e914ba220ba1dbbb0822af4933db79638354f364",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 4,
+      "branch": "codex/r2-lstm-train-input-dependency-20261023",
+      "head": "6b2ae96d47727ea9c83cdee7dc2fde57abae8e53",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 5,
+      "branch": "codex/decision-head-validation",
+      "head": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 6,
+      "branch": "",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "detached": true,
+      "dirty": false
+    },
+    {
+      "index": 7,
+      "branch": "",
+      "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "detached": true,
+      "dirty": false
+    },
+    {
+      "index": 8,
+      "branch": "fix/student-qat-training-handoff",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "detached": false,
+      "dirty": true
+    },
+    {
+      "index": 9,
+      "branch": "codex/r2-native-coverage-long-20261021",
+      "head": "33afecdc749f213cf023f4389bc5c30ebac8931e",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 10,
+      "branch": "codex/textfree-video-program-order",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "detached": false,
+      "dirty": true
+    },
+    {
+      "index": 11,
+      "branch": "codex/roadmap-scalar-audio-update-20261022",
+      "head": "bf44a5f2c2eca51d41543ac905dfcf238ee94b4b",
+      "detached": false,
+      "dirty": true
+    },
+    {
+      "index": 12,
+      "branch": "codex/qat-groupwise-performance",
+      "head": "c50f0eb364d963bbcb3144a83305705880d9d426",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 13,
+      "branch": "codex/r2-batvision-source-screen",
+      "head": "758ec16f3003940e6f37b6101156571aa4499529",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 14,
+      "branch": "codex/r0-live-audit-20261024",
+      "head": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 15,
+      "branch": "codex/r2-synthetic-av-gated-temporal-20261026",
+      "head": "dd1f7fe3487c6474ab8a0eb60b9884966407b544",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 16,
+      "branch": "codex/r1-pe-core-audit-20261021",
+      "head": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 17,
+      "branch": "codex/r2-av-task-source-screen-20261023",
+      "head": "6540c9f181a4de423f4b9e975f1373861b83b95c",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 18,
+      "branch": "codex/r2-ami-av-source-screen-20261021",
+      "head": "406f003a128a7991ec39dcb15608b381f003add4",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 19,
+      "branch": "codex/r2-avqa-source-screen-20261021",
+      "head": "9e8a8a991aac46531488691603a914b0be5757d6",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 20,
+      "branch": "codex/r2-avsbench-source-screen-20261024",
+      "head": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 21,
+      "branch": "codex/r2-clevrer-fresh-reasoning-20261021",
+      "head": "016face5ece2dd11835af641b1759104e1646a1a",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 22,
+      "branch": "codex/r2-av-training-signal-20261023",
+      "head": "443d058a8d256322a8d1417e7602fc957b3d0540",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 23,
+      "branch": "codex/r2-csqa2-text-decision-20261024",
+      "head": "f057a031ffe271c51c138b439800cae2863a9149",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 24,
+      "branch": "codex/r2-fair-play-source-screen-20261022",
+      "head": "936a9837299b25095c0f0703768f1079af24b424",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 25,
+      "branch": "codex/r2-holoassist-exposure-strata",
+      "head": "6baf4ab60f8acefc75d4d4c63961b3cb0c33f24d",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 26,
+      "branch": "codex/r2-holoassist-results-20261020",
+      "head": "5c0bae773f9d4ec983ff3ac58fc13b1dd24bc47a",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 27,
+      "branch": "codex/r2-captaincook4d-screen-20261021",
+      "head": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 28,
+      "branch": "codex/r2-mavad-source-screen-20261021",
+      "head": "07c504c958816fd2e9d70c279702b71b6e55e749",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 29,
+      "branch": "codex/r2-mavd-source-screen-20261021",
+      "head": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 30,
+      "branch": "codex/r2-observation-batch",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 31,
+      "branch": "codex/r2-otospeech-source-screen-20261024",
+      "head": "46e92ec5b3a4bb0a105ca8e79e0bdc0768d09ed4",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 32,
+      "branch": "codex/r2-pamap2-admission-screen-20261021",
+      "head": "e3fa96e7b0c5a0bf78253ef595fda4ffbeb525d6",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 33,
+      "branch": "codex/r2-pch-heldout-eval-20261021",
+      "head": "d825251d3baea690dfa17602c28fc81096ab1575",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 34,
+      "branch": "codex/r2-pch-recording-temporal-20261021",
+      "head": "fe82f5cd854cb305cc13eb715eb7a92b40dbd976",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 35,
+      "branch": "codex/holoassist-label-window-audit",
+      "head": "ddf6a106675f3a15feb66b5123ee7431539c27bf",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 36,
+      "branch": "codex/r2-robopro-source-screen-20261024",
+      "head": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 37,
+      "branch": "codex/r2-shared-gradient-audit-20261024",
+      "head": "8eb702a126a512b269fd3fd083b7f973478a6947",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 38,
+      "branch": "codex/textfree-video-coverage-v1",
+      "head": "74e2094c51af6a8738dd67d42d018442b979cd75",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 39,
+      "branch": "codex/textfree-video-coverage-v2",
+      "head": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "detached": false,
+      "dirty": true
+    },
+    {
+      "index": 40,
+      "branch": "codex/r2-json-decision-contract-20261021",
+      "head": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 41,
+      "branch": "codex/r2-ami-speaker-channel-preflight-20261022",
+      "head": "cb020322a229ea31a7d2773717ba6487a622a376",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 42,
+      "branch": "codex/r2-pch-moment-probe",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 43,
+      "branch": "codex/r0-r1-recheck-20261026",
+      "head": "5e77951c4cd4d43c66d727c72ddc611163b55ffb",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 44,
+      "branch": "codex/r2-spatial-count-readout-20261023",
+      "head": "329b525f2a504c2c77a30f48c8ae88c0b23467f5",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 45,
+      "branch": "codex/r2-av-audio-cache",
+      "head": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 46,
+      "branch": "codex/r2-av-matched-evidence",
+      "head": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 47,
+      "branch": "codex/r2-av-postnorm-stability",
+      "head": "809c0f8226a780039a89c8066709d15d39a53f8a",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 48,
+      "branch": "codex/r2-av-replacement",
+      "head": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 49,
+      "branch": "codex/r2-av-transport",
+      "head": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 50,
+      "branch": "codex/r2-clevrer-reasoning-storytime-screen-20261023",
+      "head": "cafb040c467bba6783ff30c6cc327db928cdfad5",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 51,
+      "branch": "codex/r2-holoassist-textfree",
+      "head": "39b1a7057c4ec0afaa04b3dbc09e1989d2fa654b",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 52,
+      "branch": "codex/r2-joint-av-source-screen-20261024",
+      "head": "e2c05dc5f0d0aee681345e723147df47ac307392",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 53,
+      "branch": "codex/r2-pch-temporal-readout-v1",
+      "head": "07eb437a79e11fede0b6544b75631560d7fd22a9",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 54,
+      "branch": "codex/r2-perception-av-scale-v1",
+      "head": "58633f10a6010f31dc5a17c59ce9a7c09b462db9",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 55,
+      "branch": "codex/r2-perception-source-candidate",
+      "head": "a48e8e218038bc3830d59d595dba4f070c6904ce",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 56,
+      "branch": "codex/r2-storytime-api-followup-20261023",
+      "head": "aff0452f27496e3c991ead1e64dbcbe8a8007935",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 57,
+      "branch": "codex/video-teacher-v2-long-budget",
+      "head": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 58,
+      "branch": "codex/teacher-quality-physionpp",
+      "head": "506a049142f09f6aa5e34e20778f662e680eb93d",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 59,
+      "branch": "codex/ternary-student-recovery",
+      "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "detached": false,
+      "dirty": false
+    },
+    {
+      "index": 60,
+      "branch": "codex/ternary-student-recovery-updated",
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "detached": false,
+      "dirty": true
+    }
+  ],
+  "open_pr_count": 22,
+  "open_prs": [
+    {
+      "number": 30,
+      "title": "Record AVSBench source and rights gate",
+      "branch": "codex/r2-avsbench-source-screen-20261024",
+      "head": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:41:09Z"
+    },
+    {
+      "number": 29,
+      "title": "Add CommonsenseQA 2.0 text Decision transfer probe",
+      "branch": "codex/r2-csqa2-text-decision-20261024",
+      "head": "f057a031ffe271c51c138b439800cae2863a9149",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:28:13Z"
+    },
+    {
+      "number": 28,
+      "title": "docs: refresh R0 repository and live GPU audit",
+      "branch": "codex/r0-live-audit-20261024",
+      "head": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:13:23Z"
+    },
+    {
+      "number": 27,
+      "title": "docs: reconcile AV source screen with completed synthetic run",
+      "branch": "codex/r2-joint-av-source-screen-20261024",
+      "head": "e2c05dc5f0d0aee681345e723147df47ac307392",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:09:23Z"
+    },
+    {
+      "number": 26,
+      "title": "Record pinned native shared-readout gradient diagnostic",
+      "branch": "codex/r2-shared-gradient-audit-20261024",
+      "head": "8eb702a126a512b269fd3fd083b7f973478a6947",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:00:42Z"
+    },
+    {
+      "number": 25,
+      "title": "docs: add RoboPro and otoSpeech R2 source screens",
+      "branch": "codex/r2-robopro-source-screen-20261024",
+      "head": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T13:31:13Z"
+    },
+    {
+      "number": 24,
+      "title": "Record CLEVR-4 100k fixed-readout transfer results",
+      "branch": "codex/clevr4-100k-transfer-eval-20261023",
+      "head": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-23T12:45:23Z"
+    },
+    {
+      "number": 23,
+      "title": "R2: record scalar audio projection diagnostic",
+      "branch": "codex/roadmap-scalar-audio-update-20261022",
+      "head": "df4ac9b02b66b60a3231df7f765c82bb436c908f",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-22T03:59:54Z"
+    },
+    {
+      "number": 22,
+      "title": "docs: screen FAIR-Play for R2 AV matching",
+      "branch": "codex/r2-fair-play-source-screen-20261022",
+      "head": "936a9837299b25095c0f0703768f1079af24b424",
+      "base": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "draft": true,
+      "updated_at": "2026-10-21T19:33:18Z"
+    },
+    {
+      "number": 21,
+      "title": "R2: CLEVRER synthetic AV coverage v2 results",
+      "branch": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "head": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+      "base": "codex/r2-clevrer-synthetic-av-protocol",
+      "draft": true,
+      "updated_at": "2026-10-21T17:59:37Z"
+    },
+    {
+      "number": 20,
+      "title": "Add stable typed Decision JSON output",
+      "branch": "codex/r2-json-decision-contract-20261021",
+      "head": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "base": "codex/r0-r2-continuation-20261021",
+      "draft": true,
+      "updated_at": "2026-10-21T05:23:30Z"
+    },
+    {
+      "number": 19,
+      "title": "Screen AMI for cross-modal speaker-to-face matching",
+      "branch": "codex/r2-ami-av-source-screen-20261021",
+      "head": "406f003a128a7991ec39dcb15608b381f003add4",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-21T06:02:01Z"
+    },
+    {
+      "number": 18,
+      "title": "Screen CaptainCook4D for a procedural step-text video task",
+      "branch": "codex/r2-captaincook4d-screen-20261021",
+      "head": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-20T21:35:21Z"
+    },
+    {
+      "number": 17,
+      "title": "Screen MAVD Urbansas audiovisual source integrity",
+      "branch": "codex/r2-mavd-source-screen-20261021",
+      "head": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": false,
+      "updated_at": "2026-10-20T21:19:28Z"
+    },
+    {
+      "number": 16,
+      "title": "Record PE-Core T16 checkpoint CPU audit",
+      "branch": "codex/r1-pe-core-audit-20261021",
+      "head": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": false,
+      "updated_at": "2026-10-21T05:46:12Z"
+    },
+    {
+      "number": 15,
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "branch": "docs/pretrained-reuse-roadmap-20261010",
+      "head": "2538c5a6f3702e8535c339984a43af9b9d293fed",
+      "base": "main",
+      "draft": true,
+      "updated_at": "2026-10-25T13:52:46Z"
+    },
+    {
+      "number": 14,
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "branch": "fix/student-qat-training-handoff",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "base": "codex/ternary-student-recovery",
+      "draft": true,
+      "updated_at": "2026-10-08T10:54:56Z"
+    },
+    {
+      "number": 13,
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "branch": "feat/ternary-student-recovery",
+      "head": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "base": "main",
+      "draft": false,
+      "updated_at": "2026-10-08T02:27:05Z"
+    },
+    {
+      "number": 12,
+      "title": "feat: add strict postquant teacher cache boundary",
+      "branch": "codex/postquant-teacher-cache",
+      "head": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "base": "codex/postquant-numerical-core",
+      "draft": true,
+      "updated_at": "2026-10-06T17:54:48Z"
+    },
+    {
+      "number": 11,
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "branch": "codex/postquant-numerical-core",
+      "head": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "base": "codex/postquant-worker-entrypoints",
+      "draft": true,
+      "updated_at": "2026-10-06T17:19:22Z"
+    },
+    {
+      "number": 10,
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "branch": "codex/postquant-worker-entrypoints",
+      "head": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "base": "codex/roadmap-compression-video-specialization",
+      "draft": true,
+      "updated_at": "2026-10-06T15:33:14Z"
+    },
+    {
+      "number": 9,
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "branch": "codex/teacher-quality-v1",
+      "head": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "base": "main",
+      "draft": true,
+      "updated_at": "2026-10-04T10:04:40Z"
+    }
+  ],
+  "processes": [
+    {
+      "pid": 4696,
+      "parent_pid": 3276,
+      "created": "2026-10-20T01:46:00.622404+09:00",
+      "executable": "C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\venv_cuda\\Scripts\\python.exe",
+      "command_line": "\"C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\venv_cuda\\Scripts\\python.exe\" -W ignore tools\\idle_train.py --watchdog C:\\orbitune-production\\epoch_a2_watchdog.py --gpu-index 0 --util-threshold 5 --min-free-mib 14000 --max-cpu-percent 0 --idle-seconds 60 --poll-seconds 20 --yield-after-busy-seconds 40 --graceful-timeout 900 --startup-timeout-seconds 300 --no-progress-backoff 120 --heartbeat-seconds 600 --max-failures 5 "
+    },
+    {
+      "pid": 23856,
+      "parent_pid": 4696,
+      "created": "2026-10-20T01:46:00.656712+09:00",
+      "executable": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "command_line": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -W ignore tools\\idle_train.py --watchdog C:\\orbitune-production\\epoch_a2_watchdog.py --gpu-index 0 --util-threshold 5 --min-free-mib 14000 --max-cpu-percent 0 --idle-seconds 60 --poll-seconds 20 --yield-after-busy-seconds 40 --graceful-timeout 900 --startup-timeout-seconds 300 --no-progress-backoff 120 --heartbeat-seconds 600 --max-failures 5 "
+    }
+  ],
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "memory_used_mib": 53,
+    "memory_total_mib": 16384,
+    "utilization_percent": 0,
+    "live_guard": "HotUGPU required for all future GPU runs"
+  },
+  "host": {
+    "c_free_bytes": 42029641728,
+    "ram_total_bytes": 34087497728,
+    "ram_free_bytes": 13905965056,
+    "cloud_cost_usd": 0
+  },
+  "current_branch_ci": [
+    {
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/actions/runs/40217705959/job/121242350409"
+    }
+  ],
+  "evidence": {
+    "r1_cpu_recheck_branch": "codex/r0-r1-recheck-20261026",
+    "r1_cpu_recheck_head": "5e77951c",
+    "r2_perception_source_candidate": {
+      "branch": "codex/r2-perception-source-candidate",
+      "head": "a48e8e21",
+      "selected_epoch": 7,
+      "train_videos": 320,
+      "development_videos": 80,
+      "development_events": 606,
+      "accuracy": 0.5693,
+      "nll": 1.2748,
+      "brier": 0.5039,
+      "ece_10bin": 0.0675,
+      "overfit": true,
+      "sealed_audit_opened": false
+    },
+    "synthetic_av": {
+      "reference_lstm_validation_accuracy": 1.0,
+      "residual_gate_accuracy": 1.0,
+      "gate_accuracy_gain": 0.0,
+      "scope": "synthetic only; no natural AV quality claim"
+    },
+    "path_a": {
+      "unique_parameters": 170499716,
+      "payload_bytes": 687254772,
+      "package_target_bytes": 200000000,
+      "package_target_met": false
+    }
+  },
+  "scope": {
+    "read_only_snapshot": true,
+    "no_process_stopped": true,
+    "other_worktrees_modified": false,
+    "sealed_audit_accessed": false
+  }
+}
