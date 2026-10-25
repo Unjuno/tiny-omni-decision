@@ -33,6 +33,22 @@ match at Hamming distance 4 or below was found. A 32-image validation contact
 sheet received a visual spot check; it found no clear mismatch, but it is not a
 full manual audit.
 
+A separate seed-17 sample of four train images per species was visually checked
+after fitting. In the 32-image train spot check, one Great Blue Heron record
+showed habitat without a visible bird, and another showed an isolated heron-
+like feather rather than the animal. Other examples were mostly plausible, but
+some subjects were small or distant. These are weakly grounded examples for a
+photo-classification objective, not confirmed errors in the observation taxa.
+They make label/content quality a plausible bottleneck and should not be fixed
+by editing this frozen cohort or the validation split. The train contact sheet
+and selected-ID sidecar are external and reproducible from the train manifest
+with `train-qa-seed17:{observation_id}` SHA-256 ordering, four per taxon:
+
+- `manual-label-qa-train-seed17.png` SHA-256
+  `19193d96c36939288277f7374205572a33a399a85d99386c3f3332d098f3ead2`
+- `manual-label-qa-train-seed17.json` SHA-256
+  `fde388a8162d470bace3e4c4fb5d9fd6e1f87ff5c72a9a18b7dc9f6edd6174814`
+
 External artifacts, not committed to Git:
 
 - Metadata: `C:\CodexArtifacts\inat-birds-cc0-v1-20261026\`
@@ -206,7 +222,9 @@ but the curve then overfit before 2,048, and all eight classes remain below
 90%; none approaches 95–98%. The controls establish image dependence, not
 decision competence. The appropriate next work is to diagnose the data/task
 ceiling and improve coverage or task formulation before considering a larger
-readout. This result does not justify training a multimodal gate, ternary QAT,
+readout. The train spot check reinforces the need for stricter visible-subject
+quality screens in any new corpus while keeping this cohort immutable. This
+result does not justify training a multimodal gate, ternary QAT,
 or promoting this image-only classifier. Keep this artifact as a narrow R2
 development reference and preserve the product's four-modality objective.
 

@@ -2886,7 +2886,10 @@ features and a fixed linear readout were evaluated in separate 512- and
 2,048-epoch runs. Best validation macro Accuracy reached 81.13% at epoch 1,276;
 the longer run showed overfitting by epoch 2,048 and no species reached 90%.
 Image ablation/permutation controls show the prediction depends on the image.
-This is a narrow development classification probe, not an open-vocabulary or
-multimodal Decision result, and the cohort has no sealed audit. See the
+A 32-example train spot check found one image without a visible bird and one
+feather-only image; these are possible weak image-label grounding, not confirmed
+taxonomic errors. Future expansion should gate visible-subject quality. This is
+a narrow development classification probe, not an open-vocabulary or multimodal
+Decision result, and the cohort has no sealed audit. See the
 [`metadata freeze`](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FREEZE_20261026.md)
 and [measured VideoPrism readout result](docs/pretrained_reuse/R2_INATURALIST_VIDEOPRISM_READOUT_20261026.md).
