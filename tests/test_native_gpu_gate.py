@@ -36,7 +36,7 @@ def test_accepts_only_the_live_hotgpu_parent_reservation():
         memory_used_mib=2640,
         memory_total_mib=16384,
         utilization_pct=0,
-        parent_command=["python.exe", "scripts/run_with_hotgpu_guard.py"],
+        parent_command=["python.exe", "-m", "scripts.run_with_hotgpu_guard"],
     )
 
     assert result == {
@@ -56,7 +56,10 @@ def test_guarded_gpu_allows_only_verified_cursor_renderer():
         utilization_pct=0,
         parent_command=["python.exe", "scripts/run_with_hotgpu_guard.py"],
         active_process_commands={
-            700: ("python.exe", ["python.exe", "scripts/run_with_hotgpu_guard.py"]),
+            700: (
+                "python.exe",
+                ["python.exe", "-m", "scripts.run_with_hotgpu_guard"],
+            ),
             701: ("Cursor.exe", ["Cursor.exe", "--type=gpu-process"]),
         },
     )
@@ -72,9 +75,12 @@ def test_guarded_gpu_rejects_unrecognized_auxiliary_process():
             memory_used_mib=2640,
             memory_total_mib=16384,
             utilization_pct=0,
-            parent_command=["python.exe", "scripts/run_with_hotgpu_guard.py"],
+            parent_command=["python.exe", "-m", "scripts.run_with_hotgpu_guard"],
             active_process_commands={
-                700: ("python.exe", ["python.exe", "scripts/run_with_hotgpu_guard.py"]),
+                700: (
+                    "python.exe",
+                    ["python.exe", "-m", "scripts.run_with_hotgpu_guard"],
+                ),
                 701: ("python.exe", ["python.exe", "other_training.py"]),
             },
         )

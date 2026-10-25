@@ -124,8 +124,13 @@ three phases. The live Orbitune
 process remains untouched. Tests cover the UI-process exception and rejection
 of any unrecognized auxiliary PID.
 
-No training fit has started and no model-quality result exists from this
-attempt. The provenance/gate fix is being tested before a new CPU preflight and
-new output directories `native-full-extent-fresh-long-smoke-02`,
-`native-full-extent-fresh-long-fit-02`, and
-`native-full-extent-fresh-long-replay-02` are used.
+Protected sequence attempt-02 is preserved in
+`native-full-extent-fresh-long-guard-02.stdout.log`, its stderr log, and
+`native-full-extent-fresh-long-sequence-02.json`. The guard reserved 2,418 MiB
+and kept free memory at 13,744 MiB, but the child gate rejected the guard's
+`-m scripts.run_with_hotgpu_guard` command form because it only recognized the
+direct `.py` spelling. This happened before an output directory was created,
+before model loading, and at step 0. No training or quality measurement ran.
+The gate now recognizes both verified invocation forms; attempt-03 uses new
+smoke, fit, and replay output directories after CI and a matching-source CPU
+preflight pass.

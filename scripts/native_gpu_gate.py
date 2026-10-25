@@ -44,7 +44,10 @@ def validate_gpu_preflight(
     if min(reserved_mib, parent_pid, declared_total_mib, block_free_mib, min_child_free_mib) <= 0:
         raise RuntimeError("invalid HotGPU reservation metadata")
     command = " ".join(parent_command or ()).replace("\\", "/").casefold()
-    if "run_with_hotgpu_guard.py" not in command:
+    if not any(
+        marker in command
+        for marker in ("run_with_hotgpu_guard.py", "scripts.run_with_hotgpu_guard")
+    ):
         raise RuntimeError("HotGPU parent is not the cooperative guard process")
     auxiliary_pids = active_pids - {parent_pid}
     process_commands = active_process_commands or {}
