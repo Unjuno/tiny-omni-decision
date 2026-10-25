@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 Perception frozen-readout validation transfer in progress:** The
+previously prepared 200-event official-validation cohort now has a fixed
+boundary-aware two-second manifest and completed 200/200 VideoPrism CPU feature
+extraction. The frozen Audio/Video/Joint heads have not been scored. Audio
+extraction remains behind the cooperative HotUGPU gate while the unrelated
+RTX 3080 workload is active. This label-balanced, source-screened visibility
+probe is nonblind and cannot close the joint-quality gate. See the
+[`transfer diagnostic status`](docs/pretrained_reuse/R2_PERCEPTION_VALIDATION_TRANSFER_20261025.md).
+
 **2026-10-25 R2 one-time CoGenT-B audit complete:** The frozen ViLT
 image+question option readout scored 57.90% overall Accuracy / 0.7227 NLL and
 59.05% macro-by-answer-kind Accuracy / 0.7740 NLL on 15,000 held-out valB
