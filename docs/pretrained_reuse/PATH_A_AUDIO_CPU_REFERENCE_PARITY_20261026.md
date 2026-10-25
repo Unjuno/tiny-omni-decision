@@ -42,13 +42,28 @@ keyword identity 95.9375%, response/presence 98.1250%, and switch/presence
 The existing strict saved-output probability parity threshold of `1e-5` is
 still not met. Identical CPU single-item and batch-8 outputs on the prior
 four-query diagnostic ruled out batch composition for that diagnostic sample.
+An earlier full-cache verification of the same readout on the same 640 fixed
+validation IDs, using the persisted encoder features, found exact prediction
+indices and only `2.2054e-6` maximum probability delta versus the saved GPU
+run. Its source report is
+`C:\CodexArtifacts\pretrained-reuse-r2\audio-observation-cache-multiquery-v4\verification-report.json`;
+the source run report SHA-256 is
+`833258cbc584cbe5f2583c7cc9a5a6f115deb9a46b232e81b3eb7c7489fc081b`.
+This makes the saved readout computation an unlikely explanation for the much
+larger end-to-end CPU delta. The changed feature-extraction path is the leading
+area to investigate, but this replay does not separate Whisper audio features
+from MiniLM text features.
+
 Separate one-sample feature probes showed small differences between cached
 CUDA BF16-derived features and CPU FP32/BF16 feature extraction. Together
 these observations make encoder precision/backend differences a plausible
 cause, but do not establish the cause of the 0.0571 maximum output delta over
 the full cohort. In particular, the present replay does not establish that
 all cached features were generated under identical kernels or deterministic
-settings.
+settings. The largest delta is a `keyword_identity` query on sample
+`speechcmd-validation-09a8d685789d8c537ba1`; class and target remain the same,
+but the top-option probability changes from 0.6096 to 0.5525. No decision
+changes, but the difference is material for probability parity.
 
 No parity tolerance was loosened and no runtime code was changed. Treat the
 CPU and saved reference paths as decision-equivalent on these 2,560 fixed
