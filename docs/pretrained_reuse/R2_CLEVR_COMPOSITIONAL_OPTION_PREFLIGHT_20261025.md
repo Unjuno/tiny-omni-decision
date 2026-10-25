@@ -82,7 +82,12 @@ revision `d0a1f6ab88522427a7ae76ceb6e1e1e7b68a1d08`, with checkpoint SHA-256
 117,588,537 parameters (111,595,008 ViLT parameters plus a 5,993,529-parameter
 3,129-class VQA head). The model hub declares Apache-2.0; the model card does
 not document enough VQAv2 training-data provenance to close that separate
-rights review.
+rights review. At the exact pinned model revision, the card says it was
+fine-tuned on VQAv2, disclaims authorship by the ViLT team, and leaves training
+data, preprocessing, and evaluation sections as "to do". The upstream
+repository's DATA.md says it does not redistribute datasets because of
+licensing issues. These statements do not identify the specific permissions
+for every pretrained corpus. Links: [pinned model snapshot](https://huggingface.co/dandelin/vilt-b32-finetuned-vqa/tree/d0a1f6ab88522427a7ae76ceb6e1e1e7b68a1d08), [pinned model card](https://huggingface.co/dandelin/vilt-b32-finetuned-vqa/raw/d0a1f6ab88522427a7ae76ceb6e1e1e7b68a1d08/README.md), and [upstream DATA.md at commit 3db8b5035464afee84d951bf6322e1b27f1d072d](https://github.com/dandelin/ViLT/blob/3db8b5035464afee84d951bf6322e1b27f1d072d/DATA.md). Keep this a research-only probe; this metadata is not a product-rights clearance.
 
 Its published classifier cannot directly represent all CLEVR answers: the
 local label map includes all counts, yes/no, size, and material answers, but
