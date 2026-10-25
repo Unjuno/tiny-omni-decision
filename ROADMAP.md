@@ -19,8 +19,11 @@ verification. A full train-metadata/label scan found 1,743,042 CC BY 2.0 image
 rows, zero source-MD5 overlap with validation, and 723,536 train IDs that can
 form a 4-choice task from one explicit positive and three explicit negatives
 using only `verification` rows. A fixed eight-class pool produced only 63 such
-IDs, so use a broader/hierarchy-aware option sampler. Duplicate-label and hierarchy gates,
-per-photo source verification, and actual model evaluation remain open. See the
+IDs. Restricting negatives to explicit siblings in the official 602-node class
+hierarchy leaves 54,436 train images with support, across 77 classes with at
+least 100 examples. Use this hierarchy-aware sampler, while selecting class
+scope from train evidence only. Per-photo source verification, validation
+support, dedupe/task generation, and actual model evaluation remain open. See the
 [`Open Images V6 preflight`](docs/pretrained_reuse/R2_OPENIMAGES_V6_SOURCE_PREFLIGHT_20261026.md).
 
 **2026-10-26 R2 VisTouch split-audit follow-up:** The same pinned source and

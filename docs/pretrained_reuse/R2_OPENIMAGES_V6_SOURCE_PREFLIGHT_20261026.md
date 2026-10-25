@@ -122,11 +122,44 @@ training battery. Continue with a larger predeclared class pool or a
 hierarchy-aware per-example option sampler, and measure actual support before
 fitting any readout. Do not silently convert unannotated labels to negatives.
 
+## Train-only hierarchy-matched negative feasibility
+
+Official class hierarchy object:
+`https://storage.googleapis.com/openimages/2018_04/bbox_labels_600_hierarchy.json`
+
+The pinned object is 86,291 bytes, generation `1528191513246771`, ETag
+`3fa04df9ea43b1274aaa9d06e1b38900`, SHA-256
+`a28f06e83c8378c4285d92d768ceda7568a48cac3c02994b6c346df804e7d612`. Using
+the 602 named nodes in that hierarchy, each target class was paired with
+explicitly negative siblings under its deepest parent that had at least three
+alternative children. Only `Source=verification` labels were used. A bitset
+deduplicated class rows per image; any same-class positive/negative conflict
+was removed before counting. No conflict pairs were observed.
+
+| Train-only support result | Count |
+|---|---:|
+| Hierarchy nodes with at least three siblings | 547 |
+| CC BY train images with a positive target and three explicit negative siblings | 54,436 |
+| Possible positive target choices across those images | 116,620 |
+| Target classes with at least 100 supported images | 77 |
+| Target classes with at least 1,000 supported images | 27 |
+| Positive/negative conflict pairs removed | 0 |
+
+Repeated rows were collapsed by the bitset representation; the number of
+repeated source rows was not separately counted.
+
+This supports moving forward with a hierarchy-aware four-choice task, while
+remaining a train-only upper bound. Some frequent targets are body-part labels,
+so the final task must define its class scope and review sensitivities before
+sampling. Validation task support for the resulting train-selected class set,
+perceptual/image duplicates, attribution receipts, and actual model quality are
+still open.
+
 ## Remaining gates and next step
 
 1. Build a deterministic, hierarchy-aware option sampler from train-only labels;
-   deduplicate `(ImageID, LabelName, Confidence)` rows and measure exact class
-   and per-image support before fixing sample sizes.
+   apply a predeclared object-class scope, balance task targets using only train
+   support, and record actual realized counts.
 2. Join retained train examples to exact license/attribution rows; verify each
    selected original landing page and image hash before retaining media.
 3. Deduplicate by image ID and source MD5, then perceptual hash and normalized
