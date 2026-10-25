@@ -1,0 +1,29 @@
+{
+  "experiment_id": "synthetic-av-residual-gated-temporal-v4",
+  "seed": 17,
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "epochs": 128,
+    "validation_interval_epochs": 4,
+    "validation_selector": "minimum validation NLL; strict improvement only; earliest tie retained",
+    "terminal_checkpoint_separate": true
+  },
+  "models": {
+    "residual_gated_temporal": {
+      "hidden_size": 96,
+      "num_layers": 2,
+      "gate_hidden_size": 32,
+      "expected_trainable_parameters": 595844
+    }
+  },
+  "maximum_relative_parameter_difference": 0.1,
+  "validation": {
+    "ece_bins": 15,
+    "control_metrics_do_not_select_checkpoints": true
+  },
+  "product_quality_claim": false,
+  "natural_av_transfer_claim": false
+}

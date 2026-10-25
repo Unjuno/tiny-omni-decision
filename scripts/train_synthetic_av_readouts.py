@@ -20,6 +20,7 @@ from tiny_omni_decision.synthetic_av_readouts import (
     BypassConditionedTemporalAVReadout,
     ConditionalAVReadout,
     ConditionedTemporalAVReadout,
+    ResidualGatedTemporalReadout,
     TemporalLSTMReadout,
 )
 from tiny_omni_decision.synthetic_av_task import validate_manifest
@@ -174,6 +175,15 @@ def _construct_model(architecture: str, model_config: dict[str, Any]):
             2,
             hidden_size=int(model_config["hidden_size"]),
             num_layers=int(model_config["num_layers"]),
+        )
+    if architecture == "residual_gated_temporal":
+        return ResidualGatedTemporalReadout(
+            384,
+            768,
+            2,
+            hidden_size=int(model_config["hidden_size"]),
+            num_layers=int(model_config["num_layers"]),
+            gate_hidden_size=int(model_config["gate_hidden_size"]),
         )
     raise ValueError(f"unsupported architecture: {architecture}")
 

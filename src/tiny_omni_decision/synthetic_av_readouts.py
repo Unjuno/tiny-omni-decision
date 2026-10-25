@@ -198,6 +198,84 @@ class BypassConditionedTemporalAVReadout(nn.Module):
         return self.classifier(hidden[-1])
 
 
+class ResidualGatedTemporalReadout(nn.Module):
+    """Add identity-initialized, bounded modality gains before the raw-input LSTM."""
+
+    def __init__(
+        self,
+        audio_width: int,
+        video_width: int,
+        query_width: int,
+        hidden_size: int = 96,
+        num_layers: int = 2,
+        gate_hidden_size: int = 32,
+    ) -> None:
+        super().__init__()
+        if min(
+            audio_width,
+            video_width,
+            query_width,
+            hidden_size,
+            num_layers,
+            gate_hidden_size,
+        ) < 1:
+            raise ValueError("all readout dimensions must be positive")
+        self.audio_width = audio_width
+        self.video_width = video_width
+        self.query_width = query_width
+        self.lstm = nn.LSTM(
+            audio_width + video_width + query_width,
+            hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
+        )
+        self.classifier = nn.Linear(hidden_size, 2)
+        self.audio_gate_projection = nn.Sequential(
+            nn.Linear(audio_width, gate_hidden_size), nn.LayerNorm(gate_hidden_size)
+        )
+        self.video_gate_projection = nn.Sequential(
+            nn.Linear(video_width, gate_hidden_size), nn.LayerNorm(gate_hidden_size)
+        )
+        self.query_gate_projection = nn.Sequential(
+            nn.Linear(query_width, gate_hidden_size), nn.LayerNorm(gate_hidden_size)
+        )
+        self.modality_gate = nn.Sequential(
+            nn.Linear(gate_hidden_size * 3, gate_hidden_size),
+            nn.GELU(),
+            nn.Linear(gate_hidden_size, 2),
+        )
+        nn.init.zeros_(self.modality_gate[-1].weight)
+        nn.init.zeros_(self.modality_gate[-1].bias)
+
+    def forward(
+        self, audio: torch.Tensor, video: torch.Tensor, query: torch.Tensor
+    ) -> torch.Tensor:
+        _validate_inputs(
+            audio, video, query, self.audio_width, self.video_width, self.query_width
+        )
+        query_steps = query.unsqueeze(1).expand(-1, SEQUENCE_LENGTH, -1)
+        gate_context = torch.cat(
+            (
+                self.audio_gate_projection(audio),
+                self.video_gate_projection(video),
+                self.query_gate_projection(query_steps),
+            ),
+            dim=-1,
+        )
+        modality_weights = torch.softmax(self.modality_gate(gate_context), dim=-1)
+        modality_gains = 1.0 + modality_weights - 0.5
+        sequence = torch.cat(
+            (
+                audio * modality_gains[..., 0:1],
+                video * modality_gains[..., 1:2],
+                query_steps,
+            ),
+            dim=-1,
+        )
+        _, (hidden, _) = self.lstm(sequence)
+        return self.classifier(hidden[-1])
+
+
 class ConditionalAVReadout(nn.Module):
     """Bidirectionally exchange AV sequence evidence, query-pool, and gate."""
 
