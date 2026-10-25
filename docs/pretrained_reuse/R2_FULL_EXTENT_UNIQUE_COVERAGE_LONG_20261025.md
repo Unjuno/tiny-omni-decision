@@ -97,3 +97,33 @@ python -u -m scripts.train_native_full_extent --phase replay --policy fresh --co
 
 The runner itself fails closed while the GPU is occupied. This report does not
 claim the model experiment is complete or that fresh coverage improves quality.
+
+## Runner attempt and provenance repair — 2026-10-25
+
+The first HotGPU smoke attempt is preserved at
+`C:\CodexArtifacts\pretrained-reuse-r2\native-full-extent-fresh-long-smoke-01`.
+It ended `INCOMPLETE` at step 0, before model loading or optimizer updates,
+because a pinned source file in the visual-cache receipt was compared to a newer
+checkout file. The receipt pins source commit
+`4ca45b517328d77f2be644c625920f8cdd22624f`; the expected hash for
+`scripts/extract_frozen_videoprism_features.py` is
+`0318c43e94337dbbb395d400d6c6027c2d389b8789b97b973ac37d1086129c65`. Its
+current checkout hash is different, but the original commit's Git blob matches
+the expected SHA-256. An audit of all 1,050 `source_pins` found six checkout
+mismatches, and all six matched the exact committed blobs. No file in that
+external worktree was changed.
+
+The runner now verifies changed external source files against the visual-cache
+receipt's pinned commit and records each Git-blob fallback. It also accepts a
+HotGPU reservation only when its guard process is the sole compute PID and the
+measured free memory satisfies the child minimum; ordinary occupied-GPU states
+still fail closed. The next queue will use HotGPU's 14,000 MiB free-memory block
+threshold (above the 12,288 MiB child minimum) so Orbitune's configured
+14,000 MiB restart threshold remains blocked for the whole smoke/train/replay
+sequence. The live Orbitune process remains untouched.
+
+No training fit has started and no model-quality result exists from this
+attempt. The provenance/gate fix is being tested before a new CPU preflight and
+new output directories `native-full-extent-fresh-long-smoke-02`,
+`native-full-extent-fresh-long-fit-02`, and
+`native-full-extent-fresh-long-replay-02` are used.

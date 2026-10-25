@@ -203,6 +203,15 @@ receipt/file hash mismatch and preserved; fixed attempt-02 passes with all five
 artifact hashes verified. No model-quality result is claimed. See
 [`R2 full-extent unique-coverage long comparison`](docs/pretrained_reuse/R2_FULL_EXTENT_UNIQUE_COVERAGE_LONG_20261025.md).
 
+**2026-10-25 R2 long-fit runner repair:** Its first HotGPU smoke attempt stopped
+at step 0 before model load because six files in the visual-cache provenance
+receipt were compared against a newer checkout instead of the receipt's pinned
+Git commit. All six expected hashes were independently verified from that exact
+commit; no external worktree file was changed. The runner now records this
+commit-blob verification and recognizes only a sole, capacity-checked HotGPU
+parent reservation. A full-extent × fresh-coverage fit has still not run; see
+the report for the failure receipt and rerun conditions.
+
 **2026-10-25 R2 UnAV-100 source/task screen:** UnAV-100 is a relevant
 audio-visual event-localization task-design lead, but its official page says
 raw video is retrieved from YouTube and that copyright remains with original

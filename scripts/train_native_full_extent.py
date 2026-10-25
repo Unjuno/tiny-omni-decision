@@ -30,8 +30,10 @@ from scripts.native_fit import (
 from scripts.native_fit_runtime import FeatureStore
 from scripts.native_full_extent import parent_probe
 from scripts.native_full_extent_binding import bind_visual_banks
+from scripts.native_gpu_gate import GATE_VARIABLES, validate_gpu_preflight
 from scripts.native_long_budget import EVALUATION_STEPS, MAX_STEPS, extend_plan, learning_rate
 from scripts.native_matched_batches import build_plan
+from scripts.native_source_pins import verify_pins
 from scripts.native_state_dependence import summarize as summarize_pairs
 from scripts.native_video_cache import sha
 from tiny_omni_decision.native_candidate import NativeCandidateReadout
@@ -48,10 +50,8 @@ def write(path, value):
     temporary.replace(path)
 
 
-def verify(pins):
-    for path, digest in pins.items():
-        if sha(Path(path)) != digest:
-            raise ValueError("changed input/source: " + path)
+def verify(pins, source_commit=None):
+    return verify_pins(pins, source_commit=source_commit)
 
 
 def main():
@@ -71,12 +71,40 @@ def main():
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO).strip():
         raise ValueError("clean committed source required")
     usage = subprocess.check_output(
-        ["nvidia-smi", "--query-gpu=memory.used,utilization.gpu", "--format=csv,noheader,nounits"],
+        [
+            "nvidia-smi",
+            "--query-gpu=memory.used,memory.total,utilization.gpu",
+            "--format=csv,noheader,nounits",
+        ],
         text=True,
     ).strip()
-    memory, utilization = [int(v.strip()) for v in usage.split(",")]
-    if memory > 512 or utilization > 5:
-        raise RuntimeError("GPU occupied; do not compete")
+    memory, total_memory, utilization = [int(v.strip()) for v in usage.split(",")]
+    raw_pids = subprocess.check_output(
+        ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader,nounits"],
+        text=True,
+    )
+    active_pids = {
+        int(line.strip())
+        for line in raw_pids.splitlines()
+        if line.strip() and line.strip().casefold() != "no running processes found"
+    }
+    gate_environment = {name: os.environ[name] for name in GATE_VARIABLES if name in os.environ}
+    gate_parent_command = None
+    if "TINY_OMNI_GPU_GATE_PARENT_PID" in gate_environment:
+        try:
+            gate_parent_command = psutil.Process(
+                int(gate_environment["TINY_OMNI_GPU_GATE_PARENT_PID"])
+            ).cmdline()
+        except (psutil.NoSuchProcess, psutil.AccessDenied, ValueError):
+            gate_parent_command = None
+    gpu_preflight = validate_gpu_preflight(
+        gate_environment,
+        active_pids=active_pids,
+        memory_used_mib=memory,
+        memory_total_mib=total_memory,
+        utilization_pct=utilization,
+        parent_command=gate_parent_command,
+    )
     args.output.mkdir(exist_ok=False)
     started = time.perf_counter()
     result = dict(
@@ -101,7 +129,9 @@ def main():
             "questions and scored inference; visual feature integrity checked in all phases"
         ),
         encoder_updates=0,
-        gpu_preflight=usage,
+        gpu_preflight={**gpu_preflight, "telemetry": usage, "active_pids": sorted(active_pids)},
+        visual_cache_source_commit=None,
+        verified_source_git_fallbacks=[],
     )
     write(args.output / "result.json", result)
     try:
@@ -164,6 +194,10 @@ def main():
                 for name, digest in visual_receipt["artifacts"].items()
             }
         )
+        source_commit = visual_receipt.get("source_commit")
+        if not source_commit:
+            raise ValueError("full-extent cache is missing its source commit")
+        result["visual_cache_source_commit"] = source_commit
         control_fit = Path(config["control_fit"])
         control = json.loads((control_fit / "result.json").read_text())
         if control["status"] != "PASS_NATIVE_LONG_BUDGET_TRAIN" or control["step"] != MAX_STEPS:
@@ -171,7 +205,7 @@ def main():
         pins.update(
             {str(control_fit / name): digest for name, digest in control["artifacts"].items()}
         )
-        verify(pins)
+        result["verified_source_git_fallbacks"] = verify(pins, source_commit=source_commit)
         reference = None
         if args.reference:
             if sha(args.reference / "result.json") != args.reference_sha256:
@@ -650,7 +684,7 @@ def main():
                 actual_accounting=accounting([train[i] for b in order[:limit] for i in b]),
             )
         guard()
-        verify(pins)
+        verify(pins, source_commit=source_commit)
         result.update(
             status="PASS_NATIVE_FULL_EXTENT_" + args.phase.upper(),
             training_seconds=training_seconds,
