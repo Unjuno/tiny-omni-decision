@@ -231,6 +231,11 @@ At 09:14 JST, a second rescan covered the now 2,136 downloaded train PNGs
 with zero unexpected names or decode/dimension failures; the manifest hash was
 unchanged. These are prefix checks while acquisition continues, not a complete
 train-corpus gate.
+At 09:16 JST, a third rescan covered 2,524 train PNGs with the same manifest
+hash and zero filename/decode/dimension failures; 13,860 selected train images
+were not yet downloaded. The live Teacher resume and prior full-extent GPU
+queue were still present. Its persisted training history had last advanced to
+step 1,536 at 09:13:49 JST; no claim is made about the operation since then.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
