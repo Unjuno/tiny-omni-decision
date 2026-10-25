@@ -169,6 +169,106 @@ def select_one_question_per_image(
     return result
 
 
+def select_cogent_b_audit_examples(
+    rows: Iterable[dict[str, Any]],
+    *,
+    image_limit: int,
+    seed: int = 17,
+    excluded_normalized_questions: set[str],
+    forbidden_image_filenames: set[str],
+) -> list[dict[str, Any]]:
+    """Select one hash-ranked, content-disjoint question for every CoGenT-B image.
+
+    The function fails closed if any expected image lacks a question whose
+    normalized text is absent from development data. It never shortens the
+    audit to a subset of easier or more convenient images.
+    """
+    if image_limit <= 0:
+        raise ValueError("image_limit must be positive")
+    best_by_image: dict[str, tuple[int, dict[str, Any]]] = {}
+    seen_source_ids: set[tuple[str, int]] = set()
+    source_images: set[str] = set()
+    for row in rows:
+        filename = row.get("image_filename")
+        question_index = row.get("question_index")
+        answer = row.get("answer")
+        question = row.get("question")
+        if not isinstance(filename, str) or not filename.startswith("CLEVR_valB_"):
+            raise ValueError("CoGenT-B audit rows must use valB image identities")
+        if not isinstance(question_index, int) or not isinstance(answer, str):
+            raise ValueError("CoGenT-B question row lacks a valid index or answer")
+        if not isinstance(question, str):
+            raise ValueError("CoGenT-B question row lacks question text")
+        source_id = (filename, question_index)
+        if source_id in seen_source_ids:
+            raise ValueError("CoGenT-B source question identity is duplicated")
+        seen_source_ids.add(source_id)
+        source_images.add(filename)
+        if filename in forbidden_image_filenames:
+            raise ValueError("CoGenT-B audit image overlaps a development image")
+        if normalize_question(question) in excluded_normalized_questions:
+            continue
+        score = _hash_int(
+            f"CLEVR-CoGenT-B-audit-question-v1|{seed}|{filename}|{question_index}"
+        )
+        if filename not in best_by_image or score < best_by_image[filename][0]:
+            best_by_image[filename] = (score, row)
+
+    if len(source_images) != image_limit or len(best_by_image) != image_limit:
+        raise ValueError(
+            "CoGenT-B audit requires one content-disjoint question for every source image; "
+            f"found {len(source_images)} source images and {len(best_by_image)} eligible images, "
+            f"expected {image_limit}"
+        )
+
+    selected_images = sorted(
+        best_by_image,
+        key=lambda filename: (
+            _hash_int(f"CLEVR-CoGenT-B-audit-image-v1|{seed}|{filename}"),
+            filename,
+        ),
+    )
+    result = []
+    for filename in selected_images:
+        source = best_by_image[filename][1]
+        answer = source["answer"]
+        options = make_options(
+            image_filename=filename,
+            question_index=source["question_index"],
+            answer=answer,
+            seed=seed,
+        )
+        program = source.get("program")
+        outer_program = (
+            program[-1].get("function", "unknown")
+            if isinstance(program, list) and program and isinstance(program[-1], dict)
+            else "unknown"
+        )
+        result.append(
+            {
+                "sample_id": f"{filename}:{source['question_index']}",
+                "split": "cogent_b_audit",
+                "image_filename": filename,
+                "question_index": source["question_index"],
+                "question": source["question"],
+                "answer": answer,
+                "answer_kind": answer_kind(answer),
+                "outer_program": outer_program,
+                "options": list(options),
+                "target_position": options.index(answer),
+            }
+        )
+    if len({row["sample_id"] for row in result}) != image_limit:
+        raise ValueError("CoGenT-B audit selection repeated a source question")
+    if len({row["image_filename"] for row in result}) != image_limit:
+        raise ValueError("CoGenT-B audit selection repeated an image")
+    if {
+        normalize_question(str(row["question"])) for row in result
+    } & excluded_normalized_questions:
+        raise ValueError("CoGenT-B audit selection overlaps normalized development questions")
+    return result
+
+
 def require_group_disjoint(
     train: Iterable[dict[str, Any]], validation: Iterable[dict[str, Any]]
 ) -> None:

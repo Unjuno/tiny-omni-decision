@@ -100,6 +100,93 @@ def test_validation_selection_can_exclude_normalized_train_question_content():
     assert not train_content & {normalize_question(row["question"]) for row in validation}
 
 
+def test_cogent_b_audit_selection_is_deterministic_and_content_disjoint():
+    from tiny_omni_decision.clevr_vqa_dataset import (
+        normalize_question,
+        select_cogent_b_audit_examples,
+    )
+
+    rows = [
+        {
+            "image_filename": f"CLEVR_valB_{image:06}.png",
+            "question_index": question,
+            "question": text,
+            "answer": str((image + question) % 3),
+            "program": [{"function": "count"}],
+        }
+        for image in range(4)
+        for question, text in enumerate(("Seen in development", f"novel {image}"))
+    ]
+    excluded = {normalize_question("seen in development")}
+
+    selected = select_cogent_b_audit_examples(
+        rows,
+        image_limit=4,
+        seed=17,
+        excluded_normalized_questions=excluded,
+        forbidden_image_filenames=set(),
+    )
+
+    assert selected == select_cogent_b_audit_examples(
+        rows,
+        image_limit=4,
+        seed=17,
+        excluded_normalized_questions=excluded,
+        forbidden_image_filenames=set(),
+    )
+    assert len({row["sample_id"] for row in selected}) == 4
+    assert len({row["image_filename"] for row in selected}) == 4
+    assert all(row["split"] == "cogent_b_audit" for row in selected)
+    assert all(row["answer"] in row["options"] for row in selected)
+    assert not excluded & {normalize_question(row["question"]) for row in selected}
+
+
+def test_cogent_b_audit_selection_fails_closed_without_full_image_coverage():
+    from tiny_omni_decision.clevr_vqa_dataset import select_cogent_b_audit_examples
+
+    rows = [
+        {
+            "image_filename": "CLEVR_valB_000000.png",
+            "question_index": 0,
+            "question": "Seen in development",
+            "answer": "yes",
+        },
+        {
+            "image_filename": "CLEVR_valB_000001.png",
+            "question_index": 0,
+            "question": "novel question",
+            "answer": "no",
+        },
+    ]
+    with pytest.raises(ValueError, match="every source image"):
+        select_cogent_b_audit_examples(
+            rows,
+            image_limit=2,
+            seed=17,
+            excluded_normalized_questions={"seen in development"},
+            forbidden_image_filenames=set(),
+        )
+
+
+def test_cogent_b_audit_selection_rejects_development_asset_overlap():
+    from tiny_omni_decision.clevr_vqa_dataset import select_cogent_b_audit_examples
+
+    row = {
+        "image_filename": "CLEVR_valB_000000.png",
+        "question_index": 0,
+        "question": "novel question",
+        "answer": "yes",
+    }
+    with pytest.raises(ValueError, match="overlaps a development image"):
+        select_cogent_b_audit_examples(
+            [row],
+            image_limit=1,
+            seed=17,
+            excluded_normalized_questions=set(),
+            forbidden_image_filenames={row["image_filename"]},
+        )
+
+
 def test_grouped_shuffle_is_deterministic_deranged_and_split_local():
     from tiny_omni_decision.clevr_vqa_dataset import grouped_shuffle_indices
 
