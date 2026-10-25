@@ -1,3 +1,13 @@
+**2026-10-26 R2 Open Images frozen-feature image probe:** Following the
+page-matched source gate, 336 JPEGs were cached externally and passed
+train/validation identity, normalized-RGB, and near-duplicate checks. Frozen
+VideoPrism-B + MiniLM with a 147,713-parameter readout reached 79.17% Accuracy,
+NLL 0.561, Brier 0.301, ECE 0.145 on 168 validation choices; the selected
+validation is development data, not blind. Total model count is 131.90M, but
+uncompressed weight files total 527.6MB. No individual ownership verification
+was established. This is not general image quality or 4-modality evidence, and
+does not meet the 95–98% target. See the [probe report](docs/pretrained_reuse/R2_OPENIMAGES_VIDEOPRISM_PROBE_20261026.md).
+
 **2026-10-26 R2 Open Images V6 landing-page audit:** Read-only checks of the
 440 selected Flickr pages found 347 current page declarations matching CC BY
 2.0 and the source attribution profile. The remaining 93 were inaccessible or

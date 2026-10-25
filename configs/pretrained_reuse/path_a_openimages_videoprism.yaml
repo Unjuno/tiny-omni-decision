@@ -1,0 +1,45 @@
+schema_version: 1
+experiment_id: path-a-openimages-videoprism-minilm-seed17
+purpose: frozen-feature four-choice decision probe on a page-matched Open Images V6 pilot
+seed: 17
+device: cpu
+task:
+  source: Open Images V6
+  source_revision: v6
+  task: hierarchy-matched object-presence four-choice classification
+  prompt: Which object is present in the image?
+  options_per_example: 4
+  split_policy: fixed train and validation ImageID/source asset split
+  rights_gate: current Flickr page declaration and uploader attribution-profile match
+  individual_rights_verified: false
+  sealed_audit_loaded: false
+image_encoder:
+  repo_id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  parameters: 114365184
+  frozen: true
+  image_mode: repeat_single_image_across_8_frames
+  resolution: 288
+  pooling: mean_spatiotemporal_tokens
+text_encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  weights_sha256: cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433
+  parameters: 17389824
+  frozen: true
+  pooling: attention_masked_mean
+readout:
+  architecture: shared_candidate_mlp
+  input: concatenated_frozen_image_and_candidate_text_features
+  image_feature_size: 768
+  candidate_text_feature_size: 384
+  hidden_size: 128
+  trainable_parameters_expected: 147713
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: earliest_minimum_validation_nll

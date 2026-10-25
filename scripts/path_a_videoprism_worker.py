@@ -21,8 +21,8 @@ def _encode_single_image(
     runtime: Any, image_path: Path, jnp: Any
 ) -> tuple[np.ndarray, dict[str, float]]:
     started = time.perf_counter()
-    image = runtime.tf.io.decode_png(runtime.tf.io.read_file(str(image_path)), channels=3)
-    height, width = int(image.shape[0]), int(image.shape[1])
+    image = _decode_image(runtime.tf, image_path)
+    height, width = (int(value) for value in runtime.tf.shape(image).numpy()[:2])
     scale = max(288 / height, 288 / width)
     resized = runtime.tf.image.resize(
         image, (round(height * scale), round(width * scale)), method="bilinear"
@@ -34,9 +34,7 @@ def _encode_single_image(
     forward_started = time.perf_counter()
     encoded = runtime.encode(jnp.asarray(frames))
     runtime.jax.tree_util.tree_map(
-        lambda value: (
-            value.block_until_ready() if hasattr(value, "block_until_ready") else value
-        ),
+        lambda value: value.block_until_ready() if hasattr(value, "block_until_ready") else value,
         encoded,
     )
     tokens = encoded[0] if isinstance(encoded, tuple) else encoded
@@ -49,6 +47,17 @@ def _encode_single_image(
         "forward_seconds": time.perf_counter() - forward_started,
         "worker_inference_seconds": time.perf_counter() - started,
     }
+
+
+def _decode_image(tf: Any, image_path: Path) -> Any:
+    """Decode supported local image formats without silently accepting others."""
+    payload = tf.io.read_file(str(image_path))
+    suffix = image_path.suffix.lower()
+    if suffix == ".png":
+        return tf.io.decode_png(payload, channels=3)
+    if suffix in {".jpg", ".jpeg"}:
+        return tf.io.decode_jpeg(payload, channels=3)
+    raise ValueError(f"unsupported image extension: {suffix}")
 
 
 def main() -> None:
@@ -114,7 +123,7 @@ def main() -> None:
             payload = request["payload"]
             started = time.perf_counter()
             with contextlib.redirect_stdout(sys.stderr):
-                if task == "image":
+                if task in {"image", "encode_image"}:
                     image_path = Path(payload["image_path"]).resolve(strict=True)
                     actual_hash = sha256_file(image_path)
                     expected_hash = payload.get("expected_media_sha256")
@@ -135,29 +144,44 @@ def main() -> None:
                             "worker_inference_seconds": 0.0,
                         }
                     feature_cache.put(key, feature, feature_hash)
-                    decision = runtime.decide_from_features(
-                        feature,
-                        str(payload["taxonomy"]),
-                        tuple(str(item) for item in payload["options"]),
-                    )
-                    probabilities = decision.probabilities.tolist()
-                    logits = decision.logits.tolist()
-                    result: dict[str, Any] = {
-                        "logits": logits,
-                        "probabilities": probabilities,
-                        "prediction_index": int(np.argmax(decision.probabilities)),
-                        "confidence": float(max(probabilities)),
-                        "encoder_metrics": {
-                            **encoder_metrics,
-                            "cache_hit": cache_hit,
-                            "feature_sha256": feature_hash,
-                            "cache_entries": len(feature_cache),
-                            "rss_after_request_bytes": process.memory_info().rss,
-                            "peak_working_set_bytes": getattr(
-                                process.memory_info(), "peak_wset", None
-                            ),
-                        },
-                    }
+                    if task == "encode_image":
+                        result = {
+                            "image_feature": feature.tolist(),
+                            "encoder_metrics": {
+                                **encoder_metrics,
+                                "cache_hit": cache_hit,
+                                "feature_sha256": feature_hash,
+                                "cache_entries": len(feature_cache),
+                                "rss_after_request_bytes": process.memory_info().rss,
+                                "peak_working_set_bytes": getattr(
+                                    process.memory_info(), "peak_wset", None
+                                ),
+                            },
+                        }
+                    else:
+                        decision = runtime.decide_from_features(
+                            feature,
+                            str(payload["taxonomy"]),
+                            tuple(str(item) for item in payload["options"]),
+                        )
+                        probabilities = decision.probabilities.tolist()
+                        logits = decision.logits.tolist()
+                        result = {
+                            "logits": logits,
+                            "probabilities": probabilities,
+                            "prediction_index": int(np.argmax(decision.probabilities)),
+                            "confidence": float(max(probabilities)),
+                            "encoder_metrics": {
+                                **encoder_metrics,
+                                "cache_hit": cache_hit,
+                                "feature_sha256": feature_hash,
+                                "cache_entries": len(feature_cache),
+                                "rss_after_request_bytes": process.memory_info().rss,
+                                "peak_working_set_bytes": getattr(
+                                    process.memory_info(), "peak_wset", None
+                                ),
+                            },
+                        }
                 elif task == "encode_video":
                     video_path = Path(payload["video_path"]).resolve(strict=True)
                     actual_hash = sha256_file(video_path)
