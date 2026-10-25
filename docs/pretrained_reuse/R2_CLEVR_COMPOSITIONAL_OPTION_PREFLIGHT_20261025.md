@@ -222,6 +222,11 @@ worker PID 33712; started 06:52 JST) was also still alive, waiting for the
 device to become fully idle before its smoke/train/replay stages; none of its
 three output directories existed yet. Preserve this earlier queue and let it
 take the next GPU slot before submitting the CLEVR feature extraction.
+The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
+1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
+PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
+ONNX Runtime exposes only Azure and CPU providers, not DirectML. There is no
+verified secondary-GPU extraction path in this environment.
 Next: finish media acquisition, extract full ViLT features and controls through
 the cooperative HotUGPU reservation, fit the readout, then assess per-answer
 and per-program metrics without opening CoGenT-B. Keep the prospective held-out
