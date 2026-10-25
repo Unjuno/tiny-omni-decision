@@ -222,6 +222,11 @@ worker PID 33712; started 06:52 JST) was also still alive, waiting for the
 device to become fully idle before its smoke/train/replay stages; none of its
 three output directories existed yet. Preserve this earlier queue and let it
 take the next GPU slot before submitting the CLEVR feature extraction.
+At 09:12 JST, a CPU rescan covered 1,834 downloaded train PNGs: all names were
+present in the frozen train manifest, all files decoded at 480x320, and none
+failed verification. The train manifest SHA-256 remained
+`70985cf8a95ade7fd7c5a5b969df9e7b4de1b30087d22c1f2b6949517937205c`; 14,550
+selected train images were still pending.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
