@@ -1,3 +1,12 @@
+**2026-10-26 R2 Open Images V6 pilot task manifests:** A deterministic
+seed-17 pilot created 220 train and 220 validation tasks (20 per each of the
+11 frozen targets), with zero selected ImageID or original-MD5 overlap. No
+images or models were loaded; all individual landing-page rights checks and
+perceptual/content deduplication remain pending, so the pilot is not cleared
+for fitting or quality claims. Fourteen selected records had no thumbnail URL
+and were retained with original-media-URL fallback recorded in the private
+receipt. See the [pilot record](docs/pretrained_reuse/R2_OPENIMAGES_V6_PILOT_TASK_MANIFESTS_20261026.md).
+
 **2026-10-26 R2 Open Images V6 target-scope audit:** A full pinned train-only
 scan froze 11 hierarchy-matched categories using >=1,000 supported train
 images per class and a fixed human/body-part name exclusion. Only after that

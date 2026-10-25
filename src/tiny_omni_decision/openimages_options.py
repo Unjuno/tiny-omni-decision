@@ -406,3 +406,56 @@ def build_four_choice_examples(
             raise RuntimeError("selected candidate could not be built as a four-choice example")
         examples.append(example)
     return examples
+
+
+def build_split_task_manifest(
+    *,
+    grouped_labels: Iterable[Mapping[str, Any]],
+    allowed_image_ids: Set[str],
+    target_labels: tuple[str, ...],
+    sibling_groups: Mapping[str, tuple[str, ...]],
+    display_names: Mapping[str, str],
+    split: str,
+    per_target_limit: int,
+    seed: int,
+) -> dict[str, Any]:
+    """Select a frozen-scope, image-unique task pilot from one official split."""
+    if split not in {"train", "validation"}:
+        raise ValueError("split must be train or validation")
+    if not allowed_image_ids:
+        raise ValueError("metadata allowlist must not be empty")
+    target_payload = "\n".join(sorted(target_labels))
+    examples = build_four_choice_examples(
+        (row for row in grouped_labels if row.get("image_id") in allowed_image_ids),
+        target_labels=target_labels,
+        sibling_groups=sibling_groups,
+        display_names=display_names,
+        per_target_limit=per_target_limit,
+        seed=seed,
+    )
+    if not examples:
+        raise ValueError("no supported examples found for the frozen target scope")
+    counts = {label: 0 for label in sorted(target_labels)}
+    for example in examples:
+        example["split"] = split
+        counts[example["target_label"]] += 1
+    if len({example["image_id"] for example in examples}) != len(examples):
+        raise RuntimeError("split sampler emitted a repeated image identity")
+    sample_payload = "\n".join(example["sample_id"] for example in examples)
+    return {
+        "schema_version": 1,
+        "dataset_id": "openimages-v6-hierarchy-four-choice-pilot",
+        "split": split,
+        "target_selection_source": "training-only frozen manifest",
+        "target_labels": sorted(target_labels),
+        "target_labels_sha256": hashlib.sha256(target_payload.encode("utf-8")).hexdigest(),
+        "seed": seed,
+        "per_target_limit": per_target_limit,
+        "allowed_image_id_count": len(allowed_image_ids),
+        "example_count": len(examples),
+        "unique_image_count": len({example["image_id"] for example in examples}),
+        "counts_by_target": counts,
+        "sample_ids_sha256": hashlib.sha256(sample_payload.encode("utf-8")).hexdigest(),
+        "media_downloaded": False,
+        "examples": examples,
+    }
