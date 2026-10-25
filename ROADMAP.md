@@ -2707,3 +2707,13 @@ cannot supply direct media inputs for the Path A AV gate. Only pinned metadata
 was retained; no participant data, media, MEG or MRI was downloaded. Keep this
 candidate rejected for the input-media corpus; R2 M-2 remains open. See
 [`NEMAR on006334 source screen`](docs/pretrained_reuse/R2_NEMAR_AVSPEECH_SOURCE_SCREEN_20261026.md).
+
+### MultiEventVideo MEV source screen (2026-10-26)
+
+The pinned release contains 25,262 event rows across 8,016 video UUIDs and
+76.3 GB of video shards. Its distributed annotation tables contain no
+asset-level license/commercial-use fields or source manifest; the release marks
+video rights as mixed third-party terms. Metadata-only review is complete, but
+no video assets are admitted or downloaded. Keep MEV in review until rights are
+verifiable for each asset; it does not currently close R2 M-2. See the
+[`MEV source screen`](docs/pretrained_reuse/R2_MEV_VIDEO_SOURCE_SCREEN_20261026.md).
