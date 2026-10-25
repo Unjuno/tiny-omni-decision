@@ -78,3 +78,19 @@ validation group counts.
 
 No live process was touched; no GPU, cloud compute, optimizer update, checkpoint
 or dataset split artifact was changed.
+
+## Availability recheck — 2026-10-25
+
+The official downloader metadata was re-read from
+`CaptainCook4D/downloader@cf248fe2139fc6e37f9737141ec719948fbd1747` (no source
+revision change). Read-only HTTP `HEAD` requests against the currently listed
+GoPro 360p and synchronized HoloLens PV video URLs returned 404 for each of
+`12_10`, `10_46`, `1_10`, `13_45`, `10_16`, and `10_31`. This recheck fetched no
+media bytes and does not change the admission decision: the source remains
+blocked for a quality fit pending publisher-authorized, working media and a
+stronger participant-held-out development design.
+
+At recheck, the unrelated Orbitune Python process (PID 16364, started
+2026-10-25 14:37:37 local) remained alive; the RTX 3080 Laptop reported
+15,821/16,384 MiB used and 355 MiB free. It was not touched and no GPU task was
+started.
