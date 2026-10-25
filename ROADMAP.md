@@ -2717,3 +2717,13 @@ video rights as mixed third-party terms. Metadata-only review is complete, but
 no video assets are admitted or downloaded. Keep MEV in review until rights are
 verifiable for each asset; it does not currently close R2 M-2. See the
 [`MEV source screen`](docs/pretrained_reuse/R2_MEV_VIDEO_SOURCE_SCREEN_20261026.md).
+
+### Query-conditioned temporal AV synthetic diagnostic (2026-10-26)
+
+A same-feature, same-split, 16,384-update comparison of a per-step
+query-conditioned modality gate followed by a two-layer LSTM stayed at chance
+(50% / NLL 0.693147) on the generated AV sequence task. The existing temporal
+LSTM reference remained 100% on the same validation IDs; the prior conditional
+attention head also remained at chance. The new 528,388-parameter readout is
+not adopted. This does not measure natural-media AV transfer. See the
+[`conditioned temporal AV result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_CONDITIONED_TEMPORAL_RESULTS_20261026.md).
