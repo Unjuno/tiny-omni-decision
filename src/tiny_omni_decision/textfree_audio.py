@@ -10,6 +10,7 @@ from torch import Tensor, nn
 from torch.nn import functional as F
 
 from .classification_json import classification_json
+from .native_decision_json import native_classification_request, native_decision_json
 
 
 def speaker_group_split(
@@ -94,6 +95,26 @@ class TextFreeAudioReadout(nn.Module):
         indexes = torch.tensor([self.class_ids.index(item) for item in requested])
         probabilities = torch.softmax(all_logits[indexes].float() / temperature, dim=-1).tolist()
         return classification_json(probabilities, requested, options)
+
+    @torch.inference_mode()
+    def decide_native(self, audio_features: Tensor, batch, temperature: float = 1.0) -> dict:
+        """Score a text-free ObservationBatch and return the shared typed JSON shape."""
+        batch, class_ids, abstain_reason = native_classification_request(batch, "audio")
+        if abstain_reason is not None:
+            return native_decision_json(batch, None, abstain_reason=abstain_reason)
+        result = self.decide(
+            audio_features,
+            [
+                {"option_id": option.option_id, "class_id": class_id}
+                for option, class_id in zip(batch.options, class_ids, strict=True)
+            ],
+            temperature=temperature,
+        )
+        return native_decision_json(
+            batch,
+            [option["probability"] for option in result["options"]],
+            selected_option_id=result["selected_option_id"],
+        )
 
 
 def fit_scalar_temperature(

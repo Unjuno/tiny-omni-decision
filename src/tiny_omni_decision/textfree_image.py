@@ -9,6 +9,7 @@ import torch
 from torch import Tensor, nn
 
 from .classification_json import classification_json
+from .native_decision_json import native_classification_request, native_decision_json
 
 
 class TextFreeImageReadout(nn.Module):
@@ -88,6 +89,26 @@ class TextFreeImageReadout(nn.Module):
         )
         probabilities = torch.softmax(logits[indexes].float(), dim=-1).tolist()
         return classification_json(probabilities, supplied, options)
+
+    @torch.inference_mode()
+    def decide_native(self, image_features: Tensor, taxonomy: str, batch) -> dict[str, object]:
+        """Score a text-free ObservationBatch and return the shared typed JSON shape."""
+        batch, class_ids, abstain_reason = native_classification_request(batch, "image")
+        if abstain_reason is not None:
+            return native_decision_json(batch, None, abstain_reason=abstain_reason)
+        result = self.decide(
+            image_features,
+            taxonomy,
+            [
+                {"option_id": option.option_id, "class_id": class_id}
+                for option, class_id in zip(batch.options, class_ids, strict=True)
+            ],
+        )
+        return native_decision_json(
+            batch,
+            [option["probability"] for option in result["options"]],
+            selected_option_id=result["selected_option_id"],
+        )
 
 
 def deterministic_asset_split(
