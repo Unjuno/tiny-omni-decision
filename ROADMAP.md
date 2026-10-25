@@ -2718,6 +2718,17 @@ no video assets are admitted or downloaded. Keep MEV in review until rights are
 verifiable for each asset; it does not currently close R2 M-2. See the
 [`MEV source screen`](docs/pretrained_reuse/R2_MEV_VIDEO_SOURCE_SCREEN_20261026.md).
 
+### RivaBench source screen (2026-10-26)
+
+RivaBench offers relevant AV question formats, but its Apache dataset-card tag
+does not resolve rights for the YouTube-sourced media. Academic is based on the
+M³AV test set, whose official release is limited to non-commercial use and
+states that video copyright remains with original owners. StandUp/SynthDec lack
+an asset-level rights manifest and auditable independent group mapping.
+Metadata only was inspected, with no annotations or media downloaded. Do not
+admit this source until rights and split gates can be verified. See the
+[`RivaBench source screen`](docs/pretrained_reuse/R2_RIVABENCH_SOURCE_SCREEN_20261026.md).
+
 ### Query-conditioned temporal AV synthetic diagnostic (2026-10-26)
 
 A same-feature, same-split, 16,384-update comparison of a per-step
