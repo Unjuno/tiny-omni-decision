@@ -227,6 +227,10 @@ present in the frozen train manifest, all files decoded at 480x320, and none
 failed verification. The train manifest SHA-256 remained
 `70985cf8a95ade7fd7c5a5b969df9e7b4de1b30087d22c1f2b6949517937205c`; 14,550
 selected train images were still pending.
+At 09:14 JST, a second rescan covered the now 2,136 downloaded train PNGs
+with zero unexpected names or decode/dimension failures; the manifest hash was
+unchanged. These are prefix checks while acquisition continues, not a complete
+train-corpus gate.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
