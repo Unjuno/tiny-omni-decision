@@ -304,3 +304,51 @@ the RTX 3080, then extract full ViLT features and controls through the
 cooperative HotUGPU reservation, fit the readout, and assess per-answer and
 per-program metrics without opening CoGenT-B. Keep the prospective held-out
 split sealed until model selection is frozen.
+
+## 2026-10-25 tokenizer-limit correction and CPU smoke
+
+An audit of the two frozen manifests using the exact pinned ViLT tokenizer
+found 75/16,384 train questions and 14/4,096 validation questions longer than
+the model's `max_position_embeddings=40`. The longest sequences, including
+special tokens, were 47 and 43 tokens respectively. These records remain in
+their original splits; none were discarded or truncated. The frozen manifest
+hashes remain train
+`70985cf8a95ade7fd7c5a5b969df9e7b4de1b30087d22c1f2b6949517937205c` and
+validation
+`ed3ea2d6af987a3486860f4a4766b18fd309905626e49479561675883eef0d82`.
+
+The feature extractor now tokenizes without truncation, keeps short inputs on
+the original single-window path, and splits longer inputs into windows of at
+most 40 tokens (CLS/SEP included) with 8 overlapping content tokens. It runs
+the pinned frozen ViLT encoder per window and averages the pooled features
+back to one row per original question. The maximum observed input required two
+windows. This is an input-handling change only: it adds no trainable weights,
+does not change manifests, and has not been shown to improve task quality.
+Automated tests verify lossless token reconstruction, safe boundaries, exact
+short-input forward parity, and long-input mean aggregation.
+
+The actual pinned checkpoint passed a CPU smoke for the longest train and
+validation examples. Both returned finite 768-dimensional pooled features;
+the train question used window lengths `[40, 17]`, and validation used
+`[40, 13]`. Gray-image and split-local shuffled-image controls changed the
+feature vectors, exercising the same window path. This smoke computed no
+labels or quality metrics. Checkpoint SHA-256 remained
+`4d5f3409947b0369487ece7c5868f0040ceb67d25735dbb4ac5e99e03bab3a19`; the
+immutable smoke result is
+`C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-windowing-cpu-smoke-attempt-01/result.json`
+(SHA-256 `142e86f693b06ce4529eb1b7f9f18abf7fdabaad7c34645b4d712dff6193799d`).
+The smoke used Python 3.11.9, PyTorch 2.6.0+cu124 on CPU, and source parent
+commit `1d1cb57f928b1190f3f9fca1b8912ed1029986ae`; the source script and helper
+SHA-256 values are recorded in the result JSON. Because the direct CLI can
+otherwise resolve an editable package from a different worktree, GPU commands
+must set `PYTHONPATH` to this worktree's `src` directory.
+
+The full CPU suite passes (2,426 passed, 11 skipped), Ruff passes,
+`compileall` and `git diff --check` pass. On the latest read-only GPU check the
+RTX 3080 still had 16,068/16,384 MiB allocated (0% reported utilization); the
+Teacher process remained alive, and the older full-extent queue remained
+`WAITING_FOR_IDLE_GPU` with no stage outputs. No process was stopped and no
+GPU inference, extraction, or fit was started. The data cache remains verified,
+but feature extraction and model fitting are still pending the cooperative GPU
+queue. The change therefore closes the long-question input-path defect only;
+it does not produce a quality result or close the CLEVR task gate.

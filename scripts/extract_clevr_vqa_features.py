@@ -17,9 +17,14 @@ from PIL import Image
 from transformers import ViltConfig, ViltForQuestionAnswering, ViltProcessor
 
 from tiny_omni_decision.clevr_vqa_dataset import grouped_shuffle_indices
-from tiny_omni_decision.vilt_compat import remove_legacy_position_ids
+from tiny_omni_decision.vilt_compat import (
+    build_vilt_question_input_ids,
+    remove_legacy_position_ids,
+    split_vilt_token_ids,
+)
 
 EXPECTED_WEIGHTS_SHA256 = "4d5f3409947b0369487ece7c5868f0040ceb67d25735dbb4ac5e99e03bab3a19"
+QUESTION_WINDOW_OVERLAP_TOKENS = 8
 
 
 def sha256(path: Path) -> str:
@@ -32,6 +37,46 @@ def sha256(path: Path) -> str:
 
 def read_rows(path: Path) -> list[dict[str, object]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+
+
+def encode_windowed_images(model, processor, images, token_windows, device):
+    if len(images) != len(token_windows) or not images:
+        raise ValueError("images and token_windows must be non-empty and aligned")
+    flat_images = []
+    flat_windows = []
+    window_counts = []
+    for image, windows in zip(images, token_windows, strict=True):
+        if not windows:
+            raise ValueError("each question must have at least one token window")
+        window_counts.append(len(windows))
+        flat_images.extend([image] * len(windows))
+        flat_windows.extend(windows)
+
+    image_inputs = processor.image_processor(images=flat_images, return_tensors="pt")
+    text_inputs = processor.tokenizer.pad(
+        [
+            {
+                "input_ids": window,
+                "attention_mask": [1] * len(window),
+                "token_type_ids": [0] * len(window),
+            }
+            for window in flat_windows
+        ],
+        padding=True,
+        return_tensors="pt",
+    )
+    inputs = {
+        name: tensor.to(device)
+        for name, tensor in {**image_inputs, **text_inputs}.items()
+    }
+    with torch.inference_mode():
+        pooled_windows = model.vilt(**inputs).pooler_output
+    pooled_by_example = []
+    offset = 0
+    for count in window_counts:
+        pooled_by_example.append(pooled_windows[offset : offset + count].mean(dim=0))
+        offset += count
+    return torch.stack(pooled_by_example, dim=0)
 
 
 def main() -> None:
@@ -68,11 +113,22 @@ def main() -> None:
     del state
     model.eval().requires_grad_(False).to(args.device)
     processor = ViltProcessor.from_pretrained(args.model, local_files_only=True)
-    lengths = processor.tokenizer(
-        [str(row["question"]) for row in rows], truncation=False
-    )["input_ids"]
-    if max(map(len, lengths)) > config.max_position_embeddings:
-        raise ValueError("a question exceeds the pinned ViLT position table")
+    token_windows = []
+    token_lengths = []
+    for row in rows:
+        input_ids = build_vilt_question_input_ids(
+            processor.tokenizer, str(row["question"])
+        )
+        token_lengths.append(len(input_ids))
+        token_windows.append(
+            split_vilt_token_ids(
+                input_ids,
+                max_positions=config.max_position_embeddings,
+                overlap_tokens=QUESTION_WINDOW_OVERLAP_TOKENS,
+                cls_token_id=processor.tokenizer.cls_token_id,
+                sep_token_id=processor.tokenizer.sep_token_id,
+            )
+        )
     model_load_seconds = time.perf_counter() - wall_start
 
     image_hashes: list[str] = []
@@ -94,15 +150,10 @@ def main() -> None:
                 image_hashes.append(sha256(image_path))
                 with Image.open(image_path) as source:
                     images.append(source.convert("RGB"))
-            inputs = processor(
-                images=images,
-                text=[str(row["question"]) for row in batch],
-                padding=True,
-                truncation=False,
-                return_tensors="pt",
-            ).to(args.device)
-            with torch.inference_mode():
-                pooled = model.vilt(**inputs).pooler_output
+            batch_token_windows = token_windows[start : start + len(batch)]
+            pooled = encode_windowed_images(
+                model, processor, images, batch_token_windows, args.device
+            )
             values = pooled.float().cpu().numpy()
             if values.shape != (len(batch), 768) or not np.isfinite(values).all():
                 raise FloatingPointError("invalid frozen feature batch")
@@ -123,23 +174,12 @@ def main() -> None:
                     with Image.open(other_path) as other_source:
                         other_images.append(other_source.convert("RGB"))
                 try:
-                    blank_inputs = processor(
-                        images=blank_images,
-                        text=[str(row["question"]) for row in batch],
-                        padding=True,
-                        truncation=False,
-                        return_tensors="pt",
-                    ).to(args.device)
-                    other_inputs = processor(
-                        images=other_images,
-                        text=[str(row["question"]) for row in batch],
-                        padding=True,
-                        truncation=False,
-                        return_tensors="pt",
-                    ).to(args.device)
-                    with torch.inference_mode():
-                        blank_pooled = model.vilt(**blank_inputs).pooler_output
-                        other_pooled = model.vilt(**other_inputs).pooler_output
+                    blank_pooled = encode_windowed_images(
+                        model, processor, blank_images, batch_token_windows, args.device
+                    )
+                    other_pooled = encode_windowed_images(
+                        model, processor, other_images, batch_token_windows, args.device
+                    )
                     blank_values = blank_pooled.float().cpu().numpy()
                     other_values = other_pooled.float().cpu().numpy()
                     if (
@@ -206,6 +246,16 @@ def main() -> None:
             if path.is_file()
         },
         "manifest_sha256": sha256(args.manifest),
+        "question_windowing": {
+            "max_position_embeddings": config.max_position_embeddings,
+            "overlap_tokens": QUESTION_WINDOW_OVERLAP_TOKENS,
+            "aggregation": "mean pooled ViLT feature across overlapping windows",
+            "questions_over_position_limit": sum(
+                length > config.max_position_embeddings for length in token_lengths
+            ),
+            "max_question_tokens_with_special_tokens": max(token_lengths),
+            "max_windows_per_question": max(map(len, token_windows)),
+        },
         "feature_sha256": sha256(feature_path),
         "feature_shape": list(matrix.shape),
         "feature_dtype": str(matrix.dtype),

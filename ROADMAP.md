@@ -37,6 +37,17 @@ exists yet. The RTX 3080 remains occupied by the existing Teacher run, so no
 GPU feature extraction or fit has started. Details and hashes:
 [`CLEVR compositional option preflight`](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
 
+**2026-10-25 R2 ViLT long-question input fix:** A tokenizer audit found 75/16,384
+frozen train questions and 14/4,096 validation questions exceed ViLT's pinned
+40-position limit. The feature extractor now preserves every token by splitting
+only long questions into overlapping 40-token windows (8 content-token overlap)
+and averaging per-window pooled features; short-question inputs retain direct
+forward parity. CPU tests and the full pinned-checkpoint input smoke pass, but
+no feature cache or quality score has been produced. Full CPU suite: 2,426
+passed, 11 skipped; Ruff passes. GPU work remains queued behind the existing
+Teacher run and previously queued full-extent job. Details and hashes are in
+the [CLEVR preflight report](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
+
 **2026-10-25 R2 CLEVR-4 full-validation transfer reconciliation:** Recomputed
 metrics from the saved, one-shot VideoPrism-B fixed-readout predictions for all
 19,988 official 100k validation images; all 79,952 decisions were valid and
