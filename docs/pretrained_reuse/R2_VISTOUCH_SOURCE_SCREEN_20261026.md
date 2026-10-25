@@ -1,4 +1,15 @@
-# VisTouch synchronized audio-video-touch source screen — 2026-10-26
+# VisTouch synchronized audio-video-touch split audit — 2026-10-26
+
+## Relationship to the prior screen
+
+This is a follow-up to the pinned metadata-only screen already saved on
+2026-10-14 at
+`C:\CodexArtifacts\pretrained-reuse-r2\vistouch-source-screen-01\receipt.json`
+(SHA-256 `85B86F9B50E8067408DB5E70EF326F92E238C41932A004FEE12C7F0A3D6DCE7E`).
+That receipt already pins the same source commit and metadata. This turn
+revalidated those hashes and adds the exact split/session/force overlap audit
+below; it does not present VisTouch as a newly discovered source. The prior
+screen had not accessed media, and this follow-up did not either.
 
 ## Disposition
 
