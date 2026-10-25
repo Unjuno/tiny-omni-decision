@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import psutil
 
 from tiny_omni_decision.feature_cache import BoundedFeatureCache
 
@@ -73,6 +72,7 @@ def main() -> None:
 
     import jax
     import jax.numpy as jnp
+    import psutil
 
     from scripts.extract_frozen_videoprism_features import (
         CHECKPOINT_SHA256,
