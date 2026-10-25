@@ -151,17 +151,31 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
         raise ValueError("training run receipt is incomplete")
     if run.get("smoke") and not args.allow_smoke:
         raise ValueError("validation evaluation refuses a smoke training run")
+    training_runs = [(run_path, run)]
+    if args.reference_training_run is not None:
+        reference_path = args.reference_training_run.resolve(strict=True)
+        reference_run = json.loads(reference_path.read_text(encoding="utf-8"))
+        if reference_run.get("status") != "PASS_SYNTHETIC_AV_READOUT_TRAINING":
+            raise ValueError("reference training run receipt is incomplete")
+        if reference_run.get("smoke") and not args.allow_smoke:
+            raise ValueError("validation evaluation refuses a smoke reference run")
+        training_runs.append((reference_path, reference_run))
     data = load_training_data(
         args.render_dir.resolve(strict=True),
         args.feature_dir.resolve(strict=True),
         allow_smoke=args.allow_smoke,
     )
-    if run.get("manifest_sha256") != data["manifest_sha256"] or run.get(
-        "feature_cache_sha256"
-    ) != data["feature_cache_sha256"]:
-        raise ValueError("training run and evaluation inputs do not share the same frozen data")
-    if run.get("validation_example_ids") != data["validation_ids"]:
-        raise ValueError("validation example IDs/order differ from training run")
+    for source_path, source_run in training_runs:
+        if source_run.get("manifest_sha256") != data["manifest_sha256"] or source_run.get(
+            "feature_cache_sha256"
+        ) != data["feature_cache_sha256"]:
+            raise ValueError(
+                f"training run {source_path} and evaluation inputs do not share frozen data"
+            )
+        if source_run.get("validation_example_ids") != data["validation_ids"]:
+            raise ValueError(
+                f"validation example IDs/order differ from training run {source_path}"
+            )
     output = args.output.resolve()
     if output.exists():
         raise FileExistsError(f"refusing to overwrite evaluation output: {output}")
@@ -172,6 +186,10 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
     result: dict[str, Any] = {
         "status": "RUNNING",
         "training_run_sha256": sha256_file(run_path),
+        "reference_training_runs": [
+            {"path": str(path), "sha256": sha256_file(path)}
+            for path, _ in training_runs[1:]
+        ],
         "manifest_sha256": data["manifest_sha256"],
         "feature_cache_sha256": data["feature_cache_sha256"],
         "validation_ids_sha256": hashlib.sha256(
@@ -185,70 +203,80 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
     architecture_best_group_accuracy: dict[str, dict[str, float]] = {}
     started = time.perf_counter()
     try:
-        for training_result in run["results"]:
-            architecture = training_result["architecture"]
-            model_config = run["effective_config"]["models"][architecture]
-            for checkpoint_name in ("best", "terminal"):
-                checkpoint_path = run_path.parent / architecture / f"{checkpoint_name}.pt"
-                checkpoint_hash = sha256_file(checkpoint_path)
-                expected_hash = training_result[f"{checkpoint_name}_checkpoint_sha256"]
-                if checkpoint_hash != expected_hash:
-                    raise ValueError(
-                        f"{architecture} {checkpoint_name} checkpoint hash differs from run receipt"
+        for source_path, source_run in training_runs:
+            for training_result in source_run["results"]:
+                architecture = training_result["architecture"]
+                model_config = source_run["effective_config"]["models"][architecture]
+                for checkpoint_name in ("best", "terminal"):
+                    checkpoint_path = source_path.parent / architecture / f"{checkpoint_name}.pt"
+                    checkpoint_hash = sha256_file(checkpoint_path)
+                    expected_hash = training_result[f"{checkpoint_name}_checkpoint_sha256"]
+                    if checkpoint_hash != expected_hash:
+                        raise ValueError(
+                            f"{architecture} {checkpoint_name} checkpoint hash "
+                            "differs from run receipt"
+                        )
+                    payload = torch.load(checkpoint_path, map_location=device, weights_only=True)
+                    expected_step = (
+                        training_result["best_step"]
+                        if checkpoint_name == "best"
+                        else training_result["optimizer_updates"]
                     )
-                payload = torch.load(checkpoint_path, map_location=device, weights_only=True)
-                expected_step = (
-                    training_result["best_step"]
-                    if checkpoint_name == "best"
-                    else training_result["optimizer_updates"]
-                )
-                if payload.get("step") != expected_step:
-                    raise ValueError(
-                        f"{architecture} {checkpoint_name} checkpoint step differs from run receipt"
+                    if payload.get("step") != expected_step:
+                        raise ValueError(
+                            f"{architecture} {checkpoint_name} checkpoint step "
+                            "differs from run receipt"
+                        )
+                    model = _construct_model(architecture, model_config).to(device)
+                    model.load_state_dict(payload["state_dict"], strict=True)
+                    controls, predictions = _evaluate_controls(
+                        model,
+                        inputs,
+                        data["arrays"],
+                        data["manifest"],
+                        validation_indices,
+                        device,
                     )
-                model = _construct_model(architecture, model_config).to(device)
-                model.load_state_dict(payload["state_dict"], strict=True)
-                controls, predictions = _evaluate_controls(
-                    model,
-                    inputs,
-                    data["arrays"],
-                    data["manifest"],
-                    validation_indices,
-                    device,
-                )
-                all_predictions.extend(
-                    {
+                    all_predictions.extend(
+                        {
+                            "architecture": architecture,
+                            "checkpoint": checkpoint_name,
+                            "source_training_run_sha256": sha256_file(source_path),
+                            **row,
+                        }
+                        for row in predictions
+                    )
+                    record = {
                         "architecture": architecture,
                         "checkpoint": checkpoint_name,
-                        **row,
+                        "source_training_run_sha256": sha256_file(source_path),
+                        "checkpoint_step": payload["step"],
+                        "checkpoint_sha256": checkpoint_hash,
+                        "controls": controls,
                     }
-                    for row in predictions
-                )
-                record = {
-                    "architecture": architecture,
-                    "checkpoint": checkpoint_name,
-                    "checkpoint_step": payload["step"],
-                    "checkpoint_sha256": checkpoint_hash,
-                    "controls": controls,
-                }
-                result["results"].append(record)
-                if checkpoint_name == "best":
-                    architecture_best_group_accuracy[architecture] = controls["full"][
-                        "group_accuracy"
-                    ]
+                    result["results"].append(record)
+                    if checkpoint_name == "best":
+                        architecture_best_group_accuracy[architecture] = controls["full"][
+                            "group_accuracy"
+                        ]
         reference_name = "temporal_lstm"
-        result["paired_group_bootstrap_full_best"] = {
-            name: paired_group_bootstrap_difference(
-                architecture_best_group_accuracy[reference_name],
-                architecture_best_group_accuracy[name],
-                replicates=int(run["effective_config"]["validation"]["grouped_bootstrap_replicates"])
-                if "grouped_bootstrap_replicates" in run["effective_config"]["validation"]
-                else 10_000,
-                seed=int(run["effective_config"]["seed"]),
-            )
-            for name in architecture_best_group_accuracy
-            if name != reference_name
-        }
+        if reference_name in architecture_best_group_accuracy:
+            result["paired_group_bootstrap_full_best"] = {
+                name: paired_group_bootstrap_difference(
+                    architecture_best_group_accuracy[reference_name],
+                    architecture_best_group_accuracy[name],
+                    replicates=int(
+                        run["effective_config"]["validation"].get(
+                            "grouped_bootstrap_replicates", 10_000
+                        )
+                    ),
+                    seed=int(run["effective_config"]["seed"]),
+                )
+                for name in architecture_best_group_accuracy
+                if name != reference_name
+            }
+        else:
+            result["paired_group_bootstrap_full_best"] = None
         predictions_path = output / "predictions.jsonl"
         with predictions_path.open("w", encoding="utf-8") as stream:
             for row in all_predictions:
@@ -278,6 +306,7 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--training-run", type=Path, required=True)
+    parser.add_argument("--reference-training-run", type=Path)
     parser.add_argument("--render-dir", type=Path, required=True)
     parser.add_argument("--feature-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
