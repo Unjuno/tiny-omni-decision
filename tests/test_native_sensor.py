@@ -61,6 +61,19 @@ def test_missing_signal_abstains(tmp_path):
     assert result["selected_option_id"] is None
 
 
+def test_sensor_decision_uses_typed_native_json_boundary(tmp_path):
+    batch = request(tmp_path)
+    result = decide_sensor(NativeSensorDecision().eval(), batch)
+
+    assert result["present_modalities"] == ["sensor"]
+    assert result["confidence"] == next(
+        option["probability"]
+        for option in result["options"]
+        if option["option_id"] == result["selected_option_id"]
+    )
+    assert result["options"][0]["attributes"] == {"activity_code": 1}
+
+
 @pytest.mark.parametrize("change", ["code", "unit", "channel", "criterion"])
 def test_unsupported_request_fails_closed(tmp_path, change):
     data = request(tmp_path).model_dump()

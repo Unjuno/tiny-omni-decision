@@ -9,6 +9,8 @@ import numpy as np
 import torch
 from torch import Tensor, nn
 
+from .native_decision_json import native_classification_request, native_decision_json
+
 PAD = "<pad>"
 UNK = "<unk>"
 FEATURE_FRAMES = 8
@@ -203,6 +205,7 @@ class TextFreeVideoReadout(nn.Module):
         super().__init__()
         if temporal_mode not in {"mean_mlp", "bilstm"}:
             raise ValueError("temporal_mode must be 'mean_mlp' or 'bilstm'")
+        self.vocab = vocab
         self.temporal_mode = temporal_mode
         self.video_projection = nn.Sequential(
             nn.Linear(FEATURE_WIDTH, VIDEO_WIDTH),
@@ -287,3 +290,48 @@ class TextFreeVideoReadout(nn.Module):
         )
         logits = self.candidate_scorer(contexts).squeeze(-1)
         return logits.masked_fill(~option_mask, -1e9)
+
+    @torch.inference_mode()
+    def decide_native(
+        self,
+        video_features: Tensor,
+        batch,
+        *,
+        program_tokens: Sequence[str],
+        taxonomy: str,
+    ) -> dict[str, object]:
+        """Score ordered video features against typed options without question text."""
+        batch, class_ids, abstain_reason = native_classification_request(batch, "video")
+        observation = batch.observations[0]
+        if len(observation.timestamps_ms) != FEATURE_FRAMES:
+            raise ValueError(f"video observation must contain exactly {FEATURE_FRAMES} timestamps")
+        if abstain_reason is not None:
+            return native_decision_json(batch, None, abstain_reason=abstain_reason)
+        if (
+            not isinstance(program_tokens, (list, tuple)) or not program_tokens
+            or any(not isinstance(token, str) or not token.strip() for token in program_tokens)
+        ):
+            raise ValueError("explicit nonempty typed video program tokens required")
+        program_ids = [self.vocab.program_to_id.get(token) for token in program_tokens]
+        if any(token_id is None or token_id <= self.vocab.program_to_id[UNK]
+               for token_id in program_ids):
+            raise ValueError("video program tokens must be known training vocabulary entries")
+        taxonomy_id = self.vocab.taxonomy_to_id.get(taxonomy)
+        if taxonomy_id is None or taxonomy_id <= self.vocab.taxonomy_to_id[UNK]:
+            raise ValueError("video taxonomy must be a known training vocabulary entry")
+        option_ids = [self.vocab.option_to_id.get(class_id) for class_id in class_ids]
+        if any(option_id is None or option_id <= self.vocab.option_to_id[UNK]
+               for option_id in option_ids):
+            raise ValueError("video options must be known training vocabulary entries")
+
+        parameter = next(self.parameters())
+        video = torch.as_tensor(video_features, dtype=parameter.dtype, device=parameter.device)
+        logits = self(
+            video.unsqueeze(0),
+            torch.tensor([program_ids], dtype=torch.long, device=parameter.device),
+            torch.tensor([taxonomy_id], dtype=torch.long, device=parameter.device),
+            torch.tensor([option_ids], dtype=torch.long, device=parameter.device),
+            torch.ones((1, len(option_ids)), dtype=torch.bool, device=parameter.device),
+        )[0]
+        probabilities = torch.softmax(logits.float(), dim=-1).cpu().tolist()
+        return native_decision_json(batch, probabilities)

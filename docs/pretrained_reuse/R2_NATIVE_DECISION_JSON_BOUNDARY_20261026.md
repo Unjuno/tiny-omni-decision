@@ -11,14 +11,16 @@ normalization, finiteness, and range. Explicit abstention emits null option
 probabilities instead of a fabricated distribution.
 
 The serializer is an output-boundary primitive, not an encoder, trained model,
-calibrator, or quality result. Feature-level `decide_native` adapters now
-connect the fixed-taxonomy audio and image readouts to this output. They reject
-mismatched modalities, text criteria, duplicate class IDs, and invalid option
-schemas; incomplete observation masks abstain. They consume frozen feature
-tensors supplied by the caller and do not load raw media or authenticate that
-a feature tensor came from the declared payload. Video, sensor, and screen
-readouts are not yet migrated. R2 M-0/M-1 remain open until the remaining paths
-and feature-provenance handoff are covered and each path is measured on its task.
+calibrator, or quality result. `decide_native` adapters connect the audio,
+image, video, and sensor readouts to this output. Audio and image consume frozen
+feature tensors supplied by the caller. Video also consumes eight ordered
+frozen frame features and explicit typed program tokens; it rejects natural
+language criteria. Sensor loads and verifies its referenced payload directly.
+The audio/image/video adapters do not authenticate that a supplied feature
+tensor came from the declared payload. Incomplete observation masks abstain;
+modality, criterion, vocabulary, option, and timestamp mismatches fail closed.
+The screen path is not implemented. R2 M-0/M-1 remain open until screen
+coverage, feature-provenance handoff, and task-level metrics are addressed.
 
 ## Verification
 
@@ -29,8 +31,10 @@ and feature-provenance handoff are covered and each path is measured on its task
 - New audio/image adapter tests were first run and failed because those
   adapters did not exist. A tie-case test caught and prevented the serializer
   from changing the readouts' existing class-based tie break.
-- Adapter and related readout tests: **38 passed**.
-- Full CPU suite after adapter integration: **2,509 passed, 11 skipped**.
+- Audio/image adapter and related readout tests: **38 passed**.
+- Video adapter tests failed before its implementation; targeted audio/image/
+  video/sensor regression suite: **28 passed**.
+- Full CPU suite after integration: **2,512 passed, 11 skipped**.
 - `ruff check .`: passed.
 - CI-equivalent model/dataset manifest, catalog, and example audit commands:
   passed.

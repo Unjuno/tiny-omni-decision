@@ -170,3 +170,75 @@ def test_native_adapter_preserves_model_tie_break_when_option_ids_differ():
     )
 
     assert result["selected_option_id"] == "z-option"
+
+
+def test_native_video_adapter_scores_explicit_program_tokens_and_typed_options():
+    from tiny_omni_decision.observations import ObservationBatch
+    from tiny_omni_decision.textfree_video import TextFreeVideoReadout, build_video_vocab
+
+    training_row = {
+        "program": ["events", "filter_color", "red", "count"],
+        "taxonomy": "count",
+        "options": ["0", "1", "2"],
+    }
+    vocab = build_video_vocab([training_row])
+    model = TextFreeVideoReadout(vocab, temporal_mode="bilstm").eval()
+    options = [
+        {"option_id": "one", "attributes": {"class_id": "1"}},
+        {"option_id": "two", "attributes": {"class_id": "2"}},
+    ]
+    observation = {
+        "modality": "video",
+        "source_id": "clip-0",
+        "payload_ref": "cache:clip-0",
+        "payload_sha256": "c" * 64,
+        "clock_id": "clip-ms",
+        "timestamps_ms": [float(index * 100) for index in range(8)],
+        "valid_mask": [True] * 8,
+    }
+    batch = ObservationBatch.model_validate(
+        {"schema_version": "1.0", "observations": [observation], "options": options}
+    )
+
+    result = model.decide_native(
+        torch.randn(8, 768),
+        batch,
+        program_tokens=training_row["program"],
+        taxonomy="count",
+    )
+
+    assert result["present_modalities"] == ["video"]
+    assert result["selected_option_id"] in {"one", "two"}
+    assert [option["option_id"] for option in result["options"]] == ["one", "two"]
+    assert sum(option["probability"] for option in result["options"]) == pytest.approx(1.0)
+
+
+def test_native_video_adapter_rejects_question_text_and_invalid_frames():
+    from tiny_omni_decision.observations import ObservationBatch
+    from tiny_omni_decision.textfree_video import TextFreeVideoReadout, build_video_vocab
+
+    vocab = build_video_vocab(
+        [{"program": ["count"], "taxonomy": "count", "options": ["0", "1"]}]
+    )
+    model = TextFreeVideoReadout(vocab, temporal_mode="bilstm").eval()
+    data = request(
+        "video",
+        [
+            {"option_id": "zero", "attributes": {"class_id": "0"}},
+            {"option_id": "one", "attributes": {"class_id": "1"}},
+        ],
+    )
+    data["observations"][0]["timestamps_ms"] = [float(index * 100) for index in range(8)]
+    data["observations"][0]["valid_mask"] = [True] * 8
+    data["criterion"] = {"kind": "text", "value": "which count is correct?"}
+    batch = ObservationBatch.model_validate(data)
+    with pytest.raises(ValueError, match="criterion"):
+        model.decide_native(torch.zeros(8, 768), batch, program_tokens=["count"], taxonomy="count")
+
+    data["criterion"] = None
+    data["observations"][0]["valid_mask"][3] = False
+    missing = ObservationBatch.model_validate(data)
+    result = model.decide_native(
+        torch.zeros(8, 768), missing, program_tokens=["count"], taxonomy="count"
+    )
+    assert result["status"] == "abstain"

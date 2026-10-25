@@ -3,6 +3,7 @@
 import torch
 from torch import nn
 
+from tiny_omni_decision.native_decision_json import native_decision_json
 from tiny_omni_decision.observations import ObservationBatch
 from tiny_omni_decision.sensor_payload import load_sensor_payload
 
@@ -65,12 +66,8 @@ def decide_sensor(model: NativeSensorDecision, batch: ObservationBatch):
         codes.append(code)
     payload = load_sensor_payload(observation)
     if not payload.valid_mask.all():
-        return dict(
-            schema_version="1.0",
-            status="abstain",
-            selected_option_id=None,
-            reason="incomplete_sensor_window",
-            options=[dict(option_id=o.option_id, probability=None) for o in batch.options],
+        return native_decision_json(
+            batch, None, abstain_reason="incomplete_sensor_window"
         )
     device = next(model.parameters()).device
     values = torch.tensor(payload.values, device=device, dtype=torch.float32)[None]
@@ -86,14 +83,11 @@ def decide_sensor(model: NativeSensorDecision, batch: ObservationBatch):
     probabilities = dict(zip(ordered, p, strict=True))
     # Stable semantic-code tie break, independent of supplied option order or IDs.
     selected = max(ordered, key=probabilities.__getitem__)
-    return dict(
-        schema_version="1.0",
-        status="selected",
-        selected_option_id=next(
-            o.option_id for o, c in zip(batch.options, codes, strict=True) if c == selected
-        ),
-        options=[
-            dict(option_id=o.option_id, probability=probabilities[c])
-            for o, c in zip(batch.options, codes, strict=True)
-        ],
+    selected_option_id = next(
+        o.option_id for o, c in zip(batch.options, codes, strict=True) if c == selected
+    )
+    return native_decision_json(
+        batch,
+        [probabilities[code] for code in codes],
+        selected_option_id=selected_option_id,
     )
