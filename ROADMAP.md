@@ -2697,3 +2697,13 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### NEMAR on006334 AVspeech metadata screen (2026-10-26)
+
+The pinned CC0 dataset describes audiovisual synchrony and speech-memory tasks,
+but its 1,201-entry manifest contains no standalone audio/video assets or
+`stimuli/` directory. The package is ANAT/MEG plus behavioral metadata, so it
+cannot supply direct media inputs for the Path A AV gate. Only pinned metadata
+was retained; no participant data, media, MEG or MRI was downloaded. Keep this
+candidate rejected for the input-media corpus; R2 M-2 remains open. See
+[`NEMAR on006334 source screen`](docs/pretrained_reuse/R2_NEMAR_AVSPEECH_SOURCE_SCREEN_20261026.md).
