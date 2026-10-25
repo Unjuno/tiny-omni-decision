@@ -16,14 +16,14 @@ CC BY 2.0 metadata and attribution fields; 33,561 have at least one verified
 positive and three explicit negative labels. This is promising for a bounded
 four-choice natural-image task, but Google disclaims individual license
 verification. A full train-metadata/label scan found 1,743,042 CC BY 2.0 image
-rows, zero source-MD5 overlap with validation, and 723,536 train IDs that can
-form a 4-choice task from one explicit positive and three explicit negatives
-using only `verification` rows. A fixed eight-class pool produced only 63 such
-IDs. Restricting negatives to explicit siblings in the official 602-node class
-hierarchy leaves 54,436 train images with support, across 77 classes with at
-least 100 examples. Use this hierarchy-aware sampler, while selecting class
-scope from train evidence only. Per-photo source verification, validation
-support, dedupe/task generation, and actual model evaluation remain open. See the
+rows and zero source-MD5 overlap with validation. A row-level upper bound was
+723,536 train IDs with one positive and three explicit negatives. A fixed
+eight-class pool yielded only 63 such IDs. With labels deduplicated by bitset
+and negatives restricted to explicit siblings in the official 602-node class
+hierarchy, 54,436 train images have support across 77 classes with at least
+100 examples. Use this hierarchy-aware sampler, with class scope selected from
+train evidence only. Per-photo source verification, validation support,
+manifest generation, and actual model evaluation remain open. See the
 [`Open Images V6 preflight`](docs/pretrained_reuse/R2_OPENIMAGES_V6_SOURCE_PREFLIGHT_20261026.md).
 
 **2026-10-26 R2 VisTouch split-audit follow-up:** The same pinned source and
