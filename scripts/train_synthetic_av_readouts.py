@@ -455,6 +455,19 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     if train_count % batch_size:
         raise ValueError("training example count must divide evenly into configured batches")
     permutations = epoch_permutations(train_count, epochs, int(config["seed"]))
+    permutation_payload = json.dumps(permutations, separators=(",", ":")).encode("utf-8")
+    run["sampling_preflight"] = {
+        "policy": "seeded torch.randperm per epoch; common precomputed sequence for both readouts",
+        "epoch_permutations_sha256": hashlib.sha256(permutation_payload).hexdigest(),
+        "examples_per_epoch": train_count,
+        "updates_per_epoch": train_count // batch_size,
+        "epochs": epochs,
+        "optimizer_updates_per_readout": epochs * (train_count // batch_size),
+        "examples_consumed_per_readout": epochs * train_count,
+        "unique_train_examples": train_count,
+        "max_sample_repeats_within_epoch": 1,
+    }
+    (output / "run.json").write_text(json.dumps(run, indent=2) + "\n", encoding="utf-8")
     models_results = []
     for architecture, architecture_config in config["models"].items():
         models_results.append(
