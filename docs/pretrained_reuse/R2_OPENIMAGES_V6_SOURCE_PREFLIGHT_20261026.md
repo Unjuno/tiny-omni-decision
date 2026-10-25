@@ -44,9 +44,26 @@ the temporary copy was removed automatically. No image files were requested.
 
 This validates metadata schema/coverage for the official validation cohort; it
 does not independently confirm ownership or continued availability at each
-Flickr landing page. The training metadata object is 638,407,721 bytes
-(generation `1526567626302755`; ETag `a4ac0bcedb5c2df4d1b1230dc6b41b8f`). It was
-not downloaded or inventoried in this stage.
+Flickr landing page. The full training metadata object was streamed and hashed,
+then discarded:
+
+| Check | Result |
+|---|---:|
+| GCS object generation | `1526567626302755` |
+| ETag | `a4ac0bcedb5c2df4d1b1230dc6b41b8f` |
+| Download size | 638,407,721 bytes |
+| SHA-256 | `05f3d68dbbb03728d1a37e51479f4f35c062b871e1a6cae8c4cefbe0e0c80ed0` |
+| Rows / unique image IDs | 1,743,042 / 1,743,042 |
+| Split values | train: 1,743,042 |
+| Image license field | 1,743,042 CC BY 2.0 |
+| Original URL, landing URL, author, profile, and original MD5 | complete on all rows |
+| Distinct author-profile values | 77,023 (hashed and counted transiently) |
+| Duplicate source MD5 rows within train | 0 |
+| Train-to-validation original-MD5 overlaps | 0 |
+
+The source site’s individual-image verification caveat still applies. The
+metadata proves what the source dataset records, not a fresh rights-holder
+verification for every photo.
 
 ## Validation annotation feasibility
 
@@ -75,11 +92,41 @@ this screen. Later define the class set from training-only counts, freeze a
 separate validation subset, and leave official test untouched until a
 predeclared final audit.
 
+## Training split coverage
+
+Official training label object:
+`https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-human-imagelabels.csv`
+
+The full file was streamed and discarded after aggregation. It is 2,474,671,021
+bytes (GCS generation `1580742923196487`, ETag
+`a0c8491396bfa736bec85cb172180bd3`, SHA-256
+`a97b079ccccf635a980bfe4b8180a0c844b4d9c887b2b7bc56535f539af044ea`). Joining
+against the explicit-CC-BY train image IDs yielded 19,031,110 `verification`
+rows and 1,194,138 `crowdsource-verification` rows. Across these two human
+label sources there are 9,365,200 positive and 10,860,048 explicit-negative
+rows; 1,742,970 images have at least one `verification` label. The remaining
+72 metadata images had no matching `verification` rows in this file.
+
+Using only `Source=verification`, 723,536 unique CC BY image IDs have at least
+one positive and at least three explicit-negative rows, representing
+4,276,059 possible positive-target choices before deduplication and task
+balancing. The label rows were counted without retaining example IDs; duplicate
+`(ImageID, LabelName)` pairs and hierarchy contradictions have not yet been
+audited. These are upper-bound task-construction counts, not usable examples
+until the task builder applies those gates.
+
+A fixed eight-class pool (`Cat`, `Dog`, `Horse`, `Car`, `Bicycle`, `Bird`,
+`Bus`, `Boat`) yielded only 63 training image IDs with one positive and three
+explicit negatives from that same pool. That pool is too narrow for a useful
+training battery. Continue with a larger predeclared class pool or a
+hierarchy-aware per-example option sampler, and measure actual support before
+fitting any readout. Do not silently convert unannotated labels to negatives.
+
 ## Remaining gates and next step
 
-1. From training metadata and labels only, estimate class support and build a
-   candidate class shortlist. The official training files are large, so first
-   measure transfer size/storage and stream only what is necessary.
+1. Build a deterministic, hierarchy-aware option sampler from train-only labels;
+   deduplicate `(ImageID, LabelName, Confidence)` rows and measure exact class
+   and per-image support before fixing sample sizes.
 2. Join retained train examples to exact license/attribution rows; verify each
    selected original landing page and image hash before retaining media.
 3. Deduplicate by image ID and source MD5, then perceptual hash and normalized
