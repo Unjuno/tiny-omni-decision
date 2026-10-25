@@ -21,6 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "numpy>=1.26,<3",
+  "Pillow>=10,<13",
   "pytest>=8.3,<9",
   "requests>=2.32,<3",
   "ruff>=0.9,<1",
