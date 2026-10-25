@@ -1,0 +1,66 @@
+{
+  "experiment_id": "synthetic-av-temporal-vs-conditional-v1",
+  "data": {
+    "generator": "tiny_omni_decision.synthetic_av_task.build_manifest",
+    "seed": 17,
+    "train_groups": 512,
+    "validation_groups": 128,
+    "group_rows": 8,
+    "sequence_length": 8,
+    "symbol_count": 4,
+    "video_frame_rate_hz": 2,
+    "video_frame_size_px": 224,
+    "audio_sample_rate_hz": 32000,
+    "audio_samples_per_event": 16000,
+    "audio_event_duration_seconds": 0.5,
+    "audio_channel_count": 1,
+    "audio_sample_width_bytes": 2,
+    "audio_tone_frequencies_hz": [440.0, 554.365, 659.255, 783.991],
+    "train_and_validation_group_disjoint": true
+  },
+  "encoders": {
+    "video": {
+      "id": "google/videoprism-base-f16r288",
+      "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "parameter_count": 114365184,
+      "output_layout": "8 ordered spatially pooled frame tokens, width 768",
+      "preprocessing_size_px": 288,
+      "runtime_device": "cpu",
+      "frozen": true
+    },
+    "audio": {
+      "id": "efficientat-dymn04-as",
+      "source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+      "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+      "parameter_count": 1961239,
+      "torch_version": "2.6.0+cu124",
+      "torchaudio_version": "2.6.0+cu124",
+      "output_layout": "one frozen embedding per 0.5-second event segment, width 384",
+      "sample_rate_hz": 32000,
+      "mel_frontend": "pinned models.preprocess.AugmentMelSTFT eval mode, freqm=0,timem=0",
+      "frozen": true
+    }
+  },
+  "readouts": {
+    "seed": 17,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "epochs": 128,
+    "validation_interval_epochs": 4,
+    "selection_metric": "validation NLL",
+    "terminal_checkpoint_saved_separately": true,
+    "parameter_count_tolerance_fraction": 0.1
+  },
+  "validation": {
+    "scope": "generated-development-only",
+    "grouped_bootstrap_replicates": 10000,
+    "confidence_interval_percent": 95,
+    "selection_uses_controls": false
+  },
+  "product_quality_claim": false,
+  "natural_av_transfer_claim": false
+}
