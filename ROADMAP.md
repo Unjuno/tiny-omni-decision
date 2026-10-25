@@ -2875,3 +2875,16 @@ therefore adds no demonstrated Accuracy benefit, and these synthetic results
 do not close the natural AV quality gate. See the
 [`modality-bypass result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_MODALITY_BYPASS_RESULTS_20261026.md)
 and [`identity-initialized raw-feature gate result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_RESIDUAL_GATE_RESULTS_20261026.md).
+
+### iNaturalist CC0 natural-image cohort freeze (2026-10-26)
+
+The strict-CC0 live-API cohort is frozen outside Git: 1,642 train and 683
+observer-disjoint validation examples across eight bird taxa. Per-record
+observation/photo CC0 gates passed; one cross-taxon photo identity and one
+unlicensed photo object were excluded. No media, audit set, or model result
+exists yet. Next, verify media/content identities and label validity, then
+measure frozen VideoPrism image-only readout performance with permutation
+controls. The Open Images result showed no prediction change when image inputs
+were ablated, so visual dependence is a required gate. See the
+[`iNaturalist metadata freeze`](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FREEZE_20261026.md)
+and [external metadata feasibility screen](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FEASIBILITY_20261026.md).
