@@ -18,7 +18,7 @@ frozen manifest. At 09:00, all 4,096 validation images passed the same exact
 manifest/decode check; at 09:12, 1,834 fetched train images also passed CPU
 manifest/decode checks; 09:14 and 09:16 rescans covered 2,136 and 2,524
 images with zero failures; 09:19 and 09:21 rescans covered 3,033 and 3,372
-with zero failures.
+with zero failures; the 09:23 rescan covered 3,660 with zero failures.
 Training-media fetch continues. No full feature cache or quality score exists. GPU
 feature extraction/fitting waits on the existing RTX 3080 run, which occupies
 16,124/16,384 MiB; a separate older full-extent fresh-coverage queue is also
