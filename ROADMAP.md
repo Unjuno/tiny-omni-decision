@@ -1,3 +1,4 @@
+**2026-10-26 R2 MAVC100 source gate:** MAVC100 has a relevant anchor-vocalization AV label, but the official dataset terms describe internet-sourced original videos, research-only use, and removal of potentially infringing backups; no per-video reuse grant was established. The code repository's MIT license does not grant rights to those videos. No labels or media were accessed, and the candidate is not admitted for product-aligned training or quality evaluation pending rights evidence. See the [MAVC100 source gate](docs/pretrained_reuse/R2_MAVC100_AV_VAD_SOURCE_GATE_20261026.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
 **2026-10-25 R2 synthetic AV temporal/readout comparison complete:** On a
