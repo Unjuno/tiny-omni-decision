@@ -41,8 +41,11 @@ deterministic audio-shuffle controls, and a paired video-level bootstrap.
 Unit tests verify cohort integrity, boundary retention, and deterministic
 paired intervals. The full suite passed **2,440 tests, 11 skipped**; Ruff and
 `git diff --check` passed. The commit was pushed to the roadmap PR branch and
-the continuation branch. GitHub CLI status was unavailable because this local
-session is not authenticated; public CI confirmation remains pending.
+the continuation branch. Public GitHub Actions runs for both code commit
+`56017039639df111d53df61213c826e9b92a0b43` and report commit
+`9fc7504cc5abc02773165787a119d51e1d5b5cd9` completed successfully (two CI runs
+per commit). The unauthenticated local GitHub CLI was bypassed with the public
+Actions API.
 
 The effective inference manifest is stored at
 `C:/CodexArtifacts/pretrained-reuse-r2/perception-test-av-v2-extension-eval-20261025-attempt-01/inference_manifest.json`,
