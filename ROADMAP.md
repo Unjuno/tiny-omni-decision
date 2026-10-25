@@ -1,3 +1,11 @@
+**2026-10-26 R2 iNaturalist metadata preflight:** A bounded live API sample
+confirmed observation/photo license and photo attribution fields on 100
+Research Grade bird observations (219 photos), but represented only 36
+observers. No media or raw identifiers were retained. This is not enough to
+establish observer-disjoint split feasibility or admit a corpus; next require
+a dated export and a broader metadata-only group audit. See the
+[`iNaturalist preflight`](docs/pretrained_reuse/R2_INATURALIST_METADATA_PREFLIGHT_20261026.md).
+
 **2026-10-26 R2 VisTouch split-audit follow-up:** The same pinned source and
 metadata had already been screened on 2026-10-14. The follow-up audit confirms
 the CC-BY-4.0 repository metadata lists 10,498 overlapping clips from 24
