@@ -265,12 +265,31 @@ history row and modification time were still step 1,664 / 10:10:49 JST, while
 durable trainer state remained at global/best step 1,536 and sample index
 6,144. The process remained alive with GPU memory allocated; no intervention
 was made.
+
+The pinned selective acquisition completed at 10:47 JST (elapsed 7,934.7 s)
+with 16,384 train and 4,096 validation images. The downloader's acquisition
+receipt is `C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-media-seed17-attempt-01/acquisition.json`,
+SHA-256 `1f563c809aa54c38e328d22b817c5e9cd7c1d9c1f1354d4ad81dacb1aacfba9b`.
+It records CRC-verified archive members and the frozen train/validation
+manifest hashes. A separate full CPU audit rehashed every on-disk image
+(3,872,531,998 bytes), matched all 20,480 hashes to the receipt, checked every
+PNG decodes at 480x320, and found zero missing/extra files or failures. Full
+media integrity is now passed; feature extraction and readout fitting have
+not started.
+
+At 10:26 JST, the teacher resume's latest history remained step 1,664
+(10:10:49 JST), while durable trainer state recorded global/best step 1,536
+and sample index 6,144. The same GPU process remained alive at 10:47, with
+16,124/16,384 MiB allocated and varying utilization. The earlier full-extent
+queue was also alive and waiting for a fully idle device. No process was
+stopped and no GPU task was started.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
 ONNX Runtime exposes only Azure and CPU providers, not DirectML. There is no
 verified secondary-GPU extraction path in this environment.
-Next: finish media acquisition, extract full ViLT features and controls through
-the cooperative HotUGPU reservation, fit the readout, then assess per-answer
-and per-program metrics without opening CoGenT-B. Keep the prospective held-out
+Next: wait for the existing GPU workload and the earlier queued run to release
+the RTX 3080, then extract full ViLT features and controls through the
+cooperative HotUGPU reservation, fit the readout, and assess per-answer and
+per-program metrics without opening CoGenT-B. Keep the prospective held-out
 split sealed until model selection is frozen.

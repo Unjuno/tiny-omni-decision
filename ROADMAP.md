@@ -11,21 +11,13 @@ input-path smoke. Manifest hashes and answer/question-type counts are recorded i
 [`CLEVR compositional preflight`](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
 CPU tests pass (2,418 passed, 11 skipped), Ruff passes; the corrected push is
 green on GitHub Actions. Fixed gray-image and split-local shuffled-image
-controls now pass CPU feature-extraction smoke. The selected-media range fetch
-is underway (2,591/20,480 images at 08:50 JST); a separate 08:53 CPU check
-decoded all 3,177 then-downloaded validation PNGs and matched them to the
-frozen manifest. At 09:00, all 4,096 validation images passed the same exact
-manifest/decode check; at 09:12, 1,834 fetched train images also passed CPU
-manifest/decode checks; 09:14 and 09:16 rescans covered 2,136 and 2,524
-images with zero failures; 09:19 and 09:21 rescans covered 3,033 and 3,372
-with zero failures; the 09:23 rescan covered 3,660 with zero failures.
-At 09:27 the verified prefix reached 4,287, again with zero failures.
-At 09:31 the verified train prefix reached 4,950, again with zero failures.
-At 10:26 the verified train prefix reached 13,217, again with zero failures.
-Training-media fetch continues. No full feature cache or quality score exists. GPU
-feature extraction/fitting waits on the existing RTX 3080 run, which occupies
-16,124/16,384 MiB; a separate older full-extent fresh-coverage queue is also
-waiting for the device and must run first. CoGenT-B remains unopened.
+controls pass CPU feature-extraction smoke. All 20,480 selected media images
+have now been downloaded from the pinned archive; a full CPU audit matched the
+receipt SHA-256 for every file, verified both frozen manifest hashes, decoded
+all images at 480x320, and found no missing or extra files. Acquisition took
+7,934.7 seconds. No full feature cache or quality score exists yet. GPU feature
+extraction/fitting waits on the existing RTX 3080 process and an older queue
+that must run first. CoGenT-B remains unopened.
 
 **2026-10-25 R2 CLEVR compositional option-task preflight:** The official
 CLEVR v1.0 CC BY 4.0 annotation archive is pinned locally; the 19.02 GB image
@@ -39,9 +31,10 @@ that head with a 28-answer readout. An exploratory internal train reserve was
 opened while counting labels and is explicitly disqualified as a blind audit;
 CoGenT-B validation remains unopened for a prospective one-time project-held-
 out audit. The 28-answer mapping / supplied-option softmax now has CPU tests
-(4 passed; Ruff clean). No bulk media or model checkpoint was created. The
-RTX 3080 is still occupied by the existing Teacher run (16,124/16,384 MiB,
-100% utilization at 08:12 JST), so no GPU fit has started. Details and hashes:
+(4 passed; Ruff clean). The selected train/validation media cache is now fully
+acquired and hash/CRC/decode verified; no model checkpoint or quality score
+exists yet. The RTX 3080 remains occupied by the existing Teacher run, so no
+GPU feature extraction or fit has started. Details and hashes:
 [`CLEVR compositional option preflight`](docs/pretrained_reuse/R2_CLEVR_COMPOSITIONAL_OPTION_PREFLIGHT_20261025.md).
 
 **2026-10-25 R2 CLEVR-4 full-validation transfer reconciliation:** Recomputed
