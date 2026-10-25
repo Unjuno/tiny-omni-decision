@@ -345,7 +345,11 @@ feature-swap replay held CPU text embeddings/readout fixed: cached CUDA-derived
 audio features reproduced saved GPU outputs within `2.21e-6`, while CPU FP32
 audio features yielded the same `0.0571` maximum shift as the full CPU runtime.
 This isolates the discrepancy to the audio feature path on these fixed IDs.
-No tolerance or runtime code was changed; this is not a new quality benchmark.
+An end-to-end RTX 3080 replay under the HotGPU guard matched all classes and
+stayed within `8.35e-7`, below the `1e-5` gate; inference took 7.71 s and peak
+CUDA allocation was 405 MB. CPU probability parity remains unresolved as a
+backend-specific behavior. No tolerance or runtime code was changed; this is
+not a new quality benchmark.
 See the [full replay
 record](docs/pretrained_reuse/PATH_A_AUDIO_CPU_REFERENCE_PARITY_20261026.md).
 

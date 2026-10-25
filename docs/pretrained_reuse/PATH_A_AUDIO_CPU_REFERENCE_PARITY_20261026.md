@@ -80,6 +80,16 @@ matched feature-swap result: per-example probability sensitivity is nonlinear
 and does not scale simply with a feature vector's max-coordinate difference.
 The matched comparison isolates the audio feature path at the model-output
 level without claiming which CUDA kernel detail causes the feature shift.
+
+Finally, the exact end-to-end runtime was replayed on the RTX 3080 Laptop GPU
+through `scripts.run_with_hotgpu_guard`. The fixed batch-of-eight run matched
+all 2,560 saved prediction classes and stayed within the existing numeric gate:
+maximum probability delta `8.3447e-7` versus threshold `1e-5`; median delta
+`1.8626e-9`. Overall Accuracy/NLL/Brier/ECE-15 were `0.978516 / 0.069327 /
+0.032318 / 0.006127`, consistent with the saved run. Model load took 0.594 s,
+inference 7.707 s, and peak CUDA allocation was 405,259,776 bytes. The guard
+reserved 2,560 MiB after observing 13,602 MiB free; it did not stop or modify
+the live Orbitune processes. No training or sealed-audit evaluation occurred.
 The largest delta is a `keyword_identity` query on sample
 `speechcmd-validation-09a8d685789d8c537ba1`; class and target remain the same,
 but the top-option probability changes from 0.6096 to 0.5525. No decision
@@ -112,5 +122,11 @@ its `result.json` SHA-256 is
 `91FB7A54CAC8279806E0A5808D88BE9B2328B3E293755C93EA15B536E63FA35F` and its
 `predictions.jsonl` SHA-256 is
 `D4FB7228A4E7AD726172AD39CC886494D29199F6E4C4D64F78C1C150110C2367`.
+The guarded GPU replay is in
+`C:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-gpu-reference-parity-20261026-attempt-02\`;
+the `result.json` SHA-256 is
+`912082BAEDB684198FB24C301759449C0669F08C134BDB8D21EE5D381BB6F1BF` and the
+`predictions.jsonl` SHA-256 is
+`AC48B940D827059AB40BE2A2631CD9700A796E563909D72A99D1D7DE2247370B`.
 This one fixed validation sample does not support general claims about Audio
 quality, other hardware, or the four-modality product target.
