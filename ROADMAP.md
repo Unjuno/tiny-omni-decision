@@ -9,6 +9,15 @@ bulk export is not admitted for product use pending authoritative scope
 resolution. See the
 [`iNaturalist preflight`](docs/pretrained_reuse/R2_INATURALIST_METADATA_PREFLIGHT_20261026.md).
 
+**2026-10-26 R2 Open Images V6 source preflight:** Full validation metadata
+and human-verified labels were streamed and hashed without retaining example
+rows or downloading images. All 41,620 validation records have explicit
+CC BY 2.0 metadata and attribution fields; 33,561 have at least one verified
+positive and three explicit negative labels. This is promising for a bounded
+four-choice natural-image task, but Google disclaims individual license
+verification, and train coverage/source verification remain open. See the
+[`Open Images V6 preflight`](docs/pretrained_reuse/R2_OPENIMAGES_V6_SOURCE_PREFLIGHT_20261026.md).
+
 **2026-10-26 R2 VisTouch split-audit follow-up:** The same pinned source and
 metadata had already been screened on 2026-10-14. The follow-up audit confirms
 the CC-BY-4.0 repository metadata lists 10,498 overlapping clips from 24
