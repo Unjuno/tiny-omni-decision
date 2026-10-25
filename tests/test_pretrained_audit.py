@@ -85,8 +85,11 @@ def test_machine_readable_candidate_inventory_is_explicit_and_conservative():
     assert pe_core_t16["passed_load"] is True
     assert pe_core_t16["runtime_supported"] is True
     assert pe_core_t16["runtime_smoke_status"] == "PASS_CPU_FORWARD_REVALIDATION"
-    assert pe_core_t16["license_status"] == "REVIEW"
-    assert pe_core_t16["license_allowed"] is None
+    assert pe_core_t16["license_status"] == "ALLOW"
+    assert pe_core_t16["license_allowed"] is True
+    assert pe_core_t16["tested_implementation"] == "open_clip_torch==3.3.0"
+    assert pe_core_t16["tested_implementation_license"] == "MIT"
+    assert pe_core_t16["original_perception_models_runtime_status"] == "REVIEW"
     assert pe_core_t16["task_quality_status"].startswith("measured only on synthetic CLEVR-4")
 
     videomae = next(

@@ -74,3 +74,28 @@ Primary references: [original PE-Core checkpoint card](https://huggingface.co/fa
 [converted OpenCLIP checkpoint card](https://huggingface.co/timm/PE-Core-T-16-384),
 [pinned PE implementation license](https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE), and
 [pinned implementation package metadata](https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/setup.py).
+
+## 2026-10-25 licensing scope correction
+
+The earlier `REVIEW` conclusion above conflated the original `perception_models`
+implementation with the runtime actually used for this revalidation. The tested
+route instantiates the pinned converted checkpoint through OpenCLIP 3.3.0; it
+does not import or execute `perception_models`. The original checkpoint card
+and the converted `timm/PE-Core-T-16-384@7fe539ed578ac49a1c2b4f946e4b0747704c825a`
+model card identify the respective weights as Apache-2.0, and OpenCLIP v3.3.0
+ships an MIT license. On that narrow, documented basis, the tested OpenCLIP
+route passes this project's license screen (`ALLOW`). The separate
+`perception_models` package remains `REVIEW` / noncommercial and is not cleared
+for use by this correction. This is a scoped source and license screen, not a
+comprehensive legal review of every transitive dependency.
+
+This correction does not promote PE-Core as a product candidate. The measured
+checkpoint is 278,219,132 bytes, above the provisional 200 MB package target,
+and the existing synthetic CLEVR-4 task results remain weak (42.81% zero-shot
+macro Accuracy; 79.95% for the trained readout, including 29.28% Count). No
+quality artifacts or checkpoints were changed.
+
+License evidence: [pinned original checkpoint card](https://huggingface.co/facebook/PE-Core-T16-384/tree/8b4722741a516c18e7d311f158f13c600fea6c78),
+[converted checkpoint card](https://huggingface.co/timm/PE-Core-T-16-384/tree/7fe539ed578ac49a1c2b4f946e4b0747704c825a),
+[OpenCLIP v3.3.0 license](https://github.com/mlfoundations/open_clip/blob/v3.3.0/LICENSE),
+and [the separate noncommercial implementation package](https://github.com/facebookresearch/perception_models/blob/3e352cca660658d4b5c90f42a7808b11469e4c66/LICENSE.PE).

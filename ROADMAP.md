@@ -139,9 +139,13 @@ and counted 69,546,113 parameters; this is runtime evidence, not task quality.
 On the already observed synthetic CLEVR-4 reporting IDs, zero-shot similarity
 scored 42.81% macro Accuracy and a frozen-feature candidate scorer reached
 79.95%, with Count at 29.28%, below the historical Path A 88.06% macro result.
-These are development-only results; no candidate promotion follows. Keep PE-Core
-license status REVIEW because checkpoint and implementation grants remain
-distinct. Revalidation details and hashes are in
+These are development-only results; no candidate promotion follows. A scoped
+license reconciliation now marks the tested pinned OpenCLIP route ALLOW: its
+checkpoint cards identify Apache-2.0 weights and OpenCLIP 3.3.0 is MIT. The
+separate `perception_models` runtime package remains REVIEW/noncommercial and
+was not used. PE-Core remains unsuitable for adoption on current evidence: the
+tested checkpoint is 278 MB and task quality is weak. Revalidation details and
+hashes are in
 [`PE-Core T16 CPU revalidation`](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_REVALIDATION_20261025.md);
 the detailed task protocols/results remain linked from that report.
 
