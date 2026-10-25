@@ -352,3 +352,8 @@ GPU inference, extraction, or fit was started. The data cache remains verified,
 but feature extraction and model fitting are still pending the cooperative GPU
 queue. The change therefore closes the long-question input-path defect only;
 it does not produce a quality result or close the CLEVR task gate.
+The implementation was committed as `5812a85355c478443cc32d00ee5f3d0ddd9e30a9`
+and pushed to both research refs. Its three GitHub Actions runs completed
+successfully: [40155152540](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40155152540),
+[40155154560](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40155154560),
+and [40155157476](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40155157476).
