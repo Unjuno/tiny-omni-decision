@@ -1,3 +1,12 @@
+**2026-10-26 R2 Open Images V6 landing-page audit:** Read-only checks of the
+440 selected Flickr pages found 347 current page declarations matching CC BY
+2.0 and the source attribution profile. The remaining 93 were inaccessible or
+mismatched (67 HTTP 404, 9 HTTP 403, 15 license mismatch, 2 page mismatch).
+Retries added no matches. A page declaration does not authenticate ownership;
+no image bytes were fetched and these are not product rights clearances. The
+171 validation matches remain below the provisional 200-example screen where
+that floor applies. See the [audit](docs/pretrained_reuse/R2_OPENIMAGES_V6_LANDING_PAGE_AUDIT_20261026.md).
+
 **2026-10-26 R2 Open Images V6 pilot task manifests:** A deterministic
 seed-17 pilot created 220 train and 220 validation tasks (20 per each of the
 11 frozen targets), with zero selected ImageID or original-MD5 overlap. No

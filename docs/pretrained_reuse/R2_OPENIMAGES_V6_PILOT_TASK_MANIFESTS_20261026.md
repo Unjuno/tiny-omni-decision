@@ -34,10 +34,13 @@ asset. All 440 private receipt rows therefore remain
 `individual_rights_verified=false` and `landing_page_check_status=not_checked`.
 Fourteen selected rows lacked a 300K thumbnail URL; those records were retained
 and the receipt points to the metadata's original-media URL instead. No image
-was fetched. Before any acquisition or fitting, individually check each
-landing page and attribution, then run train/validation perceptual-hash and
-normalized-content checks. A missing thumbnail is not itself a reason to drop
-an otherwise selected example.
+was fetched. The subsequent per-page declaration check is recorded in the
+[landing-page audit](R2_OPENIMAGES_V6_LANDING_PAGE_AUDIT_20261026.md): 347 pages
+matched the CC BY 2.0 declaration and attribution profile, while 93 were
+inaccessible or mismatched. The page check does not independently authenticate
+copyright ownership, so no row is marked `individual_rights_verified=true`.
+Perceptual-hash and normalized-content checks remain pending. A missing
+thumbnail is not itself a reason to drop an otherwise selected example.
 
 ## Reproduction and implementation
 
