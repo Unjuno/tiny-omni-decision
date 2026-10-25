@@ -9,7 +9,11 @@ previously inspected. Labels were used to construct the balanced cohort, so this
 is **not blind**, is not a sealed audit, and cannot qualify product quality or
 close R2 M-2. The visibility task also has a known strong sound-class prior; an
 input ablation measures dependence of this fitted readout, not proof that both
-modalities are necessary for the decision.
+modalities are necessary for the decision. Selection forces a 50/50 class mix,
+while recorded boundary-eligible validation prevalence is about 94.3% visible
+(91.3% on the full official-validation source). NLL/Brier/ECE on this cohort are
+conditional on that balanced sample and do not estimate source-prevalence
+calibration. No prevalence correction will be fit from this cohort.
 
 No training, calibration, checkpoint selection, test access, or sealed-audit
 access is part of this diagnostic. The original frozen Audio, Video, and Joint
