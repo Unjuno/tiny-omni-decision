@@ -215,6 +215,13 @@ At 09:00 JST, all 4,096 validation images had arrived; an independent CPU pass
 matched every filename to that manifest, decoded every PNG at 480x320, and
 found zero missing, unexpected, or invalid files. The training portion of the
 download had then begun (66/16,384 images); the full cache remains incomplete.
+At 09:07 JST, the train cache had 1,107/16,384 images. The Teacher v2 resume
+was live with rolling history through step 1,495 and persisted best step 1,408.
+An older, separate full-extent fresh-coverage GPU queue (supervisor PID 6080,
+worker PID 33712; started 06:52 JST) was also still alive, waiting for the
+device to become fully idle before its smoke/train/replay stages; none of its
+three output directories existed yet. Preserve this earlier queue and let it
+take the next GPU slot before submitting the CLEVR feature extraction.
 Next: finish media acquisition, extract full ViLT features and controls through
 the cooperative HotUGPU reservation, fit the readout, then assess per-answer
 and per-program metrics without opening CoGenT-B. Keep the prospective held-out

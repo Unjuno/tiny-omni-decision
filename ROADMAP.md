@@ -18,7 +18,8 @@ frozen manifest. At 09:00, all 4,096 validation images passed the same exact
 manifest/decode check; training-media fetch had started. No full feature cache
 or quality score exists. GPU
 feature extraction/fitting waits on the existing RTX 3080 run, which occupies
-16,124/16,384 MiB. CoGenT-B remains unopened.
+16,124/16,384 MiB; a separate older full-extent fresh-coverage queue is also
+waiting for the device and must run first. CoGenT-B remains unopened.
 
 **2026-10-25 R2 CLEVR compositional option-task preflight:** The official
 CLEVR v1.0 CC BY 4.0 annotation archive is pinned locally; the 19.02 GB image
