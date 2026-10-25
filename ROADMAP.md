@@ -93,6 +93,8 @@ produced. See the [`LOCATA source screen`](docs/pretrained_reuse/R2_LOCATA_SENSO
 **2026-10-26 R2 MAVC100 source gate:** MAVC100 has a relevant anchor-vocalization AV label, but the official dataset terms describe internet-sourced original videos, research-only use, and removal of potentially infringing backups; no per-video reuse grant was established. The code repository's MIT license does not grant rights to those videos. No labels or media were accessed, and the candidate is not admitted for product-aligned training or quality evaluation pending rights evidence. See the [MAVC100 source gate](docs/pretrained_reuse/R2_MAVC100_AV_VAD_SOURCE_GATE_20261026.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 natural-image source feasibility:** A live metadata-only iNaturalist screen found ample strict-CC0 candidate volume for eight bird classes, but observer clustering leaves as few as 23 independent audit-role observers in the 1,000-row/class sample; one photo object was missing/non-CC0 and one photo ID crossed taxon labels. No media was downloaded and no model was trained. Keep the source unadmitted until exact per-record licenses, observer groups, duplicate media and hashed splits are frozen. See [`CC0 metadata feasibility`](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FEASIBILITY_20261026.md).
+
 **2026-10-26 R0 live-state refresh:** the current R2 branch is clean and
 synced, CI is green, 60 worktrees and 22 open PRs are preserved, and six
 worktrees remain dirty (including the primary Teacher worktree, untouched).
