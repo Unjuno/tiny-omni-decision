@@ -82,7 +82,7 @@ def run(
     media_sha = sha256_file(media_validation_path)
     manifest_sha = sha256_file(manifest_path)
     selection = json.loads(selection_path.read_text(encoding="utf-8"))
-    json.loads(media_validation_path.read_text(encoding="utf-8"))
+    media_validation = json.loads(media_validation_path.read_text(encoding="utf-8"))
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     examples = selection.get("events", [])
     rows = manifest.get("validation", [])
@@ -104,6 +104,10 @@ def run(
         or metadata.get("validation_is_blind") is not False
     ):
         raise ValueError("validation inference manifest mismatch")
+    media_rows = media_validation.get("examples_manifest", [])
+    media_by_video = {row["video_id"]: row for row in media_rows}
+    if len(media_by_video) != 200:
+        raise ValueError("verified media receipt does not cover all 200 videos")
     fit = json.loads(fit_cohort_path.read_text(encoding="utf-8"))
     fit_ids = {row["video_id"] for split in fit["splits"].values() for row in split}
     if fit_ids & {row["video_id"] for row in examples}:
@@ -155,12 +159,21 @@ def run(
             raise ValueError("manifest order or event identity changed")
         audio_record = audio_rows[event["video_id"]]
         video_record = video_rows[event["video_id"]]
+        media_record = media_by_video[event["video_id"]]
         window = row["video_window_s"]
         if (
             audio_record.get("event_id") != event["event_id"]
             or video_record.get("event_id") != event["event_id"]
+            or audio_record.get("media_audio_sha256") != media_record.get("audio_sha256")
+            or video_record.get("media_video_sha256") != media_record.get("video_sha256")
             or not np.allclose(audio_record.get("audio_window_s"), window, atol=1e-6, rtol=0)
             or not np.allclose(video_record.get("video_window_s"), window, atol=1e-6, rtol=0)
+            or not np.allclose(
+                video_record.get("video_frame_times_s"),
+                row["video_frame_times_s"],
+                atol=1e-6,
+                rtol=0,
+            )
         ):
             raise ValueError(f"feature event/window mismatch: {event['video_id']}")
         av = np.load(audio_record["feature_path"], allow_pickle=False)
