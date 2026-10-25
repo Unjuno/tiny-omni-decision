@@ -69,6 +69,69 @@ class TemporalLSTMReadout(nn.Module):
         return self.classifier(hidden[-1])
 
 
+class ConditionedTemporalAVReadout(nn.Module):
+    """Use the query to gate aligned AV evidence before recurrent integration."""
+
+    def __init__(
+        self,
+        audio_width: int,
+        video_width: int,
+        query_width: int,
+        hidden_size: int = 128,
+        num_layers: int = 2,
+    ) -> None:
+        super().__init__()
+        if min(audio_width, video_width, query_width, hidden_size, num_layers) < 1:
+            raise ValueError("all readout dimensions must be positive")
+        self.audio_width = audio_width
+        self.video_width = video_width
+        self.query_width = query_width
+        self.hidden_size = hidden_size
+        self.audio_projection = nn.Sequential(
+            nn.Linear(audio_width, hidden_size), nn.LayerNorm(hidden_size)
+        )
+        self.video_projection = nn.Sequential(
+            nn.Linear(video_width, hidden_size), nn.LayerNorm(hidden_size)
+        )
+        self.query_projection = nn.Sequential(
+            nn.Linear(query_width, hidden_size), nn.LayerNorm(hidden_size)
+        )
+        self.modality_gate = nn.Sequential(
+            nn.Linear(hidden_size * 3, hidden_size),
+            nn.GELU(),
+            nn.Linear(hidden_size, 2),
+        )
+        self.temporal = nn.LSTM(
+            hidden_size * 2,
+            hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
+        )
+        self.classifier = nn.Linear(hidden_size, 2)
+
+    def forward(
+        self, audio: torch.Tensor, video: torch.Tensor, query: torch.Tensor
+    ) -> torch.Tensor:
+        _validate_inputs(
+            audio, video, query, self.audio_width, self.video_width, self.query_width
+        )
+        audio_steps = self.audio_projection(audio)
+        video_steps = self.video_projection(video)
+        query_context = self.query_projection(query)
+        repeated_query = query_context.unsqueeze(1).expand(-1, SEQUENCE_LENGTH, -1)
+        gate_logits = self.modality_gate(
+            torch.cat((audio_steps, video_steps, repeated_query), dim=-1)
+        )
+        modality_weights = torch.softmax(gate_logits, dim=-1)
+        fused_steps = (
+            modality_weights[..., 0:1] * audio_steps
+            + modality_weights[..., 1:2] * video_steps
+        )
+        sequence = torch.cat((fused_steps, repeated_query), dim=-1)
+        _, (hidden, _) = self.temporal(sequence)
+        return self.classifier(hidden[-1])
+
+
 class ConditionalAVReadout(nn.Module):
     """Bidirectionally exchange AV sequence evidence, query-pool, and gate."""
 

@@ -16,7 +16,11 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from tiny_omni_decision.synthetic_av_readouts import ConditionalAVReadout, TemporalLSTMReadout
+from tiny_omni_decision.synthetic_av_readouts import (
+    ConditionalAVReadout,
+    ConditionedTemporalAVReadout,
+    TemporalLSTMReadout,
+)
 from tiny_omni_decision.synthetic_av_task import validate_manifest
 from tiny_omni_decision.synthetic_av_training import (
     BestByNLL,
@@ -153,6 +157,14 @@ def _construct_model(architecture: str, model_config: dict[str, Any]):
             hidden_size=int(model_config["hidden_size"]),
             num_heads=int(model_config["attention_heads"]),
             cross_depth=int(model_config["bidirectional_cross_attention_layers"]),
+        )
+    if architecture == "conditioned_temporal_av":
+        return ConditionedTemporalAVReadout(
+            384,
+            768,
+            2,
+            hidden_size=int(model_config["hidden_size"]),
+            num_layers=int(model_config["num_layers"]),
         )
     raise ValueError(f"unsupported architecture: {architecture}")
 
