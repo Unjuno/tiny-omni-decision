@@ -152,8 +152,8 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
     if run.get("smoke") and not args.allow_smoke:
         raise ValueError("validation evaluation refuses a smoke training run")
     training_runs = [(run_path, run)]
-    if args.reference_training_run is not None:
-        reference_path = args.reference_training_run.resolve(strict=True)
+    for requested_reference in args.reference_training_run or []:
+        reference_path = requested_reference.resolve(strict=True)
         reference_run = json.loads(reference_path.read_text(encoding="utf-8"))
         if reference_run.get("status") != "PASS_SYNTHETIC_AV_READOUT_TRAINING":
             raise ValueError("reference training run receipt is incomplete")
@@ -306,7 +306,7 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--training-run", type=Path, required=True)
-    parser.add_argument("--reference-training-run", type=Path)
+    parser.add_argument("--reference-training-run", type=Path, action="append")
     parser.add_argument("--render-dir", type=Path, required=True)
     parser.add_argument("--feature-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
