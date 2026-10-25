@@ -1,5 +1,11 @@
 # Tiny Omni Decision
 
+**2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
+probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
+responded measurably to image content versus gray/shuffled controls. Results
+vary by question type and do not demonstrate the broader audio/video/4-modality
+product objective. [Full result and limitations](docs/pretrained_reuse/R2_CLEVR_COGENT_B_ONE_TIME_AUDIT_20261025.md).
+
 **2026-10-18 CLEVRER scene-coverage comparison:** Increasing unique training
 scenes from 256 to 768 improved selected pooled development Accuracy and NLL
 at the same 2,048-update budget, primarily on static descriptive questions.

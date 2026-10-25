@@ -1,7 +1,11 @@
 # CLEVR compositional option-task preflight
 
-**Status: source and input-path preflight only. No fitting, checkpoint
-selection, quality evaluation, or sealed-audit evaluation has run.**
+**Status: completed through one frozen CoGenT-B valB evaluation.** The
+candidate was selected on official CLEVR development data before the 15,000
+image CoGenT-B audit was accessed. The full protocol, metrics, controls,
+hashes, and interpretation are in the [one-time audit report](R2_CLEVR_COGENT_B_ONE_TIME_AUDIT_20261025.md).
+This is a project-held-out OOD image+question probe, not a blind product
+evaluation or evidence of four-modality quality.
 
 ## Why this is a distinct task
 
@@ -107,7 +111,9 @@ images/questions, with zero train/validation image overlap. It remains a
 development corpus; all six answer kinds occur in both splits. Validation
 selection excludes any normalized question text selected for train, and the
 final manifest records zero image and normalized-question overlap. Full media
-extraction and feature caching are still pending. The source manifests
+extraction and CPU feature caching were later completed for the frozen
+development and CoGenT-B audit artifacts. Candidate training and development
+selection were completed and frozen before CoGenT-B was read. The source manifests
 and metadata are outside Git at
 `C:/CodexArtifacts/pretrained-reuse-r2/clevr-vqa-subset-seed17-attempt-03/`.
 Earlier attempts remain preserved and are superseded by attempt-03.
@@ -165,7 +171,7 @@ The prior ViLT result on CLEVR-4 (81.10% over its fixed 10-option image
 taxonomies) is not a baseline for this question-conditioned task and will not
 be mixed into its metrics. See [the earlier fixed-taxonomy report](R2_VILT_IMAGE_RESULTS_20261012.md).
 
-## Current execution gate
+## Historical execution tracking (superseded by the completed audit above)
 
 The RTX 3080 Laptop was observed at 16,124/16,384 MiB and 99% utilization,
 with PIDs `15928` and `26920` reported by `nvidia-smi`. At 08:50 JST, read-only

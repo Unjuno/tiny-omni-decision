@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 one-time CoGenT-B audit complete:** The frozen ViLT
+image+question option readout scored 57.90% overall Accuracy / 0.7227 NLL and
+59.05% macro-by-answer-kind Accuracy / 0.7740 NLL on 15,000 held-out valB
+images. Real-image inputs exceeded gray and same-split shuffled controls under
+paired 10,000-replicate image bootstrap, but accuracy varied from 48.25% on
+Boolean to 74.59% on Count. This is OOD transfer evidence for one research-only
+image+question probe, not general Omni or product quality; CoGenT-B is closed
+to further tuning. [Protocol, detailed scores, hashes and limits](docs/pretrained_reuse/R2_CLEVR_COGENT_B_ONE_TIME_AUDIT_20261025.md).
+
 **2026-10-25 R2 CLEVR option-readout/data implementation:** Added a
 deterministic image-grouped subset builder, frozen-feature 28-answer readout,
 supplied-option loss, per-kind/program metrics, and separate best/terminal
