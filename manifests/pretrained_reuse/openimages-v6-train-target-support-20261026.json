@@ -1,0 +1,2443 @@
+{
+  "class_descriptions_sha256": "f7b528006a95db15fee1af30b198422ab067cee060f496e7a9f8930e5624d209",
+  "hierarchy_sha256": "a28f06e83c8378c4285d92d768ceda7568a48cac3c02994b6c346df804e7d612",
+  "hierarchy_sibling_target_class_count": 465,
+  "images_supporting_any_target": 54436,
+  "label_policy": {
+    "confidence_values": [
+      0.0,
+      1.0
+    ],
+    "minimum_explicit_negative_siblings": 3,
+    "negative_policy": "explicit negative sibling labels only",
+    "source": "verification"
+  },
+  "media_downloaded": false,
+  "metadata": {
+    "cc_by_2_rows": 1743042,
+    "cc_by_2_train_ids_allowlisted": 1743042,
+    "rows": 1743042,
+    "sha256": "05f3d68dbbb03728d1a37e51479f4f35c062b871e1a6cae8c4cefbe0e0c80ed0",
+    "train_rows": 1743042
+  },
+  "purpose": "train-only Open Images V6 hierarchy-choice support audit",
+  "schema_version": 1,
+  "selected_target_class_count": 11,
+  "selected_target_classes": [
+    {
+      "display_name": "Toy",
+      "label_id": "/m/0138tl",
+      "unique_train_images": 1666
+    },
+    {
+      "display_name": "Door",
+      "label_id": "/m/02dgv",
+      "unique_train_images": 1210
+    },
+    {
+      "display_name": "Food",
+      "label_id": "/m/02wbm",
+      "unique_train_images": 1406
+    },
+    {
+      "display_name": "Plant",
+      "label_id": "/m/05s2s",
+      "unique_train_images": 3801
+    },
+    {
+      "display_name": "Sculpture",
+      "label_id": "/m/06msq",
+      "unique_train_images": 1138
+    },
+    {
+      "display_name": "Vehicle",
+      "label_id": "/m/07yv9",
+      "unique_train_images": 2353
+    },
+    {
+      "display_name": "Clothing",
+      "label_id": "/m/09j2d",
+      "unique_train_images": 8336
+    },
+    {
+      "display_name": "Furniture",
+      "label_id": "/m/0c_jw",
+      "unique_train_images": 2676
+    },
+    {
+      "display_name": "Building",
+      "label_id": "/m/0cgh4",
+      "unique_train_images": 2220
+    },
+    {
+      "display_name": "Window",
+      "label_id": "/m/0d4v4",
+      "unique_train_images": 2311
+    },
+    {
+      "display_name": "Animal",
+      "label_id": "/m/0jbk",
+      "unique_train_images": 5708
+    }
+  ],
+  "target_scope_policy": {
+    "excluded_display_name_terms": [
+      "arm",
+      "baby",
+      "body",
+      "boy",
+      "child",
+      "ear",
+      "eye",
+      "face",
+      "finger",
+      "foot",
+      "girl",
+      "hair",
+      "hand",
+      "head",
+      "human",
+      "leg",
+      "man",
+      "mouth",
+      "neck",
+      "nose",
+      "person",
+      "skin",
+      "teeth",
+      "tooth",
+      "woman"
+    ],
+    "minimum_unique_train_support": 1000
+  },
+  "total_positive_target_options": 116620,
+  "train_labels_sha256": "a97b079ccccf635a980bfe4b8180a0c844b4d9c887b2b7bc56535f539af044ea",
+  "train_support_by_class": [
+    {
+      "display_name": "Container",
+      "label_id": "/m/011q46kg",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Magpie",
+      "label_id": "/m/012074",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Football",
+      "label_id": "/m/01226z",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Ambulance",
+      "label_id": "/m/012n7d",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Ladder",
+      "label_id": "/m/012w5l",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Sink",
+      "label_id": "/m/0130jx",
+      "unique_train_images": 71
+    },
+    {
+      "display_name": "Toy",
+      "label_id": "/m/0138tl",
+      "unique_train_images": 1666
+    },
+    {
+      "display_name": "Organ (Musical Instrument)",
+      "label_id": "/m/013y1f",
+      "unique_train_images": 10
+    },
+    {
+      "display_name": "Cassette deck",
+      "label_id": "/m/01432t",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Apple",
+      "label_id": "/m/014j1m",
+      "unique_train_images": 71
+    },
+    {
+      "display_name": "Human eye",
+      "label_id": "/m/014sv8",
+      "unique_train_images": 3357
+    },
+    {
+      "display_name": "Cosmetics",
+      "label_id": "/m/014trl",
+      "unique_train_images": 82
+    },
+    {
+      "display_name": "Paddle",
+      "label_id": "/m/014y4n",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Beer",
+      "label_id": "/m/01599",
+      "unique_train_images": 21
+    },
+    {
+      "display_name": "Human beard",
+      "label_id": "/m/015h_t",
+      "unique_train_images": 349
+    },
+    {
+      "display_name": "Bird",
+      "label_id": "/m/015p6",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Parking meter",
+      "label_id": "/m/015qbp",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Traffic light",
+      "label_id": "/m/015qff",
+      "unique_train_images": 37
+    },
+    {
+      "display_name": "Cucumber",
+      "label_id": "/m/015x4r",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Radish",
+      "label_id": "/m/015x5n",
+      "unique_train_images": 13
+    },
+    {
+      "display_name": "Skull",
+      "label_id": "/m/016m2d",
+      "unique_train_images": 266
+    },
+    {
+      "display_name": "Washing machine",
+      "label_id": "/m/0174k2",
+      "unique_train_images": 32
+    },
+    {
+      "display_name": "Glove",
+      "label_id": "/m/0174n1",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Tick",
+      "label_id": "/m/0175cv",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Belt",
+      "label_id": "/m/0176mf",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Sunglasses",
+      "label_id": "/m/017ftj",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Banjo",
+      "label_id": "/m/018j2",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Cart",
+      "label_id": "/m/018p4k",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Ball",
+      "label_id": "/m/018xm",
+      "unique_train_images": 12
+    },
+    {
+      "display_name": "Backpack",
+      "label_id": "/m/01940j",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Bicycle",
+      "label_id": "/m/0199g",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Home appliance",
+      "label_id": "/m/019dx1",
+      "unique_train_images": 182
+    },
+    {
+      "display_name": "Centipede",
+      "label_id": "/m/019h78",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Surfboard",
+      "label_id": "/m/019w40",
+      "unique_train_images": 12
+    },
+    {
+      "display_name": "Chopsticks",
+      "label_id": "/m/01_5g",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Fast food",
+      "label_id": "/m/01_bhs",
+      "unique_train_images": 82
+    },
+    {
+      "display_name": "Boot",
+      "label_id": "/m/01b638",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Headphones",
+      "label_id": "/m/01b7fy",
+      "unique_train_images": 56
+    },
+    {
+      "display_name": "Shorts",
+      "label_id": "/m/01bfm9",
+      "unique_train_images": 142
+    },
+    {
+      "display_name": "Bus",
+      "label_id": "/m/01bjv",
+      "unique_train_images": 31
+    },
+    {
+      "display_name": "Boy",
+      "label_id": "/m/01bl7v",
+      "unique_train_images": 2390
+    },
+    {
+      "display_name": "Screwdriver",
+      "label_id": "/m/01bms0",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Bicycle wheel",
+      "label_id": "/m/01bqk0",
+      "unique_train_images": 404
+    },
+    {
+      "display_name": "Laptop",
+      "label_id": "/m/01c648",
+      "unique_train_images": 293
+    },
+    {
+      "display_name": "Drill (Tool)",
+      "label_id": "/m/01d380",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Dress",
+      "label_id": "/m/01d40f",
+      "unique_train_images": 156
+    },
+    {
+      "display_name": "Bear",
+      "label_id": "/m/01dws",
+      "unique_train_images": 12
+    },
+    {
+      "display_name": "Waffle",
+      "label_id": "/m/01dwsz",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Pancake",
+      "label_id": "/m/01dwwc",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Brown bear",
+      "label_id": "/m/01dxs",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Woodpecker",
+      "label_id": "/m/01dy8n",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Blue jay",
+      "label_id": "/m/01f8m5",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Pretzel",
+      "label_id": "/m/01f91_",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Bagel",
+      "label_id": "/m/01fb_0",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Tower",
+      "label_id": "/m/01fdzj",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Teapot",
+      "label_id": "/m/01fh4r",
+      "unique_train_images": 16
+    },
+    {
+      "display_name": "Person",
+      "label_id": "/m/01g317",
+      "unique_train_images": 10270
+    },
+    {
+      "display_name": "Swimwear",
+      "label_id": "/m/01gkx_",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Beehive",
+      "label_id": "/m/01gllr",
+      "unique_train_images": 14
+    },
+    {
+      "display_name": "Brassiere",
+      "label_id": "/m/01gmv2",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Bee",
+      "label_id": "/m/01h3n",
+      "unique_train_images": 10
+    },
+    {
+      "display_name": "Bat (Animal)",
+      "label_id": "/m/01h44",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Starfish",
+      "label_id": "/m/01h8tj",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Burrito",
+      "label_id": "/m/01j3zr",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Wrench",
+      "label_id": "/m/01j5ks",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Tent",
+      "label_id": "/m/01j61q",
+      "unique_train_images": 49
+    },
+    {
+      "display_name": "Lantern",
+      "label_id": "/m/01jfsr",
+      "unique_train_images": 50
+    },
+    {
+      "display_name": "Toaster",
+      "label_id": "/m/01k6s3",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Flashlight",
+      "label_id": "/m/01kb5b",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Billboard",
+      "label_id": "/m/01knjb",
+      "unique_train_images": 67
+    },
+    {
+      "display_name": "Tiara",
+      "label_id": "/m/01krhy",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Necklace",
+      "label_id": "/m/01llwg",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Carnivore",
+      "label_id": "/m/01lrl",
+      "unique_train_images": 109
+    },
+    {
+      "display_name": "Scissors",
+      "label_id": "/m/01lsmm",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Stairs",
+      "label_id": "/m/01lynh",
+      "unique_train_images": 238
+    },
+    {
+      "display_name": "Computer keyboard",
+      "label_id": "/m/01m2v",
+      "unique_train_images": 223
+    },
+    {
+      "display_name": "Printer",
+      "label_id": "/m/01m4t",
+      "unique_train_images": 10
+    },
+    {
+      "display_name": "Traffic sign",
+      "label_id": "/m/01mqdt",
+      "unique_train_images": 45
+    },
+    {
+      "display_name": "Chair",
+      "label_id": "/m/01mzpv",
+      "unique_train_images": 344
+    },
+    {
+      "display_name": "Shirt",
+      "label_id": "/m/01n4qj",
+      "unique_train_images": 101
+    },
+    {
+      "display_name": "Poster",
+      "label_id": "/m/01n5jq",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Sock",
+      "label_id": "/m/01nq26",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Fire hydrant",
+      "label_id": "/m/01pns0",
+      "unique_train_images": 20
+    },
+    {
+      "display_name": "Earrings",
+      "label_id": "/m/01r546",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Tie",
+      "label_id": "/m/01rkbr",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Cabinetry",
+      "label_id": "/m/01s105",
+      "unique_train_images": 227
+    },
+    {
+      "display_name": "Suitcase",
+      "label_id": "/m/01s55n",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Muffin",
+      "label_id": "/m/01tcjp",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Bidet",
+      "label_id": "/m/01vbnl",
+      "unique_train_images": 17
+    },
+    {
+      "display_name": "Snack",
+      "label_id": "/m/01ww8y",
+      "unique_train_images": 98
+    },
+    {
+      "display_name": "Clock",
+      "label_id": "/m/01x3z",
+      "unique_train_images": 63
+    },
+    {
+      "display_name": "Camel",
+      "label_id": "/m/01x_v",
+      "unique_train_images": 19
+    },
+    {
+      "display_name": "Medical equipment",
+      "label_id": "/m/01xgg_",
+      "unique_train_images": 26
+    },
+    {
+      "display_name": "Cattle",
+      "label_id": "/m/01xq0k1",
+      "unique_train_images": 64
+    },
+    {
+      "display_name": "Cello",
+      "label_id": "/m/01xqw",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Coat",
+      "label_id": "/m/01xygc",
+      "unique_train_images": 89
+    },
+    {
+      "display_name": "Suit",
+      "label_id": "/m/01xyhv",
+      "unique_train_images": 64
+    },
+    {
+      "display_name": "Desk",
+      "label_id": "/m/01y9k5",
+      "unique_train_images": 155
+    },
+    {
+      "display_name": "Cat",
+      "label_id": "/m/01yrx",
+      "unique_train_images": 17
+    },
+    {
+      "display_name": "Juice",
+      "label_id": "/m/01z1kdw",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Beetle",
+      "label_id": "/m/020jm",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Cannon",
+      "label_id": "/m/020kz",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Computer mouse",
+      "label_id": "/m/020lf",
+      "unique_train_images": 46
+    },
+    {
+      "display_name": "Cookie",
+      "label_id": "/m/021mn",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Fountain",
+      "label_id": "/m/0220r2",
+      "unique_train_images": 54
+    },
+    {
+      "display_name": "Coin",
+      "label_id": "/m/0242l",
+      "unique_train_images": 21
+    },
+    {
+      "display_name": "Calculator",
+      "label_id": "/m/024d2",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Cocktail",
+      "label_id": "/m/024g6",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Computer monitor",
+      "label_id": "/m/02522",
+      "unique_train_images": 151
+    },
+    {
+      "display_name": "Box",
+      "label_id": "/m/025dyy",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Stapler",
+      "label_id": "/m/025fsf",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Hiking equipment",
+      "label_id": "/m/0268lbt",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Drum",
+      "label_id": "/m/026t6",
+      "unique_train_images": 54
+    },
+    {
+      "display_name": "Dessert",
+      "label_id": "/m/0270h",
+      "unique_train_images": 54
+    },
+    {
+      "display_name": "Wine rack",
+      "label_id": "/m/0271qf7",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Drink",
+      "label_id": "/m/0271t",
+      "unique_train_images": 646
+    },
+    {
+      "display_name": "Ladle",
+      "label_id": "/m/027rl48",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Human mouth",
+      "label_id": "/m/0283dt1",
+      "unique_train_images": 3614
+    },
+    {
+      "display_name": "Dairy Product",
+      "label_id": "/m/0284d",
+      "unique_train_images": 32
+    },
+    {
+      "display_name": "Oven",
+      "label_id": "/m/029bxz",
+      "unique_train_images": 34
+    },
+    {
+      "display_name": "Dinosaur",
+      "label_id": "/m/029tx",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Goggles",
+      "label_id": "/m/02_n6y",
+      "unique_train_images": 13
+    },
+    {
+      "display_name": "Ratchet (Device)",
+      "label_id": "/m/02bm9n",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Couch",
+      "label_id": "/m/02crq1",
+      "unique_train_images": 130
+    },
+    {
+      "display_name": "Winter melon",
+      "label_id": "/m/02cvgx",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Spatula",
+      "label_id": "/m/02d1br",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Whiteboard",
+      "label_id": "/m/02d9qx",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Pencil sharpener",
+      "label_id": "/m/02ddwp",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Door",
+      "label_id": "/m/02dgv",
+      "unique_train_images": 1210
+    },
+    {
+      "display_name": "Hat",
+      "label_id": "/m/02dl1y",
+      "unique_train_images": 43
+    },
+    {
+      "display_name": "Shower",
+      "label_id": "/m/02f9f_",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Eraser",
+      "label_id": "/m/02fh7f",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Fedora",
+      "label_id": "/m/02fq_6",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Guacamole",
+      "label_id": "/m/02g30s",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Dagger",
+      "label_id": "/m/02gzp",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Scarf",
+      "label_id": "/m/02h19r",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Dolphin",
+      "label_id": "/m/02hj4",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Tin can",
+      "label_id": "/m/02jnhm",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Mug",
+      "label_id": "/m/02jvh9",
+      "unique_train_images": 41
+    },
+    {
+      "display_name": "Tap",
+      "label_id": "/m/02jz0l",
+      "unique_train_images": 75
+    },
+    {
+      "display_name": "Harbor seal",
+      "label_id": "/m/02l8p9",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Can opener",
+      "label_id": "/m/02mqfb",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Human body",
+      "label_id": "/m/02p0tk3",
+      "unique_train_images": 3197
+    },
+    {
+      "display_name": "Coffee cup",
+      "label_id": "/m/02p5f1q",
+      "unique_train_images": 71
+    },
+    {
+      "display_name": "Cutting board",
+      "label_id": "/m/02pdsw",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Blender",
+      "label_id": "/m/02pjr4",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Plumbing fixture",
+      "label_id": "/m/02pkr5",
+      "unique_train_images": 221
+    },
+    {
+      "display_name": "Office supplies",
+      "label_id": "/m/02rdsp",
+      "unique_train_images": 135
+    },
+    {
+      "display_name": "Vase",
+      "label_id": "/m/02s195",
+      "unique_train_images": 129
+    },
+    {
+      "display_name": "Slow cooker",
+      "label_id": "/m/02tsc9",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Wardrobe",
+      "label_id": "/m/02vkqh8",
+      "unique_train_images": 17
+    },
+    {
+      "display_name": "Coffee",
+      "label_id": "/m/02vqfm",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Whisk",
+      "label_id": "/m/02vwcm",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Personal care",
+      "label_id": "/m/02w3_ws",
+      "unique_train_images": 10
+    },
+    {
+      "display_name": "Paper towel",
+      "label_id": "/m/02w3r3",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Food",
+      "label_id": "/m/02wbm",
+      "unique_train_images": 1406
+    },
+    {
+      "display_name": "Sun hat",
+      "label_id": "/m/02wbtzl",
+      "unique_train_images": 31
+    },
+    {
+      "display_name": "Skirt",
+      "label_id": "/m/02wv6h6",
+      "unique_train_images": 112
+    },
+    {
+      "display_name": "Gas stove",
+      "label_id": "/m/02wv84t",
+      "unique_train_images": 44
+    },
+    {
+      "display_name": "Salt and pepper shakers",
+      "label_id": "/m/02x8cch",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Mechanical fan",
+      "label_id": "/m/02x984l",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Fax",
+      "label_id": "/m/02xqq",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Fruit",
+      "label_id": "/m/02xwb",
+      "unique_train_images": 32
+    },
+    {
+      "display_name": "Nightstand",
+      "label_id": "/m/02z51p",
+      "unique_train_images": 74
+    },
+    {
+      "display_name": "Treadmill",
+      "label_id": "/m/030610",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Fox",
+      "label_id": "/m/0306r",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Flag",
+      "label_id": "/m/03120",
+      "unique_train_images": 180
+    },
+    {
+      "display_name": "French horn",
+      "label_id": "/m/0319l",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Window blind",
+      "label_id": "/m/031b6r",
+      "unique_train_images": 55
+    },
+    {
+      "display_name": "Human foot",
+      "label_id": "/m/031n1",
+      "unique_train_images": 306
+    },
+    {
+      "display_name": "Golf cart",
+      "label_id": "/m/0323sq",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Jacket",
+      "label_id": "/m/032b3c",
+      "unique_train_images": 176
+    },
+    {
+      "display_name": "Egg (Food)",
+      "label_id": "/m/033cnk",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Street light",
+      "label_id": "/m/033rq4",
+      "unique_train_images": 159
+    },
+    {
+      "display_name": "Guitar",
+      "label_id": "/m/0342h",
+      "unique_train_images": 153
+    },
+    {
+      "display_name": "Pillow",
+      "label_id": "/m/034c16",
+      "unique_train_images": 98
+    },
+    {
+      "display_name": "Human leg",
+      "label_id": "/m/035r7c",
+      "unique_train_images": 1394
+    },
+    {
+      "display_name": "Isopod",
+      "label_id": "/m/035vxb",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Grape",
+      "label_id": "/m/0388q",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Human ear",
+      "label_id": "/m/039xj_",
+      "unique_train_images": 1637
+    },
+    {
+      "display_name": "Bookcase",
+      "label_id": "/m/03__z0",
+      "unique_train_images": 110
+    },
+    {
+      "display_name": "Kitchenware",
+      "label_id": "/m/03_wxk",
+      "unique_train_images": 30
+    },
+    {
+      "display_name": "Power plugs and sockets",
+      "label_id": "/m/03bbps",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Panda",
+      "label_id": "/m/03bj1",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Giraffe",
+      "label_id": "/m/03bk1",
+      "unique_train_images": 23
+    },
+    {
+      "display_name": "Woman",
+      "label_id": "/m/03bt1vf",
+      "unique_train_images": 3594
+    },
+    {
+      "display_name": "Door handle",
+      "label_id": "/m/03c7gz",
+      "unique_train_images": 63
+    },
+    {
+      "display_name": "Rhinoceros",
+      "label_id": "/m/03d443",
+      "unique_train_images": 15
+    },
+    {
+      "display_name": "Bathtub",
+      "label_id": "/m/03dnzn",
+      "unique_train_images": 33
+    },
+    {
+      "display_name": "Goat",
+      "label_id": "/m/03fwl",
+      "unique_train_images": 50
+    },
+    {
+      "display_name": "Baseball bat",
+      "label_id": "/m/03g8mr",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Baseball glove",
+      "label_id": "/m/03grzl",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Mixing bowl",
+      "label_id": "/m/03hj559",
+      "unique_train_images": 31
+    },
+    {
+      "display_name": "Marine invertebrates",
+      "label_id": "/m/03hl4l9",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Kitchen utensil",
+      "label_id": "/m/03hlz0c",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Light switch",
+      "label_id": "/m/03jbxj",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "House",
+      "label_id": "/m/03jm5",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Horse",
+      "label_id": "/m/03k3r",
+      "unique_train_images": 40
+    },
+    {
+      "display_name": "Stationary bicycle",
+      "label_id": "/m/03kt2w",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Hammer",
+      "label_id": "/m/03l9g",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Ceiling fan",
+      "label_id": "/m/03ldnb",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Adhesive tape",
+      "label_id": "/m/03m3vtv",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Harp",
+      "label_id": "/m/03m5k",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Sandal",
+      "label_id": "/m/03nfch",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Saucer",
+      "label_id": "/m/03q5c7",
+      "unique_train_images": 58
+    },
+    {
+      "display_name": "Harpsichord",
+      "label_id": "/m/03q5t",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Human hair",
+      "label_id": "/m/03q69",
+      "unique_train_images": 5299
+    },
+    {
+      "display_name": "Heater",
+      "label_id": "/m/03qhv5",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Hamster",
+      "label_id": "/m/03qrc",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Curtain",
+      "label_id": "/m/03rszm",
+      "unique_train_images": 305
+    },
+    {
+      "display_name": "Kettle",
+      "label_id": "/m/03s_tn",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Bed",
+      "label_id": "/m/03ssj5",
+      "unique_train_images": 152
+    },
+    {
+      "display_name": "Fireplace",
+      "label_id": "/m/03tw93",
+      "unique_train_images": 35
+    },
+    {
+      "display_name": "Scale",
+      "label_id": "/m/03txqz",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Drinking straw",
+      "label_id": "/m/03v5tg",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Insect",
+      "label_id": "/m/03vt0",
+      "unique_train_images": 64
+    },
+    {
+      "display_name": "Invertebrate",
+      "label_id": "/m/03xxp",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Food processor",
+      "label_id": "/m/03y6mg",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Refrigerator",
+      "label_id": "/m/040b_t",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Wood-burning stove",
+      "label_id": "/m/04169hn",
+      "unique_train_images": 10
+    },
+    {
+      "display_name": "Common fig",
+      "label_id": "/m/043nyj",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Jaguar (Animal)",
+      "label_id": "/m/0449p",
+      "unique_train_images": 24
+    },
+    {
+      "display_name": "Fashion accessory",
+      "label_id": "/m/0463sg",
+      "unique_train_images": 385
+    },
+    {
+      "display_name": "Filing cabinet",
+      "label_id": "/m/047j0r",
+      "unique_train_images": 29
+    },
+    {
+      "display_name": "Artichoke",
+      "label_id": "/m/047v4b",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Motorcycle",
+      "label_id": "/m/04_sv",
+      "unique_train_images": 21
+    },
+    {
+      "display_name": "Table",
+      "label_id": "/m/04bcr3",
+      "unique_train_images": 455
+    },
+    {
+      "display_name": "Tableware",
+      "label_id": "/m/04brg2",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Kangaroo",
+      "label_id": "/m/04c0y",
+      "unique_train_images": 15
+    },
+    {
+      "display_name": "Koala",
+      "label_id": "/m/04cp_",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Knife",
+      "label_id": "/m/04ctx",
+      "unique_train_images": 13
+    },
+    {
+      "display_name": "Bottle",
+      "label_id": "/m/04dr76w",
+      "unique_train_images": 46
+    },
+    {
+      "display_name": "Bottle opener",
+      "label_id": "/m/04f5ws",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Lynx",
+      "label_id": "/m/04g2r",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Dumbbell",
+      "label_id": "/m/04h8sr",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Human head",
+      "label_id": "/m/04hgtk",
+      "unique_train_images": 6233
+    },
+    {
+      "display_name": "Bowl",
+      "label_id": "/m/04kkgm",
+      "unique_train_images": 69
+    },
+    {
+      "display_name": "Humidifier",
+      "label_id": "/m/04lvq_",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Porch",
+      "label_id": "/m/04m6gz",
+      "unique_train_images": 87
+    },
+    {
+      "display_name": "Lizard",
+      "label_id": "/m/04m9y",
+      "unique_train_images": 22
+    },
+    {
+      "display_name": "Billiard table",
+      "label_id": "/m/04p0qw",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Mammal",
+      "label_id": "/m/04rky",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Mouse",
+      "label_id": "/m/04rmv",
+      "unique_train_images": 20
+    },
+    {
+      "display_name": "Musical instrument",
+      "label_id": "/m/04szw",
+      "unique_train_images": 224
+    },
+    {
+      "display_name": "Bathroom cabinet",
+      "label_id": "/m/04y4h8h",
+      "unique_train_images": 22
+    },
+    {
+      "display_name": "Missile",
+      "label_id": "/m/04ylt",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Man",
+      "label_id": "/m/04yx4",
+      "unique_train_images": 6106
+    },
+    {
+      "display_name": "Ring binder",
+      "label_id": "/m/04zwwv",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Plate",
+      "label_id": "/m/050gv4",
+      "unique_train_images": 104
+    },
+    {
+      "display_name": "Baked goods",
+      "label_id": "/m/052lwg6",
+      "unique_train_images": 91
+    },
+    {
+      "display_name": "Mushroom",
+      "label_id": "/m/052sf",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Mirror",
+      "label_id": "/m/054_l",
+      "unique_train_images": 110
+    },
+    {
+      "display_name": "Pitcher (Container)",
+      "label_id": "/m/054fyh",
+      "unique_train_images": 19
+    },
+    {
+      "display_name": "Personal flotation device",
+      "label_id": "/m/054xkw",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Pencil case",
+      "label_id": "/m/05676x",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Musical keyboard",
+      "label_id": "/m/057cc",
+      "unique_train_images": 38
+    },
+    {
+      "display_name": "Kitchen knife",
+      "label_id": "/m/058qzx",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Nail (Construction)",
+      "label_id": "/m/05bm6",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Plastic bag",
+      "label_id": "/m/05gqfk",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Oboe",
+      "label_id": "/m/05kms",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Chest of drawers",
+      "label_id": "/m/05kyg_",
+      "unique_train_images": 126
+    },
+    {
+      "display_name": "Ostrich",
+      "label_id": "/m/05n4y",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Piano",
+      "label_id": "/m/05r5c",
+      "unique_train_images": 41
+    },
+    {
+      "display_name": "Girl",
+      "label_id": "/m/05r655",
+      "unique_train_images": 1619
+    },
+    {
+      "display_name": "Plant",
+      "label_id": "/m/05s2s",
+      "unique_train_images": 3801
+    },
+    {
+      "display_name": "Potato",
+      "label_id": "/m/05vtc",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Sports equipment",
+      "label_id": "/m/05y5lj",
+      "unique_train_images": 255
+    },
+    {
+      "display_name": "Pasta",
+      "label_id": "/m/05z55",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Penguin",
+      "label_id": "/m/05z6w",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Pear",
+      "label_id": "/m/061_f",
+      "unique_train_images": 14
+    },
+    {
+      "display_name": "Polar bear",
+      "label_id": "/m/0633h",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Mixer",
+      "label_id": "/m/063rgb",
+      "unique_train_images": 13
+    },
+    {
+      "display_name": "Cupboard",
+      "label_id": "/m/0642b4",
+      "unique_train_images": 160
+    },
+    {
+      "display_name": "Jacuzzi",
+      "label_id": "/m/065h6l",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Pizza",
+      "label_id": "/m/0663v",
+      "unique_train_images": 12
+    },
+    {
+      "display_name": "Pig",
+      "label_id": "/m/068zj",
+      "unique_train_images": 29
+    },
+    {
+      "display_name": "Snowboard",
+      "label_id": "/m/06__v",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Skateboard",
+      "label_id": "/m/06_fw",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Reptile",
+      "label_id": "/m/06bt6",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Rifle",
+      "label_id": "/m/06c54",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Lipstick",
+      "label_id": "/m/06c7f7",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Raven",
+      "label_id": "/m/06j2d",
+      "unique_train_images": 14
+    },
+    {
+      "display_name": "Red panda",
+      "label_id": "/m/06l9r",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Rabbit",
+      "label_id": "/m/06mf6",
+      "unique_train_images": 27
+    },
+    {
+      "display_name": "Sculpture",
+      "label_id": "/m/06msq",
+      "unique_train_images": 1138
+    },
+    {
+      "display_name": "Saxophone",
+      "label_id": "/m/06ncr",
+      "unique_train_images": 38
+    },
+    {
+      "display_name": "Shotgun",
+      "label_id": "/m/06nrc",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Seafood",
+      "label_id": "/m/06nwz",
+      "unique_train_images": 15
+    },
+    {
+      "display_name": "Sword",
+      "label_id": "/m/06y5r",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Picture frame",
+      "label_id": "/m/06z37_",
+      "unique_train_images": 224
+    },
+    {
+      "display_name": "Sushi",
+      "label_id": "/m/07030",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Ski",
+      "label_id": "/m/071p9",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Squirrel",
+      "label_id": "/m/071qp",
+      "unique_train_images": 55
+    },
+    {
+      "display_name": "Scorpion",
+      "label_id": "/m/0755b",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Training bench",
+      "label_id": "/m/076lb9",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Snake",
+      "label_id": "/m/078jl",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Skyscraper",
+      "label_id": "/m/079cl",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Sheep",
+      "label_id": "/m/07bgp",
+      "unique_train_images": 26
+    },
+    {
+      "display_name": "Television",
+      "label_id": "/m/07c52",
+      "unique_train_images": 144
+    },
+    {
+      "display_name": "Trombone",
+      "label_id": "/m/07c6l",
+      "unique_train_images": 17
+    },
+    {
+      "display_name": "Tea",
+      "label_id": "/m/07clx",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Tank",
+      "label_id": "/m/07cmd",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Taco",
+      "label_id": "/m/07crc",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Telephone",
+      "label_id": "/m/07cx4",
+      "unique_train_images": 34
+    },
+    {
+      "display_name": "Torch",
+      "label_id": "/m/07dd4",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Tiger",
+      "label_id": "/m/07dm6",
+      "unique_train_images": 43
+    },
+    {
+      "display_name": "Strawberry",
+      "label_id": "/m/07fbm7",
+      "unique_train_images": 12
+    },
+    {
+      "display_name": "Trumpet",
+      "label_id": "/m/07gql",
+      "unique_train_images": 30
+    },
+    {
+      "display_name": "Tomato",
+      "label_id": "/m/07j87",
+      "unique_train_images": 19
+    },
+    {
+      "display_name": "Train",
+      "label_id": "/m/07jdr",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Tool",
+      "label_id": "/m/07k1x",
+      "unique_train_images": 57
+    },
+    {
+      "display_name": "Trousers",
+      "label_id": "/m/07mhn",
+      "unique_train_images": 180
+    },
+    {
+      "display_name": "Bowling equipment",
+      "label_id": "/m/07pj7bq",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Truck",
+      "label_id": "/m/07r04",
+      "unique_train_images": 31
+    },
+    {
+      "display_name": "Measuring cup",
+      "label_id": "/m/07v9_z",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Coffeemaker",
+      "label_id": "/m/07xyvk",
+      "unique_train_images": 17
+    },
+    {
+      "display_name": "Violin",
+      "label_id": "/m/07y_7",
+      "unique_train_images": 34
+    },
+    {
+      "display_name": "Vehicle",
+      "label_id": "/m/07yv9",
+      "unique_train_images": 2353
+    },
+    {
+      "display_name": "Handbag",
+      "label_id": "/m/080hkjn",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Paper cutter",
+      "label_id": "/m/080n7g",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Wine",
+      "label_id": "/m/081qc",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Weapon",
+      "label_id": "/m/083kb",
+      "unique_train_images": 125
+    },
+    {
+      "display_name": "Whale",
+      "label_id": "/m/084zz",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Zebra",
+      "label_id": "/m/0898b",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Auto part",
+      "label_id": "/m/08dz3q",
+      "unique_train_images": 510
+    },
+    {
+      "display_name": "Jug",
+      "label_id": "/m/08hvt4",
+      "unique_train_images": 24
+    },
+    {
+      "display_name": "Pizza cutter",
+      "label_id": "/m/08ks85",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Monkey",
+      "label_id": "/m/08pbxl",
+      "unique_train_images": 23
+    },
+    {
+      "display_name": "Lion",
+      "label_id": "/m/096mb",
+      "unique_train_images": 38
+    },
+    {
+      "display_name": "Bread",
+      "label_id": "/m/09728",
+      "unique_train_images": 13
+    },
+    {
+      "display_name": "Platter",
+      "label_id": "/m/099ssp",
+      "unique_train_images": 76
+    },
+    {
+      "display_name": "Chicken",
+      "label_id": "/m/09b5t",
+      "unique_train_images": 19
+    },
+    {
+      "display_name": "Eagle",
+      "label_id": "/m/09csl",
+      "unique_train_images": 20
+    },
+    {
+      "display_name": "Owl",
+      "label_id": "/m/09d5_",
+      "unique_train_images": 20
+    },
+    {
+      "display_name": "Duck",
+      "label_id": "/m/09ddx",
+      "unique_train_images": 39
+    },
+    {
+      "display_name": "Turtle",
+      "label_id": "/m/09dzg",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Hippopotamus",
+      "label_id": "/m/09f20",
+      "unique_train_images": 10
+    },
+    {
+      "display_name": "Crocodile",
+      "label_id": "/m/09f_2",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Toilet",
+      "label_id": "/m/09g1w",
+      "unique_train_images": 45
+    },
+    {
+      "display_name": "Toilet paper",
+      "label_id": "/m/09gtd",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Squid",
+      "label_id": "/m/09gys",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Clothing",
+      "label_id": "/m/09j2d",
+      "unique_train_images": 8336
+    },
+    {
+      "display_name": "Footwear",
+      "label_id": "/m/09j5n",
+      "unique_train_images": 340
+    },
+    {
+      "display_name": "Lemon",
+      "label_id": "/m/09k_b",
+      "unique_train_images": 22
+    },
+    {
+      "display_name": "Spider",
+      "label_id": "/m/09kmb",
+      "unique_train_images": 15
+    },
+    {
+      "display_name": "Deer",
+      "label_id": "/m/09kx5",
+      "unique_train_images": 43
+    },
+    {
+      "display_name": "Frog",
+      "label_id": "/m/09ld4",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Banana",
+      "label_id": "/m/09qck",
+      "unique_train_images": 22
+    },
+    {
+      "display_name": "Wine glass",
+      "label_id": "/m/09tvcd",
+      "unique_train_images": 28
+    },
+    {
+      "display_name": "Ant",
+      "label_id": "/m/0_k2",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Countertop",
+      "label_id": "/m/0b3fp9",
+      "unique_train_images": 174
+    },
+    {
+      "display_name": "Swimming pool",
+      "label_id": "/m/0b_rs",
+      "unique_train_images": 52
+    },
+    {
+      "display_name": "Tablet computer",
+      "label_id": "/m/0bh9flk",
+      "unique_train_images": 45
+    },
+    {
+      "display_name": "Waste container",
+      "label_id": "/m/0bjyj5",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Dog",
+      "label_id": "/m/0bt9lr",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Book",
+      "label_id": "/m/0bt_c3",
+      "unique_train_images": 331
+    },
+    {
+      "display_name": "Elephant",
+      "label_id": "/m/0bwd_0j",
+      "unique_train_images": 46
+    },
+    {
+      "display_name": "Candle",
+      "label_id": "/m/0c06p",
+      "unique_train_images": 35
+    },
+    {
+      "display_name": "Leopard",
+      "label_id": "/m/0c29q",
+      "unique_train_images": 33
+    },
+    {
+      "display_name": "Axe",
+      "label_id": "/m/0c2jj",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Porcupine",
+      "label_id": "/m/0c568",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Furniture",
+      "label_id": "/m/0c_jw",
+      "unique_train_images": 2676
+    },
+    {
+      "display_name": "Canary",
+      "label_id": "/m/0ccs93",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Cheetah",
+      "label_id": "/m/0cd4d",
+      "unique_train_images": 16
+    },
+    {
+      "display_name": "Building",
+      "label_id": "/m/0cgh4",
+      "unique_train_images": 2220
+    },
+    {
+      "display_name": "Fish",
+      "label_id": "/m/0ch_cf",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Lobster",
+      "label_id": "/m/0cjq5",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Garden Asparagus",
+      "label_id": "/m/0cjs7",
+      "unique_train_images": 5
+    },
+    {
+      "display_name": "Hedgehog",
+      "label_id": "/m/0cl4p",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Spoon",
+      "label_id": "/m/0cmx8",
+      "unique_train_images": 43
+    },
+    {
+      "display_name": "Bull",
+      "label_id": "/m/0cnyhnx",
+      "unique_train_images": 21
+    },
+    {
+      "display_name": "Bomb",
+      "label_id": "/m/0ct4f",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Bench",
+      "label_id": "/m/0cvnqh",
+      "unique_train_images": 27
+    },
+    {
+      "display_name": "Ice cream",
+      "label_id": "/m/0cxn2",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Parachute",
+      "label_id": "/m/0cyfs",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Orange",
+      "label_id": "/m/0cyhj_",
+      "unique_train_images": 38
+    },
+    {
+      "display_name": "Antelope",
+      "label_id": "/m/0czz2",
+      "unique_train_images": 24
+    },
+    {
+      "display_name": "Window",
+      "label_id": "/m/0d4v4",
+      "unique_train_images": 2311
+    },
+    {
+      "display_name": "Closet",
+      "label_id": "/m/0d4w1",
+      "unique_train_images": 12
+    },
+    {
+      "display_name": "Castle",
+      "label_id": "/m/0d5gx",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Jellyfish",
+      "label_id": "/m/0d8zb",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Moths and butterflies",
+      "label_id": "/m/0d_2m",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Goose",
+      "label_id": "/m/0dbvp",
+      "unique_train_images": 21
+    },
+    {
+      "display_name": "Mule",
+      "label_id": "/m/0dbzx",
+      "unique_train_images": 13
+    },
+    {
+      "display_name": "Swan",
+      "label_id": "/m/0dftk",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Peach",
+      "label_id": "/m/0dj6p",
+      "unique_train_images": 15
+    },
+    {
+      "display_name": "Coconut",
+      "label_id": "/m/0djtd",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Raccoon",
+      "label_id": "/m/0dq75",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Fork",
+      "label_id": "/m/0dt3t",
+      "unique_train_images": 39
+    },
+    {
+      "display_name": "Lamp",
+      "label_id": "/m/0dtln",
+      "unique_train_images": 136
+    },
+    {
+      "display_name": "Camera",
+      "label_id": "/m/0dv5r",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Squash (Plant)",
+      "label_id": "/m/0dv77",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Racket",
+      "label_id": "/m/0dv9c",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Human face",
+      "label_id": "/m/0dzct",
+      "unique_train_images": 6416
+    },
+    {
+      "display_name": "Human arm",
+      "label_id": "/m/0dzf4",
+      "unique_train_images": 3736
+    },
+    {
+      "display_name": "Vegetable",
+      "label_id": "/m/0f4s2w",
+      "unique_train_images": 47
+    },
+    {
+      "display_name": "Falcon",
+      "label_id": "/m/0f6wt",
+      "unique_train_images": 31
+    },
+    {
+      "display_name": "Snail",
+      "label_id": "/m/0f9_l",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Cabbage",
+      "label_id": "/m/0fbw6",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Carrot",
+      "label_id": "/m/0fj52s",
+      "unique_train_images": 23
+    },
+    {
+      "display_name": "Mango",
+      "label_id": "/m/0fldg",
+      "unique_train_images": 19
+    },
+    {
+      "display_name": "Flowerpot",
+      "label_id": "/m/0fm3zh",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Pineapple",
+      "label_id": "/m/0fp6w",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Drawer",
+      "label_id": "/m/0fqfqc",
+      "unique_train_images": 194
+    },
+    {
+      "display_name": "Stool",
+      "label_id": "/m/0fqt361",
+      "unique_train_images": 24
+    },
+    {
+      "display_name": "Envelope",
+      "label_id": "/m/0frqm",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Cake",
+      "label_id": "/m/0fszt",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Dragonfly",
+      "label_id": "/m/0ft9s",
+      "unique_train_images": 12
+    },
+    {
+      "display_name": "Microwave oven",
+      "label_id": "/m/0fx9l",
+      "unique_train_images": 24
+    },
+    {
+      "display_name": "Honeycomb",
+      "label_id": "/m/0fz0h",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Marine mammal",
+      "label_id": "/m/0gd2v",
+      "unique_train_images": 17
+    },
+    {
+      "display_name": "Sea lion",
+      "label_id": "/m/0gd36",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Shelf",
+      "label_id": "/m/0gjbg72",
+      "unique_train_images": 270
+    },
+    {
+      "display_name": "Watch",
+      "label_id": "/m/0gjkl",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Candy",
+      "label_id": "/m/0gm28",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Salad",
+      "label_id": "/m/0grw1",
+      "unique_train_images": 24
+    },
+    {
+      "display_name": "Parrot",
+      "label_id": "/m/0gv1x",
+      "unique_train_images": 22
+    },
+    {
+      "display_name": "Handgun",
+      "label_id": "/m/0gxl3",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Sparrow",
+      "label_id": "/m/0h23m",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Light bulb",
+      "label_id": "/m/0h8l4fh",
+      "unique_train_images": 27
+    },
+    {
+      "display_name": "Sports uniform",
+      "label_id": "/m/0h8mhzd",
+      "unique_train_images": 39
+    },
+    {
+      "display_name": "Wall clock",
+      "label_id": "/m/0h8mzrc",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Serving tray",
+      "label_id": "/m/0h8n27j",
+      "unique_train_images": 19
+    },
+    {
+      "display_name": "Dog bed",
+      "label_id": "/m/0h8n6f9",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Cake stand",
+      "label_id": "/m/0h8n6ft",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Cat furniture",
+      "label_id": "/m/0h8nm9j",
+      "unique_train_images": 14
+    },
+    {
+      "display_name": "Bathroom accessory",
+      "label_id": "/m/0h8nr_l",
+      "unique_train_images": 124
+    },
+    {
+      "display_name": "Pressure cooker",
+      "label_id": "/m/0h8ntjv",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Tire",
+      "label_id": "/m/0h9mv",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Ruler",
+      "label_id": "/m/0hdln",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Luggage and bags",
+      "label_id": "/m/0hf58v5",
+      "unique_train_images": 37
+    },
+    {
+      "display_name": "Microphone",
+      "label_id": "/m/0hg7b",
+      "unique_train_images": 158
+    },
+    {
+      "display_name": "Broccoli",
+      "label_id": "/m/0hkxq",
+      "unique_train_images": 15
+    },
+    {
+      "display_name": "Umbrella",
+      "label_id": "/m/0hnnb",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Pastry",
+      "label_id": "/m/0hnyx",
+      "unique_train_images": 10
+    },
+    {
+      "display_name": "Grapefruit",
+      "label_id": "/m/0hqkz",
+      "unique_train_images": 32
+    },
+    {
+      "display_name": "Animal",
+      "label_id": "/m/0jbk",
+      "unique_train_images": 5708
+    },
+    {
+      "display_name": "Bell pepper",
+      "label_id": "/m/0jg57",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Turkey",
+      "label_id": "/m/0jly1",
+      "unique_train_images": 7
+    },
+    {
+      "display_name": "Pomegranate",
+      "label_id": "/m/0jwn_",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Glasses",
+      "label_id": "/m/0jyfg",
+      "unique_train_images": 70
+    },
+    {
+      "display_name": "Human nose",
+      "label_id": "/m/0k0pj",
+      "unique_train_images": 4262
+    },
+    {
+      "display_name": "Pen",
+      "label_id": "/m/0k1tl",
+      "unique_train_images": 23
+    },
+    {
+      "display_name": "Car",
+      "label_id": "/m/0k4j",
+      "unique_train_images": 61
+    },
+    {
+      "display_name": "Human hand",
+      "label_id": "/m/0k65p",
+      "unique_train_images": 3293
+    },
+    {
+      "display_name": "Skunk",
+      "label_id": "/m/0km7z",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Watermelon",
+      "label_id": "/m/0kpqd",
+      "unique_train_images": 15
+    },
+    {
+      "display_name": "Cantaloupe",
+      "label_id": "/m/0kpt_",
+      "unique_train_images": 3
+    },
+    {
+      "display_name": "Dishwasher",
+      "label_id": "/m/0ky7b",
+      "unique_train_images": 6
+    },
+    {
+      "display_name": "Flute",
+      "label_id": "/m/0l14j_",
+      "unique_train_images": 4
+    },
+    {
+      "display_name": "Sandwich",
+      "label_id": "/m/0l515",
+      "unique_train_images": 18
+    },
+    {
+      "display_name": "Shrimp",
+      "label_id": "/m/0ll1f78",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Sewing machine",
+      "label_id": "/m/0llzx",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Binoculars",
+      "label_id": "/m/0lt4_",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Ipod",
+      "label_id": "/m/0mcx2",
+      "unique_train_images": 9
+    },
+    {
+      "display_name": "Accordion",
+      "label_id": "/m/0mkg",
+      "unique_train_images": 26
+    },
+    {
+      "display_name": "Crab",
+      "label_id": "/m/0n28_",
+      "unique_train_images": 13
+    },
+    {
+      "display_name": "Crown",
+      "label_id": "/m/0nl46",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Perfume",
+      "label_id": "/m/0p833",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Alpaca",
+      "label_id": "/m/0pcr",
+      "unique_train_images": 11
+    },
+    {
+      "display_name": "Taxi",
+      "label_id": "/m/0pg52",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Remote control",
+      "label_id": "/m/0qjjc",
+      "unique_train_images": 8
+    },
+    {
+      "display_name": "Wheelchair",
+      "label_id": "/m/0qmmr",
+      "unique_train_images": 1
+    },
+    {
+      "display_name": "Armadillo",
+      "label_id": "/m/0xfy",
+      "unique_train_images": 2
+    },
+    {
+      "display_name": "Helmet",
+      "label_id": "/m/0zvk5",
+      "unique_train_images": 14
+    }
+  ],
+  "validation_or_test_accessed": false
+}

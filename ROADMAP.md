@@ -1,3 +1,14 @@
+**2026-10-26 R2 Open Images V6 target-scope audit:** A full pinned train-only
+scan froze 11 hierarchy-matched categories using >=1,000 supported train
+images per class and a fixed human/body-part name exclusion. Only after that
+scope was frozen, validation support was checked without selecting or dropping
+classes: 48–824 examples per class and 2,941 unique images across the 11
+classes. No images were downloaded and no model was evaluated. The source
+metadata's CC BY 2.0 field is not an individual rights verification; per-image
+landing-page checks and train/validation media/content deduplication remain
+required before acquisition. See the [target-scope report](docs/pretrained_reuse/R2_OPENIMAGES_V6_TARGET_SCOPE_20261026.md)
+and [machine-readable train support](manifests/pretrained_reuse/openimages-v6-train-target-support-20261026.json).
+
 **2026-10-26 R2 iNaturalist metadata preflight:** A bounded live API sample
 confirmed observation/photo license and photo attribution fields on 100
 Research Grade bird observations (219 photos), but represented only 36

@@ -1,0 +1,43 @@
+{
+  "frozen_target_labels": [
+    "/m/0138tl",
+    "/m/02dgv",
+    "/m/02wbm",
+    "/m/05s2s",
+    "/m/06msq",
+    "/m/07yv9",
+    "/m/09j2d",
+    "/m/0c_jw",
+    "/m/0cgh4",
+    "/m/0d4v4",
+    "/m/0jbk"
+  ],
+  "frozen_target_labels_sha256": "56afa73d4db5e286da9baf1c813ac9fb62b21f12b77f310789831b4344503b88",
+  "hierarchy_sha256": "a28f06e83c8378c4285d92d768ceda7568a48cac3c02994b6c346df804e7d612",
+  "media_downloaded": false,
+  "metadata": {
+    "cc_by_2_rows": 41620,
+    "rows": 41620,
+    "sha256": "ed93a0e121fe345effdfc7359b848dbc64a1ff6778c8c73563157cb500b33a17",
+    "validation_rows": 41620
+  },
+  "model_or_checkpoint_loaded": false,
+  "purpose": "validation feasibility audit for train-frozen Open Images targets",
+  "schema_version": 1,
+  "support_by_target": {
+    "/m/0138tl": 98,
+    "/m/02dgv": 48,
+    "/m/02wbm": 440,
+    "/m/05s2s": 621,
+    "/m/06msq": 90,
+    "/m/07yv9": 85,
+    "/m/09j2d": 824,
+    "/m/0c_jw": 179,
+    "/m/0cgh4": 207,
+    "/m/0d4v4": 105,
+    "/m/0jbk": 655
+  },
+  "target_selection_source": "training-only frozen manifest",
+  "unique_validation_images_with_task": 2941,
+  "validation_labels_sha256": "c2bc8b312ee7ed01ac4c58a62c2432c7f6b83b320874cbb0644e2f51aed3faad"
+}
