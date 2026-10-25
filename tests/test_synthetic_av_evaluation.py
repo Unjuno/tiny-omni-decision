@@ -1,6 +1,8 @@
 import numpy as np
 import pytest
 
+pytest.importorskip("torch")
+
 from scripts.evaluate_synthetic_av_readouts import _audio_shuffle_indices
 from tiny_omni_decision.synthetic_av_evaluation import (
     group_accuracy,

@@ -15,8 +15,14 @@ from scripts.extract_synthetic_av_readout_features import (
     validate_source_status,
     validate_video_features,
 )
-from scripts.prepare_synthetic_av_readout import render_assets
 from tiny_omni_decision.synthetic_av_task import build_manifest
+
+
+def _render_assets_with_optional_video_dependency():
+    pytest.importorskip("av")
+    from scripts.prepare_synthetic_av_readout import render_assets
+
+    return render_assets
 
 
 def test_cuda_feature_extraction_requires_hotgpu_reservation_without_cuda_init():
@@ -80,6 +86,7 @@ def test_pinned_source_check_allows_only_known_install_generated_files():
 
 
 def test_rendered_manifest_gate_checks_file_hash_and_split_identity(tmp_path: Path):
+    render_assets = _render_assets_with_optional_video_dependency()
     manifest = render_assets(
         build_manifest(train_groups=1, validation_groups=1, seed=17), tmp_path / "assets"
     )

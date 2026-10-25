@@ -3,12 +3,13 @@ import json
 
 import numpy as np
 import pytest
-import torch
 
-from scripts.extract_synthetic_av_readout_features import merge_feature_caches
-from scripts.train_synthetic_av_readouts import load_training_data
-from tiny_omni_decision.synthetic_av_task import build_manifest
-from tiny_omni_decision.synthetic_av_training import (
+torch = pytest.importorskip("torch")
+
+from scripts.extract_synthetic_av_readout_features import merge_feature_caches  # noqa: E402
+from scripts.train_synthetic_av_readouts import load_training_data  # noqa: E402
+from tiny_omni_decision.synthetic_av_task import build_manifest  # noqa: E402
+from tiny_omni_decision.synthetic_av_training import (  # noqa: E402
     BestByNLL,
     classification_metrics,
     epoch_permutations,

@@ -1,6 +1,8 @@
-import torch
+import pytest
 
-from tiny_omni_decision.synthetic_av_readouts import (
+torch = pytest.importorskip("torch")
+
+from tiny_omni_decision.synthetic_av_readouts import (  # noqa: E402
     ConditionalAVReadout,
     TemporalLSTMReadout,
 )
