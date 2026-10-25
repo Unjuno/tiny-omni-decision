@@ -54,13 +54,26 @@ larger end-to-end CPU delta. The changed feature-extraction path is the leading
 area to investigate, but this replay does not separate Whisper audio features
 from MiniLM text features.
 
-Separate one-sample feature probes showed small differences between cached
-CUDA BF16-derived features and CPU FP32/BF16 feature extraction. Together
-these observations make encoder precision/backend differences a plausible
-cause, but do not establish the cause of the 0.0571 maximum output delta over
-the full cohort. In particular, the present replay does not establish that
-all cached features were generated under identical kernels or deterministic
-settings. The largest delta is a `keyword_identity` query on sample
+Separate one-sample feature probes showed differences between cached CUDA
+BF16-derived features and CPU FP32 feature extraction. A full 640-vector CPU
+re-extraction confirms every vector differs from the saved cache, despite high
+cosine similarity:
+
+| Feature difference over 640 validation clips | Median | 95th percentile | Maximum |
+| --- | ---: | ---: | ---: |
+| Per-vector max absolute delta | 0.02816 | 0.04286 | 0.20891 |
+| Per-vector RMSE | 0.006604 | 0.008759 | 0.02400 |
+| Per-vector cosine similarity | 0.999976 | 0.999960 at 5th percentile | 0.999986 |
+
+The sample with the largest output-probability delta has audio-feature max
+absolute delta `0.05315`, RMSE `0.009884`, and cosine `0.999945`. Across clips,
+the Pearson correlation between max audio-feature delta and max output
+probability delta is only `0.137`; this does not support attributing the full
+probability shift to audio features alone. The full-cohort result confirms
+audio feature non-identity but does not establish its downstream contribution
+to the 0.0571 maximum output delta. Text-feature backend differences and
+readout sensitivity to small embedding changes still need to be separated.
+The largest delta is a `keyword_identity` query on sample
 `speechcmd-validation-09a8d685789d8c537ba1`; class and target remain the same,
 but the top-option probability changes from 0.6096 to 0.5525. No decision
 changes, but the difference is material for probability parity.
@@ -78,5 +91,13 @@ Full run metadata and per-example predictions are preserved outside Git at:
 `C:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-full-validation-cpu-parity-20261026-attempt-01\`
 
 Files: `result.json` and `predictions.jsonl`. The result records `no_gpu_or_training=true`.
+CPU feature-difference summaries and per-clip statistics are preserved at
+`C:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-feature-reextract-cpu-20261026-attempt-02\`.
+Attempt 01 in that series is retained with its aggregation assertion failure;
+the corrected attempt 02 completed all 640 embeddings.
+Attempt 02 `result.json` SHA-256:
+`DE9B2122C1E9D1509A377D04459912404B2C520B449115A5CFB59F9FE9E9EA8F`;
+`feature-deltas.jsonl` SHA-256:
+`671CDBB47001EEF4CC7AD76F38E55822B030D125F5B6B5309458580267DAC08F`.
 This one fixed validation sample does not support general claims about Audio
 quality, other hardware, or the four-modality product target.

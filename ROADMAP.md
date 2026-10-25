@@ -340,10 +340,12 @@ predicted class and the 97.8516% accuracy. Aggregate NLL/Brier/ECE were close,
 but maximum probability delta was 0.057061 (median 0.0000380), so the strict
 `1e-5` numeric parity gate remains failed. The same readout on persisted
 validation features previously matched saved GPU outputs within `2.21e-6`,
-pointing investigation toward end-to-end feature extraction; the audio/text
-encoder contributions remain unseparated. CUDA-BF16 versus CPU feature
-extraction is plausible but unproven. No tolerance or runtime code was
-changed; this is not a new quality benchmark. See the [full replay
+pointing investigation toward end-to-end feature extraction. Full CPU
+re-extraction confirms audio embeddings differ from the saved CUDA-derived
+features (median cosine 0.999976), but the clip-level feature/output-delta
+correlation is only 0.137; audio versus text contribution remains unseparated.
+No tolerance or runtime code was changed; this is not a new quality benchmark.
+See the [full replay
 record](docs/pretrained_reuse/PATH_A_AUDIO_CPU_REFERENCE_PARITY_20261026.md).
 
 **2026-10-22 R2 AVA Active Speaker label/split follow-up:** Explicit train and
