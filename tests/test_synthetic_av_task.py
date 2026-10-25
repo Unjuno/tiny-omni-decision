@@ -3,8 +3,14 @@ from pathlib import Path
 
 import pytest
 
-from scripts.prepare_synthetic_av_readout import render_assets
 from tiny_omni_decision.synthetic_av_task import build_manifest, validate_manifest
+
+
+def _render_assets_with_optional_video_dependency():
+    pytest.importorskip("av")
+    from scripts.prepare_synthetic_av_readout import render_assets
+
+    return render_assets
 
 
 def test_manifest_is_deterministic_and_query_polarities_are_complements():
@@ -50,6 +56,7 @@ def test_manifest_rejects_missing_pair_examples():
 
 
 def test_renderer_is_deterministic_and_persists_verified_av_assets(tmp_path: Path):
+    render_assets = _render_assets_with_optional_video_dependency()
     manifest = build_manifest(train_groups=1, validation_groups=1, seed=17)
     first = render_assets(manifest, tmp_path / "first")
     second = render_assets(manifest, tmp_path / "second")
@@ -66,7 +73,7 @@ def test_renderer_is_deterministic_and_persists_verified_av_assets(tmp_path: Pat
 
 
 def test_video_extraction_decoder_preserves_every_rendered_symbol_in_order(tmp_path: Path):
-    pytest.importorskip("av")
+    render_assets = _render_assets_with_optional_video_dependency()
     np = pytest.importorskip("numpy")
     Image = pytest.importorskip("PIL.Image")
     from scripts.extract_frozen_videoprism_features import _decode_video
@@ -89,6 +96,7 @@ def test_video_extraction_decoder_preserves_every_rendered_symbol_in_order(tmp_p
 
 
 def test_renderer_refuses_to_overwrite_an_existing_output(tmp_path: Path):
+    render_assets = _render_assets_with_optional_video_dependency()
     output = tmp_path / "occupied"
     output.mkdir()
     manifest = build_manifest(train_groups=1, validation_groups=1, seed=17)
