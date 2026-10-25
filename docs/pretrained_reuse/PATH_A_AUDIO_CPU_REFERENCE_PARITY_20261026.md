@@ -50,9 +50,16 @@ run. Its source report is
 the source run report SHA-256 is
 `833258cbc584cbe5f2583c7cc9a5a6f115deb9a46b232e81b3eb7c7489fc081b`.
 This makes the saved readout computation an unlikely explanation for the much
-larger end-to-end CPU delta. The changed feature-extraction path is the leading
-area to investigate, but this replay does not separate Whisper audio features
-from MiniLM text features.
+larger end-to-end CPU delta. A matched feature-swap replay then held the CPU
+MiniLM text vectors and readout fixed and changed only the audio feature vector
+for each validation clip. With cached CUDA-derived audio features, it reproduced
+the saved GPU predictions exactly and matched probabilities within `2.21e-6`.
+With newly extracted CPU FP32 audio features, all predicted classes still
+matched, but maximum probability delta returned to `0.057059` (median
+`0.0000380`). A second CPU-only replay of the same CPU-audio condition matched
+the earlier full CPU replay within `1.79e-6`. On these fixed IDs, the
+end-to-end probability-parity discrepancy is attributable to the audio feature
+extraction path, not the MiniLM/readout path.
 
 Separate one-sample feature probes showed differences between cached CUDA
 BF16-derived features and CPU FP32 feature extraction. A full 640-vector CPU
@@ -68,11 +75,11 @@ cosine similarity:
 The sample with the largest output-probability delta has audio-feature max
 absolute delta `0.05315`, RMSE `0.009884`, and cosine `0.999945`. Across clips,
 the Pearson correlation between max audio-feature delta and max output
-probability delta is only `0.137`; this does not support attributing the full
-probability shift to audio features alone. The full-cohort result confirms
-audio feature non-identity but does not establish its downstream contribution
-to the 0.0571 maximum output delta. Text-feature backend differences and
-readout sensitivity to small embedding changes still need to be separated.
+probability delta is only `0.137`. This low correlation does not contradict the
+matched feature-swap result: per-example probability sensitivity is nonlinear
+and does not scale simply with a feature vector's max-coordinate difference.
+The matched comparison isolates the audio feature path at the model-output
+level without claiming which CUDA kernel detail causes the feature shift.
 The largest delta is a `keyword_identity` query on sample
 `speechcmd-validation-09a8d685789d8c537ba1`; class and target remain the same,
 but the top-option probability changes from 0.6096 to 0.5525. No decision
@@ -99,5 +106,11 @@ Attempt 02 `result.json` SHA-256:
 `DE9B2122C1E9D1509A377D04459912404B2C520B449115A5CFB59F9FE9E9EA8F`;
 `feature-deltas.jsonl` SHA-256:
 `671CDBB47001EEF4CC7AD76F38E55822B030D125F5B6B5309458580267DAC08F`.
+The matched feature-swap replay is in
+`C:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-feature-effect-cpu-20261026-attempt-02\`;
+its `result.json` SHA-256 is
+`91FB7A54CAC8279806E0A5808D88BE9B2328B3E293755C93EA15B536E63FA35F` and its
+`predictions.jsonl` SHA-256 is
+`D4FB7228A4E7AD726172AD39CC886494D29199F6E4C4D64F78C1C150110C2367`.
 This one fixed validation sample does not support general claims about Audio
 quality, other hardware, or the four-modality product target.

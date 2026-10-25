@@ -340,10 +340,11 @@ predicted class and the 97.8516% accuracy. Aggregate NLL/Brier/ECE were close,
 but maximum probability delta was 0.057061 (median 0.0000380), so the strict
 `1e-5` numeric parity gate remains failed. The same readout on persisted
 validation features previously matched saved GPU outputs within `2.21e-6`,
-pointing investigation toward end-to-end feature extraction. Full CPU
-re-extraction confirms audio embeddings differ from the saved CUDA-derived
-features (median cosine 0.999976), but the clip-level feature/output-delta
-correlation is only 0.137; audio versus text contribution remains unseparated.
+pointing investigation toward end-to-end feature extraction. A matched
+feature-swap replay held CPU text embeddings/readout fixed: cached CUDA-derived
+audio features reproduced saved GPU outputs within `2.21e-6`, while CPU FP32
+audio features yielded the same `0.0571` maximum shift as the full CPU runtime.
+This isolates the discrepancy to the audio feature path on these fixed IDs.
 No tolerance or runtime code was changed; this is not a new quality benchmark.
 See the [full replay
 record](docs/pretrained_reuse/PATH_A_AUDIO_CPU_REFERENCE_PARITY_20261026.md).
