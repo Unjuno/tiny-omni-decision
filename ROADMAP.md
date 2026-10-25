@@ -3,7 +3,10 @@ confirmed observation/photo license and photo attribution fields on 100
 Research Grade bird observations (219 photos), but represented only 36
 observers. No media or raw identifiers were retained. This is not enough to
 establish observer-disjoint split feasibility or admit a corpus; next require
-a dated export and a broader metadata-only group audit. See the
+a rights-cleared dated export and a broader metadata-only group audit. The
+official weekly GBIF dataset metadata currently says CC BY-NC 4.0, so its
+bulk export is not admitted for product use pending authoritative scope
+resolution. See the
 [`iNaturalist preflight`](docs/pretrained_reuse/R2_INATURALIST_METADATA_PREFLIGHT_20261026.md).
 
 **2026-10-26 R2 VisTouch split-audit follow-up:** The same pinned source and

@@ -45,11 +45,24 @@ is a reproducible corpus size. No species list, data export snapshot, split,
 image hash, or normalized-content overlap test has been frozen. Do not download
 media or fit a classifier based on this preflight alone.
 
-Next gate: identify an authoritative, dated export with per-observation and
-per-photo license/attribution evidence; run a metadata-only inventory for a
-predeclared species shortlist; then measure observer-group and image/content
-split feasibility before acquiring a bounded media sample. If the export does
-not expose enough rights/observer fields, keep the source unadmitted.
+The GBIF metadata endpoint for the cited weekly iNaturalist Research-grade
+Observations dataset reports dataset ID
+`50c9509d-22c7-4a22-a47d-8c48425ef4a7`, DOI `10.15468/ab3s5x`, last modified
+`2026-10-14T00:35:28.394+09:00`, and dataset-level license CC BY-NC 4.0. This
+is a material constraint for the intended product use. Individual iNaturalist
+records expose separate licenses, but this metadata check does not establish
+that filtering records from this CC BY-NC dataset produces a permitted
+commercial training corpus. Do not bulk-download or use this export until the
+license scope is authoritatively resolved. The live API's filtered metadata
+responses alone do not solve the reproducible bulk-acquisition problem.
+
+Next gate: resolve the GBIF dataset-level CC BY-NC terms against the intended
+use, or identify an alternative authoritative, dated export with explicit
+commercially compatible rights and per-observation/per-photo
+license/attribution evidence. Then run a metadata-only inventory for a
+predeclared species shortlist and measure observer-group and image/content
+split feasibility before acquiring a bounded media sample. If rights or
+observer fields remain ambiguous, keep the source unadmitted.
 
 ## Method
 
