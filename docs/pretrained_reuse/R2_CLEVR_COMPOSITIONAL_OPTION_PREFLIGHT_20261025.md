@@ -245,6 +245,9 @@ failures. This is still only a partial-media integrity check.
 At 09:23 JST, the verified prefix grew to 3,660 train images, again with zero
 unexpected filenames or image decode/dimension failures and the same manifest
 hash; 12,724 train images remained to fetch.
+At 09:27 JST, the latest scan covered 4,287 train images with zero unexpected
+names or decode/dimension failures and the same manifest hash; 12,097 train
+images remained.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
