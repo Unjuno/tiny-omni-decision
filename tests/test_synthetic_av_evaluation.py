@@ -5,6 +5,7 @@ from scripts.evaluate_synthetic_av_readouts import _audio_shuffle_indices
 from tiny_omni_decision.synthetic_av_evaluation import (
     group_accuracy,
     paired_group_bootstrap_difference,
+    replay_prediction_metrics,
 )
 from tiny_omni_decision.synthetic_av_task import build_manifest
 
@@ -48,3 +49,25 @@ def test_audio_pairing_control_shuffles_only_within_group_and_query_polarity():
         assert source_row["group_id"] == target_row["group_id"]
         assert source_row["query_polarity"] == target_row["query_polarity"]
         assert source_row["pairing"] != target_row["pairing"]
+
+
+def test_saved_prediction_replay_recomputes_pair_and_group_metrics():
+    records = [
+        {
+            "probabilities": [0.9, 0.1],
+            "target": 0,
+            "group_id": "g0",
+            "pair_id": "p0",
+        },
+        {
+            "probabilities": [0.1, 0.9],
+            "target": 1,
+            "group_id": "g0",
+            "pair_id": "p0",
+        },
+    ]
+    metrics = replay_prediction_metrics(records)
+    assert metrics["accuracy"] == 1.0
+    assert metrics["pair_exact_accuracy"] == 1.0
+    assert metrics["group_macro_accuracy"] == 1.0
+    assert metrics["group_count"] == 1

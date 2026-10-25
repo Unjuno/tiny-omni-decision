@@ -48,3 +48,55 @@ def paired_group_bootstrap_difference(
         "lower_95_percentile": float(lower),
         "upper_95_percentile": float(upper),
     }
+
+
+def replay_prediction_metrics(records: list[dict], ece_bins: int = 15) -> dict[str, float]:
+    """Recompute published metrics from serialized probabilities without model code."""
+    if not records or ece_bins < 1:
+        raise ValueError("prediction replay requires records and positive ECE bins")
+    probabilities = np.asarray([row["probabilities"] for row in records], dtype=np.float64)
+    targets = np.asarray([row["target"] for row in records], dtype=np.int64)
+    if probabilities.shape != (len(records), 2):
+        raise ValueError("each prediction must contain two class probabilities")
+    if (
+        not np.isfinite(probabilities).all()
+        or np.any(probabilities < 0)
+        or np.any(probabilities > 1)
+        or not np.allclose(probabilities.sum(axis=1), 1.0, atol=1e-6)
+        or np.any((targets < 0) | (targets > 1))
+    ):
+        raise ValueError("saved probabilities or targets are invalid")
+    predictions = probabilities.argmax(axis=1)
+    correct = predictions == targets
+    confidence = probabilities.max(axis=1)
+    ece = 0.0
+    for bin_index in range(ece_bins):
+        lower = bin_index / ece_bins
+        upper = (bin_index + 1) / ece_bins
+        selected = (confidence > lower) & (confidence <= upper)
+        if selected.any():
+            observed_accuracy = float(correct[selected].mean())
+            observed_confidence = float(confidence[selected].mean())
+            ece += float(selected.mean()) * abs(observed_accuracy - observed_confidence)
+    one_hot = np.eye(2, dtype=np.float64)[targets]
+    group_ids = np.asarray([str(row["group_id"]) for row in records])
+    pair_ids = np.asarray([str(row["pair_id"]) for row in records])
+    groups = group_accuracy(correct.astype(np.float64), group_ids)
+    pair_accuracy = []
+    for pair_id in sorted(set(pair_ids.tolist())):
+        pair_correct = correct[pair_ids == pair_id]
+        if len(pair_correct) != 2:
+            raise ValueError("each saved pair must contain both query polarities")
+        pair_accuracy.append(float(pair_correct.all()))
+    return {
+        "accuracy": float(correct.mean()),
+        "nll": float(
+            -np.log(np.maximum(probabilities[np.arange(len(records)), targets], 1e-15)).mean()
+        ),
+        "brier": float(((probabilities - one_hot) ** 2).sum(axis=1).mean()),
+        "ece": ece,
+        "mean_confidence": float(confidence.mean()),
+        "pair_exact_accuracy": float(np.mean(pair_accuracy)),
+        "group_macro_accuracy": float(np.mean(list(groups.values()))),
+        "group_count": len(groups),
+    }
