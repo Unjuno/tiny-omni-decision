@@ -203,6 +203,19 @@ receipt/file hash mismatch and preserved; fixed attempt-02 passes with all five
 artifact hashes verified. No model-quality result is claimed. See
 [`R2 full-extent unique-coverage long comparison`](docs/pretrained_reuse/R2_FULL_EXTENT_UNIQUE_COVERAGE_LONG_20261025.md).
 
+**2026-10-25 R2 full-extent × unique-coverage result:** The guarded local
+attempt-04 smoke, 32,768-update seed-17 fit, and best/final replay all passed;
+replay max absolute difference was zero. The selected step was 4,096. On the
+same development validation, step 512→32,768 raised macro Accuracy 29.63%→
+47.23% but worsened macro NLL 1.730→3.413; Video Accuracy went 34.75%→33.00%
+and Video NLL 1.354→9.102. The fixed hierarchical macro-NLL selector did not
+improve after step 4,096. The complete 2×2 endpoint comparison found fresh
+coverage helped several Image/Audio/Text scores but did not improve Video;
+these are exposed, single-seed development results, not a blind evaluation or
+product promotion. No sealed audit or cloud compute was used. CI, test, and
+Ruff status for the recording commit follows the report. See the completed
+[`R2 long-fit report`](docs/pretrained_reuse/R2_FULL_EXTENT_UNIQUE_COVERAGE_LONG_20261025.md).
+
 **2026-10-25 R2 long-fit runner repair:** Its first HotGPU smoke attempt stopped
 at step 0 before model load because six files in the visual-cache provenance
 receipt were compared against a newer checkout instead of the receipt's pinned

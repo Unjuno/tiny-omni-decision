@@ -177,6 +177,45 @@ def test_inspect_conditions_accepts_four_hash_pinned_matched_cells(tmp_path):
         np.testing.assert_array_equal(arrays[cell], expected[cell])
 
 
+def test_inspect_conditions_accepts_explicit_full_fresh_fit_directory(tmp_path):
+    rows, _ = write_artifact_root(tmp_path, missing=("full_fresh",))
+    custom_dir = "native-full-extent-fresh-long-fit-04"
+    folder = tmp_path / custom_dir
+    folder.mkdir()
+    ids = [
+        {"id": row["id"], "option_ids": row["option_ids"], "target_index": row["target_index"]}
+        for row in rows
+    ]
+    ids_path = folder / "validation-ids.json"
+    ids_path.write_text(json.dumps(ids), encoding="utf8")
+    scores_path = folder / "validation-00004.npy"
+    np.save(scores_path, scores(rows, 1.0), allow_pickle=False)
+    (folder / "result.json").write_text(
+        json.dumps(
+            {
+                "status": "PASS_NATIVE_FULL_EXTENT_TRAIN",
+                "step": 4,
+                "best_step": 2,
+                "sealed_audit_loaded": False,
+                "source_commit": "abc123",
+                "config_sha256": "def456",
+                "artifacts": {
+                    ids_path.name: sha256(ids_path),
+                    scores_path.name: sha256(scores_path),
+                },
+            }
+        ),
+        encoding="utf8",
+    )
+    fit_dirs = dict(FIT_DIRS, full_fresh=custom_dir)
+
+    audit, _, arrays = inspect_conditions(tmp_path, step=4, fit_dirs=fit_dirs)
+
+    assert audit["status"] == "PASS"
+    assert audit["conditions"]["full_fresh"]["fit_directory"].endswith(custom_dir)
+    assert set(arrays) == set(FIT_DIRS)
+
+
 def test_run_writes_factorial_metrics_when_all_pins_match(tmp_path):
     root = tmp_path / "input"
     output = tmp_path / "comparison"

@@ -37,9 +37,10 @@ def _load_rows(path):
     return [json.loads(line) for line in Path(path).read_text(encoding="utf8").splitlines()]
 
 
-def inspect_conditions(root=DEFAULT_ROOT, step=32_768):
+def inspect_conditions(root=DEFAULT_ROOT, step=32_768, fit_dirs=None):
     """Verify available fit receipts, prediction hashes, and identical validation IDs."""
     root = Path(root)
+    fit_dirs = FIT_DIRS if fit_dirs is None else fit_dirs
     rows = _load_rows(root / "native-common-corpus-02/validation.jsonl")
     expected_ids = [
         {"id": row["id"], "option_ids": row["option_ids"], "target_index": row["target_index"]}
@@ -47,7 +48,7 @@ def inspect_conditions(root=DEFAULT_ROOT, step=32_768):
     ]
     inventory, score_arrays = {}, {}
     first_ids = None
-    for cell, dirname in FIT_DIRS.items():
+    for cell, dirname in fit_dirs.items():
         fit = root / dirname
         result_path = fit / "result.json"
         if not result_path.is_file():
@@ -122,8 +123,8 @@ def inspect_conditions(root=DEFAULT_ROOT, step=32_768):
     )
 
 
-def run(root=DEFAULT_ROOT, output=None, step=32_768, seed=17, resamples=10_000):
-    audit, rows, scores = inspect_conditions(root, step)
+def run(root=DEFAULT_ROOT, output=None, step=32_768, seed=17, resamples=10_000, fit_dirs=None):
+    audit, rows, scores = inspect_conditions(root, step, fit_dirs=fit_dirs)
     if audit["status"] != "PASS":
         if output is not None:
             output = Path(output)
@@ -160,13 +161,23 @@ def main():
     parser.add_argument("--step", type=int, default=32_768)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--resamples", type=int, default=10_000)
+    parser.add_argument(
+        "--full-fresh-fit-dir",
+        help="fit directory for the full-extent × fresh-coverage cell",
+    )
     args = parser.parse_args()
-    result = run(args.root, args.output, args.step, args.seed, args.resamples)
+    fit_dirs = dict(FIT_DIRS)
+    if args.full_fresh_fit_dir:
+        fit_dirs["full_fresh"] = args.full_fresh_fit_dir
+    result = run(
+        args.root,
+        args.output,
+        args.step,
+        args.seed,
+        args.resamples,
+        fit_dirs=fit_dirs,
+    )
     print(json.dumps(result, indent=2, allow_nan=False))
-
-
-if __name__ == "__main__":
-    main()
 
 
 def _validate(rows, scores_by_cell):
@@ -338,3 +349,7 @@ def _subtract_effects(left, right):
             for modality in ("text", "image", "audio", "video")
         },
     }
+
+
+if __name__ == "__main__":
+    main()
