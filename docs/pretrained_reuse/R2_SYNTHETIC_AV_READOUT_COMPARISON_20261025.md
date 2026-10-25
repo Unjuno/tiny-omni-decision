@@ -167,6 +167,18 @@ Accuracy/ECE corrections. Its receipt is external at
   failed before reserving the GPU. The absolute-path retry is the run described
   in this report.
 
+## CI follow-up
+
+The first pushed CI attempt failed during CPU-only test collection because the
+new synthetic integration tests imported optional PyTorch and PyAV dependencies
+at module load time. The failure was reproduced in an isolated environment
+containing only the repository `.[dev]` dependencies. Tests that require those
+optional integrations now skip cleanly when the dependency is absent, while
+CPU-only data, metric, and replay tests remain enabled. In that exact minimal
+environment, the suite passed with 1,856 passed and 162 skipped. The full local
+environment passed with 2,491 passed and 11 skipped; Ruff and manifest/catalog
+validation also passed. GitHub Actions for fix commit `92b996b` completed
+successfully. The earlier failed attempts are retained in branch history.
 ## Parameters, compute, and artifacts
 
 | Readout | Trainable readout parameters | Full frozen encoders + readout parameters | Training wall time | Peak CUDA allocated / reserved |
