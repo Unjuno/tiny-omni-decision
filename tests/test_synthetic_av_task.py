@@ -65,6 +65,29 @@ def test_renderer_is_deterministic_and_persists_verified_av_assets(tmp_path: Pat
     assert all(path.is_file() for path in audio_paths)
 
 
+def test_video_extraction_decoder_preserves_every_rendered_symbol_in_order(tmp_path: Path):
+    pytest.importorskip("av")
+    np = pytest.importorskip("numpy")
+    Image = pytest.importorskip("PIL.Image")
+    from scripts.extract_frozen_videoprism_features import _decode_video
+
+    manifest = build_manifest(train_groups=1, validation_groups=1, seed=17)
+    rendered = render_assets(manifest, tmp_path / "ordered")
+    for sequence_id, record in rendered["assets"]["videos"].items():
+        decoded = _decode_video(tmp_path / "ordered" / record["path"])
+        expected = np.stack(
+            [
+                np.asarray(Image.open(tmp_path / "ordered" / frame_path).convert("RGB"))
+                for frame_path in record["frame_paths"]
+            ]
+        )
+
+        assert decoded.shape == (len(record["symbols"]), record["height"], record["width"], 3)
+        assert np.array_equal(
+            decoded, expected
+        ), f"decoded video frame order differs: {sequence_id}"
+
+
 def test_renderer_refuses_to_overwrite_an_existing_output(tmp_path: Path):
     output = tmp_path / "occupied"
     output.mkdir()
