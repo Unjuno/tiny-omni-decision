@@ -2728,10 +2728,13 @@ attention head also remained at chance. The new 528,388-parameter readout is
 not adopted. This does not measure natural-media AV transfer. See the
 [`conditioned temporal AV result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_CONDITIONED_TEMPORAL_RESULTS_20261026.md).
 
-A second, modality-bypass gate also remained at chance after 16,384 updates,
-despite retaining direct projected paths for both modalities. Its gate
-collapsed to video (99.72%) while the earlier gate collapsed to audio. The
-direct concatenation LSTM remains the only head in this synthetic comparison
-that solves the task. A single identity-initialized raw-feature residual gate
-is the next tightly controlled test; natural AV quality remains unmeasured.
-See the [`modality-bypass result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_MODALITY_BYPASS_RESULTS_20261026.md).
+A second, modality-bypass gate also remained at chance after 16,384 updates.
+An identity-initialized residual gate preserving the reference's raw LSTM
+inputs then matched its initial logits and reached 100% validation Accuracy
+by 2,048 updates (best/terminal NLL 0.000645 at 16,384); the ungated reference
+scored 100% / 0.000585 on the same validation IDs. Input controls show that
+this synthetic task requires aligned audio and video together. The gate
+therefore adds no demonstrated Accuracy benefit, and these synthetic results
+do not close the natural AV quality gate. See the
+[`modality-bypass result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_MODALITY_BYPASS_RESULTS_20261026.md)
+and [`identity-initialized raw-feature gate result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_RESIDUAL_GATE_RESULTS_20261026.md).
