@@ -1,7 +1,5 @@
 """Validate an idle GPU or the expected cooperative HotGPU reservation."""
 
-import psutil
-
 GATE_VARIABLES = (
     "TINY_OMNI_GPU_GATE_RESERVED_MIB",
     "TINY_OMNI_GPU_GATE_PARENT_PID",
@@ -88,8 +86,12 @@ def is_safe_ui_process(name, command_line):
 def process_command(pid):
     """Return a process identity suitable for the narrow UI exception above."""
     try:
+        import psutil
+
         process = psutil.Process(pid)
         return process.name(), process.cmdline()
+    except ImportError:
+        return "", ()
     except (psutil.NoSuchProcess, psutil.AccessDenied):
         return "", ()
 

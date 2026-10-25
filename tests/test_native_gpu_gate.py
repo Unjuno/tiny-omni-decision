@@ -1,5 +1,7 @@
 """Fail-closed validation for local HotGPU reservations."""
 
+import importlib
+import sys
 from importlib import import_module
 
 import pytest
@@ -89,6 +91,15 @@ def test_accepts_idle_gpu_without_hotgpu_metadata():
     )
 
     assert result["status"] == "PASS_GPU_IDLE"
+
+
+def test_cpu_gate_import_does_not_require_optional_psutil(monkeypatch):
+    module = import_module("scripts.native_gpu_gate")
+    monkeypatch.setitem(sys.modules, "psutil", None)
+
+    importlib.reload(module)
+
+    assert callable(module.validate_gpu_preflight)
 
 
 @pytest.mark.parametrize(
