@@ -2878,13 +2878,15 @@ and [`identity-initialized raw-feature gate result`](docs/pretrained_reuse/R2_SY
 
 ### iNaturalist CC0 natural-image cohort freeze (2026-10-26)
 
-The strict-CC0 live-API cohort is frozen outside Git: 1,642 train and 683
-observer-disjoint validation examples across eight bird taxa. Per-record
-observation/photo CC0 gates passed; one cross-taxon photo identity and one
-unlicensed photo object were excluded. No media, audit set, or model result
-exists yet. Next, verify media/content identities and label validity, then
-measure frozen VideoPrism image-only readout performance with permutation
-controls. The Open Images result showed no prediction change when image inputs
-were ablated, so visual dependence is a required gate. See the
-[`iNaturalist metadata freeze`](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FREEZE_20261026.md)
-and [external metadata feasibility screen](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FEASIBILITY_20261026.md).
+The strict-CC0 live-API cohort was frozen outside Git: 1,642 train and 683
+observer-disjoint validation examples across eight bird taxa. All 2,325 media
+files were downloaded and passed the recorded integrity, cross-split identity,
+perceptual-hash, and limited visual spot-check gates. Frozen VideoPrism CPU
+features and a fixed linear readout were evaluated in separate 512- and
+2,048-epoch runs. Best validation macro Accuracy reached 81.13% at epoch 1,276;
+the longer run showed overfitting by epoch 2,048 and no species reached 90%.
+Image ablation/permutation controls show the prediction depends on the image.
+This is a narrow development classification probe, not an open-vocabulary or
+multimodal Decision result, and the cohort has no sealed audit. See the
+[`metadata freeze`](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FREEZE_20261026.md)
+and [measured VideoPrism readout result](docs/pretrained_reuse/R2_INATURALIST_VIDEOPRISM_READOUT_20261026.md).
