@@ -17,6 +17,7 @@ import torch
 import torch.nn.functional as F
 
 from tiny_omni_decision.synthetic_av_readouts import (
+    BypassConditionedTemporalAVReadout,
     ConditionalAVReadout,
     ConditionedTemporalAVReadout,
     TemporalLSTMReadout,
@@ -160,6 +161,14 @@ def _construct_model(architecture: str, model_config: dict[str, Any]):
         )
     if architecture == "conditioned_temporal_av":
         return ConditionedTemporalAVReadout(
+            384,
+            768,
+            2,
+            hidden_size=int(model_config["hidden_size"]),
+            num_layers=int(model_config["num_layers"]),
+        )
+    if architecture == "bypass_conditioned_temporal_av":
+        return BypassConditionedTemporalAVReadout(
             384,
             768,
             2,

@@ -1,0 +1,28 @@
+{
+  "experiment_id": "synthetic-av-bypass-conditioned-temporal-v3",
+  "seed": 17,
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "epochs": 128,
+    "validation_interval_epochs": 4,
+    "validation_selector": "minimum validation NLL; strict improvement only; earliest tie retained",
+    "terminal_checkpoint_separate": true
+  },
+  "models": {
+    "bypass_conditioned_temporal_av": {
+      "hidden_size": 112,
+      "num_layers": 2,
+      "expected_trainable_parameters": 521476
+    }
+  },
+  "maximum_relative_parameter_difference": 0.1,
+  "validation": {
+    "ece_bins": 15,
+    "control_metrics_do_not_select_checkpoints": true
+  },
+  "product_quality_claim": false,
+  "natural_av_transfer_claim": false
+}
