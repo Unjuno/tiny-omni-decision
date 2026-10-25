@@ -1,5 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R1 runtime recheck:** pinned VideoPrism, Ruri, and EfficientAT
+checkpoints loaded on CPU and returned finite feature outputs. This only
+revalidates cached artifacts/runtime; it adds no task-quality result or R2
+source admission. See the [R1 CPU recheck](docs/pretrained_reuse/R1_FROZEN_COMPONENT_CPU_RECHECK_20261026.md)
+for hashes, environment, size budget, and scope.
+
 **2026-10-25 Perception frozen-readout validation transfer complete:** The
 fixed 200-event official-validation cohort was scored once using frozen
 Audio/Video/Joint readouts after 200/200 VideoPrism and EfficientAT feature
