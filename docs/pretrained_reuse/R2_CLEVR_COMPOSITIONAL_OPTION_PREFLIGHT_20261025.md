@@ -239,6 +239,9 @@ step 1,536 at 09:13:49 JST; no claim is made about the operation since then.
 At 09:19 JST, a fourth CPU rescan covered 3,033 train PNGs with zero
 unexpected names or decode/dimension failures and the same manifest hash;
 13,351 selected train images remained to be fetched.
+At 09:21 JST, the rescan covered 3,372 downloaded train images; all filenames
+were in the frozen manifest and all PNGs decoded at 480x320, with zero
+failures. This is still only a partial-media integrity check.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
