@@ -283,6 +283,11 @@ and sample index 6,144. The same GPU process remained alive at 10:47, with
 16,124/16,384 MiB allocated and varying utilization. The earlier full-extent
 queue was also alive and waiting for a fully idle device. No process was
 stopped and no GPU task was started.
+At 10:51 JST, a fresh read showed history through step 1,677 (updated
+10:51:16), with durable global step 1,664, best step 1,536, and sample index
+6,656. The GPU process remained allocated and the queued full-extent run had
+not started. The media cache is complete, but feature extraction remains
+blocked on the cooperative GPU order.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
