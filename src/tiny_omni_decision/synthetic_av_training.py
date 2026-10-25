@@ -21,7 +21,7 @@ def classification_metrics(
         raise ValueError("metrics inputs must be finite")
     targets = targets.long()
     probabilities = torch.softmax(logits, dim=-1)
-    predictions = probabilities.argmax(dim=-1)
+    predictions = logits.argmax(dim=-1)
     confidence = probabilities.max(dim=-1).values
     accuracy = (predictions == targets).float()
     nll = F.cross_entropy(logits, targets, reduction="none")

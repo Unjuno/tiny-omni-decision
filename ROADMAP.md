@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-25 R2 synthetic AV temporal/readout comparison complete:** On a
+generated, group-disjoint sequence-matching task, the seed-17 temporal LSTM
+showed a delayed transition after step 3,584 and reached 100% on 1,024
+development examples; a parameter-matched bidirectional cross-attention plus
+gate readout stayed at chance through 16,384 updates. Audio-only, video-only,
+and shuffled-pair controls left the LSTM at chance, while reversing audio time
+alone returned it to chance. This is synthetic architecture evidence only,
+with shared symbol/tone prototypes and validation checkpoint selection; it is
+not natural-AV or product quality and does not meet the four-modality target.
+The current conditional head is not selected. See the
+[`synthetic AV readout report`](docs/pretrained_reuse/R2_SYNTHETIC_AV_READOUT_COMPARISON_20261025.md)
+for learning curves, corrected metrics, hashes, compute, and limitations.
+
 **2026-10-25 Perception frozen-readout validation transfer complete:** The
 fixed 200-event official-validation cohort was scored once using frozen
 Audio/Video/Joint readouts after 200/200 VideoPrism and EfficientAT feature

@@ -2,7 +2,8 @@
 
 ## Intent
 
-Compare a temporal LSTM readout with a query-conditioned audio/video readout on
+Compare a temporal LSTM readout with a query-conditioned bidirectional
+audio/video cross-attention readout and learned gate on
 a newly generated, video-required sequence-matching task. Existing AV validation
 groups are exposed, and the public natural-video candidates reviewed so far do
 not have a clean combination of media rights, unused group-disjoint data, and
@@ -59,9 +60,13 @@ Use the repository's pinned frozen VideoPrism and EfficientAT encoders. Produce
 one spatially pooled VideoPrism feature per each of the eight ordered frames,
 and one EfficientAT feature per corresponding audio time segment, yielding two
 aligned length-eight sequences. The temporal LSTM consumes both sequences and
-the query embedding at each time step. The conditional readout uses the query
-embedding to cross-attend separately to both sequences, then applies a learned
-two-way gate and a shared binary scorer. Parameter-match the two readouts
+the query embedding at each time step. The conditional readout injects the
+query into each ordered sequence, performs two layers of bidirectional
+audio-to-video and video-to-audio cross-attention, query-pools each updated
+stream, then applies a learned two-way gate and shared binary scorer. This
+operator was selected over independent query pooling because the task requires
+a cross-stream comparison; it makes direct sequence interaction explicit.
+Parameter-match the two readouts
 as closely as practical and record exact counts. Use seed 17 and one fixed
 training budget, with validation checkpoints on a preregistered schedule and
 best selection by macro NLL. Save the terminal checkpoint separately. Apply the

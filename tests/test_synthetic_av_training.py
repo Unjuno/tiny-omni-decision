@@ -26,6 +26,13 @@ def test_classification_metrics_report_binary_accuracy_nll_brier_ece():
     assert result["mean_confidence"] > 0.5
 
 
+def test_accuracy_uses_logits_argmax_when_float32_softmax_rounds_to_a_tie():
+    logits = torch.tensor([[0.0, 1e-8]], dtype=torch.float32)
+    assert torch.equal(torch.softmax(logits, dim=-1), torch.tensor([[0.5, 0.5]]))
+    result = classification_metrics(logits, torch.tensor([1]))
+    assert result["accuracy"] == 1.0
+
+
 def test_checkpoint_selector_uses_lowest_nll_and_keeps_earliest_tie():
     selector = BestByNLL()
     assert selector.update(0.8, 512)
