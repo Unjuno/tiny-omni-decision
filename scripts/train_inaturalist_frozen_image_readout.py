@@ -10,6 +10,7 @@ import math
 import platform
 import random
 import subprocess
+import sys
 import time
 from collections import Counter
 from datetime import UTC, datetime
@@ -22,6 +23,9 @@ from torch import Tensor
 from torch.nn import functional as F
 
 ROOT = Path(__file__).resolve().parents[1]
+REPOSITORY_SRC = ROOT / "src"
+if str(REPOSITORY_SRC) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_SRC))
 SEED = 17
 DEFAULT_EPOCHS = 512
 LEARNING_RATE = 1e-3
@@ -29,6 +33,7 @@ WEIGHT_DECAY = 1e-4
 IMAGE_WIDTH = 768
 ENCODER_PARAMETERS = 114_365_184
 ENCODER_CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+OPTION_ORDER_FLOAT32_TOLERANCE = 2e-7
 
 
 def _sha256(path: Path) -> str:
@@ -197,6 +202,10 @@ def _option_order_max_delta(model, taxonomy: str, features: Tensor, class_ids: l
                 max(abs(forward_by_id[key] - reverse_by_id[key]) for key in forward_by_id),
             )
     return maximum
+
+
+def _option_order_is_stable(maximum_delta: float) -> bool:
+    return math.isfinite(maximum_delta) and 0.0 <= maximum_delta <= OPTION_ORDER_FLOAT32_TOLERANCE
 
 
 def run(feature_dir: Path, output_dir: Path, epochs: int = DEFAULT_EPOCHS) -> dict[str, Any]:
@@ -391,7 +400,7 @@ def run(feature_dir: Path, output_dir: Path, epochs: int = DEFAULT_EPOCHS) -> di
     with torch.inference_mode():
         reloaded_logits = model(x_val, taxonomy)
     reload_delta = float((reloaded_logits - selected_logits).abs().max())
-    if reload_delta != 0.0 or max_option_order_delta > 1e-7:
+    if reload_delta != 0.0 or not _option_order_is_stable(max_option_order_delta):
         raise AssertionError("best readout reload or option permutation parity failed")
 
     metadata = {

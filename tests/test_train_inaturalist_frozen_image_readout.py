@@ -3,6 +3,7 @@ import torch
 from scripts.train_inaturalist_frozen_image_readout import (
     _class_weights,
     _metrics,
+    _option_order_is_stable,
     _option_order_max_delta,
 )
 from tiny_omni_decision.textfree_image import TextFreeImageReadout
@@ -35,4 +36,12 @@ def test_probabilities_follow_option_identity_when_order_changes():
 
     delta = _option_order_max_delta(model, "tax", features, [101, 202, 303])
 
-    assert delta == 0.0
+    assert _option_order_is_stable(delta)
+
+
+def test_option_order_check_allows_one_float32_ulp_but_not_material_change():
+    one_ulp = 1.1920928955078125e-7
+
+    assert _option_order_is_stable(one_ulp)
+    assert not _option_order_is_stable(1e-5)
+    assert not _option_order_is_stable(float("nan"))

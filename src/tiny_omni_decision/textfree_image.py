@@ -82,12 +82,17 @@ class TextFreeImageReadout(nn.Module):
         if len(set(option_ids)) != len(option_ids):
             raise ValueError("options must have unique option IDs")
         logits = self(image_features, taxonomy)
-        indexes = torch.tensor(
-            [class_ids.index(class_id) for class_id in supplied],
+        indexes = [class_ids.index(class_id) for class_id in supplied]
+        canonical_order = sorted(range(len(indexes)), key=indexes.__getitem__)
+        canonical_indexes = torch.tensor(
+            [indexes[position] for position in canonical_order],
             dtype=torch.long,
             device=logits.device,
         )
-        probabilities = torch.softmax(logits[indexes].float(), dim=-1).tolist()
+        canonical_probabilities = torch.softmax(logits[canonical_indexes].float(), dim=-1)
+        probabilities = [0.0] * len(options)
+        for canonical_index, option_position in enumerate(canonical_order):
+            probabilities[option_position] = canonical_probabilities[canonical_index].item()
         return classification_json(probabilities, supplied, options)
 
     @torch.inference_mode()

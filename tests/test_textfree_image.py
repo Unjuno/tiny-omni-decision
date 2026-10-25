@@ -69,6 +69,27 @@ def test_image_readout_renormalizes_over_supplied_option_subset():
     assert sum(option["probability"] for option in result["options"]) == pytest.approx(1.0)
 
 
+def test_image_readout_probabilities_are_exactly_invariant_to_option_order():
+    torch.manual_seed(17)
+    model = _readout_type()(768, {"birds": tuple(str(value) for value in range(8))})
+    features = torch.randn(768)
+    options = [
+        {"option_id": f"bird-{value}", "class_id": str(value)}
+        for value in range(8)
+    ]
+
+    forward = model.decide(features, "birds", options)
+    reverse = model.decide(features, "birds", list(reversed(options)))
+    forward_probabilities = {
+        option["option_id"]: option["probability"] for option in forward["options"]
+    }
+    reverse_probabilities = {
+        option["option_id"]: option["probability"] for option in reverse["options"]
+    }
+
+    assert forward_probabilities == reverse_probabilities
+
+
 def test_four_taxonomy_readout_has_a_measured_small_parameter_budget(tmp_path):
     from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES
 
