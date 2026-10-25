@@ -1,3 +1,12 @@
+**2026-10-26 R2 VisTouch synchronized AV+touch source screen:** A pinned
+CC-BY-4.0 repository supplies metadata for 10,498 overlapping clips from 24
+sessions, with an upstream train split at 3N/6N and test at 9N. Metadata checks
+show zero session/sample/time overlap across that official split, but only eight
+test sessions (one per material), and the published test baseline makes it
+observed for selection. The source is a low-power mechanics candidate only;
+the external media share was blocked by the browser safety gate, so no data or
+model run occurred. See [`VisTouch source screen`](docs/pretrained_reuse/R2_VISTOUCH_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 optional audio+sensor source gate:** LOCATA's official
 ODC-By development release has moving-talker/moving-array tasks and optical
 pose labels, but a metadata-only central-directory audit finds at most six
