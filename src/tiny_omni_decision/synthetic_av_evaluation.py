@@ -67,6 +67,17 @@ def replay_prediction_metrics(records: list[dict], ece_bins: int = 15) -> dict[s
     ):
         raise ValueError("saved probabilities or targets are invalid")
     predictions = probabilities.argmax(axis=1)
+    has_saved_prediction = ["prediction" in row for row in records]
+    if any(has_saved_prediction) and not all(has_saved_prediction):
+        raise ValueError("saved predictions must be present for every row or none")
+    if all(has_saved_prediction):
+        saved_predictions = np.asarray([row["prediction"] for row in records], dtype=np.int64)
+        if np.any((saved_predictions < 0) | (saved_predictions > 1)):
+            raise ValueError("saved predictions must be binary labels")
+        non_ties = np.abs(probabilities[:, 0] - probabilities[:, 1]) > 1e-7
+        if np.any(saved_predictions[non_ties] != predictions[non_ties]):
+            raise ValueError("saved prediction disagrees with non-tied probabilities")
+        predictions = saved_predictions
     correct = predictions == targets
     confidence = probabilities.max(axis=1)
     ece = 0.0

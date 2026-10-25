@@ -71,3 +71,43 @@ def test_saved_prediction_replay_recomputes_pair_and_group_metrics():
     assert metrics["pair_exact_accuracy"] == 1.0
     assert metrics["group_macro_accuracy"] == 1.0
     assert metrics["group_count"] == 1
+
+
+def test_saved_prediction_replay_preserves_logits_argmax_when_probabilities_round_to_ties():
+    records = [
+        {
+            "probabilities": [0.5, 0.5],
+            "prediction": 1,
+            "target": 1,
+            "group_id": "g0",
+            "pair_id": "p0",
+        },
+        {
+            "probabilities": [0.5, 0.5],
+            "prediction": 0,
+            "target": 0,
+            "group_id": "g0",
+            "pair_id": "p0",
+        },
+    ]
+    assert replay_prediction_metrics(records)["accuracy"] == 1.0
+
+
+def test_saved_prediction_replay_rejects_partial_prediction_fields():
+    records = [
+        {
+            "probabilities": [0.75, 0.25],
+            "prediction": 0,
+            "target": 0,
+            "group_id": "g0",
+            "pair_id": "p0",
+        },
+        {
+            "probabilities": [0.25, 0.75],
+            "target": 1,
+            "group_id": "g0",
+            "pair_id": "p0",
+        },
+    ]
+    with pytest.raises(ValueError, match="present for every row or none"):
+        replay_prediction_metrics(records)
