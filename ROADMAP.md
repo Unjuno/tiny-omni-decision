@@ -1,12 +1,11 @@
-**2026-10-26 R2 optional audio+sensor source candidate:** LOCATA's official
-ODC-By development release includes moving-talker/moving-array tasks and
-optical sensor pose/trajectory labels. ZIP central-directory inspection found
-only development metadata; a full archive transfer was stopped after 9.3 MB
-because measured throughput implied about 6 hours remaining. The evaluation
-archive was not accessed. Keep LOCATA as a promising, not-yet-admitted audio+
-sensor candidate until recording/speaker grouping, clock/coordinate semantics,
-and task necessity controls pass. No training or quality result exists. See
-[`LOCATA source screen`](docs/pretrained_reuse/R2_LOCATA_SENSOR_TRACKING_SOURCE_SCREEN_20261026.md).
+**2026-10-26 R2 optional audio+sensor source gate:** LOCATA's official
+ODC-By development release has moving-talker/moving-array tasks and optical
+pose labels, but a metadata-only central-directory audit finds at most six
+recording groups (three per array configuration), with speaker/session
+independence unproven. This does not meet the roadmap's 200-independent-group
+sensor gate. Do not acquire it for quality evaluation or fitting; `eval.zip`
+remains untouched. No member payload, training, or quality result was
+produced. See the [`LOCATA source screen`](docs/pretrained_reuse/R2_LOCATA_SENSOR_TRACKING_SOURCE_SCREEN_20261026.md).
 
 **2026-10-26 R2 Action Verb Corpus license recheck:** The live Zenodo API still has a same-record conflict: `license.id=cc-by-4.0`, while the version text says CC BY-NC-SA 4.0/non-commercial. Metadata only was read; keep AVC at REVIEW and do not use pending rights-holder clarification. See the [license recheck](docs/pretrained_reuse/R2_AVC_LICENSE_RECHECK_20261026.md).
 **2026-10-26 R2 Charades-Ego source gate:** Charades-Ego offers paired first-/third-person action videos, but its former official page now redirects and does not expose current dataset terms; a published licensing table marks it non-commercial. The reviewed source does not establish an audio input or a both-audio-and-video-required task. No data was accessed; keep it REVIEW and do not use for product-aligned AV evaluation pending authoritative rights and modality evidence. See the [Charades-Ego source gate](docs/pretrained_reuse/R2_CHARADES_EGO_SOURCE_GATE_20261026.md).

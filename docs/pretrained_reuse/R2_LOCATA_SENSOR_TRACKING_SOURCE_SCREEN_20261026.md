@@ -29,7 +29,9 @@ The directory contains 921 entries (816 files: 639 `.txt`, 177 `.wav`) across `t
 | `dummy` | 42 | 167,779,124 | 1,389,800,377 |
 | `eigenmike` | 42 | 443,457,769 | 3,479,315,679 |
 
-These are ZIP member-size totals, not inferred independent examples. The archive paths permit a small prospective subset, but recording/session and speaker independence across those paths are not established by filenames. All microphone-array views from the same underlying recording must remain in one split. Any repeated speaker, sentence, or session across recordings must be audited before defining train and development validation. The three Task 6 recordings per array alone would make a weak validation basis; broader development tasks or a separately authorized evaluation design may be needed.
+These are ZIP member-size totals, not inferred independent examples. A follow-up metadata-only audit of the ZIP central directory confirms only three recording IDs per array configuration: `recording1`–`recording3` for `benchmark2`, `dicit`, and `eigenmike`, and `recording4`–`recording6` for `dummy`. These are at most six recording groups overall, not six proven independent speakers or scenes. Array variants of a recording must remain in the same split. Any repeated speaker, sentence, or session across recordings must be audited before defining train and development validation.
+
+**Decision: do not acquire or use LOCATA as a quality-evaluation or fitting source in this workstream.** The current R0 sensor gate calls for at least 200 independent subjects/scenes unless a low-power protocol is explicitly justified. The central directory gives at most six recording groups, while speaker/session independence is not established; this is far below that gate. A mechanics-only parser smoke could be reconsidered separately, but it would not count as task-quality evidence. No Task 6 member payload was requested or read in this follow-up, and `eval.zip` remains untouched.
 
 ## Bounded transfer attempt and next gate
 
@@ -48,8 +50,7 @@ External metadata receipts, outside Git:
 
 Before any training:
 
-1. Use range reads to acquire only one frozen Task 6 array configuration and its matching audio, array pose, source positions, timestamps, and VAD members into a new output directory; verify each member's ZIP CRC and a local SHA-256 receipt. Leave `eval.zip` closed.
-2. Inspect the official development documentation and member schemas to bind sample clocks, coordinate frames, source identities, recording groups, calibration units, and missing labels. Quarantine any ambiguous joins.
-3. Predefine a text-free supplied-option task in world coordinates, then compare audio-only, sensor-only, and audio+sensor controls with recording- and speaker-grouped splits. Keep tracking/motion metrics separate from crossmodal Decision accuracy and calibration. If independent groups or useful task counts are insufficient, reject LOCATA for quality claims and retain it only as a mechanics probe.
+1. LOCATA is not on the quality-evaluation path under the current independent-group gate. Do not spend transfer or GPU budget on it for the 95–98% objective.
+2. Reconsider only if a materially broader, rights-cleared source supplies enough independent speaker/session groups, or if the project explicitly approves a low-power mechanics study. Keep any such study separate from the four required modalities and from product-quality claims.
 
 No quality, temporal-generalization, product-accuracy, or 95–98% claim follows from this source screen.
