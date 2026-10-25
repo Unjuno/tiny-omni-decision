@@ -15,6 +15,16 @@ This is a narrow image-only development result. Validation selected the
 checkpoint and is not a blind test. It does not establish general image
 understanding, four-modality performance, or the 95–98% product target.
 
+**Follow-up input control changes the interpretation:** the same selected
+checkpoint gave exactly the same top-1 predictions on all 168 validation rows
+when image features were zeroed or deranged across validation images. Accuracy
+remained 79.17% in all three conditions. The aligned image slightly changed
+confidence metrics, but did not change any choice. Do not interpret the result
+above as evidence that the choices were image-grounded. The scorer's decision
+ranking may come from text/candidate regularities; a separately trained
+text-only scorer was not tested. See the
+[fixed input controls](R2_OPENIMAGES_INPUT_CONTROLS_20261026.md).
+
 ## Data gate and fixed splits
 
 The task is Open Images V6 image-level object-presence selection using one

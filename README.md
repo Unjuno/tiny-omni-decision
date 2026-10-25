@@ -1,10 +1,12 @@
 # Tiny Omni Decision
 
-**2026-10-26 image probe:** Frozen VideoPrism-B + MiniLM with a small decision
-readout scored 79.17% Accuracy on a 168-example Open Images development
-validation set; its high ECE (0.145) and narrow task do not establish product
-quality or four-modality performance. Uncompressed model weights total
-527.6MB. [Protocol, results, hashes and limits](docs/pretrained_reuse/R2_OPENIMAGES_VIDEOPRISM_PROBE_20261026.md).
+**2026-10-26 Open Images probe follow-up:** the selected frozen VideoPrism-B +
+MiniLM scorer made the exact same top-1 predictions on all 168 development
+validation questions with aligned, zeroed, and deranged image features. Its
+79.17% score is not evidence of image-grounded choice quality; validation was
+used for model selection. The probe remains a task/input-sensitivity diagnostic.
+[Initial result](docs/pretrained_reuse/R2_OPENIMAGES_VIDEOPRISM_PROBE_20261026.md)
+and [input controls](docs/pretrained_reuse/R2_OPENIMAGES_INPUT_CONTROLS_20261026.md).
 
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
