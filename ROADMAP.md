@@ -21,7 +21,7 @@ images with zero failures; 09:19 and 09:21 rescans covered 3,033 and 3,372
 with zero failures; the 09:23 rescan covered 3,660 with zero failures.
 At 09:27 the verified prefix reached 4,287, again with zero failures.
 At 09:31 the verified train prefix reached 4,950, again with zero failures.
-At 09:43 the verified train prefix reached 6,948, again with zero failures.
+At 09:50 the verified train prefix reached 8,154, again with zero failures.
 Training-media fetch continues. No full feature cache or quality score exists. GPU
 feature extraction/fitting waits on the existing RTX 3080 run, which occupies
 16,124/16,384 MiB; a separate older full-extent fresh-coverage queue is also
