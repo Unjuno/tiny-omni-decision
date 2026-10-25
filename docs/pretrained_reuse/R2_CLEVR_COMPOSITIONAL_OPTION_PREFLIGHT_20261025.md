@@ -288,6 +288,12 @@ At 10:51 JST, a fresh read showed history through step 1,677 (updated
 6,656. The GPU process remained allocated and the queued full-extent run had
 not started. The media cache is complete, but feature extraction remains
 blocked on the cooperative GPU order.
+At 11:20 JST, history had reached step 1,792 (last updated 11:08:49), but the
+durable trainer state and latest validation artifact were still step 1,664
+(10:49:15/10:49:14). No step-1,792 validation file existed. The process was
+still alive with 16,124/16,384 MiB allocated and 100% reported GPU
+utilization; its current phase is unknown. The earlier queue was still waiting
+and had created no outputs. No intervention was made.
 The host exposes Intel Iris Xe Graphics and an RTX 3080 Laptop; Windows reports
 1 GiB `AdapterRAM` for the Intel adapter. The active Python 3.11 environment is
 PyTorch 2.6.0+cu124 with one CUDA device; `torch_directml` is absent and
