@@ -212,8 +212,9 @@ and Video NLL 1.354→9.102. The fixed hierarchical macro-NLL selector did not
 improve after step 4,096. The complete 2×2 endpoint comparison found fresh
 coverage helped several Image/Audio/Text scores but did not improve Video;
 these are exposed, single-seed development results, not a blind evaluation or
-product promotion. No sealed audit or cloud compute was used. CI, test, and
-Ruff status for the recording commit follows the report. See the completed
+product promotion. No sealed audit or cloud compute was used. Local tests and
+Ruff passed, and GitHub Actions run 40198130727 is green for the recording
+commit. See the completed
 [`R2 long-fit report`](docs/pretrained_reuse/R2_FULL_EXTENT_UNIQUE_COVERAGE_LONG_20261025.md).
 
 **2026-10-25 R2 long-fit runner repair:** Its first HotGPU smoke attempt stopped

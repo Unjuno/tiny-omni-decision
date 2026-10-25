@@ -313,6 +313,8 @@ passed, 11 skipped), `ruff check .`, all CI manifest/catalog validation and
 dataset-manifest audit commands. The direct `pytest.exe` launcher was blocked
 by Windows Application Control; invoking the same installed pytest via Python
 module succeeded. GitHub Actions status is recorded with the pushed commit.
+The `ci` workflow passed for commit `eb416be934a79507883f85cc849197a70f057992`
+in [run 40198130727](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40198130727).
 
 ### Decision
 
