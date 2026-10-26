@@ -2909,3 +2909,14 @@ tests passed (20 with SciPy available), and full Ruff passed. See
 for split, metric, bootstrap, resource, artifact-hash, and error-correction
 details. R2 M-2, the four-modality task battery, and R0/R1/R3–R8 exits remain
 open.
+
+**2026-10-26 R2 DROID next-action video+sensor readouts:** Reused the same
+group-safe 337/200 DROID split and hash-pinned frozen VideoPrism/sensor features
+for a seven-option next-step Cartesian translation direction task. Fixed-L2
+readouts overfit; a second attempt selected regularization by train-only,
+five-fold group-stratified CV. Its validation Accuracy was video 33.5%, sensor
+44.0%, fusion 36.5%, versus a 40.0% train-prior baseline. Paired bootstrap
+found fusion worse than sensor in Accuracy and NLL; input perturbations also
+showed severe overconfidence. This is a weak development task, not evidence of
+general robot or multimodal quality, and does not close R2 M-2. No GPU or sealed
+audit was used. See the [full protocol, comparisons, controls, and hashes](docs/pretrained_reuse/R2_DROID_NEXT_ACTION_VIDEO_SENSOR_20261026.md).
