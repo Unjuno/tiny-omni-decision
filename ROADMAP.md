@@ -44,6 +44,18 @@ its saved predictions. No fit or validation rerun was performed. See the
 [next-action report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-droid-next-action-20261026/docs/pretrained_reuse/R2_DROID_NEXT_ACTION_VIDEO_SENSOR_20261026.md)
 and [early-outcome report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-droid-next-action-20261026/docs/pretrained_reuse/R2_DROID_EARLY_OUTCOME_RESULTS_20261026.md).
 
+**2026-10-26 R2 VisTouch Git acquisition check:** Following the proposed
+ordinary-Git route, the official repository was freshly cloned and detached at
+`a569c7e572a78f232e819b652e0ebb718952e476` (tree
+`3d752cff8c4b54c8d78af0b4648f9749109a9036`). The tracked tree contains 9.70
+MB of CSV metadata and small task weights, but no audio, video, or tactile
+recordings, no Git LFS media pointers, and no submodules. Git alone therefore
+cannot supply the VisTouch media for feature extraction or fitting. The clone
+is isolated at `C:\CodexArtifacts\vistouch-git-verification-a569c7e-20261026`;
+the prior source/license/split audit remains unchanged. No media-access gate
+was bypassed and no model run started. See the
+[pinned source screen](docs/pretrained_reuse/R2_VISTOUCH_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 12:02 JST R0 live recheck:** PR #15 remains Draft/Open at
 `2538c5a`; its three public check runs are green. The primary local worktree
 contains unrelated uncommitted user changes and was left untouched. The local
