@@ -115,6 +115,18 @@ The current conditional head is not selected. See the
 [`synthetic AV readout report`](docs/pretrained_reuse/R2_SYNTHETIC_AV_READOUT_COMPARISON_20261025.md)
 for learning curves, corrected metrics, hashes, compute, and limitations.
 
+**2026-10-26 R2 synthetic AV temporal input contract:** The generated task uses
+eight aligned positions: one decoded VideoPrism frame and one 0.5-second,
+32-kHz EfficientAT segment per position. The same extraction decoder now has a
+frame-order regression test, and a CPU waveform test checks each tone and its
+timestamp against the paired video frame. The existing temporal LSTM and
+conditional-readout comparisons already cover this synthetic task; their
+exposed validation is not being reused for another fit or selector. This
+integrity check does not establish natural-AV quality or close M-2. See the
+[`temporal alignment contract`](docs/superpowers/specs/2026-10-26-synthetic-av-temporal-alignment.md).
+The new audio/video alignment test plus the existing AV/readout CPU suites
+passed (43 tests total); no GPU run was needed.
+
 **2026-10-25 Perception frozen-readout validation transfer complete:** The
 fixed 200-event official-validation cohort was scored once using frozen
 Audio/Video/Joint readouts after 200/200 VideoPrism and EfficientAT feature

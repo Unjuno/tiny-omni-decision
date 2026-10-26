@@ -95,6 +95,56 @@ def test_video_extraction_decoder_preserves_every_rendered_symbol_in_order(tmp_p
         ), f"decoded video frame order differs: {sequence_id}"
 
 
+def test_rendered_audio_symbols_keep_order_and_align_with_video_frames(tmp_path: Path):
+    render_assets = _render_assets_with_optional_video_dependency()
+    np = pytest.importorskip("numpy")
+    import wave
+
+    from scripts.prepare_synthetic_av_readout import (
+        EVENT_SECONDS,
+        FRAME_RATE,
+        SAMPLE_RATE_HZ,
+        TONE_FREQUENCIES_HZ,
+    )
+
+    manifest = build_manifest(train_groups=1, validation_groups=1, seed=17)
+    rendered = render_assets(manifest, tmp_path / "aligned")
+    for sequence_id, audio_record in rendered["assets"]["audio"].items():
+        video_record = rendered["assets"]["videos"][sequence_id]
+        segments = audio_record["segments"]
+        assert video_record["frame_count"] == len(video_record["symbols"])
+        assert FRAME_RATE * EVENT_SECONDS == 1
+        assert audio_record["duration_seconds"] == video_record["frame_count"] / FRAME_RATE
+        assert len(segments) == len(video_record["symbols"])
+
+        with wave.open(str(tmp_path / "aligned" / audio_record["path"]), "rb") as source:
+            assert source.getframerate() == SAMPLE_RATE_HZ
+            assert source.getnchannels() == 1
+            waveform = np.frombuffer(source.readframes(source.getnframes()), dtype="<i2")
+
+        decoded_symbols = []
+        for index, segment in enumerate(segments):
+            start = index * round(SAMPLE_RATE_HZ * EVENT_SECONDS)
+            stop = start + round(SAMPLE_RATE_HZ * EVENT_SECONDS)
+            samples = waveform[start:stop].astype(np.float64)
+            assert segment["sample_start"] == start
+            assert segment["sample_end"] == stop
+            assert len(samples) == round(SAMPLE_RATE_HZ * EVENT_SECONDS)
+            spectrum = np.abs(np.fft.rfft((samples - samples.mean()) * np.hanning(len(samples))))
+            frequencies = np.fft.rfftfreq(len(samples), d=1 / SAMPLE_RATE_HZ)
+            peak_hz = frequencies[1 + np.argmax(spectrum[1:])]
+            symbol = int(np.argmin(np.abs(np.asarray(TONE_FREQUENCIES_HZ) - peak_hz)))
+            decoded_symbols.append(symbol)
+
+            assert segment["event_index"] == index
+            assert segment["symbol_id"] == video_record["symbols"][index]
+            assert segment["start_seconds"] == index / FRAME_RATE
+            assert segment["end_seconds"] == (index + 1) / FRAME_RATE
+            assert abs(peak_hz - TONE_FREQUENCIES_HZ[symbol]) <= 2.0
+
+        assert decoded_symbols == video_record["symbols"], sequence_id
+
+
 def test_renderer_refuses_to_overwrite_an_existing_output(tmp_path: Path):
     render_assets = _render_assets_with_optional_video_dependency()
     output = tmp_path / "occupied"
