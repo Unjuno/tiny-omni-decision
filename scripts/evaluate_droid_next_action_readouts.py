@@ -26,6 +26,7 @@ from tiny_omni_decision.droid_next_action_readout import (
     multiclass_probability_metrics,
     next_cartesian_direction_label,
     predict_softmax,
+    select_l2_strength_group_cv,
 )
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -316,8 +317,18 @@ def main() -> None:
     train_metrics: dict[str, dict[str, Any]] = {}
     validation_metrics: dict[str, dict[str, Any]] = {}
     probabilities: dict[str, np.ndarray] = {}
+    regularization_selection: dict[str, dict[str, Any]] = {}
+    train_groups = [targets_rows[int(index)]["group_id"] for index in train]
     for arm in ("video", "sensor", "video_sensor"):
-        model = fit_l2_softmax(features[arm][train], labels[train])
+        selection = select_l2_strength_group_cv(
+            features[arm][train], labels[train], train_groups, folds=5, seed=17
+        )
+        regularization_selection[arm] = selection
+        model = fit_l2_softmax(
+            features[arm][train],
+            labels[train],
+            l2_strength=selection["selected_l2_strength"],
+        )
         models[arm] = model
         train_metrics[arm] = multiclass_probability_metrics(
             labels[train], predict_softmax(model, features[arm][train])
@@ -477,6 +488,15 @@ def main() -> None:
             "readout": "deterministic multinomial L2 logistic regression",
             "regularization": "0.5 * ||W||^2 / n_train",
             "standardization": "training rows only",
+            "regularization_selection": {
+                "method": (
+                    "5-fold class-stratified group CV on training rows only; select macro NLL."
+                ),
+                "folds": 5,
+                "seed": 17,
+                "candidates": [0.1, 1.0, 10.0, 100.0],
+                "per_arm": regularization_selection,
+            },
             "feature_layout": (
                 "Video mean across 3 views then separate first/last 4 sampled frame means; "
                 "sensor 8x14 flattened; fused concatenation."

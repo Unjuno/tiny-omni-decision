@@ -8,6 +8,8 @@ from tiny_omni_decision.droid_next_action_readout import (
     multiclass_probability_metrics,
     next_cartesian_direction_label,
     predict_softmax,
+    select_l2_strength_group_cv,
+    stratified_group_folds,
 )
 
 
@@ -66,3 +68,37 @@ def test_multiclass_readout_fits_and_saves_probabilities():
 def test_metrics_reject_non_normalized_probabilities():
     with pytest.raises(ValueError):
         multiclass_probability_metrics(np.asarray([0]), np.asarray([[0.8, 0.8, 0, 0, 0, 0, 0]]))
+
+
+def test_stratified_group_folds_are_deterministic_and_keep_groups_together():
+    targets = np.repeat(np.arange(len(ACTION_OPTIONS)), 8)
+    group_ids = [f"g{label}-{index // 2}" for label in range(7) for index in range(8)]
+    first = stratified_group_folds(targets, group_ids, folds=4, seed=17)
+    second = stratified_group_folds(targets, group_ids, folds=4, seed=17)
+    for left, right in zip(first, second, strict=True):
+        np.testing.assert_array_equal(left, right)
+    locations = {}
+    for fold_id, indices in enumerate(first):
+        for index in indices:
+            group = group_ids[int(index)]
+            assert group not in locations or locations[group] == fold_id
+            locations[group] = fold_id
+    assert len(locations) == len(set(group_ids))
+
+
+def test_group_cv_selects_only_from_fixed_candidates():
+    rng = np.random.default_rng(17)
+    targets = np.repeat(np.arange(len(ACTION_OPTIONS)), 5)
+    features = rng.normal(size=(len(targets), 4))
+    features[:, 0] += targets
+    selection = select_l2_strength_group_cv(
+        features,
+        targets,
+        [f"episode-{index}" for index in range(len(targets))],
+        candidates=(0.1, 10.0),
+        folds=5,
+        seed=17,
+    )
+    assert selection["selected_l2_strength"] in (0.1, 10.0)
+    assert set(selection["candidate_metrics"]) == {"0.1", "10.0"}
+    assert selection["selection_metric"] == "out-of-fold macro NLL"

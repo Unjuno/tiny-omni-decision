@@ -49,7 +49,9 @@ def make_readout_features(video: np.ndarray, sensor: np.ndarray) -> dict[str, np
     }
 
 
-def fit_l2_softmax(features: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
+def fit_l2_softmax(
+    features: np.ndarray, targets: np.ndarray, l2_strength: float = 1.0
+) -> dict[str, Any]:
     """Fit a deterministic L2 multinomial logistic head; standardization uses train only."""
     x = np.asarray(features, dtype=np.float64)
     y = np.asarray(targets, dtype=np.int64)
@@ -57,6 +59,8 @@ def fit_l2_softmax(features: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
         raise ValueError("expected a feature matrix and one target per row")
     if not np.isfinite(x).all() or not np.isfinite(y).all():
         raise ValueError("features and targets must be finite")
+    if not np.isfinite(l2_strength) or l2_strength <= 0:
+        raise ValueError("L2 strength must be a positive finite value")
     if np.any((y < 0) | (y >= len(ACTION_OPTIONS))) or len(np.unique(y)) < 2:
         raise ValueError("targets must include at least two valid action classes")
 
@@ -76,11 +80,11 @@ def fit_l2_softmax(features: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
         logits = z @ weights.T + bias
         probabilities = softmax(logits, axis=1)
         loss = -np.log(np.maximum(probabilities[np.arange(count), y], 1e-15)).mean()
-        value = float(loss + 0.5 * np.square(weights).sum() / count)
+        value = float(loss + 0.5 * l2_strength * np.square(weights).sum() / count)
         residual = probabilities
         residual[np.arange(count), y] -= 1.0
         residual /= count
-        gradient_weights = residual.T @ z + weights / count
+        gradient_weights = residual.T @ z + l2_strength * weights / count
         gradient_bias = residual.sum(axis=0)
         return value, np.concatenate((gradient_weights.ravel(), gradient_bias))
 
@@ -101,7 +105,93 @@ def fit_l2_softmax(features: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
         "bias": result.x[classes * width :],
         "objective": float(result.fun),
         "iterations": int(result.nit),
+        "l2_strength": float(l2_strength),
         "converged": True,
+    }
+
+
+def stratified_group_folds(
+    targets: np.ndarray,
+    group_ids: list[str] | tuple[str, ...],
+    folds: int = 5,
+    seed: int = 17,
+) -> list[np.ndarray]:
+    """Create deterministic class-stratified folds without splitting source groups."""
+    y = np.asarray(targets, dtype=np.int64)
+    groups = np.asarray(group_ids, dtype=str)
+    if y.ndim != 1 or groups.shape != y.shape or folds < 2:
+        raise ValueError("targets, group IDs, and fold count are invalid")
+    labels_by_group: dict[str, set[int]] = {}
+    rows_by_group: dict[str, list[int]] = {}
+    for index, (label, group) in enumerate(zip(y, groups, strict=True)):
+        labels_by_group.setdefault(str(group), set()).add(int(label))
+        rows_by_group.setdefault(str(group), []).append(index)
+    if any(len(labels) != 1 for labels in labels_by_group.values()):
+        raise ValueError("each group must have one target class for stratified allocation")
+    rows_by_class: dict[int, list[str]] = {}
+    for group, labels in labels_by_group.items():
+        rows_by_class.setdefault(next(iter(labels)), []).append(group)
+    rng = np.random.default_rng(seed)
+    fold_groups: list[list[str]] = [[] for _ in range(folds)]
+    for label in sorted(rows_by_class):
+        class_groups = sorted(rows_by_class[label])
+        if len(class_groups) < folds:
+            raise ValueError("each class must contain at least one group per fold")
+        order = rng.permutation(len(class_groups))
+        for offset, group_index in enumerate(order):
+            fold_groups[offset % folds].append(class_groups[int(group_index)])
+    result = [
+        np.asarray(
+            sorted(index for group in groups_for_fold for index in rows_by_group[group]),
+            dtype=np.int64,
+        )
+        for groups_for_fold in fold_groups
+    ]
+    all_indices = np.concatenate(result)
+    if len(all_indices) != len(y) or not np.array_equal(np.sort(all_indices), np.arange(len(y))):
+        raise RuntimeError("stratified folds do not partition every row exactly once")
+    return result
+
+
+def select_l2_strength_group_cv(
+    features: np.ndarray,
+    targets: np.ndarray,
+    group_ids: list[str] | tuple[str, ...],
+    candidates: tuple[float, ...] = (0.1, 1.0, 10.0, 100.0),
+    folds: int = 5,
+    seed: int = 17,
+) -> dict[str, Any]:
+    """Choose L2 strength by out-of-fold macro NLL on training groups only."""
+    x = np.asarray(features, dtype=np.float64)
+    y = np.asarray(targets, dtype=np.int64)
+    if x.ndim != 2 or y.shape != (len(x),) or len(group_ids) != len(y):
+        raise ValueError("training features, targets, and groups must align")
+    if not candidates or any(not np.isfinite(value) or value <= 0 for value in candidates):
+        raise ValueError("L2 candidates must be positive finite values")
+    validation_folds = stratified_group_folds(y, group_ids, folds=folds, seed=seed)
+    candidate_metrics = {}
+    for strength in candidates:
+        out_of_fold = np.zeros((len(y), len(ACTION_OPTIONS)), dtype=np.float64)
+        covered = np.zeros(len(y), dtype=bool)
+        for validation_index in validation_folds:
+            train_mask = np.ones(len(y), dtype=bool)
+            train_mask[validation_index] = False
+            model = fit_l2_softmax(x[train_mask], y[train_mask], l2_strength=strength)
+            out_of_fold[validation_index] = predict_softmax(model, x[validation_index])
+            covered[validation_index] = True
+        if not covered.all():
+            raise RuntimeError("cross-validation did not predict every training row")
+        candidate_metrics[str(strength)] = multiclass_probability_metrics(y, out_of_fold)
+    selected = min(
+        candidates,
+        key=lambda strength: (candidate_metrics[str(strength)]["macro_nll"], -strength),
+    )
+    return {
+        "selected_l2_strength": float(selected),
+        "folds": int(folds),
+        "seed": int(seed),
+        "selection_metric": "out-of-fold macro NLL",
+        "candidate_metrics": candidate_metrics,
     }
 
 
