@@ -110,6 +110,11 @@ Pinned artifacts are stored outside Git:
 The extraction driver for this run is preserved outside Git at the feature
 attempt directory; its SHA-256 is
 `efe6e4c9e375a57dd6af698797c448c2fff20ead30d2d16d9a53453fccf65490`. The
+source/task pipeline and frozen feature run started from repository commit
+`4b5742d14aafe7a2c0b60351a940483d53a75acc`; the readout evaluator, metrics,
+tests, and this report are recorded in commit
+`a40b526ec3fa37db87e78f1ad4cbd349ae110c37` on
+`codex/r2-droid100-source-task-screen-20261026`. The
 reusable readout/evaluation implementation is
 `scripts/evaluate_droid_early_outcome_readouts.py` and
 `src/tiny_omni_decision/droid_early_outcome_readout.py`; both remain subject to

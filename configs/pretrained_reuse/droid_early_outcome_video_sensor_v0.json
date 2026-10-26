@@ -42,6 +42,7 @@
     "trainable_readout": "L2 logistic; train-only feature scaling; no tuning",
     "selected": false,
     "sealed_audit_loaded": false,
+    "evaluator_commit": "a40b526ec3fa37db87e78f1ad4cbd349ae110c37",
     "evaluation_artifact": "C:/CodexArtifacts/pretrained-reuse-r2/droid-early-outcome-readouts-repo-attempt-02/evaluation-report.json",
     "validation_accuracy": {
       "video_temporal": 0.765,
