@@ -83,6 +83,7 @@ def _arguments() -> argparse.Namespace:
     parser.add_argument("--feature-cache", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument("--readout-config", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     return parser.parse_args()
 
@@ -99,6 +100,8 @@ def main() -> None:
     task = json.loads(task_raw)
     config_raw = args.config.read_bytes()
     config = json.loads(config_raw)
+    readout_config_raw = args.readout_config.read_bytes()
+    readout_config = json.loads(readout_config_raw)
     rows = [
         row
         for split in ("train", "validation")
@@ -129,6 +132,21 @@ def main() -> None:
         or summary.get("model_training") is not False
     ):
         raise ValueError("feature cache metadata does not match the frozen task/checkpoint")
+    if (
+        readout_config.get("feature_extraction_config_sha256")
+        != summary.get("experiment_config_sha256")
+        or readout_config.get("task_manifest_sha256") != hashlib.sha256(task_raw).hexdigest()
+        or readout_config.get("sealed_audit_loaded") is not False
+    ):
+        raise ValueError("readout fit config does not match frozen features or task")
+    max_iterations = int(readout_config["readout"]["max_iterations"])
+    l2_candidates = tuple(
+        float(value) for value in readout_config["readout"]["l2_candidates"]
+    )
+    if max_iterations < 500:
+        raise ValueError("fit retry must not reduce the original optimizer iteration cap")
+    if not l2_candidates or any(value <= 0 or not np.isfinite(value) for value in l2_candidates):
+        raise ValueError("readout L2 candidates must be positive finite values")
     for filename, key in (
         ("video_features.npy", "video_features.npy_sha256"),
         ("sensor_sequences.npy", "sensor_sequences.npy_sha256"),
@@ -183,12 +201,19 @@ def main() -> None:
     train_groups = [rows[int(i)]["group_id"] for i in train]
     for arm in ("video", "sensor", "video_sensor"):
         selection[arm] = select_l2_strength_group_cv(
-            features[arm][train], labels[train], train_groups, folds=5, seed=17
+            features[arm][train],
+            labels[train],
+            train_groups,
+            candidates=l2_candidates,
+            folds=int(readout_config["readout"]["folds"]),
+            seed=int(readout_config["readout"]["seed"]),
+            max_iterations=max_iterations,
         )
         model = fit_l2_softmax(
             features[arm][train],
             labels[train],
             l2_strength=selection[arm]["selected_l2_strength"],
+            max_iterations=max_iterations,
         )
         models[arm] = model
         train_metrics[arm] = multiclass_probability_metrics(
@@ -265,12 +290,14 @@ def main() -> None:
         "selection": {
             "readout": "L2 multinomial logistic; feature standardization on train only",
             "regularization": selection,
+            "readout_fit_config_sha256": hashlib.sha256(readout_config_raw).hexdigest(),
             "checkpoint_selection": "not applicable; frozen encoders, train-only grouped CV for L2",
         },
         "metrics": {"train": train_metrics, "validation": validation_metrics},
         "paired_group_bootstrap": paired,
         "artifacts": {
             "experiment_config_sha256": hashlib.sha256(config_raw).hexdigest(),
+            "readout_fit_config_sha256": hashlib.sha256(readout_config_raw).hexdigest(),
             "task_manifest_sha256": hashlib.sha256(task_raw).hexdigest(),
             "validation_predictions_sha256": hashlib.sha256(prediction_raw).hexdigest(),
             "readout_sha256": readout_hashes,

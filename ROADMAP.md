@@ -1,3 +1,16 @@
+**2026-10-26 R2 DROID fresh-shard next-action transfer:** Nine new pinned DROID
+train shards (428 episodes; no reuse of the previous selected shard set) were
+split into 275 train / 150 development-validation groups with zero recording
+and normalized-instruction overlap. A frozen VideoPrism / raw-sensor Path A
+readout comparison found severe video/fusion overfit at the original L2 grid;
+a stronger train-only L2 grid reduced that gap but left video, sensor, and
+fusion Accuracy near the 38.67% train-prior baseline (38.67%, 40.67%, 40.00%).
+Fusion did not reliably improve over sensor-only, and minority-class recall
+remained poor. This is repeated, nonblind development validation on one robot
+next-action task, not general multimodal quality or product readiness. No
+sealed audit or GPU was used. See the [protocol](docs/pretrained_reuse/R2_DROID_FRESH_NEXT_ACTION_PROTOCOL_20261026.md)
+and [results](docs/pretrained_reuse/R2_DROID_FRESH_NEXT_ACTION_RESULTS_20261026.md).
+
 **2026-10-26 R2 PE-Core zero-shot comparison:** On the same 168 previously
 exposed Open Images four-choice image cohort and fixed prompt used for TinyCLIP,
 PE-Core scored 42.26% Accuracy, NLL 1.9034, Brier 0.8652, and ECE 0.2988.

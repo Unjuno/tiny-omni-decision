@@ -50,7 +50,10 @@ def make_readout_features(video: np.ndarray, sensor: np.ndarray) -> dict[str, np
 
 
 def fit_l2_softmax(
-    features: np.ndarray, targets: np.ndarray, l2_strength: float = 1.0
+    features: np.ndarray,
+    targets: np.ndarray,
+    l2_strength: float = 1.0,
+    max_iterations: int = 500,
 ) -> dict[str, Any]:
     """Fit a deterministic L2 multinomial logistic head; standardization uses train only."""
     x = np.asarray(features, dtype=np.float64)
@@ -61,6 +64,8 @@ def fit_l2_softmax(
         raise ValueError("features and targets must be finite")
     if not np.isfinite(l2_strength) or l2_strength <= 0:
         raise ValueError("L2 strength must be a positive finite value")
+    if not isinstance(max_iterations, int) or max_iterations < 1:
+        raise ValueError("max_iterations must be a positive integer")
     if np.any((y < 0) | (y >= len(ACTION_OPTIONS))) or len(np.unique(y)) < 2:
         raise ValueError("targets must include at least two valid action classes")
 
@@ -94,7 +99,7 @@ def fit_l2_softmax(
         initial,
         jac=True,
         method="L-BFGS-B",
-        options={"maxiter": 500, "ftol": 1e-12, "gtol": 1e-8, "maxls": 40},
+        options={"maxiter": max_iterations, "ftol": 1e-12, "gtol": 1e-8, "maxls": 40},
     )
     if not result.success:
         raise RuntimeError(f"multiclass L2 logistic optimization failed: {result.message}")
@@ -160,6 +165,7 @@ def select_l2_strength_group_cv(
     candidates: tuple[float, ...] = (0.1, 1.0, 10.0, 100.0),
     folds: int = 5,
     seed: int = 17,
+    max_iterations: int = 500,
 ) -> dict[str, Any]:
     """Choose L2 strength by out-of-fold macro NLL on training groups only."""
     x = np.asarray(features, dtype=np.float64)
@@ -176,7 +182,12 @@ def select_l2_strength_group_cv(
         for validation_index in validation_folds:
             train_mask = np.ones(len(y), dtype=bool)
             train_mask[validation_index] = False
-            model = fit_l2_softmax(x[train_mask], y[train_mask], l2_strength=strength)
+            model = fit_l2_softmax(
+                x[train_mask],
+                y[train_mask],
+                l2_strength=strength,
+                max_iterations=max_iterations,
+            )
             out_of_fold[validation_index] = predict_softmax(model, x[validation_index])
             covered[validation_index] = True
         if not covered.all():
@@ -190,6 +201,7 @@ def select_l2_strength_group_cv(
         "selected_l2_strength": float(selected),
         "folds": int(folds),
         "seed": int(seed),
+        "max_iterations": max_iterations,
         "selection_metric": "out-of-fold macro NLL",
         "candidate_metrics": candidate_metrics,
     }

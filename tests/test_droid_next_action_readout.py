@@ -66,6 +66,11 @@ def test_multiclass_readout_fits_and_saves_probabilities():
     assert metrics["accuracy"] > 0.5
 
 
+def test_multiclass_readout_requires_a_positive_iteration_limit():
+    with pytest.raises(ValueError, match="max_iterations"):
+        fit_l2_softmax(np.ones((7, 2)), np.arange(7), max_iterations=0)
+
+
 def test_metrics_reject_non_normalized_probabilities():
     with pytest.raises(ValueError):
         multiclass_probability_metrics(np.asarray([0]), np.asarray([[0.8, 0.8, 0, 0, 0, 0, 0]]))

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "fit_attempt_id": "droid-fresh-next-action-readout-fit-v1-iteration-cap",
+  "purpose": "train-only optimizer convergence retry after L-BFGS-B hit the original 500-iteration cap",
+  "feature_extraction_config_sha256": "a9564644fc0d9c8d011d6638a694d9d651da1d2dedbbec67c5b8f70d246f1c1b",
+  "task_manifest_sha256": "b7315c23bad4f9b195828c934cc3a87aeb34d36b1b1180a8e8152f783148e21d",
+  "readout": {
+    "type": "L2 multinomial logistic regression",
+    "optimizer": "L-BFGS-B",
+    "objective": "unchanged",
+    "feature_standardization": "train split only",
+    "l2_candidates": [0.1, 1.0, 10.0, 100.0],
+    "folds": 5,
+    "seed": 17,
+    "max_iterations": 2000,
+    "relative_function_tolerance": 1e-12,
+    "gradient_tolerance": 1e-8,
+    "max_line_search_steps": 40,
+    "selection_metric": "grouped out-of-fold macro NLL on train only"
+  },
+  "validation_policy": "score the fixed 150-row validation split only after every train-fold fit converges",
+  "output_dir": "C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-evaluation-attempt-02",
+  "sealed_audit_loaded": false
+}

@@ -62,13 +62,23 @@ using seed 17. Validation is evaluated once after the configuration is fixed.
   `C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-prep-attempt-02`
 - Feature cache target:
   `C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-features-attempt-01`
-- Evaluation target:
-  `C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-evaluation-attempt-01`
+- First readout fit (500-iteration convergence failure, no validation metrics):
+  `C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-evaluation-attempt-01-fit-failure.json`
+- Baseline readout result:
+  `C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-evaluation-attempt-02`
+- Stronger-L2 follow-up:
+  `C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-evaluation-attempt-03`
 
-At the time this protocol was recorded, CPU feature extraction had completed
-140 of 425 eligible examples. Quality fitting and validation evaluation had
-not started. Frozen representations and fitted readout weights are not a
-replacement for a compact 200M-parameter multimodal product model.
+CPU feature extraction completed for all 425 eligible examples in 1,452.45
+seconds with `TFRT_CPU_0`. The first fit hit its 500-iteration cap during a
+train fold, before computing validation metrics; the failure was preserved.
+At 2,000 iterations the same L2 objective converged. All three arms selected
+the upper end of the original L2 grid (100) on train-only CV, so a second
+train-only CV configuration tested `[100, 1000, 10000]`. The development
+validation was consequently scored more than once and is explicitly
+nonblind. See the [results report](R2_DROID_FRESH_NEXT_ACTION_RESULTS_20261026.md).
+The frozen VideoPrism representation and fitted readouts are diagnostic
+artifacts, not a compact product model.
 
 ## Reproducibility commands
 
@@ -90,4 +100,29 @@ python scripts/prepare_droid_fresh_next_action.py `
 ```
 
 The extractor and evaluator commands are recorded with their result report
-after the current run finishes.
+and are:
+
+```powershell
+C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\venv\Scripts\python.exe `
+  scripts\extract_droid_fresh_video_sensor_features.py `
+  --dataset-root C:\CodexArtifacts\pretrained-reuse-r2\droid-fresh-next-action-seed17-attempt-01 `
+  --manifest manifests\pretrained_reuse\droid-fresh-next-action-seed17-20261026.json `
+  --task-manifest C:\CodexArtifacts\pretrained-reuse-r2\droid-fresh-next-action-prep-attempt-02\task-manifest.json `
+  --config configs\pretrained_reuse\droid_fresh_next_action_seed17_v1.json `
+  --checkpoint C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-f16r288.npz `
+  --model-source C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\source `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\droid-fresh-next-action-features-attempt-01
+
+C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\venv\Scripts\python.exe `
+  scripts\evaluate_droid_fresh_next_action.py `
+  --task-manifest C:\CodexArtifacts\pretrained-reuse-r2\droid-fresh-next-action-prep-attempt-02\task-manifest.json `
+  --feature-cache C:\CodexArtifacts\pretrained-reuse-r2\droid-fresh-next-action-features-attempt-01 `
+  --checkpoint C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-f16r288.npz `
+  --config configs\pretrained_reuse\droid_fresh_next_action_seed17_v1.json `
+  --readout-config configs\pretrained_reuse\droid_fresh_next_action_readout_fit_v1.json `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\droid-fresh-next-action-evaluation-attempt-02
+```
+
+The stronger-L2 attempt uses the same command with
+`droid_fresh_next_action_readout_fit_v2.json` and output directory
+`droid-fresh-next-action-evaluation-attempt-03`.

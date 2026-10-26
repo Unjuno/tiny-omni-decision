@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "fit_attempt_id": "droid-fresh-next-action-readout-fit-v2-stronger-l2",
+  "purpose": "train-only grouped-CV follow-up after every arm selected the previous L2 grid upper boundary",
+  "feature_extraction_config_sha256": "a9564644fc0d9c8d011d6638a694d9d651da1d2dedbbec67c5b8f70d246f1c1b",
+  "task_manifest_sha256": "b7315c23bad4f9b195828c934cc3a87aeb34d36b1b1180a8e8152f783148e21d",
+  "readout": {
+    "type": "L2 multinomial logistic regression",
+    "optimizer": "L-BFGS-B",
+    "objective": "unchanged",
+    "feature_standardization": "train split only",
+    "l2_candidates": [100.0, 1000.0, 10000.0],
+    "folds": 5,
+    "seed": 17,
+    "max_iterations": 2000,
+    "relative_function_tolerance": 1e-12,
+    "gradient_tolerance": 1e-8,
+    "max_line_search_steps": 40,
+    "selection_metric": "grouped out-of-fold macro NLL on train only"
+  },
+  "validation_policy": "same development validation as prior readout; repeated comparison is nonblind and cannot close a blind gate",
+  "output_dir": "C:/CodexArtifacts/pretrained-reuse-r2/droid-fresh-next-action-evaluation-attempt-03",
+  "sealed_audit_loaded": false
+}
