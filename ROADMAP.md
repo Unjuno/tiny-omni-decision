@@ -111,6 +111,14 @@ limits use to academic research and the source media are YouTube recordings.
 Neither source currently admits a supervised Path A AV Decision fit. No payload
 or media was downloaded/opened. [Source/task screen](docs/pretrained_reuse/R2_MCIF_SLIDESPEECH_SOURCE_SCREEN_20261026.md).
 
+**2026-10-26 R2 MAVERIX source screen:** MAVERIX is a strong task-design
+candidate (700 videos, 2,556 supplied-option questions, four AV reasoning
+tasks), but the public Hugging Face snapshot contains only annotations and
+subtitles, not video/audio; it exposes the dataset files without a declared
+license. Underlying video rights and reproducible media access remain unknown,
+and its published benchmark results are already public. Keep REVIEW-only; do not
+fetch annotation payloads or attempt fitting. See the pinned metadata-only
+receipt and disposition in the source screen.
 **2026-10-26 R2 DAVE source screen:** NeurIPS 2025 DAVE is a strong diagnostic
 task-design reference: 2,426 supplied-option samples with audio-visual
 synchronization, visual-only, audio-only and temporal controls. However, its
