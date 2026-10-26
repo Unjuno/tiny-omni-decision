@@ -12,8 +12,8 @@ ARCHIVE = re.compile(
     r"(?P<index>\d{2})_Ar(?P<robot>[12])_V(?P<velocity>high|med|low)_Ac(?P<action>[0-9])\.zip"
 )
 SPLITS = ("train", "validation", "sealed_audit")
-QUESTION = "Do these audio and video clips show the same action category?"
-OPTIONS = ("different action", "same action")
+QUESTION = "Which audio option was recorded with this video?"
+OPTIONS = ("Audio A", "Audio B")
 
 
 def stable_id(value):
@@ -71,7 +71,7 @@ def input_member(record, suffix):
     return matches[0]
 
 
-def make_pairs(assignments, seed=17):
+def make_pairs(assignments):
     manifests = {split: [] for split in SPLITS}
     used_groups = {split: set() for split in SPLITS}
     dropped = Counter()
@@ -95,34 +95,34 @@ def make_pairs(assignments, seed=17):
                 action_groups[action] = groups[:balanced_count]
             for action in range(10):
                 for index, video_record in enumerate(action_groups[action]):
-                    same_action_audio = action_groups[action][(index + 1) % balanced_count]
-                    different_action_audio = action_groups[(action + 1) % 10][index]
-                    for label, audio_record in (
-                        ("same action", same_action_audio),
-                        ("different action", different_action_audio),
-                    ):
-                        identity = (
-                            f"{split}|Ar{block[0]}|V{block[1]}|{action}|{index}|{label}"
+                    correct_audio = video_record
+                    distractor_audio = action_groups[action][
+                        (index + 1) % balanced_count
+                    ]
+                    video_group = video_record["group_id"]
+                    correct_group = correct_audio["group_id"]
+                    distractor_group = distractor_audio["group_id"]
+                    if correct_group != video_group or distractor_group == video_group:
+                        raise ValueError("candidate audio source identity is inconsistent")
+                    used_groups[split].update(
+                        (video_group, correct_group, distractor_group)
+                    )
+                    identity = f"{split}|Ar{block[0]}|V{block[1]}|{action}|{index}"
+                    for order_index in (0, 1):
+                        row_id = stable_id(f"{identity}|order{order_index}")
+                        ordered_audio = (
+                            [correct_audio, distractor_audio]
+                            if order_index == 0
+                            else [distractor_audio, correct_audio]
                         )
-                        row_id = stable_id(identity)
-                        options = list(OPTIONS)
-                        random.Random(f"{seed}:{row_id}").shuffle(options)
-                        target = options.index(
-                            label
-                        )
-                        video_group = video_record["group_id"]
-                        audio_group = audio_record["group_id"]
-                        if video_group == audio_group:
-                            raise ValueError("paired task must use separate recording groups")
-                        used_groups[split].update((video_group, audio_group))
                         manifests[split].append(
                             {
                                 "id": row_id,
                                 "model_input": {
                                     "question": QUESTION,
-                                    "options": options,
+                                    "options": list(OPTIONS),
                                 },
-                                "target": target,
+                                "target": order_index,
                                 "source_refs": {
                                     "video": {
                                         "group_id": video_group,
@@ -131,40 +131,41 @@ def make_pairs(assignments, seed=17):
                                             video_record, "_Rx1_cam.mp4"
                                         ),
                                     },
-                                    "audio": {
-                                        "group_id": audio_group,
-                                        "archive": audio_record["archive"],
-                                        "member": input_member(
-                                            audio_record, "_Rx1_mic.wav"
-                                        ),
-                                    },
+                                    "audio_candidates": [
+                                        {
+                                            "group_id": record["group_id"],
+                                            "archive": record["archive"],
+                                            "member": input_member(
+                                                record, "_Rx1_mic.wav"
+                                            ),
+                                        }
+                                        for record in ordered_audio
+                                    ],
                                 },
                             }
                         )
         rows = manifests[split]
-        positives = sum(
-            row["model_input"]["options"][row["target"]] == "same action" for row in rows
-        )
-        if not rows or positives * 2 != len(rows):
-            raise ValueError("each split must have equal same/different task labels")
-        video_label_counts = Counter()
-        audio_label_counts = Counter()
+        target_positions = Counter(row["target"] for row in rows)
+        if not rows or target_positions[0] != target_positions[1]:
+            raise ValueError("each split must balance the correct option position")
+        video_position_counts = Counter()
+        audio_role_counts = Counter()
         for row in rows:
-            label = row["model_input"]["options"][row["target"]]
-            video_label_counts[(row["source_refs"]["video"]["group_id"], label)] += 1
-            audio_label_counts[(row["source_refs"]["audio"]["group_id"], label)] += 1
+            video_group = row["source_refs"]["video"]["group_id"]
+            video_position_counts[(video_group, row["target"])] += 1
+            for index, candidate in enumerate(row["source_refs"]["audio_candidates"]):
+                role = "correct" if index == row["target"] else "distractor"
+                audio_role_counts[(candidate["group_id"], role)] += 1
         if any(
-            video_label_counts[(gid, "same action")]
-            != video_label_counts[(gid, "different action")]
+            video_position_counts[(gid, 0)] != video_position_counts[(gid, 1)]
             for gid in used_groups[split]
         ):
-            raise ValueError("video assets are not label-balanced")
+            raise ValueError("video assets are not balanced across correct option positions")
         if any(
-            audio_label_counts[(gid, "same action")]
-            != audio_label_counts[(gid, "different action")]
+            audio_role_counts[(gid, "correct")] != audio_role_counts[(gid, "distractor")]
             for gid in used_groups[split]
         ):
-            raise ValueError("audio assets are not label-balanced")
+            raise ValueError("audio assets are not balanced as correct and distractor")
 
     split_pairs = (
         ("train", "validation"),
@@ -182,7 +183,7 @@ def make_pairs(assignments, seed=17):
 
 def build(directory_audit, seed=17):
     assignments, _ = split_groups(directory_audit, seed)
-    manifests, accounting = make_pairs(assignments, seed)
+    manifests, accounting = make_pairs(assignments)
     return manifests, accounting
 
 
@@ -212,10 +213,8 @@ def main():
         "question": QUESTION,
         "options": list(OPTIONS),
         "split_row_counts": {split: len(rows) for split, rows in manifests.items()},
-        "split_pair_counts": {
-            split: dict(
-                Counter(row["model_input"]["options"][row["target"]] for row in rows)
-            )
+        "correct_option_position_counts": {
+            split: dict(Counter(str(row["target"]) for row in rows))
             for split, rows in manifests.items()
         },
         "accounting": accounting,

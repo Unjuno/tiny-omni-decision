@@ -1,3 +1,15 @@
+**2026-10-27 R2 RoboMNIST frozen runtime and dependence check:** One fixed
+training question ran through pinned, frozen TinyCLIP and EfficientAT on CPU.
+Eight time centers retain both stereo lenses (`8 x 2 x 512`) and both audio
+candidates (`2 x 8 x 384`); all features are finite, complete model state hashes
+are unchanged, and CUDA remained uninitialized. The run took 42.07 s including
+20.84 s network and 12.81 s video decode. Shared audio candidates connect the
+480 validation questions/240 repetitions into only 60 dependency components;
+neither rows nor repetitions may be counted as independent quality units.
+Session independence and common capture clocks remain unverified. No fitting,
+Decision quality evaluation, or sealed audit occurred; M-2 remains open.
+See the [runtime and dependence report](docs/pretrained_reuse/R2_ROBOMNIST_FROZEN_RUNTIME_20261027.md).
+
 **2026-10-26 R2 RoboMNIST bounded repetition audit:** A full 60-archive
 central-directory scan found 2,135 complete filename-derived repetition groups
 (32–44 per class archive; independent sessions remain unverified). One
@@ -8,10 +20,11 @@ timestamps spanning 14.966 s at a 33.329 ms median interval. This establishes
 payload/runtime feasibility for one controlled recording only; it does not
 establish audio clock alignment, group independence, or model quality. No full
 archive, training, or evaluation was run. A seed-17 metadata-only candidate
-audio/video action-match task now has group-disjoint manifests: 3,100 train,
-480 validation, and 480 sealed-audit pairs, with each input asset balanced
-across match labels; the sealed manifest is stored separately and unevaluated.
-RoboMNIST remains unadmitted for fitting pending session provenance and measured
+audio/video same-repetition two-choice task now has group-disjoint manifests:
+3,100 train, 480 validation, and 480 sealed-audit questions. Each video is
+reused with reversed candidate order and every audio asset is balanced as
+correct/distractor; the sealed manifest is separate and unevaluated. RoboMNIST
+remains unadmitted for fitting pending session provenance and measured
 unimodal/pair-shuffle controls. See the
 [repetition audit](docs/pretrained_reuse/R2_ROBOMNIST_REPETITION_AUDIT_20261026.md).
 

@@ -1,0 +1,27 @@
+{
+  "sealed_audit_opened": false,
+  "training": false,
+  "quality_evaluated": false,
+  "train": {
+    "rows": 3100,
+    "unique_repetitions": 1550,
+    "asset_sharing_connected_components": 60,
+    "component_sizes": {
+      "24": 10,
+      "26": 40,
+      "27": 10
+    },
+    "independent_sessions_verified": false,
+    "manifest_sha256": "0aa00362dc933c85926cd11bde8774ce96d1d350468e5927f226f04628b96049"
+  },
+  "validation": {
+    "rows": 480,
+    "unique_repetitions": 240,
+    "asset_sharing_connected_components": 60,
+    "component_sizes": {
+      "4": 60
+    },
+    "independent_sessions_verified": false,
+    "manifest_sha256": "02175d41fb7434fe453510bacfc55ea25f0d8d5af34e84cb0c9d01d2482f1e21"
+  }
+}

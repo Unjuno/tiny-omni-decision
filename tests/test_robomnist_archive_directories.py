@@ -232,10 +232,8 @@ def test_av_correspondence_manifest_is_group_disjoint_and_modality_asset_balance
         split: {
             group
             for row in rows
-            for group in (
-                row["source_refs"]["video"]["group_id"],
-                row["source_refs"]["audio"]["group_id"],
-            )
+            for group in [row["source_refs"]["video"]["group_id"]]
+            + [item["group_id"] for item in row["source_refs"]["audio_candidates"]]
         }
         for split, rows in manifests.items()
     }
@@ -243,15 +241,19 @@ def test_av_correspondence_manifest_is_group_disjoint_and_modality_asset_balance
     assert not groups_by_split["train"] & groups_by_split["sealed_audit"]
     assert not groups_by_split["validation"] & groups_by_split["sealed_audit"]
     for _, rows in manifests.items():
-        labels = [row["model_input"]["options"][row["target"]] for row in rows]
-        assert labels.count("same action") == labels.count("different action")
-        modality_uses = {}
+        targets = [row["target"] for row in rows]
+        assert targets.count(0) == targets.count(1)
+        video_positions = {}
+        audio_roles = {}
         for row in rows:
-            label = row["model_input"]["options"][row["target"]]
-            for modality in ["video", "audio"]:
-                group_id = row["source_refs"][modality]["group_id"]
-                modality_uses.setdefault((modality, group_id), set()).add(label)
-        assert all(
-            labels == {"same action", "different action"}
-            for labels in modality_uses.values()
-        )
+            video_group = row["source_refs"]["video"]["group_id"]
+            video_positions.setdefault(video_group, set()).add(row["target"])
+            candidates = row["source_refs"]["audio_candidates"]
+            assert len(candidates) == 2
+            assert candidates[row["target"]]["group_id"] == video_group
+            assert candidates[1 - row["target"]]["group_id"] != video_group
+            for index, candidate in enumerate(candidates):
+                role = "correct" if index == row["target"] else "distractor"
+                audio_roles.setdefault(candidate["group_id"], set()).add(role)
+        assert all(positions == {0, 1} for positions in video_positions.values())
+        assert all(roles == {"correct", "distractor"} for roles in audio_roles.values())

@@ -92,24 +92,32 @@ It records the exact per-member decode and timestamp summaries.
 ## Candidate task manifests and remaining gate
 
 RoboMNIST is now a technically viable small source for a controlled
-audio/video correspondence task, but **it is not yet admitted for model fitting
-or quality evaluation**. A metadata-only manifest generator creates the
-candidate question “Do these audio and video clips show the same action
-category?” with two supplied options. It pairs different repetition groups
-within each fixed robot/velocity block: a positive has the same action and a
-negative has a different action. Each selected video asset and each selected
-audio asset appears once with each target in its split, so either modality
-alone cannot identify the pair label from asset identity or class frequency.
+audio/video Decision probe, but **it is not yet admitted for model fitting or
+quality evaluation**. The candidate prompt is “Which audio option was recorded
+with this video?” with supplied choices `Audio A` and `Audio B`. The correct
+audio comes from the same filename-derived repetition group as the video. The
+hard distractor comes from another repetition in the same robot/velocity/action
+class. Thus class identity and capture condition are held constant while
+cross-modal repetition correspondence changes.
+
+Each video is presented twice with the two audio options reversed, once with
+the correct choice at index 0 and once at index 1. Across the split, each audio
+asset appears equally often as the correct and distractor candidate. This
+creates a paired order-invariance check and prevents option position or an
+individual unimodal asset from determining the answer by construction.
 
 The deterministic seed-17 split holds out `floor(groups/8)` groups for each of
 validation and sealed audit within each of the 60 source archive classes; the
 remaining groups are training candidates. For exact per-block label balancing,
 105 groups beyond the smallest action support were left unused. The resulting
-candidate manifests contain 3,100 train pairs (1,550 per target), 480
-validation pairs (240 per target), and 480 sealed-audit pairs (240 per target).
-The manifests reference 1,550 / 240 / 240 distinct underlying repetition
-groups, respectively, with zero group overlap. The sealed-audit manifest is
-stored in a separate sibling directory and was not loaded or evaluated.
+candidate manifests contain 3,100 train questions, 480 validation questions,
+and 480 sealed-audit questions. Correct answer positions are exactly balanced:
+1,550/1,550 for train and 240/240 for validation and sealed audit. The
+manifests reference 1,550 / 240 / 240 distinct underlying repetition groups,
+respectively, with zero group overlap. Each two-choice question has one video
+and two audio candidates; the same video and candidates are reused in the
+order-reversed companion question. The sealed-audit manifest is stored in a
+separate sibling directory and was not loaded or evaluated.
 
 These are split- and task-construction checks, not model controls or quality
 results. A future runtime must prove that the loader sends only the fixed
@@ -123,18 +131,25 @@ session-generalization claim. The manifest schema separates the model-visible
 `model_input` (`question` and `options`) from the target and `source_refs`; the
 runtime adapter must preserve that boundary when decoding the referenced files.
 
-The outside-Git manifest outputs are under
-`C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-seed17-attempt-03/`
+The earlier action-category manifest at attempt-03 and binary repetition-match
+manifest at attempt-04 remain outside Git and were not evaluated. The final
+two-choice candidate manifests are under
+`C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-seed17-attempt-05/`
 and the separate sealed path
-`C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-sealed-seed17-attempt-03/`.
-Train SHA-256: `38D374B37CB80031E35045084F286F8272D66146E352EA51BD2E7B6046C7F1EE`;
-validation SHA-256: `40A0FCA9638080BE890DFD4673959F01381D5DF7B8ECA4DBAAF8306EE10B0E12`;
-sealed-audit SHA-256: `F520A6539D173F486B7CC25A55498B4C764941F40F66A4758D6689C8051BCC93`.
-Manifest summary SHA-256: `6E90160CBCC630051B7C3E5A62599788990DA238FBC6BF4438497D3AC8460330`.
+`C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-sealed-seed17-attempt-05/`.
+Train SHA-256: `0AA00362DC933C85926CD11BDE8774CE96D1D350468E5927F226F04628B96049`;
+validation SHA-256: `02175D41FB7434FE453510BACFC55EA25F0D8D5AF34E84CB0C9D01D2482F1E21`;
+sealed-audit SHA-256: `2927F2A8EA836510E890F5834BA1435C89A4E6033C814D6128EA301183A294B8`.
+Manifest summary SHA-256: `ABCFB0D759518E62093844CD05658606D5DC5ED39B6FBCF315AFB963A1BBDF2B`.
 
 Before fitting, the next gate is to establish repeat/session identity and a
-group-disjoint split, freeze matched/mismatched task construction, and confirm
-that unimodal shortcut controls are balanced by construction. Any missing
+group-disjoint split, verify sensor alignment beyond file grouping, and measure
+rights-cleared frozen-feature baselines plus unimodal and pair-shuffle controls.
+CAV-MAE's checkpoint rights remain REVIEW; it is excluded from this new task.
+The later [CPU runtime and dependency audit](R2_ROBOMNIST_FROZEN_RUNTIME_20261027.md)
+ran TinyCLIP and EfficientAT on one training question only and found 60 shared-asset
+dependency components in development validation; no Decision quality was measured.
+Any missing
 whole-archive digest and same-lab scope must remain explicit. A one-repetition
 decode is not a quality result and cannot support the product's 95–98% claim.
 
@@ -155,6 +170,6 @@ python -m scripts.audit_robomnist_repetition_payload `
 
 python -m scripts.build_robomnist_av_correspondence_manifests `
   --directory-audit C:/CodexArtifacts/pretrained-reuse-r2/robomnist-directory-audit-20261026-attempt-04.json `
-  --output-dir C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-seed17-attempt-03 `
-  --sealed-output-dir C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-sealed-seed17-attempt-03
+  --output-dir C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-seed17-attempt-05 `
+  --sealed-output-dir C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-sealed-seed17-attempt-05
 ```

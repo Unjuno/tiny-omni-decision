@@ -1,0 +1,186 @@
+{
+  "status": "PASS_ONE_TRAIN_QUESTION_FROZEN_CPU_RUNTIME",
+  "started_at": "2026-10-26T15:12:12.778967+00:00",
+  "script_sha256": "6fd1a78f344fd8458d9171fa75b22fca5e98eebbed1aeb4e19096d1bd676d141",
+  "source_commit": "753438dffaea8c7cfaa72bdefb41b19a865af4b6",
+  "device": "cpu",
+  "dtype": "float32",
+  "seed": 17,
+  "threads": 4,
+  "train_manifest_sha256": "0aa00362dc933c85926cd11bde8774ce96d1d350468e5927f226f04628b96049",
+  "directory_audit_sha256": "538d526bfa049d4cef29568bcbe06b32a96a303a2c229d10cf0420641932d0cb",
+  "version_metadata_sha256": "18ef8b20c82056747c58572d24f262b2d12c9284e4ffd83c245ae64eca2ab120",
+  "selection": "first training question",
+  "sample_id": "4d41e8ffa6e339b71b35",
+  "source_refs": {
+    "video": {
+      "group_id": "Ar1_Vhigh_Ac0_Rp01_UNC062",
+      "archive": "00_Ar1_Vhigh_Ac0.zip",
+      "member": "00_Ar1_Vhigh_Ac0/Rp01_Ac0_Vhigh_Ar1_UNC062_Rx1_cam.mp4"
+    },
+    "audio_candidates": [
+      {
+        "group_id": "Ar1_Vhigh_Ac0_Rp01_UNC062",
+        "archive": "00_Ar1_Vhigh_Ac0.zip",
+        "member": "00_Ar1_Vhigh_Ac0/Rp01_Ac0_Vhigh_Ar1_UNC062_Rx1_mic.wav"
+      },
+      {
+        "group_id": "Ar1_Vhigh_Ac0_Rp02_UNC207",
+        "archive": "00_Ar1_Vhigh_Ac0.zip",
+        "member": "00_Ar1_Vhigh_Ac0/Rp02_Ac0_Vhigh_Ar1_UNC207_Rx1_mic.wav"
+      }
+    ]
+  },
+  "time_centers_s": [
+    1.0,
+    2.8285714285714287,
+    4.6571428571428575,
+    6.485714285714286,
+    8.314285714285715,
+    10.142857142857144,
+    11.971428571428572,
+    13.8
+  ],
+  "audio_window_s": 2.0,
+  "audio_resampling_hz": 32000,
+  "video_policy": "nearest actual PTS per center",
+  "image_frontend": "both full stereo lenses; letterbox224/BICUBIC/mean-fill; no crop",
+  "implementation_sha256": {
+    "audit_robomnist_repetition_payload.py": "3ce05fe4fc0cb60f31ef004e503e81cce6ef2eb0c08a05766bbb675b14049b0d",
+    "extract_perception_temporal_match_efficientat.py": "e34300bf519b4b5cfcb7ae9ef10df3fb15288b9f1101f9d952aada4e2809af86",
+    "robomnist_container_features.py": "b2ce28eac2322cfc6f91e5f8e7b8f8b03226b4560f6bf8cd0976f031fe531b0d"
+  },
+  "tinyclip_checkpoint_sha256": "112bdfb07ebc8994e9afba7a2a314e278493a675033595cf48e54cf8a17ae587",
+  "tinyclip_revision": "07a4b0bc751cb64fecd2b661c048c1dd98d69444",
+  "efficientat_checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+  "efficientat_source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+  "training": false,
+  "quality_evaluated": false,
+  "sealed_audit_opened": false,
+  "raw_media_saved": false,
+  "limitations": [
+    "one training question; no generalization or calibration result",
+    "shared time centers do not establish audio/video clock synchronization",
+    "filename-derived repetitions do not establish independent sessions"
+  ],
+  "members": [
+    {
+      "member": "00_Ar1_Vhigh_Ac0/Rp01_Ac0_Vhigh_Ar1_UNC062_Rx1_cam.mp4",
+      "crc32_verified": true,
+      "sha256": "c5043aa935f369ec6deb5c13fcecd475b21c7070005f5bd8b655b46dd407c914",
+      "uncompressed_bytes": 7920043
+    },
+    {
+      "member": "00_Ar1_Vhigh_Ac0/Rp01_Ac0_Vhigh_Ar1_UNC062_Rx1_mic.wav",
+      "crc32_verified": true,
+      "sha256": "fd807d6465d8c1d7c52c31cfd1b96bb29b29130c98949c177826426449b93dd0",
+      "uncompressed_bytes": 1316908
+    },
+    {
+      "member": "00_Ar1_Vhigh_Ac0/Rp02_Ac0_Vhigh_Ar1_UNC207_Rx1_mic.wav",
+      "crc32_verified": true,
+      "sha256": "45497559ee7225cd1fa2afc2efe59e5973c3858ff04ea1820d00dbdd80795300",
+      "uncompressed_bytes": 1323052
+    }
+  ],
+  "network_bytes": 9290186,
+  "network_seconds": 20.838876500027254,
+  "video_timing": {
+    "decoded_frames": 450,
+    "first_pts_s": 0.0,
+    "last_pts_s": 14.966666666666667,
+    "selected_pts_s": [
+      1.0,
+      2.8333333333333335,
+      4.666666666666667,
+      6.5,
+      8.3,
+      10.133333333333333,
+      11.966666666666667,
+      13.8
+    ]
+  },
+  "audio_timing": [
+    {
+      "source_rate_hz": 44100,
+      "source_samples": 658432,
+      "duration_s": 14.930430839002268,
+      "window_rms": [
+        0.0018845542799681425,
+        0.0013575735501945019,
+        0.001356571912765503,
+        0.001613772939890623,
+        0.0015099497977644205,
+        0.001043182099238038,
+        0.0011044405400753021,
+        0.001056445762515068
+      ]
+    },
+    {
+      "source_rate_hz": 44100,
+      "source_samples": 661504,
+      "duration_s": 15.000090702947846,
+      "window_rms": [
+        0.0020916524808853865,
+        0.001408145995810628,
+        0.0012519293231889606,
+        0.0016301278956234455,
+        0.0014097802340984344,
+        0.0009605773375369608,
+        0.0009348313906230032,
+        0.0009970449609681964
+      ]
+    }
+  ],
+  "video_features": {
+    "shape": [
+      8,
+      2,
+      512
+    ],
+    "finite": true,
+    "norm_min": 8.55871295928955,
+    "norm_max": 8.693917274475098,
+    "mean_adjacent_cosine_distance": 0.003788471221923828
+  },
+  "audio_features": {
+    "shape": [
+      2,
+      8,
+      384
+    ],
+    "finite": true,
+    "norm_min": 1.6592484712600708,
+    "norm_max": 1.8054273128509521,
+    "mean_adjacent_cosine_distance": 0.09406331926584244
+  },
+  "parameters": {
+    "image_model_including_unused_text_tower": 83101185,
+    "audio": 1961239,
+    "trainable": 0
+  },
+  "state_before": {
+    "image": "1b13a265d55b7fbc2cfba26ae82c62fc7079ea7b1184bf741c3094f3268a87a3",
+    "audio": "9252e67189f26cb2847120f8e088c2b8d544be1631b9400f9d2903eb4223b696"
+  },
+  "state_after": {
+    "image": "1b13a265d55b7fbc2cfba26ae82c62fc7079ea7b1184bf741c3094f3268a87a3",
+    "audio": "9252e67189f26cb2847120f8e088c2b8d544be1631b9400f9d2903eb4223b696"
+  },
+  "feature_sha256": "1bf4364ef34b87e5df4e2335a0433b397f27368de5429c662fdd1139815ebabb",
+  "feature_bytes": 53477,
+  "video_decode_seconds": 12.80620559991803,
+  "inference_and_audio_preprocessing_seconds": 1.0850211000069976,
+  "attention_backend": "sdpa",
+  "cuda_initialized": false,
+  "versions": {
+    "torch": "2.6.0+cu124",
+    "torchaudio": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "av": "18.1.0",
+    "numpy": "2.4.6"
+  },
+  "python": "3.11.9",
+  "finished_at": "2026-10-26T15:12:54.845494+00:00",
+  "wall_seconds": 42.066790299955755
+}
