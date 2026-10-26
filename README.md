@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-27 DROID task diagnostic:** Train-only deterministic checks found
+strong next-command persistence (94.55% with extra action history) and sensitivity
+to position sampling (46.18% sparse / 53.45% consecutive). These are not model
+quality or validation results; temporal representation needs a controlled check
+before increasing fusion capacity.
+[Evidence and limits](docs/pretrained_reuse/R2_DROID_TRAIN_TEMPORAL_20261027.md).
+
 **2026-10-26 Open Images probe follow-up:** the selected frozen VideoPrism-B +
 MiniLM scorer made the exact same top-1 predictions on all 168 development
 validation questions with aligned, zeroed, and deranged image features. Its

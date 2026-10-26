@@ -1,3 +1,14 @@
+**2026-10-27 R2 DROID train temporal diagnostic:** On the 275 frozen train
+episodes, copying the previous command predicts the next command at 94.55%,
+but uses extra action history absent from the old readouts. Fixed original
+sparse-position displacement scores 46.18%; an extra consecutive past position
+scores 53.45%. These train-only rules expose strong target persistence and
+motivate a controlled temporal representation comparison before more capacity;
+they establish neither validation quality nor video/fusion benefit. All train
+targets and nine shard hashes matched; no fitting, validation scoring or GPU.
+UnAV-100 annotations/features/media remain excluded pending rights resolution.
+See the [diagnostic](docs/pretrained_reuse/R2_DROID_TRAIN_TEMPORAL_20261027.md).
+
 **2026-10-27 R2 Touch and Go metadata gate:** The complete official label
 snapshot contains 250,169 frame rows but only 138 recording names / 24 date
 prefixes; Natural Fabric has 31 frames in one recording and cannot span
