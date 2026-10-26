@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from typing import Literal
 
 import torch
 from torch import nn
@@ -18,7 +19,13 @@ class TimestampedModalityFusion(nn.Module):
     model dynamics between query steps.
     """
 
-    def __init__(self, dimensions: dict[str, int], width: int = 64):
+    def __init__(
+        self,
+        dimensions: dict[str, int],
+        width: int = 64,
+        *,
+        readout_policy: Literal["gated", "concat_mlp"] = "gated",
+    ):
         super().__init__()
         if (
             not dimensions
@@ -27,14 +34,24 @@ class TimestampedModalityFusion(nn.Module):
             or any(type(size) is not int or size < 1 for size in dimensions.values())
         ):
             raise ValueError("positive feature dimensions and fusion width required")
+        if readout_policy not in {"gated", "concat_mlp"}:
+            raise ValueError("readout_policy must be 'gated' or 'concat_mlp'")
+        self.readout_policy = readout_policy
         self.names = tuple(sorted(dimensions))
         self.dimensions = dict(dimensions)
         self.projections = nn.ModuleDict({
             name: nn.Linear(self.dimensions[name] + 1, width) for name in self.names
         })
-        self.gate = nn.Linear(width, 1)
+        if self.readout_policy == "gated":
+            self.gate = nn.Linear(width, 1)
+        else:
+            self.concat_mlp = nn.Sequential(
+                nn.Linear(len(self.names) * (width + 1), width),
+                nn.GELU(),
+                nn.Linear(width, width),
+            )
 
-    def forward(
+    def _align_and_project(
         self,
         features: dict[str, torch.Tensor],
         timestamps_ms: dict[str, torch.Tensor],
@@ -43,7 +60,7 @@ class TimestampedModalityFusion(nn.Module):
         *,
         max_age_ms: float,
     ) -> tuple[torch.Tensor, torch.Tensor, dict[str, torch.Tensor]]:
-        """Return fused query tokens, modality weights, and aligned masks."""
+        """Return projected aligned tokens and masks shared by both readouts."""
         if not (
             set(features) == set(self.names)
             and set(timestamps_ms) == set(self.names)
@@ -110,9 +127,52 @@ class TimestampedModalityFusion(nn.Module):
 
         valid = torch.stack([aligned_masks[name] for name in self.names], dim=-1)
         tokens = torch.stack(projected, dim=-2)
+        return tokens, valid, aligned_masks
+
+    def forward(
+        self,
+        features: dict[str, torch.Tensor],
+        timestamps_ms: dict[str, torch.Tensor],
+        available: dict[str, torch.Tensor],
+        query_times_ms: torch.Tensor,
+        *,
+        max_age_ms: float,
+    ) -> tuple[torch.Tensor, torch.Tensor, dict[str, torch.Tensor]]:
+        """Return gated fused query tokens, modality weights, and aligned masks."""
+        if self.readout_policy != "gated":
+            raise ValueError("forward is only available for the gated readout")
+        tokens, valid, aligned_masks = self._align_and_project(
+            features, timestamps_ms, available, query_times_ms,
+            max_age_ms=max_age_ms,
+        )
         logits = self.gate(tokens).squeeze(-1).masked_fill(~valid, float("-inf"))
         any_valid = valid.any(dim=-1, keepdim=True)
         safe_logits = torch.where(any_valid, logits, torch.zeros_like(logits))
-        weights = safe_logits.softmax(dim=-1) * valid.to(dtype)
+        weights = safe_logits.softmax(dim=-1) * valid.to(tokens.dtype)
         fused = (tokens * weights.unsqueeze(-1)).sum(dim=-2)
         return fused, weights, aligned_masks
+
+    def forward_concat(
+        self,
+        features: dict[str, torch.Tensor],
+        timestamps_ms: dict[str, torch.Tensor],
+        available: dict[str, torch.Tensor],
+        query_times_ms: torch.Tensor,
+        *,
+        max_age_ms: float,
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+        """Return an ungated concatenation-MLP control over identical aligned tokens."""
+        if self.readout_policy != "concat_mlp":
+            raise ValueError("forward_concat requires readout_policy='concat_mlp'")
+        tokens, valid, aligned_masks = self._align_and_project(
+            features, timestamps_ms, available, query_times_ms,
+            max_age_ms=max_age_ms,
+        )
+        masked_tokens = tokens * valid.unsqueeze(-1).to(tokens.dtype)
+        control_input = torch.cat((
+            masked_tokens.flatten(start_dim=-2),
+            valid.to(tokens.dtype),
+        ), dim=-1)
+        fused = self.concat_mlp(control_input)
+        fused = fused * valid.any(dim=-1, keepdim=True).to(fused.dtype)
+        return fused, aligned_masks

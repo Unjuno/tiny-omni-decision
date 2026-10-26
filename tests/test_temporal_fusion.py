@@ -71,3 +71,59 @@ def test_invalid_shapes_and_nonmonotonic_timestamps_are_rejected():
     with pytest.raises(ValueError, match="strictly increase"):
         model(features, {"sensor": torch.tensor([[2.0, 1.0]])}, masks,
               torch.tensor([[2.0]]), max_age_ms=5.0)
+
+
+def test_concat_control_uses_same_causal_alignment_and_masks_as_gated_readout():
+    torch.manual_seed(31)
+    gated_model = TimestampedModalityFusion({"audio": 2, "video": 1}, width=4)
+    features = {
+        "audio": torch.tensor([[[1.0, 0.0], [9.0, 9.0]]]),
+        "video": torch.tensor([[[2.0], [3.0]]]),
+    }
+    timestamps = {
+        "audio": torch.tensor([[0.0, 11.0]]),
+        "video": torch.tensor([[0.0, 31.0]]),
+    }
+    masks = {
+        "audio": torch.tensor([[True, True]]),
+        "video": torch.tensor([[True, True]]),
+    }
+    queries = torch.tensor([[10.0, 30.0]])
+
+    gated, _, gated_masks = gated_model(
+        features, timestamps, masks, queries, max_age_ms=15.0
+    )
+    torch.manual_seed(31)
+    concat_model = TimestampedModalityFusion(
+        {"audio": 2, "video": 1}, width=4, readout_policy="concat_mlp"
+    )
+    assert not hasattr(gated_model, "concat_mlp")
+    assert not hasattr(concat_model, "gate")
+    concat, concat_masks = concat_model.forward_concat(
+        features, timestamps, masks, queries, max_age_ms=15.0
+    )
+
+    assert concat.shape == gated.shape == (1, 2, 4)
+    assert concat_masks.keys() == gated_masks.keys()
+    for name in gated_masks:
+        assert torch.equal(concat_masks[name], gated_masks[name])
+    assert concat_masks["audio"].tolist() == [[True, False]]
+    assert concat_masks["video"].tolist() == [[True, False]]
+    assert torch.isfinite(concat).all()
+    assert torch.equal(concat[:, 1], torch.zeros_like(concat[:, 1]))
+
+
+def test_concat_control_is_zero_when_all_modalities_are_missing_or_stale():
+    model = TimestampedModalityFusion(
+        {"sensor": 2}, width=3, readout_policy="concat_mlp"
+    )
+    output, masks = model.forward_concat(
+        {"sensor": torch.tensor([[[1.0, 2.0]]])},
+        {"sensor": torch.tensor([[0.0]])},
+        {"sensor": torch.tensor([[False]])},
+        torch.tensor([[10.0]]),
+        max_age_ms=5.0,
+    )
+
+    assert masks["sensor"].tolist() == [[False]]
+    assert torch.equal(output, torch.zeros_like(output))
