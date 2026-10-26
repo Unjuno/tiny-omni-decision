@@ -2827,3 +2827,13 @@ natural-AV development task. CommonsenseQA2 and QASC both show weak narrow
 text transfer. Continue source/task admission before another natural-AV fit;
 preserve all concurrent PRs and exposed validation IDs.
 [Cross-branch evidence and gates](docs/pretrained_reuse/R2_CROSS_BRANCH_EVIDENCE_20261026.md).
+
+### Perit duplex audio temporal source screen (2026-10-26)
+
+The open CC-BY-4.0 Perit sample has 45 separated-channel recordings and four
+recurring speaker-pair groups. The pinned EfficientAT audio checkpoint passed a
+finite CPU forward on eight real channel windows. This supports runtime
+feasibility only; onset metadata and exploratory energy thresholds do not yet
+establish a frozen segment-label rule. The candidate is not admitted to R2-M2
+because it has no video, and no training was performed. See
+[source/task screen and hashes](docs/pretrained_reuse/R2_PERIT_DUPLEX_TEMPORAL_AUDIO_SCREEN_20261026.md).
