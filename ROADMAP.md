@@ -25,6 +25,16 @@ The original branch and artifacts remain untouched. Do not repeat this synthetic
 fit; the next R2-M gate is a naturally recorded, rights-cleared task with
 independent source groups. See the [cross-branch reconciliation and hashes](docs/pretrained_reuse/R2_SYNTHETIC_AV_CROSS_BRANCH_RECONCILIATION_20261026.md).
 
+**2026-10-26 R1 frozen component runtime recheck:** A fresh CPU-only process
+reloaded the pinned VideoPrism-B, Ruri v3-30m, and EfficientAT DymN04-AS
+checkpoints and produced finite expected-shape outputs; checkpoint hashes and
+run receipts were rechecked locally. The combined towers contain 153,031,959
+parameters and 612,390,421 checkpoint bytes, before task readouts and
+preprocessing. This supports runtime feasibility only: generated text/tone
+inputs do not measure task quality. The provisional parameter budget remains
+plausible for this subset, while raw checkpoint size already exceeds 200 MB.
+See the [R1 CPU recheck and receipts](docs/pretrained_reuse/R1_FROZEN_COMPONENT_CPU_RECHECK_20261026.md).
+
 **2026-10-26 R2 input-grounding and fusion recheck:** A fixed 168-example
 Open Images probe reached 79.17% Accuracy, but its selected scorer produced
 identical top-1 decisions after image features were zeroed or deranged. Treat
