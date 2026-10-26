@@ -50,6 +50,7 @@ def test_feature_summaries_keep_video_and_sensor_paths_separate():
 
 
 def test_multiclass_readout_fits_and_saves_probabilities():
+    pytest.importorskip("scipy")
     rng = np.random.default_rng(17)
     targets = np.tile(np.arange(len(ACTION_OPTIONS)), 8)
     features = rng.normal(size=(len(targets), 4))
@@ -87,6 +88,7 @@ def test_stratified_group_folds_are_deterministic_and_keep_groups_together():
 
 
 def test_group_cv_selects_only_from_fixed_candidates():
+    pytest.importorskip("scipy")
     rng = np.random.default_rng(17)
     targets = np.repeat(np.arange(len(ACTION_OPTIONS)), 5)
     features = rng.normal(size=(len(targets), 4))
