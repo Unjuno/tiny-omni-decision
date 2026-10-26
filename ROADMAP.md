@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 AV-SyncBench source screen:** The pinned benchmark is relevant
+to temporal/semantic AV alignment but only evaluates pairwise original versus
+perturbed scoring, publishes no training path, and depends on third-party
+source video rights not cleared by its metadata license. Its 68.19 GB payload
+does not fit current free storage, and its public benchmark is exposed. Keep
+REVIEW-only; no media, weights, or labels were acquired or evaluated. See the
+[source/task screen](docs/pretrained_reuse/R2_AV_SYNC_BENCH_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 M³AV source screen:** The pinned publisher repository and
 dataset card provide a speaker-disjoint 901/99/113 train/dev/test split and
 multimodal lecture annotations, but specify CC BY-NC-SA 4.0 and retain original
