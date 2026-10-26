@@ -68,6 +68,10 @@ def test_reads_only_bounded_zip_directory_and_groups_complete_repetitions():
     result = read_zip_directory(FakeSession(payload), record, budget)
     assert result["repetition_groups"] == 1
     assert result["real_members"] == 8
+    assert len(result["groups"][0]["input_members"]) == 7
+    assert result["groups"][0]["supervision_only_member"].endswith("pos.json")
+    assert all(member["local_header_offset"] >= 0 for member in result["member_inventory"])
+    assert len({member["local_header_offset"] for member in result["member_inventory"]}) == 8
     assert result["range_bytes"] < len(payload)
     assert budget["transferred"] == result["range_bytes"]
 
@@ -104,3 +108,71 @@ def test_rejects_multidisk_or_zip64_eocd():
     zip64 = struct.pack("<4s4H2IH", EOCD, 0, 0, 0xFFFF, 0xFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0)
     with pytest.raises(ValueError, match="ZIP64"):
         parse_eocd(zip64, 0, len(zip64))
+
+
+def test_repetition_payload_reader_extracts_one_crc_checked_member_by_range():
+    from scripts.audit_robomnist_repetition_payload import extract_member
+
+    payload = io.BytesIO()
+    content = b"bounded test member" * 128
+    with zipfile.ZipFile(payload, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("safe/member.bin", content)
+    raw = payload.getvalue()
+    info = zipfile.ZipFile(io.BytesIO(raw)).getinfo("safe/member.bin")
+    member = {
+        "name": info.filename,
+        "compressed_size": info.compress_size,
+        "uncompressed_size": info.file_size,
+        "local_header_offset": info.header_offset,
+        "crc32": f"{info.CRC:08x}",
+    }
+    remaining = [1024 * 1024]
+    expanded = [0]
+    result = extract_member(
+        FakeSession(raw), "https://example.test/archive.zip", len(raw), member, remaining, expanded
+    )
+    assert result == content
+    assert expanded == [len(content)]
+    assert remaining[0] < 1024 * 1024
+
+
+def test_repetition_payload_reader_rejects_crc_mismatch():
+    from scripts.audit_robomnist_repetition_payload import extract_member
+
+    payload = io.BytesIO()
+    with zipfile.ZipFile(payload, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("safe/member.bin", b"content")
+    raw = payload.getvalue()
+    info = zipfile.ZipFile(io.BytesIO(raw)).getinfo("safe/member.bin")
+    member = {
+        "name": info.filename,
+        "compressed_size": info.compress_size,
+        "uncompressed_size": info.file_size,
+        "local_header_offset": info.header_offset,
+        "crc32": "00000000",
+    }
+    with pytest.raises(ValueError, match="CRC-32"):
+        extract_member(
+            FakeSession(raw),
+            "https://example.test/archive.zip",
+            len(raw),
+            member,
+            [1024 * 1024],
+            [0],
+        )
+
+
+def test_repetition_payload_timestamp_summary_checks_monotonicity_and_rate():
+    from scripts.audit_robomnist_repetition_payload import summarize_timestamps
+
+    result = summarize_timestamps(
+        [{"time_stamp_ns": [0, 33_000_000, 66_000_000, 100_000_000]}]
+    )
+    assert len(result) == 1
+    assert result[0]["count"] == 4
+    assert result[0]["strictly_increasing"] is True
+    assert result[0]["median_interval_ns"] == 33_000_000
+    assert result[0]["duration_seconds"] == 0.1
+    assert summarize_timestamps([{"time_stamp_ns": [0, 1, 1]}])[0][
+        "strictly_increasing"
+    ] is False

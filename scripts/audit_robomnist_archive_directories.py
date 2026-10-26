@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 import struct
+from collections import Counter
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -119,6 +120,7 @@ def read_zip_directory(session, file_record, budget):
         raise ValueError("central directory length mismatch")
 
     names = []
+    members = []
     offset = 0
     while offset < len(central):
         if central[offset : offset + 4] != CENTRAL or offset + 46 > len(central):
@@ -130,7 +132,20 @@ def read_zip_directory(session, file_record, budget):
             raise ValueError("truncated central directory member")
         name_bytes = central[offset + 46 : offset + 46 + name_size]
         encoding = "utf-8" if flags & 0x800 else "cp437"
-        names.append(name_bytes.decode(encoding))
+        name = name_bytes.decode(encoding)
+        names.append(name)
+        compressed_size, uncompressed_size = struct.unpack_from("<II", central, offset + 20)
+        crc32 = struct.unpack_from("<I", central, offset + 16)[0]
+        local_header_offset = struct.unpack_from("<I", central, offset + 42)[0]
+        members.append(
+            {
+                "name": name,
+                "compressed_size": compressed_size,
+                "uncompressed_size": uncompressed_size,
+                "crc32": f"{crc32:08x}",
+                "local_header_offset": local_header_offset,
+            }
+        )
         offset = record_end
     if len(names) != entries:
         raise ValueError("central-directory entry count mismatch")
@@ -145,7 +160,8 @@ def read_zip_directory(session, file_record, budget):
         "real_members": len(real_members),
         "resource_forks": sum(name.startswith("__MACOSX/") for name in names),
         "repetition_groups": len(groups),
-        "group_ids": [group["group_id"] for group in groups],
+        "groups": groups,
+        "member_inventory": members,
         "download_host": urlparse(url).hostname,
         "range_bytes": MAX_RANGE_BYTES_PER_ARCHIVE - budget["per_archive_remaining"],
     }
@@ -178,7 +194,7 @@ def audit(session, version, max_total_bytes=MAX_TOTAL_TRANSFER_BYTES):
         result = read_zip_directory(session, item, budget)
         result["computed_md5_missing"] = not bool(item["computed_md5"])
         results.append(result)
-    group_ids = [group_id for item in results for group_id in item["group_ids"]]
+    group_ids = [group["group_id"] for item in results for group in item["groups"]]
     if len(group_ids) != len(set(group_ids)):
         raise ValueError("underlying repetition group identity overlaps archives")
     return results, budget
@@ -198,7 +214,31 @@ def main():
     validate_version(version, article, receipt, directory)
     with requests.Session() as session:
         results, budget = audit(session, version)
-    group_ids = [group_id for item in results for group_id in item["group_ids"]]
+    group_ids = [group["group_id"] for item in results for group in item["groups"]]
+    group_counts = [item["repetition_groups"] for item in results]
+    group_sizes = Counter(group_counts)
+    stream_count_by_archive = {}
+    total_groups = 0
+    for item in results:
+        streams = Counter()
+        inventory = {member["name"]: member for member in item["member_inventory"]}
+        for group in item["groups"]:
+            total_groups += 1
+            members = group["input_members"] + [group["supervision_only_member"]]
+            if len(members) != 8 or any(member not in inventory for member in members):
+                raise ValueError("group member inventory is incomplete")
+            if len(group["input_members"]) != 7:
+                raise ValueError("group must have seven runtime input streams")
+            for name in members:
+                if "_cam." in name:
+                    streams["video"] += 1
+                elif "_mic." in name:
+                    streams["audio"] += 1
+                elif "_csi." in name:
+                    streams["csi"] += 1
+                elif "_pos." in name:
+                    streams["position_supervision"] += 1
+        stream_count_by_archive[item["archive"]] = dict(streams)
     output = {
         "schema_version": 1,
         "status": "PASS_DIRECTORY_METADATA_ONLY",
@@ -216,6 +256,14 @@ def main():
         "resource_forks": sum(item["resource_forks"] for item in results),
         "repetition_groups": len(group_ids),
         "unique_repetition_group_ids": len(set(group_ids)),
+        "repetition_group_count_distribution": {
+            str(count): number for count, number in sorted(group_sizes.items())
+        },
+        "complete_repetition_groups": total_groups,
+        "incomplete_repetition_groups": 0,
+        "runtime_input_streams_per_group": {"video": 3, "audio": 3, "csi": 1},
+        "supervision_only_streams_per_group": {"position": 1},
+        "stream_counts_by_archive": stream_count_by_archive,
         "archives_missing_computed_md5": [
             item["archive"] for item in results if item["computed_md5_missing"]
         ],
@@ -227,6 +275,8 @@ def main():
         "sealed_audit_opened": False,
         "limitations": [
             "central-directory names/counts only; no ZIP member payload was fetched or opened",
+            "group identifiers are filename-derived repetitions, not verified independent sessions",
+            "or subjects",
             "source sessions/subjects and temporal independence across repetitions are unverified",
             "no official train/validation split is asserted by this inventory",
             "both-input necessity and task label validity remain untested",

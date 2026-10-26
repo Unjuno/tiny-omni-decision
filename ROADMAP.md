@@ -1,3 +1,16 @@
+**2026-10-26 R2 RoboMNIST bounded repetition audit:** A full 60-archive
+central-directory scan found 2,135 complete filename-derived repetition groups
+(32–44 per class archive; independent sessions remain unverified). One
+preregistered repetition was range-fetched and CRC-checked: three MPEG-4 videos
+decoded to 450 frames/15 s, three 44.1 kHz mono audio streams decoded to
+14.93–14.98 s, and CSI/position arrays each had 450 strictly increasing
+timestamps spanning 14.966 s at a 33.329 ms median interval. This establishes
+payload/runtime feasibility for one controlled recording only; it does not
+establish audio clock alignment, group independence, or model quality. No full
+archive, training, or evaluation was run. RoboMNIST remains unadmitted pending
+group provenance, disjoint split, and balanced both-input task controls. See the
+[repetition audit](docs/pretrained_reuse/R2_ROBOMNIST_REPETITION_AUDIT_20261026.md).
+
 **2026-10-26 R2 PE-Core zero-shot comparison:** On the same 168 previously
 exposed Open Images four-choice image cohort and fixed prompt used for TinyCLIP,
 PE-Core scored 42.26% Accuracy, NLL 1.9034, Brier 0.8652, and ECE 0.2988.
