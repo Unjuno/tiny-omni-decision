@@ -57,3 +57,31 @@ model was trained in this follow-up.
 - [Berkeley TFDS data directory](https://rail.eecs.berkeley.edu/datasets/bridge_release/data/tfds/bridge_dataset/1.0.0/)
 - [TensorFlow Datasets Bridge catalog](https://www.tensorflow.org/datasets/catalog/bridge)
 - [TFDS slicing and determinism documentation](https://www.tensorflow.org/datasets/splits)
+
+## Metadata-only parser prototype (2026-10-26, additive follow-up)
+
+A local prototype read one first-record SequenceExample from the first train
+shard and first validation shard using byte-range requests only. It traversed
+20 context feature-map entries and extracted the schema keys, including
+`episode_metadata/file_path` and `episode_metadata/episode_id`. It did not
+fetch the image/state/action feature payloads or a complete record, and the
+source path was hashed in memory rather than retained.
+
+| Split sample | First record payload | Source size / ETag | Range requests / bytes | Collection-group hash |
+|---|---:|---|---:|---|
+| train shard 00000 of 01024 | 3,092,018 bytes | 108,381,239 / `"675c437-605e3b1511a6d"` | 43 / 896 | `b1c3f9a9e74e0b2534cfa56f3520cc0ad5306d0d5b3a686af0a8cea88b595905` |
+| validation shard 00000 of 00128 | 4,810,980 bytes | 139,629,016 / `"85291d8-605e42c3df46b"` | 43 / 876 | `4f32bbf7a7fad3caad5141078b492b73a87b67b6496cfd38d014045edf30c3c8` |
+
+The parsed context schema contained reward, observation image keys, state,
+action, language instruction/embedding, episode ID/path, and terminal/step
+flags. The machine-readable receipt is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\bridgedata-v2-metadata-preflight-20261026-attempt-02\metadata-schema-receipt.json`,
+SHA-256 `B874FA9F3A36BC47DEE420215B0B9EF026E1E2A3BB62121604160BDFB301B7A3`.
+The prototype is at the same artifact directory as
+`range_metadata_prototype.py`.
+
+This is only a parser feasibility check on two records. It does not establish
+record counts, collection-group distributions, source split independence, or
+resolve the discrepancy between the Berkeley directory metadata and the TFDS
+catalog. BridgeData remains REVIEW; no media payload, training example, or
+model input was acquired.
