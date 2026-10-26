@@ -22,6 +22,14 @@ modality, criterion, vocabulary, option, and timestamp mismatches fail closed.
 The screen path is not implemented. R2 M-0/M-1 remain open until screen
 coverage, feature-provenance handoff, and task-level metrics are addressed.
 
+Follow-up 2026-10-27: the explicit `decide_bound_native` path now verifies actual
+media bytes, the full trusted cache key, independent feature-payload hash,
+source/clock/timestamps, shape and finiteness before calling these readouts.
+The existing tensor-level methods remain low-level operations. A 24-request
+real-checkpoint replay preserves their JSON exactly; the trusted historical
+extraction and broader quality limits remain. See the
+[feature-binding report](R2_NATIVE_FEATURE_BINDING_20261027.md).
+
 ## Verification
 
 - New JSON tests were first run before implementation and failed because the

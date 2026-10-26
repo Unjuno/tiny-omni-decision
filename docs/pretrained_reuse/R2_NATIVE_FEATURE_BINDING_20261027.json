@@ -1,0 +1,2100 @@
+{
+  "status": "PASS_NATIVE_FEATURE_BINDING_REPLAY",
+  "finished_at": "2026-10-26T15:32:12.765885+00:00",
+  "source_commit": "d8a8f34fea0f0dd2e66c3bfc1b532d51de0f9065",
+  "script_sha256": "b27d5d5a536c38029c37b02edb885fff829ffe13ed6ed8852b7acfb4fa525259",
+  "binding_module_sha256": "3ba6d37b78ba5112b3186e3c983e91f56134b38f469b771ee46f6ff9b36156c7",
+  "input_hashes": {
+    "audio-probe-v0-retry3/audio-features.pt": "ace323458e7f443daf63382d2d41d99151d2a5801c671d30b0df68d52338ae64",
+    "speech-commands-sample-seed17-128-64-retry2/train.jsonl": "02a43981e153b0f63bd55192f614fe504114f05f212ca0f4da37e2d91480a9da",
+    "textfree-audio-decision-03/best-readout.pt": "46808a882ab75f8f19a138e4a91d13ceb42cfdc82534c4608c42ee615774d3cb",
+    "textfree-audio-decision-03/run-report.json": "a8452995e3d8d55f5a580177f9fd5251b392642ca7fe98396a70900b2d46ddcc",
+    "clevr4-full-videoprism-features-v0/features.npz": "f36b9cf17efed6a5137eb48ffcaf40ff960015fc07bc194fb532bf5562d88fab",
+    "clevr4-full-videoprism-features-v0/cache-report.json": "f8789fed749c8e19741758d52af2468b74598148dc673174ba65fb86181d5467",
+    "clevr4-full-coverage-seed17/train-image-manifest.jsonl": "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010",
+    "textfree-image-decision-512-01/best-readout.pt": "e62711ca1b8fd68df5037cd135266ed7f556e0ad006359305f10e6665789a47d",
+    "textfree-image-decision-512-01/run-report.json": "f2b357b00bf2ce11cc3c1b6f75b64aa8ea1a9c132908601c1fafc2e98fe80b39",
+    "clevrer-framewise-typed-v0/framewise-features.npz": "8878e2a51c9fb617466ec2e5b6dc174e9e7fb6eee666b6bee89b4071c2f00350",
+    "clevrer-framewise-typed-v0/cache-report.json": "fa8af092624ac10de46d4e9473537784e5717927c7477957c1c4702ad32a28e9",
+    "clevrer-expanded-seed17-256train-200val/train.jsonl": "5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d",
+    "textfree-video-clevrer-typed-fit-01/best-bilstm.pt": "1b4f8a6232e8c08cf1a1a5f1525b47a09d5c45a70a7c459e219b36ad4429128e"
+  },
+  "device": "cpu",
+  "threads": 4,
+  "cuda_initialized": false,
+  "wall_seconds": 1.426065200008452,
+  "training": false,
+  "quality_evaluated": false,
+  "sealed_audit_loaded": false,
+  "encoder_executed": false,
+  "legacy_artifacts_modified": false,
+  "all_legacy_input_hashes_rechecked_after": true,
+  "scope": "legacy extraction trust; current media and cache byte integrity; no encoder attestation",
+  "by_modality": {
+    "audio": {
+      "requests": 8,
+      "median_bound_decision_ms": 1.3309000059962273
+    },
+    "image": {
+      "requests": 8,
+      "median_bound_decision_ms": 1.4854000764898956
+    },
+    "video": {
+      "requests": 8,
+      "median_bound_decision_ms": 3.960200003348291
+    }
+  },
+  "records": [
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-8d155c5e30cfd5d31734",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-8d155c5e30cfd5d31734.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.001574199995957315,
+      "provenance": {
+        "cache_id": "fbdaf353be5aa35e6a5c814ae32dfea7aff6acb19b3783ef4173eb9c8b0126c5",
+        "media_sha256": "717d5805a755c6fefcf5bc691624f3c1a0144c1838946ec28281cac802b49338",
+        "feature_payload_sha256": "2c4edf7d0bcc829fa9c8cb38ef797ac7f7032dd65f6352e2cb1cc12aaae75e71"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-up",
+        "confidence": 0.25852739810943604,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.07054457813501358
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.0320773608982563
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 0.25852739810943604
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.08210140466690063
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.14338313043117523
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.1356615424156189
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.064761221408844
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.09745409339666367
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.0538850761950016
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.06160413846373558
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-1a5c262ffef1987a2210",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-1a5c262ffef1987a2210.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.001276700058951974,
+      "provenance": {
+        "cache_id": "a10a113cdc39e723831d9bcdc8b9b78cfc1a903f508cf9ddaa91259d81bc1749",
+        "media_sha256": "81086aaeb91b1bcffadf0449a10ae0a906c8bb9e6ed8135980fa8312839c611b",
+        "feature_payload_sha256": "32fa4f69652ff675cf178a74caafb1434b9111b6b3105375270cd1748cb09437"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.8974159359931946,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.8974159359931946
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.015270676463842392
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 0.00857065711170435
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.009011663496494293
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.015293879434466362
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.01414441131055355
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.00678903516381979
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.014356298372149467
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.0033887166064232588
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.015758642926812172
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-983dc11090242549bfec",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-983dc11090242549bfec.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.001420099986717105,
+      "provenance": {
+        "cache_id": "580aca4a0388853e5546d5e0c560d7a536c062ba74f710ede256c927d3000885",
+        "media_sha256": "94ddf6d284ccb222e867900ffba91e8ba578fc08ae5b30bb99912afbf0501b71",
+        "feature_payload_sha256": "d564277d182b17443cc4fd0ca0cdf9f5d4b4df4762d0557a7ca7d00e95b1eae5"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.924213707447052,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.924213707447052
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.0075387172400951385
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 0.007862426340579987
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.006332503166049719
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.010271945036947727
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.009159921668469906
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.008166528306901455
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.010641119442880154
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.009452568367123604
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.0063606444746255875
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-b3875d7e21ec5828da21",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-b3875d7e21ec5828da21.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0012823999859392643,
+      "provenance": {
+        "cache_id": "38ba4b3843a0e9534e2fc0568f8d87d44c66c173ee6fa0205275c05857d74ae0",
+        "media_sha256": "f8288200021d58386ef5ad8c8b4b1298a3a8835cdf5385481afcd5f2888e5193",
+        "feature_payload_sha256": "9d63e5a0daf198e46daa090926675b960340ab9e0ed134f0bdfa5652cf145303"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.9694197177886963,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.9694197177886963
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.006664179265499115
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 0.0024149767123162746
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.0025670912582427263
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.0032626106403768063
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.0029053620528429747
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.002173667773604393
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.00597986439242959
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.0011770672863349319
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.0034355358220636845
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-ccaa3de8df6ee0e712b9",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-ccaa3de8df6ee0e712b9.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0012272000312805176,
+      "provenance": {
+        "cache_id": "9565af241cafdaead2e85cad782eaf4f559e9401b3fe291fa0c00ed9a65711be",
+        "media_sha256": "03554b5ccec9ec8ef05c10406541c711187b55a093374833e45fe9b14a8e6e89",
+        "feature_payload_sha256": "fe3e3fe69eb5b958f50779700c0187e6145b75a3e9ad1a07eea8a4c4cef37f22"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.9517372250556946,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.9517372250556946
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.008381727151572704
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 0.004960182588547468
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.0027241811621934175
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.005053929518908262
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.0033968454226851463
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.0040158843621611595
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.008493414148688316
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.003404746064916253
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.007831942290067673
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-6ad21ce54ae2ea303069",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-6ad21ce54ae2ea303069.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0012506999773904681,
+      "provenance": {
+        "cache_id": "d6d9d2d1c8ddc9e8b916db37b23ad56ba025fc9f3aa9b99547f2b15549ca19ad",
+        "media_sha256": "474716d281ab37e2d080d7e10cbc379b23e9e36eea53e630937c54822db0d2b0",
+        "feature_payload_sha256": "eba06d41b06aac5f48ae6181644c551b7b6f53c798acff45b0db0fd69b83ae68"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.9711264967918396,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.9711264967918396
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.0030825345311313868
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 0.0028635638300329447
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.0019488264806568623
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.0036203465424478054
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.0020176684483885765
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.0022915315348654985
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.00783468410372734
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.002543938811868429
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.0026702615432441235
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-89e83ae06c1f30708cdd",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-89e83ae06c1f30708cdd.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0014686000067740679,
+      "provenance": {
+        "cache_id": "234be15c3387a88d945be762e7771323881df16d77b759d5bcb9b85520aeb4e9",
+        "media_sha256": "894197ade2f72237401daf35a2e272e333b59882f1c5079672d3dbeb68ec337b",
+        "feature_payload_sha256": "acdbfb5aa7bae5b1fda87d280a82fa3bf8769b156c574ceeaa0f171491e56462"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.7930030226707458,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.7930030226707458
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.011368980631232262
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 0.024886604398489
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.009172050282359123
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.03138980269432068
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.018733173608779907
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.024453312158584595
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.03725725784897804
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.02800813317298889
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.02172759734094143
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "audio",
+      "sample_id": "speechcmd-train-5b5228824bc94b9a0945",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\speech-commands-sample-seed17-128-64-retry2\\media\\train\\speechcmd-train-5b5228824bc94b9a0945.wav",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0013794000260531902,
+      "provenance": {
+        "cache_id": "3dec28729b94bac5a580c4d536e61083d34b16f9f90588af943c9089d8fdf9ca",
+        "media_sha256": "f6da74e0b31fff255f64c2042a9a9a42581080147546adc0b67af861be5d17b9",
+        "feature_payload_sha256": "2f3b418965a9f1f3e24064da7f58c3060c7f45a398e714e9b3801b5ec2cf6217"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "audio"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.996269941329956,
+        "options": [
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.996269941329956
+          },
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.00043502080370672047
+          },
+          {
+            "option_id": "class-up",
+            "attributes": {
+              "class_id": "up"
+            },
+            "probability": 6.591575947823003e-05
+          },
+          {
+            "option_id": "class-down",
+            "attributes": {
+              "class_id": "down"
+            },
+            "probability": 0.0003810593916568905
+          },
+          {
+            "option_id": "class-left",
+            "attributes": {
+              "class_id": "left"
+            },
+            "probability": 0.000577034370508045
+          },
+          {
+            "option_id": "class-right",
+            "attributes": {
+              "class_id": "right"
+            },
+            "probability": 0.00039181477040983737
+          },
+          {
+            "option_id": "class-on",
+            "attributes": {
+              "class_id": "on"
+            },
+            "probability": 0.00045679009053856134
+          },
+          {
+            "option_id": "class-off",
+            "attributes": {
+              "class_id": "off"
+            },
+            "probability": 0.0010276708053424954
+          },
+          {
+            "option_id": "class-stop",
+            "attributes": {
+              "class_id": "stop"
+            },
+            "probability": 0.0001339508016826585
+          },
+          {
+            "option_id": "class-go",
+            "attributes": {
+              "class_id": "go"
+            },
+            "probability": 0.00026070664171129465
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000000",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000000.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 1.1920928955078125e-07,
+      "bound_decision_seconds": 0.001574499998241663,
+      "provenance": {
+        "cache_id": "ae1700b9e029a9cae0f255da00354da1446b2e2b880978bccdcb9631d36bd299",
+        "media_sha256": "35124371d35f595370acb4845341cf8481dccba94b406a828a43ea7615ef3b3f",
+        "feature_payload_sha256": "248d780d06609c43c28bf327ad6c7025ec4c8d69c6eaa62cda35ff0078919849"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yellow",
+        "confidence": 0.9997037053108215,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 1.5077957016274013e-07
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 3.307973628352556e-08
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 4.273573495083838e-07
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 6.975721476010222e-07
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 5.234855393609905e-08
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 1.349946554540793e-08
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 3.17224635182356e-06
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 0.9997037053108215
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 3.8175639360815694e-07
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 0.0002913594653364271
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000001",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000001.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0014772000722587109,
+      "provenance": {
+        "cache_id": "9e574ce9cf16b288beee7d47147285399de485ba71a1da312acfb2226d615938",
+        "media_sha256": "0642dc58a22053cae62b6fe1f01a323eb6d530641cc7c4e929ace976283f1b80",
+        "feature_payload_sha256": "440698e5321a746b83f5e9b85d62ea2cf6e216a85bfc516c5138a295aef7485b"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-pink",
+        "confidence": 0.9985427856445312,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 0.0008662212057970464
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 0.00023452923051081598
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 2.412894718872849e-05
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 2.5759138111425273e-07
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 6.492790271295235e-05
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 1.3644515775013133e-06
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 0.0001946122501976788
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 7.082091906340793e-05
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 0.9985427856445312
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 4.3906953806072124e-07
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000002",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000002.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0014546000165864825,
+      "provenance": {
+        "cache_id": "fa6b48e37c716b4e0bd45b1310672dba27f7eb4fe746f7cd05bcbabf95179961",
+        "media_sha256": "b223e515963f456c78fcdab2bec3d81dd8dc449511f6e01bf8bc5bccec63c75d",
+        "feature_payload_sha256": "8e4a1dcbcb953d5f06a1ce37368baf008f967746a3fa16b61dcee0bc8d23610d"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-pink",
+        "confidence": 0.9938920736312866,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 2.040358822341659e-06
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 0.005402527283877134
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 8.688100933795795e-06
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 4.404506853461498e-06
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 9.931960448739119e-06
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 0.0005929098115302622
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 8.576369873480871e-05
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 1.7238826330867596e-06
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 0.9938920736312866
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 2.9900117937131654e-08
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000003",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000003.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 1.1920928955078125e-07,
+      "bound_decision_seconds": 0.002431000000797212,
+      "provenance": {
+        "cache_id": "ca3289269af2966c38502b0e9ba262b4031c94ca2c5d70107d3112f93ce655bc",
+        "media_sha256": "a7bd4766e459779a022bd4e76122ec47b9cef2bae3a0f5592cd325f2701174f9",
+        "feature_payload_sha256": "9ac4976b0b639ecc7eda12527c78ffc1d1a50ed9ccde5ddea7d82bcb04e5db71"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-cyan",
+        "confidence": 0.9988663196563721,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 5.839334562551812e-07
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 1.1295785498077748e-06
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 9.450123616261408e-05
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 0.0008465274586342275
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 5.386648904703861e-09
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 3.1247123843058944e-05
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 0.9988663196563721
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 0.0001536714844405651
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 5.8907398852170445e-06
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 3.666377423883205e-08
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000004",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000004.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0014762000646442175,
+      "provenance": {
+        "cache_id": "54b9999ec9f4a30ebe3f0361d14fd43599468d6aeb2ad3aa6189b64103c7eb0f",
+        "media_sha256": "7094f72f2ed2d7398e87d323865564448d37062df7a0fc20373ddedc5ed21470",
+        "feature_payload_sha256": "c8372d9462ebb333a41dd4f942a29b120f10b4c4cadad33c9667a97fa8eb4a5f"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-pink",
+        "confidence": 0.999825656414032,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 3.4165652778028743e-06
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 1.6101132132462226e-05
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 1.3617855287861858e-08
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 1.0639493730479899e-08
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 0.00015436264220625162
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 2.1300326125128777e-07
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 8.7614502319866e-08
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 1.0682913398341043e-07
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 0.999825656414032
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 1.0233242031532086e-09
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000005",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000005.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0015683999517932534,
+      "provenance": {
+        "cache_id": "9a9a0d6fa39bbba914b1e1c2d2ae5220c7181615509b7fa7d997773f46111ba4",
+        "media_sha256": "e39c57d8fc8e0313b430f4ec06acafda6c49f8caef7834163a981f68f390c6a1",
+        "feature_payload_sha256": "4626c78c9cd44cfb8e40d9970d2d71e195bab79d367b651c13f6df229c90d433"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-orange",
+        "confidence": 0.9926100373268127,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 1.116281467261615e-07
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 2.7926111556553224e-07
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 1.1499260210712237e-07
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 2.075684291114044e-09
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 0.0002266285300720483
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 7.663245149558406e-09
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 4.531154473852439e-08
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 0.007162898313254118
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 6.477692693351855e-08
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 0.9926100373268127
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000006",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000006.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0014660999877378345,
+      "provenance": {
+        "cache_id": "02176a751ab67fdfb09514876bf0bd45c5c3a4671d7f6f08036be3b95141e3c5",
+        "media_sha256": "a87beb874cea1db8fb10c2fc38a7fcfd4bcc9d6305fcd799e449f2a5cf96adcb",
+        "feature_payload_sha256": "62eb077b74b58e1572ec0c4d68191bd208ac1300947d3169ef9442840e772372"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-purple",
+        "confidence": 0.9999980926513672,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 7.995512585345921e-11
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 4.771095873934428e-08
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 2.4388228325733508e-08
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 1.6600466778982081e-07
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 4.0869610755563113e-13
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 0.9999980926513672
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 8.559963404763948e-09
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 1.1697477475536289e-07
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 1.5663863450754434e-06
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 4.3805275379282804e-11
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "image",
+      "sample_id": "CLEVR_new_000007",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000007.png",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 1.1920928955078125e-07,
+      "bound_decision_seconds": 0.0014936000807210803,
+      "provenance": {
+        "cache_id": "b303a177514e62feef04c7d3c5f91231b2a4b547fd4e7d0c02205544a484352b",
+        "media_sha256": "1537100348cfd77cab04ead8d2b5367cf39dffd518e574bde931fd4aeab3b37d",
+        "feature_payload_sha256": "7eb0a1a22e05cdc1caace00b7bee905eab1b99ac79df303c39ae5ae1dab286c5"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "image"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-purple",
+        "confidence": 0.9993093013763428,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 1.0470911249171877e-08
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 2.6074104653162067e-07
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 2.4024909635045333e-06
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 3.61545448868128e-06
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 3.4079603722370067e-11
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 0.9993093013763428
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 2.4641847630846314e-05
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 1.196853986584756e-06
+          },
+          {
+            "option_id": "class-pink",
+            "attributes": {
+              "class_id": "pink"
+            },
+            "probability": 0.000658511184155941
+          },
+          {
+            "option_id": "class-orange",
+            "attributes": {
+              "class_id": "orange"
+            },
+            "probability": 3.500484069274279e-10
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00019-q004",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00019.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0036439000396057963,
+      "provenance": {
+        "cache_id": "8927c54bb6469818969a4226ca8180e9bc154f52c7dd5f95b7a60f892a000e03",
+        "media_sha256": "5758dec077682cd67fc3967292cf3e370ed85c86e68e34225498fbbd4c65b258",
+        "feature_payload_sha256": "243a26540d988852c0d35c6fbf5a50a1671597d993220b57e10335abe2280032"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-1",
+        "confidence": 0.3443726897239685,
+        "options": [
+          {
+            "option_id": "class-0",
+            "attributes": {
+              "class_id": "0"
+            },
+            "probability": 0.22956131398677826
+          },
+          {
+            "option_id": "class-1",
+            "attributes": {
+              "class_id": "1"
+            },
+            "probability": 0.3443726897239685
+          },
+          {
+            "option_id": "class-2",
+            "attributes": {
+              "class_id": "2"
+            },
+            "probability": 0.2563585937023163
+          },
+          {
+            "option_id": "class-3",
+            "attributes": {
+              "class_id": "3"
+            },
+            "probability": 0.12969286739826202
+          },
+          {
+            "option_id": "class-4",
+            "attributes": {
+              "class_id": "4"
+            },
+            "probability": 0.029269834980368614
+          },
+          {
+            "option_id": "class-5",
+            "attributes": {
+              "class_id": "5"
+            },
+            "probability": 0.010744751431047916
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00019-q010",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00019.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.0041513999458402395,
+      "provenance": {
+        "cache_id": "8927c54bb6469818969a4226ca8180e9bc154f52c7dd5f95b7a60f892a000e03",
+        "media_sha256": "5758dec077682cd67fc3967292cf3e370ed85c86e68e34225498fbbd4c65b258",
+        "feature_payload_sha256": "243a26540d988852c0d35c6fbf5a50a1671597d993220b57e10335abe2280032"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-yes",
+        "confidence": 0.5640814304351807,
+        "options": [
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.4359186589717865
+          },
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.5640814304351807
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00037-q006",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00037.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 2.9802322387695312e-08,
+      "bound_decision_seconds": 0.004264200106263161,
+      "provenance": {
+        "cache_id": "6eecc166148c08800f11b0452c1b8e7738e1e3f133eccc4a05f54e17285a4a4d",
+        "media_sha256": "61ae63af7f1feabffcef855e2c9b075a2c9561264e8b2d84b0d8123307b80b49",
+        "feature_payload_sha256": "1204f61a05bcb29d3ac8e11f83ec3117675507bcca2b48ef2227176451a79723"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-blue",
+        "confidence": 0.3087531626224518,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 0.10328909009695053
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 0.08853351324796677
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 0.3087531626224518
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 0.15100209414958954
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 0.1269380748271942
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 0.10039810091257095
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 0.02448166534304619
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 0.09660422056913376
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00037-q010",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00037.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.003917300025932491,
+      "provenance": {
+        "cache_id": "6eecc166148c08800f11b0452c1b8e7738e1e3f133eccc4a05f54e17285a4a4d",
+        "media_sha256": "61ae63af7f1feabffcef855e2c9b075a2c9561264e8b2d84b0d8123307b80b49",
+        "feature_payload_sha256": "1204f61a05bcb29d3ac8e11f83ec3117675507bcca2b48ef2227176451a79723"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-no",
+        "confidence": 0.5949781537055969,
+        "options": [
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.5949781537055969
+          },
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.4050217866897583
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00040-q002",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00040.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.004003099980764091,
+      "provenance": {
+        "cache_id": "81aec1576cd4100b1137fbdcac7ace905c1fcab7a977765f9ec9e2827e0c9651",
+        "media_sha256": "fdb3186f075a3334f5133d0e433006943bf712c59aa8cdf3921c4100ec76856c",
+        "feature_payload_sha256": "b2bab9b005a63527baf5787aeaec0e0b42403f7a8a119df17481023dedfb4cf7"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-cylinder",
+        "confidence": 0.3862752318382263,
+        "options": [
+          {
+            "option_id": "class-cube",
+            "attributes": {
+              "class_id": "cube"
+            },
+            "probability": 0.35943764448165894
+          },
+          {
+            "option_id": "class-sphere",
+            "attributes": {
+              "class_id": "sphere"
+            },
+            "probability": 0.25428709387779236
+          },
+          {
+            "option_id": "class-cylinder",
+            "attributes": {
+              "class_id": "cylinder"
+            },
+            "probability": 0.3862752318382263
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00040-q007",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00040.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 1.4901161193847656e-08,
+      "bound_decision_seconds": 0.004054100019857287,
+      "provenance": {
+        "cache_id": "81aec1576cd4100b1137fbdcac7ace905c1fcab7a977765f9ec9e2827e0c9651",
+        "media_sha256": "fdb3186f075a3334f5133d0e433006943bf712c59aa8cdf3921c4100ec76856c",
+        "feature_payload_sha256": "b2bab9b005a63527baf5787aeaec0e0b42403f7a8a119df17481023dedfb4cf7"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-blue",
+        "confidence": 0.25366806983947754,
+        "options": [
+          {
+            "option_id": "class-gray",
+            "attributes": {
+              "class_id": "gray"
+            },
+            "probability": 0.11664419621229172
+          },
+          {
+            "option_id": "class-red",
+            "attributes": {
+              "class_id": "red"
+            },
+            "probability": 0.12542469799518585
+          },
+          {
+            "option_id": "class-blue",
+            "attributes": {
+              "class_id": "blue"
+            },
+            "probability": 0.25366806983947754
+          },
+          {
+            "option_id": "class-green",
+            "attributes": {
+              "class_id": "green"
+            },
+            "probability": 0.11284743249416351
+          },
+          {
+            "option_id": "class-brown",
+            "attributes": {
+              "class_id": "brown"
+            },
+            "probability": 0.16626684367656708
+          },
+          {
+            "option_id": "class-purple",
+            "attributes": {
+              "class_id": "purple"
+            },
+            "probability": 0.11232446134090424
+          },
+          {
+            "option_id": "class-cyan",
+            "attributes": {
+              "class_id": "cyan"
+            },
+            "probability": 0.0624113529920578
+          },
+          {
+            "option_id": "class-yellow",
+            "attributes": {
+              "class_id": "yellow"
+            },
+            "probability": 0.050412945449352264
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00074-q008",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00074.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.003487100009806454,
+      "provenance": {
+        "cache_id": "76bd1157c7d28ffe53be3a765c2925ca9df3445030947010e0f5cc635b46198f",
+        "media_sha256": "ba1eae0ca5c9ac65907cd69a90f30c9fafc2c982d1b99a99d7950e4717c7b46c",
+        "feature_payload_sha256": "7b3a4084b78e6686d15037eafd02f9327d6aef474d329ba3002afb1a13670882"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-0",
+        "confidence": 0.44809043407440186,
+        "options": [
+          {
+            "option_id": "class-0",
+            "attributes": {
+              "class_id": "0"
+            },
+            "probability": 0.44809043407440186
+          },
+          {
+            "option_id": "class-1",
+            "attributes": {
+              "class_id": "1"
+            },
+            "probability": 0.35259538888931274
+          },
+          {
+            "option_id": "class-2",
+            "attributes": {
+              "class_id": "2"
+            },
+            "probability": 0.07312263548374176
+          },
+          {
+            "option_id": "class-3",
+            "attributes": {
+              "class_id": "3"
+            },
+            "probability": 0.05365646257996559
+          },
+          {
+            "option_id": "class-4",
+            "attributes": {
+              "class_id": "4"
+            },
+            "probability": 0.04564650356769562
+          },
+          {
+            "option_id": "class-5",
+            "attributes": {
+              "class_id": "5"
+            },
+            "probability": 0.02688859961926937
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    },
+    {
+      "modality": "video",
+      "sample_id": "clevrer-train-00074-q010",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\media\\train\\video_00074.mp4",
+      "direct_bound_exact_json": true,
+      "option_reorder_max_probability_delta": 0.0,
+      "bound_decision_seconds": 0.003638499998487532,
+      "provenance": {
+        "cache_id": "76bd1157c7d28ffe53be3a765c2925ca9df3445030947010e0f5cc635b46198f",
+        "media_sha256": "ba1eae0ca5c9ac65907cd69a90f30c9fafc2c982d1b99a99d7950e4717c7b46c",
+        "feature_payload_sha256": "7b3a4084b78e6686d15037eafd02f9327d6aef474d329ba3002afb1a13670882"
+      },
+      "decision": {
+        "schema_version": "1.0",
+        "present_modalities": [
+          "video"
+        ],
+        "status": "selected",
+        "selected_option_id": "class-no",
+        "confidence": 0.5255632400512695,
+        "options": [
+          {
+            "option_id": "class-no",
+            "attributes": {
+              "class_id": "no"
+            },
+            "probability": 0.5255632400512695
+          },
+          {
+            "option_id": "class-yes",
+            "attributes": {
+              "class_id": "yes"
+            },
+            "probability": 0.47443684935569763
+          }
+        ]
+      },
+      "rejected_controls": [
+        "wrong_feature_digest",
+        "wrong_clock"
+      ]
+    }
+  ]
+}

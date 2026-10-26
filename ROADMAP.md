@@ -1,3 +1,13 @@
+**2026-10-27 R2 verified native feature handoff:** Added an explicit Audio/Image/Video
+JSON entry point that checks actual media bytes against a trusted full cache
+identity and independently pinned feature payload, including clocks/timestamps.
+CPU replay on 24 existing training requests / 20 media assets preserved direct
+readout JSON exactly and rejected all 48 wrong-clock/feature-digest controls.
+This trusts the hash-pinned historical extraction producer; no encoder, fitting,
+quality evaluation or sealed audit ran. Tensor-level APIs remain low-level,
+screen/fusion/quality gates remain open. See the
+[binding report](docs/pretrained_reuse/R2_NATIVE_FEATURE_BINDING_20261027.md).
+
 **2026-10-27 R2 RoboMNIST frozen runtime and dependence check:** One fixed
 training question ran through pinned, frozen TinyCLIP and EfficientAT on CPU.
 Eight time centers retain both stereo lenses (`8 x 2 x 512`) and both audio
