@@ -619,28 +619,47 @@ def train(args: argparse.Namespace) -> dict:
         "audio_zeroed": (np.concatenate((np.zeros_like(audio), video), axis=1), validation),
         "video_from_different_recording": (joint, permuted_validation),
     }
-    for arm, matrix, normalization in (
+    arm_specs = (
         ("audio_only", audio, (audio_mean, audio_std)),
         ("video_only", video, (video_mean, video_std)),
         ("audio_video_joint", joint, (joint_mean, joint_std)),
-    ):
+    )
+    for arm_index, (arm, matrix, normalization) in enumerate(arm_specs):
         arm_dir = args.output_dir / arm
         arm_dir.mkdir()
-        results[arm] = _fit_arm(
-            arm,
-            matrix,
-            splits,
-            config,
-            arm_dir,
-            device,
-            normalization,
-            joint_controls if arm == "audio_video_joint" else None,
+        write_json(
+            args.output_dir / "progress.json",
+            {"status": "RUNNING", "current_arm": arm, "completed_arms": list(results)},
         )
+        try:
+            results[arm] = _fit_arm(
+                arm,
+                matrix,
+                splits,
+                config,
+                arm_dir,
+                device,
+                normalization,
+                joint_controls if arm == "audio_video_joint" else None,
+            )
+        except Exception as error:
+            write_json(
+                args.output_dir / "progress.json",
+                {
+                    "status": "FAIL",
+                    "failed_arm": arm,
+                    "error": f"{type(error).__name__}: {error}",
+                    "completed_arms": list(results),
+                },
+            )
+            raise
         write_json(
             args.output_dir / "progress.json",
             {
                 "status": "RUNNING",
-                "current_arm": "complete" if arm == "audio_video_joint" else "next",
+                "current_arm": (
+                    arm_specs[arm_index + 1][0] if arm_index + 1 < len(arm_specs) else "finalizing"
+                ),
                 "completed_arms": list(results),
             },
         )
