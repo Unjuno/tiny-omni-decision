@@ -52,7 +52,7 @@ def test_builder_freezes_exact_validation_events_and_preserves_source_split(tmp_
     selection = tmp_path / "selection.json"
     with zipfile.ZipFile(source_zip, "w") as archive:
         archive.writestr(
-            "challenge_sound_localisation_valid.json",
+            "all_valid.json",
             json.dumps({"v1": validation_row()}),
         )
     cut_map.write_text(
@@ -103,7 +103,7 @@ def test_builder_rejects_selection_with_duplicate_videos(tmp_path, monkeypatch):
     selection = tmp_path / "selection.json"
     with zipfile.ZipFile(source_zip, "w") as archive:
         archive.writestr(
-            "challenge_sound_localisation_valid.json",
+            "all_valid.json",
             json.dumps({"v1": validation_row()}),
         )
     cut_map.write_text(json.dumps({"nid": -1, "v1": -1}), encoding="utf-8")
@@ -134,7 +134,7 @@ def test_builder_accepts_reused_local_sound_ids_across_video_groups(tmp_path, mo
     selection = tmp_path / "selection.json"
     with zipfile.ZipFile(source_zip, "w") as archive:
         archive.writestr(
-            "challenge_sound_localisation_valid.json",
+            "all_valid.json",
             json.dumps({"v1": validation_row("v1"), "v2": validation_row("v2")}),
         )
     cut_map.write_text(json.dumps({"nid": -1, "v1": -1, "v2": -1}), encoding="utf-8")
@@ -177,7 +177,7 @@ def test_builder_fails_closed_when_validation_rows_lack_object_tracks(
     row = validation_row()
     row.pop("object_tracking")
     with zipfile.ZipFile(source_zip, "w") as archive:
-        archive.writestr("challenge_sound_localisation_valid.json", json.dumps({"v1": row}))
+        archive.writestr("all_valid.json", json.dumps({"v1": row}))
     cut_map.write_text(json.dumps({"nid": -1, "v1": -1}), encoding="utf-8")
     selection.write_text(
         json.dumps(

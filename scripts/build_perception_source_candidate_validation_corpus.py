@@ -13,9 +13,9 @@ from tiny_omni_decision.perception_source_candidate import (
 )
 
 SOURCE_REVISION = "3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf"
-EXPECTED_VALIDATION_SHA256 = "4f0e602ba8f97313aca7d84805334a73edd94fa6f56d80b945954cd32327c141"
+EXPECTED_VALIDATION_SHA256 = "eeefeb43955b1850b5e521ad774fe66675baac0a2a06617bd83ffbe43aaf03d7"
 EXPECTED_CUT_MAP_SHA256 = "3cd9ae2d56f28ba70fa80ccca04aca6481ebab1bf1099f3aabe92afad89a67f7"
-VALIDATION_MEMBER = "challenge_sound_localisation_valid.json"
+VALIDATION_MEMBER = "all_valid.json"
 
 
 def sha256(path):
