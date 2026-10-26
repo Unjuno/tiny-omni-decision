@@ -33,8 +33,8 @@ softmax gate from erasing a stream before the recurrent layer can learn from
 it.
 
 The existing experiments also tested query-conditioned bidirectional
-cross-attention, a query-conditioned temporal gate, and a gated path with raw
-stream bypasses. Their code and negative results remain preserved in the
+cross-attention, a query-conditioned temporal gate, and a gated path with
+projected-stream bypasses. Their code and negative results remain preserved in the
 existing reports; none is retrained or selected again from the exposed
 development validation.
 
@@ -54,9 +54,9 @@ development validation.
 ## Verification
 
 The test suite uses the same video decoder as feature extraction and checks
-each decoded frame against its source frame in order. It also reads the
-rendered PCM waveform, recovers each tone's dominant frequency, and verifies
-that audio segment indices and timestamps align with the video frames. This
+each decoded frame against its source frame in order. It also checks decoded
+video presentation timestamps and duration, exact PCM sample count, tone
+frequency and order, and audio energy near each segment's boundaries. This
 verifies the renderer/decoder contract; it does not validate VideoPrism or
 EfficientAT representation quality.
 

@@ -98,6 +98,7 @@ def test_video_extraction_decoder_preserves_every_rendered_symbol_in_order(tmp_p
 def test_rendered_audio_symbols_keep_order_and_align_with_video_frames(tmp_path: Path):
     render_assets = _render_assets_with_optional_video_dependency()
     np = pytest.importorskip("numpy")
+    av = pytest.importorskip("av")
     import wave
 
     from scripts.prepare_synthetic_av_readout import (
@@ -117,15 +118,31 @@ def test_rendered_audio_symbols_keep_order_and_align_with_video_frames(tmp_path:
         assert audio_record["duration_seconds"] == video_record["frame_count"] / FRAME_RATE
         assert len(segments) == len(video_record["symbols"])
 
+        video = av.open(str(tmp_path / "aligned" / video_record["path"]))
+        try:
+            stream = video.streams.video[0]
+            decoded_frames = list(video.decode(stream))
+            decoded_times = [float(frame.pts * frame.time_base) for frame in decoded_frames]
+            assert len(decoded_frames) == video_record["frame_count"]
+            assert decoded_times == [index / FRAME_RATE for index in range(len(decoded_frames))]
+            assert float(stream.duration * stream.time_base) == len(decoded_frames) / FRAME_RATE
+        finally:
+            video.close()
+
         with wave.open(str(tmp_path / "aligned" / audio_record["path"]), "rb") as source:
             assert source.getframerate() == SAMPLE_RATE_HZ
             assert source.getnchannels() == 1
-            waveform = np.frombuffer(source.readframes(source.getnframes()), dtype="<i2")
+            frame_count = source.getnframes()
+            waveform = np.frombuffer(source.readframes(frame_count), dtype="<i2")
+
+        samples_per_event = round(SAMPLE_RATE_HZ * EVENT_SECONDS)
+        assert frame_count == len(video_record["symbols"]) * samples_per_event
+        assert len(waveform) == frame_count
 
         decoded_symbols = []
         for index, segment in enumerate(segments):
-            start = index * round(SAMPLE_RATE_HZ * EVENT_SECONDS)
-            stop = start + round(SAMPLE_RATE_HZ * EVENT_SECONDS)
+            start = index * samples_per_event
+            stop = start + samples_per_event
             samples = waveform[start:stop].astype(np.float64)
             assert segment["sample_start"] == start
             assert segment["sample_end"] == stop
@@ -141,6 +158,14 @@ def test_rendered_audio_symbols_keep_order_and_align_with_video_frames(tmp_path:
             assert segment["start_seconds"] == index / FRAME_RATE
             assert segment["end_seconds"] == (index + 1) / FRAME_RATE
             assert abs(peak_hz - TONE_FREQUENCIES_HZ[symbol]) <= 2.0
+
+            edge_window = round(0.025 * SAMPLE_RATE_HZ)
+            centered = samples - samples.mean()
+            segment_rms = np.sqrt(np.mean(centered**2))
+            onset_rms = np.sqrt(np.mean(centered[:edge_window] ** 2))
+            offset_rms = np.sqrt(np.mean(centered[-edge_window:] ** 2))
+            assert onset_rms >= 0.5 * segment_rms
+            assert offset_rms >= 0.5 * segment_rms
 
         assert decoded_symbols == video_record["symbols"], sequence_id
 
