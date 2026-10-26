@@ -41,6 +41,10 @@ files totaling 555,820 bytes. These are metadata sizes only; none of those files
 was fetched. The archive size is a material local-storage cost in addition to
 the unresolved terms and media-rights questions.
 
+At this screen, the local C: drive had 10.79 GiB free, so the complete listed
+video archive would not fit. No disk cleanup, partial archive download, cloud
+storage, or alternate compute was used.
+
 ## Task fit and representation path
 
 The authors describe event labels with temporal boundaries, making this a much
@@ -53,6 +57,15 @@ encoder audit. Raw-video extraction would require retrieving the source videos
 from YouTube. Before any fit, define a caller-option probability target from
 the event labels, retain concurrent-event semantics, and include audio-only,
 video-only, aligned AV, and source-shuffled controls.
+
+A read-only inspection of the pinned baseline config and dataset loader shows
+2048-dimensional visual features, 128-dimensional audio features, a 100-class
+temporal event detector, and max sequence length 224. Its published evaluator
+reports detection mAP over temporal-IoU thresholds 0.1–0.5, not calibrated
+supplied-option probabilities. Therefore using its annotations would require
+an explicit task/target adapter and a separate probability-quality evaluation;
+reproducing the original detector alone would not satisfy this project's
+Decision contract.
 
 ## Rights and access discrepancy
 
