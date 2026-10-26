@@ -643,6 +643,25 @@ def train(args: argparse.Namespace) -> dict:
             },
         )
     no_positive = {split: float((rows["target"] == 0).mean()) for split, rows in splits.items()}
+    baselines = {
+        split: {
+            "always_no": _metric_summary(
+                rows["target"],
+                np.zeros(len(rows["target"]), dtype=np.float32),
+                rows["event"],
+                rows["sector"],
+                rows["room"],
+            ),
+            "uniform": _metric_summary(
+                rows["target"],
+                np.full(len(rows["target"]), 0.5, dtype=np.float32),
+                rows["event"],
+                rows["sector"],
+                rows["room"],
+            ),
+        }
+        for split, rows in splits.items()
+    }
     result = {
         "status": "PASS",
         "source": "STARSS23 DOI 10.5281/zenodo.7880637; pinned dev-train metadata only",
@@ -651,6 +670,7 @@ def train(args: argparse.Namespace) -> dict:
             "not a blind audit or product quality claim"
         ),
         "class_prior_baseline_always_no_accuracy": no_positive,
+        "baselines": baselines,
         "arms": results,
         "runtime": {
             "torch": torch.__version__,
