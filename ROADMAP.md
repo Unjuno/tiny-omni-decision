@@ -128,6 +128,21 @@ independent train/calibration/validation/audit design. Its listed media archives
 total 17.63 GB, exceeding local free C: capacity. Keep REVIEW-only and do not
 download or evaluate. [Pinned source, task and storage screen](docs/pretrained_reuse/R2_DAVE_SOURCE_SCREEN_20261026.md).
 
+**2026-10-26 R2 QASC frozen-text Path A result reconciled:** The pinned
+MiniLM-L3 encoder (17,389,824 frozen parameters; local safetensors SHA-256
+`cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`) plus a
+196,865-parameter option scorer reached 21.81% Accuracy / 1.9925 NLL on 926
+eight-choice development examples (uniform chance 12.5% / 2.0794). The best
+checkpoint was epoch 1; across eight epochs train CE fell from 1.9743 to
+0.8321 while validation NLL, Brier and ECE worsened to 2.9282, 1.0865 and
+0.3680. The reconciled accounting reports zero train/validation overlap in
+fact-pair groups, IDs and normalized contents; normalized individual evidence
+facts still overlap and are a limitation. The official test shard was not
+opened. Treat this as weak task-specific text-transfer evidence with clear
+overfitting, and do not tune again on these exposed validation IDs. It does not
+justify shared-Lens or model-merging work. [Run, hashes, learning curve and
+limits](docs/pretrained_reuse/R2_QASC_TEXT_DECISION_20261026.md).
+
 **2026-10-26 R2 Perception source-candidate validation transfer complete:** The
 fixed epoch-7 readout scored 138 previously integrity-checked, but non-blind,
 official-validation events once: joint audio/video 52.17% set Accuracy / 1.4637
