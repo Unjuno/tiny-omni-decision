@@ -51,6 +51,17 @@ label-balanced, source-screened visibility probe is nonblind and cannot close
 the joint-quality gate. See the
 [`transfer diagnostic status`](docs/pretrained_reuse/R2_PERCEPTION_VALIDATION_TRANSFER_20261025.md).
 
+**2026-10-26 R2 source-candidate validation integrity:** Before reusing the
+existing epoch-7 source-candidate readout, a CPU audit verified the frozen
+official-validation cohort, zero video-group overlap with its 320-train/80-dev
+fit, all 276 candidate MP4/WAV hashes, and the checkpoint hash. It found 138
+eligible events across 138 video groups. This cohort was previously inspected
+and visibility-balanced, so it is a non-blind development-transfer diagnostic;
+no candidate-task metrics have been computed. The extraction path currently
+supports only train/development. Add and test an explicit official-validation
+path before a one-time fixed-checkpoint evaluation; do not tune on these IDs.
+See the [integrity report](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_VALIDATION_INTEGRITY_20261026.md).
+
 **2026-10-25 R2 one-time CoGenT-B audit complete:** The frozen ViLT
 image+question option readout scored 57.90% overall Accuracy / 0.7227 NLL and
 59.05% macro-by-answer-kind Accuracy / 0.7740 NLL on 15,000 held-out valB
