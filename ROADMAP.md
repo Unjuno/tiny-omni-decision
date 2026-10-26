@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 additional AV source screen:** MCIF's pinned CC-BY-4.0
+release has only test configurations, all sharing the same underlying audio and
+video, and its QA references are not supplied-option Decision labels. SlideSpeech
+is contextual AVSR; the publisher licenses metadata, while the corpus paper
+limits use to academic research and the source media are YouTube recordings.
+Neither source currently admits a supervised Path A AV Decision fit. No payload
+or media was downloaded/opened. [Source/task screen](docs/pretrained_reuse/R2_MCIF_SLIDESPEECH_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 Perception source-candidate validation transfer complete:** The
 fixed epoch-7 readout scored 138 previously integrity-checked, but non-blind,
 official-validation events once: joint audio/video 52.17% set Accuracy / 1.4637
