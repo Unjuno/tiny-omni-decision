@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 Perception source-candidate validation transfer complete:** The
+fixed epoch-7 readout scored 138 previously integrity-checked, but non-blind,
+official-validation events once: joint audio/video 52.17% set Accuracy / 1.4637
+NLL. Video-only was 55.07%, audio-only 13.77%; mismatched audio reduced
+Accuracy to 41.30%. A train-label option/none prior reached 57.25% by predicting
+`none_visible` for every event (0% visible-source hit), showing overall
+Accuracy is misleading here. No fitting or checkpoint selection used these
+IDs; this closes only the pending extraction/evaluation step, not R2-M or the
+broader multimodal Decision gate. Keep this readout diagnostic-only and do not
+fit again on the exposed cohort. See the [protocol, controls, intervals and
+hashes](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_VALIDATION_TRANSFER_20261026.md).
+
 **2026-10-26 R2 input-grounding and fusion recheck:** A fixed 168-example
 Open Images probe reached 79.17% Accuracy, but its selected scorer produced
 identical top-1 decisions after image features were zeroed or deranged. Treat
