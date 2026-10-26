@@ -46,6 +46,7 @@ def build_manifest_from_files(
     frozen_train_scope_path: Path,
     per_target_limit: int,
     seed: int,
+    excluded_image_ids: set[str] | None = None,
 ) -> dict[str, Any]:
     if split not in SPLIT_REVISIONS:
         raise ValueError("split must be train or validation")
@@ -73,6 +74,7 @@ def build_manifest_from_files(
             split=split,
             per_target_limit=per_target_limit,
             seed=seed,
+            excluded_image_ids=excluded_image_ids,
         )
 
     source_hashes = {
@@ -218,6 +220,11 @@ def main() -> None:
     parser.add_argument("--frozen-train-scope", type=Path, required=True)
     parser.add_argument("--per-target-limit", type=int, required=True)
     parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument(
+        "--exclude-manifest",
+        type=Path,
+        help="exclude every image_id in an earlier task manifest",
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--private-attribution-output", type=Path, required=True)
     args = parser.parse_args()
@@ -228,6 +235,17 @@ def main() -> None:
         raise ValueError("private attribution output must be outside the repository")
     if private_output.exists():
         raise FileExistsError(f"refusing to overwrite private receipt {private_output}")
+    excluded_image_ids: set[str] | None = None
+    exclude_manifest_sha256: str | None = None
+    if args.exclude_manifest is not None:
+        prior_manifest_path = args.exclude_manifest.resolve(strict=True)
+        prior_manifest = json.loads(prior_manifest_path.read_text(encoding="utf-8"))
+        excluded_image_ids = {
+            str(row["image_id"]) for row in prior_manifest.get("examples", [])
+        }
+        if not excluded_image_ids:
+            raise ValueError("exclude manifest contains no example image IDs")
+        exclude_manifest_sha256 = sha256_file(prior_manifest_path)
     manifest = build_manifest_from_files(
         split=args.split,
         image_metadata_path=args.image_metadata,
@@ -237,7 +255,9 @@ def main() -> None:
         frozen_train_scope_path=args.frozen_train_scope,
         per_target_limit=args.per_target_limit,
         seed=args.seed,
+        excluded_image_ids=excluded_image_ids,
     )
+    manifest["excluded_manifest_sha256"] = exclude_manifest_sha256
     receipt_rows = extract_private_attribution_rows(
         args.image_metadata,
         expected_split=args.split,

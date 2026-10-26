@@ -95,6 +95,46 @@ def validate_rows(
             raise ValueError("task failed the page-declaration gate")
 
 
+def validate_task_media_rows(
+    task_rows: list[dict[str, Any]], media_rows: list[dict[str, Any]]
+) -> None:
+    """Validate an image-only task/media pair without requiring VideoPrism features."""
+    if not task_rows or len(task_rows) != len(media_rows):
+        raise ValueError("task and media row counts must match and be nonzero")
+    seen_images: set[str] = set()
+    seen_samples: set[str] = set()
+    for task, media in zip(task_rows, media_rows, strict=True):
+        image_id = str(task.get("image_id", ""))
+        sample_id = str(task.get("sample_id", ""))
+        if not image_id or image_id in seen_images:
+            raise ValueError("image IDs must be nonempty and unique")
+        if not sample_id or sample_id in seen_samples:
+            raise ValueError("sample IDs must be nonempty and unique")
+        seen_images.add(image_id)
+        seen_samples.add(sample_id)
+        if task.get("split") != "validation" or media.get("split") != "validation":
+            raise ValueError("all rows must belong to validation")
+        if media.get("image_id") != image_id or media.get("sample_id") != sample_id:
+            raise ValueError("task/media row identity mismatch")
+        options = task.get("options")
+        if not isinstance(options, list) or len(options) != 4 or len(set(options)) != 4:
+            raise ValueError("each task must have exactly four unique options")
+        if task.get("target") not in options or media.get("target") != task.get("target"):
+            raise ValueError("task/media target mismatch")
+        if task.get("media_sha256") is not None and task.get("media_sha256") != media.get(
+            "media_sha256"
+        ):
+            raise ValueError("task/media hash mismatch")
+        if (
+            media.get("status") != "saved"
+            or media.get("page_license_and_attribution_match") is not True
+            or media.get("individual_rights_verified") is not False
+        ):
+            raise ValueError("only saved media with matching page declarations may be evaluated")
+        if task.get("page_license_and_attribution_match") is False:
+            raise ValueError("task failed the page-declaration gate")
+
+
 def quality_metrics(logits: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
     if logits.ndim != 2 or logits.shape[1] != 4 or targets.shape != (len(logits),):
         raise ValueError("expected four-choice logits and one target index per row")
@@ -219,7 +259,7 @@ def _write_json(path: Path, payload: Any) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--features-dir", type=Path, required=True)
+    parser.add_argument("--features-dir", type=Path)
     parser.add_argument("--media-dir", type=Path, action="append", required=True)
     parser.add_argument("--model-dir", type=Path, required=True)
     parser.add_argument("--tasks-manifest", type=Path, required=True)
@@ -227,12 +267,13 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--image-controls", action="store_true")
+    parser.add_argument("--fresh-task-id-set", action="store_true")
     args = parser.parse_args()
     if args.batch_size < 1 or args.batch_size > 32:
         raise ValueError("batch size must be between 1 and 32")
     if args.model_revision != EXPECTED_MODEL_REVISION:
         raise ValueError("this diagnostic is frozen to the audited TinyCLIP revision")
-    features_dir = args.features_dir.resolve(strict=True)
+    features_dir = args.features_dir.resolve(strict=True) if args.features_dir else None
     media_dirs = [path.resolve(strict=True) for path in args.media_dir]
     model_dir = args.model_dir.resolve(strict=True)
     tasks_path = args.tasks_manifest.resolve(strict=True)
@@ -245,7 +286,6 @@ def main() -> None:
     if sha256_file(model_weights) != EXPECTED_MODEL_SHA256:
         raise ValueError("TinyCLIP weights do not match the audited checkpoint hash")
 
-    feature_rows = read_jsonl(features_dir / "validation-rows.jsonl")
     media_by_id: dict[str, dict[str, Any]] = {}
     media_manifest_hashes: dict[str, str] = {}
     for media_dir in media_dirs:
@@ -264,33 +304,48 @@ def main() -> None:
             ):
                 raise ValueError("retried media manifests disagree on image content hash")
             media_by_id[image_id] = media_row | {"_artifact_root": str(media_dir)}
-    media_rows = [media_by_id.get(str(row["image_id"])) for row in feature_rows]
-    if any(row is None for row in media_rows):
-        raise ValueError("a validation feature is missing its source media manifest row")
     task_manifest = json.loads(tasks_path.read_text(encoding="utf-8"))
     all_task_rows = task_manifest["examples"]
     tasks_by_id = {str(row["image_id"]): row for row in all_task_rows}
     if len(tasks_by_id) != len(all_task_rows):
         raise ValueError("frozen task manifest must contain unique image IDs")
-    feature_image_ids_in_rows = [str(row["image_id"]) for row in feature_rows]
-    if not set(feature_image_ids_in_rows).issubset(tasks_by_id):
-        raise ValueError("a feature row is absent from the frozen task manifest")
-    task_rows = [tasks_by_id[image_id] for image_id in feature_image_ids_in_rows]
+    feature_rows: list[dict[str, Any]] | None = None
+    features_path: Path | None = None
+    feature_image_ids_in_rows: list[str] | None = None
+    if features_dir is not None:
+        feature_rows = read_jsonl(features_dir / "validation-rows.jsonl")
+        feature_image_ids_in_rows = [str(row["image_id"]) for row in feature_rows]
+        if not set(feature_image_ids_in_rows).issubset(tasks_by_id):
+            raise ValueError("a feature row is absent from the frozen task manifest")
+        task_rows = [tasks_by_id[image_id] for image_id in feature_image_ids_in_rows]
+        media_rows = [media_by_id.get(image_id) for image_id in feature_image_ids_in_rows]
+        if any(row is None for row in media_rows):
+            raise ValueError("a validation feature is missing its source media manifest row")
+        features_path = features_dir / "validation-features.npz"
+        with np.load(features_path, allow_pickle=False) as stored:
+            feature_sample_ids = stored["sample_ids"].astype(str).tolist()
+            feature_image_ids = stored["image_ids"].astype(str).tolist()
+            feature_hashes = stored["media_sha256"].astype(str).tolist()
+            if stored["features"].shape != (len(feature_rows), 768):
+                raise ValueError("unexpected VideoPrism feature matrix shape")
+        validate_rows(task_rows, feature_rows, media_rows)
+        if [row["sample_id"] for row in task_rows] != feature_sample_ids:
+            raise ValueError("frozen task order differs from feature sample order")
+        if [row["image_id"] for row in task_rows] != feature_image_ids:
+            raise ValueError("frozen task image order differs from feature image order")
+        if [row["media_sha256"] for row in media_rows] != feature_hashes:
+            raise ValueError("frozen media-manifest hashes differ from feature media hashes")
+    else:
+        task_rows = [
+            row
+            for row in all_task_rows
+            if str(row["image_id"]) in media_by_id
+            and media_by_id[str(row["image_id"])].get("status") == "saved"
+            and media_by_id[str(row["image_id"])].get("page_license_and_attribution_match") is True
+        ]
+        media_rows = [media_by_id[str(row["image_id"])] for row in task_rows]
+        validate_task_media_rows(task_rows, media_rows)
     excluded_task_count = len(all_task_rows) - len(task_rows)
-    features_path = features_dir / "validation-features.npz"
-    with np.load(features_path, allow_pickle=False) as stored:
-        feature_sample_ids = stored["sample_ids"].astype(str).tolist()
-        feature_image_ids = stored["image_ids"].astype(str).tolist()
-        feature_hashes = stored["media_sha256"].astype(str).tolist()
-        if stored["features"].shape != (len(feature_rows), 768):
-            raise ValueError("unexpected VideoPrism feature matrix shape")
-    validate_rows(task_rows, feature_rows, media_rows)
-    if [row["sample_id"] for row in task_rows] != feature_sample_ids:
-        raise ValueError("frozen task order differs from feature sample order")
-    if [row["image_id"] for row in task_rows] != feature_image_ids:
-        raise ValueError("frozen task image order differs from feature image order")
-    if [row["media_sha256"] for row in media_rows] != feature_hashes:
-        raise ValueError("frozen media-manifest hashes differ from feature media hashes")
 
     import torch
     from transformers import AutoModelForZeroShotImageClassification, AutoProcessor
@@ -442,14 +497,18 @@ def main() -> None:
         "image_derangement_seed": 20261026 if args.image_controls else None,
         "training_performed": False,
         "checkpoint_selection_performed": False,
-        "validation_previously_exposed": True,
+        "validation_previously_exposed": not args.fresh_task_id_set,
+        "validation_task_ids_previously_scored": not args.fresh_task_id_set,
+        "validation_source_support_aggregates_previously_inspected": True,
         "sealed_audit_loaded": False,
         "split": "development_validation",
         "count": len(task_rows),
         "frozen_manifest_count": len(all_task_rows),
         "excluded_unavailable_media_count": excluded_task_count,
-        "feature_cache_sha256": sha256_file(features_path),
-        "feature_rows_sha256": sha256_file(features_dir / "validation-rows.jsonl"),
+        "feature_cache_sha256": sha256_file(features_path) if features_path else None,
+        "feature_rows_sha256": (
+            sha256_file(features_dir / "validation-rows.jsonl") if features_dir else None
+        ),
         "task_manifest_sha256": sha256_file(tasks_path),
         "media_manifest_sha256": media_manifest_hashes,
         "result_predictions_sha256": sha256_file(predictions_path),

@@ -8,6 +8,7 @@ from scripts.evaluate_openimages_tinyclip_zero_shot import (
     probabilities_from_logits,
     quality_metrics,
     validate_rows,
+    validate_task_media_rows,
 )
 
 
@@ -44,6 +45,16 @@ def _row_bundle():
 
 def test_validate_rows_accepts_aligned_page_matched_four_choice_inputs():
     validate_rows(*_row_bundle())
+
+
+def test_validate_task_media_rows_does_not_require_another_encoder_cache():
+    tasks, _, media = _row_bundle()
+    tasks[0].pop("media_sha256")
+    validate_task_media_rows(tasks, media)
+
+    tasks[0]["media_sha256"] = "b" * 64
+    with pytest.raises(ValueError, match="task/media hash mismatch"):
+        validate_task_media_rows(tasks, media)
 
 
 def test_validate_rows_rejects_repeated_image_or_sample_ids():

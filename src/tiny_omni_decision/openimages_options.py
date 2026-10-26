@@ -418,15 +418,19 @@ def build_split_task_manifest(
     split: str,
     per_target_limit: int,
     seed: int,
+    excluded_image_ids: Set[str] | None = None,
 ) -> dict[str, Any]:
     """Select a frozen-scope, image-unique task pilot from one official split."""
     if split not in {"train", "validation"}:
         raise ValueError("split must be train or validation")
     if not allowed_image_ids:
         raise ValueError("metadata allowlist must not be empty")
+    excluded = set(excluded_image_ids or ())
+    eligible_image_ids = set(allowed_image_ids) - excluded
+    excluded_in_split = set(allowed_image_ids) & excluded
     target_payload = "\n".join(sorted(target_labels))
     examples = build_four_choice_examples(
-        (row for row in grouped_labels if row.get("image_id") in allowed_image_ids),
+        (row for row in grouped_labels if row.get("image_id") in eligible_image_ids),
         target_labels=target_labels,
         sibling_groups=sibling_groups,
         display_names=display_names,
@@ -452,6 +456,11 @@ def build_split_task_manifest(
         "seed": seed,
         "per_target_limit": per_target_limit,
         "allowed_image_id_count": len(allowed_image_ids),
+        "eligible_image_id_count": len(eligible_image_ids),
+        "excluded_image_id_count": len(excluded_in_split),
+        "excluded_image_ids_sha256": hashlib.sha256(
+            "\n".join(sorted(excluded_in_split)).encode("utf-8")
+        ).hexdigest(),
         "example_count": len(examples),
         "unique_image_count": len({example["image_id"] for example in examples}),
         "counts_by_target": counts,

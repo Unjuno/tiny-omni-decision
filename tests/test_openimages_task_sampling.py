@@ -69,6 +69,38 @@ def test_split_manifest_is_seeded_scoped_licensed_and_image_unique():
     )
 
 
+def test_split_manifest_excludes_prior_image_ids_deterministically():
+    sibling_groups = {"/car": ("/boat", "/bicycle", "/bus")}
+    display_names = {
+        "/car": "Car",
+        "/boat": "Boat",
+        "/bicycle": "Bicycle",
+        "/bus": "Bus",
+    }
+    kwargs = {
+        "grouped_labels": [
+            _group(image_id, "/car", ("/boat", "/bicycle", "/bus"))
+            for image_id in ("a", "b", "c", "d")
+        ],
+        "allowed_image_ids": {"a", "b", "c", "d"},
+        "target_labels": ("/car",),
+        "sibling_groups": sibling_groups,
+        "display_names": display_names,
+        "split": "validation",
+        "per_target_limit": 4,
+        "seed": 1729,
+        "excluded_image_ids": {"a", "c"},
+    }
+
+    manifest = build_split_task_manifest(**kwargs)
+
+    assert manifest == build_split_task_manifest(**kwargs)
+    assert {row["image_id"] for row in manifest["examples"]} == {"b", "d"}
+    assert manifest["allowed_image_id_count"] == 4
+    assert manifest["eligible_image_id_count"] == 2
+    assert manifest["excluded_image_id_count"] == 2
+
+
 def test_split_manifest_rejects_unknown_split_and_empty_allowlist():
     kwargs = {
         "grouped_labels": [],

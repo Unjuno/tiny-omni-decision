@@ -2892,3 +2892,13 @@ therefore adds no demonstrated Accuracy benefit, and these synthetic results
 do not close the natural AV quality gate. See the
 [`modality-bypass result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_MODALITY_BYPASS_RESULTS_20261026.md)
 and [`identity-initialized raw-feature gate result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_RESIDUAL_GATE_RESULTS_20261026.md).
+
+### Open Images fresh task-ID TinyCLIP reference (2026-10-26)
+
+A fixed TinyCLIP zero-shot comparison on 168 newly sampled validation image IDs
+scored64.29% Accuracy /1.0385 NLL. Zeroed and deranged image controls scored
+43.45% and33.93%, confirming image-input sensitivity on this narrow supplied-
+option task. The subset comes from the same public validation split, so it is
+not a blind audit or independent quality claim; no fitting or checkpoint
+selection occurred. Preserve as an image reference, not Path A completion.
+[`Protocol and hashes`](docs/pretrained_reuse/R2_OPENIMAGES_TINYCLIP_FRESH_VALIDATION_20261026.md).
