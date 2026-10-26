@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 screen-action source screen:** Official Android in the Wild
+provides screen/instruction/action trajectories and episode-wise plus OOD split
+descriptions, but its dataset README states no data-payload license; the
+repository Apache-2.0 license is for code, and records include third-party app
+and website content. Its coordinate/type actions also need a fixed supplied-
+option conversion. Keep REVIEW-only and do not fetch or fit until payload rights
+and a grouped decision task are established. [Pinned source screen](docs/pretrained_reuse/R2_ANDROID_IN_THE_WILD_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 JCommonsenseQA source screen:** Official JGLUE v1.1.0
 declares CC BY-SA 4.0 and the publisher catalog permits training/evaluation,
 but its train/valid splits share 17 normalized question groups (24 train / 19
