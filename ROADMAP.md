@@ -139,6 +139,12 @@ MMAct terms restrict its multimodal data to academic research and prohibit
 commercial use, so it is excluded from this product path. No data were
 downloaded or used; M-2 remains open. See the
 [`sensor+video source screen`](docs/pretrained_reuse/R2_SENSOR_VIDEO_SOURCE_SCREEN_20261026.md).
+The same follow-up screened BridgeData V2: its official data are CC BY 4.0 and
+include synchronized images, robot state, actions, and language, but the
+published TFDS release is 387.49 GiB and current free local storage is 39.4 GB.
+Its raw conversion uses unseeded per-collection trajectory shuffling, so an
+immutable source-group split is not established. It remains metadata-only
+`REVIEW`; no files were fetched and no M-2 task is admitted.
 
 **2026-10-25 R1/R2 PE-Core T16 evidence reconciliation:** The independent
 `codex/r1-pe-core-audit-20261021` branch's pinned checkpoint and CLEVR-4
