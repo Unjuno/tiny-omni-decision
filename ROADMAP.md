@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 M³AV source screen:** The pinned publisher repository and
+dataset card provide a speaker-disjoint 901/99/113 train/dev/test split and
+multimodal lecture annotations, but specify CC BY-NC-SA 4.0 and retain original
+video copyrights. Hosted payload is 45.5 GB, beyond current free local storage;
+public benchmark dev/test results are not blind. Keep REVIEW-only. The shallow
+Git inspection included publisher demo samples; they were not opened or used,
+and the working files were removed. See the [source screen](docs/pretrained_reuse/R2_M3AV_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 RAVDESS source screen:** RAVDESS is a possible narrow
 acted-emotion AV probe with 24 actor identities, but its official Zenodo record
 contradicts itself between a generic CC BY description and an explicit CC
