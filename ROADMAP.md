@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R7 Path A package-integrity recheck:** The preserved v4 assembly
+has two unmanifested `.pyc` files and fails the strict verifier. All 42
+manifest-listed files match their hashes. A new immutable clean copy containing
+only those 42 files passes strict verification at 170.50M parameters and
+687.25MB; the 200MB package target remains unmet. Original files were not
+changed. [Integrity report](docs/pretrained_reuse/R7_PATH_A_PACKAGE_INTEGRITY_RECHECK_20261026.md).
+
 **2026-10-26 R2 AV-SyncBench source screen:** The pinned benchmark is relevant
 to temporal/semantic AV alignment but only evaluates pairwise original versus
 perturbed scoring, publishes no training path, and depends on third-party
