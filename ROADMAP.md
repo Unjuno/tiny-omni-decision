@@ -1,3 +1,14 @@
+**2026-10-26 R2 TinyCLIP Path A zero-shot image control:** A pinned TinyCLIP
+checkpoint (83.10M runtime parameters, 332.4 MB weights file) ranked four
+supplied object choices on 168 available, page-declaration-matched Open Images
+development validation examples with 64.88% Accuracy, NLL 0.9902, Brier 0.4899,
+and ECE 0.0942. Replacing images with a neutral gray image reduced Accuracy to
+49.40%; a fixed image derangement reduced it to 34.52%, showing paired-image
+sensitivity on this narrow exposed task. The result is below the project goal,
+uses a small validation sample, and does not independently establish image
+ownership. It does not change model selection or close R2. See the
+[`TinyCLIP zero-shot report`](docs/pretrained_reuse/R2_OPENIMAGES_TINYCLIP_ZERO_SHOT_20261026.md).
+
 **2026-10-26 R2 Open Images frozen-feature input control:** The initial
 VideoPrism-B + MiniLM readout scored 79.17% Accuracy on 168 development
 validation choices, but a fixed input ablation gave exactly the same top-1

@@ -1,0 +1,38 @@
+experiment_id: path-a-openimages-tinyclip-zero-shot-seed17
+description: >-
+  Fixed-prompt zero-shot image-to-option scoring on the already exposed,
+  page-declaration-matched Open Images V6 development validation pilot.
+seed: 17
+training: false
+checkpoint_selection: false
+calibration: false
+prompt_search: false
+sealed_audit: false
+model:
+  repository: wkcn/TinyCLIP-ViT-39M-16-Text-19M-YFCC15M
+  revision: 07a4b0bc751cb64fecd2b661c048c1dd98d69444
+  declared_license: MIT
+  weights_sha256: 112bdfb07ebc8994e9afba7a2a314e278493a675033595cf48e54cf8a17ae587
+  runtime_parameters: 83101185
+  local_checkpoint_bytes: 332443148
+decision:
+  task: Open Images V6 hierarchy-aware object presence, four supplied choices
+  question: Which object is present in the image?
+  prompt_template: "a photo containing {label}."
+  prompt_case: lowercase
+  scoring: CLIP image-text similarity logits, softmax over supplied options only
+  ece_bins: 15
+  validation_examples: 168
+data:
+  task_manifest_sha256: 6fbd56f0caebc77b1067dfffaadb444aaf51b4b01eabff3855c11a245f86f964
+  videoprism_feature_cache_sha256: 2b13b7b50e026aa2c8e975239784b1d4aac5ea6343a446ba0bf490ca15fe1622
+  validation_image_license_gate: Flickr page CC BY 2.0 declaration and attribution profile match
+  individual_ownership_independently_verified: false
+  validation_previously_exposed: true
+runtime:
+  device: cpu
+  batch_size: 8
+  torch_threads: 4
+  max_batch_size: 32
+  output_directory: C:\CodexArtifacts\pretrained-reuse-r2\openimages-tinyclip-zero-shot-20261026-attempt-02
+  image_controls: [neutral_gray, deranged_seed_20261026]
