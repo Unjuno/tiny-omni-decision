@@ -29,6 +29,15 @@ both raw and calibrated controls. This is one exposed, highly imbalanced task,
 not blind or product evidence; R2 and the overall goal remain open. [Full
 protocol, hashes, metrics, corrected control audit, and limitations](docs/pretrained_reuse/R2_STARSS23_SPATIAL_DECISION_RESULTS_20261026.md).
 
+**2026-10-26 R2 AVMIT source screen:** The AVMIT annotation set is a promising
+audio/video correspondence task lead (57,177 rated clips and a public 960-clip
+controlled test), but the test is already exposed, original Moments in Time
+media require separate access, and the Zenodo embedding archive has no verified
+license field. Its supplied VGGish/VGG16 or YAMNet/EfficientNet features also do
+not test the pinned Path A encoders. Keep it REVIEW; do not fetch embeddings,
+inspect the test labels, or fit. Details and primary sources are in the [source
+screen](docs/pretrained_reuse/R2_AVMIT_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 additional AV source screen:** MCIF's pinned CC-BY-4.0
 release has only test configurations, all sharing the same underlying audio and
 video, and its QA references are not supplied-option Decision labels. SlideSpeech
