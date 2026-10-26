@@ -41,7 +41,7 @@
 - [x] Add tests for clip-config equality outside the cap, invalid caps, and preserved default behavior.
 - [x] Run tests and verify the new tests fail before implementation.
 - [x] Implement CLI/effective-config/provenance/reference checks, dynamic clip call and fail-closed GPU preflight.
-- [x] Run targeted tests, Ruff and the full CPU suite (2,636 passed, 11 skipped); commit and push remain pending.
+- [x] Run targeted tests, Ruff and the full CPU suite (2,636 passed, 11 skipped); commit/push completed in `533c3c5`.
 
 ### Task 2: Execute and compare the fixed candidate
 
@@ -52,9 +52,11 @@
 
 **Interfaces:** Consume the pinned norm-1.0 fit and the new runner's norm-2.0 smoke/train/replay receipts.
 
-- [ ] Run a 32-update smoke with clip norm 2.0 under HotUGPU reservation.
-- [ ] Verify effective config, learning-rate/sample-order identity and resource projection before the main fit.
-- [ ] Complete the 32,768-update candidate run without performance early stopping; preserve best/final checkpoints.
-- [ ] Fresh-process replay best/final and compute the predeclared comparisons to clip 1.0.
-- [ ] Record metrics, compute, limitations and exact hashes; run manifest checks, commit/push and verify target CI.
+- [x] Run a 32-update smoke with clip norm 2.0 under HotUGPU reservation.
+- [x] Verify effective config, learning-rate/sample-order identity and resource projection before the main fit.
+- [x] Complete the 32,768-update candidate run without performance early stopping; preserve best/final checkpoints.
+- [x] Fresh-process replay best/final and compute the predeclared comparisons to clip 1.0.
+- [x] Record metrics, compute, limitations and exact hashes in the R2 report.
+- [x] Run Ruff, the full CPU suite, manifest/catalog validation and diff checks.
+- [ ] Commit/push the report and roadmap update; verify target CI.
 

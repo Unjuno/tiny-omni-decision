@@ -2920,3 +2920,15 @@ natural-AV development task. CommonsenseQA2 and QASC both show weak narrow
 text transfer. Continue source/task admission before another natural-AV fit;
 preserve all concurrent PRs and exposed validation IDs.
 [Cross-branch evidence and gates](docs/pretrained_reuse/R2_CROSS_BRANCH_EVIDENCE_20261026.md).
+
+### Native Decision gradient clipping comparison (2026-10-26)
+
+The fixed seed-17 clip-norm 2.0 candidate completed32,768 updates against the
+preserved clip-1.0 run, changing no other effective configuration field. Its
+validation-selected macro Accuracy rose1.33pp, with modestly lower macro NLL and
+Brier but slightly worse ECE and materially worse text calibration. Later
+validation shows strong overfitting despite rising Accuracy. Do not promote or
+extend this run; keep the norm-1.0 baseline and continue task/data quality work.
+Best/final checkpoint replay matched exactly. This is one exposed validation
+comparison, not blind evidence or evidence of a model-family ceiling.
+[Protocol, learning curve, metrics, compute and hashes](docs/pretrained_reuse/R2_NATIVE_CLIP_NORM_RESULTS_20261026.md).
