@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 RAVDESS source screen:** RAVDESS is a possible narrow
+acted-emotion AV probe with 24 actor identities, but its official Zenodo record
+contradicts itself between a generic CC BY description and an explicit CC
+BY-NC-SA 4.0 license section. The 24.8 GB collection also exceeds current free
+local storage. Keep it REVIEW-only; no data or labels were fetched or used.
+See the [source screen](docs/pretrained_reuse/R2_RAVDESS_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 CREMA-D source/task screen:** CREMA-D offers same-clip
 audio-only, video-only and audiovisual human-perception labels, making it a
 useful narrow candidate for testing modality contribution. Its repository
