@@ -1,3 +1,14 @@
+**2026-10-27 R2 DROID nested temporal comparison:** A fixed, invertible
+112-value sensor transform improved outer-train Accuracy from 40.36% to 41.82%
+and macro NLL from 2.2347 to 2.1833 under five-outer/four-inner grouped CV.
+Both heads have 791 parameters and identical inputs; macro NLL improved in
+three outer folds and worsened in two. Four target classes still have zero
+recall. All ten saved outer heads passed training-only standardization and
+probability replay checks. No development validation, encoder or GPU ran; no
+capacity/fusion/product claim. Preserve the small result without adaptive
+tuning on this cohort. See the
+[comparison](docs/pretrained_reuse/R2_DROID_TRAIN_TEMPORAL_CV_20261027.md).
+
 **2026-10-27 R2 DROID train temporal diagnostic:** On the 275 frozen train
 episodes, copying the previous command predicts the next command at 94.55%,
 but uses extra action history absent from the old readouts. Fixed original

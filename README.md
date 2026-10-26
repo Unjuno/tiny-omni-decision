@@ -6,6 +6,10 @@ to position sampling (46.18% sparse / 53.45% consecutive). These are not model
 quality or validation results; temporal representation needs a controlled check
 before increasing fusion capacity.
 [Evidence and limits](docs/pretrained_reuse/R2_DROID_TRAIN_TEMPORAL_20261027.md).
+The subsequent same-input nested train-CV comparison gave only a small gain:
+40.36% to 41.82% Accuracy, with zero recall on four classes. It does not
+establish useful fusion or justify a capacity claim.
+[Controlled comparison](docs/pretrained_reuse/R2_DROID_TRAIN_TEMPORAL_CV_20261027.md).
 
 **2026-10-26 Open Images probe follow-up:** the selected frozen VideoPrism-B +
 MiniLM scorer made the exact same top-1 predictions on all 168 development
