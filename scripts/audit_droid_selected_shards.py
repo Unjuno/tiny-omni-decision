@@ -65,6 +65,19 @@ def audit_selected_shards(data_dir: Path, manifest: dict, debug_audit: dict) -> 
             }
             if any(count != steps for count in camera_counts.values()):
                 raise ValueError("camera frame count differs from the episode step count")
+            per_step_dimensions = {
+                "steps/observation/joint_position": 7,
+                "steps/observation/cartesian_position": 6,
+                "steps/observation/gripper_position": 1,
+                "steps/action_dict/cartesian_velocity": 6,
+                "steps/action_dict/cartesian_position": 6,
+            }
+            for key, dimensions in per_step_dimensions.items():
+                count = int(feature_counts.get(key, {}).get("count", 0))
+                if count != steps * dimensions:
+                    raise ValueError(
+                        f"{key} count differs from {dimensions} values per step"
+                    )
             joint_velocity_count = int(
                 feature_counts.get("steps/action_dict/joint_velocity", {}).get("count", 0)
             )
@@ -151,6 +164,7 @@ def audit_selected_shards(data_dir: Path, manifest: dict, debug_audit: dict) -> 
             "mean": sum(step_counts) / len(step_counts),
         },
         "camera_frames_equal_steps_for_all_episodes": True,
+        "proprioception_and_action_fields_match_steps": True,
         "joint_velocity_7d_and_gripper_count_match_steps": True,
         "success_failure_source_folders": {
             "success": sum("/success/" in value for value in files),

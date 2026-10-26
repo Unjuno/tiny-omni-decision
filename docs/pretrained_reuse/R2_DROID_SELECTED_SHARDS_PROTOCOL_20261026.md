@@ -94,7 +94,7 @@ step fields without decoding JPEG pixels or fitting a model. The enriched audit
 JSON is external at
 `C:\CodexArtifacts\pretrained-reuse-r2\droid-selected-shards-seed17-20261026-attempt-01\group-audit-03.json`
 with SHA-256
-`652b9973bb74c39b005d9bd367f9c880957b0271ac0a6e0ccb060cb79470a87f`.
+`d60f850f88725a45f918a992685ab1174b38f086ea14029cac1ab665a504bc3b`.
 Regenerating the split produces the same SHA-256 as the original:
 `d8d2e1ef353d2ea6388dd7e7574623e3b4d6518474afed14f042fc1838df7e43`.
 
@@ -107,7 +107,8 @@ Regenerating the split produces the same SHA-256 as the original:
 | Train instructions present / absent | 181 / 158 |
 | Validation instructions present / absent | 121 / 79 |
 | Episodes where all 3 camera counts equal step count | 539 / 539 |
-| Episodes where joint-velocity count equals 7 × steps and gripper count equals steps | 539 / 539 |
+| Episodes where 7D joint position, 6D Cartesian position, gripper state, and 6D action position/velocity match steps | 539 / 539 |
+| Episodes where 7D joint velocity and gripper action count match steps | 539 / 539 |
 
 Thus text conditioning is available for only 56.0% of this sample. Instruction-
 conditioned scores must use the text-present subset and also report text-missing
