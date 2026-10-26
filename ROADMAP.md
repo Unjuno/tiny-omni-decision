@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 UnAV-100 source preflight:** Its official split CSV contains
+10,790 unique YouTube IDs (6,489 train / 2,134 validation / 2,167 test) with no
+cross-split ID overlap and positive spans. This is a promising natural AV event
+task, but the project site says CC BY 4.0 while the pinned Hugging Face card
+says CC BY-NC-SA 4.0; underlying video copyrights remain with source owners.
+No annotations, features or videos were opened. Keep it REVIEW-only until the
+license discrepancy and source-video rights are resolved.
+[CSV hash and scope](docs/pretrained_reuse/R2_UNAV100_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 additional AV source screen:** MCIF's pinned CC-BY-4.0
 release has only test configurations, all sharing the same underlying audio and
 video, and its QA references are not supplied-option Decision labels. SlideSpeech
