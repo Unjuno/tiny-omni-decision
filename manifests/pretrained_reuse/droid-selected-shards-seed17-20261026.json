@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "dataset_id": "droid/droid",
+  "dataset_version": "1.4.0",
+  "bucket": "gresearch",
+  "prefix": "robotics/droid/1.0.0/",
+  "split": "train",
+  "selection_seed": 17,
+  "selection_method": "sorted(random.Random(17).sample(range(2048), 12))",
+  "expected_episode_count": 539,
+  "expected_object_count": 15,
+  "expected_total_bytes": 10724824602,
+  "dataset_info_sha256": "8cbd8f70428943515a67e2a571267c4de2eb71f33957c0269d8fcd5608951e4f",
+  "features_sha256": "4c556e2e38e179e41089e07cf54273b1540d67d3c78a420898370329813c9a25",
+  "license_record": [
+    {
+      "name": "robotics/droid/1.0.0/CC-BY-4.0",
+      "generation": "1710518471643551",
+      "size": 18650,
+      "md5Hash": "Shf/wnyfOyQPv0/hd4PInA=="
+    }
+  ],
+  "selected_shards": [
+    {
+      "index": 110,
+      "episodes": 47,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00110-of-02048"
+    },
+    {
+      "index": 451,
+      "episodes": 49,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00451-of-02048"
+    },
+    {
+      "index": 715,
+      "episodes": 41,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00715-of-02048"
+    },
+    {
+      "index": 1019,
+      "episodes": 48,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01019-of-02048"
+    },
+    {
+      "index": 1033,
+      "episodes": 34,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01033-of-02048"
+    },
+    {
+      "index": 1139,
+      "episodes": 53,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01139-of-02048"
+    },
+    {
+      "index": 1186,
+      "episodes": 42,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01186-of-02048"
+    },
+    {
+      "index": 1242,
+      "episodes": 40,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01242-of-02048"
+    },
+    {
+      "index": 1497,
+      "episodes": 46,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01497-of-02048"
+    },
+    {
+      "index": 1573,
+      "episodes": 40,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01573-of-02048"
+    },
+    {
+      "index": 1696,
+      "episodes": 42,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01696-of-02048"
+    },
+    {
+      "index": 1718,
+      "episodes": 57,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01718-of-02048"
+    }
+  ],
+  "objects": [
+    {
+      "name": "robotics/droid/1.0.0/CC-BY-4.0",
+      "generation": "1710518471643551",
+      "size": 18650,
+      "md5Hash": "Shf/wnyfOyQPv0/hd4PInA=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/dataset_info.json",
+      "generation": "1710518471693866",
+      "size": 29031,
+      "md5Hash": "jBB9xwEQ8scnhHTlfp3eQg=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/features.json",
+      "generation": "1710518479206616",
+      "size": 18665,
+      "md5Hash": "AUayWu2IHU/GMy61byaQpg=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00110-of-02048",
+      "generation": "1710518471840826",
+      "size": 906131219,
+      "md5Hash": "jwjezHe5o+IpGdeZ5K16fA=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00451-of-02048",
+      "generation": "1710518473323082",
+      "size": 952589366,
+      "md5Hash": "zumG+C5JjpLEHddy+4y74g=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00715-of-02048",
+      "generation": "1710518474239854",
+      "size": 876877392,
+      "md5Hash": "mcAMDY2xaYk0Xeg2oEde3g=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01019-of-02048",
+      "generation": "1710518475856471",
+      "size": 966105375,
+      "md5Hash": "usCKi65DME6pI2JBxjNj7g=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01033-of-02048",
+      "generation": "1710518478866902",
+      "size": 624549250,
+      "md5Hash": "rGl1HM6iguq1JjSVXGIDJA=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01139-of-02048",
+      "generation": "1710518476089392",
+      "size": 1025800346,
+      "md5Hash": "fxvsWuASdC+Y+LRj2VDmFg=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01186-of-02048",
+      "generation": "1710518476186536",
+      "size": 863268374,
+      "md5Hash": "ECeKZexTKSQFOJDnBWJrEg=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01242-of-02048",
+      "generation": "1710518476381105",
+      "size": 889593173,
+      "md5Hash": "mTwc9Y2lwEme7v40YsY2HA=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01497-of-02048",
+      "generation": "1710518477260274",
+      "size": 914303399,
+      "md5Hash": "C4VKaStRthRkmINlBN1SQQ=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01573-of-02048",
+      "generation": "1710518477517986",
+      "size": 752869507,
+      "md5Hash": "KIrsTys6/ipcbmSrHGomiQ=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01696-of-02048",
+      "generation": "1710518477839792",
+      "size": 945152648,
+      "md5Hash": "Hfgv6RMqpBwW0v5UTpm1yw=="
+    },
+    {
+      "name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01718-of-02048",
+      "generation": "1710518477902773",
+      "size": 1007518207,
+      "md5Hash": "F3t3Ml0//mbygKdCOwInDw=="
+    }
+  ]
+}
