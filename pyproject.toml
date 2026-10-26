@@ -37,6 +37,7 @@ ml = [
   "huggingface-hub>=0.35,<2",
 ]
 data = ["datasets>=4,<5"]
+research = ["scipy>=1.11,<2"]
 
 [project.scripts]
 tiny-omni-decision = "tiny_omni_decision.cli:app"

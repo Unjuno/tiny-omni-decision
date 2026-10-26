@@ -1916,7 +1916,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
   iNaturalist is a promising natural image-only species-decision candidate: aggregate API counts confirm scale when both observation and photo licenses are restricted to CC0/CC-BY, but no individual media is admitted until a pinned export, per-photo attribution/licensing, observer splits, and overlap checks pass. See [source screen](docs/pretrained_reuse/R2_INATURALIST_BIRD_IMAGE_SOURCE_SCREEN_20261026.md).
   A shared typed, text-free JSON output boundary now connects audio, image, video, and sensor readouts; screen, audio/image/video feature-provenance binding, and task-level integration metrics remain open. See [implementation note](docs/pretrained_reuse/R2_NATIVE_DECISION_JSON_BOUNDARY_20261026.md).
 - [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Include matched best-unimodal baselines, all missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
-  DROID is a possible video+robot-state+instruction source. A fixed 539-episode sample from its official train split now has 339 train and 200 development-validation groups with zero split overlap; a serialized-field audit confirms aligned camera/state/action step counts, but 237 episodes lack instruction text and the source schema has no explicit per-step timestamps. No task metrics or blind audit exist; M-2 remains open. See [source/task screen](docs/pretrained_reuse/R2_DROID100_SOURCE_TASK_SCREEN_20261026.md) and [selected-shard protocol/results](docs/pretrained_reuse/R2_DROID_SELECTED_SHARDS_PROTOCOL_20261026.md).
+  DROID is a possible video+robot-state source. A fixed 539-episode sample from its official train split has 339 train and 200 development-validation groups with zero split overlap; a serialized-field audit confirms aligned camera/state/action counts, but 237 episodes lack instruction text and the schema has no explicit timestamps. The one-step gripper-choice proxy is nearly solved by previous-command persistence (99% validation), so it is not used as the fusion task. A weakly labeled early-outcome video+sensor task used pinned frozen VideoPrism features for all 337 train / 200 development-validation episodes. Video, sensor, and concatenated L2 readouts scored 76.5%, 83.0%, and 79.5% Accuracy versus 85.0% for the train-prevalence baseline; failure recall was at most 23.3% for video/fusion, and the fused head had worse NLL/Brier than sensor-only. This task is not useful for promotion and does not close M-2; no sealed audit was loaded. See docs/pretrained_reuse/R2_DROID_EARLY_OUTCOME_RESULTS_20261026.md. See [source/task screen](docs/pretrained_reuse/R2_DROID100_SOURCE_TASK_SCREEN_20261026.md) and [selected-shard protocol/results](docs/pretrained_reuse/R2_DROID_SELECTED_SHARDS_PROTOCOL_20261026.md).
 - [ ] **M-3–M-6:** Add optional text/spoken conditions without making them compulsory, then evaluate individual and combined task quality, <=200M loaded parameters **including the sensor path**, and actual post-quantization >=95% recovery on the same locked task battery. Do not claim general 95–98% world understanding from unrelated narrow benchmarks; lock evaluation before training/selection.
 
 
@@ -2893,3 +2893,19 @@ therefore adds no demonstrated Accuracy benefit, and these synthetic results
 do not close the natural AV quality gate. See the
 [`modality-bypass result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_MODALITY_BYPASS_RESULTS_20261026.md)
 and [`identity-initialized raw-feature gate result`](docs/pretrained_reuse/R2_SYNTHETIC_AV_RESIDUAL_GATE_RESULTS_20261026.md).
+
+**2026-10-26 R2 DROID early-outcome frozen-feature result:** Complete pinned
+VideoPrism CPU features now cover the fixed 337 train / 200 development
+validation task episodes, and video-only, sensor-only, and concatenated L2
+readouts were measured. Their validation accuracies (76.5%, 83.0%, 79.5%) all
+fell below the 85.0% train-prevalence baseline; the fusion readout also had
+23.3% failure recall and worse NLL/Brier than sensor-only. This weak source-path
+label task is not useful for promotion and does not close M-2. The full
+extraction took 2,068.2 CPU seconds; full-run peak RAM was not captured. The
+local project CUDA DLL remains blocked by Windows Application Control
+(`WinError 4551`), but CPU readout fitting completed. Focused DROID/readout
+tests passed (20 with SciPy available), and full Ruff passed. See
+[`DROID results`](docs/pretrained_reuse/R2_DROID_EARLY_OUTCOME_RESULTS_20261026.md)
+for split, metric, bootstrap, resource, artifact-hash, and error-correction
+details. R2 M-2, the four-modality task battery, and R0/R1/R3–R8 exits remain
+open.

@@ -115,3 +115,7 @@ SHA-256 `99D7E460B32C1898632D9A2209F98D82D97115DB3F7EC4FFD8AE972A1FE054B7`.
 - [Upstream material-recognition report](https://github.com/liangnjupt/VisTouch/blob/a569c7e572a78f232e819b652e0ebb718952e476/docs/classification_report.md)
 - [Upstream data-quality report](https://github.com/liangnjupt/VisTouch/blob/a569c7e572a78f232e819b652e0ebb718952e476/docs/data_quality_report.md)
 - [Upstream synchronization/alignment report](https://github.com/liangnjupt/VisTouch/blob/a569c7e572a78f232e819b652e0ebb718952e476/docs/alignment_report.md)
+
+## 2026-10-26 acquisition recheck
+
+The user authorized Computer Control to obtain the public media. The browser site-safety control blocked opening the official Baidu share, and explicitly disallowed retrying through another browser surface or an indirect download path. The pinned upstream repository still provides only that share; its GitHub Releases page contains no release assets, and no publisher-provided direct archive URL was found in the official repository. No archive listing, credential flow, or media download was accessed. This source remains REVIEW for media access and is not admitted to fitting. Proceed only if the publisher supplies a direct public archive URL or the user places the archive in the work environment. The metadata-only screen and previous artifacts remain unchanged.

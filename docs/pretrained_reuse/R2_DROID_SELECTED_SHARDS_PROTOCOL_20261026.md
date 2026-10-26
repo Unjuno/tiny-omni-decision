@@ -124,23 +124,81 @@ offset are unknown and must not be fabricated.
 
 ## Candidate Decision task
 
-The task candidate is short-horizon action selection conditioned on the
-language instruction, a causal window of synchronized camera frames, and the
-robot's proprioceptive state history. The target comes from `action_dict` at
-the current step; no future observations or actions may enter the input. Prefer
-the explicit `action_dict.joint_velocity` (7 values) and
-`action_dict.gripper_position` (1 value) fields rather than assuming the
-top-level `action` field selects the desired representation. DROID maintainers
-explain that `action` is a default RLDS field while `action_dict` preserves the
-available representations ([official schema discussion](https://github.com/droid-dataset/droid/issues/9)).
-The task builder must verify tensor semantics, retain typed values, and avoid
-unverified unit claims.
+The first action-choice proxy considered was: observe eight step indices, then
+choose whether the gripper command one step later is open or closed, using the
+fixed threshold `0.5`. The official implementation maps gripper state to
+`1 - width / max_width` and clips commanded position to `[0,1]`; this makes the
+binary names interpretable but does not turn them into a rich manipulation
+decision ([official implementation](https://github.com/droid-dataset/droid/blob/main/droid/franka/robot.py)).
+On the fixed dev split, previous-command persistence alone reaches 98.80% on
+train and 99.04% on validation (12,543 / 6,652 windows); the current gripper
+state reaches 92.08% / 92.99%. This is not model performance. The persistence
+result is saved at
+`C:\CodexArtifacts\pretrained-reuse-r2\droid-selected-shards-seed17-20261026-attempt-01\gripper-action-feasibility-02.json`
+with SHA-256
+`dd7261a5168cae8bf307db09c769587f8ba72354188ce73185ae9ba5be0c9c5f` and is
+reproduced by `scripts/audit_droid_gripper_action_persistence.py`. Because the
+target is almost always the previous command, this definition is retained only
+as a low-compute persistence control, not the main video-sensor fusion task.
 
-Before fitting, freeze and test the sampling rate, camera-view policy, temporal
-window, action option construction, hard negatives, target mapping, and choice
-shuffle. Then compare identical examples/options with instruction-only,
-video-only, state-only, video+state, and all-input models. Require missing,
-shuffled-state, stale-state, temporal-offset, and contradictory-input
+The current task candidate is **early episode outcome selection**: from the
+first 25% of a DROID episode, choose `[success, failure]` using three
+step-aligned camera views and robot-state history. The label is derived from
+the exact `success` / `failure` folder segment in the episode source path; that
+path is not an input. This is a provisional weak target, not a separately
+verified human annotation. Text and audio are excluded, so this candidate
+tests the roadmap's video + sensor M2-VS slice only. The pinned data schema
+provides common step order but no explicit timestamps; no seconds or sampling
+rate are claimed.
+
+The frozen config is
+[`droid_early_outcome_video_sensor_v0.json`](../../configs/pretrained_reuse/droid_early_outcome_video_sensor_v0.json),
+SHA-256 `d3061257e19afe3960ed136f63811255bae43728318d371ee77486dcd1da3ce9`.
+The deterministic metadata-only task manifest was prepared at
+`C:\CodexArtifacts\pretrained-reuse-r2\droid-early-outcome-v0-attempt-02\`
+with SHA-256 `b882b66f8be2dd38aa7d69badd3d00b93f58769a9daa2be5f38088fbe084ec80`;
+train and validation JSONL hashes are
+`7f56ee2fb525fc5e40e694c23566aa8b306b0de3444e0664e94531d3da6391dd` and
+`6b014d506cb2f0ff2179a6f6394504759233b5a688765a639a617310beeb44a6`.
+After requiring eight unique observations inside the first quarter, train has
+337 episodes (274 success / 63 failure; two short failure episodes recorded
+as excluded) and development validation has 200 (170 / 30), still with one
+recording group per episode and no group overlap. The validation majority-class
+baseline is 85%; 30 failure groups are a limited basis for uncertainty
+estimates, so balanced and per-class results are mandatory. `run-metadata.json`
+records `PREPARED_NOT_TRAINED`; no model features, model predictions, checkpoint,
+or sealed audit were created.
+
+A CPU-only raw-input smoke then decoded every selected early-window JPEG and
+read each corresponding sensor vector. It passed for all 537 task episodes:
+12,888 RGB images decoded at 320×180, totaling 293,728,684 selected JPEG
+bytes; every view had eight ordered frames and every sensor window had shape
+8×(7 joint-position + 6 Cartesian-position + 1 gripper-state) finite values.
+The per-episode ordered JPEG/RGB/state hashes and split counts are saved in
+`C:\CodexArtifacts\pretrained-reuse-r2\droid-early-outcome-v0-attempt-02\raw-input-audit.json`,
+SHA-256
+`23fe0d90ed2ee0d905d27ca2d76b606aed8277bedb677fa1236b339194375a87`.
+This smoke did not apply VideoPrism preprocessing, compute embeddings, train,
+or run inference. The three views and state arrays align by step index only;
+true elapsed time remains unknown. The CPU parser and smoke are reproducible
+with `scripts/audit_droid_early_outcome_inputs.py` and the hashes in the frozen
+config/task manifests.
+
+The next model comparison should use frozen VideoPrism-B features for the
+ordered 8×3 view window and a small temporal sensor/readout head. Compare
+video-only, sensor-only, and video+sensor on identical episode IDs/options,
+then test shuffled/replaced video, shuffled/replaced state, and a one-step
+temporal offset. Include a majority predictor and report accuracy, balanced
+accuracy, per-class recall, NLL, Brier, and ECE. Keep the development split for
+iteration only; no sealed audit exists in this sample. Proceed to a model
+smoke only after the raw-input pipeline proves the fixed windows and passes
+the local HotUGPU resource guard.
+
+For any later recorded-action task, freeze and test the sampling rate,
+camera-view policy, temporal window, action option construction, hard
+negatives, target mapping, and choice shuffle. Then compare identical
+examples/options with video-only, state-only, and video+state models. Require
+missing, shuffled-state, stale-state, temporal-offset, and contradictory-input
 controls. Fusion is useful only if the actual paired inputs improve on the
 best unimodal result and replacing either input causes the expected error
 increase. High aggregate accuracy alone does not close R2 M-2.
@@ -169,3 +227,69 @@ The 100-episode debug-source screen is recorded in
 [`R2_DROID100_SOURCE_TASK_SCREEN_20261026.md`](R2_DROID100_SOURCE_TASK_SCREEN_20261026.md).
 Official sources: [DROID dataset docs](https://droid-dataset.github.io/droid/the-droid-dataset)
 and [DROID RSS 2024 paper](https://www.roboticsproceedings.org/rss20/p120.pdf).
+
+## 2026-10-26 frozen VideoPrism real-input CPU smoke
+
+A fixed first training episode from shard 1242 was passed through the pinned
+VideoPrism-B encoder using its 8 selected early-window steps from each of the
+three camera views. The smoke produced finite `[3,2048,768]` tokens and finite
+`[3,8,768]` time-preserving features after mean spatial-token pooling. It used
+the upstream resize-short-side/center-crop preprocessing, VideoPrism revision
+`be719a406d563b66f0ac969e7c94bab8e997c81a`, source commit
+`c6eba0ece3dd49a24ffc44582966997a4a59f1d8`, and checkpoint SHA-256
+`61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`.
+The actual backend was CPU (`TFRT_CPU_0`), with 11.25 s for the encoder forward
+and 4,259,770,368 bytes peak process working set. This is one-input runtime
+and representation-shape evidence only; it is not fitting or a quality score.
+The result JSON is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\droid-videoprism-early-window-cpu-smoke-02\smoke.json`,
+SHA-256 `a370a3aea69cd78cc2aa7f6715eb3346702ac18e7dab40199b2798f232edc639`.
+The reproducible one-off driver is under the separate attempt-03 directory, `run_smoke.py` SHA-256 `0f90986e1138ca4451c37f95a9fe5565e3ac9233a237627ff8f41c475bf24cb8`;
+attempts 01 and 02 preserve the Pillow-missing and rank-5 resize failures.
+
+The RTX 3080 was idle at the last read-only snapshot, but the existing project
+Python environment cannot import its CUDA PyTorch DLL: Windows Application
+Control returns `WinError 4551`. The installed VideoPrism JAX/TensorFlow runtime
+is CPU-only, so no GPU extraction was attempted. The full repository pytest
+collection consequently stopped with 100 errors at optional Torch imports;
+this is an environment gate, not a model/test-quality result. The 16 focused
+DROID tests and Ruff checks passed using the read-only `python -S` test entry.
+No environment package, GPU process, dataset, or existing checkpoint was
+changed.
+
+## 2026-10-26 complete frozen features and early-outcome readout
+
+The one-episode smoke was followed by full feature extraction for the already
+fixed 337 train and 200 validation task rows. All 537 IDs were found exactly
+once in the pinned selected shards. VideoPrism features have shape
+`[537, 3, 8, 768]`; sensor windows have shape `[537, 8, 14]`. Both arrays are
+finite, and each temporal video feature row is hashed in the extraction
+progress ledger. Checkpoint, task manifest, shard manifest, arrays, labels,
+and progress are hashed in the feature attempt directory outside Git.
+Extraction used CPU JAX and took 2,068.2 seconds; no GPU or cloud compute was
+used. Full-run peak working set was not captured.
+
+Three fixed L2 logistic heads were fit with train-only standardization on the
+same IDs: video temporal pooling, sensor sequence, and their concatenation.
+The results and per-example predictions are saved under
+`C:\CodexArtifacts\pretrained-reuse-r2\droid-early-outcome-readouts-repo-attempt-02\`.
+The correct probability outputs were generated by the repository evaluator;
+the first external one-off attempt mistakenly wrote hard labels in its
+`p_success` column and is preserved but excluded. The majority baseline uses
+the train-set success prevalence rather than validation prevalence.
+
+Validation Accuracy was 76.5% video, 83.0% sensors, and 79.5% fused, against
+85.0% for the train-prevalence majority predictor. The fused readout had 23.3%
+failure recall, and its NLL/Brier were worse than sensor-only. Paired
+class-stratified intervals do not establish a calibrated complementary fusion
+benefit. This weak folder-derived task is **not useful for model promotion**;
+it does not close R2 M-2 or replace the broader task battery. Full metrics,
+hashes, fitted parameter counts, runtime, and limitations are in
+[`R2_DROID_EARLY_OUTCOME_RESULTS_20261026.md`](R2_DROID_EARLY_OUTCOME_RESULTS_20261026.md).
+
+The portable evaluator and readout/metric functions are
+`scripts/evaluate_droid_early_outcome_readouts.py` and
+`src/tiny_omni_decision/droid_early_outcome_readout.py`. Focused tests pass
+with SciPy available (20 passed); the default system Python lacks SciPy, so
+the optional optimizer smoke skips there. Existing Teacher, sealed-audit,
+legacy run, and checkpoint artifacts were not changed.

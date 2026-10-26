@@ -10,6 +10,16 @@ of the train split. The actual pinned release contains 100 distinct
 This screen did not decode video frames, extract model features, train a model,
 or measure decision quality.
 
+A later fixed 539-episode full-train shard sample and temporal-field audit is
+recorded in the [selected-shard protocol](R2_DROID_SELECTED_SHARDS_PROTOCOL_20261026.md).
+Its one-step gripper-choice proxy was rejected as the main fusion task because
+previous-command persistence reaches 99% on development validation. The current
+development candidate uses early episode outcome labels with video + robot
+state; it remains weakly labeled. Its frozen-feature readout was measured on
+337 train / 200 development-validation episodes and performed below the
+train-prevalence baseline; see the
+[results](R2_DROID_EARLY_OUTCOME_RESULTS_20261026.md).
+
 DROID is a plausible setting for a decision model because it pairs three
 synchronized RGB camera views with proprioceptive state, a natural-language
 task instruction, and a recorded action sequence. The `droid_100` schema has

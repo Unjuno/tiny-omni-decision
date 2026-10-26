@@ -4,8 +4,10 @@ import pytest
 
 from scripts.audit_droid100_groups import (
     audit_dataset,
+    episode_example_bytes_values,
     episode_example_context,
     episode_example_feature_counts,
+    episode_example_float_values,
     episode_example_instructions,
     iter_tfrecord,
 )
@@ -81,6 +83,38 @@ def test_feature_count_audit_handles_empty_bytes_and_packed_float_steps():
         "steps/language_instruction": {"kind": "bytes", "count": 2, "nonempty": 1},
         "steps/action_dict/joint_velocity": {"kind": "float", "count": 2},
     }
+
+
+def test_float_value_audit_reads_packed_and_unpacked_floatlists():
+    packed = _length_field(1, struct.pack("<ff", 0.25, -0.5))
+    unpacked = _varint((1 << 3) | 5) + struct.pack("<f", 1.0)
+    entries = []
+    for key, float_list in (
+        ("steps/action_dict/gripper_position", packed),
+        ("steps/observation/gripper_position", unpacked),
+    ):
+        feature = _length_field(2, float_list)
+        entry = _length_field(1, key.encode()) + _length_field(2, feature)
+        entries.append(_length_field(1, entry))
+    example = _length_field(1, b"".join(entries))
+
+    assert episode_example_float_values(example, "steps/action_dict/gripper_position") == [
+        0.25,
+        -0.5,
+    ]
+    assert episode_example_float_values(example, "steps/observation/gripper_position") == [1.0]
+
+
+def test_bytes_value_audit_reads_target_camera_list():
+    bytes_list = _length_field(1, b"jpeg-frame-1") + _length_field(1, b"jpeg-frame-2")
+    feature = _length_field(1, bytes_list)
+    entry = _length_field(1, b"steps/observation/wrist_image_left") + _length_field(2, feature)
+    example = _length_field(1, _length_field(1, entry))
+
+    assert episode_example_bytes_values(example, "steps/observation/wrist_image_left") == [
+        b"jpeg-frame-1",
+        b"jpeg-frame-2",
+    ]
 
 
 def test_tfrecord_reader_checks_record_framing(tmp_path):

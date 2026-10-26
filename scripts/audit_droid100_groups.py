@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import struct
 from collections import Counter
 from collections.abc import Iterator
@@ -184,6 +185,94 @@ def episode_example_feature_counts(serialized: bytes) -> dict[str, dict[str, int
             row["nonempty"] = sum(bool(value) for value in values)
         result[key] = row
     return result
+
+
+def episode_example_float_values(serialized: bytes, target_key: str) -> list[float]:
+    feature_map = None
+    for number, wire_type, payload in _fields(serialized):
+        if number == 1 and wire_type == 2:
+            feature_map = payload
+            break
+    if feature_map is None:
+        raise ValueError("TFRecord payload has no Example feature map")
+
+    for number, wire_type, entry in _fields(feature_map):
+        if number != 1 or wire_type != 2:
+            continue
+        key = None
+        feature = None
+        for field, kind, payload in _fields(entry):
+            if field == 1 and kind == 2:
+                key = payload.decode("utf-8")
+            elif field == 2 and kind == 2:
+                feature = payload
+        if key != target_key or feature is None:
+            continue
+
+        float_list = None
+        for field, kind, payload in _fields(feature):
+            if field == 2 and kind == 2:
+                float_list = payload
+                break
+        if float_list is None:
+            raise ValueError(f"feature is not a FloatList: {target_key}")
+
+        values = []
+        for field, wire_type, payload in _fields(float_list):
+            if field != 1:
+                continue
+            if wire_type == 2:
+                if len(payload) % 4:
+                    raise ValueError(f"packed FloatList is not 4-byte aligned: {target_key}")
+                values.extend(value[0] for value in struct.iter_unpack("<f", payload))
+            elif wire_type == 5:
+                values.append(struct.unpack("<f", payload)[0])
+            else:
+                raise ValueError(f"unexpected FloatList value encoding: {target_key}")
+        if not values or not all(math.isfinite(value) for value in values):
+            raise ValueError(f"FloatList is empty or non-finite: {target_key}")
+        return values
+    raise KeyError(target_key)
+
+
+def episode_example_bytes_values(serialized: bytes, target_key: str) -> list[bytes]:
+    feature_map = None
+    for number, wire_type, payload in _fields(serialized):
+        if number == 1 and wire_type == 2:
+            feature_map = payload
+            break
+    if feature_map is None:
+        raise ValueError("TFRecord payload has no Example feature map")
+
+    for number, wire_type, entry in _fields(feature_map):
+        if number != 1 or wire_type != 2:
+            continue
+        key = None
+        feature = None
+        for field, kind, payload in _fields(entry):
+            if field == 1 and kind == 2:
+                key = payload.decode("utf-8")
+            elif field == 2 and kind == 2:
+                feature = payload
+        if key != target_key or feature is None:
+            continue
+
+        bytes_list = None
+        for field, kind, payload in _fields(feature):
+            if field == 1 and kind == 2:
+                bytes_list = payload
+                break
+        if bytes_list is None:
+            raise ValueError(f"feature is not a BytesList: {target_key}")
+        values = [
+            value
+            for field, wire_type, value in _fields(bytes_list)
+            if field == 1 and wire_type == 2 and isinstance(value, bytes)
+        ]
+        if not values:
+            raise ValueError(f"BytesList is empty: {target_key}")
+        return values
+    raise KeyError(target_key)
 
 
 def iter_tfrecord(path: Path) -> Iterator[bytes]:

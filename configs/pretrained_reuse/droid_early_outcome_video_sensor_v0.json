@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "experiment_id": "droid-early-outcome-video-sensor-v0",
+  "claim_scope": "source-folder early outcome prediction; development only",
+  "source": {
+    "dataset_id": "droid/droid",
+    "dataset_version": "1.4.0",
+    "split": "official train; local group-safe development train/validation",
+    "selection_manifest_sha256": "2bfb5626d203344bf2bd976f711c0ed5f7b4c1979932b7b48565329099207e64",
+    "download_receipt_sha256": "2bfb6322e9c0c4649f875d8ad37fb3e990f786324fe2fdbd9cd6b2872af50667",
+    "audit_sha256": "d60f850f88725a45f918a992685ab1174b38f086ea14029cac1ab665a504bc3b",
+    "development_split_sha256": "d8d2e1ef353d2ea6388dd7e7574623e3b4d6518474afed14f042fc1838df7e43"
+  },
+  "task": {
+    "target": "source folder outcome segment",
+    "options": ["success", "failure"],
+    "input_modalities": ["video", "sensor"],
+    "video_views": [
+      "exterior_image_1_left",
+      "exterior_image_2_left",
+      "wrist_image_left"
+    ],
+    "sensor_fields": [
+      "observation/joint_position",
+      "observation/cartesian_position",
+      "observation/gripper_position"
+    ],
+    "text_input": false,
+    "audio_input": false,
+    "observed_fraction": 0.25,
+    "observation_count": 8,
+    "timebase": "step index only; no explicit per-step timestamps in pinned schema",
+    "future_observations_in_input": false,
+    "split_group": "recording_folderpath",
+    "development_validation_is_blind": false,
+    "sealed_audit_loaded": false
+  },
+  "model": {
+    "status": "evaluated_not_selected",
+    "training_started": true,
+    "encoder_frozen": true,
+    "trainable_readout": "L2 logistic; train-only feature scaling; no tuning",
+    "selected": false,
+    "sealed_audit_loaded": false,
+    "evaluation_artifact": "C:/CodexArtifacts/pretrained-reuse-r2/droid-early-outcome-readouts-repo-attempt-02/evaluation-report.json",
+    "validation_accuracy": {
+      "video_temporal": 0.765,
+      "sensor_sequence": 0.83,
+      "video_plus_sensor": 0.795,
+      "train_prevalence_baseline": 0.85
+    },
+    "disposition": "not useful against the majority baseline; no product promotion"
+  }
+}
