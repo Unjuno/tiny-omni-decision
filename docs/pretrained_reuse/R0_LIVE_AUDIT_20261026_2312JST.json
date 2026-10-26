@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "snapshot_jst": "2026-10-26T23:12:40+09:00",
+  "repository": "Unjuno/tiny-omni-decision",
+  "current_branch": "codex/r2-openimages-grounding-freshval-20261026",
+  "current_commit": "e8f8ab0727b196187f3aa0b47e6078a1d5e83022",
+  "current_branch_clean": true,
+  "origin_main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+  "registered_worktrees": 73,
+  "dirty_worktrees": 6,
+  "dirty_worktree_names": [
+    "primary-user-workspace",
+    "pr14-review-qat-latest",
+    "pretrained-reuse-omni",
+    "pretrained-reuse-roadmap-20261022",
+    "textfree-video-coverage-v2",
+    "tiny-omni-decision-updated-recovery"
+  ],
+  "open_pull_requests": 22,
+  "open_pr_numbers": [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+  "current_branch_pull_request": null,
+  "current_branch_ci": {
+    "workflow": "test",
+    "conclusion": "success",
+    "url": "https://github.com/Unjuno/tiny-omni-decision/actions/runs/40336537136/job/121619517050"
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "memory_total_mib": 16384,
+    "memory_used_mib": 15821,
+    "utilization_percent": 100,
+    "power_w": 50.21,
+    "c_drive_free_bytes": 1405556736,
+    "owner_pid": 35876,
+    "owner_parent_pid": 6096,
+    "supervisor_pids": [23856, 4696],
+    "owner_start_local": "2026-10-26T21:22:25",
+    "owner": "separate Orbitune compound_cfe_train.py job",
+    "owner_checkpoint": "Orbitune research_nc_aria_gigamidi_epoch_a2_v1/model.pt",
+    "owner_steps_argument": 0,
+    "cooperative_yield_sentinel": true,
+    "intervened": false
+  },
+  "path_a_prior_run": {
+    "baseline_steps": 2048,
+    "baseline_best_step": 1792,
+    "baseline_validation_count": 24346,
+    "baseline_accuracy": 0.363139735480161,
+    "baseline_modality_accuracy": {
+      "audio": 0.5428085258821422,
+      "image": 0.201171875,
+      "text": 0.20890793887439432,
+      "video": 0.315
+    },
+    "lstm_steps": 2048,
+    "lstm_best_step": 1536,
+    "lstm_validation_count": 24346,
+    "lstm_accuracy": 0.35574632383143023,
+    "lstm_modality_accuracy": {
+      "audio": 0.5325094035464804,
+      "image": 0.14697265625,
+      "text": 0.21161013790532984,
+      "video": 0.3575
+    },
+    "fresh_validation_replay_passed": true
+  },
+  "vis_touch": {
+    "source_commit": "a569c7e572a78f232e819b652e0ebb718952e476",
+    "git_checkout_exists": true,
+    "dataset_directory_contains_only_gitkeep": true,
+    "media_downloaded": false
+  },
+  "unav100_status": "excluded_pending_rights_resolution",
+  "paid_compute_used": false,
+  "sealed_audit_accessed": false,
+  "training_started_this_snapshot": false
+}
