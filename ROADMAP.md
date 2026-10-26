@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 CREMA-D source/task screen:** CREMA-D offers same-clip
+audio-only, video-only and audiovisual human-perception labels, making it a
+useful narrow candidate for testing modality contribution. Its repository
+declares ODbL/DbCL licensing, but performer consent/personality-rights scope for
+model training is not established here; the full media tree is about 7.55 GB.
+Keep it REVIEW-only; no media or label payload was acquired. See the [pinned
+source/task screen](docs/pretrained_reuse/R2_CREMA_D_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 UnAV-100 source preflight:** Its official split CSV contains
 10,790 unique YouTube IDs (6,489 train / 2,134 validation / 2,167 test) with no
 cross-split ID overlap and positive spans. This is a promising natural AV event
