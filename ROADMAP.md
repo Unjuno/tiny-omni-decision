@@ -1,5 +1,35 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 12:12 JST R2 cross-branch image evidence reconciliation:** A
+new frozen-feature iNaturalist CC0 probe is complete on
+`codex/r2-inaturalist-cc0-screen-20261026` (`19392c9`). It uses 1,642
+observer-disjoint training photos and 683 validation photos; the selected
+2,048-epoch linear readout scored 81.55% overall / 81.13% macro Accuracy,
+with macro NLL 0.5584. Image-zero and image-permutation controls reduced
+Accuracy to 14.64% and 10.54%, respectively, so this narrow eight-species
+task is image-dependent. The best validation checkpoint was epoch 1,276;
+validation worsened while train Accuracy rose from 96.22% to 98.78% by epoch
+2,048, indicating overfitting. No class reached 90%, and this does not test
+temporal video or general multimodal decision quality. The source is a live
+iNaturalist metadata freeze, not an immutable upstream snapshot; train spot
+checks found two weakly grounded heron examples. Preserve this cohort and do
+not retune it. See the [full report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-inaturalist-cc0-screen-20261026/docs/pretrained_reuse/R2_INATURALIST_VIDEOPRISM_READOUT_20261026.md).
+
+The related Open Images V6 probe (`codex/r2-openimages-image-prototype-20261026`,
+`00df994`) is **not image-grounded evidence**: its 79.17% validation Accuracy
+was unchanged on all 168 decisions after image features were zeroed or
+permuted. On the same exposed validation, a fixed-prompt TinyCLIP run scored
+64.88% and responded to image identity, but remains a weak, narrow result; its
+332 MB weights also exceed the provisional 200 MB package target. Both sources
+remain research-only, and these results do not close R2 or justify product
+promotion. See the [VideoPrism controls/report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-openimages-image-prototype-20261026/docs/pretrained_reuse/R2_OPENIMAGES_INPUT_CONTROLS_20261026.md)
+and [TinyCLIP report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-openimages-pecore-zero-shot-20261026/docs/pretrained_reuse/R2_OPENIMAGES_TINYCLIP_ZERO_SHOT_20261026.md).
+
+This reconciliation records existing branch results only; it does not rerun
+training, reopen exposed validation, or alter their data/checkpoints. R2 still
+needs independent task coverage and a credible synchronized joint AV quality
+gate; the four-modality 95–98% objective and R3–R8 release gates remain open.
+
 **2026-10-26 12:02 JST R0 live recheck:** PR #15 remains Draft/Open at
 `2538c5a`; its three public check runs are green. The primary local worktree
 contains unrelated uncommitted user changes and was left untouched. The local
