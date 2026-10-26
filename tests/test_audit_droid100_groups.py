@@ -5,6 +5,7 @@ import pytest
 from scripts.audit_droid100_groups import (
     audit_dataset,
     episode_example_context,
+    episode_example_feature_counts,
     episode_example_instructions,
     iter_tfrecord,
 )
@@ -61,6 +62,25 @@ def test_episode_example_rejects_missing_group_identity():
 def test_episode_example_extracts_normalized_instruction_text():
     row = _episode_example("episode/1", "recording/abc", "  Move   the   cup\n left ")
     assert episode_example_instructions(row) == ["Move the cup left"]
+
+
+def test_feature_count_audit_handles_empty_bytes_and_packed_float_steps():
+    bytes_list = _length_field(1, b"") + _length_field(1, b"label")
+    bytes_feature = _length_field(1, bytes_list)
+    float_list = _length_field(1, struct.pack("<ff", 0.25, -0.5))
+    float_feature = _length_field(2, float_list)
+    entries = []
+    for key, feature in (
+        ("steps/language_instruction", bytes_feature),
+        ("steps/action_dict/joint_velocity", float_feature),
+    ):
+        entry = _length_field(1, key.encode()) + _length_field(2, feature)
+        entries.append(_length_field(1, entry))
+    example = _length_field(1, b"".join(entries))
+    assert episode_example_feature_counts(example) == {
+        "steps/language_instruction": {"kind": "bytes", "count": 2, "nonempty": 1},
+        "steps/action_dict/joint_velocity": {"kind": "float", "count": 2},
+    }
 
 
 def test_tfrecord_reader_checks_record_framing(tmp_path):

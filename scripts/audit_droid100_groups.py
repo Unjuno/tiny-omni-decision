@@ -129,6 +129,63 @@ def episode_example_instructions(serialized: bytes) -> list[str]:
     return sorted(instructions)
 
 
+def episode_example_feature_counts(serialized: bytes) -> dict[str, dict[str, int | str]]:
+    feature_map = None
+    for number, wire_type, payload in _fields(serialized):
+        if number == 1 and wire_type == 2:
+            feature_map = payload
+            break
+    if feature_map is None:
+        raise ValueError("TFRecord payload has no Example feature map")
+
+    result = {}
+    for number, wire_type, entry in _fields(feature_map):
+        if number != 1 or wire_type != 2:
+            continue
+        key = None
+        feature = None
+        for field, kind, payload in _fields(entry):
+            if field == 1 and kind == 2:
+                key = payload.decode("utf-8")
+            elif field == 2 and kind == 2:
+                feature = payload
+        if key is None or feature is None:
+            continue
+
+        feature_kind = None
+        values = []
+        for field, kind, payload in _fields(feature):
+            if kind != 2 or field not in (1, 2, 3):
+                continue
+            feature_kind = {1: "bytes", 2: "float", 3: "int64"}[field]
+            for value_field, value_wire, value in _fields(payload):
+                if value_field != 1:
+                    continue
+                if feature_kind == "bytes" and value_wire == 2:
+                    values.append(value)
+                elif feature_kind == "float" and value_wire == 2:
+                    if len(value) % 4:
+                        raise ValueError(f"packed float bytes are not 4-byte aligned for {key}")
+                    values.extend([None] * (len(value) // 4))
+                elif feature_kind == "float" and value_wire == 5:
+                    values.append(None)
+                elif feature_kind == "int64" and value_wire == 2:
+                    packed_offset = 0
+                    packed_count = 0
+                    while packed_offset < len(value):
+                        _, packed_offset = _varint(value, packed_offset)
+                        packed_count += 1
+                    values.extend([None] * packed_count)
+                elif feature_kind == "int64" and value_wire == 0:
+                    values.append(None)
+
+        row: dict[str, int | str] = {"kind": feature_kind, "count": len(values)}
+        if feature_kind == "bytes":
+            row["nonempty"] = sum(bool(value) for value in values)
+        result[key] = row
+    return result
+
+
 def iter_tfrecord(path: Path) -> Iterator[bytes]:
     with path.open("rb") as stream:
         while header := stream.read(12):

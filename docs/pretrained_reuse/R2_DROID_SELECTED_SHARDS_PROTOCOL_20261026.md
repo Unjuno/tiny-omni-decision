@@ -87,6 +87,40 @@ normalized instruction was assigned wholly to one side by the union-group
 split rule. These results establish deterministic development partitioning,
 not task quality or external generalization.
 
+## Temporal-field and language-coverage audit
+
+A second pass used the same pinned bytes and same split rule to count serialized
+step fields without decoding JPEG pixels or fitting a model. The enriched audit
+JSON is external at
+`C:\CodexArtifacts\pretrained-reuse-r2\droid-selected-shards-seed17-20261026-attempt-01\group-audit-03.json`
+with SHA-256
+`652b9973bb74c39b005d9bd367f9c880957b0271ac0a6e0ccb060cb79470a87f`.
+Regenerating the split produces the same SHA-256 as the original:
+`d8d2e1ef353d2ea6388dd7e7574623e3b4d6518474afed14f042fc1838df7e43`.
+
+| Coverage check | Result |
+| --- | ---: |
+| Episode steps (min / median / p90 / max) | 7 / 227 / 534 / 2,238 |
+| Mean episode steps | 289.38 |
+| Episodes under 8 steps | 1 |
+| Instruction present / absent | 302 / 237 |
+| Train instructions present / absent | 181 / 158 |
+| Validation instructions present / absent | 121 / 79 |
+| Episodes where all 3 camera counts equal step count | 539 / 539 |
+| Episodes where joint-velocity count equals 7 × steps and gripper count equals steps | 539 / 539 |
+
+Thus text conditioning is available for only 56.0% of this sample. Instruction-
+conditioned scores must use the text-present subset and also report text-missing
+behavior separately; treating missing instructions as ordinary text examples
+would misstate the task. The one 7-step episode is not enough for an 8-step
+history and must be explicitly excluded from that windowed analysis. These
+checks establish serialized field counts and alignment, not timestamp units,
+value semantics, image content, model inputs, or action-prediction quality.
+The pinned feature schema places cameras, state, and action in a shared step
+sequence, but exposes no explicit per-step timestamp field. Only step-index
+alignment can be claimed here; absolute timing, sampling jitter, and clock
+offset are unknown and must not be fabricated.
+
 ## Candidate Decision task
 
 The task candidate is short-horizon action selection conditioned on the
@@ -123,9 +157,10 @@ bytes before making any product-size claim.
 Download only the 12 fixed shards and their release metadata to a new directory
 outside the repository. The downloader verifies generation-pinned HTTPS
 responses, GCS MD5/size, metadata SHA-256, the 1.4.0 release, and each shard's
-episode count. The group auditor reads only serialized episode metadata and
-instruction strings; it does not decode or display images, extract model
-features, or open a sealed audit. No model training or GPU work has started.
+episode count. The group auditor reads serialized metadata, instructions, and
+protobuf list element counts; it does not decode or display images, extract
+model features, or open a sealed audit. No model training or GPU work has
+started.
 Model work still waits for a tested causal-window/action-option task builder
 and matched baseline/control definitions.
 

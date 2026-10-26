@@ -13,6 +13,7 @@ from typing import Any
 try:
     from .audit_droid100_groups import (
         episode_example_context,
+        episode_example_feature_counts,
         episode_example_instructions,
         iter_tfrecord,
     )
@@ -20,6 +21,7 @@ try:
 except ImportError:
     from audit_droid100_groups import (
         episode_example_context,
+        episode_example_feature_counts,
         episode_example_instructions,
         iter_tfrecord,
     )
@@ -46,7 +48,42 @@ def audit_selected_shards(data_dir: Path, manifest: dict, debug_audit: dict) -> 
         for record in iter_tfrecord(shard_path):
             row = episode_example_context(record)
             instructions = episode_example_instructions(record)
+            feature_counts = episode_example_feature_counts(record)
+            steps = int(feature_counts.get("steps/is_first", {}).get("count", 0))
+            if steps <= 0:
+                raise ValueError("episode has no step records")
+            camera_keys = (
+                "steps/observation/exterior_image_1_left",
+                "steps/observation/exterior_image_2_left",
+                "steps/observation/wrist_image_left",
+            )
+            camera_counts = {
+                key.rsplit("/", maxsplit=1)[-1]: int(
+                    feature_counts.get(key, {}).get("count", 0)
+                )
+                for key in camera_keys
+            }
+            if any(count != steps for count in camera_counts.values()):
+                raise ValueError("camera frame count differs from the episode step count")
+            joint_velocity_count = int(
+                feature_counts.get("steps/action_dict/joint_velocity", {}).get("count", 0)
+            )
+            if joint_velocity_count != steps * 7:
+                raise ValueError("joint-velocity action count differs from 7 values per step")
+            gripper_command_count = int(
+                feature_counts.get("steps/action_dict/gripper_position", {}).get("count", 0)
+            )
+            if gripper_command_count != steps:
+                raise ValueError("gripper command count differs from one value per step")
+            instruction_features = feature_counts.get("steps/language_instruction", {})
+            if int(instruction_features.get("count", 0)) != steps:
+                raise ValueError("language instruction sequence length differs from the step count")
             row["shard_index"] = int(shard_row["index"])
+            row["step_count"] = steps
+            row["camera_frame_counts"] = camera_counts
+            row["joint_velocity_value_count"] = joint_velocity_count
+            row["gripper_command_count"] = gripper_command_count
+            row["nonempty_instruction_steps"] = int(instruction_features.get("nonempty", 0))
             normalized_instructions = {
                 normalize_instruction(value) for value in instructions
             }
@@ -79,6 +116,9 @@ def audit_selected_shards(data_dir: Path, manifest: dict, debug_audit: dict) -> 
     }
     group_counts = Counter(groups)
     selected_instructions = set(instruction_counts)
+    step_counts = [int(row["step_count"]) for row in episodes]
+    sorted_step_counts = sorted(step_counts)
+    p90_index = (9 * len(sorted_step_counts) + 9) // 10 - 1
     return {
         "dataset_id": manifest["dataset_id"],
         "dataset_version": manifest["dataset_version"],
@@ -92,6 +132,26 @@ def audit_selected_shards(data_dir: Path, manifest: dict, debug_audit: dict) -> 
         "normalized_instruction_repeats": sum(
             max(0, count - 1) for count in instruction_counts.values()
         ),
+        "episodes_without_language_instruction": sum(
+            int(row["nonempty_instruction_steps"]) == 0 for row in episodes
+        ),
+        "instruction_presence": {
+            "episodes_with_instruction": sum(
+                int(row["nonempty_instruction_steps"]) > 0 for row in episodes
+            ),
+            "episodes_without_instruction": sum(
+                int(row["nonempty_instruction_steps"]) == 0 for row in episodes
+            ),
+        },
+        "step_count_distribution": {
+            "min": sorted_step_counts[0],
+            "median": sorted_step_counts[len(sorted_step_counts) // 2],
+            "p90": sorted_step_counts[p90_index],
+            "max": sorted_step_counts[-1],
+            "mean": sum(step_counts) / len(step_counts),
+        },
+        "camera_frames_equal_steps_for_all_episodes": True,
+        "joint_velocity_7d_and_gripper_count_match_steps": True,
         "success_failure_source_folders": {
             "success": sum("/success/" in value for value in files),
             "failure": sum("/failure/" in value for value in files),
