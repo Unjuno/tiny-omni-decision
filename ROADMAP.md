@@ -1233,6 +1233,17 @@ restart or full95–98%/<=200M Omni completion is claimed.
 [Actual acoustic diagnostic](docs/pretrained_reuse/R2_ROBOMNIST_AUDIO_CUE_RESULTS_20261015.md) ·
 [Complete metadata and access limits](docs/pretrained_reuse/R2_VISTOUCH_SOURCE_RESULTS_20261015.md).
 
+**2026-10-26 R2 VisTouch Git payload recheck:** A standard shallow clone at
+`liangnjupt/VisTouch@a569c7e572a78f232e819b652e0ebb718952e476` succeeds, but
+the Git tree contains no raw audio/tactile/video (dataset has only `.gitkeep`,
+zero LFS files, and no GitHub release). The pinned README directs users to the
+external Baidu archive. Metadata confirms 24 source sessions and a grouped
+3N/6N-train vs 9N-test split; the published test is already observed and cannot
+serve as a blind audit. Dataset terms are declared CC-BY-4.0, code MIT. No media
+or model was downloaded or evaluated. Keep the source as a research candidate;
+Path A training awaits an authorized native-media route. See
+[`R2 VisTouch Git recheck`](docs/pretrained_reuse/R2_VISTOUCH_GIT_RECHECK_20261026.md).
+
 **2026-10-15 native frontend/container gate executed:** On one known-train pilot,
 harmless container padding leaves full native decoded frames and frozen TinyCLIP
 features exact, but changes both fixed length-only predictions. Fresh CPU model/
