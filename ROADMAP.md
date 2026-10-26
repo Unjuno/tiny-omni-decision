@@ -15,6 +15,16 @@ controls. See the [Open Images controls](https://github.com/Unjuno/tiny-omni-dec
 [DROID video+sensor results](https://github.com/Unjuno/tiny-omni-decision/blob/54a1505b71a5392ad9c43d78817592cc67cc09df/docs/pretrained_reuse/R2_DROID_NEXT_ACTION_VIDEO_SENSOR_20261026.md),
 and [VisTouch Git recheck](docs/pretrained_reuse/R2_VISTOUCH_GIT_RECHECK_20261026.md).
 
+**2026-10-26 R2 natural-image Path A follow-up:** An independent branch's
+observer-disjoint eight-species iNaturalist CC0 probe selected 81.13% macro
+Accuracy / 0.5584 macro NLL with frozen 114.37M-parameter VideoPrism-B plus a
+6,152-parameter readout. Zeroed and permuted images fell near chance, but the
+live-API cohort has no sealed audit, train-side spot checks found weakly grounded
+examples, and the 2,048-epoch curve overfit after epoch 1,276. This is narrow
+closed-set image evidence, not general option-conditioned Decision quality.
+No further fit on those exposed IDs. The full protocol and artifact hashes are
+in the [iNaturalist report](https://github.com/Unjuno/tiny-omni-decision/blob/19392c947da150b4f0e4e1aca4cccef5374c1bdf/docs/pretrained_reuse/R2_INATURALIST_VIDEOPRISM_READOUT_20261026.md).
+
 **2026-10-26 BridgeData source gate:** BridgeData V2 remains a useful
 video+robot-state task-design lead, but the official TFDS release is 387.49
 GiB and the reviewed raw converter randomly partitions trajectories within

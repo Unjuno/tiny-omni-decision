@@ -18,6 +18,8 @@ PR, worktree, corpus, run, or checkpoint was changed.
 | [PR #30, AVSBench / NIST ASAPS source gates](https://github.com/Unjuno/tiny-omni-decision/pull/30) | AVSBench is CC BY-NC 4.0 with underlying YouTube media rights unverified, and its native output is masks rather than caller-option probabilities. NIST ASAPS requires a signed approved research-only data-use agreement; task labels, splits, group identities and commercial rights are unknown. | Neither source is admitted for product training or quality selection. |
 | [PR #29, CommonsenseQA 2.0 text Decision probe](https://github.com/Unjuno/tiny-omni-decision/pull/29) | The frozen MiniLM plus shared 196,865-parameter readout selected 51.79% on dev, equal to majority-class accuracy, and predicted “no” for 93.5% of rows. | A second narrow text task failed to establish useful general text Decision transfer. Do not tune on its exposed dev IDs. |
 | [QASC frozen-feature probe](R2_QASC_TEXT_DECISION_20261026.md) | Selected 21.81% Accuracy on an eight-choice QASC development set; best at epoch 1, with a strong train/dev divergence. | Text-only evidence remains task-specific and weak; no broader text claim or product promotion. |
+| [iNaturalist CC0 frozen-image readout](https://github.com/Unjuno/tiny-omni-decision/blob/19392c947da150b4f0e4e1aca4cccef5374c1bdf/docs/pretrained_reuse/R2_INATURALIST_VIDEOPRISM_READOUT_20261026.md) | On 683 observer-disjoint development photos from a live-API CC0 freeze, frozen VideoPrism-B plus a 6,152-parameter readout selected 81.13% macro Accuracy / 0.5584 macro NLL. Zero-image Accuracy was 12.59%; permuted-image Accuracy was 10.69%. The 2,048-epoch curve selected epoch 1,276; train Accuracy kept rising while validation NLL degraded afterward. No sealed audit exists. | Useful natural-image dependence evidence for a closed eight-species task, not arbitrary option-conditioned image decisions. Treat live-source/community labels, exposed validation and train-side visual spot-check concerns as limitations; keep data and run external to Git. Latest source-branch commit `19392c9` passed its public test workflow on this recheck; it is not in the open-PR list. |
+| [Synthetic AV architecture follow-ups](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-temporal-av-alignment-20261026/docs/pretrained_reuse/R2_SYNTHETIC_AV_RESIDUAL_GATE_RESULTS_20261026.md) | On the already exposed generated-tone/CLEVRER task, query-conditioned and modality-bypass gates stayed at chance through 16,384 updates. An identity-initialized residual gate matched the raw-input LSTM at 100% validation Accuracy; aligned AV scored 100%, while audio-only, video-only, missing and mispaired controls fell to chance. | The raw recurrent path solves this generated rule; the residual gate adds no demonstrated gain over the LSTM. Synthetic mechanics only; do not repeat or tune these IDs or infer natural AV quality. |
 
 The PRs above are open drafts and are cited as independent concurrent evidence,
 not merged into this branch. Their source commit identities are visible in the
@@ -34,6 +36,15 @@ on exposed CLEVRER data or on challenge test splits. Any admitted source must
 have verified source/media rights, parent-asset grouping, temporal alignment,
 and labels that require each claimed input; matched unimodal and intervention
 controls must be fixed before training.
+
+Additional independent-branch evidence since the initial reconciliation:
+iNaturalist CC0 yields an 81.13% macro-Accuracy frozen image readout with
+strong zero/permuted-image controls, but train/validation divergence after epoch
+1,276 and unresolved label-grounding concerns make data/task diagnosis the next
+image step. The recent synthetic AV residual-gate comparison reaches the same
+100% exposed validation Accuracy as the simpler recurrent baseline, so it does
+not justify adopting another gate. Neither result closes natural AV or the
+four-modality product gate.
 
 No evidence here closes the four-modality quality requirement, total <=200M
 resident-parameter gate, <=200 MB package aspiration, or R7/R8 device/release
