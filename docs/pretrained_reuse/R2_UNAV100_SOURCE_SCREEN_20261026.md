@@ -35,6 +35,12 @@ or correctness of the event annotations. Those remain unverified. CSV receipt:
 294,050 bytes, SHA-256
 `f1f9b36e607ed0cea04e818cf23027acd1cec4cdd9b7c118c93408e5654be735`.
 
+The pinned Hugging Face file-tree metadata also lists 13 raw-video archive
+chunks totaling 65,775,604,313 bytes (61.26 GiB) and three annotation Parquet
+files totaling 555,820 bytes. These are metadata sizes only; none of those files
+was fetched. The archive size is a material local-storage cost in addition to
+the unresolved terms and media-rights questions.
+
 ## Task fit and representation path
 
 The authors describe event labels with temporal boundaries, making this a much
