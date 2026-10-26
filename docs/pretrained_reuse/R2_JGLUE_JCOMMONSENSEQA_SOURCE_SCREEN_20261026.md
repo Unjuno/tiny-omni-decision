@@ -1,6 +1,6 @@
 # JGLUE JCommonsenseQA source and split screen
 
-Date: 2026-10-26  
+Date: 2026-10-26
 Status: **REVIEW — no fitting or quality evaluation admitted**
 
 ## Scope
