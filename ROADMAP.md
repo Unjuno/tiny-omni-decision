@@ -2718,3 +2718,16 @@ comparison and native transfer gates next; do not reopen closed prompt/seed
 searches. Old selected0 and all prior failure records remain unchanged.
 [Budget](docs/pretrained_reuse/R2_CONDITIONAL_CANDIDATE_BUDGET_20261015.md) and
 [data result](docs/pretrained_reuse/R2_CONDITION_RELEVANCE_DATA_RESULTS_20261015.md).
+
+### QASC frozen-feature text Decision probe (2026-10-26)
+
+Added a pinned CC-BY-4.0 eight-choice QASC development probe using a frozen
+MiniLM encoder and 196,865-parameter readout. Seed-17 validation selected epoch 1
+at 21.81% Accuracy / 1.9925 NLL; later epochs overfit (train CE fell while
+validation NLL/Brier/ECE worsened). Fact-pair-group bootstrap gives 18.88–24.73%
+Accuracy on these exposed validation IDs. This is task-specific text-only evidence,
+not general text quality or product evidence. The test shard remains unopened.
+The initial runner report miscounted group identities; corrected counts were
+recomputed from pinned JSONL and the runner now preserves `source_record_id`.
+No architecture promotion follows from this result.
+[Protocol, learning curve, split audit, limits and artifact hashes](docs/pretrained_reuse/R2_QASC_TEXT_DECISION_20261026.md).

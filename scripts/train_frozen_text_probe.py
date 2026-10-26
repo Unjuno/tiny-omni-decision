@@ -1,13 +1,13 @@
 """Train a small Decision scorer over frozen, locally pinned text features.
 
-This is a bounded Path A probe for the synthetic Typed Decisions Synth task;
-it is not a quality claim for real-world text decisions.
+This is a bounded Path A probe for frozen text features. The default source is
+the synthetic Typed Decisions Synth task; optional generic rows support separately
+manifested task-specific probes without changing the shared scorer.
 """
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import random
 import time
@@ -23,6 +23,11 @@ from transformers import AutoModel, AutoTokenizer
 from tiny_omni_decision.dataset import iter_local_rows, normalize_jsonl, sha256_file
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer as CandidateScorer
 from tiny_omni_decision.schema import DatasetManifest
+from tiny_omni_decision.text_probe_data import (
+    load_generic_text_examples,
+    text_probe_identity_sets,
+    validate_generic_probe_manifests,
+)
 
 
 def _args() -> argparse.Namespace:
@@ -30,6 +35,14 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--validation", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--validation-manifest", type=Path)
+    parser.add_argument(
+        "--adapter", choices=("typed-decisions-synth", "generic"), default="typed-decisions-synth"
+    )
+    parser.add_argument(
+        "--task-claim",
+        default="Typed Decisions Synth is synthetic and not a real-world task benchmark.",
+    )
     parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -67,10 +80,20 @@ def _apply_noul_criteria(example: Any, definition: dict[str, Any]) -> Any:
 
 
 def _load_examples(
-    path: Path, manifest: DatasetManifest, preserve_noul_criteria: bool = False
+    path: Path,
+    manifest: DatasetManifest,
+    preserve_noul_criteria: bool = False,
+    *,
+    adapter: str = "typed-decisions-synth",
 ) -> list[Any]:
+    if adapter == "generic":
+        if preserve_noul_criteria:
+            raise ValueError("criteria rewriting is available only for Typed Decisions Synth")
+        return load_generic_text_examples(path, manifest)
     rows = list(iter_local_rows(path))
-    examples = list(normalize_jsonl(rows, manifest, "typed-decisions-synth"))
+    examples = list(normalize_jsonl(rows, manifest, adapter))
+    if adapter != "typed-decisions-synth" and preserve_noul_criteria:
+        raise ValueError("criteria rewriting is available only for Typed Decisions Synth")
     if not preserve_noul_criteria:
         return examples
     definitions = {}
@@ -92,22 +115,7 @@ def _load_examples(
 
 
 def _identity_sets(examples: list[Any]) -> tuple[set[str], set[str]]:
-    state_ids = {example.source_record_id.split(":", 1)[0] for example in examples}
-    content = {
-        hashlib.sha256(
-            json.dumps(
-                {
-                    "state": example.state,
-                    "question": example.question,
-                    "options": sorted(example.options),
-                },
-                sort_keys=True,
-                ensure_ascii=False,
-            ).encode("utf-8")
-        ).hexdigest()
-        for example in examples
-    }
-    return state_ids, content
+    return text_probe_identity_sets(examples)
 
 
 def _assert_disjoint(train: list[Any], validation: list[Any]) -> None:
@@ -296,10 +304,30 @@ def main() -> None:
 
     manifest_data = __import__("yaml").safe_load(args.manifest.read_text(encoding="utf-8"))
     manifest = DatasetManifest.model_validate(manifest_data)
-    train_manifest = manifest.model_copy(update={"split": "train"})
-    validation_manifest = manifest.model_copy(update={"split": "validation"})
-    train = _load_examples(args.train, train_manifest, args.preserve_noul_criteria)
-    validation = _load_examples(args.validation, validation_manifest, args.preserve_noul_criteria)
+    if args.adapter == "generic":
+        if args.validation_manifest is None:
+            raise ValueError("generic probes require an independent validation manifest")
+        validation_data = __import__("yaml").safe_load(
+            args.validation_manifest.read_text(encoding="utf-8")
+        )
+        validation_manifest = DatasetManifest.model_validate(validation_data)
+        validate_generic_probe_manifests(manifest, validation_manifest)
+        train_manifest = manifest
+    else:
+        train_manifest = manifest.model_copy(update={"split": "train"})
+        validation_manifest = manifest.model_copy(update={"split": "validation"})
+    train = _load_examples(
+        args.train,
+        train_manifest,
+        args.preserve_noul_criteria,
+        adapter=args.adapter,
+    )
+    validation = _load_examples(
+        args.validation,
+        validation_manifest,
+        args.preserve_noul_criteria,
+        adapter=args.adapter,
+    )
     _assert_disjoint(train, validation)
     train_groups, _ = _identity_sets(train)
     validation_groups, _ = _identity_sets(validation)
@@ -403,6 +431,7 @@ def main() -> None:
     predictions = [
         {
             "id": example.id,
+            "source_group_id": example.source_record_id.split(":", 1)[0],
             "source_record_id": example.source_record_id,
             "target": example.target,
             "options": example.options,
@@ -418,23 +447,29 @@ def main() -> None:
     )
     report = {
         "schema_version": 1,
-        "status": "complete_text_only_synthetic_probe",
-        "task_claim": "Typed Decisions Synth is synthetic and not a real-world task benchmark.",
+        "status": (
+            "complete_text_only_synthetic_probe"
+            if args.adapter == "typed-decisions-synth"
+            else "complete_text_only_generic_probe"
+        ),
+        "task_claim": args.task_claim,
         "seed": args.seed,
         "context_policy": args.context_policy,
         "preserve_noul_criteria": args.preserve_noul_criteria,
         "option_max_length": args.option_max_length,
         "runner_sha256": sha256_file(Path(__file__)),
         "source_revision": manifest.revision,
+        "validation_source_revision": validation_manifest.revision,
+        "dataset_id": manifest.dataset_id,
         "model_revision": args.revision,
         "model_weights_sha256": sha256_file(args.model / "model.safetensors"),
         "train_file_sha256": sha256_file(args.train),
         "validation_file_sha256": sha256_file(args.validation),
         "train_examples": len(train),
         "validation_examples": len(validation),
-        "train_unique_states": len(train_groups),
-        "validation_unique_states": len(validation_groups),
-        "train_validation_state_overlap": 0,
+        "train_unique_source_groups": len(train_groups),
+        "validation_unique_source_groups": len(validation_groups),
+        "train_validation_source_group_overlap": 0,
         "train_validation_content_overlap": 0,
         "train_option_count_distribution": dict(sorted(counts.items())),
         "feature_cache_bytes": feature_path.stat().st_size,

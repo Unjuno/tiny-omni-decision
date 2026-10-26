@@ -2,6 +2,13 @@ schema_version: 1
 manifest_type: candidate_catalog
 purpose: evaluation
 sources:
+  - manifest: candidates/qasc-validation.yaml
+    include: true
+    adapter: generic
+    note: Development-only selector on 926 questions / 780 supporting-fact-pair groups; official test shard remains unopened.
+  - manifest: candidates/qasc.yaml
+    include: false
+    reason: training split is not an evaluation source.
   - manifest: candidates/typed-synth-validation.yaml
     include: true
     adapter: typed-decisions-synth
