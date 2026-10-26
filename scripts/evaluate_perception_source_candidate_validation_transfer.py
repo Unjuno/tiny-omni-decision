@@ -10,7 +10,6 @@ from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
-import torch
 
 from tiny_omni_decision.perception_source_candidate_readout import (
     CandidateFeatureExample,
@@ -289,6 +288,8 @@ def evaluate_controls(model, examples):
 
 
 def run(args):
+    import torch
+
     if args.output.exists():
         raise FileExistsError(f"refusing to overwrite evaluation output: {args.output}")
     plan = json.loads(args.plan.read_text(encoding="utf-8"))
