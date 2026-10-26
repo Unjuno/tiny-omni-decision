@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 BridgeData V2 metadata discrepancy:** the official Berkeley TFDS
+directory reports 53,192 train / 6,872 validation episodes across 1,152
+shards, while the TFDS catalog reports 25,460 train / 3,475 test. The counts
+and prepared views remain unreconciled; no media shard was acquired. Local C:
+had 5.90 GB free, versus 132.49 GB reported by the directory's split byte
+counts. Keep this source at metadata-only `REVIEW` pending a range-only
+episode-path/group audit. See the [receipt and limits](docs/pretrained_reuse/R2_BRIDGEDATA_TFDS_METADATA_PREFLIGHT_20261026.md).
+
 **2026-10-25 Perception frozen-readout validation transfer complete:** The
 fixed 200-event official-validation cohort was scored once using frozen
 Audio/Video/Joint readouts after 200/200 VideoPrism and EfficientAT feature
