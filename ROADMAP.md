@@ -56,6 +56,13 @@ the prior source/license/split audit remains unchanged. No media-access gate
 was bypassed and no model run started. See the
 [pinned source screen](docs/pretrained_reuse/R2_VISTOUCH_SOURCE_SCREEN_20261026.md).
 
+The official Baidu share URL in that pinned README was also opened once through
+the authorized computer-control surface, but the browser safety policy blocked
+the URL before page content or a download was available. No alternate browser,
+network client, or indirect route was used to reach the blocked share. VisTouch
+media acquisition therefore remains blocked pending a user-provided local
+archive or an approved, accessible provider-hosted mirror/direct URL.
+
 **2026-10-26 12:02 JST R0 live recheck:** PR #15 remains Draft/Open at
 `2538c5a`; its three public check runs are green. The primary local worktree
 contains unrelated uncommitted user changes and was left untouched. The local
