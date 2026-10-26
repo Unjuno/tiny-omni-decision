@@ -12,6 +12,22 @@ Keep it REVIEW-only until the license discrepancy and source-video rights are
 resolved.
 [CSV hash and scope](docs/pretrained_reuse/R2_UNAV100_SOURCE_SCREEN_20261026.md).
 
+**2026-10-26 R2 STARSS23 spatial Decision preflight:** The pinned 49-recording
+training subset has 102,434 unique recording/tick/event groups across six rooms.
+Multiple same-class sources occupy multiple azimuth sectors, so a categorical
+single-direction target would lose valid labels; a per-sector yes/no Decision
+query preserves them. Bell has zero training rows and other event classes have
+very low support. A one-window dev-train gate checked annotation ticks,
+five-second media alignment, 96 event-sector targets, and VideoPrism's
+front-referenced patch-column mapping. The pinned room-grouped 78-recording
+corpus now has 96 event-sector queries per window and no official dev-test
+labels. Its validation positive rate is 2.6963%, so an always-`no` predictor
+already reaches 97.3037% raw Accuracy; later comparisons must emphasize
+balanced Accuracy and calibration. The 2,720-window frozen spatial feature
+extraction is running on CPU in a new artifact directory, with no model
+training yet. The prior event-presence AV result remains negative. [Protocol,
+coordinate mapping, and counts](docs/pretrained_reuse/R2_STARSS23_SPATIAL_DECISION_DESIGN_20261026.md).
+
 **2026-10-26 R2 additional AV source screen:** MCIF's pinned CC-BY-4.0
 release has only test configurations, all sharing the same underlying audio and
 video, and its QA references are not supplied-option Decision labels. SlideSpeech
