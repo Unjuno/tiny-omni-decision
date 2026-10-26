@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "dataset_id": "droid/droid_100",
+  "dataset_revision": "GCS object generations recorded per object",
+  "description": "Official TFDS faceblur debug subset, 100 episodes, train-only; not a held-out test",
+  "bucket": "gresearch",
+  "prefix": "robotics/droid_100/1.0.0/",
+  "retrieved_utc": "2026-10-26T00:49:11.0701157Z",
+  "expected_object_count": 33,
+  "expected_total_bytes": 2192615094,
+  "expected_episode_count": 100,
+  "dataset_info_sha256": "58646aa75fd054a0d8670edd676620267adb32550dc228545d70a3418abb1834",
+  "features_sha256": "4c556e2e38e179e41089e07cf54273b1540d67d3c78a420898370329813c9a25",
+  "license_record": {
+    "bucket": "gresearch",
+    "name": "robotics/droid/1.0.0/CC-BY-4.0",
+    "generation": "1710518471643551",
+    "md5Hash": "Shf/wnyfOyQPv0/hd4PInA==",
+    "sha256": "7e7170e3cebf88a9f60c7b8421418323c09304da1af4d5e90f4da1dc1c8a2661"
+  },
+  "objects": [
+    {
+      "name": "robotics/droid_100/1.0.0/dataset_info.json",
+      "size": 760,
+      "generation": "1710527613369658",
+      "md5Hash": "JOcTGdwePw+iymeLhrqavg==",
+      "crc32c": "ZalzPg==",
+      "updated": "2024-03-15T18:33:33.475Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/features.json",
+      "size": 18665,
+      "generation": "1710517501027287",
+      "md5Hash": "AUayWu2IHU/GMy61byaQpg==",
+      "crc32c": "fLNLtA==",
+      "updated": "2024-03-15T15:45:01.115Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00000-of-00031",
+      "size": 27488816,
+      "generation": "1710528095074666",
+      "md5Hash": "IQoCwa04u58UpSOzKsS/6g==",
+      "crc32c": "zgQNQw==",
+      "updated": "2024-03-15T18:41:35.132Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00001-of-00031",
+      "size": 53215423,
+      "generation": "1710528095926443",
+      "md5Hash": "NArjd52W39d8BJo8SoQI3w==",
+      "crc32c": "/JnN/A==",
+      "updated": "2024-03-15T18:41:35.986Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00002-of-00031",
+      "size": 104176382,
+      "generation": "1710528096188384",
+      "md5Hash": "j4f3Y46/k9tk1zuUCQhYsw==",
+      "crc32c": "DpapyQ==",
+      "updated": "2024-03-15T18:41:36.23Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00003-of-00031",
+      "size": 49407960,
+      "generation": "1710528095901422",
+      "md5Hash": "dDhiqYAHwmqQSDAFtEfoCw==",
+      "crc32c": "2Erb7A==",
+      "updated": "2024-03-15T18:41:35.954Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00004-of-00031",
+      "size": 57059559,
+      "generation": "1710528095152348",
+      "md5Hash": "jEnMTImP6JQu1KMJwwEiIg==",
+      "crc32c": "Q5IFbQ==",
+      "updated": "2024-03-15T18:41:35.194Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00005-of-00031",
+      "size": 28932473,
+      "generation": "1710528094868229",
+      "md5Hash": "Ny4pZpWo2i+JdruCTyKPwg==",
+      "crc32c": "JC11Cw==",
+      "updated": "2024-03-15T18:41:34.924Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00006-of-00031",
+      "size": 12745632,
+      "generation": "1710528094024804",
+      "md5Hash": "enLFh5TfmdAb3HLBXQIYJA==",
+      "crc32c": "lptEmA==",
+      "updated": "2024-03-15T18:41:34.075Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00007-of-00031",
+      "size": 41133699,
+      "generation": "1710528095053693",
+      "md5Hash": "HHQPxysW9Yox9u2BLKMG+g==",
+      "crc32c": "LMRjeQ==",
+      "updated": "2024-03-15T18:41:35.108Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00008-of-00031",
+      "size": 131132714,
+      "generation": "1710528095506657",
+      "md5Hash": "Z6XJMpHU7Ra+JhQrrRKy0w==",
+      "crc32c": "dLesng==",
+      "updated": "2024-03-15T18:41:35.552Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00009-of-00031",
+      "size": 9541347,
+      "generation": "1710528094394407",
+      "md5Hash": "96W0orSYoQGtvvafj5oLtw==",
+      "crc32c": "sM5x0A==",
+      "updated": "2024-03-15T18:41:34.442Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00010-of-00031",
+      "size": 30130184,
+      "generation": "1710528094905163",
+      "md5Hash": "3szT+17iZZBmB25AlHOOKw==",
+      "crc32c": "RfkMrQ==",
+      "updated": "2024-03-15T18:41:34.945Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00011-of-00031",
+      "size": 64826210,
+      "generation": "1710528095158143",
+      "md5Hash": "mzRQQZlzLlOtAVR8vl7jWg==",
+      "crc32c": "JNHB3A==",
+      "updated": "2024-03-15T18:41:35.226Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00012-of-00031",
+      "size": 64716351,
+      "generation": "1710528094262818",
+      "md5Hash": "hElcB7uQAk5YfQXub1N0bQ==",
+      "crc32c": "S+1aVg==",
+      "updated": "2024-03-15T18:41:34.314Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00013-of-00031",
+      "size": 184352180,
+      "generation": "1710528682435772",
+      "md5Hash": "plyu7IdwX9L93w+dX5O+nA==",
+      "crc32c": "HgIfeg==",
+      "updated": "2024-03-15T18:51:22.486Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00014-of-00031",
+      "size": 31864169,
+      "generation": "1710528682820299",
+      "md5Hash": "E5xe+82Aa46JZIC05d4HZw==",
+      "crc32c": "nPdYyg==",
+      "updated": "2024-03-15T18:51:22.863Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00015-of-00031",
+      "size": 99620534,
+      "generation": "1710528683556266",
+      "md5Hash": "s8hpgUdKmRovLgPMIBnIlg==",
+      "crc32c": "DP8ayA==",
+      "updated": "2024-03-15T18:51:23.596Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00016-of-00031",
+      "size": 134703547,
+      "generation": "1710528684317134",
+      "md5Hash": "uZihjId1PYMaJKf90I+KKQ==",
+      "crc32c": "Yd1Tdw==",
+      "updated": "2024-03-15T18:51:24.358Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00017-of-00031",
+      "size": 27059787,
+      "generation": "1710528684644195",
+      "md5Hash": "Oj2WyLqzK/kGZ9n6zMT31Q==",
+      "crc32c": "DBmd3A==",
+      "updated": "2024-03-15T18:51:24.688Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00018-of-00031",
+      "size": 97615525,
+      "generation": "1710528685264421",
+      "md5Hash": "fVheOQUjHivNxZLi1XMOTg==",
+      "crc32c": "dWmKcg==",
+      "updated": "2024-03-15T18:51:25.311Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00019-of-00031",
+      "size": 14490316,
+      "generation": "1710528685542248",
+      "md5Hash": "HxPlxzbPY2fK4OPqUVXpuA==",
+      "crc32c": "gTXHbg==",
+      "updated": "2024-03-15T18:51:25.58Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00020-of-00031",
+      "size": 69822437,
+      "generation": "1710528793843539",
+      "md5Hash": "QN2WoVrghqpuOLiUhAZjjA==",
+      "crc32c": "1iiGPA==",
+      "updated": "2024-03-15T18:53:13.882Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00021-of-00031",
+      "size": 46506562,
+      "generation": "1710528794261160",
+      "md5Hash": "MlDxldSiCTxYp+MLl0H4Ug==",
+      "crc32c": "nEa83w==",
+      "updated": "2024-03-15T18:53:14.299Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00022-of-00031",
+      "size": 100973263,
+      "generation": "1710528795371750",
+      "md5Hash": "qM2j4kK3t5WFZRyFnG1Zpw==",
+      "crc32c": "qVFb7A==",
+      "updated": "2024-03-15T18:53:15.412Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00023-of-00031",
+      "size": 80456132,
+      "generation": "1710528796066123",
+      "md5Hash": "VyxJuwp2XkKLQ85ancTOfw==",
+      "crc32c": "WbC07g==",
+      "updated": "2024-03-15T18:53:16.112Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00024-of-00031",
+      "size": 25002446,
+      "generation": "1710528796411878",
+      "md5Hash": "qu8C5xikZU3Tfdf/cNC35A==",
+      "crc32c": "FWoEkw==",
+      "updated": "2024-03-15T18:53:16.452Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00025-of-00031",
+      "size": 91800923,
+      "generation": "1710528797070323",
+      "md5Hash": "NdN1WPpQOI+wIlr6WWHzPA==",
+      "crc32c": "P6QqSQ==",
+      "updated": "2024-03-15T18:53:17.109Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00026-of-00031",
+      "size": 173915084,
+      "generation": "1710528797952396",
+      "md5Hash": "E/H/L1wV/oJ8qLgjnMm1zQ==",
+      "crc32c": "EO1OGg==",
+      "updated": "2024-03-15T18:53:17.993Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00027-of-00031",
+      "size": 113599658,
+      "generation": "1710528798818597",
+      "md5Hash": "W74Fzckd8iRjlPBsB5j4QQ==",
+      "crc32c": "f8hl1A==",
+      "updated": "2024-03-15T18:53:18.866Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00028-of-00031",
+      "size": 29432148,
+      "generation": "1710528799211898",
+      "md5Hash": "EGH3Wx7UA4OfeIQbMiHNzg==",
+      "crc32c": "8cc4bg==",
+      "updated": "2024-03-15T18:53:19.257Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00029-of-00031",
+      "size": 20013917,
+      "generation": "1710528799517866",
+      "md5Hash": "bDAuXsPPNbS428+45VOZJA==",
+      "crc32c": "lOqKCA==",
+      "updated": "2024-03-15T18:53:19.554Z"
+    },
+    {
+      "name": "robotics/droid_100/1.0.0/r2d2_faceblur-train.tfrecord-00030-of-00031",
+      "size": 176860291,
+      "generation": "1710528907954714",
+      "md5Hash": "YHXlcDFibrLwrDMP30PFBA==",
+      "crc32c": "rh+lxw==",
+      "updated": "2024-03-15T18:55:07.995Z"
+    }
+  ]
+}
