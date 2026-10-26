@@ -12,6 +12,19 @@ broader multimodal Decision gate. Keep this readout diagnostic-only and do not
 fit again on the exposed cohort. See the [protocol, controls, intervals and
 hashes](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_CANDIDATE_VALIDATION_TRANSFER_20261026.md).
 
+**2026-10-26 R2-M synthetic temporal architecture evidence reconciled:** The
+independent `codex/r2-synthetic-av-gated-temporal-20261026` branch completed a
+16,384-update residual-gated LSTM run on the existing frozen synthetic AV task.
+It matched the plain raw-input LSTM at 100% selected validation Accuracy but
+had slightly worse NLL/ECE; the earlier conditional gates stayed at chance.
+This supports no gate benefit and is synthetic-mechanics evidence only, not
+natural AV transfer. An artifact audit found the residual-gate report copied
+the earlier bypass run's prediction SHA; the residual run's evaluation receipt
+and 71,680-row predictions agree on SHA `66ff5c760e556a29b05ea366f7f4392bb48e6505a7aee61076949d2b0d2e2d83`.
+The original branch and artifacts remain untouched. Do not repeat this synthetic
+fit; the next R2-M gate is a naturally recorded, rights-cleared task with
+independent source groups. See the [cross-branch reconciliation and hashes](docs/pretrained_reuse/R2_SYNTHETIC_AV_CROSS_BRANCH_RECONCILIATION_20261026.md).
+
 **2026-10-26 R2 input-grounding and fusion recheck:** A fixed 168-example
 Open Images probe reached 79.17% Accuracy, but its selected scorer produced
 identical top-1 decisions after image features were zeroed or deranged. Treat
