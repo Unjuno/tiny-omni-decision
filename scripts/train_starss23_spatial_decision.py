@@ -413,6 +413,11 @@ def _fit_arm(
         calibration["event"],
         calibration["sector"],
     )
+    training_logits = _predict(model, matrix, train, device)
+    calibrated_training_logits = training_logits / temperature
+    calibrated_training_logits[:, 1] += yes_bias
+    raw_training_probabilities = training_logits.softmax(-1)[:, 1].numpy()
+    calibrated_training_probabilities = calibrated_training_logits.softmax(-1)[:, 1].numpy()
     validation_logits = _predict(model, matrix, validation, device)
     calibrated_logits = validation_logits / temperature
     calibrated_logits[:, 1] += yes_bias
@@ -452,6 +457,20 @@ def _fit_arm(
         "stopped_epoch": len(history),
         "selection": "minimum raw calibration macro event-sector NLL; patience 6; min_delta 1e-5",
         "calibration": {"temperature": temperature, "yes_bias": yes_bias, "grid": calibration_grid},
+        "train_fixed_raw": _metric_summary(
+            train["target"],
+            raw_training_probabilities,
+            train["event"],
+            train["sector"],
+            train["room"],
+        ),
+        "train_fixed_calibrated": _metric_summary(
+            train["target"],
+            calibrated_training_probabilities,
+            train["event"],
+            train["sector"],
+            train["room"],
+        ),
         "validation_raw": _metric_summary(
             validation["target"],
             raw_probabilities,

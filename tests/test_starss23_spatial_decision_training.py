@@ -135,6 +135,8 @@ def test_cpu_training_smoke_saves_and_reloads_selected_checkpoint(tmp_path, monk
     )
 
     assert result["best_epoch"] == 1
+    assert result["train_fixed_raw"]["overall"]["count"] == 192
+    assert result["validation_calibrated"]["overall"]["count"] == 96
     assert (arm_dir / "best.pt").is_file()
     assert (arm_dir / "final.pt").is_file()
     assert (arm_dir / "validation_predictions.npz").is_file()
