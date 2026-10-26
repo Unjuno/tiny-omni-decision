@@ -5,8 +5,11 @@
 cross-split ID overlap and positive spans. This is a promising natural AV event
 task, but the project site says CC BY 4.0 while the pinned Hugging Face card
 says CC BY-NC-SA 4.0; underlying video copyrights remain with source owners.
-No annotations, features or videos were opened. Keep it REVIEW-only until the
-license discrepancy and source-video rights are resolved.
+An official repository collaborator's Google Drive folder was confirmed
+read-only to list annotations and VGGish/I3D feature archives, but no artifact
+payload was fetched and the folder metadata does not resolve component terms.
+Keep it REVIEW-only until the license discrepancy and source-video rights are
+resolved.
 [CSV hash and scope](docs/pretrained_reuse/R2_UNAV100_SOURCE_SCREEN_20261026.md).
 
 **2026-10-26 R2 additional AV source screen:** MCIF's pinned CC-BY-4.0

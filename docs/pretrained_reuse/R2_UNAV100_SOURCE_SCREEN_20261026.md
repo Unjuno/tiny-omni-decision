@@ -69,6 +69,21 @@ Decision contract.
 
 ## Rights and access discrepancy
 
+### Author-linked Google Drive metadata recheck (2026-10-26)
+
+The official repository collaborator [`ttengwang` linked a Google Drive
+folder](https://github.com/ttgeng233/UnAV/issues/6)
+in response to a dataset-access request. A read-only HTTP fetch of that
+folder's listing and its `features` subfolder returned HTTP 200. The visible
+metadata lists `download_video.csv`, `unav100_annotations.json`,
+`model_unav100.pth.tar`, and the feature archives
+`audio_features_vggish.tar.gz`, `visual_features_i3d_rgb.tar.gz`, and
+`visual_features_i3d_flow.tar.gz`. No file payload was fetched or opened in
+this recheck. The folder listing does not provide a separate license for each
+artifact, so an author-linked download location does not resolve the license
+or source-video-rights discrepancy below. C: had 11,567,124,480 bytes free at
+the time of this metadata check; no download was attempted.
+
 - The project site states that the UnAV-100 dataset is available for
   commercial/research use under CC BY 4.0, while explicitly saying copyright
   in the videos remains with the original owners.
