@@ -103,6 +103,25 @@ def test_refuses_nontrain_or_mismatched_video(split, video_id):
         list(source_candidate_records("v1", data, cut_frame=-1))
 
 
+def test_explicit_validation_records_keep_their_source_split_provenance():
+    data = row()
+    data["metadata"]["split"] = "valid"
+
+    record = list(
+        source_candidate_records("v1", data, cut_frame=-1, expected_split="valid")
+    )[0]
+
+    assert record["split"] == "validation"
+    assert record["provenance"]["source_split"] == "official_validation"
+
+
+def test_validation_request_rejects_training_annotation_rows():
+    with pytest.raises(ValueError, match="source split"):
+        list(
+            source_candidate_records("v1", row(), cut_frame=-1, expected_split="valid")
+        )
+
+
 def test_invisible_source_has_explicit_none_visible_target():
     data = row()
     data["sound_localisation"][0]["is_visible"] = 0

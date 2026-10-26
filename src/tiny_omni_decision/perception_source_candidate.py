@@ -167,7 +167,7 @@ def _sample_frames(frames, limit=4):
     return [frames[index] for index in indices]
 
 
-def source_candidate_records(video_id, row, cut_frame=None):
+def source_candidate_records(video_id, row, cut_frame=None, *, expected_split="train"):
     """Yield candidate-reranking records; annotation labels stay in supervision only.
 
     `frame_ids` on sound annotations are inclusive interval bounds. Candidate object
@@ -175,9 +175,11 @@ def source_candidate_records(video_id, row, cut_frame=None):
     externally supplied audio and frame crops; this function emits references and
     targets, not media or autonomous event detections.
     """
+    if expected_split not in {"train", "valid"}:
+        raise ValueError("source split must be official train or official validation")
     metadata = row["metadata"]
-    if metadata.get("split") != "train" or metadata.get("video_id") != video_id:
-        raise ValueError("train-only matching video identity required")
+    if metadata.get("split") != expected_split or metadata.get("video_id") != video_id:
+        raise ValueError("source split or matching video identity required")
     if type(metadata.get("num_frames")) is not int or metadata["num_frames"] <= 0:
         raise ValueError("positive integer video frame count required")
     if type(cut_frame) is not int or not -1 <= cut_frame < metadata["num_frames"]:
@@ -310,7 +312,7 @@ def source_candidate_records(video_id, row, cut_frame=None):
         record = {
             "record_id": f"{video_id}:sound:{sound_id}",
             "group_id": video_id,
-            "split": "train",
+            "split": "train" if expected_split == "train" else "validation",
             "status": status,
             "hold_reasons": hold_reasons,
             "provenance": {
@@ -319,6 +321,8 @@ def source_candidate_records(video_id, row, cut_frame=None):
                 "audio_interval_us": list(sound["timestamps"]),
             },
         }
+        if expected_split == "valid":
+            record["provenance"]["source_split"] = "official_validation"
         if status == "candidate":
             candidates.sort(key=lambda candidate: candidate["_order_key"])
             object_to_option = {}
