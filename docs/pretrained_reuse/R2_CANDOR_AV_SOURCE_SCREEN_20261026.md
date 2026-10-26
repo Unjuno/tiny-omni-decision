@@ -25,6 +25,12 @@ does not by itself establish an ML-training license or redistribution rights.
   organizational/institutional affiliation, contact details, and intended use.
   BetterUp reviews registrations before sending short-lived download links. No
   registration was submitted.
+- The public OSF replication capsule (`fbsgh`) was inspected at metadata and
+  README level only. Its code capsule has an empty `data/` directory; the README
+  says a reviewed “No Media Data Release” request is required even to reproduce
+  analyses and describes a 2.5 GB no-media package. That README does not grant
+  machine-learning training rights for the recordings. No archive, annotation
+  payload, or media was downloaded or opened.
 - Cornell ConvoKit says it does not separately distribute CANDOR and that the
   original distribution's license applies. Therefore a derived-tool or
   ConvoKit license must not be mistaken for a CANDOR media license.
@@ -76,13 +82,17 @@ turn prediction demonstrates 95–98% multimodal Decision quality.
 - [BetterUp CANDOR research page and participant-sharing statement](https://www.betterup.com/research/candor-research)
 - [BetterUp research-data request and review process](https://betterup-data-requests.herokuapp.com/)
 - [Corpus paper (Science Advances / PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10065445/)
+- [CANDOR OSF project and public replication README](https://osf.io/fbsgh/)
 - [CANDOR Corpus documentation (Cornell ConvoKit; original distribution terms apply)](https://convokit.cornell.edu/documentation/candor.html)
 - [CANDOR co-author's dataset page describing available synchronized media](https://guscooney.com/candor-dataset/)
 
 ## Next gate
 
-Only proceed to metadata acquisition through the official reviewed access route
-if the applicant has a truthful qualifying affiliation and the returned terms
-allow the intended research. Otherwise reject this source for this project and
-continue with already admitted public-data candidates. No email, form, download,
-GPU work, or existing artifact was touched in this screen.
+The public code capsule is insufficient for a model run. Proceed to metadata
+acquisition only through the official reviewed access route if the applicant
+has a truthful qualifying affiliation and the returned terms allow the
+intended research. The no-media package could support a task/split/label audit,
+but a model run still requires approved processed or raw media and explicit
+terms permitting that use. Otherwise reject this source for this project and
+continue with already admitted public-data candidates. No email, form,
+download, GPU work, or existing artifact was touched in this screen.
