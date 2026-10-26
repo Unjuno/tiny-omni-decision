@@ -42,7 +42,7 @@ are scoped to the stated artifacts, not a comprehensive legal review.
   device `TFRT_CPU_0`.
 - Ruri/EfficientAT: Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2;
   CPU-only. No GPU was used.
-- VideoPrism result: `C:\CodexArtifacts\pretrained-reuse-r1\recheck-20261026-0015\audit-result.json`, SHA-256 `09c2c3d34f7a2042499a8c598f42dbb5aadf1ff5ce5762592d2d5fb2a951ee53`.
+- VideoPrism result: `C:\CodexArtifacts\pretrained-reuse-r1\recheck-20261026-0015\audit-result.json`, SHA-256 `09c2c3d34f7a2042499a8c598f42dba5aadf1ff5ce5762592d2d5fb2a951ee53`.
 - VideoPrism driver: SHA-256 `fd364264da0f668bbffe8959bdd353c323e1430ef2616aacc78580c206aeb01`; it was modified from the earlier audit driver to write to a fresh result path.
 - Ruri/EfficientAT result: `C:\CodexArtifacts\pretrained-reuse-r1\recheck-20261026-0015\ruri-efficientat-result.json`, SHA-256 `582812a0e017c2d6d95300d5e95ff26d26d508f15aa6461f94cf107907c1e28a`.
 - Ruri/EfficientAT driver SHA-256: `479f566189af0dca7fbc9ce00a841221f6d745b10c3697b2bfbea0d7e11c4153`.
