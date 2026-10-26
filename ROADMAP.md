@@ -2731,3 +2731,15 @@ The initial runner report miscounted group identities; corrected counts were
 recomputed from pinned JSONL and the runner now preserves `source_record_id`.
 No architecture promotion follows from this result.
 [Protocol, learning curve, split audit, limits and artifact hashes](docs/pretrained_reuse/R2_QASC_TEXT_DECISION_20261026.md).
+
+### Read-only cross-branch R2 reconciliation (2026-10-26)
+
+Reviewed concurrent open source-screen and experiment PRs to avoid repeating
+work. CLEVRER plus generated-tone temporal AV reaches83.51% on its narrow,
+exposed synthetic development split; this does not qualify natural AV. The
+latest KilometerAudio/EvaOmni/AVI-Bench, MAVD/Urbansas, AMI, AVSBench and NIST
+ASAPS screens do not currently admit a rights-cleared, adequately grouped
+natural-AV development task. CommonsenseQA2 and QASC both show weak narrow
+text transfer. Continue source/task admission before another natural-AV fit;
+preserve all concurrent PRs and exposed validation IDs.
+[Cross-branch evidence and gates](docs/pretrained_reuse/R2_CROSS_BRANCH_EVIDENCE_20261026.md).
