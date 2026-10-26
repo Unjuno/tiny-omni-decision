@@ -161,4 +161,4 @@ def prepare_qasc_split_rows(
         for row in validation_source_rows
     ]
     audit = check_qasc_split_integrity(train_rows, validation_rows)
-    return train_rows, validation_rows, audit
+    return train_rows, validation_rows, audit\n
