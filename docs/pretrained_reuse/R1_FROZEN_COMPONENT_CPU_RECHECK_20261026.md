@@ -55,6 +55,20 @@ recheck preserves its prior output digest
 MiniLM and MOMENT were absent at the expected cache paths and were not tested;
 no runtime claim is added for them.
 
+### Local checkpoint path recheck
+
+The three weight files were also reopened directly from their retained local
+artifact paths. Their byte counts and SHA-256 values match the table above:
+
+| Component | Local checkpoint path | Bytes | SHA-256 |
+|---|---|---:|---|
+| VideoPrism-B | `C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz` | 457,475,296 | `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29` |
+| Ruri v3-30m | `C:/CodexArtifacts/pretrained-reuse-r1/ruri-v3-30m/model.safetensors` | 146,828,152 | `e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832` |
+| EfficientAT DyMN-0.4 | `C:/CodexArtifacts/pretrained-reuse-r1/efficientat-audit-v1/dymn04_as.pt` | 8,086,973 | `49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e` |
+
+This is a read-only file-integrity recheck; it did not rerun model inference or
+change any artifact.
+
 ## Decision
 
 This closes only a fresh local runtime recheck for these three pinned frozen
