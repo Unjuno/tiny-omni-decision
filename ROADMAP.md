@@ -25,6 +25,14 @@ closed-set image evidence, not general option-conditioned Decision quality.
 No further fit on those exposed IDs. The full protocol and artifact hashes are
 in the [iNaturalist report](https://github.com/Unjuno/tiny-omni-decision/blob/19392c947da150b4f0e4e1aca4cccef5374c1bdf/docs/pretrained_reuse/R2_INATURALIST_VIDEOPRISM_READOUT_20261026.md).
 
+**2026-10-26 R2 AV-Actions source gate:** The official Audio-Visually Indicated
+Actions dataset has synchronized audio, video and acoustic images, but only
+nine people/three scenarios, request-only non-commercial research access, and a
+published split generator that can place chunks from one recording across
+splits. No request, data acquisition or fitting was performed. Keep it
+REVIEW-only pending authorized access, a grouped split and an audio-vs-video
+task-dependence preflight. [Source and split screen](docs/pretrained_reuse/R2_AV_ACTIONS_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 BridgeData source gate:** BridgeData V2 remains a useful
 video+robot-state task-design lead, but the official TFDS release is 387.49
 GiB and the reviewed raw converter randomly partitions trajectories within
