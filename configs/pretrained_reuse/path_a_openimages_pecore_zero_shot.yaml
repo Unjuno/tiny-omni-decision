@@ -1,0 +1,35 @@
+experiment_id: path-a-openimages-pecore-zero-shot-20261026
+description: >-
+  Fixed-prompt PE-Core zero-shot image-to-option comparison on the same exposed
+  168-example Open Images V6 development validation cohort used by TinyCLIP.
+training: false
+checkpoint_selection: false
+calibration: false
+prompt_search: false
+sealed_audit: false
+model:
+  repository: timm/PE-Core-T-16-384
+  revision: 7fe539ed578ac49a1c2b4f946e4b0747704c825a
+  runtime_parameters: 69546113
+  weights_sha256: 477b7507c79e3484195f4e389af6d044b5d56f42ce503d6b0eb7e99439b545e5
+  weights_bytes: 278219132
+  local_checkpoint: C:\CodexArtifacts\pretrained-reuse-r1\pe-core-t16-r1-attempt-02-runtime\hf-cache\hub\models--timm--PE-Core-T-16-384\snapshots\7fe539ed578ac49a1c2b4f946e4b0747704c825a\open_clip_model.safetensors
+decision:
+  task: Open Images V6 hierarchy-aware object presence, four supplied choices
+  prompt_template: "a photo containing {lowercase option}."
+  scoring: OpenCLIP scaled image-text similarity, softmax over supplied options
+  ece_bins: 15
+  examples: 168
+  controls: [neutral_mean_color_image, deranged_image_seed_20261026]
+data:
+  task_manifest_sha256: 6fbd56f0caebc77b1067dfffaadb444aaf51b4b01eabff3855c11a245f86f964
+  validation_previously_exposed: true
+  page_license_and_attribution_declaration_matched: true
+  individual_ownership_independently_verified: false
+runtime:
+  library: open_clip_torch
+  library_version: 3.3.0
+  device: cpu
+  batch_size: 8
+  torch_threads: 4
+  output_directory: C:\CodexArtifacts\pretrained-reuse-r2\openimages-pecore-zero-shot-20261026-attempt-01

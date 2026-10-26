@@ -1,3 +1,11 @@
+**2026-10-26 R2 PE-Core zero-shot comparison:** On the same 168 previously
+exposed Open Images four-choice image cohort and fixed prompt used for TinyCLIP,
+PE-Core scored 42.26% Accuracy, NLL 1.9034, Brier 0.8652, and ECE 0.2988.
+TinyCLIP scored 64.88% and was correct on 50 examples where PE-Core was wrong,
+versus 12 in the reverse direction. Both models respond to image controls, but
+neither result meets the 95–98% goal; both weights files exceed the provisional
+200 MB package target. See the [matched PE-Core record](docs/pretrained_reuse/R2_OPENIMAGES_PECORE_ZERO_SHOT_20261026.md).
+
 **2026-10-26 R2 TinyCLIP Path A zero-shot image control:** A pinned TinyCLIP
 checkpoint (83.10M runtime parameters, 332.4 MB weights file) ranked four
 supplied object choices on 168 available, page-declaration-matched Open Images
