@@ -68,14 +68,14 @@ def _bytes_list(feature: bytes) -> list[bytes]:
     return []
 
 
-def sequence_example_context(serialized: bytes) -> dict[str, str]:
+def episode_example_context(serialized: bytes) -> dict[str, str]:
     context = None
     for number, wire_type, payload in _fields(serialized):
         if number == 1 and wire_type == 2:
             context = payload
             break
     if context is None:
-        raise ValueError("TFRecord payload has no SequenceExample context")
+        raise ValueError("TFRecord payload has no Example feature map")
 
     result: dict[str, str] = {}
     for number, wire_type, entry in _fields(context):
@@ -100,7 +100,7 @@ def sequence_example_context(serialized: bytes) -> dict[str, str]:
     return result
 
 
-def sequence_example_instructions(serialized: bytes) -> list[str]:
+def episode_example_instructions(serialized: bytes) -> list[str]:
     context = None
     for number, wire_type, payload in _fields(serialized):
         if number == 1 and wire_type == 2:
@@ -162,8 +162,8 @@ def audit_dataset(root: Path, dataset_info: dict) -> dict:
             raise FileNotFoundError(shard)
         shard_rows = []
         for record in iter_tfrecord(shard):
-            shard_rows.append(sequence_example_context(record))
-            instruction_counts.update(sequence_example_instructions(record))
+            shard_rows.append(episode_example_context(record))
+            instruction_counts.update(episode_example_instructions(record))
         if len(shard_rows) != expected:
             raise ValueError(f"{name}: expected {expected} episodes, read {len(shard_rows)}")
         for row in shard_rows:

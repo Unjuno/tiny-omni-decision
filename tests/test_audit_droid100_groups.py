@@ -4,9 +4,9 @@ import pytest
 
 from scripts.audit_droid100_groups import (
     audit_dataset,
+    episode_example_context,
+    episode_example_instructions,
     iter_tfrecord,
-    sequence_example_context,
-    sequence_example_instructions,
 )
 
 
@@ -23,7 +23,7 @@ def _length_field(number: int, value: bytes) -> bytes:
     return _varint((number << 3) | 2) + _varint(len(value)) + value
 
 
-def _sequence_example(file_path: str, recording_path: str, instruction: str | None = None) -> bytes:
+def _episode_example(file_path: str, recording_path: str, instruction: str | None = None) -> bytes:
     entries = []
     for key, value in (
         ("episode_metadata/file_path", file_path),
@@ -45,26 +45,26 @@ def _write_tfrecord(path, payload: bytes):
     path.write_bytes(struct.pack("<Q", len(payload)) + bytes(4) + payload + bytes(4))
 
 
-def test_sequence_example_reads_only_recording_identity_metadata():
-    row = sequence_example_context(_sequence_example("episode/1", "recording/abc"))
+def test_episode_example_reads_only_recording_identity_metadata():
+    row = episode_example_context(_episode_example("episode/1", "recording/abc"))
     assert row == {
         "episode_metadata/file_path": "episode/1",
         "episode_metadata/recording_folderpath": "recording/abc",
     }
 
 
-def test_sequence_example_rejects_missing_group_identity():
+def test_episode_example_rejects_missing_group_identity():
     with pytest.raises(ValueError, match="missing non-empty"):
-        sequence_example_context(_length_field(1, b""))
+        episode_example_context(_length_field(1, b""))
 
 
-def test_sequence_example_extracts_normalized_instruction_text():
-    row = _sequence_example("episode/1", "recording/abc", "  Move   the   cup\n left ")
-    assert sequence_example_instructions(row) == ["Move the cup left"]
+def test_episode_example_extracts_normalized_instruction_text():
+    row = _episode_example("episode/1", "recording/abc", "  Move   the   cup\n left ")
+    assert episode_example_instructions(row) == ["Move the cup left"]
 
 
 def test_tfrecord_reader_checks_record_framing(tmp_path):
-    payload = _sequence_example("episode/1", "recording/abc")
+    payload = _episode_example("episode/1", "recording/abc")
     path = tmp_path / "sample.tfrecord"
     _write_tfrecord(path, payload)
     assert list(iter_tfrecord(path)) == [payload]
@@ -82,7 +82,7 @@ def test_audit_counts_recording_groups_and_checks_pinned_shard_counts(tmp_path):
             for _ in range(length):
                 record_path = f"episode/{episode_index}"
                 group = "recording/shared" if episode_index < 2 else f"recording/{episode_index}"
-                payload = _sequence_example(record_path, group)
+                payload = _episode_example(record_path, group)
                 stream.write(struct.pack("<Q", len(payload)) + bytes(4) + payload + bytes(4))
                 episode_index += 1
     info = {"splits": [{"name": "train", "shardLengths": [str(n) for n in lengths]}]}

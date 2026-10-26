@@ -48,7 +48,7 @@ The downloader receipt SHA-256 is
 The TFRecord metadata audit JSON SHA-256 is
 `9adb67c3aee29ce7d0cecad14dbecedb2f506b9077b316fd74da80a6c09157d`.
 
-The audit read SequenceExample metadata only and confirmed:
+The audit read episode metadata from TFRecord `Example` messages only and confirmed:
 
 | Check | Result |
 | --- | ---: |
