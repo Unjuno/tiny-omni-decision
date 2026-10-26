@@ -23,10 +23,13 @@ front-referenced patch-column mapping. The pinned room-grouped 78-recording
 corpus now has 96 event-sector queries per window and no official dev-test
 labels. Its validation positive rate is 2.6963%, so an always-`no` predictor
 already reaches 97.3037% raw Accuracy; later comparisons must emphasize
-balanced Accuracy and calibration. The 2,720-window frozen spatial feature
-extraction is running on CPU in a new artifact directory, with no model
-training yet. The prior event-presence AV result remains negative. [Protocol,
-coordinate mapping, and counts](docs/pretrained_reuse/R2_STARSS23_SPATIAL_DECISION_DESIGN_20261026.md).
+balanced Accuracy and calibration. Frozen four-channel DyMN features are now
+complete for all 2,720 windows (channel-0 parity is exact); CPU VideoPrism
+spatial extraction is still running (1,137 / 2,720 windows at the latest
+checkpoint). A frozen-feature audio/video/joint Decision readout and input
+ablation controls are implemented and pass a CPU synthetic training smoke, but
+no STARSS model has been fit yet. The prior event-presence AV result remains
+negative. [Protocol, coordinate mapping, counts, and current extraction state](docs/pretrained_reuse/R2_STARSS23_SPATIAL_DECISION_DESIGN_20261026.md).
 
 **2026-10-26 R2 additional AV source screen:** MCIF's pinned CC-BY-4.0
 release has only test configurations, all sharing the same underlying audio and

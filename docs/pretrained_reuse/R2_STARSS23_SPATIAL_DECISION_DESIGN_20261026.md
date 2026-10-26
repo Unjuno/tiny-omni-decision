@@ -148,20 +148,48 @@ metrics, and the always-`no` baseline. Bell has zero training positives but
 32 validation positives, so it is an explicit unsupported-class transfer test,
 not evidence that the training split covers all events.
 
-Frozen audio feature preparation will encode each original FOA channel
-independently with the same pinned DyMN frontend, preserving source order
-`W,Y,Z,X`; channel 0 must reproduce the existing mono feature cache exactly.
-This does not claim that an AudioSet mono model is a spatial-audio encoder. The
-channel-wise comparison only tests whether its frozen features preserve useful
-directional information.
+## Frozen-feature extraction and Decision runner status
+
+The full audio feature extraction completed in a new artifact directory:
+`starss23-foa-channel-corpus-features-01/result.json` reports `PASS`, 2,720
+windows, 78 recordings, `[2720,4,384]` features, 843.37 CPU seconds, and a
+maximum channel-0 difference of exactly zero against the existing pinned mono
+cache. Feature matrix SHA-256 is
+`0d6aee00ded4db333f0e38b1d7cbee28cc70171683a4f487563cd102a17f9729`. The
+isolated `torch/torchaudio 2.6.0+cu124` environment was used; no global or
+existing VideoPrism environment was changed. This does not claim that an
+AudioSet mono model is a spatial-audio encoder; it tests whether independently
+encoded FOA channels retain useful direction cues.
+
+Frozen VideoPrism spatial extraction is still running on CPU in
+`starss23-spatial-corpus-features-01`. At the latest recorded checkpoint it
+had completed 1,137 of 2,720 windows (31 recordings); the runner saves and
+hashes one shard per recording and reads no labels. No GPU training has begun.
+
+The new `scripts/train_starss23_spatial_decision.py` implements the next
+development-only Path A comparison: frozen audio-only, spatial-video-only, and
+joint features; event and sector conditioning; supplied `[no, yes]` options;
+balanced positive/negative training loss; train-window-only feature
+normalization; calibration and checkpoint selection on the independent
+calibration rooms; and final reporting on the two held-out validation rooms.
+Checkpoint selection and calibration use macro event-sector NLL, not
+sample-weighted Accuracy. Reports include overall and per-event/per-sector/
+event-sector metrics, per-room results, trainable head size, saved predictions,
+and audio/video ablation plus cross-recording video permutation controls. A
+CPU synthetic train/reload smoke and feature-identity checks pass. The three
+readout heads have 199,681 (audio), 789,505 (video), and 986,113 (joint)
+trainable parameters at hidden width 128. Per-dimension normalization is fit
+only on unique training windows. The video permutation control preserves room
+identity while changing recording identity. The targeted suite passes 41
+tests. This is pipeline verification only; there are no measured STARSS
+readout metrics yet.
 
 ## Next gate and stop rules
 
-Before fitting any head, estimate full-corpus spatial-feature storage and
-extraction time, and verify that the appropriate frozen audio features and
-panorama sectors can be joined by exact window ID. Reuse no validation or test
-labels in this planning step. If the corpus cannot fit the local storage/compute
-budget, stop without training and report the constraint.
+Before fitting, finish VideoPrism extraction, confirm its manifest order and
+media hashes against the frozen audio features and corpus, and verify free disk
+and local runtime. The runner must reject wrong row order, split, or media
+identity. Reuse no official dev-test or sealed-audit labels.
 
 If the smoke passes and local resources allow, fit one frozen-feature readout
 with a fixed room-grouped protocol, then evaluate the untouched official
