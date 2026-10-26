@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 JCommonsenseQA source screen:** Official JGLUE v1.1.0
+declares CC BY-SA 4.0 and the publisher catalog permits training/evaluation,
+but its train/valid splits share 17 normalized question groups (24 train / 19
+valid rows), and records contain no ConceptNet seed/source-group IDs. The
+dataset is a plausible narrow Japanese text Decision task, but current evidence
+does not establish group-independent validation or resolve ShareAlike effects
+on derivative model distribution. Keep REVIEW-only: no model fitting, scoring,
+or test-split access. See the [pinned source/split screen](docs/pretrained_reuse/R2_JGLUE_JCOMMONSENSEQA_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R7 Path A package-integrity recheck:** The preserved v4 assembly
 has two unmanifested `.pyc` files and fails the strict verifier. All 42
 manifest-listed files match their hashes. A new immutable clean copy containing
