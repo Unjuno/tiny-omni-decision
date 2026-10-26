@@ -30,6 +30,20 @@ training, reopen exposed validation, or alter their data/checkpoints. R2 still
 needs independent task coverage and a credible synchronized joint AV quality
 gate; the four-modality 95–98% objective and R3–R8 release gates remain open.
 
+**2026-10-26 R2 DROID video/sensor readouts independently artifact-checked:**
+The existing DROID early-outcome and seven-choice next-action results are
+development-only, with 200 recording groups in validation and no audio/text.
+For next-action choice, train-only group-CV regularization produced 44.0%
+sensor-only Accuracy versus 36.5% for video+sensor; paired 95% intervals
+favored sensor-only on Accuracy and NLL. For early success/failure, video+
+sensor reached 79.5%, below the 85.0% train-prevalence baseline, with only
+23.3% failure recall. These results do not justify a fusion gate or establish
+robot competence. A local read-only SHA-256 check matched the reported hashes
+for both evaluation JSON files, the selected next-action fusion readout, and
+its saved predictions. No fit or validation rerun was performed. See the
+[next-action report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-droid-next-action-20261026/docs/pretrained_reuse/R2_DROID_NEXT_ACTION_VIDEO_SENSOR_20261026.md)
+and [early-outcome report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-droid-next-action-20261026/docs/pretrained_reuse/R2_DROID_EARLY_OUTCOME_RESULTS_20261026.md).
+
 **2026-10-26 12:02 JST R0 live recheck:** PR #15 remains Draft/Open at
 `2538c5a`; its three public check runs are green. The primary local worktree
 contains unrelated uncommitted user changes and was left untouched. The local
