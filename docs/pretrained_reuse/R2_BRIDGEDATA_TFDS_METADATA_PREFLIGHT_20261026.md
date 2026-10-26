@@ -109,3 +109,20 @@ that the two exports have disjoint underlying episodes or source groups. The
 candidate remains REVIEW until selected records are inspected metadata-only,
 grouped by collection identity, and split integrity is established. No payload
 or full shard was downloaded for this correction.
+
+## Full-shard metadata scan attempt (incomplete)
+
+A follow-up attempted to read record headers and metadata-only context entries
+for every record in the first train and validation shards. The process failed
+with HTTP 429 (`Too Many Requests`) while parsing the first train shard. It
+exited before serializing a complete receipt; exact request and completed-record
+counts are therefore **UNKNOWN**, and no train/validation overlap statistic was
+computed. This attempt provides no evidence about split integrity and does not
+invalidate the previously completed one-record-per-split parser feasibility
+check. No image, video, sensor-state, action, or full-record payload was saved.
+
+The failed script and failure receipt are preserved outside Git under
+`C:\CodexArtifacts\pretrained-reuse-r2\bridgedata-v2-metadata-preflight-20261026-attempt-03\`.
+The script SHA-256 is
+`342BB4EE1185EDF549EC6619025F52B1917CF33D9D3946367467C4AED935ED82`. Do not immediately retry the same high-request
+scan; first reduce request volume or obtain an authoritative index/manifest.
