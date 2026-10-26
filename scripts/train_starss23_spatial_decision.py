@@ -8,6 +8,7 @@ import json
 import math
 import os
 import platform
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -544,6 +545,13 @@ def train(args: argparse.Namespace) -> dict:
             "video_checkpoint_sha256": video_report.get("checkpoint_sha256"),
             "video_source_commit": video_report.get("videoprism_source_commit"),
             "config_sha256": hashlib.sha256(effective).hexdigest(),
+            "source_commit": subprocess.check_output(
+                ["git", "rev-parse", "HEAD"],
+                cwd=Path(__file__).resolve().parents[1],
+                text=True,
+            ).strip(),
+            "command": [sys.executable, *sys.argv],
+            "working_directory": str(Path.cwd()),
             "splits": {
                 name: {
                     "questions": len(rows["target"]),
@@ -629,6 +637,7 @@ def train(args: argparse.Namespace) -> dict:
             "torch": torch.__version__,
             "torch_cuda_runtime": torch.version.cuda,
             "python": sys.version,
+            "numpy": np.__version__,
             "platform": platform.platform(),
             "logical_cpu_count": os.cpu_count(),
             "cuda_available": torch.cuda.is_available(),
