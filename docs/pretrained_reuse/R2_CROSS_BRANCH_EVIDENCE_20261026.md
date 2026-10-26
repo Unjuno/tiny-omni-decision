@@ -41,7 +41,12 @@ Additional independent-branch evidence since the initial reconciliation:
 iNaturalist CC0 yields an 81.13% macro-Accuracy frozen image readout with
 strong zero/permuted-image controls, but train/validation divergence after epoch
 1,276 and unresolved label-grounding concerns make data/task diagnosis the next
-image step. The recent synthetic AV residual-gate comparison reaches the same
+image step. A read-only full-resolution recheck of the existing deterministic
+32-image TRAIN QA sample confirmed at least three images with no visible target
+bird (Great Blue Heron creek, Great Blue Heron feather, American Robin utility
+pole). This is a small diagnostic sample, not a corpus error-rate estimate; no
+rows were removed and no validation image was re-inspected. The recent synthetic
+AV residual-gate comparison reaches the same
 100% exposed validation Accuracy as the simpler recurrent baseline, so it does
 not justify adopting another gate. Neither result closes natural AV or the
 four-modality product gate.
