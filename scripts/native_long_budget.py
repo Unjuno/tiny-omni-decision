@@ -3,9 +3,37 @@
 import hashlib
 import json
 import math
+from copy import deepcopy
 
 MAX_STEPS = 32768
 EVALUATION_STEPS = (0, 512, 1024, 2048, 4096, 8192, 12288, 16384, 24576, 32768)
+
+
+def effective_config(config, clip_norm):
+    if (
+        isinstance(clip_norm, bool)
+        or not isinstance(clip_norm, (int, float))
+        or clip_norm not in (1.0, 2.0)
+    ):
+        raise ValueError("only registered clip norm values 1.0 and 2.0 are allowed")
+    effective = deepcopy(config)
+    expected = {
+        "seed": 17,
+        "max_steps": MAX_STEPS,
+        "microbatches_per_update": 8,
+        "lr": 0.001,
+        "warmup_updates": 62,
+        "scheduler": "cosine",
+        "optimizer": "AdamW",
+        "weight_decay": 0.01,
+        "clip_norm": 1.0,
+        "evaluation_steps": list(EVALUATION_STEPS),
+        "performance_early_stopping": False,
+    }
+    if effective.get("training") != expected:
+        raise ValueError("only the registered gradient clip norm may change")
+    effective["training"]["clip_norm"] = float(clip_norm)
+    return effective
 
 
 def learning_rate(step):

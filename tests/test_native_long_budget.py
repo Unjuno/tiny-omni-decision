@@ -74,3 +74,38 @@ def test_long_curve_bootstrap_nll_stays_finite_for_confident_wrong_answers():
     for name, vector in values.items():
         assert np.isfinite(vector).all()
         assert float(vector.mean()) == pytest.approx(expected[name], abs=1e-12)
+
+
+def test_effective_config_changes_only_the_clip_norm_and_preserves_baseline():
+    import copy
+    import json
+    from pathlib import Path
+
+    from scripts.native_long_budget import effective_config
+
+    baseline = json.loads(
+        Path("configs/pretrained_reuse/native_long_budget_v1.json").read_text()
+    )
+    frozen = copy.deepcopy(baseline)
+    candidate = effective_config(baseline, 2.0)
+    default = effective_config(baseline, 1.0)
+
+    assert baseline == frozen
+    assert default == baseline
+    assert candidate["training"]["clip_norm"] == 2.0
+    candidate["training"]["clip_norm"] = 1.0
+    assert candidate == baseline
+
+
+@pytest.mark.parametrize("clip_norm", [0, -1.0, 1.5, 4.0, True, "2.0"])
+def test_effective_config_rejects_unregistered_clip_norms(clip_norm):
+    import json
+    from pathlib import Path
+
+    from scripts.native_long_budget import effective_config
+
+    baseline = json.loads(
+        Path("configs/pretrained_reuse/native_long_budget_v1.json").read_text()
+    )
+    with pytest.raises(ValueError, match="registered clip norm"):
+        effective_config(baseline, clip_norm)

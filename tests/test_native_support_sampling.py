@@ -108,6 +108,42 @@ def test_runtime_loss_optimizer_and_selector_are_unchanged():
     trees = [ast.parse((root / name).read_text(encoding="utf-8")) for name in
              ("train_native_long_budget.py", "train_native_support.py")]
     # Compare actual optimizer construction and update loop, not just configuration labels.
+    clip_calls = [
+        [n for n in ast.walk(tree) if isinstance(n, ast.Call)
+         and isinstance(n.func, ast.Attribute) and n.func.attr == "clip_grad_norm_"]
+        for tree in trees
+    ]
+    assert all(len(calls) == 1 and len(calls[0].args) == 2 for calls in clip_calls)
+    assert ast.dump(clip_calls[0][0].args[1], include_attributes=False) == ast.dump(
+        ast.parse("float(args.clip_norm)", mode="eval").body,
+        include_attributes=False,
+    )
+    assert ast.dump(clip_calls[1][0].args[1], include_attributes=False) == "Constant(value=1.0)"
+    # Normalize only the explicitly varied clip threshold; keep every other
+    # operation in the optimizer/update/selection path structurally identical.
+    for calls in clip_calls:
+        calls[0].args[1] = ast.Name(id="REGISTERED_CLIP_NORM", ctx=ast.Load())
+    telemetry_keys = {"clip_norm", "gradient_norm_before_clip", "applied_clip_factor"}
+    log_calls = [
+        [node for node in ast.walk(tree) if isinstance(node, ast.Call)
+         and isinstance(node.func, ast.Name) and node.func.id == "dict"
+         and telemetry_keys <= {keyword.arg for keyword in node.keywords}]
+        for tree in trees
+    ]
+    assert len(log_calls[0]) == 1 and not log_calls[1]
+    for tree in trees:
+        for node in ast.walk(tree):
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Name)
+                and node.func.id == "dict"
+            ):
+                node.keywords = [
+                    keyword
+                    for keyword in node.keywords
+                    if keyword.arg not in telemetry_keys
+                ]
+
     def selected(tree):
         loops = [n for n in ast.walk(tree) if isinstance(n, ast.For)
                  and isinstance(n.target, ast.Name) and n.target.id == "step"]

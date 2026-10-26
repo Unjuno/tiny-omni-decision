@@ -28,7 +28,14 @@ from scripts.native_fit import (
     summarize,
 )
 from scripts.native_fit_runtime import FeatureStore
-from scripts.native_long_budget import EVALUATION_STEPS, MAX_STEPS, extend_plan, learning_rate
+from scripts.native_gpu_gate import process_command, validate_gpu_preflight
+from scripts.native_long_budget import (
+    EVALUATION_STEPS,
+    MAX_STEPS,
+    extend_plan,
+    learning_rate,
+)
+from scripts.native_long_budget import effective_config as make_effective_config
 from scripts.native_matched_batches import build_plan
 from scripts.native_state_dependence import summarize as summarize_pairs
 from scripts.native_video_cache import sha
@@ -36,6 +43,40 @@ from tiny_omni_decision.native_candidate import NativeCandidateReadout
 
 REPO = Path(__file__).resolve().parents[1]
 CONFIG = REPO / "configs/pretrained_reuse/native_long_budget_v1.json"
+
+
+def gpu_preflight(environment=None):
+    environment = os.environ if environment is None else environment
+    utilization, used_mib, total_mib = map(
+        int,
+        subprocess.check_output(
+            [
+                "nvidia-smi",
+                "--query-gpu=utilization.gpu,memory.used,memory.total",
+                "--format=csv,noheader,nounits",
+            ],
+            text=True,
+        ).strip().split(","),
+    )
+    active_pids = {
+        int(line.strip())
+        for line in subprocess.check_output(
+            ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader,nounits"],
+            text=True,
+        ).splitlines()
+        if line.strip() and line.strip().casefold() != "no running processes found"
+    }
+    process_commands = {pid: process_command(pid) for pid in active_pids}
+    parent_name, parent_args = process_command(os.getppid())
+    return validate_gpu_preflight(
+        environment,
+        active_pids=active_pids,
+        memory_used_mib=used_mib,
+        memory_total_mib=total_mib,
+        utilization_pct=utilization,
+        parent_command=(parent_name, *parent_args),
+        active_process_commands=process_commands,
+    )
 
 
 def write(path, value):
@@ -56,6 +97,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=["smoke", "train", "replay"], required=True)
     parser.add_argument("--policy", choices=["repeat"], required=True)
+    parser.add_argument("--clip-norm", choices=["1.0", "2.0"], default="1.0")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference", type=Path)
     parser.add_argument("--reference-sha256")
@@ -66,13 +108,7 @@ def main():
         raise ValueError("train needs smoke receipt; replay needs train receipt and SHA")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO).strip():
         raise ValueError("clean committed source required")
-    usage = subprocess.check_output(
-        ["nvidia-smi", "--query-gpu=memory.used,utilization.gpu", "--format=csv,noheader,nounits"],
-        text=True,
-    ).strip()
-    memory, utilization = [int(v.strip()) for v in usage.split(",")]
-    if memory > 512 or utilization > 5:
-        raise RuntimeError("GPU occupied; do not compete")
+    gpu_admission = gpu_preflight()
     args.output.mkdir(exist_ok=False)
     started = time.perf_counter()
     result = dict(
@@ -85,6 +121,7 @@ def main():
             ["git", "rev-parse", "HEAD"], cwd=REPO, text=True
         ).strip(),
         config_sha256=sha(CONFIG),
+        clip_norm=float(args.clip_norm),
         started_utc=datetime.now(UTC).isoformat(),
         step=0,
         best_step=None,
@@ -93,26 +130,15 @@ def main():
         cloud_cost=0,
         validation_loaded=args.phase != "smoke",
         encoder_updates=0,
-        gpu_preflight=usage,
+        gpu_preflight=gpu_admission,
     )
     write(args.output / "result.json", result)
     try:
-        config = json.loads(CONFIG.read_text())
-        shutil.copyfile(CONFIG, args.output / "effective-config.json")
-        if config["training"] != {
-            "seed": 17,
-            "max_steps": MAX_STEPS,
-            "microbatches_per_update": 8,
-            "lr": 0.001,
-            "warmup_updates": 62,
-            "scheduler": "cosine",
-            "optimizer": "AdamW",
-            "weight_decay": 0.01,
-            "clip_norm": 1.0,
-            "evaluation_steps": list(EVALUATION_STEPS),
-            "performance_early_stopping": False,
-        }:
-            raise ValueError("configuration differs from the implemented fixed schedule")
+        config = make_effective_config(json.loads(CONFIG.read_text()), float(args.clip_norm))
+        write(args.output / "effective-config.json", config)
+        effective_config_sha256 = sha(args.output / "effective-config.json")
+        result["effective_config_sha256"] = effective_config_sha256
+        write(args.output / "result.json", result)
         pins = dict(config["input_pins"])
         pins[str(CONFIG)] = sha(CONFIG)
         source_names = subprocess.check_output(
@@ -145,6 +171,8 @@ def main():
                 reference["status"] != expected
                 or reference["validated_hashes"] != pins
                 or reference["config_sha256"] != sha(CONFIG)
+                or reference["effective_config_sha256"] != effective_config_sha256
+                or reference["clip_norm"] != float(args.clip_norm)
                 or reference["policy"] != args.policy
             ):
                 raise ValueError("matching completed reference required")
@@ -300,6 +328,7 @@ def main():
                 numpy_rng=(rng[0], rng[1].tolist(), *rng[2:]),
                 sampler_file_sha256=sha(args.output / "sampling.json"),
                 config_sha256=sha(CONFIG),
+                effective_config_sha256=effective_config_sha256,
             )
             path = args.output / f"checkpoint-{step:04}.pt"
             torch.save(value, path)
@@ -496,7 +525,9 @@ def main():
                         (loss / 8).backward()
                         losses.append(float(loss.detach()))
                         correct += int(scores.detach().argmax().item() == target)
-                    norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                    norm = torch.nn.utils.clip_grad_norm_(
+                        model.parameters(), float(args.clip_norm)
+                    )
                     if not torch.isfinite(norm):
                         raise ValueError("nonfinite gradient norm")
                     optimizer.step()
@@ -509,7 +540,11 @@ def main():
                         ce=float(np.mean(losses)),
                         accuracy=correct / 8,
                         lr=lr,
+                        clip_norm=float(args.clip_norm),
                         gradient_norm_before_clip=float(norm),
+                        applied_clip_factor=min(
+                            1.0, float(args.clip_norm) / (float(norm) + 1e-6)
+                        ),
                         seconds=seconds,
                         sample_ids=[train[i]["id"] for i in order[step - 1]],
                         occurrence_ids=occurrences[step - 1],
