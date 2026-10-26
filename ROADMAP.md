@@ -1,5 +1,20 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-26 R2 input-grounding and fusion recheck:** A fixed 168-example
+Open Images probe reached 79.17% Accuracy, but its selected scorer produced
+identical top-1 decisions after image features were zeroed or deranged. Treat
+that result as a candidate/text-prior diagnostic, not image-grounded quality.
+A DROID video+robot-state next-action readout reached 36.5% validation
+Accuracy versus 44.0% for sensor-only; paired episode intervals also favored
+sensor-only. Do not continue fitting either exposed task. The latest VisTouch
+Git recheck confirms the repository contains no native synchronized media.
+These findings sharpen the R2-M admission gate: before fitting, measure
+option-/metadata-only predictability and verify the target requires the
+proposed observation streams, then retain matched unimodal and perturbation
+controls. See the [Open Images controls](https://github.com/Unjuno/tiny-omni-decision/blob/54a1505b71a5392ad9c43d78817592cc67cc09df/docs/pretrained_reuse/R2_OPENIMAGES_INPUT_CONTROLS_20261026.md),
+[DROID video+sensor results](https://github.com/Unjuno/tiny-omni-decision/blob/54a1505b71a5392ad9c43d78817592cc67cc09df/docs/pretrained_reuse/R2_DROID_NEXT_ACTION_VIDEO_SENSOR_20261026.md),
+and [VisTouch Git recheck](docs/pretrained_reuse/R2_VISTOUCH_GIT_RECHECK_20261026.md).
+
 **2026-10-25 Perception frozen-readout validation transfer complete:** The
 fixed 200-event official-validation cohort was scored once using frozen
 Audio/Video/Joint readouts after 200/200 VideoPrism and EfficientAT feature
@@ -1770,7 +1785,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 - [ ] **M-0/M-1:** Build direct text-free audio-only, video-only, image-only, screen-only and sensor-only decision probes (plus text-only control) with typed action/option IDs, time/unit/missingness metadata, and no hidden text question or mandatory text encoder. Audio, video, image and sensor each have narrow direct probes. Screen has only oracle-region category pilots that lost to a frequency prior; full screenshot-to-action selection is open. Typed criterion-to-option text control coverage is also incomplete. Treat Audio+Text, Video+Text and sensor-embedding-only results as *non-equivalent* controls.
   Direct text-free CLEVR-4 image taxonomy readout reached 88.30% macro Accuracy on an internal split; count was 58.19%. A separate CLEVRER video-only temporal probe and HARTH sensor comparison are also recorded. These are synthetic/narrow development tasks, not blind product results. The sensor result is imbalanced and transition/class-2 recall is weak. See [image](docs/pretrained_reuse/R2_TEXTFREE_IMAGE_DECISION_20261017.md), [video](docs/pretrained_reuse/R2_TEXTFREE_VIDEO_TEMPORAL_RESULTS_20261018.md), [audio](docs/pretrained_reuse/R2_TEXTFREE_AUDIO_DECISION_20261017.md), [sensor](docs/pretrained_reuse/R2_NATIVE_SENSOR_SUBJECT_RESULTS_20261012.md), and [screen pilots](docs/pretrained_reuse/R2M_SCREEN_CLASSIFIER_RESULTS_20261012.md).
-- [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Include matched best-unimodal baselines, all missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
+- [ ] **M-2:** Test synchronized audio+video, video/screen+sensor, audio+sensor and audio+video+sensor decisions using a gated/time-aware fusion over frozen features. Before fitting, measure option-/metadata-only predictability and confirm the target requires the proposed input streams. Include matched best-unimodal baselines, missing/shuffled/stale/timing-offset/contradictory-signal controls, and a predeclared task **requiring multiple inputs**. STARSS23 is an already measured negative audio/video fusion result, not proof this new matrix is complete.
 - [ ] **M-3–M-6:** Add optional text/spoken conditions without making them compulsory, then evaluate individual and combined task quality, <=200M loaded parameters **including the sensor path**, and actual post-quantization >=95% recovery on the same locked task battery. Do not claim general 95–98% world understanding from unrelated narrow benchmarks; lock evaluation before training/selection.
 
 
