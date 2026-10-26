@@ -44,6 +44,13 @@ rights question and a leakage-safe split are resolved.
   emotion. It also reports substantial ambiguity and intensity dependence;
   accuracy on only high-intensity or agreement-filtered examples would
   overstate broad task quality.
+- A follow-up read of the full-text paper found no `consent` or `IRB` discussion
+  in the accessible article text. Its conclusion describes planned release to
+  the academic community for research purposes; that statement does not
+  establish performer consent for ML model training, feature extraction, or
+  commercial use. This narrows what the cited paper supports but does not
+  establish that consent was absent. The source owner would need to clarify the
+  recording releases and current use scope before this candidate is admitted.
 
 ## Potential Path A experiment, only after rights and data gates
 
