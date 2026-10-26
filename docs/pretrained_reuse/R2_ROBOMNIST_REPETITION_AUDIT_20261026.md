@@ -89,16 +89,48 @@ The outside-Git payload receipt is
 SHA-256: `BBBFA35795CF086CBEAE6B1A95A61D1E588440F5FE149A62ED0C43C96F4BC8C6`.
 It records the exact per-member decode and timestamp summaries.
 
-## Decision-task implication and remaining gate
+## Candidate task manifests and remaining gate
 
 RoboMNIST is now a technically viable small source for a controlled
-audio/video/CSI correspondence experiment, but **it is not yet admitted for
-training or quality evaluation**. A candidate task for a future preregistration
-is whether an audio recording and a video depict the same action category.
-Matched and mismatched pairs could be formed from disjoint repetitions, with
-each input asset balanced across match labels. This would let us check that
-audio-only, video-only, and question-only controls are at chance while the
-joint input is informative. The proposal has not been implemented or evaluated.
+audio/video correspondence task, but **it is not yet admitted for model fitting
+or quality evaluation**. A metadata-only manifest generator creates the
+candidate question “Do these audio and video clips show the same action
+category?” with two supplied options. It pairs different repetition groups
+within each fixed robot/velocity block: a positive has the same action and a
+negative has a different action. Each selected video asset and each selected
+audio asset appears once with each target in its split, so either modality
+alone cannot identify the pair label from asset identity or class frequency.
+
+The deterministic seed-17 split holds out `floor(groups/8)` groups for each of
+validation and sealed audit within each of the 60 source archive classes; the
+remaining groups are training candidates. For exact per-block label balancing,
+105 groups beyond the smallest action support were left unused. The resulting
+candidate manifests contain 3,100 train pairs (1,550 per target), 480
+validation pairs (240 per target), and 480 sealed-audit pairs (240 per target).
+The manifests reference 1,550 / 240 / 240 distinct underlying repetition
+groups, respectively, with zero group overlap. The sealed-audit manifest is
+stored in a separate sibling directory and was not loaded or evaluated.
+
+These are split- and task-construction checks, not model controls or quality
+results. A future runtime must prove that the loader sends only the fixed
+question, options, and decoded audio/video tensors; the archive/member names,
+group IDs, robot/velocity/action metadata, position supervision, and target
+must not enter model inputs. Question-only, audio-only, video-only, and
+pair-shuffle controls still need measured evaluation. Group identifiers are
+filename-derived repetitions and do not establish independent collection
+sessions, so the current validation and audit candidates cannot support a
+session-generalization claim. The manifest schema separates the model-visible
+`model_input` (`question` and `options`) from the target and `source_refs`; the
+runtime adapter must preserve that boundary when decoding the referenced files.
+
+The outside-Git manifest outputs are under
+`C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-seed17-attempt-03/`
+and the separate sealed path
+`C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-sealed-seed17-attempt-03/`.
+Train SHA-256: `38D374B37CB80031E35045084F286F8272D66146E352EA51BD2E7B6046C7F1EE`;
+validation SHA-256: `40A0FCA9638080BE890DFD4673959F01381D5DF7B8ECA4DBAAF8306EE10B0E12`;
+sealed-audit SHA-256: `F520A6539D173F486B7CC25A55498B4C764941F40F66A4758D6689C8051BCC93`.
+Manifest summary SHA-256: `6E90160CBCC630051B7C3E5A62599788990DA238FBC6BF4438497D3AC8460330`.
 
 Before fitting, the next gate is to establish repeat/session identity and a
 group-disjoint split, freeze matched/mismatched task construction, and confirm
@@ -120,4 +152,9 @@ python -m scripts.audit_robomnist_repetition_payload `
   --directory-audit C:/CodexArtifacts/pretrained-reuse-r2/robomnist-directory-audit-20261026-attempt-04.json `
   --version-metadata C:/CodexArtifacts/pretrained-reuse-r2/robomnist-source-audit-01/article-version-1.json `
   --output C:/CodexArtifacts/pretrained-reuse-r2/robomnist-payload-audit-20261026-attempt-04.json
+
+python -m scripts.build_robomnist_av_correspondence_manifests `
+  --directory-audit C:/CodexArtifacts/pretrained-reuse-r2/robomnist-directory-audit-20261026-attempt-04.json `
+  --output-dir C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-seed17-attempt-03 `
+  --sealed-output-dir C:/CodexArtifacts/pretrained-reuse-r2/robomnist-av-correspondence-sealed-seed17-attempt-03
 ```

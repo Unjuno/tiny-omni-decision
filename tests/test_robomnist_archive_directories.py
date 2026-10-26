@@ -176,3 +176,82 @@ def test_repetition_payload_timestamp_summary_checks_monotonicity_and_rate():
     assert summarize_timestamps([{"time_stamp_ns": [0, 1, 1]}])[0][
         "strictly_increasing"
     ] is False
+
+
+def test_av_correspondence_manifest_is_group_disjoint_and_modality_asset_balanced():
+    from scripts.build_robomnist_av_correspondence_manifests import build
+
+    archives = []
+    for robot in [1, 2]:
+        for velocity in ["high", "med", "low"]:
+            for action in range(10):
+                class_index = {"high": 0, "med": 20, "low": 40}[velocity]
+                class_index += (robot - 1) * 10 + action
+                stem = f"{class_index:02d}_Ar{robot}_V{velocity}_Ac{action}"
+                groups = []
+                for repetition in range(16):
+                    gid = f"Ar{robot}_V{velocity}_Ac{action}_Rp{repetition:02d}_UNC{repetition:03d}"
+                    folder = stem
+                    prefix = (
+                        f"{folder}/Rp{repetition:02d}_Ac{action}_V{velocity}_"
+                        f"Ar{robot}_UNC{repetition:03d}_"
+                    )
+                    input_members = [
+                        prefix + f"Rx{rx}_{kind}.{extension}"
+                        for rx in [1, 2, 3]
+                        for kind, extension in [("cam", "mp4"), ("mic", "wav")]
+                    ] + [prefix + "Rxall_csi.json"]
+                    groups.append(
+                        {
+                            "group_id": gid,
+                            "input_members": input_members,
+                            "supervision_only_member": prefix + "Rxall_pos.json",
+                        }
+                    )
+                archives.append(
+                    {
+                        "archive": stem + ".zip",
+                        "repetition_groups": len(groups),
+                        "groups": groups,
+                    }
+                )
+    manifests, accounting = build(
+        {"status": "PASS_DIRECTORY_METADATA_ONLY", "archives": archives}
+    )
+    duplicate, _ = build({"status": "PASS_DIRECTORY_METADATA_ONLY", "archives": archives})
+    assert manifests == duplicate
+    train = manifests["train"]
+    assert train
+    assert all(
+        set(row["model_input"]) == {"question", "options"}
+        for rows in manifests.values()
+        for row in rows
+    )
+    assert accounting["used_groups_by_split"]["validation"] == 6 * 10 * 2
+    groups_by_split = {
+        split: {
+            group
+            for row in rows
+            for group in (
+                row["source_refs"]["video"]["group_id"],
+                row["source_refs"]["audio"]["group_id"],
+            )
+        }
+        for split, rows in manifests.items()
+    }
+    assert not groups_by_split["train"] & groups_by_split["validation"]
+    assert not groups_by_split["train"] & groups_by_split["sealed_audit"]
+    assert not groups_by_split["validation"] & groups_by_split["sealed_audit"]
+    for _, rows in manifests.items():
+        labels = [row["model_input"]["options"][row["target"]] for row in rows]
+        assert labels.count("same action") == labels.count("different action")
+        modality_uses = {}
+        for row in rows:
+            label = row["model_input"]["options"][row["target"]]
+            for modality in ["video", "audio"]:
+                group_id = row["source_refs"][modality]["group_id"]
+                modality_uses.setdefault((modality, group_id), set()).add(label)
+        assert all(
+            labels == {"same action", "different action"}
+            for labels in modality_uses.values()
+        )
