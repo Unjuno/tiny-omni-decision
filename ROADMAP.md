@@ -8,6 +8,14 @@ model training is not established here; the full media tree is about 7.55 GB.
 Keep it REVIEW-only; no media or label payload was acquired. See the [pinned
 source/task screen](docs/pretrained_reuse/R2_CREMA_D_SOURCE_SCREEN_20261026.md).
 
+**2026-10-26 R2 CANDOR natural-conversation AV source screen:** CANDOR is a
+promising synchronized natural-conversation turn-taking task candidate: the
+source reports consent for researcher/public sharing and 10 ms turn-state
+annotations. Its original media terms remain unspecified in the public request
+flow, access requires institutional affiliation and owner review, and
+speaker-disjoint split feasibility is unknown. Keep it REVIEW; no form was
+submitted and no data was acquired. See the [source/task preflight](docs/pretrained_reuse/R2_CANDOR_AV_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 UnAV-100 source preflight:** Its official split CSV contains
 10,790 unique YouTube IDs (6,489 train / 2,134 validation / 2,167 test) with no
 cross-split ID overlap and positive spans. This is a promising natural AV event
