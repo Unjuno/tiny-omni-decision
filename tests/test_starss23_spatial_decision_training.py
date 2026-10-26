@@ -1,18 +1,16 @@
+import importlib
 import json
 
 import numpy as np
 import pytest
-import torch
 
 from scripts.extract_frozen_videoprism_features import sha256_file
-from scripts.train_starss23_spatial_decision import (
-    _feature_matrix,
-    _fit_arm,
-    balanced_cross_entropy,
-    candidate_features,
-    same_room_video_permutation,
-    standardize_by_train_windows,
+
+torch = pytest.importorskip(
+    "torch",
+    reason="the readout training smoke requires the optional ml extra",
 )
+training = importlib.import_module("scripts.train_starss23_spatial_decision")
 
 
 def test_candidate_features_encode_context_and_binary_option_order():
@@ -20,7 +18,7 @@ def test_candidate_features_encode_context_and_binary_option_order():
     event_ids = torch.tensor([0, 11])
     sector_ids = torch.tensor([0, 7])
 
-    values = candidate_features(observations, event_ids, sector_ids)
+    values = training.candidate_features(observations, event_ids, sector_ids)
 
     assert values.shape == (2, 2, 2 + 12 + 8 + 2)
     torch.testing.assert_close(values[:, 0, :2], observations)
@@ -34,7 +32,7 @@ def test_balanced_cross_entropy_weights_positive_and_negative_groups_equally():
     targets = torch.tensor([0, 1, 1])
     losses = torch.nn.functional.cross_entropy(logits, targets, reduction="none")
 
-    actual = balanced_cross_entropy(logits, targets)
+    actual = training.balanced_cross_entropy(logits, targets)
 
     expected = (losses[targets == 0].mean() + losses[targets == 1].mean()) / 2
     torch.testing.assert_close(actual, expected)
@@ -44,7 +42,7 @@ def test_balanced_cross_entropy_handles_batch_without_positive_rows():
     logits = torch.tensor([[1.0, 0.0], [2.0, 0.0]])
     targets = torch.tensor([0, 0])
 
-    actual = balanced_cross_entropy(logits, targets)
+    actual = training.balanced_cross_entropy(logits, targets)
 
     torch.testing.assert_close(actual, torch.nn.functional.cross_entropy(logits, targets))
 
@@ -78,13 +76,13 @@ def test_feature_loader_rejects_feature_rows_with_wrong_media_identity(tmp_path)
     ]
 
     with pytest.raises(ValueError, match="media identity"):
-        _feature_matrix(tmp_path, "audio", "manifest-hash", (1, 1, 2), manifest)
+        training._feature_matrix(tmp_path, "audio", "manifest-hash", (1, 1, 2), manifest)
 
 
 def test_feature_standardization_uses_only_unique_training_windows():
     features = np.asarray([[0.0, 10.0], [2.0, 14.0], [1000.0, -500.0]])
 
-    standardized, mean, std = standardize_by_train_windows(features, np.asarray([0, 1, 1]))
+    standardized, mean, std = training.standardize_by_train_windows(features, np.asarray([0, 1, 1]))
 
     np.testing.assert_allclose(mean, [1.0, 12.0])
     np.testing.assert_allclose(standardized[:2].mean(axis=0), [0.0, 0.0], atol=1e-6)
@@ -97,7 +95,7 @@ def test_video_permutation_changes_recording_but_preserves_room():
     recordings = ["a", "a", "b", "b", "c", "c", "d", "d"]
     rooms = ["r1"] * 4 + ["r2"] * 4
 
-    replacement = same_room_video_permutation(windows, recordings, rooms, seed=17)
+    replacement = training.same_room_video_permutation(windows, recordings, rooms, seed=17)
 
     lookup = {int(window): i for i, window in enumerate(windows)}
     assert all(
@@ -107,8 +105,6 @@ def test_video_permutation_changes_recording_but_preserves_room():
 
 
 def test_cpu_training_smoke_saves_and_reloads_selected_checkpoint(tmp_path, monkeypatch):
-    import scripts.train_starss23_spatial_decision as training
-
     monkeypatch.setattr(training, "MAX_EPOCHS", 1)
     monkeypatch.setattr(training, "BATCH_SIZE", 32)
 
@@ -128,7 +124,7 @@ def test_cpu_training_smoke_saves_and_reloads_selected_checkpoint(tmp_path, monk
     arm_dir = tmp_path / "audio_only"
     arm_dir.mkdir()
 
-    result = _fit_arm(
+    result = training._fit_arm(
         "audio_only",
         features,
         splits,
