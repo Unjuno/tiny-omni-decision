@@ -111,6 +111,15 @@ limits use to academic research and the source media are YouTube recordings.
 Neither source currently admits a supervised Path A AV Decision fit. No payload
 or media was downloaded/opened. [Source/task screen](docs/pretrained_reuse/R2_MCIF_SLIDESPEECH_SOURCE_SCREEN_20261026.md).
 
+**2026-10-26 R2 DAVE source screen:** NeurIPS 2025 DAVE is a strong diagnostic
+task-design reference: 2,426 supplied-option samples with audio-visual
+synchronization, visual-only, audio-only and temporal controls. However, its
+source components carry EPIC-KITCHENS CC BY-NC 4.0, Ego4D academic/research-only,
+and ESC-50 CC BY-NC 3.0 terms; the public `epic`/`ego4d` partitions are not an
+independent train/calibration/validation/audit design. Its listed media archives
+total 17.63 GB, exceeding local free C: capacity. Keep REVIEW-only and do not
+download or evaluate. [Pinned source, task and storage screen](docs/pretrained_reuse/R2_DAVE_SOURCE_SCREEN_20261026.md).
+
 **2026-10-26 R2 Perception source-candidate validation transfer complete:** The
 fixed epoch-7 readout scored 138 previously integrity-checked, but non-blind,
 official-validation events once: joint audio/video 52.17% set Accuracy / 1.4637
