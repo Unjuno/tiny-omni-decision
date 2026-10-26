@@ -75,6 +75,19 @@ def standardize_by_train_windows(
     return normalized, mean, std
 
 
+def zero_joint_modality_controls(
+    joint_features: np.ndarray, audio_feature_count: int
+) -> dict[str, np.ndarray]:
+    """Zero one normalized modality at its train mean in the joint feature space."""
+    if joint_features.ndim != 2 or not 0 < audio_feature_count < joint_features.shape[1]:
+        raise ValueError("joint feature matrix and audio feature boundary are invalid")
+    video_zeroed = joint_features.copy()
+    video_zeroed[:, audio_feature_count:] = 0
+    audio_zeroed = joint_features.copy()
+    audio_zeroed[:, :audio_feature_count] = 0
+    return {"video_zeroed": video_zeroed, "audio_zeroed": audio_zeroed}
+
+
 def same_room_video_permutation(
     unique_windows: np.ndarray,
     recordings: list[str],
@@ -427,14 +440,27 @@ def _fit_arm(
     control_predictions = {}
     for control_name, (control_matrix, control_rows) in (control_matrices or {}).items():
         control_logits = _predict(model, control_matrix, control_rows, device)
+        raw_control_probabilities = control_logits.softmax(-1)[:, 1].numpy()
         control_logits[:, 1] += yes_bias * temperature
         control_probabilities = (control_logits / temperature).softmax(-1)[:, 1].numpy()
-        controls[control_name] = _metric_summary(
-            control_rows["target"],
-            control_probabilities,
-            control_rows["event"],
-            control_rows["sector"],
-            control_rows["room"],
+        controls[control_name] = {
+            "raw": _metric_summary(
+                control_rows["target"],
+                raw_control_probabilities,
+                control_rows["event"],
+                control_rows["sector"],
+                control_rows["room"],
+            ),
+            "calibrated": _metric_summary(
+                control_rows["target"],
+                control_probabilities,
+                control_rows["event"],
+                control_rows["sector"],
+                control_rows["room"],
+            ),
+        }
+        control_predictions[f"{control_name}_raw_positive_probabilities"] = (
+            raw_control_probabilities
         )
         control_predictions[f"{control_name}_positive_probabilities"] = control_probabilities
     np.savez_compressed(
@@ -614,9 +640,10 @@ def train(args: argparse.Namespace) -> dict:
     permuted_validation["window"] = np.asarray(
         [replacement[int(window)] for window in validation["window"]], dtype=np.int64
     )
+    zero_controls = zero_joint_modality_controls(joint, audio.shape[1])
     joint_controls = {
-        "video_zeroed": (np.concatenate((audio, np.zeros_like(video)), axis=1), validation),
-        "audio_zeroed": (np.concatenate((np.zeros_like(audio), video), axis=1), validation),
+        "video_zeroed": (zero_controls["video_zeroed"], validation),
+        "audio_zeroed": (zero_controls["audio_zeroed"], validation),
         "video_from_different_recording": (joint, permuted_validation),
     }
     arm_specs = (

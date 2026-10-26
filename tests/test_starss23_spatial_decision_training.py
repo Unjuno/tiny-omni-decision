@@ -90,6 +90,24 @@ def test_feature_standardization_uses_only_unique_training_windows():
     assert np.isfinite(std).all()
 
 
+def test_joint_zero_controls_keep_the_other_modality_in_joint_normalized_space():
+    joint = np.asarray(
+        [[1.0, 2.0, 3.0, 4.0], [-1.0, -2.0, -3.0, -4.0]], dtype=np.float32
+    )
+
+    controls = training.zero_joint_modality_controls(joint, audio_feature_count=2)
+
+    np.testing.assert_array_equal(controls["video_zeroed"][:, :2], joint[:, :2])
+    np.testing.assert_array_equal(controls["video_zeroed"][:, 2:], 0)
+    np.testing.assert_array_equal(controls["audio_zeroed"][:, :2], 0)
+    np.testing.assert_array_equal(controls["audio_zeroed"][:, 2:], joint[:, 2:])
+
+
+def test_joint_zero_controls_reject_invalid_modality_boundary():
+    with pytest.raises(ValueError, match="feature matrix"):
+        training.zero_joint_modality_controls(np.ones((2, 4)), audio_feature_count=4)
+
+
 def test_video_permutation_changes_recording_but_preserves_room():
     windows = np.arange(8)
     recordings = ["a", "a", "b", "b", "c", "c", "d", "d"]
@@ -132,11 +150,18 @@ def test_cpu_training_smoke_saves_and_reloads_selected_checkpoint(tmp_path, monk
         arm_dir,
         torch.device("cpu"),
         (np.zeros(4, dtype=np.float32), np.ones(4, dtype=np.float32)),
+        {"video_zeroed": (features, splits["validation"])},
     )
 
     assert result["best_epoch"] == 1
     assert result["train_fixed_raw"]["overall"]["count"] == 192
     assert result["validation_calibrated"]["overall"]["count"] == 96
+    video_control = result["validation_input_controls"]["video_zeroed"]
+    assert video_control["raw"]["overall"]["count"] == 96
+    assert video_control["calibrated"]["overall"]["count"] == 96
     assert (arm_dir / "best.pt").is_file()
     assert (arm_dir / "final.pt").is_file()
     assert (arm_dir / "validation_predictions.npz").is_file()
+    with np.load(arm_dir / "validation_predictions.npz", allow_pickle=False) as predictions:
+        assert "video_zeroed_raw_positive_probabilities" in predictions.files
+        assert "video_zeroed_positive_probabilities" in predictions.files
