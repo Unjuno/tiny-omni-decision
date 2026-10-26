@@ -92,7 +92,7 @@ Every row needs a task-specific label definition, valid option set, a source/lic
 
 ## 5. Concrete work items for implementation agents
 
-- [ ] Implement a versioned `ObservationBatch` protocol: variable present modalities, true timestamps, sensor value units/ranges, valid masks, stable source IDs, no-text sentinel and candidate/action IDs.
+- [x] Implement and test a versioned `ObservationBatch` protocol: variable present modalities, clocked timestamps, sensor value units/ranges, valid masks, stable source IDs, an explicit null criterion for no-text requests, and caller option/action IDs. See `src/tiny_omni_decision/observations.py` and `tests/test_native_observations.py`. This closes only the interface-contract item; modality-native M1 probes and synchronized M2 quality remain open.
 - [ ] Extend the existing native feature-cache API with a text-free single-modality Decision runner that consumes typed options and never instantiates MiniLM unless the experiment opts in.
 - [ ] Add 5 text-free M1 smoke fixtures plus one M2 synchronized fixture; test that content/label files do not leak via filenames, option IDs or sampling identifiers.
 - [ ] Add sensor numerical/time-series stem prototype with <1M params as an initial **budget hypothesis**, measured against simple deterministic rule baselines and an audited/pretrain-overlap-safe sensor dataset.

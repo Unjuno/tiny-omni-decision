@@ -38,6 +38,41 @@ def test_native_inputs_need_no_text(modality):
     assert "torch" not in json.dumps(value.model_dump())
 
 
+def test_versioned_contract_has_explicit_no_text_and_stable_option_ids():
+    value = ObservationBatch.model_validate(batch("audio"))
+    serialized = value.model_dump(mode="json")
+    assert serialized["schema_version"] == "1.0"
+    assert serialized["criterion"] is None
+    assert [item["option_id"] for item in serialized["options"]] == ["left", "right"]
+
+    data = batch("audio")
+    data["schema_version"] = "2.0"
+    with pytest.raises(ValidationError):
+        ObservationBatch.model_validate(data)
+
+    data = batch("audio")
+    data["hidden_text_question"] = "which action?"
+    with pytest.raises(ValidationError):
+        ObservationBatch.model_validate(data)
+
+
+def test_sensor_units_ranges_and_stable_source_ids_are_validated():
+    data = batch("sensor")
+    data["observations"][0]["channels"][0]["valid_range"] = [-16.0, 16.0]
+    value = ObservationBatch.model_validate(data)
+    assert value.observations[0].channels[0].unit == "g"
+    assert value.observations[0].channels[0].valid_range == (-16.0, 16.0)
+
+    data["observations"][0]["channels"][0]["valid_range"] = [16.0, -16.0]
+    with pytest.raises(ValidationError):
+        ObservationBatch.model_validate(data)
+
+    data = batch("audio")
+    data["observations"].append(dict(data["observations"][0]))
+    with pytest.raises(ValidationError, match="source IDs"):
+        ObservationBatch.model_validate(data)
+
+
 @pytest.mark.parametrize("case", ["duplicate_option", "mask", "nan", "backwards", "unit", "empty"])
 def test_rejects_invalid_observations(case):
     data = batch()
