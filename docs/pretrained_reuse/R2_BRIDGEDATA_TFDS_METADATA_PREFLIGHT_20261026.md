@@ -85,3 +85,27 @@ record counts, collection-group distributions, source split independence, or
 resolve the discrepancy between the Berkeley directory metadata and the TFDS
 catalog. BridgeData remains REVIEW; no media payload, training example, or
 model input was acquired.
+
+## Correction: the compared counts are from different exports
+
+A pinned read of the TensorFlow Datasets `Bridge` importer source at commit
+`aa6bbf949e676904cb2ce4c34e46113d7cd43021` shows that the TFDS catalog entry
+`bridge` resolves to the relative dataset location
+`bridge_data_v2/0.0.1` (see the
+[pinned importer source](https://github.com/tensorflow/datasets/blob/aa6bbf949e676904cb2ce4c34e46113d7cd43021/tensorflow_datasets/robotics/rtx/rtx.py)).
+The Berkeley directory inspected above is instead named
+`bridge_dataset/1.0.0`; its `dataset_info.json` declares module
+`bridge_dataset.bridge_dataset_dataset_builder`, and its shard lengths sum to
+53,192 train plus 6,872 validation records. The TFDS catalog's 25,460 train
+plus 3,475 test counts describe its separate `bridge` / `bridge_data_v2`
+export, not the same identified prepared directory.
+
+Therefore the earlier wording that characterized these as an unresolved count
+discrepancy for one dataset was too strong. The count comparison is not
+apples-to-apples and should not be used to infer missing or duplicated data.
+The specific identity/count ambiguity is resolved by the distinct builder
+name, version, storage location, and shard metadata. This does **not** establish
+that the two exports have disjoint underlying episodes or source groups. The
+candidate remains REVIEW until selected records are inspected metadata-only,
+grouped by collection identity, and split integrity is established. No payload
+or full shard was downloaded for this correction.
