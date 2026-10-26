@@ -163,7 +163,7 @@ encoded FOA channels retain useful direction cues.
 
 Frozen VideoPrism spatial extraction is still running on CPU in
 `starss23-spatial-corpus-features-01`. At the latest recorded checkpoint it
-had completed 1,137 of 2,720 windows (31 recordings); the runner saves and
+had completed 1,460 of 2,720 windows (39 recordings); the runner saves and
 hashes one shard per recording and reads no labels. No GPU training has begun.
 
 The new `scripts/train_starss23_spatial_decision.py` implements the next
@@ -182,7 +182,10 @@ trainable parameters at hidden width 128. Per-dimension normalization is fit
 only on unique training windows. The video permutation control preserves room
 identity while changing recording identity. The targeted suite passes 41
 tests. This is pipeline verification only; there are no measured STARSS
-readout metrics yet.
+readout metrics yet. GitHub Actions for commit
+`9572cd77ba94c8b7e91a3ad6cd55934efa424014` passed lint, all CPU tests, and
+manifest validation (run
+[`40295306030`](https://github.com/Unjuno/tiny-omni-decision/actions/runs/40295306030)).
 
 ## Next gate and stop rules
 

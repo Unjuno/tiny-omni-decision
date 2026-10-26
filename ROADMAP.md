@@ -25,7 +25,7 @@ labels. Its validation positive rate is 2.6963%, so an always-`no` predictor
 already reaches 97.3037% raw Accuracy; later comparisons must emphasize
 balanced Accuracy and calibration. Frozen four-channel DyMN features are now
 complete for all 2,720 windows (channel-0 parity is exact); CPU VideoPrism
-spatial extraction is still running (1,137 / 2,720 windows at the latest
+spatial extraction is still running (1,460 / 2,720 windows at the latest
 checkpoint). A frozen-feature audio/video/joint Decision readout and input
 ablation controls are implemented and pass a CPU synthetic training smoke, but
 no STARSS model has been fit yet. The prior event-presence AV result remains
