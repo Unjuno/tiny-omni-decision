@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from numbers import Real
 
 import torch
@@ -24,13 +24,16 @@ def decide_single_modality_from_cache(
     request_id: str,
     feature_width: int,
     option_attribute_keys: Sequence[str],
+    option_attribute_categories: Mapping[str, Sequence[str]] | None = None,
     temperature: float = 1.0,
 ) -> dict[str, object]:
     """Pool one hash-verified feature stream and score numeric typed options.
 
     This is a text-free masked-mean Path A baseline. The supplied options must
-    carry the same ordered numeric attribute schema; text and implicit query
-    encoders are never loaded. Temporal modeling belongs to a separate scorer.
+    carry the same ordered attribute schema. Enumerated attributes require an
+    explicit finite vocabulary; all other attributes must be numeric. Text and
+    implicit query encoders are never loaded. Temporal modeling belongs to a
+    separate scorer.
     """
     batch = ObservationBatch.model_validate(batch.model_dump())
     if len(batch.observations) != 1:
@@ -44,6 +47,21 @@ def decide_single_modality_from_cache(
         raise ValueError("nonempty typed option attribute keys required")
     if len(set(keys)) != len(keys):
         raise ValueError("typed option attribute keys must be unique")
+    categories = dict(option_attribute_categories or {})
+    if not set(categories) <= set(keys):
+        raise ValueError("category vocabularies must match declared option attributes")
+    normalized_categories = {}
+    for key, values in categories.items():
+        if isinstance(values, (str, bytes)) or not isinstance(values, Sequence):
+            raise ValueError("each category vocabulary must be a sequence of values")
+        values = tuple(values)
+        if (
+            len(values) < 2
+            or any(not isinstance(value, str) or not value.strip() for value in values)
+            or len(set(values)) != len(values)
+        ):
+            raise ValueError("each declared category vocabulary needs unique nonempty values")
+        normalized_categories[key] = values
     if (
         isinstance(temperature, bool)
         or not isinstance(temperature, Real)
@@ -55,10 +73,16 @@ def decide_single_modality_from_cache(
     attribute_rows = []
     for option in batch.options:
         if set(option.attributes) != set(keys):
-            raise ValueError("every option must provide exactly the typed numeric attributes")
+            raise ValueError("every option must provide exactly the declared typed attributes")
         row = []
         for key in keys:
             value = option.attributes[key]
+            if key in normalized_categories:
+                vocabulary = normalized_categories[key]
+                if not isinstance(value, str) or value not in vocabulary:
+                    raise ValueError(f"option category must match the declared category for {key}")
+                row.extend(float(value == category) for category in vocabulary)
+                continue
             if isinstance(value, str) or not isinstance(value, (bool, int, float)):
                 raise ValueError("option attributes must be numeric, never text")
             number = float(value)
@@ -88,7 +112,8 @@ def decide_single_modality_from_cache(
 
     if scorer.training:
         raise ValueError("single-modality inference requires an eval-mode scorer")
-    if scorer.feature_size != feature_width + len(keys):
+    option_feature_width = sum(len(normalized_categories.get(key, ())) or 1 for key in keys)
+    if scorer.feature_size != feature_width + option_feature_width:
         raise ValueError("scorer width must match observation plus typed option features")
     try:
         parameter = next(scorer.parameters())

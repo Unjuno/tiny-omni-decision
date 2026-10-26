@@ -91,6 +91,50 @@ def test_masked_cache_rows_do_not_change_single_modality_decision(tmp_path):
     ]
 
 
+def test_enumerated_option_attributes_use_only_the_declared_vocabulary(tmp_path):
+    torch.manual_seed(29)
+    model = FrozenFeatureCandidateScorer(feature_size=5, hidden_size=8).eval()
+    data = make_batch(tmp_path, [[1., 2.]], [True]).model_dump()
+    data["options"] = [
+        {"option_id": "red-id", "attributes": {"class_id": "red"}},
+        {"option_id": "green-id", "attributes": {"class_id": "green"}},
+        {"option_id": "blue-id", "attributes": {"class_id": "blue"}},
+    ]
+    batch = ObservationBatch.model_validate(data)
+
+    result = decide_single_modality_from_cache(
+        model,
+        batch,
+        request_id="enum-image",
+        feature_width=2,
+        option_attribute_keys=("class_id",),
+        option_attribute_categories={"class_id": ("red", "green", "blue")},
+    )
+
+    assert [row["id"] for row in result["options"]] == ["red-id", "green-id", "blue-id"]
+
+    data["options"][0]["attributes"]["class_id"] = "yellow"
+    invalid = ObservationBatch.model_validate(data)
+    with pytest.raises(ValueError, match="declared category"):
+        decide_single_modality_from_cache(
+            model,
+            invalid,
+            request_id="enum-image",
+            feature_width=2,
+            option_attribute_keys=("class_id",),
+            option_attribute_categories={"class_id": ("red", "green", "blue")},
+        )
+    with pytest.raises(ValueError, match="category vocabulary"):
+        decide_single_modality_from_cache(
+            model,
+            batch,
+            request_id="enum-image",
+            feature_width=2,
+            option_attribute_keys=("class_id",),
+            option_attribute_categories={"class_id": "red"},
+        )
+
+
 def test_missing_features_abstain_and_invalid_text_or_attributes_fail_closed(tmp_path):
     torch.manual_seed(17)
     model = FrozenFeatureCandidateScorer(feature_size=4, hidden_size=8).eval()
