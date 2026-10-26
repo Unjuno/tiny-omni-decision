@@ -1,3 +1,13 @@
+**2026-10-27 R2 Touch and Go metadata gate:** The complete official label
+snapshot contains 250,169 frame rows but only 138 recording names / 24 date
+prefixes; Natural Fabric has 31 frames in one recording and cannot span
+recording-disjoint train/evaluation splits. One recording's two timestamp arrays
+are finite and monotonic, but video alignment and physical clocks are unverified.
+No RGB/GelSight video, model, fitting or quality evaluation was used. Keep the
+full 20-class quality fit unadmitted; do not split adjacent frames or drop the
+rare class to bypass this gate. See the
+[source audit](docs/pretrained_reuse/R2_TOUCH_AND_GO_METADATA_20261027.md).
+
 **2026-10-27 R2 verified native feature handoff:** Added an explicit Audio/Image/Video
 JSON entry point that checks actual media bytes against a trusted full cache
 identity and independently pinned feature payload, including clocks/timestamps.
