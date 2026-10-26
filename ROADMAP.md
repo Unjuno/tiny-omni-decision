@@ -131,6 +131,15 @@ accessed. See the [AVRT-20K screen](https://github.com/Unjuno/tiny-omni-decision
 [RoboPro screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-robopro-source-screen-20261024/docs/pretrained_reuse/R2_ROBOPRO_SOURCE_SCREEN_20261024.md), and
 [otoSpeech screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-robopro-source-screen-20261024/docs/pretrained_reuse/R2_OTOSPEECH_TASK_SOURCE_SCREEN_20261024.md).
 
+**2026-10-26 R2 sensor+video candidate screen:** MM-Fit's official Zenodo
+record scopes its CC-BY-4.0 payload to 20 workout-session videos; its separate
+synchronized sensor files lack a confirmed data-license grant in the official
+material reviewed, so paired sensor/video use remains REVIEW. The official
+MMAct terms restrict its multimodal data to academic research and prohibit
+commercial use, so it is excluded from this product path. No data were
+downloaded or used; M-2 remains open. See the
+[`sensor+video source screen`](docs/pretrained_reuse/R2_SENSOR_VIDEO_SOURCE_SCREEN_20261026.md).
+
 **2026-10-25 R1/R2 PE-Core T16 evidence reconciliation:** The independent
 `codex/r1-pe-core-audit-20261021` branch's pinned checkpoint and CLEVR-4
 artifacts were rechecked locally without touching that branch. A fresh isolated
