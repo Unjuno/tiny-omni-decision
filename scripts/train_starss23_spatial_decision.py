@@ -33,6 +33,8 @@ MAX_EPOCHS = 40
 PATIENCE = 6
 LEARNING_RATE = 0.001
 WEIGHT_DECAY = 0.0001
+CALIBRATION_TEMPERATURES = np.geomspace(0.5, 4.0, 15)
+CALIBRATION_YES_BIASES = np.linspace(-8.0, 8.0, 65)
 
 
 def candidate_features(
@@ -235,11 +237,9 @@ def _calibrate(
 ) -> tuple[float, float, list[dict]]:
     """Fit a tiny temperature/intercept grid on calibration only."""
     y = torch.as_tensor(targets, dtype=torch.long)
-    temperatures = np.geomspace(0.5, 4.0, 15)
-    biases = np.linspace(-8.0, 0.0, 33)
     candidates = []
-    for temperature in temperatures:
-        for bias in biases:
+    for temperature in CALIBRATION_TEMPERATURES:
+        for bias in CALIBRATION_YES_BIASES:
             adjusted = logits / float(temperature)
             adjusted[:, 1] += float(bias)
             macro_nll = _macro_event_sector_nll(adjusted, y, events, sectors)
@@ -544,6 +544,8 @@ def train(args: argparse.Namespace) -> dict:
         "weight_decay": WEIGHT_DECAY,
         "loss": ("equal positive/negative CE; calibration and validation use natural frequencies"),
         "feature_normalization": "mean/std fit on unique train windows only",
+        "calibration_temperatures": CALIBRATION_TEMPERATURES.tolist(),
+        "calibration_yes_biases": CALIBRATION_YES_BIASES.tolist(),
         "arms": ["audio_only", "video_only", "audio_video_joint"],
         "device": str(args.device),
     }
