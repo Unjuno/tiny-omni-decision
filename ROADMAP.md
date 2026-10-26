@@ -6,9 +6,11 @@ contains unrelated uncommitted user changes and was left untouched. The local
 RTX 3080 Laptop was occupied by an unrelated MIDI-GPT run (15,821/16,384 MiB),
 with no active Tiny Omni model process found; no GPU work was launched. R1's
 fresh CPU-only component recheck passes runtime smoke for VideoPrism, Ruri, and
-EfficientAT, but this is not task-quality evidence. R2 still lacks a clean,
-general synchronized AV quality gate and a complete high-quality four-modality
-Path A result. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261026_1202JST.md).
+EfficientAT, but this is not task-quality evidence. The frozen CLEVR
+image+question CoGenT-B evaluation is complete (57.90% overall / 59.05% macro
+Accuracy); this is a narrow task and does not satisfy the four-modality quality
+gate. R2 still lacks a clean, general synchronized AV quality gate and a
+high-quality four-modality Path A result. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261026_1202JST.md).
 
 **2026-10-26 R1 runtime recheck:** pinned VideoPrism, Ruri, and EfficientAT
 checkpoints loaded on CPU and returned finite feature outputs. This only
