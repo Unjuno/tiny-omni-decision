@@ -1,3 +1,12 @@
+**2026-10-27 R2 ADL audio/vibration source screen:** A CC BY 4.0 release
+describes 8,615 labelled activities observed by five sensors, but only 14
+participants in one environment and no released video. It is a low-power
+audio/sensor research lead, not an admitted product or joint-AV benchmark;
+task labels, timing, split integrity and both-input necessity remain unverified.
+No source data or model was run. The user declined VisTouch acquisition;
+UnAV-100 remains excluded pending rights resolution. See the
+[source screen](docs/pretrained_reuse/R2_ADL_AUDIO_VIBRATION_SOURCE_20261027.md).
+
 **2026-10-27 R2 DROID nested temporal comparison:** A fixed, invertible
 112-value sensor transform improved outer-train Accuracy from 40.36% to 41.82%
 and macro NLL from 2.2347 to 2.1833 under five-outer/four-inner grouped CV.
