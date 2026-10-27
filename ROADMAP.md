@@ -1,3 +1,10 @@
+**2026-10-27 R2 Open Images option shortcut:** On two previously exposed
+168-example development cohorts, randomly choosing among options from the
+11-class train target whitelist has expected accuracy 65.33% / 64.98% without
+an image. The target/distractor role imbalance limits quality interpretation;
+the old cohorts remain unchanged. A future task needs symmetric option roles.
+[Audit](docs/pretrained_reuse/R2_OPENIMAGES_TARGET_SCOPE_SHORTCUT_20261027.md).
+
 **2026-10-27 R2 BeDAViN source screen:** The raw manually recorded audio
 release states CC BY 4.0 but contains no synchronized video; the full simulated
 AV framework requires separately licensed scene and source components. The
