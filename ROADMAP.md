@@ -1,3 +1,11 @@
+**2026-10-27 R2 train-only source-candidate unimodal comparison:** Three
+freshly trained audio-only, video-only and joint readouts were compared over
+three held-out video-group folds of the existing official-train source. Joint
+versus video accuracy differs by +0.69 points, with a paired group interval
+crossing zero; audio-only has a separate none-visible scorer. This is nonblind
+internal source evidence, not a product-quality or independent audit result.
+[Protocol and results](docs/pretrained_reuse/R2_SOURCE_UNIMODAL_CV_RESULTS_20261027.md).
+
 **2026-10-27 R2 source-candidate transfer reconciliation:** Existing fixed
 audio/video checkpoint results on 138 previously inspected official-validation
 videos scored 52.17% set accuracy; a no-media option prior scored 57.25%,
