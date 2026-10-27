@@ -1,3 +1,9 @@
+**2026-10-27 R2 32-epoch AV readout curves:** Baseline and visual-LSTM
+completed the same 32-epoch, three-fold train-source schedule. Online train
+loss fell while held-out NLL/Brier/ECE degraded substantially after early
+epochs. This is a nonblind single-seed diagnostic, not a general ceiling.
+[Curves](docs/pretrained_reuse/R2_SOURCE_TEMPORAL_LONG_CURVE_RESULTS_20261027.md).
+
 **2026-10-27 R2 visual LSTM order control:** Reversing only the LSTM's valid
 frame sequence changed 157/2,593 selections; the +0.58-point original-minus-
 reversed Accuracy interval crosses zero. The base path stayed forward and the
