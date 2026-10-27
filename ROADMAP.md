@@ -1,3 +1,9 @@
+**2026-10-27 R2 visual LSTM order control:** Reversing only the LSTM's valid
+frame sequence changed 157/2,593 selections; the +0.58-point original-minus-
+reversed Accuracy interval crosses zero. The base path stayed forward and the
+result is not a full reversal or independent quality test.
+[Results](docs/pretrained_reuse/R2_SOURCE_VIDEO_LSTM_ORDER_RESULTS_20261027.md).
+
 **2026-10-27 R2 visual LSTM residual:** A 32-wide per-candidate LSTM was
 trained on the same train-only video-group folds as the joint baseline.
 Accuracy changed 55.15% to 55.34%, with a paired interval crossing zero;
