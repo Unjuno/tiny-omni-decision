@@ -4,6 +4,7 @@ import pytest
 from scripts.train_droid_dense_change_weighted_cv import (
     change_metrics,
     correct_probabilities,
+    training_row_weights,
     training_weights,
 )
 
@@ -16,6 +17,19 @@ def test_train_weights_balance_stable_and_changed_mass():
     assert (stable * 3 + changed) / 4 == 1.0
     with pytest.raises(ValueError, match="stable and changed"):
         training_weights([0, 1], [0, 1])
+
+
+def test_training_row_weights_never_read_held_target_values():
+    previous = np.array([0, 1, 1, 2])
+    targets = np.array([0, 1, 2, 2])
+    train = np.array([0, 1, 2])
+    first = training_row_weights(previous, targets, train)
+    modified = targets.copy()
+    modified[3] = 6
+    second = training_row_weights(previous, modified, train)
+    assert np.array_equal(first[0], second[0])
+    assert first[0][3] == 0
+    assert first[1:] == second[1:]
 
 
 def test_probability_correction_recovers_exact_reweighted_distribution():

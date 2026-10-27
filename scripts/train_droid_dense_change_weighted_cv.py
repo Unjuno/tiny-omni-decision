@@ -48,6 +48,16 @@ def training_weights(previous, targets):
     return n / (2 * (n - nc)), n / (2 * nc)
 
 
+def training_row_weights(previous, targets, train):
+    train = np.asarray(train, dtype=np.int64)
+    if len(train) == 0 or len(set(train)) != len(train):
+        raise ValueError("invalid training indices")
+    stable_weight, change_weight = training_weights(previous[train], targets[train])
+    weights = np.zeros(len(targets), dtype=np.float32)
+    weights[train] = np.where(previous[train] != targets[train], change_weight, stable_weight)
+    return weights, stable_weight, change_weight
+
+
 def correct_probabilities(probabilities, previous, stable_weight, change_weight):
     p = np.asarray(probabilities, dtype=np.float64)
     previous = np.asarray(previous, dtype=np.int64)
@@ -80,15 +90,14 @@ def change_metrics(previous, targets, predictions):
 
 
 def fit_weighted(features, targets, previous, train, fold, arm):
-    stable_weight, change_weight = training_weights(previous[train], targets[train])
+    row_weights, stable_weight, change_weight = training_row_weights(previous, targets, train)
     model = torch.nn.Linear(features.shape[1], 7, bias=True, device="cpu")
     torch.nn.init.zeros_(model.weight)
     torch.nn.init.zeros_(model.bias)
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
     x = torch.from_numpy(features)
     y = torch.from_numpy(targets.astype(np.int64))
-    weights = torch.from_numpy(np.where(previous != targets, change_weight, stable_weight)
-                               .astype(np.float32))
+    weights = torch.from_numpy(row_weights)
     rng = np.random.default_rng(17 + fold)
     curve = []
     for epoch in range(EPOCHS):
