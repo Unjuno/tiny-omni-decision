@@ -84,3 +84,24 @@ The join used `canonical_id` from `scripts/audit_droid_train_temporal.py`;
 instruction strings and identifying paths were not copied into this report.
 Any future conditioning experiment must audit step-level availability and
 missingness before fitting and preserve instruction/group isolation.
+
+### Past-index availability check
+
+The pinned source shards were subsequently read for the 275 train recordings
+only. For each dense target `t`, the three language fields were checked at
+`t-1` and across `[0, t)`, without copying instruction text. Of 80,998 windows,
+42,076 have nonempty text at `t-1`; the same number have text at any earlier
+index. The source audit found text in 150 episodes. The remaining
+38,922 windows have none in the stored past indices. This establishes serialized
+index availability, not when an instruction was actually provided to an
+operator or whether it identifies the correct future decision.
+
+`scripts/audit_droid_instruction_timing.py` checks the pinned receipt, parser,
+train manifest and each shard hash and verifies all 275 IDs and 80,998 windows.
+The aggregate output is
+`C:/CodexArtifacts/pretrained-reuse-r2/droid-instruction-timing-20261028-attempt-01.json`,
+SHA-256 `51802f7c26c1e6df717f9d4a46a4ebcc82f7b211c627f021e28a17215b2611b0`.
+Three CPU tests cover future exclusion, alternate instruction fields and length
+validation; Ruff passed. No validation, sealed audit, model fitting or GPU was
+used. A conditioning comparison remains subject to recording/instruction
+isolation and explicit treatment of the missing half of these windows.
