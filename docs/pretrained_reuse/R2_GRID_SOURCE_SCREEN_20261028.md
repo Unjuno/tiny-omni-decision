@@ -85,6 +85,24 @@ media or validation. Two focused tests and Ruff passed. Any transfer cohort
 must exclude or separately label these overlapping utterances and audit speaker
 identity; the remainder is not automatically independent.
 
+### Original alignment coverage after training-text exclusion
+
+Scanning only original ZIP member names found 34,000 valid, distinct utterance
+codes across 34 speakers. After excluding the seven codes in the existing
+Lombard train manifest, 33,993 alignment rows remain, with 998–1,000 per
+speaker. Of these, 1,000 are for speaker 21, for whom the publisher says video
+is unavailable; the remaining 33 speakers account for 32,993 alignment rows.
+These are alignment candidates, not verified media pairs or independent people.
+The check did not compare against previously observed Lombard validation or
+prove a final benchmark split; a future task must preserve its own holdouts and
+audit all applicable source/content identities before evaluation.
+
+Aggregate receipt:
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-candidate-coverage-20261028-attempt-01.json`,
+SHA-256 `5f27f9cf0cd464a650c60ad904780b958f3d652a049d7efbd18773500267ce56`.
+Two tests check exclusion, the missing-video group and duplicate-code rejection;
+Ruff passed. No audio or video was opened during this scan.
+
 The fixed vocabulary, scripted sentences, limited speakers and potential
 audio-only or lip-only shortcuts also preclude treating a high score on this
 corpus as general Omni Decision quality. Before use, independently establish
