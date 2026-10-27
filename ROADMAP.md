@@ -1,3 +1,11 @@
+**2026-10-28 R2 iNaturalist photo identity join:** The pinned full photo
+metadata scan joined 1,572/1,598 target IDs; 26 were missing and six IDs were
+ambiguous. Connected observer/photographer grouping leaves 88 validation rows
+over 18 components, with 6–17 examples per taxon and a 481-row largest
+component. Media, per-photo rights, source integrity and ownership remain
+unverified; the candidate is not admitted for evaluation or training.
+[Result](docs/pretrained_reuse/R2_INATURALIST_PHOTO_IDENTITY_JOIN_RESULTS_20261028.md).
+
 **2026-10-28 R2 GRID matched AV interface smoke:** The complete Zenodo audio
 archive passed the publisher MD5 and local SHA-256 checks; all 16 fixed `s1`
 audio examples decoded and resampled to 16 kHz. One fixed audio plus four
