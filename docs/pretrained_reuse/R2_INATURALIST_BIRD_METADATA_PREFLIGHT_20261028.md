@@ -215,3 +215,20 @@ rows were inspected or saved. This is only the first member's header, not a
 complete archive listing, source SHA-256 or extraction-size measurement.
 A streaming filter may avoid materializing this table, but full source integrity,
 later member sizes, resource limits and the photo/observer join remain unproven.
+
+An additional raw 16 MiB conditional range read took 8.266 seconds (1.94 MiB/s
+including request setup); a linear extrapolation to the 35,966,549,880-byte
+archive is approximately 17,720 seconds (4.9 hours), not a reliable ETA or a
+guarantee of sustained transfer. The prefix SHA-256 was
+`6e579c0cd96a3c65d467ed3ceb42f8f732680a3c76b01ea6377435051935ab0c`.
+Nothing was saved from the range request. At this point C: had 77,900,357,632
+bytes free; this is a transient measurement and excludes decompression costs.
+
+Reading only the first CSV header revealed `observation_uuid`, `observer_id`,
+`latitude`, `longitude`, `positional_accuracy`, `taxon_id`, `quality_grade`,
+`observed_on`, and `anomaly_score`. It contains no observation-license field.
+The plan requires CC0/CC-BY separately for observations and photos, so this
+archive's observation table alone cannot establish the existing license gate.
+Locations were not read or saved. Resolve a version-consistent license join or
+use the source only for the narrower photo-metadata purpose before claiming
+admission. No full-archive transfer has been started.
