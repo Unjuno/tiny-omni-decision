@@ -232,3 +232,15 @@ archive's observation table alone cannot establish the existing license gate.
 Locations were not read or saved. Resolve a version-consistent license join or
 use the source only for the narrower photo-metadata purpose before claiming
 admission. No full-archive transfer has been started.
+
+### Connected-person grouping primitive
+
+`scripts/inat_source_grouping.py` groups observation observers and photo
+photographers transitively before assigning a component to train or validation.
+Missing identities are returned separately as quarantine; both identity keys
+must derive from the same verified ID scheme. Tests check cross-role transitive
+connections, row-order invariance and missing-identity quarantine. This code is
+not connected to the existing API snapshot, which has no verified photographer
+IDs, and has not been run against the official photo table. It does not prove
+media, license, person, session or split independence. Freeze the complete
+source set before assignment because later records can merge components.
