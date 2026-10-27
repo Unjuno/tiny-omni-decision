@@ -1,3 +1,10 @@
+**2026-10-27 R2 set-valued comparison:** The fixed 7-epoch, three-fold
+comparison produced 23.99% exact-set accuracy for joint input versus 23.83%
+video only, with a paired interval crossing zero. A same-record single-choice
+baseline scored 28.50% exact. This nonblind diagnostic does not support model
+promotion; source grouping and multimodal benefit remain unresolved.
+[Results](docs/pretrained_reuse/R2_SOURCE_SET_CV_RESULTS_20261027.md).
+
 **2026-10-27 R2 select-every task audit:** The source task asks for every
 matching object, while previous readouts emit one option. Their reported
 accuracy is hit@1, not exact-set accuracy. On 2,593 reused development rows,
