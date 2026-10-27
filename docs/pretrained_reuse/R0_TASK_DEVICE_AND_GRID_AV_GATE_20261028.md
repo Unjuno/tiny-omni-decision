@@ -1,8 +1,8 @@
 # R0 task/device targets and GRID synchronized AV pilot
 
-Status: criteria are frozen for the first development pilot. The GRID media
-download and evaluation are still in progress; this document contains no new
-quality result and does not approve GRID for product distribution.
+Status: criteria and the pre-media sample are frozen. A source folder-mapping
+integrity audit blocked AV evaluation before inference; this document contains
+no new quality result and does not approve GRID for product distribution.
 
 ## Product target and device
 
@@ -82,6 +82,18 @@ as product or redistribution clearance. Use any downloaded files only for
 internal research evaluation, preserve attribution, do not commit or package
 the media, and keep GRID out of product artifacts pending rights clarification.
 
+The raw Zenodo API response was saved outside Git at
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-validation-video-20261028-attempt-01/zenodo-record-3625687.json`
+(SHA-256 `fbcf06eecb05bdb8cb93a4b1cd6d1d4bfad81f5a1545e008c137d23bf1265c7e`).
+It reports `cc-by-4.0`, open access and the publisher's per-file MD5 values.
+The first held-out speaker archive `s30.zip` completed at 381,061,085 bytes;
+publisher MD5 `8958f25b49de7a7827a76abbdc7fedb2` matched and its SHA-256 is
+`69e7c2ef14b1bd4f2d0012a8a13fe8e9375c4f11a03c4de9f03f4071f48f12fd`.
+One additional archive download was stopped after the speaker-folder mismatch
+was found; its incomplete `s4.zip.part` is preserved but unverified. The other
+six held-out archives were not downloaded. Do not resume these downloads until
+the source mapping is resolved.
+
 ## Evidence and remaining gates
 
 - Pinned split, two-slot catalog and hashes: see
@@ -104,6 +116,19 @@ is `C:/CodexArtifacts/pretrained-reuse-r2/grid-av-pilot-selection-20261028-attem
 Selected `selected.jsonl` SHA-256:
 `b33e4e7e2cdb77ffdfa58da371fd712dd57c63341651cfb416505adf57ccbf0d`.
 The selection contains 64 quartets / 256 balanced query roles from eight GRID
-speaker labels, with 249 unique audio and video codes. The source manifest SHA
+speaker labels, with 249 speaker-qualified audio/video codes. The source manifest SHA
 is `ff7ec51c8bf8e873c326d41771a822b400ec99a3a8d5ee6871ad92647a364aa2`.
 No media, model predictions or sealed audit were read during selection.
+
+### Media integrity gate failed before inference
+
+The exact official GRID audio ZIP passed its publisher MD5 and SHA-256, but
+the pinned alignment speaker labels fail same-name audio-folder coverage for
+18,997 of 31,991 aligned speaker/code rows. Four of the eight validation
+speaker labels in this pilot map all their codes to a different audio folder
+by filename overlap. That overlap does not establish person identity. No audio
+or video prediction was run; do not use this frozen sample until the source
+provider explains the mapping or an authoritative mapping artifact is found.
+The full read-only audit is in
+`R2_GRID_AUDIO_FOLDER_MAPPING_AUDIT_20261028.md`. The sample list and its hash
+remain unchanged.

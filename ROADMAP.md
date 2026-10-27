@@ -2386,7 +2386,7 @@ Primary references and official implementations (paper merit does **not** imply 
 
 This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the full previous roadmap in Git history; it is not deleted from the project record. The requested product outcome stays constant—**small, high-quality, local, genuinely multimodal typed decision inference**—while the mandatory Gemma/EmbeddingGemma ternary-first implementation path is no longer the assumed route. Since this proposal was opened, a task-scoped frozen Speech Commands audio runtime bundle has been integrated on this branch and passed existing-validation replay parity; see the R2 runtime record. It does not close joint AV or full multimodal packaging.
 
-**Next implementation action:** run the frozen GRID synchronized AV development pilot and its matched unimodal/mismatch controls. Treat GRID as research-only until the Zenodo CC-BY metadata and Sheffield research-use notice, plus cross-corpus speaker identity, are reconciled. This pilot cannot close product R2; continue source review for a product-approved AV task. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
+**Next implementation action:** resolve the official GRID audio/alignment speaker-folder mismatch before any AV inference. The pre-media 64-quartet pilot is frozen, but four of its eight validation speaker groups have no same-name audio files; code-set overlap is not proof of speaker identity. Do not remap or evaluate until the source mapping is clarified. GRID remains research-only pending its rights boundary; continue source review for a product-approved AV task. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
 
 
 ### STARSS23 measured update (2026-10-11)
@@ -3248,5 +3248,9 @@ CC-BY-4.0, while the Sheffield source page says research use; media are kept
 for internal research only, with product clearance and cross-corpus speaker
 identity still unresolved. The 64-quartet / 256-query speaker-balanced
 selection was frozen from the pinned metadata before media or predictions
-were read; archive retrieval and evaluation are pending, so this does not close
-R2.
+were read. A pinned archive-member audit then found 18,997 same-name audio
+members missing among 31,991 alignment speaker/code rows across 32 speakers;
+four of eight held-out labels map to other audio folders by code overlap. Do
+not infer identity or run the pilot until this is resolved. The `s30.zip`
+publisher MD5 matched; an incomplete `s4.zip.part` is retained but unverified.
+See [`GRID audio folder mapping audit`](docs/pretrained_reuse/R2_GRID_AUDIO_FOLDER_MAPPING_AUDIT_20261028.md).
