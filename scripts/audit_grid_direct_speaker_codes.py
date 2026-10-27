@@ -151,7 +151,9 @@ def audit_speaker_bundle(
             'metadata_range_start': video_range_start,
             'metadata_range_bytes': video_tail.stat().st_size,
         },
-        'media_payload_read': False,
+        'media_content_decoded_or_semantically_inspected': False,
+        'audio_archive_payload_bytes_hashed': True,
+        'video_payload_bytes_read_by_audit': 0,
         'speaker_identity_inferred': False,
     }
 

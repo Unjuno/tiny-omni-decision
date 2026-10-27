@@ -1,9 +1,17 @@
-**2026-10-28 R2 GRID direct speaker bundle audit:** Official per-talker s13
-audio, alignment and video filename inventories agree for all 1,000 codes,
-but the frozen validation manifest's s13 rows overlap 0/1,000 codes. The old
-pilot selection is invalid; do not remap or evaluate it. Rebuild a new
-speaker-grouped manifest from official per-talker sources and verify all
-speakers before freezing a replacement. [Audit](docs/pretrained_reuse/R2_GRID_DIRECT_SPEAKER_BUNDLE_AUDIT_20261028.md).
+**2026-10-28 R2 GRID corrected matched-input smoke:** The first fixed quartet
+ran through the pinned Whisper/VideoPrism/Lombard correspondence path on CPU
+and returned valid JSON; option/ID reordering and uniform missing-input gates
+passed. It chose the same video for all four balanced roles (1/4 target match)
+in this one quartet, not a task-quality estimate. Full 256-role evaluation is
+still open. [Smoke](docs/pretrained_reuse/R2_GRID_DIRECT_PILOT_TECHNICAL_SMOKE_20261028.md).
+
+**2026-10-28 R2 GRID direct speaker bundle audit:** All eight frozen validation
+speaker bundles agree across 1,000 audio/alignment/video codes. The frozen
+validation manifest nevertheless has 0/1,000 matching IDs for s13, s18, s23
+and s27; the old 64-quartet pilot is invalid and remains unevaluated. A new
+corrected pre-media 64-quartet sample is frozen from direct-source IDs; fixed-
+model validation with controls can proceed. Audit the 24-speaker train
+partition before using it for training. [Audit](docs/pretrained_reuse/R2_GRID_DIRECT_SPEAKER_BUNDLE_AUDIT_20261028.md).
 
 **2026-10-28 R2 iNaturalist photo identity join:** The pinned full photo
 metadata scan joined 1,572/1,598 target IDs; 26 were missing and six IDs were

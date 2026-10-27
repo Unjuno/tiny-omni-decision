@@ -55,7 +55,9 @@ def test_audit_reports_matched_source_and_frozen_codes(tmp_path):
         'alignment_video': 2,
     }
     assert result['source_counts']['video_mpg_codes'] == 2
-    assert result['media_payload_read'] is False
+    assert result['media_content_decoded_or_semantically_inspected'] is False
+    assert result['audio_archive_payload_bytes_hashed'] is True
+    assert result['video_payload_bytes_read_by_audit'] == 0
 
 
 def test_audit_distinguishes_frozen_split_mismatch(tmp_path):

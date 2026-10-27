@@ -132,3 +132,24 @@ provider explains the mapping or an authoritative mapping artifact is found.
 The full read-only audit is in
 `R2_GRID_AUDIO_FOLDER_MAPPING_AUDIT_20261028.md`. The sample list and its hash
 remain unchanged.
+
+### Direct-source correction (2026-10-28)
+
+The above `selected.jsonl` is now retained only as a failed integrity receipt;
+do not run it. Official direct per-talker audio/alignment/video filename
+inventories were checked for all eight validation speakers. The frozen
+validation manifest has zero same-speaker code overlap for s13, s18, s23 and
+s27, although each direct source bundle internally agrees on all 1,000
+utterance IDs. A separate corrected 64-quartet / 256-role selection was then
+frozen from the direct-source code intersections without extracting or
+decoding media content or reading predictions. Complete audio archive bytes
+were downloaded and hashed for source integrity. See
+`R2_GRID_DIRECT_SPEAKER_BUNDLE_AUDIT_20261028.md`. This permits only
+development inference with the fixed model and prespecified controls; it does
+not clear the GRID train split, cross-corpus speaker independence, product
+rights or quality gates.
+
+The first corrected s30 quartet passed the end-to-end CPU JSON interface smoke.
+It selected one candidate for all four balanced roles (matching one target).
+This single quartet is not a task score; the full fixed-sample evaluation and
+controls remain pending. See `R2_GRID_DIRECT_PILOT_TECHNICAL_SMOKE_20261028.md`.
