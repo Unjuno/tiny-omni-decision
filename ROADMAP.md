@@ -1,3 +1,8 @@
+**2026-10-28 R2 DROID LSTM 200-epoch curve:** On the same train-group folds,
+longer training increased change recall but also false changes and worsened
+held-fold accuracy, NLL and Brier. This is nonblind and does not establish a
+general temporal-model ceiling. [Results](docs/pretrained_reuse/R2_DROID_LSTM_LONG_CURVE_RESULTS_20261028.md).
+
 **2026-10-27 R2 Open Images train metadata join:** The 11-class four-choice
 support census has 3,377 train-metadata images (4,007 target/image pairs); the
 earlier 7,714 figure covered the annotation object without this join. Exact
