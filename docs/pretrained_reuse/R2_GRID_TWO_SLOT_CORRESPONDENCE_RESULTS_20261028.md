@@ -26,3 +26,27 @@ Output:
 `b581bb4a70229f8dbb104e3f97e7b3487ac12c5c80af40aaee52bf738a31c876`.
 The receipt pins both partition, script, protocol and output hashes. Three CPU
 tests and Ruff passed. No media, model prediction or sealed audit was read.
+
+## All-role difficulty accounting
+
+The two-slot guarantee applies to the **construction anchor** and each of its
+three selected candidates. The four-role balancing also makes each other
+candidate an audio query; its distance to the remaining videos can be larger.
+Counting every ordered query-to-other-candidate pair gives:
+
+| Partition | Distance 2 | Distance 3 | Distance 4 |
+|---|---:|---:|---:|
+| Train | 166,144 | 83,248 | 38,500 |
+| Validation | 55,562 | 27,758 | 12,668 |
+
+Only 25,314 of 95,964 train query roles and 8,457 of 31,996 validation query
+roles have all three alternatives at distance 2. No role or candidate was
+removed. These are code-slot distances, not measured phonetic similarity or
+model difficulty. Report metrics by actual query distance if the task is run;
+do not call every query a two-slot-only comparison.
+
+The reproducible metadata-only audit is
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-quartet-distances-20261028-attempt-03.json`,
+SHA-256 `02cb30293315d667ac70a233cbc95a83aaaee57fb900b27e4222ee49229a1cc1`.
+Attempts 01 and 02 are preserved; the final script differs only by formatting
+fixes. Two CPU tests and Ruff passed; no media or predictions were opened.
