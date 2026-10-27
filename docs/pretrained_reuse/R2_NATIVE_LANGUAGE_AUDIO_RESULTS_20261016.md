@@ -1,5 +1,10 @@
 # Native language/audio input execution: smoke success, full cache incomplete
 
+**Later continuation:** The incomplete attempt described below was followed by
+`native-language-cache-02` and `native-language-replay-01`, both successful.
+See [full feature results](R2_NATIVE_FULL_FEATURES_RESULTS_20261016.md). The
+earlier incomplete attempt remains preserved; do not rerun it as unfinished.
+
 2026-10-16. Actual code and model execution following the strategy review.
 Language input processing and the common speech/event frontend are implemented.
 **The full language cache is INCOMPLETE due to disk capacity. The shared Decision
