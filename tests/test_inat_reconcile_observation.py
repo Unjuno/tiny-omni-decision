@@ -1,4 +1,6 @@
-from scripts.reconcile_inat_observations import reconcile_row
+import pytest
+
+from scripts.reconcile_inat_observations import reconcile_row, validate_batch
 
 
 def test_reconcile_pass_and_license_change():
@@ -19,3 +21,13 @@ def test_reconcile_pass_and_license_change():
 def test_missing_current_observation_is_retained():
     result = reconcile_row({"observation_id": 2, "photo_id": 5}, None, lambda _: "key")
     assert result["status"] == "QUARANTINE" and result["reasons"] == ["missing_observation"]
+
+
+def test_batch_identity_checks_order_and_response_hash():
+    rows = [{"observation_id": 1, "photo_id": 4}, {"observation_id": 2, "photo_id": 5}]
+    batch = {"response_sha256": "a" * 64, "results": rows}
+    assert validate_batch(rows, batch) == rows
+    with pytest.raises(ValueError, match="identity"):
+        validate_batch(list(reversed(rows)), batch)
+    with pytest.raises(ValueError, match="digest"):
+        validate_batch(rows, {"response_sha256": "no", "results": rows})

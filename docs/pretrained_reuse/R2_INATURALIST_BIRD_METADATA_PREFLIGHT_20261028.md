@@ -268,6 +268,16 @@ not saved. This records a current-API check, not proof that the monthly export
 and current API were simultaneous or that a declared license proves ownership.
 No media, training, evaluation or sealed audit is involved.
 
+The first full UUID reconciliation stopped at the request beginning at offset
+1,530 because TLS returned `UNEXPECTED_EOF_WHILE_READING`; no output directory
+was written. The revised runner saves each checked batch and its hash in a
+private new directory and supports explicit resume only when the script hash,
+input pins, saved batch hashes, IDs and order match. Batches record capture
+times; resumed results can span different API times and are not an immutable
+historical snapshot. Transport retries keep TLS verification and are bounded;
+HTTP errors including rate limits still fail closed. Unregistered partial
+files or changed provenance also fail closed. Never disable hash or TLS checks.
+
 ### Connected-person grouping primitive
 
 `scripts/inat_source_grouping.py` groups observation observers and photo

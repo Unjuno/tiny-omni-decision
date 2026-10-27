@@ -1,6 +1,7 @@
 """Recheck fixed bird observations and retain their UUID join keys privately."""
 
 import argparse
+import datetime
 import hashlib
 import json
 import time
@@ -51,13 +52,26 @@ def reconcile_row(frozen, current, key_fn=observer_key):
     return result
 
 
+def validate_batch(frozen, batch):
+    digest = batch.get("response_sha256", "")
+    if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
+        raise ValueError("invalid response digest")
+    results = batch.get("results", [])
+    expected = [(r["observation_id"], r["photo_id"]) for r in frozen]
+    actual = [(r["observation_id"], r["photo_id"]) for r in results]
+    if actual != expected:
+        raise ValueError("batch identity or order mismatch")
+    return results
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
     output = args.output_dir.resolve()
-    if output.exists() or output.is_relative_to(REPO):
-        raise ValueError("new output outside repository required")
+    if output.is_relative_to(REPO) or (output.exists() != args.resume):
+        raise ValueError("new output required, or explicit resume of existing output")
     rows = []
     for name, expected in PINS.items():
         raw = (SNAPSHOT / name).read_bytes()
@@ -67,23 +81,65 @@ def main():
     ids = [row["observation_id"] for row in rows]
     if len(rows) != 1600 or len(set(ids)) != len(ids):
         raise ValueError("unexpected snapshot identity accounting")
+    script_sha = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    manifest_path = output / "manifest.json"
+    if args.resume:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if (manifest.get("script_sha256") != script_sha or manifest.get("snapshot_pins") != PINS
+                or (output / "summary.json").exists()):
+            raise ValueError("resume provenance mismatch or run already complete")
+    else:
+        output.mkdir(parents=True)
+        manifest = {"script_sha256": script_sha, "snapshot_pins": PINS, "batch_hashes": {}}
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     results, receipts = [], []
     for offset in range(0, len(rows), 30):
         batch = rows[offset:offset + 30]
+        batch_path = output / f"batch-{offset:04d}.json"
+        if batch_path.name in manifest["batch_hashes"]:
+            raw_batch = batch_path.read_bytes()
+            if hashlib.sha256(raw_batch).hexdigest() != manifest["batch_hashes"][batch_path.name]:
+                raise ValueError("saved batch hash mismatch")
+            stored = json.loads(raw_batch)
+            results.extend(validate_batch(batch, stored))
+            receipts.append(stored["response_sha256"])
+            continue
+        if batch_path.exists():
+            raise ValueError("unregistered batch found; refusing resume")
         url = "https://api.inaturalist.org/v1/observations/" + ",".join(
             str(row["observation_id"]) for row in batch
         )
-        response = requests.get(url, timeout=(15, 45))
+        for attempt in range(3):
+            try:
+                response = requests.get(url, timeout=(15, 45))
+                break
+            except (requests.exceptions.SSLError, requests.exceptions.Timeout,
+                    requests.exceptions.ConnectionError):
+                if attempt == 2:
+                    raise
+                time.sleep(3 * (attempt + 1))
         print(f"checked {offset}/{len(rows)} status={response.status_code}", flush=True)
         response.raise_for_status()
         source = response.json()["results"]
         by_id = {r["id"]: r for r in source}
         if len(by_id) != len(source) or not set(by_id) <= {r["observation_id"] for r in batch}:
             raise ValueError("unexpected or duplicate response IDs")
-        results.extend(reconcile_row(row, by_id.get(row["observation_id"])) for row in batch)
-        receipts.append(hashlib.sha256(response.content).hexdigest())
+        stored = {"response_sha256": hashlib.sha256(response.content).hexdigest(),
+                  "captured_utc": datetime.datetime.now(datetime.UTC).isoformat(),
+                  "results": [reconcile_row(row, by_id.get(row["observation_id"]))
+                              for row in batch]}
+        checked = validate_batch(batch, stored)
+        payload = (json.dumps(stored, sort_keys=True) + "\n").encode()
+        with batch_path.open("xb") as file:
+            file.write(payload)
+        manifest["batch_hashes"][batch_path.name] = hashlib.sha256(payload).hexdigest()
+        temp = output / "manifest.next.json"
+        with temp.open("x", encoding="utf-8") as file:
+            json.dump(manifest, file, indent=2)
+        temp.replace(manifest_path)
+        results.extend(checked)
+        receipts.append(stored["response_sha256"])
         time.sleep(1.1)
-    output.mkdir(parents=True)
     payload = json.dumps(results, sort_keys=True, indent=2) + "\n"
     (output / "private-uuid-map.json").write_text(payload, encoding="utf-8", newline="\n")
     reasons = {}
