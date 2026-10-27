@@ -11,6 +11,20 @@ both modalities for a Decision task; dialogue, source separation and synthetic
 annotations need separate examination. No audio, video, test split file,
 checkpoint or model was accessed.
 
+### Audio semantics from the upstream paper
+
+The upstream paper states that the paired audio is a **source-separated music
+stem**, selected using an automatic music-event detector. It also notes that
+source separation can leave non-music residuals. Its experiments separately
+extract dialogue from movie audio; the paper's description does not establish
+that the distributed WAV is an unmodified full-scene audio track, nor that a
+visible object caused the soundtrack. Thus these paired files cannot be assumed
+to supply speech or visible-source sound evidence for a joint Decision task.
+Any proposed soundtrack-mood or correspondence task would need its own label,
+audio provenance, time-alignment and shortcut controls. The paper's
+[dataset-construction section](https://arxiv.org/html/2608.11576) is the source;
+no sample audio or video has been opened for this screen.
+
 Metadata snapshot: revision `3ed5a37d933084e5ec134e2138b8faa156cf021b`,
 `metadata.csv` size 1,220,772 bytes, SHA-256
 `0e7bdd7b92c29e9117a635ebe40d29ed6d82d04c60df5b3412e1d0bc728b4cbf`.
