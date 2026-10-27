@@ -134,3 +134,31 @@ snapshot, not a fixed evaluation set: any later benchmark must report quarantine
 coverage and assess multi-object labels rather than retroactively remove hard
 evaluation examples. Photo hashes, near-duplicates, ownership, attribution
 verification and independent observation sessions remain separate gates.
+
+### Attempt 04 outcome
+
+Commit `7e3fc66b` captured 1,600 metadata rows under the fixed policy. Two
+duplicate photo groups (four rows) were saved in quarantine; both contain
+different parent-species labels. The remaining 1,596 candidates comprise
+1,356 train / 240 development-validation rows. Candidate and quarantine hashes
+were independently recomputed. No observer key crosses the two candidate splits.
+
+The train portion has 90 distinct observer keys, but its largest observer owns
+481 / 1,356 rows (35.5%); development validation has 21 keys, with its largest
+owning 74 / 240 rows (30.8%). These earliest-ID, nonrandom samples have strong
+observer concentration and do not satisfy the provisional independent-group
+screen. Species-local counts, quarantine counts and response hashes are in the
+receipt. Observer hashes are pseudonyms and the private files include attribution
+and media URLs; they are not committed to Git. No media was acquired and no
+model was trained. Do not admit this snapshot for model quality evaluation.
+
+Directory:
+`C:/CodexArtifacts/pretrained-reuse-r2/inat-bird-development-snapshot-20261028-attempt-04/`.
+SHA-256 `summary.json`:
+`2cf53577929fe16f6d111bc4d6716edda9c59161354fab3af92522053f2f59b2`;
+`private-snapshot.json`:
+`1d97f5368855c80abdd98bfb95cdf0c6359b21bef7c8ab580318f3b3c914801d`;
+`private-quarantine.json`:
+`a83ddfe6369a46f2525d94173e2bb4ced63b52d1bd4f12e242cad8a993cac3e3`.
+The source response hashes identify what was received but the full responses
+were not retained; the sanitized snapshot is fixed, not a frozen source export.
