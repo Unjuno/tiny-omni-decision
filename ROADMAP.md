@@ -1,3 +1,8 @@
+**2026-10-28 R2 DROID change persistence:** On already inspected train windows,
+89.9% of eligible discretized change labels persist one following step and
+43.4% persist continuously for eight. These correlated labels do not establish
+physical duration or model quality. [Result](docs/pretrained_reuse/R2_DROID_CHANGE_PERSISTENCE_20261028.md).
+
 **2026-10-28 R2 iNaturalist bird metadata preflight:** Eight fixed bird-name
 queries produced 37 distinct eligible observers in 400 nonrandom returned
 rows, with 22 observers appearing across species. Name searches also returned
