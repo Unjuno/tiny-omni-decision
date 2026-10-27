@@ -163,6 +163,27 @@ SHA-256 `summary.json`:
 The source response hashes identify what was received but the full responses
 were not retained; the sanitized snapshot is fixed, not a frozen source export.
 
+An additional aggregate readback of that same fixed candidate file counted
+observation-observer keys per class, without opening media or model outputs:
+
+| Taxon ID | Train rows / observers / largest observer rows | Validation rows / observers / largest observer rows |
+|---:|---:|---:|
+| 3017 | 168 / 39 / 32 | 32 / 11 / 9 |
+| 4956 | 177 / 27 / 93 | 23 / 10 / 12 |
+| 6930 | 170 / 28 / 88 | 28 / 8 / 16 |
+| 7089 | 171 / 27 / 99 | 27 / 5 / 9 |
+| 9083 | 155 / 15 / 64 | 45 / 5 / 16 |
+| 12727 | 170 / 40 / 46 | 30 / 8 / 10 |
+| 13858 | 169 / 35 / 34 | 31 / 7 / 10 |
+| 144455 | 176 / 39 / 45 | 24 / 11 / 10 |
+
+These are observer counts, not verified photographer, session or independent
+site counts. In particular, per-class development validation has only 5–11
+observation observers. Row-level bootstrap or a high row-level Accuracy would
+not establish the roadmap's provisional independent-group screen. Sampling a
+larger, fixed, observer-diverse source is required; do not manipulate an already
+fixed evaluation to improve its composition or scores.
+
 ### Observer versus photographer limitation and official export
 
 The API snapshot's `observer_key` derives from the observation's user ID only.
