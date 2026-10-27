@@ -1,0 +1,107 @@
+{
+  "protocol_sha256": "9c301d4a3acc37711d25943e7165533410bb3297630eef19c7f6431d2daaf5f8",
+  "archives": [
+    {
+      "archive": "23_take-from-stove.zip",
+      "archive_sha256": "04bf32f55c93f54c49525d2b0581cb51f14c1ec302afb56b70a995fa4aa8f706",
+      "summary": {
+        "train": {
+          "participants": 7,
+          "events": 293
+        },
+        "validation": {
+          "participants": 2,
+          "events": 75
+        },
+        "unassigned_events": 0,
+        "coverage_pass": true
+      },
+      "sensor_checks": [
+        {
+          "common_pairs": 368,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.0
+        },
+        {
+          "common_pairs": 368,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.22099995613098145
+        },
+        {
+          "common_pairs": 368,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.20300006866455078
+        },
+        {
+          "common_pairs": 368,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.25
+        },
+        {
+          "common_pairs": 368,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.23000001907348633
+        }
+      ]
+    },
+    {
+      "archive": "10_light-off.zip",
+      "archive_sha256": "3664af53b9b4fccc9abf06d9922f66d24ee81967022d9036bd355a01462ec8e0",
+      "summary": {
+        "train": {
+          "participants": 7,
+          "events": 290
+        },
+        "validation": {
+          "participants": 2,
+          "events": 79
+        },
+        "unassigned_events": 0,
+        "coverage_pass": true
+      },
+      "sensor_checks": [
+        {
+          "common_pairs": 369,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.0
+        },
+        {
+          "common_pairs": 369,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.1960000991821289
+        },
+        {
+          "common_pairs": 369,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.3209998607635498
+        },
+        {
+          "common_pairs": 369,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.2760000228881836
+        },
+        {
+          "common_pairs": 369,
+          "reference_only_pairs": 0,
+          "sensor_only_pairs": 0,
+          "max_abs_timestamp_delta_native_units": 0.29600000381469727
+        }
+      ]
+    }
+  ],
+  "distinct_train_participants": 7,
+  "distinct_validation_participants": 2,
+  "participant_overlap": 0,
+  "all_inspected_activities_coverage_pass": true,
+  "scope": "partial source feasibility; no fitting or validation scoring",
+  "sealed_audit_loaded": false
+}

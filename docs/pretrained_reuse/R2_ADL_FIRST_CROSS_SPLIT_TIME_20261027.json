@@ -1,0 +1,18 @@
+{
+  "archive_sha256": "04bf32f55c93f54c49525d2b0581cb51f14c1ec302afb56b70a995fa4aa8f706",
+  "split_protocol_sha256": "9c301d4a3acc37711d25943e7165533410bb3297630eef19c7f6431d2daaf5f8",
+  "member": "23_take-from-stove/23_take-from-stove_multisensor-1.hdf5",
+  "train_events": 293,
+  "validation_events": 75,
+  "unassigned_events": 0,
+  "validation_events_with_equal_train_timestamp": 0,
+  "nearest_gap_quantiles_native_units": {
+    "0": 84586.79999995232,
+    "0.25": 84993.89599990845,
+    "0.5": 98678.52599978447,
+    "0.75": 99143.08649992943,
+    "1": 99545.3679997921
+  },
+  "limitations": "per-row timestamps only; semantics, units, durations and clocks unverified",
+  "training_or_validation_scoring": false
+}

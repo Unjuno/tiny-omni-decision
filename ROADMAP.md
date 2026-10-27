@@ -1,8 +1,9 @@
 **2026-10-27 R2 ADL participant split preflight:** A preregistered hash rule
-places the first activity's 368 events into 7 train and 2 validation participant
-groups, with zero group overlap. This one-activity feasibility result does not
-establish class coverage across the source or sufficient independent evaluation.
-The second activity is being fetched; no fit or quality score was run. See the
+places each of two inspected activities into the same 7 train and 2 validation
+participant groups, with zero group overlap. Five sensors match within each
+activity. This two-activity feasibility result does not establish class coverage
+across the source or sufficient independent evaluation; no fit or quality score
+was run. See the
 [source report](docs/pretrained_reuse/R2_ADL_AUDIO_VIBRATION_SOURCE_20261027.md)
 and [fixed split protocol](docs/pretrained_reuse/R2_ADL_PARTICIPANT_SPLIT_PROTOCOL_20261027.md).
 

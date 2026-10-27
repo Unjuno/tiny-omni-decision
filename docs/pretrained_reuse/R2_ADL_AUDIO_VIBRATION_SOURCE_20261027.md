@@ -1,5 +1,44 @@
 # Source screen: ambient audio, vibration and environmental measurements
 
+## Fixed participant split: two activities inspected
+
+The second-smallest activity archive, `10_light-off.zip`, was received in full
+and matched publisher MD5 `c554e01e9136100a623791fda4be0b0d`. Its SHA-256 is
+`3664af53b9b4fccc9abf06d9922f66d24ee81967022d9036bd355a01462ec8e0`.
+All five HDF5 sensors contain the same 369 participant/trial pairs. For the
+already frozen hash assignment, both activities have seven train participants
+and two validation participants; across the two activities these are the same
+nine participants, with no person appearing in both splits.
+
+| Activity | Train participants / events | Validation participants / events | Unassigned |
+|---|---:|---:|---:|
+| Take from stove | 7 / 293 | 2 / 75 | 0 |
+| Light off | 7 / 290 | 2 / 79 | 0 |
+
+Matching stored timestamps across light-off sensor files differs from the
+first sensor by up to 0.321 in the native units. Clock synchronization and
+the physical meaning of these values remain unverified. The second archive
+took 404.31 seconds to fetch and inspect; all five sensors' metadata was later
+read for the paired comparison. No model, GPU, final test or sealed audit ran.
+
+The [two-activity receipt](R2_ADL_PARTICIPANT_SPLIT_TWO_20261027.json) has
+SHA-256 `a4ee1e4be98f458fc46512c30b8a5f1b0053a8be8ed07d653f45543343a8d27a`.
+The second source receipt SHA-256 is
+`dc2c8eeb378e1e5cfd13b98a110a8d813cdf1d3e7cc17ab889a012a9818ff3a9`;
+its bounded acquisition script SHA-256 is
+`21a707b988cd6a34c8bdf793c63f2ab3237aa2493b657027a119cdecd6fa4f8a`.
+Both archives and receipts stay under separate external attempt directories.
+The combined checker verifies source preflight receipts and archive hashes,
+refuses repeated activities and cross-sensor identity mismatches, and writes
+only aggregate group counts. The complete CPU test suite reports **2,643
+passed, 11 skipped** and Ruff passed.
+
+This demonstrates limited source feasibility for two activities, not full
+dataset admission. The other 23 activities, no-participant recordings, event
+duration overlap, synchronized waveform timing and independent environment
+coverage remain unverified. Two validation participants cannot support the
+product quality claim. No two-class fit or score was run.
+
 ## Fixed participant-split feasibility: first activity
 
 Before opening the second activity archive, the
@@ -26,11 +65,21 @@ Unit tests verify fixed
 assignments, invalid IDs, special ID 999, duplicate pairs, absent split
 coverage and line-ending-independent protocol hashing.
 
+For the first activity's first sensor, a separate nearest-neighbor comparison
+found zero validation events with the exact same stored per-row timestamp as
+any training event. The minimum and median nearest differences were 84,586.8
+and 98,678.526 in native units. This checks only 293 train and 75 validation
+timestamp values; semantics, physical units, recording durations and clocks
+are not established, so it does not prove session or media non-overlap. The
+[receipt](R2_ADL_FIRST_CROSS_SPLIT_TIME_20261027.json) SHA-256 is
+`c315b54a599c3d996a2e8ad6cda5cc086e3c878d387a4edc9e8524eab11671f6`.
+The executed checker SHA-256 is
+`dfac33df8c3565ec00330481af7eec00befe0c06f35dda349c365384b307b11c`;
+tests cover sorted/unsorted nearest-gap matching and invalid inputs.
+
 The second-smallest archive `10_light-off.zip` (69,650,916 bytes) was selected
-before examining its data and is being fetched into a separate attempt
-directory. It must match publisher MD5 `c554e01e9136100a623791fda4be0b0d`
-before any content inspection. Do not fit a two-class task or treat these two
-source samples as a representative benchmark.
+before examining its data; its completed check is recorded above. Do not fit a
+two-class task or treat these two source samples as a representative benchmark.
 
 ## Completed bounded archive preflight
 
