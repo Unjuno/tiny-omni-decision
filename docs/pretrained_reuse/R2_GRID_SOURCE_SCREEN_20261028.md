@@ -103,6 +103,24 @@ SHA-256 `5f27f9cf0cd464a650c60ad904780b958f3d652a049d7efbd18773500267ce56`.
 Two tests check exclusion, the missing-video group and duplicate-code rejection;
 Ruff passed. No audio or video was opened during this scan.
 
+### Derivative speaker-label mismatch
+
+Joining original and derivative indices on their unique utterance codes finds
+32,827 shared codes, 1,173 original-only codes and no derivative-only codes.
+For 18,972 shared codes the numeric speaker labels differ across the two
+indices. There are 33 observed original/derivative label pairs, covering 33
+labels on each side; 14 pairs have equal labels and 19 have different labels.
+This is a path-label comparison, not proof of real-person identity or a claim
+that either source is incorrect. It does mean that numerical speaker IDs must
+not be equated across distributions when constructing group-disjoint splits.
+
+The original-alignment archive and derivative index were hash-verified; no
+media was read. Aggregate receipt:
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-derivative-speakers-20261028-attempt-01.json`,
+SHA-256 `ea4e2322ea131d49135638d537bfaf216a60ba337c6475eeedf9549fd014bc4b`.
+Two focused tests and Ruff passed. Speaker independence from Lombard and
+physical identity are still unverified.
+
 The fixed vocabulary, scripted sentences, limited speakers and potential
 audio-only or lip-only shortcuts also preclude treating a high score on this
 corpus as general Omni Decision quality. Before use, independently establish
