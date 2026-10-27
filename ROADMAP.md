@@ -1,3 +1,12 @@
+**2026-10-27 R2 source-label semantics gate:** The upstream sound-parent field
+means related objects, while `is_visible` can refer to an occluded sound impact.
+Among 692 derived `none_visible` examples, 30 present a known related object
+as a candidate, and 647 include an unannotated parent marker. Do not equate
+the derived label with absence of all visible related objects or treat related
+parents as verified causal sources. Clarify task semantics and review a fixed
+representative sample before further task-specific training.
+[Audit](docs/pretrained_reuse/R2_SOURCE_ANNOTATION_SEMANTICS_20261027.md).
+
 **2026-10-27 R2 balanced set same-label audio control:** Replacing audio with
 the same source-label recording from another video changed 972/2,581 sets,
 but original-minus-replacement exact accuracy was -0.04 points with an
