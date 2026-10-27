@@ -45,6 +45,8 @@ def decode_set(logits, mask):
     none = logits[:, -1] >= 0
     selected = (logits[:, :-1] >= 0) & mask & ~none[:, None]
     fallback_rows = ~none & ~selected.any(dim=1)
-    best = logits[:, :-1].masked_fill(~mask, -torch.inf).argmax(dim=1)
-    selected[fallback_rows, best[fallback_rows]] = True
+    masked = logits[:, :-1].masked_fill(~mask, -torch.inf)
+    best = masked.max(dim=1, keepdim=True).values
+    tied = torch.isclose(masked, best, rtol=0.0, atol=1e-6)
+    selected |= fallback_rows[:, None] & mask & tied
     return torch.cat((selected, none[:, None]), dim=1)

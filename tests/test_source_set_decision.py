@@ -48,3 +48,23 @@ def test_reject_inconsistent_targets_and_empty_candidate_rows():
             set_loss(logits, mask, targets)
     with pytest.raises(ValueError):
         decode_set(logits, torch.tensor([[False, False]]))
+
+
+def test_audio_only_candidate_logits_are_symmetric():
+    from scripts.train_source_unimodal_cv import CandidateModel
+
+    torch.manual_seed(17)
+    model = CandidateModel()
+    video = torch.randn(1, 3, 1536)
+    audio = torch.randn(1, 384)
+    mask = torch.tensor([[True, True, True]])
+    output = model(video, audio, mask, "audio")
+    assert torch.allclose(output[0, :3], output[0, :1].expand(3))
+
+
+def test_tied_fallback_selects_all_maxima_independent_of_order():
+    mask = torch.tensor([[True, True, True]])
+    logits = torch.tensor([[-1.0, -2.0, -1.0, -2.0]])
+    assert decode_set(logits, mask).tolist() == [[True, False, True, False]]
+    tied = torch.tensor([[-1.0, -1.0, -1.0, -2.0]])
+    assert decode_set(tied, mask).tolist() == [[True, True, True, False]]

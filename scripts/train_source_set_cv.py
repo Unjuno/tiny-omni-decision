@@ -51,7 +51,7 @@ def main():
     source = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(source)
     protocol_hash = hashlib.sha256(PROTOCOL.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-    if protocol_hash != "e32bde6f9c760f502d6ebb4681ed8acf8df3e28a17d4d089dd8f10bfdeefe988":
+    if protocol_hash != "a1e03e7988b2bb05186c83013f32ce62a3c992f1a3e70742c9934a8f3db756fa":
         raise ValueError("protocol hash mismatch")
     args.output.mkdir(parents=True)
     start = time.perf_counter()

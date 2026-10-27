@@ -8,8 +8,9 @@ identical per-fold initialization and order for audio-only, video-only and
 joint. Frozen encoders and 344,834 readout parameters are unchanged. Run all
 nine arms once; no early stop, seed sweep or threshold tuning.
 
-Use the fixed 0.5 conditional candidate and none threshold with nonempty
-fallback. Save per-record candidate IDs, labels, conditional probabilities,
+Use the fixed 0.5 conditional candidate and none threshold with a nonempty
+fallback selecting all candidates within 1e-6 of the maximum logit. Save
+per-record candidate IDs, labels, conditional probabilities,
 none probabilities and predicted sets, each checkpoint and all hashes.
 Report exact-set accuracy, none-visible detection, per-candidate marginal
 binary NLL/Brier/ECE and macro per-record scores; avoid treating correlated
@@ -22,3 +23,9 @@ is descriptive; contributors and scenes can overlap between folds, and the
 source data and earlier evaluations have already been observed. No product
 selection or sealed audit is performed. Fail closed on hashes, disk below 1 GiB,
 nonfinite loss/gradients, split overlap, mismatched IDs or existing output.
+
+The audio-only model receives identical zero visual input for each candidate;
+its conditional scores are theoretically tied. The decoder normally selects
+all candidates when visibility is chosen, including on fallback; floating
+point differences near the threshold can still affect selections. Report this
+limitation and do not interpret it as independent visual source identification.

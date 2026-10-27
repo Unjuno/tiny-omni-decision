@@ -11,8 +11,8 @@ probabilities follows from the parameterization.
    binary cross entropy only on visible records. Mask all padded candidates;
    reject invalid targets and visibility combinations.
 2. Decode with a fixed none threshold 0.5, followed by candidate conditional
-   sigmoid threshold 0.5 when visible. If none pass, return the largest valid
-   candidate; never include none and a visible candidate together. This is an
+   sigmoid threshold 0.5 when visible. If none pass, return all candidates
+   tied for the largest valid score; never include none and a visible candidate together. This is an
    exploratory point-decision rule, not a coherent joint distribution.
 3. Add tests for multi-target membership, padding invariance, none exclusivity,
    fallback, gradient flow, and rejected inconsistent labels. Run targeted
