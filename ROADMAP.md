@@ -1,3 +1,9 @@
+**2026-10-27 R2 source-candidate audio interventions:** On the fixed train-only
+OOF joint checkpoints, mismatching audio from another held-out video reduced
+Accuracy by 6.21 points. This is nonblind sensitivity evidence; unmatched sound
+classes and distribution shift preclude a causal correspondence claim.
+[Results](docs/pretrained_reuse/R2_SOURCE_UNIMODAL_CV_INTERVENTION_RESULTS_20261027.md).
+
 **2026-10-27 R2 train-only source-candidate unimodal comparison:** Three
 freshly trained audio-only, video-only and joint readouts were compared over
 three held-out video-group folds of the existing official-train source. Joint
