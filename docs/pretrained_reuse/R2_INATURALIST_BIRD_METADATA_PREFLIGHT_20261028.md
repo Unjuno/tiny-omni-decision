@@ -278,6 +278,24 @@ historical snapshot. Transport retries keep TLS verification and are bounded;
 HTTP errors including rate limits still fail closed. Unregistered partial
 files or changed provenance also fail closed. Never disable hash or TLS checks.
 
+Attempt 02 completed on the current API: all 1,600 candidate-plus-quarantine
+observation IDs returned UUIDs and matched the stored observer, exact observed
+taxon, research grade, observation license, selected photo license, attribution
+and visibility. No rows received a reconciliation quarantine reason. An
+independent readback checked the combined mapping hash and all 54 batch hashes
+with zero mismatches. This checks declared fields at capture time, not ownership,
+the monthly export's version or photographer identity. The four ambiguous-photo
+rows remain in their original quarantine; a match here does not admit them.
+
+Private output:
+`C:/CodexArtifacts/pretrained-reuse-r2/inat-bird-observation-reconcile-20261028-attempt-02/`.
+`summary.json` SHA-256:
+`e902ad4ae8d6eb09decd0c075989064f4287bd0f39a3effc4e53c938cc297b3d`;
+`private-uuid-map.json` SHA-256:
+`616afdb0c97d557e4e596fa8264af872001e7b0827f995fdcdbb23419a4ea6a0`.
+The records are pseudonymous/private and are not in Git. No media or model was
+loaded. The larger photo-table stream remains a separate operation.
+
 ### Connected-person grouping primitive
 
 `scripts/inat_source_grouping.py` groups observation observers and photo
