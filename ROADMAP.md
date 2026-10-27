@@ -1,3 +1,9 @@
+**2026-10-27 R2 BeDAViN source screen:** The raw manually recorded audio
+release states CC BY 4.0 but contains no synchronized video; the full simulated
+AV framework requires separately licensed scene and source components. The
+source is not admitted for paired-quality evaluation.
+[Screen](docs/pretrained_reuse/R2_BEDAVIN_SOURCE_SCREEN_20261027.md).
+
 **2026-10-27 R2 source-label semantics gate:** The upstream sound-parent field
 means related objects, while `is_visible` can refer to an occluded sound impact.
 Among 692 derived `none_visible` examples, 30 present a known related object
