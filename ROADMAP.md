@@ -1,3 +1,8 @@
+**2026-10-27 R2 temporal-input coverage:** In the existing source-candidate
+training plan, 71% of records have one audio window and 59% of visual
+candidates have one frame. Padding and variable-length masks must be handled
+explicitly before interpreting temporal models. [Coverage](docs/pretrained_reuse/R2_SOURCE_TEMPORAL_COVERAGE_20261027.md).
+
 **2026-10-27 R2 same-label audio substitution:** On 2,581 matched train-source
 OOF records, replacing audio with another video's same-label recording produced
 no clear aggregate Accuracy or NLL difference; 12 records were unmatched.
