@@ -1,0 +1,100 @@
+"""Capture a bounded, development-only iNaturalist bird metadata snapshot."""
+
+import argparse
+import hashlib
+import json
+import time
+from pathlib import Path
+
+import requests
+
+TAXA = (6930, 13858, 7089, 3017, 12727, 144455, 4956, 9083)
+URL = "https://api.inaturalist.org/v1/observations"
+REPO = Path(__file__).resolve().parents[1]
+
+
+def clean_record(row, class_taxon_id):
+    taxon = row.get("taxon") or {}
+    actual = taxon.get("id")
+    ancestors = str(taxon.get("ancestry") or "").split("/")
+    if (actual != class_taxon_id and str(class_taxon_id) not in ancestors):
+        return None
+    user = (row.get("user") or {}).get("id")
+    if (row.get("quality_grade") != "research" or row.get("license_code") not in
+            ("cc0", "cc-by") or type(user) is not int or type(row.get("id")) is not int):
+        return None
+    photos = [p for p in row.get("photos", []) if type(p.get("id")) is int
+              and p.get("license_code") in ("cc0", "cc-by")
+              and isinstance(p.get("attribution"), str) and p["attribution"].strip()
+              and p.get("hidden") is False and str(p.get("url", "")).startswith("https://")]
+    if not photos:
+        return None
+    photo = min(photos, key=lambda p: p["id"])
+    observer = hashlib.sha256(f"inat-bird-observer-v1:{user}".encode()).hexdigest()
+    split = "train" if int(observer[:16], 16) % 100 < 80 else "validation"
+    return {"observation_id": row["id"], "observer_key": observer, "split": split,
+            "class_taxon_id": class_taxon_id, "observed_taxon_id": actual,
+            "observation_license": row["license_code"], "photo_id": photo["id"],
+            "photo_license": photo["license_code"], "attribution": photo["attribution"],
+            "photo_url": photo["url"]}
+
+
+def validate_snapshot(rows):
+    ids, photos, observers = set(), set(), {}
+    for row in rows:
+        if row["observation_id"] in ids or row["photo_id"] in photos:
+            raise ValueError("duplicate observation or photo")
+        ids.add(row["observation_id"])
+        photos.add(row["photo_id"])
+        old = observers.setdefault(row["observer_key"], row["split"])
+        if old != row["split"]:
+            raise ValueError("observer crosses splits")
+    if not rows:
+        raise ValueError("empty snapshot")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    args = parser.parse_args()
+    output = args.output_dir.resolve()
+    if output.exists() or output.is_relative_to(REPO):
+        raise ValueError("new output outside repository required")
+    rows, receipts = [], []
+    for taxon in TAXA:
+        for page in (1, 2):
+            params = {"taxon_id": taxon, "quality_grade": "research", "photos": "true",
+                      "license": "cc0,cc-by", "photo_license": "cc0,cc-by",
+                      "per_page": 100, "page": page, "order_by": "id", "order": "asc"}
+            response = requests.get(URL, params=params, timeout=(15, 45))
+            print(f"taxon={taxon} page={page} status={response.status_code}", flush=True)
+            response.raise_for_status()
+            data = response.json()
+            batch = data["results"]
+            if len(batch) != 100:
+                raise ValueError("expected complete page; snapshot not written")
+            cleaned = [clean_record(row, taxon) for row in batch]
+            if any(row is None for row in cleaned):
+                raise ValueError("metadata gate failed; snapshot not written")
+            rows.extend(cleaned)
+            receipts.append({"taxon_id": taxon, "page": page,
+                             "response_sha256": hashlib.sha256(response.content).hexdigest(),
+                             "reported_total": data["total_results"]})
+            time.sleep(1.1)
+    validate_snapshot(rows)
+    output.mkdir(parents=True)
+    payload = json.dumps(rows, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+    (output / "private-snapshot.json").write_text(payload, encoding="utf-8", newline="\n")
+    summary = {"status": "DEVELOPMENT_METADATA_NOT_ADMITTED", "count": len(rows),
+               "snapshot_sha256": hashlib.sha256(payload.encode()).hexdigest(),
+               "response_receipts": receipts, "taxa": TAXA,
+               "split_counts": {s: sum(row["split"] == s for row in rows)
+                                for s in ("train", "validation")},
+               "limitations": ["nonrandom live API snapshot", "photo rights unverified",
+                               "no image bytes", "no deduplication", "no sealed audit"]}
+    (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps(summary, indent=2))
+
+
+if __name__ == "__main__":
+    main()
