@@ -1,5 +1,24 @@
 # Source screen: ambient audio, vibration and environmental measurements
 
+## Running inventory: sparse sweep class
+
+The ongoing 25-activity inventory has an important preliminary limitation. Its
+CRC-checked first-sensor member for `14_sweep.zip` contains only **nine**
+participant/trial rows: six from five train participants and three from two
+validation participants under the fixed split. The automatic `coverage_pass`
+means only that both sets are nonempty; it is not a claim that nine examples
+are sufficient for training or a meaningful per-class validation estimate.
+Retain the class and its actual counts rather than duplicating examples or
+quietly dropping it. The other four sensors were not checked for this activity;
+their recordings would in any case not be independent activity events.
+
+The member's ZIP CRC matched, but its full publisher archive MD5 has not been
+checked; treat this as partial, weaker source evidence. The per-activity receipt
+SHA-256 is `6f945fa730f5eda1689148888d7f9b3e10b6cfbdb438adeb717702f67969e35a`
+at `C:/CodexArtifacts/pretrained-reuse-r2/adl-partial-inventory-20261027-attempt-01/14-summary.json`.
+The full inventory remains in progress; do not infer the remaining classes'
+support or train a model from this intermediate observation.
+
 ## Partial third activity: member-CRC feasibility only
 
 Using the fixed third-smallest archive `17_stop-toaster.zip`, the pilot fetched
