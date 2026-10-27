@@ -1,5 +1,25 @@
 # Perception audio/visual source-candidate transfer: existing artifact reconciliation
 
+## Important zero-video control limitation
+
+The saved `audio_only_zero_video` control is not a viable audio-only baseline.
+In the original readout, zeroing video supplies the same all-zero visual vector
+to every candidate, including `none_visible`, with the same audio vector and
+same scorer. The logits are therefore mathematically tied. The saved float32
+outputs have candidate-probability spreads no greater than `3.28e-7` in all
+138 records; 33 nonetheless select `none_visible`. Those argmax outcomes can
+depend on numerical rounding and must not be interpreted as an audio-only
+capability measurement. The previously reported zero-video score is preserved
+as a historical numerical artifact, but must not support multimodal benefit.
+
+This was checked only against the existing prediction file, without a model
+run or audit access. The [audit result](C:/CodexArtifacts/pretrained-reuse-r2/perception-source-zero-video-ties-20261027-attempt-01/result.json)
+SHA-256 is `be74fd594edc5862ff3deacd798cf5093aaf53fb88eeb8e0f883c7c58acb5384`.
+Two targeted tests and Ruff passed. A future independent audio-only baseline
+needs a distinct learned none-visible score and a defined symmetric rule among
+the visible candidates; a matched independently trained video-only baseline is
+also required. Neither source admission nor a causal claim follows.
+
 The external fixed-checkpoint transfer outputs in `attempt-07` had already been
 produced on October 26 but were not reflected in this branch's roadmap. This
 reconciliation reads the saved result and prediction hashes; it does not rerun
