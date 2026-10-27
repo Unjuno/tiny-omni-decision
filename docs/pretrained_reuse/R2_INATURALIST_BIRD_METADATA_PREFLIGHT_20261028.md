@@ -304,9 +304,14 @@ observation IDs returned UUIDs and matched the stored observer, exact observed
 taxon, research grade, observation license, selected photo license, attribution
 and visibility. No rows received a reconciliation quarantine reason. An
 independent readback checked the combined mapping hash and all 54 batch hashes
-with zero mismatches. This checks declared fields at capture time, not ownership,
+with zero mismatches. A further UUID-format and uniqueness check found 1,600
+valid UUIDs and no duplicates. This checks declared fields at capture time, not ownership,
 the monthly export's version or photographer identity. The four ambiguous-photo
 rows remain in their original quarantine; a match here does not admit them.
+The reconciliation runner was subsequently strengthened to quarantine malformed
+UUIDs and reject duplicate UUIDs across observations. Its saved-batch resume
+guard deliberately rejects batches created by a different script hash; the
+already complete attempt 02 remains unchanged and was checked independently.
 
 Private output:
 `C:/CodexArtifacts/pretrained-reuse-r2/inat-bird-observation-reconcile-20261028-attempt-02/`.

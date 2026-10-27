@@ -5,6 +5,7 @@ import datetime
 import hashlib
 import json
 import time
+import uuid as uuid_lib
 from pathlib import Path
 
 import requests
@@ -46,7 +47,15 @@ def reconcile_row(frozen, current, key_fn=observer_key):
     if not isinstance(uuid, str) or not uuid.strip():
         result["reasons"].append("missing_uuid")
     else:
-        result["observation_uuid"] = uuid
+        try:
+            parsed_uuid = uuid_lib.UUID(uuid)
+        except ValueError:
+            result["reasons"].append("invalid_uuid")
+        else:
+            if str(parsed_uuid) != uuid.lower():
+                result["reasons"].append("invalid_uuid")
+            else:
+                result["observation_uuid"] = str(parsed_uuid)
     if not result["reasons"]:
         result["status"] = "MATCH"
     return result
@@ -62,6 +71,12 @@ def validate_batch(frozen, batch):
     if actual != expected:
         raise ValueError("batch identity or order mismatch")
     return results
+
+
+def validate_unique_uuids(rows):
+    values = [row["observation_uuid"] for row in rows if row["observation_uuid"] is not None]
+    if len(set(values)) != len(values):
+        raise ValueError("duplicate UUID across observations")
 
 
 def main():
@@ -140,6 +155,7 @@ def main():
         results.extend(checked)
         receipts.append(stored["response_sha256"])
         time.sleep(1.1)
+    validate_unique_uuids(results)
     payload = json.dumps(results, sort_keys=True, indent=2) + "\n"
     (output / "private-uuid-map.json").write_text(payload, encoding="utf-8", newline="\n")
     reasons = {}
