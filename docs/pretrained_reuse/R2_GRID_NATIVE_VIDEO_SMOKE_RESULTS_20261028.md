@@ -29,3 +29,21 @@ there. The separate audio archive was still downloading when this result was
 recorded. Two timestamp tests, one feature-shape/finiteness test and Ruff
 passed. Exact synchronized audio/video behavior and the correspondence task
 remain unverified.
+
+## Frozen video decision head
+
+The existing Lombard `video_ordered` head and normalizer were loaded by their
+previously recorded hashes and applied to all 16 verified GRID temporal
+features on CPU. All outputs had the expected finite 51 logits; the head
+contains 106,355 registered parameters. No labels were opened or scored, no
+audio was supplied and no weight was changed. This verifies a component
+interface only; it does not establish accurate choices or audiovisual fusion.
+
+The new output is
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-s1-video-head-20261028-attempt-01/`;
+`summary.json` SHA-256
+`b063f9462f80d91e5d7957f85c256cf98f5835f38f48ddf647303ea64d73b093`,
+and `video_logits.npy` SHA-256
+`7cc918e3c36e39fd29da10022ae4b0e1174e22b1e5f729a9d2cd3532afd39bea`.
+Input feature hashes and head/normalizer/source hashes were rechecked. The
+finite-logit CPU test and Ruff passed.
