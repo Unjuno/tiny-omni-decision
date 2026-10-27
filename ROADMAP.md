@@ -102,6 +102,13 @@ Accuracy by 6.21 points. This is nonblind sensitivity evidence; unmatched sound
 classes and distribution shift preclude a causal correspondence claim.
 [Results](docs/pretrained_reuse/R2_SOURCE_UNIMODAL_CV_INTERVENTION_RESULTS_20261027.md).
 
+**2026-10-27 R2 DROID train-recording change coverage:** The same 275 train
+recordings contain 7,442 adjacent discretized command changes at indices >=8,
+across 274 recordings, rather than only the 15 changes observed at the prior
+one-target-per-recording sample. These timesteps are correlated and may include
+axis-label fluctuations; no independent evaluation is established.
+[Results](docs/pretrained_reuse/R2_DROID_TRAIN_ALL_TRANSITIONS_RESULTS_20261027.md).
+
 **2026-10-27 R2 DROID matched-history sensor ablation:** Two nested train-CV
 heads both received previous command. Adding the fixed sensor representation
 worsened macro NLL by 0.1174 and neither predicted any of 15 action changes.
