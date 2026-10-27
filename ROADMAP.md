@@ -3295,3 +3295,11 @@ four of eight held-out labels map to other audio folders by code overlap. Do
 not infer identity or run the pilot until this is resolved. The `s30.zip`
 publisher MD5 matched; an incomplete `s4.zip.part` is retained but unverified.
 See [`GRID audio folder mapping audit`](docs/pretrained_reuse/R2_GRID_AUDIO_FOLDER_MAPPING_AUDIT_20261028.md).
+
+The follow-up direct-source audit covers all 24 frozen train speakers. The
+official audio/alignment/video inventories agree for all speakers, but the
+frozen speaker/code rows match only 9/24; 15/24 have zero same-label overlap.
+The old train manifest remains blocked. Preserve it as a failed receipt; build
+a new manifest from the authoritative per-speaker bundles and rerun the split
+and media-overlap gates before any GRID training. See
+[`GRID train direct-source audit`](docs/pretrained_reuse/R2_GRID_TRAIN_DIRECT_SOURCE_BUNDLE_AUDIT_20261028.md).
