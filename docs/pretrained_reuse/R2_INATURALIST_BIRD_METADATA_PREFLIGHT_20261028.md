@@ -318,3 +318,21 @@ not connected to the existing API snapshot, which has no verified photographer
 IDs, and has not been run against the official photo table. It does not prove
 media, license, person, session or split independence. Freeze the complete
 source set before assignment because later records can merge components.
+
+### Candidate-label limitation
+
+An observation identifies an organism associated with a photo, not a complete
+inventory of every organism visible in that photo. Even a photo ID appearing
+only once in this limited snapshot can contain more than one target species or
+have additional observations outside the sampled pages. Thus a different
+species not listed for that photo is **unknown**, not a verified negative.
+The metadata-only quarantine identifies known repeated photo IDs in the sampled
+rows; it cannot prove the remaining images have a single visible species.
+
+Do not derive a four-choice single-correct task by treating the other seven
+species as absent. Before image training or evaluation, establish a task whose
+target is justified by complete labels or an independently reviewed visible
+subject, retain ambiguous and unknown cases in coverage accounting, and freeze
+the candidate construction before looking at model outcomes. This gate is
+independent of observer/photographer splitting, license checks and image
+deduplication. The current metadata snapshot is not an admitted benchmark.
