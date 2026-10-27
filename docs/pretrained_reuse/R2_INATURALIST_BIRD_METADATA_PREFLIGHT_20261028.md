@@ -121,3 +121,16 @@ SHA-256 `720453ea4f01f1adfeba4a4fd08a75d21ac75679865e930b3b0ea1f0e0586152`.
 Five focused tests and Ruff passed. Before creating a single-label development
 dataset, define and record a quarantine policy for ambiguous photo groups;
 future evaluation must retain and explicitly report the quarantine coverage.
+
+### Development snapshot policy, fixed before attempt 04
+
+Keep all rows associated with any repeated photo ID in a separate private
+quarantine file; do not choose among their labels, and do not use them for
+training or validation. Retain their split, labels and photo metadata, hash the
+quarantine and report its size, split and class coverage. Duplicate observation
+IDs still fail closed. Remaining rows must have globally unique photo IDs and
+observer-disjoint train/validation assignments. This is an exploratory metadata
+snapshot, not a fixed evaluation set: any later benchmark must report quarantine
+coverage and assess multi-object labels rather than retroactively remove hard
+evaluation examples. Photo hashes, near-duplicates, ownership, attribution
+verification and independent observation sessions remain separate gates.

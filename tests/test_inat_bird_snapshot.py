@@ -1,6 +1,11 @@
 import pytest
 
-from scripts.snapshot_inat_birds import clean_record, collision_summary, validate_snapshot
+from scripts.snapshot_inat_birds import (
+    clean_record,
+    collision_summary,
+    partition_photo_collisions,
+    validate_snapshot,
+)
 
 
 def observation(observer=42, taxon=6930):
@@ -62,3 +67,23 @@ def test_collision_summary_detects_cross_split_and_conflicting_labels():
     assert result["photo_groups_cross_split"] == 1
     assert result["photo_groups_conflicting_class"] == 1
     assert result["photo_groups_multiple_observers"] == 1
+
+
+def test_all_rows_of_duplicate_photo_are_quarantined():
+    first = clean_record(observation(), 6930)
+    other = observation(observer=43)
+    other["id"] = 11
+    second = clean_record(other, 6930)
+    third = clean_record(observation(observer=44), 6930)
+    third["observation_id"] = 13
+    third["photo_id"] = 14
+    admitted, quarantine = partition_photo_collisions([first, second, third])
+    assert admitted == [third]
+    assert quarantine == [first, second]
+    validate_snapshot(admitted)
+
+
+def test_duplicate_observations_are_not_silently_quarantined():
+    first = clean_record(observation(), 6930)
+    with pytest.raises(ValueError, match="duplicate observation"):
+        partition_photo_collisions([first, first])

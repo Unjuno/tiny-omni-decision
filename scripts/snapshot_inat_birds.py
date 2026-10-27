@@ -75,6 +75,17 @@ def collision_summary(rows):
                 len({(r["photo_license"], r["attribution"]) for r in g}) > 1 for g in repeated)}
 
 
+def partition_photo_collisions(rows):
+    observations = [r["observation_id"] for r in rows]
+    if len(set(observations)) != len(observations):
+        raise ValueError("duplicate observation")
+    photo_counts = defaultdict(int)
+    for row in rows:
+        photo_counts[row["photo_id"]] += 1
+    return ([row for row in rows if photo_counts[row["photo_id"]] == 1],
+            [row for row in rows if photo_counts[row["photo_id"]] > 1])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -112,15 +123,29 @@ def main():
         (output / "summary.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(result, indent=2))
         return
-    validate_snapshot(rows)
+    admitted, quarantine = partition_photo_collisions(rows)
+    validate_snapshot(admitted)
     output.mkdir(parents=True)
-    payload = json.dumps(rows, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+    payload = json.dumps(admitted, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+    quarantine_payload = json.dumps(quarantine, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
     (output / "private-snapshot.json").write_text(payload, encoding="utf-8", newline="\n")
-    summary = {"status": "DEVELOPMENT_METADATA_NOT_ADMITTED", "count": len(rows),
+    (output / "private-quarantine.json").write_text(
+        quarantine_payload, encoding="utf-8", newline="\n"
+    )
+    summary = {"status": "DEVELOPMENT_METADATA_NOT_ADMITTED", "raw_count": len(rows),
+               "count": len(admitted), "quarantined_rows": len(quarantine),
+               "collision_summary": collision_summary(rows),
                "snapshot_sha256": hashlib.sha256(payload.encode()).hexdigest(),
+               "quarantine_sha256": hashlib.sha256(quarantine_payload.encode()).hexdigest(),
                "response_receipts": receipts, "taxa": TAXA,
-               "split_counts": {s: sum(row["split"] == s for row in rows)
+               "split_counts": {s: sum(row["split"] == s for row in admitted)
                                 for s in ("train", "validation")},
+               "class_split_counts": {str(t): {s: sum(row["split"] == s and
+                                      row["class_taxon_id"] == t for row in admitted)
+                                      for s in ("train", "validation")} for t in TAXA},
+               "quarantine_class_split_counts": {str(t): {
+                   s: sum(row["split"] == s and row["class_taxon_id"] == t for row in quarantine)
+                   for s in ("train", "validation")} for t in TAXA},
                "limitations": ["nonrandom live API snapshot", "photo rights unverified",
                                "no image bytes", "no deduplication", "no sealed audit"]}
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
