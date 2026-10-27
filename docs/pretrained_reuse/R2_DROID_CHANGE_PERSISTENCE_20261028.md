@@ -58,3 +58,32 @@ The descriptive aggregate is
 `C:/CodexArtifacts/pretrained-reuse-r2/droid-persistent-change-error-20261028-attempt-01.json`,
 SHA-256 `afa6632fcf515f2138a742c4197efb53e75063a7263ae05c150708871bdbfeba`.
 No fitting, checkpoint selection, validation or sealed-audit data was used.
+
+### Error type on persistent changes
+
+A further post-hoc readback partitions the same 5,022 persistent rows into
+correct new command, retained previous command, and a different wrong command.
+All counts use the raw change-weighted probabilities on the same held train
+folds. The linear control is the existing 50-epoch history-plus-sensor model;
+its preprocessing and initialization differ from the LSTM, so this is not a
+clean isolation of recurrence.
+
+| Model | Correct new | Retains previous | Other wrong | Target NLL |
+|---|---:|---:|---:|---:|
+| LSTM 50 epochs | 128 | 4,712 | 182 | 2.1793 |
+| LSTM 200 epochs | 238 | 4,424 | 360 | 2.1932 |
+| Linear 50 epochs | 325 | 4,332 | 365 | 2.1336 |
+
+Most wrong answers retain the previous command even when the new label persists.
+Longer LSTM training increases correct changes, but also wrong non-previous
+commands, and conditional target NLL does not improve. The seven target labels
+occur 640, 654, 958, 575, 591, 760 and 844 times respectively; this is not a
+single-class subset. These correlated observations are already exposed and do
+not establish model generalization, causality, event noise or a capacity ceiling.
+Future labels are used only to define this retrospective subgroup.
+
+Aggregate output:
+`C:/CodexArtifacts/pretrained-reuse-r2/droid-persistent-error-controls-20261028-attempt-01.json`,
+SHA-256 `c6f841dd9b11a03895238b6b887367d9688aa118fc990cdeb3787cd996be2b8a`.
+It pins the dataset summary and both saved prediction files; no new training,
+checkpoint selection, validation or sealed audit was performed.
