@@ -256,6 +256,18 @@ photo rights, source overlap and near-duplicates remain separate gates; no
 image bytes or model are used. If the stream fails, no partial output is treated
 as a completed scan. The run is CPU/network only and may take hours.
 
+For a potential join to the monthly photo table, the candidate snapshot's
+numeric observation IDs also need their observation UUIDs. A two-ID official
+API preflight returned both requested records and matching photo IDs. Before
+the full bounded reconciliation, `scripts/reconcile_inat_observations.py`
+fixes batches of at most 30 IDs and rechecks observer, exact taxon, research
+grade, observation license, selected photo license, visibility and attribution.
+Missing or changed records are explicitly quarantined. Only UUID, numeric IDs,
+status and reasons are retained privately; full API responses and locations are
+not saved. This records a current-API check, not proof that the monthly export
+and current API were simultaneous or that a declared license proves ownership.
+No media, training, evaluation or sealed audit is involved.
+
 ### Connected-person grouping primitive
 
 `scripts/inat_source_grouping.py` groups observation observers and photo
