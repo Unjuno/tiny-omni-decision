@@ -195,3 +195,23 @@ download but does not verify full bytes or guarantee the object cannot change;
 use conditional requests and compute a full SHA-256 if it is acquired. The
 current ~33.5 GiB compressed size is not an estimate of decompressed storage or
 processing RAM. No download or extracted source data exists from this check.
+
+### Archive prefix and transfer encoding check
+
+A conditional HTTPS byte-range request for the first 1,048,576 bytes of the
+dated archive returned the expected 206 range, total length and multipart ETag.
+The first request used `requests`' automatic content decoding and returned
+2,573,142 decoded bytes instead of the requested compressed length; it was
+rejected and saved nothing. A second request read the raw response with HTTP
+content decoding disabled and returned exactly 1,048,576 compressed bytes,
+SHA-256 `c06b96d059b69f11e649078ab8e80acc723dcfa2b9cb451a656f1789e267de04`.
+The server reports `Content-Encoding: gzip` even when identity was requested.
+Future download/hash code must count and hash raw object bytes, not transparent
+HTTP-decompressed bytes, and verify content ranges and conditional ETag.
+
+The bounded gzip/tar prefix shows a directory followed by `observations.csv`,
+whose tar header declares 32,899,873,979 uncompressed bytes. No observation
+rows were inspected or saved. This is only the first member's header, not a
+complete archive listing, source SHA-256 or extraction-size measurement.
+A streaming filter may avoid materializing this table, but full source integrity,
+later member sizes, resource limits and the photo/observer join remain unproven.
