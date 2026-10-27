@@ -105,3 +105,19 @@ output directory or corpus was created. The prior attempt did not preserve rows,
 so this identifies the second attempt's collision, not necessarily the first's.
 The number, labels, owners and cross-split status of collisions remain unknown.
 The check still fails closed; no deduplication or replacement was performed.
+
+Attempt 03 was an aggregate-only diagnostic using commit `7c945eac`, with the
+same eight taxa and two 100-row pages each. Of 1,600 rows, zero observation IDs
+were repeated and two photo IDs appeared twice each. Both photo groups had
+different parent species labels; neither crossed the proposed observer split,
+had multiple observers, or had conflicting declared photo attribution/license.
+These are results of a new live API read, not a reconstruction of attempt 02.
+A photo may depict multiple species; the observations alone do not establish a
+single correct class. Do not silently choose one label or remove these examples
+from an already fixed evaluation. No training corpus, images or row-level
+identities were saved. The aggregate diagnostic receipt is
+`C:/CodexArtifacts/pretrained-reuse-r2/inat-bird-collision-diagnostic-20261028-attempt-01/summary.json`,
+SHA-256 `720453ea4f01f1adfeba4a4fd08a75d21ac75679865e930b3b0ea1f0e0586152`.
+Five focused tests and Ruff passed. Before creating a single-label development
+dataset, define and record a quarantine policy for ambiguous photo groups;
+future evaluation must retain and explicitly report the quarantine coverage.
