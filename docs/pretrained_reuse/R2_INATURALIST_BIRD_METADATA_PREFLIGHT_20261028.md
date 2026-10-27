@@ -233,6 +233,29 @@ Locations were not read or saved. Resolve a version-consistent license join or
 use the source only for the narrower photo-metadata purpose before claiming
 admission. No full-archive transfer has been started.
 
+### Photographer join: fixed stream protocol
+
+The provider's separate `photos.csv.gz` object was observed at 20,668,099,997
+compressed bytes with ETag `c8ded8376313d0a25357209f8cafd0db-40` and last
+modified 2026-09-27 16:45:05 UTC. A conditional 1 MiB raw range confirmed the
+documented tab-separated header. Among 25,523 complete prefix rows, photo IDs
+were numeric and licenses included CC-BY, CC0, and several noncommercial or
+other variants. The prefix is source-ordered, not representative.
+
+`scripts/scan_inat_photo_metadata.py` streams the full gzip object without
+writing it to disk, hashes raw compressed bytes, checks conditional ETag and
+length, validates gzip completion, and retains only the 1,598 distinct photo
+IDs in the pinned 1,600-row candidate-plus-quarantine snapshot. It records all
+source rows for a matching photo, including their observation UUID, photographer
+key and declared license; duplicates are not silently merged. A new private
+output directory is written only after a complete source scan and post-HEAD
+check. A 2 GiB disk reserve is enforced. The first observed full SHA-256 has no
+independent reference and is not proof that the API candidate snapshot and this
+monthly export represent identical source versions. Observation licenses,
+photo rights, source overlap and near-duplicates remain separate gates; no
+image bytes or model are used. If the stream fails, no partial output is treated
+as a completed scan. The run is CPU/network only and may take hours.
+
 ### Connected-person grouping primitive
 
 `scripts/inat_source_grouping.py` groups observation observers and photo
