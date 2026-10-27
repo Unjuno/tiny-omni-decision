@@ -1,5 +1,19 @@
 # Perception Test same-video temporal match: exploratory result
 
+## Brier convention for cross-report comparison
+
+The Brier values in this report use the **binary** convention: the squared
+error of the probability assigned to the correct binary event, equivalent to
+half the sum across the two categorical probabilities. The later
+[sequence-readout report](R2_AV_TEMPORAL_SCALE_V2_RESULTS_20261022.md) uses
+the sum across categorical options, as does `decision_math.brier_score`.
+Thus, for identical two-option probabilities and targets, multiply this report's
+Brier by two to compare on the summed convention: 0.2500 becomes 0.5000.
+Do not compare the numbers across reports without that conversion; the two
+reports also use different data and readouts. Accuracy, NLL, ECE, existing
+checkpoints and historical selection are unchanged. A regression test compares
+the two implementations on the same logits and targets.
+
 ## Result
 
 This is a development-only audio/video matching diagnostic. It does **not** close
