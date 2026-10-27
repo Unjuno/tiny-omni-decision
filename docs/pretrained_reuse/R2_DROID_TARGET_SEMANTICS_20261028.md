@@ -60,3 +60,27 @@ cohort. This does not establish instruction availability, usefulness or
 balanced coverage in the dense cohort. Those properties must be measured from
 the exact selected records before proposing an instruction-conditioned
 experiment; missing instructions must not be silently substituted.
+
+### Instruction availability in the dense training cohort
+
+The existing fresh-shard `audit.json` was joined by the existing canonical
+source ID to the frozen 275-row `train.jsonl`; all IDs matched uniquely. The
+audit aggregates normalized instruction strings over the entire episode and
+over instruction fields. On that basis 150 recordings have at least one
+instruction and 125 have none. By the original sparse target class, present /
+absent counts are `stop 16/13`, `x- 5/3`, `x+ 59/43`, `y- 11/7`,
+`y+ 10/13`, `z- 36/35`, `z+ 13/11`. These are recording counts, not dense
+window counts. They describe this train cohort only and do not establish that
+an instruction was available at a given window's prediction time. The audit
+does not retain per-step availability; using its episode-wide text directly
+could introduce future information. Sparse classes are also small.
+
+The check read no media or validation data. Inputs:
+`droid-fresh-next-action-prep-attempt-02/audit.json` SHA-256
+`dea0dfa4a0eefd24afaad5278f2a23662626b7573ae03e7bd9a66d55397b27f8` and
+`train.jsonl` SHA-256
+`4e14850bbbe2eee2a96116a97ca935dfd5dea91d197c00639ea7ed02e2d93341`.
+The join used `canonical_id` from `scripts/audit_droid_train_temporal.py`;
+instruction strings and identifying paths were not copied into this report.
+Any future conditioning experiment must audit step-level availability and
+missingness before fitting and preserve instruction/group isolation.
