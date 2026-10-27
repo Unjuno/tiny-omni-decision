@@ -1,3 +1,9 @@
+**2026-10-27 R2 balanced set same-label audio control:** Replacing audio with
+the same source-label recording from another video changed 972/2,581 sets,
+but original-minus-replacement exact accuracy was -0.04 points with an
+interval crossing zero. This does not prove correspondence is learned or
+that the inputs are equivalent. [Results](docs/pretrained_reuse/R2_BALANCED_SAME_LABEL_AUDIO_RESULTS_20261027.md).
+
 **2026-10-27 R2 balanced set objective:** Equal positive/negative candidate
 loss increased multi-target candidate recall but also false selections and
 calibration error; joint exact-set accuracy fell from 23.99% to 18.63% at
