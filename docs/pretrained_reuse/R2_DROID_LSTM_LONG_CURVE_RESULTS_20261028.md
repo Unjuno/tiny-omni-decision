@@ -45,3 +45,10 @@ files and the combined OOF file. Each row appeared exactly once at each epoch;
 the maximum absolute difference was `2.99e-8` across raw and corrected
 probabilities. The small corrected-probability difference reflects the OOF
 array's float32 storage. This checks aggregation, not independent model replay.
+
+Separately, all 20 saved weight files were checked against the recorded hashes,
+loaded into the 880-parameter LSTM, and evaluated on their corresponding held
+rows using the saved fold normalizers and original sensor/previous-command
+inputs. Raw predictions exactly matched the saved held-fold predictions (maximum
+absolute difference `0.0`, same local CPU/PyTorch environment). This checks
+weight reload and inference, not generalization to an independent dataset.
