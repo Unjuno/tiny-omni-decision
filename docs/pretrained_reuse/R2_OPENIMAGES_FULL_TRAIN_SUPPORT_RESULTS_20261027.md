@@ -1,5 +1,12 @@
 # Open Images full train support audit
 
+**Correction (2026-10-27):** This is a census of image groups in the train
+annotation object, not a count restricted to IDs in the official train image
+metadata. The 7,714 and per-class counts below are annotation-object upper
+bounds for train-metadata-eligible images. The train metadata join was not
+performed, so do not treat these counts as confirmed train images. The separate
+176-image inventory did use fixed IDs from the train metadata and is unaffected.
+
 The fixed [protocol](R2_OPENIMAGES_FULL_TRAIN_SUPPORT_PROTOCOL_20261027.md)
 streamed the complete 2,474,671,021-byte pinned train label object without
 persisting source rows. Its SHA-256 matched the existing manifest:
