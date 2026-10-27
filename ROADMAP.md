@@ -102,6 +102,12 @@ Accuracy by 6.21 points. This is nonblind sensitivity evidence; unmatched sound
 classes and distribution shift preclude a causal correspondence claim.
 [Results](docs/pretrained_reuse/R2_SOURCE_UNIMODAL_CV_INTERVENTION_RESULTS_20261027.md).
 
+**2026-10-27 R2 DROID previous-command baseline:** A train-fold-only smoothed
+transition table using extra previous-command input scored 94.55% overall but
+0/15 when the next command changed. This exposes task persistence; it is not
+an equal-input architecture comparison or a multimodal quality result.
+[Results](docs/pretrained_reuse/R2_DROID_PREVIOUS_COMMAND_CV_RESULTS_20261027.md).
+
 **2026-10-27 R2 train-only source-candidate unimodal comparison:** Three
 freshly trained audio-only, video-only and joint readouts were compared over
 three held-out video-group folds of the existing official-train source. Joint
