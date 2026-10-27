@@ -1,3 +1,10 @@
+**2026-10-28 R2 GRID direct speaker bundle audit:** Official per-talker s13
+audio, alignment and video filename inventories agree for all 1,000 codes,
+but the frozen validation manifest's s13 rows overlap 0/1,000 codes. The old
+pilot selection is invalid; do not remap or evaluate it. Rebuild a new
+speaker-grouped manifest from official per-talker sources and verify all
+speakers before freezing a replacement. [Audit](docs/pretrained_reuse/R2_GRID_DIRECT_SPEAKER_BUNDLE_AUDIT_20261028.md).
+
 **2026-10-28 R2 iNaturalist photo identity join:** The pinned full photo
 metadata scan joined 1,572/1,598 target IDs; 26 were missing and six IDs were
 ambiguous. Connected observer/photographer grouping leaves 88 validation rows
