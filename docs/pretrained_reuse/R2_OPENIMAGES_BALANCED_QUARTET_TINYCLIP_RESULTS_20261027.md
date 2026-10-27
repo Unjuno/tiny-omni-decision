@@ -27,6 +27,19 @@ verify ownership, and overlap with TinyCLIP's YFCC pretraining data is unknown.
 No training, model selection, prompt search, calibration fitting, or sealed
 evaluation occurred. The existing evaluations were not altered.
 
+### Paired within-quartet uncertainty diagnostic (2026-10-28)
+
+The saved prediction file was rehashed against the pinned SHA below and all 15
+four-row groups were checked for identical options and one correct occurrence
+per option. Aligned-image minus blank-image Accuracy was +20.00 percentage
+points. Resampling the 15 complete quartets with replacement 10,000 times
+(NumPy seed 17, percentile 95% interval) gives [+6.67, +33.33] points. This
+interval describes this small, previously inspected development sample under
+quartet resampling. It does not establish independent photographer or source
+groups, resolve pretraining overlap, or measure production performance. The
+deranged-image control is excluded from this bootstrap because donor images
+cross quartet boundaries. No new model inference or checkpoint selection ran.
+
 Raw SHA-256 for
 `C:/CodexArtifacts/pretrained-reuse-r2/openimages-balanced-quartet-tinyclip-20261027-attempt-01/summary.json`:
 `ad55c0dc20a65307604dc26ef0e24877d3c5ad29a53e9492f3af1a9cf24bb29d`;
