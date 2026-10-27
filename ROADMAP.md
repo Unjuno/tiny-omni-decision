@@ -1,3 +1,10 @@
+**2026-10-27 R2 ADL source range probe:** The third-smallest activity archive
+returned an exact bounded HTTP 206 range containing its ZIP directory. No
+media/label payload or whole-archive checksum was read, and the response had
+no ETag. This supports a low-storage metadata inventory with an explicit weaker
+integrity boundary; it does not by itself admit a source for training. See the
+[source report](docs/pretrained_reuse/R2_ADL_AUDIO_VIBRATION_SOURCE_20261027.md).
+
 **2026-10-27 R2 ADL participant split preflight:** A preregistered hash rule
 places each of two inspected activities into the same 7 train and 2 validation
 participant groups, with zero group overlap. Five sensors match within each

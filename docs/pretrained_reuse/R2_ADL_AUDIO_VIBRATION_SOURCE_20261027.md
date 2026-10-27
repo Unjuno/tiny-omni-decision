@@ -1,5 +1,30 @@
 # Source screen: ambient audio, vibration and environmental measurements
 
+## Bounded ZIP range capability
+
+A predeclared check of the third-smallest archive, `17_stop-toaster.zip`,
+requested its final 65,536 bytes. The publisher returned HTTP 206 with the
+exact requested byte range and total length. Its ZIP central directory is 686
+bytes and lies within the returned tail. The response supplied no ETag. The
+check transferred no waveform or label content and did not verify the complete
+archive's publisher MD5. Therefore, range support permits a low-storage source
+inventory, but partial bytes alone are not the same integrity evidence as the
+fully downloaded and MD5-verified first two archives.
+
+The first range attempt received the requested data but failed to import the
+existing ZIP parser. Its error and protocol remain in
+`C:/CodexArtifacts/pretrained-reuse-r2/adl-zip-range-20261027-attempt-01/`.
+The successful second attempt explicitly set the repository import path and
+used a separate output directory. It took 91.90 seconds; no model ran. The
+[result receipt](R2_ADL_ZIP_RANGE_20261027.json) has SHA-256
+`3da7949bb5fee8187d3d4176fa5b097beca7a17bb4c3145810eb76df354f8171`;
+the executed script is preserved outside Git at
+`C:/CodexArtifacts/pretrained-reuse-r2/adl-zip-range-probe-retry-20261027.py`,
+SHA-256 `56080ae63ec1826de68a22446935b3a447f4895e77538d52a0b89257d55dc208`.
+Any later partial-member inventory must check member CRC and retain hashes,
+record the weaker whole-archive integrity boundary, and remain a source
+feasibility screen until the relevant admission requirements are satisfied.
+
 ## Fixed participant split: two activities inspected
 
 The second-smallest activity archive, `10_light-off.zip`, was received in full

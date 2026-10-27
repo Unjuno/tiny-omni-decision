@@ -1,0 +1,19 @@
+{
+  "archive": "17_stop-toaster.zip",
+  "selection_rule": "third smallest published activity archive by size/name",
+  "expected_size": 72770695,
+  "requested_bytes": 65536,
+  "source_record_sha256": "c01bf60460981280c5063ea54c038d41c751bf3056220059c3896cbc5d2b97c6",
+  "media_payloads_or_labels_read": false,
+  "whole_archive_md5_verified": false,
+  "status": "PASS_RANGE",
+  "elapsed_seconds": 91.90354699990712,
+  "http_status": 206,
+  "content_range": "bytes 72705159-72770694/72770695",
+  "etag": null,
+  "tail_sha256": "7a170fbc393f7ec17a61785443cf4a72e1e05e89d02a9df0bbe081f17acaa696",
+  "zip_entries": 6,
+  "central_directory_bytes": 686,
+  "central_directory_offset": 72769987,
+  "central_directory_within_tail": true
+}
