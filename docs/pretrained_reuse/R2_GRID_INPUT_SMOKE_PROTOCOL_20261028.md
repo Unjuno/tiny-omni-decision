@@ -31,3 +31,7 @@ All 16 selected six-word alignments matched their decoded codes and none occurs
 in the existing Lombard train manifest. This does not verify media presence or
 speaker independence. `scripts/prepare_grid_smoke_manifest.py` records the
 pinned inputs and selection rule; no model was run.
+The lexicographic smoke is intentionally not class-balanced: these 16 examples
+share one command, one color and one preposition; they cover four letters, ten
+numbers and four adverbs. This confirms the sample is suitable only for
+functional input checks and must not be reported as broad task accuracy.
