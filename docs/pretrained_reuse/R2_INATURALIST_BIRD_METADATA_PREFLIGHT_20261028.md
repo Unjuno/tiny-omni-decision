@@ -76,3 +76,24 @@ Both are in `C:/CodexArtifacts/pretrained-reuse-r2/` with prefixes
 `inaturalist-bird-taxon-ids-20261028-attempt-01` and
 `inaturalist-bird-taxon-preflight-20261028-attempt-01` respectively. They are
 aggregate receipts, not saved API responses, a frozen export or a training set.
+
+## Bounded development snapshot attempt
+
+The new `scripts/snapshot_inat_birds.py` fixed the eight taxon IDs, queried two
+100-row pages per taxon, selected a licensed attributed photo per observation,
+and assigned train/validation using a stable observer-derived key. It preserves
+descendant taxon IDs while assigning the requested parent ID. All 16 HTTP
+requests returned 200, and each returned 100 rows that passed the local metadata
+gate. The final global uniqueness check raised `ValueError: duplicate observation
+or photo`; the command exited 1 before creating its output directory. It did
+not retain the response rows or identify whether the duplicate was an observation
+or a photo, so the precise cause is unknown. No corpus, media or model resulted.
+
+Attempted command, with `PYTHONPATH=src;.`:
+`python -u -m scripts.snapshot_inat_birds --output-dir C:/CodexArtifacts/pretrained-reuse-r2/inat-bird-development-snapshot-20261028-attempt-01`.
+Source commit `b593aaa6`; three focused tests and Ruff passed before the attempt.
+Do not silently discard duplicates or reuse this failed attempt as a corpus.
+A future retry must first distinguish collision types and define deterministic
+handling, then recheck global observer/photo disjointness and label conflicts.
+Observer keys are pseudonyms, not anonymous data. The snapshot would remain
+development-only and require per-photo rights, media and visual-duplicate checks.

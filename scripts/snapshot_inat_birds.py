@@ -42,8 +42,10 @@ def clean_record(row, class_taxon_id):
 def validate_snapshot(rows):
     ids, photos, observers = set(), set(), {}
     for row in rows:
-        if row["observation_id"] in ids or row["photo_id"] in photos:
-            raise ValueError("duplicate observation or photo")
+        if row["observation_id"] in ids:
+            raise ValueError("duplicate observation")
+        if row["photo_id"] in photos:
+            raise ValueError("duplicate photo")
         ids.add(row["observation_id"])
         photos.add(row["photo_id"])
         old = observers.setdefault(row["observer_key"], row["split"])

@@ -37,5 +37,14 @@ def test_photo_and_observation_licenses_fail_closed():
 
 def test_duplicate_observation_rejected():
     row = clean_record(observation(), 6930)
-    with pytest.raises(ValueError, match="duplicate"):
+    with pytest.raises(ValueError, match="duplicate observation"):
         validate_snapshot([row, row])
+
+
+def test_duplicate_photo_rejected_separately():
+    first = clean_record(observation(), 6930)
+    other = observation(observer=43)
+    other["id"] = 11
+    second = clean_record(other, 6930)
+    with pytest.raises(ValueError, match="duplicate photo"):
+        validate_snapshot([first, second])
