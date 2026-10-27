@@ -1,5 +1,11 @@
 # Full native language and audio features: completed input preparation
 
+**Later continuation:** The shared readout was subsequently trained and
+evaluated in the [native attention/LSTM comparison](R2_NATIVE_TEMPORAL_FIT_RESULTS_20261016.md)
+and the [32,768-update learning curve](R2_NATIVE_LONG_BUDGET_RESULTS_20261016.md).
+The untrained-readout statement below records the state at feature extraction;
+neither later fit established product quality or completed R2.
+
 2026-10-16. **All registered language and audio examples are extracted and pass
 independent full recomputation. The shared Decision readout remains untrained.**
 This completes the language/audio observation-feature unit, not R2, model quality,
