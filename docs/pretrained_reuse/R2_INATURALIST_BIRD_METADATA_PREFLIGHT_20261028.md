@@ -97,3 +97,11 @@ A future retry must first distinguish collision types and define deterministic
 handling, then recheck global observer/photo disjointness and label conflicts.
 Observer keys are pseudonyms, not anonymous data. The snapshot would remain
 development-only and require per-photo rights, media and visual-duplicate checks.
+
+Attempt 02 used commit `6ecc5185`, which distinguishes duplicate observation
+and photo IDs and adds a regression test. All 16 responses again returned 200;
+the final check failed specifically with `ValueError: duplicate photo`. No
+output directory or corpus was created. The prior attempt did not preserve rows,
+so this identifies the second attempt's collision, not necessarily the first's.
+The number, labels, owners and cross-split status of collisions remain unknown.
+The check still fails closed; no deduplication or replacement was performed.
