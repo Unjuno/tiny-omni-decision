@@ -1,3 +1,9 @@
+**2026-10-27 R2 visual LSTM residual:** A 32-wide per-candidate LSTM was
+trained on the same train-only video-group folds as the joint baseline.
+Accuracy changed 55.15% to 55.34%, with a paired interval crossing zero;
+the head adds 106,752 parameters. This is nonblind oracle-track development
+evidence, not a general temporal-model ceiling. [Results](docs/pretrained_reuse/R2_SOURCE_VIDEO_LSTM_RESULTS_20261027.md).
+
 **2026-10-27 R2 temporal-input coverage:** In the existing source-candidate
 training plan, 71% of records have one audio window and 59% of visual
 candidates have one frame. Padding and variable-length masks must be handled
