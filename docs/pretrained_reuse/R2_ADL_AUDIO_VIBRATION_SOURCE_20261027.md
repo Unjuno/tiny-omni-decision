@@ -1,5 +1,37 @@
 # Source screen: ambient audio, vibration and environmental measurements
 
+## Fixed participant-split feasibility: first activity
+
+Before opening the second activity archive, the
+[development split protocol](R2_ADL_PARTICIPANT_SPLIT_PROTOCOL_20261027.md)
+fixed a seed-17 hash rule that assigns each real participant consistently across
+activities and devices. The special no-participant ID remains unassigned.
+On the already inspected `23_take-from-stove` activity, the rule assigned
+293 events from 7 people to train and 75 events from 2 people to validation,
+with zero participant overlap or unassigned events. All five sensors matched
+the same event identities. This passes the **single inspected activity**
+coverage check only; it does not establish support in the other 24 activities,
+independent recording sessions, physical synchronization, model quality or a
+product audit. No model was fit or scored.
+
+The exact [first-activity receipt](R2_ADL_PARTICIPANT_SPLIT_FIRST_20261027.json)
+has SHA-256 `7ba09527d0309a3327a06eecbcfcc61d30d7eb6a7e8bbc16ef6e343deffb0c43`.
+The LF-normalized protocol SHA-256 is
+`9c301d4a3acc37711d25943e7165533410bb3297630eef19c7f6431d2daaf5f8`;
+the replayed script SHA-256 was
+`27d27e8fbe62c83de8634ef85b29252af77228fce896aa29da72c8d378aa0406`.
+After the initial execution, the script was changed to normalize CRLF/LF
+protocol line endings; the replay was byte-identical to the first result.
+Unit tests verify fixed
+assignments, invalid IDs, special ID 999, duplicate pairs, absent split
+coverage and line-ending-independent protocol hashing.
+
+The second-smallest archive `10_light-off.zip` (69,650,916 bytes) was selected
+before examining its data and is being fetched into a separate attempt
+directory. It must match publisher MD5 `c554e01e9136100a623791fda4be0b0d`
+before any content inspection. Do not fit a two-class task or treat these two
+source samples as a representative benchmark.
+
 ## Completed bounded archive preflight
 
 After the source-only entry below, the predeclared smallest archive
