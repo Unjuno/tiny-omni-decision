@@ -38,6 +38,28 @@ not yet an admitted task or a blind quality result. Freeze source and split
 rules before decoding, and verify actual sentence/source and speaker overlap;
 do not equate matching numerical speaker IDs with matching individuals.
 
+### Derivative index versus existing Lombard train codes
+
+A preliminary exact-code check used the public derivative
+[`SilentSpeak/EGCLLC` alignment index](https://huggingface.co/datasets/SilentSpeak/EGCLLC/blob/b61192d1a5790843425862111a0eb870d911e8a9/alignments.txt),
+not the still-pending Zenodo archive. Its 32,827 index paths contain 32,827
+distinct six-character utterance codes. The existing Lombard train manifest
+contains 4,080 rows and 1,968 distinct actual codes. Seven distinct codes match,
+affecting eight Lombard train rows. This is a concrete warning against assuming
+the author's distinct-sentence statement proves zero overlap for these particular
+files. It does not establish whether the derivative index accurately represents
+the original, whether alignment contents match, or whether speakers overlap.
+No validation or media was read. Compare the verified original alignment archive
+and inspect the specific code mapping before declaring source/content isolation.
+
+The aggregate output is
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-lombard-index-20261028-attempt-02.json`,
+SHA-256 `1e7265574dfbf80af3ff75c53e783fd32621deae21bad14070eafd3d6ad2a921`.
+It pins the index, train manifest and script hashes. The initial attempt used
+an equivalent script before a formatting-only correction and remains preserved.
+Two focused tests and Ruff passed; no original alignment or media was fetched
+by this comparison.
+
 The fixed vocabulary, scripted sentences, limited speakers and potential
 audio-only or lip-only shortcuts also preclude treating a high score on this
 corpus as general Omni Decision quality. Before use, independently establish
