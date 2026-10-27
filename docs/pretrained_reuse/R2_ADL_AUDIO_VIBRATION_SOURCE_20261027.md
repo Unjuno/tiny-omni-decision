@@ -1,5 +1,43 @@
 # Source screen: ambient audio, vibration and environmental measurements
 
+## Partial third activity: member-CRC feasibility only
+
+Using the fixed third-smallest archive `17_stop-toaster.zip`, the pilot fetched
+the 65,536-byte ZIP tail and a 14,550,386-byte range containing the first
+sensor's HDF5 member. The ZIP tail matched the earlier independently recorded
+tail SHA-256. The local and central ZIP headers agreed, the member decompressed
+within the fixed 128 MiB bound, and its CRC-32 matched the central directory.
+Its 41,652,368 decoded bytes had SHA-256
+`6dfddd035cf6d5385160f6a2942dd88d6c0207ee751df8ff8ddea145bab2cb77`.
+The raw member was not written to disk. Compressed audio/vibration payload bytes
+were transferred and decoded in memory as part of the HDF5 file, but waveform
+arrays were not read for the metadata check and no model was fit or scored.
+
+The one sensor contains 368 unique participant/trial rows from eight people.
+Under the unchanged preregistered hash, train has six people/253 rows and
+validation has two people/115 rows, with no unassigned rows. This is only a
+single-sensor source feasibility observation; the other four sensors and
+cross-activity content have not been checked for this activity.
+
+**Integrity boundary:** neither HTTP response supplied an ETag, and the complete
+archive's publisher MD5 `46b56be5a1f861df7274480f0e0c43a0` was not computed.
+ZIP CRC and a locally computed member SHA-256 detect accidental corruption but
+do not authenticate the member against that publisher whole-archive MD5. This
+partial result is not a training admission or product-quality result. The
+[receipt](R2_ADL_PARTIAL_THIRD_20261027.json) SHA-256 is
+`e8af54b28ca7232a74cc3a86ce7427405d7509cb80a6f9bf6f526d251b9ce3bc`;
+the executed script SHA-256 is
+`a1e13bdf1568b1f161ff89168970e0b924aa5eefdb52590ba222d0ca4eb37349`.
+Execution took 136.57 seconds on CPU. Both input ranges used HTTPS and exact
+Content-Range/length checks; no GPU or cloud compute was used. The full local
+CPU suite reported **2,646 passed, 11 skipped**, and Ruff passed.
+
+Before any fit, retain all source activities and obtain a defensible split,
+stronger source-integrity evidence, timing checks and matched input controls.
+The remaining 22 activities, 999 no-participant source and five-sensor
+agreement for the partial third archive remain open. This source also has no
+released video and cannot satisfy the full Omni product target alone.
+
 ## Bounded ZIP range capability
 
 A predeclared check of the third-smallest archive, `17_stop-toaster.zip`,

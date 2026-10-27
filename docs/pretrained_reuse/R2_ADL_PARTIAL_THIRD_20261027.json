@@ -1,0 +1,42 @@
+{
+  "source_record_sha256": "c01bf60460981280c5063ea54c038d41c751bf3056220059c3896cbc5d2b97c6",
+  "participant_split_protocol_sha256": "9c301d4a3acc37711d25943e7165533410bb3297630eef19c7f6431d2daaf5f8",
+  "archive": "17_stop-toaster.zip",
+  "archive_publisher_md5": "md5:46b56be5a1f861df7274480f0e0c43a0",
+  "selection_rule": "third smallest archive; its multisensor-1 HDF5 member",
+  "expected_tail_sha256": "7a170fbc393f7ec17a61785443cf4a72e1e05e89d02a9df0bbe081f17acaa696",
+  "script_sha256": "a1e13bdf1568b1f161ff89168970e0b924aa5eefdb52590ba222d0ca4eb37349",
+  "whole_archive_md5_verified": false,
+  "use": "source feasibility only, no fit, validation score or audit",
+  "status": "PASS_MEMBER_CRC_SOURCE_FEASIBILITY_ONLY",
+  "elapsed_seconds": 136.57258749986067,
+  "tail_bytes": 65536,
+  "member_range_bytes": 14550386,
+  "tail_etag": null,
+  "member_etag": null,
+  "member_name": "17_stop-toaster/17_stop-toaster_multisensor-1.hdf5",
+  "member_bytes": 41652368,
+  "member_sha256": "6dfddd035cf6d5385160f6a2942dd88d6c0207ee751df8ff8ddea145bab2cb77",
+  "member_crc32": "86319886",
+  "rows": 368,
+  "participant_count": 8,
+  "split": {
+    "train": {
+      "participants": 6,
+      "events": 253
+    },
+    "validation": {
+      "participants": 2,
+      "events": 115
+    },
+    "unassigned_events": 0,
+    "coverage_pass": true
+  },
+  "rates_min": 1075.18798828125,
+  "rates_max": 1090.5982666015625,
+  "raw_member_retained": false,
+  "waveform_values_read": false,
+  "other_four_sensors_checked": false,
+  "training_or_validation_scoring": false,
+  "sealed_audit_loaded": false
+}

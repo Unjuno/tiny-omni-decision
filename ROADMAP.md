@@ -1,3 +1,10 @@
+**2026-10-27 R2 ADL partial-member feasibility:** A bounded ZIP range fetched
+one sensor of the third activity, passed member CRC and yielded 368 rows from
+eight people (six train / two validation). The full archive MD5 and four
+other sensors remain unverified; this is a partial source screen, not a
+training admission or quality score. See the
+[source report](docs/pretrained_reuse/R2_ADL_AUDIO_VIBRATION_SOURCE_20261027.md).
+
 **2026-10-27 R2 ADL source range probe:** The third-smallest activity archive
 returned an exact bounded HTTP 206 range containing its ZIP directory. No
 media/label payload or whole-archive checksum was read, and the response had
