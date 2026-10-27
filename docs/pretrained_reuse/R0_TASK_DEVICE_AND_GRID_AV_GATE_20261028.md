@@ -24,6 +24,26 @@ no new quality result and does not approve GRID for product distribution.
   there is no approved sensor task paired with a decision label in the current
   inventory.
 
+## User-confirmed engineering gates (2026-10-28)
+
+- Device: local Windows PC with RTX 3080 Laptop GPU (16 GiB); CPU is the
+  bounded fallback. Do not use paid/cloud compute.
+- Model: provisionally target 100–200M total parameters before quantization.
+- Package: provisionally target at most 200 MB only after a real quantized
+  export, reload-parity check and package accounting; do not treat an estimate
+  as a pass.
+- Accuracy: >=95% on each separately defined task is the aspiration, with 98%
+  as a stretch target. Do not pool unrelated tasks or treat these targets as
+  achieved by proxy benchmarks.
+- Calibration: report NLL, Brier, ECE and reliability bins for every task, but
+  no numeric calibration acceptance floor has been approved yet.
+- Runtime/cost: no paid compute is authorized; record per-run wall time, GPU
+  use and peak VRAM. A numerical wall-clock ceiling and release latency target
+  remain unset.
+
+These engineering criteria do not convert research-only GRID material into
+product-cleared data or establish a release gate for any benchmark.
+
 ## First task suite
 
 The suite is intentionally task-specific; success on one row does not imply
