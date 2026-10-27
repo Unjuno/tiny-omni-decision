@@ -95,6 +95,20 @@ def main():
               for s in ("train", "validation")}
     if groups["train"] & groups["validation"]:
         raise ValueError("connected component crosses splits")
+    component_sizes = Counter(row["component_key"] for row in candidates)
+    classes = sorted({row["class_taxon_id"] for row, _ in rows})
+    per_class = {}
+    for taxon in classes:
+        subset = [row for row in candidates if row["class_taxon_id"] == taxon]
+        per_class[str(taxon)] = {
+            "rows": len(subset),
+            "quarantined_rows": sum(row["class_taxon_id"] == taxon for row in quarantine),
+            "components": len({row["component_key"] for row in subset}),
+            "splits": {s: {
+                "rows": sum(row["split"] == s for row in subset),
+                "components": len({row["component_key"] for row in subset if row["split"] == s}),
+            } for s in groups},
+        }
     output.mkdir(parents=True)
     hashes = {}
     for name, payload in (("private-candidates.json", candidates),
@@ -107,6 +121,9 @@ def main():
                "join_failure_reasons": dict(reasons),
                "split_counts": {s: sum(r["split"] == s for r in candidates) for s in groups},
                "split_components": {s: len(g) for s, g in groups.items()},
+               "component_counts": {"total": len(component_sizes),
+                                    "largest_rows": max(component_sizes.values(), default=0)},
+               "per_class": per_class,
                "source_scan_summary_sha256": args.scan_summary_sha256,
                "uuid_map_sha256": UUID_SHA, "snapshot_pins": PINS, "output_hashes": hashes,
                "limitations": ["unverified source-version consistency", "no image hash checks",

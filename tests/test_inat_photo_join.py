@@ -41,9 +41,11 @@ def test_full_join_preserves_ambiguous_and_unmatched_rows(tmp_path, monkeypatch)
     snap, uuid_dir, scan = (tmp_path / x for x in ("snapshot", "uuid", "scan"))
     for folder in (snap, uuid_dir, scan):
         folder.mkdir()
-    rows = [{"observation_id": i, "photo_id": i, "photo_license": "cc-by",
+    rows = [{"observation_id": i, "photo_id": i, "class_taxon_id": 6930,
+             "photo_license": "cc-by",
              "observer_key": f"observer-{i}"} for i in range(1596)]
     ambiguous = [dict(rows[0], observation_id=1600 + i) for i in range(4)]
+    ambiguous[0]["class_taxon_id"] = 999
     pins = {"private-snapshot.json": save(snap / "private-snapshot.json", rows),
             "private-quarantine.json": save(snap / "private-quarantine.json", ambiguous)}
     all_rows = rows + ambiguous
@@ -76,3 +78,9 @@ def test_full_join_preserves_ambiguous_and_unmatched_rows(tmp_path, monkeypatch)
     assert result["candidate_count"] == 1595
     assert result["quarantine_count"] == 5
     assert result["join_failure_reasons"]["source_row_missing"] == 2
+    assert result["component_counts"]["total"] == 1
+    assert result["component_counts"]["largest_rows"] == 1595
+    assert result["per_class"]["6930"]["rows"] == 1595
+    assert result["per_class"]["6930"]["components"] == 1
+    assert result["per_class"]["999"]["rows"] == 0
+    assert result["per_class"]["999"]["quarantined_rows"] == 1
