@@ -102,6 +102,14 @@ Accuracy by 6.21 points. This is nonblind sensitivity evidence; unmatched sound
 classes and distribution shift preclude a causal correspondence claim.
 [Results](docs/pretrained_reuse/R2_SOURCE_UNIMODAL_CV_INTERVENTION_RESULTS_20261027.md).
 
+**2026-10-27 R2 DROID small LSTM follow-up:** An 880-parameter LSTM/head was
+trained for 50 epochs on the same dense train-group folds and weighted loss as
+the 840-parameter linear head. Weighted Accuracy improved, but NLL, calibration
+and exact changed-command accuracy worsened; corrected LSTM predicted no
+changes. Different preprocessing and initialization limit attribution; this
+one nonblind configuration does not establish a temporal-model ceiling.
+[Results](docs/pretrained_reuse/R2_DROID_DENSE_LSTM_CV_RESULTS_20261027.md).
+
 **2026-10-27 R2 DROID weighted-head sensor intervention:** In train-group CV,
 within-recording sensor shifts worsen NLL but increase both apparent change
 recall and false alarms; exact changed-command correct counts are 444 aligned
