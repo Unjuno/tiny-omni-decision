@@ -43,13 +43,34 @@ an independent privacy or downstream-use assessment.
 ## Actual access and limitations
 
 The public Zenodo record and indexed publisher descriptions were read on
-2026-10-27 JST. A local Zenodo API request confirmed version `1.0`, 29 files,
-and dataset license `cc-by-4.0`; the listed README has 5,452 bytes and MD5
-`61f46b9339b227c4571a796dff9bd73b`. No source archives, raw media,
-annotations, model weights or sealed data were acquired, decoded or trained.
-The browser-backed API request failed, and an additional attempt to retain the
-record and README was still running at the time of this entry. A separate data
-license was checked; the paper explicitly identifies the dataset as CC BY 4.0.
+2026-10-27 JST. The local Zenodo API confirmed version `1.0`, 29 files, and
+dataset license `cc-by-4.0`. Its 5,452-byte README was downloaded and matched
+the publisher MD5 `61f46b9339b227c4571a796dff9bd73b`.
+
+The README says the data are stored by activity and sensor in HDF5 files. It
+lists `participant`, `trial`, `timestamp` and `vibration_sample_rate` columns,
+with audio and three vibration axes stored as ragged arrays. This is a feasible
+split/loader lead, not proof that the actual columns, IDs and times are correct
+or sufficiently independent. It also says infrared/light measurements have
+separate timestamps; do not assume those streams are already row-aligned.
+The browser-backed API request failed, while the local API and README retrieval
+completed. A separate data license was checked; the paper explicitly identifies
+the dataset as CC BY 4.0.
+
+Original downloaded metadata and README are retained outside Git in
+`C:/CodexArtifacts/pretrained-reuse-r2/adl-audio-vibration-source-20261027-attempt-01/`:
+
+- Record SHA-256: `c01bf60460981280c5063ea54c038d41c751bf3056220059c3896cbc5d2b97c6`.
+- README SHA-256: `d5fe3c9097226f00656a65b86d8374a4bf62c42f8c80b156cbe2a69ab33f83ac`.
+
+A separate predeclared preflight is acquiring the smallest source archive,
+`23_take-from-stove.zip` (69,152,997 bytes), to inspect HDF5 structure. It was
+still in progress at the time of this entry. Its output directory and complete
+protocol are `C:/CodexArtifacts/pretrained-reuse-r2/adl-audio-vibration-archive-20261027-attempt-01/`.
+An archived publisher MD5 is required before inspection; a 1 GiB free-space
+reserve and 128 MiB uncompressed member cap apply. No source archive had been
+successfully acquired at this entry; no model weights or sealed data were
+opened and no training occurred.
 
 The complete archive set is listed as approximately 4.6 GB; local C: free space
 was approximately 1.35 GB during the preflight. Do not download the whole set
