@@ -1,9 +1,15 @@
+**2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
+64-quartet / 256-query sample completed on CPU with integrity and order checks.
+Joint Accuracy was 34.38%, but NLL/Brier/ECE were poor (2.049/0.911/0.337);
+video mismatch reduced Accuracy to 17.97%, while mismatch-audio Accuracy was
+24.61%. This narrow development probe shows input correspondence sensitivity,
+not general AV quality; product gates remain unmet. [Report](docs/pretrained_reuse/R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md).
+
 **2026-10-28 R2 GRID corrected matched-input smoke:** The first fixed quartet
-ran through the pinned Whisper/VideoPrism/Lombard correspondence path on CPU
-and returned valid JSON; option/ID reordering and uniform missing-input gates
-passed. It chose the same video for all four balanced roles (1/4 target match)
-in this one quartet, not a task-quality estimate. Full 256-role evaluation is
-still open. [Smoke](docs/pretrained_reuse/R2_GRID_DIRECT_PILOT_TECHNICAL_SMOKE_20261028.md).
+passed the pinned Whisper/VideoPrism/Lombard interface, JSON, option-order and
+uniform missing-input checks. It chose the same video for all four roles
+(1/4 target match), so remains a technical smoke only.
+[Smoke](docs/pretrained_reuse/R2_GRID_DIRECT_PILOT_TECHNICAL_SMOKE_20261028.md).
 
 **2026-10-28 R2 GRID direct speaker bundle audit:** All eight frozen validation
 speaker bundles agree across 1,000 audio/alignment/video codes. The frozen

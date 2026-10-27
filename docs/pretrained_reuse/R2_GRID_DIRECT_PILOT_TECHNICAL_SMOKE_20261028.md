@@ -58,14 +58,13 @@ Receipt SHA-256:
 Worker result SHA-256:
 `30caf3b500a1916e2692336390c00286472864b3c371f6d4b4cb7a2be281eb88`.
 
-## Next measurement
+## Subsequent full evaluation
 
-The next step is to run the entire frozen 64-quartet / 256-role development
-sample with matched audio/video and the prespecified audio-only, video-only,
-option-order, mismatched-audio and mismatched-video controls. Report
-Accuracy/NLL/Brier/ECE and speaker-grouped uncertainty only after all rows are
-processed. Do not tune on this development sample or promote a product model.
-The GPU was occupied at 15,821/16,384 MiB by the existing Orbitune job; it was
-not interrupted. On the CPU worker's measured rate, 255 distinct video
-features project to roughly 48 minutes, excluding setup and the additional
-audio encoder pass.
+The frozen 64-quartet / 256-role development sample subsequently completed
+with matched audio/video and uniform missing-input, option-order,
+mismatched-audio and mismatched-video controls. The actual result, full metrics,
+speaker-grouped intervals, source hashes and resource measurements are in
+[`R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md`](R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md).
+The original 48-minute CPU projection was too high: batched VideoPrism worker
+execution completed the evaluation in 894.12 seconds. Do not tune this sample
+or promote a product model.

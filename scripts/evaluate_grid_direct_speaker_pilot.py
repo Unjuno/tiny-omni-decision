@@ -17,7 +17,6 @@ from pathlib import Path
 import numpy as np
 
 from scripts.audit_droid_train_temporal import digest
-from scripts.lombard_temporal_model import TemporalSlotHead
 from tiny_omni_decision.native_av_correspondence import NativeAVCorrespondence
 
 ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r2")
@@ -51,9 +50,9 @@ PINNED = {
     Path(
         "scripts/lombard_temporal_model.py"
     ): "ba0e87fdacd9a465cbbac6557b0c66f333752f6fb6929123a53258546b56daee",
-    Path(
-        "src/tiny_omni_decision/native_av_correspondence.py"
-    ): "d18eb335082f8d6a326b07c5ecfbc22e83b059c6e3a4b4b55bf9fab2f7311",
+    Path("src/tiny_omni_decision/native_av_correspondence.py"): (
+        "d18eb335082f8d6a326b07c5ecfbc22e83b059c6e3a4b4b55b45bf9fab2f7311"
+    ),
     WORKER: "5857a1d8973c7995c67efed448a87561e43a64ed122e49446d1d1e3f1a074093",
     VIDEOS / "s30.zip": "69e7c2ef14b1bd4f2d0012a8a13fe8e9375c4f11a03c4de9f03f4071f48f12fd",
 }
@@ -133,12 +132,17 @@ def speaker_bootstrap(rows: list[dict], field_a: str, field_b: str, *, iteration
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--video-range-dir", type=Path, default=RANGE_DIR)
     parser.add_argument("--worker-batch-size", type=int, default=32)
+    parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args()
-    out = args.output.resolve()
-    if out.exists() or out.is_relative_to(REPO) or not 1 <= args.worker_batch_size <= 40:
+    out = args.output.resolve() if args.output else None
+    if (
+        (not args.preflight_only and out is None)
+        or (out is not None and (out.exists() or out.is_relative_to(REPO)))
+        or not 1 <= args.worker_batch_size <= 40
+    ):
         raise ValueError("new external output and safe worker batch size required")
     for path, expected in PINNED.items():
         if digest(path) != expected:
@@ -197,7 +201,25 @@ def main() -> None:
             video_bytes[("s30", code)] = payload
     if set(audio_bytes) != set(video_bytes) or len(video_bytes) != 255:
         raise ValueError("selected audio/video identities do not align")
+    if args.preflight_only:
+        print(
+            json.dumps(
+                {
+                    "status": "PASS_PREFLIGHT",
+                    "quartets": len(rows),
+                    "queries": sum(len(row["queries"]) for row in rows),
+                    "unique_audio_assets": len(audio_bytes),
+                    "unique_video_assets": len(video_bytes),
+                    "range_video_assets": len(video_records),
+                    "source_hashes_verified": len(verified_source_hashes),
+                    "gpu_used": False,
+                    "sealed_audit_read": False,
+                }
+            )
+        )
+        return
 
+    assert out is not None
     out.mkdir(parents=True)
     started = time.perf_counter()
     media_dir = out / "media"
@@ -219,6 +241,8 @@ def main() -> None:
     from transformers import WhisperConfig, WhisperFeatureExtractor
     from transformers.models.whisper.modeling_whisper import WhisperEncoder
 
+    from scripts.lombard_temporal_model import TemporalSlotHead
+
     torch.set_num_threads(4)
     encoder = WhisperEncoder(WhisperConfig.from_pretrained(SPEECH, local_files_only=True))
     encoder.load_state_dict(load_file(SPEECH / "encoder.safetensors"), strict=True)
@@ -235,7 +259,14 @@ def main() -> None:
     with np.load(AUDIO_HEAD / "normalizer.npz", allow_pickle=False) as values:
         audio_mean, audio_scale = values["audio_mean"].copy(), values["audio_scale"].copy()
     with np.load(VIDEO_HEAD / "normalizer.npz", allow_pickle=False) as values:
-        video_mean, video_scale = values["audio_mean"].copy(), values["audio_scale"].copy()
+        video_mean, video_scale = values["video_mean"].copy(), values["video_scale"].copy()
+    if (
+        audio_mean.shape != (384,)
+        or audio_scale.shape != (384,)
+        or video_mean.shape != (768,)
+        or video_scale.shape != (768,)
+    ):
+        raise ValueError("frozen AV normalizer dimensions differ from the heads")
 
     audio_logits = {}
     audio_duration = {}

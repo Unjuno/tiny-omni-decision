@@ -17,7 +17,6 @@ from pathlib import Path
 import numpy as np
 
 from scripts.audit_droid_train_temporal import digest
-from scripts.lombard_temporal_model import TemporalSlotHead
 from tiny_omni_decision.native_av_correspondence import NativeAVCorrespondence
 
 ROOT = Path('C:/CodexArtifacts/pretrained-reuse-r2')
@@ -109,6 +108,7 @@ def decode_audio(data: bytes, processor) -> tuple[np.ndarray, float]:
 
 
 def main() -> None:
+    from scripts.lombard_temporal_model import TemporalSlotHead
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--selection', type=Path, required=True)
     parser.add_argument('--audio-tar', type=Path, required=True)
