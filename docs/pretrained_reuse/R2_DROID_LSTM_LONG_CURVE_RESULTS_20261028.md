@@ -39,3 +39,9 @@ SHA-256 `summary.json`:
 `11d0c40026dc1b54d1bec6266371e640ede88a3d020709e37ecd7fa5fa962415`.
 The summary records individual milestones, training curves, source hashes and
 all artifact hashes. No independent multimodal or 95–98% claim follows.
+
+An independent aggregation check reopened all 20 saved held-fold prediction
+files and the combined OOF file. Each row appeared exactly once at each epoch;
+the maximum absolute difference was `2.99e-8` across raw and corrected
+probabilities. The small corrected-probability difference reflects the OOF
+array's float32 storage. This checks aggregation, not independent model replay.
