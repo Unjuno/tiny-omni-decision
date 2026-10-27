@@ -17,8 +17,9 @@ have not been independently verified.
 
 The authors' [README preview](https://zenodo.org/records/17058101/preview/README.md?include_deleted=0)
 explicitly states CC BY 4.0 for the dataset. The extracted landing page itself
-shows a blank license field and the API request was still pending during this
-screen. The record discourages use for generative-AI training. It does not
+shows a blank license field; a separate Zenodo API response subsequently also
+reported `license.id = cc-by-4.0`. The record discourages use for generative-AI
+training. It does not
 explain whether a non-generative Decision classifier is included; do not treat
 the statement as either permission or a prohibition for that specific task. The
 performances include arranged popular music; rights for recorded compositions
