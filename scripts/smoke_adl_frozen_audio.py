@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import contextlib
 import hashlib
 import io
@@ -27,10 +28,10 @@ ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r1")
 ARCHIVE = Path(
     "C:/CodexArtifacts/pretrained-reuse-r2/adl-audio-vibration-archive-20261027-attempt-01/23_take-from-stove.zip"
 )
-OUTPUT = Path("C:/CodexArtifacts/pretrained-reuse-r2/adl-frozen-audio-smoke-20261027-attempt-01")
 SOURCE = ROOT / "efficientat-audit-v1/source"
 WEIGHTS = ROOT / "efficientat-audit-v1/dymn04_as.pt"
 PROTOCOL = Path("docs/pretrained_reuse/R2_ADL_AUDIO_RUNTIME_PROTOCOL_20261027.md")
+PROTOCOL_SHA = "573009755c681b153340277ca03ccc03db310b9d60d903cafa7d3d42293cafcf"
 
 
 def first_train_row(participants):
@@ -40,8 +41,14 @@ def first_train_row(participants):
 
 
 def main():
-    if OUTPUT.exists():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, required=True)
+    output = parser.parse_args().output
+    if output.exists():
         raise FileExistsError("output already exists")
+    protocol_sha = hashlib.sha256(PROTOCOL.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    if protocol_sha != PROTOCOL_SHA:
+        raise ValueError("preregistered protocol hash mismatch")
     if sha256_file(ARCHIVE) != ARCHIVE_SHA or sha256_file(WEIGHTS) != WEIGHTS_SHA256:
         raise ValueError("archive or checkpoint hash mismatch")
     commit = subprocess.check_output(
@@ -52,16 +59,14 @@ def main():
     ).strip()
     if commit != SOURCE_COMMIT or dirty:
         raise ValueError("source revision mismatch or dirty checkout")
-    OUTPUT.mkdir(parents=True)
+    output.mkdir(parents=True)
     started = time.perf_counter()
     receipt = {
         "status": "RUNNING",
         "archive_sha256": ARCHIVE_SHA,
         "checkpoint_sha256": WEIGHTS_SHA256,
         "source_commit": commit,
-        "protocol_sha256_lf": hashlib.sha256(
-            PROTOCOL.read_bytes().replace(b"\r\n", b"\n")
-        ).hexdigest(),
+        "protocol_sha256_lf": protocol_sha,
         "script_sha256": sha256_file(Path(__file__)),
         "training": False,
         "validation_waveform_read": False,
@@ -114,7 +119,7 @@ def main():
         after = state_sha(model)
         if before != after or any(p.requires_grad for p in model.parameters()):
             raise ValueError("frozen state changed")
-        feature_path = OUTPUT / "features.npy"
+        feature_path = output / "features.npy"
         with feature_path.open("xb") as f:
             np.save(f, features, allow_pickle=False)
         receipt.update(
@@ -147,7 +152,7 @@ def main():
         raise
     finally:
         receipt["wall_seconds"] = time.perf_counter() - started
-        (OUTPUT / "run.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+        (output / "run.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(receipt, indent=2))
 
 
