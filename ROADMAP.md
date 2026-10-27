@@ -1,3 +1,8 @@
+**2026-10-28 R2 GRID train partition source mapping audit:** A fresh pinned
+full-index audit found 14,997/23,992 train records without same-speaker audio
+matches across 15/24 train speakers (18,997/31,991 across the full split).
+No media was decoded and no labels were remapped. GRID training is blocked
+until its source-to-record mapping is independently verified. [Audit](docs/pretrained_reuse/R2_GRID_TRAIN_PARTITION_SOURCE_MAPPING_AUDIT_20261028.md).
 **2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
 64-quartet / 256-query sample completed on CPU with integrity and order checks.
 Joint Accuracy was 34.38%, but NLL/Brier/ECE were poor (2.049/0.911/0.337);
