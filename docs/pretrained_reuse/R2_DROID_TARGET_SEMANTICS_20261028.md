@@ -105,3 +105,14 @@ Three CPU tests cover future exclusion, alternate instruction fields and length
 validation; Ruff passed. No validation, sealed audit, model fitting or GPU was
 used. A conditioning comparison remains subject to recording/instruction
 isolation and explicit treatment of the missing half of these windows.
+
+The existing episode-level instruction audit contains 334 distinct normalized
+strings across these 275 recordings. Eight strings appear in more than one
+recording, connecting 13 recordings in total. This count uses the entire
+episode and therefore is a conservative grouping signal, not a safe model
+input. A new grouped-CV comparison must form transitive components across
+recordings sharing any normalized instruction before assigning folds; keeping
+only recording IDs apart would not guarantee instruction isolation. The
+existing train/validation split was already grouped by normalized instruction;
+the new concern is partitioning within the training subset. The check used the
+two pinned inputs listed above and printed aggregate counts only.
