@@ -67,3 +67,16 @@ Metadata-only receipt:
 `C:/CodexArtifacts/pretrained-reuse-r2/grid-quartet-reuse-20261028-attempt-01.json`,
 SHA-256 `c68cac88d6c9251af113a504466ef4fb1f1a2bf63fad5539b684d4f43c6a6362`.
 Two focused tests and Ruff passed.
+
+## Model-input boundary
+
+`tiny_omni_decision.grid_correspondence_input.build_input` maps a quartet and
+verified caller-supplied media to an immutable public input containing only
+audio bytes, four ordered video byte strings and opaque option IDs. It returns
+the target separately for evaluation. It rejects malformed target mappings,
+missing/extra media, empty media and identical video byte strings. The boundary
+does not itself verify source hashes, identity, synchronization, consent or
+semantic correctness; those remain caller gates. A synthetic integration test
+connects it to the existing `NativeAVCorrespondence` JSON interface and checks
+four probabilities sum to one. Three CPU tests and Ruff passed. No GRID audio,
+combined model inference or task accuracy was measured in this check.
