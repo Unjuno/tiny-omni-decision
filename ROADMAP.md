@@ -2386,7 +2386,7 @@ Primary references and official implementations (paper merit does **not** imply 
 
 This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the full previous roadmap in Git history; it is not deleted from the project record. The requested product outcome stays constant—**small, high-quality, local, genuinely multimodal typed decision inference**—while the mandatory Gemma/EmbeddingGemma ternary-first implementation path is no longer the assumed route. Since this proposal was opened, a task-scoped frozen Speech Commands audio runtime bundle has been integrated on this branch and passed existing-validation replay parity; see the R2 runtime record. It does not close joint AV or full multimodal packaging.
 
-**Next implementation action:** define R0 task/device criteria and R2 task-matched quality gates, including an approved synchronized audio-video task, before new training or product selection. Expand Path A task coverage only with approved sources and report results by task. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
+**Next implementation action:** run the frozen GRID synchronized AV development pilot and its matched unimodal/mismatch controls. Treat GRID as research-only until the Zenodo CC-BY metadata and Sheffield research-use notice, plus cross-corpus speaker identity, are reconciled. This pilot cannot close product R2; continue source review for a product-approved AV task. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
 
 
 ### STARSS23 measured update (2026-10-11)
@@ -3233,3 +3233,20 @@ option task. The subset comes from the same public validation split, so it is
 not a blind audit or independent quality claim; no fitting or checkpoint
 selection occurred. Preserve as an image reference, not Path A completion.
 [`Protocol and hashes`](docs/pretrained_reuse/R2_OPENIMAGES_TINYCLIP_FRESH_VALIDATION_20261026.md).
+
+### R0 task/device criteria and synchronized AV pilot (2026-10-28)
+
+The first task suite, local RTX 3080 Laptop device target, 100–200M
+pre-quantization parameter budget, <=200 MB post-quantization package target,
+and per-task 95% aspiration / 98% stretch goal are now written down in
+[`R0 task/device and GRID AV gate`](docs/pretrained_reuse/R0_TASK_DEVICE_AND_GRID_AV_GATE_20261028.md).
+The GRID development pilot is fixed at eight hash-selected two-slot quartets
+per each of eight held-out GRID speaker labels, with four balanced roles per
+quartet and matched unimodal/mismatch controls. It remains a narrow speech
+correspondence probe, not general AV reasoning. GRID's Zenodo API declares
+CC-BY-4.0, while the Sheffield source page says research use; media are kept
+for internal research only, with product clearance and cross-corpus speaker
+identity still unresolved. The 64-quartet / 256-query speaker-balanced
+selection was frozen from the pinned metadata before media or predictions
+were read; archive retrieval and evaluation are pending, so this does not close
+R2.
