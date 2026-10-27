@@ -1,6 +1,11 @@
 import pytest
 
-from scripts.audit_openimages_train_option_prior import build_tasks, cross_validate, metrics
+pytest.importorskip("torch")
+from scripts.audit_openimages_train_option_prior import (  # noqa: E402
+    build_tasks,
+    cross_validate,
+    metrics,
+)
 
 
 def test_tasks_are_deterministic_and_keep_all_images():

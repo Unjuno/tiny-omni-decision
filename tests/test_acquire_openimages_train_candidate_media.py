@@ -1,6 +1,10 @@
 import pytest
 
-from scripts.acquire_openimages_train_candidate_media import compare_images, prepare_records
+pytest.importorskip("torch")
+from scripts.acquire_openimages_train_candidate_media import (  # noqa: E402
+    compare_images,
+    prepare_records,
+)
 
 
 def test_prepare_requires_matching_page_and_photo_identity():

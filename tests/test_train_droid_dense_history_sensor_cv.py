@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
-import torch
 
-import scripts.train_droid_dense_history_sensor_cv as trainer
-from scripts.train_droid_dense_history_sensor_cv import group_accuracy, sensor_deltas
+torch = pytest.importorskip("torch")
+import scripts.train_droid_dense_history_sensor_cv as trainer  # noqa: E402
+from scripts.train_droid_dense_history_sensor_cv import group_accuracy, sensor_deltas  # noqa: E402
 
 
 def test_sensor_transform_keeps_last_state_and_all_increments():

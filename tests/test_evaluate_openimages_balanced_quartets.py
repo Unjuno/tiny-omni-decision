@@ -2,7 +2,8 @@ import hashlib
 
 import pytest
 
-from scripts.evaluate_openimages_balanced_quartets import prepare
+pytest.importorskip("torch")
+from scripts.evaluate_openimages_balanced_quartets import prepare  # noqa: E402
 
 
 def test_prepare_pins_every_image_and_page(tmp_path):

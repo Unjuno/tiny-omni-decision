@@ -1,6 +1,7 @@
 import pytest
 
-from scripts.audit_openimages_balanced_quartets import build_quartets
+pytest.importorskip("torch")
+from scripts.audit_openimages_balanced_quartets import build_quartets  # noqa: E402
 
 
 def test_quartet_has_identical_options_all_targets_and_unique_images():

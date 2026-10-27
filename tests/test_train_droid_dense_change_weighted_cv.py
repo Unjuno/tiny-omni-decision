@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
 
-from scripts.train_droid_dense_change_weighted_cv import (
+pytest.importorskip("torch")
+from scripts.train_droid_dense_change_weighted_cv import (  # noqa: E402
     change_metrics,
     correct_probabilities,
     training_row_weights,

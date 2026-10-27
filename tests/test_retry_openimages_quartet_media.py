@@ -3,7 +3,8 @@ import hashlib
 
 import pytest
 
-from scripts.retry_openimages_quartet_media import prepare_retries, verify_original
+pytest.importorskip("torch")
+from scripts.retry_openimages_quartet_media import prepare_retries, verify_original  # noqa: E402
 
 
 def test_retry_preserves_photo_and_original_md5():

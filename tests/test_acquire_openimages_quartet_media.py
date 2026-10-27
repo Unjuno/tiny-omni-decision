@@ -1,6 +1,7 @@
 import pytest
 
-from scripts.acquire_openimages_quartet_media import page_matched_quartets
+pytest.importorskip("torch")
+from scripts.acquire_openimages_quartet_media import page_matched_quartets  # noqa: E402
 
 
 def test_page_matching_requires_all_four_and_no_substitution():

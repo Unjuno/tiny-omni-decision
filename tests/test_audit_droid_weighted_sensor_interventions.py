@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
 
-from scripts.audit_droid_weighted_sensor_interventions import (
+pytest.importorskip("torch")
+from scripts.audit_droid_weighted_sensor_interventions import (  # noqa: E402
     group_bootstrap,
     within_recording_shift,
 )

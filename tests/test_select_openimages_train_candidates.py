@@ -1,4 +1,7 @@
-from scripts.select_openimages_train_candidates import select_candidates
+import pytest
+
+pytest.importorskip("torch")
+from scripts.select_openimages_train_candidates import select_candidates  # noqa: E402
 
 
 def test_selection_excludes_validation_and_deduplicates_author():

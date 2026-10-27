@@ -1,4 +1,7 @@
-from scripts.select_openimages_quartet_candidates import rank_quartets, select_unique
+import pytest
+
+pytest.importorskip("torch")
+from scripts.select_openimages_quartet_candidates import rank_quartets, select_unique  # noqa: E402
 
 
 def test_select_unique_excludes_author_md5_and_prior_id():

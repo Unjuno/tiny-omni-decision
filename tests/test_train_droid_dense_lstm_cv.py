@@ -1,7 +1,7 @@
 import pytest
-import torch
 
-from scripts.train_droid_dense_lstm_cv import SmallTemporalDecision
+torch = pytest.importorskip("torch")
+from scripts.train_droid_dense_lstm_cv import SmallTemporalDecision  # noqa: E402
 
 
 def test_lstm_parameter_count_shapes_and_no_carried_state():

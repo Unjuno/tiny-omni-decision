@@ -1,6 +1,7 @@
 import pytest
 
-from scripts.audit_openimages_full_train_quartets import filter_candidates
+pytest.importorskip("torch")
+from scripts.audit_openimages_full_train_quartets import filter_candidates  # noqa: E402
 
 
 def test_train_id_and_explicit_negative_filter():

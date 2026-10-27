@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
 
-from scripts.audit_droid_previous_command_cv import transition_oof
+pytest.importorskip("torch")
+from scripts.audit_droid_previous_command_cv import transition_oof  # noqa: E402
 
 
 def test_held_targets_do_not_change_own_fold_probabilities():

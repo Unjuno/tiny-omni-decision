@@ -2,7 +2,8 @@ import hashlib
 
 import pytest
 
-from scripts.audit_openimages_train_metadata_join import metadata_ids, stream_lines
+pytest.importorskip("torch")
+from scripts.audit_openimages_train_metadata_join import metadata_ids, stream_lines  # noqa: E402
 
 
 def test_metadata_ids_require_unique_train_and_declared_license():

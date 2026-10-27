@@ -1,6 +1,7 @@
 import pytest
 
-from scripts.audit_openimages_existing_train_labels import inventory
+pytest.importorskip("torch")
+from scripts.audit_openimages_existing_train_labels import inventory  # noqa: E402
 
 
 def test_inventory_requires_explicit_negatives_and_matching_feature():

@@ -2,7 +2,8 @@ import hashlib
 
 import pytest
 
-from scripts.audit_openimages_full_train_support import count_support, stream_lines
+pytest.importorskip("torch")
+from scripts.audit_openimages_full_train_support import count_support, stream_lines  # noqa: E402
 
 
 def test_support_counts_unique_images_and_multiple_targets():
