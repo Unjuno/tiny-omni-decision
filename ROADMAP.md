@@ -102,6 +102,13 @@ Accuracy by 6.21 points. This is nonblind sensitivity evidence; unmatched sound
 classes and distribution shift preclude a causal correspondence claim.
 [Results](docs/pretrained_reuse/R2_SOURCE_UNIMODAL_CV_INTERVENTION_RESULTS_20261027.md).
 
+**2026-10-27 R2 DROID change-weighted follow-up:** On the same previously
+observed train folds, train-only weighting with history plus sensor increased
+change-detection recall to 14.53% but caused 7.30% stable false alarms and
+worse natural-prevalence calibration. Fixed probability correction reduced
+recall to 0.44%. This does not establish an acceptable operating point or
+independent multimodal quality. [Results](docs/pretrained_reuse/R2_DROID_DENSE_CHANGE_WEIGHTED_CV_RESULTS_20261027.md).
+
 **2026-10-27 R2 DROID dense-window grouped CV:** Past-only windows from 275
 train recordings yielded 80,998 rows, including 7,442 changed commands. Over
 five recording-group folds, adding a small sensor head to command history
