@@ -14,7 +14,7 @@ from scripts.audit_openimages_symmetric_prefix import ETAG, TARGET_SHA, TARGETS,
 from scripts.train_source_unimodal_cv import digest
 from tiny_omni_decision.openimages_options import group_verification_labels
 
-EXPECTED_SHA = "a97b079ccccf635a980bfe4b8180a0c844b4d9c887b2bc56535f539af044ea"
+EXPECTED_SHA = "a97b079ccccf635a980bfe4b8180a0c844b4d9c887b2b7bc56535f539af044ea"
 PROTOCOL = Path("docs/pretrained_reuse/R2_OPENIMAGES_FULL_TRAIN_SUPPORT_PROTOCOL_20261027.md")
 
 
@@ -82,7 +82,7 @@ def main():
         images, eligible_images, eligible_pairs, counts, pairs = count_support(groups, set(names))
     source_sha = state["sha"].hexdigest()
     if state["bytes"] != TOTAL or source_sha != EXPECTED_SHA:
-        raise ValueError("full source length or SHA-256 mismatch")
+        raise ValueError(f"source mismatch: bytes={state['bytes']} sha256={source_sha}")
     result = {
         "status": "PASS_FULL_TRAIN_LABEL_AUDIT", "source_bytes": state["bytes"],
         "source_sha256": source_sha, "etag": ETAG, "targets_sha256": TARGET_SHA,
