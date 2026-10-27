@@ -296,6 +296,17 @@ Private output:
 The records are pseudonymous/private and are not in Git. No media or model was
 loaded. The larger photo-table stream remains a separate operation.
 
+`scripts/join_inat_photo_metadata.py` prepares the subsequent private join:
+it requires the hash-pinned observation UUID map and a completed, hash-pinned
+photo scan, matches photo and observation UUID, and quarantines missing,
+ambiguous, changed-license or missing-photographer rows. Matched originally
+ambiguous rows participate in the connected-person graph but remain quarantined.
+The remaining matched rows are assigned by connected observer/photographer
+component; this is a newly derived development split, not the earlier observer-
+only split or an admitted benchmark. Unknown source links, near duplicates,
+ownership and source-version differences remain unverified. The join has not
+yet run: it must wait for the full source scan and its completed receipt.
+
 ### Connected-person grouping primitive
 
 `scripts/inat_source_grouping.py` groups observation observers and photo
