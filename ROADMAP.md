@@ -102,6 +102,13 @@ Accuracy by 6.21 points. This is nonblind sensitivity evidence; unmatched sound
 classes and distribution shift preclude a causal correspondence claim.
 [Results](docs/pretrained_reuse/R2_SOURCE_UNIMODAL_CV_INTERVENTION_RESULTS_20261027.md).
 
+**2026-10-27 R2 DROID matched-history sensor ablation:** Two nested train-CV
+heads both received previous command. Adding the fixed sensor representation
+worsened macro NLL by 0.1174 and neither predicted any of 15 action changes.
+The models have different capacities and every fit chose the edge of the fixed
+regularization grid; this is nonblind diagnostic evidence, not a general
+capacity or multimodal conclusion. [Results](docs/pretrained_reuse/R2_DROID_HISTORY_SENSOR_CV_RESULTS_20261027.md).
+
 **2026-10-27 R2 DROID previous-command baseline:** A train-fold-only smoothed
 transition table using extra previous-command input scored 94.55% overall but
 0/15 when the next command changed. This exposes task persistence; it is not
