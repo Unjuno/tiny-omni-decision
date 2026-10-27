@@ -19,6 +19,12 @@ An additional primary-source check found that Meta's June 2025 V-JEPA 2 announce
 
 Sources: [pinned V-JEPA 2.1 repository README](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md), [Meta's June 2025 V-JEPA 2 announcement](https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/), and [Meta's V-JEPA project page](https://ai.meta.com/vjepa/).
 
+### Official-source recheck, 2026-10-28
+
+The current official [`facebookresearch/vjepa2` README](https://github.com/facebookresearch/vjepa2) now explicitly labels V-JEPA 2.1 as released on 2026-03-16 and lists the exact ViT-B/16 384 checkpoint URL and 80M model size. Its repository license section still describes the *code* as mostly MIT with named Apache-2.0 source-file exceptions; the checkpoint table provides no per-weight license field or separate weight grant. Meta's official June 2025 V-JEPA 2 announcement says that V-JEPA 2 code and checkpoints are available for commercial and research applications, but that statement predates the V-JEPA 2.1 release and does not name this exact 2026 file. Meta's earlier CC-BY-NC statement is about V-JEPA (v1), so it also does not establish the terms for this V-JEPA 2.1 checkpoint. These sources clarify the release chronology but still do not resolve the exact-weight grant. Keep the checkpoint at **REVIEW** for product use; do not infer its license from source-code terms or from another V-JEPA version.
+
+Sources: [official V-JEPA 2.1 checkpoint table and repository license](https://github.com/facebookresearch/vjepa2), [Meta's V-JEPA 2 commercial/research announcement (2025-06-11)](https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/), and [Meta's earlier V-JEPA v1 CC-BY-NC statement](https://ai.meta.com/blog/v-jepa-yann-lecun-ai-model-video-joint-embedding-predictive-architecture/).
+
 Command (report saved outside Git at C:\CodexArtifacts\pretrained-reuse-r1\vjepa21-audit.json):
 
     $env:PYTHONPATH='C:\CodexArtifacts\pretrained-reuse-r1\python-deps'

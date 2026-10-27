@@ -9,11 +9,19 @@ exposed development-validation diagnostic, not a new blind estimate or causal
 proof; no calibration, fitting, checkpoint selection, model load, or sealed
 audit occurred. [Protocol and hashes](docs/pretrained_reuse/R2_FULL_EXTENT_VIDEO_LOGIT_SCALE_DIAGNOSTIC_20261028.md).
 
-**2026-10-28 R2 GRID train partition source mapping audit:** A fresh pinned
-full-index audit found 14,997/23,992 train records without same-speaker audio
-matches across 15/24 train speakers (18,997/31,991 across the full split).
-No media was decoded and no labels were remapped. GRID training is blocked
-until its source-to-record mapping is independently verified. [Audit](docs/pretrained_reuse/R2_GRID_TRAIN_PARTITION_SOURCE_MAPPING_AUDIT_20261028.md).
+**2026-10-28 R2 GRID aggregate-audio ZIP mapping audit:** The aggregate
+`audio_25k.zip` index has 14,997/23,992 train records without same-named audio
+matches across 15/24 train labels (18,997/31,991 across the full split).
+This does not apply to the separately inventoried per-speaker bundle tars used
+by the corrected direct-source manifest. Do not remap aggregate ZIP folders or
+use that ZIP as the source for this split. Full direct-source media and
+duplicate checks remain incomplete before any GRID training. [Audit](docs/pretrained_reuse/R2_GRID_TRAIN_PARTITION_SOURCE_MAPPING_AUDIT_20261028.md).
+**2026-10-28 R2 GRID Path A frozen-feature runtime smoke:** One direct-source
+train utterance and one speaker-disjoint validation utterance passed integrity
+checks and frozen Whisper/VideoPrism feature extraction on CPU. The audio came
+from per-speaker bundle tars, not the separately audited aggregate audio ZIP.
+This verifies only the two-example runtime path; it is not a trained baseline,
+media-duplicate audit, or quality result. [Details and hashes](docs/pretrained_reuse/R2_GRID_PATH_A_FROZEN_FEATURE_SMOKE_20261028.md).
 **2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
 64-quartet / 256-query sample completed on CPU with integrity and order checks.
 Joint Accuracy was 34.38%, but NLL/Brier/ECE were poor (2.049/0.911/0.337);
