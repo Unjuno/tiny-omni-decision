@@ -50,3 +50,20 @@ The reproducible metadata-only audit is
 SHA-256 `02cb30293315d667ac70a233cbc95a83aaaee57fb900b27e4222ee49229a1cc1`.
 Attempts 01 and 02 are preserved; the final script differs only by formatting
 fixes. Two CPU tests and Ruff passed; no media or predictions were opened.
+
+## Reuse and cluster accounting
+
+The train quartets derive from 24 speaker labels, with 998–1,000 quartets per
+speaker and 23,992 distinct audio codes; each audio code appears in 1–10 query
+roles. The validation quartets derive from only eight speaker labels, with
+999–1,000 quartets each and 7,999 distinct audio codes; an audio code appears
+in 1–11 roles. These are code-level counts before media verification. They
+confirm that tens of thousands of roles are highly dependent and that future
+uncertainty must resample at least by speaker, not individual questions. Eight
+validation speaker clusters provide limited precision even if media and person
+isolation are later established.
+
+Metadata-only receipt:
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-quartet-reuse-20261028-attempt-01.json`,
+SHA-256 `c68cac88d6c9251af113a504466ef4fb1f1a2bf63fad5539b684d4f43c6a6362`.
+Two focused tests and Ruff passed.
