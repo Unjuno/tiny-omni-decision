@@ -162,3 +162,36 @@ SHA-256 `summary.json`:
 `a83ddfe6369a46f2525d94173e2bb4ced63b52d1bd4f12e242cad8a993cac3e3`.
 The source response hashes identify what was received but the full responses
 were not retained; the sanitized snapshot is fixed, not a frozen source export.
+
+### Observer versus photographer limitation and official export
+
+The API snapshot's `observer_key` derives from the observation's user ID only.
+The [official open-data metadata schema](https://github.com/inaturalist/inaturalist-open-data/blob/main/Metadata/README.md)
+separately identifies the observation observer and the photo's photographer.
+The API snapshot did not capture an independently verified photographer ID.
+Therefore zero observation-observer overlap **does not establish photographer
+disjointness**, and the split is not admitted. Names embedded in attribution
+are not a reliable substitute for identity. The source table exposes separate
+observation, photo and taxonomy metadata; individual photo licenses still need
+checking independently of observation licenses.
+
+On 2026-10-28 JST a read-only HTTPS HEAD of the official monthly S3 metadata
+archive returned status 200, length 35,966,549,880 bytes, last modified
+2026-09-27 17:38:16 UTC, and ETag `8d2b2b78d0c3d7dd2a3457e2e996f74b-69`.
+The `-69` multipart ETag is not a SHA-256 or evidence of full-content integrity;
+the `latest` URL is mutable and no version ID was supplied. Nothing was
+downloaded. The [provider's dataset description](https://registry.opendata.aws/inaturalist-open-data/)
+states that photo licenses vary and metadata is updated monthly. A future
+acquisition must pin a specific object, verify bytes and source consistency,
+and budget storage for the archive and streaming processing before use. It
+must group both observation and photographer identities, including transitive
+connections. No existing candidate snapshot was modified.
+
+The public bucket listing additionally returned a dated
+`metadata/inaturalist-open-data-20260927.tar.gz` object. Its HEAD response had
+the same length and multipart ETag as `latest`, with last-modified
+2026-09-27 17:31:41 UTC. Matching metadata makes this a candidate for a pinned
+download but does not verify full bytes or guarantee the object cannot change;
+use conditional requests and compute a full SHA-256 if it is acquired. The
+current ~33.5 GiB compressed size is not an estimate of decompressed storage or
+processing RAM. No download or extracted source data exists from this check.
