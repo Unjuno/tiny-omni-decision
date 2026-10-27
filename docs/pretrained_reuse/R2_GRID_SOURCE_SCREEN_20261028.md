@@ -8,6 +8,14 @@ record's visible rights section does not specify a license. Open download is
 not by itself permission to train or redistribute. Status is **REVIEW**; no
 corpus media or alignment files were fetched or admitted.
 
+The [original Sheffield distribution page](https://spandh.dcs.shef.ac.uk/gridcorpus/)
+explicitly describes the corpus and transcriptions as freely available for
+research use, but does not state a commercial license or detailed consent
+scope. A 2021 paper cites the Zenodo copy as CC-BY-4.0, but that secondary
+statement does not resolve the missing visible license on the current source
+record or establish the terms of the Sheffield distribution. Continue to treat
+the exact intended distribution and use as REVIEW pending primary evidence.
+
 The fixed vocabulary, scripted sentences, limited speakers and potential
 audio-only or lip-only shortcuts also preclude treating a high score on this
 corpus as general Omni Decision quality. Before use, independently establish
