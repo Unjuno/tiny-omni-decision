@@ -33,3 +33,28 @@ The source summary SHA-256 is
 `31abc71b9d31f69e906c6e98ee712c82384dc90bbd5ab1a9a6122b0c12953982`.
 The analysis was a local inline NumPy invocation; it used no GPU, media,
 validation, sealed audit or optimizer, and does not select a checkpoint.
+
+## Post-hoc LSTM error breakdown
+
+The saved raw OOF probabilities from the fixed 50/200-epoch LSTM curve were
+joined to the same train windows by row identity, after verifying the curve and
+dataset hashes. Of 7,442 changes, 110 have no complete four-step follow-up.
+The remaining 7,332 split into 5,022 whose next four labels all remain new and
+2,310 with another label change during those four steps. These groups use
+future labels only for retrospective analysis; they are not model inputs or a
+training/evaluation selection rule.
+
+| Group | Rows / recordings | Correct new label, epoch 50 | Correct new label, epoch 200 | Any change detected, 50 / 200 |
+|---|---:|---:|---:|---:|
+| Persists four steps | 5,022 / 274 | 128 (2.55%) | 238 (4.74%) | 310 / 598 |
+| Changes again within four | 2,310 / 254 | 27 (1.17%) | 61 (2.64%) | 138 / 262 |
+
+Both subsets contain correlated and overlapping windows; the recording sets
+overlap too. Low changed-command accuracy is present even on this more persistent
+subset, so treating all failures as short-lived label flicker is unsupported.
+This does not identify why the model failed, validate the labels, justify using
+future information in a model, or establish a general temporal capacity limit.
+The descriptive aggregate is
+`C:/CodexArtifacts/pretrained-reuse-r2/droid-persistent-change-error-20261028-attempt-01.json`,
+SHA-256 `afa6632fcf515f2138a742c4197efb53e75063a7263ae05c150708871bdbfeba`.
+No fitting, checkpoint selection, validation or sealed-audit data was used.
