@@ -1,3 +1,11 @@
+**2026-10-27 R2 source-candidate transfer reconciliation:** Existing fixed
+audio/video checkpoint results on 138 previously inspected official-validation
+videos scored 52.17% set accuracy; a no-media option prior scored 57.25%,
+with a paired accuracy interval crossing zero. The joint NLL was lower, and
+visible-source results differ sharply from the none-visible-heavy aggregate.
+This is nonblind oracle-track evidence, not a new fit or product quality.
+[Reconciliation](docs/pretrained_reuse/R2_SOURCE_CANDIDATE_TRANSFER_RECONCILIATION_20261027.md).
+
 **2026-10-27 R2 ADL source inventory:** The 25-activity source screen finished:
 20 activities have first-sensor split counts and five exceed the fixed size
 cap. Every inspected class has two validation participants; sweep and typing
