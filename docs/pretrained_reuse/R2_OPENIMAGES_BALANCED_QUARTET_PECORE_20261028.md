@@ -27,8 +27,13 @@ Post-hoc paired PE-Core minus TinyCLIP accuracy was -20.0 percentage points;
 groups; this interval is descriptive of the resampling assumption, not a blind
 population estimate. The two models differ in architecture, preprocessing and
 parameter count. No fitting, calibration, prompt search or audit evaluation ran.
-PE-Core remains license `REVIEW`; its 69,546,113 parameters and 278,219,132-byte
-weights do not by themselves meet the provisional 200 MB package target.
+The particular converted checkpoint and OpenCLIP route used here are `ALLOW`
+under the subsequent [scoped license reconciliation](R1_PE_CORE_T16_CPU_REVALIDATION_20261025.md).
+The separate `perception_models` implementation remains `REVIEW` and was not
+used. The checkpoint's 69,546,113 parameters and 278,219,132-byte weights do not
+by themselves meet the provisional 200 MB package target. The immutable result
+receipt's earlier blanket `REVIEW` notice predates this correction and is not
+the current scoped status.
 
 CPU inference used four threads, PyTorch and OpenCLIP 3.3.0, no GPU; elapsed
 time including model load and scoring was 17.55 seconds. We used existing
