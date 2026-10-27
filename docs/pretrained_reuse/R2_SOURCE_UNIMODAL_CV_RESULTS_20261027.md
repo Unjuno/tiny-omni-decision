@@ -41,9 +41,15 @@ similar content, and subgroup/annotation validity is not independently
 established. They do not establish that audio/video fusion beats video-only or
 that this oracle-track source requires both inputs. This is not a 95% result.
 
-Training elapsed 42.47 seconds, CPU only; CUDA was not initialized. All nine
-weights were reloaded with strict state-dict checks, but prediction parity was
-not separately re-run. Targeted tests passed (5), Ruff passed, and the full CPU
+Training elapsed 42.47 seconds, CPU only; CUDA was not initialized. A later
+independent-process replay strictly reloaded all nine weights and reproduced
+all 7,779 saved held-out predictions, with maximum probability difference 0,
+matching labels, decisions, NLL and Brier. It reused the same pinned feature
+loader and code, so it checks reproducibility, not independent correctness.
+Its result at
+`C:/CodexArtifacts/pretrained-reuse-r2/perception-source-unimodal-cv-replay-20261027-attempt-01/result.json`
+has SHA-256 `b79a02bea9893ab838e09d5483c6a0cdccda23d2b9d5dbf17266e6ce1d5f402f`.
+Replay used no GPU, training, or sealed audit. Targeted tests passed (5), Ruff passed, and the full CPU
 suite passed 2,670 tests with 11 skipped. An initial shell-only checkpoint reload command
 failed due to quoting; the corrected check loaded all nine without modifying
 outputs.
