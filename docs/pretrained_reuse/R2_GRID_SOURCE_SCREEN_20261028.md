@@ -60,6 +60,31 @@ an equivalent script before a formatting-only correction and remains preserved.
 Two focused tests and Ruff passed; no original alignment or media was fetched
 by this comparison.
 
+### Original and derivative alignment contents
+
+The original Zenodo `alignments.zip` was downloaded without media; its
+20,091,485 bytes match the publisher MD5
+`df892a5adea6595339b331cc065501f9`, and its locally computed SHA-256 is
+`161bcf2548797e6cf0116541e8c76fdb34e014a1dd4d33d2909cb12e588232ee`.
+The separately published derivative alignment TAR matched its pinned 67,338,240
+byte size and SHA-256
+`40abb10300984775e6465b6ab6665231c8d81f3a9af559622d6f48a48d902f11`.
+Both archives independently contain the seven matching codes; all eight
+associated Lombard training rows have exactly matching six alignment words
+after converting numeric target labels to their written form. macOS sidecar
+entries in the ZIP were excluded by a strict path pattern. This confirms
+**transcription overlap**, not identical recordings or speaker identity.
+
+The original-content receipt is
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-lombard-original-content-20261028-attempt-01.json`,
+SHA-256 `15fe0ef426b92efe32f0f874ebee88ca4b26611447cb5655dde1d5c068394c5c`;
+the derivative-content receipt is `grid-lombard-content-20261028-attempt-01.json`,
+SHA-256 `88844668ad29bb8666480ea9c215e294cfcf940deb9b1bf31d7037514ab7d3ca`.
+Both compare only existing Lombard train labels and alignment text, without
+media or validation. Two focused tests and Ruff passed. Any transfer cohort
+must exclude or separately label these overlapping utterances and audit speaker
+identity; the remainder is not automatically independent.
+
 The fixed vocabulary, scripted sentences, limited speakers and potential
 audio-only or lip-only shortcuts also preclude treating a high score on this
 corpus as general Omni Decision quality. Before use, independently establish
