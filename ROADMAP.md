@@ -1,3 +1,11 @@
+**2026-10-28 R2 GRID matched AV interface smoke:** The complete Zenodo audio
+archive passed the publisher MD5 and local SHA-256 checks; all 16 fixed `s1`
+audio examples decoded and resampled to 16 kHz. One fixed audio plus four
+same-speaker video candidates produced valid probability JSON; the model chose
+the wrong candidate in this single smoke, which is not an accuracy result.
+No training or sealed audit occurred. Speaker independence remains unknown.
+[Result](docs/pretrained_reuse/R2_GRID_MATCHED_AV_JSON_SMOKE_RESULTS_20261028.md).
+
 **2026-10-28 R2 DROID change persistence:** On already inspected train windows,
 89.9% of eligible discretized change labels persist one following step and
 43.4% persist continuously for eight. These correlated labels do not establish
