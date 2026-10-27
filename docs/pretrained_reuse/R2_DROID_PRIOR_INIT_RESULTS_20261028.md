@@ -28,3 +28,20 @@ Output:
 All fold scores, update choices and OOF predictions are saved. Two CPU tests,
 including exact train-prior initialization and held-label isolation, and Ruff
 passed. No validation, sealed audit, new encoder training or product promotion.
+
+## Post-hoc paired uncertainty
+
+Using the saved predictions, a paired bootstrap resampled the 268 connected
+instruction components 5,000 times with seed 17 and percentile 95% intervals.
+Sensor minus prior accuracy was -0.73 percentage points, interval [-4.32,
+2.89] points. Sensor minus prior NLL was -0.0328, interval [-0.0648, -0.00025].
+The NLL interval nearly touches zero, accuracy is inconclusive, and this is a
+post-hoc development-cohort analysis after several comparisons; folds share
+training data and components do not establish independent operators or sites.
+It is not blind confirmation or a basis for product promotion.
+
+The aggregate output is
+`C:/CodexArtifacts/pretrained-reuse-r2/droid-prior-uncertainty-20261028-attempt-01.json`,
+SHA-256 `12c337cbfae05d511b7cc61b419335043c617d99a21719c343e4182591ddce2a`.
+The source OOF hash, seed, repetitions and script hash are in the artifact.
+The script has a CPU test for identical paired predictions; Ruff passed.
