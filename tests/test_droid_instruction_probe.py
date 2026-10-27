@@ -1,5 +1,7 @@
 import numpy as np
+import pytest
 
+pytest.importorskip('torch')
 from scripts.probe_droid_instruction import group_components, metrics, word_features
 
 

@@ -1,5 +1,7 @@
 import numpy as np
+import pytest
 
+pytest.importorskip('torch')
 from scripts.probe_droid_prior_init import fit_predict
 
 
