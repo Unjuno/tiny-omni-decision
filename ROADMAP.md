@@ -1,3 +1,9 @@
+**2026-10-27 R2 ADL source inventory:** The 25-activity source screen finished:
+20 activities have first-sensor split counts and five exceed the fixed size
+cap. Every inspected class has two validation participants; sweep and typing
+are especially sparse. Partial archive authentication, missing activities and
+task admission remain open. [Results](docs/pretrained_reuse/R2_ADL_PARTIAL_INVENTORY_RESULTS_20261027.md).
+
 **2026-10-27 R2 ADL partial-member feasibility:** A bounded ZIP range fetched
 one sensor of the third activity, passed member CRC and yielded 368 rows from
 eight people (six train / two validation). The full archive MD5 and four
