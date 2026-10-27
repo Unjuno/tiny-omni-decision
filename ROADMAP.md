@@ -1,3 +1,9 @@
+**2026-10-27 R2 same-label audio substitution:** On 2,581 matched train-source
+OOF records, replacing audio with another video's same-label recording produced
+no clear aggregate Accuracy or NLL difference; 12 records were unmatched.
+This limits interpretation of earlier unrestricted audio-shuffle sensitivity.
+[Results](docs/pretrained_reuse/R2_SOURCE_SAME_LABEL_AUDIO_RESULTS_20261027.md).
+
 **2026-10-27 R2 source-candidate audio interventions:** On the fixed train-only
 OOF joint checkpoints, mismatching audio from another held-out video reduced
 Accuracy by 6.21 points. This is nonblind sensitivity evidence; unmatched sound
