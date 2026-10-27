@@ -1,3 +1,14 @@
+**2026-10-28 R2 full-extent Video logit-scale diagnostic:** A CPU-only,
+hash-checked analysis of saved predictions from the completed 32,768-update
+full-extent/fresh-coverage run found Video confidence and logit magnitude grew
+sharply after the selected step without an Accuracy gain: 512→32,768 Video
+Accuracy changed 34.75%→33.00%, mean confidence 39.0%→92.3%, and median logit
+span 0.60→19.59. A paired 200-scene bootstrap leaves the Accuracy difference
+uncertain but supports a large confidence/logit-scale increase. This is an
+exposed development-validation diagnostic, not a new blind estimate or causal
+proof; no calibration, fitting, checkpoint selection, model load, or sealed
+audit occurred. [Protocol and hashes](docs/pretrained_reuse/R2_FULL_EXTENT_VIDEO_LOGIT_SCALE_DIAGNOSTIC_20261028.md).
+
 **2026-10-28 R2 GRID train partition source mapping audit:** A fresh pinned
 full-index audit found 14,997/23,992 train records without same-speaker audio
 matches across 15/24 train speakers (18,997/31,991 across the full split).
@@ -680,10 +691,12 @@ repeat/fresh coverage), with per-modality Accuracy/NLL/Brier/ECE, macro metrics,
 simple effects and an interaction contrast. It fails closed on missing cells,
 changed validation IDs/order, prediction hash mismatch, or a non-endpoint run;
 the incomplete preflight records no factorial metrics. Three existing 32,768-step
-cells pass hash and shared-validation checks. The full-extent fresh fit is still
-missing because the live GPU run owns the device; no new GPU job was started.
-The full CPU suite passes (2,397 passed, 11 skipped); Ruff and manifest/catalog
-validation pass. See the
+cells passed hash and shared-validation checks; at the time it was written the
+full-extent fresh fit was still missing because the live GPU run owned the
+device. That fit later completed as attempt-04, and all four cells were
+compared in attempt-03; see the completion addendum and full-fit report below.
+The full CPU suite passed (2,397 passed, 11 skipped); Ruff and manifest/catalog
+validation passed. See the
 [`crop × coverage factorial record`](docs/pretrained_reuse/R2_CROP_COVERAGE_FACTORIAL_20261025.md).
 
 **2026-10-25 R2 full-extent × unique-coverage long comparison:** Added a
@@ -719,9 +732,11 @@ Git commit. All six expected hashes were independently verified from that exact
 commit; no external worktree file was changed. The runner now records this
 commit-blob verification and recognizes a capacity-checked HotGPU parent
 reservation. Its only allowed auxiliary GPU PID is the verified Cursor GPU
-renderer; unknown processes still block launch. A full-extent × fresh-coverage
-fit has still not run; see
-the report for the failure receipt and rerun conditions.
+renderer; unknown processes still block launch. At the time of this
+runner-repair note the full-extent × fresh-coverage fit had not yet run. It
+later completed as attempt-04; its result and the factorial comparison are
+recorded in the full-fit report and factorial completion addendum. The initial
+failure receipt remains historical context.
 
 **2026-10-25 R2 UnAV-100 source/task screen:** UnAV-100 is a relevant
 audio-visual event-localization task-design lead, but its official page says

@@ -87,3 +87,21 @@ The 2×2 result is a development-validation comparison, not a blind evaluation,
 general video claim, or product promotion. Even the fresh-coverage cell adds no
 new Video questions, so this comparison does not establish improved Video data
 coverage.
+
+## Completion addendum (2026-10-28)
+
+The preflight above accurately recorded the state when it was written: only
+three cells had completed. The full-extent × fresh-coverage cell later
+completed as native full-extent attempt-04, and the fixed-endpoint four-cell
+comparison completed as attempt-03. The full-fit report records all artifacts,
+learning curves, validation results, and the comparison hash. Its Video
+Accuracy remained 0.3300, so the fourth cell does not change the earlier
+conclusion that fresh coverage did not improve Video on this exposed
+development validation.
+
+The subsequent CPU-only Video logit-scale diagnostic found a large increase
+in confidence, logit span, and NLL from step 512 to the terminal checkpoint,
+while Accuracy did not improve; see
+[`R2 full-extent Video logit-scale diagnostic`](R2_FULL_EXTENT_VIDEO_LOGIT_SCALE_DIAGNOSTIC_20261028.md).
+This is a post-hoc diagnostic on the same validation and does not create an
+independent estimate or justify calibration fitting on those IDs.
