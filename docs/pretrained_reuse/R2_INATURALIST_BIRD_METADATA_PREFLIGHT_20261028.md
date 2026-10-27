@@ -47,3 +47,32 @@ The aggregate output is
 SHA-256 `a49b7b156e3234ff06cda66e20671cd8b108e8caae451ec88c7613f7b03dd28a`.
 It includes the per-response hashes but not the response bodies, so the live
 API data cannot be reconstructed from this receipt alone.
+
+## Follow-up: explicit taxon IDs
+
+Each of the eight names returned exactly one active species-level taxon from
+the current official taxa API. Their IDs, in the table order above, are 6930,
+13858, 7089, 3017, 12727, 144455, 4956 and 9083. An additional request per
+ID with the same earliest-50 and license filters returned no rows outside the
+queried species' ancestry. The `Cardinalis cardinalis` ID query returned 50
+exact species records, unlike the name query which also returned other taxa.
+
+Taxon-ID queries include descendants: 49 of 50 `Columba livia` records were
+descendants, as were six `Anas platyrhynchos` and one `Ardea alba`. All 400
+returned rows had at least one photo carrying a CC0/CC-BY field and attribution,
+and an observer ID. Those fields are metadata declarations, not ownership
+verification; other photos on a row can have different terms. There were 43
+distinct observers, 24 occurring in multiple queried taxa, and no duplicate
+observation IDs within these returned samples. Per-taxon unique observer counts
+were 15, 13, 15, 19, 17, 17, 16 and 8. The source-order and privacy limitations
+above still apply. No labels were assigned to descendants for a corpus: an
+explicit and immutable parent/descendant mapping is still required.
+
+Taxon-resolution receipt SHA-256:
+`c9ddc29f658ebcc7c0e355d2b043b27c6f819e728cab9d0761407df90390b538`.
+Taxon-ID sample receipt SHA-256:
+`20bbfeb59164d9a77fa9ae5bceff4720a82a24a33283b757003384e31d93efea`.
+Both are in `C:/CodexArtifacts/pretrained-reuse-r2/` with prefixes
+`inaturalist-bird-taxon-ids-20261028-attempt-01` and
+`inaturalist-bird-taxon-preflight-20261028-attempt-01` respectively. They are
+aggregate receipts, not saved API responses, a frozen export or a training set.
