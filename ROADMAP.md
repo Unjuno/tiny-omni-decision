@@ -1,3 +1,8 @@
+**2026-10-28 R2 balanced-quartet PE-Core comparison:** On 60 previously
+inspected train images with balanced option roles, frozen PE-Core scored 25%
+versus TinyCLIP 45%; both are nonblind research diagnostics, and PE-Core rights
+remain under review. [Results](docs/pretrained_reuse/R2_OPENIMAGES_BALANCED_QUARTET_PECORE_20261028.md).
+
 **2026-10-28 R2 image choice evidence reconciliation:** A previously completed
 full-train audit constructed 410 unique-image same-option quartets; class counts
 remain unequal and rights and independent splits are not established. The
