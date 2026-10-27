@@ -1,3 +1,10 @@
+**2026-10-28 R2 iNaturalist bird metadata preflight:** Eight fixed bird-name
+queries produced 37 distinct eligible observers in 400 nonrandom returned
+rows, with 22 observers appearing across species. Name searches also returned
+subspecies and unrelated names. No corpus or media was admitted; frozen taxon
+IDs, photo rights and global observer splits remain open.
+[Preflight](docs/pretrained_reuse/R2_INATURALIST_BIRD_METADATA_PREFLIGHT_20261028.md).
+
 **2026-10-28 R2 balanced-quartet PE-Core comparison:** On 60 previously
 inspected train images with balanced option roles, frozen PE-Core scored 25%
 versus TinyCLIP 45%; both are nonblind research diagnostics. The tested converted
