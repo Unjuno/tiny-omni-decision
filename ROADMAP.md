@@ -1,3 +1,10 @@
+**2026-10-27 R2 Open Images symmetric-choice prefix:** A fixed 64 MiB
+train-label prefix contains 4–31 eligible positive image groups per target
+class when all three explicit negatives must also belong to the 11-class
+scope. All 11 classes are mutual hierarchy siblings. The prefix is nonrandom,
+does not prove full-corpus coverage or balanced option roles, and is not an
+evaluation set. [Feasibility](docs/pretrained_reuse/R2_OPENIMAGES_SYMMETRIC_PREFIX_RESULTS_20261027.md).
+
 **2026-10-27 R2 Open Images option shortcut:** On two previously exposed
 168-example development cohorts, randomly choosing among options from the
 11-class train target whitelist has expected accuracy 65.33% / 64.98% without
