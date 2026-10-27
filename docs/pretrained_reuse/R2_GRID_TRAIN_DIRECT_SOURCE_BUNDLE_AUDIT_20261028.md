@@ -114,6 +114,21 @@ An earlier build at attempt 01 was preserved. Attempt 02 reran with the pinned
 input hashes rechecked before and after processing. Both produced byte-identical
 train and validation manifests; attempt 02 is the authoritative receipt.
 
+The executed builder command was:
+
+```powershell
+python -m scripts.prepare_grid_direct_source_split `
+  --bundle-index C:\CodexArtifacts\pretrained-reuse-r2\grid-train-direct-speaker-audit-20261028-attempt-03\direct-source-bundle-index.json `
+  --zenodo-record C:\CodexArtifacts\pretrained-reuse-r2\grid-validation-video-20261028-attempt-01\zenodo-record-3625687.json `
+  --frozen-summary C:\CodexArtifacts\pretrained-reuse-r2\grid-development-split-20261028-attempt-02\summary.json `
+  --frozen-train C:\CodexArtifacts\pretrained-reuse-r2\grid-development-split-20261028-attempt-02\train.json `
+  --frozen-validation C:\CodexArtifacts\pretrained-reuse-r2\grid-development-split-20261028-attempt-02\validation.json `
+  --output-dir C:\CodexArtifacts\pretrained-reuse-r2\grid-development-split-direct-source-20261028-attempt-02
+```
+
+The existing output directory is intentionally immutable; reproduction must
+use a new attempt suffix.
+
 Do not start training from this manifest yet. First finish per-media runtime
 and duplicate-asset checks, then produce a frozen-feature Path A baseline on
 the corrected split with the fixed validation protocol. This audit does not
