@@ -1,3 +1,9 @@
+**2026-10-28 R2 image choice evidence reconciliation:** A previously completed
+full-train audit constructed 410 unique-image same-option quartets; class counts
+remain unequal and rights and independent splits are not established. The
+new aggregate role-flow check does not prove equal-class construction.
+[Quartets](docs/pretrained_reuse/R2_OPENIMAGES_FULL_TRAIN_QUARTET_RESULTS_20261027.md).
+
 **2026-10-28 R2 DROID LSTM 200-epoch curve:** On the same train-group folds,
 longer training increased change recall but also false changes and worsened
 held-fold accuracy, NLL and Brier. This is nonblind and does not establish a

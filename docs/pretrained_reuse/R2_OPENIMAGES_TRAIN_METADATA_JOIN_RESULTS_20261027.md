@@ -46,6 +46,13 @@ This relaxation does not enforce which three negative labels coexist on an
 image, image uniqueness, source splits or rights. It is not evidence that 440
 valid examples can actually be constructed or that option-only leakage is gone.
 
+A separate, already completed [full-train quartet analysis](R2_OPENIMAGES_FULL_TRAIN_QUARTET_RESULTS_20261027.md)
+did enforce within-image label co-occurrence and unique images and found 410
+disjoint same-option quartets. Its class totals are highly unequal (for example,
+Sculpture has nine and Window has 331), so it does not establish the equal
+40-per-class construction considered above. The greedy search is not an
+optimality proof. Rights, duplicates and source-disjoint evaluation remain open.
+
 The source declares CC BY 2.0 but individual license and ownership remain to
 be checked; no selected IDs or image media were saved. No validation or test
 data, model or checkpoint was accessed. The joined aggregate is
