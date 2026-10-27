@@ -1,3 +1,9 @@
+**2026-10-27 R2 balanced set objective:** Equal positive/negative candidate
+loss increased multi-target candidate recall but also false selections and
+calibration error; joint exact-set accuracy fell from 23.99% to 18.63% at
+fixed thresholds. This nonblind source-fold result is not a product test.
+[Results](docs/pretrained_reuse/R2_SOURCE_BALANCED_SET_RESULTS_20261027.md).
+
 **2026-10-27 R2 nested set thresholds:** Inner video-fold threshold selection
 raised aggregate exact accuracy from 23.99% to 25.57%, while multi-target
 accuracy fell from 6.17% to 4.63%. This is a nonblind development tradeoff,
