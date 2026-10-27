@@ -1,6 +1,6 @@
 import pytest
 
-from scripts.snapshot_inat_birds import clean_record, validate_snapshot
+from scripts.snapshot_inat_birds import clean_record, collision_summary, validate_snapshot
 
 
 def observation(observer=42, taxon=6930):
@@ -48,3 +48,17 @@ def test_duplicate_photo_rejected_separately():
     second = clean_record(other, 6930)
     with pytest.raises(ValueError, match="duplicate photo"):
         validate_snapshot([first, second])
+
+
+def test_collision_summary_detects_cross_split_and_conflicting_labels():
+    first = clean_record(observation(), 6930)
+    other = observation(observer=43)
+    other["id"] = 11
+    second = clean_record(other, 6930)
+    second["split"] = "validation" if first["split"] == "train" else "train"
+    second["class_taxon_id"] = 999
+    result = collision_summary([first, second])
+    assert result["duplicate_photo_ids"] == 1
+    assert result["photo_groups_cross_split"] == 1
+    assert result["photo_groups_conflicting_class"] == 1
+    assert result["photo_groups_multiple_observers"] == 1

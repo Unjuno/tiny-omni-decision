@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import time
+from collections import defaultdict
 from pathlib import Path
 
 import requests
@@ -55,9 +56,29 @@ def validate_snapshot(rows):
         raise ValueError("empty snapshot")
 
 
+def collision_summary(rows):
+    grouped = defaultdict(list)
+    obs = defaultdict(int)
+    for row in rows:
+        grouped[row["photo_id"]].append(row)
+        obs[row["observation_id"]] += 1
+    repeated = [group for group in grouped.values() if len(group) > 1]
+    return {"duplicate_observation_ids": sum(count > 1 for count in obs.values()),
+            "duplicate_photo_ids": len(repeated),
+            "rows_in_duplicate_photo_groups": sum(len(group) for group in repeated),
+            "photo_groups_cross_split": sum(len({r["split"] for r in g}) > 1 for g in repeated),
+            "photo_groups_conflicting_class": sum(
+                len({r["class_taxon_id"] for r in g}) > 1 for g in repeated),
+            "photo_groups_multiple_observers": sum(
+                len({r["observer_key"] for r in g}) > 1 for g in repeated),
+            "photo_groups_conflicting_license_or_attribution": sum(
+                len({(r["photo_license"], r["attribution"]) for r in g}) > 1 for g in repeated)}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--diagnose-only", action="store_true")
     args = parser.parse_args()
     output = args.output_dir.resolve()
     if output.exists() or output.is_relative_to(REPO):
@@ -83,6 +104,14 @@ def main():
                              "response_sha256": hashlib.sha256(response.content).hexdigest(),
                              "reported_total": data["total_results"]})
             time.sleep(1.1)
+    if args.diagnose_only:
+        output.mkdir(parents=True)
+        result = {"status": "AGGREGATE_DIAGNOSTIC_NO_CORPUS", "count": len(rows),
+                  "collisions": collision_summary(rows), "response_receipts": receipts,
+                  "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+        (output / "summary.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(result, indent=2))
+        return
     validate_snapshot(rows)
     output.mkdir(parents=True)
     payload = json.dumps(rows, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
