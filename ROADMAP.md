@@ -1,3 +1,10 @@
+**2026-10-27 R2 Open Images train metadata join:** The 11-class four-choice
+support census has 3,377 train-metadata images (4,007 target/image pairs); the
+earlier 7,714 figure covered the annotation object without this join. Exact
+class-role balance is constrained by scarce Sculpture negatives and is not yet
+demonstrated. Individual rights and independent splits remain open.
+[Results](docs/pretrained_reuse/R2_OPENIMAGES_TRAIN_METADATA_JOIN_RESULTS_20261027.md).
+
 **2026-10-27 R2 Open Images symmetric-choice prefix:** A fixed 64 MiB
 train-label prefix contains 4–31 eligible positive image groups per target
 class when all three explicit negatives must also belong to the 11-class
