@@ -1,3 +1,11 @@
+**2026-10-27 R2 select-every task audit:** The source task asks for every
+matching object, while previous readouts emit one option. Their reported
+accuracy is hit@1, not exact-set accuracy. On 2,593 reused development rows,
+the existing epoch-32 one-choice output attains 30.97% exact-set accuracy;
+the one-choice rule is capped at 57.50% on these labels. A set-valued decision
+and validation protocol are needed before claiming the full task is solved.
+[Audit](docs/pretrained_reuse/R2_SOURCE_SET_TASK_AUDIT_20261027.md).
+
 **2026-10-27 R2 32-epoch AV readout curves:** Baseline and visual-LSTM
 completed the same 32-epoch, three-fold train-source schedule. Online train
 loss fell while held-out NLL/Brier/ECE degraded substantially after early
