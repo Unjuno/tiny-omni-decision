@@ -72,9 +72,50 @@ receipt.
 
 The source files themselves are coherent, but the existing train manifest is
 not. Do not train on the frozen GRID split or the failed source-mapping
-corpus. Rebuild a new train/validation manifest directly from the official
-per-speaker bundles and annotations, retaining the fixed speaker partition
-unless a newly justified split protocol is documented. Verify the rebuilt
-manifest and all source/media overlap gates before generating features or
-starting a model run. GRID remains internal research-only pending product
-rights clarification; this audit does not change that boundary.
+corpus. A separate hash-gated builder has now produced a corrected external
+train/validation manifest directly from the official per-speaker bundles and
+annotations, while retaining the fixed speaker partition. It verifies all
+32,000 audio/alignment/video filename identities and reads each alignment to
+confirm its six-slot target. The corrected manifest contains 23,993 train
+rows and 7,998 validation rows; it excludes 7 and 2 previously observed codes
+from those partitions, respectively. Its hashes and full per-speaker input
+receipt are recorded in the output summary.
+
+The corrected split has zero train/validation speaker, source-asset, code,
+normalized-target, or known-observed-code overlap. This remains metadata and
+annotation validation: media payloads were not decoded, content-level media
+deduplication was not run, and physical cross-corpus speaker independence is
+unknown. GRID remains internal research-only pending product-rights
+clarification.
+
+The already-evaluated 64-quartet AV pilot was cross-checked after the corrected
+manifest was built: all 255 distinct selected speaker/code assets occur in
+corrected validation, with zero corrected-train or forbidden-code overlap.
+The check did not alter selection or predictions. The fixed pilot scores
+34.38% accuracy (NLL 2.0492) and is a narrow development correspondence
+probe, not a product-quality result. See
+[`fixed AV evaluation`](R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md).
+
+The authoritative corrected output is
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-development-split-direct-source-20261028-attempt-02/`:
+
+- `train.json` SHA-256: `3a4304e7158ee89380a6d4827ef23c5f1117494e10b1493bcb9a97a3fe3be816`.
+- `validation.json` SHA-256: `f05cf77258aa2ea2145eb0002fc828b9f2cdf7b5f7d0f91adea72b3204a70812`.
+- `summary.json` SHA-256: `547e84167267428712ba5c7859869cd1eb7d558ee3502d9908f89223a77a3410`.
+- Direct-source bundle index SHA-256: `fb54bb49a0f9425cd6206508e99a1d2fef25220444e3853af11aac75431861ed`.
+- Builder SHA-256: `6deb183cbb54e171d7cdaedf78fd696fe23de0e3d15cd3e60a478ecce1869d00`.
+- Builder: `scripts/prepare_grid_direct_source_split.py`; tests:
+  `tests/test_prepare_grid_direct_source_split.py`.
+- The post-evaluation pilot membership receipt is
+  `C:/CodexArtifacts/pretrained-reuse-r2/grid-train-direct-speaker-audit-20261028-attempt-03/direct-pilot-validation-crosscheck.json`,
+  SHA-256 `3c758f658b675b02dfc0c5f8480ebc8c5f66087d65c8bc6f1897b15931c588bc`.
+
+An earlier build at attempt 01 was preserved. Attempt 02 reran with the pinned
+input hashes rechecked before and after processing. Both produced byte-identical
+train and validation manifests; attempt 02 is the authoritative receipt.
+
+Do not start training from this manifest yet. First finish per-media runtime
+and duplicate-asset checks, then produce a frozen-feature Path A baseline on
+the corrected split with the fixed validation protocol. This audit does not
+change the product-rights boundary or claim that speaker labels represent
+independent physical people across corpora.

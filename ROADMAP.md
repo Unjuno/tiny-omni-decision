@@ -3292,14 +3292,21 @@ selection was frozen from the pinned metadata before media or predictions
 were read. A pinned archive-member audit then found 18,997 same-name audio
 members missing among 31,991 alignment speaker/code rows across 32 speakers;
 four of eight held-out labels map to other audio folders by code overlap. Do
-not infer identity or run the pilot until this is resolved. The `s30.zip`
-publisher MD5 matched; an incomplete `s4.zip.part` is retained but unverified.
-See [`GRID audio folder mapping audit`](docs/pretrained_reuse/R2_GRID_AUDIO_FOLDER_MAPPING_AUDIT_20261028.md).
+not use the original frozen pilot selection or train/validation manifests.
+The corrected direct-source validation pilot is documented separately; it is
+still narrow and under-calibrated. The `s30.zip` publisher MD5 matched; an
+incomplete `s4.zip.part` from the original acquisition remains preserved and
+unverified. See
+[`GRID audio folder mapping audit`](docs/pretrained_reuse/R2_GRID_AUDIO_FOLDER_MAPPING_AUDIT_20261028.md).
 
 The follow-up direct-source audit covers all 24 frozen train speakers. The
 official audio/alignment/video inventories agree for all speakers, but the
 frozen speaker/code rows match only 9/24; 15/24 have zero same-label overlap.
-The old train manifest remains blocked. Preserve it as a failed receipt; build
-a new manifest from the authoritative per-speaker bundles and rerun the split
-and media-overlap gates before any GRID training. See
+The old train manifest remains blocked and is preserved as a failed receipt.
+A new manifest was rebuilt from authoritative per-speaker bundles with
+23,993 train and 7,998 validation rows; source identity and label-content
+checks pass, while media-content duplicate scanning and model training remain
+open. The existing 64-quartet pilot selection was verified inside corrected
+validation with zero train/forbidden overlap; its 34.38% accuracy / 2.0492 NLL
+remain a weak development result. See
 [`GRID train direct-source audit`](docs/pretrained_reuse/R2_GRID_TRAIN_DIRECT_SOURCE_BUNDLE_AUDIT_20261028.md).
