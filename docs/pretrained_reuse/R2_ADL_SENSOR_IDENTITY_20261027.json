@@ -1,0 +1,68 @@
+{
+  "archive_sha256": "04bf32f55c93f54c49525d2b0581cb51f14c1ec302afb56b70a995fa4aa8f706",
+  "records": [
+    {
+      "member": "23_take-from-stove/23_take-from-stove_multisensor-1.hdf5",
+      "member_sha256": "73aae1893b07c23c0814362f906e9795dea9a03c7a6c13ab03e2f07e5af5f645",
+      "rows": 368,
+      "participants": 9,
+      "vibration_rate_min": 1075.4190673828125,
+      "vibration_rate_max": 1088.845947265625,
+      "common_pairs": 368,
+      "reference_only_pairs": 0,
+      "sensor_only_pairs": 0,
+      "max_abs_timestamp_delta_native_units": 0.0
+    },
+    {
+      "member": "23_take-from-stove/23_take-from-stove_multisensor-2.hdf5",
+      "member_sha256": "a2b159cc9cbb125a7ccfb9641be2c17c2897c0a74ca76a7a7fbbbb6dee771019",
+      "rows": 368,
+      "participants": 9,
+      "vibration_rate_min": 1076.546630859375,
+      "vibration_rate_max": 1089.10888671875,
+      "common_pairs": 368,
+      "reference_only_pairs": 0,
+      "sensor_only_pairs": 0,
+      "max_abs_timestamp_delta_native_units": 0.22099995613098145
+    },
+    {
+      "member": "23_take-from-stove/23_take-from-stove_multisensor-3.hdf5",
+      "member_sha256": "6dade0856ae7bccbf10920febb5d674267dbd93030d38e23fc753027e695183f",
+      "rows": 368,
+      "participants": 9,
+      "vibration_rate_min": 1075.697265625,
+      "vibration_rate_max": 1088.5416259765625,
+      "common_pairs": 368,
+      "reference_only_pairs": 0,
+      "sensor_only_pairs": 0,
+      "max_abs_timestamp_delta_native_units": 0.20300006866455078
+    },
+    {
+      "member": "23_take-from-stove/23_take-from-stove_multisensor-4.hdf5",
+      "member_sha256": "3a4653b27b8f102d6d3b0dc80b178309c6b5eb1a80df68aabef2cd18d8d35198",
+      "rows": 368,
+      "participants": 9,
+      "vibration_rate_min": 1083.4769287109375,
+      "vibration_rate_max": 1094.0860595703125,
+      "common_pairs": 368,
+      "reference_only_pairs": 0,
+      "sensor_only_pairs": 0,
+      "max_abs_timestamp_delta_native_units": 0.25
+    },
+    {
+      "member": "23_take-from-stove/23_take-from-stove_multisensor-5.hdf5",
+      "member_sha256": "44dcaefd29c2bc0d3790c136d7e67243b30551edd78289ddcca86d1203d9e33d",
+      "rows": 368,
+      "participants": 9,
+      "vibration_rate_min": 1077.4710693359375,
+      "vibration_rate_max": 1094.52734375,
+      "common_pairs": 368,
+      "reference_only_pairs": 0,
+      "sensor_only_pairs": 0,
+      "max_abs_timestamp_delta_native_units": 0.23000001907348633
+    }
+  ],
+  "scope": "one activity; participant/trial/timestamp/rate metadata only",
+  "timestamp_units_and_physical_synchronization": "not verified",
+  "training_or_validation": false
+}

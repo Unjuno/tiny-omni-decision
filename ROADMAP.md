@@ -1,3 +1,11 @@
+**2026-10-27 R2 ADL bounded media preflight:** The smallest source activity ZIP
+(69,152,997 bytes) matched its publisher MD5. Its five HDF5 sensors contain
+the same 368 participant/trial pairs from nine people, not 1,840 independent
+events. Matched stored timestamps differ by up to 0.25 native units across
+sensors; physical sync and units remain unverified. No model was trained or
+evaluated. The [identity checker and report](docs/pretrained_reuse/R2_ADL_AUDIO_VIBRATION_SOURCE_20261027.md)
+preserve this limited result and the original artifacts.
+
 **2026-10-27 R2 ADL audio/vibration source screen:** A CC BY 4.0 release
 describes 8,615 labelled activities observed by five sensors, but only 14
 participants in one environment and no released video. It is a low-power

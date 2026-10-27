@@ -1,5 +1,58 @@
 # Source screen: ambient audio, vibration and environmental measurements
 
+## Completed bounded archive preflight
+
+After the source-only entry below, the predeclared smallest archive
+`23_take-from-stove.zip` was fetched and its 69,152,997 bytes matched the
+publisher MD5. It contains five HDF5 sensor files. The SHA-256-pinned archive
+was opened locally; all five files contain **368 participant/trial pairs from
+9 participants**, with the same pair identities across the five sensors.
+These are 368 events represented five times, not 1,840 independent events.
+Each sensor's participant/trial pairs are unique. This is one activity from
+one archive and does not establish support or splits for the other 24 classes.
+
+For matching participant/trial pairs, maximum absolute timestamp differences
+from sensor 1 were 0.2210, 0.2030, 0.2500 and 0.2300 in the stored native
+units for sensors 2–5, respectively. This is an exact comparison of saved
+numeric values, not proof of common physical clocks or units. Vibration rate
+values span 1,075.42–1,094.53 across the five files; use recorded per-row rates,
+not an assumed single rate. One exploratory first row was inspected for array
+shapes: audio had 42,605 int16 values, each vibration axis 2,876 int16 values.
+Those shape observations do not prove waveform alignment or a sampling rate.
+
+The preflight took 474.40 seconds including network, checksum and initial
+single-file schema inspection. CPU/h5py 3.14.0 was used; no encoder, GPU,
+training, validation or sealed audit ran. The saved archive remains outside
+Git under
+`C:/CodexArtifacts/pretrained-reuse-r2/adl-audio-vibration-archive-20261027-attempt-01/`.
+Its SHA-256 is `04bf32f55c93f54c49525d2b0581cb51f14c1ec302afb56b70a995fa4aa8f706`;
+the publisher MD5 is `10834b9e0813ee9441abe2c3f5c2233a`.
+
+The [identity receipt](R2_ADL_SENSOR_IDENTITY_20261027.json) records each
+member hash, participant counts, pair matches and rate ranges; its SHA-256 is
+`9adfbeb513acf5c9855fa94be0fbeec39ad047d7f7ac4bd9bfb680ab5b3ffb6a`.
+The original download/schema result SHA-256 is
+`f2dc538461d5726a0019cbad6802b561c4c94a48f20b0f3b42a3e70983bd9f50`.
+The original bounded acquisition script is preserved outside Git at
+`C:/CodexArtifacts/pretrained-reuse-r2/adl-audio-vibration-archive-preflight-20261027.py`,
+SHA-256 `47b8b63adf42f6964c5f3f26ca257bb93c5dcaa5731c661f3fe9cd2451cfc2ae`.
+The identity checker can be reproduced, using the existing h5py environment,
+with a **new** output filename:
+
+```powershell
+& C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-r1/venv/Scripts/python.exe `
+  -m scripts.audit_adl_sensor_identity `
+  --archive C:/CodexArtifacts/pretrained-reuse-r2/adl-audio-vibration-archive-20261027-attempt-01/23_take-from-stove.zip `
+  --output C:/CodexArtifacts/pretrained-reuse-r2/adl-audio-vibration-archive-20261027-attempt-01/sensor-identity-NEW.json
+```
+
+Tests exercise identity matching across reordered rows, duplicate/nonfinite
+rejection and unmatched participants/trials. Ruff passed; the local CPU suite
+reported **2,633 passed, 11 skipped**. More activities and a fixed
+participant-disjoint task are required before any model comparison. The
+14-person, single-environment limitation remains; this does not close the
+natural joint-AV or final product gates.
+
 ## Disposition
 
 This is a possible **audio + sensor research task**, not an audio/video dataset
