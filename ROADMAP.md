@@ -1,3 +1,9 @@
+**2026-10-27 R2 nested set thresholds:** Inner video-fold threshold selection
+raised aggregate exact accuracy from 23.99% to 25.57%, while multi-target
+accuracy fell from 6.17% to 4.63%. This is a nonblind development tradeoff,
+not a calibrated or independently evaluated product candidate.
+[Results](docs/pretrained_reuse/R2_SOURCE_SET_NESTED_THRESHOLD_RESULTS_20261027.md).
+
 **2026-10-27 R2 set-valued comparison:** The fixed 7-epoch, three-fold
 comparison produced 23.99% exact-set accuracy for joint input versus 23.83%
 video only, with a paired interval crossing zero. A same-record single-choice
