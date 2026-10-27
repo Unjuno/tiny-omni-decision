@@ -1,5 +1,18 @@
 # Verified native feature handoff: executed CPU replay
 
+## 2026-10-28 fresh local replay
+
+After storage cleanup, the unchanged script was run again with a new output
+directory. All 24 train requests passed the existing direct-versus-bound JSON,
+option-order and negative controls: eight each for audio, image and video.
+The script SHA-256 remains
+`b27d5d5a536c38029c37b02edb885fff829ffe13ed6ed8852b7acfb4fa525259`;
+`native-feature-binding-replay-20261028-attempt-04/result.json` SHA-256 is
+`aca20aa6bcfb58cc32decb0045d4e050a7966a69676ede1e77ccb976a7bf03d2`.
+Existing observation alignment, JSON and binding tests also passed (38 tests).
+This is a repeat of the same training examples and trusted extraction receipts;
+it does not verify encoder execution, fusion or independent model quality.
+
 The new `decide_bound_native` entry point binds the shared text-free JSON
 boundary to current local media, a full encoder/preprocessing cache identity,
 and a producer-pinned feature payload. A real CPU replay passed on 24 existing
