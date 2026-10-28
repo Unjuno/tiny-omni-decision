@@ -2449,6 +2449,8 @@ This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the f
 
 **2026-10-28 Path A throughput preflight:** the corrected 23,993/7,998 split passes the new fail-closed local identity/feature-bank contract (23,993 train, 7,998 validation). Three additional fixed train clips were run through the pinned native VideoPrism CPU worker: first-call 9.19s, then 2.49s and 2.47s, with finite ordered `[16,768]` features. The steady-state estimate is ~2.48s/clip (~22h for 31,991 clips before audio/write overhead). This is runtime-only evidence. The existing worker's 10-minute lifetime requires a resumable chunked extractor before full Path A feature extraction. No training or quality result was added. See [`GRID Path A CPU timing sample`](docs/pretrained_reuse/R2_GRID_PATH_A_SPEED_SAMPLE_20261028.md).
 
+**2026-10-28 GRID Path A fixed cohort:** a deterministic, speaker-disjoint subset now contains 768 unique train utterances across 24 speakers and 256 unique validation utterances across eight held-out speakers. Previously used validation pilot media were excluded; all 1,024 direct audio/video archive members exist, with no selected train/validation media overlap. This clears the media-cohort preflight for a narrow speech-slot readout, not a general AV quality claim; speaker-cluster uncertainty remains limited to eight validation groups. Frozen feature extraction and head fitting are pending. See [`GRID Path A cohort`](docs/pretrained_reuse/R2_GRID_PATH_A_COHORT_20261028.md).
+
 
 ### STARSS23 measured update (2026-10-11)
 
