@@ -46,6 +46,8 @@ def archive_member_hashes(path: Path, suffix: str) -> dict[str, str]:
                 member_path = PurePosixPath(member.filename)
                 if member.is_dir() or member_path.suffix.lower() != suffix:
                     continue
+                if member_path.name.startswith("._") or "__MACOSX" in member_path.parts:
+                    continue
                 if member.filename in seen_names:
                     raise ValueError(f"duplicate archive member name: {member.filename}")
                 seen_names.add(member.filename)

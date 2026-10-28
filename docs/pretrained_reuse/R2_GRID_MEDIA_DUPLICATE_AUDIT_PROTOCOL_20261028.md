@@ -86,6 +86,25 @@ was loaded, and no sealed audit was accessed.
 - The report pins the split summary, bundle index, train/validation manifests,
   and per-speaker audio TAR SHA-256 values.
 
+## Real ZIP member-hash smoke
+
+The first real-archive smoke found 2,000 `.mpg`-suffixed entries in `s10.zip`:
+1,000 actual clips plus 1,000 `__MACOSX/._*.mpg` AppleDouble metadata
+sidecars. The pinned source-inventory parser already excludes those sidecars;
+the media scanner was corrected to match it, and a unit test now covers the
+case. The pre-fix attempt is preserved under
+`grid-video-member-hash-smoke-20261028-attempt-01`.
+
+The corrected streaming scan passed on all 1,000 actual s10 clips, with 1,000
+distinct exact payload hashes. The ZIP's publisher MD5 and SHA-256 matched the
+acquisition receipt. It took 3.827 seconds and wrote the per-code hashes to
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-video-member-hash-smoke-20261028-attempt-02/result.json`
+(SHA-256 `773eca17c17e1456e8c3c6a10bfa50b149bbc6024ff797164c20ab65350710c8`).
+The runner snapshot SHA-256 is
+`5e081559be4cce03a21885b3c14d55a59dd8c185069e509e93d485ef20bb536a`.
+This validates one train speaker's ZIP structure, not the full split-level
+video duplicate gate.
+
 Executed command:
 
 ```powershell

@@ -31,6 +31,7 @@ def test_archive_member_hashes_reads_audio_and_video_payloads(tmp_path):
     video_path = tmp_path / "video.zip"
     with zipfile.ZipFile(video_path, "w") as archive:
         archive.writestr("s2/bbaa1a.mpg", b"mpg bytes")
+        archive.writestr("__MACOSX/s2/._bbaa1a.mpg", b"AppleDouble metadata")
 
     assert archive_member_hashes(audio_path, ".wav") == {
         "bbaa1a": hashlib.sha256(b"wav bytes").hexdigest()
