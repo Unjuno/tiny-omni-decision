@@ -154,12 +154,17 @@ At 2026-10-28 13:00 JST, 24 archives were verified; cumulative acquisition
 was 9.44 GiB with 2.82 GiB remaining. At the 1.687 MiB/s measured mean, the
 forecast was about 29 minutes. The progress log was updated at 13:00:06 JST.
 
-At 2026-10-28 13:19 JST, 28/32 ZIPs were complete. Accounting for the latest
-partial-transfer counters, 11.33 GiB of the pinned 12.26 GiB total had arrived
-and 0.93 GiB remained; three transfers were active and s30 had not started.
-The latest 57-second interval measured about 1.40 MiB/s, for roughly 12 minutes
-remaining at that instant. PID 28572 remained alive. The progress log timestamp
-was 13:19:04 JST; no restart or source change was made.
+At 2026-10-28 13:19 JST, 28 of the 31 remotely downloaded ZIPs were complete.
+The existing s30 archive was supplied through `--existing-archive` and reused
+after publisher-hash validation; it was not a pending transfer. Accounting for
+partial-transfer counters, 11.33 GiB of 11.90 GiB of new transfer bytes had
+arrived, with about 0.57 GiB remaining. Three transfers were active. PID 28572
+remained alive. The progress log timestamp was 13:19:04 JST; no restart or
+source change was made.
+
+At 2026-10-28 13:26:44 JST, 30/31 downloaded ZIPs were complete, s30 remained
+reused from the existing validation archive, and only s9 was still transferring.
+There were about 28.1 MiB of transfer bytes remaining; PID 28572 was alive.
 
 ## Audio-only interim result
 
