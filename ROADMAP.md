@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 08:25 JST R0 checkpoint confirmation:** Read-only sampling
+predicted the next save near 08:24:29; `model.pt` was written at 08:24:16.
+CPU `weights_only=True, mmap=True` inspection verifies saved step `511837`,
+`12,210,014,863` events, latest validation step `511477` / loss `-1.538318`,
+and best step `455514` / loss `-1.623135`. The checkpoint SHA-256 is
+`BEA851A2638D0383B173F23C1DB1D6F070399B902E6B13EFAF73503DDB3CAAC8`.
+At 08:25 the process remained live; RTX use was 15,821/16,384 MiB and C: had
+0.41 GiB free. The job still has `--steps 0`; this is checkpoint cadence, not
+completion. No process, run, or checkpoint was changed. See the
+[08:25 audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0825JST.md).
+
 **2026-10-29 08:03 JST R0 progress recheck:** Orbitune PID 22136 remains live
 at log step 511,150 / 12,190,945,719 events; the last saved checkpoint is
 still step 510,759 from 07:49:52 (best step 455,514). The next 30M-event save
