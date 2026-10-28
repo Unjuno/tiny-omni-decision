@@ -3365,3 +3365,16 @@ VideoPrism + sensor. This is same-site, group-disjoint development evidence
 from official-train data, not a blind audit; the 14 sites were already seen.
 No model was trained or changed. Preserve the negative joint result and the
 per-site/per-shard metrics. See the [frozen transfer report](docs/pretrained_reuse/R2_DROID_LATER_SHARD_FROZEN_TRANSFER_RESULTS_20261028.md).
+
+### GRID Path A frozen-feature extraction and readouts (2026-10-28)
+
+The fixed 768-train / 256-validation speaker-disjoint cohort was encoded with
+frozen Whisper and temporal VideoPrism features on CPU. Three 116,339-parameter
+readouts were fitted for 50 epochs each (Audio, Video, Joint). Best-validation
+macro Accuracy was 0.8919 Audio-only, 0.2057 Video-only and 0.8835 Joint; a
+cross-speaker video mismatch scored 0.8848. The speaker-cluster paired interval
+for matched-minus-mismatched Joint Accuracy includes zero. Audio and Joint show
+a large train/validation gap; Video did not fit this cohort. This is a negative
+joint-video result on constrained GRID speech-slot prediction, not a general AV
+quality claim or a product decision. No sealed audit, GPU, or cloud compute was
+used. Details and hashes: [GRID Path A readouts](docs/pretrained_reuse/R2_GRID_PATH_A_READOUTS_20261028.md).
