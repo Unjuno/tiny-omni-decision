@@ -26,6 +26,15 @@ about 68.19 GB, and one included baseline uses non-commercial ImageBind. Keep
 verified, and no payload was downloaded. See the [pinned source
 screen](docs/pretrained_reuse/R2_AV_SYNCBENCH_SOURCE_SCREEN_20261029.md).
 
+**2026-10-29 03:56 JST R0/R2 cross-branch recheck:** The current GPU process
+is confirmed as Orbitune PID 22136 (parent 31624); 15,821 MiB VRAM is allocated
+and C: has 0.72 GiB free, so no new fit was started. Open PR #36's DAVE screen
+has a stronger both-required AV task design than AV-SyncBench but remains
+blocked by non-commercial/agreement-bound component media. PR #35 keeps ZOD
+unadmitted pending access, drive-level grouping, and measured fusion benefit;
+PR #34 corrects GOOSE instance mapping without changing its unadmitted
+disposition. See the [live cross-branch recheck](docs/pretrained_reuse/R0_R2_LIVE_CROSS_BRANCH_RECHECK_20261029_0356JST.md).
+
 The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
 green. No model run was repeated.
