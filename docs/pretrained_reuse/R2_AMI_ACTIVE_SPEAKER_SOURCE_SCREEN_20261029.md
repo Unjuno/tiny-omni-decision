@@ -22,8 +22,15 @@ states that word-level transcripts are available per meeting. These ingredients
 could support an active-speaker candidate-choice task grounded in synchronized
 audio, video, and speaker/time annotations. The official [download page](https://groups.inf.ed.ac.uk/ami/download/)
 offers selectable signals and 22 MB manual / 68 MB automatic annotation
-archives; it says full-size video requires a separate distribution. Exact
-selected-video payload size and checksums remain unknown.
+archives; it says full-size video requires a separate distribution. The
+[official signal description](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
+reports low-size DivX video averaging 400 MB per meeting, and synchronized
+50-kbit/s RealMedia video plus RealMedia audio averaging 40 MB and 2 MB per
+meeting, respectively. These are published averages, not exact sizes for a
+selected meeting; checksums and availability for a chosen subset remain
+unknown. The RealMedia stream may be too low-bitrate for reliable visual
+speaker cues, so it cannot be assumed suitable before a local decode/quality
+smoke.
 
 The official [split page](https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml)
 defines training, development, and unseen evaluation partitions by meeting
@@ -51,7 +58,8 @@ needed.
 Metadata-only review of official AMI pages on 2026-10-29. No repository clone,
 annotation archive, audio, video, training, GPU work, or sealed-audit access.
 Reconsider after speaker-group split verification, annotation/video
-availability inventory, payload-size/hash preflight, and local storage is
-above the established reserve. The corpus license statement is useful source
-evidence, but this screen is not a legal review of individual recordings or a
-product-use approval.
+availability inventory, exact payload-size/hash preflight, and local storage
+is above the established reserve. A few-meeting RealMedia subset appears
+plausible by published average size but still needs that preflight. The corpus
+license statement is useful source evidence, but this screen is not a legal
+review of individual recordings or a product-use approval.
