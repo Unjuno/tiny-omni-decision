@@ -154,6 +154,13 @@ At 2026-10-28 13:00 JST, 24 archives were verified; cumulative acquisition
 was 9.44 GiB with 2.82 GiB remaining. At the 1.687 MiB/s measured mean, the
 forecast was about 29 minutes. The progress log was updated at 13:00:06 JST.
 
+At 2026-10-28 13:19 JST, 28/32 ZIPs were complete. Accounting for the latest
+partial-transfer counters, 11.33 GiB of the pinned 12.26 GiB total had arrived
+and 0.93 GiB remained; three transfers were active and s30 had not started.
+The latest 57-second interval measured about 1.40 MiB/s, for roughly 12 minutes
+remaining at that instant. PID 28572 remained alive. The progress log timestamp
+was 13:19:04 JST; no restart or source change was made.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
@@ -275,6 +282,16 @@ duplicates. Eight speakers remain unscanned.
 - Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-video-partial-media-audit-20261028-attempt-11/report.json`.
 - Report SHA-256: `1b3e2858980cc8472a8949ab21a7630ccabb5f3d4921eefc2d86479db53171d1`.
 - Runtime: 73.749 seconds.
+
+At 2026-10-28 13:14 JST, the incremental diagnostic covered 27
+publisher-verified archives and hashed 27,000 actual MPG payloads. All 27,000
+hashes were unique, with zero exact cross-split or within-split duplicate
+groups. Five speakers were still outside this partial screen; it does not pass
+the required full 32-speaker gate.
+
+- Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-video-partial-media-audit-20261028-attempt-14/report.json`.
+- Report SHA-256: `68cce59bc2fd3c3e65a32a184a5d68a6df512cb3419a1630ceee2715a5726f30`.
+- Runtime: 88.890 seconds.
 
 Executed command:
 
