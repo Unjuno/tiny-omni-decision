@@ -8,10 +8,11 @@ discarded after counts and hashes are written.
 from __future__ import annotations
 
 import argparse
+import csv
+import hashlib
 import io
 import json
 import struct
-from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -29,6 +30,7 @@ from scripts.audit_goose_archive_indexes import (
 
 INDEX_SHA256 = "38fa35593065b5768e823dc67275d7088c359b29e1690724bfc3f54178d76cb4"
 SAMPLE_COUNT = 3
+MAPPING_SHA256 = "88ae319ba5a3877dd3ae0773f693a6a5fdc283934140de9dfaff029108aefd7f"
 MAX_TOTAL_SAMPLE_BYTES = 128 * 1024 * 1024
 SUFFIX_TO_KIND = {
     "_windshield_vis.png": "image",
@@ -132,7 +134,28 @@ def read_member_payload(session, spec, record, budget):
     }
 
 
-def summarize_pair(payloads, receipts):
+def load_instance_class_ids(path: Path, expected_sha256: str = MAPPING_SHA256) -> set[int]:
+    data = path.read_bytes()
+    if hashlib.sha256(data).hexdigest() != expected_sha256:
+        raise ValueError("GOOSE label mapping SHA-256 mismatch")
+    rows = list(csv.DictReader(io.StringIO(data.decode("utf-8"))))
+    if not rows or set(rows[0]) != {"class_name", "label_key", "has_instance", "hex"}:
+        raise ValueError("unexpected GOOSE label mapping columns")
+    ids = [int(row["label_key"]) for row in rows]
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate GOOSE label keys")
+    return {int(row["label_key"]) for row in rows if row["has_instance"] == "1"}
+
+
+def instance_keys(semantic, instance, instance_class_ids):
+    return {
+        (int(class_id), int(instance_id))
+        for class_id, instance_id in zip(semantic.ravel(), instance.ravel(), strict=True)
+        if int(class_id) in instance_class_ids and int(instance_id) >= 0
+    }
+
+
+def summarize_pair(payloads, receipts, instance_class_ids):
     input_image = np.asarray(Image.open(io.BytesIO(payloads["image"])).convert("RGB"))
     if input_image.ndim != 3 or input_image.shape[2] != 3:
         raise ValueError("RGB input image failed to decode")
@@ -153,63 +176,33 @@ def summarize_pair(payloads, receipts):
     semantic3d = labels & 0xFFFF
     instance3d = labels >> 16
 
-    keys2d = {
-        (int(class_id), int(instance_id))
-        for class_id, instance_id in zip(
-            semantic.ravel(), instance_image.ravel(), strict=True
-        )
-        if int(class_id) > 0 and int(instance_id) > 0
-    }
-    keys3d = {
-        (int(class_id), int(instance_id))
-        for class_id, instance_id in zip(semantic3d, instance3d, strict=True)
-        if int(class_id) > 0 and int(instance_id) > 0
-    }
+    keys2d = instance_keys(semantic, instance_image, instance_class_ids)
+    keys3d = instance_keys(semantic3d, instance3d, instance_class_ids)
     matched_instance_class_keys = keys2d & keys3d
 
-    ids2d, counts2d = np.unique(instance_image.astype(np.int64), return_counts=True)
-    ids3d, counts3d = np.unique(instance3d.astype(np.int64), return_counts=True)
-    count2d = {int(i): int(c) for i, c in zip(ids2d, counts2d, strict=True) if i > 0}
-    count3d = {int(i): int(c) for i, c in zip(ids3d, counts3d, strict=True) if i > 0}
-    common = sorted(count2d.keys() & count3d.keys())
-    semantic_match = []
-    class_pairs = Counter()
-    for instance_id in common:
-        classes2d = semantic[instance_image == instance_id]
-        classes3d = semantic3d[instance3d == instance_id]
-        if len(classes2d) and len(classes3d):
-            mode2d = int(Counter(map(int, classes2d.ravel())).most_common(1)[0][0])
-            mode3d = int(Counter(map(int, classes3d)).most_common(1)[0][0])
-            semantic_match.append(mode2d == mode3d)
-            class_pairs[(mode2d, mode3d)] += 1
+    ids2d = {instance_id for _, instance_id in keys2d}
+    ids3d = {instance_id for _, instance_id in keys3d}
+    common = sorted(keys2d & keys3d)
 
     return {
         "rgb_input_shape": list(input_image.shape),
         "image_instance_mode": image_mode,
         "image_shape": list(instance_image.shape),
-        "image_nonzero_instance_count": len(count2d),
+        "image_instance_object_key_count": len(keys2d),
         "point_count": len(points),
         "point_finite": bool(np.isfinite(points).all()),
-        "point_nonzero_instance_count": len(count3d),
-        "shared_nonzero_instance_ids": len(common),
-        "shared_instance_semantic_class_matches": int(sum(semantic_match)),
-        "shared_instance_semantic_class_mismatches": int(len(semantic_match) - sum(semantic_match)),
+        "point_instance_object_key_count": len(keys3d),
+        "shared_instance_object_keys": len(common),
         "image_instance_class_key_count": len(keys2d),
         "pointcloud_instance_class_key_count": len(keys3d),
         "shared_instance_class_key_count": len(matched_instance_class_keys),
         "shared_instance_class_key_jaccard": round(
             len(matched_instance_class_keys) / max(len(keys2d | keys3d), 1), 6
         ),
-        "shared_instance_semantic_class_pair_counts": [
-            {"image_class_id": image_class, "pointcloud_class_id": point_class, "instances": count}
-            for (image_class, point_class), count in sorted(class_pairs.items())
-        ],
         "shared_id_jaccard": round(
-            len(common) / max(len(count2d.keys() | count3d.keys()), 1), 6
+            len(ids2d & ids3d) / max(len(ids2d | ids3d), 1), 6
         ),
-        "shared_ids_semantic_mode_agreement": round(
-            float(np.mean(semantic_match)), 6
-        ) if semantic_match else None,
+        "instance_id_zero_included": True,
         "instance_id_values_sha256": sha256(
             json.dumps(common, separators=(",", ":")).encode()
         ),
@@ -219,6 +212,7 @@ def summarize_pair(payloads, receipts):
 
 def audit(
     index_path: Path,
+    mapping_path: Path,
     output_dir: Path,
     session,
     *,
@@ -229,6 +223,7 @@ def audit(
     if sha256(index_bytes) != INDEX_SHA256:
         raise ValueError("source archive-index SHA-256 mismatch")
     indexes = json.loads(index_bytes)
+    instance_class_ids = load_instance_class_ids(mapping_path)
     selected, validation_group_count, complete_train_count = select_frames(
         indexes, start_group_index=start_group_index, sample_count=sample_count
     )
@@ -275,7 +270,7 @@ def audit(
             {
                 "frame_key_sha256": sha256(key.encode()),
                 "scenario_sha256": sha256(value["group"].encode())[:16],
-                **summarize_pair(payloads, receipts),
+                **summarize_pair(payloads, receipts, instance_class_ids),
             }
         )
         del payloads
@@ -292,6 +287,8 @@ def audit(
     result = {
         "plan_sha256": sha256(plan_path.read_bytes()),
         "source_index_sha256": INDEX_SHA256,
+        "label_mapping_sha256": MAPPING_SHA256,
+        "instance_class_ids": sorted(instance_class_ids),
         "frames": frame_results,
         "transfer": {
             "members": sum(len(row["member_receipts"]) for row in frame_results),
@@ -313,6 +310,7 @@ def audit(
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--index-path", type=Path, required=True)
+    parser.add_argument("--mapping-path", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--start-group-index", type=int, default=0)
     parser.add_argument("--sample-count", type=int, default=SAMPLE_COUNT)
@@ -324,6 +322,7 @@ def main():
     with requests.Session() as session:
         result = audit(
             args.index_path,
+            args.mapping_path,
             args.output_dir,
             session,
             start_group_index=args.start_group_index,
