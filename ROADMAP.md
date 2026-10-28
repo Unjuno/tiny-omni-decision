@@ -301,6 +301,17 @@ raw video requires large MCAP files. Keep `REVIEW`/not admitted; metadata only
 was fetched, no media or audit data was opened. See the
 [source screen](docs/pretrained_reuse/R2_EGOVIZ120_SOURCE_SCREEN_20261029.md)
 and [machine-readable metadata](manifests/pretrained_reuse/egoviz120-metadata-screen-20261029.json).
+**2026-10-29 EgoViz-120 provenance recheck:** The publisher's dataset-specific
+card still says action labels are model-generated and not human-verified, while
+its general company site describes human review and random re-audits. Treat the
+dataset-specific label provenance as unresolved pending a dataset-specific
+clarification or sample audit. The current GitHub license at
+`humaidtech/EgoViz-120@9c91b23a66fcaa1fee083b679d5993fdfff9a64e` explicitly
+states CC BY 4.0 including commercial use with attribution; the exact Hugging
+Face card revision is `7a84ecd3411b9f219b02f273c438f1ea12d74f52`. This resolves
+the publisher-license-text check, not label quality, participant independence,
+both-input necessity, or the local media-storage gate. No media was downloaded.
+See the [pinned provenance recheck](docs/pretrained_reuse/R2_EGOVIZ120_PROVENANCE_RECHECK_20261029.md).
 
 **2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
 audio/video features were evaluated on two fixed development tasks. The
