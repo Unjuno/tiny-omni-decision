@@ -41,6 +41,10 @@ and streaming AV event-response. However, dataset/media rights and consent are
 not separately established, source-group independence is unverified, and its
 AV dev shard is 9.28 GB against 0.72 GiB local free space. Keep
 `REVIEW_NOT_ADMITTED`; no data was fetched. See the [source/task screen](docs/pretrained_reuse/R2_HEARTBEAT_2027_SOURCE_SCREEN_20261029.md).
+The related Realtime-Venus paper describes scenario-planned/composed AV
+construction, while the exact lineage and natural/composed fraction of these
+challenge partitions remain unknown; do not treat this as an independent
+natural-AV benchmark without a provenance audit.
 
 The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are

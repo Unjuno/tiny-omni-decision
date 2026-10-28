@@ -5,6 +5,7 @@
   "screened_at": "2026-10-29",
   "official_sources": {
     "challenge_website": "https://heartbeat-challenge.github.io/",
+    "related_system_paper": "https://arxiv.org/abs/2609.13814",
     "baseline_repository": "https://github.com/heartbeat-challenge/HEARTBEAT_challenge_baseline",
     "baseline_commit": "53cf8aa4d55ed522facd8083d56bc998668dc847",
     "data_model_repository": "https://huggingface.co/inclusionAI/Realtime-Venus",
@@ -45,6 +46,13 @@
     "underlying_media_provenance_and_rights": "not independently established",
     "speaker_consent_and_privacy_terms": "not established in the inspected materials",
     "product_compatible": false
+  },
+  "provenance_followup": {
+    "challenge_relation": "The pinned Realtime-Venus model README says HEARTBEAT grew out of Realtime-Venus; identity between the challenge partitions and the paper's full training corpus is not established",
+    "related_paper_pipeline": "scenario/interaction planning, speech realization, temporal alignment, and audiovisual instances combining composed audio with associated video",
+    "natural_vs_composed_media_fraction": "unknown for the released HEARTBEAT partitions",
+    "distribution_overlap_risk": "challenge data may share lineage with the related Realtime-Venus system; exact source/session overlap is unverified",
+    "natural_av_quality_gate_substitute": false
   },
   "split_and_evaluation": {
     "official_splits_seen": ["train", "dev"],

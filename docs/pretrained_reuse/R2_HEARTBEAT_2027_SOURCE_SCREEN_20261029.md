@@ -58,17 +58,33 @@ that does not resolve the data-use or split-integrity gates.
 The baseline code repository declares Apache-2.0 and the linked HF repository
 card displays Apache-2.0, but the inspected challenge dataset README does not
 state separate dataset terms, source-media provenance, or speaker-consent
-terms. I do not infer a grant for underlying conversational recordings from a
-code/model repository license. The challenge page asks participants to use
-open-source data and models; it does not provide a separate dataset license in
-the materials inspected here.
+terms. The pinned Realtime-Venus root README explicitly says to review the
+licenses and acceptable-use terms of any data used with its checkpoint; its
+`LEGAL.md` only discusses which language governs source-code comments. I do not
+infer a grant for underlying conversational recordings from a code/model
+repository license. The challenge page asks participants to use open-source
+data and models; it does not provide a separate dataset license in the
+materials inspected here.
+
+There is also a provenance/generalization issue. The [related
+Realtime-Venus paper](https://arxiv.org/abs/2609.13814) describes a full-duplex
+data pipeline based on scenario planning, speech realization, and temporal
+alignment, with audiovisual instances combining composed audio and associated
+video. The pinned model README says HEARTBEAT grew out of Realtime-Venus, but
+the inspected sources do not establish whether these exact challenge
+partitions are the same data, how much is naturally recorded versus composed,
+or whether source sessions overlap with the related model's development. Treat
+HEARTBEAT as a promising interaction-control task candidate, not yet as an
+independent natural-AV quality benchmark. Synthetic/composed records must not
+be used to close the roadmap's natural-AV gate.
 
 The public material describes train/dev partitions and source shards, but this
 metadata-only screen did not establish participant-, speaker-, conversation-,
 or source-level disjointness. It also did not identify a sealed final audit.
 Therefore do not download, train, or evaluate on this corpus yet. Admission
 requires explicit rights/consent terms, group-level split verification, a
-task-specific audio/AV necessity protocol, and a storage-safe run plan.
+task-specific audio/AV necessity protocol, a provenance/overlap audit, and a
+storage-safe run plan.
 
 ## Reproducibility and limits
 
