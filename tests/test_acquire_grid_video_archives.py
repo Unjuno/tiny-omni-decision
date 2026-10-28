@@ -106,6 +106,51 @@ def test_download_one_checks_range_stream_hash_and_publisher_md5(tmp_path, monke
     assert not (tmp_path / "s1.zip.part").exists()
 
 
+def test_download_one_resumes_only_from_validated_content_range(tmp_path, monkeypatch):
+    partial = tmp_path / "s1.zip.part"
+    partial.write_bytes(b"te")
+
+    class Response:
+        status = 206
+        headers = {"Content-Range": "bytes 2-3/4"}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def __init__(self):
+            self.payload = b"st"
+
+        def read(self, _size):
+            payload, self.payload = self.payload, b""
+            return payload
+
+    seen_request = {}
+
+    def fake_urlopen(request, **_kwargs):
+        seen_request.update(request.header_items())
+        return Response()
+
+    monkeypatch.setattr(
+        "scripts.acquire_grid_video_archives.urllib.request.urlopen",
+        fake_urlopen,
+    )
+    item = {
+        "speaker": "s1",
+        "url": "https://zenodo.org/api/records/3625687/files/s1.zip/content",
+        "expected_bytes": 4,
+        "publisher_md5": "098f6bcd4621d373cade4e832627b4f6",
+    }
+
+    result = download_one(item, tmp_path, tmp_path / "progress.jsonl")
+
+    assert seen_request["Range"] == "bytes=2-"
+    assert result["sha256"] == hashlib.sha256(b"test").hexdigest()
+    assert (tmp_path / "s1.zip").read_bytes() == b"test"
+
+
 def test_existing_archive_argument_requires_speaker_equals_path(tmp_path):
     assert parse_existing_archive(f"s30={tmp_path / 's30.zip'}") == (
         "s30",
