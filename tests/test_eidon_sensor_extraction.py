@@ -1,8 +1,11 @@
 import json
 
+import pytest
+
+pytest.importorskip("pyarrow", reason="Eidon Parquet extraction is an optional data dependency")
+
 import pyarrow as pa
 import pyarrow.parquet as pq
-import pytest
 
 from scripts.extract_eidon_sensor_features import VIDEO_REVISION, _load_split, midpoint_window
 

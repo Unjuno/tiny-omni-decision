@@ -1,7 +1,8 @@
 import pytest
-import torch
 
-from scripts.fit_eidon_temporal_matcher import PairMatcher
+torch = pytest.importorskip("torch", reason="temporal matcher checks require optional PyTorch")
+
+from scripts.fit_eidon_temporal_matcher import PairMatcher  # noqa: E402
 
 
 @pytest.mark.parametrize("mode", ["pooled", "lstm"])
