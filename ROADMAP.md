@@ -9,6 +9,10 @@ the fit runner's 2-GiB output reserve. No process was interrupted and no new
 fit was started. The current common-fit GPU guard also rejects the live
 processes. See the [live audit and next-run gate](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
 
+The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
+absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
+green. No model run was repeated.
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was
