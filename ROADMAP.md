@@ -1,3 +1,12 @@
+**2026-10-28 R2 GOOSE cross-sensor instance-label probe:** Three fixed
+train-only image/LiDAR frames passed pinned range, CRC and decode checks. The
+official policy supports a same-object task in principle, but only 25/25,
+7/17 and 14/16 numerically overlapping 2D instance IDs also matched semantic
+class across the two label streams. This is too inconsistent to admit a
+class-instance Decision target; broader train-only audit and a non-oracle
+inference-time proposal path are required. No model or validation/test data was
+used. [Protocol and hashes](docs/pretrained_reuse/R2_GOOSE_INSTANCE_LABEL_CORRESPONDENCE_20261028.md).
+
 **2026-10-28 R2 GOOSE ZIP-index and transfer preflight:** The official train
 and validation archives are range-capable and their pinned ZIP64 central
 directories contain 7,712 matched train image/point-cloud IDs and 961

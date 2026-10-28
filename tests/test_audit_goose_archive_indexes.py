@@ -231,3 +231,85 @@ def test_three_sample_reader_verifies_member_without_saving_media():
     assert result["crc32_verified"] is True
     assert result["uncompressed_bytes"] == len(contents)
     assert session.transferred < len(payload)
+
+
+def test_instance_correspondence_probe_excludes_validation_scenarios():
+    from scripts.probe_goose_instance_correspondence import select_frames
+
+    def members(split, scenario, modality):
+        stem = f"{scenario}__0000_123456"
+        if modality == "2d":
+            names = [
+                f"images/{split}/{scenario}/{stem}_windshield_vis.png",
+                f"labels/{split}/{scenario}/{stem}_labelids.png",
+                f"labels/{split}/{scenario}/{stem}_instanceids.png",
+            ]
+        else:
+            names = [
+                f"lidar/{split}/{scenario}/{stem}_vls128.bin",
+                f"labels/{split}/{scenario}/{stem}_goose.label",
+            ]
+        return [{"name": name} for name in names]
+
+    indexes = [
+        {
+            "name": "goose_2d_train.zip",
+            "member_inventory": members("train", "scene-a", "2d")
+            + members("train", "scene-b", "2d")
+            + members("train", "scene-c", "2d")
+            + members("train", "scene-d", "2d"),
+        },
+        {
+            "name": "goose_3d_train.zip",
+            "member_inventory": members("train", "scene-a", "3d")
+            + members("train", "scene-b", "3d")
+            + members("train", "scene-c", "3d")
+            + members("train", "scene-d", "3d"),
+        },
+        {"name": "goose_2d_val.zip", "member_inventory": members("val", "scene-b", "2d")},
+        {"name": "goose_3d_val.zip", "member_inventory": members("val", "scene-b", "3d")},
+    ]
+
+    selected, validation_group_count, complete_count = select_frames(indexes)
+    assert validation_group_count == 1
+    assert complete_count == 3
+    assert len(selected) == 3
+    assert {item[1]["group"] for item in selected} == {"scene-a", "scene-c", "scene-d"}
+
+
+def test_summarizes_cross_modal_instance_ids_without_retaining_payloads():
+    import numpy as np
+    from PIL import Image
+
+    from scripts.probe_goose_instance_correspondence import summarize_pair
+
+    def png(array):
+        buffer = io.BytesIO()
+        Image.fromarray(array).save(buffer, format="PNG")
+        return buffer.getvalue()
+
+    instance_2d = np.array([[1, 1], [0, 2]], dtype=np.uint16)
+    semantic_2d = np.array([[3, 3], [0, 5]], dtype=np.uint8)
+    image_rgb = np.zeros((2, 2, 3), dtype=np.uint8)
+    labels_3d = np.array(
+        [(1 << 16) | 3, (1 << 16) | 3, 0, (2 << 16) | 5], dtype="<u4"
+    )
+    points = np.array(
+        [[0, 0, 0, 1], [1, 0, 0, 2], [2, 0, 0, 3], [3, 0, 0, 4]], dtype="<f4"
+    )
+    payloads = {
+        "image": png(image_rgb),
+        "instance2d": png(instance_2d),
+        "semantic2d": png(semantic_2d),
+        "pointcloud": points.tobytes(),
+        "labels3d": labels_3d.tobytes(),
+    }
+    receipts = {key: {"zip_crc32_verified": True} for key in payloads}
+    result = summarize_pair(payloads, receipts)
+    assert result["shared_nonzero_instance_ids"] == 2
+    assert result["shared_instance_class_key_count"] == 2
+    assert result["shared_instance_class_key_jaccard"] == 1.0
+    assert result["shared_id_jaccard"] == 1.0
+    assert result["shared_ids_semantic_mode_agreement"] == 1.0
+    assert result["point_count"] == 4
+    assert result["point_finite"] is True
