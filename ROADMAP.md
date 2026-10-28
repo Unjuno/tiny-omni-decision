@@ -3339,3 +3339,13 @@ This sample-only screen does not prove the full release has no other sites; it
 does not justify another site-held-out fit by itself. Six verified shard
 downloads averaged 21.97 MiB/s; no labels, media, model or GPU were opened.
 See [the sample protocol, hashes, timing and limitations](docs/pretrained_reuse/R2_DROID_UNSEEN_SITE_SHARD_SAMPLE_20261028.md).
+
+### DROID later-shard frozen-readout transfer (2026-10-28)
+
+The three preselected later shards yielded 137 eligible episodes with zero
+prior episode/group/sampled-frame overlap. Replaying the unchanged readouts
+gave 42.34% Accuracy / 1.4968 NLL for sensor-only versus 39.42% / 1.7790 for
+VideoPrism + sensor. This is same-site, group-disjoint development evidence
+from official-train data, not a blind audit; the 14 sites were already seen.
+No model was trained or changed. Preserve the negative joint result and the
+per-site/per-shard metrics. See the [frozen transfer report](docs/pretrained_reuse/R2_DROID_LATER_SHARD_FROZEN_TRANSFER_RESULTS_20261028.md).
