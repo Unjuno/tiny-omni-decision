@@ -9,6 +9,18 @@ measured checkpoint-to-checkpoint throughput projects another save near
 06:40:40. This `--steps 0` run has no completion ETA, and its process/artifacts
 were left untouched. See the [R0 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0534JST.md).
 
+**2026-10-29 R2-M Multimodal-Wireless metadata screen:** The official project
+describes 161,400 synchronized simulation frames across 4 towns, 16 scenarios,
+and 3 weather conditions, with camera, LiDAR, depth, radar, IMU/GPS, and CSI
+data; its project page states CC BY 4.0. This could support a sensor/video
+decision task, but the release defines no benchmark target or split manifest,
+and the official download page gives no payload size. Current C: free space is
+about 0.48 GiB, so no dataset data were fetched. Keep `REVIEW_NOT_ADMITTED`
+until payload size/checksums and scenario-grouped split feasibility are known,
+then freeze a future-channel decision task and test joint-input necessity
+against unimodal and shuffled controls. See the
+[source screen](docs/pretrained_reuse/R2_MULTIMODAL_WIRELESS_SOURCE_SCREEN_20261029.md).
+
 **2026-10-29 05:56 JST R0 checkpoint recheck:** Orbitune PID 22136 remains
 live at step 507,200 / 12,080,946,174 events; its last saved checkpoint is
 still step 506,449. The longer 05:47–05:56 log interval measured 30.6
