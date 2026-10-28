@@ -1,5 +1,30 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 04:57 JST R0 checkpoint recheck:** Read-only sampling of the
+active Orbitune PID 22136 (started 2026-10-28 09:12 JST) predicted the next
+30-million-event save near 04:57; the checkpoint was written at 04:57:10.
+CPU `weights_only=True` inspection verifies step 505,374 and 12,030,012,963
+events. `model.pt` is 117,942,316 bytes with SHA-256
+`e363276109616051ae85438890d06fa035dd021664643f6e116f15990d7ebfcc`.
+Three pre-save observations measured about 31.4 steps/minute and 14,689
+events/second; the projected 13.5-minute save time was within seconds of the
+observed interval, despite validation pauses. At 04:57:56 the process remained
+alive and RTX 3080 use was 15,821/16,384 MiB. C: fell to 0.499 GiB free during
+the save, below the existing 2-GiB fit reserve; do not start a Tiny Omni fit
+until storage is safely restored and the cooperative GPU guard permits it.
+No process or run was changed. See the [read-only measurement record](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0457JST.md).
+
+**2026-10-29 R2 DROID later-shard transfer (PR #32, open draft):** Three
+unchanged frozen readouts were replayed on 137 previously unopened official-
+train episodes with zero overlap in episode, recording group, or sampled
+frames; all 14 sites had appeared in the earlier cohort. Sensor-only scored
+42.34% Accuracy / 1.4968 NLL; matched Video+sensor scored 39.42% / 1.7790,
+with higher Brier and ECE as well. Preserve this as negative same-site,
+group-disjoint development evidence; it gives no basis for another DROID fusion
+fit or a broad video/sensor conclusion. No training, GPU, or sealed audit was
+used. See the [frozen transfer report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-droid-temporal-transfer-20261028/docs/pretrained_reuse/R2_DROID_LATER_SHARD_FROZEN_TRANSFER_RESULTS_20261028.md)
+and [PR #32](https://github.com/Unjuno/tiny-omni-decision/pull/32).
+
 **2026-10-29 R0 live-state audit:** PR #15 remains Draft on the R0–R8 branch;
 `main` has since moved to a separate ternary-first roadmap, and no merge was
 made. The 2,048-update Path A baseline and 32,768-update long curve are already
