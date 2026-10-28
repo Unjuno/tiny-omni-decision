@@ -61,6 +61,12 @@ whole-run rate the forecast is approximately 2 hours 8 minutes. The s14 and
 s15 transfers had started, and the overall acquisition was still live. Do not
 interpret this interim rate as a guaranteed ETA.
 
+At 2026-10-28 11:36 JST, the next four connections (s14–s17) had produced 11
+post-startup interval samples averaging 0.324 MiB/s per connection, or 1.294
+MiB/s across the four workers. The remaining 10.4 GiB forecast was then 2
+hours 17 minutes. The interval set includes three recent intervals each for
+s14–s16 and two for s17; sampling and transfer continue.
+
 The exact acquisition command was:
 
 ```powershell
