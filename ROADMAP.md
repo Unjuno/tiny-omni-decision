@@ -21,7 +21,10 @@ train utterance and one speaker-disjoint validation utterance passed integrity
 checks and frozen Whisper/VideoPrism feature extraction on CPU. The audio came
 from per-speaker bundle tars, not the separately audited aggregate audio ZIP.
 This verifies only the two-example runtime path; it is not a trained baseline,
-media-duplicate audit, or quality result. [Details and hashes](docs/pretrained_reuse/R2_GRID_PATH_A_FROZEN_FEATURE_SMOKE_20261028.md).
+media-duplicate audit, or quality result. The full official per-speaker
+archive acquisition for an exact train/validation WAV/MPG payload-hash scan is
+now running in a separate external attempt; no GRID training is authorized
+until that integrity scan completes. [Protocol and measured transfer rates](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md).
 **2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
 64-quartet / 256-query sample completed on CPU with integrity and order checks.
 Joint Accuracy was 34.38%, but NLL/Brier/ECE were poor (2.049/0.911/0.337);
