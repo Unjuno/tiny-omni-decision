@@ -88,6 +88,12 @@ At 2026-10-28 11:59 JST, the cumulative-size samples were 1.333, 1.867 and
 mean. The download remained active; forecast changes reflect variable
 throughput and are not a completion claim.
 
+At 2026-10-28 12:02 JST, the next three cumulative-size samples were all
+1.867 MiB/s. Eight archives were verified, about 3.95 GiB had been downloaded
+including partials, and 8.31 GiB remained. The short-window forecast was
+approximately 76 minutes. PID 28572 and the progress log were both confirmed
+live at this observation; no GPU or model training was used.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
