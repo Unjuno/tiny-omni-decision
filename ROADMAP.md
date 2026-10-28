@@ -20,6 +20,16 @@ head are green. RTX 3080 remains occupied (15,821 MiB used, 355 MiB free), and
 C: has 795,308,032 bytes free (0.741 GiB). Orbitune PIDs 22136/31624 and its
 watchdogs remain present. No training or process intervention was performed.
 
+**2026-10-29 02:45 JST R0 checkpoint recheck:** Orbitune remains active; its
+live checkpoint was read on CPU and reports step 501,070 at 92.03% of epoch 1.
+The command has `--steps 0` and no epoch stop limit, so no completion ETA is
+available. GPU utilization dipped as low as 52%, but VRAM stayed at 15,821 MiB
+used / 355 MiB free; C: has 0.737 GiB free. The latest `model.pt` timestamp is
+02:39 JST. Do not treat utilization dips as an idle GPU or attempt a fit while
+the 2-GiB output reserve also fails. PR #15 commit `7dba9b5e` passed its push
+and PR checks. Details and exact read-only inspection method are in the
+[follow-up audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
+
 **2026-10-29 R2-M audio/sensor source screen:** The Zenodo ADL collection has
 25 activity labels, 14 participants, synchronized ambient audio and multiple
 environmental sensors, but it contains no video and provides no declared
