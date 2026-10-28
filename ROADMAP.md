@@ -35,6 +35,13 @@ unadmitted pending access, drive-level grouping, and measured fusion benefit;
 PR #34 corrects GOOSE instance mapping without changing its unadmitted
 disposition. See the [live cross-branch recheck](docs/pretrained_reuse/R0_R2_LIVE_CROSS_BRANCH_RECHECK_20261029_0356JST.md).
 
+**2026-10-29 R2 HEARTBEAT 2027 screen:** This new challenge is the closest
+task format found so far to typed Decision JSON: four-way audio turn-taking
+and streaming AV event-response. However, dataset/media rights and consent are
+not separately established, source-group independence is unverified, and its
+AV dev shard is 9.28 GB against 0.72 GiB local free space. Keep
+`REVIEW_NOT_ADMITTED`; no data was fetched. See the [source/task screen](docs/pretrained_reuse/R2_HEARTBEAT_2027_SOURCE_SCREEN_20261029.md).
+
 The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
 green. No model run was repeated.
