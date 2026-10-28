@@ -55,6 +55,15 @@ was accessed. Prioritize rights, archive identity, and group-split verification
 before any download or training. See the [source
 screen](docs/pretrained_reuse/R2_OPENMARCIE_SOURCE_TASK_SCREEN_20261028.md).
 
+**2026-10-28 R2 LATAM Egocentric + IMU screen:** The card reports CC BY 4.0
+and research-use participant consent, but only 20 clips / 39 minutes, one
+unpartitioned split, and 3.41 GB total payload. Only 13 clips have recoverable
+clip-level synchronization; 7 session-level IMU streams have unknown offsets.
+No payload was downloaded. This is at most a small input/sync prototype after
+storage, participant-group and consent review; it cannot establish two-input
+necessity or R2-M generalization. See the
+[source screen](docs/pretrained_reuse/R2_LATAM_EGOCENTRIC_IMU_SOURCE_SCREEN_20261028.md).
+
 **2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
 audio/video features were evaluated on two fixed development tasks. The
 six-slot joint readout (88.35%) did not improve over audio-only (89.19%); a
