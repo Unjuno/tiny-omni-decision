@@ -2367,6 +2367,15 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+**2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
+release is a relevant video/wearable-sensor work-activity source, but its
+non-RGB dataset is CC BY-NC-SA 4.0 and its RGB release is restricted to
+academic research with redistribution prohibited. The official challenge
+split also shares participants across train and validation. Keep it
+`REVIEW_NOT_ADMITTED` for product-directed work; no payload was fetched. The
+preprocessed IMU archive is 515 MB, above current local free space. See the
+[pinned source screen](docs/pretrained_reuse/R2_OPENPACK_SOURCE_SCREEN_20261029.md).
+
 **2026-10-29 R2-M XRFv2 Plus screen:** The official Kaggle API reports
 `licenseName=Unknown` for the 210.8 GB data release. Zenodo CC BY metadata
 covers the attached paper; the project repository's MIT license covers code,
