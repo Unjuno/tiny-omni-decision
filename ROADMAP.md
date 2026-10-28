@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 R0 live-state audit:** PR #15 remains Draft on the R0–R8 branch;
+`main` has since moved to a separate ternary-first roadmap, and no merge was
+made. The 2,048-update Path A baseline and 32,768-update long curve are already
+complete, with step 8,192 selected by NLL; do not repeat them. The RTX 3080 is
+occupied by Orbitune (15,821/16,384 MiB, 71%), and C: has 0.737 GiB free versus
+the fit runner's 2-GiB output reserve. No process was interrupted and no new
+fit was started. The current common-fit GPU guard also rejects the live
+processes. See the [live audit and next-run gate](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was
