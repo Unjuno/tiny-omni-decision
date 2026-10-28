@@ -2451,6 +2451,8 @@ This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the f
 
 **2026-10-28 GRID Path A fixed cohort:** a deterministic, speaker-disjoint subset now contains 768 unique train utterances across 24 speakers and 256 unique validation utterances across eight held-out speakers. Previously used validation pilot media were excluded; all 1,024 direct audio/video archive members exist, with no selected train/validation media overlap. This clears the media-cohort preflight for a narrow speech-slot readout, not a general AV quality claim; speaker-cluster uncertainty remains limited to eight validation groups. Frozen feature extraction and head fitting are pending. See [`GRID Path A cohort`](docs/pretrained_reuse/R2_GRID_PATH_A_COHORT_20261028.md).
 
+**2026-10-28 GRID Path A extractor smoke:** a new chunked CPU path loaded frozen Whisper (8.21M) and native temporal VideoPrism-B (114.37M), extracted two train and two validation examples, and passed feature shape, finiteness, model-state and input-hash checks in 51.88 seconds. This is a technical smoke only; the full 1,024-example cache and readout fits remain pending. See [`GRID Path A extraction smoke`](docs/pretrained_reuse/R2_GRID_PATH_A_FEATURE_EXTRACTION_SMOKE_20261028.md).
+
 
 ### STARSS23 measured update (2026-10-11)
 
