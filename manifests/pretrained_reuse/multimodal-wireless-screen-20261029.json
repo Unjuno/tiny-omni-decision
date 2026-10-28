@@ -28,7 +28,8 @@
   ],
   "alignment": "six-digit frame number per official data-collection page",
   "candidate_task": "predict next 10 beam indices from 400ms history of beam indices, RGB, and LiDAR",
-  "candidate_task_is_dataset_provided": true,
+  "candidate_task_is_dataset_provided": false,
+  "candidate_task_documented_in_associated_paper": true,
   "paper_trajectories": 50,
   "paper_split_counts": {
     "train_trajectories": 40,
@@ -46,6 +47,10 @@
   "paper_split_manifest_available": false,
   "payload_size_bytes": null,
   "payload_hashes": null,
+  "official_share_metadata_head_status": 403,
+  "official_share_metadata_head_date": "2026-10-29",
+  "official_share_metadata_head_time_approx_jst": "06:44",
+  "official_share_metadata_head_requested_body": false,
   "split_manifest": null,
   "joint_input_necessity_tested": false,
   "downloaded": false,
@@ -53,8 +58,8 @@
   "local_free_space_bytes_last_observed": 512946176,
   "blockers": [
     "official download page does not publish payload sizes or checksums",
-    "no supervised decision target is documented; a derived target must be frozen",
-    "no independent scenario-grouped split manifest is documented",
+    "associated paper reports a trajectory-disjoint split but no trajectory-ID assignment manifest was located",
+    "task labels and preprocessing must be independently reconstructed and frozen",
     "local free space is below the 2 GiB reserve"
   ],
   "next_gate": "obtain official payload inventory and hashes; reconstruct and verify the paper's trajectory-disjoint split; freeze task targets and modality controls; acquire only if storage permits"

@@ -4,10 +4,11 @@
 
 `REVIEW_NOT_ADMITTED`. The source has a promising synchronized camera/sensor/
 wireless-channel structure for a narrow temporal decision task. The official
-project page states CC BY 4.0. However, the public source pages inspected do
-not specify a supervised decision target, an independent train/validation/test
-split, per-archive sizes, or checksums. No data were downloaded or opened, and
-no model was trained or evaluated.
+project page states CC BY 4.0. The associated paper defines a beam-prediction
+task and reports a trajectory-disjoint split, but the inspected materials do
+not provide the actual trajectory-ID assignment manifest, per-archive sizes,
+or checksums. No data were downloaded or opened, and no model was trained or
+evaluated.
 
 ## Pinned source evidence
 
@@ -69,11 +70,14 @@ not sufficient proof of joint-input necessity for our runtime/model.
 
 At the last local check, C: had approximately 0.48 GiB free, below the
 project's 2-GiB reserve. The OneDrive folder's payload size was not available
-from the public page. No download was attempted. Before acquisition, obtain
-the official file inventory, per-file sizes, and immutable hashes using the
-provider's normal listing interface; choose a scenario subset only after the
-full inventory and split plan are known. Do not fetch an unknown-size folder
-to the constrained C: drive.
+from the public page. A metadata-only HTTP `HEAD` request to the official
+OneDrive share returned `403 Forbidden` around 06:44 JST; it requested no file
+body and does not distinguish an access restriction from endpoint/bot policy.
+No alternate mirror or access path was tried and no download was attempted.
+Before acquisition, obtain the official file inventory, per-file sizes, and
+immutable hashes through the provider's normal listing interface; choose a
+scenario subset only after the full inventory and split plan are known. Do not
+fetch an unknown-size folder to the constrained C: drive.
 
 The source remains unadmitted until the derived target, trajectory-grouped
 split, payload size/hash inventory, and end-to-end modality controls are
