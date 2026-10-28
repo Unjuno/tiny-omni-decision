@@ -649,6 +649,14 @@ pretraining overlap is established. IIT's 378 synchronized AV sequences cover
 research requests; its action labels are intentionally audio-distinctive.
 Neither is admitted for a local quality run. See the [source screen](docs/pretrained_reuse/R2_MULTIMODAL_SOURCE_ADMISSION_SCREEN_20261021.md).
 
+**2026-10-28 ZOD follow-up:** Open Draft PR #35 verifies shared annotation UUIDs
+link camera 2D and LiDAR 3D boxes, making a narrow supplied-candidate
+association task schema-feasible. Access-request versus public-torrent
+authorization, CC BY-SA model implications, drive-disjoint group counts,
+pretraining overlap, and both-input necessity remain unresolved. ZOD remains
+unadmitted; this supersedes only the earlier statement that box co-reference
+was not established. See the [cross-branch reconciliation](docs/pretrained_reuse/R2_ZOD_CROSS_BRANCH_RECONCILIATION_20261028.md).
+
 **2026-10-21 R2 synchronized sensor/video source screen:** Compared CUHK-X,
 C-MHAD, and XRFv2 Plus from official publisher materials. CUHK-X is the most
 promising bounded research candidate (seven aligned modalities, 64,267 samples,
