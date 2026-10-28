@@ -64,6 +64,14 @@ storage, participant-group and consent review; it cannot establish two-input
 necessity or R2-M generalization. See the
 [source screen](docs/pretrained_reuse/R2_LATAM_EGOCENTRIC_IMU_SOURCE_SCREEN_20261028.md).
 
+**2026-10-28 R2 open-source PR reconciliation:** PR #35's ZOD schema ties 2D
+and 3D boxes by annotation UUID but leaves access and split/overlap gates open.
+PR #36 identifies a FZI-AURA access-control discrepancy: its previously
+retrieved sample is quarantined and must not be read or used. DAVE has a
+promising both-required AV diagnostic but combines non-commercial and
+agreement-bound sources. Neither PR admits new model work; both remain open
+Drafts. See [the read-only reconciliation](docs/pretrained_reuse/R2_OPEN_PR_SOURCE_RECONCILIATION_20261028.md).
+
 **2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
 audio/video features were evaluated on two fixed development tasks. The
 six-slot joint readout (88.35%) did not improve over audio-only (89.19%); a
