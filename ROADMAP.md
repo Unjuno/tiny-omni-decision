@@ -27,8 +27,8 @@ now running in a separate external attempt; no GRID training is authorized
 until that integrity scan completes. The audio-only portion scanned 32,000
 WAV members and found zero exact-payload duplicates among 31,991 eligible
 rows. A real s10 ZIP smoke also passed after excluding 1,000 AppleDouble
-sidecars. Partial scans of 19 verified speaker archives found no exact video
-payload duplicates across 19,000 clips; the full 32-speaker video scan remains
+sidecars. Partial scans of 20 verified speaker archives found no exact video
+payload duplicates across 20,000 clips; the full 32-speaker video scan remains
 pending. [Protocol, partial/video and audio results, and measured
 transfer rates](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md).
 **2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
