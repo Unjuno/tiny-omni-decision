@@ -13,6 +13,13 @@ The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
 green. No model run was repeated.
 
+**2026-10-29 03:45 JST R0 recheck:** PR #15 remains Draft at `34b26cc0`, with
+both checks green. Orbitune still occupies 15,821 MiB VRAM and C: has 0.73 GiB
+free. A preserved Greatest Hits E0G0 receipt says `RUNNING`, but its matching
+safety-stop record confirms an incomplete gradient-anomaly stop at step 5,385;
+best step 4,096 was not reload-verified. Do not resume or repeat it. See the
+[read-only reconciliation](docs/pretrained_reuse/R0_LIVE_RECHECK_20261029_0345JST.md).
+
 **2026-10-29 02:11 JST R0 recheck:** Public GitHub API confirms PR #15 is still
 open/Draft at `92a6ddaf500cf4499c513c5e48ce809fc0708aea` against
 `09246d7b1821662a6b1eba47fc08c43f9dc3863c`; both push and PR checks for that
