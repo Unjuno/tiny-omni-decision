@@ -112,6 +112,16 @@ payload is reported as ~164.9 GB. No archive or media was downloaded; keep
 `REVIEW` pending rights, event-group, and selected-payload-size gates. See the
 [source/task screen](docs/pretrained_reuse/R2_MUVS_SOURCE_TASK_SCREEN_20261028.md).
 
+**2026-10-29 R2-M EgoViz-120 metadata-only screen:** The publisher states
+CC BY 4.0 and describes synchronized video/IMU/action labels; a hash-pinned
+871 KB index contains 5,392 clips across 180 session groups. Labels are
+model-generated, no official split is stated, participant independence across
+groups is unverified, and the dataset is 7.25 TB. The preview MP4 overlays labels;
+raw video requires large MCAP files. Keep `REVIEW`/not admitted; metadata only
+was fetched, no media or audit data was opened. See the
+[source screen](docs/pretrained_reuse/R2_EGOVIZ120_SOURCE_SCREEN_20261029.md)
+and [machine-readable metadata](manifests/pretrained_reuse/egoviz120-metadata-screen-20261029.json).
+
 **2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
 audio/video features were evaluated on two fixed development tasks. The
 six-slot joint readout (88.35%) did not improve over audio-only (89.19%); a
