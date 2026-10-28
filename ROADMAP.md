@@ -1950,6 +1950,13 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+**MEVA metadata acquisition (2026-10-28):** The official annotation Git
+repository is pinned, but the C: checkout is incomplete and consumes most
+available disk; no video clips or model fit were started. The source separates
+training-level and evaluation-level annotations. Rights for the specific
+video payload and a clip-disjoint train/validation split remain gates. See
+[`R2_MEVA_GIT_METADATA_ACQUISITION_20261028.md`](docs/pretrained_reuse/R2_MEVA_GIT_METADATA_ACQUISITION_20261028.md).
+
 **Mandatory design correction — R2-M modality-native and sensor-inclusive fusion experiments (2026-10-12).** This is the next architecture/evaluation workstream, superseding the earlier text-question-first assumption. See [R2-M experiment protocol](docs/pretrained_reuse/R2_MODALITY_NATIVE_FUSION_PROTOCOL_20261012.md). The independently scoped <=10M audio-only experiment was **withdrawn by the user on 2026-10-12**, not put on hold. The archived research proposal is retained solely for provenance, and its training, deployment and integration work are no longer active. The main <=200M Omni model still includes native audio as a required modality. All preserved legacy experiments remain valid in their original scope.
 
 - [ ] **M-0/M-1:** Build direct text-free audio-only, video-only, image-only, screen-only and sensor-only decision probes (plus text-only control) with typed action/option IDs, time/unit/missingness metadata, and no hidden text question or mandatory text encoder. Audio, video, image and sensor each have narrow direct probes. Screen has only oracle-region category pilots that lost to a frequency prior; full screenshot-to-action selection is open. Typed criterion-to-option text control coverage is also incomplete. Treat Audio+Text, Video+Text and sensor-embedding-only results as *non-equivalent* controls.
