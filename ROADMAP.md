@@ -1,3 +1,17 @@
+**2026-10-28 R2 GOOSE ZIP-index and transfer preflight:** The official train
+and validation archives are range-capable and their pinned ZIP64 central
+directories contain 7,712 matched train image/point-cloud IDs and 961
+validation pairs. The publisher's official train/validation split shares all
+8 validation scenario groups with train, although exact media IDs do not
+overlap. Excluding those 8 train-side groups leaves 15 train groups / 4,473
+paired examples and 8 validation groups / 961 pairs. Three CRC-checked train
+image reads averaged 0.315 MiB/s (0.301 pooled), extrapolating to about 5.6 h
+for both full validation archives. Only indexes and three train images were
+read; no full archive, validation media/labels, test split, model or GPU was
+used. The group-filtered cohort is a source candidate only: a task requiring
+both camera and point cloud is still unproven, and full archive SHA-256 is
+unknown. See [`R2_GOOSE_ARCHIVE_INDEX_AUDIT_20261028.md`](docs/pretrained_reuse/R2_GOOSE_ARCHIVE_INDEX_AUDIT_20261028.md).
+
 **2026-10-28 R2 GOOSE image/point-cloud source screen:** The publisher
 explicitly licenses the dataset CC BY-SA 4.0 and provides separate image and
 point-cloud train/validation/test archives. This is a more directly accessible
