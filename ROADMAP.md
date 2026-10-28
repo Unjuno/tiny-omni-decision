@@ -72,6 +72,16 @@ not natural AV or IMU fusion evidence. The partial annotation checkout remains
 incomplete, no video media was obtained, and no task/split or storage/runtime
 gate is yet satisfied. See the [license recheck and remaining gates](docs/pretrained_reuse/R2_MEVA_GIT_METADATA_ACQUISITION_20261028.md).
 
+**2026-10-29 MEVA training-metadata preflight:** At the pinned annotation
+revision, the complete `kitware-meva-training` subtree has 1,443 clips and
+35,174 labels across 37 classes. Exact time-window/site grouping yields 741
+groups; conservative date/site grouping only 28, and participant independence
+across clips remains unverified. Two classes have only 1 and 3 instances, so
+the full 37-way task is long-tailed. No evaluation-level annotation contents
+or video media were accessed. Keep as a video-only research candidate pending
+a principled independent split, class/task protocol, and storage/runtime gates.
+See the [pinned preflight and counts](docs/pretrained_reuse/R2_MEVA_GIT_METADATA_ACQUISITION_20261028.md).
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was

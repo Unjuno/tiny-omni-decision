@@ -77,3 +77,37 @@ validation split without evaluation-level annotations, audit label/task
 ambiguity, and pass the 2-GiB output-storage and GPU gates. The machine-readable
 license recheck is
 [`meva-source-license-recheck-20261029.json`](../../manifests/pretrained_reuse/meva-source-license-recheck-20261029.json).
+
+## Training-annotation subtree audit — 2026-10-29
+
+Read-only inspection used only
+`annotation/DIVA-phase-2/MEVA/kitware-meva-training` at the pinned commit; no
+annotation content from the separate `kitware` evaluation-level directory was
+read. The local training subtree exactly matches all 4,331 Git-tree entries
+at the pinned revision. It contains 1,443 `*.activities.yml` clip files;
+`status.csv` and an independent YAML parse agree on 35,174 activity instances
+across 37 labels. The directory-level README describes these as training-level
+annotations.
+
+The 1,443 camera clips map to 741 distinct exact `(date, start, end, site)`
+windows across four sites and seven dates. A conservative `(date, site)` split
+has only 28 groups. These are scene/time groups, not confirmed independent
+people: stable subject identity across different clips is not established.
+Class counts are extremely long-tailed: `person_abandons_package` has 1
+instance and `person_steals_object` has 3; the largest class has 3,961. Thus a
+high-accuracy 37-way result would be difficult to validate with a clean
+participant-disjoint split. Do not prune rare classes after seeing validation
+results; any narrower task needs a prospectively justified operational scope
+and its own untouched split.
+
+The exact subtree check found 4,331 expected and 4,331 present files, with no
+missing or extra paths. Canonical SHA-256 over the sorted `git ls-tree -r`
+entry lines is `e9c75e2343f29137dea04766ac8d72e3c6511f06d4e29fdc6029337ec288a638`.
+`README.md` SHA-256 is
+`31d9917b93dce3747ae6a3db5bbc28ef36805c2eec4f1bce8e9a27fb8a0eeadd` and
+`status.csv` SHA-256 is
+`8c7578e8d65d352ea9ac4254ef97752ec10bce47798cfac99b030a934bbfa9d4`.
+See [`meva-training-annotation-preflight-20261029.json`](../../manifests/pretrained_reuse/meva-training-annotation-preflight-20261029.json)
+for all class counts and the group inventory. This resolves metadata availability
+for training annotations, not video access, a clean subject split, or runtime
+feasibility. No video was acquired and no fit was run.
