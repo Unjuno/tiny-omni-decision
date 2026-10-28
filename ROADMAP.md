@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R2 FZI-AURA access screen:** A candidate camera+LiDAR
+object-association task was identified, but FZI-AURA is on **HOLD** because
+the official SDK requires accepting the Hugging Face dataset terms and signing
+in. An anonymous one-scene retrieval occurred before this requirement was
+recognized; that external sample is quarantined, not used for fitting or
+quality evaluation, and not committed. No R2 gate is closed. See the
+[source/access record](docs/pretrained_reuse/R2_FZI_AURA_SOURCE_SCREEN_20261028.md).
+
 **2026-10-28 R1/R2 open-PR reconciliation:** PR #16's pinned PE-Core T16
 CPU/runtime and CLEVR-4 readout evidence does not outperform the existing
 Path A count result and has a non-commercial implementation-license constraint.
