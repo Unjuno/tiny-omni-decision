@@ -20,17 +20,18 @@ duplicate checks remain incomplete before any GRID training. [Audit](docs/pretra
 train utterance and one speaker-disjoint validation utterance passed integrity
 checks and frozen Whisper/VideoPrism feature extraction on CPU. The audio came
 from per-speaker bundle tars, not the separately audited aggregate audio ZIP.
-This verifies only the two-example runtime path; it is not a trained baseline,
-media-duplicate audit, or quality result. The full official per-speaker
-archive acquisition for an exact train/validation WAV/MPG payload-hash scan is
-now running in a separate external attempt; no GRID training is authorized
-until that integrity scan completes. The audio-only portion scanned 32,000
-WAV members and found zero exact-payload duplicates among 31,991 eligible
-rows. A real s10 ZIP smoke also passed after excluding 1,000 AppleDouble
-sidecars. Partial scans of 24 verified speaker archives found no exact video
-payload duplicates across 24,000 clips; the full 32-speaker video scan remains
-pending. [Protocol, partial/video and audio results, and measured
-transfer rates](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md).
+This verifies only the two-example runtime path; it is not a trained baseline
+or quality result. The full official per-speaker archive acquisition and
+exact train/validation WAV/MPG payload-hash scan have since completed: all 32
+archives were verified, and the 63,982 eligible payloads had zero exact
+cross-split or within-split duplicates. This clears the exact-byte media gate
+for the corrected split, but not re-encoded duplicate or cross-corpus physical
+speaker identity checks. GRID training is still an internal-research probe
+pending product-rights clarification. The audio-only portion independently
+scanned 32,000 WAV members and found zero exact-payload duplicates among
+31,991 eligible rows. A real s10 ZIP smoke also passed after excluding 1,000
+AppleDouble sidecars. [Protocol and full/partial media results, acquisition
+receipt, and measured transfer rates](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md).
 **2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
 64-quartet / 256-query sample completed on CPU with integrity and order checks.
 Joint Accuracy was 34.38%, but NLL/Brier/ECE were poor (2.049/0.911/0.337);
@@ -2444,7 +2445,7 @@ Primary references and official implementations (paper merit does **not** imply 
 
 This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the full previous roadmap in Git history; it is not deleted from the project record. The requested product outcome stays constant—**small, high-quality, local, genuinely multimodal typed decision inference**—while the mandatory Gemma/EmbeddingGemma ternary-first implementation path is no longer the assumed route. Since this proposal was opened, a task-scoped frozen Speech Commands audio runtime bundle has been integrated on this branch and passed existing-validation replay parity; see the R2 runtime record. It does not close joint AV or full multimodal packaging.
 
-**Current implementation action (updated 2026-10-28):** the original GRID selection from the frozen split remains an integrity failure and must not be remapped. A separate 64-quartet sample built from direct per-speaker source intersections was evaluated with the fixed runtime; it scored 34.38% Accuracy with poor calibration and is only a narrow development probe ([report](docs/pretrained_reuse/R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md)). A fresh directory-only audit also found 14,997/23,992 unmatched train codes across 15/24 speakers; do not train on this GRID split until source-to-record identity is independently verified ([audit](docs/pretrained_reuse/R2_GRID_TRAIN_PARTITION_SOURCE_MAPPING_AUDIT_20261028.md)). The exact-video duplicate gate is in progress: at 13:14 JST, 27/32 publisher-verified archives showed zero exact payload duplicates across 27,000 MPG members; this partial result does not clear the full gate ([protocol and reports](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md)). GRID remains research-only pending its rights boundary; continue source review for a product-approved AV task. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
+**Current implementation action (updated 2026-10-28):** the original GRID selection and its train/validation manifests remain integrity failures and must not be remapped. The corrected direct-source split contains 23,993 train and 7,998 validation rows and passes source identity, label-content, speaker-disjointness, and exact-media integrity checks. Its full media audit hashed 31,991 eligible WAV and 31,991 MPG payloads and found zero exact duplicates across or within splits ([protocol and report](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md)). The already-fixed 64-quartet cross-source pilot scored 34.38% Accuracy with poor calibration and remains a narrow development result ([report](docs/pretrained_reuse/R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md)). The corrected split is now eligible for an internal-research-only frozen-feature Path A baseline; it is not a product-quality result, and cross-corpus physical speaker identity and product rights remain unresolved. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
 
 
 ### STARSS23 measured update (2026-10-11)
@@ -3322,8 +3323,8 @@ frozen speaker/code rows match only 9/24; 15/24 have zero same-label overlap.
 The old train manifest remains blocked and is preserved as a failed receipt.
 A new manifest was rebuilt from authoritative per-speaker bundles with
 23,993 train and 7,998 validation rows; source identity and label-content
-checks pass, while media-content duplicate scanning and model training remain
-open. The existing 64-quartet pilot selection was verified inside corrected
+checks pass, and the full exact-byte media duplicate gate now passes. Frozen-
+feature model training and evaluation remain open. The existing 64-quartet pilot selection was verified inside corrected
 validation with zero train/forbidden overlap; its 34.38% accuracy / 2.0492 NLL
 remain a weak development result. See
 [`GRID train direct-source audit`](docs/pretrained_reuse/R2_GRID_TRAIN_DIRECT_SOURCE_BUNDLE_AUDIT_20261028.md).

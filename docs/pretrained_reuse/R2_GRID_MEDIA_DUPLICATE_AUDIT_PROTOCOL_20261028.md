@@ -166,6 +166,13 @@ At 2026-10-28 13:26:44 JST, 30/31 downloaded ZIPs were complete, s30 remained
 reused from the existing validation archive, and only s9 was still transferring.
 There were about 28.1 MiB of transfer bytes remaining; PID 28572 was alive.
 
+The download process exited normally at 13:28 JST. The acquisition receipt
+reports `PASS_ARCHIVES_VERIFIED`, 32/32 verified archives (31 downloaded and
+the pre-existing s30 reused), and a total declared archive size of
+13,160,236,536 bytes. The receipt is
+`C:/CodexArtifacts/pretrained-reuse-r2/grid-video-archives-duplicate-audit-20261028-attempt-01/acquisition-result.json`,
+SHA-256 `c0bcee1f37118a657e14e4312e4f4067fbfab914340152eb9d9c05186b740e13`.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
@@ -297,6 +304,24 @@ the required full 32-speaker gate.
 - Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-video-partial-media-audit-20261028-attempt-14/report.json`.
 - Report SHA-256: `68cce59bc2fd3c3e65a32a184a5d68a6df512cb3419a1630ceee2715a5726f30`.
 - Runtime: 88.890 seconds.
+
+At 2026-10-28 13:30 JST, the required full audit completed with
+`PASS_NO_CROSS_SPLIT_EXACT_MEDIA_DUPLICATES`. It verified the acquisition
+receipt and the pinned direct-source bundle index, then hashed 31,991 eligible
+WAV and 31,991 MPG payloads (63,982 total). It found zero cross-split and zero
+within-split exact-payload duplicate groups. Runtime was 114.453 seconds.
+
+- Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-media-duplicate-audit-20261028-attempt-01/report.json`.
+- Report SHA-256: `a0a756bcf49baa4939dd51bcb4e89f02c4b8b36b891e4b8415fa577ab798712e`.
+- Acquisition receipt SHA-256: `c0bcee1f37118a657e14e4312e4f4067fbfab914340152eb9d9c05186b740e13`.
+- Train manifest SHA-256: `3a4304e7158ee89380a6d4827ef23c5f1117494e10b1493bcb9a97a3fe3be816`.
+- Validation manifest SHA-256: `f05cf77258aa2ea2145eb0002fc828b9f2cdf7b5f7d0f91adea72b3204a70812`.
+- Bundle index SHA-256: `fb54bb49a0f9425cd6206508e99a1d2fef25220444e3853af11aac75431861ed`.
+
+This is exact-byte identity only; it does not detect re-encoded duplicates or
+establish cross-corpus physical-speaker identity. No model was loaded, no
+training was run, and no sealed audit was accessed. GRID remains internal
+research pending product-rights clarification.
 
 Executed command:
 
