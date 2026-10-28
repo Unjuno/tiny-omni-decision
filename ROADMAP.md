@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R2-M synchronized video+sensor source screen:** C-MHAD is a
+task-aligned continuous video+IMU candidate (12 participants, two action
+families), but the official download page does not state dataset-payload
+licensing or participant-media terms. The paper's CC BY license is not treated
+as a license for separate data files. No media was fetched and no access request
+was sent. Keep REVIEW-only pending rights, privacy, and immutable-version
+checks; its 12 independent participants would support only a narrow diagnostic.
+See the [source screen](docs/pretrained_reuse/R2_C_MHAD_VIDEO_IMU_SOURCE_SCREEN_20261028.md).
+
 **2026-10-28 R1/R2 open-PR reconciliation:** PR #16's pinned PE-Core T16
 CPU/runtime and CLEVR-4 readout evidence does not outperform the existing
 Path A count result and has a non-commercial implementation-license constraint.
