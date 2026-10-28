@@ -20,6 +20,16 @@ head are green. RTX 3080 remains occupied (15,821 MiB used, 355 MiB free), and
 C: has 795,308,032 bytes free (0.741 GiB). Orbitune PIDs 22136/31624 and its
 watchdogs remain present. No training or process intervention was performed.
 
+**2026-10-29 R2-M audio/sensor source screen:** The Zenodo ADL collection has
+25 activity labels, 14 participants, synchronized ambient audio and multiple
+environmental sensors, but it contains no video and provides no declared
+participant-disjoint split in the public metadata inspected. The paper states
+CC BY 4.0; the Zenodo record's rendered rights field is blank, so payload terms
+still need confirmation. Its 4.6 GB archive is not downloaded: C: remains below
+the 2-GiB reserve. Keep REVIEW-only for a narrow audio/sensor candidate; it
+cannot satisfy the video requirement or establish both-input necessity without
+participant IDs and matched unimodal controls. See the [source screen](docs/pretrained_reuse/R2_ADL_AUDIO_SENSOR_SOURCE_SCREEN_20261029.md).
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was
