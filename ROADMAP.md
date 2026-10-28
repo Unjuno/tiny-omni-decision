@@ -1,5 +1,6 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R2 synchronized-AV rights screen:** Action Verb Corpus (AVC) is a plausible small action-grounding candidate, but OFAI states CC BY 4.0 while its Zenodo record says CC BY-NC-SA 4.0. Urban Soundscapes is research/education-only and its 360 video is unavailable; Ego4D requires accepting a separate license. No data was downloaded and no agreement accepted. The AV quality gate remains open. See the [source and rights screen](docs/pretrained_reuse/R2_AVC_SYNCHRONIZED_SOURCE_RIGHTS_SCREEN_20261028.md).
 **2026-10-28 R1/R2 open-PR reconciliation:** PR #16's pinned PE-Core T16
 CPU/runtime and CLEVR-4 readout evidence does not outperform the existing
 Path A count result and has a non-commercial implementation-license constraint.
