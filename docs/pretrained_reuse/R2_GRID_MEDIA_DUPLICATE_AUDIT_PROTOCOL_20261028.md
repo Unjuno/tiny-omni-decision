@@ -171,6 +171,16 @@ This is a partial diagnostic only. It says nothing about duplicates involving
 the remaining 20 speaker archives; the required full 32-speaker audit remains
 pending and GRID training remains gated on that full result.
 
+An incremental attempt at 2026-10-28 12:22 JST added newly verified `s22.zip`
+and rechecked the 13 completed train/validation archives. All 13,000 actual
+MPG payloads again had unique hashes, with zero exact cross-split or within-
+split duplicate groups. The 20 uncompleted speakers remain outside this
+diagnostic, so the full gate remains pending.
+
+- Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-video-partial-media-audit-20261028-attempt-02/report.json`.
+- Report SHA-256: `b7e5f329ee8e7c31e2655696c5a5e245b2de7fd2f744edf38b0beba31a97b6ca`.
+- Runtime: 41.293 seconds.
+
 Executed command:
 
 ```powershell
