@@ -17,6 +17,15 @@ media was downloaded. Its generated context and lack of demonstrated
 both-input necessity would also require shortcut and unimodal controls in any
 research-only evaluation. See the [source screen](docs/pretrained_reuse/R2_GAVID_SOURCE_SCREEN_20261029.md).
 
+**2026-10-29 R2 AV-SyncBench source screen:** Its pairwise temporal/semantic
+audio-video synchronization tasks are structurally relevant, but the author
+repository warns that original media rights remain with source creators; a
+dataset-repository MIT tag does not resolve those rights. The full payload is
+about 68.19 GB, and one included baseline uses non-commercial ImageBind. Keep
+`REVIEW_NOT_ADMITTED`; current dataset-card terms were not independently
+verified, and no payload was downloaded. See the [pinned source
+screen](docs/pretrained_reuse/R2_AV_SYNCBENCH_SOURCE_SCREEN_20261029.md).
+
 The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
 green. No model run was repeated.
