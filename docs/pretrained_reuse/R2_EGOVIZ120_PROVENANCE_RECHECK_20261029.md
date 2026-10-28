@@ -43,6 +43,29 @@ timestamp/schema audit, a dataset-specific label-provenance clarification, and
 matched video-only / IMU-only / joint task controls. Keep the existing 144/36
 session-group split frozen; do not treat it as participant-disjoint or sealed.
 
+## Frozen local metadata and split artifact recheck — 05:07 JST
+
+The preserved Parquet index and split report were independently re-read from
+their recorded external artifact paths without opening any media:
+
+- `index.parquet`: 870,961 bytes; SHA-256
+  `c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074`.
+- `metadata-audit.json`: SHA-256
+  `71a1af8e0e916a47f005d2f189774d6f6bfdd652eb78b33d06d44d109b9a5e66`.
+- Session split `report.json`: SHA-256
+  `d2e2869dcce0a7d96cddc7dee639794a7cf253c3f922637ab9c9699cb5e6d7d2`.
+- Recomputed Parquet counts match the metadata receipt: 5,392 rows and unique
+  chunk IDs, 180 session groups, 12 categories, and zero sequence IDs crossing
+  groups.
+- Re-running the fixed SHA-256 group-order rule from the Parquet file exactly
+  reproduces the stored train/development group-hash lists, category row and
+  group counts, and 144/36 group split. There are zero group or sequence IDs
+  crossing the split.
+
+This confirms integrity and determinism of the metadata-only split artifacts;
+it adds no evidence about participant independence, label truth, or modality
+complementarity and does not admit the source for fitting.
+
 ## Scope
 
 This recheck consumed only small public README/license/homepage responses. No

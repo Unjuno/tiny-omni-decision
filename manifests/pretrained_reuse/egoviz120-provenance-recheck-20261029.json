@@ -2,7 +2,7 @@
   "format": "publisher_license_and_label_provenance_recheck_v1",
   "dataset_id": "EgoViz-120",
   "status": "REVIEW_NOT_ADMITTED_FOR_QUALITY_FIT",
-  "recorded_at": "2026-10-29T05:03:35+09:00",
+  "recorded_at": "2026-10-29T05:07:10+09:00",
   "sources": {
     "dataset_card": {
       "url": "https://huggingface.co/datasets/humaidtech/EgoViz-120",
@@ -35,6 +35,23 @@
     "sealed_audit_loaded": false,
     "media_payload_downloaded": false,
     "model_fit_or_evaluation": false
+  },
+  "local_metadata_integrity_recheck": {
+    "checked_at": "2026-10-29T05:07:10+09:00",
+    "index_bytes": 870961,
+    "index_sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "metadata_audit_sha256": "71a1af8e0e916a47f005d2f189774d6f6bfdd652eb78b33d06d44d109b9a5e66",
+    "split_report_sha256": "d2e2869dcce0a7d96cddc7dee639794a7cf253c3f922637ab9c9699cb5e6d7d2",
+    "rows": 5392,
+    "unique_chunk_ids": 5392,
+    "session_groups": 180,
+    "categories": 12,
+    "train_groups": 144,
+    "development_groups": 36,
+    "group_and_sequence_cross_split_overlap": 0,
+    "stored_group_hashes_reproduced": true,
+    "per_category_row_and_group_counts_reproduced": true,
+    "media_payload_read": false
   },
   "resource_gate": {
     "free_space_gib_at_recheck": 0.496,
