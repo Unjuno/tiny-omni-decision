@@ -8,6 +8,14 @@ recognized; that external sample is quarantined, not used for fitting or
 quality evaluation, and not committed. No R2 gate is closed. See the
 [source/access record](docs/pretrained_reuse/R2_FZI_AURA_SOURCE_SCREEN_20261028.md).
 
+**2026-10-28 R2 DAVE AV candidate screen:** DAVE is a promising fixed AV
+diagnostic because its authors state audio and video are both required and
+provide unimodal controls. Its package is derived from EPIC-KITCHENS, Ego4D,
+and ESC-50, whose source terms include non-commercial and agreement-bound
+restrictions despite the HF card's MIT label. Keep it `REVIEW`; no access,
+download, or evaluation was performed. See the
+[source/task screen](docs/pretrained_reuse/R2_DAVE_SOURCE_TASK_SCREEN_20261028.md).
+
 **2026-10-28 R1/R2 open-PR reconciliation:** PR #16's pinned PE-Core T16
 CPU/runtime and CLEVR-4 readout evidence does not outperform the existing
 Path A count result and has a non-commercial implementation-license constraint.
