@@ -119,6 +119,28 @@ def evaluate_saved_readouts(
     }
 
 
+def validate_feature_progress(
+    progress: list[dict[str, Any]], rows: list[dict[str, Any]]
+) -> None:
+    """Validate append-ordered extraction records through their stable row indices."""
+    if len(progress) != len(rows):
+        raise ValueError("feature progress does not cover every evaluation row")
+    seen: set[int] = set()
+    for item in progress:
+        index = int(item.get("index", -1))
+        if index < 0 or index >= len(rows) or index in seen:
+            raise ValueError("feature progress contains an invalid or duplicate row index")
+        row = rows[index]
+        if item.get("id") != row["id"] or item.get("split") != "validation":
+            raise ValueError("feature progress ID or split differs from the frozen task")
+        expected_label = ACTION_OPTIONS.index(row["target_option_id"])
+        if int(item.get("label", -1)) != expected_label:
+            raise ValueError("feature progress target differs from the frozen task")
+        seen.add(index)
+    if seen != set(range(len(rows))):
+        raise ValueError("feature progress is missing task rows")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--task-manifest", type=Path, required=True)
@@ -160,18 +182,7 @@ def main() -> None:
         for line in (args.feature_cache / "progress.jsonl").read_text(encoding="utf-8").splitlines()
         if line
     ]
-    if len(progress) != len(rows):
-        raise ValueError("feature progress does not cover every evaluation row")
-    for index, item in enumerate(progress):
-        row = rows[index]
-        if (
-            item.get("index") != index
-            or item.get("id") != row["id"]
-            or item.get("split") != "validation"
-        ):
-            raise ValueError("feature cache ID or order differs from frozen task")
-        if item.get("label") != ACTION_OPTIONS.index(row["target_option_id"]):
-            raise ValueError("feature cache label differs from frozen task target")
+    validate_feature_progress(progress, rows)
     video = np.load(args.feature_cache / "video_features.npy", mmap_mode="r")
     sensor = np.load(args.feature_cache / "sensor_sequences.npy", mmap_mode="r")
     label_array = np.load(args.feature_cache / "labels.npy", mmap_mode="r")

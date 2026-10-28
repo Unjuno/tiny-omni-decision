@@ -7,7 +7,10 @@ from pathlib import Path
 import numpy as np
 
 from scripts import build_droid_later_shard_holdout_task as builder
-from scripts.evaluate_droid_frozen_readout_transfer import evaluate_saved_readouts
+from scripts.evaluate_droid_frozen_readout_transfer import (
+    evaluate_saved_readouts,
+    validate_feature_progress,
+)
 from tiny_omni_decision.droid_next_action_readout import ACTION_OPTIONS
 
 
@@ -208,3 +211,19 @@ def test_saved_readout_evaluation_rejects_group_duplicates() -> None:
             sensor=np.zeros((2, 8, 14)),
             readouts=readouts,
         )
+
+
+def test_progress_is_validated_by_row_index_not_append_order() -> None:
+    rows = [
+        {"id": "a", "target_option_id": "stop"},
+        {"id": "b", "target_option_id": "x-"},
+    ]
+    progress = [
+        {"index": 1, "id": "b", "split": "validation", "label": 1},
+        {"index": 0, "id": "a", "split": "validation", "label": 0},
+    ]
+
+    validate_feature_progress(progress, rows)
+
+    with np.testing.assert_raises_regex(ValueError, "duplicate row index"):
+        validate_feature_progress([progress[0], progress[0]], rows)
