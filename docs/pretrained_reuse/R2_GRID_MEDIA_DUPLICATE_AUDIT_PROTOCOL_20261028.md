@@ -82,6 +82,12 @@ averaging 1.244 MiB/s. About 8.91 GiB remained, corresponding to roughly 122
 minutes at that short-window mean. The downloader remained live; no restart
 or worker-count change was made.
 
+At 2026-10-28 11:59 JST, the cumulative-size samples were 1.333, 1.867 and
+1.867 MiB/s, averaging 1.689 MiB/s. Eight archives were verified and about
+8.62 GiB remained, for an approximately 87-minute forecast at this window's
+mean. The download remained active; forecast changes reflect variable
+throughput and are not a completion claim.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
