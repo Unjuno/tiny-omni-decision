@@ -1,5 +1,7 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+
+**2026-10-28 R2 cross-modal source recheck:** No newly admitted natural synchronized task was found. ZOD remains the strongest camera-sensor candidate but requires a dataset access request and its CC BY-SA product implications remain unassessed; VIDIMU's fixed validation is sensor-solved and MEVA has date-camera group overlap. No further fitting or payload download is justified. See the [source comparison](docs/pretrained_reuse/R2_CROSS_MODAL_SOURCE_RECHECK_20261028.md).
 **2026-10-28 R2 synchronized-AV rights screen:** Action Verb Corpus (AVC) is a plausible small action-grounding candidate, but OFAI states CC BY 4.0 while its Zenodo record says CC BY-NC-SA 4.0. Urban Soundscapes is research/education-only and its 360 video is unavailable; Ego4D requires accepting a separate license. No data was downloaded and no agreement accepted. The AV quality gate remains open. See the [source and rights screen](docs/pretrained_reuse/R2_AVC_SYNCHRONIZED_SOURCE_RIGHTS_SCREEN_20261028.md).
 **2026-10-28 R1/R2 open-PR reconciliation:** PR #16's pinned PE-Core T16
 CPU/runtime and CLEVR-4 readout evidence does not outperform the existing

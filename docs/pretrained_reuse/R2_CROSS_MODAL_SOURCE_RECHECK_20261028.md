@@ -1,0 +1,27 @@
+# Cross-modal source recheck (2026-10-28)
+
+Status: **no new source admitted and no new data downloaded**. This recheck compares the strongest already-screened or newly surfaced synchronized multimodal sources for an R2-M Decision task. It does not reopen sealed data or alter any existing experiment.
+
+| Source | Modalities and useful labels | Main gate | Current decision |
+| --- | --- | --- | --- |
+| ZOD | Camera, LiDAR, GNSS/IMU. Official release lists 1,473 20-second Sequences and 29 multi-minute Drives; sequence annotations currently cover only the central keyframe. The pinned SDK schema confirms a common annotation UUID can link 2D and 3D boxes. | CC BY-SA 4.0; product model share-alike implications have not been assessed. Official download instructions require requesting access before using the CLI; whether Academic Torrents waives this is unresolved. No drive-level split and overlap audit has been proven. | **Best current camera-sensor candidate, REVIEW / not admitted.** Need user/provider access approval, license compatibility, grouped split proof, and a both-input task before fetching media or fitting. See [ZOD schema/torrent follow-up](R2_ZOD_SCHEMA_TORRENT_FOLLOWUP_20261028.md). |
+| VIDIMU | Synchronized video and IMU, CC BY 4.0, 16 participants and 13 activities in the existing frozen inventory. | Existing subject split has 10 train / 3 validation / 3 sealed participants. On the 39-episode validation set, sensor-only already classified all examples correctly; joint fusion reduced that to 30/39 and worsened NLL. Reusing the same validation for a new task-selection loop would be exposed development tuning. | **Existing negative joint result; no repeat fit on these IDs.** See [frozen split](R2M_VIDIMU_SPLIT_20261012.md), [gated fusion result](R2M_GATED_FUSION_RESULTS_20261012.md), and [saved-prediction complementarity audit](R2_FUSION_COMPLEMENTARITY_20261012.md). |
+| MEVA | Real multi-camera video with activity labels; CC BY 4.0 per its official paper/site. | 142 of 146 evaluation-level date-camera groups also occur in train-level annotations; clip-level non-overlap does not yield independent capture groups. Actor activity data also requires privacy/use review. | **Not admitted for current independent-group quality evaluation.** See [metadata-only split and rights screen](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-meva-source-screen-20261020/docs/pretrained_reuse/R2_MEVA_SOURCE_SCREEN_20261020.md). |
+| AVC | Synchronized audio, video, hand/arm movement, and descriptions; 46 episodes / 12 participants. | OFAI states CC BY 4.0, while the Zenodo record describes CC BY-NC-SA 4.0. The transcript may also reveal the action target without video. | **REVIEW / not admitted** until license terms and both-input dependence are resolved. See [AVC rights screen](R2_AVC_SYNCHRONIZED_SOURCE_RIGHTS_SCREEN_20261028.md). |
+| ActionNet | Synchronized wearable sensors, audio, first-person video, RGB/depth cameras, and activity labels. | Official dataset page lists direct files but does not state a specific dataset license. Its paper says only “Creative Commons” without identifying the variant on the accessed page; current subject pool is small and has subject-specific recording gaps. | **REVIEW / not admitted** pending the exact dataset license and a group/coverage audit. No files were fetched. |
+| OpenPack | Synchronized wearable sensor, vision, depth/keypoints and IoT data for packaging tasks. | Non-RGB release is CC BY-NC-SA 4.0; RGB release has a separate academic-only license and requires an access application. | **Not suitable for the product-quality track** under current rights constraints. |
+| Urban Soundscapes | About 130 synchronized audiovisual recordings in nine cities. | Official page limits use to research and education and says 360-degree videos are unavailable. | **Not admitted** for product-quality training. |
+
+## Disposition
+
+The existing frozen-feature Path A implementation and its low development metrics are already recorded. The available paired-data experiments do not justify another architecture or training run: synthetic AV controls do not establish natural-world transfer, STARSS23 did not benefit from video over audio, and VIDIMU did not benefit from video over sensor. The next productive route is to resolve ZOD access and licensing or find a new permissively licensed synchronized dataset with independent source groups and a preregisterable task. No access request was sent, no agreement was accepted, no payload was downloaded, and no GPU job was started here.
+
+## Primary source references
+
+- [ZOD license](https://zod.zenseact.com/license/), [download instructions](https://zod.zenseact.com/download/), [Sequences](https://zod.zenseact.com/sequences/)
+- [VIDIMU dataset record](https://zenodo.org/records/8210563), [paper and license](https://www.nature.com/articles/s41597-023-02554-9)
+- [MEVA official site](https://mevadata.org/), [MEVA paper](https://openaccess.thecvf.com/content/WACV2021/papers/Corona_MEVA_A_Large-Scale_Multiview_Multimodal_Video_Dataset_for_Activity_Detection_WACV_2021_paper.pdf)
+- [OFAI AVC page](https://www.ofai.at/resources/avc), [AVC Zenodo record](https://zenodo.org/records/5140014)
+- [ActionNet data page](https://action-net.csail.mit.edu/data.html), [ActionNet paper](https://cdfg.csail.mit.edu/assets/images/actionnet.pdf)
+- [OpenPack official terms and download guide](https://open-pack.github.io/)
+- [Urban Soundscapes recordings](https://urban-soundscapes.org/recordings/)
