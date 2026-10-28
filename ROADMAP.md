@@ -1,3 +1,13 @@
+**2026-10-28 R2 GOOSE image/point-cloud source screen:** The publisher
+explicitly licenses the dataset CC BY-SA 4.0 and provides separate image and
+point-cloud train/validation/test archives. This is a more directly accessible
+real camera+sensor candidate than the previously screened gated/research-only
+sources. It is **not admitted for model selection or training yet**: recording
+group/sequence leakage, cross-modal asset joins, pretraining overlap, and a
+decision task requiring both modalities have not been verified. No data or
+model was downloaded or opened. See
+[`R2_GOOSE_IMAGE_POINT_CLOUD_SOURCE_SCREEN_20261028.md`](docs/pretrained_reuse/R2_GOOSE_IMAGE_POINT_CLOUD_SOURCE_SCREEN_20261028.md).
+
 **2026-10-28 R2 ADL full sensor identity/split audit:** All 125 sensor HDF5
 members across 25 pinned activities passed identity checks; the five sensors
 within each activity have matching participant/trial rows. The fixed split
