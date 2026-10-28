@@ -125,6 +125,11 @@ At 2026-10-28 12:27 JST, 16 archives had passed publisher checks; about 6.20
 GiB was acquired and 6.05 GiB remained. At the 12:21 measured mean of 1.771
 MiB/s, the forecast was about 58 minutes. Progress was updated at 12:27:35.
 
+At 2026-10-28 12:30 JST, 16 archives remained verified, cumulative acquisition
+was about 6.48 GiB, and 5.77 GiB remained. The next three 30-second samples
+were 2.133, 2.133 and 2.400 MiB/s (mean 2.222 MiB/s), giving a short-window
+forecast of about 44 minutes. The progress log was updated at 12:30:37 JST.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
