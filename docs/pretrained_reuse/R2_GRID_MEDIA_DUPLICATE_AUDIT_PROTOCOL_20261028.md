@@ -150,6 +150,10 @@ was 9.19 GiB and 3.07 GiB remained. At the latest 1.687 MiB/s three-sample
 mean, the forecast was about 31 minutes. The progress log was updated at
 12:57:06 JST.
 
+At 2026-10-28 13:00 JST, 24 archives were verified; cumulative acquisition
+was 9.44 GiB with 2.82 GiB remaining. At the 1.687 MiB/s measured mean, the
+forecast was about 29 minutes. The progress log was updated at 13:00:06 JST.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
@@ -262,6 +266,15 @@ Nine speakers remain outside the partial scan.
 - Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-video-partial-media-audit-20261028-attempt-10/report.json`.
 - Report SHA-256: `36fa28393c20387374c69b906408e4eaf1296fe6b8e1352e9012f58f5ab44a01`.
 - Runtime: 75.087 seconds.
+
+At 2026-10-28 13:00 JST, the next diagnostic covered 24 publisher-verified
+archives (s2, s10–s20, and s22–s29 plus s31–s33). It hashed 24,000 actual MPG
+payloads; every hash was unique, with zero exact cross-split or within-split
+duplicates. Eight speakers remain unscanned.
+
+- Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-video-partial-media-audit-20261028-attempt-11/report.json`.
+- Report SHA-256: `1b3e2858980cc8472a8949ab21a7630ccabb5f3d4921eefc2d86479db53171d1`.
+- Runtime: 73.749 seconds.
 
 Executed command:
 
