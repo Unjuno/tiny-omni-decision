@@ -3345,8 +3345,8 @@ preserve all concurrent PRs and exposed validation IDs.
 [Cross-branch evidence and gates](docs/pretrained_reuse/R2_CROSS_BRANCH_EVIDENCE_20261026.md).
 
 **2026-10-29 07:30 JST R2 one-time text-free image readout evaluation:** A
-frozen VideoPrism-B image taxonomy head, selected before this official split was
-loaded, scored 2,107 CLEVR-4 validation images once. Color/texture/count/shape
+frozen VideoPrism-B image taxonomy head, selected on its own development split
+before this one-time evaluation, scored 2,107 CLEVR-4 validation images. Color/texture/count/shape
 accuracy was 99.86%/95.59%/59.33%/99.95% (macro 88.68%); count is the weak
 head. This split was accessed by other project experiments, so the result is
 not blind project-level evidence and will not be used for tuning. It is a
