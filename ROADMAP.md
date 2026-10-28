@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 R2-M MM-Motion source/rights screen:** Official Zenodo v2
+metadata marks the synchronized video/IMU/plantar-pressure dataset open under
+CC BY 4.0, but the publisher's agreement hosted at pinned upstream commit
+`51a26dcf` requires signing, limits use to non-commercial research, prohibits
+medical diagnosis and redistribution, and reserves access termination. Treat
+that conflict as unresolved and keep MM-Motion unadmitted for product work.
+The record contains 20 subject-named archives totaling 175.13 GB; its dataset
+description names 33 subjects, but no split manifest or both-input necessity
+was verified. Only metadata and the small agreement document were read; no
+dataset payload, annotations, or media were downloaded. See the
+[source screen](docs/pretrained_reuse/R2_MM_MOTION_SOURCE_RIGHTS_SCREEN_20261029.md).
+
 **2026-10-29 05:34 JST R0 checkpoint timing verification:** Three read-only
 log samples measured 31.75 steps/minute and 14,760 events/second. From the
 12,043,312,981-event sample, this projected the next 30-million-event save at
@@ -2226,6 +2238,16 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
+
+**2026-10-29 R2-M MM-Motion source screen:** Although its modalities and
+motion-risk task are relevant, the upstream repository's signed agreement
+conflicts with the Zenodo CC BY metadata and restricts use to non-commercial
+research, forbids diagnostic use and redistribution, and requires a signature.
+Do not sign or use the source for product-directed fitting without explicit
+rights clarification. Its subject-level archive count does not establish an
+official grouped split, and both-input necessity remains unverified. No media,
+labels, or annotation payload was accessed. See the [pinned source screen](docs/pretrained_reuse/R2_MM_MOTION_SOURCE_RIGHTS_SCREEN_20261029.md)
+and [machine-readable evidence](manifests/pretrained_reuse/mm-motion-source-screen-20261029.json).
 
 **2026-10-29 EgoViz-120 metadata split preflight:** A deterministic 144/36
 session-group train/development split covers all 12 publisher categories, with
