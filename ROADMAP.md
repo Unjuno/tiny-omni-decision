@@ -9,6 +9,14 @@ the fit runner's 2-GiB output reserve. No process was interrupted and no new
 fit was started. The current common-fit GPU guard also rejects the live
 processes. See the [live audit and next-run gate](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
 
+**2026-10-29 R2 GAViD source screen:** The publisher reports synchronized
+video/audio group-affect clips, but its dataset terms restrict use to
+non-commercial academic research; validation/test media also require a request
+and approval. It is not admitted for product-directed work, and no payload or
+media was downloaded. Its generated context and lack of demonstrated
+both-input necessity would also require shortcut and unimodal controls in any
+research-only evaluation. See the [source screen](docs/pretrained_reuse/R2_GAVID_SOURCE_SCREEN_20261029.md).
+
 The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
 green. No model run was repeated.
