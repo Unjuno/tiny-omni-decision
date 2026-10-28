@@ -68,6 +68,14 @@ MiB/s across the four workers. The remaining 10.4 GiB forecast was then 2
 hours 17 minutes. The interval set includes three recent intervals each for
 s14–s16 and two for s17; sampling and transfer continue.
 
+At 2026-10-28 11:52 JST, seven archives had passed verification. A fresh
+three-sample 30-second measurement (0.800, 0.800 and 1.067 MiB/s aggregate)
+averaged 0.889 MiB/s. This calculation includes completed archive sizes plus
+current partial bytes so completion of an archive does not look like negative
+throughput. About 9.19 GiB remained, implying approximately 176 minutes at
+that short-window mean. This is a variable network estimate; the acquisition
+process remained active and no restart was attempted.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
