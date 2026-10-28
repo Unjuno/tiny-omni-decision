@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 06:06 JST R0 checkpoint observed:** Orbitune's next interval
+save appeared at 06:06:03.291, verified on CPU as step 507,526 /
+12,090,003,255 events, 117,943,148 bytes, SHA-256
+`4FF37521DD684C8437F7087260015365C2638E612C8D8EC12C6DAA35315FF1B`.
+PID 22136 remained live at 06:06:49. The prior estimate was 87 seconds late;
+measured checkpoint-to-checkpoint throughput projects another save near
+06:40:40. This `--steps 0` run has no completion ETA, and its process/artifacts
+were left untouched. See the [R0 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0534JST.md).
+
 **2026-10-29 05:56 JST R0 checkpoint recheck:** Orbitune PID 22136 remains
 live at step 507,200 / 12,080,946,174 events; its last saved checkpoint is
 still step 506,449. The longer 05:47–05:56 log interval measured 30.6
