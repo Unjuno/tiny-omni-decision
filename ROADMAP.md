@@ -4,11 +4,12 @@
 plausible synchronized active-speaker decision task and states CC BY 4.0 for
 released signals/transcripts/some annotations. An official-metadata comparison
 confirms no participant-ID overlap across the 15 ES scenario groups in the
-scenario-only train/dev/evaluation partition. The official page reports average
-per-meeting media sizes of 400 MB for low-size DivX or 40 MB RealMedia video
-plus 2 MB audio; exact chosen-file sizes/checksums and RealMedia visual
-suitability and required annotation availability remain unknown, so no data
-were fetched and the source remains `REVIEW_NOT_ADMITTED`. See the [source
+scenario-only train/dev/evaluation partition; official annotation metadata
+lists manual transcripts for all 60 ES submeetings. The official page reports
+average per-meeting media sizes of 400 MB for low-size DivX or 40 MB RealMedia
+video plus 2 MB audio; exact chosen-file sizes/checksums and RealMedia visual
+suitability remain unknown, so no data were fetched and the source remains
+`REVIEW_NOT_ADMITTED`. See the [source
 screen](docs/pretrained_reuse/R2_AMI_ACTIVE_SPEAKER_SOURCE_SCREEN_20261029.md).
 
 **2026-10-29 08:25 JST R0 checkpoint confirmation:** Read-only sampling

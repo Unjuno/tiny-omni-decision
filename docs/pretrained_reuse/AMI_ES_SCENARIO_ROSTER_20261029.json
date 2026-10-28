@@ -4,6 +4,15 @@
   "source_url": "https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml",
   "retrieved_html_utf8_sha256": "185bca2fa07fd0a4e99004a8fcd228058f9445874391d107ab0c0c97fcbe2abc",
   "partition_source": "https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml",
+  "manual_transcript_availability": {
+    "source_url": "https://groups.inf.ed.ac.uk/ami/corpus/annotationpresent.shtml",
+    "retrieved_html_utf8_sha256": "0bc08fa2a6c722f88ee72c8a432b57037bb5114dac4f1dfd81e1922d611fa19e",
+    "annotation_column": "manual transcript",
+    "meeting_id_rule": "Each group below with suffix a, b, c, and d",
+    "meeting_count": 60,
+    "groups_with_all_four_transcripts": ["ES2002", "ES2003", "ES2004", "ES2005", "ES2006", "ES2007", "ES2008", "ES2009", "ES2010", "ES2011", "ES2012", "ES2013", "ES2014", "ES2015", "ES2016"],
+    "missing_meetings": []
+  },
   "scenario_only_partition": {
     "train": ["ES2002", "ES2005", "ES2006", "ES2007", "ES2008", "ES2009", "ES2010", "ES2012", "ES2013", "ES2015", "ES2016"],
     "validation": ["ES2003", "ES2011"],

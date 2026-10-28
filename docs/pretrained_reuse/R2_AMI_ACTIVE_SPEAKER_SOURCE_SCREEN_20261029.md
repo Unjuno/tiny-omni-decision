@@ -17,10 +17,13 @@ The [official corpus page](https://groups.inf.ed.ac.uk/ami/corpus/) describes
 100 hours of multimodal meetings. The [official annotation overview](https://groups.inf.ed.ac.uk/ami/corpus/annotation.shtml)
 describes speaker-intent dialogue-act labels and video annotations such as
 participant presence, face/mouth locations, head position, and hand location
-for selected portions. The [official transcription page](https://groups.inf.ed.ac.uk/ami/corpus/transcription.shtml)
-states that word-level transcripts are available per meeting. These ingredients
-could support an active-speaker candidate-choice task grounded in synchronized
-audio, video, and speaker/time annotations. The official [download page](https://groups.inf.ed.ac.uk/ami/download/)
+for selected portions. A read-only parse of the official
+[annotation availability table](https://groups.inf.ed.ac.uk/ami/corpus/annotationpresent.shtml)
+found a manual-transcript flag for all 60 ES submeetings (15 sets × a–d); the
+[official transcription page](https://groups.inf.ed.ac.uk/ami/corpus/transcription.shtml)
+describes word-level transcripts. Together with the participant-to-camera
+mapping, these provide candidate labels and synchronized visual inputs for an
+active-speaker task. The official [download page](https://groups.inf.ed.ac.uk/ami/download/)
 offers selectable signals and 22 MB manual / 68 MB automatic annotation
 archives; it says full-size video requires a separate distribution. The
 [official signal description](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
@@ -48,7 +51,8 @@ partition clears the speaker-identity overlap gate at metadata level. This
 does not clear other corpus partitions or media/question-content overlap.
 The captured participant roster and normalized split are stored in the
 [machine-readable roster manifest](AMI_ES_SCENARIO_ROSTER_20261029.json);
-the manifest records the SHA-256 of the retrieved UTF-8 signals-page HTML.
+the manifest records SHA-256 hashes of the retrieved UTF-8 signals and
+annotation-availability pages.
 Annotation availability is meeting-dependent, and the download and
 synchronization path for selected videos still needs an exact inventory before
 media is fetched.
