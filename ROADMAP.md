@@ -1,3 +1,14 @@
+**2026-10-28 R2 ADL full sensor identity/split audit:** All 125 sensor HDF5
+members across 25 pinned activities passed identity checks; the five sensors
+within each activity have matching participant/trial rows. The fixed split
+assigns 12 train and 2 validation participants with zero overlap, but only
+24/25 activities have both splits. The `00_no-activity` class has 231
+unassigned rows (special ID 999); sweep, typing and vacuum-cleaning have only
+3–4 validation rows each. This is source-integrity evidence, not a quality
+result or training admission. ADL has one environment, two validation people,
+no released video, and unverified physical clocks/session independence. [Report
+and aggregate hashes](docs/pretrained_reuse/R2_ADL_FULL_SENSOR_IDENTITY_20261028.md).
+
 **2026-10-28 R2 ADL full archive authentication:** All 25 activity ZIPs from
 the pinned Zenodo record were present and independently rehashed; every source
 size, publisher MD5 and receipt SHA-256 matched. This replaces the prior

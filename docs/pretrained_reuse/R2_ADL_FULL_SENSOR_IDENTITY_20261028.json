@@ -1,0 +1,1654 @@
+{
+  "source_record_sha256": "c01bf60460981280c5063ea54c038d41c751bf3056220059c3896cbc5d2b97c6",
+  "download_plan_sha256": "a387e837d9e14ea00fec20e72c07331fafd3f12e07661cf671da0f4216152dc2",
+  "download_receipt_sha256": "af284fe02e447a33194aa0fa871a0601dc0f067ec81137ceb9a17843379230aa",
+  "participant_split_protocol_sha256": "9c301d4a3acc37711d25943e7165533410bb3297630eef19c7f6431d2daaf5f8",
+  "activity_count": 25,
+  "sensor_member_count": 125,
+  "activities_with_both_splits": 24,
+  "unassigned_rows": 231,
+  "distinct_train_participants": 12,
+  "distinct_validation_participants": 2,
+  "participant_overlap": 0,
+  "activities": [
+    {
+      "activity": "23_take-from-stove.zip",
+      "archive_size": 69152997,
+      "archive_publisher_md5": "10834b9e0813ee9441abe2c3f5c2233a",
+      "archive_sha256": "04bf32f55c93f54c49525d2b0581cb51f14c1ec302afb56b70a995fa4aa8f706",
+      "sensor_count": 5,
+      "event_rows": 368,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 293,
+        "validation": 75,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "23_take-from-stove/23_take-from-stove_multisensor-1.hdf5",
+          "member_size": 44247528,
+          "member_sha256": "73aae1893b07c23c0814362f906e9795dea9a03c7a6c13ab03e2f07e5af5f645",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "23_take-from-stove/23_take-from-stove_multisensor-2.hdf5",
+          "member_size": 44265280,
+          "member_sha256": "a2b159cc9cbb125a7ccfb9641be2c17c2897c0a74ca76a7a7fbbbb6dee771019",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.22099995613098145,
+          "max_abs_sample_rate_delta": 12.4588623046875
+        },
+        {
+          "sensor_index": 3,
+          "member": "23_take-from-stove/23_take-from-stove_multisensor-3.hdf5",
+          "member_size": 44254864,
+          "member_sha256": "6dade0856ae7bccbf10920febb5d674267dbd93030d38e23fc753027e695183f",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.20300006866455078,
+          "max_abs_sample_rate_delta": 12.151611328125
+        },
+        {
+          "sensor_index": 4,
+          "member": "23_take-from-stove/23_take-from-stove_multisensor-4.hdf5",
+          "member_size": 44366264,
+          "member_sha256": "3a4653b27b8f102d6d3b0dc80b178309c6b5eb1a80df68aabef2cd18d8d35198",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.25,
+          "max_abs_sample_rate_delta": 16.7498779296875
+        },
+        {
+          "sensor_index": 5,
+          "member": "23_take-from-stove/23_take-from-stove_multisensor-5.hdf5",
+          "member_size": 44358664,
+          "member_sha256": "44dcaefd29c2bc0d3790c136d7e67243b30551edd78289ddcca86d1203d9e33d",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.23000001907348633,
+          "max_abs_sample_rate_delta": 15.5428466796875
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "10_light-off.zip",
+      "archive_size": 69650916,
+      "archive_publisher_md5": "c554e01e9136100a623791fda4be0b0d",
+      "archive_sha256": "3664af53b9b4fccc9abf06d9922f66d24ee81967022d9036bd355a01462ec8e0",
+      "sensor_count": 5,
+      "event_rows": 369,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 290,
+        "validation": 79,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "10_light-off/10_light-off_multisensor-1.hdf5",
+          "member_size": 40630318,
+          "member_sha256": "a2ca09d746d835bee1d0e8d83c5bd9fb70576c76706a83293eb9be1c37f3b6b1",
+          "rows": 369,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "10_light-off/10_light-off_multisensor-2.hdf5",
+          "member_size": 40727150,
+          "member_sha256": "3dc642dd3f080a30a8a19bb446e1feeeee1661ced11ce4aed48f040c2b2ec07f",
+          "rows": 369,
+          "max_abs_timestamp_delta_native_units": 0.1960000991821289,
+          "max_abs_sample_rate_delta": 15.5823974609375
+        },
+        {
+          "sensor_index": 3,
+          "member": "10_light-off/10_light-off_multisensor-3.hdf5",
+          "member_size": 40719334,
+          "member_sha256": "9b5637e080def2d7b1bd8a30d3cedf6ded9a1dc3103446569eafe10e7cf9c762",
+          "rows": 369,
+          "max_abs_timestamp_delta_native_units": 0.3209998607635498,
+          "max_abs_sample_rate_delta": 11.22216796875
+        },
+        {
+          "sensor_index": 4,
+          "member": "10_light-off/10_light-off_multisensor-4.hdf5",
+          "member_size": 40730822,
+          "member_sha256": "999f3c09cbcb2fd6acbbd0ceb43e2f5233076be045d99c19665f15c566c52e27",
+          "rows": 369,
+          "max_abs_timestamp_delta_native_units": 0.2760000228881836,
+          "max_abs_sample_rate_delta": 17.5335693359375
+        },
+        {
+          "sensor_index": 5,
+          "member": "10_light-off/10_light-off_multisensor-5.hdf5",
+          "member_size": 40829382,
+          "member_sha256": "b6a2ffa8c17ac89ea05a3d78bad7de8c783d2e407884744474755a3b3647acd4",
+          "rows": 369,
+          "max_abs_timestamp_delta_native_units": 0.29600000381469727,
+          "max_abs_sample_rate_delta": 17.835693359375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "17_stop-toaster.zip",
+      "archive_size": 72770695,
+      "archive_publisher_md5": "46b56be5a1f861df7274480f0e0c43a0",
+      "archive_sha256": "be38112cd4ea51d8e81a1a2a6ba18bf4fb11424c8524b06025510515b2dddb2c",
+      "sensor_count": 5,
+      "event_rows": 368,
+      "distinct_participants": 8,
+      "train_participants": 6,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 253,
+        "validation": 115,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "17_stop-toaster/17_stop-toaster_multisensor-1.hdf5",
+          "member_size": 41652368,
+          "member_sha256": "6dfddd035cf6d5385160f6a2942dd88d6c0207ee751df8ff8ddea145bab2cb77",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "17_stop-toaster/17_stop-toaster_multisensor-2.hdf5",
+          "member_size": 41613472,
+          "member_sha256": "dc3f057301f019f7aa4510797173ee53497c12349b21a1bbe4af65aad17351e6",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.29200005531311035,
+          "max_abs_sample_rate_delta": 12.297607421875
+        },
+        {
+          "sensor_index": 3,
+          "member": "17_stop-toaster/17_stop-toaster_multisensor-3.hdf5",
+          "member_size": 41647952,
+          "member_sha256": "801859fbe31eacea9028dab4c8bc85222a5922eb9ab76630e190b3970c69b520",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.2909998893737793,
+          "max_abs_sample_rate_delta": 12.151611328125
+        },
+        {
+          "sensor_index": 4,
+          "member": "17_stop-toaster/17_stop-toaster_multisensor-4.hdf5",
+          "member_size": 40649544,
+          "member_sha256": "3782abfd846f1b86cb657e1075b863aa241472b08294a6c12e44ce5edbe6a75c",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.32400012016296387,
+          "max_abs_sample_rate_delta": 18.2913818359375
+        },
+        {
+          "sensor_index": 5,
+          "member": "17_stop-toaster/17_stop-toaster_multisensor-5.hdf5",
+          "member_size": 41642768,
+          "member_sha256": "fb9c1b9d7f62a4f2930694b3205aec6784bf19755e6516a25e0e134e4525efba",
+          "rows": 368,
+          "max_abs_timestamp_delta_native_units": 0.2739999294281006,
+          "max_abs_sample_rate_delta": 18.3310546875
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "16_start-toaster.zip",
+      "archive_size": 77765408,
+      "archive_publisher_md5": "4dd99127d96ed12af798b0069757f935",
+      "archive_sha256": "d093302bd31c3eecf803cc4dbbfc8b72e2efa76279105e831d54f96832684d1a",
+      "sensor_count": 5,
+      "event_rows": 373,
+      "distinct_participants": 8,
+      "train_participants": 6,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 257,
+        "validation": 116,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "16_start-toaster/16_start-toaster_multisensor-1.hdf5",
+          "member_size": 43961878,
+          "member_sha256": "6b55dc6aa2824034371f91ec894532adc09c10177f859c3ae7996adb0cee0ecb",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "16_start-toaster/16_start-toaster_multisensor-2.hdf5",
+          "member_size": 43714854,
+          "member_sha256": "cae7f0d480a461e723cb82a493a9b7446e8eec53f8a2934ce349d6998d8a78c3",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.24699997901916504,
+          "max_abs_sample_rate_delta": 12.151611328125
+        },
+        {
+          "sensor_index": 3,
+          "member": "16_start-toaster/16_start-toaster_multisensor-3.hdf5",
+          "member_size": 43830606,
+          "member_sha256": "fbedc3d056d3de0c5e45a533452177f974b9f4e6f9ccd2f0d3db6ff8bba834c9",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.27300000190734863,
+          "max_abs_sample_rate_delta": 12.40966796875
+        },
+        {
+          "sensor_index": 4,
+          "member": "16_start-toaster/16_start-toaster_multisensor-4.hdf5",
+          "member_size": 42860654,
+          "member_sha256": "ff97b1d5f385b38395d2892d5c0d17aef329d6e277c144d2b0296c7671574543",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.3409998416900635,
+          "max_abs_sample_rate_delta": 17.8358154296875
+        },
+        {
+          "sensor_index": 5,
+          "member": "16_start-toaster/16_start-toaster_multisensor-5.hdf5",
+          "member_size": 43929438,
+          "member_sha256": "49019ce28cf17867463156c8025a25c55119f6d3f41e95f2c04e99b3cac8bbf3",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.26399993896484375,
+          "max_abs_sample_rate_delta": 17.5433349609375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "22_place-on-stove.zip",
+      "archive_size": 78399122,
+      "archive_publisher_md5": "5bcb6c7167d5cb977100c9e57cc7f9b6",
+      "archive_sha256": "e80cc1d62bde06ec1e0f62fc02e2b3b827e00442ec4d2b54546d8049e61fadda",
+      "sensor_count": 5,
+      "event_rows": 380,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 302,
+        "validation": 78,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "22_place-on-stove/22_place-on-stove_multisensor-1.hdf5",
+          "member_size": 46087272,
+          "member_sha256": "493405a9da2ba8233e7d104fd3c9cf3e0c5197666e4c1a8c3c896984ede01b46",
+          "rows": 380,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "22_place-on-stove/22_place-on-stove_multisensor-2.hdf5",
+          "member_size": 46317464,
+          "member_sha256": "cdf5d5c02f7658f2b745ba8575b22ebcf86cd0581a8f0a3f397c63999f9bb505",
+          "rows": 380,
+          "max_abs_timestamp_delta_native_units": 0.2669999599456787,
+          "max_abs_sample_rate_delta": 12.1517333984375
+        },
+        {
+          "sensor_index": 3,
+          "member": "22_place-on-stove/22_place-on-stove_multisensor-3.hdf5",
+          "member_size": 46390040,
+          "member_sha256": "7a7ea46c6a2c91787d16b9b1163c428389f34043f45b479c276c6280db813745",
+          "rows": 380,
+          "max_abs_timestamp_delta_native_units": 0.23199987411499023,
+          "max_abs_sample_rate_delta": 12.4930419921875
+        },
+        {
+          "sensor_index": 4,
+          "member": "22_place-on-stove/22_place-on-stove_multisensor-4.hdf5",
+          "member_size": 45652312,
+          "member_sha256": "7ce43e30f3963b271a51f8db12694f7a1f33af9f521d15185ed5616946ca4a7d",
+          "rows": 380,
+          "max_abs_timestamp_delta_native_units": 0.37599992752075195,
+          "max_abs_sample_rate_delta": 17.08154296875
+        },
+        {
+          "sensor_index": 5,
+          "member": "22_place-on-stove/22_place-on-stove_multisensor-5.hdf5",
+          "member_size": 45873648,
+          "member_sha256": "36e24d11ac2b367da99417487c5e47a99b984dab90290d56cd41a80792f056dc",
+          "rows": 380,
+          "max_abs_timestamp_delta_native_units": 0.2519998550415039,
+          "max_abs_sample_rate_delta": 18.503662109375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "13_place-plate.zip",
+      "archive_size": 85317441,
+      "archive_publisher_md5": "0282a3b556dd8bede697e5071ed07e88",
+      "archive_sha256": "394eceb8615ac5949ffa1df7a04ebb9c8e5b548fe1fe18e64d5d1c266b1236e7",
+      "sensor_count": 5,
+      "event_rows": 370,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 255,
+        "validation": 115,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "13_place-plate/13_place-plate_multisensor-1.hdf5",
+          "member_size": 42752172,
+          "member_sha256": "e0572de16f67e95db56c41447f6a640924f09420c1971f7a10667c6b6a97ccc6",
+          "rows": 370,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "13_place-plate/13_place-plate_multisensor-2.hdf5",
+          "member_size": 42811908,
+          "member_sha256": "1a076c3c75e585d4fce236879689a5550c4d370542e054a7747629bf163d28f3",
+          "rows": 370,
+          "max_abs_timestamp_delta_native_units": 0.24499988555908203,
+          "max_abs_sample_rate_delta": 13.330078125
+        },
+        {
+          "sensor_index": 3,
+          "member": "13_place-plate/13_place-plate_multisensor-3.hdf5",
+          "member_size": 42920964,
+          "member_sha256": "bf327fc62032ffa64d83d21a7cea72820644f5540f64fefc8284f60aa49ed753",
+          "rows": 370,
+          "max_abs_timestamp_delta_native_units": 0.19099998474121094,
+          "max_abs_sample_rate_delta": 12.1484375
+        },
+        {
+          "sensor_index": 4,
+          "member": "13_place-plate/13_place-plate_multisensor-4.hdf5",
+          "member_size": 42977372,
+          "member_sha256": "60aeccf9cc45e45570b2cd74335648ce39340f6a573ebfd1b13ad6fab6893ede",
+          "rows": 370,
+          "max_abs_timestamp_delta_native_units": 0.18499994277954102,
+          "max_abs_sample_rate_delta": 18.3309326171875
+        },
+        {
+          "sensor_index": 5,
+          "member": "13_place-plate/13_place-plate_multisensor-5.hdf5",
+          "member_size": 43529076,
+          "member_sha256": "f25c23ee60607cbf404259025b3607acf8036d225e84fadbce190e7e9cae99ca",
+          "rows": 370,
+          "max_abs_timestamp_delta_native_units": 0.1979999542236328,
+          "max_abs_sample_rate_delta": 18.137939453125
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "09_light-on.zip",
+      "archive_size": 91486810,
+      "archive_publisher_md5": "32f32464334fbb11b5b680bd5a26d38f",
+      "archive_sha256": "b2a03b0bdf93265e9888f4d102749574ea8fd21bfd7ef691ef3f8cebcf1fef9f",
+      "sensor_count": 5,
+      "event_rows": 384,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 307,
+        "validation": 77,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "09_light-on/09_light-on_multisensor-1.hdf5",
+          "member_size": 54865704,
+          "member_sha256": "c3830053147db7a1023316505215cf70a5023c3e59a3a64f794a8eb46a240be4",
+          "rows": 384,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "09_light-on/09_light-on_multisensor-2.hdf5",
+          "member_size": 54892176,
+          "member_sha256": "f34c45682937e5f9a6cbe6620176dc020f33a7b6f676143194c36b424d8e90f0",
+          "rows": 384,
+          "max_abs_timestamp_delta_native_units": 0.2369999885559082,
+          "max_abs_sample_rate_delta": 12.8162841796875
+        },
+        {
+          "sensor_index": 3,
+          "member": "09_light-on/09_light-on_multisensor-3.hdf5",
+          "member_size": 54947848,
+          "member_sha256": "70668db6fe29e7dcb3247a544834a4b219cc14004c7a2d2bc7d59f04a6d1afc4",
+          "rows": 384,
+          "max_abs_timestamp_delta_native_units": 0.34200000762939453,
+          "max_abs_sample_rate_delta": 12.416259765625
+        },
+        {
+          "sensor_index": 4,
+          "member": "09_light-on/09_light-on_multisensor-4.hdf5",
+          "member_size": 54965896,
+          "member_sha256": "e2ad3b23bd4b123b50c02e2a02a5e089d7168b17199fa05e784d811896adf117",
+          "rows": 384,
+          "max_abs_timestamp_delta_native_units": 0.3259999752044678,
+          "max_abs_sample_rate_delta": 18.148193359375
+        },
+        {
+          "sensor_index": 5,
+          "member": "09_light-on/09_light-on_multisensor-5.hdf5",
+          "member_size": 54990960,
+          "member_sha256": "6330be8a1a6b0b9687617c6e07bcc22bf5cc62a83e1b978a1fea07f3a4567bf2",
+          "rows": 384,
+          "max_abs_timestamp_delta_native_units": 0.16699981689453125,
+          "max_abs_sample_rate_delta": 17.366455078125
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "18_open-fridge.zip",
+      "archive_size": 95354213,
+      "archive_publisher_md5": "9e4f26e916c864aca919a574876e66f8",
+      "archive_sha256": "c771a0a5b8e597c6f6e24104f05d7f8e69029d141c86e86c7bb55ea58b840034",
+      "sensor_count": 5,
+      "event_rows": 355,
+      "distinct_participants": 8,
+      "train_participants": 6,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 235,
+        "validation": 120,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "18_open-fridge/18_open-fridge_multisensor-1.hdf5",
+          "member_size": 50793970,
+          "member_sha256": "fd9689b2e5373f705ce2e28ce4008aaf6eb1a75ead1e3a994ba05a65eb02d78e",
+          "rows": 355,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "18_open-fridge/18_open-fridge_multisensor-2.hdf5",
+          "member_size": 50573338,
+          "member_sha256": "d8db2a04512cb38862d310a9803aafa81caf5959cd966651b17bbce01663d445",
+          "rows": 355,
+          "max_abs_timestamp_delta_native_units": 0.2590000629425049,
+          "max_abs_sample_rate_delta": 12.680908203125
+        },
+        {
+          "sensor_index": 3,
+          "member": "18_open-fridge/18_open-fridge_multisensor-3.hdf5",
+          "member_size": 50687794,
+          "member_sha256": "7d667eeb8ad7f458c74ef2e2dd8c71591deec0bdbbad70e50398534316c35932",
+          "rows": 355,
+          "max_abs_timestamp_delta_native_units": 0.28999996185302734,
+          "max_abs_sample_rate_delta": 12.1483154296875
+        },
+        {
+          "sensor_index": 4,
+          "member": "18_open-fridge/18_open-fridge_multisensor-4.hdf5",
+          "member_size": 50084234,
+          "member_sha256": "378309beb59409951619fb5ce85d096f5b588ed62a23ec9a8085fc3b0b572528",
+          "rows": 355,
+          "max_abs_timestamp_delta_native_units": 0.24399995803833008,
+          "max_abs_sample_rate_delta": 18.5035400390625
+        },
+        {
+          "sensor_index": 5,
+          "member": "18_open-fridge/18_open-fridge_multisensor-5.hdf5",
+          "member_size": 50669002,
+          "member_sha256": "5c8f8c1d0718eae1c00e9f46b90d22e1af9a825a9768e9dd7c47bcea83aa55fe",
+          "rows": 355,
+          "max_abs_timestamp_delta_native_units": 0.24900007247924805,
+          "max_abs_sample_rate_delta": 16.357177734375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "19_close-fridge.zip",
+      "archive_size": 113040265,
+      "archive_publisher_md5": "29910db0bc56cfef8c913c3f095fe6f9",
+      "archive_sha256": "51a81b032f2b28ba5626c9e0f01d21e8c7fa9a8759f3c53f886437a3c2032320",
+      "sensor_count": 5,
+      "event_rows": 359,
+      "distinct_participants": 8,
+      "train_participants": 6,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 242,
+        "validation": 117,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "19_close-fridge/19_close-fridge_multisensor-1.hdf5",
+          "member_size": 56375506,
+          "member_sha256": "90155d0852e72ee90f079b1214a4972ac511c33b822dec6ecf45ed4ff1a973cb",
+          "rows": 359,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "19_close-fridge/19_close-fridge_multisensor-2.hdf5",
+          "member_size": 56422194,
+          "member_sha256": "294e1a874b3872c9023740c8bf8e09dd0399afc25118006d7f6d8a37a3aea866",
+          "rows": 359,
+          "max_abs_timestamp_delta_native_units": 0.25499987602233887,
+          "max_abs_sample_rate_delta": 9.5457763671875
+        },
+        {
+          "sensor_index": 3,
+          "member": "19_close-fridge/19_close-fridge_multisensor-3.hdf5",
+          "member_size": 56178498,
+          "member_sha256": "c96e26c751cdd43369a6bb892fe2c44b1ab7964be0b7c7f87ed06d45ce2a254d",
+          "rows": 359,
+          "max_abs_timestamp_delta_native_units": 0.25,
+          "max_abs_sample_rate_delta": 11.5263671875
+        },
+        {
+          "sensor_index": 4,
+          "member": "19_close-fridge/19_close-fridge_multisensor-4.hdf5",
+          "member_size": 55709778,
+          "member_sha256": "34a349cfa27a205e27fd6523283133b90d0ec2b237ea8c18285b1e138c7320fa",
+          "rows": 359,
+          "max_abs_timestamp_delta_native_units": 0.16000008583068848,
+          "max_abs_sample_rate_delta": 16.48876953125
+        },
+        {
+          "sensor_index": 5,
+          "member": "19_close-fridge/19_close-fridge_multisensor-5.hdf5",
+          "member_size": 55881514,
+          "member_sha256": "71cc5d12f4314a45fec7d4cfbf2081441fd84b400d193f963154fe1dd9d6255f",
+          "rows": 359,
+          "max_abs_timestamp_delta_native_units": 0.18400001525878906,
+          "max_abs_sample_rate_delta": 15.2755126953125
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "20_open-dishwasher.zip",
+      "archive_size": 119416292,
+      "archive_publisher_md5": "1f5a0a94b9a24d00e5496fec68661e21",
+      "archive_sha256": "3f5e0db83a99761c048d44f866c54ecf102f0a4d80f6b7b894e69210095dc81d",
+      "sensor_count": 5,
+      "event_rows": 453,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 357,
+        "validation": 96,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "20_open-dishwasher/20_open-dishwasher_multisensor-1.hdf5",
+          "member_size": 63400790,
+          "member_sha256": "45e4461cc7e900c8a3843a14014e13c5b643f64353d30731ab7f06259a5f4b52",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "20_open-dishwasher/20_open-dishwasher_multisensor-2.hdf5",
+          "member_size": 63597150,
+          "member_sha256": "c18c03b7b00e1326f54dfc26e3ad6989b3f9a260fa7330953c0f54c56762f26f",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.22300004959106445,
+          "max_abs_sample_rate_delta": 13.091064453125
+        },
+        {
+          "sensor_index": 3,
+          "member": "20_open-dishwasher/20_open-dishwasher_multisensor-3.hdf5",
+          "member_size": 63715126,
+          "member_sha256": "12fba4878c83b773e38a92b2431d7f510c1c9a89140667286ed47290262ffa1e",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.2650001049041748,
+          "max_abs_sample_rate_delta": 11.878662109375
+        },
+        {
+          "sensor_index": 4,
+          "member": "20_open-dishwasher/20_open-dishwasher_multisensor-4.hdf5",
+          "member_size": 62937582,
+          "member_sha256": "1b1ab258dccc8df9831b0d8a237580227a7003b84301a8632ef628f9d1d66841",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.2630000114440918,
+          "max_abs_sample_rate_delta": 18.4193115234375
+        },
+        {
+          "sensor_index": 5,
+          "member": "20_open-dishwasher/20_open-dishwasher_multisensor-5.hdf5",
+          "member_size": 63412550,
+          "member_sha256": "368583a4ee798fc64fce313178202d26cbbcdef5c2377d5eade7486d6a768595",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.23099994659423828,
+          "max_abs_sample_rate_delta": 17.207763671875
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "14_sweep.zip",
+      "archive_size": 127029813,
+      "archive_publisher_md5": "6d2a7fb7dc1f2077c85744ee78d1f18f",
+      "archive_sha256": "89eedd1cb62f6117f0a6cb9e01f0f7863d1997dbdf0118b78817c85ac6811fe0",
+      "sensor_count": 5,
+      "event_rows": 9,
+      "distinct_participants": 7,
+      "train_participants": 5,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 6,
+        "validation": 3,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "14_sweep/14_sweep_multisensor-1.hdf5",
+          "member_size": 71231934,
+          "member_sha256": "389b3f5325328bf14bb2d3a7f82db5e4130b6afe0fac61d7e578fb5c1779718a",
+          "rows": 9,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "14_sweep/14_sweep_multisensor-2.hdf5",
+          "member_size": 71281806,
+          "member_sha256": "66677d1fe79e155c39de503a150dc43e6ca87bb7dc616a62cae86de10789ecd8",
+          "rows": 9,
+          "max_abs_timestamp_delta_native_units": 0.1119999885559082,
+          "max_abs_sample_rate_delta": 4.3292236328125
+        },
+        {
+          "sensor_index": 3,
+          "member": "14_sweep/14_sweep_multisensor-3.hdf5",
+          "member_size": 71275702,
+          "member_sha256": "ffc39e704a57aba34966f19e909ed6388b2310fac61abaa24bf0bcb78271ca03",
+          "rows": 9,
+          "max_abs_timestamp_delta_native_units": 0.12100005149841309,
+          "max_abs_sample_rate_delta": 3.86865234375
+        },
+        {
+          "sensor_index": 4,
+          "member": "14_sweep/14_sweep_multisensor-4.hdf5",
+          "member_size": 71334438,
+          "member_sha256": "f820cee0878b1ab5e9d924eaa4d502c6d6555b68ff957e73b53d009bb2cafb7a",
+          "rows": 9,
+          "max_abs_timestamp_delta_native_units": 0.09600019454956055,
+          "max_abs_sample_rate_delta": 9.4271240234375
+        },
+        {
+          "sensor_index": 5,
+          "member": "14_sweep/14_sweep_multisensor-5.hdf5",
+          "member_size": 71359950,
+          "member_sha256": "a6c2e5fc2830eeabc480c3335effb00c850fd809f2218972416323a8f22be4d2",
+          "rows": 9,
+          "max_abs_timestamp_delta_native_units": 0.17600011825561523,
+          "max_abs_sample_rate_delta": 9.5579833984375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "21_close-dishwasher.zip",
+      "archive_size": 127871317,
+      "archive_publisher_md5": "c9ca48978340416a5337e4a42be535be",
+      "archive_sha256": "7c105297818bd9a1c36cdcbe7dfcbdd0c300bde3165000be2a22fb3f5d27d429",
+      "sensor_count": 5,
+      "event_rows": 453,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 357,
+        "validation": 96,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "21_close-dishwasher/21_close-dishwasher_multisensor-1.hdf5",
+          "member_size": 65874046,
+          "member_sha256": "d24d4c40bfccf0759ec149c4f17aba6d17f5cb81cfe2b1d7e94552d77e6c35fa",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "21_close-dishwasher/21_close-dishwasher_multisensor-2.hdf5",
+          "member_size": 66242998,
+          "member_sha256": "162c156a299797c5c9e75190504c63ee6dd8f152d3b03c3524248dabbb0aac9b",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.26799988746643066,
+          "max_abs_sample_rate_delta": 12.73046875
+        },
+        {
+          "sensor_index": 3,
+          "member": "21_close-dishwasher/21_close-dishwasher_multisensor-3.hdf5",
+          "member_size": 66480862,
+          "member_sha256": "6aa136d249899ebca5ce8dac39d53f18e3f3ca078ac4360828c4c5f6021eeac6",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.26799988746643066,
+          "max_abs_sample_rate_delta": 12.7919921875
+        },
+        {
+          "sensor_index": 4,
+          "member": "21_close-dishwasher/21_close-dishwasher_multisensor-4.hdf5",
+          "member_size": 65513726,
+          "member_sha256": "44404eb492d5ebb47dd46a5ef83620241fa9742a4b86d2a3baa2611f3aabe7ce",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.2929999828338623,
+          "max_abs_sample_rate_delta": 18.1279296875
+        },
+        {
+          "sensor_index": 5,
+          "member": "21_close-dishwasher/21_close-dishwasher_multisensor-5.hdf5",
+          "member_size": 65801142,
+          "member_sha256": "c8bce6ab1a460dca20a5a71def5ef7cbc50b0e872d9e8093590b27e264c6055f",
+          "rows": 453,
+          "max_abs_timestamp_delta_native_units": 0.2799999713897705,
+          "max_abs_sample_rate_delta": 18.5037841796875
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "03_open-door.zip",
+      "archive_size": 154614674,
+      "archive_publisher_md5": "8ed9f298a8cc5f21d62953f8865a204f",
+      "archive_sha256": "831c924c54e49a0db91a98efde2a4d8872784cada70b16fae906334b83bb680f",
+      "sensor_count": 5,
+      "event_rows": 448,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 350,
+        "validation": 98,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "03_open-door/03_open-door_multisensor-1.hdf5",
+          "member_size": 73651456,
+          "member_sha256": "ebfde6722ef58af1f5cbad05453eff837ff7ebb3ec03d558e78a68ddb7032024",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "03_open-door/03_open-door_multisensor-2.hdf5",
+          "member_size": 73879664,
+          "member_sha256": "a82f2a3badb9eac505644bdabca4300a7190dd145d8d9893a7547bd07fdc006d",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.21600008010864258,
+          "max_abs_sample_rate_delta": 11.8250732421875
+        },
+        {
+          "sensor_index": 3,
+          "member": "03_open-door/03_open-door_multisensor-3.hdf5",
+          "member_size": 73572232,
+          "member_sha256": "c4867f658d8730b50b640fad3dabd1786c08c4d13f426cadbaf8f89d89da7bee",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.25300002098083496,
+          "max_abs_sample_rate_delta": 11.8251953125
+        },
+        {
+          "sensor_index": 4,
+          "member": "03_open-door/03_open-door_multisensor-4.hdf5",
+          "member_size": 73890728,
+          "member_sha256": "9bc2ea6588433287fa232ba396d0d685442b97d4a71ccc7cc690d1873369812a",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.25800013542175293,
+          "max_abs_sample_rate_delta": 15.7982177734375
+        },
+        {
+          "sensor_index": 5,
+          "member": "03_open-door/03_open-door_multisensor-5.hdf5",
+          "member_size": 72910816,
+          "member_sha256": "dc30533011614f1efffc370ab535e31fe46a9058a0d80065e961c75eb3ebf9ab",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.25800013542175293,
+          "max_abs_sample_rate_delta": 18.1539306640625
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "06_close-window.zip",
+      "archive_size": 160671825,
+      "archive_publisher_md5": "87e1e4957ba985cf1b469d9dc88c0b85",
+      "archive_sha256": "2e6b9af680c4ffb47d8ada63c52df808c7a650d49feaa7116e3a5208c5a8f702",
+      "sensor_count": 5,
+      "event_rows": 465,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 366,
+        "validation": 99,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "06_close-window/06_close-window_multisensor-1.hdf5",
+          "member_size": 75588382,
+          "member_sha256": "bd1c431adde3a52d8fe1567d130562e889a5646a23090c34fab9c5cc17fe5050",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "06_close-window/06_close-window_multisensor-2.hdf5",
+          "member_size": 74893206,
+          "member_sha256": "345143dd434290d32c7fdba4989b80431c1d0a212231e91932303b0f6447bf09",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.2610001564025879,
+          "max_abs_sample_rate_delta": 10.943115234375
+        },
+        {
+          "sensor_index": 3,
+          "member": "06_close-window/06_close-window_multisensor-3.hdf5",
+          "member_size": 75019894,
+          "member_sha256": "452a667e161ca58cb8730c7a7d3081d983c21185cf24cd3d9538d83d8ab9c0b6",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.22699999809265137,
+          "max_abs_sample_rate_delta": 11.8251953125
+        },
+        {
+          "sensor_index": 4,
+          "member": "06_close-window/06_close-window_multisensor-4.hdf5",
+          "member_size": 76004798,
+          "member_sha256": "67c8942c629a5fba67845e57323ff82d4cbc3eddc3faff0422a0f0cdd3b01442",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.25999999046325684,
+          "max_abs_sample_rate_delta": 14.7528076171875
+        },
+        {
+          "sensor_index": 5,
+          "member": "06_close-window/06_close-window_multisensor-5.hdf5",
+          "member_size": 76550334,
+          "member_sha256": "d2fe76d67e940a1a260415be4d5e08d7d301824b7e33143fdd60df26ab599641",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.20200014114379883,
+          "max_abs_sample_rate_delta": 16.9212646484375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "05_open-window.zip",
+      "archive_size": 163116725,
+      "archive_publisher_md5": "17ede0c3a5d4de25b99dd85e4cc2b0d0",
+      "archive_sha256": "72f2e3f9b870abfe099527b132ef8652c58d36b9171da6534bfb85a95faa1a2b",
+      "sensor_count": 5,
+      "event_rows": 465,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 367,
+        "validation": 98,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "05_open-window/05_open-window_multisensor-1.hdf5",
+          "member_size": 78741246,
+          "member_sha256": "726d07996ce55eb5f83990707cee3196b31412b8a32226e2d52743714e99fe45",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "05_open-window/05_open-window_multisensor-2.hdf5",
+          "member_size": 78727230,
+          "member_sha256": "392178df96b99abd3616a0b40e4d07e3478a050ca942fbebdcbd6b6d5bc730c4",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.26999998092651367,
+          "max_abs_sample_rate_delta": 12.151611328125
+        },
+        {
+          "sensor_index": 3,
+          "member": "05_open-window/05_open-window_multisensor-3.hdf5",
+          "member_size": 78709054,
+          "member_sha256": "6319def018b34eda9b9f84393722c71f87b04c26dfe09af5814f72bca3789fb0",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.24699997901916504,
+          "max_abs_sample_rate_delta": 11.8250732421875
+        },
+        {
+          "sensor_index": 4,
+          "member": "05_open-window/05_open-window_multisensor-4.hdf5",
+          "member_size": 78697878,
+          "member_sha256": "220fc7711c909793c84b594a471e94949d0ef26ca33f29b1862d04937d5a43f4",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.18499994277954102,
+          "max_abs_sample_rate_delta": 15.67333984375
+        },
+        {
+          "sensor_index": 5,
+          "member": "05_open-window/05_open-window_multisensor-5.hdf5",
+          "member_size": 79280006,
+          "member_sha256": "357b165273f2b850c33a21084a6d7159c5befe9e293f1039684ed7bb42e0c09f",
+          "rows": 465,
+          "max_abs_timestamp_delta_native_units": 0.24000000953674316,
+          "max_abs_sample_rate_delta": 18.34130859375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "04_close-door.zip",
+      "archive_size": 182401481,
+      "archive_publisher_md5": "05a9ed2281c3570c81ba053c0118d552",
+      "archive_sha256": "1451b0738514a77652c076c5a3cfddf3bc23c815a101488e468c38cbb2ffae26",
+      "sensor_count": 5,
+      "event_rows": 454,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 355,
+        "validation": 99,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "04_close-door/04_close-door_multisensor-1.hdf5",
+          "member_size": 81533236,
+          "member_sha256": "127018858c866ab11a32a98489f1b9b1d26b763c187be16fd8e164f331f0f461",
+          "rows": 454,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "04_close-door/04_close-door_multisensor-2.hdf5",
+          "member_size": 81792764,
+          "member_sha256": "40f9f210ae249cecc823f18c061960bd956eba5673044147d21a6ab7a35241cb",
+          "rows": 454,
+          "max_abs_timestamp_delta_native_units": 0.2519998550415039,
+          "max_abs_sample_rate_delta": 11.8251953125
+        },
+        {
+          "sensor_index": 3,
+          "member": "04_close-door/04_close-door_multisensor-3.hdf5",
+          "member_size": 81186980,
+          "member_sha256": "963b21ec29340a4034b60c193a6240db18e434985ac2db03ab07ac9338572ef7",
+          "rows": 454,
+          "max_abs_timestamp_delta_native_units": 0.2799999713897705,
+          "max_abs_sample_rate_delta": 11.512939453125
+        },
+        {
+          "sensor_index": 4,
+          "member": "04_close-door/04_close-door_multisensor-4.hdf5",
+          "member_size": 81487748,
+          "member_sha256": "2a5712576e24fa4549820eee4806b0edbef0b6f9451b54c5e49cc977527e8877",
+          "rows": 454,
+          "max_abs_timestamp_delta_native_units": 0.24500012397766113,
+          "max_abs_sample_rate_delta": 17.835693359375
+        },
+        {
+          "sensor_index": 5,
+          "member": "04_close-door/04_close-door_multisensor-5.hdf5",
+          "member_size": 82266628,
+          "member_sha256": "b702220ad595ebc15f4cfc502f96bef741ee5b17572e0a95b1e8942e1073c166",
+          "rows": 454,
+          "max_abs_timestamp_delta_native_units": 0.30099987983703613,
+          "max_abs_sample_rate_delta": 15.2755126953125
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "11_typing.zip",
+      "archive_size": 188096739,
+      "archive_publisher_md5": "59bd5da2d33f2c9efb3299c0609dd387",
+      "archive_sha256": "4cc9351235e08d74ceb728bbf8f206020dca4a7a017fa569f0970be401a9de95",
+      "sensor_count": 5,
+      "event_rows": 14,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 10,
+        "validation": 4,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "11_typing/11_typing_multisensor-1.hdf5",
+          "member_size": 108245748,
+          "member_sha256": "c1c89dd97377528fd7fdba14a02f6356d787c690586aa77589706c001354dead",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "11_typing/11_typing_multisensor-2.hdf5",
+          "member_size": 108346532,
+          "member_sha256": "6628b2f038cdeabf3e5b5f11bb60881f0e4d6e750b5e76093dea6bb3e5cd38e5",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.13200020790100098,
+          "max_abs_sample_rate_delta": 4.5625
+        },
+        {
+          "sensor_index": 3,
+          "member": "11_typing/11_typing_multisensor-3.hdf5",
+          "member_size": 108343260,
+          "member_sha256": "536752a141005831469826c62bf558f67d7ce6b8b5e57e3a37a7f6cb2d95d464",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.10000014305114746,
+          "max_abs_sample_rate_delta": 4.3597412109375
+        },
+        {
+          "sensor_index": 4,
+          "member": "11_typing/11_typing_multisensor-4.hdf5",
+          "member_size": 108425708,
+          "member_sha256": "6007148c42ee437247fe8bc49b77b9d0b376dc6dfa3b5ba263be8e46d2c6f684",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.12800002098083496,
+          "max_abs_sample_rate_delta": 9.31689453125
+        },
+        {
+          "sensor_index": 5,
+          "member": "11_typing/11_typing_multisensor-5.hdf5",
+          "member_size": 108452980,
+          "member_sha256": "cbc6c89fe440bbffc1ef88b55cb0d9c672cd6b7ba1bd483d383eb9562d05ff7c",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.10000014305114746,
+          "max_abs_sample_rate_delta": 9.623046875
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "12_make-coffee.zip",
+      "archive_size": 191125863,
+      "archive_publisher_md5": "d21236a967ec81756af983b7ba7990d8",
+      "archive_sha256": "b30d270c91b4c64197e356603dcba8d7295779000fee2cddc447f4ac1339b614",
+      "sensor_count": 5,
+      "event_rows": 72,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 51,
+        "validation": 21,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "12_make-coffee/12_make-coffee_multisensor-1.hdf5",
+          "member_size": 95144200,
+          "member_sha256": "328e7a66031a9579924d0f0da9f40a43c9e82d523913c7b1db10d0313215b6c1",
+          "rows": 72,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "12_make-coffee/12_make-coffee_multisensor-2.hdf5",
+          "member_size": 95174584,
+          "member_sha256": "67d74bec2fc39903ce8979fdb116a92402f891e6016eb7f5bc32b88751603257",
+          "rows": 72,
+          "max_abs_timestamp_delta_native_units": 0.12599992752075195,
+          "max_abs_sample_rate_delta": 6.45166015625
+        },
+        {
+          "sensor_index": 3,
+          "member": "12_make-coffee/12_make-coffee_multisensor-3.hdf5",
+          "member_size": 95178448,
+          "member_sha256": "0e7ec308a378ffa4fe1cca6bade0b469c62707ca902c68d69c263d57e3c4c13f",
+          "rows": 72,
+          "max_abs_timestamp_delta_native_units": 0.12899994850158691,
+          "max_abs_sample_rate_delta": 6.6385498046875
+        },
+        {
+          "sensor_index": 4,
+          "member": "12_make-coffee/12_make-coffee_multisensor-4.hdf5",
+          "member_size": 95296168,
+          "member_sha256": "24e0e2b38272d7ae9747b4f060f50eddddb3cda18e94b455b845919ab721851c",
+          "rows": 72,
+          "max_abs_timestamp_delta_native_units": 0.2369999885559082,
+          "max_abs_sample_rate_delta": 10.9881591796875
+        },
+        {
+          "sensor_index": 5,
+          "member": "12_make-coffee/12_make-coffee_multisensor-5.hdf5",
+          "member_size": 95324840,
+          "member_sha256": "22c5372beb8b51a316a7b08fa2032a3380dc0daeb77d512267101c40e5534a85",
+          "rows": 72,
+          "max_abs_timestamp_delta_native_units": 0.16899991035461426,
+          "max_abs_sample_rate_delta": 11.6258544921875
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "24_wipe-stove.zip",
+      "archive_size": 211369573,
+      "archive_publisher_md5": "e3898ffa2daa8878964c986e1f991387",
+      "archive_sha256": "b868b1fc8965c0056484fb0c780166e680f285b3513ebfa757760628628364c8",
+      "sensor_count": 5,
+      "event_rows": 448,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 370,
+        "validation": 78,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "24_wipe-stove/24_wipe-stove_multisensor-1.hdf5",
+          "member_size": 135847664,
+          "member_sha256": "7d7347ae47be1dda4de2fd0372862aa69b407898d41ce1c6e5265a7241682054",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "24_wipe-stove/24_wipe-stove_multisensor-2.hdf5",
+          "member_size": 135879552,
+          "member_sha256": "8bb9814fe49a327cdee8dfa905fbd267634f11fc03cb95e24e86536cd33c668f",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.2519998550415039,
+          "max_abs_sample_rate_delta": 9.2532958984375
+        },
+        {
+          "sensor_index": 3,
+          "member": "24_wipe-stove/24_wipe-stove_multisensor-3.hdf5",
+          "member_size": 135760896,
+          "member_sha256": "b13fe3bf65c24db4518e5239dee88d9a464c5ecdd8aff68bc52ee300288099cd",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.25100016593933105,
+          "max_abs_sample_rate_delta": 9.0152587890625
+        },
+        {
+          "sensor_index": 4,
+          "member": "24_wipe-stove/24_wipe-stove_multisensor-4.hdf5",
+          "member_size": 135614424,
+          "member_sha256": "40f486d7576bcbaafb74b0e6bfe9c04a9aa168091e656e54661a5b0f327470d9",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.2049999237060547,
+          "max_abs_sample_rate_delta": 14.9456787109375
+        },
+        {
+          "sensor_index": 5,
+          "member": "24_wipe-stove/24_wipe-stove_multisensor-5.hdf5",
+          "member_size": 135914760,
+          "member_sha256": "aa9b037bc0295b5dd3673c300e389fd4b918dcdc9ed19eb0f861db715d81e713",
+          "rows": 448,
+          "max_abs_timestamp_delta_native_units": 0.25300002098083496,
+          "max_abs_sample_rate_delta": 14.0352783203125
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "07_sit-down.zip",
+      "archive_size": 219691455,
+      "archive_publisher_md5": "0fdb8f074f85ffd88cd8fda7808e0b15",
+      "archive_sha256": "6e434db5191bfffd53403bec8ab19821dbaf82364c2706bcbb5e12062572cd6b",
+      "sensor_count": 5,
+      "event_rows": 466,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 365,
+        "validation": 101,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "07_sit-down/07_sit-down_multisensor-1.hdf5",
+          "member_size": 103720092,
+          "member_sha256": "a5fa37951959421487196e7c8704d210435a230a742178f1cbed87935a711576",
+          "rows": 466,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "07_sit-down/07_sit-down_multisensor-2.hdf5",
+          "member_size": 103965332,
+          "member_sha256": "1ff123beb1462e33059997ff3678bc355963f29a2a8a0bc5567cb2a6adae9c88",
+          "rows": 466,
+          "max_abs_timestamp_delta_native_units": 0.2759997844696045,
+          "max_abs_sample_rate_delta": 10.915771484375
+        },
+        {
+          "sensor_index": 3,
+          "member": "07_sit-down/07_sit-down_multisensor-3.hdf5",
+          "member_size": 103991124,
+          "member_sha256": "01763d1f9973c9e0b817e812b56e75e3f3d3f417d2f15ec30ab48fac4582bb09",
+          "rows": 466,
+          "max_abs_timestamp_delta_native_units": 0.33499979972839355,
+          "max_abs_sample_rate_delta": 11.224853515625
+        },
+        {
+          "sensor_index": 4,
+          "member": "07_sit-down/07_sit-down_multisensor-4.hdf5",
+          "member_size": 104224020,
+          "member_sha256": "3cea11e900c6d60403a8f7e878c7119ad821447f3fe2a1d0a1480015639c09aa",
+          "rows": 466,
+          "max_abs_timestamp_delta_native_units": 0.27699995040893555,
+          "max_abs_sample_rate_delta": 17.521240234375
+        },
+        {
+          "sensor_index": 5,
+          "member": "07_sit-down/07_sit-down_multisensor-5.hdf5",
+          "member_size": 104771948,
+          "member_sha256": "3f40821b4aea1fa0b4a96ae7c25f9148f44b2b3e404b4a3ea502ac531b2db399",
+          "rows": 466,
+          "max_abs_timestamp_delta_native_units": 0.31800007820129395,
+          "max_abs_sample_rate_delta": 16.4984130859375
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "08_stand-up.zip",
+      "archive_size": 242933197,
+      "archive_publisher_md5": "2df37a1578abb5c4bc2c56d62fbc3f88",
+      "archive_sha256": "535b375e4d740f6697c4a3c1877d7b4b0b25ff1763a22f5c24ecf92537e51c45",
+      "sensor_count": 5,
+      "event_rows": 460,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 360,
+        "validation": 100,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "08_stand-up/08_stand-up_multisensor-1.hdf5",
+          "member_size": 109803856,
+          "member_sha256": "8bf2373cf04a33d13a4ef8093a39f8f44903f9eac3c2a038dc1bafbec4922e9c",
+          "rows": 460,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "08_stand-up/08_stand-up_multisensor-2.hdf5",
+          "member_size": 110166232,
+          "member_sha256": "e4a00f324072f44903e4cccf19a74bb748474bc0128e48c5c3e8d7915e447c17",
+          "rows": 460,
+          "max_abs_timestamp_delta_native_units": 0.23000001907348633,
+          "max_abs_sample_rate_delta": 11.515869140625
+        },
+        {
+          "sensor_index": 3,
+          "member": "08_stand-up/08_stand-up_multisensor-3.hdf5",
+          "member_size": 109946544,
+          "member_sha256": "ad5a936be67d9690573c8a7738cd480f40ec0c079f2f0e734460d3c75d983813",
+          "rows": 460,
+          "max_abs_timestamp_delta_native_units": 0.24399995803833008,
+          "max_abs_sample_rate_delta": 9.7498779296875
+        },
+        {
+          "sensor_index": 4,
+          "member": "08_stand-up/08_stand-up_multisensor-4.hdf5",
+          "member_size": 110115568,
+          "member_sha256": "4c0dceb015b7c9a86763253a3f5f5fc8342a01751e4b4946e0dd58dd70ed0f28",
+          "rows": 460,
+          "max_abs_timestamp_delta_native_units": 0.1959998607635498,
+          "max_abs_sample_rate_delta": 14.43017578125
+        },
+        {
+          "sensor_index": 5,
+          "member": "08_stand-up/08_stand-up_multisensor-5.hdf5",
+          "member_size": 110466800,
+          "member_sha256": "a37953223c856393b2ca51230831966823d00d82b90782f0586db577d5726e32",
+          "rows": 460,
+          "max_abs_timestamp_delta_native_units": 0.23799991607666016,
+          "max_abs_sample_rate_delta": 16.3514404296875
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "02_walk-to-room.zip",
+      "archive_size": 278113412,
+      "archive_publisher_md5": "9ed1f500bff7d9f7edb80f2a3f7b64f0",
+      "archive_sha256": "db60f2f36b16d009fb65d17f183a66265dfe8a0e76f0c9eaeab9d66e5c2ed286",
+      "sensor_count": 5,
+      "event_rows": 373,
+      "distinct_participants": 9,
+      "train_participants": 7,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 289,
+        "validation": 84,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "02_walk-to-room/02_walk-to-room_multisensor-1.hdf5",
+          "member_size": 154110206,
+          "member_sha256": "69dc562c5c729b63101ef33fead9a71c20ddfea93615aff48ba55f2ebbb6128e",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "02_walk-to-room/02_walk-to-room_multisensor-2.hdf5",
+          "member_size": 154399126,
+          "member_sha256": "963a21b24f29b646360cecaed76692f90e420c5f9c8610dcbc192cb8b58df791",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.24300003051757812,
+          "max_abs_sample_rate_delta": 8.18994140625
+        },
+        {
+          "sensor_index": 3,
+          "member": "02_walk-to-room/02_walk-to-room_multisensor-3.hdf5",
+          "member_size": 154365790,
+          "member_sha256": "810910339a7c9787e4e5ca3750f906b3a9cdd84585665cbfda5661916b83d377",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.23100018501281738,
+          "max_abs_sample_rate_delta": 7.620849609375
+        },
+        {
+          "sensor_index": 4,
+          "member": "02_walk-to-room/02_walk-to-room_multisensor-4.hdf5",
+          "member_size": 154234902,
+          "member_sha256": "aede5f808b451e56e3efc5f7b70f6d9262f4c81cb73f4927a52c5248f045e3e1",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.27500009536743164,
+          "max_abs_sample_rate_delta": 12.8380126953125
+        },
+        {
+          "sensor_index": 5,
+          "member": "02_walk-to-room/02_walk-to-room_multisensor-5.hdf5",
+          "member_size": 154649270,
+          "member_sha256": "f067568bf3bd602bbf42d3b413bcbc7a4270333d94197a3df5f89fc6466bbab7",
+          "rows": 373,
+          "max_abs_timestamp_delta_native_units": 0.28999996185302734,
+          "max_abs_sample_rate_delta": 14.698486328125
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "01_walk.zip",
+      "archive_size": 307054238,
+      "archive_publisher_md5": "4de9c773ca20c6da072d744ab65a553e",
+      "archive_sha256": "667eccd871abadee6bc8d8ebe348d422567300b056cb817165ac7971537b875b",
+      "sensor_count": 5,
+      "event_rows": 464,
+      "distinct_participants": 11,
+      "train_participants": 9,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 364,
+        "validation": 100,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "01_walk/01_walk_multisensor-1.hdf5",
+          "member_size": 170086272,
+          "member_sha256": "7e92039e703682f400269afd3ea79b458c801f7e33439c3d0dbe06c9cf59fa4d",
+          "rows": 464,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "01_walk/01_walk_multisensor-2.hdf5",
+          "member_size": 170416056,
+          "member_sha256": "bb1ea09e5b500f8b6fc7ca58c86b9043aa0674d83a2a2f874f58f7913066d0d4",
+          "rows": 464,
+          "max_abs_timestamp_delta_native_units": 0.18900012969970703,
+          "max_abs_sample_rate_delta": 8.360107421875
+        },
+        {
+          "sensor_index": 3,
+          "member": "01_walk/01_walk_multisensor-3.hdf5",
+          "member_size": 170198224,
+          "member_sha256": "7892a427212ced350893de3eec640b9e0dea90658d140558fd881451211ed817",
+          "rows": 464,
+          "max_abs_timestamp_delta_native_units": 0.2569999694824219,
+          "max_abs_sample_rate_delta": 7.5291748046875
+        },
+        {
+          "sensor_index": 4,
+          "member": "01_walk/01_walk_multisensor-4.hdf5",
+          "member_size": 170019984,
+          "member_sha256": "790d19eaa61232d9c67768578040e38fb2906fa9e6879f42ba570cbdbc114785",
+          "rows": 464,
+          "max_abs_timestamp_delta_native_units": 0.27700018882751465,
+          "max_abs_sample_rate_delta": 14.7740478515625
+        },
+        {
+          "sensor_index": 5,
+          "member": "01_walk/01_walk_multisensor-5.hdf5",
+          "member_size": 170576792,
+          "member_sha256": "66354409ae850baddb6f8ac15482b77a5a0b9c693e436f5514c64c7fce6a8556",
+          "rows": 464,
+          "max_abs_timestamp_delta_native_units": 0.25500011444091797,
+          "max_abs_sample_rate_delta": 13.3218994140625
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "15_vacuum-cleaning.zip",
+      "archive_size": 351401282,
+      "archive_publisher_md5": "d052af77a2fa80f53db0bb33d1cd815e",
+      "archive_sha256": "ed2a22c17ca23ba1eec8f84c61935e28f7c39f85c863b0b9c2541dd32008c878",
+      "sensor_count": 5,
+      "event_rows": 14,
+      "distinct_participants": 8,
+      "train_participants": 6,
+      "validation_participants": 2,
+      "split_event_rows": {
+        "train": 11,
+        "validation": 3,
+        "unassigned": 0
+      },
+      "coverage_pass": true,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "15_vacuum-cleaning/15_vacuum-cleaning_multisensor-1.hdf5",
+          "member_size": 107336156,
+          "member_sha256": "3f7c823d6b0cf0e0068c3f35dfa5d3dc2fc6f5a1d9dac6a165e499fb82edff22",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "15_vacuum-cleaning/15_vacuum-cleaning_multisensor-2.hdf5",
+          "member_size": 107463964,
+          "member_sha256": "85a378346fa22bd4e67f6cd2eda29d41b6ff02763ca38f67958620d3ade7323e",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.17999982833862305,
+          "max_abs_sample_rate_delta": 4.7261962890625
+        },
+        {
+          "sensor_index": 3,
+          "member": "15_vacuum-cleaning/15_vacuum-cleaning_multisensor-3.hdf5",
+          "member_size": 107456020,
+          "member_sha256": "3fad08d80b44ae988434cd4ea61ab8c1e60e8e7d9d32cec6f4384320b4b9390e",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.1679999828338623,
+          "max_abs_sample_rate_delta": 4.1739501953125
+        },
+        {
+          "sensor_index": 4,
+          "member": "15_vacuum-cleaning/15_vacuum-cleaning_multisensor-4.hdf5",
+          "member_size": 107545244,
+          "member_sha256": "0be803b2b15d8c4d0c3ea08da731237ec059eabbc181e758e67be6355d479d85",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.10500001907348633,
+          "max_abs_sample_rate_delta": 9.403076171875
+        },
+        {
+          "sensor_index": 5,
+          "member": "15_vacuum-cleaning/15_vacuum-cleaning_multisensor-5.hdf5",
+          "member_size": 107560268,
+          "member_sha256": "9fa7218f267020243a871d92482b7d4ab62546858e8c16f34b6a931d2f2ee06d",
+          "rows": 14,
+          "max_abs_timestamp_delta_native_units": 0.10599994659423828,
+          "max_abs_sample_rate_delta": 10.306884765625
+        }
+      ],
+      "waveform_arrays_read": false
+    },
+    {
+      "activity": "00_no-activity.zip",
+      "archive_size": 794471071,
+      "archive_publisher_md5": "346553bbb3c67ef32613646a7776227a",
+      "archive_sha256": "031e8486df70f36bb4d6d293704d46bef5deca9591003060d95b1296e78a8dd2",
+      "sensor_count": 5,
+      "event_rows": 231,
+      "distinct_participants": 1,
+      "train_participants": 0,
+      "validation_participants": 0,
+      "split_event_rows": {
+        "train": 0,
+        "validation": 0,
+        "unassigned": 231
+      },
+      "coverage_pass": false,
+      "sensors": [
+        {
+          "sensor_index": 1,
+          "member": "00_no-activity/00_no-activity_multisensor-1.hdf5",
+          "member_size": 540658050,
+          "member_sha256": "9eebe53468d8808fe81df5d3557622ccb7ef9b45ca639d0840d3aa78a171392b",
+          "rows": 231,
+          "max_abs_timestamp_delta_native_units": 0.0,
+          "max_abs_sample_rate_delta": 0.0
+        },
+        {
+          "sensor_index": 2,
+          "member": "00_no-activity/00_no-activity_multisensor-2.hdf5",
+          "member_size": 541077066,
+          "member_sha256": "5c07c44c7bf3d39f069122483a76171d0d9ce08a04fc3340d20e004932762a80",
+          "rows": 231,
+          "max_abs_timestamp_delta_native_units": 0.06799983978271484,
+          "max_abs_sample_rate_delta": 21.29833984375
+        },
+        {
+          "sensor_index": 3,
+          "member": "00_no-activity/00_no-activity_multisensor-3.hdf5",
+          "member_size": 540714826,
+          "member_sha256": "3a12ba50fd8b3170ea566e053a9ebaff0ae2002ea67cc967e0223c60d5890e82",
+          "rows": 231,
+          "max_abs_timestamp_delta_native_units": 0.08100008964538574,
+          "max_abs_sample_rate_delta": 20.9593505859375
+        },
+        {
+          "sensor_index": 4,
+          "member": "00_no-activity/00_no-activity_multisensor-4.hdf5",
+          "member_size": 540217290,
+          "member_sha256": "a234e504aa69a44d8dc7e6947cee47ee61084db941e7637caca354331a62fb9f",
+          "rows": 231,
+          "max_abs_timestamp_delta_native_units": 0.1400001049041748,
+          "max_abs_sample_rate_delta": 24.4998779296875
+        },
+        {
+          "sensor_index": 5,
+          "member": "00_no-activity/00_no-activity_multisensor-5.hdf5",
+          "member_size": 541704146,
+          "member_sha256": "902edeab05fb98dcbf5fce05162c7ef2e0cccfeb45231804b0d6f8d4092f9d5c",
+          "rows": 231,
+          "max_abs_timestamp_delta_native_units": 0.08750677108764648,
+          "max_abs_sample_rate_delta": 25.4512939453125
+        }
+      ],
+      "waveform_arrays_read": false
+    }
+  ],
+  "scope": "pinned source metadata and cross-sensor identity only; no model or waveform evaluation",
+  "physical_clock_synchronization": "not established by shared row identity/timestamps",
+  "waveform_arrays_read": false,
+  "sealed_audit_loaded": false,
+  "receipt_summary": {
+    "status": "ALL_ARCHIVES_MD5_VERIFIED",
+    "new_archives_verified": 23,
+    "new_archives_expected": 23,
+    "verified_new_bytes": 4433512911,
+    "remaining_new_bytes": 0,
+    "first_three_mean_mib_per_second": 0.2136095112093487,
+    "projected_remaining_seconds_from_first_three": 0.0,
+    "publisher_md5_verified": 25
+  }
+}
