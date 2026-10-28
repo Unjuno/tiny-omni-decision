@@ -3383,3 +3383,15 @@ argmaxes under shuffled frames but stayed near chance; the Joint head changed
 only 4.0% and lost validation NLL under both shuffle and reversal. This suggests
 order-sensitive but unhelpful video signals for this narrow speech-slot task;
 it does not close the multi-input-required R2 M-2 gate.
+
+**2026-10-28 synchronized GRID utterance matching:** to probe an explicitly
+paired task, 768 training and 256 speaker-disjoint validation utterances were
+formed into balanced four-choice same-utterance video matching quartets. Three
+equal 115,457-parameter heads trained for 50 CPU epochs. Audio-only and
+Video-only stayed near chance; Joint selected at epoch 2 with 31.25% Accuracy
+and 1.3702 NLL, then overfit severely (epoch-50 rolling train NLL 0.00005,
+validation NLL 6.3498). The matched input scored 31.25%, while a +4-frame offset
+scored 32.03%; their paired eight-speaker bootstrap includes zero. This is
+weak development evidence only and does not establish temporal alignment,
+robust joint quality or close M-2. No sealed audit, GPU or cloud compute was
+used. Full controls, hashes and limits: [GRID AV matching](docs/pretrained_reuse/R2_GRID_PATH_A_AV_MATCHING_20261028.md).
