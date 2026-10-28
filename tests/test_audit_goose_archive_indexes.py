@@ -275,6 +275,8 @@ def test_instance_correspondence_probe_excludes_validation_scenarios():
     assert complete_count == 3
     assert len(selected) == 3
     assert {item[1]["group"] for item in selected} == {"scene-a", "scene-c", "scene-d"}
+    followup, _, _ = select_frames(indexes, start_group_index=1, sample_count=2)
+    assert {item[1]["group"] for item in followup} == {"scene-c", "scene-d"}
 
 
 def test_summarizes_cross_modal_instance_ids_without_retaining_payloads():
@@ -313,3 +315,27 @@ def test_summarizes_cross_modal_instance_ids_without_retaining_payloads():
     assert result["shared_ids_semantic_mode_agreement"] == 1.0
     assert result["point_count"] == 4
     assert result["point_finite"] is True
+
+
+def test_summarizes_frames_with_no_2d_instance_targets():
+    import numpy as np
+    from PIL import Image
+
+    from scripts.probe_goose_instance_correspondence import summarize_pair
+
+    def png(array):
+        buffer = io.BytesIO()
+        Image.fromarray(array).save(buffer, format="PNG")
+        return buffer.getvalue()
+
+    payloads = {
+        "image": png(np.zeros((1, 1, 3), dtype=np.uint8)),
+        "instance2d": png(np.zeros((1, 1), dtype=np.uint8)),
+        "semantic2d": png(np.zeros((1, 1), dtype=np.uint8)),
+        "pointcloud": np.zeros((1, 4), dtype="<f4").tobytes(),
+        "labels3d": np.zeros(1, dtype="<u4").tobytes(),
+    }
+    result = summarize_pair(payloads, {})
+    assert result["image_instance_class_key_count"] == 0
+    assert result["shared_instance_class_key_count"] == 0
+    assert result["shared_instance_class_key_jaccard"] == 0.0

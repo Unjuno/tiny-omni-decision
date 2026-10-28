@@ -1,3 +1,11 @@
+**2026-10-28 R2 GOOSE 15-scenario label follow-up:** One paired frame from
+each of all 15 train-only scenarios yielded 283/561 matching 2D
+`(class,instance)` keys (50.4% weighted coverage; 57.3% scenario median). Only
+2/14 positive frames exceeded 90% coverage and 7/14 fell below 50%. This is a
+label-integrity diagnostic, not model quality; GOOSE correspondence is not
+admitted as an M-2 target until the discrepancy and inference-time proposals
+are resolved. No validation/test media or model was used. [Results and hashes](docs/pretrained_reuse/R2_GOOSE_INSTANCE_LABEL_CORRESPONDENCE_FOLLOWUP_20261028.md).
+
 **2026-10-28 R2 GOOSE cross-sensor instance-label probe:** Three fixed
 train-only image/LiDAR frames passed pinned range, CRC and decode checks. The
 official policy supports a same-object task in principle, but only 25/25,

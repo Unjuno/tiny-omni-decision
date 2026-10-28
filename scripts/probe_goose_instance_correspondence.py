@@ -43,7 +43,7 @@ def _archive(indexes, name):
     return next(row for row in indexes if row["name"] == name)
 
 
-def select_frames(indexes):
+def select_frames(indexes, *, start_group_index=0, sample_count=SAMPLE_COUNT):
     validation_groups = set()
     for archive_name in ("goose_2d_val.zip", "goose_3d_val.zip"):
         for row in _archive(indexes, archive_name)["member_inventory"]:
@@ -73,10 +73,12 @@ def select_frames(indexes):
     by_group = {}
     for key, value in complete:
         by_group.setdefault(value["group"], (key, value))
-    selected = [by_group[group] for group in sorted(by_group)[:SAMPLE_COUNT]]
-    if len(selected) != SAMPLE_COUNT:
-        raise ValueError("fewer than three paired frames in train-only scenarios")
-    if len({value["group"] for _, value in selected}) != SAMPLE_COUNT:
+    ordered_groups = sorted(by_group)
+    selected_groups = ordered_groups[start_group_index : start_group_index + sample_count]
+    selected = [by_group[group] for group in selected_groups]
+    if len(selected) != sample_count:
+        raise ValueError("requested sample range exceeds complete train-only scenarios")
+    if len({value["group"] for _, value in selected}) != sample_count:
         raise ValueError("selected frames are not from distinct scenarios")
     return selected, len(validation_groups), len(complete)
 
@@ -215,12 +217,21 @@ def summarize_pair(payloads, receipts):
     }
 
 
-def audit(index_path: Path, output_dir: Path, session):
+def audit(
+    index_path: Path,
+    output_dir: Path,
+    session,
+    *,
+    start_group_index=0,
+    sample_count=SAMPLE_COUNT,
+):
     index_bytes = index_path.read_bytes()
     if sha256(index_bytes) != INDEX_SHA256:
         raise ValueError("source archive-index SHA-256 mismatch")
     indexes = json.loads(index_bytes)
-    selected, validation_group_count, complete_train_count = select_frames(indexes)
+    selected, validation_group_count, complete_train_count = select_frames(
+        indexes, start_group_index=start_group_index, sample_count=sample_count
+    )
     archive_specs = {row["name"]: row for row in ARCHIVES}
     archive_names = {
         "image": "goose_2d_train.zip",
@@ -231,10 +242,9 @@ def audit(index_path: Path, output_dir: Path, session):
     }
     plan = {
         "source_index_sha256": INDEX_SHA256,
-        "selection": (
-            "lexicographically first complete paired frame from each of the first "
-            "three train-only scenarios"
-        ),
+        "selection": "first complete paired frame per lexically ordered train-only scenario",
+        "start_group_index": start_group_index,
+        "sample_count": sample_count,
         "validation_scenario_count_excluded": validation_group_count,
         "complete_train_only_paired_frame_count": complete_train_count,
         "frames": [
@@ -304,11 +314,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--index-path", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--start-group-index", type=int, default=0)
+    parser.add_argument("--sample-count", type=int, default=SAMPLE_COUNT)
     args = parser.parse_args()
+    if args.start_group_index < 0 or args.sample_count < 1:
+        parser.error("start-group-index must be >= 0 and sample-count must be >= 1")
     import requests
 
     with requests.Session() as session:
-        result = audit(args.index_path, args.output_dir, session)
+        result = audit(
+            args.index_path,
+            args.output_dir,
+            session,
+            start_group_index=args.start_group_index,
+            sample_count=args.sample_count,
+        )
     print(json.dumps(result, indent=2))
 
 
