@@ -3455,3 +3455,15 @@ scored 32.03%; their paired eight-speaker bootstrap includes zero. This is
 weak development evidence only and does not establish temporal alignment,
 robust joint quality or close M-2. No sealed audit, GPU or cloud compute was
 used. Full controls, hashes and limits: [GRID AV matching](docs/pretrained_reuse/R2_GRID_PATH_A_AV_MATCHING_20261028.md).
+
+### GOOSE instance-label mapping correction (2026-10-28)
+
+The earlier 15-scenario GOOSE correspondence screen did not apply the official
+`has_instance` class mapping and excluded instance ID zero. A pinned mapping-
+aware recheck of the same 15 train-only scenarios changed aggregate 2D object
+keys from 561 to 555 and 2D-to-3D shared keys from 283/561 (50.4%) to 283/555
+(51.0%); per-scenario coverage remains variable (9.1%–100%, median 59.0%). This
+small change does not admit GOOSE: there is still no validated inference-time
+object-proposal path or safe Decision target. Preserve the prior result as
+historical and use the correction as a qualification; R2 M-2 remains open.
+See [the mapping-aware correction](docs/pretrained_reuse/R2_GOOSE_INSTANCE_LABEL_MAPPING_CORRECTION_20261028.md).

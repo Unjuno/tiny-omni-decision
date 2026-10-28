@@ -307,12 +307,12 @@ def test_summarizes_cross_modal_instance_ids_without_retaining_payloads():
         "labels3d": labels_3d.tobytes(),
     }
     receipts = {key: {"zip_crc32_verified": True} for key in payloads}
-    result = summarize_pair(payloads, receipts)
-    assert result["shared_nonzero_instance_ids"] == 2
+    result = summarize_pair(payloads, receipts, {3, 5})
+    assert result["shared_instance_object_keys"] == 2
     assert result["shared_instance_class_key_count"] == 2
     assert result["shared_instance_class_key_jaccard"] == 1.0
     assert result["shared_id_jaccard"] == 1.0
-    assert result["shared_ids_semantic_mode_agreement"] == 1.0
+    assert result["instance_id_zero_included"] is True
     assert result["point_count"] == 4
     assert result["point_finite"] is True
 
@@ -335,7 +335,7 @@ def test_summarizes_frames_with_no_2d_instance_targets():
         "pointcloud": np.zeros((1, 4), dtype="<f4").tobytes(),
         "labels3d": np.zeros(1, dtype="<u4").tobytes(),
     }
-    result = summarize_pair(payloads, {})
+    result = summarize_pair(payloads, {}, {1})
     assert result["image_instance_class_key_count"] == 0
     assert result["shared_instance_class_key_count"] == 0
     assert result["shared_instance_class_key_jaccard"] == 0.0
