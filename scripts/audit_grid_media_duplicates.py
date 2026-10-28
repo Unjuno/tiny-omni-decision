@@ -161,8 +161,11 @@ def run_audit(
                 != source_video["video_publisher_md5"].removeprefix("md5:")
             ):
                 raise ValueError(f"video archive receipt mismatch: {speaker}")
-            if file_hashes(video_path)[1] != video["sha256"]:
+            video_md5, video_sha256 = file_hashes(video_path)
+            if video_sha256 != video["sha256"]:
                 raise ValueError(f"video archive SHA-256 changed after acquisition: {speaker}")
+            if video_md5 != source_video["video_publisher_md5"].removeprefix("md5:"):
+                raise ValueError(f"video archive publisher MD5 mismatch: {speaker}")
             if file_hashes(audio_path)[1] != bundle["audio_sha256"]:
                 raise ValueError(f"audio TAR SHA-256 mismatch: {speaker}")
             video_hashes = archive_member_hashes(video_path, ".mpg")
