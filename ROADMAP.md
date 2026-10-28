@@ -3361,3 +3361,12 @@ not blind project-level evidence and will not be used for tuning. It is a
 synthetic taxonomy task, not general natural-image or multimodal quality. The
 CPU pass used cached features and did no training or checkpoint selection. See
 [protocol, results and hashes](docs/pretrained_reuse/R2_TEXTFREE_IMAGE_OFFICIAL_VALIDATION_20261029.md).
+
+**2026-10-29 R2 train-only count-loss comparison:** On the same 842-image
+train-derived development split, count-only CE (58.43% / 0.9440 NLL) was nearly
+identical to the existing joint four-head CE reference (58.19% / 0.9447). The
+matched cumulative-ordinal-NLL arm selected epoch 5 at 34.80% / 1.8402 NLL;
+its train Accuracy rose while train/dev NLL worsened through epoch 512. It was
+rejected under the fixed NLL selector; official validation and sealed audit
+were not loaded. No hyperparameter search follows from this result. See the
+[protocol, learning curve, paired intervals and hashes](docs/pretrained_reuse/R2_TEXTFREE_COUNT_ORDINAL_LOSS_RESULTS_20261029.md).
