@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "experiment_id": "droid-r2-expanded-site-heldout-readout-v1",
+  "feature_extraction_config_sha256": "4ec8023ee4ca8eb121a4e03dc33a2f4b1b7669f7eaaab1b91c3a0216ce9168bf",
+  "task_manifest_sha256": "6f32c4d4a2ad1e2fed6ac1c904010c158cd6f17366b5f049c59dba27e6fef6cd",
+  "sealed_audit_loaded": false,
+  "readout": {
+    "type": "L2 multinomial logistic regression",
+    "max_iterations": 500,
+    "l2_candidates": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "folds": 5,
+    "seed": 17,
+    "selection_metric": "train-only five-fold recording-group stratified out-of-fold macro NLL",
+    "arms": [
+      "video",
+      "sensor",
+      "video_sensor"
+    ],
+    "checkpoint_selection": "none"
+  }
+}

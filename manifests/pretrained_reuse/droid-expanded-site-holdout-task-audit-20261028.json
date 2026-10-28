@@ -1,0 +1,64 @@
+{
+  "all_selected_frames_count": 21744,
+  "created_utc": "2026-10-28T00:01:24.376407+00:00",
+  "eligible_rows": 906,
+  "episode_id_overlap_with_previous_corpus": 0,
+  "exact_selected_jpeg_hash_overlap": 0,
+  "exact_selected_jpeg_hashes_train": 17400,
+  "exact_selected_jpeg_hashes_validation": 4344,
+  "excluded_short_rows": 5,
+  "labels_seen_during_earlier_preflight_for_first_3_shards": 149,
+  "labels_used_to_choose_split": false,
+  "media_duplicate_occurrences_within_cohort": 0,
+  "perceptual_duplicate_scan": "not performed; exact selected JPEG byte hashes were compared across train/validation; source identity and recording group are stricter scene provenance controls.",
+  "recording_group_overlap_with_previous_corpus": 0,
+  "sealed_audit_loaded": false,
+  "source_records_total": 911,
+  "split_protocol_sha256": "2b88549b6fe6dd344841b3fd2ca55dfbf49e4cc923f12f70559d54a59338999c",
+  "split_rule_depended_on_labels": false,
+  "status": "PASS_SOURCE_ID_AND_GROUP_AUDIT",
+  "target_counts": {
+    "train": {
+      "stop": 73,
+      "x+": 304,
+      "x-": 42,
+      "y+": 38,
+      "y-": 48,
+      "z+": 62,
+      "z-": 158
+    },
+    "validation": {
+      "stop": 28,
+      "x+": 67,
+      "x-": 7,
+      "y+": 10,
+      "y-": 9,
+      "z+": 14,
+      "z-": 46
+    }
+  },
+  "task_manifest_sha256": "6f32c4d4a2ad1e2fed6ac1c904010c158cd6f17366b5f049c59dba27e6fef6cd",
+  "train_rows": 725,
+  "train_site_count": 10,
+  "train_sites": {
+    "autolab": 126,
+    "clvr": 47,
+    "guptalab": 8,
+    "iprl": 73,
+    "iris": 93,
+    "rad": 20,
+    "rail": 90,
+    "rpl": 32,
+    "tri": 204,
+    "weird": 32
+  },
+  "validation_rows": 181,
+  "validation_site_count": 4,
+  "validation_sites": {
+    "bvl": 31,
+    "iliad": 67,
+    "pennpal": 32,
+    "real": 51
+  },
+  "within_split_id_or_group_overlap": false
+}

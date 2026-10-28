@@ -1,0 +1,42 @@
+{
+  "cohort_audit_sha256": "049b57e3772ece6057dce24da75b4473fba9a5fa937b81e0a8b7ef5ab2f60ce2",
+  "cohort_records_sha256": "b810e8a8141dce6f877f1ff5584221785cbdb2b079a5b7a55ee6e5392cd0ef04",
+  "created_utc": "2026-10-27T23:59:36.752753+00:00",
+  "eligible_rows": 906,
+  "eligible_rule": "source_step_count >= 32; observed_steps=floor(source_step_count*0.25) >= 8; target_index=uniform_indices(observed_steps,8)[-1]+1; use only action at target_index as label.",
+  "input_rule": "Eight ordered observations uniformly sampled over the first floor(25%) of the episode; frozen VideoPrism features for the same 8 time indices and 3 camera views, plus the same 8-step sensor sequence.",
+  "known_prior_exploration": "An earlier feasibility scan computed the target class counts for the first 3 shards (149 rows). Those rows remain in this expanded cohort. The held-out site list was selected only from source-site counts and hash; no model metrics or validation predictions were available. Treat this as development validation, not blind/sealed evaluation.",
+  "labels_used_to_choose_split": false,
+  "model_predictions_seen": false,
+  "prior_corpus_task_manifest_sha256": "b7315c23bad4f9b195828c934cc3a87aeb34d36b1b1180a8e8152f783148e21d",
+  "prior_train_validation_rows_excluded": 425,
+  "protocol_id": "droid-r2-expanded-site-heldout-next-action-v1",
+  "quantization_or_encoder_training": false,
+  "sealed_audit_loaded": false,
+  "source": "Google Research DROID 1.0.0 r2d2_faceblur train split, first 20 GCS shards only; train source records only",
+  "source_identity_overlap_excluded": true,
+  "split_selection": "Enumerate combinations of 3..5 sites, require held-out eligible-row fraction in [0.15,0.25], choose fraction closest to 0.20; ties by SHA256(\"droid-r2-site-heldout-v1|\" + sorted_site_names_joined_by_pipe). No target labels used in site selection.",
+  "split_unit": "top-level DROID collection site inferred as first path component after r2d2-data-full; all rows from one site assigned to one split.",
+  "task": "Predict dominant signed Cartesian direction of the commanded velocity immediately after the eighth observed state.",
+  "training_sites": [
+    "autolab",
+    "clvr",
+    "guptalab",
+    "iprl",
+    "iris",
+    "rad",
+    "rail",
+    "rpl",
+    "tri",
+    "weird"
+  ],
+  "validation_fraction_by_step_count_only": 0.1997792494481236,
+  "validation_rows_by_step_count_only": 181,
+  "validation_site_tiebreak_sha256": "0eef5853acc09755763b007eff34f522cc11cc967f6d360ffca875014ec2bd71",
+  "validation_sites": [
+    "bvl",
+    "iliad",
+    "pennpal",
+    "real"
+  ]
+}

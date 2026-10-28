@@ -3318,3 +3318,14 @@ open. The existing 64-quartet pilot selection was verified inside corrected
 validation with zero train/forbidden overlap; its 34.38% accuracy / 2.0492 NLL
 remain a weak development result. See
 [`GRID train direct-source audit`](docs/pretrained_reuse/R2_GRID_TRAIN_DIRECT_SOURCE_BUNDLE_AUDIT_20261028.md).
+
+### DROID site-held-out frozen VideoPrism and sensor readout (2026-10-28)
+
+On 906 eligible episodes from 20 newly audited official-train shards, a
+seven-way next-Cartesian-direction readout reached 37.02% pooled Accuracy with
+sensor features alone; adding frozen VideoPrism features reduced it to 34.81%.
+The fixed site-held-out validation is nonblind development data, and the task
+is narrow robot action prediction. Preserve as an R2 transfer probe, not a
+general Omni result or product promotion. The frozen VideoPrism checkpoint is
+114.37M parameters / 457.5 MB before any runtime packaging. See
+[DROID site-held-out readout results](docs/pretrained_reuse/R2_DROID_SITE_HELDOUT_VIDEOPRISM_SENSOR_RESULTS_20261028.md).

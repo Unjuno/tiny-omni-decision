@@ -1,0 +1,6 @@
+/configs/pretrained_reuse/droid_expanded_site_holdout_v1.json -text whitespace=cr-at-eol
+/configs/pretrained_reuse/droid_expanded_site_holdout_readout_v1.json -text whitespace=cr-at-eol
+/configs/pretrained_reuse/droid_expanded_site_holdout_readout_v1_solver2k.json -text whitespace=cr-at-eol
+/manifests/pretrained_reuse/droid-expanded-site-holdout-source-20261028.json -text whitespace=cr-at-eol
+/manifests/pretrained_reuse/droid-expanded-site-holdout-split-protocol-20261028.json -text whitespace=cr-at-eol
+/manifests/pretrained_reuse/droid-expanded-site-holdout-task-20261028.json -text whitespace=cr-at-eol

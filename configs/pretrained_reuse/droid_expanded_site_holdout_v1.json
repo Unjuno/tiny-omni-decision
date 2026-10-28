@@ -1,0 +1,106 @@
+{
+  "claim_scope": "development-only, site-held-out one-step robot action-direction prediction; not a general Omni benchmark",
+  "experiment_id": "droid-r2-expanded-site-heldout-v1",
+  "outputs": {
+    "evaluation": "C:/CodexArtifacts/pretrained-reuse-r2/droid-expanded-site-holdout-evaluation-attempt-01",
+    "feature_cache": "C:/CodexArtifacts/pretrained-reuse-r2/droid-expanded-site-holdout-features-attempt-01"
+  },
+  "readout": {
+    "arms": [
+      "video",
+      "sensor",
+      "video_sensor"
+    ],
+    "checkpoint_selection": "not applicable",
+    "feature_standardization": "fit on train split only",
+    "l2_candidates": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "selection": "5-fold recording-group stratified CV on train sites only; macro NLL; seed 17",
+    "type": "L2 multinomial logistic regression"
+  },
+  "representation": {
+    "encoder_training": false,
+    "execution": "CPU-only frozen-feature extraction using pinned R1 runtime",
+    "feature_shapes": {
+      "sensor": [
+        8,
+        14
+      ],
+      "video": [
+        3,
+        8,
+        768
+      ]
+    },
+    "sensor_encoder": "none; fixed raw proprioception sequence",
+    "video_checkpoint": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz",
+    "video_checkpoint_bytes": 457475296,
+    "video_checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "video_encoder": "google/videoprism-base-f16r288",
+    "video_parameter_count": 114365184,
+    "video_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a"
+  },
+  "schema_version": 1,
+  "source": {
+    "dataset_id": "droid/droid",
+    "dataset_version": "1.4.0",
+    "license": "CC-BY-4.0",
+    "partition": "official train shards only",
+    "sealed_audit_loaded": false,
+    "selection_manifest": "manifests/pretrained_reuse/droid-expanded-site-holdout-source-20261028.json",
+    "selection_manifest_sha256": "6ac6b222b43b1ff889952d880beaab6fbf0d3129c493d2856f98f8289d9588ec",
+    "selection_method": "contiguous first 20 TFDS source shards after three-shard bandwidth preflight",
+    "selection_seed": null,
+    "storage_release": "1.0.0",
+    "task_manifest_sha256": "6f32c4d4a2ad1e2fed6ac1c904010c158cd6f17366b5f049c59dba27e6fef6cd"
+  },
+  "split": {
+    "development_validation_is_blind": false,
+    "selection_protocol": "manifests/pretrained_reuse/droid-expanded-site-holdout-split-protocol-20261028.json",
+    "split_protocol_sha256": "2b88549b6fe6dd344841b3fd2ca55dfbf49e4cc923f12f70559d54a59338999c",
+    "split_rule_uses_labels": false,
+    "training_rows": 725,
+    "unit": "top-level DROID collection site",
+    "validation_rows": 181,
+    "validation_sites": [
+      "bvl",
+      "iliad",
+      "pennpal",
+      "real"
+    ]
+  },
+  "task": {
+    "future_observations_in_input": false,
+    "input_modalities": [
+      "video",
+      "sensor"
+    ],
+    "observation_count": 8,
+    "observed_fraction": 0.25,
+    "options": [
+      "stop",
+      "x-",
+      "x+",
+      "y-",
+      "y+",
+      "z-",
+      "z+"
+    ],
+    "sensor_fields": [
+      "observation/joint_position",
+      "observation/cartesian_position",
+      "observation/gripper_position"
+    ],
+    "target": "dominant signed xyz direction of Cartesian velocity at uniform_indices(floor(step_count*0.25), 8)[-1] + 1; stop threshold 1e-4",
+    "timebase": "uniform source step indices; no explicit timestamp used",
+    "video_views": [
+      "exterior_image_1_left",
+      "exterior_image_2_left",
+      "wrist_image_left"
+    ]
+  }
+}
