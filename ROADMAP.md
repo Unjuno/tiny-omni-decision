@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 05:34 JST R0 checkpoint timing verification:** Three read-only
+log samples measured 31.75 steps/minute and 14,760 events/second. From the
+12,043,312,981-event sample, this projected the next 30-million-event save at
+about 05:31:28; `model.pt` was written at 05:31:28.203 with CPU-verified step
+506,449 / 12,060,018,449 events. At 05:33:51 PID 22136 remained live and the
+latest log was step 506,450. RTX 3080 use was 15,821/16,384 MiB and C: had
+0.485 GiB free, still below the 2-GiB fit reserve. No Tiny Omni run or process
+intervention occurred. The Orbitune command has no finite stop, so completion
+has no ETA. See the [fresh read-only measurement](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0534JST.md).
+
 **2026-10-29 04:57 JST R0 checkpoint recheck:** Read-only sampling of the
 active Orbitune PID 22136 (started 2026-10-28 09:12 JST) predicted the next
 30-million-event save near 04:57; the checkpoint was written at 04:57:10.
