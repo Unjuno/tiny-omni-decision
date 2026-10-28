@@ -5,9 +5,13 @@ CPU/runtime and CLEVR-4 readout evidence does not outperform the existing
 Path A count result and has a non-commercial implementation-license constraint.
 PRs #31/#32 add a DROID shard/site audit and fixed-readout transfer: the sample
 contains no new collection site, and VideoPrism+sensor remains below
-sensor-only on matched later-shard records. No rerun or product promotion is
-justified. The PRs remain open and unchanged. See the [cross-branch evidence
-reconciliation](docs/pretrained_reuse/R1_R2_CROSS_BRANCH_RECONCILIATION_20261028.md).
+sensor-only on matched later-shard records. A post-hoc 14-site bootstrap of
+the saved predictions gives joint-minus-sensor Accuracy −2.92 pp (95% CI
+−8.08 to +0.97), NLL +0.282 (+0.160 to +0.487), and Brier +0.0887 (+0.0448 to
++0.1595). No rerun or product promotion is justified. PRs #31/#32 remain open
+and unchanged. See the [cross-branch evidence
+reconciliation](docs/pretrained_reuse/R1_R2_CROSS_BRANCH_RECONCILIATION_20261028.md)
+and [reproducible bootstrap audit](https://github.com/Unjuno/tiny-omni-decision/blob/b8245103d221daea225f9666862f6b149462aa1b/docs/pretrained_reuse/R2_DROID_LATER_SHARD_PAIRED_SITE_BOOTSTRAP_20261028.md).
 
 **2026-10-28 R2 Path A baseline-run reconciliation:** The common frozen-feature
 four-modality Decision readout already completed a 2,048-update seed-17 fit

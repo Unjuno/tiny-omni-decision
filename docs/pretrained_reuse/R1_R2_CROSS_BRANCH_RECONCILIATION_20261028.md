@@ -47,8 +47,14 @@ same-site group-disjoint development transfer, not an unseen-site test. On
 these fixed records, video+sensor scored 39.42% Accuracy / 1.7790 NLL;
 sensor-only scored 42.34% / 1.4968. Video permutation worsened joint metrics
 in the earlier cohort, but that dependence did not produce a useful quality
-gain over the matched sensor-only baseline. Do not tune or refit on either
-observed DROID validation/sample. Another DROID fit is not justified without a
+gain over the matched sensor-only baseline. A post-hoc paired site-cluster
+bootstrap of the saved later-shard predictions (10,000 resamples, seed 17,
+14 sites) gives joint-minus-sensor Accuracy −2.92 pp (95% CI −8.08 to +0.97),
+NLL +0.2822 (+0.1598 to +0.4871), and Brier +0.0887 (+0.0448 to +0.1595).
+Accuracy uncertainty includes zero; the proper-scoring differences favor
+sensor-only. This adds uncertainty quantification to existing predictions
+only; it is post-hoc and not independent validation. Do not tune or refit on
+either observed DROID validation/sample. Another DROID fit is not justified without a
 prospectively specified task whose labels require visual state, and a new
 evaluation cohort.
 
@@ -79,5 +85,7 @@ evaluation cohort.
   on commit `23f02483866715a9aa52f42b6ca0625e987c0773`.
 - DROID later-shard transfer: `R2_DROID_LATER_SHARD_FROZEN_TRANSFER_RESULTS_20261028.md`
   on PR #32.
+- DROID later-shard site bootstrap: [report and output hash](https://github.com/Unjuno/tiny-omni-decision/blob/b8245103d221daea225f9666862f6b149462aa1b/docs/pretrained_reuse/R2_DROID_LATER_SHARD_PAIRED_SITE_BOOTSTRAP_20261028.md);
+  derived on a separate branch from the PR #32 prediction SHA-256.
 - DROID shard/site metadata audit: `R2_DROID_UNSEEN_SITE_SHARD_SAMPLE_20261028.md`
   on PR #31.
