@@ -60,8 +60,9 @@ On 2026-10-29 the DeBERTa, Whisper-encoder, EfficientAT and VideoPrism files
 were re-hashed locally; all four matched their pinned SHA-256 values above.
 The native fit receipt, selected checkpoint, native corpus result, and modular
 package manifest also matched the recorded hashes. Parameter arithmetic was
-recomputed from the pinned cache receipts and the native fit receipt. No model
-was loaded, no data or checkpoint was changed, no fit was run, and no sealed
+recomputed from the pinned cache receipts and the native fit receipt. During
+that hash-only audit, no model was loaded and no fit was run. The later CPU
+smoke below loaded the existing checkpoint without modifying it; no sealed
 audit was accessed.
 
 This resolves the count discrepancy; it does **not** close the product gate.
@@ -70,3 +71,23 @@ Accuracy was 0%, and the modular package exceeds the provisional byte target.
 The trained common model has not been shown to run as the v4 package. Preserve
 both artifacts and keep runtime-package parity, end-to-end modality quality,
 independent evaluation, and target-device profiling open.
+
+## Cached-feature CPU inference smoke (2026-10-29)
+
+The selected native common checkpoint was loaded on CPU and run against the
+first existing validation example from each modality using the same frozen
+feature stores as Path A. The run used no GPU, did not train, did not load the
+sealed audit, and computed no quality metrics. All four outputs had finite
+probabilities summing to 1; model inference took 0.1004 seconds after feature
+store setup. This verifies only that the trained readout can consume the
+cached native features and produce candidate probabilities. It is not a
+quality estimate or a runtime-package parity result.
+
+The external receipt is
+`C:/CodexArtifacts/pretrained-reuse-r2/native-common-cpu-inference-smoke-01/report.json`,
+SHA-256 `7c9960f96240dbaae6bd4cfc6428b52e2837002eab1dbfeccce7e09e60a5bc3b`.
+It pins the selected step-1,792 checkpoint hash above and the query-cache
+receipt SHA-256 `7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e`.
+The execution path merges the separately stored new-query bank into the
+corpus bank map, matching the fit runner. Existing feature arrays, checkpoints,
+and corpus files were read only.
