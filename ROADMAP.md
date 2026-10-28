@@ -3378,3 +3378,8 @@ a large train/validation gap; Video did not fit this cohort. This is a negative
 joint-video result on constrained GRID speech-slot prediction, not a general AV
 quality claim or a product decision. No sealed audit, GPU, or cloud compute was
 used. Details and hashes: [GRID Path A readouts](docs/pretrained_reuse/R2_GRID_PATH_A_READOUTS_20261028.md).
+In a no-training temporal-order replay, the Video-only head changed 71.5% of
+argmaxes under shuffled frames but stayed near chance; the Joint head changed
+only 4.0% and lost validation NLL under both shuffle and reversal. This suggests
+order-sensitive but unhelpful video signals for this narrow speech-slot task;
+it does not close the multi-input-required R2 M-2 gate.

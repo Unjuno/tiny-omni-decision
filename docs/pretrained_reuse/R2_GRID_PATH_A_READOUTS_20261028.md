@@ -15,6 +15,23 @@ Each arm used the same 116,339-parameter readout, AdamW (`lr=0.001`, `weight_dec
 
 The synchronized-video control re-evaluated the selected joint checkpoint after replacing each validation video with the same within-speaker position from a different held-out speaker. The feature IDs, targets and order remained fixed.
 
+### Temporal-order sensitivity control
+
+Without fitting another model, the selected Video-only and Joint checkpoints were replayed on the same 256 validation rows with the 16 frozen video tokens kept chronological, reversed, or independently shuffled per clip (fixed permutation seed 1702). This was a readout sensitivity probe only.
+
+| Readout / video order | Macro Accuracy | Macro NLL | Macro Brier | Macro ECE |
+|---|---:|---:|---:|---:|
+| Video-only, chronological | 0.2057 | 1.8523 | 0.8108 | 0.0250 |
+| Video-only, reversed | 0.1842 | 1.8504 | 0.8120 | 0.0384 |
+| Video-only, shuffled | 0.1829 | 1.8508 | 0.8116 | 0.0336 |
+| Joint, chronological | 0.8835 | 0.3820 | 0.1612 | 0.0365 |
+| Joint, reversed | 0.8646 | 0.4533 | 0.1950 | 0.0427 |
+| Joint, shuffled | 0.8763 | 0.4079 | 0.1741 | 0.0387 |
+
+The Video-only head changed 71.5% of slot argmaxes under independent shuffling and 82.4% under reversal, while remaining near chance; therefore the GRU uses order-sensitive signals, but those signals did not support accurate slot prediction. Joint argmaxes changed only 4.0% and 7.2%, respectively, and both controls degraded NLL. This is consistent with the Joint head relying mostly on Audio, but is not proof that no video information was used. The held-out validation was already used for checkpoint selection, so these are not blind estimates.
+
+Temporal-order result SHA-256: `3121355a5a75ed4edbbb29f7982f7c450eb65d2e73e78b0399e4b91872a2288f`; saved temporal-control predictions SHA-256: `3ed7960d54ed7bb3be96250b7305e04c9d16d80c469d8ee7a8de51e778375a88`.
+
 ## Results
 
 Metrics below are per-slot macro averages over the six GRID decision slots; each validation slot has 256 examples. ECE uses 10 equal-width confidence bins. Values were recomputed from the reloaded best checkpoints; saved predictions had identical argmaxes and maximum absolute probability replay delta below `6.3e-7`.
@@ -58,5 +75,6 @@ The cache and readout outputs are external to Git under `C:/CodexArtifacts/pretr
 - Fitting script SHA-256: `35d1b7468c136f124661de878bd7a5472e41a70d7c8c583496cdab3c9aaffd24`; analysis/recheck script SHA-256: `34094c9cd807eb029a4dc4a075a32da56c635e7addbe6987861da6b72d4a5a69`.
 - Best checkpoints: Audio `6a3c8839173ffe62305dbc8bb70106d762fd4b9732249d4036ee93e4bd43a63c`; Video `2598f9c578188fbd0d051992aade08f9aad4ca038672396598e86e61b51dd4b1`; Joint `95cce7b4fe35df6bade0b5b779ff3d2acf41712333f5cc9a9df2aa4ba40232c1`.
 - Source scripts: `scripts/fit_grid_path_a_readouts.py` and `scripts/analyze_grid_path_a_readouts.py`.
+- Temporal-order replay script SHA-256: `77cb8c077e2f7f9e77106a80c9fe87292c198a1b09c8281f1d0d2b76500ea0c2` (`scripts/evaluate_grid_path_a_temporal_order.py`).
 
 Readout fitting took 29.12 seconds on CPU; no cloud compute or GPU was used. Existing Teacher artifacts and sealed-audit data were not accessed.
