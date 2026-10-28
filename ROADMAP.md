@@ -1,5 +1,25 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 06:58 JST R2 CPU runtime replay:** The fitted Path A readout
+was exported, reloaded, and run over all 24,346 pinned development-validation
+rows using cached frozen features on CPU. It produced zero top-option
+disagreements against the saved GPU score matrix; maximum absolute logit drift
+was `3.53e-5` and macro metric deltas were under `1.3e-8`. The measured pass
+took 58.8 s. The initial three 256-row throughput samples averaged 595.9
+examples/s and underpredicted the remaining time by about 19 s as throughput
+fell later. A first attempt's `2e-6` tolerance was too strict; the rerun used a
+post-hoc `5e-5` tolerance, so this is evidence of CPU cached-feature execution
+and close numerical agreement, not exact floating-point parity. It does not
+cover raw encoders or change the product/quality gates. See the [full replay
+record](docs/pretrained_reuse/R2_NATIVE_COMMON_CPU_REPLAY_20261029.md).
+
+**2026-10-29 06:58 JST R0 process recheck:** Orbitune PID 22136 remained live;
+the latest log was step 509,150 / 12,135,188,721 events, while its last
+verified saved checkpoint remained step 508,603 at 06:40:13.621. RTX usage
+was 15,821/16,384 MiB at 99%, and C: had about 0.72 GiB free. No GPU work was
+started and the process/checkpoint were not modified. The process uses
+`--steps 0`, so the next checkpoint cadence is not a completion ETA.
+
 **2026-10-29 06:40 JST R0 checkpoint observed:** The next interval save was
 written at 06:40:13.621 and CPU-loaded state verified step 508,603 /
 12,120,026,000 events, 117,943,468 bytes, SHA-256
