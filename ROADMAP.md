@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 06:40 JST R0 checkpoint observed:** The next interval save was
+written at 06:40:13.621 and CPU-loaded state verified step 508,603 /
+12,120,026,000 events, 117,943,468 bytes, SHA-256
+`2F33E7A6069FD84EA8A08C15B50FEBA9F94A77A458CD3C1D488C996C2BD5EC19`.
+The 06:06:03→06:40:13 interval was 34m10s and 30,022,745 events. The run
+remained live at 06:41:15 with RTX VRAM 15,821/16,384 MiB and C: free space
+0.477 GiB. Its step limit remains `--steps 0`, so this is checkpoint cadence,
+not a completion ETA. See the [R0 follow-up audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0640JST.md).
+
 **2026-10-29 06:06 JST R0 checkpoint observed:** Orbitune's next interval
 save appeared at 06:06:03.291, verified on CPU as step 507,526 /
 12,090,003,255 events, 117,943,148 bytes, SHA-256
