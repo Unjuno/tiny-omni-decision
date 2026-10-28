@@ -1,3 +1,63 @@
+**2026-10-28 R2 GOOSE 15-scenario label follow-up:** One paired frame from
+each of all 15 train-only scenarios yielded 283/561 matching 2D
+`(class,instance)` keys (50.4% weighted coverage; 57.3% scenario median). Only
+2/14 positive frames exceeded 90% coverage and 7/14 fell below 50%. This is a
+label-integrity diagnostic, not model quality; GOOSE correspondence is not
+admitted as an M-2 target until the discrepancy and inference-time proposals
+are resolved. No validation/test media or model was used. [Results and hashes](docs/pretrained_reuse/R2_GOOSE_INSTANCE_LABEL_CORRESPONDENCE_FOLLOWUP_20261028.md).
+
+**2026-10-28 R2 GOOSE cross-sensor instance-label probe:** Three fixed
+train-only image/LiDAR frames passed pinned range, CRC and decode checks. The
+official policy supports a same-object task in principle, but only 25/25,
+7/17 and 14/16 numerically overlapping 2D instance IDs also matched semantic
+class across the two label streams. This is too inconsistent to admit a
+class-instance Decision target; broader train-only audit and a non-oracle
+inference-time proposal path are required. No model or validation/test data was
+used. [Protocol and hashes](docs/pretrained_reuse/R2_GOOSE_INSTANCE_LABEL_CORRESPONDENCE_20261028.md).
+
+**2026-10-28 R2 GOOSE ZIP-index and transfer preflight:** The official train
+and validation archives are range-capable and their pinned ZIP64 central
+directories contain 7,712 matched train image/point-cloud IDs and 961
+validation pairs. The publisher's official train/validation split shares all
+8 validation scenario groups with train, although exact media IDs do not
+overlap. Excluding those 8 train-side groups leaves 15 train groups / 4,473
+paired examples and 8 validation groups / 961 pairs. Three CRC-checked train
+image reads averaged 0.315 MiB/s (0.301 pooled), extrapolating to about 5.6 h
+for both full validation archives. Only indexes and three train images were
+read; no full archive, validation media/labels, test split, model or GPU was
+used. The group-filtered cohort is a source candidate only: a task requiring
+both camera and point cloud is still unproven, and full archive SHA-256 is
+unknown. See [`R2_GOOSE_ARCHIVE_INDEX_AUDIT_20261028.md`](docs/pretrained_reuse/R2_GOOSE_ARCHIVE_INDEX_AUDIT_20261028.md).
+
+**2026-10-28 R2 GOOSE image/point-cloud source screen:** The publisher
+explicitly licenses the dataset CC BY-SA 4.0 and provides separate image and
+point-cloud train/validation/test archives. This is a more directly accessible
+real camera+sensor candidate than the previously screened gated/research-only
+sources. It is **not admitted for model selection or training yet**: recording
+group/sequence leakage, cross-modal asset joins, pretraining overlap, and a
+decision task requiring both modalities have not been verified. No data or
+model was downloaded or opened. See
+[`R2_GOOSE_IMAGE_POINT_CLOUD_SOURCE_SCREEN_20261028.md`](docs/pretrained_reuse/R2_GOOSE_IMAGE_POINT_CLOUD_SOURCE_SCREEN_20261028.md).
+
+**2026-10-28 R2 ADL full sensor identity/split audit:** All 125 sensor HDF5
+members across 25 pinned activities passed identity checks; the five sensors
+within each activity have matching participant/trial rows. The fixed split
+assigns 12 train and 2 validation participants with zero overlap, but only
+24/25 activities have both splits. The `00_no-activity` class has 231
+unassigned rows (special ID 999); sweep, typing and vacuum-cleaning have only
+3–4 validation rows each. This is source-integrity evidence, not a quality
+result or training admission. ADL has one environment, two validation people,
+no released video, and unverified physical clocks/session independence. [Report
+and aggregate hashes](docs/pretrained_reuse/R2_ADL_FULL_SENSOR_IDENTITY_20261028.md).
+
+**2026-10-28 R2 ADL full archive authentication:** All 25 activity ZIPs from
+the pinned Zenodo record were present and independently rehashed; every source
+size, publisher MD5 and receipt SHA-256 matched. This replaces the prior
+archive-authentication gap only. Full HDF5 row/sensor identity, participant and
+session leakage, waveform alignment, sparse task support and dataset admission
+remain open. No model/GPU/sealed-audit work occurred. [Report, hashes and
+measured transfer](docs/pretrained_reuse/R2_ADL_FULL_ARCHIVE_AUTHENTICATION_20261028.md).
+
 **2026-10-28 R2 full-extent Video logit-scale diagnostic:** A CPU-only,
 hash-checked analysis of saved predictions from the completed 32,768-update
 full-extent/fresh-coverage run found Video confidence and logit magnitude grew
@@ -20,8 +80,18 @@ duplicate checks remain incomplete before any GRID training. [Audit](docs/pretra
 train utterance and one speaker-disjoint validation utterance passed integrity
 checks and frozen Whisper/VideoPrism feature extraction on CPU. The audio came
 from per-speaker bundle tars, not the separately audited aggregate audio ZIP.
-This verifies only the two-example runtime path; it is not a trained baseline,
-media-duplicate audit, or quality result. [Details and hashes](docs/pretrained_reuse/R2_GRID_PATH_A_FROZEN_FEATURE_SMOKE_20261028.md).
+This verifies only the two-example runtime path; it is not a trained baseline
+or quality result. The full official per-speaker archive acquisition and
+exact train/validation WAV/MPG payload-hash scan have since completed: all 32
+archives were verified, and the 63,982 eligible payloads had zero exact
+cross-split or within-split duplicates. This clears the exact-byte media gate
+for the corrected split, but not re-encoded duplicate or cross-corpus physical
+speaker identity checks. GRID training is still an internal-research probe
+pending product-rights clarification. The audio-only portion independently
+scanned 32,000 WAV members and found zero exact-payload duplicates among
+31,991 eligible rows. A real s10 ZIP smoke also passed after excluding 1,000
+AppleDouble sidecars. [Protocol and full/partial media results, acquisition
+receipt, and measured transfer rates](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md).
 **2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
 64-quartet / 256-query sample completed on CPU with integrity and order checks.
 Joint Accuracy was 34.38%, but NLL/Brier/ECE were poor (2.049/0.911/0.337);
@@ -2435,7 +2505,13 @@ Primary references and official implementations (paper merit does **not** imply 
 
 This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the full previous roadmap in Git history; it is not deleted from the project record. The requested product outcome stays constant—**small, high-quality, local, genuinely multimodal typed decision inference**—while the mandatory Gemma/EmbeddingGemma ternary-first implementation path is no longer the assumed route. Since this proposal was opened, a task-scoped frozen Speech Commands audio runtime bundle has been integrated on this branch and passed existing-validation replay parity; see the R2 runtime record. It does not close joint AV or full multimodal packaging.
 
-**Current implementation action (updated 2026-10-28):** the original GRID selection from the frozen split remains an integrity failure and must not be remapped. A separate 64-quartet sample built from direct per-speaker source intersections was evaluated with the fixed runtime; it scored 34.38% Accuracy with poor calibration and is only a narrow development probe ([report](docs/pretrained_reuse/R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md)). A fresh directory-only audit also found 14,997/23,992 unmatched train codes across 15/24 speakers; do not train on this GRID split until source-to-record identity is independently verified ([audit](docs/pretrained_reuse/R2_GRID_TRAIN_PARTITION_SOURCE_MAPPING_AUDIT_20261028.md)). GRID remains research-only pending its rights boundary; continue source review for a product-approved AV task. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
+**Current implementation action (updated 2026-10-28):** the original GRID selection and its train/validation manifests remain integrity failures and must not be remapped. The corrected direct-source split contains 23,993 train and 7,998 validation rows and passes source identity, label-content, speaker-disjointness, and exact-media integrity checks. Its full media audit hashed 31,991 eligible WAV and 31,991 MPG payloads and found zero exact duplicates across or within splits ([protocol and report](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md)). The already-fixed 64-quartet cross-source pilot scored 34.38% Accuracy with poor calibration and remains a narrow development result ([report](docs/pretrained_reuse/R2_GRID_DIRECT_FIXED_AV_EVALUATION_20261028.md)). The corrected split supported an internal-research-only frozen-feature Path A baseline; it is not a product-quality result, and cross-corpus physical speaker identity and product rights remain unresolved. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
+
+**2026-10-28 Path A throughput preflight:** the corrected 23,993/7,998 split passes the new fail-closed local identity/feature-bank contract (23,993 train, 7,998 validation). Three additional fixed train clips were run through the pinned native VideoPrism CPU worker: first-call 9.19s, then 2.49s and 2.47s, with finite ordered `[16,768]` features. The steady-state estimate is ~2.48s/clip (~22h for all 31,991 eligible clips before audio/write overhead). A resumable chunked extractor was subsequently implemented and used for the separate 1,024-row fixed cohort; the full 31,991-row corpus feature run remains unexecuted. See [`GRID Path A CPU timing sample`](docs/pretrained_reuse/R2_GRID_PATH_A_SPEED_SAMPLE_20261028.md) and [`extractor smoke`](docs/pretrained_reuse/R2_GRID_PATH_A_FEATURE_EXTRACTION_SMOKE_20261028.md).
+
+**2026-10-28 GRID Path A fixed cohort:** a deterministic, speaker-disjoint subset contains 768 unique train utterances across 24 speakers and 256 unique validation utterances across eight held-out speakers. Previously used validation pilot media were excluded; all 1,024 direct audio/video archive members exist, with no selected train/validation media overlap. Frozen CPU extraction has completed for all 1,024 rows and the Audio/Video/Joint heads have been fitted and replay-checked. The narrow GRID speech-slot scores remain 0.8919 Audio, 0.2057 Video and 0.8835 Joint; eight validation speakers limit uncertainty. This is not a general AV quality claim. See [`GRID Path A cohort`](docs/pretrained_reuse/R2_GRID_PATH_A_COHORT_20261028.md), [`readouts`](docs/pretrained_reuse/R2_GRID_PATH_A_READOUTS_20261028.md), and [`AV matching`](docs/pretrained_reuse/R2_GRID_PATH_A_AV_MATCHING_20261028.md).
+
+**2026-10-28 GRID Path A extractor smoke:** the initial chunked CPU runtime check loaded frozen Whisper (8.21M) and native temporal VideoPrism-B (114.37M), extracted two train and two validation examples, and passed feature shape, finiteness, model-state and input-hash checks in 51.88 seconds. The later full 1,024-example cache and readout fits are recorded separately above and in their linked reports. See [`GRID Path A extraction smoke`](docs/pretrained_reuse/R2_GRID_PATH_A_FEATURE_EXTRACTION_SMOKE_20261028.md).
 
 
 ### STARSS23 measured update (2026-10-11)
@@ -3313,8 +3389,8 @@ frozen speaker/code rows match only 9/24; 15/24 have zero same-label overlap.
 The old train manifest remains blocked and is preserved as a failed receipt.
 A new manifest was rebuilt from authoritative per-speaker bundles with
 23,993 train and 7,998 validation rows; source identity and label-content
-checks pass, while media-content duplicate scanning and model training remain
-open. The existing 64-quartet pilot selection was verified inside corrected
+checks pass, and the full exact-byte media duplicate gate now passes. Frozen-
+feature model training and evaluation remain open. The existing 64-quartet pilot selection was verified inside corrected
 validation with zero train/forbidden overlap; its 34.38% accuracy / 2.0492 NLL
 remain a weak development result. See
 [`GRID train direct-source audit`](docs/pretrained_reuse/R2_GRID_TRAIN_DIRECT_SOURCE_BUNDLE_AUDIT_20261028.md).
@@ -3339,3 +3415,43 @@ This sample-only screen does not prove the full release has no other sites; it
 does not justify another site-held-out fit by itself. Six verified shard
 downloads averaged 21.97 MiB/s; no labels, media, model or GPU were opened.
 See [the sample protocol, hashes, timing and limitations](docs/pretrained_reuse/R2_DROID_UNSEEN_SITE_SHARD_SAMPLE_20261028.md).
+
+### DROID later-shard frozen-readout transfer (2026-10-28)
+
+The three preselected later shards yielded 137 eligible episodes with zero
+prior episode/group/sampled-frame overlap. Replaying the unchanged readouts
+gave 42.34% Accuracy / 1.4968 NLL for sensor-only versus 39.42% / 1.7790 for
+VideoPrism + sensor. This is same-site, group-disjoint development evidence
+from official-train data, not a blind audit; the 14 sites were already seen.
+No model was trained or changed. Preserve the negative joint result and the
+per-site/per-shard metrics. See the [frozen transfer report](docs/pretrained_reuse/R2_DROID_LATER_SHARD_FROZEN_TRANSFER_RESULTS_20261028.md).
+
+### GRID Path A frozen-feature extraction and readouts (2026-10-28)
+
+The fixed 768-train / 256-validation speaker-disjoint cohort was encoded with
+frozen Whisper and temporal VideoPrism features on CPU. Three 116,339-parameter
+readouts were fitted for 50 epochs each (Audio, Video, Joint). Best-validation
+macro Accuracy was 0.8919 Audio-only, 0.2057 Video-only and 0.8835 Joint; a
+cross-speaker video mismatch scored 0.8848. The speaker-cluster paired interval
+for matched-minus-mismatched Joint Accuracy includes zero. Audio and Joint show
+a large train/validation gap; Video did not fit this cohort. This is a negative
+joint-video result on constrained GRID speech-slot prediction, not a general AV
+quality claim or a product decision. No sealed audit, GPU, or cloud compute was
+used. Details and hashes: [GRID Path A readouts](docs/pretrained_reuse/R2_GRID_PATH_A_READOUTS_20261028.md).
+In a no-training temporal-order replay, the Video-only head changed 71.5% of
+argmaxes under shuffled frames but stayed near chance; the Joint head changed
+only 4.0% and lost validation NLL under both shuffle and reversal. This suggests
+order-sensitive but unhelpful video signals for this narrow speech-slot task;
+it does not close the multi-input-required R2 M-2 gate.
+
+**2026-10-28 synchronized GRID utterance matching:** to probe an explicitly
+paired task, 768 training and 256 speaker-disjoint validation utterances were
+formed into balanced four-choice same-utterance video matching quartets. Three
+equal 115,457-parameter heads trained for 50 CPU epochs. Audio-only and
+Video-only stayed near chance; Joint selected at epoch 2 with 31.25% Accuracy
+and 1.3702 NLL, then overfit severely (epoch-50 rolling train NLL 0.00005,
+validation NLL 6.3498). The matched input scored 31.25%, while a +4-frame offset
+scored 32.03%; their paired eight-speaker bootstrap includes zero. This is
+weak development evidence only and does not establish temporal alignment,
+robust joint quality or close M-2. No sealed audit, GPU or cloud compute was
+used. Full controls, hashes and limits: [GRID AV matching](docs/pretrained_reuse/R2_GRID_PATH_A_AV_MATCHING_20261028.md).

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "dataset_id": "droid/droid",
+  "dataset_version": "1.4.0",
+  "storage_release": "1.0.0",
+  "partition": "official train",
+  "license": "CC-BY-4.0",
+  "selection_sha256": "bfd50abbe9a87f3bdcbe44c3ebdff2144ea596ae558d699b350cdd177b32f43e",
+  "source_audit_sha256": "738231fb8bb100ae0d000a663ae6dee824d42bf3dd5dfe8e1c4e3f75ea1dad4d",
+  "selection_method": "Three smallest salted SHA-256 ranks among shard indices 23..2047, salt droid-r2-unseen-sites-v1, minimum spacing 20.",
+  "labels_used_for_selection": false,
+  "sealed_audit_loaded": false,
+  "prefix": "",
+  "selected_shards": [
+    {
+      "index": 466,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00466-of-02048",
+      "generation": "1710518473341014",
+      "size": 1034736346,
+      "episodes": 50,
+      "sha256": "6d8316537912dc65cd4924f2f4f9df4950269d564a2e88da53eeca5dc1632591"
+    },
+    {
+      "index": 759,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-00759-of-02048",
+      "generation": "1710518474339030",
+      "size": 1362668663,
+      "episodes": 47,
+      "sha256": "d827d53c865854eeea8194d4a889be1f0e96e3a51916d7d7e62006efeb6e0203"
+    },
+    {
+      "index": 1632,
+      "object_name": "robotics/droid/1.0.0/r2d2_faceblur-train.tfrecord-01632-of-02048",
+      "generation": "1710518477661727",
+      "size": 769377906,
+      "episodes": 41,
+      "sha256": "6de00c548fcf7c25e54ba183701f451d56e0d502e77fae86e55597c8f4d5225a"
+    }
+  ]
+}
