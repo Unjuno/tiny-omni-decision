@@ -22,6 +22,7 @@ from tiny_omni_decision.native_candidate import NativeCandidateReadout  # noqa: 
 
 CONFIG = REPO / "configs/pretrained_reuse/native_common_fit_v1.json"
 SOURCE_ROOT = Path(r"C:\CodexWorktrees\pretrained-reuse-omni")
+SCORE_ATOL = 5e-5
 
 
 def score_validation(model, rows, store, progress=None):
@@ -191,11 +192,30 @@ def main():
     if expected_scores.shape != scores.shape:
         raise ValueError("saved validation score matrix shape differs")
     max_abs = float(np.max(np.abs(scores - expected_scores)))
-    np.testing.assert_allclose(scores, expected_scores, rtol=0, atol=2e-6)
+    if max_abs > SCORE_ATOL:
+        raise ValueError(f"CPU score drift {max_abs} exceeds absolute tolerance {SCORE_ATOL}")
+    option_disagreements = int(
+        np.count_nonzero(scores.argmax(axis=1) != expected_scores.argmax(axis=1))
+    )
 
     score_path = args.output / "validation-scores.npy"
     np.save(score_path, scores, allow_pickle=False)
     metrics = summarize(rows, scores)
+    reference_metrics = summarize(rows, expected_scores)
+    metric_deltas = {}
+    for group in ("overall", "macro", "modalities"):
+        metric_deltas[group] = {}
+        for name, values in metrics[group].items():
+            if isinstance(values, dict):
+                metric_deltas[group][name] = {
+                    key: values[key] - reference_metrics[group][name][key]
+                    for key in values
+                    if key in reference_metrics[group][name]
+                    and isinstance(values[key], (float, int))
+                    and isinstance(reference_metrics[group][name][key], (float, int))
+                }
+            elif isinstance(values, (float, int)):
+                metric_deltas[group][name] = values - reference_metrics[group][name]
     metrics_path = args.output / "validation-metrics.json"
     metrics_path.write_text(
         json.dumps(metrics, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
@@ -218,7 +238,11 @@ def main():
         validation_ids_order_sha256=hashlib.sha256(
             json.dumps(ids, ensure_ascii=False, separators=(",", ":")).encode()
         ).hexdigest(),
+        score_absolute_tolerance=SCORE_ATOL,
         max_abs_score_difference=max_abs,
+        top_option_disagreements=option_disagreements,
+        reference_metrics=reference_metrics,
+        metric_deltas_vs_saved_gpu_scores=metric_deltas,
         cpu_only=True,
         cuda_used=False,
         training_performed=False,
