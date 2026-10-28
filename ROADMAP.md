@@ -51,6 +51,15 @@ poorly calibrated on eight development speakers; cross-corpus speaker identity
 and product-use rights remain unresolved. R2-M and Path A joint-quality gates
 remain open. See [the evidence reconciliation](docs/pretrained_reuse/R0_R2_CROSS_BRANCH_RECHECK_20261028.md).
 
+**2026-10-28 R1 ADL audio/vibration paired-feature smoke:** A fixed
+participant-disjoint training row passed the pinned frozen EfficientAT and
+MOMENT embedding paths on CPU. The outputs were finite, model-state hashes
+were unchanged, and repeated feature files matched exactly; no training,
+validation scoring, sealed-audit access, or GPU use occurred. This establishes
+input-path compatibility only. ADL still has 12 train and 2 validation
+participants, one environment, and no video, so it is not admitted for a
+quality fit. See the [runtime protocol and measurements](docs/pretrained_reuse/R2_ADL_AUDIO_VIBRATION_FEATURE_RUNTIME_20261028.md).
+
 **2026-10-26 R2 UnAV-100 source preflight:** Its official split CSV contains
 10,790 unique YouTube IDs (6,489 train / 2,134 validation / 2,167 test) with no
 cross-split ID overlap and positive spans. This is a promising natural AV event
