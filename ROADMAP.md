@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
+audio/video features were evaluated on two fixed development tasks. The
+six-slot joint readout (88.35%) did not improve over audio-only (89.19%); a
+video-swap control matched it, and video-only was 20.57%. A separate
+four-choice clip-matching readout reached 31.25%; a four-frame temporal offset
+scored slightly higher. This closes this GRID candidate for quality iteration,
+not R2-M or the product goal. No GPU run or repeat download was needed. See
+[the measured results and artifact hashes](docs/pretrained_reuse/R2_GRID_PATH_A_READOUTS_20261028.md).
+
 **2026-10-28 R0/R2 cross-branch recheck:** Read-only review of current PRs
 #31/#32 and the latest DROID, ADL, GOOSE and GRID branches found no new
 admitted task that justifies another fit or large download. DROID's later-shard
