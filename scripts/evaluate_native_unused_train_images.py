@@ -11,20 +11,6 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
-import numpy as np  # noqa: E402
-import torch  # noqa: E402
-
-from scripts.native_fit import summarize  # noqa: E402
-from scripts.native_fit_runtime import FeatureStore  # noqa: E402
-from scripts.native_video_cache import sha  # noqa: E402
-from scripts.replay_native_common_cpu import (  # noqa: E402
-    load_json,
-    score_validation,
-    verify_file,
-    verify_inputs,
-)
-from tiny_omni_decision.native_candidate import NativeCandidateReadout  # noqa: E402
-
 CONFIG = REPO / "configs/pretrained_reuse/native_common_fit_v1.json"
 
 
@@ -66,6 +52,20 @@ def unused_image_rows(train_rows, order, selected_step):
 
 
 def main():
+    import numpy as np
+    import torch
+
+    from scripts.native_fit import summarize
+    from scripts.native_fit_runtime import FeatureStore
+    from scripts.native_video_cache import sha
+    from scripts.replay_native_common_cpu import (
+        load_json,
+        score_validation,
+        verify_file,
+        verify_inputs,
+    )
+    from tiny_omni_decision.native_candidate import NativeCandidateReadout
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--reference-sha256", required=True)
