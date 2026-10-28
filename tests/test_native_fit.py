@@ -124,3 +124,28 @@ def test_feature_store_does_not_use_targets_or_task_names(tmp_path):
     torch.testing.assert_close(blocks[0].values, other[0].values, atol=0, rtol=0)
     torch.testing.assert_close(q, q2, atol=0, rtol=0)
     assert not q.requires_grad and not blocks[0].values.requires_grad
+
+
+def test_cpu_replay_scores_rows_in_order_and_keeps_option_padding():
+    torch = pytest.importorskip("torch")
+    from scripts.replay_native_common_cpu import score_validation
+
+    class Store:
+        def get(self, row):
+            return [], torch.tensor(row["scores"], dtype=torch.float32)
+
+    class Model(torch.nn.Module):
+        def forward(self, _blocks, queries):
+            return queries
+
+    rows = [
+        dict(options=["a", "b", "c"], scores=[0.1, 0.8, 0.2]),
+        dict(options=["x", "y"], scores=[0.9, 0.3]),
+    ]
+    scores = score_validation(Model(), rows, Store())
+
+    assert scores.shape == (2, 40)
+    np.testing.assert_array_equal(scores[0, :3], np.array([0.1, 0.8, 0.2], dtype=np.float32))
+    np.testing.assert_array_equal(scores[1, :2], np.array([0.9, 0.3], dtype=np.float32))
+    assert np.all(scores[0, 3:] == -1e30)
+    assert np.all(scores[1, 2:] == -1e30)
