@@ -1,0 +1,817 @@
+{
+  "snapshot_local": "2026-10-28T23:21:27.0597411+09:00",
+  "repository": "Unjuno/tiny-omni-decision",
+  "roadmap_branch": "docs/pretrained-reuse-roadmap-20261010",
+  "roadmap_head": "50b28622fa570a5d3d0d9913c758686bc4ed0aab",
+  "remote_head": "50b28622fa570a5d3d0d9913c758686bc4ed0aab",
+  "worktree_count": 84,
+  "worktrees": [
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+      "head": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "branch": "codex/teacher-quality-clean-dev-v1"
+    },
+    {
+      "path": "C:/CodexWorktrees/clevr4-100k-transfer-eval-20261023",
+      "head": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "branch": "codex/clevr4-100k-transfer-eval-20261023"
+    },
+    {
+      "path": "C:/CodexWorktrees/clevrer-coverage-1024",
+      "head": "e914ba220ba1dbbb0822af4933db79638354f364",
+      "branch": "codex/r2-clevrer-coverage-20261020"
+    },
+    {
+      "path": "C:/CodexWorktrees/clevrer-synthetic-av-followup-20261022",
+      "head": "6b2ae96d47727ea9c83cdee7dc2fde57abae8e53",
+      "branch": "codex/r2-lstm-train-input-dependency-20261023"
+    },
+    {
+      "path": "C:/CodexWorktrees/decision-head-validation",
+      "head": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "branch": "codex/decision-head-validation"
+    },
+    {
+      "path": "C:/CodexWorktrees/native-coverage-run-source-20261024",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "branch": "DETACHED"
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat",
+      "head": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "branch": "DETACHED"
+    },
+    {
+      "path": "C:/CodexWorktrees/pr14-review-qat-latest",
+      "head": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "branch": "fix/student-qat-training-handoff"
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-next-20261021",
+      "head": "33afecdc749f213cf023f4389bc5c30ebac8931e",
+      "branch": "codex/r2-native-coverage-long-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-omni",
+      "head": "87ed587ee847b83531b6be186f8694685124b731",
+      "branch": "codex/textfree-video-program-order"
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-roadmap-20261022",
+      "head": "bf44a5f2c2eca51d41543ac905dfcf238ee94b4b",
+      "branch": "codex/roadmap-scalar-audio-update-20261022"
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-roadmap-current",
+      "head": "50b28622fa570a5d3d0d9913c758686bc4ed0aab",
+      "branch": "docs/pretrained-reuse-roadmap-20261010"
+    },
+    {
+      "path": "C:/CodexWorktrees/pretrained-reuse-roadmap-vistouch-20261026",
+      "head": "e89bfc99c886a2972b47580f63ec4ab80a37a2df",
+      "branch": "codex/native-clipnorm-comparison-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/qat-groupwise-performance",
+      "head": "c50f0eb364d963bbcb3144a83305705880d9d426",
+      "branch": "codex/qat-groupwise-performance"
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-av-source-gate-20261020",
+      "head": "758ec16f3003940e6f37b6101156571aa4499529",
+      "branch": "codex/r2-batvision-source-screen"
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-live-audit-20261024",
+      "head": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+      "branch": "codex/r0-live-audit-20261024"
+    },
+    {
+      "path": "C:/CodexWorktrees/r0-r2-continuation-audit-20261021",
+      "head": "4a9f856ab010254fee6f83f438cc52ef77c9a311",
+      "branch": "codex/r2-synthetic-av-gated-temporal-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r1-pe-core-audit",
+      "head": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "branch": "codex/r1-pe-core-audit-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r1-recheck-hash-correction-20261026",
+      "head": "2978b4a5b41b5a4e4d84acb47ab1f3ded429a541",
+      "branch": "codex/r1-recheck-hash-correction-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-a2d2-source-screen-20261023",
+      "head": "6540c9f181a4de423f4b9e975f1373861b83b95c",
+      "branch": "codex/r2-av-task-source-screen-20261023"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-adl-complete-archive-audit-20261028",
+      "head": "81d57da616886bc03d1690e2a86d124581af55e1",
+      "branch": "codex/r2-adl-complete-archive-audit-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-adl-feature-smoke-20261028",
+      "head": "d382517b39709367599984bcb764a7db319d06d1",
+      "branch": "codex/r2-adl-feature-smoke-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-ami-av-source-screen-20261021",
+      "head": "406f003a128a7991ec39dcb15608b381f003add4",
+      "branch": "codex/r2-ami-av-source-screen-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-av-source-rights-screen-20261028",
+      "head": "851de12e5dd26d3923bf5080a83aa5372733d0dc",
+      "branch": "codex/r2-av-source-rights-screen-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-avqa-source-screen-20261021",
+      "head": "9e8a8a991aac46531488691603a914b0be5757d6",
+      "branch": "codex/r2-avqa-source-screen-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-avsbench-source-screen-20261024",
+      "head": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+      "branch": "codex/r2-avsbench-source-screen-20261024"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-clevrer-fresh-reasoning-20261021",
+      "head": "016face5ece2dd11835af641b1759104e1646a1a",
+      "branch": "codex/r2-clevrer-fresh-reasoning-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-conditional-av-readout-20261022",
+      "head": "443d058a8d256322a8d1417e7602fc957b3d0540",
+      "branch": "codex/r2-av-training-signal-20261023"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-csqa2-text-decision-20261024",
+      "head": "f057a031ffe271c51c138b439800cae2863a9149",
+      "branch": "codex/r2-csqa2-text-decision-20261024"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-droid-expanded-sites-20261028",
+      "head": "23f02483866715a9aa52f42b6ca0625e987c0773",
+      "branch": "codex/r2-droid-expanded-sites-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-droid-later-shard-uncertainty-20261028",
+      "head": "b8245103d221daea225f9666862f6b149462aa1b",
+      "branch": "codex/r2-droid-later-shard-uncertainty-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-droid-next-action-20261026",
+      "head": "54a1505b71a5392ad9c43d78817592cc67cc09df",
+      "branch": "codex/r2-droid-next-action-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-droid-site-universe-audit-20261028",
+      "head": "aefb1a1a3cd09959e73dfac79dbf319fce63c367",
+      "branch": "codex/r2-droid-site-universe-audit-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-droid-temporal-transfer-20261028",
+      "head": "a8db60d262b9655cb00897f26cdec9ee6a177070",
+      "branch": "codex/r2-droid-temporal-transfer-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-droid100-source-task-screen-20261026",
+      "head": "ad9306fa0d57fa99325b7242d751ef1a545cae40",
+      "branch": "codex/r2-droid100-source-task-screen-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-fair-play-source-screen-20261022",
+      "head": "936a9837299b25095c0f0703768f1079af24b424",
+      "branch": "codex/r2-fair-play-source-screen-20261022"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-goose-instance-map-audit-20261028",
+      "head": "2a6a022f9974c2b0aec79da759b4d1fd0d27b57a",
+      "branch": "codex/r2-goose-instance-map-audit-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-holoassist-exposure-strata",
+      "head": "6baf4ab60f8acefc75d4d4c63961b3cb0c33f24d",
+      "branch": "codex/r2-holoassist-exposure-strata"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-holoassist-results-20261020",
+      "head": "5c0bae773f9d4ec983ff3ac58fc13b1dd24bc47a",
+      "branch": "codex/r2-holoassist-results-20261020"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-inaturalist-cc0-screen-20261026",
+      "head": "19392c947da150b4f0e4e1aca4cccef5374c1bdf",
+      "branch": "codex/r2-inaturalist-cc0-screen-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-independent-joint-task",
+      "head": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "branch": "codex/r2-captaincook4d-screen-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-mavad-source-screen",
+      "head": "07c504c958816fd2e9d70c279702b71b6e55e749",
+      "branch": "codex/r2-mavad-source-screen-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-mavd-source-screen",
+      "head": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "branch": "codex/r2-mavd-source-screen-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-observation-batch",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "branch": "codex/r2-observation-batch"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-openimages-grounding-freshval-20261026",
+      "head": "87265cf2c59608b806e4975c17f9a143dbbfe0ab",
+      "branch": "codex/r2-audio-vibration-source-20261027"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-openimages-image-prototype-20261026",
+      "head": "00df994790db8d19d6b570563cc95641af03633b",
+      "branch": "codex/r2-openimages-image-prototype-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-openimages-pecore-zero-shot-20261026",
+      "head": "25b2fdc8d2c964f589940a335dc26a3365398858",
+      "branch": "codex/r2-openimages-pecore-zero-shot-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-otospeech-source-screen-20261024",
+      "head": "46e92ec5b3a4bb0a105ca8e79e0bdc0768d09ed4",
+      "branch": "codex/r2-otospeech-source-screen-20261024"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pamap2-admission-screen-20261021",
+      "head": "e3fa96e7b0c5a0bf78253ef595fda4ffbeb525d6",
+      "branch": "codex/r2-pamap2-admission-screen-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pch-heldout-eval-20261021",
+      "head": "d825251d3baea690dfa17602c28fc81096ab1575",
+      "branch": "codex/r2-pch-heldout-eval-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-pch-recording-temporal-20261021",
+      "head": "fe82f5cd854cb305cc13eb715eb7a92b40dbd976",
+      "branch": "codex/r2-pch-recording-temporal-20261021"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-perception-fresh-holdout",
+      "head": "ddf6a106675f3a15feb66b5123ee7431539c27bf",
+      "branch": "codex/holoassist-label-window-audit"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-perit-duplex-screen-20261026",
+      "head": "b7075812aee034b03bc9c30e28941eb6d00ec2d0",
+      "branch": "codex/r2-perit-duplex-screen-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-robopro-source-screen-20261024",
+      "head": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+      "branch": "codex/r2-robopro-source-screen-20261024"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-sensor-video-source-screen-20261026",
+      "head": "2583f3a76738b6c5772741d47724518f2b616dae",
+      "branch": "codex/r2-sensor-video-source-screen-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-shared-gradient-audit-20261024",
+      "head": "8eb702a126a512b269fd3fd083b7f973478a6947",
+      "branch": "codex/r2-shared-gradient-audit-20261024"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-temporal-av-alignment-20261026",
+      "head": "d264d59c6e1393a85c3f27b8a7211a5644cb393d",
+      "branch": "codex/r2-temporal-av-alignment-20261026"
+    },
+    {
+      "path": "C:/CodexWorktrees/r2-zod-cam-lidar-screen-20261028",
+      "head": "3160975fac62e1c1cb79ad91dc94b0f3b7bf2bcb",
+      "branch": "codex/r2-zod-cam-lidar-screen-20261028"
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage",
+      "head": "74e2094c51af6a8738dd67d42d018442b979cd75",
+      "branch": "codex/textfree-video-coverage-v1"
+    },
+    {
+      "path": "C:/CodexWorktrees/textfree-video-coverage-v2",
+      "head": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "branch": "codex/textfree-video-coverage-v2"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/decision-json-contract/tiny-omni-decision",
+      "head": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "branch": "codex/r2-json-decision-contract-20261021"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/patha-r2-continuation/tiny-omni-decision",
+      "head": "cb020322a229ea31a7d2773717ba6487a622a376",
+      "branch": "codex/r2-ami-speaker-channel-preflight-20261022"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/perception-source-val-transfer-20261026/tiny-omni-decision",
+      "head": "595e4c310789f25204967b5a394fbd012a4e17cb",
+      "branch": "codex/r2-perception-source-validation-transfer-20261026"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/pr15-r2-progress-update/tiny-omni-decision",
+      "head": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "branch": "codex/r2-pch-moment-probe"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r0-r1-recheck-20261026/tiny-omni-decision",
+      "head": "a32f6aeaa79d77e904839cdad4906bc421a56a02",
+      "branch": "codex/r0-r1-recheck-20261026"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-ami-rm-media-preflight/tiny-omni-decision",
+      "head": "329b525f2a504c2c77a30f48c8ae88c0b23467f5",
+      "branch": "codex/r2-spatial-count-readout-20261023"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-audio-cache/tiny-omni-decision",
+      "head": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+      "branch": "codex/r2-av-audio-cache"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-matched-evidence/tiny-omni-decision",
+      "head": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+      "branch": "codex/r2-av-matched-evidence"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-postnorm-stability",
+      "head": "809c0f8226a780039a89c8066709d15d39a53f8a",
+      "branch": "codex/r2-av-postnorm-stability"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-replacement/tiny-omni-decision",
+      "head": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+      "branch": "codex/r2-av-replacement"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-av-transport/tiny-omni-decision",
+      "head": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+      "branch": "codex/r2-av-transport"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-crossmodal-binding-design/tiny-omni-decision",
+      "head": "cafb040c467bba6783ff30c6cc327db928cdfad5",
+      "branch": "codex/r2-clevrer-reasoning-storytime-screen-20261023"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-droid-fresh/tiny-omni-decision",
+      "head": "eba818067c6a9ef9089288205c26f6a8254ca6e5",
+      "branch": "codex/r2-droid-fresh-holdout-20261026"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-fzi-aura-source-screen/tiny-omni-decision",
+      "head": "57aa474d9f15b2f70d9f9dc6fb441e69d377ba99",
+      "branch": "codex/r2-fzi-aura-source-screen-20261028"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-holoassist-textfree/tiny-omni-decision",
+      "head": "39b1a7057c4ec0afaa04b3dbc09e1989d2fa654b",
+      "branch": "codex/r2-holoassist-textfree"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-next-joint-av-source-screen/tiny-omni-decision",
+      "head": "e2c05dc5f0d0aee681345e723147df47ac307392",
+      "branch": "codex/r2-joint-av-source-screen-20261024"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-pch-sensor-probe/tiny-omni-decision",
+      "head": "07eb437a79e11fede0b6544b75631560d7fd22a9",
+      "branch": "codex/r2-pch-temporal-readout-v1"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-perception-av-scale-v1/tiny-omni-decision",
+      "head": "58633f10a6010f31dc5a17c59ce9a7c09b462db9",
+      "branch": "codex/r2-perception-av-scale-v1"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-perception-source-candidate/tiny-omni-decision",
+      "head": "a48e8e218038bc3830d59d595dba4f070c6904ce",
+      "branch": "codex/r2-perception-source-candidate"
+    },
+    {
+      "path": "C:/Users/junny/.codex/worktrees/r2-storytime-api-followup/tiny-omni-decision",
+      "head": "aff0452f27496e3c991ead1e64dbcbe8a8007935",
+      "branch": "codex/r2-storytime-api-followup-20261023"
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-long-budget",
+      "head": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "branch": "codex/video-teacher-v2-long-budget"
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp",
+      "head": "506a049142f09f6aa5e34e20778f662e680eb93d",
+      "branch": "codex/teacher-quality-physionpp"
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-ternary-student",
+      "head": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "branch": "codex/ternary-student-recovery"
+    },
+    {
+      "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery",
+      "head": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "branch": "codex/ternary-student-recovery-updated"
+    }
+  ],
+  "open_pr_count": 28,
+  "open_prs": [
+    {
+      "number": 36,
+      "title": "docs: screen FZI-AURA and DAVE AV candidates",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/36",
+      "head_branch": "codex/r2-fzi-aura-source-screen-20261028",
+      "head_sha": "57aa474d9f15b2f70d9f9dc6fb441e69d377ba99",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "81d57da616886bc03d1690e2a86d124581af55e1",
+      "updated_at": "2026-10-28T12:33:33Z"
+    },
+    {
+      "number": 35,
+      "title": "docs: update ZOD schema and source gate",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/35",
+      "head_branch": "codex/r2-zod-cam-lidar-screen-20261028",
+      "head_sha": "3160975fac62e1c1cb79ad91dc94b0f3b7bf2bcb",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "81d57da616886bc03d1690e2a86d124581af55e1",
+      "updated_at": "2026-10-28T12:02:18Z"
+    },
+    {
+      "number": 34,
+      "title": "Correct GOOSE instance-label mapping audit",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/34",
+      "head_branch": "codex/r2-goose-instance-map-audit-20261028",
+      "head_sha": "2a6a022f9974c2b0aec79da759b4d1fd0d27b57a",
+      "base_branch": "codex/r2-droid-later-shard-uncertainty-20261028",
+      "base_sha": "b8245103d221daea225f9666862f6b149462aa1b",
+      "updated_at": "2026-10-28T11:46:37Z"
+    },
+    {
+      "number": 33,
+      "title": "Add paired site uncertainty audit for DROID later-shard transfer",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/33",
+      "head_branch": "codex/r2-droid-later-shard-uncertainty-20261028",
+      "head_sha": "b8245103d221daea225f9666862f6b149462aa1b",
+      "base_branch": "codex/r2-droid-temporal-transfer-20261028",
+      "base_sha": "a8db60d262b9655cb00897f26cdec9ee6a177070",
+      "updated_at": "2026-10-28T11:15:07Z"
+    },
+    {
+      "number": 32,
+      "title": "Evaluate frozen DROID readouts on later shard groups",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/32",
+      "head_branch": "codex/r2-droid-temporal-transfer-20261028",
+      "head_sha": "a8db60d262b9655cb00897f26cdec9ee6a177070",
+      "base_branch": "codex/r2-droid-site-universe-audit-20261028",
+      "base_sha": "aefb1a1a3cd09959e73dfac79dbf319fce63c367",
+      "updated_at": "2026-10-28T10:21:39Z"
+    },
+    {
+      "number": 31,
+      "title": "Record DROID unseen-site shard sample audit",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/31",
+      "head_branch": "codex/r2-droid-site-universe-audit-20261028",
+      "head_sha": "aefb1a1a3cd09959e73dfac79dbf319fce63c367",
+      "base_branch": "codex/r2-droid-expanded-sites-20261028",
+      "base_sha": "23f02483866715a9aa52f42b6ca0625e987c0773",
+      "updated_at": "2026-10-28T01:45:13Z"
+    },
+    {
+      "number": 30,
+      "title": "Record AVSBench source and rights gate",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/30",
+      "head_branch": "codex/r2-avsbench-source-screen-20261024",
+      "head_sha": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:41:09Z"
+    },
+    {
+      "number": 29,
+      "title": "Add CommonsenseQA 2.0 text Decision transfer probe",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/29",
+      "head_branch": "codex/r2-csqa2-text-decision-20261024",
+      "head_sha": "f057a031ffe271c51c138b439800cae2863a9149",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:28:13Z"
+    },
+    {
+      "number": 28,
+      "title": "docs: refresh R0 repository and live GPU audit",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/28",
+      "head_branch": "codex/r0-live-audit-20261024",
+      "head_sha": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:13:23Z"
+    },
+    {
+      "number": 27,
+      "title": "docs: reconcile AV source screen with completed synthetic run",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/27",
+      "head_branch": "codex/r2-joint-av-source-screen-20261024",
+      "head_sha": "e2c05dc5f0d0aee681345e723147df47ac307392",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:09:23Z"
+    },
+    {
+      "number": 26,
+      "title": "Record pinned native shared-readout gradient diagnostic",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/26",
+      "head_branch": "codex/r2-shared-gradient-audit-20261024",
+      "head_sha": "8eb702a126a512b269fd3fd083b7f973478a6947",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T14:00:42Z"
+    },
+    {
+      "number": 25,
+      "title": "docs: add RoboPro and otoSpeech R2 source screens",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/25",
+      "head_branch": "codex/r2-robopro-source-screen-20261024",
+      "head_sha": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-24T13:31:13Z"
+    },
+    {
+      "number": 24,
+      "title": "Record CLEVR-4 100k fixed-readout transfer results",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/24",
+      "head_branch": "codex/clevr4-100k-transfer-eval-20261023",
+      "head_sha": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-23T12:45:23Z"
+    },
+    {
+      "number": 23,
+      "title": "R2: record scalar audio projection diagnostic",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/23",
+      "head_branch": "codex/roadmap-scalar-audio-update-20261022",
+      "head_sha": "df4ac9b02b66b60a3231df7f765c82bb436c908f",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "0bbb5d17cc9a2b7e5e0d9353e3e70d0c6c1ff17a",
+      "updated_at": "2026-10-22T03:59:54Z"
+    },
+    {
+      "number": 22,
+      "title": "docs: screen FAIR-Play for R2 AV matching",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/22",
+      "head_branch": "codex/r2-fair-play-source-screen-20261022",
+      "head_sha": "936a9837299b25095c0f0703768f1079af24b424",
+      "base_branch": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "base_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+      "updated_at": "2026-10-21T19:33:18Z"
+    },
+    {
+      "number": 21,
+      "title": "R2: CLEVRER synthetic AV coverage v2 results",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/21",
+      "head_branch": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "head_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+      "base_branch": "codex/r2-clevrer-synthetic-av-protocol",
+      "base_sha": "83c4750aba663743bb5c2be3c0c8a90b8e8ead44",
+      "updated_at": "2026-10-21T17:59:37Z"
+    },
+    {
+      "number": 20,
+      "title": "Add stable typed Decision JSON output",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/20",
+      "head_branch": "codex/r2-json-decision-contract-20261021",
+      "head_sha": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "base_branch": "codex/r0-r2-continuation-20261021",
+      "base_sha": "9037a5b425adda83ddd09b2312532a470cc78701",
+      "updated_at": "2026-10-21T05:23:30Z"
+    },
+    {
+      "number": 19,
+      "title": "Screen AMI for cross-modal speaker-to-face matching",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/19",
+      "head_branch": "codex/r2-ami-av-source-screen-20261021",
+      "head_sha": "406f003a128a7991ec39dcb15608b381f003add4",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-21T06:02:01Z"
+    },
+    {
+      "number": 18,
+      "title": "Screen CaptainCook4D for a procedural step-text video task",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/18",
+      "head_branch": "codex/r2-captaincook4d-screen-20261021",
+      "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-20T21:35:21Z"
+    },
+    {
+      "number": 17,
+      "title": "Screen MAVD Urbansas audiovisual source integrity",
+      "state": "open",
+      "draft": false,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/17",
+      "head_branch": "codex/r2-mavd-source-screen-20261021",
+      "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-20T21:19:28Z"
+    },
+    {
+      "number": 16,
+      "title": "Record PE-Core T16 checkpoint CPU audit",
+      "state": "open",
+      "draft": false,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/16",
+      "head_branch": "codex/r1-pe-core-audit-20261021",
+      "head_sha": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "base_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "base_sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "updated_at": "2026-10-21T05:46:12Z"
+    },
+    {
+      "number": 15,
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/15",
+      "head_branch": "docs/pretrained-reuse-roadmap-20261010",
+      "head_sha": "50b28622fa570a5d3d0d9913c758686bc4ed0aab",
+      "base_branch": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "updated_at": "2026-10-28T14:18:49Z"
+    },
+    {
+      "number": 14,
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/14",
+      "head_branch": "fix/student-qat-training-handoff",
+      "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "base_branch": "codex/ternary-student-recovery",
+      "base_sha": "5674e1ff5ac3494ab5c5da84d6a0b7a0320a4b9c",
+      "updated_at": "2026-10-08T10:54:56Z"
+    },
+    {
+      "number": 13,
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "state": "open",
+      "draft": false,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/13",
+      "head_branch": "feat/ternary-student-recovery",
+      "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+      "base_branch": "main",
+      "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+      "updated_at": "2026-10-08T02:27:05Z"
+    },
+    {
+      "number": 12,
+      "title": "feat: add strict postquant teacher cache boundary",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/12",
+      "head_branch": "codex/postquant-teacher-cache",
+      "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+      "base_branch": "codex/postquant-numerical-core",
+      "base_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "updated_at": "2026-10-06T17:54:48Z"
+    },
+    {
+      "number": 11,
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/11",
+      "head_branch": "codex/postquant-numerical-core",
+      "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+      "base_branch": "codex/postquant-worker-entrypoints",
+      "base_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "updated_at": "2026-10-06T17:19:22Z"
+    },
+    {
+      "number": 10,
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/10",
+      "head_branch": "codex/postquant-worker-entrypoints",
+      "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+      "base_branch": "codex/roadmap-compression-video-specialization",
+      "base_sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277",
+      "updated_at": "2026-10-06T15:33:14Z"
+    },
+    {
+      "number": 9,
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "state": "open",
+      "draft": true,
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/9",
+      "head_branch": "codex/teacher-quality-v1",
+      "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+      "base_branch": "main",
+      "base_sha": "498f557ecb0059fbdf541ea51072bda553c0020c",
+      "updated_at": "2026-10-04T10:04:40Z"
+    }
+  ],
+  "primary_worktree_status": [
+    " M ROADMAP.md",
+    " M docs/VIDEO_TEACHER_V2_LONG_BUDGET.md",
+    "?? docs/pretrained_reuse/",
+    "?? scripts/resume_teacher_quality_clean_dev_v2.py",
+    "?? tests/test_freeze_perception_source_candidate_controls.py"
+  ],
+  "cuda_snapshot": "NVIDIA GeForce RTX 3080 Laptop GPU, 15821 MiB, 355 MiB, 16 %",
+  "observed_processes": [
+    {
+      "pid": 29152,
+      "name": "python.exe",
+      "started": "2026-10-28T09:10:17.388443+09:00"
+    },
+    {
+      "pid": 20352,
+      "name": "python.exe",
+      "started": "2026-10-28T09:10:17.456351+09:00"
+    },
+    {
+      "pid": 31624,
+      "name": "python.exe",
+      "started": "2026-10-28T09:12:42.178597+09:00"
+    },
+    {
+      "pid": 22136,
+      "name": "python.exe",
+      "started": "2026-10-28T09:12:42.209841+09:00"
+    }
+  ],
+  "c_drive_free_bytes": 881897472,
+  "c_drive_free_gib": 0.82,
+  "meva_partial_clone": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\meva-metadata-screen-20261028-attempt-01",
+    "head": "421841a75577b697c314e952e585aecbb1b99e17",
+    "materialized_file_count": 14329,
+    "materialized_bytes": 5955001894.0,
+    "status": "partial; retained; no media payload fit launched"
+  },
+  "changes_this_snapshot": [
+    "No existing worktree, PR, dataset, model artifact, or training process modified.",
+    "Only the roadmap worktree received documentation commits 220573e6 and 50b28622."
+  ],
+  "unresolved": [
+    "Deployment device and task-specific quality/confidence criteria",
+    "Storage headroom for feature cache and checkpoint outputs",
+    "Rights-cleared, prospective multimodal task/data split to admit the next fit"
+  ]
+}
