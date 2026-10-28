@@ -57,6 +57,13 @@ the official dataset license is CC BY-NC-SA 4.0 and its raw payload is about
 current storage constraints. Preserve as a research-only reference; no payload
 or media was downloaded. See the [screen](docs/pretrained_reuse/R2_WEAR_VIDEO_IMU_SOURCE_SCREEN_20261029.md).
 
+**2026-10-29 R2-M Luel IMU Egocentric screen:** The card describes paired
+Video/30-Hz IMU and structured work-task steps, but marks the data All Rights
+Reserved, forbids use without permission, and gates the 250,000-hour corpus.
+The 10-clip preview has no explicit separate permission or independent split.
+Do not fetch or use the preview pending explicit payload rights. No access
+request or download was made. See the [screen](docs/pretrained_reuse/R2_LUEL_IMU_EGOCENTRIC_SOURCE_SCREEN_20261029.md).
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was

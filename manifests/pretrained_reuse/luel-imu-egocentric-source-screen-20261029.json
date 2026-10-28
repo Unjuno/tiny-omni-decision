@@ -1,0 +1,35 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "Luel IMU Egocentric 250k",
+  "status": "NOT_ADMITTED",
+  "screened_at": "2026-10-29",
+  "official_source": "https://huggingface.co/datasets/Luel-ai/imu-egocentric-250k",
+  "source_scope": "dataset-card metadata only; no preview or task data fetched",
+  "reported": {
+    "full_corpus_hours_approx": 250000,
+    "structured_task_records": 46340,
+    "preview_clips": 10,
+    "preview_total_duration_minutes": 30,
+    "preview_size_gb_approx": 1,
+    "modalities": ["egocentric_video", "accelerometer", "gyroscope", "text_task_annotations"],
+    "imu_sampling_hz": 30,
+    "tasks_include_ordered_steps": true
+  },
+  "license": {
+    "card_label": "all-rights-reserved",
+    "text_states_authorized_parties_only": true,
+    "text_prohibits_use_without_permission": true,
+    "separate_preview_permission_verified": false
+  },
+  "limitations": [
+    "Full corpus is gated and access requires contacting the publisher",
+    "No explicit permission for the 10-clip preview was verified",
+    "No independent participant or task split was identified in inspected card",
+    "Current disk free space is below the preview size and project reserve"
+  ],
+  "training_admission": "NOT_ADMITTED",
+  "access_request_sent": false,
+  "payload_downloaded": false,
+  "sealed_audit_accessed": false,
+  "training_started": false
+}
