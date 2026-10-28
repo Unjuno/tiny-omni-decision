@@ -116,6 +116,11 @@ about 5.28 GiB had been acquired, and 6.98 GiB remained; the short-window
 forecast was approximately 64 minutes. The progress log was updated at
 12:17:50 JST.
 
+At 2026-10-28 12:24 JST, 13 archives were verified and cumulative acquisition
+was about 5.98 GiB, leaving 6.28 GiB. Using the 1.771 MiB/s mean from the
+12:21 three-sample measurement gives an approximately 61-minute forecast.
+The progress log was updated at 12:24:24 JST.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
