@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 07:19 JST R0 live checkpoint recheck:** Orbitune PID 22136 is
+still running its epoch-sampled `--steps 0` job. Its latest verified periodic
+checkpoint was written at 07:15:26 JST: step 509,683, 12,150,022,113 events,
+SHA-256 `0BCE916A926FBF29BEEEC67A6799459B9F966ACA0F59DF2A4629EBBFEA93863D`.
+The checkpoint stores no best step/loss, so it is a latest snapshot, not a
+selected model. The 06:40:13→07:15:26 interval measured about 14,200 events/s; the
+next 30M-event save projects near 07:50:39, not job completion. GPU was at
+15,821/16,384 MiB and 99%; C: had 0.44 GiB free. No process or artifact was
+changed and no Tiny Omni training was started. PR #15 remains Draft/Open at
+this branch head and both Actions checks passed. See
+[the live-state record](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0719JST.md).
+
 **2026-10-29 07:08 JST R2 one-time unused-image transfer check:** The fixed
 Path A readout selected at step 1,792 was scored on all 27,008 CLEVR-4
 questions from 6,752 image groups not seen by that checkpoint, using cached
