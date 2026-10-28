@@ -76,6 +76,12 @@ throughput. About 9.19 GiB remained, implying approximately 176 minutes at
 that short-window mean. This is a variable network estimate; the acquisition
 process remained active and no restart was attempted.
 
+At 2026-10-28 11:56 JST, eight archives had passed verification. The next
+three 30-second cumulative-size samples were 1.867, 1.067 and 0.800 MiB/s,
+averaging 1.244 MiB/s. About 8.91 GiB remained, corresponding to roughly 122
+minutes at that short-window mean. The downloader remained live; no restart
+or worker-count change was made.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
