@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
+from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
+and hash-verified for a source-host transfer probe. Their weighted rate was
+0.150 MiB/s; linear extrapolation to the published 15.9 GB is roughly 28–30
+hours, with substantial uncertainty. The complete payload exceeds available
+disk. The release exposes only one `train` split and 11 task variants; paired-
+input necessity, independent task/actor validation, and participant/privacy
+terms remain unresolved. One inspected frame contains a private-looking
+workstation and computer display. Keep `REVIEW`; no training or quality
+evaluation. See the [source and transfer screen](docs/pretrained_reuse/R2_FUSIONX_V3_SOURCE_TRANSFER_SCREEN_20261028.md).
+
 **2026-10-28 R2-M synchronized video+sensor source screen:** C-MHAD is a
 task-aligned continuous video+IMU candidate (12 participants, two action
 families), but the official download page does not state dataset-payload
