@@ -441,6 +441,9 @@ independence and actual paired-input necessity are unverified. The full video
 payload is reported as ~164.9 GB. No archive or media was downloaded; keep
 `REVIEW` pending rights, event-group, and selected-payload-size gates. See the
 [source/task screen](docs/pretrained_reuse/R2_MUVS_SOURCE_TASK_SCREEN_20261028.md).
+The 2026-10-29 Zenodo page recheck still shows no rights/license and now shows
+a 1.1 GB record-level data-volume statistic beside its 9.7 MB listed metadata
+archive; these do not resolve the publisher's ~164.9 GB external video payload.
 
 **2026-10-29 R2-M EgoViz-120 metadata-only screen:** The publisher states
 CC BY 4.0 and describes synchronized video/IMU/action labels; a hash-pinned

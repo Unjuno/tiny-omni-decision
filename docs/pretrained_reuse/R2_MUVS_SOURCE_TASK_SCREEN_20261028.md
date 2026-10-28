@@ -35,3 +35,14 @@ No model, code, existing artifact, or running process was changed. No GPU was us
 
 - [Zenodo v1.0 record](https://zenodo.org/records/20708683): listed archive, release date, dataset description and current Rights/License section.
 - [Publisher project page](https://swperfi-project.github.io/Pages-dev/MuvsDataset-page/): modalities, camera-selection label, splits, event counts, event-selection downloader and stated full video size.
+
+## 2026-10-29 official-record recheck
+
+The current rendered [Zenodo v1.0 record](https://zenodo.org/records/20708683)
+still shows an empty Rights/License section. It lists `data.zip` as 9.7 MB with
+MD5 `8fd1d426e0b4308655ea71884d1b0c8e`; its separate record-level “Data volume”
+statistic currently reads 1.1 GB, while the publisher page reports about
+164.9 GB of period video on GCS. The record page says it was published and
+modified on 2026-06-15. These different figures are not a consistent payload
+inventory and do not establish a usable license or selected-event storage
+budget. The source remains `REVIEW`; no file or media was fetched.
