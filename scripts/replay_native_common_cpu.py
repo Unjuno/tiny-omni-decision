@@ -5,18 +5,21 @@ import hashlib
 import json
 import math
 import subprocess
+import sys
 import time
 from pathlib import Path
 
-import numpy as np
-import torch
-
-from scripts.native_fit import summarize
-from scripts.native_fit_runtime import FeatureStore
-from scripts.native_video_cache import sha
-from tiny_omni_decision.native_candidate import NativeCandidateReadout
-
 REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO))
+
+import numpy as np  # noqa: E402
+import torch  # noqa: E402
+
+from scripts.native_fit import summarize  # noqa: E402
+from scripts.native_fit_runtime import FeatureStore  # noqa: E402
+from scripts.native_video_cache import sha  # noqa: E402
+from tiny_omni_decision.native_candidate import NativeCandidateReadout  # noqa: E402
+
 CONFIG = REPO / "configs/pretrained_reuse/native_common_fit_v1.json"
 SOURCE_ROOT = Path(r"C:\CodexWorktrees\pretrained-reuse-omni")
 
