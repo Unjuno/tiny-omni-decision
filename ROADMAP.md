@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R2 AV source gate remains open:** Official QIVD terms bind on
+download and restrict results to internal non-profit research, prohibit
+commercial use and third-party data combination. Tsinghua AVQA has relevant
+`Both` multiple-choice labels but personal/classroom/non-profit use terms and
+YouTube-sourced clips. Neither is admitted for the multi-source product model;
+no data or agreement was accessed. See the [source/license screen](docs/pretrained_reuse/R2_AV_SOURCE_LICENSE_TASK_SCREEN_20261028.md).
+
 **2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
 audio/video features were evaluated on two fixed development tasks. The
 six-slot joint readout (88.35%) did not improve over audio-only (89.19%); a
