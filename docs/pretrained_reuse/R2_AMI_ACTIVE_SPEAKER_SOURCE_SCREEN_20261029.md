@@ -36,11 +36,22 @@ The official [split page](https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml)
 defines training, development, and unseen evaluation partitions by meeting
 sets and notes that at least one meeting is omitted from a partition because
 its speakers overlap other sets. It does not establish that all proposed
-train/development/evaluation meeting sets are speaker-disjoint. Participant
-identity leakage therefore remains a material unresolved risk for an
-active-speaker task. Annotation availability is meeting-dependent, and the
-download and synchronization path for the selected low-resolution videos also
-needs a concrete inventory before any media is fetched.
+train/development/evaluation meeting sets across the entire corpus are
+speaker-disjoint. However, a metadata comparison of the official scenario-only
+partition and the participant rosters on the official [signals page](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
+does verify the 15 ES scenario groups specifically: SA has ES2002, ES2005,
+ES2006, ES2007, ES2008, ES2009, ES2010, ES2012, ES2013, ES2015, and ES2016;
+SB has ES2003 and ES2011; SC has ES2004 and ES2014. The 60 listed participant
+IDs are unique across these 15 groups (zero cross-group duplicate IDs), and
+the group ID keeps each set's a–d submeetings together. Thus this ES-only
+partition clears the speaker-identity overlap gate at metadata level. This
+does not clear other corpus partitions or media/question-content overlap.
+The captured participant roster and normalized split are stored in the
+[machine-readable roster manifest](AMI_ES_SCENARIO_ROSTER_20261029.json);
+the manifest records the SHA-256 of the retrieved UTF-8 signals-page HTML.
+Annotation availability is meeting-dependent, and the download and
+synchronization path for selected videos still needs an exact inventory before
+media is fetched.
 
 If these gates pass, preflight should first inspect only small metadata and
 annotation files, enumerate meetings with both required annotations and
@@ -58,8 +69,9 @@ needed.
 Metadata-only review of official AMI pages on 2026-10-29. No repository clone,
 annotation archive, audio, video, training, GPU work, or sealed-audit access.
 Reconsider after speaker-group split verification, annotation/video
-availability inventory, exact payload-size/hash preflight, and local storage
-is above the established reserve. A few-meeting RealMedia subset appears
-plausible by published average size but still needs that preflight. The corpus
-license statement is useful source evidence, but this screen is not a legal
-review of individual recordings or a product-use approval.
+availability inventory for the ES-only partition, exact payload-size/hash
+preflight, and local storage above the established reserve. A few-meeting
+RealMedia subset appears plausible by published average size but still needs
+that preflight and a local video-quality smoke. The corpus license statement
+is useful source evidence, but this screen is not a legal review of individual
+recordings or a product-use approval.

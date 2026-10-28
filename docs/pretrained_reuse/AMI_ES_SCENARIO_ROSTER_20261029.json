@@ -1,0 +1,32 @@
+{
+  "screen_date": "2026-10-29",
+  "retrieved_at": "2026-10-29T08:50:02.7250385+09:00",
+  "source_url": "https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml",
+  "retrieved_html_utf8_sha256": "185bca2fa07fd0a4e99004a8fcd228058f9445874391d107ab0c0c97fcbe2abc",
+  "partition_source": "https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml",
+  "scenario_only_partition": {
+    "train": ["ES2002", "ES2005", "ES2006", "ES2007", "ES2008", "ES2009", "ES2010", "ES2012", "ES2013", "ES2015", "ES2016"],
+    "validation": ["ES2003", "ES2011"],
+    "evaluation": ["ES2004", "ES2014"]
+  },
+  "groups": [
+    {"group": "ES2002", "participants": ["FEE005", "MEE006", "MEE007", "MEE008"]},
+    {"group": "ES2003", "participants": ["MEE009", "MEE010", "MEE011", "MEE012"]},
+    {"group": "ES2004", "participants": ["FEE013", "MEE014", "MEO015", "FEE016"]},
+    {"group": "ES2005", "participants": ["MEE017", "MEE018", "FEE019", "MEO020"]},
+    {"group": "ES2006", "participants": ["FEE021", "MEO022", "FEO023", "FEE024"]},
+    {"group": "ES2007", "participants": ["MEE025", "FEO026", "MEE027", "FEE028"]},
+    {"group": "ES2008", "participants": ["FEE029", "FEE030", "MEE031", "FEE032"]},
+    {"group": "ES2009", "participants": ["MEE033", "MEE034", "MEE035", "FEE036"]},
+    {"group": "ES2010", "participants": ["FEE037", "FEE038", "FEE039", "FEE040"]},
+    {"group": "ES2011", "participants": ["FEE041", "FEE042", "FEE043", "FEE044"]},
+    {"group": "ES2012", "participants": ["MEE045", "FEE046", "FEE047", "MEE048"]},
+    {"group": "ES2013", "participants": ["FEE049", "FEE050", "FEE051", "FEE052"]},
+    {"group": "ES2014", "participants": ["MEE053", "MEE054", "FEE055", "MEE056"]},
+    {"group": "ES2015", "participants": ["FEE057", "FEE058", "FEE059", "FEE060"]},
+    {"group": "ES2016", "participants": ["MEE061", "MEO062", "MEE063", "FEE064"]}
+  ],
+  "group_count": 15,
+  "participant_id_count": 60,
+  "duplicate_participant_ids": []
+}
