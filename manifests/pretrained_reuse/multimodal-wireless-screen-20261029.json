@@ -7,6 +7,7 @@
   "official_scenarios": "https://le-liang.github.io/mmw/scenarios.html",
   "official_download": "https://le-liang.github.io/mmw/download.html",
   "official_code": "https://github.com/LE-Liang/Multimodal-Wireless",
+  "official_task_paper": "https://arxiv.org/abs/2603.15093v2",
   "disposition": "REVIEW_NOT_ADMITTED",
   "dataset_license_statement": "CC BY 4.0",
   "dataset_license_verified_from_official_overview": true,
@@ -26,8 +27,23 @@
     "bounding boxes"
   ],
   "alignment": "six-digit frame number per official data-collection page",
-  "candidate_task": "derived future-link transmission-action decision from current video and sensor/CSI context",
-  "candidate_task_is_dataset_provided": false,
+  "candidate_task": "predict next 10 beam indices from 400ms history of beam indices, RGB, and LiDAR",
+  "candidate_task_is_dataset_provided": true,
+  "paper_trajectories": 50,
+  "paper_split_counts": {
+    "train_trajectories": 40,
+    "validation_trajectories": 5,
+    "test_trajectories": 5,
+    "train_samples": 41800,
+    "validation_samples": 6000,
+    "test_samples": 6000
+  },
+  "paper_reported_metrics": {
+    "average_top1_beam_accuracy": 0.808,
+    "average_normalized_gain": 0.891,
+    "parameters": 777000000
+  },
+  "paper_split_manifest_available": false,
   "payload_size_bytes": null,
   "payload_hashes": null,
   "split_manifest": null,
@@ -41,5 +57,5 @@
     "no independent scenario-grouped split manifest is documented",
     "local free space is below the 2 GiB reserve"
   ],
-  "next_gate": "inspect official provider inventory and hashes, freeze derived target and scenario grouping, then obtain payload only if storage permits"
+  "next_gate": "obtain official payload inventory and hashes; reconstruct and verify the paper's trajectory-disjoint split; freeze task targets and modality controls; acquire only if storage permits"
 }

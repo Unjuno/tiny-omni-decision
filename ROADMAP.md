@@ -17,8 +17,11 @@ decision task, but the release defines no benchmark target or split manifest,
 and the official download page gives no payload size. Current C: free space is
 about 0.48 GiB, so no dataset data were fetched. Keep `REVIEW_NOT_ADMITTED`
 until payload size/checksums and scenario-grouped split feasibility are known,
-then freeze a future-channel decision task and test joint-input necessity
-against unimodal and shuffled controls. See the
+then reconstruct the authors' 400-ms-history / 100-ms-horizon future beam task
+and trajectory-disjoint 40/5/5 split before testing joint-input necessity
+against unimodal and shuffled controls. The authors report 80.8% Top-1 with a
+777M-parameter model, so this is a narrow research candidate, not evidence the
+small product target is met. See the
 [source screen](docs/pretrained_reuse/R2_MULTIMODAL_WIRELESS_SOURCE_SCREEN_20261029.md).
 
 **2026-10-29 05:56 JST R0 checkpoint recheck:** Orbitune PID 22136 remains

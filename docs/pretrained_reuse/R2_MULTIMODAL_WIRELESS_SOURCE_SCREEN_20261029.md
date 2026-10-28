@@ -34,19 +34,36 @@ no model was trained or evaluated.
   [code repository](https://github.com/LE-Liang/Multimodal-Wireless) is MIT
   licensed; that code license is separate from the dataset's stated CC BY
   license.
+- The dataset authors' [beam-prediction paper (arXiv:2603.15093v2)](https://arxiv.org/abs/2603.15093)
+  turns this into a concrete decision task: predict the next 10 beam indices
+  from a 400 ms history of optimal beam indices, LiDAR, and RGB. Its reported
+  setup uses 50 trajectories with a trajectory-disjoint 40/5/5
+  train/validation/test split (41,800/6,000/6,000 samples). It reports 80.8%
+  average Top-1 beam accuracy and 89.1% normalized gain for a 777M-parameter
+  model. The paper's ablation says adding LiDAR to beam history approaches the
+  full model, while camera-only addition is weaker but still improves over
+  beam-history-only. These are useful task and baseline clues, not independent
+  replication or proof that both image and point-cloud inputs are necessary.
 
 ## Candidate task and required controls
 
-A plausible task to test is a future-link decision: choose a discrete
-transmission action (for example, a beam or channel-quality class) at a future
-frame from current visual context plus current/previous sensor or CSI context.
-This is a proposed derived target, not a label documented by the dataset.
-Before admission, define the target deterministically from the released
-channel fields, pin the horizon and tie-breaking rule, and verify frame and
-agent alignment. Compare camera-only, sensor/CSI-only, and joint input using
-scenario-grouped splits, plus missing, shuffled, stale, and time-offset input
-controls. The task only establishes usefulness for this narrow simulated V2X
-decision; it cannot establish general multimodal decision quality.
+The strongest candidate is the paper's future beam-selection decision: use
+the last 400 ms of beam indices, RGB, and LiDAR to select beams over the next
+100 ms. This makes the sensor/video stream consequential to a concrete action
+selection task, and gives an existing trajectory-disjoint protocol to
+reconstruct. The paper's model is 777M parameters and its published Top-1
+result is 80.8%; it does not meet the project's provisional 100–200M
+prequantization size range or 95–98% aspiration. A small model should be
+evaluated against the exact task and strong non-neural/persistence baselines,
+with all results scoped to this simulated beam task.
+
+Before admission, reconstruct and hash the exact 50 trajectories and their
+40/5/5 assignments, confirm no trajectory or overlapping window crosses a
+split, and freeze the beam-index derivation, tie-breaking rule, input history,
+and prediction horizon. Compare beam-history-only, RGB-only, LiDAR-only,
+history+RGB, history+LiDAR, and joint inputs with missing, shuffled, stale, and
+time-offset controls. The paper's reported modality ablation is motivation,
+not sufficient proof of joint-input necessity for our runtime/model.
 
 ## Acquisition and next gate
 
@@ -58,6 +75,7 @@ provider's normal listing interface; choose a scenario subset only after the
 full inventory and split plan are known. Do not fetch an unknown-size folder
 to the constrained C: drive.
 
-The source remains unadmitted until the derived target, grouped split, payload
-size/hash inventory, and end-to-end both-input controls are established. No
-sealed audit or product-quality claim is involved in this screen.
+The source remains unadmitted until the derived target, trajectory-grouped
+split, payload size/hash inventory, and end-to-end modality controls are
+established. No sealed audit or product-quality claim is involved in this
+screen.
