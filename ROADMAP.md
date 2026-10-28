@@ -1996,6 +1996,16 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+**2026-10-29 R2-M Eidon video/IMU match diagnostic:** Frozen VideoPrism and
+quaternion-only features were extracted for 120 train and 24 development
+recordings after applying a contributor/task-group quarantine for malformed
+quaternions. A pooled readout and a 2,000-update LSTM each reached 7/24
+development matches; the long curves overfit, and reversing sensor time did
+not reduce LSTM accuracy. The set has only 3 development contributors, so this
+does not pass the R2-M both-input-necessary or quality gate. No sealed audit was
+read; audio/image/text and the product gate remain open. See the
+[reproducible diagnostic](docs/pretrained_reuse/R2_EIDON_TRACKER_POV_MATCH_20261029.md).
+
 **MEVA metadata acquisition (2026-10-28):** The official annotation Git
 repository is pinned, but the C: checkout is incomplete and consumes most
 available disk; no video clips or model fit were started. The source separates
