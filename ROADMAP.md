@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 R2-M XRFv2 Plus source screen:** This sensor/video action dataset
+is relevant in content, but the linked Kaggle API says its data license is
+`Unknown`; Zenodo's CC BY record attaches only the paper, while GitHub's MIT
+license covers project code. Its payload is about 210.8 GB, and independent
+group splits and both-input necessity remain unverified. No data was
+downloaded or evaluated. Keep it unadmitted pending explicit data-rights
+clarification. See the [source screen](docs/pretrained_reuse/R2_XRFV2_PLUS_SOURCE_SCREEN_20261029.md).
+
 **2026-10-29 R2-M MM-Motion source/rights screen:** Official Zenodo v2
 metadata marks the synchronized video/IMU/plantar-pressure dataset open under
 CC BY 4.0, but the publisher's agreement hosted at pinned upstream commit
@@ -2238,6 +2246,14 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
+
+**2026-10-29 R2-M XRFv2 Plus screen:** The official Kaggle API reports
+`licenseName=Unknown` for the 210.8 GB data release. Zenodo CC BY metadata
+covers the attached paper; the project repository's MIT license covers code,
+not demonstrably the dataset. Keep the source unadmitted until data rights and
+grouped splits are verified; both-input necessity is also unknown. No payload
+or annotations were accessed. See the [source screen](docs/pretrained_reuse/R2_XRFV2_PLUS_SOURCE_SCREEN_20261029.md)
+and [machine-readable evidence](manifests/pretrained_reuse/xrfv2-plus-source-screen-20261029.json).
 
 **2026-10-29 R2-M MM-Motion source screen:** Although its modalities and
 motion-risk task are relevant, the upstream repository's signed agreement
