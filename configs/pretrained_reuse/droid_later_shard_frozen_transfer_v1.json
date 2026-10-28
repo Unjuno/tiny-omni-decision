@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "experiment_id": "droid-r2-later-shard-frozen-readout-transfer-v1",
+  "claim_scope": "One-time same-site, recording-group-disjoint DROID next-action transfer evaluation; not blind or general Omni quality.",
+  "source": {
+    "manifest": "manifests/pretrained_reuse/droid-later-shard-frozen-transfer-source-20261028.json",
+    "manifest_sha256": "8d664bfa59eb2c391d5a86eb47547a89d4569fd747e2f10b6e0127350a2dfd80",
+    "dataset_root": "C:/CodexArtifacts/pretrained-reuse-r2/droid-unseen-site-sample-20261028-attempt-02",
+    "source_audit": "C:/CodexArtifacts/pretrained-reuse-r2/droid-unseen-site-sample-20261028-attempt-02/site-metadata-audit-scripted.json",
+    "source_audit_sha256": "738231fb8bb100ae0d000a663ae6dee824d42bf3dd5dfe8e1c4e3f75ea1dad4d",
+    "selection": "C:/CodexArtifacts/pretrained-reuse-r2/droid-unseen-site-sample-20261028-attempt-02/selection.json",
+    "selection_sha256": "bfd50abbe9a87f3bdcbe44c3ebdff2144ea596ae558d699b350cdd177b32f43e",
+    "previous_task_manifest": "manifests/pretrained_reuse/droid-expanded-site-holdout-task-20261028.json",
+    "previous_task_manifest_sha256": "6f32c4d4a2ad1e2fed6ac1c904010c158cd6f17366b5f049c59dba27e6fef6cd",
+    "split_unit": "episode and recording group",
+    "new_sites_expected": false,
+    "labels_used_for_selection": false,
+    "sealed_audit_loaded": false
+  },
+  "representation": {
+    "video_encoder": "google/videoprism-base-f16r288",
+    "video_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "checkpoint_path": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz",
+    "checkpoint_bytes": 457475296,
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "model_source": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-r1/source",
+    "runtime": "existing VideoPrism venv, forced JAX CPU",
+    "model_training": false
+  },
+  "readouts": {
+    "type": "frozen L2 multinomial logistic readouts; no fit, selection, or calibration",
+    "reference_report": "C:/CodexArtifacts/pretrained-reuse-r2/droid-expanded-site-holdout-evaluation-attempt-03/evaluation-report.json",
+    "reference_directory": "C:/CodexArtifacts/pretrained-reuse-r2/droid-expanded-site-holdout-evaluation-attempt-03",
+    "reference_report_sha256": "2f3e6a16e6bd039b92f7beff57c8eb5a1a4a55529e4306d78caa379a7d1460c8",
+    "sha256": {
+      "video-readout.npz": "4afefda7c2ab1d034f2d78f124aff393932071f11a319cc6274be20296f798fe",
+      "sensor-readout.npz": "056ced9e4d9653c231d51ba0290bd87b0983a14da34b70e0de00ab5ae7885b74",
+      "video_sensor-readout.npz": "dde026c9a8bb377d04ecb059971a3eb185891739ba367f001018575225f83a75"
+    }
+  },
+  "outputs": {
+    "task_manifest": "C:/CodexArtifacts/pretrained-reuse-r2/droid-later-shard-transfer-task-attempt-01/task-manifest.json",
+    "feature_cache": "C:/CodexArtifacts/pretrained-reuse-r2/droid-later-shard-transfer-features-attempt-01",
+    "evaluation": "C:/CodexArtifacts/pretrained-reuse-r2/droid-later-shard-transfer-evaluation-attempt-01"
+  },
+  "evaluation": {
+    "arms": ["video", "sensor", "video_sensor"],
+    "metrics": ["accuracy", "macro_accuracy", "nll", "macro_nll", "brier", "ece_10", "mean_confidence"],
+    "strata": ["site", "shard", "target_class"],
+    "report_comparison_is_paired": false,
+    "training": false,
+    "checkpoint_selection": false,
+    "sealed_audit_loaded": false
+  }
+}
