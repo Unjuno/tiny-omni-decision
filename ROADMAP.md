@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 08:03 JST R0 progress recheck:** Orbitune PID 22136 remains live
+at log step 511,150 / 12,190,945,719 events; the last saved checkpoint is
+still step 510,759 from 07:49:52 (best step 455,514). The next 30M-event save
+projects near 08:25 JST. RTX use is 15,821/16,384 MiB; C: free is 0.41 GiB.
+No process or checkpoint was changed. See the
+[live progress record](docs/pretrained_reuse/R0_LIVE_PROGRESS_20261029_0803JST.md).
+
 **2026-10-29 07:51 JST R0 checkpoint update:** Orbitune PID 22136 remains live;
 its 07:49:52 save was CPU-inspected as step 510,759 / 12,180,004,749 events,
 with best step 455,514 and latest validation loss `-1.4775`. The checkpoint SHA
