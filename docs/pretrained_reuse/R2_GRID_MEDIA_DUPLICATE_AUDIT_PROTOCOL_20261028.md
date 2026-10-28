@@ -99,6 +99,12 @@ downloaded and 7.98 GiB remaining. Three 30-second cumulative-size samples
 (1.867, 1.600 and 1.522 MiB/s) averaged 1.663 MiB/s, for an approximately
 82-minute forecast. The progress log was updated at 12:05:19 JST.
 
+At 2026-10-28 12:08 JST, eleven archives were verified. The next three
+cumulative-size samples were 1.067, 1.333 and 1.345 MiB/s (mean 1.248 MiB/s).
+About 7.78 GiB remained, yielding an approximately 106-minute forecast. The
+progress log was updated at 12:08:18 JST; the estimate varies with network
+throughput.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
