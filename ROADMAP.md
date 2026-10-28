@@ -72,6 +72,15 @@ promising both-required AV diagnostic but combines non-commercial and
 agreement-bound sources. Neither PR admits new model work; both remain open
 Drafts. See [the read-only reconciliation](docs/pretrained_reuse/R2_OPEN_PR_SOURCE_RECONCILIATION_20261028.md).
 
+**2026-10-28 R2 MUVS candidate screen:** MUVS offers synchronized sports
+video + 18 phone-sensor channels, 5,039 three-second fragments, and expert
+camera-selection labels, a promising supplied-option task shape. Its Zenodo
+license field and dataset-page consent terms are unstated; event split
+independence and actual paired-input necessity are unverified. The full video
+payload is reported as ~164.9 GB. No archive or media was downloaded; keep
+`REVIEW` pending rights, event-group, and selected-payload-size gates. See the
+[source/task screen](docs/pretrained_reuse/R2_MUVS_SOURCE_TASK_SCREEN_20261028.md).
+
 **2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
 audio/video features were evaluated on two fixed development tasks. The
 six-slot joint readout (88.35%) did not improve over audio-only (89.19%); a
