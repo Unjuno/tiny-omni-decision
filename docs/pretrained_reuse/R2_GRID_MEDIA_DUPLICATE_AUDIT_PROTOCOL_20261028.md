@@ -142,6 +142,24 @@ The runner snapshot SHA-256 is
 This validates one train speaker's ZIP structure, not the full split-level
 video duplicate gate.
 
+## Partial video split diagnostic
+
+At 2026-10-28 12:11 JST, all 12 then-completed speaker archives were rechecked
+against the pinned publisher MD5 and byte size, then streamed without
+extraction. The 12,000 actual MPG payloads had 12,000 unique SHA-256 hashes,
+with zero exact cross-split duplicate groups and zero within-split duplicate
+groups in this subset. The audit covers speakers s2, s10–s20 (excluding s21)
+and includes both train and validation speakers. The report also records each
+archive SHA-256 and source/config hashes:
+
+- Report: `C:/CodexArtifacts/pretrained-reuse-r2/grid-video-partial-media-audit-20261028-attempt-01/report.json`.
+- Report SHA-256: `97cdc86c116a4a6bbcf1f80b85cd6eabe78dbd8952bed210691e63c7f81d16a4`.
+- Runtime: 36.367 seconds.
+
+This is a partial diagnostic only. It says nothing about duplicates involving
+the remaining 20 speaker archives; the required full 32-speaker audit remains
+pending and GRID training remains gated on that full result.
+
 Executed command:
 
 ```powershell
