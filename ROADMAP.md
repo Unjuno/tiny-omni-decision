@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R0/R2 cross-branch recheck:** Read-only review of current PRs
+#31/#32 and the latest DROID, ADL, GOOSE and GRID branches found no new
+admitted task that justifies another fit or large download. DROID's later-shard
+sample found no new site among six sampled shards; its four-site VideoPrism +
+sensor readout remained weaker than sensor-only. ADL's 25 archives are fully
+authenticated, but its fixed split has only 12 train and 2 validation
+participants, one uncovered class, and no video. GOOSE's train-only image/point
+cloud instance keys agree inconsistently. GRID now has a corrected direct-source
+speaker split and a fixed AV correspondence probe, but the probe is weak and
+poorly calibrated on eight development speakers; cross-corpus speaker identity
+and product-use rights remain unresolved. R2-M and Path A joint-quality gates
+remain open. See [the evidence reconciliation](docs/pretrained_reuse/R0_R2_CROSS_BRANCH_RECHECK_20261028.md).
+
 **2026-10-26 R2 UnAV-100 source preflight:** Its official split CSV contains
 10,790 unique YouTube IDs (6,489 train / 2,134 validation / 2,167 test) with no
 cross-split ID overlap and positive spans. This is a promising natural AV event
