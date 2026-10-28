@@ -40,6 +40,14 @@ No process was interrupted or manually changed; the live run wrote its normal
 checkpoint, and no new fit was started. See the
 [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
 
+**2026-10-29 R1/R7 parameter accounting:** The common Path A fit's exact
+pre-quantization count is 196,254,874 (195,365,529 frozen encoders plus an
+889,345-parameter readout). The v4 modular package's 170,499,716 unique count
+comes from a different task-scoped encoder inventory and is not the same
+trained model. Its 687,254,772 bytes still exceed the provisional 200 MB
+package target. The pinned checkpoint files and both receipts were re-hashed.
+See the [parameter accounting reconciliation](docs/pretrained_reuse/R1_R7_PATH_A_PARAMETER_ACCOUNTING_20261029.md).
+
 **2026-10-29 R2-M audio/sensor source screen:** The Zenodo ADL collection has
 25 activity labels, 14 participants, synchronized ambient audio and multiple
 environmental sensors, but it contains no video and provides no declared
