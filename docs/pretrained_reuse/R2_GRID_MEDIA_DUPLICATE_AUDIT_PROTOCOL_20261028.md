@@ -53,6 +53,14 @@ estimated 1.411 MiB/s aggregate. That implied about 2.4 hours for the remaining
 11.9 GiB at the measurement snapshot. This is a forecast, not a completion
 claim; the live progress log and actual elapsed time are authoritative.
 
+At 2026-10-28 11:33 JST, the first four archives (s10–s13; 1,608,089,900
+bytes) completed with publisher MD5 and SHA-256 checks passing in 18 minutes
+21 seconds from run start. Their measured aggregate rate was about 1.39
+MiB/s. The remaining 27 downloads total about 10.4 GiB; at that observed
+whole-run rate the forecast is approximately 2 hours 8 minutes. The s14 and
+s15 transfers had started, and the overall acquisition was still live. Do not
+interpret this interim rate as a guaranteed ETA.
+
 The exact acquisition command was:
 
 ```powershell
