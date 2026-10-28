@@ -38,6 +38,23 @@ commercial use and third-party data combination. Tsinghua AVQA has relevant
 YouTube-sourced clips. Neither is admitted for the multi-source product model;
 no data or agreement was accessed. See the [source/license screen](docs/pretrained_reuse/R2_AV_SOURCE_LICENSE_TASK_SCREEN_20261028.md).
 
+**2026-10-28 R2 CONVERGE source screen:** CONVERGE offers synchronized RGB-D
+and radio inputs with a three-state blockage target, but its official README
+specifies CC BY-NC-ND 4.0, the rendered Zenodo License field is blank, and the
+4.8 GB train/validation archives leave only about 2.3 GiB on C: before
+extraction. No archive was downloaded or used. Keep it out of product-directed
+training pending permissive rights and an independent test protocol. See the
+[source screen](docs/pretrained_reuse/R2_CONVERGE_SOURCE_TASK_SCREEN_20261028.md).
+
+**2026-10-28 R2 OpenMarcie follow-up candidate:** OpenMarcie is the closest
+new natural synchronized video/audio/wearable-sensor source found in this
+screen, with 36 participants and activity/alignment tasks. Its official
+materials reviewed here do not state the dataset license or participant-level
+split protocol; the code's Apache-2.0 license is not data permission. No payload
+was accessed. Prioritize rights, archive identity, and group-split verification
+before any download or training. See the [source
+screen](docs/pretrained_reuse/R2_OPENMARCIE_SOURCE_TASK_SCREEN_20261028.md).
+
 **2026-10-28 R2 GRID Path A readouts completed:** Existing pinned frozen
 audio/video features were evaluated on two fixed development tasks. The
 six-slot joint readout (88.35%) did not improve over audio-only (89.19%); a
