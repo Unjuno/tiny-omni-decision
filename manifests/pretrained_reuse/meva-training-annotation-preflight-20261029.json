@@ -20,6 +20,15 @@
     "camera_clips": 1443,
     "exact_time_window_site_groups": 741,
     "conservative_date_site_groups": 28,
+    "group_support": {
+      "group_definition": "date and site parsed from training clip IDs; participant identity is unknown",
+      "classes_with_fewer_than_four_date_site_groups": {
+        "person_abandons_package": {"groups": 1, "instances": 1},
+        "person_interacts_with_laptop": {"groups": 3, "instances": 26},
+        "person_steals_object": {"groups": 2, "instances": 3}
+      },
+      "all_37_labels_can_appear_in_each_of_three_disjoint_groups": false
+    },
     "sites": ["admin", "bus", "hospital", "school"],
     "dates": 7,
     "class_counts": {

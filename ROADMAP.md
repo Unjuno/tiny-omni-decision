@@ -30,6 +30,16 @@ the 2-GiB output reserve also fails. PR #15 commit `7dba9b5e` passed its push
 and PR checks. Details and exact read-only inspection method are in the
 [follow-up audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
 
+**2026-10-29 03:16 JST R0 follow-up:** Orbitune remains active at log step
+502,200. Its latest `model.pt` was saved at 03:13:31 JST and SHA-256 verified;
+the checkpoint step is not inferred from the later log step. Five 50-step log
+intervals averaged about 94 seconds, while the next scheduled 30-million-event
+checkpoint is estimated at roughly 34 minutes from the last save. RTX 3080
+remains fully occupied and C: has 0.735 GiB free, below the 2-GiB fit reserve.
+No process was interrupted or manually changed; the live run wrote its normal
+checkpoint, and no new fit was started. See the
+[live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
+
 **2026-10-29 R2-M audio/sensor source screen:** The Zenodo ADL collection has
 25 activity labels, 14 participants, synchronized ambient audio and multiple
 environmental sensors, but it contains no video and provides no declared
@@ -76,10 +86,11 @@ gate is yet satisfied. See the [license recheck and remaining gates](docs/pretra
 revision, the complete `kitware-meva-training` subtree has 1,443 clips and
 35,174 labels across 37 classes. Exact time-window/site grouping yields 741
 groups; conservative date/site grouping only 28, and participant independence
-across clips remains unverified. Two classes have only 1 and 3 instances, so
-the full 37-way task is long-tailed. No evaluation-level annotation contents
-or video media were accessed. Keep as a video-only research candidate pending
-a principled independent split, class/task protocol, and storage/runtime gates.
+across clips remains unverified. The rarest labels occupy only 1, 2 and 3
+date/site groups, so a disjoint three-way split cannot cover all 37 labels in
+every split. No evaluation-level annotation contents or video media were
+accessed. Keep as a video-only research candidate pending a principled
+narrower task, independent split, and storage/runtime gates.
 See the [pinned preflight and counts](docs/pretrained_reuse/R2_MEVA_GIT_METADATA_ACQUISITION_20261028.md).
 
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files

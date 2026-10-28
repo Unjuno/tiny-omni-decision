@@ -100,6 +100,16 @@ participant-disjoint split. Do not prune rare classes after seeing validation
 results; any narrower task needs a prospectively justified operational scope
 and its own untouched split.
 
+The label-by-group cross-tab makes the limitation decisive for a full
+37-class three-way split: `person_abandons_package` appears in only one
+date/site group, `person_steals_object` in two, and
+`person_interacts_with_laptop` in three. These are the only labels with fewer
+than four date/site groups. The first two cannot occur in all three disjoint
+partitions, so no date/site-group-disjoint train/validation/test partition of
+this training subtree can place every label in all three partitions. This
+source cannot provide the locked full-label evaluation needed for a broad
+video quality claim.
+
 The exact subtree check found 4,331 expected and 4,331 present files, with no
 missing or extra paths. Canonical SHA-256 over the sorted `git ls-tree -r`
 entry lines is `e9c75e2343f29137dea04766ac8d72e3c6511f06d4e29fdc6029337ec288a638`.
@@ -111,3 +121,8 @@ See [`meva-training-annotation-preflight-20261029.json`](../../manifests/pretrai
 for all class counts and the group inventory. This resolves metadata availability
 for training annotations, not video access, a clean subject split, or runtime
 feasibility. No video was acquired and no fit was run.
+
+The label-by-date/site support counts were recomputed from the pinned
+training-only YAML files with PyYAML 6.0.3. The result was 1,443 files,
+35,174 instances and 37 labels, agreeing with the pinned manifest and
+`status.csv`; no evaluation-level annotations were opened.
