@@ -110,6 +110,12 @@ and 2.133 MiB/s, averaging 1.689 MiB/s. Twelve archives were verified, about
 4.96 GiB had been acquired, and 7.29 GiB remained; the short-window ETA was
 about 74 minutes. The progress log was updated at 12:15:02 JST.
 
+At 2026-10-28 12:17 JST, the next three cumulative-size samples were 2.400,
+1.867 and 1.333 MiB/s, averaging 1.867 MiB/s. Twelve archives were verified,
+about 5.28 GiB had been acquired, and 6.98 GiB remained; the short-window
+forecast was approximately 64 minutes. The progress log was updated at
+12:17:50 JST.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
