@@ -13,6 +13,13 @@ The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
 green. No model run was repeated.
 
+**2026-10-29 02:11 JST R0 recheck:** Public GitHub API confirms PR #15 is still
+open/Draft at `92a6ddaf500cf4499c513c5e48ce809fc0708aea` against
+`09246d7b1821662a6b1eba47fc08c43f9dc3863c`; both push and PR checks for that
+head are green. RTX 3080 remains occupied (15,821 MiB used, 355 MiB free), and
+C: has 795,308,032 bytes free (0.741 GiB). Orbitune PIDs 22136/31624 and its
+watchdogs remain present. No training or process intervention was performed.
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was
