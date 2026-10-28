@@ -94,6 +94,11 @@ including partials, and 8.31 GiB remained. The short-window forecast was
 approximately 76 minutes. PID 28572 and the progress log were both confirmed
 live at this observation; no GPU or model training was used.
 
+At 2026-10-28 12:05 JST, ten archives were verified, with about 4.28 GiB
+downloaded and 7.98 GiB remaining. Three 30-second cumulative-size samples
+(1.867, 1.600 and 1.522 MiB/s) averaged 1.663 MiB/s, for an approximately
+82-minute forecast. The progress log was updated at 12:05:19 JST.
+
 ## Audio-only interim result
 
 Before the video archives finish, all 32 pinned audio TARs were re-hash
