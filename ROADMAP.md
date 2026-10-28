@@ -4,11 +4,13 @@
 Path A readout selected at step 1,792 was scored on all 27,008 CLEVR-4
 questions from 6,752 image groups not seen by that checkpoint, using cached
 features on CPU. Accuracy was 19.65%, NLL 2.1633, Brier 0.8645, and ECE
-0.0276. This is a weak transfer result on unused records from the original
-training partition, not independent validation or sealed-audit evidence; no
-tuning or checkpoint selection used it. The evaluation took 49.7 s; three
-initial throughput samples averaged 492.7 rows/s versus 543.5 rows/s overall.
-See [the transfer report](docs/pretrained_reuse/R2_NATIVE_UNUSED_TRAIN_IMAGE_TRANSFER_20261029.md).
+0.0276, close to the saved same-checkpoint validation result (20.12% accuracy,
+NLL 2.1651). That suggests no large extra penalty on unused image groups, but
+does not identify the image-task bottleneck. This is a one-time result on the
+original training partition, not independent validation or sealed-audit
+evidence; no tuning or selection used it. It took 49.7 s; initial three-sample
+throughput averaged 492.7 rows/s versus 543.5 overall. See
+[the transfer report](docs/pretrained_reuse/R2_NATIVE_UNUSED_TRAIN_IMAGE_TRANSFER_20261029.md).
 
 **2026-10-29 06:58 JST R2 CPU runtime replay:** The fitted Path A readout
 was exported, reloaded, and run over all 24,346 pinned development-validation

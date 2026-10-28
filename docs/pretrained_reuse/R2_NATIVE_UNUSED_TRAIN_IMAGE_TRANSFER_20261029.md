@@ -41,11 +41,29 @@ Metrics SHA-256: `7a3841414476d34f3e1902535e7e37f809312b2d527d17c4244bbeedf0675f
 | Shape | 6,752 | 0.2984 | 2.0802 | 0.8441 | 0.1038 |
 | Texture | 6,752 | 0.1272 | 2.3266 | 0.9031 | 0.0405 |
 
-This is weak image-group-disjoint transfer for the selected readout. The
-number should be interpreted in context of the task's four-choice scoring,
-the fixed cached representation, and this checkpoint's limited image-group
-coverage. It does not establish a general model-family ceiling or justify
-changing the product gates. No follow-up tuning on these rows is authorized by
+## Matched selected-validation comparison
+
+The same selected checkpoint's existing fixed validation set has 2,048
+CLEVR-4 questions (512 per taxonomy). It was not rerun. The saved validation
+metrics and the one-time unused-training-image metrics are:
+
+| CLEVR-4 rows | Questions | Accuracy | NLL | Brier | ECE |
+|---|---:|---:|---:|---:|---:|
+| Selected checkpoint validation | 2,048 | 0.2012 | 2.1651 | 0.8652 | 0.0311 |
+| Unused original-train image groups | 27,008 | 0.1965 | 2.1633 | 0.8645 | 0.0276 |
+
+The unused-image result is close to the saved validation result: accuracy is
+lower by `0.0046`, while NLL, Brier, and ECE differ by `-0.0018`, `-0.0007`,
+and `-0.0035`. The fixed readout's low image score therefore does not show a
+large extra penalty on image groups it did not train on. This is consistent
+with a broader image-task/representation weakness rather than a gap caused
+only by the selected checkpoint's image-group coverage. It does not identify
+the cause: the readout and cached features are fixed, the transfer set comes
+from the original training partition, and no architecture or data intervention
+was compared.
+
+This result does not establish a general model-family ceiling or justify
+changing product gates. No follow-up tuning on these rows is authorized by
 this result.
 
 ## Runtime and throughput sampling
