@@ -60,6 +60,13 @@ input-path compatibility only. ADL still has 12 train and 2 validation
 participants, one environment, and no video, so it is not admitted for a
 quality fit. See the [runtime protocol and measurements](docs/pretrained_reuse/R2_ADL_AUDIO_VIBRATION_FEATURE_RUNTIME_20261028.md).
 
+**2026-10-28 R0/R2 open-PR reconciliation:** Rechecked current PRs #31–#36.
+The new DROID site-bootstrap result does not support joint-video benefit;
+GOOSE correspondence is too inconsistent for supervision; ZOD access and
+grouping remain unresolved; and FZI-AURA/DAVE remain on access or rights hold.
+No new task in these PRs is admitted for another fit. Existing PRs and data
+remain unchanged. See the [PR reconciliation](docs/pretrained_reuse/R0_R2_OPEN_PR_RECONCILIATION_20261028.md).
+
 **2026-10-26 R2 UnAV-100 source preflight:** Its official split CSV contains
 10,790 unique YouTube IDs (6,489 train / 2,134 validation / 2,167 test) with no
 cross-split ID overlap and positive spans. This is a promising natural AV event
