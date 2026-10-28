@@ -94,6 +94,98 @@ def _load_rows(path: Path) -> list[dict]:
     return raw
 
 
+def run_audio_audit(
+    *,
+    summary_path: Path,
+    expected_summary_sha256: str,
+    bundle_index_path: Path,
+    train_path: Path,
+    validation_path: Path,
+    output_path: Path,
+) -> dict:
+    """Finish the audio duplicate gate while video ZIP acquisition continues."""
+    output_path = output_path.resolve()
+    if output_path.is_relative_to(REPO) or output_path.exists():
+        raise ValueError("use a new output file outside the repository")
+    if file_hashes(summary_path)[1] != expected_summary_sha256:
+        raise ValueError("source summary SHA-256 mismatch")
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if file_hashes(bundle_index_path)[1] != summary.get("bundle_index_sha256"):
+        raise ValueError("bundle index SHA-256 differs from split receipt")
+    if file_hashes(train_path)[1] != summary.get("output_sha256", {}).get("train"):
+        raise ValueError("train manifest SHA-256 differs from split receipt")
+    if file_hashes(validation_path)[1] != summary.get("output_sha256", {}).get("validation"):
+        raise ValueError("validation manifest SHA-256 differs from split receipt")
+    bundle_index = json.loads(bundle_index_path.read_text(encoding="utf-8"))
+    train_rows, validation_rows = _load_rows(train_path), _load_rows(validation_path)
+    if {row["code"] for row in train_rows} & {row["code"] for row in validation_rows}:
+        raise ValueError("train/validation source code overlap")
+    for split, rows in (("train", train_rows), ("validation", validation_rows)):
+        if {row["speaker"] for row in rows} != set(
+            summary["frozen_speaker_assignment"][split]
+        ):
+            raise ValueError(f"{split} speaker assignment differs from frozen summary")
+    records, per_speaker = [], {}
+    started = time.monotonic()
+    for split, rows in (("train", train_rows), ("validation", validation_rows)):
+        rows_by_speaker: dict[str, set[str]] = {}
+        for row in rows:
+            rows_by_speaker.setdefault(row["speaker"], set()).add(row["code"])
+        for speaker, expected_codes in sorted(rows_by_speaker.items()):
+            bundle = bundle_index["speakers"][speaker]
+            audio_path = Path(bundle["audio_tar"]).resolve()
+            if file_hashes(audio_path)[1] != bundle["audio_sha256"]:
+                raise ValueError(f"audio TAR SHA-256 mismatch: {speaker}")
+            audio_hashes = archive_member_hashes(audio_path, ".wav")
+            expected_source_assets = int(
+                summary["source_receipts"][speaker]["codes_in_audio_alignment_video"]
+            )
+            if len(audio_hashes) != expected_source_assets:
+                raise ValueError(f"incomplete audio payload inventory for {speaker}")
+            if not expected_codes <= audio_hashes.keys():
+                raise ValueError(f"audio TAR lacks split rows for {speaker}")
+            for code in sorted(expected_codes):
+                records.append({
+                    "split": split,
+                    "speaker": speaker,
+                    "code": code,
+                    "modality": "audio",
+                    "sha256": audio_hashes[code],
+                })
+            per_speaker[speaker] = {
+                "split": split,
+                "manifest_rows": len(expected_codes),
+                "audio_tar_sha256": bundle["audio_sha256"],
+                "audio_payloads_hashed": len(audio_hashes),
+            }
+    duplicates = find_duplicates(records)
+    report = {
+        "status": (
+            "PASS_NO_CROSS_SPLIT_EXACT_AUDIO_DUPLICATES"
+            if not duplicates["cross_split_exact_payload_duplicates"]
+            else "FAIL_CROSS_SPLIT_EXACT_AUDIO_DUPLICATES"
+        ),
+        "scope": "exact SHA-256 of WAV member payloads as stored; not re-encoding invariant",
+        "source_summary_sha256": expected_summary_sha256,
+        "bundle_index_sha256": file_hashes(bundle_index_path)[1],
+        "train_manifest_sha256": file_hashes(train_path)[1],
+        "validation_manifest_sha256": file_hashes(validation_path)[1],
+        "audio_payload_count": len(records),
+        "cross_split_exact_payload_duplicate_groups": len(
+            duplicates["cross_split_exact_payload_duplicates"]
+        ),
+        "within_split_exact_payload_duplicate_groups": len(
+            duplicates["within_split_exact_payload_duplicates"]
+        ),
+        "elapsed_seconds": round(time.monotonic() - started, 3),
+        "per_speaker": per_speaker,
+        **duplicates,
+    }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
+    return report
+
+
 def run_audit(
     *,
     summary_path: Path,
@@ -246,23 +338,31 @@ def main() -> None:
     parser.add_argument("--summary", type=Path, required=True)
     parser.add_argument("--expected-summary-sha256", required=True)
     parser.add_argument("--bundle-index", type=Path, required=True)
-    parser.add_argument("--archive-result", type=Path, required=True)
+    parser.add_argument("--archive-result", type=Path)
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--validation", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--audio-only", action="store_true")
     args = parser.parse_args()
-    report = run_audit(
-        summary_path=args.summary,
-        expected_summary_sha256=args.expected_summary_sha256,
-        bundle_index_path=args.bundle_index,
-        archive_result_path=args.archive_result,
-        train_path=args.train,
-        validation_path=args.validation,
-        output_path=args.output,
+    if not args.audio_only and args.archive_result is None:
+        parser.error("--archive-result is required unless --audio-only is set")
+    runner = run_audio_audit if args.audio_only else run_audit
+    kwargs = {
+        "summary_path": args.summary,
+        "expected_summary_sha256": args.expected_summary_sha256,
+        "bundle_index_path": args.bundle_index,
+        "train_path": args.train,
+        "validation_path": args.validation,
+        "output_path": args.output,
+    }
+    if not args.audio_only:
+        kwargs["archive_result_path"] = args.archive_result
+    report = runner(
+        **kwargs,
     )
     print(json.dumps({key: report[key] for key in (
         "status",
-        "asset_payload_count",
+        "asset_payload_count" if not args.audio_only else "audio_payload_count",
         "cross_split_exact_payload_duplicate_groups",
         "within_split_exact_payload_duplicate_groups",
         "elapsed_seconds",

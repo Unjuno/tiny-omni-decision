@@ -1,8 +1,9 @@
 # GRID exact media duplicate audit (2026-10-28)
 
-Status: **acquisition is in progress; no duplicate-scan result or new training
-result exists yet.** This is a prerequisite integrity check for any future
-frozen-feature Path A fit on the corrected direct-source split.
+Status: **audio exact-payload scan passed; video archive acquisition and the
+full audio/video media audit remain in progress. No new training result exists.**
+This is a prerequisite integrity check for any future frozen-feature Path A
+fit on the corrected direct-source split.
 
 ## Frozen inputs and scope
 
@@ -66,6 +67,37 @@ post-startup interval samples averaging 0.324 MiB/s per connection, or 1.294
 MiB/s across the four workers. The remaining 10.4 GiB forecast was then 2
 hours 17 minutes. The interval set includes three recent intervals each for
 s14–s16 and two for s17; sampling and transfer continue.
+
+## Audio-only interim result
+
+Before the video archives finish, all 32 pinned audio TARs were re-hash
+verified and all 32,000 WAV members were streamed and hashed. The 31,991
+eligible train/validation rows had **zero exact-payload duplicate groups
+between splits and zero within either split**. This clears only the exact WAV
+payload gate; it does not rule out re-encoded audio duplicates or establish
+cross-corpus speaker independence. No audio was decoded for quality, no model
+was loaded, and no sealed audit was accessed.
+
+- Report:
+  `C:/CodexArtifacts/pretrained-reuse-r2/grid-audio-duplicate-audit-20261028-attempt-01/report.json`.
+- Report SHA-256:
+  `ce95ee4679dff2a18dc855f44aa031f0e3a43bd65587ed5e500f048cff330f71`.
+- Runtime: 11.437 seconds.
+- The report pins the split summary, bundle index, train/validation manifests,
+  and per-speaker audio TAR SHA-256 values.
+
+Executed command:
+
+```powershell
+python -m scripts.audit_grid_media_duplicates `
+  --summary C:\CodexArtifacts\pretrained-reuse-r2\grid-development-split-direct-source-20261028-attempt-02\summary.json `
+  --expected-summary-sha256 547e84167267428712ba5c7859869cd1eb7d558ee3502d9908f89223a77a3410 `
+  --bundle-index C:\CodexArtifacts\pretrained-reuse-r2\grid-train-direct-speaker-audit-20261028-attempt-03\direct-source-bundle-index.json `
+  --train C:\CodexArtifacts\pretrained-reuse-r2\grid-development-split-direct-source-20261028-attempt-02\train.json `
+  --validation C:\CodexArtifacts\pretrained-reuse-r2\grid-development-split-direct-source-20261028-attempt-02\validation.json `
+  --output C:\CodexArtifacts\pretrained-reuse-r2\grid-audio-duplicate-audit-20261028-attempt-01\report.json `
+  --audio-only
+```
 
 The exact acquisition command was:
 

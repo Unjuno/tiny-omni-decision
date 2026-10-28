@@ -24,7 +24,10 @@ This verifies only the two-example runtime path; it is not a trained baseline,
 media-duplicate audit, or quality result. The full official per-speaker
 archive acquisition for an exact train/validation WAV/MPG payload-hash scan is
 now running in a separate external attempt; no GRID training is authorized
-until that integrity scan completes. [Protocol and measured transfer rates](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md).
+until that integrity scan completes. The audio-only portion scanned 32,000
+WAV members and found zero exact-payload duplicates among 31,991 eligible
+rows; the full video scan is still pending. [Protocol, audio result and measured
+transfer rates](docs/pretrained_reuse/R2_GRID_MEDIA_DUPLICATE_AUDIT_PROTOCOL_20261028.md).
 **2026-10-28 R2 GRID corrected fixed AV evaluation:** The full frozen
 64-quartet / 256-query sample completed on CPU with integrity and order checks.
 Joint Accuracy was 34.38%, but NLL/Brier/ECE were poor (2.049/0.911/0.337);

@@ -11,6 +11,7 @@ from scripts.audit_grid_media_duplicates import (
     archive_member_hashes,
     digest_stream,
     find_duplicates,
+    run_audio_audit,
     run_audit,
 )
 
@@ -148,3 +149,14 @@ def test_run_audit_validates_all_inputs_and_scans_each_frozen_split(tmp_path):
     assert report["status"] == "PASS_NO_CROSS_SPLIT_EXACT_MEDIA_DUPLICATES"
     assert report["asset_payload_count"] == 64
     assert report["cross_split_exact_payload_duplicate_groups"] == 0
+
+    audio_report = run_audio_audit(
+        summary_path=summary_path,
+        expected_summary_sha256=summary_sha,
+        bundle_index_path=bundle_index_path,
+        train_path=train_path,
+        validation_path=validation_path,
+        output_path=tmp_path / "audio-report.json",
+    )
+    assert audio_report["status"] == "PASS_NO_CROSS_SPLIT_EXACT_AUDIO_DUPLICATES"
+    assert audio_report["audio_payload_count"] == 32
