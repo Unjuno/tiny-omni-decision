@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-28 R1/R2 open-PR reconciliation:** PR #16's pinned PE-Core T16
+CPU/runtime and CLEVR-4 readout evidence does not outperform the existing
+Path A count result and has a non-commercial implementation-license constraint.
+PRs #31/#32 add a DROID shard/site audit and fixed-readout transfer: the sample
+contains no new collection site, and VideoPrism+sensor remains below
+sensor-only on matched later-shard records. No rerun or product promotion is
+justified. The PRs remain open and unchanged. See the [cross-branch evidence
+reconciliation](docs/pretrained_reuse/R1_R2_CROSS_BRANCH_RECONCILIATION_20261028.md).
+
 **2026-10-28 R2 Path A baseline-run reconciliation:** The common frozen-feature
 four-modality Decision readout already completed a 2,048-update seed-17 fit
 and matched LSTM control. Fixed-endpoint macro Accuracy was 30.58% / 30.71%;
@@ -2055,7 +2064,7 @@ Primary references and official implementations (paper merit does **not** imply 
 
 This roadmap is a **model-agnostic, evidence-first design proposal**. Keep the full previous roadmap in Git history; it is not deleted from the project record. The requested product outcome stays constant—**small, high-quality, local, genuinely multimodal typed decision inference**—while the mandatory Gemma/EmbeddingGemma ternary-first implementation path is no longer the assumed route. Since this proposal was opened, a task-scoped frozen Speech Commands audio runtime bundle has been integrated on this branch and passed existing-validation replay parity; see the R2 runtime record. It does not close joint AV or full multimodal packaging.
 
-**Next implementation action:** do not rerun the existing Path A baseline or tune its exposed validation. The R0 device/quality targets are documented; R2 still needs a source-compatible synchronized AV task with genuinely both-required labels and independent groups before further joint fitting. Continue Path A task-specific evaluation on approved data and report all four modalities for one candidate. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
+**Next implementation action:** do not rerun the existing Path A baseline or tune exposed validation IDs. The R0 device/quality targets are documented; R2 still needs a rights-cleared, source-compatible synchronized AV task with genuinely both-required labels and independent groups before further joint fitting. The recent DROID transfer did not show a video benefit over sensor-only; the PE-Core candidate did not beat Path A on count and has an implementation-license restriction. Continue task-specific evaluation only on an admitted source, with matched unimodal and input-perturbation controls fixed before fitting. The current four-component assembly is about 687.3 MB, above the provisional 200 MB target; any size reduction must preserve task-specific outputs and be measured.
 
 
 ### STARSS23 measured update (2026-10-11)
