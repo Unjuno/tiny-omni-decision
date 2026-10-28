@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "screen_id": "videofdb-source-screen-20261029",
+  "screened_at": "2026-10-29",
+  "source": {
+    "official_project_page": "https://research.nvidia.com/labs/amri/projects/video-fdb/",
+    "dataset_repository": "https://huggingface.co/datasets/nvidia/video-full-duplex-benchmark",
+    "dataset_revision": "53a324dea6c82411d0e26d18b376b111163b906e",
+    "license_path": "LICENSE.md",
+    "access": "manual_gated"
+  },
+  "task": {
+    "description": "Full-duplex audio-video interaction perception and generation over natural two-person video-call clips",
+    "reported_clip_count": 237,
+    "reported_dynamic_categories": 11,
+    "validation_rows": 11,
+    "validation_unique_sample_ids": 8,
+    "test_rows": 226,
+    "train_split": false,
+    "paired_audio_only_control_reported": true,
+    "fixed_option_probability_target": false,
+    "scoring": "LM-judged conversational rubrics"
+  },
+  "rights": {
+    "license": "custom NVIDIA Evaluation License for Video, Image or Audio Data",
+    "purpose_restricted_to_evaluation_and_benchmarking": true,
+    "commercial_use_allowed": false,
+    "commercial_training_allowed": false,
+    "manual_access_gate": true,
+    "identity_recognition_and_biometric_processing_prohibited": true,
+    "product_directed_training_admitted": false,
+    "license_accepted": false,
+    "access_request_submitted": false
+  },
+  "local_screen": {
+    "metadata_api_revision_pinned": true,
+    "public_tree_metadata_inspected": true,
+    "annotation_payload_downloaded": false,
+    "media_payload_downloaded": false,
+    "evaluation_rows_opened": false,
+    "media_payload_total_bytes": "UNKNOWN",
+    "disposition": "REVIEW_NOT_ADMITTED"
+  },
+  "limits": [
+    "No train split; not suitable for fitting the product candidate.",
+    "Task is conversational response/rubric scoring, not calibrated fixed-option JSON.",
+    "Test records ship in the gated release and are not treated as a sealed blind audit.",
+    "Participant/conversation group separation and component consent were not independently verified.",
+    "Source-reported paired AV/audio-only scores do not prove Tiny Omni uses both inputs."
+  ]
+}

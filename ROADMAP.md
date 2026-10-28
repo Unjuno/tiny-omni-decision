@@ -67,6 +67,15 @@ construction, while the exact lineage and natural/composed fraction of these
 challenge partitions remain unknown; do not treat this as an independent
 natural-AV benchmark without a provenance audit.
 
+**2026-10-29 R2 VideoFDB source screen:** VideoFDB is a close natural
+audio/video interaction-evaluation match (237 dyadic clips, 11 dynamics, with
+paired AV/audio-only baselines), but access is manually gated under NVIDIA's
+non-commercial evaluation-only license. It has no train split and evaluates
+rubric-scored conversational behavior rather than fixed-option probabilities;
+no request, license acceptance, annotation access or media download occurred.
+Keep `REVIEW_NOT_ADMITTED` for product training. See the [source/task/rights
+screen](docs/pretrained_reuse/R2_VIDEOFDB_SOURCE_SCREEN_20261029.md).
+
 The added Eidon CPU tests now skip cleanly when optional PyArrow/PyTorch are
 absent; local Ruff/pytest/manifests pass and both CI runs for `0263aa97` are
 green. No model run was repeated.
