@@ -1,3 +1,11 @@
+**2026-10-28 R2 ADL full archive authentication:** All 25 activity ZIPs from
+the pinned Zenodo record were present and independently rehashed; every source
+size, publisher MD5 and receipt SHA-256 matched. This replaces the prior
+archive-authentication gap only. Full HDF5 row/sensor identity, participant and
+session leakage, waveform alignment, sparse task support and dataset admission
+remain open. No model/GPU/sealed-audit work occurred. [Report, hashes and
+measured transfer](docs/pretrained_reuse/R2_ADL_FULL_ARCHIVE_AUTHENTICATION_20261028.md).
+
 **2026-10-28 R2 full-extent Video logit-scale diagnostic:** A CPU-only,
 hash-checked analysis of saved predictions from the completed 32,768-update
 full-extent/fresh-coverage run found Video confidence and logit magnitude grew
