@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 R2-M AMI candidate screen:** Official AMI metadata supports a
+plausible synchronized active-speaker decision task and states CC BY 4.0 for
+released signals/transcripts/some annotations. Meeting-level partitions do
+not yet prove speaker-disjointness, and selected video payload size/checksums
+are unknown, so no data were fetched and the source remains
+`REVIEW_NOT_ADMITTED`. See the [source screen](docs/pretrained_reuse/R2_AMI_ACTIVE_SPEAKER_SOURCE_SCREEN_20261029.md).
+
 **2026-10-29 08:25 JST R0 checkpoint confirmation:** Read-only sampling
 predicted the next save near 08:24:29; `model.pt` was written at 08:24:16.
 CPU `weights_only=True, mmap=True` inspection verifies saved step `511837`,
