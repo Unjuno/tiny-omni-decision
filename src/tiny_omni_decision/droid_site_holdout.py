@@ -32,6 +32,42 @@ def droid_site_from_path(value: str) -> str:
     return site
 
 
+def select_unseen_droid_shards(
+    *,
+    first_candidate: int = 23,
+    shard_count: int = 2048,
+    sample_count: int = 3,
+    minimum_spacing: int = 20,
+    salt: str = "droid-r2-unseen-sites-v1",
+) -> list[int]:
+    """Select a reproducible metadata-only shard sample by salted SHA-256 rank."""
+    if not isinstance(first_candidate, int) or first_candidate < 0:
+        raise ValueError("first candidate shard must be a non-negative integer")
+    if not isinstance(shard_count, int) or shard_count <= first_candidate:
+        raise ValueError("shard count must exceed the first candidate")
+    if not isinstance(sample_count, int) or sample_count < 1:
+        raise ValueError("sample count must be a positive integer")
+    if not isinstance(minimum_spacing, int) or minimum_spacing < 0:
+        raise ValueError("minimum shard spacing must be a non-negative integer")
+    if not salt:
+        raise ValueError("sample salt must not be empty")
+
+    candidates = range(first_candidate, shard_count)
+    ranked = sorted(
+        candidates,
+        key=lambda index: hashlib.sha256(
+            f"{salt}|{index:05d}".encode()
+        ).digest(),
+    )
+    selected: list[int] = []
+    for index in ranked:
+        if all(abs(index - prior) >= minimum_spacing for prior in selected):
+            selected.append(index)
+            if len(selected) == sample_count:
+                return sorted(selected)
+    raise ValueError("not enough spaced shards for the requested sample")
+
+
 def uniform_step_indices(length: int, count: int) -> list[int]:
     """Match the pinned DROID task's rounded, uniformly spaced source indices."""
     if count < 1 or length < count:

@@ -6,6 +6,7 @@ from tiny_omni_decision.droid_site_holdout import (
     canonical_droid_path,
     droid_site_from_path,
     select_site_holdout,
+    select_unseen_droid_shards,
     stable_droid_id,
     uniform_step_indices,
     validate_site_split,
@@ -58,6 +59,28 @@ def test_site_holdout_is_deterministic_and_uses_counts_not_labels() -> None:
 def test_site_holdout_fails_when_no_three_site_partition_meets_bounds() -> None:
     with pytest.raises(ValueError, match="no label-independent"):
         select_site_holdout({"a": 90, "b": 5, "c": 5}, minimum_fraction=0.15)
+
+
+def test_unseen_shard_sample_is_deterministic_and_spaced() -> None:
+    selected = select_unseen_droid_shards()
+
+    assert selected == [466, 759, 1632]
+    assert selected == select_unseen_droid_shards()
+    assert min(selected) >= 23
+    assert all(
+        right - left >= 20
+        for left, right in zip(selected, selected[1:], strict=False)
+    )
+
+
+def test_unseen_shard_sample_rejects_impossible_spacing() -> None:
+    with pytest.raises(ValueError, match="not enough spaced shards"):
+        select_unseen_droid_shards(
+            first_candidate=0,
+            shard_count=3,
+            sample_count=3,
+            minimum_spacing=2,
+        )
 
 
 def test_split_validation_rejects_media_identity_overlap() -> None:

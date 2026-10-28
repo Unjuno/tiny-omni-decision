@@ -3329,3 +3329,13 @@ is narrow robot action prediction. Preserve as an R2 transfer probe, not a
 general Omni result or product promotion. The frozen VideoPrism checkpoint is
 114.37M parameters / 457.5 MB before any runtime packaging. See
 [DROID site-held-out readout results](docs/pretrained_reuse/R2_DROID_SITE_HELDOUT_VIDEOPRISM_SENSOR_RESULTS_20261028.md).
+
+### DROID unseen-site shard sample (2026-10-28)
+
+Three later train shards selected by a fixed SHA-256 rule (466, 759, 1632)
+contained 138 records / 137 eligible examples, with zero ID/group overlap
+against the previous cohort but no sites outside its existing 14-site set.
+This sample-only screen does not prove the full release has no other sites; it
+does not justify another site-held-out fit by itself. Six verified shard
+downloads averaged 21.97 MiB/s; no labels, media, model or GPU were opened.
+See [the sample protocol, hashes, timing and limitations](docs/pretrained_reuse/R2_DROID_UNSEEN_SITE_SHARD_SAMPLE_20261028.md).
