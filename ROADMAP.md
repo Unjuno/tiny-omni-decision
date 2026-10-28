@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 05:49 JST R0 live recheck:** Orbitune PID 22136 is still present
+at step 506,950 / 12,073,978,188 events; its last verified checkpoint is
+506,449 at 05:31:28.203. Three samples measured 37.6 steps/minute; the latest
+log reports 14,675 events/second, projecting the next 30M-event checkpoint
+near 06:06 JST using the previously validated rate. This is not a completion
+ETA (`--steps 0`). RTX VRAM remains 15,821/16,384 MiB and C: has 0.49 GiB free,
+below the 2-GiB reserve. No process or artifact was modified. See the
+[R0 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0534JST.md).
+
 **2026-10-29 R2-M XRFv2 Plus source screen:** This sensor/video action dataset
 is relevant in content, but the linked Kaggle API says its data license is
 `Unknown`; Zenodo's CC BY record attaches only the paper, while GitHub's MIT
