@@ -2107,6 +2107,13 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+**2026-10-29 EgoViz-120 metadata split preflight:** A deterministic 144/36
+session-group train/development split covers all 12 publisher categories, with
+zero session/sequence overlap. It is not an admitted task: participant
+independence, generated-label quality, raw video/IMU synchronization, and
+both-input necessity remain unknown; local storage is below a safe MCAP
+download reserve. See the [metadata-only preflight](docs/pretrained_reuse/R2_EGOVIZ120_GROUP_SPLIT_PREFLIGHT_20261029.md).
+
 **2026-10-29 R2-M Eidon video/IMU match diagnostic:** Frozen VideoPrism and
 quaternion-only features were extracted for 120 train and 24 development
 recordings after applying a contributor/task-group quarantine for malformed
