@@ -54,3 +54,26 @@ was modified. No new model training was started. A MEVA fit is not admitted
 until there is storage headroom, video-asset rights are verified for the
 specific subset, and a training/validation split is fixed by independent
 video identity without using the evaluation-level annotations.
+
+## Official dataset-license follow-up — 2026-10-29
+
+The official [MEVA data page](https://mevadata.org/) states that all MEVA data
+is under CC BY 4.0. The linked [dataset license](https://mevadata.org/resources/MEVA-data-license.txt)
+identifies the covered material as the MEVA dataset by Kitware and IARPA. The
+official WACV paper also describes the release as CC BY 4.0 and states that
+actors signed consent forms under IRB oversight. This resolves the earlier
+source-level uncertainty about whether the public MEVA video release is
+licensed, but not all rights: CC BY grants only rights the licensor can grant,
+and its text expressly leaves privacy/publicity rights outside the copyright
+license. Preserve attribution and source provenance.
+
+This makes a bounded **video-only** development task a plausible candidate;
+MEVA is not synchronized natural audio/video or video/IMU evidence, and no
+two-input necessity claim follows. The partial annotation checkout remains
+incomplete and preserved. No MEVA video was acquired. Before training, still
+pin an exact public training subset and annotation revision, group every
+view/clip from the same underlying event or actor appropriately, construct a
+validation split without evaluation-level annotations, audit label/task
+ambiguity, and pass the 2-GiB output-storage and GPU gates. The machine-readable
+license recheck is
+[`meva-source-license-recheck-20261029.json`](../../manifests/pretrained_reuse/meva-source-license-recheck-20261029.json).

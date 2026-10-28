@@ -64,6 +64,14 @@ The 10-clip preview has no explicit separate permission or independent split.
 Do not fetch or use the preview pending explicit payload rights. No access
 request or download was made. See the [screen](docs/pretrained_reuse/R2_LUEL_IMU_EGOCENTRIC_SOURCE_SCREEN_20261029.md).
 
+**2026-10-29 MEVA license follow-up:** Official MEVA terms explicitly license
+the dataset under CC BY 4.0, and the WACV paper reports IRB oversight and actor
+consent. This resolves the prior dataset-license uncertainty for a bounded
+video-only probe, subject to privacy/personality rights and attribution. It is
+not natural AV or IMU fusion evidence. The partial annotation checkout remains
+incomplete, no video media was obtained, and no task/split or storage/runtime
+gate is yet satisfied. See the [license recheck and remaining gates](docs/pretrained_reuse/R2_MEVA_GIT_METADATA_ACQUISITION_20261028.md).
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was
