@@ -9,6 +9,15 @@ the fit runner's 2-GiB output reserve. No process was interrupted and no new
 fit was started. The current common-fit GPU guard also rejects the live
 processes. See the [live audit and next-run gate](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
 
+**2026-10-29 04:32 JST R0 progress recheck:** Orbitune advanced to log step
+504,600; the latest checkpoint remains step 504,302 from 04:23 JST. The
+30-million-event checkpoint interval has about 21.64M events remaining; recent
+versus since-checkpoint throughput projects another save in roughly 17–25
+minutes, with evaluation pauses adding uncertainty. RTX 3080 remains at
+15,821 MiB used and C: at 0.716 GiB
+free. No Tiny Omni run was started. See the timestamped follow-up in the
+[R0 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0423JST.md).
+
 **2026-10-29 04:23 JST R0 live recheck:** Orbitune PID 22136 is still training;
 its CPU-only, `weights_only=True` checkpoint read verifies step 504,302 and
 12,000,010,764 cumulative events. A validation record at the same step reports
