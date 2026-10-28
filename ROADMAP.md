@@ -15,8 +15,9 @@ its CPU-only, `weights_only=True` checkpoint read verifies step 504,302 and
 loss -1.3606; `best_step` and `best_validation_loss` remain null. The run has no
 finite step/epoch stop limit. The latest `model.pt` write is 04:23:02 JST; RTX
 3080 remains at 15,821 MiB used / 100% utilization and C: has 0.717 GiB free.
-Three one-minute log samples averaged 50 steps/minute while actively training,
-but evaluation pauses make wall-clock extrapolation uncertain. No Tiny Omni job
+Three one-minute log samples advanced 50 steps per 66–67-second interval
+(about 45 steps/minute); evaluation pauses make wall-clock extrapolation
+uncertain. No Tiny Omni job
 was started because the local fit reserve is still unmet; the Orbitune run and
 all artifacts were left untouched. See the [fresh read-only audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0423JST.md).
 
