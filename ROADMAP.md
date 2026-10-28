@@ -50,6 +50,13 @@ performed. Keep REVIEW-only pending access, payload license, privacy/consent,
 and exact split/payload verification. It is a non-clinical simulated benchmark,
 not a clinical decision dataset. See the [source screen](docs/pretrained_reuse/R2_EGOINERTIA_MI_SOURCE_SCREEN_20261029.md).
 
+**2026-10-29 R2-M WEAR screen:** WEAR has synchronized egocentric video and
+wearable inertial data from 22 participants across 18 outdoor activities, but
+the official dataset license is CC BY-NC-SA 4.0 and its raw payload is about
+130 GB. Do not use it for product-directed training or acquire it under the
+current storage constraints. Preserve as a research-only reference; no payload
+or media was downloaded. See the [screen](docs/pretrained_reuse/R2_WEAR_VIDEO_IMU_SOURCE_SCREEN_20261029.md).
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was
