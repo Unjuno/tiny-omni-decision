@@ -40,6 +40,16 @@ the 2-GiB reserve. Keep REVIEW-only for a narrow audio/sensor candidate; it
 cannot satisfy the video requirement or establish both-input necessity without
 participant IDs and matched unimodal controls. See the [source screen](docs/pretrained_reuse/R2_ADL_AUDIO_SENSOR_SOURCE_SCREEN_20261029.md).
 
+**2026-10-29 R2-M EgoInertia-MI candidate screen:** The official project page
+describes synchronized egocentric video and three wearable IMUs, with action
+recognition and simulated motor-impairment severity tasks and a subject-disjoint
+five-fold protocol. This is unusually well aligned with the optional-sensor
+path, but the data are access-restricted through Zenodo and the page does not
+name an explicit data license. No request, payload access, or training was
+performed. Keep REVIEW-only pending access, payload license, privacy/consent,
+and exact split/payload verification. It is a non-clinical simulated benchmark,
+not a clinical decision dataset. See the [source screen](docs/pretrained_reuse/R2_EGOINERTIA_MI_SOURCE_SCREEN_20261029.md).
+
 **2026-10-28 R2 FusionX V3 transfer/source screen:** Three small RGB files
 from one pinned task were downloaded from TouchTronix's CC BY 4.0 V3 release
 and hash-verified for a source-host transfer probe. Their weighted rate was
