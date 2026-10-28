@@ -9,6 +9,17 @@ the fit runner's 2-GiB output reserve. No process was interrupted and no new
 fit was started. The current common-fit GPU guard also rejects the live
 processes. See the [live audit and next-run gate](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0155JST.md).
 
+**2026-10-29 04:23 JST R0 live recheck:** Orbitune PID 22136 is still training;
+its CPU-only, `weights_only=True` checkpoint read verifies step 504,302 and
+12,000,010,764 cumulative events. A validation record at the same step reports
+loss -1.3606; `best_step` and `best_validation_loss` remain null. The run has no
+finite step/epoch stop limit. The latest `model.pt` write is 04:23:02 JST; RTX
+3080 remains at 15,821 MiB used / 100% utilization and C: has 0.717 GiB free.
+Three one-minute log samples averaged 50 steps/minute while actively training,
+but evaluation pauses make wall-clock extrapolation uncertain. No Tiny Omni job
+was started because the local fit reserve is still unmet; the Orbitune run and
+all artifacts were left untouched. See the [fresh read-only audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0423JST.md).
+
 **2026-10-29 R2 GAViD source screen:** The publisher reports synchronized
 video/audio group-affect clips, but its dataset terms restrict use to
 non-commercial academic research; validation/test media also require a request
