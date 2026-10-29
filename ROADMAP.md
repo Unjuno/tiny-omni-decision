@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-30 R2-M RoboHEARD release-day public-page recheck:** The official
+page is byte-identical to the prior capture, still lists the development data
+and baselines as due today, and exposes no public download or baseline-repo
+link. Its CC BY-NC-SA 4.0 terms and AVSR/tcpCER output do not meet the current
+product-directed, supplied-option Decision gate. No registration or payload
+access occurred; retain `REVIEW_NOT_ADMITTED`. See the
+[release-day source screen](docs/pretrained_reuse/R2_ROBOHEARD_SOURCE_SCREEN_20261029.md).
+
 **2026-10-30 R2 EgoViz per-session validation path:** Added a single-session
 package validator so each future train/development session can be checked
 against the frozen plan before a complete aggregate exists. The retained `g154`

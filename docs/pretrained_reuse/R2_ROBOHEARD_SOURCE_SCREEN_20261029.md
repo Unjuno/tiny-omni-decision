@@ -8,6 +8,18 @@ recognition (AVSR), but it is not yet a frozen-feature Decision task and its
 data terms are non-commercial. Do not register, accept an agreement, or fetch
 training/development/test payloads as part of this screen.
 
+## Release-day public-page recheck — 2026-10-30 00:23 JST
+
+The official page returned HTTP 200 and 40,771 UTF-8 bytes with SHA-256
+`ac739eed17c91ab621a95257426f964f7ddf35317658733d88905d0bfd685326`, exactly
+matching the 2026-10-29 capture above. It still labels the development-data and
+baseline release as scheduled for October 30 and says the baselines are being
+finalized. The public HTML exposes no dataset download or baseline-repository
+URL; it contains a registration form. The form was not opened or submitted, and
+no terms were accepted. The stated CC BY-NC-SA 4.0 data license and AVSR/tcpCER
+task mismatch remain disqualifying for the current product-directed Decision
+path. Keep the source `REVIEW_NOT_ADMITTED` and do not fetch or fit it.
+
 ## Pinned observation
 
 - Official page: <https://roboheard.github.io/>.
