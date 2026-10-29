@@ -14,6 +14,14 @@
     "validation_parent_groups": 5,
     "reported_multipt_audio_video_observations": 288,
     "known_train_visibility_failures_in_sample": 2,
+    "train_presence_review": {
+      "artifact": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021\\train-visual-qa-all-sa-20261021\\train-visual-qa-review-all-sa-20261021.json",
+      "review_sha256": "E344E81BC6B60DA0D65C5A96387225C47C5A0F7AFD6F2BD5DC43E4EF096F971F",
+      "input_manifest_sha256": "5A1BF48D478C889002C2C238E0CED7F376F2494EF490848A54A01C8FA2B61882",
+      "rows": 213,
+      "counts": {"face_visibly_framed": 168, "limited_or_ambiguous": 21, "no_clear_person": 24},
+      "method_limit": "single-reviewer qualitative still-frame presence screen; not speaker identity, speech alignment, synchronization, label validity, or prevalence"
+    },
     "status": "no_model_quality_run; visibility and validation coverage gates open"
   },
   "method": {

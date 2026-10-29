@@ -31,8 +31,11 @@ This is subordinate to existing Draft PR #19 (head
 `406f003a128a7991ec39dcb15608b381f003add4`), whose broader SA/SB preflight has
 214 train and 111 validation candidate windows across five validation groups,
 288 sampled PTS checks, and observed empty-room target-camera failures. Reuse
-its external receipts; AMI remains blocked on visible-speaker label validity
-and adequate independent validation, not on another media-size probe.
+its external receipts. The same train-only qualitative visual-presence screen
+covered 213 rows: 168 clearly framed faces, 21 ambiguous, and 24 with no clear
+person; it did not verify speaking identity or timing. AMI remains blocked on
+visible-speaker label validity and adequate independent validation, not on
+another media-size probe.
 
 **2026-10-29 R2-M AMI candidate screen:** Official AMI metadata supports a
 plausible synchronized active-speaker decision task and states CC BY 4.0 for

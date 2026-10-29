@@ -26,6 +26,18 @@ and `codex/r2-ami-multipt-timing-gate-20261023` (`e25d21300850126d408ed837ef7437
 were also read before this update. Reuse that evidence; do not repeat its
 speaker-channel acquisition, timing sample, or six-meeting RM decode.
 
+The external artifact also contains a broader 213-row SA training visual-
+presence review: 168 `face_visibly_framed`, 21 `limited_or_ambiguous`, and 24
+`no_clear_person`. It was one qualitative reviewer over three still frames per
+row (15/50/85%); it does not verify speaker identity, speech alignment,
+synchronization, or label correctness and is not a prevalence estimate. The
+review JSON SHA-256 is
+`E344E81BC6B60DA0D65C5A96387225C47C5A0F7AFD6F2BD5DC43E4EF096F971F`; its input
+manifest SHA-256 is
+`5A1BF48D478C889002C2C238E0CED7F376F2494EF490848A54A01C8FA2B61882`. Keep
+those rows as training-only source diagnostics; do not filter evaluation rows
+or claim the screen makes the task labels valid.
+
 The new smoke is limited to one train meeting using the mixed Room-Lapel track
 and official low-size RM streams. It adds a direct-stream decoder check and
 exact `Content-Length`/ETag evidence for one submeeting in each scenario
