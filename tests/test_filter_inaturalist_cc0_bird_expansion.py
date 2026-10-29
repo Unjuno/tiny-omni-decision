@@ -1,6 +1,8 @@
+import json
+
 import pytest
 
-from scripts.filter_inaturalist_cc0_bird_expansion import filter_expansion
+from scripts.filter_inaturalist_cc0_bird_expansion import filter_expansion, freeze_expansion
 
 
 def _row(split, observer, observation, photo, taxon=1):
@@ -86,3 +88,44 @@ def test_expansion_rejects_duplicate_observer_class_and_records_missing_class_ga
     assert summary["all_classes_represented"] is False
     assert summary["minimum_count_gate"]["passed"] is False
     assert summary["eligible_for_training"] is False
+
+
+def test_freeze_expansion_applies_sources_sequentially_and_keeps_provenance(tmp_path):
+    previous = tmp_path / "previous"
+    source_a = tmp_path / "source-a"
+    source_b = tmp_path / "source-b"
+    output = tmp_path / "output"
+    for directory in (previous, source_a, source_b):
+        directory.mkdir()
+        (directory / "metadata.json").write_text("{}\n", encoding="utf-8")
+        (directory / "train.jsonl").write_text("", encoding="utf-8")
+        (directory / "validation.jsonl").write_text("", encoding="utf-8")
+    (source_a / "train.jsonl").write_text(
+        json.dumps(_row("train", "observer-a", "obs-a", "photo-a")) + "\n",
+        encoding="utf-8",
+    )
+    (source_a / "validation.jsonl").write_text(
+        json.dumps(_row("validation", "observer-b", "obs-b", "photo-b")) + "\n",
+        encoding="utf-8",
+    )
+    (source_b / "train.jsonl").write_text(
+        "\n".join(
+            json.dumps(row)
+            for row in (
+                _row("train", "observer-a", "obs-a-duplicate", "photo-a-duplicate"),
+                _row("train", "observer-c", "obs-c", "photo-c"),
+            )
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = freeze_expansion([previous], [source_a, source_b], output)
+
+    train_rows = [json.loads(line) for line in (output / "train.jsonl").read_text().splitlines()]
+    assert {row["observation_id"] for row in train_rows} == {"obs-a", "obs-c"}
+    assert result["summary"]["new_train_count"] == 2
+    assert result["summary"]["excluded_previous_identity_counts"] == {
+        "previous_observer": 1
+    }
+    assert len(result["expanded_source_sha256"]) == 2

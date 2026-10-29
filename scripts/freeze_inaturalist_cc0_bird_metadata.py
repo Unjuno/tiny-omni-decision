@@ -214,35 +214,46 @@ def _fetch_page(taxon_id: int, page: int, limit: int) -> tuple[int, list[dict]]:
     )
     with urlopen(request, timeout=30) as response:
         payload = json.load(response)
-    expected = min(PER_PAGE, max(0, limit - (page - 1) * PER_PAGE))
+    total_results = int(payload.get("total_results", 0))
+    expected = min(PER_PAGE, max(0, min(limit, total_results) - (page - 1) * PER_PAGE))
     rows = payload.get("results") or []
     if len(rows) != expected:
         raise RuntimeError(
             f"taxon {taxon_id} page {page}: expected {expected} rows, got {len(rows)}"
         )
-    return int(payload.get("total_results", 0)), rows
+    return total_results, rows
 
 
-def fetch_observations(limit_per_taxon: int) -> tuple[list[tuple[str, int, dict]], dict]:
+def fetch_observations(
+    limit_per_taxon: int,
+    *,
+    start_page: int = 1,
+) -> tuple[list[tuple[str, int, dict]], dict]:
     if limit_per_taxon < 1 or limit_per_taxon > 2000 or limit_per_taxon % PER_PAGE:
         raise ValueError("limit_per_taxon must be a positive multiple of 200, up to 2000")
     pages = limit_per_taxon // PER_PAGE
+    end_page = start_page + pages - 1
+    if start_page < 1 or end_page > 50:
+        raise ValueError("requested page window must stay within the API's first 10,000 results")
+    absolute_limit = end_page * PER_PAGE
     all_rows = []
     filtered_totals = {}
     last_request = 0.0
     for label, taxon_id in SPECIES:
-        for page in range(1, pages + 1):
+        for page in range(start_page, end_page + 1):
             elapsed = time.monotonic() - last_request
             if last_request and elapsed < 1.05:
                 time.sleep(1.05 - elapsed)
-            total, rows = _fetch_page(taxon_id, page, limit_per_taxon)
+            total, rows = _fetch_page(taxon_id, page, absolute_limit)
             last_request = time.monotonic()
             filtered_totals[str(taxon_id)] = total
             all_rows.extend((label, taxon_id, row) for row in rows)
             print(
-                f"fetched {label} page {page}/{pages}: {len(rows)} observations",
+                f"fetched {label} page {page}/{end_page}: {len(rows)} observations",
                 flush=True,
             )
+            if not rows:
+                break
     return all_rows, filtered_totals
 
 
@@ -254,10 +265,21 @@ def _write_jsonl(path: Path, rows: list[dict]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def freeze(output_dir: Path, *, limit_per_taxon: int, seed: int, train_percent: int) -> dict:
+def freeze(
+    output_dir: Path,
+    *,
+    limit_per_taxon: int,
+    seed: int,
+    train_percent: int,
+    start_page: int = 1,
+) -> dict:
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite existing output directory: {output_dir}")
-    source_rows, live_totals = fetch_observations(limit_per_taxon)
+    source_rows, live_totals = fetch_observations(
+        limit_per_taxon,
+        start_page=start_page,
+    )
+    end_page = start_page + limit_per_taxon // PER_PAGE - 1
     manifests, counts = build_manifests(
         source_rows,
         seed=seed,
@@ -281,6 +303,8 @@ def freeze(output_dir: Path, *, limit_per_taxon: int, seed: int, train_percent: 
             "order_by": "date_added",
             "order": "desc",
             "limit_per_taxon": limit_per_taxon,
+            "start_page": start_page,
+            "end_page": end_page,
             "species": [{"label": label, "taxon_id": taxon_id} for label, taxon_id in SPECIES],
             "live_filtered_totals": live_totals,
         },
@@ -313,6 +337,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--limit-per-taxon", type=int, default=1000)
+    parser.add_argument("--start-page", type=int, default=1)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--train-percent", type=int, default=70)
     args = parser.parse_args()
@@ -321,6 +346,7 @@ def main() -> None:
         limit_per_taxon=args.limit_per_taxon,
         seed=args.seed,
         train_percent=args.train_percent,
+        start_page=args.start_page,
     )
     print(json.dumps(result, sort_keys=True, indent=2))
 

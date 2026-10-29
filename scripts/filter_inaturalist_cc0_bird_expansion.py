@@ -138,28 +138,51 @@ def _validate_disjoint(splits: dict[str, list[dict[str, Any]]]) -> None:
             raise ValueError(f"train/validation {key} overlap")
 
 
-def freeze_expansion(previous_dir: Path, source_dir: Path, output_dir: Path) -> dict[str, Any]:
-    previous_dir = previous_dir.resolve(strict=True)
-    source_dir = source_dir.resolve(strict=True)
+def freeze_expansion(
+    previous_dirs: list[Path], source_dirs: list[Path], output_dir: Path
+) -> dict[str, Any]:
+    previous_dirs = [path.resolve(strict=True) for path in previous_dirs]
+    source_dirs = [path.resolve(strict=True) for path in source_dirs]
+    if not previous_dirs or not source_dirs:
+        raise ValueError("at least one previous and one source directory are required")
     output_dir = output_dir.resolve()
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite expansion output: {output_dir}")
     previous_paths = [
-        previous_dir / "metadata.json",
-        previous_dir / "train.jsonl",
-        previous_dir / "validation.jsonl",
+        [directory / name for name in ("metadata.json", "train.jsonl", "validation.jsonl")]
+        for directory in previous_dirs
     ]
-    candidate_paths = [
-        source_dir / "metadata.json",
-        source_dir / "train.jsonl",
-        source_dir / "validation.jsonl",
+    source_paths = [
+        [directory / name for name in ("metadata.json", "train.jsonl", "validation.jsonl")]
+        for directory in source_dirs
     ]
-    previous_rows = [row for path in previous_paths[1:] for row in _read_jsonl(path)]
-    candidate = {
-        split: _read_jsonl(source_dir / f"{split}.jsonl")
-        for split in ("train", "validation")
-    }
-    retained, summary = filter_expansion(previous_rows, candidate)
+    previous_rows = [
+        row for paths in previous_paths for path in paths[1:] for row in _read_jsonl(path)
+    ]
+    retained: dict[str, list[dict[str, Any]]] = {"train": [], "validation": []}
+    excluded = Counter()
+    batch_summaries = []
+    for paths in source_paths:
+        candidate = {
+            split: _read_jsonl(paths[index])
+            for index, split in ((1, "train"), (2, "validation"))
+        }
+        batch, summary = filter_expansion(previous_rows, candidate)
+        for split in retained:
+            retained[split].extend(batch[split])
+        previous_rows.extend(row for rows in batch.values() for row in rows)
+        excluded.update(summary["excluded_previous_identity_counts"])
+        batch_summaries.append(summary)
+    for split in retained:
+        retained[split].sort(key=lambda row: (int(row["taxon_id"]), str(row["observation_id"])))
+    _validate_disjoint(retained)
+    # Recompute the aggregate gate against the original cohort plus all retained batches.
+    _, summary = filter_expansion(
+        [row for paths in previous_paths for path in paths[1:] for row in _read_jsonl(path)],
+        retained,
+    )
+    summary["excluded_previous_identity_counts"] = dict(sorted(excluded.items()))
+    summary["batch_summaries"] = batch_summaries
 
     output_dir.mkdir(parents=True, exist_ok=False)
     hashes: dict[str, str] = {}
@@ -171,12 +194,16 @@ def freeze_expansion(previous_dir: Path, source_dir: Path, output_dir: Path) -> 
         path.write_bytes(payload)
         hashes[path.name] = hashlib.sha256(payload).hexdigest()
     metadata = {
-        "schema_version": "inat-cc0-bird-expansion-v1",
+        "schema_version": "inat-cc0-bird-expansion-v2",
         "source": "iNaturalist public API frozen response; underlying API is live",
-        "previous_metadata_sha256": {path.name: _sha256(path) for path in previous_paths},
-        "expanded_source_sha256": {
-            path.name: _sha256(path) for path in candidate_paths
-        },
+        "previous_metadata_sha256": [
+            {"directory": str(paths[0].parent), **{path.name: _sha256(path) for path in paths}}
+            for paths in previous_paths
+        ],
+        "expanded_source_sha256": [
+            {"directory": str(paths[0].parent), **{path.name: _sha256(path) for path in paths}}
+            for paths in source_paths
+        ],
         "split": {
             "inherited_seed": 17,
             "group": "observer SHA-256 from source freeze",
@@ -205,8 +232,8 @@ def freeze_expansion(previous_dir: Path, source_dir: Path, output_dir: Path) -> 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--previous-dir", type=Path, required=True)
-    parser.add_argument("--expanded-source-dir", type=Path, required=True)
+    parser.add_argument("--previous-dir", type=Path, action="append", required=True)
+    parser.add_argument("--expanded-source-dir", type=Path, action="append", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     result = freeze_expansion(args.previous_dir, args.expanded_source_dir, args.output_dir)

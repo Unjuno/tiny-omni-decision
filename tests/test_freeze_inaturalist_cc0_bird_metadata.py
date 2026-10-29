@@ -1,3 +1,6 @@
+import pytest
+
+from scripts import freeze_inaturalist_cc0_bird_metadata as freezer
 from scripts.freeze_inaturalist_cc0_bird_metadata import build_manifests, observer_group_hash
 
 
@@ -96,3 +99,35 @@ def test_group_split_is_deterministic_and_distinct_between_observers():
     second, _ = build_manifests(rows, seed=17)
     assert first == second
     assert observer_group_hash("user-a", 17) != observer_group_hash("user-b", 17)
+
+
+def test_fetch_observations_supports_a_bounded_later_page_window(monkeypatch):
+    calls = []
+
+    def fake_fetch(taxon_id, page, limit):
+        calls.append((taxon_id, page, limit))
+        return 5000, [{"id": f"{taxon_id}-{page}"}]
+
+    monkeypatch.setattr(freezer, "_fetch_page", fake_fetch)
+    monkeypatch.setattr(freezer.time, "sleep", lambda _seconds: None)
+
+    rows, totals = freezer.fetch_observations(2000, start_page=11)
+
+    assert len(rows) == 80
+    assert len(totals) == 8
+    assert [page for _taxon, page, _limit in calls[:10]] == list(range(11, 21))
+    assert all(limit == 4000 for _taxon, _page, limit in calls)
+
+
+def test_fetch_observations_rejects_page_windows_beyond_api_cap(monkeypatch):
+    called = False
+
+    def forbidden_fetch(*_args):
+        nonlocal called
+        called = True
+        raise AssertionError("invalid page windows must fail before a request")
+
+    monkeypatch.setattr(freezer, "_fetch_page", forbidden_fetch)
+    with pytest.raises(ValueError, match="first 10,000 results"):
+        freezer.fetch_observations(2000, start_page=42)
+    assert called is False

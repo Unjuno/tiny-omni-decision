@@ -1,8 +1,20 @@
+**2026-10-29 15:22 JST R2 metadata expansion follow-up:** Two additional
+iNaturalist CC0 metadata windows (pages 11–20 and 21–30 per taxon) were frozen
+without downloading media. Sequential observer/observation/photo exclusion
+against the 2026-10-26 cohort, pages 1–10 expansion and prior retained window
+produces 921 train / 446 validation candidates; all eight per-class floors and
+train/validation identity gates pass in the combined manifest. This is metadata
+coverage only: media deduplication and training readiness remain unverified.
+At the check, C: had 0.53 GiB free and Orbitune occupied 15,821/16,384 MiB on
+the RTX 3080, so no media or model run was started. See the
+[follow-up record](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_FOLLOWUP_20261029.md).
+
 **2026-10-29 R2 one-time observer-disjoint image transfer:** The immutable
 VideoPrism-B frozen readout scored 79.55% accuracy / 0.5906 NLL on 176 newly
 frozen iNaturalist CC0 validation records, with zero exact or pHash<=4 media
-overlap against all 2,325 prior images. The expansion-training gate remains
-failed; no examples were added to training. This narrow eight-species image
+overlap against all 2,325 prior images. At that initial metadata snapshot, the
+pages 1–10 expansion-training gate failed and no examples were added to
+training. This narrow eight-species image
 result is not an open-ended Decision, temporal-video, multimodal-fusion, or
 product-quality result. See the [protocol](docs/pretrained_reuse/R2_INATURALIST_NEW_OBSERVER_TRANSFER_PROTOCOL_20261029.md)
 and [result report](docs/pretrained_reuse/R2_INATURALIST_NEW_OBSERVER_TRANSFER_RESULT_20261029.md).
