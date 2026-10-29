@@ -1,3 +1,11 @@
+**2026-10-29 R2 one-time observer-disjoint image transfer:** The immutable
+VideoPrism-B frozen readout scored 79.55% accuracy / 0.5906 NLL on 176 newly
+frozen iNaturalist CC0 validation records, with zero exact or pHash<=4 media
+overlap against all 2,325 prior images. The expansion-training gate remains
+failed; no examples were added to training. This narrow eight-species image
+result is not an open-ended Decision, temporal-video, multimodal-fusion, or
+product-quality result. See the [protocol](docs/pretrained_reuse/R2_INATURALIST_NEW_OBSERVER_TRANSFER_PROTOCOL_20261029.md)
+and [result report](docs/pretrained_reuse/R2_INATURALIST_NEW_OBSERVER_TRANSFER_RESULT_20261029.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
 **2026-10-29 13:12 JST R0 checkpoint-state recheck:** Orbitune PID `22136`
