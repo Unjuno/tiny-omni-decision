@@ -2529,7 +2529,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 - [x] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifest hashes and experiment checkpoint hashes without modifying their bytes (`docs/pretrained_reuse/R0_INVENTORY.json`; 2026-10-10 snapshot).
 - [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Read-only contribution/dependency review for PRs #9–#14: `docs/pretrained_reuse/R0_OPEN_PR_REVIEW_20261011.md`. All remain open and unchanged; CI for PRs #13/#14 was not verifiable from the unauthenticated status lookup.
-- [x] Refresh the live PR/worktree/process/storage snapshot without modifying existing experiments (`docs/pretrained_reuse/R0_LIVE_RECHECK_20261028.md` and `.json`). The primary user worktree remains dirty and untouched; 28 PRs and 84 worktrees are inventoried. This refresh does not close the open device/task-criteria gate below.
+- [x] Refresh the live PR/worktree/process/storage snapshot without modifying existing experiments (`docs/pretrained_reuse/R0_LIVE_RECHECK_20261028.md` and `.json`). The 2026-10-28 snapshot inventoried 28 PRs and 84 worktrees. A read-only follow-up on 2026-10-29 confirms PR #15 remains Draft/Open at the current branch head, 28 PRs (#9–#36) remain open, and 84 worktrees are present; see `docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_1204JST.md` and `.json`. No experiment was interrupted or changed. This refresh does not close the open device/task-criteria gate below.
 - [ ] Set the deployment device, task-specific quality/confidence and time/money criteria before training or promotion decisions; retain the historical >=95% product aspiration only as a specified challenge target. The user provisionally authorized the roadmap's 100–200M parameter and <=200 MB package figures for engineering work only; neither is a release gate yet.
 - [x] Publish candidate matrix, evaluation plan and separate environment contracts (`docs/pretrained_reuse/R0_DECISION_MATRIX_20261011.md`). Parameter/package targets are provisional; deployment device, task thresholds and time/money approval remain open.
 
@@ -3578,3 +3578,22 @@ its train Accuracy rose while train/dev NLL worsened through epoch 512. It was
 rejected under the fixed NLL selector; official validation and sealed audit
 were not loaded. No hyperparameter search follows from this result. See the
 [protocol, learning curve, paired intervals and hashes](docs/pretrained_reuse/R2_TEXTFREE_COUNT_ORDINAL_LOSS_RESULTS_20261029.md).
+
+**2026-10-29 R2 Perception Test source-task disposition:** A read-only audit of
+previously saved train-source diagnostics found that 647/692 records labeled
+`none` lack a parent-object annotation, and replacing audio with same-label
+audio from another video changed OOF accuracy by only -0.27 pp (95% video-group
+CI -1.79 to +1.27). The existing audio/video source-candidate task therefore
+does not establish reliable dependence on both streams or valid negative labels;
+do not tune it further or promote its readout. This is train-source OOF evidence,
+not an independent task-quality result. See the [artifact-provenance and
+disposition report](docs/pretrained_reuse/R2_PERCEPTION_SOURCE_TASK_DISPOSITION_20261029.md).
+
+**2026-10-29 read-only DROID transfer review (open PRs #32/#33):** On 137
+later-shard episodes across 14 already-seen sites, frozen VideoPrism+sensor
+scored 39.42% Accuracy / 1.7790 NLL versus sensor-only 42.34% / 1.4968. The
+paired joint-minus-sensor Accuracy interval includes zero (-8.08 to +0.97 pp),
+while NLL and Brier favor sensor-only. This same-site development transfer does
+not pass R2-M or justify shared-backbone work; the two PRs remain independent
+and unmodified ([PR #32](https://github.com/Unjuno/tiny-omni-decision/pull/32),
+[paired site audit PR #33](https://github.com/Unjuno/tiny-omni-decision/pull/33)).
