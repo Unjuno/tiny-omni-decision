@@ -83,3 +83,25 @@ The source remains unadmitted until the derived target, trajectory-grouped
 split, payload size/hash inventory, and end-to-end modality controls are
 established. No sealed audit or product-quality claim is involved in this
 screen.
+
+## Official-code tree recheck (2026-10-29)
+
+The official code repository's public GitHub API was queried read-only. Its
+`main` resolved to commit `b1cac1216e83108e7e974828f44fdd23704c46f4`; the
+complete recursive tree was not truncated and contained 18 entries, including
+14 blobs totaling 108,216 bytes. The blobs are the MIT code, configuration,
+requirements, and replay/generation utilities. This repository snapshot
+contains neither the dataset payload nor an explicit 50-trajectory
+train/validation/test assignment manifest. The paper's 40/5/5 counts therefore
+remain unreconstructable as an exact ID split from the official code tree
+alone.
+
+No OneDrive/Quark listing or payload was retrieved, no license/access flow was
+accepted, and no media or labels were read. C: had less than 0.4 GiB free at
+the accompanying local-state check; do not attempt an unknown-size dataset
+download. This narrows the next gate to an official file inventory with exact
+trajectory IDs, sizes, and hashes, followed by a frozen split and controls. If
+those are unavailable without a large payload, leave this source
+`REVIEW_NOT_ADMITTED` and do not fit on it. Even if admitted, this synthetic
+camera/LiDAR/radio beam task would be a narrow video/sensor study, not evidence
+for the full text/image/audio/video product objective.
