@@ -3703,3 +3703,10 @@ while NLL and Brier favor sensor-only. This same-site development transfer does
 not pass R2-M or justify shared-backbone work; the two PRs remain independent
 and unmodified ([PR #32](https://github.com/Unjuno/tiny-omni-decision/pull/32),
 [paired site audit PR #33](https://github.com/Unjuno/tiny-omni-decision/pull/33)).
+
+**2026-10-30 R2 EgoViz per-session aggregation smoke:** Added a hash- and
+split-checked CPU combiner for one-session-at-a-time frozen feature packages.
+Its two-session replay (14 train / 21 development examples) verified sensor
+window index rebasing and group isolation; it did not train or score a readout,
+and does not complete the 44-session plan or R2-M. Disk capacity remains the
+next gate. See [smoke report](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_SMOKE_20261029.md).

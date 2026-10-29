@@ -4,8 +4,9 @@
 
 This is a raw-media, synchronized-window, and frozen-feature pipeline smoke for
 the frozen unseen-session plan. It is **not** a model-quality evaluation: no
-readout was fit and no sealed-audit media or labels were accessed. The fixed task remains four-choice matching of
-an 8-frame, two-second wrist-video window to its timestamp-matched 6-channel
+readout was fit and no sealed-audit media or labels were accessed. The fixed
+task remains four-choice matching of an 8-frame, two-second wrist-video window
+to its timestamp-matched 6-channel
 IMU window, with three same-recording distractors at least three seconds away.
 
 The two selected source sessions are `g154` (train) and `g119` (development),
@@ -95,3 +96,31 @@ GPU task; CPU-only frozen feature extraction is preferred if the pinned
 VideoPrism and MOMENT weights plus their exact local runtimes are available.
 Only then run the preregistered fixed scorer and controls. Do not use the
 35-example smoke to select a model or claim generalization.
+
+## Per-session aggregation replay (2026-10-30)
+
+To support one-at-a-time media acquisition and feature extraction without
+retaining the complete raw corpus, a CPU-only aggregator was added at
+`scripts/aggregate_egoviz_unseen_group_features.py`. It accepts one package per
+planned train/development session, verifies the frozen plan and split
+identities, sample/corpus and feature hashes, pinned encoder environments,
+feature shapes/finiteness, target-to-timestamp correspondence, and rebases
+session-local sensor-window indices into combined train/development artifacts.
+It rejects missing/duplicate plan rows and any sealed-audit session directory;
+it does not fit a readout or evaluate quality.
+
+The integration replay used only the existing `g154` train and `g119`
+development packages (14 train / 21 development examples, 35 windows total).
+The generated report is
+`C:\CodexArtifacts\egoviz-unseen-group-temporal-smoke-20261030-attempt-01\aggregate-replay-02\aggregate-report.json`,
+SHA-256 `c06c4e494f4e1f489641a6f3c4ba52704e7293107c20380d5c4d995a6aaf35f7`.
+The report records two sessions, zero train/development group overlap, and no
+sealed data. Four new synthetic tests cover index rebasing, missing-session
+rejection, sealed-session rejection, and target/timestamp mismatch rejection.
+This validates the combiner on two sessions only; it does not establish that
+the full 44-session set has been acquired or that the task is learnable.
+
+At the latest resource check, C: had 2.48 GiB free and the RTX 3080 Laptop had
+419 MiB free. No further raw media acquisition or feature extraction was
+started. The full per-session plan remains gated on materially more free disk
+space and a fresh resource check.
