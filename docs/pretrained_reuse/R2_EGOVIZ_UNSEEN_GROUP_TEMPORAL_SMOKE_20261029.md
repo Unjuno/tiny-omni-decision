@@ -120,7 +120,23 @@ rejection, sealed-session rejection, and target/timestamp mismatch rejection.
 This validates the combiner on two sessions only; it does not establish that
 the full 44-session set has been acquired or that the task is learnable.
 
-At the latest resource check, C: had 2.48 GiB free and the RTX 3080 Laptop had
-419 MiB free. No further raw media acquisition or feature extraction was
-started. The full per-session plan remains gated on materially more free disk
-space and a fresh resource check.
+The aggregator now also supports `--validate-chunk-id` to validate one
+train/development package before the full aggregate exists. For example:
+
+```powershell
+python -m scripts.aggregate_egoviz_unseen_group_features `
+  --plan <frozen-plan.json> --runs-root <session-packages> `
+  --validate-chunk-id <planned-chunk-id>
+```
+
+This reads only that planned session package and fails closed for unknown or
+sealed IDs. The smoke replay packages were made against a two-session derived
+plan, not the 44-session frozen plan; passing the derived plan validates the
+replay packages, while supplying the full frozen plan correctly rejects their
+different acquisition-plan hash. Future per-session acquisition must use the
+frozen plan directly so its receipt can be validated against that plan.
+
+At the 2026-10-30 00:01 JST resource check, C: had 2.23 GiB free and the RTX
+3080 Laptop had 419 MiB free. No further raw media acquisition or feature
+extraction was started. The full per-session plan remains gated on materially
+more free disk space and a fresh resource check.

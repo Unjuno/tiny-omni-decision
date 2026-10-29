@@ -436,13 +436,55 @@ def aggregate(plan_path: Path, runs_root: Path, output: Path) -> dict[str, Any]:
     return payload
 
 
+def validate_session(plan_path: Path, runs_root: Path, chunk_id: str) -> dict[str, Any]:
+    """Validate one planned train/development package without opening other sessions."""
+    plan = _read_json(plan_path)
+    plan_hash = sha256_file(plan_path)
+    selected = [
+        row
+        for row in select_media_rows(plan, splits=("train", "development"))
+        if str(row["chunk_id"]) == chunk_id
+    ]
+    if len(selected) != 1:
+        raise ValueError(f"chunk is not uniquely present in the train/development plan: {chunk_id}")
+    validated = _validate_chunk(selected[0], runs_root / chunk_id, plan_sha256=plan_hash)
+    row = selected[0]
+    return {
+        "status": "FROZEN_SESSION_PACKAGE_VALIDATED_NO_TRAINING_OR_QUALITY_EVALUATION",
+        "plan_sha256": plan_hash,
+        "chunk_id": chunk_id,
+        "group_id": str(row["group_id"]),
+        "split": str(row["split"]),
+        "sample_count": len(validated["rows"]),
+        "window_count": len(validated["windows"]),
+        "raw_media_sha256": validated["raw_sha256"],
+        "video_feature_sha256": validated["video_cache_sha256"],
+        "sensor_feature_sha256": validated["sensor_cache_sha256"],
+        "publisher_action_labels_read": False,
+        "sealed_audit_accessed": False,
+        "training": False,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, required=True)
     parser.add_argument("--runs-root", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--validate-chunk-id",
+        help="validate only this planned train/development session package",
+    )
     args = parser.parse_args()
-    print(json.dumps(aggregate(args.plan, args.runs_root, args.output), indent=2))
+    if args.validate_chunk_id:
+        if args.output is not None:
+            parser.error("--output cannot be combined with --validate-chunk-id")
+        result = validate_session(args.plan, args.runs_root, args.validate_chunk_id)
+    else:
+        if args.output is None:
+            parser.error("--output is required unless --validate-chunk-id is used")
+        result = aggregate(args.plan, args.runs_root, args.output)
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":

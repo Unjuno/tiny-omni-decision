@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from scripts.aggregate_egoviz_unseen_group_features import aggregate
+from scripts.aggregate_egoviz_unseen_group_features import aggregate, validate_session
 
 PLAN_FORMAT = "egoviz-unseen-session-temporal-correspondence-plan-v1"
 VIDEO_CHECKPOINT = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
@@ -310,3 +310,40 @@ def test_aggregate_rejects_target_not_pointing_to_matching_timestamp(tmp_path: P
         aggregate(plan_path, runs, tmp_path / "aggregate")
 
     assert not (tmp_path / "aggregate").exists()
+
+
+def test_validate_session_checks_only_selected_planned_session(tmp_path: Path) -> None:
+    plan_path = tmp_path / "plan.json"
+    plan = _plan()
+    plan_path.write_text(json.dumps(plan), encoding="utf-8")
+    plan_hash = _hash(plan_path)
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    _write_chunk(runs, plan_hash, split="train", chunk_id="train-chunk", group_id="train-group")
+    (runs / "sealed-chunk").mkdir()
+
+    report = validate_session(plan_path, runs, "train-chunk")
+
+    assert report["status"] == "FROZEN_SESSION_PACKAGE_VALIDATED_NO_TRAINING_OR_QUALITY_EVALUATION"
+    assert report["split"] == "train"
+    assert report["sample_count"] == 1
+    assert report["sealed_audit_accessed"] is False
+    assert not any((runs / "sealed-chunk").iterdir())
+
+
+def test_validate_session_rejects_sealed_or_unknown_chunk_before_opening_it(
+    tmp_path: Path,
+) -> None:
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_text(json.dumps(_plan()), encoding="utf-8")
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    sealed = runs / "sealed-chunk"
+    sealed.mkdir()
+    marker = sealed / "must-not-read.json"
+    marker.write_text("not opened", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="not uniquely present"):
+        validate_session(plan_path, runs, "sealed-chunk")
+
+    assert marker.read_text(encoding="utf-8") == "not opened"
