@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 10:35 JST R2-M RoboHEARD source screen:** The official challenge
+page describes a real robot-centered multi-speaker AVSR task with multi-channel
+audio, multi-view cameras, 100+ conversations, and speaker/environment-disjoint
+30h/10h/20h train/dev/test partitions. Data are stated to be CC BY-NC-SA 4.0;
+the development release is scheduled for 2026-10-30 and participant dataset/model
+declaration is required. Exact group IDs, payload size, schema, consent details,
+and both-input necessity are not yet verified; this is not yet a supplied-option
+Decision task. Keep `REVIEW_NOT_ADMITTED`; no registration, agreement, data or
+GPU work occurred. Three identical 40,771-byte metadata-page fetches averaged
+0.174 s, which is not a dataset transfer estimate. C: free space remained about
+0.372 GiB and the local GPU was occupied. See the [pinned observation and gate
+analysis](docs/pretrained_reuse/R2_ROBOHEARD_SOURCE_SCREEN_20261029.md).
+
 **2026-10-29 10:31 JST R2-M Humanola source screen:** Pinned public HF tree
 metadata for `humanola-inc/egocentric-sample` reports 18.42 GB across 99 files
 (largest single video 818.9 MB). The card reports nine synchronized video/hand-
