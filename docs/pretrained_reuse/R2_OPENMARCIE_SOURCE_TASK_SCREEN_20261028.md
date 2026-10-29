@@ -94,6 +94,14 @@ necessary for our product task.
 The split and modality statements refer to the [CVPR paper](https://openaccess.thecvf.com/content/CVPR2026/papers/Bello_OpenMarcie_Dataset_for_Multimodal_Action_Recognition_in_Industrial_Environments_CVPR_2026_paper.pdf)
 and its [official supplement](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Bello_OpenMarcie_Dataset_for_CVPR_2026_supplemental.pdf).
 
+The [official code repository](https://github.com/HymalaiDFKI/OpenMarcie) was
+rechecked at commit `fd72cf1ff11961520aafebc1f52587fd5bc2e74f`, tree
+`a73e02927d5e1cbfad17b326e59e761b7cceeedd` (22 blobs, complete recursive
+tree). Its `LICENSE` is Apache-2.0, which applies to code. The pinned tree has
+no path containing `split`, `partition`, or `fold`, and the 5,151-byte code
+README has no split/participant description. Thus the paper's split statement
+cannot be reconstructed from this pinned repository snapshot alone.
+
 The three repeated small-page retrievals for OpenMarcieA_Main were 12,295
 bytes each and took 0.57, 0.31, and 0.38 seconds (mean 0.42 seconds). This
 measures only public metadata-page response time, not dataset download
