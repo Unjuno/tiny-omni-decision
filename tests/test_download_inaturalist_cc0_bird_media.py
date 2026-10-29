@@ -1,7 +1,6 @@
 import hashlib
 
 import pytest
-from PIL import Image
 
 from scripts.download_inaturalist_cc0_bird_media import (
     _decode_and_strip,
@@ -59,6 +58,7 @@ def test_split_gate_rejects_shared_observer_photo_or_missing_cc0():
 
 
 def test_image_normalization_applies_orientation_and_strips_exif(tmp_path):
+    Image = pytest.importorskip("PIL.Image")
     source = tmp_path / "source.jpg"
     image = Image.new("RGB", (80, 40), color=(10, 20, 30))
     exif = Image.Exif()
@@ -78,3 +78,5 @@ def test_image_normalization_applies_orientation_and_strips_exif(tmp_path):
             f"RGB:{saved.width}x{saved.height}:".encode() + saved.tobytes()
         ).hexdigest()
     assert digest == metadata["normalized_rgb_sha256"]
+
+

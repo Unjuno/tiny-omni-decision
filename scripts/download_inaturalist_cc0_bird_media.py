@@ -16,7 +16,6 @@ from urllib.parse import urljoin, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 import numpy as np
-from PIL import Image, ImageOps
 
 ALLOWED_HOST = "inaturalist-open-data.s3.amazonaws.com"
 USER_AGENT = "tiny-omni-decision-research-preflight/1.0"
@@ -88,7 +87,8 @@ def validate_splits(train: list[dict[str, Any]], validation: list[dict[str, Any]
             raise ValueError(f"train/validation {key} overlap")
 
 
-def _perceptual_hash(image: Image.Image) -> str:
+def _perceptual_hash(image: Any) -> str:
+    from PIL import Image, ImageOps
     positions = np.arange(32, dtype=np.float64)
     frequencies = positions[:, None]
     matrix = np.cos(np.pi * (2 * positions[None, :] + 1) * frequencies / 64)
@@ -106,7 +106,8 @@ def _perceptual_hash(image: Image.Image) -> str:
     return f"{value:016x}"
 
 
-def _decode_and_strip(path: Path) -> tuple[Image.Image, dict[str, Any]]:
+def _decode_and_strip(path: Path) -> tuple[Any, dict[str, Any]]:
+    from PIL import Image, ImageOps
     with Image.open(path) as image:
         image.verify()
     with Image.open(path) as image:
@@ -291,3 +292,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+
+
