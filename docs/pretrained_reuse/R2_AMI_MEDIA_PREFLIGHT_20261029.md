@@ -45,6 +45,19 @@ partition. It does not address the earlier visibility failures or provide a
 new quality comparison. The existing SA/SB participant-channel cohort is the
 stronger task candidate if its remaining label gates can be resolved.
 
+A follow-up listing check found eight individual low-bitrate RM audio tracks
+for ES2002a (`Headset-0..3` and `Lapel-0..3`); the official directory also
+lists their WAV counterparts. `ES2002a.Lapel-0.rm` returned HTTP 200 with
+2,660,658 bytes and ETag `"289932-3f389de7dfdc0"`. A direct CPU stream smoke
+decoded its first SIPR frame (16 kHz mono, 160 samples; in-memory frame SHA-256
+`adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d`). No full
+track or feature cache was saved. The official `meetings.xml` maps ES2002a
+speaker channel 0 to MEE006 / Closeup1, but the correspondence between these
+individual track suffixes and annotation channels has not yet been verified;
+do not treat `Lapel-0` as a validated speaker-isolated label stream. This
+improves source availability evidence only and does not change
+`REVIEW_NOT_ADMITTED` or close any task/label/validation gate.
+
 ## Source and exact media inventory
 
 The source remains the official AMI mirror and its scenario-only split. The
@@ -76,14 +89,18 @@ all four video files returned successful `HEAD` responses.
 ## Actual decoder smoke
 
 Using Python 3.11 and PyAV 18.1.0, one frame was decoded from the ES2002a train
-Room-Lapel audio and one from its Closeup1 video by reading the official HTTP
-URLs directly. No media files or feature caches were written, and this was a
-CPU-only process.
+Room-Lapel audio, one from `Lapel-0`, and one from its Closeup1 video by reading
+the official HTTP URLs directly. No media files or feature caches were written,
+and this was a CPU-only process.
 
 - Video: RV40, 360 × 284, 15 fps; decoded RGB frame SHA-256
   `a3be406da1cee3ffd175f1a20c2c60f9057cc33e4bf16fe144dd71952d86159f`.
 - Audio: SIPR, 16 kHz, mono; decoded first-frame SHA-256
   `5f48b7357acaeef9046a423c6bdebbf3ea62e643a39941bdcebc49626a7e8210`.
+- Individual-track availability probe: `Lapel-0` is also SIPR, 16 kHz, mono;
+  first frame has 160 samples and SHA-256
+  `adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d`. Track
+  suffix-to-speaker mapping remains unverified.
 - The decoded-frame hashes identify those in-memory frames only; they are not
   hashes of the source files.
 - For ES2002a Closeup1, the video stream starts at 0 and reports 1,230.321 s.

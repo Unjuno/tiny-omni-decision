@@ -37,6 +37,13 @@ person; it did not verify speaking identity or timing. AMI remains blocked on
 visible-speaker label validity and adequate independent validation, not on
 another media-size probe.
 
+**2026-10-29 R2-M AMI individual audio path follow-up:** The official ES2002a
+listing includes individual `Headset-0..3` and `Lapel-0..3` low-bitrate tracks.
+One `Lapel-0` SIPR frame decoded on CPU directly from the official URL; no full
+track was saved. Its track-suffix-to-speaker mapping is still unverified, so
+this expands source availability only. AMI remains `REVIEW_NOT_ADMITTED`; the
+speaker-label and independent-validation gates above remain open.
+
 **2026-10-29 R2-M AMI candidate screen:** Official AMI metadata supports a
 plausible synchronized active-speaker decision task and states CC BY 4.0 for
 released signals/transcripts/some annotations. An official-metadata comparison
