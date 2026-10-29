@@ -3743,3 +3743,10 @@ simulated modalities, but its data link lacks an immutable snapshot, hashes,
 and a frozen task/split schema. Neither source is admitted for joint fitting;
 no media was downloaded. See the
 [source screen](docs/pretrained_reuse/R2_MM_FIT_AND_MMW_SOURCE_SCREEN_20261030.md).
+
+**2026-10-30 iNaturalist pages 41–50 follow-up:** The metadata-only query
+returned 2,712 CC0 records, but after excluding every observer/source identity
+in the prior cohorts only 27 train and 14 validation records remained, from
+Mallard and Canada Goose alone. This fails the frozen 700/200 and all-eight-
+taxa coverage gate; no media or model run followed. See the
+[coverage report](docs/pretrained_reuse/R2_INATURALIST_PAGES_41_50_COVERAGE_20261030.md).
