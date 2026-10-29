@@ -2,10 +2,9 @@
 
 ## Scope and outcome
 
-This is a raw-media and synchronized-window pipeline smoke for the frozen
-unseen-session plan. It is **not** a model-quality evaluation: no encoder
-features were extracted for this smoke, no model was fit, and no sealed-audit
-media or labels were accessed. The fixed task remains four-choice matching of
+This is a raw-media, synchronized-window, and frozen-feature pipeline smoke for
+the frozen unseen-session plan. It is **not** a model-quality evaluation: no
+readout was fit and no sealed-audit media or labels were accessed. The fixed task remains four-choice matching of
 an 8-frame, two-second wrist-video window to its timestamp-matched 6-channel
 IMU window, with three same-recording distractors at least three seconds away.
 
@@ -34,6 +33,26 @@ Plan manifest:
 - `development-samples.jsonl` SHA-256:
   `d83f43c9bfc476025a630afb286b4341ecd0c4dfbe5e4ca2e27d3cc82333dad2`
 
+## Frozen feature extraction
+
+The same 35 samples passed through the already-pinned encoders in CPU-only
+processes. Their local checkpoint SHA-256 values and source commits matched the
+existing extraction scripts:
+
+| Encoder | Checkpoint SHA-256 | Source commit | Device | Output | Elapsed | Feature SHA-256 |
+|---|---|---|---|---|---:|---|
+| VideoPrism-B | `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29` | `c6eba0ece3dd49a24ffc44582966997a4a59f1d8` | JAX CPU | `[35, 8, 768]` | 95.09 s | `a77a315fe6f086a1db5d36cf0f65fe9ab48f9114d21f0f0a433350d4b3a284dc` |
+| MOMENT-1-small | `785e6c6f57ffa7cac7e2a1fff6369618d49f2f441563ddea76c866231e5aa877` | `38f7310ad594100747ca2a8357e9c7ca7d323e0e` | PyTorch CPU | `[35, 6, 16, 512]` | 1.79 s | `f5239aa4857a7d972a905c76ef5fe7446da0ebaccff35b5500448e68dfc22970` |
+
+Both arrays contain finite values. Video features are keyed by the 35 unique
+sample IDs; sensor features cover dense window indices 0–34, and every
+four-option example refers to four in-range candidate windows with a valid
+target index. Train/development groups remain disjoint. The VideoPrism process
+reported JAX 0.6.2 and `TFRT_CPU_0`; MOMENT reported PyTorch 2.6.0+cu124 and
+Transformers 5.6.2 while executing on CPU. The expected upstream warning that
+MOMENT's reconstruction head is pretrained was emitted. Feature extraction
+does not establish task quality or sensor suitability.
+
 External raw artifacts are under
 `C:\CodexArtifacts\egoviz-unseen-group-temporal-smoke-20261030-attempt-01\`
 and the timing repeat under
@@ -56,12 +75,14 @@ raw transfer is approximately 10 minutes. Allow **10–12 minutes** for transfer
 per-file requests, and hash/receipt overhead; this is an estimate from only two
 unique files and two repeated transfers, not a service guarantee.
 
-At the end of this smoke, C: had 4.27 GiB free and the RTX 3080 Laptop had
-419 MiB free VRAM while the separate Orbitune training process remained active.
-No GPU work was started. Bulk media acquisition and feature extraction remain
-gated on safe disk space and a verified local checkpoint/runtime path. The
-prior CPU VideoPrism run took about 530 seconds for 216 windows, but that
-historical timing is not used as a promise for this corpus.
+At the end of the transfer stage C: had 4.27 GiB free. After CPU feature
+extraction, C: reported 2.25 GiB free; the system pagefile showed 3.48 GiB
+current use and a 4.11 GiB peak. The timing correlation does not prove that
+pagefile growth caused the disk change. RTX 3080 remained occupied by the
+separate Orbitune process at 100% utilization and 419 MiB free; no GPU work was
+started. Bulk media acquisition remains gated on safe disk space. The prior
+CPU VideoPrism run took about 530 seconds for 216 windows; this smoke took 95
+seconds for 35 samples, including decode and JAX initialization.
 
 ## Next gate
 

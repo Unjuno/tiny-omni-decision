@@ -2,9 +2,9 @@
 
 ## Status
 
-**Metadata split is frozen. A two-session train/development raw-data smoke has
-since completed; bulk acquisition, new feature extraction, model fitting and
-sealed evaluation have not started.** The smoke is documented separately in
+**Metadata split is frozen. A two-session raw-data and 35-window frozen-feature
+smoke has since completed; bulk acquisition, full-corpus feature extraction,
+model fitting and sealed evaluation have not started.** The smoke is documented separately in
 [`R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_SMOKE_20261029.md`](R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_SMOKE_20261029.md).
 This is a follow-up to the existing
 EgoViz video/IMU timestamp-correspondence pilot. It excludes all 16 publisher
