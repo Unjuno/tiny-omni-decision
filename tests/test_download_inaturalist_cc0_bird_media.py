@@ -78,5 +78,3 @@ def test_image_normalization_applies_orientation_and_strips_exif(tmp_path):
             f"RGB:{saved.width}x{saved.height}:".encode() + saved.tobytes()
         ).hexdigest()
     assert digest == metadata["normalized_rgb_sha256"]
-
-
