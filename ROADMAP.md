@@ -4,8 +4,10 @@
 page describes a real robot-centered multi-speaker AVSR task with multi-channel
 audio, multi-view cameras, 100+ conversations, and speaker/environment-disjoint
 30h/10h/20h train/dev/test partitions. Data are stated to be CC BY-NC-SA 4.0;
-the development release is scheduled for 2026-10-30 and participant dataset/model
-declaration is required. Exact group IDs, payload size, schema, consent details,
+the development release is scheduled for 2026-10-30, and a Google Form
+registration is required to receive data access by email; participant
+dataset/model declaration is due by November 30. No form was submitted. Exact
+group IDs, payload size, schema, consent details,
 and both-input necessity are not yet verified; this is not yet a supplied-option
 Decision task. Keep `REVIEW_NOT_ADMITTED`; no registration, agreement, data or
 GPU work occurred. Three identical 40,771-byte metadata-page fetches averaged

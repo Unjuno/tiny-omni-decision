@@ -33,12 +33,14 @@ and environment-disjoint partitions. Inputs are multi-channel audio (2- or
 identify who spoke, when, and what they said; the offline and online tracks are
 scored by time-constrained minimum-permutation character error rate (tcpCER).
 
-The page states CC BY-NC-SA 4.0 for the data. It also says that participants
-must register and declare datasets/checkpoints to organizers by 2026-11-30;
-the training-data links were announced for 2026-10-23 and the development data
-and baseline for 2026-10-30. No registration was submitted and no access terms
-were accepted. The page reports the split policy but does not publish exact
-recording, speaker, or environment IDs in the inspected page.
+The page states CC BY-NC-SA 4.0 for the data. It also says participants must
+register through a Google Form; successful registration is followed by an email
+containing dataset access. Participants must declare datasets/checkpoints to the
+organizers by 2026-11-30. The training-data release is dated 2026-10-23 and the
+development data/baseline release 2026-10-30, but no direct download URL is
+exposed on the inspected public page. No registration was submitted and no
+access terms were accepted. The page reports the split policy but does not
+publish exact recording, speaker, or environment IDs in the inspected page.
 
 Primary source: [RoboHEARD 2027 official challenge page](https://roboheard.github.io/)
 (live page observed 2026-10-29; captured HTML SHA-256 above).
