@@ -2893,3 +2893,14 @@ a narrow development classification probe, not an open-vocabulary or multimodal
 Decision result, and the cohort has no sealed audit. See the
 [`metadata freeze`](docs/pretrained_reuse/R2_INATURALIST_CC0_METADATA_FREEZE_20261026.md)
 and [measured VideoPrism readout result](docs/pretrained_reuse/R2_INATURALIST_VIDEOPRISM_READOUT_20261026.md).
+
+### iNaturalist CC0 expansion coverage gate (2026-10-29)
+
+A metadata-only query of 2,000 recent observations per taxon returned 16,000
+rows. After excluding previously exposed observer, observation, and photo
+identities, only 430 new train and 176 new validation records remained; the
+predeclared 700/200 minimum failed, and Northern Cardinal had only 16 new train
+records. No media was downloaded and no expanded-data fit was run. The 2026-10-26
+cohort and checkpoints remain untouched. See the
+[`expansion metadata screen`](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_METADATA_20261029.md)
+for per-taxon counts, hashes, and limits.
