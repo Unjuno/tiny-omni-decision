@@ -50,13 +50,17 @@ for ES2002a (`Headset-0..3` and `Lapel-0..3`); the official directory also
 lists their WAV counterparts. `ES2002a.Lapel-0.rm` returned HTTP 200 with
 2,660,658 bytes and ETag `"289932-3f389de7dfdc0"`. A direct CPU stream smoke
 decoded its first SIPR frame (16 kHz mono, 160 samples; in-memory frame SHA-256
-`adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d`). No full
-track or feature cache was saved. The official `meetings.xml` maps ES2002a
-speaker channel 0 to MEE006 / Closeup1, but the correspondence between these
-individual track suffixes and annotation channels has not yet been verified;
-do not treat `Lapel-0` as a validated speaker-isolated label stream. This
-improves source availability evidence only and does not change
-`REVIEW_NOT_ADMITTED` or close any task/label/validation gate.
+`adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d`). The
+official [signal description](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
+states that the individual audio files are per-channel and its ES2002a table
+maps channel 0 to MEE006 / Closeup1. The official
+[data-problems table](https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml)
+notes that this participant's headset was worn incorrectly but its lapel
+recording is okay. Thus `Lapel-0` is the appropriate channel-matched source
+candidate; the speaker-turn annotation and temporal AV alignment still need
+validation. No full track or feature cache was saved. This improves source
+availability evidence only and does not change `REVIEW_NOT_ADMITTED` or close
+the task/label/validation gates.
 
 ## Source and exact media inventory
 
@@ -99,8 +103,9 @@ and this was a CPU-only process.
   `5f48b7357acaeef9046a423c6bdebbf3ea62e643a39941bdcebc49626a7e8210`.
 - Individual-track availability probe: `Lapel-0` is also SIPR, 16 kHz, mono;
   first frame has 160 samples and SHA-256
-  `adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d`. Track
-  suffix-to-speaker mapping remains unverified.
+  `adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d`.
+  Official per-channel naming/mapping makes it channel 0 (MEE006 / Closeup1);
+  its turn labels and timestamp alignment remain unverified.
 - The decoded-frame hashes identify those in-memory frames only; they are not
   hashes of the source files.
 - For ES2002a Closeup1, the video stream starts at 0 and reports 1,230.321 s.

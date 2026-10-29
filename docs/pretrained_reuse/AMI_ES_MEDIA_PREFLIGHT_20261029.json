@@ -61,7 +61,7 @@
       "decoder_smoke": {
         "video": {"codec": "rv40", "width": 360, "height": 284, "fps": 15, "duration_seconds": 1230.321, "start_seconds": 0, "decoded_frame_sha256": "a3be406da1cee3ffd175f1a20c2c60f9057cc33e4bf16fe144dd71952d86159f"},
         "audio": {"codec": "sipr", "sample_rate_hz": 16000, "channels": 1, "duration_seconds": 1272.96, "start_seconds": 0, "decoded_frame_sha256": "5f48b7357acaeef9046a423c6bdebbf3ea62e643a39941bdcebc49626a7e8210"},
-        "individual_audio_track_probe": {"path": "audio/ES2002a.Lapel-0.rm", "http_status": 200, "content_length_bytes": 2660658, "etag": "\"289932-3f389de7dfdc0\"", "codec": "sipr", "sample_rate_hz": 16000, "channels": 1, "first_frame_samples": 160, "first_frame_sha256": "adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d", "full_media_saved": false, "channel_mapping_verified": false},
+        "individual_audio_track_probe": {"path": "audio/ES2002a.Lapel-0.rm", "http_status": 200, "content_length_bytes": 2660658, "etag": "\"289932-3f389de7dfdc0\"", "codec": "sipr", "sample_rate_hz": 16000, "channels": 1, "first_frame_samples": 160, "first_frame_sha256": "adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d", "full_media_saved": false, "channel_mapping_verified": true, "mapping": "official per-channel naming plus ES2002a meetings.xml/signal table: channel 0 -> MEE006 / Closeup1", "known_issue": "official data-problems table reports MEE006's headset mic was worn incorrectly; lapel mic recording is okay", "turn_label_and_temporal_alignment_verified": false},
         "all_four_video_durations_seconds": [1230.321, 1248.161, 1248.641, 1248.4]
       }
     },
