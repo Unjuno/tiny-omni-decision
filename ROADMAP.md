@@ -3724,3 +3724,22 @@ observer, observation, and photo identities left 430 train and 176 validation
 records. The predeclared 700/200 minimum failed, including only 16 new Northern
 Cardinal training records. No media or training run followed. See the
 [frozen expansion screen](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_METADATA_20261029.md).
+
+**2026-10-29 iNaturalist fresh-observer readout:** A later, separately frozen
+cohort used 1,145 train and 430 previously unscored validation photos from
+eight CC0 bird taxa, with observer/observation/photo identity disjointness and
+zero exact or near-duplicate media overlap. The 6,152-parameter frozen-
+VideoPrism readout selected epoch 10 at 74.88% accuracy / 71.90% macro
+accuracy / 1.1258 NLL; it overfit after epoch 10, with train accuracy reaching
+100% while validation NLL and calibration worsened. This is a narrow,
+validation-selected image classification result, not general Decision quality.
+The sealed audit was not accessed. See the
+[protocol and results](docs/pretrained_reuse/R2_INATURALIST_FRESH_VALIDATION_READOUT_20261029.md).
+
+**2026-10-30 R2-M source recheck:** MM-Fit's video record is explicitly
+CC-BY-4.0, but its companion inertial archive has no stated terms on the
+official project page. Multimodal-Wireless states CC BY 4.0 and has synchronized
+simulated modalities, but its data link lacks an immutable snapshot, hashes,
+and a frozen task/split schema. Neither source is admitted for joint fitting;
+no media was downloaded. See the
+[source screen](docs/pretrained_reuse/R2_MM_FIT_AND_MMW_SOURCE_SCREEN_20261030.md).
