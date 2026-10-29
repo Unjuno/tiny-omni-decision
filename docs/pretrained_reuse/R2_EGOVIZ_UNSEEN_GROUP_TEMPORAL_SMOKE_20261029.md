@@ -87,8 +87,10 @@ seconds for 35 samples, including decode and JAX initialization.
 ## Next gate
 
 After disk capacity is confirmed, acquire train/development media with the
-existing hash-checked downloader while preserving a minimum 3 GB free-space
-reserve. Keep sealed media unopened. Reconfirm active GPU resources before any
+existing hash-checked downloader in fixed-plan order. Its split and offset
+options allow selecting one plan row at a time without modifying the frozen
+manifest. Preserve a minimum 3 GB free-space reserve. Keep sealed media
+unopened. Reconfirm active GPU resources before any
 GPU task; CPU-only frozen feature extraction is preferred if the pinned
 VideoPrism and MOMENT weights plus their exact local runtimes are available.
 Only then run the preregistered fixed scorer and controls. Do not use the

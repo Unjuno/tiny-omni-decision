@@ -58,6 +58,19 @@ def test_selects_only_train_and_development_and_respects_limit() -> None:
     ]
 
 
+def test_offset_selects_next_stable_row_in_each_split() -> None:
+    rows = select_media_rows(_plan(), limit_per_split=1, offset_per_split=1)
+
+    assert [(row["split"], row["chunk_id"]) for row in rows] == [
+        ("train", "t2"),
+        ("development", "d2"),
+    ]
+    train_only = select_media_rows(
+        _plan(), splits=("train",), limit_per_split=1, offset_per_split=1
+    )
+    assert [(row["split"], row["chunk_id"]) for row in train_only] == [("train", "t2")]
+
+
 def test_rejects_sealed_audit_and_invalid_split_names() -> None:
     with pytest.raises(ValueError, match="sealed_audit cannot be downloaded"):
         select_media_rows(_plan(), splits=("train", "sealed_audit"))
@@ -72,3 +85,7 @@ def test_rejects_overlap_and_invalid_limits() -> None:
         select_media_rows(plan, limit_per_split=1)
     with pytest.raises(ValueError, match="positive"):
         select_media_rows(_plan(), limit_per_split=0)
+    with pytest.raises(ValueError, match="nonnegative"):
+        select_media_rows(_plan(), offset_per_split=-1)
+    with pytest.raises(ValueError, match="no media rows"):
+        select_media_rows(_plan(), offset_per_split=3)

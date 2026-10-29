@@ -33,6 +33,7 @@ def select_media_rows(
     *,
     splits: tuple[str, ...] = ALLOWED_SPLITS,
     limit_per_split: int | None = None,
+    offset_per_split: int = 0,
 ) -> list[dict[str, Any]]:
     if plan.get("format") != "egoviz-unseen-session-temporal-correspondence-plan-v1":
         raise ValueError("unsupported EgoViz group plan format")
@@ -44,12 +45,15 @@ def select_media_rows(
         raise ValueError("split list contains duplicates")
     if limit_per_split is not None and limit_per_split <= 0:
         raise ValueError("limit_per_split must be positive")
+    if offset_per_split < 0:
+        raise ValueError("offset_per_split must be nonnegative")
 
     result: list[dict[str, Any]] = []
     groups: set[str] = set()
     for split in splits:
         rows = plan["splits"][split]
-        chosen = rows if limit_per_split is None else rows[:limit_per_split]
+        remaining = rows[offset_per_split:]
+        chosen = remaining if limit_per_split is None else remaining[:limit_per_split]
         for original in chosen:
             row = dict(original)
             row["split"] = split
@@ -79,6 +83,7 @@ def download(
     *,
     splits: tuple[str, ...] = ALLOWED_SPLITS,
     limit_per_split: int | None = None,
+    offset_per_split: int = 0,
     max_total_bytes: int = 5_000_000_000,
     reserve_bytes: int = DEFAULT_RESERVE_BYTES,
 ) -> dict[str, Any]:
@@ -89,7 +94,12 @@ def download(
     if max_total_bytes <= 0 or reserve_bytes < 0:
         raise ValueError("byte limits must be positive and reserve nonnegative")
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    rows = select_media_rows(plan, splits=splits, limit_per_split=limit_per_split)
+    rows = select_media_rows(
+        plan,
+        splits=splits,
+        limit_per_split=limit_per_split,
+        offset_per_split=offset_per_split,
+    )
     total_bytes = sum(int(row["expected_bytes"]) for row in rows)
     if total_bytes > max_total_bytes:
         raise ValueError(f"selection requires {total_bytes} bytes, over max_total_bytes")
@@ -108,6 +118,7 @@ def download(
         "plan_sha256": sha256_file(plan_path),
         "splits": list(splits),
         "limit_per_split": limit_per_split,
+        "offset_per_split": offset_per_split,
         "expected_files": len(rows),
         "expected_bytes": total_bytes,
         "sealed_audit_downloaded": False,
@@ -205,7 +216,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--splits", nargs="+", choices=ALLOWED_SPLITS, default=list(ALLOWED_SPLITS))
     parser.add_argument("--limit-per-split", type=int)
+    parser.add_argument("--offset-per-split", type=int, default=0)
     parser.add_argument("--max-total-bytes", type=int, default=5_000_000_000)
     parser.add_argument("--reserve-bytes", type=int, default=DEFAULT_RESERVE_BYTES)
     args = parser.parse_args()
@@ -214,7 +227,9 @@ def main() -> None:
             download(
                 args.plan,
                 args.output,
+                splits=tuple(args.splits),
                 limit_per_split=args.limit_per_split,
+                offset_per_split=args.offset_per_split,
                 max_total_bytes=args.max_total_bytes,
                 reserve_bytes=args.reserve_bytes,
             ),
