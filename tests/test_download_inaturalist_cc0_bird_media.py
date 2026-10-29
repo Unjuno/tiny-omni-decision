@@ -29,6 +29,8 @@ def test_medium_url_is_derived_only_for_matching_https_photo_identity():
     assert medium_url(row).endswith("/photos/1234/medium.jpg")
     row["photo_url"] = "https://inaturalist-open-data.s3.amazonaws.com/photos/1234/square.png"
     assert medium_url(row).endswith("/photos/1234/medium.png")
+    row["photo_url"] = "https://inaturalist-open-data.s3.amazonaws.com/photos/1234/square.JPG"
+    assert medium_url(row).endswith("/photos/1234/medium.JPG")
     row["photo_url"] = "https://example.test/photos/1234/square.jpg"
     with pytest.raises(ValueError, match="expected CC0"):
         medium_url(row)

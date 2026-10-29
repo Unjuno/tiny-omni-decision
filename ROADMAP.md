@@ -1,3 +1,16 @@
+**2026-10-29 21:05 JST R2 fresh-observer iNaturalist readout:** After a
+metadata split audit found that the pages 1–10 validation cohort had already
+been used by the observer-transfer diagnostic, those 176 exposed identities
+were excluded. One frozen seed-17 CPU readout used 1,145 train rows and 430
+previously unused observer groups as validation. On those same validation IDs,
+the expanded readout scored 74.88% accuracy / 71.90% macro accuracy / 1.1258
+NLL, versus 68.84% / 62.91% / 1.3501 for the existing readout. The new
+checkpoint was selected on this validation, so this is selection-affected
+development evidence, not a blind estimate. Train accuracy reached 100% while
+validation NLL worsened after epoch 10; overfitting remains. This narrow
+eight-taxon image probe does not meet the 95–98% multimodal Decision goal. See
+the [fresh-validation report](docs/pretrained_reuse/R2_INATURALIST_FRESH_VALIDATION_READOUT_20261029.md).
+
 **2026-10-29 16:43 JST R2 iNaturalist image readout:** A single seed-17 CPU
 linear probe (6,152 trainable parameters; 921 train / 446 observer-disjoint
 validation records) selected epoch 4 by validation NLL. Validation accuracy was

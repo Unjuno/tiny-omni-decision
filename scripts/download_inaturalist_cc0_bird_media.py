@@ -21,7 +21,9 @@ ALLOWED_HOST = "inaturalist-open-data.s3.amazonaws.com"
 USER_AGENT = "tiny-omni-decision-research-preflight/1.0"
 MAX_MEDIA_BYTES = 8 * 1024 * 1024
 MAX_IMAGE_PIXELS = 20_000_000
-PHOTO_PATH = re.compile(r"^/photos/(\d+)/square\.(?P<extension>jpg|jpeg|png)$")
+PHOTO_PATH = re.compile(
+    r"^/photos/(\d+)/square\.(?P<extension>jpg|jpeg|png)$", re.IGNORECASE
+)
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -133,7 +135,9 @@ def download_one(row: dict[str, Any], split_dir: Path) -> dict[str, Any]:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite existing photo {output.name}")
     opener = build_opener(_RedirectGuard)
-    expected_media_type = "image/png" if url.endswith(".png") else "image/jpeg"
+    expected_media_type = (
+        "image/png" if urlparse(url).path.lower().endswith(".png") else "image/jpeg"
+    )
     request = Request(url, headers={"User-Agent": USER_AGENT, "Accept": expected_media_type})
     temporary: Path | None = None
     try:
