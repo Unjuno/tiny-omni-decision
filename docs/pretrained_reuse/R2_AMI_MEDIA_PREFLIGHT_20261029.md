@@ -78,6 +78,21 @@ labels, model predictions, and model-quality metrics were not opened or
 produced. No full track or feature cache was persisted. AMI remains
 `REVIEW_NOT_ADMITTED`.
 
+The retained development-camera review at
+`C:\CodexArtifacts\pretrained-reuse-r2\ami-av-development-visual-review-attempt-03`
+was reconciled against PR #19's pinned preflight windows. Its 111 sample IDs
+exactly match the candidate-window set by meeting, agent, index, and interval;
+all 333 referenced frames are present and decode at 352×288, and all 12
+contact sheets match their recorded hashes.
+The review labels 69 `clear`, 6 `limited`, 2 `no_clear_face`, and 34
+`no_clear_person`. Thus 42/111 (37.8%) do not show a clear face in the selected
+target-camera frames, including 34/111 (30.6%) with no discernible person
+there. This is a single visual pass over three sparse frames per interval; it
+does not identify who spoke, measure lip-sync, or show that other camera views
+lack the speaker. Preserve all 111 examples and their labels; do not filter on
+this review. This is development-only evidence; no SC/test or sealed-evaluation
+material was opened.
+
 ## Source and exact media inventory
 
 The source remains the official AMI mirror and its scenario-only split. The
@@ -181,9 +196,11 @@ features, or model outputs. Do not fetch it while the established 2 GiB free
 space reserve is unmet.
 
 Before admission, audit the low-energy ES2011a channel-0 sample and full
-validation-cohort turn/timestamp alignment and visible-speaker validity. Then
-establish enough independent meeting groups and data storage for a predeclared
-task with audio-only,
-video-only, joint, and mismatched-input controls. The exposed ES2014 group is
+validation-cohort turn/audio alignment, speaker identity, and AV sync. The
+existing single-pass visibility review shows the target camera is not clear in
+42/111 development examples; preserve them and verify task validity under
+these conditions. Then establish enough independent meeting groups and data
+storage for a predeclared task with audio-only, video-only, joint, and
+mismatched-input controls. The exposed ES2014 group is
 not eligible for its final locked evaluation. No training, model-quality
 evaluation, sealed-audit access, or GPU job was performed here.

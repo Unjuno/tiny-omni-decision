@@ -60,6 +60,16 @@ This resolves the validation annotation-source lookup, not turn quality,
 visible-speaker validity, synchronization, both-input necessity, or the small
 number of independent groups. Evaluation labels remained unopened.
 
+**2026-10-29 R2-M AMI development visibility reconciliation:** A retained
+single-pass review was hash-checked and its 111 IDs exactly matched the pinned
+PR #19 development candidate-window set; all 333 sampled frames and 12 contact
+sheets validated. It found 69 clear target-camera faces, 6 limited, 2 without a
+clear face, and 34 with no discernible person in the selected camera. This
+review does not verify speaker identity, synchronization, or other camera
+views. Keep every example; no filtering or model evaluation occurred. The
+visibility and AV-quality gates remain open. Details and hashes are in the
+[AMI preflight manifest](docs/pretrained_reuse/AMI_ES_MEDIA_PREFLIGHT_20261029.json).
+
 **2026-10-29 09:47 JST R0 checkpoint confirmation:** Orbitune PID 22136
 remained live at step 514,400 / 12,270,542,841 events. Its newly written
 checkpoint at 09:45:28 was CPU-verified as step 514,381 / 12,270,020,976 events,
