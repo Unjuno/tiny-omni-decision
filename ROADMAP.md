@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 10:31 JST R2-M Humanola source screen:** Pinned public HF tree
+metadata for `humanola-inc/egocentric-sample` reports 18.42 GB across 99 files
+(largest single video 818.9 MB). The card reports nine synchronized video/hand-
+pose/IMU episodes but no participant-grouped split; the publisher's catalog
+describes per-episode consent without an exposed manifest tying it to this exact
+revision. C: had about 0.37 GiB free; no payload or terms were accessed. Keep
+`REVIEW_NOT_ADMITTED` for fitting. See
+[`source screen`](docs/pretrained_reuse/R2_HUMANOLA_EGOCENTRIC_SAMPLE_SCREEN_20261029.md).
+
 **2026-10-29 10:25 JST R2-M interface verification:** CPU-only focused tests
 for the existing text-optional `ObservationBatch`, temporal/alignment contract,
 masked fusion, and AV interaction pass: 53 passed. Mark the versioned observation
