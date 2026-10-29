@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 R2-M MUSIC-AVQA source screen:** The official task includes audio-
+visual association and temporal questions, but its pinned train/validation
+annotations share 3,808 of 3,815 validation video IDs. The official page states
+CC BY-NC 4.0 and describes YouTube-origin clips; clip-level rights, a clean
+group split, supplied-option construction, and both-input necessity remain
+unresolved. Keep `REVIEW_NOT_ADMITTED`; no video media, test annotations, or
+model outputs were accessed. See the [source screen](docs/pretrained_reuse/R2_MUSIC_AVQA_SOURCE_SCREEN_20261029.md).
+
 **2026-10-29 R2 Path A artifact-level verification:** The 2026-10-28 entry
 already records the completed 2,048-update baseline and residual-LSTM runs.
 This read-only follow-up reverified their local receipts, shared validation
