@@ -2631,6 +2631,16 @@ independence, generated-label quality, raw video/IMU synchronization, and
 both-input necessity remain unknown; local storage is below a safe MCAP
 download reserve. See the [metadata-only preflight](docs/pretrained_reuse/R2_EGOVIZ120_GROUP_SPLIT_PREFLIGHT_20261029.md).
 
+**2026-10-29 EgoViz-120 bounded raw MCAP preflight:** After C: space was
+restored, the three smallest MCAPs from three distinct frozen train groups were
+downloaded to an external attempt directory. CRC validation passed; all three
+show exact `/action` to head-camera timestamp matches and nearest head-IMU
+samples within 3.31 ms. This is recorded timestamp agreement only: generated
+label quality, participant independence, and both-input necessity remain
+unresolved, so no model fitting or quality claim is admitted. See the
+[MCAP topic/time report](docs/pretrained_reuse/R2_EGOVIZ120_MCAP_TIME_PREFLIGHT_20261029.md)
+and [machine-readable manifest](manifests/pretrained_reuse/egoviz120-mcap-time-preflight-20261029.json).
+
 **2026-10-29 R2-M Eidon video/IMU match diagnostic:** Frozen VideoPrism and
 quaternion-only features were extracted for 120 train and 24 development
 recordings after applying a contributor/task-group quarantine for malformed

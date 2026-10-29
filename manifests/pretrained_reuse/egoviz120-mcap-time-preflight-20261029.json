@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "dataset_id": "humaidtech/EgoViz-120",
+  "purpose": "Bounded train-only MCAP topic/schema/timestamp preflight; no fitting or quality evaluation",
+  "status": {
+    "execution": "PASS",
+    "fit_admission": "NOT_PASSED",
+    "both_input_required_task_admission": "NOT_PASSED: /action labels are described by their schema as Gemini-predicted from the head-left video stream",
+    "sealed_audit_accessed": false,
+    "payload_values_decoded": false,
+    "video_frames_inspected": false,
+    "model_loaded_or_trained": false
+  },
+  "source": {
+    "dataset_card_revision": "7a84ecd3411b9f219b02f273c438f1ea12d74f52",
+    "license_repository_commit": "9c91b23a66fcaa1fee083b679d5993fdfff9a64e",
+    "license": "CC-BY-4.0",
+    "index_path": "C:/CodexArtifacts/pretrained-reuse-r2/egoviz-source-screen-01/index.parquet",
+    "index_bytes": 870961,
+    "index_sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "split_receipt_sha256": "d2e2869dcce0a7d96cddc7dee639794a7cf253c3f922637ab9c9699cb5e6d7d2",
+    "action_schema_sha256": "6a2038b3d510660b12dc683c2c31182687d0cf5906fc8d7d690f721a86c51806",
+    "action_schema_bytes": 941,
+    "action_schema_provenance": "Schema comment: TAD/Gemini temporal action segmentation predicted from /ego/zed_head/left/image/compressed; message values were not decoded",
+    "selection_rule": "Three smallest MCAPs by indexed mcap_bytes among groups on the frozen seed-17 train side; each group_id distinct"
+  },
+  "environment": {
+    "python": "3.11.9",
+    "reader": "mcap==1.6.0",
+    "zstandard": "0.25.0",
+    "lz4": "4.4.5",
+    "crc_validation": true,
+    "dependency_install_scope": "isolated external attempt directory; no shared environment changes"
+  },
+  "storage": {
+    "c_free_gib_before": 10.20,
+    "c_free_gib_after": 9.77,
+    "total_download_bytes": 460948943,
+    "mean_seconds_per_file": 9.654888766584918,
+    "aggregate_mib_per_second": 15.176945716009529
+  },
+  "artifacts": {
+    "directory": "C:/CodexArtifacts/egoviz-mcap-preflight-20261029-attempt-01",
+    "download_receipt_sha256": "6b52381ebdd3f4fdff3aca7ea9d1eadf57a9d3cef89d662b8d49653c1e997c43",
+    "topic_time_audit_sha256": "29691746e93559f54a512627607d7b790997c2c7012326cdc88cf8c8021abb05"
+  },
+  "files": [
+    {
+      "chunk_id": "c59801fe4172cf9b430cd9232dda3909",
+      "category": "cleaning_restroom",
+      "group_id": "g114",
+      "bytes": 150184348,
+      "download_seconds": 12.585629899986088,
+      "mib_per_second": 11.380197618394664,
+      "sha256": "c86d1d69df71953b0b7fe1d61cfbc919743d1c108a2a0adc30b5c1a449e2e7d4",
+      "topics": 23,
+      "messages": 17565,
+      "action_messages": 449,
+      "head_left_video_messages": 449,
+      "head_imu_messages": 2993,
+      "action_video_exact_timestamp_matches": 449,
+      "action_to_head_imu_nearest_offset_ms": {"median": 1.281, "p95": 2.513, "max": 3.310}
+    },
+    {
+      "chunk_id": "f4b4e1846062bdb8193786209a44e930",
+      "category": "managing_trash",
+      "group_id": "g110",
+      "bytes": 151857236,
+      "download_seconds": 9.526333099929616,
+      "mib_per_second": 15.20231806031563,
+      "sha256": "e5138ac1966ae323d55de4e6c1179ef82f7addff26069e06ee9b6b6c8a21c5fe",
+      "topics": 23,
+      "messages": 17569,
+      "action_messages": 450,
+      "head_left_video_messages": 450,
+      "head_imu_messages": 2992,
+      "action_video_exact_timestamp_matches": 450,
+      "action_to_head_imu_nearest_offset_ms": {"median": 1.331, "p95": 2.471, "max": 3.234}
+    },
+    {
+      "chunk_id": "ad15950002d490a519a26e18052fc1e6",
+      "category": "organizing_items",
+      "group_id": "g174",
+      "bytes": 158907359,
+      "download_seconds": 6.85270329983905,
+      "mib_per_second": 22.114756809886536,
+      "sha256": "aba7edeef1f0f12b35f143ae10c68ff2648a0f85c78c08d2a5ce0fb9db8313bf",
+      "topics": 23,
+      "messages": 17568,
+      "action_messages": 449,
+      "head_left_video_messages": 450,
+      "head_imu_messages": 2987,
+      "action_video_exact_timestamp_matches": 449,
+      "action_to_head_imu_nearest_offset_ms": {"median": 1.309, "p95": 2.531, "max": 2.946}
+    }
+  ]
+}
