@@ -1,5 +1,16 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 R2 image transfer artifact recheck:** Independently replayed
+checks over the preserved PR #24 prediction artifact reproduce the metrics on
+all 19,988 official CLEVR-4 100k validation images (79,952 decisions), with
+matching prediction/manifest hashes and normalized ten-option probabilities.
+The fixed readout scores macro Accuracy 87.41%; color/shape are near 99.5%,
+texture 90.28%, and count 60.44%. This is a same-family synthetic image
+transfer check, not general image reasoning or joint fusion. The validation
+is exposed and must not be reused for tuning. PR #24 stays separate and open;
+no source branch, data, or model was modified. See the
+[artifact reconciliation](docs/pretrained_reuse/R2_CLEVR4_100K_ARTIFACT_RECONCILIATION_20261029.md).
+
 **2026-10-29 12:41 JST R0 live checkpoint and cadence recheck:** Orbitune
 PID `22136` remains live with `--steps 0`; this is its separate Aria-MIDI /
 GigaMIDI training job, not a Tiny Omni experiment. The live log reached step
