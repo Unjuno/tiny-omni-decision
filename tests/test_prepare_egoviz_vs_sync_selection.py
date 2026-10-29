@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import hashlib
-import json
-
-import pandas as pd
 
 from scripts import prepare_egoviz_vs_sync_selection as selection
 
 
-def _fixture_rows() -> tuple[pd.DataFrame, set[str], set[str]]:
+def _fixture_records() -> tuple[list[dict[str, object]], set[str], set[str]]:
     groups = [f"group-{index:02}" for index in range(40)]
     ordered = sorted(
         groups,
@@ -16,14 +13,15 @@ def _fixture_rows() -> tuple[pd.DataFrame, set[str], set[str]]:
     )
     development = set(ordered[:8])
     training = set(ordered[8:])
-    categories = selection.CATEGORIES
-    assignment = {group: categories[index // 2] for index, group in enumerate(ordered[:8])}
+    assignment = {
+        group: selection.CATEGORIES[index // 2] for index, group in enumerate(ordered[:8])
+    }
     for index, group in enumerate(ordered[8:]):
-        assignment[group] = categories[index % len(categories)]
+        assignment[group] = selection.CATEGORIES[index % len(selection.CATEGORIES)]
 
-    rows = []
+    records = []
     for number, (group, category) in enumerate(assignment.items()):
-        rows.append(
+        records.append(
             {
                 "category": category,
                 "group_id": group,
@@ -35,47 +33,32 @@ def _fixture_rows() -> tuple[pd.DataFrame, set[str], set[str]]:
                 "n_frames": 450,
             }
         )
-    return pd.DataFrame(rows), training, development
+    return records, training, development
 
 
-def test_selection_is_deterministic_and_group_disjoint(tmp_path, monkeypatch):
-    frame, training, development = _fixture_rows()
-    index_path = tmp_path / "index.parquet"
-    index_path.write_bytes(b"synthetic index")
-    split_path = tmp_path / "split.json"
-    split_path.write_text(
-        json.dumps(
-            {
-                "seed": 17,
-                "index_sha256": "index-hash",
-                "train_group_sha256": sorted(
-                    hashlib.sha256(group.encode()).hexdigest() for group in training
-                ),
-                "development_group_sha256": sorted(
-                    hashlib.sha256(group.encode()).hexdigest() for group in development
-                ),
-            }
+def test_selection_is_deterministic_and_group_disjoint():
+    records, training, development = _fixture_records()
+    split = {
+        "development_group_sha256": sorted(
+            hashlib.sha256(group.encode()).hexdigest() for group in development
         ),
-        encoding="utf-8",
+        "train_group_sha256": sorted(
+            hashlib.sha256(group.encode()).hexdigest() for group in training
+        ),
+    }
+    checked_train, checked_development = selection._verify_split(records_group_ids(records), split)
+    first, first_groups = selection._select_records(records, checked_train, checked_development)
+    second, second_groups = selection._select_records(
+        list(reversed(records)), checked_train, checked_development
     )
-    monkeypatch.setattr(selection, "INDEX_SHA256", "index-hash")
-    monkeypatch.setattr(selection, "SPLIT_SHA256", "split-hash")
-    monkeypatch.setattr(
-        selection, "_sha256", lambda path: "index-hash" if path == index_path else "split-hash"
-    )
-    monkeypatch.setattr(selection.pd, "read_parquet", lambda _path: frame.copy())
-
-    first = selection.select(index_path, split_path)
-    monkeypatch.setattr(
-        selection.pd, "read_parquet", lambda _path: frame.sample(frac=1, random_state=9)
-    )
-    second = selection.select(index_path, split_path)
 
     assert first == second
-    assert first["selection"]["files_total"] == 16
-    assert first["selection"]["train_development_group_overlap"] == 0
-    assert len(first["selection"]["train_groups"]) == 8
-    assert len(first["selection"]["development_groups"]) == 8
-    assert set(first["selection"]["train_groups"]).isdisjoint(
-        first["selection"]["development_groups"]
-    )
+    assert first_groups == second_groups
+    assert len(first) == 16
+    assert len(first_groups["train"]) == 8
+    assert len(first_groups["development"]) == 8
+    assert first_groups["train"].isdisjoint(first_groups["development"])
+
+
+def records_group_ids(records: list[dict[str, object]]) -> list[str]:
+    return [str(record["group_id"]) for record in records]

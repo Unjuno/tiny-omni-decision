@@ -5,10 +5,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
-
-import pandas as pd
 
 INDEX_SHA256 = "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074"
 SPLIT_SHA256 = "d2e2869dcce0a7d96cddc7dee639794a7cf253c3f922637ab9c9699cb5e6d7d2"
@@ -39,9 +38,9 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _verify_split(index: pd.DataFrame, split: dict[str, Any]) -> tuple[set[str], set[str]]:
+def _verify_split(group_ids: Iterable[str], split: dict[str, Any]) -> tuple[set[str], set[str]]:
     groups = sorted(
-        index["group_id"].astype(str).unique(),
+        {str(group) for group in group_ids},
         key=lambda group: hashlib.sha256((SPLIT_PREFIX + group).encode()).hexdigest(),
     )
     development = set(groups[: round(len(groups) * 0.2)])
@@ -57,27 +56,29 @@ def _verify_split(index: pd.DataFrame, split: dict[str, Any]) -> tuple[set[str],
     return training, development
 
 
-def select(index_path: Path, split_path: Path) -> dict[str, Any]:
-    if _sha256(index_path) != INDEX_SHA256 or _sha256(split_path) != SPLIT_SHA256:
-        raise ValueError("source index or split receipt SHA-256 changed")
-    index = pd.read_parquet(index_path)
-    split = json.loads(split_path.read_text(encoding="utf-8"))
-    if split.get("seed") != 17 or split.get("index_sha256") != INDEX_SHA256:
-        raise ValueError("unexpected seed or source index in split receipt")
-    training, development = _verify_split(index, split)
-
+def _select_records(
+    records: list[dict[str, Any]], training: set[str], development: set[str]
+) -> tuple[list[dict[str, Any]], dict[str, set[str]]]:
     selected: list[dict[str, Any]] = []
     split_groups: dict[str, set[str]] = {"train": set(), "development": set()}
     for split_name, allowed_groups in (("train", training), ("development", development)):
         used_groups: set[str] = set()
         for category in CATEGORIES:
-            candidates = index[
-                (index["category"] == category) & index["group_id"].astype(str).isin(allowed_groups)
-            ].sort_values(["mcap_bytes", "chunk_id"])
-            candidates = candidates.drop_duplicates("group_id")
+            candidates = sorted(
+                (
+                    row
+                    for row in records
+                    if row["category"] == category and str(row["group_id"]) in allowed_groups
+                ),
+                key=lambda row: (int(row["mcap_bytes"]), str(row["chunk_id"])),
+            )
+            seen_category_groups: set[str] = set()
             added = 0
-            for row in candidates.to_dict(orient="records"):
+            for row in candidates:
                 group_id = str(row["group_id"])
+                if group_id in seen_category_groups:
+                    continue
+                seen_category_groups.add(group_id)
                 if group_id in used_groups:
                     continue
                 used_groups.add(group_id)
@@ -106,6 +107,20 @@ def select(index_path: Path, split_path: Path) -> dict[str, Any]:
         raise ValueError("selected train and development groups overlap")
     if len(split_groups["train"]) != 8 or len(split_groups["development"]) != 8:
         raise ValueError("expected eight unique groups per split")
+    return selected, split_groups
+
+
+def select(index_path: Path, split_path: Path) -> dict[str, Any]:
+    if _sha256(index_path) != INDEX_SHA256 or _sha256(split_path) != SPLIT_SHA256:
+        raise ValueError("source index or split receipt SHA-256 changed")
+    import pandas as pd
+
+    index = pd.read_parquet(index_path)
+    split = json.loads(split_path.read_text(encoding="utf-8"))
+    if split.get("seed") != 17 or split.get("index_sha256") != INDEX_SHA256:
+        raise ValueError("unexpected seed or source index in split receipt")
+    training, development = _verify_split(index["group_id"].astype(str).unique(), split)
+    selected, split_groups = _select_records(index.to_dict(orient="records"), training, development)
     total_bytes = sum(row["expected_bytes"] for row in selected)
     return {
         "format": "egoviz-vs-sync-selection-v1",
@@ -160,12 +175,11 @@ def select(index_path: Path, split_path: Path) -> dict[str, Any]:
             },
             "target": (
                 "the candidate IMU window whose source-clock interval "
-                "matches the video query interval"
+                "exactly matches the video query interval"
             ),
             "negative_options": (
-                "three same-duration windows from the recording, each at least 0.5 seconds "
-                "from the query interval; "
-                "sampled deterministically from other valid windows"
+                "three same-duration windows from the same recording, non-overlapping the query "
+                "with at least 0.5 seconds of separation; sampled deterministically"
             ),
             "query_windows": (
                 "2.0 seconds, 1.0-second stride; omit queries without three valid negatives"
