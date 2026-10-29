@@ -2,12 +2,12 @@
 
 **2026-10-30 R2 EgoViz per-session validation path:** Added a single-session
 package validator so each future train/development session can be checked
-against the frozen plan before a complete aggregate exists. Both retained smoke
-packages pass against their two-row replay plan; they intentionally fail
-against the 44-session frozen plan because their receipts carry the replay
-plan's different hash. Future acquisitions must be made from the frozen plan
-itself. Six focused tests pass. No media was acquired and no model was trained.
-The existing smoke and its limits are documented in
+against the frozen plan before a complete aggregate exists. The retained `g154`
+train and `g119` development feature packages validate against their original
+full-plan acquisition receipt (14 and 21 samples); their derived-plan package
+receipts alone fail the frozen-plan hash check, as intended. Eight focused
+tests pass. No media was acquired and no model was trained. The existing smoke
+and its limits are documented in
 [the EgoViz report](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_SMOKE_20261029.md).
 
 **2026-10-29 22:54 JST EgoViz video/IMU execution follow-up:** The frozen corpus rebuilt byte-for-byte (106 train / 110 development queries, eight publisher sessions in each split, zero session overlap). Frozen VideoPrism-B extraction ran CPU-only for 529.6 s; frozen MOMENT extraction ran on RTX 3080 for 19.6 s at 163 MiB peak allocated. One 81,920-parameter temporal scorer reached 47.27% development Accuracy / 1.2773 NLL, while training Accuracy reached 98.11%; session-shuffled video fell to 14.55%. This is an overfit timestamp-correspondence diagnostic on eight development sessions with unknown participant independence, not general video/sensor quality. R2-M M-2 remains open. See [updated report](docs/pretrained_reuse/R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md), [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_2254JST.md), and [manifest](manifests/pretrained_reuse/egoviz-vs-sync-task-preflight-20261029.json).

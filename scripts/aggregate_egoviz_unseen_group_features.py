@@ -72,11 +72,12 @@ def _validate_chunk(
     chunk_root: Path,
     *,
     plan_sha256: str,
+    acquisition_manifest: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     chunk_id = str(plan_row["chunk_id"])
     split = str(plan_row["split"])
     group_id = str(plan_row["group_id"])
-    acquisition = _read_json(chunk_root / "acquisition-manifest.json")
+    acquisition = acquisition_manifest or _read_json(chunk_root / "acquisition-manifest.json")
     files = acquisition.get("files")
     if (
         acquisition.get("format") != "egoviz-unseen-group-media-acquisition-v1"
@@ -92,6 +93,7 @@ def _validate_chunk(
         ("chunk_id", chunk_id),
         ("split", split),
         ("group_id", group_id),
+        ("category", plan_row["category"]),
         ("mcap_path", plan_row["mcap_path"]),
         ("expected_bytes", int(plan_row["expected_bytes"])),
         ("bytes", int(plan_row["expected_bytes"])),
@@ -436,7 +438,12 @@ def aggregate(plan_path: Path, runs_root: Path, output: Path) -> dict[str, Any]:
     return payload
 
 
-def validate_session(plan_path: Path, runs_root: Path, chunk_id: str) -> dict[str, Any]:
+def validate_session(
+    plan_path: Path,
+    runs_root: Path,
+    chunk_id: str,
+    acquisition_manifest_path: Path | None = None,
+) -> dict[str, Any]:
     """Validate one planned train/development package without opening other sessions."""
     plan = _read_json(plan_path)
     plan_hash = sha256_file(plan_path)
@@ -447,7 +454,62 @@ def validate_session(plan_path: Path, runs_root: Path, chunk_id: str) -> dict[st
     ]
     if len(selected) != 1:
         raise ValueError(f"chunk is not uniquely present in the train/development plan: {chunk_id}")
-    validated = _validate_chunk(selected[0], runs_root / chunk_id, plan_sha256=plan_hash)
+    receipt_override = None
+    if acquisition_manifest_path is not None:
+        shared_receipt = _read_json(acquisition_manifest_path)
+        expected_rows = {
+            str(row["chunk_id"]): row
+            for row in select_media_rows(plan, splits=("train", "development"))
+        }
+        receipt_files = shared_receipt.get("files")
+        if (
+            shared_receipt.get("format") != "egoviz-unseen-group-media-acquisition-v1"
+            or shared_receipt.get("status") != "ACQUIRED_TRAIN_DEVELOPMENT_ONLY"
+            or shared_receipt.get("plan_sha256") != plan_hash
+            or shared_receipt.get("sealed_audit_downloaded") is not False
+            or not isinstance(receipt_files, list)
+        ):
+            raise ValueError("invalid shared acquisition receipt for frozen plan")
+        seen: set[str] = set()
+        selected_receipts: list[dict[str, Any]] = []
+        for receipt in receipt_files:
+            receipt_id = str(receipt.get("chunk_id", ""))
+            planned = expected_rows.get(receipt_id)
+            if planned is None or receipt_id in seen:
+                raise ValueError(
+                    f"shared receipt contains unknown or duplicate chunk: {receipt_id}"
+                )
+            seen.add(receipt_id)
+            for key, expected in (
+                ("split", planned["split"]),
+                ("group_id", planned["group_id"]),
+                ("category", planned["category"]),
+                ("mcap_path", planned["mcap_path"]),
+                ("expected_bytes", int(planned["expected_bytes"])),
+                ("bytes", int(planned["expected_bytes"])),
+            ):
+                if receipt.get(key) != expected:
+                    raise ValueError(f"shared receipt {key} mismatch for {receipt_id}")
+            digest = receipt.get("sha256")
+            if not isinstance(digest, str) or len(digest) != 64:
+                raise ValueError(f"shared receipt lacks media SHA-256 for {receipt_id}")
+            if receipt_id == chunk_id:
+                selected_receipts.append(receipt)
+        if len(selected_receipts) != 1:
+            raise ValueError(f"shared receipt does not uniquely contain planned chunk: {chunk_id}")
+        receipt_override = {
+            "format": shared_receipt["format"],
+            "status": shared_receipt["status"],
+            "plan_sha256": shared_receipt["plan_sha256"],
+            "sealed_audit_downloaded": False,
+            "files": selected_receipts,
+        }
+    validated = _validate_chunk(
+        selected[0],
+        runs_root / chunk_id,
+        plan_sha256=plan_hash,
+        acquisition_manifest=receipt_override,
+    )
     row = selected[0]
     return {
         "status": "FROZEN_SESSION_PACKAGE_VALIDATED_NO_TRAINING_OR_QUALITY_EVALUATION",
@@ -475,13 +537,23 @@ def main() -> None:
         "--validate-chunk-id",
         help="validate only this planned train/development session package",
     )
+    parser.add_argument(
+        "--acquisition-manifest",
+        type=Path,
+        help="optional shared full-plan receipt when package receipts were split",
+    )
     args = parser.parse_args()
     if args.validate_chunk_id:
         if args.output is not None:
             parser.error("--output cannot be combined with --validate-chunk-id")
-        result = validate_session(args.plan, args.runs_root, args.validate_chunk_id)
+        result = validate_session(
+            args.plan,
+            args.runs_root,
+            args.validate_chunk_id,
+            args.acquisition_manifest,
+        )
     else:
-        if args.output is None:
+        if args.output is None or args.acquisition_manifest is not None:
             parser.error("--output is required unless --validate-chunk-id is used")
         result = aggregate(args.plan, args.runs_root, args.output)
     print(json.dumps(result, indent=2))

@@ -126,15 +126,19 @@ train/development package before the full aggregate exists. For example:
 ```powershell
 python -m scripts.aggregate_egoviz_unseen_group_features `
   --plan <frozen-plan.json> --runs-root <session-packages> `
+  --acquisition-manifest <original-full-plan-receipt.json> `
   --validate-chunk-id <planned-chunk-id>
 ```
 
-This reads only that planned session package and fails closed for unknown or
-sealed IDs. The smoke replay packages were made against a two-session derived
-plan, not the 44-session frozen plan; passing the derived plan validates the
-replay packages, while supplying the full frozen plan correctly rejects their
-different acquisition-plan hash. Future per-session acquisition must use the
-frozen plan directly so its receipt can be validated against that plan.
+This reads the small shared receipt and only the selected train/development
+session package; unknown or sealed receipt entries fail closed. The smoke
+replay packages were split from a two-session derived plan, so their local
+receipts have a different plan hash. The original acquisition receipt retains
+the 44-session frozen-plan hash; passing it with the frozen plan validated both
+real session packages (`g154` train: 14 samples/14 windows; `g119`
+development: 21/21). Their media and feature hashes match the prior report.
+Future acquisition should use the frozen plan directly; retain its original
+receipt when creating per-session feature packages.
 
 At the 2026-10-30 00:01 JST resource check, C: had 2.23 GiB free and the RTX
 3080 Laptop had 419 MiB free. No further raw media acquisition or feature

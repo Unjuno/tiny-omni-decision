@@ -25,6 +25,10 @@ def _write_json(path: Path, payload: object) -> None:
     path.write_text(json.dumps(payload) + "\n", encoding="utf-8")
 
 
+def _read_json(path: Path) -> dict[str, object]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def _plan() -> dict[str, object]:
     return {
         "format": PLAN_FORMAT,
@@ -347,3 +351,68 @@ def test_validate_session_rejects_sealed_or_unknown_chunk_before_opening_it(
         validate_session(plan_path, runs, "sealed-chunk")
 
     assert marker.read_text(encoding="utf-8") == "not opened"
+
+
+def test_validate_session_uses_shared_frozen_plan_receipt(tmp_path: Path) -> None:
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_text(json.dumps(_plan()), encoding="utf-8")
+    plan_hash = _hash(plan_path)
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    _write_chunk(runs, plan_hash, split="train", chunk_id="train-chunk", group_id="train-group")
+    _write_chunk(
+        runs,
+        plan_hash,
+        split="development",
+        chunk_id="dev-chunk",
+        group_id="dev-group",
+    )
+    shared_receipt = tmp_path / "shared-acquisition.json"
+    _write_json(
+        shared_receipt,
+        {
+            "format": "egoviz-unseen-group-media-acquisition-v1",
+            "status": "ACQUIRED_TRAIN_DEVELOPMENT_ONLY",
+            "plan_sha256": plan_hash,
+            "sealed_audit_downloaded": False,
+            "files": [
+                _read_json(runs / chunk / "acquisition-manifest.json")["files"][0]
+                for chunk in ("train-chunk", "dev-chunk")
+            ],
+        },
+    )
+
+    report = validate_session(
+        plan_path, runs, "dev-chunk", acquisition_manifest_path=shared_receipt
+    )
+
+    assert report["split"] == "development"
+    assert report["group_id"] == "dev-group"
+    assert report["sealed_audit_accessed"] is False
+
+
+def test_validate_session_rejects_sealed_entry_in_shared_receipt(tmp_path: Path) -> None:
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_text(json.dumps(_plan()), encoding="utf-8")
+    plan_hash = _hash(plan_path)
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    _write_chunk(runs, plan_hash, split="train", chunk_id="train-chunk", group_id="train-group")
+    receipt = _read_json(runs / "train-chunk" / "acquisition-manifest.json")["files"][0]
+    receipt["chunk_id"] = "sealed-chunk"
+    shared_receipt = tmp_path / "shared-acquisition.json"
+    _write_json(
+        shared_receipt,
+        {
+            "format": "egoviz-unseen-group-media-acquisition-v1",
+            "status": "ACQUIRED_TRAIN_DEVELOPMENT_ONLY",
+            "plan_sha256": plan_hash,
+            "sealed_audit_downloaded": False,
+            "files": [receipt],
+        },
+    )
+
+    with pytest.raises(ValueError, match="unknown or duplicate chunk"):
+        validate_session(
+            plan_path, runs, "train-chunk", acquisition_manifest_path=shared_receipt
+        )
