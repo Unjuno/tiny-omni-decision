@@ -1,5 +1,24 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 12:41 JST R0 live checkpoint and cadence recheck:** Orbitune
+PID `22136` remains live with `--steps 0`; this is its separate Aria-MIDI /
+GigaMIDI training job, not a Tiny Omni experiment. The live log reached step
+`519850` / `12,422,446,582` events at 12:40:18, reporting `13,427` events/s.
+Its 12:37:23 `model.pt` snapshot is step `519764` / `12,420,006,378` events,
+117,947,372 bytes, SHA-256
+`69cc9d73717cbe459cdbaf329baf58d81892a6ad321a72af21902fac258561fb`.
+A CPU-only `torch.load(weights_only=True, mmap=True)` inspection confirms 1,038
+validation records, optimizer and RNG state, latest validation loss `-1.614579`
+at step 519,764, and historical best `-1.623135` at step 455,514. Three
+15-second progress samples initially showed stale log rows; the two distinct
+log updates imply about 14.4k events/s. After a roughly 20-minute controlled
+wait, the next checkpoint appeared at 12:37:23, about 32 seconds earlier than
+the 19m48s estimate. Current C: free space is about 0.38 GiB and RTX usage is
+15,821/16,384 MiB; no process, checkpoint or dataset was changed and no new
+GPU work was started. The next 30M-event checkpoint is estimated in roughly
+31–34 minutes; the unbounded `--steps 0` run has no completion ETA. See the
+[12:41 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_1241JST.md).
+
 **2026-10-29 11:29 JST R0 live checkpoint:** Orbitune PID 22136 remained live
 at step 517,609 / 12,360,001,721 events. A CPU-only, mmap checkpoint read
 confirmed the saved checkpoint step and full training/optimizer/RNG state; its

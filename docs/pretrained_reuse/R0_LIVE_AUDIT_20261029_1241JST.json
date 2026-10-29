@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-29T12:41:54+09:00",
+  "repository": "Unjuno/tiny-omni-decision",
+  "worktree": "C:/CodexWorktrees/pretrained-reuse-roadmap-current",
+  "branch": "docs/pretrained-reuse-roadmap-20261010",
+  "head": "a9f37938323d300648635ca02c9e56cf48ded27a",
+  "remote_head": "a9f37938323d300648635ca02c9e56cf48ded27a",
+  "worktree_clean_before_snapshot_update": true,
+  "pull_request": {
+    "number": 15,
+    "state": "open",
+    "draft": true,
+    "base": "main",
+    "push_workflow_run": 3495,
+    "push_workflow_conclusion": "success",
+    "pr_sync_workflow_run": 3496,
+    "pr_sync_workflow_conclusion": "success"
+  },
+  "user_primary_worktree": {
+    "branch": "codex/teacher-quality-clean-dev-v1",
+    "had_uncommitted_changes": true,
+    "accessed_or_modified": false
+  },
+  "live_process": {
+    "pid": 22136,
+    "started_at": "2026-10-28T09:12:42+09:00",
+    "alive_at_capture": true,
+    "script": "C:/orbitune-production/epoch_a2_source/scripts/compound_cfe_train.py",
+    "project": "Orbitune Aria-MIDI + GigaMIDI-v2 training; not Tiny Omni",
+    "steps_limit": 0,
+    "resume_checkpoint": "C:/Users/junny/OneDrive/Desktop/MIDI-GPT/orbitune_clone/runs/research_nc_aria_gigamidi_epoch_a2_v1/model.pt",
+    "latest_log_step": 519850,
+    "latest_log_events_seen": 12422446582,
+    "latest_log_updated_at": "2026-10-29T12:40:18+09:00",
+    "latest_log_events_per_second": 13427.232102504564,
+    "latest_log_loss": -1.7420614957809448,
+    "process_intervened": false
+  },
+  "checkpoint": {
+    "path": "C:/Users/junny/OneDrive/Desktop/MIDI-GPT/orbitune_clone/runs/research_nc_aria_gigamidi_epoch_a2_v1/model.pt",
+    "saved_step": 519764,
+    "events_seen": 12420006378,
+    "saved_at": "2026-10-29T12:37:23+09:00",
+    "bytes": 117947372,
+    "sha256": "69cc9d73717cbe459cdbaf329baf58d81892a6ad321a72af21902fac258561fb",
+    "stable_during_hash": true,
+    "inspection": "CPU torch.load(weights_only=True,mmap=True)",
+    "source_commit": "8489870f81a1591515a98e58554e533fcac9d095",
+    "validation_corpus_identity": "9b8f61eaa156971ad3988a13945184708edcdbc39293ae9d4ba52c5c87831c2c",
+    "optimizer_state_present": true,
+    "rng_state_present": true,
+    "epoch_sampler_state_present": true,
+    "validation_history_count": 1038,
+    "latest_validation_step": 519764,
+    "latest_validation_loss": -1.6145790815353394,
+    "best_validation_step": 455514,
+    "best_validation_loss": -1.6231351792812347
+  },
+  "cadence_measurement": {
+    "samples_seconds_apart": 15,
+    "two_initial_samples_same_stale_row": true,
+    "distinct_log_interval_seconds": 97,
+    "distinct_log_interval_steps": 50,
+    "distinct_log_interval_events": 1400342,
+    "measured_events_per_second": 14436.515463917526,
+    "next_checkpoint_predicted_minutes": 19.8,
+    "observed_checkpoint_after_minutes": 19.25,
+    "prediction_error_seconds": 32,
+    "next_checkpoint_events_estimate": 12450006378,
+    "next_checkpoint_wait_minutes_range": [31, 34]
+  },
+  "resources": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "gpu_utilization_percent": 50,
+    "gpu_memory_used_mib": 15821,
+    "gpu_memory_total_mib": 16384,
+    "c_free_bytes": 407986176
+  },
+  "no_new_gpu_work": true,
+  "no_data_transfer": true,
+  "r2_m_joint_task_gate": "open"
+}
