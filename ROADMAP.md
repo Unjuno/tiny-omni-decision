@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 10:19 JST R2-M OpenMarcie metadata follow-up:** Read-only public
+Kaggle JSON-LD reports CC BY-SA 4.0 and `requiresSubscription=true` for all
+four archive parts, totaling 591,290,808,729 bytes (550.68 GiB). The paper's
+subject-disjoint statement is for its 12-class HAR experiment; no pinned
+participant-to-split manifest or equivalent guarantee for the other tasks was
+located. The audio reported is instrumental, and paper results do not establish
+that audio is necessary. C: had about 0.38 GiB free, so no archive or media was
+downloaded and no terms were accepted. Keep OpenMarcie `REVIEW_NOT_ADMITTED`
+pending rights/derivative-model policy review, split provenance, and feasible
+storage. Three 12,295-byte metadata-page retrievals averaged 0.42 s; this is
+not a data-transfer throughput estimate. See the dated
+[source-screen follow-up](docs/pretrained_reuse/R2_OPENMARCIE_SOURCE_TASK_SCREEN_20261028.md#2026-10-29-metadata-and-split-follow-up).
+
 **2026-10-29 09:22 JST R0 live-state audit:** Orbitune PID 22136 remained live
 at log step 513,650 / 12,249,743,497 events. Its latest saved checkpoint was
 step 513,303 / 12,240,024,888 events, SHA-256

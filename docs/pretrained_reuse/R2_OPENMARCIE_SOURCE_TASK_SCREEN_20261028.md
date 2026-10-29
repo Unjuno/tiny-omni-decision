@@ -59,3 +59,42 @@ was performed.
 The supplement PDF was not accessible to the current web reader, and the
 Kaggle page was not readable from the browser. This screen does not infer
 license or split terms from inaccessible materials.
+
+## 2026-10-29 metadata and split follow-up
+
+Public Kaggle dataset pages were fetched as small metadata documents only; no
+Kaggle API request, subscription acceptance, download request, archive, or
+media payload was used. Their JSON-LD now exposes these versioned declarations:
+
+| Part | Kaggle dataset ID | Version | Declared archive size | Displayed license | Subscription required |
+|---|---:|---:|---:|---|---|
+| [OpenMarcieA_Main](https://www.kaggle.com/datasets/4942046dbb2608f5a0c3e76c9bd53c6b9b2784d738da7db37f7739b89c2c7f95) | 7391133 | 14 | 139,274,818,467 bytes | CC BY-SA 4.0 | yes |
+| [OpenMarcieB1](https://www.kaggle.com/datasets/9707fa8bcc1441bc7794afd43c64af8462487db326448e24a015740e218af2cb) | 7387960 | 15 | 131,915,306,620 bytes | CC BY-SA 4.0 | yes |
+| [OpenMarcieB2](https://www.kaggle.com/datasets/106440bd5392b49fc4b732a8205f768af76db808cd70a94f4aa1b7ded115eb21) | 7389510 | 14 | 171,538,118,613 bytes | CC BY-SA 4.0 | yes |
+| [OpenMarcieB3](https://www.kaggle.com/datasets/4a3e662eeea0e2fbeec209f9c617da36aa057186221b017ec39564ba74d781bf) | 7389984 | 11 | 148,562,565,029 bytes | CC BY-SA 4.0 | yes |
+
+The combined declared archive size is 591,290,808,729 bytes (550.68 GiB). The
+local C: volume had only about 0.38 GiB free during this check, so downloading
+these archives is not feasible in the current environment. The license value
+is the dataset host's displayed metadata; it is not treated as confirmation of
+participant consent, third-party media rights, model-derivative obligations,
+or compatibility with the project's product policy. Keep the source
+`REVIEW_NOT_ADMITTED` pending those checks and a feasible storage plan.
+
+The CVPR paper describes a 12-class HAR experiment with subject-disjoint
+splits. This is useful evidence for that reported experiment, but the paper
+does not provide a pinned participant-to-split manifest in the inspected
+materials, and this statement does not establish grouped splits for the other
+benchmarks or both experimental settings. The paper's reported acoustic track
+is instrumental; do not interpret it as a speech/audio-understanding dataset.
+The paper also reports I+V as stronger than adding audio for its HAR fusion
+results, so OpenMarcie is not evidence that all modalities are jointly
+necessary for our product task.
+
+The split and modality statements refer to the [CVPR paper](https://openaccess.thecvf.com/content/CVPR2026/papers/Bello_OpenMarcie_Dataset_for_Multimodal_Action_Recognition_in_Industrial_Environments_CVPR_2026_paper.pdf)
+and its [official supplement](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Bello_OpenMarcie_Dataset_for_CVPR_2026_supplemental.pdf).
+
+The three repeated small-page retrievals for OpenMarcieA_Main were 12,295
+bytes each and took 0.57, 0.31, and 0.38 seconds (mean 0.42 seconds). This
+measures only public metadata-page response time, not dataset download
+throughput; no large transfer ETA is inferred from it.
