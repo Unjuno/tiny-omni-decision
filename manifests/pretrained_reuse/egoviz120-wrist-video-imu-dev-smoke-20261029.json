@@ -1,0 +1,109 @@
+{
+  "format": "egoviz-wrist-video-imu-dev-smoke-v1",
+  "scope": "one deterministic development-group source record; decode and timestamp smoke only",
+  "index": {
+    "sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "chunk_id": "7f2a80d98e54f0559893a5bf5cee0e5c",
+    "group_id": "g008"
+  },
+  "split": {
+    "seed": 17,
+    "algorithm": "seed17:egoviz-session-split-v1:",
+    "side": "development",
+    "sealed_audit": false
+  },
+  "mcap": {
+    "bytes": 153903851,
+    "sha256": "00b877226c83fb69210fab1da124acbaf5b51fd4cfe05ffdcd2d2308e4c3f1f0",
+    "crc_validation": "passed",
+    "topic_counts": {
+      "/action": 471,
+      "/ego/zed_head/depth/camera_info": 480,
+      "/ego/zed_head/depth/image/compressed": 480,
+      "/ego/zed_head/imu/data": 3189,
+      "/ego/zed_head/left/camera_info": 480,
+      "/ego/zed_head/left/image/compressed": 480,
+      "/ego/zed_head/odom": 480,
+      "/ego/zed_head/right/camera_info": 480,
+      "/ego/zed_head/right/image/compressed": 480,
+      "/hands/left/detected": 480,
+      "/hands/left/keypoints": 480,
+      "/hands/left/odom": 480,
+      "/hands/right/detected": 480,
+      "/hands/right/keypoints": 480,
+      "/hands/right/odom": 480,
+      "/tf": 480,
+      "/tf_static": 48,
+      "/wrist_left/image/camera_info": 480,
+      "/wrist_left/image/compressed": 480,
+      "/wrist_left/imu/data": 3200,
+      "/wrist_right/image/camera_info": 480,
+      "/wrist_right/image/compressed": 480,
+      "/wrist_right/imu/data": 3190
+    }
+  },
+  "wrist_video": {
+    "topic": "/wrist_left/image/compressed",
+    "schema": "foxglove.CompressedVideo/protobuf",
+    "format": "h264",
+    "messages": 480,
+    "decoded_frames": 480,
+    "dimensions": [
+      1920,
+      1200
+    ],
+    "frame_ids": [
+      "wrist_left_optical_frame"
+    ],
+    "encoded_stream_sha256": "4af820bca85754bb2948656d481033397f813484bd2519379cfa65027201e559"
+  },
+  "wrist_imu": {
+    "topic": "/wrist_left/imu/data",
+    "schema": "sensor_msgs/msg/Imu/cdr",
+    "samples": 3200,
+    "frame_ids": [
+      "wrist_left_imu_link"
+    ],
+    "all_values_finite": true,
+    "acceleration_component_ranges": [
+      [
+        -11.30725383758545,
+        -5.0286383628845215
+      ],
+      [
+        -5.8599653244018555,
+        6.290318012237549
+      ],
+      [
+        -4.435072898864746,
+        7.869024753570557
+      ]
+    ],
+    "angular_velocity_component_ranges": [
+      [
+        -74.299560546875,
+        72.5931167602539
+      ],
+      [
+        -67.53546905517578,
+        39.608238220214844
+      ],
+      [
+        -50.43862533569336,
+        27.904359817504883
+      ]
+    ]
+  },
+  "nearest_video_to_imu_offset_ms": {
+    "median": 1.2810000000000001,
+    "p95": 2.587,
+    "max": 3.481,
+    "within_20ms": 480
+  },
+  "not_performed": [
+    "action labels read",
+    "model fitting",
+    "quality evaluation",
+    "sealed audit access"
+  ]
+}

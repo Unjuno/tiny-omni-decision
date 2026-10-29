@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 21:51 JST EgoViz wrist video/IMU development input smoke:** One
+record from deterministic held-out session group `g008` passed MCAP CRC
+validation, H.264 decoding (480/480 1920×1200 frames), finite CDR decoding of
+3,200 wrist-IMU samples, and timestamp matching (median 1.281 ms, p95 2.587
+ms, maximum 3.481 ms). This confirms the raw input path for one development
+session only. The source remains NOT ADMITTED: participant independence is
+unknown, 180 sessions are below the provisional floor, and action labels are
+publisher-generated. No action-label payload, model, quality evaluation, or
+sealed audit was accessed. See the [input smoke report](docs/pretrained_reuse/R2_EGOVIZ120_WRIST_VIDEO_IMU_DEV_SMOKE_20261029.md),
+[receipt](manifests/pretrained_reuse/egoviz120-wrist-video-imu-dev-smoke-20261029.json),
+and [runner](scripts/audit_egoviz_wrist_video_imu_smoke.py).
+
 **2026-10-29 13:12 JST R0 checkpoint-state recheck:** Orbitune PID `22136`
 is still running its separate Aria-MIDI/GigaMIDI `--steps 0` job. A CPU-only
 `weights_only=True, mmap=True` read of the checkpoint saved at 13:11:51
