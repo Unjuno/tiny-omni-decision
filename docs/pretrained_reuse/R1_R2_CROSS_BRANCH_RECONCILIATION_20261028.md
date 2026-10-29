@@ -89,3 +89,44 @@ evaluation cohort.
   derived on a separate branch from the PR #32 prediction SHA-256.
 - DROID shard/site metadata audit: `R2_DROID_UNSEEN_SITE_SHARD_SAMPLE_20261028.md`
   on PR #31.
+
+## 2026-10-29 open-PR follow-up
+
+Read-only API and pinned-head report review found four newer draft PRs. Their
+heads remain open and separate; this reconciliation changed none of them.
+
+- PR #33 (`b8245103d221daea225f9666862f6b149462aa1b`) adds a post-hoc,
+  10,000-resample paired bootstrap over the existing PR #32 DROID predictions.
+  Across 137 observed train episodes and 14 sites, joint-minus-sensor Accuracy
+  is −2.92 pp (95% CI −8.08 to +0.97), while NLL and Brier are worse by
+  +0.2822 (CI +0.1598 to +0.4871) and +0.0887 (CI +0.0448 to +0.1595).
+  This strengthens the no-refit/no-promotion decision for these exposed IDs;
+  it is not independent evaluation or evidence that video is generally useless.
+- PR #34 (`2a6a022f9974c2b0aec79da759b4d1fd0d27b57a`) corrects GOOSE's
+  instance mapping and retains valid zero IDs. The shared-key aggregate changes
+  only from 50.4% to 51.0%, remains highly variable by scenario, and does not
+  provide a non-oracle inference path or a Decision target. GOOSE stays
+  unadmitted; do not repeat the same mapping probe or start a fit on these IDs.
+- PR #35 (`3160975fac62e1c1cb79ad91dc94b0f3b7bf2bcb`) confirms that ZOD's
+  pinned SDK can associate an image-space box and LiDAR box by a common
+  annotation UUID. The candidate is still unadmitted: access-request semantics,
+  sequence/drive independence, usable paired-label counts, encoder overlap,
+  CC BY-SA product implications, and both-input benefit remain unresolved.
+  The advertised relevant archives total about 2.98 GB, beyond current local
+  free space; no payload was fetched.
+- PR #36 (`57aa474d9f15b2f70d9f9dc6fb441e69d377ba99`) keeps FZI-AURA on HOLD
+  because an accidentally retrieved scene was accessed outside its required
+  acceptance/sign-in flow; it is quarantined and must not be read or reused.
+  The report says the train camera+LiDAR payload is about 462.84 GB. Its DAVE
+  screen is also REVIEW because the benchmark bundles non-commercial and
+  agreement-bound upstream data despite the package-level MIT label. Neither
+  source admits fitting/evaluation under the current project's rights gates.
+
+### Next action after this reconciliation
+
+These additions do not open a justified new training run. Preserve the DROID
+negative result and the GOOSE, ZOD, FZI-AURA, and DAVE admission constraints.
+Continue only with a prospective task/source whose inputs, labels, rights,
+group isolation, and independent development cohort can all be established
+without reading quarantined artifacts or spending the unavailable disk reserve.
+No evaluation/test or sealed-audit labels were opened in this follow-up.
