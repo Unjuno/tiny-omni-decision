@@ -1,5 +1,7 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 22:14 JST EgoViz synchronized wrist-video/IMU correspondence preflight:** Selected 16 files from the frozen seed-17 group split (8 training groups, 8 development groups; zero overlap); 13 new files were retrieved and all 16 passed size/hash and MCAP CRC/schema checks. A one-window frozen VideoPrism CPU smoke returned `[8,768]` per-frame features; warmed forward time was 1.75 s. This is only a timestamp-derived correspondence probe: publisher action labels were not read, quality was not measured, participant independence remains unknown, and no sealed audit or GPU/training run occurred. See [preflight](docs/pretrained_reuse/R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md) and [manifest](manifests/pretrained_reuse/egoviz-vs-sync-task-preflight-20261029.json).
+
 **2026-10-29 21:51 JST EgoViz wrist video/IMU development input smoke:** One
 record from deterministic held-out session group `g008` passed MCAP CRC
 validation, H.264 decoding (480/480 1920×1200 frames), finite CDR decoding of

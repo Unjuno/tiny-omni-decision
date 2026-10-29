@@ -1,0 +1,250 @@
+{
+  "format": "egoviz-vs-sync-task-preflight-v1",
+  "status": "INPUTS_INTEGRITY_PASS_TASK_NOT_YET_EVALUATED",
+  "source": {
+    "dataset": "humaidtech/EgoViz-120",
+    "index_sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "split_receipt_sha256": "d2e2869dcce0a7d96cddc7dee639794a7cf253c3f922637ab9c9699cb5e6d7d2",
+    "publisher_license": "CC BY 4.0 per publisher card",
+    "split_seed": 17,
+    "participant_independence": "unknown"
+  },
+  "selection": {
+    "selection_sha256": "393d2ff4c74f5e6f06bddec7cb3f62d6d43317771bc21858db6b1bc28e82a00e",
+    "artifact_directory": "C:\\CodexArtifacts\\egoviz-vs-sync-20261029-attempt-01",
+    "mcap_files": 16,
+    "bytes_total": 3009402794,
+    "new_files": 13,
+    "new_bytes": 2546407236,
+    "train_unique_groups": 8,
+    "development_unique_groups": 8,
+    "train_development_group_overlap": 0,
+    "categories": [
+      "cleaning_restroom",
+      "organizing_items",
+      "preparing_food",
+      "mopping_floor"
+    ],
+    "rule": "two smallest MCAPs by (bytes, chunk_id) per category and split, with unique groups within each split"
+  },
+  "files": [
+    {
+      "chunk_id": "c59801fe4172cf9b430cd9232dda3909",
+      "category": "cleaning_restroom",
+      "group_id": "g114",
+      "split": "train",
+      "bytes": 150184348,
+      "sha256": "c86d1d69df71953b0b7fe1d61cfbc919743d1c108a2a0adc30b5c1a449e2e7d4",
+      "retrieved_now": false
+    },
+    {
+      "chunk_id": "0a641e6c8cb2a253aa3015723355b3cd",
+      "category": "cleaning_restroom",
+      "group_id": "g038",
+      "split": "train",
+      "bytes": 177580231,
+      "sha256": "58605ae7e3f3912b42832c714a62df92e69e8ab9ad9768f854cf270df1b251b0",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "ad15950002d490a519a26e18052fc1e6",
+      "category": "organizing_items",
+      "group_id": "g174",
+      "split": "train",
+      "bytes": 158907359,
+      "sha256": "aba7edeef1f0f12b35f143ae10c68ff2648a0f85c78c08d2a5ce0fb9db8313bf",
+      "retrieved_now": false
+    },
+    {
+      "chunk_id": "8af4e82bb27628cf0968c72dfd0ffb35",
+      "category": "organizing_items",
+      "group_id": "g166",
+      "split": "train",
+      "bytes": 188745496,
+      "sha256": "e2c7bec620798fa01948b7a7a9ec699ffaab415b329fa2a5ba33c497958db758",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "f85a66e2d6f31379cae6643e3b825dcb",
+      "category": "preparing_food",
+      "group_id": "g143",
+      "split": "train",
+      "bytes": 192886193,
+      "sha256": "c74dbcb4e575c4b2f940cc3a5e04e33d603051a22a6f9d93676078235bb37d8e",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "36ab177eb54017e2019399457127f963",
+      "category": "preparing_food",
+      "group_id": "g151",
+      "split": "train",
+      "bytes": 201100917,
+      "sha256": "2889ae23ca7100d2ef819546a2401abae00d27db93d15ab8001113937997a9e4",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "d10c15ea11708b0937b45845c1536fab",
+      "category": "mopping_floor",
+      "group_id": "g076",
+      "split": "train",
+      "bytes": 183141621,
+      "sha256": "b8908acd481d2cfcca9a706cd52e8d0cefdf5e2c48293be9a16ccaa63bc11ef2",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "6656cfb73671d80d77454cff40374d9e",
+      "category": "mopping_floor",
+      "group_id": "g142",
+      "split": "train",
+      "bytes": 186743844,
+      "sha256": "b443f731f5878774f041ae426b2f5001ec4dcb49902e539ec3e1282d475d681e",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "536cfb3199b53b2cec82dc1476a05251",
+      "category": "cleaning_restroom",
+      "group_id": "g001",
+      "split": "development",
+      "bytes": 165281285,
+      "sha256": "2b1260200e38c19fd5d76c91f2c30d109b15bb7708b0c6e079b446f64f70784d",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "28e91b35d61fccaf257c9304489f4393",
+      "category": "cleaning_restroom",
+      "group_id": "g035",
+      "split": "development",
+      "bytes": 172356052,
+      "sha256": "e0e5cb795829ac82dd12c03bca1cbb423fdbeead7581bfddb6580942c236a543",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "7f2a80d98e54f0559893a5bf5cee0e5c",
+      "category": "organizing_items",
+      "group_id": "g008",
+      "split": "development",
+      "bytes": 153903851,
+      "sha256": "00b877226c83fb69210fab1da124acbaf5b51fd4cfe05ffdcd2d2308e4c3f1f0",
+      "retrieved_now": false
+    },
+    {
+      "chunk_id": "9f1f278cc7f81891d612dd9eb0d759e4",
+      "category": "organizing_items",
+      "group_id": "g152",
+      "split": "development",
+      "bytes": 227248994,
+      "sha256": "8044054ec42173aad8f14f7c2107888fab6b75cd42d0cf8be4c918a59391111c",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "dc04577fcbca592d7d8f695d42431540",
+      "category": "preparing_food",
+      "group_id": "g006",
+      "split": "development",
+      "bytes": 213784521,
+      "sha256": "e792dc673e95b2ccaec7bb1088ec337bea4061a8e5d064a5c9a3ce2ca267366d",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "c9641eaa7ab6eb0e156563b5f192d05a",
+      "category": "preparing_food",
+      "group_id": "g057",
+      "split": "development",
+      "bytes": 214937764,
+      "sha256": "ca2f066b0af565eacb234d19d89f2b2f18f1912c6b1ef65134ee517c4b74c78a",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "f24b5b364916b03b9d48397e2b8cdebb",
+      "category": "mopping_floor",
+      "group_id": "g156",
+      "split": "development",
+      "bytes": 207881817,
+      "sha256": "527a2d0ab9bf1b1726a774875cac2ed9e2e9c86a1acb866806189bfac2401d7e",
+      "retrieved_now": true
+    },
+    {
+      "chunk_id": "dc5d0c7be7b48a9e79d8d5cbe9800a4a",
+      "category": "mopping_floor",
+      "group_id": "g153",
+      "split": "development",
+      "bytes": 214718501,
+      "sha256": "3d59cd3f6efc20962df862fe1157bf738ac9d6b40847f26846e80f69bb8e97b5",
+      "retrieved_now": true
+    }
+  ],
+  "download_measurement": {
+    "initial_three_seconds": [
+      25.17083750013262,
+      16.648681699996814,
+      16.059131199959666
+    ],
+    "initial_three_mean_seconds": 19.292883466696367,
+    "initial_three_aggregate_mib_s": 9.21421010762555,
+    "predicted_remaining_seconds_from_initial_mean": 173.6359512002673,
+    "actual_remaining_download_seconds": 184.24297809996642,
+    "all_new_files_mean_seconds": 18.624740653850424,
+    "all_new_files_aggregate_mib_s": 10.029848201205501,
+    "polling_interval_seconds": 30,
+    "initial_prediction_error_fraction": 0.06108773457557327
+  },
+  "mcap_stream_preflight": {
+    "file_count": 16,
+    "all_crc_passed": true,
+    "all_expected_wrist_video_imu_schemas": true,
+    "topic_count_per_file": 23,
+    "wrist_video_message_range": [
+      447,
+      539
+    ],
+    "wrist_imu_message_range": [
+      2977,
+      3586
+    ],
+    "action_payloads_read": false
+  },
+  "videoprism_cpu_smoke": {
+    "status": "PASS_ONE_DEV_WINDOW_CPU_SMOKE",
+    "chunk_id": "7f2a80d98e54f0559893a5bf5cee0e5c",
+    "group_id": "g008",
+    "video_sha256": "00b877226c83fb69210fab1da124acbaf5b51fd4cfe05ffdcd2d2308e4c3f1f0",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "device": [
+      "TFRT_CPU_0"
+    ],
+    "selected_frame_indices": [
+      0,
+      8,
+      17,
+      25,
+      34,
+      42,
+      51,
+      59
+    ],
+    "feature_shape": [
+      1,
+      2048,
+      768
+    ],
+    "per_frame_feature_shape": [
+      8,
+      768
+    ],
+    "decode_preprocess_seconds": 4.41653580009006,
+    "forward_seconds": 9.170529800001532,
+    "feature_sha256": "30d9a04ebaafe4c036b4460c77238ae53ffb2d33a355c47ea5322c647a330951",
+    "model_parameters": 114365184,
+    "gpu_used": false,
+    "training": false
+  },
+  "claims": {
+    "model_quality": "not measured",
+    "training": "not run",
+    "sealed_audit_accessed": false,
+    "publisher_action_labels_accessed": false,
+    "product_teacher_promotion": false,
+    "video_and_sensor_both_required_for_real_task": "not established; this pilot is a timestamp-derived correspondence probe"
+  }
+}
