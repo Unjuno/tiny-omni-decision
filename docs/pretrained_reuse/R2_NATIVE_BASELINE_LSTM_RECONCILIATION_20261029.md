@@ -1,9 +1,10 @@
 # Frozen-feature Path A baseline and LSTM result reconciliation
 
-**Reconciled 2026-10-29 from existing 2026-10-16 run artifacts.** No model,
-media, validation prediction, or sealed-audit evaluation was rerun for this
-report. It corrects the older planning snapshot that still listed the common
-baseline fit as a future step.
+**Reconciled 2026-10-29 from existing 2026-10-16 run artifacts.** This
+artifact-level supplement adds selected per-modality metrics and verifies local
+receipts referenced by the [2026-10-28 run reconciliation](R2_PATH_A_NATIVE_BASELINE_RECONCILIATION_20261028.md)
+and original [temporal-fit report](R2_NATIVE_TEMPORAL_FIT_RESULTS_20261016.md).
+No model, media, validation prediction, or sealed-audit evaluation was rerun.
 
 ## What was verified
 
@@ -67,7 +68,8 @@ The baseline is selected by the fixed validation rule (macro NLL 1.6865 versus
 1.6967 for the LSTM). The LSTM's selected Video Accuracy is higher, but the
 selected Image Accuracy is lower. Both candidates remain far from the target;
 their zero minimum task accuracies and per-task weaknesses must not be hidden
-by the overall aggregate.
+by the overall aggregate. This supplements the previous run reconciliation;
+it does not newly close or repeat the fit work package.
 
 ## Selected-checkpoint metrics
 

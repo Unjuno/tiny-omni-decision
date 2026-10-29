@@ -1,15 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-29 R2 Path A fit reconciliation:** The previously prepared frozen-
-feature common Decision baseline and residual-LSTM comparison both completed
-2,048 updates on 2026-10-16. Their local result receipts, shared validation IDs,
-source pins, best/final predictions and paired scene-cluster analysis were
-verified read-only; the saved comparison tests pass (3 passed). Baseline is
-selected by the fixed hierarchical macro-NLL rule. LSTM does not improve that
-score and reduces selected Image accuracy; its Video-Accuracy difference has
-an interval including zero. Neither fit approaches the 95–98% per-task target.
-This closes the previously stated “baseline fit next” item, not R2 quality or
-product readiness. See the [fit comparison reconciliation](docs/pretrained_reuse/R2_NATIVE_BASELINE_LSTM_RECONCILIATION_20261029.md).
+**2026-10-29 R2 Path A artifact-level verification:** The 2026-10-28 entry
+already records the completed 2,048-update baseline and residual-LSTM runs.
+This read-only follow-up reverified their local receipts, shared validation
+IDs/source pins, exact replays and paired-audit CPU tests (3 passed), and adds
+selected per-modality calibration metrics. Baseline remains selected by the
+fixed hierarchical macro-NLL rule (1.6865 vs LSTM 1.6967). LSTM's selected
+Video Accuracy difference is +4.25 pp (95% scene-bootstrap CI -0.25 to +8.75)
+and Image Accuracy falls from 20.12% to 14.70%; this is not a broad gain or a
+new evaluation. See the [artifact-level supplement](docs/pretrained_reuse/R2_NATIVE_BASELINE_LSTM_RECONCILIATION_20261029.md)
+and the [original run reconciliation](docs/pretrained_reuse/R2_PATH_A_NATIVE_BASELINE_RECONCILIATION_20261028.md).
 
 **2026-10-29 10:55 JST R0 checkpoint recheck:** Orbitune PID 22136 remained
 live at log step 516,550 / 12,330,368,091 events; the latest health counters
