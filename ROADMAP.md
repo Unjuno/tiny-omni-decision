@@ -4,6 +4,8 @@
 
 **2026-10-29 22:54 JST R0 repository audit:** Remote state is 30 open PRs (#9–#38), 114 remote heads and 85 local worktrees; PR #15 remains Draft/Open and unmerged. The primary OneDrive checkout retains pre-existing user modifications. Orbitune PID `22136` remained live; no process was stopped. C: had 5.24 GiB free. No sealed audit, paid compute, main update or product promotion occurred. Full snapshot: [R0 audit JSON](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_2254JST.json) and [readable report](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_2254JST.md).
 
+**2026-10-29 23:13 JST EgoViz source and fresh-group recheck:** The official Hugging Face card/bucket state CC BY 4.0, 5,392 clips and 180 `group_id` capture sessions; each session shares worker/site/lighting, but cross-session participant uniqueness is not established. The `/action` labels are Gemini-generated from ego-left video and unverified, so the fixed timestamp-correspondence target does not use them. A metadata-only plan reserves 24 train, 20 development and 20 sealed-audit sessions across all 12 categories, excluding all 16 sessions from the previous pilot. Train/development media would total 9.73 GB; the sealed 4.62 GB remains metadata-only and unopened. No selected MCAP media or model weights were downloaded; no model was trained. See the [source/task report](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_PLAN_20261029.md) and [frozen split manifest](manifests/pretrained_reuse/egoviz-unseen-session-temporal-plan-20261029.json).
+
 **2026-10-29 21:51 JST EgoViz wrist video/IMU development input smoke:** One
 record from deterministic held-out session group `g008` passed MCAP CRC
 validation, H.264 decoding (480/480 1920×1200 frames), finite CDR decoding of
@@ -2671,6 +2673,18 @@ exploratory with eight development sessions; participant independence remains
 unknown. This timestamp-derived probe does not meet the R2-M M-2 sample or
 natural-task gate. The report and full hashes are in
 [`R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md`](docs/pretrained_reuse/R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md).
+
+**2026-10-29 fresh EgoViz session-held-out follow-up plan:** The official
+index was downloaded and hashed; the publisher confirms CC BY 4.0 and that
+`group_id` is a capture session containing the same worker/site/lighting. It
+does not establish cross-session participant uniqueness. The 64-session plan
+contains 24 train, 20 development and 20 metadata-only sealed groups across all
+12 categories, with all 16 prior sessions excluded. Estimated train/development
+media is 9.73 GB and the largest selected file is 538 MB. This plan tests the
+same exact timestamp-match task on fresh groups; it does not use Gemini-generated
+video-only `/action` labels. No selected media, audit media or model run was
+opened. C: had 5.24 GiB free, so bulk acquisition is not yet safe. See the
+[frozen plan and resource gate](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_PLAN_20261029.md).
 
 **2026-10-29 R2-M Eidon video/IMU match diagnostic:** Frozen VideoPrism and
 quaternion-only features were extracted for 120 train and 24 development
