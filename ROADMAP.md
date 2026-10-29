@@ -1,5 +1,24 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 13:12 JST R0 checkpoint-state recheck:** Orbitune PID `22136`
+is still running its separate Aria-MIDI/GigaMIDI `--steps 0` job. A CPU-only
+`weights_only=True, mmap=True` read of the checkpoint saved at 13:11:51
+verified step `520839` / `12,450,013,846` events; the log had reached
+step `520850` / `12,450,311,232` events at 13:12:11. The checkpoint is
+117,947,820 bytes with SHA-256
+`E0FCD74C780872A60987706D9976F6A28F697A35F2190AA947B2224CA8961C33`.
+It contains optimizer, sampler, and Python/PyTorch/CUDA RNG state; this is
+checkpoint-content evidence, not a claim that resume is exact under every
+runtime condition. Its 1,039-row validation history ends at step `520477`
+(`-1.601522`, four batches / 98,304 events); historical best remains step
+`455514` (`-1.623135`). Validation rows have no wall-clock timestamp, so the
+last validation time is UNKNOWN. At about 14.6k events/s, the next
+30M-event checkpoint is estimated in about 34 minutes. GPU utilization was
+100% at the live sample, 15,821/16,384 MiB used, and C: had 0.374 GiB free;
+no new model experiment was started because there is no safe disk reserve.
+No process, data, or checkpoint was modified. See the
+[checkpoint-state audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_1312JST.md).
+
 **2026-10-29 R2 image transfer artifact recheck:** Independently replayed
 checks over the preserved PR #24 prediction artifact reproduce the metrics on
 all 19,988 official CLEVR-4 100k validation images (79,952 decisions), with
