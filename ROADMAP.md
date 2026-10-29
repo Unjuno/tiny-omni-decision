@@ -47,6 +47,29 @@ remain open, so this expands source availability only. AMI remains
 `REVIEW_NOT_ADMITTED`; the label and independent-validation gates above remain
 open.
 
+**2026-10-29 R2-M AMI annotation-route follow-up:** The retained official
+manual-annotation v1.6.2 archive contains the ES2011a development-validation
+word/segment XMLs for all four agents (263 segments across channels 0–3).
+Three training and four validation transcript intervals were checked against
+the corresponding streamed Lapel tracks without saving media or running a
+model. One validation channel-0 sample had lower RMS inside the annotation
+interval than in the preceding second; keep it and audit the cohort rather than
+filtering it. The archive hash and sample values are in the
+[AMI preflight manifest](docs/pretrained_reuse/AMI_ES_MEDIA_PREFLIGHT_20261029.json).
+This resolves the validation annotation-source lookup, not turn quality,
+visible-speaker validity, synchronization, both-input necessity, or the small
+number of independent groups. Evaluation labels remained unopened.
+
+**2026-10-29 09:47 JST R0 checkpoint confirmation:** Orbitune PID 22136
+remained live at step 514,400 / 12,270,542,841 events. Its newly written
+checkpoint at 09:45:28 was CPU-verified as step 514,381 / 12,270,020,976 events,
+SHA-256 `b6a4f66cb3d2cfa3768e757369369682a5e8c1bc9b09d84eb01cf3317e78fa11`.
+Latest saved validation is step 514,019 / loss -1.493842; the recorded best is
+step 455,514 / loss -1.623135. `--steps 0` means the job has no finite end; this
+checkpoint cadence is not a completion estimate. RTX use was 15,821/16,384 MiB
+and C: free space was 0.39 GiB. No process or run was modified. See the
+[09:47 live-state audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0947JST.md).
+
 **2026-10-29 R2-M AMI candidate screen:** Official AMI metadata supports a
 plausible synchronized active-speaker decision task and states CC BY 4.0 for
 released signals/transcripts/some annotations. An official-metadata comparison

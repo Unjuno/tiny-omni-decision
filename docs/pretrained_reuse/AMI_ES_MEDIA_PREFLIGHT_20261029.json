@@ -36,6 +36,23 @@
     "feature_cache_written": false,
     "gpu_used": false
   },
+  "manual_annotations_archive_preflight": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021\\ami_public_manual_1.6.2.zip",
+    "release": "AMI manual annotations v1.6.2",
+    "bytes": 22887865,
+    "sha256": "b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d",
+    "opened_partitions": ["train: ES2002a", "development_validation: ES2011a"],
+    "sealed_or_evaluation_annotations_opened": false,
+    "es2011a_validation_segments": {
+      "A": {"channel": 0, "segments": 91, "first_interval_seconds": [33.802, 44.656], "lapel_track": "Lapel-0", "speech_rms": 0.000915, "preceding_1s_rms": 0.001398},
+      "B": {"channel": 1, "segments": 44, "first_interval_seconds": [84.791, 85.572], "lapel_track": "Lapel-1", "speech_rms": 0.003281, "preceding_1s_rms": 0.002297},
+      "C": {"channel": 2, "segments": 67, "first_interval_seconds": [85.808, 86.665], "lapel_track": "Lapel-2", "speech_rms": 0.004194, "preceding_1s_rms": 0.002318},
+      "D": {"channel": 3, "segments": 61, "first_interval_seconds": [64.976, 77.9], "lapel_track": "Lapel-3", "speech_rms": 0.007298, "preceding_1s_rms": 0.000668}
+    },
+    "media_persisted": false,
+    "model_predictions_or_quality_metrics": false,
+    "interpretation": "Validation transcript source exists; this four-interval smoke is not a cohort audit. Preserve the low-energy channel-0 example for review."
+  },
   "meetings": [
     {
       "meeting": "ES2002a",
@@ -141,7 +158,7 @@
   "r2m_status": "REVIEW_NOT_ADMITTED",
   "unresolved_gates": [
     "speakerseg channel semantics and channel 4 meaning",
-    "manual transcript source for validation meetings",
+    "full validation-cohort turn-to-audio timestamp alignment and visible-speaker validity",
     "synchronization within the common stream interval",
     "suitability of 360x284 15-fps low-size video for mouth/action cues",
     "audio-only/video-only/joint/mismatched controls demonstrating both-input necessity",

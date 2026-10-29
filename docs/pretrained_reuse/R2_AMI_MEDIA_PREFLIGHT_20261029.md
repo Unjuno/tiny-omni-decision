@@ -57,10 +57,26 @@ maps channel 0 to MEE006 / Closeup1. The official
 [data-problems table](https://groups.inf.ed.ac.uk/ami/corpus/dataproblems.shtml)
 notes that this participant's headset was worn incorrectly but its lapel
 recording is okay. Thus `Lapel-0` is the appropriate channel-matched source
-candidate; the speaker-turn annotation and temporal AV alignment still need
-validation. No full track or feature cache was saved. This improves source
-availability evidence only and does not change `REVIEW_NOT_ADMITTED` or close
-the task/label/validation gates.
+candidate. The protected external artifact directory contains the official
+manual-annotation v1.6.2 archive (SHA-256
+`b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d`). Its
+ES2002a speaker-A segment XML uses channel 0; the first three transcript
+segments align with higher decoded `Lapel-0` RMS than the preceding second
+(ratios 3.80, 3.84, 1.50). No archive or media file was changed or newly
+persisted.
+
+The same archive contains ES2011a development-validation segment XML for all
+four agents: 91/44/67/61 segments on channels 0/1/2/3. A CPU direct-stream
+check of each agent's first segment against the same-numbered Lapel track gave
+speech-window RMS values 0.000915/0.003281/0.004194/0.007298, versus the
+preceding-second values 0.001398/0.002297/0.002318/0.000668. The first A
+interval has lower RMS and needs review; this is not a reason to remove or
+filter it. The check confirms that the validation transcript source exists,
+but it does not validate all turns, visible-speaker truth, or AV sync. Only
+train ES2002a and development-validation ES2011a were inspected; evaluation
+labels, model predictions, and model-quality metrics were not opened or
+produced. No full track or feature cache was persisted. AMI remains
+`REVIEW_NOT_ADMITTED`.
 
 ## Source and exact media inventory
 
@@ -124,19 +140,21 @@ unmeasured. No visual suitability conclusion is made.
 The official meeting-information files give four participants per meeting.
 For ES2002 and ES2011, the official [signals table](https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml)
 maps the four participant roles to close-up camera names and channels.
-However, the low-size mirror's `speakersegAll.xml` is not yet validated as the
+However, the low-size mirror's `speakersegAll.xml` is not validated as the
 ground-truth target:
 its intervals carry channel and time attributes but empty `textlabel` fields in
 the checked ES2002a and ES2011a files. ES2011a additionally contains channel 4,
 although the mirror lists `speakersegChan0.xml` through `speakersegChan3.xml`;
 the meaning of channel 4 is unknown. ES2011a's browsable directory does not
-contain the manual-transcript HTML files seen for ES2002a, despite the official
-availability table marking manual transcripts for all 60 scenario submeetings.
-PR #19 separately records selective extraction from the official
-manual-annotation archive for its train/validation cohort; use that pinned
-extraction and its receipts rather than infer that validation labels are
-absent. Resolve whether the low-size mirror's `speakersegAll.xml` is equivalent
-before using it for targets.
+contain the manual-transcript HTML files seen for ES2002a, but the existing
+official manual-annotation archive contains ES2011a A–D word and segment XMLs.
+Its hash and channel counts are recorded in the companion manifest. The first
+segment for channel 0 had lower RMS than the preceding second; preserve it and
+review the full validation cohort before use. PR #19 separately records
+selective extraction from the official archive for its train/validation cohort;
+reuse its pinned receipts. The low-size mirror's `speakersegAll.xml` remains a
+distinct, unvalidated annotation source and must not be substituted for manual
+transcript targets.
 
 During source-schema inspection, the ES2014a `speakersegAll.xml` evaluation
 annotation was fetched into memory and parsed (49,529 UTF-8-reencoded bytes;
@@ -162,10 +180,10 @@ does not include the complete train/validation data, annotations, extracted
 features, or model outputs. Do not fetch it while the established 2 GiB free
 space reserve is unmet.
 
-Before admission, resolve the channel/annotation semantics, confirm the exact
-manual-transcript route for held-out development meetings, and test timestamp
-alignment across all required streams. Then establish enough independent
-meeting groups and data storage for a predeclared task with audio-only,
+Before admission, audit the low-energy ES2011a channel-0 sample and full
+validation-cohort turn/timestamp alignment and visible-speaker validity. Then
+establish enough independent meeting groups and data storage for a predeclared
+task with audio-only,
 video-only, joint, and mismatched-input controls. The exposed ES2014 group is
 not eligible for its final locked evaluation. No training, model-quality
 evaluation, sealed-audit access, or GPU job was performed here.
