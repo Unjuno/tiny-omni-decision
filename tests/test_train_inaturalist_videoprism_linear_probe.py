@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 from pathlib import Path
 
 import numpy as np
 import pytest
 
-from scripts.train_inaturalist_videoprism_linear_probe import load_verified_data, run
+pytest.importorskip("torch", reason="the optional CPU probe runtime requires PyTorch")
+probe = importlib.import_module("scripts.train_inaturalist_videoprism_linear_probe")
 
 
 def _sha(path: Path) -> str:
@@ -75,7 +77,9 @@ def _write_fixture(root: Path) -> tuple[Path, Path]:
 def test_load_verified_data_preserves_split_order_and_class_ids(tmp_path: Path) -> None:
     feature_dir, metadata_dir = _write_fixture(tmp_path)
 
-    x_train, y_train, x_val, y_val, class_ids = load_verified_data(feature_dir, metadata_dir)
+    x_train, y_train, x_val, y_val, class_ids = probe.load_verified_data(
+        feature_dir, metadata_dir
+    )
 
     assert x_train.shape == (16, 768)
     assert x_val.shape == (8, 768)
@@ -92,14 +96,14 @@ def test_load_verified_data_rejects_changed_feature_row_order(tmp_path: Path) ->
     path.write_text("\n".join(rows) + "\n", encoding="utf-8")
 
     with pytest.raises(ValueError, match="feature row hash mismatch"):
-        load_verified_data(feature_dir, metadata_dir)
+        probe.load_verified_data(feature_dir, metadata_dir)
 
 
 def test_cpu_probe_writes_selected_checkpoint_and_complete_predictions(tmp_path: Path) -> None:
     feature_dir, metadata_dir = _write_fixture(tmp_path)
     output_dir = tmp_path / "readout"
 
-    result = run(feature_dir, metadata_dir, output_dir, epochs=2, patience=2)
+    result = probe.run(feature_dir, metadata_dir, output_dir, epochs=2, patience=2)
 
     assert result["status"] == "complete_inaturalist_videoprism_linear_probe"
     assert result["device"] == "cpu"
