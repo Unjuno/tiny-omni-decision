@@ -1,0 +1,1201 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-29T22:55:03+09:00",
+  "repository": "Unjuno/tiny-omni-decision",
+  "current_worktree": {
+    "path": "C:\\CodexWorktrees\\r2-egoviz-mcap-preflight-20261029",
+    "branch": "codex/r2-egoviz-mcap-preflight-20261029",
+    "head": "999a8bd416bd81bbe78e519d81d54af9a3699a2c",
+    "clean": true
+  },
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_branch": "db19d1729ad540a77afd5a05758113488355c8ca",
+    "open_pr_count": 30,
+    "open_prs": [
+      {
+        "number": 9,
+        "title": "Teacher v1: leakage-safe quality pipeline",
+        "draft": true,
+        "base": "main",
+        "head": "codex/teacher-quality-v1",
+        "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134"
+      },
+      {
+        "number": 10,
+        "title": "feat: safe postquant worker entrypoints (no training launch)",
+        "draft": true,
+        "base": "codex/roadmap-compression-video-specialization",
+        "head": "codex/postquant-worker-entrypoints",
+        "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"
+      },
+      {
+        "number": 11,
+        "title": "feat: postquant numerical core and CPU checker (no model execution)",
+        "draft": true,
+        "base": "codex/postquant-worker-entrypoints",
+        "head": "codex/postquant-numerical-core",
+        "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"
+      },
+      {
+        "number": 12,
+        "title": "feat: add strict postquant teacher cache boundary",
+        "draft": true,
+        "base": "codex/postquant-numerical-core",
+        "head": "codex/postquant-teacher-cache",
+        "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61"
+      },
+      {
+        "number": 13,
+        "title": "feat: ternary-first student recovery with conditional LoRA",
+        "draft": false,
+        "base": "main",
+        "head": "feat/ternary-student-recovery",
+        "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd"
+      },
+      {
+        "number": 14,
+        "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+        "draft": true,
+        "base": "codex/ternary-student-recovery",
+        "head": "fix/student-qat-training-handoff",
+        "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8"
+      },
+      {
+        "number": 15,
+        "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+        "draft": true,
+        "base": "main",
+        "head": "docs/pretrained-reuse-roadmap-20261010",
+        "head_sha": "db19d1729ad540a77afd5a05758113488355c8ca"
+      },
+      {
+        "number": 16,
+        "title": "Record PE-Core T16 checkpoint CPU audit",
+        "draft": false,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r1-pe-core-audit-20261021",
+        "head_sha": "afea6624dfe247350ecbb704d61099304009f2a0"
+      },
+      {
+        "number": 17,
+        "title": "Screen MAVD Urbansas audiovisual source integrity",
+        "draft": false,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-mavd-source-screen-20261021",
+        "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5"
+      },
+      {
+        "number": 18,
+        "title": "Screen CaptainCook4D for a procedural step-text video task",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-captaincook4d-screen-20261021",
+        "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a"
+      },
+      {
+        "number": 19,
+        "title": "Screen AMI for cross-modal speaker-to-face matching",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-ami-av-source-screen-20261021",
+        "head_sha": "db8e83fa4f7aab3280e90b630f904b5fe3f2ab3c"
+      },
+      {
+        "number": 20,
+        "title": "Add stable typed Decision JSON output",
+        "draft": true,
+        "base": "codex/r0-r2-continuation-20261021",
+        "head": "codex/r2-json-decision-contract-20261021",
+        "head_sha": "7c4ac37fbeb8b18445e05882baa4282d65901189"
+      },
+      {
+        "number": 21,
+        "title": "R2: CLEVRER synthetic AV coverage v2 results",
+        "draft": true,
+        "base": "codex/r2-clevrer-synthetic-av-protocol",
+        "head": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+        "head_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705"
+      },
+      {
+        "number": 22,
+        "title": "docs: screen FAIR-Play for R2 AV matching",
+        "draft": true,
+        "base": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+        "head": "codex/r2-fair-play-source-screen-20261022",
+        "head_sha": "936a9837299b25095c0f0703768f1079af24b424"
+      },
+      {
+        "number": 23,
+        "title": "R2: record scalar audio projection diagnostic",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/roadmap-scalar-audio-update-20261022",
+        "head_sha": "df4ac9b02b66b60a3231df7f765c82bb436c908f"
+      },
+      {
+        "number": 24,
+        "title": "Record CLEVR-4 100k fixed-readout transfer results",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/clevr4-100k-transfer-eval-20261023",
+        "head_sha": "204d1f2932dc8def5a8830226a7e03926b88a6c5"
+      },
+      {
+        "number": 25,
+        "title": "docs: add RoboPro and otoSpeech R2 source screens",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-robopro-source-screen-20261024",
+        "head_sha": "096d9cfb83bb1898a05b5a4fcd313ef232363f34"
+      },
+      {
+        "number": 26,
+        "title": "Record pinned native shared-readout gradient diagnostic",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-shared-gradient-audit-20261024",
+        "head_sha": "8eb702a126a512b269fd3fd083b7f973478a6947"
+      },
+      {
+        "number": 27,
+        "title": "docs: reconcile AV source screen with completed synthetic run",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-joint-av-source-screen-20261024",
+        "head_sha": "e2c05dc5f0d0aee681345e723147df47ac307392"
+      },
+      {
+        "number": 28,
+        "title": "docs: refresh R0 repository and live GPU audit",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r0-live-audit-20261024",
+        "head_sha": "c0ca187c0dfe9be9b54439b70fde1c723047ec46"
+      },
+      {
+        "number": 29,
+        "title": "Add CommonsenseQA 2.0 text Decision transfer probe",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-csqa2-text-decision-20261024",
+        "head_sha": "f057a031ffe271c51c138b439800cae2863a9149"
+      },
+      {
+        "number": 30,
+        "title": "Record AVSBench source and rights gate",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-avsbench-source-screen-20261024",
+        "head_sha": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca"
+      },
+      {
+        "number": 31,
+        "title": "Record DROID unseen-site shard sample audit",
+        "draft": true,
+        "base": "codex/r2-droid-expanded-sites-20261028",
+        "head": "codex/r2-droid-site-universe-audit-20261028",
+        "head_sha": "aefb1a1a3cd09959e73dfac79dbf319fce63c367"
+      },
+      {
+        "number": 32,
+        "title": "Evaluate frozen DROID readouts on later shard groups",
+        "draft": true,
+        "base": "codex/r2-droid-site-universe-audit-20261028",
+        "head": "codex/r2-droid-temporal-transfer-20261028",
+        "head_sha": "a8db60d262b9655cb00897f26cdec9ee6a177070"
+      },
+      {
+        "number": 33,
+        "title": "Add paired site uncertainty audit for DROID later-shard transfer",
+        "draft": true,
+        "base": "codex/r2-droid-temporal-transfer-20261028",
+        "head": "codex/r2-droid-later-shard-uncertainty-20261028",
+        "head_sha": "b8245103d221daea225f9666862f6b149462aa1b"
+      },
+      {
+        "number": 34,
+        "title": "Correct GOOSE instance-label mapping audit",
+        "draft": true,
+        "base": "codex/r2-droid-later-shard-uncertainty-20261028",
+        "head": "codex/r2-goose-instance-map-audit-20261028",
+        "head_sha": "2a6a022f9974c2b0aec79da759b4d1fd0d27b57a"
+      },
+      {
+        "number": 35,
+        "title": "docs: update ZOD schema and source gate",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-zod-cam-lidar-screen-20261028",
+        "head_sha": "3160975fac62e1c1cb79ad91dc94b0f3b7bf2bcb"
+      },
+      {
+        "number": 36,
+        "title": "docs: screen FZI-AURA and DAVE AV candidates",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-fzi-aura-source-screen-20261028",
+        "head_sha": "57aa474d9f15b2f70d9f9dc6fb441e69d377ba99"
+      },
+      {
+        "number": 37,
+        "title": "Record iNaturalist CC0 expansion coverage gate",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-inat-expansion-roadmap-20261029",
+        "head_sha": "436a242be68e044948a25adca0167b1ea98b98d0"
+      },
+      {
+        "number": 38,
+        "title": "docs: record EgoViz MCAP sync preflight",
+        "draft": true,
+        "base": "docs/pretrained-reuse-roadmap-20261010",
+        "head": "codex/r2-egoviz-mcap-preflight-20261029",
+        "head_sha": "999a8bd416bd81bbe78e519d81d54af9a3699a2c"
+      }
+    ],
+    "head_branch_count": 114,
+    "branches": [
+      {
+        "sha": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+        "ref": "refs/heads/codex/clevr4-100k-transfer-eval-20261023"
+      },
+      {
+        "sha": "6c2abb842b448e248573e2f729670e1a1080ae98",
+        "ref": "refs/heads/codex/clevr4-image-candidate"
+      },
+      {
+        "sha": "24d7fab171524aea51b3ba82726d33c728407d50",
+        "ref": "refs/heads/codex/decision-head-validation"
+      },
+      {
+        "sha": "fbb1dced2f6b6a0272ca29325dfb0b54da7e5c58",
+        "ref": "refs/heads/codex/durable-decision-teacher"
+      },
+      {
+        "sha": "ac44d457073df83d7a0c2f8d6c5e4490f725014b",
+        "ref": "refs/heads/codex/fix-speechcommands-parquet"
+      },
+      {
+        "sha": "ddf6a106675f3a15feb66b5123ee7431539c27bf",
+        "ref": "refs/heads/codex/holoassist-label-window-audit"
+      },
+      {
+        "sha": "e89bfc99c886a2972b47580f63ec4ab80a37a2df",
+        "ref": "refs/heads/codex/native-clipnorm-comparison-20261026"
+      },
+      {
+        "sha": "c5b0c5020f77018fbce8d6f0880a079a3bd51281",
+        "ref": "refs/heads/codex/phase1-reproducible-smoke"
+      },
+      {
+        "sha": "b8057ec534b3792ab54ee136465544fa9c26d925",
+        "ref": "refs/heads/codex/phase2-audio-video"
+      },
+      {
+        "sha": "b02180f7f2bd6f2876958a1e5c6018fc6bdc9927",
+        "ref": "refs/heads/codex/phase2-dataset-gates"
+      },
+      {
+        "sha": "30bcf23c510b9db724c0b17b07f284139105ee44",
+        "ref": "refs/heads/codex/phase3-high-precision-omni"
+      },
+      {
+        "sha": "92fc57f2a28d82b7afad5533f2df66a4042d67a0",
+        "ref": "refs/heads/codex/postquant-cache-preparation"
+      },
+      {
+        "sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5",
+        "ref": "refs/heads/codex/postquant-numerical-core"
+      },
+      {
+        "sha": "c79a50bd937de9266fb1277efd68fd24b3989a61",
+        "ref": "refs/heads/codex/postquant-teacher-cache"
+      },
+      {
+        "sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932",
+        "ref": "refs/heads/codex/postquant-worker-entrypoints"
+      },
+      {
+        "sha": "c50f0eb364d963bbcb3144a83305705880d9d426",
+        "ref": "refs/heads/codex/qat-groupwise-performance"
+      },
+      {
+        "sha": "b404cb5889da14fc85d7a08c2d14f6d71966efc1",
+        "ref": "refs/heads/codex/r0-av-source-gate-20261020"
+      },
+      {
+        "sha": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+        "ref": "refs/heads/codex/r0-live-audit-20261024"
+      },
+      {
+        "sha": "a32f6aeaa79d77e904839cdad4906bc421a56a02",
+        "ref": "refs/heads/codex/r0-r1-recheck-20261026"
+      },
+      {
+        "sha": "408003a204642d45935a4cde3c71e19216e67cb8",
+        "ref": "refs/heads/codex/r0-r2-continuation-20261021"
+      },
+      {
+        "sha": "afea6624dfe247350ecbb704d61099304009f2a0",
+        "ref": "refs/heads/codex/r1-pe-core-audit-20261021"
+      },
+      {
+        "sha": "2978b4a5b41b5a4e4d84acb47ab1f3ded429a541",
+        "ref": "refs/heads/codex/r1-recheck-hash-correction-20261026"
+      },
+      {
+        "sha": "6d6be75d75bae9663cc35d13bd7c052aae288326",
+        "ref": "refs/heads/codex/r2-a2d2-source-screen-20261023"
+      },
+      {
+        "sha": "d382517b39709367599984bcb764a7db319d06d1",
+        "ref": "refs/heads/codex/r2-adl-feature-smoke-20261028"
+      },
+      {
+        "sha": "db8e83fa4f7aab3280e90b630f904b5fe3f2ab3c",
+        "ref": "refs/heads/codex/r2-ami-av-source-screen-20261021"
+      },
+      {
+        "sha": "e25d21300850126d408ed837ef7437c99d8f3829",
+        "ref": "refs/heads/codex/r2-ami-multipt-timing-gate-20261023"
+      },
+      {
+        "sha": "9966302c06ebacae30d292b88d13c98d03a5d021",
+        "ref": "refs/heads/codex/r2-ami-rm-media-preflight-20261023"
+      },
+      {
+        "sha": "cb020322a229ea31a7d2773717ba6487a622a376",
+        "ref": "refs/heads/codex/r2-ami-speaker-channel-preflight-20261022"
+      },
+      {
+        "sha": "2721093fc72984bbf46de5501d6b42175e426d1f",
+        "ref": "refs/heads/codex/r2-audio-vibration-source-20261027"
+      },
+      {
+        "sha": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+        "ref": "refs/heads/codex/r2-av-audio-cache"
+      },
+      {
+        "sha": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+        "ref": "refs/heads/codex/r2-av-matched-evidence"
+      },
+      {
+        "sha": "809c0f8226a780039a89c8066709d15d39a53f8a",
+        "ref": "refs/heads/codex/r2-av-postnorm-stability"
+      },
+      {
+        "sha": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+        "ref": "refs/heads/codex/r2-av-replacement"
+      },
+      {
+        "sha": "851de12e5dd26d3923bf5080a83aa5372733d0dc",
+        "ref": "refs/heads/codex/r2-av-source-rights-screen-20261028"
+      },
+      {
+        "sha": "6540c9f181a4de423f4b9e975f1373861b83b95c",
+        "ref": "refs/heads/codex/r2-av-task-source-screen-20261023"
+      },
+      {
+        "sha": "443d058a8d256322a8d1417e7602fc957b3d0540",
+        "ref": "refs/heads/codex/r2-av-training-signal-20261023"
+      },
+      {
+        "sha": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+        "ref": "refs/heads/codex/r2-av-transport"
+      },
+      {
+        "sha": "9e8a8a991aac46531488691603a914b0be5757d6",
+        "ref": "refs/heads/codex/r2-avqa-source-screen-20261021"
+      },
+      {
+        "sha": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+        "ref": "refs/heads/codex/r2-avsbench-source-screen-20261024"
+      },
+      {
+        "sha": "758ec16f3003940e6f37b6101156571aa4499529",
+        "ref": "refs/heads/codex/r2-batvision-source-screen"
+      },
+      {
+        "sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+        "ref": "refs/heads/codex/r2-captaincook4d-screen-20261021"
+      },
+      {
+        "sha": "e914ba220ba1dbbb0822af4933db79638354f364",
+        "ref": "refs/heads/codex/r2-clevrer-coverage-20261020"
+      },
+      {
+        "sha": "016face5ece2dd11835af641b1759104e1646a1a",
+        "ref": "refs/heads/codex/r2-clevrer-fresh-reasoning-20261021"
+      },
+      {
+        "sha": "cafb040c467bba6783ff30c6cc327db928cdfad5",
+        "ref": "refs/heads/codex/r2-clevrer-reasoning-storytime-screen-20261023"
+      },
+      {
+        "sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705",
+        "ref": "refs/heads/codex/r2-clevrer-synthetic-av-coverage-20261022"
+      },
+      {
+        "sha": "83c4750aba663743bb5c2be3c0c8a90b8e8ead44",
+        "ref": "refs/heads/codex/r2-clevrer-synthetic-av-protocol"
+      },
+      {
+        "sha": "9feb7494889036eb1d9be3528e3f596fa5b3ff16",
+        "ref": "refs/heads/codex/r2-clevrer-video-coverage-v1"
+      },
+      {
+        "sha": "72cf2d8dcaa7d8d330e4402fa9d96be228ef629b",
+        "ref": "refs/heads/codex/r2-conditional-av-readout-20261022"
+      },
+      {
+        "sha": "f057a031ffe271c51c138b439800cae2863a9149",
+        "ref": "refs/heads/codex/r2-csqa2-text-decision-20261024"
+      },
+      {
+        "sha": "23f02483866715a9aa52f42b6ca0625e987c0773",
+        "ref": "refs/heads/codex/r2-droid-expanded-sites-20261028"
+      },
+      {
+        "sha": "eba818067c6a9ef9089288205c26f6a8254ca6e5",
+        "ref": "refs/heads/codex/r2-droid-fresh-holdout-20261026"
+      },
+      {
+        "sha": "b8245103d221daea225f9666862f6b149462aa1b",
+        "ref": "refs/heads/codex/r2-droid-later-shard-uncertainty-20261028"
+      },
+      {
+        "sha": "54a1505b71a5392ad9c43d78817592cc67cc09df",
+        "ref": "refs/heads/codex/r2-droid-next-action-20261026"
+      },
+      {
+        "sha": "aefb1a1a3cd09959e73dfac79dbf319fce63c367",
+        "ref": "refs/heads/codex/r2-droid-site-universe-audit-20261028"
+      },
+      {
+        "sha": "a8db60d262b9655cb00897f26cdec9ee6a177070",
+        "ref": "refs/heads/codex/r2-droid-temporal-transfer-20261028"
+      },
+      {
+        "sha": "4b5742d14aafe7a2c0b60351a940483d53a75acc",
+        "ref": "refs/heads/codex/r2-droid100-source-task-screen-20261026"
+      },
+      {
+        "sha": "999a8bd416bd81bbe78e519d81d54af9a3699a2c",
+        "ref": "refs/heads/codex/r2-egoviz-mcap-preflight-20261029"
+      },
+      {
+        "sha": "936a9837299b25095c0f0703768f1079af24b424",
+        "ref": "refs/heads/codex/r2-fair-play-source-screen-20261022"
+      },
+      {
+        "sha": "57aa474d9f15b2f70d9f9dc6fb441e69d377ba99",
+        "ref": "refs/heads/codex/r2-fzi-aura-source-screen-20261028"
+      },
+      {
+        "sha": "2a6a022f9974c2b0aec79da759b4d1fd0d27b57a",
+        "ref": "refs/heads/codex/r2-goose-instance-map-audit-20261028"
+      },
+      {
+        "sha": "6baf4ab60f8acefc75d4d4c63961b3cb0c33f24d",
+        "ref": "refs/heads/codex/r2-holoassist-exposure-strata"
+      },
+      {
+        "sha": "5c0bae773f9d4ec983ff3ac58fc13b1dd24bc47a",
+        "ref": "refs/heads/codex/r2-holoassist-results-20261020"
+      },
+      {
+        "sha": "39b1a7057c4ec0afaa04b3dbc09e1989d2fa654b",
+        "ref": "refs/heads/codex/r2-holoassist-textfree"
+      },
+      {
+        "sha": "976afd9d9788a1bf5d7d462d08a853590b655e73",
+        "ref": "refs/heads/codex/r2-inat-coverage-scale-20261029"
+      },
+      {
+        "sha": "436a242be68e044948a25adca0167b1ea98b98d0",
+        "ref": "refs/heads/codex/r2-inat-expansion-roadmap-20261029"
+      },
+      {
+        "sha": "19392c947da150b4f0e4e1aca4cccef5374c1bdf",
+        "ref": "refs/heads/codex/r2-inaturalist-cc0-screen-20261026"
+      },
+      {
+        "sha": "2dc16f0ed83ff8705c835b78acc397b496450d5f",
+        "ref": "refs/heads/codex/r2-independent-joint-task"
+      },
+      {
+        "sha": "e2c05dc5f0d0aee681345e723147df47ac307392",
+        "ref": "refs/heads/codex/r2-joint-av-source-screen-20261024"
+      },
+      {
+        "sha": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+        "ref": "refs/heads/codex/r2-json-decision-contract-20261021"
+      },
+      {
+        "sha": "6b2ae96d47727ea9c83cdee7dc2fde57abae8e53",
+        "ref": "refs/heads/codex/r2-lstm-train-input-dependency-20261023"
+      },
+      {
+        "sha": "07c504c958816fd2e9d70c279702b71b6e55e749",
+        "ref": "refs/heads/codex/r2-mavad-source-screen-20261021"
+      },
+      {
+        "sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+        "ref": "refs/heads/codex/r2-mavd-source-screen-20261021"
+      },
+      {
+        "sha": "83234a18d07a05f5c9052f80c5b9fcfbf0205dcc",
+        "ref": "refs/heads/codex/r2-meva-source-screen-20261020"
+      },
+      {
+        "sha": "33afecdc749f213cf023f4389bc5c30ebac8931e",
+        "ref": "refs/heads/codex/r2-native-coverage-long-20261021"
+      },
+      {
+        "sha": "fe0cde75cf403c21cbd6288a6f4b1a46479a5e24",
+        "ref": "refs/heads/codex/r2-openimages-grounding-freshval-20261026"
+      },
+      {
+        "sha": "00df994790db8d19d6b570563cc95641af03633b",
+        "ref": "refs/heads/codex/r2-openimages-image-prototype-20261026"
+      },
+      {
+        "sha": "25b2fdc8d2c964f589940a335dc26a3365398858",
+        "ref": "refs/heads/codex/r2-openimages-pecore-zero-shot-20261026"
+      },
+      {
+        "sha": "46e92ec5b3a4bb0a105ca8e79e0bdc0768d09ed4",
+        "ref": "refs/heads/codex/r2-otospeech-source-screen-20261024"
+      },
+      {
+        "sha": "e3fa96e7b0c5a0bf78253ef595fda4ffbeb525d6",
+        "ref": "refs/heads/codex/r2-pamap2-admission-screen-20261021"
+      },
+      {
+        "sha": "d825251d3baea690dfa17602c28fc81096ab1575",
+        "ref": "refs/heads/codex/r2-pch-heldout-eval-20261021"
+      },
+      {
+        "sha": "fe82f5cd854cb305cc13eb715eb7a92b40dbd976",
+        "ref": "refs/heads/codex/r2-pch-recording-temporal-20261021"
+      },
+      {
+        "sha": "5a1bd69f733da1926ce6c7e4d0afe7221272609e",
+        "ref": "refs/heads/codex/r2-pch-sensor-v1-pr15"
+      },
+      {
+        "sha": "07eb437a79e11fede0b6544b75631560d7fd22a9",
+        "ref": "refs/heads/codex/r2-pch-temporal-readout-v1"
+      },
+      {
+        "sha": "58633f10a6010f31dc5a17c59ce9a7c09b462db9",
+        "ref": "refs/heads/codex/r2-perception-av-scale-v1"
+      },
+      {
+        "sha": "77c2949c6d454ad81ba335f2a0b2a1601bbb8297",
+        "ref": "refs/heads/codex/r2-perception-fresh-holdout"
+      },
+      {
+        "sha": "a48e8e218038bc3830d59d595dba4f070c6904ce",
+        "ref": "refs/heads/codex/r2-perception-source-candidate"
+      },
+      {
+        "sha": "595e4c310789f25204967b5a394fbd012a4e17cb",
+        "ref": "refs/heads/codex/r2-perception-source-validation-transfer-20261026"
+      },
+      {
+        "sha": "b7075812aee034b03bc9c30e28941eb6d00ec2d0",
+        "ref": "refs/heads/codex/r2-perit-duplex-screen-20261026"
+      },
+      {
+        "sha": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+        "ref": "refs/heads/codex/r2-roadmap-status-20261021"
+      },
+      {
+        "sha": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+        "ref": "refs/heads/codex/r2-robopro-source-screen-20261024"
+      },
+      {
+        "sha": "2583f3a76738b6c5772741d47724518f2b616dae",
+        "ref": "refs/heads/codex/r2-sensor-video-source-screen-20261026"
+      },
+      {
+        "sha": "8eb702a126a512b269fd3fd083b7f973478a6947",
+        "ref": "refs/heads/codex/r2-shared-gradient-audit-20261024"
+      },
+      {
+        "sha": "329b525f2a504c2c77a30f48c8ae88c0b23467f5",
+        "ref": "refs/heads/codex/r2-spatial-count-readout-20261023"
+      },
+      {
+        "sha": "aff0452f27496e3c991ead1e64dbcbe8a8007935",
+        "ref": "refs/heads/codex/r2-storytime-api-followup-20261023"
+      },
+      {
+        "sha": "4a9f856ab010254fee6f83f438cc52ef77c9a311",
+        "ref": "refs/heads/codex/r2-synthetic-av-gated-temporal-20261026"
+      },
+      {
+        "sha": "d264d59c6e1393a85c3f27b8a7211a5644cb393d",
+        "ref": "refs/heads/codex/r2-temporal-av-alignment-20261026"
+      },
+      {
+        "sha": "3160975fac62e1c1cb79ad91dc94b0f3b7bf2bcb",
+        "ref": "refs/heads/codex/r2-zod-cam-lidar-screen-20261028"
+      },
+      {
+        "sha": "91d7867fadfd2315f8e4d4c650ae10c4d235d277",
+        "ref": "refs/heads/codex/roadmap-compression-video-specialization"
+      },
+      {
+        "sha": "df4ac9b02b66b60a3231df7f765c82bb436c908f",
+        "ref": "refs/heads/codex/roadmap-scalar-audio-update-20261022"
+      },
+      {
+        "sha": "44f9366b394e1d2ac23cc5d2cb701c3af64e0d27",
+        "ref": "refs/heads/codex/starss23-spatial-option-preflight-20261026"
+      },
+      {
+        "sha": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+        "ref": "refs/heads/codex/teacher-quality-clean-dev-v1"
+      },
+      {
+        "sha": "c5f120857bc5c4f392e1605895a614760cef12a1",
+        "ref": "refs/heads/codex/teacher-quality-next"
+      },
+      {
+        "sha": "506a049142f09f6aa5e34e20778f662e680eb93d",
+        "ref": "refs/heads/codex/teacher-quality-physionpp"
+      },
+      {
+        "sha": "8bf351c9b2537e03780d55edf12c45ad09819134",
+        "ref": "refs/heads/codex/teacher-quality-v1"
+      },
+      {
+        "sha": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+        "ref": "refs/heads/codex/ternary-student-recovery"
+      },
+      {
+        "sha": "74e2094c51af6a8738dd67d42d018442b979cd75",
+        "ref": "refs/heads/codex/textfree-video-coverage-v1"
+      },
+      {
+        "sha": "87ed587ee847b83531b6be186f8694685124b731",
+        "ref": "refs/heads/codex/textfree-video-program-order"
+      },
+      {
+        "sha": "7b13057a38e7d84019d802129c70ee5350185db7",
+        "ref": "refs/heads/codex/textfree-video-task-error-audit"
+      },
+      {
+        "sha": "6b15fcbb2546ac153c0313af0d63be86f41ff885",
+        "ref": "refs/heads/codex/video-teacher-v2"
+      },
+      {
+        "sha": "ac93eddd289bf207b70b55759a922b070132d0d2",
+        "ref": "refs/heads/codex/video-teacher-v2-long-budget"
+      },
+      {
+        "sha": "db19d1729ad540a77afd5a05758113488355c8ca",
+        "ref": "refs/heads/docs/pretrained-reuse-roadmap-20261010"
+      },
+      {
+        "sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd",
+        "ref": "refs/heads/feat/ternary-student-recovery"
+      },
+      {
+        "sha": "c3391a0c689d69df3300686d9c287546b741e7c8",
+        "ref": "refs/heads/fix/student-qat-training-handoff"
+      },
+      {
+        "sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+        "ref": "refs/heads/main"
+      }
+    ]
+  },
+  "worktree_count": 85,
+  "worktrees": [
+    {
+      "HEAD": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+      "branch": "refs/heads/codex/teacher-quality-clean-dev-v1",
+      "worktree": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision"
+    },
+    {
+      "HEAD": "204d1f2932dc8def5a8830226a7e03926b88a6c5",
+      "branch": "refs/heads/codex/clevr4-100k-transfer-eval-20261023",
+      "worktree": "C:/CodexWorktrees/clevr4-100k-transfer-eval-20261023"
+    },
+    {
+      "HEAD": "e914ba220ba1dbbb0822af4933db79638354f364",
+      "branch": "refs/heads/codex/r2-clevrer-coverage-20261020",
+      "worktree": "C:/CodexWorktrees/clevrer-coverage-1024"
+    },
+    {
+      "HEAD": "6b2ae96d47727ea9c83cdee7dc2fde57abae8e53",
+      "branch": "refs/heads/codex/r2-lstm-train-input-dependency-20261023",
+      "worktree": "C:/CodexWorktrees/clevrer-synthetic-av-followup-20261022"
+    },
+    {
+      "HEAD": "24d7fab171524aea51b3ba82726d33c728407d50",
+      "branch": "refs/heads/codex/decision-head-validation",
+      "worktree": "C:/CodexWorktrees/decision-head-validation"
+    },
+    {
+      "HEAD": "87ed587ee847b83531b6be186f8694685124b731",
+      "detached": true,
+      "worktree": "C:/CodexWorktrees/native-coverage-run-source-20261024"
+    },
+    {
+      "HEAD": "cb8643849eb5a82ce97bd4722150d217d5cd1939",
+      "detached": true,
+      "worktree": "C:/CodexWorktrees/pr14-review-qat"
+    },
+    {
+      "HEAD": "c3391a0c689d69df3300686d9c287546b741e7c8",
+      "branch": "refs/heads/fix/student-qat-training-handoff",
+      "worktree": "C:/CodexWorktrees/pr14-review-qat-latest"
+    },
+    {
+      "HEAD": "33afecdc749f213cf023f4389bc5c30ebac8931e",
+      "branch": "refs/heads/codex/r2-native-coverage-long-20261021",
+      "worktree": "C:/CodexWorktrees/pretrained-reuse-next-20261021"
+    },
+    {
+      "HEAD": "87ed587ee847b83531b6be186f8694685124b731",
+      "branch": "refs/heads/codex/textfree-video-program-order",
+      "worktree": "C:/CodexWorktrees/pretrained-reuse-omni"
+    },
+    {
+      "HEAD": "bf44a5f2c2eca51d41543ac905dfcf238ee94b4b",
+      "branch": "refs/heads/codex/roadmap-scalar-audio-update-20261022",
+      "worktree": "C:/CodexWorktrees/pretrained-reuse-roadmap-20261022"
+    },
+    {
+      "HEAD": "436a242be68e044948a25adca0167b1ea98b98d0",
+      "branch": "refs/heads/codex/r2-inat-expansion-roadmap-20261029",
+      "worktree": "C:/CodexWorktrees/pretrained-reuse-roadmap-current"
+    },
+    {
+      "HEAD": "e89bfc99c886a2972b47580f63ec4ab80a37a2df",
+      "branch": "refs/heads/codex/native-clipnorm-comparison-20261026",
+      "worktree": "C:/CodexWorktrees/pretrained-reuse-roadmap-vistouch-20261026"
+    },
+    {
+      "HEAD": "c50f0eb364d963bbcb3144a83305705880d9d426",
+      "branch": "refs/heads/codex/qat-groupwise-performance",
+      "worktree": "C:/CodexWorktrees/qat-groupwise-performance"
+    },
+    {
+      "HEAD": "758ec16f3003940e6f37b6101156571aa4499529",
+      "branch": "refs/heads/codex/r2-batvision-source-screen",
+      "worktree": "C:/CodexWorktrees/r0-av-source-gate-20261020"
+    },
+    {
+      "HEAD": "c0ca187c0dfe9be9b54439b70fde1c723047ec46",
+      "branch": "refs/heads/codex/r0-live-audit-20261024",
+      "worktree": "C:/CodexWorktrees/r0-live-audit-20261024"
+    },
+    {
+      "HEAD": "4a9f856ab010254fee6f83f438cc52ef77c9a311",
+      "branch": "refs/heads/codex/r2-synthetic-av-gated-temporal-20261026",
+      "worktree": "C:/CodexWorktrees/r0-r2-continuation-audit-20261021"
+    },
+    {
+      "HEAD": "afea6624dfe247350ecbb704d61099304009f2a0",
+      "branch": "refs/heads/codex/r1-pe-core-audit-20261021",
+      "worktree": "C:/CodexWorktrees/r1-pe-core-audit"
+    },
+    {
+      "HEAD": "2978b4a5b41b5a4e4d84acb47ab1f3ded429a541",
+      "branch": "refs/heads/codex/r1-recheck-hash-correction-20261026",
+      "worktree": "C:/CodexWorktrees/r1-recheck-hash-correction-20261026"
+    },
+    {
+      "HEAD": "6540c9f181a4de423f4b9e975f1373861b83b95c",
+      "branch": "refs/heads/codex/r2-av-task-source-screen-20261023",
+      "worktree": "C:/CodexWorktrees/r2-a2d2-source-screen-20261023"
+    },
+    {
+      "HEAD": "81d57da616886bc03d1690e2a86d124581af55e1",
+      "branch": "refs/heads/codex/r2-adl-complete-archive-audit-20261028",
+      "worktree": "C:/CodexWorktrees/r2-adl-complete-archive-audit-20261028"
+    },
+    {
+      "HEAD": "d382517b39709367599984bcb764a7db319d06d1",
+      "branch": "refs/heads/codex/r2-adl-feature-smoke-20261028",
+      "worktree": "C:/CodexWorktrees/r2-adl-feature-smoke-20261028"
+    },
+    {
+      "HEAD": "db8e83fa4f7aab3280e90b630f904b5fe3f2ab3c",
+      "branch": "refs/heads/codex/r2-ami-av-source-screen-20261021",
+      "worktree": "C:/CodexWorktrees/r2-ami-av-source-screen-20261021"
+    },
+    {
+      "HEAD": "851de12e5dd26d3923bf5080a83aa5372733d0dc",
+      "branch": "refs/heads/codex/r2-av-source-rights-screen-20261028",
+      "worktree": "C:/CodexWorktrees/r2-av-source-rights-screen-20261028"
+    },
+    {
+      "HEAD": "9e8a8a991aac46531488691603a914b0be5757d6",
+      "branch": "refs/heads/codex/r2-avqa-source-screen-20261021",
+      "worktree": "C:/CodexWorktrees/r2-avqa-source-screen-20261021"
+    },
+    {
+      "HEAD": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca",
+      "branch": "refs/heads/codex/r2-avsbench-source-screen-20261024",
+      "worktree": "C:/CodexWorktrees/r2-avsbench-source-screen-20261024"
+    },
+    {
+      "HEAD": "016face5ece2dd11835af641b1759104e1646a1a",
+      "branch": "refs/heads/codex/r2-clevrer-fresh-reasoning-20261021",
+      "worktree": "C:/CodexWorktrees/r2-clevrer-fresh-reasoning-20261021"
+    },
+    {
+      "HEAD": "443d058a8d256322a8d1417e7602fc957b3d0540",
+      "branch": "refs/heads/codex/r2-av-training-signal-20261023",
+      "worktree": "C:/CodexWorktrees/r2-conditional-av-readout-20261022"
+    },
+    {
+      "HEAD": "f057a031ffe271c51c138b439800cae2863a9149",
+      "branch": "refs/heads/codex/r2-csqa2-text-decision-20261024",
+      "worktree": "C:/CodexWorktrees/r2-csqa2-text-decision-20261024"
+    },
+    {
+      "HEAD": "23f02483866715a9aa52f42b6ca0625e987c0773",
+      "branch": "refs/heads/codex/r2-droid-expanded-sites-20261028",
+      "worktree": "C:/CodexWorktrees/r2-droid-expanded-sites-20261028"
+    },
+    {
+      "HEAD": "b8245103d221daea225f9666862f6b149462aa1b",
+      "branch": "refs/heads/codex/r2-droid-later-shard-uncertainty-20261028",
+      "worktree": "C:/CodexWorktrees/r2-droid-later-shard-uncertainty-20261028"
+    },
+    {
+      "HEAD": "54a1505b71a5392ad9c43d78817592cc67cc09df",
+      "branch": "refs/heads/codex/r2-droid-next-action-20261026",
+      "worktree": "C:/CodexWorktrees/r2-droid-next-action-20261026"
+    },
+    {
+      "HEAD": "aefb1a1a3cd09959e73dfac79dbf319fce63c367",
+      "branch": "refs/heads/codex/r2-droid-site-universe-audit-20261028",
+      "worktree": "C:/CodexWorktrees/r2-droid-site-universe-audit-20261028"
+    },
+    {
+      "HEAD": "a8db60d262b9655cb00897f26cdec9ee6a177070",
+      "branch": "refs/heads/codex/r2-droid-temporal-transfer-20261028",
+      "worktree": "C:/CodexWorktrees/r2-droid-temporal-transfer-20261028"
+    },
+    {
+      "HEAD": "ad9306fa0d57fa99325b7242d751ef1a545cae40",
+      "branch": "refs/heads/codex/r2-droid100-source-task-screen-20261026",
+      "worktree": "C:/CodexWorktrees/r2-droid100-source-task-screen-20261026"
+    },
+    {
+      "HEAD": "999a8bd416bd81bbe78e519d81d54af9a3699a2c",
+      "branch": "refs/heads/codex/r2-egoviz-mcap-preflight-20261029",
+      "worktree": "C:/CodexWorktrees/r2-egoviz-mcap-preflight-20261029"
+    },
+    {
+      "HEAD": "936a9837299b25095c0f0703768f1079af24b424",
+      "branch": "refs/heads/codex/r2-fair-play-source-screen-20261022",
+      "worktree": "C:/CodexWorktrees/r2-fair-play-source-screen-20261022"
+    },
+    {
+      "HEAD": "2a6a022f9974c2b0aec79da759b4d1fd0d27b57a",
+      "branch": "refs/heads/codex/r2-goose-instance-map-audit-20261028",
+      "worktree": "C:/CodexWorktrees/r2-goose-instance-map-audit-20261028"
+    },
+    {
+      "HEAD": "6baf4ab60f8acefc75d4d4c63961b3cb0c33f24d",
+      "branch": "refs/heads/codex/r2-holoassist-exposure-strata",
+      "worktree": "C:/CodexWorktrees/r2-holoassist-exposure-strata"
+    },
+    {
+      "HEAD": "5c0bae773f9d4ec983ff3ac58fc13b1dd24bc47a",
+      "branch": "refs/heads/codex/r2-holoassist-results-20261020",
+      "worktree": "C:/CodexWorktrees/r2-holoassist-results-20261020"
+    },
+    {
+      "HEAD": "19392c947da150b4f0e4e1aca4cccef5374c1bdf",
+      "branch": "refs/heads/codex/r2-inaturalist-cc0-screen-20261026",
+      "worktree": "C:/CodexWorktrees/r2-inaturalist-cc0-screen-20261026"
+    },
+    {
+      "HEAD": "13b6fa22348cb5de4c905bcf365da17dbec5695a",
+      "branch": "refs/heads/codex/r2-captaincook4d-screen-20261021",
+      "worktree": "C:/CodexWorktrees/r2-independent-joint-task"
+    },
+    {
+      "HEAD": "07c504c958816fd2e9d70c279702b71b6e55e749",
+      "branch": "refs/heads/codex/r2-mavad-source-screen-20261021",
+      "worktree": "C:/CodexWorktrees/r2-mavad-source-screen"
+    },
+    {
+      "HEAD": "79f83b55b58d82612c1941cf600dcca6357ba9f5",
+      "branch": "refs/heads/codex/r2-mavd-source-screen-20261021",
+      "worktree": "C:/CodexWorktrees/r2-mavd-source-screen"
+    },
+    {
+      "HEAD": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "branch": "refs/heads/codex/r2-observation-batch",
+      "worktree": "C:/CodexWorktrees/r2-observation-batch"
+    },
+    {
+      "HEAD": "87265cf2c59608b806e4975c17f9a143dbbfe0ab",
+      "branch": "refs/heads/codex/r2-audio-vibration-source-20261027",
+      "worktree": "C:/CodexWorktrees/r2-openimages-grounding-freshval-20261026"
+    },
+    {
+      "HEAD": "00df994790db8d19d6b570563cc95641af03633b",
+      "branch": "refs/heads/codex/r2-openimages-image-prototype-20261026",
+      "worktree": "C:/CodexWorktrees/r2-openimages-image-prototype-20261026"
+    },
+    {
+      "HEAD": "25b2fdc8d2c964f589940a335dc26a3365398858",
+      "branch": "refs/heads/codex/r2-openimages-pecore-zero-shot-20261026",
+      "worktree": "C:/CodexWorktrees/r2-openimages-pecore-zero-shot-20261026"
+    },
+    {
+      "HEAD": "46e92ec5b3a4bb0a105ca8e79e0bdc0768d09ed4",
+      "branch": "refs/heads/codex/r2-otospeech-source-screen-20261024",
+      "worktree": "C:/CodexWorktrees/r2-otospeech-source-screen-20261024"
+    },
+    {
+      "HEAD": "e3fa96e7b0c5a0bf78253ef595fda4ffbeb525d6",
+      "branch": "refs/heads/codex/r2-pamap2-admission-screen-20261021",
+      "worktree": "C:/CodexWorktrees/r2-pamap2-admission-screen-20261021"
+    },
+    {
+      "HEAD": "d825251d3baea690dfa17602c28fc81096ab1575",
+      "branch": "refs/heads/codex/r2-pch-heldout-eval-20261021",
+      "worktree": "C:/CodexWorktrees/r2-pch-heldout-eval-20261021"
+    },
+    {
+      "HEAD": "fe82f5cd854cb305cc13eb715eb7a92b40dbd976",
+      "branch": "refs/heads/codex/r2-pch-recording-temporal-20261021",
+      "worktree": "C:/CodexWorktrees/r2-pch-recording-temporal-20261021"
+    },
+    {
+      "HEAD": "ddf6a106675f3a15feb66b5123ee7431539c27bf",
+      "branch": "refs/heads/codex/holoassist-label-window-audit",
+      "worktree": "C:/CodexWorktrees/r2-perception-fresh-holdout"
+    },
+    {
+      "HEAD": "b7075812aee034b03bc9c30e28941eb6d00ec2d0",
+      "branch": "refs/heads/codex/r2-perit-duplex-screen-20261026",
+      "worktree": "C:/CodexWorktrees/r2-perit-duplex-screen-20261026"
+    },
+    {
+      "HEAD": "096d9cfb83bb1898a05b5a4fcd313ef232363f34",
+      "branch": "refs/heads/codex/r2-robopro-source-screen-20261024",
+      "worktree": "C:/CodexWorktrees/r2-robopro-source-screen-20261024"
+    },
+    {
+      "HEAD": "2583f3a76738b6c5772741d47724518f2b616dae",
+      "branch": "refs/heads/codex/r2-sensor-video-source-screen-20261026",
+      "worktree": "C:/CodexWorktrees/r2-sensor-video-source-screen-20261026"
+    },
+    {
+      "HEAD": "8eb702a126a512b269fd3fd083b7f973478a6947",
+      "branch": "refs/heads/codex/r2-shared-gradient-audit-20261024",
+      "worktree": "C:/CodexWorktrees/r2-shared-gradient-audit-20261024"
+    },
+    {
+      "HEAD": "d264d59c6e1393a85c3f27b8a7211a5644cb393d",
+      "branch": "refs/heads/codex/r2-temporal-av-alignment-20261026",
+      "worktree": "C:/CodexWorktrees/r2-temporal-av-alignment-20261026"
+    },
+    {
+      "HEAD": "3160975fac62e1c1cb79ad91dc94b0f3b7bf2bcb",
+      "branch": "refs/heads/codex/r2-zod-cam-lidar-screen-20261028",
+      "worktree": "C:/CodexWorktrees/r2-zod-cam-lidar-screen-20261028"
+    },
+    {
+      "HEAD": "74e2094c51af6a8738dd67d42d018442b979cd75",
+      "branch": "refs/heads/codex/textfree-video-coverage-v1",
+      "worktree": "C:/CodexWorktrees/textfree-video-coverage"
+    },
+    {
+      "HEAD": "7b13057a38e7d84019d802129c70ee5350185db7",
+      "branch": "refs/heads/codex/textfree-video-coverage-v2",
+      "worktree": "C:/CodexWorktrees/textfree-video-coverage-v2"
+    },
+    {
+      "HEAD": "7c4ac37fbeb8b18445e05882baa4282d65901189",
+      "branch": "refs/heads/codex/r2-json-decision-contract-20261021",
+      "worktree": "C:/Users/junny/.codex/worktrees/decision-json-contract/tiny-omni-decision"
+    },
+    {
+      "HEAD": "cb020322a229ea31a7d2773717ba6487a622a376",
+      "branch": "refs/heads/codex/r2-ami-speaker-channel-preflight-20261022",
+      "worktree": "C:/Users/junny/.codex/worktrees/patha-r2-continuation/tiny-omni-decision"
+    },
+    {
+      "HEAD": "595e4c310789f25204967b5a394fbd012a4e17cb",
+      "branch": "refs/heads/codex/r2-perception-source-validation-transfer-20261026",
+      "worktree": "C:/Users/junny/.codex/worktrees/perception-source-val-transfer-20261026/tiny-omni-decision"
+    },
+    {
+      "HEAD": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+      "branch": "refs/heads/codex/r2-pch-moment-probe",
+      "worktree": "C:/Users/junny/.codex/worktrees/pr15-r2-progress-update/tiny-omni-decision"
+    },
+    {
+      "HEAD": "a32f6aeaa79d77e904839cdad4906bc421a56a02",
+      "branch": "refs/heads/codex/r0-r1-recheck-20261026",
+      "worktree": "C:/Users/junny/.codex/worktrees/r0-r1-recheck-20261026/tiny-omni-decision"
+    },
+    {
+      "HEAD": "329b525f2a504c2c77a30f48c8ae88c0b23467f5",
+      "branch": "refs/heads/codex/r2-spatial-count-readout-20261023",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-ami-rm-media-preflight/tiny-omni-decision"
+    },
+    {
+      "HEAD": "8e90c80d7d605a52c202247a4d86c1cfa5cbbf14",
+      "branch": "refs/heads/codex/r2-av-audio-cache",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-av-audio-cache/tiny-omni-decision"
+    },
+    {
+      "HEAD": "57593a1a29328d238edc8436162ebd2cbac2ea86",
+      "branch": "refs/heads/codex/r2-av-matched-evidence",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-av-matched-evidence/tiny-omni-decision"
+    },
+    {
+      "HEAD": "809c0f8226a780039a89c8066709d15d39a53f8a",
+      "branch": "refs/heads/codex/r2-av-postnorm-stability",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-av-postnorm-stability"
+    },
+    {
+      "HEAD": "328e935c7bf1e94e2f7e51907393d4514de4e5fa",
+      "branch": "refs/heads/codex/r2-av-replacement",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-av-replacement/tiny-omni-decision"
+    },
+    {
+      "HEAD": "8a5440da334e74e970d80a7059ca5bb99a7248cb",
+      "branch": "refs/heads/codex/r2-av-transport",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-av-transport/tiny-omni-decision"
+    },
+    {
+      "HEAD": "cafb040c467bba6783ff30c6cc327db928cdfad5",
+      "branch": "refs/heads/codex/r2-clevrer-reasoning-storytime-screen-20261023",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-crossmodal-binding-design/tiny-omni-decision"
+    },
+    {
+      "HEAD": "eba818067c6a9ef9089288205c26f6a8254ca6e5",
+      "branch": "refs/heads/codex/r2-droid-fresh-holdout-20261026",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-droid-fresh/tiny-omni-decision"
+    },
+    {
+      "HEAD": "57aa474d9f15b2f70d9f9dc6fb441e69d377ba99",
+      "branch": "refs/heads/codex/r2-fzi-aura-source-screen-20261028",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-fzi-aura-source-screen/tiny-omni-decision"
+    },
+    {
+      "HEAD": "39b1a7057c4ec0afaa04b3dbc09e1989d2fa654b",
+      "branch": "refs/heads/codex/r2-holoassist-textfree",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-holoassist-textfree/tiny-omni-decision"
+    },
+    {
+      "HEAD": "e2c05dc5f0d0aee681345e723147df47ac307392",
+      "branch": "refs/heads/codex/r2-joint-av-source-screen-20261024",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-next-joint-av-source-screen/tiny-omni-decision"
+    },
+    {
+      "HEAD": "07eb437a79e11fede0b6544b75631560d7fd22a9",
+      "branch": "refs/heads/codex/r2-pch-temporal-readout-v1",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-pch-sensor-probe/tiny-omni-decision"
+    },
+    {
+      "HEAD": "58633f10a6010f31dc5a17c59ce9a7c09b462db9",
+      "branch": "refs/heads/codex/r2-perception-av-scale-v1",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-perception-av-scale-v1/tiny-omni-decision"
+    },
+    {
+      "HEAD": "a48e8e218038bc3830d59d595dba4f070c6904ce",
+      "branch": "refs/heads/codex/r2-perception-source-candidate",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-perception-source-candidate/tiny-omni-decision"
+    },
+    {
+      "HEAD": "aff0452f27496e3c991ead1e64dbcbe8a8007935",
+      "branch": "refs/heads/codex/r2-storytime-api-followup-20261023",
+      "worktree": "C:/Users/junny/.codex/worktrees/r2-storytime-api-followup/tiny-omni-decision"
+    },
+    {
+      "HEAD": "ac93eddd289bf207b70b55759a922b070132d0d2",
+      "branch": "refs/heads/codex/video-teacher-v2-long-budget",
+      "worktree": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-long-budget"
+    },
+    {
+      "HEAD": "506a049142f09f6aa5e34e20778f662e680eb93d",
+      "branch": "refs/heads/codex/teacher-quality-physionpp",
+      "worktree": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-physionpp"
+    },
+    {
+      "HEAD": "acd20f04f3410900689098d7b50eeb10c5d4c52f",
+      "branch": "refs/heads/codex/ternary-student-recovery",
+      "worktree": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-ternary-student"
+    },
+    {
+      "HEAD": "8c87ac47dbf2e81ada01719cfca75ee02e870cca",
+      "branch": "refs/heads/codex/ternary-student-recovery-updated",
+      "worktree": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery"
+    }
+  ],
+  "primary_user_worktree": {
+    "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+    "status": [
+      "## codex/teacher-quality-clean-dev-v1...origin/codex/teacher-quality-clean-dev-v1",
+      " M ROADMAP.md",
+      " M docs/VIDEO_TEACHER_V2_LONG_BUDGET.md",
+      "?? docs/pretrained_reuse/",
+      "?? scripts/download_inaturalist_cc0_bird_media.py",
+      "?? scripts/resume_teacher_quality_clean_dev_v2.py",
+      "?? tests/test_download_inaturalist_cc0_bird_media.py",
+      "?? tests/test_freeze_perception_source_candidate_controls.py"
+    ],
+    "modified_by_this_task": false
+  },
+  "live_process": {
+    "pid": 22136,
+    "parent_pid": 31624,
+    "created": "2026-10-28T09:12:42.209841+09:00",
+    "executable": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "command_line": "\"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" C:\\orbitune-production\\epoch_a2_source\\scripts\\compound_cfe_train.py train --train-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\train,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\train --validation-jsonl C:\\orbitune-research-nc\\indexes\\aria_midi\\validation,C:\\orbitune-research-nc\\indexes\\gigamidi_v2\\validation --checkpoint C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --resume C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\model.pt --steps 0 --sampler epoch --epoch-seed 2026 --weighted-loss --batch-size 64 --seq-len 512 --encode-semantics a2 --precision bf16 --learning-rate 0.0003 --weight-decay 0.01 --grad-clip 1.0 --checkpoint-every-events 30000000 --eval-every-events 20000000 --log-every 50 --yield-sentinel C:\\Users\\junny\\OneDrive\\Desktop\\MIDI-GPT\\orbitune_clone\\runs\\research_nc_aria_gigamidi_epoch_a2_v1\\YIELD",
+    "gpu_sample": [
+      "NVIDIA GeForce RTX 3080 Laptop GPU, 15757 MiB, 419 MiB, 100 %"
+    ],
+    "intervened_by_this_task": false
+  },
+  "constraints": {
+    "cpu": "local",
+    "gpu": "RTX 3080 Laptop, 16GB",
+    "c_free_gib": 5.24,
+    "cloud_compute_usd": 0,
+    "sealed_audit_opened": false,
+    "main_modified": false
+  },
+  "latest_artifact_evidence": {
+    "mcap_selection_bytes": 3009402794,
+    "new_download_bytes": 2546407236,
+    "train_examples": 106,
+    "development_examples": 110,
+    "train_groups": 8,
+    "development_groups": 8,
+    "train_dev_group_overlap": 0,
+    "video_cache_sha256": "ca698686b9c17fc0e49d0a017e71ed1f7cb7906f127eae4e77b223dac3d85202",
+    "sensor_cache_sha256": "58b9c82efb4d5782c19c24a3ba5274e7d9a3896157a60dec5d991998de75b0ff",
+    "readout_report_sha256": "8E87F8F0218914EB271DA0B44CBADB1CDC1EDD02167634A928051612ACC82048",
+    "joint_temporal_dev_accuracy": 0.4727272727272727,
+    "joint_temporal_dev_nll": 1.2772712570211093,
+    "joint_temporal_train_accuracy": 0.9811320754716981,
+    "sensor_only_dev_accuracy": 0.2818181818181818,
+    "video_mismatch_dev_accuracy": 0.14545454545454545,
+    "readout_trainable_parameters": 81920
+  },
+  "explicit_nonclaims": [
+    "EgoViz synthetic timestamp-correspondence does not qualify general video or sensor decision quality",
+    "participant independence unknown",
+    "no product model promotion, merge or release qualification"
+  ]
+}

@@ -1,6 +1,8 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
-**2026-10-29 22:14 JST EgoViz synchronized wrist-video/IMU correspondence preflight:** Selected 16 files from the frozen seed-17 group split (8 training groups, 8 development groups; zero overlap); 13 new files were retrieved and all 16 passed size/hash and MCAP CRC/schema checks. A one-window frozen VideoPrism CPU smoke returned `[8,768]` per-frame features; warmed forward time was 1.75 s. This is only a timestamp-derived correspondence probe: publisher action labels were not read, quality was not measured, participant independence remains unknown, and no sealed audit or GPU/training run occurred. See [preflight](docs/pretrained_reuse/R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md) and [manifest](manifests/pretrained_reuse/egoviz-vs-sync-task-preflight-20261029.json).
+**2026-10-29 22:54 JST EgoViz video/IMU execution follow-up:** The frozen corpus rebuilt byte-for-byte (106 train / 110 development queries, eight publisher sessions in each split, zero session overlap). Frozen VideoPrism-B extraction ran CPU-only for 529.6 s; frozen MOMENT extraction ran on RTX 3080 for 19.6 s at 163 MiB peak allocated. One 81,920-parameter temporal scorer reached 47.27% development Accuracy / 1.2773 NLL, while training Accuracy reached 98.11%; session-shuffled video fell to 14.55%. This is an overfit timestamp-correspondence diagnostic on eight development sessions with unknown participant independence, not general video/sensor quality. R2-M M-2 remains open. See [updated report](docs/pretrained_reuse/R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md), [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_2254JST.md), and [manifest](manifests/pretrained_reuse/egoviz-vs-sync-task-preflight-20261029.json).
+
+**2026-10-29 22:54 JST R0 repository audit:** Remote state is 30 open PRs (#9–#38), 114 remote heads and 85 local worktrees; PR #15 remains Draft/Open and unmerged. The primary OneDrive checkout retains pre-existing user modifications. Orbitune PID `22136` remained live; no process was stopped. C: had 5.24 GiB free. No sealed audit, paid compute, main update or product promotion occurred. Full snapshot: [R0 audit JSON](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_2254JST.json) and [readable report](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_2254JST.md).
 
 **2026-10-29 21:51 JST EgoViz wrist video/IMU development input smoke:** One
 record from deterministic held-out session group `g008` passed MCAP CRC
@@ -2592,7 +2594,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 - [x] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifest hashes and experiment checkpoint hashes without modifying their bytes (`docs/pretrained_reuse/R0_INVENTORY.json`; 2026-10-10 snapshot).
 - [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Read-only contribution/dependency review for PRs #9–#14: `docs/pretrained_reuse/R0_OPEN_PR_REVIEW_20261011.md`. All remain open and unchanged; CI for PRs #13/#14 was not verifiable from the unauthenticated status lookup.
-- [x] Refresh the live PR/worktree/process/storage snapshot without modifying existing experiments (`docs/pretrained_reuse/R0_LIVE_RECHECK_20261028.md` and `.json`). The 2026-10-28 snapshot inventoried 28 PRs and 84 worktrees. A read-only follow-up on 2026-10-29 confirms PR #15 remains Draft/Open at the current branch head, 28 PRs (#9–#36) remain open, and 84 worktrees are present; see `docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_1204JST.md` and `.json`. No experiment was interrupted or changed. This refresh does not close the open device/task-criteria gate below.
+- [x] Refresh the live PR/worktree/process/storage snapshot without modifying existing experiments (`docs/pretrained_reuse/R0_LIVE_RECHECK_20261028.md` and `.json`). A 2026-10-29 22:54 JST read-only refresh found 30 open PRs (#9–#38), 114 remote branch refs and 85 worktrees; PR #15 remains Draft/Open and the primary OneDrive worktree still has user changes. Orbitune PID 22136 was live; no process or checkpoint was changed. See `docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_2254JST.md` and `.json`. The deployment-device and task-specific quality/confidence gate below remains open.
 - [ ] Set the deployment device, task-specific quality/confidence and time/money criteria before training or promotion decisions; retain the historical >=95% product aspiration only as a specified challenge target. The user provisionally authorized the roadmap's 100–200M parameter and <=200 MB package figures for engineering work only; neither is a release gate yet.
 - [x] Publish candidate matrix, evaluation plan and separate environment contracts (`docs/pretrained_reuse/R0_DECISION_MATRIX_20261011.md`). Parameter/package targets are provisional; deployment device, task thresholds and time/money approval remain open.
 
@@ -2654,6 +2656,21 @@ label quality, participant independence, and both-input necessity remain
 unresolved, so no model fitting or quality claim is admitted. See the
 [MCAP topic/time report](docs/pretrained_reuse/R2_EGOVIZ120_MCAP_TIME_PREFLIGHT_20261029.md)
 and [machine-readable manifest](manifests/pretrained_reuse/egoviz120-mcap-time-preflight-20261029.json).
+
+**2026-10-29 EgoViz synchronized wrist-camera/IMU temporal correspondence run:**
+The frozen 16-file sample was expanded to 216 two-second queries (106 train,
+110 development; eight session groups per split). VideoPrism-B `[216,8,768]`
+features were extracted on CPU in 529.6 s and MOMENT-1-small `[216,6,16,512]`
+features on RTX 3080 in 19.6 s. A seed-17 81,920-parameter temporal scorer
+selected epoch 27 by development NLL and reached 47.27% / 1.2773 NLL, against
+25% / 1.3863 uniform expectation and 28.18% / 1.3863 sensor-only. Training
+Accuracy was 98.11%, so the 50.84-point train/development gap is a strong
+overfitting warning. A within-session half-roll video mismatch scored 14.55%;
+option-permutation equivariance passed. Session bootstrap intervals are
+exploratory with eight development sessions; participant independence remains
+unknown. This timestamp-derived probe does not meet the R2-M M-2 sample or
+natural-task gate. The report and full hashes are in
+[`R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md`](docs/pretrained_reuse/R2_EGOVIZ120_VS_SYNC_TASK_PREFLIGHT_20261029.md).
 
 **2026-10-29 R2-M Eidon video/IMU match diagnostic:** Frozen VideoPrism and
 quaternion-only features were extracted for 120 train and 24 development
