@@ -1,3 +1,12 @@
+**2026-10-29 16:38 JST R2 iNaturalist expansion feature extraction:** A
+streaming CPU-only VideoPrism run completed all 1,367 frozen records in 57m45s
+(2.54 s/image end to end; 1.17 s/image forward). It retained the 921/446
+train/validation split and produced finite `[1367, 768]` features. Exact and
+pHash≤4 media overlap was zero within/across splits and against prior media.
+Normalized images were deleted per row, leaving about 4.2 MB of features rather
+than retaining the earlier projected 0.49 GiB image set. No readout or quality
+evaluation has run yet. See the [extraction report](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_FEATURE_EXTRACTION_20261029.md).
+
 **2026-10-29 15:28 JST R2 media preflight:** A deterministic three-image train
 sample passed the existing strict CC0 downloader. Mean processing time was
 1.401 seconds/image and mean normalized PNG was 377,662 bytes. The sample is
