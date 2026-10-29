@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 10:25 JST R2-M interface verification:** CPU-only focused tests
+for the existing text-optional `ObservationBatch`, temporal/alignment contract,
+masked fusion, and AV interaction pass: 53 passed. Mark the versioned observation
+contract work item complete in the R2-M protocol. This verifies interfaces and
+fallback masks only; it is not M1 modality quality, trained fusion evidence, or
+the still-open both-input-required M2 task.
+
 **2026-10-29 10:22 JST R2-M OpenMarcie metadata/code follow-up:** Read-only public
 Kaggle JSON-LD reports CC BY-SA 4.0 and `requiresSubscription=true` for all
 four archive parts, totaling 591,290,808,729 bytes (550.68 GiB). The paper's
