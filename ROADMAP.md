@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 10:55 JST R0 checkpoint recheck:** Orbitune PID 22136 remained
+live at log step 516,550 / 12,330,368,091 events; the latest health counters
+reported zero non-finite loss/gradient events. Three recent log-rate samples
+averaged 14,495 events/s. From 12,324,799,730 events, this projected the next
+30M-event checkpoint in about 6 minutes; `model.pt` was saved at 10:54:28,
+within that estimate. CPU-loaded checkpoint metadata confirms step 516,537 /
+12,330,005,811 events, latest validation step 516,179 (loss -1.545699), and
+best step 455,514 (loss -1.623135). The checkpoint SHA-256 is
+`1e5dd30bff060155d8b311c18b4a7710bf755c145820b3f1f16a8b2f51d58201`.
+RTX 3080 usage remained 15,821/16,384 MiB and C: had 385,966,080 bytes free.
+No process or artifact was changed. This is a continuing `--steps 0` run, not
+a completion ETA. See the [live checkpoint audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_1055JST.md).
+
 **2026-10-29 10:35 JST R2-M RoboHEARD source screen:** The official challenge
 page describes a real robot-centered multi-speaker AVSR task with multi-channel
 audio, multi-view cameras, 100+ conversations, and speaker/environment-disjoint
