@@ -1,3 +1,13 @@
+**2026-10-30 R2 optional-sensor source screen:** The official EduGage
+repository advertises CC BY 4.0 and a 3.05 GB release with 699 momentary
+attention ratings from 16 participants. Its released participant files are
+wearable / gaze sensor streams and response logs; the viewed lecture content is
+not included as a video input. This can at most support a narrow sensor-only
+ordinal task, not the synchronized video+sensor necessity gate or the required
+four-modality Path A. The small participant count and publicly reported folds
+also preclude a blind quality claim here. No data were downloaded and no model
+was fitted. See the [source screen](docs/pretrained_reuse/R2_EDUGAGE_SENSOR_SOURCE_SCREEN_20261030.md).
+
 **2026-10-29 21:05 JST R2 fresh-observer iNaturalist readout:** After a
 metadata split audit found that the pages 1–10 validation cohort had already
 been used by the observer-transfer diagnostic, those 176 exposed identities
