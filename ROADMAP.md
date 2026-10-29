@@ -1,3 +1,12 @@
+**2026-10-29 16:43 JST R2 iNaturalist image readout:** A single seed-17 CPU
+linear probe (6,152 trainable parameters; 921 train / 446 observer-disjoint
+validation records) selected epoch 4 by validation NLL. Validation accuracy was
+71.08% (macro 66.24%), NLL 1.4023, Brier 0.4689, ECE 0.1745. Training continued
+to epoch 29 under the fixed patience rule and clearly overfit: train accuracy
+reached 100% while validation NLL rose to 2.0876. This is a narrow image
+classification result, far below the 95–98% aspiration and not a multimodal
+Decision result. See the [probe report](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_LINEAR_PROBE_20261029.md).
+
 **2026-10-29 16:38 JST R2 iNaturalist expansion feature extraction:** A
 streaming CPU-only VideoPrism run completed all 1,367 frozen records in 57m45s
 (2.54 s/image end to end; 1.17 s/image forward). It retained the 921/446
