@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-29",
+  "source": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/",
+  "source_license_statement": "Official AMI pages state released signals, transcripts, and some annotations are CC BY 4.0; this is not a legal review of individual recordings.",
+  "existing_ami_work_reused": {
+    "pr": 19,
+    "state": "open_draft",
+    "head_sha": "406f003a128a7991ec39dcb15608b381f003add4",
+    "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md",
+    "external_artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021",
+    "reported_candidates": {"train": 214, "validation": 111},
+    "train_parent_groups": 4,
+    "validation_parent_groups": 5,
+    "reported_multipt_audio_video_observations": 288,
+    "known_train_visibility_failures_in_sample": 2,
+    "status": "no_model_quality_run; visibility and validation coverage gates open"
+  },
+  "method": {
+    "directory_listings": true,
+    "media_head_requests": true,
+    "full_media_files_saved": false,
+    "media_streamed_for_cpu_decoder_smoke": [
+      "ES2002a.Closeup1.rm",
+      "ES2002a.Mix-Lapel.rm"
+    ],
+    "feature_cache_written": false,
+    "gpu_used": false
+  },
+  "meetings": [
+    {
+      "meeting": "ES2002a",
+      "partition": "train",
+      "media": [
+        {"path": "audio/ES2002a.Mix-Lapel.rm", "content_length_bytes": 2660658, "etag": "\"289932-3f388a94364c0\""},
+        {"path": "video/ES2002a.Closeup1.rm", "content_length_bytes": 7988839, "etag": "\"79e667-3f68dd0246640\""},
+        {"path": "video/ES2002a.Closeup2.rm", "content_length_bytes": 8084050, "etag": "\"7b5a52-3f68e11b51140\""},
+        {"path": "video/ES2002a.Closeup3.rm", "content_length_bytes": 8080447, "etag": "\"7b4c3f-3f68e5308b340\""},
+        {"path": "video/ES2002a.Closeup4.rm", "content_length_bytes": 8092837, "etag": "\"7b7ca5-3f68e95e90fc0\""}
+      ],
+      "media_total_bytes": 34906831,
+      "speakerseg_annotation": {
+        "path": "browsable/ES2002a.speakersegAll.xml",
+        "retrieved_in_memory": true,
+        "saved_to_disk": false,
+        "raw_sha256": "EA6417A3672A4DD1A100FDDB360749FC0D1E27AD52F9A5079AAC2FBA6888B81B",
+        "raw_bytes": 51401,
+        "interval_count": 517,
+        "channels": ["0", "1", "2", "3"],
+        "nonempty_textlabel_count": 0
+      },
+      "decoder_smoke": {
+        "video": {"codec": "rv40", "width": 360, "height": 284, "fps": 15, "duration_seconds": 1230.321, "start_seconds": 0, "decoded_frame_sha256": "a3be406da1cee3ffd175f1a20c2c60f9057cc33e4bf16fe144dd71952d86159f"},
+        "audio": {"codec": "sipr", "sample_rate_hz": 16000, "channels": 1, "duration_seconds": 1272.96, "start_seconds": 0, "decoded_frame_sha256": "5f48b7357acaeef9046a423c6bdebbf3ea62e643a39941bdcebc49626a7e8210"},
+        "all_four_video_durations_seconds": [1230.321, 1248.161, 1248.641, 1248.4]
+      }
+    },
+    {
+      "meeting": "ES2011a",
+      "partition": "validation",
+      "media": [
+        {"path": "audio/ES2011a.Mix-Lapel.rm", "content_length_bytes": 2329668, "etag": "\"238c44-3fc2d115a7240\""},
+        {"path": "video/ES2011a.Closeup1.rm", "content_length_bytes": 7228405, "etag": "\"6e4bf5-3fb62fef57d40\""},
+        {"path": "video/ES2011a.Closeup2.rm", "content_length_bytes": 7233139, "etag": "\"6e5e73-3fb63387a3880\""},
+        {"path": "video/ES2011a.Closeup3.rm", "content_length_bytes": 7224529, "etag": "\"6e3cd1-3fb6373025a00\""},
+        {"path": "video/ES2011a.Closeup4.rm", "content_length_bytes": 7222991, "etag": "\"6e36cf-3fb63acf1e500\""}
+      ],
+      "media_total_bytes": 31238732,
+      "speakerseg_annotation": {
+        "path": "browsable/ES2011a.speakersegAll.xml",
+        "retrieved_in_memory": true,
+        "saved_to_disk": false,
+        "raw_sha256": "11983525D1DBFDBC10F880D1D76A2BEC09CC3BB539D45BB60619C91AB89E47AD",
+        "raw_bytes": 56696,
+        "interval_count": 569,
+        "channels": ["0", "1", "2", "3", "4"],
+        "nonempty_textlabel_count": 0
+      },
+      "manual_transcript_in_browsable_directory": false,
+      "directory_content_length_rounded": {
+        "speakersegAll.xml": "55K"
+      }
+    },
+    {
+      "meeting": "ES2004a",
+      "partition": "evaluation_candidate_unexposed",
+      "media": [
+        {"path": "audio/ES2004a.Mix-Lapel.rm", "content_length_bytes": 2195266, "etag": "\"217f42-3f388ec330380\""},
+        {"path": "video/ES2004a.Closeup1.rm", "content_length_bytes": 7481731, "etag": "\"722983-3f69af9793a40\""},
+        {"path": "video/ES2004a.Closeup2.rm", "content_length_bytes": 7510616, "etag": "\"729a58-3f69b66408480\""},
+        {"path": "video/ES2004a.Closeup3.rm", "content_length_bytes": 7496629, "etag": "\"7263b5-3f69bd3171100\""},
+        {"path": "video/ES2004a.Closeup4.rm", "content_length_bytes": 7502316, "etag": "\"7279ec-3f69c410f8840\""}
+      ],
+      "media_total_bytes": 32186558,
+      "speakerseg_annotation": {
+        "path": "browsable/ES2004a.speakersegAll.xml",
+        "retrieved_in_memory": false,
+        "saved_to_disk": false,
+        "listings_only": true
+      }
+    },
+    {
+      "meeting": "ES2014a",
+      "partition": "evaluation_exposed_quarantine_group",
+      "speakerseg_annotation": {
+        "path": "browsable/ES2014a.speakersegAll.xml",
+        "retrieved_in_memory": true,
+        "saved_to_disk": false,
+        "response_text_utf8_reencoded_bytes": 49529,
+        "raw_transfer_hash": "not_computed",
+        "observed_interval_elements": 496,
+        "model_predictions_or_metrics": false,
+        "selection_used": false,
+        "disposition": "quarantine_entire_ES2014_group_from_future_locked_evaluation"
+      }
+    },
+    {
+      "meeting": "ES2003a",
+      "partition": "validation_candidate_rejected_incomplete_video",
+      "audio_content_length_bytes": 2383830,
+      "video": [
+        {"file": "ES2003a.Closeup1.rm", "status": 404},
+        {"file": "ES2003a.Closeup2.rm", "content_length_bytes": 7292933},
+        {"file": "ES2003a.Closeup3.rm", "content_length_bytes": 7282149},
+        {"file": "ES2003a.Closeup4.rm", "content_length_bytes": 7299548}
+      ],
+      "disposition": "not_selected"
+    }
+  ],
+  "candidate_three_submeeting_total_bytes": 98332121,
+  "r2m_status": "REVIEW_NOT_ADMITTED",
+  "unresolved_gates": [
+    "speakerseg channel semantics and channel 4 meaning",
+    "manual transcript source for validation meetings",
+    "synchronization within the common stream interval",
+    "suitability of 360x284 15-fps low-size video for mouth/action cues",
+    "audio-only/video-only/joint/mismatched controls demonstrating both-input necessity",
+    "too few independent scenario groups for a robust validation and locked evaluation",
+    "local storage reserve below 2 GiB"
+  ],
+  "runtime_environment": {
+    "python": "3.11",
+    "pyav": "18.1.0",
+    "ffmpeg_cli_available": false,
+    "torch_gpu_used": false
+  }
+}

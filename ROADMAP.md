@@ -1,5 +1,39 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 09:22 JST R0 live-state audit:** Orbitune PID 22136 remained live
+at log step 513,650 / 12,249,743,497 events. Its latest saved checkpoint was
+step 513,303 / 12,240,024,888 events, SHA-256
+`928AB7CB9B07B8BEA8612A94A002758DBA45C34163C1CEEFCD10951F54524ABD`; recorded
+validation best remains step 455,514. The run uses `--steps 0`, the RTX 3080
+was 15,821/16,384 MiB used, and C: free space was 425,914,368 bytes. No process
+or run was modified. PR #15 remains Draft/Open at its existing head. See the
+[live-state audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_0922JST.md).
+
+**2026-10-29 R2-M AMI media preflight:** Exact HTTP `Content-Length` checks for
+one submeeting each in the train (ES2002a), validation (ES2011a), and still
+unexposed evaluation-candidate (ES2004a) groups total 98,332,121 bytes. A CPU
+PyAV stream smoke decoded one train audio frame and one train video frame from
+the official URLs without saving media or using the GPU: RV40 360×284 at 15
+fps and SIPR 16-kHz mono. ES2002a video durations range 1,230.321–1,248.641 s;
+the room-audio duration is 1,272.960 s, so alignment must be verified over the
+common interval. ES2003a is unsuitable as the validation example because
+Closeup1 returns 404; ES2011a has all four closeups. Annotation semantics are
+still unresolved: ES2011a `speakersegAll.xml` includes channel 4, and its
+browsable directory lacks the transcript HTML visible for ES2002a. The
+ES2014a evaluation annotation was read in memory during schema inspection, so
+quarantine the entire ES2014 group from any future locked evaluation; ES2004
+is the only still-unexposed official scenario-evaluation group found here.
+No model training or predictions occurred; the source stays
+`REVIEW_NOT_ADMITTED` and C: free space was only 427,327,488 bytes. See the
+[media preflight](docs/pretrained_reuse/R2_AMI_MEDIA_PREFLIGHT_20261029.md)
+and [manifest](docs/pretrained_reuse/AMI_ES_MEDIA_PREFLIGHT_20261029.json).
+This is subordinate to existing Draft PR #19 (head
+`406f003a128a7991ec39dcb15608b381f003add4`), whose broader SA/SB preflight has
+214 train and 111 validation candidate windows across five validation groups,
+288 sampled PTS checks, and observed empty-room target-camera failures. Reuse
+its external receipts; AMI remains blocked on visible-speaker label validity
+and adequate independent validation, not on another media-size probe.
+
 **2026-10-29 R2-M AMI candidate screen:** Official AMI metadata supports a
 plausible synchronized active-speaker decision task and states CC BY 4.0 for
 released signals/transcripts/some annotations. An official-metadata comparison
