@@ -1,3 +1,13 @@
+**2026-10-29 15:28 JST R2 media preflight:** A deterministic three-image train
+sample passed the existing strict CC0 downloader. Mean processing time was
+1.401 seconds/image and mean normalized PNG was 377,662 bytes. The sample is
+all Rock Pigeon, so planning also uses the earlier 176-image mean (340,230
+bytes) and 242-second acquisition time: budget 0.49 GiB for 1,367 normalized
+images and roughly 20–35 minutes. C: had 0.263 GiB free, below the 2.6 GiB
+needed to preserve a 2-GiB reserve; the RTX 3080 was occupied by Orbitune. No
+full download or Tiny Omni fit was started. See the
+[media preflight](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_MEDIA_PREFLIGHT_20261029.md).
+
 **2026-10-29 15:22 JST R2 metadata expansion follow-up:** Two additional
 iNaturalist CC0 metadata windows (pages 11–20 and 21–30 per taxon) were frozen
 without downloading media. Sequential observer/observation/photo exclusion
