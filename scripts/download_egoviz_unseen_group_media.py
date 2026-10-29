@@ -17,7 +17,8 @@ from typing import Any
 from urllib.parse import quote
 
 ALLOWED_SPLITS = ("train", "development")
-DEFAULT_RESERVE_BYTES = 1_000_000_000
+# Match the frozen-feature smoke's acquisition gate (decimal GB, not GiB).
+DEFAULT_RESERVE_BYTES = 3_000_000_000
 
 
 def sha256_file(path: Path) -> str:

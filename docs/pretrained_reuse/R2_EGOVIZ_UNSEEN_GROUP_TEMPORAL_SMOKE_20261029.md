@@ -144,3 +144,20 @@ At the 2026-10-30 00:01 JST resource check, C: had 2.23 GiB free and the RTX
 3080 Laptop had 419 MiB free. No further raw media acquisition or feature
 extraction was started. The full per-session plan remains gated on materially
 more free disk space and a fresh resource check.
+
+### Acquisition reserve correction (2026-10-30)
+
+The resumed execution audit found that the downloader's default reserve was
+1,000,000,000 bytes, below this report's required 3 GB. The default now matches
+the documented gate: **3,000,000,000 bytes remaining after the selected raw
+downloads**. Regression tests check rejection before output creation or network
+access when free space is below the reserve, equal to the reserve, or one byte
+short of the reserve plus the selected payload. These tests failed against the
+old default and pass with the correction.
+
+C: reported 2,580,217,856 bytes free at the resumed check, so acquisition remains
+blocked. The next three unused training files total 558,403,302 bytes; their raw
+download alone requires 3,558,403,302 bytes free including the reserve. Feature
+extraction also needs temporary and pagefile headroom. This correction changes
+no frozen split, source selection, feature extractor, checkpoint, or existing
+artifact. No further media download or training was started.

@@ -1,7 +1,12 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+from types import SimpleNamespace
+
 import pytest
 
+from scripts import download_egoviz_unseen_group_media as downloader
 from scripts.download_egoviz_unseen_group_media import select_media_rows
 
 
@@ -89,3 +94,24 @@ def test_rejects_overlap_and_invalid_limits() -> None:
         select_media_rows(_plan(), offset_per_split=-1)
     with pytest.raises(ValueError, match="no media rows"):
         select_media_rows(_plan(), offset_per_split=3)
+
+
+@pytest.mark.parametrize("free_bytes", [2_500_000_000, 3_000_000_000, 3_000_000_099])
+def test_default_reserves_three_gb_after_selected_downloads_before_io(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, free_bytes: int
+) -> None:
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_text(json.dumps(_plan()), encoding="utf-8")
+    output = tmp_path / "new-acquisition"
+    monkeypatch.setattr(
+        downloader.shutil, "disk_usage", lambda _: SimpleNamespace(free=free_bytes)
+    )
+
+    def unexpected_network() -> None:
+        pytest.fail("insufficient capacity must fail before creating a network session")
+
+    monkeypatch.setattr("requests.Session", unexpected_network)
+    # The selected four synthetic files total 100 bytes; the reserve remains free.
+    with pytest.raises(OSError, match="insufficient disk reserve: need 3000000100"):
+        downloader.download(plan_path, output)
+    assert not output.exists()
