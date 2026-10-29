@@ -2,8 +2,11 @@
 
 ## Status
 
-**Metadata split is frozen; new media, feature extraction, model fitting and
-sealed evaluation have not started.** This is a follow-up to the existing
+**Metadata split is frozen. A two-session train/development raw-data smoke has
+since completed; bulk acquisition, new feature extraction, model fitting and
+sealed evaluation have not started.** The smoke is documented separately in
+[`R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_SMOKE_20261029.md`](R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_SMOKE_20261029.md).
+This is a follow-up to the existing
 EgoViz video/IMU timestamp-correspondence pilot. It excludes all 16 publisher
 sessions used by that pilot and therefore creates a fresh development set for a
 single, fixed-budget follow-up. It does not replace or retune the earlier run.
