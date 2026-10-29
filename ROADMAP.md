@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-29 11:29 JST R0 live checkpoint:** Orbitune PID 22136 remained live
+at step 517,609 / 12,360,001,721 events. A CPU-only, mmap checkpoint read
+confirmed the saved checkpoint step and full training/optimizer/RNG state; its
+latest validation loss is -1.601152 at step 517,609, while the historical best
+remains step 455,514 at -1.623135. `model.pt` SHA-256 is
+`c7724b207f1116072d647077271022c6ad870c181df5b4a305df31016f0d5798`. No
+process or run was changed. See the [live checkpoint audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_1129JST.md).
+
 **2026-10-29 R2-M MUSIC-AVQA source screen:** The official task includes audio-
 visual association and temporal questions, but its pinned train/validation
 annotations share 3,808 of 3,815 validation video IDs. The official page states
