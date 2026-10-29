@@ -3646,3 +3646,10 @@ while NLL and Brier favor sensor-only. This same-site development transfer does
 not pass R2-M or justify shared-backbone work; the two PRs remain independent
 and unmodified ([PR #32](https://github.com/Unjuno/tiny-omni-decision/pull/32),
 [paired site audit PR #33](https://github.com/Unjuno/tiny-omni-decision/pull/33)).
+
+**2026-10-29 iNaturalist CC0 expansion coverage gate:** A live metadata-only
+query returned 16,000 rows (2,000 per taxon); excluding the previous cohort's
+observer, observation, and photo identities left 430 train and 176 validation
+records. The predeclared 700/200 minimum failed, including only 16 new Northern
+Cardinal training records. No media or training run followed. See the
+[frozen expansion screen](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_METADATA_20261029.md).
