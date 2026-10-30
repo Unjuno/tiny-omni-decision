@@ -376,7 +376,8 @@ def run(corpus_dir: Path, video_cache: Path, sensor_cache: Path, output: Path) -
             "logits_permute_equivariance": "PASS",
         },
         "limitations": [
-            "development has eight publisher session groups; participant independence is unknown",
+            f"development has {len(np.unique(groups))} publisher session groups; "
+            "participant independence is unknown",
             "timestamp correspondence is not a general multimodal decision benchmark",
             "one seed and validation-based early stopping are exploratory only",
         ],
