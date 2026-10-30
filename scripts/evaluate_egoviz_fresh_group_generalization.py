@@ -9,15 +9,34 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
 
-from scripts.train_egoviz_gru_temporal import OrderedCrossModalGRUScorer
-from scripts.train_egoviz_vs_sync_readout import (
-    JointTemporalScorer,
-    _load_samples,
-    _tensor_data,
-    metrics,
-)
+
+def metrics(logits: np.ndarray, targets: np.ndarray) -> dict[str, float]:
+    logits = np.asarray(logits, dtype=np.float64)
+    targets = np.asarray(targets, dtype=np.int64)
+    shifted = logits - logits.max(axis=1, keepdims=True)
+    probabilities = np.exp(shifted)
+    probabilities /= probabilities.sum(axis=1, keepdims=True)
+    one_hot = np.eye(logits.shape[1])[targets]
+    confidence = probabilities.max(axis=1)
+    correct = probabilities.argmax(axis=1) == targets
+    ece = 0.0
+    for lower in np.linspace(0, 1, 11)[:-1]:
+        upper = lower + 0.1
+        upper_test = confidence < upper if upper < 1 else confidence <= upper
+        selected = (confidence >= lower) & upper_test
+        if selected.any():
+            ece += selected.mean() * abs(correct[selected].mean() - confidence[selected].mean())
+    return {
+        "accuracy": float(correct.mean()),
+        "nll": float(
+            -np.log(np.maximum(probabilities[np.arange(len(targets)), targets], 1e-15)).mean()
+        ),
+        "brier": float(((probabilities - one_hot) ** 2).sum(axis=1).mean()),
+        "ece": float(ece),
+        "mean_confidence": float(confidence.mean()),
+        "count": int(len(targets)),
+    }
 
 
 def grouped_metrics(
@@ -119,6 +138,8 @@ def validate_matched_training_provenance(
 
 
 def _load_checkpoint(model, path: Path, expected_sha256: str) -> None:
+    import torch
+
     if sha256_file(path) != expected_sha256:
         raise ValueError(f"checkpoint hash mismatch: {path}")
     state = torch.load(path, map_location="cpu", weights_only=True)
@@ -129,6 +150,8 @@ def _load_checkpoint(model, path: Path, expected_sha256: str) -> None:
 
 
 def _predict(model, data) -> np.ndarray:
+    import torch
+
     with torch.inference_mode():
         logits = model(data[0], data[1]).detach().cpu().numpy().astype(np.float64)
     if logits.ndim != 2 or logits.shape != (len(data[4]), 4) or not np.isfinite(logits).all():
@@ -145,6 +168,15 @@ def evaluate(
     output: Path,
     draws: int = 2_000,
 ) -> dict[str, Any]:
+    import torch
+
+    from scripts.train_egoviz_gru_temporal import OrderedCrossModalGRUScorer
+    from scripts.train_egoviz_vs_sync_readout import (
+        JointTemporalScorer,
+        _load_samples,
+        _tensor_data,
+    )
+
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
     plan = _read_json(plan_path)

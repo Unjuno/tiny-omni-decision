@@ -8,8 +8,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-import pyarrow.parquet as parquet
-
 MIN_DURATION_SECONDS = 15.0
 MAX_MCAP_BYTES = 1_000_000_000
 
@@ -80,6 +78,8 @@ def build_plan(
     *,
     seed: int = 20261030,
 ) -> dict[str, Any]:
+    import pyarrow.parquet as parquet
+
     previous_plan = json.loads(previous_plan_path.read_text(encoding="utf-8"))
     if previous_plan.get("format") != "egoviz-unseen-session-temporal-correspondence-plan-v1":
         raise ValueError("unsupported previous EgoViz plan")
