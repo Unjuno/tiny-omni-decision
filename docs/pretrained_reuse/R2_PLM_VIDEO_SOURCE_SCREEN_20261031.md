@@ -2,11 +2,12 @@
 
 ## Disposition
 
-Keep Meta's PLM Video Human/Bench as a **video-only M1 candidate under review**.
-Do not acquire data, train, or use it to close R2-M. This is a metadata and
-license screen of the official Meta dataset page and official
-`facebookresearch/perception_models` repository; no dataset files, annotations,
-media, or model weights were downloaded or opened.
+Keep Meta's PLM Video Human/Bench **unadmitted**. Do not acquire data, train,
+or use it to close R2-M. The follow-up inspected the official Meta dataset
+page, the pinned Hugging Face dataset metadata/card/license, and the official
+`facebookresearch/perception_models` repository. The Hugging Face dataset
+viewer exposed a small preview of train annotations; no dataset files, video,
+audio, or model weights were downloaded or opened.
 
 ## What is promising
 
@@ -45,19 +46,44 @@ introducing new labels.
 - The repository describes large full-video datasets, but no size-bounded
   task-specific download plan or local-storage feasibility was verified.
 
+## Pinned Hugging Face metadata follow-up
+
+The official Meta download button resolves to
+[`facebook/PLM-Video-Human`](https://huggingface.co/datasets/facebook/PLM-Video-Human).
+Its Hub repository revision at this screen is
+`9af8490af2630b87769a2b040c6c5b03c7752164` (last modified 2025-05-21).
+The pinned `README.md` reports an FGQA train config of 2,321,035 rows and
+409,709,782 annotation bytes. The Hub page and repository `LICENSE` declare
+CC BY 4.0, while Meta's current PLM page explicitly places FGQA under the
+Llama 3.2 license and imposes a `Llama` model-name condition. This is an
+unresolved license conflict; do not use FGQA unless the provider clarifies
+which terms govern this exact release and the project accepts them.
+
+The repository contains annotation Parquet files and `metadata_train.jsonl`,
+not source videos or audio. The FGQA schema records `source_video_id`,
+`source_dataset`, and source time bounds. The public train preview identifies
+upstream sources including COIN, HowTo100M, and Ego4D. The Hub config exposes
+only a train split for FGQA; it does not provide a validation split or a
+group-split manifest. The metadata may support a future source-ID audit, but
+does not grant rights to the referenced media or establish participant/group
+independence. No annotation Parquet or referenced video was downloaded.
+
 ## Next gate
 
 Before any access, a future screen must verify the exact task-specific files,
 source-asset licenses, split/group IDs, and media size from official metadata.
 If rights and split integrity pass, first consider a bounded train/validation
 video-only M1 probe on a task with supplied options or unambiguous
-programmatically checked options. Keep FGQA excluded unless its license
-condition is accepted. Reserve the official test split; do not use it for
-selection. This candidate does not justify fusion training or encoder unfreeze.
+programmatically checked options. Reserve an independent group-level
+validation source; the FGQA train config alone cannot supply one. Do not use
+FGQA pending resolution of the license conflict. This candidate does not
+justify fusion training or encoder unfreeze.
 
 ## Primary sources
 
 - [Meta PLM Data page](https://ai.meta.com/datasets/plm-data/)
+- [Pinned PLM Video Human Hub dataset card](https://huggingface.co/datasets/facebook/PLM-Video-Human/tree/9af8490af2630b87769a2b040c6c5b03c7752164)
+- [Pinned Hub README](https://huggingface.co/datasets/facebook/PLM-Video-Human/blob/9af8490af2630b87769a2b040c6c5b03c7752164/README.md)
 - [Official Perception Models repository](https://github.com/facebookresearch/perception_models)
 - [Official PLM license file](https://github.com/facebookresearch/perception_models/blob/main/LICENSE.PLM)
 
