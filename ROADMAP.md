@@ -1,4 +1,5 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-10-31 R2-M Action Verb Corpus screen:** The OFAI page labels AVC CC BY 4.0, but its Zenodo record labels the same audio/video/motion data CC BY-NC-SA 4.0; the corpus has 46 episodes / 12 people and does not establish a both-required task or grouped split. Keep REVIEW-only; no payload was accessed. See [the source/task disposition](docs/pretrained_reuse/R2_AVC_SOURCE_LICENSE_DISPOSITION_20261031.md).
 
 **2026-10-31 02:51 JST R0/R1/R2 cross-branch recheck:** PR #15 remains Draft
 at `66810de2`; the RTX 3080 Laptop is idle. The exact V-JEPA 2.1 checkpoint
