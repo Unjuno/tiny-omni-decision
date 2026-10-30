@@ -15,6 +15,24 @@ downloaded or opened, and no model was trained or evaluated.
 - Associated Data in Brief article, DOI `10.1016/j.dib.2018.11.110`:
   <https://www.sciencedirect.com/science/article/pii/S2352340918315038>
 
+## Metadata-only file inventory follow-up
+
+The official Mendeley Data public snapshot API confirms version 3,
+`is_metadata_only=false`, and CC BY 4.0. The public root-folder file listing
+returned eight completed entries: seven `.m` files and one `.txt` file, with a
+combined listed size of 20,631 bytes. No video, sensor spreadsheet, or
+questionnaire file appears in that root listing. This does **not** prove the
+recordings are absent: the file-list endpoint queried only `folder_id=root`,
+and the official folders endpoint requires OAuth. An unauthenticated read-only
+request to that folders endpoint returned HTTP 401, so nested folders and
+their contents remain unverified. The public Mendeley page also rendered an
+empty file list in the available text view. No file-content or zip-download
+endpoint was called.
+
+Three metadata-list request timings were 2.484 s, 1.123 s, and 1.113 s
+(mean 1.573 s). This estimates only repeated metadata-list requests; it is not
+a media-download estimate and does not justify downloading the dataset.
+
 The version 3 dataset page explicitly labels the dataset files CC BY 4.0. The
 associated article's full text is marked CC BY-NC-ND; that article license is
 not treated as the dataset license. Use would require attributing the dataset
@@ -65,4 +83,5 @@ partition unopened until architecture and selection are frozen.
 ## Source references
 
 - [Mendeley Data v3 record](https://data.mendeley.com/datasets/cyr9gmhspy/3)
+- [Mendeley Data API documentation](https://data.mendeley.com/api/docs/)
 - [Data in Brief article](https://www.sciencedirect.com/science/article/pii/S2352340918315038)
