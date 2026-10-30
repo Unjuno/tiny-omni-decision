@@ -2742,6 +2742,17 @@ independence, generated-label quality, raw video/IMU synchronization, and
 both-input necessity remain unknown; local storage is below a safe MCAP
 download reserve. See the [metadata-only preflight](docs/pretrained_reuse/R2_EGOVIZ120_GROUP_SPLIT_PREFLIGHT_20261029.md).
 
+**2026-10-31 GrandTour source/task screen:** The official publisher says the
+dataset is CC BY-SA 4.0 and includes synchronized camera, IMU, LiDAR,
+proprioception, and RTK-GPS, but the Hugging Face data card at its pinned
+revision labels the dataset `MIT`. The 2.11 TB total, unresolved license
+metadata conflict, and lack of a frozen mission-grouped Decision protocol
+keep it `REVIEW_NOT_ADMITTED`; do not fetch payloads or use hidden COMFORT test
+labels. A bounded visual-inertial option-selection pilot remains a candidate
+only after rights, per-mission size/hash inventory, and grouped split gates
+pass. See the [source/task screen](docs/pretrained_reuse/R2_GRANDTOUR_SOURCE_SCREEN_20261031.md)
+and [evidence manifest](docs/pretrained_reuse/R2_GRANDTOUR_SOURCE_SCREEN_20261031.json).
+
 **2026-10-29 R2-M Eidon video/IMU match diagnostic:** Frozen VideoPrism and
 quaternion-only features were extracted for 120 train and 24 development
 recordings after applying a contributor/task-group quarantine for malformed
