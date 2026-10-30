@@ -1,3 +1,74 @@
+**2026-10-30 R2 optional-sensor source screen:** The official EduGage
+repository advertises CC BY 4.0 and a 3.05 GB release with 699 momentary
+attention ratings from 16 participants. Its released participant files are
+wearable / gaze sensor streams and response logs; the viewed lecture content is
+not included as a video input. This can at most support a narrow sensor-only
+ordinal task, not the synchronized video+sensor necessity gate or the required
+four-modality Path A. The small participant count and publicly reported folds
+also preclude a blind quality claim here. No data were downloaded and no model
+was fitted. See the [source screen](docs/pretrained_reuse/R2_EDUGAGE_SENSOR_SOURCE_SCREEN_20261030.md).
+
+**2026-10-29 21:05 JST R2 fresh-observer iNaturalist readout:** After a
+metadata split audit found that the pages 1–10 validation cohort had already
+been used by the observer-transfer diagnostic, those 176 exposed identities
+were excluded. One frozen seed-17 CPU readout used 1,145 train rows and 430
+previously unused observer groups as validation. On those same validation IDs,
+the expanded readout scored 74.88% accuracy / 71.90% macro accuracy / 1.1258
+NLL, versus 68.84% / 62.91% / 1.3501 for the existing readout. The new
+checkpoint was selected on this validation, so this is selection-affected
+development evidence, not a blind estimate. Train accuracy reached 100% while
+validation NLL worsened after epoch 10; overfitting remains. This narrow
+eight-taxon image probe does not meet the 95–98% multimodal Decision goal. See
+the [fresh-validation report](docs/pretrained_reuse/R2_INATURALIST_FRESH_VALIDATION_READOUT_20261029.md).
+
+**2026-10-29 16:43 JST R2 iNaturalist image readout:** A single seed-17 CPU
+linear probe (6,152 trainable parameters; 921 train / 446 observer-disjoint
+validation records) selected epoch 4 by validation NLL. Validation accuracy was
+71.08% (macro 66.24%), NLL 1.4023, Brier 0.4689, ECE 0.1745. Training continued
+to epoch 29 under the fixed patience rule and clearly overfit: train accuracy
+reached 100% while validation NLL rose to 2.0876. This is a narrow image
+classification result, far below the 95–98% aspiration and not a multimodal
+Decision result. See the [probe report](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_LINEAR_PROBE_20261029.md).
+
+**2026-10-29 16:38 JST R2 iNaturalist expansion feature extraction:** A
+streaming CPU-only VideoPrism run completed all 1,367 frozen records in 57m45s
+(2.54 s/image end to end; 1.17 s/image forward). It retained the 921/446
+train/validation split and produced finite `[1367, 768]` features. Exact and
+pHash≤4 media overlap was zero within/across splits and against prior media.
+Normalized images were deleted per row, leaving about 4.2 MB of features rather
+than retaining the earlier projected 0.49 GiB image set. No readout or quality
+evaluation has run yet. See the [extraction report](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_FEATURE_EXTRACTION_20261029.md).
+
+**2026-10-29 15:28 JST R2 media preflight:** A deterministic three-image train
+sample passed the existing strict CC0 downloader. Mean processing time was
+1.401 seconds/image and mean normalized PNG was 377,662 bytes. The sample is
+all Rock Pigeon, so planning also uses the earlier 176-image mean (340,230
+bytes) and 242-second acquisition time: budget 0.49 GiB for 1,367 normalized
+images and roughly 20–35 minutes. C: had 0.263 GiB free, below the 2.6 GiB
+needed to preserve a 2-GiB reserve; the RTX 3080 was occupied by Orbitune. No
+full download or Tiny Omni fit was started. See the
+[media preflight](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_MEDIA_PREFLIGHT_20261029.md).
+
+**2026-10-29 15:22 JST R2 metadata expansion follow-up:** Two additional
+iNaturalist CC0 metadata windows (pages 11–20 and 21–30 per taxon) were frozen
+without downloading media. Sequential observer/observation/photo exclusion
+against the 2026-10-26 cohort, pages 1–10 expansion and prior retained window
+produces 921 train / 446 validation candidates; all eight per-class floors and
+train/validation identity gates pass in the combined manifest. This is metadata
+coverage only: media deduplication and training readiness remain unverified.
+At the check, C: had 0.53 GiB free and Orbitune occupied 15,821/16,384 MiB on
+the RTX 3080, so no media or model run was started. See the
+[follow-up record](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_FOLLOWUP_20261029.md).
+
+**2026-10-29 R2 one-time observer-disjoint image transfer:** The immutable
+VideoPrism-B frozen readout scored 79.55% accuracy / 0.5906 NLL on 176 newly
+frozen iNaturalist CC0 validation records, with zero exact or pHash<=4 media
+overlap against all 2,325 prior images. At that initial metadata snapshot, the
+pages 1–10 expansion-training gate failed and no examples were added to
+training. This narrow eight-species image
+result is not an open-ended Decision, temporal-video, multimodal-fusion, or
+product-quality result. See the [protocol](docs/pretrained_reuse/R2_INATURALIST_NEW_OBSERVER_TRANSFER_PROTOCOL_20261029.md)
+and [result report](docs/pretrained_reuse/R2_INATURALIST_NEW_OBSERVER_TRANSFER_RESULT_20261029.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 **2026-10-31 R2-M implementation increment:** Added a text-free, candidate-equivariant frozen-feature Decision readout that accepts numeric modality features and task-owned typed-option vectors without a language-model import. Its CPU tests pass; it does not yet connect to the feature cache or establish task quality. The full single-modality cache-to-Decision runner and measured M1 evaluation remain open. See [implementation note](docs/pretrained_reuse/R2_TEXTFREE_NATIVE_FEATURE_READOUT_20261031.md).
 **2026-10-31 R2-M recent-source terms screen:** ActionSense and OctoNet publish CC BY-NC-SA/NC data terms, while CUHK-X raw data require a non-commercial DUA; none is admitted for this product-directed training path. No payload was accessed. See [the terms/task screen](docs/pretrained_reuse/R2_RECENT_MULTIMODAL_SOURCE_TERMS_SCREEN_20261031.md).
@@ -2701,6 +2772,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 - [x] Load and hash Ruri v3-30m as one small Japanese text candidate; a single zero-shot JamC-QA-V2 dev diagnostic was near uniform chance. It is not a Decision-head result, has unresolved training-data contamination risk, and JamC-QA remains `REVIEW` under this repository's license policy; see `docs/pretrained_reuse/R2_PATH_A_PROBES.md`. This does not close the broader language-candidate audit.
 - [x] Test the selected compact local candidate forwards for preprocessing, shape, parameter count and memory. VideoPrism-B's official loader and pinned checkpoint were exercised on a deterministic 8-frame input; ViT-Lens original-backbone execution remains untested and is outside the initial small model budget.
 - [x] Create compact source-of-truth inventory with `passed_load`, `license_allowed`, `has_real_weights`, `runtime_supported`, parameter tensor bytes, source revision and primary citations in `docs/pretrained_reuse/R1_CANDIDATE_INVENTORY.json`. The minimum executable/legal video-candidate gate is now met by VideoPrism-B; task quality, model package fit and broader candidate screening remain open. V-JEPA 2.1 itself stays REVIEW.
+- [x] Recheck the exact V-JEPA 2.1 ViT-B rights and object pin on 2026-10-30. Upstream `main` remains the audited commit, the local SHA-256/size match, and the S3 object exposes a version ID; the official materials still do not grant checkpoint-specific terms. Keep this file **REVIEW** and research-only. See the [dated recheck](docs/pretrained_reuse/R1_VJEPA21_LICENSE_RECHECK_20261030.md).
 - [x] Screen the small sensor checkpoint MOMENT-1-small as a frozen feature-source candidate. Its pinned MIT checkpoint passed a local 128-sample × 6-channel CUDA embedding smoke; no task quality was measured. UCI HAR was not used for model selection because MOMENT pretraining includes UCR/UEA and the available official sources do not identify every constituent dataset, leaving overlap UNKNOWN. See `docs/pretrained_reuse/R1_MOMENT_SENSOR_20261011.md` and the candidate inventory. This does not close the sensor quality or deployment gate.
 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
@@ -3756,3 +3828,36 @@ while NLL and Brier favor sensor-only. This same-site development transfer does
 not pass R2-M or justify shared-backbone work; the two PRs remain independent
 and unmodified ([PR #32](https://github.com/Unjuno/tiny-omni-decision/pull/32),
 [paired site audit PR #33](https://github.com/Unjuno/tiny-omni-decision/pull/33)).
+
+**2026-10-29 iNaturalist CC0 expansion coverage gate:** A live metadata-only
+query returned 16,000 rows (2,000 per taxon); excluding the previous cohort's
+observer, observation, and photo identities left 430 train and 176 validation
+records. The predeclared 700/200 minimum failed, including only 16 new Northern
+Cardinal training records. No media or training run followed. See the
+[frozen expansion screen](docs/pretrained_reuse/R2_INATURALIST_EXPANSION_METADATA_20261029.md).
+
+**2026-10-29 iNaturalist fresh-observer readout:** A later, separately frozen
+cohort used 1,145 train and 430 previously unscored validation photos from
+eight CC0 bird taxa, with observer/observation/photo identity disjointness and
+zero exact or near-duplicate media overlap. The 6,152-parameter frozen-
+VideoPrism readout selected epoch 10 at 74.88% accuracy / 71.90% macro
+accuracy / 1.1258 NLL; it overfit after epoch 10, with train accuracy reaching
+100% while validation NLL and calibration worsened. This is a narrow,
+validation-selected image classification result, not general Decision quality.
+The sealed audit was not accessed. See the
+[protocol and results](docs/pretrained_reuse/R2_INATURALIST_FRESH_VALIDATION_READOUT_20261029.md).
+
+**2026-10-30 R2-M source recheck:** MM-Fit's video record is explicitly
+CC-BY-4.0, but its companion inertial archive has no stated terms on the
+official project page. Multimodal-Wireless states CC BY 4.0 and has synchronized
+simulated modalities, but its data link lacks an immutable snapshot, hashes,
+and a frozen task/split schema. Neither source is admitted for joint fitting;
+no media was downloaded. See the
+[source screen](docs/pretrained_reuse/R2_MM_FIT_AND_MMW_SOURCE_SCREEN_20261030.md).
+
+**2026-10-30 iNaturalist pages 41–50 follow-up:** The metadata-only query
+returned 2,712 CC0 records, but after excluding every observer/source identity
+in the prior cohorts only 27 train and 14 validation records remained, from
+Mallard and Canada Goose alone. This fails the frozen 700/200 and all-eight-
+taxa coverage gate; no media or model run followed. See the
+[coverage report](docs/pretrained_reuse/R2_INATURALIST_PAGES_41_50_COVERAGE_20261030.md).
