@@ -3763,3 +3763,11 @@ the scaling effect and the new-versus-prior Accuracy difference included zero.
 The pilot was previously observed and participant independence is unknown;
 neither product readiness nor blind calibration is established. [Results and
 reproduction](docs/pretrained_reuse/R2_EGOVIZ_PILOT_TRANSFER_RESULTS_20261030.md).
+
+**2026-10-30 matched 512-epoch channel experiment:** Both the uniform-channel
+baseline and a 3,072-parameter mixer completed 5,632 updates. Their selected
+development Accuracy was 56.03% and 57.00%; the paired Accuracy interval
+included zero. At the fixed final epoch they fell to 41.37% and 37.46% while
+training reached 100%, with no late recovery in this budget. The mixer cost
+about 3.65 times the CPU wall time. No promotion or general grokking impossibility
+claim. [Full curves, uncertainty, integrity and cost](docs/pretrained_reuse/R2_EGOVIZ_CHANNEL_BUDGET_RESULTS_20261030.md).

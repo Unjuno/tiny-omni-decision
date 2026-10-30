@@ -2,6 +2,11 @@ import numpy as np
 import pytest
 
 from scripts.egoviz_channel_budget_policy import evaluation_epochs, improves
+from scripts.verify_egoviz_channel_budget import (
+    assert_logits_match,
+    check_predictions,
+    compare_predictions,
+)
 
 
 def test_budget_and_checkpoint_selection_are_distinct():
@@ -14,6 +19,33 @@ def test_budget_and_checkpoint_selection_are_distinct():
     assert not improves(1.1, 1.0)
     with pytest.raises(ValueError, match="nonfinite"):
         improves(np.nan, 1.0)
+
+
+def test_paired_comparison_rejects_mismatched_sample_identity():
+    baseline = [{"sample_id": "a", "group_id": "g", "target": 0, "logits": [1, 0, 0, 0]}]
+    candidate = [dict(baseline[0], sample_id="other")]
+    with pytest.raises(ValueError, match="sample_id"):
+        compare_predictions(baseline, candidate)
+
+
+def test_verification_rejects_wrong_group_and_nonfinite_reload():
+    saved = [{"sample_id": "a", "group_id": "wrong", "target": 0, "logits": [1, 0, 0, 0]}]
+    with pytest.raises(ValueError, match="group_id"):
+        check_predictions(saved, ["a"], ["expected"], [0])
+    with pytest.raises(ValueError, match="nonfinite"):
+        assert_logits_match(np.array([[np.nan, 0, 0, 0]]), np.array([[1, 0, 0, 0]]))
+
+
+def test_paired_accuracy_difference_has_the_correct_direction():
+    pytest.importorskip("torch")
+    baseline = [
+        {"sample_id": str(i), "group_id": f"g{i}", "target": 0, "logits": [2, 0, 0, 0]}
+        for i in range(20)
+    ]
+    candidate = [dict(row, logits=[0, 2, 0, 0]) for row in baseline]
+    result = compare_predictions(baseline, candidate)["candidate_minus_baseline_accuracy"]
+    assert result["candidate_minus_baseline"] == -1.0
+    assert "baseline_minus_candidate" not in result
 
 
 def test_zero_gate_matches_baseline_has_gradients_and_preserves_option_order():
