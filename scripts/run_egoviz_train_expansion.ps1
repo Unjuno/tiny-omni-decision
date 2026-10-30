@@ -14,7 +14,7 @@ $env:HF_HUB_OFFLINE = '1'
 $env:TF_CPP_MIN_LOG_LEVEL = '2'
 Set-Location -LiteralPath $taskRepo
 $taskCommit = (git rev-parse HEAD)
-if ((Get-FileHash -Algorithm SHA256 -LiteralPath $taskPlanPath).Hash -ine '18958dcece44ae8a387895cbb5b64ffeb218f4988a8d59401522d797f8703b3') { throw 'Frozen plan hash differs' }
+if ((Get-FileHash -Algorithm SHA256 -LiteralPath $taskPlanPath).Hash -ine '18958dcece44ae8a387895cbbe5b64ffeb218f4988a8d59401522d797f8703b3') { throw 'Frozen plan hash differs' }
 $taskPlan = Get-Content -LiteralPath $taskPlanPath -Raw | ConvertFrom-Json
 if ($taskPlan.splits.train.Count -ne 24 -or $taskPlan.splits.development.Count -ne 0 -or $taskPlan.splits.sealed_audit.Count -ne 0) { throw 'Unexpected plan splits' }
 if (Test-Path -LiteralPath $taskRoot) { throw 'Existing run: inspect its status and process instead of restarting' }

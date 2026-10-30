@@ -17,7 +17,7 @@ eligible groups; `cooking_food` has no eligible group under these rules and
 is not fabricated. The 24 files total 7,299,677,559 bytes in the index. Index
 SHA-256 is `c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074`;
 the new train-only plan SHA-256 is
-`18958dcece44ae8a387895cbb5b64ffeb218f4988a8d59401522d797f8703b3`.
+`18958dcece44ae8a387895cbbe5b64ffeb218f4988a8d59401522d797f8703b3`.
 
 Acquire one file at a time with the existing source size/ETag checks, compute
 SHA-256 and MCAP CRC, construct timestamp-only four-choice windows, and extract

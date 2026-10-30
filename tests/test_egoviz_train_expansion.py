@@ -1,3 +1,7 @@
+import hashlib
+import re
+from pathlib import Path
+
 import pytest
 
 from scripts.prepare_egoviz_train_expansion import select_expansion
@@ -35,3 +39,12 @@ def test_expansion_fails_closed_when_distinct_groups_are_insufficient():
     }
     with pytest.raises(ValueError, match="distinct"):
         select_expansion([row], set(), count=2, seed=17)
+
+
+def test_controller_pins_the_actual_frozen_plan_hash():
+    repo = Path(__file__).resolve().parents[1]
+    plan = repo / "manifests/pretrained_reuse/egoviz-train-expansion-plan-20261030.json"
+    controller = repo / "scripts/run_egoviz_train_expansion.ps1"
+    match = re.search(r"\.Hash -ine '([0-9a-f]+)'", controller.read_text(encoding="utf-8"))
+    assert match is not None
+    assert match.group(1) == hashlib.sha256(plan.read_bytes()).hexdigest()
