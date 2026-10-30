@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-30 23:22 JST R0 checkpoint-state recheck:** Orbitune's separate
+Aria-MIDI/GigaMIDI job remained live (worker PID `3668`, wrapper PID `33576`).
+Three five-second observations found the worker alive with CPU time increasing
+by an average 3.71 seconds per 5.09 seconds wall time; `model.pt` stayed at
+step `581092` / `14,130,003,782` events, last written at 23:19:03 JST. The
+saved best is step `521917` (validation loss `-1.627876`); the latest saved
+validation is step `580734` (`-1.121710`). The log files are stale at 21:58,
+so the unsaved live step, current throughput, next checkpoint ETA and run
+completion time are UNKNOWN. No process or artifact was changed. CPU checkpoint
+inspection confirmed separate hashes for current, healthy, and best snapshots
+and saved optimizer/sampler/RNG state; exact resume is not claimed. See the
+[23:22 read-only audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261030_2322JST.md).
+
 **2026-10-29 13:12 JST R0 checkpoint-state recheck:** Orbitune PID `22136`
 is still running its separate Aria-MIDI/GigaMIDI `--steps 0` job. A CPU-only
 `weights_only=True, mmap=True` read of the checkpoint saved at 13:11:51
