@@ -3739,3 +3739,10 @@ was 92.77%, and development NLL worsened after epoch 19. Preserve this narrow
 temporal-correspondence baseline; calibration, cross-session generalization
 and conditional-semantic usefulness remain open. R2-M and R7/R8 are not passed.
 [Full result, costs, hashes, learning curves and controls](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_RESULTS_20261030.md).
+
+**2026-10-30 EgoViz temperature diagnostic:** A scalar fitted on the original
+training examples worsened held-out-session development NLL from 1.2190 to
+1.4737, despite unchanged 55.70% Accuracy. Development-group cross-fitting
+produced lower NLL, but uses development labels and is diagnostic only. The
+checkpoint was selected on this development set; independent calibration and
+unseen evaluation remain open. [Protocol, results and limits](docs/pretrained_reuse/R2_EGOVIZ_TEMPERATURE_RESULTS_20261030.md).
