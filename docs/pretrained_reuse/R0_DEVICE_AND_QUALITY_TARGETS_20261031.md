@@ -20,10 +20,15 @@ product release gate passed.
 - Sensor input remains optional and outside the first acceptance suite until
   an approved sensor task is available.
 
-## Still open
+## Provisional criteria and remaining open items
 
-- No numeric NLL, Brier, ECE or reliability acceptance floor is approved.
-- No numeric wall-clock ceiling or release latency target is approved.
-- These engineering targets do not grant data/model rights, close R2's
-  both-input-required task gate, or qualify any model for release.
+The internal, forward-looking thresholds and candidate-run resource budget are
+specified in [`R0_QUANTITATIVE_ACCEPTANCE_POLICY_20261031.md`](R0_QUANTITATIVE_ACCEPTANCE_POLICY_20261031.md).
+They are provisional engineering policy, not a user-approved release contract,
+and do not retroactively alter any observed result.
+
+- The end-user deployment device, latency/energy ceiling, and complete approved
+  task battery remain open.
+- These criteria do not grant data/model rights, close R2's both-input-required
+  task gate, or qualify any model for release.
 
