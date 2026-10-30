@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-30 EgoViz fresh-group fixed-checkpoint evaluation:** Completed the
+one-time comparison on 2,394 four-choice video/IMU correspondence examples
+from 69 groups excluded from prior train/development and reserved groups. The
+5,632-step GRU gained 3.84 pp Accuracy over the matched linear endpoint, but
+NLL/Brier/ECE worsened sharply from overconfidence; the historical linear
+step-616 checkpoint had better Accuracy and NLL than its endpoint. No training,
+checkpoint selection, or sealed access occurred. This does not close R2-M or
+establish multimodal action-decision quality. [Full results and limits](docs/pretrained_reuse/R2_EGOVIZ_FRESH_GROUP_GENERALIZATION_RESULTS_20261030.md).
+
 **2026-10-30 R2-M RoboHEARD release-day public-page recheck:** The official
 page is byte-identical to the prior capture, still lists the development data
 and baselines as due today, and exposes no public download or baseline-repo
