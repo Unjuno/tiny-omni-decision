@@ -1,5 +1,21 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-30 23:51 JST R0 process/checkpoint recheck:** PID `3668` is still
+alive and listed by `nvidia-smi` as the CUDA process. Five-minute samples from
+23:27–23:34 and a 16-minute watch from 23:35–23:51 showed CPU time increasing
+(about 0.65 CPU-seconds per wall-second in the latter interval). The RTX 3080
+sample at 23:51 was 99% GPU utilization and 15,821/16,384 MiB allocated. The
+checkpoint stayed unchanged at its 23:19:03 save (step `581092`,
+`14,130,003,782` events, SHA-256 unchanged); the current live step/event count
+is still UNKNOWN. The files `train.log` and `watchdog.jsonl` end at 21:58; the
+watchdog records a different trainer child (`19004`) exiting at step `578783`
+after an idle-yield request. Do not treat that old child-exit record as proof
+that the currently GPU-visible PID `3668` has stopped. PR #15's branch ref is
+at `e1ca037`, and Actions has two successful runs for that SHA, but GitHub's
+`refs/pull/15/head` and PR metadata still report `db19d172`; the PR-head
+divergence remains unresolved. Full read-only evidence:
+[23:51 recheck](docs/pretrained_reuse/R0_LIVE_AUDIT_20261030_2351JST.md).
+
 **2026-10-30 23:22 JST R0 checkpoint-state recheck:** Orbitune's separate
 Aria-MIDI/GigaMIDI job remained live (worker PID `3668`, wrapper PID `33576`).
 Three five-second observations found the worker alive with CPU time increasing
