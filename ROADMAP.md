@@ -1,5 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-30 23:55 JST R0 PR synchronization:** Fast-forwarded the verified
+R0 audit commit `945fd5ec572c73063a41f06e7493beccfd5089df` onto the PR #15
+source branch without force. GitHub branch metadata, PR API, and
+`refs/pull/15/head` now agree on that SHA. All three Actions test checks for
+the synchronized PR head completed successfully. This resolves the prior
+head-reference mismatch; see the [23:51 audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261030_2351JST.md)
+for the incident and read-only evidence.
+
 **2026-10-30 23:51 JST R0 process/checkpoint recheck:** PID `3668` is still
 alive and listed by `nvidia-smi` as the CUDA process. Five-minute samples from
 23:27–23:34 and a 16-minute watch from 23:35–23:51 showed CPU time increasing
