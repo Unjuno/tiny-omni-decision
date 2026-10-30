@@ -52,8 +52,11 @@ shorten the budget for ordinary metric variation.
 Compare the expanded run to the existing fixed-budget baseline on the same
 307 development IDs at matching update counts, with paired 20-session bootstrap
 (2,000 draws, seed 17) for Accuracy, NLL and Brier. Report best checkpoints
-separately; selected-checkpoint intervals do not correct for selection. Report
-actual sample counts, modality/category mix, loss curves, end/best checkpoints,
+separately; selected-checkpoint intervals do not correct for selection. The
+expanded run evaluates at update 1, whereas the old baseline's first selection
+candidate was update 11, so selected-checkpoint comparisons are exploratory;
+fixed-update comparisons match. Report actual sample counts, modality/category
+mix, loss curves, end/best checkpoints,
 local time, memory observations and source hashes. Reload saved checkpoints
 in a fresh process. This cannot establish blind performance, participant-level
 independence, a full four-modality product, or grokking impossibility. Promote
