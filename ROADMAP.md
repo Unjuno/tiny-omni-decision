@@ -3728,3 +3728,14 @@ Its two-session replay (14 train / 21 development examples) verified sensor
 window index rebasing and group isolation; it did not train or score a readout,
 and does not complete the 44-session plan or R2-M. Disk capacity remains the
 next gate. See [smoke report](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_TEMPORAL_SMOKE_20261029.md).
+
+**2026-10-30 R2 EgoViz full unseen-session follow-up completed:** Sequential,
+hash-checked CPU processing covered all 24 train / 20 development sessions
+(332 / 307 windows), with zero group overlap and no sealed access. The fixed
+81,920-parameter joint readout reached 55.70% Accuracy / 1.2190 NLL versus
+sensor-only 28.66% / 1.3873. Single-stream feature reversal reduced Accuracy to
+26.38%; fresh-process reload matched exactly. The selected training Accuracy
+was 92.77%, and development NLL worsened after epoch 19. Preserve this narrow
+temporal-correspondence baseline; calibration, cross-session generalization
+and conditional-semantic usefulness remain open. R2-M and R7/R8 are not passed.
+[Full result, costs, hashes, learning curves and controls](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_RESULTS_20261030.md).
