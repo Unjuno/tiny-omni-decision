@@ -1,0 +1,88 @@
+{
+  "status": "FIXED_BUDGET_COMPLETE_EXPLORATORY_DEVELOPMENT",
+  "experiment": "EgoViz ordered cross-modal GRU temporal readout",
+  "source_commit": "ac6aae443a89b2aa8b8c18c4b85a6480f1b0f722",
+  "seed": 17,
+  "device": "CPU; Intel Core i7-12700H; 4 threads",
+  "pretrained_encoders_frozen": true,
+  "sealed_audit_accessed": false,
+  "training": {
+    "updates": 5632,
+    "sample_exposures": 174149,
+    "full_passes": 225,
+    "partial_pass_batches": 7,
+    "train_examples": 773,
+    "train_sessions": 48,
+    "development_examples": 307,
+    "development_sessions": 20,
+    "parameter_count": 123521,
+    "optimizer": "AdamW",
+    "learning_rate": 0.003,
+    "weight_decay": 0.01,
+    "batch_size": 32,
+    "early_stopping": false,
+    "evaluation_steps": [352, 704, 1408, 2816, 4224, 5632],
+    "elapsed_seconds": 115.54538879985921,
+    "sample_order_sha256": "64104236342d53194075291203bbd66827e29ed85822eb73a6bacd53aa77ad8f"
+  },
+  "inputs_sha256": {
+    "train-samples.jsonl": "9e108f5d5ba2c756321c96b4ab47a0a387b146883367066499db7eea214d8245",
+    "development-samples.jsonl": "55fe808c824825762da63d2c0f376dde30d61986a8fb6481c0768f661aa9d232",
+    "imu-windows.npy": "26e31282046ec47ff358ba0c18d1e46650fb78d03868186ff239b43f8f206554",
+    "video-features.npz": "17b14afdfef6255a11662cd5989732ef4a15a11bdea737f4b8582f233dc9b28c",
+    "sensor-features.npz": "4c2201b13403ce5f395591b876fdd78ae9b3a99cff7898556eaa3694f28af431"
+  },
+  "comparison": {
+    "baseline": "fixed 81,920-parameter linear temporal scorer",
+    "development_ids_identical": true,
+    "paired_bootstrap": {
+      "unit": "20 development sessions",
+      "draws": 2000,
+      "seed": 17,
+      "interval": "percentile 95%"
+    },
+    "fixed_endpoint_step": 5632,
+    "gru_metrics": {
+      "accuracy": 0.5732899022801303,
+      "nll": 4.247866733263443,
+      "brier": 0.754665374672757,
+      "ece": 0.374448481282199,
+      "mean_confidence": 0.9477383835623294
+    },
+    "linear_metrics": {
+      "accuracy": 0.5504885993485342,
+      "nll": 1.2001318328307826,
+      "brier": 0.6526488950507935,
+      "ece": 0.20913387867025582,
+      "mean_confidence": 0.34135472067827843
+    },
+    "gru_minus_linear": {
+      "accuracy": {
+        "estimate": 0.0228013029315961,
+        "percentile_95_ci": [-0.04316966426858509, 0.09092249932957894]
+      },
+      "nll": {
+        "estimate": 3.04773490043266,
+        "percentile_95_ci": [2.3010180411502943, 3.7460301609418543]
+      },
+      "brier": {
+        "estimate": 0.10201647962196347,
+        "percentile_95_ci": [-0.002439178939628028, 0.19687907107249478]
+      }
+    }
+  },
+  "artifacts": {
+    "external_directory": "C:\\CodexArtifacts\\egoviz-gru-temporal-budget-20261030-attempt-01",
+    "runner_sha256": "a026a5eea67e80e07b952d68ebd5f809ba88105ae21dd856cc98a5813b07c943",
+    "merged_corpus_report_sha256": "e8a451de798f468af65dddb037e12ef132a45062df3dc4f882aa2addb5550635",
+    "baseline_results_sha256": "fc26c040e61618d64812793fef4fbc10863c33b89174ea24f05e77ab31ac1a9a",
+    "results_sha256": "5f64a15d0b963c6e041109a1ce1c0012d61c4fe26fbaa92bedb6f8f9265ac95c",
+    "reload_verification_sha256": "c381e25cef28171f53787bd3388290ae04c1c52bc524ac09e860aa8d3e2e3b1e",
+    "final_checkpoint_sha256": "ee54065f5161bfb1ead7356ad9d838d2f28cc1d4294597087986ff3d8d8505ec",
+    "final_predictions_sha256": "f8827057fc7b311b57d0bfa658228b3a7e292160f8e8f4f83a80d81beaeae912",
+    "max_reload_logit_delta": 0.000003814697265625,
+    "all_six_checkpoints_reload": true,
+    "option_permutation_equivariance": true
+  },
+  "interpretation": "NOT SUPPORTED for this fixed EgoViz task/readout: the GRU's accuracy interval includes zero improvement while NLL and calibration are substantially worse. This is not a general recurrent-model limit or blind product result."
+}
