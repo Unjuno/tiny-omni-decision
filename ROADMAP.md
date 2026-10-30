@@ -3771,3 +3771,11 @@ included zero. At the fixed final epoch they fell to 41.37% and 37.46% while
 training reached 100%, with no late recovery in this budget. The mixer cost
 about 3.65 times the CPU wall time. No promotion or general grokking impossibility
 claim. [Full curves, uncertainty, integrity and cost](docs/pretrained_reuse/R2_EGOVIZ_CHANNEL_BUDGET_RESULTS_20261030.md).
+
+**2026-10-30 expanded EgoViz training sessions:** At 5,632 matched updates,
+773 training examples from 48 sessions reduced late development degradation
+relative to 332 examples from 24 sessions. Selected development Accuracy was
+56.68% versus 56.03%, with a paired interval including zero; selected NLL was
+1.1746 versus 1.2147. The development set is repeatedly observed, and remaining
+overfitting and the four-modality objective remain open. [Protocol, curves and
+limitations](docs/pretrained_reuse/R2_EGOVIZ_TRAIN_COVERAGE_RESULTS_20261030.md).
