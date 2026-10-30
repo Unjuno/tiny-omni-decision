@@ -1,8 +1,10 @@
 """Unit checks for metric behavior used by the fixed-budget native readout diagnostic."""
 
-import torch
+import pytest
 
-from scripts.fit_native_feature_inat_diagnostic import metric_summary
+torch = pytest.importorskip("torch")
+
+from scripts.fit_native_feature_inat_diagnostic import metric_summary  # noqa: E402
 
 
 def test_metric_summary_reports_perfect_multiclass_decisions() -> None:
