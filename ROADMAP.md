@@ -1,5 +1,18 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-31 02:51 JST R0/R1/R2 cross-branch recheck:** PR #15 remains Draft
+at `66810de2`; the RTX 3080 Laptop is idle. The exact V-JEPA 2.1 checkpoint
+still lacks an explicit checkpoint-specific license grant, while VideoPrism-B
+remains the admitted Path A video source. The fresh-observer iNaturalist
+readout reached 74.88% Accuracy on its narrow eight-species image task but
+showed overfitting; pages 41–50 produced only 27 train / 14 validation rows and
+fail the frozen expansion gate. Perception joint AV remains below video-only
+Accuracy, so R2 M-2 is still open. No new training is justified by these
+gates. See [the cross-branch recheck](docs/pretrained_reuse/R0_R1_R2_CROSS_BRANCH_RECHECK_20261031.md),
+[V-JEPA rights recheck](docs/pretrained_reuse/R1_VJEPA21_LICENSE_RECHECK_20261030.md),
+[iNaturalist readout](docs/pretrained_reuse/R2_INATURALIST_FRESH_VALIDATION_READOUT_20261029.md),
+and [iNaturalist coverage gate](docs/pretrained_reuse/R2_INATURALIST_PAGES_41_50_COVERAGE_20261030.md).
+
 **2026-10-31 02:11 JST R0 Orbitune run terminal check:** Both tracked
 processes (worker `3668`, wrapper `33576`) are absent. The RTX 3080 reported
 0% utilization / 0 MiB used. The final saved checkpoint is step `586076` /
