@@ -1,4 +1,5 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-10-31 R2-M recent-source terms screen:** ActionSense and OctoNet publish CC BY-NC-SA/NC data terms, while CUHK-X raw data require a non-commercial DUA; none is admitted for this product-directed training path. No payload was accessed. See [the terms/task screen](docs/pretrained_reuse/R2_RECENT_MULTIMODAL_SOURCE_TERMS_SCREEN_20261031.md).
 **2026-10-31 R2-M Action Verb Corpus screen:** The OFAI page labels AVC CC BY 4.0, but its Zenodo record labels the same audio/video/motion data CC BY-NC-SA 4.0; the corpus has 46 episodes / 12 people and does not establish a both-required task or grouped split. Keep REVIEW-only; no payload was accessed. See [the source/task disposition](docs/pretrained_reuse/R2_AVC_SOURCE_LICENSE_DISPOSITION_20261031.md).
 
 **2026-10-31 02:51 JST R0/R1/R2 cross-branch recheck:** PR #15 remains Draft
