@@ -3754,3 +3754,12 @@ to 1.0688 while Accuracy remained 55.70%. All five fold checkpoints and the
 scalar reproduced exactly after reload. Checkpoint selection and the adaptive
 protocol used the already observed development set; no blind calibration or
 four-modality quality is established. [Full result](docs/pretrained_reuse/R2_EGOVIZ_OOF_TEMPERATURE_RESULTS_20261030.md).
+
+**2026-10-30 fixed EgoViz pilot transfer:** The selected 24-session model and
+training-out-of-fold scalar were evaluated on 16 excluded prior pilot sessions.
+On the 110-example prior development split, Accuracy was 50.91%; NLL changed
+from 1.2449 to 1.1304 after scaling. Eight-session paired intervals for both
+the scaling effect and the new-versus-prior Accuracy difference included zero.
+The pilot was previously observed and participant independence is unknown;
+neither product readiness nor blind calibration is established. [Results and
+reproduction](docs/pretrained_reuse/R2_EGOVIZ_PILOT_TRANSFER_RESULTS_20261030.md).
