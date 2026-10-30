@@ -1,0 +1,37 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "D2E-480p",
+  "recorded_at": "2026-10-31T05:53:00+09:00",
+  "status": "REVIEW_NOT_ADMITTED_FOR_PRODUCT_WORK",
+  "sources": {
+    "official_repository": {
+      "url": "https://github.com/worv-ai/D2E",
+      "revision": "1adbc09f81810412413ff046a80e8333df80647d",
+      "license": "UNKNOWN_FOR_DATA_PAYLOAD"
+    },
+    "huggingface_dataset": {
+      "url": "https://huggingface.co/datasets/open-world-agents/D2E-480p",
+      "revision": "f075f7e25df6f6d385840a836f86bf92dfb877ff",
+      "license": "cc-by-nc-4.0",
+      "split_names": ["train"],
+      "train_rows": 459,
+      "total_size_reported": "194 GB (Hub display; exact bytes not verified)"
+    }
+  },
+  "task_and_split": {
+    "modalities": ["screen/video", "audio", "keyboard/mouse/window events"],
+    "game_count_reported": 29,
+    "synchronized_timestamps_reported": true,
+    "supplied_option_decision_task": "NOT_ESTABLISHED",
+    "group_disjoint_train_validation_audit": "NOT_ESTABLISHED",
+    "underlying_game_media_rights": "UNKNOWN"
+  },
+  "integrity_and_use": {
+    "metadata_only": true,
+    "dataset_payload_downloaded": false,
+    "annotations_or_events_opened": false,
+    "model_fit_or_evaluation": false,
+    "sealed_audit_loaded": false
+  },
+  "decision": "NONCOMMERCIAL_TERMS_AND_UNRESOLVED_SOURCE_RIGHTS_SPLITS_TASK; do not acquire or use for product-directed fitting"
+}
