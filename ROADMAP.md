@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-31 02:11 JST R0 Orbitune run terminal check:** Both tracked
+processes (worker `3668`, wrapper `33576`) are absent. The RTX 3080 reported
+0% utilization / 0 MiB used. The final saved checkpoint is step `586076` /
+`14,268,978,580` events, 17,641 above the command's `14,268,960,939` stop
+threshold; this is consistent with threshold completion. The current-run exit
+code/reason was not persisted, so the exact termination cause remains UNKNOWN.
+Best stays step `521917`; final saved validation is `-1.576682` at step
+`585754`; no non-finite loss/gradient counters. See [02:11 terminal audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261031_0211JST.md).
+
 **2026-10-31 01:44 JST R0 checkpoint update:** PID `3668` remains the live
 GPU process. The saved checkpoint is now step `585395` / `14,250,013,261`
 events; latest validation is `-1.601044` at step `585036`, while best remains
