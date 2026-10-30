@@ -99,6 +99,8 @@ def run(pilot: Path, current: Path, selected: Path, calibration_path: Path, outp
                  "scaling_paired_bootstrap": {
                      metric: bootstrap(new_logits, scaled, labels, data[3], metric)
                      for metric in ("nll", "brier")}}
+        for interval in block["scaling_paired_bootstrap"].values():
+            interval["unit"] = f"pilot {split} session"
         old_logits = None
         if split == "development":
             with torch.inference_mode():
