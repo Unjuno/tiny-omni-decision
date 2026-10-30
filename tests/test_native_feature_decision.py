@@ -20,24 +20,30 @@ from tiny_omni_decision.observations import NativeOption, ObservationBatch  # no
 def cached_request(tmp_path, *, valid=(True, True), criterion=None):
     path = tmp_path / "features.npz"
     values = np.array([[0.2, 0.4, 0.6], [0.3, 0.5, 0.7]], dtype=np.float32)
-    timestamps = np.array([10., 20.])
+    timestamps = np.array([10.0, 20.0])
     mask = np.array(valid, dtype=np.bool_)
     np.savez(path, values=values, timestamps_ms=timestamps, valid_mask=mask)
-    batch = ObservationBatch.model_validate({
-        "schema_version": "1.0",
-        "observations": [{
-            "modality": "video", "source_id": "camera",
-            "payload_ref": str(path),
-            "payload_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-            "clock_id": "clock-a", "timestamps_ms": (10., 20.),
-            "valid_mask": valid,
-        }],
-        "options": [
-            {"option_id": "caller-a", "attributes": {"action_code": 1}},
-            {"option_id": "caller-b", "attributes": {"action_code": 2}},
-        ],
-        "criterion": criterion,
-    })
+    batch = ObservationBatch.model_validate(
+        {
+            "schema_version": "1.0",
+            "observations": [
+                {
+                    "modality": "video",
+                    "source_id": "camera",
+                    "payload_ref": str(path),
+                    "payload_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                    "clock_id": "clock-a",
+                    "timestamps_ms": (10.0, 20.0),
+                    "valid_mask": valid,
+                }
+            ],
+            "options": [
+                {"option_id": "caller-a", "attributes": {"action_code": 1}},
+                {"option_id": "caller-b", "attributes": {"action_code": 2}},
+            ],
+            "criterion": criterion,
+        }
+    )
     return batch, path
 
 
@@ -45,7 +51,7 @@ def test_text_free_native_scorer_is_candidate_permutation_equivariant():
     torch.manual_seed(17)
     model = NativeFeatureDecisionScorer(feature_width=3, option_width=2, hidden_width=8).eval()
     state = torch.tensor([[0.2, -0.3, 0.7]])
-    candidates = torch.tensor([[[1., 0.], [0., 1.], [2., -1.]]])
+    candidates = torch.tensor([[[1.0, 0.0], [0.0, 1.0], [2.0, -1.0]]])
     valid = torch.tensor([[True, True, True]])
 
     logits = model(state, candidates, valid)
@@ -59,22 +65,20 @@ def test_decide_preserves_supplied_option_order_and_returns_typed_json():
     model = NativeFeatureDecisionScorer(feature_width=3, option_width=2, hidden_width=8).eval()
     result = model.decide(
         torch.tensor([0.2, -0.3, 0.7]),
-        torch.tensor([[1., 0.], [0., 1.], [2., -1.]]),
+        torch.tensor([[1.0, 0.0], [0.0, 1.0], [2.0, -1.0]]),
         ["caller-b", "caller-a", "caller-c"],
         ["action-2", "action-1", "action-3"],
     )
     assert result["status"] == "selected"
-    assert [row["option_id"] for row in result["options"]] == [
-        "caller-b", "caller-a", "caller-c"
-    ]
+    assert [row["option_id"] for row in result["options"]] == ["caller-b", "caller-a", "caller-c"]
     assert sum(row["probability"] for row in result["options"]) == pytest.approx(1.0)
     assert result["selected_option_id"] in {"caller-a", "caller-b", "caller-c"}
 
 
 def test_invalid_padding_is_ignored_but_available_values_must_be_finite():
     model = NativeFeatureDecisionScorer(feature_width=2, option_width=1, hidden_width=4)
-    state = torch.tensor([[1., 2.]])
-    candidates = torch.tensor([[[0.], [1.], [float("nan")]]])
+    state = torch.tensor([[1.0, 2.0]])
+    candidates = torch.tensor([[[0.0], [1.0], [float("nan")]]])
     valid = torch.tensor([[True, True, False]])
     output = model(state, candidates, valid)
     assert torch.isfinite(output[valid]).all()
@@ -98,23 +102,80 @@ def test_cached_single_modality_path_checks_payload_and_returns_option_json(tmp_
     model = NativeFeatureDecisionScorer(feature_width=3, option_width=1, hidden_width=8).eval()
     batch, _ = cached_request(tmp_path)
     result = decide_cached_native_feature(
-        model, batch,
-        modality="video", query_time_ms=20., max_age_ms=15.,
+        model,
+        batch,
+        modality="video",
+        query_time_ms=20.0,
+        max_age_ms=15.0,
         option_schema=TypedOptionSchema(numeric=(NumericOptionField("action_code"),)),
     )
     assert result["status"] == "selected"
     assert [row["option_id"] for row in result["options"]] == ["caller-a", "caller-b"]
 
 
-@pytest.mark.parametrize("query_time", [5., 100.])
-def test_cached_single_modality_path_abstains_without_fresh_valid_evidence(
-    tmp_path, query_time
-):
+def test_cached_single_modality_path_applies_training_feature_normalization(tmp_path):
+    torch.manual_seed(29)
+    model = NativeFeatureDecisionScorer(feature_width=3, option_width=1, hidden_width=8).eval()
+    batch, _ = cached_request(tmp_path)
+    mean = torch.tensor([0.1, 0.2, 0.3])
+    scale = torch.tensor([0.5, 0.25, 0.1])
+    schema = TypedOptionSchema(numeric=(NumericOptionField("action_code"),))
+    option_features = schema.encode(batch.options)
+    expected = model.decide(
+        (torch.tensor([0.3, 0.5, 0.7]) - mean) / scale,
+        option_features,
+        [option.option_id for option in batch.options],
+        [option.option_id for option in batch.options],
+    )
+
+    result = decide_cached_native_feature(
+        model,
+        batch,
+        modality="video",
+        query_time_ms=20.0,
+        max_age_ms=15.0,
+        option_schema=schema,
+        feature_mean=mean,
+        feature_scale=scale,
+    )
+
+    torch.testing.assert_close(
+        torch.tensor([option["probability"] for option in result["options"]]),
+        torch.tensor([item["probability"] for item in expected["options"]]),
+    )
+
+
+@pytest.mark.parametrize(
+    "mean,scale",
+    [([0.0, 0.0, 0.0], None), ([0.0, 0.0], [1.0, 1.0]), ([0.0] * 3, [1.0, 0.0, 1.0])],
+)
+def test_cached_single_modality_path_rejects_invalid_feature_normalization(tmp_path, mean, scale):
+    model = NativeFeatureDecisionScorer(feature_width=3, option_width=1, hidden_width=4)
+    batch, _ = cached_request(tmp_path)
+    with pytest.raises(ValueError, match="normalization"):
+        decide_cached_native_feature(
+            model,
+            batch,
+            torch.tensor([[1.0], [2.0]]),
+            modality="video",
+            query_time_ms=20.0,
+            max_age_ms=15.0,
+            feature_mean=mean,
+            feature_scale=scale,
+        )
+
+
+@pytest.mark.parametrize("query_time", [5.0, 100.0])
+def test_cached_single_modality_path_abstains_without_fresh_valid_evidence(tmp_path, query_time):
     model = NativeFeatureDecisionScorer(feature_width=3, option_width=1, hidden_width=4).eval()
     batch, _ = cached_request(tmp_path, valid=(False, False))
     result = decide_cached_native_feature(
-        model, batch, torch.tensor([[1.], [2.]]),
-        modality="video", query_time_ms=query_time, max_age_ms=15.,
+        model,
+        batch,
+        torch.tensor([[1.0], [2.0]]),
+        modality="video",
+        query_time_ms=query_time,
+        max_age_ms=15.0,
     )
     assert result["status"] == "abstain"
     assert result["selected_option_id"] is None
@@ -127,23 +188,31 @@ def test_cached_single_modality_path_rejects_modified_payload_and_text_condition
     path.write_bytes(path.read_bytes() + b"tampered")
     with pytest.raises(ValueError, match="hash"):
         decide_cached_native_feature(
-            model, batch, torch.tensor([[1.], [2.]]), ["walk", "stop"],
-            modality="video", query_time_ms=20., max_age_ms=15.,
+            model,
+            batch,
+            torch.tensor([[1.0], [2.0]]),
+            ["walk", "stop"],
+            modality="video",
+            query_time_ms=20.0,
+            max_age_ms=15.0,
         )
 
-    batch, _ = cached_request(
-        tmp_path, criterion={"kind": "text", "value": "choose fastest"}
-    )
+    batch, _ = cached_request(tmp_path, criterion={"kind": "text", "value": "choose fastest"})
     with pytest.raises(ValueError, match="criterion"):
         decide_cached_native_feature(
-            model, batch, torch.tensor([[1.], [2.]]), ["walk", "stop"],
-            modality="video", query_time_ms=20., max_age_ms=15.,
+            model,
+            batch,
+            torch.tensor([[1.0], [2.0]]),
+            ["walk", "stop"],
+            modality="video",
+            query_time_ms=20.0,
+            max_age_ms=15.0,
         )
 
 
 def test_typed_option_schema_normalizes_numeric_and_one_hot_encodes_enum():
     schema = TypedOptionSchema(
-        numeric=(NumericOptionField("cost", center=10., scale=5.),),
+        numeric=(NumericOptionField("cost", center=10.0, scale=5.0),),
         enums=(EnumOptionField("action", ("wait", "go")),),
     )
     options = [
@@ -151,18 +220,22 @@ def test_typed_option_schema_normalizes_numeric_and_one_hot_encodes_enum():
         NativeOption(option_id="opt-b", attributes={"cost": 15, "action": "go"}),
     ]
     encoded = schema.encode(options)
-    torch.testing.assert_close(encoded, torch.tensor([[-1., 1., 0.], [1., 0., 1.]]))
+    torch.testing.assert_close(encoded, torch.tensor([[-1.0, 1.0, 0.0], [1.0, 0.0, 1.0]]))
 
 
 def test_typed_option_schema_rejects_free_text_and_unknown_categories():
     schema = TypedOptionSchema(enums=(EnumOptionField("action", ("wait", "go")),))
     with pytest.raises(ValueError, match="exactly match"):
-        schema.encode([
-            NativeOption(option_id="a", attributes={"action": "wait", "label": "secret"}),
-            NativeOption(option_id="b", attributes={"action": "go", "label": "secret"}),
-        ])
+        schema.encode(
+            [
+                NativeOption(option_id="a", attributes={"action": "wait", "label": "secret"}),
+                NativeOption(option_id="b", attributes={"action": "go", "label": "secret"}),
+            ]
+        )
     with pytest.raises(ValueError, match="fixed vocabulary"):
-        schema.encode([
-            NativeOption(option_id="a", attributes={"action": "stop"}),
-            NativeOption(option_id="b", attributes={"action": "go"}),
-        ])
+        schema.encode(
+            [
+                NativeOption(option_id="a", attributes={"action": "stop"}),
+                NativeOption(option_id="b", attributes={"action": "go"}),
+            ]
+        )

@@ -122,3 +122,11 @@ readout. Full M0/M1 remains open across modalities and task types; R2-M joint
 input necessity remains open; R3–R8 are not unlocked by this diagnostic. The
 sealed audit, ternary export, quantization, merging, and product promotion were
 not performed.
+
+## Runtime adapter normalization follow-up
+
+After the diagnostic was recorded, an implementation-path mismatch was found: the scorer was fitted on train-only standardized image features, but the hash-checked cached-feature JSON adapter had no way to apply the saved training mean and scale. This could make cached inference use a different feature scale from the fitted readout. The adapter now accepts an optional mean/scale pair, validates that both are present, finite, and match the feature width (with strictly positive scale), and normalizes gathered features before scoring. Existing callers remain unchanged when neither value is provided.
+
+Regression tests verify parity with a direct standardized readout and reject partial, wrong-width, and non-positive normalization. The real cache-to-JSON path was replayed on the same 430 fixed development image IDs in a fresh external output directory. Every argmax prediction matched the saved direct readout; maximum probability difference was `9.54e-7`. Cache-write/read/decision time averaged `0.00199 s/example` on CPU. The run receipt SHA-256 is `E7B534B2DDFAA12D38378DAEC8D1DB2EC0EAA693C1F5955E84ECE5D8EEEF5233`; prediction SHA-256 is `16d654caa88ec9338cca6853cdded3dc3324717eee6e63184366c85b4f873fd7`. Receipt and per-example JSON remain outside Git under `C:\CodexArtifacts\pretrained-reuse-r2\native-feature-decision-inat-20261031-attempt-01\runtime-json-replay`.
+
+This is an integration-parity check on already observed, post-selection development IDs; it is not a new quality evaluation and does not change the accuracy conclusion above. It does not unlock another modality, joint-input claims, sealed-audit evaluation, quantization, or product promotion.

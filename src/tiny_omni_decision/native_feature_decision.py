@@ -29,8 +29,12 @@ class NumericOptionField:
     scale: float = 1.0
 
     def __post_init__(self):
-        if (not self.name.strip() or not math.isfinite(self.center)
-                or not math.isfinite(self.scale) or self.scale <= 0):
+        if (
+            not self.name.strip()
+            or not math.isfinite(self.center)
+            or not math.isfinite(self.scale)
+            or self.scale <= 0
+        ):
             raise ValueError("numeric option fields need a name and finite positive scale")
 
 
@@ -42,9 +46,12 @@ class EnumOptionField:
     values: tuple[str, ...]
 
     def __post_init__(self):
-        if (not self.name.strip() or len(self.values) < 2
-                or any(not isinstance(value, str) or not value.strip() for value in self.values)
-                or len(set(self.values)) != len(self.values)):
+        if (
+            not self.name.strip()
+            or len(self.values) < 2
+            or any(not isinstance(value, str) or not value.strip() for value in self.values)
+            or len(set(self.values)) != len(self.values)
+        ):
             raise ValueError("enum option fields need a name and unique fixed categories")
 
 
@@ -118,25 +125,32 @@ class NativeFeatureDecisionScorer(nn.Module):
         option_features: Tensor,
         option_valid: Tensor,
     ) -> Tensor:
-        if (observation_features.ndim != 2
-                or observation_features.shape[-1] != self.feature_width):
+        if observation_features.ndim != 2 or observation_features.shape[-1] != self.feature_width:
             raise ValueError("observation features must have shape [batch, feature_width]")
-        if (option_features.ndim != 3
-                or option_features.shape[0] != observation_features.shape[0]
-                or option_features.shape[-1] != self.option_width):
+        if (
+            option_features.ndim != 3
+            or option_features.shape[0] != observation_features.shape[0]
+            or option_features.shape[-1] != self.option_width
+        ):
             raise ValueError("option features must have shape [batch, candidates, option_width]")
-        if (option_valid.dtype != torch.bool
-                or option_valid.shape != option_features.shape[:2]
-                or not (option_valid.sum(-1) >= 2).all()):
+        if (
+            option_valid.dtype != torch.bool
+            or option_valid.shape != option_features.shape[:2]
+            or not (option_valid.sum(-1) >= 2).all()
+        ):
             raise ValueError("a boolean mask with at least two options per row is required")
         if not observation_features.is_floating_point() or not option_features.is_floating_point():
             raise ValueError("observation and option features must use floating-point tensors")
-        if (observation_features.device != option_features.device
-                or option_valid.device != option_features.device
-                or observation_features.dtype != option_features.dtype):
+        if (
+            observation_features.device != option_features.device
+            or option_valid.device != option_features.device
+            or observation_features.dtype != option_features.dtype
+        ):
             raise ValueError("features and validity mask must share device and feature dtype")
-        if (not torch.isfinite(observation_features).all()
-                or not torch.isfinite(option_features[option_valid]).all()):
+        if (
+            not torch.isfinite(observation_features).all()
+            or not torch.isfinite(option_features[option_valid]).all()
+        ):
             raise ValueError("available observation and option features must be finite")
 
         clean_options = torch.where(
@@ -159,12 +173,16 @@ class NativeFeatureDecisionScorer(nn.Module):
         """Score a complete supplied typed-option set and return option-ID JSON."""
         if observation_features.ndim != 1 or option_features.ndim != 2:
             raise ValueError("decide expects one observation and an unbatched option matrix")
-        if (len(option_ids) != len(option_features)
-                or len(class_ids) != len(option_features)
-                or any(not isinstance(value, str) or not value.strip()
-                       for value in [*option_ids, *class_ids])
-                or len(set(option_ids)) != len(option_ids)
-                or len(set(class_ids)) != len(class_ids)):
+        if (
+            len(option_ids) != len(option_features)
+            or len(class_ids) != len(option_features)
+            or any(
+                not isinstance(value, str) or not value.strip()
+                for value in [*option_ids, *class_ids]
+            )
+            or len(set(option_ids)) != len(option_ids)
+            or len(set(class_ids)) != len(class_ids)
+        ):
             raise ValueError("unique nonempty option and class IDs must match the option rows")
         if not math.isfinite(temperature) or temperature <= 0:
             raise ValueError("temperature must be finite and positive")
@@ -174,12 +192,16 @@ class NativeFeatureDecisionScorer(nn.Module):
             device=reference.device, dtype=reference.dtype
         )
         option_features = option_features.to(device=reference.device, dtype=reference.dtype)
-        logits = self(
-            observation_features[None],
-            option_features[None],
-            torch.ones((1, len(option_features)), dtype=torch.bool,
-                       device=option_features.device),
-        )[0].float() / temperature
+        logits = (
+            self(
+                observation_features[None],
+                option_features[None],
+                torch.ones(
+                    (1, len(option_features)), dtype=torch.bool, device=option_features.device
+                ),
+            )[0].float()
+            / temperature
+        )
         probabilities = torch.softmax(logits, dim=-1).cpu().tolist()
         options = [
             {"option_id": option_id, "class_id": class_id}
@@ -199,6 +221,8 @@ def decide_cached_native_feature(
     query_time_ms: float,
     max_age_ms: float,
     option_schema: TypedOptionSchema | None = None,
+    feature_mean: Tensor | None = None,
+    feature_scale: Tensor | None = None,
     temperature: float = 1.0,
 ) -> dict[str, object]:
     """Run a text-free M1 decision from one hash-checked cached feature stream.
@@ -220,9 +244,30 @@ def decide_cached_native_feature(
         raise ValueError("provide exactly one typed option schema or option feature matrix")
     if option_schema is not None:
         option_features = option_schema.encode(batch.options)
-    if (option_features is None or option_features.ndim != 2
-            or option_features.shape[0] != len(batch.options)):
+    if (
+        option_features is None
+        or option_features.ndim != 2
+        or option_features.shape[0] != len(batch.options)
+    ):
         raise ValueError("typed option features must align with supplied options")
+    if (feature_mean is None) != (feature_scale is None):
+        raise ValueError("feature normalization requires both mean and scale")
+    reference = next(model.parameters())
+    if feature_mean is not None and feature_scale is not None:
+        feature_mean = torch.as_tensor(feature_mean, device=reference.device, dtype=reference.dtype)
+        feature_scale = torch.as_tensor(
+            feature_scale, device=reference.device, dtype=reference.dtype
+        )
+        if (
+            feature_mean.shape != (model.feature_width,)
+            or feature_scale.shape != (model.feature_width,)
+            or not torch.isfinite(feature_mean).all()
+            or not torch.isfinite(feature_scale).all()
+            or (feature_scale <= 0).any()
+        ):
+            raise ValueError(
+                "feature normalization must be finite width-sized mean and positive scale"
+            )
     option_ids = [option.option_id for option in batch.options]
     classes = list(class_ids) if class_ids is not None else option_ids
     # Validate class coverage and option identifiers before reading feature data.
@@ -231,8 +276,10 @@ def decide_cached_native_feature(
     classification_json(
         [1.0 / len(classes)] * len(classes) if classes else [],
         classes,
-        [{"option_id": option_id, "class_id": class_id}
-         for option_id, class_id in zip(option_ids, classes, strict=True)],
+        [
+            {"option_id": option_id, "class_id": class_id}
+            for option_id, class_id in zip(option_ids, classes, strict=True)
+        ],
     )
 
     observation = batch.observations[0]
@@ -250,16 +297,14 @@ def decide_cached_native_feature(
             "selected_option_id": None,
             "reason": "insufficient_evidence",
             "missing_modalities": [modality],
-            "options": [
-                {"option_id": option_id, "probability": None}
-                for option_id in option_ids
-            ],
+            "options": [{"option_id": option_id, "probability": None} for option_id in option_ids],
         }
 
-    reference = next(model.parameters())
     features = torch.from_numpy(gathered["features"][modality][0]).to(
         device=reference.device, dtype=reference.dtype
     )
+    if feature_mean is not None and feature_scale is not None:
+        features = (features - feature_mean) / feature_scale
     return model.decide(
         features,
         option_features,
