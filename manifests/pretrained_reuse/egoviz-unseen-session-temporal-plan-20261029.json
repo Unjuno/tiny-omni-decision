@@ -1,0 +1,636 @@
+{
+  "format": "egoviz-unseen-session-temporal-correspondence-plan-v1",
+  "status": "METADATA_ONLY_PLAN_MEDIA_NOT_DOWNLOADED",
+  "source": {
+    "dataset": "humaidtech/EgoViz-120",
+    "bucket": "hf://buckets/humaidtech/EgoViz-120",
+    "license": "CC-BY-4.0, as stated by the official dataset card",
+    "index_sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "previous_acquisition_sha256": "3e05a92c9365aeb69f91bae3ed1dce8258c77b6d58941ae07a9ed0f1fc95b733",
+    "previous_groups_excluded": [
+      "g001",
+      "g006",
+      "g008",
+      "g035",
+      "g038",
+      "g057",
+      "g076",
+      "g114",
+      "g142",
+      "g143",
+      "g151",
+      "g152",
+      "g153",
+      "g156",
+      "g166",
+      "g174"
+    ],
+    "split_unit": "publisher group_id session; participant independence across sessions is unknown",
+    "seed": 20261029,
+    "selection_rule": "exclude every previously used group; require duration >= 15s and MCAP size <= 1000000000 bytes; reserve one smallest eligible file per category and split, then fill to fixed group capacities by least represented category with smallest eligible file and SHA tie-break"
+  },
+  "task": {
+    "name": "four-choice video-to-IMU timestamp correspondence",
+    "inputs": [
+      "8 wrist-left video frames",
+      "6-channel wrist-left IMU window"
+    ],
+    "duration_seconds": 2,
+    "stride_seconds": 1,
+    "candidates": 4,
+    "negative_windows": "same clip, at least 3 seconds from the matching timestamp",
+    "label_source": "exact shared-clock interval identity; publisher /action labels are not used",
+    "question": "Which IMU option comes from the same two-second interval as this video window?"
+  },
+  "split_counts": {
+    "train": {
+      "unique_groups": 24,
+      "unique_clips": 24,
+      "estimated_bytes": 5027437434,
+      "category_counts": {
+        "cleaning_kitchen": 2,
+        "cleaning_restroom": 2,
+        "cleaning_windows": 2,
+        "cooking_food": 2,
+        "managing_laundry": 2,
+        "managing_trash": 2,
+        "mopping_floor": 2,
+        "organizing_items": 2,
+        "preparing_cleaning_supplies": 2,
+        "preparing_food": 2,
+        "sweeping_floor": 2,
+        "wiping_surfaces": 2
+      }
+    },
+    "development": {
+      "unique_groups": 20,
+      "unique_clips": 20,
+      "estimated_bytes": 4706125199,
+      "category_counts": {
+        "cleaning_kitchen": 2,
+        "cleaning_restroom": 2,
+        "cleaning_windows": 2,
+        "cooking_food": 2,
+        "managing_laundry": 2,
+        "managing_trash": 2,
+        "mopping_floor": 1,
+        "organizing_items": 1,
+        "preparing_cleaning_supplies": 1,
+        "preparing_food": 2,
+        "sweeping_floor": 2,
+        "wiping_surfaces": 1
+      }
+    },
+    "sealed_audit": {
+      "unique_groups": 20,
+      "unique_clips": 20,
+      "estimated_bytes": 4617257827,
+      "category_counts": {
+        "cleaning_kitchen": 2,
+        "cleaning_restroom": 2,
+        "cleaning_windows": 2,
+        "cooking_food": 1,
+        "managing_laundry": 2,
+        "managing_trash": 2,
+        "mopping_floor": 1,
+        "organizing_items": 2,
+        "preparing_cleaning_supplies": 1,
+        "preparing_food": 2,
+        "sweeping_floor": 2,
+        "wiping_surfaces": 1
+      }
+    }
+  },
+  "totals": {
+    "selected_groups": 64,
+    "selected_bytes": 14350820460,
+    "train_development_bytes": 9733562633,
+    "largest_file_bytes": 538029923,
+    "previous_split_group_overlap": 0,
+    "new_split_group_overlap": 0,
+    "sealed_audit_media_downloaded": false,
+    "sealed_audit_media_loaded": false,
+    "sealed_audit_evaluated": false,
+    "publisher_action_labels_read": false
+  },
+  "splits": {
+    "train": [
+      {
+        "chunk_id": "54778614ed6f8cf1941948b58b316ed6",
+        "group_id": "g154",
+        "category": "cleaning_kitchen",
+        "duration_s": 16.0,
+        "expected_bytes": 256307528,
+        "mcap_path": "data/cleaning_kitchen/54778614ed6f8cf1941948b58b316ed6/54778614ed6f8cf1941948b58b316ed6.mcap"
+      },
+      {
+        "chunk_id": "b18fdacb1229b0842a1f8d2d91ca8488",
+        "group_id": "g097",
+        "category": "cleaning_kitchen",
+        "duration_s": 17.0,
+        "expected_bytes": 182992353,
+        "mcap_path": "data/cleaning_kitchen/b18fdacb1229b0842a1f8d2d91ca8488/b18fdacb1229b0842a1f8d2d91ca8488.mcap"
+      },
+      {
+        "chunk_id": "42c0ea0ad979872d6908a8bb4bdde7b0",
+        "group_id": "g030",
+        "category": "cleaning_restroom",
+        "duration_s": 15.0,
+        "expected_bytes": 187025009,
+        "mcap_path": "data/cleaning_restroom/42c0ea0ad979872d6908a8bb4bdde7b0/42c0ea0ad979872d6908a8bb4bdde7b0.mcap"
+      },
+      {
+        "chunk_id": "71e678a02524ae01888c34b18f983be2",
+        "group_id": "g058",
+        "category": "cleaning_restroom",
+        "duration_s": 15.0,
+        "expected_bytes": 188385940,
+        "mcap_path": "data/cleaning_restroom/71e678a02524ae01888c34b18f983be2/71e678a02524ae01888c34b18f983be2.mcap"
+      },
+      {
+        "chunk_id": "10df74f800bedcbafcdb46371a1ff79a",
+        "group_id": "g146",
+        "category": "cleaning_windows",
+        "duration_s": 16.0,
+        "expected_bytes": 236114197,
+        "mcap_path": "data/cleaning_windows/10df74f800bedcbafcdb46371a1ff79a/10df74f800bedcbafcdb46371a1ff79a.mcap"
+      },
+      {
+        "chunk_id": "17a6a3f0b0acd54e6d6675be707e9c8c",
+        "group_id": "g168",
+        "category": "cleaning_windows",
+        "duration_s": 20.0,
+        "expected_bytes": 301810050,
+        "mcap_path": "data/cleaning_windows/17a6a3f0b0acd54e6d6675be707e9c8c/17a6a3f0b0acd54e6d6675be707e9c8c.mcap"
+      },
+      {
+        "chunk_id": "29e2c5febb8e569650efa36385492c64",
+        "group_id": "g046",
+        "category": "cooking_food",
+        "duration_s": 15.0,
+        "expected_bytes": 228307650,
+        "mcap_path": "data/cooking_food/29e2c5febb8e569650efa36385492c64/29e2c5febb8e569650efa36385492c64.mcap"
+      },
+      {
+        "chunk_id": "618046a261d8f45b5c555321b98e26fa",
+        "group_id": "g037",
+        "category": "cooking_food",
+        "duration_s": 16.0,
+        "expected_bytes": 255848280,
+        "mcap_path": "data/cooking_food/618046a261d8f45b5c555321b98e26fa/618046a261d8f45b5c555321b98e26fa.mcap"
+      },
+      {
+        "chunk_id": "2dbf1d5f78a376fbe1cff6d7bad70ded",
+        "group_id": "g068",
+        "category": "managing_laundry",
+        "duration_s": 15.0,
+        "expected_bytes": 180443988,
+        "mcap_path": "data/managing_laundry/2dbf1d5f78a376fbe1cff6d7bad70ded/2dbf1d5f78a376fbe1cff6d7bad70ded.mcap"
+      },
+      {
+        "chunk_id": "e288a91ef5e70cc138ca294afb1e336c",
+        "group_id": "g060",
+        "category": "managing_laundry",
+        "duration_s": 17.0,
+        "expected_bytes": 222327128,
+        "mcap_path": "data/managing_laundry/e288a91ef5e70cc138ca294afb1e336c/e288a91ef5e70cc138ca294afb1e336c.mcap"
+      },
+      {
+        "chunk_id": "03774f14e67e3dd95feb72a4d6941be7",
+        "group_id": "g157",
+        "category": "managing_trash",
+        "duration_s": 15.0,
+        "expected_bytes": 192898855,
+        "mcap_path": "data/managing_trash/03774f14e67e3dd95feb72a4d6941be7/03774f14e67e3dd95feb72a4d6941be7.mcap"
+      },
+      {
+        "chunk_id": "f4b4e1846062bdb8193786209a44e930",
+        "group_id": "g110",
+        "category": "managing_trash",
+        "duration_s": 15.0,
+        "expected_bytes": 151857236,
+        "mcap_path": "data/managing_trash/f4b4e1846062bdb8193786209a44e930/f4b4e1846062bdb8193786209a44e930.mcap"
+      },
+      {
+        "chunk_id": "29b26ccdca68ef2b3db7914110f87900",
+        "group_id": "g084",
+        "category": "mopping_floor",
+        "duration_s": 15.0,
+        "expected_bytes": 227636239,
+        "mcap_path": "data/mopping_floor/29b26ccdca68ef2b3db7914110f87900/29b26ccdca68ef2b3db7914110f87900.mcap"
+      },
+      {
+        "chunk_id": "88e364050c2e8b59112465d7eb159539",
+        "group_id": "g140",
+        "category": "mopping_floor",
+        "duration_s": 15.0,
+        "expected_bytes": 204261886,
+        "mcap_path": "data/mopping_floor/88e364050c2e8b59112465d7eb159539/88e364050c2e8b59112465d7eb159539.mcap"
+      },
+      {
+        "chunk_id": "32c1bde08183058d325ed16dc74a582c",
+        "group_id": "g101",
+        "category": "organizing_items",
+        "duration_s": 17.0,
+        "expected_bytes": 216080151,
+        "mcap_path": "data/organizing_items/32c1bde08183058d325ed16dc74a582c/32c1bde08183058d325ed16dc74a582c.mcap"
+      },
+      {
+        "chunk_id": "a31908965f58a538c4366c920189faff",
+        "group_id": "g080",
+        "category": "organizing_items",
+        "duration_s": 15.0,
+        "expected_bytes": 231516475,
+        "mcap_path": "data/organizing_items/a31908965f58a538c4366c920189faff/a31908965f58a538c4366c920189faff.mcap"
+      },
+      {
+        "chunk_id": "59624bb5c057e00df5b24da18254c697",
+        "group_id": "g028",
+        "category": "preparing_cleaning_supplies",
+        "duration_s": 16.0,
+        "expected_bytes": 165215812,
+        "mcap_path": "data/preparing_cleaning_supplies/59624bb5c057e00df5b24da18254c697/59624bb5c057e00df5b24da18254c697.mcap"
+      },
+      {
+        "chunk_id": "e3ef35b60a4f44d7d49b75a4b574106d",
+        "group_id": "g133",
+        "category": "preparing_cleaning_supplies",
+        "duration_s": 16.0,
+        "expected_bytes": 187361498,
+        "mcap_path": "data/preparing_cleaning_supplies/e3ef35b60a4f44d7d49b75a4b574106d/e3ef35b60a4f44d7d49b75a4b574106d.mcap"
+      },
+      {
+        "chunk_id": "2770f798c1f410a03490127eef4a96c7",
+        "group_id": "g132",
+        "category": "preparing_food",
+        "duration_s": 15.0,
+        "expected_bytes": 226993583,
+        "mcap_path": "data/preparing_food/2770f798c1f410a03490127eef4a96c7/2770f798c1f410a03490127eef4a96c7.mcap"
+      },
+      {
+        "chunk_id": "3d81cd489657d6c2bf82bf92324dd7cf",
+        "group_id": "g059",
+        "category": "preparing_food",
+        "duration_s": 17.0,
+        "expected_bytes": 239847114,
+        "mcap_path": "data/preparing_food/3d81cd489657d6c2bf82bf92324dd7cf/3d81cd489657d6c2bf82bf92324dd7cf.mcap"
+      },
+      {
+        "chunk_id": "55cb95d1215393578e9ce8a8f37111bb",
+        "group_id": "g064",
+        "category": "sweeping_floor",
+        "duration_s": 15.0,
+        "expected_bytes": 186836045,
+        "mcap_path": "data/sweeping_floor/55cb95d1215393578e9ce8a8f37111bb/55cb95d1215393578e9ce8a8f37111bb.mcap"
+      },
+      {
+        "chunk_id": "e49d45464922948cd7f5d923ce5538ca",
+        "group_id": "g045",
+        "category": "sweeping_floor",
+        "duration_s": 15.0,
+        "expected_bytes": 205654480,
+        "mcap_path": "data/sweeping_floor/e49d45464922948cd7f5d923ce5538ca/e49d45464922948cd7f5d923ce5538ca.mcap"
+      },
+      {
+        "chunk_id": "079cbb05d271160ec80211a6bb9bb81c",
+        "group_id": "g129",
+        "category": "wiping_surfaces",
+        "duration_s": 15.0,
+        "expected_bytes": 171691981,
+        "mcap_path": "data/wiping_surfaces/079cbb05d271160ec80211a6bb9bb81c/079cbb05d271160ec80211a6bb9bb81c.mcap"
+      },
+      {
+        "chunk_id": "1bc95ff4831588df463430acc67f9b77",
+        "group_id": "g137",
+        "category": "wiping_surfaces",
+        "duration_s": 17.0,
+        "expected_bytes": 180023956,
+        "mcap_path": "data/wiping_surfaces/1bc95ff4831588df463430acc67f9b77/1bc95ff4831588df463430acc67f9b77.mcap"
+      }
+    ],
+    "development": [
+      {
+        "chunk_id": "183297b93c7f76d383aa0d2b89cbb699",
+        "group_id": "g119",
+        "category": "cleaning_kitchen",
+        "duration_s": 23.0,
+        "expected_bytes": 260539513,
+        "mcap_path": "data/cleaning_kitchen/183297b93c7f76d383aa0d2b89cbb699/183297b93c7f76d383aa0d2b89cbb699.mcap"
+      },
+      {
+        "chunk_id": "cbcfd080b8275d2349b9e2078cf15606",
+        "group_id": "g000",
+        "category": "cleaning_kitchen",
+        "duration_s": 15.0,
+        "expected_bytes": 210084307,
+        "mcap_path": "data/cleaning_kitchen/cbcfd080b8275d2349b9e2078cf15606/cbcfd080b8275d2349b9e2078cf15606.mcap"
+      },
+      {
+        "chunk_id": "1ea966949536097c5f2afbcbea91f637",
+        "group_id": "g024",
+        "category": "cleaning_restroom",
+        "duration_s": 16.0,
+        "expected_bytes": 196454552,
+        "mcap_path": "data/cleaning_restroom/1ea966949536097c5f2afbcbea91f637/1ea966949536097c5f2afbcbea91f637.mcap"
+      },
+      {
+        "chunk_id": "1f2059178f0f572193a93a49f763e88f",
+        "group_id": "g041",
+        "category": "cleaning_restroom",
+        "duration_s": 15.0,
+        "expected_bytes": 187069619,
+        "mcap_path": "data/cleaning_restroom/1f2059178f0f572193a93a49f763e88f/1f2059178f0f572193a93a49f763e88f.mcap"
+      },
+      {
+        "chunk_id": "504d790c93fb7543feec684e0f5bf98e",
+        "group_id": "g138",
+        "category": "cleaning_windows",
+        "duration_s": 21.0,
+        "expected_bytes": 326585045,
+        "mcap_path": "data/cleaning_windows/504d790c93fb7543feec684e0f5bf98e/504d790c93fb7543feec684e0f5bf98e.mcap"
+      },
+      {
+        "chunk_id": "f23f2e153ce6ddb6b5213cac9a14b3d2",
+        "group_id": "g088",
+        "category": "cleaning_windows",
+        "duration_s": 18.0,
+        "expected_bytes": 255418979,
+        "mcap_path": "data/cleaning_windows/f23f2e153ce6ddb6b5213cac9a14b3d2/f23f2e153ce6ddb6b5213cac9a14b3d2.mcap"
+      },
+      {
+        "chunk_id": "2cb2fad4184c483c46d3aa123dba3239",
+        "group_id": "g017",
+        "category": "cooking_food",
+        "duration_s": 30.0,
+        "expected_bytes": 538029923,
+        "mcap_path": "data/cooking_food/2cb2fad4184c483c46d3aa123dba3239/2cb2fad4184c483c46d3aa123dba3239.mcap"
+      },
+      {
+        "chunk_id": "91c9691738bbb92de5c33a84847a6ac4",
+        "group_id": "g029",
+        "category": "cooking_food",
+        "duration_s": 15.0,
+        "expected_bytes": 230733237,
+        "mcap_path": "data/cooking_food/91c9691738bbb92de5c33a84847a6ac4/91c9691738bbb92de5c33a84847a6ac4.mcap"
+      },
+      {
+        "chunk_id": "695af7b0d9f8150fd8bad254df76471f",
+        "group_id": "g173",
+        "category": "managing_laundry",
+        "duration_s": 15.0,
+        "expected_bytes": 196364887,
+        "mcap_path": "data/managing_laundry/695af7b0d9f8150fd8bad254df76471f/695af7b0d9f8150fd8bad254df76471f.mcap"
+      },
+      {
+        "chunk_id": "7262a8ec237928d15b4b5e1ed86a3a33",
+        "group_id": "g113",
+        "category": "managing_laundry",
+        "duration_s": 16.0,
+        "expected_bytes": 234093744,
+        "mcap_path": "data/managing_laundry/7262a8ec237928d15b4b5e1ed86a3a33/7262a8ec237928d15b4b5e1ed86a3a33.mcap"
+      },
+      {
+        "chunk_id": "1633a5388ef867429d7567b42f69c9e6",
+        "group_id": "g096",
+        "category": "managing_trash",
+        "duration_s": 15.0,
+        "expected_bytes": 193707200,
+        "mcap_path": "data/managing_trash/1633a5388ef867429d7567b42f69c9e6/1633a5388ef867429d7567b42f69c9e6.mcap"
+      },
+      {
+        "chunk_id": "710fd4e002a925ec9d45b3adcd59c175",
+        "group_id": "g127",
+        "category": "managing_trash",
+        "duration_s": 15.0,
+        "expected_bytes": 183152262,
+        "mcap_path": "data/managing_trash/710fd4e002a925ec9d45b3adcd59c175/710fd4e002a925ec9d45b3adcd59c175.mcap"
+      },
+      {
+        "chunk_id": "5afd17d371a03aa9fe89b700117cfbbc",
+        "group_id": "g148",
+        "category": "mopping_floor",
+        "duration_s": 16.0,
+        "expected_bytes": 212868350,
+        "mcap_path": "data/mopping_floor/5afd17d371a03aa9fe89b700117cfbbc/5afd17d371a03aa9fe89b700117cfbbc.mcap"
+      },
+      {
+        "chunk_id": "363f5400a918e79623486af528bd6c8c",
+        "group_id": "g115",
+        "category": "organizing_items",
+        "duration_s": 18.0,
+        "expected_bytes": 217427848,
+        "mcap_path": "data/organizing_items/363f5400a918e79623486af528bd6c8c/363f5400a918e79623486af528bd6c8c.mcap"
+      },
+      {
+        "chunk_id": "1ee9cb2a7eb5f35743388ccce979b816",
+        "group_id": "g106",
+        "category": "preparing_cleaning_supplies",
+        "duration_s": 17.0,
+        "expected_bytes": 178807581,
+        "mcap_path": "data/preparing_cleaning_supplies/1ee9cb2a7eb5f35743388ccce979b816/1ee9cb2a7eb5f35743388ccce979b816.mcap"
+      },
+      {
+        "chunk_id": "64bb09df94c35fbe7893b0bf160db85b",
+        "group_id": "g112",
+        "category": "preparing_food",
+        "duration_s": 19.0,
+        "expected_bytes": 231077908,
+        "mcap_path": "data/preparing_food/64bb09df94c35fbe7893b0bf160db85b/64bb09df94c35fbe7893b0bf160db85b.mcap"
+      },
+      {
+        "chunk_id": "a05341b891f917ba10b40d90d50a2e3d",
+        "group_id": "g094",
+        "category": "preparing_food",
+        "duration_s": 15.0,
+        "expected_bytes": 264362014,
+        "mcap_path": "data/preparing_food/a05341b891f917ba10b40d90d50a2e3d/a05341b891f917ba10b40d90d50a2e3d.mcap"
+      },
+      {
+        "chunk_id": "8a3708b23bdafa2ca91e67d78c324ea9",
+        "group_id": "g091",
+        "category": "sweeping_floor",
+        "duration_s": 15.0,
+        "expected_bytes": 189711189,
+        "mcap_path": "data/sweeping_floor/8a3708b23bdafa2ca91e67d78c324ea9/8a3708b23bdafa2ca91e67d78c324ea9.mcap"
+      },
+      {
+        "chunk_id": "fae543b4e92c36a8a6dc69967e0a2912",
+        "group_id": "g044",
+        "category": "sweeping_floor",
+        "duration_s": 17.0,
+        "expected_bytes": 227579530,
+        "mcap_path": "data/sweeping_floor/fae543b4e92c36a8a6dc69967e0a2912/fae543b4e92c36a8a6dc69967e0a2912.mcap"
+      },
+      {
+        "chunk_id": "121d871c678166f95609b47e1fe8cee2",
+        "group_id": "g090",
+        "category": "wiping_surfaces",
+        "duration_s": 16.0,
+        "expected_bytes": 172057511,
+        "mcap_path": "data/wiping_surfaces/121d871c678166f95609b47e1fe8cee2/121d871c678166f95609b47e1fe8cee2.mcap"
+      }
+    ],
+    "sealed_audit": [
+      {
+        "chunk_id": "c8cda23c44dee607a3dd2a5e23604b6f",
+        "group_id": "g026",
+        "category": "cleaning_kitchen",
+        "duration_s": 18.0,
+        "expected_bytes": 256169778,
+        "mcap_path": "data/cleaning_kitchen/c8cda23c44dee607a3dd2a5e23604b6f/c8cda23c44dee607a3dd2a5e23604b6f.mcap"
+      },
+      {
+        "chunk_id": "cbe26705d4d1dc2ce2fc3c30f7516424",
+        "group_id": "g141",
+        "category": "cleaning_kitchen",
+        "duration_s": 16.0,
+        "expected_bytes": 286168978,
+        "mcap_path": "data/cleaning_kitchen/cbe26705d4d1dc2ce2fc3c30f7516424/cbe26705d4d1dc2ce2fc3c30f7516424.mcap"
+      },
+      {
+        "chunk_id": "2fa8437a1e7aff99e8e168fd2424808a",
+        "group_id": "g162",
+        "category": "cleaning_restroom",
+        "duration_s": 16.0,
+        "expected_bytes": 233108523,
+        "mcap_path": "data/cleaning_restroom/2fa8437a1e7aff99e8e168fd2424808a/2fa8437a1e7aff99e8e168fd2424808a.mcap"
+      },
+      {
+        "chunk_id": "a9dab5c1011896e09098896f4741fa42",
+        "group_id": "g098",
+        "category": "cleaning_restroom",
+        "duration_s": 16.0,
+        "expected_bytes": 187951703,
+        "mcap_path": "data/cleaning_restroom/a9dab5c1011896e09098896f4741fa42/a9dab5c1011896e09098896f4741fa42.mcap"
+      },
+      {
+        "chunk_id": "4dca0777ce49aa978aa746f4373813e0",
+        "group_id": "g086",
+        "category": "cleaning_windows",
+        "duration_s": 18.0,
+        "expected_bytes": 275878890,
+        "mcap_path": "data/cleaning_windows/4dca0777ce49aa978aa746f4373813e0/4dca0777ce49aa978aa746f4373813e0.mcap"
+      },
+      {
+        "chunk_id": "888eb57579dc4286854da2319365a3bf",
+        "group_id": "g103",
+        "category": "cleaning_windows",
+        "duration_s": 22.0,
+        "expected_bytes": 343201717,
+        "mcap_path": "data/cleaning_windows/888eb57579dc4286854da2319365a3bf/888eb57579dc4286854da2319365a3bf.mcap"
+      },
+      {
+        "chunk_id": "9d4d1f7246e2da6c7469e8d0795bc0fa",
+        "group_id": "g169",
+        "category": "cooking_food",
+        "duration_s": 16.0,
+        "expected_bytes": 231094912,
+        "mcap_path": "data/cooking_food/9d4d1f7246e2da6c7469e8d0795bc0fa/9d4d1f7246e2da6c7469e8d0795bc0fa.mcap"
+      },
+      {
+        "chunk_id": "0fa1603bb9a61e2254bd1626401f7be0",
+        "group_id": "g108",
+        "category": "managing_laundry",
+        "duration_s": 15.0,
+        "expected_bytes": 236184582,
+        "mcap_path": "data/managing_laundry/0fa1603bb9a61e2254bd1626401f7be0/0fa1603bb9a61e2254bd1626401f7be0.mcap"
+      },
+      {
+        "chunk_id": "3e3defe010efc9978f5a20fb723806af",
+        "group_id": "g072",
+        "category": "managing_laundry",
+        "duration_s": 15.0,
+        "expected_bytes": 201312974,
+        "mcap_path": "data/managing_laundry/3e3defe010efc9978f5a20fb723806af/3e3defe010efc9978f5a20fb723806af.mcap"
+      },
+      {
+        "chunk_id": "05a88a436e7e0f4117490f5a15e27e72",
+        "group_id": "g124",
+        "category": "managing_trash",
+        "duration_s": 18.0,
+        "expected_bytes": 205130782,
+        "mcap_path": "data/managing_trash/05a88a436e7e0f4117490f5a15e27e72/05a88a436e7e0f4117490f5a15e27e72.mcap"
+      },
+      {
+        "chunk_id": "61fa9ee3ebd555fb3ae0b5099391af92",
+        "group_id": "g135",
+        "category": "managing_trash",
+        "duration_s": 15.0,
+        "expected_bytes": 191379286,
+        "mcap_path": "data/managing_trash/61fa9ee3ebd555fb3ae0b5099391af92/61fa9ee3ebd555fb3ae0b5099391af92.mcap"
+      },
+      {
+        "chunk_id": "aa1d7502b4034833f3d8510eb7c30a95",
+        "group_id": "g120",
+        "category": "mopping_floor",
+        "duration_s": 20.0,
+        "expected_bytes": 217026267,
+        "mcap_path": "data/mopping_floor/aa1d7502b4034833f3d8510eb7c30a95/aa1d7502b4034833f3d8510eb7c30a95.mcap"
+      },
+      {
+        "chunk_id": "b3416db5c965224f038b9f38a02e0d26",
+        "group_id": "g109",
+        "category": "organizing_items",
+        "duration_s": 16.0,
+        "expected_bytes": 231659944,
+        "mcap_path": "data/organizing_items/b3416db5c965224f038b9f38a02e0d26/b3416db5c965224f038b9f38a02e0d26.mcap"
+      },
+      {
+        "chunk_id": "f136f30ed98ecec21f043a340f5c97fe",
+        "group_id": "g176",
+        "category": "organizing_items",
+        "duration_s": 16.0,
+        "expected_bytes": 227347590,
+        "mcap_path": "data/organizing_items/f136f30ed98ecec21f043a340f5c97fe/f136f30ed98ecec21f043a340f5c97fe.mcap"
+      },
+      {
+        "chunk_id": "f529ba1f223c2c3250e12201a72bb537",
+        "group_id": "g039",
+        "category": "preparing_cleaning_supplies",
+        "duration_s": 15.0,
+        "expected_bytes": 179359324,
+        "mcap_path": "data/preparing_cleaning_supplies/f529ba1f223c2c3250e12201a72bb537/f529ba1f223c2c3250e12201a72bb537.mcap"
+      },
+      {
+        "chunk_id": "1f0c25f12117c7fe33767245bbc8dbb3",
+        "group_id": "g054",
+        "category": "preparing_food",
+        "duration_s": 19.15,
+        "expected_bytes": 264844704,
+        "mcap_path": "data/preparing_food/1f0c25f12117c7fe33767245bbc8dbb3/1f0c25f12117c7fe33767245bbc8dbb3.mcap"
+      },
+      {
+        "chunk_id": "a2d2f13359207c72fdc2d619de16f978",
+        "group_id": "g062",
+        "category": "preparing_food",
+        "duration_s": 18.0,
+        "expected_bytes": 236884882,
+        "mcap_path": "data/preparing_food/a2d2f13359207c72fdc2d619de16f978/a2d2f13359207c72fdc2d619de16f978.mcap"
+      },
+      {
+        "chunk_id": "3762c3d9b7557d29894c3180bd4f7216",
+        "group_id": "g178",
+        "category": "sweeping_floor",
+        "duration_s": 15.0,
+        "expected_bytes": 229222997,
+        "mcap_path": "data/sweeping_floor/3762c3d9b7557d29894c3180bd4f7216/3762c3d9b7557d29894c3180bd4f7216.mcap"
+      },
+      {
+        "chunk_id": "d4825e24b72eefa061864cfda09362b1",
+        "group_id": "g167",
+        "category": "sweeping_floor",
+        "duration_s": 15.0,
+        "expected_bytes": 204451255,
+        "mcap_path": "data/sweeping_floor/d4825e24b72eefa061864cfda09362b1/d4825e24b72eefa061864cfda09362b1.mcap"
+      },
+      {
+        "chunk_id": "f84ede82aa51ed6cf4728acb1275f4c5",
+        "group_id": "g031",
+        "category": "wiping_surfaces",
+        "duration_s": 15.0,
+        "expected_bytes": 178878739,
+        "mcap_path": "data/wiping_surfaces/f84ede82aa51ed6cf4728acb1275f4c5/f84ede82aa51ed6cf4728acb1275f4c5.mcap"
+      }
+    ]
+  }
+}

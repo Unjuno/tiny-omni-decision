@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-30 EgoViz unseen-session correspondence:** The fixed CPU video+IMU
+readout reached 55.70% development Accuracy on 307 windows from 20 held-out
+sessions versus 28.66% for sensor-only; reversing one stream's cached temporal
+positions reduced it to 26.38%. Reload parity passed. Generalization and
+calibration remain weak; this is not four-modality product quality.
+[Execution, all curves, controls and limitations](docs/pretrained_reuse/R2_EGOVIZ_UNSEEN_GROUP_RESULTS_20261030.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results
