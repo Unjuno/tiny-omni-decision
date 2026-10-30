@@ -1180,6 +1180,22 @@ group-disjoint decision-task split. No data was accessed. Keep it REVIEW-only;
 it does not close the both-input-required AV gate. See the
 [`SlideSpeech source screen`](docs/pretrained_reuse/R2_SLIDESPEECH_SOURCE_SCREEN_20261025.md).
 
+**2026-10-24 R2 NIST ASAPS source gate:** ASAPS is relevant to multimodal
+public-safety decision support, but participant audio/video consent is for
+research use and access requires a signed data-use agreement and NIST approval.
+The agreement, task semantics, split/group integrity, and commercial model-use
+rights remain unverified; no account or data access was attempted. Keep REVIEW;
+it does not close R2 M-2. See the
+[metadata-only source gate](docs/pretrained_reuse/R2_NIST_ASAPS_SOURCE_GATE_20261024.md).
+
+**2026-10-24 R2 AVSBench source gate:** Audio-Visual Segmentation is a
+cross-modal sounding-object task with official train/validation/test splits, but
+the data page licenses the dataset CC BY-NC 4.0, processed media requires a
+request, original clips are YouTube sourced, group integrity is unaudited, and
+pixel masks do not directly match caller-option Decision output. No data were
+accessed; keep it REVIEW and do not treat it as a product-quality gate. See the
+[metadata-only source gate](docs/pretrained_reuse/R2_AVSBENCH_SOURCE_GATE_20261024.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
