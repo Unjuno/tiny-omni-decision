@@ -1,5 +1,14 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-31 01:44 JST R0 checkpoint update:** PID `3668` remains the live
+GPU process. The saved checkpoint is now step `585395` / `14,250,013,261`
+events; latest validation is `-1.601044` at step `585036`, while best remains
+step `521917` / `-1.627876`. Five observed save intervals average about
+13.77k events/s. The run has `18,947,678` saved-count events to its configured
+stop threshold, an estimated 23 minutes at that mean; threshold is expected
+before the next 30M-event checkpoint. Current live progress remains unknown.
+See [01:44 audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261031_0144JST.md).
+
 **2026-10-31 01:03 JST R0 checkpoint update:** Orbitune PID `3668` is still
 GPU-visible. The saved checkpoint advanced to step `584321` / `14,220,006,898`
 events at 01:03:18; latest validation loss is `-1.510132` at step `584321`,
