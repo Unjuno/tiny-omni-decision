@@ -3746,3 +3746,11 @@ training examples worsened held-out-session development NLL from 1.2190 to
 produced lower NLL, but uses development labels and is diagnostic only. The
 checkpoint was selected on this development set; independent calibration and
 unseen evaluation remain open. [Protocol, results and limits](docs/pretrained_reuse/R2_EGOVIZ_TEMPERATURE_RESULTS_20261030.md).
+
+**2026-10-30 training-session cross-fitted temperature:** Five CPU readouts
+produced out-of-fold scores on all 24 training sessions. A scalar fitted only
+to those scores improved the original checkpoint's development NLL from 1.2190
+to 1.0688 while Accuracy remained 55.70%. All five fold checkpoints and the
+scalar reproduced exactly after reload. Checkpoint selection and the adaptive
+protocol used the already observed development set; no blind calibration or
+four-modality quality is established. [Full result](docs/pretrained_reuse/R2_EGOVIZ_OOF_TEMPERATURE_RESULTS_20261030.md).
