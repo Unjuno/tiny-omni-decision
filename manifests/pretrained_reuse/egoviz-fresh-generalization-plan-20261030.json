@@ -1,0 +1,804 @@
+{
+  "format": "egoviz-unseen-session-temporal-correspondence-plan-v1",
+  "source": {
+    "dataset": "humaidtech/EgoViz-120",
+    "excluded_groups": [
+      "g000",
+      "g001",
+      "g006",
+      "g008",
+      "g013",
+      "g017",
+      "g018",
+      "g019",
+      "g021",
+      "g024",
+      "g026",
+      "g028",
+      "g029",
+      "g030",
+      "g031",
+      "g035",
+      "g037",
+      "g038",
+      "g039",
+      "g040",
+      "g041",
+      "g043",
+      "g044",
+      "g045",
+      "g046",
+      "g047",
+      "g054",
+      "g056",
+      "g057",
+      "g058",
+      "g059",
+      "g060",
+      "g062",
+      "g063",
+      "g064",
+      "g066",
+      "g068",
+      "g072",
+      "g073",
+      "g076",
+      "g078",
+      "g079",
+      "g080",
+      "g083",
+      "g084",
+      "g086",
+      "g088",
+      "g090",
+      "g091",
+      "g094",
+      "g096",
+      "g097",
+      "g098",
+      "g101",
+      "g103",
+      "g104",
+      "g106",
+      "g108",
+      "g109",
+      "g110",
+      "g112",
+      "g113",
+      "g114",
+      "g115",
+      "g119",
+      "g120",
+      "g124",
+      "g127",
+      "g128",
+      "g129",
+      "g132",
+      "g133",
+      "g135",
+      "g136",
+      "g137",
+      "g138",
+      "g139",
+      "g140",
+      "g141",
+      "g142",
+      "g143",
+      "g146",
+      "g147",
+      "g148",
+      "g151",
+      "g152",
+      "g153",
+      "g154",
+      "g155",
+      "g156",
+      "g157",
+      "g158",
+      "g162",
+      "g164",
+      "g166",
+      "g167",
+      "g168",
+      "g169",
+      "g173",
+      "g174",
+      "g176",
+      "g177",
+      "g178",
+      "g179"
+    ],
+    "existing_corpus_development_sha256": "55fe808c824825762da63d2c0f376dde30d61986a8fb6481c0768f661aa9d232",
+    "existing_corpus_train_sha256": "9e108f5d5ba2c756321c96b4ab47a0a387b146883367066499db7eea214d8245",
+    "index_sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "license": "CC-BY-4.0, as stated by the official dataset card",
+    "previous_plan_sha256": "8f19a087ab0d63031ce28045def2767acfe03290951da0f4b2abfc327428672c",
+    "prior_sealed_media_accessed": false,
+    "publisher_action_labels_read": false,
+    "reserved_prior_sealed_group_count": 20,
+    "seed": 20261030,
+    "selection_rule": "exclude every observed train/development group and every group reserved by the prior plan; include every remaining group with a >=15s clip <=1GB; select one eligible clip per group by SHA-256 ordering of seed and chunk ID",
+    "split_unit": "publisher group_id session; participant independence remains unknown"
+  },
+  "split_counts": {
+    "development": {
+      "category_counts": {
+        "cleaning_kitchen": 1,
+        "cleaning_restroom": 4,
+        "cleaning_windows": 2,
+        "managing_trash": 8,
+        "mopping_floor": 21,
+        "organizing_items": 6,
+        "preparing_cleaning_supplies": 17,
+        "sweeping_floor": 2,
+        "wiping_surfaces": 8
+      },
+      "estimated_bytes": 38394025914,
+      "unique_clips": 69,
+      "unique_groups": 69
+    },
+    "sealed_audit": {
+      "estimated_bytes": 0,
+      "unique_clips": 0,
+      "unique_groups": 0
+    },
+    "train": {
+      "estimated_bytes": 0,
+      "unique_clips": 0,
+      "unique_groups": 0
+    }
+  },
+  "splits": {
+    "development": [
+      {
+        "category": "cleaning_kitchen",
+        "chunk_id": "9ab93264880adcf344ab854ef7718309",
+        "duration_s": 42.0,
+        "expected_bytes": 569326390,
+        "group_id": "g122",
+        "mcap_path": "data/cleaning_kitchen/9ab93264880adcf344ab854ef7718309/9ab93264880adcf344ab854ef7718309.mcap",
+        "split": "development"
+      },
+      {
+        "category": "cleaning_restroom",
+        "chunk_id": "2ff5d500ff321cd06db7c3fd81e3e21a",
+        "duration_s": 28.0,
+        "expected_bytes": 395736131,
+        "group_id": "g009",
+        "mcap_path": "data/cleaning_restroom/2ff5d500ff321cd06db7c3fd81e3e21a/2ff5d500ff321cd06db7c3fd81e3e21a.mcap",
+        "split": "development"
+      },
+      {
+        "category": "cleaning_restroom",
+        "chunk_id": "ca9a00fe4e9f2f475154ebad316681c1",
+        "duration_s": 29.0,
+        "expected_bytes": 433390904,
+        "group_id": "g081",
+        "mcap_path": "data/cleaning_restroom/ca9a00fe4e9f2f475154ebad316681c1/ca9a00fe4e9f2f475154ebad316681c1.mcap",
+        "split": "development"
+      },
+      {
+        "category": "cleaning_restroom",
+        "chunk_id": "4e7034c6396cc978f3b12373cbf235aa",
+        "duration_s": 29.0,
+        "expected_bytes": 436036555,
+        "group_id": "g100",
+        "mcap_path": "data/cleaning_restroom/4e7034c6396cc978f3b12373cbf235aa/4e7034c6396cc978f3b12373cbf235aa.mcap",
+        "split": "development"
+      },
+      {
+        "category": "cleaning_restroom",
+        "chunk_id": "1b1624c9b47dd9e4631450d6b8ec77d1",
+        "duration_s": 25.0,
+        "expected_bytes": 423076231,
+        "group_id": "g105",
+        "mcap_path": "data/cleaning_restroom/1b1624c9b47dd9e4631450d6b8ec77d1/1b1624c9b47dd9e4631450d6b8ec77d1.mcap",
+        "split": "development"
+      },
+      {
+        "category": "cleaning_windows",
+        "chunk_id": "6eaebc6b2e11ec95ef91d5231f161495",
+        "duration_s": 43.0,
+        "expected_bytes": 655672320,
+        "group_id": "g131",
+        "mcap_path": "data/cleaning_windows/6eaebc6b2e11ec95ef91d5231f161495/6eaebc6b2e11ec95ef91d5231f161495.mcap",
+        "split": "development"
+      },
+      {
+        "category": "cleaning_windows",
+        "chunk_id": "2b0c605a30b82553e68c3e091ea2b8ab",
+        "duration_s": 28.0,
+        "expected_bytes": 587620340,
+        "group_id": "g159",
+        "mcap_path": "data/cleaning_windows/2b0c605a30b82553e68c3e091ea2b8ab/2b0c605a30b82553e68c3e091ea2b8ab.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "9e9c4a9577bf18e0ac856a9943388e62",
+        "duration_s": 38.0,
+        "expected_bytes": 565911967,
+        "group_id": "g050",
+        "mcap_path": "data/managing_trash/9e9c4a9577bf18e0ac856a9943388e62/9e9c4a9577bf18e0ac856a9943388e62.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "dc83acc85b04f55123ea02c1eaffed0e",
+        "duration_s": 25.0,
+        "expected_bytes": 411447292,
+        "group_id": "g071",
+        "mcap_path": "data/managing_trash/dc83acc85b04f55123ea02c1eaffed0e/dc83acc85b04f55123ea02c1eaffed0e.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "81524582d3a159f59c79df7400ac2096",
+        "duration_s": 29.0,
+        "expected_bytes": 405192889,
+        "group_id": "g089",
+        "mcap_path": "data/managing_trash/81524582d3a159f59c79df7400ac2096/81524582d3a159f59c79df7400ac2096.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "1383e6d6312adf2b005dfd867179aba4",
+        "duration_s": 15.0,
+        "expected_bytes": 258628817,
+        "group_id": "g093",
+        "mcap_path": "data/managing_trash/1383e6d6312adf2b005dfd867179aba4/1383e6d6312adf2b005dfd867179aba4.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "e0a9087f8e8d6f2b50f96e426897042a",
+        "duration_s": 34.0,
+        "expected_bytes": 560685019,
+        "group_id": "g102",
+        "mcap_path": "data/managing_trash/e0a9087f8e8d6f2b50f96e426897042a/e0a9087f8e8d6f2b50f96e426897042a.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "2a803585dce3316eec81e1a6d6849f7c",
+        "duration_s": 24.0,
+        "expected_bytes": 377957567,
+        "group_id": "g116",
+        "mcap_path": "data/managing_trash/2a803585dce3316eec81e1a6d6849f7c/2a803585dce3316eec81e1a6d6849f7c.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "2efb24d2e36c35c2eb2012758d95ac73",
+        "duration_s": 38.0,
+        "expected_bytes": 488053551,
+        "group_id": "g126",
+        "mcap_path": "data/managing_trash/2efb24d2e36c35c2eb2012758d95ac73/2efb24d2e36c35c2eb2012758d95ac73.mcap",
+        "split": "development"
+      },
+      {
+        "category": "managing_trash",
+        "chunk_id": "c80466b3d06d10aad29af034d35e11e3",
+        "duration_s": 53.0,
+        "expected_bytes": 778842566,
+        "group_id": "g172",
+        "mcap_path": "data/managing_trash/c80466b3d06d10aad29af034d35e11e3/c80466b3d06d10aad29af034d35e11e3.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "7975134d9f92f7c74766ed3154e46197",
+        "duration_s": 60.0,
+        "expected_bytes": 831938400,
+        "group_id": "g016",
+        "mcap_path": "data/mopping_floor/7975134d9f92f7c74766ed3154e46197/7975134d9f92f7c74766ed3154e46197.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "c81ccdd68ae3a5664280c6759f676200",
+        "duration_s": 41.0,
+        "expected_bytes": 555042615,
+        "group_id": "g022",
+        "mcap_path": "data/mopping_floor/c81ccdd68ae3a5664280c6759f676200/c81ccdd68ae3a5664280c6759f676200.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "e25cc0dad979eccc9b8c7638f4133518",
+        "duration_s": 63.428,
+        "expected_bytes": 845699792,
+        "group_id": "g032",
+        "mcap_path": "data/mopping_floor/e25cc0dad979eccc9b8c7638f4133518/e25cc0dad979eccc9b8c7638f4133518.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "fcb98ef59a5e40b798f4ea60042d908e",
+        "duration_s": 29.0,
+        "expected_bytes": 393913095,
+        "group_id": "g048",
+        "mcap_path": "data/mopping_floor/fcb98ef59a5e40b798f4ea60042d908e/fcb98ef59a5e40b798f4ea60042d908e.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "0e4b78439aa761660e27db1cf888e853",
+        "duration_s": 33.477,
+        "expected_bytes": 506463091,
+        "group_id": "g049",
+        "mcap_path": "data/mopping_floor/0e4b78439aa761660e27db1cf888e853/0e4b78439aa761660e27db1cf888e853.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "8286acc8a100a1dc0abee2078b660314",
+        "duration_s": 39.0,
+        "expected_bytes": 532693937,
+        "group_id": "g053",
+        "mcap_path": "data/mopping_floor/8286acc8a100a1dc0abee2078b660314/8286acc8a100a1dc0abee2078b660314.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "847872b541cc40e3b8144ca3e5926c95",
+        "duration_s": 25.0,
+        "expected_bytes": 421334584,
+        "group_id": "g065",
+        "mcap_path": "data/mopping_floor/847872b541cc40e3b8144ca3e5926c95/847872b541cc40e3b8144ca3e5926c95.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "8f0895f8814141084f8a7dba8156b0a6",
+        "duration_s": 59.0,
+        "expected_bytes": 906974059,
+        "group_id": "g069",
+        "mcap_path": "data/mopping_floor/8f0895f8814141084f8a7dba8156b0a6/8f0895f8814141084f8a7dba8156b0a6.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "6598081d3729628f35d4d15b65e3ad0c",
+        "duration_s": 25.0,
+        "expected_bytes": 538754962,
+        "group_id": "g085",
+        "mcap_path": "data/mopping_floor/6598081d3729628f35d4d15b65e3ad0c/6598081d3729628f35d4d15b65e3ad0c.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "35f1cded21b1c3738f58571d55038ceb",
+        "duration_s": 37.0,
+        "expected_bytes": 513436673,
+        "group_id": "g092",
+        "mcap_path": "data/mopping_floor/35f1cded21b1c3738f58571d55038ceb/35f1cded21b1c3738f58571d55038ceb.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "63f7e9ab0f60d9953bd11df10e06462d",
+        "duration_s": 65.0,
+        "expected_bytes": 910679645,
+        "group_id": "g099",
+        "mcap_path": "data/mopping_floor/63f7e9ab0f60d9953bd11df10e06462d/63f7e9ab0f60d9953bd11df10e06462d.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "d8d69c8d9d8e490546021728b5d5bca2",
+        "duration_s": 42.366,
+        "expected_bytes": 572769918,
+        "group_id": "g107",
+        "mcap_path": "data/mopping_floor/d8d69c8d9d8e490546021728b5d5bca2/d8d69c8d9d8e490546021728b5d5bca2.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "c584958ac3a73860b46248b5ff29a8f6",
+        "duration_s": 17.967,
+        "expected_bytes": 269000255,
+        "group_id": "g117",
+        "mcap_path": "data/mopping_floor/c584958ac3a73860b46248b5ff29a8f6/c584958ac3a73860b46248b5ff29a8f6.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "30bce8d257acacfbab4a84e4cd530779",
+        "duration_s": 30.0,
+        "expected_bytes": 481708543,
+        "group_id": "g121",
+        "mcap_path": "data/mopping_floor/30bce8d257acacfbab4a84e4cd530779/30bce8d257acacfbab4a84e4cd530779.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "126d7a5e8c7369e3bc2b5e480660b142",
+        "duration_s": 61.0,
+        "expected_bytes": 917388818,
+        "group_id": "g125",
+        "mcap_path": "data/mopping_floor/126d7a5e8c7369e3bc2b5e480660b142/126d7a5e8c7369e3bc2b5e480660b142.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "494ca12579088d352b27b979fce5fa7f",
+        "duration_s": 55.0,
+        "expected_bytes": 919304880,
+        "group_id": "g130",
+        "mcap_path": "data/mopping_floor/494ca12579088d352b27b979fce5fa7f/494ca12579088d352b27b979fce5fa7f.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "8f219bcffb506c1c7e2fb8b8c08c0889",
+        "duration_s": 36.0,
+        "expected_bytes": 527583425,
+        "group_id": "g134",
+        "mcap_path": "data/mopping_floor/8f219bcffb506c1c7e2fb8b8c08c0889/8f219bcffb506c1c7e2fb8b8c08c0889.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "62f6ac4b257e1e716cd9cff306818605",
+        "duration_s": 56.0,
+        "expected_bytes": 793958780,
+        "group_id": "g149",
+        "mcap_path": "data/mopping_floor/62f6ac4b257e1e716cd9cff306818605/62f6ac4b257e1e716cd9cff306818605.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "7ab29d1d092caebb5e833e76a85983f0",
+        "duration_s": 42.0,
+        "expected_bytes": 584793854,
+        "group_id": "g150",
+        "mcap_path": "data/mopping_floor/7ab29d1d092caebb5e833e76a85983f0/7ab29d1d092caebb5e833e76a85983f0.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "2b01e55bf4b428de8eda44f11d1c80a5",
+        "duration_s": 24.0,
+        "expected_bytes": 355914098,
+        "group_id": "g165",
+        "mcap_path": "data/mopping_floor/2b01e55bf4b428de8eda44f11d1c80a5/2b01e55bf4b428de8eda44f11d1c80a5.mcap",
+        "split": "development"
+      },
+      {
+        "category": "mopping_floor",
+        "chunk_id": "669e86465d48da0b3d7d8ca2fbc18e75",
+        "duration_s": 26.0,
+        "expected_bytes": 421171758,
+        "group_id": "g175",
+        "mcap_path": "data/mopping_floor/669e86465d48da0b3d7d8ca2fbc18e75/669e86465d48da0b3d7d8ca2fbc18e75.mcap",
+        "split": "development"
+      },
+      {
+        "category": "organizing_items",
+        "chunk_id": "6571bef2156e9b14da2a8f1f068bd7f2",
+        "duration_s": 24.0,
+        "expected_bytes": 378239234,
+        "group_id": "g010",
+        "mcap_path": "data/organizing_items/6571bef2156e9b14da2a8f1f068bd7f2/6571bef2156e9b14da2a8f1f068bd7f2.mcap",
+        "split": "development"
+      },
+      {
+        "category": "organizing_items",
+        "chunk_id": "8ebf780112c4a47ee2d38191e996fc91",
+        "duration_s": 23.0,
+        "expected_bytes": 526294245,
+        "group_id": "g011",
+        "mcap_path": "data/organizing_items/8ebf780112c4a47ee2d38191e996fc91/8ebf780112c4a47ee2d38191e996fc91.mcap",
+        "split": "development"
+      },
+      {
+        "category": "organizing_items",
+        "chunk_id": "025ad8be747711eee71c6d815b43db02",
+        "duration_s": 20.0,
+        "expected_bytes": 349936822,
+        "group_id": "g012",
+        "mcap_path": "data/organizing_items/025ad8be747711eee71c6d815b43db02/025ad8be747711eee71c6d815b43db02.mcap",
+        "split": "development"
+      },
+      {
+        "category": "organizing_items",
+        "chunk_id": "ebeaea2b3e61d774b1d1986873ae4ea8",
+        "duration_s": 39.0,
+        "expected_bytes": 487842461,
+        "group_id": "g052",
+        "mcap_path": "data/organizing_items/ebeaea2b3e61d774b1d1986873ae4ea8/ebeaea2b3e61d774b1d1986873ae4ea8.mcap",
+        "split": "development"
+      },
+      {
+        "category": "organizing_items",
+        "chunk_id": "c16e881fa203bbca1a0a36f8c30f547a",
+        "duration_s": 33.0,
+        "expected_bytes": 658664429,
+        "group_id": "g075",
+        "mcap_path": "data/organizing_items/c16e881fa203bbca1a0a36f8c30f547a/c16e881fa203bbca1a0a36f8c30f547a.mcap",
+        "split": "development"
+      },
+      {
+        "category": "organizing_items",
+        "chunk_id": "c85429d8b46f076b40c40318c377b652",
+        "duration_s": 54.0,
+        "expected_bytes": 895998255,
+        "group_id": "g077",
+        "mcap_path": "data/organizing_items/c85429d8b46f076b40c40318c377b652/c85429d8b46f076b40c40318c377b652.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "6a7a6cdfa21f22239552fc0246eda4d8",
+        "duration_s": 17.0,
+        "expected_bytes": 209102765,
+        "group_id": "g005",
+        "mcap_path": "data/preparing_cleaning_supplies/6a7a6cdfa21f22239552fc0246eda4d8/6a7a6cdfa21f22239552fc0246eda4d8.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "ef244619460e8de958cc922ad85e45ea",
+        "duration_s": 57.0,
+        "expected_bytes": 803158461,
+        "group_id": "g007",
+        "mcap_path": "data/preparing_cleaning_supplies/ef244619460e8de958cc922ad85e45ea/ef244619460e8de958cc922ad85e45ea.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "5f51ce0f8d2aa48dfe8d633336f418aa",
+        "duration_s": 50.0,
+        "expected_bytes": 767528593,
+        "group_id": "g027",
+        "mcap_path": "data/preparing_cleaning_supplies/5f51ce0f8d2aa48dfe8d633336f418aa/5f51ce0f8d2aa48dfe8d633336f418aa.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "3fe2a21df14bc74cba9009e32bf9a057",
+        "duration_s": 15.0,
+        "expected_bytes": 200129533,
+        "group_id": "g033",
+        "mcap_path": "data/preparing_cleaning_supplies/3fe2a21df14bc74cba9009e32bf9a057/3fe2a21df14bc74cba9009e32bf9a057.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "71abfa564e3b54f9596e54fd285c8e24",
+        "duration_s": 35.0,
+        "expected_bytes": 574851896,
+        "group_id": "g034",
+        "mcap_path": "data/preparing_cleaning_supplies/71abfa564e3b54f9596e54fd285c8e24/71abfa564e3b54f9596e54fd285c8e24.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "4a0dad025f2d6c97a37f9f5b6fc6c6b3",
+        "duration_s": 41.0,
+        "expected_bytes": 579749960,
+        "group_id": "g036",
+        "mcap_path": "data/preparing_cleaning_supplies/4a0dad025f2d6c97a37f9f5b6fc6c6b3/4a0dad025f2d6c97a37f9f5b6fc6c6b3.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "8c7780da9da94914571637dae7973c88",
+        "duration_s": 31.0,
+        "expected_bytes": 486398226,
+        "group_id": "g042",
+        "mcap_path": "data/preparing_cleaning_supplies/8c7780da9da94914571637dae7973c88/8c7780da9da94914571637dae7973c88.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "75970f6cf49517af558e4d2128fefec0",
+        "duration_s": 23.0,
+        "expected_bytes": 315183211,
+        "group_id": "g055",
+        "mcap_path": "data/preparing_cleaning_supplies/75970f6cf49517af558e4d2128fefec0/75970f6cf49517af558e4d2128fefec0.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "a74d251238006d00567afc8595ab79a4",
+        "duration_s": 29.0,
+        "expected_bytes": 375403876,
+        "group_id": "g070",
+        "mcap_path": "data/preparing_cleaning_supplies/a74d251238006d00567afc8595ab79a4/a74d251238006d00567afc8595ab79a4.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "6825f72cd8cf943aee21109b1698533e",
+        "duration_s": 28.0,
+        "expected_bytes": 386566107,
+        "group_id": "g074",
+        "mcap_path": "data/preparing_cleaning_supplies/6825f72cd8cf943aee21109b1698533e/6825f72cd8cf943aee21109b1698533e.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "4165a1ea896cbfcf3641f5c481bd095c",
+        "duration_s": 25.0,
+        "expected_bytes": 353244827,
+        "group_id": "g087",
+        "mcap_path": "data/preparing_cleaning_supplies/4165a1ea896cbfcf3641f5c481bd095c/4165a1ea896cbfcf3641f5c481bd095c.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "10f19a00d4e3d1314d6e8912e6dfc5e2",
+        "duration_s": 21.0,
+        "expected_bytes": 336909487,
+        "group_id": "g095",
+        "mcap_path": "data/preparing_cleaning_supplies/10f19a00d4e3d1314d6e8912e6dfc5e2/10f19a00d4e3d1314d6e8912e6dfc5e2.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "3cda301348573d6a42260ddfe5709337",
+        "duration_s": 25.0,
+        "expected_bytes": 450796493,
+        "group_id": "g123",
+        "mcap_path": "data/preparing_cleaning_supplies/3cda301348573d6a42260ddfe5709337/3cda301348573d6a42260ddfe5709337.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "13fe31dea00d8e0e99e6690022fcf4ab",
+        "duration_s": 35.0,
+        "expected_bytes": 519434535,
+        "group_id": "g145",
+        "mcap_path": "data/preparing_cleaning_supplies/13fe31dea00d8e0e99e6690022fcf4ab/13fe31dea00d8e0e99e6690022fcf4ab.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "bbcafaef8e4093f95b7491718241d5d8",
+        "duration_s": 26.0,
+        "expected_bytes": 422232688,
+        "group_id": "g163",
+        "mcap_path": "data/preparing_cleaning_supplies/bbcafaef8e4093f95b7491718241d5d8/bbcafaef8e4093f95b7491718241d5d8.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "c4c3d96c0b0d4d0f7f349dc21139c0ef",
+        "duration_s": 40.0,
+        "expected_bytes": 588864616,
+        "group_id": "g170",
+        "mcap_path": "data/preparing_cleaning_supplies/c4c3d96c0b0d4d0f7f349dc21139c0ef/c4c3d96c0b0d4d0f7f349dc21139c0ef.mcap",
+        "split": "development"
+      },
+      {
+        "category": "preparing_cleaning_supplies",
+        "chunk_id": "72debd8932a374b72161eea216b971e5",
+        "duration_s": 24.0,
+        "expected_bytes": 376780895,
+        "group_id": "g171",
+        "mcap_path": "data/preparing_cleaning_supplies/72debd8932a374b72161eea216b971e5/72debd8932a374b72161eea216b971e5.mcap",
+        "split": "development"
+      },
+      {
+        "category": "sweeping_floor",
+        "chunk_id": "5cb32a116e7f93e2f9448f17a5c23ec2",
+        "duration_s": 62.5,
+        "expected_bytes": 972987959,
+        "group_id": "g067",
+        "mcap_path": "data/sweeping_floor/5cb32a116e7f93e2f9448f17a5c23ec2/5cb32a116e7f93e2f9448f17a5c23ec2.mcap",
+        "split": "development"
+      },
+      {
+        "category": "sweeping_floor",
+        "chunk_id": "6cb5da71148902e268e2ddffd1abc435",
+        "duration_s": 22.9,
+        "expected_bytes": 370739242,
+        "group_id": "g144",
+        "mcap_path": "data/sweeping_floor/6cb5da71148902e268e2ddffd1abc435/6cb5da71148902e268e2ddffd1abc435.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "80b88942b813068e6440c0baef78443f",
+        "duration_s": 42.0,
+        "expected_bytes": 796681486,
+        "group_id": "g002",
+        "mcap_path": "data/wiping_surfaces/80b88942b813068e6440c0baef78443f/80b88942b813068e6440c0baef78443f.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "3330959c6e73a825f22fe8a82f2102cb",
+        "duration_s": 47.0,
+        "expected_bytes": 884184461,
+        "group_id": "g015",
+        "mcap_path": "data/wiping_surfaces/3330959c6e73a825f22fe8a82f2102cb/3330959c6e73a825f22fe8a82f2102cb.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "587085a25acc8cc1e5b122edb27cb948",
+        "duration_s": 61.0,
+        "expected_bytes": 823396854,
+        "group_id": "g023",
+        "mcap_path": "data/wiping_surfaces/587085a25acc8cc1e5b122edb27cb948/587085a25acc8cc1e5b122edb27cb948.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "a9c621d09ef8270b26cb0cd748f36842",
+        "duration_s": 30.0,
+        "expected_bytes": 485995268,
+        "group_id": "g025",
+        "mcap_path": "data/wiping_surfaces/a9c621d09ef8270b26cb0cd748f36842/a9c621d09ef8270b26cb0cd748f36842.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "376bf559e27026c7e29a0fa8919a1c3f",
+        "duration_s": 69.0,
+        "expected_bytes": 932368349,
+        "group_id": "g051",
+        "mcap_path": "data/wiping_surfaces/376bf559e27026c7e29a0fa8919a1c3f/376bf559e27026c7e29a0fa8919a1c3f.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "18199fe523ce630bed5486997878506e",
+        "duration_s": 59.0,
+        "expected_bytes": 814641962,
+        "group_id": "g082",
+        "mcap_path": "data/wiping_surfaces/18199fe523ce630bed5486997878506e/18199fe523ce630bed5486997878506e.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "31bf769f4cb46ef6b426cedf296c8895",
+        "duration_s": 53.0,
+        "expected_bytes": 808309308,
+        "group_id": "g118",
+        "mcap_path": "data/wiping_surfaces/31bf769f4cb46ef6b426cedf296c8895/31bf769f4cb46ef6b426cedf296c8895.mcap",
+        "split": "development"
+      },
+      {
+        "category": "wiping_surfaces",
+        "chunk_id": "22794e6f2fc91030d7038835fd5c5679",
+        "duration_s": 21.0,
+        "expected_bytes": 313305689,
+        "group_id": "g160",
+        "mcap_path": "data/wiping_surfaces/22794e6f2fc91030d7038835fd5c5679/22794e6f2fc91030d7038835fd5c5679.mcap",
+        "split": "development"
+      }
+    ],
+    "sealed_audit": [],
+    "train": []
+  },
+  "status": "METADATA_ONLY_FRESH_DEVELOPMENT_PLAN_MEDIA_NOT_DOWNLOADED",
+  "task": {
+    "candidates": 4,
+    "duration_seconds": 2,
+    "inputs": [
+      "8 wrist-left video frames",
+      "6-channel wrist-left IMU window"
+    ],
+    "label_source": "exact shared-clock interval identity; publisher /action labels are not used",
+    "name": "four-choice video-to-IMU timestamp correspondence",
+    "negative_windows": "same clip, at least 3 seconds from the matching timestamp",
+    "question": "Which IMU option comes from the same two-second interval as this video window?",
+    "stride_seconds": 1
+  },
+  "totals": {
+    "eligible_unseen_groups": 69,
+    "largest_selected_file_bytes": 972987959,
+    "observed_groups_excluded": 68,
+    "prior_sealed_media_downloaded": false,
+    "prior_sealed_media_evaluated": false,
+    "prior_sealed_media_loaded": false,
+    "publisher_action_labels_read": false,
+    "reserved_groups_excluded": 104,
+    "selected_bytes": 38394025914,
+    "train_development_group_overlap": 0
+  }
+}
