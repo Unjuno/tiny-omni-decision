@@ -3779,3 +3779,11 @@ relative to 332 examples from 24 sessions. Selected development Accuracy was
 1.1746 versus 1.2147. The development set is repeatedly observed, and remaining
 overfitting and the four-modality objective remain open. [Protocol, curves and
 limitations](docs/pretrained_reuse/R2_EGOVIZ_TRAIN_COVERAGE_RESULTS_20261030.md).
+
+**2026-10-30 fixed-budget GRU temporal readout:** A 123,521-parameter GRU
+completed the same 5,632-update CPU budget over the identical 773 train / 307
+development examples. Its final Accuracy was 57.33% vs. 55.05% for the linear
+reference, but the paired 20-session interval included zero; NLL worsened from
+1.2001 to 4.2479 and ECE from 0.2091 to 0.3744. The candidate overfit and is
+not promoted. The probe does not establish a general recurrent-model limit.
+[Protocol, six-step comparison, hashes and limits](docs/pretrained_reuse/R2_EGOVIZ_GRU_TEMPORAL_RESULTS_20261030.md).
