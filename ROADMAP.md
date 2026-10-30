@@ -13,6 +13,14 @@ gates. See [the cross-branch recheck](docs/pretrained_reuse/R0_R1_R2_CROSS_BRANC
 [iNaturalist readout](docs/pretrained_reuse/R2_INATURALIST_FRESH_VALIDATION_READOUT_20261029.md),
 and [iNaturalist coverage gate](docs/pretrained_reuse/R2_INATURALIST_PAGES_41_50_COVERAGE_20261030.md).
 
+**2026-10-31 R2-M EgoViz cross-branch result:** PR #44 reports one fixed
+checkpoint evaluation on 2,394 timestamp-correspondence choices from 69 fresh
+session groups. It is useful development evidence for video+IMU temporal
+alignment, but the GRU's NLL/ECE are poor, participant identity across sessions
+is unknown, and the target is not a natural action label. Keep M-2 open; do not
+re-evaluate or tune on those groups. See
+[`R2_EGOVIZ_PR44_CROSS_BRANCH_RECONCILIATION_20261031.md`](docs/pretrained_reuse/R2_EGOVIZ_PR44_CROSS_BRANCH_RECONCILIATION_20261031.md).
+
 **2026-10-31 02:11 JST R0 Orbitune run terminal check:** Both tracked
 processes (worker `3668`, wrapper `33576`) are absent. The RTX 3080 reported
 0% utilization / 0 MiB used. The final saved checkpoint is step `586076` /
