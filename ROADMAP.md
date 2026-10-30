@@ -705,6 +705,15 @@ was sent. Keep REVIEW-only pending rights, privacy, and immutable-version
 checks; its 12 independent participants would support only a narrow diagnostic.
 See the [source screen](docs/pretrained_reuse/R2_C_MHAD_VIDEO_IMU_SOURCE_SCREEN_20261028.md).
 
+**2026-10-28 R2 ZOD schema follow-up:** The official MIT SDK at pinned commit
+`601a3ef5cfccad9cc545230362077d299acbf898` confirms that one object annotation
+can carry a 2D camera box and an optional 3D LiDAR box under a common UUID. An
+official Academic Torrents descriptor is publicly reachable, but the publisher
+also says to request access; that ambiguity, drive-level split integrity,
+pretraining overlap, and actual both-input benefit remain unresolved. No media
+payload was obtained and no quality run is admitted. See the [additive source
+follow-up](docs/pretrained_reuse/R2_ZOD_SCHEMA_TORRENT_FOLLOWUP_20261028.md).
+
 **2026-10-28 R1/R2 open-PR reconciliation:** PR #16's pinned PE-Core T16
 CPU/runtime and CLEVR-4 readout evidence does not outperform the existing
 Path A count result and has a non-commercial implementation-license constraint.
