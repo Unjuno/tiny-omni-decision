@@ -1,0 +1,209 @@
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+import pytest
+
+from tiny_omni_decision.modular_bundle import assemble_modular_bundle, verify_modular_bundle
+
+
+def _write_component(root: Path, bundle_id: str, file_name: str, contents: bytes) -> None:
+    path = root / file_name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(contents)
+    manifest = {
+        "schema_version": 1,
+        "bundle_id": bundle_id,
+        "scope": "test component",
+        "models": {
+            "encoder": {
+                "weights_sha256": hashlib.sha256(contents).hexdigest(),
+                "parameters": 7,
+            }
+        },
+        "readout": {
+            "sha256": hashlib.sha256(contents + b"-readout").hexdigest(),
+            "parameters": 3,
+        },
+        "files": [
+            {
+                "path": file_name,
+                "bytes": len(contents),
+                "sha256": hashlib.sha256(contents).hexdigest(),
+            }
+        ],
+    }
+    (root / "bundle-manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+
+def test_assembly_copies_and_verifies_immutable_components(tmp_path: Path) -> None:
+    audio = tmp_path / "audio-source"
+    image = tmp_path / "image-source"
+    _write_component(audio, "audio-v0", "weights.bin", b"same")
+    _write_component(image, "image-v0", "weights.bin", b"other")
+    output = tmp_path / "assembled"
+
+    manifest = assemble_modular_bundle(
+        {"audio": audio, "image": image}, output, source_commit="abc123"
+    )
+
+    assert audio.joinpath("weights.bin").read_bytes() == b"same"
+    assert image.joinpath("weights.bin").read_bytes() == b"other"
+    assert manifest["unique_runtime_parameters"] == 20
+    assert manifest["component_count"] == 2
+    assert manifest["supports_joint_audio_video"] is False
+    assert manifest["has_standalone_text_task"] is False
+    assert "README.md" in {entry["path"] for entry in manifest["files"]}
+    assert verify_modular_bundle(output)["package_target_met"] is True
+
+
+def test_assembly_refuses_existing_output_and_bad_component(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    _write_component(source, "audio-v0", "weights.bin", b"payload")
+    output = tmp_path / "assembled"
+    output.mkdir()
+    with pytest.raises(FileExistsError):
+        assemble_modular_bundle({"audio": source}, output, source_commit="abc123")
+
+    (source / "weights.bin").write_bytes(b"tampered")
+    with pytest.raises(ValueError, match="wrong-sized|hash mismatch"):
+        assemble_modular_bundle(
+            {"audio": source}, tmp_path / "rejected", source_commit="abc123"
+        )
+
+
+def test_verifier_rejects_tampering_and_path_traversal(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    _write_component(source, "audio-v0", "weights.bin", b"payload")
+    output = tmp_path / "assembled"
+    assemble_modular_bundle({"audio": source}, output, source_commit="abc123")
+    (output / "components/audio/weights.bin").write_bytes(b"changed")
+    with pytest.raises(ValueError, match="wrong-sized|hash mismatch"):
+        verify_modular_bundle(output)
+
+    manifest_path = output / "package-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["files"][0]["path"] = "../../escape"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="outside the package|missing or wrong-sized"):
+        verify_modular_bundle(output)
+
+
+def test_verifier_rejects_accounting_and_component_path_tampering(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    _write_component(source, "audio-v0", "weights.bin", b"payload")
+    output = tmp_path / "assembled"
+    assemble_modular_bundle({"audio": source}, output, source_commit="abc123")
+    manifest_path = output / "package-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+    manifest["unique_content_file_bytes"] += 1
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="unique content byte accounting"):
+        verify_modular_bundle(output)
+
+    manifest["unique_content_file_bytes"] -= 1
+    manifest["components"][0]["path"] = "../../outside"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="component manifest contains a path outside"):
+        verify_modular_bundle(output)
+
+
+def test_shared_task_reuses_model_file_without_copying_it(tmp_path: Path) -> None:
+    audio = tmp_path / "audio-source"
+    _write_component(audio, "audio-v0", "models/text-minilm-en/model.safetensors", b"model")
+    text_readout = tmp_path / "text-readout.pt"
+    text_readout.write_bytes(b"readout")
+    runtime_module = tmp_path / "text_runtime.py"
+    runtime_module.write_text("# runtime\n", encoding="utf-8")
+    model_hash = hashlib.sha256(b"model").hexdigest()
+    readout_hash = hashlib.sha256(b"readout").hexdigest()
+    output = tmp_path / "assembled"
+
+    manifest = assemble_modular_bundle(
+        {"audio": audio},
+        output,
+        source_commit="abc123",
+        shared_tasks={
+            "text": {
+                "task_id": "typed-text-v0",
+                "scope": "synthetic text only",
+                "source_report_sha256": "a" * 64,
+                "shared_assets": [
+                    {
+                        "name": "minilm",
+                        "path": "components/audio/models/text-minilm-en",
+                        "weights_sha256": model_hash,
+                        "parameters": 7,
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "readout",
+                        "identity": readout_hash,
+                        "parameters": 3,
+                        "path": "readout/head.pt",
+                    }
+                ],
+                "files": {
+                    "readout/head.pt": text_readout,
+                    "runtime/text_runtime.py": runtime_module,
+                },
+            }
+        },
+    )
+
+    assert manifest["has_standalone_text_task"] is True
+    assert manifest["has_temporal_video_task"] is False
+    assert manifest["unique_runtime_parameters"] == 13
+    assert manifest["component_parameter_sum"] == 20
+    assert len(list(output.rglob("model.safetensors"))) == 1
+    assert verify_modular_bundle(output)["component_count"] == 2
+
+
+def test_shared_task_can_reference_a_pinned_file_asset(tmp_path: Path) -> None:
+    image = tmp_path / "image-source"
+    _write_component(image, "image-v0", "videoprism.npz", b"encoder")
+    readout = tmp_path / "readout.pt"
+    readout.write_bytes(b"readout")
+    runtime = tmp_path / "video_runtime.py"
+    runtime.write_text("# video feature decision runtime\n", encoding="utf-8")
+    output = tmp_path / "assembled"
+
+    manifest = assemble_modular_bundle(
+        {"image": image},
+        output,
+        source_commit="abc123",
+        shared_tasks={
+            "video": {
+                "task_id": "clevrer-video-v0",
+                "scope": "precomputed VideoPrism features only",
+                "source_report_sha256": "b" * 64,
+                "shared_assets": [
+                    {
+                        "name": "videoprism-base",
+                        "path": "components/image/videoprism.npz",
+                        "weights_sha256": hashlib.sha256(b"encoder").hexdigest(),
+                        "parameters": 7,
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "video-readout",
+                        "identity": hashlib.sha256(b"readout").hexdigest(),
+                        "parameters": 3,
+                        "path": "readout/best-readout.pt",
+                    }
+                ],
+                "files": {"readout/best-readout.pt": readout, "runtime/video.py": runtime},
+            }
+        },
+    )
+
+    assert manifest["has_temporal_video_task"] is True
+    assert "components/video/videoprism.npz" not in {
+        item["path"] for item in manifest["files"]
+    }
+    assert verify_modular_bundle(output)["component_count"] == 2

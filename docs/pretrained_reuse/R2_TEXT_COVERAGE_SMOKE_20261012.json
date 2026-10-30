@@ -1,0 +1,97 @@
+{
+  "result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "smoke": true,
+    "steps": 2,
+    "best_step": 2,
+    "best_sha256": "e1130d280fc7878fa81041d8314560735369e33cfd7b8e061ebf850dc5092c1c",
+    "final_sha256": "b1e51b17b827866d891623ecdfba563e66b5f1ba7c0289cd02210e05a711ec59",
+    "frozen_sha256": "2947322a7fe4101ea8110b9689092ce542fbf0042d0204edacc5e6ce3477e7b9",
+    "reload_exact": true,
+    "seconds": 1.5518054999411106,
+    "peak_vram_bytes": 2443544576,
+    "exact_resume": false,
+    "ended_utc": "2026-10-12T00:36:03.445170+00:00"
+  },
+  "config": {
+    "argv": [
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\train_text_coverage.py",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/text-coverage-smoke-01",
+      "--smoke"
+    ],
+    "started_utc": "2026-10-12T00:36:01.803063+00:00",
+    "smoke": true,
+    "source_commit": "8cdb80b81c67fb44acad8af87c8f76a1e81cc887",
+    "runner_sha256": "5cdeb220b998675589a3b04c7cd5b5dd08f3c99d6f9f69795967e610efbb524c",
+    "seed": 17,
+    "steps": 2,
+    "batch": 8,
+    "lr": 2e-05,
+    "weight_decay": 0.01,
+    "clip": 1,
+    "dropout": false,
+    "deterministic": true,
+    "optimizer_reset": true,
+    "exact_resume": false,
+    "initialization": "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-deterministic-control-01\\best-delta.pt",
+    "checkpoint_sha256": "0b785581bc5db5db01a9b39494af41b32d26fc6958d2c6191ccd74edcf016882",
+    "order_sha256": "f32de459ec5ddf7d5d0ec89c012d2de512099028ad61e9ce9d065697b23828bb",
+    "input_hashes": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\comparison-vocabulary-curriculum-01\\train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-encoder-coverage-01\\config.json": "dbd450f65d2efd6bb23974ea0df389055373dbab0cbfb6be5d167b6d947a9784",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-deterministic-control-01\\config.json": "2133891170ef237f29128cde55124f686a529ca880d338ed0f2ae724bd212657"
+    },
+    "train_ids": [
+      "n4ze3m/typed-decisions-synth:synth-3189c9765dccafbe:confidence_in_legitimacy",
+      "n4ze3m/typed-decisions-synth:synth-6217835d2a89515e:city_owned_tree",
+      "n4ze3m/typed-decisions-synth:synth-d38e8069c2f52044:margin_calculation_correct",
+      "n4ze3m/typed-decisions-synth:synth-9c3d2d2c1c7a27c7:q3",
+      "5d34263b6d002d896e5f8e78086926bf6bee2d9cc0900e62bce62a4b11457169:6",
+      "f0adfc84462c807f9388e4d046ffbba3afbe824c1693c51b753a44d4ae1d21e6:3",
+      "8bce49e0b48aaff814ff5cc9bc907772e0dd17b778252d6b80cc270447ccce93:2",
+      "b3cebc679a8fe4ec313b987219e540861e4a51f17513073a7eacd89b00525d26:4",
+      "n4ze3m/typed-decisions-synth:synth-7b24967f656fe184:q1",
+      "n4ze3m/typed-decisions-synth:synth-94b33932b4d2c9b3:q2",
+      "n4ze3m/typed-decisions-synth:synth-b0bfb227972d67ea:cause_category",
+      "n4ze3m/typed-decisions-synth:synth-ca98534040512646:q3",
+      "1c651d7548a5d060da6c65b260f8d258604442c6b53306ada39df9ec3d6cdb01:7",
+      "7dc266ac930e32663938a3f791f26d6088235d7586851a9057d41f74b9c9803d:2",
+      "40164ab4ebaf4ee4fb5967bfb3093964c9b29c9ad1eea1759b12ea23010f0332:1",
+      "519d2d1883de1bd2702f707ac4f6f0a3cac99ac94537cebba8a2614f8de12e1b:2"
+    ],
+    "validation_ids": [
+      [
+        "n4ze3m/typed-decisions-synth:synth-5e8f341ff8eb1725:highest_price_offer",
+        "n4ze3m/typed-decisions-synth:synth-5e8f341ff8eb1725:strongest_terms",
+        "n4ze3m/typed-decisions-synth:synth-5e8f341ff8eb1725:any_cash_offer",
+        "n4ze3m/typed-decisions-synth:synth-5e8f341ff8eb1725:risk_of_lowest_offer",
+        "n4ze3m/typed-decisions-synth:synth-89c7fa58f32b7799:thesis_position",
+        "n4ze3m/typed-decisions-synth:synth-89c7fa58f32b7799:citation_coverage",
+        "n4ze3m/typed-decisions-synth:synth-89c7fa58f32b7799:conclusion_cites_sources",
+        "n4ze3m/typed-decisions-synth:synth-89c7fa58f32b7799:longer_than_four_paragraphs"
+      ],
+      [
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:0",
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:1",
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:2",
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:3",
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:4",
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:5",
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:6",
+        "e153eb12d0b070d80f4824dce4af40faa7f9a621c87e9e041f0f32a3ab1187e4:7"
+      ]
+    ],
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "cuda": "12.4",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "attention_backend": "sdpa",
+    "trainable_parameters": 10647169,
+    "total_parameters": 22713601,
+    "selector": "earliest minimum equal-source mean NLL, including step0"
+  }
+}

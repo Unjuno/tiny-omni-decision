@@ -1,0 +1,3 @@
+arm,original_prediction,derivative_prediction,probability_l1_change,max_logp_change,original_target_probability,derivative_target_probability
+camera_length,0,48,1.646939845363923,13.54914688629741,0.053062996184777333,0.0009290689691348504
+all_lengths,9,22,1.5504880521858373,13.581705797168095,0.03629767622253757,0.0006565611241180478

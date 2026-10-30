@@ -1,0 +1,835 @@
+{
+  "initial_metrics": {
+    "step": 0,
+    "selector": 0.6692643761634827,
+    "best_step": 0,
+    "original": {
+      "count": 2540,
+      "accuracy": 0.6023622155189514,
+      "nll": 0.877433717250824,
+      "brier": 0.4948609471321106,
+      "ece_15_bins": 0.01918563447364672,
+      "ece_bin_counts": [
+        0,
+        0,
+        1,
+        38,
+        147,
+        264,
+        233,
+        313,
+        343,
+        291,
+        215,
+        184,
+        148,
+        154,
+        209
+      ]
+    },
+    "curriculum": {
+      "count": 2048,
+      "accuracy": 0.8056640625,
+      "nll": 0.46109503507614136,
+      "brier": 0.2554559111595154,
+      "ece_15_bins": 0.03055865162605187,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        9,
+        75,
+        116,
+        153,
+        102,
+        97,
+        92,
+        70,
+        68,
+        85,
+        98,
+        1083
+      ]
+    },
+    "tasks": {
+      "original:choice": {
+        "count": 1008,
+        "accuracy": 0.5773809552192688,
+        "nll": 1.0223522186279297,
+        "brier": 0.5410708785057068,
+        "ece_15_bins": 0.03322405790880559,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          13,
+          67,
+          152,
+          144,
+          129,
+          101,
+          94,
+          66,
+          64,
+          52,
+          56,
+          70
+        ]
+      },
+      "original:noul": {
+        "count": 987,
+        "accuracy": 0.7021276354789734,
+        "nll": 0.5484406352043152,
+        "brier": 0.3720463216304779,
+        "ece_15_bins": 0.023070616381508965,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          111,
+          194,
+          161,
+          125,
+          100,
+          83,
+          85,
+          128
+        ]
+      },
+      "original:score": {
+        "count": 545,
+        "accuracy": 0.4678899049758911,
+        "nll": 1.2052104473114014,
+        "brier": 0.631812334060669,
+        "ece_15_bins": 0.04347068276427207,
+        "ece_bin_counts": [
+          0,
+          0,
+          1,
+          25,
+          80,
+          112,
+          89,
+          73,
+          48,
+          36,
+          24,
+          20,
+          13,
+          13,
+          11
+        ]
+      },
+      "curriculum:conditional_selection": {
+        "count": 256,
+        "accuracy": 0.58984375,
+        "nll": 1.0825992822647095,
+        "brier": 0.5702553987503052,
+        "ece_15_bins": 0.11098292580572888,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          3,
+          22,
+          41,
+          45,
+          36,
+          34,
+          27,
+          18,
+          13,
+          10,
+          7,
+          0
+        ]
+      },
+      "curriculum:count": {
+        "count": 256,
+        "accuracy": 0.41015625,
+        "nll": 1.1946810483932495,
+        "brier": 0.6662677526473999,
+        "ece_15_bins": 0.08651948079932481,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          6,
+          37,
+          60,
+          92,
+          37,
+          16,
+          4,
+          3,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "curriculum:extremum": {
+        "count": 1024,
+        "accuracy": 0.8935546875,
+        "nll": 0.2523154318332672,
+        "brier": 0.1462157964706421,
+        "ece_15_bins": 0.023550565383629873,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          10,
+          9,
+          13,
+          23,
+          31,
+          39,
+          31,
+          44,
+          47,
+          50,
+          727
+        ]
+      },
+      "curriculum:temporal_order": {
+        "count": 512,
+        "accuracy": 0.935546875,
+        "nll": 0.20110926032066345,
+        "brier": 0.11113037168979645,
+        "ece_15_bins": 0.035683513211552054,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          6,
+          6,
+          3,
+          6,
+          16,
+          22,
+          18,
+          10,
+          28,
+          41,
+          356
+        ]
+      }
+    },
+    "rolling_train_ce": null,
+    "last_gradient_norm": null,
+    "consumed": 0,
+    "unique_questions": 0,
+    "unique_states": 0,
+    "source_counts": {},
+    "task_counts": {},
+    "evaluation_seconds": 27.779521399992518,
+    "elapsed_seconds": 27.779525199905038
+  },
+  "comparisons": {
+    "selected": {
+      "step": 1408,
+      "groups": {
+        "overall": {
+          "questions": 2048,
+          "states": 256,
+          "accuracy_difference": 0.0166015625,
+          "percentile_95_interval": [
+            0.0,
+            0.033203125
+          ]
+        },
+        "conditional_selection": {
+          "questions": 256,
+          "states": 256,
+          "accuracy_difference": 0.0625,
+          "percentile_95_interval": [
+            0.01171875,
+            0.11328125
+          ]
+        },
+        "count": {
+          "questions": 256,
+          "states": 256,
+          "accuracy_difference": 0.06640625,
+          "percentile_95_interval": [
+            -0.01171875,
+            0.140625
+          ]
+        },
+        "extremum": {
+          "questions": 1024,
+          "states": 256,
+          "accuracy_difference": 0.001953125,
+          "percentile_95_interval": [
+            -0.017578125,
+            0.021484375
+          ]
+        },
+        "temporal_order": {
+          "questions": 512,
+          "states": 256,
+          "accuracy_difference": -0.001953125,
+          "percentile_95_interval": [
+            -0.0234375,
+            0.021484375
+          ]
+        }
+      },
+      "metrics": {
+        "step": 1408,
+        "selector": 0.6565639525651932,
+        "best_step": 1408,
+        "original": {
+          "count": 2540,
+          "accuracy": 0.6031495928764343,
+          "nll": 0.8999845385551453,
+          "brier": 0.5075711011886597,
+          "ece_15_bins": 0.06325494097912406,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            12,
+            73,
+            171,
+            222,
+            284,
+            276,
+            262,
+            249,
+            233,
+            220,
+            233,
+            305
+          ]
+        },
+        "curriculum": {
+          "count": 2048,
+          "accuracy": 0.822265625,
+          "nll": 0.4131433665752411,
+          "brier": 0.23334857821464539,
+          "ece_15_bins": 0.017362164551741444,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            1,
+            14,
+            62,
+            128,
+            114,
+            115,
+            77,
+            70,
+            105,
+            134,
+            174,
+            1054
+          ]
+        },
+        "tasks": {
+          "original:choice": {
+            "count": 1008,
+            "accuracy": 0.5763888955116272,
+            "nll": 1.0506141185760498,
+            "brier": 0.5553686022758484,
+            "ece_15_bins": 0.052069597655818575,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              4,
+              34,
+              101,
+              127,
+              130,
+              97,
+              106,
+              84,
+              77,
+              79,
+              72,
+              97
+            ]
+          },
+          "original:noul": {
+            "count": 987,
+            "accuracy": 0.7112461924552917,
+            "nll": 0.5577874183654785,
+            "brier": 0.3745846450328827,
+            "ece_15_bins": 0.0587550269434155,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              77,
+              127,
+              101,
+              118,
+              118,
+              123,
+              136,
+              187
+            ]
+          },
+          "original:score": {
+            "count": 545,
+            "accuracy": 0.45688074827194214,
+            "nll": 1.2411105632781982,
+            "brier": 0.6600073575973511,
+            "ece_15_bins": 0.09931396787319709,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              8,
+              39,
+              70,
+              95,
+              77,
+              52,
+              55,
+              47,
+              38,
+              18,
+              25,
+              21
+            ]
+          },
+          "curriculum:conditional_selection": {
+            "count": 256,
+            "accuracy": 0.65234375,
+            "nll": 0.8399986624717712,
+            "brier": 0.45297226309776306,
+            "ece_15_bins": 0.11321813426911831,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              1,
+              2,
+              5,
+              19,
+              21,
+              28,
+              16,
+              21,
+              24,
+              28,
+              29,
+              62
+            ]
+          },
+          "curriculum:count": {
+            "count": 256,
+            "accuracy": 0.4765625,
+            "nll": 1.1206560134887695,
+            "brier": 0.6240160465240479,
+            "ece_15_bins": 0.05604816123377532,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              11,
+              53,
+              95,
+              64,
+              25,
+              8,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "curriculum:extremum": {
+            "count": 1024,
+            "accuracy": 0.8955078125,
+            "nll": 0.23882150650024414,
+            "brier": 0.1426193118095398,
+            "ece_15_bins": 0.02244802229688503,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              3,
+              8,
+              20,
+              44,
+              36,
+              36,
+              54,
+              70,
+              93,
+              659
+            ]
+          },
+          "curriculum:temporal_order": {
+            "count": 512,
+            "accuracy": 0.93359375,
+            "nll": 0.1946030706167221,
+            "brier": 0.10966159403324127,
+            "ece_15_bins": 0.02600680897012353,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              6,
+              9,
+              18,
+              17,
+              13,
+              27,
+              36,
+              52,
+              333
+            ]
+          }
+        },
+        "rolling_train_ce": 0.6818278582471645,
+        "last_gradient_norm": 15.567172050476074,
+        "consumed": 11264,
+        "unique_questions": 11264,
+        "unique_states": 5039,
+        "source_counts": {
+          "original": 5632,
+          "curriculum": 5632
+        },
+        "task_counts": {
+          "original:noul": 2244,
+          "curriculum:extremum": 2822,
+          "curriculum:temporal_order": 1393,
+          "curriculum:conditional_selection": 716,
+          "original:choice": 2208,
+          "curriculum:count": 701,
+          "original:score": 1180
+        },
+        "evaluation_seconds": 34.37104640004691,
+        "elapsed_seconds": 750.7690292999614
+      }
+    },
+    "final": {
+      "step": 2048,
+      "groups": {
+        "overall": {
+          "questions": 2048,
+          "states": 256,
+          "accuracy_difference": 0.0322265625,
+          "percentile_95_interval": [
+            0.0146484375,
+            0.0498046875
+          ]
+        },
+        "conditional_selection": {
+          "questions": 256,
+          "states": 256,
+          "accuracy_difference": 0.09765625,
+          "percentile_95_interval": [
+            0.0390625,
+            0.15625
+          ]
+        },
+        "count": {
+          "questions": 256,
+          "states": 256,
+          "accuracy_difference": 0.14453125,
+          "percentile_95_interval": [
+            0.0703125,
+            0.21875
+          ]
+        },
+        "extremum": {
+          "questions": 1024,
+          "states": 256,
+          "accuracy_difference": 0.005859375,
+          "percentile_95_interval": [
+            -0.013671875,
+            0.025390625
+          ]
+        },
+        "temporal_order": {
+          "questions": 512,
+          "states": 256,
+          "accuracy_difference": -0.00390625,
+          "percentile_95_interval": [
+            -0.02734375,
+            0.01953125
+          ]
+        }
+      },
+      "metrics": {
+        "step": 2048,
+        "selector": 0.6857269555330276,
+        "best_step": 1408,
+        "original": {
+          "count": 2540,
+          "accuracy": 0.6098425388336182,
+          "nll": 0.9508062601089478,
+          "brier": 0.5097722411155701,
+          "ece_15_bins": 0.081422523309396,
+          "ece_bin_counts": [
+            0,
+            0,
+            1,
+            18,
+            105,
+            201,
+            182,
+            253,
+            244,
+            241,
+            199,
+            215,
+            188,
+            188,
+            505
+          ]
+        },
+        "curriculum": {
+          "count": 2048,
+          "accuracy": 0.837890625,
+          "nll": 0.42064765095710754,
+          "brier": 0.22732855379581451,
+          "ece_15_bins": 0.030675887639517896,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            9,
+            42,
+            74,
+            105,
+            134,
+            92,
+            81,
+            85,
+            78,
+            145,
+            1203
+          ]
+        },
+        "tasks": {
+          "original:choice": {
+            "count": 1008,
+            "accuracy": 0.5734127163887024,
+            "nll": 1.1278156042099,
+            "brier": 0.5659806728363037,
+            "ece_15_bins": 0.08375510008680442,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              7,
+              53,
+              121,
+              98,
+              114,
+              88,
+              85,
+              65,
+              72,
+              59,
+              67,
+              179
+            ]
+          },
+          "original:noul": {
+            "count": 987,
+            "accuracy": 0.7284700870513916,
+            "nll": 0.5805633664131165,
+            "brier": 0.36629825830459595,
+            "ece_15_bins": 0.07536655510450208,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              74,
+              111,
+              115,
+              98,
+              111,
+              102,
+              93,
+              283
+            ]
+          },
+          "original:score": {
+            "count": 545,
+            "accuracy": 0.4623853266239166,
+            "nll": 1.2939332723617554,
+            "brier": 0.6656452417373657,
+            "ece_15_bins": 0.10770955296284564,
+            "ece_bin_counts": [
+              0,
+              0,
+              1,
+              11,
+              52,
+              80,
+              84,
+              65,
+              45,
+              41,
+              36,
+              32,
+              27,
+              28,
+              43
+            ]
+          },
+          "curriculum:conditional_selection": {
+            "count": 256,
+            "accuracy": 0.6875,
+            "nll": 0.8636900782585144,
+            "brier": 0.44873133301734924,
+            "ece_15_bins": 0.09164081874769181,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              6,
+              6,
+              16,
+              25,
+              18,
+              29,
+              25,
+              26,
+              52,
+              53
+            ]
+          },
+          "curriculum:count": {
+            "count": 256,
+            "accuracy": 0.5546875,
+            "nll": 0.9853951334953308,
+            "brier": 0.5632379055023193,
+            "ece_15_bins": 0.05250099883414805,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              29,
+              58,
+              66,
+              54,
+              32,
+              10,
+              1,
+              2,
+              2,
+              0
+            ]
+          },
+          "curriculum:extremum": {
+            "count": 1024,
+            "accuracy": 0.8994140625,
+            "nll": 0.25994595885276794,
+            "brier": 0.14605113863945007,
+            "ece_15_bins": 0.03345318610081449,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              6,
+              6,
+              6,
+              17,
+              39,
+              25,
+              27,
+              44,
+              33,
+              53,
+              768
+            ]
+          },
+          "curriculum:temporal_order": {
+            "count": 512,
+            "accuracy": 0.931640625,
+            "nll": 0.23815612494945526,
+            "brier": 0.11122728139162064,
+            "ece_15_bins": 0.028906171559356153,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              4,
+              6,
+              16,
+              17,
+              15,
+              15,
+              17,
+              38,
+              382
+            ]
+          }
+        },
+        "rolling_train_ce": 0.6572817388919248,
+        "last_gradient_norm": 6.729294776916504,
+        "consumed": 16384,
+        "unique_questions": 16384,
+        "unique_states": 6056,
+        "source_counts": {
+          "original": 8192,
+          "curriculum": 8192
+        },
+        "task_counts": {
+          "original:noul": 3273,
+          "curriculum:extremum": 4096,
+          "curriculum:temporal_order": 2048,
+          "curriculum:conditional_selection": 1024,
+          "original:choice": 3189,
+          "curriculum:count": 1024,
+          "original:score": 1730
+        },
+        "evaluation_seconds": 34.343836699961685,
+        "elapsed_seconds": 1087.7794536999427
+      }
+    }
+  },
+  "input_sha256": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-range-warmstart-01\\config.json": "153a398c1be3f3851c3413961e2e09ac5431da18271783eab7557c442d8ae5f5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-range-warmstart-01\\result.json": "13d1573fab7fb5369794381218f79126ecccb5e3f1b9e141ac52124cd7024c43",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-range-warmstart-01\\history.json": "966ca3db0b709dbced53613fea7f759399bf46071e19e38934c48649b7948c56",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-range-warmstart-01\\predictions-0-curriculum.json": "17dcb98cca085f66bef555da757f0f087da3eea9709b86e9a491615461752034",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-range-warmstart-01\\predictions-1408-curriculum.json": "b54522f1066c8f1904af7bbd992181762d299528327696cbaa71b9c954490d50",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-range-warmstart-01\\predictions-2048-curriculum.json": "b8af0ab4d270c5732722824a4e64e79b50c9da18520a994ab5414249fc707e95"
+  },
+  "runner_sha256": "dc2b9d66eea01408ff33ae6c8cf6b3a3d6473d3a66fc452dad3114c1776eb72a",
+  "bootstrap_seed": 20261012,
+  "replicates": 10000,
+  "limitation": "Posthoc reused development validation; selection and multiple comparisons are not corrected. No new transfer, blind audit or causal attribution."
+}

@@ -1,0 +1,113 @@
+{
+  "status": "PASS_SAVED_NATIVE_ERROR_ACCOUNTING",
+  "errors": {
+    "step0:oracle": {
+      "count": 596,
+      "confusion": {
+        "color->texture": 95,
+        "count->texture": 238,
+        "shape->texture": 220,
+        "color->color": 20,
+        "count->color": 12,
+        "texture->color": 8,
+        "shape->color": 2,
+        "texture->shape": 1
+      },
+      "attribution": {
+        "true_but_unrequested": 569,
+        "other": 27
+      }
+    },
+    "step0:predicted": {
+      "count": 603,
+      "confusion": {
+        "color->texture": 95,
+        "count->texture": 237,
+        "shape->texture": 219,
+        "color->color": 19,
+        "count->color": 13,
+        "texture->texture": 5,
+        "texture->color": 8,
+        "shape->color": 2,
+        "count->count": 4,
+        "texture->shape": 1
+      },
+      "attribution": {
+        "true_but_unrequested": 568,
+        "other": 35
+      }
+    },
+    "endpoint:oracle": {
+      "count": 268,
+      "confusion": {
+        "count->texture": 160,
+        "color->texture": 12,
+        "count->shape": 96
+      },
+      "attribution": {
+        "true_but_unrequested": 268
+      }
+    },
+    "endpoint:predicted": {
+      "count": 273,
+      "confusion": {
+        "count->texture": 160,
+        "color->texture": 12,
+        "count->shape": 96,
+        "texture->texture": 5
+      },
+      "attribution": {
+        "true_but_unrequested": 268,
+        "other": 5
+      }
+    }
+  },
+  "train_wording_coverage": {
+    "train.jsonl": {
+      "rows": 16384,
+      "exact_native_count_question": 0,
+      "how_many_rows": 0
+    },
+    "retention_train.jsonl": {
+      "rows": 2048,
+      "exact_native_count_question": 0,
+      "how_many_rows": 129
+    }
+  },
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\result.json": "e7901306ca31d6c32fee8d4e888d01f0eb4f78ec6854e8f71c0e72ea75ff289b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\effective-config.json": "f6f72d54382382b4c1e5c81b3da4f769dc0c5025e43386fdd50fc6d985015d94",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-donor-predictions.jsonl": "8b47ed9d50ee662c581b9d55c4840a5f1fd337def5c49f16c05d936305482d90",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-donor-scores.npy": "cc447547248afdc05568719545b99f0a91282492a5431c990e6e72284bd9e5c6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-no_evidence-predictions.jsonl": "5fee9c90941b06eed54fd04b1bcb8577ab67908b6908047d7656e1e661e9abf0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-no_evidence-scores.npy": "3dfa4716ddf2583b52f59471fefdaba1f9d6291356934d743b656ab8d83d6b50",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-no_question-predictions.jsonl": "3df3f03e6feddfad4e642392aeff3bd4d9129c300a92193756afd7344424bbab",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-no_question-scores.npy": "11262ce8a8b1a17ca377c4b9fbeb4a903da7e7405f64c7d1927cd9cc65385eb9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-oracle-predictions.jsonl": "43b781811b859faddcf8f61fcfda3cd49f6a27a002c00672666703fe09c6a8e2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-oracle-scores.npy": "5afcdf2ed6ef7a3f77cb90543fc5562b5ced1a7f66b916a09d23de7ea5593627",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-predicted-predictions.jsonl": "1a1b8777f72030a0c71e7969f7d20249a3dc23c78fb3e881177fdb314dd6067b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\endpoint-predicted-scores.npy": "fbc0f38ba5f6b2ba84be45bdee0d94f376d835c3343012c51df56b43b97d5fe2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\metrics.json": "d7c8b0fd1f32a576832b1a3c1a1a5843e7f57b15abfda899b2c03a20bea36bc9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\native-logits.npy": "57d1be2f6dffbfc28b937ce8f0ca7ca11935dfb75ad8777f828b6a3dc07c63ee",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\selection.json": "8a7ac8d6513c48d198d14c4be345d1081f4e1b9be7ff573fa23adf49c44a4b76",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\states.json": "e7e7bc2c90ac815279df0f7b772cffa9330d3db5d61ca0a32bc65f66f2d6ea5e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-donor-predictions.jsonl": "9023a3177aa49846083c3bfa8ef0b78a405e3d796f28db0cb54af5b67b329703",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-donor-scores.npy": "ca3d075f977d402bcf8a8ab1c9f6287b3c28b10374058f86fb4c27078d12b5e8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-no_evidence-predictions.jsonl": "d4e3042c7954a9b502571d6f512bfcd592a72edc9db8fcb292bcd9ca36900f1c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-no_evidence-scores.npy": "5b22ced4bf4ccb855372afab816c078896ed2df75c4b41015aa5fb0f4e36da34",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-no_question-predictions.jsonl": "14366ef3a254decbc33a214b94062d31b77805892a09db529c748dd916591062",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-no_question-scores.npy": "5f521886b31466caa74441731cc365e35abaa60815dc99bab26be15c7128f899",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-oracle-predictions.jsonl": "22e6b357fd5b616520577d667fc6e853b01ab3f2f66e0abe8112b04a31a42ef7",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-oracle-scores.npy": "952b4f4a7bfe7dae500439f0a40e63090f3d1d04fa596a2404f55f0e8b80800b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-predicted-predictions.jsonl": "419d77e8d44448ed82ec34078d5ba085ae7befb5d0bdb01c0812a9174771dbf7",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\step0-predicted-scores.npy": "3f69a1d12961d378e2dcf72833bc24ce472e74b41dccd126cc931c5c351b63ce",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\semantic-native-comparison-01\\targets.npy": "fc4756dfb5325c799b1394e74ffd9742fa6e9e6ee5f2d2cb389498e758e7b04f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\decision-supervision-corpus-01\\train.jsonl": "ecadf350f1003842703a5f41aeb2eb5ab760b236130c4d1f0543b9b1886a53b3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\decision-supervision-corpus-01\\retention_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c"
+  },
+  "script_sha256": "9a77503de76f6e2d73611de4f8821c179f73ad7f21f5a45b3d4ac874e30725a5",
+  "interpretation": "Observed interface-transfer failures; coverage is not causal proof.",
+  "transfer_loaded": false,
+  "sealed_audit_loaded": false,
+  "optimizer_updates": 0
+}

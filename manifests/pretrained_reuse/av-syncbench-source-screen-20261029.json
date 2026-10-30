@@ -1,0 +1,47 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "AV-SyncBench",
+  "status": "REVIEW_NOT_ADMITTED",
+  "screened_at": "2026-10-29",
+  "official_sources": {
+    "author_repository": "https://github.com/Duck-Boss/AV-SyncBench",
+    "pinned_source_revision": "82e13536074377b71a51d81b2f5559a43cf4a122",
+    "paper": "https://arxiv.org/abs/2607.00726",
+    "dataset_repository": "https://modelscope.cn/datasets/coming245/AVSyncBench"
+  },
+  "source_scope": "pinned public repository metadata, README, and paper abstract only; no dataset card contents beyond indexed metadata, archives, videos, audio, or checkpoints fetched",
+  "reported": {
+    "videos": 3269,
+    "evaluation_pairs": 38390,
+    "scenarios": 10,
+    "challenge_families": ["temporal_offset", "local_jitter", "global_speed", "voice_timbre", "instrument_timbre"],
+    "modalities": ["video", "audio"],
+    "full_dataset_size": "about 68.19 GB",
+    "released_split_details": "not independently verified in this metadata-only screen"
+  },
+  "license": {
+    "dataset_repository_metadata_claim": "not independently verified in this screen",
+    "underlying_media_rights": "not established; author repository says media may retain rights of original creators",
+    "dataset_media_product_compatible": false,
+    "synchformer_weight_license": "not stated separately in author repository",
+    "imagebind_license": "CC-BY-NC-SA-4.0",
+    "author_adapter_license": "no top-level project license present at pinned revision"
+  },
+  "decision_task_fit": {
+    "pairwise_audio_video_alignment": true,
+    "both_input_necessity_proven": false,
+    "required_controls": ["video_only", "audio_only", "joint", "audio_swap", "temporal_offset", "source_video_grouped_split"]
+  },
+  "limitations": [
+    "Dataset repository MIT metadata does not establish rights to every source video or audio recording",
+    "Author repository explicitly leaves original media rights with their respective creators",
+    "Full payload is too large for current local free-space constraints",
+    "ImageBind baseline is non-commercial and Synchformer weight terms are not separately specified",
+    "Paper benchmark scores are not evidence of this project's model quality or broad Decision ability",
+    "Independent-source grouped split and both-input necessity controls were not audited"
+  ],
+  "training_admission": "NOT_ADMITTED_PENDING_MEDIA_RIGHTS_AND_SPLIT_AUDIT",
+  "payload_downloaded": false,
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

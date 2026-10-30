@@ -1,0 +1,39 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "GAViD",
+  "status": "NOT_ADMITTED_PRODUCT",
+  "screened_at": "2026-10-29",
+  "official_sources": {
+    "zenodo_record": "https://zenodo.org/records/15448846",
+    "author_repository": "https://github.com/deepakkumar-iitr/GAViD",
+    "paper": "https://arxiv.org/abs/2604.16214"
+  },
+  "source_scope": "publisher metadata and paper abstract only; no repository checkout, dataset CSV, archive, or media fetched",
+  "reported": {
+    "clips": 5091,
+    "clip_duration_seconds": 5,
+    "modalities": ["video", "aligned_audio", "generated_context"],
+    "labels": ["ternary_valence", "discrete_emotion", "emotion_intensity", "interaction_type", "action_cues"],
+    "publisher_split_counts": {"train": 3503, "validation": 542, "test": 1046},
+    "train_archive_size": "1.7 GB",
+    "validation_test_media": "provided on request and approval per publisher record"
+  },
+  "license": {
+    "dataset_terms": "academic research only; non-commercial purposes",
+    "payload_license_field": "GAViD dataset custom licence",
+    "source_video_claim": "publisher says source videos were CC BY 4.0",
+    "product_compatible": false
+  },
+  "limitations": [
+    "Dataset terms explicitly restrict use to non-commercial academic research",
+    "Validation and test video media are request-gated",
+    "Context is generated from video and may provide a label shortcut",
+    "Published task is group-affect recognition, not demonstrated option-conditioned decision making",
+    "No evidence that both audio and video are necessary; matched unimodal and corruption controls would be required",
+    "Published baseline accuracy is about 63 percent, not evidence for the project's high-accuracy objective"
+  ],
+  "training_admission": "NOT_ADMITTED_PRODUCT",
+  "payload_downloaded": false,
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

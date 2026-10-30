@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "captured_at_local": "2026-10-21T21:18:33+09:00",
+  "repository": "https://github.com/Unjuno/tiny-omni-decision",
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_branch": "e92dbbd25475e2b6d97461d8159647ddac6befbf",
+    "roadmap_pr": 15,
+    "roadmap_pr_state": "open",
+    "roadmap_pr_draft": true,
+    "roadmap_pr_checks": ["success", "success"]
+  },
+  "local": {
+    "branch": "codex/r0-r2-continuation-20261021",
+    "head": "e92dbbd25475e2b6d97461d8159647ddac6befbf",
+    "working_tree_clean": true,
+    "registered_worktrees": 40,
+    "dirty_worktrees": 6,
+    "primary_user_worktree": {
+      "branch": "codex/teacher-quality-clean-dev-v1",
+      "dirty": true,
+      "modified_by_audit": false
+    }
+  },
+  "pull_requests": {
+    "open_range": "#9-#20",
+    "roadmap_pr_15": "Draft/Open; current head e92dbbd25475e2b6d97461d8159647ddac6befbf",
+    "source_and_candidate_prs_16_20": "Open on separate branches; not changed",
+    "legacy_prs_9_14": "Open; not changed"
+  },
+  "gpu": {
+    "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "total_mib": 16384,
+    "used_mib": 15821,
+    "free_mib": 355,
+    "utilization_percent_first": 100,
+    "utilization_percent_second": [17, 18],
+    "temperature_c": 67,
+    "power_w": 66.94,
+    "poll_interval_seconds": 4,
+    "active_process": {
+      "pid": 24700,
+      "parent_pid": 19828,
+      "supervisor_pids": [23856, 4696],
+      "workload": "Orbitune compound_cfe_train",
+      "precision": "BF16",
+      "batch_size": 64,
+      "sequence_length": 512,
+      "artifact": "Orbitune research_nc_aria_gigamidi_epoch_a2_v1/model.pt",
+      "intervened": false
+    },
+    "tiny_omni_gpu_job_started": false,
+    "hotgpu_invoked": false,
+    "paid_cloud_cost_usd": 0
+  },
+  "system": {
+    "ram_total_gib": 31.77,
+    "ram_free_gib": 11.49,
+    "c_drive_free_gib": 11.16
+  },
+  "r1": {
+    "candidate_count": 23,
+    "video_candidate": "google-videoprism-base-f16r288",
+    "video_candidate_parameters": 114365184,
+    "vjepa_2_1_license_status": "REVIEW",
+    "path_a_v4_parameters": 170499716,
+    "path_a_payload_bytes": 687254772,
+    "package_target_bytes": 209715200,
+    "package_target_met": false
+  },
+  "r0_r2_gates": {
+    "end_user_device": "not selected",
+    "locked_task_battery": "not defined",
+    "task_specific_calibration_confidence_and_abstention": "not defined",
+    "local_time_energy_budget": "not defined",
+    "both_input_required_admitted_task": false,
+    "quality_aspiration": "95-98%; not a release result"
+  },
+  "preservation": {
+    "sealed_audit_opened": false,
+    "live_process_touched": false,
+    "user_primary_worktree_touched": false,
+    "existing_checkpoint_or_corpus_modified": false,
+    "peer_worktrees_modified": false
+  }
+}

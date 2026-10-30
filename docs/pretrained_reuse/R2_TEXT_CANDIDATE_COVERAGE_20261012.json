@@ -1,0 +1,194 @@
+{
+  "train": {
+    "choice_dict_questions": 9171,
+    "top_target_labels": [
+      [
+        "approve",
+        657
+      ],
+      [
+        "escalate",
+        538
+      ],
+      [
+        "hold",
+        467
+      ],
+      [
+        "request_info",
+        433
+      ],
+      [
+        "reject",
+        145
+      ],
+      [
+        "high",
+        59
+      ],
+      [
+        "hold_for_review",
+        37
+      ],
+      [
+        "medium",
+        27
+      ],
+      [
+        "low",
+        25
+      ],
+      [
+        "negative",
+        23
+      ],
+      [
+        "monitor",
+        23
+      ],
+      [
+        "positive",
+        21
+      ],
+      [
+        "investigate",
+        21
+      ],
+      [
+        "none",
+        20
+      ],
+      [
+        "moderate",
+        18
+      ],
+      [
+        "mixed",
+        17
+      ],
+      [
+        "urgent",
+        17
+      ],
+      [
+        "critical",
+        15
+      ],
+      [
+        "flag_for_review",
+        15
+      ],
+      [
+        "yes",
+        13
+      ]
+    ],
+    "ABC_exact_target_counts": {
+      "A": 1
+    },
+    "ABC_source_examples": [
+      {
+        "state_id": "synth-8d26cdf12aacdc8e",
+        "question_id": "q1"
+      }
+    ],
+    "candidate_coverage": {
+      "bare_ABC_candidates": 0,
+      "ABC_all_available": 3
+    },
+    "sha256": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675"
+  },
+  "validation": {
+    "choice_dict_questions": 1008,
+    "top_target_labels": [
+      [
+        "approve",
+        80
+      ],
+      [
+        "escalate",
+        59
+      ],
+      [
+        "hold",
+        54
+      ],
+      [
+        "request_info",
+        47
+      ],
+      [
+        "reject",
+        22
+      ],
+      [
+        "mixed",
+        6
+      ],
+      [
+        "positive",
+        5
+      ],
+      [
+        "high",
+        5
+      ],
+      [
+        "hold_for_review",
+        5
+      ],
+      [
+        "urgent",
+        4
+      ],
+      [
+        "monitor",
+        4
+      ],
+      [
+        "bug_fix",
+        3
+      ],
+      [
+        "verified",
+        3
+      ],
+      [
+        "technology",
+        3
+      ],
+      [
+        "critical",
+        3
+      ],
+      [
+        "theft",
+        3
+      ],
+      [
+        "middle",
+        2
+      ],
+      [
+        "deny",
+        2
+      ],
+      [
+        "new_york",
+        2
+      ],
+      [
+        "low",
+        2
+      ]
+    ],
+    "ABC_exact_target_counts": {},
+    "ABC_source_examples": [],
+    "candidate_coverage": {
+      "bare_ABC_candidates": 0,
+      "ABC_all_available": 0
+    },
+    "sha256": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8"
+  },
+  "scope": "Dictionary-valued choice questions only; no model inference or label changes."
+}

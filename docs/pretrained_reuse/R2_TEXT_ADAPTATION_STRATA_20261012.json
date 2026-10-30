@@ -1,0 +1,119 @@
+{
+  "scope": "posthoc observed-validation diagnosis; no new blind evaluation",
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-crossencoder-zero-shot-01\\predictions.json": "369f71b15fc3a12baec6e8da3d2b5ec3fb49ec3f59b92e830af366d640e68c4b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-crossencoder-adapt-v1\\predictions.json": "2abd122adba3fbf9161d76d0546f230cf5c760fa7f50046eb5ff0f956e64d6c4"
+  },
+  "strata": {
+    "all": {
+      "count": 2540,
+      "zero_shot": {
+        "accuracy": 0.45984251968503936,
+        "nll": 1.1986914554620123,
+        "brier": 0.6497541859947888
+      },
+      "adapted": {
+        "accuracy": 0.5811023622047244,
+        "nll": 0.9377868753759748,
+        "brier": 0.534314817374209
+      }
+    },
+    "choice": {
+      "count": 1008,
+      "zero_shot": {
+        "accuracy": 0.4375,
+        "nll": 1.517747923719763,
+        "brier": 0.7311150404647524
+      },
+      "adapted": {
+        "accuracy": 0.566468253968254,
+        "nll": 1.0777354844762677,
+        "brier": 0.5684898766520748
+      }
+    },
+    "noul": {
+      "count": 987,
+      "zero_shot": {
+        "accuracy": 0.5542046605876393,
+        "nll": 0.7160737599282061,
+        "brier": 0.5078803616332029
+      },
+      "adapted": {
+        "accuracy": 0.6565349544072948,
+        "nll": 0.615957259956581,
+        "brier": 0.43072974185639634
+      }
+    },
+    "score": {
+      "count": 545,
+      "zero_shot": {
+        "accuracy": 0.3302752293577982,
+        "nll": 1.4826084196602825,
+        "brier": 0.7562087242317832
+      },
+      "adapted": {
+        "accuracy": 0.47155963302752296,
+        "nll": 1.2617825312399071,
+        "brier": 0.6587001564274092
+      }
+    },
+    "seen_exact_instruction": {
+      "count": 394,
+      "zero_shot": {
+        "accuracy": 0.4416243654822335,
+        "nll": 1.5503923201449794,
+        "brier": 0.7441272603982908
+      },
+      "adapted": {
+        "accuracy": 0.5812182741116751,
+        "nll": 1.0170820904098696,
+        "brier": 0.5589012012787922
+      }
+    },
+    "unseen_exact_instruction": {
+      "count": 2146,
+      "zero_shot": {
+        "accuracy": 0.46318732525629075,
+        "nll": 1.134120094471759,
+        "brier": 0.6324275358014141
+      },
+      "adapted": {
+        "accuracy": 0.581081081081081,
+        "nll": 0.9232284808170963,
+        "brier": 0.529800821447646
+      }
+    }
+  },
+  "paired_state_bootstrap": {
+    "states": 732,
+    "seed": 17,
+    "replicates": 10000,
+    "method": "percentile 95%; resample states with replacement; question-weighted metrics; adapted minus zero-shot",
+    "difference": {
+      "accuracy": 0.12125984251968504,
+      "nll": -0.2609045800860402,
+      "brier": -0.11543936862057938
+    },
+    "intervals": {
+      "accuracy": [
+        0.10038672704730475,
+        0.14206798529016365
+      ],
+      "nll": [
+        -0.29459075341156443,
+        -0.2273404310738433
+      ],
+      "brier": [
+        -0.1313258320998518,
+        -0.09957275959088582
+      ]
+    }
+  },
+  "limitations": [
+    "Selection on this validation is not accounted for by intervals.",
+    "Exact wording novelty is not semantic/task novelty.",
+    "No inference, new training, sealed data or calibration fit."
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "source_sha256": "c6ae866a84f1c6dc80eb78044cd660d402b59583f9eb780785758875109c0841",
+  "scope": "post-hoc train-only; adjacent ticks correlated; fixed distance bins, no exclusions, no parameter fitting",
+  "strata": {
+    "distance:101-200cm": {
+      "ticks": 28630,
+      "recordings": 42,
+      "mean_deg": 58.13485431013309,
+      "median_deg": 49.7917530349878,
+      "within20": 0.2137268599371289,
+      "within45": 0.46905344044708347
+    },
+    "raw_class:0": {
+      "ticks": 20688,
+      "recordings": 30,
+      "mean_deg": 57.465496685718946,
+      "median_deg": 50.47434770107895,
+      "within20": 0.23230858468677495,
+      "within45": 0.466792343387471
+    },
+    "raw_class:4": {
+      "ticks": 818,
+      "recordings": 24,
+      "mean_deg": 76.37287930795141,
+      "median_deg": 77.18576579216548,
+      "within20": 0.1356968215158924,
+      "within45": 0.3251833740831296
+    },
+    "raw_class:1": {
+      "ticks": 20276,
+      "recordings": 35,
+      "mean_deg": 66.82154328755395,
+      "median_deg": 63.81072221295001,
+      "within20": 0.1651213257052673,
+      "within45": 0.38296508187019135
+    },
+    "raw_class:5": {
+      "ticks": 4966,
+      "recordings": 9,
+      "mean_deg": 33.90897396822708,
+      "median_deg": 26.69122188866703,
+      "within20": 0.319975835682642,
+      "within45": 0.7863471606927104
+    },
+    "distance:201-400cm": {
+      "ticks": 24863,
+      "recordings": 44,
+      "mean_deg": 64.74062404866174,
+      "median_deg": 56.71890709588221,
+      "within20": 0.18694445561677994,
+      "within45": 0.42806580058721794
+    },
+    "distance:0-100cm": {
+      "ticks": 1210,
+      "recordings": 14,
+      "mean_deg": 51.82372519284278,
+      "median_deg": 34.01415702542264,
+      "within20": 0.3768595041322314,
+      "within45": 0.543801652892562
+    },
+    "raw_class:12": {
+      "ticks": 19,
+      "recordings": 3,
+      "mean_deg": 103.17072946318243,
+      "median_deg": 114.7173474310572,
+      "within20": 0.0,
+      "within45": 0.05263157894736842
+    },
+    "raw_class:6": {
+      "ticks": 1183,
+      "recordings": 25,
+      "mean_deg": 109.05353322463776,
+      "median_deg": 120.63371313509269,
+      "within20": 0.03127641589180051,
+      "within45": 0.0904480135249366
+    },
+    "raw_class:7": {
+      "ticks": 522,
+      "recordings": 18,
+      "mean_deg": 92.09326541105685,
+      "median_deg": 101.26063332688295,
+      "within20": 0.028735632183908046,
+      "within45": 0.09386973180076628
+    },
+    "distance:over400cm": {
+      "ticks": 35,
+      "recordings": 4,
+      "mean_deg": 70.3492502121769,
+      "median_deg": 63.82845292990066,
+      "within20": 0.08571428571428572,
+      "within45": 0.34285714285714286
+    },
+    "raw_class:2": {
+      "ticks": 18,
+      "recordings": 2,
+      "mean_deg": 79.16374544642672,
+      "median_deg": 91.91646981773405,
+      "within20": 0.2777777777777778,
+      "within45": 0.2777777777777778
+    },
+    "raw_class:8": {
+      "ticks": 3181,
+      "recordings": 7,
+      "mean_deg": 66.85745317392839,
+      "median_deg": 56.6015226702123,
+      "within20": 0.1898773970449544,
+      "within45": 0.4306821754165357
+    },
+    "raw_class:3": {
+      "ticks": 440,
+      "recordings": 11,
+      "mean_deg": 83.48334743794662,
+      "median_deg": 86.26129810556174,
+      "within20": 0.10227272727272728,
+      "within45": 0.21818181818181817
+    },
+    "raw_class:10": {
+      "ticks": 352,
+      "recordings": 5,
+      "mean_deg": 65.20875788842578,
+      "median_deg": 58.34509688380966,
+      "within20": 0.002840909090909091,
+      "within45": 0.3068181818181818
+    },
+    "raw_class:9": {
+      "ticks": 2275,
+      "recordings": 3,
+      "mean_deg": 49.14428083788715,
+      "median_deg": 31.725177570387732,
+      "within20": 0.2923076923076923,
+      "within45": 0.6210989010989011
+    }
+  }
+}

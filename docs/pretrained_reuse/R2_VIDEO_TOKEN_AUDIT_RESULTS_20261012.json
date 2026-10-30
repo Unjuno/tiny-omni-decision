@@ -1,0 +1,388 @@
+{
+  "config": {
+    "source_commit": "dc82b70cf592502f888a8136832743b9326705e4",
+    "runner_sha256": "575f0e9604ecbd9d7f7684b29e1dfe495b9c03c15fc8d3a53886375fce4bb6bc",
+    "argv": {
+      "sample_dir": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val",
+      "cache": "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-clevrer-expanded-features-v0\\video-features.npz",
+      "checkpoint": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz",
+      "source_root": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-r1\\source",
+      "output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-token-audit-02"
+    },
+    "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "upstream_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "train_manifest_sha256": "5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d",
+    "pooled_cache_sha256": "40eaff323e3654bf34653950d5fea4cd532f1a0e096438ec9cb73703dc589ea1",
+    "selected": [
+      {
+        "archive_member": "video_00000-01000/video_00019.mp4",
+        "id": "clevrer-train-00019-q004",
+        "media_bytes": 1080421,
+        "media_path": "media/train/video_00019.mp4",
+        "media_sha256": "5758dec077682cd67fc3967292cf3e370ed85c86e68e34225498fbbd4c65b258",
+        "options": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "program": [
+          "events",
+          "events",
+          "objects",
+          "rubber",
+          "filter_material",
+          "cylinder",
+          "filter_shape",
+          "unique",
+          "filter_in",
+          "unique",
+          "filter_before",
+          "objects",
+          "filter_collision",
+          "count"
+        ],
+        "question": "How many collisions happen before the rubber cylinder enters the scene?",
+        "question_id": 4,
+        "question_type": "temporal_descriptive",
+        "scene_group_id": "clevrer:train:19",
+        "scene_index": 19,
+        "source": "MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef",
+        "split": "train",
+        "target": "2",
+        "taxonomy": "count",
+        "video_filename": "video_00019.mp4"
+      },
+      {
+        "archive_member": "video_00000-01000/video_00037.mp4",
+        "id": "clevrer-train-00037-q006",
+        "media_bytes": 1371026,
+        "media_path": "media/train/video_00037.mp4",
+        "media_sha256": "61ae63af7f1feabffcef855e2c9b075a2c9561264e8b2d84b0d8123307b80b49",
+        "options": [
+          "gray",
+          "red",
+          "blue",
+          "green",
+          "brown",
+          "purple",
+          "cyan",
+          "yellow"
+        ],
+        "program": [
+          "objects",
+          "rubber",
+          "filter_material",
+          "end",
+          "get_frame",
+          "filter_moving",
+          "unique",
+          "query_color"
+        ],
+        "question": "What color is the rubber object that is moving when the video ends?",
+        "question_id": 6,
+        "question_type": "temporal_descriptive",
+        "scene_group_id": "clevrer:train:37",
+        "scene_index": 37,
+        "source": "MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef",
+        "split": "train",
+        "target": "blue",
+        "taxonomy": "query_color",
+        "video_filename": "video_00037.mp4"
+      }
+    ],
+    "started_utc": "2026-10-11T20:41:36.889990+00:00",
+    "python": "3.11.16 (main, Sep  1 2026, 14:15:24) [MSC v.1944 64 bit (AMD64)]",
+    "quality_evaluation": false,
+    "training": false
+  },
+  "result": {
+    "status": "PASS_FEASIBILITY_ONLY",
+    "records": [
+      {
+        "scene": 19,
+        "media_sha256": "5758dec077682cd67fc3967292cf3e370ed85c86e68e34225498fbbd4c65b258",
+        "shape": [
+          8,
+          16,
+          16,
+          768
+        ],
+        "dtype": "float32",
+        "array_bytes": 6291456,
+        "file_bytes": 6291584,
+        "file_sha256": "e1e2d5307da6a7af6447ae14d9b81924ac4e1a5434ebae4f9009954168bcca17",
+        "pooled_max_abs": 0.0,
+        "preprocess_seconds": 0.23078680003527552,
+        "forward_seconds": 6.058711700025015,
+        "memory": {
+          "rss": 1884983296,
+          "vms": 2487205888,
+          "num_page_faults": 3029925,
+          "peak_wset": 4155723776,
+          "wset": 1884983296,
+          "peak_paged_pool": 3111056,
+          "paged_pool": 3111056,
+          "peak_nonpaged_pool": 118040,
+          "nonpaged_pool": 111240,
+          "pagefile": 2487205888,
+          "peak_pagefile": 4760088576,
+          "private": 2487205888
+        }
+      },
+      {
+        "scene": 37,
+        "media_sha256": "61ae63af7f1feabffcef855e2c9b075a2c9561264e8b2d84b0d8123307b80b49",
+        "shape": [
+          8,
+          16,
+          16,
+          768
+        ],
+        "dtype": "float32",
+        "array_bytes": 6291456,
+        "file_bytes": 6291584,
+        "file_sha256": "53cd5745bb1706668796893eb3256507816915a8cb43418245866d4c5ec39ddf",
+        "pooled_max_abs": 0.0,
+        "preprocess_seconds": 0.15885869995690882,
+        "forward_seconds": 1.056122799986042,
+        "memory": {
+          "rss": 1900343296,
+          "vms": 2502635520,
+          "num_page_faults": 3236884,
+          "peak_wset": 4155723776,
+          "wset": 1900343296,
+          "peak_paged_pool": 3111152,
+          "paged_pool": 3111152,
+          "peak_nonpaged_pool": 118040,
+          "nonpaged_pool": 111512,
+          "pagefile": 2502635520,
+          "peak_pagefile": 4760088576,
+          "private": 2502635520
+        }
+      }
+    ],
+    "parameters": 114365184,
+    "repeat_exact": true,
+    "repeat_forward_seconds": 1.0462242999346927,
+    "load_seconds": 0.30735070002265275,
+    "total_seconds": 9.292022600071505,
+    "memory": {
+      "rss": 1906651136,
+      "vms": 2508955648,
+      "num_page_faults": 3543239,
+      "peak_wset": 4155723776,
+      "wset": 1906651136,
+      "peak_paged_pool": 3111248,
+      "paged_pool": 3111152,
+      "peak_nonpaged_pool": 118040,
+      "nonpaged_pool": 111648,
+      "pagefile": 2508955648,
+      "peak_pagefile": 4760088576,
+      "private": 2508955648
+    },
+    "devices": [
+      "TFRT_CPU_0"
+    ],
+    "backend": "cpu",
+    "versions": {
+      "jax": "0.6.2",
+      "jaxlib": "0.6.2",
+      "numpy": "1.26.4",
+      "av": "18.1.0",
+      "tensorflow": "2.18.1"
+    },
+    "projected456_scene_array_bytes": 2868903936,
+    "projected456_scene_npy_bytes": 2868962304,
+    "free_disk_bytes": 2184622080,
+    "finished_utc": "2026-10-11T20:41:48.732087+00:00",
+    "cost_usd": 0,
+    "limitation": "Two training scenes; no full cache, training, or video quality evaluation."
+  },
+  "elapsed_from_config_seconds": 11.842097,
+  "hashes": {
+    "config.json": "a2ac2ee1248517e83656f67b0fc79ec49f51d6c2f57b8f5d8ef894f5c2573a73",
+    "progress.json": "bee738ff254ee6d36c7051fa8436cb5adf24b490d9d42b5510be7f46a430f6bf",
+    "result.json": "92360e4e35532fdb692ed63b7891cb1f8f2febe97e6bf73b924fb00c742b31db",
+    "tokens-0.npy": "e1e2d5307da6a7af6447ae14d9b81924ac4e1a5434ebae4f9009954168bcca17",
+    "tokens-1.npy": "53cd5745bb1706668796893eb3256507816915a8cb43418245866d4c5ec39ddf"
+  },
+  "failed_attempt": {
+    "config": {
+      "source_commit": "ba303fda507164af402e5c187b0e182e4fc6adc8",
+      "runner_sha256": "31a0d24aa37e3747c09e4094a9bc66db44bf3c0d1fe0a50cbb78bbe27158dec8",
+      "argv": {
+        "sample_dir": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val",
+        "cache": "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-clevrer-expanded-features-v0\\video-features.npz",
+        "checkpoint": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz",
+        "source_root": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-r1\\source",
+        "output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-token-audit-01"
+      },
+      "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "upstream_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "train_manifest_sha256": "5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d",
+      "pooled_cache_sha256": "40eaff323e3654bf34653950d5fea4cd532f1a0e096438ec9cb73703dc589ea1",
+      "selected": [
+        {
+          "archive_member": "video_00000-01000/video_00019.mp4",
+          "id": "clevrer-train-00019-q004",
+          "media_bytes": 1080421,
+          "media_path": "media/train/video_00019.mp4",
+          "media_sha256": "5758dec077682cd67fc3967292cf3e370ed85c86e68e34225498fbbd4c65b258",
+          "options": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "program": [
+            "events",
+            "events",
+            "objects",
+            "rubber",
+            "filter_material",
+            "cylinder",
+            "filter_shape",
+            "unique",
+            "filter_in",
+            "unique",
+            "filter_before",
+            "objects",
+            "filter_collision",
+            "count"
+          ],
+          "question": "How many collisions happen before the rubber cylinder enters the scene?",
+          "question_id": 4,
+          "question_type": "temporal_descriptive",
+          "scene_group_id": "clevrer:train:19",
+          "scene_index": 19,
+          "source": "MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef",
+          "split": "train",
+          "target": "2",
+          "taxonomy": "count",
+          "video_filename": "video_00019.mp4"
+        },
+        {
+          "archive_member": "video_00000-01000/video_00037.mp4",
+          "id": "clevrer-train-00037-q006",
+          "media_bytes": 1371026,
+          "media_path": "media/train/video_00037.mp4",
+          "media_sha256": "61ae63af7f1feabffcef855e2c9b075a2c9561264e8b2d84b0d8123307b80b49",
+          "options": [
+            "gray",
+            "red",
+            "blue",
+            "green",
+            "brown",
+            "purple",
+            "cyan",
+            "yellow"
+          ],
+          "program": [
+            "objects",
+            "rubber",
+            "filter_material",
+            "end",
+            "get_frame",
+            "filter_moving",
+            "unique",
+            "query_color"
+          ],
+          "question": "What color is the rubber object that is moving when the video ends?",
+          "question_id": 6,
+          "question_type": "temporal_descriptive",
+          "scene_group_id": "clevrer:train:37",
+          "scene_index": 37,
+          "source": "MIT-IBM/CLEVRER@98b842082ba4f7c18b6b9e3f39145871782a65ef",
+          "split": "train",
+          "target": "blue",
+          "taxonomy": "query_color",
+          "video_filename": "video_00037.mp4"
+        }
+      ],
+      "started_utc": "2026-10-11T20:39:01.274539+00:00",
+      "python": "3.11.16 (main, Sep  1 2026, 14:15:24) [MSC v.1944 64 bit (AMD64)]",
+      "quality_evaluation": false,
+      "training": false
+    },
+    "progress": [
+      {
+        "scene": 19,
+        "media_sha256": "5758dec077682cd67fc3967292cf3e370ed85c86e68e34225498fbbd4c65b258",
+        "shape": [
+          8,
+          16,
+          16,
+          768
+        ],
+        "dtype": "float32",
+        "array_bytes": 6291456,
+        "file_bytes": 6291584,
+        "file_sha256": "e1e2d5307da6a7af6447ae14d9b81924ac4e1a5434ebae4f9009954168bcca17",
+        "pooled_max_abs": 0.0,
+        "preprocess_seconds": 1.2422577999532223,
+        "forward_seconds": 6.71374769997783,
+        "memory": {
+          "rss": 1890971648,
+          "vms": 2498424832,
+          "num_page_faults": 3031081,
+          "peak_wset": 4161728512,
+          "wset": 1890971648,
+          "peak_paged_pool": 3111696,
+          "paged_pool": 3111696,
+          "peak_nonpaged_pool": 118176,
+          "nonpaged_pool": 111376,
+          "pagefile": 2498424832,
+          "peak_pagefile": 4773244928,
+          "private": 2498424832
+        }
+      },
+      {
+        "scene": 37,
+        "media_sha256": "61ae63af7f1feabffcef855e2c9b075a2c9561264e8b2d84b0d8123307b80b49",
+        "shape": [
+          8,
+          16,
+          16,
+          768
+        ],
+        "dtype": "float32",
+        "array_bytes": 6291456,
+        "file_bytes": 6291584,
+        "file_sha256": "53cd5745bb1706668796893eb3256507816915a8cb43418245866d4c5ec39ddf",
+        "pooled_max_abs": 0.0,
+        "preprocess_seconds": 0.1598500000545755,
+        "forward_seconds": 1.0826357998885214,
+        "memory": {
+          "rss": 1906606080,
+          "vms": 2514374656,
+          "num_page_faults": 3238014,
+          "peak_wset": 4161728512,
+          "wset": 1906606080,
+          "peak_paged_pool": 3111792,
+          "paged_pool": 3111792,
+          "peak_nonpaged_pool": 118176,
+          "nonpaged_pool": 111648,
+          "pagefile": 2514374656,
+          "peak_pagefile": 4773244928,
+          "private": 2514374656
+        }
+      }
+    ],
+    "error": "importlib.metadata.PackageNotFoundError: tensorflow",
+    "total_seconds": "UNKNOWN: final reporting failed",
+    "raw_arrays_match_retry": true,
+    "hashes": {
+      "config.json": "25c69254b2eb4bf90a62181212230ae515cb9286d1f924431f13d15a46db5eab",
+      "progress.json": "5e1c228a72c69108587a176b20591017964d4ea9292489dd0bb8cc563b531982",
+      "tokens-0.npy": "e1e2d5307da6a7af6447ae14d9b81924ac4e1a5434ebae4f9009954168bcca17",
+      "tokens-1.npy": "53cd5745bb1706668796893eb3256507816915a8cb43418245866d4c5ec39ddf"
+    }
+  }
+}

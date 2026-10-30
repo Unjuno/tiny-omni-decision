@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "run_result_sha256": "3c6ff7fa1d7995c1a88fee731cc299a82a1c96d4b967bd15298e320fda5df07c",
+  "normalization_sha256": "b56d442a07b62d6f650f06d08463d75b87971564a63bbb4718a04e6ad03bc8e2",
+  "conditions": {
+    "audio_only": {
+      "max_absolute_errors": {
+        "positive_probabilities": 0.0,
+        "raw_positive_probabilities": 0.0
+      },
+      "queries": 5832,
+      "checkpoint_sha256": "e9fa48136944819c43119c7e5208477c166e48838a9b173538ab52f2fa0164bd"
+    },
+    "video_only": {
+      "max_absolute_errors": {
+        "positive_probabilities": 0.0,
+        "raw_positive_probabilities": 0.0
+      },
+      "queries": 5832,
+      "checkpoint_sha256": "f8a0d048d5e0e1d3e3d77237de787406181213530fad1cd7a3a8c6f224bf89f2"
+    },
+    "audio_video": {
+      "max_absolute_errors": {
+        "positive_probabilities": 0.0,
+        "raw_positive_probabilities": 0.0
+      },
+      "queries": 5832,
+      "checkpoint_sha256": "c034d3ce9d86f483933dc1086a37e9e0ade9bf9efafef7c89a9c011f1e701f98"
+    }
+  },
+  "seconds": 0.087402299977839,
+  "cpu_threads": 4,
+  "torch": "2.6.0+cu124",
+  "new_training": false,
+  "scope": "saved frozen features to all validation predictions; no raw-media re-encoding"
+}

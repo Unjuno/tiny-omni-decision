@@ -1,0 +1,198 @@
+{
+  "stage": "R2 development-input mechanics only",
+  "product_goal_achieved": false,
+  "source_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-container-feature-smoke-01",
+  "replay_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-container-feature-replay-01.json",
+  "main_report_sha256": "12a20f436a487e4e21a91956d58bf1fb9bd231ef1494eb9abc8ca7346425ddba",
+  "replay_sha256": "40b5d246ad6fb5e28220ff5565be7328be97cb24a6a5115d86d0eaae5f1657fc",
+  "source_commit": "3e91eef37a1d53ed8ab768e68c2f396cb21f7fe4",
+  "replay_source_commit": "127c1aa48f04146cae57984caef97e017d1413bf",
+  "group": "Ar1_Vhigh_Ac0_Rp01_UNC062",
+  "unique_source_recordings": 1,
+  "derivative_decoded_frames": 1350,
+  "frontend": {
+    "parameters": 83101185,
+    "parameter_bytes": 332404740,
+    "buffers": 274,
+    "trainable_parameters": 0,
+    "gradients_present": false,
+    "model_training": false,
+    "cuda_initialized": false,
+    "state_unchanged": true,
+    "state_before": "061d84f192ef4529c6f0a59f82f9287eeb450c7327fa47967998e0c673674bb5",
+    "state_after": "061d84f192ef4529c6f0a59f82f9287eeb450c7327fa47967998e0c673674bb5",
+    "forward_cpu_rng_unchanged": true,
+    "features_container_invariant": true,
+    "pixels_container_invariant": true,
+    "uniform_sensitive": true,
+    "all_uniform_l2_distances": [
+      [
+        [
+          6.568211078643799,
+          6.595383167266846
+        ],
+        [
+          6.723550319671631,
+          6.651103496551514
+        ],
+        [
+          6.555072784423828,
+          6.547008037567139
+        ]
+      ],
+      [
+        [
+          6.631064414978027,
+          6.6734299659729
+        ],
+        [
+          6.6958327293396,
+          6.714052677154541
+        ],
+        [
+          6.690751552581787,
+          6.657108306884766
+        ]
+      ],
+      [
+        [
+          6.77120304107666,
+          6.907900333404541
+        ],
+        [
+          6.762750148773193,
+          6.943645477294922
+        ],
+        [
+          6.712131500244141,
+          6.82714319229126
+        ]
+      ]
+    ],
+    "inference_seconds": {
+      "original": 1.4306787999812514,
+      "derivative": 1.4352284000487998,
+      "uniform": 1.4214920999947935
+    },
+    "load_and_forward_seconds": 5.35369240003638,
+    "device": "cpu",
+    "dtype": "float32",
+    "threads": 2,
+    "seed": 17,
+    "attention_backend": "eager",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "numpy": "2.4.6",
+    "av": "18.1.0",
+    "pillow": "10.4.0",
+    "processor_class": "CLIPImageProcessorPil",
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "feature_shape": [
+      3,
+      3,
+      2,
+      512
+    ]
+  },
+  "nuisance_length_controls": {
+    "camera_length": {
+      "original_prediction": 0,
+      "derivative_prediction": 48,
+      "probability_l1_change": 1.646939845363923,
+      "max_logp_change": 13.54914688629741,
+      "original_target_probability": 0.053062996184777333,
+      "derivative_target_probability": 0.0009290689691348504
+    },
+    "all_lengths": {
+      "original_prediction": 9,
+      "derivative_prediction": 22,
+      "probability_l1_change": 1.5504880521858373,
+      "max_logp_change": 13.581705797168095,
+      "original_target_probability": 0.03629767622253757,
+      "derivative_target_probability": 0.0006565611241180478
+    }
+  },
+  "artifacts": {
+    "config.json": "406abd9ea230d3bf5fb24f10f30d5992ef1a5d6d8dac1171b5c29b1e03a19ea1",
+    "camera-1-free.mp4": "a887ddfee01677473c019ba0d69075dffae358ff0329f9be1841927ede8ee5b2",
+    "camera-2-free.mp4": "69f390166a353dcab2cbd6d16516548cde2bb47ba2303c242d2233457acf1ac3",
+    "camera-3-free.mp4": "8e2139de378d45eb590e2c482325676c06f6983bc5846abd6f93a1d520fc3c8a",
+    "arrays.npz": "7800a959fb08f2d0f8a8c5b7c26d26d5f5454634a76c6d56fe1ffdf40960116e"
+  },
+  "camera_rows": [
+    {
+      "receiver": 1,
+      "source_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-input-smoke-01\\camera-1.mp4",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-container-feature-smoke-01\\camera-1-free.mp4",
+      "source_bytes": 7920043,
+      "source_sha256": "c5043aa935f369ec6deb5c13fcecd475b21c7070005f5bd8b655b46dd407c914",
+      "derived_bytes": 8968627,
+      "derived_sha256": "a887ddfee01677473c019ba0d69075dffae358ff0329f9be1841927ede8ee5b2",
+      "free_atom_bytes": 1048584,
+      "payload_bytes": 1048576,
+      "decoded_frames": 450,
+      "rgb_stream_sha256": "cac91d1eb6eb7c784024fc4ab986dfee37e03a6c9ef24b69f2f473ab0466a5e4"
+    },
+    {
+      "receiver": 2,
+      "source_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-input-smoke-01\\camera-2.mp4",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-container-feature-smoke-01\\camera-2-free.mp4",
+      "source_bytes": 7433377,
+      "source_sha256": "be0cf850b349e46441d01f22011ba6b3cf438b059745386d4187ccafeed98a88",
+      "derived_bytes": 8481961,
+      "derived_sha256": "69f390166a353dcab2cbd6d16516548cde2bb47ba2303c242d2233457acf1ac3",
+      "free_atom_bytes": 1048584,
+      "payload_bytes": 1048576,
+      "decoded_frames": 450,
+      "rgb_stream_sha256": "c8f94a24481448c0ce37e644263a2a3fcff4003df9f71b7f27f954c310c845a1"
+    },
+    {
+      "receiver": 3,
+      "source_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-input-smoke-01\\camera-3.mp4",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-container-feature-smoke-01\\camera-3-free.mp4",
+      "source_bytes": 7438345,
+      "source_sha256": "0fbf26946869aca856f31acda5a0b74c6a0f142ea6dbde8c59257770942262da",
+      "derived_bytes": 8486929,
+      "derived_sha256": "8e2139de378d45eb590e2c482325676c06f6983bc5846abd6f93a1d520fc3c8a",
+      "free_atom_bytes": 1048584,
+      "payload_bytes": 1048576,
+      "decoded_frames": 450,
+      "rgb_stream_sha256": "a56b16e2149432e5f7f1d288390301d64df812be19aad1ff22a216e9c028e46c"
+    }
+  ],
+  "started_utc": "2026-10-14T17:08:52.617493+00:00",
+  "ended_utc": "2026-10-14T17:09:17.881982+00:00",
+  "main_seconds": 25.264937300002202,
+  "main_peak_cpu_bytes": 1175064576,
+  "producer_pins": 126,
+  "replay_seconds": 37.954371500061825,
+  "replay_peak_cpu_bytes": 1229021184,
+  "replay_pins": 134,
+  "arrays_exact": 8,
+  "consumer_sha256": "132ebea7ce416f5de094106b61efab90764518a866ea8d3db4533562b698146b",
+  "hardware": "Intel Core i7-12700H, CPU only; RTX3080 Laptop idle",
+  "quality_measured": false,
+  "training_corpus_admission": "NOT_ADMITTED",
+  "common_clock": "UNVERIFIED",
+  "native_temporal_model": false,
+  "teacher_training": false,
+  "gpu_used": false,
+  "cloud_cost": 0,
+  "remaining_gates": [
+    "native task quality",
+    "audio/sensor representation and complementary decisions",
+    "synchronization",
+    "split identity/content integrity",
+    "full Omni task/OOD 95-98%",
+    "complete system residency and package budget"
+  ]
+}

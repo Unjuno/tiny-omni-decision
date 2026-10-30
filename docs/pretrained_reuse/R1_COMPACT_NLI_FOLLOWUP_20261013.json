@@ -1,0 +1,32 @@
+[
+  {
+    "repo": "prajjwal1/bert-mini-mnli",
+    "revision": "2793a188a2d6f995f9e6a5f73d9dd8b7a3a3aaa6",
+    "files": {
+      "README.md": "dc57d7bb068b5eddc655b91b19b5eb253503c0bbd1443eade0087d950ace16f4",
+      "config.json": "f1acb83bc18055d25028b1af74c26489c673b6ed2fb94fcad188cc56fde7cd21"
+    },
+    "checkpoint_downloaded": false,
+    "local_quality_measured": false
+  },
+  {
+    "repo": "M-FAC/bert-mini-finetuned-mnli",
+    "revision": "780061727f47254ff763de653920bb8b7e2fd5f2",
+    "files": {
+      "README.md": "9028e6c7778972ed8fdce74593f6a1fec9c043409f1a9805c475031fa04b1ffd",
+      "config.json": "5fd9642e6a065b014bb7b9cffafeaefb4faf5aac64d6f5850f44c9f5f77c868a"
+    },
+    "checkpoint_downloaded": false,
+    "local_quality_measured": false
+  },
+  {
+    "repo": "agentlans/TinyBERT_General_4L_312D-nli",
+    "revision": "a0387dbd317defbc66e06f16aa9c30d869f3350e",
+    "files": {
+      "README.md": "da0cd2748849f269358f7b5e185bdb385078d162bf1467a083fcb72e1b0065c2",
+      "config.json": "c03fdacd903d621f525edd74b866990d016d6a4df9a8d21f3da5b45742cb88cd"
+    },
+    "checkpoint_downloaded": false,
+    "local_quality_measured": false
+  }
+]

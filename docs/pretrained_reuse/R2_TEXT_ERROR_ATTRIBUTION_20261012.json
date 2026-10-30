@@ -1,0 +1,1437 @@
+{
+  "status": "PASS_DIAGNOSTIC_ONLY",
+  "checkpoint_step": 1664,
+  "corpus_sha256": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+  "predictions_sha256": "789e765af167d7945827eea2990090fb7108e3575a9c500f069c324c50d7da69",
+  "runner_sha256": "4f2c29b39fe8521852dc27951fea4e40f2319f747bf733499cd0939d6ffeaf25",
+  "groups": {
+    "all": {
+      "count": 2540,
+      "errors": 977,
+      "accuracy": 0.6153543307086614,
+      "nll": 0.885242684950839,
+      "brier": 0.4949984187544359,
+      "ece": 0.06748399716310614,
+      "ece_bins": 15
+    },
+    "type:choice": {
+      "count": 1008,
+      "errors": 416,
+      "accuracy": 0.5873015873015873,
+      "nll": 1.0429572463693302,
+      "brier": 0.5428508342438383,
+      "ece": 0.07912141507461903,
+      "ece_bins": 15
+    },
+    "domain:real estate listings": {
+      "count": 18,
+      "errors": 7,
+      "accuracy": 0.6111111111111112,
+      "nll": 0.6058202037149779,
+      "brier": 0.3557766881035493,
+      "ece": 0.22530823118156856,
+      "ece_bins": 15
+    },
+    "context:complete": {
+      "count": 2474,
+      "errors": 950,
+      "accuracy": 0.6160064672594988,
+      "nll": 0.8842469682258527,
+      "brier": 0.49450214710582185,
+      "ece": 0.0692717043762739,
+      "ece_bins": 15
+    },
+    "teacher:agrees": {
+      "count": 2538,
+      "errors": 977,
+      "accuracy": 0.6150512214342002,
+      "nll": 0.8857185640219214,
+      "brier": 0.4952540581572202,
+      "ece": 0.06771183758974075,
+      "ece_bins": 15
+    },
+    "teacher_gold:at_least_0.8": {
+      "count": 1405,
+      "errors": 400,
+      "accuracy": 0.7153024911032029,
+      "nll": 0.640585361842969,
+      "brier": 0.3816469315486714,
+      "ece": 0.03686689438556861,
+      "ece_bins": 15
+    },
+    "type:noul": {
+      "count": 987,
+      "errors": 268,
+      "accuracy": 0.7284701114488349,
+      "nll": 0.5319450430461425,
+      "brier": 0.3585937248957525,
+      "ece": 0.03953039827317815,
+      "ece_bins": 15
+    },
+    "type:score": {
+      "count": 545,
+      "errors": 293,
+      "accuracy": 0.46238532110091746,
+      "nll": 1.233368363207906,
+      "brier": 0.6535235527456327,
+      "ece": 0.1183857315997465,
+      "ece_bins": 15
+    },
+    "domain:student essay excerpts": {
+      "count": 15,
+      "errors": 7,
+      "accuracy": 0.5333333333333333,
+      "nll": 1.1078613206081898,
+      "brier": 0.5580456585162178,
+      "ece": 0.26698185404141744,
+      "ece_bins": 15
+    },
+    "domain:IoT sensor readings as JSON": {
+      "count": 10,
+      "errors": 3,
+      "accuracy": 0.7,
+      "nll": 0.9505896417149027,
+      "brier": 0.5111141337864479,
+      "ece": 0.12188041508197785,
+      "ece_bins": 15
+    },
+    "domain:HR policy questions": {
+      "count": 8,
+      "errors": 2,
+      "accuracy": 0.75,
+      "nll": 0.5921570003545986,
+      "brier": 0.3421840263086757,
+      "ece": 0.31258396804332733,
+      "ece_bins": 15
+    },
+    "domain:travel itineraries": {
+      "count": 5,
+      "errors": 1,
+      "accuracy": 0.8,
+      "nll": 0.5376029254768777,
+      "brier": 0.32337751360972417,
+      "ece": 0.29811915159225466,
+      "ece_bins": 15
+    },
+    "domain:API error responses": {
+      "count": 5,
+      "errors": 3,
+      "accuracy": 0.4,
+      "nll": 1.071463296498922,
+      "brier": 0.5978195271443025,
+      "ece": 0.43778382539749144,
+      "ece_bins": 15
+    },
+    "teacher_gold:below_0.8": {
+      "count": 1135,
+      "errors": 577,
+      "accuracy": 0.49162995594713654,
+      "nll": 1.1881004285337147,
+      "brier": 0.6353145769254479,
+      "ece": 0.12592618893421695,
+      "ece_bins": 15
+    },
+    "domain:legal contract clauses": {
+      "count": 19,
+      "errors": 6,
+      "accuracy": 0.6842105263157895,
+      "nll": 0.7700659341482288,
+      "brier": 0.44931967619418095,
+      "ece": 0.19080679197060435,
+      "ece_bins": 15
+    },
+    "domain:restaurant reviews": {
+      "count": 11,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.27185790209709254,
+      "brier": 0.12764959496663722,
+      "ece": 0.20923418348485773,
+      "ece_bins": 15
+    },
+    "domain:insurance claims": {
+      "count": 6,
+      "errors": 2,
+      "accuracy": 0.6666666666666666,
+      "nll": 1.3657100798028567,
+      "brier": 0.6939269081141303,
+      "ece": 0.49924803773562115,
+      "ece_bins": 15
+    },
+    "domain:translation pairs to be quality-rated": {
+      "count": 7,
+      "errors": 4,
+      "accuracy": 0.42857142857142855,
+      "nll": 1.0734397717848545,
+      "brier": 0.6501144465503556,
+      "ece": 0.41106939741543363,
+      "ece_bins": 15
+    },
+    "domain:e-commerce product reviews": {
+      "count": 12,
+      "errors": 3,
+      "accuracy": 0.75,
+      "nll": 0.6170916412977552,
+      "brier": 0.3135258462714488,
+      "ece": 0.11856131007273991,
+      "ece_bins": 15
+    },
+    "domain:hotel booking requests": {
+      "count": 14,
+      "errors": 4,
+      "accuracy": 0.7142857142857143,
+      "nll": 0.5623139627420091,
+      "brier": 0.3399821726503985,
+      "ece": 0.18707387149333954,
+      "ece_bins": 15
+    },
+    "domain:server and application logs": {
+      "count": 7,
+      "errors": 3,
+      "accuracy": 0.5714285714285714,
+      "nll": 0.9637427571559007,
+      "brier": 0.5804681515838224,
+      "ece": 0.24839711615017482,
+      "ece_bins": 15
+    },
+    "domain:academic paper abstracts": {
+      "count": 12,
+      "errors": 4,
+      "accuracy": 0.6666666666666666,
+      "nll": 0.57793042620114,
+      "brier": 0.3867951876209745,
+      "ece": 0.2911642591158549,
+      "ece_bins": 15
+    },
+    "domain:grant proposals": {
+      "count": 13,
+      "errors": 4,
+      "accuracy": 0.6923076923076923,
+      "nll": 0.5932163720534797,
+      "brier": 0.346257564439547,
+      "ece": 0.16098716167303231,
+      "ece_bins": 15
+    },
+    "domain:smart home voice commands": {
+      "count": 17,
+      "errors": 7,
+      "accuracy": 0.5882352941176471,
+      "nll": 1.1517798736511298,
+      "brier": 0.5598161702278626,
+      "ece": 0.39892282380777244,
+      "ece_bins": 15
+    },
+    "domain:shipping and logistics updates": {
+      "count": 4,
+      "errors": 2,
+      "accuracy": 0.5,
+      "nll": 0.958376694117534,
+      "brier": 0.5027145143620515,
+      "ece": 0.3774690255522728,
+      "ece_bins": 15
+    },
+    "domain:search queries with a candidate result": {
+      "count": 22,
+      "errors": 13,
+      "accuracy": 0.4090909090909091,
+      "nll": 1.154071359312846,
+      "brier": 0.6351586649280546,
+      "ece": 0.28839144246144727,
+      "ece_bins": 15
+    },
+    "domain:bug tracker issues": {
+      "count": 14,
+      "errors": 5,
+      "accuracy": 0.6428571428571429,
+      "nll": 0.7457887927097306,
+      "brier": 0.4531557629361655,
+      "ece": 0.30354026172842297,
+      "ece_bins": 15
+    },
+    "domain:app store feedback": {
+      "count": 10,
+      "errors": 4,
+      "accuracy": 0.6,
+      "nll": 0.8440371973756238,
+      "brier": 0.4661954606328925,
+      "ece": 0.3241916984319687,
+      "ece_bins": 15
+    },
+    "domain:citations paired with a quoted source": {
+      "count": 16,
+      "errors": 5,
+      "accuracy": 0.6875,
+      "nll": 0.7640623503552525,
+      "brier": 0.40150550127279094,
+      "ece": 0.2570212557911873,
+      "ece_bins": 15
+    },
+    "domain:product catalogue entries to be matched": {
+      "count": 4,
+      "errors": 2,
+      "accuracy": 0.5,
+      "nll": 0.8504664947377698,
+      "brier": 0.5396179627621609,
+      "ece": 0.3165498748421669,
+      "ece_bins": 15
+    },
+    "domain:survey free-text answers": {
+      "count": 6,
+      "errors": 2,
+      "accuracy": 0.6666666666666666,
+      "nll": 1.1538593186233679,
+      "brier": 0.5471010886509412,
+      "ece": 0.39324745039145154,
+      "ece_bins": 15
+    },
+    "domain:game chat messages": {
+      "count": 16,
+      "errors": 6,
+      "accuracy": 0.625,
+      "nll": 1.0454381356291718,
+      "brier": 0.5433133135248808,
+      "ece": 0.252560643479228,
+      "ece_bins": 15
+    },
+    "domain:podcast episode descriptions": {
+      "count": 9,
+      "errors": 5,
+      "accuracy": 0.4444444444444444,
+      "nll": 0.9394784214718889,
+      "brier": 0.618038608063656,
+      "ece": 0.4640699558787876,
+      "ece_bins": 15
+    },
+    "domain:commit messages with diffs": {
+      "count": 19,
+      "errors": 7,
+      "accuracy": 0.631578947368421,
+      "nll": 0.7929139016850935,
+      "brier": 0.45311772029664416,
+      "ece": 0.25827901457485397,
+      "ece_bins": 15
+    },
+    "domain:supply chain purchase orders as JSON": {
+      "count": 15,
+      "errors": 4,
+      "accuracy": 0.7333333333333333,
+      "nll": 0.5348140079816631,
+      "brier": 0.296863094815768,
+      "ece": 0.20381661852200825,
+      "ece_bins": 15
+    },
+    "domain:accessibility audit findings": {
+      "count": 39,
+      "errors": 18,
+      "accuracy": 0.5384615384615384,
+      "nll": 1.1187472501812106,
+      "brier": 0.6308821748493418,
+      "ece": 0.21736315886179605,
+      "ece_bins": 15
+    },
+    "domain:code snippets with a bug report": {
+      "count": 25,
+      "errors": 10,
+      "accuracy": 0.6,
+      "nll": 0.8111796950009226,
+      "brier": 0.5032363595925422,
+      "ece": 0.22196901440620423,
+      "ece_bins": 15
+    },
+    "domain:pull request descriptions": {
+      "count": 19,
+      "errors": 10,
+      "accuracy": 0.47368421052631576,
+      "nll": 1.1099370495060015,
+      "brier": 0.6325007465541848,
+      "ece": 0.3588517512145795,
+      "ece_bins": 15
+    },
+    "domain:bank transaction disputes": {
+      "count": 4,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.4994582023372565,
+      "brier": 0.2679443002232613,
+      "ece": 0.387003630399704,
+      "ece_bins": 15
+    },
+    "domain:government form submissions": {
+      "count": 2,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.23287651672978613,
+      "brier": 0.10426781722287098,
+      "ece": 0.18715357780456543,
+      "ece_bins": 15
+    },
+    "domain:chatbot replies to be quality-checked": {
+      "count": 4,
+      "errors": 2,
+      "accuracy": 0.5,
+      "nll": 0.8707228668668796,
+      "brier": 0.45743074499539627,
+      "ece": 0.3573255091905594,
+      "ece_bins": 15
+    },
+    "domain:financial news snippets": {
+      "count": 4,
+      "errors": 1,
+      "accuracy": 0.75,
+      "nll": 0.4044180247409641,
+      "brier": 0.26584062484058985,
+      "ece": 0.22493880987167358,
+      "ece_bins": 15
+    },
+    "domain:user prompts to be screened for jailbreaks": {
+      "count": 5,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.285767122727357,
+      "brier": 0.15007435932374094,
+      "ece": 0.22728780508041382,
+      "ece_bins": 15
+    },
+    "domain:forum posts asking for help": {
+      "count": 8,
+      "errors": 2,
+      "accuracy": 0.75,
+      "nll": 0.4967837161904355,
+      "brier": 0.305118604844011,
+      "ece": 0.12403901666402817,
+      "ece_bins": 15
+    },
+    "domain:medical appointment requests (fictional)": {
+      "count": 14,
+      "errors": 3,
+      "accuracy": 0.7857142857142857,
+      "nll": 0.6852144089361166,
+      "brier": 0.42037430483666166,
+      "ece": 0.3637132836239679,
+      "ece_bins": 15
+    },
+    "domain:SQL queries with a stated intent": {
+      "count": 7,
+      "errors": 2,
+      "accuracy": 0.7142857142857143,
+      "nll": 0.7391554960835414,
+      "brier": 0.45600913647507213,
+      "ece": 0.18639747159821646,
+      "ece_bins": 15
+    },
+    "domain:sales call notes": {
+      "count": 3,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.22255639852532902,
+      "brier": 0.11136298664108486,
+      "ece": 0.16559030612309775,
+      "ece_bins": 15
+    },
+    "domain:CRM lead records as JSON": {
+      "count": 9,
+      "errors": 1,
+      "accuracy": 0.8888888888888888,
+      "nll": 0.36202341051043135,
+      "brier": 0.19861951258051982,
+      "ece": 0.26438575983047485,
+      "ece_bins": 15
+    },
+    "domain:clinical triage notes (fictional)": {
+      "count": 7,
+      "errors": 2,
+      "accuracy": 0.7142857142857143,
+      "nll": 0.6520933388946064,
+      "brier": 0.35838702741206,
+      "ece": 0.2393613202231271,
+      "ece_bins": 15
+    },
+    "domain:earnings call excerpts": {
+      "count": 12,
+      "errors": 5,
+      "accuracy": 0.5833333333333334,
+      "nll": 1.1025995176885408,
+      "brier": 0.6103430667629696,
+      "ece": 0.24392297863960266,
+      "ece_bins": 15
+    },
+    "domain:job applications and resumes": {
+      "count": 4,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.36042298210380463,
+      "brier": 0.14510712467147266,
+      "ece": 0.29470308125019073,
+      "ece_bins": 15
+    },
+    "domain:content moderation queue items": {
+      "count": 2,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.07777692986408902,
+      "brier": 0.012085861519781027,
+      "ece": 0.07456851005554199,
+      "ece_bins": 15
+    },
+    "domain:social media posts": {
+      "count": 10,
+      "errors": 2,
+      "accuracy": 0.8,
+      "nll": 0.5347553285775131,
+      "brier": 0.2894668118756769,
+      "ece": 0.27205850183963776,
+      "ece_bins": 15
+    },
+    "domain:meeting transcripts": {
+      "count": 4,
+      "errors": 3,
+      "accuracy": 0.25,
+      "nll": 1.311171283117171,
+      "brier": 0.6706446737389591,
+      "ece": 0.34059855341911316,
+      "ece_bins": 15
+    },
+    "domain:recipe and nutrition entries": {
+      "count": 6,
+      "errors": 2,
+      "accuracy": 0.6666666666666666,
+      "nll": 0.7633193703213038,
+      "brier": 0.493138993532662,
+      "ece": 0.43361376722653705,
+      "ece_bins": 15
+    },
+    "domain:RAG passages paired with a user question": {
+      "count": 4,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.40818272438126113,
+      "brier": 0.2150551115370907,
+      "ece": 0.28656666725873947,
+      "ece_bins": 15
+    },
+    "domain:news headlines with a lede": {
+      "count": 8,
+      "errors": 3,
+      "accuracy": 0.625,
+      "nll": 0.3365481330376199,
+      "brier": 0.24250373791961827,
+      "ece": 0.23026590049266815,
+      "ece_bins": 15
+    },
+    "context:truncated": {
+      "count": 66,
+      "errors": 27,
+      "accuracy": 0.5909090909090909,
+      "nll": 0.9225669755208041,
+      "brier": 0.5136010863100489,
+      "ece": 0.11071447373339624,
+      "ece_bins": 15
+    },
+    "domain:sales lead qualification": {
+      "count": 35,
+      "errors": 12,
+      "accuracy": 0.6571428571428571,
+      "nll": 0.7992816395540759,
+      "brier": 0.42919986232054874,
+      "ece": 0.21880752614566257,
+      "ece_bins": 15
+    },
+    "domain:app store review triage for a product team": {
+      "count": 25,
+      "errors": 12,
+      "accuracy": 0.52,
+      "nll": 0.9609792248376832,
+      "brier": 0.5498409742192674,
+      "ece": 0.20662574529647826,
+      "ece_bins": 15
+    },
+    "domain:content moderation queue for a video platform": {
+      "count": 26,
+      "errors": 12,
+      "accuracy": 0.5384615384615384,
+      "nll": 0.8947044771774468,
+      "brier": 0.5211124777943867,
+      "ece": 0.2459362235206824,
+      "ece_bins": 15
+    },
+    "domain:HR leave and accommodation requests": {
+      "count": 46,
+      "errors": 9,
+      "accuracy": 0.8043478260869565,
+      "nll": 0.6024190469788931,
+      "brier": 0.29708182580630343,
+      "ece": 0.10737565030222354,
+      "ece_bins": 15
+    },
+    "domain:smart home automation requests": {
+      "count": 22,
+      "errors": 10,
+      "accuracy": 0.5454545454545454,
+      "nll": 0.9851145047736979,
+      "brier": 0.5384773172302718,
+      "ece": 0.24094172905791889,
+      "ece_bins": 15
+    },
+    "domain:medical coding of visit notes (fictional)": {
+      "count": 10,
+      "errors": 4,
+      "accuracy": 0.6,
+      "nll": 1.2528160052157336,
+      "brier": 0.6234380941665653,
+      "ece": 0.2265881657600403,
+      "ece_bins": 15
+    },
+    "domain:code review triage": {
+      "count": 16,
+      "errors": 8,
+      "accuracy": 0.5,
+      "nll": 1.1106187952086093,
+      "brier": 0.6134497049281037,
+      "ece": 0.3488388452678919,
+      "ece_bins": 15
+    },
+    "domain:hotel guest complaint handling": {
+      "count": 28,
+      "errors": 14,
+      "accuracy": 0.5,
+      "nll": 0.9906328529689673,
+      "brier": 0.5918699447563291,
+      "ece": 0.20148367328303202,
+      "ece_bins": 15
+    },
+    "domain:RAG passage grading against a user question": {
+      "count": 8,
+      "errors": 4,
+      "accuracy": 0.5,
+      "nll": 0.9378247615643666,
+      "brier": 0.5481132694755997,
+      "ece": 0.28469591587781906,
+      "ece_bins": 15
+    },
+    "domain:payment fraud screening of card transactions": {
+      "count": 46,
+      "errors": 24,
+      "accuracy": 0.4782608695652174,
+      "nll": 1.0998078309960106,
+      "brier": 0.5920055582173841,
+      "ece": 0.19897279596847037,
+      "ece_bins": 15
+    },
+    "domain:search result relevance judgement": {
+      "count": 24,
+      "errors": 7,
+      "accuracy": 0.7083333333333334,
+      "nll": 0.8653391706615254,
+      "brier": 0.4573586876722293,
+      "ece": 0.1943880288551251,
+      "ece_bins": 15
+    },
+    "domain:LLM output guardrail screening": {
+      "count": 32,
+      "errors": 15,
+      "accuracy": 0.53125,
+      "nll": 0.9594799305097897,
+      "brier": 0.5875834454786784,
+      "ece": 0.17174487188458443,
+      "ece_bins": 15
+    },
+    "domain:translation quality review": {
+      "count": 21,
+      "errors": 9,
+      "accuracy": 0.5714285714285714,
+      "nll": 1.0655697396065134,
+      "brier": 0.5745969335281104,
+      "ece": 0.24457247626213802,
+      "ece_bins": 15
+    },
+    "domain:voice assistant intent resolution": {
+      "count": 23,
+      "errors": 7,
+      "accuracy": 0.6956521739130435,
+      "nll": 1.245996168507705,
+      "brier": 0.5574750522806523,
+      "ece": 0.3261427775673244,
+      "ece_bins": 15
+    },
+    "domain:manufacturing quality-control reports": {
+      "count": 22,
+      "errors": 4,
+      "accuracy": 0.8181818181818182,
+      "nll": 0.49752889580887294,
+      "brier": 0.2849216799258493,
+      "ece": 0.2203448401256041,
+      "ece_bins": 15
+    },
+    "domain:calendar scheduling conflict resolution": {
+      "count": 29,
+      "errors": 14,
+      "accuracy": 0.5172413793103449,
+      "nll": 0.9217152865590891,
+      "brier": 0.535019566024342,
+      "ece": 0.18417748500560893,
+      "ece_bins": 15
+    },
+    "domain:industrial IoT sensor anomalies": {
+      "count": 40,
+      "errors": 15,
+      "accuracy": 0.625,
+      "nll": 0.8585974746992162,
+      "brier": 0.4649566833737164,
+      "ece": 0.13472298085689544,
+      "ece_bins": 15
+    },
+    "domain:school absence and parent notes": {
+      "count": 14,
+      "errors": 8,
+      "accuracy": 0.42857142857142855,
+      "nll": 1.1939741364332188,
+      "brier": 0.6375039757055795,
+      "ece": 0.2262395535196577,
+      "ece_bins": 15
+    },
+    "domain:open-ended survey response coding": {
+      "count": 23,
+      "errors": 13,
+      "accuracy": 0.43478260869565216,
+      "nll": 1.2076779912775462,
+      "brier": 0.7044234807074945,
+      "ece": 0.2702750459961269,
+      "ece_bins": 15
+    },
+    "domain:multiplayer game chat moderation": {
+      "count": 21,
+      "errors": 9,
+      "accuracy": 0.5714285714285714,
+      "nll": 1.1354803428237588,
+      "brier": 0.5921537627215403,
+      "ece": 0.22188241992677962,
+      "ece_bins": 15
+    },
+    "domain:personal inbox email triage": {
+      "count": 9,
+      "errors": 5,
+      "accuracy": 0.4444444444444444,
+      "nll": 1.634524406977506,
+      "brier": 0.7880573712550735,
+      "ece": 0.3341355555587345,
+      "ece_bins": 15
+    },
+    "domain:customer record deduplication": {
+      "count": 31,
+      "errors": 8,
+      "accuracy": 0.7419354838709677,
+      "nll": 0.7089173528898624,
+      "brier": 0.3789419994767721,
+      "ece": 0.18702241105418052,
+      "ece_bins": 15
+    },
+    "domain:news desk story routing": {
+      "count": 17,
+      "errors": 7,
+      "accuracy": 0.5882352941176471,
+      "nll": 0.6580530210133527,
+      "brier": 0.3694613888329634,
+      "ece": 0.24981921385316289,
+      "ece_bins": 15
+    },
+    "domain:anti-cheat player reports": {
+      "count": 23,
+      "errors": 10,
+      "accuracy": 0.5652173913043478,
+      "nll": 1.0486740072510137,
+      "brier": 0.5546877713182112,
+      "ece": 0.181852576525315,
+      "ece_bins": 15
+    },
+    "domain:fleet maintenance scheduling": {
+      "count": 24,
+      "errors": 11,
+      "accuracy": 0.5416666666666666,
+      "nll": 1.0608217236833801,
+      "brier": 0.6044931681835247,
+      "ece": 0.28040820856889087,
+      "ece_bins": 15
+    },
+    "domain:lab sample quality control": {
+      "count": 12,
+      "errors": 6,
+      "accuracy": 0.5,
+      "nll": 0.9642545038527315,
+      "brier": 0.5825698269427871,
+      "ece": 0.3170512070258458,
+      "ece_bins": 15
+    },
+    "domain:public benefits eligibility review": {
+      "count": 26,
+      "errors": 10,
+      "accuracy": 0.6153846153846154,
+      "nll": 0.9013628303749834,
+      "brier": 0.5572614722118419,
+      "ece": 0.21495760174898002,
+      "ece_bins": 15
+    },
+    "domain:tutoring session feedback": {
+      "count": 22,
+      "errors": 11,
+      "accuracy": 0.5,
+      "nll": 0.9959849489465092,
+      "brier": 0.5857388076882887,
+      "ece": 0.25667376816272736,
+      "ece_bins": 15
+    },
+    "domain:customs declaration review": {
+      "count": 22,
+      "errors": 7,
+      "accuracy": 0.6818181818181818,
+      "nll": 0.6186504861667929,
+      "brier": 0.3914755271949216,
+      "ece": 0.2645792202516036,
+      "ece_bins": 15
+    },
+    "domain:event ticket resale fraud checks": {
+      "count": 17,
+      "errors": 4,
+      "accuracy": 0.7647058823529411,
+      "nll": 0.8601587813105165,
+      "brier": 0.4609469373881032,
+      "ece": 0.3611584971932804,
+      "ece_bins": 15
+    },
+    "domain:building permit review": {
+      "count": 19,
+      "errors": 8,
+      "accuracy": 0.5789473684210527,
+      "nll": 1.0662299480944293,
+      "brier": 0.5496066290623677,
+      "ece": 0.294816183416467,
+      "ece_bins": 15
+    },
+    "domain:clinical trial eligibility screening (fictional)": {
+      "count": 21,
+      "errors": 13,
+      "accuracy": 0.38095238095238093,
+      "nll": 1.456018866916912,
+      "brier": 0.8405017419300383,
+      "ece": 0.3720337762719109,
+      "ece_bins": 15
+    },
+    "domain:mortgage document checklist review": {
+      "count": 11,
+      "errors": 4,
+      "accuracy": 0.6363636363636364,
+      "nll": 0.8144798301404523,
+      "brier": 0.4601667837866829,
+      "ece": 0.19217742031270807,
+      "ece_bins": 15
+    },
+    "domain:patent prior-art relevance": {
+      "count": 13,
+      "errors": 10,
+      "accuracy": 0.23076923076923078,
+      "nll": 1.563007708813064,
+      "brier": 0.8871856976191551,
+      "ece": 0.44283872613540065,
+      "ece_bins": 15
+    },
+    "domain:dataset labelling quality review": {
+      "count": 18,
+      "errors": 5,
+      "accuracy": 0.7222222222222222,
+      "nll": 0.6870843626895888,
+      "brier": 0.4207972312278174,
+      "ece": 0.19478731685214573,
+      "ece_bins": 15
+    },
+    "domain:tax document classification": {
+      "count": 19,
+      "errors": 6,
+      "accuracy": 0.6842105263157895,
+      "nll": 0.627624457078628,
+      "brier": 0.40871216994622583,
+      "ece": 0.18835172841423437,
+      "ece_bins": 15
+    },
+    "domain:bank wire transfer AML review": {
+      "count": 15,
+      "errors": 5,
+      "accuracy": 0.6666666666666666,
+      "nll": 0.8440320845000893,
+      "brier": 0.4347024978225435,
+      "ece": 0.20726466476917266,
+      "ece_bins": 15
+    },
+    "domain:court filing classification": {
+      "count": 38,
+      "errors": 12,
+      "accuracy": 0.6842105263157895,
+      "nll": 0.6722132202049002,
+      "brier": 0.39248389953835766,
+      "ece": 0.11776988835711229,
+      "ece_bins": 15
+    },
+    "domain:library cataloguing": {
+      "count": 18,
+      "errors": 7,
+      "accuracy": 0.6111111111111112,
+      "nll": 0.7966726889610388,
+      "brier": 0.49050224277367316,
+      "ece": 0.2846487793657515,
+      "ece_bins": 15
+    },
+    "domain:clinical triage intake notes (fictional)": {
+      "count": 24,
+      "errors": 9,
+      "accuracy": 0.625,
+      "nll": 0.7713786342270943,
+      "brier": 0.42211154217448504,
+      "ece": 0.1486534277598063,
+      "ece_bins": 15
+    },
+    "domain:genealogy record matching": {
+      "count": 14,
+      "errors": 5,
+      "accuracy": 0.6428571428571429,
+      "nll": 1.1969896950186343,
+      "brier": 0.5998959323617434,
+      "ece": 0.357992878981999,
+      "ece_bins": 15
+    },
+    "domain:shipment exception handling": {
+      "count": 16,
+      "errors": 5,
+      "accuracy": 0.6875,
+      "nll": 0.6119112498453176,
+      "brier": 0.329516221795695,
+      "ece": 0.21623443812131882,
+      "ece_bins": 15
+    },
+    "domain:resume screening for a job opening": {
+      "count": 20,
+      "errors": 11,
+      "accuracy": 0.45,
+      "nll": 1.095895030181169,
+      "brier": 0.6363438797684917,
+      "ece": 0.3450247675180435,
+      "ece_bins": 15
+    },
+    "domain:DevOps change-approval requests": {
+      "count": 21,
+      "errors": 9,
+      "accuracy": 0.5714285714285714,
+      "nll": 1.0291712836207385,
+      "brier": 0.6174152196918752,
+      "ece": 0.24710750579833984,
+      "ece_bins": 15
+    },
+    "domain:ML model monitoring alerts": {
+      "count": 33,
+      "errors": 11,
+      "accuracy": 0.6666666666666666,
+      "nll": 0.9109489697548945,
+      "brier": 0.476874796111118,
+      "ece": 0.24805269638697305,
+      "ece_bins": 15
+    },
+    "domain:pharmacy refill requests (fictional)": {
+      "count": 22,
+      "errors": 10,
+      "accuracy": 0.5454545454545454,
+      "nll": 0.7969598266542749,
+      "brier": 0.48161536658142556,
+      "ece": 0.19687780196016486,
+      "ece_bins": 15
+    },
+    "domain:site reliability outage postmortems": {
+      "count": 20,
+      "errors": 3,
+      "accuracy": 0.85,
+      "nll": 0.5235689829269388,
+      "brier": 0.28425148479800766,
+      "ece": 0.19899654984474183,
+      "ece_bins": 15
+    },
+    "domain:loan underwriting files": {
+      "count": 11,
+      "errors": 5,
+      "accuracy": 0.5454545454545454,
+      "nll": 1.1714908286350616,
+      "brier": 0.6356317093079119,
+      "ece": 0.17300027879801663,
+      "ece_bins": 15
+    },
+    "domain:advertising policy review": {
+      "count": 20,
+      "errors": 12,
+      "accuracy": 0.4,
+      "nll": 1.1911546384871623,
+      "brier": 0.7141098271104668,
+      "ece": 0.29845492988824845,
+      "ece_bins": 15
+    },
+    "domain:real estate listing quality checks": {
+      "count": 27,
+      "errors": 6,
+      "accuracy": 0.7777777777777778,
+      "nll": 0.6912738287819693,
+      "brier": 0.4004063335111879,
+      "ece": 0.2306405504544576,
+      "ece_bins": 15
+    },
+    "domain:citation verification against a source excerpt": {
+      "count": 14,
+      "errors": 5,
+      "accuracy": 0.6428571428571429,
+      "nll": 0.8132170667216994,
+      "brier": 0.44096490987475534,
+      "ece": 0.316612252167293,
+      "ece_bins": 15
+    },
+    "domain:city 311 service requests": {
+      "count": 12,
+      "errors": 5,
+      "accuracy": 0.5833333333333334,
+      "nll": 0.6537728395698172,
+      "brier": 0.3967924916034799,
+      "ece": 0.2631035049756368,
+      "ece_bins": 15
+    },
+    "domain:restaurant health inspection notes": {
+      "count": 27,
+      "errors": 10,
+      "accuracy": 0.6296296296296297,
+      "nll": 0.9963469384387795,
+      "brier": 0.5409521956029709,
+      "ece": 0.23656882180107963,
+      "ece_bins": 15
+    },
+    "domain:podcast and video categorisation": {
+      "count": 14,
+      "errors": 5,
+      "accuracy": 0.6428571428571429,
+      "nll": 0.6282849167708624,
+      "brier": 0.3884730993924585,
+      "ece": 0.30521143334252493,
+      "ece_bins": 15
+    },
+    "domain:meeting notes action-item extraction": {
+      "count": 28,
+      "errors": 10,
+      "accuracy": 0.6428571428571429,
+      "nll": 0.7563070111012823,
+      "brier": 0.44857268828128877,
+      "ece": 0.15414469582693918,
+      "ece_bins": 15
+    },
+    "domain:sports scouting notes": {
+      "count": 26,
+      "errors": 13,
+      "accuracy": 0.5,
+      "nll": 1.1670769880766425,
+      "brier": 0.6355746457050108,
+      "ece": 0.21055100743587202,
+      "ece_bins": 15
+    },
+    "domain:freight damage claims": {
+      "count": 27,
+      "errors": 14,
+      "accuracy": 0.48148148148148145,
+      "nll": 0.956921162766239,
+      "brier": 0.5669533052471382,
+      "ece": 0.22305692346007736,
+      "ece_bins": 15
+    },
+    "domain:fact-check request triage": {
+      "count": 17,
+      "errors": 9,
+      "accuracy": 0.47058823529411764,
+      "nll": 1.2437408774747585,
+      "brier": 0.6763719887941381,
+      "ece": 0.3316809447372661,
+      "ece_bins": 15
+    },
+    "domain:legal intake for a law firm": {
+      "count": 14,
+      "errors": 4,
+      "accuracy": 0.7142857142857143,
+      "nll": 0.66949126621907,
+      "brier": 0.35324328163976254,
+      "ece": 0.20433914235660008,
+      "ece_bins": 15
+    },
+    "domain:construction site safety reports": {
+      "count": 19,
+      "errors": 9,
+      "accuracy": 0.5263157894736842,
+      "nll": 0.7351401394249019,
+      "brier": 0.4222079709536939,
+      "ece": 0.2461149723906266,
+      "ece_bins": 15
+    },
+    "domain:dating profile moderation": {
+      "count": 28,
+      "errors": 15,
+      "accuracy": 0.4642857142857143,
+      "nll": 0.8403120202402786,
+      "brier": 0.5383048258290213,
+      "ece": 0.23317644000053406,
+      "ece_bins": 15
+    },
+    "domain:museum collection records": {
+      "count": 31,
+      "errors": 11,
+      "accuracy": 0.6451612903225806,
+      "nll": 0.7267782048129523,
+      "brier": 0.4196908149584147,
+      "ece": 0.20190228185346049,
+      "ece_bins": 15
+    },
+    "domain:startup pitch screening for investors": {
+      "count": 17,
+      "errors": 10,
+      "accuracy": 0.4117647058823529,
+      "nll": 0.9236083691964134,
+      "brier": 0.5743761068462204,
+      "ece": 0.22923074750339284,
+      "ece_bins": 15
+    },
+    "domain:KYC identity document review": {
+      "count": 15,
+      "errors": 3,
+      "accuracy": 0.8,
+      "nll": 0.6230896632877116,
+      "brier": 0.3520614922555465,
+      "ece": 0.3608632206916809,
+      "ece_bins": 15
+    },
+    "domain:insurance claim triage": {
+      "count": 24,
+      "errors": 8,
+      "accuracy": 0.6666666666666666,
+      "nll": 0.9191943950130318,
+      "brier": 0.4668355436982807,
+      "ece": 0.1142072690029939,
+      "ece_bins": 15
+    },
+    "domain:CI pipeline failure triage": {
+      "count": 37,
+      "errors": 15,
+      "accuracy": 0.5945945945945946,
+      "nll": 0.9162560777195526,
+      "brier": 0.5233566632889863,
+      "ece": 0.20397892997071548,
+      "ece_bins": 15
+    },
+    "domain:data pipeline freshness alerts": {
+      "count": 15,
+      "errors": 9,
+      "accuracy": 0.4,
+      "nll": 1.3543225986423493,
+      "brier": 0.6922009121151179,
+      "ece": 0.30077618757883706,
+      "ece_bins": 15
+    },
+    "domain:employee expense report audit": {
+      "count": 20,
+      "errors": 9,
+      "accuracy": 0.55,
+      "nll": 1.0426603970561477,
+      "brier": 0.5896752689325904,
+      "ece": 0.29444218426942825,
+      "ece_bins": 15
+    },
+    "domain:research grant proposal review": {
+      "count": 23,
+      "errors": 7,
+      "accuracy": 0.6956521739130435,
+      "nll": 0.8151542134918925,
+      "brier": 0.45285667287388814,
+      "ece": 0.19593364389046378,
+      "ece_bins": 15
+    },
+    "teacher:disagrees": {
+      "count": 2,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.28135214374704265,
+      "brier": 0.1705920166212498,
+      "ece": 0.2216455042362213,
+      "ece_bins": 15
+    },
+    "domain:contract clause risk review": {
+      "count": 18,
+      "errors": 7,
+      "accuracy": 0.6111111111111112,
+      "nll": 1.0856445449508394,
+      "brier": 0.5713937341953369,
+      "ece": 0.35878072844611275,
+      "ece_bins": 15
+    },
+    "domain:power grid alarm prioritisation": {
+      "count": 19,
+      "errors": 8,
+      "accuracy": 0.5789473684210527,
+      "nll": 1.1676043175210151,
+      "brier": 0.5707858157560268,
+      "ece": 0.23449876277070297,
+      "ece_bins": 15
+    },
+    "domain:tenant maintenance requests": {
+      "count": 12,
+      "errors": 1,
+      "accuracy": 0.9166666666666666,
+      "nll": 0.43426699286702647,
+      "brier": 0.21301351495123555,
+      "ece": 0.2826361854871114,
+      "ece_bins": 15
+    },
+    "domain:prompt-injection screening of retrieved documents": {
+      "count": 25,
+      "errors": 9,
+      "accuracy": 0.64,
+      "nll": 0.723413371674538,
+      "brier": 0.3896527710197399,
+      "ece": 0.20296378970146178,
+      "ece_bins": 15
+    },
+    "domain:farm sensor and crop scouting reports": {
+      "count": 34,
+      "errors": 14,
+      "accuracy": 0.5882352941176471,
+      "nll": 0.8927707505322181,
+      "brier": 0.5142207818092773,
+      "ece": 0.2194855940692565,
+      "ece_bins": 15
+    },
+    "domain:procurement vendor vetting": {
+      "count": 10,
+      "errors": 5,
+      "accuracy": 0.5,
+      "nll": 1.0055523181325952,
+      "brier": 0.5857661397211451,
+      "ece": 0.33613438010215757,
+      "ece_bins": 15
+    },
+    "domain:aviation maintenance log entries": {
+      "count": 3,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.4921307076227486,
+      "brier": 0.24831655906148423,
+      "ece": 0.3700658480326335,
+      "ece_bins": 15
+    },
+    "domain:charity aid request vetting": {
+      "count": 9,
+      "errors": 1,
+      "accuracy": 0.8888888888888888,
+      "nll": 0.4942861658210377,
+      "brier": 0.2875417771740075,
+      "ece": 0.3670181367132399,
+      "ece_bins": 15
+    },
+    "domain:marketplace listing moderation": {
+      "count": 15,
+      "errors": 3,
+      "accuracy": 0.8,
+      "nll": 0.6739132159621902,
+      "brier": 0.3613608841680039,
+      "ece": 0.22362335125605265,
+      "ece_bins": 15
+    },
+    "domain:fitness coaching check-ins": {
+      "count": 32,
+      "errors": 10,
+      "accuracy": 0.6875,
+      "nll": 0.9633948562908969,
+      "brier": 0.536442080954506,
+      "ece": 0.23480791877955198,
+      "ece_bins": 15
+    },
+    "domain:weather alert prioritisation": {
+      "count": 19,
+      "errors": 8,
+      "accuracy": 0.5789473684210527,
+      "nll": 0.9142074872476297,
+      "brier": 0.5446727858378978,
+      "ece": 0.3219205595945057,
+      "ece_bins": 15
+    },
+    "domain:e-discovery document relevance": {
+      "count": 21,
+      "errors": 15,
+      "accuracy": 0.2857142857142857,
+      "nll": 1.487352407709127,
+      "brier": 0.8826760701473721,
+      "ece": 0.4100328598703657,
+      "ece_bins": 15
+    },
+    "domain:traffic violation appeal review": {
+      "count": 16,
+      "errors": 8,
+      "accuracy": 0.5,
+      "nll": 1.0643058762807014,
+      "brier": 0.6130000873628553,
+      "ece": 0.22050729021430016,
+      "ece_bins": 15
+    },
+    "domain:warehouse inventory discrepancy reports": {
+      "count": 33,
+      "errors": 9,
+      "accuracy": 0.7272727272727273,
+      "nll": 0.8487166827283472,
+      "brier": 0.4303242067900174,
+      "ece": 0.24264362273794232,
+      "ece_bins": 15
+    },
+    "domain:data-quality checks on table rows": {
+      "count": 21,
+      "errors": 7,
+      "accuracy": 0.6666666666666666,
+      "nll": 0.8865653625141009,
+      "brier": 0.4744208720498686,
+      "ece": 0.29550754669166746,
+      "ece_bins": 15
+    },
+    "domain:chatbot reply quality assurance": {
+      "count": 24,
+      "errors": 4,
+      "accuracy": 0.8333333333333334,
+      "nll": 0.6026396949108517,
+      "brier": 0.32808012688253885,
+      "ece": 0.15000897273421288,
+      "ece_bins": 15
+    },
+    "domain:SQL query review against a stated intent": {
+      "count": 27,
+      "errors": 8,
+      "accuracy": 0.7037037037037037,
+      "nll": 0.7316530103109649,
+      "brier": 0.4397234799110695,
+      "ece": 0.20812505814764234,
+      "ece_bins": 15
+    },
+    "domain:product catalogue entity matching": {
+      "count": 22,
+      "errors": 11,
+      "accuracy": 0.5,
+      "nll": 0.9902491461441617,
+      "brier": 0.513602715001764,
+      "ece": 0.22162849659269507,
+      "ece_bins": 15
+    },
+    "domain:product recall notice handling": {
+      "count": 18,
+      "errors": 5,
+      "accuracy": 0.7222222222222222,
+      "nll": 0.6094555976470227,
+      "brier": 0.3721714971854715,
+      "ece": 0.2217625172601806,
+      "ece_bins": 15
+    },
+    "domain:veterinary triage calls": {
+      "count": 17,
+      "errors": 7,
+      "accuracy": 0.5882352941176471,
+      "nll": 1.0437785908891133,
+      "brier": 0.5797127098495147,
+      "ece": 0.34769713528016033,
+      "ece_bins": 15
+    },
+    "domain:academic integrity case review": {
+      "count": 26,
+      "errors": 8,
+      "accuracy": 0.6923076923076923,
+      "nll": 0.7756492781395412,
+      "brier": 0.4500783640978063,
+      "ece": 0.20683157902497512,
+      "ece_bins": 15
+    },
+    "domain:brand-safety review of social posts": {
+      "count": 17,
+      "errors": 5,
+      "accuracy": 0.7058823529411765,
+      "nll": 0.6946578176800199,
+      "brier": 0.36767369447618264,
+      "ece": 0.22246868645443635,
+      "ece_bins": 15
+    },
+    "domain:returns / RMA approval": {
+      "count": 13,
+      "errors": 5,
+      "accuracy": 0.6153846153846154,
+      "nll": 1.0398964084967963,
+      "brier": 0.5847526019968083,
+      "ece": 0.37569613410876346,
+      "ece_bins": 15
+    },
+    "domain:airline disruption rebooking": {
+      "count": 10,
+      "errors": 0,
+      "accuracy": 1.0,
+      "nll": 0.4211685411770697,
+      "brier": 0.2100098425412324,
+      "ece": 0.2979012817144394,
+      "ece_bins": 15
+    },
+    "domain:vehicle telematics alerts": {
+      "count": 9,
+      "errors": 4,
+      "accuracy": 0.5555555555555556,
+      "nll": 1.1295906002444065,
+      "brier": 0.5639823830743091,
+      "ece": 0.3506905568970574,
+      "ece_bins": 15
+    },
+    "domain:influencer partnership vetting": {
+      "count": 12,
+      "errors": 6,
+      "accuracy": 0.5,
+      "nll": 1.0988537401374223,
+      "brier": 0.6182681187627503,
+      "ece": 0.2207511787613233,
+      "ece_bins": 15
+    },
+    "domain:disaster relief request triage": {
+      "count": 4,
+      "errors": 3,
+      "accuracy": 0.25,
+      "nll": 1.0941143748406397,
+      "brier": 0.6967227613511212,
+      "ece": 0.438477523624897,
+      "ece_bins": 15
+    },
+    "domain:A/B test readout interpretation": {
+      "count": 6,
+      "errors": 4,
+      "accuracy": 0.3333333333333333,
+      "nll": 1.0187119213425933,
+      "brier": 0.5764476454087003,
+      "ece": 0.3812609612941742,
+      "ece_bins": 15
+    },
+    "domain:feature-flag rollout decisions": {
+      "count": 12,
+      "errors": 5,
+      "accuracy": 0.5833333333333334,
+      "nll": 1.0709964161904884,
+      "brier": 0.5847453988709596,
+      "ece": 0.3223776047428449,
+      "ece_bins": 15
+    }
+  },
+  "teacher_reference": {
+    "count": 2540,
+    "errors": 2,
+    "accuracy": 0.9992125984251968,
+    "nll": 0.2706301418233529,
+    "brier": 0.12187914831496079,
+    "ece": 0.208741062992126,
+    "ece_bins": 15
+  },
+  "limitations": [
+    "Observed checkpoint-selection validation, not blind evaluation",
+    "Teacher disagreement is not proof of label error or a quality ceiling",
+    "Associations across subgroups are not causal effects",
+    "No filtering, reweighting, inference, training or calibration"
+  ]
+}

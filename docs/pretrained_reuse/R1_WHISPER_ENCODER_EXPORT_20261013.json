@@ -1,0 +1,148 @@
+{
+  "runtime": {
+    "status": "PASS",
+    "scope": "frozen encoder export and four training-media feature smokes; no trained decision quality",
+    "reference_revision": "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "reference_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\path-a-audio-multiquery-runtime-bundle-v2\\models\\audio-whisper-tiny",
+    "reference_files": {
+      "added_tokens.json": "9715fd2243b6f06a5858b5e32950d2853f73dd5bc201aafcf76f5082a2d8acd1",
+      "config.json": "ffdccec4f3211f4c63310f2b7098f309fe70f3952cedc5e4d11e43f5b2379b98",
+      "generation_config.json": "a5d5325911f16e74001a72fa13d6e208eee51548f994646de1f4b4cc8b35b512",
+      "merges.txt": "2df2990a395e35e8dfbc7511e08c12d56018d8d04691e0133e5d63b21e154dc6",
+      "model.safetensors": "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395",
+      "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+      "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+      "special_tokens_map.json": "e67ae3a0aaa99abcd9f187138e12db1f65c16a14761c50ef10eef2c174a7a691",
+      "tokenizer.json": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566",
+      "tokenizer_config.json": "2a4c4281cf9f51ac6ccc406fdc711a087afe6530f671fa7b80953edc498275ce",
+      "vocab.json": "8f680bba319e01a653d2e8a5dbc17a9157179e0576e6ce74ce0c06356c6e24f9"
+    },
+    "full_model_parameters": 37760640,
+    "encoder_parameters": 8208384,
+    "encoder_bytes": 32839984,
+    "encoder_sha256": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8",
+    "processor_sha256": "3e4dc53c73e7e3954fc4435034f5027733c61d7c123b38bbd1461598fd8503ef",
+    "config_sha256": "d8c8d403350cf4e21b4351d3812fc61defc6c5784d2d8f8a622d4b8ca23b98e9",
+    "device": "cpu",
+    "dtype": "float32",
+    "threads": 4,
+    "seconds": 1.8198213999858126,
+    "rows": [
+      {
+        "source": "s22_p_sgbe5s.wav",
+        "source_sha256": "d20870f17d2da0818ee56a4d1ec04d9f327d641c62d874445d8bf67cff0ebeb3",
+        "samples": 34080,
+        "processor_shape": [
+          1,
+          80,
+          3000
+        ],
+        "encoder_shape": [
+          1,
+          1500,
+          384
+        ],
+        "retained_shape": [
+          107,
+          384
+        ],
+        "physical_steps": 107,
+        "complete_audio_covered": true,
+        "repeat_and_reload_bitwise_equal": true,
+        "token_sha256": "bc79d023626281964beb639be461309f590b087c0a9e83db7e725af78f27a49a"
+      },
+      {
+        "source": "s22_l_sgbe5s.wav",
+        "source_sha256": "9603c6644aa3fd6a01f00c308a490ab648a4e7c2373ddf2f34cb9175b37ca27d",
+        "samples": 38400,
+        "processor_shape": [
+          1,
+          80,
+          3000
+        ],
+        "encoder_shape": [
+          1,
+          1500,
+          384
+        ],
+        "retained_shape": [
+          120,
+          384
+        ],
+        "physical_steps": 120,
+        "complete_audio_covered": true,
+        "repeat_and_reload_bitwise_equal": true,
+        "token_sha256": "6d588874d2404bf8cb381701ddd0e4e22f7f4130c550ef899ee817933cc283e4"
+      },
+      {
+        "source": "s16_p_bgah2n.wav",
+        "source_sha256": "fe5a3bea6fbf846caf326885ff3a7e3b2a90746903571748eea1026e0ab26f0f",
+        "samples": 34560,
+        "processor_shape": [
+          1,
+          80,
+          3000
+        ],
+        "encoder_shape": [
+          1,
+          1500,
+          384
+        ],
+        "retained_shape": [
+          108,
+          384
+        ],
+        "physical_steps": 108,
+        "complete_audio_covered": true,
+        "repeat_and_reload_bitwise_equal": true,
+        "token_sha256": "8cbebc033742721f1a9a6a3d65af791b860a9dd9b927fc96b56b71e544ec1235"
+      },
+      {
+        "source": "s16_l_bgah2n.wav",
+        "source_sha256": "c61905276ee578ab244f529fe032d783cf23c21d52242c99f806d90dca089eae",
+        "samples": 37440,
+        "processor_shape": [
+          1,
+          80,
+          3000
+        ],
+        "encoder_shape": [
+          1,
+          1500,
+          384
+        ],
+        "retained_shape": [
+          117,
+          384
+        ],
+        "physical_steps": 117,
+        "complete_audio_covered": true,
+        "repeat_and_reload_bitwise_equal": true,
+        "token_sha256": "419df6feeb57fc64b8ff5a7c28b0f37607f00425d917a3b5c531d41be931071a"
+      }
+    ],
+    "decoder_loaded_only_for_encoder_parity": true,
+    "decoder_not_exported": true,
+    "frozen": true,
+    "training": false,
+    "torch": "2.6.0+cu124",
+    "license_reference": "existing pinned openai Whisper MIT checkpoint audit; source notices retained by reference",
+    "physical_mask_note": "retain first ceil(samples/(2*hop_length)) steps after official full30s padding; not token-level word alignment",
+    "world_understanding_claimed": false,
+    "runner_sha256": "98fe5f03efef7c19051b2f14c8648909378018546ea0bcc1770ae728dba29890"
+  },
+  "license_addendum": {
+    "component_license_evidence": "Apache-2.0 per pinned HF model card, consistent with repository R1 inventory",
+    "source_model_card_url": "https://huggingface.co/openai/whisper-tiny/resolve/169d4a4341b33bc18d8881c4b69c2e104e1cc0af/README.md",
+    "source_model_card_sha256": "57a3bbbbf1e79369e4d1ced790812a1723b43a256c1b43fc70cc2f3339ae9881",
+    "apache_license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "corrects": "result.json license_reference inaccurately said MIT checkpoint audit; preserve original report and use this explicit addendum",
+    "upstream_distinction": "OpenAI original implementation describes MIT code/model weights; HF pinned card labels Apache2; native export uses Apache2 Transformers; preserve source attribution, no license restrictions relaxed",
+    "parameter_and_parity_report_unchanged": true,
+    "first_notice_attempt": "assertion used first500bytes but license occurs later in YAML; no output persisted; second attempt parses complete bounded frontmatter"
+  },
+  "artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01",
+  "reference_parameter_saving": 29552256,
+  "complete_product_quality_certified": false,
+  "source_code_commit": "3fe7d4794c0a52bd4b8664022de26a6e10af80ec"
+}

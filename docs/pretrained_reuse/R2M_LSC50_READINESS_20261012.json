@@ -1,0 +1,137 @@
+{
+  "archives": [
+    {
+      "archive": "IMU.zip",
+      "members": 22,
+      "examples": [
+        {
+          "name": "IMU/INFO/OpenSim_Model.osim",
+          "size": 890547,
+          "crc": 596280424
+        },
+        {
+          "name": "IMU/INFO/Timestamps.xlsx",
+          "size": 21772,
+          "crc": 1404518165
+        },
+        {
+          "name": "IMU/INFO/Volunteer_1.txt",
+          "size": 122,
+          "crc": 3606118823
+        },
+        {
+          "name": "IMU/INFO/Volunteer_2.txt",
+          "size": 122,
+          "crc": 1029976800
+        },
+        {
+          "name": "IMU/INFO/Volunteer_3.txt",
+          "size": 122,
+          "crc": 1790782727
+        },
+        {
+          "name": "IMU/INFO/Volunteer_4.txt",
+          "size": 122,
+          "crc": 1632072340
+        },
+        {
+          "name": "IMU/INFO/Volunteer_5.txt",
+          "size": 122,
+          "crc": 4193380241
+        },
+        {
+          "name": "IMU/OUT_OPENSIM/Volunteer_1.mot",
+          "size": 39323652,
+          "crc": 3614202308
+        },
+        {
+          "name": "IMU/OUT_OPENSIM/Volunteer_2.mot",
+          "size": 94220858,
+          "crc": 3319673584
+        },
+        {
+          "name": "IMU/OUT_OPENSIM/Volunteer_3.mot",
+          "size": 93436996,
+          "crc": 3502384794
+        },
+        {
+          "name": "IMU/OUT_OPENSIM/Volunteer_4.mot",
+          "size": 93894288,
+          "crc": 3718357106
+        },
+        {
+          "name": "IMU/OUT_OPENSIM/Volunteer_5.mot",
+          "size": 87397013,
+          "crc": 3833738672
+        }
+      ]
+    },
+    {
+      "archive": "VIDEOS.zip",
+      "members": 4004,
+      "examples": [
+        {
+          "name": "VIDEOS/COLOR_BODY/",
+          "size": 0,
+          "crc": 0
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0000_0000.avi",
+          "size": 1626582,
+          "crc": 4229173662
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0000_0001.avi",
+          "size": 2553742,
+          "crc": 1447081948
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0000_0002.avi",
+          "size": 2703468,
+          "crc": 339673203
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0000_0003.avi",
+          "size": 2650738,
+          "crc": 2392834788
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0001_0000.avi",
+          "size": 2436774,
+          "crc": 300957154
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0001_0001.avi",
+          "size": 1934064,
+          "crc": 2521657113
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0001_0002.avi",
+          "size": 1992570,
+          "crc": 376132977
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0001_0003.avi",
+          "size": 1902544,
+          "crc": 2323935349
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0002_0000.avi",
+          "size": 2745046,
+          "crc": 1330758325
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0002_0001.avi",
+          "size": 2885470,
+          "crc": 2308897940
+        },
+        {
+          "name": "VIDEOS/COLOR_BODY/0000_0002_0002.avi",
+          "size": 3094316,
+          "crc": 1803357819
+        }
+      ]
+    }
+  ],
+  "recordings_read": false
+}

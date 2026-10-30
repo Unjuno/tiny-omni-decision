@@ -1,0 +1,1085 @@
+{
+  "result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "metrics": {
+      "base": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.212890625,
+          "nll": 1.4432932138442993,
+          "brier": 0.7630400061607361,
+          "ece_15_bins": 0.03235197067260742,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            1024,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.1640625,
+            "nll": 1.6112315654754639,
+            "brier": 0.8007971048355103,
+            "ece_15_bins": 0.05540114641189575,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              128,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.1171875,
+            "nll": 1.614034652709961,
+            "brier": 0.8018723726272583,
+            "ece_15_bins": 0.09141324460506439,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              128,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.21875,
+            "nll": 1.3868767023086548,
+            "brier": 0.7502952814102173,
+            "ece_15_bins": 0.036748528480529785,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              512,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.2734375,
+            "nll": 1.3867864608764648,
+            "brier": 0.750234842300415,
+            "ece_15_bins": 0.01749640703201294,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              256,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      "option_reverse": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.2470703125,
+          "nll": 1.4421623945236206,
+          "brier": 0.7625613212585449,
+          "ece_15_bins": 0.0018786042928695679,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            1024,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.21875,
+            "nll": 1.6096181869506836,
+            "brier": 0.800043523311615,
+            "ece_15_bins": 0.00035008788108825684,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              128,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.234375,
+            "nll": 1.60727858543396,
+            "brier": 0.7991323471069336,
+            "ece_15_bins": 0.025846421718597412,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              128,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.2421875,
+            "nll": 1.3870073556900024,
+            "brier": 0.7503569722175598,
+            "ece_15_bins": 0.013470590114593506,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              512,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.27734375,
+            "nll": 1.386186122894287,
+            "brier": 0.7499435544013977,
+            "ece_15_bins": 0.02170741558074951,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              256,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    },
+    "comparisons": {
+      "base": {
+        "difference": -0.021484375,
+        "percentile_95_interval": [
+          -0.0576171875,
+          0.0166015625
+        ]
+      },
+      "option_reverse": {
+        "difference": 0.00390625,
+        "percentile_95_interval": [
+          -0.02734375,
+          0.0341796875
+        ]
+      }
+    },
+    "counts": {
+      "base": {
+        "questions": 1024,
+        "forward_examples": 4352
+      },
+      "option_reverse": {
+        "questions": 1024,
+        "forward_examples": 4352
+      }
+    },
+    "candidate_reversal_identity_consistency": 0.2724609375,
+    "rotation0_max_probability_difference": 3.427267074584961e-06,
+    "seconds": 95.7044885000214,
+    "peak_vram_bytes": 660232192,
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "training": false,
+    "cost_usd": 0,
+    "limitation": "Observed development states; cyclic averaging lacks full permutation invariance."
+  },
+  "config": {
+    "source_commit": "677d2faa0453631e11c2a28f2d8ec303c98e2f16",
+    "argv": {
+      "root": "C:\\CodexArtifacts\\pretrained-reuse-r2",
+      "model": "C:\\CodexArtifacts\\pretrained-reuse-r1\\smollm2-135m-audit-01\\model",
+      "output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\candidate-rotation-eval-01"
+    },
+    "runner_sha256": "1fc932f5fba98a03433299b9ebe1ca31381ed712e3b0adc7724c94c4d6a409fc",
+    "base_sha256": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+    "delta_sha256": "0caea48debd72e7ca4fa7c4f31da99005d8e6d587f07f32a3f1e9603cc3203e7",
+    "input_sha256": "dc5871692646473f8eac216aa7e0e9ee065040a4c5c9f6e3e22c0a16099ef51d",
+    "selected_step": 2048,
+    "aggregation": "arithmetic_mean_identity_aligned_probabilities",
+    "temperature": 1,
+    "training": false,
+    "reference_hashes": {
+      "base-base-predictions.json": "a736a5f9fca1f0970f5fedd91dbf01a3acae00eb710a3d8728adeae02fce1003",
+      "base-domain-predictions.json": "9e939f7b46383b35efef379ba914ad685bdb9fdfb02b3bf0f672fcd112481491",
+      "base-expanded-predictions.json": "b7957357ddf714b0669197a724ac44bf8afda53a28f5594b4929962f6c82135c",
+      "base-expanded_domain-predictions.json": "c542e842c75852f9d973a0ec8bd6080e8eabe3895d59ceba4f2f0cd289a0825f",
+      "base-option_reverse-predictions.json": "b98d1a26db8ead726b9f44d220542cb2d2362bc2e2125dd29d220681f75b1e66",
+      "base-state_reverse-predictions.json": "a82ad104e62457ec378beb41908e1e40afeacd08fb1e3aa19136f1c3a44af10e",
+      "bert-base-predictions.json": "975e717fb1ff37f326ab399b3402f44e01da9ac586671922ea344284c8339488",
+      "bert-domain-predictions.json": "f5d5b9d3f5ea7b99962109a22d6c4c9661a11836afe96aa4f993e9c62d129f0b",
+      "bert-expanded-predictions.json": "13126f5b3dbe4e4a990c329748b20da28e4e94859921df6bc51cea1eeeee1354",
+      "bert-expanded_domain-predictions.json": "5ea712f3139ef0be0926744a993c9bb8601440258df4df4f0dbdf5223b83a307",
+      "bert-option_reverse-predictions.json": "1eebea07a9300183482b5c7d33cb52bcb9e4dd446e09a94d68f8dbeba7e280e5",
+      "bert-state_reverse-predictions.json": "220162e45af4281160eb39dff3b781494b61004724284e33bba107c0981cc425",
+      "decoder-base-predictions.json": "c3e2f1ad7bfc1e677f20cc6bf1803e1b03e2b644300ec82c87bd560bff888188",
+      "decoder-domain-predictions.json": "aaf59cc2b3e7171a10b7ccdb1415db13ac3f166cd895ea70a560da80d60202ed",
+      "decoder-expanded-predictions.json": "da33b95d205ed5ef33553319ffb16030b55d9e390bee8c84be6655e8dd8fd9ad",
+      "decoder-expanded_domain-predictions.json": "a9856c649129d439d23a7ce548a7ae492a2d77e9fb7bc3ee7e675db335e01a12",
+      "decoder-option_reverse-predictions.json": "dd6668740f2dfbe0f706721246f638f5d390d7273d39b08bba83f77ab7b72bad",
+      "decoder-state_reverse-predictions.json": "22bfb73e8ae6f98b8cb062417f3db566d1061bd1282d05424413352b35ecff14",
+      "result.json": "e2d97f566647d23241ac7d83d92e19d5100e97d89bde7bf5bd43f703b7c664c1",
+      "selection.json": "26c2dd115c6e389bb71d719f95cb20db762a2342a75aa808c96a23924b12a0aa"
+    }
+  },
+  "hashes": {
+    "base-predictions.json": "236e8aa1c8a3b1b7b45b25a263d48680b6cbfa8e265ea2a10d8af8a3582a2e61",
+    "config.json": "67445c70de12136e00ebea8c9bd90d272cafda3697d2281790124634b7b086f4",
+    "option_reverse-predictions.json": "451e27788799d9343a14942113ce2497344b5b2ebf50c0f43979a525a661e498",
+    "result.json": "ef2e2be6d2c16d6e6327964f097eb2dd7775dbf2c60bc10fc2c712d538f984ab"
+  },
+  "single_forward": {
+    "base": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.234375,
+        "nll": 1.4481128454208374,
+        "brier": 0.7652222514152527,
+        "ece_15_bins": 0.03455766511615366,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          312,
+          712,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tasks": {
+        "conditional_selection": {
+          "count": 128,
+          "accuracy": 0.2109375,
+          "nll": 1.6212466955184937,
+          "brier": 0.8055448532104492,
+          "ece_15_bins": 0.03760655072983354,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            113,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "count": {
+          "count": 128,
+          "accuracy": 0.125,
+          "nll": 1.6274511814117432,
+          "brier": 0.8077967166900635,
+          "ece_15_bins": 0.1123238205909729,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "extremum": {
+          "count": 512,
+          "accuracy": 0.263671875,
+          "nll": 1.3868032693862915,
+          "brier": 0.7501512765884399,
+          "ece_15_bins": 0.018904457800090313,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            52,
+            460,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "temporal_order": {
+          "count": 256,
+          "accuracy": 0.2421875,
+          "nll": 1.3944960832595825,
+          "brier": 0.7539157867431641,
+          "ece_15_bins": 0.04295232362346724,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            19,
+            237,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "max_tokens": 213
+    },
+    "option_reverse": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.2431640625,
+        "nll": 1.4525885581970215,
+        "brier": 0.767112672328949,
+        "ece_15_bins": 0.025674950302345678,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          309,
+          715,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tasks": {
+        "conditional_selection": {
+          "count": 128,
+          "accuracy": 0.21875,
+          "nll": 1.626686453819275,
+          "brier": 0.8067968487739563,
+          "ece_15_bins": 0.02874159556813538,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            119,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "count": {
+          "count": 128,
+          "accuracy": 0.2578125,
+          "nll": 1.6213347911834717,
+          "brier": 0.8038612604141235,
+          "ece_15_bins": 0.02064935863018036,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "extremum": {
+          "count": 512,
+          "accuracy": 0.24609375,
+          "nll": 1.4003524780273438,
+          "brier": 0.7566821575164795,
+          "ece_15_bins": 0.0392587335081771,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            42,
+            470,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "temporal_order": {
+          "count": 256,
+          "accuracy": 0.2421875,
+          "nll": 1.385638952255249,
+          "brier": 0.7497573494911194,
+          "ece_15_bins": 0.034624253399670124,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            20,
+            236,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "max_tokens": 213
+    },
+    "state_reverse": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.248046875,
+        "nll": 1.448217749595642,
+        "brier": 0.7651923298835754,
+        "ece_15_bins": 0.02050323784351349,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          320,
+          704,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tasks": {
+        "conditional_selection": {
+          "count": 128,
+          "accuracy": 0.1796875,
+          "nll": 1.6220742464065552,
+          "brier": 0.8060110807418823,
+          "ece_15_bins": 0.06891308643389493,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            111,
+            17,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "count": {
+          "count": 128,
+          "accuracy": 0.125,
+          "nll": 1.629201889038086,
+          "brier": 0.808528482913971,
+          "ece_15_bins": 0.11229145526885986,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "extremum": {
+          "count": 512,
+          "accuracy": 0.294921875,
+          "nll": 1.38545560836792,
+          "brier": 0.7494549751281738,
+          "ece_15_bins": 0.01784953335300088,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            56,
+            456,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "temporal_order": {
+          "count": 256,
+          "accuracy": 0.25,
+          "nll": 1.3963215351104736,
+          "brier": 0.7545895576477051,
+          "ece_15_bins": 0.03784913488198072,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            25,
+            231,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "max_tokens": 213
+    },
+    "expanded": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.236328125,
+        "nll": 1.448582649230957,
+        "brier": 0.7654269933700562,
+        "ece_15_bins": 0.03618413353979122,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          273,
+          751,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tasks": {
+        "conditional_selection": {
+          "count": 128,
+          "accuracy": 0.203125,
+          "nll": 1.6216657161712646,
+          "brier": 0.8056290745735168,
+          "ece_15_bins": 0.044671494513750076,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            118,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "count": {
+          "count": 128,
+          "accuracy": 0.1328125,
+          "nll": 1.6205230951309204,
+          "brier": 0.805126428604126,
+          "ece_15_bins": 0.10377608239650726,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "extremum": {
+          "count": 512,
+          "accuracy": 0.271484375,
+          "nll": 1.3877376317977905,
+          "brier": 0.7504830360412598,
+          "ece_15_bins": 0.011464749521110207,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            19,
+            493,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "temporal_order": {
+          "count": 256,
+          "accuracy": 0.234375,
+          "nll": 1.3977606296539307,
+          "brier": 0.7553642392158508,
+          "ece_15_bins": 0.04758319118991494,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            8,
+            248,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "max_tokens": 222
+    },
+    "domain": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.244140625,
+        "nll": 1.4639344215393066,
+        "brier": 0.7716615200042725,
+        "ece_15_bins": 0.05303422840370331,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          241,
+          659,
+          124,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tasks": {
+        "conditional_selection": {
+          "count": 128,
+          "accuracy": 0.2109375,
+          "nll": 1.6212466955184937,
+          "brier": 0.8055448532104492,
+          "ece_15_bins": 0.03760655072983354,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            113,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "count": {
+          "count": 128,
+          "accuracy": 0.125,
+          "nll": 1.6274511814117432,
+          "brier": 0.8077967166900635,
+          "ece_15_bins": 0.1123238205909729,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "extremum": {
+          "count": 512,
+          "accuracy": 0.279296875,
+          "nll": 1.4061245918273926,
+          "brier": 0.7580952644348145,
+          "ece_15_bins": 0.04122797679156065,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            399,
+            113,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "temporal_order": {
+          "count": 256,
+          "accuracy": 0.25,
+          "nll": 1.4191402196884155,
+          "brier": 0.7637850046157837,
+          "ece_15_bins": 0.054715737234801054,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            245,
+            11,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "max_tokens": 213
+    },
+    "expanded_domain": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.25,
+        "nll": 1.4606903791427612,
+        "brier": 0.7702640295028687,
+        "ece_15_bins": 0.044400082115316764,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          246,
+          684,
+          94,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tasks": {
+        "conditional_selection": {
+          "count": 128,
+          "accuracy": 0.203125,
+          "nll": 1.6216657161712646,
+          "brier": 0.8056290745735168,
+          "ece_15_bins": 0.044671494513750076,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            118,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "count": {
+          "count": 128,
+          "accuracy": 0.1328125,
+          "nll": 1.6205230951309204,
+          "brier": 0.805126428604126,
+          "ece_15_bins": 0.10377608239650726,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "extremum": {
+          "count": 512,
+          "accuracy": 0.279296875,
+          "nll": 1.4024624824523926,
+          "brier": 0.7564108967781067,
+          "ece_15_bins": 0.03682142007164657,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            427,
+            85,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "temporal_order": {
+          "count": 256,
+          "accuracy": 0.2734375,
+          "nll": 1.4167418479919434,
+          "brier": 0.7628567814826965,
+          "ece_15_bins": 0.029733683564700186,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            247,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "max_tokens": 222
+    }
+  }
+}
