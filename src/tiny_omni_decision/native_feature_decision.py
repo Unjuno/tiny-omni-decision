@@ -17,6 +17,7 @@ from torch import Tensor, nn
 from .aligned_features import gather_aligned_features
 from .classification_json import classification_json
 from .decision import FrozenFeatureCandidateScorer
+from .fusion_decision import FusionDecisionScorer
 from .observations import ObservationBatch
 
 
@@ -312,3 +313,123 @@ def decide_cached_native_feature(
         classes,
         temperature=temperature,
     )
+
+
+@torch.inference_mode()
+def decide_cached_native_fusion(
+    model: FusionDecisionScorer,
+    batch: ObservationBatch,
+    *,
+    source_by_modality: dict[str, str],
+    query_time_ms: float,
+    max_age_ms: float,
+    required_modalities: Sequence[str],
+    option_features: Tensor | None = None,
+    class_ids: list[str] | None = None,
+    option_schema: TypedOptionSchema | None = None,
+    criterion_features: Tensor | None = None,
+    criterion_present: bool = False,
+    feature_normalization: dict[str, tuple[Tensor, Tensor]] | None = None,
+    temperature: float = 1.0,
+) -> dict[str, object]:
+    """Fuse hash-checked cached features and emit option-ID probabilities.
+
+    Cache timestamps are treated as evidence-availability times by
+    ``gather_aligned_features``. This adapter validates shared clock metadata,
+    and abstains before model inference if any task-required modality is absent
+    or stale. It consumes no raw media and makes no model-quality claim.
+    """
+    batch = ObservationBatch.model_validate(batch.model_dump())
+    if not isinstance(model, FusionDecisionScorer):
+        raise TypeError("model must be a FusionDecisionScorer")
+    names = set(model.fusion.names)
+    if set(source_by_modality) != names:
+        raise ValueError("one configured source ID is required for every model modality")
+    required = set(required_modalities)
+    if not required or not required <= names:
+        raise ValueError("at least one configured required modality is required")
+    batch.require_shared_clock()
+    if batch.criterion is not None and batch.criterion.kind != "typed":
+        raise ValueError("cached native fusion does not encode free-text or spoken criteria")
+    if (option_schema is None) == (option_features is None):
+        raise ValueError("provide exactly one typed option schema or option feature matrix")
+    if option_schema is not None:
+        option_features = option_schema.encode(batch.options)
+    if (option_features is None or option_features.ndim != 2
+            or option_features.shape != (len(batch.options), model.option_dim)):
+        raise ValueError("typed option features must align with model and supplied options")
+    if (criterion_features is None) != (not criterion_present):
+        raise ValueError("present criterion requires a feature vector; absent criterion forbids it")
+    if batch.criterion is not None and not criterion_present:
+        raise ValueError("typed batch criterion requires its precomputed criterion features")
+    if criterion_features is not None and criterion_features.shape != (model.criterion_dim,):
+        raise ValueError("criterion features must match the model criterion width")
+    if (not math.isfinite(query_time_ms) or not math.isfinite(max_age_ms)
+            or max_age_ms < 0 or not math.isfinite(temperature) or temperature <= 0):
+        raise ValueError("query time, nonnegative maximum age, and positive temperature required")
+
+    option_ids = [option.option_id for option in batch.options]
+    classes = list(class_ids) if class_ids is not None else option_ids
+    if len(classes) != len(option_ids):
+        raise ValueError("one class ID is required per supplied option")
+    options_json = [
+        {"option_id": option_id, "class_id": class_id}
+        for option_id, class_id in zip(option_ids, classes, strict=True)
+    ]
+    classification_json([1.0 / len(classes)] * len(classes), classes, options_json)
+
+    gathered = gather_aligned_features(
+        batch,
+        source_by_modality,
+        model.fusion.dimensions,
+        [query_time_ms],
+        max_age_ms=max_age_ms,
+    )
+    missing = sorted(
+        name for name in required if not gathered["available"][name][0]
+    )
+    if missing:
+        return {
+            "schema_version": "1.0",
+            "status": "abstain",
+            "selected_option_id": None,
+            "reason": "insufficient_evidence",
+            "missing_modalities": missing,
+            "options": [{"option_id": option_id, "probability": None}
+                        for option_id in option_ids],
+        }
+
+    reference = next(model.parameters())
+    features: dict[str, Tensor] = {}
+    available: dict[str, Tensor] = {}
+    normalization = feature_normalization or {}
+    if set(normalization) - names:
+        raise ValueError("feature normalization contains an unconfigured modality")
+    for name in model.fusion.names:
+        values = torch.from_numpy(gathered["features"][name]).to(
+            device=reference.device, dtype=reference.dtype
+        )
+        if name in normalization:
+            mean, scale = normalization[name]
+            mean = torch.as_tensor(mean, device=reference.device, dtype=reference.dtype)
+            scale = torch.as_tensor(scale, device=reference.device, dtype=reference.dtype)
+            if (mean.shape != (model.fusion.dimensions[name],)
+                    or scale.shape != mean.shape or not torch.isfinite(mean).all()
+                    or not torch.isfinite(scale).all() or (scale <= 0).any()):
+                raise ValueError("feature normalization must be finite with positive scales")
+            values = (values - mean) / scale
+        features[name] = values
+        available[name] = torch.as_tensor(
+            gathered["available"][name], device=reference.device, dtype=torch.bool
+        )
+
+    candidates = option_features.to(device=reference.device, dtype=reference.dtype)[None]
+    valid = torch.ones(candidates.shape[:2], dtype=torch.bool, device=reference.device)
+    criterion = None
+    criterion_mask = None
+    if criterion_present:
+        criterion = criterion_features.to(device=reference.device, dtype=reference.dtype)[None]
+        criterion_mask = torch.ones(1, dtype=torch.bool, device=reference.device)
+    logits = model(features, available, candidates, valid, criterion, criterion_mask)[0].float()
+    probabilities = torch.softmax(logits / temperature, dim=-1).cpu().tolist()
+    return classification_json(probabilities, classes, options_json)

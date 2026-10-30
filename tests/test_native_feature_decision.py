@@ -239,3 +239,61 @@ def test_typed_option_schema_rejects_free_text_and_unknown_categories():
                 NativeOption(option_id="b", attributes={"action": "go"}),
             ]
         )
+
+
+def test_cached_fusion_requires_all_required_fresh_streams_and_returns_json(tmp_path):
+    from tiny_omni_decision.fusion_decision import FusionDecisionScorer
+    from tiny_omni_decision.native_feature_decision import decide_cached_native_fusion
+
+    def write_cache(name, modality, source_id, values, valid):
+        path = tmp_path / f"{name}.npz"
+        timestamps = np.array([10.0, 20.0])
+        mask = np.asarray(valid, dtype=np.bool_)
+        np.savez(path, values=np.asarray(values, dtype=np.float32),
+                 timestamps_ms=timestamps, valid_mask=mask)
+        return dict(modality=modality, source_id=source_id, payload_ref=str(path),
+                    payload_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                    clock_id="clock-a", timestamps_ms=(10.0, 20.0), valid_mask=tuple(valid))
+
+    audio = write_cache("audio", "audio", "mic", [[1.0, 2.0], [3.0, 4.0]], [True, True])
+    video = write_cache("video", "video", "camera", [[5.0], [6.0]], [False, False])
+    batch = ObservationBatch.model_validate({
+        "schema_version": "1.0", "observations": [audio, video],
+        "options": [
+            {"option_id": "a", "attributes": {"choice": "left"}},
+            {"option_id": "b", "attributes": {"choice": "right"}},
+        ],
+    })
+    model = FusionDecisionScorer({"audio": 2, "video": 1}, 2, 1, width=4).eval()
+    calls = []
+    original_forward = model.forward
+
+    def tracked_forward(*args, **kwargs):
+        calls.append(True)
+        return original_forward(*args, **kwargs)
+
+    model.forward = tracked_forward
+    schema = TypedOptionSchema(enums=(EnumOptionField("choice", ("left", "right")),))
+    rejected = decide_cached_native_fusion(
+        model, batch, source_by_modality={"audio": "mic", "video": "camera"},
+        query_time_ms=20.0, max_age_ms=15.0, required_modalities=("audio", "video"),
+        option_schema=schema,
+    )
+    assert rejected["status"] == "abstain"
+    assert rejected["missing_modalities"] == ["video"]
+    assert calls == []
+
+    video_path = tmp_path / "video.npz"
+    np.savez(video_path, values=np.array([[5.0], [6.0]], dtype=np.float32),
+             timestamps_ms=np.array([10.0, 20.0]), valid_mask=np.array([True, True]))
+    batch.observations[1].payload_sha256 = hashlib.sha256(video_path.read_bytes()).hexdigest()
+    batch.observations[1].valid_mask = (True, True)
+    selected = decide_cached_native_fusion(
+        model, batch, source_by_modality={"audio": "mic", "video": "camera"},
+        query_time_ms=20.0, max_age_ms=15.0, required_modalities=("audio", "video"),
+        option_schema=schema,
+    )
+    assert selected["status"] == "selected"
+    assert [item["option_id"] for item in selected["options"]] == ["a", "b"]
+    assert sum(item["probability"] for item in selected["options"]) == pytest.approx(1.0)
+    assert len(calls) == 1
