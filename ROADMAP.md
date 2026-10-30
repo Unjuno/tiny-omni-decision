@@ -1,5 +1,17 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-10-31 00:03 JST R0 Orbitune checkpoint update:** The same live CUDA
+process PID `3668` remains active. A new checkpoint was saved at 23:52:37 JST:
+step `582168`, `14,160,017,296` events; best remains step `521917`, and latest
+validation is `-1.511443` at step `582168` (four batches / 98,304 events).
+No non-finite loss or gradients are recorded. The command's event threshold is
+`14,268,960,939`; `108,943,643` saved-count events remain. Two observed
+checkpoint intervals averaged about 14.1k events/s, implying roughly 35
+minutes to the next 30M-event save and 2h09m to the configured stop threshold
+if that rate persists. These are projections; the trainer logs remain stale
+at 21:58 and the unsaved live step is unknown. Read-only evidence and hashes:
+[00:03 recheck](docs/pretrained_reuse/R0_LIVE_AUDIT_20261031_0003JST.md).
+
 **2026-10-30 23:55 JST R0 PR synchronization:** Fast-forwarded the verified
 R0 audit commit `945fd5ec572c73063a41f06e7493beccfd5089df` onto the PR #15
 source branch without force. GitHub branch metadata, PR API, and
