@@ -1180,6 +1180,109 @@ group-disjoint decision-task split. No data was accessed. Keep it REVIEW-only;
 it does not close the both-input-required AV gate. See the
 [`SlideSpeech source screen`](docs/pretrained_reuse/R2_SLIDESPEECH_SOURCE_SCREEN_20261025.md).
 
+**2026-10-22 R2 FAIR-Play / PseudoBinaural split audit correction:** Train/validation
+ID overlap is zero within each split. The five validation lists have 935 rows,
+744 unique asset IDs, and 13–35 shared IDs per pair; 134–161 validation IDs
+per fold occur in another fold's training list. These are correlated split
+assignments, not independent evaluation replicates, but full-partition overlap
+alone does not establish that. Original-scene group IDs remain unavailable.
+Pooling the lists is not admitted: 53 IDs are outside split 1's exposed
+train+validation lists, and split 1's sealed test was not inspected. No test
+content or media was opened. See the [corrected split audit](docs/pretrained_reuse/R2_FAIRPLAY_PSEUDOBINAURAL_SPLIT_AUDIT_20261022.md).
+
+**2026-10-22 R2 FAIR-Play source license:** The pinned upstream dataset README
+and LICENSE file both declare CC BY 4.0 (LICENSE Git blob
+`a6d7fd364bcc113164fb923e4eb53ae6fd75cae4`). This resolves the repository-level
+license declaration gate, not scene grouping, physical synchronization, or
+both-input task validity. Keep it as a research candidate for bounded train-only
+task construction; do not launch quality fitting yet. See the
+[license and group follow-up](docs/pretrained_reuse/R2_FAIRPLAY_LICENSE_AND_GROUP_FOLLOWUP_20261022.md).
+
+**2026-10-22 FAIR-Play train audio pair check:** CPU waveform matching on eight
+already acquired split1 train-only pairs found related embedded-AAC/paired-WAV
+signals, but zero-lag correlations were low and peak lags varied. This does not
+measure physical AV synchronization or certify original-scene grouping. No
+quality fitting is admitted; details and hashes are in the
+[audio pair report](docs/pretrained_reuse/R2_FAIRPLAY_AUDIO_PAIR_ALIGNMENT_20261022.md).
+
+**2026-10-22 AMI timing receipt interpretation:** A pre-existing train-only
+receipt maps 20 speech-interval midpoints across six meetings to 80 video frames
+within one 25 fps frame period. Its code selects the first PTS at/after each
+requested time, so this demonstrates frame lookup coverage, not an independently
+measured A/V clock offset or visible-speaker truth. AMI remains review-only;
+details are in the [timestamp-join review](docs/pretrained_reuse/R2_AMI_TIMESTAMP_JOIN_REVIEW_20261022.md)
+and AV4 of the [task battery](docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md).
+
+**2026-10-22 12:54 JST R0 live refresh:** PR #23 remote head is
+`26ac9a385c1dd9e26d59c22776929caae7f94670`, with both CI checks successful.
+The local checkout is still at its parent because C: has zero free bytes; its
+five pending paths match the committed content hashes. The unrelated Orbitune
+PID 30196 remains live and reserves 15,821/16,384 MiB on the RTX 3080 Laptop;
+the single utilization sample was 0%. No GPU work was started and no process
+was signaled. See the [R0 refresh](docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_1254JST.md).
+
+**2026-10-22 R1 PE-Core T16 CPU state-dict round-trip:** A second, isolated
+CPU attempt loaded the pinned 278,219,132-byte checkpoint into the 69,546,113-
+parameter OpenCLIP model, encoded one deterministic synthetic image and two
+fixed texts, serialized the state dict in memory, then strict-loaded it into a
+fresh model. Image and text embeddings matched bit-for-bit (max absolute delta
+0); no benchmark data, GPU, network, or large temporary file was used. This
+verifies state-dict round-trip parity for that path, not package installation,
+official preprocessing, Decision quality, or the 200 MB product-package target.
+See the [round-trip audit](docs/pretrained_reuse/R1_PE_CORE_T16_CPU_SAVE_RELOAD_PARITY_20261022.md)
+and preserved local [attempt-04 artifacts](C:/CodexArtifacts/pretrained-reuse-r1/pe-core-t16-r1-attempt-04-memory-reload/).
+
+**2026-10-22 07:09 JST R0 live refresh:** The roadmap branch is clean and
+synchronized at `bae5d688`. PR #23 checks are green. C: has 265,768,960 bytes
+free; the RTX 3080 Laptop has 15,821 / 16,384 MiB allocated to compute PID
+30196, which was left untouched. The PE-Core reload attempt remains empty and
+is not being repeated under the same resource state. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261022_0709JST.md).
+
+**2026-10-22 R1 PE-Core T16 runtime follow-up (separate audit branch):** The
+separate `codex/r1-pe-core-audit-20261021` report records a CPU OpenCLIP
+image/text forward using the pinned converted T16 weights and a measured
+69,546,113 runtime parameters. It is a feature-extraction smoke only: no
+Decision task quality, full mapping parity, or final-runtime integration was
+measured. The source-of-truth inventory now has a separate pinned OpenCLIP
+runtime entry and preserves the earlier Meta implementation entry as REVIEW.
+A follow-on serialization parity attempt in this branch did not produce
+output and was stopped with only 268 MB free on C:; no model failure is
+inferred. See the [attempt record](docs/pretrained_reuse/R1_PE_CORE_RELOAD_PARITY_ATTEMPT_20261022.md)
+and the [separate audit report](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r1-pe-core-audit-20261021/docs/pretrained_reuse/R1_PE_CORE_T16_CPU_AUDIT_20261021.md).
+
+**2026-10-22 R2 synthetic AV temporal interaction follow-up (remote branch):**
+The four-arm, frozen-feature CLEVRER collision/tone development study reports
+83.51% Accuracy / 0.3534 NLL for its selected joint gated LSTM versus 75.14% /
+0.4577 for audio-only on 1,110 task-specific validation examples. The
+scene-paired joint-minus-audio Accuracy interval was +5.89 to +10.83 points
+(5,000 bootstrap replicates). This is bounded evidence that a temporal AV
+readout can use a synthetic timing relation; it is not natural AV, blind
+validation, or product quality. Its validation media occur in other CLEVRER
+tasks and 349 question-template overlaps were reported. Preserve the result
+without retuning those IDs. It advances only the synthetic interaction
+diagnostic; natural both-required AV task admission and the R2-M matrix remain
+open. See the [full v2 result and provenance](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-clevrer-synthetic-av-coverage-20261022/docs/pretrained_reuse/R2_CLEVRER_SYNTHETIC_AV_COVERAGE_V2_RESULTS_20261022.md).
+
+**2026-10-22 R2 HarmonySet / RealSync source screen:** HarmonySet is a useful
+video-music semantic-alignment task lead, but the inspected card exposes only
+train/test annotation files, gives a YouTube-backed example, and does not
+establish underlying media rights or group-disjoint validation. RealSync has
+explicit source-video train/validation/test counts for an AV offset task, but
+the release does not redistribute source videos and the reviewed materials do
+not establish training rights or fully resolved timestamp reconstruction.
+Neither source is admitted for fitting or quality evaluation. Continue the
+source/task gate; do not start another architecture fit on exposed AV
+development IDs. See the [source screen](docs/pretrained_reuse/R2_HARMONYSET_REALSYNC_SOURCE_SCREEN_20261022.md).
+
+**2026-10-22 R2 scalar-audio projection diagnostic:** Matched C0 and
+exchange/gate arms each completed 2,048 updates after adding a learned
+scalar-to-192 audio projection. Both selected checkpoints remained at 50.0%
+validation Accuracy / 0.6931 NLL; the exchange/gate arm briefly reached
+50.27% at step 1,920 before returning to chance. No sustained gain over the
+zero-padded control was found. This remains synthetic, exposed development
+validation, not natural AV or product evidence. See the
+[diagnostic report](docs/pretrained_reuse/R2_SCALAR_AUDIO_PROJECTION_DIAGNOSTIC_20261022.md).
+
 **2026-10-22 R2 AVE source/task screen:** The Audio-Visual Event dataset has
 synchronized streams and temporal event boundaries, but its labels do not
 establish that both modalities are necessary. The authors also do not own its
@@ -1264,6 +1367,32 @@ as a narrow development-task result, not a model-family ceiling or product
 quality result. No official test/sealed audit was opened. See the
 [frozen protocol and results](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_RESULTS_20261022.md)
 and [learning curves](docs/pretrained_reuse/R2_AV_TEMPORAL_SCALE_V2_CURVES_20261022.csv).
+
+**2026-10-22 R2 AV temporal train-only grouped OOF follow-up:** A fixed
+five-fold, video-grouped CPU probe used only the 224 frozen training groups;
+the exposed 64-video validation cohort was not scored or used. At 32 updates,
+audio-only / pooled AV / sequence AV reached 45.54% / 47.32% / 47.32% OOF
+Accuracy, below the 56.70% option-position majority and 58.04% fold-local
+source-label baselines; NLL/ECE show overconfidence. This indicates poor
+group-transfer for this task and a mild event-label/option-position association,
+not media leakage or a general AV ceiling. A train-only candidate-order control
+balanced positive position within each label while holding groups/folds fixed;
+semantic probabilities and NLL/Brier stayed within floating-point tolerance,
+with one exact argmax tie accounting for a 0.45-point Accuracy change. Order
+balancing does not repair the weak group transfer. Do not extend this fit or
+tune the exposed validation. A new AV quality attempt needs a distinct
+task/readout and newly frozen group-disjoint validation. See the
+[train-only OOF report](docs/pretrained_reuse/R2_AV_TEMPORAL_TRAIN_OOF_20261022.md).
+
+**2026-10-22 R2 AV temporal task-construction audit:** On only the 224 training
+groups, the target audio interval exactly matched the video interval in 224/224
+examples. A nearest-center or maximum-overlap timestamp-only rule also selects
+the correct option in 224/224, with no ties. The frozen readout did not receive
+timestamps, so this is not feature leakage into its scores; it shows that a
+runtime with interval metadata can solve this narrow task without learned AV
+representations. Do not use this task as evidence of temporal understanding or
+AV complementarity. The audit did not score validation and did not modify any
+existing run. See the train-only audit subsection in the report above.
 
 **2026-10-22 R2 HoloAssist fixed-checkpoint replay:** Replayed the already
 selected 1,042-session-train joint, audio-only, and video-only readouts on the
