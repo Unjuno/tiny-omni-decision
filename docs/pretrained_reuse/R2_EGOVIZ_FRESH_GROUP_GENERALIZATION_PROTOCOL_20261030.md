@@ -23,7 +23,10 @@ independent evidence.
 
 - Source: official `humaidtech/EgoViz-120` clip index, SHA-256
   `c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074`;
-  upstream card states CC-BY-4.0.
+  upstream card revision `7a84ecd3411b9f219b02f273c438f1ea12d74f52` states
+  CC-BY-4.0 and defines `group_id` as the capture session. The card says clips
+  in one group share the same worker, site and lighting, and explicitly
+  recommends splitting on `group_id`.
 - Previously used train/development groups: 48 + 20.
 - Additional reserved groups: the prior plan's 16 previously used groups and
   20 prior sealed-audit groups. The sealed group IDs are used only to exclude
@@ -62,8 +65,13 @@ publisher `/action` annotation is read. No sealed audit media is accessed.
 
 ## Limits
 
-EgoViz publisher `group_id` is treated as the split unit, but participant
-independence across groups remains unknown. This correspondence task has
+EgoViz publisher `group_id` is the documented session-level split unit, so
+clips from one worker/session/site/lighting group do not cross the split. The
+pinned card does not state whether a worker can appear under multiple
+`group_id` values or provide a cross-session participant mapping; therefore
+participant independence across groups remains unknown. This correspondence task has
 timestamp-derived labels; it does not establish useful natural-world action
 reasoning or prove either modality is necessary. Results cannot close R2-M or
 support product promotion. Do not start additional training from these scores.
+
+Primary source: [EgoViz-120 dataset card at the pinned revision](https://huggingface.co/datasets/humaidtech/EgoViz-120/tree/7a84ecd3411b9f219b02f273c438f1ea12d74f52).

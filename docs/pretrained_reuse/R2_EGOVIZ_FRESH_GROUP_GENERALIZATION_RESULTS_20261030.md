@@ -113,13 +113,21 @@ are not a quality win by themselves; calibration/overconfidence is the
 immediate readout issue. This does not prove an architectural ceiling or
 justify another GRU training run.
 
-Group separation does not guarantee participant separation; the publisher's
-action labels are automatically generated and unverified; timestamp-derived
+The pinned EgoViz-120 dataset-card revision
+`7a84ecd3411b9f219b02f273c438f1ea12d74f52` defines `group_id` as a capture
+session and says clips sharing one group are from the same worker, site and
+lighting; it recommends splitting on that key. Thus the 69-group evaluation
+is session-disjoint. The card does not say whether one worker can recur under
+different `group_id` values or provide a cross-session participant mapping, so
+participant-disjoint generalization remains unverified. The publisher's action
+labels are automatically generated and unverified; timestamp-derived
 correspondence is not a natural-world action decision; audio and text are not
 part of this task; and the 9-category distribution is imbalanced. R2-M stays
 open. Before any new fit, define a product-directed, sensor-inclusive task
 with trusted labels and a separately frozen development design. Do not tune
 on these 69 groups or call this result four-modality quality.
+
+Primary source: [EgoViz-120 dataset card at the pinned revision](https://huggingface.co/datasets/humaidtech/EgoViz-120/tree/7a84ecd3411b9f219b02f273c438f1ea12d74f52).
 
 ## Reproduction
 
