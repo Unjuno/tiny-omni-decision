@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
+
+pytest.importorskip("torch")
 
 from scripts.evaluate_dcase2025_av_readout import (
     cluster_bootstrap_differences,

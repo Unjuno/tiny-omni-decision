@@ -98,3 +98,8 @@ quality target.
 After this one-shot run, only formatting and an unused config parse were
 cleaned in the runner to satisfy Ruff; no evaluation logic or output artifact
 was changed, and dev-test was not rerun.
+
+The first GitHub Actions run on commit `3a143788` exposed that this synthetic
+bootstrap test imported the optional PyTorch dependency without a skip guard.
+The test now follows the repository's `pytest.importorskip("torch")` pattern;
+production behavior and the one-shot evaluation are unchanged.
