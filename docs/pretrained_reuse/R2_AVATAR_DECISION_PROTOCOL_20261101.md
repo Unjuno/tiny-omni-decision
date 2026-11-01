@@ -21,8 +21,8 @@ The video archive was downloaded to
 and its length and SHA-256 were verified. The metadata archive was downloaded
 to the same attempt directory and verified against its pinned length and
 SHA-256. Only train and validation annotation JSON members were opened and
-extracted; no JPG previews were extracted, no video bytes were decoded, and no
-audit annotation member was opened. The extraction receipt is
+extracted; no JPG previews were extracted, and no audit annotation member was
+opened. A later bounded media-container pass is described below. The extraction receipt is
 `C:\CodexArtifacts\pretrained-reuse-r2\avatar-av-decision-20261101-attempt-01\annotation-extraction-02-receipt.json`.
 It records 21,682 extracted JSONs (242,943,743 bytes), extracted-file manifest
 SHA-256 `c8125861e0b63ca25df8bb8b21e418701a2f0b5c64a1970d22ec09f9c3581a44`,
@@ -97,6 +97,18 @@ counts, not evidence that the audio and video streams are both necessary.
 Validation has 305 independent target groups, and frozen-encoder pretraining
 overlap is unresolved.
 
+Across the train/validation choice inputs, 68,440 audio/video asset references
+collapse to 13,688 unique timestamped assets and 3,009 unique source MP4 clips.
+All 3,009 referenced MP4 containers opened from the pinned archive with
+readable audio and video streams. All referenced annotation times were within
+container duration. This checks container/stream availability and time bounds;
+it does not decode every media payload or confirm every timestamp's
+frame/audio alignment. Full decode/alignment was checked only on three fixed
+validation examples. Receipt:
+`C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-02/av-media-integrity-01.json`
+(SHA-256 `ab117d7b34f4de1056d124d88634a93c7bc8ef82f5994fda21137e06f83ec00a`).
+No audit annotation or media was accessed.
+
 The file-to-video identity audit normalized zero-padded clip-folder offsets
 against each JSON `video_id` and found zero mismatches: train has 3,952 clips /
 3,286 source YouTube groups, and validation has 520 clips / 411 groups. All
@@ -126,6 +138,10 @@ Before fitting, verify frame seeks and audio-crop alignment across more source
 groups. Compare option-only, audio-only, video-only, joint, missing-stream, and
 within-split audio/video-shuffle controls; report source-group intervals. The
 held-out audit remains unopened.
+
+The pinned EfficientAT and VideoPrism smoke receipts, three-run timing
+averages, and rough extraction estimate are recorded in
+[`R2_AVATAR_ENCODER_RUNTIME_SMOKES_20261101.md`](R2_AVATAR_ENCODER_RUNTIME_SMOKES_20261101.md).
 
 ## Model and execution gates
 

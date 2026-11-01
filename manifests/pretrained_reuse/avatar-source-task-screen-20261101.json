@@ -74,7 +74,7 @@
     "The proposed split is public-source development data, not a blind external benchmark.",
     "Exact frozen-encoder pretraining overlap with AVATAR source videos is not yet verified.",
     "Underlying source-video copyrights remain with original owners; attribution is required and raw media will not be redistributed.",
-    "No video media was decoded. Only train/validation annotation JSONs were opened; audit annotation members remain unopened."
+    "All 3,009 train/validation-referenced MP4 containers opened with readable audio and video streams, and all referenced annotation times were within container duration. Full payload decoding/alignment was sampled on only three validation targets, so this is not a full decode audit. Only train/validation annotation JSONs were opened; audit annotation members remain unopened."
   ],
   "annotation_extraction": {
     "receipt_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/annotation-extraction-02-receipt.json",
@@ -155,6 +155,23 @@
     "features_extracted": false,
     "training_started": false,
     "cloud_compute_used": false
+  },
+  "media_container_integrity": {
+    "status": "PASS_TRAIN_VALIDATION_REFERENCED_CONTAINERS",
+    "receipt_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-02/av-media-integrity-01.json",
+    "receipt_sha256": "ab117d7b34f4de1056d124d88634a93c7bc8ef82f5994fda21137e06f83ec00a",
+    "unique_referenced_clips": 3009,
+    "checked_clips": 3009,
+    "missing_or_unreadable_audio_video_streams": 0,
+    "annotation_times_beyond_container_duration": 0,
+    "full_payload_decode_scope": "three validation target videos only",
+    "audit_annotations_or_media_accessed": false
+  },
+  "runtime_smoke_receipts": {
+    "efficientat_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-02/efficientat-validation-smoke.json",
+    "efficientat_sha256": "e64acba92da221cec6495bc03329e5be996d8d11982ed67676f36dafb8dcfb03",
+    "videoprism_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-02/videoprism-validation-smoke.json",
+    "videoprism_sha256": "1427032c02bd45b9caa35e290f0ff2959980b573dc06de32aaf55e781adb79f3"
   },
   "decision": "SOURCE_LICENSES_SUPPORT_BOUNDED_LOCAL_DEVELOPMENT; REQUIRE_VIDEO_GROUP_SPLIT_AND_CONTROL_PREFLIGHT_BEFORE_ANY_FIT"
 }
