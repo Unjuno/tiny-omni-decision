@@ -50,6 +50,45 @@ class DCASE2025Readout(nn.Module):
         return self.network(torch.cat([*features, context], dim=-1))
 
 
+class DCASE2025LinearReadout(nn.Module):
+    """Affine two-option readout used to test whether the nonlinear head overfits."""
+
+    MODES = DCASE2025Readout.MODES
+
+    def __init__(self, mode: str, *, event_classes: int = 13):
+        super().__init__()
+        if mode not in self.MODES or event_classes < 1:
+            raise ValueError("unsupported mode or non-positive event taxonomy")
+        self.mode = mode
+        self.event_classes = event_classes
+        input_width = event_classes
+        input_width += 768 if mode in {"audio", "joint"} else 0
+        input_width += 768 if mode in {"video", "joint"} else 0
+        self.linear = nn.Linear(input_width, 2)
+
+    def forward(self, audio: Tensor, video: Tensor, event_class: Tensor) -> Tensor:
+        if event_class.ndim != 1 or event_class.dtype != torch.long:
+            raise ValueError("event_class must be a one-dimensional int64 tensor")
+        batch = event_class.shape[0]
+        if batch < 1 or (event_class < 0).any() or (event_class >= self.event_classes).any():
+            raise ValueError("event_class is outside the fixed taxonomy")
+        features = []
+        if self.mode in {"audio", "joint"}:
+            if audio.shape != (batch, 768) or not torch.isfinite(audio).all():
+                raise ValueError("audio features must be finite [batch, 768]")
+            features.append(audio)
+        if self.mode in {"video", "joint"}:
+            if video.shape != (batch, 768) or not torch.isfinite(video).all():
+                raise ValueError("video features must be finite [batch, 768]")
+            features.append(video)
+        if not features:
+            raise ValueError("at least one modality is required")
+        context = torch.nn.functional.one_hot(event_class, self.event_classes).to(
+            dtype=features[0].dtype
+        )
+        return self.linear(torch.cat([*features, context], dim=-1))
+
+
 def binary_probability_metrics(probabilities, targets, *, bins: int = 15) -> dict[str, float]:
     """Return fixed-order binary metrics; probabilities are ``[off, on]``."""
     probabilities = torch.as_tensor(probabilities, dtype=torch.float64)

@@ -3,6 +3,7 @@ import pytest
 torch = pytest.importorskip("torch")
 
 from tiny_omni_decision.dcase2025_readout import (  # noqa: E402
+    DCASE2025LinearReadout,
     DCASE2025Readout,
     binary_probability_metrics,
 )
@@ -21,6 +22,19 @@ def test_dcase_readout_rejects_out_of_range_event_context():
     model = DCASE2025Readout("joint", hidden_width=8)
     with pytest.raises(ValueError, match="taxonomy"):
         model(torch.zeros(1, 768), torch.zeros(1, 768), torch.tensor([13]))
+
+
+@pytest.mark.parametrize(
+    "mode,expected_parameters", [("audio", 1564), ("video", 1564), ("joint", 3100)]
+)
+def test_linear_readout_is_affine_and_has_expected_parameter_budget(mode, expected_parameters):
+    model = DCASE2025LinearReadout(mode)
+    logits = model(torch.zeros(2, 768), torch.ones(2, 768), torch.tensor([0, 12]))
+
+    assert logits.shape == (2, 2)
+    assert torch.isfinite(logits).all()
+    assert sum(parameter.numel() for parameter in model.parameters()) == expected_parameters
+    assert len(list(model.modules())) == 2
 
 
 def test_binary_metrics_report_balanced_accuracy_and_calibration():
