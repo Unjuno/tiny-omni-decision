@@ -109,7 +109,14 @@ def test_choices_skip_ambiguous_and_mixed_sound_rows(tmp_path):
         for index, category in enumerate(categories):
             source_id = f"{prefix[:8]}{index:03d}"
             _write_row(tmp_path, split, source_id, category)
-    mixed_path = next((tmp_path / "train").rglob("*.json"))
+    mixed_path = next(
+        path
+        for path in sorted((tmp_path / "train").rglob("*.json"))
+        if json.loads(path.read_text(encoding="utf-8"))["annotations"][0][
+            "audio_visual_category"
+        ]
+        == "Guitar"
+    )
     row = json.loads(mixed_path.read_text(encoding="utf-8"))
     row["annotations"].append(
         {
