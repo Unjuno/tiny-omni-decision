@@ -1,0 +1,160 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "AVATAR",
+  "recorded_at": "2026-11-01T11:00:00+09:00",
+  "status": "ALLOW_BOUNDED_LOCAL_DEVELOPMENT_WITH_ATTRIBUTION",
+  "sources": {
+    "huggingface_dataset": {
+      "url": "https://huggingface.co/datasets/mipal/AVATAR",
+      "revision": "a7f0146ff704799d044133e61137836cacc1c233",
+      "license": "CC-BY-4.0",
+      "storage_bytes": 5409402996,
+      "files": {
+        "video.zip": {
+          "size_bytes": 3785157586,
+          "sha256": "5ce5be7fa6dda85889750f6c7cc2fad807527063e7d7090c664170a66b078a68"
+        },
+        "metadata.zip": {
+          "size_bytes": 1624245410,
+          "sha256": "97e9f09e9f4325ac888db2886da22ca4650eafb8848721230a4e5d80fb6a4183"
+        }
+      }
+    },
+    "upstream_media_dataset": {
+      "url": "https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
+      "license": "CC-BY-4.0",
+      "media_rights_note": "The publisher states source-video copyright remains with original owners. Preserve attribution; do not redistribute media."
+    },
+    "paper": "https://arxiv.org/abs/2507.04667"
+  },
+  "reported": {
+    "videos": 5000,
+    "annotated_frames": 24266,
+    "annotated_instances": 28516,
+    "audio_visual_categories": 80,
+    "scenarios": ["single_sound", "mixed_sound", "multi_entity", "off_screen"],
+    "official_train_validation_test_split": false
+  },
+  "proposed_split": {
+    "group_key": "source_youtube_id_from_archive_member_name",
+    "seed": 17,
+    "fractions": {"train": 0.8, "validation": 0.1, "audit": 0.1},
+    "derived_from_labels": false,
+    "clip_count": 5000,
+    "source_video_group_count": 4108,
+    "groups_with_multiple_clips": 568,
+    "max_clips_per_source_group": 24,
+    "mac_osx_sidecars_ignored": 5000,
+    "split_artifact_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/source-video-group-split.json",
+    "split_artifact_sha256": "57766c748e2d567060685cc16d8be554201f602224b81e6b3ee13f61d987b9af",
+    "split_manifest_sha256": "bd01932a05952e303b9d0d97c2c15870d8c4315e3e50dc9b08db7e4e3b4cdc41",
+    "split_group_counts": {"train": 3286, "validation": 411, "audit": 411},
+    "split_clip_counts": {"train": 3952, "validation": 520, "audit": 528},
+    "status": "MATERIALIZED_BY_ZIP_MEMBER_ONLY_SCRIPT_AFTER_CODE_TESTS"
+  },
+  "task": {
+    "name": "avatar_native_audio_visual_localization",
+    "decision_form": "native_spatiotemporal_source_localization",
+    "primary_scenarios": ["single_sound", "multi_entity"],
+    "off_screen_option": "none_visible",
+    "mixed_sound_handling": "separate_multi_label_diagnostic",
+    "both_input_necessity": "UNVERIFIED_PENDING_FIXED_CONTROLS",
+    "oracle_candidate_regions": true,
+    "end_to_end_object_detection_claim": false
+  },
+  "decision_adaptation": {
+    "name": "cross_clip_audio_video_category_choice_preflight",
+    "decision_form": "probabilities_over_four_opaque_video_options",
+    "task_scope": "audio_category_to_annotated_video_frame_category matching across distinct source clips",
+    "native_localization_claim": false,
+    "both_input_necessity": "UNVERIFIED_PENDING_FIXED_CONTROLS",
+    "training_started": false
+  },
+  "limitations": [
+    "The proposed split is public-source development data, not a blind external benchmark.",
+    "Exact frozen-encoder pretraining overlap with AVATAR source videos is not yet verified.",
+    "Underlying source-video copyrights remain with original owners; attribution is required and raw media will not be redistributed.",
+    "No video media was decoded. Only train/validation annotation JSONs were opened; audit annotation members remain unopened."
+  ],
+  "annotation_extraction": {
+    "receipt_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/annotation-extraction-02-receipt.json",
+    "receipt_status": "PASS_TRAIN_VALIDATION_ANNOTATIONS_EXTRACTED_AUDIT_UNOPENED",
+    "receipt_sha256": "e62978dcad79111c148c2df22f3655581b69abe71a6c4fe83290c8d0dc55df55",
+    "extracted_train_validation_json_count": 21682,
+    "withheld_audit_json_count": 2584,
+    "extracted_annotation_bytes": 242943743,
+    "extracted_files_manifest_sha256": "c8125861e0b63ca25df8bb8b21e418701a2f0b5c64a1970d22ec09f9c3581a44",
+    "task_instances": {
+      "train": {"Single-Sound": 12006, "Multi-Entity": 3083, "Mixed-Sound": 7423, "Off-Screen": 540},
+      "validation": {"Single-Sound": 1693, "Multi-Entity": 345, "Mixed-Sound": 887, "Off-Screen": 70}
+    },
+    "video_media_decoded": false,
+    "jpg_previews_extracted": false,
+    "audit_annotation_members_opened": false
+  },
+  "annotation_preflight": {
+    "status": "PASS_TRAIN_VALIDATION_ANNOTATION_PREFLIGHT_AUDIT_UNREAD",
+    "report_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/annotation-preflight-03.json",
+    "report_sha256": "1ec78010fe73eeeef5fcc89e2562de233f2c49c21af382e9141febbc273aa461",
+    "task_field_in_archive": "task",
+    "dataset_card_example_field": "scenario",
+    "official_example_parser_field": "task",
+    "clip_to_video_id_normalized_mismatches": 0,
+    "visible_bbox_out_of_frame_count": 0,
+    "visible_bbox_instances": {"train": 22512, "validation": 2925},
+    "off_screen_bbox_missing_instances": {"train": 540, "validation": 70},
+    "potential_temporal_multicategory_clips": {"train": 109, "validation": 18},
+    "potential_temporal_multicategory_source_groups": {"train": 101, "validation": 15},
+    "validation_temporal_group_count_is_small": true,
+    "audit_annotation_files_opened": false
+  },
+  "option_choice_preflight": {
+    "status": "PASS_TRAIN_VALIDATION_FOUR_OPTION_CONSTRUCTION_AUDIT_UNREAD",
+    "seed": 17,
+    "report_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/option-choices-04/report.json",
+    "report_sha256": "809237486a120a44ad4360c5d3ae3144eba7b07e45e34fca3f02177add8c446f",
+    "train_model_input_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/option-choices-04/train-model-input.jsonl",
+    "train_model_input_sha256": "aeab21994e00ddde5f87b1f61b385e2f1f25e2ffe5e37dcd20b02457f85edbe3",
+    "validation_model_input_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/option-choices-04/validation-model-input.jsonl",
+    "validation_model_input_sha256": "26752042e36175b9a601f9ee0be2b4a1bbbe3fcc29411a31796c6e6d578cbcaa",
+    "train_analysis_sidecar_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/option-choices-04/train-analysis-sidecar.jsonl",
+    "train_analysis_sidecar_sha256": "097943ce2916fd869ff321ecc0c8b6b3d327294baacb038daa090a205662b1d0",
+    "validation_analysis_sidecar_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-av-decision-20261101-attempt-01/option-choices-04/validation-analysis-sidecar.jsonl",
+    "validation_analysis_sidecar_sha256": "c9a32cb9206e80091b64a89ef5ccdea21cbca1a8c4394a7637f4bc3d035f0bf1",
+    "train_examples": 11995,
+    "validation_examples": 1693,
+    "train_unique_target_source_groups": 2268,
+    "validation_unique_target_source_groups": 305,
+    "skipped_for_insufficient_negative_categories_or_groups": {"train": 0, "validation": 0},
+    "audio_window_seconds": 2.0,
+    "audio_window_center": "target annotation frame_number / annotation fps",
+    "candidate_frame_timestamp": "candidate frame_number / annotation fps",
+    "category_text_in_model_input": false,
+    "distinct_candidate_category_and_source_group_gate": "PASS",
+    "audio_windows_requiring_boundary_zero_padding": {"train": 2230, "validation": 300},
+    "audit_annotation_files_opened": false,
+    "video_media_decoded": true,
+    "media_smoke": {
+      "split": "validation",
+      "rows": [0, 100, 500],
+      "source_groups": ["-EFu7tP-QEk", "0OtOrR70M1A", "9o2GcFviRBc"],
+      "frame_seek_errors": 0,
+      "seconds_per_row": [0.2092, 0.5041, 0.2745],
+      "mean_seconds_per_row": 0.3293,
+      "decoded_streams_per_row": 5,
+      "audio_window_verified_sample_rate_hz": 44100,
+      "audio_window_verified_samples_after_duration_clamp_and_padding": [88200, 88200, 88200]
+    }
+  },
+  "integrity": {
+    "payload_downloaded": true,
+    "video_archive_downloaded": true,
+    "metadata_archive_downloaded": true,
+    "annotations_opened": true,
+    "sealed_audit_accessed": false,
+    "features_extracted": false,
+    "training_started": false,
+    "cloud_compute_used": false
+  },
+  "decision": "SOURCE_LICENSES_SUPPORT_BOUNDED_LOCAL_DEVELOPMENT; REQUIRE_VIDEO_GROUP_SPLIT_AND_CONTROL_PREFLIGHT_BEFORE_ANY_FIT"
+}
