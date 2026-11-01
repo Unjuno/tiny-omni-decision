@@ -9,6 +9,7 @@ import pytest
 from tiny_omni_decision.dcase2025 import (
     assert_dcase2025_room_disjoint,
     load_dcase2025_devtrain_queries,
+    load_dcase2025_queries,
     parse_dcase2025_clip_member,
     queries_from_annotations,
     select_one_query_per_clip,
@@ -17,9 +18,7 @@ from tiny_omni_decision.dcase2025_media import stereo_from_foa, uniform_clip_fra
 
 
 def _clip(name: str = "fold3_room22_mix007_deg216_start0139"):
-    parsed = parse_dcase2025_clip_member(
-        f"metadata_dev/dev-train-sony/{name}.csv"
-    )
+    parsed = parse_dcase2025_clip_member(f"metadata_dev/dev-train-sony/{name}.csv")
     assert parsed is not None
     return parsed
 
@@ -104,6 +103,30 @@ def test_development_loader_never_opens_devtest_annotations() -> None:
         assert queries[0].split == "train"
 
 
+def test_postfreeze_loader_reads_devtest_only_and_keeps_group_identity() -> None:
+    archive_buffer = io.BytesIO()
+    with zipfile.ZipFile(archive_buffer, "w") as archive:
+        archive.writestr(
+            "metadata_dev/dev-train-sony/fold3_room22_mix007_deg216_start0139.csv",
+            "frame,class,source,azimuth,distance,onscreen\n0,2,0,20,1,0\n",
+        )
+        archive.writestr(
+            "metadata_dev/dev-test-tau/fold3_room23_mix008_deg000_start0001.csv",
+            "frame,class,source,azimuth,distance,onscreen\n0,4,1,30,2,1\n",
+        )
+    archive_buffer.seek(0)
+    with zipfile.ZipFile(archive_buffer) as archive:
+        queries, inventory = load_dcase2025_queries(archive, split="devtest")
+    assert inventory["opened_split"] == "devtest"
+    assert inventory["opened_devtest_annotation_members"] is True
+    assert len(queries) == 1
+    assert queries[0].split == "test"
+    assert queries[0].room_id == "tau:room23"
+    assert queries[0].target_onscreen == 1
+    with pytest.raises(ValueError, match="split"):
+        load_dcase2025_queries(archive, split="sealed-audit")
+
+
 def test_room_disjoint_gate_rejects_room_parent_and_clip_overlap() -> None:
     train = [_clip()]
     same_room = parse_dcase2025_clip_member(
@@ -117,9 +140,7 @@ def test_room_disjoint_gate_rejects_room_parent_and_clip_overlap() -> None:
 def test_uniform_frame_indices_match_official_clip_timebase() -> None:
     indices = uniform_clip_frame_indices(start_frame=13, fps=29.97)
     assert indices == (39, 60, 82, 103, 124, 145, 167, 188)
-    centered = uniform_clip_frame_indices(
-        start_frame=13, fps=29.97, event_frame=25
-    )
+    centered = uniform_clip_frame_indices(start_frame=13, fps=29.97, event_frame=25)
     assert centered == (104, 107, 110, 113, 115, 118, 121, 124)
 
 
@@ -134,4 +155,3 @@ def test_stereo_projection_matches_official_rotation_and_clipping_gate() -> None
     foa[:, 0] = 0.8
     with pytest.raises(ValueError, match="clipped"):
         stereo_from_foa(foa, view_degrees=90)
-

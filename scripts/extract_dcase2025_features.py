@@ -13,8 +13,8 @@ from pathlib import Path
 
 import numpy as np
 
-from scripts.preflight_dcase2025 import preflight, sha256_file
-from tiny_omni_decision.dcase2025 import load_dcase2025_devtrain_queries
+from scripts.preflight_dcase2025 import preflight, preflight_devtest, sha256_file
+from tiny_omni_decision.dcase2025 import load_dcase2025_queries
 
 VIDEO_CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
 VIDEO_SOURCE_COMMIT = "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
@@ -38,6 +38,16 @@ def write_text_atomic(path: Path, value: str) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(value, encoding="utf-8")
     temporary.replace(path)
+
+
+def worker_environment(repo_root: Path, dependency_root: Path | None = None) -> dict[str, str]:
+    env = os.environ.copy()
+    paths = []
+    if dependency_root is not None:
+        paths.append(str(dependency_root.resolve()))
+    paths.extend((str((repo_root / "src").resolve()), str(repo_root.resolve())))
+    env["PYTHONPATH"] = os.pathsep.join(paths)
+    return env
 
 
 def send_request(process: subprocess.Popen[str], request: dict[str, object]) -> dict[str, object]:
@@ -104,21 +114,37 @@ def run(args) -> dict[str, object]:
     scratch = output / "scratch"
     scratch.mkdir(exist_ok=True)
 
-    expected_preflight = preflight(args.metadata_zip, args.media_manifest, seed=17)
+    if args.split == "devtrain":
+        expected_preflight = preflight(args.metadata_zip, args.media_manifest, seed=17)
+    else:
+        if args.candidate_freeze is None:
+            raise ValueError("devtest extraction requires a candidate-freeze receipt")
+        expected_preflight = preflight_devtest(
+            args.metadata_zip,
+            args.media_manifest,
+            args.candidate_freeze,
+            seed=17,
+        )
     if expected_preflight["status"] != "PASS":
         raise ValueError("DCASE media/metadata preflight did not pass")
     with zipfile_for(args.metadata_zip) as archive:
-        queries, inventory = load_dcase2025_devtrain_queries(archive, seed=17)
+        queries, inventory = load_dcase2025_queries(archive, split=args.split, seed=17)
     query_rows = query_manifest_rows(queries)
     query_ids_hash = hashlib.sha256(
         "".join(f"{row['sample_id']}\n" for row in query_rows).encode()
     ).hexdigest()
-    if query_ids_hash != expected_preflight["selected_sample_id_order_sha256"]:
+    expected_ids_key = (
+        "selected_sample_id_order_sha256"
+        if args.split == "devtrain"
+        else "selected_id_order_sha256"
+    )
+    if query_ids_hash != expected_preflight[expected_ids_key]:
         raise ValueError("query order differs from the frozen preflight")
     total = len(query_rows)
 
     run_identity = {
         "query_ids_sha256": query_ids_hash,
+        "split": args.split,
         "metadata_sha256": expected_preflight["metadata_sha256"],
         "media_manifest_sha256": expected_preflight["media_manifest_sha256"],
         "audio_checkpoint_sha256": AUDIO_CHECKPOINT_SHA256,
@@ -130,6 +156,12 @@ def run(args) -> dict[str, object]:
         "video_window": "fixed 0.7 seconds centered on event midpoint",
         "audio_window": "official 5-second DCASE FOA-to-stereo clip",
         "seed": 17,
+        "video_python": str(args.video_python.resolve()),
+        "video_dependency_root": (
+            str(args.video_dependency_root.resolve())
+            if args.video_dependency_root is not None
+            else None
+        ),
         "runner_sha256": {
             name: sha256_file(args.repo_root / "scripts" / name)
             for name in (
@@ -209,10 +241,8 @@ def run(args) -> dict[str, object]:
             str(args.repo_root.resolve()),
         ]
     )
-    worker_env = os.environ.copy()
-    worker_env["PYTHONPATH"] = os.pathsep.join(
-        [str(args.repo_root.resolve() / "src"), str(args.repo_root.resolve())]
-    )
+    worker_env = worker_environment(args.repo_root)
+    video_env = worker_environment(args.repo_root, args.video_dependency_root)
     media_command = [
         str(media_python),
         str(args.repo_root / "scripts/dcase2025_media_worker.py"),
@@ -247,7 +277,7 @@ def run(args) -> dict[str, object]:
         workers.append(media_worker)
         audio_worker = start_worker(audio_command, audio_env, output / "audio-worker.log")
         workers.append(audio_worker)
-        video_worker = start_worker(video_command, worker_env, output / "video-worker.log")
+        video_worker = start_worker(video_command, video_env, output / "video-worker.log")
         workers.append(video_worker)
         progress["worker_ready"] = {
             "media": media_worker[2],
@@ -402,6 +432,8 @@ def main() -> None:
     parser.add_argument("--metadata-zip", type=Path, required=True)
     parser.add_argument("--media-manifest", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--split", choices=("devtrain", "devtest"), default="devtrain")
+    parser.add_argument("--candidate-freeze", type=Path)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--media-python", type=Path, required=True)
     parser.add_argument("--generator-source", type=Path, required=True)
@@ -409,6 +441,7 @@ def main() -> None:
     parser.add_argument("--audio-checkpoint", type=Path, required=True)
     parser.add_argument("--audio-dependency-root", type=Path, required=True)
     parser.add_argument("--video-python", type=Path, required=True)
+    parser.add_argument("--video-dependency-root", type=Path)
     parser.add_argument("--video-source", type=Path, required=True)
     parser.add_argument("--video-checkpoint", type=Path, required=True)
     args = parser.parse_args()

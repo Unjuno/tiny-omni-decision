@@ -124,9 +124,7 @@ def queries_from_annotations(
             if len(active_sources_by_class_frame[(event_class, event_frame)]) != 1:
                 ambiguous += 1
                 continue
-            sample_id = (
-                f"{clip.clip_id}|frame={event_frame}|class={event_class}|source={source}"
-            )
+            sample_id = f"{clip.clip_id}|frame={event_frame}|class={event_class}|source={source}"
             queries.append(
                 DCASE2025Query(
                     sample_id=sample_id,
@@ -159,22 +157,23 @@ def select_one_query_per_clip(
     for _clip_id, candidates in by_clip.items():
         chosen = min(
             candidates,
-            key=lambda item: hashlib.sha256(
-                f"{seed}\0{item.sample_id}".encode()
-            ).digest(),
+            key=lambda item: hashlib.sha256(f"{seed}\0{item.sample_id}".encode()).digest(),
         )
         selected.append(chosen)
     return sorted(selected, key=lambda item: item.sample_id)
 
 
-def load_dcase2025_devtrain_queries(
-    archive: zipfile.ZipFile, *, seed: int = 17
+def load_dcase2025_queries(
+    archive: zipfile.ZipFile, *, split: str, seed: int = 17
 ) -> tuple[list[DCASE2025Query], dict[str, object]]:
-    """Read dev-train members only and return one query per eligible clip."""
+    """Read only the requested official split and return one query per clip."""
+    if split not in {"devtrain", "devtest"}:
+        raise ValueError("split must be devtrain or devtest")
+    archive_split = "dev-train" if split == "devtrain" else "dev-test"
     all_queries: list[DCASE2025Query] = []
     inventory: dict[str, object] = {
-        "opened_split": "dev-train",
-        "opened_devtest_annotation_members": False,
+        "opened_split": split,
+        "opened_devtest_annotation_members": split == "devtest",
         "metadata_clip_files": 0,
         "clips_with_unambiguous_queries": 0,
         "annotation_rows": 0,
@@ -184,7 +183,7 @@ def load_dcase2025_devtrain_queries(
     }
     room_counts: dict[str, int] = defaultdict(int)
     for member in archive.namelist():
-        if not member.startswith("metadata_dev/dev-train-"):
+        if not member.startswith(f"metadata_dev/{archive_split}-"):
             continue
         clip = parse_dcase2025_clip_member(member)
         if clip is None:
@@ -209,6 +208,13 @@ def load_dcase2025_devtrain_queries(
         "".join(f"{item.sample_id}\n" for item in selected).encode("utf-8")
     ).hexdigest()
     return selected, inventory
+
+
+def load_dcase2025_devtrain_queries(
+    archive: zipfile.ZipFile, *, seed: int = 17
+) -> tuple[list[DCASE2025Query], dict[str, object]]:
+    """Read dev-train members only; preserved for the training preflight."""
+    return load_dcase2025_queries(archive, split="devtrain", seed=seed)
 
 
 def assert_dcase2025_room_disjoint(

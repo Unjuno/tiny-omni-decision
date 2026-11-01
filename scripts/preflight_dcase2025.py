@@ -10,7 +10,9 @@ from collections import Counter
 from pathlib import Path
 
 from tiny_omni_decision.dcase2025 import (
+    assert_dcase2025_room_disjoint,
     load_dcase2025_devtrain_queries,
+    load_dcase2025_queries,
     parse_dcase2025_clip_member,
 )
 
@@ -163,6 +165,113 @@ def preflight(metadata_zip: Path, media_manifest: Path, *, seed: int = 17) -> di
         "verified_media_file_count": verified_media_file_count,
         "missing_or_mismatched_media": sorted(set(missing_media)),
         "training_protocol": "all official dev-train rooms; fixed budget; no validation selection",
+    }
+    return report
+
+
+def preflight_devtest(
+    metadata_zip: Path,
+    media_manifest: Path,
+    candidate_freeze: Path,
+    *,
+    seed: int = 17,
+) -> dict[str, object]:
+    """Validate room-held-out dev-test media only after candidate checkpoint freeze."""
+    metadata_sha = sha256_file(metadata_zip)
+    if metadata_sha != METADATA_SHA256:
+        raise ValueError("DCASE metadata archive SHA-256 differs from the pinned release")
+
+    freeze = json.loads(candidate_freeze.read_text(encoding="utf-8"))
+    if freeze.get("status") != "FROZEN_BEFORE_DEVTEST":
+        raise ValueError("candidate freeze receipt is required before dev-test access")
+    if freeze.get("devtest_annotation_content_opened") is not False:
+        raise ValueError("candidate freeze receipt does not prove pre-evaluation isolation")
+    model_dir = Path(str(freeze.get("source_training_output", "")))
+    expected_checkpoints = freeze.get("candidate_checkpoint_sha256")
+    if not isinstance(expected_checkpoints, dict) or set(expected_checkpoints) != {
+        "audio",
+        "video",
+        "joint",
+    }:
+        raise ValueError("candidate freeze receipt lacks the three fixed candidates")
+    for mode, expected_hash in expected_checkpoints.items():
+        checkpoint = model_dir / f"{mode}-readout.npz"
+        if not checkpoint.is_file() or sha256_file(checkpoint) != expected_hash:
+            raise ValueError(f"frozen {mode} checkpoint hash mismatch")
+
+    manifest = json.loads(media_manifest.read_text(encoding="utf-8"))
+    if manifest.get("status") != "PASS" or manifest.get("license") != "MIT":
+        raise ValueError("dev-test media manifest is not complete under the admitted source")
+    pairs = manifest.get("pairs")
+    if not isinstance(pairs, list):
+        raise ValueError("dev-test media manifest needs a pair list")
+    media_by_parent = {}
+    for pair in pairs:
+        parent, room = pair.get("clip"), pair.get("room")
+        if not isinstance(parent, str) or not isinstance(room, str) or parent in media_by_parent:
+            raise ValueError("invalid or duplicate dev-test parent media identity")
+        files = pair.get("files")
+        if not isinstance(files, dict):
+            raise ValueError("dev-test parent is missing modality files")
+        for modality in ("audio", "video"):
+            record = files.get(modality)
+            if not isinstance(record, dict):
+                raise ValueError(f"dev-test parent is missing {modality}")
+            path = Path(str(record.get("path", "")))
+            if (
+                not path.is_file()
+                or path.stat().st_size != record.get("bytes")
+                or sha256_file(path) != record.get("sha256")
+            ):
+                raise ValueError(f"dev-test {modality} media hash/size mismatch: {parent}")
+        media_by_parent[parent] = {"room": room, "files": files}
+
+    train_rooms: set[str] = set()
+    train_rows = []
+    with zipfile.ZipFile(metadata_zip) as archive:
+        for member in archive.namelist():
+            if not member.startswith("metadata_dev/dev-train-"):
+                continue
+            clip = parse_dcase2025_clip_member(member)
+            if clip is not None:
+                train_rows.append(clip)
+                train_rooms.add(clip.room_id)
+        queries, inventory = load_dcase2025_queries(archive, split="devtest", seed=seed)
+    if not queries:
+        raise ValueError("no eligible dev-test queries were found")
+    assert_dcase2025_room_disjoint(train_rows, queries)
+    test_rooms = {query.room_id for query in queries}
+    if test_rooms != DEVTEST_ROOMS or test_rooms & train_rooms:
+        raise ValueError("DCASE dev-test rooms differ from the pinned room-disjoint split")
+    required_parents = {query.parent_recording for query in queries}
+    if set(media_by_parent) != required_parents:
+        raise ValueError("dev-test media parents do not exactly match selected queries")
+    for query in queries:
+        if media_by_parent[query.parent_recording]["room"] != query.room_id:
+            raise ValueError("dev-test media room differs from annotation identity")
+    query_ids = [query.sample_id for query in queries]
+    row_order_hash = hashlib.sha256("".join(f"{item}\n" for item in query_ids).encode()).hexdigest()
+    target_counts = {
+        str(value): sum(query.target_onscreen == value for query in queries) for value in (0, 1)
+    }
+    report = {
+        "status": "PASS",
+        "purpose": "single post-freeze evaluation split preflight",
+        "candidate_freeze_sha256": sha256_file(candidate_freeze),
+        "candidate_training_result_sha256": freeze["training_result_sha256"],
+        "metadata_sha256": metadata_sha,
+        "media_manifest_sha256": sha256_file(media_manifest),
+        "devtrain_rooms": sorted(train_rooms),
+        "devtest_rooms": sorted(test_rooms),
+        "devtrain_devtest_room_overlap": sorted(train_rooms & test_rooms),
+        "query_inventory": inventory,
+        "selected_queries": len(queries),
+        "selected_id_order_sha256": row_order_hash,
+        "selected_targets": target_counts,
+        "unique_parent_recordings": len(required_parents),
+        "media_file_count": 2 * len(required_parents),
+        "annotation_content_opened_after_candidate_freeze": True,
+        "sealed_audit_accessed": False,
     }
     return report
 
