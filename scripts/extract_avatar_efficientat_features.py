@@ -14,7 +14,6 @@ from itertools import groupby
 from pathlib import Path
 from typing import Any
 
-import av
 import numpy as np
 
 AUDIO_MODEL_REVISION = "a425fdce92572e602a1d5634799bd9f1f2efa806"
@@ -125,6 +124,11 @@ def trim_to_audio_stream_end(
 
 
 def decode_mono_32khz(path: Path) -> np.ndarray:
+    try:
+        import av
+    except ImportError as exc:
+        message = "PyAV is required for media decoding; install the project ML extra"
+        raise RuntimeError(message) from exc
     with av.open(str(path)) as container:
         streams = [stream for stream in container.streams if stream.type == "audio"]
         if not streams:

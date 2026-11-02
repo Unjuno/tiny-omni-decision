@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import builtins
+import importlib
 import json
 
 import numpy as np
@@ -12,6 +14,20 @@ from scripts.extract_avatar_efficientat_features import (
     load_audio_assets,
     trim_to_audio_stream_end,
 )
+
+
+def test_extractor_module_import_does_not_require_optional_pyav(monkeypatch):
+    from scripts import extract_avatar_efficientat_features as module
+
+    original_import = builtins.__import__
+
+    def reject_pyav(name, *args, **kwargs):
+        if name == "av":
+            raise ModuleNotFoundError("simulated CPU-only CI without PyAV")
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", reject_pyav)
+    importlib.reload(module)
 
 
 def _write_row(path, split: str, key: str, center: float, left: float, right: float) -> None:
