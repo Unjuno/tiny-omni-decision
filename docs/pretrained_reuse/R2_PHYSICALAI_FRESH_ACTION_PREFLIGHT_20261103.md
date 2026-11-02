@@ -117,12 +117,27 @@ downloader rechecks their hashes.
 
 Three completed-file observations were noisy (reported payload rates about
 0.352, 0.068, and 0 MB/s over the observed intervals) and ended in a 429.
-These are not a stable transfer-speed estimate, so no completion ETA is
-claimed. The downloader now honors numeric/date `Retry-After` and uses bounded
-exponential fallback, with retry behavior covered by CPU tests. Resume will
-use two workers and the same output directory. No model/data configuration,
-split, or reserved partition changed; feature extraction and fitting remain
-unstarted.
+These were not a stable transfer-speed estimate. A cached Hugging Face token
+is now read in memory and supplied only as the request Authorization header;
+it is not written to receipts or logs. A CPU regression test checks this
+behavior. The downloader also honors numeric/date `Retry-After` and uses
+bounded exponential fallback. Focused tests pass (**6 passed**) and Ruff passes.
+
+The two-worker resume started at 2026-11-03 01:58:40 JST in the same output
+directory with `--max-retries 8`. At the 02:03:13 JST snapshot, **558 files /
+56,863,546 bytes** were present and no receipt had been written. All 306 files
+present at resume start were independently checked against the manifest; the
+downloader verifies every newly fetched file before atomic rename. The active
+request plan includes only selected train/validation files and excludes the
+reserved split. The process is acquisition-only: it does not use the GPU,
+extract features, fit a readout, or evaluate quality. The candidate remains
+`REVIEW_NOT_ADMITTED`; the ROADMAP's unresolved scene/task gate prevents model
+fitting unless independently resolved.
+
+Three short transfer observations after resume imply roughly 0.10 MB/s and a
+very rough multi-hour remaining duration at the observed point. This estimate
+is noisy and not a completion commitment. No split, task, model, or reserved
+partition changed; feature extraction and fitting remain unstarted.
 
 ## Execution gate and stop conditions
 
