@@ -19,6 +19,17 @@ def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _hub_auth_headers() -> dict[str, str]:
+    try:
+        from huggingface_hub import get_token
+    except ImportError:
+        return {}
+    token = get_token()
+    if token is None:
+        return {}
+    return {"Authorization": f"Bearer {token}"}
+
+
 def _retry_after_seconds(response: requests.Response, attempt: int) -> float:
     value = response.headers.get("Retry-After")
     if value is not None:
@@ -100,6 +111,7 @@ def download_pilot(
 
     output_dir.mkdir(parents=True, exist_ok=True)
     started = time.perf_counter()
+    auth_headers = _hub_auth_headers()
 
     def fetch(item: dict[str, Any]) -> dict[str, Any]:
         suffix = ".mp4" if item["kind"] == "video" else ".parquet"
@@ -112,7 +124,7 @@ def download_pilot(
                 f"{item['path']}?download=true"
             )
             for attempt in range(max_retries + 1):
-                response = requests.get(url, timeout=(30, 180))
+                response = requests.get(url, headers=auth_headers, timeout=(30, 180))
                 if getattr(response, "status_code", 200) != 429:
                     response.raise_for_status()
                     break

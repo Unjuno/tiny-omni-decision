@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -104,6 +106,38 @@ def test_downloads_only_selected_train_validation_and_reuses_verified_files(
 
     downloader.download_pilot(manifest_path, output, workers=2)
     assert len(requested_urls) == 4
+
+
+def test_cached_huggingface_token_is_used_only_as_request_header(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    manifest_path, payloads = make_manifest(tmp_path)
+    token = "test-secret-token"
+    hub = types.ModuleType("huggingface_hub")
+    hub.get_token = lambda: token  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "huggingface_hub", hub)
+    observed_headers: list[dict[str, str] | None] = []
+    requested_urls: list[str] = []
+
+    def fake_get(url: str, **kwargs: object) -> FakeResponse:
+        requested_urls.append(url)
+        observed_headers.append(kwargs.get("headers"))  # type: ignore[arg-type]
+        match = next(path for path in payloads if path in url)
+        return FakeResponse(payloads[match])
+
+    monkeypatch.setattr(downloader.requests, "get", fake_get)
+    output = tmp_path / "authenticated-pilot"
+
+    result = downloader.download_pilot(manifest_path, output, workers=1)
+
+    assert observed_headers == [{"Authorization": f"Bearer {token}"}] * 4
+    receipt = Path(result["receipt_path"]).read_text(encoding="utf-8")
+    captured = capsys.readouterr()
+    assert token not in receipt
+    assert token not in captured.out
+    assert token not in captured.err
+    assert all("reserved" not in url for url in requested_urls)
+    assert all("/" + "a" * 40 + "/" in url for url in requested_urls)
 
 
 def test_download_fails_closed_on_publisher_hash_mismatch(
