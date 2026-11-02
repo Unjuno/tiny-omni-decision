@@ -138,3 +138,15 @@ Feature extraction/fitting is the next step, using only the frozen train and
 three-group validation set. Report any metrics as exploratory and selection-
 affected; this source cannot establish actor-independent or broad multimodal
 quality.
+
+## Follow-up result
+
+The frozen 936/144 train/validation windows were encoded with pinned VideoPrism
+and MiniLM; the 1,080-window extraction completed on CPU in 1,819.217 seconds.
+Five readouts (options-only, video mean, state mean, video+state mean, and
+video+state LSTM) each completed a fixed 25 epochs. The best validation
+accuracy was 44.44%; the LSTM tied options-only accuracy, and validation
+performance deteriorated while training fit approached 100%. This does not
+support a clear temporal-fusion benefit on these three held-out groups. Keep
+this task `REVIEW_NOT_ADMITTED`; do not increase model capacity on this
+evidence alone. See the [readout results and artifacts](R2_HABIT_SUPERVISOR_READOUT_RESULTS_20261102.md).
