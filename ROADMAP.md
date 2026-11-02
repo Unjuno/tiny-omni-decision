@@ -3843,3 +3843,6 @@ evidence. Reserved episodes were not downloaded, but the split is not blind;
 scene identity remains unknown. Keep candidate `REVIEW_NOT_ADMITTED`; no GPU
 work was done. See [pilot protocol and results](docs/pretrained_reuse/R2_PHYSICALAI_ACTION_PILOT_20261102.md)
 and [source screen](docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_20261102.md).
+The CPU extraction/evaluation entrypoints are now versioned and the artifact
+stores all per-example probabilities and probe parameters; reloaded probes
+reproduce validation probabilities exactly.

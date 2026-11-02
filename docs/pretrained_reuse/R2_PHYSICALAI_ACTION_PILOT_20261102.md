@@ -108,7 +108,13 @@ are stored outside Git under
 - `feature-extraction.json` — query counts, timestamp checks, encoder time,
   pinned source/model revisions and feature hash.
 - `features.npz` — frozen visual, state, action and grouping features.
-- `pilot-metrics.json` — metrics, class counts, bootstrap and protocol.
+- `pilot-metrics.json` — metrics, class counts, bootstrap, protocol and hashes.
+- `validation-predictions.json` — all 64 IDs, targets, predictions and
+  probability vectors for every probe/control.
+- `probe-checkpoints.pt` — all fitted linear probe weights, train-only feature
+  normalization, action normalization and action prototypes.
+  Reloading each of the four fitted probe arms reproduced all 64 saved
+  probability rows with maximum absolute delta 0.0.
 
 Artifact SHA-256: download receipt
 `ca8fb5ffa6ae51964cfe7f011c353890e2ce94d6726c518ea300b6fe32608617`, feature
@@ -116,10 +122,21 @@ archive `ebaace829f4e608746a8ffb657dfedcb8d865fae030d3f747a66f83047a1182a`,
 metrics `655af288385601a84001f523c99da73d4c0d017c116d1e0dd3f49f6cfe943214`,
 and extraction metadata
 `37713ce533c46c8780fc83f86102e58f7b2003cd9a4f3a17e37012459df47eba`.
+The original metrics hash above predates the addition of saved predictions and
+checkpoints. The regenerated prediction and probe checkpoint hashes are
+`fde01b384c63efd9853220fe5cc67cf5c05f57008457f272e74b93e299ee1f07` and
+`102965afe03de2cb6cb549e9e37df7355ea9063b605a086ee00079c3eb7c1da0`;
+the final metrics file (including zero-delta checkpoint reload validation)
+hash is
+`A6584B382DEEADA757A3AC5DBEF912919ED5509F926188492A13A56E0D55153C`.
 
-The split builder is `scripts/build_physicalai_singlearm_split.py`, with
-regression tests in `tests/test_physicalai_singlearm_split.py`. The feature
-extraction and probe scripts were kept in the artifact directory, not Git.
+Reproduction code is versioned at `scripts/build_physicalai_singlearm_split.py`,
+`scripts/extract_physicalai_action_pilot.py`, and
+`scripts/evaluate_physicalai_action_pilot.py`; split-builder regression tests
+are in `tests/test_physicalai_singlearm_split.py`. Re-evaluation from the
+saved features reproduced the metrics before writing per-example predictions
+and probe checkpoints. Full feature extraction takes about ten minutes on the
+measured CPU path.
 
 ## Next gate
 
