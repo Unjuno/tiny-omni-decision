@@ -5,10 +5,11 @@ import json
 
 import numpy as np
 import pytest
-import torch
 
-from scripts.verify_avatar_fusion_runtime import run_verification, sha256_file
-from tiny_omni_decision.avatar_fusion_runtime import AvatarAVDecisionRuntime
+torch = pytest.importorskip("torch")
+
+from scripts.verify_avatar_fusion_runtime import run_verification, sha256_file  # noqa: E402
+from tiny_omni_decision.avatar_fusion_runtime import AvatarAVDecisionRuntime  # noqa: E402
 
 
 def _runtime():
