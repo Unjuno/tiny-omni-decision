@@ -47,7 +47,8 @@ or signed it in this screen.**
 The publisher's default recommended download is approximately 14 TiB. The CLI
 supports selecting parts, including annotations, metadata, and takes, but the
 size of a minimal eligible subset or pre-extracted feature set has not been
-verified. The observed C: free space during this screen was 1,402,617,856 bytes;
+verified. The observed C: free space at 2026-11-02 screen completion was
+1,274,449,920 bytes (1.187 GiB);
 no download should begin before a size and storage-reserve preflight.
 
 ## Decision and next gates
