@@ -3837,11 +3837,12 @@ episode-grouped 70/15/15 project split and ran a fixed 64-train / 16-validation
 episode, four-window feasibility study using frozen DINOv2-base plus a small
 linear action-prototype probe. Joint Accuracy was 79.69% vs. 76.56% for the
 best singleton, but the episode-cluster interval spans zero; validation lacks
-one of eight action classes. Video-episode misalignment sharply reduced the
-joint score, but this small public development sample is not R2 quality
-evidence. Reserved episodes were not downloaded, but the split is not blind;
-scene identity remains unknown. Keep candidate `REVIEW_NOT_ADMITTED`; no GPU
-work was done. See [pilot protocol and results](docs/pretrained_reuse/R2_PHYSICALAI_ACTION_PILOT_20261102.md)
+one of eight action classes. Missing-video and missing-proprioception controls
+reduced the fixed joint probe by 20.25 and 7.90 points, respectively; intervals
+remain small-sample development evidence. Video-episode misalignment also
+sharply reduced the joint score. Reserved episodes were not downloaded, but the
+split is not blind; scene identity remains unknown. Keep candidate
+`REVIEW_NOT_ADMITTED`; no GPU work was done. See [pilot protocol and results](docs/pretrained_reuse/R2_PHYSICALAI_ACTION_PILOT_20261102.md)
 and [source screen](docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_20261102.md).
 The CPU extraction/evaluation entrypoints are now versioned and the artifact
 stores all per-example probabilities and probe parameters; reloaded probes

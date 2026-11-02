@@ -125,6 +125,24 @@ with torch.no_grad():
     p_misaligned = model((torch.tensor(Xmis, dtype=torch.float32) - mean) / std).softmax(1).numpy()
 results["joint_video_episode_misaligned"] = metrics(p_misaligned, y[va])
 predictions["joint_video_episode_misaligned"] = p_misaligned
+# Replace one modality by its train mean so it maps to zero after train-only
+# standardization. This keeps the jointly trained readout and validation rows fixed.
+model, mean, std = fitted["joint_video_proprio"]
+joint_val_features = np.concatenate([d["video"][va], d["state"][va]], axis=1)
+video_width = d["video"].shape[1]
+missing_inputs = {
+    "joint_video_missing": (slice(0, video_width),),
+    "joint_proprio_missing": (slice(video_width, joint_val_features.shape[1]),),
+}
+for name, (feature_slice,) in missing_inputs.items():
+    inputs = joint_val_features.copy()
+    inputs[:, feature_slice] = mean[feature_slice].numpy()
+    with torch.inference_mode():
+        probabilities = (
+            model((torch.tensor(inputs, dtype=torch.float32) - mean) / std).softmax(1).numpy()
+        )
+    results[name] = metrics(probabilities, y[va])
+    predictions[name] = probabilities
 # option-only class prior
 prior = np.bincount(y[tr], minlength=8).astype(float)
 prior /= prior.sum()
@@ -153,6 +171,8 @@ for name in (
     "video_8frame_mean",
     "video_last_frame",
     "joint_video_episode_misaligned",
+    "joint_video_missing",
+    "joint_proprio_missing",
 ):
     pred_base = predictions[name].argmax(1)
     diffs = []

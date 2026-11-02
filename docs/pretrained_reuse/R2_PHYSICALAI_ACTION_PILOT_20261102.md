@@ -67,6 +67,8 @@ prior. No checkpoint selection or sealed/reserved evaluation was done.
 | Video, mean of 8 frames | 0.7500 | 1.3050 | 0.4247 | 0.2097 | 64 |
 | Video, last frame | 0.7656 | 1.5217 | 0.4362 | 0.2071 | 64 |
 | Joint video + proprioception | 0.7969 | 1.5239 | 0.3823 | 0.1811 | 64 |
+| Joint model, video replaced by train mean | 0.5938 | 1.9694 | 0.6633 | 0.2810 | 64 |
+| Joint model, proprioception replaced by train mean | 0.7188 | 1.7101 | 0.5011 | 0.2430 | 64 |
 | Joint model, episode-misaligned video | 0.4531 | 5.7025 | 0.9665 | 0.3681 | 64 |
 | Train class-prior baseline | 0.2188 | 1.9026 | 0.8375 | 0.0117 | 64 |
 
@@ -77,9 +79,12 @@ joint-minus-8-frame-video it is -3.13 to +12.50 points. These 2,000 resamples
 are over only 16 validation episodes (seed 17); the intervals are wide and do
 not establish a reliable benefit. Episode-misaligned video lowers joint
 accuracy to 0.4531, a 34.31-point paired drop (95% episode-cluster interval
-20.31 to 48.44). This suggests the probe uses episode-specific video/state
-alignment, but the small exposed development sample and prototype target
-prevent a broader causal or quality claim.
+20.31 to 48.44). Replacing video with its train mean drops Accuracy by 20.25
+points (paired interval 6.25 to 34.38); replacing proprioception drops it by
+7.90 points (interval 3.13 to 14.06). These fixed-model interventions suggest
+both inputs affect this probe on these 16 episodes, but the small exposed
+development sample, class-coverage gap and prototype target prevent a
+generalizable complementarity or quality claim.
 
 Validation contains no examples for action class 4 and only two for class 3.
 The eight-class codebook therefore has inadequate class coverage for quality
@@ -124,11 +129,11 @@ and extraction metadata
 `37713ce533c46c8780fc83f86102e58f7b2003cd9a4f3a17e37012459df47eba`.
 The original metrics hash above predates the addition of saved predictions and
 checkpoints. The regenerated prediction and probe checkpoint hashes are
-`fde01b384c63efd9853220fe5cc67cf5c05f57008457f272e74b93e299ee1f07` and
+`FD496AB84C4EE9F9D943A1058457F44D2478738708A626DB353E3B43E91A7E13` and
 `102965afe03de2cb6cb549e9e37df7355ea9063b605a086ee00079c3eb7c1da0`;
 the final metrics file (including zero-delta checkpoint reload validation)
 hash is
-`A6584B382DEEADA757A3AC5DBEF912919ED5509F926188492A13A56E0D55153C`.
+`335524FEDBCB8AFC973F33B1A842F662A3D125C804DBA858EA916102AFEB6EDD`.
 
 Reproduction code is versioned at `scripts/build_physicalai_singlearm_split.py`,
 `scripts/extract_physicalai_action_pilot.py`, and
