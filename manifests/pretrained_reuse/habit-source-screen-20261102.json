@@ -1,0 +1,121 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "HABIT (configinc/HABIT)",
+  "recorded_at": "2026-11-02",
+  "status": "REVIEW_NOT_ADMITTED",
+  "sources": [
+    {
+      "kind": "Hugging Face dataset card and file tree",
+      "url": "https://huggingface.co/datasets/configinc/HABIT",
+      "revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+      "gated": false,
+      "private": false
+    },
+    {
+      "kind": "author project page",
+      "url": "https://habit-dataset.github.io/"
+    },
+    {
+      "kind": "author paper and ethics statement",
+      "url": "https://arxiv.org/html/2606.31682v1",
+      "revision": "arXiv v1, 2026-06-30"
+    }
+  ],
+  "metadata_inventory_snapshot": {
+    "hub_revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+    "hub_reported_total_bytes": 250134941418,
+    "downloaded_metadata_bytes": 9446061,
+    "files": [
+      {"path": "README.md", "bytes": 15540, "sha256": "44b6bd40bebaee29a2a22ba023bbc8b811df9db4158b6ef9c219a9b669223470"},
+      {"path": "full/meta/episodes.jsonl", "bytes": 9311649, "sha256": "0aa53b5ab7c6c22ed8662bc77ce0ba3d5bcfa62bc885f1a928c586f76e95fff5"},
+      {"path": "full/meta/tasks.jsonl", "bytes": 4393, "sha256": "9d407780b6ae0ae31677556bfd97982b74339389d52ecbe9e3a7c6a2948be013"},
+      {"path": "full/meta/subtasks.jsonl", "bytes": 16170, "sha256": "dcb0a7fe179c3f015bcef5bf3047de34d92dab2f0b8e2a55521b2fb0a21203a9"},
+      {"path": "full/meta/human_subtasks.jsonl", "bytes": 18145, "sha256": "6f4ba296ca2a79423d9ab28119a52be01402bbf08c856bff20a8d40a064c3877"},
+      {"path": "full/meta/info.json", "bytes": 19105, "sha256": "41749996d359830ede789179d4bb0c08a90db1a3bd97928e0f7d8d05f948ce08"},
+      {"path": "full/meta/modality.json", "bytes": 7624, "sha256": "97d9d99879698a21ef7382c9733703377ebcb9ebcd35f73f06586637ca574131"},
+      {"path": "sample/meta/episodes.jsonl", "bytes": 53435, "sha256": "41c772fc24570ea6f50717f949657e89c9e0f76151bfbedd35b055470dc82ce4"}
+    ],
+    "external_artifact_directory": "C:/CodexArtifacts/pretrained-reuse-r2/habit-source-screen-20261102-attempt-01/source-metadata",
+    "media_or_episode_payload_downloaded": false
+  },
+  "task_details_inventory": {
+    "hub_revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+    "file_count": 60,
+    "total_bytes": 73824,
+    "inventory_sha256": "5c69012f32394f77d5e783e7557a3e58ca424f6659efe4c504ba947989b23458",
+    "external_artifact_directory": "C:/CodexArtifacts/pretrained-reuse-r2/habit-source-screen-20261102-attempt-01/task-details",
+    "local_files_verified_against_pinned_size_and_sha256": 60,
+    "sid_values_found_by_detail_filename": 65,
+    "sid_without_matching_detail_filename": {
+      "sid": "S7791",
+      "episode_rows": 114,
+      "task_index": 54
+    },
+    "role_heading_file_counts": {
+      "Colaborator": 8,
+      "Collaborator": 12,
+      "Coworker": 19,
+      "Supervisor": 21
+    },
+    "normalization_note": "Normalizing the apparent Colaborator spelling variant yields 20 Collaborator, 19 Coworker, and 21 Supervisor detail files; discrepancy from paper's 20 tasks per role is unresolved."
+  },
+  "source_scope": {
+    "reported_episodes": 10563,
+    "reported_hours": 164.19,
+    "reported_high_level_tasks": 60,
+    "reported_roles": ["Collaborator", "Coworker", "Supervisor"],
+    "reported_synchronized_rgb_cameras": 5,
+    "reported_robot_configuration": "bimanual Franka Research 3",
+    "metadata_modalities": ["video", "state", "action", "annotation"],
+    "audio_recorded": false,
+    "reported_human_collectors": "approximately 10, one institution",
+    "public_video_privacy": "paper states faces are blurred; body, clothing, posture and gestures remain visible"
+  },
+  "license": {
+    "hub_card": "CC BY 4.0",
+    "author_paper": "states public CC BY 4.0 release and signed participant consent",
+    "withdrawal": "participants may request withdrawal; author-controlled mirrors remove episodes, but third-party copies cannot be recalled",
+    "product_compatibility": "LICENSE_DECLARATION_COMPATIBLE; maintain attribution and avoid identity inference; task/split gates remain open"
+  },
+  "task_and_split": {
+    "publisher_split": "full metadata defines only train: 0:10563",
+    "full_episode_metadata_rows": 10563,
+    "unique_episode_index": 10563,
+    "unique_sid_scenario_ids": 66,
+    "unique_task_index_values": 63,
+    "sample_episode_rows": 60,
+    "sample_unique_task_indices": 58,
+    "sample_unique_sid_values": 60,
+    "candidate_group_key": "sid",
+    "sid_grouped_custom_split_possible": true,
+    "participant_id_available": false,
+    "scene_or_layout_id_available": false,
+    "actor_independence": "UNKNOWN; paper reports approximately ten collectors but released episode metadata does not map them to rows",
+    "both_input_task": "NOT_ESTABLISHED; gesture and collaborative interaction provide a candidate video+proprioception task, but no fixed option-choice protocol or necessity controls have been frozen"
+  },
+  "resource_gate": {
+    "local_c_free_gib_at_screen": 7.08,
+    "hub_full_bytes": 250134941418,
+    "card_sample_config_approximate_bytes": 1000000000,
+    "action": "NO_MEDIA_OR_PARQUET_PAYLOAD_DOWNLOADED; only 9,446,061 bytes of pinned documentation/metadata were retrieved"
+  },
+  "reported": {
+    "info_fps": 10,
+    "info_robot_type_field": "human",
+    "info_robot_type_conflicts_with_paper": true,
+    "metadata_top_level_modalities": ["state", "action", "video", "annotation"],
+    "episode_metadata_has_actor_or_participant_field": false,
+    "episode_metadata_has_scene_or_layout_field": false,
+    "unit_name_unique_values": 4,
+    "unit_name_is_verified_person_identifier": false
+  },
+  "decision": "REVIEW_NOT_ADMITTED: rights are promising, but the source has no publisher validation split, no participant IDs, no verified scene/layout IDs, no audio, and no established fixed-option task requiring both video and proprioception. Do not use the 60-episode sample as a train/evaluation split. Before media access, freeze a useful task and held-out scenario groups, quantify selected media bytes from the pinned file tree, and state the actor/scene independence limits.",
+  "integrity_and_use": {
+    "metadata_only": true,
+    "read": ["README and license metadata", "episode/task/subtask metadata", "schema and modality metadata", "task_details Markdown metadata"],
+    "not_read": ["video frames", "Parquet state/action rows", "model weights", "evaluation outcomes"],
+    "sealed_audit_accessed": false,
+    "models_fitted_or_evaluated": false,
+    "gpu_used": false
+  }
+}
