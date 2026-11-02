@@ -3882,3 +3882,14 @@ ODbL for the database and DbCL for contents and requests usage registration;
 rights/consent, original-AV actor/sentence split, and common target definition
 are unresolved. No payload or annotation was obtained, and no form was
 submitted. Keep unadmitted; see the [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
+
+### 2026-11-02 R2-M NVIDIA PhysicalAI synthetic scene source screen
+
+Pinned the public manifest for NVIDIA PhysicalAI WorldModel Synthetic Embodied
+Robot Scenes at revision `b86a9fe1076e49a2847d95fee4531f541c5b126b`: 373,703
+video samples across 377 shards (~2.08 TB). Its card describes scene/layout
+metadata and simulator state where available, but the source is video-only,
+scene-key semantics and a grouped split are unverified, and OpenMDW-1.1 puts
+third-party rights diligence on the user. No media or model was accessed and
+no license was accepted. Keep `REVIEW_NOT_ADMITTED`; this does not pass the R2
+synchronized AV gate or justify modeling. See the [source screen](docs/pretrained_reuse/R2_NVIDIA_ROBOT_SCENES_SOURCE_SCREEN_20261102.md).
