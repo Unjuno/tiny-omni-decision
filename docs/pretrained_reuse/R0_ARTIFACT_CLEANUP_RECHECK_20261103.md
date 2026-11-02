@@ -52,3 +52,12 @@ and preserved provenance/hash evidence. **No files were removed.** The next
 cleanup action needs a per-source receipt review that proves recoverability;
 the next R2 action needs a source with an admissible grouped split and a frozen
 task that can genuinely require both inputs.
+
+## Follow-up: apparent duplicates are already hard-linked
+
+A read-only check on 2026-11-03 resolved two large logical-size duplicates:
+
+- DROID shard pairs `00003`–`00019` in `droid-expanded-site-holdout-data-attempt-01` and `droid-expansion-sample-20261028-attempt-01` all have matching byte lengths, SHA-256 hashes, and NTFS file IDs. The 17 sample-path aliases total 15,732,444,458 logical bytes (about 14.65 GiB), but already refer to the same NTFS file records as their canonical paths.
+- `train-spatial-features.npy` in `clevr4-spatial-count-readout-features-01` and `-02` has matching size (2,949,120,128 bytes), SHA-256 `495F066859CB3879D9371B1C797B24E5ACD47CB88B3E9D34C973ACFA2A1BB460`, and NTFS file ID. It is already one physical file with two names.
+
+These aliases do not account for C: free-space pressure; unlinking either alias would not reclaim the underlying bytes. No hardlinks, files, or attributes were changed. This check covered only the named paths and does not estimate total allocated size across the artifact store. The raw `.npy`/TFRecord contents were hashed, not parsed; no sealed audit was opened.
