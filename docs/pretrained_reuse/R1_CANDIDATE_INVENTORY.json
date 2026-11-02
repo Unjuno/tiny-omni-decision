@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "snapshot_date": "2026-10-11",
+  "snapshot_date": "2026-11-02",
   "scope": "Pretrained encoder/checkpoint feasibility. License facts apply only as stated by the cited source; an unclear weight grant remains unknown.",
   "candidates": [
     {
@@ -719,8 +719,47 @@
         "https://huggingface.co/PekingU/rtdetr_v2_r18vd/tree/5650961749fa93567c0d46fc7f43ea4f9e914107",
         "https://github.com/lyuwenyu/RT-DETR"
       ]
+    },
+    {
+      "id": "dinov2-base",
+      "modality": [
+        "image",
+        "video-frame"
+      ],
+      "model_revision": "facebook/dinov2-base@f9e44c814b77203eaa57a6bdbbd535f21ede1415",
+      "checkpoint": "model.safetensors",
+      "checkpoint_sha256": "d73036b56966966d07975d696bde331762f37297e2f095de8cea0040c3aa0841",
+      "checkpoint_bytes": 346345912,
+      "parameters": 86580480,
+      "parameter_tensor_bytes": 346321920,
+      "license": "Apache-2.0 per exact pinned Hugging Face model card and upstream DINOv2 model-weight statement",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/facebook/dinov2-base/tree/f9e44c814b77203eaa57a6bdbbd535f21ede1415",
+        "https://github.com/facebookresearch/dinov2/blob/main/README.md"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "CPU FP32 frozen forward on synchronized world/hand frames from one pinned NVIDIA train episode; exact fresh model reload reproduced [2,257,768] outputs",
+      "task_quality_status": "UNMEASURED; per-frame representation smoke only, no temporal or Decision result",
+      "decision": "rights-cleared per-frame visual feature candidate; temporal aggregation and task-specific quality remain open",
+      "report": "docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_20261102.md",
+      "audit_date": "2026-11-02",
+      "primary_citations": [
+        "https://huggingface.co/facebook/dinov2-base/tree/f9e44c814b77203eaa57a6bdbbd535f21ede1415",
+        "https://github.com/facebookresearch/dinov2/blob/main/README.md"
+      ]
     }
   ],
   "incremental_update_date": "2026-10-14",
-  "incremental_update_scope": "append pinned RTDETRv2 R18 actual CPU/fresh component audit; earlier candidate records preserved"
+  "incremental_update_scope": "append pinned RTDETRv2 R18 actual CPU/fresh component audit; earlier candidate records preserved",
+  "additional_audit_updates": [
+    {
+      "date": "2026-11-02",
+      "scope": "append pinned DINOv2-base Apache-2.0 weights and CPU exact-reload smoke; prior candidate records preserved",
+      "report": "docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_20261102.md"
+    }
+  ]
 }
