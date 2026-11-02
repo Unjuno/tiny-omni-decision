@@ -1,5 +1,11 @@
 # PhysicalAI fixed-pilot full development validation — 2026-11-02
 
+> **ECE correction:** The ECE-10 values below omitted predictions with maximum
+> confidence exactly 1.0. Treat that column as superseded by the saved-output
+> correction in [the corrigendum](R2_PHYSICALAI_ECE_CORRIGENDUM_20261102.md).
+> Accuracy, NLL, Brier, predictions, and paired bootstrap results are unchanged;
+> there was no model re-evaluation or checkpoint selection.
+
 ## Purpose and scope
 
 This is a one-time, fixed-checkpoint extension of the 64-episode action pilot

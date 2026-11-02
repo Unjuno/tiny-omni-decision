@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import numpy as np
 
-from scripts.physicalai_pilot_metrics import episode_counts_by_split, per_class_accuracy
+from scripts.physicalai_pilot_metrics import (
+    episode_counts_by_split,
+    expected_calibration_error,
+    per_class_accuracy,
+)
 
 
 def test_per_class_accuracy_reports_support_and_missing_classes() -> None:
@@ -49,3 +53,17 @@ def test_episode_counts_are_derived_from_ids_and_reject_group_overlap() -> None:
         assert "episode IDs overlap" in str(exc)
     else:
         raise AssertionError("group overlap must be rejected")
+
+
+def test_ece_includes_confidence_exactly_one_in_final_bin() -> None:
+    probabilities = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 0.0]])
+    targets = np.array([1, 1, 0])
+
+    assert np.isclose(expected_calibration_error(probabilities, targets), 1 / 3)
+
+
+def test_ece_uses_expected_confidence_bins() -> None:
+    probabilities = np.array([[0.91, 0.09], [0.89, 0.11]])
+    targets = np.array([0, 1])
+
+    assert np.isclose(expected_calibration_error(probabilities, targets), 0.49)

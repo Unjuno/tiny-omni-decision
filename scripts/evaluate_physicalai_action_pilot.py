@@ -11,12 +11,17 @@ from torch.nn import functional as F
 try:
     from scripts.physicalai_pilot_metrics import (
         episode_counts_by_split,
+        expected_calibration_error,
         per_class_accuracy,
     )
 except ModuleNotFoundError as exc:
     if exc.name != "scripts":
         raise
-    from physicalai_pilot_metrics import episode_counts_by_split, per_class_accuracy
+    from physicalai_pilot_metrics import (
+        episode_counts_by_split,
+        expected_calibration_error,
+        per_class_accuracy,
+    )
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--artifact-dir", type=pathlib.Path, required=True)
@@ -67,18 +72,7 @@ def metrics(prob, ytrue):
     nll = float(-np.log(np.clip(prob[np.arange(len(ytrue)), ytrue], 1e-8, 1)).mean())
     one = np.eye(prob.shape[1])[ytrue]
     brier = float(((prob - one) ** 2).sum(1).mean())
-    conf = prob.max(1)
-    bins = []
-    for a in np.linspace(0, 1, 11)[:-1]:
-        mask = (conf >= a) & (conf < min(a + 0.1, 1.000001))
-        if mask.any():
-            bins.append(
-                (
-                    float(mask.mean()),
-                    float(abs((pred[mask] == ytrue[mask]).mean() - conf[mask].mean())),
-                )
-            )
-    ece = float(sum(w * e for w, e in bins))
+    ece = expected_calibration_error(prob, ytrue, bins=10)
     return {
         "accuracy": acc,
         "nll": nll,

@@ -10,23 +10,19 @@ from typing import Any
 
 import numpy as np
 
+try:
+    from scripts.physicalai_pilot_metrics import expected_calibration_error
+except ModuleNotFoundError as exc:
+    if exc.name != "scripts":
+        raise
+    from physicalai_pilot_metrics import expected_calibration_error
+
 
 def metrics(probabilities: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
     predictions = probabilities.argmax(axis=1)
     confidence = probabilities.max(axis=1)
     correct = predictions == targets
     one_hot = np.eye(probabilities.shape[1])[targets]
-    bins = []
-    for lower in np.linspace(0.0, 1.0, 11)[:-1]:
-        upper = min(lower + 0.1, 1.000001)
-        selected = (confidence >= lower) & (confidence < upper)
-        if selected.any():
-            bins.append(
-                (
-                    float(selected.mean()),
-                    float(abs(correct[selected].mean() - confidence[selected].mean())),
-                )
-            )
     present = np.unique(targets)
     per_class_accuracy = {
         str(int(label)): float(correct[targets == label].mean()) for label in present
@@ -39,7 +35,7 @@ def metrics(probabilities: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
             -np.log(np.clip(probabilities[np.arange(len(targets)), targets], 1e-8, 1)).mean()
         ),
         "brier": float(((probabilities - one_hot) ** 2).sum(axis=1).mean()),
-        "ece_10": float(sum(weight * error for weight, error in bins)),
+        "ece_10": expected_calibration_error(probabilities, targets, bins=10),
         "mean_confidence": float(confidence.mean()),
         "n": int(len(targets)),
     }

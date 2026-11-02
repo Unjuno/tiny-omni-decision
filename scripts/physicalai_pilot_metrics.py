@@ -5,6 +5,40 @@ from __future__ import annotations
 import numpy as np
 
 
+def expected_calibration_error(
+    probabilities: np.ndarray, targets: np.ndarray, *, bins: int = 10
+) -> float:
+    probabilities = np.asarray(probabilities, dtype=np.float64)
+    targets = np.asarray(targets)
+    if probabilities.ndim != 2 or targets.ndim != 1:
+        raise ValueError("probabilities must be 2-D and targets must be 1-D")
+    if probabilities.shape[0] != targets.shape[0] or targets.size == 0:
+        raise ValueError("probabilities and targets must have the same nonzero row count")
+    if bins < 1:
+        raise ValueError("bins must be positive")
+    if not np.isfinite(probabilities).all() or np.any(probabilities < 0.0):
+        raise ValueError("probabilities must be finite and nonnegative")
+    if not np.allclose(probabilities.sum(axis=1), 1.0, atol=1e-5, rtol=0.0):
+        raise ValueError("each probability row must sum to one")
+    confidence = probabilities.max(axis=1)
+    if np.any(confidence > 1.0):
+        raise ValueError("probabilities must not exceed one")
+    if targets.min() < 0 or targets.max() >= probabilities.shape[1]:
+        raise ValueError("targets contain a class outside the probability columns")
+
+    predictions = probabilities.argmax(axis=1)
+    bin_indices = np.minimum((confidence * bins).astype(int), bins - 1)
+    ece = 0.0
+    for bin_index in range(bins):
+        selected = bin_indices == bin_index
+        if selected.any():
+            ece += float(selected.mean()) * abs(
+                float((predictions[selected] == targets[selected]).mean())
+                - float(confidence[selected].mean())
+            )
+    return float(ece)
+
+
 def episode_counts_by_split(
     episode_ids: np.ndarray, train_mask: np.ndarray, validation_mask: np.ndarray
 ) -> dict[str, int]:

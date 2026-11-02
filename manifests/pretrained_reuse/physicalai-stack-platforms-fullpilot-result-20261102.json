@@ -58,13 +58,13 @@
   },
   "validation_class_support": [78, 74, 106, 92, 69, 137, 88, 356],
   "validation_metrics": {
-    "proprio_history": {"accuracy": 0.704, "nll": 5.413153171539307, "brier": 0.5910413296566114, "ece10": 0.005611460089683533, "macro_class_accuracy": 0.6922077755526534},
-    "video_8frame_mean": {"accuracy": 0.584, "nll": 7.342164039611816, "brier": 0.8272734933783656, "ece10": 0.05076557976007461, "macro_class_accuracy": 0.5369750701681206},
-    "video_last_frame": {"accuracy": 0.506, "nll": 8.582746505737305, "brier": 0.9823449659537571, "ece10": 0.0934394685029983, "macro_class_accuracy": 0.4794711083529159},
-    "joint_video_proprio": {"accuracy": 0.725, "nll": 4.4898152351379395, "brier": 0.5432230149249995, "ece10": 0.07710974770784379, "macro_class_accuracy": 0.7126284978562383},
-    "joint_video_episode_misaligned": {"accuracy": 0.548, "nll": 7.662847995758057, "brier": 0.8883940104448174, "ece10": 0.10044595915079119, "macro_class_accuracy": 0.5037923607870641},
-    "joint_video_missing": {"accuracy": 0.632, "nll": 5.89719820022583, "brier": 0.7253507622225773, "ece10": 0.11346776390075683, "macro_class_accuracy": 0.6243919196861833},
-    "joint_proprio_missing": {"accuracy": 0.321, "nll": 11.092464447021484, "brier": 1.3231906921294525, "ece10": 0.28051409465074545, "macro_class_accuracy": 0.3070560160089323},
+    "proprio_history": {"accuracy": 0.704, "nll": 5.413153171539307, "brier": 0.5910413296566114, "ece10": 0.29561145985126497, "macro_class_accuracy": 0.6922077755526534},
+    "video_8frame_mean": {"accuracy": 0.584, "nll": 7.342164039611816, "brier": 0.8272734933783656, "ece10": 0.4127655764818192, "macro_class_accuracy": 0.5369750701681206},
+    "video_last_frame": {"accuracy": 0.506, "nll": 8.582746505737305, "brier": 0.9823449659537571, "ece10": 0.4904394654035569, "macro_class_accuracy": 0.4794711083529159},
+    "joint_video_proprio": {"accuracy": 0.725, "nll": 4.4898152351379395, "brier": 0.5432230149249995, "ece10": 0.2681097491383553, "macro_class_accuracy": 0.7126284978562383},
+    "joint_video_episode_misaligned": {"accuracy": 0.548, "nll": 7.662847995758057, "brier": 0.8883940104448174, "ece10": 0.43844595640897754, "macro_class_accuracy": 0.5037923607870641},
+    "joint_video_missing": {"accuracy": 0.632, "nll": 5.89719820022583, "brier": 0.7253507622225773, "ece10": 0.35846775108575835, "macro_class_accuracy": 0.6243919196861833},
+    "joint_proprio_missing": {"accuracy": 0.321, "nll": 11.092464447021484, "brier": 1.3231906921294525, "ece10": 0.6585141015648842, "macro_class_accuracy": 0.3070560160089323},
     "train_prior_option_only": {"accuracy": 0.356, "nll": 1.8944787428945005, "brier": 0.8123616326530614, "ece10": 0.022928571428571354, "macro_class_accuracy": 0.125}
   },
   "training_diagnostic": {
@@ -134,5 +134,49 @@
     "metric_recompute_tolerance": 0.000005,
     "bootstrap_recomputed_exactly": true
   },
-  "next_gate": "Do not tune on this validation set. Need source/scene-independent evaluation and a deployment-aligned task before any PhysicalAI admission or architecture expansion."
+  "next_gate": "Do not tune on this validation set. Need source/scene-independent evaluation and a deployment-aligned task before any PhysicalAI admission or architecture expansion.",
+  "reproduction_provenance": {
+    "classification": "deterministic_reproduction_not_independent",
+    "independent_quality_evidence": false,
+    "prior_validation_already_observed": true,
+    "original_report": "docs/pretrained_reuse/R2_PHYSICALAI_STACK_PLATFORMS_ACTION_PILOT_20261102.md",
+    "original_run_started_jst": "2026-11-02 14:47:50",
+    "reproduction_start_time": "UNKNOWN",
+    "original_and_reproduction_primary_hashes_match": true,
+    "original_validation_reused": true
+  },
+  "storage_policy_compliance": {
+    "free_gib_at_reproduction_start": 1.181,
+    "required_minimum_free_gib": 2.0,
+    "compliant": false,
+    "interpretation": "R0 artifact-volume reserve violation; do not repeat expensive run below reserve"
+  },
+  "metric_correction": {
+    "corrected_from_saved_predictions": true,
+    "model_inference": false,
+    "features_recomputed": false,
+    "optimizer_updates": 0,
+    "sealed_audit_loaded": false,
+    "bins": 10,
+    "confidence_one_included_in_final_bin": true,
+    "audit_report": "docs/pretrained_reuse/R2_PHYSICALAI_ECE_CORRIGENDUM_20261102.md",
+    "audit_manifest": "manifests/pretrained_reuse/physicalai-pilot-ece-correction-20261102.json",
+    "audit_result_sha256": "b297f417723117e906d477d0f557cfb0eee29fd9980aa92e4dc1f592cd5029b9",
+    "audit_code_sha256": "04a19de90d2d83a90f3bf13e4ae30a4209e82dbc7edc91a7f389d63636d6790a"
+  },
+  "fixed_checkpoint_full_validation_metric_correction": {
+    "audit_manifest": "manifests/pretrained_reuse/physicalai-pilot-ece-correction-20261102.json",
+    "corrected_ece10": {
+      "proprio_history": 0.18899934578046926,
+      "video_8frame_mean": 0.1838630897686345,
+      "video_last_frame": 0.17004002361570686,
+      "joint_video_proprio": 0.1629147354989325,
+      "joint_video_missing": 0.22088735110828006,
+      "joint_proprio_missing": 0.20768546818505296,
+      "joint_video_episode_misaligned": 0.4558471131758018,
+      "train_class_prior": 0.011305754405286333
+    },
+    "model_inference": false,
+    "sealed_audit_loaded": false
+  }
 }

@@ -2,6 +2,14 @@
 
 ## Disposition
 
+This report records an accidental deterministic reproduction of the original
+pilot, not an independent second experiment. The original 700/250 episode
+pilot had already evaluated and exposed this validation set; see the preserved
+[original report](R2_PHYSICALAI_STACK_PLATFORMS_ACTION_PILOT_20261102.md).
+The original and reproduction `features.npz`, `validation-predictions.json`,
+and `probe-checkpoints.pt` are byte-identical by SHA-256. The reproduction
+adds no independent quality evidence and must not be counted as another run.
+
 Execution completed, but the source/task result is **UNCERTAIN** and remains
 `REVIEW_NOT_ADMITTED`. The joint video+proprio readout scored 72.5% validation
 Accuracy versus 70.4% for the best single input (proprio history), but the
@@ -14,6 +22,12 @@ reliably exceed the best single-input result. The fitted heads also reached
 This is a narrow action-prototype prediction task, not a successful or optimal
 robot policy and not evidence of a general Omni Decision model. No candidate is
 promoted. The validation result is now observed; do not tune on these IDs.
+
+The reproduction started with 1.181 GiB free on C:, below the R0 policy's
+2 GiB minimum artifact-volume reserve. This was a process violation and is
+recorded rather than normalized; no further expensive runs should start below
+that reserve. The run metadata and original run artifacts are preserved as
+written.
 
 ## Frozen task and execution
 
@@ -52,7 +66,8 @@ task-success, or deployment label.
 - Controls: proprio-only, video mean, video last-frame, joint, episode-shuffled
   video, missing video, and missing proprio. Missing inputs use the joint
   model's train feature mean; controls are not refit.
-- The only model fit was the predeclared one-shot readout. The pretrained
+- The reproduction refit the predeclared readout on the original train rows;
+  its fitted checkpoint hash matches the original pilot. The pretrained
   encoder was frozen. Its exact checkpoint has 86,580,480 parameters and a
   346,345,912-byte weight file; the fitted joint Linear head has 11,336
   parameters. The probe checkpoint contains all four fitted arms and is not a
@@ -90,14 +105,21 @@ Accuracy.
 
 | Arm | Accuracy | NLL | Brier | ECE-10 | Macro class Accuracy |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Proprio history | 70.4% | 5.4132 | 0.5910 | 0.0056 | 69.22% |
-| Video, 8-frame mean | 58.4% | 7.3422 | 0.8273 | 0.0508 | 53.70% |
-| Video, last frame | 50.6% | 8.5827 | 0.9823 | 0.0934 | 47.95% |
-| Joint video + proprio | **72.5%** | **4.4898** | **0.5432** | 0.0771 | **71.26%** |
-| Joint, episode-misaligned video | 54.8% | 7.6628 | 0.8884 | 0.1004 | 50.38% |
-| Joint, missing video | 63.2% | 5.8972 | 0.7254 | 0.1135 | 62.44% |
-| Joint, missing proprio | 32.1% | 11.0925 | 1.3232 | 0.2805 | 30.71% |
+| Proprio history | 70.4% | 5.4132 | 0.5910 | 0.2956 | 69.22% |
+| Video, 8-frame mean | 58.4% | 7.3422 | 0.8273 | 0.4128 | 53.70% |
+| Video, last frame | 50.6% | 8.5827 | 0.9823 | 0.4904 | 47.95% |
+| Joint video + proprio | **72.5%** | **4.4898** | **0.5432** | 0.2681 | **71.26%** |
+| Joint, episode-misaligned video | 54.8% | 7.6628 | 0.8884 | 0.4384 | 50.38% |
+| Joint, missing video | 63.2% | 5.8972 | 0.7254 | 0.3585 | 62.44% |
+| Joint, missing proprio | 32.1% | 11.0925 | 1.3232 | 0.6585 | 30.71% |
 | Train-class prior | 35.6% | 1.8945 | 0.8124 | 0.0229 | 12.50% |
+
+ECE values in this table were corrected from the immutable saved prediction
+rows. The prior report and both run metric JSON files contain an invalid ECE:
+confidence exactly 1.0 was excluded from the final bin, omitting 600–990 rows
+per arm. Accuracy, NLL, Brier, predictions, and checkpoints were unchanged.
+See the [ECE corrigendum](R2_PHYSICALAI_ECE_CORRIGENDUM_20261102.md) and its
+hash-pinned [audit manifest](../../manifests/pretrained_reuse/physicalai-pilot-ece-correction-20261102.json).
 
 Each trained readout reached 100% train Accuracy with near-zero train loss.
 For the joint model, the train-to-validation Accuracy gap is 27.5 percentage
@@ -138,14 +160,18 @@ is therefore **UNCERTAIN**, not a both-input pass.
   observed command session took about 70 seconds.
 - `probe-checkpoints.pt` save/reload reproduced probabilities exactly (maximum
   absolute delta 0.0 for all four fitted arms).
-- Independent verification recomputed all eight arms' metrics from the saved
-  probability rows (maximum metric difference below `5e-6`, due to float32
-  probabilities serialized then recomputed in float64) and reproduced all six
-  paired bootstrap means and intervals exactly. All 1,000 prediction rows map
+- The initial metric reconciliation reproduced the original metric JSON,
+  including its ECE boundary bug. A later saved-prediction-only correction
+  recomputed all eight arms with the final bin closed at confidence 1.0; the
+  correction is detailed separately below. All six paired bootstrap means and
+  intervals were reproduced exactly. All 1,000 prediction rows map
   to the declared validation IDs, every episode has windows 0–3, probability
   sums differ from 1 by at most `1.11e-7`, and no reserved ID is present.
 - C: free space was 1.181 GiB before and 1.133 GiB after the full run and audit.
   No cloud compute was used and no new media download occurred in this run.
+- Original-run features, predictions, checkpoint, metrics, and extraction
+  metadata were not overwritten. The reproduction's `run-metadata.json` is
+  preserved; post-hoc provenance and metric corrections are recorded separately.
 
 Local result directory:
 `C:\CodexArtifacts\pretrained-reuse-r2\physicalai-stack-platforms-patha-fullpilot-20261102-attempt-01\`

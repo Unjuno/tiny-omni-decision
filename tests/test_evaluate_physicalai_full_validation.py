@@ -22,6 +22,13 @@ def test_metrics_calculates_multiclass_probability_scores():
     assert result["n"] == 2
 
 
+def test_metrics_includes_confidence_one_in_final_ece_bin():
+    probabilities = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 0.0]])
+    targets = np.array([1, 1, 0])
+
+    assert metrics(probabilities, targets)["ece_10"] == pytest.approx(1 / 3)
+
+
 def test_full_validation_evaluator_fails_closed_below_200_groups(tmp_path: Path):
     validation_dir = tmp_path / "validation"
     validation_dir.mkdir()
