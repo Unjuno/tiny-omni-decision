@@ -80,10 +80,10 @@ its video and Parquet match the publisher size and SHA-256. PyAV decoded the
 10-fps H.264 video as 457 frames at 640x480; its 457 Parquet rows align in
 count. The repo audit script also resolved its four global option IDs, checked
 three transition boundaries, and emitted three eligible windows with no edge
-skips. The script SHA-256 is
-`331c20fb24e749cdd10623f718e161785e66611b86168b91a793465b6dd82655`; the
-external smoke report at
-`C:/CodexArtifacts/pretrained-reuse-r2/habit-task-feasibility-20261102-attempt-01/transition-audit-train-smoke.json`
+skips. The executed script SHA-256 is
+`688bc3b556094a379c16de4ce8faeffa7fa96d317af81081ee79922cdfa54fab`; it
+refuses to overwrite an existing report. The external smoke report at
+`C:/CodexArtifacts/pretrained-reuse-r2/habit-task-feasibility-20261102-attempt-01/transition-audit-train-smoke-v3.json`
 has SHA-256
 `b28f4f4c8d7b38c2c674f3535f93230f9eff28028576123318f99b40a5edaf6a`. The
 source's `info.json` codec declaration is not treated as runtime truth; codec

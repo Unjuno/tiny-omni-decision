@@ -261,6 +261,8 @@ def main() -> None:
     args = parser.parse_args()
     if args.limit_episodes is not None and args.limit_episodes < 1:
         parser.error("--limit-episodes must be positive")
+    if args.output.exists():
+        raise FileExistsError(f"refusing to overwrite existing audit: {args.output}")
     report = audit(
         args.attempt_root,
         args.metadata_root,
