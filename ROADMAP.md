@@ -3916,3 +3916,11 @@ invalidation on rebinding. Synthetic tests and existing observation-alignment
 and feature-cache tests pass (40 total); this is not wired to the scorer and
 does not establish H4 or decision quality. See
 [contract and evidence](docs/pretrained_reuse/R2_TEMPORAL_FEATURE_STATE_RUNTIME_20261103.md).
+
+**2026-11-03 PhysicalAI fresh-action payload integrity:** The frozen 4,000-train
+/ 1,000-validation selection was fully acquired and independently hash-checked
+(10,000 files; reserved payload absent). The normalized 32x32 RGB frame audit
+found zero exact train/validation frame overlap across 411,315 decoded frames.
+This does not establish scene/layout independence; retain
+`REVIEW_NOT_ADMITTED` and do not fit features/readouts or evaluate quality.
+See [preflight and audit record](docs/pretrained_reuse/R2_PHYSICALAI_FRESH_ACTION_PREFLIGHT_20261103.md).

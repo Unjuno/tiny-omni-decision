@@ -162,3 +162,43 @@ quality experiment requires a separately documented source/task admission that
 resolves the ROADMAP scene/task gate; this manifest and its results must not be
 used to bypass that gate. No quantization, shared-backbone work, second seed, or
 product promotion is part of this record.
+
+## Acquisition recovery and normalized-frame audit completion
+
+The transient Hugging Face `499` retry fix was committed as source commit
+`4feaaca4fdb5323584591c72ab43e3ac0d36944a` on
+`docs/pretrained-reuse-roadmap-20261010`. The corresponding CI checks were
+green before this audit. The frozen split, dataset revision, and task were not
+changed. The downloader completed into the same attempt directory using the
+existing hash-verifying resume path; it did not download reserved IDs.
+
+The final download receipt records **10,000 files / 1,016,146,067 bytes**:
+8,000 train files (4,000 episodes), 2,000 validation files (1,000 episodes),
+with 5,000 videos and 5,000 Parquet files. The receipt reports 7,775.323
+seconds elapsed. Its recorded SHA-256 is
+`b7a40364f1f931e897430e3057379cbd52ebaa4e1aae823c266d33dcb7e4f634`; the
+manifest SHA-256 remains
+`fb51eb0028c8f55372930548d2e480bbf616debc1a59779f29098d86ce1bbe7f`. An
+independent local receipt verifier reported PASS, checked all 10,000 files and
+their publisher sizes/hashes, found zero unexpected or partial files, and
+confirmed `reserved_payload_downloaded: false`. The verifier result is saved
+beside the receipt as `receipt-verification.json`. The receipt stores elapsed
+time but no acquisition start timestamp; exact acquisition wall-clock start
+is therefore UNKNOWN. The receipt file's local last-write time was
+2026-11-03 05:04:58 JST.
+
+The CPU-only normalized-frame audit ran from 2026-11-03 05:06:59 to about
+05:32:26 JST (1,526.408 seconds). It decoded all 5,000 selected videos and
+compared RGB frames after bilinear resize to 32x32. It counted 328,454 train
+frames and 82,861 validation frames. Exact cross-split normalized-frame hash
+overlap was **0 unique hashes / 0 frame occurrences**. The result is saved at
+`normalized-frame-overlap.json`, SHA-256
+`8f893109c8986ff1563759853cebb54dfbe94a04eb0e0cc8151f45cbfc322b0f`, with the
+progress log retained in the same output directory. GPU use was not required.
+
+This zero-overlap finding is only an exact normalized-frame check; it does not
+rule out near-duplicate frames, shared scene/layout identity, or leakage through
+other semantics. Consequently the source stays `REVIEW_NOT_ADMITTED`. No
+features were extracted, no readout was fitted, no quality metric was
+evaluated, and the reserved cohort remains unopened. The existing v1/v2 model,
+corpus, and checkpoint artifacts were not changed.
