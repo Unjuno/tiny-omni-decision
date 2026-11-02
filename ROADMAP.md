@@ -1,4 +1,11 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-11-02 R1 VideoPrism–AVATAR provenance audit:** Exact overlap between
+the pinned VideoPrism-B pretraining corpus and AVATAR's 2,268 TRAIN YouTube
+source groups is UNKNOWN; reviewed official sources do not publish
+checkpoint-specific video IDs. The AVATAR category result is therefore not
+independent-source transfer evidence. No model, features, metrics, validation,
+or sealed audit were accessed in this read-only check. See [audit](docs/pretrained_reuse/R1_AVATAR_VIDEOPRISM_OVERLAP_AUDIT_20261102.md)
+and [machine-readable record](manifests/pretrained_reuse/videoprism-avatar-overlap-audit-20261102.json).
 **2026-11-02 R2 AVATAR category transfer:** The one-shot CPU-only held-category
 TRAIN diagnostic selected its 73,857-parameter readout on inner validation and
 scored 2,490 held-category choices once: 69.60% sample Accuracy / 0.7295 NLL;

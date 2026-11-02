@@ -1,5 +1,12 @@
 # AVATAR held-category transfer results (2026-11-02)
 
+> Provenance qualification (2026-11-02): overlap between the AVATAR YouTube
+> source groups and VideoPrism-B pretraining is **unknown**, because a
+> checkpoint-specific pretraining video-ID manifest is not public in the
+> reviewed sources. Treat this as a source-group-disjoint, category-held-out
+> development diagnostic within AVATAR TRAIN, not independent-source transfer
+> evidence. See the [provenance audit](R1_AVATAR_VIDEOPRISM_OVERLAP_AUDIT_20261102.md).
+
 ## Decision
 
 The frozen-feature AVATAR readout transferred above four-choice chance on this
