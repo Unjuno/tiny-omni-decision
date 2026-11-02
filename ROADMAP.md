@@ -3853,3 +3853,18 @@ stores all per-example probabilities and probe parameters; reloaded probes
 reproduce validation probabilities exactly.
 A DINO-feature neighbor screen found no cross-split pair above cosine 0.98 in
 the 80-episode pilot, but this cannot establish scene independence.
+
+**2026-11-02 PhysicalAI stack-platforms full frozen-feature pilot:** Followed
+the pre-registered 700-train/250-validation episode protocol once, extracting
+3,800 queries (8 RGB frames each) with frozen FP32 DINOv2-base on the local
+RTX 3080 Laptop GPU, then fitting train-only action prototypes and linear
+readouts. Joint video+proprio validation accuracy was 72.5% vs 70.4% for
+proprio-only and 58.4% for 8-frame video-only; the paired episode-bootstrap
+interval for joint minus proprio spans zero. Misaligned-episode video and
+missing-input controls indicate signal from both modalities on this
+demonstrator-action target, but class imbalance/calibration are poor and this
+does not establish task success or general temporal reasoning. Scene/layout
+identity and semantic near-duplicate gates remain unresolved; retain
+`REVIEW_NOT_ADMITTED` and do not promote or tune from these validation results.
+Full results, run details, hashes and limitations:
+[pilot report](docs/pretrained_reuse/R2_PHYSICALAI_STACK_PLATFORMS_ACTION_PILOT_20261102.md).
