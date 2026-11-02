@@ -78,9 +78,17 @@ model/architecture selection.
 One selected train-only episode (1062) was downloaded from the pinned revision;
 its video and Parquet match the publisher size and SHA-256. PyAV decoded the
 10-fps H.264 video as 457 frames at 640x480; its 457 Parquet rows align in
-count. The source's `info.json` codec declaration is not treated as runtime
-truth; codec is detected from the media stream. The smoke confirms decoding and
-annotation availability only, not model quality.
+count. The repo audit script also resolved its four global option IDs, checked
+three transition boundaries, and emitted three eligible windows with no edge
+skips. The script SHA-256 is
+`331c20fb24e749cdd10623f718e161785e66611b86168b91a793465b6dd82655`; the
+external smoke report at
+`C:/CodexArtifacts/pretrained-reuse-r2/habit-task-feasibility-20261102-attempt-01/transition-audit-train-smoke.json`
+has SHA-256
+`b28f4f4c8d7b38c2c674f3535f93230f9eff28028576123318f99b40a5edaf6a`. The
+source's `info.json` codec declaration is not treated as runtime truth; codec
+is detected from the media stream. The smoke confirms decoding and annotation
+availability only, not model quality.
 
 Train/validation media acquisition started in the external attempt directory
 named in the live run receipt. The downloader verifies every file's size and
