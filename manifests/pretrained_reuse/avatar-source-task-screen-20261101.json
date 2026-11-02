@@ -67,8 +67,30 @@
     "decision_form": "probabilities_over_four_opaque_video_options",
     "task_scope": "audio_category_to_annotated_video_frame_category matching across distinct source clips",
     "native_localization_claim": false,
-    "both_input_necessity": "UNVERIFIED_PENDING_FIXED_CONTROLS",
-    "training_started": false
+    "both_input_necessity": "PARTIAL_EVIDENCE_VS_VIDEO_ONLY;DEPLOYABLE_AUDIO_ONLY_BASELINE_REQUIRED",
+    "evidence_report": "docs/pretrained_reuse/R2_AVATAR_CROSS_SOURCE_READOUT_20261102.md",
+    "control_summary": {
+      "sample_count": 1655,
+      "audio_query_source_group_count": 305,
+      "video_only_accuracy": 0.3118,
+      "joint_accuracy": 0.8979,
+      "audio_removed_accuracy": 0.2381,
+      "video_removed_accuracy": 0.2502,
+      "audio_shuffled_accuracy": 0.2423,
+      "deployable_audio_only_baseline": "UNAVAILABLE",
+      "best_unimodal_improvement_gate": "OPEN",
+      "paired_joint_minus_video_accuracy_ci_95": [0.5514, 0.6249],
+      "bootstrap_replicates": 2000,
+      "seed": 17
+    },
+    "limitations": [
+      "derived cross-source category-match task, not native AVATAR localization",
+      "development validation used for checkpoint selection",
+      "VideoPrism pretraining overlap with YouTube source groups is unknown",
+      "accuracy is below the provisional 95 percent task target",
+      "does not close the broader M2 modality/task matrix"
+    ],
+    "training_started": true
   },
   "limitations": [
     "The proposed split is public-source development data, not a blind external benchmark.",

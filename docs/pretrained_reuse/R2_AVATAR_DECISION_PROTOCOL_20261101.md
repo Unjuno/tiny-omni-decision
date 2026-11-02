@@ -64,6 +64,23 @@ understanding. Since audio-only or video-only recognition may solve it, measure
 option-only, metadata-only, audio-only, video-only, joint, missing-stream, and
 within-split audio/video-shuffle controls before claiming useful fusion.
 
+### 2026-11-02 corrected cross-source follow-up
+
+The corrected category-match adaptation now has a fixed-control development
+result in [`R2_AVATAR_CROSS_SOURCE_READOUT_20261102.md`](R2_AVATAR_CROSS_SOURCE_READOUT_20261102.md).
+On 1,655 validation choices from 305 audio-query source groups, joint accuracy
+was 89.79% versus 31.18% video-only; removing audio, removing video, or
+shuffling audio reduced accuracy to 23.81%, 25.02%, and 24.23%. A paired
+2,000-replicate source-group bootstrap for joint-minus-video accuracy was
++55.14 to +62.49 percentage points. These controls are consistent with audio
+adding information beyond the video-only arm in this constructed development
+task. They do not establish the formal both-input-required gate because a
+deployable matched audio-only baseline is unavailable (the category-oracle
+arm is not deployable). Validation was used for checkpoint selection, exact
+VideoPrism pretraining overlap is unknown, and accuracy is below the provisional
+95% target. Native AVATAR localization remains unverified; this does not close
+the broader M2 task matrix or justify product promotion.
+
 Schema inspection on train/validation found per-frame `video_id`,
 `frame_number`, original dimensions, FPS, duration, and annotation arrays with
 `segmentation`, `bbox`, `task`, and `audio_visual_category`. The dataset-card
@@ -162,6 +179,8 @@ hashes. Save predictions and per-video metrics. Primary metrics are option
 Accuracy, NLL, Brier, ECE and macro-by-scenario values; report the native
 localization metrics only as supplemental comparisons.
 
-Model training and feature extraction remain gated on completion of the
-split, annotation-schema, media-integrity, and fixed-control preflight. No
-sealed-audit labels may enter normal development.
+For the native localization task, model training and feature extraction remain
+gated on completion of the split, annotation-schema, media-integrity, and
+fixed-control preflight. The corrected cross-source category adaptation above
+has its own completed fixed-control result and does not satisfy those native
+task gates. No sealed-audit labels may enter normal development.
