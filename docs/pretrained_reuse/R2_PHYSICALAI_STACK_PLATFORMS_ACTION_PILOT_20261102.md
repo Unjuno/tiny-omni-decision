@@ -62,6 +62,13 @@ confidence bins. Lower NLL/Brier/ECE is better; higher accuracy is better.
 | Joint readout, proprio input missing | 0.321 | 11.092 | 1.323 | 0.281 |
 | Train class prior only | 0.356 | 1.894 | 0.812 | 0.023 |
 
+All four fitted readouts reached 100% training accuracy with effectively zero
+training NLL/Brier/ECE (2,800 queries), while their validation scores were
+substantially lower. This is direct evidence of severe readout overfit under
+the fixed protocol. For example, joint video+proprio moved from train 100.0%
+Accuracy / 0.000 NLL to validation 72.5% / 4.490 NLL. No regularization or
+hyperparameter changes were tried after seeing this result.
+
 The action-prototype validation support was imbalanced: class counts were
 `[78, 74, 106, 92, 69, 137, 88, 356]` (train counts
 `[206, 255, 260, 217, 231, 354, 216, 1061]`). The high NLLs and the strong
@@ -77,6 +84,20 @@ joint accuracy by 17.6 points (paired interval for joint minus misaligned
 (`[+0.367, +0.439]`). Bootstrap used 2,000 episode-cluster resamples, seed 17.
 These are diagnostics on the same validation set used for the reported
 comparison, not an untouched inferential test.
+
+After the one-shot metrics were saved, the existing representation-neighbor
+screen was run over the same frozen features as a split-integrity diagnostic,
+without reading action labels or changing the split/readout. Among all 175,000
+train/validation episode pairs, the maximum cosine similarity of normalized
+episode-mean DINO features was `0.99008`; 78 pairs were at least `0.98`, and
+one was at least `0.99`. The nearest pair was validation episode 12627 and
+train episode 12613 (episode-index distance 14). These are only embedding
+neighbors: the thresholds are descriptive, not validated duplicate cutoffs,
+and this screen cannot establish that those episodes share a scene or are
+duplicates. It strengthens the case to keep the source unadmitted until
+publisher scene/layout identifiers or a defensible scene-level audit exist.
+Since the task labels were already inspected, this post-hoc screen is not used
+for model selection or to revise the reported metrics.
 
 ## Interpretation and next gate
 
@@ -113,3 +134,7 @@ Artifacts are outside Git at
 Full per-class metrics, prediction probabilities, checkpoint details, and
 protocol fields are in the immutable JSON artifacts above. The baseline and
 source admission status remain unchanged.
+
+The separate similarity screen is at
+`C:/CodexArtifacts/pretrained-reuse-r2/physicalai-stack-platforms-episode-similarity-20261102-attempt-01/episode-similarity.json`
+(SHA-256 `ea5ec427a8d659c050a593c648128237933603d261cd3f2dd5122fb77ebe6023`).

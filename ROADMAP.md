@@ -3868,3 +3868,7 @@ identity and semantic near-duplicate gates remain unresolved; retain
 `REVIEW_NOT_ADMITTED` and do not promote or tune from these validation results.
 Full results, run details, hashes and limitations:
 [pilot report](docs/pretrained_reuse/R2_PHYSICALAI_STACK_PLATFORMS_ACTION_PILOT_20261102.md).
+The post-result, label-blind full-split embedding-neighbor screen found 78 of
+175,000 train/validation episode pairs at cosine >=0.98 (maximum 0.99008).
+These are not proven duplicates, but further weaken any assumption of
+scene-independent splits; thresholds are descriptive only.
