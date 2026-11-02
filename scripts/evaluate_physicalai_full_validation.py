@@ -9,8 +9,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
-from torch import nn
 
 
 def metrics(probabilities: np.ndarray, targets: np.ndarray) -> dict[str, Any]:
@@ -56,6 +54,11 @@ def evaluate(
         raise ValueError("full-validation feature archive contains non-validation examples")
     if len(np.unique(features["episode"])) < 200:
         raise ValueError("full validation must include at least 200 episode groups")
+
+    # Torch is an optional model-scoring dependency; metric and fail-closed
+    # validation tests should remain runnable in the CPU-only CI environment.
+    import torch
+    from torch import nn
 
     checkpoint_path = pilot_dir / "probe-checkpoints.pt"
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
