@@ -141,3 +141,10 @@ The fixed readout runner also passed a no-work CLI startup check under system
 Python 3.11.9 / NumPy 2.4.6 / PyTorch 2.6.0+cu124. `--help` exited
 successfully; CUDA was available but remained uninitialized. No inference,
 training, output creation, or GPU work occurred in this startup check.
+
+At **08:25 local**, a read-only integrity pass validated all **181** currently
+committed groups: each receipt matched its directory ID, each feature SHA-256
+matched, and every payload had the expected finite VideoPrism `[8,768]` and
+EfficientAT `[8,384]` arrays. The metadata count, directory count, and receipt
+count agreed at 181. This is a partial-cache check only; the full 1,780-group
+gate remains required before fitting the readout.
