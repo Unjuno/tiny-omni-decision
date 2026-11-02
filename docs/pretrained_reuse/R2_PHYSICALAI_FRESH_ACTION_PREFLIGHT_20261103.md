@@ -2,13 +2,14 @@
 
 ## Purpose and disposition
 
-Prepare one new, bounded frozen-feature Decision evaluation of the existing
-video+robot-state action-choice task on previously unused episode groups. The
-task, feature backbone, 100 ms target horizon, four windows per episode, and
-eight train-only action prototypes follow the already frozen
+Prepare one fresh episode split for publisher-file and normalized-content
+integrity checks on previously unused records. This is not an admitted model
+quality experiment. The proposed video+robot-state action-choice task would use
+the already frozen 100 ms target horizon, four windows per episode, and eight
+train-only action prototypes from the
 [`R2_PHYSICALAI_STACK_PLATFORMS_PILOT_PROTOCOL_20261102.md`](R2_PHYSICALAI_STACK_PLATFORMS_PILOT_PROTOCOL_20261102.md).
-This is a fresh data-budget check, not a product admission or a claim that
-video+state is required.
+The data-budget check does not establish product admission or that video and
+state are both required.
 
 The source remains `REVIEW_NOT_ADMITTED`: source metadata has no scene/layout
 identity, and a prior label-blind neighbor review found a shared simulated
@@ -150,15 +151,14 @@ The intended new output directory is
 The existing downloader will verify every publisher size and SHA-256 against
 the new manifest. After acquisition, require the complete 10,000-file
 train+validation set, exact receipt/split/hash checks, zero reserved files,
-and a normalized-frame cross-split overlap audit before extracting features or
-fitting any readout. Use the pinned DINOv2 checkpoint and the existing frozen
-feature/evaluation pipeline; do not overwrite prior outputs.
-
-If these checks pass, the single seed-17 fit will compare the unchanged
-state-only, video-only, and joint controls on the new IDs, with shuffled and
-missing-input controls, per-class metrics, calibration, and episode-cluster
-uncertainty. If only the joint model is better with the predeclared uncertainty
-gate, report support for both-input contribution only on this same-workspace
-task. Otherwise report the measured negative or uncertain result and keep the
-source unadmitted. No quantization, shared-backbone work, second seed, or
-product promotion is authorized by this experiment.
+and a normalized-frame cross-split overlap audit. These are integrity checks
+only. Even a zero exact-frame overlap result cannot establish scene/layout
+independence: the pinned source has no such identity field, and the existing
+neighbor review already shows shared camera/workspace/scene geometry across
+the episode split. Therefore no feature extraction, readout fitting, or
+validation quality evaluation is authorized by this preflight. Keep the source
+`REVIEW_NOT_ADMITTED` and preserve the reserved cohort unopened. Any future
+quality experiment requires a separately documented source/task admission that
+resolves the ROADMAP scene/task gate; this manifest and its results must not be
+used to bypass that gate. No quantization, shared-backbone work, second seed, or
+product promotion is part of this record.
