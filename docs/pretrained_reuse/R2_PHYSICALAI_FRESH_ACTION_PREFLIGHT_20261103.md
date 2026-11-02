@@ -122,10 +122,14 @@ is now read in memory and supplied only as the request Authorization header;
 it is not written to receipts or logs. A CPU regression test checks this
 behavior. The downloader also honors numeric/date `Retry-After` and uses
 bounded exponential fallback. Focused tests pass (**6 passed**) and Ruff passes.
+The first full-suite replay exposed an existing test mock that did not accept
+the request-header keyword; after updating that mock, the full suite passes
+(**2,814 passed / 11 skipped**) and Ruff passes. The fix is commit `1e8913bc`;
+CI run #3825 is green while #3826 was still in progress at the latest check.
 
 The two-worker resume started at 2026-11-03 01:58:40 JST in the same output
-directory with `--max-retries 8`. At the 02:03:13 JST snapshot, **558 files /
-56,863,546 bytes** were present and no receipt had been written. All 306 files
+directory with `--max-retries 8`. At the 02:09:17 JST snapshot, **893 files /
+91,005,038 bytes** were present and no receipt had been written. All 306 files
 present at resume start were independently checked against the manifest; the
 downloader verifies every newly fetched file before atomic rename. The active
 request plan includes only selected train/validation files and excludes the
