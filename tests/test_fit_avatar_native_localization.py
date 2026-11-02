@@ -2,7 +2,10 @@ import numpy as np
 import pytest
 
 from scripts.fit_avatar_native_localization import (
+    _experiment_id,
     _paired_group_bootstrap,
+    _validate_learning_rate,
+    build_parser,
     localization_metrics,
 )
 
@@ -32,3 +35,25 @@ def test_paired_group_bootstrap_is_deterministic_for_identical_predictions():
     assert result["ci95_percentile"] == [0.0, 0.0]
     assert result["repetitions"] == 100
     assert result["validation_source_group_count"] == 3
+
+
+def test_learning_rate_cli_defaults_to_reference_and_can_set_followup():
+    parser = build_parser()
+    required = [
+        "--train-input", "train.jsonl",
+        "--validation-input", "validation.jsonl",
+        "--video-features", "video.npz",
+        "--audio-features", "audio.npz",
+        "--output-dir", "out",
+    ]
+
+    assert parser.parse_args(required).learning_rate == 0.02
+    assert parser.parse_args([*required, "--learning-rate", "0.002"]).learning_rate == 0.002
+    assert _experiment_id(0.02) == "avatar-native-audio-video-localization-readout-v1"
+    assert _experiment_id(0.002) == "avatar-native-audio-video-localization-readout-lr-followup-v1"
+
+
+@pytest.mark.parametrize("learning_rate", [0.0, -0.01, float("inf"), float("nan")])
+def test_learning_rate_must_be_finite_and_positive(learning_rate):
+    with pytest.raises(ValueError, match="finite and positive"):
+        _validate_learning_rate(learning_rate)

@@ -25,6 +25,18 @@ MAX_EPOCHS = 100
 PATIENCE = 10
 MIN_DELTA = 0.001
 OPTION_COUNT = 40
+REFERENCE_LEARNING_RATE = 0.02
+
+
+def _experiment_id(learning_rate: float) -> str:
+    if learning_rate == REFERENCE_LEARNING_RATE:
+        return "avatar-native-audio-video-localization-readout-v1"
+    return "avatar-native-audio-video-localization-readout-lr-followup-v1"
+
+
+def _validate_learning_rate(learning_rate: float) -> None:
+    if not np.isfinite(learning_rate) or learning_rate <= 0:
+        raise ValueError("learning rate must be finite and positive")
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -173,7 +185,12 @@ def _prepare_features(data: dict[str, Any]) -> tuple[np.ndarray, np.ndarray]:
 
 
 def _fit_models(
-    data: dict[str, Any], video: np.ndarray, audio: np.ndarray, output: Path
+    data: dict[str, Any],
+    video: np.ndarray,
+    audio: np.ndarray,
+    output: Path,
+    *,
+    learning_rate: float,
 ) -> dict[str, Any]:
     import torch
     from torch import nn
@@ -231,7 +248,7 @@ def _fit_models(
         torch.manual_seed(SEED + model_index)
         model = constructor().to(device)
         parameters = sum(parameter.numel() for parameter in model.parameters())
-        optimizer = torch.optim.AdamW(model.parameters(), lr=0.02, weight_decay=0.001)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=0.001)
         best_nll = float("inf")
         best_state = None
         best_epoch = 0
@@ -466,6 +483,7 @@ def _paired_group_bootstrap(
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
+    _validate_learning_rate(args.learning_rate)
     output = args.output_dir.resolve()
     if output.exists():
         raise FileExistsError(f"refusing to overwrite output directory: {output}")
@@ -476,13 +494,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     import torch
 
     effective_config = {
-        "experiment_id": "avatar-native-audio-video-localization-readout-v1",
+        "experiment_id": _experiment_id(args.learning_rate),
         "seed": SEED,
         "max_epochs": MAX_EPOCHS,
         "early_stopping_patience": PATIENCE,
         "min_delta": MIN_DELTA,
         "optimizer": "AdamW",
-        "learning_rate": 0.02,
+        "learning_rate": args.learning_rate,
         "weight_decay": 0.001,
         "batch_size": 128,
         "option_count": OPTION_COUNT,
@@ -503,11 +521,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         _baseline_prior(data["labels"][:count], len(data["labels"]) - count),
         data["labels"][count:],
     )
-    fitted = _fit_models(data, video, audio, output)
+    fitted = _fit_models(data, video, audio, output, learning_rate=args.learning_rate)
     result = {
-        "experiment_id": "avatar-native-audio-video-localization-readout-v1",
+        "experiment_id": _experiment_id(args.learning_rate),
         "created_utc": datetime.now(UTC).isoformat(),
         "seed": SEED,
+        "learning_rate": args.learning_rate,
         "selection": {
             "metric": "validation target-set NLL",
             "min_delta": MIN_DELTA,
@@ -544,14 +563,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     return result
 
 
-def main() -> None:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--train-input", type=Path, required=True)
     parser.add_argument("--validation-input", type=Path, required=True)
     parser.add_argument("--video-features", type=Path, required=True)
     parser.add_argument("--audio-features", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    result = run(parser.parse_args())
+    parser.add_argument("--learning-rate", type=float, default=0.02)
+    return parser
+
+
+def main() -> None:
+    result = run(build_parser().parse_args())
     summary = {
         "experiment_id": result["experiment_id"],
         "counts": result["counts"],
