@@ -171,3 +171,11 @@ and validation group-ID hashes are
 `142506a8f1cfcd3e6a8e90bd754ae9bc21abbfb50ca1536e08884f3cefe2f28a`.
 Extractor runtime recorded Python 3.11.16, NumPy 1.26.4, JAX 0.6.2 on CPU,
 TensorFlow 2.18.1, and PyTorch/Torchaudio 2.6.0+cu124 with CUDA uninitialized.
+
+At **08:50 local**, the latest 50 committed receipts averaged **33.0 seconds
+per group** and **7.8 MiB of HTTP Range transfer per group** (390.08 MiB total
+over the sampled 50). At 226 / 1,780 groups, linear extrapolation from this
+recent window is about **14 hours remaining**. This is a variable-rate
+network/decode forecast, not a completion guarantee; the rolling sample is
+slower than the full-run average. GPU compute is not the evident bottleneck,
+so the CPU-only pinned extraction remains unchanged.
