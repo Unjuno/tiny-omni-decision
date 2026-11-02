@@ -1,0 +1,96 @@
+{
+  "format": "avatar_pillow_opencv_train_mask_parity_v1",
+  "created_local": "2026-11-03T00:16:46+09:00",
+  "source_commit": "1f8db75c59a77638941c910d216b3156662b30e7",
+  "dataset": {
+    "repository": "mipal/AVATAR",
+    "revision": "a7f0146ff704799d044133e61137836cacc1c233",
+    "train_annotation_tree_sha256": "4c17a0bdbd7d488bced018404ce71be5659d27273efcfdec9e1cdfffd16eb651",
+    "train_annotation_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\avatar-av-decision-20261101-attempt-01\\train-validation-annotations-02\\train"
+  },
+  "official_reference": {
+    "utils_path": "code/evaluation/utils.py",
+    "utils_sha256": "cef3a03a5b3befff7d1859526ed075a32e7d3ebfba70b51ae3e9f3b94b8d549b",
+    "evaluator_path": "code/evaluation/evaluator.py",
+    "evaluator_sha256": "0560545251519b5d0bce20ca1d3c8e2d57b5545f7fe08c85302d99f4f300827b",
+    "mask_conversion": "np.array(p).reshape(-1, 2).astype(int); cv2.fillPoly(mask, [p], 1)",
+    "union_semantics": "logical union over visible instance masks"
+  },
+  "split": {
+    "assignment_unit": "source_group_global_across_tasks",
+    "previously_unexposed_groups": 1015,
+    "seed": 17,
+    "validation_fraction": 0.4,
+    "train_groups": 609,
+    "validation_groups": 406,
+    "overlap_count": 0,
+    "train_group_set_sha256": "2ab6aad8eb73e3c85f4529406068187244cf619e1edcddef2a7795739834d9be",
+    "validation_group_set_sha256": "9ee1a810ad8dd7032c2d46c55359fc80f19e7c73a8d8d58851386d4a0b55a65b"
+  },
+  "train_support": {
+    "task": "Mixed-Sound",
+    "source_groups": 370,
+    "clips": 426,
+    "frames": 1962,
+    "categories": 60,
+    "frame_size": [640, 360]
+  },
+  "runtime": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "opencv": "4.10.0",
+    "opencv_wheel": "opencv-python-headless-4.10.0.84",
+    "opencv_wheel_sha256": "afcf28bd1209dd58810d33debb62b325d3cbe49dcd7a43a902982c33e5fad05",
+    "opencv_installed_in_isolated_artifact_target": true,
+    "wall_seconds": 15.288,
+    "gpu_used": false,
+    "cloud_cost_usd": 0
+  },
+  "comparison": {
+    "raster_pixels_compared": 452044800,
+    "different_pixels": 219084,
+    "different_pixel_fraction": 0.0004846510788311247,
+    "frames_with_any_pixel_difference": 1820,
+    "grids": {
+      "14": {
+        "total_queries": 384552,
+        "pillow_positive_points": 54345,
+        "opencv_positive_points": 54539,
+        "different_point_labels": 194,
+        "different_point_label_fraction": 0.0005044831388212777
+      },
+      "16": {
+        "total_queries": 502272,
+        "pillow_positive_points": 71219,
+        "opencv_positive_points": 71433,
+        "different_point_labels": 214,
+        "different_point_label_fraction": 0.0004260639653414883
+      },
+      "28": {
+        "total_queries": 1538208,
+        "pillow_positive_points": 217886,
+        "opencv_positive_points": 218640,
+        "different_point_labels": 754,
+        "different_point_label_fraction": 0.0004901807817928394
+      }
+    }
+  },
+  "execution": {
+    "command": "python -m scripts.audit_avatar_rasterizer_parity --train-annotations <pinned TRAIN annotation root> --artifact-root C:/CodexArtifacts/pretrained-reuse-r2 --output C:/CodexArtifacts/pretrained-reuse-r2/avatar-rasterizer-parity-20261103-attempt-01/report.json --expected-opencv-version 4.10.0 --seed 17 --validation-fraction 0.4 --grid-sizes 14,16,28",
+    "implementation_sha256": "26e11c01190cd5f71b61042b24d8354071b79da82aad86d5b636acba1c05a8f7",
+    "test_sha256": "050b074f1e34da3427df200ddcce2a754b0623b52688374fa3a1db538f449c4c",
+    "report_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\avatar-rasterizer-parity-20261103-attempt-01\\report.json",
+    "report_sha256": "8b22556f6aaa7493fe73e61b65daa01836d1badaf166b1a3ebd39e8a7880c242",
+    "wheel_sha256": "afcf28bd1209dd58810d33debb62b325d3cbe49dcd7a43a902982c33e5fad05"
+  },
+  "access_and_scope": {
+    "internal_validation_group_json_parsed_for_split_replay": true,
+    "internal_validation_masks_or_dimensions_used": false,
+    "official_validation_accessed": false,
+    "sealed_audit_accessed": false,
+    "media_payloads_opened_or_decoded": false,
+    "model_or_features_loaded": false,
+    "quality_result": false
+  },
+  "decision": "TRAIN_GEOMETRY_PARITY_FAILURE_PILLOW_NOT_EQUIVALENT_AVATAR_REMAINS_REVIEW_NOT_ADMITTED"
+}

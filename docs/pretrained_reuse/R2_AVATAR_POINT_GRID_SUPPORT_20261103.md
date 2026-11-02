@@ -93,3 +93,12 @@ Keep the candidate unadmitted until all of these are resolved:
 
 No model was trained, no checkpoint was created, and no quality or product
 claim follows from this support audit.
+
+## Subsequent official-rasterizer comparison
+
+The follow-up pinned-code comparison found small but nonzero disagreement
+between Pillow and AVATAR's OpenCV `fillPoly` rasterizer: 0.0485% of pixels
+and 194–754 center-point labels per tested grid. The support counts above are
+therefore approximate geometry counts, not exact official-mask counts. See
+the [TRAIN-only parity audit](R2_AVATAR_RASTERIZER_PARITY_20261103.md) for the
+full method, per-grid results, hashes, and remaining admission gates.

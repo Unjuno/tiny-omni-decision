@@ -3888,3 +3888,9 @@ ODbL for the database and DbCL for contents and requests usage registration;
 rights/consent, original-AV actor/sentence split, and common target definition
 are unresolved. No payload or annotation was obtained, and no form was
 submitted. Keep unadmitted; see the [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
+
+**2026-11-03 R2 AVATAR rasterizer parity:** The TRAIN-only Pillow/OpenCV
+comparison found 0.0485% pixel disagreement and 194–754 differing labels on
+the tested center grids. Treat the earlier Pillow support counts as approximate;
+AVATAR remains unadmitted while source-video rights and feature/task gates are
+open. [Pinned method, counts, hashes and limits](docs/pretrained_reuse/R2_AVATAR_RASTERIZER_PARITY_20261103.md).
