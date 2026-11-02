@@ -112,3 +112,18 @@ set by streaming and retaining only a small frozen-feature artifact. Revisit
 cleanup only after a receipt-level audit proves that a specific path is
 redundant or deterministically recoverable and is not an input to an active or
 reproducibility-critical run.
+
+## Live extraction follow-up — 2026-11-03 08:17 local
+
+The CPU-only attempt-01 cache was rechecked without touching its process or
+output. PID `5596` is still running the pinned extractor from this worktree;
+`run.json` and committed directories agree at **167 / 1,780 groups**. At this
+snapshot it had run **73.68 minutes**, transferred **1,311.46 MiB**, and the
+entire cache directory occupied **6,105,229 bytes (5.82 MiB)**. C: had **6.18
+GiB free**, above the extractor's 2 GiB reserve; the GPU reported 0 MiB / 0%.
+
+Three short interval measurements plus the process-wide rate put throughput
+near **2.2 groups/minute**. Linear extrapolation gives roughly **12 hours
+remaining**, which is only a planning estimate because network and decode time
+vary. No eligible large deletion candidate has emerged. The partial downloads,
+legacy media, and all referenced data/checkpoints remain protected.
