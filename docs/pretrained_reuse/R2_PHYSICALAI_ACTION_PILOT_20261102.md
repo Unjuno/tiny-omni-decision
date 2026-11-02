@@ -143,6 +143,19 @@ saved features reproduced the metrics before writing per-example predictions
 and probe checkpoints. Full feature extraction takes about ten minutes on the
 measured CPU path.
 
+## Exploratory visual-neighbor audit
+
+For the same 80 pilot episodes, the mean of four sampled eight-frame DINO CLS
+features was L2-normalized per episode and compared across the 64/16 split.
+Among 1,024 train-validation pairs, cosine similarity had median 0.8541, p95
+0.9242 and maximum 0.9727; no pair reached 0.98. This is only a descriptive
+embedding-neighbor screen. It neither proves independent scenes nor excludes
+near-duplicates under other features. The source still has no scene/layout ID.
+The audit code is `scripts/audit_physicalai_episode_similarity.py`; two CPU
+tests cover deterministic neighbor accounting and fail-closed episode grouping.
+Receipt: `C:/CodexArtifacts/pretrained-reuse-r2/physicalai-action-pilot-01/scene-similarity-audit.json`,
+SHA-256 `CB4F3AE67F0DFDC0747B69A86240E5309B796E808B515EF15E567CC2E8CFE076`.
+
 ## Next gate
 
 Do not expand this pilot directly into a larger fit. First establish

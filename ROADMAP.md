@@ -3847,3 +3847,5 @@ and [source screen](docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_
 The CPU extraction/evaluation entrypoints are now versioned and the artifact
 stores all per-example probabilities and probe parameters; reloaded probes
 reproduce validation probabilities exactly.
+A DINO-feature neighbor screen found no cross-split pair above cosine 0.98 in
+the 80-episode pilot, but this cannot establish scene independence.
