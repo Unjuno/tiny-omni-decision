@@ -48,10 +48,13 @@ def evaluate_intervention_factorial(
     frozen_candidate_sha256: str | None = None,
     sample_ids: Sequence[str],
     group_ids: Sequence[str],
+    sample_ids_by_arm: Mapping[str, Sequence[str]],
+    group_ids_by_arm: Mapping[str, Sequence[str]],
     option_ids: Sequence[Sequence[str]],
     option_ids_by_arm: Mapping[str, Sequence[Sequence[str]]],
     intervention_types: Mapping[str, str],
     targets: Sequence[int],
+    targets_by_arm: Mapping[str, Sequence[int]],
     probabilities_by_arm: Mapping[str, object],
     baseline_arm: str = "matched",
 ) -> dict[str, object]:
@@ -60,7 +63,9 @@ def evaluate_intervention_factorial(
     ``probabilities_by_arm`` must already be realigned to each row's supplied
     option-ID order. This function never loads media or a model. It rejects
     sealed/test scoring unless the caller explicitly attests that the candidate
-    is frozen; development comparisons remain paired by source group.
+    is frozen; development comparisons remain paired by source group. Every
+    prediction arm must also provide the exact ordered sample, group, and target
+    identities used to produce its rows; mismatches fail closed.
     """
     if not isinstance(evaluation_role, str) or evaluation_role not in {
         "train", "development", "validation", "sealed_audit", "test"
@@ -119,11 +124,44 @@ def evaluate_intervention_factorial(
         raise ValueError("declare one supported intervention type per prediction arm")
     if set(option_ids_by_arm) != set(probabilities_by_arm):
         raise ValueError("each prediction arm needs its own aligned option IDs")
+    for identity_name, identity_by_arm in (
+        ("sample", sample_ids_by_arm),
+        ("group", group_ids_by_arm),
+        ("target", targets_by_arm),
+    ):
+        if set(identity_by_arm) != set(probabilities_by_arm):
+            raise ValueError(f"each prediction arm needs its own {identity_name} identities")
     for name, arm_options in option_ids_by_arm.items():
         if any(isinstance(row, (str, bytes)) for row in arm_options):
             raise ValueError("each arm must provide per-sample option ID rows")
         if [list(row) for row in arm_options] != candidates:
             raise ValueError(f"option IDs/order differ in intervention arm {name!r}")
+
+    samples_by_arm: dict[str, list[str]] = {}
+    groups_by_arm: dict[str, list[str]] = {}
+    targets_array_by_arm: dict[str, np.ndarray] = {}
+    for name in probabilities_by_arm:
+        arm_samples = sample_ids_by_arm[name]
+        arm_groups = group_ids_by_arm[name]
+        arm_targets = targets_by_arm[name]
+        if isinstance(arm_samples, (str, bytes)) or isinstance(arm_groups, (str, bytes)):
+            raise ValueError(f"row identities must be sequences in intervention arm {name!r}")
+        sample_values = list(arm_samples)
+        group_values = list(arm_groups)
+        if sample_values != ids:
+            raise ValueError(f"sample IDs/order differ in intervention arm {name!r}")
+        if group_values != groups:
+            raise ValueError(f"group IDs/order differ in intervention arm {name!r}")
+        if isinstance(arm_targets, (str, bytes)):
+            raise ValueError(f"targets/order differ in intervention arm {name!r}")
+        arm_y = np.asarray(arm_targets)
+        if arm_y.shape != (count,) or arm_y.dtype.kind not in "iu" or not np.array_equal(
+            arm_y, y
+        ):
+            raise ValueError(f"targets/order differ in intervention arm {name!r}")
+        samples_by_arm[name] = sample_values
+        groups_by_arm[name] = group_values
+        targets_array_by_arm[name] = arm_y
 
     matrices = {
         name: _validate_probability_matrix(values, rows=count, options=option_count)
@@ -150,7 +188,7 @@ def evaluate_intervention_factorial(
             ),
         }
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "evaluation_role": evaluation_role,
         "candidate_frozen": candidate_frozen,
         "frozen_candidate_sha256": frozen_candidate_sha256,
@@ -160,6 +198,16 @@ def evaluate_intervention_factorial(
         "group_count": len(set(groups)),
         "sample_ids_sha256": _ordered_ids_hash(ids),
         "group_ids_sha256": _ordered_ids_hash(groups),
+        "sample_ids_sha256_by_arm": {
+            name: _ordered_ids_hash(values) for name, values in samples_by_arm.items()
+        },
+        "group_ids_sha256_by_arm": {
+            name: _ordered_ids_hash(values) for name, values in groups_by_arm.items()
+        },
+        "targets_sha256_by_arm": {
+            name: _ordered_ids_hash([str(int(value)) for value in values])
+            for name, values in targets_array_by_arm.items()
+        },
         "option_order_sha256": _ordered_ids_hash(
             ["\x1f".join(row) for row in candidates]
         ),
