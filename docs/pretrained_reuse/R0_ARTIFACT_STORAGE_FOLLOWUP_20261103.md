@@ -136,3 +136,8 @@ The manifest SHA-256 still matches the pinned value
 validation confirmed 1,560 train / 2,000 validation rows, 780 / 1,000 unique
 source groups, 390 / 500 pair units, and zero train-validation group or pair
 overlap. All pair units passed the frozen 2x2 design checks.
+
+The fixed readout runner also passed a no-work CLI startup check under system
+Python 3.11.9 / NumPy 2.4.6 / PyTorch 2.6.0+cu124. `--help` exited
+successfully; CUDA was available but remained uninitialized. No inference,
+training, output creation, or GPU work occurred in this startup check.
