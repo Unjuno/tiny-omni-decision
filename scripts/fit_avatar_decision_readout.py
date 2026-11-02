@@ -422,6 +422,30 @@ def _model_class(torch: Any, input_dim: int):
     return PairwiseScorer
 
 
+def _gated_model_class(torch: Any):
+    class ConditionalGateScorer(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.audio_projection = torch.nn.Linear(384, HIDDEN_DIM)
+            self.video_projection = torch.nn.Linear(768, HIDDEN_DIM)
+            self.gate_projection = torch.nn.Linear(2 * HIDDEN_DIM, HIDDEN_DIM)
+            self.output = torch.nn.Linear(HIDDEN_DIM, 1)
+
+        def gates(self, values):
+            audio = torch.nn.functional.gelu(self.audio_projection(values[..., :384]))
+            video = torch.nn.functional.gelu(self.video_projection(values[..., 384:]))
+            return torch.sigmoid(self.gate_projection(torch.cat([audio, video], dim=-1)))
+
+        def forward(self, values):
+            audio = torch.nn.functional.gelu(self.audio_projection(values[..., :384]))
+            video = torch.nn.functional.gelu(self.video_projection(values[..., 384:]))
+            gate = torch.sigmoid(self.gate_projection(torch.cat([audio, video], dim=-1)))
+            fused = gate * audio + (1.0 - gate) * video
+            return self.output(fused).squeeze(-1)
+
+    return ConditionalGateScorer
+
+
 def _normalize(train: dict[str, Any], validation: dict[str, Any]) -> dict[str, Any]:
     train_audio = train["audio"]
     train_video = train["video"]
@@ -509,11 +533,19 @@ def _fit_candidate(
     *,
     output_path: Path,
     device: Any,
+    model_kind: str = "mlp",
 ) -> dict[str, Any]:
     torch.manual_seed(SEED)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(SEED)
-    model_type = _model_class(torch, train_x.shape[2])
+    if model_kind == "conditional_gate":
+        if train_x.shape[2] != 1152:
+            raise ValueError("conditional AV gate expects 384-D audio + 768-D video features")
+        model_type = _gated_model_class(torch)
+    elif model_kind == "mlp":
+        model_type = _model_class(torch, train_x.shape[2])
+    else:
+        raise ValueError(f"unsupported readout model kind: {model_kind}")
     model = model_type().to(device)
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
@@ -614,6 +646,16 @@ def _fit_candidate(
     model.eval()
     with torch.no_grad():
         selected_logits = model(validation_values)
+        gate_diagnostics = None
+        if model_kind == "conditional_gate":
+            gate_values = model.gates(validation_values).float()
+            gate_diagnostics = {
+                "audio_weight_mean": float(gate_values.mean().cpu()),
+                "audio_weight_p10": float(torch.quantile(gate_values, 0.10).cpu()),
+                "audio_weight_p90": float(torch.quantile(gate_values, 0.90).cpu()),
+                "fraction_saturated_below_0_05": float((gate_values < 0.05).float().mean().cpu()),
+                "fraction_saturated_above_0_95": float((gate_values > 0.95).float().mean().cpu()),
+            }
     selected_metrics, selected_probabilities = _metrics_for_logits(
         selected_logits, validation_targets
     )
@@ -632,6 +674,8 @@ def _fit_candidate(
             if torch.cuda.is_available() and device.type == "cuda"
             else 0
         ),
+        "model_kind": model_kind,
+        "gate_diagnostics": gate_diagnostics,
     }
 
 
@@ -904,6 +948,11 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         "readout": {
             "joint": "per-option MLP 1152->64->1",
             "joint_parameters": 73_857,
+            "joint_conditional_gate": (
+                "per-option 384->64 audio and 768->64 video projections, "
+                "feature-conditioned 128->64 sigmoid gate, weighted sum, 64->1"
+            ),
+            "joint_conditional_gate_parameters": 82_177,
             "video_only": "per-option MLP 768->64->1",
             "video_only_parameters": 49_281,
             "metadata_only": "per-option MLP 5->64->1",
@@ -922,6 +971,7 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         "sealed_audit_loaded": False,
         "model_input_policy": {
             "joint": "frozen query-audio and candidate-video features",
+            "joint_conditional_gate": "the same frozen query-audio and candidate-video features",
             "video_only": "candidate-video features only",
             "metadata_only": "audio-window center/duration/padding and candidate timestamps only",
             "audio_category_only": (
@@ -959,6 +1009,18 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         val_n["targets"],
         output_path=joint_dir / "best-state.pt",
         device=device,
+    )
+    gated_joint_dir = output / "joint-conditional-gate"
+    gated_joint_dir.mkdir()
+    gated_joint = _fit_candidate(
+        torch,
+        train_joint,
+        train_n["targets"],
+        validation_joint,
+        val_n["targets"],
+        output_path=gated_joint_dir / "best-state.pt",
+        device=device,
+        model_kind="conditional_gate",
     )
     video_only = _fit_candidate(
         torch,
@@ -1066,11 +1128,48 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
     )
     shuffled_video_metrics = compute_metrics(shuffled_video_probs, shuffled_video_targets)
 
+    gated_joint_metrics = gated_joint["selected_validation_metrics"]
+    gated_joint_probabilities = gated_joint["selected_validation_probabilities"]
+    gated_missing_audio_values = np.concatenate(
+        [np.zeros_like(val_n["audio"][:, None, :]).repeat(4, axis=1), val_n["video"]],
+        axis=2,
+    )
+    gated_missing_audio_metrics, gated_missing_audio_probs = _set_metrics(
+        gated_joint["model"], gated_missing_audio_values, val_n["targets"], device
+    )
+    gated_missing_video_values = np.concatenate(
+        [np.repeat(val_n["audio"][:, None, :], 4, axis=1), np.zeros_like(val_n["video"])],
+        axis=2,
+    )
+    gated_missing_video_metrics, gated_missing_video_probs = _set_metrics(
+        gated_joint["model"], gated_missing_video_values, val_n["targets"], device
+    )
+    gated_shuffled_audio_values = np.concatenate(
+        [
+            np.repeat(val_n["audio"][permutation, None, :], 4, axis=1),
+            val_n["video"],
+        ],
+        axis=2,
+    )
+    gated_shuffled_audio_metrics, gated_shuffled_audio_probs = _set_metrics(
+        gated_joint["model"], gated_shuffled_audio_values, val_n["targets"], device
+    )
+    gated_shuffled_video_values = np.concatenate(
+        [np.repeat(val_n["audio"][:, None, :], 4, axis=1), shuffled_video], axis=2
+    )
+    gated_shuffled_video_metrics, gated_shuffled_video_probs = _set_metrics(
+        gated_joint["model"], gated_shuffled_video_values, val_n["targets"], device
+    )
+    gated_shuffled_video_metrics = compute_metrics(
+        gated_shuffled_video_probs, shuffled_video_targets
+    )
+
     predictions = []
     conditions = {
         "uniform": uniform,
         "option_position_prior": position_prior_probabilities,
         "joint": joint_probabilities,
+        "joint_conditional_gate": gated_joint_probabilities,
         "audio_only_oracle_category_match": audio_only_probabilities,
         "video_only": video_probabilities,
         "metadata_only": metadata_probabilities,
@@ -1078,6 +1177,10 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         "joint_missing_video": joint_missing_video_probs,
         "joint_group_shuffled_audio": shuffled_audio_probs,
         "joint_shuffled_video_option_order": shuffled_video_probs,
+        "joint_gate_missing_audio": gated_missing_audio_probs,
+        "joint_gate_missing_video": gated_missing_video_probs,
+        "joint_gate_group_shuffled_audio": gated_shuffled_audio_probs,
+        "joint_gate_shuffled_video_option_order": gated_shuffled_video_probs,
     }
     category_metrics = {
         name: compute_grouped_metrics(probabilities, val_n["targets"], val_n["target_categories"])
@@ -1109,6 +1212,7 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         predictions.append(row)
     write_json_atomic(output / "validation-predictions.json", predictions)
     joint_correct = joint_probabilities.argmax(axis=1) == val_n["targets"]
+    gated_joint_correct = gated_joint_probabilities.argmax(axis=1) == val_n["targets"]
     video_correct = video_probabilities.argmax(axis=1) == val_n["targets"]
     metadata_correct = metadata_probabilities.argmax(axis=1) == val_n["targets"]
     audio_only_correct = audio_only_probabilities.argmax(axis=1) == val_n["targets"]
@@ -1169,10 +1273,15 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
             "video_only": video_metrics,
             "metadata_only": metadata_metrics,
             "joint_audio_video": joint_metrics,
+            "joint_audio_video_conditional_gate": gated_joint_metrics,
             "joint_missing_audio": joint_missing_audio_metrics,
             "joint_missing_video": joint_missing_video_metrics,
             "joint_group_shuffled_audio": shuffled_audio_metrics,
             "joint_shuffled_video_option_order": shuffled_video_metrics,
+            "joint_gate_missing_audio": gated_missing_audio_metrics,
+            "joint_gate_missing_video": gated_missing_video_metrics,
+            "joint_gate_group_shuffled_audio": gated_shuffled_audio_metrics,
+            "joint_gate_shuffled_video_option_order": gated_shuffled_video_metrics,
         },
         "validation_category_metrics": category_metrics,
         "validation_source_group_metrics": source_group_metrics,
@@ -1183,6 +1292,14 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
             "joint_validation_nll": joint_metrics["nll"],
             "joint_validation_minus_train_nll": joint_metrics["nll"]
             - joint["history"][joint["best_epoch"] - 1]["fixed_train_evaluation"]["nll"],
+            "joint_gate_fixed_train_nll": gated_joint["history"][
+                gated_joint["best_epoch"] - 1
+            ]["fixed_train_evaluation"]["nll"],
+            "joint_gate_validation_nll": gated_joint_metrics["nll"],
+            "joint_gate_validation_minus_train_nll": gated_joint_metrics["nll"]
+            - gated_joint["history"][gated_joint["best_epoch"] - 1][
+                "fixed_train_evaluation"
+            ]["nll"],
             "video_only_fixed_train_nll": video_only["history"][video_only["best_epoch"] - 1][
                 "fixed_train_evaluation"
             ]["nll"],
@@ -1203,6 +1320,12 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
             "audio_category_validation_nll": audio_category["best_validation_nll"],
         },
         "group_paired_bootstrap": {
+            "conditional_gate_minus_joint_accuracy": group_bootstrap_difference(
+                gated_joint_correct, joint_correct, val_n["groups"]
+            ),
+            "conditional_gate_minus_video_only_accuracy": group_bootstrap_difference(
+                gated_joint_correct, video_correct, val_n["groups"]
+            ),
             "joint_minus_video_only_accuracy": group_bootstrap_difference(
                 joint_correct, video_correct, val_n["groups"]
             ),
@@ -1225,6 +1348,11 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
             "joint": {
                 key: value
                 for key, value in joint.items()
+                if key not in {"model", "selected_validation_probabilities"}
+            },
+            "joint_conditional_gate": {
+                key: value
+                for key, value in gated_joint.items()
                 if key not in {"model", "selected_validation_probabilities"}
             },
             "video_only": {
@@ -1261,6 +1389,12 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         "prediction_sha256": report["prediction_sha256"],
         "joint_checkpoint_sha256": sha256_file(joint_dir / "best-state.pt"),
         "joint_last_checkpoint_sha256": sha256_file(joint_dir / "last-state.pt"),
+        "joint_conditional_gate_checkpoint_sha256": sha256_file(
+            gated_joint_dir / "best-state.pt"
+        ),
+        "joint_conditional_gate_last_checkpoint_sha256": sha256_file(
+            gated_joint_dir / "last-state.pt"
+        ),
         "video_only_checkpoint_sha256": sha256_file(video_only_dir / "best-state.pt"),
         "video_only_last_checkpoint_sha256": sha256_file(video_only_dir / "last-state.pt"),
         "metadata_only_checkpoint_sha256": sha256_file(metadata_only_dir / "best-state.pt"),

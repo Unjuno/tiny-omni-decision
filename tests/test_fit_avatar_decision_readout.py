@@ -10,6 +10,7 @@ import pytest
 
 from scripts.fit_avatar_decision_readout import (
     _fit_candidate,
+    _gated_model_class,
     _run,
     _score_audio_category_candidates,
     assemble_split,
@@ -360,4 +361,33 @@ def test_cpu_end_to_end_readout_writes_all_control_arms(tmp_path):
         "audio_only_oracle_category_match",
         "video_only",
         "joint_audio_video",
+        "joint_audio_video_conditional_gate",
+        "joint_gate_missing_audio",
+        "joint_gate_missing_video",
     }.issubset(report["candidates"])
+    gate_info = report["training"]["joint_conditional_gate"]
+    assert gate_info["parameter_count"] == 82_177
+    assert set(gate_info["gate_diagnostics"]) == {
+        "audio_weight_mean",
+        "audio_weight_p10",
+        "audio_weight_p90",
+        "fraction_saturated_below_0_05",
+        "fraction_saturated_above_0_95",
+    }
+    assert predictions[0]["joint_conditional_gate"]["probabilities"]
+
+
+def test_conditional_gate_is_differentiable_and_option_equivariant():
+    torch = pytest.importorskip("torch")
+    model = _gated_model_class(torch)()
+    assert sum(parameter.numel() for parameter in model.parameters()) == 82_177
+    values = torch.randn(3, 4, 1152)
+    logits = model(values)
+    gates = model.gates(values)
+    assert logits.shape == (3, 4)
+    assert gates.shape == (3, 4, 64)
+    assert torch.isfinite(gates).all()
+    order = torch.tensor([2, 0, 3, 1])
+    assert torch.allclose(model(values[:, order]), logits[:, order])
+    logits.square().mean().backward()
+    assert all(parameter.grad is not None for parameter in model.parameters())
