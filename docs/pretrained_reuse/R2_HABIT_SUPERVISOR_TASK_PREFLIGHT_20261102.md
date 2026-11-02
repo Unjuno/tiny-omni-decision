@@ -90,6 +90,16 @@ source's `info.json` codec declaration is not treated as runtime truth; codec
 is detected from the media stream. The smoke confirms decoding and annotation
 availability only, not model quality.
 
+The pinned VideoPrism checkpoint was also run on these three real frame windows
+in the existing CPU-only JAX environment. The first compile+forward took
+8.102 s; the next two took 1.436 s and 1.524 s (warm mean 1.480 s/window).
+Output was finite `[1,8,768]`; peak working set was 4,182,413,312 bytes and
+device was `TFRT_CPU_0`. This gives a local extraction-throughput measurement,
+not the event count or end-to-end runtime for the full split. No GPU or weights
+were changed. Two failed smoke attempts and the passing attempt are retained in
+`videoprism-habit-smoke-attempt-log.json` (SHA-256
+`31056ff418a70adfb59de865ec571f72db87690c3060a0636c76204dbf828ea8`).
+
 Train/validation media acquisition started in the external attempt directory
 named in the live run receipt. The downloader verifies every file's size and
 SHA-256 and refuses reserved entries; its progress and completion receipt are
