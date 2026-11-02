@@ -17,6 +17,11 @@
     "response_sha256": "a7aa8d7f2bb362812ea622c37aeac4192999ce555e91c7679ec555ae5c81a172",
     "metadata_only": true
   },
+  "reproduction": {
+    "script": "scripts/audit_hoi_source_metadata.py",
+    "unit_tests": "tests/test_hoi_source_metadata.py",
+    "live_output_matches_pinned_response": true
+  },
   "source_scope": "Official dataset/challenge pages, Bonn Dataverse API file metadata, the 11,277-byte dataset README, and one 664-byte confirmed session-interaction annotation only; no media, sensor streams, or challenge labels opened.",
   "readme": {
     "persistent_id": "doi:10.60507/FK2/QODWTV/1ELBAW",

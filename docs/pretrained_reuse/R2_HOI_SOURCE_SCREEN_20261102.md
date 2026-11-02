@@ -74,6 +74,10 @@ not used for training or evaluation.
   physical-object identities, so independent group count remains UNKNOWN. The
   candidate is below the roadmap's provisional 200-scene/clip floor even
   before allocating train/validation/audit splits.
+- The metadata aggregation is reproducible with
+  `python scripts/audit_hoi_source_metadata.py`; its live output matched the
+  recorded response length, SHA-256, archive counts, bytes, and 198 candidate
+  keys. Unit coverage is in `tests/test_hoi_source_metadata.py`.
 - The [official processing tools](https://github.com/timengelbracht/hoi-dataset-tools)
   describe data processing and alignment utilities; their existence does not
   resolve the task/split/resource gates.
