@@ -1,13 +1,14 @@
+import importlib
+
 import numpy as np
 import pytest
-import torch
 
-from scripts.train_habit_option_readout import (
-    MODES,
-    OptionReadout,
-    classification_metrics,
-    cluster_bootstrap_delta,
-)
+torch = pytest.importorskip("torch")
+readout = importlib.import_module("scripts.train_habit_option_readout")
+MODES = readout.MODES
+OptionReadout = readout.OptionReadout
+classification_metrics = readout.classification_metrics
+cluster_bootstrap_delta = readout.cluster_bootstrap_delta
 
 
 def test_metrics_match_uniform_two_choice_baseline():
