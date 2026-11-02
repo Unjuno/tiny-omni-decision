@@ -16,6 +16,10 @@ from typing import Any
 
 import numpy as np
 
+REPOSITORY_ROOT = Path(__file__).resolve().parent.parent
+if str(REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT))
+
 SEED = 17
 HELD_CATEGORY_COUNT = 16
 VALIDATION_FRACTION = 0.20
