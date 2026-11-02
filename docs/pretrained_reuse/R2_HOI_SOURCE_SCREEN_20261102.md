@@ -57,6 +57,23 @@ not used for training or evaluation.
   annotation files other than the single event JSON above were accessed. The
   README and dataset page state CC BY; participant
   consent scope remains unknown.
+- A complete metadata-only inventory for Dataverse version 1 was retrieved as
+  a 3,769,110-byte API response (SHA-256
+  `a7aa8d7f2bb362812ea622c37aeac4192999ce555e91c7679ec555ae5c81a172`). It
+  lists 22 force/torque ZIPs (136,626,600 bytes), 22 DIGIT ZIPs
+  (2,858,497,449 bytes), 24 UMI telemetry ZIPs (23,595,019 bytes), and 24
+  odometry ZIPs (139,860,733,262 bytes). The 362 `camera_rgb.zip` files total
+  855,857,508,336 bytes. Matching the 24 UMI telemetry packages to the
+  `aria_human` RGB view involves 46,809,692,711 bytes of RGB archives plus
+  23,595,019 bytes of telemetry if acquired in full; none of these archives
+  were downloaded.
+- Parsing interaction-index suffixes from force/telemetry package paths gives
+  168 force-side keys and 187 telemetry-side keys, with a deduplicated union
+  of 198 `(environment, index)` keys. This is a metadata-derived candidate
+  count only: the keys have not been verified against all event annotations or
+  physical-object identities, so independent group count remains UNKNOWN. The
+  candidate is below the roadmap's provisional 200-scene/clip floor even
+  before allocating train/validation/audit splits.
 - The [official processing tools](https://github.com/timengelbracht/hoi-dataset-tools)
   describe data processing and alignment utilities; their existence does not
   resolve the task/split/resource gates.
@@ -71,14 +88,17 @@ matched unimodal controls. The full dataset reports 38 environments and 381
 objects. Object-disjoint grouping might provide more independent groups than
 environment grouping, but object identity and cross-embodiment/session overlap
 have not been audited, so the available group count is UNKNOWN. The full release
-size exceeds local C: free space by over two orders of magnitude; selective-
-subset feasibility is unknown.
+size exceeds local C: free space by over two orders of magnitude. The matched
+UMI video+telemetry archives total about 43.6 GiB; they could be processed
+serially, but the metadata-derived group candidate count remains below 200.
 
-Do not download the full release or use challenge labels. A bounded next
-screen may inspect session event metadata, object identity mapping, and per-file
-sizes, then assess whether group-disjoint train/validation/audit sets and a
-both-input-required decision target are feasible. No media/sensor payload,
-challenge labels, sealed audit, GPU, fit, or evaluation was used. The README
-and single event-annotation hashes are above.
+Do not ingest Hoi! for R2-M under the current gate: the metadata-derived
+sensor-bearing group candidate count is below 200, and the full selected UMI
+video+telemetry sweep spans about 43.6 GiB. Reopen only if a valid object
+identity mapping establishes at least 200 independent groups, a smaller legal
+feature-extraction route is demonstrated, and a task is frozen that needs both
+inference streams. No media/sensor payload, challenge labels, sealed audit,
+GPU, fit, or evaluation was used. The README and one event-annotation hashes
+are above.
 
 Machine-readable record: `manifests/pretrained_reuse/hoi-source-screen-20261102.json`.

@@ -9,6 +9,14 @@
     "official_data_repository": "https://bonndata.uni-bonn.de/catalog/datasets/10.60507/FK2/QODWTV/",
     "official_processing_tools": "https://github.com/timengelbracht/hoi-dataset-tools"
   },
+  "metadata_inventory_snapshot": {
+    "api_url": "https://bonndata.uni-bonn.de/api/datasets/:persistentId/?persistentId=doi%3A10.60507%2FFK2%2FQODWTV",
+    "dataset_version": "1",
+    "retrieved_at": "2026-11-02",
+    "response_bytes": 3769110,
+    "response_sha256": "a7aa8d7f2bb362812ea622c37aeac4192999ce555e91c7679ec555ae5c81a172",
+    "metadata_only": true
+  },
   "source_scope": "Official dataset/challenge pages, Bonn Dataverse API file metadata, the 11,277-byte dataset README, and one 664-byte confirmed session-interaction annotation only; no media, sensor streams, or challenge labels opened.",
   "readme": {
     "persistent_id": "doi:10.60507/FK2/QODWTV/1ELBAW",
@@ -55,7 +63,19 @@
     "zip_file_count": 3181,
     "zip_total_bytes": 3185687461273,
     "json_file_count": 1354,
-    "json_total_bytes": 156171537
+    "json_total_bytes": 156171537,
+    "camera_rgb_zip_count": 362,
+    "camera_rgb_zip_total_bytes": 855857508336,
+    "force_torque_zip_count": 22,
+    "force_torque_zip_total_bytes": 136626600,
+    "digit_zip_count": 22,
+    "digit_zip_total_bytes": 2858497449,
+    "telemetry_zip_count": 24,
+    "telemetry_zip_total_bytes": 23595019,
+    "odometry_zip_count": 24,
+    "odometry_zip_total_bytes": 139860733262,
+    "interaction_window_json_count": 200,
+    "interaction_window_json_directory_count": 79
   },
   "license": {
     "official_dataset_page": "CC BY 4.0; official page states commercial use is permitted with attribution",
@@ -71,6 +91,18 @@
     "reported_articulated_object_count": 381,
     "independent_group_count_for_candidate_split": "UNKNOWN",
     "independent_group_basis": "Environment grouping yields 38 reported groups; 381 objects could yield more groups, but object identities, cross-embodiment/session overlap, and candidate split have not been verified",
+    "metadata_derived_environment_index_keys": {
+      "force_torque": 168,
+      "umi_telemetry": 187,
+      "union_deduplicated": 198,
+      "interpretation": "Parsed from package path index suffixes and deduplicated by environment/index; candidate physical-object independence not established"
+    },
+    "umi_telemetry_with_aria_human_rgb": {
+      "paired_package_count": 24,
+      "camera_rgb_total_bytes": 46809692711,
+      "telemetry_total_bytes": 23595019,
+      "all_media_downloaded": false
+    },
     "both_input_necessity": "NOT_ESTABLISHED_BY_PUBLISHED_CHALLENGE_TASKS"
   },
   "resource_gate": {
