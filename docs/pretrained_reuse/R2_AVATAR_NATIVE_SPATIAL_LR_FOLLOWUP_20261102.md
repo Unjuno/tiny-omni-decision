@@ -79,9 +79,15 @@ percentage points; the candidate-minus-reference NLL interval was
 same validation partition, these intervals are descriptive and are not
 independent confirmation.
 
-At learning rate 0.002, joint minus Video-only Accuracy was +1.34 points, but
-its paired source-group bootstrap 95% interval was [-1.55,+4.07] points. The
-joint readout is audio-sensitive: shuffling available audio lowered Accuracy
+At learning rate 0.002, a policy-matched 10,000-replicate paired source-group
+bootstrap estimated joint-minus-Video-only Accuracy at +1.34 points
+(95% percentile interval [-1.52,+4.16]); the interval includes zero. NLL
+improved by 0.090 (interval [-0.161,-0.017]) and Brier by 0.037
+([-0.060,-0.013]); ECE-15 changed by -0.024 ([-0.049,+0.008]), so calibration
+improvement is uncertain and candidate ECE-15=0.064 remains above the
+provisional 0.05 gate. These are descriptive intervals on the same exposed
+development validation used for checkpoint selection, not independent
+confirmation. The joint readout is audio-sensitive: shuffling available audio lowered Accuracy
 to 32.24% and raised NLL to 2.222; zeroing audio content while preserving the
 missingness flag yielded 38.99% and NLL 1.799. This supports dependence on
 audio content, but does not establish a reliable joint-quality gain over the
