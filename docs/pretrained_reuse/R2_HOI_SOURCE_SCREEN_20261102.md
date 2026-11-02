@@ -10,8 +10,11 @@ decision task that requires video and force as simultaneous inference inputs.
 The challenge evaluation is only 40 interactions across two kitchens, while
 the official dataset page reports 38 environments. No group-disjoint
 train/validation/audit split for this project has been verified. The full
-deposited release is far beyond local storage capacity. No payload was
-downloaded or opened.
+deposited release is far beyond local storage capacity, though selective
+download feasibility remains unknown. The README and one tiny
+interaction-window annotation were retrieved; no media, sensors, or challenge
+labels were opened. The annotation is source-structure evidence only and was
+not used for training or evaluation.
 
 ## Official source evidence
 
@@ -25,14 +28,35 @@ downloaded or opened.
   of the target; it is not an inference-time input. The challenge uses 40
   interactions from `kitchen_9` and `kitchen_16`, with labels hidden on
   Codabench.
+- The [deposited README](https://bonndata.uni-bonn.de/api/access/datafile/54498)
+  (persistent ID `doi:10.60507/FK2/QODWTV/1ELBAW`, 11,277 bytes, SHA-256
+  `973b02605c7bda0fbe965e3f6ece9b24ebfd7f2263fb63a8a8ab552eac88fac0`)
+  states `CC-BY`, describes EgoBlur anonymization, and documents files named
+  `interaction_splitting_info_*`. It does not specify participant consent
+  scope.
+- One public [confirmed interaction-window annotation](https://bonndata.uni-bonn.de/file.xhtml?persistentId=doi%3A10.60507%2FFK2%2FQODWTV%2FKBKXAY&version=1.0)
+  (persistent ID `doi:10.60507/FK2/QODWTV/KBKXAY`, 664 bytes, MD5
+  `d9cf961d71420e7fb44ebda6831e334d`, SHA-256
+  `f46ec180a6f3fd9d4f0ec459e4d7676eff1fabd6fe40177737dcd05ca077f3c4`)
+  contains four timestamped `open`/`close` windows for one interaction. This is
+  session-level event segmentation, not a train/validation/test split; one
+  example cannot establish group independence.
+- The public metadata page for one
+  [`camera_rgb.zip`](https://bonndata.uni-bonn.de/file.xhtml?persistentId=doi%3A10.60507%2FFK2%2FQODWTV%2FEUSQRS&version=1.0)
+  reports 1.4 GB for a `bathroom_1/gripper/aria_gripper` package associated
+  with interaction indices `1-2` (MD5 `d920385292d0803a43f33afe3137ee5e`).
+  This is one example archive, not a measured total for a candidate subset;
+  its ZIP and any sensor archive were not downloaded.
 - The [Bonn Dataverse record](https://bonndata.uni-bonn.de/catalog/datasets/10.60507/FK2/QODWTV/)
   metadata inventory reported 4,769 files totaling 3,186,202,640,224 bytes
   (about 2,967.38 GiB), including 3,181 ZIPs totaling 3,185,687,461,273 bytes
-  (about 2,966.90 GiB) and 1,354 JSON files totaling 156,171,537 bytes. This
-  was an API metadata-only inventory; no archive contents were accessed. The deposited
-  documentation and participant-specific downstream consent scope have not
-  been reviewed, so practical product-use rights remain unverified despite
-  the public CC BY statement.
+  (about 2,966.90 GiB) and 1,354 JSON files totaling 156,171,537 bytes. The
+  site allows selective file download, but whether an aligned video+sensor
+  subset fits local resources has not been assessed; one public two-interaction
+  RGB archive is already reported as 1.4 GB. No archive contents or
+  annotation files other than the single event JSON above were accessed. The
+  README and dataset page state CC BY; participant
+  consent scope remains unknown.
 - The [official processing tools](https://github.com/timengelbracht/hoi-dataset-tools)
   describe data processing and alignment utilities; their existence does not
   resolve the task/split/resource gates.
@@ -43,14 +67,18 @@ Hoi! is not admitted for the current both-input-required Decision evaluation.
 The two-kitchen challenge split is too small to support the roadmap's
 provisional 200 independent-scene/clip floor, and it is a hidden-label external
 challenge rather than a project-controlled split suitable for the needed
-matched unimodal controls. The 38 reported environments also do not by
-themselves provide a verified split or enough independent groups. The full
-release size exceeds the local C: free space by over two orders of magnitude.
+matched unimodal controls. The full dataset reports 38 environments and 381
+objects. Object-disjoint grouping might provide more independent groups than
+environment grouping, but object identity and cross-embodiment/session overlap
+have not been audited, so the available group count is UNKNOWN. The full release
+size exceeds local C: free space by over two orders of magnitude; selective-
+subset feasibility is unknown.
 
-Do not download the full release or use challenge labels. Reconsider only if
-the authors provide a legally usable, selectively downloadable subset with a
-predefined environment/object-disjoint split and a decision target whose
-inference-time label demonstrably depends on both video and force/tactile
-input. No sealed audit, GPU, fit, or evaluation was used in this screen.
+Do not download the full release or use challenge labels. A bounded next
+screen may inspect session event metadata, object identity mapping, and per-file
+sizes, then assess whether group-disjoint train/validation/audit sets and a
+both-input-required decision target are feasible. No media/sensor payload,
+challenge labels, sealed audit, GPU, fit, or evaluation was used. The README
+and single event-annotation hashes are above.
 
 Machine-readable record: `manifests/pretrained_reuse/hoi-source-screen-20261102.json`.
