@@ -127,3 +127,12 @@ near **2.2 groups/minute**. Linear extrapolation gives roughly **12 hours
 remaining**, which is only a planning estimate because network and decode time
 vary. No eligible large deletion candidate has emerged. The partial downloads,
 legacy media, and all referenced data/checkpoints remain protected.
+
+The frozen manifest was independently loaded through the repository's
+`validate_examples` function using the installed system Python 3.11 because
+this worktree's `.venv` does not contain NumPy (no dependency was installed).
+The manifest SHA-256 still matches the pinned value
+`3f4575ba41d944310e1de83cbdc68385390581723262245b97dc0d2c71db660f`;
+validation confirmed 1,560 train / 2,000 validation rows, 780 / 1,000 unique
+source groups, 390 / 500 pair units, and zero train-validation group or pair
+overlap. All pair units passed the frozen 2x2 design checks.
