@@ -130,3 +130,37 @@ def test_choices_skip_ambiguous_and_mixed_sound_rows(tmp_path):
     result = build_choices(tmp_path)
 
     assert len(result["splits"]["train"]["examples"]) == 4
+
+
+def test_cross_source_positive_has_no_audio_asset_or_exact_timestamp_shortcut(tmp_path):
+    categories = ("Guitar", "Piano", "Violin", "Drum")
+    for split, prefix in (("train", "ab"), ("validation", "cd")):
+        for index in range(8):
+            _write_row(
+                tmp_path,
+                split,
+                f"{prefix}{index:09d}",
+                categories[index % len(categories)],
+                frame=index + 1,
+            )
+
+    result = build_choices(tmp_path, cross_source_positive=True)
+    for split in ("train", "validation"):
+        examples = result["splits"][split]["examples"]
+        analysis = result["splits"][split]["analysis"]
+        assert len(examples) == 8
+        for example, sidecar in zip(examples, analysis, strict=True):
+            target_index = int(example["target_option_id"].rsplit("_", 1)[1])
+            target = example["options"][target_index]
+            assert target["video_asset_key"] != example["audio_asset_key"]
+            assert target["video_timestamp_seconds"] != example["audio_window_center_seconds"]
+            assert sidecar["audio_source_group"] not in sidecar["option_source_groups"]
+            assert sidecar["target_source_group"] in sidecar["option_source_groups"]
+            assert len(set(sidecar["option_source_groups"])) == 4
+            assert len(set(sidecar["option_categories"])) == 4
+        assert result["splits"][split]["report"][
+            "positive_candidate_timestamp_equals_audio_center_count"
+        ] == 0
+        assert result["splits"][split]["report"][
+            "positive_candidate_asset_equals_audio_asset_count"
+        ] == 0

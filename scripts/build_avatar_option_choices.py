@@ -75,7 +75,9 @@ def _load_single_sound_rows(root: Path, split: str) -> list[dict]:
     return rows
 
 
-def _build_split(rows: list[dict], *, seed: int, split: str) -> tuple[list[dict], list[dict], dict]:
+def _build_split(
+    rows: list[dict], *, seed: int, split: str, cross_source_positive: bool = False
+) -> tuple[list[dict], list[dict], dict]:
     pools: dict[str, list[dict]] = defaultdict(list)
     for row in rows:
         pools[row["category"]].append(row)
@@ -98,8 +100,29 @@ def _build_split(rows: list[dict], *, seed: int, split: str) -> tuple[list[dict]
             key=lambda category: _rank(seed, split, target["asset_key"], category)
         )
 
+        positives = [target]
+        if cross_source_positive:
+            positives = [
+                candidate
+                for candidate in pools[target["category"]]
+                if candidate["source_group"] != target["source_group"]
+                and candidate["asset_key"] != target["asset_key"]
+                and abs(candidate["timestamp_seconds"] - target["timestamp_seconds"]) > 1e-9
+            ]
+            positives.sort(
+                key=lambda row: _rank(
+                    seed, split, target["asset_key"], "positive", row["asset_key"]
+                )
+            )
+            if not positives:
+                skipped_no_negative_set += 1
+                continue
+        positive = positives[0]
+
         negatives: list[dict] = []
         used_groups = {target["source_group"]}
+        if positive["source_group"] != target["source_group"]:
+            used_groups.add(positive["source_group"])
         for category in available_categories:
             pool = [
                 candidate
@@ -122,7 +145,7 @@ def _build_split(rows: list[dict], *, seed: int, split: str) -> tuple[list[dict]
             skipped_no_negative_set += 1
             continue
 
-        candidates = [target, *negatives]
+        candidates = [positive, *negatives]
         candidates.sort(
             key=lambda row: _rank(
                 seed, split, target["asset_key"], "option", row["asset_key"]
@@ -130,7 +153,7 @@ def _build_split(rows: list[dict], *, seed: int, split: str) -> tuple[list[dict]
         )
         option_ids = [f"option_{index}" for index in range(4)]
         target_index = next(
-            index for index, candidate in enumerate(candidates) if candidate is target
+            index for index, candidate in enumerate(candidates) if candidate is positive
         )
         example_id = hashlib.sha256(
             f"avatar-av-choice-v1:{seed}:{split}:{target['asset_key']}".encode()
@@ -163,20 +186,21 @@ def _build_split(rows: list[dict], *, seed: int, split: str) -> tuple[list[dict]
                 "target_option_id": option_ids[target_index],
             }
         )
-        analysis_rows.append(
-            {
-                "example_id": example_id,
-                "target_source_group": target["source_group"],
-                "target_category": target["category"],
-                "target_option_index": target_index,
-                "option_source_groups": [candidate["source_group"] for candidate in candidates],
-                "option_categories": [candidate["category"] for candidate in candidates],
-                "option_asset_keys": [candidate["asset_key"] for candidate in candidates],
-                "option_timestamps_seconds": [
-                    candidate["timestamp_seconds"] for candidate in candidates
-                ],
-            }
-        )
+        sidecar = {
+            "example_id": example_id,
+            "target_source_group": positive["source_group"],
+            "target_category": target["category"],
+            "target_option_index": target_index,
+            "option_source_groups": [candidate["source_group"] for candidate in candidates],
+            "option_categories": [candidate["category"] for candidate in candidates],
+            "option_asset_keys": [candidate["asset_key"] for candidate in candidates],
+            "option_timestamps_seconds": [
+                candidate["timestamp_seconds"] for candidate in candidates
+            ],
+        }
+        if cross_source_positive:
+            sidecar["audio_source_group"] = target["source_group"]
+        analysis_rows.append(sidecar)
         target_positions[target_index] += 1
 
     report = {
@@ -200,10 +224,36 @@ def _build_split(rows: list[dict], *, seed: int, split: str) -> tuple[list[dict]
             for row in analysis_rows
         ),
     }
+    if cross_source_positive:
+        report.update(
+            {
+                "unique_audio_source_groups": len(
+                    {row["audio_source_group"] for row in analysis_rows}
+                ),
+                "positive_candidate_crosses_audio_source_group": True,
+                "positive_candidate_timestamp_equals_audio_center_count": sum(
+                    abs(
+                        example["audio_window_center_seconds"]
+                        - example["options"][
+                            int(example["target_option_id"].rsplit("_", 1)[1])
+                        ]["video_timestamp_seconds"]
+                    )
+                    <= 1e-9
+                    for example in model_examples
+                ),
+                "positive_candidate_asset_equals_audio_asset_count": sum(
+                    example["audio_asset_key"]
+                    == example["options"][
+                        int(example["target_option_id"].rsplit("_", 1)[1])
+                    ]["video_asset_key"]
+                    for example in model_examples
+                ),
+            }
+        )
     return model_examples, analysis_rows, report
 
 
-def build_choices(root: Path, *, seed: int = 17) -> dict:
+def build_choices(root: Path, *, seed: int = 17, cross_source_positive: bool = False) -> dict:
     root = Path(root)
     train_rows = _load_single_sound_rows(root, "train")
     validation_rows = _load_single_sound_rows(root, "validation")
@@ -212,15 +262,28 @@ def build_choices(root: Path, *, seed: int = 17) -> dict:
     if train_groups & validation_groups:
         raise ValueError("train/validation source-video groups overlap")
 
-    train_model, train_analysis, train_report = _build_split(train_rows, seed=seed, split="train")
-    validation_model, validation_analysis, validation_report = _build_split(
-        validation_rows, seed=seed, split="validation"
+    train_model, train_analysis, train_report = _build_split(
+        train_rows, seed=seed, split="train", cross_source_positive=cross_source_positive
     )
-    return {
-        "format": "avatar-audio-video-option-choice-preflight-v1",
+    validation_model, validation_analysis, validation_report = _build_split(
+        validation_rows,
+        seed=seed,
+        split="validation",
+        cross_source_positive=cross_source_positive,
+    )
+    result = {
+        "format": (
+            "avatar-audio-video-option-choice-preflight-v2"
+            if cross_source_positive
+            else "avatar-audio-video-option-choice-preflight-v1"
+        ),
         "seed": seed,
         "split_group_key": "source YouTube ID encoded in clip folder",
-        "task": "match a Single-Sound audio segment to one of four video event windows",
+        "task": (
+            "match a Single-Sound audio segment to the same category in a different source video"
+            if cross_source_positive
+            else "match a Single-Sound audio segment to one of four video event windows"
+        ),
         "options_per_example": 4,
         "negative_policy": (
             "three distinct annotated sound categories from three distinct source groups "
@@ -248,6 +311,13 @@ def build_choices(root: Path, *, seed: int = 17) -> dict:
             },
         },
     }
+    if cross_source_positive:
+        result["cross_source_positive"] = True
+        result["positive_policy"] = (
+            "same annotated category from a different source group and different timestamp"
+        )
+        result["analysis_sidecar_fields_excluded_from_model"].append("audio_source_group")
+    return result
 
 
 def write_jsonl(path: Path, rows: list[dict]) -> None:
@@ -261,8 +331,11 @@ def main() -> None:
     parser.add_argument("--annotations-root", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--seed", default=17, type=int)
+    parser.add_argument("--cross-source-positive", action="store_true")
     args = parser.parse_args()
-    result = build_choices(args.annotations_root, seed=args.seed)
+    result = build_choices(
+        args.annotations_root, seed=args.seed, cross_source_positive=args.cross_source_positive
+    )
     args.output_dir.mkdir(parents=True, exist_ok=False)
     for split, values in result["splits"].items():
         write_jsonl(args.output_dir / f"{split}-model-input.jsonl", values["examples"])
