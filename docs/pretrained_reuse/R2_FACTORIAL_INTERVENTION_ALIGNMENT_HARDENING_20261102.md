@@ -18,10 +18,15 @@ modality.
 
 ## Verification and limits
 
-- CPU regression tests cover sample-ID order, group-ID order, target order, and
-  missing per-arm identity mappings.
-- Ruff, focused pytest, repository CPU tests, and GitHub Actions status are to
-  be recorded for the implementation commit.
+- CPU regression tests cover sample-ID order, group-ID order, target order,
+  missing per-arm identity mappings, and probability validation after identity
+  alignment. Direct Python smoke scenarios and Ruff passed locally.
+- GitHub Actions for implementation commit `e0b87253` passed on both push and
+  pull-request events, including repository-wide `pytest -q`, Ruff, and
+  manifest validation: [push run](https://github.com/Unjuno/tiny-omni-decision/actions/runs/41382108611),
+  [pull-request run](https://github.com/Unjuno/tiny-omni-decision/actions/runs/41382115658).
+- Local pytest was not invoked because Windows Application Control blocks the
+  `pytest.exe` launcher; that policy was not bypassed.
 - No model, media, validation cohort, or sealed audit was loaded. This is an
   evaluation-contract change, not new modality-quality evidence; R2-M still
   lacks an admitted real task requiring multiple inputs.
