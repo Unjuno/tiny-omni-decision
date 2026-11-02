@@ -1,4 +1,13 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-11-02 R2 AVATAR category transfer:** The one-shot CPU-only held-category
+TRAIN diagnostic selected its 73,857-parameter readout on inner validation and
+scored 2,490 held-category choices once: 69.60% sample Accuracy / 0.7295 NLL;
+macro over 16 categories was 71.33% / 0.7133 NLL. The large seen-to-held gap and
+uneven category results are narrow transfer evidence, not general Omni quality
+or a model-family ceiling. Original report/checkpoints remain unchanged; a
+deterministically reconstructed fit-only normalization supplement now closes a
+run-artifact gap. R2 remains open. See [protocol](docs/pretrained_reuse/R2_AVATAR_CATEGORY_TRANSFER_PROTOCOL_20261102.md)
+and [results](docs/pretrained_reuse/R2_AVATAR_CATEGORY_TRANSFER_RESULTS_20261102.md).
 **2026-11-02 10:24 JST R0 live refresh:** roadmap branch `docs/pretrained-reuse-roadmap-20261010` is synchronized locally/remotely at `c2e58994`; public GitHub checks for Lint, Test, and manifest validation pass. Three GPU samples averaged 72.7% utilization while VRAM stayed at 15,821/16,384 MiB; Orbitune PID 2128 remained live and untouched, and C: had 9.44 GiB free. Raw VideoPrism extraction remains blocked by Windows Code Integrity; no Tiny Omni GPU job or policy workaround was started. See [10:24 live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261102_1024JST.md). R0/R2 remain open.
 **2026-11-02 10:10 JST R0 live refresh:** PR #15 remains open/Draft at `7577d798` against main `09246d7b`; both checks on that head are green. Three GPU samples averaged 97.7%, with 15,821/16,384 MiB in use and 9.45 GiB free on C:. Orbitune PID 2128 remained live and untouched; no Tiny Omni training started. Raw VideoPrism re-extraction is blocked by Windows Code Integrity: the signed-policy gate rejected the unsigned TensorFlow native DLL, and no approved existing environment was found. See [live snapshot](docs/pretrained_reuse/R0_LIVE_AUDIT_20261102_1010JST.md) and [machine-readable state](docs/pretrained_reuse/R0_LIVE_AUDIT_20261102_1010JST.json). R0 and R2 remain open.
 **2026-11-02 R2 AVATAR budget addendum:** The Path A v4 package contains the identical 114.4M VideoPrism-B checkpoint used by the AVATAR readout. Counting that encoder once, the arithmetic union would be 172,534,812 parameters and 695,700,396 unquantized payload bytes. The parameter count fits the provisional 100–200M range, while the existing and added package files exceed the <=200MB target; this is not a built composite or shared-residency test. See [component budget addendum](docs/pretrained_reuse/R2_AVATAR_COMPONENT_BUDGET_20261102.md).
