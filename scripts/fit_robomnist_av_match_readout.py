@@ -21,6 +21,11 @@ from torch.nn import functional as F
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
+from tiny_omni_decision.robomnist_av_match_evaluation import (  # noqa: E402
+    classification_metrics,
+    paired_bootstrap_delta,
+    validate_examples,
+)
 from tiny_omni_decision.robomnist_av_match_readout import (  # noqa: E402
     BilinearAVMatchScorer,
     SingleModalityMatchScorer,
@@ -50,52 +55,6 @@ def _write_json(path: Path, value: dict[str, Any]) -> None:
         output.flush()
         os.fsync(output.fileno())
     os.replace(temporary, path)
-
-
-def _validate_examples(manifest: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
-    output = {}
-    for split in ("train", "validation"):
-        rows = manifest["examples"][split]
-        pair_rows: dict[str, list[dict[str, Any]]] = {}
-        for row in rows:
-            if row["target"] not in (0, 1):
-                raise ValueError("AV match target must be binary")
-            if (row["audio_group"] == row["video_group"]) != (row["target"] == 1):
-                raise ValueError("binary target disagrees with source-group match identity")
-            pair_rows.setdefault(row["pair_unit_id"], []).append(row)
-        for pair_id, examples in pair_rows.items():
-            if len(examples) != 4 or sum(row["target"] for row in examples) != 2:
-                raise ValueError(f"pair unit must contain four balanced examples: {pair_id}")
-            if len({row["condition"] for row in examples}) != 1:
-                raise ValueError(f"pair unit spans multiple conditions: {pair_id}")
-            groups = sorted(
-                {
-                    group_id
-                    for row in examples
-                    for group_id in (row["audio_group"], row["video_group"])
-                }
-            )
-            observed = {(row["audio_group"], row["video_group"]) for row in examples}
-            expected = (
-                {
-                    (groups[0], groups[0]),
-                    (groups[0], groups[1]),
-                    (groups[1], groups[1]),
-                    (groups[1], groups[0]),
-                }
-                if len(groups) == 2
-                else set()
-            )
-            if observed != expected:
-                raise ValueError(f"pair unit is not the frozen 2x2 AV match design: {pair_id}")
-        output[split] = rows
-    train_groups = {row[key] for row in output["train"] for key in ("audio_group", "video_group")}
-    validation_groups = {
-        row[key] for row in output["validation"] for key in ("audio_group", "video_group")
-    }
-    if train_groups & validation_groups:
-        raise ValueError("audio/video source group overlap between train and validation")
-    return output
 
 
 def _load_group_features(
@@ -216,68 +175,6 @@ def _predict(model, audio: torch.Tensor, video: torch.Tensor, *, mode: str) -> n
         return torch.softmax(logits.float(), dim=-1).cpu().numpy()
 
 
-def _metrics(probabilities: np.ndarray, target: np.ndarray, *, bins: int = 15):
-    target = np.asarray(target, dtype=np.int64)
-    probabilities = np.asarray(probabilities, dtype=np.float64)
-    predictions = probabilities.argmax(-1)
-    confidence = probabilities.max(-1)
-    correct = predictions == target
-    nll = -np.log(np.clip(probabilities[np.arange(len(target)), target], 1e-12, 1.0))
-    one_hot = np.eye(2, dtype=np.float64)[target]
-    brier = np.square(probabilities - one_hot).sum(-1)
-    ece = 0.0
-    edges = np.linspace(0, 1, bins + 1)
-    for index in range(bins):
-        mask = (confidence >= edges[index]) & (
-            confidence < edges[index + 1] if index < bins - 1 else confidence <= 1.0
-        )
-        if mask.any():
-            ece += mask.mean() * abs(correct[mask].mean() - confidence[mask].mean())
-    return {
-        "count": len(target),
-        "accuracy": float(correct.mean()),
-        "nll": float(nll.mean()),
-        "brier": float(brier.mean()),
-        "ece_15": float(ece),
-        "mean_confidence": float(confidence.mean()),
-    }
-
-
-def _paired_bootstrap_delta(
-    correct_joint: np.ndarray,
-    correct_unimodal: np.ndarray,
-    pair_ids: np.ndarray,
-    *,
-    replicates: int = BOOTSTRAP_REPLICATES,
-    seed: int = SEED,
-):
-    unique_pairs = np.unique(pair_ids)
-    if len(unique_pairs) < 200:
-        raise ValueError("paired validation bootstrap requires at least 200 independent pair units")
-    pair_to_rows = [np.flatnonzero(pair_ids == pair_id) for pair_id in unique_pairs]
-    if any(len(indices) != 4 for indices in pair_to_rows):
-        raise ValueError("each bootstrap unit must contain exactly four decision rows")
-    rng = np.random.default_rng(seed)
-    deltas = np.empty(replicates, dtype=np.float64)
-    for index in range(replicates):
-        sample = rng.integers(0, len(pair_to_rows), size=len(pair_to_rows))
-        rows = np.concatenate([pair_to_rows[unit] for unit in sample])
-        deltas[index] = correct_joint[rows].mean() - correct_unimodal[rows].mean()
-    return {
-        "independent_pair_units": len(unique_pairs),
-        "replicates": replicates,
-        "seed": seed,
-        "unit": "paired 4-example source pair unit sampled with replacement",
-        "accuracy_delta_joint_minus_best_unimodal": float(
-            correct_joint.mean() - correct_unimodal.mean()
-        ),
-        "percentile_95_ci": [
-            float(np.quantile(deltas, 0.025)),
-            float(np.quantile(deltas, 0.975)),
-        ],
-    }
-
-
 def _counterfactual_rows(
     rows: list[dict[str, Any]], summaries: dict[str, tuple[np.ndarray, np.ndarray]], *, swap: str
 ):
@@ -317,7 +214,7 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
         or run_meta.get("sealed_audit_opened") is not False
     ):
         raise ValueError("feature cache is incomplete or does not match the frozen split")
-    rows = _validate_examples(manifest)
+    rows = validate_examples(manifest)
     group_ids = {
         row[key]
         for split_rows in rows.values()
@@ -446,7 +343,8 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
         }
         targets = val_target.numpy()
         metrics = {
-            name: _metrics(probability, targets) for name, probability in predictions.items()
+            name: classification_metrics(probability, targets)
+            for name, probability in predictions.items()
         }
         train_predictions = {
             "joint": _predict(models["joint"], train_audio, train_video, mode="joint"),
@@ -454,11 +352,11 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
             "video_only": _predict(models["video_only"], train_audio, train_video, mode="video"),
         }
         train_metrics = {
-            name: _metrics(probability, train_target.numpy())
+            name: classification_metrics(probability, train_target.numpy())
             for name, probability in train_predictions.items()
         }
         metrics["best_unimodal_selected_for_comparison"] = best_name
-        metrics["paired_bootstrap_joint_vs_best_unimodal"] = _paired_bootstrap_delta(
+        metrics["paired_bootstrap_joint_vs_best_unimodal"] = paired_bootstrap_delta(
             joint_correct, best_unimodal_correct, val_pair_ids
         )
         model_hashes = {}

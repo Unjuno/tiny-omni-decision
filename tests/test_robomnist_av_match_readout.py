@@ -1,7 +1,8 @@
 import pytest
-import torch
 
-from tiny_omni_decision.robomnist_av_match_readout import (
+torch = pytest.importorskip("torch")
+
+from tiny_omni_decision.robomnist_av_match_readout import (  # noqa: E402
     BilinearAVMatchScorer,
     SingleModalityMatchScorer,
 )
