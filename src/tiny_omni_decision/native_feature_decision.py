@@ -7,18 +7,22 @@ in the caller; importing this module never loads a language encoder.
 
 from __future__ import annotations
 
+import hashlib
 import math
 from collections.abc import Sequence
 from dataclasses import dataclass
 
+import numpy as np
 import torch
 from torch import Tensor, nn
 
 from .aligned_features import gather_aligned_features
+from .cache import ObservationFeatureKey
 from .classification_json import classification_json
 from .decision import FrozenFeatureCandidateScorer
 from .fusion_decision import FusionDecisionScorer
-from .observations import ObservationBatch
+from .observations import NativeOption, ObservationBatch
+from .temporal_feature_state import SessionTemporalFeatureState
 
 
 @dataclass(frozen=True)
@@ -98,6 +102,28 @@ class TypedOptionSchema:
         if len(rows) < 2:
             raise ValueError("at least two typed options are required")
         return torch.tensor(rows, dtype=torch.float32)
+
+
+def _same_feature_runtime_identity(
+    actual: ObservationFeatureKey, expected: ObservationFeatureKey
+) -> bool:
+    """Compare encoder/preprocessor identity while allowing each event's input hash/time."""
+    fields = (
+        "modality",
+        "source_id",
+        "source_revision",
+        "encoder_id",
+        "encoder_revision",
+        "encoder_weights_sha256",
+        "preprocessor_id",
+        "preprocessor_revision",
+        "preprocessing_sha256",
+        "feature_name",
+        "feature_dtype",
+        "feature_shape",
+        "temporal_policy",
+    )
+    return all(getattr(actual, field) == getattr(expected, field) for field in fields)
 
 
 class NativeFeatureDecisionScorer(nn.Module):
@@ -431,5 +457,140 @@ def decide_cached_native_fusion(
         criterion = criterion_features.to(device=reference.device, dtype=reference.dtype)[None]
         criterion_mask = torch.ones(1, dtype=torch.bool, device=reference.device)
     logits = model(features, available, candidates, valid, criterion, criterion_mask)[0].float()
+    probabilities = torch.softmax(logits / temperature, dim=-1).cpu().tolist()
+    return classification_json(probabilities, classes, options_json)
+
+
+@torch.inference_mode()
+def decide_temporal_native_fusion(
+    model: FusionDecisionScorer,
+    state: SessionTemporalFeatureState,
+    *,
+    source_by_modality: dict[str, str],
+    expected_feature_keys: dict[str, ObservationFeatureKey],
+    required_modalities: Sequence[str],
+    as_of_ms: float,
+    max_age_ms: float,
+    runtime_sha256: str,
+    clock_id: str,
+    options: Sequence[NativeOption],
+    option_schema: TypedOptionSchema,
+    class_ids: list[str] | None = None,
+    temperature: float = 1.0,
+) -> dict[str, object]:
+    """Decide from caller-provided, time-indexed frozen features in one session.
+
+    Feature payloads use canonical little-endian float32 bytes and must match the
+    expected per-stream encoder/preprocessor identity; input hashes and intervals
+    may vary per event. The caller remains responsible for truthful common-clock
+    timestamps and causal feature extraction. This function reads no media and
+    does not persist state.
+    """
+    if not isinstance(model, FusionDecisionScorer):
+        raise TypeError("model must be a FusionDecisionScorer")
+    if not isinstance(state, SessionTemporalFeatureState):
+        raise TypeError("state must be a SessionTemporalFeatureState")
+    names = set(model.fusion.names)
+    supported = {"text", "audio", "image", "video", "sensor"}
+    if not names or not names <= supported:
+        raise ValueError("model modalities must be supported observation feature streams")
+    if set(source_by_modality) != names or set(expected_feature_keys) != names:
+        raise ValueError("source IDs and expected feature keys must cover every model modality")
+    sources = list(source_by_modality.values())
+    if (any(not isinstance(source, str) or not source.strip() for source in sources)
+            or len(set(sources)) != len(sources)):
+        raise ValueError("configured stream source IDs must be non-empty and distinct")
+    for modality in names:
+        key = expected_feature_keys[modality]
+        if (not isinstance(key, ObservationFeatureKey)
+                or key.modality != modality
+                or key.source_id != source_by_modality[modality]
+                or key.feature_dtype != "float32"
+                or key.feature_shape != (model.fusion.dimensions[modality],)):
+            raise ValueError("expected feature key identity or shape does not match model stream")
+
+    required_values = tuple(required_modalities)
+    required = set(required_values)
+    if not required or not required <= names or len(required) != len(required_values):
+        raise ValueError("unique required modalities must be a non-empty subset of model streams")
+    if (not math.isfinite(as_of_ms) or not math.isfinite(max_age_ms)
+            or max_age_ms < 0 or not math.isfinite(temperature) or temperature <= 0):
+        raise ValueError(
+            "finite query time, nonnegative max age, and positive temperature required"
+        )
+    if not isinstance(option_schema, TypedOptionSchema):
+        raise TypeError("option_schema must be a TypedOptionSchema")
+
+    option_ids = [option.option_id for option in options]
+    if len(option_ids) < 2:
+        raise ValueError("at least two supplied options are required")
+    classes = list(class_ids) if class_ids is not None else option_ids
+    if len(classes) != len(option_ids):
+        raise ValueError("one class ID is required per supplied option")
+    options_json = [
+        {"option_id": option_id, "class_id": class_id}
+        for option_id, class_id in zip(option_ids, classes, strict=True)
+    ]
+    classification_json([1.0 / len(classes)] * len(classes), classes, options_json)
+    encoded_options = option_schema.encode(options)
+    if encoded_options.shape != (len(options), model.option_dim):
+        raise ValueError("typed option schema width must match the fusion scorer")
+
+    snapshots = state.snapshot(
+        as_of_ms=as_of_ms,
+        max_age_ms=max_age_ms,
+        required_streams=[(name, source_by_modality[name]) for name in model.fusion.names],
+        runtime_sha256=runtime_sha256,
+        clock_id=clock_id,
+    )
+    reference = next(model.parameters())
+    features: dict[str, Tensor] = {}
+    available: dict[str, Tensor] = {}
+    for modality in model.fusion.names:
+        snapshot = snapshots[modality, source_by_modality[modality]]
+        values = np.zeros(model.fusion.dimensions[modality], dtype=np.float32)
+        if snapshot.available:
+            key = snapshot.feature_key
+            payload = snapshot.payload
+            if (not isinstance(key, ObservationFeatureKey)
+                    or not _same_feature_runtime_identity(
+                        key, expected_feature_keys[modality]
+                    )):
+                raise ValueError("session feature key differs from expected feature identity")
+            if (not isinstance(payload, bytes)
+                    or hashlib.sha256(payload).hexdigest() != snapshot.payload_sha256):
+                raise ValueError("session feature payload hash mismatch")
+            if len(payload) != values.size * np.dtype("<f4").itemsize:
+                raise ValueError("session feature payload byte size does not match feature shape")
+            values = np.frombuffer(payload, dtype="<f4").astype(np.float32, copy=True)
+            if not np.isfinite(values).all():
+                raise ValueError("session feature payload contains nonfinite values")
+        features[modality] = torch.as_tensor(
+            values[None], device=reference.device, dtype=reference.dtype
+        )
+        available[modality] = torch.tensor(
+            [snapshot.available], device=reference.device, dtype=torch.bool
+        )
+
+    missing = sorted(
+        modality for modality in required if not bool(available[modality][0].item())
+    )
+    if missing:
+        return {
+            "schema_version": "1.0",
+            "status": "abstain",
+            "selected_option_id": None,
+            "reason": "insufficient_evidence",
+            "missing_modalities": missing,
+            "options": [
+                {"option_id": option_id, "probability": None} for option_id in option_ids
+            ],
+        }
+
+    candidates = encoded_options.to(device=reference.device, dtype=reference.dtype)[None]
+    option_valid = torch.ones(
+        candidates.shape[:2], device=reference.device, dtype=torch.bool
+    )
+    logits = model(features, available, candidates, option_valid)[0].float()
     probabilities = torch.softmax(logits / temperature, dim=-1).cpu().tolist()
     return classification_json(probabilities, classes, options_json)
