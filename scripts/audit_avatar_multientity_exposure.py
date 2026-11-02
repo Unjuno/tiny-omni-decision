@@ -55,12 +55,15 @@ def _read_sidecar(path: Path, destination: set[str]) -> int:
     return rows
 
 
-def _sidecar_for(directory: Path, split: str) -> Path | None:
-    for name in (f"{split}-analysis-sidecar.jsonl", f"{split}-sidecar.jsonl"):
+def _sidecar_for(directory: Path, split: str, *, allow_plain_jsonl: bool = False) -> Path:
+    names = [f"{split}-analysis-sidecar.jsonl", f"{split}-sidecar.jsonl"]
+    if allow_plain_jsonl:
+        names.append(f"{split}.jsonl")
+    for name in names:
         candidate = directory / name
         if candidate.is_file():
             return candidate
-    return None
+    raise FileNotFoundError(f"missing inventoried {split} sidecar in {directory}")
 
 
 def provisional_group_split(groups: set[str]) -> tuple[set[str], set[str]]:
@@ -97,8 +100,6 @@ def collect_prior_group_usage(
     for directory in choice_dirs:
         for split, destination in (("train", fit_groups), ("validation", evaluation_groups)):
             path = _sidecar_for(directory, split)
-            if path is None:
-                continue
             label = f"{directory.name}/{path.name}"
             sidecar_rows[label] = _read_sidecar(path, destination)
             input_hashes[label] = _sha256_file(path)
@@ -130,11 +131,7 @@ def collect_prior_group_usage(
         artifact_root / "avatar-native-localization-20261102-attempt-01" / "fold",
     ):
         for split, destination in (("train", fit_groups), ("validation", evaluation_groups)):
-            path = _sidecar_for(directory, split)
-            if path is None:
-                path = directory / f"{split}.jsonl"
-            if not path.is_file():
-                continue
+            path = _sidecar_for(directory, split, allow_plain_jsonl=True)
             label = f"{directory.name}/{path.name}"
             sidecar_rows[label] = _read_sidecar(path, destination)
             input_hashes[label] = _sha256_file(path)

@@ -98,6 +98,18 @@ def test_builds_four_choice_corpus_with_group_safe_splits(tmp_path: Path) -> Non
     assert position_prior["validation_accuracy"] == validation_counts[
         str(selected_position)
     ] / manifest["counts"]["validation"]["query_count"]
+    assert (
+        manifest["metadata_only_controls"]["serialized_row_order_modulo_four"][
+            "train_accuracy"
+        ]
+        < 1.0
+    )
+    assert (
+        manifest["metadata_only_controls"]["serialized_row_order_modulo_four"][
+            "validation_accuracy"
+        ]
+        < 1.0
+    )
     assert manifest["counts"]["train"]["query_count"] > 0
     assert manifest["counts"]["validation"]["query_count"] > 0
     for split in ("train", "validation"):
@@ -127,6 +139,15 @@ def test_builds_four_choice_corpus_with_group_safe_splits(tmp_path: Path) -> Non
             assert "query_category" not in model
             assert "option_categories" not in model
 
+    replay_dir = tmp_path / "frozen-corpus-replay"
+    replay = build_corpus(
+        train_annotations=train_annotations,
+        artifact_root=artifact_root,
+        output_dir=replay_dir,
+    )
+    assert replay["files"] == manifest["files"]
+    assert replay["dependency_diagnostics"] == manifest["dependency_diagnostics"]
+
 
 def test_builder_refuses_non_train_annotation_path(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="isolated TRAIN"):
@@ -147,4 +168,25 @@ def test_builder_refuses_to_overwrite_existing_output(tmp_path: Path) -> None:
             train_annotations=train_annotations,
             artifact_root=tmp_path / "not-needed",
             output_dir=output_dir,
+        )
+
+
+def test_builder_fails_closed_when_prior_exposure_sidecar_is_missing(tmp_path: Path) -> None:
+    train_annotations = tmp_path / "train"
+    train_annotations.mkdir()
+    artifact_root = tmp_path / "artifacts"
+    _make_artifact_root(artifact_root)
+    missing = (
+        artifact_root
+        / "avatar-av-decision-20261101-attempt-01"
+        / "option-choices-01"
+        / "train-analysis-sidecar.jsonl"
+    )
+    missing.unlink()
+
+    with pytest.raises(FileNotFoundError, match="missing inventoried train sidecar"):
+        build_corpus(
+            train_annotations=train_annotations,
+            artifact_root=artifact_root,
+            output_dir=tmp_path / "output",
         )

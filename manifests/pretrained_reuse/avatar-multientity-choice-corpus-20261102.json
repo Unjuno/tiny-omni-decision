@@ -1,6 +1,6 @@
 {
   "format": "pretrained_reuse_avatar_multientity_choice_corpus_v1",
-  "status": "METADATA_FROZEN_PENDING_MEDIA_PREFLIGHT",
+  "status": "INVALIDATED_ORDER_INDEX_SHORTCUT",
   "recorded_at": "2026-11-02",
   "source": {
     "dataset_id": "mipal/AVATAR",
@@ -105,6 +105,18 @@
     "free_c_gib_at_latest_check_approx": 1.37,
     "required_reserve_gib": 2,
     "media_or_gpu_work_started": false
+  },
+  "correction": {
+    "attempt03_row_index_modulo_four_train_accuracy": 1.0,
+    "attempt03_row_index_modulo_four_validation_accuracy": 1.0,
+    "invalid_for_model_use": true,
+    "replacement_attempt": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-multientity-choice-corpus-20261102-attempt-04",
+    "replacement_manifest_sha256": "161181e339745f4eac67579cf24ff82b1dcfb3a009a0f9313064ddac61f23d6e",
+    "replacement_row_index_modulo_four_train_accuracy": 0.2287390029325513,
+    "replacement_row_index_modulo_four_validation_accuracy": 0.25,
+    "replacement_validation_dependency_components": 1,
+    "replacement_validation_examples": 68,
+    "replacement_not_eligible_for_quality_gate": true
   },
   "report": "docs/pretrained_reuse/R2_AVATAR_MULTIENTITY_CHOICE_CORPUS_20261102.md"
 }

@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import math
+import random
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -102,6 +103,63 @@ def _choose_asset(assets: list[dict], *rank_parts: str) -> dict:
     return min(assets, key=lambda asset: _rank(*rank_parts, asset["asset_key"]))
 
 
+def _balanced_target_positions(query_groups: list[str], split_name: str) -> dict[str, int]:
+    """Assign balanced labels with a seeded shuffle independent of row order."""
+    positions = [index % 4 for index in range(len(query_groups))]
+    shuffle_seed = int(_rank(split_name, "target-position-shuffle"), 16)
+    random.Random(shuffle_seed).shuffle(positions)
+    return dict(zip(query_groups, positions, strict=True))
+
+
+def _dependency_diagnostics(sidecars: list[dict]) -> dict[str, Any]:
+    """Summarize shared query/candidate groups without emitting their identities."""
+    parent: dict[str, str] = {}
+
+    def find(group: str) -> str:
+        parent.setdefault(group, group)
+        if parent[group] != group:
+            parent[group] = find(parent[group])
+        return parent[group]
+
+    def union(left: str, right: str) -> None:
+        left_root = find(left)
+        right_root = find(right)
+        if left_root != right_root:
+            parent[right_root] = left_root
+
+    candidate_reuse: Counter[str] = Counter()
+    for sidecar in sidecars:
+        groups = [sidecar["query_source_group"], *sidecar["option_source_groups"]]
+        for group in groups:
+            find(group)
+        for group in groups[1:]:
+            union(groups[0], group)
+        candidate_reuse.update(sidecar["option_source_groups"])
+
+    component_groups: dict[str, set[str]] = defaultdict(set)
+    component_queries: Counter[str] = Counter()
+    for sidecar in sidecars:
+        root = find(sidecar["query_source_group"])
+        component_queries[root] += 1
+        component_groups[root].add(sidecar["query_source_group"])
+        component_groups[root].update(sidecar["option_source_groups"])
+
+    return {
+        "query_source_group_count": len({row["query_source_group"] for row in sidecars}),
+        "distinct_query_and_candidate_source_group_count": len(parent),
+        "connected_dependency_component_count": len(component_groups),
+        "largest_component_query_count": max(component_queries.values(), default=0),
+        "largest_component_source_group_count": max(
+            (len(groups) for groups in component_groups.values()), default=0
+        ),
+        "maximum_candidate_source_group_reuse_count": max(candidate_reuse.values(), default=0),
+        "resampling_note": (
+            "query-only bootstrap omits shared candidate-source dependence; use the connected "
+            "query/candidate source-group component as the conservative cluster"
+        ),
+    }
+
+
 def _build_split(
     *,
     split_name: str,
@@ -120,6 +178,18 @@ def _build_split(
     for category in category_groups:
         category_groups[category].sort(key=lambda group: _rank(split_name, "group", group))
 
+    query_order = sorted(groups, key=lambda group: _rank(split_name, "query", group))
+    eligible_query_groups = [
+        group
+        for group in query_order
+        if group_categories.get(group) is not None
+        and len(category_groups[group_categories[group]]) >= 2
+        and sum(category != group_categories[group] for category in category_groups) >= 3
+    ]
+    target_position_by_group = _balanced_target_positions(
+        eligible_query_groups, split_name
+    )
+
     inputs: list[dict] = []
     sidecars: list[dict] = []
     skipped_ambiguous = 0
@@ -127,7 +197,7 @@ def _build_split(
     skipped_no_negative_categories = 0
     target_positions: Counter[int] = Counter()
 
-    for query_group in sorted(groups, key=lambda group: _rank(split_name, "query", group)):
+    for query_group in query_order:
         category = group_categories.get(query_group)
         if category is None:
             skipped_ambiguous += 1
@@ -191,7 +261,7 @@ def _build_split(
         negative_rows.sort(
             key=lambda item: _rank(split_name, "negative-option-order", query_group, item[0])
         )
-        target_index = len(inputs) % 4
+        target_index = target_position_by_group[query_group]
         option_rows = list(negative_rows)
         option_rows.insert(target_index, (positive_group, category, positive_asset))
         option_groups = [item[0] for item in option_rows]
@@ -327,6 +397,20 @@ def build_corpus(
         },
         "interpretation": "option-position-only baseline; no feature/model fitting",
     }
+    row_order_baseline = {
+        "rule": "predict option position equal to serialized row index modulo four",
+        "train_accuracy": sum(
+            int(row["target_option_id"].rsplit("_", 1)[1]) == index % 4
+            for index, row in enumerate(train_inputs)
+        )
+        / len(train_inputs),
+        "validation_accuracy": sum(
+            int(row["target_option_id"].rsplit("_", 1)[1]) == index % 4
+            for index, row in enumerate(validation_inputs)
+        )
+        / len(validation_inputs),
+        "interpretation": "serialization-order leakage diagnostic; no feature/model fitting",
+    }
 
     output_dir.mkdir(parents=True)
     outputs = {
@@ -390,7 +474,12 @@ def build_corpus(
         "counts": {"train": train_summary, "validation": validation_summary},
         "metadata_only_controls": {
             "option_position_prior": position_prior_baseline,
+            "serialized_row_order_modulo_four": row_order_baseline,
             "source_group_or_category_sidecars_exposed_to_scorer": False,
+        },
+        "dependency_diagnostics": {
+            "train": _dependency_diagnostics(train_sidecars),
+            "validation": _dependency_diagnostics(validation_sidecars),
         },
         "files": {
             name: {
