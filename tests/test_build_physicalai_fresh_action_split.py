@@ -174,7 +174,8 @@ def test_fresh_selection_downloads_only_new_train_and_validation(tmp_path, monke
         def raise_for_status(self):
             return None
 
-    def fake_get(url: str, timeout: tuple[int, int]):
+    def fake_get(url: str, *, headers: dict[str, str], timeout: tuple[int, int]):
+        del headers
         del timeout
         path = "panda-stack-platforms/" + url.split("/panda-stack-platforms/", 1)[
             1
