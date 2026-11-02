@@ -3872,3 +3872,11 @@ The post-result, label-blind full-split embedding-neighbor screen found 78 of
 175,000 train/validation episode pairs at cosine >=0.98 (maximum 0.99008).
 These are not proven duplicates, but further weaken any assumption of
 scene-independent splits; thresholds are descriptive only.
+
+**2026-11-02 R2 AV source screen — CREMA-D:** The pinned upstream documents
+paired audio-only/video-only/AV human emotion ratings across 7,442 acted clips
+and 91 actors, a possible narrow AV-complementarity task. The repository states
+ODbL for the database and DbCL for contents and requests usage registration;
+rights/consent, original-AV actor/sentence split, and common target definition
+are unresolved. No payload or annotation was obtained, and no form was
+submitted. Keep unadmitted; see the [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
