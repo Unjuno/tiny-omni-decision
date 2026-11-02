@@ -14,6 +14,8 @@ from typing import Any
 
 import requests
 
+RETRYABLE_HTTP_STATUSES = frozenset({429, 499, 500, 502, 503, 504})
+
 
 def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
@@ -125,7 +127,8 @@ def download_pilot(
             )
             for attempt in range(max_retries + 1):
                 response = requests.get(url, headers=auth_headers, timeout=(30, 180))
-                if getattr(response, "status_code", 200) != 429:
+                status_code = getattr(response, "status_code", 200)
+                if status_code not in RETRYABLE_HTTP_STATUSES:
                     response.raise_for_status()
                     break
                 if attempt == max_retries:
@@ -134,7 +137,8 @@ def download_pilot(
                 print(
                     json.dumps(
                         {
-                            "event": "http_429_retry",
+                            "event": "http_transient_retry",
+                            "status_code": status_code,
                             "episode": item["episode"],
                             "kind": item["kind"],
                             "retry": attempt + 1,

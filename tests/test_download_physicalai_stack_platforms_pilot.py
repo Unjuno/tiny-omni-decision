@@ -184,6 +184,53 @@ def test_rate_limit_retry_respects_retry_after_and_completes(tmp_path, monkeypat
     assert delays == [0.25] * 4
 
 
+def test_http_499_retry_respects_retry_after_and_completes(tmp_path, monkeypatch):
+    manifest_path, payloads = make_manifest(tmp_path)
+    retries: dict[str, int] = {}
+    delays: list[float] = []
+
+    def fake_get(url: str, **_kwargs: object) -> FakeResponse:
+        match = next(path for path in payloads if path in url)
+        retries[match] = retries.get(match, 0) + 1
+        if retries[match] == 1:
+            return FakeResponse(b"", status_code=499, headers={"Retry-After": "0.25"})
+        return FakeResponse(payloads[match])
+
+    monkeypatch.setattr(downloader.requests, "get", fake_get)
+    monkeypatch.setattr(downloader.time, "sleep", delays.append)
+
+    result = downloader.download_pilot(
+        manifest_path, tmp_path / "pilot", workers=1, max_retries=1
+    )
+
+    assert result["files"] == 4
+    assert len(retries) == 4
+    assert all(count == 2 for count in retries.values())
+    assert delays == [0.25] * 4
+
+
+def test_nonretryable_http_404_fails_without_retry(tmp_path, monkeypatch):
+    manifest_path, payloads = make_manifest(tmp_path)
+    calls: dict[str, int] = {}
+
+    def fake_get(url: str, **_kwargs: object) -> FakeResponse:
+        match = next(path for path in payloads if path in url)
+        calls[match] = calls.get(match, 0) + 1
+        return FakeResponse(b"", status_code=404)
+
+    monkeypatch.setattr(downloader.requests, "get", fake_get)
+
+    with pytest.raises(downloader.requests.HTTPError, match="HTTP 404"):
+        downloader.download_pilot(
+            manifest_path, tmp_path / "pilot", workers=1, max_retries=3
+        )
+
+    assert calls
+    assert all(count == 1 for count in calls.values())
+    assert list((tmp_path / "pilot").glob("*.mp4")) == []
+    assert list((tmp_path / "pilot").glob("*.parquet")) == []
+
+
 def test_retry_after_exponential_fallback_is_bounded(monkeypatch):
     response = FakeResponse(b"", status_code=429)
     assert downloader._retry_after_seconds(response, 0) == 2.0
