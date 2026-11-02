@@ -23,10 +23,14 @@ def test_episode_options_resolve_to_pinned_global_subtask_ids():
 def test_episode_options_fail_closed_on_missing_or_ambiguous_text():
     with pytest.raises(ValueError, match="not present"):
         resolve_episode_options(["Unknown action"], {15: "Hold the roller."})
-    with pytest.raises(ValueError, match="duplicate"):
+    assert resolve_episode_options(
+        ["Same", "Same", "Other"], {15: "Same", 16: "Other"}
+    ) == ((15, "Same"), (16, "Other"))
+    with pytest.raises(ValueError, match="duplicate global subtask text"):
         resolve_episode_options(
-            ["Same", "Same"], {15: "Same", 16: "Same"}
+            ["Same", "Other"], {15: "Same", 16: "Same", 17: "Other"}
         )
+    assert resolve_episode_options(["Only"], {15: "Only"}) == ((15, "Only"),)
 
 
 def test_transition_window_uses_only_pretransition_inputs_and_future_target():

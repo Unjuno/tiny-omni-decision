@@ -94,6 +94,7 @@ def audit(
         raise ValueError("train/validation episode ID overlap")
     reports: dict[str, dict] = {}
     media_hashes: dict[str, set[str]] = {"train": set(), "validation": set()}
+    parquet_hashes: dict[str, set[str]] = {"train": set(), "validation": set()}
     normalized_content: dict[str, set[tuple[str, ...]]] = {
         "train": set(),
         "validation": set(),
@@ -116,6 +117,7 @@ def audit(
         sample_ids: set[str] = set()
         decoded_frames = 0
         checked_files = 0
+        duplicate_option_descriptions_collapsed = 0
         for episode_id in declared:
             if (
                 episode_id not in split_entries
@@ -135,7 +137,15 @@ def audit(
             high_level_id = int(row["task_index"])
             if tasks.get(high_level_id) != row["high_level_instruction"]:
                 raise ValueError(f"high-level task mapping mismatch for {episode_id}")
-            options = resolve_episode_options(row["low_level_tasks"], subtasks)
+            low_level_tasks = row["low_level_tasks"]
+            if not isinstance(low_level_tasks, list) or any(
+                not isinstance(text, str) for text in low_level_tasks
+            ):
+                raise ValueError(f"invalid episode option list for {episode_id}")
+            duplicate_option_descriptions_collapsed += len(low_level_tasks) - len(
+                set(low_level_tasks)
+            )
+            options = resolve_episode_options(low_level_tasks, subtasks)
             option_ids = tuple(option_id for option_id, _ in options)
             normalized_options = tuple(
                 sorted(text.casefold().strip() for _, text in options)
@@ -155,6 +165,8 @@ def audit(
                 checked_files += 1
                 if kind == "video":
                     media_hashes[split].add(actual_hash)
+                else:
+                    parquet_hashes[split].add(actual_hash)
 
             table = pq.read_table(
                 local_paths["parquet"], columns=["frame_index", "low_level_task_index"]
@@ -188,6 +200,13 @@ def audit(
             boundaries = [
                 index for index in range(1, len(labels)) if labels[index] != labels[index - 1]
             ]
+            if len(option_ids) < 2:
+                event_counts["single_option_episodes"] += 1
+                event_counts["single_option_boundaries"] += len(boundaries)
+                event_counts["boundaries"] += len(boundaries)
+                task_group_events[parent_group]["episodes"] += 1
+                task_group_events[parent_group]["single_option_boundaries"] += len(boundaries)
+                continue
             eligible = 0
             for boundary in boundaries:
                 window = transition_window_for_boundary(
@@ -213,7 +232,9 @@ def audit(
             "episodes": len(declared),
             "files_sha256_checked": checked_files,
             "unique_video_assets": len(media_hashes[split]),
+            "unique_parquet_assets": len(parquet_hashes[split]),
             "decoded_video_frames": decoded_frames,
+            "duplicate_option_descriptions_collapsed": duplicate_option_descriptions_collapsed,
             "event_counts": dict(event_counts),
             "target_counts_by_low_level_id": dict(sorted(target_counts.items())),
             "unique_event_sample_ids": len(sample_ids),
@@ -224,8 +245,22 @@ def audit(
 
     compare_splits = set(reports) == {"train", "validation"}
     overlap = media_hashes["train"] & media_hashes["validation"] if compare_splits else set()
-    if compare_splits and overlap:
-        raise ValueError(f"train/validation video hash overlap: {len(overlap)}")
+    parquet_overlap = (
+        parquet_hashes["train"] & parquet_hashes["validation"] if compare_splits else set()
+    )
+    train_input_keys = {
+        item["input_key_sha256"] for item in plan["sampled_episode_ids"]["train"]
+    }
+    validation_input_keys = {
+        item["input_key_sha256"] for item in plan["sampled_episode_ids"]["validation"]
+    }
+    input_key_overlap = train_input_keys & validation_input_keys if compare_splits else set()
+    if compare_splits and (overlap or parquet_overlap or input_key_overlap):
+        raise ValueError(
+            "train/validation identity overlap: "
+            f"video={len(overlap)}, parquet={len(parquet_overlap)}, "
+            f"input_key={len(input_key_overlap)}"
+        )
     content_overlap = (
         normalized_content["train"] & normalized_content["validation"]
         if compare_splits
@@ -245,6 +280,10 @@ def audit(
         "split_reports": reports,
         "split_comparison_performed": compare_splits,
         "train_validation_video_hash_overlap": len(overlap) if compare_splits else None,
+        "train_validation_parquet_hash_overlap": (
+            len(parquet_overlap) if compare_splits else None
+        ),
+        "train_validation_input_key_overlap": len(input_key_overlap) if compare_splits else None,
         "train_validation_option_text_set_overlap": (
             len(content_overlap) if compare_splits else None
         ),

@@ -43,14 +43,14 @@ def resolve_episode_options(
             raise ValueError("episode option text must be a non-empty string")
         text = raw_text.strip()
         if text in seen_texts:
-            raise ValueError(f"duplicate episode option text: {text!r}")
+            # Repeated workflow occurrences with identical text share one
+            # global low-level task ID and therefore one decision candidate.
+            continue
         seen_texts.add(text)
         if text not in reverse:
             raise ValueError(f"episode option text is not present in global subtasks: {text!r}")
         options.append((reverse[text], text))
 
-    if len(options) < 2:
-        raise ValueError("decision task must provide at least two candidate options")
     return tuple(sorted(options))
 
 

@@ -100,10 +100,41 @@ were changed. Two failed smoke attempts and the passing attempt are retained in
 `videoprism-habit-smoke-attempt-log.json` (SHA-256
 `31056ff418a70adfb59de865ec571f72db87690c3060a0636c76204dbf828ea8`).
 
-Train/validation media acquisition started in the external attempt directory
-named in the live run receipt. The downloader verifies every file's size and
-SHA-256 and refuses reserved entries; its progress and completion receipt are
-external artifacts, not model results. Before extraction or fitting, run the
-data-integrity and event-count checks over the frozen selected split, then
-report the three-group validation limitation alongside any exploratory
-metrics.
+## Full media and data audit
+
+The pinned media transfer completed successfully: 816 train/validation files,
+810 newly fetched (2,994,388,803 bytes) and six previously timed train files
+reused only after size/SHA verification. Total selected media is 3,011,694,918
+bytes; elapsed time was 2,194.7 seconds. No reserved media was requested or
+loaded. C: had 2,942,636,032 bytes free after acquisition, above the retained
+2 GiB reserve. The three-pair transfer timing file has SHA-256
+`a2b22d52f731c3a58c2d580f168af0a4d4ee921226b907e0a964a8682960021f`.
+
+The full media audit passed for all 408 selected episodes / 816 files. It
+recomputed all file SHA-256 values, decoded 255,694 frames at 10 fps, and
+confirmed exact video-frame/Parquet-row counts. It found 360 unique train and
+48 unique validation video/Parquet assets, with zero train/validation overlap
+in episode IDs, parent task groups, source input keys, video hashes, Parquet
+hashes, or normalized option-text sets. It produced 936 eligible train and 144
+eligible validation transition windows; no multi-option boundary was dropped
+for an edge. Ninety-six train episodes in four whole groups have only one
+distinct candidate action and contain no label transitions; they remain
+integrity-audited but are ineligible for a choice task. Duplicate repeated
+option descriptions were collapsed to their unique global action ID (744 train
+and 32 validation occurrences). Validation still has only three task groups.
+
+The external full-audit report is
+`C:/CodexArtifacts/pretrained-reuse-r2/habit-task-feasibility-20261102-attempt-01/transition-audit-full-04.json`
+with SHA-256
+`61e7f7617de732df3c84146d1409de4bf7b337fde3c3f3295db9cf321adb3cd4`. The
+executed auditor source SHA-256 is
+`788103756cf331f26e97ba9034882db5172d2dc19744fc788a044abcfdb922e2`.
+Two earlier full-audit attempts failed closed on duplicate repeated option
+text and single-option episodes; the final audit explicitly handles/counts
+both structural cases. These are eligibility corrections, not media integrity
+failures.
+
+Feature extraction/fitting is the next step, using only the frozen train and
+three-group validation set. Report any metrics as exploratory and selection-
+affected; this source cannot establish actor-independent or broad multimodal
+quality.
