@@ -1,20 +1,23 @@
+# ruff: noqa: E402
+
 from __future__ import annotations
 
 import hashlib
 
 import numpy as np
 import pytest
-import torch
 
-from tiny_omni_decision.cache import ObservationFeatureKey
-from tiny_omni_decision.fusion_decision import FusionDecisionScorer
+torch = pytest.importorskip("torch", exc_type=ImportError)
+
+from tiny_omni_decision.cache import ObservationFeatureKey  # noqa: E402
+from tiny_omni_decision.fusion_decision import FusionDecisionScorer  # noqa: E402
 from tiny_omni_decision.native_feature_decision import (
     EnumOptionField,
     TypedOptionSchema,
     decide_temporal_native_fusion,
-)
-from tiny_omni_decision.observations import NativeOption
-from tiny_omni_decision.temporal_feature_state import SessionTemporalFeatureState
+)  # noqa: E402
+from tiny_omni_decision.observations import NativeOption  # noqa: E402
+from tiny_omni_decision.temporal_feature_state import SessionTemporalFeatureState  # noqa: E402
 
 RUNTIME = hashlib.sha256(b"runtime-config-v1").hexdigest()
 CLOCK = "fixture-common-clock"
