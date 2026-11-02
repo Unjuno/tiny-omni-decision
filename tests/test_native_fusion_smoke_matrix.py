@@ -117,7 +117,7 @@ def _av_batch(tmp_path, *, audio_values, audio_stamps=(10.0, 20.0), audio_valid=
         tmp_path / "stream-a.npz", audio_values, stamps=audio_stamps, valid=audio_valid
     )
     video_cache = _write_cache(
-        tmp_path / "stream-b.npz", [[0.0, 1.0], [1.0, 0.0]], stamps=(10.0, 20.0)
+        tmp_path / "stream-b.npz", [[1.0, 0.0], [0.0, 1.0]], stamps=(10.0, 20.0)
     )
     common = {"clock_id": "shared-clock"}
     return _batch(
@@ -168,7 +168,7 @@ def test_synchronized_m2_smoke_routes_matched_missing_shuffle_offset_and_conflic
     )
     assert matched["status"] == "selected"
     assert seen[-1]["audio"].tolist() == [[0.0, 1.0]]
-    assert seen[-1]["video"].tolist() == [[1.0, 0.0]]
+    assert seen[-1]["video"].tolist() == [[0.0, 1.0]]
     assert all(bool(mask.item()) for mask in seen[-1]["available"].values())
 
     calls_before_missing = len(seen)
@@ -190,20 +190,20 @@ def test_synchronized_m2_smoke_routes_matched_missing_shuffle_offset_and_conflic
     )
     assert shuffled["status"] == "selected"
     assert seen[-1]["audio"].tolist() == [[1.0, 0.0]]
-    assert seen[-1]["video"].tolist() == [[1.0, 0.0]]
+    assert seen[-1]["video"].tolist() == [[0.0, 1.0]]
 
     offset = _run_av(
         model,
         _av_batch(
             tmp_path / "offset",
-            audio_values=[[1.0, 0.0], [0.0, 1.0]],
+            audio_values=[[0.0, 1.0], [1.0, 0.0]],
             audio_stamps=(0.0, 10.0),
         ),
         max_age_ms=15.0,
     )
     assert offset["status"] == "selected"
-    assert seen[-1]["audio"].tolist() == [[0.0, 1.0]]
-    assert seen[-1]["video"].tolist() == [[1.0, 0.0]]
+    assert seen[-1]["audio"].tolist() == [[1.0, 0.0]]
+    assert seen[-1]["video"].tolist() == [[0.0, 1.0]]
 
     contradictory = _run_av(
         model,
@@ -211,7 +211,7 @@ def test_synchronized_m2_smoke_routes_matched_missing_shuffle_offset_and_conflic
     )
     assert contradictory["status"] == "selected"
     assert seen[-1]["audio"].tolist() == [[1.0, 0.0]]
-    assert seen[-1]["video"].tolist() == [[1.0, 0.0]]
+    assert seen[-1]["video"].tolist() == [[0.0, 1.0]]
 
     stale = _run_av(
         model,
