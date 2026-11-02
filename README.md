@@ -1,5 +1,7 @@
 # Tiny Omni Decision
 
+**2026-11-02 AVATAR spatial probe:** A source-group-held-out TRAIN-only probe extracted 12,004 DINOv2 spatial maps and compared Video-only, Audio-only and Joint 40-cell localization readouts. Video-only reached 45.39% hit@1; the current Joint readout fell to 39.94% with substantially worse NLL and calibration. This is a development result, not a blind test or product model. [Protocol and results](docs/pretrained_reuse/R2_AVATAR_NATIVE_SPATIAL_LOCALIZATION_20261102.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results

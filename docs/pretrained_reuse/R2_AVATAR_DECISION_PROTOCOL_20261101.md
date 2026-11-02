@@ -179,8 +179,22 @@ hashes. Save predictions and per-video metrics. Primary metrics are option
 Accuracy, NLL, Brier, ECE and macro-by-scenario values; report the native
 localization metrics only as supplemental comparisons.
 
-For the native localization task, model training and feature extraction remain
-gated on completion of the split, annotation-schema, media-integrity, and
+At publication time, native localization model training and feature extraction
+remained gated on completion of split, annotation-schema, media-integrity, and
 fixed-control preflight. The corrected cross-source category adaptation above
 has its own completed fixed-control result and does not satisfy those native
 task gates. No sealed-audit labels may enter normal development.
+
+## Status update (2026-11-02)
+
+The native-task gates above have now been exercised on a new deterministic
+source-group fold made only from the original AVATAR TRAIN annotations. The
+frame-level DINOv2 cache passed ID, shape, finite-value, timestamp, and
+train/validation identity checks. Frozen Video-only, Audio-only, and Joint
+40-cell readouts plus audio-content shuffle/zero controls were evaluated on
+that development-validation partition. Joint did not improve over Video-only
+and was markedly worse calibrated; retain this as a negative result. The full
+procedure and metrics are in
+[`R2_AVATAR_NATIVE_SPATIAL_LOCALIZATION_20261102.md`](R2_AVATAR_NATIVE_SPATIAL_LOCALIZATION_20261102.md).
+Official validation and sealed audit remain unopened, and no native-localization
+quality claim is blind.
