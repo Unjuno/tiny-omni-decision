@@ -35,6 +35,9 @@ def _write_cache(path, values, stamps=(10.0, 20.0), valid=(True, True)):
         timestamps_ms=np.asarray(stamps, dtype=np.float64),
         valid_mask=np.asarray(valid, dtype=np.bool_),
     )
+    with np.load(path, allow_pickle=False) as cache:
+        assert set(cache.files) == {"values", "timestamps_ms", "valid_mask"}
+    assert path.name not in {"target.npz", "labels.npz", "positive.npz", "negative.npz"}
     return {
         "payload_ref": str(path),
         "payload_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
@@ -45,10 +48,12 @@ def _write_cache(path, values, stamps=(10.0, 20.0), valid=(True, True)):
 
 def _options():
     # Opaque IDs and numeric attributes keep labels/names out of the input.
-    return [
+    options = [
         {"option_id": "opt-17", "attributes": {"action_code": 0}},
         {"option_id": "opt-42", "attributes": {"action_code": 1}},
     ]
+    assert {option["option_id"] for option in options} == {"opt-17", "opt-42"}
+    return options
 
 
 def _batch(observations):
