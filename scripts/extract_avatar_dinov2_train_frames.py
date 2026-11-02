@@ -40,6 +40,12 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def write_json_atomic(path: Path, value: object) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
 def expected_video_assets(
     input_paths: list[Path], *, limit_assets: int | None = None
 ) -> list[dict[str, Any]]:
@@ -219,7 +225,7 @@ def extract(args: argparse.Namespace) -> dict[str, Any]:
     )
     temporary.replace(output_path)
     peak_memory = int(torch.cuda.max_memory_allocated(device)) if device.type == "cuda" else None
-    return {
+    report = {
         "experiment_id": "avatar-dinov2-framewise-train-fold-v1",
         "source_revision": SOURCE_REVISION,
         "model_id": "facebook/dinov2-base",
@@ -242,6 +248,8 @@ def extract(args: argparse.Namespace) -> dict[str, Any]:
         "sealed_audit_accessed": False,
         "media_written_to_output": False,
     }
+    write_json_atomic(output_path.with_suffix(".metadata.json"), report)
+    return report
 
 
 def main() -> None:
