@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
+import zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -24,13 +26,14 @@ except ImportError:  # Direct execution as ``python scripts/audit_avatar_task_su
 
 TASKS = {"Single-Sound", "Mixed-Sound", "Multi-Entity", "Off-Screen"}
 DATASET_REVISION = "a7f0146ff704799d044133e61137836cacc1c233"
+CLIP_ID = re.compile(r"([A-Za-z0-9_-]{11})_(\d+)\Z")
 
 
-def _group_split(groups: set[str], task: str, seed: int, validation_fraction: float):
+def _group_split(groups: set[str], seed: int, validation_fraction: float):
     ranked = sorted(
         groups,
         key=lambda group: hashlib.sha256(
-            f"avatar-task-support-v1:{seed}:{task}:{group}".encode()
+            f"avatar-task-support-v1:{seed}:{group}".encode()
         ).hexdigest(),
     )
     validation_count = round(len(ranked) * validation_fraction)
@@ -44,6 +47,7 @@ def audit_task_support(
     previously_exposed_groups: set[str],
     seed: int = 17,
     validation_fraction: float = 0.2,
+    media_zip: Path | None = None,
 ) -> dict[str, Any]:
     """Read TRAIN JSON annotations only and return aggregate task support."""
     root = Path(train_annotations).resolve()
@@ -56,6 +60,7 @@ def audit_task_support(
         task: {
             "groups": set(),
             "clips": set(),
+            "group_clips": defaultdict(set),
             "categories": defaultdict(set),
             "instances": 0,
             "frames": 0,
@@ -73,6 +78,10 @@ def audit_task_support(
         row = json.loads(path.read_text(encoding="utf-8"))
         group = _source_group_from_annotation(path, row)
         clip = row["video_id"]
+        clip_match = CLIP_ID.fullmatch(clip)
+        if clip_match is None:
+            raise ValueError(f"invalid video_id in {path}")
+        clip_key = (clip_match.group(1), int(clip_match.group(2)))
         annotations = row.get("annotations")
         if not isinstance(annotations, list) or not annotations:
             raise ValueError(f"missing annotations in {path}")
@@ -95,6 +104,7 @@ def audit_task_support(
             item = state[task]
             item["groups"].add(group)
             item["clips"].add(clip)
+            item["group_clips"][group].add(clip_key)
             item["instances"] += len(items)
             item["frames"] += 1
             item["group_instances"][group] += len(items)
@@ -104,11 +114,21 @@ def audit_task_support(
             item["categories"][group].update(frame_categories)
             item["group_multi_category_frames"][group] += len(frame_categories) > 1
 
+    unexposed_groups_by_task = {
+        task: item["groups"] - previously_exposed_groups
+        for task, item in state.items()
+    }
+    all_unexposed_groups = set().union(*unexposed_groups_by_task.values())
+    global_fit_groups, global_validation_groups = _group_split(
+        all_unexposed_groups, seed, validation_fraction
+    )
+
     tasks: dict[str, Any] = {}
     for task, item in sorted(state.items()):
         groups = item["groups"]
-        unexposed = groups - previously_exposed_groups
-        fit, validation = _group_split(unexposed, task, seed, validation_fraction)
+        unexposed = unexposed_groups_by_task[task]
+        fit = unexposed & global_fit_groups
+        validation = unexposed & global_validation_groups
         category_support: dict[str, dict[str, int]] = defaultdict(
             lambda: {"train_groups": 0, "validation_groups": 0}
         )
@@ -145,6 +165,22 @@ def audit_task_support(
             "illustrative_group_split_not_frozen": {
                 "seed": seed,
                 "validation_fraction": validation_fraction,
+                "assignment_unit": "source_group_global_across_tasks",
+                "global_unexposed_source_group_count": len(all_unexposed_groups),
+                "global_train_group_count": len(global_fit_groups),
+                "global_validation_group_count": len(global_validation_groups),
+                "global_train_group_set_sha256": hashlib.sha256(
+                    "\n".join(sorted(global_fit_groups)).encode("utf-8")
+                ).hexdigest(),
+                "global_validation_group_set_sha256": hashlib.sha256(
+                    "\n".join(sorted(global_validation_groups)).encode("utf-8")
+                ).hexdigest(),
+                "train_group_set_sha256": hashlib.sha256(
+                    "\n".join(sorted(fit)).encode("utf-8")
+                ).hexdigest(),
+                "validation_group_set_sha256": hashlib.sha256(
+                    "\n".join(sorted(validation)).encode("utf-8")
+                ).hexdigest(),
                 "train_group_count": len(fit),
                 "validation_group_count": len(validation),
                 "overlap_count": len(fit & validation),
@@ -167,6 +203,56 @@ def audit_task_support(
             },
         }
 
+    media_zip_inventory: dict[str, Any] | None = None
+    if media_zip is not None:
+        expected_by_task = {
+            task: {
+                clip
+                for group in state[task]["groups"] - previously_exposed_groups
+                for clip in state[task]["group_clips"][group]
+            }
+            for task in TASKS
+        }
+        archive_sizes = {
+            task: {"compressed_bytes": 0, "uncompressed_bytes": 0, "matched_clip_count": 0}
+            for task in TASKS
+        }
+        matched_by_task = {task: set() for task in TASKS}
+        expected_any = set().union(*expected_by_task.values())
+        seen_archive_keys: set[tuple[str, int]] = set()
+        with zipfile.ZipFile(media_zip) as archive:
+            for member in archive.infolist():
+                if member.is_dir() or not member.filename.lower().endswith(".mp4"):
+                    continue
+                match = CLIP_ID.fullmatch(Path(member.filename).stem)
+                if match is None:
+                    continue
+                key = (match.group(1), int(match.group(2)))
+                if key in expected_any and key in seen_archive_keys:
+                    raise ValueError(f"duplicate expected video in media ZIP: {member.filename}")
+                if key in expected_any:
+                    seen_archive_keys.add(key)
+                for task, expected in expected_by_task.items():
+                    if key in expected:
+                        matched_by_task[task].add(key)
+                        archive_sizes[task]["compressed_bytes"] += member.compress_size
+                        archive_sizes[task]["uncompressed_bytes"] += member.file_size
+        for task in TASKS:
+            archive_sizes[task]["matched_clip_count"] = len(matched_by_task[task])
+        media_zip_inventory = {
+            "archive_name": Path(media_zip).name,
+            "task_media": {
+                task: {
+                    **archive_sizes[task],
+                    "expected_annotated_clip_count": len(expected_by_task[task]),
+                    "missing_clip_count": len(expected_by_task[task] - matched_by_task[task]),
+                }
+                for task in sorted(TASKS)
+            },
+            "zip_member_payloads_opened": False,
+            "method": "ZIP central-directory member names and sizes only",
+        }
+
     return {
         "format": "avatar_train_task_support_v1",
         "dataset_revision": DATASET_REVISION,
@@ -178,6 +264,7 @@ def audit_task_support(
         "source_group_ids_emitted": False,
         "official_validation_or_sealed_audit_accessed": False,
         "media_bytes_read": False,
+        "media_zip_inventory": media_zip_inventory,
         "tasks": tasks,
         "interpretation": (
             "Previously unexposed means absent from inventoried prior fit/evaluation groups. "
@@ -191,10 +278,19 @@ def main() -> None:
     parser.add_argument("--train-annotations", required=True, type=Path)
     parser.add_argument("--artifact-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument("--validation-fraction", type=float, default=0.2)
+    parser.add_argument("--media-zip", type=Path)
     args = parser.parse_args()
     fit_groups, evaluation_groups, _, _ = collect_prior_group_usage(args.artifact_root)
     groups = fit_groups | evaluation_groups
-    report = audit_task_support(args.train_annotations, previously_exposed_groups=groups)
+    report = audit_task_support(
+        args.train_annotations,
+        previously_exposed_groups=groups,
+        seed=args.seed,
+        validation_fraction=args.validation_fraction,
+        media_zip=args.media_zip,
+    )
     with args.output.open("x", encoding="utf-8", newline="\n") as stream:
         json.dump(report, stream, indent=2, sort_keys=True)
         stream.write("\n")
