@@ -3924,3 +3924,14 @@ found zero exact train/validation frame overlap across 411,315 decoded frames.
 This does not establish scene/layout independence; retain
 `REVIEW_NOT_ADMITTED` and do not fit features/readouts or evaluate quality.
 See [preflight and audit record](docs/pretrained_reuse/R2_PHYSICALAI_FRESH_ACTION_PREFLIGHT_20261103.md).
+
+**2026-11-03 PhysicalAI fresh-cohort scene/layout screen:** A label-blind
+DINOv2-base audit extracted three fixed-time embeddings from all 5,000 train
+and validation videos. Across four million cross-split pairs the median cosine
+was 0.82465, p95 0.89808, p99 0.92249, and maximum 0.98078 (one pair >=0.98).
+A deterministic 30+30 video contact sheet and the 12 nearest pairs all show the
+same robot, camera, work surface, and background geometry while objects vary.
+This is not a validated scene classifier or proof about every clip, and no
+scene IDs exist in the source metadata. It does not establish an independent
+scene split; keep PhysicalAI `REVIEW_NOT_ADMITTED` and do not fit/evaluate a
+readout. See [full protocol and outputs](docs/pretrained_reuse/R2_PHYSICALAI_FRESH_SCENE_SIMILARITY_20261103.md).
