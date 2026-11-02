@@ -37,6 +37,29 @@ Removing an alias would not recover their underlying storage. The earlier
 inventory also found 26 `.part`/temporary files (1.765 GiB), but did not prove
 whether they can resume or be regenerated. They remain untouched.
 
+### Live recheck later on 2026-11-03
+
+The active feature extraction process remains live as PID `5596` (started
+07:03:44 local); the run metadata says `RUNNING`. At the latest snapshot it had
+committed 78 / 1,780 groups, transferred 603.7 MiB, used about 31.4 minutes,
+left **6.19 GiB** free on C:, and used 0 MiB / 0% GPU. The committed feature
+groups occupied about 2.3 MiB. This is consistent with the measured low-storage
+streaming path; the active process and output were left untouched.
+
+The 26 partial/temp files were re-inventoried by path and size. They comprise
+one 0.30 MiB CLAP progress file, 15 HoloAssist video `.part` files (about
+928 MiB), and 10 GRID archive `.part` files (about 837 MiB). No matching final
+file exists beside any of these partials, so they may be the only local resume
+state. No active command line referenced their paths, but that alone does not
+prove they are not resumable. They remain protected.
+
+Four old hidden CLEVRER media temp directories contain 293 files totaling
+333.62 MiB. SHA-256 comparison found 32 exact-duplicate hash groups, with a
+maximum of 40.93 MiB of duplicate payload beyond one copy per hash; this is an
+upper-bound storage opportunity, not proof that any directory is disposable.
+The media files remain untouched. Hard-link conversion or deletion was not
+attempted.
+
 ## Working disposition rules
 
 - **Keep:** source datasets, canonical media, selected checkpoints, fixed
