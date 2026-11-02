@@ -1,4 +1,5 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-11-02 R2-M Hoi! source/task screen:** Official metadata reports synchronized video, force/tactile streams, and 38 environments, but the challenge predicts force targets from RGB rather than requiring both streams as inference inputs; its evaluation is 40 interactions across two kitchens. The metadata-only full-release inventory is about 2,967 GiB, so no payload was downloaded. Keep `REVIEW_NOT_ADMITTED` pending a usable grouped split and a true both-input-required decision task. See [source screen](docs/pretrained_reuse/R2_HOI_SOURCE_SCREEN_20261102.md) and [machine-readable record](manifests/pretrained_reuse/hoi-source-screen-20261102.json).
 **2026-11-02 R2 native M1/M2 interface smoke:** The existing cached text-free
 Decision runners are now covered by CPU fixtures for audio, image, screen,
 video and sensor, plus a synchronized synthetic AV routing/intervention smoke.

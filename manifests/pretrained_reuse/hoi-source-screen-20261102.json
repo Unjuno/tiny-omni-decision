@@ -1,0 +1,56 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "Hoi!",
+  "recorded_at": "2026-11-02",
+  "status": "REVIEW_NOT_ADMITTED",
+  "sources": {
+    "official_dataset_page": "https://hoi-dataset.ethz.ch/",
+    "official_challenge_page": "https://hoi-dataset.ethz.ch/workshop.html",
+    "official_data_repository": "https://bonndata.uni-bonn.de/catalog/datasets/10.60507/FK2/QODWTV/",
+    "official_processing_tools": "https://github.com/timengelbracht/hoi-dataset-tools"
+  },
+  "source_scope": "Official web pages and Bonn Dataverse file metadata only; no payload, challenge labels, or media downloaded or opened.",
+  "reported": {
+    "sequences": 3048,
+    "articulated_objects": 381,
+    "environments": 38,
+    "embodiments": 4,
+    "modalities": ["RGB video", "force/torque", "DIGIT tactile", "spatial registration", "camera metadata"],
+    "challenge_evaluation_interactions": 40,
+    "challenge_evaluation_scenes": ["kitchen_9", "kitchen_16"],
+    "challenge_ground_truth": "Hidden on Codabench",
+    "dataverse_file_count": 4769,
+    "dataverse_total_bytes": 3186202640224,
+    "zip_file_count": 3181,
+    "zip_total_bytes": 3185687461273,
+    "json_file_count": 1354,
+    "json_total_bytes": 156171537
+  },
+  "license": {
+    "official_dataset_page": "CC BY 4.0; official page states commercial use is permitted with attribution",
+    "payload_terms_and_participant_consent_scope": "UNKNOWN pending review of the deposited documentation and source-specific terms",
+    "product_compatible": "NOT_YET_ESTABLISHED"
+  },
+  "task_and_split": {
+    "challenge_t1": "RGB clips to articulation type and axis estimation",
+    "challenge_t2": "RGB clips to peak force and mechanical work regression; force is the target, not an inference-time input",
+    "challenge_split": "40 interactions from two kitchens; hidden ground truth",
+    "independent_group_count_for_candidate_split": 38,
+    "independent_group_basis": "Official page reports 38 environments; no candidate-specific train/validation/audit group split has been verified",
+    "both_input_necessity": "NOT_ESTABLISHED_BY_PUBLISHED_CHALLENGE_TASKS"
+  },
+  "resource_gate": {
+    "full_release_gib": 2967.38,
+    "local_c_free_gib_at_screen": 9.13,
+    "action": "NO_PAYLOAD_DOWNLOAD"
+  },
+  "decision": "REVIEW_NOT_ADMITTED: the published force challenge predicts sensor targets from video rather than requiring synchronized video and force as joint decision inputs; the challenge has only 40 interactions across two kitchens, no verified independent candidate split, and the full release is about 2967 GiB.",
+  "integrity_and_use": {
+    "payload_downloaded": false,
+    "annotations_opened": false,
+    "challenge_ground_truth_accessed": false,
+    "fit_or_evaluation_performed": false,
+    "sealed_audit_accessed": false,
+    "training_started": false
+  }
+}
