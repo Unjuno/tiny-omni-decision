@@ -84,6 +84,15 @@ def test_intervention_comparison_is_paired_and_grouped():
                 "matched": [["left", "right"]] * 4,
                 "bad": [["left", "right"]] * 4,
             },
+            "sample_ids_by_arm": {
+                "matched": ["q1", "q2", "q3", "q4"],
+                "bad": ["q1", "q2", "q3", "q4"],
+            },
+            "group_ids_by_arm": {
+                "matched": ["scene-a", "scene-a", "scene-b", "scene-b"],
+                "bad": ["scene-a", "scene-a", "scene-b", "scene-b"],
+            },
+            "targets_by_arm": {"matched": [0, 1, 0, 1], "bad": [0, 1, 0, 1]},
             "intervention_types": {"matched": "matched", "bad": "shuffle"},
         }, "normalized"),
     ],
