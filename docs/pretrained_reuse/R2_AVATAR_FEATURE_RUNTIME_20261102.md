@@ -60,12 +60,44 @@ integration report records the hashes.
 | Runtime inference on CPU, including reordering checks | 0.0165 s |
 | Encoder calls during this wrapper check | 0 |
 
-The cached vectors were previously extracted from raw media by the pinned
-EfficientAT and VideoPrism pipelines; this check begins at those encoder
-outputs and does not freshly decode or re-encode raw media. Consequently it
-verifies the feature-to-probability runtime boundary, not the complete raw-media
-deployment package. The 8/8 TRAIN result is expected to be optimistic and must
-not be used to claim accuracy, calibration, or generalization.
+The completed check begins at cached vectors that were previously extracted
+from raw media by the pinned EfficientAT and VideoPrism pipelines. A separate
+CPU-only VideoPrism re-extraction attempt for these 32 candidate-video assets
+was blocked before model forward: Windows Code Integrity events 3077/3033
+reported that the existing pinned environment's TensorFlow
+`_pywrap_traceme.pyd` binary did not meet the active enterprise signing policy.
+The run completed 0/32 assets and exited with code 1. Its exact identity and
+failure record are preserved outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\avatar-runtime-integration-20261102-attempt-01\videoprism-raw-01\attempt-record.json`
+(SHA-256 `287b406d354b738fc481e07b5841721cabb04fcb057bd447290ae704c992f8f9`).
+No policy workaround, environment change, checkpoint change, or media change
+was attempted. A read-only inventory then found four existing VideoPrism/JAX
+environments, but `_pywrap_traceme.pyd` is unsigned in each and no alternative
+was verified as allowed by the current policy. The official pinned loader
+imports TensorFlow unconditionally; removing or stubbing that import would
+bypass the blocked component and is not an acceptable fallback. Raw-video
+re-extraction therefore needs an administrator-approved signing/runtime
+resolution. The cached-feature check verifies the feature-to-probability
+boundary, not a fresh complete raw-media deployment. The 8/8 TRAIN result is
+expected to be optimistic and must not be used to claim accuracy, calibration,
+or generalization.
+
+The read-only environment inventory inspected installed metadata without
+importing native libraries:
+
+| Environment | JAX/JAXlib | TensorFlow | PyAV | Flax | NumPy | Code Integrity |
+|---|---:|---:|---:|---:|---:|---|
+| `pretrained-reuse-r1/videoprism-base-r1/venv` | 0.6.2 | 2.18.1 CPU | 18.1.0 | 0.11.1 | 1.26.4 | `_pywrap_traceme.pyd` NotSigned |
+| `pretrained-reuse-r2/textfree-video-coverage-extraction-env-20261018` | 0.6.2 | 2.19.1 | 18.1.0 | 0.11.2 | 2.1.3 | `_pywrap_traceme.pyd` NotSigned |
+| `pretrained-reuse-r2/clevrer-coverage-512train-96val-v1/feature-env311` | 0.6.2 | 2.19.1 CPU | 13.1.0 | 0.11.1 | 2.1.3 | `_pywrap_traceme.pyd` NotSigned |
+| `pretrained-reuse-r2/clevrer-coverage-512train-96val-v1/feature-env` | 0.6.2 | 2.19.1 CPU | 13.1.0 | 0.10.4 | 2.1.3 | `_pywrap_traceme.pyd` NotSigned |
+
+The blocked VideoPrism import generated Code Integrity events 3077/3033 at
+10:07:27. The system Python Parquet import was separately blocked at 09:58:56.
+No other existing environment was verified safe to execute under the current
+policy. Do not relocate the unsigned library, stub TensorFlow, edit the pinned
+import path, or disable the policy; raw re-extraction needs an administrator-
+approved signing/runtime resolution.
 
 ## Interpretation and remaining work
 
