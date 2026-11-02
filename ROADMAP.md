@@ -1,4 +1,10 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+**2026-11-02 R2 native M1/M2 interface smoke:** The existing cached text-free
+Decision runners are now covered by CPU fixtures for audio, image, screen,
+video and sensor, plus a synchronized synthetic AV routing/intervention smoke.
+This closes only the implementation smoke item; it adds no quality evidence.
+Real task-admitted M1 evaluation and real multi-input-required M2 remain open.
+See [test record](docs/pretrained_reuse/R2_NATIVE_M1_M2_SMOKE_20261102.md).
 **2026-11-02 R1 VideoPrism–AVATAR provenance audit:** Exact overlap between
 the pinned VideoPrism-B pretraining corpus and AVATAR's 2,268 TRAIN YouTube
 source groups is UNKNOWN; reviewed official sources do not publish
