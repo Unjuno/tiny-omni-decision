@@ -1,0 +1,110 @@
+{
+  "format": "pretrained_reuse_avatar_multientity_choice_corpus_v1",
+  "status": "METADATA_FROZEN_PENDING_MEDIA_PREFLIGHT",
+  "recorded_at": "2026-11-02",
+  "source": {
+    "dataset_id": "mipal/AVATAR",
+    "revision": "a7f0146ff704799d044133e61137836cacc1c233",
+    "train_annotation_tree_sha256": "4c17a0bdbd7d488bced018404ce71be5659d27273efcfdec9e1cdfffd16eb651",
+    "train_annotation_json_count": 19159,
+    "prior_exposed_groups_removed": true,
+    "candidate_source_group_count": 452,
+    "candidate_source_group_set_sha256": "41155016616901005e9fc98aee5a160797ec2c9c5ad4b9921ede55a832799a2a",
+    "prior_fit_or_evaluation_group_set_sha256": "4f0fbd6dc342c8c485c4c187bc102a988def78fdaeef11879ed11221ab4adf3a"
+  },
+  "task": {
+    "name": "cross-source AV category match over AVATAR Multi-Entity TRAIN groups",
+    "query": "2-second audio window",
+    "options": "four timestamped video frames from distinct source groups",
+    "target": "same single annotated category as query group",
+    "question_is_constant_and_not_a_scorer_feature": true,
+    "scorer_feature_contract": "frozen audio/video tensors only; identifiers, timestamps, targets, category labels, and sidecars are excluded",
+    "native_localization_task": false
+  },
+  "split": {
+    "method": "SHA-256 rank of prior-unexposed TRAIN source-group identities",
+    "hash_prefix": "avatar-multientity-dev-v1:17:",
+    "train_fraction": 0.8,
+    "validation_fraction": 0.2,
+    "train_source_groups": 362,
+    "validation_source_groups": 90,
+    "source_group_overlap": 0,
+    "query_and_candidate_source_group_cross_split_overlap": 0,
+    "query_and_candidate_asset_cross_split_overlap": 0,
+    "official_validation_annotations_or_media_accessed": false,
+    "sealed_audit_accessed": false
+  },
+  "counts": {
+    "train": {
+      "single_category_groups": 350,
+      "queries": 341,
+      "categories": 53,
+      "target_position_counts": [86, 85, 85, 85],
+      "skipped_ambiguous_groups": 12,
+      "skipped_without_positive": 9
+    },
+    "validation": {
+      "single_category_groups": 87,
+      "queries": 68,
+      "categories": 22,
+      "target_position_counts": [17, 17, 17, 17],
+      "skipped_ambiguous_groups": 3,
+      "skipped_without_positive": 19
+    }
+  },
+  "metadata_only_controls": {
+    "selected_option_position_from_train": 0,
+    "train_accuracy": 0.25219941348973607,
+    "validation_accuracy": 0.25,
+    "uniform_chance_accuracy": 0.25,
+    "feature_model_fit": false
+  },
+  "artifacts": {
+    "external_output_directory": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-multientity-choice-corpus-20261102-attempt-03",
+    "corpus_manifest_sha256": "1d1e54c8697578fc0cbb420bae4ac15396731b3d9b5e55e941e15d4521eddb97",
+    "files": {
+      "train_model_input.jsonl": {
+        "rows": 341,
+        "bytes": 302543,
+        "sha256": "48815ab1e245d7f51938ac31685075298f5c0ca7fc009152eea1ba73b6af5ad8"
+      },
+      "train_analysis_sidecar.jsonl": {
+        "rows": 341,
+        "bytes": 175240,
+        "sha256": "2d37d8aa0fc2480962079872785249a3d2fc2dd3e124911e15d2dd9b5390e119"
+      },
+      "validation_model_input.jsonl": {
+        "rows": 68,
+        "bytes": 60553,
+        "sha256": "9f1512afe35dab80a997b646a3c7dd0729b11b0f830357a993cec8f3205b9faf"
+      },
+      "validation_analysis_sidecar.jsonl": {
+        "rows": 68,
+        "bytes": 35079,
+        "sha256": "3f8c5c2bdb237f58d5fefcd3795f4453ad78706e19a38d5035916b40ae40d8f8"
+      }
+    },
+    "attempt02_model_input_and_sidecar_hashes_identical": true
+  },
+  "implementation": {
+    "source_commit_before_uncommitted_changes": "151c6e6428b30fa6061619993afecc2354b25e34",
+    "scripts/build_avatar_multientity_choice_corpus.py": "c1b9a648a813621bd0a7d4f181f2ce1d4d27a9a2c8f2752057853b22e314e9e0",
+    "scripts/audit_avatar_multientity_exposure.py": "dd4d0b0d01c8462791bbd4236a4c6447f3487c003701c34a742f971db1bd9e7d",
+    "targeted_pytest": "8 passed",
+    "focused_ruff": "passed"
+  },
+  "integrity": {
+    "media_bytes_read": false,
+    "official_validation_or_audit_accessed": false,
+    "feature_extraction_started": false,
+    "model_loaded_or_trained": false,
+    "raw_group_ids_emitted_to_repository": false,
+    "product_promotion": false
+  },
+  "resource_gate": {
+    "free_c_gib_at_latest_check_approx": 1.37,
+    "required_reserve_gib": 2,
+    "media_or_gpu_work_started": false
+  },
+  "report": "docs/pretrained_reuse/R2_AVATAR_MULTIENTITY_CHOICE_CORPUS_20261102.md"
+}

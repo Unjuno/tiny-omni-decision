@@ -76,18 +76,10 @@ def provisional_group_split(groups: set[str]) -> tuple[set[str], set[str]]:
     return set(ranked[validation_count:]), validation
 
 
-def build_report(
-    *,
-    train_annotations: Path,
+def collect_prior_group_usage(
     artifact_root: Path,
-    extracted_media_dir: Path | None = None,
-) -> dict[str, Any]:
-    train_annotations = train_annotations.resolve()
-    if train_annotations.name.lower() != "train":
-        raise ValueError("train_annotations must be the isolated TRAIN directory")
-    if any(part.lower() == "audit" for part in train_annotations.parts):
-        raise ValueError("audit paths are forbidden")
-
+) -> tuple[set[str], set[str], dict[str, str], dict[str, int]]:
+    """Return source groups and hashes from the inventoried prior AVATAR runs."""
     fit_groups: set[str] = set()
     evaluation_groups: set[str] = set()
     input_hashes: dict[str, str] = {}
@@ -146,6 +138,24 @@ def build_report(
             label = f"{directory.name}/{path.name}"
             sidecar_rows[label] = _read_sidecar(path, destination)
             input_hashes[label] = _sha256_file(path)
+    return fit_groups, evaluation_groups, input_hashes, sidecar_rows
+
+
+def build_report(
+    *,
+    train_annotations: Path,
+    artifact_root: Path,
+    extracted_media_dir: Path | None = None,
+) -> dict[str, Any]:
+    train_annotations = train_annotations.resolve()
+    if train_annotations.name.lower() != "train":
+        raise ValueError("train_annotations must be the isolated TRAIN directory")
+    if any(part.lower() == "audit" for part in train_annotations.parts):
+        raise ValueError("audit paths are forbidden")
+
+    fit_groups, evaluation_groups, input_hashes, sidecar_rows = collect_prior_group_usage(
+        artifact_root
+    )
 
     all_train_groups: set[str] = set()
     multi_entity_groups: set[str] = set()
