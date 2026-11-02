@@ -30,7 +30,14 @@ The readout has 73,857 parameters. The pinned encoders associated with its
 feature cache have 1,961,239 EfficientAT parameters and 114,365,184 VideoPrism
 parameters, for 116,400,280 parameters across this AV route before
 quantization. This count excludes software/runtime overhead and does not imply
-that quantized deployment size or latency has been measured.
+that quantized deployment size or latency has been measured. The exact two
+encoder checkpoints, readout state and normalization file total 465,920,920
+bytes (465.921 decimal MB / 444.34 MiB). This is a raw reference payload, not a
+package-ready export; tokenizer/runtime files and operational memory are not
+included, and no quantization was attempted.
+The pinned per-component parameter/file/hash table is preserved outside Git in
+`C:\CodexArtifacts\pretrained-reuse-r2\avatar-runtime-integration-20261102-attempt-01\component-inventory.json`
+(SHA-256 `e24f62236fe8f672cbc626f1ba96ed01ab6c97f7a07511ed0b4bfce273c0e2ae`).
 
 The CPU verification used a separate process and these fixed inputs:
 
