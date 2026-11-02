@@ -3831,3 +3831,15 @@ while NLL and Brier favor sensor-only. This same-site development transfer does
 not pass R2-M or justify shared-backbone work; the two PRs remain independent
 and unmodified ([PR #32](https://github.com/Unjuno/tiny-omni-decision/pull/32),
 [paired site audit PR #33](https://github.com/Unjuno/tiny-omni-decision/pull/33)).
+
+**2026-11-02 R2 PhysicalAI SingleArm CPU action pilot:** Created a pinned,
+episode-grouped 70/15/15 project split and ran a fixed 64-train / 16-validation
+episode, four-window feasibility study using frozen DINOv2-base plus a small
+linear action-prototype probe. Joint Accuracy was 79.69% vs. 76.56% for the
+best singleton, but the episode-cluster interval spans zero; validation lacks
+one of eight action classes. Video-episode misalignment sharply reduced the
+joint score, but this small public development sample is not R2 quality
+evidence. Reserved episodes were not downloaded, but the split is not blind;
+scene identity remains unknown. Keep candidate `REVIEW_NOT_ADMITTED`; no GPU
+work was done. See [pilot protocol and results](docs/pretrained_reuse/R2_PHYSICALAI_ACTION_PILOT_20261102.md)
+and [source screen](docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_20261102.md).

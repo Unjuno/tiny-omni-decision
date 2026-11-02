@@ -2,14 +2,14 @@
 
 ## Disposition
 
-**`REVIEW_NOT_ADMITTED` for R2-M quality evaluation; promising candidate for a
-bounded Video + proprioception action-choice pilot.** Rights,
+**`REVIEW_NOT_ADMITTED` for R2-M quality evaluation.** A bounded CPU-only
+Video + proprioception action-choice wiring pilot has now run. Rights,
 storage, synchronized payload availability and a potentially useful action
 label are supported by pinned publisher metadata and one verified training
 episode. DINOv2-base supplies a rights-cleared per-frame CPU feature path. The
-required task, independent scene grouping, temporal feature policy and
-both-input necessity are not yet established. No training or task evaluation
-occurred, and no GPU work was started.
+independent scene grouping and robust both-input necessity are not established.
+The pilot is exploratory with only 16 validation episodes and severe action
+class coverage gaps; it is not a task-quality result. No GPU work was started.
 
 ## Pinned source and rights
 
@@ -86,9 +86,13 @@ official DINOv2 repository explicitly licenses its code and weights Apache
 temporal encoder or task result. Receipt:
 `C:/CodexArtifacts/pretrained-reuse-r2/dinov2-base-runtime-smoke-01/cpu-runtime-smoke.json`.
 
-No depth media, other episodes, validation examples, sealed audit, or GPU was
-loaded. The source receipts are `verified-sample-hashes.json` and
-`verified-cpu-inspection.json` under the episode artifact directory.
+An additional 64 train and 16 development-validation episodes were used for
+the bounded pilot; no reserved-holdout media was downloaded or scored. The
+pilot protocol and results, including the episode-level paired bootstrap, are
+in [the action-pilot report](R2_PHYSICALAI_ACTION_PILOT_20261102.md). No GPU
+work was started. The original source receipts remain
+`verified-sample-hashes.json` and `verified-cpu-inspection.json` under the
+episode artifact directory.
 
 ## Task and integrity gates still open
 
@@ -102,20 +106,21 @@ instruction, not general language, image, audio or video understanding.
 
 Specific blockers before admission:
 
-1. The source supplies no official validation or audit split; all episodes are
-   declared train. Create project-owned train/validation/sealed partitions
-   only after verifying complete episode grouping.
+1. A deterministic project-owned episode split now exists (train/validation/
+   reserved). It is public and not blind because all source episode summary
+   metadata had been inspected. Do not call it a sealed audit.
 2. `episode_index` is available, but a separate scene/layout identity and
    cross-episode scene-overlap evidence are absent from the inspected metadata.
    Episode-level splitting alone must not be described as scene-disjoint until
    this is checked.
-3. Continuous action labels must be mapped to stable candidate actions without
-   target leakage or a trivial candidate/option shortcut. Keep every frame and
-   question from an episode in one partition.
-4. Compare joint, video-only, proprioception-only, shuffled-state and
-   time-shifted-state arms on the same frozen rows. Until the joint model beats
-   the best singleton with grouped uncertainty and interventions, this is not
-   evidence that both streams are necessary.
+3. The pilot tests a train-only 8-prototype future-action target without
+   episode-summary features. Validation class 4 is absent and class 3 has only
+   two examples, so the label/codebook needs a better-coverage design before
+   any quality experiment.
+4. The joint probe reached 79.69% accuracy vs. 76.56% for the best singleton,
+   but grouped uncertainty spans zero. Episode-misaligned video causes a large
+   drop, yet 16 validation episodes are insufficient to claim repeatable
+   complementarity. This pilot remains wiring evidence only.
 5. DINOv2-base now provides a rights-cleared local CPU per-frame feature path,
    but the time-aware feature policy and Decision runtime remain to be
    implemented. The V-JEPA 2.1 exact weight grant remains REVIEW; prior
@@ -123,7 +128,9 @@ Specific blockers before admission:
    substitute either model or claim that temporal features are already
    available.
 
-The candidate is therefore **not yet admitted for fitting or R2 quality
-claims**. Next safe work is a no-media episode/scene grouping and action-label
-protocol audit, followed by a rights-cleared runtime feasibility check. The
-source screen does not authorize access to any pre-existing sealed audit.
+The candidate is therefore **not admitted for an R2 quality-training run or
+R2 quality claims**. The small frozen-feature probes above are feasibility
+only. Next safe work is scene/layout provenance research and an improved,
+well-covered action target protocol, followed by a larger episode-grouped
+development study. The source screen does not authorize access to any
+pre-existing sealed audit.
