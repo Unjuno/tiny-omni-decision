@@ -10,10 +10,20 @@ from scripts import download_physicalai_stack_platforms_pilot as downloader
 
 
 class FakeResponse:
-    def __init__(self, payload: bytes):
+    def __init__(
+        self,
+        payload: bytes,
+        *,
+        status_code: int = 200,
+        headers: dict[str, str] | None = None,
+    ):
         self.content = payload
+        self.status_code = status_code
+        self.headers = headers or {}
 
     def raise_for_status(self) -> None:
+        if self.status_code >= 400:
+            raise downloader.requests.HTTPError(f"HTTP {self.status_code}")
         return None
 
 
@@ -111,6 +121,40 @@ def test_download_fails_closed_on_publisher_hash_mismatch(
 
     assert list((tmp_path / "pilot").glob("*.mp4")) == []
     assert list((tmp_path / "pilot").glob("*.parquet")) == []
+
+
+def test_rate_limit_retry_respects_retry_after_and_completes(tmp_path, monkeypatch):
+    manifest_path, payloads = make_manifest(tmp_path)
+    retries: dict[str, int] = {}
+    delays: list[float] = []
+
+    def fake_get(url: str, **_kwargs: object) -> FakeResponse:
+        match = next(path for path in payloads if path in url)
+        retries[match] = retries.get(match, 0) + 1
+        if retries[match] == 1:
+            return FakeResponse(
+                b"", status_code=429, headers={"Retry-After": "0.25"}
+            )
+        return FakeResponse(payloads[match])
+
+    monkeypatch.setattr(downloader.requests, "get", fake_get)
+    monkeypatch.setattr(downloader.time, "sleep", delays.append)
+
+    result = downloader.download_pilot(
+        manifest_path, tmp_path / "pilot", workers=2, max_retries=2
+    )
+
+    assert result["files"] == 4
+    assert len(retries) == 4
+    assert all(count == 2 for count in retries.values())
+    assert delays == [0.25] * 4
+
+
+def test_retry_after_exponential_fallback_is_bounded(monkeypatch):
+    response = FakeResponse(b"", status_code=429)
+    assert downloader._retry_after_seconds(response, 0) == 2.0
+    assert downloader._retry_after_seconds(response, 3) == 16.0
+    assert downloader._retry_after_seconds(response, 20) == 120.0
 
 
 def test_duplicate_or_overlapping_selection_is_rejected_before_network(

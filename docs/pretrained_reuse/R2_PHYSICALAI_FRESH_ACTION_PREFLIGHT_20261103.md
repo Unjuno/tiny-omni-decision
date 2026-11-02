@@ -103,6 +103,27 @@ videos remains a required pre-fit gate after acquisition.
 - Repository checks before acquisition: Ruff passed; full CPU suite **2,810
   passed, 11 skipped**; CI manifest/catalog validation commands passed.
 
+## Acquisition attempt and recovery
+
+The first acquisition attempt used eight workers in the intended new output
+directory. It terminated with HTTP 429 for the pinned world-camera file for
+episode `010750`. The process exit code was 1; no complete receipt was written.
+At termination, **175 files / 17,625,486 bytes** were present (87 video and 88
+Parquet files). All 175 were independently re-read and matched the new
+manifest's exact byte sizes and SHA-256 values; all were selected train files.
+No validation or reserved file and no `.part` file was present. The verified
+files remain in the new attempt directory and are reused only after the
+downloader rechecks their hashes.
+
+Three completed-file observations were noisy (reported payload rates about
+0.352, 0.068, and 0 MB/s over the observed intervals) and ended in a 429.
+These are not a stable transfer-speed estimate, so no completion ETA is
+claimed. The downloader now honors numeric/date `Retry-After` and uses bounded
+exponential fallback, with retry behavior covered by CPU tests. Resume will
+use two workers and the same output directory. No model/data configuration,
+split, or reserved partition changed; feature extraction and fitting remain
+unstarted.
+
 ## Execution gate and stop conditions
 
 The intended new output directory is

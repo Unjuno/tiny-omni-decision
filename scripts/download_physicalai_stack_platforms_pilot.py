@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import email.utils
 import hashlib
 import json
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -17,11 +19,31 @@ def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _retry_after_seconds(response: requests.Response, attempt: int) -> float:
+    value = response.headers.get("Retry-After")
+    if value is not None:
+        try:
+            return max(0.0, float(value))
+        except ValueError:
+            try:
+                retry_time = email.utils.parsedate_to_datetime(value).timestamp()
+                return max(0.0, retry_time - time.time())
+            except (TypeError, ValueError, OverflowError):
+                pass
+    return min(2.0 * (2**attempt), 120.0)
+
+
 def download_pilot(
-    manifest_path: Path, output_dir: Path, *, workers: int = 8
+    manifest_path: Path,
+    output_dir: Path,
+    *,
+    workers: int = 8,
+    max_retries: int = 5,
 ) -> dict[str, Any]:
     if workers < 1:
         raise ValueError("workers must be positive")
+    if max_retries < 0:
+        raise ValueError("max_retries must be nonnegative")
     manifest_bytes = manifest_path.read_bytes()
     manifest = json.loads(manifest_bytes)
     source = manifest["source"]
@@ -89,8 +111,29 @@ def download_pilot(
                 f"https://huggingface.co/datasets/{dataset_id}/resolve/{revision}/"
                 f"{item['path']}?download=true"
             )
-            response = requests.get(url, timeout=(30, 180))
-            response.raise_for_status()
+            for attempt in range(max_retries + 1):
+                response = requests.get(url, timeout=(30, 180))
+                if getattr(response, "status_code", 200) != 429:
+                    response.raise_for_status()
+                    break
+                if attempt == max_retries:
+                    response.raise_for_status()
+                delay = _retry_after_seconds(response, attempt)
+                print(
+                    json.dumps(
+                        {
+                            "event": "http_429_retry",
+                            "episode": item["episode"],
+                            "kind": item["kind"],
+                            "retry": attempt + 1,
+                            "max_retries": max_retries,
+                            "sleep_seconds": delay,
+                        }
+                    ),
+                    file=sys.stderr,
+                    flush=True,
+                )
+                time.sleep(delay)
             payload = response.content
         actual_sha = _sha256(payload)
         if len(payload) != item["size"] or actual_sha != item["sha256"]:
@@ -144,8 +187,18 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--max-retries", type=int, default=5)
     args = parser.parse_args()
-    print(json.dumps(download_pilot(args.manifest, args.output_dir, workers=args.workers)))
+    print(
+        json.dumps(
+            download_pilot(
+                args.manifest,
+                args.output_dir,
+                workers=args.workers,
+                max_retries=args.max_retries,
+            )
+        )
+    )
 
 
 if __name__ == "__main__":
