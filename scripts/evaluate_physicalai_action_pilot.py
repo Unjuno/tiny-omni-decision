@@ -8,6 +8,16 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
+try:
+    from scripts.physicalai_pilot_metrics import (
+        episode_counts_by_split,
+        per_class_accuracy,
+    )
+except ModuleNotFoundError as exc:
+    if exc.name != "scripts":
+        raise
+    from physicalai_pilot_metrics import episode_counts_by_split, per_class_accuracy
+
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--artifact-dir", type=pathlib.Path, required=True)
 args = parser.parse_args()
@@ -15,6 +25,15 @@ root = args.artifact_dir
 d = np.load(root / "features.npz", allow_pickle=False)
 tr = d["split"] == "train"
 va = d["split"] == "validation"
+if not tr.any() or not va.any():
+    raise ValueError("features must include both train and validation examples")
+episodes = d["episode"]
+episode_counts = episode_counts_by_split(episodes, tr, va)
+for split_name, split_mask in (("train", tr), ("validation", va)):
+    for episode in np.unique(episodes[split_mask]):
+        windows = np.sort(d["window"][split_mask & (episodes == episode)])
+        if not np.array_equal(windows, np.array([0, 1, 2, 3])):
+            raise ValueError(f"{split_name} episode {episode} must have windows 0..3")
 torch.manual_seed(17)
 np.random.seed(17)
 torch.set_num_threads(2)
@@ -60,7 +79,14 @@ def metrics(prob, ytrue):
                 )
             )
     ece = float(sum(w * e for w, e in bins))
-    return {"accuracy": acc, "nll": nll, "brier": brier, "ece": ece, "n": len(ytrue)}
+    return {
+        "accuracy": acc,
+        "nll": nll,
+        "brier": brier,
+        "ece": ece,
+        "n": len(ytrue),
+        "per_class_accuracy": per_class_accuracy(prob, ytrue),
+    }
 
 
 def fit_eval(name, Xtr, Xva, ytr, yva):
@@ -80,7 +106,8 @@ def fit_eval(name, Xtr, Xva, ytr, yva):
     opt.step(closure)
     with torch.no_grad():
         p = model(Xva).softmax(1).numpy()
-    return metrics(p, yva.numpy()), p, (model, m, s)
+        p_train = model(Xtr).softmax(1).numpy()
+    return metrics(p, yva.numpy()), metrics(p_train, ytr.numpy()), p, (model, m, s)
 
 
 yt = torch.tensor(y[tr], dtype=torch.long)
@@ -92,11 +119,12 @@ views = {
     "joint_video_proprio": ("joint", "joint"),
 }
 results = {}
+training_metrics = {}
 predictions = {}
 fitted = {}
 for name, (a, _b) in views.items():
     X = np.concatenate([d["video"], d["state"]], axis=1) if a == "joint" else d[a]
-    res, p, fit = fit_eval(
+    res, train_res, p, fit = fit_eval(
         name,
         torch.tensor(X[tr], dtype=torch.float32),
         torch.tensor(X[va], dtype=torch.float32),
@@ -104,6 +132,7 @@ for name, (a, _b) in views.items():
         yv,
     )
     results[name] = res
+    training_metrics[name] = train_res
     predictions[name] = p
     fitted[name] = fit
 # Pair each held-out episode's proprio history with the next held-out episode's video,
@@ -189,9 +218,10 @@ for name in (
         "seed": 17,
     }
 results["episode_cluster_bootstrap_joint_accuracy"] = boot
+results["training_metrics"] = training_metrics
 results["protocol"] = {
-    "train_episodes": 64,
-    "validation_episodes": 16,
+    "train_episodes": episode_counts["train"],
+    "validation_episodes": episode_counts["validation"],
     "windows_per_episode": 4,
     "train_queries": int(tr.sum()),
     "validation_queries": int(va.sum()),

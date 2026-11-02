@@ -10,6 +10,13 @@ import pyarrow.parquet as pq
 import torch
 from transformers import AutoImageProcessor, AutoModel
 
+try:
+    from scripts.physicalai_pilot_receipts import split_episode_ids
+except ModuleNotFoundError as exc:
+    if exc.name != "scripts":
+        raise
+    from physicalai_pilot_receipts import split_episode_ids
+
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--artifact-dir", type=pathlib.Path, required=True)
 parser.add_argument("--model-dir", type=pathlib.Path, required=True)
@@ -17,6 +24,7 @@ parser.add_argument("--max-episodes", type=int)
 parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
 parser.add_argument("--batch-size", type=int, default=32)
 args = parser.parse_args()
+run_started = time.perf_counter()
 if args.batch_size < 1:
     parser.error("--batch-size must be positive")
 if args.device == "cuda" and not torch.cuda.is_available():
@@ -24,6 +32,20 @@ if args.device == "cuda" and not torch.cuda.is_available():
 root = args.artifact_dir
 model_dir = args.model_dir
 receipt = json.loads((root / "download-receipt.json").read_text())
+
+
+def sha256_file(path: pathlib.Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+model_files = {}
+for filename in ("config.json", "model.safetensors", "preprocessor_config.json"):
+    path = model_dir / filename
+    model_files[filename] = {"sha256": sha256_file(path), "bytes": path.stat().st_size}
 proc = AutoImageProcessor.from_pretrained(model_dir, local_files_only=True)
 model = AutoModel.from_pretrained(model_dir, local_files_only=True).eval()
 torch.set_num_threads(4)
@@ -34,10 +56,7 @@ if device.type == "cuda":
 all_queries = []
 decode_seconds = 0.0
 infer_seconds = 0.0
-train_ids = set(receipt.get("train_episode_indices", receipt.get("train_ids", [])))
-validation_ids = set(
-    receipt.get("validation_episode_indices", receipt.get("validation_ids", []))
-)
+train_ids, validation_ids = split_episode_ids(receipt)
 video_files = [file_rec for file_rec in receipt["files"] if file_rec["kind"] == "video"]
 if args.max_episodes is not None:
     if args.max_episodes < 1:
@@ -132,7 +151,8 @@ meta = {
     "validation_queries": sum(x["split"] == "validation" for x in all_queries),
     "frames_per_query": 8,
     "decode_seconds": decode_seconds,
-    "dinov2_cpu_seconds": infer_seconds,
+    "dinov2_inference_seconds": infer_seconds,
+    "total_wall_seconds": time.perf_counter() - run_started,
     "device": args.device,
     "batch_size": args.batch_size,
     "peak_cuda_bytes": (
@@ -140,6 +160,7 @@ meta = {
     ),
     "dtype": "float32",
     "model_revision": "f9e44c814b77203eaa57a6bdbbd535f21ede1415",
+    "model_files": model_files,
     "source_revision": receipt.get("dataset_revision") or receipt["revision"],
     "timestamp_frame_verified": True,
     "reserved_holdout_accessed": False,
