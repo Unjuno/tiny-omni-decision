@@ -158,7 +158,7 @@ EfficientAT source commit `a425fdce92572e602a1d5634799bd9f1f2efa806` and
 checkpoint SHA-256 `49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e`.
 The extractor, media helper, and probe implementation hashes are respectively
 `daf83f8e504b63173e6bd08a6a5253badbd6deff055e0597b5facbcf0424304d`,
-`32db5753a06d7b9f6854e30e7154aa27639723b0bbc7d616ae4fbbcdbbedb6`, and
+`32db5753a06d7b9f6854e30e7154aa2763869723b0bbc7d616ae4fbbcdbbedb6`, and
 `dd5be4f48c3e02a2087c1c82c50fe2fa22b58dc1631e530f5c5152d667412b68`.
 
 The feature contract is CPU FP32, eight VideoPrism frames pooled per frame,
