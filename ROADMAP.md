@@ -3894,3 +3894,10 @@ comparison found 0.0485% pixel disagreement and 194–754 differing labels on
 the tested center grids. Treat the earlier Pillow support counts as approximate;
 AVATAR remains unadmitted while source-video rights and feature/task gates are
 open. [Pinned method, counts, hashes and limits](docs/pretrained_reuse/R2_AVATAR_RASTERIZER_PARITY_20261103.md).
+
+**2026-11-03 R2 robotics AV/sensor source screen:** Metadata-only review of
+BridgeData V2, RH20T, and RoboSet found no source that passes the current
+synchronized-input, rights, independent-group, decision-target, and local
+storage gates. No data or media was downloaded. Keep all three unadmitted and
+do not fit another joint model from these candidates. See the
+[source screen](docs/pretrained_reuse/R2_ROBOTICS_AV_SOURCE_SCREEN_20261103.md).
