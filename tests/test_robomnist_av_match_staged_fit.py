@@ -153,3 +153,44 @@ def test_frozen_fit_loader_rejects_changed_training_features(tmp_path):
             normalizer_hashes={"train_only": True},
             steps=400,
         )
+
+
+def test_incomplete_cache_fails_before_validation_access_or_output_creation(
+    tmp_path, monkeypatch
+):
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text("{}\n", encoding="utf-8")
+    manifest_sha = sha256_file(manifest_path)
+    monkeypatch.setattr(fit_module, "MANIFEST_SHA256", manifest_sha)
+    cache = tmp_path / "cache"
+    cache.mkdir()
+    (cache / "run.json").write_text(
+        json.dumps(
+            {
+                "status": "INCOMPLETE",
+                "effective": {"manifest_sha256": manifest_sha, "group_count": 1780},
+                "training": False,
+                "sealed_audit_opened": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+    output = tmp_path / "evaluation-output"
+
+    def must_not_run(*args, **kwargs):
+        pytest.fail("validation data or model weights were touched before the cache gate")
+
+    monkeypatch.setattr(fit_module, "validate_examples", must_not_run)
+    monkeypatch.setattr(fit_module, "_load_group_features", must_not_run)
+    monkeypatch.setattr(fit_module, "_load_frozen_fit", must_not_run)
+
+    with pytest.raises(ValueError, match="feature cache is incomplete"):
+        fit_module.run(
+            manifest_path,
+            cache,
+            output,
+            steps=400,
+            frozen_fit=tmp_path / "not-loaded-fit",
+        )
+
+    assert not output.exists()

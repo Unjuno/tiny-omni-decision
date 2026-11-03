@@ -84,10 +84,13 @@ extractor's 2 GiB reserve because it performed no extraction. The missing
 validation data still cannot be extracted until that original reserve is
 restored.
 
-Focused checks after implementation: Ruff passed; 10 related CPU tests passed.
+Focused checks after implementation: Ruff passed; 11 related CPU tests passed.
 The frozen-fit loader accepted the saved checkpoint and verified the run,
 config, checkpoint, implementation, manifest, train-feature, and normalizer
-hashes. The evaluator's complete-cache path has not yet run end to end.
+hashes. A regression test also proves an `INCOMPLETE` cache is rejected before
+validation rows/features or the frozen checkpoint are read and before an
+evaluation output directory is created. The evaluator's complete-cache path
+has not yet run end to end.
 
 Next, when stable C: free space is at least 2 GiB, resume the **original** cache
 with the existing extractor and `--resume`. Then evaluate all 2,000 validation
