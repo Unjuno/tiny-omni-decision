@@ -2,16 +2,19 @@ import json
 from pathlib import Path
 
 import pytest
-import torch
 
-from scripts import fit_robomnist_av_match_readout as fit_module
-from scripts.fit_robomnist_av_match_readout import (
+torch = pytest.importorskip("torch")
+
+from scripts import fit_robomnist_av_match_readout as fit_module  # noqa: E402
+from scripts.fit_robomnist_av_match_readout import (  # noqa: E402
     REPO_ROOT,
     _load_frozen_fit,
     sha256_file,
 )
-from scripts.fit_robomnist_av_match_train_only import _validate_train_only_coverage
-from tiny_omni_decision.robomnist_av_match_readout import (
+from scripts.fit_robomnist_av_match_train_only import (  # noqa: E402
+    _validate_train_only_coverage,
+)
+from tiny_omni_decision.robomnist_av_match_readout import (  # noqa: E402
     BilinearAVMatchScorer,
     SingleModalityMatchScorer,
 )
