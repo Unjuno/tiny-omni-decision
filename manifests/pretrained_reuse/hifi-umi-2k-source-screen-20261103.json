@@ -1,0 +1,116 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "HiFi-UMI-2K",
+  "recorded_at": "2026-11-03",
+  "status": "REVIEW_NOT_ADMITTED",
+  "sources": {
+    "publisher_dataset_repo": "https://huggingface.co/datasets/simple-world-lab/HiFi-UMI-2K",
+    "publisher_project_page": "https://cloud.simpleai.tech/simple-world-lab/hifi-umi/",
+    "technical_report": "https://arxiv.org/abs/2607.25895",
+    "secondary_umi_dataset_index": "https://umi-data.github.io/"
+  },
+  "repository_snapshot": {
+    "repo_id": "simple-world-lab/HiFi-UMI-2K",
+    "revision": "a53b7b5784afdd50b2fda9195c9f724ef75ffdaf",
+    "last_modified": "2026-07-29T02:17:44Z",
+    "reported_file_count": 5176,
+    "publisher_api_license": "cc-by-4.0",
+    "card_license_statement": "CC BY 4.0; card explicitly permits commercial adaptation with attribution",
+    "published_release_size": "16 TB",
+    "published_release_hours": 2000,
+    "published_row_count": 192297515,
+    "metadata_only": true
+  },
+  "content_hashes": {
+    "README.md": {
+      "bytes": 20762,
+      "sha256": "863734e7f4d12bd283f3b676e42993d144f5f20779b5204e95a3e49911f65730"
+    },
+    "chunk-0000/part-0000/meta/info.json": {
+      "bytes": 11283,
+      "sha256": "a7f45a6b027a7da40c645cd97e311bdecd04e64a882fc3db13f68489c5a2195e"
+    },
+    "chunk-0000/part-0000/meta/modality.json": {
+      "bytes": 3286,
+      "sha256": "3acdc12dce04242c3d7bca151ba6cf75d086ec0e57129fe02c1423250230cea4"
+    }
+  },
+  "sampled_part_metadata": {
+    "part": "chunk-0000/part-0000",
+    "metadata_files_bytes": 1907539,
+    "data_parquet_bytes": 80148885,
+    "video_bytes_total": 40467521713,
+    "part_total_bytes": 40549578578,
+    "part_total_gib": 37.765,
+    "info_json": {
+      "episodes": 1125,
+      "frames": 478810,
+      "tasks": 38,
+      "fps": 25,
+      "split": {
+        "train": "0:1125"
+      },
+      "scene_related_top_level_fields": []
+    },
+    "six_video_files": [
+      {
+        "path": "videos/observation.images.head_main/chunk-000/file-000.mp4",
+        "bytes": 7195082257,
+        "sha256": "17497b55e3f0f8974ef490852081d12b77662b5cae0aed94cbe1978f7a9d6868"
+      },
+      {
+        "path": "videos/observation.images.head_main_stereo_right/chunk-000/file-000.mp4",
+        "bytes": 7168288075,
+        "sha256": "033671535b6ff5f6b84811e810b2dcc6fef7b1c7ecafd56528be82a173122279"
+      },
+      {
+        "path": "videos/observation.images.left_hand_down/chunk-000/file-000.mp4",
+        "bytes": 6497322495,
+        "sha256": "a05aca0d434cb910d9e6482c26a7182aed3dae398bc20d0a9285c3e879f71a50"
+      },
+      {
+        "path": "videos/observation.images.left_hand_up/chunk-000/file-000.mp4",
+        "bytes": 6524780915,
+        "sha256": "068e254085994870ac835d39acdd8acc4f55611b763d967d068848cb7300c7f3"
+      },
+      {
+        "path": "videos/observation.images.right_hand_down/chunk-000/file-000.mp4",
+        "bytes": 6565873557,
+        "sha256": "c445b1a89eeda2c3313ab2b57fd7c83e27b9a78234af9180354539133b0cc256"
+      },
+      {
+        "path": "videos/observation.images.right_hand_up/chunk-000/file-000.mp4",
+        "bytes": 6516174414,
+        "sha256": "344122e51121f8f6205fa4ec952a44aec8cf9c392c832841c995c811e79c7996"
+      }
+    ]
+  },
+  "source_and_task_gate": {
+    "available_modalities": ["video", "bimanual state/action time series", "language task annotations"],
+    "audio_available": false,
+    "release_split": "One train split only; no publisher validation/test partition found in the card or sampled part metadata.",
+    "group_identity": "UNKNOWN: sampled info.json has no scene/site/environment field; episode-metadata schema was documented without a scene key but its Parquet contents were not opened.",
+    "scene_count_reconciliation": "Publisher card reports >480 scenes for the larger source corpus without attributing that count to the 2,000-hour release. A secondary UMI dataset index reports 110+ scenes for the release; no episode-level scene IDs were verified.",
+    "decision_target": "Continuous next-state action is supplied. A calibrated candidate-action Decision protocol and independent split have not been frozen.",
+    "both_input_necessity": "NOT_ESTABLISHED"
+  },
+  "rights_and_resource_gate": {
+    "license_declaration": "CC BY 4.0 on publisher dataset card/API, including commercial use with attribution",
+    "participant_consent_or_publicity_scope": "UNKNOWN; the reviewed card does not state consent or downstream publicity/privacy scope for human-recorded video",
+    "local_c_free_gib_at_screen": 1.9308,
+    "full_release_bytes": "16 TB as published",
+    "one_sample_part_bytes": 40549578578,
+    "range_streaming_tested": false,
+    "decision": "Do not acquire media or fit/evaluate until human-video rights, scene grouping, a held-out split, task labels, and a feasible streaming/storage plan are established."
+  },
+  "handling": {
+    "README_and_small_meta_json_fetched_in_memory_only": true,
+    "metadata_json_saved_to_workspace": false,
+    "data_or_episode_parquet_downloaded": false,
+    "video_media_downloaded": false,
+    "media_opened": false,
+    "training_or_quality_evaluation": false,
+    "sealed_audit_accessed": false
+  },
+  "decision": "REVIEW_NOT_ADMITTED: useful video+sensor+language structure, but scene-level independent grouping, participant-rights scope, an independent split, both-input-required Decision labels, and local feasibility remain unresolved."
+}
