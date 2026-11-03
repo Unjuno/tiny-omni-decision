@@ -108,3 +108,14 @@ def test_paired_bootstrap_requires_independent_pair_unit_floor():
             np.asarray(["p1", "p1"]),
             replicates=10,
         )
+
+
+def test_paired_bootstrap_reports_explicit_comparator_delta():
+    pair_ids = np.repeat(np.arange(200), 4)
+    joint = np.ones(800, dtype=bool)
+    comparator = np.zeros(800, dtype=bool)
+
+    result = paired_bootstrap_delta(joint, comparator, pair_ids, replicates=10)
+
+    assert result["accuracy_delta_joint_minus_comparator"] == 1.0
+    assert "accuracy_delta_joint_minus_best_unimodal" not in result

@@ -122,7 +122,7 @@ def paired_bootstrap_delta(
         "replicates": replicates,
         "seed": seed,
         "unit": "paired 4-example source pair unit sampled with replacement",
-        "accuracy_delta_joint_minus_best_unimodal": float(
+        "accuracy_delta_joint_minus_comparator": float(
             correct_joint.mean() - correct_unimodal.mean()
         ),
         "percentile_95_ci": [

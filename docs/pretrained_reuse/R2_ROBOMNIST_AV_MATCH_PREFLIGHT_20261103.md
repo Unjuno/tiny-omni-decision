@@ -86,9 +86,12 @@ model (73,728 trainable parameters) and separate audio-only/video-only logistic
 controls. It has a fixed 400-update train-only schedule, no validation
 checkpoint selection or temperature fitting, option-ID probability output,
 paired bootstrap at the 500-pair-unit level, missing/shuffled-input controls,
-and save/reload parity checking. CPU tests cover grouping, metrics, the
-bootstrap floor, and a two-step synthetic optimizer smoke. No readout has been
-fitted and no validation quality result exists yet.
+and save/reload parity checking. Audio-only and video-only comparisons are
+reported separately with pair-unit bootstrap; no validation-selected "best
+unimodal" comparator is used. CPU tests cover grouping, metrics, the bootstrap
+floor, and a two-step synthetic optimizer smoke. Validation predictions include
+target and predicted option IDs and probabilities. No readout has been fitted
+and no validation quality result exists yet.
 
 ## Remaining gate
 
@@ -96,3 +99,15 @@ Wait for the frozen feature cache to complete, then fit and evaluate the one
 predeclared readout/control suite on its fixed train/validation data. Do not
 infer accuracy, calibration, cross-modal necessity, or general-purpose Omni
 quality before those measured results exist.
+
+## 2026-11-03 readout review correction
+
+Before fitting, source review found that the runner selected whichever
+unimodal control scored higher on the same validation set and reported a
+joint-vs-selected-control bootstrap. This gave the comparator a validation
+selection advantage. The runner now reports separate paired-bootstrap
+comparisons against the fixed audio-only and video-only controls. Prediction
+rows also store the predicted option ID explicitly. This is an evaluation
+reporting correction only: the frozen split, examples, encoders, feature cache,
+model, seed, optimizer, 400-update budget, and no-selection policy are
+unchanged. Focused tests: 8 passed; Ruff: passed. No readout fit has been run.

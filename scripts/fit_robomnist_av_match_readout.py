@@ -304,15 +304,9 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
         joint_prob = _predict(models["joint"], val_audio, val_video, mode="joint")
         audio_prob = _predict(models["audio_only"], val_audio, val_video, mode="audio")
         video_prob = _predict(models["video_only"], val_audio, val_video, mode="video")
-        audio_accuracy = (audio_prob.argmax(-1) == val_target.numpy()).mean()
-        video_accuracy = (video_prob.argmax(-1) == val_target.numpy()).mean()
-        best_name, best_prob = (
-            ("audio_only", audio_prob)
-            if audio_accuracy >= video_accuracy
-            else ("video_only", video_prob)
-        )
         joint_correct = joint_prob.argmax(-1) == val_target.numpy()
-        best_unimodal_correct = best_prob.argmax(-1) == val_target.numpy()
+        audio_correct = audio_prob.argmax(-1) == val_target.numpy()
+        video_correct = video_prob.argmax(-1) == val_target.numpy()
         shuffled_audio, shuffled_audio_video = _counterfactual_rows(
             rows["validation"], summaries, swap="audio"
         )
@@ -355,9 +349,11 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
             name: classification_metrics(probability, train_target.numpy())
             for name, probability in train_predictions.items()
         }
-        metrics["best_unimodal_selected_for_comparison"] = best_name
-        metrics["paired_bootstrap_joint_vs_best_unimodal"] = paired_bootstrap_delta(
-            joint_correct, best_unimodal_correct, val_pair_ids
+        metrics["paired_bootstrap_joint_vs_audio_only"] = paired_bootstrap_delta(
+            joint_correct, audio_correct, val_pair_ids
+        )
+        metrics["paired_bootstrap_joint_vs_video_only"] = paired_bootstrap_delta(
+            joint_correct, video_correct, val_pair_ids
         )
         model_hashes = {}
         checkpoint_path = output / "readouts.pt"
@@ -388,6 +384,9 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
                     "predictions": {
                         name: {
                             "option_ids": ["different", "same"],
+                            "predicted_option_id": ["different", "same"][
+                                int(probability[index].argmax())
+                            ],
                             "probabilities": probability[index].tolist(),
                         }
                         for name, probability in predictions.items()
