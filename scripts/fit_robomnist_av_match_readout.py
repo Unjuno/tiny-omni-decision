@@ -196,7 +196,59 @@ def _counterfactual_rows(
     return torch.from_numpy(np.stack(audio_values)), torch.from_numpy(np.stack(video_values))
 
 
-def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_STEPS):
+def _load_frozen_fit(
+    frozen_fit: Path,
+    *,
+    manifest_sha: str,
+    train_feature_hashes_sha256: str,
+    normalizer_hashes: dict[str, Any],
+    steps: int,
+):
+    fit_meta = json.loads((frozen_fit / "run.json").read_text(encoding="utf-8"))
+    checkpoint_path = frozen_fit / "readouts.pt"
+    config_path = frozen_fit / "config.json"
+    implementation_paths = {
+        "train_only_script": REPO_ROOT / "scripts" / "fit_robomnist_av_match_train_only.py",
+        "readout_fit_script": Path(__file__).resolve(),
+        "readout_module": (
+            REPO_ROOT / "src" / "tiny_omni_decision" / "robomnist_av_match_readout.py"
+        ),
+        "feature_extractor": REPO_ROOT / "scripts" / "extract_robomnist_av_match_feature_cache.py",
+    }
+    expected_implementation = {
+        name: sha256_file(path) for name, path in implementation_paths.items()
+    }
+    if (
+        fit_meta.get("status") != "TRAIN_COMPLETE_VALIDATION_PENDING"
+        or fit_meta.get("manifest_sha256") != manifest_sha
+        or fit_meta.get("train_feature_hashes_sha256") != train_feature_hashes_sha256
+        or fit_meta.get("normalizer_hashes") != normalizer_hashes
+        or fit_meta.get("implementation_sha256") != expected_implementation
+        or fit_meta.get("training", {}).get("steps") != steps
+        or fit_meta.get("training", {}).get("seed") != SEED
+        or fit_meta.get("training", {}).get("validation_used") is not False
+        or fit_meta.get("validation_features_read") is not False
+        or not config_path.is_file()
+        or sha256_file(config_path) != fit_meta.get("config_sha256")
+        or not checkpoint_path.is_file()
+        or sha256_file(checkpoint_path) != fit_meta.get("readout_checkpoint_sha256")
+    ):
+        raise ValueError("frozen train-only fit does not match this evaluation contract")
+    state = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+    expected = {"joint", "audio_only", "video_only"}
+    if set(state) != expected:
+        raise ValueError("frozen checkpoint does not contain the three declared readouts")
+    return fit_meta, state
+
+
+def run(
+    manifest_path: Path,
+    cache: Path,
+    output: Path,
+    *,
+    steps: int = TRAIN_STEPS,
+    frozen_fit: Path | None = None,
+):
     if output.exists():
         raise FileExistsError(f"refusing to overwrite existing readout output: {output}")
     if steps < 1:
@@ -225,6 +277,24 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
     summaries, normalizer_hashes = _pool_features(features, rows["train"])
     train_audio, train_video, train_target, _ = _arrays(rows["train"], summaries)
     val_audio, val_video, val_target, val_pair_ids = _arrays(rows["validation"], summaries)
+    train_group_ids = {
+        row[key] for row in rows["train"] for key in ("audio_group", "video_group")
+    }
+    train_feature_hashes_sha256 = hashlib.sha256(
+        "\n".join(
+            f"{key}:{feature_hashes[key]}" for key in sorted(train_group_ids)
+        ).encode()
+    ).hexdigest()
+    frozen_fit_meta = None
+    frozen_state = None
+    if frozen_fit is not None:
+        frozen_fit_meta, frozen_state = _load_frozen_fit(
+            frozen_fit,
+            manifest_sha=manifest_sha,
+            train_feature_hashes_sha256=train_feature_hashes_sha256,
+            normalizer_hashes=normalizer_hashes,
+            steps=steps,
+        )
 
     output.mkdir(parents=True)
     started = time.perf_counter()
@@ -246,6 +316,7 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
         "feature_hashes_sha256": hashlib.sha256(
             "\n".join(f"{key}:{feature_hashes[key]}" for key in sorted(feature_hashes)).encode()
         ).hexdigest(),
+        "train_feature_hashes_sha256": train_feature_hashes_sha256,
         "normalizer_hashes": normalizer_hashes,
         "seed": SEED,
         "training": {
@@ -262,6 +333,9 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
         "sealed_audit_opened": False,
         "gpu_used": False,
     }
+    if frozen_fit is not None:
+        meta["frozen_fit_run"] = str(frozen_fit)
+        meta["frozen_fit_checkpoint_sha256"] = frozen_fit_meta["readout_checkpoint_sha256"]
     _write_json(output / "run.json", meta)
 
     try:
@@ -290,16 +364,22 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
         }
         histories = {}
         training_seconds = {}
-        for name, model in models.items():
-            torch.manual_seed(SEED)
-            inputs = (
-                (train_audio, train_video)
-                if name == "joint"
-                else (train_audio if name == "audio_only" else train_video,)
-            )
-            fit_started = time.perf_counter()
-            histories[name] = _fit(model, inputs, train_target, steps=steps)
-            training_seconds[name] = time.perf_counter() - fit_started
+        if frozen_state is None:
+            for name, model in models.items():
+                torch.manual_seed(SEED)
+                inputs = (
+                    (train_audio, train_video)
+                    if name == "joint"
+                    else (train_audio if name == "audio_only" else train_video,)
+                )
+                fit_started = time.perf_counter()
+                histories[name] = _fit(model, inputs, train_target, steps=steps)
+                training_seconds[name] = time.perf_counter() - fit_started
+        else:
+            for name, model in models.items():
+                model.load_state_dict(frozen_state[name], strict=True)
+            histories = frozen_fit_meta["training_history"]
+            training_seconds = frozen_fit_meta["training_seconds_by_readout"]
         inference_started = time.perf_counter()
         joint_prob = _predict(models["joint"], val_audio, val_video, mode="joint")
         audio_prob = _predict(models["audio_only"], val_audio, val_video, mode="audio")
@@ -406,6 +486,7 @@ def run(manifest_path: Path, cache: Path, output: Path, *, steps: int = TRAIN_ST
             "elapsed_seconds": time.perf_counter() - started,
             "training_history": histories,
             "training_seconds_by_readout": training_seconds,
+            "readout_fit_reused_without_refit": frozen_fit is not None,
             "inference_seconds_all_validation_controls": inference_seconds,
             "runtime": {
                 "python": platform.python_version(),
@@ -454,6 +535,11 @@ def main() -> None:
     parser.add_argument("--cache", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--steps", type=int, default=TRAIN_STEPS)
+    parser.add_argument(
+        "--frozen-fit",
+        type=Path,
+        help="evaluate a matching train-only checkpoint without fitting it again",
+    )
     args = parser.parse_args()
     print(
         json.dumps(
@@ -462,6 +548,7 @@ def main() -> None:
                 args.cache.resolve(strict=True),
                 args.output.resolve(),
                 steps=args.steps,
+                frozen_fit=args.frozen_fit.resolve(strict=True) if args.frozen_fit else None,
             ),
             indent=2,
         )
