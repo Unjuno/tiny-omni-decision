@@ -76,6 +76,8 @@ claiming four-modality quality.
 - Runner: `scripts/evaluate_whisper_librispeech_candidate_likelihood.py`, SHA-256 `6cb83c555e216ed04445ab40e974d37ecc7a02fa90a9df0a860572c4bfeb0128`.
 - Scoring helper: `src/tiny_omni_decision/whisper_option_likelihood.py`, SHA-256 `480da326ca804eceb479f04af4daa0cc0d22d49903e22d5ef58a08dec4799420`.
 - Focused CPU tests: 9 passed; `ruff check` and `ruff format --check` passed for the changed code.
+- Full local suite with the optional ML dependencies already installed: 2,937 passed / 11 skipped. A second full-suite run with `torch` import-blocked to match CI's `.[dev]` dependency set passed 2,197 / skipped 183; the new focused module correctly skips when PyTorch is absent.
+- Remote CI on code commit `213a5ed02d2c4431fa0179a78fe2c0d8c315031e`: push run `41876492567` and PR run `41876508803` both passed. An earlier CI failure exposed the test's unconditional optional `torch` import; it was corrected without adding PyTorch to the lightweight dev dependencies.
 - Smoke: 8 fixed examples completed in 5.00 seconds on CPU; no GPU used.
 - Full run: 1,938 examples × two conditions; 20m59s end-to-end, including model load and 10,000 bootstrap replicates. Candidate scoring took 1,230.06s; no GPU or cloud compute was used.
 - Environment: Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2, PyAV 18.1.0; FP32 CPU inference, two CPU threads.
