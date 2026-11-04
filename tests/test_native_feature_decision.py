@@ -297,3 +297,101 @@ def test_cached_fusion_requires_all_required_fresh_streams_and_returns_json(tmp_
     assert [item["option_id"] for item in selected["options"]] == ["a", "b"]
     assert sum(item["probability"] for item in selected["options"]) == pytest.approx(1.0)
     assert len(calls) == 1
+
+
+def test_text_criterion_features_change_typed_choice_and_roundtrip(tmp_path):
+    from tiny_omni_decision.fusion_decision import FusionDecisionScorer
+    from tiny_omni_decision.native_feature_decision import decide_cached_native_fusion
+
+    feature_path = tmp_path / "sensor.npz"
+    np.savez(
+        feature_path,
+        values=np.array([[0.25], [0.5]], dtype=np.float32),
+        timestamps_ms=np.array([10.0, 20.0]),
+        valid_mask=np.array([True, True]),
+    )
+    batch = ObservationBatch.model_validate(
+        {
+            "schema_version": "1.0",
+            "observations": [
+                {
+                    "modality": "sensor",
+                    "source_id": "sensor-1",
+                    "payload_ref": str(feature_path),
+                    "payload_sha256": hashlib.sha256(feature_path.read_bytes()).hexdigest(),
+                    "clock_id": "clock-a",
+                    "timestamps_ms": (10.0, 20.0),
+                    "valid_mask": (True, True),
+                    "channels": [
+                        {"name": "level", "unit": "a.u.", "scale": 1.0, "offset": 0.0}
+                    ],
+                }
+            ],
+            "options": [
+                {"option_id": "low", "attributes": {"score": -10.0}},
+                {"option_id": "high", "attributes": {"score": 10.0}},
+            ],
+            "criterion": {"kind": "text", "value": "choose the higher score"},
+        }
+    )
+    schema = TypedOptionSchema(numeric=(NumericOptionField("score"),))
+    model = FusionDecisionScorer({"sensor": 1}, option_dim=1, criterion_dim=1, width=2).eval()
+    # Fixed synthetic rule: choose the numeric option matching the encoded
+    # criterion polarity. No fitting or external data is involved.
+    with torch.no_grad():
+        for parameter in model.parameters():
+            parameter.zero_()
+        first = model.scorer.network[0]
+        first.weight[0, 3] = 1.0
+        first.weight[0, 5] = 1.0
+        first.bias[0] = -10.0
+        first.weight[1, 3] = -1.0
+        first.weight[1, 5] = -1.0
+        first.bias[1] = -10.0
+        model.scorer.network[2].weight.fill_(1.0)
+
+    synthetic_encoder = {
+        "choose the higher score": torch.tensor([10.0]),
+        "choose the lower score": torch.tensor([-10.0]),
+    }
+
+    def decide(request):
+        return decide_cached_native_fusion(
+            model,
+            request,
+            source_by_modality={"sensor": "sensor-1"},
+            query_time_ms=20.0,
+            max_age_ms=10.0,
+            required_modalities=("sensor",),
+            option_schema=schema,
+            criterion_encoder=synthetic_encoder.__getitem__,
+        )
+
+    high = decide(batch)
+    low_request = batch.model_copy(deep=True)
+    low_request.criterion.value = "choose the lower score"
+    low = decide(low_request)
+    assert high["selected_option_id"] == "high"
+    assert low["selected_option_id"] == "low"
+    assert [row["option_id"] for row in high["options"]] == ["low", "high"]
+    assert sum(row["probability"] for row in high["options"]) == pytest.approx(1.0)
+
+    reversed_request = batch.model_copy(deep=True)
+    reversed_request.options = tuple(reversed(reversed_request.options))
+    reversed_high = decide(reversed_request)
+    assert reversed_high["selected_option_id"] == "high"
+    assert {
+        row["option_id"]: row["probability"] for row in reversed_high["options"]
+    } == pytest.approx({row["option_id"]: row["probability"] for row in high["options"]})
+
+    checkpoint = tmp_path / "criterion-fusion.pt"
+    torch.save(model.state_dict(), checkpoint)
+    reloaded = FusionDecisionScorer(
+        {"sensor": 1}, option_dim=1, criterion_dim=1, width=2
+    ).eval()
+    reloaded.load_state_dict(torch.load(checkpoint, map_location="cpu", weights_only=True))
+    original_model = model
+    model = reloaded
+    reloaded_high = decide(batch)
+    assert reloaded_high == high
+    model = original_model

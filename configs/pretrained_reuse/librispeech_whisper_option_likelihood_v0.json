@@ -1,0 +1,67 @@
+{
+  "experiment_id": "librispeech-whisper-tiny-option-likelihood-v0",
+  "purpose": "One-time frozen Path A audio-text candidate-likelihood diagnostic on the existing fixed LibriSpeech four-choice task.",
+  "pre_registration_parent_commit": "26ac09d3554b7a51bd59efa82b1d37b9ce1c003c",
+  "model": {
+    "id": "openai/whisper-tiny",
+    "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "license": "Apache-2.0 per pinned model card",
+    "parameters": 37760640,
+    "checkpoint_bytes": 151061672,
+    "checkpoint_sha256": "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395",
+    "local_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\path-a-modular-runtime-assembly-v4\\components\\audio\\models\\audio-whisper-tiny",
+    "loading": "local_files_only; no model download; FP32; evaluation mode"
+  },
+  "data": {
+    "source": "OpenSLR SLR12 LibriSpeech dev-clean",
+    "license": "CC BY 4.0",
+    "archive_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\librispeech-dev-clean-hardneg-v0\\dev-clean.tar.gz",
+    "archive_sha256": "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3",
+    "examples_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\librispeech-audio-hard-negatives-v0\\evaluation-examples.jsonl",
+    "examples_sha256": "1f17d86a15faecc3ba3e13cd406dfd0119ef17850d1a7206956a70f4eb801923",
+    "ordered_sample_ids_sha256": "709687d926f46907a3c5d447d8921b51cb8f1188163f25fd777b11dfae34384c",
+    "examples": 1938,
+    "conditions": ["random_distractors", "hard_distractors"],
+    "condition_ids_options_targets_and_target_positions": "reuse exactly from the existing fixed evaluation manifest",
+    "exposure": "Previously inspected public dev-clean development IDs; not blind, not independent project-level evidence, and not sealed audit data."
+  },
+  "scoring": {
+    "question": "Which exact transcript matches the spoken audio?",
+    "decoder_prefix": ["<|startoftranscript|>", "<|en|>", "<|transcribe|>", "<|notimestamps|>"],
+    "candidate_text": "Use each supplied transcript verbatim after stripping only outer whitespace.",
+    "score": "teacher-forced sum of log probabilities for transcript tokens plus end-of-text, divided by the number of transcript tokens plus end-of-text",
+    "probabilities": "softmax of the four mean token log-likelihood scores; no fitted temperature or calibration",
+    "precision": "FP32",
+    "option_count": 4,
+    "primary_metrics": ["accuracy", "NLL", "multiclass Brier", "ECE-15", "mean confidence"],
+    "paired_uncertainty": {
+      "method": "paired percentile bootstrap by LibriSpeech speaker ID",
+      "replicates": 10000,
+      "seed": 17,
+      "contrast": "hard-distractor minus random-distractor metrics"
+    }
+  },
+  "execution": {
+    "device": "cpu",
+    "training": false,
+    "calibration": false,
+    "checkpoint_selection": false,
+    "gpu_or_cloud": false,
+    "archive_handling": "read-only sequential tar stream; no extraction",
+    "smoke_examples": 8,
+    "expected_full_examples_per_condition": 1938,
+    "new_output_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\librispeech-whisper-tiny-option-likelihood-20261105-attempt-01"
+  },
+  "baseline": {
+    "run_report_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\librispeech-audio-hard-negatives-v0\\report.json",
+    "run_report_sha256": "087988dcfc2373a8cb38f339dd26e8badd2d7e69bf76ea13ac91edcc9f56c791",
+    "random_distractors": {"accuracy": 0.2652, "nll": 2.6085, "brier": 1.0880, "ece_15": 0.4487},
+    "hard_distractors": {"accuracy": 0.2637, "nll": 2.5361, "brier": 1.0841, "ece_15": 0.4425},
+    "identity": "unchanged Path A Speech Commands Audio+Text readout, same fixed IDs and choices"
+  },
+  "claim_limits": [
+    "This is a fixed-model development comparison, not a blind result or product release evaluation.",
+    "Whisper pretraining overlap with LibriSpeech is unknown; do not claim decontaminated generalization.",
+    "No general speech, arbitrary text reasoning, multimodal fusion, or 95-percent product claim follows from this narrow task."
+  ]
+}

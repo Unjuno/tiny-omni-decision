@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 import numpy as np
@@ -355,6 +355,7 @@ def decide_cached_native_fusion(
     option_schema: TypedOptionSchema | None = None,
     criterion_features: Tensor | None = None,
     criterion_present: bool = False,
+    criterion_encoder: Callable[[str], Tensor] | None = None,
     feature_normalization: dict[str, tuple[Tensor, Tensor]] | None = None,
     temperature: float = 1.0,
 ) -> dict[str, object]:
@@ -363,7 +364,10 @@ def decide_cached_native_fusion(
     Cache timestamps are treated as evidence-availability times by
     ``gather_aligned_features``. This adapter validates shared clock metadata,
     and abstains before model inference if any task-required modality is absent
-    or stale. It consumes no raw media and makes no model-quality claim.
+    or stale. Text criteria may use a caller-supplied frozen encoder callback;
+    typed or spoken criteria require caller-supplied ``criterion_features``.
+    The adapter imports and loads no text or speech encoder and consumes no raw
+    media.
     """
     batch = ObservationBatch.model_validate(batch.model_dump())
     if not isinstance(model, FusionDecisionScorer):
@@ -375,8 +379,12 @@ def decide_cached_native_fusion(
     if not required or not required <= names:
         raise ValueError("at least one configured required modality is required")
     batch.require_shared_clock()
-    if batch.criterion is not None and batch.criterion.kind != "typed":
-        raise ValueError("cached native fusion does not encode free-text or spoken criteria")
+    if batch.criterion is not None and batch.criterion.kind == "text":
+        if criterion_features is None and not criterion_present and criterion_encoder is not None:
+            criterion_features = criterion_encoder(batch.criterion.value)
+            criterion_present = True
+    if criterion_features is not None and not isinstance(criterion_features, Tensor):
+        raise TypeError("criterion encoder must return a torch Tensor")
     if (option_schema is None) == (option_features is None):
         raise ValueError("provide exactly one typed option schema or option feature matrix")
     if option_schema is not None:
@@ -387,7 +395,7 @@ def decide_cached_native_fusion(
     if (criterion_features is None) != (not criterion_present):
         raise ValueError("present criterion requires a feature vector; absent criterion forbids it")
     if batch.criterion is not None and not criterion_present:
-        raise ValueError("typed batch criterion requires its precomputed criterion features")
+        raise ValueError("batch criterion requires precomputed criterion features")
     if criterion_features is not None and criterion_features.shape != (model.criterion_dim,):
         raise ValueError("criterion features must match the model criterion width")
     if (not math.isfinite(query_time_ms) or not math.isfinite(max_age_ms)

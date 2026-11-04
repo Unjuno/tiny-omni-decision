@@ -1,0 +1,74 @@
+{
+  "experiment_id": "qasc-same-state-new-criterion-seed17-v1",
+  "source": "allenai/qasc",
+  "source_revision": "a34ba204eb9a33b919c10cc08f4f1c8dae5ec070",
+  "license": "CC-BY-4.0",
+  "split": "official TRAIN only; fixed within-state held-question split",
+  "train_rows": 7451,
+  "held_rows": 683,
+  "held_state_groups": 666,
+  "seed": 17,
+  "evidence_train_sha256": "6ad3536ebba70a35f87bf078d0d2837df09fda652201a2b4a6fd7d7b01ed7f0b",
+  "selection": {
+    "state_identity": "SHA-256 of normalized ordered evidence state; exactly one source fact-pair group per normalized state",
+    "held_question": "Choose one globally unique normalized question per eligible state using Python random.Random(17) over sorted state keys and sorted eligible questions; hold all rows with that question",
+    "state_overlap": "intentional: each held state has at least one other training question",
+    "question_overlap": "zero normalized question overlap",
+    "question_option_overlap": "zero normalized question plus sorted option-set overlap"
+  },
+  "encoder": {
+    "id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+    "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+    "weight_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+    "parameters_frozen": 17389824,
+    "max_sequence_length": 256
+  },
+  "readout": {
+    "class": "FusionDecisionScorer",
+    "modality_dimensions": {
+      "text_state": 384
+    },
+    "option_dim": 384,
+    "criterion_dim": 384,
+    "width": 128,
+    "trainable_parameters": 164610,
+    "loss": "8-way cross entropy",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_questions": 64,
+    "epochs": 8,
+    "seed": 17,
+    "device": "cpu",
+    "checkpoint_rule": "single final epoch-8 checkpoint; no held-question evaluation before final epoch",
+    "torch_threads": 4
+  },
+  "held_controls": [
+    "correct state and criterion",
+    "correct state with criterion absent",
+    "zero state-content vector with the state slot present",
+    "deterministic Sattolo-deranged different-state feature with criterion present",
+    "option-order permutation invariance",
+    "exact save/reload prediction parity"
+  ],
+  "uncertainty": {
+    "unit": "held state group",
+    "method": "paired cluster bootstrap with replacement",
+    "repetitions": 5000,
+    "seed": 1718,
+    "interval": "percentile 95%"
+  },
+  "forbidden_inputs": [
+    "QASC official validation shard",
+    "QASC official test shard",
+    "sealed audit",
+    "any non-TRAIN rows"
+  ],
+  "exposure": "All QASC TRAIN rows were already included in the preceding five-fold experiment universe; this is an internal development diagnostic, not an independent project-level holdout.",
+  "claim_scope": "text-only same-fact-state/new-question transfer diagnostic; not multimodal, persistent-cache, broad text, or product quality",
+  "expected_split_hashes": {
+    "train_ids_sha256": "6d7408b3cf5bb58a6dabe753ed88d90a744645564af60b87df1d144c4bb460cf",
+    "held_ids_sha256": "d44f521df10ddee02e026613438c30453eb4c89ccca5683a9e687062ab2f1918",
+    "held_question_order_sha256": "87217db85a7eff7ec5deb1e3c8326e3bc6534a9e592d44fe252e4daa2bf6e6f2"
+  }
+}

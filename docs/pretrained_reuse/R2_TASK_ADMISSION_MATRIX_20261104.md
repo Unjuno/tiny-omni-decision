@@ -53,3 +53,53 @@ A read-only split-code/manifest screen found only 10 groups unselected from the 
 ## CREMA-D source-code follow-up — 2026-11-04
 
 Pinned source code confirms same-filename `VoiceVote`, `FaceVote`, and `MultiModalVote` columns, so a common AV target is structurally possible. The repository requests usage registration, while individual voice/face rights, consent scope, and a verified actor/sentence split remain unresolved. Keep this narrow emotion source `REVIEW_NOT_ADMITTED`; no data access, registration, or fit. See [source-code follow-up](R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md#pinned-source-code-follow-up--2026-11-04).
+
+## 2026-11-05 RoboMNIST task-native CV follow-up
+
+The frozen TRAIN-only five-fold condition CV is complete for the separate
+10-option “which digit did the robot draw?” task. It used 780 TRAIN source
+groups across 60 arm × speed × digit conditions; complete conditions were held
+out together. Original validation arrays and sealed audit stayed closed.
+At step 25, joint AV reached 20.64% accuracy (10% chance), versus 18.72%
+audio-only and 10.90% video-only, but joint NLL/ECE were 12.929/0.701.
+By step 400, all readouts fit their training folds while OOF calibration and
+class recall remained poor. This is condition-level overfitting, not a useful
+decision-quality pass and not evidence that the target needs both modalities.
+Do not tune or select another checkpoint on these OOF folds or the already
+exposed original validation.
+
+The matched ordered-vs-shuffled recurrent follow-up remained near chance.
+At 50 updates ordered accuracy/NLL/ECE were 50.0%/0.706/0.020, versus
+49.3%/1.370/0.337 shuffled and 50.2%/0.716/0.083 pooled. At 400 updates,
+ordered accuracy fell to 48.9% and NLL rose to 0.794; it did not beat pooled
+accuracy/NLL (53.2%/1.245). This does not justify a larger LSTM/xLSTM or more
+RoboMNIST fitting. Preserve both studies as negative, task-scoped development
+evidence; they do not establish a general architecture limit.
+
+Full provenance and curves: [10-option Decision results](R2_ROBOMNIST_DIGIT_DECISION_RESULTS_20261105.md),
+[temporal readout results](R2_ROBOMNIST_TEMPORAL_CV_RESULTS_20261105.md).
+The candidate remains **not admitted for product promotion**. Next fitting work
+still requires a distinct source with explicit rights, fresh independent
+groups, and a frozen task/control design; do not substitute another model
+variant on the same exposed RoboMNIST source.
+
+## BBBD video + sensor source screen — 2026-11-05
+
+BBBD v1.1 has a documented CC BY 4.0 grant for its released neural,
+physiological, and behavioral data, but the 11 stimulus videos are third-party
+YouTube sources and video-training rights were not established. Correct-answer
+selection is answerable from video content without participant signals; the
+alternative human-response prediction task is plausible but unvalidated and
+requires matched unimodal controls. Subject IDs restart per experiment and
+questions/videos recur; there are only 11 underlying video identities. Keep
+`REVIEW_NOT_ADMITTED` for joint video + sensor fitting; no payload was accessed.
+See [BBBD source/task screen](R2_BBBD_SOURCE_TASK_SCREEN_20261105.md).
+
+## 2026-11-05 Action Verb Corpus source screen
+
+The OFAI resource page presents a small synchronized audio/video/motion task
+and says CC BY 4.0, but its linked Zenodo release labels the dataset
+CC BY-NC-SA 4.0. Audio also contains spoken descriptions of the action, so
+both-input necessity is not established, and only 12 participants/46 episodes
+are available. Keep it REVIEW_NOT_ADMITTED; no payload was accessed. See
+the [source screen](R2_ACTION_VERB_CORPUS_SOURCE_SCREEN_20261105.md).

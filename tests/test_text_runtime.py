@@ -5,7 +5,10 @@ import pytest
 torch = pytest.importorskip("torch", reason="optional Path A model-evaluation dependency")
 pytest.importorskip("transformers", reason="optional Path A model-evaluation dependency")
 
-from tiny_omni_decision.text_runtime import candidate_features  # noqa: E402
+from tiny_omni_decision.text_runtime import (  # noqa: E402
+    TypedTextDecisionRuntime,
+    candidate_features,
+)
 
 
 def test_candidate_features_preserve_supplied_option_count_and_shape() -> None:
@@ -34,3 +37,36 @@ def test_candidate_features_reject_invalid_inputs(
 ) -> None:
     with pytest.raises(ValueError):
         candidate_features(context, options)
+
+
+def test_text_runtime_encodes_a_single_nonempty_criterion(monkeypatch) -> None:
+    runtime = object.__new__(TypedTextDecisionRuntime)
+    encoded_texts: list[str] = []
+
+    def encode(texts):
+        encoded_texts.extend(texts)
+        return torch.ones((len(texts), 384), dtype=torch.float32)
+
+    monkeypatch.setattr(runtime, "_encode", encode)
+
+    result = runtime.encode_criterion("prefer the higher score")
+
+    assert encoded_texts == ["prefer the higher score"]
+    assert result.shape == (384,)
+    assert torch.isfinite(result).all()
+
+
+@pytest.mark.parametrize("texts", [[], [""], ["valid", " "]])
+def test_text_runtime_rejects_empty_text_feature_batches(texts) -> None:
+    runtime = object.__new__(TypedTextDecisionRuntime)
+
+    with pytest.raises(ValueError, match="nonempty strings"):
+        runtime.encode_texts(texts)
+
+
+@pytest.mark.parametrize("criterion", ["", "  ", None, 3])
+def test_text_runtime_rejects_empty_or_nontext_criterion(criterion) -> None:
+    runtime = object.__new__(TypedTextDecisionRuntime)
+
+    with pytest.raises(ValueError, match="nonempty string"):
+        runtime.encode_criterion(criterion)
