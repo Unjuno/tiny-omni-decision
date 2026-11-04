@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-import torch
 
 from tiny_omni_decision.qasc_text_criterion_fusion import (
     qasc_probability_metrics,
@@ -45,6 +44,7 @@ def test_qasc_roles_reject_invalid_or_nontrain_rows(mutate):
 
 
 def test_qasc_probability_metrics_report_calibrated_uniform_control():
+    torch = pytest.importorskip("torch")
     probabilities = torch.full((4, 8), 1 / 8)
     targets = torch.tensor([0, 1, 2, 3])
 
@@ -58,5 +58,6 @@ def test_qasc_probability_metrics_report_calibrated_uniform_control():
 
 
 def test_qasc_probability_metrics_reject_invalid_rows():
+    torch = pytest.importorskip("torch")
     with pytest.raises(ValueError, match="sum to one"):
         qasc_probability_metrics(torch.full((2, 8), 0.2), torch.tensor([0, 1]))

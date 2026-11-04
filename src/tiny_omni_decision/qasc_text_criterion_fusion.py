@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.nn import functional as F
+if TYPE_CHECKING:
+    import torch
 
 
 def qasc_text_roles(row: dict[str, Any]) -> tuple[str, str, list[str]]:
@@ -32,6 +32,9 @@ def qasc_text_roles(row: dict[str, Any]) -> tuple[str, str, list[str]]:
 def qasc_probability_metrics(
     probabilities: torch.Tensor, targets: torch.Tensor, *, bins: int = 15
 ) -> dict[str, float | int]:
+    import torch
+    from torch.nn import functional as F
+
     probabilities = probabilities.float()
     targets = targets.long()
     if probabilities.ndim != 2 or probabilities.shape != (len(targets), 8):
