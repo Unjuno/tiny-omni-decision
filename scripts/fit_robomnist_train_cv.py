@@ -25,6 +25,7 @@ from tiny_omni_decision.robomnist_av_match_readout import BilinearAVMatchScorer 
 from tiny_omni_decision.robomnist_train_cv import grouped_folds, pooled_normalize  # noqa: E402
 
 POINTS = (1, 25, 50, 100, 200, 400)
+ORIGINAL_SCALE = math.sqrt(32)
 
 
 def digest(value):
@@ -72,7 +73,7 @@ class ScoreScaleScorer(BilinearAVMatchScorer):
         return super().forward(audio, video) * (self.score_scale / math.sqrt(32))
 
 
-def run(manifest_path, cache, output, *, score_scale=math.sqrt(32)):
+def run(manifest_path, cache, output, *, score_scale=ORIGINAL_SCALE):
     if output.exists():
         raise FileExistsError(output)
     if shutil.disk_usage(output.parent).free < 2 * 1024**3:
@@ -84,7 +85,8 @@ def run(manifest_path, cache, output, *, score_scale=math.sqrt(32)):
     torch.use_deterministic_algorithms(True)
     config = {
         "scope": "TRAIN-only internal development; not independent product evaluation",
-        "score_scale": score_scale, "seed": 17, "folds": 5, "steps": 400, "points": POINTS, "rank": 32,
+        "score_scale": score_scale,
+        "seed": 17, "folds": 5, "steps": 400, "points": POINTS, "rank": 32,
         "learning_rate": 0.01, "weight_decay": 0.0001, "optimizer": "AdamW",
         "gradient_clip": 5.0, "batch": "all fitting rows each update",
         "selection": "none; all preregistered steps reported", "device": "cpu",

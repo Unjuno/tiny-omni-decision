@@ -62,6 +62,7 @@ def test_overlap_fails_before_any_feature_open(tmp_path, monkeypatch):
 
 def test_scale_arm_changes_only_cosine_multiplier():
     import math
+
     import torch
 
     torch.manual_seed(17)
