@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "candidate_id": "nvidia-physicalai-singlearm-cabinet-left",
+  "status": "REVIEW_NOT_ADMITTED",
+  "source": {
+    "publisher": "NVIDIA",
+    "dataset_id": "nvidia/PhysicalAI-Robotics-Manipulation-SingleArm",
+    "revision": "73c00c18e7ca108e91846294b20a1d7cd5de9340",
+    "subset": "panda-open-cabinet-left",
+    "revision_observed_date": "2026-11-02",
+    "license": "CC-BY-4.0",
+    "license_evidence": "NVIDIA publisher dataset card at the pinned revision declares cc-by-4.0 and says commercial use is available; attribution required.",
+    "publisher_card_url": "https://huggingface.co/datasets/nvidia/PhysicalAI-Robotics-Manipulation-SingleArm"
+  },
+  "inventory": {
+    "full_dataset_bytes_from_publisher_api": 15138436544,
+    "subset_file_count": 7564,
+    "subset_bytes": 1582348397,
+    "subset_inventory_sha256": "edf7843093cb499e0f6c91834bcb114cad74aee0438fae60b40d7e08ed0dd04f",
+    "subset_inventory_digest_recipe": "Sort files by rfilename, form UTF-8 lines rfilename<TAB>size<TAB>(LFS SHA-256 or Git blob ID), join by LF without a trailing LF, then SHA-256.",
+    "groups": {
+      "meta": {"files": 4, "bytes": 7198633},
+      "data": {"files": 1512, "bytes": 46600882},
+      "videos": {"files": 6048, "bytes": 1528548882}
+    },
+    "video_streams": {
+      "observation.images.world_camera": {"files": 1512, "bytes": 734010701},
+      "observation.images.hand_camera": {"files": 1512, "bytes": 498805293},
+      "observation.depths.world_camera": {"files": 1512, "bytes": 244470182},
+      "observation.depths.hand_camera": {"files": 1512, "bytes": 51262706}
+    }
+  },
+  "pinned_metadata": {
+    "info_json": {
+      "path": "panda-open-cabinet-left/meta/info.json",
+      "bytes": 5319,
+      "sha256": "d782c809c30490f96bb665343a39cf423626de8e638dd53905c379d1944ff6df",
+      "episodes": 1512,
+      "frames": 220038,
+      "fps": 30,
+      "tasks": 1,
+      "source_split": {"train": "0:1512"},
+      "state_dim": 25,
+      "state_semantics": "end-effector pose, gripper position/velocity, robot joint position/velocity; no scene object poses listed",
+      "action_dim": 8,
+      "action_semantics": "7 joint deltas plus gripper"
+    },
+    "tasks_jsonl": {
+      "path": "panda-open-cabinet-left/meta/tasks.jsonl",
+      "bytes": 53,
+      "sha256": "1b56befc214182e48ccbc1a8b35d67d6be6a3bce92fa4ef054fb52377bb5b43d",
+      "only_task": "panda-open-cabinet-left"
+    },
+    "episodes_jsonl": {
+      "path": "panda-open-cabinet-left/meta/episodes.jsonl",
+      "bytes": 115313,
+      "sha256": "f81631538a9107e856e78c8bb040f58175e4720864727c4d192a0c5f191e775a",
+      "rows": 1512
+    },
+    "episodes_stats_jsonl": {
+      "path": "panda-open-cabinet-left/meta/episodes_stats.jsonl",
+      "bytes": 7077948,
+      "sha256": "e9e2f0019d14c2df8ea67cd88ca4a7a6b136aa2cabc425c15ee34be5ed160577",
+      "git_blob_sha1": "d1589232f1a507e0f7e8f9f337b89ef0d4a6dea3",
+      "rows": 1512,
+      "unique_episode_indices": 1512,
+      "scene_identity_present": false
+    }
+  },
+  "local_sample_verification": {
+    "artifact_dir": "C:/CodexArtifacts/pretrained-reuse-r2/physicalai-singlearm-source-smoke-01",
+    "payloads": [
+      {
+        "path": "panda-open-cabinet-left/data/chunk-000/episode_000000.parquet",
+        "bytes": 28533,
+        "sha256": "24461cd3a2d4a698ca50b84ef917e12a0ccf58dcc2c4f19d467eb462bb640fff"
+      },
+      {
+        "path": "panda-open-cabinet-left/videos/chunk-000/observation.images.world_camera/episode_000000.mp4",
+        "bytes": 336875,
+        "sha256": "355d5009695f4469de04efded34d74cb71fd2d33939229c16cfff6fa468a4e67"
+      },
+      {
+        "path": "panda-open-cabinet-left/videos/chunk-000/observation.images.hand_camera/episode_000000.mp4",
+        "bytes": 198243,
+        "sha256": "a24cdce9478614b2de5aa583f44d6184e04a9acd4263c8a2adb525c79f1bbaa4"
+      }
+    ],
+    "decoded_rows": 134,
+    "decoded_rgb_frames_per_stream": 134,
+    "resolution": "512x512",
+    "fps": 30,
+    "decoder": "PyAV 18.1.0 CPU",
+    "parquet": "PyArrow 25.0.1"
+  },
+  "frozen_visual_encoder_smoke": {
+    "model": "facebook/dinov2-base",
+    "revision": "f9e44c814b77203eaa57a6bdbbd535f21ede1415",
+    "license": "Apache-2.0",
+    "checkpoint_bytes": 346345912,
+    "checkpoint_sha256": "d73036b56966966d07975d696bde331762f37297e2f095de8cea0040c3aa0841",
+    "parameters": 86580480,
+    "trainable_parameters": 0,
+    "frameworks": {"torch": "2.6.0+cu124", "transformers": "5.6.2", "python": "3.11.9"},
+    "device": "cpu",
+    "input_shape": [2, 3, 224, 224],
+    "output_shape": [2, 257, 768],
+    "finite": true,
+    "forward_seconds_two_synchronized_rgb_frames": 0.444116,
+    "reload_exact": true,
+    "reload_max_abs_diff": 0.0,
+    "output_sha256": "ff71c7ca839666c1a610c27c9b7be39521c2359ab0f1cce0f14e94764422b737",
+    "artifact_dir": "C:/CodexArtifacts/pretrained-reuse-r2/dinov2-base-runtime-smoke-01",
+    "interpretation": "Per-frame image feature and safe local reload smoke only; no temporal or task quality evidence."
+  },
+  "candidate_task": {
+    "proposal": "Video + proprioception selection among supplied numeric next-action candidates",
+    "admitted": false,
+    "known_limits": [
+      "single scripted task",
+      "source has no validation or audit split",
+      "scene/layout identity across episodes is unverified",
+      "continuous-action-to-option mapping is not frozen",
+      "both-input necessity has not been tested",
+      "time-aware feature and Decision runtime not implemented"
+    ]
+  },
+  "accessed": {
+    "metadata": ["publisher card", "pinned repository file inventory", "info.json", "tasks.jsonl", "episodes.jsonl", "episodes_stats.jsonl"],
+    "payload": ["one training episode parquet", "same-episode world RGB video", "same-episode hand RGB video"],
+    "not_accessed": ["depth payloads", "other episodes", "validation labels", "sealed audit", "model checkpoints"]
+  },
+  "training_or_task_evaluation": "none",
+  "gpu_used": false
+}

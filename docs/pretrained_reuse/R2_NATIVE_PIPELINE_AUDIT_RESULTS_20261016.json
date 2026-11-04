@@ -1,0 +1,1085 @@
+{
+  "status": "PASS_AUDIT_EXECUTION_WITH_DATA_LIMITATIONS",
+  "goal_complete": false,
+  "model_promoted": false,
+  "executed_source_commit": "69e6068c5cd38bc61a83238a3bfc6f6002ebe8f3",
+  "artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2",
+  "receipts": {
+    "pipeline_initial": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-pipeline-audit-01\\result.json",
+      "sha256": "ad3f41fdb66e5d243ff182e4ad7bc0da9fe9c3b013c3a52a696e19fd713985d3",
+      "seconds": 51.16201810000348
+    },
+    "pipeline_complete": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-pipeline-audit-02\\result.json",
+      "sha256": "616a13abcf9cd0541b1323cd611e17750e0a11b961f85898ac874a21cd3defc2",
+      "seconds": 60.711381399974925
+    },
+    "metrics_initial": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-pipeline-metrics-audit-01\\result.json",
+      "sha256": "3c2347f38f2b8f585a0dd4114585764b25069e721fa6f18c7c85bda0a27cc288",
+      "seconds": 2.496378400013782
+    },
+    "metrics_complete": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-pipeline-metrics-audit-02\\result.json",
+      "sha256": "e5e59fe406bfeb366c4f14d20bc7b9296a35c777092ef096ded1b1fa133dad5b",
+      "seconds": 2.7300614999840036
+    },
+    "visualization": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-pipeline-audit-visual-01\\result.json",
+      "sha256": "9f7078b40df6b08ae7a22344c94de14594e4d16afd872daa1d0895b1245617d8",
+      "seconds": null
+    }
+  },
+  "optimizer_updates": 0,
+  "gpu_used": false,
+  "cloud_cost": 0,
+  "calibration_payloads_loaded": false,
+  "sealed_audit_loaded": false,
+  "findings": {
+    "consumed_zero_positive_events": [
+      "clapping",
+      "telephone",
+      "water tap",
+      "bell",
+      "knock"
+    ],
+    "missed_available_positive_events": [
+      "clapping",
+      "telephone",
+      "water tap",
+      "knock"
+    ],
+    "no_available_train_positive_events": [
+      "bell"
+    ],
+    "no_validation_positive_events": [
+      "water tap"
+    ],
+    "joint_independent_audio_video_observations": 0,
+    "pixel_or_frame_loss_does_not_establish_answer_impossibility": true
+  },
+  "associations": {
+    "rows": 124926,
+    "conflicting_identical_inputs": []
+  },
+  "structured_text_labels": {
+    "checked": {
+      "train:condition_relevance_v1": 8192,
+      "train:programmatic_decision_v1": 8192,
+      "train:curriculum": 1024,
+      "validation:condition_relevance_v1": 2048,
+      "validation:programmatic_decision_v1": 3072,
+      "validation:curriculum": 2048,
+      "validation:binding": 1024
+    },
+    "mismatches": [],
+    "unverified_legacy": {
+      "train:original:noul": 412,
+      "train:original:choice": 396,
+      "train:original:score": 216,
+      "validation:original:choice": 1008,
+      "validation:original:noul": 987,
+      "validation:original:score": 545
+    },
+    "scope": "label recomputation; generator-rule/question wording reviewed separately"
+  },
+  "independent_starss_annotations": {
+    "checked_windows": 2441,
+    "checked_queries": 29292,
+    "source_members": [
+      "metadata_dev/dev-train-tau/fold3_room12_mix001.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix002.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix003.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix004.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix005.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix006.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix007.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix008.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix009.csv",
+      "metadata_dev/dev-train-tau/fold3_room12_mix010.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix001.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix002.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix003.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix004.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix005.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix006.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix007.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix008.csv",
+      "metadata_dev/dev-train-tau/fold3_room13_mix009.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix001.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix002.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix003.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix004.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix005.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix006.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix007.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix008.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix009.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix010.csv",
+      "metadata_dev/dev-train-sony/fold3_room22_mix011.csv",
+      "metadata_dev/dev-train-tau/fold3_room4_mix001.csv",
+      "metadata_dev/dev-train-tau/fold3_room4_mix004.csv",
+      "metadata_dev/dev-train-tau/fold3_room4_mix005.csv",
+      "metadata_dev/dev-train-tau/fold3_room4_mix006.csv",
+      "metadata_dev/dev-train-tau/fold3_room4_mix007.csv",
+      "metadata_dev/dev-train-tau/fold3_room4_mix008.csv",
+      "metadata_dev/dev-train-tau/fold3_room6_mix001.csv",
+      "metadata_dev/dev-train-tau/fold3_room6_mix002.csv",
+      "metadata_dev/dev-train-tau/fold3_room6_mix003.csv",
+      "metadata_dev/dev-train-tau/fold3_room6_mix004.csv",
+      "metadata_dev/dev-train-tau/fold3_room6_mix005.csv",
+      "metadata_dev/dev-train-tau/fold3_room6_mix006.csv",
+      "metadata_dev/dev-train-tau/fold3_room6_mix007.csv",
+      "metadata_dev/dev-train-tau/fold3_room7_mix001.csv",
+      "metadata_dev/dev-train-tau/fold3_room7_mix002.csv",
+      "metadata_dev/dev-train-tau/fold3_room7_mix003.csv",
+      "metadata_dev/dev-train-tau/fold3_room7_mix004.csv",
+      "metadata_dev/dev-train-tau/fold3_room7_mix005.csv",
+      "metadata_dev/dev-train-tau/fold3_room7_mix006.csv",
+      "metadata_dev/dev-train-tau/fold3_room14_mix001.csv",
+      "metadata_dev/dev-train-tau/fold3_room14_mix002.csv",
+      "metadata_dev/dev-train-tau/fold3_room14_mix003.csv",
+      "metadata_dev/dev-train-tau/fold3_room14_mix004.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix013.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix014.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix015.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix016.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix017.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix018.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix019.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix020.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix021.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix022.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix023.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix024.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix025.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix026.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix027.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix028.csv",
+      "metadata_dev/dev-train-sony/fold3_room21_mix029.csv"
+    ],
+    "brief_positive_frames": {
+      "train:17": 20,
+      "train:31": 29,
+      "train:3": 34,
+      "train:47": 21,
+      "train:45": 145,
+      "train:42": 35,
+      "train:5": 66,
+      "train:44": 36,
+      "train:40": 131,
+      "train:50": 1058,
+      "train:39": 44,
+      "train:35": 76,
+      "train:41": 46,
+      "train:49": 18,
+      "train:23": 26,
+      "train:2": 17,
+      "train:43": 37,
+      "train:30": 68,
+      "train:25": 64,
+      "train:16": 29,
+      "train:9": 16,
+      "train:36": 36,
+      "train:29": 23,
+      "train:34": 37,
+      "train:48": 29,
+      "train:33": 23,
+      "train:14": 18,
+      "train:38": 41,
+      "train:46": 25,
+      "train:1": 15,
+      "train:37": 33,
+      "train:32": 37,
+      "train:21": 18,
+      "train:27": 22,
+      "train:15": 55,
+      "train:22": 19,
+      "train:26": 18,
+      "train:13": 15,
+      "train:8": 24,
+      "train:6": 20,
+      "train:28": 11,
+      "train:24": 14,
+      "train:11": 15,
+      "train:4": 19,
+      "train:18": 16,
+      "train:10": 84,
+      "train:20": 70,
+      "train:19": 16,
+      "train:12": 14,
+      "train:7": 21,
+      "validation:39": 13,
+      "validation:50": 472,
+      "validation:41": 9,
+      "validation:2": 6,
+      "validation:31": 9,
+      "validation:32": 15,
+      "validation:18": 8,
+      "validation:49": 20,
+      "validation:1": 10,
+      "validation:46": 4,
+      "validation:40": 11,
+      "validation:33": 15,
+      "validation:48": 4,
+      "validation:43": 11,
+      "validation:27": 13,
+      "validation:34": 11,
+      "validation:47": 9,
+      "validation:29": 11,
+      "validation:44": 10,
+      "validation:12": 12,
+      "validation:19": 6,
+      "validation:7": 7,
+      "validation:14": 10,
+      "validation:11": 12,
+      "validation:36": 9,
+      "validation:30": 9,
+      "validation:10": 11,
+      "validation:20": 13,
+      "validation:5": 14,
+      "validation:3": 5,
+      "validation:45": 7,
+      "validation:4": 13,
+      "validation:35": 9,
+      "validation:9": 17,
+      "validation:21": 12,
+      "validation:23": 6,
+      "validation:28": 10,
+      "validation:8": 15,
+      "validation:15": 9,
+      "validation:37": 10,
+      "validation:42": 11,
+      "validation:6": 9,
+      "validation:16": 12,
+      "validation:13": 9,
+      "validation:38": 5,
+      "validation:22": 6,
+      "validation:24": 8,
+      "validation:25": 13,
+      "validation:26": 8,
+      "validation:17": 11
+    },
+    "disagreement": []
+  },
+  "exposure": {
+    "updates": 32768,
+    "presentations": 262144,
+    "unique_questions": 6656,
+    "by_source": {
+      "text:condition_relevance_v1": 683,
+      "text:programmatic_decision_v1": 682,
+      "text:curriculum": 497,
+      "text:original": 186,
+      "clevr4": 2048,
+      "lombard": 1024,
+      "starss": 1024,
+      "clevrer": 512
+    },
+    "train_available": 100580,
+    "label_coverage_file": "label-coverage.json"
+  },
+  "starss_support": {
+    "speech": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 1631,
+        "negative": 324,
+        "always_no_accuracy": 0.16572890025575449
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 70,
+        "negative": 15,
+        "always_no_accuracy": 0.17647058823529413
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 2240,
+        "negative": 480,
+        "always_no_accuracy": 0.17647058823529413
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 311,
+        "negative": 175,
+        "always_no_accuracy": 0.360082304526749
+      }
+    },
+    "clapping": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 9,
+        "negative": 1946,
+        "always_no_accuracy": 0.9953964194373401
+      },
+      "train_consumed_unique": {
+        "rows": 86,
+        "unique_rows": 86,
+        "positive": 0,
+        "negative": 86,
+        "always_no_accuracy": 1.0
+      },
+      "train_presentations": {
+        "rows": 2752,
+        "unique_rows": 86,
+        "positive": 0,
+        "negative": 2752,
+        "always_no_accuracy": 1.0
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 10,
+        "negative": 476,
+        "always_no_accuracy": 0.9794238683127572
+      }
+    },
+    "telephone": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 27,
+        "negative": 1928,
+        "always_no_accuracy": 0.9861892583120204
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 0,
+        "negative": 85,
+        "always_no_accuracy": 1.0
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 0,
+        "negative": 2720,
+        "always_no_accuracy": 1.0
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 19,
+        "negative": 467,
+        "always_no_accuracy": 0.9609053497942387
+      }
+    },
+    "laughter": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 273,
+        "negative": 1682,
+        "always_no_accuracy": 0.8603580562659846
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 6,
+        "negative": 79,
+        "always_no_accuracy": 0.9294117647058824
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 192,
+        "negative": 2528,
+        "always_no_accuracy": 0.9294117647058824
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 56,
+        "negative": 430,
+        "always_no_accuracy": 0.8847736625514403
+      }
+    },
+    "domestic sounds": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 249,
+        "negative": 1706,
+        "always_no_accuracy": 0.8726342710997442
+      },
+      "train_consumed_unique": {
+        "rows": 86,
+        "unique_rows": 86,
+        "positive": 10,
+        "negative": 76,
+        "always_no_accuracy": 0.8837209302325582
+      },
+      "train_presentations": {
+        "rows": 2752,
+        "unique_rows": 86,
+        "positive": 320,
+        "negative": 2432,
+        "always_no_accuracy": 0.8837209302325582
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 267,
+        "negative": 219,
+        "always_no_accuracy": 0.4506172839506173
+      }
+    },
+    "footsteps": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 105,
+        "negative": 1850,
+        "always_no_accuracy": 0.9462915601023018
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 3,
+        "negative": 82,
+        "always_no_accuracy": 0.9647058823529412
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 96,
+        "negative": 2624,
+        "always_no_accuracy": 0.9647058823529412
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 19,
+        "negative": 467,
+        "always_no_accuracy": 0.9609053497942387
+      }
+    },
+    "door": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 60,
+        "negative": 1895,
+        "always_no_accuracy": 0.969309462915601
+      },
+      "train_consumed_unique": {
+        "rows": 86,
+        "unique_rows": 86,
+        "positive": 6,
+        "negative": 80,
+        "always_no_accuracy": 0.9302325581395349
+      },
+      "train_presentations": {
+        "rows": 2752,
+        "unique_rows": 86,
+        "positive": 192,
+        "negative": 2560,
+        "always_no_accuracy": 0.9302325581395349
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 17,
+        "negative": 469,
+        "always_no_accuracy": 0.9650205761316872
+      }
+    },
+    "music": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 339,
+        "negative": 1616,
+        "always_no_accuracy": 0.8265984654731457
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 14,
+        "negative": 71,
+        "always_no_accuracy": 0.8352941176470589
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 448,
+        "negative": 2272,
+        "always_no_accuracy": 0.8352941176470589
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 229,
+        "negative": 257,
+        "always_no_accuracy": 0.5288065843621399
+      }
+    },
+    "instrument": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 73,
+        "negative": 1882,
+        "always_no_accuracy": 0.9626598465473146
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 1,
+        "negative": 84,
+        "always_no_accuracy": 0.9882352941176471
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 32,
+        "negative": 2688,
+        "always_no_accuracy": 0.9882352941176471
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 5,
+        "negative": 481,
+        "always_no_accuracy": 0.9897119341563786
+      }
+    },
+    "water tap": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 28,
+        "negative": 1927,
+        "always_no_accuracy": 0.9856777493606138
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 0,
+        "negative": 85,
+        "always_no_accuracy": 1.0
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 0,
+        "negative": 2720,
+        "always_no_accuracy": 1.0
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 0,
+        "negative": 486,
+        "always_no_accuracy": 1.0
+      }
+    },
+    "bell": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 0,
+        "negative": 1955,
+        "always_no_accuracy": 1.0
+      },
+      "train_consumed_unique": {
+        "rows": 86,
+        "unique_rows": 86,
+        "positive": 0,
+        "negative": 86,
+        "always_no_accuracy": 1.0
+      },
+      "train_presentations": {
+        "rows": 2752,
+        "unique_rows": 86,
+        "positive": 0,
+        "negative": 2752,
+        "always_no_accuracy": 1.0
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 32,
+        "negative": 454,
+        "always_no_accuracy": 0.934156378600823
+      }
+    },
+    "knock": {
+      "train_available": {
+        "rows": 1955,
+        "unique_rows": 1955,
+        "positive": 10,
+        "negative": 1945,
+        "always_no_accuracy": 0.9948849104859335
+      },
+      "train_consumed_unique": {
+        "rows": 85,
+        "unique_rows": 85,
+        "positive": 0,
+        "negative": 85,
+        "always_no_accuracy": 1.0
+      },
+      "train_presentations": {
+        "rows": 2720,
+        "unique_rows": 85,
+        "positive": 0,
+        "negative": 2720,
+        "always_no_accuracy": 1.0
+      },
+      "validation": {
+        "rows": 486,
+        "unique_rows": 486,
+        "positive": 4,
+        "negative": 482,
+        "always_no_accuracy": 0.9917695473251029
+      }
+    }
+  },
+  "task_support": {
+    "common": [
+      "clevr4:color",
+      "clevr4:count",
+      "clevr4:shape",
+      "clevr4:texture",
+      "clevrer:static_descriptive",
+      "clevrer:temporal_descriptive",
+      "lombard:adverb",
+      "lombard:color",
+      "lombard:command",
+      "lombard:letter",
+      "lombard:number",
+      "lombard:preposition",
+      "starss:bell",
+      "starss:clapping",
+      "starss:domestic sounds",
+      "starss:door",
+      "starss:footsteps",
+      "starss:instrument",
+      "starss:knock",
+      "starss:laughter",
+      "starss:music",
+      "starss:speech",
+      "starss:telephone",
+      "starss:water tap",
+      "text:curriculum:legacy:curriculum:conditional_selection",
+      "text:curriculum:legacy:curriculum:cost:maximum",
+      "text:curriculum:legacy:curriculum:cost:minimum",
+      "text:curriculum:legacy:curriculum:count",
+      "text:curriculum:legacy:curriculum:risk:maximum",
+      "text:curriculum:legacy:curriculum:risk:minimum",
+      "text:curriculum:legacy:curriculum:time:maximum",
+      "text:curriculum:legacy:curriculum:time:minimum",
+      "text:original:legacy:original:choice",
+      "text:original:legacy:original:noul",
+      "text:original:legacy:original:score",
+      "text:programmatic_decision_v1:numeric:count",
+      "text:programmatic_decision_v1:numeric:extremum:cost:maximum",
+      "text:programmatic_decision_v1:numeric:extremum:cost:minimum",
+      "text:programmatic_decision_v1:numeric:extremum:risk:maximum",
+      "text:programmatic_decision_v1:numeric:extremum:risk:minimum",
+      "text:programmatic_decision_v1:numeric:extremum:time:maximum",
+      "text:programmatic_decision_v1:numeric:extremum:time:minimum",
+      "text:programmatic_decision_v1:numeric:filter_min_cost"
+    ],
+    "train_only": [
+      "text:condition_relevance_v1:relevance:color:q0:key_value",
+      "text:condition_relevance_v1:relevance:color:q0:sentence",
+      "text:condition_relevance_v1:relevance:color:q1:key_value",
+      "text:condition_relevance_v1:relevance:color:q1:sentence",
+      "text:condition_relevance_v1:relevance:color:q2:key_value",
+      "text:condition_relevance_v1:relevance:color:q2:sentence",
+      "text:condition_relevance_v1:relevance:color:q3:key_value",
+      "text:condition_relevance_v1:relevance:color:q3:sentence",
+      "text:condition_relevance_v1:relevance:color:q4:key_value",
+      "text:condition_relevance_v1:relevance:color:q4:sentence",
+      "text:condition_relevance_v1:relevance:color:q5:key_value",
+      "text:condition_relevance_v1:relevance:color:q5:sentence",
+      "text:condition_relevance_v1:relevance:count:q0:key_value",
+      "text:condition_relevance_v1:relevance:count:q0:sentence",
+      "text:condition_relevance_v1:relevance:count:q1:key_value",
+      "text:condition_relevance_v1:relevance:count:q1:sentence",
+      "text:condition_relevance_v1:relevance:count:q2:key_value",
+      "text:condition_relevance_v1:relevance:count:q2:sentence",
+      "text:condition_relevance_v1:relevance:count:q3:key_value",
+      "text:condition_relevance_v1:relevance:count:q3:sentence",
+      "text:condition_relevance_v1:relevance:count:q4:key_value",
+      "text:condition_relevance_v1:relevance:count:q4:sentence",
+      "text:condition_relevance_v1:relevance:count:q5:key_value",
+      "text:condition_relevance_v1:relevance:count:q5:sentence",
+      "text:condition_relevance_v1:relevance:shape:q0:key_value",
+      "text:condition_relevance_v1:relevance:shape:q0:sentence",
+      "text:condition_relevance_v1:relevance:shape:q1:key_value",
+      "text:condition_relevance_v1:relevance:shape:q1:sentence",
+      "text:condition_relevance_v1:relevance:shape:q2:key_value",
+      "text:condition_relevance_v1:relevance:shape:q2:sentence",
+      "text:condition_relevance_v1:relevance:shape:q3:key_value",
+      "text:condition_relevance_v1:relevance:shape:q3:sentence",
+      "text:condition_relevance_v1:relevance:shape:q4:key_value",
+      "text:condition_relevance_v1:relevance:shape:q4:sentence",
+      "text:condition_relevance_v1:relevance:shape:q5:key_value",
+      "text:condition_relevance_v1:relevance:shape:q5:sentence",
+      "text:condition_relevance_v1:relevance:texture:q0:key_value",
+      "text:condition_relevance_v1:relevance:texture:q0:sentence",
+      "text:condition_relevance_v1:relevance:texture:q1:key_value",
+      "text:condition_relevance_v1:relevance:texture:q1:sentence",
+      "text:condition_relevance_v1:relevance:texture:q2:key_value",
+      "text:condition_relevance_v1:relevance:texture:q2:sentence",
+      "text:condition_relevance_v1:relevance:texture:q3:key_value",
+      "text:condition_relevance_v1:relevance:texture:q3:sentence",
+      "text:condition_relevance_v1:relevance:texture:q4:key_value",
+      "text:condition_relevance_v1:relevance:texture:q4:sentence",
+      "text:condition_relevance_v1:relevance:texture:q5:key_value",
+      "text:condition_relevance_v1:relevance:texture:q5:sentence"
+    ],
+    "validation_only": [
+      "text:binding:legacy:binding:color",
+      "text:binding:legacy:binding:count",
+      "text:binding:legacy:binding:shape",
+      "text:binding:legacy:binding:texture",
+      "text:condition_relevance_v1:relevance:color:q8:key_value",
+      "text:condition_relevance_v1:relevance:color:q8:sentence",
+      "text:condition_relevance_v1:relevance:color:q9:key_value",
+      "text:condition_relevance_v1:relevance:color:q9:sentence",
+      "text:condition_relevance_v1:relevance:count:q8:key_value",
+      "text:condition_relevance_v1:relevance:count:q8:sentence",
+      "text:condition_relevance_v1:relevance:count:q9:key_value",
+      "text:condition_relevance_v1:relevance:count:q9:sentence",
+      "text:condition_relevance_v1:relevance:shape:q8:key_value",
+      "text:condition_relevance_v1:relevance:shape:q8:sentence",
+      "text:condition_relevance_v1:relevance:shape:q9:key_value",
+      "text:condition_relevance_v1:relevance:shape:q9:sentence",
+      "text:condition_relevance_v1:relevance:texture:q8:key_value",
+      "text:condition_relevance_v1:relevance:texture:q8:sentence",
+      "text:condition_relevance_v1:relevance:texture:q9:key_value",
+      "text:condition_relevance_v1:relevance:texture:q9:sentence",
+      "text:programmatic_decision_v1:binding:4:color",
+      "text:programmatic_decision_v1:binding:4:count",
+      "text:programmatic_decision_v1:binding:4:shape",
+      "text:programmatic_decision_v1:binding:4:texture",
+      "text:programmatic_decision_v1:binding:5:color",
+      "text:programmatic_decision_v1:binding:5:count",
+      "text:programmatic_decision_v1:binding:5:shape",
+      "text:programmatic_decision_v1:binding:5:texture"
+    ],
+    "note": "Literal task IDs include held-out wording; absence is not necessarily absence of the underlying semantic operation. Do not drop held-out tasks."
+  },
+  "transport": {
+    "banks": 466,
+    "observations": 21184,
+    "query_vectors": 24950,
+    "tokens": {
+      "text": 612145,
+      "image": 151912,
+      "speech": 1235364,
+      "event_audio": 7410,
+      "video": 933888
+    },
+    "runtime_max_abs": 0,
+    "duplicate_query_vectors": [],
+    "query_addresses_unique": true
+  },
+  "actual_gradient_path": {
+    "rows": [
+      "text:condition-relevance-v1:train:477227f9612d98f86c7974bef16cd08ba235f8403db28f78ec4e13ee52e0e051:train:texture:5:sentence",
+      "text:decision-supervision-v1:train:fece35686003a40d536e7158b4e83d6d7f8869d4977dbad9b2d813f16331610c:numeric:extremum:risk:minimum:0",
+      "image:CLEVR_new_007824:texture",
+      "image:CLEVR_new_006227:texture",
+      "lombard:s34_l_swbr3n:adverb",
+      "lombard:s19_p_bwac4p:command",
+      "video:clevrer-train-06359-q006",
+      "video:clevrer-train-07251-q006"
+    ],
+    "logit_max_abs": 5.960464477539063e-08,
+    "gradient_max_abs": 2.1886080503463745e-08,
+    "rtol": 0.0002,
+    "atol": 2e-06,
+    "optimizer_updates": 0,
+    "train_eval_and_permutation_equivalent": true
+  },
+  "image_input": [
+    {
+      "split": "train",
+      "assets": 8424,
+      "crop": {
+        "original": [
+          640,
+          480
+        ],
+        "resized": [
+          384,
+          288
+        ],
+        "retained_fraction": 0.75,
+        "source_box": [
+          80.0,
+          0.0,
+          560.0,
+          480.0
+        ]
+      }
+    },
+    {
+      "split": "val",
+      "assets": 512,
+      "crop": {
+        "original": [
+          640,
+          480
+        ],
+        "resized": [
+          384,
+          288
+        ],
+        "retained_fraction": 0.75,
+        "source_box": [
+          80.0,
+          0.0,
+          560.0,
+          480.0
+        ]
+      }
+    }
+  ],
+  "video_input": {
+    "assets": 456,
+    "geometry": {
+      "[480, 320, 128, 25.0]": 456
+    },
+    "crop_retained_fractions": [
+      0.6666666666666666
+    ],
+    "sampled_frame_fractions": [
+      0.0625
+    ],
+    "maximum_gap_seconds": 0.76,
+    "programs": {
+      "unique": 585,
+      "objects": 912,
+      "events": 341,
+      "filter_in": 211,
+      "count": 249,
+      "filter_before": 27,
+      "rubber": 136,
+      "cylinder": 150,
+      "filter_collision": 132,
+      "filter_material": 251,
+      "filter_shape": 421,
+      "null": 485,
+      "blue": 64,
+      "filter_stationary": 555,
+      "filter_color": 391,
+      "exist": 165,
+      "get_frame": 165,
+      "filter_moving": 95,
+      "query_color": 185,
+      "end": 50,
+      "green": 41,
+      "query_shape": 162,
+      "get_object": 30,
+      "cyan": 45,
+      "filter_out": 29,
+      "start": 36,
+      "sphere": 154,
+      "cube": 143,
+      "red": 55,
+      "filter_after": 36,
+      "query_material": 151,
+      "get_col_partner": 106,
+      "gray": 45,
+      "first": 32,
+      "filter_order": 76,
+      "brown": 49,
+      "yellow": 45,
+      "last": 39,
+      "metal": 121,
+      "purple": 62,
+      "second": 5
+    },
+    "limitation": "Geometry establishes discarded pixels/times, not which answers need them."
+  },
+  "source_only_baselines": {
+    "train_available": {
+      "rows": 23460,
+      "positive": 2804,
+      "always_no_accuracy": 0.8804774083546462
+    },
+    "train_consumed_unique": {
+      "rows": 1024,
+      "positive": 110,
+      "always_no_accuracy": 0.892578125
+    },
+    "train_presentations": {
+      "rows": 32768,
+      "positive": 3520,
+      "always_no_accuracy": 0.892578125
+    },
+    "validation": {
+      "rows": 5832,
+      "positive": 969,
+      "always_no_accuracy": 0.8338477366255144
+    }
+  },
+  "observation_kinds": [
+    {
+      "split": "train",
+      "kinds": "image",
+      "count": 8424
+    },
+    {
+      "split": "train",
+      "kinds": "speech+event_audio",
+      "count": 6035
+    },
+    {
+      "split": "train",
+      "kinds": "text",
+      "count": 2626
+    },
+    {
+      "split": "train",
+      "kinds": "video",
+      "count": 256
+    },
+    {
+      "split": "validation",
+      "kinds": "image",
+      "count": 512
+    },
+    {
+      "split": "validation",
+      "kinds": "speech+event_audio",
+      "count": 1375
+    },
+    {
+      "split": "validation",
+      "kinds": "text",
+      "count": 1756
+    },
+    {
+      "split": "validation",
+      "kinds": "video",
+      "count": 200
+    }
+  ],
+  "saved_metric_audit": {
+    "validation_rows": 24346,
+    "checkpoints": [
+      {
+        "step": 0,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.15914983933433136,
+          "nll": 2.222727769790237,
+          "brier": 0.7997399583702294,
+          "ece": 0.08115108141609004
+        }
+      },
+      {
+        "step": 512,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.2906461145308956,
+          "nll": 1.7645439788462411,
+          "brier": 0.7546128150429658,
+          "ece": 0.08546658981884286
+        }
+      },
+      {
+        "step": 1024,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.3049185709917133,
+          "nll": 1.6938240972606238,
+          "brier": 0.7413804253967706,
+          "ece": 0.07752498952021505
+        }
+      },
+      {
+        "step": 2048,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.32825833421219286,
+          "nll": 1.7396183659052382,
+          "brier": 0.7477730693663226,
+          "ece": 0.12281747144895462
+        }
+      },
+      {
+        "step": 4096,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.3453183445045897,
+          "nll": 1.6745808358386287,
+          "brier": 0.7270488207222306,
+          "ece": 0.11536631516959567
+        }
+      },
+      {
+        "step": 8192,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.37417434202153466,
+          "nll": 1.6302494144920978,
+          "brier": 0.705674020871007,
+          "ece": 0.12608094057054317
+        }
+      },
+      {
+        "step": 12288,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.3997950558970502,
+          "nll": 1.6952469243130075,
+          "brier": 0.7086953163031149,
+          "ece": 0.15017124361675718
+        }
+      },
+      {
+        "step": 16384,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.4094996641277381,
+          "nll": 2.0496281542235755,
+          "brier": 0.7509101432215964,
+          "ece": 0.20500499722729054
+        }
+      },
+      {
+        "step": 24576,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.4460746009880596,
+          "nll": 3.615092577450632,
+          "brier": 0.7985314934775992,
+          "ece": 0.28381954774131823
+        }
+      },
+      {
+        "step": 32768,
+        "exact_top_score_ties": 0,
+        "macro": {
+          "accuracy": 0.45696687917582385,
+          "nll": 4.8481142711659535,
+          "brier": 0.8154608250788232,
+          "ece": 0.3115787635647469
+        }
+      }
+    ],
+    "scalar_comparisons": 5660,
+    "maximum_absolute_error": 8.881784197001252e-16,
+    "seconds": 2.7300614999840036
+  },
+  "limitations": [
+    "No full human reannotation or perceptual sufficiency audit.",
+    "No new encoder extraction or GPU gradient test.",
+    "No training, balancing intervention, crop intervention, new seed, or quality improvement.",
+    "Development data already observed; this is not a blind evaluation."
+  ]
+}

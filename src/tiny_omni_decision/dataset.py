@@ -375,8 +375,8 @@ def _base_example(
     trust_status: str = "review",
 ) -> DecisionExample:
     source_record_id = (
-        row.get("id")
-        or row.get("source_record_id")
+        row.get("source_record_id")
+        or row.get("id")
         or row.get("audio_id")
         or row.get("video_id")
         or row.get("video")
@@ -394,8 +394,9 @@ def _base_example(
         (kind for kind in ("video", "audio", "image") if any(item.kind == kind for item in media)),
         "text",
     )
+    example_id = row.get("id") or source_record_id
     return DecisionExample(
-        id=f"{dataset_id}:{source_record_id}",
+        id=f"{dataset_id}:{example_id}",
         modality=modality,
         state=state,
         question=question,

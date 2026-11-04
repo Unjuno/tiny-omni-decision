@@ -1,0 +1,232 @@
+{
+  "arms": {
+    "ce": {
+      "candidate_pair_forwards": 9452,
+      "consumed": {
+        "consumed": 36,
+        "modalities": {
+          "text": 36
+        },
+        "native_assets": 0,
+        "repeated_questions": 0,
+        "sources": {
+          "condition_relevance_v1": 16,
+          "curriculum": 3,
+          "original": 1,
+          "programmatic_decision_v1": 16
+        },
+        "tasks": {
+          "legacy:curriculum:risk:maximum": 1,
+          "legacy:curriculum:time:minimum": 2,
+          "legacy:original:choice": 1,
+          "numeric:count": 2,
+          "numeric:extremum:cost:maximum": 2,
+          "numeric:extremum:cost:minimum": 3,
+          "numeric:extremum:risk:maximum": 1,
+          "numeric:extremum:risk:minimum": 3,
+          "numeric:extremum:time:maximum": 2,
+          "numeric:extremum:time:minimum": 1,
+          "numeric:filter_min_cost": 2,
+          "relevance:color:q5:sentence": 1,
+          "relevance:count:q0:key_value": 1,
+          "relevance:count:q0:sentence": 1,
+          "relevance:count:q1:key_value": 1,
+          "relevance:count:q3:key_value": 1,
+          "relevance:shape:q0:key_value": 1,
+          "relevance:shape:q1:key_value": 1,
+          "relevance:shape:q1:sentence": 1,
+          "relevance:shape:q2:key_value": 1,
+          "relevance:shape:q4:key_value": 1,
+          "relevance:shape:q4:sentence": 1,
+          "relevance:texture:q3:key_value": 1,
+          "relevance:texture:q3:sentence": 2,
+          "relevance:texture:q5:key_value": 2
+        },
+        "unique_questions": 36,
+        "unique_states": 35,
+        "unique_states_by_source": {
+          "condition_relevance_v1": 15,
+          "curriculum": 3,
+          "original": 1,
+          "programmatic_decision_v1": 16
+        }
+      },
+      "frozen_and_sources_unchanged": true,
+      "frozen_sha256": "7bfe64f42bce22f87ed18f9ecd0278a5a8ca828c2596f3c9b069d0fbf915c2f9",
+      "initial_cache_sha256": "e976c7b22739e0d0297fedf6830af746c331a24633753935f836ce97c46b676f",
+      "initial_delta_sha256": "2adf82937665c2eea10c23aed348f512b84b514942be96e92bd26675508817f5",
+      "measured_seconds_per_update": 2.2153030000008584,
+      "native_forward_equivalence": true,
+      "ordered_id_sha256": "2b9cee7d8fb9dab5790b96f32b9deef9bdf5b73fae1a81fae42aa108c2593cfd",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-smoke-ce-01",
+      "peak_cuda_allocated": 3071888896,
+      "peak_cuda_reserved": 3286237184,
+      "projected_train_seconds": 2268.470272000879,
+      "result_sha256": "af0cbcf9441aebf60b7b1963b23d61ca3039473ceae64ea2f046f35a7d7c88a5",
+      "sample_order_sha256": "4cd0e805fa558372fd0300ceb2af9b088e4979f05a5c40b7175e9e06d1364272",
+      "seconds": 90.53510929999902,
+      "source_commit": "8216c042fe998fabb448d946a3f731a9f9d362e5",
+      "status": "PASS_TRAIN_ONLY_RELEVANCE_SMOKE",
+      "steps": 2,
+      "token_preflight": {
+        "binding_train": {
+          "maximum": 69,
+          "rows": 8192,
+          "truncated_count": 0
+        },
+        "legacy_train": {
+          "maximum": 786,
+          "rows": 2048,
+          "truncated_count": 48
+        },
+        "numeric_train": {
+          "maximum": 147,
+          "rows": 8192,
+          "truncated_count": 0
+        }
+      },
+      "train_probe_reload_exact": true,
+      "updates": [
+        {
+          "auxiliary_gradient_norm_after_clip": 0.0,
+          "ce": 2.109453135066562,
+          "consumed": 18,
+          "gradient_norm": 10.53471851348877,
+          "kl": -6.185668510738651e-08,
+          "learning_rate": 6.451612903225807e-07,
+          "relevance_loss": 0.696011871099472,
+          "seconds": 2.323371300000872,
+          "step": 1
+        },
+        {
+          "auxiliary_gradient_norm_after_clip": 0.0,
+          "ce": 1.8806305329004924,
+          "consumed": 36,
+          "gradient_norm": 13.043394088745117,
+          "kl": 1.1057854862883687e-06,
+          "learning_rate": 1.2903225806451614e-06,
+          "relevance_loss": 0.6880695670843124,
+          "seconds": 2.107234700000845,
+          "step": 2
+        }
+      ]
+    },
+    "relevance": {
+      "candidate_pair_forwards": 9452,
+      "consumed": {
+        "consumed": 36,
+        "modalities": {
+          "text": 36
+        },
+        "native_assets": 0,
+        "repeated_questions": 0,
+        "sources": {
+          "condition_relevance_v1": 16,
+          "curriculum": 3,
+          "original": 1,
+          "programmatic_decision_v1": 16
+        },
+        "tasks": {
+          "legacy:curriculum:risk:maximum": 1,
+          "legacy:curriculum:time:minimum": 2,
+          "legacy:original:choice": 1,
+          "numeric:count": 2,
+          "numeric:extremum:cost:maximum": 2,
+          "numeric:extremum:cost:minimum": 3,
+          "numeric:extremum:risk:maximum": 1,
+          "numeric:extremum:risk:minimum": 3,
+          "numeric:extremum:time:maximum": 2,
+          "numeric:extremum:time:minimum": 1,
+          "numeric:filter_min_cost": 2,
+          "relevance:color:q5:sentence": 1,
+          "relevance:count:q0:key_value": 1,
+          "relevance:count:q0:sentence": 1,
+          "relevance:count:q1:key_value": 1,
+          "relevance:count:q3:key_value": 1,
+          "relevance:shape:q0:key_value": 1,
+          "relevance:shape:q1:key_value": 1,
+          "relevance:shape:q1:sentence": 1,
+          "relevance:shape:q2:key_value": 1,
+          "relevance:shape:q4:key_value": 1,
+          "relevance:shape:q4:sentence": 1,
+          "relevance:texture:q3:key_value": 1,
+          "relevance:texture:q3:sentence": 2,
+          "relevance:texture:q5:key_value": 2
+        },
+        "unique_questions": 36,
+        "unique_states": 35,
+        "unique_states_by_source": {
+          "condition_relevance_v1": 15,
+          "curriculum": 3,
+          "original": 1,
+          "programmatic_decision_v1": 16
+        }
+      },
+      "frozen_and_sources_unchanged": true,
+      "frozen_sha256": "7bfe64f42bce22f87ed18f9ecd0278a5a8ca828c2596f3c9b069d0fbf915c2f9",
+      "initial_cache_sha256": "e976c7b22739e0d0297fedf6830af746c331a24633753935f836ce97c46b676f",
+      "initial_delta_sha256": "2adf82937665c2eea10c23aed348f512b84b514942be96e92bd26675508817f5",
+      "measured_seconds_per_update": 2.3223146999989694,
+      "native_forward_equivalence": true,
+      "ordered_id_sha256": "2b9cee7d8fb9dab5790b96f32b9deef9bdf5b73fae1a81fae42aa108c2593cfd",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-smoke-aux-01",
+      "peak_cuda_allocated": 3071888896,
+      "peak_cuda_reserved": 3286237184,
+      "projected_train_seconds": 2378.0502527989447,
+      "result_sha256": "47c68a59b3ef442474477a6f00dcdae4dda204608b5f95d8f8b0f7c56cea8d0e",
+      "sample_order_sha256": "4cd0e805fa558372fd0300ceb2af9b088e4979f05a5c40b7175e9e06d1364272",
+      "seconds": 91.2340430999975,
+      "source_commit": "8216c042fe998fabb448d946a3f731a9f9d362e5",
+      "status": "PASS_TRAIN_ONLY_RELEVANCE_SMOKE",
+      "steps": 2,
+      "token_preflight": {
+        "binding_train": {
+          "maximum": 69,
+          "rows": 8192,
+          "truncated_count": 0
+        },
+        "legacy_train": {
+          "maximum": 786,
+          "rows": 2048,
+          "truncated_count": 48
+        },
+        "numeric_train": {
+          "maximum": 147,
+          "rows": 8192,
+          "truncated_count": 0
+        }
+      },
+      "train_probe_reload_exact": true,
+      "updates": [
+        {
+          "auxiliary_gradient_norm_after_clip": 0.0030675469897687435,
+          "ce": 2.109453135066562,
+          "consumed": 18,
+          "gradient_norm": 10.541139602661133,
+          "kl": -6.185668510738651e-08,
+          "learning_rate": 6.451612903225807e-07,
+          "relevance_loss": 0.696011871099472,
+          "seconds": 2.434193299995968,
+          "step": 1
+        },
+        {
+          "auxiliary_gradient_norm_after_clip": 0.0019084620289504528,
+          "ce": 1.880630115667979,
+          "consumed": 36,
+          "gradient_norm": 13.048762321472168,
+          "kl": 1.1252850526943803e-06,
+          "learning_rate": 1.2903225806451614e-06,
+          "relevance_loss": 0.6880601793527603,
+          "seconds": 2.2104361000019708,
+          "step": 2
+        }
+      ]
+    }
+  },
+  "full_fit_complete": false,
+  "matched_code_and_input_pins": true,
+  "matched_initial_weights_cache_and_sample_order": true,
+  "new_validation_loaded": false,
+  "sealed_audit_loaded": false,
+  "transfer_loaded": false
+}

@@ -1,0 +1,81 @@
+{
+  "format": "pretrained_reuse_avatar_multientity_exposure_v1",
+  "status": "METADATA_ONLY_CANDIDATE_NOT_ADMITTED",
+  "recorded_at": "2026-11-02",
+  "source": {
+    "dataset_id": "AVATAR",
+    "revision": "a7f0146ff704799d044133e61137836cacc1c233",
+    "metadata_archive_sha256": "97e9f09e9f4325ac888db2886da22ca4650eafb8848721230a4e5d80fb6a4183",
+    "train_annotation_tree_sha256": "4c17a0bdbd7d488bced018404ce71be5659d27273efcfdec9e1cdfffd16eb651",
+    "train_annotation_json_count": 19159
+  },
+  "prior_model_usage": {
+    "fit_source_group_count": 2271,
+    "evaluation_source_group_count": 1681,
+    "fit_evaluation_intersection_across_experiments": 1376,
+    "fit_or_evaluation_source_group_count": 2576,
+    "source_group_set_sha256": "4f0fbd6dc342c8c485c4c187bc102a988def78fdaeef11879ed11221ab4adf3a",
+    "counted_inputs": [
+      "legacy AVATAR option-choice artifacts",
+      "corrected cross-source fit and evaluation",
+      "held-category fit, inner validation, and saved predictions",
+      "DINOv2 train-fold fit and evaluation",
+      "native-localization train-fold fit and evaluation"
+    ]
+  },
+  "train_only_multientity": {
+    "source_group_count": 565,
+    "fit_exposed_source_groups": 113,
+    "evaluation_exposed_source_groups": 65,
+    "distinct_prior_fit_or_evaluation_exposed_source_groups": 113,
+    "unexposed_to_prior_fit_or_evaluation_source_groups": 452,
+    "unexposed_source_group_set_sha256": "41155016616901005e9fc98aee5a160797ec2c9c5ad4b9921ede55a832799a2a",
+    "eligible_clips": 523,
+    "eligible_annotations_with_bbox": 2517,
+    "categories": 65,
+    "categories_with_at_least_20_annotations": 39,
+    "minimum_category_source_group_support": 1,
+    "eligible_frames_with_multiple_distinct_categories": 5,
+    "eligible_clips_with_multiple_distinct_categories": 19,
+    "eligible_source_groups_with_multiple_distinct_categories": 15,
+    "provisional_hash_split_not_frozen": {
+      "seed": 17,
+      "train_source_groups": 362,
+      "validation_source_groups": 90,
+      "source_group_overlap": 0,
+      "train_annotated_clips": 416,
+      "validation_annotated_clips": 107,
+      "categories_in_both_splits": 41,
+      "categories_with_four_source_groups_in_each_split": 5,
+      "minimum_validation_source_groups_per_shared_category": 1,
+      "task_or_split_frozen": false
+    }
+  },
+  "existing_media_inventory": {
+    "train_validation_media_files_name_scanned": 3009,
+    "eligible_source_group_media_files": 0,
+    "media_bytes_read": false,
+    "new_features_extracted": false
+  },
+  "integrity": {
+    "train_annotations_only": true,
+    "official_validation_annotations_or_media_accessed": false,
+    "sealed_audit_accessed": false,
+    "source_group_ids_emitted": false,
+    "model_loaded_or_trained": false,
+    "product_promotion": false
+  },
+  "audit": {
+    "source_commit": "788ee1e55f4865688de1678a038eebfac7406d59",
+    "script": "scripts/audit_avatar_multientity_exposure.py",
+    "script_sha256": "50a28d8e9d4ddabbe886df2983b13c674bf1c48c1000d069000e7f59c0badd4d",
+    "result_path": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-multientity-exposure-20261102-attempt-04/result.json",
+    "result_sha256": "f2bcd8f791462bdbfcd1beaa8252a536a8097683f9f3b73cc948685fff92149b"
+  },
+  "resource_gate": {
+    "free_c_gib_at_screen": 1.38,
+    "required_reserve_gib": 2,
+    "media_or_gpu_work_started": false
+  },
+  "report": "docs/pretrained_reuse/R2_AVATAR_MULTIENTITY_EXPOSURE_AUDIT_20261102.md"
+}

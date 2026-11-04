@@ -1,0 +1,16 @@
+{
+  "id": "native-audio-cache-v1",
+  "seed": 17,
+  "batch_size": 1,
+  "dtype": "float32",
+  "attention": "eager",
+  "profile_sha256": "57fe149d4bccb09a4d28d3da0950efd4bb1cafdc15f8a95e78212c36ef9d39ae",
+  "corpus_audit": "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-corpus-audit-01",
+  "corpus_audit_sha256": "5a289f858b0db764b03b93fe1a6dd6f9ac95ff1ba4df07b8715fccfc9af48784",
+  "max_examples": 7410,
+  "expected_tensor_bytes": 1908900864,
+  "max_wall_seconds": 3600,
+  "max_vram_bytes": 3221225472,
+  "max_rss_bytes": 6442450944,
+  "disk_reserve_bytes": 2147483648
+}

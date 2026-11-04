@@ -1,0 +1,16 @@
+{
+  "id": "condition-relevance-v1-seed17",
+  "seed": 17,
+  "previous_root": "C:/CodexArtifacts/pretrained-reuse-r2/decision-supervision-corpus-01",
+  "counts": {"train": 512, "calibration": 128, "validation": 128, "transfer": 256},
+  "expected_unused_states": 1492,
+  "expected_numeric_train_rows": 8192,
+  "source_pins": {
+    "result.json": "f2fac1bb77e762748e9ce49077009bb69a50d7c2869b93c27de6ffbeb7c55d17",
+    "excluded-state-keys.json": "1f72f817d21fe893b24eb1003033de016e8ea67d69926131d4f5e5f641d5ce2c",
+    "train.jsonl": "ecadf350f1003842703a5f41aeb2eb5ab760b236130c4d1f0543b9b1886a53b3",
+    "validation.jsonl": "01cd6c8f55df5e68770408b8825711e9b7f2ea3ec7e9a3022725bbb4e5a0f536",
+    "retention_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+    "retention_validation.jsonl": "265aa8b5d9ee372a02481427bfa1620bc68f6593af1137fb3e000227e4a8774c"
+  }
+}

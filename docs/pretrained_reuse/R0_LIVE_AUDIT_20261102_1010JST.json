@@ -1,0 +1,41 @@
+{
+  "snapshot_local": "2026-11-02T10:10:44+09:00",
+  "scope": "read-only refresh of target branch, PR, CI, GPU and live process state",
+  "repository": "Unjuno/tiny-omni-decision",
+  "branch": "docs/pretrained-reuse-roadmap-20261010",
+  "local_head": "7577d79826fb05654d63574ca187a038282d50a0",
+  "remote_branch_head": "7577d79826fb05654d63574ca187a038282d50a0",
+  "main_head": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+  "pr": {
+    "number": 15,
+    "state": "open",
+    "draft": true,
+    "base": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "checks_for_7577d798": ["success", "success"]
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "samples_local": [
+      {"time": "10:10:23", "utilization_percent": 97, "memory_used_mib": 15821, "memory_total_mib": 16384},
+      {"time": "10:10:33", "utilization_percent": 99, "memory_used_mib": 15821, "memory_total_mib": 16384},
+      {"time": "10:10:44", "utilization_percent": 97, "memory_used_mib": 15821, "memory_total_mib": 16384}
+    ],
+    "mean_utilization_percent": 97.6667,
+    "c_free_gib": 9.45
+  },
+  "processes": {
+    "orbitune_pid": 2128,
+    "orbitune_alive": true,
+    "orbitune_cpu_seconds_samples": [37540.2, 37546.9, 37554.0],
+    "tiny_omni_training_started": false,
+    "process_stopped": false
+  },
+  "video_raw_reextract": {
+    "status": "blocked_before_first_forward",
+    "reason": "Windows Code Integrity blocked unsigned TensorFlow _pywrap_traceme.pyd",
+    "existing_policy_approved_alternative_verified": false,
+    "workaround_or_environment_change": false
+  },
+  "sealed_audit_loaded": false,
+  "full_branch_worktree_inventory": "See R0_LIVE_AUDIT_20261102_0935JST; not repeated in this narrow refresh"
+}

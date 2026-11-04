@@ -1,0 +1,163 @@
+{
+  "config": {
+    "pins": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\vidimu-video-decode-smoke-01\\input.mp4": "b6d8fd31bc9459e3f822c4df20a844232db491d260cd82d5e0585af3df3de0d9",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\records.json": "32944fc822c45a7a93ee06904c9a97acaa5bf6364c33c40525f535c59da55b41",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\val-cells.npy": "1be3736b12cea9265233ebf005234c8e81cfa3c96645704e0cc2d00944b85fec",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-past-window-probe-01\\features.npz": "4c3238ee977e092a7fa28aaac244755665f900d193b60755b53777fa3532cea5"
+    },
+    "source": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "script_sha256": "b0210aff4027c1663868cf8dea9e28a7b685bed7336ecad9d989dc2a332373d8",
+    "helper_sha256": "dabfce94acd584a179408debbef913025287ad2761d4aa4ba3785209f7aeb31d",
+    "source_commit": "92c09fa0ae6c0a959a0ae77f1899b9372bc368f9",
+    "feature_tolerance": {
+      "atol": 0.0001,
+      "rtol": 1e-05
+    },
+    "order": [
+      "image",
+      "video",
+      "image",
+      "video"
+    ],
+    "video_indices": [
+      0,
+      17,
+      34,
+      51,
+      69,
+      86,
+      103,
+      120
+    ],
+    "video_window_ms": [
+      0,
+      4000
+    ],
+    "sealed_audit": false,
+    "fitting": false
+  },
+  "result": {
+    "status": "PASS_SHARED_PROFILES",
+    "requests": [
+      {
+        "modality": "image",
+        "seconds": 1.333482899935916,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1108168704
+      },
+      {
+        "modality": "video",
+        "seconds": 1.5532200000016019,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1142870016
+      },
+      {
+        "modality": "image",
+        "seconds": 0.9226951999589801,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1122820096
+      },
+      {
+        "modality": "video",
+        "seconds": 1.1246978999115527,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1143517184
+      }
+    ],
+    "parameters": 114365184,
+    "parameter_tree_sha256": "a85cffa2a24372026eb9397458753f7461bfac2350a217decd3b4d72251d6f6a",
+    "same_parameter_tree": true,
+    "parameter_tree_unchanged": true,
+    "exact_repeat_outputs": true,
+    "features_sha256": "06c00f0868417d95d34cf37ab212a10185112bd536d53ffa7199df74d74b6c48",
+    "image_ids": [
+      "CLEVR_new_008427",
+      "CLEVR_new_008428",
+      "CLEVR_new_008432",
+      "CLEVR_new_008445",
+      "CLEVR_new_008446",
+      "CLEVR_new_008454",
+      "CLEVR_new_008459",
+      "CLEVR_new_008461"
+    ],
+    "selected_video_timestamps_ms": [
+      0.0,
+      566.6666666666666,
+      1133.3333333333333,
+      1700.0,
+      2300.0,
+      2866.6666666666665,
+      3433.333333333333,
+      4000.0
+    ],
+    "peak_working_set_bytes": 1195708416,
+    "backend": "CPU JAX explicit parameter arguments",
+    "versions": {
+      "jax": "0.6.2"
+    },
+    "physical_backend_buffer_deduplication_proven": false
+  },
+  "first_attempt": {
+    "status": "PASS_SHARED_PROFILES",
+    "requests": [
+      {
+        "modality": "image",
+        "seconds": 1.176396100083366,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1094688768
+      },
+      {
+        "modality": "video",
+        "seconds": 1.511101400014013,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1146638336
+      },
+      {
+        "modality": "image",
+        "seconds": 0.8752287999959663,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1128964096
+      },
+      {
+        "modality": "video",
+        "seconds": 1.107433500001207,
+        "maximum_cache_delta": 0.0,
+        "working_set_bytes": 1153069056
+      }
+    ],
+    "parameters": 114365184,
+    "parameter_tree_sha256": "a85cffa2a24372026eb9397458753f7461bfac2350a217decd3b4d72251d6f6a",
+    "same_parameter_tree": true,
+    "parameter_tree_unchanged": true,
+    "exact_repeat_outputs": true,
+    "features_sha256": "06c00f0868417d95d34cf37ab212a10185112bd536d53ffa7199df74d74b6c48",
+    "image_ids": [
+      "CLEVR_new_008427",
+      "CLEVR_new_008428",
+      "CLEVR_new_008432",
+      "CLEVR_new_008445",
+      "CLEVR_new_008446",
+      "CLEVR_new_008454",
+      "CLEVR_new_008459",
+      "CLEVR_new_008461"
+    ],
+    "selected_video_timestamps_ms": [
+      0.0,
+      566.6666666666666,
+      1133.3333333333333,
+      1700.0,
+      2300.0,
+      2866.6666666666665,
+      3433.333333333333,
+      4000.0
+    ],
+    "peak_working_set_bytes": 1199910912,
+    "backend": "CPU JAX explicit parameter arguments",
+    "versions": {
+      "jax": "0.6.2"
+    },
+    "physical_backend_buffer_deduplication_proven": false
+  }
+}

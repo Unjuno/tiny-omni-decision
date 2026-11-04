@@ -1,0 +1,104 @@
+{
+  "calibration_scalars": 13,
+  "components": {
+    "audio_head": {
+      "elements": 106355,
+      "file_bytes": 428622,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\audio\\best.pt",
+      "sha256": "ade277dc1adf24bd621c838ebb8be8a7cbf26380889d45a3893400b4723a491a",
+      "tensor_bytes": 425420,
+      "tensor_count": 10
+    },
+    "audio_normalizer": {
+      "elements": 2304,
+      "file_bytes": 10250,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\audio\\normalizer.npz",
+      "sha256": "13e3c7367c9c0a079c29f4acdff5ce4263883cfaeffd1714f646210b0698c289",
+      "tensor_bytes": 9216,
+      "tensor_count": 4
+    },
+    "event_audio": {
+      "elements": 1972124,
+      "file_bytes": 8086973,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\efficientat-audit-v1\\dymn04_as.pt",
+      "sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+      "tensor_bytes": 7888740,
+      "tensor_count": 578
+    },
+    "image_head": {
+      "elements": 61480,
+      "file_bytes": 493196,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\0.01\\final.pt",
+      "sha256": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5",
+      "tensor_bytes": 491840,
+      "tensor_count": 2
+    },
+    "semantic_core": {
+      "elements": 70830722,
+      "file_bytes": 141685964,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\model.safetensors",
+      "sha256": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+      "tensor_bytes": 141661444,
+      "tensor_count": 202
+    },
+    "speech_encoder": {
+      "elements": 8208384,
+      "file_bytes": 32839984,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\encoder.safetensors",
+      "sha256": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8",
+      "tensor_bytes": 32833536,
+      "tensor_count": 67
+    },
+    "video_head": {
+      "elements": 106355,
+      "file_bytes": 428622,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\video_ordered\\best.pt",
+      "sha256": "4261a296711b0cfac2a7681bc250ddc4c2d59d8265119f0143e798e2936397d9",
+      "tensor_bytes": 425420,
+      "tensor_count": 10
+    },
+    "video_normalizer": {
+      "elements": 2304,
+      "file_bytes": 10250,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-temporal-full-01\\video_ordered\\normalizer.npz",
+      "sha256": "13e3c7367c9c0a079c29f4acdff5ce4263883cfaeffd1714f646210b0698c289",
+      "tensor_bytes": 9216,
+      "tensor_count": 4
+    },
+    "visual_encoder": {
+      "elements": 114365184,
+      "file_bytes": 457475296,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz",
+      "sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "tensor_bytes": 457460736,
+      "tensor_count": 40
+    }
+  },
+  "gpu_used": false,
+  "remaining_gates": [
+    "natural condition transfer",
+    "native per-task quality",
+    "general temporal reasoning",
+    "complete integration",
+    "Japanese task quality",
+    "runtime and quantized package"
+  ],
+  "result_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-omni-component-budget-01\\result.json",
+  "result_sha256": "8a22824775535ff89a91b897622bd72bb72fa214ac2d03d692f735bfd0d54764",
+  "sealed_audit_loaded": false,
+  "source_commit": "96e00dde2eebb75951c3efb1d66462a72b31e9fa",
+  "status": "PASS_COMPONENT_FILE_INVENTORY",
+  "summary": {
+    "combined_model_loaded": false,
+    "count_scope": "all declared tensor elements including buffers and calibration",
+    "headroom_elements": 4344775,
+    "native_forwards": 0,
+    "optimizer_updates": 0,
+    "package_bytes_measured": false,
+    "quality_qualified": false,
+    "stored_tensor_elements_plus_calibration": 195655225,
+    "tensor_bytes_plus_float64_calibration": 641205672,
+    "within_200m_upper_bound": true
+  },
+  "transfer_loaded": false
+}

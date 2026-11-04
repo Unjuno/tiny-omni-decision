@@ -1,0 +1,49 @@
+{
+  "source": "local programmatic conditional curriculum",
+  "purpose": "development repair only; not final/general/multimodal evaluation",
+  "source_sha256": "832891cfad35459bd5488f317202ebe394a7f1dd326f5cd9850d8d9e3a4fc2e0",
+  "seeds": {
+    "train": 17,
+    "validation": 29
+  },
+  "splits": {
+    "train": {
+      "rows": 8192,
+      "states": 1024,
+      "sha256": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+      "tasks": {
+        "extremum": 4096,
+        "temporal_order": 2048,
+        "count": 1024,
+        "conditional_selection": 1024
+      },
+      "target_positions": {
+        "1": 1910,
+        "0": 1983,
+        "2": 1901,
+        "3": 1973,
+        "4": 425
+      }
+    },
+    "validation": {
+      "rows": 2048,
+      "states": 256,
+      "sha256": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+      "tasks": {
+        "extremum": 1024,
+        "temporal_order": 512,
+        "count": 256,
+        "conditional_selection": 256
+      },
+      "target_positions": {
+        "2": 463,
+        "1": 455,
+        "0": 496,
+        "4": 100,
+        "3": 534
+      }
+    }
+  },
+  "source_commit": "424ac48",
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01"
+}

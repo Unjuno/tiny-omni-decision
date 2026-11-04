@@ -1,0 +1,70 @@
+{
+  "status": "COMPLETE_FIXED_ORIGINAL_RETENTION",
+  "results": {
+    "parent": {
+      "metrics": {
+        "count": 2540,
+        "accuracy": 0.6358267664909363,
+        "nll": 0.8355907797813416,
+        "brier": 0.47060567140579224,
+        "ece_15_bins": 0.018915114000322315,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          9,
+          117,
+          208,
+          194,
+          274,
+          337,
+          304,
+          268,
+          205,
+          195,
+          164,
+          265
+        ]
+      },
+      "max_untruncated_tokens": 892,
+      "truncated_candidate_pairs": 239,
+      "preprocessing": "historical only_second truncation max512"
+    },
+    "context": {
+      "metrics": {
+        "count": 2540,
+        "accuracy": 0.6283464431762695,
+        "nll": 0.8766460418701172,
+        "brier": 0.4856856167316437,
+        "ece_15_bins": 0.043872193135614475,
+        "ece_bin_counts": [
+          0,
+          0,
+          1,
+          12,
+          98,
+          185,
+          204,
+          265,
+          282,
+          287,
+          247,
+          198,
+          193,
+          180,
+          388
+        ]
+      },
+      "max_untruncated_tokens": 892,
+      "truncated_candidate_pairs": 239,
+      "preprocessing": "historical only_second truncation max512"
+    }
+  },
+  "seconds": 46.02500719996169,
+  "hashes": {
+    "context-predictions.json": "a02e4ab51e515856134cc1ceec8b282410b6c79882032984942e4b213eeaba79",
+    "inputs.json": "c9f6a78e64889afd088a39b719597bb62665d8a81e8a99d4274780abd455440b",
+    "parent-predictions.json": "fc82fea5c253ff0f85f0392d8e5032e6da32510a9f4149cf563043fe175c81dc",
+    "protocol.json": "2316afde9a58226b0d7d6934ab92fb9b97017c7b20d4cf9b6ed6fdf4f91d3333"
+  }
+}

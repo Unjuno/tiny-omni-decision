@@ -1,0 +1,336 @@
+{
+  "status": "PASS_TEMPORAL_PLUMBING_ONLY",
+  "quality_evaluation": false,
+  "records": {
+    "native-temporal-probe-01": {
+      "source_commit": "3f70918c63904a2b37470694ae395487e1baa5a5",
+      "config_sha256": "34afb1ecb2af230d74c396ca9042af1564b544281dec2c6a0693735d25570b72",
+      "started_utc": "2026-10-16T06:35:17.703258+00:00",
+      "finished_utc": "2026-10-16T06:35:20.405121+00:00",
+      "seconds": 2.7012511999928392,
+      "command": [
+        "scripts/probe_native_temporal.py",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-temporal-probe-01"
+      ],
+      "candidate_parameters": 197291290,
+      "readout_parameters": 889345,
+      "adapter_parameters": {
+        "video": 591936,
+        "speech": 444480
+      },
+      "quality_evaluation": false,
+      "encoder_execution": false,
+      "real_training_updates": 0,
+      "artificial_target_updates": 2,
+      "baseline_unchanged": true,
+      "initial_baseline_max_difference": 0,
+      "checkpoint_reload_max_difference": 0,
+      "replay_exact": false,
+      "replay_reference_sha256": null,
+      "gradient_peak_allocated_bytes": 160061952,
+      "cuda_peak_reserved_bytes": 234881024,
+      "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "python": "3.11.9",
+      "torch": "2.6.0+cu124",
+      "cuda": "12.4",
+      "cudnn": 90100,
+      "dtype": "float32",
+      "tf32": false,
+      "artifacts": {
+        "diagnostic-only.pt": "db221759b77953374629b63d2dce41fc81b2dc54cb31b8451b0eb89759cc1994",
+        "diagnostic-scores.npy": "576e582d8e96204da495dd8dd1f15302eae6b4d9cafd3b118ee0e4cb322402cf",
+        "initial-scores.npy": "ff46780972b3054ce11357abad378250c0d8ead0bc55dde6ad19b2d2f4bc2f7b",
+        "initial.pt": "1dcd0cd86efe4aeb21bd02aaaacc7b13a60adff1ac9a6855a6fc65e5aeb54c3b"
+      },
+      "receipt_sha256": "9d8b383f2db414b4a35add1c6a8b6b4d8ec118ca44d0b58cc128d302f7169241",
+      "timings": {
+        "text-0": {
+          "baseline": {
+            "p50_ms": 1.6639500026940368,
+            "p95_ms": 2.2002799982146826,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.3834999990649521,
+            "p95_ms": 1.597204999416135,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "text-1": {
+          "baseline": {
+            "p50_ms": 1.510350004537031,
+            "p95_ms": 1.777735001815017,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.692049998382572,
+            "p95_ms": 1.7595199984498322,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "image-0": {
+          "baseline": {
+            "p50_ms": 1.5456999972229823,
+            "p95_ms": 1.7682900004729163,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.6177500001504086,
+            "p95_ms": 2.6248200032569,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "image-1": {
+          "baseline": {
+            "p50_ms": 1.4884999982314184,
+            "p95_ms": 1.7304150067502633,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.894900000479538,
+            "p95_ms": 2.584525002748705,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "audio-0": {
+          "baseline": {
+            "p50_ms": 2.196549998188857,
+            "p95_ms": 2.666994997707661,
+            "peak_allocated_bytes": 52851712,
+            "peak_reserved_bytes": 67108864
+          },
+          "lstm": {
+            "p50_ms": 6.113499999628402,
+            "p95_ms": 7.091065002896357,
+            "peak_allocated_bytes": 64101376,
+            "peak_reserved_bytes": 67108864
+          }
+        },
+        "audio-1": {
+          "baseline": {
+            "p50_ms": 2.070100003038533,
+            "p95_ms": 4.097189992171479,
+            "peak_allocated_bytes": 52851712,
+            "peak_reserved_bytes": 67108864
+          },
+          "lstm": {
+            "p50_ms": 5.879700001969468,
+            "p95_ms": 7.103970005846349,
+            "peak_allocated_bytes": 64101376,
+            "peak_reserved_bytes": 67108864
+          }
+        },
+        "video-0": {
+          "baseline": {
+            "p50_ms": 2.0885499980067834,
+            "p95_ms": 2.693745000578928,
+            "peak_allocated_bytes": 62459392,
+            "peak_reserved_bytes": 134217728
+          },
+          "lstm": {
+            "p50_ms": 9.115300003031734,
+            "p95_ms": 10.54149500632775,
+            "peak_allocated_bytes": 109401600,
+            "peak_reserved_bytes": 134217728
+          }
+        },
+        "video-1": {
+          "baseline": {
+            "p50_ms": 1.964449998922646,
+            "p95_ms": 2.0719099979032762,
+            "peak_allocated_bytes": 62459392,
+            "peak_reserved_bytes": 134217728
+          },
+          "lstm": {
+            "p50_ms": 9.709450001537334,
+            "p95_ms": 11.880684996867783,
+            "peak_allocated_bytes": 109401600,
+            "peak_reserved_bytes": 134217728
+          }
+        }
+      },
+      "source_files_rechecked": 16,
+      "minimum_second_update_gradient_norm": 3.4611973287468345e-09
+    },
+    "native-temporal-replay-01": {
+      "source_commit": "3f70918c63904a2b37470694ae395487e1baa5a5",
+      "config_sha256": "34afb1ecb2af230d74c396ca9042af1564b544281dec2c6a0693735d25570b72",
+      "started_utc": "2026-10-16T06:35:32.628942+00:00",
+      "finished_utc": "2026-10-16T06:35:35.382579+00:00",
+      "seconds": 2.7539972999948077,
+      "command": [
+        "scripts/probe_native_temporal.py",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-temporal-replay-01",
+        "--replay",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-temporal-probe-01",
+        "--replay-sha256",
+        "9d8b383f2db414b4a35add1c6a8b6b4d8ec118ca44d0b58cc128d302f7169241"
+      ],
+      "candidate_parameters": 197291290,
+      "readout_parameters": 889345,
+      "adapter_parameters": {
+        "video": 591936,
+        "speech": 444480
+      },
+      "quality_evaluation": false,
+      "encoder_execution": false,
+      "real_training_updates": 0,
+      "artificial_target_updates": 2,
+      "baseline_unchanged": true,
+      "initial_baseline_max_difference": 0,
+      "checkpoint_reload_max_difference": 0,
+      "replay_exact": true,
+      "replay_reference_sha256": "9d8b383f2db414b4a35add1c6a8b6b4d8ec118ca44d0b58cc128d302f7169241",
+      "gradient_peak_allocated_bytes": 160061952,
+      "cuda_peak_reserved_bytes": 234881024,
+      "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "python": "3.11.9",
+      "torch": "2.6.0+cu124",
+      "cuda": "12.4",
+      "cudnn": 90100,
+      "dtype": "float32",
+      "tf32": false,
+      "artifacts": {
+        "diagnostic-only.pt": "db221759b77953374629b63d2dce41fc81b2dc54cb31b8451b0eb89759cc1994",
+        "diagnostic-scores.npy": "576e582d8e96204da495dd8dd1f15302eae6b4d9cafd3b118ee0e4cb322402cf",
+        "initial-scores.npy": "ff46780972b3054ce11357abad378250c0d8ead0bc55dde6ad19b2d2f4bc2f7b",
+        "initial.pt": "1dcd0cd86efe4aeb21bd02aaaacc7b13a60adff1ac9a6855a6fc65e5aeb54c3b"
+      },
+      "receipt_sha256": "27b835ccabf9d40caf784f94b07177e2f7254ec65f679d16cba1005a2db310b9",
+      "timings": {
+        "text-0": {
+          "baseline": {
+            "p50_ms": 1.6266499951598234,
+            "p95_ms": 2.25074499976472,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.4594999956898391,
+            "p95_ms": 1.592489999893587,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "text-1": {
+          "baseline": {
+            "p50_ms": 1.4827499981038272,
+            "p95_ms": 1.7192450002767146,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.6035499938880093,
+            "p95_ms": 2.1739250048995014,
+            "peak_allocated_bytes": 52565504,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "image-0": {
+          "baseline": {
+            "p50_ms": 1.515599993581418,
+            "p95_ms": 1.7330299990135245,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.5981000033207238,
+            "p95_ms": 1.915470005769748,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "image-1": {
+          "baseline": {
+            "p50_ms": 1.5717499918537214,
+            "p95_ms": 2.516240002296398,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          },
+          "lstm": {
+            "p50_ms": 1.5098000003490597,
+            "p95_ms": 1.6466349952679593,
+            "peak_allocated_bytes": 52563456,
+            "peak_reserved_bytes": 65011712
+          }
+        },
+        "audio-0": {
+          "baseline": {
+            "p50_ms": 2.1188999962760136,
+            "p95_ms": 2.487999993900303,
+            "peak_allocated_bytes": 52851712,
+            "peak_reserved_bytes": 67108864
+          },
+          "lstm": {
+            "p50_ms": 6.0054499917896464,
+            "p95_ms": 6.355635004729265,
+            "peak_allocated_bytes": 64101376,
+            "peak_reserved_bytes": 67108864
+          }
+        },
+        "audio-1": {
+          "baseline": {
+            "p50_ms": 2.1943999963696115,
+            "p95_ms": 3.126294993853661,
+            "peak_allocated_bytes": 52851712,
+            "peak_reserved_bytes": 67108864
+          },
+          "lstm": {
+            "p50_ms": 5.837049997353461,
+            "p95_ms": 6.249434996425407,
+            "peak_allocated_bytes": 64101376,
+            "peak_reserved_bytes": 67108864
+          }
+        },
+        "video-0": {
+          "baseline": {
+            "p50_ms": 1.9375999982003123,
+            "p95_ms": 2.0369000078062527,
+            "peak_allocated_bytes": 62459392,
+            "peak_reserved_bytes": 134217728
+          },
+          "lstm": {
+            "p50_ms": 8.972750001703389,
+            "p95_ms": 9.263435004686471,
+            "peak_allocated_bytes": 109401600,
+            "peak_reserved_bytes": 134217728
+          }
+        },
+        "video-1": {
+          "baseline": {
+            "p50_ms": 2.013750003243331,
+            "p95_ms": 2.1348599992052186,
+            "peak_allocated_bytes": 62459392,
+            "peak_reserved_bytes": 134217728
+          },
+          "lstm": {
+            "p50_ms": 9.232800002791919,
+            "p95_ms": 10.407200004556216,
+            "peak_allocated_bytes": 109401600,
+            "peak_reserved_bytes": 134217728
+          }
+        }
+      },
+      "source_files_rechecked": 16,
+      "minimum_second_update_gradient_norm": 3.4611973287468345e-09
+    }
+  },
+  "cpu_tests": {
+    "passed": 2029,
+    "skipped": 1
+  },
+  "ruff": "PASS",
+  "manifest_checks": 25,
+  "cloud_cost": 0,
+  "scope": "Native TRAIN feature head-only smoke; two artificial-target updates per process; not task training or quality evaluation"
+}

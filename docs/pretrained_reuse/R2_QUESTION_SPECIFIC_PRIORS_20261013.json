@@ -1,0 +1,104 @@
+[
+  {
+    "question": "The person uses multiple similar objects to play an occlusion game. How many such objects does the person use?",
+    "count": 79,
+    "answer_counts": {
+      "2": 17,
+      "3": 61,
+      "4": 1
+    },
+    "train_majority_fraction": 0.7721518987341772
+  },
+  {
+    "question": "The person uses multiple similar objects to play an occlusion game. Do these objects have handles?",
+    "count": 77,
+    "answer_counts": {
+      "They don't have handles.": 46,
+      "They have handles.": 25,
+      "Some have handles, some don't.": 5,
+      "They probably all have handles.": 1
+    },
+    "train_majority_fraction": 0.5974025974025974
+  },
+  {
+    "question": "The person uses multiple similar objects to play an occlusion game. Are these objects identical?",
+    "count": 79,
+    "answer_counts": {
+      "They are not identical.": 22,
+      "They are identical.": 57
+    },
+    "train_majority_fraction": 0.7215189873417721
+  },
+  {
+    "question": "Was the hidden object moved while being occluded?",
+    "count": 79,
+    "answer_counts": {
+      "yes": 55,
+      "no": 24
+    },
+    "train_majority_fraction": 0.6962025316455697
+  },
+  {
+    "question": "The person uses multiple similar objects to play an occlusion game. Where is the hidden object at the end of the game from the person's point of view?",
+    "count": 79,
+    "answer_counts": {
+      "Under the second object from the left.": 34,
+      "Under the first object from the left.": 17,
+      "Under the third object from the left.": 15,
+      "Under the farthest object from the person.": 7,
+      "Under the middle object.": 5,
+      "Under the closest object to the person.": 1
+    },
+    "train_majority_fraction": 0.43037974683544306
+  },
+  {
+    "question": "The person uses multiple similar objects to play an occlusion game. Where is the hidden object at the beginning of the game from the person's point of view?",
+    "count": 79,
+    "answer_counts": {
+      "Under the second object from the left.": 29,
+      "Under the first object from the left.": 22,
+      "Under the third object from the left.": 15,
+      "Under the farthest object from the person.": 5,
+      "Under the middle object.": 3,
+      "Under the closest object to the person.": 5
+    },
+    "train_majority_fraction": 0.3670886075949367
+  },
+  {
+    "question": "The person uses multiple similar objects to play an occlusion game. Are these objects transparent?",
+    "count": 79,
+    "answer_counts": {
+      "They are transparent.": 12,
+      "They are not transparent.": 61,
+      "They are semi-transparent.": 3,
+      "They are semi-transparent or they are mixed: some are transparent, some are not transparent.": 3
+    },
+    "train_majority_fraction": 0.7721518987341772
+  },
+  {
+    "question": "Is the camera moving or static?",
+    "count": 53,
+    "answer_counts": {
+      "moving": 44,
+      "static or shaking": 9
+    },
+    "train_majority_fraction": 0.8301886792452831
+  },
+  {
+    "question": "Where is the person?",
+    "count": 19,
+    "answer_counts": {
+      "Indoors in the kitchen": 11,
+      "Indoors in the living room or bedroom": 8
+    },
+    "train_majority_fraction": 0.5789473684210527
+  },
+  {
+    "question": "Which of the following statements describes the scene better?",
+    "count": 1,
+    "answer_counts": {
+      "There is a red ping pong paddle next to a black ping pong paddle on the table in the background.": 1
+    },
+    "train_majority_fraction": 1.0
+  }
+]

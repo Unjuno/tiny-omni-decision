@@ -1,0 +1,46 @@
+{
+  "result_sha256": "e988c302d83ec4db88a30181ea688830b62c4617f7307ec528a243ca8a276903",
+  "source_sha256": "e2c6ced9d77ae58f3383e3a96c9cecb1be37c583b6bc611298ea2c77f8467747",
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\paired-wording-control-01\\config.json": "b328df0af0141b2b6a37421b3a97ea79c97f79fab4fbba437a665197c591d0b3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\comparison-vocabulary-curriculum-01\\train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c"
+  },
+  "groups": {
+    "original-train": {
+      "questions": 4096,
+      "independent_state_truncated": 167,
+      "matched_evidence_verified": 4096,
+      "matched_state_truncated": 260,
+      "joint_state_truncated": 260,
+      "joint_unpadded_tokens": 1215735
+    },
+    "curriculum-train": {
+      "questions": 1024,
+      "independent_state_truncated": 0,
+      "matched_evidence_verified": 1024,
+      "matched_state_truncated": 0,
+      "joint_state_truncated": 0,
+      "joint_unpadded_tokens": 161836
+    },
+    "original-validation": {
+      "questions": 2540,
+      "independent_state_truncated": 66,
+      "matched_evidence_verified": 2540,
+      "matched_state_truncated": 117,
+      "joint_state_truncated": 117,
+      "joint_unpadded_tokens": 744112
+    },
+    "curriculum-validation": {
+      "questions": 2048,
+      "independent_state_truncated": 0,
+      "matched_evidence_verified": 2048,
+      "matched_state_truncated": 0,
+      "joint_state_truncated": 0,
+      "joint_unpadded_tokens": 311808
+    }
+  },
+  "training_started": false
+}

@@ -1,0 +1,105 @@
+{
+  "status": "POSTHOC_OBSERVED_INTERNAL_DEVELOPMENT_ONLY",
+  "arms": {
+    "baseline": {
+      "input_hashes": {
+        "examples.json": "4348fa32e1fb964abc0fd655adc8909dfacb02e1602a017838cba2f3d8a80063",
+        "predictions.json": "ffc18c41701ee1c05a9b216c6cb8bf87e6748d26f8822fc11368f9f2fca9c58d",
+        "result.json": "202462c6ac1089e05b9f2d98fb462c9ff95ee9f0baddb62a2b99ab6393505130"
+      },
+      "metrics": {
+        "normal": {
+          "accuracy": 0.425,
+          "nll": 2.914193909835654,
+          "brier": 0.9774411420420707,
+          "ece": 0.4651431806385517
+        },
+        "mismatch": {
+          "accuracy": 0.475,
+          "nll": 4.401485946623156,
+          "brier": 0.9326828981734636,
+          "ece": 0.4349809281527996
+        },
+        "zero": {
+          "accuracy": 0.3,
+          "nll": 1.1035798518447817,
+          "brier": 0.6700652542765401,
+          "ece": 0.058163102716207504
+        }
+      },
+      "paired_normal_minus_mismatch": {
+        "seed": 17,
+        "replicates": 10000,
+        "unit": "video_pair",
+        "videos": 20,
+        "method": "95% percentile; numpy linear quantile",
+        "direction": "normal-minus-mismatch",
+        "probability_floor": 1e-15,
+        "accuracy": {
+          "difference": -0.05,
+          "interval": [
+            -0.25,
+            0.15
+          ]
+        },
+        "nll": {
+          "difference": -1.832679800736607,
+          "interval": [
+            -5.968567142676145,
+            1.0212983863723843
+          ]
+        }
+      }
+    },
+    "relational": {
+      "input_hashes": {
+        "examples.json": "4348fa32e1fb964abc0fd655adc8909dfacb02e1602a017838cba2f3d8a80063",
+        "predictions.json": "7221f9c2aa5a52b7e79dba6c066b7937b9d561612e844547082b14470dc70f46",
+        "result.json": "4337f6a0418395d0d4b2d553d937816e2e71f3fcea2ffcfd5c18a752ccbbaa92"
+      },
+      "metrics": {
+        "normal": {
+          "accuracy": 0.3,
+          "nll": 2.78488563412139,
+          "brier": 1.141853460798783,
+          "ece": 0.5313060328364372
+        },
+        "mismatch": {
+          "accuracy": 0.4,
+          "nll": 3.171957322602875,
+          "brier": 1.0465404007949834,
+          "ece": 0.46589172780513766
+        },
+        "zero": {
+          "accuracy": 0.3,
+          "nll": 1.4399744328318107,
+          "brier": 0.9011302090368563,
+          "ece": 0.38682356625795367
+        }
+      },
+      "paired_normal_minus_mismatch": {
+        "seed": 17,
+        "replicates": 10000,
+        "unit": "video_pair",
+        "videos": 20,
+        "method": "95% percentile; numpy linear quantile",
+        "direction": "normal-minus-mismatch",
+        "probability_floor": 1e-15,
+        "accuracy": {
+          "difference": -0.1,
+          "interval": [
+            -0.25,
+            0.025
+          ]
+        },
+        "nll": {
+          "difference": -0.3870716884814841,
+          "interval": [
+            -1.5938777359585647,
+            0.8606296291445981
+          ]
+        }
+      }
+    }
+  }
+}

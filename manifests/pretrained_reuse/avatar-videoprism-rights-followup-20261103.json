@@ -1,0 +1,49 @@
+{
+  "format": "pretrained_reuse_source_rights_followup_v1",
+  "recorded_at": "2026-11-03T01:11:09+09:00",
+  "scope": "Read-only pinned-source and local-checkpoint provenance reconciliation; no annotation/media payload, model inference, features, metrics, validation labels, or sealed-audit data accessed.",
+  "dataset": {
+    "id": "mipal/AVATAR",
+    "revision": "a7f0146ff704799d044133e61137836cacc1c233",
+    "pinned_hub_metadata_url": "https://huggingface.co/api/datasets/mipal/AVATAR?revision=a7f0146ff704799d044133e61137836cacc1c233",
+    "pinned_readme_url": "https://huggingface.co/datasets/mipal/AVATAR/blob/a7f0146ff704799d044133e61137836cacc1c233/README.md",
+    "declared_license": "CC-BY-4.0",
+    "training_media_source_family": "VGGSound-derived YouTube videos",
+    "train_input_sha256": "0139f4f59a685c3f83890156b59c42d12aca9db54b22ee5c0a9c70b6ec7d60ef",
+    "train_sidecar_sha256": "90adbf04450e0854fdb379dbcceb6aaa73790b205c08f1cf6c2cb786b6710a57",
+    "unique_train_source_groups": 2268,
+    "license_scope_finding": "The pinned AVATAR metadata/README declares CC-BY-4.0 for the dataset. The official VGG-Sound page also states CC-BY-4.0 commercial/research availability and separately states source-video copyright remains with original owners. No per-source-video rights receipts were found in the reviewed pinned card/records; the annotation license is not treated as a clearance of every underlying video.",
+    "official_upstream_rights_url": "https://www.robots.ox.ac.uk/~vgg//data/vggsound/"
+  },
+  "checkpoint": {
+    "model": "google/videoprism-base-f16r288",
+    "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "implementation_revision": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "file": "flax_base_f16r288_repeated.npz",
+    "bytes": 457475296,
+    "sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "local_rehash": "PASS",
+    "parameters": 114365184,
+    "preserved_cpu_runtime_receipts": {
+      "primary_output_sha256": "df185755af2fabc6c8dcf0765743edd5cbb01cf6bb6bc7d968e469a929b9796f",
+      "reproduction_output_sha256": "df185755af2fabc6c8dcf0765743edd5cbb01cf6bb6bc7d968e469a929b9796f",
+      "fixture": "deterministic synthetic 8-frame input",
+      "this_followup_reran_model": false
+    }
+  },
+  "pretraining_overlap": {
+    "decision": "UNKNOWN",
+    "public_item_level_training_video_ids": false,
+    "local_checkpoint_source_manifest": false,
+    "exact_id_comparison_performed": false,
+    "reason": "The checkpoint's disclosed training sources include large YouTube-derived collections, but the reviewed checkpoint-specific materials expose no item-level ID manifest to compare against the 2,268 AVATAR TRAIN source groups.",
+    "zero_overlap_claim": false,
+    "positive_collision_observed": false
+  },
+  "disposition": "REVIEW_NOT_ADMITTED_FOR_MEDIA_FEATURE_FITTING",
+  "existing_validation_reopened": false,
+  "sealed_audit_accessed": false,
+  "model_loaded": false,
+  "features_extracted": false,
+  "training_started": false
+}

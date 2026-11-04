@@ -1,0 +1,23 @@
+{
+  "id": "native-common-fit-v1",
+  "corpus": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "queries": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01",
+  "initial_readout": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\readout.pt",
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01\\result.json": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\readout.pt": "77a45ce55b5b17eb787ca649d2affbd6a8c72118f8953967eab41a02c2b2646b"
+  },
+  "training": {
+    "seed": 17,
+    "max_steps": 2048,
+    "microbatches_per_update": 4,
+    "lr": 0.001,
+    "warmup_updates": 62,
+    "scheduler": "cosine",
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "evaluation_interval": 256
+  }
+}

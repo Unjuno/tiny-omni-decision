@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "source_id": "155281",
+  "filename": "0232 Street_birds_2.wav",
+  "license": "http://creativecommons.org/licenses/by/3.0/",
+  "uploader": "bmoreno",
+  "split_sha256": "4b3ee6fe483d20e55e32de47d491d946538df82ef7ce45698ec764d6aa0f1df3",
+  "member": "audio_files/0232 Street_birds_2.wav",
+  "sha256": "28ed6d57e46fe3da60e712bbdb300f3e8fa96b92f1960a6a05f6b13b4d639aa6",
+  "bytes": 2264904,
+  "sample_rate": 44100,
+  "shape": [
+    1,
+    1132430
+  ],
+  "duration_seconds": 25.678684807256236,
+  "nonzero": 1128519,
+  "transferred": 2073181
+}

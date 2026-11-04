@@ -1,0 +1,63 @@
+{
+  "scope": "posthoc paired development analysis, no selection",
+  "unit": "underlying state, six questions per context",
+  "replicates": 10000,
+  "seed": 17,
+  "method": "95% percentile, linear quantile; unadjusted multiple contexts",
+  "direction": "context-trained minus plain-trained",
+  "probability_floor": 1e-12,
+  "source_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\context-robustness-plain-run-01\\predictions-384.json": "3e0ea1641496b6b25dcd6bd1818aeadd7787b83a5ed4ac4c6d020d0e86702326",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\context-robustness-context-run-01\\predictions-384.json": "f813ffe2b5470ce827ddeadd5dbdbdcbb40d062457111c5a99eb0f7a47050593"
+  },
+  "contexts": {
+    "plain": {
+      "accuracy": {
+        "difference": -0.0078125,
+        "interval": [
+          -0.016927083333333332,
+          0.0
+        ]
+      },
+      "nll": {
+        "difference": 0.013374641980805119,
+        "interval": [
+          0.003664430186760957,
+          0.02262557201636856
+        ]
+      }
+    },
+    "irrelevant": {
+      "accuracy": {
+        "difference": 0.022135416666666664,
+        "interval": [
+          0.002604166666666666,
+          0.04296875
+        ]
+      },
+      "nll": {
+        "difference": -0.7827265491186404,
+        "interval": [
+          -0.9024976658930909,
+          -0.6659912068283328
+        ]
+      }
+    },
+    "necessary": {
+      "accuracy": {
+        "difference": -0.00390625,
+        "interval": [
+          -0.014322916666666666,
+          0.005208333333333334
+        ]
+      },
+      "nll": {
+        "difference": 0.00820295903822453,
+        "interval": [
+          -0.0015900140075731527,
+          0.01684373784882405
+        ]
+      }
+    }
+  }
+}

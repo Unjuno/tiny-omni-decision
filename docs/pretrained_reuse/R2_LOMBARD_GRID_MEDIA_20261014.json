@@ -1,0 +1,447 @@
+{
+  "media_integrity": {
+    "status": "AUDIT_COMPLETE_FOUR_BROKEN_TRAIN_VIDEOS",
+    "expected_sources": 5390,
+    "paired_decode_pass": 5386,
+    "broken_train_video_ids": [
+      "s32_l_pwip9p",
+      "s32_p_bwwj2n",
+      "s33_l_pwajza",
+      "s33_p_sgwq2s"
+    ],
+    "all_audio_decode_pass": 5390,
+    "full_video_frames_decoded": 329556,
+    "exact_duplicates": {
+      "audio_sha256": {
+        "unique": 5390,
+        "within_split_duplicate_groups": 0,
+        "cross_split_duplicates": 0
+      },
+      "video_sha256": {
+        "unique": 5390,
+        "within_split_duplicate_groups": 0,
+        "cross_split_duplicates": 0
+      },
+      "decoded_mono_f32_sha256": {
+        "unique": 5390,
+        "within_split_duplicate_groups": 0,
+        "cross_split_duplicates": 0
+      }
+    },
+    "end_video_pts_minus_audio_seconds": {
+      "min": -0.08091666666666653,
+      "max": 0.16500000000000004,
+      "percentiles": [
+        -0.04212499999999997,
+        0.0,
+        0.08066176470588161
+      ]
+    },
+    "precise_av_alignment": "UNKNOWN; no offset adjustment or artificial degradation",
+    "rows_sha256": "af7217e9323cc4a2d261baec65ccec23177e1889ab0adde25575036f9cfddce4",
+    "layout_hashes": {
+      "train": "c1a88f5f76eec95107e581989513d44da6fc643d6a470135a67362082349494a",
+      "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+      "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+      "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+    },
+    "prior_failed_full_audit_preserved": true,
+    "source_archives": {
+      "audio": {
+        "status": "PASS",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_audio.zip",
+        "etag": "\"26e61999-568649ce7ab80\"",
+        "bytes": 652614041,
+        "sha256": "e36707602fdbeaa2e2284acb29bba883261d5e86857f694ac40cbb56cdcc5e10",
+        "members": 5390,
+        "all_member_crc_verified": true
+      },
+      "front": {
+        "status": "PASS",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front.zip",
+        "etag": "\"31e7421f-56864af341e40\"",
+        "bytes": 837239327,
+        "sha256": "8c7ff24dffd5acb3b8cd1dceb4bd33463b82b797f66a8ed092ad681a9ffb6313",
+        "members": 5390,
+        "all_member_crc_verified": true
+      }
+    },
+    "quality_measured": false
+  },
+  "media_gated_layout": {
+    "status": "MEDIA_GATED_LAYOUT_FIXED_AV_ALIGNMENT_PROFILED_NOT_PROVEN",
+    "source_layout": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-layout-01",
+    "source_hashes": {
+      "train": "c1a88f5f76eec95107e581989513d44da6fc643d6a470135a67362082349494a",
+      "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+      "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+      "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+    },
+    "media_audit": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-media-integrity-01",
+    "media_audit_sha256": "3a29c73421bb695b9179e540ade00484a2ab6e744f90d1a62b078797048a054b",
+    "hashes": {
+      "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+      "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+      "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+      "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+    },
+    "train_assets": 4080,
+    "calibration_assets": 398,
+    "validation_assets": 889,
+    "unresolved_labels_retained": 19,
+    "invalid_train_media_retained_separately": 4,
+    "calibration_validation_ids_labels_bytes_unchanged": true,
+    "all_three_arms_use_identical_common_valid_training_ids": true,
+    "no_quality_based_filtering": true,
+    "quality_evaluated": false,
+    "options_and_grouping_unchanged": true,
+    "original_layout_and_archives_preserved": true
+  },
+  "acquisition": {
+    "status": "PASS",
+    "archives": {
+      "audio": {
+        "status": "PASS",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_audio.zip",
+        "etag": "\"26e61999-568649ce7ab80\"",
+        "bytes": 652614041,
+        "sha256": "e36707602fdbeaa2e2284acb29bba883261d5e86857f694ac40cbb56cdcc5e10",
+        "members": 5390,
+        "all_member_crc_verified": true
+      },
+      "front": {
+        "status": "PASS",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front.zip",
+        "etag": "\"31e7421f-56864af341e40\"",
+        "bytes": 837239327,
+        "sha256": "8c7ff24dffd5acb3b8cd1dceb4bd33463b82b797f66a8ed092ad681a9ffb6313",
+        "members": 5390,
+        "all_member_crc_verified": true
+      }
+    },
+    "max_seconds": 900,
+    "workers": 2,
+    "cloud_cost": 0,
+    "source_index_sha256": "d3209f186b1ad848c93a59e14436fc675431276f7344eceb3a69f2e4fd5b6659",
+    "script_sha256": "7281305008994e370b6b9e28cac6cc7e96382b1a61c41f445daf2a10f4bca4c9",
+    "seconds": 784.904660900007
+  },
+  "official_alternates": {
+    "scope": "official alternate copies for four undecodable training MOVs, no model evaluation",
+    "sources": [
+      {
+        "id": "s32_l_pwip9p",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front_s32.zip",
+        "archive_etag": "\"da3970-56864b63ca7c0\"",
+        "archive_bytes": 14301552,
+        "member": "lombardgrid/front/s32_l_pwip9p.mov",
+        "crc32": 1661550327,
+        "bytes": 40444,
+        "sha256": "0748995620b96e3d00048a485bae5424b35f551783e03cb4865f7f4583fb8846",
+        "aggregate_byte_identical": true,
+        "has_moov": false,
+        "decode_status": "FAIL",
+        "error": "InvalidDataError(1094995529, 'Invalid data found when processing input', '<none>')"
+      },
+      {
+        "id": "s32_p_bwwj2n",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front_s32.zip",
+        "archive_etag": "\"da3970-56864b63ca7c0\"",
+        "archive_bytes": 14301552,
+        "member": "lombardgrid/front/s32_p_bwwj2n.mov",
+        "crc32": 3508828033,
+        "bytes": 38536,
+        "sha256": "037b9fe8f0bf0b4851414d16ed1e4eb90a863697b0108c87de6634ab10b9c506",
+        "aggregate_byte_identical": true,
+        "has_moov": false,
+        "decode_status": "FAIL",
+        "error": "InvalidDataError(1094995529, 'Invalid data found when processing input', '<none>')"
+      },
+      {
+        "id": "s33_l_pwajza",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front_s33.zip",
+        "archive_etag": "\"fcdf15-56864b679b0c0\"",
+        "archive_bytes": 16572181,
+        "member": "lombardgrid/front/s33_l_pwajza.mov",
+        "crc32": 2835962017,
+        "bytes": 53320,
+        "sha256": "d1143c30da30ad845992478a12d4bfa13e4cf26927a6553bbc5589782150b1b0",
+        "aggregate_byte_identical": true,
+        "has_moov": false,
+        "decode_status": "FAIL",
+        "error": "InvalidDataError(1094995529, 'Invalid data found when processing input', '<none>')"
+      },
+      {
+        "id": "s33_p_sgwq2s",
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front_s33.zip",
+        "archive_etag": "\"fcdf15-56864b679b0c0\"",
+        "archive_bytes": 16572181,
+        "member": "lombardgrid/front/s33_p_sgwq2s.mov",
+        "crc32": 3880725570,
+        "bytes": 112636,
+        "sha256": "b9c22745ed004d16e33b48714ac4bfb3d3138fb1e9e6c8e04eb723890ad1fd1e",
+        "aggregate_byte_identical": true,
+        "has_moov": false,
+        "decode_status": "FAIL",
+        "error": "InvalidDataError(1094995529, 'Invalid data found when processing input', '<none>')"
+      }
+    ],
+    "status": "ALTERNATES_CHECKED"
+  },
+  "publisher_samples_vs_release": {
+    "status": "DIAGNOSED",
+    "rows": [
+      {
+        "id": "s22_p_sgbe5s.wav",
+        "sample_sha256": "d20870f17d2da0818ee56a4d1ec04d9f327d641c62d874445d8bf67cff0ebeb3",
+        "archive_member_sha256": "8c7645e232fb48ec70c799ddd684721a2b0b3892149395d0bd6fe5e9f1577c3d",
+        "sample_bytes": 136378,
+        "archive_bytes": 154298,
+        "sample_rate": 16000,
+        "archive_rate": 16000,
+        "sample_codec": "pcm_f32le",
+        "archive_codec": "pcm_f32le",
+        "sample_samples": 34080,
+        "archive_samples": 38560,
+        "waveform_bitwise_equal": false,
+        "scope": "publisher preview vs full-release same utterance ID; byte equality not assumed"
+      },
+      {
+        "id": "s22_l_sgbe5s.wav",
+        "sample_sha256": "9603c6644aa3fd6a01f00c308a490ab648a4e7c2373ddf2f34cb9175b37ca27d",
+        "archive_member_sha256": "7b47bbb536103c6a19d5544072304dca84b9444a01f2e877148a8d9867fc311f",
+        "sample_bytes": 153658,
+        "archive_bytes": 170298,
+        "sample_rate": 16000,
+        "archive_rate": 16000,
+        "sample_codec": "pcm_f32le",
+        "archive_codec": "pcm_f32le",
+        "sample_samples": 38400,
+        "archive_samples": 42560,
+        "waveform_bitwise_equal": false,
+        "scope": "publisher preview vs full-release same utterance ID; byte equality not assumed"
+      },
+      {
+        "id": "s16_p_bgah2n.wav",
+        "sample_sha256": "fe5a3bea6fbf846caf326885ff3a7e3b2a90746903571748eea1026e0ab26f0f",
+        "archive_member_sha256": "41f44a1d7d59a8ea5d34627e0d2d81c899463eaf431b61c42a42a60bd5b19d75",
+        "sample_bytes": 138298,
+        "archive_bytes": 154938,
+        "sample_rate": 16000,
+        "archive_rate": 16000,
+        "sample_codec": "pcm_f32le",
+        "archive_codec": "pcm_f32le",
+        "sample_samples": 34560,
+        "archive_samples": 38720,
+        "waveform_bitwise_equal": false,
+        "scope": "publisher preview vs full-release same utterance ID; byte equality not assumed"
+      },
+      {
+        "id": "s16_l_bgah2n.wav",
+        "sample_sha256": "c61905276ee578ab244f529fe032d783cf23c21d52242c99f806d90dca089eae",
+        "archive_member_sha256": "9ad3f64f1644d59690d389eba2d63aaadcdfad40894abf46333318bf98e8681e",
+        "sample_bytes": 149818,
+        "archive_bytes": 163898,
+        "sample_rate": 16000,
+        "archive_rate": 16000,
+        "sample_codec": "pcm_f32le",
+        "archive_codec": "pcm_f32le",
+        "sample_samples": 37440,
+        "archive_samples": 40960,
+        "waveform_bitwise_equal": false,
+        "scope": "publisher preview vs full-release same utterance ID; byte equality not assumed"
+      }
+    ],
+    "initial_archive_byte_parity_assertion_failed": true,
+    "source_hash_gates_unchanged": true
+  },
+  "independent_frontend_reload": {
+    "status": "PASS",
+    "records": [
+      {
+        "source": "s22_p_sgbe5s.wav",
+        "version": "official_sample",
+        "input_sha256": "d20870f17d2da0818ee56a4d1ec04d9f327d641c62d874445d8bf67cff0ebeb3",
+        "samples": 34080,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": true,
+        "tokens_finite": true,
+        "token_shape": [
+          107,
+          384
+        ]
+      },
+      {
+        "source": "s22_p_sgbe5s.wav",
+        "version": "full_release",
+        "input_sha256": "8c7645e232fb48ec70c799ddd684721a2b0b3892149395d0bd6fe5e9f1577c3d",
+        "samples": 38560,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": "not comparable: different waveform",
+        "tokens_finite": true,
+        "token_shape": [
+          121,
+          384
+        ]
+      },
+      {
+        "source": "s22_l_sgbe5s.wav",
+        "version": "official_sample",
+        "input_sha256": "9603c6644aa3fd6a01f00c308a490ab648a4e7c2373ddf2f34cb9175b37ca27d",
+        "samples": 38400,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": true,
+        "tokens_finite": true,
+        "token_shape": [
+          120,
+          384
+        ]
+      },
+      {
+        "source": "s22_l_sgbe5s.wav",
+        "version": "full_release",
+        "input_sha256": "7b47bbb536103c6a19d5544072304dca84b9444a01f2e877148a8d9867fc311f",
+        "samples": 42560,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": "not comparable: different waveform",
+        "tokens_finite": true,
+        "token_shape": [
+          133,
+          384
+        ]
+      },
+      {
+        "source": "s16_p_bgah2n.wav",
+        "version": "official_sample",
+        "input_sha256": "fe5a3bea6fbf846caf326885ff3a7e3b2a90746903571748eea1026e0ab26f0f",
+        "samples": 34560,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": true,
+        "tokens_finite": true,
+        "token_shape": [
+          108,
+          384
+        ]
+      },
+      {
+        "source": "s16_p_bgah2n.wav",
+        "version": "full_release",
+        "input_sha256": "41f44a1d7d59a8ea5d34627e0d2d81c899463eaf431b61c42a42a60bd5b19d75",
+        "samples": 38720,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": "not comparable: different waveform",
+        "tokens_finite": true,
+        "token_shape": [
+          121,
+          384
+        ]
+      },
+      {
+        "source": "s16_l_bgah2n.wav",
+        "version": "official_sample",
+        "input_sha256": "c61905276ee578ab244f529fe032d783cf23c21d52242c99f806d90dca089eae",
+        "samples": 37440,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": true,
+        "tokens_finite": true,
+        "token_shape": [
+          117,
+          384
+        ]
+      },
+      {
+        "source": "s16_l_bgah2n.wav",
+        "version": "full_release",
+        "input_sha256": "9ad3f64f1644d59690d389eba2d63aaadcdfad40894abf46333318bf98e8681e",
+        "samples": 40960,
+        "frontend_bitwise_equal": true,
+        "original_token_smoke_bitwise_equal": "not comparable: different waveform",
+        "tokens_finite": true,
+        "token_shape": [
+          128,
+          384
+        ]
+      }
+    ],
+    "all_parameter_dtypes": [
+      "torch.float32"
+    ],
+    "all_parameters_frozen": true,
+    "model_training": false,
+    "scope": "independent frontend reload; preview/full-release inputs tested separately, no quality metrics",
+    "prior_attempt": "frontend-reload-audit-01 failed incorrect preview/archive byte identity assumption before outputs, preserved"
+  },
+  "source_commit": "cb4368dc1e23519e774c78275e2f63d2f339e7ec",
+  "new_model_training_started": false,
+  "sealed_audit_used": false,
+  "cloud_cost": 0,
+  "runner_hashes": {
+    "lombard_grid_acquire_archives.py": "7281305008994e370b6b9e28cac6cc7e96382b1a61c41f445daf2a10f4bca4c9",
+    "lombard_grid_decoded_audit.py": "ee1ab0fcf6132d94d9d1c0d9cba5e706b6ad6ec7cd5d14df4e1836199750a6a7",
+    "lombard_grid_full_decode_controller.py": "d1a03846bfa69a9d15e3bd01cf3ead6ad82f6a00d0f72e7ad94c157e81c1b06d",
+    "lombard_grid_broken_video_alternate.py": "b74d7812ad3f792b0452b22451acf662b5acc8bf7111991ece79128af4f0be1f",
+    "lombard_grid_finalize_media_gate.py": "ea6324ef636fb62378d1b2885d09389fcfb612ebe0c9b9f6dc026016c82a342e",
+    "lombard_grid_encoder_frontend_reload_02.py": "51ee3278b4d561edfd0c6162bfa0d337f9a5d425bd437ed5c4f3e4f869096e8f"
+  },
+  "cuda_encoder_smoke": {
+    "status": "PASS",
+    "scope": "four full-release train utterances, CUDA frozen feature smoke only",
+    "rows": [
+      {
+        "source": "s22_p_sgbe5s.wav",
+        "input_sha256": "8c7645e232fb48ec70c799ddd684721a2b0b3892149395d0bd6fe5e9f1577c3d",
+        "shape": [
+          121,
+          384
+        ],
+        "cpu_max_abs_difference": 3.5762786865234375e-05,
+        "gpu_repeat_bitwise_equal": true,
+        "two_forwards_seconds": 0.21000799990724772
+      },
+      {
+        "source": "s22_l_sgbe5s.wav",
+        "input_sha256": "7b47bbb536103c6a19d5544072304dca84b9444a01f2e877148a8d9867fc311f",
+        "shape": [
+          133,
+          384
+        ],
+        "cpu_max_abs_difference": 3.0517578125e-05,
+        "gpu_repeat_bitwise_equal": true,
+        "two_forwards_seconds": 0.018860999960452318
+      },
+      {
+        "source": "s16_p_bgah2n.wav",
+        "input_sha256": "41f44a1d7d59a8ea5d34627e0d2d81c899463eaf431b61c42a42a60bd5b19d75",
+        "shape": [
+          121,
+          384
+        ],
+        "cpu_max_abs_difference": 5.510449409484863e-05,
+        "gpu_repeat_bitwise_equal": true,
+        "two_forwards_seconds": 0.018418700085021555
+      },
+      {
+        "source": "s16_l_bgah2n.wav",
+        "input_sha256": "9ad3f64f1644d59690d389eba2d63aaadcdfad40894abf46333318bf98e8681e",
+        "shape": [
+          128,
+          384
+        ],
+        "cpu_max_abs_difference": 3.24249267578125e-05,
+        "gpu_repeat_bitwise_equal": true,
+        "two_forwards_seconds": 0.018822800018824637
+      }
+    ],
+    "atol": 0.0001,
+    "rtol": 0.0001,
+    "dtype": "float32",
+    "tf32": false,
+    "seed": 17,
+    "training": false,
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "parameters": 8208384,
+    "seconds": 0.34615200001280755,
+    "peak_allocated_bytes": 100234752,
+    "peak_reserved_bytes": 113246208
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "status": "PASS_TRAIN_SOURCE_ROLE_AUDIT_ONLY",
+  "source_commit": "f5bb5241097b338f4770b72f3df18c5b851646cc",
+  "written_utc": "2026-10-13T22:33:11.759680+00:00",
+  "python": "3.11.9",
+  "source_revision": "3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf",
+  "annotation_sha256": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78",
+  "media_manifest_sha256": "469299ad240ff85c47ba44abb8920aae9994b0e3ec15a3fca1373c49b2fa6ee3",
+  "archive_checked": true,
+  "clips": 8,
+  "raw_frames_reviewed": 64,
+  "roles_match_legacy_plan_count": 8,
+  "grounded_target_roles_distinct_count": 8,
+  "candidate_counts": {
+    "2": 1,
+    "3": 6,
+    "4": 1
+  },
+  "source_shuffle_annotation_present_count": 7,
+  "hidden_first_annotation_after_frame_zero_count": 1,
+  "frame_extraction_seconds": 26.016894200001843,
+  "gpu_seconds": 0,
+  "cloud_cost": 0,
+  "model_inference": false,
+  "training": false,
+  "validation_opened": false,
+  "sealed_audit_opened": false,
+  "scientific_scope": "previously known/selected training subset, not a blind quality test",
+  "manual_review_limits": "eight sparse raw frames per video, labels known; not a dense event or visibility annotation",
+  "source_mask_semantics_limit": "is_masked=0 is not a verified deployable visibility/target cue; no mask flags used in frame sampling",
+  "no_cut_limit": "video_10212 official cut=-1; full official input retained, no invented cut",
+  "adoption": false,
+  "decision_accuracy": "NOT_EVALUATED",
+  "rows": [
+    {
+      "video_id": "video_10103",
+      "source_grounded_hidden_id": 6,
+      "hidden_label_diagnostic_only": "apple",
+      "hidden_first_annotated_frame": 0,
+      "source_grounded_cover_id": 4,
+      "similar_candidate_ids": [
+        4,
+        5
+      ],
+      "source_similar_object_count": 2,
+      "shuffle_segments_diagnostic_only": [
+        [
+          289,
+          424
+        ]
+      ],
+      "initial_question_id": 5,
+      "final_question_id": 4,
+      "initial_correct_option_diagnostic_only": "Under the second object from the left.",
+      "final_correct_option_diagnostic_only": "Under the second object from the left.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    },
+    {
+      "video_id": "video_10186",
+      "source_grounded_hidden_id": 6,
+      "hidden_label_diagnostic_only": "eraser",
+      "hidden_first_annotated_frame": 0,
+      "source_grounded_cover_id": 4,
+      "similar_candidate_ids": [
+        3,
+        4,
+        5
+      ],
+      "source_similar_object_count": 3,
+      "shuffle_segments_diagnostic_only": [
+        [
+          407,
+          612
+        ]
+      ],
+      "initial_question_id": 6,
+      "final_question_id": 5,
+      "initial_correct_option_diagnostic_only": "Under the second object from the left.",
+      "final_correct_option_diagnostic_only": "Under the second object from the left.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    },
+    {
+      "video_id": "video_10212",
+      "source_grounded_hidden_id": 5,
+      "hidden_label_diagnostic_only": "cap",
+      "hidden_first_annotated_frame": 0,
+      "source_grounded_cover_id": 2,
+      "similar_candidate_ids": [
+        1,
+        2,
+        3
+      ],
+      "source_similar_object_count": 3,
+      "shuffle_segments_diagnostic_only": [
+        [
+          286,
+          894
+        ]
+      ],
+      "initial_question_id": 6,
+      "final_question_id": 5,
+      "initial_correct_option_diagnostic_only": "Under the first object from the left.",
+      "final_correct_option_diagnostic_only": "Under the second object from the left.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    },
+    {
+      "video_id": "video_10387",
+      "source_grounded_hidden_id": 2,
+      "hidden_label_diagnostic_only": "cap",
+      "hidden_first_annotated_frame": 0,
+      "source_grounded_cover_id": 10,
+      "similar_candidate_ids": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "source_similar_object_count": 4,
+      "shuffle_segments_diagnostic_only": [
+        [
+          290,
+          491
+        ]
+      ],
+      "initial_question_id": 6,
+      "final_question_id": 5,
+      "initial_correct_option_diagnostic_only": "Under the second object from the left.",
+      "final_correct_option_diagnostic_only": "Under the first object from the left.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    },
+    {
+      "video_id": "video_1087",
+      "source_grounded_hidden_id": 7,
+      "hidden_label_diagnostic_only": "purple-toy",
+      "hidden_first_annotated_frame": 0,
+      "source_grounded_cover_id": 2,
+      "similar_candidate_ids": [
+        2,
+        3,
+        4
+      ],
+      "source_similar_object_count": 3,
+      "shuffle_segments_diagnostic_only": [],
+      "initial_question_id": 7,
+      "final_question_id": 6,
+      "initial_correct_option_diagnostic_only": "Under the first object from the left.",
+      "final_correct_option_diagnostic_only": "Under the first object from the left.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    },
+    {
+      "video_id": "video_10886",
+      "source_grounded_hidden_id": 3,
+      "hidden_label_diagnostic_only": "box",
+      "hidden_first_annotated_frame": 0,
+      "source_grounded_cover_id": 0,
+      "similar_candidate_ids": [
+        0,
+        1,
+        2
+      ],
+      "source_similar_object_count": 3,
+      "shuffle_segments_diagnostic_only": [
+        [
+          280,
+          621
+        ]
+      ],
+      "initial_question_id": 6,
+      "final_question_id": 5,
+      "initial_correct_option_diagnostic_only": "Under the third object from the left.",
+      "final_correct_option_diagnostic_only": "Under the third object from the left.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    },
+    {
+      "video_id": "video_10894",
+      "source_grounded_hidden_id": 4,
+      "hidden_label_diagnostic_only": "vaseline-bottle",
+      "hidden_first_annotated_frame": 0,
+      "source_grounded_cover_id": 1,
+      "similar_candidate_ids": [
+        7,
+        1,
+        2
+      ],
+      "source_similar_object_count": 3,
+      "shuffle_segments_diagnostic_only": [
+        [
+          194,
+          534
+        ]
+      ],
+      "initial_question_id": 6,
+      "final_question_id": 5,
+      "initial_correct_option_diagnostic_only": "Under the second object from the left.",
+      "final_correct_option_diagnostic_only": "Under the first object from the left.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    },
+    {
+      "video_id": "video_10903",
+      "source_grounded_hidden_id": 7,
+      "hidden_label_diagnostic_only": "cap",
+      "hidden_first_annotated_frame": 224,
+      "source_grounded_cover_id": 3,
+      "similar_candidate_ids": [
+        1,
+        2,
+        3
+      ],
+      "source_similar_object_count": 3,
+      "shuffle_segments_diagnostic_only": [
+        [
+          298,
+          525
+        ]
+      ],
+      "initial_question_id": 6,
+      "final_question_id": 5,
+      "initial_correct_option_diagnostic_only": "Under the farthest object from the person.",
+      "final_correct_option_diagnostic_only": "Under the farthest object from the person.",
+      "deployable_target_identification": "UNKNOWN: no input-only selector measured",
+      "deployable_game_start_frame": "UNKNOWN: no input-only event detector measured",
+      "deployable_actor_coordinate_mapping": "UNKNOWN: source relative answer is supervision only"
+    }
+  ],
+  "next_gate": "bounded input-only temporal cue and actor-relative association protocol; labels may supervise training only",
+  "sha256": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-cues-01\\annotation-inventory.json": "af8ec1e14a7ed730bb522f4224f9464f5fa8f5fb1f432f845d53cc3c46597279",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-cues-01\\raw-frame-review-02\\result.json": "09b13b2ddde90d5a93ebf0a02f930cb15e3a733b9c90a06ff08020a55e0197a2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-tapir-expanded-plan-01\\config.json": "977cfcd414db9a34af1f88a9089e2a5e6f1eb65d7e89dc32c57ac7d0199e5b32",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-source-cues-01\\frame-attempt-01-failure.json": "d6ea633d5c8dd74f8a252e9956edbff51a0073b26418e5c358cd9c8f821788a6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_source_cues_01.py": "7dd7bf298bfd415fad6cbbb8965c2c4461baba0866b4d13a165ad180b98165d7",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_cue_frames_01.py": "89a14bde8c387bb742e68a55fb66a471f89f625950cd8c6b23c3f37c08a8e30f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_cue_frames_02.py": "10e3096419d3217e10bd660c4cccf0bb1046b2ae7328d504ffe601d86f263fd3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_cue_report_01.py": "8f64fae5bf8648a057d20cdf60407e3da0ca04c65c04a2eea816b1005ddaafe3"
+  }
+}

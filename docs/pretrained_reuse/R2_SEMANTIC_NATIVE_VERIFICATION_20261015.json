@@ -1,0 +1,28 @@
+{
+  "status": "PASS_INDEPENDENT_SEMANTIC_NATIVE_VERIFICATION",
+  "primary_sha256": "e7901306ca31d6c32fee8d4e888d01f0eb4f78ec6854e8f71c0e72ea75ff289b",
+  "replay_sha256": "4a28e6ad6d444af210c899de5114dad1bc5028433c58bc3dcc524be50fa9a1f8",
+  "script_sha256": "fd90b29cc69507653a32754515be3c990e5a5d9982fcd8ee93eb2de810ed966f",
+  "primary": {
+    "predictions": 10240,
+    "whole_state_groups": 252,
+    "payloads": 26,
+    "full_candidate_choices": 40,
+    "metrics_recomputed": true,
+    "both_bootstraps_recomputed": true
+  },
+  "replay": {
+    "predictions": 10240,
+    "whole_state_groups": 252,
+    "payloads": 26,
+    "full_candidate_choices": 40,
+    "metrics_recomputed": true,
+    "both_bootstraps_recomputed": true
+  },
+  "selected_step": 0,
+  "optimizer_updates": 0,
+  "observed_train_diagnostic": true,
+  "product_complete": false,
+  "sealed_audit_loaded": false,
+  "transfer_loaded": false
+}

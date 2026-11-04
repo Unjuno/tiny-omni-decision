@@ -1,0 +1,36 @@
+{
+  "format": "source_license_recheck_v1",
+  "dataset_id": "MEVA KF1 public release",
+  "screened_at": "2026-10-29",
+  "source_revision": "421841a75577b697c314e952e585aecbb1b99e17",
+  "official_sources": {
+    "dataset_page": "https://mevadata.org/",
+    "license_text": "https://mevadata.org/resources/MEVA-data-license.txt",
+    "paper": "https://openaccess.thecvf.com/content/WACV2021/papers/Corona_MEVA_A_Large-Scale_Multiview_Multimodal_Video_Dataset_for_Activity_Detection_WACV_2021_paper.pdf"
+  },
+  "license": {
+    "dataset_page_claim": "CC-BY-4.0 for all MEVA data",
+    "license_text_claim": "MEVA dataset by Kitware and IARPA under CC-BY-4.0",
+    "paper_claim": "dataset release CC-BY-4.0",
+    "privacy_personality_rights_granted": false,
+    "actor_consent_and_irb_reported_by_paper": true,
+    "attribution_required": true
+  },
+  "scope_and_admission": {
+    "candidate_scope": "video-only bounded development task",
+    "natural_audio_video": false,
+    "video_imu": false,
+    "two_input_necessity_established": false,
+    "training_admission": "NOT_YET_ADMITTED",
+    "remaining_gates": [
+      "pin exact public training video subset and annotation revision",
+      "construct event/actor-disjoint validation without evaluation-level annotations",
+      "audit task and annotation quality",
+      "resolve privacy/personality rights and attribution operationally",
+      "pass local GPU and at least 2-GiB output-volume preflight"
+    ]
+  },
+  "media_downloaded": false,
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

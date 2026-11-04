@@ -1,0 +1,5644 @@
+{
+  "status": "EXECUTED_NONBLIND_TRAIN_CUE_OPPORTUNITY_NOT_DECISION_QUALITY",
+  "inference_source_commit": "ee91735382105b11669bd49fac1b4dd3c2c5112b",
+  "scorer_source_commit": "a3e38e58e737bfd50701666aea76b7bace9ab449",
+  "effective_config": {
+    "source_commit": "ee91735382105b11669bd49fac1b4dd3c2c5112b",
+    "input_plan": {
+      "video_id": "video_10903",
+      "split": "train",
+      "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4",
+      "media_sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+      "cut_frame": 558,
+      "frames": 558,
+      "frame_indices": [
+        0,
+        18,
+        36,
+        54,
+        72,
+        90,
+        108,
+        126,
+        144,
+        162,
+        180,
+        198,
+        216,
+        234,
+        252,
+        270,
+        287,
+        305,
+        323,
+        341,
+        359,
+        377,
+        395,
+        413,
+        431,
+        449,
+        467,
+        485,
+        503,
+        521,
+        539,
+        557
+      ]
+    },
+    "executed_frame_indices": [
+      0,
+      18,
+      36,
+      54,
+      72,
+      90,
+      108,
+      126,
+      144,
+      162,
+      180,
+      198,
+      216,
+      234,
+      252,
+      270,
+      287,
+      305,
+      323,
+      341,
+      359,
+      377,
+      395,
+      413,
+      431,
+      449,
+      467,
+      485,
+      503,
+      521,
+      539,
+      557
+    ],
+    "model_revision": "de431c4043854a71d8101e17995dfe596bf101a5",
+    "old_proposal_sha256": "9d4f50c0722a93589d05471f1b94e9c05b72dc7fb49edfc5deb7df63c528f075",
+    "fine_result_sha256": "a000672b4500a8b4ae9bfde3f15e06d8103c56e986c2d7d3c17a6a77addf98f4",
+    "fine_config_sha256": "b86589ce82c5b1bde7657ffa4b1f80abc5464e54f63211a3f2fd728fff774a79",
+    "fine_time_archive_sha256": "e79ff7d73ff3b58f04f0d058666768f603823140829141311d63e3cdf18158bb",
+    "old_result_sha256": "75665a07c986dd0a97bff4854912b7a265e91baf49c0c5d45637886e880fa3d1",
+    "old_config_sha256": "371135a2b4ea735f65038312927a02f29541739dee2c7889a738d5c071578dd3",
+    "source_hashes": {
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_dynamic_discovery.py": "5bc8c15b4a819b7870c55aacc8cadf629895d031eca3306abadf3bf5ccbf3e08",
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\auto_init02.py": "b9918adcdf5aceed646b6d404a611618fe3026a9edec822beea382dd37e943c0",
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\model.safetensors": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\result.json": "a000672b4500a8b4ae9bfde3f15e06d8103c56e986c2d7d3c17a6a77addf98f4",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\effective-config.json": "b86589ce82c5b1bde7657ffa4b1f80abc5464e54f63211a3f2fd728fff774a79",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\video_10903.npz": "e79ff7d73ff3b58f04f0d058666768f603823140829141311d63e3cdf18158bb",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\result.json": "75665a07c986dd0a97bff4854912b7a265e91baf49c0c5d45637886e880fa3d1",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\effective-config.json": "371135a2b4ea735f65038312927a02f29541739dee2c7889a738d5c071578dd3",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10903-proposals.npz": "9d4f50c0722a93589d05471f1b94e9c05b72dc7fb49edfc5deb7df63c528f075",
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\config.json": "860aff9751b139d83a4ad7df1e5535416fded533e0ead02625edbefcb9953cce",
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\preprocessor_config.json": "6ebf229ee259368ce4a8d4f2fe893a72b053023710853e257253939e601f583d",
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\processor_config.json": "f8a68e865cfad115c1c2763f3d93eca7b1c622da06da2a9273eb437fb2389b6d",
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\video_preprocessor_config.json": "9fccfe5f464ec38c2f236d0e6a68e95511c80c22132fc2fa4b9f7b65f24fad95",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\modeling_sam2_video.py": "7dee3aa3e106a7b00c1f08444be62595e7032b2d67c883c96d1adb42dbcfc748",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\processing_sam2_video.py": "f3b430f31dce2fd96100a033f39ab84616e2a55b997d2073290a240e9649cd74",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2\\image_processing_sam2.py": "765a73f0d8b5fcce9ffe3a6c623534b8ab6df5d7bf15cc50a4d468592e4cce69",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\video_processing_sam2_video.py": "4d9b7861dd78f62241036c171fc22a9311c4013459240a26e5b13653163ed0c4"
+    },
+    "grid_side": 32,
+    "chunk_objects": 64,
+    "mask_threshold": 0.0,
+    "nms_iou": 0.7,
+    "top_k": null,
+    "cache_policy": "reset_tracking_data within one frame; new session for every source time",
+    "seed": 17,
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "dtype": "float32",
+    "attention": "sdpa",
+    "tf32": false,
+    "max_seconds": 1200,
+    "peak_torch_cap_bytes": 6442450944,
+    "disk_reserve_bytes": 8589934592,
+    "training": false,
+    "smoke_result_sha256": "bc05e706e702013b36a123166077e092442966f2e29ab01d785792bc55c83684",
+    "replay_result_sha256": null
+  },
+  "primary_result_sha256": "191796c3e85ffea628c55d45f15cd1a09ecdba546551476e57dd55ce09a7ae0e",
+  "smoke_result_sha256": "bc05e706e702013b36a123166077e092442966f2e29ab01d785792bc55c83684",
+  "reload_result_sha256": "34a40ab1c0dece860e699375908b6f5d0683d7e98994a8f77111f2b5837efa7c",
+  "scorer_result_sha256": "de2c495522f978edcefeb39a6c81084ef32d8add90223a53b882fd2bccab57cc",
+  "independent_audit_sha256": "097f08b712267839922236e381e701acd8fdd3806f980b84a616474f5266df5a",
+  "independent_audit_script_sha256": "8bec9154f580a8a321a9814551a0532e35612f0232402be1b4262854389678ba",
+  "primary_seconds": 541.5329905999824,
+  "smoke_seconds": 24.89361040003132,
+  "reload_seconds": 20.777543299947865,
+  "scoring_seconds": 13.070475999964401,
+  "independent_audit_seconds": 5.695720700081438,
+  "primary_cached_forward_window_seconds": 520.1728149999399,
+  "primary_peak_torch_bytes": 682148352,
+  "primary_peak_process_bytes": 1614536704,
+  "inference_rows": [
+    {
+      "frame_index": 0,
+      "rgb_sha256": "b703c749ab94ba5b67e585f7ded3b7b68a9e785042f5e853fe135566c21fe554",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0000-proposals.npz",
+      "sha256": "3ceb2615c9b40a161747032c25d7a16117e4b2daa1485aefb4c9ea3ffffb069b",
+      "file_bytes": 361816,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 40,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.602417299873196,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.165888499934226,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 18,
+      "rgb_sha256": "1c0c73cdccc0e23e2b02e6f51f844fa9fd7e1a412bb76d32874b608c5c916de1",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0018-proposals.npz",
+      "sha256": "3085d0dcc6b2e5eb015da6e8c357a76603dde47b4ba5e496870346f47630960e",
+      "file_bytes": 316459,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 39,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.785112699843012,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.29988119995687,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 36,
+      "rgb_sha256": "7ee73d3b2e5b35d9ae6c67d57ae51b84cbcd2e7c3de4e387f0dd17a7e1adca84",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0036-proposals.npz",
+      "sha256": "ef5dc7b41a200e0679a7b2abd33ad12168d862cc7e8bb1e270e3c1a9871e2f0f",
+      "file_bytes": 319030,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 30,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.73646699974779,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.262793199974112,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 54,
+      "rgb_sha256": "8b4c0e849a7093d789af4fa2ad1ab81b891d7b8c69600572e5edfb8a6066f799",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0054-proposals.npz",
+      "sha256": "9c467f32beda6c7b22b8bbb86515aa7a99bdf91a6606147b5de3124445d7c43b",
+      "file_bytes": 343700,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 44,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.747355800238438,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.288937299977988,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 72,
+      "rgb_sha256": "498bc6ce176b8427f645192d4b49ad5e04f5f36c8f6a5f1fa974bac5bf7d0316",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0072-proposals.npz",
+      "sha256": "511b4460b7f58656c82383c738f4185757f3a97fb5adea0dc80ee87bb9c91fed",
+      "file_bytes": 320016,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 43,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.745019899914041,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.272063600015827,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 90,
+      "rgb_sha256": "1c958a4b4d249457e06bd067c7301cd23a5753040922a0fbc12426d2f3c396bf",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0090-proposals.npz",
+      "sha256": "e1ba45629ce62f2fc8dfe47303e7399431df14bd3f4d84003f3bc5ce3e553188",
+      "file_bytes": 311677,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 45,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.742734899977222,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.259963599964976,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 108,
+      "rgb_sha256": "7b7b617483ac589f246235dd619c87facbd036a194bf3a887869ab7e54759561",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0108-proposals.npz",
+      "sha256": "fcf8cdd69c1b34750de3a58c8e5dbc45e152bb002e92bd01b05edc064d0ec33f",
+      "file_bytes": 309023,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 36,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.749983700108714,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.27061250002589,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 126,
+      "rgb_sha256": "8878d3e194db1e8bd863a65e800f1d7c2425634478678ba2466e8793a311d54d",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0126-proposals.npz",
+      "sha256": "3667703828879d3624324db88204c7a1f3bcb9f6614c4a6832175884016953e3",
+      "file_bytes": 319392,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 31,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.007290000095963,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.5353582999669,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 144,
+      "rgb_sha256": "4ecfa4b8f3d96a9a4e312a5f1b4594d2278590c752b78310a5d4773ce24d34da",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0144-proposals.npz",
+      "sha256": "ea449d35313a2676c7f4e88dbd77dca73d2705c1ce86f786f54153a32672fa46",
+      "file_bytes": 344080,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 25,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.736641900497489,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.266254000016488,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 162,
+      "rgb_sha256": "ad2376f49c1a859b9e5689ea6753c5572c40613156cf62e61cf151281d9a2f48",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0162-proposals.npz",
+      "sha256": "5379abd041d5cb72d4953116b25df899061ce041fc04ffea4d102b18cc3d0878",
+      "file_bytes": 353571,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 38,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.438144899788313,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.985425399965607,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 180,
+      "rgb_sha256": "75b1dd5820692d45700dfdea1ccfd88078a136cc6b6e73f862e6b77bedeca3a8",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0180-proposals.npz",
+      "sha256": "28d81791896d7b1575f4b77ba433f0503d10be654ad79ec5f9038d84cad34e68",
+      "file_bytes": 324450,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 36,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.1314419999253,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.660417500068434,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 198,
+      "rgb_sha256": "79c91ca79f2c599ed792f2622da01179dfc4c3a7a9fc92d0efe4ae7da58e5560",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0198-proposals.npz",
+      "sha256": "e173d33d1cf33ba05fd7863a617e9677304c5b5487a3cb9c133d37aaf3d22ac6",
+      "file_bytes": 333846,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 37,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.31452449981589,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.898645600071177,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 216,
+      "rgb_sha256": "36cb5f7a8384db13a1c721472e15a57b90819563616cb3695f116fe40193a132",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0216-proposals.npz",
+      "sha256": "c40718bbcf78019aaac4d9af6e91f5bbb2142985d5aa725f3a4619976dcb15b5",
+      "file_bytes": 370737,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 34,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 19.19799250003416,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 19.759780899970792,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 234,
+      "rgb_sha256": "d30793a71415baa81f726d130224e582a83c7862545f179e925a05e714026490",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0234-proposals.npz",
+      "sha256": "e999d0f26e605025524f534b17c8922416498ec50f9363e1efe199d856c9e03b",
+      "file_bytes": 333520,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 35,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.697632800089195,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.228838399983943,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 252,
+      "rgb_sha256": "c32d258349fe1fd9a143bc71da64eb6120e7e046bbf7553ced625dba4de89ed2",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0252-proposals.npz",
+      "sha256": "1c250014f5d093eeaad8fbcfa539db033ffd621b6dc07e9a74226e1eb9130217",
+      "file_bytes": 338431,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 41,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.637875399901532,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.1673046000069,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 270,
+      "rgb_sha256": "e985783b6e78a611622dcd96b6c7e85f478d9a4174eb0a4325bc3485c4d564b1",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0270-proposals.npz",
+      "sha256": "c97fac90ee4613b64de10359f27c20067e9e6f63b8aa1c00f9cf59dacde34ef5",
+      "file_bytes": 403068,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 35,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.916974700056016,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.44482670002617,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 287,
+      "rgb_sha256": "566d55bab794c5731af3225c82da9247dbee113c7ae6378f09a9103e520cf01b",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0287-proposals.npz",
+      "sha256": "682619ba8feb1dc6703b5413797305cb2e7a03c369952ccb8ae5485ab9133ba4",
+      "file_bytes": 384009,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 41,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.845465199789032,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.387436200049706,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 305,
+      "rgb_sha256": "ca3f9f71b5478fe0ed62717484245f25b50380344b32f36b5d00bc355675456c",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0305-proposals.npz",
+      "sha256": "2245506b8c468f7edda537c37880f638e29f5fd37cfae4577150dcd85231afbc",
+      "file_bytes": 348757,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 31,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.523851400008425,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 17.06258400005754,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 323,
+      "rgb_sha256": "e7ef24933840f031b7b903a08532c57fce6fe65fd5a1ba9b7e3a728973968e7e",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0323-proposals.npz",
+      "sha256": "a28ba55cfe81bc55541a8dadabd98e6a8b45271f009f7055bdf4256947fbb0ca",
+      "file_bytes": 321641,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 36,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.692990300012752,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 17.24676270002965,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 341,
+      "rgb_sha256": "ea9b1c3f8021ed8a03ec376922b70e5c8ccbb89feec243827c14d16fda33362c",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0341-proposals.npz",
+      "sha256": "ddf018d3dbcfbdad90fb9f8841d98f4084a9303b931056e247437b31d808abdf",
+      "file_bytes": 369064,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 29,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.520023900084198,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 17.058388500008732,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 359,
+      "rgb_sha256": "1dd347850c61530262edcf86bdef72795c12242fc90b4deaa3c75184a5631523",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0359-proposals.npz",
+      "sha256": "b7fed18483ad769d5c2458bc27b411efb6e248fbca056f346ffc3ab9ff6fdcc1",
+      "file_bytes": 303125,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 26,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.22347870003432,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.769275700091384,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 377,
+      "rgb_sha256": "a7762bd0754b4f8daaf701ad8340c28a93fde1c7d9d14f033279a0a3ac7dddde",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0377-proposals.npz",
+      "sha256": "bf9787ddeb1cf66db9c0fcaec1a11f5d3e6d0599f40e85aea28c323b10d1066f",
+      "file_bytes": 305376,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 32,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.713967900024727,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.273410000023432,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 395,
+      "rgb_sha256": "a22db2ab52f4e9f66adf34727886b0c87e2d5e424376fd8c94b9d30358704fa2",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0395-proposals.npz",
+      "sha256": "3243fde2a011d6f2414c828694c777ab78ec865faa2ad20d022e422c09136a11",
+      "file_bytes": 322773,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 25,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.902802599943243,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 17.44991139997728,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 413,
+      "rgb_sha256": "667d3f0de6ffb25cfa441d7f5b8d6d5e6749d1dcdd6d1a73873907864ea794bf",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0413-proposals.npz",
+      "sha256": "3a3f93297370bd9a6cf71e126ea2ac952e190a34f9ac449cfa7700d377396e00",
+      "file_bytes": 313817,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 23,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.781027799937874,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.329123799921945,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 431,
+      "rgb_sha256": "aea8651b4727efd712c6129d3798051a86230543cbdc10d8baad8e2979d3bb2d",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0431-proposals.npz",
+      "sha256": "dfcf13defe0ad8518dfbabff71c588df746616b57e24d3eefef631ceb2a1e144",
+      "file_bytes": 331171,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 33,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 17.200390400132164,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 17.762958099949174,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 449,
+      "rgb_sha256": "f8fbd491a6e93286832c856d9bdec6c5abdaa80417cf8c76ede50f874cfe871b",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0449-proposals.npz",
+      "sha256": "0871f28e53f079737461fc91c3aa7ef17a6107e1a1ab96d3d27bc9a500cdb136",
+      "file_bytes": 378544,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 31,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.40254180005286,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.96159910003189,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 467,
+      "rgb_sha256": "92925fbd17496233d01b24fde5cb143a380c38d5d536541260039fc65862386d",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0467-proposals.npz",
+      "sha256": "9f0312b880e4b1b42c526bf7a1f542392b33e913119172b88a453c616e6a6fea",
+      "file_bytes": 346157,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 32,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.21709129982628,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.76917600003071,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 485,
+      "rgb_sha256": "126d2788de0e59f1428856f5f57733e61e31feb696ab80e147c43f9999587554",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0485-proposals.npz",
+      "sha256": "91d7ff828f5047c670f88251c2a7ce1281fb1ea16a853f867712bfffb29ca50b",
+      "file_bytes": 331611,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 21,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.230732699856162,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.786186799989082,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 503,
+      "rgb_sha256": "cfde9865acb7c4133d9c9159268b4008f25377a50bd27dae21822d695efd092b",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0503-proposals.npz",
+      "sha256": "a4da472a74dbec2aa5f19a69a1913e74e01ab0ae1b01ba2e2ce6878a923040ee",
+      "file_bytes": 319862,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 21,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.676623799954541,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.2225652000634,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 521,
+      "rgb_sha256": "8caf05acc1de26a7dfa08e6653f770a08265e630d642562ab208ce67e7905442",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0521-proposals.npz",
+      "sha256": "03e4d3a6ab196ba12332d15447e89aa2370cd0c8393e9ffcb595311b16089b03",
+      "file_bytes": 317041,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 31,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 15.901547799934633,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.434133700095117,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 539,
+      "rgb_sha256": "75cf0c9d27bf26615c16d704f440d33d846523d179a7a8eb5fbda7eb2809bc74",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0539-proposals.npz",
+      "sha256": "e68382d156212ca0332335d7f7ba0930633a0135ad595cdf492b32d6dad8ed06",
+      "file_bytes": 306538,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 34,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 18.93898880004417,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 19.49271909997333,
+      "readback_bitwise": true
+    },
+    {
+      "frame_index": 557,
+      "rgb_sha256": "1d88e7b42f13aa35b8dc2774c461cf5a433eed90a0456e0b2860651c3079b8a4",
+      "input_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0557-proposals.npz",
+      "sha256": "b36e58ee821ec6bea095df3706265d2eed21fc44f1444cdc6972c59209e7920d",
+      "file_bytes": 307155,
+      "raw_proposals": 1024,
+      "empty_proposals": 0,
+      "nms_count": 35,
+      "encoder_calls_cached": 1,
+      "encoder_calls_fresh": 0,
+      "cached_forward_seconds": 16.21368060039822,
+      "fresh_prefix_forward_seconds": 0.0,
+      "frame_seconds": 16.746710899984464,
+      "readback_bitwise": true
+    }
+  ],
+  "source_opportunity_summary": {
+    "group": {
+      "source_ids": [
+        1,
+        2,
+        3
+      ],
+      "all_source_time_cases": 96,
+      "source_box_available_cases": 96,
+      "source_box_unavailable_cases": 0,
+      "exact_annotation_time_cases": 12,
+      "max_nearest_annotation_distance_frames": 13,
+      "dynamic": {
+        "raw": {
+          "opportunity_hits": 81,
+          "denominator": 96,
+          "bbox_opportunity_rate": 0.84375
+        },
+        "nms": {
+          "opportunity_hits": 80,
+          "denominator": 96,
+          "bbox_opportunity_rate": 0.8333333333333334
+        }
+      },
+      "first_frame_static": {
+        "raw": {
+          "opportunity_hits": 27,
+          "denominator": 96,
+          "bbox_opportunity_rate": 0.28125
+        },
+        "nms": {
+          "opportunity_hits": 27,
+          "denominator": 96,
+          "bbox_opportunity_rate": 0.28125
+        }
+      }
+    },
+    "hidden": {
+      "source_ids": [
+        7
+      ],
+      "all_source_time_cases": 32,
+      "source_box_available_cases": 19,
+      "source_box_unavailable_cases": 13,
+      "exact_annotation_time_cases": 1,
+      "max_nearest_annotation_distance_frames": 13,
+      "dynamic": {
+        "raw": {
+          "opportunity_hits": 1,
+          "denominator": 19,
+          "bbox_opportunity_rate": 0.05263157894736842
+        },
+        "nms": {
+          "opportunity_hits": 1,
+          "denominator": 19,
+          "bbox_opportunity_rate": 0.05263157894736842
+        }
+      },
+      "first_frame_static": {
+        "raw": {
+          "opportunity_hits": 1,
+          "denominator": 19,
+          "bbox_opportunity_rate": 0.05263157894736842
+        },
+        "nms": {
+          "opportunity_hits": 1,
+          "denominator": 19,
+          "bbox_opportunity_rate": 0.05263157894736842
+        }
+      }
+    }
+  },
+  "posthoc_rows": [
+    {
+      "frame_index": 0,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.592399001121521,
+          0.5850589871406555,
+          0.6935570240020752,
+          0.8817750215530396
+        ],
+        "bracket_frames": [
+          0,
+          0
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9636666920602682,
+        "nms_max_iou": 0.9592867788235832,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9636666920602682,
+        "nms_max_iou": 0.9592867788235832,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 0,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5137270092964172,
+          0.45935899019241333,
+          0.6037949919700623,
+          0.7424240112304688
+        ],
+        "bracket_frames": [
+          0,
+          0
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9550166826424622,
+        "nms_max_iou": 0.9480224131723978,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9550166826424622,
+        "nms_max_iou": 0.9480224131723978,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 0,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.4246380031108856,
+          0.38276100158691406,
+          0.5118460059165955,
+          0.6526319980621338
+        ],
+        "bracket_frames": [
+          0,
+          0
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9699271354038772,
+        "nms_max_iou": 0.9699271354038772,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9699271354038772,
+        "nms_max_iou": 0.9699271354038772,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 0,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 18,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6032139897346497,
+          0.554452407360077,
+          0.709521210193634,
+          0.8534424185752869
+        ],
+        "bracket_frames": [
+          0,
+          30
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9425628283005526,
+        "nms_max_iou": 0.9425628283005526,
+        "raw_best_index": 757,
+        "nms_best_index": 757
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6605154797358996,
+        "nms_max_iou": 0.6344519655037084,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 18,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5253028154373169,
+          0.4275307893753052,
+          0.6172499895095825,
+          0.709937596321106
+        ],
+        "bracket_frames": [
+          0,
+          30
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9612488362257794,
+        "nms_max_iou": 0.9612488362257794,
+        "raw_best_index": 465,
+        "nms_best_index": 530
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6382775862624075,
+        "nms_max_iou": 0.609631904387462,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 18,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.43928279280662536,
+          0.34848240613937376,
+          0.5262969970703125,
+          0.6184152007102967
+        ],
+        "bracket_frames": [
+          0,
+          30
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.943061626876513,
+        "nms_max_iou": 0.943061626876513,
+        "raw_best_index": 496,
+        "nms_best_index": 560
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5683043700326115,
+        "nms_max_iou": 0.5683043700326115,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 18,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 36,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6319731831550598,
+          0.46060181558132174,
+          0.7640100002288819,
+          0.7496020138263703
+        ],
+        "bracket_frames": [
+          30,
+          60
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5127789203344527,
+        "nms_max_iou": 0.5127789203344527,
+        "raw_best_index": 533,
+        "nms_best_index": 694
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.1789048701816694,
+        "nms_max_iou": 0.16939268759644754,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 36,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5289204120635986,
+          0.4135909914970398,
+          0.6215689897537231,
+          0.6959757924079895
+        ],
+        "bracket_frames": [
+          30,
+          60
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8525802445039706,
+        "nms_max_iou": 0.8525802445039706,
+        "raw_best_index": 434,
+        "nms_best_index": 595
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5380430507027116,
+        "nms_max_iou": 0.5133580418255428,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 36,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.444392591714859,
+          0.3334878087043762,
+          0.5312127947807312,
+          0.6034821987152099
+        ],
+        "bracket_frames": [
+          30,
+          60
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.88365769553905,
+        "nms_max_iou": 0.88365769553905,
+        "raw_best_index": 335,
+        "nms_best_index": 496
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4607478602155073,
+        "nms_max_iou": 0.4607478602155073,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 36,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 54,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.696620786190033,
+          0.24026319980621336,
+          0.8955479979515075,
+          0.4947460055351257
+        ],
+        "bracket_frames": [
+          30,
+          60
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4022967307246153,
+        "nms_max_iou": 0.4022967307246153,
+        "raw_best_index": 351,
+        "nms_best_index": 479
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.2117899154675634,
+        "nms_max_iou": 0.18598241940213697,
+        "raw_best_index": 351,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 54,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5166215896606445,
+          0.43542799949645994,
+          0.6076159954071045,
+          0.7190632104873658
+        ],
+        "bracket_frames": [
+          30,
+          60
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9187433541784304,
+        "nms_max_iou": 0.9060517687916789,
+        "raw_best_index": 465,
+        "nms_best_index": 561
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8148702116622456,
+        "nms_max_iou": 0.7815520853697389,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 54,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.43043240904808044,
+          0.3570612072944641,
+          0.5170582056045532,
+          0.6271167874336243
+        ],
+        "bracket_frames": [
+          30,
+          60
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9232644690307095,
+        "nms_max_iou": 0.9100570808278304,
+        "raw_best_index": 622,
+        "nms_best_index": 462
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.732428250111363,
+        "nms_max_iou": 0.732428250111363,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 54,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 72,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6638251900672912,
+          0.31553299725055695,
+          0.8415271997451782,
+          0.5828972041606904
+        ],
+        "bracket_frames": [
+          60,
+          90
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.27867887700350347,
+        "nms_max_iou": 0.2606585465883428,
+        "raw_best_index": 470,
+        "nms_best_index": 537
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.20732464079765692,
+        "nms_max_iou": 0.20732464079765692,
+        "raw_best_index": 410,
+        "nms_best_index": 507
+      }
+    },
+    {
+      "frame_index": 72,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.509261178970337,
+          0.42864179611206055,
+          0.6009501934051513,
+          0.7145170092582702
+        ],
+        "bracket_frames": [
+          60,
+          90
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8513236011545661,
+        "nms_max_iou": 0.8513236011545661,
+        "raw_best_index": 465,
+        "nms_best_index": 624
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7527172675166459,
+        "nms_max_iou": 0.7527172675166459,
+        "raw_best_index": 498,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 72,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.4191554129123688,
+          0.3498170018196106,
+          0.5089088082313538,
+          0.6251453876495361
+        ],
+        "bracket_frames": [
+          60,
+          90
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8121941348921667,
+        "nms_max_iou": 0.8121941348921667,
+        "raw_best_index": 429,
+        "nms_best_index": 527
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7150271401735429,
+        "nms_max_iou": 0.7150271401735429,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 72,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 90,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5823079943656921,
+          0.5386070013046265,
+          0.6947270035743713,
+          0.8425520062446594
+        ],
+        "bracket_frames": [
+          90,
+          90
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9744130721899444,
+        "nms_max_iou": 0.9744130721899444,
+        "raw_best_index": 564,
+        "nms_best_index": 789
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6746483632741693,
+        "nms_max_iou": 0.6577277739112498,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 90,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5043699741363525,
+          0.40754398703575134,
+          0.597927987575531,
+          0.696153998374939
+        ],
+        "bracket_frames": [
+          90,
+          90
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9729390100993888,
+        "nms_max_iou": 0.9729390100993888,
+        "raw_best_index": 433,
+        "nms_best_index": 530
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6085315712795027,
+        "nms_max_iou": 0.6085315712795027,
+        "raw_best_index": 498,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 90,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.40922001004219055,
+          0.3271639943122864,
+          0.5037620067596436,
+          0.6103709936141968
+        ],
+        "bracket_frames": [
+          90,
+          90
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9817678547628892,
+        "nms_max_iou": 0.9817678547628892,
+        "raw_best_index": 334,
+        "nms_best_index": 527
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5422804789280982,
+        "nms_max_iou": 0.5422804789280982,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 90,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 108,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5788633942604064,
+          0.5372941851615906,
+          0.6921830177307129,
+          0.842752993106842
+        ],
+        "bracket_frames": [
+          90,
+          120
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6788643690030501,
+        "nms_max_iou": 0.6658857714322477,
+        "raw_best_index": 627,
+        "nms_best_index": 690
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6509704502660167,
+        "nms_max_iou": 0.6509704502660167,
+        "raw_best_index": 629,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 108,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.49689878821372985,
+          0.2357993945479393,
+          0.6584895849227905,
+          0.5319969952106476
+        ],
+        "bracket_frames": [
+          90,
+          120
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.27616241731012225,
+        "nms_max_iou": 0.27616241731012225,
+        "raw_best_index": 561,
+        "nms_best_index": 561
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.18557313685234225,
+        "nms_max_iou": 0.18557313685234225,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 108,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.41155220866203307,
+          0.31114339232444765,
+          0.5012504041194916,
+          0.5933519840240479
+        ],
+        "bracket_frames": [
+          90,
+          120
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6788120892715351,
+        "nms_max_iou": 0.6788120892715351,
+        "raw_best_index": 333,
+        "nms_best_index": 526
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4791459690089606,
+        "nms_max_iou": 0.4791459690089606,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 108,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 126,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5805611968040466,
+          0.5445085763931274,
+          0.6939474225044251,
+          0.8511673927307128
+        ],
+        "bracket_frames": [
+          120,
+          150
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8411455043587355,
+        "nms_max_iou": 0.8307196383268912,
+        "raw_best_index": 597,
+        "nms_best_index": 693
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6930247478435972,
+        "nms_max_iou": 0.6841129539680092,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 126,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5070544004440307,
+          0.10927339941263199,
+          0.7147831916809082,
+          0.41618979573249815
+        ],
+        "bracket_frames": [
+          120,
+          150
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.25665929441869817,
+        "nms_max_iou": 0.25085631527908797,
+        "raw_best_index": 53,
+        "nms_best_index": 52
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.233287568626322,
+        "nms_max_iou": 0.233287568626322,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 126,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.41581660509109497,
+          0.3116927921772003,
+          0.5031944036483764,
+          0.5929585814476013
+        ],
+        "bracket_frames": [
+          120,
+          150
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7781983035558672,
+        "nms_max_iou": 0.7781983035558672,
+        "raw_best_index": 334,
+        "nms_best_index": 527
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5078487116548656,
+        "nms_max_iou": 0.5078487116548656,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 126,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 144,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5925438046455384,
+          0.5687773823738098,
+          0.7043286085128784,
+          0.8760086178779602
+        ],
+        "bracket_frames": [
+          120,
+          150
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.874530205372851,
+        "nms_max_iou": 0.874530205372851,
+        "raw_best_index": 596,
+        "nms_best_index": 693
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8408880785747711,
+        "nms_max_iou": 0.8091600643030286,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 144,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5524636089801789,
+          0.07318459898233415,
+          0.7625408172607422,
+          0.3970822036266327
+        ],
+        "bracket_frames": [
+          120,
+          150
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5768731689441061,
+        "nms_max_iou": 0.5691892203722514,
+        "raw_best_index": 120,
+        "nms_best_index": 215
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.34467612114174845,
+        "nms_max_iou": 0.34467612114174845,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 144,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.4239453971385956,
+          0.3453821957111359,
+          0.5140496075153351,
+          0.6258163928985596
+        ],
+        "bracket_frames": [
+          120,
+          150
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8460863821697091,
+        "nms_max_iou": 0.8460863821697091,
+        "raw_best_index": 366,
+        "nms_best_index": 527
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7458783281710981,
+        "nms_max_iou": 0.7458783281710981,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 144,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 162,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6112876057624816,
+          0.5692773818969726,
+          0.7229038119316101,
+          0.8740178108215332
+        ],
+        "bracket_frames": [
+          150,
+          180
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8830210615387062,
+        "nms_max_iou": 0.8830210615387062,
+        "raw_best_index": 628,
+        "nms_best_index": 726
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6057624860217399,
+        "nms_max_iou": 0.578098080902026,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 162,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5614200115203858,
+          0.20513139814138412,
+          0.7258012056350708,
+          0.5194094121456146
+        ],
+        "bracket_frames": [
+          150,
+          180
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5992280205129487,
+        "nms_max_iou": 0.5992280205129487,
+        "raw_best_index": 212,
+        "nms_best_index": 530
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.18057744398641326,
+        "nms_max_iou": 0.18057744398641326,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 162,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.4404745936393738,
+          0.3510475933551788,
+          0.5305324077606202,
+          0.6277505993843079
+        ],
+        "bracket_frames": [
+          150,
+          180
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.90956341350326,
+        "nms_max_iou": 0.90956341350326,
+        "raw_best_index": 398,
+        "nms_best_index": 560
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.561651702409619,
+        "nms_max_iou": 0.561651702409619,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 162,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 180,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6334120035171509,
+          0.5578929781913757,
+          0.745576024055481,
+          0.858610987663269
+        ],
+        "bracket_frames": [
+          180,
+          180
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9853494550848819,
+        "nms_max_iou": 0.9853494550848819,
+        "raw_best_index": 597,
+        "nms_best_index": 695
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.35910068699600217,
+        "nms_max_iou": 0.3371175791377807,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 180,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5521500110626221,
+          0.42109599709510803,
+          0.6468129754066467,
+          0.7124540209770203
+        ],
+        "bracket_frames": [
+          180,
+          180
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9545146416921538,
+        "nms_max_iou": 0.9493631833717059,
+        "raw_best_index": 722,
+        "nms_best_index": 627
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3400340566618732,
+        "nms_max_iou": 0.3160531706520793,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 180,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.46120399236679077,
+          0.3427009880542755,
+          0.5498290061950684,
+          0.6142230033874512
+        ],
+        "bracket_frames": [
+          180,
+          180
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9418543609003696,
+        "nms_max_iou": 0.9418543609003696,
+        "raw_best_index": 463,
+        "nms_best_index": 495
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4068694661499576,
+        "nms_max_iou": 0.4068694661499576,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 180,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 198,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6581224083900452,
+          0.5711115837097168,
+          0.7711498141288757,
+          0.8706050038337707
+        ],
+        "bracket_frames": [
+          180,
+          210
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8813503654754384,
+        "nms_max_iou": 0.8813503654754384,
+        "raw_best_index": 598,
+        "nms_best_index": 696
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.27492634427690626,
+        "nms_max_iou": 0.27492634427690626,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 198,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5766018152236938,
+          0.4398292064666748,
+          0.6722338080406189,
+          0.7274270057678223
+        ],
+        "bracket_frames": [
+          180,
+          210
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8781814268287274,
+        "nms_max_iou": 0.8781814268287274,
+        "raw_best_index": 563,
+        "nms_best_index": 564
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.24464606367305966,
+        "nms_max_iou": 0.24464606367305966,
+        "raw_best_index": 629,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 198,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.48512600660324096,
+          0.3595705986022949,
+          0.5715418100357056,
+          0.6305351972579956
+        ],
+        "bracket_frames": [
+          180,
+          210
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8254969893070868,
+        "nms_max_iou": 0.8254969893070868,
+        "raw_best_index": 368,
+        "nms_best_index": 465
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4389468958307394,
+        "nms_max_iou": 0.4389468958307394,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 198,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 216,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6720006108283997,
+          0.5868589878082275,
+          0.785696804523468,
+          0.8861836075782776
+        ],
+        "bracket_frames": [
+          210,
+          240
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8631592299775008,
+        "nms_max_iou": 0.8324837195211556,
+        "raw_best_index": 631,
+        "nms_best_index": 728
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.29501663175287346,
+        "nms_max_iou": 0.29501663175287346,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 216,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5901326179504395,
+          0.45923560857772827,
+          0.6859368205070495,
+          0.7451128005981446
+        ],
+        "bracket_frames": [
+          210,
+          240
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8459259890678804,
+        "nms_max_iou": 0.8459259890678804,
+        "raw_best_index": 501,
+        "nms_best_index": 693
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.351840022246014,
+        "nms_max_iou": 0.351840022246014,
+        "raw_best_index": 629,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 216,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5121368169784546,
+          0.29665360450744627,
+          0.6136492133140564,
+          0.5300003945827484
+        ],
+        "bracket_frames": [
+          210,
+          240
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.36994607423110165,
+        "nms_max_iou": 0.36994607423110165,
+        "raw_best_index": 496,
+        "nms_best_index": 529
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.21463797295388473,
+        "nms_max_iou": 0.21463797295388473,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 216,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": null,
+        "bracket_frames": null,
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": null,
+        "source_masked_flags": null
+      },
+      "dynamic": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      },
+      "first_frame_static": {
+        "source_box_available": false,
+        "raw_max_iou": null,
+        "nms_max_iou": null,
+        "raw_best_index": null,
+        "nms_best_index": null
+      }
+    },
+    {
+      "frame_index": 234,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6642144083976745,
+          0.6076639890670776,
+          0.7781901955604553,
+          0.9089313864707946
+        ],
+        "bracket_frames": [
+          210,
+          240
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8862895519351764,
+        "nms_max_iou": 0.8862895519351764,
+        "raw_best_index": 631,
+        "nms_best_index": 887
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.2976616406005896,
+        "nms_max_iou": 0.2976616406005896,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 234,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5818214178085327,
+          0.4799883961677551,
+          0.6762041926383973,
+          0.7682242155075073
+        ],
+        "bracket_frames": [
+          210,
+          240
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8807764050880924,
+        "nms_max_iou": 0.8801422277538005,
+        "raw_best_index": 757,
+        "nms_best_index": 724
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3651154714761763,
+        "nms_max_iou": 0.3651154714761763,
+        "raw_best_index": 629,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 234,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5453252196311951,
+          0.0741634011268616,
+          0.6965458154678345,
+          0.195771598815918
+        ],
+        "bracket_frames": [
+          210,
+          240
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.48322966274931045,
+        "nms_max_iou": 0.48322966274931045,
+        "raw_best_index": 16,
+        "nms_best_index": 17
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.0877042809021493,
+        "nms_max_iou": 0.0877042809021493,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 234,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.5030811093747616,
+          0.5604057461023331,
+          0.5392006263136864,
+          0.6188085004687309
+        ],
+        "bracket_frames": [
+          224,
+          240
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 6,
+        "source_masked_flags": [
+          0,
+          1
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6867753798443856,
+        "nms_max_iou": 0.6867753798443856,
+        "raw_best_index": 560,
+        "nms_best_index": 592
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.05529085139368794,
+        "nms_max_iou": 0.05529085139368794,
+        "raw_best_index": 498,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 252,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6608614087104797,
+          0.6303570032119751,
+          0.7776455998420715,
+          0.9293431878089905
+        ],
+        "bracket_frames": [
+          240,
+          270
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8231846221376927,
+        "nms_max_iou": 0.8231846221376927,
+        "raw_best_index": 662,
+        "nms_best_index": 918
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3026866824224138,
+        "nms_max_iou": 0.3026866824224138,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 252,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5798366069793701,
+          0.4987208008766174,
+          0.6737563967704773,
+          0.7875012159347534
+        ],
+        "bracket_frames": [
+          240,
+          270
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7948944961028538,
+        "nms_max_iou": 0.7948944961028538,
+        "raw_best_index": 531,
+        "nms_best_index": 724
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.403285607195196,
+        "nms_max_iou": 0.403285607195196,
+        "raw_best_index": 629,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 252,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5277068138122558,
+          0.13671799898147582,
+          0.6634292006492615,
+          0.30281999707221985
+        ],
+        "bracket_frames": [
+          240,
+          270
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.10942807851042968,
+        "nms_max_iou": 0.0856161344940454,
+        "raw_best_index": 117,
+        "nms_best_index": 50
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.08939237367548461,
+        "nms_max_iou": 0.08939237367548461,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 252,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.49720060229301455,
+          0.5829877853393555,
+          0.5342284083366394,
+          0.6433287978172302
+        ],
+        "bracket_frames": [
+          240,
+          270
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 12,
+        "source_masked_flags": [
+          1,
+          1
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.48557451725580825,
+        "nms_max_iou": 0.48557451725580825,
+        "raw_best_index": 592,
+        "nms_best_index": 624
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.04893943088476693,
+        "nms_max_iou": 0.04893943088476693,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 270,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.65972501039505,
+          0.6539940237998962,
+          0.7805820107460022,
+          0.9485870003700256
+        ],
+        "bracket_frames": [
+          270,
+          270
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9495449599809613,
+        "nms_max_iou": 0.9495449599809613,
+        "raw_best_index": 695,
+        "nms_best_index": 792
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3086400883476787,
+        "nms_max_iou": 0.3086400883476787,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 270,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5810149908065796,
+          0.5164430141448975,
+          0.6749510169029236,
+          0.8048610091209412
+        ],
+        "bracket_frames": [
+          270,
+          270
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9563549757074202,
+        "nms_max_iou": 0.9563549757074202,
+        "raw_best_index": 563,
+        "nms_best_index": 756
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.464052882086312,
+        "nms_max_iou": 0.464052882086312,
+        "raw_best_index": 629,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 270,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.4846850037574768,
+          0.3417949974536896,
+          0.5723059773445129,
+          0.6305069923400879
+        ],
+        "bracket_frames": [
+          270,
+          270
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9118825211249095,
+        "nms_max_iou": 0.9006542604357951,
+        "raw_best_index": 496,
+        "nms_best_index": 528
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4307465619389534,
+        "nms_max_iou": 0.4307465619389534,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 270,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.5022370219230652,
+          0.6202459931373596,
+          0.5362780094146729,
+          0.6534850001335144
+        ],
+        "bracket_frames": [
+          270,
+          270
+        ],
+        "source_frame_exact": true,
+        "nearest_annotation_distance_frames": 0,
+        "source_masked_flags": [
+          1,
+          1
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.47444977136714384,
+        "nms_max_iou": 0.47444977136714384,
+        "raw_best_index": 656,
+        "nms_best_index": 656
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.027888995201401933,
+        "nms_max_iou": 0.027888995201401933,
+        "raw_best_index": 498,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 287,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6707744459311168,
+          0.6470189154148102,
+          0.7940573374430339,
+          0.9495871742566426
+        ],
+        "bracket_frames": [
+          270,
+          300
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7673202264615043,
+        "nms_max_iou": 0.7673202264615043,
+        "raw_best_index": 664,
+        "nms_best_index": 793
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.323358523476497,
+        "nms_max_iou": 0.323358523476497,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 287,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5971094747384389,
+          0.5012121478716532,
+          0.6945757985115051,
+          0.7926346162954966
+        ],
+        "bracket_frames": [
+          270,
+          300
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8850554988023405,
+        "nms_max_iou": 0.8850554988023405,
+        "raw_best_index": 532,
+        "nms_best_index": 725
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5245094739726908,
+        "nms_max_iou": 0.514207190175003,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 287,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.49233840107917787,
+          0.3655632625023524,
+          0.581319397687912,
+          0.6497068047523499
+        ],
+        "bracket_frames": [
+          270,
+          300
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6551679039120182,
+        "nms_max_iou": 0.6319183312271731,
+        "raw_best_index": 528,
+        "nms_best_index": 562
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4922706634412716,
+        "nms_max_iou": 0.4922706634412716,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 287,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.5154380877812703,
+          0.614627496401469,
+          0.5515139758586883,
+          0.6563001930713653
+        ],
+        "bracket_frames": [
+          270,
+          300
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          1,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.05838291491352117,
+        "nms_max_iou": 0.0520216724605916,
+        "raw_best_index": 658,
+        "nms_best_index": 562
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.06185822984069287,
+        "nms_max_iou": 0.06185822984069287,
+        "raw_best_index": 498,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 305,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6857696771621704,
+          0.6281261742115021,
+          0.8145968317985535,
+          0.9375828405221304
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6454326203560969,
+        "nms_max_iou": 0.6454326203560969,
+        "raw_best_index": 695,
+        "nms_best_index": 726
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.34559336234798993,
+        "nms_max_iou": 0.34559336234798993,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 305,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5933645168940226,
+          0.4309470131993294,
+          0.690908819437027,
+          0.7223221858342489
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6004862319533377,
+        "nms_max_iou": 0.5330562391145844,
+        "raw_best_index": 499,
+        "nms_best_index": 532
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3000489422137542,
+        "nms_max_iou": 0.3000489422137542,
+        "raw_best_index": 629,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 305,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.508365660905838,
+          0.361647496620814,
+          0.5984468460083008,
+          0.6420413454373678
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5618097839912715,
+        "nms_max_iou": 0.5618097839912715,
+        "raw_best_index": 433,
+        "nms_best_index": 497
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4738250749866446,
+        "nms_max_iou": 0.4738250749866446,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 305,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.5356563528378805,
+          0.589008500178655,
+          0.5735765099525452,
+          0.6366461515426636
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07687403543604979,
+        "nms_max_iou": 0.07687403543604979,
+        "raw_best_index": 433,
+        "nms_best_index": 497
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07473864556282618,
+        "nms_max_iou": 0.07473864556282618,
+        "raw_best_index": 498,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 323,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.7093340635299683,
+          0.5793143689632416,
+          0.8514422297477722,
+          0.8916138192017873
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7558571100572009,
+        "nms_max_iou": 0.7558571100572009,
+        "raw_best_index": 602,
+        "nms_best_index": 728
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3735165977384802,
+        "nms_max_iou": 0.3735165977384802,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 323,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5355755011240642,
+          0.21992220729589462,
+          0.6236818253993988,
+          0.5028559764226277
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5398853820201099,
+        "nms_max_iou": 0.5398853820201099,
+        "raw_best_index": 371,
+        "nms_best_index": 372
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.11376965060333419,
+        "nms_max_iou": 0.11376965060333419,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 323,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.544994443655014,
+          0.28211810390154524,
+          0.6352922439575195,
+          0.5615897377332052
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6105743284978495,
+        "nms_max_iou": 0.5623101233393737,
+        "raw_best_index": 498,
+        "nms_best_index": 372
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.14930091552614114,
+        "nms_max_iou": 0.14930091552614114,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 323,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.5721003492673238,
+          0.512247504790624,
+          0.6110579133033752,
+          0.558141541481018
+        ],
+        "bracket_frames": [
+          300,
+          330
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.04208483977016898,
+        "nms_max_iou": 0.04208483977016898,
+        "raw_best_index": 403,
+        "nms_best_index": 468
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.0599963475246221,
+        "nms_max_iou": 0.059652808187678714,
+        "raw_best_index": 592,
+        "nms_best_index": 497
+      }
+    },
+    {
+      "frame_index": 341,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6272973616917928,
+          0.3863937673469384,
+          0.7521410008271535,
+          0.6897187183300654
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.1429056548550912,
+        "nms_max_iou": 0.1429056548550912,
+        "raw_best_index": 503,
+        "nms_best_index": 599
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.16791724550026993,
+        "nms_max_iou": 0.16791724550026993,
+        "raw_best_index": 628,
+        "nms_best_index": 628
+      }
+    },
+    {
+      "frame_index": 341,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5248093008995056,
+          0.1532405028740565,
+          0.615762056907018,
+          0.4369629661242167
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.30722746890051333,
+        "nms_max_iou": 0.30722746890051333,
+        "raw_best_index": 430,
+        "nms_best_index": 430
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07915139303506392,
+        "nms_max_iou": 0.07915139303506392,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 341,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5650315821170807,
+          0.27354676922162374,
+          0.6653546690940857,
+          0.5573446750640869
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.09570039960165987,
+        "nms_max_iou": 0.09570039960165987,
+        "raw_best_index": 305,
+        "nms_best_index": 368
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.08119431091979502,
+        "nms_max_iou": 0.08119431091979502,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 341,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.5942615767319998,
+          0.505205233891805,
+          0.6341993530591329,
+          0.5523476759592693
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.0032132510836142374,
+        "nms_max_iou": 0.0031919712751134807,
+        "raw_best_index": 477,
+        "nms_best_index": 280
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.01984501388725624,
+        "nms_max_iou": 0.013387918949693184,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 359,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.47805996735890705,
+          0.10176756804188092,
+          0.5662010093530019,
+          0.38859793047110236
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7719555601677314,
+        "nms_max_iou": 0.7719555601677314,
+        "raw_best_index": 143,
+        "nms_best_index": 240
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.0351213599318782,
+        "nms_max_iou": 0.0349841671196443,
+        "raw_best_index": 601,
+        "nms_best_index": 698
+      }
+    },
+    {
+      "frame_index": 359,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5439667105674744,
+          0.17841349939505258,
+          0.6455832501252492,
+          0.4687983552614848
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9756030746351527,
+        "nms_max_iou": 0.9625451798453839,
+        "raw_best_index": 243,
+        "nms_best_index": 307
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.11077738032742279,
+        "nms_max_iou": 0.11077738032742279,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 359,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5745104014873504,
+          0.3101305623849233,
+          0.6911006569862366,
+          0.6015946865081787
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.964084965987085,
+        "nms_max_iou": 0.9374245369621924,
+        "raw_best_index": 562,
+        "nms_best_index": 500
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07932309767028267,
+        "nms_max_iou": 0.0700147425673591,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 359,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.6073337694009145,
+          0.5425294240315756,
+          0.6482153614362081,
+          0.5928242842356364
+        ],
+        "bracket_frames": [
+          330,
+          360
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.06034518359262875,
+        "nms_max_iou": 0.06034518359262875,
+        "raw_best_index": 340,
+        "nms_best_index": 500
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.023506417502564155,
+        "nms_max_iou": 0.020846952041311873,
+        "raw_best_index": 661,
+        "nms_best_index": 628
+      }
+    },
+    {
+      "frame_index": 377,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5075883209705353,
+          0.10800796672701836,
+          0.5967044293880462,
+          0.39105349282423657
+        ],
+        "bracket_frames": [
+          360,
+          390
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.19640713346322933,
+        "nms_max_iou": 0.19640713346322933,
+        "raw_best_index": 211,
+        "nms_best_index": 211
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.05285089019326203,
+        "nms_max_iou": 0.05285089019326203,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 377,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5638279100259145,
+          0.20975806564092636,
+          0.6652242998282115,
+          0.5044173955917358
+        ],
+        "bracket_frames": [
+          360,
+          390
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4972764057455036,
+        "nms_max_iou": 0.4972764057455036,
+        "raw_best_index": 149,
+        "nms_best_index": 149
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.11305814380831491,
+        "nms_max_iou": 0.11305814380831491,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 377,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5956336200237274,
+          0.34010135928789775,
+          0.7131423672040303,
+          0.6423959354559581
+        ],
+        "bracket_frames": [
+          360,
+          390
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3406898966407421,
+        "nms_max_iou": 0.3406898966407421,
+        "raw_best_index": 277,
+        "nms_best_index": 469
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.10861287152053926,
+        "nms_max_iou": 0.10544336436078079,
+        "raw_best_index": 661,
+        "nms_best_index": 628
+      }
+    },
+    {
+      "frame_index": 377,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.625643668572108,
+          0.5645564456780752,
+          0.6718153675397237,
+          0.6269978582859039
+        ],
+        "bracket_frames": [
+          360,
+          390
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.03677656028465489,
+        "nms_max_iou": 0.03677656028465489,
+        "raw_best_index": 438,
+        "nms_best_index": 631
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.28069947488614966,
+        "nms_max_iou": 0.28069947488614966,
+        "raw_best_index": 660,
+        "nms_best_index": 660
+      }
+    },
+    {
+      "frame_index": 395,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5300808151563009,
+          0.12430449947714806,
+          0.6198658247788748,
+          0.40404049058755237
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8910043668671191,
+        "nms_max_iou": 0.8910043668671191,
+        "raw_best_index": 147,
+        "nms_best_index": 274
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.08672211136270455,
+        "nms_max_iou": 0.08672211136270455,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 395,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5878380040327708,
+          0.27929650247097015,
+          0.6938426792621613,
+          0.5799663364887238
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5520150188568025,
+        "nms_max_iou": 0.49959103986037495,
+        "raw_best_index": 627,
+        "nms_best_index": 531
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.08153458881093216,
+        "nms_max_iou": 0.07754076316400993,
+        "raw_best_index": 85,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 395,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6053326427936554,
+          0.35888882478078205,
+          0.7205515106519064,
+          0.6683896581331888
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8761191892209669,
+        "nms_max_iou": 0.8492732263172849,
+        "raw_best_index": 405,
+        "nms_best_index": 565
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.16634144216790211,
+        "nms_max_iou": 0.16125820602986815,
+        "raw_best_index": 661,
+        "nms_best_index": 628
+      }
+    },
+    {
+      "frame_index": 395,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.6330380042394003,
+          0.5776631434758505,
+          0.6824446519215902,
+          0.6474986672401428
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.10126351296840805,
+        "nms_max_iou": 0.09788806253612778,
+        "raw_best_index": 405,
+        "nms_best_index": 565
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5136523003587187,
+        "nms_max_iou": 0.5136523003587187,
+        "raw_best_index": 660,
+        "nms_best_index": 660
+      }
+    },
+    {
+      "frame_index": 413,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.506939431031545,
+          0.1222615011036396,
+          0.5908348460992178,
+          0.39797989626725516
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8668922671972527,
+        "nms_max_iou": 0.8668922671972527,
+        "raw_best_index": 146,
+        "nms_best_index": 274
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.043595291313590835,
+        "nms_max_iou": 0.043595291313590835,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 413,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6225275854269663,
+          0.447195115685463,
+          0.7473590791225433,
+          0.7587543427944183
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.27144980502786636,
+        "nms_max_iou": 0.23442733094817247,
+        "raw_best_index": 472,
+        "nms_best_index": 696
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.2227643618956315,
+        "nms_max_iou": 0.2126338419018269,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 413,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5835478484630585,
+          0.3496110280354818,
+          0.690482517083486,
+          0.6564112703005472
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8489062475255171,
+        "nms_max_iou": 0.8489062475255171,
+        "raw_best_index": 373,
+        "nms_best_index": 468
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.14804691392351849,
+        "nms_max_iou": 0.14328446670897682,
+        "raw_best_index": 661,
+        "nms_best_index": 628
+      }
+    },
+    {
+      "frame_index": 413,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.6112508138020833,
+          0.569916566212972,
+          0.6578842719395955,
+          0.6334142804145813
+        ],
+        "bracket_frames": [
+          390,
+          420
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.09359091544781066,
+        "nms_max_iou": 0.09359091544781066,
+        "raw_best_index": 373,
+        "nms_best_index": 468
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.25436160811114195,
+        "nms_max_iou": 0.25436160811114195,
+        "raw_best_index": 660,
+        "nms_best_index": 660
+      }
+    },
+    {
+      "frame_index": 431,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5245522916316986,
+          0.1124272013703982,
+          0.6129985908667247,
+          0.39955110251903536
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5665719594107013,
+        "nms_max_iou": 0.560623702457987,
+        "raw_best_index": 210,
+        "nms_best_index": 274
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07832361838195175,
+        "nms_max_iou": 0.07832361838195175,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 431,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6454017221927643,
+          0.5191022237141927,
+          0.7884011050065358,
+          0.8369249741236369
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7261646876970597,
+        "nms_max_iou": 0.683139895068194,
+        "raw_best_index": 788,
+        "nms_best_index": 727
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.28732645982888694,
+        "nms_max_iou": 0.28732645982888694,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 431,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5923397580782572,
+          0.3396802028020223,
+          0.7072419822216034,
+          0.6454928954442342
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7158749287054365,
+        "nms_max_iou": 0.7158749287054365,
+        "raw_best_index": 404,
+        "nms_best_index": 501
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.11642220718539864,
+        "nms_max_iou": 0.1129715344718304,
+        "raw_best_index": 661,
+        "nms_best_index": 628
+      }
+    },
+    {
+      "frame_index": 431,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.6209342420101166,
+          0.5587269683678945,
+          0.6679416139920552,
+          0.6201904356479645
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.08370865387536916,
+        "nms_max_iou": 0.08370865387536916,
+        "raw_best_index": 404,
+        "nms_best_index": 501
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.22174189717051382,
+        "nms_max_iou": 0.22174189717051382,
+        "raw_best_index": 660,
+        "nms_best_index": 660
+      }
+    },
+    {
+      "frame_index": 449,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5680996716022492,
+          0.0976348007718722,
+          0.6677407960096995,
+          0.4059789091348648
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9516855700438431,
+        "nms_max_iou": 0.9167072398322745,
+        "raw_best_index": 116,
+        "nms_best_index": 276
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.16198808688441316,
+        "nms_max_iou": 0.16198808688441316,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 449,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6607569396495819,
+          0.5299238284428914,
+          0.8215048929055532,
+          0.8510663668314616
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9665531600021041,
+        "nms_max_iou": 0.9578137813656131,
+        "raw_best_index": 599,
+        "nms_best_index": 728
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.34270458039185175,
+        "nms_max_iou": 0.34270458039185175,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 449,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.620589570204417,
+          0.3293338139851888,
+          0.7538013756275177,
+          0.6352490743001302
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9868239056165344,
+        "nms_max_iou": 0.9868239056165344,
+        "raw_best_index": 342,
+        "nms_best_index": 501
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07846076290604816,
+        "nms_max_iou": 0.07646833152382047,
+        "raw_best_index": 661,
+        "nms_best_index": 628
+      }
+    },
+    {
+      "frame_index": 449,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.6506444275379181,
+          0.5453463574250539,
+          0.7000284155209859,
+          0.6075142085552215
+        ],
+        "bracket_frames": [
+          420,
+          450
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07490760928216446,
+        "nms_max_iou": 0.07490760928216446,
+        "raw_best_index": 342,
+        "nms_best_index": 501
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.09875421967969997,
+        "nms_max_iou": 0.09875421967969997,
+        "raw_best_index": 660,
+        "nms_best_index": 660
+      }
+    },
+    {
+      "frame_index": 467,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.55015922387441,
+          0.10280606870849927,
+          0.6488321781158447,
+          0.4021732737620672
+        ],
+        "bracket_frames": [
+          450,
+          480
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7736399673057023,
+        "nms_max_iou": 0.7635632890358336,
+        "raw_best_index": 148,
+        "nms_best_index": 244
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.1405597451753949,
+        "nms_max_iou": 0.1405597451753949,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 467,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.6283551712830862,
+          0.4781298766533534,
+          0.7735311647256216,
+          0.7940559526284536
+        ],
+        "bracket_frames": [
+          450,
+          480
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9034065194637656,
+        "nms_max_iou": 0.8789944671024464,
+        "raw_best_index": 692,
+        "nms_best_index": 663
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.23062647213677978,
+        "nms_max_iou": 0.23062647213677978,
+        "raw_best_index": 883,
+        "nms_best_index": 883
+      }
+    },
+    {
+      "frame_index": 467,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5849046210447947,
+          0.2888928711414337,
+          0.7064323763052622,
+          0.5955669661362966
+        ],
+        "bracket_frames": [
+          450,
+          480
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8805932761000881,
+        "nms_max_iou": 0.8805932761000881,
+        "raw_best_index": 308,
+        "nms_best_index": 499
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.08565724619132753,
+        "nms_max_iou": 0.08154603849741483,
+        "raw_best_index": 85,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 467,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.6137599607308706,
+          0.4973809649546941,
+          0.6632765233516693,
+          0.5662383516629537
+        ],
+        "bracket_frames": [
+          450,
+          480
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.09673173464282177,
+        "nms_max_iou": 0.09673173464282177,
+        "raw_best_index": 308,
+        "nms_best_index": 499
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.004736625480125454,
+        "nms_max_iou": 0.004718123036843714,
+        "raw_best_index": 601,
+        "nms_best_index": 698
+      }
+    },
+    {
+      "frame_index": 485,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5472295085589091,
+          0.19328217208385468,
+          0.6545246640841166,
+          0.49074084063371026
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5349459655510259,
+        "nms_max_iou": 0.5303343623997239,
+        "raw_best_index": 562,
+        "nms_best_index": 530
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.11401768845424237,
+        "nms_max_iou": 0.11401768845424237,
+        "raw_best_index": 84,
+        "nms_best_index": 84
+      }
+    },
+    {
+      "frame_index": 485,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5919866661230723,
+          0.43956049780050915,
+          0.7213621735572815,
+          0.7519884804884592
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8590939356862698,
+        "nms_max_iou": 0.8590939356862698,
+        "raw_best_index": 469,
+        "nms_best_index": 564
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3140083213275889,
+        "nms_max_iou": 0.3048315845252452,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 485,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5432991435130438,
+          0.2634381651878357,
+          0.6525095105171204,
+          0.5703348517417908
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7631493205867933,
+        "nms_max_iou": 0.7631493205867933,
+        "raw_best_index": 307,
+        "nms_best_index": 468
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.14425314494849797,
+        "nms_max_iou": 0.14425314494849797,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 485,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.570757657289505,
+          0.46772534151872,
+          0.619944304227829,
+          0.5399079918861389
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 5,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.10792230588863495,
+        "nms_max_iou": 0.10420084706488893,
+        "raw_best_index": 276,
+        "nms_best_index": 468
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.11041190277338742,
+        "nms_max_iou": 0.11041190277338742,
+        "raw_best_index": 497,
+        "nms_best_index": 497
+      }
+    },
+    {
+      "frame_index": 503,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5927317182223002,
+          0.5024975806474685,
+          0.7354442636171977,
+          0.8210438479979834
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.25770545585536553,
+        "nms_max_iou": 0.25770545585536553,
+        "raw_best_index": 467,
+        "nms_best_index": 564
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.46155375568215556,
+        "nms_max_iou": 0.4458812503802386,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 503,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5526086548964182,
+          0.4449515054623286,
+          0.6706855893135071,
+          0.7596546987692515
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7956844495699001,
+        "nms_max_iou": 0.7956844495699001,
+        "raw_best_index": 467,
+        "nms_best_index": 564
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.31258702232962365,
+        "nms_max_iou": 0.28948749794204165,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 503,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.49607854982217153,
+          0.2815503716468811,
+          0.5959121108055114,
+          0.5871750473976135
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8455451527922297,
+        "nms_max_iou": 0.8455451527922297,
+        "raw_best_index": 273,
+        "nms_best_index": 466
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3563841871111033,
+        "nms_max_iou": 0.3563841871111033,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 503,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.5220340430736542,
+          0.49096455474694567,
+          0.5700315058231353,
+          0.5568099856376648
+        ],
+        "bracket_frames": [
+          480,
+          510
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 7,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.10759525546204912,
+        "nms_max_iou": 0.10759525546204912,
+        "raw_best_index": 273,
+        "nms_best_index": 466
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.4855450103877159,
+        "nms_max_iou": 0.4855450103877159,
+        "raw_best_index": 497,
+        "nms_best_index": 497
+      }
+    },
+    {
+      "frame_index": 521,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5956884880860647,
+          0.6269558767477671,
+          0.7452411711215973,
+          0.9497700194517772
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6647781154472386,
+        "nms_max_iou": 0.6647781154472386,
+        "raw_best_index": 821,
+        "nms_best_index": 917
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.48148174926835363,
+        "nms_max_iou": 0.464007258989105,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 521,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.524330751101176,
+          0.44985703627268475,
+          0.638091512521108,
+          0.7669370114803314
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7052911133000316,
+        "nms_max_iou": 0.7052911133000316,
+        "raw_best_index": 498,
+        "nms_best_index": 627
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.592424952395635,
+        "nms_max_iou": 0.5639036676498635,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 521,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.46425722241401673,
+          0.29005113740762073,
+          0.5602638343969981,
+          0.5957604646682739
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5983646737879487,
+        "nms_max_iou": 0.5983646737879487,
+        "raw_best_index": 335,
+        "nms_best_index": 560
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.36532951633517247,
+        "nms_max_iou": 0.36532951633517247,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 521,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.4888032128413518,
+          0.5012930472691853,
+          0.5375489513079326,
+          0.5676865458488465
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 11,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.11330166565705826,
+        "nms_max_iou": 0.11330166565705826,
+        "raw_best_index": 335,
+        "nms_best_index": 560
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.07088927744318618,
+        "nms_max_iou": 0.07088927744318618,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 539,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5715708871682484,
+          0.633841464916865,
+          0.7097781836986542,
+          0.9502200225989024
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9171587828654936,
+        "nms_max_iou": 0.9171587828654936,
+        "raw_best_index": 660,
+        "nms_best_index": 917
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.5203861518462316,
+        "nms_max_iou": 0.5023056857292021,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 539,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5031165520350138,
+          0.4544536272684733,
+          0.6170044859250386,
+          0.7739750206470489
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9510108328427533,
+        "nms_max_iou": 0.9392699583632131,
+        "raw_best_index": 627,
+        "nms_best_index": 658
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.6943888620756613,
+        "nms_max_iou": 0.6641980419854151,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 539,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.4422354280948639,
+          0.29243553181489307,
+          0.5379468182722728,
+          0.5990928411483765
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.9563755600307415,
+        "nms_max_iou": 0.9442176445202745,
+        "raw_best_index": 303,
+        "nms_best_index": 528
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3943332241634019,
+        "nms_max_iou": 0.3943332241634019,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 539,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.4654314269622167,
+          0.5034056266148885,
+          0.5161583701769511,
+          0.5747287392616272
+        ],
+        "bracket_frames": [
+          510,
+          540
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 1,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.12830599372371665,
+        "nms_max_iou": 0.12830599372371665,
+        "raw_best_index": 366,
+        "nms_best_index": 528
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.14264539662280487,
+        "nms_max_iou": 0.14264539662280487,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    },
+    {
+      "frame_index": 557,
+      "source_id": 1,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5718970199426016,
+          0.6009595354398092,
+          0.7169619460900625,
+          0.9367147088050842
+        ],
+        "bracket_frames": [
+          540,
+          570
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8120259948834399,
+        "nms_max_iou": 0.7866501825433323,
+        "raw_best_index": 629,
+        "nms_best_index": 853
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.569869923865583,
+        "nms_max_iou": 0.5485927031199416,
+        "raw_best_index": 659,
+        "nms_best_index": 725
+      }
+    },
+    {
+      "frame_index": 557,
+      "source_id": 2,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.5126921852429708,
+          0.4528576989968618,
+          0.618920749425888,
+          0.7671823799610138
+        ],
+        "bracket_frames": [
+          540,
+          570
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8354661474984008,
+        "nms_max_iou": 0.8108886176514423,
+        "raw_best_index": 466,
+        "nms_best_index": 594
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.7567642489460669,
+        "nms_max_iou": 0.7238614555136292,
+        "raw_best_index": 592,
+        "nms_best_index": 562
+      }
+    },
+    {
+      "frame_index": 557,
+      "source_id": 3,
+      "role": "group",
+      "source_label": "glass",
+      "source_proxy": {
+        "box": [
+          0.4549984703461329,
+          0.30754443009694415,
+          0.5443468034267426,
+          0.6031216780344645
+        ],
+        "bracket_frames": [
+          540,
+          570
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.8303741209918065,
+        "nms_max_iou": 0.8303741209918065,
+        "raw_best_index": 399,
+        "nms_best_index": 528
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.3666950717418913,
+        "nms_max_iou": 0.3666950717418913,
+        "raw_best_index": 558,
+        "nms_best_index": 558
+      }
+    },
+    {
+      "frame_index": 557,
+      "source_id": 7,
+      "role": "hidden",
+      "source_label": "cap",
+      "source_proxy": {
+        "box": [
+          0.4764789710442225,
+          0.5101739525794983,
+          0.5254454175631206,
+          0.5791104674339295
+        ],
+        "bracket_frames": [
+          540,
+          570
+        ],
+        "source_frame_exact": false,
+        "nearest_annotation_distance_frames": 13,
+        "source_masked_flags": [
+          0,
+          0
+        ]
+      },
+      "dynamic": {
+        "source_box_available": true,
+        "raw_max_iou": 0.13407379377828377,
+        "nms_max_iou": 0.13407379377828377,
+        "raw_best_index": 399,
+        "nms_best_index": 528
+      },
+      "first_frame_static": {
+        "source_box_available": true,
+        "raw_max_iou": 0.10218588010862201,
+        "nms_max_iou": 0.10218588010862201,
+        "raw_best_index": 398,
+        "nms_best_index": 527
+      }
+    }
+  ],
+  "raw_rgb_review": [
+    {
+      "frame_index": 0,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-raw-review-01\\0000.png",
+      "sha256": "bde470551526c7f9a49a83af961557badcc64db294427f15a1216a9c1986730a",
+      "posthoc_raw_review_only": true
+    },
+    {
+      "frame_index": 234,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-raw-review-01\\0234.png",
+      "sha256": "0f3f69d67bded06802a3953c520b837b8d70973d28399c9d2db6cf6a79dae884",
+      "posthoc_raw_review_only": true
+    },
+    {
+      "frame_index": 395,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-raw-review-01\\0395.png",
+      "sha256": "8fa6d8647e532f037b0b4091199891985d9820d9a28c0bb6a4a0b51cbb568fb3",
+      "posthoc_raw_review_only": true
+    },
+    {
+      "frame_index": 557,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-raw-review-01\\0557.png",
+      "sha256": "384231137d74bb4dc966423e96303ea5efc9afb406f15bf5155b2b1d23bf10e1",
+      "posthoc_raw_review_only": true
+    }
+  ],
+  "registered_model_parameters": 38962498,
+  "training": false,
+  "new_parameters": 0,
+  "cloud_cost": 0,
+  "sealed_audit_opened": false,
+  "interpretation": "Annotation start is not object birth; opportunity is not semantic identity or QA"
+}

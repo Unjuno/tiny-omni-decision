@@ -1,0 +1,990 @@
+{
+  "source_commit": "e8f6a3f",
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-eval-01",
+  "data_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-01",
+  "data_manifest": {
+    "seed": 43,
+    "states": 128,
+    "questions_per_variant": 1024,
+    "variants": [
+      "control",
+      "labels",
+      "identifier_key",
+      "wording",
+      "magnitude",
+      "field_name",
+      "combined"
+    ],
+    "rows": 7168,
+    "input_sha256": "a1bad72fff10e9a264b66557e9b2c1079954d508aa6f07972060804dd0c6221b",
+    "builder_sha256": "18ff97c83f0acdb5e7fb51bfb40de2c2ff9ec3fac1243bc004e5f6bb9db768f1",
+    "purpose": "fixed-weight one-factor development diagnosis, not product audit",
+    "previous_corpus_group_overlap": 0
+  },
+  "protocol": {
+    "paths": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-01\\inputs.jsonl": "a1bad72fff10e9a264b66557e9b2c1079954d508aa6f07972060804dd0c6221b",
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\model.safetensors": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-encoder-coverage-01\\best-delta.pt": "4024788b1a9d17735612a98da6acb1a65af5d82a9d440b4fddb4ab62efb9d318"
+    },
+    "runner_sha256": "d98ae0c7018c636671dac3831c986105af01516801c40074ab29925a00ec6466",
+    "training": false,
+    "selection": false,
+    "variants": [
+      "control",
+      "labels",
+      "identifier_key",
+      "wording",
+      "magnitude",
+      "field_name",
+      "combined"
+    ]
+  },
+  "result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "metrics": {
+      "control": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.7978515625,
+          "nll": 0.47845637798309326,
+          "brier": 0.264165997505188,
+          "ece_15_bins": 0.020575819595251232,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            4,
+            45,
+            60,
+            70,
+            61,
+            48,
+            40,
+            36,
+            38,
+            47,
+            59,
+            516
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.578125,
+            "nll": 1.1277028322219849,
+            "brier": 0.5759060978889465,
+            "ece_15_bins": 0.08314916491508484,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              4,
+              15,
+              23,
+              13,
+              19,
+              15,
+              12,
+              5,
+              9,
+              8,
+              3,
+              2
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.34375,
+            "nll": 1.2503993511199951,
+            "brier": 0.6973702907562256,
+            "ece_15_bins": 0.143136749509722,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              16,
+              30,
+              47,
+              20,
+              8,
+              4,
+              1,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.8984375,
+            "nll": 0.2625297009944916,
+            "brier": 0.15406739711761475,
+            "ece_15_bins": 0.038764935452491045,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              11,
+              6,
+              8,
+              15,
+              16,
+              15,
+              23,
+              21,
+              25,
+              35,
+              337
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.93359375,
+            "nll": 0.19971521198749542,
+            "brier": 0.11189107596874237,
+            "ece_15_bins": 0.05054946767631918,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              1,
+              2,
+              7,
+              9,
+              9,
+              7,
+              6,
+              14,
+              21,
+              177
+            ]
+          }
+        }
+      },
+      "labels": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.7646484375,
+          "nll": 0.5609997510910034,
+          "brier": 0.3075801432132721,
+          "ece_15_bins": 0.027422813582234085,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            19,
+            48,
+            69,
+            69,
+            60,
+            47,
+            46,
+            39,
+            38,
+            58,
+            79,
+            452
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.53125,
+            "nll": 1.2767727375030518,
+            "brier": 0.6541867256164551,
+            "ece_15_bins": 0.13356758677400649,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              18,
+              28,
+              29,
+              14,
+              16,
+              12,
+              8,
+              2,
+              0,
+              1,
+              0,
+              0
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.3515625,
+            "nll": 1.2589694261550903,
+            "brier": 0.6981870532035828,
+            "ece_15_bins": 0.1079177213832736,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              19,
+              34,
+              46,
+              18,
+              5,
+              4,
+              0,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.865234375,
+            "nll": 0.3514088988304138,
+            "brier": 0.19725564122200012,
+            "ece_15_bins": 0.035560131655074656,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              1,
+              1,
+              5,
+              6,
+              19,
+              22,
+              23,
+              24,
+              22,
+              35,
+              52,
+              302
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.88671875,
+            "nll": 0.2733100950717926,
+            "brier": 0.1596224308013916,
+            "ece_15_bins": 0.04040937847457826,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              3,
+              7,
+              8,
+              11,
+              13,
+              14,
+              22,
+              27,
+              150
+            ]
+          }
+        }
+      },
+      "identifier_key": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.7900390625,
+          "nll": 0.4847249984741211,
+          "brier": 0.26693931221961975,
+          "ece_15_bins": 0.028766690229531378,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            4,
+            43,
+            57,
+            65,
+            58,
+            52,
+            40,
+            46,
+            36,
+            47,
+            70,
+            506
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.5703125,
+            "nll": 1.1130168437957764,
+            "brier": 0.5706450939178467,
+            "ece_15_bins": 0.0632379911839962,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              4,
+              16,
+              22,
+              16,
+              14,
+              15,
+              13,
+              8,
+              6,
+              10,
+              2,
+              2
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.3046875,
+            "nll": 1.2918269634246826,
+            "brier": 0.7192773222923279,
+            "ece_15_bins": 0.16396418132353574,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              12,
+              27,
+              45,
+              23,
+              12,
+              5,
+              1,
+              2,
+              1,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.892578125,
+            "nll": 0.2722592055797577,
+            "brier": 0.15697892010211945,
+            "ece_15_bins": 0.03311839685193263,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              13,
+              6,
+              3,
+              16,
+              17,
+              13,
+              27,
+              18,
+              22,
+              44,
+              333
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.9375,
+            "nll": 0.19195975363254547,
+            "brier": 0.10883811116218567,
+            "ece_15_bins": 0.03325992834288627,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              2,
+              1,
+              5,
+              8,
+              9,
+              10,
+              10,
+              14,
+              24,
+              171
+            ]
+          }
+        }
+      },
+      "wording": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.5439453125,
+          "nll": 1.0010700225830078,
+          "brier": 0.5417969226837158,
+          "ece_15_bins": 0.05510809112456627,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            6,
+            97,
+            173,
+            154,
+            100,
+            82,
+            68,
+            56,
+            41,
+            36,
+            47,
+            164
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.3046875,
+            "nll": 1.457306981086731,
+            "brier": 0.7606144547462463,
+            "ece_15_bins": 0.10338404681533575,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              2,
+              18,
+              41,
+              48,
+              9,
+              8,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.3125,
+            "nll": 1.3553239107131958,
+            "brier": 0.7213506102561951,
+            "ece_15_bins": 0.09185926453210413,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              4,
+              53,
+              54,
+              10,
+              3,
+              1,
+              2,
+              1,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.576171875,
+            "nll": 0.9379727244377136,
+            "brier": 0.5162048935890198,
+            "ece_15_bins": 0.08277365303365514,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              20,
+              59,
+              63,
+              58,
+              47,
+              41,
+              35,
+              23,
+              16,
+              25,
+              125
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.71484375,
+            "nll": 0.7220191359519958,
+            "brier": 0.3937954306602478,
+            "ece_15_bins": 0.10059579834342003,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              6,
+              19,
+              33,
+              30,
+              26,
+              23,
+              20,
+              18,
+              20,
+              22,
+              39
+            ]
+          }
+        }
+      },
+      "magnitude": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.2587890625,
+          "nll": 2.199117660522461,
+          "brier": 0.9512211084365845,
+          "ece_15_bins": 0.33994882804108784,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            13,
+            158,
+            164,
+            94,
+            95,
+            63,
+            44,
+            56,
+            44,
+            48,
+            50,
+            195
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.21875,
+            "nll": 1.7168610095977783,
+            "brier": 0.8360389471054077,
+            "ece_15_bins": 0.16139746038243175,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              11,
+              49,
+              33,
+              16,
+              11,
+              5,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.140625,
+            "nll": 2.0817909240722656,
+            "brier": 0.9437974691390991,
+            "ece_15_bins": 0.22468859259970486,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              1,
+              41,
+              52,
+              29,
+              4,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.271484375,
+            "nll": 2.4570398330688477,
+            "brier": 1.0112278461456299,
+            "ece_15_bins": 0.41072185517987236,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              1,
+              52,
+              46,
+              29,
+              55,
+              33,
+              23,
+              38,
+              27,
+              39,
+              37,
+              132
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.3125,
+            "nll": 1.9830653667449951,
+            "brier": 0.8925103545188904,
+            "ece_15_bins": 0.35212134825997055,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              16,
+              33,
+              20,
+              25,
+              24,
+              20,
+              17,
+              17,
+              8,
+              13,
+              63
+            ]
+          }
+        }
+      },
+      "field_name": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.7998046875,
+          "nll": 0.4784787893295288,
+          "brier": 0.2622233033180237,
+          "ece_15_bins": 0.024024416226893663,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            2,
+            37,
+            59,
+            78,
+            51,
+            45,
+            47,
+            39,
+            47,
+            37,
+            67,
+            515
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.578125,
+            "nll": 1.158790111541748,
+            "brier": 0.5904133319854736,
+            "ece_15_bins": 0.08352990285493433,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              1,
+              8,
+              18,
+              27,
+              15,
+              14,
+              13,
+              11,
+              8,
+              6,
+              6,
+              1
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.34375,
+            "nll": 1.2465016841888428,
+            "brier": 0.6919962167739868,
+            "ece_15_bins": 0.0907736518420279,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              18,
+              33,
+              44,
+              19,
+              8,
+              4,
+              0,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.90234375,
+            "nll": 0.25564783811569214,
+            "brier": 0.14798809587955475,
+            "ece_15_bins": 0.029094765661284328,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              1,
+              9,
+              6,
+              5,
+              12,
+              15,
+              20,
+              20,
+              31,
+              19,
+              41,
+              333
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.93359375,
+            "nll": 0.19997364282608032,
+            "brier": 0.11171221733093262,
+            "ece_15_bins": 0.042314037680625916,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              2,
+              2,
+              5,
+              8,
+              10,
+              8,
+              6,
+              12,
+              20,
+              181
+            ]
+          }
+        }
+      },
+      "combined": {
+        "overall": {
+          "count": 1024,
+          "accuracy": 0.2294921875,
+          "nll": 2.0026066303253174,
+          "brier": 0.96514892578125,
+          "ece_15_bins": 0.3054320311784977,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            34,
+            147,
+            126,
+            119,
+            115,
+            109,
+            124,
+            82,
+            64,
+            40,
+            35,
+            29
+          ]
+        },
+        "tasks": {
+          "conditional_selection": {
+            "count": 128,
+            "accuracy": 0.2265625,
+            "nll": 1.7440130710601807,
+            "brier": 0.8387588262557983,
+            "ece_15_bins": 0.10614609986077994,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              27,
+              46,
+              36,
+              14,
+              4,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "count": {
+            "count": 128,
+            "accuracy": 0.1328125,
+            "nll": 1.8324025869369507,
+            "brier": 0.8787384033203125,
+            "ece_15_bins": 0.21504801465198398,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              7,
+              89,
+              29,
+              2,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "extremum": {
+            "count": 512,
+            "accuracy": 0.234375,
+            "nll": 2.1381921768188477,
+            "brier": 1.024349570274353,
+            "ece_15_bins": 0.36773514398373663,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              10,
+              48,
+              73,
+              78,
+              63,
+              82,
+              49,
+              35,
+              24,
+              30,
+              20
+            ]
+          },
+          "temporal_order": {
+            "count": 256,
+            "accuracy": 0.26953125,
+            "nll": 1.9458343982696533,
+            "brier": 0.9531477689743042,
+            "ece_15_bins": 0.3482720387401059,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              13,
+              30,
+              32,
+              45,
+              42,
+              33,
+              29,
+              16,
+              5,
+              9
+            ]
+          }
+        }
+      }
+    },
+    "paired_state_bootstrap": {
+      "labels": {
+        "accuracy_difference": -0.033203125,
+        "percentile_95_interval": [
+          -0.0517578125,
+          -0.015625
+        ]
+      },
+      "identifier_key": {
+        "accuracy_difference": -0.0078125,
+        "percentile_95_interval": [
+          -0.017578125,
+          0.001953125
+        ]
+      },
+      "wording": {
+        "accuracy_difference": -0.25390625,
+        "percentile_95_interval": [
+          -0.28125,
+          -0.2265625
+        ]
+      },
+      "magnitude": {
+        "accuracy_difference": -0.5390625,
+        "percentile_95_interval": [
+          -0.57421875,
+          -0.5029296875
+        ]
+      },
+      "field_name": {
+        "accuracy_difference": 0.001953125,
+        "percentile_95_interval": [
+          -0.0078125,
+          0.0107421875
+        ]
+      },
+      "combined": {
+        "accuracy_difference": -0.568359375,
+        "percentile_95_interval": [
+          -0.603515625,
+          -0.5322265625
+        ]
+      }
+    },
+    "seed": 20261012,
+    "resamples": 10000,
+    "groups": 128,
+    "max_tokens": 157,
+    "seconds": 29.98014209989924,
+    "device": "cuda",
+    "peak_vram_bytes": 192056320,
+    "limitation": "Known development study; no multiplicity adjustment."
+  },
+  "files": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-eval-01\\predictions.json": {
+      "bytes": 3906178,
+      "sha256": "a4f1fd83b58f3be15a0705e7fadad702f13a2aebb06851ae157b9e3163e5e0f7"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-eval-01\\protocol.json": {
+      "bytes": 811,
+      "sha256": "6211e29cb4aa25b15f4f43c2328cbddf27e0fcac3090450cede5d95e8250d850"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-eval-01\\result.json": {
+      "bytes": 19317,
+      "sha256": "c3d4a25c85270a3d2b9c160db9ec54aa5a852cc0ab893462de8e31efcdb518e5"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-01\\inputs.jsonl": {
+      "bytes": 5410116,
+      "sha256": "a1bad72fff10e9a264b66557e9b2c1079954d508aa6f07972060804dd0c6221b"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-01\\manifest.json": {
+      "bytes": 530,
+      "sha256": "fad1922f662d265d8d2acc40a177eaf78a9c214dbf684bd1e8f7fc1ce43d19eb"
+    }
+  }
+}

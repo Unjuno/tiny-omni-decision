@@ -1,0 +1,38 @@
+{
+  "status": "PASS_CORPUS_AND_TOKENIZATION_PREFLIGHT_NOT_TRAINED",
+  "counts": {
+    "train": 9216,
+    "development": 2304
+  },
+  "unique_states": {
+    "train": 512,
+    "development": 128
+  },
+  "context_counts": {
+    "train": {
+      "plain": 3072,
+      "irrelevant": 3072,
+      "necessary": 3072
+    },
+    "development": {
+      "plain": 768,
+      "irrelevant": 768,
+      "necessary": 768
+    }
+  },
+  "max_tokens": 147,
+  "prior_overlap": 0,
+  "prior_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\comparison-vocabulary-curriculum-01\\train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\train.jsonl": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\vocabulary-transfer-inputs-01\\inputs.jsonl": "1a825b413e32f319dead47ccbef07ef3b36f2c391ca2c197a694aaeb4ed54dd2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-prefix-factorial-01\\inputs.jsonl": "ebd762bdae9ff43b3f4f45d16c370d16a6f0550fd5aa5fba9111ff17e138f159"
+  },
+  "files": {
+    "development.jsonl": "310a0c7d3daad92dddb807a58d9e1483d06fd1b14bca67b4b29e9293520d8e4c",
+    "train.jsonl": "a0116e4e2c5024fe39e113461c3b286da3d76b1f8b11940dc195fd5594c2982b"
+  },
+  "builder_sha256": "1825ff7c68ca6bc317925d7397aa11aced45b18ce332a2578abb2d0a52a21d5d",
+  "scope": "synthetic development; heldout context templates, familiar comparison words; not all-language or product evaluation"
+}

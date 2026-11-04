@@ -1,0 +1,29 @@
+{
+  "status": "PREPROCESSING_SMOKE_PASS",
+  "training": false,
+  "member": "harth/S025.csv",
+  "member_sha256": "1768410a124abc54df63971050463eca773fee4b36cc429c05aeed8f7867d5d6",
+  "archive_sha256": "2ab54d6b11467ddbe998dfb60355f9f1ae181b0af7a89e7c78bb7af2cf16b64a",
+  "split_sha256": "0259363d0dde5255a7c2ba2925959aad12df78007c60d26db855b009fca04695",
+  "source_samples": 231729,
+  "windows": 3593,
+  "window_length": 128,
+  "stride": 64,
+  "max_gap_ms": 30.0,
+  "gap_count": 22,
+  "mixed_label_windows": 330,
+  "feature_shape": [
+    3593,
+    128,
+    6
+  ],
+  "feature_sha256": "52ee95851ba8dc5128518ba12ec07e04ed61ac83c5a9b5a9c940fb0aa8ccd702",
+  "target_sha256": "7ed4020b79cacd8eda4512441b54892843be2eb69cde1fe50e2720f7b915af7f",
+  "clock_origin": "2019-01-12T00:00:00",
+  "timezone": "unspecified by source; no cross-subject clock alignment",
+  "input_units": "g",
+  "validation_calibration_audit_opened": false,
+  "roundtrip_exact": true,
+  "seconds": 1.5907085000071675,
+  "limitation": "first train subject only; no accuracy or multimodal fusion claim"
+}

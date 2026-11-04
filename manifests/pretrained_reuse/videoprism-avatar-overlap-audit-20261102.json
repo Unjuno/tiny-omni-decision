@@ -1,0 +1,53 @@
+{
+  "format": "pretrained_overlap_audit_v1",
+  "recorded_at": "2026-11-02T11:05:00+09:00",
+  "question": "Can exact source-video overlap between the pinned VideoPrism-B checkpoint's pretraining corpus and the AVATAR TRAIN videos used in the category-transfer probe be established?",
+  "decision": "UNKNOWN",
+  "model": {
+    "repository": "google/videoprism-base-f16r288",
+    "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "file": "flax_base_f16r288_repeated.npz",
+    "file_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "official_implementation_revision": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
+  },
+  "target_data": {
+    "dataset": "AVATAR",
+    "hub_revision": "a7f0146ff704799d044133e61137836cacc1c233",
+    "license": "CC-BY-4.0",
+    "upstream_media_source": "VGGSound-derived YouTube videos; source-video copyright remains with original owners",
+    "train_model_input_sha256": "0139f4f59a685c3f83890156b59c42d12aca9db54b22ee5c0a9c70b6ec7d60ef",
+    "train_sidecar_sha256": "90adbf04450e0854fdb379dbcceb6aaa73790b205c08f1cf6c2cb786b6710a57",
+    "group_key": "source_youtube_id_from_archive_member_name",
+    "referenced_train_source_group_count": 2268,
+    "sorted_train_source_group_ids_sha256": "b0075660b35ca5538e5afd878a455b6b78897daed0b0b637c88162b81d6e1f55"
+  },
+  "pretraining_evidence": {
+    "official_sources": [
+      "https://research.google/blog/videoprism-a-foundational-visual-encoder-for-video-understanding/",
+      "https://github.com/google-deepmind/videoprism/blob/c6eba0ece3dd49a24ffc44582966997a4a59f1d8/README.md"
+    ],
+    "reported_scale": "36 million video-text pairs and 582 million video clips with noisy or machine-generated parallel text",
+    "named_source_families": [
+      "YT-Temporal-180M",
+      "InternVid",
+      "VideoCC",
+      "WTS-70M",
+      "additional public and private sources"
+    ],
+    "item_level_training_video_ids_publicly_available_in_reviewed_sources": false,
+    "local_pinned_source_checkout_contains_pretraining_item_id_manifest": false
+  },
+  "overlap_assessment": {
+    "same_source_platform_possible": true,
+    "exact_id_overlap_computed": false,
+    "reason": "The AVATAR groups are YouTube video IDs. Official VideoPrism materials disclose broad source families, including YouTube video collections, but do not publish the full checkpoint-specific item-level source-ID manifest; some sources are private or subject to data wipeout. Therefore exact overlap and a zero-overlap claim cannot be tested.",
+    "inference": "Potential source overlap is material, but no actual overlapping ID has been established by this audit."
+  },
+  "result_disposition": "Treat the AVATAR category-transfer result as a source-group-disjoint, category-held-out development diagnostic within AVATAR TRAIN whose VideoPrism pretraining overlap is unknown. Do not describe it as independent-source transfer evidence or tune again on its held categories.",
+  "sealed_audit_accessed": false,
+  "official_validation_labels_accessed": false,
+  "model_loaded": false,
+  "features_extracted": false,
+  "metrics_recomputed": false,
+  "data_downloaded": false
+}

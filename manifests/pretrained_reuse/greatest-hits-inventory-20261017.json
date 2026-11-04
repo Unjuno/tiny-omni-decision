@@ -1,0 +1,242 @@
+{
+  "format": "greatest_hits_inventory_and_acquisition_v1",
+  "policy": "REVIEW",
+  "training_admission": "NOT_ADMITTED",
+  "source_license": "CC-BY-4.0",
+  "official_train_parents": 733,
+  "development_partition_counts": {
+    "train": 308,
+    "validation": 101,
+    "quarantine": 324
+  },
+  "partition_sha256": "6c9ac8eb8e12bd5dc0af77c8d162a40c753d5a215d07eb85dc3a69c3973d9f98",
+  "partition_id_hashes": {
+    "train": "232d37d77ccd010482173a219d9b29769601b29f6a22cc60afd7d0c7cc73141b",
+    "validation": "4ff58bb69499d59d79b2528da410d47e8af7ae2d9957b972490b3949ab56bba6",
+    "quarantine": "e4a57ea7617306a01ea1fa2bb14475750e6cf87797bce6a8f28ffaf6da97d4a2"
+  },
+  "annotations_sha256": "24e8df777bee34102591e7b15901b931034ee2df3b549d632fb5b7094322e3dd",
+  "splits": {
+    "train": {
+      "parents": 308,
+      "rows": 13327,
+      "complete": 7551,
+      "missing_fields": {
+        "0": 7551,
+        "3": 5225,
+        "2": 48,
+        "1": 503
+      },
+      "fields": [
+        {
+          "<MISSING>": 5399,
+          "carpet": 105,
+          "ceramic": 213,
+          "cloth": 925,
+          "dirt": 58,
+          "drywall": 381,
+          "glass": 171,
+          "grass": 89,
+          "gravel": 49,
+          "leaf": 160,
+          "metal": 1734,
+          "paper": 734,
+          "plastic": 933,
+          "plastic-bag": 157,
+          "rock": 592,
+          "tile": 87,
+          "water": 109,
+          "wood": 1431
+        },
+        {
+          "<MISSING>": 5381,
+          "hit": 5389,
+          "scratch": 2557
+        },
+        {
+          "<MISSING>": 5494,
+          "deform": 821,
+          "rigid-motion": 853,
+          "scatter": 272,
+          "splash": 112,
+          "static": 5775
+        }
+      ]
+    },
+    "validation": {
+      "parents": 101,
+      "rows": 4605,
+      "complete": 2800,
+      "missing_fields": {
+        "0": 2800,
+        "3": 1556,
+        "1": 226,
+        "2": 23
+      },
+      "fields": [
+        {
+          "<MISSING>": 1627,
+          "ceramic": 77,
+          "cloth": 201,
+          "dirt": 310,
+          "drywall": 10,
+          "glass": 48,
+          "grass": 180,
+          "gravel": 32,
+          "leaf": 338,
+          "metal": 307,
+          "paper": 192,
+          "plastic": 171,
+          "plastic-bag": 42,
+          "rock": 300,
+          "water": 486,
+          "wood": 284
+        },
+        {
+          "<MISSING>": 1618,
+          "hit": 1840,
+          "scratch": 1147
+        },
+        {
+          "<MISSING>": 1695,
+          "deform": 293,
+          "rigid-motion": 286,
+          "scatter": 622,
+          "splash": 480,
+          "static": 1229
+        }
+      ]
+    },
+    "quarantine": {
+      "parents": 324,
+      "rows": 16789,
+      "complete": 9906,
+      "missing_fields": {
+        "0": 9906,
+        "1": 770,
+        "3": 6011,
+        "2": 102
+      },
+      "fields": [
+        {
+          "<MISSING>": 6259,
+          "carpet": 188,
+          "cloth": 395,
+          "dirt": 2152,
+          "drywall": 165,
+          "glass": 50,
+          "grass": 569,
+          "gravel": 208,
+          "leaf": 1401,
+          "metal": 1259,
+          "paper": 394,
+          "plastic": 354,
+          "plastic-bag": 126,
+          "rock": 1215,
+          "tile": 187,
+          "water": 49,
+          "wood": 1818
+        },
+        {
+          "<MISSING>": 6179,
+          "hit": 7461,
+          "scratch": 3149
+        },
+        {
+          "<MISSING>": 6569,
+          "deform": 705,
+          "rigid-motion": 900,
+          "scatter": 3546,
+          "splash": 104,
+          "static": 4965
+        }
+      ]
+    }
+  },
+  "task_vocabularies": [
+    [
+      "carpet",
+      "ceramic",
+      "cloth",
+      "dirt",
+      "drywall",
+      "glass",
+      "grass",
+      "gravel",
+      "leaf",
+      "metal",
+      "paper",
+      "plastic",
+      "plastic-bag",
+      "rock",
+      "tile",
+      "water",
+      "wood"
+    ],
+    [
+      "hit",
+      "scratch"
+    ],
+    [
+      "deform",
+      "rigid-motion",
+      "scatter",
+      "splash",
+      "static"
+    ]
+  ],
+  "validation_values_absent_from_train": [
+    [],
+    [],
+    []
+  ],
+  "media_acquisition": {
+    "status": "PASS_COMPLETE_DEVELOPMENT_MEDIA",
+    "command": [
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\fetch_greatest_hits_development_media.py",
+      "--directory",
+      "C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-directory-01/members.json",
+      "--inventory",
+      "C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-train-inventory-01",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-development-media-01"
+    ],
+    "source_commit": "8ce7de7e8ae67f44d525729261af4a2a46827dd4",
+    "started_utc": "2026-10-16T16:54:42.436011+00:00",
+    "workers": 2,
+    "dispatch_deadline_seconds": 1800,
+    "request_seconds": 90,
+    "partition_sha256": "6c9ac8eb8e12bd5dc0af77c8d162a40c753d5a215d07eb85dc3a69c3973d9f98",
+    "directory_sha256": "98673a0101020606537d2850f825ebe08219c496928002f2cf09dcaa83b9824a",
+    "media_plan_sha256": "97f626245fbaa9b995597121749621418bcaf05d035079168199fc1338c01c5d",
+    "test_media_or_labels_opened": false,
+    "quarantine_media_opened": false,
+    "model_loaded": false,
+    "optimizer_updates": 0,
+    "sealed_audit_opened": false,
+    "seconds": 568.6870000000054,
+    "finished_utc": "2026-10-16T17:04:11.094808+00:00",
+    "completed": 409,
+    "passed": 409,
+    "requested_bytes": 632309869,
+    "source_hashes": {
+      "scripts/greatest_hits_media.py": "67e0c9e829ec8b2d554e10bab2135a2a7301a43d5f6e82742ca353371397b035",
+      "scripts/greatest_hits_source.py": "10a332b161dd7f8fa5401250a00a74b5c6678c949d0842c10af57ae82d976e8e",
+      "scripts/fetch_greatest_hits_development_media.py": "f17b3ae4132485e65e4b34981504a147305d220ba8bec8b5bbb084f71ae04cb1"
+    }
+  },
+  "test_media_or_labels_opened": false,
+  "sealed_audit_opened": false,
+  "model_loaded": false,
+  "optimizer_updates": 0,
+  "full_decode": "separate running process; not claimed complete by this receipt",
+  "artifacts": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-train-inventory-01\\result.json": "409a23c86426a38ddca4456f8d8d3704a1b8d250e516eb926fd53d70c3ae1ab6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-train-inventory-01\\inventory.json": "3dab5814a6a5e87599f5d67ad435d7f8a81042e426969c004b9eed6e3d74a19d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-train-inventory-01\\members.json": "372abc53c62b45d59b7de49609800f496bef7bd5ada5476586619fe94c43c27a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-development-media-01\\result.json": "15147261a99ccb1fd81ea934233063f3aebe8288258cc38fa4b5853d5f11c95a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-development-media-01\\members.json": "8f734168a472680acbe7e4be3bc409204105451e7b9fecbc381a0ee874828678",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-development-media-01\\plan.json": "97f626245fbaa9b995597121749621418bcaf05d035079168199fc1338c01c5d"
+  }
+}

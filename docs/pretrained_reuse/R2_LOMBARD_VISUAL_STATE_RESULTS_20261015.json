@@ -1,0 +1,2052 @@
+{
+  "status": "VERIFIED_FIXED_MODEL_DIAGNOSIS_NOT_PRODUCT_COMPLETION",
+  "source_commit": "c6970fe65605a367de9fabd50e4d436cc40939da",
+  "receipt_hashes": {
+    "lombard-visual-state-diagnosis-01": "25076e30d398defcfcb5c7a5123c27aed371703354c3902bdd927e898d56897f",
+    "lombard-visual-state-replay-01": "c1ac0b1d699d623048388dfe61f2166aead7608f9449a12f198574b5483632a0"
+  },
+  "paths": {
+    "lombard-visual-state-diagnosis-01": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-visual-state-diagnosis-01",
+    "lombard-visual-state-replay-01": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-visual-state-replay-01"
+  },
+  "input_pin_count": 4197,
+  "provenance": {
+    "protocol": {
+      "experiment_id": "lombard-grid-pooled-slot-v1",
+      "status": "FROZEN_BEFORE_ANY_READOUT_QUALITY_METRICS",
+      "source_manifest": "manifests/pretrained_reuse/lombard-grid-source-20261014.json",
+      "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+      "split_hashes": {
+        "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+        "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+        "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+        "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+      },
+      "arms": [
+        "audio",
+        "video",
+        "joint"
+      ],
+      "seed": 17,
+      "epochs": 24,
+      "batch_size": 128,
+      "optimizer": "AdamW",
+      "learning_rate": 0.001,
+      "weight_decay": 0.001,
+      "lr_schedule": "fixed",
+      "hidden_size": 64,
+      "activation": "GELU",
+      "input_features": {
+        "audio": "mean complete physical frozen Whisper Encoder tokens(384)",
+        "video": "mean native16 chronological VideoPrism framewise spatial means(768)"
+      },
+      "input_dimensions": 1154,
+      "presence_mask_dimensions": 2,
+      "absent_stream": "zero standardized feature vector with absent mask bit",
+      "encoder_training": false,
+      "head": "Linear1154->64,GELU,Linear64->51; split into6 native slot option-logit vectors",
+      "head_parameters": 77235,
+      "options": {
+        "command": [
+          "bin",
+          "lay",
+          "place",
+          "set"
+        ],
+        "color": [
+          "blue",
+          "green",
+          "red",
+          "white"
+        ],
+        "preposition": [
+          "at",
+          "by",
+          "in",
+          "with"
+        ],
+        "letter": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "k",
+          "l",
+          "m",
+          "n",
+          "o",
+          "p",
+          "q",
+          "r",
+          "s",
+          "t",
+          "u",
+          "v",
+          "x",
+          "y",
+          "z"
+        ],
+        "number": [
+          "zero",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "adverb": [
+          "again",
+          "now",
+          "please",
+          "soon"
+        ]
+      },
+      "loss": "mean of6 unweighted full-vocabulary slot cross-entropies; all native options preserved",
+      "normalization": "per-feature train-only mean/std; std<=1e-6 replaced with1; no heldout fitting",
+      "selector": "earliest minimum unrounded raw validation macro NLL across6 slots",
+      "checkpoint_policy": "retain best and final separately; no automatic last selection",
+      "calibration": "independent calibration split; per-slot earliest minimum NLL over17 geometric temperatures0.25..4",
+      "report": [
+        "each-slot Accuracy/NLL/Brier/ECE15/mean confidence",
+        "macro6-slot Accuracy/NLL/Brier/ECE",
+        "minimum slot Accuracy",
+        "all6-slots-correct utterance Accuracy",
+        "plain/Lombard and each validation speaker results",
+        "train/validation curves at every epoch",
+        "best/final metrics and train/validation gaps",
+        "unique assets/examples and repeated-example count, total versus selected",
+        "parameter count, normalization coefficients, wall time, VRAM, hashes/reload checks"
+      ],
+      "controls": "selected joint weights/temperature frozen; label-independent different-speaker-group bijective audio mismatch and video mismatch; missing stream with mask unset; no contrived noise/degradation",
+      "paired_uncertainty": "10000 bootstrap resamples of whole validation speaker groups, seed17, percentile95% interval; all observations per sampled group, pooled metrics recomputed; development selector/calibration caveats explicit",
+      "json": "native probabilities for all options under6 named slots; exact option permutation, no text generation; no claim of open vocabulary or legacy DecisionExample25-letter compatibility",
+      "stopping": "fixed24 epochs; safe stop for nonfinite loss/gradients, hash/integrity, frozen-feature failure or resource issues; no extra seed/epoch/policy search",
+      "outputs": "new separate per-arm directories; no weight overwrite of older artifacts",
+      "quality_scope": "native closed-vocabulary spoken-command slots; generic pooled visual representation may miss fine lip motion; pooling removes time order and cannot validate temporal reasoning; not general4-modality95\u201398% product",
+      "extra_trials": "none before fixed three-arm comparison; poor result is retained, not made easier"
+    },
+    "protocol_sha256": "047e98485298c5ff26900e20335aa49a1aa8cbf0581772482edc2dad3c19afe4",
+    "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+    "media_report_sha256": "3a29c73421bb695b9179e540ade00484a2ab6e744f90d1a62b078797048a054b",
+    "audio_report_sha256": "d72ae9cd299419feecc307d00dc30bd26fad9907a04ee4ffaf82d31a361c8bed",
+    "audio_features": {
+      "tokens.npy": "c8bec22068bf089b71c4e4ec31174e1a0a68d53f453bdf81228d3d27488a2763",
+      "pooled.npy": "e09aab88f31957c53c2e48f38a7e79971739efc916547cd5fd3dd6a1bca0a509"
+    },
+    "video_report_sha256": "3cbf602dcb9e659f65e4c1562724072c80f6d94f0093d2e543ab61cd2e8d7f07",
+    "video_features": {
+      "framewise.npy": "a4f44cd94ef762316440e359f5e916a0e862b2e61378aeafa0bd6f4e9f67699a",
+      "pooled.npy": "9d36c4c039b4276dfe6e548686a9ea3b90a0d0a8eee3177da8701308b8059e2b"
+    },
+    "training_only_smoke": false,
+    "framewise_sha256": "a4f44cd94ef762316440e359f5e916a0e862b2e61378aeafa0bd6f4e9f67699a",
+    "frame_report_sha256": "3cbf602dcb9e659f65e4c1562724072c80f6d94f0093d2e543ab61cd2e8d7f07",
+    "frames": 16,
+    "temporal_mean_exact": true
+  },
+  "arms": {
+    "joint_broadcast": {
+      "best_epoch": 23,
+      "checkpoint_sha256": "4f005ba03413054941406942b883bea7705df3682c1ceec77756d139885f072a",
+      "temperatures": [
+        0.8408964152537145,
+        0.5,
+        0.8408964152537145,
+        0.5946035575013605,
+        0.5946035575013605,
+        0.25
+      ],
+      "controls": {
+        "matched": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020755528084545256,
+                "brier": 0.0006550281902450079,
+                "ece": 0.0018416263425675258,
+                "mean_confidence": 0.9981583736574325
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.007941164666939917,
+                "brier": 0.0026747638478792505,
+                "ece": 0.0017911683124142452,
+                "mean_confidence": 0.9987976099959184
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03397577769131804,
+                "brier": 0.01642008453262724,
+                "ece": 0.007304464527039603,
+                "mean_confidence": 0.9863273042760942
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.050844399847811826,
+                "brier": 0.024801769039106965,
+                "ece": 0.008440266472902193,
+                "mean_confidence": 0.9825629540470259
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0017374329200099826,
+                "brier": 0.0006092093020072706,
+                "ece": 0.001547588242653498,
+                "mean_confidence": 0.9984524117573464
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 2.7171084625268264e-05,
+                "brier": 9.749395795263101e-07,
+                "ece": 2.691585676561914e-05,
+                "mean_confidence": 0.9999730841432344
+              }
+            },
+            "macro": {
+              "accuracy": 0.995313085864267,
+              "nll": 0.01610024983652659,
+              "brier": 0.007526971641907544,
+              "ece": 0.0034920049590571136,
+              "mean_confidence": 0.9940452896461753,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9718785151856018
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.0
+        },
+        "input_zero": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.004906995540213509,
+                "brier": 0.001985786920349694,
+                "ece": 0.0032722178135043602,
+                "mean_confidence": 0.9970046701619303
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.005376477724122144,
+                "brier": 0.0026603205842558836,
+                "ece": 0.0016605342698876742,
+                "mean_confidence": 0.998334365306371
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9876265466816648,
+                "nll": 0.04566230506950223,
+                "brier": 0.020828479591367157,
+                "ece": 0.010978248224298957,
+                "mean_confidence": 0.9803738659036938
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9808773903262092,
+                "nll": 0.05772896406661588,
+                "brier": 0.026598521791720054,
+                "ece": 0.0145084546403572,
+                "mean_confidence": 0.9729928126967285
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.002708183645517246,
+                "brier": 0.000939368421212709,
+                "ece": 0.0023952935714873806,
+                "mean_confidence": 0.9976047064285124
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.00209273922333645,
+                "brier": 0.0013908404915105586,
+                "ece": 0.0009580965431392922,
+                "mean_confidence": 0.9995484988411183
+              }
+            },
+            "macro": {
+              "accuracy": 0.9941882264716911,
+              "nll": 0.019745944211551243,
+              "brier": 0.009067219633402675,
+              "ece": 0.00562880751044581,
+              "mean_confidence": 0.9909764865563924,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9808773903262092,
+            "whole_utterance_accuracy": 0.9662542182227222
+          },
+          "slot_answer_changes": 17,
+          "max_abs_raw_logit_change": 3.6413702964782715
+        },
+        "input_train_first": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020576063291932807,
+                "brier": 0.0006490659533375066,
+                "ece": 0.0018254649217984606,
+                "mean_confidence": 0.9981745350782016
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.007939491505634794,
+                "brier": 0.0026750640116421157,
+                "ece": 0.0017942067890533613,
+                "mean_confidence": 0.9987995294090607
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03397067613178075,
+                "brier": 0.01641457228793771,
+                "ece": 0.007303006977691103,
+                "mean_confidence": 0.9863290905679705
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.05087829874454523,
+                "brier": 0.024856689388669022,
+                "ece": 0.0089201681537891,
+                "mean_confidence": 0.9826290302903739
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0017313989226021345,
+                "brier": 0.0006082750886950795,
+                "ece": 0.0015418378835977702,
+                "mean_confidence": 0.9984581621164024
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 2.7118324498466448e-05,
+                "brier": 9.73927320777266e-07,
+                "ece": 2.6863397920684484e-05,
+                "mean_confidence": 0.9999731366020793
+              }
+            },
+            "macro": {
+              "accuracy": 0.995313085864267,
+              "nll": 0.01610076499304244,
+              "brier": 0.007534106776267035,
+              "ece": 0.00356859135397508,
+              "mean_confidence": 0.9940605806773481,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9718785151856018
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.38669633865356445
+        },
+        "reverse": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020755528084545256,
+                "brier": 0.0006550281902450079,
+                "ece": 0.0018416263425675258,
+                "mean_confidence": 0.9981583736574325
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.007941164666939917,
+                "brier": 0.0026747638478792505,
+                "ece": 0.0017911683124142452,
+                "mean_confidence": 0.9987976099959184
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03397577769131804,
+                "brier": 0.01642008453262724,
+                "ece": 0.007304464527039603,
+                "mean_confidence": 0.9863273042760942
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.050844399847811826,
+                "brier": 0.024801769039106965,
+                "ece": 0.008440266472902193,
+                "mean_confidence": 0.9825629540470259
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0017374329200099826,
+                "brier": 0.0006092093020072706,
+                "ece": 0.001547588242653498,
+                "mean_confidence": 0.9984524117573464
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 2.7171084625268264e-05,
+                "brier": 9.749395795263101e-07,
+                "ece": 2.691585676561914e-05,
+                "mean_confidence": 0.9999730841432344
+              }
+            },
+            "macro": {
+              "accuracy": 0.995313085864267,
+              "nll": 0.01610024983652659,
+              "brier": 0.007526971641907544,
+              "ece": 0.0034920049590571136,
+              "mean_confidence": 0.9940452896461753,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9718785151856018
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.0
+        },
+        "latent_train_mean": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020577529702545286,
+                "brier": 0.000649065062218945,
+                "ece": 0.0018256178583498125,
+                "mean_confidence": 0.9981743821416501
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.00793964897318537,
+                "brier": 0.00267501683060742,
+                "ece": 0.0017941399955132948,
+                "mean_confidence": 0.9987995592394998
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03397269766993933,
+                "brier": 0.016415486149090237,
+                "ece": 0.007303090370555465,
+                "mean_confidence": 0.986328969393098
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.050875832116325764,
+                "brier": 0.024855614731178605,
+                "ece": 0.008920429234370763,
+                "mean_confidence": 0.9826280697840006
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0017315474987680986,
+                "brier": 0.0006083745371788351,
+                "ece": 0.0015419520974154003,
+                "mean_confidence": 0.9984580479025849
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 2.71385473508251e-05,
+                "brier": 9.751592072899482e-07,
+                "ece": 2.6883294999779928e-05,
+                "mean_confidence": 0.9999731167050002
+              }
+            },
+            "macro": {
+              "accuracy": 0.995313085864267,
+              "nll": 0.016100769629303985,
+              "brier": 0.007534088744913556,
+              "ece": 0.0035686854752007527,
+              "mean_confidence": 0.9940603575276391,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9718785151856018
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.38573312759399414
+        },
+        "latent_train_first": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020576063291932807,
+                "brier": 0.0006490659533375066,
+                "ece": 0.0018254649217984606,
+                "mean_confidence": 0.9981745350782016
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.007939491505634794,
+                "brier": 0.0026750640116421157,
+                "ece": 0.0017942067890533613,
+                "mean_confidence": 0.9987995294090607
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03397067613178075,
+                "brier": 0.01641457228793771,
+                "ece": 0.007303006977691103,
+                "mean_confidence": 0.9863290905679705
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.05087829874454523,
+                "brier": 0.024856689388669022,
+                "ece": 0.0089201681537891,
+                "mean_confidence": 0.9826290302903739
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0017313989226021345,
+                "brier": 0.0006082750886950795,
+                "ece": 0.0015418378835977702,
+                "mean_confidence": 0.9984581621164024
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 2.7118324498466448e-05,
+                "brier": 9.73927320777266e-07,
+                "ece": 2.6863397920684484e-05,
+                "mean_confidence": 0.9999731366020793
+              }
+            },
+            "macro": {
+              "accuracy": 0.995313085864267,
+              "nll": 0.01610076499304244,
+              "brier": 0.007534106776267035,
+              "ece": 0.00356859135397508,
+              "mean_confidence": 0.9940605806773481,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9718785151856018
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.38669633865356445
+        },
+        "latent_zero_present": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.04305885226477009,
+                "brier": 0.01685455201193324,
+                "ece": 0.026270231193563934,
+                "mean_confidence": 0.9670744955600681
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.032762233636779034,
+                "brier": 0.01603854509762901,
+                "ece": 0.006063171254188022,
+                "mean_confidence": 0.9874594977303245
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9460067491563554,
+                "nll": 0.16275400242616697,
+                "brier": 0.08279317327816743,
+                "ece": 0.029563023924148463,
+                "mean_confidence": 0.9188069785986172
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9358830146231721,
+                "nll": 0.22562904089935334,
+                "brier": 0.10277720440805733,
+                "ece": 0.06034105742430918,
+                "mean_confidence": 0.8764802317236672
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.9898762654668166,
+                "nll": 0.05209466043389341,
+                "brier": 0.0225522326355775,
+                "ece": 0.023640680271039154,
+                "mean_confidence": 0.9662355851957776
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.9932508436445444,
+                "nll": 0.01971786049492377,
+                "brier": 0.010267659680903651,
+                "ece": 0.003925851264023688,
+                "mean_confidence": 0.9955915227208915
+              }
+            },
+            "macro": {
+              "accuracy": 0.9745031871016122,
+              "nll": 0.08933610835931444,
+              "brier": 0.04188056118537803,
+              "ece": 0.02496733588854541,
+              "mean_confidence": 0.9519413852548911,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9358830146231721,
+            "whole_utterance_accuracy": 0.859392575928009
+          },
+          "slot_answer_changes": 133,
+          "max_abs_raw_logit_change": 9.07314395904541
+        },
+        "latent_zero_absent": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.04575378284791629,
+                "brier": 0.0180576403892307,
+                "ece": 0.025895715126586137,
+                "mean_confidence": 0.9652450303765641
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03440263965667955,
+                "brier": 0.016717083820000565,
+                "ece": 0.0072542328611383995,
+                "mean_confidence": 0.9865447541648965
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9460067491563554,
+                "nll": 0.16832889741647603,
+                "brier": 0.08560575211480777,
+                "ece": 0.03060039941398832,
+                "mean_confidence": 0.9160313202185224
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9313835770528683,
+                "nll": 0.23557857841313226,
+                "brier": 0.10724317612175802,
+                "ece": 0.06260951778148936,
+                "mean_confidence": 0.8711429562138953
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.9887514060742407,
+                "nll": 0.05675345491184925,
+                "brier": 0.024802173887507203,
+                "ece": 0.026256759073962153,
+                "mean_confidence": 0.9635361698484537
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.9921259842519685,
+                "nll": 0.021117466289367882,
+                "brier": 0.010792686281289817,
+                "ece": 0.0037379734016093997,
+                "mean_confidence": 0.9952712409880087
+              }
+            },
+            "macro": {
+              "accuracy": 0.9733783277090363,
+              "nll": 0.09365580325590354,
+              "brier": 0.043869752102432345,
+              "ece": 0.02605909960979563,
+              "mean_confidence": 0.9496285786350569,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9313835770528683,
+            "whole_utterance_accuracy": 0.8537682789651294
+          },
+          "slot_answer_changes": 137,
+          "max_abs_raw_logit_change": 9.134425163269043
+        }
+      },
+      "train_latent_summary": {
+        "rows": 4080,
+        "channels": 64,
+        "std_mean": 0.0006131624031023922,
+        "std_max": 0.018150479774800776,
+        "std_min": 2.217393793454872e-05,
+        "std_below_1e6": 0,
+        "std_below_1e3": 60,
+        "fraction_abs_at_least_099": 0.9990693933823529
+      },
+      "validation_latent_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 0.010980672655556082,
+        "std_max": 0.10402236318395552,
+        "std_min": 0.00038766668077821646,
+        "std_below_1e6": 0,
+        "std_below_1e3": 5,
+        "fraction_abs_at_least_099": 0.9449697694038245
+      },
+      "audio_first_affine_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 2.9597180264605445,
+        "std_max": 3.9724184334395787,
+        "std_min": 2.4596090411101104,
+        "std_below_1e6": 0,
+        "std_below_1e3": 0,
+        "fraction_abs_at_least_099": 0.7448854049493814
+      },
+      "visual_first_affine_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 0.045705113729813666,
+        "std_max": 0.05648700921562151,
+        "std_min": 0.03239596131099527,
+        "std_below_1e6": 0,
+        "std_below_1e3": 0,
+        "fraction_abs_at_least_099": 1.0
+      },
+      "validation_visual_input_std_mean": 0.8910589814186096,
+      "unchanged_tensor_sha256": "5dcc69e9f480af043a3aa41340ba9bfa185c82eee617b648a32ff608a67c1943",
+      "native_decomposition_bitwise_exact": true,
+      "paired_train_mean_minus_matched": {
+        "groups": 9,
+        "group_ids": [
+          "s10",
+          "s17",
+          "s31",
+          "s36",
+          "s38",
+          "s48",
+          "s5",
+          "s51",
+          "s7"
+        ],
+        "observations": 889,
+        "seed": 17,
+        "replicates": 10000,
+        "method": "paired whole-group percentile95%, linear quantiles",
+        "difference_second_minus_first": {
+          "macro_accuracy": {
+            "point": 0.0,
+            "lower": 0.0,
+            "upper": 0.0
+          },
+          "minimum_slot_accuracy": {
+            "point": 0.0,
+            "lower": 0.0,
+            "upper": 0.0
+          },
+          "macro_nll": {
+            "point": 5.197927773897826e-07,
+            "lower": -1.1764207521658757e-06,
+            "upper": 2.3254698569507254e-06
+          },
+          "macro_brier": {
+            "point": 7.117103006013502e-06,
+            "lower": -8.247688770416858e-07,
+            "upper": 2.2335639392028447e-05
+          },
+          "macro_ece": {
+            "point": 7.668051614360266e-05,
+            "lower": -5.082244023581943e-07,
+            "upper": 0.00043757762359166976
+          },
+          "whole_utterance_accuracy": {
+            "point": 0.0,
+            "lower": 0.0,
+            "upper": 0.0
+          }
+        },
+        "scope": "development validation and selected checkpoints; not blind audit"
+      }
+    },
+    "joint_ordered": {
+      "best_epoch": 23,
+      "checkpoint_sha256": "982f48f94e4ab8136ecdf3cf39e992e1ca4d72a1bbd529bf3f358aa74d6a9f65",
+      "temperatures": [
+        0.8408964152537145,
+        0.5,
+        0.8408964152537145,
+        0.5946035575013605,
+        0.5946035575013605,
+        0.25
+      ],
+      "controls": {
+        "matched": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020447480490309723,
+                "brier": 0.0006467704611617267,
+                "ece": 0.0018109124951099548,
+                "mean_confidence": 0.99818908750489
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.007985518763945161,
+                "brier": 0.0026027971636868037,
+                "ece": 0.0017290348431620957,
+                "mean_confidence": 0.9988725822052157
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9898762654668166,
+                "nll": 0.03399651106937528,
+                "brier": 0.016489895628927498,
+                "ece": 0.005046190334230148,
+                "mean_confidence": 0.9863522896031116
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.050280639730189064,
+                "brier": 0.024545809802738867,
+                "ece": 0.00820962764671162,
+                "mean_confidence": 0.9827448985968468
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0018934433414076275,
+                "brier": 0.0007307151672367912,
+                "ece": 0.0016608955188952255,
+                "mean_confidence": 0.9983391044811047
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 1.376248861599166e-05,
+                "brier": 1.8587845917774347e-07,
+                "ece": 1.3712799145859655e-05,
+                "mean_confidence": 0.9999862872008541
+              }
+            },
+            "macro": {
+              "accuracy": 0.9951256092988375,
+              "nll": 0.016035770573760686,
+              "brier": 0.007502695683701811,
+              "ece": 0.0030783956062091504,
+              "mean_confidence": 0.9940807082653372,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9707536557930259
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.0
+        },
+        "input_zero": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.9921259842519685,
+                "nll": 0.03549344942313479,
+                "brier": 0.013428690320051114,
+                "ece": 0.019742479168818453,
+                "mean_confidence": 0.9724545210845446
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.027714307330708805,
+                "brier": 0.014200383829129623,
+                "ece": 0.00788140494068619,
+                "mean_confidence": 0.9896471289326463
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.953880764904387,
+                "nll": 0.14443586630670494,
+                "brier": 0.0731081737806253,
+                "ece": 0.02703863598423209,
+                "mean_confidence": 0.9281223106318148
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9448818897637795,
+                "nll": 0.1923169249282456,
+                "brier": 0.08764103948391185,
+                "ece": 0.05319193373227982,
+                "mean_confidence": 0.8935191603213054
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.0407839485751865,
+                "brier": 0.01710633705610925,
+                "ece": 0.018412397640069,
+                "mean_confidence": 0.9737462720404102
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.9943757030371203,
+                "nll": 0.014479928964687826,
+                "brier": 0.007918484888002626,
+                "ece": 0.003716392691420194,
+                "mean_confidence": 0.9968177855865328
+              }
+            },
+            "macro": {
+              "accuracy": 0.9778777652793401,
+              "nll": 0.0758707375881114,
+              "brier": 0.03556718489297162,
+              "ece": 0.021663874026250956,
+              "mean_confidence": 0.9590511964328757,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9448818897637795,
+            "whole_utterance_accuracy": 0.876265466816648
+          },
+          "slot_answer_changes": 119,
+          "max_abs_raw_logit_change": 8.691058158874512
+        },
+        "input_train_first": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020447319837562684,
+                "brier": 0.0006467650010002623,
+                "ece": 0.0018108975518804041,
+                "mean_confidence": 0.9981891024481196
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.007985526104342045,
+                "brier": 0.00260279697348897,
+                "ece": 0.0017290320680221436,
+                "mean_confidence": 0.9988725869287837
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9898762654668166,
+                "nll": 0.03399641883123829,
+                "brier": 0.016489844194168102,
+                "ece": 0.005046219975042551,
+                "mean_confidence": 0.986352251663417
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.050280385914213306,
+                "brier": 0.024545700964608414,
+                "ece": 0.008209527536152396,
+                "mean_confidence": 0.9827449854516545
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0018933839048238539,
+                "brier": 0.0007306708191977111,
+                "ece": 0.0016608524987402281,
+                "mean_confidence": 0.99833914750126
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 1.3763133672642345e-05,
+                "brier": 1.8590003235113314e-07,
+                "ece": 1.3713438550722046e-05,
+                "mean_confidence": 0.9999862865614493
+              }
+            },
+            "macro": {
+              "accuracy": 0.9951256092988375,
+              "nll": 0.016035701645341068,
+              "brier": 0.007502660642082636,
+              "ece": 0.0030783738447314074,
+              "mean_confidence": 0.994080726759114,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9707536557930259
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.00025153160095214844
+        },
+        "reverse": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.008848454984131332,
+                "brier": 0.0031033233086588973,
+                "ece": 0.004487015795647024,
+                "mean_confidence": 0.9943881248117771
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9977502812148481,
+                "nll": 0.0056889563175425645,
+                "brier": 0.003119632339517165,
+                "ece": 0.0033620319194449817,
+                "mean_confidence": 0.9970251728667
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.062080767151120965,
+                "brier": 0.02824406051813786,
+                "ece": 0.01649724822832426,
+                "mean_confidence": 0.9684239303361093
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9741282339707537,
+                "nll": 0.07669289591528602,
+                "brier": 0.034509505451074465,
+                "ece": 0.021125960022618857,
+                "mean_confidence": 0.9598216219894227
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.0059722326130301675,
+                "brier": 0.0022848327341707985,
+                "ece": 0.005056158825304663,
+                "mean_confidence": 0.9952301470836473
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.0018260314526482176,
+                "brier": 0.0013754253454170372,
+                "ece": 0.0009764594540881414,
+                "mean_confidence": 0.999642878996731
+              }
+            },
+            "macro": {
+              "accuracy": 0.99175103112111,
+              "nll": 0.02685155640562655,
+              "brier": 0.012106129949496038,
+              "ece": 0.00858414570757132,
+              "mean_confidence": 0.9857553126807312,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9741282339707537,
+            "whole_utterance_accuracy": 0.952755905511811
+          },
+          "slot_answer_changes": 34,
+          "max_abs_raw_logit_change": 5.871928691864014
+        },
+        "latent_train_mean": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.002044775439817036,
+                "brier": 0.0006467966336545242,
+                "ece": 0.0018109273482081515,
+                "mean_confidence": 0.9981890726517919
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.00798553621472206,
+                "brier": 0.002602806105936444,
+                "ece": 0.001729046701606913,
+                "mean_confidence": 0.998872576004969
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9898762654668166,
+                "nll": 0.033996464461226235,
+                "brier": 0.016489860425577842,
+                "ece": 0.005046193740272002,
+                "mean_confidence": 0.9863522554010211
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.050280421304912976,
+                "brier": 0.024545711796520535,
+                "ece": 0.008209600767045752,
+                "mean_confidence": 0.9827449428620098
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0018933952468060023,
+                "brier": 0.0007306784445945434,
+                "ece": 0.0016608609858343028,
+                "mean_confidence": 0.9983391390141658
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 1.376417664677998e-05,
+                "brier": 1.8592264018607313e-07,
+                "ece": 1.371447553588645e-05,
+                "mean_confidence": 0.9999862855244641
+              }
+            },
+            "macro": {
+              "accuracy": 0.9951256092988375,
+              "nll": 0.016035726140688513,
+              "brier": 0.007502673221487346,
+              "ece": 0.0030783906697505014,
+              "mean_confidence": 0.9940807119097369,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9707536557930259
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.0002052783966064453
+        },
+        "latent_train_first": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0020447319837562684,
+                "brier": 0.0006467650010002623,
+                "ece": 0.0018108975518804041,
+                "mean_confidence": 0.9981891024481196
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9988751406074241,
+                "nll": 0.007985526104342045,
+                "brier": 0.00260279697348897,
+                "ece": 0.0017290320680221436,
+                "mean_confidence": 0.9988725869287837
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9898762654668166,
+                "nll": 0.03399641883123829,
+                "brier": 0.016489844194168102,
+                "ece": 0.005046219975042551,
+                "mean_confidence": 0.986352251663417
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9820022497187851,
+                "nll": 0.050280385914213306,
+                "brier": 0.024545700964608414,
+                "ece": 0.008209527536152396,
+                "mean_confidence": 0.9827449854516545
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 0.0018933839048238539,
+                "brier": 0.0007306708191977111,
+                "ece": 0.0016608524987402281,
+                "mean_confidence": 0.99833914750126
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 1.0,
+                "nll": 1.3763133672642345e-05,
+                "brier": 1.8590003235113314e-07,
+                "ece": 1.3713438550722046e-05,
+                "mean_confidence": 0.9999862865614493
+              }
+            },
+            "macro": {
+              "accuracy": 0.9951256092988375,
+              "nll": 0.016035701645341068,
+              "brier": 0.007502660642082636,
+              "ece": 0.0030783738447314074,
+              "mean_confidence": 0.994080726759114,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9820022497187851,
+            "whole_utterance_accuracy": 0.9707536557930259
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.00025153160095214844
+        },
+        "latent_zero_present": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.04293519140925553,
+                "brier": 0.016640514010024084,
+                "ece": 0.023980470297325262,
+                "mean_confidence": 0.9670988294232342
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03285097571626595,
+                "brier": 0.01644326648519151,
+                "ece": 0.008545867956528452,
+                "mean_confidence": 0.9871073379491477
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9471316085489314,
+                "nll": 0.16089444957134133,
+                "brier": 0.08167965215421737,
+                "ece": 0.032471560074460504,
+                "mean_confidence": 0.9200178930608712
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9347581552305961,
+                "nll": 0.21996304950262036,
+                "brier": 0.09987005918538562,
+                "ece": 0.05925699518271178,
+                "mean_confidence": 0.878655158277203
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.9887514060742407,
+                "nll": 0.05255736941489508,
+                "brier": 0.02262529880404649,
+                "ece": 0.02327220842220366,
+                "mean_confidence": 0.9668173766870923
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.9932508436445444,
+                "nll": 0.018065188975788803,
+                "brier": 0.009735964721707891,
+                "ece": 0.004581974517386521,
+                "mean_confidence": 0.9965344899118247
+              }
+            },
+            "macro": {
+              "accuracy": 0.9743157105361829,
+              "nll": 0.08787770409836117,
+              "brier": 0.0411657925600955,
+              "ece": 0.02535151274176936,
+              "mean_confidence": 0.9527051808848954,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9347581552305961,
+            "whole_utterance_accuracy": 0.859392575928009
+          },
+          "slot_answer_changes": 135,
+          "max_abs_raw_logit_change": 8.969815254211426
+        },
+        "latent_zero_absent": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.045767182402955846,
+                "brier": 0.017884762379061576,
+                "ece": 0.025832920201444214,
+                "mean_confidence": 0.9651682046579484
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.9910011248593926,
+                "nll": 0.03462964363200467,
+                "brier": 0.01722820985510238,
+                "ece": 0.009303966266911363,
+                "mean_confidence": 0.9861298331892767
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.9460067491563554,
+                "nll": 0.16677884064473686,
+                "brier": 0.08464365144087213,
+                "ece": 0.03236220637082549,
+                "mean_confidence": 0.9170430649549458
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.9313835770528683,
+                "nll": 0.2303292353447054,
+                "brier": 0.10449495430462961,
+                "ece": 0.0644556805140741,
+                "mean_confidence": 0.8730181431163698
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.9876265466816648,
+                "nll": 0.057399422303149296,
+                "brier": 0.024897377297924763,
+                "ece": 0.024581641049207743,
+                "mean_confidence": 0.963976510049143
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.9932508436445444,
+                "nll": 0.0194909072057441,
+                "brier": 0.010231823625678376,
+                "ece": 0.005060993939240506,
+                "mean_confidence": 0.9962040743680298
+              }
+            },
+            "macro": {
+              "accuracy": 0.9733783277090363,
+              "nll": 0.09239920525554936,
+              "brier": 0.04323012981721148,
+              "ece": 0.0269329013902839,
+              "mean_confidence": 0.9502566383892855,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.9313835770528683,
+            "whole_utterance_accuracy": 0.8560179977502812
+          },
+          "slot_answer_changes": 140,
+          "max_abs_raw_logit_change": 9.040090560913086
+        }
+      },
+      "train_latent_summary": {
+        "rows": 4080,
+        "channels": 64,
+        "std_mean": 2.0126409302070627e-05,
+        "std_max": 0.0006839131109299323,
+        "std_min": 0.0,
+        "std_below_1e6": 24,
+        "std_below_1e3": 64,
+        "fraction_abs_at_least_099": 0.9999961703431373
+      },
+      "validation_latent_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 1.4009883679134056e-05,
+        "std_max": 0.00026867840856672587,
+        "std_min": 0.0,
+        "std_below_1e6": 31,
+        "std_below_1e3": 64,
+        "fraction_abs_at_least_099": 1.0
+      },
+      "audio_first_affine_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 2.9424879658329983,
+        "std_max": 4.025651037180441,
+        "std_min": 2.422029966091813,
+        "std_below_1e6": 0,
+        "std_below_1e3": 0,
+        "fraction_abs_at_least_099": 0.7434090269966255
+      },
+      "visual_first_affine_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 2.6385104799888418e-05,
+        "std_max": 4.275999026705784e-05,
+        "std_min": 1.214495456695899e-05,
+        "std_below_1e6": 0,
+        "std_below_1e3": 64,
+        "fraction_abs_at_least_099": 1.0
+      },
+      "validation_visual_input_std_mean": 1.0820142030715942,
+      "unchanged_tensor_sha256": "8fa8183d9e666530a3ae425d61a34f7c650867b65d128c12e2dad62a0398b1f7",
+      "native_decomposition_bitwise_exact": true,
+      "paired_train_mean_minus_matched": {
+        "groups": 9,
+        "group_ids": [
+          "s10",
+          "s17",
+          "s31",
+          "s36",
+          "s38",
+          "s48",
+          "s5",
+          "s51",
+          "s7"
+        ],
+        "observations": 889,
+        "seed": 17,
+        "replicates": 10000,
+        "method": "paired whole-group percentile95%, linear quantiles",
+        "difference_second_minus_first": {
+          "macro_accuracy": {
+            "point": 0.0,
+            "lower": 0.0,
+            "upper": 0.0
+          },
+          "minimum_slot_accuracy": {
+            "point": 0.0,
+            "lower": 0.0,
+            "upper": 0.0
+          },
+          "macro_nll": {
+            "point": -4.443307217300019e-08,
+            "lower": -9.104611981705992e-08,
+            "upper": -6.040000721796446e-10
+          },
+          "macro_brier": {
+            "point": -2.246221446344787e-08,
+            "lower": -4.9681311339519475e-08,
+            "upper": 4.524005881793382e-09
+          },
+          "macro_ece": {
+            "point": -4.936458709251662e-09,
+            "lower": -3.192547492329202e-08,
+            "upper": 1.1294202795653768e-08
+          },
+          "whole_utterance_accuracy": {
+            "point": 0.0,
+            "lower": 0.0,
+            "upper": 0.0
+          }
+        },
+        "scope": "development validation and selected checkpoints; not blind audit"
+      }
+    },
+    "video_ordered": {
+      "best_epoch": 18,
+      "checkpoint_sha256": "4261a296711b0cfac2a7681bc250ddc4c2d59d8265119f0143e798e2936397d9",
+      "temperatures": [
+        1.189207115002721,
+        1.0,
+        1.4142135623730951,
+        1.9999999999999998,
+        1.6817928305074292,
+        2.378414230005442
+      ],
+      "controls": {
+        "matched": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.6164229471316085,
+                "nll": 0.8611486217926775,
+                "brier": 0.4751142037580507,
+                "ece": 0.04934112503545575,
+                "mean_confidence": 0.6575621269020512
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.38357705286839144,
+                "nll": 1.2770909170310902,
+                "brier": 0.6980460912731619,
+                "ece": 0.038112047953827874,
+                "mean_confidence": 0.3986271893868121
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.5163104611923509,
+                "nll": 1.0433175293074473,
+                "brier": 0.580988930785498,
+                "ece": 0.024577174128652058,
+                "mean_confidence": 0.5279389019825539
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.06974128233970754,
+                "nll": 3.1673069450212097,
+                "brier": 0.9561785978293117,
+                "ece": 0.010920989989049156,
+                "mean_confidence": 0.06788057513733281
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.47919010123734535,
+                "nll": 1.4194260436399777,
+                "brier": 0.6739632680801131,
+                "ece": 0.10361342292535693,
+                "mean_confidence": 0.3755766783119885
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.8155230596175478,
+                "nll": 0.4967451998285913,
+                "brier": 0.2726193907729387,
+                "ece": 0.03581822696014617,
+                "mean_confidence": 0.781728073483379
+              }
+            },
+            "macro": {
+              "accuracy": 0.48012748406449185,
+              "nll": 1.377505876103499,
+              "brier": 0.6094850804165123,
+              "ece": 0.04373049783208133,
+              "mean_confidence": 0.4682189242006862,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.06974128233970754,
+            "whole_utterance_accuracy": 0.0022497187851518562
+          },
+          "slot_answer_changes": 0,
+          "max_abs_raw_logit_change": 0.0
+        },
+        "input_zero": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.24746906636670415,
+                "nll": 1.539573846624764,
+                "brier": 0.8109667399668927,
+                "ece": 0.14164441518359425,
+                "mean_confidence": 0.3891134815502984
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.24746906636670415,
+                "nll": 1.3920870165575543,
+                "brier": 0.7529549823152855,
+                "ece": 0.04069860275155493,
+                "mean_confidence": 0.2881676691182591
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.27334083239595053,
+                "nll": 1.3884610634268653,
+                "brier": 0.7510141216342471,
+                "ece": 0.010703900514543008,
+                "mean_confidence": 0.2626369318814075
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.04049493813273341,
+                "nll": 3.2210209602867654,
+                "brier": 0.9601678375135114,
+                "ece": 0.004375459353984007,
+                "mean_confidence": 0.044870397486717416
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.10011248593925759,
+                "nll": 2.338975124743352,
+                "brier": 0.9068169691658301,
+                "ece": 0.03919362468132864,
+                "mean_confidence": 0.13930611062058623
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.2373453318335208,
+                "nll": 1.3964689227005187,
+                "brier": 0.7552789778245284,
+                "ece": 0.05985662762069771,
+                "mean_confidence": 0.2972019594542185
+              }
+            },
+            "macro": {
+              "accuracy": 0.19103862017247844,
+              "nll": 1.8794311557233032,
+              "brier": 0.822866604736716,
+              "ece": 0.04941210501761709,
+              "mean_confidence": 0.23688275835191452,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.04049493813273341,
+            "whole_utterance_accuracy": 0.0
+          },
+          "slot_answer_changes": 4249,
+          "max_abs_raw_logit_change": 13.065519332885742
+        },
+        "input_train_first": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.25646794150731156,
+                "nll": 2.5722642119756394,
+                "brier": 1.032698531435508,
+                "ece": 0.4225706186687006,
+                "mean_confidence": 0.6790385601760122
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.25196850393700787,
+                "nll": 1.4727175113327649,
+                "brier": 0.8011571674568544,
+                "ece": 0.19193790078326556,
+                "mean_confidence": 0.44390640472027343
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.24746906636670415,
+                "nll": 1.628520008657766,
+                "brier": 0.8949280673377004,
+                "ece": 0.32759853529596517,
+                "mean_confidence": 0.5750676016626693
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.03937007874015748,
+                "nll": 3.246112626505387,
+                "brier": 0.9620699076819386,
+                "ece": 0.019267197138399583,
+                "mean_confidence": 0.05863727587855706
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.09898762654668167,
+                "nll": 2.953080388686768,
+                "brier": 1.021627769094884,
+                "ece": 0.30140108987807934,
+                "mean_confidence": 0.40038871642476104
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.2609673790776153,
+                "nll": 2.984035566322183,
+                "brier": 1.2731464561784884,
+                "ece": 0.6236494437302846,
+                "mean_confidence": 0.8846168228078999
+              }
+            },
+            "macro": {
+              "accuracy": 0.192538432695913,
+              "nll": 2.476121718913418,
+              "brier": 0.997604649864229,
+              "ece": 0.31440413091578245,
+              "mean_confidence": 0.5069425636116954,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.03937007874015748,
+            "whole_utterance_accuracy": 0.0
+          },
+          "slot_answer_changes": 4213,
+          "max_abs_raw_logit_change": 17.03049087524414
+        },
+        "reverse": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.3295838020247469,
+                "nll": 1.3634132058742647,
+                "brier": 0.7373348130826928,
+                "ece": 0.12984152522650905,
+                "mean_confidence": 0.45936772045436575
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.25196850393700787,
+                "nll": 1.4324663122956383,
+                "brier": 0.7717490598755951,
+                "ece": 0.10493982512128983,
+                "mean_confidence": 0.3558360186918519
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.28008998875140606,
+                "nll": 1.4692381308294462,
+                "brier": 0.7878554419424669,
+                "ece": 0.14070776907629748,
+                "mean_confidence": 0.41949834949738396
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.04611923509561305,
+                "nll": 3.2289564989613506,
+                "brier": 0.9608174060888216,
+                "ece": 0.010196866378263789,
+                "mean_confidence": 0.05631610147387684
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.10011248593925759,
+                "nll": 2.5502419550122664,
+                "brier": 0.9432864397529884,
+                "ece": 0.12755125515636528,
+                "mean_confidence": 0.22766374109562287
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.26321709786276715,
+                "nll": 1.7568333638403366,
+                "brier": 0.8957865747498643,
+                "ece": 0.2666164878701109,
+                "mean_confidence": 0.5247213468450941
+              }
+            },
+            "macro": {
+              "accuracy": 0.21184851893513312,
+              "nll": 1.9668582444688836,
+              "brier": 0.8494716225820715,
+              "ece": 0.1299756214714727,
+              "mean_confidence": 0.3405672130096993,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.04611923509561305,
+            "whole_utterance_accuracy": 0.0022497187851518562
+          },
+          "slot_answer_changes": 4083,
+          "max_abs_raw_logit_change": 15.496379852294922
+        },
+        "latent_train_mean": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.25646794150731156,
+                "nll": 1.6111625826849107,
+                "brier": 0.8350329808753745,
+                "ece": 0.1934493975142495,
+                "mean_confidence": 0.44991733902156106
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.24859392575928008,
+                "nll": 1.3887382148605838,
+                "brier": 0.7512054482208078,
+                "ece": 0.018157208509998635,
+                "mean_confidence": 0.2667511342692787
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.24859392575928008,
+                "nll": 1.4683272017186682,
+                "brier": 0.787326898116172,
+                "ece": 0.12346874702836136,
+                "mean_confidence": 0.37206267278764144
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.03937007874015748,
+                "nll": 3.223516587465244,
+                "brier": 0.9603691563599436,
+                "ece": 0.006964695590282732,
+                "mean_confidence": 0.04633477433044021
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.09786276715410573,
+                "nll": 2.4371692409648937,
+                "brier": 0.9216969480929568,
+                "ece": 0.08022161136822871,
+                "mean_confidence": 0.17808437852233444
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.2373453318335208,
+                "nll": 1.3868759875353895,
+                "brier": 0.750292729333207,
+                "ece": 0.02103305962262253,
+                "mean_confidence": 0.25837839145614333
+              }
+            },
+            "macro": {
+              "accuracy": 0.1880389951256093,
+              "nll": 1.9192983025382817,
+              "brier": 0.8343206934997437,
+              "ece": 0.07388245327229058,
+              "mean_confidence": 0.2619214483978999,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.03937007874015748,
+            "whole_utterance_accuracy": 0.0
+          },
+          "slot_answer_changes": 4418,
+          "max_abs_raw_logit_change": 11.362060546875
+        },
+        "latent_train_first": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.25646794150731156,
+                "nll": 2.572264208794082,
+                "brier": 1.0326985327138907,
+                "ece": 0.42257062121193945,
+                "mean_confidence": 0.679038562719251
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.25196850393700787,
+                "nll": 1.472717510938944,
+                "brier": 0.8011571672508713,
+                "ece": 0.1919379005414098,
+                "mean_confidence": 0.44390640447841767
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.24746906636670415,
+                "nll": 1.6285200062360559,
+                "brier": 0.8949280655783737,
+                "ece": 0.3275985338532037,
+                "mean_confidence": 0.5750676002199079
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.03937007874015748,
+                "nll": 3.2461126272275758,
+                "brier": 0.9620699077420584,
+                "ece": 0.019267197276284537,
+                "mean_confidence": 0.058637276016442016
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.09898762654668167,
+                "nll": 2.953080389709214,
+                "brier": 1.0216277689085485,
+                "ece": 0.3014010896442856,
+                "mean_confidence": 0.4003887161909673
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.2609673790776153,
+                "nll": 2.984035563582033,
+                "brier": 1.2731464556217347,
+                "ece": 0.6236494433363742,
+                "mean_confidence": 0.8846168224139895
+              }
+            },
+            "macro": {
+              "accuracy": 0.192538432695913,
+              "nll": 2.476121717747984,
+              "brier": 0.9976046496359129,
+              "ece": 0.31440413097724956,
+              "mean_confidence": 0.5069425636731625,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.03937007874015748,
+            "whole_utterance_accuracy": 0.0
+          },
+          "slot_answer_changes": 4213,
+          "max_abs_raw_logit_change": 17.03049087524414
+        },
+        "latent_zero_present": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.24634420697412823,
+                "nll": 1.3874493051193921,
+                "brier": 0.7505942811577869,
+                "ece": 0.022044602151412185,
+                "mean_confidence": 0.2683888091255404
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.24746906636670415,
+                "nll": 1.3886968410393352,
+                "brier": 0.7512287569618975,
+                "ece": 0.027854494191636908,
+                "mean_confidence": 0.27532356055834106
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.23059617547806524,
+                "nll": 1.3864754918818802,
+                "brier": 0.750091236985861,
+                "ece": 0.022251602622228944,
+                "mean_confidence": 0.2528477781002942
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.03937007874015748,
+                "nll": 3.219405032437002,
+                "brier": 0.9600419660636448,
+                "ece": 0.002726171379566329,
+                "mean_confidence": 0.04209625011972381
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.10123734533183353,
+                "nll": 2.3052118916930553,
+                "brier": 0.9005017920523793,
+                "ece": 0.008367983327060652,
+                "mean_confidence": 0.10960532865889418
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.2373453318335208,
+                "nll": 1.3870989084938439,
+                "brier": 0.7504010615600903,
+                "ece": 0.02016522034824253,
+                "mean_confidence": 0.25751055218176333
+              }
+            },
+            "macro": {
+              "accuracy": 0.18372703412073488,
+              "nll": 1.845722911777418,
+              "brier": 0.8104765157969434,
+              "ece": 0.017235012336691256,
+              "mean_confidence": 0.20096204645742619,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.03937007874015748,
+            "whole_utterance_accuracy": 0.0
+          },
+          "slot_answer_changes": 4427,
+          "max_abs_raw_logit_change": 13.166547775268555
+        },
+        "latent_zero_absent": {
+          "metrics": {
+            "by_slot": {
+              "command": {
+                "count": 889,
+                "accuracy": 0.24634420697412823,
+                "nll": 1.3869312685907074,
+                "brier": 0.7503247062862194,
+                "ece": 0.01607188151947353,
+                "mean_confidence": 0.26241608849360176
+              },
+              "color": {
+                "count": 889,
+                "accuracy": 0.24746906636670415,
+                "nll": 1.3888421734165923,
+                "brier": 0.751325748823046,
+                "ece": 0.03113711868249361,
+                "mean_confidence": 0.27860618504919776
+              },
+              "preposition": {
+                "count": 889,
+                "accuracy": 0.24746906636670415,
+                "nll": 1.386439832195398,
+                "brier": 0.750072927132771,
+                "ece": 0.00460744647545594,
+                "mean_confidence": 0.2520765128421601
+              },
+              "letter": {
+                "count": 889,
+                "accuracy": 0.03937007874015748,
+                "nll": 3.219357992282894,
+                "brier": 0.960038243199082,
+                "ece": 0.002590975203226306,
+                "mean_confidence": 0.041961053943383786
+              },
+              "number": {
+                "count": 889,
+                "accuracy": 0.10123734533183353,
+                "nll": 2.3039052154258,
+                "brier": 0.9002567428627894,
+                "ece": 0.005876701487070021,
+                "mean_confidence": 0.10711404681890355
+              },
+              "adverb": {
+                "count": 889,
+                "accuracy": 0.2373453318335208,
+                "nll": 1.386629534077388,
+                "brier": 0.7501680392120991,
+                "ece": 0.018450264504519753,
+                "mean_confidence": 0.25579559633804055
+              }
+            },
+            "macro": {
+              "accuracy": 0.18653918260217472,
+              "nll": 1.8453510026647966,
+              "brier": 0.8103644012526678,
+              "ece": 0.013122397978706526,
+              "mean_confidence": 0.19966158058088126,
+              "count": 5334
+            },
+            "minimum_slot_accuracy": 0.03937007874015748,
+            "whole_utterance_accuracy": 0.0
+          },
+          "slot_answer_changes": 4385,
+          "max_abs_raw_logit_change": 13.222589492797852
+        }
+      },
+      "train_latent_summary": {
+        "rows": 4080,
+        "channels": 64,
+        "std_mean": 0.6304719482432006,
+        "std_max": 0.9070294237363546,
+        "std_min": 0.004566624863034571,
+        "std_below_1e6": 0,
+        "std_below_1e3": 0,
+        "fraction_abs_at_least_099": 0.22712545955882352
+      },
+      "validation_latent_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 0.6133273194174433,
+        "std_max": 0.890274755906607,
+        "std_min": 0.00025493918138637064,
+        "std_below_1e6": 0,
+        "std_below_1e3": 1,
+        "fraction_abs_at_least_099": 0.23307438132733407
+      },
+      "audio_first_affine_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 0.0,
+        "std_max": 0.0,
+        "std_min": 0.0,
+        "std_below_1e6": 64,
+        "std_below_1e3": 64,
+        "fraction_abs_at_least_099": 0.0
+      },
+      "visual_first_affine_summary": {
+        "rows": 889,
+        "channels": 64,
+        "std_mean": 1.110554200433284,
+        "std_max": 1.4244674937920567,
+        "std_min": 0.7655866875819614,
+        "std_below_1e6": 0,
+        "std_below_1e3": 0,
+        "fraction_abs_at_least_099": 0.5875632733408324
+      },
+      "validation_visual_input_std_mean": 1.0820142030715942,
+      "unchanged_tensor_sha256": "a02967a8cba207d683f432eff8753ee95d3fc974d6afc507c221cdc1d556a550",
+      "native_decomposition_bitwise_exact": true
+    }
+  },
+  "training_constant_source_id": "s11_l_bbab2n",
+  "resources": {
+    "lombard-visual-state-diagnosis-01": {
+      "seconds": 22.962821299908683,
+      "peak_cpu_bytes": 2232905728,
+      "output_bytes": 11842072
+    },
+    "lombard-visual-state-replay-01": {
+      "seconds": 22.76681699999608,
+      "peak_cpu_bytes": 2233966592,
+      "output_bytes": 11842072
+    }
+  },
+  "commands": {
+    "lombard-visual-state-diagnosis-01": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m scripts.diagnose_lombard_visual_state --output C:/CodexArtifacts/pretrained-reuse-r2/lombard-visual-state-diagnosis-01",
+    "lombard-visual-state-replay-01": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m scripts.diagnose_lombard_visual_state --replay-reference C:/CodexArtifacts/pretrained-reuse-r2/lombard-visual-state-diagnosis-01 --replay-sha256 25076e30d398defcfcb5c7a5123c27aed371703354c3902bdd927e898d56897f --output C:/CodexArtifacts/pretrained-reuse-r2/lombard-visual-state-replay-01"
+  },
+  "runtime": {
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "python_executable": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "torch": "2.6.0+cu124",
+    "numpy": "2.4.6",
+    "device": "cpu",
+    "dtype": "float32",
+    "cpu_threads": 4,
+    "interop_threads": 1,
+    "deterministic": true
+  },
+  "frozen_weights": true,
+  "model_updates": 0,
+  "gradients_computed": false,
+  "gpu_used": false,
+  "sealed_audit_opened": false,
+  "cloud_cost": 0,
+  "scope": "Observed nine-speaker development, fixed selected models; no blind result",
+  "recommendation": "Close capacity/budget extension here; require genuinely joint decision task"
+}

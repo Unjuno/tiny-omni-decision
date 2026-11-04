@@ -1,0 +1,499 @@
+{
+  "status": "LAYOUT_FIXED_MEDIA_INTEGRITY_PENDING",
+  "layout": {
+    "status": "LAYOUT_FIXED_MEDIA_INTEGRITY_PENDING",
+    "seed": 17,
+    "source_pins": {
+      "lombard-grid-admission-01/lombardgrid_json.zip": "1de3299baaa6a13d8bcd458a688c94f2288a0ecca8b5a6817a055b393f5a98a6",
+      "lombard-grid-archive-index-01/audio-members.json": "8ed96b356ff9bdfadc29f3cce7cb58c00d5577946a1c71cf02607f93744e510b",
+      "lombard-grid-archive-index-01/front-members.json": "337cfcfb4df687db7a04c3c4fe8a3589b8f9259d716560b5f0503fc41d6a118b"
+    },
+    "split_rule": "SHA256(seed:sorted connected speakers), first8bytes modulo100; <70 train,70..84 calibration,85..99 validation",
+    "grouping": "speaker plus all valid intended/actual complete sentences; published6/29,25/26 aliases",
+    "slots": {
+      "command": [
+        "bin",
+        "lay",
+        "place",
+        "set"
+      ],
+      "color": [
+        "blue",
+        "green",
+        "red",
+        "white"
+      ],
+      "preposition": [
+        "at",
+        "by",
+        "in",
+        "with"
+      ],
+      "letter": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "x",
+        "y",
+        "z"
+      ],
+      "number": [
+        "zero",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "adverb": [
+        "again",
+        "now",
+        "please",
+        "soon"
+      ]
+    },
+    "source_assets": 5390,
+    "labeled_assets": 5371,
+    "labeled_coverage": 0.9964749536178108,
+    "unresolved_assets": 19,
+    "unresolved_counts": {
+      "metadata_conflict": 1,
+      "unresolved_transcription": 18
+    },
+    "metadata_missing_assets": 50,
+    "label_policy": "exact source actual code; quarantine any valid metadata disagreement; no cleanup of error/silence/distorted markers; filename-only labels explicit when metadata missing; no model-informed eligibility",
+    "speaker_groups": 49,
+    "speaker_assignments": {
+      "s10": "validation",
+      "s11": "train",
+      "s12": "train",
+      "s13": "train",
+      "s14": "train",
+      "s15": "train",
+      "s16": "train",
+      "s17": "validation",
+      "s18": "calibration",
+      "s19": "train",
+      "s2": "train",
+      "s20": "train",
+      "s21": "train",
+      "s22": "train",
+      "s23": "train",
+      "s24": "train",
+      "s25": "train",
+      "s26": "train",
+      "s27": "train",
+      "s28": "train",
+      "s29": "train",
+      "s3": "train",
+      "s30": "train",
+      "s31": "validation",
+      "s32": "train",
+      "s33": "train",
+      "s34": "train",
+      "s35": "train",
+      "s36": "validation",
+      "s37": "train",
+      "s38": "validation",
+      "s39": "train",
+      "s4": "calibration",
+      "s40": "train",
+      "s41": "train",
+      "s42": "train",
+      "s43": "train",
+      "s44": "calibration",
+      "s45": "train",
+      "s46": "calibration",
+      "s47": "train",
+      "s48": "validation",
+      "s49": "train",
+      "s5": "validation",
+      "s50": "train",
+      "s51": "validation",
+      "s52": "train",
+      "s53": "train",
+      "s54": "train",
+      "s55": "train",
+      "s6": "train",
+      "s7": "validation",
+      "s8": "train",
+      "s9": "train"
+    },
+    "splits": {
+      "train": {
+        "assets": 4084,
+        "speakers": 41,
+        "conditions": {
+          "l": 2039,
+          "p": 2045
+        },
+        "slot_counts": {
+          "command": {
+            "bin": 1008,
+            "lay": 1022,
+            "place": 1041,
+            "set": 1013
+          },
+          "color": {
+            "blue": 1024,
+            "green": 1024,
+            "red": 1015,
+            "white": 1021
+          },
+          "preposition": {
+            "at": 1001,
+            "by": 1006,
+            "in": 1023,
+            "with": 1054
+          },
+          "letter": {
+            "b": 163,
+            "g": 168,
+            "n": 165,
+            "i": 162,
+            "a": 163,
+            "c": 163,
+            "u": 163,
+            "v": 164,
+            "k": 161,
+            "r": 164,
+            "y": 165,
+            "z": 158,
+            "h": 163,
+            "t": 164,
+            "s": 164,
+            "l": 163,
+            "m": 164,
+            "e": 164,
+            "d": 164,
+            "f": 165,
+            "o": 163,
+            "x": 163,
+            "p": 164,
+            "q": 164,
+            "j": 160
+          },
+          "number": {
+            "2": 410,
+            "8": 405,
+            "9": 409,
+            "4": 409,
+            "7": 407,
+            "3": 406,
+            "1": 412,
+            "5": 410,
+            "zero": 406,
+            "6": 410
+          },
+          "adverb": {
+            "now": 986,
+            "please": 1023,
+            "again": 1022,
+            "soon": 1053
+          }
+        }
+      },
+      "calibration": {
+        "assets": 398,
+        "speakers": 4,
+        "conditions": {
+          "l": 198,
+          "p": 200
+        },
+        "slot_counts": {
+          "command": {
+            "bin": 102,
+            "lay": 84,
+            "place": 100,
+            "set": 112
+          },
+          "color": {
+            "blue": 98,
+            "green": 97,
+            "red": 97,
+            "white": 106
+          },
+          "preposition": {
+            "at": 115,
+            "in": 101,
+            "with": 78,
+            "by": 104
+          },
+          "letter": {
+            "t": 16,
+            "f": 16,
+            "g": 16,
+            "b": 15,
+            "x": 16,
+            "m": 16,
+            "n": 16,
+            "c": 16,
+            "i": 16,
+            "h": 16,
+            "u": 16,
+            "a": 16,
+            "e": 16,
+            "z": 16,
+            "s": 16,
+            "r": 16,
+            "o": 16,
+            "p": 16,
+            "l": 16,
+            "y": 16,
+            "j": 16,
+            "q": 16,
+            "k": 16,
+            "d": 16,
+            "v": 15
+          },
+          "number": {
+            "zero": 40,
+            "3": 40,
+            "6": 40,
+            "7": 40,
+            "8": 39,
+            "1": 40,
+            "5": 39,
+            "9": 40,
+            "2": 40,
+            "4": 40
+          },
+          "adverb": {
+            "please": 104,
+            "again": 107,
+            "now": 106,
+            "soon": 81
+          }
+        }
+      },
+      "validation": {
+        "assets": 889,
+        "speakers": 9,
+        "conditions": {
+          "l": 450,
+          "p": 439
+        },
+        "slot_counts": {
+          "command": {
+            "bin": 222,
+            "lay": 220,
+            "place": 228,
+            "set": 219
+          },
+          "color": {
+            "blue": 224,
+            "green": 220,
+            "red": 224,
+            "white": 221
+          },
+          "preposition": {
+            "at": 205,
+            "by": 243,
+            "in": 221,
+            "with": 220
+          },
+          "letter": {
+            "t": 36,
+            "y": 36,
+            "g": 36,
+            "n": 34,
+            "c": 35,
+            "i": 36,
+            "p": 35,
+            "u": 35,
+            "o": 36,
+            "f": 36,
+            "z": 36,
+            "l": 35,
+            "a": 35,
+            "x": 36,
+            "j": 36,
+            "q": 36,
+            "m": 35,
+            "e": 36,
+            "r": 35,
+            "s": 35,
+            "h": 36,
+            "k": 35,
+            "b": 36,
+            "d": 36,
+            "v": 36
+          },
+          "number": {
+            "9": 90,
+            "5": 88,
+            "8": 90,
+            "7": 88,
+            "zero": 90,
+            "2": 89,
+            "1": 89,
+            "3": 87,
+            "4": 89,
+            "6": 89
+          },
+          "adverb": {
+            "please": 211,
+            "now": 232,
+            "soon": 211,
+            "again": 235
+          }
+        }
+      }
+    },
+    "hashes": {
+      "train": "c1a88f5f76eec95107e581989513d44da6fc643d6a470135a67362082349494a",
+      "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+      "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+      "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+    },
+    "known_source_speaker_phrase_cross_split_overlap": 0,
+    "assets_acquired": false,
+    "decoded_duplicate_check": "PENDING",
+    "precise_av_synchronization": "PENDING",
+    "quality_evaluated": false,
+    "runtime_input_contract": "waveform and video pixels/timestamps only; never filenames, metadata, transcripts or alignment as input features",
+    "limitations": "native command-slot decisions only; not general world reasoning; unresolved assets retained and coverage reported, not scored as correct",
+    "script_sha256": "3fc2a07c4c2dee8d73f2a21dde84ab401372493c19f81a56defda52ee7e27f5b",
+    "helper_sha256": "c30aa4b45072ba1cb5f9e1665fb465df01965aa0fc0f9cc0b287a80a3ce7fab5"
+  },
+  "archives": {
+    "status": "PASS",
+    "archives": {
+      "audio": {
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_audio.zip",
+        "bytes": 652614041,
+        "etag": "\"26e61999-568649ce7ab80\"",
+        "last_modified": "Tue, 27 Mar 2018 13:10:22 GMT",
+        "member_index_sha256": "8ed96b356ff9bdfadc29f3cce7cb58c00d5577946a1c71cf02607f93744e510b",
+        "members": 5390,
+        "transferred_bytes": 560877,
+        "full_archive_sha256": "UNKNOWN; only bounded central directory fetched"
+      },
+      "front": {
+        "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front.zip",
+        "bytes": 837239327,
+        "etag": "\"31e7421f-56864af341e40\"",
+        "last_modified": "Tue, 27 Mar 2018 13:15:29 GMT",
+        "member_index_sha256": "337cfcfb4df687db7a04c3c4fe8a3589b8f9259d716560b5f0503fc41d6a118b",
+        "members": 5390,
+        "transferred_bytes": 560877,
+        "full_archive_sha256": "UNKNOWN; only bounded central directory fetched"
+      }
+    },
+    "seconds": 13.306559399934486
+  },
+  "reconciliation_preflight": {
+    "paired_media": 5390,
+    "missing_metadata_stems": [
+      "s14_1_50_15_r_prwr3a",
+      "s31_l_bbwg8a",
+      "s31_l_bwab8p",
+      "s31_l_lbbj7p",
+      "s31_l_lbiy9s",
+      "s31_l_lbwm2n",
+      "s31_l_lgbt7n",
+      "s31_l_lgim6n",
+      "s31_l_lgwh4s",
+      "s31_l_lrat2n",
+      "s31_l_pbay5a",
+      "s31_l_pbbj8s",
+      "s31_l_pgwh6p",
+      "s31_l_prax2n",
+      "s31_l_pwbf8n",
+      "s31_l_sbai5s",
+      "s31_l_sbao6a",
+      "s31_l_sbbv6s",
+      "s31_l_sgap6p",
+      "s31_l_sgix8s",
+      "s31_l_srai4a",
+      "s31_p_bbib2p",
+      "s31_p_bbwg8a",
+      "s31_p_bgaq1a",
+      "s31_p_bgwdzn",
+      "s31_p_brif9n",
+      "s31_p_bwwozp",
+      "s31_p_lbbj7p",
+      "s31_p_lgbt7n",
+      "s31_p_lgim6n",
+      "s31_p_lgwh4s",
+      "s31_p_lrie4a",
+      "s31_p_lrir7n",
+      "s31_p_lwbu9s",
+      "s31_p_lwiuza",
+      "s31_p_pbbj8s",
+      "s31_p_pgiaza",
+      "s31_p_pgwa5p",
+      "s31_p_prie9s",
+      "s31_p_prwz1p",
+      "s31_p_pwil3s",
+      "s31_p_pwiq9p",
+      "s31_p_pwws5s",
+      "s31_p_sbai5s",
+      "s31_p_sbbv6s",
+      "s31_p_sgap6p",
+      "s31_p_sgbk5n",
+      "s31_p_swadzp",
+      "s31_p_swbk4n",
+      "s31_p_swbp7s",
+      "s31_p_swwz1a"
+    ],
+    "ambiguous_metadata": [
+      {
+        "stem": "s14_p_prwr3a",
+        "records": [
+          {
+            "SPKR": "s14",
+            "BLOCK": "1",
+            "INDEX": "3",
+            "SUBINDEX": "9",
+            "COND": "p",
+            "UTTERANCE": "prwr3a",
+            "STATUS": "CORRECT",
+            "TRANSCRIPTION": "-"
+          },
+          {
+            "SPKR": "s14",
+            "BLOCK": "1",
+            "INDEX": "5",
+            "SUBINDEX": "10",
+            "COND": "p",
+            "UTTERANCE": "prwr3a",
+            "STATUS": "CORRECT",
+            "TRANSCRIPTION": "-"
+          }
+        ]
+      }
+    ],
+    "wrong_filename_count": 71,
+    "alignment_url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_alignment.zip",
+    "alignment_bytes": 2532345,
+    "alignment_sha256": "2205fa509c74c9d5d74ece299af7da530d76f651e38391d2b364a7417b0d6309",
+    "alignment_members": 5361
+  },
+  "scope": "new native command-slot corpus layout, media integrity pending; no trained model metrics",
+  "existing_sources_preserved": true,
+  "cloud_cost": 0
+}

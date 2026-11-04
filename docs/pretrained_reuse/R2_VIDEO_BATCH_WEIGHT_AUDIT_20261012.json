@@ -1,0 +1,84 @@
+{
+  "status": "PASS_SAMPLER_REPLAY_ONLY",
+  "runner_sha256": "0316a16d852b5a6725d657a293b4cf973d0574359f8986ccd01bccb42ce9431b",
+  "source_result_sha256": "ad3c97cecc10efd76d002819cf41622243f602a5b30941934e6fd2275e2ecfda",
+  "order_sha256": "4009558c773ea4db3f90772e2446dca94f11d9b164cbdf33ec37b2c3b3bcd1c8",
+  "unique_train_examples": 3794,
+  "batches": 1440,
+  "steps_per_epoch": 60,
+  "global_weight_ess": 2183.306862495305,
+  "sample_weight_ratio": 5.818181818181818,
+  "summary": {
+    "loss_mass": {
+      "minimum": 0.7018543603383781,
+      "median": 0.9936566302394567,
+      "maximum": 1.4259218301112924,
+      "std": 0.1105201361899664
+    },
+    "effective_sample_size": {
+      "minimum": 9.325574505033554,
+      "median": 37.027108183508375,
+      "maximum": 60.693644275782844,
+      "std": 4.493788971590198
+    },
+    "maximum_weight_fraction": {
+      "minimum": 0.028398676094026624,
+      "median": 0.05656275722445077,
+      "maximum": 0.24054278770871595,
+      "std": 0.01810319315979592
+    },
+    "correct_weight_fraction": {
+      "minimum": 0.16999930784753658,
+      "median": 0.5039792477846696,
+      "maximum": 0.7772650248356306,
+      "std": 0.08168047182113038
+    }
+  },
+  "limitation": "Loss-weight variability is not a measured gradient or causal explanation.",
+  "per_batch_size": {
+    "64": {
+      "loss_mass": [
+        0.7188241384337744,
+        0.9938476286868081,
+        1.4259218301112924
+      ],
+      "effective_sample_size": [
+        33.659889485225605,
+        37.093778358853115,
+        60.693644275782844
+      ],
+      "maximum_weight_fraction": [
+        0.028398676094026624,
+        0.05643295264223394,
+        0.07557393689476795
+      ],
+      "correct_weight_fraction": [
+        0.26555444242186577,
+        0.5042920430017237,
+        0.7772650248356306
+      ]
+    },
+    "18": {
+      "loss_mass": [
+        0.7018543603383781,
+        0.9786335434813129,
+        1.3272385403219635
+      ],
+      "effective_sample_size": [
+        9.325574505033554,
+        10.747360418164767,
+        17.11996755010201
+      ],
+      "maximum_weight_fraction": [
+        0.10277783123611672,
+        0.18817743470786774,
+        0.24054278770871595
+      ],
+      "correct_weight_fraction": [
+        0.16999930784753658,
+        0.487377617635021,
+        0.7515957896144378
+      ]
+    }
+  }
+}

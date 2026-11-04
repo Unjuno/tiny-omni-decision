@@ -1,0 +1,202 @@
+{
+  "status": "PASS_MATCHED64_ENGINEERING_MEASUREMENT_NOT_ADOPTED",
+  "source_commit": "2efbd752718685b024994d71e94fc8e66d00934e",
+  "publisher_sha256": "3747fdd854555f4f542a7a9ae4eb892270a168c65e256fe4b1232eaa4364f924",
+  "artifacts": {
+    "primary": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\sam2-batched-decoder-prefix-01\\result.json",
+      "sha256": "5122a01547fc8b1b2733b8582485ea2893b25b86511a75360cee0a461962856e"
+    },
+    "fresh_replay": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\sam2-batched-decoder-fresh-replay-01\\result.json",
+      "sha256": "08f73c65d014f6e4d00851ae82f814b21a0da2b2bdede870acac47f619d2488d"
+    },
+    "audit": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\sam2-batched-decoder-independent-audit-01.json",
+      "sha256": "5f8acd4abb84ca5ff54106a927f581ce5f9cfb0a372c3357385f6f468023b028"
+    }
+  },
+  "reports": {
+    "primary": {
+      "status": "PASS_MATCHED64_PROBE_NOT_DROPIN_EQUIVALENT",
+      "source_commit": "2efbd752718685b024994d71e94fc8e66d00934e",
+      "pid": 32448,
+      "training": false,
+      "annotations_loaded": false,
+      "validation_opened": false,
+      "sealed_audit_opened": false,
+      "cloud_cost": 0,
+      "windows": [
+        {
+          "arm": "native",
+          "rep": 0,
+          "objects": 64,
+          "seconds": 0.9320190000580624,
+          "extra_encoder_calls": 0
+        },
+        {
+          "arm": "batch",
+          "rep": 0,
+          "objects": 64,
+          "seconds": 0.18421440001111478,
+          "extra_encoder_calls": 0
+        },
+        {
+          "arm": "batch",
+          "rep": 1,
+          "objects": 64,
+          "seconds": 0.185395099921152,
+          "extra_encoder_calls": 0
+        },
+        {
+          "arm": "native",
+          "rep": 1,
+          "objects": 64,
+          "seconds": 0.9311196999624372,
+          "extra_encoder_calls": 0
+        }
+      ],
+      "config_sha256": "e214a6ce2aa91a48c4951a77466ebdfa3c790236d46a2d61f2436a771dc23660",
+      "state_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+      "parameters": 38962498,
+      "native_rgb_sha256": "b703c749ab94ba5b67e585f7ded3b7b68a9e785042f5e853fe135566c21fe554",
+      "parity": {
+        "raw_byte_exact": false,
+        "score_byte_exact": false,
+        "raw_max_abs": 0.000179290771484375,
+        "score_max_abs": 1.33514404296875e-05,
+        "changed_mask_pixels": 0,
+        "changed_proposal_masks": 0,
+        "boxes_byte_exact": true,
+        "prefix_nms_exact": true,
+        "foreground_seeds_exact": true,
+        "nonempty_flags_exact": true
+      },
+      "state_after": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+      "prefix_only_admission": false,
+      "full_corpus_or_quality_admission": false,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\sam2-batched-decoder-prefix-01\\matched64-outputs.npz",
+      "sha256": "d8357e6ee0fd21a27e05daed05eeb64817c5eb1736a4de3dbb344aa58139d828",
+      "seconds": 9.466856100014411,
+      "encoder_calls_total": 1,
+      "rng_unchanged": true,
+      "peak_torch_bytes": 3568890880,
+      "peak_reserved_bytes": 5064622080,
+      "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2"
+    },
+    "fresh_replay": {
+      "status": "PASS_MATCHED64_PROBE_NOT_DROPIN_EQUIVALENT",
+      "source_commit": "2efbd752718685b024994d71e94fc8e66d00934e",
+      "pid": 27528,
+      "training": false,
+      "annotations_loaded": false,
+      "validation_opened": false,
+      "sealed_audit_opened": false,
+      "cloud_cost": 0,
+      "windows": [
+        {
+          "arm": "native",
+          "rep": 0,
+          "objects": 64,
+          "seconds": 0.9254639999708161,
+          "extra_encoder_calls": 0
+        },
+        {
+          "arm": "batch",
+          "rep": 0,
+          "objects": 64,
+          "seconds": 0.18373420007992536,
+          "extra_encoder_calls": 0
+        },
+        {
+          "arm": "batch",
+          "rep": 1,
+          "objects": 64,
+          "seconds": 0.18566760001704097,
+          "extra_encoder_calls": 0
+        },
+        {
+          "arm": "native",
+          "rep": 1,
+          "objects": 64,
+          "seconds": 0.9364583999849856,
+          "extra_encoder_calls": 0
+        }
+      ],
+      "config_sha256": "e214a6ce2aa91a48c4951a77466ebdfa3c790236d46a2d61f2436a771dc23660",
+      "reference_result_sha256": "5122a01547fc8b1b2733b8582485ea2893b25b86511a75360cee0a461962856e",
+      "state_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+      "parameters": 38962498,
+      "native_rgb_sha256": "b703c749ab94ba5b67e585f7ded3b7b68a9e785042f5e853fe135566c21fe554",
+      "parity": {
+        "raw_byte_exact": false,
+        "score_byte_exact": false,
+        "raw_max_abs": 0.000179290771484375,
+        "score_max_abs": 1.33514404296875e-05,
+        "changed_mask_pixels": 0,
+        "changed_proposal_masks": 0,
+        "boxes_byte_exact": true,
+        "prefix_nms_exact": true,
+        "foreground_seeds_exact": true,
+        "nonempty_flags_exact": true
+      },
+      "fresh_replay_bitwise": true,
+      "state_after": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+      "prefix_only_admission": false,
+      "full_corpus_or_quality_admission": false,
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\sam2-batched-decoder-fresh-replay-01\\matched64-outputs.npz",
+      "sha256": "d8357e6ee0fd21a27e05daed05eeb64817c5eb1736a4de3dbb344aa58139d828",
+      "seconds": 9.86846060003154,
+      "encoder_calls_total": 1,
+      "rng_unchanged": true,
+      "peak_torch_bytes": 3568890880,
+      "peak_reserved_bytes": 5064622080,
+      "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2"
+    },
+    "audit": {
+      "status": "PASS_INDEPENDENT64_PREFIX_AUDIT_NOT_ADMITTED",
+      "script_sha256": "1fe19f5e24654a050faa15779a5ca036d4c310123c51a1327ae4d20125b12343",
+      "primary_result_sha256": "5122a01547fc8b1b2733b8582485ea2893b25b86511a75360cee0a461962856e",
+      "fresh_result_sha256": "08f73c65d014f6e4d00851ae82f814b21a0da2b2bdede870acac47f619d2488d",
+      "arrays_compared": 8,
+      "raw_values_per_arm": 4194304,
+      "raw_max_abs": 0.000179290771484375,
+      "score_max_abs": 1.33514404296875e-05,
+      "changed_mask_pixels": 0,
+      "raw_abs_gate_pass": true,
+      "score_abs_gate_pass": false,
+      "presence_flags_exact": true,
+      "native_min_score": 11.794121742248535,
+      "score_values_over_guard": 1,
+      "matched_native_median_seconds": 0.9315693500102498,
+      "matched_batch_median_seconds": 0.18480474996613339,
+      "cached64_forward_ratio": 5.040830120334924,
+      "numerical_gate_unchanged": true,
+      "annotations_loaded": false,
+      "gpu_or_model_loaded": false,
+      "training": false,
+      "seconds": 3.315309099969454
+    }
+  },
+  "total_measured_body_seconds": 22.650625800015405,
+  "artifact_sizes": {
+    "primary": 58023638,
+    "fresh_replay": 58023638
+  },
+  "local_checks": {
+    "ruff": "pass",
+    "cpu_passed": 1193,
+    "cpu_skipped": 1,
+    "cpu_seconds": 16.0
+  },
+  "training": false,
+  "quality_evaluated": false,
+  "old_corpus_changed": false,
+  "cloud_cost": 0,
+  "gate_relaxed": false,
+  "next_gate": "explicit fixed chunk-size or derived-corpus protocol; no silent substitution"
+}

@@ -1,0 +1,741 @@
+{
+  "status": "PASS_COMPLETE_NATIVE_LANGUAGE_AUDIO_FEATURES",
+  "generated_utc": "2026-10-16T06:14:52.484061+00:00",
+  "records": {
+    "native-language-smoke-02": {
+      "status": "PASS_NATIVE_LANGUAGE_SMOKE",
+      "receipt_sha256": "2628281459b023c268d62069f9f0390eab91183b7f7e541a1e3d258e73c8ef75",
+      "source_commit": "6a075d08601fa1076d2ca9ebe51f6da74420de06",
+      "config_sha256": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\capture_native_language.py",
+        "--phase",
+        "smoke",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-language-smoke-02"
+      ],
+      "started_utc": "2026-10-16T05:40:40.488290+00:00",
+      "finished_utc": "2026-10-16T05:40:52.775897+00:00",
+      "seconds": 12.287757300000521,
+      "state_encoding_seconds": 0.704304900005809,
+      "query_encoding_seconds": 0.16134839999722317,
+      "parameters": 70830722,
+      "unique_states": 4382,
+      "unique_queries": 22328,
+      "long_states": 38,
+      "completed_states": 4,
+      "completed_queries": 8,
+      "expected_states": 4,
+      "expected_queries": 8,
+      "source_rows": {
+        "binding_train": 8192,
+        "numeric_train": 8192,
+        "legacy_train": 2048,
+        "validation": 2048,
+        "old_validation": 3072,
+        "legacy_validation": 5612
+      },
+      "tensor_bytes": 974550528,
+      "max_replay_abs": 0.0,
+      "cuda_peak_allocated_bytes": 371848704,
+      "cuda_peak_reserved_bytes": 392167424,
+      "os_peak_working_set_bytes": 2068283392,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "safetensors": "0.8.0",
+        "tokenizers": "0.22.2"
+      },
+      "dtype": "float32",
+      "attention": "eager",
+      "batch_size": 1,
+      "initial_model_state_sha256": "fcee7cf8c38bd489642e3b3539938c2c2dbf37a5d8fade37c552371f8f2f2c52",
+      "final_model_state_sha256": "fcee7cf8c38bd489642e3b3539938c2c2dbf37a5d8fade37c552371f8f2f2c52",
+      "artifact_hashes": {
+        "effective-config.json": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+        "index.json": "3ab72e851ac1534f0c543bd4d1b7b928cb2d98541343d0cae4ae1231a782ac49",
+        "query-000c93cfed598522c1c3d54483deea287a34a20c7e75a9bed08ded00b7097dbd.npy": "e96a9aa77bee8b15daa7d60b52bf1865a0d30b494a417a9d888df94735752ef0",
+        "query-0012296e8a6b15c30d06699189bbb7a34692d269738fad248671f04a5dada338.npy": "c6d27880602df107a19b824ad9ece0acc2b423e794c143052ac1ebcc35d1838a",
+        "query-0012a10b4c6ed54f5a088b97972696a5f75f85e9d5bdf564372ade7fc1fad5e4.npy": "517e3b8f7998bb08cf2a4314a6247d7fa1e50e6dfc0cd416ed20354953023a64",
+        "query-001995cf774aa5cdb6bb1f79c36934b5eeb8bfd811ec946f482690c3df078bb6.npy": "32898d1e443a5cdf186c8cdc1b5574997103e1e7e44cee9264cc4c8f711920b8",
+        "query-001a9dd161e8847dd40a8d345f56c7891217f1672bc06ba08fe9915f3f5722e2.npy": "d1489ea1b1ae7ca70eda534e6681c3e1aaaa061cd7a16ea70ae2e4676671ea03",
+        "query-001b53156fa33aa916e1a3b329594bb0c61d7b2b1fc75163ca9bdb6fc3dc21bc.npy": "712522d8a436815c3a72ebebced6895989f9ba81a1b681d2c049a770e0f27963",
+        "query-002444028385a48664b27fcba72cb1b4adb26140b1fbfaf5428b47b976ae7117.npy": "787be69a8fced550fc73971d8a2e7488835e55615567c102d482bed93539cf73",
+        "query-0027dda0be84961dd1f03056a1d1933918bf24f3ae61b93faffb9c459c3c31d5.npy": "814e17f6318418d5925fd5ee611e3a6efb15a99d734611ca7170608590b389fc",
+        "segments.json": "418a3ac19e48d07eac0527028934e02d20c1271cff88bc74e3c0603a0c71730a",
+        "state-000e3ad67c7e58687e55b4259ad843e63e8abb7ac638e64b378baff5932074d9.npy": "7532d8538977cbfc231504eced11e63931c9ef1bcc142abe722deccf3f8462aa",
+        "state-00233c7880fb64a8b7840f961fff8e96620f1feac03743311892732b20912a55.npy": "33b1e7cc997d219b53080995b1ef7c5bde6332c26adc2b0d46b62a8db70ba29f",
+        "state-0052fa6a87458eaf396f7cc7d197f4e340e6e4e4ee65498020971f8764875977.npy": "2ab10df8fcd0c506be0311d32289aaf2b163a63981d0b94fcb35ce176d177941",
+        "state-2ee5200956530e016f2bd05497559602cad352e719ba18d360d514ddee656e20.npy": "560236c2cd8fe1a673d5dd3c3c469805a6ae3bb199e379eba074a6f9b61d0302"
+      }
+    },
+    "native-language-cache-02": {
+      "status": "PASS_NATIVE_LANGUAGE_CACHE",
+      "receipt_sha256": "21d427849547541ff3824843b3c2e5e855a6a958fbc88e21ae9e037ffe405278",
+      "source_commit": "6a075d08601fa1076d2ca9ebe51f6da74420de06",
+      "config_sha256": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\capture_native_language.py",
+        "--phase",
+        "cache",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-language-cache-02",
+        "--reference",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-language-smoke-02",
+        "--reference-sha256",
+        "2628281459b023c268d62069f9f0390eab91183b7f7e541a1e3d258e73c8ef75"
+      ],
+      "started_utc": "2026-10-16T05:41:14.124973+00:00",
+      "finished_utc": "2026-10-16T05:50:12.528687+00:00",
+      "seconds": 538.401003299994,
+      "state_encoding_seconds": 89.81736590000219,
+      "query_encoding_seconds": 435.42193099998985,
+      "parameters": 70830722,
+      "unique_states": 4382,
+      "unique_queries": 22328,
+      "long_states": 38,
+      "completed_states": 4382,
+      "completed_queries": 22328,
+      "expected_states": 4382,
+      "expected_queries": 22328,
+      "source_rows": {
+        "binding_train": 8192,
+        "numeric_train": 8192,
+        "legacy_train": 2048,
+        "validation": 2048,
+        "old_validation": 3072,
+        "legacy_validation": 5612
+      },
+      "tensor_bytes": 974550528,
+      "max_replay_abs": 0.0,
+      "cuda_peak_allocated_bytes": 372304896,
+      "cuda_peak_reserved_bytes": 394264576,
+      "os_peak_working_set_bytes": 2619707392,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "safetensors": "0.8.0",
+        "tokenizers": "0.22.2"
+      },
+      "dtype": "float32",
+      "attention": "eager",
+      "batch_size": 1,
+      "initial_model_state_sha256": "fcee7cf8c38bd489642e3b3539938c2c2dbf37a5d8fade37c552371f8f2f2c52",
+      "final_model_state_sha256": "fcee7cf8c38bd489642e3b3539938c2c2dbf37a5d8fade37c552371f8f2f2c52",
+      "reference": {
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-smoke-02",
+        "sha256": "2628281459b023c268d62069f9f0390eab91183b7f7e541a1e3d258e73c8ef75"
+      },
+      "artifact_hashes": {
+        "effective-config.json": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+        "index.json": "3ab72e851ac1534f0c543bd4d1b7b928cb2d98541343d0cae4ae1231a782ac49",
+        "queries.npy": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3",
+        "segments.json": "6f2fef4923a4844c260656c1ddf3f3a3158ff9fb2508f1939d5738d8ba91be28",
+        "train-states.npy": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
+        "validation-states.npy": "e641908412b8c7fbab0ba122767cd2c7f396e0e56cbc05842d0f0b1c2a412a11"
+      }
+    },
+    "native-language-replay-01": {
+      "status": "PASS_NATIVE_LANGUAGE_REPLAY",
+      "receipt_sha256": "6ff0d20d0776e53a17730509c49e3bf7b187245ec97e4361fcf19833e8b590da",
+      "source_commit": "6a075d08601fa1076d2ca9ebe51f6da74420de06",
+      "config_sha256": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\capture_native_language.py",
+        "--phase",
+        "replay",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-language-replay-01",
+        "--reference",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-language-cache-02",
+        "--reference-sha256",
+        "21d427849547541ff3824843b3c2e5e855a6a958fbc88e21ae9e037ffe405278"
+      ],
+      "started_utc": "2026-10-16T05:51:00.429881+00:00",
+      "finished_utc": "2026-10-16T05:59:49.810863+00:00",
+      "seconds": 529.3768247999978,
+      "state_encoding_seconds": 88.29873840000073,
+      "query_encoding_seconds": 428.7764027000085,
+      "parameters": 70830722,
+      "unique_states": 4382,
+      "unique_queries": 22328,
+      "long_states": 38,
+      "completed_states": 4382,
+      "completed_queries": 22328,
+      "expected_states": 4382,
+      "expected_queries": 22328,
+      "source_rows": {
+        "binding_train": 8192,
+        "numeric_train": 8192,
+        "legacy_train": 2048,
+        "validation": 2048,
+        "old_validation": 3072,
+        "legacy_validation": 5612
+      },
+      "tensor_bytes": 974550528,
+      "max_replay_abs": 0.0,
+      "cuda_peak_allocated_bytes": 372304896,
+      "cuda_peak_reserved_bytes": 394264576,
+      "os_peak_working_set_bytes": 3118628864,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "safetensors": "0.8.0",
+        "tokenizers": "0.22.2"
+      },
+      "dtype": "float32",
+      "attention": "eager",
+      "batch_size": 1,
+      "initial_model_state_sha256": "fcee7cf8c38bd489642e3b3539938c2c2dbf37a5d8fade37c552371f8f2f2c52",
+      "final_model_state_sha256": "fcee7cf8c38bd489642e3b3539938c2c2dbf37a5d8fade37c552371f8f2f2c52",
+      "reference": {
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02",
+        "sha256": "21d427849547541ff3824843b3c2e5e855a6a958fbc88e21ae9e037ffe405278"
+      },
+      "artifact_hashes": {
+        "effective-config.json": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+        "index.json": "3ab72e851ac1534f0c543bd4d1b7b928cb2d98541343d0cae4ae1231a782ac49",
+        "segments.json": "6f2fef4923a4844c260656c1ddf3f3a3158ff9fb2508f1939d5738d8ba91be28"
+      }
+    },
+    "native-audio-corpus-audit-01": {
+      "status": "PASS_NATIVE_AUDIO_CORPUS",
+      "receipt_sha256": "5a289f858b0db764b03b93fe1a6dd6f9ac95ff1ba4df07b8715fccfc9af48784",
+      "source_commit": "6a075d08601fa1076d2ca9ebe51f6da74420de06",
+      "started_utc": "2026-10-16T05:42:51.531634+00:00",
+      "finished_utc": "2026-10-16T05:43:12.078090+00:00",
+      "seconds": 20.54742280000937,
+      "tensor_bytes": 1908900864,
+      "completed": 7410,
+      "counts": {
+        "train": {
+          "lombard": {
+            "examples": 4080,
+            "assets": 4080,
+            "groups": 36,
+            "speech_tokens": 510484,
+            "physical_seconds": 10189.439999999995
+          },
+          "starss": {
+            "examples": 1955,
+            "assets": 49,
+            "groups": 6,
+            "speech_tokens": 488750,
+            "physical_seconds": 9775.0
+          }
+        },
+        "validation": {
+          "lombard": {
+            "examples": 889,
+            "assets": 889,
+            "groups": 9,
+            "speech_tokens": 114630,
+            "physical_seconds": 2288.1800000000003
+          },
+          "starss": {
+            "examples": 486,
+            "assets": 21,
+            "groups": 2,
+            "speech_tokens": 121500,
+            "physical_seconds": 2430.0
+          }
+        }
+      },
+      "shapes": {
+        "train-speech.npy": [
+          999234,
+          384
+        ],
+        "train-event.npy": [
+          6035,
+          384
+        ],
+        "validation-speech.npy": [
+          236130,
+          384
+        ],
+        "validation-event.npy": [
+          1375,
+          384
+        ]
+      },
+      "unique_decoded_pcm": {
+        "train": 6035,
+        "validation": 1375
+      },
+      "cross_split_decoded_pcm_overlap": 0,
+      "silent_examples": {
+        "train": 0,
+        "validation": 0
+      },
+      "unique_physical_assets": 5039,
+      "os_peak_working_set_bytes": 111792128,
+      "example_order_sha256": "f054fb49a5a8284d3d05760b2f683e618d70873c2664b17cfd0dc6c26a9e0a9f",
+      "artifact_hashes": {
+        "decoded.jsonl": "66ba1c38fd3edcf9cc25751ee4d7c1825b819da05cfb022daaa6f2e7c391066f",
+        "plan.json": "ccfcfa7ec9d007feb1df1eb49baa84d6a49ab1a258e1144cfa96105beaadd346"
+      },
+      "exact_runner_sha256": "7949bb57d30cc3e2d81c58b2957723e7738284fcce1e3c5e9919dabfc0f3d7a0"
+    },
+    "native-audio-corpus-audit-replay-01": {
+      "status": "PASS_NATIVE_AUDIO_CORPUS",
+      "receipt_sha256": "9747a4657751e19933d07e8322542fa92160b9afbf4f5f69139bb0d67d7bfba7",
+      "source_commit": "bcb775b8ebc0f76a3962cc3781f6de813c860908",
+      "started_utc": "2026-10-16T06:02:44.647392+00:00",
+      "finished_utc": "2026-10-16T06:03:07.654836+00:00",
+      "seconds": 23.008038200001465,
+      "tensor_bytes": 1908900864,
+      "completed": 7410,
+      "counts": {
+        "train": {
+          "lombard": {
+            "examples": 4080,
+            "assets": 4080,
+            "groups": 36,
+            "speech_tokens": 510484,
+            "physical_seconds": 10189.439999999995
+          },
+          "starss": {
+            "examples": 1955,
+            "assets": 49,
+            "groups": 6,
+            "speech_tokens": 488750,
+            "physical_seconds": 9775.0
+          }
+        },
+        "validation": {
+          "lombard": {
+            "examples": 889,
+            "assets": 889,
+            "groups": 9,
+            "speech_tokens": 114630,
+            "physical_seconds": 2288.1800000000003
+          },
+          "starss": {
+            "examples": 486,
+            "assets": 21,
+            "groups": 2,
+            "speech_tokens": 121500,
+            "physical_seconds": 2430.0
+          }
+        }
+      },
+      "shapes": {
+        "train-speech.npy": [
+          999234,
+          384
+        ],
+        "train-event.npy": [
+          6035,
+          384
+        ],
+        "validation-speech.npy": [
+          236130,
+          384
+        ],
+        "validation-event.npy": [
+          1375,
+          384
+        ]
+      },
+      "unique_decoded_pcm": {
+        "train": 6035,
+        "validation": 1375
+      },
+      "cross_split_decoded_pcm_overlap": 0,
+      "silent_examples": {
+        "train": 0,
+        "validation": 0
+      },
+      "unique_physical_assets": 5039,
+      "os_peak_working_set_bytes": 110559232,
+      "example_order_sha256": "f054fb49a5a8284d3d05760b2f683e618d70873c2664b17cfd0dc6c26a9e0a9f",
+      "artifact_hashes": {
+        "decoded.jsonl": "66ba1c38fd3edcf9cc25751ee4d7c1825b819da05cfb022daaa6f2e7c391066f",
+        "plan.json": "ccfcfa7ec9d007feb1df1eb49baa84d6a49ab1a258e1144cfa96105beaadd346"
+      },
+      "exact_runner_sha256": "951eb7dea4a514274a860b5f0bf71e8f6b16e5bcefd06684e1a9b2c50eb834e8"
+    },
+    "native-audio-profile-smoke-02": {
+      "status": "PASS_NATIVE_AUDIO_PROFILE",
+      "receipt_sha256": "5525a0ffc619b3af5a806bde3ee7d47ac9af1975b5f1dcb363577bb1d780de8b",
+      "source_commit": "bcb775b8ebc0f76a3962cc3781f6de813c860908",
+      "config_sha256": "57fe149d4bccb09a4d28d3da0950efd4bb1cafdc15f8a95e78212c36ef9d39ae",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_native_audio_profile.py",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-profile-smoke-02"
+      ],
+      "started_utc": "2026-10-16T06:01:29.870552+00:00",
+      "finished_utc": "2026-10-16T06:01:35.340570+00:00",
+      "seconds": 5.469425599992974,
+      "parameters": {
+        "speech": 8208384,
+        "event": 1961239,
+        "mel": 0
+      },
+      "peak_vram_bytes": 200990208,
+      "os_peak_working_set_bytes": 1394532352,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "soundfile": "0.14.0",
+        "safetensors": "0.8.0"
+      },
+      "dtype": "float32",
+      "attention": "eager",
+      "frozen_before": {
+        "speech": "e683a81ee6b5a982a7ab1e82b432eb783651e4976754a23d078e9a9a16611e64",
+        "event": "38ca32e3a2aa59bd94a86caf6f55fb16e90f6db22648524448cf4cc672a63db7",
+        "mel": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "frozen_after": {
+        "speech": "e683a81ee6b5a982a7ab1e82b432eb783651e4976754a23d078e9a9a16611e64",
+        "event": "38ca32e3a2aa59bd94a86caf6f55fb16e90f6db22648524448cf4cc672a63db7",
+        "mel": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "artifact_hashes": {
+        "effective-config.json": "57fe149d4bccb09a4d28d3da0950efd4bb1cafdc15f8a95e78212c36ef9d39ae",
+        "lombard-event.npy": "d12f73348f86e9c4c57945a7268c34bd7ab5b056db18ea01a57bf9909ad00f7d",
+        "lombard-pcm.npy": "b6b4aa96b031b517fc9559848ec860914526ef63000aa2c0773d938cc6b2911b",
+        "lombard-speech.npy": "e12b9c72791b91a92fbd97b7ac558bf7cfc2567c373d448701013666837f68b6",
+        "starss-event.npy": "bc7896202b3ef7edff47b98a9ffc8f2d72946016b01fe5611db983960255a3dc",
+        "starss-pcm.npy": "59a441ae7929105f923804e08bd444356d694612afdd85fe4ff43e68bacc93f3",
+        "starss-speech.npy": "9008503a80445c596da86996579c93dc148c7d128a621a86daddd2c97cca211c"
+      }
+    },
+    "native-audio-cache-01": {
+      "status": "PASS_NATIVE_AUDIO_CACHE",
+      "receipt_sha256": "02029f2935587f36b8a8deab1aa82e974b0e9d1582d074d2fede15f25ba87ae4",
+      "source_commit": "bcb775b8ebc0f76a3962cc3781f6de813c860908",
+      "config_sha256": "7e134987030250d7f13b78e38bd551b6b09b497e7b2e33513e8b3aa0f0dbb40d",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\capture_native_audio.py",
+        "--phase",
+        "cache",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-cache-01",
+        "--reference",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-profile-smoke-02",
+        "--reference-sha256",
+        "5525a0ffc619b3af5a806bde3ee7d47ac9af1975b5f1dcb363577bb1d780de8b"
+      ],
+      "started_utc": "2026-10-16T06:02:01.440337+00:00",
+      "finished_utc": "2026-10-16T06:07:58.448170+00:00",
+      "seconds": 357.004646100002,
+      "encoding_seconds": 343.92308950000734,
+      "parameters": {
+        "speech": 8208384,
+        "event": 1961239,
+        "mel": 0
+      },
+      "tensor_bytes": 1908900864,
+      "completed_examples": 7410,
+      "expected_examples": 7410,
+      "counts": {
+        "train": {
+          "lombard": {
+            "examples": 4080,
+            "assets": 4080,
+            "groups": 36,
+            "speech_tokens": 510484,
+            "physical_seconds": 10189.439999999995
+          },
+          "starss": {
+            "examples": 1955,
+            "assets": 49,
+            "groups": 6,
+            "speech_tokens": 488750,
+            "physical_seconds": 9775.0
+          }
+        },
+        "validation": {
+          "lombard": {
+            "examples": 889,
+            "assets": 889,
+            "groups": 9,
+            "speech_tokens": 114630,
+            "physical_seconds": 2288.1800000000003
+          },
+          "starss": {
+            "examples": 486,
+            "assets": 21,
+            "groups": 2,
+            "speech_tokens": 121500,
+            "physical_seconds": 2430.0
+          }
+        }
+      },
+      "shapes": {
+        "train-speech.npy": [
+          999234,
+          384
+        ],
+        "train-event.npy": [
+          6035,
+          384
+        ],
+        "validation-speech.npy": [
+          236130,
+          384
+        ],
+        "validation-event.npy": [
+          1375,
+          384
+        ]
+      },
+      "max_replay_abs": 0.0,
+      "profile_matches": 2,
+      "cuda_peak_reserved_bytes": 262144000,
+      "peak_vram_bytes": 200990208,
+      "os_peak_working_set_bytes": 3481264128,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "soundfile": "0.14.0",
+        "safetensors": "0.8.0"
+      },
+      "dtype": "float32",
+      "attention": "eager",
+      "batch_size": 1,
+      "frozen_before": {
+        "speech": "e683a81ee6b5a982a7ab1e82b432eb783651e4976754a23d078e9a9a16611e64",
+        "event": "38ca32e3a2aa59bd94a86caf6f55fb16e90f6db22648524448cf4cc672a63db7",
+        "mel": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "frozen_after": {
+        "speech": "e683a81ee6b5a982a7ab1e82b432eb783651e4976754a23d078e9a9a16611e64",
+        "event": "38ca32e3a2aa59bd94a86caf6f55fb16e90f6db22648524448cf4cc672a63db7",
+        "mel": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "example_order_sha256": "f054fb49a5a8284d3d05760b2f683e618d70873c2664b17cfd0dc6c26a9e0a9f",
+      "reference": {
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-audio-profile-smoke-02",
+        "sha256": "5525a0ffc619b3af5a806bde3ee7d47ac9af1975b5f1dcb363577bb1d780de8b"
+      },
+      "artifact_hashes": {
+        "effective-config.json": "7e134987030250d7f13b78e38bd551b6b09b497e7b2e33513e8b3aa0f0dbb40d",
+        "features.jsonl": "5bb686ab5d1311bac1ff20121e3db7b6c85b33b1b9881a47fc730283c6fed855",
+        "plan.json": "ccfcfa7ec9d007feb1df1eb49baa84d6a49ab1a258e1144cfa96105beaadd346",
+        "train-event.npy": "38ff26cca0a05d421591ea51be01d713560a37cfcb308ef5ab667487f7427f3d",
+        "train-speech.npy": "db850a772109ba4ff18d3a31973c023297042f2c472cda34b7ac518775fae129",
+        "validation-event.npy": "ae53421d6c0459337186c7bad39d6da05d67a695be86a769acf5b483158652ce",
+        "validation-speech.npy": "5a763c1ae1c57874e2caa13fc2596b608145a4ffe96b6246f2eb29fbb3e9dcdf"
+      }
+    },
+    "native-audio-cache-replay-01": {
+      "status": "PASS_NATIVE_AUDIO_REPLAY",
+      "receipt_sha256": "dca50582dbc52f3ef32bbfd834da047c69f089297c5d8fad549048214a776b08",
+      "source_commit": "bcb775b8ebc0f76a3962cc3781f6de813c860908",
+      "config_sha256": "7e134987030250d7f13b78e38bd551b6b09b497e7b2e33513e8b3aa0f0dbb40d",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\capture_native_audio.py",
+        "--phase",
+        "replay",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-cache-replay-01",
+        "--reference",
+        "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-cache-01",
+        "--reference-sha256",
+        "02029f2935587f36b8a8deab1aa82e974b0e9d1582d074d2fede15f25ba87ae4"
+      ],
+      "started_utc": "2026-10-16T06:08:20.580514+00:00",
+      "finished_utc": "2026-10-16T06:14:35.968349+00:00",
+      "seconds": 375.38424840000516,
+      "encoding_seconds": 363.8270690999925,
+      "parameters": {
+        "speech": 8208384,
+        "event": 1961239,
+        "mel": 0
+      },
+      "tensor_bytes": 1908900864,
+      "completed_examples": 7410,
+      "expected_examples": 7410,
+      "counts": {
+        "train": {
+          "lombard": {
+            "examples": 4080,
+            "assets": 4080,
+            "groups": 36,
+            "speech_tokens": 510484,
+            "physical_seconds": 10189.439999999995
+          },
+          "starss": {
+            "examples": 1955,
+            "assets": 49,
+            "groups": 6,
+            "speech_tokens": 488750,
+            "physical_seconds": 9775.0
+          }
+        },
+        "validation": {
+          "lombard": {
+            "examples": 889,
+            "assets": 889,
+            "groups": 9,
+            "speech_tokens": 114630,
+            "physical_seconds": 2288.1800000000003
+          },
+          "starss": {
+            "examples": 486,
+            "assets": 21,
+            "groups": 2,
+            "speech_tokens": 121500,
+            "physical_seconds": 2430.0
+          }
+        }
+      },
+      "shapes": {
+        "train-speech.npy": [
+          999234,
+          384
+        ],
+        "train-event.npy": [
+          6035,
+          384
+        ],
+        "validation-speech.npy": [
+          236130,
+          384
+        ],
+        "validation-event.npy": [
+          1375,
+          384
+        ]
+      },
+      "max_replay_abs": 0.0,
+      "profile_matches": 0,
+      "cuda_peak_reserved_bytes": 262144000,
+      "peak_vram_bytes": 200990208,
+      "os_peak_working_set_bytes": 3479199744,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "soundfile": "0.14.0",
+        "safetensors": "0.8.0"
+      },
+      "dtype": "float32",
+      "attention": "eager",
+      "batch_size": 1,
+      "frozen_before": {
+        "speech": "e683a81ee6b5a982a7ab1e82b432eb783651e4976754a23d078e9a9a16611e64",
+        "event": "38ca32e3a2aa59bd94a86caf6f55fb16e90f6db22648524448cf4cc672a63db7",
+        "mel": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "frozen_after": {
+        "speech": "e683a81ee6b5a982a7ab1e82b432eb783651e4976754a23d078e9a9a16611e64",
+        "event": "38ca32e3a2aa59bd94a86caf6f55fb16e90f6db22648524448cf4cc672a63db7",
+        "mel": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "example_order_sha256": "f054fb49a5a8284d3d05760b2f683e618d70873c2664b17cfd0dc6c26a9e0a9f",
+      "reference": {
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-audio-cache-01",
+        "sha256": "02029f2935587f36b8a8deab1aa82e974b0e9d1582d074d2fede15f25ba87ae4"
+      },
+      "artifact_hashes": {
+        "effective-config.json": "7e134987030250d7f13b78e38bd551b6b09b497e7b2e33513e8b3aa0f0dbb40d",
+        "features.jsonl": "5bb686ab5d1311bac1ff20121e3db7b6c85b33b1b9881a47fc730283c6fed855",
+        "plan.json": "ccfcfa7ec9d007feb1df1eb49baa84d6a49ab1a258e1144cfa96105beaadd346"
+      }
+    }
+  },
+  "banks": {
+    "native-language-cache-02": [
+      {
+        "file": "queries.npy",
+        "bytes": 34295936,
+        "shape": [
+          22328,
+          384
+        ],
+        "dtype": "float32",
+        "sha256": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3"
+      },
+      {
+        "file": "train-states.npy",
+        "bytes": 576119936,
+        "shape": [
+          375078,
+          384
+        ],
+        "dtype": "float32",
+        "sha256": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99"
+      },
+      {
+        "file": "validation-states.npy",
+        "bytes": 364135040,
+        "shape": [
+          237067,
+          384
+        ],
+        "dtype": "float32",
+        "sha256": "e641908412b8c7fbab0ba122767cd2c7f396e0e56cbc05842d0f0b1c2a412a11"
+      }
+    ],
+    "native-audio-cache-01": [
+      {
+        "file": "train-event.npy",
+        "bytes": 9269888,
+        "shape": [
+          6035,
+          384
+        ],
+        "dtype": "float32",
+        "sha256": "38ff26cca0a05d421591ea51be01d713560a37cfcb308ef5ab667487f7427f3d"
+      },
+      {
+        "file": "train-speech.npy",
+        "bytes": 1534823552,
+        "shape": [
+          999234,
+          384
+        ],
+        "dtype": "float32",
+        "sha256": "db850a772109ba4ff18d3a31973c023297042f2c472cda34b7ac518775fae129"
+      },
+      {
+        "file": "validation-event.npy",
+        "bytes": 2112128,
+        "shape": [
+          1375,
+          384
+        ],
+        "dtype": "float32",
+        "sha256": "ae53421d6c0459337186c7bad39d6da05d67a695be86a769acf5b483158652ce"
+      },
+      {
+        "file": "validation-speech.npy",
+        "bytes": 362695808,
+        "shape": [
+          236130,
+          384
+        ],
+        "dtype": "float32",
+        "sha256": "5a763c1ae1c57874e2caa13fc2596b608145a4ffe96b6246f2eb29fbb3e9dcdf"
+      }
+    ]
+  },
+  "distinct_source_input_pins_verified": 1135,
+  "all_input_sources_unchanged": true,
+  "total_recorded_process_wall_seconds": 1861.4793665000034,
+  "wall_measurement": "Sum of process wall times; CPU audit/tests overlapped extraction. Not elapsed time or GPU kernel time.",
+  "training_updates": 0,
+  "quality_evaluated": false,
+  "sealed_audit_loaded": false,
+  "cloud_cost": 0,
+  "remaining": [
+    "Other modality question/candidate feature alignment",
+    "Shared task/sampler/budget/checkpoint-selection/retention contract",
+    "First common native readout fit and task-specific validation",
+    "Missing joint/temporal/unknown-language/natural-input coverage and final quality gates"
+  ]
+}

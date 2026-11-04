@@ -1,0 +1,30 @@
+{
+  "seed": 17,
+  "uses_labels": false,
+  "splits": {
+    "train": {
+      "source_count": 578,
+      "queries": 2312,
+      "mapping_sha256": "e5036d464cf639303fbafbb324abc4fd195a88bc3ef7c6f2d7c9984a28d6c746",
+      "input_sha256": "4b3ee6fe483d20e55e32de47d491d946538df82ef7ce45698ec764d6aa0f1df3",
+      "query_marginal_preserved": true,
+      "source_bijection": true
+    },
+    "calibration": {
+      "source_count": 138,
+      "queries": 550,
+      "mapping_sha256": "ae70993c3c4d38769ed0d72fe648b14a11974710ade1782fc7f68131e12746c0",
+      "input_sha256": "dcdafb80a88999a5e1c401883d8b0a6c520a2e50059b1364769336e500c74291",
+      "query_marginal_preserved": false,
+      "source_bijection": true
+    },
+    "validation": {
+      "source_count": 140,
+      "queries": 560,
+      "mapping_sha256": "82b6a398c80dbdc8fc0519262e82863454b033afb0b624789d9b4dbda38e4efd",
+      "input_sha256": "9587abbc775e03698f48bd10d45ac8fd8703018689999d3ed8925f7d2bf0527f",
+      "query_marginal_preserved": true,
+      "source_bijection": true
+    }
+  }
+}

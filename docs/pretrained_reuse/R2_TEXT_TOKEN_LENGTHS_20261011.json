@@ -1,0 +1,6 @@
+{
+  "count": 2540,
+  "over_256": 1005,
+  "maximum_tokens": 868,
+  "scope": "tokenized actual formatted validation context before max_length=256; no inference"
+}

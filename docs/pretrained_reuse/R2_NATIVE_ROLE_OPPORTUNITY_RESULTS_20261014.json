@@ -1,0 +1,504 @@
+{
+  "status": "PASS_TRAIN_ROLE_SUPERVISION_GEOMETRY_CENSUS_NOT_DECISION_QUALITY",
+  "artifacts": [
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-role-opportunity-eight-01.json",
+      "sha256": "823e0557d798cf5f0d6118a1eb127877f4811591410bc58d8bc83c77935bd052",
+      "report": {
+        "status": "PASS_TRAIN_NATIVE_ROLE_BBOX_OPPORTUNITY_CENSUS_NOT_DECISION_QUALITY",
+        "source_commit": "fbbd0dbbeee83b2beaa41df30b3d77ed0a197927",
+        "script_sha256": "08a75cf2a9071efc136e19318cca4611a48935f03fc217e9fd9114ba23ece536",
+        "source_track_instances": 32,
+        "unique_training_media_assets": 8,
+        "observation_times": 256,
+        "retained_nms_proposals": 18441,
+        "role_counts": {
+          "hidden": {
+            "source_cases": 256,
+            "available": 243,
+            "missing": 13,
+            "raw_hits_iou_ge_half": 44,
+            "nms_hits_iou_ge_half": 41,
+            "exact_source_cases": 15,
+            "interpolated_source_cases": 228
+          },
+          "group": {
+            "source_cases": 768,
+            "available": 768,
+            "missing": 0,
+            "raw_hits_iou_ge_half": 608,
+            "nms_hits_iou_ge_half": 589,
+            "exact_source_cases": 54,
+            "interpolated_source_cases": 714
+          },
+          "cover": {
+            "source_cases": 256,
+            "available": 256,
+            "missing": 0,
+            "raw_hits_iou_ge_half": 201,
+            "nms_hits_iou_ge_half": 193,
+            "exact_source_cases": 18,
+            "interpolated_source_cases": 238
+          }
+        },
+        "hidden_and_cover_source_available_times": 243,
+        "hidden_and_cover_nms_supported_times": 30,
+        "clips": [
+          {
+            "video_id": "video_10103",
+            "source_roles": {
+              "hidden": [
+                6
+              ],
+              "cover": [
+                4
+              ],
+              "group": [
+                4,
+                5
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 28,
+                "nms_hits_iou_ge_half": 25,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              },
+              "group": {
+                "source_cases": 64,
+                "available": 64,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 55,
+                "nms_hits_iou_ge_half": 51,
+                "exact_source_cases": 4,
+                "interpolated_source_cases": 60
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 26,
+                "nms_hits_iou_ge_half": 23,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              }
+            },
+            "hidden_and_cover_source_available_times": 32,
+            "hidden_and_cover_nms_supported_times": 20
+          },
+          {
+            "video_id": "video_10186",
+            "source_roles": {
+              "hidden": [
+                6
+              ],
+              "cover": [
+                4
+              ],
+              "group": [
+                3,
+                4,
+                5
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 2,
+                "nms_hits_iou_ge_half": 2,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              },
+              "group": {
+                "source_cases": 96,
+                "available": 96,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 68,
+                "nms_hits_iou_ge_half": 61,
+                "exact_source_cases": 7,
+                "interpolated_source_cases": 89
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 24,
+                "nms_hits_iou_ge_half": 20,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              }
+            },
+            "hidden_and_cover_source_available_times": 32,
+            "hidden_and_cover_nms_supported_times": 1
+          },
+          {
+            "video_id": "video_10212",
+            "source_roles": {
+              "hidden": [
+                5
+              ],
+              "cover": [
+                2
+              ],
+              "group": [
+                1,
+                2,
+                3
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 1,
+                "nms_hits_iou_ge_half": 1,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              },
+              "group": {
+                "source_cases": 96,
+                "available": 96,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 65,
+                "nms_hits_iou_ge_half": 63,
+                "exact_source_cases": 6,
+                "interpolated_source_cases": 90
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 23,
+                "nms_hits_iou_ge_half": 23,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              }
+            },
+            "hidden_and_cover_source_available_times": 32,
+            "hidden_and_cover_nms_supported_times": 1
+          },
+          {
+            "video_id": "video_10387",
+            "source_roles": {
+              "hidden": [
+                2
+              ],
+              "cover": [
+                10
+              ],
+              "group": [
+                9,
+                10,
+                11,
+                12
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 4,
+                "nms_hits_iou_ge_half": 4,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              },
+              "group": {
+                "source_cases": 128,
+                "available": 128,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 90,
+                "nms_hits_iou_ge_half": 89,
+                "exact_source_cases": 7,
+                "interpolated_source_cases": 121
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 19,
+                "nms_hits_iou_ge_half": 19,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              }
+            },
+            "hidden_and_cover_source_available_times": 32,
+            "hidden_and_cover_nms_supported_times": 2
+          },
+          {
+            "video_id": "video_1087",
+            "source_roles": {
+              "hidden": [
+                7
+              ],
+              "cover": [
+                2
+              ],
+              "group": [
+                2,
+                3,
+                4
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 3,
+                "nms_hits_iou_ge_half": 3,
+                "exact_source_cases": 1,
+                "interpolated_source_cases": 31
+              },
+              "group": {
+                "source_cases": 96,
+                "available": 96,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 91,
+                "nms_hits_iou_ge_half": 90,
+                "exact_source_cases": 3,
+                "interpolated_source_cases": 93
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 32,
+                "nms_hits_iou_ge_half": 32,
+                "exact_source_cases": 1,
+                "interpolated_source_cases": 31
+              }
+            },
+            "hidden_and_cover_source_available_times": 32,
+            "hidden_and_cover_nms_supported_times": 3
+          },
+          {
+            "video_id": "video_10886",
+            "source_roles": {
+              "hidden": [
+                3
+              ],
+              "cover": [
+                0
+              ],
+              "group": [
+                0,
+                1,
+                2
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 2,
+                "nms_hits_iou_ge_half": 2,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              },
+              "group": {
+                "source_cases": 96,
+                "available": 96,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 71,
+                "nms_hits_iou_ge_half": 70,
+                "exact_source_cases": 6,
+                "interpolated_source_cases": 90
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 20,
+                "nms_hits_iou_ge_half": 20,
+                "exact_source_cases": 2,
+                "interpolated_source_cases": 30
+              }
+            },
+            "hidden_and_cover_source_available_times": 32,
+            "hidden_and_cover_nms_supported_times": 1
+          },
+          {
+            "video_id": "video_10894",
+            "source_roles": {
+              "hidden": [
+                4
+              ],
+              "cover": [
+                1
+              ],
+              "group": [
+                7,
+                1,
+                2
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 3,
+                "nms_hits_iou_ge_half": 3,
+                "exact_source_cases": 3,
+                "interpolated_source_cases": 29
+              },
+              "group": {
+                "source_cases": 96,
+                "available": 96,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 87,
+                "nms_hits_iou_ge_half": 85,
+                "exact_source_cases": 9,
+                "interpolated_source_cases": 87
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 30,
+                "nms_hits_iou_ge_half": 29,
+                "exact_source_cases": 3,
+                "interpolated_source_cases": 29
+              }
+            },
+            "hidden_and_cover_source_available_times": 32,
+            "hidden_and_cover_nms_supported_times": 2
+          },
+          {
+            "video_id": "video_10903",
+            "source_roles": {
+              "hidden": [
+                7
+              ],
+              "cover": [
+                3
+              ],
+              "group": [
+                1,
+                2,
+                3
+              ]
+            },
+            "counts": {
+              "hidden": {
+                "source_cases": 32,
+                "available": 19,
+                "missing": 13,
+                "raw_hits_iou_ge_half": 1,
+                "nms_hits_iou_ge_half": 1,
+                "exact_source_cases": 1,
+                "interpolated_source_cases": 18
+              },
+              "group": {
+                "source_cases": 96,
+                "available": 96,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 81,
+                "nms_hits_iou_ge_half": 80,
+                "exact_source_cases": 12,
+                "interpolated_source_cases": 84
+              },
+              "cover": {
+                "source_cases": 32,
+                "available": 32,
+                "missing": 0,
+                "raw_hits_iou_ge_half": 27,
+                "nms_hits_iou_ge_half": 27,
+                "exact_source_cases": 4,
+                "interpolated_source_cases": 28
+              }
+            },
+            "hidden_and_cover_source_available_times": 19,
+            "hidden_and_cover_nms_supported_times": 0
+          }
+        ],
+        "threshold": 0.5,
+        "annotations_loaded_after_complete_input_admission": true,
+        "training": false,
+        "gpu_or_model_loaded": false,
+        "validation_opened": false,
+        "sealed_audit_opened": false,
+        "quality_evaluated": false,
+        "source_visibility_verified": false,
+        "source_annotation_start_is_object_birth": false,
+        "numpy_rng_unchanged": true,
+        "cloud_cost": 0,
+        "seconds": 6.7668947000056505
+      }
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-role-opportunity-independent-audit-01.json",
+      "sha256": "226013a7234bd5171a19c4574ec286de27709e32b14944bfa492441de9788ab2",
+      "report": {
+        "status": "PASS_INDEPENDENT_TRAIN_ROLE_GEOMETRY_RECOUNT_NOT_QUALITY",
+        "input_sha256": "823e0557d798cf5f0d6118a1eb127877f4811591410bc58d8bc83c77935bd052",
+        "script_sha256": "3ed42bb0edfdd0ff76dff7b1f30de1f038e6149525f4dc094a27ea10befae942",
+        "source_cases_checked": 1024,
+        "media_assets": 8,
+        "unique_source_tracks": 32,
+        "all_iou_and_matching_counts_recomputed": true,
+        "scalar_iou_max_abs_error": 0.0,
+        "iou_verification_absolute_tolerance": 1e-12,
+        "decision_threshold_unchanged": 0.5,
+        "hidden_source_masked_bracket_strata": {
+          "[0, 0]": {
+            "available": 213,
+            "raw_hits": 29,
+            "nms_hits": 27
+          },
+          "[0, 1]": {
+            "available": 13,
+            "raw_hits": 7,
+            "nms_hits": 7
+          },
+          "[1, 1]": {
+            "available": 6,
+            "raw_hits": 4,
+            "nms_hits": 4
+          },
+          "[1, 0]": {
+            "available": 11,
+            "raw_hits": 4,
+            "nms_hits": 3
+          }
+        },
+        "visibility_interpretation_verified": false,
+        "source_box_interpolation_independently_recomputed": false,
+        "source_zip_hash_checked_without_opening": true,
+        "training": false,
+        "gpu_or_model_loaded": false,
+        "validation_opened": false,
+        "sealed_audit_opened": false,
+        "quality_evaluated": false,
+        "seconds": 2.894522999995388
+      }
+    }
+  ],
+  "local_verification": {
+    "ruff": "PASS",
+    "cpu_tests_passed": 1321,
+    "cpu_tests_skipped": 1,
+    "cpu_test_seconds": 17.3,
+    "model_dataset_manifests": "PASS",
+    "four_catalogs": "PASS",
+    "dataset_policy": "ALLOW"
+  },
+  "limitations": [
+    "All8 clips already known training diagnostics, not blind validation.",
+    "Source boxes are range-limited sparse proxies; masked flags are not verified visibility.",
+    "Geometric best-mask indices must never become runtime seeds or inputs.",
+    "Cover is a group subset, not an extra source-track instance.",
+    "41hidden and30co-support opportunities are correlated;25hidden/20co-support belong to oneclip.",
+    "No source-box interpolation independent recomputation in scalar audit.",
+    "Not relationship prediction, Accuracy, detector ceiling, capacity proof or product adoption."
+  ]
+}

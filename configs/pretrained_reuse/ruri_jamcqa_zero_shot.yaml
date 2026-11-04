@@ -1,0 +1,35 @@
+schema_version: 1
+experiment_id: path-a-ruri-jamcqa-v2-dev-zero-shot-v0
+seed: 17
+dataset:
+  manifest: manifests/candidates/jamcqa-v2-dev.yaml
+  revision: cfb4b64d289acaf592237179f90dd23d3f2d5bdf
+  local_jsonl: C:/CodexArtifacts/pretrained-reuse-r2/jamcqa-v2-dev-sample-v0/dev.jsonl
+  provenance_file: C:/CodexArtifacts/pretrained-reuse-r2/jamcqa-v2-dev-sample-v0/fetch-report.json
+  expected_rows: 52
+  split: dev
+encoder:
+  repo_id: cl-nagoya/ruri-v3-30m
+  revision: 24899e5de370b56d179604a007c0d727bf144504
+  local_path: C:/CodexArtifacts/pretrained-reuse-r1/ruri-v3-30m
+  checkpoint_sha256: e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832
+  pooling: masked_mean
+  max_length: 512
+  batch_size: 32
+  query_prefix: "検索クエリ: "
+  candidate_prefix: "検索文書: "
+  frozen: true
+scoring:
+  method: cosine_similarity
+  softmax_temperature: 1.0
+  option_order_check: reverse_and_align
+  checkpoint_selection: none
+  training: none
+device: cuda
+sealed_audit_loaded: false
+test_split_loaded: false
+notes:
+  - This is a zero-shot retrieval-style cosine baseline, not a trained Decision head.
+  - The public dev split is used once as a development diagnostic; the test split is never loaded.
+  - No temperature fitting or hyperparameter selection is performed on these examples.
+  - Duplicate option strings are retained and counted; no questions are dropped.

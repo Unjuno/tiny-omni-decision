@@ -1,0 +1,99 @@
+# STARSS23 development comparison preregistration
+
+The fixed configuration is `configs/pretrained_reuse/path_a_starss23_events.yaml`.
+It is registered before any validation readout scores. No readout has been fit
+yet. All 78 recordings, all complete five-second intervals, all twelve event
+queries and the frozen room splits are retained. Previously exposed smoke
+rooms remain training-only. This is a narrow event-presence development task,
+not general natural-language AV reasoning or a blind audit.
+
+## Matched training conditions
+
+Train audio-only, video-only and audio+video readouts with the existing shared
+candidate MLP. Each receives 384 audio dimensions, 768 video dimensions, twelve
+one-hot task/event IDs and two one-hot option IDs. Use the same 1166-dimensional
+input and 64-unit hidden layer for all three conditions; zero the absent
+modality after train-only standardization. This keeps head parameter counts
+equal. Event IDs represent this fixed query vocabulary, not a new pretrained
+language encoder. Both media encoders remain frozen.
+
+For each condition use seed17, AdamW at 0.001 with weight decay0.001, 24 epochs,
+128 queries per batch and a seeded permutation of all train queries each epoch.
+No class balancing/resampling or new random seeds. Select the earliest epoch
+with minimum uncalibrated validation macro-event NLL. Save all epoch summaries,
+best weights and final weights separately. Validation supports selection and
+therefore its final numbers are development estimates.
+
+After selecting each checkpoint, fit one scalar temperature using only the
+calibration room: seventeen geometric candidates from0.25 to4. Select minimum
+calibration macro-event NLL with deterministic first-in-grid tie handling.
+Validation never fits temperature or normalization. Report calibrated and raw
+metrics and unsupported classes. The calibration room and two validation rooms
+are far too few to establish product generalization.
+
+## Controls and reporting
+
+Compare the same windows against a Laplace-smoothed train-event prior. For the
+fixed joint model also report zero-audio, zero-video and mismatched-video
+inference, without retraining. The mismatched-video permutation preserves the
+exact video-feature marginal and sends every window to a different recording;
+it does not silently substitute a same-recording window. If a single recording
+contains more than half a split's windows, such a bijection is impossible and
+the control fails explicitly. No labels are used in this mapping.
+
+Report each event's Accuracy, balanced Accuracy, NLL, two-option Brier, ECE15,
+positive/negative counts, and sensitivity/specificity. A missing class side
+means balanced Accuracy is null, not zero or one. Bell remains in all reports
+despite no positive training annotations. Always show the prior and class
+prevalence; pooled Accuracy alone is misleading. Return probability vectors
+in `[no, yes]` order, choosing no at a0.5 tie, and test reversed options after
+restoring their original order.
+
+Use10,000 paired bootstrap replicates by room, seed17, percentile95% intervals.
+Explicitly label the two-room validation intervals severely low-power; many
+windows do not supply independent environments. Retain all individual window
+predictions for paired comparisons. No product promotion or sealed evaluation
+is authorized by this development result.
+
+`scripts/starss23_readout_common.py` implements the metric conventions and
+label-independent cross-recording permutation. CPU tests cover marginal
+preservation, deterministic mapping, impossible controls, absent-class
+handling, Brier normalization and invalid probabilities. These helpers passing
+tests is not evidence that the planned training/evaluation has run.
+
+## Executable runner (real-corpus execution pending)
+
+`scripts/train_starss23_readouts.py` implements this fixed policy. It rejects
+changed canonical config content, mismatched split-summary/manifest hashes,
+wrong encoder revisions, incomplete features and changed feature order/media
+identities. It saves normalization, effective config, input hashes, validation
+IDs, per-epoch history, separate best/final weights, raw/calibrated predictions,
+control predictions and paired room-bootstrap intervals. No resume or automatic
+hyperparameter retry is implemented.
+
+CPU tests use a small synthetic fixture to check train-only normalization,
+candidate identity, calibration search, identical-prediction bootstrap zero
+differences, and two epochs with best/final save and reload. This fixture is
+not a STARSS23 score. The full media acquisition and feature extraction must
+finish before running the following with real artifact paths:
+
+```powershell
+python -m scripts.train_starss23_readouts --manifest-dir <complete-window-manifest> --audio-features <complete-audio-features> --video-features <complete-video-features> --config configs/pretrained_reuse/path_a_starss23_events.yaml --output-dir <new-readout-output>
+```
+
+No STARSS23 model fitting, validation-score inspection, or product promotion
+has occurred at this implementation checkpoint.
+
+## Artifact byte-preservation correction
+
+A later pre-execution audit found Git text normalization changed the archived
+JSON bytes: the local split-summary hash was the registered `209423b7...`, but
+the earlier Git blob hash was `a3fe5477...`. Likewise the local window-result
+hash was `7ed1bf59...` while its earlier Git blob hash was `bdde815b...`.
+The JSON contents were equivalent, but an exact provenance check on another
+checkout would fail. `docs/pretrained_reuse/.gitattributes` now disables text
+normalization for `R2_STARSS23*.json`, and the original local artifact bytes
+are committed unchanged. Split JSONL files retain their separate LF rule.
+Regression tests check the actual split-summary hash against preregistration
+and the original window-result hash. No recorded hash, split, model setting,
+external artifact or active acquisition process was changed to bypass a gate.

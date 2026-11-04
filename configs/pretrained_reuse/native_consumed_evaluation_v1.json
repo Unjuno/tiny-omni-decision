@@ -1,0 +1,46 @@
+{
+  "id": "native-consumed-evaluation-v1",
+  "corpus": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "queries": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01",
+  "pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01\\result.json": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\readout.pt": "77a45ce55b5b17eb787ca649d2affbd6a8c72118f8953967eab41a02c2b2646b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\result.json": "aaa1fe96a4be85a71ce146981c6b2e8b58e1308d91fc110e1ece6804b4d8048c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-lstm-fit-01\\result.json": "47dde479c91ed82cdbf260686f0184ebdf95b53981b28248e0ad1ebf2c6b10c6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-batch-independent-fit-01\\result.json": "d4b699ee44906ea8043dab95c934b6ab2e13463f1927e348e74e9be76a0dae56",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-batch-matched-fit-01\\result.json": "e589a4da6f1848909fd0ccc787330efaf292f64948abcf4bc52669cceec24be6"
+  },
+  "models": {
+    "initial": {
+      "fit": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01",
+      "checkpoint": "initial.pt",
+      "variant": "baseline",
+      "fit_steps": 2048
+    },
+    "baseline": {
+      "fit": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01",
+      "checkpoint": "final.pt",
+      "variant": "baseline",
+      "fit_steps": 2048
+    },
+    "lstm": {
+      "fit": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-lstm-fit-01",
+      "checkpoint": "final.pt",
+      "variant": "lstm",
+      "fit_steps": 2048
+    },
+    "independent": {
+      "fit": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-batch-independent-fit-01",
+      "checkpoint": "final.pt",
+      "variant": "baseline",
+      "fit_steps": 1024
+    },
+    "matched": {
+      "fit": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-batch-matched-fit-01",
+      "checkpoint": "final.pt",
+      "variant": "baseline",
+      "fit_steps": 1024
+    }
+  }
+}

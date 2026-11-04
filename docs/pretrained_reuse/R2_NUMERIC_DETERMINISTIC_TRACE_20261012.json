@@ -1,0 +1,13 @@
+{
+  "input_equal": true,
+  "initial_equal": true,
+  "trace_exact": true,
+  "steps": 16,
+  "optimizer_updates_total": 32,
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-prefix-trace-512-deterministic-01\\config.json": "3a64dcebbe353665f895e1066f298e5afb73260c798a1a9e135c5f05befbcd6f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-prefix-trace-512-deterministic-01\\trace.json": "4b0f9f35de40ed139e441daf9e2c0612587025e1538a7a4d703303e9c24f15e5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-prefix-trace-2048-deterministic-01\\config.json": "064069ed1f5d2da20c6867b93221dfd989976f94495c7d2786a53f64724225e9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-prefix-trace-2048-deterministic-01\\trace.json": "4b0f9f35de40ed139e441daf9e2c0612587025e1538a7a4d703303e9c24f15e5"
+  }
+}

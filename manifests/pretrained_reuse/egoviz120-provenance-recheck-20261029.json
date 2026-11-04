@@ -1,0 +1,63 @@
+{
+  "format": "publisher_license_and_label_provenance_recheck_v1",
+  "dataset_id": "EgoViz-120",
+  "status": "REVIEW_NOT_ADMITTED_FOR_QUALITY_FIT",
+  "recorded_at": "2026-10-29T05:07:10+09:00",
+  "sources": {
+    "dataset_card": {
+      "url": "https://huggingface.co/datasets/humaidtech/EgoViz-120",
+      "revision": "7a84ecd3411b9f219b02f273c438f1ea12d74f52",
+      "file": "README.md",
+      "sha256": "505ce8b885dd535c8a0527a08ccf9d24f0b7ee315e019fadd2cba6b1ee6ecba1",
+      "label_statement": "model-generated and not human-verified"
+    },
+    "license": {
+      "url": "https://github.com/humaidtech/EgoViz-120/blob/main/LICENSE",
+      "repository_commit": "9c91b23a66fcaa1fee083b679d5993fdfff9a64e",
+      "file_blob": "0a0e759c0faad246f2964e86841d705ade7249b7",
+      "response_sha256": "fc3180a6abaafc3d5ce5ee715ac96c6393d6b73c64aadcbfba3f21bae5ca33de",
+      "license_claim": "CC-BY-4.0; commercial sharing/adaptation allowed with appropriate credit"
+    },
+    "company_homepage": {
+      "url": "https://humaid.co/",
+      "retrieved_at": "2026-10-29T05:03:35+09:00",
+      "response_sha256": "fa085ae6c3c0e5a451a7ae9e6425d456fae9db74438a0d57793acb2555c7ff64",
+      "general_claim": "human review at every gate and random-clip re-audits",
+      "dataset_specific": false
+    }
+  },
+  "resolution": {
+    "publisher_license_text_check": "PASS_CC_BY_4.0_WITH_ATTRIBUTION",
+    "label_quality": "UNKNOWN_CONFLICTING_PUBLISHER_DESCRIPTIONS",
+    "participant_independence": "UNKNOWN_ACROSS_180_SESSION_GROUPS",
+    "both_video_and_imu_necessity": "NOT_ESTABLISHED",
+    "training_admission": "NOT_ADMITTED",
+    "sealed_audit_loaded": false,
+    "media_payload_downloaded": false,
+    "model_fit_or_evaluation": false
+  },
+  "local_metadata_integrity_recheck": {
+    "checked_at": "2026-10-29T05:07:10+09:00",
+    "index_bytes": 870961,
+    "index_sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "metadata_audit_sha256": "71a1af8e0e916a47f005d2f189774d6f6bfdd652eb78b33d06d44d109b9a5e66",
+    "split_report_sha256": "d2e2869dcce0a7d96cddc7dee639794a7cf253c3f922637ab9c9699cb5e6d7d2",
+    "rows": 5392,
+    "unique_chunk_ids": 5392,
+    "session_groups": 180,
+    "categories": 12,
+    "train_groups": 144,
+    "development_groups": 36,
+    "group_and_sequence_cross_split_overlap": 0,
+    "stored_group_hashes_reproduced": true,
+    "per_category_row_and_group_counts_reproduced": true,
+    "media_payload_read": false
+  },
+  "resource_gate": {
+    "free_space_gib_at_recheck": 0.496,
+    "required_experiment_reserve_gib": 2.0,
+    "sole_volume": "C:",
+    "smallest_mcap_bytes": 150184348,
+    "action": "NO_MEDIA_DOWNLOAD_UNTIL_STORAGE_RESERVE_IS_RESTORED"
+  }
+}

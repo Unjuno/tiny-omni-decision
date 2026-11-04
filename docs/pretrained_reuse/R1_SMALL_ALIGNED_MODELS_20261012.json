@@ -1,0 +1,132 @@
+{
+  "audit": {
+    "status": "PASS_LOAD_SMOKE_ONLY",
+    "parameters": 83101185,
+    "parameters_by_top_level": {
+      "logit_scale": 1,
+      "text_model": 44251648,
+      "vision_model": 38325248,
+      "visual_projection": 262144,
+      "text_projection": 262144
+    },
+    "input_sha256": {
+      "config.json": "de47e9e12875c7abb6e0ddd13b5b0f54851b96cefa5c2ed3aab881e3efd1647b",
+      "model.safetensors": "112bdfb07ebc8994e9afba7a2a314e278493a675033595cf48e54cf8a17ae587",
+      "preprocessor_config.json": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd",
+      "README.md": "6565f08e0bd79353937fd1b7c89b69d0383a5e8e511c260a7a091a2f95c359a9",
+      "tokenizer.json": "b556ac8c99757ffb677208af34bc8c6721572114111a6e0aaf5fa69ff0b8d842"
+    },
+    "parameter_bytes": 332404740,
+    "image_shape": [
+      2,
+      512
+    ],
+    "text_shape": [
+      2,
+      512
+    ],
+    "logits": [
+      [
+        12.735505104064941,
+        9.145608901977539
+      ],
+      [
+        10.394001960754395,
+        14.55698299407959
+      ]
+    ],
+    "seconds": 0.7055187000660226,
+    "device": "cpu",
+    "threads": 2,
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "python": "3.11.9",
+    "source_sha256": "7a76a842304c95f63f57acd7c81590eb4b2b9278a7f0d3567609a13a01a48e0a",
+    "limitation": "Solid-color load smoke only, not task quality or temporal reasoning."
+  },
+  "download": {
+    "repo": "wkcn/TinyCLIP-ViT-39M-16-Text-19M-YFCC15M",
+    "revision": "07a4b0bc751cb64fecd2b661c048c1dd98d69444",
+    "files": {
+      "README.md": {
+        "bytes": 5965,
+        "sha256": "6565f08e0bd79353937fd1b7c89b69d0383a5e8e511c260a7a091a2f95c359a9"
+      },
+      "config.json": {
+        "bytes": 4602,
+        "sha256": "de47e9e12875c7abb6e0ddd13b5b0f54851b96cefa5c2ed3aab881e3efd1647b"
+      },
+      "preprocessor_config.json": {
+        "bytes": 316,
+        "sha256": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd"
+      },
+      "tokenizer.json": {
+        "bytes": 2224041,
+        "sha256": "b556ac8c99757ffb677208af34bc8c6721572114111a6e0aaf5fa69ff0b8d842"
+      },
+      "model.safetensors": {
+        "bytes": 332443148,
+        "sha256": "112bdfb07ebc8994e9afba7a2a314e278493a675033595cf48e54cf8a17ae587"
+      }
+    }
+  },
+  "metadata_inventory": {
+    "mobileclip": {
+      "repo": "apple/MobileCLIP-S0",
+      "revision": "71aa3e13dda93115871afbd017336535ba29886c",
+      "files": [
+        ".gitattributes",
+        "LICENSE",
+        "README.md",
+        "config.json",
+        "fig_accuracy_latency.png",
+        "mobileclip_s0.pt"
+      ]
+    },
+    "tinyclip": {
+      "repo": "wkcn/TinyCLIP-ViT-39M-16-Text-19M-YFCC15M",
+      "revision": "07a4b0bc751cb64fecd2b661c048c1dd98d69444",
+      "files": [
+        ".gitattributes",
+        "README.md",
+        "config.json",
+        "figure/TinyCLIP.jpg",
+        "figure/fig1.jpg",
+        "model.safetensors",
+        "preprocessor_config.json",
+        "pytorch_model.bin",
+        "tokenizer.json"
+      ]
+    },
+    "mobileclip-code": {
+      "repo": "apple-aiml-research/ml-mobileclip",
+      "revision": "48faa0fea4b08d74188b3841771aca6ff2c92852"
+    },
+    "mobileviclip": {
+      "repo": "MCG-NJU/MobileViCLIP",
+      "revision": "3706de2e69d30be05c08f8fb8a4ba0619f76ea43"
+    },
+    "tinyclip-code": {
+      "repo": "microsoft/Cream",
+      "revision": "4a13c4091e78f9abd2160e7e01c02e48c1cf8fb9"
+    }
+  },
+  "metadata_sha256": {
+    "inventory.json": "9a8a163ac18ed7a1afb496250c28cd33cb2e3e9f89b6fe00c5e65e1ea758f247",
+    "mobileclip-code-LICENSE": "e7b09f708a137b12d14656d05dce036353b426f53eebd215106738a00a0a9357",
+    "mobileclip-code-LICENSE_MODELS": "30c59d255d2b4075ba11b81ce5aa0109c28d28138d66d52f7f5d8cbba814df8b",
+    "mobileclip-code-README.md": "ee6649a0fa45635dcd6a7b543dec5cc3ac64e017186e70199348f0f4a8cef62e",
+    "mobileclip-config.json": "b34a4607bb2bac1f096c05fe2f77b205a9c80a5c528690c9bbfcb6a3b7864d94",
+    "mobileclip-hub.json": "d7d1e70aed4fd91116f814e4e8592826ba12584f1f8170fd7bec2768f35cb851",
+    "mobileclip-README.md": "ad49da3e4e2b8ff8d48c1747f8f7384e0bc8fe94a6889e4747c23f24d789e940",
+    "mobileviclip-LICENSE": "546128d41e32ca81b2f7a3035716a6254bbb82fcad1ab416cd816e91305d7963",
+    "mobileviclip-README.md": "e2b5160c33b0adf4b07391ea639e7d1c13a74e46f5c6430a89c7d4d8a5dcc4b0",
+    "tinyclip-code-LICENSE": "4ecaa5a5bc48d91c899216ba3ab8d9fccbb543e106b75f5792e455631d599ae5",
+    "tinyclip-code-README.md": "9e25ddd88108a5d6ed6ed641d6f1e6a9ad5075f97fb3442ce6a1a3594faa9ff2",
+    "tinyclip-config.json": "de47e9e12875c7abb6e0ddd13b5b0f54851b96cefa5c2ed3aab881e3efd1647b",
+    "tinyclip-hub.json": "8b1ba0320a4d19403d5ba51b7f8abca17c62cc9a41ca5678daf0d434b4660319",
+    "tinyclip-README.md": "6565f08e0bd79353937fd1b7c89b69d0383a5e8e511c260a7a091a2f95c359a9"
+  },
+  "candidate_plus_whisper_tiny_plus_decision_text_parameters": 143575426,
+  "scope": "No fusion, task quality, calibrated option likelihood or video order claim."
+}

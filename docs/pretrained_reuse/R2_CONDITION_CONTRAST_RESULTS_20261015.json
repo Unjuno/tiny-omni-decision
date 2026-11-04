@@ -1,0 +1,5195 @@
+{
+  "status": "PASS_MATCHED_CONDITIONAL_CONTRAST_EXECUTION",
+  "product_complete": false,
+  "selected_for_product": false,
+  "sealed_audit_loaded": false,
+  "source_commit": "f159d2d7141e056b16b6e617074d31a807649a29",
+  "publication_code_pins": {
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\publish_condition_contrast.py": "254220fa9b6f7bbc53d57cf35b48b1febcf6473570fa4722b55cf7a3adb2692b",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\tests\\test_condition_contrast_publication.py": "5c579e0d5dec06fbccf9791226038c322e2e6a6d0629bcb3f2e82e7bf7d51b38"
+  },
+  "config": {
+    "experiment_id": "conditional-contrast-v1-seed17",
+    "root": "C:/CodexArtifacts/pretrained-reuse-r2",
+    "base_directory": "C:/CodexArtifacts/pretrained-reuse-r1/crossencoder-minilm-l6-audit-01",
+    "base_audit_sha256": "b3ff45ab20ffae8c19bcbe02d206bc8546e5687599aa9635c42c84f5fddf8d6a",
+    "seed": 17,
+    "steps": 512,
+    "evaluation_interval": 128,
+    "learning_rate": 2e-05,
+    "weight_decay": 0.01,
+    "gradient_clip": 1.0,
+    "binding_questions_per_update": 4,
+    "replay_questions_per_update": 4,
+    "trainable_policy": "all_encoder_blocks_and_classifier",
+    "trainable_parameters": 10647169,
+    "total_parameters": 22713601,
+    "dropout": false,
+    "scheduler": "constant",
+    "max_seconds": 1800,
+    "max_vram_bytes": 8589934592,
+    "max_host_bytes": 5368709120,
+    "min_free_disk_bytes": 2147483648,
+    "max_output_bytes": 536870912,
+    "source_pins": {
+      "clevr4-full-coverage-seed17/train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
+      "semantic-state-bridge-01/states.json": "e7e7bc2c90ac815279df0f7b772cffa9330d3db5d61ca0a32bc65f66f2d6ea5e",
+      "semantic-state-bridge-01/targets.npy": "fc4756dfb5325c799b1394e74ffd9742fa6e9e6ee5f2d2cb389498e758e7b04f",
+      "text/train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+      "text/validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+      "conditional-curriculum-01/validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+      "text-coverage-training-01/config.json": "199c7fa6e40d7145b9f3c5a5ee9475cd2f86e0ffc27296f3f1464d77a93e32f7",
+      "text-coverage-training-01/best-delta.pt": "b063f124e59c8a4c1b09c7bf2a8423846f73489d7ce8cd6649735745bc6cebf5"
+    },
+    "retention_kl_coefficient": 1.0,
+    "retention_temperature": 1.0,
+    "control_result_sha256": "d58df7c1e6bb4cda0f63b8e92554699f40e53baef65d53037fad583434684cb4",
+    "language_policy": "eight_families_same_states_v1",
+    "fit_result_sha256": "040c4e838af84f2a19ea57ffde894189891383adb0df396199e6e7c62aade82c",
+    "old_corpus_sha256": "957e2ce3ade65c5d2caa26a1cbb0e95a3adeee5cf5b312110f8c2a7e3cfed971",
+    "previous_transfer_corpus_sha256": "b784233ee4dac03aaaf1be67aae97ed07b0dadc55e45f76a2fa2fbe5fc6634e4",
+    "question_batch_size": 4,
+    "max_tokens": 512,
+    "replay_policy": "two_original_two_curriculum_per_update_v1",
+    "language_corpus_sha256": "142c4e540b67b65aea3c4803916e98cb3019009bd3ef6fefdeec6d9b403e971f",
+    "language_fit_sha256": "b954742214821de1923f4cb7179cf7ae4325e4cf7f25456fbe5bc6f009de3174",
+    "curriculum_train_sha256": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+    "arms": {
+      "ce": 0.0,
+      "contrast": 0.25
+    },
+    "partition_counts": [
+      512,
+      128,
+      256
+    ],
+    "legacy_binding_accuracy_floor": 0.99,
+    "replay_corpus_sha256": "dd737881dcc24808295c245e1c5aca06fe5ac002ec48dc24bf26dd3ef50499ac",
+    "replay_fit_sha256": "4f3e3cde7d8449ca9e70f727360532e8b3d706fca943f22e07e843586cec518c",
+    "language_states_sha256": "130ed5aaa13cc5410f0743817ef502e8b25a7f5ee24bd244b9dac2f066346ec5"
+  },
+  "corpus_sha256": "78b803f6e557d73b1c2dcff7ce60a46ca2ca62d9034941a6b4d60754a5685ff9",
+  "corpus_summary": {
+    "excluded_unique_states": 6684,
+    "partitions": {
+      "train": 512,
+      "validation": 128,
+      "transfer": 256
+    },
+    "rows": {
+      "train": 2048,
+      "validation": 1024,
+      "known": 1024,
+      "focus": 1024,
+      "complement": 1024,
+      "focus_descriptions": 1024,
+      "complement_descriptions": 1024,
+      "reverse_focus_descriptions": 1024,
+      "no_question": 1024
+    },
+    "train_families": {
+      "0": 256,
+      "1": 256,
+      "2": 256,
+      "3": 256,
+      "4": 256,
+      "5": 256,
+      "6": 256,
+      "7": 256
+    },
+    "native_media_assets": 0,
+    "state_overlap": 0
+  },
+  "corpus_artifacts": {
+    "accounting.json": "c2fde5591129a939d902a1337729bf4fdbff5a816b9fedbe24caf2d3ea5a2af8",
+    "complement.jsonl": "09fb616922c8a24d2f89b3d1853eafffb2059e9a8e050b5ab672800d90a9c4b6",
+    "complement_descriptions.jsonl": "c6c3542b220d18b4d1f77cbc06a434aa464017a8cbe2ab6c7a86ee29e883aa2c",
+    "focus.jsonl": "48ab099ad113122bd141100e9c67ffa6f83e4d51090d0a63732894f55d88d49a",
+    "focus_descriptions.jsonl": "aeebc813e7c8ea04f4be3c6410c34174b96d0720a85841aa016ddcd56eef32de",
+    "known.jsonl": "c8050cba56c035a95166b49978f623daf5d0c852888c5915e5e8a6392d5a8ff7",
+    "no_question.jsonl": "e5f0ecae1caaf584592d97d7d38f5edad1bb3f4d797f032f5b950b2abdb33bc6",
+    "replay.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+    "reverse_focus_descriptions.jsonl": "21a7811a6ca6adabdd021e2893f697c9676100e7fa36a5474532c43c06028aea",
+    "sample-order.json": "bf6b497fb66b990bbe7955eecc8fa6398374363a8fe2ba1185ac75ab69e3fdd9",
+    "state-partitions.json": "89823041cafc3e678c3f0d6c1e92b05da0c437ad5da2873ce5ee627d9dd8dd48",
+    "train.jsonl": "7f57e5ae3ea67487518b2121d0120d37dc62f8816d6c01990c2b3f2909fd7ea3",
+    "validation.jsonl": "d5287c01ad98a4ed857d038bdad7f810cc1ee86399027221c37fcc1c269af42e"
+  },
+  "curves": {
+    "ce": [
+      {
+        "step": 0,
+        "eligible": true,
+        "old_tasks_retained": true,
+        "legacy_binding_retained": false,
+        "binding_nll": 1.8408579770919602,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.3232421875,
+              "nll": 1.8408579770919602,
+              "brier": 0.8479901935735017,
+              "ece": 0.2628004271876605,
+              "mean_confidence": 0.5762945367277751
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.44140625,
+                "nll": 1.3842844568867883,
+                "brier": 0.6714298742620868,
+                "ece": 0.21570477509441072,
+                "mean_confidence": 0.618522726298689
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.625,
+                "nll": 1.0531555378761346,
+                "brier": 0.49558591754333103,
+                "ece": 0.0768451570899456,
+                "mean_confidence": 0.6122861301141119
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 0.109375,
+                "nll": 2.4612231735590857,
+                "brier": 1.1121841702062127,
+                "ece": 0.4398123675811448,
+                "mean_confidence": 0.5330755217280879
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.1171875,
+                "nll": 2.464768740045833,
+                "brier": 1.112760812282376,
+                "ece": 0.4297668687158797,
+                "mean_confidence": 0.5412937687702115
+              }
+            },
+            "all_four_correct": 0.0,
+            "pair_both_correct": 0.059895833333333336
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.3173828125,
+              "nll": 2.1890419932967067,
+              "brier": 0.9442297885632946,
+              "ece": 0.328489777579979,
+              "mean_confidence": 0.6458725900799791
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.5546875,
+                "nll": 1.0739661097014999,
+                "brier": 0.5833295605094906,
+                "ece": 0.12976626283894097,
+                "mean_confidence": 0.6565625469815897
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.578125,
+                "nll": 1.3037215879918342,
+                "brier": 0.5891726850604582,
+                "ece": 0.07053794723677208,
+                "mean_confidence": 0.6421297637837287
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 0.0234375,
+                "nll": 3.771644346006395,
+                "brier": 1.4253638151754182,
+                "ece": 0.6582722057816945,
+                "mean_confidence": 0.6817097057816945
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.11328125,
+                "nll": 2.6068359294870977,
+                "brier": 1.1790530935078118,
+                "ece": 0.49020145733395826,
+                "mean_confidence": 0.6030883437729032
+              }
+            },
+            "all_four_correct": 0.0,
+            "pair_both_correct": 0.046875
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6358267716535433,
+              "nll": 0.8355908834293307,
+              "brier": 0.47060569669082597,
+              "ece": 0.018915121667054658,
+              "mean_confidence": 0.6425090227602094
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6071428571428571,
+                "nll": 0.9648638726218247,
+                "brier": 0.5076400238887623,
+                "ece": 0.01945424241752436,
+                "mean_confidence": 0.6213925642692952
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7406281661600811,
+                "nll": 0.5193553609410679,
+                "brier": 0.34972616847712024,
+                "ece": 0.022056570747650064,
+                "mean_confidence": 0.7305692649081851
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.4990825688073395,
+                "nll": 1.1692005854291132,
+                "brier": 0.6210231141796474,
+                "ece": 0.057137286955238356,
+                "mean_confidence": 0.5220868780974378
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.8408203125,
+              "nll": 0.3753695538849263,
+              "brier": 0.21432433933220013,
+              "ece": 0.016822969470067478,
+              "mean_confidence": 0.8369654507598789
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.7109375,
+                "nll": 0.7475211656845309,
+                "brier": 0.40820796724280384,
+                "ece": 0.0640630484251889,
+                "mean_confidence": 0.7109508839884667
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.5625,
+                "nll": 0.9350096273666824,
+                "brier": 0.5310657172127808,
+                "ece": 0.0974620671681559,
+                "mean_confidence": 0.5338150948453686
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.896484375,
+                "nll": 0.23532660929462765,
+                "brier": 0.14041925955254586,
+                "ece": 0.011995148898041704,
+                "mean_confidence": 0.9041333679019403
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.93359375,
+                "nll": 0.18955960042484343,
+                "brier": 0.10682199599591646,
+                "ece": 0.031118265696693764,
+                "mean_confidence": 0.9172120778187172
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 0.25390625,
+            "nll": 3.0182242741292606,
+            "brier": 1.0979773935539874,
+            "ece": 0.43815566424856145,
+            "mean_confidence": 0.675535664768516
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 0.21875,
+              "nll": 3.112274843184556,
+              "brier": 1.1952459200472973,
+              "ece": 0.5356586187523483,
+              "mean_confidence": 0.7143411642812741
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 0.734375,
+              "nll": 0.7454738610870306,
+              "brier": 0.35460631882274196,
+              "ece": 0.13311957141309652,
+              "mean_confidence": 0.6510468607891065
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 0.0,
+              "nll": 4.062480064360727,
+              "brier": 1.422448113212605,
+              "ece": 0.650650384258692,
+              "mean_confidence": 0.6506503842586921
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 0.0625,
+              "nll": 4.152668327884728,
+              "brier": 1.4196092221333052,
+              "ece": 0.675865910369408,
+              "mean_confidence": 0.6861042497449914
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.028645833333333332
+        },
+        "consumed": 0,
+        "unique_questions": 0,
+        "unique_states_by_source": {
+          "binding": 0,
+          "original": 0,
+          "curriculum": 0
+        },
+        "source_counts": {},
+        "language_family_counts": {},
+        "task_counts": {},
+        "evaluation_seconds": 61.025204899997334,
+        "elapsed_seconds": 90.61564989999897,
+        "best_step": 0
+      },
+      {
+        "step": 128,
+        "eligible": false,
+        "old_tasks_retained": true,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.06725828405032017,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.9912109375,
+              "nll": 0.06725828405032017,
+              "brier": 0.022026533864477234,
+              "ece": 0.04675142104976525,
+              "mean_confidence": 0.9444595164502347
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.036340409888910484,
+                "brier": 0.005166829909061528,
+                "ece": 0.034523671864669495,
+                "mean_confidence": 0.9654763281353305
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.9921875,
+                "nll": 0.10442697066798248,
+                "brier": 0.03720566000870984,
+                "ece": 0.07496039379820743,
+                "mean_confidence": 0.9172271062017926
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.02401117647833257,
+                "brier": 0.004137591364745907,
+                "ece": 0.022658700046382894,
+                "mean_confidence": 0.9773412999536171
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.97265625,
+                "nll": 0.10425457916605516,
+                "brier": 0.041596054175391646,
+                "ece": 0.06643699112206805,
+                "mean_confidence": 0.9177933315101984
+              }
+            },
+            "all_four_correct": 0.96484375,
+            "pair_both_correct": 0.982421875
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.7353515625,
+              "nll": 1.101011427496008,
+              "brier": 0.4130662373569256,
+              "ece": 0.13109512822627872,
+              "mean_confidence": 0.8664466907262787
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.734375,
+                "nll": 0.4859892909118011,
+                "brier": 0.3201431801226712,
+                "ece": 0.061891756996331294,
+                "mean_confidence": 0.7668776266774981
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.2109375,
+                "nll": 3.8193325651151646,
+                "brier": 1.303521857310122,
+                "ece": 0.5769765061078643,
+                "mean_confidence": 0.7879140061078642
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.08008870721577643,
+                "brier": 0.02137655786328117,
+                "ece": 0.07327175744001033,
+                "mean_confidence": 0.9267282425599896
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.99609375,
+                "nll": 0.018635146741290978,
+                "brier": 0.0072233541316282,
+                "ece": 0.01182686244023717,
+                "mean_confidence": 0.9842668875597629
+              }
+            },
+            "all_four_correct": 0.17578125,
+            "pair_both_correct": 0.509765625
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6421259842519685,
+              "nll": 0.8429777521239677,
+              "brier": 0.47082818310255575,
+              "ece": 0.03450812310777348,
+              "mean_confidence": 0.6578998421272927
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6160714285714286,
+                "nll": 0.9651488328959887,
+                "brier": 0.5075364097349158,
+                "ece": 0.02956052390747682,
+                "mean_confidence": 0.628429447601556
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.75177304964539,
+                "nll": 0.5233919969570471,
+                "brier": 0.34493985676449507,
+                "ece": 0.05145386832751206,
+                "mean_confidence": 0.7506090708380677
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.4917431192660551,
+                "nll": 1.1957900290625987,
+                "brier": 0.630919716405761,
+                "ece": 0.06345726437046259,
+                "mean_confidence": 0.5445092897317106
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.8544921875,
+              "nll": 0.36265658598211836,
+              "brier": 0.20052461877562827,
+              "ece": 0.00933865923447716,
+              "mean_confidence": 0.8543426804448181
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.74609375,
+                "nll": 0.6689589321163376,
+                "brier": 0.35198321115976905,
+                "ece": 0.04883734756062444,
+                "mean_confidence": 0.7640060911026492
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.56640625,
+                "nll": 1.0023745341576176,
+                "brier": 0.543682769544431,
+                "ece": 0.05264043529162617,
+                "mean_confidence": 0.5941700227432241
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.912109375,
+                "nll": 0.22038205253766097,
+                "brier": 0.12955821830394276,
+                "ece": 0.01391186724306771,
+                "mean_confidence": 0.9084098846205758
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.9375,
+                "nll": 0.1741955057161737,
+                "brier": 0.09514904814252761,
+                "ece": 0.023749214271842393,
+                "mean_confidence": 0.921462895615184
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 0.875,
+            "nll": 0.33397833703247826,
+            "brier": 0.16856795207096792,
+            "ece": 0.06730977592266743,
+            "mean_confidence": 0.81463631845782
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 0.90625,
+              "nll": 0.2645185898137864,
+              "brier": 0.13570336316990378,
+              "ece": 0.0765790172884936,
+              "mean_confidence": 0.8426618761343634
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 0.84375,
+              "nll": 0.3403090129124482,
+              "brier": 0.1724362361187428,
+              "ece": 0.06003058131220476,
+              "mean_confidence": 0.8086412963641687
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 0.84375,
+              "nll": 0.41914178639240546,
+              "brier": 0.21789076185757084,
+              "ece": 0.11454939392977267,
+              "mean_confidence": 0.7761087747096019
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 0.90625,
+              "nll": 0.31194395901127286,
+              "brier": 0.14824144713765425,
+              "ece": 0.10806505825888969,
+              "mean_confidence": 0.8311333266231463
+            }
+          },
+          "all_four_correct": 0.734375,
+          "pair_both_correct": 0.8020833333333334
+        },
+        "consumed": 1024,
+        "unique_questions": 1024,
+        "unique_states_by_source": {
+          "binding": 128,
+          "original": 254,
+          "curriculum": 113
+        },
+        "source_counts": {
+          "binding": 512,
+          "original": 256,
+          "curriculum": 256
+        },
+        "language_family_counts": {
+          "4": 60,
+          "2": 60,
+          "3": 76,
+          "6": 44,
+          "0": 80,
+          "5": 64,
+          "1": 68,
+          "7": 60
+        },
+        "task_counts": {
+          "binding:color": 128,
+          "binding:texture": 128,
+          "binding:count": 128,
+          "binding:shape": 128,
+          "original:noul": 88,
+          "original:choice": 103,
+          "curriculum:extremum": 131,
+          "curriculum:conditional_selection": 30,
+          "curriculum:count": 39,
+          "curriculum:temporal_order": 56,
+          "original:score": 65
+        },
+        "evaluation_seconds": 66.35689789999742,
+        "elapsed_seconds": 190.8183510000017,
+        "best_step": 0
+      },
+      {
+        "step": 256,
+        "eligible": false,
+        "old_tasks_retained": false,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.01404012016328517,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 1.0,
+              "nll": 0.01404012016328517,
+              "brier": 0.0026145843377029616,
+              "ece": 0.013175278096923707,
+              "mean_confidence": 0.9868247219030764
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.012640348312735292,
+                "brier": 0.0007398553412226953,
+                "ece": 0.012424808521685045,
+                "mean_confidence": 0.9875751914783151
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.01752197285592692,
+                "brier": 0.002327900222233687,
+                "ece": 0.016667559820058884,
+                "mean_confidence": 0.983332440179941
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.0027338283522963967,
+                "brier": 0.0002102322204447107,
+                "ece": 0.00267888817057291,
+                "mean_confidence": 0.997321111829427
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.02326433113218207,
+                "brier": 0.007180349566910755,
+                "ece": 0.020929855875377625,
+                "mean_confidence": 0.9790701441246226
+              }
+            },
+            "all_four_correct": 1.0,
+            "pair_both_correct": 1.0
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.857421875,
+              "nll": 0.5939642227100881,
+              "brier": 0.2377753009777714,
+              "ece": 0.09809085742526841,
+              "mean_confidence": 0.9474298085804315
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.98828125,
+                "nll": 0.0323197887069132,
+                "brier": 0.016094748883075355,
+                "ece": 0.019034537051069902,
+                "mean_confidence": 0.9793642126546429
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.51953125,
+                "nll": 2.150397705397505,
+                "brier": 0.8346693134931752,
+                "ece": 0.3989991296473263,
+                "mean_confidence": 0.9079137455187087
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.0051222207199379255,
+                "brier": 0.0003340174552334198,
+                "ece": 0.005018944983628029,
+                "mean_confidence": 0.994981055016372
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.921875,
+                "nll": 0.18801717601599638,
+                "brier": 0.10000312407960167,
+                "ece": 0.049925130673426577,
+                "mean_confidence": 0.907460221132002
+              }
+            },
+            "all_four_correct": 0.49609375,
+            "pair_both_correct": 0.7259114583333334
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6322834645669292,
+              "nll": 0.8619090553865264,
+              "brier": 0.478659923860215,
+              "ece": 0.06030526046431545,
+              "mean_confidence": 0.690029130962248
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6041666666666666,
+                "nll": 0.9914107545894988,
+                "brier": 0.5154561204787327,
+                "ece": 0.0774186275315474,
+                "mean_confidence": 0.6714238205031765
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7406281661600811,
+                "nll": 0.5311145226000962,
+                "brier": 0.3492941930453392,
+                "ece": 0.033604000068744894,
+                "mean_confidence": 0.7669241843118415
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.48807339449541287,
+                "nll": 1.2214622499986563,
+                "brier": 0.6448863644525387,
+                "ece": 0.1018967187298404,
+                "mean_confidence": 0.5851827736901297
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.8525390625,
+              "nll": 0.3545364844129619,
+              "brier": 0.20203652468662087,
+              "ece": 0.018686548406741228,
+              "mean_confidence": 0.847850570447962
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.72265625,
+                "nll": 0.7657626126186052,
+                "brier": 0.4054693788143885,
+                "ece": 0.08303148157859438,
+                "mean_confidence": 0.7603418455554236
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.57421875,
+                "nll": 0.9076153458820473,
+                "brier": 0.5241990088675548,
+                "ece": 0.10106963807064877,
+                "mean_confidence": 0.6078380284852136
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.916015625,
+                "nll": 0.19839317347061478,
+                "brier": 0.11826682390638646,
+                "ece": 0.025284588348186025,
+                "mean_confidence": 0.8989902499437309
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.9296875,
+                "nll": 0.18467061146029212,
+                "brier": 0.10677825709273905,
+                "ece": 0.021006559460513753,
+                "mean_confidence": 0.9093318448840677
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 0.984375,
+            "nll": 0.04690075026286912,
+            "brier": 0.02110695862516207,
+            "ece": 0.03320457093145868,
+            "mean_confidence": 0.9673912304227477
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.03145283210017642,
+              "brier": 0.012701869982660785,
+              "ece": 0.02617205545295953,
+              "mean_confidence": 0.9738279445470405
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 0.9375,
+              "nll": 0.10610906816931637,
+              "brier": 0.05921430408939924,
+              "ece": 0.06174728431188855,
+              "mean_confidence": 0.940635921104937
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.016755422163151415,
+              "brier": 0.0022541784133118608,
+              "ece": 0.015994822606750496,
+              "mean_confidence": 0.9840051773932494
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.033285678618832276,
+              "brier": 0.010257482015276405,
+              "ece": 0.028904121354236187,
+              "mean_confidence": 0.9710958786457637
+            }
+          },
+          "all_four_correct": 0.9375,
+          "pair_both_correct": 0.96875
+        },
+        "consumed": 2048,
+        "unique_questions": 2048,
+        "unique_states_by_source": {
+          "binding": 256,
+          "original": 494,
+          "curriculum": 128
+        },
+        "source_counts": {
+          "binding": 1024,
+          "original": 512,
+          "curriculum": 512
+        },
+        "language_family_counts": {
+          "4": 116,
+          "2": 144,
+          "3": 132,
+          "6": 104,
+          "0": 140,
+          "5": 132,
+          "1": 116,
+          "7": 140
+        },
+        "task_counts": {
+          "binding:color": 256,
+          "binding:texture": 256,
+          "binding:count": 256,
+          "binding:shape": 256,
+          "original:noul": 191,
+          "original:choice": 203,
+          "curriculum:extremum": 262,
+          "curriculum:conditional_selection": 58,
+          "curriculum:count": 75,
+          "curriculum:temporal_order": 117,
+          "original:score": 118
+        },
+        "evaluation_seconds": 73.7790548999983,
+        "elapsed_seconds": 299.9677582000004,
+        "best_step": 0
+      },
+      {
+        "step": 384,
+        "eligible": false,
+        "old_tasks_retained": true,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.005318687134197422,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 1.0,
+              "nll": 0.005318687134197422,
+              "brier": 0.0005816898030467875,
+              "ece": 0.005133360976979647,
+              "mean_confidence": 0.9948666390230203
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.005020972433777016,
+                "brier": 7.026696634356078e-05,
+                "ece": 0.004996742095150664,
+                "mean_confidence": 0.9950032579048493
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.005062839156720367,
+                "brier": 0.00041680428703406557,
+                "ece": 0.004911208756866338,
+                "mean_confidence": 0.9950887912431337
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.002675276633696163,
+                "brier": 5.146488265319858e-05,
+                "ece": 0.00266062293307312,
+                "mean_confidence": 0.9973393770669269
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.008515660312596141,
+                "brier": 0.001788223076156325,
+                "ece": 0.007964870122828267,
+                "mean_confidence": 0.9920351298771717
+              }
+            },
+            "all_four_correct": 1.0,
+            "pair_both_correct": 1.0
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.8076171875,
+              "nll": 0.7457149207672198,
+              "brier": 0.3103237146866635,
+              "ece": 0.09954564685027759,
+              "mean_confidence": 0.9071628343502777
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.796875,
+                "nll": 0.440351154446153,
+                "brier": 0.2770322723873515,
+                "ece": 0.0655536016962969,
+                "mean_confidence": 0.8343291745525646
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.44921875,
+                "nll": 2.428450849855259,
+                "brier": 0.9237749297995317,
+                "ece": 0.42357674209612006,
+                "mean_confidence": 0.8727954920961201
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.034710821118504154,
+                "brier": 0.0057009564160286005,
+                "ece": 0.03295269546764812,
+                "mean_confidence": 0.9670473045323518
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.984375,
+                "nll": 0.07934685764896379,
+                "brier": 0.034786700143742105,
+                "ece": 0.030627892935718416,
+                "mean_confidence": 0.9544793662200741
+              }
+            },
+            "all_four_correct": 0.375,
+            "pair_both_correct": 0.6393229166666666
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6381889763779528,
+              "nll": 0.8492802271873077,
+              "brier": 0.47714759505295634,
+              "ece": 0.03382292079873848,
+              "mean_confidence": 0.6543212252176327
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6140873015873016,
+                "nll": 0.9783666409341003,
+                "brier": 0.5154491058360433,
+                "ece": 0.04217526041007237,
+                "mean_confidence": 0.6336257733164714
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7365754812563323,
+                "nll": 0.5330286214220609,
+                "brier": 0.3552856970227399,
+                "ece": 0.03886222564981795,
+                "mean_confidence": 0.7392464943353968
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.5045871559633027,
+                "nll": 1.183264135138742,
+                "brier": 0.6270003849363909,
+                "ece": 0.07622486917910377,
+                "mean_confidence": 0.5387978764050407
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.859375,
+              "nll": 0.34926224853372256,
+              "brier": 0.19589836355752097,
+              "ece": 0.014938323738518335,
+              "mean_confidence": 0.8549519203618424
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.74609375,
+                "nll": 0.6688372399011749,
+                "brier": 0.34940782895936207,
+                "ece": 0.07340198195595592,
+                "mean_confidence": 0.7416053635321794
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.58203125,
+                "nll": 0.9606102853493905,
+                "brier": 0.5266351733587701,
+                "ece": 0.0724722238187843,
+                "mean_confidence": 0.5726116656053062
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.9208984375,
+                "nll": 0.20095239189208394,
+                "brier": 0.11996016694850131,
+                "ece": 0.01458726606353488,
+                "mean_confidence": 0.9177164347646112
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.931640625,
+                "nll": 0.18042044772543964,
+                "brier": 0.10565161917401517,
+                "ece": 0.02198773157629555,
+                "mean_confidence": 0.9272662973494048
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.003600494647338701,
+            "brier": 0.0003555910947123712,
+            "ece": 0.003472304587921648,
+            "mean_confidence": 0.9965276954120783
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0023771100170902745,
+              "brier": 0.0002337635213911012,
+              "ece": 0.00231168458488365,
+              "mean_confidence": 0.9976883154151164
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0015207696082354806,
+              "brier": 2.518049394539355e-05,
+              "ece": 0.0015114269447951134,
+              "mean_confidence": 0.9984885730552049
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.004326216148881435,
+              "brier": 0.00032047423588376446,
+              "ece": 0.00421469850629717,
+              "mean_confidence": 0.9957853014937027
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.006177882815147616,
+              "brier": 0.0008429461276292257,
+              "ece": 0.005851408315710235,
+              "mean_confidence": 0.9941485916842895
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "consumed": 3072,
+        "unique_questions": 3072,
+        "unique_states_by_source": {
+          "binding": 384,
+          "original": 733,
+          "curriculum": 128
+        },
+        "source_counts": {
+          "binding": 1536,
+          "original": 768,
+          "curriculum": 768
+        },
+        "language_family_counts": {
+          "4": 192,
+          "2": 208,
+          "3": 192,
+          "6": 192,
+          "0": 192,
+          "5": 196,
+          "1": 168,
+          "7": 196
+        },
+        "task_counts": {
+          "binding:color": 384,
+          "binding:texture": 384,
+          "binding:count": 384,
+          "binding:shape": 384,
+          "original:noul": 313,
+          "original:choice": 287,
+          "curriculum:extremum": 390,
+          "curriculum:conditional_selection": 98,
+          "curriculum:count": 95,
+          "curriculum:temporal_order": 185,
+          "original:score": 168
+        },
+        "evaluation_seconds": 75.08358790000057,
+        "elapsed_seconds": 409.7100664999962,
+        "best_step": 0
+      },
+      {
+        "step": 512,
+        "eligible": false,
+        "old_tasks_retained": false,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.007585707461522177,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 1.0,
+              "nll": 0.007585707461522177,
+              "brier": 0.001266065604604317,
+              "ece": 0.007136560731100248,
+              "mean_confidence": 0.9928634392688998
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.003944377136533671,
+                "brier": 5.104376773666549e-05,
+                "ece": 0.003929232144649797,
+                "mean_confidence": 0.9960707678553502
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.015941661686629284,
+                "brier": 0.003346281646249777,
+                "ece": 0.014650749524876883,
+                "mean_confidence": 0.9853492504751231
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.001791385688499862,
+                "brier": 6.692327101650618e-05,
+                "ece": 0.00177415098850231,
+                "mean_confidence": 0.9982258490114977
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.00866540533442589,
+                "brier": 0.0016000137334143188,
+                "ece": 0.00819211026637193,
+                "mean_confidence": 0.991807889733628
+              }
+            },
+            "all_four_correct": 1.0,
+            "pair_both_correct": 1.0
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.8486328125,
+              "nll": 0.6418361334881306,
+              "brier": 0.24016555085464028,
+              "ece": 0.07679652934208314,
+              "mean_confidence": 0.9254293418420831
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.953125,
+                "nll": 0.13015268970118585,
+                "brier": 0.07150848313538796,
+                "ece": 0.037882142811259095,
+                "mean_confidence": 0.9257605568828133
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.453125,
+                "nll": 2.400544281776007,
+                "brier": 0.8773381023305755,
+                "ece": 0.35319231484993363,
+                "mean_confidence": 0.8063173148499336
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.011523174881502797,
+                "brier": 0.001375034996720186,
+                "ece": 0.011136232347084093,
+                "mean_confidence": 0.988863767652916
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.98828125,
+                "nll": 0.02512438759382643,
+                "brier": 0.010440582955877518,
+                "ece": 0.01800655137418621,
+                "mean_confidence": 0.9807757279826699
+              }
+            },
+            "all_four_correct": 0.44140625,
+            "pair_both_correct": 0.705078125
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6358267716535433,
+              "nll": 0.841840114740626,
+              "brier": 0.47371848488091167,
+              "ece": 0.029294607370660725,
+              "mean_confidence": 0.6554893491647446
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6160714285714286,
+                "nll": 0.963427475154955,
+                "brier": 0.5064445003386979,
+                "ece": 0.03511132967550497,
+                "mean_confidence": 0.6385404166793069
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7254305977710233,
+                "nll": 0.5286901205310867,
+                "brier": 0.3554435975471711,
+                "ece": 0.028770007382168176,
+                "mean_confidence": 0.7336381349481382
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.5100917431192661,
+                "nll": 1.1840767844418583,
+                "brier": 0.6273872742698169,
+                "ece": 0.05566469451951577,
+                "mean_confidence": 0.545308931508068
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.84228515625,
+              "nll": 0.38523099995685606,
+              "brier": 0.21711233763267723,
+              "ece": 0.024767181207160056,
+              "mean_confidence": 0.855996613457683
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.74609375,
+                "nll": 0.7216753588497635,
+                "brier": 0.38656971974471416,
+                "ece": 0.0973705875885634,
+                "mean_confidence": 0.6984686752426746
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.515625,
+                "nll": 1.0758035901895564,
+                "brier": 0.5898473253106609,
+                "ece": 0.11744072975206152,
+                "mean_confidence": 0.59071947804631
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.904296875,
+                "nll": 0.22336020792440642,
+                "brier": 0.13446402110608902,
+                "ece": 0.03001659414560439,
+                "mean_confidence": 0.9227479218886977
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.9296875,
+                "nll": 0.19546410945895157,
+                "brier": 0.11131278579084336,
+                "ece": 0.031355441271131344,
+                "mean_confidence": 0.933896533408844
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0021232949088431635,
+            "brier": 0.00011973723377183934,
+            "ece": 0.002086146424835151,
+            "mean_confidence": 0.9979138535751649
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0008802278201518008,
+              "brier": 1.0308008639751714e-05,
+              "ece": 0.0008767208871836019,
+              "mean_confidence": 0.9991232791128164
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0029395880723645245,
+              "brier": 0.00010451341038197234,
+              "ece": 0.002899181460970568,
+              "mean_confidence": 0.9971008185390294
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0020648146195652852,
+              "brier": 8.988350626130705e-05,
+              "ece": 0.002040369962931443,
+              "mean_confidence": 0.9979596300370686
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0026085491232910427,
+              "brier": 0.0002742440098043263,
+              "ece": 0.00252831338825457,
+              "mean_confidence": 0.9974716866117453
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "consumed": 4096,
+        "unique_questions": 4096,
+        "unique_states_by_source": {
+          "binding": 512,
+          "original": 962,
+          "curriculum": 128
+        },
+        "source_counts": {
+          "binding": 2048,
+          "original": 1024,
+          "curriculum": 1024
+        },
+        "language_family_counts": {
+          "4": 256,
+          "2": 256,
+          "3": 256,
+          "6": 256,
+          "0": 256,
+          "5": 256,
+          "1": 256,
+          "7": 256
+        },
+        "task_counts": {
+          "binding:color": 512,
+          "binding:texture": 512,
+          "binding:count": 512,
+          "binding:shape": 512,
+          "original:noul": 412,
+          "original:choice": 396,
+          "curriculum:extremum": 512,
+          "curriculum:conditional_selection": 128,
+          "curriculum:count": 128,
+          "curriculum:temporal_order": 256,
+          "original:score": 216
+        },
+        "evaluation_seconds": 75.62330240000301,
+        "elapsed_seconds": 520.6144178999966,
+        "best_step": 0
+      }
+    ],
+    "contrast": [
+      {
+        "step": 0,
+        "eligible": true,
+        "old_tasks_retained": true,
+        "legacy_binding_retained": false,
+        "binding_nll": 1.8408579770919602,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.3232421875,
+              "nll": 1.8408579770919602,
+              "brier": 0.8479901935735017,
+              "ece": 0.2628004271876605,
+              "mean_confidence": 0.5762945367277751
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.44140625,
+                "nll": 1.3842844568867883,
+                "brier": 0.6714298742620868,
+                "ece": 0.21570477509441072,
+                "mean_confidence": 0.618522726298689
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.625,
+                "nll": 1.0531555378761346,
+                "brier": 0.49558591754333103,
+                "ece": 0.0768451570899456,
+                "mean_confidence": 0.6122861301141119
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 0.109375,
+                "nll": 2.4612231735590857,
+                "brier": 1.1121841702062127,
+                "ece": 0.4398123675811448,
+                "mean_confidence": 0.5330755217280879
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.1171875,
+                "nll": 2.464768740045833,
+                "brier": 1.112760812282376,
+                "ece": 0.4297668687158797,
+                "mean_confidence": 0.5412937687702115
+              }
+            },
+            "all_four_correct": 0.0,
+            "pair_both_correct": 0.059895833333333336
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.3173828125,
+              "nll": 2.1890419932967067,
+              "brier": 0.9442297885632946,
+              "ece": 0.328489777579979,
+              "mean_confidence": 0.6458725900799791
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.5546875,
+                "nll": 1.0739661097014999,
+                "brier": 0.5833295605094906,
+                "ece": 0.12976626283894097,
+                "mean_confidence": 0.6565625469815897
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.578125,
+                "nll": 1.3037215879918342,
+                "brier": 0.5891726850604582,
+                "ece": 0.07053794723677208,
+                "mean_confidence": 0.6421297637837287
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 0.0234375,
+                "nll": 3.771644346006395,
+                "brier": 1.4253638151754182,
+                "ece": 0.6582722057816945,
+                "mean_confidence": 0.6817097057816945
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.11328125,
+                "nll": 2.6068359294870977,
+                "brier": 1.1790530935078118,
+                "ece": 0.49020145733395826,
+                "mean_confidence": 0.6030883437729032
+              }
+            },
+            "all_four_correct": 0.0,
+            "pair_both_correct": 0.046875
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6358267716535433,
+              "nll": 0.8355908834293307,
+              "brier": 0.47060569669082597,
+              "ece": 0.018915121667054658,
+              "mean_confidence": 0.6425090227602094
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6071428571428571,
+                "nll": 0.9648638726218247,
+                "brier": 0.5076400238887623,
+                "ece": 0.01945424241752436,
+                "mean_confidence": 0.6213925642692952
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7406281661600811,
+                "nll": 0.5193553609410679,
+                "brier": 0.34972616847712024,
+                "ece": 0.022056570747650064,
+                "mean_confidence": 0.7305692649081851
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.4990825688073395,
+                "nll": 1.1692005854291132,
+                "brier": 0.6210231141796474,
+                "ece": 0.057137286955238356,
+                "mean_confidence": 0.5220868780974378
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.8408203125,
+              "nll": 0.3753695538849263,
+              "brier": 0.21432433933220013,
+              "ece": 0.016822969470067478,
+              "mean_confidence": 0.8369654507598789
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.7109375,
+                "nll": 0.7475211656845309,
+                "brier": 0.40820796724280384,
+                "ece": 0.0640630484251889,
+                "mean_confidence": 0.7109508839884667
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.5625,
+                "nll": 0.9350096273666824,
+                "brier": 0.5310657172127808,
+                "ece": 0.0974620671681559,
+                "mean_confidence": 0.5338150948453686
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.896484375,
+                "nll": 0.23532660929462765,
+                "brier": 0.14041925955254586,
+                "ece": 0.011995148898041704,
+                "mean_confidence": 0.9041333679019403
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.93359375,
+                "nll": 0.18955960042484343,
+                "brier": 0.10682199599591646,
+                "ece": 0.031118265696693764,
+                "mean_confidence": 0.9172120778187172
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 0.25390625,
+            "nll": 3.0182242741292606,
+            "brier": 1.0979773935539874,
+            "ece": 0.43815566424856145,
+            "mean_confidence": 0.675535664768516
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 0.21875,
+              "nll": 3.112274843184556,
+              "brier": 1.1952459200472973,
+              "ece": 0.5356586187523483,
+              "mean_confidence": 0.7143411642812741
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 0.734375,
+              "nll": 0.7454738610870306,
+              "brier": 0.35460631882274196,
+              "ece": 0.13311957141309652,
+              "mean_confidence": 0.6510468607891065
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 0.0,
+              "nll": 4.062480064360727,
+              "brier": 1.422448113212605,
+              "ece": 0.650650384258692,
+              "mean_confidence": 0.6506503842586921
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 0.0625,
+              "nll": 4.152668327884728,
+              "brier": 1.4196092221333052,
+              "ece": 0.675865910369408,
+              "mean_confidence": 0.6861042497449914
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.028645833333333332
+        },
+        "consumed": 0,
+        "unique_questions": 0,
+        "unique_states_by_source": {
+          "binding": 0,
+          "original": 0,
+          "curriculum": 0
+        },
+        "source_counts": {},
+        "language_family_counts": {},
+        "task_counts": {},
+        "evaluation_seconds": 61.54311980000057,
+        "elapsed_seconds": 91.68287589999818,
+        "best_step": 0
+      },
+      {
+        "step": 128,
+        "eligible": false,
+        "old_tasks_retained": true,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.05531685784554013,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.994140625,
+              "nll": 0.05531685784554013,
+              "brier": 0.01830213130104079,
+              "ece": 0.040295833008481635,
+              "mean_confidence": 0.9538447919915183
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.04062119751658906,
+                "brier": 0.007334237615297855,
+                "ece": 0.03807891468676575,
+                "mean_confidence": 0.9619210853132343
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.9921875,
+                "nll": 0.08562877331162014,
+                "brier": 0.03164822072941435,
+                "ece": 0.0595852940593376,
+                "mean_confidence": 0.9326022059406625
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.018925772163562605,
+                "brier": 0.0033539754114441317,
+                "ece": 0.01787351733562418,
+                "mean_confidence": 0.9821264826643756
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.984375,
+                "nll": 0.07609168839038868,
+                "brier": 0.030872091448006823,
+                "ece": 0.04758663788112322,
+                "mean_confidence": 0.9387293940478008
+              }
+            },
+            "all_four_correct": 0.9765625,
+            "pair_both_correct": 0.98828125
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.751953125,
+              "nll": 1.0404732575551434,
+              "brier": 0.3961350317343415,
+              "ece": 0.12314148402390146,
+              "mean_confidence": 0.8622330832035562
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.74609375,
+                "nll": 0.4872585812151093,
+                "brier": 0.3287808592428607,
+                "ece": 0.10203576812615664,
+                "mean_confidence": 0.7768584880809781
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.26171875,
+                "nll": 3.5407695319441634,
+                "brier": 1.2104510820451877,
+                "ece": 0.5283845254317885,
+                "mean_confidence": 0.7901032754317885
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.11170622102563542,
+                "brier": 0.03790731819258841,
+                "ece": 0.09838462594508707,
+                "mean_confidence": 0.901615374054913
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.02215869603566538,
+                "brier": 0.007400867456729241,
+                "ece": 0.019644804753454544,
+                "mean_confidence": 0.9803551952465455
+              }
+            },
+            "all_four_correct": 0.21484375,
+            "pair_both_correct": 0.5384114583333334
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6413385826771654,
+              "nll": 0.8443300205867348,
+              "brier": 0.471127394560884,
+              "ece": 0.034402392553910165,
+              "mean_confidence": 0.658740697192242
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6170634920634921,
+                "nll": 0.9660189074207071,
+                "brier": 0.5075109362611973,
+                "ece": 0.03446609889889842,
+                "mean_confidence": 0.6294888538473292
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7497467071935157,
+                "nll": 0.5251727946736305,
+                "brier": 0.34538939754091774,
+                "ece": 0.04489069471871517,
+                "mean_confidence": 0.7514107338874699
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.48990825688073397,
+                "nll": 1.1972580647107522,
+                "brier": 0.6315471982760965,
+                "ece": 0.05860179993311284,
+                "mean_confidence": 0.5450169024646863
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.85205078125,
+              "nll": 0.3640018162663311,
+              "brier": 0.20185886511843837,
+              "ece": 0.018933381443152104,
+              "mean_confidence": 0.8538753199377793
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.73828125,
+                "nll": 0.6721123002068362,
+                "brier": 0.3564804097119504,
+                "ece": 0.060179691288733905,
+                "mean_confidence": 0.7633075926083375
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.5625,
+                "nll": 0.9986174302075014,
+                "brier": 0.543283289699654,
+                "ece": 0.07043337206453436,
+                "mean_confidence": 0.594649039175331
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.9091796875,
+                "nll": 0.22228746028810725,
+                "brier": 0.13070441805069236,
+                "ece": 0.022686509218999347,
+                "mean_confidence": 0.9081929920032024
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.939453125,
+                "nll": 0.17606747928194094,
+                "brier": 0.09614477466656654,
+                "ece": 0.024502646787008666,
+                "mean_confidence": 0.9201369798528782
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 0.8984375,
+            "nll": 0.2813674594234298,
+            "brier": 0.14291858681149444,
+            "ece": 0.06421803037121225,
+            "mean_confidence": 0.8382769536662771
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 0.890625,
+              "nll": 0.2615184674305223,
+              "brier": 0.13687710343422427,
+              "ece": 0.07415235676476584,
+              "mean_confidence": 0.8534937913191576
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 0.90625,
+              "nll": 0.24245272447326424,
+              "brier": 0.11906453363808384,
+              "ece": 0.10866989877924443,
+              "mean_confidence": 0.8481721783692286
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 0.859375,
+              "nll": 0.3774412435949767,
+              "brier": 0.19989716198316593,
+              "ece": 0.10107757306883813,
+              "mean_confidence": 0.7963815803205128
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 0.9375,
+              "nll": 0.2440574021949559,
+              "brier": 0.11583554819050368,
+              "ece": 0.0824397353437907,
+              "mean_confidence": 0.8550602646562093
+            }
+          },
+          "all_four_correct": 0.765625,
+          "pair_both_correct": 0.8333333333333334
+        },
+        "consumed": 1024,
+        "unique_questions": 1024,
+        "unique_states_by_source": {
+          "binding": 128,
+          "original": 254,
+          "curriculum": 113
+        },
+        "source_counts": {
+          "binding": 512,
+          "original": 256,
+          "curriculum": 256
+        },
+        "language_family_counts": {
+          "4": 60,
+          "2": 60,
+          "3": 76,
+          "6": 44,
+          "0": 80,
+          "5": 64,
+          "1": 68,
+          "7": 60
+        },
+        "task_counts": {
+          "binding:color": 128,
+          "binding:texture": 128,
+          "binding:count": 128,
+          "binding:shape": 128,
+          "original:noul": 88,
+          "original:choice": 103,
+          "curriculum:extremum": 131,
+          "curriculum:conditional_selection": 30,
+          "curriculum:count": 39,
+          "curriculum:temporal_order": 56,
+          "original:score": 65
+        },
+        "evaluation_seconds": 68.99638380000397,
+        "elapsed_seconds": 200.33830849999504,
+        "best_step": 0
+      },
+      {
+        "step": 256,
+        "eligible": false,
+        "old_tasks_retained": false,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.012701271857729773,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 1.0,
+              "nll": 0.012701271857729773,
+              "brier": 0.001895636029896252,
+              "ece": 0.01210204714491359,
+              "mean_confidence": 0.9878979528550864
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.028150484410039298,
+                "brier": 0.0022365655193998524,
+                "ece": 0.027419380447751687,
+                "mean_confidence": 0.9725806195522484
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.00452387337390395,
+                "brier": 0.0002201748505873451,
+                "ece": 0.004445973724060116,
+                "mean_confidence": 0.99555402627594
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.002470098883332182,
+                "brier": 0.0001470790853164319,
+                "ece": 0.0024319942055077703,
+                "mean_confidence": 0.9975680057944922
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.01566063076364367,
+                "brier": 0.004978724664281378,
+                "ece": 0.014110840202335335,
+                "mean_confidence": 0.9858891597976647
+              }
+            },
+            "all_four_correct": 1.0,
+            "pair_both_correct": 1.0
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.796875,
+              "nll": 0.6836458969576829,
+              "brier": 0.3152137715210054,
+              "ece": 0.1159878299735874,
+              "mean_confidence": 0.9060284578902207
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.71875,
+                "nll": 0.587451625976988,
+                "brier": 0.3742876737412354,
+                "ece": 0.11256842727528303,
+                "mean_confidence": 0.8201726834195396
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.51171875,
+                "nll": 1.9855442217831754,
+                "brier": 0.8056959535550954,
+                "ece": 0.37598664547601446,
+                "mean_confidence": 0.885427565405583
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.0170494849392944,
+                "brier": 0.002995224614637063,
+                "ece": 0.01601912511920529,
+                "mean_confidence": 0.9839808748807947
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.95703125,
+                "nll": 0.1445382551312735,
+                "brier": 0.0778762341730535,
+                "ece": 0.03123457207437822,
+                "mean_confidence": 0.9345327078549656
+              }
+            },
+            "all_four_correct": 0.36328125,
+            "pair_both_correct": 0.6243489583333334
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6307086614173228,
+              "nll": 0.863704297116721,
+              "brier": 0.47979605787419466,
+              "ece": 0.06105969117004178,
+              "mean_confidence": 0.6904982325374066
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6051587301587301,
+                "nll": 0.9943703964007111,
+                "brier": 0.5162782220618372,
+                "ece": 0.07129859858309401,
+                "mean_confidence": 0.673373711101277
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7396149949341438,
+                "nll": 0.5309399814510668,
+                "brier": 0.3500358019717116,
+                "ece": 0.035109466416769396,
+                "mean_confidence": 0.7660210963989613
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.48073394495412847,
+                "nll": 1.2246711805731232,
+                "brier": 0.647317802965217,
+                "ece": 0.10996771910043936,
+                "mean_confidence": 0.585398142585598
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.84619140625,
+              "nll": 0.3631090236703411,
+              "brier": 0.2068865395883831,
+              "ece": 0.019890370390543942,
+              "mean_confidence": 0.8444160798287192
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.71484375,
+                "nll": 0.7825457879458597,
+                "brier": 0.4166527721364857,
+                "ece": 0.10024163396871931,
+                "mean_confidence": 0.7501123872557389
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.546875,
+                "nll": 0.9575527443087328,
+                "brier": 0.5497811752846222,
+                "ece": 0.10849474566763895,
+                "mean_confidence": 0.6140711410237896
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.9169921875,
+                "nll": 0.19737188708267267,
+                "brier": 0.11735623289063454,
+                "ece": 0.02804939243986268,
+                "mean_confidence": 0.8955540985113262
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.919921875,
+                "nll": 0.1876430543887228,
+                "brier": 0.10961671886170926,
+                "ece": 0.023988525684948976,
+                "mean_confidence": 0.9044643581524603
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.018934008832067237,
+            "brier": 0.005445489316263374,
+            "ece": 0.01651809133510821,
+            "mean_confidence": 0.9834819086648918
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0339862129657259,
+              "brier": 0.013472153588402513,
+              "ece": 0.027556177999200522,
+              "mean_confidence": 0.9724438220007995
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.013348312468308664,
+              "brier": 0.0022766765111221165,
+              "ece": 0.01256955728348877,
+              "mean_confidence": 0.9874304427165114
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.007992466788806453,
+              "brier": 0.0006868576254513183,
+              "ece": 0.007749337253883897,
+              "mean_confidence": 0.9922506627461162
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.02040904310542793,
+              "brier": 0.005346269540077548,
+              "ece": 0.01819729280385957,
+              "mean_confidence": 0.9818027071961404
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "consumed": 2048,
+        "unique_questions": 2048,
+        "unique_states_by_source": {
+          "binding": 256,
+          "original": 494,
+          "curriculum": 128
+        },
+        "source_counts": {
+          "binding": 1024,
+          "original": 512,
+          "curriculum": 512
+        },
+        "language_family_counts": {
+          "4": 116,
+          "2": 144,
+          "3": 132,
+          "6": 104,
+          "0": 140,
+          "5": 132,
+          "1": 116,
+          "7": 140
+        },
+        "task_counts": {
+          "binding:color": 256,
+          "binding:texture": 256,
+          "binding:count": 256,
+          "binding:shape": 256,
+          "original:noul": 191,
+          "original:choice": 203,
+          "curriculum:extremum": 262,
+          "curriculum:conditional_selection": 58,
+          "curriculum:count": 75,
+          "curriculum:temporal_order": 117,
+          "original:score": 118
+        },
+        "evaluation_seconds": 73.38433450000593,
+        "elapsed_seconds": 310.61133659999905,
+        "best_step": 0
+      },
+      {
+        "step": 384,
+        "eligible": false,
+        "old_tasks_retained": true,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.007396818895300811,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 1.0,
+              "nll": 0.007396818895300811,
+              "brier": 0.0010411751715233392,
+              "ece": 0.00706506237626528,
+              "mean_confidence": 0.9929349376237345
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.00691887204602201,
+                "brier": 0.00015618180541044908,
+                "ece": 0.006870837114589801,
+                "mean_confidence": 0.9931291628854102
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.006663717491796308,
+                "brier": 0.0011348978756740092,
+                "ece": 0.006260966292175219,
+                "mean_confidence": 0.9937390337078248
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.003915843596291869,
+                "brier": 0.00018049807739396162,
+                "ece": 0.0038604523421169185,
+                "mean_confidence": 0.9961395476578832
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.012088842447093058,
+                "brier": 0.002693122927614937,
+                "ece": 0.011267993756180183,
+                "mean_confidence": 0.9887320062438198
+              }
+            },
+            "all_four_correct": 1.0,
+            "pair_both_correct": 1.0
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.8369140625,
+              "nll": 0.5986323613059352,
+              "brier": 0.25564225859183576,
+              "ece": 0.0777439354388969,
+              "mean_confidence": 0.9081742870912649
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.94140625,
+                "nll": 0.1634681099263537,
+                "brier": 0.0931040076071713,
+                "ece": 0.03108878251275597,
+                "mean_confidence": 0.9200305179185608
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.4609375,
+                "nll": 2.0270587480253592,
+                "brier": 0.8360162778174256,
+                "ece": 0.37118659571055734,
+                "mean_confidence": 0.8321240957105573
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.044226081630678815,
+                "brier": 0.009907130392668259,
+                "ece": 0.04057364721080952,
+                "mean_confidence": 0.9594263527891906
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.9453125,
+                "nll": 0.1597765056413494,
+                "brier": 0.08354161855007797,
+                "ece": 0.06034792164000152,
+                "mean_confidence": 0.9211161819467509
+              }
+            },
+            "all_four_correct": 0.4140625,
+            "pair_both_correct": 0.6848958333333334
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6350393700787401,
+              "nll": 0.851052467938294,
+              "brier": 0.47802345705081783,
+              "ece": 0.03046156816127985,
+              "mean_confidence": 0.6565143848753003
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6121031746031746,
+                "nll": 0.9815218563982144,
+                "brier": 0.5163131438136448,
+                "ece": 0.03752781152640003,
+                "mean_confidence": 0.6380584762397296
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7315096251266464,
+                "nll": 0.5321645026810886,
+                "brier": 0.3554129980455979,
+                "ece": 0.03218087459426851,
+                "mean_confidence": 0.7394632234988827
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.5027522935779817,
+                "nll": 1.1872529782892343,
+                "brier": 0.6292537667411342,
+                "ece": 0.06358542919037856,
+                "mean_confidence": 0.540428242092143
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.8583984375,
+              "nll": 0.3590972121854775,
+              "brier": 0.20063521494835235,
+              "ece": 0.021277224569037405,
+              "mean_confidence": 0.8600669446918469
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.75390625,
+                "nll": 0.6485373816635822,
+                "brier": 0.33717481143849914,
+                "ece": 0.060938794265394294,
+                "mean_confidence": 0.7561941272371716
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.59375,
+                "nll": 0.9768431564363427,
+                "brier": 0.531404612528197,
+                "ece": 0.07480775256261021,
+                "mean_confidence": 0.5772690686979018
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.916015625,
+                "nll": 0.21698114957092238,
+                "brier": 0.12835632703959715,
+                "ece": 0.020902686269907142,
+                "mean_confidence": 0.9217215013728892
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.927734375,
+                "nll": 0.18973628055010294,
+                "brier": 0.11153849373086697,
+                "ece": 0.028281035729475306,
+                "mean_confidence": 0.9300931780540724
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0027672687047888608,
+            "brier": 0.0001615465413005604,
+            "ece": 0.0027156429814191854,
+            "mean_confidence": 0.9972843570185808
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0016097785498907242,
+              "brier": 7.187898247014112e-05,
+              "ece": 0.0015882577470203163,
+              "mean_confidence": 0.9984117422529797
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0010544282087132405,
+              "brier": 1.4169119283213862e-05,
+              "ece": 0.0010500881670615358,
+              "mean_confidence": 0.9989499118329385
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.002356468616072467,
+              "brier": 6.85679520427852e-05,
+              "ece": 0.002336880187727264,
+              "mean_confidence": 0.9976631198122727
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.006048399444479013,
+              "brier": 0.0004915701114061015,
+              "ece": 0.005887345823867459,
+              "mean_confidence": 0.9941126541761325
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "consumed": 3072,
+        "unique_questions": 3072,
+        "unique_states_by_source": {
+          "binding": 384,
+          "original": 733,
+          "curriculum": 128
+        },
+        "source_counts": {
+          "binding": 1536,
+          "original": 768,
+          "curriculum": 768
+        },
+        "language_family_counts": {
+          "4": 192,
+          "2": 208,
+          "3": 192,
+          "6": 192,
+          "0": 192,
+          "5": 196,
+          "1": 168,
+          "7": 196
+        },
+        "task_counts": {
+          "binding:color": 384,
+          "binding:texture": 384,
+          "binding:count": 384,
+          "binding:shape": 384,
+          "original:noul": 313,
+          "original:choice": 287,
+          "curriculum:extremum": 390,
+          "curriculum:conditional_selection": 98,
+          "curriculum:count": 95,
+          "curriculum:temporal_order": 185,
+          "original:score": 168
+        },
+        "evaluation_seconds": 76.39069380000001,
+        "elapsed_seconds": 421.65708040000027,
+        "best_step": 0
+      },
+      {
+        "step": 512,
+        "eligible": false,
+        "old_tasks_retained": false,
+        "legacy_binding_retained": false,
+        "binding_nll": 0.011771750963949364,
+        "validation": {
+          "binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.9990234375,
+              "nll": 0.011771750963949364,
+              "brier": 0.0032895961283885425,
+              "ece": 0.010334303412227555,
+              "mean_confidence": 0.9898731498372653
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.0074955192617387634,
+                "brier": 0.000295786247791661,
+                "ece": 0.007412071572324635,
+                "mean_confidence": 0.9925879284276754
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.99609375,
+                "nll": 0.025557643228648733,
+                "brier": 0.010341584212314413,
+                "ece": 0.020626906115072535,
+                "mean_confidence": 0.9802029068828992
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.004214461930615185,
+                "brier": 0.00018237040318651125,
+                "ece": 0.0041642138188559,
+                "mean_confidence": 0.9958357861811441
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 1.0,
+                "nll": 0.00981937943479477,
+                "brier": 0.002338643650261585,
+                "ece": 0.009134022142657284,
+                "mean_confidence": 0.9908659778573428
+              }
+            },
+            "all_four_correct": 0.99609375,
+            "pair_both_correct": 0.998046875
+          },
+          "legacy_binding": {
+            "overall": {
+              "count": 1024,
+              "accuracy": 0.8251953125,
+              "nll": 0.652032083149227,
+              "brier": 0.26411803426790637,
+              "ece": 0.07545734517415972,
+              "mean_confidence": 0.9006526576741596
+            },
+            "tasks": {
+              "color": {
+                "count": 256,
+                "accuracy": 0.9609375,
+                "nll": 0.1222919970516594,
+                "brier": 0.0703485862788043,
+                "ece": 0.03407990992425302,
+                "mean_confidence": 0.9396161798544626
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.36328125,
+                "nll": 2.366002053685741,
+                "brier": 0.9366649181677867,
+                "ece": 0.3976271805481832,
+                "mean_confidence": 0.7609084305481831
+              },
+              "shape": {
+                "count": 256,
+                "accuracy": 0.9921875,
+                "nll": 0.09256204752746759,
+                "brier": 0.03640243148405693,
+                "ece": 0.07077564533348132,
+                "mean_confidence": 0.9214219658520659
+              },
+              "texture": {
+                "count": 256,
+                "accuracy": 0.984375,
+                "nll": 0.02727223433204,
+                "brier": 0.01305620114097734,
+                "ece": 0.021829967289210495,
+                "mean_confidence": 0.9806640544419267
+              }
+            },
+            "all_four_correct": 0.3515625,
+            "pair_both_correct": 0.6595052083333334
+          },
+          "original": {
+            "overall": {
+              "count": 2540,
+              "accuracy": 0.6366141732283465,
+              "nll": 0.8433321488452103,
+              "brier": 0.4739232746116703,
+              "ece": 0.027889105024047123,
+              "mean_confidence": 0.6624608731541278
+            },
+            "tasks": {
+              "choice": {
+                "count": 1008,
+                "accuracy": 0.6160714285714286,
+                "nll": 0.9678887236766082,
+                "brier": 0.507400393836699,
+                "ece": 0.04041156092425884,
+                "mean_confidence": 0.649075587309512
+              },
+              "noul": {
+                "count": 987,
+                "accuracy": 0.7304964539007093,
+                "nll": 0.5285041242683082,
+                "brier": 0.35515272832757677,
+                "ece": 0.019011892399434925,
+                "mean_confidence": 0.7378489428163696
+              },
+              "score": {
+                "count": 545,
+                "accuracy": 0.5045871559633027,
+                "nll": 1.183116062289895,
+                "brier": 0.6271005094806085,
+                "ece": 0.049371957524347816,
+                "mean_confidence": 0.5506890261353025
+              }
+            }
+          },
+          "curriculum": {
+            "overall": {
+              "count": 2048,
+              "accuracy": 0.8408203125,
+              "nll": 0.3767056798884876,
+              "brier": 0.2133800512356756,
+              "ece": 0.020039871885708854,
+              "mean_confidence": 0.8522064507541828
+            },
+            "tasks": {
+              "conditional_selection": {
+                "count": 256,
+                "accuracy": 0.7421875,
+                "nll": 0.7154691505956254,
+                "brier": 0.3824285655690406,
+                "ece": 0.06610811084387092,
+                "mean_confidence": 0.7067208229087475
+              },
+              "count": {
+                "count": 256,
+                "accuracy": 0.52734375,
+                "nll": 1.0097045232733612,
+                "brier": 0.5600502486979657,
+                "ece": 0.11672259914219807,
+                "mean_confidence": 0.5758295557909907
+              },
+              "extremum": {
+                "count": 1024,
+                "accuracy": 0.9033203125,
+                "nll": 0.22779887076840816,
+                "brier": 0.13530104061374995,
+                "ece": 0.02627033484786258,
+                "mean_confidence": 0.9200944230979102
+              },
+              "temporal_order": {
+                "count": 512,
+                "accuracy": 0.921875,
+                "nll": 0.18863814108264065,
+                "brier": 0.11167871658169935,
+                "ece": 0.019899372969024824,
+                "mean_confidence": 0.9273617674710416
+              }
+            }
+          }
+        },
+        "fixed_train": {
+          "overall": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0022441047032879507,
+            "brier": 9.477845317788783e-05,
+            "ece": 0.0022152021288523896,
+            "mean_confidence": 0.9977847978711475
+          },
+          "tasks": {
+            "color": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0028560733565791393,
+              "brier": 0.00019049920716877598,
+              "ece": 0.0027954314034374667,
+              "mean_confidence": 0.9972045685965625
+            },
+            "count": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0014726549396660616,
+              "brier": 1.4428057967652201e-05,
+              "ece": 0.0014670705470625212,
+              "mean_confidence": 0.9985329294529375
+            },
+            "shape": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0024084915660138994,
+              "brier": 0.00011055598769242107,
+              "ece": 0.002378353464666527,
+              "mean_confidence": 0.9976216465353335
+            },
+            "texture": {
+              "count": 64,
+              "accuracy": 1.0,
+              "nll": 0.0022391989508927014,
+              "brier": 6.36305598827021e-05,
+              "ece": 0.002219953100243366,
+              "mean_confidence": 0.9977800468997566
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "consumed": 4096,
+        "unique_questions": 4096,
+        "unique_states_by_source": {
+          "binding": 512,
+          "original": 962,
+          "curriculum": 128
+        },
+        "source_counts": {
+          "binding": 2048,
+          "original": 1024,
+          "curriculum": 1024
+        },
+        "language_family_counts": {
+          "4": 256,
+          "2": 256,
+          "3": 256,
+          "6": 256,
+          "0": 256,
+          "5": 256,
+          "1": 256,
+          "7": 256
+        },
+        "task_counts": {
+          "binding:color": 512,
+          "binding:texture": 512,
+          "binding:count": 512,
+          "binding:shape": 512,
+          "original:noul": 412,
+          "original:choice": 396,
+          "curriculum:extremum": 512,
+          "curriculum:conditional_selection": 128,
+          "curriculum:count": 128,
+          "curriculum:temporal_order": 256,
+          "original:score": 216
+        },
+        "evaluation_seconds": 76.75315920000139,
+        "elapsed_seconds": 533.6507506999988,
+        "best_step": 0
+      }
+    ]
+  },
+  "post_selection": {
+    "models": {
+      "control": {
+        "known": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 1.0,
+            "nll": 0.002000630294853151,
+            "brier": 0.00011312348430751669,
+            "ece": 0.0019590863745890053,
+            "mean_confidence": 0.998040913625411
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.002514140632937762,
+              "brier": 0.00017852838528843222,
+              "ece": 0.0024455232720838696,
+              "mean_confidence": 0.9975544767279161
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.003732743632504451,
+              "brier": 0.00022151975713848634,
+              "ece": 0.00364877424495849,
+              "mean_confidence": 0.9963512257550415
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.0006328028268637331,
+              "brier": 2.4174726951215305e-05,
+              "ece": 0.0006265957274147471,
+              "mean_confidence": 0.9993734042725853
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.0011228340871066603,
+              "brier": 2.827106785193289e-05,
+              "ece": 0.0011154522538987521,
+              "mean_confidence": 0.9988845477461012
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "focus": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.3115234375,
+            "nll": 2.036912904815367,
+            "brier": 1.0026180950034618,
+            "ece": 0.4608081168319702,
+            "mean_confidence": 0.7723315543319702
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.23828125,
+              "nll": 1.4484945770459807,
+              "brier": 0.9559133481492802,
+              "ece": 0.4715335079465419,
+              "mean_confidence": 0.7098147579465418
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 4.123400828714134,
+              "brier": 1.6837127716763751,
+              "ece": 0.82775938515622,
+              "mean_confidence": 0.82775938515622
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.9140625,
+              "nll": 0.26026564313610245,
+              "brier": 0.124702757144198,
+              "ece": 0.09036516491628517,
+              "mean_confidence": 0.8323874166553639
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.09375,
+              "nll": 2.3154905703652506,
+              "brier": 1.246143503043994,
+              "ece": 0.6256784885695499,
+              "mean_confidence": 0.7193646575697552
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.046223958333333336
+        },
+        "complement": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.998046875,
+            "nll": 0.05051289073154025,
+            "brier": 0.01091982270973926,
+            "ece": 0.043685815730754474,
+            "mean_confidence": 0.9543610592692456
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.014398450662279013,
+              "brier": 0.0005343917952938613,
+              "ece": 0.01421399181197658,
+              "mean_confidence": 0.9857860081880234
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.08095511349726989,
+              "brier": 0.01477793878696458,
+              "ece": 0.07358988888462556,
+              "mean_confidence": 0.9264101111153744
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.027631442113268317,
+              "brier": 0.003207320364126423,
+              "ece": 0.026431898031865624,
+              "mean_confidence": 0.9735681019681346
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.9921875,
+              "nll": 0.0790665566533438,
+              "brier": 0.025159639892572177,
+              "ece": 0.060507484194549856,
+              "mean_confidence": 0.9316800158054501
+            }
+          },
+          "all_four_correct": 0.9921875,
+          "pair_both_correct": 0.99609375
+        },
+        "focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.2314453125,
+            "nll": 2.722639061813848,
+            "brier": 1.1557115705555392,
+            "ece": 0.4929404462597201,
+            "mean_confidence": 0.722830637040953
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.0078125,
+              "nll": 3.9234768789231067,
+              "brier": 1.5345991725611676,
+              "ece": 0.7331976931397454,
+              "mean_confidence": 0.7410101931397453
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 4.488925446570102,
+              "brier": 1.6622895670551439,
+              "ece": 0.7977571368151333,
+              "mean_confidence": 0.7977571368151334
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.640625,
+              "nll": 0.8184402676543974,
+              "brier": 0.44812058152374484,
+              "ece": 0.10529203921257554,
+              "mean_confidence": 0.6412657202547052
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.27734375,
+              "nll": 1.6597136541077853,
+              "brier": 0.9778369610821009,
+              "ece": 0.4542610009162972,
+              "mean_confidence": 0.7112894979542277
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.005859375
+        },
+        "complement_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.97265625,
+            "nll": 0.2576703121704266,
+            "brier": 0.10263682485949222,
+            "ece": 0.16843732615947968,
+            "mean_confidence": 0.8042189238405203
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.97265625,
+              "nll": 0.2996476358110428,
+              "brier": 0.13046846063597006,
+              "ece": 0.21202404503164018,
+              "mean_confidence": 0.7606322049683598
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.91796875,
+              "nll": 0.5129139657006135,
+              "brier": 0.22011448637717043,
+              "ece": 0.27016345412965076,
+              "mean_confidence": 0.6478052958703493
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.12246755881014061,
+              "brier": 0.036204772487167504,
+              "ece": 0.10618921368567993,
+              "mean_confidence": 0.8938107863143201
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.09565208835990939,
+              "brier": 0.023759579937660858,
+              "ece": 0.0853725917909477,
+              "mean_confidence": 0.9146274082090523
+            }
+          },
+          "all_four_correct": 0.890625,
+          "pair_both_correct": 0.9453125
+        },
+        "reverse_focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.2314453125,
+            "nll": 2.722639061813848,
+            "brier": 1.1557115705555392,
+            "ece": 0.4929404462597201,
+            "mean_confidence": 0.722830637040953
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.0078125,
+              "nll": 3.9234768789231067,
+              "brier": 1.5345991725611676,
+              "ece": 0.7331976931397454,
+              "mean_confidence": 0.7410101931397453
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 4.488925446570102,
+              "brier": 1.6622895670551439,
+              "ece": 0.7977571368151335,
+              "mean_confidence": 0.7977571368151334
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.640625,
+              "nll": 0.8184402676543974,
+              "brier": 0.44812058152374484,
+              "ece": 0.10529203921257554,
+              "mean_confidence": 0.6412657202547052
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.27734375,
+              "nll": 1.6597136541077853,
+              "brier": 0.9778369610821009,
+              "ece": 0.4542610009162972,
+              "mean_confidence": 0.7112894979542277
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.005859375
+        },
+        "no_question": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.25,
+            "nll": 2.4505995246805234,
+            "brier": 1.0779164176653646,
+            "ece": 0.43842108354357356,
+            "mean_confidence": 0.6884210835435733
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.515625,
+              "nll": 1.216040737279922,
+              "brier": 0.6610954843385027,
+              "ece": 0.19376720408930342,
+              "mean_confidence": 0.6884210835435735
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.03515625,
+              "nll": 4.027777583142392,
+              "brier": 1.4564558264905068,
+              "ece": 0.6532648335435735,
+              "mean_confidence": 0.6884210835435735
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.21875,
+              "nll": 2.7250178701438696,
+              "brier": 1.1475488767341528,
+              "ece": 0.4712479662931909,
+              "mean_confidence": 0.6884210835435735
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.23046875,
+              "nll": 1.8335619081559114,
+              "brier": 1.0465654830982958,
+              "ece": 0.45795233354357345,
+              "mean_confidence": 0.6884210835435735
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        }
+      },
+      "candidate": {
+        "known": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 1.0,
+            "nll": 0.0026451110296449518,
+            "brier": 0.0003894040145137952,
+            "ece": 0.0024844597631622535,
+            "mean_confidence": 0.9975155402368379
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.007242895600028044,
+              "brier": 0.0014526039678619878,
+              "ece": 0.006628243388695771,
+              "mean_confidence": 0.9933717566113043
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.0008571337881278869,
+              "brier": 5.964934862250436e-06,
+              "ece": 0.0008547435188177577,
+              "mean_confidence": 0.9991452564811822
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.0008360697762087026,
+              "brier": 3.0753298419181e-05,
+              "ece": 0.0008281994595463749,
+              "mean_confidence": 0.9991718005404536
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.0016443449542151757,
+              "brier": 6.829385691176166e-05,
+              "ece": 0.0016266526855889252,
+              "mean_confidence": 0.9983733473144111
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "focus": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.2666015625,
+            "nll": 2.4169912945554435,
+            "brier": 1.152142606952166,
+            "ece": 0.5215635648098467,
+            "mean_confidence": 0.7822580696903144
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.109375,
+              "nll": 2.481800523707067,
+              "brier": 1.358886648026079,
+              "ece": 0.6901110491585227,
+              "mean_confidence": 0.7671776716448007
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 4.2128651505515435,
+              "brier": 1.7014300272239011,
+              "ece": 0.836789598100929,
+              "mean_confidence": 0.8367895981009288
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.8828125,
+              "nll": 0.4018770300504376,
+              "brier": 0.1970918120787285,
+              "ece": 0.1238274764622516,
+              "mean_confidence": 0.7708378184673439
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.07421875,
+              "nll": 2.571422473912726,
+              "brier": 1.3511619404799562,
+              "ece": 0.6800084405481843,
+              "mean_confidence": 0.7542271905481842
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.018229166666666668
+        },
+        "complement": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 1.0,
+            "nll": 0.037451466581584214,
+            "brier": 0.006054260131890603,
+            "ece": 0.035024950281990964,
+            "mean_confidence": 0.964975049718009
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.019263188218745488,
+              "brier": 0.0010192765654718464,
+              "ece": 0.01892171126799592,
+              "mean_confidence": 0.9810782887320041
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.05966568159572029,
+              "brier": 0.008245580506540989,
+              "ece": 0.05574768734835095,
+              "mean_confidence": 0.9442523126516491
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.018797816201418786,
+              "brier": 0.0020630907312250146,
+              "ece": 0.018112930984575594,
+              "mean_confidence": 0.9818870690154243
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.05207918031045229,
+              "brier": 0.012889092724324565,
+              "ece": 0.0473174715270413,
+              "mean_confidence": 0.9526825284729588
+            }
+          },
+          "all_four_correct": 1.0,
+          "pair_both_correct": 1.0
+        },
+        "focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.173828125,
+            "nll": 3.044448284912255,
+            "brier": 1.2079368743773184,
+            "ece": 0.5262643392244792,
+            "mean_confidence": 0.7000924642244792
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.01953125,
+              "nll": 3.9633249811284186,
+              "brier": 1.479164809586574,
+              "ece": 0.6839548415928806,
+              "mean_confidence": 0.7034860915928804
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 5.235452273097025,
+              "brier": 1.6441892167676753,
+              "ece": 0.7626300752204985,
+              "mean_confidence": 0.7626300752204984
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.31640625,
+              "nll": 1.4998846893039166,
+              "brier": 0.8514073583503392,
+              "ece": 0.31710926464873185,
+              "mean_confidence": 0.6331538257031528
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.359375,
+              "nll": 1.47913119611966,
+              "brier": 0.8569861128046854,
+              "ece": 0.3515564333636322,
+              "mean_confidence": 0.701099864381385
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        },
+        "complement_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.9638671875,
+            "nll": 0.28505400436031186,
+            "brier": 0.11742131487723988,
+            "ece": 0.16800209617359027,
+            "mean_confidence": 0.7966568869094982
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.98046875,
+              "nll": 0.3215735115051604,
+              "brier": 0.1396626909864127,
+              "ece": 0.2376777143829531,
+              "mean_confidence": 0.7427910356170468
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.875,
+              "nll": 0.6781414643372679,
+              "brier": 0.3023822525527139,
+              "ece": 0.30481650499004015,
+              "mean_confidence": 0.5733506773423136
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.06057225387985913,
+              "brier": 0.009920646097404999,
+              "ece": 0.056501988687287855,
+              "mean_confidence": 0.943498011312712
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 1.0,
+              "nll": 0.0799287877189601,
+              "brier": 0.01771966987242788,
+              "ece": 0.07301217663407969,
+              "mean_confidence": 0.9269878233659203
+            }
+          },
+          "all_four_correct": 0.85546875,
+          "pair_both_correct": 0.927734375
+        },
+        "reverse_focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.173828125,
+            "nll": 3.044448284912255,
+            "brier": 1.2079368743773182,
+            "ece": 0.5262643392244792,
+            "mean_confidence": 0.7000924642244792
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.01953125,
+              "nll": 3.9633249811284186,
+              "brier": 1.4791648095865741,
+              "ece": 0.6839548415928806,
+              "mean_confidence": 0.7034860915928804
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 5.235452273097025,
+              "brier": 1.6441892167676753,
+              "ece": 0.7626300752204985,
+              "mean_confidence": 0.7626300752204984
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.31640625,
+              "nll": 1.4998846893039166,
+              "brier": 0.8514073583503392,
+              "ece": 0.31710926464873196,
+              "mean_confidence": 0.6331538257031528
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.359375,
+              "nll": 1.4791311961196603,
+              "brier": 0.8569861128046854,
+              "ece": 0.3515564333636322,
+              "mean_confidence": 0.701099864381385
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        },
+        "no_question": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.25,
+            "nll": 3.8329307782134165,
+            "brier": 1.283591398003321,
+            "ece": 0.6031492789740361,
+            "mean_confidence": 0.8531492789740363
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.8515625,
+              "nll": 0.3499976725362689,
+              "brier": 0.20645280582672626,
+              "ece": 0.043958836900474724,
+              "mean_confidence": 0.8531492789740363
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 6.27087583753761,
+              "brier": 1.7691757398466876,
+              "ece": 0.8531492789740361,
+              "mean_confidence": 0.8531492789740363
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.015625,
+              "nll": 5.668786513088129,
+              "brier": 1.7061333877554148,
+              "ece": 0.8375242789740361,
+              "mean_confidence": 0.8531492789740363
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.1328125,
+              "nll": 3.042063089691659,
+              "brier": 1.4526036585844557,
+              "ece": 0.7203367789740361,
+              "mean_confidence": 0.8531492789740363
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        }
+      },
+      "retained_reference": {
+        "known": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.3515625,
+            "nll": 2.2292366195058912,
+            "brier": 0.856288011957018,
+            "ece": 0.33505977630894757,
+            "mean_confidence": 0.6866222763089475
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.25,
+              "nll": 3.206914624344636,
+              "brier": 1.0319718573420618,
+              "ece": 0.42323908562922075,
+              "mean_confidence": 0.6732390856292207
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.6015625,
+              "nll": 1.1514890227574517,
+              "brier": 0.4854078329262913,
+              "ece": 0.12887750235902465,
+              "mean_confidence": 0.7140735913319095
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.28125,
+              "nll": 2.3561038060689867,
+              "brier": 0.9766445148898263,
+              "ece": 0.41697079098744716,
+              "mean_confidence": 0.6908434016712053
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.2734375,
+              "nll": 2.20243902485249,
+              "brier": 0.9311278426698922,
+              "ece": 0.3948955266034544,
+              "mean_confidence": 0.6683330266034544
+            }
+          },
+          "all_four_correct": 0.25,
+          "pair_both_correct": 0.2513020833333333
+        },
+        "focus": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.40625,
+            "nll": 1.8375656105734444,
+            "brier": 0.7460308239518003,
+            "ece": 0.09253602055342636,
+            "mean_confidence": 0.31414822014778543
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.03125,
+              "nll": 2.8398666963638757,
+              "brier": 1.0076036968602438,
+              "ece": 0.254902826707753,
+              "mean_confidence": 0.2861528267077531
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.58203125,
+              "nll": 1.3816665947199334,
+              "brier": 0.6209083621908423,
+              "ece": 0.2505238985344089,
+              "mean_confidence": 0.3315073514655912
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.54296875,
+              "nll": 1.561409524331553,
+              "brier": 0.6715962478817075,
+              "ece": 0.22646491700520263,
+              "mean_confidence": 0.31773391619519975
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.46875,
+              "nll": 1.5673196268784162,
+              "brier": 0.6840149888744078,
+              "ece": 0.1527094854189298,
+              "mean_confidence": 0.32119878622259795
+            }
+          },
+          "all_four_correct": 0.0078125,
+          "pair_both_correct": 0.12369791666666667
+        },
+        "complement": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.0849609375,
+            "nll": 2.834957875378577,
+            "brier": 1.1260324861911717,
+            "ece": 0.41972972945816356,
+            "mean_confidence": 0.4707353686142619
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 3.189366481893466,
+              "brier": 1.2000964908049467,
+              "ece": 0.49617326950289026,
+              "mean_confidence": 0.4961732695028902
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.3359375,
+              "nll": 1.8552984621927444,
+              "brier": 0.7946157607906658,
+              "ece": 0.18749255682516686,
+              "mean_confidence": 0.262685102860611
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 3.196348683166133,
+              "brier": 1.286815634917439,
+              "ece": 0.5879999736042194,
+              "mean_confidence": 0.5879999736042194
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.00390625,
+              "nll": 3.0988178742619636,
+              "brier": 1.2226020582516357,
+              "ece": 0.5321768784893272,
+              "mean_confidence": 0.536083128489327
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        },
+        "focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.3056640625,
+            "nll": 1.9648992013888327,
+            "brier": 0.8045468920345589,
+            "ece": 0.16080539496789517,
+            "mean_confidence": 0.44954158200093886
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.00390625,
+              "nll": 3.1018102671456,
+              "brier": 1.1270536523848786,
+              "ece": 0.4195783726359392,
+              "mean_confidence": 0.4234846226359392
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.94140625,
+              "nll": 0.6261818003043456,
+              "brier": 0.2539429764724246,
+              "ece": 0.37803671831465074,
+              "mean_confidence": 0.5673645869438328
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.20703125,
+              "nll": 1.9636444930608388,
+              "brier": 0.8713917319154991,
+              "ece": 0.2076374960560406,
+              "mean_confidence": 0.3936078433759195
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.0703125,
+              "nll": 2.167960245044548,
+              "brier": 0.9657992073654329,
+              "ece": 0.3433967750480639,
+              "mean_confidence": 0.4137092750480639
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0390625
+        },
+        "complement_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.013671875,
+            "nll": 2.577193598369826,
+            "brier": 1.0019521989489564,
+            "ece": 0.31972518979825865,
+            "mean_confidence": 0.3333970647982587
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.01171875,
+              "nll": 2.6148312550919517,
+              "brier": 1.0056066415138876,
+              "ece": 0.31210879910229417,
+              "mean_confidence": 0.32382754910229417
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.00390625,
+              "nll": 2.764082984223267,
+              "brier": 1.061228805413952,
+              "ece": 0.363645499052488,
+              "mean_confidence": 0.36755174905248794
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.03515625,
+              "nll": 2.261863630835526,
+              "brier": 0.946935787455139,
+              "ece": 0.31471188684656676,
+              "mean_confidence": 0.3457899785856501
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.00390625,
+              "nll": 2.6679965233285596,
+              "brier": 0.9940375614128473,
+              "ece": 0.2925127324526025,
+              "mean_confidence": 0.29641898245260245
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        },
+        "reverse_focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.3056640625,
+            "nll": 1.9648992013888327,
+            "brier": 0.8045468920345589,
+            "ece": 0.16080539496789517,
+            "mean_confidence": 0.44954158200093886
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.00390625,
+              "nll": 3.1018102671456,
+              "brier": 1.1270536523848786,
+              "ece": 0.4195783726359392,
+              "mean_confidence": 0.4234846226359391
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.94140625,
+              "nll": 0.6261818003043456,
+              "brier": 0.2539429764724246,
+              "ece": 0.3780367183146508,
+              "mean_confidence": 0.5673645869438328
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.20703125,
+              "nll": 1.9636444930608388,
+              "brier": 0.8713917319154991,
+              "ece": 0.2076374960560406,
+              "mean_confidence": 0.3936078433759195
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.0703125,
+              "nll": 2.167960245044548,
+              "brier": 0.9657992073654329,
+              "ece": 0.3433967750480639,
+              "mean_confidence": 0.4137092750480639
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0390625
+        },
+        "no_question": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.25,
+            "nll": 3.2064330096462355,
+            "brier": 1.331432515360321,
+            "ece": 0.6463883417782759,
+            "mean_confidence": 0.8963883417782759
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 4.662405073467045,
+              "brier": 1.7892075537667838,
+              "ece": 0.8963883417782759,
+              "mean_confidence": 0.8963883417782759
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.9765625,
+              "nll": 0.14117495977446293,
+              "brier": 0.05659643366469885,
+              "ece": 0.08017415822172413,
+              "mean_confidence": 0.8963883417782759
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.0,
+              "nll": 4.566710082638411,
+              "brier": 1.7971064383338615,
+              "ece": 0.8963883417782759,
+              "mean_confidence": 0.8963883417782759
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.0234375,
+              "nll": 3.455441922705023,
+              "brier": 1.6828196356759406,
+              "ece": 0.8729508417782759,
+              "mean_confidence": 0.8963883417782759
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        }
+      },
+      "control_selected": {
+        "known": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.2568359375,
+            "nll": 3.0149557139692797,
+            "brier": 1.1598109917463448,
+            "ece": 0.4904160249882288,
+            "mean_confidence": 0.7472519624882288
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.21875,
+              "nll": 3.2914099232437666,
+              "brier": 1.2679961591198208,
+              "ece": 0.5768180756731375,
+              "mean_confidence": 0.7955680756731376
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.7734375,
+              "nll": 0.6948327746328331,
+              "brier": 0.3419413960387401,
+              "ece": 0.06767852106738925,
+              "mean_confidence": 0.71785452180016
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.01171875,
+              "nll": 4.104834349481146,
+              "brier": 1.511939982800611,
+              "ece": 0.7123868942441294,
+              "mean_confidence": 0.7241056442441294
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.0234375,
+              "nll": 3.9687458085193743,
+              "brier": 1.5173664290262072,
+              "ece": 0.7280421082354884,
+              "mean_confidence": 0.7514796082354883
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.033854166666666664
+        },
+        "focus": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.2724609375,
+            "nll": 2.3485167813384864,
+            "brier": 0.988137763620448,
+            "ece": 0.3453052653965381,
+            "mean_confidence": 0.6105857832857846
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.09765625,
+              "nll": 2.7020972647681845,
+              "brier": 1.1880977855986132,
+              "ece": 0.4955522982199848,
+              "mean_confidence": 0.5929622349226551
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.890625,
+              "nll": 0.5259780775561572,
+              "brier": 0.22032317281894023,
+              "ece": 0.24134843878733908,
+              "mean_confidence": 0.649276561212661
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.01953125,
+              "nll": 3.239460867132526,
+              "brier": 1.3047889546268148,
+              "ece": 0.5806714256235866,
+              "mean_confidence": 0.6002026756235866
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.08203125,
+              "nll": 2.9265309158970774,
+              "brier": 1.2393411414374238,
+              "ece": 0.5513919121789036,
+              "mean_confidence": 0.5999016613842361
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.017578125
+        },
+        "complement": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.150390625,
+            "nll": 2.3045445228812884,
+            "brier": 0.970405661415833,
+            "ece": 0.2825244754125263,
+            "mean_confidence": 0.43251367718436906
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.1171875,
+              "nll": 2.1058483984833756,
+              "brier": 0.9768338364563924,
+              "ece": 0.35118127246742514,
+              "mean_confidence": 0.4378814810127889
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.3984375,
+              "nll": 1.6511008719100218,
+              "brier": 0.7376114465781298,
+              "ece": 0.12751111438545773,
+              "mean_confidence": 0.42529764793494373
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.05078125,
+              "nll": 2.696132434029454,
+              "brier": 1.0761723673889294,
+              "ece": 0.3773979487439456,
+              "mean_confidence": 0.42605913682778984
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.03515625,
+              "nll": 2.765096387102302,
+              "brier": 1.0910049952398801,
+              "ece": 0.4060467181234012,
+              "mean_confidence": 0.44081644296195377
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.001953125
+        },
+        "focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.2724609375,
+            "nll": 2.00976933795726,
+            "brier": 0.8541246223565058,
+            "ece": 0.14465283819278113,
+            "mean_confidence": 0.41711377569278113
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.31640625,
+              "nll": 1.8274197428164545,
+              "brier": 0.8088361050437445,
+              "ece": 0.1511345796740851,
+              "mean_confidence": 0.4096368533402162
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.58984375,
+              "nll": 1.3819524917432795,
+              "brier": 0.5924179911481919,
+              "ece": 0.17658698074213797,
+              "mean_confidence": 0.434998305169924
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.0625,
+              "nll": 2.422749405487064,
+              "brier": 1.0129640975527796,
+              "ece": 0.35236237325790615,
+              "mean_confidence": 0.4088437052406776
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.12109375,
+              "nll": 2.4069557117822415,
+              "brier": 1.0022802956813073,
+              "ece": 0.3052612563336036,
+              "mean_confidence": 0.4149762390203069
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.018229166666666668
+        },
+        "complement_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.1298828125,
+            "nll": 2.3456273867873287,
+            "brier": 1.0003836436833717,
+            "ece": 0.3159556119422348,
+            "mean_confidence": 0.4431632574680372
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.3671875,
+              "nll": 1.5893435187861427,
+              "brier": 0.7403537985579038,
+              "ece": 0.12449083013845559,
+              "mean_confidence": 0.3744436416326536
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.11328125,
+              "nll": 2.463695267523071,
+              "brier": 1.0834653955434295,
+              "ece": 0.4752790443107374,
+              "mean_confidence": 0.5208823771235436
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.01953125,
+              "nll": 2.6237985156797894,
+              "brier": 1.115126443160933,
+              "ece": 0.4486313275997222,
+              "mean_confidence": 0.46816257759972224
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.01953125,
+              "nll": 2.7056722451603132,
+              "brier": 1.06258893747122,
+              "ece": 0.38963318351622955,
+              "mean_confidence": 0.40916443351622955
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        },
+        "reverse_focus_descriptions": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.2724609375,
+            "nll": 2.00976933795726,
+            "brier": 0.8541246223565058,
+            "ece": 0.14465283819278119,
+            "mean_confidence": 0.41711377569278113
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.31640625,
+              "nll": 1.8274197428164545,
+              "brier": 0.8088361050437445,
+              "ece": 0.15113457967408514,
+              "mean_confidence": 0.40963685334021627
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.58984375,
+              "nll": 1.3819524917432795,
+              "brier": 0.5924179911481919,
+              "ece": 0.17658698074213797,
+              "mean_confidence": 0.434998305169924
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.0625,
+              "nll": 2.422749405487064,
+              "brier": 1.0129640975527796,
+              "ece": 0.35236237325790615,
+              "mean_confidence": 0.40884370524067754
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.12109375,
+              "nll": 2.4069557117822415,
+              "brier": 1.0022802956813073,
+              "ece": 0.3052612563336036,
+              "mean_confidence": 0.4149762390203069
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.018229166666666668
+        },
+        "no_question": {
+          "overall": {
+            "count": 1024,
+            "accuracy": 0.25,
+            "nll": 2.436024399330303,
+            "brier": 1.1110775539006454,
+            "ece": 0.47691502856696233,
+            "mean_confidence": 0.7269150285669623
+          },
+          "tasks": {
+            "color": {
+              "count": 256,
+              "accuracy": 0.39453125,
+              "nll": 1.6174443738034041,
+              "brier": 0.9163153724247276,
+              "ece": 0.39912168159518846,
+              "mean_confidence": 0.7269150285669623
+            },
+            "count": {
+              "count": 256,
+              "accuracy": 0.58203125,
+              "nll": 1.1121894153963818,
+              "brier": 0.5710198534325954,
+              "ece": 0.15983590237485884,
+              "mean_confidence": 0.7269150285669623
+            },
+            "shape": {
+              "count": 256,
+              "accuracy": 0.0078125,
+              "nll": 3.8484517087105936,
+              "brier": 1.5100762621974833,
+              "ece": 0.7191025285669622,
+              "mean_confidence": 0.7269150285669623
+            },
+            "texture": {
+              "count": 256,
+              "accuracy": 0.015625,
+              "nll": 3.166012099410831,
+              "brier": 1.4468987275477754,
+              "ece": 0.7112900285669622,
+              "mean_confidence": 0.7269150285669623
+            }
+          },
+          "all_four_correct": 0.0,
+          "pair_both_correct": 0.0
+        }
+      }
+    },
+    "selected_models": {
+      "ce": "control_selected",
+      "contrast": "control_selected"
+    },
+    "selected_steps": {
+      "ce": 0,
+      "contrast": 0
+    },
+    "primary_comparison": "CE512 versus contrast512; same data and budget",
+    "final_retention": {
+      "ce": false,
+      "contrast": false
+    },
+    "paired_intervals": {
+      "known": {
+        "columns": [
+          "accuracy_candidate512_minus_control512",
+          "nll_candidate512_minus_control512"
+        ],
+        "groups": 256,
+        "questions": 1024,
+        "repetitions": 10000,
+        "seed": 17,
+        "method": "paired whole-state bootstrap; question-weighted mean; percentile 95%, linear",
+        "difference": [
+          0.0,
+          0.0006444807347918004
+        ],
+        "lower": [
+          0.0,
+          -9.618915944870615e-05
+        ],
+        "upper": [
+          0.0,
+          0.0015580633134970293
+        ]
+      },
+      "focus": {
+        "columns": [
+          "accuracy_candidate512_minus_control512",
+          "nll_candidate512_minus_control512"
+        ],
+        "groups": 256,
+        "questions": 1024,
+        "repetitions": 10000,
+        "seed": 17,
+        "method": "paired whole-state bootstrap; question-weighted mean; percentile 95%, linear",
+        "difference": [
+          -0.044921875,
+          0.38007838974007596
+        ],
+        "lower": [
+          -0.060546875,
+          0.36111418147073143
+        ],
+        "upper": [
+          -0.0302734375,
+          0.3994289136890579
+        ]
+      },
+      "complement": {
+        "columns": [
+          "accuracy_candidate512_minus_control512",
+          "nll_candidate512_minus_control512"
+        ],
+        "groups": 256,
+        "questions": 1024,
+        "repetitions": 10000,
+        "seed": 17,
+        "method": "paired whole-state bootstrap; question-weighted mean; percentile 95%, linear",
+        "difference": [
+          0.001953125,
+          -0.013061424149956027
+        ],
+        "lower": [
+          0.0,
+          -0.015364839758048598
+        ],
+        "upper": [
+          0.0048828125,
+          -0.010987015936663201
+        ]
+      },
+      "focus_descriptions": {
+        "columns": [
+          "accuracy_candidate512_minus_control512",
+          "nll_candidate512_minus_control512"
+        ],
+        "groups": 256,
+        "questions": 1024,
+        "repetitions": 10000,
+        "seed": 17,
+        "method": "paired whole-state bootstrap; question-weighted mean; percentile 95%, linear",
+        "difference": [
+          -0.0576171875,
+          0.3218092230984071
+        ],
+        "lower": [
+          -0.0732421875,
+          0.2949167923273878
+        ],
+        "upper": [
+          -0.04296875,
+          0.349623802319934
+        ]
+      },
+      "complement_descriptions": {
+        "columns": [
+          "accuracy_candidate512_minus_control512",
+          "nll_candidate512_minus_control512"
+        ],
+        "groups": 256,
+        "questions": 1024,
+        "repetitions": 10000,
+        "seed": 17,
+        "method": "paired whole-state bootstrap; question-weighted mean; percentile 95%, linear",
+        "difference": [
+          -0.0087890625,
+          0.027383692189885303
+        ],
+        "lower": [
+          -0.017578125,
+          0.021602203603611904
+        ],
+        "upper": [
+          0.0,
+          0.033039148445678505
+        ]
+      },
+      "reverse_focus_descriptions": {
+        "columns": [
+          "accuracy_candidate512_minus_control512",
+          "nll_candidate512_minus_control512"
+        ],
+        "groups": 256,
+        "questions": 1024,
+        "repetitions": 10000,
+        "seed": 17,
+        "method": "paired whole-state bootstrap; question-weighted mean; percentile 95%, linear",
+        "difference": [
+          -0.0576171875,
+          0.32180922309840726
+        ],
+        "lower": [
+          -0.0732421875,
+          0.29491679232738793
+        ],
+        "upper": [
+          -0.04296875,
+          0.34962380231993406
+        ]
+      },
+      "no_question": {
+        "columns": [
+          "accuracy_candidate512_minus_control512",
+          "nll_candidate512_minus_control512"
+        ],
+        "groups": 256,
+        "questions": 1024,
+        "repetitions": 10000,
+        "seed": 17,
+        "method": "paired whole-state bootstrap; question-weighted mean; percentile 95%, linear",
+        "difference": [
+          0.0,
+          1.3823312535328949
+        ],
+        "lower": [
+          0.0,
+          1.2884057836225777
+        ],
+        "upper": [
+          0.0,
+          1.476986976007439
+        ]
+      }
+    },
+    "controls": {
+      "control": {
+        "max_order_probability_difference": 4.440892098500626e-16,
+        "same_argmax_identity": true,
+        "max_question_free_probability_difference": 0.0
+      },
+      "candidate": {
+        "max_order_probability_difference": 4.440892098500626e-16,
+        "same_argmax_identity": true,
+        "max_question_free_probability_difference": 0.0
+      },
+      "retained_reference": {
+        "max_order_probability_difference": 3.3306690738754696e-16,
+        "same_argmax_identity": true,
+        "max_question_free_probability_difference": 0.0
+      },
+      "control_selected": {
+        "max_order_probability_difference": 3.3306690738754696e-16,
+        "same_argmax_identity": true,
+        "max_question_free_probability_difference": 0.0
+      }
+    },
+    "transfer_gate_failures": [
+      "focus_descriptions:minimum_task_accuracy",
+      "focus_descriptions:pair_accuracy",
+      "focus_descriptions:improvement",
+      "focus_descriptions:paired_lower",
+      "focus_descriptions:nll",
+      "focus_descriptions:brier",
+      "focus_descriptions:ece",
+      "complement_descriptions:minimum_task_accuracy",
+      "complement_descriptions:improvement",
+      "complement_descriptions:paired_lower",
+      "complement_descriptions:nll",
+      "complement_descriptions:brier"
+    ]
+  },
+  "post_hoc_error_attribution": {
+    "control": {
+      "known": {
+        "questions": 1024,
+        "correct": 1024,
+        "wrong_field": 0,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 0,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 256
+          },
+          "texture": {
+            "texture": 256
+          },
+          "count": {
+            "count": 256
+          },
+          "shape": {
+            "shape": 256
+          }
+        }
+      },
+      "focus": {
+        "questions": 1024,
+        "correct": 319,
+        "wrong_field": 705,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 705,
+        "target_to_predicted_field": {
+          "color": {
+            "shape": 195,
+            "color": 61
+          },
+          "texture": {
+            "shape": 204,
+            "color": 28,
+            "texture": 24
+          },
+          "count": {
+            "shape": 224,
+            "color": 24,
+            "texture": 8
+          },
+          "shape": {
+            "shape": 234,
+            "color": 22
+          }
+        }
+      },
+      "complement": {
+        "questions": 1024,
+        "correct": 1022,
+        "wrong_field": 2,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 2,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 256
+          },
+          "texture": {
+            "texture": 254,
+            "shape": 2
+          },
+          "count": {
+            "count": 256
+          },
+          "shape": {
+            "shape": 256
+          }
+        }
+      },
+      "focus_descriptions": {
+        "questions": 1024,
+        "correct": 237,
+        "wrong_field": 787,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 787,
+        "target_to_predicted_field": {
+          "color": {
+            "shape": 209,
+            "texture": 45,
+            "color": 2
+          },
+          "texture": {
+            "shape": 177,
+            "texture": 71,
+            "color": 8
+          },
+          "count": {
+            "shape": 222,
+            "texture": 28,
+            "color": 6
+          },
+          "shape": {
+            "shape": 164,
+            "texture": 75,
+            "color": 16,
+            "count": 1
+          }
+        }
+      },
+      "complement_descriptions": {
+        "questions": 1024,
+        "correct": 996,
+        "wrong_field": 28,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 28,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 249,
+            "texture": 7
+          },
+          "texture": {
+            "texture": 256
+          },
+          "count": {
+            "count": 235,
+            "texture": 16,
+            "shape": 5
+          },
+          "shape": {
+            "shape": 256
+          }
+        }
+      },
+      "reverse_focus_descriptions": {
+        "questions": 1024,
+        "correct": 237,
+        "wrong_field": 787,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 787,
+        "target_to_predicted_field": {
+          "color": {
+            "shape": 209,
+            "texture": 45,
+            "color": 2
+          },
+          "texture": {
+            "shape": 177,
+            "texture": 71,
+            "color": 8
+          },
+          "count": {
+            "shape": 222,
+            "texture": 28,
+            "color": 6
+          },
+          "shape": {
+            "shape": 164,
+            "texture": 75,
+            "color": 16,
+            "count": 1
+          }
+        }
+      },
+      "no_question": {
+        "questions": 1024,
+        "correct": 256,
+        "wrong_field": 768,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 768,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 132,
+            "shape": 56,
+            "texture": 59,
+            "count": 9
+          },
+          "texture": {
+            "color": 132,
+            "shape": 56,
+            "texture": 59,
+            "count": 9
+          },
+          "count": {
+            "color": 132,
+            "shape": 56,
+            "texture": 59,
+            "count": 9
+          },
+          "shape": {
+            "color": 132,
+            "shape": 56,
+            "texture": 59,
+            "count": 9
+          }
+        }
+      }
+    },
+    "candidate": {
+      "known": {
+        "questions": 1024,
+        "correct": 1024,
+        "wrong_field": 0,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 0,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 256
+          },
+          "texture": {
+            "texture": 256
+          },
+          "count": {
+            "count": 256
+          },
+          "shape": {
+            "shape": 256
+          }
+        }
+      },
+      "focus": {
+        "questions": 1024,
+        "correct": 273,
+        "wrong_field": 751,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 751,
+        "target_to_predicted_field": {
+          "color": {
+            "shape": 222,
+            "color": 28,
+            "texture": 6
+          },
+          "texture": {
+            "shape": 215,
+            "texture": 19,
+            "color": 22
+          },
+          "count": {
+            "shape": 235,
+            "color": 11,
+            "texture": 10
+          },
+          "shape": {
+            "shape": 226,
+            "color": 24,
+            "texture": 6
+          }
+        }
+      },
+      "complement": {
+        "questions": 1024,
+        "correct": 1024,
+        "wrong_field": 0,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 0,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 256
+          },
+          "texture": {
+            "texture": 256
+          },
+          "count": {
+            "count": 256
+          },
+          "shape": {
+            "shape": 256
+          }
+        }
+      },
+      "focus_descriptions": {
+        "questions": 1024,
+        "correct": 178,
+        "wrong_field": 846,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 846,
+        "target_to_predicted_field": {
+          "color": {
+            "shape": 183,
+            "texture": 68,
+            "color": 5
+          },
+          "texture": {
+            "shape": 148,
+            "texture": 92,
+            "color": 16
+          },
+          "count": {
+            "shape": 191,
+            "texture": 56,
+            "color": 9
+          },
+          "shape": {
+            "shape": 81,
+            "texture": 151,
+            "color": 23,
+            "count": 1
+          }
+        }
+      },
+      "complement_descriptions": {
+        "questions": 1024,
+        "correct": 987,
+        "wrong_field": 37,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 37,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 251,
+            "texture": 5
+          },
+          "texture": {
+            "texture": 256
+          },
+          "count": {
+            "count": 224,
+            "texture": 20,
+            "color": 1,
+            "shape": 11
+          },
+          "shape": {
+            "shape": 256
+          }
+        }
+      },
+      "reverse_focus_descriptions": {
+        "questions": 1024,
+        "correct": 178,
+        "wrong_field": 846,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 846,
+        "target_to_predicted_field": {
+          "color": {
+            "shape": 183,
+            "texture": 68,
+            "color": 5
+          },
+          "texture": {
+            "shape": 148,
+            "texture": 92,
+            "color": 16
+          },
+          "count": {
+            "shape": 191,
+            "texture": 56,
+            "color": 9
+          },
+          "shape": {
+            "shape": 81,
+            "texture": 151,
+            "color": 23,
+            "count": 1
+          }
+        }
+      },
+      "no_question": {
+        "questions": 1024,
+        "correct": 256,
+        "wrong_field": 768,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 768,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 218,
+            "shape": 4,
+            "texture": 34
+          },
+          "texture": {
+            "color": 218,
+            "shape": 4,
+            "texture": 34
+          },
+          "count": {
+            "color": 218,
+            "shape": 4,
+            "texture": 34
+          },
+          "shape": {
+            "color": 218,
+            "shape": 4,
+            "texture": 34
+          }
+        }
+      }
+    },
+    "retained_reference": {
+      "known": {
+        "questions": 1024,
+        "correct": 360,
+        "wrong_field": 659,
+        "correct_field_wrong_value": 5,
+        "wrong_field_value_matches_state": 588,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 64,
+            "count": 168,
+            "shape": 17,
+            "texture": 7
+          },
+          "texture": {
+            "texture": 70,
+            "count": 177,
+            "shape": 9
+          },
+          "count": {
+            "count": 159,
+            "texture": 29,
+            "shape": 67,
+            "color": 1
+          },
+          "shape": {
+            "shape": 72,
+            "count": 182,
+            "texture": 2
+          }
+        }
+      },
+      "focus": {
+        "questions": 1024,
+        "correct": 416,
+        "wrong_field": 605,
+        "correct_field_wrong_value": 3,
+        "wrong_field_value_matches_state": 594,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 79,
+            "texture": 74,
+            "shape": 95,
+            "color": 8
+          },
+          "texture": {
+            "count": 54,
+            "texture": 120,
+            "shape": 80,
+            "color": 2
+          },
+          "count": {
+            "count": 152,
+            "texture": 46,
+            "shape": 56,
+            "color": 2
+          },
+          "shape": {
+            "shape": 139,
+            "texture": 69,
+            "count": 47,
+            "color": 1
+          }
+        }
+      },
+      "complement": {
+        "questions": 1024,
+        "correct": 87,
+        "wrong_field": 937,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 937,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 239,
+            "texture": 5,
+            "shape": 12
+          },
+          "texture": {
+            "count": 251,
+            "texture": 1,
+            "color": 3,
+            "shape": 1
+          },
+          "count": {
+            "count": 86,
+            "texture": 72,
+            "shape": 37,
+            "color": 61
+          },
+          "shape": {
+            "count": 253,
+            "color": 3
+          }
+        }
+      },
+      "focus_descriptions": {
+        "questions": 1024,
+        "correct": 313,
+        "wrong_field": 711,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 711,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 227,
+            "shape": 23,
+            "texture": 5,
+            "color": 1
+          },
+          "texture": {
+            "count": 205,
+            "shape": 32,
+            "texture": 18,
+            "color": 1
+          },
+          "count": {
+            "count": 241,
+            "shape": 15
+          },
+          "shape": {
+            "count": 187,
+            "shape": 53,
+            "texture": 15,
+            "color": 1
+          }
+        }
+      },
+      "complement_descriptions": {
+        "questions": 1024,
+        "correct": 14,
+        "wrong_field": 1010,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 1010,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 148,
+            "shape": 92,
+            "texture": 13,
+            "color": 3
+          },
+          "texture": {
+            "count": 151,
+            "color": 67,
+            "shape": 37,
+            "texture": 1
+          },
+          "count": {
+            "color": 165,
+            "shape": 74,
+            "texture": 16,
+            "count": 1
+          },
+          "shape": {
+            "count": 157,
+            "texture": 6,
+            "shape": 9,
+            "color": 84
+          }
+        }
+      },
+      "reverse_focus_descriptions": {
+        "questions": 1024,
+        "correct": 313,
+        "wrong_field": 711,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 711,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 227,
+            "shape": 23,
+            "texture": 5,
+            "color": 1
+          },
+          "texture": {
+            "count": 205,
+            "shape": 32,
+            "texture": 18,
+            "color": 1
+          },
+          "count": {
+            "count": 241,
+            "shape": 15
+          },
+          "shape": {
+            "count": 187,
+            "shape": 53,
+            "texture": 15,
+            "color": 1
+          }
+        }
+      },
+      "no_question": {
+        "questions": 1024,
+        "correct": 256,
+        "wrong_field": 768,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 768,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 250,
+            "texture": 6
+          },
+          "texture": {
+            "count": 250,
+            "texture": 6
+          },
+          "count": {
+            "count": 250,
+            "texture": 6
+          },
+          "shape": {
+            "count": 250,
+            "texture": 6
+          }
+        }
+      }
+    },
+    "control_selected": {
+      "known": {
+        "questions": 1024,
+        "correct": 263,
+        "wrong_field": 759,
+        "correct_field_wrong_value": 2,
+        "wrong_field_value_matches_state": 759,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 56,
+            "count": 195,
+            "texture": 5
+          },
+          "texture": {
+            "color": 59,
+            "count": 191,
+            "texture": 6
+          },
+          "count": {
+            "count": 200,
+            "color": 47,
+            "texture": 8,
+            "shape": 1
+          },
+          "shape": {
+            "count": 197,
+            "color": 48,
+            "shape": 3,
+            "texture": 8
+          }
+        }
+      },
+      "focus": {
+        "questions": 1024,
+        "correct": 279,
+        "wrong_field": 745,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 745,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 212,
+            "color": 25,
+            "texture": 16,
+            "shape": 3
+          },
+          "texture": {
+            "count": 215,
+            "texture": 21,
+            "color": 16,
+            "shape": 4
+          },
+          "count": {
+            "count": 228,
+            "color": 13,
+            "texture": 13,
+            "shape": 2
+          },
+          "shape": {
+            "count": 216,
+            "texture": 20,
+            "color": 15,
+            "shape": 5
+          }
+        }
+      },
+      "complement": {
+        "questions": 1024,
+        "correct": 154,
+        "wrong_field": 870,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 870,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 189,
+            "color": 30,
+            "texture": 23,
+            "shape": 14
+          },
+          "texture": {
+            "count": 188,
+            "color": 50,
+            "texture": 9,
+            "shape": 9
+          },
+          "count": {
+            "color": 128,
+            "count": 102,
+            "shape": 6,
+            "texture": 20
+          },
+          "shape": {
+            "count": 159,
+            "color": 76,
+            "shape": 13,
+            "texture": 8
+          }
+        }
+      },
+      "focus_descriptions": {
+        "questions": 1024,
+        "correct": 279,
+        "wrong_field": 745,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 745,
+        "target_to_predicted_field": {
+          "color": {
+            "texture": 20,
+            "count": 139,
+            "color": 81,
+            "shape": 16
+          },
+          "texture": {
+            "texture": 31,
+            "count": 139,
+            "color": 65,
+            "shape": 21
+          },
+          "count": {
+            "texture": 24,
+            "count": 151,
+            "color": 62,
+            "shape": 19
+          },
+          "shape": {
+            "texture": 33,
+            "count": 144,
+            "color": 63,
+            "shape": 16
+          }
+        }
+      },
+      "complement_descriptions": {
+        "questions": 1024,
+        "correct": 133,
+        "wrong_field": 891,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 891,
+        "target_to_predicted_field": {
+          "color": {
+            "count": 135,
+            "color": 94,
+            "texture": 19,
+            "shape": 8
+          },
+          "texture": {
+            "color": 147,
+            "count": 101,
+            "texture": 5,
+            "shape": 3
+          },
+          "count": {
+            "color": 220,
+            "count": 29,
+            "texture": 4,
+            "shape": 3
+          },
+          "shape": {
+            "color": 184,
+            "count": 60,
+            "texture": 7,
+            "shape": 5
+          }
+        }
+      },
+      "reverse_focus_descriptions": {
+        "questions": 1024,
+        "correct": 279,
+        "wrong_field": 745,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 745,
+        "target_to_predicted_field": {
+          "color": {
+            "texture": 20,
+            "count": 139,
+            "color": 81,
+            "shape": 16
+          },
+          "texture": {
+            "texture": 31,
+            "count": 139,
+            "color": 65,
+            "shape": 21
+          },
+          "count": {
+            "texture": 24,
+            "count": 151,
+            "color": 62,
+            "shape": 19
+          },
+          "shape": {
+            "texture": 33,
+            "count": 144,
+            "color": 63,
+            "shape": 16
+          }
+        }
+      },
+      "no_question": {
+        "questions": 1024,
+        "correct": 256,
+        "wrong_field": 768,
+        "correct_field_wrong_value": 0,
+        "wrong_field_value_matches_state": 768,
+        "target_to_predicted_field": {
+          "color": {
+            "color": 101,
+            "count": 149,
+            "texture": 4,
+            "shape": 2
+          },
+          "texture": {
+            "color": 101,
+            "count": 149,
+            "texture": 4,
+            "shape": 2
+          },
+          "count": {
+            "color": 101,
+            "count": 149,
+            "texture": 4,
+            "shape": 2
+          },
+          "shape": {
+            "color": 101,
+            "count": 149,
+            "texture": 4,
+            "shape": 2
+          }
+        }
+      }
+    }
+  },
+  "mechanism_support": false,
+  "mechanism_failures": [
+    "final_retention",
+    "focus_descriptions:improvement",
+    "focus_descriptions:paired_lower",
+    "focus_descriptions:nll",
+    "focus_descriptions:brier",
+    "focus_descriptions:ece",
+    "complement_descriptions:improvement",
+    "complement_descriptions:paired_lower",
+    "complement_descriptions:nll",
+    "complement_descriptions:brier"
+  ],
+  "final_quality_failures": [
+    "focus_descriptions:minimum_task_accuracy",
+    "focus_descriptions:pair_accuracy",
+    "focus_descriptions:improvement",
+    "focus_descriptions:paired_lower",
+    "focus_descriptions:nll",
+    "focus_descriptions:brier",
+    "focus_descriptions:ece",
+    "complement_descriptions:minimum_task_accuracy",
+    "complement_descriptions:improvement",
+    "complement_descriptions:paired_lower",
+    "complement_descriptions:nll",
+    "complement_descriptions:brier"
+  ],
+  "final_retention": {
+    "ce": false,
+    "contrast": false
+  },
+  "selected_steps": {
+    "ce": 0,
+    "contrast": 0
+  },
+  "selected_consumption": {
+    "ce": 0,
+    "contrast": 0
+  },
+  "selected_weight_hashes": {
+    "ce": "b063f124e59c8a4c1b09c7bf2a8423846f73489d7ce8cd6649735745bc6cebf5",
+    "contrast": "b063f124e59c8a4c1b09c7bf2a8423846f73489d7ce8cd6649735745bc6cebf5"
+  },
+  "resources": {
+    "condition-contrast-ce-fit-01": {
+      "seconds": 596.8633589000019,
+      "peak_vram_bytes": 2257383424,
+      "peak_host_bytes": 1756020736,
+      "candidate_pair_forward_presentations": 749114,
+      "actual_candidate_pairs": null,
+      "max_tokens": 512,
+      "truncated_pair_presentations": 1624,
+      "started_utc": "2026-10-15T07:57:20.444085+00:00",
+      "finished_utc": "2026-10-15T08:07:17.310473+00:00"
+    },
+    "condition-contrast-ce-replay-01": {
+      "seconds": 92.6824831000049,
+      "peak_vram_bytes": 338388992,
+      "peak_host_bytes": 1310322688,
+      "candidate_pair_forward_presentations": 109879,
+      "actual_candidate_pairs": null,
+      "max_tokens": 512,
+      "truncated_pair_presentations": 239,
+      "started_utc": "2026-10-15T08:19:15.059127+00:00",
+      "finished_utc": "2026-10-15T08:20:47.741743+00:00"
+    },
+    "condition-contrast-fit-01": {
+      "seconds": 611.4920319999947,
+      "peak_vram_bytes": 2257383424,
+      "peak_host_bytes": 1761501184,
+      "candidate_pair_forward_presentations": 749114,
+      "actual_candidate_pairs": null,
+      "max_tokens": 512,
+      "truncated_pair_presentations": 1624,
+      "started_utc": "2026-10-15T08:08:33.248306+00:00",
+      "finished_utc": "2026-10-15T08:18:44.740725+00:00"
+    },
+    "condition-contrast-replay-01": {
+      "seconds": 93.56669530000363,
+      "peak_vram_bytes": 338388992,
+      "peak_host_bytes": 1310408704,
+      "candidate_pair_forward_presentations": 109879,
+      "actual_candidate_pairs": null,
+      "max_tokens": 512,
+      "truncated_pair_presentations": 239,
+      "started_utc": "2026-10-15T08:20:48.993951+00:00",
+      "finished_utc": "2026-10-15T08:22:22.568264+00:00"
+    },
+    "condition-contrast-transfer-01": {
+      "seconds": 551.6411105999941,
+      "peak_vram_bytes": 356538368,
+      "peak_host_bytes": 1300709376,
+      "candidate_pair_forward_presentations": null,
+      "actual_candidate_pairs": 1146880,
+      "max_tokens": 85,
+      "truncated_pair_presentations": null,
+      "started_utc": "2026-10-15T08:23:01.948416+00:00",
+      "finished_utc": "2026-10-15T08:32:13.594073+00:00"
+    },
+    "condition-contrast-transfer-replay-01": {
+      "seconds": 557.1700376000008,
+      "peak_vram_bytes": 356538368,
+      "peak_host_bytes": 1300615168,
+      "candidate_pair_forward_presentations": null,
+      "actual_candidate_pairs": 1146880,
+      "max_tokens": 85,
+      "truncated_pair_presentations": null,
+      "started_utc": "2026-10-15T08:32:57.187974+00:00",
+      "finished_utc": "2026-10-15T08:42:14.361108+00:00"
+    },
+    "condition-contrast-smoke-01": {
+      "seconds": 33.65838669999357,
+      "peak_vram_bytes": 1947896832,
+      "peak_host_bytes": 1723486208,
+      "candidate_pair_forward_presentations": 355,
+      "actual_candidate_pairs": null,
+      "max_tokens": 310,
+      "truncated_pair_presentations": 0,
+      "started_utc": "2026-10-15T07:56:27.079101+00:00",
+      "finished_utc": "2026-10-15T07:57:00.737388+00:00"
+    }
+  },
+  "run_manifest_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-contrast-ce-fit-01\\result.json": "3864e669dfedce7545f84f60a35121d911923dbf18a002d57e3900a328fc59de",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-contrast-ce-replay-01\\result.json": "149dd2858cffae1a09a3f44edd4dec4f1e18a58fa83aa5669bf5709ac92ccd19",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-contrast-fit-01\\result.json": "13e4fc327fec2d02ec07eca2c4ea47e2ec9feb5c153e06e4cee64d63b764bf5e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-contrast-replay-01\\result.json": "1dbefdf7f8dd0f125320691d91d51079af1590074b54214bd6d9e952a4f734fa",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-contrast-transfer-01\\result.json": "77374d662cf68a3df95eae01d72375b107d1b8974811234c5af0accad00e5233",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-contrast-transfer-replay-01\\result.json": "57477ec51094ed0fbdbfaab7c0a1b925324b3e4a3eea30a8e2d987d7729781e8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-contrast-smoke-01\\result.json": "12834d7e581fbd561be0e36e8f90c6011cdd80629d64697a9c5108beddd1f27d"
+  },
+  "cloud_cost": 0,
+  "exact_selected_replay_files_per_arm": 15,
+  "exact_post_replay_files": 86
+}
