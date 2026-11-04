@@ -350,7 +350,12 @@ def test_text_criterion_features_change_typed_choice_and_roundtrip(tmp_path):
         first.bias[1] = -10.0
         model.scorer.network[2].weight.fill_(1.0)
 
-    def decide(request, criterion_value):
+    synthetic_encoder = {
+        "choose the higher score": torch.tensor([10.0]),
+        "choose the lower score": torch.tensor([-10.0]),
+    }
+
+    def decide(request):
         return decide_cached_native_fusion(
             model,
             request,
@@ -359,14 +364,13 @@ def test_text_criterion_features_change_typed_choice_and_roundtrip(tmp_path):
             max_age_ms=10.0,
             required_modalities=("sensor",),
             option_schema=schema,
-            criterion_features=torch.tensor([criterion_value]),
-            criterion_present=True,
+            criterion_encoder=synthetic_encoder.__getitem__,
         )
 
-    high = decide(batch, 10.0)
+    high = decide(batch)
     low_request = batch.model_copy(deep=True)
     low_request.criterion.value = "choose the lower score"
-    low = decide(low_request, -10.0)
+    low = decide(low_request)
     assert high["selected_option_id"] == "high"
     assert low["selected_option_id"] == "low"
     assert [row["option_id"] for row in high["options"]] == ["low", "high"]
@@ -374,7 +378,7 @@ def test_text_criterion_features_change_typed_choice_and_roundtrip(tmp_path):
 
     reversed_request = batch.model_copy(deep=True)
     reversed_request.options = tuple(reversed(reversed_request.options))
-    reversed_high = decide(reversed_request, 10.0)
+    reversed_high = decide(reversed_request)
     assert reversed_high["selected_option_id"] == "high"
     assert {
         row["option_id"]: row["probability"] for row in reversed_high["options"]
@@ -388,6 +392,6 @@ def test_text_criterion_features_change_typed_choice_and_roundtrip(tmp_path):
     reloaded.load_state_dict(torch.load(checkpoint, map_location="cpu", weights_only=True))
     original_model = model
     model = reloaded
-    reloaded_high = decide(batch, 10.0)
+    reloaded_high = decide(batch)
     assert reloaded_high == high
     model = original_model

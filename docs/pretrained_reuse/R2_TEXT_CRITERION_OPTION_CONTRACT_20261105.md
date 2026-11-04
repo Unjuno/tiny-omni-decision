@@ -3,10 +3,11 @@
 ## Result
 
 `decide_cached_native_fusion` now accepts a non-typed criterion when the caller
-provides its precomputed criterion feature vector. It still consumes only
-hash-checked cached modality features; it does not load a text or speech
-encoder, tokenize criterion text, or read raw media. A criterion present in the
-request without a feature vector fails closed.
+provides its precomputed criterion feature vector. For text criteria, the
+caller may instead pass a frozen encoder callback. It still consumes only
+hash-checked cached modality features; it imports or loads no text or speech
+encoder and reads no raw media. A criterion present in the request without
+either a feature vector or the supported text callback fails closed.
 
 A CPU-only synthetic test uses deterministic hand-set scorer weights to show
 that changing only the criterion feature polarity changes the selected typed
@@ -38,9 +39,10 @@ stay open; this result does not justify training or model promotion.
 
 `TypedTextDecisionRuntime.encode_criterion()` now exposes one criterion vector
 from the same frozen MiniLM-L3 encoder already used by the Path A text runtime.
-It validates nonempty input and returns a finite `[384]` pooled feature; callers
-can pass that vector as `criterion_features` to cached native fusion. The model
-is the existing `sentence-transformers/paraphrase-MiniLM-L3-v2` revision
+It validates nonempty input and returns a finite `[384]` pooled feature. Its
+method can be passed directly as the cached native fusion `criterion_encoder`
+callback. The model is the existing
+`sentence-transformers/paraphrase-MiniLM-L3-v2` revision
 `4ca70771034acceecb2e72475f72050fcdde4ddc`, with encoder weights SHA-256
 `cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`.
 
@@ -55,3 +57,11 @@ its weights were read-only.
 - `python -m pytest tests/test_text_runtime.py tests/test_native_feature_decision.py -q`: 26 passed.
 - `ruff check src/tiny_omni_decision/text_runtime.py tests/test_text_runtime.py`: passed.
 - `git diff --check`: passed.
+
+The end-to-end CPU smoke then passed the real MiniLM criterion callback,
+hash-checked synthetic sensor cache and typed candidates through the fusion
+JSON endpoint. It produced normalized two-option JSON for both criteria and
+matched the exact first response after saving/reloading the randomly initialized
+fusion scorer. The two selected options happened to differ, but the random
+scorer is untrained and this must not be interpreted as criterion-following
+quality. No labels or quality metrics were used.
