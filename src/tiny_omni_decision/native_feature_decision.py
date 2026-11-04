@@ -21,7 +21,7 @@ from .cache import ObservationFeatureKey
 from .classification_json import classification_json
 from .decision import FrozenFeatureCandidateScorer
 from .fusion_decision import FusionDecisionScorer
-from .observations import NativeOption, ObservationBatch
+from .observations import NATIVE_DECISION_MODALITIES, NativeOption, ObservationBatch
 from .temporal_feature_state import SessionTemporalFeatureState
 
 
@@ -261,7 +261,7 @@ def decide_cached_native_feature(
     Missing or stale evidence produces an abstention with null probabilities.
     """
     batch = ObservationBatch.model_validate(batch.model_dump())
-    if modality not in {"audio", "image", "screen", "video", "sensor"}:
+    if modality not in NATIVE_DECISION_MODALITIES:
         raise ValueError("M1 requires one supported non-text modality")
     if batch.criterion is not None:
         raise ValueError("single-modality M1 adapter does not accept a criterion")

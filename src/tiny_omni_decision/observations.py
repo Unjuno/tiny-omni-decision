@@ -1,11 +1,13 @@
 """Versioned, text-optional observation metadata; no encoder imports or inference."""
 
-from typing import Annotated, Literal
+from typing import Annotated, Literal, get_args
 
 from pydantic import BaseModel, ConfigDict, Field, FiniteFloat, StrictBool, model_validator
 
 Nonempty = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
 Modality = Literal["text", "audio", "image", "screen", "video", "sensor"]
+OBSERVATION_MODALITIES = frozenset(get_args(Modality))
+NATIVE_DECISION_MODALITIES = OBSERVATION_MODALITIES - {"text"}
 Scalar = StrictBool | int | FiniteFloat | str
 
 

@@ -13,6 +13,8 @@ from pathlib import Path
 from threading import RLock
 from typing import Any
 
+from .observations import OBSERVATION_MODALITIES
+
 _HEADER_LENGTH = struct.Struct(">Q")
 
 
@@ -46,7 +48,7 @@ class ObservationFeatureKey:
     end_ms: int | None = None
 
     def __post_init__(self) -> None:
-        if self.modality not in {"text", "image", "audio", "screen", "video", "sensor"}:
+        if self.modality not in OBSERVATION_MODALITIES:
             raise FeatureCacheError(f"unsupported observation modality: {self.modality}")
         for name in (
             "source_id",

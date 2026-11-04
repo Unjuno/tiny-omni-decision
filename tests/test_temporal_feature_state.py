@@ -5,6 +5,7 @@ import hashlib
 import pytest
 
 from tiny_omni_decision.cache import ObservationFeatureKey
+from tiny_omni_decision.observations import OBSERVATION_MODALITIES, Modality
 from tiny_omni_decision.temporal_feature_state import (
     SessionTemporalFeatureState,
     TemporalFeatureStateError,
@@ -12,6 +13,31 @@ from tiny_omni_decision.temporal_feature_state import (
 
 RUNTIME = hashlib.sha256(b"runtime-v1").hexdigest()
 OTHER_RUNTIME = hashlib.sha256(b"runtime-v2").hexdigest()
+
+
+def test_observation_modality_contract_is_shared_by_feature_cache_and_temporal_state():
+    from typing import get_args
+
+    assert OBSERVATION_MODALITIES == frozenset(get_args(Modality))
+    store = state(
+        max_serialized_bytes=16_384,
+        max_events_per_stream=1,
+        max_streams=len(OBSERVATION_MODALITIES),
+    )
+    for index, modality in enumerate(sorted(OBSERVATION_MODALITIES)):
+        source_id = f"{modality}-source"
+        feature_key = key(modality, source_id, f"payload-{index}".encode())
+        store.update_feature(
+            modality=modality,
+            source_id=source_id,
+            available_at_ms=float(index + 1),
+            key=feature_key,
+            payload=f"payload-{index}".encode(),
+            runtime_sha256=RUNTIME,
+            clock_id="synthetic-clock",
+        )
+
+    assert store.event_count == len(OBSERVATION_MODALITIES)
 
 
 def key(modality: str, source_id: str, content: bytes) -> ObservationFeatureKey:

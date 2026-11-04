@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from threading import RLock
 
 from tiny_omni_decision.cache import ObservationFeatureKey
+from tiny_omni_decision.observations import OBSERVATION_MODALITIES
 
 
 class TemporalFeatureStateError(ValueError):
@@ -110,7 +111,7 @@ class SessionTemporalFeatureState:
 
     @staticmethod
     def _validate_stream(modality: str, source_id: str) -> tuple[str, str]:
-        if modality not in {"text", "image", "audio", "screen", "video", "sensor"}:
+        if modality not in OBSERVATION_MODALITIES:
             raise TemporalFeatureStateError(f"unsupported modality: {modality}")
         _nonempty(source_id, "source_id")
         return modality, source_id
