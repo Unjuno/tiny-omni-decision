@@ -4,7 +4,10 @@ import pytest
 
 torch = pytest.importorskip("torch")
 
-from scripts.verify_textfree_audio_patha_feature_parity import _tensor_delta  # noqa: E402
+from scripts.verify_textfree_audio_patha_feature_parity import (  # noqa: E402
+    _select_device,
+    _tensor_delta,
+)
 
 
 def test_tensor_delta_reports_exact_parity() -> None:
@@ -22,3 +25,20 @@ def test_tensor_delta_reports_backend_drift() -> None:
 def test_tensor_delta_rejects_shape_mismatch() -> None:
     with pytest.raises(ValueError, match="equal shapes"):
         _tensor_delta(torch.ones(2), torch.ones(3))
+
+
+def test_select_device_accepts_cpu() -> None:
+    assert str(_select_device("cpu")) == "cpu"
+
+
+def test_select_device_rejects_unknown_device() -> None:
+    with pytest.raises(ValueError, match="device must be"):
+        _select_device("mps")
+
+
+def test_select_device_fails_closed_when_cuda_is_unavailable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    with pytest.raises(RuntimeError, match="CUDA was requested but is unavailable"):
+        _select_device("cuda")
