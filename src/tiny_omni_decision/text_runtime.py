@@ -115,6 +115,17 @@ class TypedTextDecisionRuntime:
             raise ValueError("MiniLM produced invalid pooled text features")
         return pooled
 
+    def encode_criterion(self, criterion: str) -> Tensor:
+        """Encode one natural-language criterion with the pinned frozen encoder.
+
+        The returned vector can be supplied to a feature-fusion Decision model
+        whose criterion width is ``TEXT_FEATURE_SIZE``. This only encodes the
+        wording; it does not establish that a downstream scorer follows it.
+        """
+        if not isinstance(criterion, str) or not criterion.strip():
+            raise ValueError("text criterion must be a nonempty string")
+        return self._encode([criterion])[0]
+
     def decide(
         self, state: str, question: str, options: Sequence[str]
     ) -> DecisionOutput:
