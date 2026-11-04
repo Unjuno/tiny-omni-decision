@@ -1,0 +1,70 @@
+{
+  "source_commit": "e749b0317a9e23d08162bfc6be37b93fecea91cd",
+  "config_sha256": "6326ee2d4cf01efbee01282311c81839c24a6b691d28f877e72c973c66e01e2d",
+  "run_sha256": "1ceb0aa2595c0a3166e3f537cc031ed2636548bf9269f5d42cde85630b0f3694",
+  "predictions_sha256": "337606bc374740e7203e0d206a34291c8a41956d9dcde53fe2a040466f8e766b",
+  "curves": [
+    {
+      "accuracy": 0.49166666666666664,
+      "brier": 0.5379236846672472,
+      "count": 1560,
+      "ece_15": 0.1307235008630997,
+      "mean_confidence": 0.6223901675297664,
+      "nll": 0.7341314930060414,
+      "step": 1
+    },
+    {
+      "accuracy": 0.5160256410256411,
+      "brier": 0.5114161055432996,
+      "count": 1560,
+      "ece_15": 0.07123682074821912,
+      "mean_confidence": 0.5872624617738601,
+      "nll": 0.705682860178841,
+      "step": 25
+    },
+    {
+      "accuracy": 0.4980769230769231,
+      "brier": 0.5225949981980138,
+      "count": 1560,
+      "ece_15": 0.10027158699738674,
+      "mean_confidence": 0.5981029132619883,
+      "nll": 0.7174432399526397,
+      "step": 50
+    },
+    {
+      "accuracy": 0.49166666666666664,
+      "brier": 0.5360532896445799,
+      "count": 1560,
+      "ece_15": 0.11150391518305507,
+      "mean_confidence": 0.6031705818497217,
+      "nll": 0.7319636740166183,
+      "step": 100
+    },
+    {
+      "accuracy": 0.5032051282051282,
+      "brier": 0.538825230440014,
+      "count": 1560,
+      "ece_15": 0.1136294348499714,
+      "mean_confidence": 0.6090302885724947,
+      "nll": 0.7355412479074723,
+      "step": 200
+    },
+    {
+      "accuracy": 0.49423076923076925,
+      "brier": 0.538570793861583,
+      "count": 1560,
+      "ece_15": 0.11747651065771399,
+      "mean_confidence": 0.6117072798884832,
+      "nll": 0.7354220524525028,
+      "step": 400
+    }
+  ],
+  "artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-train-cv-unit-scale-20261104-attempt-01",
+  "elapsed_seconds": 26.333402000018395,
+  "observed_peak_working_set_bytes": 610930688,
+  "trainable_parameters": 73728,
+  "reload_exact": true,
+  "baseline_config_equal_except_scale": true,
+  "all_normalizer_hashes_equal": true,
+  "disposition": "NOT_ADOPTED: improved calibration metrics without improved discrimination"
+}

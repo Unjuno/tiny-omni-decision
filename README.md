@@ -1,5 +1,7 @@
 # Tiny Omni Decision
 
+**2026-11-04 R2 TRAIN-only learning curves:** Five-fold fits over original TRAIN demonstrate overfitting in the pooled AV readout. A one-factor score-scale arm reduces NLL/ECE but loses accuracy; neither is promoted. Existing validation/audit remain closed. [Measured curves and artifacts](docs/pretrained_reuse/R2_ROBOMNIST_TRAIN_CV_RESULTS_20261104.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results
