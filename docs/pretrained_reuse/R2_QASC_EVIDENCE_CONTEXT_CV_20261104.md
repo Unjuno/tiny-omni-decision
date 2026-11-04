@@ -109,6 +109,11 @@ The reproducible corrected run is in:
   `report.json` records the same value as `runner_sha256`. The checked-in
   runner and analysis auditor retain the corrected implementation. No weight
   or media file is added to Git.
+- After this run, CI exposed that the research runner imported optional Torch/
+  Transformers dependencies while tests only need its CPU-safe split and
+  integrity helpers. Those imports now occur only inside the execution entry
+  point. This changes module import behavior, not the recorded training math;
+  the run-time script hash above remains the exact hash retained in `report.json`.
 
 ## Interpretation and next gate
 

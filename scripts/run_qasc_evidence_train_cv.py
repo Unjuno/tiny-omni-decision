@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.metadata
 import json
 import math
@@ -14,27 +15,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-import torch
 import yaml
-from torch.nn import functional as F
-from transformers import AutoModel, AutoTokenizer
 
-from scripts.run_qasc_train_cv import (
-    BATCH_QUESTIONS,
-    EPOCHS,
-    FEATURE_SIZE,
-    HIDDEN_SIZE,
-    LEARNING_RATE,
-    SEED,
-    WEIGHT_DECAY,
-    _baseline_position_probabilities,
-    _metrics,
-    _predict,
-    _sha256,
-    _write_json,
-)
-from scripts.train_frozen_text_probe import _extract_features, _format_context, _load_examples
-from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 from tiny_omni_decision.qasc import _normalized
 from tiny_omni_decision.qasc_cv import (
     audit_qasc_train_folds,
@@ -44,6 +26,27 @@ from tiny_omni_decision.qasc_cv import (
 from tiny_omni_decision.schema import DatasetManifest
 
 EXPECTED_FEATURE_MODEL_SHA256 = "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433"
+SEED = 17
+EPOCHS = 8
+BATCH_QUESTIONS = 64
+FEATURE_SIZE = 1536
+HIDDEN_SIZE = 128
+LEARNING_RATE = 1e-3
+WEIGHT_DECAY = 1e-4
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _write_json(path: Path, value: Any) -> None:
+    path.write_text(
+        json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8"
+    )
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -145,6 +148,18 @@ def _paired_group_bootstrap(
 
 
 def main() -> None:
+    import torch
+    from torch.nn import functional as F
+    from transformers import AutoModel, AutoTokenizer
+
+    from scripts.run_qasc_train_cv import (
+        _baseline_position_probabilities,
+        _metrics,
+        _predict,
+    )
+    from scripts.train_frozen_text_probe import _extract_features, _format_context, _load_examples
+    from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--train-jsonl", type=Path, required=True)
     parser.add_argument("--preparation-report", type=Path, required=True)

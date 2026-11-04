@@ -10,21 +10,20 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
 
-from scripts.run_qasc_evidence_train_cv import _metrics, _read_jsonl, _sha256
-from scripts.run_qasc_train_cv import SEED
 from tiny_omni_decision.qasc import _normalized
 from tiny_omni_decision.qasc_cv import qasc_train_component_ids
 
+SEED = 17
 
-def _probabilities(rows: list[dict[str, Any]]) -> torch.Tensor:
-    values = torch.tensor([row["probabilities"] for row in rows], dtype=torch.float32)
+
+def _probabilities(rows: list[dict[str, Any]]) -> np.ndarray:
+    values = np.asarray([row["probabilities"] for row in rows], dtype=np.float32)
     if values.ndim != 2 or values.shape[1] != 8:
         raise ValueError("saved predictions must contain eight option probabilities")
-    if not torch.isfinite(values).all() or (values < 0).any():
+    if not np.isfinite(values).all() or (values < 0).any():
         raise ValueError("saved probabilities must be finite and nonnegative")
-    if not torch.allclose(values.sum(-1), torch.ones(len(values)), atol=1e-5):
+    if not np.allclose(values.sum(-1), np.ones(len(values)), atol=1e-5):
         raise ValueError("saved eight-choice probabilities must sum to one")
     return values
 
@@ -36,6 +35,10 @@ def audit_result(
     *,
     replicates: int = 10_000,
 ) -> dict[str, Any]:
+    import torch
+
+    from scripts.run_qasc_evidence_train_cv import _metrics, _read_jsonl, _sha256
+
     preparation = json.loads(preparation_path.read_text(encoding="utf-8"))
     report_path = run_dir / "report.json"
     report = json.loads(report_path.read_text(encoding="utf-8"))
@@ -84,8 +87,10 @@ def audit_result(
     candidate_probabilities = _probabilities(candidate)
     reference_probabilities = _probabilities(reference)
     target_tensor = torch.tensor(targets, dtype=torch.long)
-    candidate_metrics = _metrics(candidate_probabilities, target_tensor)
-    reference_metrics = _metrics(reference_probabilities, target_tensor)
+    candidate_tensor = torch.from_numpy(candidate_probabilities)
+    reference_tensor = torch.from_numpy(reference_probabilities)
+    candidate_metrics = _metrics(candidate_tensor, target_tensor)
+    reference_metrics = _metrics(reference_tensor, target_tensor)
     for key, value in candidate_metrics.items():
         if isinstance(value, (int, float)) and not math.isclose(
             float(value), float(report["out_of_fold_metrics"][key]), rel_tol=1e-9, abs_tol=1e-12
@@ -98,7 +103,7 @@ def audit_result(
         if indices:
             strata[str(label).lower()] = {
                 "examples": len(indices),
-                "metrics": _metrics(candidate_probabilities[indices], target_tensor[indices]),
+                "metrics": _metrics(candidate_tensor[indices], target_tensor[indices]),
             }
     exact_fact_overlap_count = sum(target_in_facts)
     expected_overlap_count = int(
