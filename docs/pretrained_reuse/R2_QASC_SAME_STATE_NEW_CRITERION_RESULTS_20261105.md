@@ -29,6 +29,19 @@ The normalized target option text occurs in the supplied evidence in 542/683 hel
 
 The correct-state model is still overconfident: mean confidence 0.8406 versus 0.7862 Accuracy, ECE-15 0.0653. Zero-state and shuffled-state controls are also severely overconfident despite near-chance Accuracy. A deployed system must not interpret a score from absent or mismatched evidence as a reliable decision; this experiment did not implement an abstention policy.
 
+### Post-hoc target-not-in-evidence sensitivity (2026-11-05)
+
+After the fixed aggregate result, the already saved predictions were stratified on the protocol's `target_in_evidence` field. No model, data, prediction, or checkpoint was changed. On the 141 held rows (141 distinct state groups) where the exact normalized target string was absent from both supplied facts, the correct-state + criterion condition scored 102/141 (72.34%) Accuracy, 0.8770 NLL, 0.3943 Brier, and 0.1194 ECE-15. Same-checkpoint controls scored:
+
+| Condition | Accuracy | NLL | Brier | ECE-15 |
+|---|---:|---:|---:|---:|
+| Correct state + criterion | 0.7234 | 0.8770 | 0.3943 | 0.1194 |
+| Correct state, criterion absent | 0.6312 | 1.3518 | 0.5337 | 0.1656 |
+| Zero state content + criterion | 0.2128 | 4.2001 | 1.1673 | 0.4864 |
+| Deranged different state + criterion | 0.1560 | 5.4280 | 1.3508 | 0.6005 |
+
+Exploratory paired state-cluster bootstrap (5,000 percentile resamples, seed 1718) intervals for correct-state minus control were +9.12 pp Accuracy (+2.13, +16.31), -0.4762 NLL (-0.7032, -0.2665), and -0.1387 Brier (-0.2176, -0.0648) against criterion-absent; +50.97 pp Accuracy (+41.84, +59.57), -3.3183 NLL (-3.9457, -2.7020), and -0.7716 Brier (-0.9005, -0.6467) against zero-state; and +56.67 pp Accuracy (+47.52, +65.96), -4.5467 NLL (-5.2437, -3.8668), and -0.9550 Brier (-1.0855, -0.8225) against the deranged state. This weakens the specific explanation that the observed signal comes solely from copying the exact target string, but does not rule out semantic/lexical shortcuts, dataset artifacts, or exposure to all QASC TRAIN rows in earlier project experiments. The stratum and this follow-up were post-hoc, remain development-only, and were not used for model selection or promotion. Reproduction command: `$env:PYTHONPATH='src'; py -3.11 scripts/analyze_qasc_same_state_nonliteral.py --run-dir 'C:\CodexArtifacts\pretrained-reuse-r2\qasc-same-state-new-criterion-20261105-attempt-01'`. The analysis script SHA-256 is `2b861d539d7f31e292060fb0ec921752f978a0c5fcf164500001077f161323b6`; machine-readable output is `C:\CodexArtifacts\pretrained-reuse-r2\qasc-same-state-new-criterion-20261105-attempt-01\target-not-in-evidence-analysis.json` (SHA-256 `8fe32f0e07d8633446b32dfb405082870d3b4191e447f475a93c5a9d5087092b`). The input held-prediction file remains SHA-256 `7138c49afb424e615aa1c95b08cc0e733368010f4ed49ab18ffaad49a6de9650`.
+
 Every QASC TRAIN row was already in the universe of the preceding five-fold QASC experiment. These held questions are new only relative to this one fixed fit; they are **not project-level unseen data or independent quality evidence**. QASC official validation, test, and sealed audit were not read. This is text only and does not demonstrate persistent cache/runtime savings, video/audio/image/sensor competence, or M2 cross-modal fusion. Keep R2-M and product promotion gates open.
 
 ## Frozen split, model, and training
