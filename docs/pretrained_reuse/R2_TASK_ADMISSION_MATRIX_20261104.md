@@ -45,3 +45,7 @@ The prior matrix's DCASE and Eidon candidates remain weak/negative; PhysicalAI
 scene identity remains unresolved, and user-owned split manifests are excluded
 from this review. If no candidate passes these gates, continue R0/R1 feasibility
 work instead of fitting another weakly identified task.
+
+## Residual RoboMNIST cohort follow-up — 2026-11-04
+
+A read-only split-code/manifest screen found only 10 groups unselected from the prior non-sealed eligible pool of 1,790 (1,780 already assigned to train/validation). The other 345 of 2,135 total source groups were outside that pool and were not inspected. Ten groups are far below the task's provisional 1,000-group validation gate. Do not train or re-evaluate this task; see [the residual-group screen](R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md). This does not establish a clean fresh evaluation cohort.
