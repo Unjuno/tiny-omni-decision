@@ -1,0 +1,35 @@
+# R2 text-criterion to typed-option contract (2026-11-05)
+
+## Result
+
+`decide_cached_native_fusion` now accepts a non-typed criterion when the caller
+provides its precomputed criterion feature vector. It still consumes only
+hash-checked cached modality features; it does not load a text or speech
+encoder, tokenize criterion text, or read raw media. A criterion present in the
+request without a feature vector fails closed.
+
+A CPU-only synthetic test uses deterministic hand-set scorer weights to show
+that changing only the criterion feature polarity changes the selected typed
+option, that reversing supplied option order preserves probabilities by
+option ID, and that save/reload reproduces the exact response. The criterion
+vectors are supplied directly by the test; no learned text encoder or model
+quality is being claimed.
+
+The existing text-free `decide_cached_native_feature` interface continues to
+reject a criterion. The new contract is specific to the feature-fusion scorer.
+
+## Verification
+
+- `python -m pytest tests/test_native_feature_decision.py -q`: 16 passed.
+- `ruff check src/tiny_omni_decision/native_feature_decision.py tests/test_native_feature_decision.py`: passed.
+- Whole-file `ruff format --check` reports formatting differences in both
+  touched files, including pre-existing sections; no broad formatting rewrite
+  is included in this narrow change.
+
+## Limits and next gate
+
+This is an interface contract only. A text/spoken criterion encoder must still
+be selected, pinned, loaded and tested. Real text-conditioned option selection,
+task-admitted data, generalization, calibration, latency and multi-input
+quality remain unverified. R2-M1/R2-M2 stay open; this result does not justify
+training or model promotion.

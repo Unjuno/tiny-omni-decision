@@ -363,7 +363,9 @@ def decide_cached_native_fusion(
     Cache timestamps are treated as evidence-availability times by
     ``gather_aligned_features``. This adapter validates shared clock metadata,
     and abstains before model inference if any task-required modality is absent
-    or stale. It consumes no raw media and makes no model-quality claim.
+    or stale. Optional typed, text, or spoken criteria must be encoded by the
+    caller and supplied as ``criterion_features``; this adapter loads no text
+    or speech encoder and consumes no raw media.
     """
     batch = ObservationBatch.model_validate(batch.model_dump())
     if not isinstance(model, FusionDecisionScorer):
@@ -375,8 +377,6 @@ def decide_cached_native_fusion(
     if not required or not required <= names:
         raise ValueError("at least one configured required modality is required")
     batch.require_shared_clock()
-    if batch.criterion is not None and batch.criterion.kind != "typed":
-        raise ValueError("cached native fusion does not encode free-text or spoken criteria")
     if (option_schema is None) == (option_features is None):
         raise ValueError("provide exactly one typed option schema or option feature matrix")
     if option_schema is not None:
@@ -387,7 +387,7 @@ def decide_cached_native_fusion(
     if (criterion_features is None) != (not criterion_present):
         raise ValueError("present criterion requires a feature vector; absent criterion forbids it")
     if batch.criterion is not None and not criterion_present:
-        raise ValueError("typed batch criterion requires its precomputed criterion features")
+        raise ValueError("batch criterion requires precomputed criterion features")
     if criterion_features is not None and criterion_features.shape != (model.criterion_dim,):
         raise ValueError("criterion features must match the model criterion width")
     if (not math.isfinite(query_time_ms) or not math.isfinite(max_age_ms)
