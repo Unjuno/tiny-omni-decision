@@ -175,7 +175,10 @@ def run(corpus: Path, train_run: Path, fresh_eval: Path, output: Path) -> dict[s
     if not np.array_equal(fresh_logits.argmax(axis=1), (alpha * fresh_logits).argmax(axis=1)):
         raise ValueError("positive temperature changed candidate ranking")
     base_metrics = metrics(fresh_logits, fresh_targets)
-    _verify_metrics(base_metrics, fresh_summary["metrics"]["linear_selected_step_616"])
+    _verify_metrics(
+        base_metrics,
+        fresh_summary["metrics"]["linear_selected_step_616"]["overall"],
+    )
     scaled_logits = alpha * fresh_logits
     scaled_metrics = metrics(scaled_logits, fresh_targets)
     paired = {
