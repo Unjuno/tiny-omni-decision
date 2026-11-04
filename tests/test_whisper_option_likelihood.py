@@ -2,7 +2,7 @@ import pytest
 
 torch = pytest.importorskip("torch")
 
-from tiny_omni_decision.whisper_option_likelihood import (
+from tiny_omni_decision.whisper_option_likelihood import (  # noqa: E402
     build_decoder_batch,
     candidate_probabilities,
     mean_transcript_log_likelihoods,
