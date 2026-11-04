@@ -31,10 +31,13 @@ audio inputs.
 - Code commit: `fef96cb4a6eb002e0b012ace327f2dc7f4268d5d`.
 - Environment: Python 3.11.9; PyTorch 2.6.0+cu124; NVIDIA GeForce RTX 3080 Laptop GPU, 16 GiB. The audit used the existing BF16 CUDA path. No cloud or paid compute was used.
 
-The four IDs and media hashes are preserved in the external run record. Only
-`train.jsonl` and its selected media were read. The script explicitly records
-that no validation manifest, target labels, or sealed audit was loaded. No
-weights, media, or feature cache were modified; no training or calibration ran.
+The four IDs and media hashes are preserved in the external run record. The
+runner parsed the frozen `train.jsonl` manifest to verify source/split and
+select distinct speaker groups, then read only those four media files. It did
+not use target values for selection, inference, or metrics; the manifest parser
+does deserialize the full TRAIN rows. No validation manifest or sealed audit
+was opened. No weights, media, or feature cache were modified; no training or
+calibration ran.
 
 ## Reproduction
 
