@@ -83,6 +83,18 @@ still requires a distinct source with explicit rights, fresh independent
 groups, and a frozen task/control design; do not substitute another model
 variant on the same exposed RoboMNIST source.
 
+## BBBD video + sensor source screen — 2026-11-05
+
+BBBD v1.1 has a documented CC BY 4.0 grant for its released neural,
+physiological, and behavioral data, but the 11 stimulus videos are third-party
+YouTube sources and video-training rights were not established. Correct-answer
+selection is answerable from video content without participant signals; the
+alternative human-response prediction task is plausible but unvalidated and
+requires matched unimodal controls. Subject IDs restart per experiment and
+questions/videos recur; there are only 11 underlying video identities. Keep
+`REVIEW_NOT_ADMITTED` for joint video + sensor fitting; no payload was accessed.
+See [BBBD source/task screen](R2_BBBD_SOURCE_TASK_SCREEN_20261105.md).
+
 ## 2026-11-05 Action Verb Corpus source screen
 
 The OFAI resource page presents a small synchronized audio/video/motion task
