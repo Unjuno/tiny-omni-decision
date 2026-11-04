@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "snapshot_date": "2026-11-04",
-  "scope": "metadata-only reconciliation of tracked R2 source screens, protocols, and results; no media, model, feature, sealed-audit, or user-owned untracked manifest payloads opened",
-  "worktree_head": "6e42213ed886f1d8e5d16b9df626eb6f8d618d58",
-  "origin_head": "6e42213ed886f1d8e5d16b9df626eb6f8d618d58",
+  "scope": "metadata-only source reconciliation plus the one predeclared RoboMNIST AV-match validation evaluation recorded in R2_ROBOMNIST_AV_MATCH_EVALUATION_20261104.md; no sealed-audit or user-owned untracked manifest payloads opened",
+  "worktree_head": "477ece18fdd21869ee8287d7f3abcb4a4d68d10a",
+  "origin_head": "477ece18fdd21869ee8287d7f3abcb4a4d68d10a",
   "capacity": {
-    "c_free_gib_approx": 1.40,
+    "c_free_gib_approx": 7.8,
     "robomnist_extractor_reserve_gib": 2.0,
     "quartus_compile_live": true,
     "intervened_in_process": false
@@ -17,11 +17,12 @@
       "source_revision": "figshare official v1; pinned details in R2_ROBOMNIST_SOURCE_20261014.md",
       "group_key": "full primary-combination repetition; all modality files remain together",
       "task_requires_both_by_construction": true,
-      "empirical_both_input_benefit": "UNKNOWN; full evaluation not run",
+      "empirical_both_input_benefit": "SMALL_ACCURACY_SIGNAL; joint 0.5335 vs each unimodal 0.5000; paired 95% CI +0.0130 to +0.0550 over 500 pair units, but joint NLL/Brier/ECE-15 are severely poor (1.2494/0.7217/0.3074)",
       "split": {"train_groups": 780, "validation_groups": 1000, "independent_pair_units": {"train": 390, "validation": 500}},
-      "validation_exposure": "previously exposed development metadata; not blind or scene-held-out",
-      "cache": {"verified_groups": 1778, "required_groups": 1780, "missing_groups": 2, "missing_are_validation_only": true},
-      "decision": "BLOCKED_ON_CAPACITY_AND_INCOMPLETE_CACHE"
+      "validation_exposure": "development validation evaluated once; not blind, scene-held-out, or eligible for further model tuning",
+      "validation_metrics": {"rows": 2000, "pair_units": 500, "joint_accuracy": 0.5335, "joint_nll": 1.2494230554, "joint_brier": 0.7217002573, "joint_ece_15": 0.3074068756, "audio_only_accuracy": 0.5, "video_only_accuracy": 0.5, "paired_bootstrap_replicates": 2000, "seed": 17},
+      "cache": {"verified_groups": 1780, "required_groups": 1780, "missing_groups": 0, "missing_are_validation_only": true, "status": "COMPLETE"},
+      "decision": "DO_NOT_RETUNE_OR_PROMOTE; modest task-specific accuracy gain but severe calibration failure and limited split independence"
     },
     {
       "id": "dcase2025_starss23_av_recording_match",
@@ -70,8 +71,8 @@
     }
   ],
   "overall_decision": "NO_CANDIDATE_CURRENTLY_PASSES_ALL_R2_M_GATES",
-  "next_action": "resume original RoboMNIST feature cache only after stable free space meets the existing 2 GiB reserve; evaluate the unchanged train-only checkpoint on all 2000 validation rows once; do not fit or tune again",
+  "next_action": "do not retune or re-evaluate RoboMNIST validation; screen a genuinely fresh, rights-cleared, independently grouped task for measured modality-native and joint Path A evaluation, resolving task/data gates before fitting",
   "sealed_audit_opened": false,
-  "new_training_or_inference": false,
+  "new_training_or_inference": true,
   "artifacts_deleted": false
 }
