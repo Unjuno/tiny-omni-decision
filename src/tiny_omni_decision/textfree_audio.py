@@ -91,7 +91,9 @@ class TextFreeAudioReadout(nn.Module):
         ):
             raise ValueError("options must contain at least two unique known class IDs")
         all_logits = self(audio_features)
-        indexes = torch.tensor([self.class_ids.index(item) for item in requested])
+        indexes = torch.tensor(
+            [self.class_ids.index(item) for item in requested], device=all_logits.device
+        )
         probabilities = torch.softmax(all_logits[indexes].float() / temperature, dim=-1).tolist()
         return classification_json(probabilities, requested, options)
 

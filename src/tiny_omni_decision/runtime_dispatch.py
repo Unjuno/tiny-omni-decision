@@ -165,6 +165,7 @@ class PathARuntimeDispatcher:
     Request forms are task-specific and explicit:
     - text: ``state``, ``question``, ``options``
     - audio: ``audio_path``, ``queries`` (question/options pairs)
+    - audio_native: ``audio_path``, typed ``options`` with ``option_id`` / ``class_id``
     - image: ``image_path``, ``taxonomy``, ``options``
     - video: ``video_path``, ``question``, ``candidate_statement``
     """
@@ -177,6 +178,8 @@ class PathARuntimeDispatcher:
         videoprism_source: Path,
         worker_log_dir: Path,
         device: str = "cuda",
+        textfree_audio_encoder_dir: Path | None = None,
+        textfree_audio_readout_path: Path | None = None,
     ) -> None:
         self.assembly_dir = assembly_dir.resolve(strict=True)
         verify_started = time.perf_counter()
@@ -189,9 +192,20 @@ class PathARuntimeDispatcher:
             raise FileExistsError(f"worker log directory is not empty: {self.worker_log_dir}")
         if device not in {"cpu", "cuda"}:
             raise ValueError("device must be cpu or cuda")
+        if (textfree_audio_encoder_dir is None) != (textfree_audio_readout_path is None):
+            raise ValueError("text-free audio encoder and readout paths must be provided together")
+        self.textfree_audio_encoder_dir = (
+            textfree_audio_encoder_dir.resolve(strict=True)
+            if textfree_audio_encoder_dir is not None else None
+        )
+        self.textfree_audio_readout_path = (
+            textfree_audio_readout_path.resolve(strict=True)
+            if textfree_audio_readout_path is not None else None
+        )
         self.device = device
         self._torch_worker: JsonLineWorker | None = None
         self._videoprism_worker: JsonLineWorker | None = None
+        self._textfree_audio_worker: JsonLineWorker | None = None
         self._request_id = 0
         self._project_root = Path(__file__).resolve().parents[2]
         env = os.environ.copy()
@@ -208,6 +222,9 @@ class PathARuntimeDispatcher:
         return {
             "torch": self._torch_worker.ready if self._torch_worker else None,
             "videoprism": self._videoprism_worker.ready if self._videoprism_worker else None,
+            "textfree_audio": (
+                self._textfree_audio_worker.ready if self._textfree_audio_worker else None
+            ),
         }
 
     def _next_id(self) -> str:
@@ -254,11 +271,35 @@ class PathARuntimeDispatcher:
             )
         return self._videoprism_worker
 
+    def _ensure_textfree_audio(self) -> JsonLineWorker:
+        if self.textfree_audio_encoder_dir is None or self.textfree_audio_readout_path is None:
+            raise ValueError("text-free audio runtime artifacts were not configured")
+        if self._textfree_audio_worker is None:
+            self._textfree_audio_worker = JsonLineWorker(
+                [
+                    sys.executable,
+                    "-B",
+                    "-m",
+                    "scripts.path_a_textfree_audio_worker",
+                    "--encoder-dir",
+                    str(self.textfree_audio_encoder_dir),
+                    "--readout",
+                    str(self.textfree_audio_readout_path),
+                    "--device",
+                    self.device,
+                ],
+                cwd=self._project_root,
+                env=self._worker_env,
+                log_path=self.worker_log_dir / "textfree-audio-worker.log",
+            )
+        return self._textfree_audio_worker
+
     def dispatch(self, task: str, payload: dict[str, Any]) -> dict[str, Any]:
         request_id = self._next_id()
         started = time.perf_counter()
         torch_was_running = self._torch_worker is not None
         videoprism_was_running = self._videoprism_worker is not None
+        audio_was_running = getattr(self, "_textfree_audio_worker", None) is not None
         if task == "image":
             response = self._ensure_videoprism().request(
                 {"request_id": request_id, "task": task, "payload": payload}
@@ -282,6 +323,10 @@ class PathARuntimeDispatcher:
             response = self._ensure_torch().request(
                 {"request_id": request_id, "task": task, "payload": payload}
             )
+        elif task == "audio_native":
+            response = self._ensure_textfree_audio().request(
+                {"request_id": request_id, "payload": payload}
+            )
         else:
             raise ValueError(f"unsupported Path A task: {task}")
         startup_wall = {}
@@ -289,6 +334,8 @@ class PathARuntimeDispatcher:
             startup_wall["torch"] = self._torch_worker.startup_wall_seconds
         if not videoprism_was_running and self._videoprism_worker is not None:
             startup_wall["videoprism"] = self._videoprism_worker.startup_wall_seconds
+        if not audio_was_running and getattr(self, "_textfree_audio_worker", None) is not None:
+            startup_wall["textfree_audio"] = self._textfree_audio_worker.startup_wall_seconds
         return {
             **response,
             "dispatch_request_id": request_id,
@@ -325,6 +372,18 @@ class PathARuntimeDispatcher:
                     query_options
                 ) != spec.option_texts:
                     raise ValueError("audio decision option texts must match query order")
+        elif task == "audio_native":
+            options = payload.get("options")
+            if not isinstance(options, list) or len(decision_specs) != 1:
+                raise ValueError("audio_native requires one spec and a typed options list")
+            spec = decision_specs[0]
+            try:
+                option_ids = tuple(option["option_id"] for option in options)
+                class_ids = tuple(option["class_id"] for option in options)
+            except (TypeError, KeyError) as error:
+                raise ValueError("audio_native options require option_id and class_id") from error
+            if option_ids != spec.option_ids or class_ids != spec.option_texts:
+                raise ValueError("audio_native options must match the typed decision order")
         else:
             if len(decision_specs) != 1:
                 raise ValueError("non-audio Path A tasks require exactly one decision spec")
@@ -378,11 +437,14 @@ class PathARuntimeDispatcher:
         }
 
     def close(self) -> None:
-        for worker in (self._torch_worker, self._videoprism_worker):
+        for worker in (
+            self._torch_worker, self._videoprism_worker, self._textfree_audio_worker
+        ):
             if worker is not None:
                 worker.close()
         self._torch_worker = None
         self._videoprism_worker = None
+        self._textfree_audio_worker = None
 
     def __enter__(self) -> PathARuntimeDispatcher:
         return self

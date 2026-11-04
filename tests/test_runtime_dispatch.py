@@ -257,3 +257,75 @@ def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract() -> None:
         "right",
     ]
     assert result["encoder_metrics"] == {"cache_hits": 1}
+
+
+def test_dispatch_typed_routes_textfree_audio_without_starting_other_workers() -> None:
+    class TextFreeAudioWorker:
+        def __init__(self) -> None:
+            self.requests = []
+
+        def request(self, payload: dict[str, object]) -> dict[str, object]:
+            self.requests.append(payload)
+            return {
+                "probabilities": [0.8, 0.2],
+                "prediction_index": 0,
+                "confidence": 0.8,
+                "encoder_metrics": {"cache_hit": True, "single_event_encoder_calls": 1},
+            }
+
+    worker = TextFreeAudioWorker()
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._request_id = 0
+    dispatcher._torch_worker = None
+    dispatcher._videoprism_worker = None
+    dispatcher._textfree_audio_worker = worker
+    dispatcher.textfree_audio_encoder_dir = Path("encoder")
+    dispatcher.textfree_audio_readout_path = Path("readout.pt")
+    dispatcher.device = "cpu"
+    dispatcher.worker_log_dir = Path("unused")
+
+    options = [
+        {"option_id": "stop-id", "class_id": "stop"},
+        {"option_id": "go-id", "class_id": "go"},
+    ]
+    result = dispatcher.dispatch_typed(
+        "audio_native",
+        {"audio_path": "train.wav", "options": options},
+        decision_specs=[
+            TypedDecisionSpec(
+                "native-audio-1", "choice", ("stop-id", "go-id"), ("stop", "go")
+            )
+        ],
+    )
+
+    assert result["decision_json"]["selected_option_id"] == "stop-id"
+    assert [row["probability"] for row in result["decision_json"]["options"]] == [0.8, 0.2]
+    assert result["encoder_metrics"]["single_event_encoder_calls"] == 1
+    assert len(worker.requests) == 1
+    assert worker.requests[0]["payload"]["options"] == options
+    assert dispatcher._torch_worker is None
+    assert dispatcher._videoprism_worker is None
+
+
+def test_dispatch_typed_rejects_misbound_textfree_audio_options_before_worker() -> None:
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._request_id = 0
+    dispatcher._torch_worker = None
+    dispatcher._videoprism_worker = None
+    dispatcher._textfree_audio_worker = None
+
+    with pytest.raises(ValueError, match="typed decision order"):
+        dispatcher.dispatch_typed(
+            "audio_native",
+            {"audio_path": "train.wav", "options": [
+                {"option_id": "go-id", "class_id": "go"},
+                {"option_id": "stop-id", "class_id": "stop"},
+            ]},
+            decision_specs=[
+                TypedDecisionSpec(
+                    "native-audio-1", "choice", ("stop-id", "go-id"), ("stop", "go")
+                )
+            ],
+        )
+
+    assert dispatcher._textfree_audio_worker is None
