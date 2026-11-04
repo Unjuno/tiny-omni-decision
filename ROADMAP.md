@@ -1,5 +1,12 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-11-05 R2 text-free Decision wiring smoke:** Added the cached-feature
+single-modality adapter and five synthetic M1 fixtures, plus one synchronized
+four-state Video+Sensor XOR wiring fixture. Identifier/display-text invariance,
+typed JSON probabilities and required-input abstention pass CPU tests. This is
+interface evidence only; no pretrained model quality or real multimodal gain is
+established. See [smoke report](docs/pretrained_reuse/R2_TEXTFREE_NATIVE_DECISION_SMOKE_20261105.md).
+
 **2026-11-05 R2 EgoViz train-only calibration transfer:** A scalar fitted on
 five-fold session-held-out logits from the existing 773-example/48-session
 training corpus improved NLL, Brier, and 10-bin ECE on the stored 2,394-example
