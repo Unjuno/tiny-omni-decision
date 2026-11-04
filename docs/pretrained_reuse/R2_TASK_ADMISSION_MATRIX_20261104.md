@@ -82,3 +82,12 @@ The candidate remains **not admitted for product promotion**. Next fitting work
 still requires a distinct source with explicit rights, fresh independent
 groups, and a frozen task/control design; do not substitute another model
 variant on the same exposed RoboMNIST source.
+
+## 2026-11-05 Action Verb Corpus source screen
+
+The OFAI resource page presents a small synchronized audio/video/motion task
+and says CC BY 4.0, but its linked Zenodo release labels the dataset
+CC BY-NC-SA 4.0. Audio also contains spoken descriptions of the action, so
+both-input necessity is not established, and only 12 participants/46 episodes
+are available. Keep it REVIEW_NOT_ADMITTED; no payload was accessed. See
+the [source screen](R2_ACTION_VERB_CORPUS_SOURCE_SCREEN_20261105.md).
