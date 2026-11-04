@@ -37,6 +37,8 @@ LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 WIDTH = 128
 FUSION_PARAMETERS = 164_610
+OPTION_PERMUTATION_ATOL = 1e-6
+OPTION_PERMUTATION_RTOL = 1e-6
 EXPECTED_CORPUS_SHA256 = "6ad3536ebba70a35f87bf078d0d2837df09fda652201a2b4a6fd7d7b01ed7f0b"
 EXPECTED_FOLD_SHA256 = "72282c4b57fb2e5a56c4d2f15f75d11bf11f79071d8ac8a981b1a7311bcd0b67"
 EXPECTED_ROWS = 8_134
@@ -216,6 +218,10 @@ def main() -> None:
         or training_config.get("width") != WIDTH
         or training_config.get("trainable_parameters") != FUSION_PARAMETERS
         or training_config.get("device") != "cpu"
+        or config.get("option_permutation_tolerance", {}).get("atol")
+        != OPTION_PERMUTATION_ATOL
+        or config.get("option_permutation_tolerance", {}).get("rtol")
+        != OPTION_PERMUTATION_RTOL
     ):
         raise ValueError("effective run constants differ from the frozen experiment config")
     config_sha256 = _sha256(config_path)
@@ -262,6 +268,8 @@ def main() -> None:
             "option_dimension": TEXT_FEATURE_SIZE,
             "hidden_width": WIDTH,
             "trainable_parameters": FUSION_PARAMETERS,
+            "option_permutation_atol": OPTION_PERMUTATION_ATOL,
+            "option_permutation_rtol": OPTION_PERMUTATION_RTOL,
             "checkpoint_rule": "fixed epoch 8 endpoint; no held-fold checkpoint selection",
             "official_validation_read": False,
             "official_test_read": False,
@@ -389,7 +397,13 @@ def main() -> None:
         permuted = _predict(
             reloaded, states, criteria, options, probe_indices, permutation=permutation
         )
-        if not torch.allclose(permuted[:, permutation], probe, atol=1e-7, rtol=1e-7):
+        option_permutation_delta = float((permuted[:, permutation] - probe).abs().max())
+        if not torch.allclose(
+            permuted[:, permutation],
+            probe,
+            atol=OPTION_PERMUTATION_ATOL,
+            rtol=OPTION_PERMUTATION_RTOL,
+        ):
             raise AssertionError(f"option permutation invariance failed in fold {held_fold}")
 
         targets = torch.tensor([target_indices[i] for i in held_indices])
@@ -414,6 +428,7 @@ def main() -> None:
                 "checkpoint_sha256": _sha256(checkpoint),
                 "save_reload_exact": True,
                 "option_permutation_invariant": True,
+                "option_permutation_max_abs_probability_delta": option_permutation_delta,
                 "training_seconds": fold_training_seconds,
                 "evaluation_seconds": fold_eval_seconds,
             }
@@ -522,6 +537,9 @@ def main() -> None:
         "save_reload_exact_all_folds": all(item["save_reload_exact"] for item in fold_results),
         "option_permutation_invariant_all_folds": all(
             item["option_permutation_invariant"] for item in fold_results
+        ),
+        "option_permutation_max_abs_probability_delta": max(
+            item["option_permutation_max_abs_probability_delta"] for item in fold_results
         ),
         "training_seconds": training_seconds,
         "evaluation_and_reload_seconds": evaluation_seconds,

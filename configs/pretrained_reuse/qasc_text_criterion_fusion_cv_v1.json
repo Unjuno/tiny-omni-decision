@@ -44,6 +44,12 @@
     "option permutation invariance on fixed held-fold rows",
     "exact save/reload prediction parity"
   ],
+  "option_permutation_tolerance": {
+    "dtype": "float32",
+    "atol": 0.000001,
+    "rtol": 0.000001,
+    "reason": "allow normal CPU floating-point accumulation differences after candidate reordering"
+  },
   "forbidden_inputs": [
     "official validation shard",
     "official test shard",

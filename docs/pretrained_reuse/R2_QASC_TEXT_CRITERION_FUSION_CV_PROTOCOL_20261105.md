@@ -37,10 +37,25 @@ frozen.
 - Report OOF Accuracy, NLL, multiclass Brier, ECE-15 and mean confidence,
   per-fold scores, uniform and fold-training position-prior controls, and a
   same-checkpoint criterion-masked ablation. Check option permutation and
-  exact save/reload parity.
+  exact save/reload parity; accept option-permutation differences only within
+  float32 `atol=1e-6`, `rtol=1e-6`.
 - Store predictions and fold checkpoints under the new external directory
-  `C:\CodexArtifacts\pretrained-reuse-r2\qasc-text-criterion-fusion-cv-20261105-attempt-01`.
+  `C:\CodexArtifacts\pretrained-reuse-r2\qasc-text-criterion-fusion-cv-20261105-attempt-02`.
   Refuse to overwrite it.
+
+## Execution correction
+
+Attempt 01 used the same fixed seed, data, folds, architecture and schedule,
+but an overly strict float32 permutation assertion (`1e-7`). It completed fold
+0 and trained/saved the fold-1 endpoint, then stopped before fold-1 metrics
+because 32 held-fold rows had maximum probability delta `2.3841858e-7` after
+reordering, with zero top-option changes. A separate CPU replay on the saved
+fold-1 checkpoint confirmed the comparison passes at `1e-6`. This is a numeric
+invariance tolerance correction only; no task metric, weights, training
+condition, or checkpoint was selected from that replay. Attempt 01's partial
+artifacts remain preserved and its failure receipt is stored with them.
+Attempt 02 re-executes the exact same preregistered training condition from
+fresh per-fold initialization so its OOF report is complete and consistent.
 
 ## Integrity and claim limits
 
@@ -57,3 +72,5 @@ exposed validation/test or tune other experiments.
 No quality threshold or model-promotion rule is relaxed. A poor result is
 retained. No additional seed, training budget, or architecture variant is
 authorized by this protocol.
+
+Attempt 01 provenance: experiment_config_sha256=e71581bee81a39a9cfe027c2d7a026408189e43622ea32ae08156b12a4623e44 (verified against source commit f2c4904); corrected failure.json SHA-256 ee370c8f1d08e06f9513b5961eac86cf86164b4f983d9e8e61ed63a0802d2756.
