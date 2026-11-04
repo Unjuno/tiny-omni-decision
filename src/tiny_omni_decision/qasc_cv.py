@@ -65,18 +65,15 @@ class _UnionFind:
             self.rank[left_root] += 1
 
 
-def build_qasc_train_folds(
-    rows: list[dict[str, Any]], *, folds: int = 5, seed: int = 17
-) -> tuple[list[int], dict[str, Any]]:
-    """Assign every row to one deterministic fold without fact/question/content leakage.
-
-    Connected components join rows sharing an unordered fact-pair group, a normalized
-    question, or normalized question+choice content. A greedy size/answer-position
-    balance is used only to distribute whole components; no model output is consulted.
-    """
-    if folds < 2 or len(rows) < folds:
-        raise ValueError("at least two folds and one row per fold are required")
+def _connected_components(
+    rows: list[dict[str, Any]],
+) -> tuple[list[tuple[str, str, str, int]], _UnionFind, list[list[int]]]:
     identities = [_row_identities(row) for row in rows]
+    row_ids = [row.get("id") for row in rows]
+    if any(not isinstance(row_id, str) or not row_id for row_id in row_ids):
+        raise ValueError("QASC rows require nonempty string IDs")
+    if len(set(row_ids)) != len(row_ids):
+        raise ValueError("QASC row IDs must be unique")
     union_find = _UnionFind(len(rows))
     first_by_identity: dict[tuple[str, str], int] = {}
     for index, (fact_group, question, content, _position) in enumerate(identities):
@@ -88,7 +85,33 @@ def build_qasc_train_folds(
     components: dict[int, list[int]] = defaultdict(list)
     for index in range(len(rows)):
         components[union_find.find(index)].append(index)
-    component_rows = list(components.values())
+    return identities, union_find, list(components.values())
+
+
+def qasc_train_component_ids(rows: list[dict[str, Any]]) -> list[str]:
+    """Return stable cluster IDs for the same fact/question/content graph as CV."""
+    _identities, _union_find, components = _connected_components(rows)
+    component_ids = [""] * len(rows)
+    for component in components:
+        payload = "\n".join(sorted(str(rows[index]["id"]) for index in component))
+        component_id = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+        for index in component:
+            component_ids[index] = component_id
+    return component_ids
+
+
+def build_qasc_train_folds(
+    rows: list[dict[str, Any]], *, folds: int = 5, seed: int = 17
+) -> tuple[list[int], dict[str, Any]]:
+    """Assign every row to one deterministic fold without fact/question/content leakage.
+
+    Connected components join rows sharing an unordered fact-pair group, a normalized
+    question, or normalized question+choice content. A greedy size/answer-position
+    balance is used only to distribute whole components; no model output is consulted.
+    """
+    if folds < 2 or len(rows) < folds:
+        raise ValueError("at least two folds and one row per fold are required")
+    identities, union_find, component_rows = _connected_components(rows)
     if len(component_rows) < folds:
         raise ValueError("not enough independent connected components for requested folds")
 

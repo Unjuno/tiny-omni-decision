@@ -1,6 +1,6 @@
 import pytest
 
-from tiny_omni_decision.qasc_cv import build_qasc_train_folds
+from tiny_omni_decision.qasc_cv import build_qasc_train_folds, qasc_train_component_ids
 
 
 def _row(row_id, group, question, options, target):
@@ -59,6 +59,22 @@ def test_qasc_folds_join_normalized_question_and_content_duplicates():
     assert assignment[0] == assignment[1]
     assert report["connected_components"] == 3
     assert assignment[2] != assignment[0] or assignment[3] != assignment[0]
+
+
+def test_qasc_component_ids_match_question_overlap_clusters_and_are_stable():
+    options = [f"choice {i}" for i in range(8)]
+    rows = [
+        _row("a", "pair-a", "Question repeated?", options, options[0]),
+        _row("b", "pair-b", " QUESTION   REPEATED? ", options, options[1]),
+        _row("c", "pair-c", "Independent question?", list(reversed(options)), options[-1]),
+    ]
+
+    first = qasc_train_component_ids(rows)
+    second = qasc_train_component_ids(rows)
+
+    assert first == second
+    assert first[0] == first[1]
+    assert first[2] != first[0]
 
 
 def test_qasc_folds_reject_too_few_independent_components():
