@@ -46,7 +46,7 @@ class ObservationFeatureKey:
     end_ms: int | None = None
 
     def __post_init__(self) -> None:
-        if self.modality not in {"text", "image", "audio", "video", "sensor"}:
+        if self.modality not in {"text", "image", "audio", "screen", "video", "sensor"}:
             raise FeatureCacheError(f"unsupported observation modality: {self.modality}")
         for name in (
             "source_id",

@@ -166,3 +166,46 @@ def test_temporal_fusion_rejects_feature_key_not_in_frozen_runtime_contract():
 
     with pytest.raises(ValueError, match="expected feature identity"):
         decide_temporal_native_fusion(model, state, as_of_ms=10.0, **kwargs)
+
+
+def test_temporal_fusion_routes_screen_and_video_features():
+    torch.manual_seed(31)
+    state = SessionTemporalFeatureState(
+        runtime_sha256=RUNTIME,
+        clock_id=CLOCK,
+        max_serialized_bytes=16_384,
+        max_events_per_stream=4,
+        max_streams=2,
+    )
+    keys = {
+        "screen": feature_key("screen", "display-1", "screen-encoder", 2),
+        "video": feature_key("video", "camera-1", "video-encoder", 1),
+    }
+    put(state, keys["screen"], [0.5, -0.25], 12.0)
+    put(state, keys["video"], [1.0], 12.0)
+    model = FusionDecisionScorer({"screen": 2, "video": 1}, 2, 1, width=4).eval()
+    options = [
+        NativeOption(option_id="inspect", attributes={"direction": "left"}),
+        NativeOption(option_id="continue", attributes={"direction": "right"}),
+    ]
+    schema = TypedOptionSchema(
+        enums=(EnumOptionField("direction", ("left", "right")),)
+    )
+
+    result = decide_temporal_native_fusion(
+        model,
+        state,
+        source_by_modality={"screen": "display-1", "video": "camera-1"},
+        expected_feature_keys=keys,
+        required_modalities=("screen", "video"),
+        as_of_ms=15.0,
+        max_age_ms=10.0,
+        runtime_sha256=RUNTIME,
+        clock_id=CLOCK,
+        options=options,
+        option_schema=schema,
+    )
+
+    assert result["status"] == "selected"
+    assert [row["option_id"] for row in result["options"]] == ["inspect", "continue"]
+    assert sum(row["probability"] for row in result["options"]) == pytest.approx(1.0)

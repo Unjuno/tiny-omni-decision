@@ -491,7 +491,7 @@ def decide_temporal_native_fusion(
     if not isinstance(state, SessionTemporalFeatureState):
         raise TypeError("state must be a SessionTemporalFeatureState")
     names = set(model.fusion.names)
-    supported = {"text", "audio", "image", "video", "sensor"}
+    supported = {"text", "audio", "image", "screen", "video", "sensor"}
     if not names or not names <= supported:
         raise ValueError("model modalities must be supported observation feature streams")
     if set(source_by_modality) != names or set(expected_feature_keys) != names:

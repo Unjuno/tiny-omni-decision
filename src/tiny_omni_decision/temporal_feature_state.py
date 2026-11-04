@@ -110,7 +110,7 @@ class SessionTemporalFeatureState:
 
     @staticmethod
     def _validate_stream(modality: str, source_id: str) -> tuple[str, str]:
-        if modality not in {"text", "image", "audio", "video", "sensor"}:
+        if modality not in {"text", "image", "audio", "screen", "video", "sensor"}:
             raise TemporalFeatureStateError(f"unsupported modality: {modality}")
         _nonempty(source_id, "source_id")
         return modality, source_id
