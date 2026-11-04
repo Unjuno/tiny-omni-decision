@@ -30,6 +30,7 @@ from tiny_omni_decision.whisper_option_likelihood import (
     build_decoder_batch,
     candidate_probabilities,
     mean_transcript_log_likelihoods,
+    ordered_sample_ids_sha256,
 )
 
 DATA_ARCHIVE_SHA256 = "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3"
@@ -68,8 +69,7 @@ def _sha256(path: Path) -> str:
 
 
 def _ordered_ids_sha256(examples: list[dict[str, Any]]) -> str:
-    payload = "".join(f"{row['id']}\n" for row in examples)
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    return ordered_sample_ids_sha256([str(row["id"]) for row in examples])
 
 
 def _load_jsonl(path: Path) -> list[dict[str, Any]]:

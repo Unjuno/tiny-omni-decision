@@ -5,6 +5,7 @@ from tiny_omni_decision.whisper_option_likelihood import (
     build_decoder_batch,
     candidate_probabilities,
     mean_transcript_log_likelihoods,
+    ordered_sample_ids_sha256,
 )
 
 
@@ -45,6 +46,18 @@ def test_candidate_probabilities_are_order_equivariant_and_normalized():
 
     assert torch.allclose(reordered, original[permutation])
     assert float(original.sum()) == pytest.approx(1.0)
+
+
+def test_ordered_sample_id_hash_matches_newline_join_without_trailing_newline():
+    assert (
+        ordered_sample_ids_sha256(["sample-a", "sample-b"])
+        == "4932c53bd536ecf7caed0e90abfed9fa49cdb8bd0e319a5ef1d34fa26bbc510c"
+    )
+
+
+def test_ordered_sample_id_hash_rejects_empty_ids():
+    with pytest.raises(ValueError, match="nonempty"):
+        ordered_sample_ids_sha256(["sample-a", ""])
 
 
 @pytest.mark.parametrize(

@@ -2,9 +2,17 @@
 
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Sequence
 
 import torch
+
+
+def ordered_sample_ids_sha256(sample_ids: Sequence[str]) -> str:
+    """Hash IDs using the established newline-joined, no-trailing-newline form."""
+    if not sample_ids or any(not sample_id for sample_id in sample_ids):
+        raise ValueError("sample IDs must be nonempty")
+    return hashlib.sha256("\n".join(sample_ids).encode("utf-8")).hexdigest()
 
 
 def build_decoder_batch(
