@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-10-30 EgoViz fresh-group comparison:** On 2,394 samples across 69 new
+groups, the fixed GRU endpoint scored 57.10% Accuracy versus 53.26% for the
+matched linear endpoint, but its NLL/Brier/ECE were much worse (4.796/0.786/0.378)
+with 0.949 mean confidence. This is a narrow video-IMU timestamp task, not
+four-modality Decision quality. No training or sealed evaluation was done.
+[Full metrics, group bootstrap, hashes and caveats](docs/pretrained_reuse/R2_EGOVIZ_FRESH_GROUP_GENERALIZATION_RESULTS_20261030.md).
+
 **2026-10-30 EgoViz unseen-session correspondence:** The fixed CPU video+IMU
 readout reached 55.70% development Accuracy on 307 windows from 20 held-out
 sessions versus 28.66% for sensor-only; reversing one stream's cached temporal
