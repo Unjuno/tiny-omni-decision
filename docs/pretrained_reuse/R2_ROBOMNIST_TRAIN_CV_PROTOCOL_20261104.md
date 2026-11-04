@@ -39,3 +39,17 @@ Only after this curve is measured should a separate temporal comparison be
 specified. Cached sequences retain audio[8,384] and video[8,768], but their clocks
 are not aligned. A future recurrence must encode each stream separately, and
 ordered/shuffled controls must share capacity. No LSTM is trained in this run.
+
+## Follow-up fixed after the baseline curve, before the next fit
+
+The baseline completed and showed rising held-fold NLL in every fold despite
+falling training loss. Test one new arm: cosine score multiplier 1.0 instead of
+sqrt(32), preserving every fold, fit-only normalizer, initialization, rank,
+optimizer, update count, and reporting point. This keeps 73,728 parameters.
+The new arm gets a separate output directory and never loads the old checkpoint.
+This changes optimization as well as output confidence; it is not post-hoc
+calibration. Unit scale caps confidence at sigmoid(2), about88%, so it is a
+mechanism diagnostic rather than a product confidence policy. A reduction in
+NLL without improved discrimination is not a quality-gate pass. No temporal
+capacity is added. All scheduled points remain primary descriptive outputs;
+no seed/budget selection or final validation follows this experiment.

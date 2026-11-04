@@ -58,3 +58,19 @@ def test_overlap_fails_before_any_feature_open(tmp_path, monkeypatch):
     monkeypatch.setattr(cv.original, "_load_group_features", must_not_read)
     with pytest.raises(ValueError, match="identity/count"):
         cv.load_train(cache, manifest)
+
+
+def test_scale_arm_changes_only_cosine_multiplier():
+    import math
+    import torch
+
+    torch.manual_seed(17)
+    baseline = cv.BilinearAVMatchScorer(rank=32)
+    unchanged = cv.ScoreScaleScorer(math.sqrt(32))
+    unit = cv.ScoreScaleScorer(1.0)
+    unchanged.load_state_dict(baseline.state_dict())
+    unit.load_state_dict(baseline.state_dict())
+    audio, video = torch.randn(4, 768), torch.randn(4, 1536)
+    assert torch.equal(baseline(audio, video), unchanged(audio, video))
+    torch.testing.assert_close(unit(audio, video) * math.sqrt(32), baseline(audio, video))
+    assert unit.trainable_parameters == baseline.trainable_parameters == 73728

@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import platform
 import shutil
 import subprocess
@@ -58,7 +59,20 @@ def predict(model, inputs):
         return model(*inputs).softmax(-1).numpy()
 
 
-def run(manifest_path, cache, output):
+class ScoreScaleScorer(BilinearAVMatchScorer):
+    """Development arm changing only the existing cosine logit multiplier."""
+
+    def __init__(self, score_scale):
+        super().__init__(rank=32)
+        if not math.isfinite(score_scale) or score_scale <= 0:
+            raise ValueError("score scale must be finite and positive")
+        self.score_scale = score_scale
+
+    def forward(self, audio, video):
+        return super().forward(audio, video) * (self.score_scale / math.sqrt(32))
+
+
+def run(manifest_path, cache, output, *, score_scale=math.sqrt(32)):
     if output.exists():
         raise FileExistsError(output)
     if shutil.disk_usage(output.parent).free < 2 * 1024**3:
@@ -70,7 +84,7 @@ def run(manifest_path, cache, output):
     torch.use_deterministic_algorithms(True)
     config = {
         "scope": "TRAIN-only internal development; not independent product evaluation",
-        "seed": 17, "folds": 5, "steps": 400, "points": POINTS, "rank": 32,
+        "score_scale": score_scale, "seed": 17, "folds": 5, "steps": 400, "points": POINTS, "rank": 32,
         "learning_rate": 0.01, "weight_decay": 0.0001, "optimizer": "AdamW",
         "gradient_clip": 5.0, "batch": "all fitting rows each update",
         "selection": "none; all preregistered steps reported", "device": "cpu",
@@ -118,7 +132,7 @@ def run(manifest_path, cache, output):
             a, v, target, _ = original._arrays(fit_rows, summaries)
             ha, hv, ht, _ = original._arrays(held_rows, summaries)
             torch.manual_seed(17)
-            model = BilinearAVMatchScorer(rank=32)
+            model = ScoreScaleScorer(score_scale)
             optimizer = torch.optim.AdamW(model.parameters(), lr=0.01, weight_decay=0.0001)
             for step in range(1, 401):
                 tick = time.perf_counter()
@@ -142,7 +156,7 @@ def run(manifest_path, cache, output):
                 oof[step][held_idx] = held_p
                 path = output / f"fold-{fold}-step-{step}.pt"
                 torch.save(model.state_dict(), path)
-                restored = BilinearAVMatchScorer(rank=32)
+                restored = ScoreScaleScorer(score_scale)
                 restored.load_state_dict(torch.load(path, map_location="cpu", weights_only=True))
                 restored.eval()
                 if not np.array_equal(held_p, predict(restored, (ha, hv))):
@@ -206,5 +220,8 @@ if __name__ == "__main__":
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--cache", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--score-scale", type=float, choices=(1.0, math.sqrt(32)),
+                        default=math.sqrt(32))
     args = parser.parse_args()
-    run(args.manifest.resolve(strict=True), args.cache.resolve(strict=True), args.output.resolve())
+    run(args.manifest.resolve(strict=True), args.cache.resolve(strict=True), args.output.resolve(),
+        score_scale=args.score_scale)
