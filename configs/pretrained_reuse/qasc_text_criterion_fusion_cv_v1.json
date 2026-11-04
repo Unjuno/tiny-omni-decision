@@ -1,0 +1,54 @@
+{
+  "experiment_id": "qasc-text-criterion-fusion-cv-seed17-v1",
+  "source": "allenai/qasc",
+  "source_revision": "a34ba204eb9a33b919c10cc08f4f1c8dae5ec070",
+  "license": "CC-BY-4.0",
+  "split": "official TRAIN only; existing five grouped folds",
+  "train_rows": 8134,
+  "evidence_train_sha256": "6ad3536ebba70a35f87bf078d0d2837df09fda652201a2b4a6fd7d7b01ed7f0b",
+  "fold_assignment_sha256": "72282c4b57fb2e5a56c4d2f15f75d11bf11f79071d8ac8a981b1a7311bcd0b67",
+  "encoder_id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+  "encoder_revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+  "encoder_weight_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+  "encoder_frozen_parameters": 17389824,
+  "feature_roles": {
+    "state": "MiniLM masked-mean feature of the two supplied support facts in source order",
+    "criterion": "MiniLM masked-mean feature of the QASC question",
+    "options": "one MiniLM masked-mean feature per supplied answer option in supplied order"
+  },
+  "max_sequence_length": 256,
+  "readout": {
+    "class": "FusionDecisionScorer",
+    "modality_dimensions": {
+      "text_state": 384
+    },
+    "option_dim": 384,
+    "criterion_dim": 384,
+    "width": 128,
+    "trainable_parameters": 164610,
+    "loss": "8-way cross entropy",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_questions": 64,
+    "epochs_per_fold": 8,
+    "seed_per_fold": 17,
+    "fold_count": 5,
+    "checkpoint_rule": "fixed epoch 8 endpoint; no held-fold checkpoint selection",
+    "device": "cpu"
+  },
+  "controls": [
+    "uniform option probabilities",
+    "fold-training answer-position prior",
+    "same checkpoint with criterion mask absent",
+    "option permutation invariance on fixed held-fold rows",
+    "exact save/reload prediction parity"
+  ],
+  "forbidden_inputs": [
+    "official validation shard",
+    "official test shard",
+    "sealed audit",
+    "any non-TRAIN rows"
+  ],
+  "claim_scope": "task-specific QASC text Decision development cross-validation; not multimodal, broad text, or product quality"
+}

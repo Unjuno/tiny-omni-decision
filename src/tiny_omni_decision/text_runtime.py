@@ -124,7 +124,13 @@ class TypedTextDecisionRuntime:
         """
         if not isinstance(criterion, str) or not criterion.strip():
             raise ValueError("text criterion must be a nonempty string")
-        return self._encode([criterion])[0]
+        return self.encode_texts([criterion])[0]
+
+    def encode_texts(self, texts: Sequence[str]) -> Tensor:
+        """Expose frozen pooled text features for state/criterion/option roles."""
+        if not texts or any(not isinstance(text, str) or not text.strip() for text in texts):
+            raise ValueError("text feature input requires nonempty strings")
+        return self._encode(texts)
 
     def decide(
         self, state: str, question: str, options: Sequence[str]
@@ -138,7 +144,7 @@ class TypedTextDecisionRuntime:
             raise ValueError("candidate options must be unique")
         texts = [f"State: {state}\nQuestion: {question}"]
         texts.extend(f"Candidate answer: {option}" for option in options)
-        pooled = self._encode(texts)
+        pooled = self.encode_texts(texts)
         features = candidate_features(pooled[0], pooled[1:])
         with torch.inference_mode():
             logits = self.scorer(features).float()

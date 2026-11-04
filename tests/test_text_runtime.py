@@ -56,6 +56,14 @@ def test_text_runtime_encodes_a_single_nonempty_criterion(monkeypatch) -> None:
     assert torch.isfinite(result).all()
 
 
+@pytest.mark.parametrize("texts", [[], [""], ["valid", " "]])
+def test_text_runtime_rejects_empty_text_feature_batches(texts) -> None:
+    runtime = object.__new__(TypedTextDecisionRuntime)
+
+    with pytest.raises(ValueError, match="nonempty strings"):
+        runtime.encode_texts(texts)
+
+
 @pytest.mark.parametrize("criterion", ["", "  ", None, 3])
 def test_text_runtime_rejects_empty_or_nontext_criterion(criterion) -> None:
     runtime = object.__new__(TypedTextDecisionRuntime)
