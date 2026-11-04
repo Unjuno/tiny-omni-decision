@@ -151,6 +151,63 @@ def test_dispatch_typed_validates_audio_spec_count_before_starting_workers() -> 
     assert dispatcher._videoprism_worker is None
 
 
+def test_dispatch_typed_rejects_reordered_video_options_before_starting_workers() -> None:
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._request_id = 0
+    dispatcher._torch_worker = None
+    dispatcher._videoprism_worker = None
+
+    with pytest.raises(ValueError, match="video decision option texts"):
+        dispatcher.dispatch_typed(
+            "video",
+            {"video_path": "video.mp4", "question": "q", "candidate_statement": "s"},
+            decision_specs=[
+                TypedDecisionSpec(
+                    "video-1", "choice", ("yes", "no"), ("correct", "wrong")
+                )
+            ],
+        )
+
+    assert dispatcher._torch_worker is None
+    assert dispatcher._videoprism_worker is None
+
+
+def test_dispatch_typed_video_binds_correct_probability_to_caller_id() -> None:
+    class TorchWorker:
+        def request(self, payload: dict[str, object]) -> dict[str, object]:
+            assert payload["task"] == "video_score"
+            return {
+                "probabilities": [0.1, 0.9],
+                "prediction_index": 1,
+                "confidence": 0.9,
+            }
+
+    class VideoWorker:
+        def request(self, payload: dict[str, object]) -> dict[str, object]:
+            assert payload["task"] == "encode_video"
+            return {"video_feature": [0.0] * 768, "encoder_metrics": {}}
+
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._request_id = 0
+    dispatcher._torch_worker = TorchWorker()
+    dispatcher._videoprism_worker = VideoWorker()
+    result = dispatcher.dispatch_typed(
+        "video",
+        {"video_path": "video.mp4", "question": "q", "candidate_statement": "s"},
+        decision_specs=[
+            TypedDecisionSpec(
+                "video-1", "choice", ("candidate-wrong", "candidate-correct"),
+                ("wrong", "correct"),
+            )
+        ],
+    )
+
+    assert result["decision_json"]["selected_option_id"] == "candidate-correct"
+    assert [option["probability"] for option in result["decision_json"]["options"]] == [
+        0.1, 0.9
+    ]
+
+
 def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract() -> None:
     class RecordingWorker:
         def request(self, payload: dict[str, object]) -> dict[str, object]:

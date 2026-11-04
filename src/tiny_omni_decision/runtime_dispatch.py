@@ -335,6 +335,11 @@ class PathARuntimeDispatcher:
                     payload_options
                 ) != spec.option_texts:
                     raise ValueError("decision option texts must match payload order")
+            elif task == "video" and spec.option_texts != ("wrong", "correct"):
+                # The frozen video worker always emits [wrong, correct]. Keep
+                # caller IDs bound to that order instead of silently relabeling
+                # its probabilities or selected index.
+                raise ValueError("video decision option texts must be ('wrong', 'correct')")
 
         for spec in decision_specs:
             decision_json_record(
