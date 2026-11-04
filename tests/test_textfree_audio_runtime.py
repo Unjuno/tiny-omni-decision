@@ -53,6 +53,8 @@ def runtime_factory(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
 
         def forward(self, input_features):
             self.calls += 1
+            self.autocast_enabled = torch.is_autocast_enabled(input_features.device.type)
+            self.autocast_dtype = torch.get_autocast_dtype(input_features.device.type)
             batch = input_features.shape[0]
             hidden = torch.ones((batch, 1500, 384), device=input_features.device)
             return SimpleNamespace(last_hidden_state=hidden * self.scale)
@@ -126,6 +128,8 @@ def test_raw_audio_decision_reuses_features_across_option_order_and_subset(
     assert len(subset["options"]) == 2
     assert sum(row["probability"] for row in subset["options"]) == pytest.approx(1.0)
     assert runtime.encoder.calls == 1
+    assert runtime.encoder.autocast_enabled is True
+    assert runtime.encoder.autocast_dtype is torch.bfloat16
     assert first["encoder_metrics"]["cache_hit"] is False
     assert reordered["encoder_metrics"]["cache_hit"] is True
     assert subset["encoder_metrics"]["single_event_encoder_calls"] == 1

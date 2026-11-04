@@ -149,7 +149,11 @@ class TextFreeAudioRuntime:
             return_tensors="pt",
         )
         input_features = encoded.input_features.to(self.device)
-        with torch.inference_mode():
+        # Match the BF16 autocast used when the frozen training feature cache
+        # was produced. Keep frontend feature extraction outside autocast.
+        with torch.inference_mode(), torch.autocast(
+            device_type=self.device.type, dtype=torch.bfloat16
+        ):
             hidden = self.encoder(input_features).last_hidden_state
         valid_tokens = min(
             hidden.shape[1], max(1, math.ceil(len(waveform) / 320))
