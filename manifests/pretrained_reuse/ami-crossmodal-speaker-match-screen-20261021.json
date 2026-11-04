@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ami-crossmodal-speaker-match-screen-20261021",
+  "status": "REVIEW",
+  "decision": "NOT_ADMITTED",
+  "screened_at": "2026-10-21",
+  "repository_base_commit": "71c4db1d4a8f6aed6963c4d31f3d87f9b51ab51c",
+  "source": {
+    "name": "AMI Meeting Corpus",
+    "homepage": "https://groups.inf.ed.ac.uk/ami/",
+    "license_page": "https://groups.inf.ed.ac.uk/ami/corpus/license.shtml",
+    "declared_license": "CC-BY-4.0",
+    "download_page": "https://groups.inf.ed.ac.uk/ami/download/",
+    "split_page": "https://groups.inf.ed.ac.uk/ami/corpus/datasets.shtml",
+    "signals_page": "https://groups.inf.ed.ac.uk/ami/corpus/signals.shtml",
+    "ethics_page": "https://groups.inf.ed.ac.uk/ami/corpus/ethicsandconsent.shtml",
+    "annotation_release": "manual annotations v1.6.2",
+    "source_revision": "official selector-generated media manifests amiBuild-214757-Tue-Oct-20-2026, amiBuild-221837-Tue-Oct-20-2026, amiBuild-221911-Tue-Oct-20-2026, amiBuild-221931-Tue-Oct-20-2026, amiBuild-224046-Tue-Oct-20-2026; direct official-mirror URLs for TS3004a, TS3006a and IS1000a–d; manual annotations v1.6.2",
+    "archive_sha256": "b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d",
+    "archive_bytes": 22887865,
+    "media_manifest_sha256": "E6AE323CB8B078E0E578A17DE5054DFA5BC3058235479E47615FE2D68E9F3750",
+    "additional_media_manifest_sha256": {
+      "amiBuild-221837-Tue-Oct-20-2026.manifest.txt": "8c07e0d28c82c7e1660235481a3e56f0243a6cf0633e8ecd645a856e4516f9f6",
+      "amiBuild-221911-Tue-Oct-20-2026.manifest.txt": "c32b35cc28acdc07c088da5691b2993c13df758452f26f35f6cef97205d15754",
+      "amiBuild-221931-Tue-Oct-20-2026.manifest.txt": "ccdf63efc807976ab49eba00b3d85ecd67e83254112bdeaa28d77e7496336dfb",
+      "amiBuild-224046-Tue-Oct-20-2026.manifest.txt": "94c72e0a13ca99823062c19b96f5b521bb50bf1a6c8e8f915680fd8c45fecfd0"
+    },
+    "local_media": true,
+    "local_annotations": true,
+    "external_artifact_root": "C:/CodexArtifacts/pretrained-reuse-r2/ami-av-probe-20261021",
+    "annotation_extraction_policy": "only selected SA/SB meeting word and segment XML members plus corpusResources/meetings.xml; no SC annotation members extracted or read"
+  },
+  "proposed_task": {
+    "name": "meeting_local_voice_to_face_matching",
+    "input_modalities": [
+      "audio",
+      "video"
+    ],
+    "choices": 4,
+    "question": "Which candidate video shows the person who spoke in the audio reference?",
+    "audio_source": "mixed headset audio only; never individual lapel/headset channel identity",
+    "video_source": "four duration-matched closeup clips from a separate time in the same meeting",
+    "labels": "manual speaker intervals joined with official camera/channel mapping",
+    "task_scope": "within-meeting cross-modal association; not cross-recording identity recognition"
+  },
+  "split": {
+    "policy": "official scenario-only partition, grouped by 4-meeting parent set",
+    "train": {
+      "partition": "SA",
+      "meetings": 98,
+      "sets": 25
+    },
+    "validation": {
+      "partition": "SB",
+      "meetings": 20,
+      "sets": 5
+    },
+    "sealed_unseen": {
+      "partition": "SC",
+      "meetings": 20,
+      "sets": 5,
+      "accessed": false
+    },
+    "participant_disjointness_verified": true,
+    "selected_meetings": [
+      "ES2002a",
+      "ES2003a",
+      "ES2005a",
+      "ES2006a",
+      "ES2011a",
+      "TS3004a",
+      "IS1008a",
+      "TS3006a",
+      "IS1000a",
+      "IS1000b",
+      "IS1000c",
+      "IS1000d"
+    ],
+    "selected_train_meetings": [
+      "ES2002a",
+      "ES2005a",
+      "ES2006a",
+      "IS1000a",
+      "IS1000b",
+      "IS1000c",
+      "IS1000d"
+    ],
+    "selected_validation_meetings": [
+      "ES2003a",
+      "ES2011a",
+      "TS3004a",
+      "IS1008a",
+      "TS3006a"
+    ],
+    "selected_meeting_participant_overlap": false,
+    "media_overlap_verified": false,
+    "metadata_scope_participant_disjointness": {
+      "sa_meetings": 98,
+      "sb_meetings": 20,
+      "sa_unique_participant_ids": 100,
+      "sb_unique_participant_ids": 20,
+      "participant_id_intersection_count": 0,
+      "metadata_sha256": "8ab6cdcf03ed863e839418f31c7380392397a2eed892d73b9bc1b438c7ec520a",
+      "audit_receipt_sha256": "b14e1d787e409ccbcb13e3124dc839f7a27fc3ab6e16b92104cb5e162e462fcb"
+    }
+  },
+  "access": {
+    "official_download_chooser_http_status": 200,
+    "pre_selector_single_slash_head_checks": {
+      "SA_ES2002a_Closeup1_avi": 200,
+      "SA_ES2002a_Mix_Headset_wav": 200,
+      "SB_ES2003a_Closeup1_avi": 403,
+      "SB_ES2003a_Mix_Headset_wav": 403
+    },
+    "selector_generated_asset_downloads_succeeded": true,
+    "official_train_video_index_checked": true,
+    "official_selector_manifest_estimated_bytes": 636000000,
+    "selected_media_bytes_downloaded": 2891874753,
+    "selected_annotation_bytes_extracted": 5173336,
+    "all_selected_media_hashes_verified": true,
+    "sampled_audio_and_video_decode": true,
+    "annotation_members_extracted": 97,
+    "sc_annotation_content_accessed": false,
+    "external_receipts": {
+      "media_download_receipt_sha256": "06C0CEFBFF0C4B0C94289F97DF48E5F54A273E4FD531C8D4C745B1697C48076E",
+      "media_annotation_preflight_sha256": "12032F62BA00BEB7C4571F79F5C710DCD7A29BA8D13F7F7A8F0E74FD2C586267",
+      "annotation_extraction_receipt_sha256": "11EA84202DAAB2C5A073A8A080E0E6F15F7AED6455272B8D33322A14AF02350B",
+      "expanded_media_download_receipt_sha256": "3bb1bb16dde2f73aa227e68d371ddaa64ec967d966e14b7b834b580589b451db",
+      "expanded_media_annotation_preflight_sha256": "bbead20d61d57429cbf7a5358bfb5ac890e6da108a35c20e6ad8621cd67a9b4b",
+      "expanded_annotation_extraction_receipt_sha256": "8f82eade6d08f098d61d16e1a815f8f028a019ec83317b5077c595817974deb0",
+      "ts3004a_media_receipt_sha256": "2469bba07b96f36b4bc0531a6233461c11f6206c23c9258475f6cbada0932fdb",
+      "ts3004a_annotation_receipt_sha256": "1f9d834bc58ddedc79c84d2009ed6b4a84a61dcf87674a7fb645fa04a5ce5ae3",
+      "ts3004a_preflight_sha256": "94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452",
+      "ts3004a_selection_note_sha256": "76f2cfd8acd100c1dd4d29c064a78eac89042e52b22506939d006fd0ee2815aa",
+      "is1008a_ts3006a_media_receipt_sha256": "d68f6feb9cd8bff843e8b77a1bf26662398c573ce392a57061ffd2618773922f",
+      "is1008a_ts3006a_annotation_receipt_sha256": "cf5d4a2ff904cecaf8ad72231b367e943b4dd170e301c3955db746827aca66cb",
+      "is1008a_ts3006a_preflight_sha256": "9fe028d09e7b8d69a4e8749f61a788bbbba0de7a4aa59c91f2c2a8a8096698d8",
+      "is1008a_ts3006a_selection_note_sha256": "283446a3ab2073f66ab3170fbde495f1e2df02b6973a074c19d791bb1ec082a0",
+      "is1000a_d_media_receipt_sha256": "11c7d6b306b4da2a36e7d2964da8d2591d9017ef440aeaac1491c251c4adc844",
+      "is1000a_d_head_preflight_sha256": "6ff6f95fb217f2fe48cf3b4f991b71b276b7a232780725a3e47e08ee925581f4",
+      "is1000a_d_annotation_receipt_sha256": "396a2f727d991561035615f118e15cd15fafadada5c0386430c8d1602931be75",
+      "is1000a_d_preflight_sha256": "41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73",
+      "is1000a_d_segment_join_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6",
+      "all_sa_word_segment_join_audit_sha256": "e457bc9ff7d940f385d9a153e7441a634e1d661480db905ba1c2f2a1f3330a19",
+      "all_sa_word_segment_join_audit_script_sha256": "ebbf2fa483f55a06391b506f09290306d1b40e8e8f2e5390c440baad6f1eed89",
+      "is1000_single_segment_audit_interim_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6",
+      "train_visual_qa_sample_manifest_sha256": "ecc37d77490b28afe16dd17b5f9e5fc56c69c55889c0f5e52ffb61f91557584d",
+      "train_visual_qa_review_sha256": "cadbfa3cd6d00584670a75c5314eec57ee6d6a83146afcd520f8035f9aab5461",
+      "train_visual_qa_script_sha256": "2968f158e288469adbb971b0e0503b064ab73c9d0a2a53bb6cdc68b5caca832d",
+      "train_visual_qa_contact_sheet_01_sha256": "25742864f306570c6b9bfe4e1de039a5b8f0d5c22b23c2c1d61185705b2efee5",
+      "train_visual_qa_contact_sheet_02_sha256": "b1eec24b7af9a98e6b5e60dd1e1ec9ce0d2414b996b7ac21904aeb61bb940e33",
+      "train_visual_qa_detail_sheet_sha256": "cffb1fbb6de48fa853865358ecba5f403840e8b33e8802e57bd848df3d363e91",
+      "train_visual_qa_all_sa_receipt_sha256": "5a1bf48d478c889002c2c238e0ced7f376f2494ef490848a54a01c8fa2b61882",
+      "train_visual_qa_all_sa_builder_sha256": "0da948a76f8fe09e95275cd91262393b737901862b4624e93ea2f2bb8929e2b7",
+      "train_visual_qa_all_sa_review_sha256": "e344e81bc6b60da0d65c5a96387225c47c5a0f7afd6f2bd5dc43e4ef096f971f"
+    },
+    "third_party_mirror_used": false,
+    "resolution": "official selector and official AMI mirror used for selected files where available; selector response for TS3004a was stale and not applied; TS3006a and IS1000a–d were acquired from official mirror URLs after per-file HEAD checks; manual v1.6.2 members were selectively extracted; no third-party mirror",
+    "full_decode_selected_video_streams": 28
+  },
+  "resource_estimates": {
+    "official_low_size_video_mb_per_meeting_approx": 400,
+    "official_headset_mix_mb_per_meeting_approx": 30,
+    "one_train_plus_one_validation_meeting_mb_approx": 636,
+    "local_selected_media_bytes": 2891874753,
+    "initial_expanded_selector_manifest_estimated_bytes": 1384000000,
+    "selected_train_preliminary_windows": 214,
+    "selected_validation_preliminary_windows": 111,
+    "local_annotation_archive_bytes": 22887865,
+    "gpu_job_started": false,
+    "gpu_status_at_last_check": "2026-10-21 08:19 local: RTX 3080 Laptop 15821/16384 MiB used, 27% utilization; Orbitune PID 24160 active; no Tiny Omni GPU job started",
+    "hotgpu_required_for_future_gpu_smoke": true,
+    "all_sa_candidate_windows": 214,
+    "all_sa_windows_with_segment_union_overlap_ge_80pct": 213,
+    "all_sa_windows_below_segment_union_overlap_threshold": 1,
+    "is1000_batch_windows_with_segment_union_overlap_ge_80pct": 181,
+    "is1000_batch_windows_below_segment_union_overlap_threshold": 1,
+    "train_visual_qa_samples": 24,
+    "train_visual_qa_clear_target_views": 17,
+    "train_visual_qa_no_clear_person": 2,
+    "train_visual_qa_limited_or_ambiguous": 5,
+    "train_visual_qa_is_prevalence_estimate": false,
+    "train_visual_qa_all_sa_candidates_materialized": 213,
+    "train_visual_qa_all_sa_requested_views": 639,
+    "train_visual_qa_all_sa_contact_sheets": 12,
+    "train_visual_qa_all_sa_row_review_complete": true,
+    "train_visual_qa_all_sa_face_visibly_framed": 168,
+    "train_visual_qa_all_sa_limited_or_ambiguous": 21,
+    "train_visual_qa_all_sa_no_clear_person": 24,
+    "train_visual_qa_all_sa_review_is_single_reviewer": true,
+    "train_visual_qa_seed17_subset_agreement_after_reconciliation": 24
+  },
+  "blockers": [
+    "four SA parent sets and all five SB parent sets are screened, but SA coverage is uneven: ES2002/2005/2006 have only submeeting a while IS1000 includes a–d",
+    "214 preliminary train candidates and 111 validation candidates remain weakly labeled; union-overlap segment audit passes 213/214 SA candidates, with one IS1000c window quarantined at 76.7%",
+    "single-reviewer visual-presence review of all 213 segment-join-passing SA train windows found 168 clearly framed faces, 21 limited/ambiguous and 24 with no clear person; this verifies visibility only, not speaker labels, clock sync or AV quality",
+    "audio/video clock synchronization and active-speaker truth remain unverified; 28 fully decoded streams are each one frame below AVI declaration, while five earlier meetings only have sampled decode",
+    "SA/SB participant IDs are disjoint in official metadata, but media identity, normalized content and near-duplicate cross-split audits remain incomplete",
+    "ES2005a media spans about 8 minutes while meeting metadata says 958 seconds; investigate source/time coverage",
+    "freeze balanced task manifest, hard-negative rule, candidate-order policy and comprehensive train-only visual label QA before feature extraction",
+    "privacy/governance review is required before product claims"
+  ],
+  "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md",
+  "additional_selected_sb_meeting": {
+    "meeting": "TS3004a",
+    "official_selector_response": "selector returned prior IS1008a selection; response not used for TS3004a",
+    "acquisition": "five policy-approved files fetched from official AMI mirror after per-file HEAD checks",
+    "media_bytes": 250353986,
+    "preliminary_validation_windows_added": 30,
+    "validation_windows_after_addition": 68,
+    "participant_overlap_with_selected_sa_sb": false,
+    "decoded_frames_vs_declared": {
+      "Closeup1": "33337/33338",
+      "Closeup2": "33306/33307",
+      "Closeup3": "33266/33267",
+      "Closeup4": "33451/33452"
+    },
+    "provenance_note": "amiBuild-224157 manifest is the preserved IS1008a manifest; it is not a TS3004a manifest. TS3004a direct URL and acquisition evidence is in external note and receipts.",
+    "selection_note_sha256": "76f2cfd8acd100c1dd4d29c064a78eac89042e52b22506939d006fd0ee2815aa",
+    "media_receipt_sha256": "2469bba07b96f36b4bc0531a6233461c11f6206c23c9258475f6cbada0932fdb",
+    "annotation_receipt_sha256": "1f9d834bc58ddedc79c84d2009ed6b4a84a61dcf87674a7fb645fa04a5ce5ae3",
+    "preflight_sha256": "94148155c34648a48ccf8f22900a03d2eae81be27bd4fb23a7b7033ac63e3452"
+  },
+  "additional_selected_sb_meetings": {
+    "meetings": [
+      "IS1008a",
+      "TS3006a"
+    ],
+    "media_bytes": 380769551,
+    "preliminary_validation_windows_added": 43,
+    "official_selector_manifest": "amiBuild-224046-Tue-Oct-20-2026.manifest.txt for IS1008a; TS3006a selected by direct official URLs after HEAD checks",
+    "media_receipt_sha256": "d68f6feb9cd8bff843e8b77a1bf26662398c573ce392a57061ffd2618773922f",
+    "annotation_receipt_sha256": "cf5d4a2ff904cecaf8ad72231b367e943b4dd170e301c3955db746827aca66cb",
+    "preflight_sha256": "9fe028d09e7b8d69a4e8749f61a788bbbba0de7a4aa59c91f2c2a8a8096698d8",
+    "selection_note_sha256": "283446a3ab2073f66ab3170fbde495f1e2df02b6973a074c19d791bb1ec082a0"
+  },
+  "additional_selected_sa_parent_set": {
+    "meetings": [
+      "IS1000a",
+      "IS1000b",
+      "IS1000c",
+      "IS1000d"
+    ],
+    "media_files": 20,
+    "media_bytes": 1435495016,
+    "preliminary_train_windows_added": 182,
+    "windows_by_meeting": {
+      "IS1000a": 36,
+      "IS1000b": 31,
+      "IS1000c": 32,
+      "IS1000d": 83
+    },
+    "below_80pct_examples": [
+      {
+        "meeting": "IS1000c",
+        "agent": "B",
+        "start_s": 1664.2,
+        "end_s": 1666.2,
+        "union_overlap_fraction": 0.767
+      }
+    ],
+    "all_28_video_streams_decode_one_frame_below_declared_count": true,
+    "media_receipt_sha256": "11c7d6b306b4da2a36e7d2964da8d2591d9017ef440aeaac1491c251c4adc844",
+    "head_preflight_sha256": "6ff6f95fb217f2fe48cf3b4f991b71b276b7a232780725a3e47e08ee925581f4",
+    "annotation_receipt_sha256": "396a2f727d991561035615f118e15cd15fafadada5c0386430c8d1602931be75",
+    "media_preflight_sha256": "41f1084d933f0045446c968dbf66911b3fab7eb36e52b3509d4eb769f90e6b73",
+    "same_agent_segment_union_overlap_ge_80pct": 181,
+    "single_segment_method_interim_overlap_ge_80pct": 180,
+    "all_sa_join_audit_receipt_sha256": "e457bc9ff7d940f385d9a153e7441a634e1d661480db905ba1c2f2a1f3330a19",
+    "all_sa_join_audit_script_sha256": "ebbf2fa483f55a06391b506f09290306d1b40e8e8f2e5390c440baad6f1eed89",
+    "single_segment_method_interim_audit_sha256": "97a5637fd5a910162146bfa81752962133096f8d8da48c1c1b654afc610939a6"
+  }
+}
