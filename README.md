@@ -1,3 +1,5 @@
+**2026-11-05 R2 RoboMNIST digit Decision:** With complete action conditions held out, a frozen-feature 10-choice readout peaks at20.64% joint Accuracy (10% chance) and has severe overconfidence; train Accuracy reaches100%. No adoption or further selection on these folds. See [full result](docs/pretrained_reuse/R2_ROBOMNIST_DIGIT_DECISION_RESULTS_20261105.md).
+
 **2026-11-05 R2 temporal readout:** A paired five-fold CPU-only ordered-versus-shuffled per-stream LSTM diagnostic reports 48.91% Accuracy at 400 updates, below the pooled readout; order strongly changes NLL but does not establish an Accuracy gain. No adoption; original validation and audit remain closed. See [result](docs/pretrained_reuse/R2_ROBOMNIST_TEMPORAL_CV_RESULTS_20261105.md).
 
 # Tiny Omni Decision
