@@ -49,3 +49,7 @@ work instead of fitting another weakly identified task.
 ## Residual RoboMNIST cohort follow-up — 2026-11-04
 
 A read-only split-code/manifest screen found only 10 groups unselected from the prior non-sealed eligible pool of 1,790 (1,780 already assigned to train/validation). The other 345 of 2,135 total source groups were outside that pool and were not inspected. Ten groups are far below the task's provisional 1,000-group validation gate. Do not train or re-evaluate this task; see [the residual-group screen](R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md). This does not establish a clean fresh evaluation cohort.
+
+## CREMA-D source-code follow-up — 2026-11-04
+
+Pinned source code confirms same-filename `VoiceVote`, `FaceVote`, and `MultiModalVote` columns, so a common AV target is structurally possible. The repository requests usage registration, while individual voice/face rights, consent scope, and a verified actor/sentence split remain unresolved. Keep this narrow emotion source `REVIEW_NOT_ADMITTED`; no data access, registration, or fit. See [source-code follow-up](R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md#pinned-source-code-follow-up--2026-11-04).

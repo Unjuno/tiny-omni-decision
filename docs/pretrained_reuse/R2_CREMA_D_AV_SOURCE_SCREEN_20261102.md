@@ -63,3 +63,11 @@ was accessed.
 - [CREMA-D source paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC4313618/)
 - [CREMA-D dataset card](https://audeering.github.io/datasets/datasets/crema-d.html) (audio-only mirror; reports ODbL and commercial use)
 - [ODbL 1.0 official summary](https://opendatacommons.org/licenses/odbl/summary/)
+
+## Pinned source-code follow-up — 2026-11-04
+
+A metadata/code-only review of the official repository at `1658cd342dff90010aa843eaeebd53610a08b1dc` confirmed that the task could use one common target across modalities. `processFinishedResponses.R` calls `summarizeVotes`; the pinned `summarizeVotes.r` groups responses by `queryType × clipNum`, maps query types 1/2/3 to voice-only/face-only/audiovisual, associates each group with the same `fileNames` entry, and emits `VoiceVote`, `FaceVote`, and `MultiModalVote` columns on the same per-filename row. Thus a future fixed comparison can score audio-only, video-only, and joint inputs against the same `MultiModalVote` target, then test whether each input contributes. This verifies label-row correspondence, not causal necessity or label reliability.
+
+The code review did not read `SentenceFilenames.csv`, rating CSVs, media, model outputs, or held-out annotations. Actor-disjoint grouping remains a metadata gate: the existing screen identifies actor IDs in the filename convention, but no registration or content access was performed to validate a complete actor/sentence split. The README's usage-registration request and unresolved individual voice/face rights and consent scope remain unchanged. Keep the source `REVIEW_NOT_ADMITTED`; no acquisition or training is authorized by this follow-up.
+
+Pinned code references: [processFinishedResponses.R](https://github.com/CheyneyComputerScience/CREMA-D/blob/1658cd342dff90010aa843eaeebd53610a08b1dc/processFinishedResponses.R), [summarizeVotes.r](https://github.com/CheyneyComputerScience/CREMA-D/blob/1658cd342dff90010aa843eaeebd53610a08b1dc/summarizeVotes.r), and [readTabulatedVotes.R](https://github.com/CheyneyComputerScience/CREMA-D/blob/1658cd342dff90010aa843eaeebd53610a08b1dc/readTabulatedVotes.R).
