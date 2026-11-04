@@ -1,5 +1,15 @@
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 
+**2026-11-05 R2 EgoViz train-only calibration transfer:** A scalar fitted on
+five-fold session-held-out logits from the existing 773-example/48-session
+training corpus improved NLL, Brier, and 10-bin ECE on the stored 2,394-example
+69-session video/IMU correspondence evaluation while leaving Accuracy
+unchanged. The unscaled fresh-group metrics had already been reported, so this
+is exposed-development evidence only; it is not blind calibration or general
+Omni quality. No weights or sealed audit were changed/accessed. See the
+[protocol](docs/pretrained_reuse/R2_EGOVIZ_EXPANDED_OOF_CALIBRATION_TRANSFER_PROTOCOL_20261105.md)
+and [results](docs/pretrained_reuse/R2_EGOVIZ_EXPANDED_OOF_CALIBRATION_TRANSFER_RESULTS_20261105.md).
+
 **2026-10-30 EgoViz fresh-group fixed-checkpoint evaluation:** Completed the
 one-time comparison on 2,394 four-choice video/IMU correspondence examples
 from 69 groups excluded from prior train/development and reserved groups. The

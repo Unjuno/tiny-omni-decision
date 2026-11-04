@@ -265,28 +265,40 @@ def run(corpus: Path, train_run: Path, fresh_eval: Path, output: Path) -> dict[s
                 )
                 + "\n"
             )
-    subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "scripts.egoviz_expanded_oof_calibration",
-            "--verify-fold-reloads",
-            "--corpus",
-            str(corpus),
-            "--train-run",
-            str(train_run),
-            "--fresh-eval",
-            str(fresh_eval),
-            "--output",
-            str(output),
-        ],
-        check=True,
-        cwd=Path.cwd(),
-        capture_output=True,
-        text=True,
-    )
+    verify_command = [
+        sys.executable,
+        "-m",
+        "scripts.egoviz_expanded_oof_calibration",
+        "--verify-fold-reloads",
+        "--corpus",
+        str(corpus),
+        "--train-run",
+        str(train_run),
+        "--fresh-eval",
+        str(fresh_eval),
+        "--output",
+        str(output),
+    ]
+    verify_processes = []
+    for _ in range(2):
+        verification = subprocess.run(
+            verify_command,
+            check=False,
+            cwd=Path.cwd(),
+            capture_output=True,
+            text=True,
+        )
+        verify_processes.append(verification)
+        if verification.returncode == 0:
+            break
+    if verify_processes[-1].returncode != 0:
+        raise RuntimeError(
+            "independent fold reload verification failed: "
+            f"{verify_processes[-1].stderr[-4000:]}"
+        )
     receipt_path = output / "fold-reload-receipt.json"
     report["fold_reload_receipt_sha256"] = sha256_file(receipt_path)
+    report["fold_reload_process_attempts"] = len(verify_processes)
     (output / "results.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return report
 
