@@ -20,19 +20,27 @@ The runtime verifies encoder/readout hashes, rejects unsupported WAV format and 
 
 ## CPU TRAIN-only smoke
 
-- Source code commit: `78d86a29eb4e9e631a1414b0b1ed4c98dec6d7dd`.
+- Source code commit: `fa155496ffb0bd0c2f1194816663b3866c7ac204`.
 - Environment: Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2.
 - Device: CPU; CUDA was not initialized and no GPU was used.
 - Data access: `train.jsonl` only. Four raw assets from four distinct speaker groups; no validation manifest, labels for inference/metrics, or sealed audit was opened.
 - Requests: five, including a repeated first asset with reversed option order.
 - Encoder calls: four expected and observed; the repeated request was a cache hit.
 - Class-bound option-permutation probability maximum absolute delta: `2.9802322387695312e-08` (acceptance tolerance `1e-6`).
-- Wall time: 9.57 seconds for the smoke, including worker startup and bundle integrity verification.
+- Wall time: 18.28 seconds for the smoke, including worker startup and bundle integrity verification. BF16 CPU autocast is slower than the earlier FP32 attempt.
 - Result: `PASS_RAW_AUDIO_PATH_A_TRAIN_ONLY_SMOKE`.
-- Full run record: `C:\CodexArtifacts\pretrained-reuse-r2\textfree-audio-patha-runtime-smoke-20261104-attempt-05\run-report.json`.
-- Run record SHA-256: `06f007bddf42b0259b3604989bc6eeb3c7d64fce58cd2eb238db42ca0ee0aede`.
+- Full run record: `C:\CodexArtifacts\pretrained-reuse-r2\textfree-audio-patha-runtime-smoke-20261104-attempt-06\run-report.json`.
+- Run record SHA-256: `2181c96d5fe25b9d242795f15241f19f741076cd6e68abcefae3b0db2e44360e`.
 
 The smoke intentionally did not read targets to calculate accuracy, NLL, Brier, or ECE. It therefore makes no quality statement. Earlier separate development evidence for this narrow readout includes poor calibration; this integration does not resolve that issue. The output probabilities are not evidence of 95–98% accuracy or general multimodal performance.
+
+## Training-feature precision follow-up
+
+Inspection of `scripts/train_frozen_audio_probe.py` showed that the existing frozen training feature cache was created with CUDA BF16 autocast. The first new CPU runtime version used FP32 and was not numerically aligned with that training path. The runtime now applies BF16 autocast around the encoder forward pass on both CPU and CUDA; waveform/Whisper frontend preparation remains outside autocast. A focused unit test asserts this precision mode.
+
+A read-only comparison against the four same TRAIN rows in the existing feature cache (`ace323458e7f443daf63382d2d41d99151d2a5801c671d30b0df68d52338ae64`) found that CPU BF16 autocast did not achieve the `1e-5` feature parity threshold against features produced on CUDA: per-row maximum absolute feature difference was 0.00998–0.02127, with mean absolute difference 0.00231–0.00325. For these four rows the readout's top class was unchanged; maximum absolute probability difference was 0.000967. These are only four TRAIN examples and are not quality evidence. CPU and CUDA BF16 kernels can differ numerically, so exact CUDA runtime parity remains unverified.
+
+At this audit, the RTX 3080 Laptop GPU had 15,832/16,384 MiB allocated and 344 MiB free while another user's GPU workload was active. No GPU test or process intervention was attempted. Revalidate feature parity on CUDA after that GPU is available before claiming runtime parity to the training cache.
 
 ## Code and verification
 
@@ -40,7 +48,7 @@ Implementation adds `textfree_audio_runtime.py`, an isolated audio worker, and a
 
 Focused tests cover pinned hash checks, WAV contract rejection, feature-cache reuse, option-order invariance and typed dispatch without starting unrelated workers. Ruff and 30 focused CPU tests pass; `git diff --check` passes. No model fitting occurred.
 
-The first attempt to repeat the smoke used a stale auxiliary VideoPrism path and stopped before loading a model or reading audio; the corrected attempt above used the existing pinned VideoPrism runtime paths. No existing artifact was changed by either attempt.
+The first repeat attempt used a stale auxiliary VideoPrism path and stopped before loading a model or reading audio; the corrected attempts used the existing pinned VideoPrism runtime paths. The original smoke record (attempt 05) remains preserved and corresponds to the pre-BF16 code commit; attempt 06 is the current runtime implementation. No existing artifact was changed by these attempts.
 
 ## Limits and next gate
 
