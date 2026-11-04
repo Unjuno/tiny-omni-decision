@@ -40,6 +40,8 @@ Inspection of `scripts/train_frozen_audio_probe.py` showed that the existing fro
 
 A read-only comparison against the four same TRAIN rows in the existing feature cache (`ace323458e7f443daf63382d2d41d99151d2a5801c671d30b0df68d52338ae64`) found that CPU BF16 autocast did not achieve the `1e-5` feature parity threshold against features produced on CUDA: per-row maximum absolute feature difference was 0.00998–0.02127, with mean absolute difference 0.00231–0.00325. For these four rows the readout's top class was unchanged; maximum absolute probability difference was 0.000967. These are only four TRAIN examples and are not quality evidence. CPU and CUDA BF16 kernels can differ numerically, so exact CUDA runtime parity remains unverified.
 
+This diagnostic is reproducible with `scripts/verify_textfree_audio_patha_feature_parity.py`, which verifies the pinned feature-cache hash and exact TRAIN ID order before comparing raw WAV features and class probabilities. The committed-code run used source commit `308d74ffec778dc7ab57eae457c05464de5f9370`, completed in 9.66 seconds on CPU, and returned `CPU_BACKEND_DRIFT_OBSERVED`; all four top classes matched, while strict feature parity failed. Its external report is `C:\CodexArtifacts\pretrained-reuse-r2\textfree-audio-patha-cpu-parity-20261104-attempt-02\parity-report.json` (SHA-256 `ab1b97160744307fc3a95e28ebbcc1ec54ef12c79bd4efa2d6f66c87f55d7229`).
+
 At this audit, the RTX 3080 Laptop GPU had 15,832/16,384 MiB allocated and 344 MiB free while another user's GPU workload was active. No GPU test or process intervention was attempted. Revalidate feature parity on CUDA after that GPU is available before claiming runtime parity to the training cache.
 
 ## Code and verification
