@@ -1,5 +1,6 @@
 import pytest
-import torch
+
+torch = pytest.importorskip("torch")
 
 from tiny_omni_decision.whisper_option_likelihood import (
     build_decoder_batch,
