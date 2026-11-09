@@ -1,0 +1,106 @@
+{
+  "contract_id": "tiny-omni-decision-task-contract",
+  "contract_version": "0.1.0",
+  "status": "engineering-interface-frozen_task_battery-open",
+  "purpose": "Define a stable supplied-option decision interface and per-task evidence gates without claiming product quality or inventing an end-user task battery.",
+  "product_inputs": {
+    "required_modalities": ["text", "image", "audio", "video"],
+    "optional_modalities": ["sensor"]
+  },
+  "request_contract": {
+    "request_id": "nonempty stable caller ID",
+    "decision_type": ["choice", "yes_no", "ordinal_score"],
+    "criterion": "explicit question, instruction, or task criterion; may be empty only for a frozen task contract that defines the criterion out of band",
+    "options": {
+      "minimum_count": 2,
+      "fields": ["id", "text"],
+      "id_requirement": "unique nonempty stable IDs",
+      "order_requirement": "preserve caller-supplied option order end to end"
+    },
+    "ordinal_score": {
+      "required_for_decision_type": "ordinal_score",
+      "field": "strictly increasing finite numeric value per supplied option"
+    }
+  },
+  "modality_inputs": {
+    "text": {
+      "required": true,
+      "fields": ["text_or_state", "criterion", "options"],
+      "guard": "Do not encode the target label or correct option in the state or criterion."
+    },
+    "image": {
+      "required": true,
+      "fields": ["image_asset", "criterion", "options"],
+      "asset_integrity": "Pin source identity and content hash; state crop/resize/preprocessing in the task protocol."
+    },
+    "audio": {
+      "required": true,
+      "fields": ["audio_asset", "sample_rate_hz", "channels", "criterion", "options"],
+      "temporal_metadata": "When the task uses a segment, record start/end times and the clock reference."
+    },
+    "video": {
+      "required": true,
+      "fields": ["video_asset", "criterion", "options"],
+      "temporal_metadata": "Preserve frame order and record timestamps, sampling policy, and source clock for temporal tasks."
+    },
+    "sensor": {
+      "required": false,
+      "fields": ["timestamped_channels", "units", "validity_or_missingness", "criterion", "options"],
+      "guard": "A sensor route is optional and is not part of the first required modality battery."
+    },
+    "joint": {
+      "required": false,
+      "fields": ["explicit_modalities", "asset_ids_and_hashes", "time_alignment", "missingness", "criterion", "options"],
+      "guard": "Do not claim that multiple inputs are needed until matched unimodal, missing, shuffled, stale/time-offset, and contradiction controls pass on a rights-cleared independent-group task."
+    }
+  },
+  "response_contract": {
+    "implementation": "tiny_omni_decision.decision_json.decision_json_record",
+    "schema_version": 1,
+    "fields": ["schema_version", "request_id", "decision_type", "selected_option_id", "confidence", "options"],
+    "option_fields": ["id", "text", "probability"],
+    "probability_requirements": "finite values in [0,1], same length/order as supplied options, sum to 1 within 1e-5; selected_option_id must have maximum probability",
+    "confidence_semantics": "probability assigned to the selected option; JSON shape validity does not establish calibration",
+    "abstention": {
+      "supported": true,
+      "implementation": "tiny_omni_decision.decision_json.decision_json_abstention_record",
+      "evaluation": "Count abstentions as incorrect for all-query accuracy and report covered-only metrics and coverage separately."
+    }
+  },
+  "evaluation_policy": {
+    "source_policy": "docs/pretrained_reuse/R0_QUANTITATIVE_ACCEPTANCE_POLICY_20261031.md",
+    "source_policy_sha256": "818e97822ebf32fdfa21771e35f8e9d2b846c7802de9b286c7b582fb22244862",
+    "minimum_examples_per_named_task": 1000,
+    "minimum_independent_groups_per_named_task": 200,
+    "accuracy_point_target": 0.95,
+    "accuracy_lower_95_percent_group_bootstrap_target": 0.95,
+    "accuracy_stretch_target": 0.98,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 17,
+      "unit": "independent source group"
+    },
+    "required_metrics_per_task": ["accuracy", "NLL", "Brier", "ECE-15", "mean_confidence", "coverage", "reliability_bins"],
+    "calibration_gate": {
+      "ece15_point_max": 0.05,
+      "ece15_upper_95_percent_group_bootstrap_max": 0.05
+    },
+    "baseline_gate": "NLL and Brier must improve over both uniform-option and train-only majority-class baselines using paired source-group uncertainty.",
+    "selection_gate": "Any calibration or model selection uses training/calibration groups only; locked evaluation groups are not reused for tuning.",
+    "joint_input_gate": "The fused model must improve both accuracy and NLL over the best unimodal control under paired source-group uncertainty and pass frozen missing/shuffled/stale/time-offset/contradiction controls.",
+    "task_battery_status": "open",
+    "unresolved_release_inputs": ["end-user deployment device", "latency ceiling", "energy ceiling", "approved task per required modality", "fresh locked evaluation cohort per task", "rights-cleared joint-input task"]
+  },
+  "known_development_tasks": [
+    {"modality": "text", "task": "Typed Decisions Synth synthetic option decisions", "status": "development_only_not_release_qualified"},
+    {"modality": "image", "task": "CLEVR-4 four-taxonomy fixed-option decisions", "status": "development_only_synthetic_not_general_image_quality"},
+    {"modality": "audio", "task": "Speech Commands fixed-query keyword decisions", "status": "development_only_closed_set_not_general_speech_quality"},
+    {"modality": "video", "task": "CLEVRER candidate-statement decisions", "status": "development_only_temporal_quality_gate_unmet"}
+  ],
+  "non_claims": [
+    "This contract does not select a product task battery or deployment device.",
+    "Schema-valid probabilities are not evidence of calibrated probabilities.",
+    "Passing one modality-specific benchmark does not qualify another modality or a joint-input task.",
+    "The current Path A runtime and its observed development results do not meet the full release gates by virtue of this contract."
+  ]
+}
