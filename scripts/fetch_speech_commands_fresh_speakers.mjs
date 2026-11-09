@@ -12,9 +12,10 @@ const EXPECTED_ENTRY_SHA256 = '9a61c1600b11d650609ea664c8de6e290046ac5045870cc00
 const utf8 = new TextDecoder()
 const sha = (value) => createHash('sha256').update(value).digest('hex')
 const parsers = {
-  stringFromBytes: (bytes) => bytes && utf8.decode(bytes),
+  stringFromBytes: (bytes) => bytes,
   jsonFromBytes: (bytes) => bytes && JSON.parse(utf8.decode(bytes)),
 }
+const text = (value) => typeof value === 'string' ? value : utf8.decode(value)
 
 function arg(argv, name) {
   const index = argv.indexOf(`--${name}`)
@@ -134,14 +135,16 @@ async function main() {
       const frozen = selectedByIndex.get(sourceRow)
       if (!frozen) continue
       if (Number(record.label) !== frozen.label
-          || sha(String(record.speaker_id)) !== frozen.speaker_group_sha256
-          || sha(String(record.file)) !== frozen.source_path_sha256) {
+          || sha(text(record.speaker_id)) !== frozen.speaker_group_sha256
+          || sha(text(record.file)) !== frozen.source_path_sha256) {
         throw new Error(`source identity mismatch for ${frozen.id}`)
       }
       const audio = record.audio
       const payload = audio?.bytes ?? audio?.data
-      if (!(payload instanceof Uint8Array)) throw new Error(`missing binary audio bytes for ${frozen.id}`)
-      const wav = Buffer.from(payload)
+      let wav
+      if (payload instanceof Uint8Array) wav = Buffer.from(payload)
+      else if (typeof payload === 'string') wav = Buffer.from(payload, 'latin1')
+      else throw new Error(`missing binary audio bytes for ${frozen.id}`)
       const wavInfo = pcmWavInfo(wav)
       const audioHash = sha256Bytes(wav)
       const audioPath = path.join(outputDir, `${frozen.id}.wav`)

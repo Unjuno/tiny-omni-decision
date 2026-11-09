@@ -8,6 +8,7 @@ import json
 import platform
 import sys
 import time
+import wave
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -54,6 +55,18 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
+def normalized_pcm_sha256(path: Path) -> str:
+    with wave.open(str(path), "rb") as stream:
+        if (
+            stream.getnchannels() != 1
+            or stream.getsampwidth() != 2
+            or stream.getframerate() != 16_000
+            or stream.getcomptype() != "NONE"
+        ):
+            raise ValueError(f"unexpected WAV format: {path}")
+        return hashlib.sha256(stream.readframes(stream.getnframes())).hexdigest()
+
+
 def metric_intervals(bootstrap: dict[str, list[float]]) -> dict[str, list[float]]:
     return {name: percentile_interval(values) for name, values in bootstrap.items()}
 
@@ -61,6 +74,7 @@ def metric_intervals(bootstrap: dict[str, list[float]]) -> dict[str, list[float]
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--historical-exposure-dir", type=Path, required=True)
     parser.add_argument("--media-dir", type=Path, required=True)
     parser.add_argument("--readout", type=Path, required=True)
     parser.add_argument("--encoder-dir", type=Path, required=True)
@@ -90,6 +104,28 @@ def main() -> None:
     media_by_id = {row["id"]: row for row in media_rows}
     if len(media_by_id) != 1000 or set(media_by_id) != {row["id"] for row in rows}:
         raise SystemExit("materialized audio inventory does not exactly match frozen IDs")
+    historical_rows = []
+    for split in ("train", "validation"):
+        historical = read_jsonl(args.historical_exposure_dir / f"{split}.jsonl")
+        if any(row.get("split") != split for row in historical):
+            raise SystemExit(f"historical {split} manifest has a split mismatch")
+        historical_rows.extend(historical)
+    historical_speakers = {row["speaker_group_sha256"] for row in historical_rows}
+    historical_assets = {row["source_path_sha256"] for row in historical_rows}
+    historical_records = {(row["source_file"], row["source_row"]) for row in historical_rows}
+    historical_media_hashes = {row["media_sha256"] for row in historical_rows}
+    selected_assets = {row["source_path_sha256"] for row in rows}
+    selected_records = {(row["source_file"], row["source_row"]) for row in rows}
+    selected_media_hashes = {row["audio_sha256"] for row in media_rows}
+    if historical_speakers.intersection(group_ids):
+        raise SystemExit("fresh cohort overlaps prior train/validation speakers")
+    if historical_assets.intersection(selected_assets):
+        raise SystemExit("fresh cohort overlaps prior train/validation source assets")
+    if historical_records.intersection(selected_records):
+        raise SystemExit("fresh cohort overlaps prior train/validation source rows")
+    if historical_media_hashes.intersection(selected_media_hashes):
+        raise SystemExit("fresh cohort has an exact WAV content hash in prior exposure")
+    pcm_hashes = []
     for row in rows:
         media = media_by_id[row["id"]]
         for key in ("source", "source_file", "source_row", "speaker_group_sha256", "target"):
@@ -98,6 +134,13 @@ def main() -> None:
         audio_path = args.media_dir / media["local_file"]
         if sha256_file(audio_path) != media["audio_sha256"]:
             raise SystemExit(f"audio SHA-256 mismatch for {row['id']}")
+        pcm_hashes.append(normalized_pcm_sha256(audio_path))
+    class_counts = Counter(row["target"] for row in rows)
+    per_speaker = Counter(group_ids)
+    if set(class_counts.values()) != {100} or max(per_speaker.values()) > 5:
+        raise SystemExit("fresh cohort balance or per-speaker cap differs from frozen protocol")
+    if len(selected_assets) != len(rows) or len(selected_records) != len(rows):
+        raise SystemExit("fresh cohort repeats a source asset or source record")
 
     torch.set_num_threads(4)
     load_started = time.perf_counter()
@@ -214,6 +257,18 @@ def main() -> None:
         "cohort_manifest_sha256": manifest_sha,
         "cohort_examples": len(rows),
         "unique_speaker_groups": len(set(group_ids)),
+        "identity_integrity": {
+            "prior_train_validation_examples": len(historical_rows),
+            "speaker_overlap": 0,
+            "source_asset_path_overlap": 0,
+            "source_record_overlap": 0,
+            "exact_wav_sha256_overlap": 0,
+            "selected_cohort_unique_pcm_contents": len(set(pcm_hashes)),
+            "selected_cohort_pcm_duplicates": len(pcm_hashes) - len(set(pcm_hashes)),
+            "historical_normalized_pcm_overlap": (
+                "UNKNOWN: prior raw WAVs are absent; exact historical WAV hashes were compared"
+            ),
+        },
         "class_order": list(CLASSES),
         "candidate": {
             "checkpoint_sha256": READOUT_SHA256,
