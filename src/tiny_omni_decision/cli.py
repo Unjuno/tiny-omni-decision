@@ -6,6 +6,7 @@ import json
 import os
 import platform
 import random
+import sys
 import tempfile
 from pathlib import Path
 
@@ -31,6 +32,11 @@ ADAPTER_OPTION = typer.Option("generic", "--adapter")
 LIMIT_OPTION = typer.Option(None, "--limit", min=1)
 SEED_OPTION = typer.Option(None, "--seed")
 COMPONENTS_OPTION = typer.Option(None, "--components")
+PATH_A_ASSEMBLY_OPTION = typer.Option(..., "--assembly")
+VIDEOPRISM_PYTHON_OPTION = typer.Option(..., "--videoprism-python")
+VIDEOPRISM_SOURCE_OPTION = typer.Option(..., "--videoprism-source")
+PATH_A_WORKER_LOG_OPTION = typer.Option(..., "--worker-log-dir")
+PATH_A_DEVICE_OPTION = typer.Option("cpu", "--device")
 
 
 @app.command()
@@ -968,6 +974,31 @@ def smoke_text_decision(
             "checkpoint": str(output_dir),
         }
     )
+
+
+@app.command("path-a-jsonl")
+def path_a_jsonl(
+    assembly: Path = PATH_A_ASSEMBLY_OPTION,
+    videoprism_python: Path = VIDEOPRISM_PYTHON_OPTION,
+    videoprism_source: Path = VIDEOPRISM_SOURCE_OPTION,
+    worker_log_dir: Path = PATH_A_WORKER_LOG_OPTION,
+    device: str = PATH_A_DEVICE_OPTION,
+) -> None:
+    """Run the existing task-scoped Path A bundle over JSONL on stdin/stdout."""
+    from tiny_omni_decision.path_a_runtime_cli import run_jsonl
+    from tiny_omni_decision.runtime_dispatch import PathARuntimeDispatcher
+
+    dispatcher = PathARuntimeDispatcher(
+        assembly,
+        videoprism_python=videoprism_python,
+        videoprism_source=videoprism_source,
+        worker_log_dir=worker_log_dir,
+        device=device,
+    )
+    try:
+        run_jsonl(sys.stdin, sys.stdout, dispatcher)
+    finally:
+        dispatcher.close()
 
 
 if __name__ == "__main__":
