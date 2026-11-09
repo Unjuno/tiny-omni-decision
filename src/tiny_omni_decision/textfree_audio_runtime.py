@@ -75,11 +75,20 @@ class TextFreeAudioRuntime:
         device: str | torch.device = "cpu",
         cache_entries: int = 64,
         temperature: float = 1.0,
+        expected_readout_sha256: str | None = None,
     ) -> None:
         if type(cache_entries) is not int or cache_entries < 0:
             raise ValueError("cache_entries must be a nonnegative integer")
         if not math.isfinite(temperature) or temperature <= 0:
             raise ValueError("temperature must be finite and positive")
+        if expected_readout_sha256 is None:
+            expected_readout_sha256 = AUDIO_READOUT_SHA256
+        if (
+            not isinstance(expected_readout_sha256, str)
+            or len(expected_readout_sha256) != 64
+            or any(character not in "0123456789abcdef" for character in expected_readout_sha256)
+        ):
+            raise ValueError("expected_readout_sha256 must be a lowercase SHA-256 hex digest")
         self.device = torch.device(device)
         if self.device.type == "cuda" and not torch.cuda.is_available():
             raise RuntimeError("CUDA was requested but is unavailable")
@@ -98,7 +107,7 @@ class TextFreeAudioRuntime:
             config_path: AUDIO_ENCODER_CONFIG_SHA256,
             weights_path: AUDIO_ENCODER_SHA256,
             processor_path: AUDIO_PREPROCESSOR_SHA256,
-            readout_path: AUDIO_READOUT_SHA256,
+            readout_path: expected_readout_sha256,
         }
         for path, expected in expected_hashes.items():
             if sha256_file(path) != expected:
