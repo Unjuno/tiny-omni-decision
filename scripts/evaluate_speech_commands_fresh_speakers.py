@@ -28,7 +28,7 @@ from tiny_omni_decision.speech_commands_labels import validate_speech_commands_t
 from tiny_omni_decision.textfree_audio_runtime import TextFreeAudioRuntime
 
 CLASSES = ("yes", "no", "up", "down", "left", "right", "on", "off", "stop", "go")
-MANIFEST_SHA256 = "96c6fe86298ef234e3b49546df8e07858049283a1e1334e4982a5bdbad5daaa4"
+MANIFEST_SHA256 = "06baea7a101ce60849b5a6dc81d4413c531c0871091fa914d169a53e5f30f23e"
 READOUT_SHA256 = "171f6a9303b2fd9ad63efe2bee6af119549fb4f26ea663e9c1297f51a678e1c3"
 TEMPERATURE = 0.42702477413437295
 ENCODER_REVISION = "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
@@ -260,7 +260,7 @@ def main() -> None:
         ["git", "rev-parse", "HEAD"], cwd=repository_root, text=True
     ).strip()
     config_path = (
-        repository_root / "configs/pretrained_reuse/speech_commands_fresh_speakers_eval.json"
+        repository_root / "configs/pretrained_reuse/speech_commands_fresh_speakers_eval_v2.json"
     )
     materialization_report_path = args.media_dir / "materialization-report.json"
     report = {

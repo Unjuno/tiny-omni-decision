@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "experiment_id": "speech-commands-fresh-speakers-textfree-audio-20261110-v2-label-corrected",
+  "source": {
+    "dataset": "google/speech_commands",
+    "revision": "a751309c0fd613e8a5d30d77900f30e8b42bc2da",
+    "config": "v0.02",
+    "split": "official_train_unused_speakers",
+    "license": "CC-BY-4.0",
+    "license_evidence": "https://huggingface.co/datasets/google/speech_commands/blob/a751309c0fd613e8a5d30d77900f30e8b42bc2da/README.md",
+    "label_id_to_name": ["yes", "no", "up", "down", "left", "right", "on", "off", "stop", "go"],
+    "manifest_sha256": "06baea7a101ce60849b5a6dc81d4413c531c0871091fa914d169a53e5f30f23e",
+    "superseded_manifest_sha256": "96c6fe86298ef234e3b49546df8e07858049283a1e1334e4982a5bdbad5daaa4",
+    "examples": 1000,
+    "independent_speaker_groups": 562,
+    "per_class_count": 100,
+    "same_sample_ids_and_source_rows_as_v1": true,
+    "historical_exposure_excluded": "C:/CodexArtifacts/pretrained-reuse-r2/speech-commands-sample-seed17-128-64-retry2",
+    "official_validation_or_test_accessed": false
+  },
+  "candidate": {
+    "type": "frozen-feature-path-a-text-free-audio-readout",
+    "readout_path": "C:/CodexArtifacts/pretrained-reuse-r2/textfree-audio-calibration-03/last-readout.pt",
+    "readout_sha256": "171f6a9303b2fd9ad63efe2bee6af119549fb4f26ea663e9c1297f51a678e1c3",
+    "calibration_temperature": 0.42702477413437295,
+    "temperature_source": "separate fit/calibration speaker groups within prior official TRAIN source records; frozen before this cohort",
+    "encoder": "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "encoder_sha256": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8",
+    "training_on_this_cohort": false,
+    "checkpoint_or_temperature_selection_on_this_cohort": false
+  },
+  "classes": ["yes", "no", "up", "down", "left", "right", "on", "off", "stop", "go"],
+  "metrics": {
+    "ece_bins": 15,
+    "brier": "mean per-example sum of squared multiclass probability errors",
+    "baselines": ["uniform-10", "training-majority-class-tie-broken-by-class-order"],
+    "bootstrap": {
+      "unit": "speaker_group_sha256",
+      "paired": true,
+      "replicates": 10000,
+      "seed": 17,
+      "interval": "two-sided percentile 95% [2.5%, 97.5%]"
+    }
+  },
+  "acceptance_policy": {
+    "minimum_examples": 1000,
+    "minimum_independent_groups": 200,
+    "accuracy_point_minimum": 0.95,
+    "accuracy_ci_lower_minimum": 0.95,
+    "ece15_point_maximum": 0.05,
+    "ece15_ci_upper_maximum": 0.05,
+    "nll_and_brier_must_improve_over_both_baselines": true,
+    "paired_difference_ci_upper_must_be_below_zero": true,
+    "policy_reference": "docs/pretrained_reuse/R0_QUANTITATIVE_ACCEPTANCE_POLICY_20261031.md"
+  },
+  "prior_run_note": "Attempt 01 was invalidated because its targets used an incorrect numeric ClassLabel map. The same sample rows and WAVs are retained with corrected labels in a new immutable artifact; no model or calibration changes were made.",
+  "scope": "One locked validation-only transfer measurement on unused official TRAIN speakers. Not an official test, sealed audit, general speech evaluation, or multimodal result."
+}
