@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-11-10 frozen VideoMAE Clevr-4 Path A completed:** On a frozen
+VideoMAE V2 ViT-Small representation, a 52.7k-parameter option readout reached
+79.62% equal-taxonomy selector Accuracy and 80.01% on a disjoint one-time
+internal reporting pool. Color/shape were near 99%, while count was 43%; this
+is a narrow synthetic image taxonomy result, with no temporal or multimodal
+claim and no product promotion. [Protocol and complete results](docs/pretrained_reuse/R2_VIDEOMAE_CLEVR4_100K_PATH_A_RESULTS_20261110.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results
