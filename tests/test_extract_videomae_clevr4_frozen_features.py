@@ -1,20 +1,23 @@
 from __future__ import annotations
 
+import importlib
 import json
 from io import BytesIO
 
 import numpy as np
 import pytest
-import torch
 from PIL import Image
 
-from scripts.extract_videomae_clevr4_frozen_features import image_tensor
-from scripts.train_videomae_clevr4_option_scorer import (
-    TaxonomyConditionedScorer,
-    decision_json,
-    parameter_count,
-    score_options,
-)
+torch = pytest.importorskip("torch", reason="VideoMAE runtime tests require PyTorch")
+
+image_tensor = importlib.import_module(
+    "scripts.extract_videomae_clevr4_frozen_features"
+).image_tensor
+scorer_module = importlib.import_module("scripts.train_videomae_clevr4_option_scorer")
+TaxonomyConditionedScorer = scorer_module.TaxonomyConditionedScorer
+decision_json = scorer_module.decision_json
+parameter_count = scorer_module.parameter_count
+score_options = scorer_module.score_options
 
 
 def test_static_image_is_repeated_and_normalized_for_all_frames() -> None:
