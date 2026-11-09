@@ -212,6 +212,11 @@ def main() -> None:
     finally:
         runtime.close()
     inference_seconds = time.perf_counter() - start
+    predictions_path = args.output_dir / "predictions.jsonl"
+    predictions_path.write_text(
+        "".join(json.dumps(item, sort_keys=True) + "\n" for item in predictions),
+        encoding="utf-8",
+    )
 
     uniform = [[1.0 / len(CLASSES)] * len(CLASSES) for _ in rows]
     majority_class = max(CLASSES, key=lambda label: FIT_CLASS_COUNTS[label])
@@ -255,6 +260,27 @@ def main() -> None:
         }
         for label in CLASSES
     }
+    metrics_payload = {
+        "candidate": primary_metrics,
+        "uniform_10_baseline": uniform_metrics,
+        "training_majority_one_hot_baseline": {
+            "class": majority_class,
+            "fit_class_counts": FIT_CLASS_COUNTS,
+            **majority_metrics,
+        },
+        "per_class": per_class,
+        "confusion_matrix_actual_by_predicted": confusion,
+        "paired_speaker_group_bootstrap": {
+            "replicates": 10_000,
+            "seed": 17,
+            "percentile_interval": "two-sided 95%",
+            "by_baseline": bootstrap_by_baseline,
+        },
+    }
+    metrics_path = args.output_dir / "metrics.json"
+    metrics_path.write_text(
+        json.dumps(metrics_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     repository_root = Path(__file__).resolve().parents[1]
     source_commit = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=repository_root, text=True
@@ -262,7 +288,11 @@ def main() -> None:
     config_path = (
         repository_root / "configs/pretrained_reuse/speech_commands_fresh_speakers_eval_v2.json"
     )
-    materialization_report_path = args.media_dir / "materialization-report.json"
+    cohort_artifact_report_path = args.media_dir / "materialization-report.json"
+    if not cohort_artifact_report_path.is_file():
+        cohort_artifact_report_path = args.media_dir / "label-correction-report.json"
+    if not cohort_artifact_report_path.is_file():
+        raise SystemExit("cohort artifact integrity report is missing")
     report = {
         "schema_version": 1,
         "status": "FRESH_SPEAKER_EVALUATION_COMPLETE",
@@ -288,7 +318,7 @@ def main() -> None:
             repository_root / "scripts/fetch_speech_commands_fresh_speakers.mjs"
         ),
         "media_inventory_sha256": sha256_file(args.media_dir / "media-inventory.jsonl"),
-        "materialization_report_sha256": sha256_file(materialization_report_path),
+        "cohort_artifact_report_sha256": sha256_file(cohort_artifact_report_path),
         "cohort_examples": len(rows),
         "unique_speaker_groups": len(set(group_ids)),
         "identity_integrity": {
@@ -313,23 +343,8 @@ def main() -> None:
             "resident_parameters": resident_parameter_count,
             "training_or_selection_on_this_cohort": False,
         },
-        "metrics": {
-            "candidate": primary_metrics,
-            "uniform_10_baseline": uniform_metrics,
-            "training_majority_one_hot_baseline": {
-                "class": majority_class,
-                "fit_class_counts": FIT_CLASS_COUNTS,
-                **majority_metrics,
-            },
-            "per_class": per_class,
-            "confusion_matrix_actual_by_predicted": confusion,
-            "paired_speaker_group_bootstrap": {
-                "replicates": 10_000,
-                "seed": 17,
-                "percentile_interval": "two-sided 95%",
-                "by_baseline": bootstrap_by_baseline,
-            },
-        },
+        "metrics": metrics_payload,
+        "metrics_sha256": sha256_file(metrics_path),
         "runtime": {
             "device": args.device,
             "python": platform.python_version(),
@@ -354,10 +369,6 @@ def main() -> None:
             "readout_or_temperature_selection_on_cohort": False,
         },
     }
-    predictions_path = args.output_dir / "predictions.jsonl"
-    predictions_path.write_text(
-        "".join(json.dumps(item, sort_keys=True) + "\n" for item in predictions), encoding="utf-8"
-    )
     report["predictions_sha256"] = sha256_file(predictions_path)
     report_path = args.output_dir / "report.json"
     report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
