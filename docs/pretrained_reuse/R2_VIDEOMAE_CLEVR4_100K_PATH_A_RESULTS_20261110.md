@@ -91,6 +91,33 @@ readout limitation for count/texture, but the experiment does not distinguish
 those causes from dataset/task properties. No architecture or data changes
 were tested after seeing these results.
 
+### Selector count error profile
+
+This descriptive breakdown uses only the 1,000-image selector predictions;
+the one-time reporting pool was not re-opened. Class supports range from 39 to
+123, so the weakest recalls are not confined to the rarest classes.
+
+| Target count | Support | Recall | Most common predictions when wrong |
+|---:|---:|---:|---|
+| 1 | 39 | 97.44% | 2 (1) |
+| 2 | 90 | 73.33% | 3 (14), 1 (10) |
+| 3 | 107 | 66.36% | 4 (18), 2 (16) |
+| 4 | 101 | 41.58% | 3 (27), 5 (14), 6 (11) |
+| 5 | 106 | 24.53% | 6 (37), 4 (24), 3 (10) |
+| 6 | 123 | 46.34% | 5 (19), 8 (17), 7 (13) |
+| 7 | 123 | 8.94% | 6 (44), 8 (34), 5 (15) |
+| 8 | 95 | 27.37% | 7 (20), 6 (17), 10 (16) |
+| 9 | 94 | 5.32% | 10 (38), 8 (32), 6 (12) |
+| 10 | 122 | 68.85% | 8 (23), 6 (6), 9 (5) |
+
+The errors often move to nearby counts, although 6/8/10 confusions are also
+common. This points to a plausible loss of object-level spatial detail in a
+single 384-wide global feature followed by the small MLP, but it does not prove
+that mechanism. A future count-focused comparison would need a separate frozen
+protocol that retains spatial/token features or supplies object-centric
+features; changing the current run after observing the selector is not part of
+this result.
+
 ## Artifacts, integrity, and deviations
 
 The external run directory is
