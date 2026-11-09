@@ -83,9 +83,12 @@ allocated VRAM 1,234,878,464 bytes. The loaded model had the expected strict
 checkpoint and 22,153,286 parameters. This is a smoke result, not a Decision
 quality metric.
 
-Full feature extraction and the fixed 8-epoch readout fit have not yet been
-run. Do not describe this protocol or smoke as completed training or model
-quality. Final reporting must include per-taxonomy Accuracy/NLL/Brier/ECE,
-macro metrics, selected epoch, train/selector gap with rolling-train caveat,
-unique assets and samples, compute/VRAM/time, saved prediction and checkpoint
-hashes, and limitations.
+Full extraction and the fixed 8-epoch readout fit completed on 2026-11-10.
+The selector chose epoch 8 (macro NLL 0.5082; Accuracy 79.62%); the disjoint
+5,296-image one-time internal reporting pool scored 80.01% macro Accuracy.
+Count accuracy was 43.43% on reporting and is the clearest per-task weakness.
+The results, complete learning curve, hashes, runtime, compute and limitations
+are recorded in
+[`R2_VIDEOMAE_CLEVR4_100K_PATH_A_RESULTS_20261110.md`](R2_VIDEOMAE_CLEVR4_100K_PATH_A_RESULTS_20261110.md).
+This fixed-image experiment uses no temporal signal and does not test audio,
+natural-language questions, modality fusion, or the product-wide target.
