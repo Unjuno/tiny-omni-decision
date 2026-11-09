@@ -1,0 +1,48 @@
+{
+    "schema_version": 1,
+    "experiment_id": "path-a-image-videomae-clevr4-100k-seed17",
+    "seed": 17,
+    "source": {
+        "dataset": "Clevr-4 100k v1",
+        "archive_bytes": 36057238315,
+        "archive_sha512_pinned": "7e8454f9f44d7b527eb20252a687b15b4cd28f3e9c79cf6147317971034c367b64bf6bba98d2a66f64b26f1e7eea2105a8acf221198342e89a844fd0007cc94c",
+        "license": "CC-BY-4.0",
+        "split": "official train only; seed-17 internal train/validation group split"
+    },
+    "task": {
+        "scope": "synthetic Clevr-4 image taxonomy decisions",
+        "taxonomies": ["color", "texture", "count", "shape"],
+        "options_per_taxonomy": 10,
+        "training_images": 72010,
+        "selector_images": 1000,
+        "one_time_reporting_images": 5296,
+        "quarantined_validation_images": 1706,
+        "sealed_audit_loaded": false
+    },
+    "encoder": {
+        "name": "OpenGVLab VideoMAE V2 ViT-Small K710",
+        "source_sha256": "d132c97369f25207e380e78c59294fd00b93d2f6aa0fb5c4ded19eff26a5a3cb",
+        "checkpoint_sha256": "24fb71687fa3671b8387cadfbcbab0f72af695692e93cf1ecc82caa888626172",
+        "parameters": 22153286,
+        "frozen": true,
+        "input_frames": 16,
+        "image_mode": "repeat static image in every frame",
+        "resolution": 224,
+        "preprocessing": "RGB Lanczos resize; /255; mean/std 0.5",
+        "feature_width": 384
+    },
+    "readout": {
+        "architecture": "shared taxonomy-conditioned MLP over frozen image features; class logits map to supplied option IDs",
+        "hidden_width": 128,
+        "task_embedding_width": 16,
+        "epochs": 8,
+        "batch_tasks": 512,
+        "optimizer": "AdamW",
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "scheduler": "constant",
+        "checkpoint_selection": "minimum equal-taxonomy macro NLL on fixed 1000-image selector; earliest epoch on ties",
+        "training_examples_per_epoch": 288040,
+        "early_stopping": false
+    }
+}
