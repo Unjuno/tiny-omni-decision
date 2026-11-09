@@ -6,6 +6,12 @@ import { pathToFileURL } from 'node:url'
 export const REVISION = 'a751309c0fd613e8a5d30d77900f30e8b42bc2da'
 export const DATASET = 'google/speech_commands'
 export const LABELS = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
+const SOURCE_LABELS = [
+  'yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go',
+  'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+  'bed', 'bird', 'cat', 'dog', 'happy', 'house', 'marvin', 'sheila', 'tree', 'wow',
+  'backward', 'forward', 'follow', 'learn', 'visual', '_silence_',
+]
 const TRAIN_FILES = Array.from({ length: 6 }, (_, index) =>
   `train-${String(index).padStart(5, '0')}-of-00006.parquet`,
 )
@@ -219,7 +225,8 @@ async function scanShard(name, parquet, fetch) {
   const entry = metadata.key_value_metadata?.find(({ key }) => key === 'huggingface')
   if (!entry) throw new Error(`missing ClassLabel metadata: ${name}`)
   const sourceLabels = JSON.parse(entry.value).info?.features?.label?.names
-  if (JSON.stringify(sourceLabels) !== JSON.stringify(LABELS)) {
+  if (JSON.stringify(sourceLabels) !== JSON.stringify(SOURCE_LABELS)
+      || JSON.stringify(SOURCE_LABELS.slice(0, LABELS.length)) !== JSON.stringify(LABELS)) {
     throw new Error(`unexpected pinned label mapping in ${name}: ${JSON.stringify(sourceLabels)}`)
   }
   const rows = []
