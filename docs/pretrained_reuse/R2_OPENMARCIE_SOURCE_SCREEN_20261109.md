@@ -42,4 +42,4 @@ Until these gates pass, no Path A fit or quality evaluation is justified on this
 
 ## Machine-readable record
 
-See [`R2_OPENMARCIE_SOURCE_SCREEN_20261109.json`](../manifests/pretrained_reuse/r2-openmarcie-source-screen-20261109.json).
+See [`R2_OPENMARCIE_SOURCE_SCREEN_20261109.json`](../../manifests/pretrained_reuse/r2-openmarcie-source-screen-20261109.json).
