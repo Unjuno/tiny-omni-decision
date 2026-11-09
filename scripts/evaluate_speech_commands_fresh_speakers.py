@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import platform
+import subprocess
 import sys
 import time
 import wave
@@ -237,6 +239,12 @@ def main() -> None:
         }
         for label in CLASSES
     }
+    repository_root = Path(__file__).resolve().parents[1]
+    source_commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=repository_root, text=True
+    ).strip()
+    config_path = repository_root / "configs/pretrained_reuse/speech_commands_fresh_speakers_eval.json"
+    materialization_report_path = args.media_dir / "materialization-report.json"
     report = {
         "schema_version": 1,
         "status": "FRESH_SPEAKER_EVALUATION_COMPLETE",
@@ -255,6 +263,14 @@ def main() -> None:
             "Commands v0.02, CC BY 4.0."
         ),
         "cohort_manifest_sha256": manifest_sha,
+        "config_sha256": hashlib.sha256(config_path.read_bytes()).hexdigest(),
+        "source_commit": source_commit,
+        "evaluator_script_sha256": sha256_file(Path(__file__).resolve()),
+        "materializer_script_sha256": sha256_file(
+            repository_root / "scripts/fetch_speech_commands_fresh_speakers.mjs"
+        ),
+        "media_inventory_sha256": sha256_file(args.media_dir / "media-inventory.jsonl"),
+        "materialization_report_sha256": sha256_file(materialization_report_path),
         "cohort_examples": len(rows),
         "unique_speaker_groups": len(set(group_ids)),
         "identity_integrity": {
@@ -300,7 +316,10 @@ def main() -> None:
             "device": args.device,
             "python": platform.python_version(),
             "torch": torch.__version__,
+            "transformers": importlib.metadata.version("transformers"),
+            "safetensors": importlib.metadata.version("safetensors"),
             "cuda": torch.version.cuda,
+            "gpu_name": torch.cuda.get_device_name(0) if args.device == "cuda" else None,
             "load_seconds": load_seconds,
             "inference_seconds": inference_seconds,
             "examples_per_second": len(rows) / inference_seconds,
@@ -308,6 +327,7 @@ def main() -> None:
                 torch.cuda.max_memory_allocated() if args.device == "cuda" else None
             ),
         },
+        "command": [sys.executable, *sys.argv],
         "safety": {
             "training_run": False,
             "official_validation_shards_read": False,
