@@ -30,24 +30,47 @@ general speech understanding or multimodal fusion.
    source row indices. Verify the Parquet ClassLabel order against the frozen
    class list. Do not read audio during preflight.
 2. Hash speaker IDs and remove the complete historical and observed groups.
-   Sort remaining speaker groups by
+   Rank remaining groups by
    `SHA256("r2-speechcmd-m1-seed17|" + speaker_group_sha256)`.
-3. Reserve the first 200 groups for final development evaluation. The
-   remainder are the training pool; the existing training procedure makes a
-   speaker-held-out 20% calibration subset within that pool using seed 17.
+3. Reserve 200 development groups with a deterministic rare-class-coverage
+   greedy rule: at each step choose the group covering the largest number of
+   labels that still have fewer than 100 distinct development speakers; break
+   ties by the hash rank above. Fail if the 200 groups cannot support 100
+   distinct speakers for every label. The remainder are the training pool; the
+   existing training procedure makes a speaker-held-out 20% calibration
+   subset within that pool using seed 17.
 4. Select one row from each of the 200 development groups, always assigning
    the currently least-filled available class (SHA-256 tie order). Then fill
    each class to exactly 100 rows by
    `SHA256("17|dev-fill|class|source_file|source_row")`, at most one row per
    speaker per class. The final development cohort must contain all 200 groups.
 5. From the training pool, select exactly 150 rows per class, at most five
-   selected rows total per speaker, ordered by
-   `SHA256("17|train|class|source_file|source_row")`.
+   selected rows total per speaker. Rank each class queue by
+   `SHA256("17|train|class|source_file|source_row")`; walk the queues in fixed
+   class order, taking one eligible row per class per pass and skipping a
+   speaker after its fifth selected row. This prevents earlier classes from
+   consuming the entire speaker budget before later classes are sampled.
 6. Fail closed before media retrieval if fewer than 200 development speakers
    remain; any class lacks 100 distinct development speakers or 150 eligible
    training rows under the speaker cap; the training-pool speaker split lacks
    100 fit speakers or 30 calibration speakers; or the fit/calibration split
    lacks 20 examples in any class. Do not reduce quotas or weaken a gate.
+
+## Metadata-only protocol correction
+
+Before any media retrieval, the initial implementation exposed two sampling
+problems. Its training selector incorrectly required 150 distinct speakers
+within every class, although the frozen protocol allows up to five selected
+rows total per speaker. After that code defect was corrected, selecting the
+first 200 groups by hash left only 93 distinct development speakers with the
+`left` label. No audio, model, inference result, or training data was accessed.
+
+The protocol therefore uses the deterministic coverage rule above and a
+round-robin walk of per-class hash-ranked training queues. These changes
+preserve the 200-group, 100-per-class, 150-per-class, and five-rows-per-speaker
+quotas; they do not use model metrics or audio content. The original failed
+metadata-only attempts remain in the external artifact directory and are not
+overwritten.
 
 ## Single fixed run
 

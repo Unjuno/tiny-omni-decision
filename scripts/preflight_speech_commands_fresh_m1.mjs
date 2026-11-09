@@ -75,7 +75,35 @@ export function chooseGroupRows(rows, { seed = 17, devGroupCount = 200,
   if (groups.length < devGroupCount + 2) {
     throw new Error(`only ${groups.length} eligible groups; need at least ${devGroupCount + 2}`)
   }
-  const devGroups = new Set(groups.slice(0, devGroupCount))
+  const groupLabels = new Map(groups.map((group) => [group, new Set()]))
+  for (const row of rows) groupLabels.get(row.speaker_group_sha256)?.add(row.label)
+  const groupRank = new Map(groups.map((group) => [group,
+    sha(`r2-speechcmd-m1-seed${seed}|${group}`),
+  ]))
+  const devCounts = Array(LABELS.length).fill(0)
+  const devGroupOrder = []
+  const selectedDevGroups = new Set()
+  while (devGroupOrder.length < devGroupCount) {
+    let bestGroup
+    let bestGain = -1
+    for (const group of groups) {
+      if (selectedDevGroups.has(group)) continue
+      const gain = [...groupLabels.get(group)].filter((label) => devCounts[label] < devPerClass).length
+      if (gain > bestGain || (gain === bestGain && groupRank.get(group) < groupRank.get(bestGroup))) {
+        bestGroup = group
+        bestGain = gain
+      }
+    }
+    if (bestGroup === undefined) break
+    selectedDevGroups.add(bestGroup)
+    devGroupOrder.push(bestGroup)
+    if (bestGain > 0) {
+      for (const label of groupLabels.get(bestGroup)) {
+        if (devCounts[label] < devPerClass) devCounts[label] += 1
+      }
+    }
+  }
+  const devGroups = selectedDevGroups
   const byClass = (classId, split) => rows.filter((row) =>
     row.label === classId && (split === 'dev'
       ? devGroups.has(row.speaker_group_sha256)
@@ -98,25 +126,56 @@ export function chooseGroupRows(rows, { seed = 17, devGroupCount = 200,
       let count = 0
       for (const row of ranked) {
         if (seenSpeakers.has(row.speaker_group_sha256)) continue
-        if (split === 'train' && selected.filter(
-          (item) => item.speaker_group_sha256 === row.speaker_group_sha256,
-        ).length >= maxTrainRowsPerSpeaker) continue
         selected.push(row)
         seenSpeakers.add(row.speaker_group_sha256)
         count += 1
         if (count === quota) break
       }
       if (count !== quota) {
-        throw new Error(`${split} class ${LABELS[classId]} has ${count}/${quota} distinct speakers`)
+        throw new Error(`${split} class ${LABELS[classId]} has ${count}/${quota} rows under the speaker cap`)
       }
     }
     return selected.sort((a, b) => a.label - b.label
       || a.source_file.localeCompare(b.source_file) || a.source_row - b.source_row)
   }
-  const train = selectPerClass('train', trainPerClass)
+  const selectTrainingRows = () => {
+    const rankedByClass = LABELS.map((_, classId) => rows
+      .filter((row) => row.label === classId && !devGroups.has(row.speaker_group_sha256))
+      .sort((a, b) => sha(`${seed}|train|${classId}|${a.source_file}|${a.source_row}`).localeCompare(
+        sha(`${seed}|train|${classId}|${b.source_file}|${b.source_row}`),
+      )))
+    const cursors = Array(LABELS.length).fill(0)
+    const counts = Array(LABELS.length).fill(0)
+    const perSpeaker = new Map()
+    const selected = []
+    while (counts.some((count) => count < trainPerClass)) {
+      let progressed = false
+      for (let classId = 0; classId < LABELS.length; classId += 1) {
+        if (counts[classId] >= trainPerClass) continue
+        const ranked = rankedByClass[classId]
+        while (cursors[classId] < ranked.length) {
+          const row = ranked[cursors[classId]++]
+          const speakerRows = perSpeaker.get(row.speaker_group_sha256) ?? 0
+          if (speakerRows >= maxTrainRowsPerSpeaker) continue
+          selected.push(row)
+          counts[classId] += 1
+          perSpeaker.set(row.speaker_group_sha256, speakerRows + 1)
+          progressed = true
+          break
+        }
+      }
+      if (!progressed) {
+        const classId = counts.findIndex((count) => count < trainPerClass)
+        throw new Error(`train class ${LABELS[classId]} has ${counts[classId]}/${trainPerClass} rows under the speaker cap`)
+      }
+    }
+    return selected.sort((a, b) => a.label - b.label
+      || a.source_file.localeCompare(b.source_file) || a.source_row - b.source_row)
+  }
+  const train = selectTrainingRows()
   const validation = []
-  const devCounts = Array(LABELS.length).fill(0)
-  const orderedDevGroups = groups.slice(0, devGroupCount)
+  devCounts.fill(0)
+  const orderedDevGroups = devGroupOrder
   for (const group of orderedDevGroups) {
     const groupRows = rows.filter((row) => row.speaker_group_sha256 === group)
     const availableLabels = [...new Set(groupRows.map((row) => row.label))]
@@ -343,6 +402,8 @@ async function main() {
     selected_development_rows: plan.validation.length,
     selected_development_unique_speakers: plan.validationGroups.size,
     selected_development_class_counts: Object.fromEntries(LABELS.map((label) => [label, plan.validation.filter((row) => row.target === label).length])),
+    development_group_policy: '200 groups selected by seeded greedy coverage of labels with fewer than 100 supporting groups; hash rank breaks ties',
+    training_row_policy: 'one eligible row per class per deterministic round-robin pass; per-class SHA-256 row order; maximum five rows per speaker overall',
     train_development_group_overlap: 0,
     historical_or_observed_speaker_overlap: 0,
     files,
