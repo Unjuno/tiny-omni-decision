@@ -8,6 +8,7 @@
     "publisher_repository": "https://github.com/HymalaiDFKI/OpenMarcie",
     "repository_revision": "fd72cf1ff11961520aafebc1f52587fd5bc2e74f",
     "readme_sha256_utf8_response": "fb4086f54cba13a557b6a725a78b5b773a01790a82457c64dd63b02ae53fe971",
+    "license_file_sha256_utf8_response": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "code_license": "Apache-2.0",
     "dataset_url": "https://www.kaggle.com/datasets/4942046dbb2608f5a0c3e76c9bd53c6b9b2784d738da7db37f7739b89c2c7f95",
     "dataset_license": "UNKNOWN",
