@@ -1,0 +1,421 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-11-09 19:26:53 UTC",
+  "repository": "Unjuno/tiny-omni-decision",
+  "target_roadmap_branch": "docs/pretrained-reuse-roadmap-20261010",
+  "target_roadmap_commit": "e07e049ff4387484fb754e0fff963631f3cc7c85",
+  "active_worktree": {
+    "path": "C:/CodexWorktrees/r2-audio-native-json-runtime-20261110",
+    "branch": "codex/r1-checkpoint-recheck-20261110",
+    "head": "a1c608d3f144302e1ba9a12712bdc435b5c5cac7",
+    "related_pull_request": 50
+  },
+  "pull_request_15": {
+    "state": "open",
+    "draft": true,
+    "head": "docs/pretrained-reuse-roadmap-20261010",
+    "base": "main",
+    "url": "https://github.com/Unjuno/tiny-omni-decision/pull/15"
+  },
+  "open_pull_request_count": 42,
+  "open_pull_requests": [
+    {
+      "number": 50,
+      "title": "docs: recheck pinned Path A encoder assets",
+      "head": "codex/r1-checkpoint-recheck-20261110",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-11-09T19:16:10Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/50"
+    },
+    {
+      "number": 49,
+      "title": "docs: record fresh-speaker audio evidence in R2 roadmap",
+      "head": "codex/r2-audio-fresh-speaker-roadmap-20261110",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-11-09T16:44:20Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/49"
+    },
+    {
+      "number": 48,
+      "title": "Record fresh-speaker Speech Commands transfer evaluation",
+      "head": "codex/r2-speechcmd-fresh-speaker-eval-20261110",
+      "base": "codex/r2-train-only-temporal-cv-20261104",
+      "draft": true,
+      "updated_at": "2026-11-09T18:09:50Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/48"
+    },
+    {
+      "number": 47,
+      "title": "R2: screen C-MHAD video and IMU source",
+      "head": "codex/r2-cmhad-source-screen-20261109",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-11-09T14:59:36Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/47"
+    },
+    {
+      "number": 46,
+      "title": "R2: verify the frozen Path A audio runtime locally",
+      "head": "codex/r2-patha-audio-runtime-smoke-20261109",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-11-09T14:49:15Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/46"
+    },
+    {
+      "number": 45,
+      "title": "R2: Measure overfitting, temporal order and task transfer",
+      "head": "codex/r2-train-only-temporal-cv-20261104",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-11-04T18:55:07Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/45"
+    },
+    {
+      "number": 44,
+      "title": "Evaluate EgoViz readouts on fresh unused session groups",
+      "head": "codex/r2-egoviz-fresh-session-validation-20261030",
+      "base": "codex/r2-egoviz-gru-temporal-20261030",
+      "draft": true,
+      "updated_at": "2026-11-04T18:09:47Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/44"
+    },
+    {
+      "number": 43,
+      "title": "Evaluate a fixed-budget temporal GRU on EgoViz frozen features",
+      "head": "codex/r2-egoviz-gru-temporal-20261030",
+      "base": "codex/r2-egoviz-train-coverage-20261030",
+      "draft": true,
+      "updated_at": "2026-10-30T10:35:59Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/43"
+    },
+    {
+      "number": 42,
+      "title": "Evaluate expanded EgoViz training-session coverage",
+      "head": "codex/r2-egoviz-train-coverage-20261030",
+      "base": "codex/r2-egoviz-channel-budget-20261030",
+      "draft": true,
+      "updated_at": "2026-10-30T10:20:12Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/42"
+    },
+    {
+      "number": 41,
+      "title": "Compare channel pooling under a fixed 512-epoch budget",
+      "head": "codex/r2-egoviz-channel-budget-20261030",
+      "base": "codex/r2-egoviz-pilot-transfer-20261030",
+      "draft": true,
+      "updated_at": "2026-10-30T05:21:46Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/41"
+    },
+    {
+      "number": 40,
+      "title": "Evaluate fixed EgoViz calibration on excluded pilot sessions",
+      "head": "codex/r2-egoviz-pilot-transfer-20261030",
+      "base": "codex/r2-egoviz-temperature-20261030",
+      "draft": true,
+      "updated_at": "2026-10-30T05:10:39Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/40"
+    },
+    {
+      "number": 39,
+      "title": "Evaluate training-session cross-fitted calibration",
+      "head": "codex/r2-egoviz-temperature-20261030",
+      "base": "codex/r2-egoviz-mcap-preflight-20261029",
+      "draft": true,
+      "updated_at": "2026-10-30T05:05:56Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/39"
+    },
+    {
+      "number": 38,
+      "title": "feat: validate EgoViz temporal correspondence on unseen sessions",
+      "head": "codex/r2-egoviz-mcap-preflight-20261029",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-30T04:58:44Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/38"
+    },
+    {
+      "number": 37,
+      "title": "Record iNaturalist CC0 expansion coverage gate",
+      "head": "codex/r2-inat-expansion-roadmap-20261029",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-29T15:52:04Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/37"
+    },
+    {
+      "number": 36,
+      "title": "docs: screen FZI-AURA and DAVE AV candidates",
+      "head": "codex/r2-fzi-aura-source-screen-20261028",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-28T12:33:33Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/36"
+    },
+    {
+      "number": 35,
+      "title": "docs: update ZOD schema and source gate",
+      "head": "codex/r2-zod-cam-lidar-screen-20261028",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-28T12:02:18Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/35"
+    },
+    {
+      "number": 34,
+      "title": "Correct GOOSE instance-label mapping audit",
+      "head": "codex/r2-goose-instance-map-audit-20261028",
+      "base": "codex/r2-droid-later-shard-uncertainty-20261028",
+      "draft": true,
+      "updated_at": "2026-10-28T11:46:37Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/34"
+    },
+    {
+      "number": 33,
+      "title": "Add paired site uncertainty audit for DROID later-shard transfer",
+      "head": "codex/r2-droid-later-shard-uncertainty-20261028",
+      "base": "codex/r2-droid-temporal-transfer-20261028",
+      "draft": true,
+      "updated_at": "2026-10-28T11:15:07Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/33"
+    },
+    {
+      "number": 32,
+      "title": "Evaluate frozen DROID readouts on later shard groups",
+      "head": "codex/r2-droid-temporal-transfer-20261028",
+      "base": "codex/r2-droid-site-universe-audit-20261028",
+      "draft": true,
+      "updated_at": "2026-10-28T10:21:39Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/32"
+    },
+    {
+      "number": 31,
+      "title": "Record DROID unseen-site shard sample audit",
+      "head": "codex/r2-droid-site-universe-audit-20261028",
+      "base": "codex/r2-droid-expanded-sites-20261028",
+      "draft": true,
+      "updated_at": "2026-10-28T01:45:13Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/31"
+    },
+    {
+      "number": 30,
+      "title": "Record AVSBench source and rights gate",
+      "head": "codex/r2-avsbench-source-screen-20261024",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:41:09Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/30"
+    },
+    {
+      "number": 29,
+      "title": "Add CommonsenseQA 2.0 text Decision transfer probe",
+      "head": "codex/r2-csqa2-text-decision-20261024",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:28:13Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/29"
+    },
+    {
+      "number": 28,
+      "title": "docs: refresh R0 repository and live GPU audit",
+      "head": "codex/r0-live-audit-20261024",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:13:23Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/28"
+    },
+    {
+      "number": 27,
+      "title": "docs: reconcile AV source screen with completed synthetic run",
+      "head": "codex/r2-joint-av-source-screen-20261024",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:09:23Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/27"
+    },
+    {
+      "number": 26,
+      "title": "Record pinned native shared-readout gradient diagnostic",
+      "head": "codex/r2-shared-gradient-audit-20261024",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T14:00:42Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/26"
+    },
+    {
+      "number": 25,
+      "title": "docs: add RoboPro and otoSpeech R2 source screens",
+      "head": "codex/r2-robopro-source-screen-20261024",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-24T13:31:13Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/25"
+    },
+    {
+      "number": 24,
+      "title": "Record CLEVR-4 100k fixed-readout transfer results",
+      "head": "codex/clevr4-100k-transfer-eval-20261023",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-23T12:45:23Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/24"
+    },
+    {
+      "number": 23,
+      "title": "R2: record scalar audio projection diagnostic",
+      "head": "codex/roadmap-scalar-audio-update-20261022",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-22T03:59:54Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/23"
+    },
+    {
+      "number": 22,
+      "title": "docs: screen FAIR-Play for R2 AV matching",
+      "head": "codex/r2-fair-play-source-screen-20261022",
+      "base": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "draft": true,
+      "updated_at": "2026-10-21T19:33:18Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/22"
+    },
+    {
+      "number": 21,
+      "title": "R2: CLEVRER synthetic AV coverage v2 results",
+      "head": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+      "base": "codex/r2-clevrer-synthetic-av-protocol",
+      "draft": true,
+      "updated_at": "2026-10-21T17:59:37Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/21"
+    },
+    {
+      "number": 20,
+      "title": "Add stable typed Decision JSON output",
+      "head": "codex/r2-json-decision-contract-20261021",
+      "base": "codex/r0-r2-continuation-20261021",
+      "draft": true,
+      "updated_at": "2026-10-21T05:23:30Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/20"
+    },
+    {
+      "number": 19,
+      "title": "Screen AMI for cross-modal speaker-to-face matching",
+      "head": "codex/r2-ami-av-source-screen-20261021",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-29T05:28:47Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/19"
+    },
+    {
+      "number": 18,
+      "title": "Screen CaptainCook4D for a procedural step-text video task",
+      "head": "codex/r2-captaincook4d-screen-20261021",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": true,
+      "updated_at": "2026-10-20T21:35:21Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/18"
+    },
+    {
+      "number": 17,
+      "title": "Screen MAVD Urbansas audiovisual source integrity",
+      "head": "codex/r2-mavd-source-screen-20261021",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": false,
+      "updated_at": "2026-10-20T21:19:28Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/17"
+    },
+    {
+      "number": 16,
+      "title": "Record PE-Core T16 checkpoint CPU audit",
+      "head": "codex/r1-pe-core-audit-20261021",
+      "base": "docs/pretrained-reuse-roadmap-20261010",
+      "draft": false,
+      "updated_at": "2026-10-21T05:46:12Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/16"
+    },
+    {
+      "number": 15,
+      "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+      "head": "docs/pretrained-reuse-roadmap-20261010",
+      "base": "main",
+      "draft": true,
+      "updated_at": "2026-11-04T04:24:03Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/15"
+    },
+    {
+      "number": 14,
+      "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+      "head": "fix/student-qat-training-handoff",
+      "base": "codex/ternary-student-recovery",
+      "draft": true,
+      "updated_at": "2026-10-08T10:54:56Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/14"
+    },
+    {
+      "number": 13,
+      "title": "feat: ternary-first student recovery with conditional LoRA",
+      "head": "feat/ternary-student-recovery",
+      "base": "main",
+      "draft": false,
+      "updated_at": "2026-10-08T02:27:05Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/13"
+    },
+    {
+      "number": 12,
+      "title": "feat: add strict postquant teacher cache boundary",
+      "head": "codex/postquant-teacher-cache",
+      "base": "codex/postquant-numerical-core",
+      "draft": true,
+      "updated_at": "2026-10-06T17:54:48Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/12"
+    },
+    {
+      "number": 11,
+      "title": "feat: postquant numerical core and CPU checker (no model execution)",
+      "head": "codex/postquant-numerical-core",
+      "base": "codex/postquant-worker-entrypoints",
+      "draft": true,
+      "updated_at": "2026-10-06T17:19:22Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/11"
+    },
+    {
+      "number": 10,
+      "title": "feat: safe postquant worker entrypoints (no training launch)",
+      "head": "codex/postquant-worker-entrypoints",
+      "base": "codex/roadmap-compression-video-specialization",
+      "draft": true,
+      "updated_at": "2026-10-06T15:33:14Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/10"
+    },
+    {
+      "number": 9,
+      "title": "Teacher v1: leakage-safe quality pipeline",
+      "head": "codex/teacher-quality-v1",
+      "base": "main",
+      "draft": true,
+      "updated_at": "2026-10-04T10:04:40Z",
+      "url": "https://github.com/Unjuno/tiny-omni-decision/pull/9"
+    }
+  ],
+  "local_worktree_count": 105,
+  "local_branch_ref_count": 279,
+  "shared_user_worktree": {
+    "path": "C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision",
+    "branch": "codex/teacher-quality-clean-dev-v1",
+    "preexisting_status_entry_count": 9,
+    "modified_by_this_recheck": false
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU, 16 GiB; 2026-11-09 19:27:03 UTC snapshot: 0 MiB allocated, 0% utilization, 43C, 15.55W; ChatGPT.exe C+G listed",
+    "python_model_process_count": 0,
+  "C_free_bytes": 4948463616
+  },
+  "controls": {
+    "cloud_compute_used": false,
+    "training_started": false,
+    "media_or_checkpoint_changed": false,
+    "sealed_audit_opened": false,
+    "live_process_intervened": false
+  }
+}
