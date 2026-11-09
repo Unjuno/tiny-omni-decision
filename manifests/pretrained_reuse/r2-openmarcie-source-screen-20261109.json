@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "openmarcie",
+  "screened_at": "2026-11-09",
+  "status": "REVIEW_NOT_ADMITTED",
+  "candidate_task": "video+inertial sensor 12-class activity decision",
+  "source": {
+    "publisher_repository": "https://github.com/HymalaiDFKI/OpenMarcie",
+    "repository_revision": "fd72cf1ff11961520aafebc1f52587fd5bc2e74f",
+    "readme_sha256_utf8_response": "fb4086f54cba13a557b6a725a78b5b773a01790a82457c64dd63b02ae53fe971",
+    "code_license": "Apache-2.0",
+    "dataset_url": "https://www.kaggle.com/datasets/4942046dbb2608f5a0c3e76c9bd53c6b9b2784d738da7db37f7739b89c2c7f95",
+    "dataset_license": "UNKNOWN",
+    "dataset_revision": "UNKNOWN",
+    "dataset_bytes": "UNKNOWN",
+    "dataset_files_and_hashes": "UNKNOWN",
+    "anonymous_metadata_http_status": 403
+  },
+  "publisher_reported": {
+    "participants": 36,
+    "scenarios": ["bicycle assembly", "3D printer assembly"],
+    "classes": 12,
+    "subject_disjoint_split_claim": true,
+    "macro_f1_no_null": {
+      "bicycle": {"inertial": 0.834, "vision": 0.757, "inertial_plus_vision": 0.882},
+      "3d_printer": {"inertial": 0.750, "vision": 0.705, "inertial_plus_vision": 0.773}
+    },
+    "macro_f1_with_null": {
+      "bicycle": {"inertial": 0.811, "vision": 0.729, "inertial_plus_vision": 0.851},
+      "3d_printer": {"inertial": 0.674, "vision": 0.655, "inertial_plus_vision": 0.685}
+    }
+  },
+  "accessed": {
+    "code_and_publication_metadata_only": true,
+    "dataset_payload": false,
+    "annotations": false,
+    "media": false,
+    "split_files": false,
+    "sealed_audit": false,
+    "agreement_accepted": false,
+    "download_started": false
+  },
+  "gates": {
+    "dataset_specific_rights": "OPEN",
+    "release_pin_and_hash_inventory": "OPEN",
+    "participant_split_audit": "OPEN",
+    "task_leakage_and_temporal_label_audit": "OPEN",
+    "matched_project_controls": "NOT_RUN"
+  },
+  "next_action": "Obtain and verify official dataset-specific usage terms and release metadata without accepting a gated agreement or downloading payloads. If rights and storage gates pass, freeze a participant-disjoint Path A protocol before data use."
+}
