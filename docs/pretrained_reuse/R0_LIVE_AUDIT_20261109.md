@@ -68,6 +68,21 @@ independent groups; the currently cached/exposed validation sets are not a
 substitute. No R3 shared-backbone or merge experiment is justified by this
 snapshot.
 
+### EgoViz audit-set gate recheck
+
+The official [EgoViz-120 dataset card](https://huggingface.co/datasets/humaidtech/EgoViz-120)
+currently documents CC-BY-4.0, 180 capture-session `group_id`s, and says clips
+within a session share a worker/site/lighting. Its documented clip metadata
+does not expose a cross-session participant identifier or guarantee that a
+worker appears in only one session. The reserved 20-session split therefore
+cannot yet establish participant-independent evaluation. The already-reported
+69-session transfer has no matched video-only, sensor-only, or metadata-only
+control on that cohort; its timestamp-matching target is narrower than a
+natural action decision, and the GRU endpoint's NLL/ECE were poor. Keep the
+reserved sessions unopened until a task-level candidate and controls are
+frozen; even then, report the result only as session-held-out evidence unless
+participant independence is verified.
+
 ## Outcome
 
 R0's live-state picture is refreshed and auditable. No experiment was launched
