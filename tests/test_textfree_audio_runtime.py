@@ -91,14 +91,19 @@ def runtime_factory(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     monkeypatch.setattr(module, "AUDIO_PREPROCESSOR_SHA256", digest(processor_path))
     monkeypatch.setattr(module, "AUDIO_READOUT_SHA256", digest(readout_path))
 
-    def create(cache_entries: int = 4) -> TextFreeAudioRuntime:
+    def create(
+        cache_entries: int = 4,
+        expected_readout_sha256: str | None = None,
+    ) -> TextFreeAudioRuntime:
         return TextFreeAudioRuntime(
             encoder_dir,
             readout_path,
             device="cpu",
             cache_entries=cache_entries,
+            expected_readout_sha256=expected_readout_sha256,
         )
 
+    create.readout_sha256 = digest(readout_path)
     return create
 
 
@@ -147,6 +152,24 @@ def test_raw_audio_runtime_rejects_hash_mismatch_before_encoding(runtime_factory
     assert runtime.encoder.calls == 0
     assert runtime.audio_cache is not None and len(runtime.audio_cache) == 0
     runtime.close()
+
+
+def test_runtime_accepts_explicit_hash_for_frozen_alternate_readout(runtime_factory):
+    runtime = runtime_factory(
+        expected_readout_sha256=runtime_factory.readout_sha256
+    )
+    runtime.close()
+
+
+def test_runtime_rejects_unpinned_alternate_readout_hash(runtime_factory):
+    with pytest.raises(ValueError, match="readout.pt"):
+        runtime_factory(expected_readout_sha256="0" * 64)
+
+
+@pytest.mark.parametrize("digest", ["", "A" * 64, "z" * 64])
+def test_runtime_rejects_malformed_explicit_readout_hash(runtime_factory, digest):
+    with pytest.raises(ValueError, match="lowercase SHA-256"):
+        runtime_factory(expected_readout_sha256=digest)
 
 
 def test_raw_audio_runtime_requires_exact_sample_format(runtime_factory, tmp_path):
