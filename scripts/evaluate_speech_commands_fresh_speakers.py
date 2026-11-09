@@ -24,6 +24,7 @@ from tiny_omni_decision.grouped_eval_metrics import (
     grouped_bootstrap,
     percentile_interval,
 )
+from tiny_omni_decision.speech_commands_labels import validate_speech_commands_target
 from tiny_omni_decision.textfree_audio_runtime import TextFreeAudioRuntime
 
 CLASSES = ("yes", "no", "up", "down", "left", "right", "on", "off", "stop", "go")
@@ -98,6 +99,13 @@ def main() -> None:
         raise SystemExit("frozen cohort must contain exactly 1,000 unique IDs")
     if {row["target"] for row in rows} != set(CLASSES):
         raise SystemExit("cohort label set differs from the frozen class order")
+    try:
+        for row in rows:
+            validate_speech_commands_target(
+                row["label"], f"{row['source_path_class']}/", row["target"]
+            )
+    except (KeyError, ValueError) as error:
+        raise SystemExit(f"invalid pinned Speech Commands label mapping: {error}") from error
     group_ids = [row["speaker_group_sha256"] for row in rows]
     if len(set(group_ids)) != 562:
         raise SystemExit("cohort speaker-group count differs from its frozen preflight")
@@ -130,7 +138,15 @@ def main() -> None:
     pcm_hashes = []
     for row in rows:
         media = media_by_id[row["id"]]
-        for key in ("source", "source_file", "source_row", "speaker_group_sha256", "target"):
+        for key in (
+            "source",
+            "source_file",
+            "source_row",
+            "speaker_group_sha256",
+            "label",
+            "target",
+            "source_path_class",
+        ):
             if media.get(key) != row.get(key):
                 raise SystemExit(f"media inventory identity mismatch for {row['id']} ({key})")
         audio_path = args.media_dir / media["local_file"]
