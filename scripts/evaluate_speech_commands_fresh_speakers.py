@@ -243,7 +243,9 @@ def main() -> None:
     source_commit = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=repository_root, text=True
     ).strip()
-    config_path = repository_root / "configs/pretrained_reuse/speech_commands_fresh_speakers_eval.json"
+    config_path = (
+        repository_root / "configs/pretrained_reuse/speech_commands_fresh_speakers_eval.json"
+    )
     materialization_report_path = args.media_dir / "materialization-report.json"
     report = {
         "schema_version": 1,
