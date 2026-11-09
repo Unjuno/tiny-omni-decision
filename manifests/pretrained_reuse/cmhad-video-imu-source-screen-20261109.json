@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "source_id": "cmhad-video-imu-source-screen-20261109",
+  "candidate": "C-MHAD Continuous Multimodal Human Action Dataset",
+  "disposition": "REVIEW_NOT_ADMITTED",
+  "source_urls": {
+    "author_dataset_page": "https://personal.utdallas.edu/~kehtar/C-MHAD.html",
+    "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7287800/",
+    "data_landing_page": "https://utdallas.box.com/s/4zwus5h4khsxpullnm45o59xlfpba6a0",
+    "linked_code_repository": "https://github.com/HaoranWeiUTD/C-MHAD-Python"
+  },
+  "metadata_snapshot": {
+    "retrieved_utc": "2026-11-09T14:54:03.9822141Z",
+    "author_page_http_status": 200,
+    "author_page_utf8_content_sha256": "aa4fbf800519600694b835011ab3a51f4622257dbf710ee3ac1ab70ecb3cc8af",
+    "paper_page_http_status": 200,
+    "paper_page_utf8_content_sha256": "4ddbc903fb45b75b87af1025d3d3a0ed365de853194b57f7c7b4a381737bbab8",
+    "box_landing_http_status": 200,
+    "box_landing_page_utf8_content_sha256": "7ae9a3b6a6e107df639196d4bd85cd83a02401d8b8bbf03788c946d121b6e9bf",
+    "box_landing_license_found": false,
+    "code_default_branch": "master",
+    "code_repository_head": "cfc2c579ae7fcc8d3dbf50a1d1005fd5f2a6cf60",
+    "code_license_endpoint_status": 404
+  },
+  "reported_dataset_metadata": {
+    "participants": 12,
+    "video_streams_total": 240,
+    "video_streams_gesture_task": 120,
+    "video_streams_transition_task": 120,
+    "stream_duration_seconds": 120,
+    "reported_total_hours": 8,
+    "video_resolution": "640x480",
+    "video_fps": 15,
+    "imu_channels": 6,
+    "imu_rate_hz": 50,
+    "timestamps_synchronized": true,
+    "action_intervals_manually_labeled": true,
+    "official_split_found": false
+  },
+  "rights": {
+    "paper_license": "CC BY 4.0 applies to the paper",
+    "dataset_media_training_license": "UNKNOWN",
+    "video_consent_scope": "UNKNOWN",
+    "dataset_access_terms": "No dataset-specific terms found on reviewed author/Box landing pages"
+  },
+  "r2_assessment": {
+    "task_relevance": "synchronized video plus IMU with continuous action interval labels",
+    "both_input_necessity": "UNVERIFIED; author baseline shows modest fusion gains but no project matched controls",
+    "independent_group_count": 12,
+    "evaluation_protocol_group_reference": 200,
+    "group_gate": "FAILS_REFERENCE; subject-disjoint intervals would be low-power",
+    "project_decision_protocol": "NOT_FROZEN"
+  },
+  "access_log": {
+    "metadata_only": true,
+    "data_media_downloaded": false,
+    "annotations_opened": false,
+    "model_loaded": false,
+    "training_performed": false,
+    "evaluation_performed": false,
+    "sealed_audit_opened": false,
+    "author_contacted": false,
+    "gpu_used": false,
+    "paid_compute": false
+  },
+  "report": "docs/pretrained_reuse/R2_CMHAD_VIDEO_IMU_SOURCE_SCREEN_20261109.md"
+}
