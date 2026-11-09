@@ -149,8 +149,7 @@ def run(feature_cache: Path, sample_dir: Path, output_dir: Path) -> dict[str, An
         "weight_decay": 1e-4,
         "checkpoint": "last epoch; no validation checkpoint selection",
         "calibration": (
-            "single scalar temperature fitted by CPU float64 LBFGS on "
-            "speaker-held-out train subset"
+            "single scalar temperature fitted by CPU float64 LBFGS on speaker-held-out train subset"
         ),
         "calibration_seed_key": "sha256('17:calibration:' + speaker_group_sha256)",
         "calibration_speaker_fraction": 0.2,
@@ -199,8 +198,8 @@ def run(feature_cache: Path, sample_dir: Path, output_dir: Path) -> dict[str, An
         "validation_metrics_uncalibrated": uncalibrated,
         "validation_metrics_temperature_scaled": calibrated,
         "validation_metrics_scope": (
-            "one post-fit evaluation on previously inspected validation IDs; "
-            "not blind or sealed audit"
+            "one planned post-fit evaluation on the fresh-speaker development IDs; "
+            "not a sealed audit"
         ),
         "training_history": history,
         "optimizer_updates": 8 * math.ceil(len(fit_indices) / 64),
@@ -218,9 +217,10 @@ def run(feature_cache: Path, sample_dir: Path, output_dir: Path) -> dict[str, An
             Path(__file__).resolve().parents[1] / "src" / "tiny_omni_decision" / "textfree_audio.py"
         ),
         "limitation": (
-            "Training excludes 264 train examples relative to the prior 1,280-example fit, "
-            "so this is a calibration-method experiment, not a matched replication of the "
-            "prior checkpoint."
+            "This is a fresh-speaker, task-specific keyword experiment using a deterministic "
+            "speaker-held-out calibration partition. The last epoch is used without validation "
+            "checkpoint selection; results do not establish general speech understanding or "
+            "multimodal competence."
         ),
     }
     (output_dir / "run-report.json").write_text(
