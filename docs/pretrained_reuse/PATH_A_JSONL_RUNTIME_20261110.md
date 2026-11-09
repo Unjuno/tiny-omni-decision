@@ -7,7 +7,7 @@ single stdin/stdout JSONL interface:
 
 ```powershell
 python -m tiny_omni_decision.cli path-a-jsonl `
-  --assembly 'C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v4' `
+  --assembly 'C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v4-clean-copy-20261026-01' `
   --videoprism-python 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\venv\Scripts\python.exe' `
   --videoprism-source 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\source' `
   --worker-log-dir 'C:\CodexArtifacts\pretrained-reuse-r2\path-a-jsonl-runtime-smoke-20261110-attempt-01' `
@@ -20,6 +20,9 @@ request, and writes worker diagnostics to the caller-provided empty log
 directory. Invalid lines return a JSON error record and do not prevent later
 lines from being handled. Image, audio, and video requests must supply the
 asset SHA-256; the existing workers verify the actual bytes against it.
+Use an assembly whose file set exactly matches its manifest. The default v4
+directory currently has two unmanifested `.pyc` files and is correctly
+rejected; the clean copy shown above passes verification without modification.
 
 ## Frozen task scope
 
