@@ -7,7 +7,8 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-import torch
+
+torch = pytest.importorskip("torch", reason="readout metric checks require the optional ML extra")
 
 MODULE_PATH = (
     Path(__file__).parents[1] / "scripts" / "evaluate_speech_commands_fresh_m1_readouts.py"
