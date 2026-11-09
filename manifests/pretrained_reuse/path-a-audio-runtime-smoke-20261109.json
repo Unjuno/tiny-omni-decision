@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "experiment_id": "path-a-audio-runtime-smoke-20261109-attempt-01",
+  "kind": "synthetic_input_runtime_smoke_not_quality_evaluation",
+  "repository": "Unjuno/tiny-omni-decision",
+  "roadmap_base_commit": "e07e049ff4387484fb754e0fff963631f3cc7c85",
+  "package_id": "path-a-modular-runtime-assembly-v4",
+  "package_source_commit": "b32d2b0c3d3fccfeb7772ca61ec153ce99aa1a6a",
+  "package_manifest_sha256": "79fbca05e6062b66fe6ffb8a831d6c635edffe361c76ea4ce1574f0736ae9519",
+  "package_integrity": {
+    "files_checked": 42,
+    "size_or_hash_mismatches": 0,
+    "reported_content_bytes": 687254772,
+    "unique_runtime_parameters": 170499716,
+    "int8_size_is_estimate": true,
+    "estimated_int8_bytes": 182018983
+  },
+  "runtime": {
+    "component": "audio",
+    "class": "SpeechCommandsMultiQueryRuntime",
+    "parameter_count": 55494785,
+    "device": "cpu",
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.19.0",
+    "transformers_version_at_package_build": "5.6.2",
+    "elapsed_seconds": 0.6137282848358154
+  },
+  "input": {
+    "type": "generated_sine_wave",
+    "frequency_hz": 1000,
+    "sample_rate_hz": 16000,
+    "duration_seconds": 1,
+    "sha256": "ef8544b046a025554e80d9d1f3a6fbf9685070eaed0dc6b47afee5604a418c35"
+  },
+  "decision": {
+    "question": "Which sound is present?",
+    "options": ["yes", "no"],
+    "probabilities": [0.2696554362773895, 0.7303445935249329],
+    "probability_sum": 1.0000000298023224,
+    "predicted_index": 1,
+    "confidence": 0.7303445935249329,
+    "finite": true
+  },
+  "evaluation_scope": {
+    "quality_evaluation": false,
+    "corpus_loaded": false,
+    "validation_loaded": false,
+    "sealed_audit_loaded": false,
+    "training_performed": false,
+    "gpu_used": false,
+    "cloud_cost": 0
+  },
+  "artifact_path": "C:/CodexArtifacts/pretrained-reuse-r2/path-a-audio-runtime-smoke-20261109-attempt-01",
+  "result_json_sha256": "b4c06ac7d0697eb2ca6f0a9cc1b5f7f4c8f10120d49b54760a811234dadcac0c"
+}
