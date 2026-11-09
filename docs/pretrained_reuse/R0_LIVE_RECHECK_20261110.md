@@ -29,4 +29,3 @@ Captured: 2026-11-09 19:26:53 UTC. Read-only refresh for the pretrained-reuse ro
 ## Decision
 
 Preserve all existing branches, worktrees, artifacts, runs, and checkpoints. Continue only with fresh, rights-cleared tasks that meet the independent-group and both-input controls. This snapshot alone does not justify shared-Lens, merge, quantization, or another dispatcher benchmark.
-
