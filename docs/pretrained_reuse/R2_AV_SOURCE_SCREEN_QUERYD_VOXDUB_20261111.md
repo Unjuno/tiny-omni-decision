@@ -40,4 +40,3 @@ fit or quality claim should be made.
 - VoxDub repository and dataset terms: <https://github.com/voxdub-dataset/VoxDub>.
 - VoxDub project page and copyright notice: <https://voxdub-dataset.github.io/VoxDub/>.
 - Concert recording catalog entry: <https://qualinet.github.io/databases/audiovisual/multi_sensor_concert_recording_dataset_including_professional_and_user_generated_content/>.
-
