@@ -5,11 +5,13 @@ from io import BytesIO
 
 import numpy as np
 import pytest
-import torch
-from PIL import Image
 
-from scripts.extract_videomae_clevr4_frozen_features import image_tensor
-from scripts.train_videomae_clevr4_option_scorer import (
+torch = pytest.importorskip("torch")
+
+from PIL import Image  # noqa: E402
+
+from scripts.extract_videomae_clevr4_frozen_features import image_tensor  # noqa: E402
+from scripts.train_videomae_clevr4_option_scorer import (  # noqa: E402
     TaxonomyConditionedScorer,
     decision_json,
     parameter_count,
