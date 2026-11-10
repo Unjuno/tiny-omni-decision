@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-11-10 frozen VideoMAE Clevr-4 image result:** A 52.7k-parameter
+readout over frozen VideoMAE V2 scored 80.01% on a one-time synthetic image
+taxonomy reporting pool. The earlier exposure audit had not admitted that
+pool because near-duplicate identity and full prior-exposure checks remained
+open, so the score is retained as observed development evidence only—not a
+clean validation pass or temporal video result. [Results and validity
+reconciliation](docs/pretrained_reuse/R2_VIDEOMAE_CLEVR4_100K_VALIDITY_RECONCILIATION_20261110.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results
