@@ -1,0 +1,83 @@
+{
+  "format": "pretrained_reuse_r2_video_source_screen_v1",
+  "screen_date": "2026-11-11",
+  "candidate_id": "drone-detection-dataset",
+  "source": {
+    "repository": "https://github.com/DroneDetectionThesis/Drone-detection-dataset",
+    "commit": "442d0c6750708cc221636f7a1fd31cbd8cb0aeb8",
+    "tree": "5a1f20041afb6eba144b872ae6bd67ba33a98283",
+    "declared_license": "CC0-1.0",
+    "readme_url": "https://github.com/DroneDetectionThesis/Drone-detection-dataset/blob/442d0c6750708cc221636f7a1fd31cbd8cb0aeb8/README.md",
+    "license_url": "https://github.com/DroneDetectionThesis/Drone-detection-dataset/blob/442d0c6750708cc221636f7a1fd31cbd8cb0aeb8/LICENSE",
+    "paper_url": "https://arxiv.org/html/2007.07396"
+  },
+  "metadata_snapshot": {
+    "path": "Data/Video_dataset_description.xlsx",
+    "git_blob_sha1": "1ee7612f08e0285595d12362e1c7bb12dadcbb50",
+    "bytes": 31475,
+    "sha256": "0544022AE732A6B088AF4B6555A18C53A9364C2C02721D38E30D73AF1C684CAB",
+    "local_artifact_directory": "D:/CodexArtifacts/pretrained-reuse-r2/drone-dataset-source-screen-20261111-attempt-01"
+  },
+  "metadata_counts": {
+    "video_rows": 650,
+    "video_by_sensor": {
+      "IR": 365,
+      "visible": 285
+    },
+    "video_by_class": {
+      "airplane": 133,
+      "bird": 130,
+      "drone": 271,
+      "helicopter": 116
+    },
+    "video_by_distance_bin": {
+      "close": 133,
+      "medium": 292,
+      "distant": 225
+    },
+    "audio_files": 90,
+    "audio_by_class_paper_reported": {
+      "drone": 30,
+      "helicopter": 30,
+      "background": 30
+    },
+    "annotated_frames_publisher_reported": 203328,
+    "youtube_derived_video_rows": 49,
+    "youtube_rows_by_class": {
+      "airplane": 11,
+      "helicopter": 38
+    },
+    "matched_class_number_keys_ir_and_visible": 279,
+    "matched_class_number_keys_ir_and_visible_after_youtube_exclusion": 231,
+    "class_number_keys_after_youtube_exclusion": 370,
+    "matched_class_number_pairs_same_distance_bin": 101,
+    "matched_class_number_pairs_same_inter_bin_number": 23,
+    "matched_class_number_pairs_same_distance_and_inter_bin_number": 13
+  },
+  "admission": {
+    "video_only_m1": "REVIEW_NOT_ADMITTED",
+    "joint_audio_video_m2": "NOT_ADMITTED",
+    "m2_audio_video_sync_verified": false,
+    "independent_capture_group_count": "UNKNOWN",
+    "legacy_published_split_identity_mapping": "UNKNOWN",
+    "third_party_youtube_item_rights": "UNRESOLVED",
+    "media_payload_opened": false,
+    "annotation_payload_opened": false,
+    "training_run": false,
+    "evaluation_run": false,
+    "sealed_audit_opened": false,
+    "gpu_used": false,
+    "cross_spectrum_pair_identity": "NOT_ESTABLISHED_BY_CLASS_AND_NUMBER"
+  },
+  "next_gate": [
+    "Resolve or exclude all 49 YouTube-derived video rows at item level",
+    "Map clips to airport, flight/session, and cross-spectrum source identity",
+    "Recover and quarantine the identities in the paper's published evaluation set",
+    "Confirm at least 1000 decisions across at least 200 independent groups in a fresh development split before fitting"
+  ],
+  "upstream_tree_inventory": {
+    "entry_count": 1400,
+    "truncated": false,
+    "paths_matching_train_test_eval_split": []
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "format": "pretrained_reuse_r2_legacy_split_group_audit_v1",
+  "audit_date": "2026-11-11",
+  "candidate_id": "drone-detection-dataset",
+  "source": {
+    "repository": "https://github.com/DroneDetectionThesis/Drone-detection-dataset",
+    "commit": "442d0c6750708cc221636f7a1fd31cbd8cb0aeb8",
+    "tree": "5a1f20041afb6eba144b872ae6bd67ba33a98283",
+    "paper": "https://arxiv.org/html/2007.07396",
+    "paper_version": "2007.07396v2",
+    "paper_version_date": "2020-10-19",
+    "metadata_path": "Data/Video_dataset_description.xlsx",
+    "metadata_sha256": "0544022AE732A6B088AF4B6555A18C53A9364C2C02721D38E30D73AF1C684CAB"
+  },
+  "paper_reported_split": {
+    "evaluation_ir_clips": 120,
+    "evaluation_visible_clips": 120,
+    "training_clips": 240,
+    "clip_ids_available_in_inspected_paper": false,
+    "clip_ids_available_in_metadata": false
+  },
+  "group_metadata": {
+    "airport_per_clip": false,
+    "flight_or_session_per_clip": false,
+    "date_or_operator_per_clip": false,
+    "independent_capture_group_count": "UNKNOWN",
+    "ir_visible_pair_identity": "NOT_ESTABLISHED"
+  },
+  "rights_and_alignment": {
+    "youtube_derived_rows": 49,
+    "third_party_item_rights": "UNRESOLVED",
+    "audio_video_clip_mapping": false,
+    "audio_video_synchronization": "NOT_ESTABLISHED"
+  },
+  "decision": {
+    "video_only_m1": "NOT_ADMITTED",
+    "joint_audio_video_m2": "NOT_ADMITTED",
+    "reason": "Cannot reconstruct exact legacy evaluation identities or independent capture groups from pinned public metadata; third-party rights for 49 YouTube-derived clips and AV synchronization also remain unresolved.",
+    "media_or_annotations_opened": false,
+    "model_loaded": false,
+    "training_or_inference_run": false,
+    "sealed_audit_opened": false,
+    "gpu_used": false
+  },
+  "reopen_requirements": [
+    "Published stable clip-to-airport/flight/session identities",
+    "Exact identities for the previously evaluated clips",
+    "Item-level rights clearance for every retained clip",
+    "At least 200 independent capture groups and 1000 decisions in a fresh group-disjoint development split",
+    "For M2, verified audio-to-video correspondence and synchronization"
+  ]
+}
