@@ -1,6 +1,15 @@
 import pytest
 
-from scripts.extract_perception_test_text_features import candidate_prompts, strip_option_prefix
+from scripts.extract_perception_test_text_features import (
+    candidate_prompts,
+    expected_source_split,
+    strip_option_prefix,
+)
+
+
+def test_text_feature_split_maps_to_frozen_corpus_split_values():
+    assert expected_source_split("train") == "train"
+    assert expected_source_split("validation") == "valid"
 
 
 def test_option_prefix_is_removed_before_text_encoding():

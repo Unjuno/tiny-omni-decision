@@ -53,6 +53,12 @@ def candidate_prompts(row: dict[str, Any]) -> list[str]:
     return [f"Question: {question.strip()}\nCandidate answer: {option}" for option in candidates]
 
 
+def expected_source_split(split: str) -> str:
+    if split not in {"train", "validation"}:
+        raise ValueError("split must be train or validation")
+    return "train" if split == "train" else "valid"
+
+
 def _read_rows(corpus_dir: Path, split: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     manifest_path = corpus_dir / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -69,7 +75,7 @@ def _read_rows(corpus_dir: Path, split: str) -> tuple[list[dict[str, Any]], dict
         raise ValueError("frozen JSONL count differs from corpus manifest")
     if len({row.get("id") for row in rows}) != len(rows):
         raise ValueError("duplicate sample IDs in frozen JSONL")
-    expected_split = "train" if split == "train" else "validation"
+    expected_split = expected_source_split(split)
     if any(row.get("split") != expected_split for row in rows):
         raise ValueError("frozen JSONL has an unexpected split value")
     return rows, manifest

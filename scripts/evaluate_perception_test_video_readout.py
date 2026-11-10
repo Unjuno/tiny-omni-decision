@@ -42,6 +42,11 @@ def donor_video_map(video_ids: list[str], *, seed: int = SEED) -> dict[str, str]
     return {video_id: order[(index + 1) % len(order)] for index, video_id in enumerate(order)}
 
 
+def _require_fixed_validation_split(rows: list[dict[str, Any]]) -> None:
+    if any(row.get("split") != "valid" for row in rows):
+        raise ValueError("validation corpus contains an unexpected split")
+
+
 def _load_validation_rows(corpus_dir: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     manifest = json.loads((corpus_dir / "manifest.json").read_text(encoding="utf-8"))
     path = corpus_dir / "validation.jsonl"
@@ -53,8 +58,7 @@ def _load_validation_rows(corpus_dir: Path) -> tuple[list[dict[str, Any]], dict[
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
     if len(rows) != 2886 or len({row.get("id") for row in rows}) != len(rows):
         raise ValueError("unexpected validation count or duplicate IDs")
-    if any(row.get("split") != "validation" for row in rows):
-        raise ValueError("validation corpus contains an unexpected split")
+    _require_fixed_validation_split(rows)
     order_hash = hashlib.sha256("\n".join(row["id"] for row in rows).encode()).hexdigest()
     if order_hash != VALID_ID_ORDER_SHA256:
         raise ValueError("validation sample order differs from frozen candidate")

@@ -6,6 +6,7 @@ import numpy as np
 
 from scripts.evaluate_perception_test_video_readout import (
     _paired_group_bootstrap,
+    _require_fixed_validation_split,
     donor_video_map,
 )
 from scripts.train_perception_test_video_readout import _metrics
@@ -20,6 +21,13 @@ def test_donor_map_is_deterministic_and_never_uses_same_video():
     assert first == second
     assert all(video_id != donor for video_id, donor in first.items())
     assert set(first) == set(first.values())
+
+
+def test_validation_reader_uses_frozen_corpus_split_value():
+    _require_fixed_validation_split([{"split": "valid"}, {"split": "valid"}])
+
+    with pytest.raises(ValueError, match="unexpected split"):
+        _require_fixed_validation_split([{"split": "validation"}])
 
 
 def test_paired_group_bootstrap_is_deterministic_and_reports_direction():
