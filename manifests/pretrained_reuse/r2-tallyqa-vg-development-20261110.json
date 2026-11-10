@@ -415,7 +415,8 @@
     "scripts/prepare_tallyqa_vg_task.py": "a7255ae1a9ca0874de5ce08eb96891a560885aa457ce2ccceb1c3e99bad2ceb3",
     "scripts/extract_tallyqa_videoprism_features.py": "dc9a13a9a5e2230758d98823917c1ecc1979980bcd9689e14bc68abb2d26b074",
     "scripts/train_tallyqa_vg_readout.py": "2f3088cf7f107e02a5a4371fab9a410726095db4940faae1775758a8247e74c6",
-    "configs/pretrained_reuse/path_a_tallyqa_vg_videoprism_seed17.yaml": "60857ddebb2ab0d741d46f9e08b077160069d536c80dbd862654ef5b1c481164"
+    "configs/pretrained_reuse/path_a_tallyqa_vg_videoprism_seed17.yaml": "60857ddebb2ab0d741d46f9e08b077160069d536c80dbd862654ef5b1c481164",
+    "tests\\test_tallyqa_readout_controls.py": "3a36cd04c27bff8c0b744bb3b6c00e1e4c2e72dedce5ab2985bb451189cf6a41"
   },
   "verification": {
     "ruff": "pass",
