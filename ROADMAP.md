@@ -8,11 +8,12 @@ released annotations/features as CC BY 4.0. A deterministic seed-17 split of
 zero clip-ID or feature-record overlap across train/calibration/dev/sealed ID
 manifests. Raw Moments in Time media were not accessed. AVMIT remains a
 preliminary candidate only: train/calibration/development SAVC pair manifests
-are frozen and balanced by source within pair groups; feature archive
-integrity, a frozen scoring protocol, and measured joint-vs-unimodal controls
-are still required. Existing manifests remain unchanged; a Windows newline/hash
-reporting discrepancy was traced to CRLF conversion, documented, and fixed in
-the serializer with regression tests. See
+are frozen in v2 as cross-clip same-label positives and different-label
+negatives; an initial same-clip-positive version is explicitly retired before
+any fit. Feature archive integrity, a frozen scoring protocol, and measured
+joint-vs-unimodal controls are still required. Existing source splits remain
+unchanged; a Windows newline/hash reporting discrepancy was traced to CRLF
+conversion, documented, and fixed in the serializer with regression tests. See
 [`R2_AVMIT_METADATA_GATE_20261110.md`](docs/pretrained_reuse/R2_AVMIT_METADATA_GATE_20261110.md).
 **2026-11-04 R2 CLEVRER exposure inventory:** A read-only scan of 118 preserved corpus/readout manifests found 7,163 of 10,000 official TRAIN scene IDs; the remaining 2,837 are only an upper bound, not proven unused. Historical exclusions are contained in the corrected V2 exclusions, and the 768-scene V2 train/256-scene validation split has zero overlap. Existing unseen candidate scenes were already fetched/used, so no fresh CLEVRER evaluation pool is established. No model, media, holdout, sealed audit, or GPU run was touched. See [inventory](docs/pretrained_reuse/R2_CLEVRER_TRAIN_SCENE_EXPOSURE_INVENTORY_20261104.md).
 **2026-11-04 R2 video-source screen:** ARID v1.5 is a plausible low-light video-only action task, but dataset-specific access/licensing conflicts and a missing auditable cross-action person/scene split keep it `REVIEW_NOT_ADMITTED`. No payload or evaluation data was accessed. See [ARID source screen](docs/pretrained_reuse/R2_ARID_VIDEO_TASK_SOURCE_SCREEN_20261104.md).

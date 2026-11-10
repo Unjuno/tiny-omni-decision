@@ -30,15 +30,15 @@ def main() -> None:
         "source_manifest_sha256": hashlib.sha256(args.manifest.read_bytes()).hexdigest(),
         "pair_manifest_sha256": hashlib.sha256(payload).hexdigest(),
         "source_video_count": len(rows),
-        "pair_groups": len(pairs) // 4,
+        "pair_groups": len(pairs) // 8,
         "decision_rows": len(pairs),
         "positive_rows": sum(row["target"] == "same_action" for row in pairs),
         "negative_rows": sum(row["target"] == "different_action" for row in pairs),
         "unpaired_source_video_hashes": leftovers,
         "unpaired_count": len(leftovers),
         "grouping": (
-            "two distinct source videos per pair group; every source video is used in "
-            "at most one group"
+            "four distinct source videos per pair group: two clips from each of two labels; "
+            "same-label positives are cross-clip and no audio/video row uses the same clip"
         ),
         "unimodal_balance": (
             "each source audio and source video appears once under each target within "

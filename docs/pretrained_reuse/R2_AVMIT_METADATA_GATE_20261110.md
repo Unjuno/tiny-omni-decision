@@ -107,27 +107,34 @@ until the architecture, training recipe, and selector are frozen.
   `src/tiny_omni_decision/avmit_metadata.py`; focused tests cover deterministic
   splits, test-set exclusion, sealed-label isolation, and duplicate rejection.
 
-## Frozen feature-pair manifests
+## Frozen feature-pair manifests and correction
 
-The non-sealed source manifests were converted to disjoint, balanced SAVC pair
-groups before any feature archive was opened. Each group contains two positive
-same-action pairs and two negative cross-action pairs from two distinct source
-clips. Each source audio and source video occurs once under each target within
-its group. A source clip is used in at most one pair group per split. Any later
-uncertainty interval must resample whole pair groups, not individual rows.
+Pair generation was corrected before any model fit or feature-record read.
+The initial `pairs/` version used a clip's audio and video for positives, so
+same-clip synchronization/recording cues could solve the label. It is retained
+as provenance only and must not be used for training, calibration, or
+validation. No model quality result was produced from it.
 
-| Split | Pair groups | Decision rows | Positive / negative | Unpaired clips | Canonical LF SHA-256 | Existing file SHA-256 |
-|---|---:|---:|---:|---:|---|---|
-| Train | 19,115 | 76,460 | 38,230 / 38,230 | 1 | `113bc99f15714112e4d401dce76eaebbfaee8b729d21ac5113f9cb4ca7883ee4` | `d332dbbe57926b9a95b107c5afeac1a72fb1c57bb3086e9914dd9ad9ccd7229e` |
-| Calibration | 2,642 | 10,568 | 5,284 / 5,284 | 0 | `bf8f7668a7bbea8b51cf2b38429ba1c9b699d358c2467919c592295d1d49cfeb` | `473ea4a7241df54db36c25d3983a72b5c23955299fc7965e214d8641ba90a2a5` |
-| Development validation | 2,755 | 11,020 | 5,510 / 5,510 | 0 | `bfa1a3bcca67508b4de64bcf4ec02798ee30087328c8399f50201aca414c4698` | `b9d70a39960e5d867d53c3bbee07c5e0f74140e2a332a8266a4288a41e5b6f02` |
+The replacement `pairs-v2/` uses four distinct clips per pair group: two
+clips from one action label and two from another. Its eight rows contain
+cross-clip same-label positives and different-label negatives. No row pairs
+audio and video from the same clip. Every source clip used in a group appears
+once under each target as audio and once under each target as video, and each
+clip is used in at most one group per split. Groups are deterministic, balanced
+and the bootstrap unit; they must never be split across train/calibration/
+validation or resampled as individual rows. The builder refuses sealed audit.
 
-The one train leftover is an odd remaining source after disjoint pairing; it
-was not duplicated. The builder refuses the sealed split. These pair manifests
-specify the task labels, not a model result. The pair reports and manifests
-remain outside Git under the external artifact root recorded above.
-The existing pair files also use CRLF; their LF-normalized hashes match the
-canonical hashes reported by the original builder exactly.
+| Split | Pair groups | Decision rows | Positive / negative | Unpaired clips | Pair file SHA-256 |
+|---|---:|---:|---:|---:|---|
+| Train | 9,552 | 76,416 | 38,208 / 38,208 | 23 | `c728289dfbfb31cfc68a210a13ce4b9b41c4d7ee0ec31d61db59f9ecbee4cc8c` |
+| Calibration | 1,317 | 10,536 | 5,268 / 5,268 | 16 | `331f96e7f571dbb740103b0cfb9ee22b866f0c2fd49daecdbc3e4db5e2b9a4d9` |
+| Development validation | 1,374 | 10,992 | 5,496 / 5,496 | 14 | `2ebc5a6a7770f51461bbd487a98f71e5054c2b2994cc47a447f30708bda6b1b` |
+
+The v2 pair JSONL files are written as canonical UTF-8/LF bytes; the listed
+SHA-256 values were recomputed from those exact files. Files and per-split
+reports remain outside Git under
+`D:\\CodexArtifacts\\pretrained-reuse-r2\\avmit-metadata-gate-20261110-attempt-01\\split-v1\\pairs-v2`.
+The sealed audit pair file was neither created nor read.
 
 ## Next gate
 

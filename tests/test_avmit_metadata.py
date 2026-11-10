@@ -123,20 +123,27 @@ def test_savc_pairs_are_balanced_and_each_source_is_grouped_once():
 
     pairs, leftovers = build_savc_pair_rows(rows, "validation")
 
-    assert not leftovers
-    assert len(pairs) == 12
-    assert sum(row["target"] == "same_action" for row in pairs) == 6
-    assert sum(row["target"] == "different_action" for row in pairs) == 6
+    assert len(leftovers) == 2
+    assert len(pairs) == 8
+    assert sum(row["target"] == "same_action" for row in pairs) == 4
+    assert sum(row["target"] == "different_action" for row in pairs) == 4
+    source_labels = {row["asset_id_sha256"]: row["target_label"] for row in rows}
     groups = {}
     for row in pairs:
         groups.setdefault(row["pair_group_sha256"], []).append(row)
-    assert len(groups) == 3
+    assert len(groups) == 1
     used_sources = set()
     for group in groups.values():
-        assert len(group) == 4
+        assert len(group) == 8
         audio_labels = {}
         video_labels = {}
         for row in group:
+            assert row["audio_asset_id_sha256"] != row["video_asset_id_sha256"]
+            labels_match = (
+                source_labels[row["audio_asset_id_sha256"]]
+                == source_labels[row["video_asset_id_sha256"]]
+            )
+            assert labels_match == (row["target"] == "same_action")
             audio_labels.setdefault(row["audio_asset_id_sha256"], set()).add(row["target"])
             video_labels.setdefault(row["video_asset_id_sha256"], set()).add(row["target"])
             used_sources.add(row["audio_asset_id_sha256"])
@@ -147,7 +154,8 @@ def test_savc_pairs_are_balanced_and_each_source_is_grouped_once():
         assert all(
             labels == {"same_action", "different_action"} for labels in video_labels.values()
         )
-    assert used_sources == {row["asset_id_sha256"] for row in rows}
+    assert used_sources.isdisjoint(leftovers)
+    assert used_sources | set(leftovers) == {row["asset_id_sha256"] for row in rows}
 
 
 def test_savc_pairing_refuses_sealed_split_or_duplicate_source():
@@ -159,6 +167,37 @@ def test_savc_pairing_refuses_sealed_split_or_duplicate_source():
     ]
     with pytest.raises(ValueError, match="duplicate source clip"):
         build_savc_pair_rows(rows, "train")
+
+
+def test_savc_pair_groups_are_disjoint_and_deterministic():
+    rows = [
+        {
+            "asset_id_sha256": f"asset-{index}",
+            "feature_record": f"features/{index}.tfrecord",
+            "target_label": label,
+        }
+        for index, label in enumerate(("a", "a", "a", "a", "b", "b", "b", "b"))
+    ]
+    first, leftovers = build_savc_pair_rows(rows, "train")
+    second, second_leftovers = build_savc_pair_rows(rows, "train")
+
+    assert first == second
+    assert leftovers == second_leftovers == []
+    grouped = {}
+    for row in first:
+        grouped.setdefault(row["pair_group_sha256"], []).append(row)
+    assert len(grouped) == 2
+    used_by_group = []
+    for group in grouped.values():
+        assert len(group) == 8
+        used_by_group.append(
+            {
+                asset
+                for row in group
+                for asset in (row["audio_asset_id_sha256"], row["video_asset_id_sha256"])
+            }
+        )
+    assert used_by_group[0].isdisjoint(used_by_group[1])
 
 
 def test_canonical_jsonl_bytes_have_stable_lf_and_hash(tmp_path):

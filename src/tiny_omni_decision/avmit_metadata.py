@@ -250,30 +250,40 @@ def build_savc_pair_rows(
     for rows in classes.values():
         rows.sort(key=lambda row: row["asset_id_sha256"])
 
-    pairs: list[tuple[dict[str, str], dict[str, str]]] = []
+    groups: list[tuple[dict[str, str], dict[str, str], dict[str, str], dict[str, str]]] = []
     while True:
         available = sorted(
-            ((len(rows), label) for label, rows in classes.items() if rows),
+            ((len(rows), label) for label, rows in classes.items() if len(rows) >= 2),
             key=lambda entry: (-entry[0], entry[1]),
         )
         if len(available) < 2:
             break
-        left_label = available[0][1]
-        right_label = available[1][1]
-        pairs.append((classes[left_label].pop(0), classes[right_label].pop(0)))
+        first_label, second_label = available[0][1], available[1][1]
+        first_a, first_b = classes[first_label].pop(0), classes[first_label].pop(0)
+        second_a, second_b = classes[second_label].pop(0), classes[second_label].pop(0)
+        groups.append((first_a, first_b, second_a, second_b))
 
     leftovers = sorted(row["asset_id_sha256"] for rows in classes.values() for row in rows)
     output: list[dict[str, str]] = []
-    for left, right in pairs:
-        group_material = "\0".join(sorted((left["asset_id_sha256"], right["asset_id_sha256"])))
+    for first_a, first_b, second_a, second_b in groups:
+        group_material = "\0".join(
+            sorted(
+                row["asset_id_sha256"]
+                for row in (first_a, first_b, second_a, second_b)
+            )
+        )
         pair_group = hashlib.sha256(
-            f"avmit-savc-pair-v1\0{split_name}\0{group_material}".encode()
+            f"avmit-savc-pair-v2\0{split_name}\0{group_material}".encode()
         ).hexdigest()
         entries = (
-            (left, left, "same_action"),
-            (right, right, "same_action"),
-            (left, right, "different_action"),
-            (right, left, "different_action"),
+            (first_a, first_b, "same_action"),
+            (first_b, first_a, "same_action"),
+            (second_a, second_b, "same_action"),
+            (second_b, second_a, "same_action"),
+            (first_a, second_a, "different_action"),
+            (second_a, first_a, "different_action"),
+            (first_b, second_b, "different_action"),
+            (second_b, first_b, "different_action"),
         )
         for audio_source, video_source, target in entries:
             output.append(
