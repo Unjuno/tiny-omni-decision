@@ -11,6 +11,7 @@ from tiny_omni_decision.runtime_dispatch import (
     PathARuntimeDispatcher,
     TypedDecisionSpec,
 )
+from tiny_omni_decision.speech_commands_m1_contract import SPEECH_COMMANDS_M1_LABELS
 
 
 def test_json_line_worker_keeps_process_resident_for_multiple_requests(tmp_path: Path) -> None:
@@ -151,6 +152,64 @@ def test_dispatch_typed_validates_audio_spec_count_before_starting_workers() -> 
     assert dispatcher._videoprism_worker is None
 
 
+def test_dispatch_typed_keyword_m1_preserves_caller_option_order_and_ids() -> None:
+    class RecordingWorker:
+        startup_wall_seconds = 0.0
+
+        def request(self, payload: dict[str, object]) -> dict[str, object]:
+            assert payload["task"] == "audio_keyword"
+            probabilities = [0.01] * len(SPEECH_COMMANDS_M1_LABELS)
+            probabilities[SPEECH_COMMANDS_M1_LABELS.index("go")] = 0.91
+            return {
+                "probabilities": probabilities,
+                "prediction_index": 9,
+                "confidence": 0.91,
+                "keyword_metrics": {"encoder_calls": 1},
+            }
+
+    labels = list(reversed(SPEECH_COMMANDS_M1_LABELS))
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._request_id = 0
+    dispatcher._torch_worker = RecordingWorker()
+    dispatcher._videoprism_worker = None
+    dispatcher.speech_commands_m1_readout = Path("m1-readout.pt")
+
+    result = dispatcher.dispatch_typed(
+        "audio_keyword",
+        {"audio_path": "train.wav", "expected_media_sha256": "a" * 64},
+        decision_specs=[
+            TypedDecisionSpec(
+                "speech-command-1",
+                "choice",
+                tuple(f"id-{label}" for label in labels),
+                tuple(labels),
+            )
+        ],
+    )
+
+    assert result["decision_json"]["selected_option_id"] == "id-go"
+    assert [item["text"] for item in result["decision_json"]["options"]] == labels
+    assert result["keyword_metrics"] == {"encoder_calls": 1}
+
+
+def test_dispatch_typed_keyword_m1_rejects_subsets_before_worker_start() -> None:
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._request_id = 0
+    dispatcher._torch_worker = None
+    dispatcher._videoprism_worker = None
+    dispatcher.speech_commands_m1_readout = Path("m1-readout.pt")
+
+    with pytest.raises(ValueError, match="complete ten-label"):
+        dispatcher.dispatch_typed(
+            "audio_keyword",
+            {"audio_path": "train.wav", "expected_media_sha256": "a" * 64},
+            decision_specs=[TypedDecisionSpec("choice", "choice", ("yes", "no"), ("yes", "no"))],
+        )
+
+    assert dispatcher._torch_worker is None
+    assert dispatcher._videoprism_worker is None
+
+
 def test_dispatch_typed_rejects_reordered_video_options_before_starting_workers() -> None:
     dispatcher = object.__new__(PathARuntimeDispatcher)
     dispatcher._request_id = 0
@@ -162,9 +221,7 @@ def test_dispatch_typed_rejects_reordered_video_options_before_starting_workers(
             "video",
             {"video_path": "video.mp4", "question": "q", "candidate_statement": "s"},
             decision_specs=[
-                TypedDecisionSpec(
-                    "video-1", "choice", ("yes", "no"), ("correct", "wrong")
-                )
+                TypedDecisionSpec("video-1", "choice", ("yes", "no"), ("correct", "wrong"))
             ],
         )
 
@@ -196,16 +253,16 @@ def test_dispatch_typed_video_binds_correct_probability_to_caller_id() -> None:
         {"video_path": "video.mp4", "question": "q", "candidate_statement": "s"},
         decision_specs=[
             TypedDecisionSpec(
-                "video-1", "choice", ("candidate-wrong", "candidate-correct"),
+                "video-1",
+                "choice",
+                ("candidate-wrong", "candidate-correct"),
                 ("wrong", "correct"),
             )
         ],
     )
 
     assert result["decision_json"]["selected_option_id"] == "candidate-correct"
-    assert [option["probability"] for option in result["decision_json"]["options"]] == [
-        0.1, 0.9
-    ]
+    assert [option["probability"] for option in result["decision_json"]["options"]] == [0.1, 0.9]
 
 
 def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract() -> None:

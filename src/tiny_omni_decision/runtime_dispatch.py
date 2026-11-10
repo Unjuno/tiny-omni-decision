@@ -15,6 +15,7 @@ from typing import Any
 
 from tiny_omni_decision.decision_json import decision_json_record
 from tiny_omni_decision.modular_bundle import verify_modular_bundle
+from tiny_omni_decision.speech_commands_m1_contract import SPEECH_COMMANDS_M1_LABELS
 
 
 @dataclass(frozen=True)
@@ -165,6 +166,7 @@ class PathARuntimeDispatcher:
     Request forms are task-specific and explicit:
     - text: ``state``, ``question``, ``options``
     - audio: ``audio_path``, ``queries`` (question/options pairs)
+    - audio_keyword: ``audio_path`` for the fixed ten-class M1 task
     - image: ``image_path``, ``taxonomy``, ``options``
     - image_videomae: the same payload through the separate VideoMAE Path A image candidate
     - video: ``video_path``, ``question``, ``candidate_statement``
@@ -181,6 +183,7 @@ class PathARuntimeDispatcher:
         videomae_readout: Path | None = None,
         videomae_dependency_dir: Path | None = None,
         device: str = "cuda",
+        speech_commands_m1_readout: Path | None = None,
     ) -> None:
         self.assembly_dir = assembly_dir.resolve(strict=True)
         verify_started = time.perf_counter()
@@ -205,6 +208,11 @@ class PathARuntimeDispatcher:
         if device not in {"cpu", "cuda"}:
             raise ValueError("device must be cpu or cuda")
         self.device = device
+        self.speech_commands_m1_readout = (
+            speech_commands_m1_readout.resolve(strict=True)
+            if speech_commands_m1_readout is not None
+            else None
+        )
         self._torch_worker: JsonLineWorker | None = None
         self._videoprism_worker: JsonLineWorker | None = None
         self._videomae_worker: JsonLineWorker | None = None
@@ -212,6 +220,14 @@ class PathARuntimeDispatcher:
         self._project_root = Path(__file__).resolve().parents[2]
         env = os.environ.copy()
         source_paths = [str(self._project_root / "src"), str(self._project_root)]
+        source_paths.extend(
+            path
+            for entry in sys.path
+            if entry
+            and Path(entry).is_dir()
+            and Path(entry).name in {"site-packages", "dist-packages"}
+            and (path := str(Path(entry).resolve())) not in source_paths
+        )
         old_pythonpath = env.get("PYTHONPATH")
         if old_pythonpath:
             source_paths.append(old_pythonpath)
@@ -234,17 +250,23 @@ class PathARuntimeDispatcher:
     def _ensure_torch(self) -> JsonLineWorker:
         if self._torch_worker is None:
             log_path = self.worker_log_dir / "torch-worker.log"
+            command = [
+                sys.executable,
+                "-S",
+                "-B",
+                "-m",
+                "scripts.path_a_torch_worker",
+                "--assembly",
+                str(self.assembly_dir),
+                "--device",
+                self.device,
+            ]
+            if self.speech_commands_m1_readout is not None:
+                command.extend(
+                    ["--speech-commands-m1-readout", str(self.speech_commands_m1_readout)]
+                )
             self._torch_worker = JsonLineWorker(
-                [
-                    sys.executable,
-                    "-B",
-                    "-m",
-                    "scripts.path_a_torch_worker",
-                    "--assembly",
-                    str(self.assembly_dir),
-                    "--device",
-                    self.device,
-                ],
+                command,
                 cwd=self._project_root,
                 env=self._worker_env,
                 log_path=log_path,
@@ -336,7 +358,11 @@ class PathARuntimeDispatcher:
                 }
             )
             response = {**scored, "video_encoder": encoded["encoder_metrics"]}
-        elif task in {"text", "audio"}:
+        elif task in {"text", "audio", "audio_keyword"}:
+            if task == "audio_keyword" and self.speech_commands_m1_readout is None:
+                raise ValueError(
+                    "audio_keyword requires --speech-commands-m1-readout with the frozen M1 weights"
+                )
             response = self._ensure_torch().request(
                 {"request_id": request_id, "task": task, "payload": payload}
             )
@@ -387,6 +413,18 @@ class PathARuntimeDispatcher:
                     or tuple(query_options) != spec.option_texts
                 ):
                     raise ValueError("audio decision option texts must match query order")
+        elif task == "audio_keyword":
+            if len(decision_specs) != 1:
+                raise ValueError("audio_keyword requires exactly one decision spec")
+            spec = decision_specs[0]
+            if spec.decision_type != "choice":
+                raise ValueError("audio_keyword requires a choice decision")
+            if len(spec.option_texts) != len(SPEECH_COMMANDS_M1_LABELS) or set(
+                spec.option_texts
+            ) != set(SPEECH_COMMANDS_M1_LABELS):
+                raise ValueError(
+                    "audio_keyword requires the complete ten-label Speech Commands option set"
+                )
         else:
             if len(decision_specs) != 1:
                 raise ValueError("non-audio Path A tasks require exactly one decision spec")
@@ -432,6 +470,29 @@ class PathARuntimeDispatcher:
                 **response,
                 "decisions": typed_scores,
                 "decision_json": [item["decision_json"] for item in typed_scores],
+            }
+        if task == "audio_keyword":
+            raw_probabilities = response.get("probabilities")
+            if not isinstance(raw_probabilities, list) or len(raw_probabilities) != len(
+                SPEECH_COMMANDS_M1_LABELS
+            ):
+                raise RuntimeError("audio_keyword worker returned an invalid class distribution")
+            probability_by_label = dict(
+                zip(SPEECH_COMMANDS_M1_LABELS, raw_probabilities, strict=True)
+            )
+            ordered = [
+                float(probability_by_label[label]) for label in decision_specs[0].option_texts
+            ]
+            prediction_index = max(range(len(ordered)), key=ordered.__getitem__)
+            typed_result = {
+                **response,
+                "probabilities": ordered,
+                "prediction_index": prediction_index,
+                "confidence": ordered[prediction_index],
+            }
+            return {
+                **typed_result,
+                "decision_json": _typed_record(typed_result, decision_specs[0]),
             }
         return {
             **response,

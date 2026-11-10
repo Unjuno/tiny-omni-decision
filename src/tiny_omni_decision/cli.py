@@ -40,6 +40,9 @@ PATH_A_DEVICE_OPTION = typer.Option("cpu", "--device")
 VIDEOMAE_MODEL_DIR_OPTION = typer.Option(None, "--videomae-model-dir")
 VIDEOMAE_READOUT_OPTION = typer.Option(None, "--videomae-readout")
 VIDEOMAE_DEPENDENCY_DIR_OPTION = typer.Option(None, "--videomae-dependency-dir")
+SPEECH_COMMANDS_M1_READOUT_OPTION = typer.Option(
+    None, "--speech-commands-m1-readout", help="Hash-pinned text-free Speech Commands M1 readout"
+)
 
 
 @app.command()
@@ -351,9 +354,7 @@ def freeze_corpus(
 
     def normalize_catalog(
         catalog_path: Path, split_output: Path
-    ) -> tuple[
-        list[DecisionExample], list[dict[str, object]], dict[tuple[str, str], str]
-    ]:
+    ) -> tuple[list[DecisionExample], list[dict[str, object]], dict[tuple[str, str], str]]:
         catalog = DatasetCatalog.model_validate(load_structured_file(catalog_path))
         if catalog_path == train_catalog_path and catalog.purpose != "training":
             raise click.ClickException("train catalog must have purpose=training")
@@ -397,9 +398,7 @@ def freeze_corpus(
                 rows = iter_hub_rows(manifest)
             adapter = entry.adapter or "generic"
             if adapter in {"clevr4", "clevr-4"}:
-                rows = (
-                    row for row in rows if row.get("split", manifest.split) == manifest.split
-                )
+                rows = (row for row in rows if row.get("split", manifest.split) == manifest.split)
             elif adapter in {"speech-commands", "speech_commands"}:
                 from .dataset import _speech_command_label
 
@@ -419,9 +418,7 @@ def freeze_corpus(
                 seed=seed,
                 source_key=f"{manifest.dataset_id}@{manifest.revision}:{manifest.split}",
             )
-            normalized = list(
-                normalize_jsonl(rows, manifest, adapter, seed=seed)
-            )
+            normalized = list(normalize_jsonl(rows, manifest, adapter, seed=seed))
             if not normalized:
                 raise click.ClickException(f"source normalized to zero rows: {entry.manifest}")
             for item in normalized:
@@ -515,9 +512,7 @@ def freeze_corpus(
         )
         speech_eval_manifests = {
             split: DatasetManifest.model_validate(
-                load_structured_file(
-                    Path(f"manifests/candidates/speech-commands-{split}.yaml")
-                )
+                load_structured_file(Path(f"manifests/candidates/speech-commands-{split}.yaml"))
             )
             for split in ("validation", "test")
         }
@@ -621,9 +616,7 @@ def freeze_corpus(
         ),
         "corpus_pair_sha256": hashlib.sha256(
             (
-                sha256_file(train_path)
-                + sha256_file(validation_path)
-                + sha256_file(eval_path)
+                sha256_file(train_path) + sha256_file(validation_path) + sha256_file(eval_path)
             ).encode()
         ).hexdigest(),
     }
@@ -685,9 +678,7 @@ def train_decision(
                 "consumed": result["actual_train_consumption_by_modality_source"],
                 "baseline": result["baseline_metrics"],
                 "decision_teacher": result["decision_teacher_metrics"],
-                "metric_deltas_teacher_minus_base": result[
-                    "metric_deltas_teacher_minus_base"
-                ],
+                "metric_deltas_teacher_minus_base": result["metric_deltas_teacher_minus_base"],
                 "best_checkpoint_step": result["best_checkpoint_step"],
                 "skipped_train": result["skipped_train_examples"],
                 "skipped_eval": result["skipped_eval_examples"],
@@ -989,6 +980,7 @@ def path_a_jsonl(
     videomae_model_dir: Path | None = VIDEOMAE_MODEL_DIR_OPTION,
     videomae_readout: Path | None = VIDEOMAE_READOUT_OPTION,
     videomae_dependency_dir: Path | None = VIDEOMAE_DEPENDENCY_DIR_OPTION,
+    speech_commands_m1_readout: Path | None = SPEECH_COMMANDS_M1_READOUT_OPTION,
 ) -> None:
     """Run the existing task-scoped Path A bundle over JSONL on stdin/stdout."""
     from tiny_omni_decision.path_a_runtime_cli import run_jsonl
@@ -1003,6 +995,7 @@ def path_a_jsonl(
         videomae_readout=videomae_readout,
         videomae_dependency_dir=videomae_dependency_dir,
         device=device,
+        speech_commands_m1_readout=speech_commands_m1_readout,
     )
     try:
         run_jsonl(sys.stdin, sys.stdout, dispatcher)
