@@ -174,10 +174,15 @@ search is authorized on this exposed holdout.
   approximately 2.05 TiB free, and the GPU was idle. Results were written to D:.
 
 The first 32-image smoke succeeded with the pinned source and checkpoint. Six
-focused tests pass. Full-suite verification initially had three unrelated
-Windows fixture path failures because the chosen temporary path was too deep;
-those exact tests passed when isolated under a short D: path. Full-suite retry
-is recorded with the commit/CI results.
+focused tests pass. Full-suite verification first had three unrelated Windows
+fixture path failures because the chosen temporary path was too deep; those
+exact tests passed under a short D: path. The final full-suite retry passed:
+`2,895 passed, 11 skipped` using a short D: pytest temp directory. `ruff check .`
+and `git diff --check` passed. Commit `86a849443cdc5bf17cdc007d43d8c761cd0611cf`
+was pushed to the dedicated branch; GitHub Actions run
+[`42772649950`](https://github.com/Unjuno/tiny-omni-decision/actions/runs/42772649950)
+completed successfully. No model weights, media, or large feature cache were
+added to Git.
 
 ## Interpretation and next action
 
