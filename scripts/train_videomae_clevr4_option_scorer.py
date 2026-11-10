@@ -17,41 +17,33 @@ import torch
 from torch import Tensor, nn
 from torch.nn import functional as F
 
-from scripts.audit_clevr4_content_overlap import _load_jsonl, sha256_file
 from scripts.train_frozen_text_probe import _metrics
-from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES
+from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES, sha256_file
 from tiny_omni_decision.decision import DecisionOutput
+from tiny_omni_decision.videomae_runtime import (
+    FEATURE_WIDTH,
+    HIDDEN_WIDTH,
+    TASK_EMBED_WIDTH,
+    TASK_NAMES,
+    TASK_TO_INDEX,
+    TaxonomyConditionedScorer,
+)
 
-TASK_NAMES = list(CLEVR4_TAXONOMIES)
-TASK_TO_INDEX = {name: index for index, name in enumerate(TASK_NAMES)}
+
+def _load_jsonl(path: Path) -> list[dict[str, Any]]:
+    with path.open(encoding="utf-8") as stream:
+        return [json.loads(line) for line in stream if line.strip()]
+
+
 OPTION_TO_INDEX = {
     task: {str(option): index for index, option in enumerate(options)}
     for task, options in CLEVR4_TAXONOMIES.items()
 }
-FEATURE_WIDTH = 384
-HIDDEN_WIDTH = 128
-TASK_EMBED_WIDTH = 16
 EPOCHS = 8
 BATCH_TASKS = 512
 LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 SEED = 17
-
-
-class TaxonomyConditionedScorer(nn.Module):
-    """Score known taxonomy classes from a frozen image feature and task key."""
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.task_embedding = nn.Embedding(len(TASK_NAMES), TASK_EMBED_WIDTH)
-        self.network = nn.Sequential(
-            nn.Linear(FEATURE_WIDTH + TASK_EMBED_WIDTH, HIDDEN_WIDTH),
-            nn.GELU(),
-            nn.Linear(HIDDEN_WIDTH, max(len(v) for v in CLEVR4_TAXONOMIES.values())),
-        )
-
-    def forward(self, image_features: Tensor, task_ids: Tensor) -> Tensor:
-        return self.network(torch.cat([image_features, self.task_embedding(task_ids)], dim=-1))
 
 
 def parameter_count(model: nn.Module) -> int:

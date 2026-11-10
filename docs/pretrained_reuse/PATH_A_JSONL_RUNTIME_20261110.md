@@ -34,6 +34,7 @@ development scopes:
 |---|---|---|
 | `typed-decisions-synth-text-v0` | text | Synthetic Typed Decisions Synth only |
 | `path-a-image-videoprism-clevr4-runtime-v0` | image | Static CLEVR-4 taxonomy choices |
+| `path-a-image-videomaev2-clevr4-100k-runtime-v0` | image_videomae | Static CLEVR-4 taxonomy choices using the pinned VideoMAEv2 Small encoder and frozen 100k readout |
 | `path-a-audio-multiquery-runtime-v0` | audio | Four Speech Commands query templates |
 | `clevrer-videoprism-binary-feature-decision-v0` | video | CLEVRER candidate-statement binary score; options must be ordered `wrong`, `correct` |
 
@@ -41,6 +42,14 @@ This interface does not add model weights, training, calibration, or joint
 audio-video support. It does not make the existing task-specific scores
 general-purpose or release-qualified. The v4 package remains 170,499,716
 unique parameters and 687,254,772 bytes, above the provisional 200 MB target.
+
+The VideoMAE image route is a separately pinned task-specific path. It is
+selected only by its explicit task ID and requires explicit encoder, readout,
+and dependency paths. It does not start the VideoPrism image worker. This
+route is static-image taxonomy scoring only; repeating one image across the
+encoder's 16-frame input does not provide temporal evidence. Its integration
+smoke and limitations are recorded in
+[`PATH_A_VIDEOMAE_JSONL_IMAGE_RUNTIME_20261110.md`](PATH_A_VIDEOMAE_JSONL_IMAGE_RUNTIME_20261110.md).
 
 ## Request example
 
@@ -84,3 +93,14 @@ protocol/load check only and is not a new quality measurement.
 This verifies one modality's request-to-weighted-response path. Image/audio/
 video JSONL dispatch was not run end to end in this smoke, and no joint AV
 support or product-quality conclusion follows.
+
+### CUDA VideoMAE image JSONL parity smoke
+
+On 2026-11-10, a separate train-only request exercised the new explicit
+VideoMAE image route on the RTX 3080 Laptop. The actual typed probabilities
+matched the pinned frozen-feature/readout reference exactly (maximum delta
+0.0); peak allocated CUDA memory was 240,896,512 bytes. This validates the
+integration and deterministic score path for one training image only. It does
+not measure accuracy/calibration, validation, video understanding, or joint
+modalities. See the linked report for pinned artifact hashes, timings, and the
+immutable metadata-reconciliation note for the attempt-02 directory.

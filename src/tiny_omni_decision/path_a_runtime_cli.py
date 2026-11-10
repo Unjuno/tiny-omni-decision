@@ -12,10 +12,11 @@ from tiny_omni_decision.runtime_dispatch import PathARuntimeDispatcher, TypedDec
 TASKS = {
     "typed-decisions-synth-text-v0": "text",
     "path-a-image-videoprism-clevr4-runtime-v0": "image",
+    "path-a-image-videomaev2-clevr4-100k-runtime-v0": "image_videomae",
     "path-a-audio-multiquery-runtime-v0": "audio",
     "clevrer-videoprism-binary-feature-decision-v0": "video",
 }
-MEDIA_TASKS = {"image", "audio", "video"}
+MEDIA_TASKS = {"image", "image_videomae", "audio", "video"}
 SHA256_PATTERN = re.compile(r"[0-9a-fA-F]{64}\Z")
 
 
@@ -33,7 +34,7 @@ def _validate_payload(task: str, payload: object) -> dict[str, Any]:
         _required_text(payload.get("question"), "payload.question")
         if not isinstance(payload.get("options"), list):
             raise ValueError("payload.options must be an array")
-    elif task == "image":
+    elif task in {"image", "image_videomae"}:
         _required_text(payload.get("image_path"), "payload.image_path")
         _required_text(payload.get("taxonomy"), "payload.taxonomy")
         if not isinstance(payload.get("options"), list):
@@ -155,6 +156,10 @@ def run_jsonl(
                     "worker_inference_seconds",
                     "encoder_metrics",
                     "video_encoder",
+                    "image_encoder",
+                    "feature_shape",
+                    "cuda_allocated_bytes_after_request",
+                    "cuda_peak_allocated_bytes",
                 )
                 if key in result
             }

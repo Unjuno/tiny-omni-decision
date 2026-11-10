@@ -37,6 +37,9 @@ VIDEOPRISM_PYTHON_OPTION = typer.Option(..., "--videoprism-python")
 VIDEOPRISM_SOURCE_OPTION = typer.Option(..., "--videoprism-source")
 PATH_A_WORKER_LOG_OPTION = typer.Option(..., "--worker-log-dir")
 PATH_A_DEVICE_OPTION = typer.Option("cpu", "--device")
+VIDEOMAE_MODEL_DIR_OPTION = typer.Option(None, "--videomae-model-dir")
+VIDEOMAE_READOUT_OPTION = typer.Option(None, "--videomae-readout")
+VIDEOMAE_DEPENDENCY_DIR_OPTION = typer.Option(None, "--videomae-dependency-dir")
 
 
 @app.command()
@@ -983,6 +986,9 @@ def path_a_jsonl(
     videoprism_source: Path = VIDEOPRISM_SOURCE_OPTION,
     worker_log_dir: Path = PATH_A_WORKER_LOG_OPTION,
     device: str = PATH_A_DEVICE_OPTION,
+    videomae_model_dir: Path | None = VIDEOMAE_MODEL_DIR_OPTION,
+    videomae_readout: Path | None = VIDEOMAE_READOUT_OPTION,
+    videomae_dependency_dir: Path | None = VIDEOMAE_DEPENDENCY_DIR_OPTION,
 ) -> None:
     """Run the existing task-scoped Path A bundle over JSONL on stdin/stdout."""
     from tiny_omni_decision.path_a_runtime_cli import run_jsonl
@@ -993,6 +999,9 @@ def path_a_jsonl(
         videoprism_python=videoprism_python,
         videoprism_source=videoprism_source,
         worker_log_dir=worker_log_dir,
+        videomae_model_dir=videomae_model_dir,
+        videomae_readout=videomae_readout,
+        videomae_dependency_dir=videomae_dependency_dir,
         device=device,
     )
     try:

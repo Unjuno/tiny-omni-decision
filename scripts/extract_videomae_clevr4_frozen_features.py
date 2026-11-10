@@ -11,15 +11,14 @@ import sys
 import time
 import zipfile
 from datetime import UTC, datetime
-from io import BytesIO
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import torch
-from PIL import Image
 
-from scripts.audit_clevr4_content_overlap import _load_jsonl, sha256_file
+from tiny_omni_decision.dataset import sha256_file
+from tiny_omni_decision.videomae_runtime import image_tensor
 
 MODEL_DIR = Path("C:/CodexArtifacts/pretrained-reuse-r1/videomaev2-small-audit-01")
 SOURCE_SHA256 = "d132c97369f25207e380e78c59294fd00b93d2f6aa0fb5c4ded19eff26a5a3cb"
@@ -31,16 +30,9 @@ IMAGE_SIZE = 224
 ARCHIVE_BYTES = 36_057_238_315
 
 
-def image_tensor(image_bytes: bytes) -> torch.Tensor:
-    """Return static RGB image repeated over VideoMAE's fixed 16-frame input."""
-    with Image.open(BytesIO(image_bytes)) as image:
-        pixels = np.asarray(
-            image.convert("RGB").resize((IMAGE_SIZE, IMAGE_SIZE), Image.Resampling.LANCZOS),
-            dtype=np.uint8,
-        ).copy()
-    frame = torch.from_numpy(pixels).permute(2, 0, 1).float().div_(255.0)
-    frame.sub_(0.5).div_(0.5)
-    return frame.unsqueeze(1).expand(3, FRAME_COUNT, IMAGE_SIZE, IMAGE_SIZE).contiguous()
+def _load_jsonl(path: Path) -> list[dict[str, Any]]:
+    with path.open(encoding="utf-8") as stream:
+        return [json.loads(line) for line in stream if line.strip()]
 
 
 def load_encoder() -> torch.nn.Module:
