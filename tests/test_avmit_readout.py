@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import pytest
-import torch
 
-from tiny_omni_decision.avmit_readout import AVMITFeatureDecisionScorer
+torch = pytest.importorskip("torch")
+
+from tiny_omni_decision.avmit_readout import AVMITFeatureDecisionScorer  # noqa: E402
 
 
 @pytest.mark.parametrize("policy", ["mean", "gru"])

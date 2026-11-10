@@ -3,6 +3,9 @@ from __future__ import annotations
 import json
 
 import numpy as np
+import pytest
+
+pytest.importorskip("torch")
 
 from tiny_omni_decision.avmit_training import (
     FeatureStore,
