@@ -1,3 +1,15 @@
+**2026-11-10 R2 AVMIT corrected SAVC result:** The pair-v2 generator omitted
+two of the four required cross-label clip combinations; this was caught before
+full fitting. Pair-v3 now covers every combination once, preserves the same
+split assets, and has generator/input-validator regression tests. One seed-17
+mean-vs-GRU fit over frozen licensed AVMIT features completed: calibrated
+development validation Accuracy was 67.19% vs 66.15% (1,374 paired groups;
+95% group-bootstrap interval for GRU-minus-mean Accuracy: -1.865 to -0.264
+points). Both curves overfit after their calibration-NLL-selected epochs.
+This is narrow precomputed-feature label-matching evidence, not a Path A
+product result and does not close multimodal R2-M. No sealed audit or raw
+Moments in Time media was opened. Full hashes, metrics, histories and limits:
+[AVMIT fit report](docs/pretrained_reuse/R2_AVMIT_SAVC_PROTOCOL_20261110.md#fixed-seed-fit-and-development-validation--2026-11-10).
 **2026-11-04 R2 CREMA-D source-code follow-up:** Pinned official code confirms same-filename VoiceVote/FaceVote/MultiModalVote labels, making a common AV target structurally possible. Access registration and content-rights/consent scope remain unresolved; no annotations/media were read and no task was admitted. See [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
 **2026-11-04 R2 RoboMNIST residual-group screen:** The pinned split manifest selects 1,780 groups from a prior non-sealed eligible pool of 1,790 (780 train / 1,000 already evaluated validation), leaving only 10 unselected eligible groups; the other 345 of the 2,135 total were outside the pool and were not inspected. Ten groups cannot satisfy the 1,000-group validation gate. No new fit or validation replay is justified. See [residual screen](docs/pretrained_reuse/R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)

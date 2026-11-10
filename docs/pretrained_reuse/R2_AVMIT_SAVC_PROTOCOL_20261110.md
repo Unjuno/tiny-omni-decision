@@ -166,3 +166,104 @@ the new report SHA-256 is
 The new cache report continues to record zero sealed payloads and zero raw
 media opened. All subsequent smoke, fit, and validation commands must point
 only to `pairs-v3/` and `features-pairs-v3/`.
+
+## Fixed-seed fit and development validation — 2026-11-10
+
+**Scope:** This completes the one predeclared seed-17 AVMIT feature-readout
+comparison only. It does not complete the broader pretrained-representation
+roadmap or qualify a product model.
+
+- Source code commit: `e5d8f0a597aa7af2a31ed44a7259ae7214d61a5b`.
+- Exact command:
+  `python scripts/run_avmit_savc_experiment.py train --cache D:\CodexArtifacts\pretrained-reuse-r2\avmit-metadata-gate-20261110-attempt-01\features-pairs-v3 --pairs D:\CodexArtifacts\pretrained-reuse-r2\avmit-metadata-gate-20261110-attempt-01\split-v1\pairs-v3 --output D:\CodexArtifacts\pretrained-reuse-r2\avmit-metadata-gate-20261110-attempt-01\run-v1\fit-v1 --device auto --smoke-report D:\CodexArtifacts\pretrained-reuse-r2\avmit-metadata-gate-20261110-attempt-01\run-v1\smoke-v3\smoke-report.json`
+- Initialization: two fresh seed-17 readout initializations; no checkpoint
+  warm-start. The mean and GRU share identical data, scorer, optimizer,
+  schedule, calibration selector, and fixed train/calibration/validation IDs.
+- Environment: RTX 3080 Laptop GPU, 16 GiB; Python 3.11.9, PyTorch
+  2.6.0+cu124, CUDA runtime 12.4; FP32 readouts over cached FP32 features.
+- Process created at 2026-11-10 13:40:19 JST; results file was written at
+  13:41:30 JST. Runner wall time was 63.172 seconds; recorded training time
+  was 22.983 seconds for mean and 19.471 seconds for GRU. Calibration
+  evaluation took 3.093 and 2.513 seconds; final validation took 0.562 and
+  0.547 seconds, respectively. No cloud/paid compute was used.
+- Effective config SHA-256:
+  `d05d2810eae66c1fcedc3079ec317294e4c8fa2dd53837b75e76d3340b85231d`.
+  The exact serialized config and environment are in the results artifact.
+- Run-wide data: 76,416 unique training rows, 38,208 unique source clips and
+  9,552 groups. Mean consumed 458,496 rows (6 complete passes; 382,080
+  repeated row-consumptions); GRU consumed 382,080 rows (5 passes; 305,664
+  repeated row-consumptions). Calibration: 10,536 rows / 1,317 groups / 5,268
+  clips. Development validation: 10,992 rows / 1,374 groups / 5,496 clips.
+  Train source clips are disjoint from calibration and validation by the
+  frozen asset IDs. No sealed or publisher-test records were used.
+- Peak allocated VRAM: mean 92,640,256 bytes; GRU 144,313,344 bytes. Best
+  readout parameter counts and sizes: mean 180,865 parameters / 726,108 bytes;
+  GRU 500,993 / 2,007,490 bytes. These counts exclude upstream feature
+  producers and are not a complete deployed-model/package measurement.
+- The selector chose mean epoch 2 and GRU epoch 1 by lowest calibration NLL.
+  Training stopped by the fixed four-epoch patience rule, not by an adjusted
+  quality threshold. Best and final checkpoints are both preserved.
+
+### Learning curves and overfit signal
+
+| Readout | Epoch | Train CE | Calibration NLL | Selected |
+|---|---:|---:|---:|:---:|
+| Mean | 1 | 0.60212 | 0.58934 | |
+| Mean | 2 | 0.51702 | 0.58873 | yes |
+| Mean | 3 | 0.48104 | 0.59054 | |
+| Mean | 4 | 0.44952 | 0.60349 | |
+| Mean | 5 | 0.41645 | 0.63672 | |
+| Mean | 6 | 0.38480 | 0.68829 | |
+| GRU | 1 | 0.61938 | 0.59093 | yes |
+| GRU | 2 | 0.52158 | 0.59314 | |
+| GRU | 3 | 0.46717 | 0.59672 | |
+| GRU | 4 | 0.41595 | 0.62474 | |
+| GRU | 5 | 0.35821 | 0.70440 | |
+
+Both training losses fell while calibration NLL rose after the selected
+checkpoint. This is direct evidence of overfitting within this fixed recipe.
+No later epoch was selected because its training loss was lower.
+
+### Development validation metrics
+
+All rows below are the single post-freeze pass over the fixed 10,992-row
+validation set. Temperature was fitted only on the 10,536 calibration rows.
+
+| Readout | Calibration temperature | Validation calibration | Accuracy | NLL | Brier | ECE-15 | Mean confidence |
+|---|---:|---|---:|---:|---:|---:|---:|
+| Mean | 1.37466 | unscaled | 0.67194 | 0.60108 | 0.41371 | 0.06603 | 0.73798 |
+| Mean | 1.37466 | scaled | 0.67194 | 0.58665 | 0.40467 | 0.02322 | 0.69225 |
+| GRU | 1.11806 | unscaled | 0.66148 | 0.60272 | 0.41811 | 0.04575 | 0.70427 |
+| GRU | 1.11806 | scaled | 0.66148 | 0.60003 | 0.41576 | 0.03523 | 0.68794 |
+| Structural unimodal control / chance | — | — | 0.50000 | 0.69315 | 0.50000 | 0.00000 | 0.50000 |
+
+The fixed readouts exceed the structural 50% one-source ceiling on this narrow
+label-matching task, but remain far below the project's broad multimodal
+quality aspiration. Mean pooling is ahead of GRU by 1.046 percentage points
+of accuracy. The 2,000-replicate paired group bootstrap (seed 17) gives a
+95% interval of `[-1.865, -0.264]` percentage points for `GRU - mean`
+accuracy; for NLL the difference is `+0.00164` with interval
+`[-0.00438, +0.00779]`. Thus this one validation comparison favors mean
+pooling on accuracy, while NLL does not resolve a difference. It does not
+establish a general temporal-architecture result.
+
+An independent fresh-model reload of each selected `best.pt` reproduced the
+saved validation row IDs, targets and logits (absolute tolerance `1e-6`) for
+all 10,992 rows; recomputed accuracy/NLL/Brier/ECE exactly matched the saved
+uncalibrated validation metrics. Reloaded checkpoint SHA-256 values:
+
+- Mean best: `a3b6592ad06f94bec44df361773ae4790c9b8686a035133eb44075f09974ea3f`.
+- GRU best: `ef9dd0bbf89ba3fd83fb982a8fe850e55bd419d264b48bdffb910981e78430f2`.
+- `results.json`: `295e57cc66cceb7ec422269396c37c348b4c071d9d76b9773097ed5c62cbc4d3`.
+- Full 21-file hash inventory (smoke, fit, predictions, v3 pair manifests and
+  cache report): `run-v1/artifact-hashes.json`, SHA-256
+  `d7f1ba838df7b5ef58dcb9a542a185052cfac61852b6622ee67099e82e1a1815`.
+
+The complete `fit-v1/` directory also contains final checkpoints, full
+per-epoch histories, and exact calibration/validation predictions with IDs,
+targets, logits and probabilities. It is outside Git at
+`D:\CodexArtifacts\pretrained-reuse-r2\avmit-metadata-gate-20261110-attempt-01\run-v1\fit-v1`.
+No weights, features or media are added to Git. The sealed audit was not
+opened. No additional seed, hyperparameter change, or product promotion
+followed this result. Continue R2 only with a distinct, predeclared task/source
+if roadmap gates justify it; do not tune this validation set further.

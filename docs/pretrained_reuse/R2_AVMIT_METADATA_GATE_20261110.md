@@ -128,7 +128,7 @@ validation or resampled as individual rows. The builder refuses sealed audit.
 |---|---:|---:|---:|---:|---|
 | Train | 9,552 | 76,416 | 38,208 / 38,208 | 23 | `c728289dfbfb31cfc68a210a13ce4b9b41c4d7ee0ec31d61db59f9ecbee4cc8c` |
 | Calibration | 1,317 | 10,536 | 5,268 / 5,268 | 16 | `331f96e7f571dbb740103b0cfb9ee22b866f0c2fd49daecdbc3e4db5e2b9a4d9` |
-| Development validation | 1,374 | 10,992 | 5,496 / 5,496 | 14 | `2ebc5a6a7770f51461bbd487a98f71e5054c2b2994cc47a447f30708bda6b1b` |
+| Development validation | 1,374 | 10,992 | 5,496 / 5,496 | 14 | `2ebc5a6a7770f51461bbed487a98f71e5054c2b2994cc47a447f30708bda6b1b` |
 
 The v2 pair JSONL files are written as canonical UTF-8/LF bytes; the listed
 SHA-256 values were recomputed from those exact files. Files and per-split
@@ -198,8 +198,12 @@ hashes were independently recomputed and matched. It reports
 | Calibration | 5,268 | 10,536 | 31,608 | 32,463 |
 | Development validation | 5,496 | 10,992 | 32,976 | 33,857 |
 
-No model has been trained and no validation result exists. These integrity
-checks are not evidence of model quality.
+At cache-build time, no model had been trained and no validation result
+existed. The later corrected pairs-v3 run, its validation metrics, overfitting
+curves, and interpretation limits are recorded in
+[the SAVC protocol report](R2_AVMIT_SAVC_PROTOCOL_20261110.md#fixed-seed-fit-and-development-validation--2026-11-10).
+The result is narrow AVMIT precomputed-feature label matching evidence; it is
+not evidence of product-model quality.
 
 ## Primary sources
 
