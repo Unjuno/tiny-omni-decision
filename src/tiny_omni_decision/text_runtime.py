@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 from collections.abc import Sequence
 from pathlib import Path
+from typing import Any
 
 import torch
 from torch import Tensor
@@ -61,7 +62,11 @@ class TypedTextDecisionRuntime:
         readout_path: Path,
         *,
         device: str | torch.device = "cpu",
+        shared_encoder: torch.nn.Module | None = None,
+        shared_tokenizer: Any | None = None,
     ) -> None:
+        if (shared_encoder is None) != (shared_tokenizer is None):
+            raise ValueError("shared encoder and tokenizer must be provided together")
         self.device = torch.device(device)
         if self.device.type == "cuda" and not torch.cuda.is_available():
             raise RuntimeError("CUDA was requested but is unavailable")
@@ -76,9 +81,15 @@ class TypedTextDecisionRuntime:
         if sha256_file(readout_path) != READOUT_SHA256:
             raise ValueError("typed-text readout hash mismatch")
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_dir, local_files_only=True)
-        self.encoder = AutoModel.from_pretrained(
-            model_dir, local_files_only=True, dtype=torch.float32
+        self.tokenizer = (
+            shared_tokenizer
+            if shared_tokenizer is not None
+            else AutoTokenizer.from_pretrained(model_dir, local_files_only=True)
+        )
+        self.encoder = (
+            shared_encoder
+            if shared_encoder is not None
+            else AutoModel.from_pretrained(model_dir, local_files_only=True, dtype=torch.float32)
         ).eval().to(self.device)
         for parameter in self.encoder.parameters():
             parameter.requires_grad_(False)
