@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import csv
+import gzip
 import hashlib
 import io
 import json
 import struct
 import tarfile
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -63,11 +66,19 @@ def _tfrecord(payload: bytes) -> bytes:
 
 def _write_pair_manifests(directory):
     directory.mkdir()
+    source_rows = []
     for split in ("train", "calibration", "validation"):
-        assets = [hashlib.sha256(f"{split}-{index}".encode()).hexdigest() for index in range(4)]
-        records = [
-            f"class{'a' if index < 2 else 'b'}/{split}-{index}.tfrecord" for index in range(4)
+        source_names = [
+            f"class{'a' if index < 2 else 'b'}/{split}-{index}-long-name.mp4" for index in range(4)
         ]
+        assets = [hashlib.sha256(name.casefold().encode()).hexdigest() for name in source_names]
+        records = [
+            f"class{'a' if index < 2 else 'b'}/{split}-{index}~1.tfrecord" for index in range(4)
+        ]
+        source_rows.extend(
+            {"filename": source_names[index], "tfrecord_filename": records[index]}
+            for index in range(4)
+        )
         rows = []
         group = hashlib.sha256(f"group-{split}".encode()).hexdigest()
         entries = (
@@ -96,20 +107,31 @@ def _write_pair_manifests(directory):
         (directory / f"{split}.jsonl").write_text(payload, encoding="utf-8")
     # If the cache code accidentally opens this file, parsing fails loudly.
     (directory / "sealed_audit.jsonl").write_text("not-json; never read\n", encoding="utf-8")
+    with (directory / "ratings.csv").open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=("filename", "tfrecord_filename"))
+        writer.writeheader()
+        writer.writerows(source_rows)
 
 
-def _write_archive(path):
+def _write_archive(path, pair_dir):
+    with (pair_dir / "ratings.csv").open(encoding="utf-8", newline="") as handle:
+        source_by_alias = {
+            row["tfrecord_filename"].casefold(): row["filename"] for row in csv.DictReader(handle)
+        }
     with tarfile.open(path, "w:") as archive:
-        for split in ("train", "calibration", "validation"):
-            for index in range(4):
-                label = "classa" if index < 2 else "classb"
-                record = f"{label}/{split}-{index}.tfrecord"
-                payload = _tfrecord(
-                    _sequence_example(record.removesuffix(".tfrecord") + ".mp4", index + 1)
-                )
-                member = tarfile.TarInfo(f"release/features/{record}")
-                member.size = len(payload)
-                archive.addfile(member, io.BytesIO(payload))
+        for _alias, source_name in source_by_alias.items():
+            record = str(Path(source_name).with_suffix(".tfrecord")).replace("\\", "/")
+            payload = gzip.compress(
+                _tfrecord(_sequence_example(source_name, len(archive.getmembers()) + 1))
+            )
+            member = tarfile.TarInfo(f"release/features/{record}")
+            member.size = len(payload)
+            archive.addfile(member, io.BytesIO(payload))
+    with tarfile.open(path, "a:") as archive:
+        decoy = tarfile.TarInfo("release/features/wrong-class/train-0-long-name.tfrecord")
+        decoy_payload = b"same basename, wrong class path"
+        decoy.size = len(decoy_payload)
+        archive.addfile(decoy, io.BytesIO(decoy_payload))
         sealed = tarfile.TarInfo("release/features/sealed/unopened.tfrecord")
         sealed_payload = b"invalid-tfrecord!!"
         sealed.size = len(sealed_payload)
@@ -120,16 +142,20 @@ def test_avmit_cache_reads_only_allowlisted_nonsealed_records(tmp_path):
     pair_dir = tmp_path / "pairs-v2"
     _write_pair_manifests(pair_dir)
     archive_path = tmp_path / "features.tar"
-    _write_archive(archive_path)
+    _write_archive(archive_path, pair_dir)
     archive_sha = hashlib.sha256(archive_path.read_bytes()).hexdigest()
     archive_md5 = hashlib.md5(archive_path.read_bytes()).hexdigest()
     output = tmp_path / "cache"
 
     report = audit_and_cache_avmit_features(
         archive_path,
+        pair_dir / "ratings.csv",
         pair_dir,
         output,
         expected_archive_sha256=archive_sha,
+        expected_source_metadata_sha256=hashlib.sha256(
+            (pair_dir / "ratings.csv").read_bytes()
+        ).hexdigest(),
         expected_archive_size=archive_path.stat().st_size,
         expected_archive_md5=archive_md5,
     )
@@ -154,9 +180,13 @@ def test_avmit_cache_reads_only_allowlisted_nonsealed_records(tmp_path):
     with pytest.raises(FileExistsError, match="refusing to overwrite"):
         audit_and_cache_avmit_features(
             archive_path,
+            pair_dir / "ratings.csv",
             pair_dir,
             output,
             expected_archive_sha256=archive_sha,
+            expected_source_metadata_sha256=hashlib.sha256(
+                (pair_dir / "ratings.csv").read_bytes()
+            ).hexdigest(),
             expected_archive_size=archive_path.stat().st_size,
             expected_archive_md5=archive_md5,
         )
@@ -166,15 +196,19 @@ def test_avmit_cache_fails_closed_on_archive_hash_mismatch(tmp_path):
     pair_dir = tmp_path / "pairs-v2"
     _write_pair_manifests(pair_dir)
     archive_path = tmp_path / "features.tar"
-    _write_archive(archive_path)
+    _write_archive(archive_path, pair_dir)
     output = tmp_path / "cache"
 
     with pytest.raises(ValueError, match="SHA-256 mismatch"):
         audit_and_cache_avmit_features(
             archive_path,
+            pair_dir / "ratings.csv",
             pair_dir,
             output,
             expected_archive_sha256="0" * 64,
+            expected_source_metadata_sha256=hashlib.sha256(
+                (pair_dir / "ratings.csv").read_bytes()
+            ).hexdigest(),
             expected_archive_size=archive_path.stat().st_size,
             expected_archive_md5=hashlib.md5(archive_path.read_bytes()).hexdigest(),
         )
@@ -195,15 +229,19 @@ def test_avmit_cache_rejects_cross_split_asset_overlap(tmp_path):
         encoding="utf-8",
     )
     archive_path = tmp_path / "features.tar"
-    _write_archive(archive_path)
+    _write_archive(archive_path, pair_dir)
     output = tmp_path / "cache"
 
     with pytest.raises(ValueError, match="source asset appears in more than one split"):
         audit_and_cache_avmit_features(
             archive_path,
+            pair_dir / "ratings.csv",
             pair_dir,
             output,
             expected_archive_sha256=hashlib.sha256(archive_path.read_bytes()).hexdigest(),
+            expected_source_metadata_sha256=hashlib.sha256(
+                (pair_dir / "ratings.csv").read_bytes()
+            ).hexdigest(),
             expected_archive_size=archive_path.stat().st_size,
             expected_archive_md5=hashlib.md5(archive_path.read_bytes()).hexdigest(),
         )

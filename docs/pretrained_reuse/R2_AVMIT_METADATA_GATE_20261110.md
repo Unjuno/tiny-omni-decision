@@ -138,9 +138,9 @@ The sealed audit pair file was neither created nor read.
 
 ## Next gate
 
-Freeze the pair-construction and scoring protocol, then acquire only the
-Zenodo-licensed precomputed feature archive (never raw MIT media). Verify its
-publisher checksum, record-to-feature coverage, temporal tensor shapes and
+The pair-construction and scoring protocol is frozen, and the Zenodo-licensed
+precomputed feature archive (never raw MIT media) is verified. Build the
+allowlisted feature cache and validate every sequence's temporal shape and
 finite values. Start with one bounded frozen-feature fit and paired
 source-pair bootstrap; require the joint model to beat both unimodal controls
 on validation before considering this a useful fusion result. The selected
@@ -159,11 +159,34 @@ extracting archive paths. It does not open `sealed_audit.jsonl`, sealed
 payloads, or raw media. Synthetic tests exercise allowlisting, overwrite
 refusal, archive hash failure, and cross-split identity rejection.
 
-This code has passed the full CPU suite and Ruff, but it has **not yet been
-run against the publisher archive**. The local archive transfer is still in
-progress; no real feature payload has been parsed, cached, trained on, or
-evaluated. Actual archive SHA-256, feature coverage, and tensor compatibility
-remain pending. These implementation checks are not evidence of model quality.
+The archive download completed at 2,063,124,480 bytes. Its SHA-256 is
+`9a76ce7fd43bcac714019c08d6c39177e7901f3cd9794fe1b34775c2c30c1127`, and its
+publisher MD5 matches `45c51034fb418eb0bbfdae2d17afb29b`. The pinned source
+ratings CSV hash is `0a4c607b99acb248e30d3c3eb29ab074ac668989e02518459530b4de6994ded9`.
+Header-only matching resolved all 48,972 allowed records; those selected
+TFRecord members total 1,726,510,352 compressed bytes. The `tfrecord_filename`
+field has Windows 8.3 aliases for a small subset. The reader resolves them
+through allowlisted source-identity columns and constructs archive paths from
+the TFRecord category directory plus the original filename basename. Members
+are gzip-wrapped TFRecord streams. Four allowed TRAIN records passed gzip,
+TFRecord CRC, SequenceExample, embedded-filename, and finite-feature checks;
+Audio shape was `[6, 1024]`, Visual shape `[6, 1280]` (one sample had 7 Visual
+steps).
+
+The complete allowlisted cache was then built in 4m43s at
+`D:\\CodexArtifacts\\pretrained-reuse-r2\\avmit-metadata-gate-20261110-attempt-01\\features-v1`.
+The run report records per-file byte counts and SHA-256 values; all output
+hashes were independently recomputed and matched. It reports
+`sealed_payloads_opened=0` and `raw_media_opened=0`.
+
+| Split | Unique source clips | Pair rows | Audio steps | Visual steps |
+|---|---:|---:|---:|---:|
+| Train | 38,208 | 76,416 | 229,233 | 235,451 |
+| Calibration | 5,268 | 10,536 | 31,608 | 32,463 |
+| Development validation | 5,496 | 10,992 | 32,976 | 33,857 |
+
+No model has been trained and no validation result exists. These integrity
+checks are not evidence of model quality.
 
 ## Primary sources
 
