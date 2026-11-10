@@ -1,9 +1,16 @@
 from __future__ import annotations
 
 import numpy as np
-import torch
+import pytest
 
-from scripts.train_tallyqa_vg_readout import _batch_logits, _cache_features, _fit
+torch = pytest.importorskip("torch")
+pytest.importorskip("transformers")
+
+from scripts.train_tallyqa_vg_readout import (  # noqa: E402
+    _batch_logits,
+    _cache_features,
+    _fit,
+)
 
 
 def test_readout_parameter_counts_match_declared_towers() -> None:
