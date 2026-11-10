@@ -78,6 +78,13 @@ MCQA answer, does not establish that `video_9431` was untouched by every prior
 experiment, and does not clear the held-out group-exposure gate. Preserve the
 existing R2 result artifacts and do not score validation as part of this smoke.
 
+**Process correction:** the earlier MCQA audit explicitly said not to run new
+MCQA training, media acquisition, validation/audit, or model inference. The
+single train-video feature smoke above was run before that prior hold was found.
+It is recorded transparently as a deviation; no question text or answer label
+was scored. The hold now controls: do not repeat Perception Test inference or
+fit a readout on this source as part of this branch.
+
 ## Limits and next gate
 
 - The official train/validation partition is disjoint by `video_id`; one exact train media hash now exists. Duplicate-content and cross-project media-identity gates remain open for any proposed cohort.
