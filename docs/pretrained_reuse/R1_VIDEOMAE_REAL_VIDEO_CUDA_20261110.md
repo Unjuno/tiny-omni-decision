@@ -16,7 +16,10 @@ end-to-end latency including decode/model startup.
 
 - Owner model card: [OpenGVLab/VideoMAE2 at revision
   `706cc172d65ebd4dedbee3f9c0183a93df9fa125`](https://huggingface.co/OpenGVLab/VideoMAE2/tree/706cc172d65ebd4dedbee3f9c0183a93df9fa125)
-  declares Apache-2.0.
+  declares Apache-2.0 for the released model. The pinned
+  [upstream source LICENSE](https://github.com/OpenGVLab/VideoMAEv2/blob/29eab1e8a588d1b3ec0cdec7b03a86cca491b74b/LICENSE)
+  is MIT for code; these are distinct scopes. Neither establishes rights for
+  the upstream training videos.
 - Upstream source commit:
   `29eab1e8a588d1b3ec0cdec7b03a86cca491b74b`.
 - Local model source SHA-256:
