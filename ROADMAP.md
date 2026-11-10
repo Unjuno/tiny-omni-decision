@@ -3933,6 +3933,15 @@ storage gates. No data or media was downloaded. Keep all three unadmitted and
 do not fit another joint model from these candidates. See the
 [source screen](docs/pretrained_reuse/R2_ROBOTICS_AV_SOURCE_SCREEN_20261103.md).
 
+**2026-11-10 R2 MMCSG license/task recheck:** Meta's public Data License
+expressly contemplates commercial-purpose model development, but becomes
+effective on dataset access or acceptance; no access or acceptance occurred.
+The publisher lists 530 recordings with audio/video/IMU, but independent group
+composition, a Decision target requiring both inputs, and release rights for a
+derived model artifact remain unresolved. Keep MMCSG unadmitted pending an
+authorized license decision and metadata-only split/task audit. See the
+[recheck](docs/pretrained_reuse/R2_MMCSG_DATA_LICENSE_RECHECK_20261110.md).
+
 **2026-11-03 R2 temporal feature-state runtime contract:** Added a bounded
 CPU-only session feature history with runtime/clock identity, causal as-of
 snapshots, explicit missingness, FIFO/event/stream/byte limits, and explicit
