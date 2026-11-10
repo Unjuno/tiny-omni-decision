@@ -67,12 +67,19 @@ train, calibration, and development validation. The sealed manifest contains
 only hashed clip IDs and feature-record paths; it contains no target labels or
 label summaries.
 
-| Split | Clips/groups | ID-order SHA-256 | Manifest SHA-256 |
-|---|---:|---|---|
-| Train | 38,231 | `054e5a3bf494a99873d2ec44237d6170b46b46454eef1e64d565d9ff321a0947` | `4f8bdcf722ee94780737fdd8a23656e6ed70d3cd1988c93c495e73aacb0dd1e2` |
-| Calibration | 5,284 | `ccd978f6c65864952b569eead94f88b2a7035dbcb9a2a244c3dedabf54fea9a8` | `69a51a3b36474803bfdf03ab586c3059c669533fb2a438dd0b1480b99054808b` |
-| Development validation | 5,510 | `9fd55bf86fc983dc1320ae791115ece4819fa4141543308cfae3505ddf457126` | `7acde5c5742921e8a6e1f7a5754207d94b0fa4f449cb6ad70f09dd220e2e1648` |
-| Sealed audit | 5,534 | `7e46c6ca7759bb59133746cc1e4f3387da0d19df0bd983c220a9ab0b6de342e5` | `e47b4aa69e742522893eda260b004f99339a2614f56c2410f26e10c81ffc2b98` |
+| Split | Clips/groups | ID-order SHA-256 | Canonical LF SHA-256 | Existing file SHA-256 |
+|---|---:|---|---|---|
+| Train | 38,231 | `054e5a3bf494a99873d2ec44237d6170b46b46454eef1e64d565d9ff321a0947` | `4f8bdcf722ee94780737fdd8a23656e6ed70d3cd1988c93c495e73aacb0dd1e2` | `a22632b9dfbb4b42cc1bb9fc0860f2ef9081aee9434786f8415264b27b79fab8` |
+| Calibration | 5,284 | `ccd978f6c65864952b569eead94f88b2a7035dbcb9a2a244c3dedabf54fea9a8` | `69a51a3b36474803bfdf03ab586c3059c669533fb2a438dd0b1480b99054808b` | `e710d6d816fafcebd4083e030cd619f1d44d8df0d7174baebabda8bc04c8e3d5` |
+| Development validation | 5,510 | `9fd55bf86fc983dc1320ae791115ece4819fa4141543308cfae3505ddf457126` | `7acde5c5742921e8a6e1f7a5754207d94b0fa4f449cb6ad70f09dd220e2e1648` | `0d07fc562c1808c7456657d61fa4b0efd210d094e93151d03fb7991474bab9c2` |
+| Sealed audit | 5,534 | `7e46c6ca7759bb59133746cc1e4f3387da0d19df0bd983c220a9ab0b6de342e5` | `e47b4aa69e742522893eda260b004f99339a2614f56c2410f26e10c81ffc2b98` | `1b56b8ec7cc830706ae80735d3bf11cfe6b7a452e75505cb2eb4c61b35286745` |
+
+The initial Windows `Path.write_text` serialization translated the canonical
+LF payloads to CRLF on disk. Rehashing after normalizing CRLF to LF reproduced
+every canonical hash exactly; source identities and rows are unchanged. Both
+canonical-content and byte-for-byte hashes are recorded. The serializer has
+since been corrected to write canonical UTF-8/LF bytes directly, with
+regression coverage; existing frozen split files were not rewritten.
 
 The source's `filename` is the available clip identity. Parent upload identity
 and normalized raw-media overlap cannot be checked from the released tables;
@@ -109,16 +116,18 @@ clips. Each source audio and source video occurs once under each target within
 its group. A source clip is used in at most one pair group per split. Any later
 uncertainty interval must resample whole pair groups, not individual rows.
 
-| Split | Pair groups | Decision rows | Positive / negative | Unpaired clips | Pair JSONL SHA-256 |
-|---|---:|---:|---:|---:|---|
-| Train | 19,115 | 76,460 | 38,230 / 38,230 | 1 | `113bc99f15714112e4d401dce76eaebbfaee8b729d21ac5113f9cb4ca7883ee4` |
-| Calibration | 2,642 | 10,568 | 5,284 / 5,284 | 0 | `bf8f7668a7bbea8b51cf2b38429ba1c9b699d358c2467919c592295d1d49cfeb` |
-| Development validation | 2,755 | 11,020 | 5,510 / 5,510 | 0 | `bfa1a3bcca67508b4de64bcf4ec02798ee30087328c8399f50201aca414c4698` |
+| Split | Pair groups | Decision rows | Positive / negative | Unpaired clips | Canonical LF SHA-256 | Existing file SHA-256 |
+|---|---:|---:|---:|---:|---|---|
+| Train | 19,115 | 76,460 | 38,230 / 38,230 | 1 | `113bc99f15714112e4d401dce76eaebbfaee8b729d21ac5113f9cb4ca7883ee4` | `d332dbbe57926b9a95b107c5afeac1a72fb1c57bb3086e9914dd9ad9ccd7229e` |
+| Calibration | 2,642 | 10,568 | 5,284 / 5,284 | 0 | `bf8f7668a7bbea8b51cf2b38429ba1c9b699d358c2467919c592295d1d49cfeb` | `473ea4a7241df54db36c25d3983a72b5c23955299fc7965e214d8641ba90a2a5` |
+| Development validation | 2,755 | 11,020 | 5,510 / 5,510 | 0 | `bfa1a3bcca67508b4de64bcf4ec02798ee30087328c8399f50201aca414c4698` | `b9d70a39960e5d867d53c3bbee07c5e0f74140e2a332a8266a4288a41e5b6f02` |
 
 The one train leftover is an odd remaining source after disjoint pairing; it
 was not duplicated. The builder refuses the sealed split. These pair manifests
 specify the task labels, not a model result. The pair reports and manifests
 remain outside Git under the external artifact root recorded above.
+The existing pair files also use CRLF; their LF-normalized hashes match the
+canonical hashes reported by the original builder exactly.
 
 ## Next gate
 

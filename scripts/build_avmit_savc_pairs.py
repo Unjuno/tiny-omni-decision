@@ -7,7 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from tiny_omni_decision.avmit_metadata import build_savc_pair_rows
+from tiny_omni_decision.avmit_metadata import build_savc_pair_rows, canonical_jsonl_bytes
 
 
 def main() -> None:
@@ -23,14 +23,12 @@ def main() -> None:
     ]
     pairs, leftovers = build_savc_pair_rows(rows, args.split)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    payload = "".join(
-        json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in pairs
-    )
-    args.output.write_text(payload, encoding="utf-8")
+    payload = canonical_jsonl_bytes(pairs)
+    args.output.write_bytes(payload)
     report = {
         "split": args.split,
         "source_manifest_sha256": hashlib.sha256(args.manifest.read_bytes()).hexdigest(),
-        "pair_manifest_sha256": hashlib.sha256(payload.encode()).hexdigest(),
+        "pair_manifest_sha256": hashlib.sha256(payload).hexdigest(),
         "source_video_count": len(rows),
         "pair_groups": len(pairs) // 4,
         "decision_rows": len(pairs),
@@ -48,7 +46,9 @@ def main() -> None:
         ),
     }
     report_path = args.output.with_suffix(args.output.suffix + ".report.json")
-    report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    report_path.write_bytes(
+        (json.dumps(report, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    )
     print(json.dumps(report, indent=2, sort_keys=True))
 
 

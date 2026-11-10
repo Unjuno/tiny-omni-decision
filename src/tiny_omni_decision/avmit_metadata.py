@@ -33,6 +33,14 @@ def deterministic_split(source_id: str, seed: int = 17) -> str:
     raise AssertionError(f"unassigned split bucket: {bucket}")
 
 
+def canonical_jsonl_bytes(rows: list[dict[str, Any]]) -> bytes:
+    """Serialize rows with stable UTF-8/LF bytes so the reported hash is the file hash."""
+    return b"".join(
+        json.dumps(row, sort_keys=True, separators=(",", ":")).encode("utf-8") + b"\n"
+        for row in rows
+    )
+
+
 def _read_test_ids(path: Path) -> tuple[set[str], set[str], int]:
     ids: set[str] = set()
     source_assets: set[str] = set()
@@ -138,11 +146,9 @@ def audit_avmit_metadata(
             (item for item in candidates.values() if item["split"] == split),
             key=lambda item: item["asset_id_sha256"],
         )
-        payload = "".join(
-            json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in rows
-        )
+        payload = canonical_jsonl_bytes(rows)
         split_path = output_dir / f"{split}.jsonl"
-        split_path.write_text(payload, encoding="utf-8")
+        split_path.write_bytes(payload)
         asset_ids = {row["asset_id_sha256"] for row in rows}
         feature_ids = {normalize_source_id(row["feature_record"]) for row in rows}
         all_asset_ids[split] = asset_ids
@@ -154,7 +160,7 @@ def audit_avmit_metadata(
             "id_order_sha256": hashlib.sha256(
                 "\n".join(row["asset_id_sha256"] for row in rows).encode()
             ).hexdigest(),
-            "manifest_sha256": hashlib.sha256(payload.encode()).hexdigest(),
+            "manifest_sha256": hashlib.sha256(payload).hexdigest(),
             "action_class_counts": dict(sorted(target_counts[split].items()))
             if split != "sealed_audit"
             else None,
@@ -211,7 +217,9 @@ def audit_avmit_metadata(
         ],
     }
     summary_path = output_dir / "metadata-audit.json"
-    summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    summary_path.write_bytes(
+        (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    )
     summary["summary_sha256"] = hashlib.sha256(summary_path.read_bytes()).hexdigest()
     return summary
 

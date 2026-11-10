@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 
 import pytest
@@ -8,6 +9,7 @@ import pytest
 from tiny_omni_decision.avmit_metadata import (
     audit_avmit_metadata,
     build_savc_pair_rows,
+    canonical_jsonl_bytes,
     deterministic_split,
 )
 
@@ -82,6 +84,9 @@ def test_audit_excludes_published_test_and_source_validation_and_seals_targets(t
     assert summary["eligible_source_videos"] == 100
     assert summary["cross_split_source_identity_overlap"] == 0
     assert summary["cross_split_feature_record_overlap"] == 0
+    for split, values in summary["splits"].items():
+        path = output / f"{split}.jsonl"
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == values["manifest_sha256"]
     sealed = (output / "sealed_audit.jsonl").read_text(encoding="utf-8")
     assert "target_label" not in sealed
     assert "test-target-must-not-appear" not in "".join(
@@ -154,3 +159,14 @@ def test_savc_pairing_refuses_sealed_split_or_duplicate_source():
     ]
     with pytest.raises(ValueError, match="duplicate source clip"):
         build_savc_pair_rows(rows, "train")
+
+
+def test_canonical_jsonl_bytes_have_stable_lf_and_hash(tmp_path):
+    rows = [{"z": "日本語", "a": 1}, {"a": 2}]
+    payload = canonical_jsonl_bytes(rows)
+    expected = b'{"a":1,"z":"\\u65e5\\u672c\\u8a9e"}\n{"a":2}\n'
+    assert payload == expected
+    assert b"\r\n" not in payload
+    manifest = tmp_path / "stable.jsonl"
+    manifest.write_bytes(payload)
+    assert hashlib.sha256(manifest.read_bytes()).digest() == hashlib.sha256(payload).digest()
