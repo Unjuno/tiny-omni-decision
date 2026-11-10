@@ -1,6 +1,34 @@
+**2026-11-10 R2 AVMIT corrected SAVC result:** The pair-v2 generator omitted
+two of the four required cross-label clip combinations; this was caught before
+full fitting. Pair-v3 now covers every combination once, preserves the same
+split assets, and has generator/input-validator regression tests. One seed-17
+mean-vs-GRU fit over frozen licensed AVMIT features completed: calibrated
+development validation Accuracy was 67.19% vs 66.15% (1,374 paired groups;
+95% group-bootstrap interval for GRU-minus-mean Accuracy: -1.865 to -0.264
+points). Both curves overfit after their calibration-NLL-selected epochs.
+This is narrow precomputed-feature label-matching evidence, not a Path A
+product result and does not close multimodal R2-M. No sealed audit or raw
+Moments in Time media was opened. Full hashes, metrics, histories and limits:
+[AVMIT fit report](docs/pretrained_reuse/R2_AVMIT_SAVC_PROTOCOL_20261110.md#fixed-seed-fit-and-development-validation--2026-11-10).
 **2026-11-04 R2 CREMA-D source-code follow-up:** Pinned official code confirms same-filename VoiceVote/FaceVote/MultiModalVote labels, making a common AV target structurally possible. Access registration and content-rights/consent scope remain unresolved; no annotations/media were read and no task was admitted. See [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
 **2026-11-04 R2 RoboMNIST residual-group screen:** The pinned split manifest selects 1,780 groups from a prior non-sealed eligible pool of 1,790 (780 train / 1,000 already evaluated validation), leaving only 10 unselected eligible groups; the other 345 of the 2,135 total were outside the pool and were not inspected. Ten groups cannot satisfy the 1,000-group validation gate. No new fit or validation replay is justified. See [residual screen](docs/pretrained_reuse/R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
+
+**2026-11-10 R2 AVMIT metadata gate:** The Zenodo record API identifies the
+released annotations/features as CC BY 4.0. A deterministic seed-17 split of
+54,559 publisher-training clips excludes the exposed 960-clip test set and has
+zero clip-ID or feature-record overlap across train/calibration/dev/sealed ID
+manifests. Raw Moments in Time media were not accessed. AVMIT remains a
+preliminary candidate only: train/calibration/development SAVC pair manifests
+are frozen in v2 as cross-clip same-label positives and different-label
+negatives; an initial same-clip-positive version is explicitly retired before
+any fit. The fixed mean-pooling-vs-GRU protocol is recorded at
+[`R2_AVMIT_SAVC_PROTOCOL_20261110.md`](docs/pretrained_reuse/R2_AVMIT_SAVC_PROTOCOL_20261110.md).
+Archive integrity, an 8-group smoke, and measured joint-vs-unimodal controls
+are still required. Existing source splits remain
+unchanged; a Windows newline/hash reporting discrepancy was traced to CRLF
+conversion, documented, and fixed in the serializer with regression tests. See
+[`R2_AVMIT_METADATA_GATE_20261110.md`](docs/pretrained_reuse/R2_AVMIT_METADATA_GATE_20261110.md).
 **2026-11-04 R2 CLEVRER exposure inventory:** A read-only scan of 118 preserved corpus/readout manifests found 7,163 of 10,000 official TRAIN scene IDs; the remaining 2,837 are only an upper bound, not proven unused. Historical exclusions are contained in the corrected V2 exclusions, and the 768-scene V2 train/256-scene validation split has zero overlap. Existing unseen candidate scenes were already fetched/used, so no fresh CLEVRER evaluation pool is established. No model, media, holdout, sealed audit, or GPU run was touched. See [inventory](docs/pretrained_reuse/R2_CLEVRER_TRAIN_SCENE_EXPOSURE_INVENTORY_20261104.md).
 **2026-11-04 R2 video-source screen:** ARID v1.5 is a plausible low-light video-only action task, but dataset-specific access/licensing conflicts and a missing auditable cross-action person/scene split keep it `REVIEW_NOT_ADMITTED`. No payload or evaluation data was accessed. See [ARID source screen](docs/pretrained_reuse/R2_ARID_VIDEO_TASK_SOURCE_SCREEN_20261104.md).
 **2026-11-04 R2 Path A typed-video contract fix:** The video worker's fixed `[wrong, correct]` class order is now enforced before worker startup, preventing typed JSON from binding scores to reordered caller IDs. Eight focused CPU tests, Ruff, and diff checks pass; no model or evaluation data was loaded. See [contract-fix record](docs/pretrained_reuse/R2_PATH_A_VIDEO_TYPED_OPTION_ORDER_20261104.md).
