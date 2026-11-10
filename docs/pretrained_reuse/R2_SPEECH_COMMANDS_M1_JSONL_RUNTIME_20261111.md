@@ -49,8 +49,23 @@ reasoning. It covers one narrow command-recognition task only.
 - Base branch: the four-route Path A integration head from PR #57,
   `519ba902e9cc61b8c00d9f3933fae23cd9fe9b15`.
 - Runtime integration branch: `codex/r2-speech-commands-m1-runtime-20261110`.
-- Exact source commit and changed-file hashes: to be recorded after the final
-  integration commit in this branch.
+- M1 route implementation commit:
+  `c2bfce9be8521effd538037a5eb158ff4a966a8d` (`feat: add fresh-speaker Speech
+  Commands JSONL route`). Runtime startup-metadata output and its regression test
+  are in `ab8db807cc788bd73490d296c3b672e338de1927` (`docs: record Speech
+  Commands M1 Path A runtime`). The
+  smoke ran on the exact file contents later committed there; that commit also
+  added the regression test and documentation.
+- SHA-256 of implementation files at the smoke revision:
+
+  | File | SHA-256 |
+  |---|---|
+  | `src/tiny_omni_decision/speech_commands_m1_contract.py` | `d36559b6be5fa2f5a11e89405e89ff3bf122b0d0f007b3c06b7317434d0d461d` |
+  | `src/tiny_omni_decision/speech_commands_m1_runtime.py` | `2bd42c7fa74228023635b1aaa882cb6217db30b8ded2d41dd254e86275964f10` |
+  | `src/tiny_omni_decision/runtime_dispatch.py` | `1e900e9232d83cff8c4a732e3d4a55db823b683b6fdfc5b4657ceac4a93d736d` |
+  | `src/tiny_omni_decision/path_a_runtime_cli.py` | `3460bc07f28759c60da70a8253a985378dcebd0f3e8be6d522e4ec5200df68b2` |
+  | `src/tiny_omni_decision/cli.py` | `1f25e4811ffb8997c5b008ddd1c6e8b1b87218755cf58c131c4dcb76e1699e20` |
+  | `scripts/path_a_torch_worker.py` | `d62d039666e55c3008f28cef41256ad05f3a5c8f6e26ce10f99aac3071cd9785` |
 - Focused verification after rebasing onto the four-route head: 23 tests passed
   across the M1 contract/runtime, dispatcher, JSONL contract, and VideoMAEv2
   round-trip modules; Ruff checks and format checks passed. CLI help lists the
@@ -62,6 +77,8 @@ reasoning. It covers one narrow command-recognition task only.
 
 - Attempt directory:
   `D:\CodexArtifacts\pretrained-reuse-r2\speech-commands-m1-patha-runtime-20261110-attempt-03`.
+- Run metadata SHA-256:
+  `682fa4cbdc1d6569b10edc3829e2b6304665a9187b3cae6dafbb20c3e8a20bcf`.
 - Request used train record `scm1-007c9454983af89b4804`, target `right`, from
   `speech-commands-fresh-m1-media-20261110-attempt-04\train.jsonl`; media SHA-256
   `606ce34b946dfef7ef1c229fb60dc3b47a324db960631df5a560c74ff733b4b4`.
