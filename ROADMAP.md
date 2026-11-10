@@ -10,8 +10,10 @@ manifests. Raw Moments in Time media were not accessed. AVMIT remains a
 preliminary candidate only: train/calibration/development SAVC pair manifests
 are frozen in v2 as cross-clip same-label positives and different-label
 negatives; an initial same-clip-positive version is explicitly retired before
-any fit. Feature archive integrity, a frozen scoring protocol, and measured
-joint-vs-unimodal controls are still required. Existing source splits remain
+any fit. The fixed mean-pooling-vs-GRU protocol is recorded at
+[`R2_AVMIT_SAVC_PROTOCOL_20261110.md`](docs/pretrained_reuse/R2_AVMIT_SAVC_PROTOCOL_20261110.md).
+Archive integrity, an 8-group smoke, and measured joint-vs-unimodal controls
+are still required. Existing source splits remain
 unchanged; a Windows newline/hash reporting discrepancy was traced to CRLF
 conversion, documented, and fixed in the serializer with regression tests. See
 [`R2_AVMIT_METADATA_GATE_20261110.md`](docs/pretrained_reuse/R2_AVMIT_METADATA_GATE_20261110.md).
