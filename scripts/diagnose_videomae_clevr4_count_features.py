@@ -98,8 +98,7 @@ def _read_feature_prefix(path: Path, rows: int) -> np.ndarray:
     """Read only the leading train/selector rows; never parse the report suffix."""
     with zipfile.ZipFile(path) as archive:
         with archive.open("features.npy") as stream:
-            version = np.lib.format.read_magic(stream)
-            shape, fortran_order, dtype = np.lib.format._read_array_header(stream, version)
+            shape, fortran_order, dtype = _read_npy_header(stream)
             if shape != (78_306, FEATURE_WIDTH) or fortran_order or dtype != np.dtype("float32"):
                 raise ValueError(
                     f"unexpected feature member header: {shape}, {fortran_order}, {dtype}"
@@ -116,6 +115,17 @@ def _read_feature_prefix(path: Path, rows: int) -> np.ndarray:
                     )
                 blocks.extend(part)
             return np.frombuffer(blocks, dtype=np.float32).reshape(rows, FEATURE_WIDTH).copy()
+
+
+def _read_npy_header(stream: Any) -> tuple[tuple[int, ...], bool, np.dtype[Any]]:
+    version = np.lib.format.read_magic(stream)
+    if version == (1, 0):
+        shape, fortran_order, dtype = np.lib.format.read_array_header_1_0(stream)
+    elif version == (2, 0):
+        shape, fortran_order, dtype = np.lib.format.read_array_header_2_0(stream)
+    else:
+        raise ValueError(f"unsupported NumPy feature member version: {version}")
+    return shape, fortran_order, dtype
 
 
 def _class_metrics(

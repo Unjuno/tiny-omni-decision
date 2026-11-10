@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from io import BytesIO
+
 import numpy as np
 import pytest
 
 from scripts.diagnose_videomae_clevr4_count_features import (
+    _read_npy_header,
     paired_accuracy_bootstrap,
     ridge_scores,
     stratified_hash_folds,
@@ -21,6 +24,14 @@ def test_hash_folds_are_deterministic_and_stratified() -> None:
     assert sorted(first.tolist()) == [0] * 8 + [1] * 8 + [2] * 8 + [3] * 8 + [4] * 8
     for target in range(4):
         assert np.bincount(first[targets == target], minlength=5).tolist() == [2] * 5
+
+
+def test_npy_header_reader_supports_numpy_v1_members() -> None:
+    stream = BytesIO()
+    np.save(stream, np.zeros((2, 3), dtype=np.float32))
+    stream.seek(0)
+
+    assert _read_npy_header(stream) == ((2, 3), False, np.dtype("float32"))
 
 
 def test_ridge_diagnostic_recovers_linearly_separable_classes() -> None:
