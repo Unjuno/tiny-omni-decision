@@ -2822,6 +2822,16 @@ None is admitted; continue source discovery without fitting until all R2-M
 gates pass. See
 [`R2_AV_SOURCE_SCREEN_QUERYD_VOXDUB_20261111.md`](docs/pretrained_reuse/R2_AV_SOURCE_SCREEN_QUERYD_VOXDUB_20261111.md).
 
+**2026-11-11 R2 HiFi-UMI metadata follow-up:** The current public revision is
+unchanged and exposes a train-only release. The authors' paper says the
+released subset has 110+ scenes, CC BY 4.0 terms, and masked faces, but gives
+no episode-to-scene/session mapping or consent details. One 1,125-row episode
+metadata file has no scene/session/participant key, so it cannot establish
+independent grouping. The both-input Decision task is also undefined. No media
+or model data were accessed. Keep
+`REVIEW_NOT_ADMITTED`; see
+[`R2_HIFI_UMI_METADATA_GROUP_FOLLOWUP_20261111.md`](docs/pretrained_reuse/R2_HIFI_UMI_METADATA_GROUP_FOLLOWUP_20261111.md).
+
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
 release is a relevant video/wearable-sensor work-activity source, but its
 non-RGB dataset is CC BY-NC-SA 4.0 and its RGB release is restricted to
