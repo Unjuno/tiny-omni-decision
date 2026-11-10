@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "experiment_id": "r2-perception-test-source-screen-20261111",
+  "screen_date_local": "2026-11-11",
+  "source": {
+    "dataset_id": "google-deepmind/perception_test",
+    "repository_url": "https://github.com/google-deepmind/perception_test",
+    "repository_revision": "3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf",
+    "readme_sha256": "9f739a07616e3f60af0723800d813ca87953496ba9e288fc62b4bfd7578afa85",
+    "license_file": "LICENSE",
+    "license_file_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "software_license": "Apache-2.0",
+    "data_license": "CC-BY-4.0",
+    "rights_evidence": [
+      "Pinned official README states all non-software materials are CC BY 4.0.",
+      "NeurIPS paper describes public train/validation as CC BY and participant consent for use, publication, and storage.",
+      "Paper says participants were instructed not to record faces or voices."
+    ],
+    "primary_citation": "Pătrăucean et al., Perception Test: A Diagnostic Benchmark for Multimodal Video Models, NeurIPS 2023.",
+    "primary_sources": [
+      "https://github.com/google-deepmind/perception_test",
+      "https://papers.nips.cc/paper_files/paper/2023/file/8540fba4abdc7f9f7a7b1cc6cd60e409-Paper-Datasets_and_Benchmarks.pdf"
+    ]
+  },
+  "annotation_archives": {
+    "train": {
+      "url": "https://storage.googleapis.com/dm-perception-test/zip_data/train_annotations.zip",
+      "content_length_bytes": 26247728,
+      "etag": "de6f179b8e591e5c75bb63bec235e79f",
+      "last_modified": "2023-07-03T08:26:24Z",
+      "local_sha256": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78"
+    },
+    "validation": {
+      "url": "https://storage.googleapis.com/dm-perception-test/zip_data/valid_annotations.zip",
+      "content_length_bytes": 70209095,
+      "etag": "a23b40fe7f467304e3afdfc2514e4730",
+      "last_modified": "2023-07-03T08:26:53Z",
+      "local_sha256": "eeefeb43955b1850b5e521ad774fe66675baac0a2a06617bd83ffbe43aaf03d7"
+    },
+    "test": {
+      "downloaded": false,
+      "opened": false,
+      "used_for_selection": false
+    },
+    "raw_video_audio": {
+      "downloaded": false,
+      "opened": false,
+      "used_for_selection": false
+    }
+  },
+  "split_audit": {
+    "group_key": "video_id",
+    "train_video_groups": 2184,
+    "validation_video_groups": 5900,
+    "train_validation_video_id_overlap": 0,
+    "participant_id_available": false,
+    "participant_disjointness_proven": false,
+    "same_script_variation_across_splits_possible": true,
+    "grouping_limit": "Video/scene IDs are separated, but contributor and script-variation IDs are absent from annotation metadata."
+  },
+  "task_counts": {
+    "train": {
+      "video_qa_questions": 7392,
+      "video_groups": 2184,
+      "reasoning": {
+        "descriptive": 6144,
+        "explanatory": 852,
+        "predictive": 247,
+        "counterfactual": 149
+      },
+      "sound_segments": 25757,
+      "visible_single_source_events": 6170,
+      "sound_source_choice_candidates": 4066,
+      "sound_source_choice_candidate_video_groups": 1437
+    },
+    "validation": {
+      "video_qa_questions": 19140,
+      "video_groups": 5900,
+      "reasoning": {
+        "descriptive": 15858,
+        "explanatory": 2286,
+        "predictive": 639,
+        "counterfactual": 357
+      },
+      "sound_segments": 69767,
+      "visible_single_source_events": 16824,
+      "sound_source_choice_candidates": 11211,
+      "sound_source_choice_candidate_video_groups": 3997
+    }
+  },
+  "sound_source_candidate_rule": [
+    "one parent object ID after removing the -1 unknown sentinel",
+    "parent ID resolves to an object-track annotation in the same video",
+    "is_visible is truthy",
+    "parent object's annotated timestamp intersects the sound segment time interval",
+    "at least one additional object track has an annotated timestamp inside that interval"
+  ],
+  "candidate_disposition": "SOURCE_AND_SPLIT_CANDIDATE_FOR_BOUNDED_PATH_A_PILOT; no model fitting or quality inference yet",
+  "annotation_adapter_preflight": {
+    "adapter": "src/tiny_omni_decision/perception_test_dataset.py",
+    "converted_train_video_qa_rows": 7392,
+    "converted_validation_video_qa_rows": 19140,
+    "train_duplicate_option_rows": 0,
+    "validation_duplicate_option_rows": 4,
+    "duplicate_option_correct_target_ambiguous_rows": 0,
+    "duplicate_options_policy": "uniform A/B/C choice labels preserve answer_id; no source rows excluded or merged",
+    "synthetic_media_paths_used_for_schema_preflight": true,
+    "raw_media_presence_or_decoder_verified": false,
+    "model_fitting_or_quality_inference": false
+  },
+  "human_baseline_context": {
+    "accuracy": 0.914,
+    "source": "NeurIPS 2023 paper",
+    "note": "Task-specific reference; not a target redefinition or a result from this project."
+  },
+  "hardware_and_compute": {
+    "gpu_used": false,
+    "cloud_compute_used": false,
+    "paid_compute_usd": 0,
+    "data_storage_drive": "D:",
+    "free_space_at_screen_bytes_approx": 2243409281024
+  }
+}

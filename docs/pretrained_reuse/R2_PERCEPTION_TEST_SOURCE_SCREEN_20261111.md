@@ -1,0 +1,65 @@
+# Perception Test source and task screen — 2026-11-11
+
+## Decision
+
+**Admit as a candidate for a bounded Path A video-task pilot, not as a product qualification or proof of joint audio-video benefit.** The public training and validation annotations are explicitly CC BY 4.0, cover 2,184 and 5,900 video groups, and have zero overlap by official `video_id`. They include typed three-choice video QA and aligned sound-event/object-track annotations. This is a stronger, rights-clearer video lead than the previously screened YouTube-derived AV sources.
+
+Do not inspect, download, or evaluate the official test split. Do not claim participant-disjoint evaluation: the paper reports around 100 participants, while participant IDs are absent from the inspected annotations. The group unit available for this task is the full video/scene ID. The paper also describes 37 script templates with 2–5 variations, so a video-level split does not test unseen-script generalization.
+
+## Source and rights evidence
+
+- Official repository: [`google-deepmind/perception_test`](https://github.com/google-deepmind/perception_test), inspected at commit `3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf`.
+- Pinned README SHA-256: `9f739a07616e3f60af0723800d813ca87953496ba9e288fc62b4bfd7578afa85`.
+- Pinned repository `LICENSE` SHA-256: `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`. The README states software is Apache-2.0 and other materials are CC BY 4.0. The NeurIPS paper also identifies the public fine-tuning and validation splits as CC BY and says participants consented to use, publication, and storage. The paper says faces and voices were intentionally not recorded.
+- Primary references: [official repository and data instructions](https://github.com/google-deepmind/perception_test), [NeurIPS paper](https://papers.nips.cc/paper_files/paper/2023/file/8540fba4abdc7f9f7a7b1cc6cd60e409-Paper-Datasets_and_Benchmarks.pdf).
+- The public multiple-choice video-QA task uses three options, with questions labeled by Memory/Abstraction/Physics/Semantics and Descriptive/Explanatory/Predictive/Counterfactual reasoning. The authors report 91.4% human accuracy and 46.2% for the evaluated SOTA video-QA model; this is a hard diagnostic task, not a 95%-accuracy expectation.
+
+## Annotation-only preflight
+
+Only the official `train_annotations.zip` and `valid_annotations.zip` were fetched. No video/audio files, precomputed features, test annotations, or test media were accessed. ZIP metadata supplied ETags and lengths; local SHA-256 receipts are recorded in [`manifests/pretrained_reuse/perception-test-source-screen-20261111.json`](../../manifests/pretrained_reuse/perception-test-source-screen-20261111.json).
+
+| Split | Unique video groups | Video-QA questions | Sound segments | Visible single-source events | Video-ID overlap |
+|---|---:|---:|---:|---:|---:|
+| Train | 2,184 | 7,392 | 25,757 | 6,170 | 0 |
+| Validation | 5,900 | 19,140 | 69,767 | 16,824 | 0 |
+
+Reasoning support (question counts):
+
+| Split | Descriptive | Explanatory | Predictive | Counterfactual |
+|---|---:|---:|---:|---:|
+| Train | 6,144 | 852 | 247 | 149 |
+| Validation | 15,858 | 2,286 | 639 | 357 |
+
+The sound-source candidate requires one resolvable parent object, `is_visible=1`, a parent object track whose timestamp intersects the annotated sound interval, and at least two object tracks whose timestamps intersect that interval. This produced 4,066 candidate events across 1,437 train video groups and 11,211 across 3,997 validation video groups. The proposed decision is to choose the object label that produced an event from synchronized video/audio and supplied object labels. This is a candidate adapter design only; audio-only, video-only, both-input, and source-shuffled controls have not been evaluated.
+
+## Adapter preflight and annotation anomaly
+
+A strict annotation-only adapter and schema tests now exist in
+`src/tiny_omni_decision/perception_test_dataset.py` and
+`tests/test_perception_test_dataset.py`. The adapter accepts only the public
+train/valid annotations, requires matching split and video IDs, preserves the
+publisher's answer index, and rejects unsafe/missing media paths. Every choice
+is labeled `A:`, `B:`, or `C:` uniformly. This is necessary because a complete
+annotation scan found four validation questions with duplicate distractor
+text; their correct `answer_id` points to a distinct third choice. Train has
+0 such rows (7,392 total), validation has 4 (19,140 total). No rows are
+excluded or merged. The fixed choice labels retain the source index while
+satisfying the repository's unique-option decision schema.
+
+The adapter has been exercised over all 7,392 train and 19,140 validation QA
+rows using synthetic relative media references only. This validates
+annotation/schema conversion, not media presence, decoding, feature extraction,
+or model quality. Raw media remains unfetched.
+
+## Limits and next gate
+
+- The official train/validation partition is disjoint by `video_id`; no exact media hashes exist yet, so duplicate-content and cross-project media-identity gates remain open until authorized assets are fetched for a frozen subset.
+- Participant and script/variation IDs are not present in the annotation metadata. A video-ID split establishes clip/scene separation, not participant separation or unseen-script generalization.
+- Video-QA is a text-conditioned video decision task. It is not a direct text-free video probe. The sound-source candidate is more explicitly audio-video, but its joint-input value is unproven.
+- The paper's 91.4% human score makes the project-wide 95% target unsuitable as a guaranteed threshold for this diagnostic. Report actual scores and difficulty; do not redefine the project target.
+- Full train and validation video archives are large (26.5 GB and 70.2 GB compressed); separate audio archives are 12.3 GB and 33.1 GB. D: had about 2.24 TB free at this screen. No media download or GPU use is authorized by this screen.
+- Before feature extraction or fitting: freeze the exact video-group sample, option construction and candidate filtering; record participant/script limitations; verify local media hashes and decoder behavior; use only train groups for fitting and public validation for selection; preserve the official test split unopened.
+
+The next gate is a bounded real-video feature smoke using one authorized train
+group, after pinning its media hash and validating the decoder/runtime. Expand
+to a frozen train/validation pilot only after the media and group receipts pass.
