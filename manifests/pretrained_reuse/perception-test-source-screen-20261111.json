@@ -43,15 +43,18 @@
       "used_for_selection": false
     },
     "raw_video_audio": {
-      "downloaded": false,
-      "opened": false,
-      "used_for_selection": false
+      "downloaded": true,
+      "opened": true,
+      "used_for_selection": false,
+      "scope": "one official train member video_9431.mp4 fetched by HTTP byte ranges; video stream decoded, embedded audio stream not processed; no validation/test media"
     }
   },
   "split_audit": {
     "group_key": "video_id",
-    "train_video_groups": 2184,
-    "validation_video_groups": 5900,
+    "train_archive_video_groups": 2184,
+    "train_video_qa_groups": 1955,
+    "validation_archive_video_groups": 5900,
+    "validation_video_qa_groups": 5260,
     "train_validation_video_id_overlap": 0,
     "participant_id_available": false,
     "participant_disjointness_proven": false,
@@ -61,7 +64,8 @@
   "task_counts": {
     "train": {
       "video_qa_questions": 7392,
-      "video_groups": 2184,
+      "archive_video_groups": 2184,
+      "video_groups_with_video_qa": 1955,
       "reasoning": {
         "descriptive": 6144,
         "explanatory": 852,
@@ -75,7 +79,8 @@
     },
     "validation": {
       "video_qa_questions": 19140,
-      "video_groups": 5900,
+      "archive_video_groups": 5900,
+      "video_groups_with_video_qa": 5260,
       "reasoning": {
         "descriptive": 15858,
         "explanatory": 2286,
@@ -95,18 +100,45 @@
     "parent object's annotated timestamp intersects the sound segment time interval",
     "at least one additional object track has an annotated timestamp inside that interval"
   ],
-  "candidate_disposition": "SOURCE_AND_SPLIT_CANDIDATE_FOR_BOUNDED_PATH_A_PILOT; no model fitting or quality inference yet",
+  "candidate_disposition": "NO_NEW_SOURCE_ADMISSION; prior Perception Test R2 work and exposure constraints exist; adapter/runtime plumbing only; no QA quality evaluation or model fitting",
   "annotation_adapter_preflight": {
     "adapter": "src/tiny_omni_decision/perception_test_dataset.py",
     "converted_train_video_qa_rows": 7392,
     "converted_validation_video_qa_rows": 19140,
+    "train_video_groups_with_video_qa": 1955,
+    "validation_video_groups_with_video_qa": 5260,
     "train_duplicate_option_rows": 0,
     "validation_duplicate_option_rows": 4,
     "duplicate_option_correct_target_ambiguous_rows": 0,
     "duplicate_options_policy": "uniform A/B/C choice labels preserve answer_id; no source rows excluded or merged",
     "synthetic_media_paths_used_for_schema_preflight": true,
-    "raw_media_presence_or_decoder_verified": false,
+    "raw_media_presence_or_decoder_verified": true,
+    "media_scope": "only train video_9431.mp4; HTTP range extraction; ZIP CRC and local SHA-256 verified; no validation/test media",
+    "frozen_feature_smoke": {
+      "model_id": "google/videoprism-base-f16r288",
+      "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "model_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "upstream_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+      "result": "finite 2048x768 FP32 tokens on CPU",
+      "feature_sha256": "2a13aa09175558291e334c218cef825a9b6ecb118cf348653456dc7a5b35fc4f",
+      "media_sha256": "c6ee88c3dc3b297e98bb784fa21e38e5c9e0127161edaaad2c25cbfb4f98aef2",
+      "media_receipt_sha256": "91a3131c03016956f8f8e662d5d2b6682bdbd0028b397fa91a24b12980b649af",
+      "runtime_receipt_sha256": "3e2ad825c68b8ab8f35c52cc0e01445a9de3e12e22bb8a78430146239fbc823d",
+      "first_forward_seconds": 5.887655000027735,
+      "decode_preprocess_forward_seconds": 13.355162299994845,
+      "peak_working_set_bytes": 4203892736,
+      "gpu_used": false,
+      "quality_evaluation": false
+    },
     "model_fitting_or_quality_inference": false
+  },
+  "prior_r2_history": {
+    "existing_source_screen": "docs/pretrained_reuse/R2_PERCEPTION_TEST_SOURCE_SCREEN_20261021.md",
+    "existing_mcqa_admission_audit": "docs/pretrained_reuse/R2_PERCEPTION_AV_QUESTION_AUDIT_20261013.md",
+    "existing_av_temporal_match": "docs/pretrained_reuse/R2_PERCEPTION_AV_TEMPORAL_MATCH_20261021.md",
+    "existing_source_task_disposition": "docs/pretrained_reuse/R2_PERCEPTION_SOURCE_TASK_DISPOSITION_20261029.md",
+    "cohort_reuse_status": "No prior result cohort was reused for a new QA score; exact media/group exposure for video_9431 across every R2 artifact is UNKNOWN and requires audit before any quality experiment.",
+    "previous_av1_av2_reuse": "closed to further validation-guided tuning per docs/pretrained_reuse/R0_TASK_BATTERY_DRAFT_20261021.md"
   },
   "human_baseline_context": {
     "accuracy": 0.914,
