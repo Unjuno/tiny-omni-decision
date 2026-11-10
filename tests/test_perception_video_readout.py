@@ -1,7 +1,8 @@
 import pytest
-import torch
 
-from tiny_omni_decision.perception_video_readout import PerceptionVideoDecisionReadout
+torch = pytest.importorskip("torch", reason="optional Path A model-evaluation dependency")
+
+from tiny_omni_decision.perception_video_readout import PerceptionVideoDecisionReadout  # noqa: E402
 
 
 def test_video_readout_returns_finite_candidate_logits():

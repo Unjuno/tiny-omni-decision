@@ -1,3 +1,7 @@
+import pytest
+
+pytest.importorskip("torch", reason="optional Path A model-evaluation dependency")
+
 from scripts.train_perception_test_video_readout import (
     selection_improved,
     should_stop,

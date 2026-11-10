@@ -1,3 +1,7 @@
+import pytest
+
+pytest.importorskip("torch", reason="optional Path A model-evaluation dependency")
+
 import numpy as np
 
 from scripts.evaluate_perception_test_video_readout import (
