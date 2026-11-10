@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -22,6 +24,7 @@ MODEL_REVISION = "706cc172d65ebd4dedbee3f9c0183a93df9fa125"
 SOURCE_COMMIT = "29eab1e8a588d1b3ec0cdec7b03a86cca491b74b"
 SOURCE_SHA256 = "d132c97369f25207e380e78c59294fd00b93d2f6aa0fb5c4ded19eff26a5a3cb"
 CHECKPOINT_SHA256 = "24fb71687fa3671b8387cadfbcbab0f72af695692e93cf1ecc82caa888626172"
+PREFLIGHT_SHA256 = "e04504116449b100d9c415d63b5fa0204c550c83cf75ef2b4d6fc523c476c910"
 MODEL_PARAMETERS = 22_153_286
 FRAME_COUNT = 16
 FRAME_SIZE = 224
@@ -71,6 +74,62 @@ def preprocess_frames(frames: np.ndarray) -> np.ndarray:
     if values.shape != (FRAME_COUNT, FRAME_SIZE, FRAME_SIZE, 3) or values.dtype != np.uint8:
         raise ValueError("decoded frames do not match the pinned RGB uint8 input shape")
     return values.astype(np.float32) / 127.5 - 1.0
+
+
+def _receipt_set_hash(rows: list[dict[str, Any]]) -> str:
+    canonical = "\n".join(
+        json.dumps(row, sort_keys=True, separators=(",", ":"))
+        for row in sorted(rows, key=lambda item: item["video_id"])
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _load_preflight_progress(preflight_path: Path, progress_path: Path, split: str):
+    preflight_hash = sha256_file(preflight_path)
+    if preflight_hash != PREFLIGHT_SHA256:
+        raise ValueError("media preflight hash differs from the pinned candidate")
+    preflight = json.loads(preflight_path.read_text(encoding="utf-8"))
+    if (
+        preflight.get("status") != "PASS_METADATA_ONLY_MEDIA_PREFLIGHT"
+        or preflight.get("official_test_archive_opened") is not False
+    ):
+        raise ValueError("media preflight does not attest the fixed train/validation-only scope")
+    expected = preflight.get("splits", {}).get(split, {}).get("members")
+    if not isinstance(expected, list) or not expected:
+        raise ValueError(f"pinned preflight has no {split} media members")
+    expected_by_id = {row["video_id"]: row for row in expected}
+    if len(expected_by_id) != len(expected):
+        raise ValueError("duplicate video IDs in media preflight")
+
+    raw = progress_path.read_bytes()
+    complete_bytes = raw if raw.endswith(b"\n") else raw[: raw.rfind(b"\n") + 1]
+    receipts = [json.loads(line) for line in complete_bytes.splitlines() if line.strip()]
+    all_ids = [row.get("video_id") for row in receipts]
+    if len(all_ids) != len(set(all_ids)):
+        raise ValueError("duplicate IDs in acquisition progress")
+    selected = [row for row in receipts if row.get("split") == split]
+    actual_by_id = {row["video_id"]: row for row in selected}
+    if set(actual_by_id) != set(expected_by_id):
+        raise ValueError(
+            f"{split} media receipts incomplete: {len(actual_by_id)}/{len(expected_by_id)}"
+        )
+    ordered = []
+    for video_id, expected_row in expected_by_id.items():
+        receipt = actual_by_id[video_id]
+        for key in ("split", "member", "expanded_bytes", "compressed_bytes", "crc32"):
+            if receipt.get(key) != expected_row.get(key):
+                raise ValueError(f"{split} progress receipt differs from preflight: {video_id}")
+        if (
+            receipt.get("crc32_verified") is not True
+            or receipt.get("expanded_size_verified") is not True
+        ):
+            raise ValueError(f"{split} progress receipt lacks ZIP/size verification: {video_id}")
+        relative = Path(str(receipt.get("local_relative_path", "")))
+        if relative.is_absolute() or ".." in relative.parts or not relative.parts:
+            raise ValueError(f"unsafe path in acquisition receipt: {video_id}")
+        ordered.append(receipt)
+    ordered.sort(key=lambda row: row["video_id"])
+    return preflight_hash, _receipt_set_hash(ordered), hashlib.sha256(raw).hexdigest(), ordered
 
 
 def _load_model(model_dir: Path, dependency_dir: Path, device_name: str):
@@ -140,7 +199,8 @@ def _forward_feature(torch, model, device, capture, frames: np.ndarray) -> np.nd
 def extract_split(
     *,
     preflight_path: Path,
-    media_manifest_path: Path,
+    media_manifest_path: Path | None = None,
+    acquisition_progress_path: Path | None = None,
     media_root: Path,
     model_dir: Path,
     dependency_dir: Path,
@@ -150,20 +210,45 @@ def extract_split(
 ) -> dict[str, Any]:
     if split not in {"train", "valid"}:
         raise ValueError("only train and public validation splits are supported")
-    for path in (preflight_path, media_manifest_path, media_root, model_dir, dependency_dir):
+    if (media_manifest_path is None) == (acquisition_progress_path is None):
+        raise ValueError("provide exactly one complete media manifest or acquisition progress log")
+    required_paths = [preflight_path, media_root, model_dir, dependency_dir]
+    if media_manifest_path is not None:
+        required_paths.append(media_manifest_path)
+    if acquisition_progress_path is not None:
+        required_paths.append(acquisition_progress_path)
+    for path in required_paths:
         path.resolve(strict=True)
     if output_dir.drive.upper() != "D:":
         raise ValueError("feature outputs must stay on D:")
-    preflight_hash, media_hash, media_rows = _load_fixed_inputs(
-        preflight_path, media_manifest_path, split
-    )
+    if media_manifest_path is not None:
+        preflight_hash, _manifest_hash, media_rows = _load_fixed_inputs(
+            preflight_path, media_manifest_path, split
+        )
+        media_source_kind = "complete_media_manifest"
+        media_source_file_sha256 = sha256_file(media_manifest_path)
+    else:
+        (
+            preflight_hash,
+            source_receipt_hash,
+            media_source_file_sha256,
+            media_rows,
+        ) = _load_preflight_progress(preflight_path, acquisition_progress_path, split)
+        media_source_kind = "verified_acquisition_progress"
+    receipt_set_sha256 = _receipt_set_hash(media_rows)
+    if media_manifest_path is None and source_receipt_hash != receipt_set_sha256:
+        raise ValueError("acquisition progress receipt-set hash mismatch")
     output_dir.mkdir(parents=True, exist_ok=True)
     identity = {
         "schema_version": 1,
         "status": "RUNNING",
         "split": split,
         "preflight_sha256": preflight_hash,
-        "media_manifest_sha256": media_hash,
+        "media_receipt_set_sha256": receipt_set_sha256,
+        "project_code_commit": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=Path(__file__).resolve().parents[1], text=True
+        ).strip(),
+        "extractor_script_sha256": sha256_file(Path(__file__).resolve()),
         "source_commit": SOURCE_COMMIT,
         "source_sha256": SOURCE_SHA256,
         "model_revision": MODEL_REVISION,
@@ -259,6 +344,8 @@ def extract_split(
     report = {
         **identity,
         "status": "COMPLETE",
+        "media_source_kind": media_source_kind,
+        "media_source_file_sha256": media_source_file_sha256,
         "model_parameters": parameters,
         "model_source_sha256": sha256_file(source),
         "checkpoint_bytes": checkpoint.stat().st_size,
@@ -288,7 +375,9 @@ def extract_split(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--preflight", type=Path, required=True)
-    parser.add_argument("--media-manifest", type=Path, required=True)
+    source_group = parser.add_mutually_exclusive_group(required=True)
+    source_group.add_argument("--media-manifest", type=Path)
+    source_group.add_argument("--acquisition-progress", type=Path)
     parser.add_argument("--media-root", type=Path, required=True)
     parser.add_argument("--model-dir", type=Path, required=True)
     parser.add_argument("--dependency-dir", type=Path, required=True)
@@ -299,6 +388,7 @@ def main() -> None:
     report = extract_split(
         preflight_path=args.preflight,
         media_manifest_path=args.media_manifest,
+        acquisition_progress_path=args.acquisition_progress,
         media_root=args.media_root,
         model_dir=args.model_dir,
         dependency_dir=args.dependency_dir,

@@ -74,23 +74,42 @@ count.
 
 1. Keep the publisher's three options and answer index. All choices for a video
    remain in one split.
-2. From the fixed 7,392-row source train split, allocate a seed-17 internal
-   selection subset by **video group** before training. Use it only to select
-   the readout checkpoint by macro NLL, then Brier as a tie-break. The public
-   validation candidate pool is not used for fitting, early stopping, or
-   checkpoint selection.
-3. Freeze the trained checkpoint and all preprocessing before opening the
+2. Encode exactly `Question: {question}\nCandidate answer: {option text}` for
+   each choice using MiniLM masked mean pooling (max length 256). Remove only
+   the publisher's `A:`, `B:`, or `C:` prefix from the choice text before
+   encoding; do not expose choice position to the encoder. Preserve publisher
+   option IDs/order and target index in the Decision data.
+3. The readout is fixed before public-validation evaluation: project each
+   384-D candidate query and each 384-D VideoMAE token into 192 dimensions,
+   apply four-head cross-attention from each candidate to the full 1,568-token
+   video grid, then score `[query, attended, product, absolute difference]`
+   with a shared MLP. It has **444,673 trainable parameters** and contains no
+   option-position embedding. CPU tests verify finite scoring and exact
+   candidate permutation equivariance within numerical tolerance.
+4. From the fixed 7,392-row source train split, sort unique video IDs, permute
+   with NumPy `default_rng(17)`, and allocate `ceil(15% of video groups)` to
+   internal selection. All questions for a video remain together. Train only
+   on the remaining groups. Use seed 17, AdamW (`lr=3e-4`, weight decay
+   `1e-4`), batch size 16 questions, maximum 30 epochs, and evaluate once per
+   epoch. Stop after six epochs without a new minimum selection NLL; treat
+   NLL changes smaller than `1e-5` as ties and prefer lower Brier. Save each
+   epoch's train/selection metrics, the best-selected state, and the final
+   state separately. No temperature fitting or post-hoc calibration is used.
+5. The internal selection subset is used only to choose the readout checkpoint
+   by NLL, then Brier as a tie-break. The public validation candidate pool is
+   not used for fitting, early stopping, or checkpoint selection.
+6. Freeze the trained checkpoint and all preprocessing before opening the
    public-validation candidate labels for the one final comparison.
-4. Compare the same candidate scorer and train/selection schedule under:
+7. Compare the same candidate scorer and train/selection schedule under:
    - correct VideoMAE tokens plus question/option MiniLM features;
    - text-only features with the video memory replaced by a fixed zero tensor;
    - the trained joint reader with a fixed, deterministic, different-video
      donor for each validation video.
-5. A video-only condition is not meaningful for this source because answering
+8. A video-only condition is not meaningful for this source because answering
    the supplied QA requires the question and options. Option-order robustness
    is checked by a fixed permutation and restoring probabilities to publisher
    option IDs.
-6. Do not tune preprocessing, reader width, epochs, or sampling after
+9. Do not tune preprocessing, reader width, epochs, or sampling after
    validation predictions are observed. If the frozen comparison fails, report
    it and design a new task/cohort separately.
 
