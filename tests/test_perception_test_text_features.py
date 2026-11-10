@@ -36,6 +36,10 @@ def test_candidate_prompts_keep_question_and_remove_position_labels():
     ]
 
 
-def test_candidate_prompts_reject_duplicate_choice_text_after_label_removal():
-    with pytest.raises(ValueError, match="unique"):
-        candidate_prompts({"question": "Choose", "options": ["A: same", "B: same", "C: other"]})
+def test_candidate_prompts_preserve_duplicate_choice_text_after_label_removal():
+    prompts = candidate_prompts(
+        {"question": "Choose", "options": ["A: same", "B: same", "C: other"]}
+    )
+
+    assert prompts[0] == prompts[1]
+    assert prompts[2].endswith("Candidate answer: other")

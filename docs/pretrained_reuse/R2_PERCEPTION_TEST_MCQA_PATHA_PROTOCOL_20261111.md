@@ -78,7 +78,9 @@ count.
    each choice using MiniLM masked mean pooling (max length 256). Remove only
    the publisher's `A:`, `B:`, or `C:` prefix from the choice text before
    encoding; do not expose choice position to the encoder. Preserve publisher
-   option IDs/order and target index in the Decision data.
+   option IDs/order and target index in the Decision data. Do not drop rows
+   with repeated option text; keep identical candidate embeddings and report
+   their IDs as a source-data ambiguity diagnostic.
 3. The readout is fixed before public-validation evaluation: project each
    384-D candidate query and each 384-D VideoMAE token into 192 dimensions,
    apply four-head cross-attention from each candidate to the full 1,568-token

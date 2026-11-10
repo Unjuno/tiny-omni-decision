@@ -48,8 +48,6 @@ def candidate_prompts(row: dict[str, Any]) -> list[str]:
     if not isinstance(options, list) or len(options) != 3:
         raise ValueError("exactly three candidates are required")
     candidates = [strip_option_prefix(option) for option in options]
-    if len(set(candidates)) != len(candidates):
-        raise ValueError("candidate text must be unique after removing option labels")
     return [f"Question: {question.strip()}\nCandidate answer: {option}" for option in candidates]
 
 
@@ -179,6 +177,10 @@ def extract_text_features(
             "Question: {question}\nCandidate answer: {option_text_without_A_B_C_prefix}"
         ),
         "option_prefix_removed_before_encoding": True,
+        "rows_with_duplicate_candidate_text_ids": [
+            row["id"] for row in rows if len(set(candidate_prompts(row))) < 3
+        ],
+        "duplicate_candidate_rows_excluded": 0,
         "pooling": "masked mean of last_hidden_state",
         "max_length": MAX_LENGTH,
         "feature_shape": list(features.shape),
