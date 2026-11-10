@@ -30,6 +30,7 @@ ml = [
   "torch>=2.6,<2.7",
   "torchvision>=0.21,<0.22",
   "transformers>=5.6.2,<5.7",
+  "psutil>=5.9,<8",
   "peft>=0.21.2,<0.22",
   "accelerate>=1.10,<2",
   "av>=14,<19",
