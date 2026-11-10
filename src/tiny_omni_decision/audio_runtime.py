@@ -15,6 +15,7 @@ from collections.abc import Sequence
 from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import torch
@@ -113,7 +114,11 @@ class SpeechCommandsMultiQueryRuntime:
         *,
         device: str | torch.device = "cpu",
         audio_cache_entries: int = 64,
+        shared_text_encoder: torch.nn.Module | None = None,
+        shared_text_tokenizer: Any | None = None,
     ) -> None:
+        if (shared_text_encoder is None) != (shared_text_tokenizer is None):
+            raise ValueError("shared text encoder and tokenizer must be provided together")
         if audio_cache_entries < 0:
             raise ValueError("audio cache capacity must be nonnegative")
         self.audio_cache = BoundedFeatureCache(audio_cache_entries) if audio_cache_entries else None
@@ -146,9 +151,15 @@ class SpeechCommandsMultiQueryRuntime:
         self.audio_processor = WhisperFeatureExtractor.from_pretrained(
             audio_dir, local_files_only=True
         )
-        self.text_tokenizer = AutoTokenizer.from_pretrained(text_dir, local_files_only=True)
-        self.text_model = AutoModel.from_pretrained(
-            text_dir, local_files_only=True, dtype=torch.float32
+        self.text_tokenizer = (
+            shared_text_tokenizer
+            if shared_text_tokenizer is not None
+            else AutoTokenizer.from_pretrained(text_dir, local_files_only=True)
+        )
+        self.text_model = (
+            shared_text_encoder
+            if shared_text_encoder is not None
+            else AutoModel.from_pretrained(text_dir, local_files_only=True, dtype=torch.float32)
         ).eval().to(self.device)
         for model in (self.audio_model, self.text_model):
             for parameter in model.parameters():
