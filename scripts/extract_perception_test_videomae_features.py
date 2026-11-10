@@ -124,6 +124,12 @@ def _forward_feature(torch, model, device, capture, frames: np.ndarray) -> np.nd
         raise ValueError("VideoMAE final-block token shape differs from pinned contract")
     if tuple(pooled.shape) != (1, TOKEN_SHAPE[-1]):
         raise ValueError("VideoMAE pooled representation has unexpected shape")
+    torch.testing.assert_close(
+        pooled,
+        model.fc_norm(tokens.mean(1)),
+        rtol=0,
+        atol=0,
+    )
     grid = tokens.reshape((1, *TOKEN_SHAPE)).squeeze(0).float().cpu().numpy()
     pooled_np = pooled.squeeze(0).float().cpu().numpy()
     if not np.isfinite(grid).all() or not np.isfinite(pooled_np).all():

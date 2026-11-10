@@ -115,8 +115,16 @@ experiment can only add a bounded video-plus-text evidence point.
   under a separate D: attempt; do not modify it while active.
 - The VideoPrism candidate extractor has unit coverage but cannot currently
   execute under the active Windows Code Integrity policy.
-- VideoMAE's earlier real-video CUDA runtime and source/license audit passed;
-  a new train-media smoke through the proposed feature cache is still required
-  before full extraction.
+- VideoMAE's earlier real-video CUDA runtime and source/license audit passed.
+  The proposed extractor also passed a new train-only smoke on `video_10001`:
+  16 frames decoded in 1.808s, frozen forward in 0.452s, finite token grid
+  `[8,14,14,384]`, RTX 3080 peak allocated memory 240,685,056 bytes. The media
+  SHA matched its acquisition receipt. The report is
+  `D:\CodexArtifacts\pretrained-reuse-r2\perception-test-videomae-smoke-20261111-attempt-02\smoke-report.json`
+  (SHA-256 `51f4f2d5e30ebdb2a1f6f6cfe5a317608156bd450773c94feca981e917d3a4b8`);
+  its feature shard SHA-256 is
+  `3fe0a89cbd43fa65bd5c978edaf73073ac695864c17a08beddea0c9eb3bb10c6`.
+  This is a runtime smoke only; no question, label, validation, or test data was
+  loaded and no quality metric was computed.
 - No feature cache for this MCQA cohort, readout fit, or quality metric exists
   yet. Do not report this protocol as an evaluation result.
