@@ -273,7 +273,7 @@ def build_savc_pair_rows(
             )
         )
         pair_group = hashlib.sha256(
-            f"avmit-savc-pair-v2\0{split_name}\0{group_material}".encode()
+            f"avmit-savc-pair-v3\0{split_name}\0{group_material}".encode()
         ).hexdigest()
         entries = (
             (first_a, first_b, "same_action"),
@@ -281,9 +281,9 @@ def build_savc_pair_rows(
             (second_a, second_b, "same_action"),
             (second_b, second_a, "same_action"),
             (first_a, second_a, "different_action"),
-            (second_a, first_a, "different_action"),
+            (second_a, first_b, "different_action"),
             (first_b, second_b, "different_action"),
-            (second_b, first_b, "different_action"),
+            (second_b, first_a, "different_action"),
         )
         for audio_source, video_source, target in entries:
             output.append(

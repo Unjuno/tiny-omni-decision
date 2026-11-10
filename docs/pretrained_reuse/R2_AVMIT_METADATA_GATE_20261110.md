@@ -147,6 +147,19 @@ on validation before considering this a useful fusion result. The selected
 Path A encoders are not the feature producers in AVMIT, so any result remains a
 task/fusion feasibility diagnostic and cannot be called a product model result.
 
+## Pre-fit correction: pair-v3
+
+During the training-input audit, pair-v2 was found to repeat two cross-label
+edges in reverse direction instead of covering all four cross-label clip
+combinations. No fit, calibration selection, or validation inference used
+pair-v2. Its manifests and hashes above are preserved as the historical
+attempt. Pair-v3 corrects the edge construction, is tested for complete
+cross-label coverage, and uses exactly the same source clips in each split.
+Current experiment inputs are the `pairs-v3/` manifests and the separate
+`features-pairs-v3/` cache view; the original `features-v1/` bytes and report
+were not modified. See the protocol correction section for current hashes and
+the exact changes.
+
 ## Local feature-reader implementation status — 2026-11-10
 
 Added a pure-Python TFRecord/SequenceExample reader and a cache builder that

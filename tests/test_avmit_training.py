@@ -22,9 +22,9 @@ def _group(index: int) -> PairGroup:
         (2, 3, "same_action"),
         (3, 2, "same_action"),
         (0, 2, "different_action"),
-        (2, 0, "different_action"),
+        (2, 1, "different_action"),
         (1, 3, "different_action"),
-        (3, 1, "different_action"),
+        (3, 0, "different_action"),
     )
     rows = tuple(
         {
@@ -53,6 +53,20 @@ def test_load_pair_groups_and_verify_unimodal_balance(tmp_path):
         "rows": 8,
         "unimodal_accuracy": 0.5,
     }
+
+
+def test_unimodal_verifier_rejects_missing_cross_class_edges():
+    group = _group(1)
+    rows = list(group.rows)
+    rows[5] = {**rows[5], "video_asset_id_sha256": rows[4]["video_asset_id_sha256"]}
+    malformed = PairGroup(group.group_id, tuple(rows))
+
+    try:
+        verify_unimodal_balance([malformed])
+    except ValueError as error:
+        assert "all four cross-label" in str(error)
+    else:
+        raise AssertionError("incomplete cross-label edge set was accepted")
 
 
 def test_feature_store_reads_exact_indexed_temporal_slices(tmp_path):

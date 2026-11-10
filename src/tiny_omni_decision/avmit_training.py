@@ -193,6 +193,28 @@ def load_pair_groups(pair_manifest: Path) -> list[PairGroup]:
 
 def verify_unimodal_balance(groups: list[PairGroup]) -> dict[str, int]:
     for group in groups:
+        positive_edges = {
+            frozenset((row["audio_asset_id_sha256"], row["video_asset_id_sha256"]))
+            for row in group.rows
+            if row["target"] == "same_action"
+        }
+        negative_edges = {
+            frozenset((row["audio_asset_id_sha256"], row["video_asset_id_sha256"]))
+            for row in group.rows
+            if row["target"] == "different_action"
+        }
+        if len(positive_edges) != 2 or any(len(edge) != 2 for edge in positive_edges):
+            raise ValueError("each AVMIT group must have two distinct positive source pairs")
+        positive_pairs = [set(edge) for edge in positive_edges]
+        if positive_pairs[0] & positive_pairs[1]:
+            raise ValueError("positive source pairs must partition four distinct clips")
+        expected_negative_edges = {
+            frozenset((first, second))
+            for first in positive_pairs[0]
+            for second in positive_pairs[1]
+        }
+        if len(negative_edges) != 4 or negative_edges != expected_negative_edges:
+            raise ValueError("each AVMIT group must contain all four cross-label combinations")
         for key in ("audio_asset_id_sha256", "video_asset_id_sha256"):
             counts: dict[str, dict[str, int]] = {}
             for row in group.rows:

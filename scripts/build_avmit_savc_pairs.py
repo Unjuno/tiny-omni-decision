@@ -38,7 +38,8 @@ def main() -> None:
         "unpaired_count": len(leftovers),
         "grouping": (
             "four distinct source videos per pair group: two clips from each of two labels; "
-            "same-label positives are cross-clip and no audio/video row uses the same clip"
+            "same-label positives are cross-clip; all four cross-label combinations appear "
+            "once and no audio/video row uses the same clip"
         ),
         "unimodal_balance": (
             "each source audio and source video appears once under each target within "

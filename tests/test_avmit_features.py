@@ -87,9 +87,9 @@ def _write_pair_manifests(directory):
             (2, 3, "same_action"),
             (3, 2, "same_action"),
             (0, 2, "different_action"),
-            (2, 0, "different_action"),
+            (2, 1, "different_action"),
             (1, 3, "different_action"),
-            (3, 1, "different_action"),
+            (3, 0, "different_action"),
         )
         for audio, video, target in entries:
             rows.append(

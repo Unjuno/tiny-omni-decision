@@ -33,7 +33,7 @@ prevents a single audio or video feature from identifying the target and
 prevents same-record audio/video synchronization from defining positives.
 The independent uncertainty unit is the eight-row pair group.
 
-The only included manifests are `pairs-v2/{train,calibration,validation}.jsonl`
+The only included manifests are `pairs-v3/{train,calibration,validation}.jsonl`
 under the external attempt directory. The earlier same-clip-positive `pairs/`
 version is retired and must not be read for fitting or evaluation. The sealed
 split is not an input to any command in this protocol.
@@ -129,3 +129,40 @@ general audio/video reasoning, temporal causality, raw-media runtime quality,
 Path A compatibility, four-modality performance, or product deployment fit.
 A null result is retained as-is and does not prove a universal model-family
 limit. No sealed-audit or published test result may be reported.
+
+## Pre-fit pair-construction correction — 2026-11-10
+
+The initial implementation generated `pairs-v2` with only two distinct
+cross-label source combinations per group (each duplicated in reverse), while
+the protocol required all four cross-label combinations. This was found during
+the pre-training audit. A prior v2 smoke used eight **training** groups for
+forward/backward, but performed no optimizer update, calibration selection, or
+development-validation inference. Full fitting had not begun. The feature
+cache had been decoded against v2; v3 was verified to have identical source
+asset sets, so no features needed re-extraction. The v2 manifests, cache and
+smoke report are retained unchanged as history.
+
+The corrected immutable manifests are `split-v1/pairs-v3/` outside Git. The
+four negatives now form a cycle through every cross-label edge exactly once;
+the four positive rows still contain the two same-label edges in both
+directions. All four clips remain represented once under each target as audio
+and once under each target as video. Tests check the full cross-product edge
+set, and the training input validator independently enforces it.
+
+| Split | Groups | Rows | Unique clips | pairs-v3 SHA-256 |
+|---|---:|---:|---:|---|
+| Train | 9,552 | 76,416 | 38,208 | `d003a693668c34d4da31d242295511e8836945e61780810df6db23ded88488b7` |
+| Calibration | 1,317 | 10,536 | 5,268 | `c0f857319413121764c9fb2f5eb1458bb5ce73027a049a8c146df90160dd36ed` |
+| Development validation | 1,374 | 10,992 | 5,496 | `e473fd1c9c5527a6ea949440eb991732fe996d3dd04ac39541d905288b7617eb` |
+
+The pair-v3 asset identity sets exactly match the corresponding v2 and feature
+cache identities in all three allowed splits. No features were re-extracted.
+For the new run, `features-pairs-v3/` is a separate cache view containing
+hardlinks to the already verified v1 feature arrays/indexes and a new report
+bound to the v3 pair hashes. The original `features-v1/cache-report.json`
+SHA-256 remains `4b88888b09676c854a6272edb136ef91b3d2240468a0a596a80f6b203d6f8e7f`;
+the new report SHA-256 is
+`71533d86b62a7eedb45586f90684ce96a7bfa0e5b9875822e2bb8a347d3f179b`.
+The new cache report continues to record zero sealed payloads and zero raw
+media opened. All subsequent smoke, fit, and validation commands must point
+only to `pairs-v3/` and `features-pairs-v3/`.

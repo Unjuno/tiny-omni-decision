@@ -137,17 +137,40 @@ def test_savc_pairs_are_balanced_and_each_source_is_grouped_once():
         assert len(group) == 8
         audio_labels = {}
         video_labels = {}
+        positive_edges = set()
+        negative_edges = set()
         for row in group:
             assert row["audio_asset_id_sha256"] != row["video_asset_id_sha256"]
+            edge = frozenset((row["audio_asset_id_sha256"], row["video_asset_id_sha256"]))
             labels_match = (
                 source_labels[row["audio_asset_id_sha256"]]
                 == source_labels[row["video_asset_id_sha256"]]
             )
             assert labels_match == (row["target"] == "same_action")
+            (positive_edges if labels_match else negative_edges).add(edge)
             audio_labels.setdefault(row["audio_asset_id_sha256"], set()).add(row["target"])
             video_labels.setdefault(row["video_asset_id_sha256"], set()).add(row["target"])
             used_sources.add(row["audio_asset_id_sha256"])
             used_sources.add(row["video_asset_id_sha256"])
+        label_groups = {}
+        group_assets = {
+            asset
+            for row in group
+            for asset in (row["audio_asset_id_sha256"], row["video_asset_id_sha256"])
+        }
+        for asset in group_assets:
+            label_groups.setdefault(source_labels[asset], set()).add(asset)
+        first_label_assets, second_label_assets = label_groups.values()
+        expected_negative_edges = {
+            frozenset((first, second))
+            for first in first_label_assets
+            for second in second_label_assets
+        }
+        assert positive_edges == {
+            frozenset(group_assets) for group_assets in label_groups.values()
+        }
+        assert negative_edges == expected_negative_edges
+        assert len(negative_edges) == 4
         assert all(
             labels == {"same_action", "different_action"} for labels in audio_labels.values()
         )
