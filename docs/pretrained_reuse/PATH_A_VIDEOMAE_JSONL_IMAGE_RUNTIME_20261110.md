@@ -82,13 +82,14 @@ output directory. The original result remains unchanged.
 
 ## Checks and limits
 
-Focused CPU tests passed: `12 passed` across JSONL dispatch, VideoMAE runtime
-contracts, and frozen-feature extraction. Ruff check/format and CLI help pass
-for changed files (the existing `cli.py` formatting baseline was kept intact).
-Full pytest collection fails before test execution because the existing
-`tests/test_freeze_videomae_clevr4_inputs.py` imports the untracked/missing
-`scripts.audit_clevr4_content_overlap` module. The GPU smoke above is a
-one-example train-split integration parity check, not a benchmark.
+The first full CI attempt found that the Clevr-4 input-freeze script and its
+test imported an audit helper absent from this branch. The script now uses the
+package's existing SHA-256 helper and contains its small JSONL reader locally.
+After the fix, the complete CPU suite passed (`2,887 passed, 11 skipped`),
+`ruff check .` passed, changed-file Ruff format checks passed, both dataset
+catalogs validated, and CLI help exposed the explicit VideoMAE options. The
+GPU smoke above is a one-example train-split integration parity check, not a
+benchmark.
 
 The existing Clevr-4 frozen-feature experiment reported 80.01% macro accuracy
 (count 43.43%, texture 79.04%, color 98.70%, shape 98.89%). Those historical

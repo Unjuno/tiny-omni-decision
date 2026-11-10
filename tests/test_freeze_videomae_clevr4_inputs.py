@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from scripts import freeze_videomae_clevr4_inputs as freeze_module
-from scripts.audit_clevr4_content_overlap import sha256_file
+from tiny_omni_decision.dataset import sha256_file
 
 
 def _write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:

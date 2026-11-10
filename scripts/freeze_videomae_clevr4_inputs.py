@@ -9,11 +9,16 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from scripts.audit_clevr4_content_overlap import _load_jsonl, sha256_file
+from tiny_omni_decision.dataset import sha256_file
 
 EXPECTED_TRAIN_COUNT = 72_010
 EXPECTED_SELECTOR_COUNT = 1_000
 EXPECTED_REPORT_COUNT = 5_296
+
+
+def _load_jsonl(path: Path) -> list[dict[str, Any]]:
+    with path.open(encoding="utf-8") as stream:
+        return [json.loads(line) for line in stream if line.strip()]
 
 
 def _order_hash(rows: list[dict[str, Any]]) -> str:
