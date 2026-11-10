@@ -1,3 +1,12 @@
+**2026-11-10 R2 RoboMNIST readout-capacity CV:** A fixed seed-17, five-fold
+train-only comparison selected an 18,432-parameter rank-8 AV readout over the
+73,728-parameter rank-32 reference by the preregistered OOF NLL/Accuracy rule.
+On the already-observed 2,000-row development validation, rank 8 lowered NLL
+but lost 3.60 Accuracy points to rank 32 (paired 95% interval -6.30 to -1.00
+points); Brier/ECE differences were uncertain. Rank 8 was not promoted, and no
+further tuning on these IDs is planned. See
+[`R2_ROBOMNIST_CAPACITY_CV_20261110.md`](docs/pretrained_reuse/R2_ROBOMNIST_CAPACITY_CV_20261110.md).
+
 **2026-11-04 R2 CREMA-D source-code follow-up:** Pinned official code confirms same-filename VoiceVote/FaceVote/MultiModalVote labels, making a common AV target structurally possible. Access registration and content-rights/consent scope remain unresolved; no annotations/media were read and no task was admitted. See [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
 **2026-11-04 R2 RoboMNIST residual-group screen:** The pinned split manifest selects 1,780 groups from a prior non-sealed eligible pool of 1,790 (780 train / 1,000 already evaluated validation), leaving only 10 unselected eligible groups; the other 345 of the 2,135 total were outside the pool and were not inspected. Ten groups cannot satisfy the 1,000-group validation gate. No new fit or validation replay is justified. See [residual screen](docs/pretrained_reuse/R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
