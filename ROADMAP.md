@@ -1,3 +1,19 @@
+**2026-11-10 R2 TallyQA Visual Genome development probe:** Pinned TallyQA
+`46cdc649ec79c3dcc2720ff227ad07d7ee51da6f`; inspected only `train.json`,
+selected 3,902 AMT questions / 3,494 Visual Genome images, and froze
+image/question-grouped train/validation splits. All selected images passed
+JPEG/hash checks; source images have zero train/validation byte overlap. On a
+project-created four-choice counting adaptation, frozen VideoPrism + MiniLM
+with a 196,865-parameter readout reached 55.93% validation Accuracy / 1.0925
+NLL; the question-only control reached 56.30% / 1.1226. Image zeroing/shuffling
+reduced joint-checkpoint accuracy to 50.56% / 50.19%, while image-group paired
+bootstrap intervals excluded zero. Train/validation curves show overfitting
+after joint epoch 4. This task-specific probe is far below product aspirations,
+does not establish broad image/video quality, and is not a text-free image or
+M-2 fusion gate. The frozen unquantized parameter total is 131,951,873; the
+package-size target is not met. Official TallyQA test and sealed audit remain
+unopened. See [probe report](docs/pretrained_reuse/R2_TALLYQA_VG_AMT_SOURCE_SCREEN_20261110.md).
+
 **2026-11-04 R2 CREMA-D source-code follow-up:** Pinned official code confirms same-filename VoiceVote/FaceVote/MultiModalVote labels, making a common AV target structurally possible. Access registration and content-rights/consent scope remain unresolved; no annotations/media were read and no task was admitted. See [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
 **2026-11-04 R2 RoboMNIST residual-group screen:** The pinned split manifest selects 1,780 groups from a prior non-sealed eligible pool of 1,790 (780 train / 1,000 already evaluated validation), leaving only 10 unselected eligible groups; the other 345 of the 2,135 total were outside the pool and were not inspected. Ten groups cannot satisfy the 1,000-group validation gate. No new fit or validation replay is justified. See [residual screen](docs/pretrained_reuse/R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md).
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)

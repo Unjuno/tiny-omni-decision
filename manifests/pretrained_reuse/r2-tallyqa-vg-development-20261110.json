@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "experiment_id": "path-a-tallyqa-vg-videoprism-seed17",
+  "status": "development_probe_complete_not_product_admitted",
+  "source": {
+    "repository": "https://github.com/manoja328/TallyQA_dataset",
+    "commit": "46cdc649ec79c3dcc2720ff227ad07d7ee51da6f",
+    "archive_sha256": "e805199fa25c91d2f9df964920c6c36ce8d6cb941c970176f38a92f971bab5ea",
+    "screen_sha256": "110fbbe4983106dceb90e82d5454aa40dd3eaebd6151fae03c8f6e6af40a516a",
+    "acquisition_sha256": "13707d624dcd3d9ee814b85436d5346f230845a095a5b8067bb15b396976f952",
+    "images": 3494,
+    "bytes": 495530887,
+    "unique_hashes": 3494,
+    "cross_split_hash_overlap": 0,
+    "license": "annotations/code Apache-2.0; Visual Genome publisher CC BY 4.0"
+  },
+  "split": {
+    "seed": 17,
+    "train_questions": 3101,
+    "validation_questions": 801,
+    "train_images": 2795,
+    "validation_images": 699,
+    "grouping": "image plus normalized question connected components",
+    "image_overlap": 0,
+    "normalized_question_overlap": 0,
+    "official_test_opened": false,
+    "sealed_audit_opened": false,
+    "historical_asset_overlap_audit": "not exhaustive"
+  },
+  "task": {
+    "name": "question-conditioned natural-image count selection",
+    "option_transform": "correct count plus three nearest distinct counts, deterministic option order",
+    "adapted_from_open_response": true,
+    "official_accuracy_comparable": false
+  },
+  "config": {
+    "path": "configs/pretrained_reuse/path_a_tallyqa_vg_videoprism_seed17.yaml",
+    "sha256": "60857ddebb2ab0d741d46f9e08b077160069d536c80dbd862654ef5b1c481164",
+    "seed": 17,
+    "epochs": 16,
+    "optimizer": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "checkpoint_selection": "minimum independent validation NLL"
+  },
+  "parameters_prequant": {
+    "video_prism_frozen": 114365184,
+    "minilm_frozen": 17389824,
+    "joint_readout_trainable": 196865,
+    "question_only_readout_trainable": 98561,
+    "joint_total_prequant": 131951873
+  },
+  "validation_metrics": {
+    "joint_image_question": {
+      "count": 801,
+      "accuracy": 0.5593008995056152,
+      "nll": 1.0924692153930664,
+      "brier": 0.591468334197998,
+      "ece_15_bins": 0.038653154126118486
+    },
+    "question_only": {
+      "count": 801,
+      "accuracy": 0.5630462169647217,
+      "nll": 1.122581958770752,
+      "brier": 0.609511137008667,
+      "ece_15_bins": 0.05773758665006259
+    },
+    "joint_checkpoint_image_zero": {
+      "count": 801,
+      "accuracy": 0.5056179761886597,
+      "nll": 1.204176425933838,
+      "brier": 0.6525991559028625,
+      "ece_15_bins": 0.11704329697975656
+    },
+    "joint_checkpoint_seed17_shuffled_image": {
+      "count": 801,
+      "accuracy": 0.5018726587295532,
+      "nll": 1.2166391611099243,
+      "brier": 0.6515437960624695,
+      "ece_15_bins": 0.0725473292385892
+    }
+  },
+  "paired_image_group_bootstrap": {
+    "unit": "validation image_id cluster with all questions retained",
+    "seed": 17,
+    "replicates": 2000,
+    "selection_and_reuse_note": "Validation selected checkpoints and is reused for inference comparisons; intervals are descriptive, not independent confirmatory inference.",
+    "comparisons": {
+      "question_only": {
+        "accuracy_delta_95_percentile_interval": [
+          -0.021739826309636567,
+          0.028972768479331012
+        ],
+        "nll_delta_95_percentile_interval": [
+          0.002066469192504883,
+          0.05724943876266479
+        ],
+        "delta_definition": "comparison minus joint image+question baseline"
+      },
+      "image_zero": {
+        "accuracy_delta_95_percentile_interval": [
+          -0.08228401898734182,
+          -0.02664638132594987
+        ],
+        "nll_delta_95_percentile_interval": [
+          0.06914173662662507,
+          0.15029732882976532
+        ],
+        "delta_definition": "comparison minus joint image+question baseline"
+      },
+      "image_shuffled": {
+        "accuracy_delta_95_percentile_interval": [
+          -0.08679385739032724,
+          -0.02958676390341845
+        ],
+        "nll_delta_95_percentile_interval": [
+          0.08259378969669343,
+          0.16793923377990722
+        ],
+        "delta_definition": "comparison minus joint image+question baseline"
+      }
+    }
+  },
+  "learning_curves": {
+    "joint": [
+      {
+        "epoch": 1,
+        "train_accuracy": 0.49338921904563904,
+        "train_nll": 1.1345202922821045,
+        "validation_accuracy": 0.483146071434021,
+        "validation_nll": 1.170013427734375
+      },
+      {
+        "epoch": 2,
+        "train_accuracy": 0.5714285969734192,
+        "train_nll": 1.036087989807129,
+        "validation_accuracy": 0.516853928565979,
+        "validation_nll": 1.1436635255813599
+      },
+      {
+        "epoch": 3,
+        "train_accuracy": 0.6149629354476929,
+        "train_nll": 0.9494374394416809,
+        "validation_accuracy": 0.5493133664131165,
+        "validation_nll": 1.0952837467193604
+      },
+      {
+        "epoch": 4,
+        "train_accuracy": 0.6256046295166016,
+        "train_nll": 0.9093747138977051,
+        "validation_accuracy": 0.5593008995056152,
+        "validation_nll": 1.0924692153930664
+      },
+      {
+        "epoch": 5,
+        "train_accuracy": 0.6175427436828613,
+        "train_nll": 0.9104129672050476,
+        "validation_accuracy": 0.5468164682388306,
+        "validation_nll": 1.1439117193222046
+      },
+      {
+        "epoch": 6,
+        "train_accuracy": 0.6378587484359741,
+        "train_nll": 0.853174090385437,
+        "validation_accuracy": 0.5518102645874023,
+        "validation_nll": 1.1180049180984497
+      },
+      {
+        "epoch": 7,
+        "train_accuracy": 0.6472105979919434,
+        "train_nll": 0.8279365301132202,
+        "validation_accuracy": 0.5543071031570435,
+        "validation_nll": 1.1257123947143555
+      },
+      {
+        "epoch": 8,
+        "train_accuracy": 0.6488229632377625,
+        "train_nll": 0.8203265070915222,
+        "validation_accuracy": 0.5530586838722229,
+        "validation_nll": 1.17137610912323
+      },
+      {
+        "epoch": 9,
+        "train_accuracy": 0.6726862192153931,
+        "train_nll": 0.7762158513069153,
+        "validation_accuracy": 0.54556804895401,
+        "validation_nll": 1.1445645093917847
+      },
+      {
+        "epoch": 10,
+        "train_accuracy": 0.687842607498169,
+        "train_nll": 0.7548754215240479,
+        "validation_accuracy": 0.5330836176872253,
+        "validation_nll": 1.1595232486724854
+      },
+      {
+        "epoch": 11,
+        "train_accuracy": 0.7036439776420593,
+        "train_nll": 0.7171090245246887,
+        "validation_accuracy": 0.5293383002281189,
+        "validation_nll": 1.206234335899353
+      },
+      {
+        "epoch": 12,
+        "train_accuracy": 0.7046114206314087,
+        "train_nll": 0.7032533288002014,
+        "validation_accuracy": 0.5543071031570435,
+        "validation_nll": 1.2308176755905151
+      },
+      {
+        "epoch": 13,
+        "train_accuracy": 0.7449209690093994,
+        "train_nll": 0.6622329950332642,
+        "validation_accuracy": 0.516853928565979,
+        "validation_nll": 1.2115819454193115
+      },
+      {
+        "epoch": 14,
+        "train_accuracy": 0.7481457591056824,
+        "train_nll": 0.6644035577774048,
+        "validation_accuracy": 0.45443195104599,
+        "validation_nll": 1.257974624633789
+      },
+      {
+        "epoch": 15,
+        "train_accuracy": 0.7581425309181213,
+        "train_nll": 0.6012844443321228,
+        "validation_accuracy": 0.5243445634841919,
+        "validation_nll": 1.2700976133346558
+      },
+      {
+        "epoch": 16,
+        "train_accuracy": 0.7645920515060425,
+        "train_nll": 0.5846346616744995,
+        "validation_accuracy": 0.5280898809432983,
+        "validation_nll": 1.3206515312194824
+      }
+    ],
+    "question_only": [
+      {
+        "epoch": 1,
+        "train_accuracy": 0.5175749659538269,
+        "train_nll": 1.1352957487106323,
+        "validation_accuracy": 0.483146071434021,
+        "validation_nll": 1.1753345727920532
+      },
+      {
+        "epoch": 2,
+        "train_accuracy": 0.5785230398178101,
+        "train_nll": 1.0462273359298706,
+        "validation_accuracy": 0.5380774140357971,
+        "validation_nll": 1.135388731956482
+      },
+      {
+        "epoch": 3,
+        "train_accuracy": 0.5933569669723511,
+        "train_nll": 1.0108656883239746,
+        "validation_accuracy": 0.5630462169647217,
+        "validation_nll": 1.122581958770752
+      },
+      {
+        "epoch": 4,
+        "train_accuracy": 0.598516583442688,
+        "train_nll": 0.9918022155761719,
+        "validation_accuracy": 0.5343320965766907,
+        "validation_nll": 1.123429298400879
+      },
+      {
+        "epoch": 5,
+        "train_accuracy": 0.6062560677528381,
+        "train_nll": 0.9863314032554626,
+        "validation_accuracy": 0.5418227314949036,
+        "validation_nll": 1.131984829902649
+      },
+      {
+        "epoch": 6,
+        "train_accuracy": 0.6127055883407593,
+        "train_nll": 0.9682984352111816,
+        "validation_accuracy": 0.5380774140357971,
+        "validation_nll": 1.123142123222351
+      },
+      {
+        "epoch": 7,
+        "train_accuracy": 0.6104482412338257,
+        "train_nll": 0.9598969221115112,
+        "validation_accuracy": 0.5430711507797241,
+        "validation_nll": 1.1338073015213013
+      },
+      {
+        "epoch": 8,
+        "train_accuracy": 0.6178652048110962,
+        "train_nll": 0.9469584226608276,
+        "validation_accuracy": 0.5405742526054382,
+        "validation_nll": 1.126649260520935
+      },
+      {
+        "epoch": 9,
+        "train_accuracy": 0.623347282409668,
+        "train_nll": 0.9400708675384521,
+        "validation_accuracy": 0.5493133664131165,
+        "validation_nll": 1.1439450979232788
+      },
+      {
+        "epoch": 10,
+        "train_accuracy": 0.6149629354476929,
+        "train_nll": 0.9423317313194275,
+        "validation_accuracy": 0.5430711507797241,
+        "validation_nll": 1.1562150716781616
+      },
+      {
+        "epoch": 11,
+        "train_accuracy": 0.6230248212814331,
+        "train_nll": 0.9172182083129883,
+        "validation_accuracy": 0.521847665309906,
+        "validation_nll": 1.1377345323562622
+      },
+      {
+        "epoch": 12,
+        "train_accuracy": 0.6310867667198181,
+        "train_nll": 0.9082480072975159,
+        "validation_accuracy": 0.5368289351463318,
+        "validation_nll": 1.1502019166946411
+      },
+      {
+        "epoch": 13,
+        "train_accuracy": 0.6330215930938721,
+        "train_nll": 0.898394763469696,
+        "validation_accuracy": 0.5181023478507996,
+        "validation_nll": 1.1445481777191162
+      },
+      {
+        "epoch": 14,
+        "train_accuracy": 0.6388261914253235,
+        "train_nll": 0.8903215527534485,
+        "validation_accuracy": 0.5243445634841919,
+        "validation_nll": 1.1456260681152344
+      },
+      {
+        "epoch": 15,
+        "train_accuracy": 0.6417284607887268,
+        "train_nll": 0.8747580051422119,
+        "validation_accuracy": 0.5318351984024048,
+        "validation_nll": 1.1570135354995728
+      },
+      {
+        "epoch": 16,
+        "train_accuracy": 0.6488229632377625,
+        "train_nll": 0.8633078336715698,
+        "validation_accuracy": 0.5143570303916931,
+        "validation_nll": 1.146562099456787
+      }
+    ]
+  },
+  "selected_epochs": {
+    "joint": 4,
+    "question_only": 3
+  },
+  "fit_seconds": {
+    "joint": 3.678863899956923,
+    "question_only": 3.701344200002495
+  },
+  "feature_extract_seconds": 3582.7803607999813,
+  "feature_extract_device": [
+    "TFRT_CPU_0"
+  ],
+  "runtime": {
+    "python": "3.11.16 (main, Sep  1 2026, 14:15:24) [MSC v.1944 64 bit (AMD64)]",
+    "jax": "0.6.2",
+    "tensorflow": "2.18.1",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.19.0",
+    "numpy": "2.4.6"
+  },
+  "peak_gpu_bytes_readout_fit": 22945280,
+  "text_encoder_gpu_peak": "not separately sampled",
+  "compute_cost_usd": 0,
+  "artifacts": {
+    "root": "D:\\CodexArtifacts\\pretrained-reuse-r2\\tallyqa-vg-source-20261110-attempt-01",
+    "task_manifest_sha256": "59c1c03edf17a8da6c870d4827d033af58759c8300f953b60cb0abbff98f8a45",
+    "feature_cache_sha256": "ddd738a362d7b31762c676dc178fed0183ddce8052ffaac4bbc93f57ef2753a6",
+    "feature_report_sha256": "aa018cfcac4e714d26d43d7c7810193555dee7ebc02d848a6fa619bfe1e1df6d",
+    "joint_readout_sha256": "6a1ce691626d47a45ddf0a92e8c43c38e249de826c5f81b64a989e44ad85bb1b",
+    "question_only_readout_sha256": "6c5773aaa10c133907a9592e6298ab7e8a31e4f44abd0904f7b7ba61894a97f9",
+    "complete_result_sha256": "9e1d88a83e35ef1455221234ac90296e453ae298af34a92f0501391c77c61e1f"
+  },
+  "attempt_log": [
+    {
+      "id": "01",
+      "status": "invalid_output_recording",
+      "reason": "post-fit finite-metric validator did not accept list-valued ECE-bin counts; checkpoint saved, result omitted."
+    },
+    {
+      "id": "02",
+      "status": "invalid_for_selection",
+      "reason": "selection used training inputs due to missing validation argument; preserved and excluded from quality evidence."
+    },
+    {
+      "id": "03",
+      "status": "valid",
+      "reason": "validation-only selector, finite metrics, saved checkpoint reload equivalence."
+    }
+  ],
+  "limitations": [
+    "single task and seed",
+    "repeated development validation use",
+    "four-choice adaptation differs from official open-response task",
+    "no sealed audit or official test",
+    "no general image/video or multimodal claim",
+    "global historical media/pretraining overlap not exhaustively checked"
+  ],
+  "source_commit": "e07e049ff4387484fb754e0fff963631f3cc7c85",
+  "code_sha256_at_finalization": {
+    "scripts/screen_tallyqa_vg_train.py": "bc239bb02bf83b1fbe12a46160136e67a3b00bca466d18afe4b1d6cbe96d717b",
+    "scripts/acquire_tallyqa_vg_images.py": "eab66bc925a31a6d86e23004792504f9e284f53d748ec25de28248739b745464",
+    "scripts/prepare_tallyqa_vg_task.py": "a7255ae1a9ca0874de5ce08eb96891a560885aa457ce2ccceb1c3e99bad2ceb3",
+    "scripts/extract_tallyqa_videoprism_features.py": "dc9a13a9a5e2230758d98823917c1ecc1979980bcd9689e14bc68abb2d26b074",
+    "scripts/train_tallyqa_vg_readout.py": "2f3088cf7f107e02a5a4371fab9a410726095db4940faae1775758a8247e74c6",
+    "configs/pretrained_reuse/path_a_tallyqa_vg_videoprism_seed17.yaml": "60857ddebb2ab0d741d46f9e08b077160069d536c80dbd862654ef5b1c481164",
+    "tests\\test_tallyqa_readout_controls.py": "3a36cd04c27bff8c0b744bb3b6c00e1e4c2e72dedce5ab2985bb451189cf6a41"
+  },
+  "verification": {
+    "ruff": "pass",
+    "pytest": "2898 passed, 2 skipped",
+    "manifest_catalog_validation": "pass",
+    "full_test_environment": "PYTHONPATH=src;."
+  },
+  "timing_jst": {
+    "feature_extraction_start": "2026-11-10 19:09:14",
+    "feature_extraction_end": "2026-11-10 20:08:58",
+    "valid_result_written": "2026-11-10 20:12:28",
+    "image_download_start": "unknown",
+    "minilm_embedding_duration": "not separately timed"
+  }
+}
