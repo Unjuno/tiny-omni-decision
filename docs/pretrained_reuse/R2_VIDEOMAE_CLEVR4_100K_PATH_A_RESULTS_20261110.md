@@ -144,8 +144,10 @@ legacy artifact, or sealed audit was changed or loaded.
 
 Path A proves a pinned frozen-feature to JSON-option-scoring path runs at this
 scale, but it does not pass a useful all-task quality gate. Preserve this result
-as a baseline. Before broadening to more sources or adding a fusion module,
-inspect count errors and feature separability on the existing frozen selector
-predictions; any follow-up must use a newly frozen protocol and must not tune
-against the one-time reporting pool. The overall four-modality product goal
-remains unmet.
+as a baseline. The fixed, train-only count-feature separability diagnostic is
+recorded in
+[`R2_VIDEOMAE_CLEVR4_COUNT_FEATURE_DIAGNOSTIC_20261110.md`](R2_VIDEOMAE_CLEVR4_COUNT_FEATURE_DIAGNOSTIC_20261110.md);
+it found weak linear count readout, especially for intermediate counts, and
+does not isolate a backbone or task ceiling. The one-time reporting pool was
+not reopened. Do not retune this image experiment on the exposed selector or
+reporting examples. The overall four-modality product goal remains unmet.
