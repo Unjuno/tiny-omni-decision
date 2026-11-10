@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import gc
 import json
 import os
 import sys
@@ -14,6 +13,7 @@ from typing import Any
 
 import psutil
 import torch
+from transformers import AutoModel, AutoTokenizer
 
 from tiny_omni_decision.audio_runtime import (
     AUDIO_MODEL_REVISION,
@@ -63,6 +63,50 @@ def _unique_parameters(modules: list[torch.nn.Module]) -> int:
     return sum(values.values())
 
 
+def _build_task_runtimes(
+    assembly: Path, *, device: str, audio_cache_entries: int
+) -> tuple[
+    SpeechCommandsMultiQueryRuntime, TypedTextDecisionRuntime, ClevrerBinaryVideoFeatureRuntime
+]:
+    """Load MiniLM once and inject it into the Torch task runtimes."""
+    components = assembly / "components"
+    audio_root = components / "audio"
+    text_root = components / "text"
+    video_root = components / "video"
+    model_root = audio_root / "models"
+    text_model_dir = model_root / "text-minilm-en"
+    shared_tokenizer = AutoTokenizer.from_pretrained(text_model_dir, local_files_only=True)
+    shared_encoder = AutoModel.from_pretrained(
+        text_model_dir, local_files_only=True, dtype=torch.float32
+    ).eval().to(device)
+    for parameter in shared_encoder.parameters():
+        parameter.requires_grad_(False)
+
+    audio = SpeechCommandsMultiQueryRuntime(
+        model_root,
+        audio_root / "readout/best-readout.pt",
+        device=device,
+        audio_cache_entries=audio_cache_entries,
+        shared_text_encoder=shared_encoder,
+        shared_text_tokenizer=shared_tokenizer,
+    )
+    text = TypedTextDecisionRuntime(
+        model_root / "text-minilm-en",
+        text_root / "readout/best-readout.pt",
+        device=device,
+        shared_encoder=shared_encoder,
+        shared_tokenizer=shared_tokenizer,
+    )
+    video = ClevrerBinaryVideoFeatureRuntime(
+        model_root / "text-minilm-en",
+        video_root / "readout/best-readout.pt",
+        device=device,
+        shared_encoder=shared_encoder,
+        shared_tokenizer=shared_tokenizer,
+    )
+    return audio, text, video
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--assembly", type=Path, required=True)
@@ -70,11 +114,6 @@ def main() -> None:
     parser.add_argument("--audio-cache-entries", type=int, default=64)
     args = parser.parse_args()
     assembly = args.assembly.resolve(strict=True)
-    components = assembly / "components"
-    audio_root = components / "audio"
-    text_root = components / "text"
-    video_root = components / "video"
-    model_root = audio_root / "models"
     start = time.perf_counter()
     process = psutil.Process()
     rss_before_load = process.memory_info().rss
@@ -84,38 +123,15 @@ def main() -> None:
     if args.device == "cuda":
         torch.cuda.reset_peak_memory_stats()
     with contextlib.redirect_stdout(sys.stderr):
-        audio = SpeechCommandsMultiQueryRuntime(
-            model_root,
-            audio_root / "readout/best-readout.pt",
-            device=args.device,
-            audio_cache_entries=args.audio_cache_entries,
-        )
-        text = TypedTextDecisionRuntime(
-            model_root / "text-minilm-en",
-            text_root / "readout/best-readout.pt",
-            device=args.device,
-        )
-        video = ClevrerBinaryVideoFeatureRuntime(
-            model_root / "text-minilm-en",
-            video_root / "readout/best-readout.pt",
-            device=args.device,
+        audio, text, video = _build_task_runtimes(
+            assembly, device=args.device, audio_cache_entries=args.audio_cache_entries
         )
     startup_peak_allocated = (
         torch.cuda.max_memory_allocated() if args.device == "cuda" else None
     )
     startup_peak_reserved = torch.cuda.max_memory_reserved() if args.device == "cuda" else None
 
-    # These task runtimes use the identical pinned MiniLM files. Share one
-    # resident module after their own hash-checked initializations.
-    shared_encoder = text.encoder
-    shared_tokenizer = text.tokenizer
-    audio.text_model = shared_encoder
-    audio.text_tokenizer = shared_tokenizer
-    video.encoder = shared_encoder
-    video.tokenizer = shared_tokenizer
-    gc.collect()
     if args.device == "cuda":
-        torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats()
 
     parameter_count = _unique_parameters(
@@ -131,7 +147,8 @@ def main() -> None:
         "device": torch.cuda.get_device_name() if args.device == "cuda" else "cpu",
         "resident_unique_parameters": parameter_count,
         "audio_cache_max_entries": args.audio_cache_entries,
-        "shared_minilm_instances_after_consolidation": 1,
+        "shared_minilm_load_count": 1,
+        "shared_minilm_instances": 1,
         "audio_encoder_revision": AUDIO_MODEL_REVISION,
         "audio_encoder_weights_sha256": AUDIO_WEIGHTS_SHA256,
         "audio_readout_sha256": AUDIO_READOUT_SHA256,
