@@ -19,11 +19,13 @@ The source's pinned `Data/Video_dataset_description.xlsx` was fetched from the r
 
 - The sheet has 650 video rows: 365 infrared and 285 visible. Class counts are Airplane 133, Bird 130, Drone 271, and Helicopter 116. Distance-bin counts are Close 133, Medium 292, and Distant 225.
 - Its available columns are sensor, class, number, distance bin, inter-bin number, and drone type/internet source. It has no airport, date, flight, operator, or session ID.
-- 279 `(class, number)` keys occur in both IR and visible. After excluding the 49 YouTube-derived rows, 231 such keys remain. This is a filename/metadata correspondence only; it does not prove the clips are synchronized, the same flight, or independent groups.
+- 279 `(class, number)` keys occur in both IR and visible. Only 101 of those pairs have matching distance bins; 23 share the inter-bin-number field, and 13 share both. After excluding the 49 YouTube-derived rows, 231 such keys remain. The filename number is therefore not a reliable paired-recording key; none of these counts proves synchronization or independent capture groups.
 - The pinned README reports 203,328 annotated frames. Frames and temporal windows remain nested within their source clips and do not increase independent-group count.
 - The source lists 90 audio files; the paper reports 30 each for drone, helicopter, and background. No audio/video identity join is published in the checked README or description sheet.
 
 ## Split and task feasibility
+
+The pinned GitHub tree contains 1,400 entries and is not truncated. No path name contains `train`, `test`, `eval`, or `split`; the description sheet likewise has no published-split column. This confirms that a split manifest is absent from the inspected revision, while the identities of the old paper split remain unknown.
 
 The paper describes footage from three Swedish airports and reports an earlier evaluation comprising 120 IR and 120 visible clips, plus a 240-clip training set. The current repository is version 1.1 and its README says clips were added after the paper's version. The inspected description sheet does not identify those old split members or map clips to airport/flight/session. Therefore neither the published evaluation membership nor a genuinely fresh group-disjoint development set can yet be reconstructed from the checked metadata.
 

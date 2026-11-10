@@ -20,17 +20,39 @@
   },
   "metadata_counts": {
     "video_rows": 650,
-    "video_by_sensor": {"IR": 365, "visible": 285},
-    "video_by_class": {"airplane": 133, "bird": 130, "drone": 271, "helicopter": 116},
-    "video_by_distance_bin": {"close": 133, "medium": 292, "distant": 225},
+    "video_by_sensor": {
+      "IR": 365,
+      "visible": 285
+    },
+    "video_by_class": {
+      "airplane": 133,
+      "bird": 130,
+      "drone": 271,
+      "helicopter": 116
+    },
+    "video_by_distance_bin": {
+      "close": 133,
+      "medium": 292,
+      "distant": 225
+    },
     "audio_files": 90,
-    "audio_by_class_paper_reported": {"drone": 30, "helicopter": 30, "background": 30},
+    "audio_by_class_paper_reported": {
+      "drone": 30,
+      "helicopter": 30,
+      "background": 30
+    },
     "annotated_frames_publisher_reported": 203328,
     "youtube_derived_video_rows": 49,
-    "youtube_rows_by_class": {"airplane": 11, "helicopter": 38},
+    "youtube_rows_by_class": {
+      "airplane": 11,
+      "helicopter": 38
+    },
     "matched_class_number_keys_ir_and_visible": 279,
     "matched_class_number_keys_ir_and_visible_after_youtube_exclusion": 231,
-    "class_number_keys_after_youtube_exclusion": 370
+    "class_number_keys_after_youtube_exclusion": 370,
+    "matched_class_number_pairs_same_distance_bin": 101,
+    "matched_class_number_pairs_same_inter_bin_number": 23,
+    "matched_class_number_pairs_same_distance_and_inter_bin_number": 13
   },
   "admission": {
     "video_only_m1": "REVIEW_NOT_ADMITTED",
@@ -44,12 +66,18 @@
     "training_run": false,
     "evaluation_run": false,
     "sealed_audit_opened": false,
-    "gpu_used": false
+    "gpu_used": false,
+    "cross_spectrum_pair_identity": "NOT_ESTABLISHED_BY_CLASS_AND_NUMBER"
   },
   "next_gate": [
     "Resolve or exclude all 49 YouTube-derived video rows at item level",
     "Map clips to airport, flight/session, and cross-spectrum source identity",
     "Recover and quarantine the identities in the paper's published evaluation set",
     "Confirm at least 1000 decisions across at least 200 independent groups in a fresh development split before fitting"
-  ]
+  ],
+  "upstream_tree_inventory": {
+    "entry_count": 1400,
+    "truncated": false,
+    "paths_matching_train_test_eval_split": []
+  }
 }
