@@ -3936,10 +3936,12 @@ do not fit another joint model from these candidates. See the
 **2026-11-10 R2 MMCSG license/task recheck:** Meta's public Data License
 expressly contemplates commercial-purpose model development, but becomes
 effective on dataset access or acceptance; no access or acceptance occurred.
-The publisher lists 530 recordings with audio/video/IMU, but independent group
-composition, a Decision target requiring both inputs, and release rights for a
-derived model artifact remain unresolved. Keep MMCSG unadmitted pending an
-authorized license decision and metadata-only split/task audit. See the
+The publisher lists 530 audio/video/IMU recordings but only 49/45/44 speakers
+across train/dev/eval; speaker overlap is unknown, the challenge forbids
+automatic tuning on dev, and the paper does not establish visual necessity for
+speaker attribution. Product artifact distribution rights also remain
+unresolved. Keep MMCSG unadmitted pending an authorized license decision and
+metadata-only split/task audit. See the
 [recheck](docs/pretrained_reuse/R2_MMCSG_DATA_LICENSE_RECHECK_20261110.md).
 
 **2026-11-03 R2 temporal feature-state runtime contract:** Added a bounded

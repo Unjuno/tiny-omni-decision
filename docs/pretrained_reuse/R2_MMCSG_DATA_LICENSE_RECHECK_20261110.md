@@ -18,16 +18,21 @@ metadata-only recheck, not dataset admission.
   detection, and speaker diarization as research tasks.
 - The CHiME-8 task page reports 172 train, 169 development, and 189 evaluation
   recordings (530 total), each with audio, RGB video, and 1 kHz IMU. The
-  challenge specifies one device's recording at a time. These are recording
-  counts, not proof of 530 independent participants/scenes; participant
-  overlap and source-group composition remain unknown until a permitted
-  metadata audit.
+  challenge paper separately lists 49 train, 45 development, and 44 evaluation
+  speakers. Thus, the 530 recording count is not 530 independent speaker
+  groups; the per-split counts sum to at most 138 distinct speakers, with
+  cross-split speaker overlap still unknown. Recording/session independence
+  and speaker-group composition would need a permitted metadata audit.
 - The CHiME-8 benchmark is streaming speaker-attributed ASR scored by
-  multi-talker WER and latency. This is not yet a defined typed-choice Decision
-  task, and the public task description does not establish that both video and
-  audio are necessary. A task adapter and matched audio-only/video-only/joint,
-  missing, shuffled, stale, timing, and contradiction controls would need to be
-  specified before fitting.
+  multi-talker WER and latency. A speaker-attribution segment could be adapted
+  to a supplied binary `SELF`/`OTHER` Decision, but that is a derived task, not
+  the native output. Challenge rules prohibit training or automatic tuning on
+  its development set. The paper says faces are blurred, notes this prevents
+  many lip-motion approaches, and describes visual use as largely unexplored.
+  The source therefore does not establish that both audio and video are
+  necessary for the adapted Decision task. A task-specific adapter and matched
+  audio-only/video-only/joint, missing, shuffled, stale, timing, and
+  contradiction controls would need to be frozen before fitting.
 
 ## Data License findings and handling boundary
 
@@ -55,10 +60,13 @@ and its implementation is not imported or reused here.
 |---|---|
 | Public evidence for synchronized modalities | Pass at description level |
 | Published recording count | 530; promising, independence unverified |
+| Published speaker counts | 49 train / 45 dev / 44 eval; at most 138 distinct speakers across those counts |
 | Rights for commercial-purpose model development | Expressly contemplated by Meta terms, subject to agreement |
 | Agreement/access authorized for this run | **No; not accepted** |
 | Product model artifact distribution rights | Unresolved |
-| Defined task requiring both modalities | **Not established** |
+| Native/derived Decision task | Binary speaker attribution is adaptable; it is not native option-probability output |
+| Defined task requiring both audio and video | **Not established; source paper flags visual limits** |
+| Official development-set tuning allowed | **No; challenge rules prohibit automatic tuning on dev** |
 | Independent group split and leakage checks | Unknown; requires permitted metadata access |
 | Current R2 admission | **No** |
 
