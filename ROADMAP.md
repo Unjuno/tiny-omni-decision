@@ -2826,6 +2826,25 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+**2026-11-10 Path A VideoMAE Clevr-4 image result and count diagnostic:** The
+fixed frozen VideoMAE feature path and JSON option scorer completed on the
+predeclared 72,010-train / 1,000-selector / 5,296 one-time reporting split.
+Equal-taxonomy accuracy was 80.01% on the reporting pool, with count at 43.43%
+and texture at 79.04%; color and shape were about 99%. This is a synthetic,
+closed-set image taxonomy result, not natural-image, temporal-video, or
+multimodal quality. A preregistered, fixed ridge diagnostic using train-only
+five-fold predictions scored 34.77% out-of-fold and 30.00% on the existing
+selector, below the selected MLP's 42.60% selector count accuracy. It suggests
+weak linear count separability in the pooled feature, without isolating a
+backbone or task ceiling. The one-time reporting pool was not reopened for the
+diagnostic. Preserve the run as a task-specific baseline; do not retune on its
+reported examples. See [Path A results](docs/pretrained_reuse/R2_VIDEOMAE_CLEVR4_100K_PATH_A_RESULTS_20261110.md)
+and [count-feature diagnostic](docs/pretrained_reuse/R2_VIDEOMAE_CLEVR4_COUNT_FEATURE_DIAGNOSTIC_20261110.md).
+
+R2 M-1 task-admitted quality across all native modalities and R2 M-2
+real-world both-input-required evaluation remain open; the current image
+result does not close either gate.
+
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
 release is a relevant video/wearable-sensor work-activity source, but its
 non-RGB dataset is CC BY-NC-SA 4.0 and its RGB release is restricted to
