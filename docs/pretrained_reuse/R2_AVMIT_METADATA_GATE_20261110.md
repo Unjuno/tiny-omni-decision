@@ -147,6 +147,24 @@ on validation before considering this a useful fusion result. The selected
 Path A encoders are not the feature producers in AVMIT, so any result remains a
 task/fusion feasibility diagnostic and cannot be called a product model result.
 
+## Local feature-reader implementation status — 2026-11-10
+
+Added a pure-Python TFRecord/SequenceExample reader and a cache builder that
+requires the pinned archive byte count, publisher MD5, and an expected
+SHA-256. It derives the allowed feature-record set exclusively from the three
+non-sealed `pairs-v2` manifests, rejects cross-split clip identity reuse,
+checks record framing CRCs, finite fixed-width float32 sequences, and the
+embedded media filename, and writes into a new output directory without
+extracting archive paths. It does not open `sealed_audit.jsonl`, sealed
+payloads, or raw media. Synthetic tests exercise allowlisting, overwrite
+refusal, archive hash failure, and cross-split identity rejection.
+
+This code has passed the full CPU suite and Ruff, but it has **not yet been
+run against the publisher archive**. The local archive transfer is still in
+progress; no real feature payload has been parsed, cached, trained on, or
+evaluated. Actual archive SHA-256, feature coverage, and tensor compatibility
+remain pending. These implementation checks are not evidence of model quality.
+
 ## Primary sources
 
 - [AVMIT Zenodo record and release metadata](https://zenodo.org/records/8253350)
