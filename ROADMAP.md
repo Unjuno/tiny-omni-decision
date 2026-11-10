@@ -2811,6 +2811,13 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
 
+**2026-11-10 VideoMAE V2 real-video CUDA follow-up:** The pinned Apache-2.0
+VideoMAE V2 Small checkpoint strict-loaded and ran a real 16-frame train-video
+forward on the RTX 3080 Laptop: 22,153,286 parameters, 73.76 ms forward for
+logits plus features after warm-up, 240.7 MB peak allocated VRAM, finite and
+bitwise-repeatable logits. This is runtime feasibility only, not Decision or
+temporal quality. See [R1 runtime receipt](docs/pretrained_reuse/R1_VIDEOMAE_REAL_VIDEO_CUDA_20261110.md).
+
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
