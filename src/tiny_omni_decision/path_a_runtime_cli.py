@@ -179,6 +179,15 @@ def run_jsonl(
                 )
                 if key in result
             }
+            worker_metadata = getattr(dispatcher, "worker_metadata", {})
+            if isinstance(worker_metadata, Mapping):
+                loaded_workers = {
+                    name: {key: value for key, value in metadata.items() if key != "process_id"}
+                    for name, metadata in worker_metadata.items()
+                    if isinstance(metadata, Mapping) and metadata.get("ready") is True
+                }
+                if loaded_workers:
+                    runtime["worker_metadata"] = loaded_workers
             print(
                 json.dumps(
                     {

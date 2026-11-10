@@ -58,6 +58,9 @@ def _request(task_id: str, task: str, payload: dict[str, object]) -> dict[str, o
 
 def test_jsonl_dispatches_scoped_text_request_and_returns_typed_json() -> None:
     dispatcher = FakeDispatcher()
+    dispatcher.worker_metadata = {
+        "torch": {"ready": True, "process_id": 123, "resident_unique_parameters": 3850}
+    }
     request = _request(
         "typed-decisions-synth-text-v0",
         "text",
@@ -72,6 +75,8 @@ def test_jsonl_dispatches_scoped_text_request_and_returns_typed_json() -> None:
     assert response["status"] == "ok"
     assert response["task_id"] == "typed-decisions-synth-text-v0"
     assert response["decision"]["request_id"] == "req-1"
+    assert response["runtime"]["worker_metadata"]["torch"]["resident_unique_parameters"] == 3850
+    assert "process_id" not in response["runtime"]["worker_metadata"]["torch"]
     assert dispatcher.calls[0][0] == "text"
 
 
