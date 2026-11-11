@@ -11,6 +11,8 @@ def _write_jsonl(path, rows):
 
 
 def test_audio_training_blocks_unknown_history_before_media_or_model_load(tmp_path, monkeypatch):
+    pytest.importorskip("torch")
+    pytest.importorskip("transformers")
     from scripts import train_frozen_audio_probe as module
 
     sample_dir = tmp_path / "sample"
@@ -38,6 +40,8 @@ def test_audio_training_blocks_unknown_history_before_media_or_model_load(tmp_pa
 
 
 def test_image_training_blocks_unknown_history_before_media_or_model_load(tmp_path, monkeypatch):
+    pytest.importorskip("torch")
+    pytest.importorskip("transformers")
     from scripts import train_frozen_image_probe as module
 
     sample_dir = tmp_path / "sample"
@@ -60,6 +64,9 @@ def test_image_training_blocks_unknown_history_before_media_or_model_load(tmp_pa
 
 
 def test_video_training_blocks_unknown_history_before_media_or_model_load(tmp_path, monkeypatch):
+    pytest.importorskip("torch")
+    pytest.importorskip("transformers")
+    pytest.importorskip("av")
     from scripts import train_frozen_video_probe as module
 
     sample_dir = tmp_path / "sample"
@@ -87,6 +94,8 @@ def test_video_training_blocks_unknown_history_before_media_or_model_load(tmp_pa
 
 
 def test_text_training_blocks_unknown_history_before_tokenizer_or_model_load(tmp_path, monkeypatch):
+    pytest.importorskip("torch")
+    pytest.importorskip("transformers")
     from scripts import train_frozen_text_probe as module
 
     train_manifest = tmp_path / "train.yaml"
