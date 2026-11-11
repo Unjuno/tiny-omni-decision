@@ -33,13 +33,18 @@ LIMIT_OPTION = typer.Option(None, "--limit", min=1)
 SEED_OPTION = typer.Option(None, "--seed")
 COMPONENTS_OPTION = typer.Option(None, "--components")
 PATH_A_ASSEMBLY_OPTION = typer.Option(..., "--assembly")
-VIDEOPRISM_PYTHON_OPTION = typer.Option(..., "--videoprism-python")
-VIDEOPRISM_SOURCE_OPTION = typer.Option(..., "--videoprism-source")
+VIDEOPRISM_PYTHON_OPTION = typer.Option(None, "--videoprism-python")
+VIDEOPRISM_SOURCE_OPTION = typer.Option(None, "--videoprism-source")
 PATH_A_WORKER_LOG_OPTION = typer.Option(..., "--worker-log-dir")
 PATH_A_DEVICE_OPTION = typer.Option("cpu", "--device")
 VIDEOMAE_MODEL_DIR_OPTION = typer.Option(None, "--videomae-model-dir")
 VIDEOMAE_READOUT_OPTION = typer.Option(None, "--videomae-readout")
 VIDEOMAE_DEPENDENCY_DIR_OPTION = typer.Option(None, "--videomae-dependency-dir")
+PERCEPTION_VIDEO_READOUT_OPTION = typer.Option(
+    None,
+    "--perception-video-readout",
+    help="Hash-pinned experimental Perception Test video-text Decision readout",
+)
 SPEECH_COMMANDS_M1_READOUT_OPTION = typer.Option(
     None, "--speech-commands-m1-readout", help="Hash-pinned text-free Speech Commands M1 readout"
 )
@@ -973,13 +978,14 @@ def smoke_text_decision(
 @app.command("path-a-jsonl")
 def path_a_jsonl(
     assembly: Path = PATH_A_ASSEMBLY_OPTION,
-    videoprism_python: Path = VIDEOPRISM_PYTHON_OPTION,
-    videoprism_source: Path = VIDEOPRISM_SOURCE_OPTION,
+    videoprism_python: Path | None = VIDEOPRISM_PYTHON_OPTION,
+    videoprism_source: Path | None = VIDEOPRISM_SOURCE_OPTION,
     worker_log_dir: Path = PATH_A_WORKER_LOG_OPTION,
     device: str = PATH_A_DEVICE_OPTION,
     videomae_model_dir: Path | None = VIDEOMAE_MODEL_DIR_OPTION,
     videomae_readout: Path | None = VIDEOMAE_READOUT_OPTION,
     videomae_dependency_dir: Path | None = VIDEOMAE_DEPENDENCY_DIR_OPTION,
+    perception_video_readout: Path | None = PERCEPTION_VIDEO_READOUT_OPTION,
     speech_commands_m1_readout: Path | None = SPEECH_COMMANDS_M1_READOUT_OPTION,
 ) -> None:
     """Run the existing task-scoped Path A bundle over JSONL on stdin/stdout."""
@@ -994,6 +1000,7 @@ def path_a_jsonl(
         videomae_model_dir=videomae_model_dir,
         videomae_readout=videomae_readout,
         videomae_dependency_dir=videomae_dependency_dir,
+        perception_video_readout=perception_video_readout,
         device=device,
         speech_commands_m1_readout=speech_commands_m1_readout,
     )

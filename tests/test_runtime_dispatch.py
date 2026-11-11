@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+import tiny_omni_decision.runtime_dispatch as runtime_dispatch_module
 from tiny_omni_decision.runtime_dispatch import (
     JsonLineWorker,
     PathARuntimeDispatcher,
@@ -263,6 +264,94 @@ def test_dispatch_typed_video_binds_correct_probability_to_caller_id() -> None:
 
     assert result["decision_json"]["selected_option_id"] == "candidate-correct"
     assert [option["probability"] for option in result["decision_json"]["options"]] == [0.1, 0.9]
+
+
+def test_dispatch_typed_perception_video_text_preserves_caller_option_order() -> None:
+    class VideoMAEWorker:
+        def request(self, payload: dict[str, object]) -> dict[str, object]:
+            assert payload["task"] == "video_text"
+            return {
+                "probabilities": [0.15, 0.7, 0.15],
+                "prediction_index": 1,
+                "confidence": 0.7,
+            }
+
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._request_id = 0
+    dispatcher._torch_worker = None
+    dispatcher._videoprism_worker = None
+    dispatcher._videomae_worker = VideoMAEWorker()
+    dispatcher.perception_video_readout = Path("readout.pt")
+    spec = TypedDecisionSpec(
+        "perception-1",
+        "choice",
+        ("third", "first", "second"),
+        ("C: third answer", "A: first answer", "B: second answer"),
+    )
+
+    result = dispatcher.dispatch_typed(
+        "video_text_videomae",
+        {
+            "video_path": "video.mp4",
+            "question": "Which answer applies?",
+            "options": list(spec.option_texts),
+            "expected_media_sha256": "a" * 64,
+        },
+        decision_specs=[spec],
+    )
+
+    assert result["decision_json"]["selected_option_id"] == "first"
+    assert [row["id"] for row in result["decision_json"]["options"]] == [
+        "third",
+        "first",
+        "second",
+    ]
+    assert [row["probability"] for row in result["decision_json"]["options"]] == [
+        0.15,
+        0.7,
+        0.15,
+    ]
+
+
+def test_videomae_worker_receives_perception_readout_and_assembly_minilm_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    assembly = tmp_path / "assembly"
+    text_model = assembly / "components/audio/models/text-minilm-en"
+    text_model.mkdir(parents=True)
+    model_root = tmp_path / "videomae"
+    dependency_root = tmp_path / "dependencies"
+    readout = tmp_path / "perception-readout.pt"
+    for path in (model_root, dependency_root):
+        path.mkdir()
+    readout.write_bytes(b"pinned-readout-placeholder")
+    captured: dict[str, object] = {}
+
+    class StubWorker:
+        def __init__(self, command, **kwargs):
+            captured["command"] = command
+            captured["kwargs"] = kwargs
+
+    monkeypatch.setattr(runtime_dispatch_module, "JsonLineWorker", StubWorker)
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher.videomae_model_dir = model_root
+    dispatcher.videomae_dependency_dir = dependency_root
+    dispatcher.videomae_readout = None
+    dispatcher.perception_video_readout = readout
+    dispatcher.assembly_dir = assembly
+    dispatcher.worker_log_dir = tmp_path / "logs"
+    dispatcher.device = "cpu"
+    dispatcher._videomae_worker = None
+    dispatcher._project_root = tmp_path
+    dispatcher._worker_env = {}
+
+    dispatcher._ensure_videomae()
+
+    command = captured["command"]
+    assert isinstance(command, list)
+    assert command[command.index("--perception-video-readout") + 1] == str(readout)
+    assert command[command.index("--text-model-dir") + 1] == str(text_model)
+    assert "--readout" not in command
 
 
 def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract() -> None:

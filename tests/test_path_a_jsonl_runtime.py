@@ -215,6 +215,51 @@ def test_jsonl_videomae_image_requires_media_sha256_before_dispatch() -> None:
     assert dispatcher.calls == []
 
 
+def test_jsonl_dispatches_experimental_perception_video_text_decision() -> None:
+    dispatcher = FakeDispatcher()
+    request = _request(
+        "path-a-video-text-videomaev2-perception-test-experimental-v0",
+        "video_text_videomae",
+        {
+            "video_path": "sample.mp4",
+            "expected_media_sha256": "d" * 64,
+            "question": "Which object enters the scene?",
+            "options": ["A: red cube", "B: blue sphere", "C: green cylinder"],
+        },
+    )
+    stdout = io.StringIO()
+
+    run_jsonl(io.StringIO(json.dumps(request) + "\n"), stdout, dispatcher)
+
+    response = json.loads(stdout.getvalue())
+    assert response["status"] == "ok"
+    assert response["task_id"] == "path-a-video-text-videomaev2-perception-test-experimental-v0"
+    assert dispatcher.calls[0][0] == "video_text_videomae"
+    assert dispatcher.calls[0][1]["question"] == "Which object enters the scene?"
+
+
+def test_jsonl_perception_video_text_requires_three_candidates_before_dispatch() -> None:
+    dispatcher = FakeDispatcher()
+    request = _request(
+        "path-a-video-text-videomaev2-perception-test-experimental-v0",
+        "video_text_videomaev2",
+        {
+            "video_path": "sample.mp4",
+            "expected_media_sha256": "d" * 64,
+            "question": "Which object enters the scene?",
+            "options": ["A: red cube", "B: blue sphere"],
+        },
+    )
+    stdout = io.StringIO()
+
+    run_jsonl(io.StringIO(json.dumps(request) + "\n"), stdout, dispatcher)
+
+    response = json.loads(stdout.getvalue())
+    assert response["status"] == "error"
+    assert "exactly three" in response["error"]["message"]
+    assert dispatcher.calls == []
+
+
 def test_jsonl_rejects_video_options_that_do_not_match_frozen_head_order() -> None:
     dispatcher = FakeDispatcher()
     request = _request(

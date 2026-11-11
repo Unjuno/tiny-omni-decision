@@ -176,12 +176,13 @@ class PathARuntimeDispatcher:
         self,
         assembly_dir: Path,
         *,
-        videoprism_python: Path,
-        videoprism_source: Path,
+        videoprism_python: Path | None = None,
+        videoprism_source: Path | None = None,
         worker_log_dir: Path,
         videomae_model_dir: Path | None = None,
         videomae_readout: Path | None = None,
         videomae_dependency_dir: Path | None = None,
+        perception_video_readout: Path | None = None,
         device: str = "cuda",
         speech_commands_m1_readout: Path | None = None,
     ) -> None:
@@ -189,8 +190,12 @@ class PathARuntimeDispatcher:
         verify_started = time.perf_counter()
         self.manifest = verify_modular_bundle(self.assembly_dir)
         self.bundle_verification_seconds = time.perf_counter() - verify_started
-        self.videoprism_python = videoprism_python.resolve(strict=True)
-        self.videoprism_source = videoprism_source.resolve(strict=True)
+        self.videoprism_python = (
+            videoprism_python.resolve(strict=True) if videoprism_python is not None else None
+        )
+        self.videoprism_source = (
+            videoprism_source.resolve(strict=True) if videoprism_source is not None else None
+        )
         self.videomae_model_dir = (
             videomae_model_dir.resolve(strict=True) if videomae_model_dir is not None else None
         )
@@ -200,6 +205,11 @@ class PathARuntimeDispatcher:
         self.videomae_dependency_dir = (
             videomae_dependency_dir.resolve(strict=True)
             if videomae_dependency_dir is not None
+            else None
+        )
+        self.perception_video_readout = (
+            perception_video_readout.resolve(strict=True)
+            if perception_video_readout is not None
             else None
         )
         self.worker_log_dir = worker_log_dir.resolve()
@@ -261,6 +271,22 @@ class PathARuntimeDispatcher:
                 "--device",
                 self.device,
             ]
+            if self.perception_video_readout is not None:
+                text_model_dir = (
+                    self.assembly_dir
+                    / "components"
+                    / "audio"
+                    / "models"
+                    / "text-minilm-en"
+                ).resolve(strict=True)
+                command.extend(
+                    [
+                        "--perception-video-readout",
+                        str(self.perception_video_readout),
+                        "--text-model-dir",
+                        str(text_model_dir),
+                    ]
+                )
             if self.speech_commands_m1_readout is not None:
                 command.extend(
                     ["--speech-commands-m1-readout", str(self.speech_commands_m1_readout)]
@@ -275,6 +301,10 @@ class PathARuntimeDispatcher:
 
     def _ensure_videoprism(self) -> JsonLineWorker:
         if self._videoprism_worker is None:
+            if self.videoprism_python is None or self.videoprism_source is None:
+                raise ValueError(
+                    "image/video Path A tasks require --videoprism-python and --videoprism-source"
+                )
             log_path = self.worker_log_dir / "videoprism-worker.log"
             self._videoprism_worker = JsonLineWorker(
                 [
@@ -297,30 +327,46 @@ class PathARuntimeDispatcher:
         if self._videomae_worker is None:
             paths = (
                 self.videomae_model_dir,
-                self.videomae_readout,
                 self.videomae_dependency_dir,
             )
             if any(path is None for path in paths):
                 raise ValueError(
-                    "VideoMAE image task requires --videomae-model-dir, "
-                    "--videomae-readout and --videomae-dependency-dir"
+                    "VideoMAE tasks require --videomae-model-dir and "
+                    "--videomae-dependency-dir"
                 )
             log_path = self.worker_log_dir / "videomae-worker.log"
+            command = [
+                sys.executable,
+                "-B",
+                "-m",
+                "scripts.path_a_videomae_worker",
+                "--model-root",
+                str(self.videomae_model_dir),
+                "--dependency-root",
+                str(self.videomae_dependency_dir),
+                "--device",
+                self.device,
+            ]
+            if self.videomae_readout is not None:
+                command.extend(["--readout", str(self.videomae_readout)])
+            if self.perception_video_readout is not None:
+                text_model_dir = (
+                    self.assembly_dir
+                    / "components"
+                    / "audio"
+                    / "models"
+                    / "text-minilm-en"
+                ).resolve(strict=True)
+                command.extend(
+                    [
+                        "--perception-video-readout",
+                        str(self.perception_video_readout),
+                        "--text-model-dir",
+                        str(text_model_dir),
+                    ]
+                )
             self._videomae_worker = JsonLineWorker(
-                [
-                    sys.executable,
-                    "-B",
-                    "-m",
-                    "scripts.path_a_videomae_worker",
-                    "--model-root",
-                    str(self.videomae_model_dir),
-                    "--readout",
-                    str(self.videomae_readout),
-                    "--dependency-root",
-                    str(self.videomae_dependency_dir),
-                    "--device",
-                    self.device,
-                ],
+                command,
                 cwd=self._project_root,
                 env=self._worker_env,
                 log_path=log_path,
@@ -338,11 +384,23 @@ class PathARuntimeDispatcher:
                 {"request_id": request_id, "task": task, "payload": payload}
             )
         elif task == "image_videomae":
+            if self.videomae_readout is None:
+                raise ValueError("image_videomae requires --videomae-readout")
             worker = self._ensure_videomae()
             response = worker.request(
                 {"request_id": request_id, "task": "image", "payload": payload}
             )
             response["image_encoder"] = worker.ready
+        elif task == "video_text_videomae":
+            if self.perception_video_readout is None:
+                raise ValueError(
+                    "video_text_videomae requires --perception-video-readout "
+                    "with the frozen R2 readout"
+                )
+            worker = self._ensure_videomae()
+            response = worker.request(
+                {"request_id": request_id, "task": "video_text", "payload": payload}
+            )
         elif task == "video":
             encoded = self._ensure_videoprism().request(
                 {"request_id": request_id, "task": "encode_video", "payload": payload}
@@ -429,7 +487,7 @@ class PathARuntimeDispatcher:
             if len(decision_specs) != 1:
                 raise ValueError("non-audio Path A tasks require exactly one decision spec")
             spec = decision_specs[0]
-            if task in {"text", "image", "image_videomae"}:
+            if task in {"text", "image", "image_videomae", "video_text_videomae"}:
                 payload_options = payload.get("options")
                 if (
                     not isinstance(payload_options, (list, tuple))
