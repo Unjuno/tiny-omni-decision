@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "INSUFFICIENT_UNEXPOSED_GROUPED_VALIDATION_COHORT",
+  "source": {
+    "dataset_id": "google/speech_commands",
+    "revision": "a751309c0fd613e8a5d30d77900f30e8b42bc2da",
+    "file": "validation-00000-of-00001.parquet",
+    "expected_full_file_sha256": "06683ef0761319a415ee516939c64b9b7a20be0b6bb17ce8d2b6e36abe373a46",
+    "full_file_sha256_verified": false
+  },
+  "metadata_scan": {
+    "columns": ["label", "speaker_id", "file"],
+    "audio_payload_read": false,
+    "source_rows": 9982,
+    "row_groups": 100,
+    "range_requests": 91,
+    "range_bytes": 632727
+  },
+  "prior_validation_excluded": {
+    "examples": 640,
+    "speaker_groups": 206
+  },
+  "eligible_remainder": {
+    "examples": 222,
+    "speaker_groups": 39,
+    "by_class": {
+      "yes": {"rows": 24, "groups": 16},
+      "no": {"rows": 29, "groups": 19},
+      "up": {"rows": 16, "groups": 15},
+      "down": {"rows": 22, "groups": 20},
+      "left": {"rows": 24, "groups": 16},
+      "right": {"rows": 21, "groups": 15},
+      "on": {"rows": 22, "groups": 17},
+      "off": {"rows": 22, "groups": 12},
+      "stop": {"rows": 19, "groups": 15},
+      "go": {"rows": 23, "groups": 15}
+    }
+  },
+  "frozen_gate": {
+    "minimum_examples": 1000,
+    "minimum_speaker_groups": 200,
+    "maximum_examples_per_speaker": 5,
+    "passed": false
+  },
+  "official_test_opened": false,
+  "sealed_audit_opened": false,
+  "audio_materialized": false,
+  "inference_or_fit_performed": false,
+  "decision": "do_not_materialize_or_evaluate"
+}
