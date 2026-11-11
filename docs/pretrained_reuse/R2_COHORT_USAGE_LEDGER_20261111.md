@@ -41,12 +41,20 @@ python scripts/check_cohort_usage.py `
   --groups proposed-groups.jsonl
 ```
 
-The current command is a preflight primitive; it is not yet wired into every
-training/evaluation launcher. Its result must be recorded with the run until
-the launcher integration is complete. `CLEAR_WITHIN_DECLARED_HISTORY` proves
-only a non-overlap within a source inventory explicitly marked complete. It
-does not prove semantic novelty, label independence, rights, or sufficient
-sample size.
+The shared `scripts/cohort_gate.py` API is now called by the four canonical
+frozen-feature Path A trainers: `train_frozen_text_probe.py`,
+`train_frozen_image_probe.py`, `train_frozen_audio_probe.py`, and
+`train_frozen_video_probe.py`. Each gate runs before output-directory creation,
+media access, and encoder/tokenizer loading. New run reports retain the source
+revision, ledger SHA-256, and source-scoped hashes for all proposed train and
+validation groups so that later exposure reconciliation can be auditable.
+
+Other specialized training/evaluation launchers are not yet integrated, so
+this is not a repository-wide enforcement boundary. `CLEAR_WITHIN_DECLARED_HISTORY`
+proves only a non-overlap within a source inventory explicitly marked complete.
+It does not prove semantic novelty, label independence, rights, or sufficient
+sample size. A source missing from the ledger or marked `INCOMPLETE` remains
+blocked by the canonical trainers.
 
 ## Verification and scope
 
@@ -54,6 +62,9 @@ sample size.
 - `ruff check scripts/check_cohort_usage.py tests/test_check_cohort_usage.py`:
   passed.
 - Synthetic CLI cases cover known overlap and incomplete-history blocking.
+- Launcher regressions cover the four canonical trainer entrypoints and prove
+  unknown source history blocks before media validation, encoder/tokenizer
+  loading, or output creation.
 - The saved prediction artifact was read only to collect group IDs. No model,
   source media, official test split, or sealed audit was opened. No GPU work,
   training, or new quality evaluation was performed.
