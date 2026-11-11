@@ -21,16 +21,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
-
-from tiny_omni_decision.perception_video_readout import PerceptionVideoDecisionReadout
-from tiny_omni_decision.perception_video_runtime import (
-    VIDEO_TOKEN_SHAPE,
-    PerceptionVideoTextRuntime,
-    _candidate_text,
-    _file_sha256,
-    pool_candidate_queries,
-)
 
 TRAIN_SHA256 = "2f2fa8ed4e81baaadcede50cc4343f0f0c55a02dd63703d3313e8d2188cb60a7"
 TRAIN_FEATURE_SHA256 = "9802470f0ca145f051d64f6f46341817e0f14b96a84f54fd2c25c69384f1b3e2"
@@ -139,7 +129,9 @@ def select_fit_rows(
     return chosen
 
 
-def _max_abs_delta(left: torch.Tensor, right: torch.Tensor) -> float:
+def _max_abs_delta(left: Any, right: Any) -> float:
+    import torch
+
     if left.shape != right.shape:
         raise ValueError(f"shape mismatch: {tuple(left.shape)} != {tuple(right.shape)}")
     if not torch.isfinite(left).all() or not torch.isfinite(right).all():
@@ -153,7 +145,7 @@ def _load_train_inputs(args: argparse.Namespace):
     manifest = json.loads((corpus_dir / "manifest.json").read_text(encoding="utf-8"))
     if (
         manifest.get("experiment_id") != "r2-perception-test-mcqa-path-a-20261111"
-        or _file_sha256(train_path) != TRAIN_SHA256
+        or sha256_file(train_path) != TRAIN_SHA256
         or manifest.get("train", {}).get("records_sha256") != TRAIN_SHA256
     ):
         raise ValueError("frozen official TRAIN corpus identity/hash mismatch")
@@ -215,6 +207,16 @@ def _load_train_inputs(args: argparse.Namespace):
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
+    import torch
+
+    from tiny_omni_decision.perception_video_readout import PerceptionVideoDecisionReadout
+    from tiny_omni_decision.perception_video_runtime import (
+        VIDEO_TOKEN_SHAPE,
+        PerceptionVideoTextRuntime,
+        _candidate_text,
+        pool_candidate_queries,
+    )
+
     if args.output_dir.drive.upper() != "D:" or args.output_dir.exists():
         raise ValueError("choose a new, non-existing output directory on D:")
     if args.device not in {"cpu", "cuda"} or (
@@ -228,7 +230,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         video_id = row["source_video_id"]
         media_path = media_root / f"{video_id}.mp4"
         media_path.resolve(strict=True)
-        if _file_sha256(media_path) != row["expected_media_sha256"]:
+        if sha256_file(media_path) != row["expected_media_sha256"]:
             raise ValueError(f"media hash differs from its TRAIN feature receipt: {video_id}")
         media_by_video[video_id] = media_path
 
@@ -345,9 +347,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "fit_video_group_ids_sha256": FIT_GROUPS_SHA256,
         "internal_selection_groups_excluded": SELECTION_GROUP_COUNT,
         "internal_selection_group_ids_sha256": SELECTION_GROUPS_SHA256,
-        "previous_runtime_canary_video_ids_excluded": sorted(
-            PREVIOUS_RUNTIME_CANARY_VIDEO_IDS
-        ),
+        "previous_runtime_canary_video_ids_excluded": sorted(PREVIOUS_RUNTIME_CANARY_VIDEO_IDS),
         "sample_count": len(observations),
         "video_group_count": len(video_deltas),
         "sample_ids": [item["sample_id"] for item in observations],
@@ -363,11 +363,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "train_text_features_sha256": TRAIN_FEATURE_SHA256,
             "train_text_report_sha256": sha256_file(args.text_report),
             "video_feature_manifest_sha256": VIDEO_MANIFEST_SHA256,
-            "readout_sha256": _file_sha256(args.readout),
+            "readout_sha256": sha256_file(args.readout),
             "video_checkpoint_sha256": VIDEO_MODEL_SHA256,
             "text_checkpoint_sha256": TEXT_MODEL_SHA256,
             "media_sha256": {
-                video_id: _file_sha256(path) for video_id, path in media_by_video.items()
+                video_id: sha256_file(path) for video_id, path in media_by_video.items()
             },
         },
         "fixed_absolute_tolerances": {

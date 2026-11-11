@@ -19,7 +19,12 @@ weights, caches, or the existing attempt artifacts.
   `codex/path-a-video-text-parity-20261111` with the new verifier file
   uncommitted. Its SHA-256 below binds that executed code.
 - Verifier: `scripts/verify_path_a_perception_train_runtime_parity.py`, SHA-256
-  `ccf895275d679e4c467584bf869fd3ed53cd2e659de4bac09d64aa0cf6296435`.
+  `ccf895275d679e4c467584bf869fd3ed53cd2e659de4bac09d64aa0cf6296435` at
+  measurement time. A later CPU-CI fix moved optional PyTorch/runtime imports
+  into `run()` and reused the equivalent local SHA helper; the resulting source
+  hash is `b9ec4a069ca926c4dbb0e97978c3d589e3b32f5c6a610137212bf872d6b2c02`.
+  No parity algorithm, threshold, input, or output changed; the GPU run was not
+  repeated for this import-only change.
 - Frozen training corpus: official TRAIN JSONL only, SHA-256
   `2f2fa8ed4e81baaadcede50cc4343f0f0c55a02dd63703d3313e8d2188cb60a7`.
 - The fit/selection group split was reconstructed with seed 17 and checked
@@ -93,6 +98,10 @@ registry warnings; the verifier completed and all numeric checks passed.
   and ended with 6 failures / 336 setup errors; rerunning the complete suite
   with `TEMP`, `TMP`, and pytest's `--basetemp` on D: passed without excluding
   tests. The D:-backed run is the authoritative suite result.
+- PR CI run 4154 initially failed during test collection because the new test
+  imported optional PyTorch at module import. The runner now imports PyTorch
+  only when executing the GPU verifier; this makes the CPU-only test module
+  collectable without installing the ML extra. A fresh PR run is pending.
 - Ruff: `ruff check .` passed.
 - CI manifest validation commands passed for the model manifest, all candidate
   dataset manifests, the four catalogs, and the dataset-manifest audit.
