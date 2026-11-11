@@ -39,6 +39,61 @@ def test_audio_training_blocks_unknown_history_before_media_or_model_load(tmp_pa
     assert not output.exists()
 
 
+def test_audio_multiquery_blocks_unknown_history_before_hash_cache_or_model_load(
+    tmp_path, monkeypatch
+):
+    torch = pytest.importorskip("torch")
+    pytest.importorskip("transformers")
+    from scripts import train_frozen_audio_multiquery as module
+
+    sample_dir = tmp_path / "sample"
+    sample_dir.mkdir()
+    _write_jsonl(
+        sample_dir / "train.jsonl",
+        [{"speaker_group_sha256": "speaker-a"}],
+    )
+    _write_jsonl(
+        sample_dir / "validation.jsonl",
+        [{"speaker_group_sha256": "speaker-b"}],
+    )
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(
+        json.dumps(
+            {
+                "device": "cpu",
+                "source": {
+                    "sample_dir": str(sample_dir),
+                    "feature_cache": str(tmp_path / "cache.pt"),
+                },
+                "encoder": {"text_model_path": str(tmp_path / "text-model")},
+            }
+        ),
+        encoding="utf-8",
+    )
+    output = tmp_path / "output"
+    monkeypatch.setattr(
+        module,
+        "_args",
+        lambda: SimpleNamespace(
+            config=config_path,
+            output_dir=output,
+            device=None,
+            preflight_only=False,
+            cohort_ledger=module.DEFAULT_LEDGER,
+        ),
+    )
+    monkeypatch.setattr(module, "_hash", lambda *args: pytest.fail("artifact hashed"))
+    monkeypatch.setattr(module, "_validate_splits", lambda *args: pytest.fail("media read"))
+    monkeypatch.setattr(
+        module, "_count_model_parameters", lambda *args: pytest.fail("model loaded")
+    )
+    monkeypatch.setattr(torch, "load", lambda *args, **kwargs: pytest.fail("cache loaded"))
+
+    with pytest.raises(CohortUseBlocked, match="BLOCKED_UNKNOWN_SOURCE_OR_REVISION"):
+        module.main()
+    assert not output.exists()
+
+
 def test_image_training_blocks_unknown_history_before_media_or_model_load(tmp_path, monkeypatch):
     pytest.importorskip("torch")
     pytest.importorskip("transformers")
