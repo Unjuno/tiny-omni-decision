@@ -103,6 +103,7 @@ class VideoMAEClevr4ImageRuntime:
         dependency_root: Path,
         *,
         device: str,
+        encoder: torch.nn.Module | None = None,
     ) -> None:
         if device not in {"cpu", "cuda"}:
             raise ValueError("device must be cpu or cuda")
@@ -110,7 +111,11 @@ class VideoMAEClevr4ImageRuntime:
             raise RuntimeError("VideoMAE CUDA runtime requested but CUDA is unavailable")
         self.device = torch.device(device)
         torch.set_num_threads(4)
-        self.encoder = _load_encoder(model_root.resolve(strict=True), dependency_root)
+        self.encoder = (
+            encoder
+            if encoder is not None
+            else _load_encoder(model_root.resolve(strict=True), dependency_root)
+        )
         self.encoder.to(self.device).eval().requires_grad_(False)
         if sha256_file(readout_path) != READOUT_SHA256:
             raise ValueError("VideoMAE Clevr-4 readout hash mismatch")

@@ -14,11 +14,19 @@ TASKS = {
     "typed-decisions-synth-text-v0": "text",
     "path-a-image-videoprism-clevr4-runtime-v0": "image",
     "path-a-image-videomaev2-clevr4-100k-runtime-v0": "image_videomae",
+    "path-a-video-text-videomaev2-perception-test-experimental-v0": "video_text_videomae",
     "path-a-audio-multiquery-runtime-v0": "audio",
     "path-a-audio-speech-commands-m1-v0": "audio_keyword",
     "clevrer-videoprism-binary-feature-decision-v0": "video",
 }
-MEDIA_TASKS = {"image", "image_videomae", "audio", "audio_keyword", "video"}
+MEDIA_TASKS = {
+    "image",
+    "image_videomae",
+    "video_text_videomae",
+    "audio",
+    "audio_keyword",
+    "video",
+}
 SHA256_PATTERN = re.compile(r"[0-9a-fA-F]{64}\Z")
 
 
@@ -41,6 +49,14 @@ def _validate_payload(task: str, payload: object) -> dict[str, Any]:
         _required_text(payload.get("taxonomy"), "payload.taxonomy")
         if not isinstance(payload.get("options"), list):
             raise ValueError("payload.options must be an array")
+    elif task == "video_text_videomae":
+        _required_text(payload.get("video_path"), "payload.video_path")
+        _required_text(payload.get("question"), "payload.question")
+        options = payload.get("options")
+        if not isinstance(options, list) or len(options) != 3:
+            raise ValueError("payload.options must contain exactly three candidates")
+        for index, option in enumerate(options):
+            _required_text(option, f"payload.options[{index}]")
     elif task == "audio":
         _required_text(payload.get("audio_path"), "payload.audio_path")
         queries = payload.get("queries")
@@ -144,6 +160,16 @@ def _parse_request(request: object) -> tuple[str, str, dict[str, Any], list[Type
         raise ValueError("non-audio tasks require exactly one decision_spec")
     if task == "video" and specs[0].option_texts != ("wrong", "correct"):
         raise ValueError("video decision option texts must be ('wrong', 'correct')")
+    if task == "video_text_videomae":
+        spec = specs[0]
+        if spec.decision_type != "choice":
+            raise ValueError("video_text_videomae requires decision_type 'choice'")
+        if len(spec.option_ids) != 3 or len(set(spec.option_ids)) != 3:
+            raise ValueError("video_text_videomae requires three unique option IDs")
+        if len(set(spec.option_texts)) != 3:
+            raise ValueError("video_text_videomae requires three unique option texts")
+        if tuple(payload["options"]) != spec.option_texts:
+            raise ValueError("video_text_videomae option texts must match payload order")
     return request_id, task_id, payload, specs
 
 
@@ -173,9 +199,17 @@ def run_jsonl(
                     "keyword_metrics",
                     "video_encoder",
                     "image_encoder",
+                    "video_text_encoder",
                     "feature_shape",
+                    "video_feature_shape",
+                    "video_cache_hits",
+                    "video_cache_misses",
+                    "video_cache_entries",
+                    "video_cache_limit",
                     "cuda_allocated_bytes_after_request",
                     "cuda_peak_allocated_bytes",
+                    "worker_rss_bytes",
+                    "worker_peak_working_set_bytes",
                 )
                 if key in result
             }
