@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import json
+from types import SimpleNamespace
+
 import pytest
 
 torch = pytest.importorskip("torch")
 pytest.importorskip("transformers")
 
+from scripts import train_frozen_clevrer_binary_reasoning as clevrer_module  # noqa: E402
+from scripts.cohort_gate import CohortUseBlocked  # noqa: E402
 from scripts.train_frozen_clevrer_binary_reasoning import (  # noqa: E402
     QUESTION_TYPES,
     _metrics_by_scene_bootstrap,
@@ -64,3 +69,39 @@ def test_scene_bootstrap_is_reproducible_and_reports_independent_groups():
         for interval in metrics.values():
             assert len(interval) == 2
             assert interval[0] <= interval[1]
+
+
+def test_main_blocks_unknown_scene_history_before_full_input_validation(tmp_path, monkeypatch):
+    sample_dir = tmp_path / "samples"
+    sample_dir.mkdir()
+    (sample_dir / "train.jsonl").write_text(
+        json.dumps({"scene_index": 1, "split": "train"}) + "\n", encoding="utf-8"
+    )
+    (sample_dir / "validation.jsonl").write_text(
+        json.dumps({"scene_index": 2, "split": "validation"}) + "\n", encoding="utf-8"
+    )
+    config = tmp_path / "config.yaml"
+    config.write_text(
+        "experiment_id: test\n"
+        "source:\n"
+        f"  sample_dir: {sample_dir.as_posix()}\n"
+        "  revision: 98b842082ba4f7c18b6b9e3f39145871782a65ef\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        clevrer_module,
+        "_args",
+        lambda: SimpleNamespace(
+            config=config,
+            preflight_only=True,
+            cohort_ledger=clevrer_module.DEFAULT_LEDGER,
+        ),
+    )
+    monkeypatch.setattr(
+        clevrer_module,
+        "_validate_inputs",
+        lambda *_: pytest.fail("questions, features, or media were inspected"),
+    )
+
+    with pytest.raises(CohortUseBlocked, match="BLOCKED_UNKNOWN_SOURCE_OR_REVISION"):
+        clevrer_module.main()

@@ -20,6 +20,7 @@ from torch import Tensor, nn
 from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer
 
+from scripts.cohort_gate import DEFAULT_LEDGER, require_clear_cohort
 from scripts.extract_frozen_videoprism_clevr4_features import (
     CHECKPOINT_SHA256,
     DATASET_REVISION,
@@ -44,6 +45,7 @@ def _args() -> argparse.Namespace:
         default=Path("configs/pretrained_reuse/path_a_image_videoprism_clevr4_full.yaml"),
     )
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--cohort-ledger", type=Path, default=DEFAULT_LEDGER)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-questions", type=int, default=64)
@@ -275,6 +277,23 @@ def main() -> None:
     ):
         raise ValueError("dataset/split settings differ from the frozen CLEVR-4 probe plan")
 
+    # Read only the source-scoped image identities before opening the feature cache,
+    # selection report, or any model. The ledger fails closed for unknown history.
+    train_rows = _load_rows(sample_dir / "train-labels.jsonl")
+    all_validation = _load_rows(sample_dir / "val-labels.jsonl")
+    selection_assets = _load_rows(selection_dir / "val-image-manifest.jsonl")
+    cohort_check = require_clear_cohort(
+        ledger_path=args.cohort_ledger,
+        source_id="sgvaze/clevr4",
+        revision=DATASET_REVISION,
+        group_ids=sorted(
+            {
+                str(row["id"])
+                for row in train_rows + all_validation + selection_assets
+            }
+        ),
+    )
+
     cache_report = json.loads(cache_report_path.read_text(encoding="utf-8"))
     if cache_report.get("status") != "complete_videoprism_clevr4_full_feature_cache":
         raise ValueError("feature cache report does not describe a complete full extraction")
@@ -308,8 +327,6 @@ def main() -> None:
         if cache_report["sample_hashes"][name] != sha256_file(sample_dir / path_name):
             raise ValueError(f"source data changed since feature extraction: {name}")
     features_by_id, media_by_id = _features_by_id(cache_path)
-    train_rows = _load_rows(sample_dir / "train-labels.jsonl")
-    all_validation = _load_rows(sample_dir / "val-labels.jsonl")
     train_assets = _load_rows(sample_dir / "train-image-manifest.jsonl")
     validation_assets = _load_rows(sample_dir / "val-image-manifest.jsonl")
     with np.load(cache_path, allow_pickle=False) as payload:
@@ -329,14 +346,10 @@ def main() -> None:
         raise ValueError("validation media identities differ from the feature cache")
     if {row["id"] for row in train_rows} & {row["id"] for row in all_validation}:
         raise ValueError("train and full validation IDs overlap")
-    selection_ids = {
-        str(row["id"]) for row in _load_rows(selection_dir / "val-image-manifest.jsonl")
-    }
+    selection_ids = {str(row["id"]) for row in selection_assets}
     selected_rows = [row for row in all_validation if str(row["id"]) in selection_ids]
     report_holdout_rows = [row for row in all_validation if str(row["id"]) not in selection_ids]
-    selection_order = [
-        str(row["id"]) for row in _load_rows(selection_dir / "val-image-manifest.jsonl")
-    ]
+    selection_order = [str(row["id"]) for row in selection_assets]
     if [str(row["id"]) for row in selected_rows] != selection_order:
         raise ValueError("checkpoint-selection validation order differs from the frozen sample")
     if len(train_rows) != 8424 or len(selected_rows) != 512 or len(report_holdout_rows) != 1595:
@@ -474,6 +487,7 @@ def main() -> None:
         "claim_scope": "synthetic CLEVR-4 image taxonomy decisions; static image mode only",
         "seed": args.seed,
         "source_revision": DATASET_REVISION,
+        "cohort_gate": cohort_check,
         "config_sha256": sha256_file(config_path),
         "implementation_commit": subprocess.run(
             ["git", "-C", str(Path(__file__).resolve().parents[1]), "rev-parse", "HEAD"],
