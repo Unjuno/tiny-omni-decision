@@ -131,11 +131,14 @@ experiment can only add a bounded video-plus-text evidence point.
 
 ## Current gates
 
-- The frozen corpus generator, metadata preflight, and receipt-based media
-  acquisition are implemented and tested. Full media acquisition is running
-  under a separate D: attempt; do not modify it while active.
+- The frozen corpus, metadata preflight, and receipt-based train/validation
+  media acquisition completed. The train and validation VideoMAE caches are
+  complete at 1,955 and 1,518 videos respectively. All validation shard hashes,
+  `[8,14,14,384]` shapes, float32 dtypes, and finite values passed an independent
+  pre-evaluation scan.
 - The VideoPrism candidate extractor has unit coverage but cannot currently
-  execute under the active Windows Code Integrity policy.
+  execute under the active Windows Code Integrity policy. It was not bypassed
+  or used for this result.
 - VideoMAE's earlier real-video CUDA runtime and source/license audit passed.
   The proposed extractor also passed a new train-only smoke on `video_10001`:
   16 frames decoded in 1.808s, frozen forward in 0.452s, finite token grid
@@ -145,7 +148,21 @@ experiment can only add a bounded video-plus-text evidence point.
   (SHA-256 `51f4f2d5e30ebdb2a1f6f6cfe5a317608156bd450773c94feca981e917d3a4b8`);
   its feature shard SHA-256 is
   `3fe0a89cbd43fa65bd5c978edaf73073ac695864c17a08beddea0c9eb3bb10c6`.
-  This is a runtime smoke only; no question, label, validation, or test data was
-  loaded and no quality metric was computed.
-- No feature cache for this MCQA cohort, readout fit, or quality metric exists
-  yet. Do not report this protocol as an evaluation result.
+  This earlier smoke was runtime-only; the later full-corpus run is documented
+  separately below.
+- The frozen-feature readout completed eight epochs and selected epoch 2 on
+  train-video-group internal selection only. Strong overfit appeared by epoch
+  8. Best-checkpoint SHA-256 is
+  `e9516be6d58ba82c3c4f111e59d6b724e856b3ac412bbc2c57b683d35deecb8c`;
+  the separate final checkpoint is retained.
+- The one-time public-validation comparison completed on 2,886 questions /
+  1,518 videos. Joint Accuracy was 51.77% versus 50.83% text-only; its paired
+  Accuracy interval includes zero, and joint NLL/ECE were worse. Correct video
+  improved NLL/Brier over the mismatched-video control. These are
+  exposed-development candidate metrics, not a blind test or product claim.
+  See [the full result](R2_PERCEPTION_TEST_PATHA_VIDEO_TEXT_RESULT_20261111.md)
+  and external predictions/report in the D: artifact tree.
+- The feature extractor's initial `run.json` remains marked `RUNNING` after
+  completion; the immutable feature manifest says `COMPLETE`, all receipts
+  passed, and no extraction process remains. The stale run metadata was
+  preserved and is a known reporting limitation.
