@@ -100,6 +100,8 @@ Attempt 06 output directory:
 SHA-256 `47a54ae10ea001c70e97c07ab48d0b414a88e81f6d5ae3bfef08d0c5760a6e61`,
 response SHA-256
 `3e3d0d7ab396e7e86b1114c63f5dc24198475dfc412ff3a16253e9275c34c6f2`, and
+result file SHA-256
+`2c1180421b559848e1775c7d37fe9428fc7bda5aab4d456b9d4da882ca8cd8a5`, and
 explicit `targets_or_labels_used: false`, `validation_or_sealed_audit_opened:
 false`, and `training_performed: false`. Its source/code hashes bind the exact
 runtime measured. The report and result file are kept as separate artifacts.
