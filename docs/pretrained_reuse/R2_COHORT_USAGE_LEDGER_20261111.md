@@ -49,8 +49,16 @@ media access, and encoder/tokenizer loading. New run reports retain the source
 revision, ledger SHA-256, and source-scoped hashes for all proposed train and
 validation groups so that later exposure reconciliation can be auditable.
 
-The gate also protects the specialized `train_frozen_videoprism_clevr4_probe.py`
-and `train_frozen_clevrer_binary_reasoning.py` launchers. CLEVR-4 passes image
+The gate also protects the specialized `train_frozen_videoprism_clevr4_probe.py`,
+`train_frozen_clevrer_binary_reasoning.py`, and
+`train_frozen_audio_multiquery.py` launchers. The multiquery Speech Commands
+trainer reads only split metadata to collect speaker-group identities, then
+checks the pinned `google/speech_commands` revision before hashing artifacts,
+validating media, loading Whisper parameters or cached features, or creating an
+output directory. It stores the cohort receipt in preflight output and its final
+report. Its regression verifies unknown history blocks before those operations.
+This does not admit the existing sample: the source remains blocked unless its
+full exposure history is reconciled in the ledger. CLEVR-4 passes image
 IDs from the train, full validation, and checkpoint-selection manifests;
 CLEVRER passes scene IDs from the train and validation manifests. Both gates
 run before cached features or model weights are read, and each run report keeps
@@ -71,9 +79,9 @@ blocked by every integrated launcher.
   passed.
 - Synthetic CLI cases cover known overlap and incomplete-history blocking.
 - Launcher regressions cover the four canonical Path A trainers plus the
-  specialized CLEVR-4 and CLEVRER trainers. Unknown history blocks before
-  feature-cache/model loading or output creation; the two media-backed runners
-  also block before media validation.
+  specialized CLEVR-4, CLEVRER, and Speech Commands multiquery trainers.
+  Unknown history blocks before feature-cache/model loading or output creation;
+  media-backed runners also block before media validation.
 - The saved prediction artifact was read only to collect group IDs. No model,
   source media, official test split, or sealed audit was opened. No GPU work,
   training, or new quality evaluation was performed while adding the two

@@ -25,6 +25,8 @@ from scripts.train_frozen_text_probe import CandidateScorer, _metrics
 from tiny_omni_decision.dataset import sha256_file
 
 LABELS = ["yes", "no", "up", "down", "left", "right", "on", "off", "stop", "go"]
+SPEECH_COMMANDS_SOURCE_ID = "google/speech_commands"
+SPEECH_COMMANDS_SOURCE_REVISION = "a751309c0fd613e8a5d30d77900f30e8b42bc2da"
 
 
 def _args() -> argparse.Namespace:
@@ -64,7 +66,9 @@ def _read_wav(path: Path) -> np.ndarray:
 def _validate_splits(
     sample_dir: Path, train_rows: list[dict[str, Any]], val_rows: list[dict[str, Any]]
 ) -> None:
-    expected_source = "google/speech_commands@a751309c0fd613e8a5d30d77900f30e8b42bc2da"
+    expected_source = (
+        f"{SPEECH_COMMANDS_SOURCE_ID}@{SPEECH_COMMANDS_SOURCE_REVISION}"
+    )
     for split, rows in (("train", train_rows), ("validation", val_rows)):
         if not rows or any(
             row.get("split") != split or row.get("source") != expected_source for row in rows

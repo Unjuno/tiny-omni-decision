@@ -22,7 +22,14 @@ import yaml
 from torch import Tensor, nn
 from transformers import AutoModel, AutoTokenizer
 
-from scripts.train_frozen_audio_probe import LABELS, _rows, _validate_splits
+from scripts.cohort_gate import DEFAULT_LEDGER, require_clear_cohort
+from scripts.train_frozen_audio_probe import (
+    LABELS,
+    SPEECH_COMMANDS_SOURCE_ID,
+    SPEECH_COMMANDS_SOURCE_REVISION,
+    _rows,
+    _validate_splits,
+)
 from scripts.train_frozen_text_probe import CandidateScorer, _metrics
 from tiny_omni_decision.dataset import sha256_file
 
@@ -40,6 +47,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", choices=("cuda", "cpu"), default=None)
     parser.add_argument("--preflight-only", action="store_true")
+    parser.add_argument("--cohort-ledger", type=Path, default=DEFAULT_LEDGER)
     return parser.parse_args()
 
 
@@ -286,6 +294,34 @@ def main() -> None:
     output = args.output_dir.resolve()
     if output.exists():
         raise FileExistsError(f"refusing to reuse multi-query output directory: {output}")
+
+    # Read only the frozen split metadata first. The source-scoped gate must run
+    # before hashing caches/weights, validating media, or loading any model.
+    train_rows = _rows(sample_dir / "train.jsonl")
+    validation_rows = _rows(sample_dir / "validation.jsonl")
+    if any(
+        not isinstance(row.get("speaker_group_sha256"), str)
+        or not row["speaker_group_sha256"]
+        for row in train_rows + validation_rows
+    ):
+        raise ValueError("Speech Commands split metadata has a missing speaker group")
+    train_speakers = {row["speaker_group_sha256"] for row in train_rows}
+    validation_speakers = {row["speaker_group_sha256"] for row in validation_rows}
+    if train_speakers & validation_speakers:
+        raise ValueError("train and validation speaker groups overlap")
+    speaker_groups = sorted(
+        {
+            str(row["speaker_group_sha256"])
+            for row in train_rows + validation_rows
+        }
+    )
+    cohort_check = require_clear_cohort(
+        ledger_path=args.cohort_ledger,
+        source_id=SPEECH_COMMANDS_SOURCE_ID,
+        revision=SPEECH_COMMANDS_SOURCE_REVISION,
+        group_ids=speaker_groups,
+    )
+
     if _hash(sample_dir / "train.jsonl") != config["source"]["train_manifest_sha256"]:
         raise ValueError("frozen audio train manifest hash mismatch")
     if _hash(sample_dir / "validation.jsonl") != config["source"]["validation_manifest_sha256"]:
@@ -303,8 +339,6 @@ def main() -> None:
     if audio_parameter_count != int(config["encoder"]["audio_parameters"]):
         raise ValueError("frozen Whisper parameter count mismatch")
 
-    train_rows = _rows(sample_dir / "train.jsonl")
-    validation_rows = _rows(sample_dir / "validation.jsonl")
     _validate_splits(sample_dir, train_rows, validation_rows)
     for split, rows in (("train", train_rows), ("validation", validation_rows)):
         if len({str(row["id"]) for row in rows}) != len(rows):
@@ -373,6 +407,7 @@ def main() -> None:
             json.dumps(
                 {
                     "preflight": "pass",
+                    "cohort_gate": cohort_check,
                     "config_path": str(config_path),
                     "config_sha256": sha256_file(config_path),
                     "train_manifest_sha256": _hash(sample_dir / "train.jsonl"),
@@ -560,6 +595,7 @@ def main() -> None:
             "final_readout_sha256": sha256_file(final_checkpoint_path),
         },
         "data_hashes": sample_hashes,
+        "cohort_gate": cohort_check,
         "sample_counts": {
             "unique_train_audio_events": unique_train,
             "unique_validation_audio_events": unique_validation,
