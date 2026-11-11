@@ -23,6 +23,7 @@ from torch import Tensor
 from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer
 
+from scripts.cohort_gate import DEFAULT_LEDGER, require_clear_cohort
 from scripts.train_frozen_text_probe import CandidateScorer, _metrics
 from scripts.train_frozen_video_probe import _combine, _predict, _text_features
 from tiny_omni_decision.clevrer import (
@@ -49,6 +50,7 @@ def _args() -> argparse.Namespace:
         default=Path("configs/pretrained_reuse/path_a_videoprism_clevrer_binary_reasoning.yaml"),
     )
     parser.add_argument("--preflight-only", action="store_true")
+    parser.add_argument("--cohort-ledger", type=Path, default=DEFAULT_LEDGER)
     return parser.parse_args()
 
 
@@ -453,6 +455,16 @@ def main() -> None:
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
     started_at = datetime.now(UTC).isoformat()
     preflight_started = time.perf_counter()
+    sample_dir = Path(config["source"]["sample_dir"]).resolve(strict=True)
+    source_rows = _load_rows(sample_dir / "train.jsonl") + _load_rows(
+        sample_dir / "validation.jsonl"
+    )
+    cohort_check = require_clear_cohort(
+        ledger_path=args.cohort_ledger,
+        source_id="MIT-IBM/CLEVRER",
+        revision=str(config["source"]["revision"]),
+        group_ids=sorted({str(row["scene_index"]) for row in source_rows}),
+    )
     checked = _validate_inputs(config_path, config)
     preflight_seconds = time.perf_counter() - preflight_started
     train_rows = checked["train_rows"]
@@ -462,6 +474,7 @@ def main() -> None:
         "status": "preflight_pass_clevrer_binary_reasoning",
         "experiment_id": config["experiment_id"],
         "source_revision": config["source"]["revision"],
+        "cohort_gate": cohort_check,
         "config_sha256": checked["config_sha256"],
         "source_question_sha256": checked["source_question_sha256"],
         "sample_manifest_sha256": checked["sample_manifest_sha256"],
@@ -525,6 +538,7 @@ def main() -> None:
         "question_type_counts",
         "normalized_content_overlap_before_filter",
         "validation_rows_removed_for_exact_content_overlap",
+        "cohort_gate",
     ):
         if saved_preflight.get(key) != preflight.get(key):
             raise ValueError(f"saved preflight no longer matches current inputs: {key}")
@@ -703,6 +717,7 @@ def main() -> None:
             "development validation scenes; not a blind or general-world benchmark"
         ),
         "experiment_id": config["experiment_id"],
+        "cohort_gate": cohort_check,
         "source_commit": subprocess.run(
             ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
         ).stdout.strip(),

@@ -49,12 +49,20 @@ media access, and encoder/tokenizer loading. New run reports retain the source
 revision, ledger SHA-256, and source-scoped hashes for all proposed train and
 validation groups so that later exposure reconciliation can be auditable.
 
-Other specialized training/evaluation launchers are not yet integrated, so
-this is not a repository-wide enforcement boundary. `CLEAR_WITHIN_DECLARED_HISTORY`
+The gate also protects the specialized `train_frozen_videoprism_clevr4_probe.py`
+and `train_frozen_clevrer_binary_reasoning.py` launchers. CLEVR-4 passes image
+IDs from the train, full validation, and checkpoint-selection manifests;
+CLEVRER passes scene IDs from the train and validation manifests. Both gates
+run before cached features or model weights are read, and each run report keeps
+the gate receipt. Their regressions prove that unknown source history blocks
+before cache/model access or output creation.
+
+Other specialized training/evaluation launchers remain unintegrated, so this
+is still not a repository-wide enforcement boundary. `CLEAR_WITHIN_DECLARED_HISTORY`
 proves only a non-overlap within a source inventory explicitly marked complete.
 It does not prove semantic novelty, label independence, rights, or sufficient
 sample size. A source missing from the ledger or marked `INCOMPLETE` remains
-blocked by the canonical trainers.
+blocked by every integrated launcher.
 
 ## Verification and scope
 
@@ -62,12 +70,14 @@ blocked by the canonical trainers.
 - `ruff check scripts/check_cohort_usage.py tests/test_check_cohort_usage.py`:
   passed.
 - Synthetic CLI cases cover known overlap and incomplete-history blocking.
-- Launcher regressions cover the four canonical trainer entrypoints and prove
-  unknown source history blocks before media validation, encoder/tokenizer
-  loading, or output creation.
+- Launcher regressions cover the four canonical Path A trainers plus the
+  specialized CLEVR-4 and CLEVRER trainers. Unknown history blocks before
+  feature-cache/model loading or output creation; the two media-backed runners
+  also block before media validation.
 - The saved prediction artifact was read only to collect group IDs. No model,
   source media, official test split, or sealed audit was opened. No GPU work,
-  training, or new quality evaluation was performed.
+  training, or new quality evaluation was performed while adding the two
+  specialized gates.
 
 This is R2 exposure-control infrastructure only. It does not complete R2 task
 admission, the multimodal quality gate, or any later R0/R3–R8 requirement.
