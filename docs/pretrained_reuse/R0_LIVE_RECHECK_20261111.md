@@ -98,3 +98,60 @@ isolated D: checkout, recover or replace only the unreproducible runtime
 candidate after inspecting the newest Path A branches, and select the next
 experiment from a rights-cleared, exposure-audited task. The current lack of an
 admitted fresh AV task is the active research constraint, not GPU availability.
+
+## Same-day follow-up and experiment triage
+
+Snapshot time: **2026-11-11 15:58 JST**. The current user worktree remains
+unchanged, including all nine pre-existing changed paths. The local RTX 3080
+again showed 0 MiB / 0% use, with only the ChatGPT desktop process listed by
+`nvidia-smi`. C: now has 2.43 GiB free and D: has 2,031.92 GiB free; use D: for
+any new large data or model outputs. No training process was started.
+
+Two existing result lines were checked before choosing another action:
+
+- The fixed-feature iNaturalist readout from 2026-10-31 already used 1,145
+  training images and 430 observer-disjoint development images. Its 49,793
+  parameter scorer reached 75.35% Accuracy, with 98.17% train Accuracy and a
+  22.82-point gap. Accuracy gain over the prior readout was only 0.47 points
+  with a paired observer-cluster interval spanning zero; its NLL/Brier/ECE
+  improved. That validation was already involved in earlier selection, so it
+  is not eligible for more tuning.
+- The existing RoboMNIST capacity-CV artifact on D: selected rank 8 using
+  train-only grouped five-fold selection. On the already observed development
+  validation, its Accuracy was 49.75% versus 53.35% for the preserved rank-32
+  reference; its paired Accuracy interval against audio-only included zero.
+  This does not support more RoboMNIST fitting or a claim of useful joint-input
+  quality. The original 2,000-row validation remains development evidence,
+  not blind evidence.
+
+A proposed newer iNaturalist metadata cohort was compared by record identity
+against the existing frozen feature rows (without opening image payloads).
+Its 921 train rows all overlap the prior training corpus by observation and
+photo IDs. Its 446 validation rows have zero overlap with that feature cache
+by sample, observation, photo, or observer-group IDs. Therefore it can provide
+a new observer-disjoint image validation only if a compatible feature route is
+available; it does not add unique training examples. The previous VideoPrism
+feature cache has no features for those 446 images. The current Windows
+VideoPrism worker is policy-blocked, while substituting VideoMAE would change
+the encoder and invalidate direct comparison. No media download, feature
+extraction, or fitting was started. Frozen metadata is at
+`C:\CodexArtifacts\inat-birds-cc0-expansion-filtered-pages-11-30-20261029-attempt-02`;
+the train, validation, and metadata SHA-256 values are respectively
+`362a562568910676a15b71d42233fbeb8f6811116afcb6ef22f846bcf83e8618`,
+`c3f846c677516b5f08c82f6ea12a39146bf9a890be66306985f202622d6ddcc0`, and
+`8e1c8e65c281018657caa3edc8c2f0374d934b34a59fe949deba9baa9088ba22`.
+
+The user's uncommitted iNaturalist downloader was reviewed read-only and left
+untouched. Before it can support that cohort, its reported near-duplicate
+hashes must be made part of the actual cross-split pass/fail gate; the current
+`media_identity_gate_pass` checks exact hashes only. This is an implementation
+integrity fix, not a reason to weaken the split.
+
+**Triage:** do not repeat the exposed iNaturalist or RoboMNIST experiments.
+Keep R2-M data/task admission as the blocking gate. Continue only with a
+rights-cleared and exposure-audited task where both inputs can be tested with
+predeclared ablations and independent source groups; do not begin R3 shared
+backbone/weight merging until that gate passes. The alternate VideoMAE route
+may be developed as a separate Path A runtime, but it needs its own frozen
+feature cache and task-specific evaluation and cannot be presented as a
+VideoPrism comparison.
