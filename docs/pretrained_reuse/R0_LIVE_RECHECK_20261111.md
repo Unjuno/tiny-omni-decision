@@ -125,16 +125,10 @@ Two existing result lines were checked before choosing another action:
   not blind evidence.
 
 A proposed newer iNaturalist metadata cohort was compared by record identity
-against the existing frozen feature rows (without opening image payloads).
-Its 921 train rows all overlap the prior training corpus by observation and
-photo IDs. Its 446 validation rows have zero overlap with that feature cache
-by sample, observation, photo, or observer-group IDs. Therefore it can provide
-a new observer-disjoint image validation only if a compatible feature route is
-available; it does not add unique training examples. The previous VideoPrism
-feature cache has no features for those 446 images. The current Windows
-VideoPrism worker is policy-blocked, while substituting VideoMAE would change
-the encoder and invalidate direct comparison. No media download, feature
-extraction, or fitting was started. Frozen metadata is at
+against one merged feature cache, which was an incomplete history check. The
+initial interpretation of its validation as fresh is superseded by the
+correction below. No media download, feature extraction, or fitting was
+started. Frozen metadata is at
 `C:\CodexArtifacts\inat-birds-cc0-expansion-filtered-pages-11-30-20261029-attempt-02`;
 the train, validation, and metadata SHA-256 values are respectively
 `362a562568910676a15b71d42233fbeb8f6811116afcb6ef22f846bcf83e8618`,
@@ -171,3 +165,34 @@ No candidate in this screen passes the existing task, rights, group-count,
 and both-input gates. No data was downloaded, no media or labels were opened,
 and no model was run. Continue R2-M source discovery; do not substitute an
 easy single-stream task or change the group floor to manufacture a pass.
+
+## Correction — iNaturalist validation exposure — 2026-11-11 16:17 JST
+
+The earlier same-day follow-up incorrectly treated the 446-row validation
+manifest as unseen because it compared only with the merged feature cache
+containing a different 430-row validation split. A read-only scan of all
+`C:\CodexArtifacts\inat-birds*` JSONL manifests found that the full 446-row
+validation is already present in the earlier source manifest and feature run:
+
+- Proposed `attempt-02/validation.jsonl` and prior
+  `attempt-01/validation.jsonl` are byte-identical (SHA-256
+  `c3f846c677516b5f08c82f6ea12a39146bf9a890be66306985f202622d6ddcc0`).
+- The matching validation records occur in the prior 1,367-row VideoPrism
+  feature cache; its `feature-rows.jsonl` SHA-256 is
+  `d772a67381f37dbda25c77d7a2ee4e841773573023dfa920082e4f4be1d309ae`.
+- The prior linear-readout run has 446 validation predictions with SHA-256
+  `0fc854c25a8d9887674c12fb1b6af50a97992baf886d9bbdfd2f3b89b490fbeb`; its
+  result record SHA-256 is
+  `bbc5f4d03b0c6fc0c5242a6f7e1f5cb324fe08e84522eec631b0555def49a56f`.
+- All 446 proposed validation observation IDs, photo IDs, and observer hashes
+  occur in the prior validation manifest and feature rows. The prior
+  prediction file covers the same 446 observations and photos in the same
+  order.
+
+Therefore this validation is exposed development data and is closed to further
+model selection or quality claims. The exact match demonstrates duplicate
+records, not an independent fresh cohort. The prior report's claim that the
+new validation could provide independent evidence is withdrawn. The iNaturalist
+run was not launched; no existing artifact or user work was altered. Any future
+use requires a genuinely new, adequately sized cohort and a source-global
+exposure audit before acquisition or model loading.
