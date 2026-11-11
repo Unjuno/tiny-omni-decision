@@ -20,6 +20,7 @@ from torch import Tensor, nn
 from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer
 
+from scripts.cohort_gate import DEFAULT_LEDGER, require_clear_cohort
 from scripts.train_frozen_image_probe import _load_vjepa
 from scripts.train_frozen_text_probe import CandidateScorer, _metrics
 from tiny_omni_decision.dataset import sha256_file
@@ -37,6 +38,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--text-model", type=Path, required=True)
     parser.add_argument("--text-revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--cohort-ledger", type=Path, default=DEFAULT_LEDGER)
     parser.add_argument(
         "--config", type=Path, default=Path("configs/pretrained_reuse/path_a_video_vjepa.yaml")
     )
@@ -197,6 +199,15 @@ def _predict(scorer: nn.Module, features: list[Tensor], device: torch.device) ->
 
 def main() -> None:
     args = _args()
+    root = args.sample_dir.resolve()
+    train = _load_rows(root / "train.jsonl")
+    val = _load_rows(root / "validation.jsonl")
+    cohort_check = require_clear_cohort(
+        ledger_path=args.cohort_ledger,
+        source_id="MIT-IBM/CLEVRER",
+        revision="98b842082ba4f7c18b6b9e3f39145871782a65ef",
+        group_ids=sorted({str(row["scene_index"]) for row in train + val}),
+    )
     run_started_at = datetime.now(UTC).isoformat()
     output = args.output_dir.resolve()
     if output.exists() and any(output.iterdir()):
@@ -211,9 +222,6 @@ def main() -> None:
     device = torch.device("cuda")
     torch.cuda.reset_peak_memory_stats(device)
     torch.set_num_threads(4)
-    root = args.sample_dir.resolve()
-    train = _load_rows(root / "train.jsonl")
-    val = _load_rows(root / "validation.jsonl")
     _validate_splits(root, train, val)
     encoder, transform, source_commit = _load_vjepa(args, torch)
     encoder.to(device)
@@ -339,6 +347,7 @@ def main() -> None:
         "schema_version": 1,
         "status": "complete_clevrer_frozen_video_probe",
         "claim_scope": "small synthetic CLEVRER descriptive probe; not general video understanding",
+        "cohort_gate": cohort_check,
         "seed": args.seed,
         "source_commit": subprocess.run(
             ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True

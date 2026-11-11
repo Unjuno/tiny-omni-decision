@@ -20,6 +20,7 @@ from torch import Tensor, nn
 from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer
 
+from scripts.cohort_gate import DEFAULT_LEDGER, require_clear_cohort
 from tiny_omni_decision.dataset import iter_local_rows, normalize_jsonl, sha256_file
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer as CandidateScorer
 from tiny_omni_decision.schema import DatasetManifest
@@ -46,6 +47,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--cohort-ledger", type=Path, default=DEFAULT_LEDGER)
     parser.add_argument("--context-policy", choices=("legacy", "question_pair"), default="legacy")
     parser.add_argument("--preserve-noul-criteria", action="store_true")
     parser.add_argument("--option-max-length", type=int, choices=(256, 512), default=256)
@@ -288,10 +290,6 @@ def _predict(scorer: nn.Module, features: list[Tensor], device: torch.device) ->
 
 def main() -> None:
     args = _args()
-    output = args.output_dir.resolve()
-    if output.exists() and any(output.iterdir()):
-        raise FileExistsError(f"refusing to overwrite non-empty output directory: {output}")
-    output.mkdir(parents=True, exist_ok=True)
     random.seed(args.seed)
     torch.manual_seed(args.seed)
     if torch.cuda.is_available():
@@ -331,6 +329,16 @@ def main() -> None:
     _assert_disjoint(train, validation)
     train_groups, _ = _identity_sets(train)
     validation_groups, _ = _identity_sets(validation)
+    cohort_check = require_clear_cohort(
+        ledger_path=args.cohort_ledger,
+        source_id=manifest.dataset_id,
+        revision=manifest.revision,
+        group_ids=sorted(train_groups | validation_groups),
+    )
+    output = args.output_dir.resolve()
+    if output.exists() and any(output.iterdir()):
+        raise FileExistsError(f"refusing to overwrite non-empty output directory: {output}")
+    output.mkdir(parents=True, exist_ok=True)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=True)
     if args.preserve_noul_criteria:
@@ -459,6 +467,7 @@ def main() -> None:
         "option_max_length": args.option_max_length,
         "runner_sha256": sha256_file(Path(__file__)),
         "source_revision": manifest.revision,
+        "cohort_gate": cohort_check,
         "validation_source_revision": validation_manifest.revision,
         "dataset_id": manifest.dataset_id,
         "model_revision": args.revision,

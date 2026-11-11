@@ -17,6 +17,7 @@ from torch import Tensor, nn
 from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer
 
+from scripts.cohort_gate import DEFAULT_LEDGER, require_clear_cohort
 from scripts.train_frozen_text_probe import CandidateScorer, _metrics
 from tiny_omni_decision.dataset import CLEVR4_TAXONOMIES, sha256_file
 
@@ -30,6 +31,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--text-model", type=Path, required=True)
     parser.add_argument("--text-revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--cohort-ledger", type=Path, default=DEFAULT_LEDGER)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-images", type=int, default=8)
@@ -190,6 +192,15 @@ def _predict(scorer: nn.Module, features: list[Tensor], device: torch.device) ->
 
 def main() -> None:
     args = _args()
+    sample_root = args.sample_dir.resolve()
+    train_rows = _load_rows(sample_root / "train-labels.jsonl")
+    validation_rows = _load_rows(sample_root / "val-labels.jsonl")
+    cohort_check = require_clear_cohort(
+        ledger_path=args.cohort_ledger,
+        source_id="sgvaze/clevr4",
+        revision="cddc78fb2a8359dc958987b2c750bfdd4bfd2c73",
+        group_ids=sorted({str(row["id"]) for row in train_rows + validation_rows}),
+    )
     output = args.output_dir.resolve()
     if output.exists() and any(output.iterdir()):
         raise FileExistsError(f"refusing to overwrite non-empty output directory: {output}")
@@ -202,9 +213,6 @@ def main() -> None:
     torch.cuda.reset_peak_memory_stats(device)
     torch.set_num_threads(4)
 
-    sample_root = args.sample_dir.resolve()
-    train_rows = _load_rows(sample_root / "train-labels.jsonl")
-    validation_rows = _load_rows(sample_root / "val-labels.jsonl")
     train_ids = {row["id"] for row in train_rows}
     validation_ids = {row["id"] for row in validation_rows}
     if train_ids & validation_ids:
@@ -371,6 +379,7 @@ def main() -> None:
         ),
         "seed": args.seed,
         "source_revision": "sgvaze/clevr4@cddc78fb2a8359dc958987b2c750bfdd4bfd2c73",
+        "cohort_gate": cohort_check,
         "source_archive_sha512_expected": (
             "769465d90b6550a242f6d5940b52f2e0944c65af09e17e6f3f2cb65701af66057"
             "ab06485b2194fa9d8932e03a03e87b3fadece43049e1af1ddd9f8e4990ed19a"

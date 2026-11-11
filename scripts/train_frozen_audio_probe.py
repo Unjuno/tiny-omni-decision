@@ -20,6 +20,7 @@ from torch import Tensor, nn
 from torch.nn import functional as F
 from transformers import AutoModel, AutoTokenizer, WhisperFeatureExtractor, WhisperModel
 
+from scripts.cohort_gate import DEFAULT_LEDGER, require_clear_cohort
 from scripts.train_frozen_text_probe import CandidateScorer, _metrics
 from tiny_omni_decision.dataset import sha256_file
 
@@ -34,6 +35,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--text-model", type=Path, required=True)
     parser.add_argument("--text-revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--cohort-ledger", type=Path, default=DEFAULT_LEDGER)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--feature-batch-size", type=int, default=8)
@@ -286,6 +288,18 @@ def _train_head(
 
 def main() -> None:
     args = _args()
+    sample_dir = args.sample_dir.resolve()
+    train_rows = _rows(sample_dir / "train.jsonl")
+    validation_rows = _rows(sample_dir / "validation.jsonl")
+    cohort_groups = sorted(
+        {str(row["speaker_group_sha256"]) for row in train_rows + validation_rows}
+    )
+    cohort_check = require_clear_cohort(
+        ledger_path=args.cohort_ledger,
+        source_id="google/speech_commands",
+        revision="a751309c0fd613e8a5d30d77900f30e8b42bc2da",
+        group_ids=cohort_groups,
+    )
     output_dir = args.output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     if any(output_dir.iterdir()):
@@ -301,9 +315,6 @@ def main() -> None:
     device = torch.device("cuda")
     torch.cuda.reset_peak_memory_stats(device)
 
-    sample_dir = args.sample_dir.resolve()
-    train_rows = _rows(sample_dir / "train.jsonl")
-    validation_rows = _rows(sample_dir / "validation.jsonl")
     _validate_splits(sample_dir, train_rows, validation_rows)
     encoder, model_config, processor = _load_encoder(args, device)
     train_features, train_ids, train_targets, train_seconds = _extract_features(
@@ -406,6 +417,7 @@ def main() -> None:
         ),
         "seed": args.seed,
         "source_revision": "google/speech_commands@a751309c0fd613e8a5d30d77900f30e8b42bc2da",
+        "cohort_gate": cohort_check,
         "sample_fetch_report_sha256": sha256_file(sample_dir / "fetch-report.json"),
         "train_sample_ids_sha256": hashlib.sha256("\n".join(train_ids).encode()).hexdigest(),
         "validation_sample_ids_sha256": hashlib.sha256(
