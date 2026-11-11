@@ -155,3 +155,19 @@ backbone/weight merging until that gate passes. The alternate VideoMAE route
 may be developed as a separate Path A runtime, but it needs its own frozen
 feature cache and task-specific evaluation and cannot be presented as a
 VideoPrism comparison.
+
+## Targeted synchronized-source follow-up — 2026-11-11 16:11 JST
+
+An additional official-source screen did not find a new R2-M admission:
+
+| Source | Official facts | Disposition |
+|---|---|---|
+| [Action Verb Corpus](https://www.ofai.at/resources/avc) | CC BY 4.0; 46 recordings from 12 people, with audio, video, hand/arm motion, and 390 simple action instances. | Too few independent people/recordings for the existing minimum; no fit. |
+| [XRFv2 Plus](https://airslab2020.github.io/labpages/datasets/xrfv2-plus/index.html) | 853 synchronized sequences from 16 volunteers; 108,929 QA pairs do not increase the number of independent groups. | Below the 1,000-example / 200-group admission floor, and the tracked source/rights screen remains unresolved; no acquisition. |
+| [Argoverse 2 Sensor](https://www.argoverse.org/av2.html) | 1,000 camera/LiDAR scenarios, but the official data license is CC BY-NC-SA 4.0. | Exclude for this product-directed workstream; the task is also camera/LiDAR rather than audio/video. |
+| [Seeing Sound](https://github.com/sonyc-project/seeing-sound-dataset) | CC BY 4.0 but only 60 synthesized audio soundscapes; the visualization is annotation assistance, not a synchronized video input. | Not an AV task or sufficiently independent source set. |
+
+No candidate in this screen passes the existing task, rights, group-count,
+and both-input gates. No data was downloaded, no media or labels were opened,
+and no model was run. Continue R2-M source discovery; do not substitute an
+easy single-stream task or change the group floor to manufacture a pass.
