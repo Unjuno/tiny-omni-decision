@@ -360,4 +360,3 @@ class PerceptionVideoTextRuntime:
 
     def close(self) -> None:
         self._hook.remove()
-
