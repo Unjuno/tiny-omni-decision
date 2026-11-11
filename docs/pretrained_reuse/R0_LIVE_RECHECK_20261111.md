@@ -77,7 +77,9 @@ contain only the new audit record. New large outputs must also go to D:.
   `supports_joint_modalities: false`, and no quality evaluation/training. Its
   named source commit `025336e40aeeda2db32d459703beb3342d519395` is not present
   in the current local/fetched Git object database, so the artifact is not
-  reproducible from current refs until the code revision is recovered. The
+  reproducible from current refs until the code revision is recovered. A
+  read-only GitHub commit lookup also returned HTTP 422, `No commit found for
+  SHA`, confirming it is unavailable from the repository API. The
   recorded package is above the provisional 200 MB size target.
 
 ## Constraints and decision
