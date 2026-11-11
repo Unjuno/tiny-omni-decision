@@ -101,7 +101,8 @@ registry warnings; the verifier completed and all numeric checks passed.
 - PR CI run 4154 initially failed during test collection because the new test
   imported optional PyTorch at module import. The runner now imports PyTorch
   only when executing the GPU verifier; this makes the CPU-only test module
-  collectable without installing the ML extra. A fresh PR run is pending.
+  collectable without installing the ML extra. PR CI run 4156 passed for code
+  commit `aaa47968c1db8bd63306d9320dd8b3e693a49ee4`.
 - Ruff: `ruff check .` passed.
 - CI manifest validation commands passed for the model manifest, all candidate
   dataset manifests, the four catalogs, and the dataset-manifest audit.
