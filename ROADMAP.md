@@ -1,3 +1,4 @@
+**2026-11-12 R2 MiniWoB screen-only preflight:** The pinned synthetic click-color corpus is independently reverified (512 train / 512 development validation; zero ID, group, or screen-pixel overlap) and its five focused CPU tests pass. No model was scored. The approved system Python lacks the pinned VideoPrism JAX/Flax stack, while its dedicated runtime is blocked by Windows Application Control; the RTX 3080 was occupied by a separate Orbitune job during the recheck. R2 quality and multimodal M-2 remain open. See [preflight report](docs/pretrained_reuse/R2_MINIWOB_SCREEN_ACTION_PREFLIGHT_20261112.md).
 **2026-11-10 R2 TallyQA Visual Genome development probe:** Pinned TallyQA
 `46cdc649ec79c3dcc2720ff227ad07d7ee51da6f`; inspected only `train.json`,
 selected 3,902 AMT questions / 3,494 Visual Genome images, and froze
