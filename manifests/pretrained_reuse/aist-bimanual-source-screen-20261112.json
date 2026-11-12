@@ -23,7 +23,8 @@
   },
   "license": {
     "page_displays": "CC BY 4.0",
-    "media_and_derivative_scope": "REVIEW",
+    "source_level_rights_screen": "PROVISIONALLY_FAVORABLE",
+    "archive_component_and_derivative_scope": "REVIEW_BEFORE_PAYLOAD_USE",
     "human_content_and_privacy_scope": "UNKNOWN"
   },
   "modalities": {
@@ -33,8 +34,10 @@
   "split_and_task": {
     "publisher_split": "not established in inspected official metadata",
     "task_group_count": 117,
-    "provisional_200_independent_clip_gate": "uncertain; episode-level independence and repeated-scene risk not verified",
-    "proposed_task": "candidate action-chunk selection from synchronized camera, proprioception and task prompt",
+    "nominal_demos_may_exceed_200_clip_floor": true,
+    "independent_trajectory_group_count": "UNKNOWN; must group stable demo IDs by shared session/scene/operator/configuration",
+    "proposed_task": "candidate action-chunk selection by preregistered normalized 14-D distance to the next teleoperated action, with frozen ambiguity margin; synchronized camera + proprioception, optional task prompt",
+    "camera_joint_clock_alignment": "UNKNOWN; published rates are 30 FPS RGB and 50 Hz joints; no timestamp mapping verified",
     "success_labels": "not documented",
     "both_input_necessity": "not tested"
   },
