@@ -40,7 +40,9 @@ candidate until the R2 gates below are resolved.
   declares Apache License 2.0 but gives no detailed dataset or split
   description. The `122-rotate_pot_handle/success_episodes` directory contains
   303 timestamped HDF5 episode pointers. The task path exposes no train/val
-  partition; episode independence as a scene/session group is undocumented.
+  partition. The IDs span six calendar dates, but no official metadata maps
+  them to independent scene/session/operator groups; count 303 episodes, not
+  303 independent groups.
   One LFS pointer reports a 13,768,050-byte HDF5 object; this is not a complete
   task-size estimate. No LFS object, HDF5, annotation, or media payload was
   fetched or opened.
@@ -51,7 +53,7 @@ candidate until the R2 gates below are resolved.
 |---|---|---|
 | Rights for both synchronized modalities | Dataset cards display Apache-2.0; scope across every media/annotation component and person-related rights was not verified | Open |
 | Relevant observations | Camera plus proprioceptive/force/tactile data are described | Promising, not sufficient |
-| Independent grouped splits | One simulation task has 303 timestamped HDF5 episode IDs but no declared train/val split; independent scene/session grouping remains UNKNOWN | Fail closed |
+| Independent grouped splits | One simulation task has 303 timestamped episodes across six dates but no declared train/val split or independent scene/session mapping; independent-group count is UNKNOWN | Fail closed |
 | Supplied-option Decision task | Release describes manipulation demonstrations and policy learning; no fixed supplied-option decision labels were verified | Open |
 | Both-input necessity | No paired unimodal-vs-joint task/evaluation evidence found | Open |
 | Local feasibility | ModelScope reports 51.04 GB for the top-level collection and 194.21 GB for the Tienkung simulation sub-repository; one task's total pointer sizes remain UNKNOWN | Not assessed |
