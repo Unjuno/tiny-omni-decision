@@ -1,0 +1,48 @@
+{
+  "experiment_id": "r2-miniwob-dino-path-a-v1-seed17",
+  "seed": 17,
+  "device": "cpu",
+  "corpus": {
+    "path": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-screen-only-corpus-20261112-attempt-02",
+    "manifest_sha256": "dc9c7b5c3d7c7b044e319ef108da1a84ab24eedd7a10439942f8f5d05f17eecc",
+    "train_jsonl_sha256": "be296443c53e29b77873856c710f48ef98ef21091e113a47108dbe04e60f54b9",
+    "validation_jsonl_sha256": "2be09a9f7f9a4d85f9d642f798b69d2fc39d5fcac0b0a0f9993d4fad892a350f",
+    "expected_examples_per_split": 512,
+    "task": "miniwob/click-color-v1:screen-only"
+  },
+  "encoder": {
+    "repo": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "artifact_path": "C:/CodexArtifacts/pretrained-reuse-r1/dinov2-small-audit-01/model",
+    "weight_sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1",
+    "parameters": 22056576,
+    "dtype": "float32",
+    "trainable": false,
+    "processor_config_sha256": "14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828",
+    "image_preprocessing": {
+      "method": "resize whole screen to 224x224 bicubic; no center crop",
+      "normalization_mean": [0.485, 0.456, 0.406],
+      "normalization_std": [0.229, 0.224, 0.225],
+      "reason": "preserve all MiniWoB action candidates; pretrained processor center crop would discard side content"
+    },
+    "features": ["cls_token", "mean_patch_tokens", "3x3_patch_mean_at_each_option_center", "x_norm", "y_norm"]
+  },
+  "readout": {
+    "architecture": "shared scorer: LayerNorm(1154), Linear(1154,64), GELU, Linear(64,1)",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "max_epochs": 100,
+    "early_stopping_patience": 15,
+    "min_delta": 0.0001,
+    "selector": "earliest strict minimum development-validation NLL; improvement must exceed min_delta"
+  },
+  "controls": [
+    "train-derived candidate-position prior",
+    "black-screen features with coordinates retained",
+    "train and validation screens independently cyclically permuted across episodes",
+    "same-example candidate-order permutation; predictions restored by opaque option ID"
+  ],
+  "output_path": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-dino-path-a-v1-attempt-01"
+}
