@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
 
 import pytest
 
@@ -263,6 +265,75 @@ def test_payload_over_budget_is_rejected_without_mutating_state():
 
     assert snapshot(store, 10.0, [("audio", "mic")])["audio", "mic"].payload == before
     assert store.bytes_used <= store.max_serialized_bytes
+
+
+def test_concurrent_stream_updates_keep_snapshots_causal_and_state_bounded():
+    max_events = 3
+    store = state(
+        max_serialized_bytes=32_768,
+        max_events_per_stream=max_events,
+        max_streams=2,
+    )
+    barrier = Barrier(3)
+    snapshots = []
+    iterations = 64
+
+    def write_stream(modality, source_id, offset):
+        for step in range(1, iterations + 1):
+            barrier.wait()
+            timestamp = float(step * 10 + offset)
+            payload = f"{modality}-{step}".encode()
+            put_feature(store, modality, source_id, timestamp, payload)
+            barrier.wait()
+
+    def query_streams():
+        for step in range(1, iterations + 1):
+            barrier.wait()
+            as_of = float(step * 10 + 2)
+            result = snapshot(
+                store,
+                as_of,
+                [("audio", "mic"), ("video", "camera")],
+            )
+            snapshots.append((as_of, result))
+            barrier.wait()
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        futures = [
+            pool.submit(write_stream, "audio", "mic", 0),
+            pool.submit(write_stream, "video", "camera", 4),
+            pool.submit(query_streams),
+        ]
+        for future in futures:
+            future.result()
+
+    assert len(snapshots) == iterations
+    for as_of, result in snapshots:
+        for entry in result.values():
+            if entry.available:
+                assert entry.available_at_ms <= as_of
+                assert entry.payload_sha256 == hashlib.sha256(entry.payload).hexdigest()
+                assert entry.feature_key.modality == entry.modality
+                assert entry.feature_key.source_id == entry.source_id
+
+    assert store.event_count <= max_events * 2
+    assert store.bytes_used <= store.max_serialized_bytes
+    assert store.eviction_count > 0
+
+
+def test_temporal_feature_history_is_isolated_between_sessions_with_same_stream_ids():
+    first = state(max_serialized_bytes=16_384, max_events_per_stream=4)
+    second = state(max_serialized_bytes=16_384, max_events_per_stream=4)
+    put_feature(first, "audio", "mic", 10.0, b"session-one")
+    put_feature(second, "audio", "mic", 10.0, b"session-two")
+
+    first_entry = snapshot(first, 10.0, [("audio", "mic")])["audio", "mic"]
+    second_entry = snapshot(second, 10.0, [("audio", "mic")])["audio", "mic"]
+
+    assert first_entry.payload == b"session-one"
+    assert second_entry.payload == b"session-two"
+    assert first_entry.payload_sha256 != second_entry.payload_sha256
+    assert first.event_count == second.event_count == 1
 
 
 def test_maximum_stream_count_is_bounded():
