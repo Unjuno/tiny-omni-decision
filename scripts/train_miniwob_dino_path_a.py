@@ -471,11 +471,19 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, default=CONFIG_DEFAULT)
     parser.add_argument("--preflight-only", action="store_true")
+    parser.add_argument("--smoke", action="store_true")
     args = parser.parse_args()
+    if args.preflight_only and args.smoke:
+        parser.error("--preflight-only and --smoke are separate execution modes")
     config_path = args.config.resolve(strict=True)
     config = read_json(config_path)
-    settings = config["readout"]
+    settings = dict(config["readout"])
     output = Path(config["output_path"])
+    run_mode = "smoke" if args.smoke else "full"
+    if args.smoke:
+        output = output.with_name(output.name + "-smoke")
+        settings["max_epochs"] = 2
+        settings["early_stopping_patience"] = 2
     if output.exists() and not args.preflight_only:
         raise FileExistsError(f"refusing to overwrite existing experiment output: {output}")
     if config["device"] != "cpu" or torch.cuda.is_initialized():
@@ -487,6 +495,8 @@ def main() -> None:
     torch.manual_seed(config["seed"])
     root, corpus_manifest, splits = read_corpus(config)
     train_rows, val_rows = splits["train"], splits["validation"]
+    if args.smoke:
+        train_rows, val_rows = train_rows[:16], val_rows[:16]
     train_targets, val_targets = targets_for(train_rows), targets_for(val_rows)
     model, model_dir, model_hashes = load_encoder(config)
     encoder_count = sum(parameter.numel() for parameter in model.parameters())
@@ -533,6 +543,9 @@ def main() -> None:
         json.dumps(
             {
                 **config,
+                "output_path": str(output),
+                "run_mode": run_mode,
+                "effective_readout": settings,
                 "config_sha256": sha256_file(config_path),
                 "source_commit": subprocess.run(
                     ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
