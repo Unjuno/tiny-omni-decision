@@ -271,22 +271,6 @@ class PathARuntimeDispatcher:
                 "--device",
                 self.device,
             ]
-            if self.perception_video_readout is not None:
-                text_model_dir = (
-                    self.assembly_dir
-                    / "components"
-                    / "audio"
-                    / "models"
-                    / "text-minilm-en"
-                ).resolve(strict=True)
-                command.extend(
-                    [
-                        "--perception-video-readout",
-                        str(self.perception_video_readout),
-                        "--text-model-dir",
-                        str(text_model_dir),
-                    ]
-                )
             if self.speech_commands_m1_readout is not None:
                 command.extend(
                     ["--speech-commands-m1-readout", str(self.speech_commands_m1_readout)]

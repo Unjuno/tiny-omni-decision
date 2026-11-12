@@ -354,6 +354,43 @@ def test_videomae_worker_receives_perception_readout_and_assembly_minilm_path(
     assert "--readout" not in command
 
 
+def test_torch_worker_does_not_receive_videomae_only_perception_flags(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    assembly = tmp_path / "assembly"
+    assembly.mkdir()
+    (assembly / "components/audio/models/text-minilm-en").mkdir(parents=True)
+    readout = tmp_path / "perception-readout.pt"
+    readout.write_bytes(b"pinned-readout-placeholder")
+    captured: dict[str, object] = {}
+
+    class StubWorker:
+        def __init__(self, command, **kwargs):
+            captured["command"] = command
+            captured["kwargs"] = kwargs
+
+    monkeypatch.setattr(runtime_dispatch_module, "JsonLineWorker", StubWorker)
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher.assembly_dir = assembly
+    dispatcher.perception_video_readout = readout
+    dispatcher.speech_commands_m1_readout = None
+    dispatcher.worker_log_dir = tmp_path / "logs"
+    dispatcher.device = "cpu"
+    dispatcher._torch_worker = None
+    dispatcher._project_root = tmp_path
+    dispatcher._worker_env = {}
+
+    dispatcher._ensure_torch()
+
+    command = captured["command"]
+    assert isinstance(command, list)
+    worker_args = command[command.index("scripts.path_a_torch_worker") + 1 :]
+    assert "--assembly" in worker_args
+    assert "--device" in worker_args
+    assert "--perception-video-readout" not in worker_args
+    assert "--text-model-dir" not in worker_args
+
+
 def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract() -> None:
     class RecordingWorker:
         def request(self, payload: dict[str, object]) -> dict[str, object]:
