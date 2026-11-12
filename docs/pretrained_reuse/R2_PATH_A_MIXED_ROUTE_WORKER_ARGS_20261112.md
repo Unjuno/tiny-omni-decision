@@ -26,3 +26,24 @@ the focused dispatcher tests and Ruff pass.
 This verifies command construction and route integration only. It does not
 load checkpoints, access a corpus, run GPU inference, or provide task-quality
 evidence.
+
+## Pinned CPU runtime attempt
+
+After the code fix, one label-free text request was attempted through the real
+dispatcher with the Perception readout configured. The selected output folder
+was new and on D:, CUDA was hidden with `CUDA_VISIBLE_DEVICES=-1`, and the
+request used a synthetic state/question/options payload. The attempt stopped
+before the worker parser or any checkpoint load: importing the pinned
+`torch 2.6.0+cu124` environment failed while loading `cusolver64_11.dll` with
+Windows `WinError 1455` (insufficient paging-file/commit capacity). No GPU
+inference occurred and Orbitune's process was left untouched. This is an
+environmental runtime-smoke failure, so actual text inference with the mixed
+configuration remains unverified.
+
+External attempt directory:
+`D:\CodexArtifacts\pretrained-reuse-r2\path-a-mixed-route-runtime-smoke-20261112-attempt-01`
+
+- Result JSON SHA-256: `836879cc76ca5a11c6155ef188cdec1162ffef60a893c8f9bf99ee39eff9b99e`
+- Worker log SHA-256: `115be7a8d990a215fe05362247dd48f242f1c0a3215c73f8e1cd00598c9440a0`
+- Synthetic request SHA-256: `20735a76d700f54e41bb8bbb9a5783bea579d788e221d1be851bd38eddf103f7`
+- Source commit: `c49127143fe483ecfb5b6c96af9e616dded72bc2`
