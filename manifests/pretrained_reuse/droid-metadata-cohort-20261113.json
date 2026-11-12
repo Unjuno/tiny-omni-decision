@@ -1,0 +1,79 @@
+{
+  "format": "pretrained_reuse_metadata_cohort_screen_v1",
+  "dataset_id": "DROID",
+  "recorded_at": "2026-11-13",
+  "status": "REVIEW_NOT_ADMITTED",
+  "scope": "Fixed-seed metadata-only sample of official raw 1.0.1 object metadata; no model or media payload access",
+  "source": {
+    "repository_commit": "caf2035049f239cac608700c5d24c815d06ce9d4",
+    "bucket_prefix": "gs://gresearch/robotics/droid_raw/1.0.1/",
+    "object_inventory": {
+      "objects": 741866,
+      "bytes": 196036747,
+      "sha256": "af0a8141b88fae097873b2c83309e43bb326e5024d4ee63c9ef17c179f161c9d",
+      "metadata_json_objects": 74896,
+      "total_payload_bytes_listed": 8528498975639
+    },
+    "paper": "https://arxiv.org/abs/2403.12945",
+    "official_schema": "https://github.com/droid-dataset/droid/blob/main/droid/postprocessing/schema.py"
+  },
+  "sample": {
+    "seed": 17,
+    "metadata_json_objects": 10000,
+    "sample_order_sha256": "29488a82baebd9a3086b51a25952286133725a36875492f51108515eb5e3bdbb",
+    "metadata_bytes": 17740854,
+    "metadata_receipts_sha256": "05819035bdec7b0a3b561ac86bdbf45ee5d3130a7ff12ae771c8a0943ad5dea5",
+    "summary_sha256": "80fd1b5cdade6424848c4198a14d1967fdef398b652829f51a3377ff1beebc5f",
+    "sample_started_local": "2026-11-13T00:08:40+09:00",
+    "sample_completed_local": "2026-11-13T00:30:26+09:00"
+  },
+  "group_integrity": {
+    "building_scene_id_tuples_in_sample": 1586,
+    "raw_building_strings_in_sample": 61,
+    "collector_ids_in_sample": 78,
+    "physical_scene_groups_verified": null,
+    "official_paper_raw_scene_ids": 2080,
+    "official_paper_manually_deduplicated_scenes": 564,
+    "deduplication_requires_robot_serial_lab_building_and_video_review": true,
+    "prior_exposure_crosswalk_complete": false,
+    "group_split_created": false
+  },
+  "asset_references": {
+    "video_reference_occurrences": 50000,
+    "video_references_found_in_inventory": 49189,
+    "unique_video_asset_references": 29988,
+    "within_record_alias_occurrences": 20000,
+    "cross_record_duplicate_occurrences": 12,
+    "hdf5_references": 10000,
+    "hdf5_references_found_in_inventory": 9990,
+    "media_or_trajectory_payloads_downloaded": 0
+  },
+  "prior_evidence": {
+    "droid_1_0_0_shards_00000_through_00019_previously_used": true,
+    "later_shard_transfer_n": 137,
+    "later_shard_transfer_same_14_sites": true,
+    "video_improvement_over_state_only_observed": false,
+    "prior_result": "video_accuracy=0.3942; state_accuracy=0.4234; joint_accuracy=0.3942; joint_nll=1.7790; state_nll=1.4968"
+  },
+  "decision": {
+    "r2_m2_admitted": false,
+    "reason": "Raw building+scene_id tuples are not verified independent physical scenes; official mapping requires visual/manual dedup; prior exposure is not cross-walked; prior task did not show video complementarity.",
+    "next_requirement": "Obtain an auditable physical-scene equivalence mapping and crosswalk the proposed cohort against all prior DROID train/validation exposure before freezing any task split."
+  },
+  "integrity": {
+    "task_text_or_success_fields_used_or_logged": false,
+    "model_loaded_or_run": false,
+    "training_or_evaluation": false,
+    "sealed_audit_accessed": false,
+    "gpu_used": false,
+    "paid_compute": false
+  },
+  "external_artifacts": {
+    "directory": "D:/CodexArtifacts/pretrained-reuse-r2/droid-metadata-cohort-20261113-attempt-07",
+    "metadata_json_payload_bytes": 17740854,
+    "video_bytes": 0,
+    "hdf5_bytes": 0,
+    "svo_bytes": 0,
+    "npy_bytes": 0
+  }
+}
