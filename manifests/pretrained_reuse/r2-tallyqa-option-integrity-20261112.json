@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "experiment_id": "path-a-tallyqa-vg-option-integrity-20261112",
+  "status": "candidate_set_shortcut_confirmed_task_construction_corrected",
+  "source": {
+    "repository": "https://github.com/manoja328/TallyQA_dataset",
+    "commit": "46cdc649ec79c3dcc2720ff227ad07d7ee51da6f",
+    "archive_member_used": "train.json",
+    "archive_sha256": "e805199fa25c91d2f9df964920c6c36ce8d6cb941c970176f38a92f971bab5ea",
+    "screen_file_sha256": "110fbbe4983106dceb90e82d5454aa40dd3eaebd6151fae03c8f6e6af40a516a",
+    "acquisition_file_sha256": "13707d624dcd3d9ee814b85436d5346f230845a095a5b8067bb15b396976f952"
+  },
+  "legacy_task": {
+    "id": "tallyqa_vg_amt_four_option_counting",
+    "task_manifest_sha256": "59c1c03edf17a8da6c870d4827d033af58759c8300f953b60cb0abbff98f8a45",
+    "option_policy": "answer_plus_three_nearest_distinct_counts",
+    "possible_labels_uniquely_revealed_by_unordered_option_set": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "train_rows": 3101,
+    "distinct_train_option_sets": 13,
+    "in_sample_option_set_majority_correct": 1722,
+    "in_sample_option_set_majority_accuracy": 0.5553047404063205,
+    "validation_scored_by_integrity_audit": false
+  },
+  "corrected_task": {
+    "id": "tallyqa_vg_amt_16_choice_label_independent_counting",
+    "option_count": 16,
+    "candidate_values": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "ordering": "sha256(seed=17,question_id,value), independent of answer",
+    "task_manifest_path": "D:/CodexArtifacts/pretrained-reuse-r2/tallyqa-vg-label-independent-20261112-attempt-01/task-manifest.json",
+    "task_manifest_sha256": "13561149f377a7b831a34516a0ac55d0569af23f856caa2a7e1fc6b47ebb2d8b",
+    "train_questions": 3101,
+    "validation_questions": 801,
+    "validation_prior_exposure": "Previously observed in the legacy four-choice development probe; not blind.",
+    "readout_trained": true,
+    "validation_metrics_computed": true,
+    "inner_development_only": {
+      "task_manifest_path": "D:/CodexArtifacts/pretrained-reuse-r2/tallyqa-vg-label-independent-20261112-attempt-03/inner-task-manifest.json",
+      "task_manifest_sha256": "1456148a9ed38738b1db86826b4361b8268986ea267809e2239f12d5c6249f21",
+      "train_questions": 2478,
+      "validation_questions": 623,
+      "train_images": 2236,
+      "validation_images": 559,
+      "cross_split_image_question_media_overlap": 0,
+      "joint_image_question": {
+        "accuracy": 0.5264847278594971,
+        "nll": 1.3125860691070557,
+        "brier": 0.6251460909843445,
+        "ece_15_bins": 0.05131219884748443,
+        "best_epoch": 14
+      },
+      "question_only": {
+        "accuracy": 0.5296950340270996,
+        "nll": 1.34394371509552,
+        "brier": 0.6333420276641846,
+        "ece_15_bins": 0.039327140987206424,
+        "best_epoch": 14
+      },
+      "joint_image_zero_accuracy": 0.4686998426914215,
+      "joint_image_shuffled_accuracy": 0.47993579506874084,
+      "joint_train_seconds": 4.43,
+      "question_only_train_seconds": 3.67,
+      "peak_gpu_bytes": 28847616,
+      "total_prequant_parameters": 131951873,
+      "result_path": "D:/CodexArtifacts/pretrained-reuse-r2/tallyqa-vg-label-independent-20261112-attempt-03/readout/result.json",
+      "blind_quality_claim": false,
+      "inner_task_manifest": {
+        "path": "D:\\CodexArtifacts\\pretrained-reuse-r2\\tallyqa-vg-label-independent-20261112-attempt-03\\inner-task-manifest.json",
+        "sha256": "1456148a9ed38738b1db86826b4361b8268986ea267809e2239f12d5c6249f21"
+      },
+      "cache_report": {
+        "path": "D:\\CodexArtifacts\\pretrained-reuse-r2\\tallyqa-vg-label-independent-20261112-attempt-03\\inner-cache-report.json",
+        "sha256": "56b260d1426b83f4853f3997c73c6fc81a5b54c84f431eca958b526e341d4449"
+      },
+      "readout_joint": {
+        "path": "D:\\CodexArtifacts\\pretrained-reuse-r2\\tallyqa-vg-label-independent-20261112-attempt-03\\readout\\best-joint-readout.pt",
+        "sha256": "7d71ab22d004659226babb09ef9492aad8511d35a2efa3e59dd640c51e08bb24"
+      },
+      "readout_question_only": {
+        "path": "D:\\CodexArtifacts\\pretrained-reuse-r2\\tallyqa-vg-label-independent-20261112-attempt-03\\readout\\best-question-only-readout.pt",
+        "sha256": "22094f77f4acdc4f5b70760483908d961374883c807ad3ad500f9edf28a52f3b"
+      },
+      "result": {
+        "path": "D:\\CodexArtifacts\\pretrained-reuse-r2\\tallyqa-vg-label-independent-20261112-attempt-03\\readout\\result.json",
+        "sha256": "362f287b2d3b2b3b4a7157940750eb8648481fd26dfefcac290ca29a16e53b5d"
+      }
+    }
+  },
+  "preservation": {
+    "legacy_task_manifest_sha256_unchanged": true,
+    "legacy_feature_cache_sha256": "ddd738a362d7b31762c676dc178fed0183ddce8052ffaac4bbc93f57ef2753a6",
+    "legacy_joint_checkpoint_sha256": "6a1ce691626d47a45ddf0a92e8c43c38e249de826c5f81b64a989e44ad85bb1b",
+    "legacy_question_only_checkpoint_sha256": "6c5773aaa10c133907a9592e6298ab7e8a31e4f44abd0904f7b7ba61894a97f9",
+    "official_test_opened": false,
+    "sealed_audit_opened": false,
+    "gpu_training_or_evaluation_run": true,
+    "legacy_manifest_cache_and_checkpoints_unchanged": true
+  },
+  "verification": {
+    "ruff": "passed",
+    "focused_pytest": "21 passed",
+    "full_pytest": "collection blocked by 10 Windows torchaudio/scikit-learn DLL import errors in embeddinggemma2-v518; no project tests reached in those modules",
+    "manifest_validation": "training/evaluation catalogs and dataset.example.yaml pass; all-manifest example audit not rerun in this worktree"
+  }
+}

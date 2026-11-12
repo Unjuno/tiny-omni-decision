@@ -1,3 +1,15 @@
+**2026-11-12 R2 TallyQA option-policy integrity correction:** A follow-up
+found that the four-choice candidate set itself uniquely identifies 11/16
+possible count labels. An option-set-only lookup scores 55.53% on the same
+3,101 training rows (in-sample); no new validation score was computed. Keep the
+earlier 55.93% image+question result as historical, shortcut-confounded
+development evidence. A distinct answer-independent 16-choice task was fit on
+a grouped inner development split: question-only slightly exceeded joint
+accuracy, while zeroed/shuffled image controls lowered it. The inner split
+comes from previously used legacy training rows, so this is development-only,
+not blind quality evidence. See
+[`R2_TALLYQA_OPTION_POLICY_INTEGRITY_20261112.md`](docs/pretrained_reuse/R2_TALLYQA_OPTION_POLICY_INTEGRITY_20261112.md).
+
 **2026-11-10 R2 TallyQA Visual Genome development probe:** Pinned TallyQA
 `46cdc649ec79c3dcc2720ff227ad07d7ee51da6f`; inspected only `train.json`,
 selected 3,902 AMT questions / 3,494 Visual Genome images, and froze

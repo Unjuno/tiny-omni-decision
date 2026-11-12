@@ -9,6 +9,7 @@ pytest.importorskip("transformers")
 from scripts.train_tallyqa_vg_readout import (  # noqa: E402
     _batch_logits,
     _cache_features,
+    _encode_rows,
     _fit,
 )
 
@@ -46,6 +47,60 @@ def test_readout_parameter_counts_match_declared_towers() -> None:
     assert joint["history"][0]["validation"]["count"] == 4
     assert joint["checkpoint_selection"] == "minimum_validation_nll"
     assert sum(parameter.numel() for parameter in scorer.parameters()) == 196_865
+
+
+def test_readout_encoding_supports_sixteen_options() -> None:
+    question = torch.zeros(384)
+    options = [torch.full((384,), float(index)) for index in range(16)]
+    rows = [
+        {
+            "question_id": 7,
+            "image_id": 11,
+            "options": [{"id": f"count_{i}"} for i in range(16)],
+            "target": 13,
+        }
+    ]
+    text_features = {"7": question}
+    text_features.update({f"option:7:{index}": value for index, value in enumerate(options)})
+    tasks, targets = _encode_rows(rows, {"11": torch.ones(768)}, text_features)
+    assert tasks[0].shape == (16, 1536)
+    assert targets == [13]
+    assert torch.equal(tasks[0][:, 768:1152], question.expand(16, -1))
+
+
+def test_readout_fit_and_metrics_support_sixteen_options() -> None:
+    tasks = [torch.randn(16, 6) for _ in range(4)]
+    targets = [0, 5, 10, 15]
+    scorer, fit = _fit(
+        tasks,
+        targets,
+        validation_tasks=tasks[:2],
+        validation_targets=targets[:2],
+        feature_size=6,
+        seed=17,
+        device=torch.device("cpu"),
+        epochs=1,
+        batch_size=2,
+    )
+    logits = _batch_logits(scorer, tasks[:1], torch.device("cpu"))
+    assert logits.shape == (1, 16)
+    assert fit["history"][0]["validation"]["count"] == 2
+
+
+def test_readout_encoding_rejects_inconsistent_option_counts() -> None:
+    rows = [
+        {"question_id": 1, "image_id": 1, "options": [{}, {}], "target": 0},
+        {"question_id": 2, "image_id": 2, "options": [{}, {}, {}], "target": 1},
+    ]
+    features: dict[str, torch.Tensor] = {"1": torch.zeros(384), "2": torch.zeros(384)}
+    for qid, count in ((1, 2), (2, 3)):
+        features.update({f"option:{qid}:{i}": torch.zeros(384) for i in range(count)})
+    try:
+        _encode_rows(rows, {"1": torch.zeros(768), "2": torch.zeros(768)}, features)
+    except ValueError as error:
+        assert "same option count" in str(error)
+    else:
+        raise AssertionError("mixed option cardinality must fail before batching")
 
 
 def test_image_zero_control_changes_only_visual_feature_slice() -> None:
@@ -103,3 +158,22 @@ def test_feature_cache_must_match_manifest_image_hash_pairs(tmp_path) -> None:
         assert "media hash" in str(error)
     else:
         raise AssertionError("a cache whose image/hash pair differs must be rejected")
+
+
+def test_feature_cache_can_serve_grouped_subset_without_cross_split_leak(tmp_path) -> None:
+    cache = tmp_path / "features.npz"
+    np.savez_compressed(
+        cache,
+        train_ids=np.asarray(["1", "2", "3"]),
+        train_media_sha256=np.asarray(["hash-1", "hash-2", "hash-3"]),
+        train_features=np.arange(3 * 768, dtype=np.float32).reshape(3, 768),
+        validation_ids=np.asarray(["4"]),
+        validation_media_sha256=np.asarray(["hash-4"]),
+        validation_features=np.ones((1, 768), dtype=np.float32),
+    )
+    features = _cache_features(
+        cache,
+        [{"image_id": 1, "media_sha256": "hash-1"}],
+        [{"image_id": 2, "media_sha256": "hash-2"}],
+    )
+    assert set(features) == {"1", "2"}
