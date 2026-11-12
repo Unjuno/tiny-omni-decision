@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pytest
 
@@ -92,3 +93,34 @@ def test_reads_json_array(tmp_path):
     path = tmp_path / "groups.json"
     path.write_text(json.dumps(["v1", "v2"]), encoding="utf-8")
     assert read_group_ids(path, "unused") == ["v1", "v2"]
+
+
+def test_partial_perception_train_exposure_stays_fail_closed():
+    ledger_path = (
+        Path(__file__).parents[1]
+        / "manifests/pretrained_reuse/cohort_usage_ledger.json"
+    )
+    ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+    source = next(
+        item
+        for item in ledger["sources"]
+        if item["source_id"] == SOURCE and item["revision"] == REVISION
+    )
+    exposure = next(
+        item
+        for item in source["usage"]
+        if item.get("cohort_role") == "official_train_metadata_exposure"
+    )
+
+    assert source["history_status"] == "INCOMPLETE"
+    assert exposure["row_count"] == 25757
+    assert exposure["group_count"] == 2149
+    assert len(exposure["group_identity_sha256"]) == 2149
+    assert all(len(value) == 64 for value in exposure["group_identity_sha256"])
+    decision = check_cohort(
+        ledger,
+        source_id=SOURCE,
+        revision=REVISION,
+        group_ids=["unseen_disjoint_group"],
+    )
+    assert decision["decision"] == "BLOCKED_INCOMPLETE_HISTORY"
