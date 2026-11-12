@@ -24,7 +24,7 @@ Snapshot time: **2026-11-11 15:41 JST**.
 | Registered worktrees | 134 |
 | Current user worktree | `codex/teacher-quality-clean-dev-v1` at `041c5954`; 9 changed paths, preserved |
 | Other spot-checked worktrees | Path A shared-MiniLM, Path A video-text runtime, and AV-source screen clean; Perception MCQA worktree has 1 changed path and was left untouched |
-| Global dirty-worktree count | **UNKNOWN**; only the listed worktrees were inspected for dirtiness |
+| Global dirty-worktree count | 13 dirty of 134 registered worktrees; complete read-only scan at 16:35 JST on Nov 11 |
 
 The checked-out user worktree is on a historical Teacher branch, not the
 roadmap branch. Its modified/untracked paths were not used as a base and remain
@@ -196,3 +196,44 @@ new validation could provide independent evidence is withdrawn. The iNaturalist
 run was not launched; no existing artifact or user work was altered. Any future
 use requires a genuinely new, adequately sized cohort and a source-global
 exposure audit before acquisition or model loading.
+
+## Complete linked-worktree dirtiness scan — 2026-11-11 16:35 JST
+
+Ran `git status --porcelain` in every path returned by
+`git worktree list --porcelain`: **134 registered worktrees, 13 dirty, 121
+clean**. The scan was read-only. The dirty worktrees are listed here so that
+follow-up work can choose clean bases and preserve all in-progress changes:
+
+| Worktree | Changed paths |
+|---|---:|
+| `C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision` | 9 |
+| `C:/CodexWorktrees/pr14-review-qat-latest` | 2 |
+| `C:/CodexWorktrees/pretrained-reuse-omni` | 2 |
+| `C:/CodexWorktrees/pretrained-reuse-roadmap-20261022` | 9 |
+| `C:/CodexWorktrees/r0-live-checkpoint-recheck-20261030` | 2 |
+| `C:/CodexWorktrees/r2-audio-native-json-runtime-20261110` | 1 |
+| `C:/CodexWorktrees/r2-egoviz-fresh-session-validation-20261030` | 1 |
+| `C:/CodexWorktrees/r2-perception-control-freezer-20261031` | 2 |
+| `C:/CodexWorktrees/r2-speechcmd-roadmap-followup-20261110` | 2 |
+| `C:/CodexWorktrees/r2-videomae-clevr4-jsonl-runtime-20261110` | 3 |
+| `C:/CodexWorktrees/textfree-video-coverage-v2` | 10 |
+| `C:/Users/junny/OneDrive/ドキュメント/ChatGPT/tiny-omni-decision-updated-recovery` | 11 |
+| `D:/CodexWorktrees/r2-perception-mcqa-patha-20261111` | 1 |
+
+The nine changed paths in the primary user worktree match the preservation list
+in this report. All other dirty paths remain untouched. This is a time-specific
+snapshot, not permission to clean, commit, or switch any listed worktree.
+
+## Additional source-candidate recheck — 2026-11-12 14:16 JST
+
+An official-page recheck found no newly admissible R2 synchronized task:
+
+| Candidate | Current evidence | Decision |
+|---|---|---|
+| otoSpeech Task v1 + v2 | The official v2 card reports 47 new sessions and 8,301 synchronized events, with CC BY 4.0 metadata, but access to its files is gated. The publisher states its 47 sessions do not duplicate v1's 58, so the combined upper bound is 105 sessions before checking speaker/scenario independence. | Below the 200 independent-group floor; do not request gated access. |
+| otoSpeech Video / Face-to-Face / Egocentric | Publisher lists these synchronized products as available on request; public independent-group counts and a supplied-option task contract are not available. | Not admitted from public evidence. |
+| ObjectFolder 2.0 | Stanford describes 1,000 simulated multisensory neural objects and ten object-centric benchmark tasks; the dataset represents queried signals from implicit object files, not a released synchronized event/decision-record corpus. ObjectFolder-Real has 100 objects. | Potentially a separately designed synthetic task, but not a ready R2 synchronized task corpus; do not relabel it as one. |
+
+Sources: [otoSpeech Task v2 card](https://huggingface.co/datasets/otoearth/otoSpeech-full-duplex-task-oriented-v2), [otoSpeech publisher catalog](https://www.oto.earth/datasets), [ObjectFolder repository](https://github.com/rhgao/ObjectFolder), and [Stanford ObjectFolder overview](https://objectfolder.stanford.edu/).
+
+No access request, data acquisition, model load, fitting, or evaluation was performed. R2-M remains the active gate; existing Path A runtime canaries remain implementation-only evidence.
