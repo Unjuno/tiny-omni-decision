@@ -41,7 +41,7 @@
   "controls": [
     "train-derived candidate-position prior",
     "black-screen features with coordinates retained",
-    "train and validation screens independently cyclically permuted across episodes",
+    "train and validation screens independently deranged across episodes with a deterministic Sattolo cycle",
     "same-example candidate-order permutation; predictions restored by opaque option ID; max probability difference tolerance 2e-6"
   ],
   "output_path": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-dino-path-a-v1-attempt-01"

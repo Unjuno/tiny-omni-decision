@@ -665,7 +665,6 @@ def main() -> None:
     option_order_tolerance = 2e-6
     if option_order_delta > option_order_tolerance:
         raise RuntimeError("candidate-order permutation changed option-aligned probabilities")
-    ordered_records, _ = predict_rows(matched_model, val_features, val_rows)
     results["controls"]["candidate_order_permutation"] = {
         "input_permutation": permutation.tolist(),
         "max_option_aligned_probability_abs_difference": option_order_delta,
