@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "screen_date": "2026-11-12",
+  "candidate_id": "aist-bimanual-manipulation",
+  "status": "REVIEW_NOT_ADMITTED",
+  "scope": "metadata-only source and task screen; no archive payload or model accessed",
+  "official_sources": {
+    "dataset_page": "https://aistairc.github.io/aist_bimanip_site/",
+    "dataset_details": "https://aistairc.github.io/aist_bimanip_site/dataset.html",
+    "publisher_announcement": "https://www.aist.go.jp/aist_j/press_release/pr2025/pr20250902/pr20250902.html",
+    "task_csv_url": "https://aistairc.github.io/aist_bimanip_site/statics/docs/sheet.csv",
+    "task_csv_bytes": 28827,
+    "task_csv_sha256": "62bd7daf3b43792575624cfc8942e32c65afcd0a1ff0f875850c3c666de10e33",
+    "task_csv_rows": 119,
+    "task_csv_demo_count_sum": 12025,
+    "downloader_repository": "https://github.com/aistairc/aist_bimanip_downloader",
+    "downloader_revision": "43ec219724f961996ae4d65ae75edcd697650247",
+    "archive_link_manifest": "hdf5_links.csv",
+    "archive_link_manifest_bytes": 17621,
+    "archive_link_manifest_sha256": "e9ec61dc96f832cbc43387fd74c0ddf96527655f0b9a89111d48f415fbbb7ae5",
+    "listed_archives": 117,
+    "listed_archive_demo_count_sum": 10705
+  },
+  "license": {
+    "page_displays": "CC BY 4.0",
+    "media_and_derivative_scope": "REVIEW",
+    "human_content_and_privacy_scope": "UNKNOWN"
+  },
+  "modalities": {
+    "documented": ["rgb", "depth", "robot_qpos", "robot_qvel", "robot_action", "text_prompt"],
+    "audio": "UNKNOWN; CSV environment text mentions audio in HDF5 but official schema omits an audio field"
+  },
+  "split_and_task": {
+    "publisher_split": "not established in inspected official metadata",
+    "task_group_count": 117,
+    "provisional_200_independent_clip_gate": "uncertain; episode-level independence and repeated-scene risk not verified",
+    "proposed_task": "candidate action-chunk selection from synchronized camera, proprioception and task prompt",
+    "success_labels": "not documented",
+    "both_input_necessity": "not tested"
+  },
+  "discrepancies": [
+    "Current task CSV lists 119 tasks and sums to 12025 demos, but downloader manifest lists 117 archives and the older 10705 total.",
+    "fold_towel_in_half (600) and fold_towel_in_quarters (720) are absent from the pinned archive manifest.",
+    "Task CSV environment text mentions audio in HDF5, but published HDF5 schema does not enumerate audio."
+  ],
+  "payload_opened": false,
+  "labels_opened": false,
+  "model_loaded": false,
+  "training_run": false,
+  "sealed_audit_accessed": false,
+  "external_contact": false,
+  "next_gate": "resolve media license scope, pin and reconcile archive revision/inventory, and establish a valid independent episode/action-choice protocol before payload access"
+}
