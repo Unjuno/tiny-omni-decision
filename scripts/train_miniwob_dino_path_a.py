@@ -31,6 +31,7 @@ from scripts.miniwob_screen_action_data import (
 from tiny_omni_decision.miniwob_dino_readout import (
     MiniWoBOptionScorer,
     classification_metrics,
+    deranged_indices,
     finite_json_metrics,
     permute_candidate_axis,
 )
@@ -258,13 +259,10 @@ def targets_for(rows: list[dict[str, Any]]) -> torch.Tensor:
 
 
 def permute_screens(features: torch.Tensor, seed: int) -> tuple[torch.Tensor, list[int]]:
-    """Cyclically map every row to a different example within its own split."""
+    """Map every row to a different screen within its own split."""
     if features.shape[0] < 2:
         raise ValueError("at least two examples are required for screen permutation")
-    order = np.random.default_rng(seed).permutation(features.shape[0]).tolist()
-    donor_indices = order[1:] + order[:1]
-    if any(receiver == donor for receiver, donor in enumerate(donor_indices)):
-        raise ValueError("screen permutation unexpectedly retained a self-pair")
+    donor_indices = deranged_indices(features.shape[0], seed)
     visual = features[donor_indices, :, :PIXEL_FEATURE_WIDTH]
     result = features.clone()
     result[:, :, :PIXEL_FEATURE_WIDTH] = visual
@@ -481,7 +479,7 @@ def main() -> None:
     output = Path(config["output_path"])
     run_mode = "smoke" if args.smoke else "full"
     if args.smoke:
-        output = output.with_name(output.name + "-smoke-02")
+        output = output.with_name(output.name + "-smoke-03")
         settings["max_epochs"] = 2
         settings["early_stopping_patience"] = 2
     if output.exists() and not args.preflight_only:

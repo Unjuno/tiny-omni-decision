@@ -5,6 +5,7 @@ torch = pytest.importorskip("torch")
 from tiny_omni_decision.miniwob_dino_readout import (  # noqa: E402
     MiniWoBOptionScorer,
     classification_metrics,
+    deranged_indices,
     permute_candidate_axis,
 )
 
@@ -46,3 +47,12 @@ def test_scorer_rejects_wrong_shapes_and_nonfinite_inputs():
 def test_metric_validation_rejects_non_normalized_probabilities():
     with pytest.raises(ValueError):
         classification_metrics(torch.tensor([[0.5, 0.2, 0.2, 0.2]]), torch.tensor([0]))
+
+
+def test_screen_derangement_is_deterministic_complete_and_has_no_fixed_points():
+    first = deranged_indices(16, seed=17)
+    assert first == deranged_indices(16, seed=17)
+    assert sorted(first) == list(range(16))
+    assert all(index != donor for index, donor in enumerate(first))
+    with pytest.raises(ValueError):
+        deranged_indices(1, seed=17)

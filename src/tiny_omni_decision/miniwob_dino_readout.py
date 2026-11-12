@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import random
 
 import torch
 from torch import nn
@@ -95,6 +96,20 @@ def permute_candidate_axis(
         raise ValueError("a complete option-axis permutation is required")
     inverse = torch.argsort(permutation)
     return features.index_select(1, permutation), inverse
+
+
+def deranged_indices(count: int, seed: int) -> list[int]:
+    """Build a deterministic full derangement using Sattolo's cycle shuffle."""
+    if count < 2:
+        raise ValueError("at least two items are required for a derangement")
+    indices = list(range(count))
+    rng = random.Random(seed)
+    for index in range(count - 1, 0, -1):
+        swap = rng.randrange(index)
+        indices[index], indices[swap] = indices[swap], indices[index]
+    if any(index == donor for index, donor in enumerate(indices)):
+        raise RuntimeError("derangement construction produced a fixed point")
+    return indices
 
 
 def finite_json_metrics(metrics: dict[str, float]) -> dict[str, float | int]:
