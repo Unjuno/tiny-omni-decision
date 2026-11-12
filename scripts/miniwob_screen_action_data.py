@@ -118,6 +118,18 @@ def validate_screen_action_row(row: dict[str, Any]) -> None:
         raise ValueError("target index must identify a supplied action")
 
 
+def model_option_positions(row: dict[str, Any]) -> tuple[tuple[float, float], ...]:
+    """Project a dataset row to scorer-visible coordinates, excluding IDs and labels."""
+    validate_screen_action_row(row)
+    return tuple((float(option["x_norm"]), float(option["y_norm"])) for option in row["options"])
+
+
+def output_option_ids(row: dict[str, Any]) -> tuple[str, ...]:
+    """Return opaque response keys separately from the scorer's option features."""
+    validate_screen_action_row(row)
+    return tuple(option["option_id"] for option in row["options"])
+
+
 def write_canonical_jsonl(path: Path, rows: Sequence[dict[str, Any]]) -> str:
     """Write LF-terminated canonical JSONL as bytes and return its file SHA-256."""
     payload = "".join(

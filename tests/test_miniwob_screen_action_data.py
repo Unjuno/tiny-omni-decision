@@ -7,6 +7,8 @@ import unittest
 from pathlib import Path
 
 from scripts.miniwob_screen_action_data import (
+    model_option_positions,
+    output_option_ids,
     resolve_screen_target_index,
     validate_screen_action_row,
     write_canonical_jsonl,
@@ -80,6 +82,9 @@ class MiniWoBScreenActionDataTests(unittest.TestCase):
         validate_screen_action_row(row)
         with self.assertRaisesRegex(ValueError, "missing or unexpected"):
             validate_screen_action_row({**row, "utterance": "Click on blue"})
+        self.assertEqual(model_option_positions(row), ((0.25, 0.5), (0.75, 0.5)))
+        self.assertEqual(output_option_ids(row), ("action-0", "action-1"))
+        self.assertNotIn(row["target_index"], model_option_positions(row))
 
     def test_jsonl_manifest_hash_matches_bytes_written_on_windows(self):
         rows = [{"sample_id": "one", "value": 1}, {"sample_id": "two", "value": 2}]
