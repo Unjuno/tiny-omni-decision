@@ -116,10 +116,12 @@ The pinned VideoPrism-B checkpoint still matches its admitted R1 SHA-256
 was denied by Windows Application Control. No policy bypass, alternate encoder,
 or model run was attempted. A read-only check of the approved system Python
 3.11.9 found PyTorch/Transformers but none of the pinned VideoPrism runtime
-stack (`jax`, `flax`, `einshape`, `einops`, `tensorflow`). At 2026-11-12
-20:18 JST, the RTX 3080 was occupied at 91% utilization / 8,259 MiB by the
-separate Orbitune process PID 27640; this work did not use or interrupt it.
-There was no cloud use.
+stack (`jax`, `flax`, `einshape`, `einops`, `tensorflow`). Two other existing
+Python 3.11.9 environments (`pretrained-reuse-r2/perception-test-av-v1` and
+`venvs/embeddinggemma2-v518`) were checked without loading weights; both also
+lack that stack. At 2026-11-12 20:24 JST, the RTX 3080 was occupied at 99%
+utilization / 8,259 MiB by the separate Orbitune process PID 27640; this work
+did not use or interrupt it. There was no cloud use.
 
 The next valid action is a single-image finite-output/shape smoke with this
 pinned VideoPrism checkpoint in an already approved runtime, after the local
