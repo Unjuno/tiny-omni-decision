@@ -1,3 +1,10 @@
+**2026-11-12 R2 Perception Test source-exposure recheck:** All 2,149
+official TRAIN groups in the preserved candidate inventory hash-match existing
+ledger exposure; the cohort checker blocks all 2,149 as prior use. The 1,518
+development-validation groups are already observed. Source history remains
+`INCOMPLETE`; no fresh TRAIN/validation quality cohort is available, and
+official test/sealed audit are not substitutes. No model, media, GPU, or
+training was used. See [the recheck](docs/pretrained_reuse/R2_PERCEPTION_TEST_SOURCE_EXPOSURE_RECHECK_20261112.md).
 **2026-11-11 R2 cohort reuse guard:** Added a fail-closed group-identity checker and registered the 1,518 video groups in the already-observed Perception Test video-plus-text validation. Historical source coverage remains explicitly incomplete, so new cohorts from that source stay blocked until full exposure reconciliation. The guard is not yet integrated into every launcher. See [the ledger record](docs/pretrained_reuse/R2_COHORT_USAGE_LEDGER_20261111.md).
 **2026-11-04 R2 CREMA-D source-code follow-up:** Pinned official code confirms same-filename VoiceVote/FaceVote/MultiModalVote labels, making a common AV target structurally possible. Access registration and content-rights/consent scope remain unresolved; no annotations/media were read and no task was admitted. See [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
 **2026-11-04 R2 RoboMNIST residual-group screen:** The pinned split manifest selects 1,780 groups from a prior non-sealed eligible pool of 1,790 (780 train / 1,000 already evaluated validation), leaving only 10 unselected eligible groups; the other 345 of the 2,135 total were outside the pool and were not inspected. Ten groups cannot satisfy the 1,000-group validation gate. No new fit or validation replay is justified. See [residual screen](docs/pretrained_reuse/R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md).
