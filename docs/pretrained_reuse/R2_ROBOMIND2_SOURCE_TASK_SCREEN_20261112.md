@@ -23,9 +23,17 @@ candidate until the R2 gates below are resolved.
   independent-scene/session/collector train-validation group counts in the
   accessible abstract.
 - The official ModelScope collection is split across embodiment-specific
-  sub-repositories. The public metadata reviewed here does not provide a
-  consolidated, independently grouped release split with at least 200 groups
-  per required evaluation partition.
+  sub-repositories. A metadata-only clone of the top-level
+  `X-Humanoid/RoboMIND2.0` repository was pinned at ModelScope commit
+  `75a95b8ac4c4cdf8ea1e846d72761e6de92f199c`. Its README describes 310K
+  trajectories, including 12K tactile-enriched sequences, and documents
+  camera, robot-state, force, and tactile fields. The tree contains 1,894
+  paths, but no top-level split manifest or independent-group counts. Large
+  media/data formats are Git LFS tracked; the clone used
+  `GIT_LFS_SKIP_SMUDGE=1` and `--no-checkout`, and no LFS objects were fetched.
+  The actual per-subrepository/HDF5 group identities and split counts remain
+  **UNKNOWN**. The older RoboMIND 1.x page shows a train/val directory example,
+  but that example is not evidence about the 2.0 release.
 
 ## R2 gate assessment
 
@@ -33,7 +41,7 @@ candidate until the R2 gates below are resolved.
 |---|---|---|
 | Rights for both synchronized modalities | Dataset cards display Apache-2.0; scope across every media/annotation component and person-related rights was not verified | Open |
 | Relevant observations | Camera plus proprioceptive/force/tactile data are described | Promising, not sufficient |
-| Independent grouped splits | No verified group-level split counts or group identity contract found | Fail closed |
+| Independent grouped splits | Pinned 2.0 top-level metadata has no split manifest/counts; per-subrepository/HDF5 identities and splits remain UNKNOWN | Fail closed |
 | Supplied-option Decision task | Release describes manipulation demonstrations and policy learning; no fixed supplied-option decision labels were verified | Open |
 | Both-input necessity | No paired unimodal-vs-joint task/evaluation evidence found | Open |
 | Local feasibility | ModelScope search metadata reports a 51.04 GB collection; no payload was retrieved or storage feasibility tested | Not assessed |
