@@ -15,9 +15,7 @@ import torch
 import yaml
 from torch import Tensor, nn
 from torch.nn import functional as F
-from transformers import AutoModel, AutoTokenizer
 
-from scripts.train_frozen_text_probe import _metrics
 from tiny_omni_decision.dataset import sha256_file
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 
@@ -30,6 +28,8 @@ TEXT_PARAMETERS = 17_389_824
 def _pooled_texts(
     texts: list[str], model_path: Path, device: torch.device, batch_size: int = 128
 ) -> Tensor:
+    from transformers import AutoModel, AutoTokenizer
+
     tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
     encoder = AutoModel.from_pretrained(model_path, local_files_only=True).eval().to(device)
     for parameter in encoder.parameters():
@@ -69,15 +69,18 @@ def _cache_features(
         ids = train_ids + validation_ids
         media = train_media + validation_media
         values = np.concatenate([train_features, validation_features])
-    expected_train = {str(row["image_id"]): row["media_sha256"] for row in train_rows}
-    expected_validation = {str(row["image_id"]): row["media_sha256"] for row in validation_rows}
-    actual_train = dict(zip(train_ids, train_media, strict=True))
-    actual_validation = dict(zip(validation_ids, validation_media, strict=True))
+    expected = {
+        str(row["image_id"]): row["media_sha256"] for row in train_rows + validation_rows
+    }
+    actual_cache = dict(zip(ids, media, strict=True))
     if (
         len(ids) != len(set(ids))
         or len(media) != len(set(media))
-        or actual_train != expected_train
-        or actual_validation != expected_validation
+        or not set(expected).issubset(actual_cache)
+        or any(
+            actual_cache.get(image_id) != media_hash
+            for image_id, media_hash in expected.items()
+        )
         or train_features.shape != (len(train_ids), 768)
         or validation_features.shape != (len(validation_ids), 768)
         or not np.isfinite(values).all()
@@ -85,9 +88,11 @@ def _cache_features(
         raise ValueError(
             "feature cache split identity, media hash, shape, or finite-value validation failed"
         )
+    wanted = set(expected)
     return {
         image_id: torch.from_numpy(value.copy())
         for image_id, value in zip(ids, values, strict=True)
+        if image_id in wanted
     }
 
 
@@ -96,14 +101,24 @@ def _encode_rows(
 ) -> tuple[list[Tensor], list[int]]:
     candidates: list[Tensor] = []
     targets: list[int] = []
+    expected_option_count: int | None = None
     for row in rows:
         question_id = str(row["question_id"])
         image_id = str(row["image_id"])
         if question_id not in text_features or image_id not in image_features:
             raise ValueError("missing question/image feature")
-        q = text_features[question_id].expand(4, -1)
-        option = torch.stack([text_features[f"option:{question_id}:{i}"] for i in range(4)])
-        image = image_features[image_id].expand(4, -1)
+        option_count = len(row["options"])
+        if expected_option_count is None:
+            expected_option_count = option_count
+        elif option_count != expected_option_count:
+            raise ValueError("all rows in a readout batch must have the same option count")
+        if option_count < 2 or not 0 <= int(row["target"]) < option_count:
+            raise ValueError("each row must have at least two options and an in-range target")
+        q = text_features[question_id].expand(option_count, -1)
+        option = torch.stack(
+            [text_features[f"option:{question_id}:{i}"] for i in range(option_count)]
+        )
+        image = image_features[image_id].expand(option_count, -1)
         candidates.append(torch.cat([image, q, option], dim=-1))
         targets.append(int(row["target"]))
     return candidates, targets
@@ -133,8 +148,48 @@ def _batch_logits(
 
 
 def _quality(logits: Tensor, targets: list[int]) -> dict[str, float]:
-    rows = [logits[i] for i in range(len(targets))]
-    return _metrics(rows, targets)
+    probabilities = torch.softmax(logits.float(), dim=-1)
+    correct = torch.tensor(
+        [
+            int(int(prob.argmax()) == target)
+            for prob, target in zip(probabilities, targets, strict=True)
+        ],
+        dtype=torch.float32,
+    )
+    nll = torch.tensor(
+        [
+            -float(prob[target].clamp_min(1e-12).log())
+            for prob, target in zip(probabilities, targets, strict=True)
+        ],
+        dtype=torch.float32,
+    )
+    brier = torch.tensor(
+        [
+            float((prob - F.one_hot(torch.tensor(target), prob.numel())).square().sum())
+            for prob, target in zip(probabilities, targets, strict=True)
+        ],
+        dtype=torch.float32,
+    )
+    confidence = torch.tensor([float(prob.max()) for prob in probabilities])
+    ece = 0.0
+    bins = 15
+    bin_counts = []
+    for index in range(bins):
+        low, high = index / bins, (index + 1) / bins
+        upper = confidence < high if index < bins - 1 else confidence <= high
+        mask = (confidence >= low) & upper
+        count = int(mask.sum())
+        bin_counts.append(count)
+        if count:
+            ece += count / len(targets) * abs(float(correct[mask].mean() - confidence[mask].mean()))
+    return {
+        "count": len(targets),
+        "accuracy": float(correct.mean()),
+        "nll": float(nll.mean()),
+        "brier": float(brier.mean()),
+        "ece_15_bins": ece,
+        "ece_bin_counts": bin_counts,
+    }
 
 
 def _finite_tree(value: Any) -> bool:
@@ -338,16 +393,30 @@ def main() -> None:
     report_path = args.cache_report.resolve(strict=True)
     text_path = args.text_model.resolve(strict=True)
     report = json.loads(report_path.read_text(encoding="utf-8"))
+    task = json.loads(task_path.read_text(encoding="utf-8"))
+    cache_task_sha = report.get("feature_cache_source_task_manifest_sha256") or report.get(
+        "task_manifest_sha256"
+    )
+    expected_cache_task_sha = task.get("source_legacy_task_manifest_sha256") or task.get(
+        "parent_task_manifest_sha256", sha256_file(task_path)
+    )
     if (
         report.get("status") != "complete_tallyqa_vg_videoprism_features"
         or report.get("cache_sha256") != sha256_file(feature_path)
-        or report.get("task_manifest_sha256") != sha256_file(task_path)
+        or cache_task_sha != expected_cache_task_sha
     ):
         raise ValueError("feature cache report/hash mismatch")
     if sha256_file(text_path / "model.safetensors") != TEXT_MODEL_SHA256:
         raise ValueError("MiniLM weights do not match the pinned candidate hash")
-    task = json.loads(task_path.read_text(encoding="utf-8"))
     train_rows, val_rows = task["train"], task["validation"]
+    option_counts = {len(row["options"]) for row in train_rows + val_rows}
+    if (
+        len(option_counts) != 1
+        or next(iter(option_counts)) != int(config["task"].get("option_count", 4))
+        or task["task"].get("id", task["task"].get("name")) != config["task"]["id"]
+    ):
+        raise ValueError("task ID or option count does not match the effective config")
+    option_count = next(iter(option_counts))
     image_features = _cache_features(feature_path, train_rows, val_rows)
     unique_texts: dict[str, str] = {}
     for row in train_rows + val_rows:
@@ -422,8 +491,8 @@ def main() -> None:
         {str(row["image_id"]) for row in val_rows},
         key=lambda value: hashlib.sha256(f"17:{value}".encode()).digest(),
     )
-    if len(image_order) != 699:
-        raise ValueError("validation image count mismatch")
+    if len(image_order) < 2:
+        raise ValueError("validation requires at least two unique images for image shuffle")
     image_features_val = {key: image_features[key] for key in image_order}
     shuffled = {
         image_order[i]: image_features_val[image_order[(i + 1) % len(image_order)]]
@@ -511,7 +580,7 @@ def main() -> None:
         "validation_count": len(val_rows),
         "validation_unique_images": len(image_order),
         "validation_option_target_position_counts": {
-            str(i): sum(row["target"] == i for row in val_rows) for i in range(4)
+            str(i): sum(row["target"] == i for row in val_rows) for i in range(option_count)
         },
         "metrics": metric_set,
         "paired_image_group_bootstrap": bootstrap,
@@ -530,7 +599,7 @@ def main() -> None:
         "limitations": [
             "single seed",
             "one question-conditioned natural-image counting adaptation",
-            "four-choice conversion differs from original open-response task",
+            f"{option_count}-choice conversion differs from original open-response task",
             "validation used for checkpoint selection",
             "no claim about video temporal reasoning or general multimodal quality",
         ],

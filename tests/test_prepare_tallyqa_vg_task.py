@@ -43,6 +43,16 @@ def test_count_options_keep_answer_and_choose_distinct_nearby_values() -> None:
     assert options_for(15) == [15, 14, 13, 12]
 
 
+def test_legacy_four_option_policy_exposes_many_labels_from_candidate_set() -> None:
+    labels_by_candidate_set: dict[tuple[int, ...], set[int]] = {}
+    for answer in range(16):
+        key = tuple(sorted(options_for(answer)))
+        labels_by_candidate_set.setdefault(key, set()).add(answer)
+    assert sum(len(labels) == 1 for labels in labels_by_candidate_set.values()) == 11
+    assert labels_by_candidate_set[(1, 2, 3, 4)] == {3}
+    assert labels_by_candidate_set[(11, 12, 13, 14)] == {13}
+
+
 def test_option_order_is_deterministic_and_preserves_all_values() -> None:
     assert option_order(123, options_for(5)) == option_order(123, options_for(5))
     assert sorted(option_order(123, options_for(5))) == [3, 4, 5, 6]

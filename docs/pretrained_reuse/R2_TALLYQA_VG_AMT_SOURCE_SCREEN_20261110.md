@@ -7,7 +7,10 @@ counting Decision task was constructed from pinned TallyQA training
 annotations, using only AMT-origin rows and Visual Genome paths. This is a
 text-conditioned image task; it does not satisfy the roadmap's text-free image
 M-0 probe or any M-2 multimodal-fusion gate. Do not present it as general image
-understanding.
+understanding. A follow-up found that the four-choice candidate set itself
+leaks many count labels; retain the recorded model metrics as historical,
+shortcut-confounded development results, not clean counting accuracy. See the
+[integrity correction](R2_TALLYQA_OPTION_POLICY_INTEGRITY_20261112.md).
 
 Do not read the official `test.json` labels. The official archive contains a
 separate test member, but this screen opened only `train.json`; no official test
@@ -77,7 +80,7 @@ source-relative image paths and normalized-text hashes, is outside Git at
 `D:\CodexArtifacts\pretrained-reuse-r2\tallyqa-vg-source-20261110-attempt-01\source-screen.json`
 (the hash is recorded in the live run artifact; it changes if this manifest is
 regenerated): SHA-256
-`110fbbbe4983106dceb90e82d5454aa40dd3eaebd6151fae03c8f6e6af40a516a`. The
+`110fbbe4983106dceb90e82d5454aa40dd3eaebd6151fae03c8f6e6af40a516a`. The
 source archive and pinned README/license snapshots are in the same artifact
 directory. The screening utility verifies the pinned archive SHA and reads only
 `train.json`:
@@ -93,6 +96,15 @@ prior source-screen history. The publisher documents the image archives at
 [its API page](https://homes.cs.washington.edu/~ranjay/visualgenome/api.html).
 
 ## Frozen-feature development probe
+
+**Subsequent integrity note (2026-11-12):** the four-option candidate set
+uniquely reveals labels 3 through 13. The original 55.93%/56.30% measurements
+below remain historical but are shortcut-confounded and are not clean counting
+accuracy estimates. A separate answer-independent 16-choice follow-up scored
+52.65% joint and 52.97% question-only on an inner development split drawn from
+the old training pool; it is not blind evidence. See
+[`option-policy correction`](R2_TALLYQA_OPTION_POLICY_INTEGRITY_20261112.md)
+for the complete audit and follow-up.
 
 The open-ended source labels were adapted into a project-created four-option
 task: the correct integer count plus the three nearest distinct counts, with
