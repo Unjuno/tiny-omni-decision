@@ -235,7 +235,7 @@ def encode_screen_features(
 def black_screen_features(rows: list[dict[str, Any]], model: torch.nn.Module) -> torch.Tensor:
     with torch.inference_mode():
         image = Image.new("RGB", (160, 210), color=(0, 0, 0))
-        pixels = preprocess_screens_from_image(image).unsqueeze(0)
+        pixels = preprocess_screens_from_image(image)
         tokens = model(pixel_values=pixels).last_hidden_state
         patches = tokens[:, 1:].reshape(1, PATCH_GRID, PATCH_GRID, 384)
         shared = torch.cat((tokens[:, 0], patches.mean(dim=(1, 2))), dim=1)[0]
@@ -481,7 +481,7 @@ def main() -> None:
     output = Path(config["output_path"])
     run_mode = "smoke" if args.smoke else "full"
     if args.smoke:
-        output = output.with_name(output.name + "-smoke")
+        output = output.with_name(output.name + "-smoke-02")
         settings["max_epochs"] = 2
         settings["early_stopping_patience"] = 2
     if output.exists() and not args.preflight_only:
