@@ -34,6 +34,16 @@ candidate until the R2 gates below are resolved.
   The actual per-subrepository/HDF5 group identities and split counts remain
   **UNKNOWN**. The older RoboMIND 1.x page shows a train/val directory example,
   but that example is not evidence about the 2.0 release.
+- A further metadata-only check pinned the official simulation sub-repository
+  `X-Humanoid/RoboMIND2.0-Tienkung-sim` at
+  `a8e3d2e926cc286563bf9d641c23e3e658fe6edd`. Its default-template README
+  declares Apache License 2.0 but gives no detailed dataset or split
+  description. The `122-rotate_pot_handle/success_episodes` directory contains
+  303 timestamped HDF5 episode pointers. The task path exposes no train/val
+  partition; episode independence as a scene/session group is undocumented.
+  One LFS pointer reports a 13,768,050-byte HDF5 object; this is not a complete
+  task-size estimate. No LFS object, HDF5, annotation, or media payload was
+  fetched or opened.
 
 ## R2 gate assessment
 
@@ -41,10 +51,10 @@ candidate until the R2 gates below are resolved.
 |---|---|---|
 | Rights for both synchronized modalities | Dataset cards display Apache-2.0; scope across every media/annotation component and person-related rights was not verified | Open |
 | Relevant observations | Camera plus proprioceptive/force/tactile data are described | Promising, not sufficient |
-| Independent grouped splits | Pinned 2.0 top-level metadata has no split manifest/counts; per-subrepository/HDF5 identities and splits remain UNKNOWN | Fail closed |
+| Independent grouped splits | One simulation task has 303 timestamped HDF5 episode IDs but no declared train/val split; independent scene/session grouping remains UNKNOWN | Fail closed |
 | Supplied-option Decision task | Release describes manipulation demonstrations and policy learning; no fixed supplied-option decision labels were verified | Open |
 | Both-input necessity | No paired unimodal-vs-joint task/evaluation evidence found | Open |
-| Local feasibility | ModelScope search metadata reports a 51.04 GB collection; no payload was retrieved or storage feasibility tested | Not assessed |
+| Local feasibility | ModelScope reports 51.04 GB for the top-level collection and 194.21 GB for the Tienkung simulation sub-repository; one task's total pointer sizes remain UNKNOWN | Not assessed |
 
 This candidate could support a future task such as choosing a typed next action
 or predicting a failure state from synchronized camera and robot-state cues,
