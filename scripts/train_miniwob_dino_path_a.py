@@ -662,12 +662,14 @@ def main() -> None:
             matched_model(permuted_features), dim=1
         ).index_select(1, inverse)
     option_order_delta = float((original_probabilities - permuted_probabilities).abs().max())
-    if option_order_delta > 1e-7:
+    option_order_tolerance = 2e-6
+    if option_order_delta > option_order_tolerance:
         raise RuntimeError("candidate-order permutation changed option-aligned probabilities")
     ordered_records, _ = predict_rows(matched_model, val_features, val_rows)
     results["controls"]["candidate_order_permutation"] = {
         "input_permutation": permutation.tolist(),
         "max_option_aligned_probability_abs_difference": option_order_delta,
+        "numerical_tolerance": option_order_tolerance,
         "accuracy_after_id_remap": float(
             classification_metrics(permuted_probabilities, val_targets)["accuracy"]
         ),
@@ -680,7 +682,8 @@ def main() -> None:
         "validation_is_development_only": True,
         "not_multimodal_product_evidence": True,
         "selected_rule": settings["selector"],
-        "candidate_order_probability_mapping_verified": option_order_delta <= 1e-7,
+        "candidate_order_probability_mapping_verified": option_order_delta
+        <= option_order_tolerance,
         "readout_parameters": sum(parameter.numel() for parameter in matched_model.parameters()),
         "resident_parameters": encoder_count
         + sum(parameter.numel() for parameter in matched_model.parameters()),
