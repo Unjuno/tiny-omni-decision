@@ -246,8 +246,8 @@ def run(output):
     try:
         if not torch.cuda.is_available():
             raise RuntimeError("pinned CUDA runtime required for the diagnostic")
-        device = torch.device("cuda")
-        torch.cuda.set_device(device)
+        device = torch.device("cuda:0")
+        torch.cuda.set_device(0)
         torch.set_num_threads(4)
         torch.set_num_interop_threads(1)
         torch.use_deterministic_algorithms(True)
