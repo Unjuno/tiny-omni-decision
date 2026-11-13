@@ -8,8 +8,8 @@ evaluation. This is a **metadata feasibility result only**. CATER remains
 `REVIEW_NOT_ADMITTED`: no video was acquired or inspected, no model was run,
 and this does not resolve possible visual near-duplicates or qualify a model.
 
-The fixed task candidate asks: **which object moved the farthest during one
-specified 75-frame interval?** Each source scene contributes at most one query
+The fixed task candidate asks: **which object had the greatest net displacement
+between the endpoints of one specified 75-frame interval?** Each source scene contributes at most one query
 per fixed, non-overlapping interval: `0–75`, `75–150`, `150–225`, and `225–300`.
 Every object in the scene remains an option (5–10 choices in the eligible
 cohort); no option-count reduction was used. A scene/query is eligible only if
@@ -47,9 +47,9 @@ lists, and Clevr-4 collision receipt match their pinned SHA-256 values. It
 checks train/selector video-ID disjointness and scene `image_index` identity.
 The machine-readable receipt is stored outside Git at
 `D:\CodexArtifacts\pretrained-reuse-r2\cater-temporal-task-feasibility-20261113-attempt-01\feasibility.json`
-(SHA-256 `fd3e9559578b56875514dfbfe444d5dd4c0ae35f95c05f1854d510d5900a27c`).
+(SHA-256 `f28444999f0c469b3c990733d41360f1597956825dcacd9fb1719ecf2ab48618`).
 The script SHA-256 is
-`c5d589182bb315f6e80aa0d1103c2b79e3e988d84eeb45765cb5e9bd99fd6440`.
+`a6c7ce5f85cb5012bcb9b92a2c46e086450876f0cc5bff147094cd838f9c7b6d`.
 
 Pinned inputs:
 

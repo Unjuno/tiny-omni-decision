@@ -161,8 +161,8 @@ def audit(scenes_zip: Path, lists_dir: Path, collision_receipt: Path) -> dict[st
         },
         "task": {
             "definition": (
-                "Select which visually distinguishable object moved the farthest "
-                "over one fixed 75-frame interval."
+                "Select which visually distinguishable object had the greatest "
+                "net displacement over one fixed 75-frame interval."
             ),
             "intervals": [list(window) for window in WINDOWS],
             "min_max_displacement_world_units": MIN_DISPLACEMENT,
