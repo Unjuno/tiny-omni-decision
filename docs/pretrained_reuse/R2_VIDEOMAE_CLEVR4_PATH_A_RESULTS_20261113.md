@@ -93,6 +93,11 @@ The large task gap is material: the representation/readout predicts color and
 shape well on this synthetic split, texture moderately, and count poorly.
 Calibration ECE alone does not imply useful probabilities when count accuracy
 and NLL remain weak. The product's 95–98% objective is not met across tasks.
+The older text-free CLEVR-4 probe reported 88.30% macro Accuracy and 58.19%
+count Accuracy with a different frozen representation and split. This run is
+not a matched comparison; the numerical difference does not establish that
+VideoMAE is worse than VideoPrism or that the encoder alone caused the count
+errors.
 
 ## Artifacts and integrity
 
