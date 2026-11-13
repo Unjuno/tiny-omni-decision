@@ -350,6 +350,39 @@
       ]
     },
     {
+      "id": "opengvlab-videomae-v2-small-k710",
+      "modality": [
+        "image",
+        "video"
+      ],
+      "model_revision": "OpenGVLab/VideoMAE2@706cc172d65ebd4dedbee3f9c0183a93df9fa125",
+      "upstream_code_revision": "OpenGVLab/VideoMAEv2@29eab1e8a588d1b3ec0cdec7b03a86cca491b74b",
+      "checkpoint": "https://huggingface.co/OpenGVLab/VideoMAE2/resolve/706cc172d65ebd4dedbee3f9c0183a93df9fa125/distill/vit_s_k710_dl_from_giant.pth",
+      "checkpoint_sha256": "24fb71687fa3671b8387cadfbcbab0f72af695692e93cf1ecc82caa888626172",
+      "checkpoint_bytes": 44334609,
+      "parameters": 22153286,
+      "license": "Apache-2.0 declared for released weights by pinned owner model card; MIT source-code license is distinct; upstream training-data rights are separate",
+      "license_allowed": true,
+      "license_status": "ALLOW",
+      "license_evidence": [
+        "https://huggingface.co/OpenGVLab/VideoMAE2/tree/706cc172d65ebd4dedbee3f9c0183a93df9fa125",
+        "https://github.com/OpenGVLab/VideoMAEv2/blob/29eab1e8a588d1b3ec0cdec7b03a86cca491b74b/LICENSE"
+      ],
+      "passed_load": true,
+      "has_real_weights": true,
+      "runtime_supported": true,
+      "runtime_evidence": "strict 22,153,286-parameter load; finite CPU and RTX 3080 Laptop forwards on pinned real training video; exact repeated CUDA logits",
+      "task_quality_status": "task-specific only: narrow static CLEVR-4 taxonomy evaluation; temporal occlusion validation collapsed to one option and scored 38.91%; not a product pass",
+      "decision": "use as a compact frozen research candidate; compare on a newly admitted task before product promotion",
+      "parameter_tensor_bytes": 44306572,
+      "report": "docs/pretrained_reuse/R1_VIDEOMAE_REAL_VIDEO_CUDA_20261110.md",
+      "audit_date": "2026-11-10",
+      "primary_citations": [
+        "https://huggingface.co/OpenGVLab/VideoMAE2/tree/706cc172d65ebd4dedbee3f9c0183a93df9fa125",
+        "https://github.com/OpenGVLab/VideoMAEv2/tree/29eab1e8a588d1b3ec0cdec7b03a86cca491b74b"
+      ]
+    },
+    {
       "id": "vatt-ma",
       "modality": [
         "audio",
@@ -760,6 +793,11 @@
       "date": "2026-11-02",
       "scope": "append pinned DINOv2-base Apache-2.0 weights and CPU exact-reload smoke; prior candidate records preserved",
       "report": "docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_20261102.md"
+    },
+    {
+      "date": "2026-11-10",
+      "scope": "append OpenGVLab VideoMAE V2 Small pinned checkpoint, Apache-2.0 card, exact parameter/tensor-byte count, and real-video CUDA forward; prior candidate records preserved",
+      "report": "docs/pretrained_reuse/R1_VIDEOMAE_REAL_VIDEO_CUDA_20261110.md"
     }
   ]
 }
