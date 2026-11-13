@@ -2964,6 +2964,8 @@ these limits remain explicit in `docs/pretrained_reuse/R2_STARSS23_SPLITS_202610
 - [ ] If delayed queries need persistence, compare no memory, 16/32/64 compressed latent slots, and a gated update; retain time/location/missingness metadata. No default promise of action-conditioned physics.
 - [ ] If a State Predictor helps specified future-state or sensor tests, train the smallest viable module using permitted temporal supervision; report forecasting quality separately from decision accuracy.
 
+**2026-11-05 QASC same-state/new-question diagnostic:** A completed seed-17 train-only run on 7,451 questions held 683 new questions across 666 fact-pair states, intentionally keeping each state in training. Correct text state plus criterion scored 78.62% Accuracy / 0.7065 NLL versus 70.13% / 1.1174 with the criterion removed; zero or deranged state controls were near 15–16%. The target answer appeared verbatim in evidence for 542/683 held questions (79.36%), and all source TRAIN rows had already appeared in an earlier project train-only CV. Treat this as an internal text mechanism diagnostic only; it does not demonstrate unseen-state, temporal, multimodal, or product quality, and does not close R5. Full hashes, group intervals, target-absent sensitivity, and limits: [QASC same-state diagnostic](docs/pretrained_reuse/R5_QASC_SAME_STATE_NEW_CRITERION_20261105.md). No rerun was performed.
+
 **Exit:** a minimal state representation chosen by actual temporal recall and runtime results.
 
 ### R6 — Compatible weight integration / structural reduction (**optional**)
