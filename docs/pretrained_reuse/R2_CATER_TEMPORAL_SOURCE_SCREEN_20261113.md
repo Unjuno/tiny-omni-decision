@@ -64,12 +64,14 @@ features, or sealed audit data were accessed.
 
 ## Next gate
 
-Keep this candidate unadmitted until the exact hosted-payload rights scope and
-the `CLEVR_new_*` cross-source identity relationship with prior Clevr-4
-exposure are resolved. The train/selector subsets have zero overlap by video ID
-and exact normalized scene metadata, but that does not prove independence from
-Clevr-4 or detect all visual near-duplicates. Do not download videos or fit a
-model before those gates pass. If admitted later, freeze only the already
+Keep this candidate unadmitted until the hosted-payload rights scope and
+cross-source scene identity with prior Clevr-4 exposure are resolved. A later
+bounded central-directory check found the video members use `CATER_new_*`,
+while an inspected scene JSON embeds a mismatching `CLEVR_new_*` filename.
+The train/selector subsets have zero overlap by archive video ID and exact
+normalized CATER scene metadata, but this does not prove independence from
+Clevr-4 or detect all visual near-duplicates. Do not download video payloads or
+fit a model before those gates pass. If admitted later, freeze only the already
 audited train/selector cohorts, keep official `val.txt` and any test set
 unopened, and preregister temporal-order, frame-shuffle, position-prior, and
 option-order controls before one frozen-feature fit. Use the verified
