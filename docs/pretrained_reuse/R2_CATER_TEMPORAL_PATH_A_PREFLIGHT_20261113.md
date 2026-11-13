@@ -290,13 +290,16 @@ backend, and recorded about 1.90 GB final process RSS. The source commit was
 `c6eba0ece3dd49a24ffc44582966997a4a59f1d8`; checkpoint SHA-256 remains
 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`.
 
-**Disposition:** admit CATER only for this local, video-only Path A development
-readout. Keep the task, manifests, intervals, option sets, split, and encoder
-frozen. This does not establish general video quality, multimodal benefit, an
-independent audit, or product readiness. The failed 1,248-feature attempt
-remains preserved and unusable; the bulk run must use a new output directory.
-After extraction, fit the already specified fixed readout once and run its
-preregistered temporal/order/permutation controls. Bootstrap by video scene.
+**Disposition:** admit CATER only for this local, video-plus-text-conditioned
+Path A development readout. The readout embeds the question and candidate
+descriptions with MiniLM, so this experiment is not the roadmap's direct
+text-free video-only M0/M1 probe. Keep the task, manifests, intervals, option
+sets, split, and encoders frozen. This does not establish general video quality,
+multimodal benefit, an independent audit, or product readiness. The failed
+1,248-feature attempt remains preserved and unusable; the bulk run must use a
+new output directory. After extraction, fit the already specified fixed readout
+once and run its preregistered temporal/order/permutation controls. Bootstrap by
+video scene.
 
 The new full extraction attempt was launched at 2026-11-14 02:26:44 JST in
 `D:\CodexArtifacts\pretrained-reuse-r2\cater-videoprism-interval-features-20261114-attempt-01`

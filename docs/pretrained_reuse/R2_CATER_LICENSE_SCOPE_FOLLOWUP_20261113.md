@@ -36,9 +36,10 @@ project-level license interpretation, not legal advice.
 - CATER remains unadmitted for model fitting until the selected media's
   hashes, train/selector identity checks, and cross-source content checks are
   recorded. This decision resolves the rights gate only.
-- The task is synthetic temporal video-only 8x8 snitch localization. It is
-  M1 video evidence and cannot close the roadmap's both-input-required M2
-  fusion gate.
+- The source task is synthetic temporal 8x8 snitch localization. The current
+  derived readout requires video and also consumes the text question/options;
+  it is not direct text-free M1 evidence and cannot close the roadmap's
+  both-input-required M2 fusion gate.
 
 ## 2026-11-14 task-description correction
 
@@ -46,6 +47,8 @@ The admitted development candidate uses a distinct fixed derived question:
 which object has the greatest annotated net displacement between the endpoints
 of one 75-frame interval. It retains every scene object as an option. The
 phrase “8x8 snitch localization” above describes the broader CATER source task
-and was inaccurate for the current derived readout. This correction does not
-change the source license interpretation or upgrade the candidate beyond a
-local video-only Path A development task.
+and was inaccurate for the current derived readout. The implemented readout also
+embeds the question and candidate descriptions with MiniLM, so its correct scope
+is a local video-plus-text-conditioned Path A development task, not the roadmap's
+direct text-free video-only M0/M1 probe. This correction does not change the
+source license interpretation or admit the candidate for M2 fusion or product use.
