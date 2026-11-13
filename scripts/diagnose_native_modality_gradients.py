@@ -254,17 +254,41 @@ def run(output):
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.backends.cudnn.allow_tf32 = False
         torch.backends.cudnn.benchmark = False
+        gpu_samples = []
+        for index in range(3):
+            gpu_usage = subprocess.check_output(
+                [
+                    "nvidia-smi",
+                    "--query-gpu=memory.used,utilization.gpu",
+                    "--format=csv,noheader,nounits",
+                ],
+                text=True,
+            ).strip()
+            used_mib, utilization = [int(value.strip()) for value in gpu_usage.split(",")]
+            gpu_samples.append(
+                {
+                    "sample": index + 1,
+                    "memory_used_mib": used_mib,
+                    "utilization_percent": utilization,
+                }
+            )
+            if index < 2:
+                time.sleep(2)
         free_memory, total_memory = torch.cuda.mem_get_info()
-        gpu_usage = subprocess.check_output(
-            [
-                "nvidia-smi",
-                "--query-gpu=memory.used,utilization.gpu",
-                "--format=csv,noheader,nounits",
-            ],
-            text=True,
-        ).strip()
-        allocated_mib, utilization = [int(value.strip()) for value in gpu_usage.split(",")]
-        if allocated_mib > 512 or utilization > 5 or free_memory < 8 * 2**30:
+        result["gpu_preflight"] = {
+            "samples": gpu_samples,
+            "mean_memory_used_mib": sum(item["memory_used_mib"] for item in gpu_samples) / 3,
+            "mean_utilization_percent": sum(item["utilization_percent"] for item in gpu_samples)
+            / 3,
+            "torch_free_memory_bytes": free_memory,
+            "torch_total_memory_bytes": total_memory,
+        }
+        write(output / "result.json", result)
+        if (
+            max(item["memory_used_mib"] for item in gpu_samples) > 512
+            or max(item["utilization_percent"] for item in gpu_samples) > 5
+            or free_memory < 8 * 2**30
+        ):
             raise RuntimeError("GPU resource preflight failed")
         if shutil.disk_usage(output).free < 2 * 2**30:
             raise RuntimeError("free disk space is below the preserved 2 GiB reserve")
@@ -393,9 +417,7 @@ def run(output):
                 "device": torch.cuda.get_device_name(),
                 "dtype": "float32",
                 "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(),
-                "gpu_preflight_free_memory_bytes": free_memory,
-                "gpu_total_memory_bytes": total_memory,
-                "gpu_preflight_utilization_percent": utilization,
+                "gpu_preflight": result["gpu_preflight"],
                 "model_state_sha256_before": before_state,
                 "model_state_sha256_after": after_state,
                 "trainable_parameters": sum(parameter.numel() for _, parameter in named_parameters),
