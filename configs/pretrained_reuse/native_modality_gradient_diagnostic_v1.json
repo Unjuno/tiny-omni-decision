@@ -24,7 +24,7 @@
   "expected_train_probe_count": 6656,
   "expected_validation_count": 24346,
   "corpus_result_sha256": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
-  "query_cache_result_sha256": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a7f6dbdc21f1ef7d909e",
+  "query_cache_result_sha256": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e",
   "corpus_artifact_sha256": {
     "train.jsonl": "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb",
     "observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
