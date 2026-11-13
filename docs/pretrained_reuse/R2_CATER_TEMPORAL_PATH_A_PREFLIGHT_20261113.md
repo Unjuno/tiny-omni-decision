@@ -197,6 +197,13 @@ The two encoders plus this readout total 132,265,729 unquantized parameters
 (VideoPrism 114,365,184 + MiniLM 17,389,824 + readout head 510,721). Packaged
 size, quantized size, and runtime latency have not been measured here.
 
+The local MiniLM-L3 readout input was rechecked before the full run: its
+`model.safetensors` SHA-256 matches the pinned
+`cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`; the local
+configuration reports a 384-wide, 3-layer encoder. The readout report now also
+records a sorted file/size/SHA-256 manifest for all model, tokenizer, and
+configuration files instead of recording only the weight hash.
+
 ## 2026-11-14 extraction and packet-integrity correction
 
 The interval-local bulk extraction attempt did **not** complete. Its stdout

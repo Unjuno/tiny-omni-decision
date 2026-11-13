@@ -46,6 +46,20 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def artifact_file_manifest(root: Path) -> dict[str, dict[str, Any]]:
+    files = sorted(
+        (path for path in root.rglob("*") if path.is_file()),
+        key=lambda path: path.relative_to(root).as_posix(),
+    )
+    return {
+        path.relative_to(root).as_posix(): {
+            "bytes": path.stat().st_size,
+            "sha256": sha256_file(path),
+        }
+        for path in files
+    }
+
+
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
@@ -637,6 +651,7 @@ def main() -> None:
         "feature_result_sha256": sha256_file(result_path),
         "text_model_revision": TEXT_REVISION,
         "text_model_weights_sha256": TEXT_WEIGHTS_SHA256,
+        "text_model_files": artifact_file_manifest(text_model_path),
         "text_model_parameters": text_parameter_count,
         "videoprism_parameters": VIDEOPRISM_PARAMETERS,
         "head_parameters": trainable,

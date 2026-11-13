@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+
 import pytest
 
 torch = pytest.importorskip("torch")
@@ -8,6 +10,7 @@ from scripts.train_cater_temporal_readout import (  # noqa: E402
     _batch_metrics,
     _cluster_bootstrap_accuracy_delta,
     _feature_for_mode,
+    artifact_file_manifest,
     feature_record_for_example,
     group_by_video,
     prepare_examples,
@@ -63,6 +66,20 @@ def test_full_cohort_guard_matches_the_frozen_manifest_counts() -> None:
 
     with pytest.raises(ValueError, match="got 1/1"):
         require_full_cohort([{}], [{}], expected_train_count=2, expected_validation_count=1)
+
+
+def test_artifact_file_manifest_hashes_all_nested_files(tmp_path) -> None:
+    (tmp_path / "config.json").write_text("{}", encoding="utf-8")
+    nested = tmp_path / "tokenizer"
+    nested.mkdir()
+    (nested / "vocab.txt").write_text("alpha\nbeta\n", encoding="utf-8")
+
+    manifest = artifact_file_manifest(tmp_path)
+
+    assert list(manifest) == ["config.json", "tokenizer/vocab.txt"]
+    assert manifest["config.json"]["bytes"] == 2
+    expected = hashlib.sha256((nested / "vocab.txt").read_bytes()).hexdigest()
+    assert manifest["tokenizer/vocab.txt"]["sha256"] == expected
 
 
 def test_video_permutation_resolves_the_same_local_task_interval() -> None:
