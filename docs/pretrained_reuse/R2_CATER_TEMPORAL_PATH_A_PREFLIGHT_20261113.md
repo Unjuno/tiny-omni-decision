@@ -322,3 +322,13 @@ frozen 4,360/1,120 counts and added a regression test. The readout tests passed
 (6 passed) in the existing torch environment and Ruff passed. This fixes a
 pre-existing evaluation blocker; it does not change the extraction process,
 data, model, or training conditions.
+
+At 03:36:39 JST, the new packet-aware bulk extractor successfully wrote the
+exact interval feature that stopped the prior decoder attempt:
+`cater-003291-disp-075-150`. Its selected packet PTS are
+`[75,81,88,94,100,106,112,119,125,131,138,144,150]`; the unreadable PTS 90 is
+not selected. The saved tensor is finite `[13,256,768]` float16 and its payload
+SHA-256 matches the embedded record. This verifies the specific prior failure
+case without changing manifests or decoding policy. At 03:38:46 JST the full
+run remained `RUNNING` at 1,280/5,480 samples (1,290 atomic feature files); no
+readout or quality evaluation has run.
