@@ -25,6 +25,7 @@ from scripts.native_fit_runtime import FeatureStore  # noqa: E402
 from scripts.native_gradient_diagnostic import (  # noqa: E402
     MODALITIES,
     fixed_update_window,
+    required_bank_names,
     summarize_updates,
     update_gradient_metrics,
 )
@@ -161,14 +162,14 @@ def load_training_inputs(config):
     query_map_all = read_json(corpus / "query-map.json")
     observation_ids = {row["observation"] for row in selected_rows}
     observations = {ident: observations_all[ident] for ident in observation_ids}
-    bank_names = {
-        feature["bank"] for ident in observation_ids for feature in observations[ident]["features"]
-    }
-    banks = {name: banks_all[name] for name in bank_names}
     query_names = {name for row in selected_rows for name in row["queries"]}
     if not query_names <= set(query_map_all):
         raise ValueError("TRAIN query map incomplete")
     query_map = {name: query_map_all[name] for name in query_names}
+    bank_names = required_bank_names(observations, observation_ids, query_map)
+    if bank_names - set(banks_all) - {"new/queries.npy"}:
+        raise ValueError("one or more selected TRAIN feature banks are missing")
+    banks = {name: banks_all[name] for name in bank_names if name in banks_all}
     query_bank = {
         "path": str(queries / "queries.npy"),
         "sha256": query_result["artifacts"]["queries.npy"],

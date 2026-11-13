@@ -27,6 +27,23 @@ def fixed_update_window(order, selected_step, window_updates):
     return start, window
 
 
+def required_bank_names(observations, observation_ids, query_map):
+    if not observation_ids or not query_map:
+        raise ValueError("selected TRAIN observations and queries required")
+    try:
+        names = {
+            feature["bank"]
+            for ident in observation_ids
+            for feature in observations[ident]["features"]
+        }
+        names.update(entry["bank"] for entry in query_map.values())
+    except (KeyError, TypeError) as error:
+        raise ValueError("selected TRAIN observation/query bank references required") from error
+    if any(not isinstance(name, str) or not name for name in names):
+        raise ValueError("nonempty bank names required")
+    return names
+
+
 def _cosine(left, right):
     left_norm = torch.linalg.vector_norm(left)
     right_norm = torch.linalg.vector_norm(right)

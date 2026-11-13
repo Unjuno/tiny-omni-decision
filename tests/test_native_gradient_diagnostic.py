@@ -4,6 +4,7 @@ import torch
 from scripts.native_gradient_diagnostic import (
     MODALITIES,
     fixed_update_window,
+    required_bank_names,
     summarize_updates,
     update_gradient_metrics,
 )
@@ -28,6 +29,15 @@ def test_fixed_window_selects_the_final_prior_updates():
 def test_fixed_window_rejects_invalid_ranges_and_batches(args):
     with pytest.raises(ValueError):
         fixed_update_window(*args)
+
+
+def test_required_banks_include_observation_and_train_query_feature_sources():
+    observations = {"image-1": {"features": [{"bank": "image/bank.npy"}]}}
+    query_map = {"question-a": {"bank": "language/queries.npy"}}
+    assert required_bank_names(observations, {"image-1"}, query_map) == {
+        "image/bank.npy",
+        "language/queries.npy",
+    }
 
 
 def test_gradient_metrics_separate_shared_direction_and_global_clipping():
