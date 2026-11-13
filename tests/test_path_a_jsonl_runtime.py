@@ -4,6 +4,10 @@ import io
 import json
 
 from tiny_omni_decision.path_a_runtime_cli import run_jsonl
+from tiny_omni_decision.speech_commands_m1_contract import (
+    SPEECH_COMMANDS_M1_LABELS,
+    SPEECH_COMMANDS_M1_TASK_ID,
+)
 
 
 class FakeDispatcher:
@@ -54,6 +58,9 @@ def _request(task_id: str, task: str, payload: dict[str, object]) -> dict[str, o
 
 def test_jsonl_dispatches_scoped_text_request_and_returns_typed_json() -> None:
     dispatcher = FakeDispatcher()
+    dispatcher.worker_metadata = {
+        "torch": {"ready": True, "process_id": 123, "resident_unique_parameters": 3850}
+    }
     request = _request(
         "typed-decisions-synth-text-v0",
         "text",
@@ -68,6 +75,8 @@ def test_jsonl_dispatches_scoped_text_request_and_returns_typed_json() -> None:
     assert response["status"] == "ok"
     assert response["task_id"] == "typed-decisions-synth-text-v0"
     assert response["decision"]["request_id"] == "req-1"
+    assert response["runtime"]["worker_metadata"]["torch"]["resident_unique_parameters"] == 3850
+    assert "process_id" not in response["runtime"]["worker_metadata"]["torch"]
     assert dispatcher.calls[0][0] == "text"
 
 
@@ -97,6 +106,57 @@ def test_jsonl_audio_keeps_one_typed_record_per_query() -> None:
     response = json.loads(stdout.getvalue())
     assert len(response["decision"]) == 2
     assert [item["request_id"] for item in response["decision"]] == ["req-1-0", "req-1-1"]
+
+
+def test_jsonl_accepts_audio_keyword_m1_with_full_taxonomy() -> None:
+    dispatcher = FakeDispatcher()
+    labels = list(reversed(SPEECH_COMMANDS_M1_LABELS))
+    request = {
+        "request_id": "keyword-1",
+        "task_id": SPEECH_COMMANDS_M1_TASK_ID,
+        "payload": {
+            "audio_path": "train.wav",
+            "expected_media_sha256": "c" * 64,
+        },
+        "decision_specs": [
+            {
+                "request_id": "keyword-decision-1",
+                "decision_type": "choice",
+                "options": [{"id": f"id-{label}", "text": label} for label in labels],
+            }
+        ],
+    }
+    stdout = io.StringIO()
+
+    run_jsonl(io.StringIO(json.dumps(request) + "\n"), stdout, dispatcher)
+
+    response = json.loads(stdout.getvalue())
+    assert response["status"] == "ok"
+    assert dispatcher.calls[0][0] == "audio_keyword"
+
+
+def test_jsonl_audio_keyword_rejects_subset_before_dispatch() -> None:
+    dispatcher = FakeDispatcher()
+    request = {
+        "request_id": "keyword-2",
+        "task_id": SPEECH_COMMANDS_M1_TASK_ID,
+        "payload": {"audio_path": "train.wav", "expected_media_sha256": "d" * 64},
+        "decision_specs": [
+            {
+                "request_id": "keyword-decision-2",
+                "decision_type": "choice",
+                "options": [{"id": "yes", "text": "yes"}, {"id": "no", "text": "no"}],
+            }
+        ],
+    }
+    stdout = io.StringIO()
+
+    run_jsonl(io.StringIO(json.dumps(request) + "\n"), stdout, dispatcher)
+
+    response = json.loads(stdout.getvalue())
+    assert response["status"] == "error"
+    assert "all ten fixed" in response["error"]["message"]
+    assert dispatcher.calls == []
 
 
 def test_jsonl_rejects_media_without_sha256_before_dispatch() -> None:

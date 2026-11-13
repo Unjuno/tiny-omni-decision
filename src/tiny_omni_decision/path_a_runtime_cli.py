@@ -8,15 +8,17 @@ from collections.abc import Mapping
 from typing import Any, TextIO
 
 from tiny_omni_decision.runtime_dispatch import PathARuntimeDispatcher, TypedDecisionSpec
+from tiny_omni_decision.speech_commands_m1_contract import SPEECH_COMMANDS_M1_LABELS
 
 TASKS = {
     "typed-decisions-synth-text-v0": "text",
     "path-a-image-videoprism-clevr4-runtime-v0": "image",
     "path-a-image-videomaev2-clevr4-100k-runtime-v0": "image_videomae",
     "path-a-audio-multiquery-runtime-v0": "audio",
+    "path-a-audio-speech-commands-m1-v0": "audio_keyword",
     "clevrer-videoprism-binary-feature-decision-v0": "video",
 }
-MEDIA_TASKS = {"image", "image_videomae", "audio", "video"}
+MEDIA_TASKS = {"image", "image_videomae", "audio", "audio_keyword", "video"}
 SHA256_PATTERN = re.compile(r"[0-9a-fA-F]{64}\Z")
 
 
@@ -50,6 +52,8 @@ def _validate_payload(task: str, payload: object) -> dict[str, Any]:
             _required_text(query.get("question"), f"payload.queries[{index}].question")
             if not isinstance(query.get("options"), list):
                 raise ValueError(f"payload.queries[{index}].options must be an array")
+    elif task == "audio_keyword":
+        _required_text(payload.get("audio_path"), "payload.audio_path")
     elif task == "video":
         _required_text(payload.get("video_path"), "payload.video_path")
         _required_text(payload.get("question"), "payload.question")
@@ -125,6 +129,17 @@ def _parse_request(request: object) -> tuple[str, str, dict[str, Any], list[Type
     if task == "audio":
         if len(specs) != len(payload["queries"]):
             raise ValueError("audio requires one decision_spec per query")
+    elif task == "audio_keyword":
+        if len(specs) != 1:
+            raise ValueError("audio_keyword requires exactly one decision_spec")
+        if specs[0].decision_type != "choice":
+            raise ValueError("audio_keyword requires decision_type 'choice'")
+        if len(specs[0].option_texts) != len(SPEECH_COMMANDS_M1_LABELS) or set(
+            specs[0].option_texts
+        ) != set(SPEECH_COMMANDS_M1_LABELS):
+            raise ValueError(
+                "audio_keyword requires all ten fixed Speech Commands labels exactly once"
+            )
     elif len(specs) != 1:
         raise ValueError("non-audio tasks require exactly one decision_spec")
     if task == "video" and specs[0].option_texts != ("wrong", "correct"):
@@ -155,6 +170,7 @@ def run_jsonl(
                     "worker_startup_wall_seconds",
                     "worker_inference_seconds",
                     "encoder_metrics",
+                    "keyword_metrics",
                     "video_encoder",
                     "image_encoder",
                     "feature_shape",
@@ -163,6 +179,15 @@ def run_jsonl(
                 )
                 if key in result
             }
+            worker_metadata = getattr(dispatcher, "worker_metadata", {})
+            if isinstance(worker_metadata, Mapping):
+                loaded_workers = {
+                    name: {key: value for key, value in metadata.items() if key != "process_id"}
+                    for name, metadata in worker_metadata.items()
+                    if isinstance(metadata, Mapping) and metadata.get("ready") is True
+                }
+                if loaded_workers:
+                    runtime["worker_metadata"] = loaded_workers
             print(
                 json.dumps(
                     {

@@ -26,6 +26,7 @@ from tiny_omni_decision.audio_runtime import (
 from tiny_omni_decision.audio_runtime import (
     READOUT_SHA256 as AUDIO_READOUT_SHA256,
 )
+from tiny_omni_decision.speech_commands_m1_runtime import SpeechCommandsM1Runtime
 from tiny_omni_decision.text_runtime import (
     MODEL_REVISION as TEXT_PROBE_MODEL_REVISION,
 )
@@ -68,6 +69,7 @@ def main() -> None:
     parser.add_argument("--assembly", type=Path, required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), required=True)
     parser.add_argument("--audio-cache-entries", type=int, default=64)
+    parser.add_argument("--speech-commands-m1-readout", type=Path)
     args = parser.parse_args()
     assembly = args.assembly.resolve(strict=True)
     components = assembly / "components"
@@ -100,9 +102,12 @@ def main() -> None:
             video_root / "readout/best-readout.pt",
             device=args.device,
         )
-    startup_peak_allocated = (
-        torch.cuda.max_memory_allocated() if args.device == "cuda" else None
-    )
+        keyword = (
+            SpeechCommandsM1Runtime(audio, args.speech_commands_m1_readout)
+            if args.speech_commands_m1_readout is not None
+            else None
+        )
+    startup_peak_allocated = torch.cuda.max_memory_allocated() if args.device == "cuda" else None
     startup_peak_reserved = torch.cuda.max_memory_reserved() if args.device == "cuda" else None
 
     # These task runtimes use the identical pinned MiniLM files. Share one
@@ -119,7 +124,15 @@ def main() -> None:
         torch.cuda.reset_peak_memory_stats()
 
     parameter_count = _unique_parameters(
-        [audio.audio_model, audio.text_model, audio.scorer, text.encoder, text.scorer, video.scorer]
+        [
+            audio.audio_model,
+            audio.text_model,
+            audio.scorer,
+            text.encoder,
+            text.scorer,
+            video.scorer,
+            *([keyword.readout] if keyword is not None else []),
+        ]
     )
     ready = {
         "ready": True,
@@ -135,6 +148,12 @@ def main() -> None:
         "audio_encoder_revision": AUDIO_MODEL_REVISION,
         "audio_encoder_weights_sha256": AUDIO_WEIGHTS_SHA256,
         "audio_readout_sha256": AUDIO_READOUT_SHA256,
+        "speech_commands_m1_readout_sha256": (
+            keyword.readout_sha256 if keyword is not None else None
+        ),
+        "speech_commands_m1_readout_parameters": (
+            keyword.parameter_count if keyword is not None else None
+        ),
         "text_encoder_revision": TEXT_MODEL_REVISION,
         "text_encoder_weights_sha256": TEXT_WEIGHTS_SHA256,
         "text_probe_model_revision": TEXT_PROBE_MODEL_REVISION,
@@ -143,9 +162,7 @@ def main() -> None:
         "video_readout_sha256": VIDEO_READOUT_SHA256,
         "rss_before_load_bytes": rss_before_load,
         "rss_after_load_bytes": process.memory_info().rss,
-        "peak_working_set_after_load_bytes": getattr(
-            process.memory_info(), "peak_wset", None
-        ),
+        "peak_working_set_after_load_bytes": getattr(process.memory_info(), "peak_wset", None),
         "startup_peak_cuda_allocated_bytes": startup_peak_allocated,
         "startup_peak_cuda_reserved_bytes": startup_peak_reserved,
         "cuda_allocated_bytes_after_load": (
@@ -187,12 +204,24 @@ def main() -> None:
                         for item in payload["queries"]
                     ]
                     decisions = audio.decide_many(
-                        Path(payload["audio_path"]), queries,
+                        Path(payload["audio_path"]),
+                        queries,
                         expected_media_sha256=payload.get("expected_media_sha256"),
                     )
                     result = {
                         "decisions": [_serialize_decision(item) for item in decisions],
                         "encoder_metrics": dict(audio.audio_cache_metrics),
+                    }
+                elif task == "audio_keyword":
+                    if keyword is None:
+                        raise ValueError("worker was not started with --speech-commands-m1-readout")
+                    decision, keyword_metrics = keyword.decide(
+                        Path(payload["audio_path"]),
+                        expected_media_sha256=str(payload["expected_media_sha256"]),
+                    )
+                    result = {
+                        **_serialize_decision(decision),
+                        "keyword_metrics": keyword_metrics,
                     }
                 elif task == "video_score":
                     feature = torch.tensor(payload["video_feature"], dtype=torch.float32)
@@ -218,9 +247,7 @@ def main() -> None:
                         torch.cuda.max_memory_allocated() if args.device == "cuda" else None
                     ),
                     "rss_after_request_bytes": process.memory_info().rss,
-                    "peak_working_set_bytes": getattr(
-                        process.memory_info(), "peak_wset", None
-                    ),
+                    "peak_working_set_bytes": getattr(process.memory_info(), "peak_wset", None),
                 }
             )
             protocol.write(json.dumps(result, ensure_ascii=False) + "\n")

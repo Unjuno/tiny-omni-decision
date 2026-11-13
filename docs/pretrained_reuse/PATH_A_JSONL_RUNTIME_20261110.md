@@ -36,12 +36,16 @@ development scopes:
 | `path-a-image-videoprism-clevr4-runtime-v0` | image | Static CLEVR-4 taxonomy choices |
 | `path-a-image-videomaev2-clevr4-100k-runtime-v0` | image_videomae | Static CLEVR-4 taxonomy choices using the pinned VideoMAEv2 Small encoder and frozen 100k readout |
 | `path-a-audio-multiquery-runtime-v0` | audio | Four Speech Commands query templates |
+| `path-a-audio-speech-commands-m1-v0` | audio_keyword | Ten fixed Speech Commands keywords with a pinned text-free readout |
 | `clevrer-videoprism-binary-feature-decision-v0` | video | CLEVRER candidate-statement binary score; options must be ordered `wrong`, `correct` |
 
-This interface does not add model weights, training, calibration, or joint
-audio-video support. It does not make the existing task-specific scores
-general-purpose or release-qualified. The v4 package remains 170,499,716
-unique parameters and 687,254,772 bytes, above the provisional 200 MB target.
+The M1 route adds a separate 3,850-parameter frozen readout and train-only
+calibration scalar; it reuses the resident Whisper-Tiny encoder. It does not add
+joint audio-video support or make task-specific scores general-purpose or
+release-qualified. The four-component v4 assembly remains 170,499,716 unique
+parameters and 687,254,772 bytes. Adding the separate VideoMAE image route and
+the M1 readout yields a simple union of 192,709,534 parameters and 731,819,316
+bytes, still above the provisional 200 MB package target.
 
 The VideoMAE image route is a separately pinned task-specific path. It is
 selected only by its explicit task ID and requires explicit encoder, readout,
@@ -61,15 +65,17 @@ decision specification (audio uses one per query):
 ```
 
 The response has `status`, `request_id`, `task_id`, a validated `decision`
-record, and measured runtime fields returned by the underlying workers. JSON
-schema validity is not evidence of calibration or task accuracy.
+record, measured runtime fields, and—when a worker starts—its model revisions,
+unique parameter count, and memory metadata. JSON schema validity is not
+evidence of calibration or task accuracy.
 
 ## Verification status
 
 Five CPU unit tests cover text routing, multi-query audio response shape,
 mandatory media hashes, frozen video option order, and recovery after malformed
-JSONL input. A local CPU end-to-end smoke is recorded separately; it is a
-protocol/load check only and is not a new quality measurement.
+JSONL input. Separate CPU and CUDA end-to-end smokes cover text, image, video,
+audio multi-query, and the new fixed-taxonomy keyword route. They are
+protocol/load checks, not new quality measurements.
 
 ### Local CPU end-to-end smoke
 
@@ -91,8 +97,9 @@ protocol/load check only and is not a new quality measurement.
   SHA-256 `cf839a760ce766e1826ba2cd2b79a43bcc82085bb4efd3e0dad55ce78d349f2e`.
 
 This verifies one modality's request-to-weighted-response path. Image/audio/
-video JSONL dispatch was not run end to end in this smoke, and no joint AV
-support or product-quality conclusion follows.
+video dispatch was not run end to end in this original smoke, and no joint AV
+support or product-quality conclusion follows. Later route-specific smokes are
+recorded below and in their linked reports.
 
 ### CUDA VideoMAE image JSONL parity smoke
 
@@ -104,3 +111,15 @@ integration and deterministic score path for one training image only. It does
 not measure accuracy/calibration, validation, video understanding, or joint
 modalities. See the linked report for pinned artifact hashes, timings, and the
 immutable metadata-reconciliation note for the attempt-02 directory.
+
+### CUDA Speech Commands M1 JSONL smoke
+
+On 2026-11-11, the final four-route integration branch ran one SHA-verified
+TRAIN WAV through the CUDA Path A JSONL CLI and returned a finite ten-option
+Decision JSON in caller-specified option order. The record was a training
+example, so its single correct prediction is protocol evidence only. The
+worker reported 55,990,669 resident unique Torch parameters, including the
+3,850-parameter M1 readout; 233,796,608 CUDA bytes were allocated after the
+request. See
+[`R2_SPEECH_COMMANDS_M1_JSONL_RUNTIME_20261111.md`](R2_SPEECH_COMMANDS_M1_JSONL_RUNTIME_20261111.md)
+for exact source hashes, timings, artifact paths, and limitations.
