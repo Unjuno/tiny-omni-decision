@@ -19,6 +19,14 @@ unopened. See [probe report](docs/pretrained_reuse/R2_TALLYQA_VG_AMT_SOURCE_SCRE
 
 **2026-11-04 R2 CREMA-D source-code follow-up:** Pinned official code confirms same-filename VoiceVote/FaceVote/MultiModalVote labels, making a common AV target structurally possible. Access registration and content-rights/consent scope remain unresolved; no annotations/media were read and no task was admitted. See [source screen](docs/pretrained_reuse/R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md).
 **2026-11-04 R2 RoboMNIST residual-group screen:** The pinned split manifest selects 1,780 groups from a prior non-sealed eligible pool of 1,790 (780 train / 1,000 already evaluated validation), leaving only 10 unselected eligible groups; the other 345 of the 2,135 total were outside the pool and were not inspected. Ten groups cannot satisfy the 1,000-group validation gate. No new fit or validation replay is justified. See [residual screen](docs/pretrained_reuse/R2_ROBOMNIST_RESIDUAL_GROUP_SCREEN_20261104.md).
+**2026-11-11 R2 Commons AV metadata recheck:** A bounded official-category
+screen found only 34 direct files in the explicitly animal-sound, bird-song,
+and cat-sound categories inspected, before deduplication, item-rights review,
+or independent recording grouping. This scoped task fails the provisional
+1,000-example / 200-group floor; Commons-wide enumeration remains incomplete.
+No media was downloaded and no model was run. See
+[`R2_COMMONS_AV_SOUND_CATEGORY_RECHECK_20261111.md`](docs/pretrained_reuse/R2_COMMONS_AV_SOUND_CATEGORY_RECHECK_20261111.md).
+
 # Roadmap — Pretrained-Reuse Omni Decision (proposed 2026-10-10)
 **2026-11-04 R2 CLEVRER exposure inventory:** A read-only scan of 118 preserved corpus/readout manifests found 7,163 of 10,000 official TRAIN scene IDs; the remaining 2,837 are only an upper bound, not proven unused. Historical exclusions are contained in the corrected V2 exclusions, and the 768-scene V2 train/256-scene validation split has zero overlap. Existing unseen candidate scenes were already fetched/used, so no fresh CLEVRER evaluation pool is established. No model, media, holdout, sealed audit, or GPU run was touched. See [inventory](docs/pretrained_reuse/R2_CLEVRER_TRAIN_SCENE_EXPOSURE_INVENTORY_20261104.md).
 **2026-11-04 R2 video-source screen:** ARID v1.5 is a plausible low-light video-only action task, but dataset-specific access/licensing conflicts and a missing auditable cross-action person/scene split keep it `REVIEW_NOT_ADMITTED`. No payload or evaluation data was accessed. See [ARID source screen](docs/pretrained_reuse/R2_ARID_VIDEO_TASK_SOURCE_SCREEN_20261104.md).
