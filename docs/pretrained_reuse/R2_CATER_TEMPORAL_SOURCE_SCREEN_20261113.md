@@ -2,12 +2,15 @@
 
 ## Disposition
 
-**Status: `REVIEW_NOT_ADMITTED` pending data-scope and accessibility checks.**
+**Status: `REVIEW_NOT_ADMITTED` pending data-scope and cross-source identity checks.**
 CATER is a promising synthetic video-only temporal Decision candidate, but this
-metadata screen does not authorize payload acquisition, model fitting, or
-quality claims. No CATER videos, scene JSONs, train/validation labels, or model
-features were downloaded or opened. No sealed or official validation/test labels
-were accessed.
+initial source screen did not authorize model fitting or quality claims. Its
+original no-payload statement was superseded by the later, bounded
+[access/integrity recheck](R2_CATER_ACCESS_RECHECK_20261113.md): only the small
+lists and scenes ZIPs and the `train_subsetT` / `train_subsetV` entries were
+downloaded/read. The corresponding 3,849 training/selector scene JSONs were
+audited. No CATER videos, official validation/test list contents, model
+features, or sealed audit data were accessed.
 
 ## Pinned source and product fit
 
@@ -52,22 +55,24 @@ were accessed.
   scene JSON and decoded video content, verify exact and normalized overlap,
   and group by underlying scene identity. Do not assume a video ID alone is an
   independent scene.
-- The official README points to a CMU Box share and provides direct ZIP links
-  for video, scene, and list files. A metadata-only HTTP `HEAD` check to the
-  documented Box share and the `all_actions` videos/scenes/lists URLs returned
-  HTTP 404 from this workstation. No `GET` or alternate download route was
-  attempted. Availability and exact byte sizes therefore remain **UNKNOWN**;
-  the error does not prove the files are unavailable to all clients.
+- The initial metadata-only check used the `cmu.box.com` host and received
+  HTTP 404. The later recheck followed the official redirect to
+  `cmu.app.box.com`; the lists/scenes archives were downloaded and hashed, and
+  `HEAD` reported the video archive size. No video archive was downloaded.
+  See the later recheck for exact receipts and the remaining archive-rights
+  limitation.
 
 ## Next gate
 
-Keep this candidate unadmitted until a bounded metadata-only follow-up confirms
-the exact payload license scope, an accessible source with stable size/hash
-receipts, and scene-grouped train/selector isolation. If those pass, freeze the
-upstream `train_subsetT` and `train_subsetV` cohorts, keep official `val.txt`
-and any test set unopened, and preregister temporal-order, frame-shuffle,
-position-prior, and option-order controls before one frozen-feature fit. Use
-the verified VideoMAE V2 CUDA runtime as the candidate encoder; its existing
-runtime smoke is not a CATER quality result. If rights, source access, or group
-integrity fails, stop this candidate and retain the negative gate without
-installing a new generator environment or fetching media.
+Keep this candidate unadmitted until the exact hosted-payload rights scope and
+the `CLEVR_new_*` cross-source identity relationship with prior Clevr-4
+exposure are resolved. The train/selector subsets have zero overlap by video ID
+and exact normalized scene metadata, but that does not prove independence from
+Clevr-4 or detect all visual near-duplicates. Do not download videos or fit a
+model before those gates pass. If admitted later, freeze only the already
+audited train/selector cohorts, keep official `val.txt` and any test set
+unopened, and preregister temporal-order, frame-shuffle, position-prior, and
+option-order controls before one frozen-feature fit. Use the verified
+VideoMAE V2 CUDA runtime as the candidate encoder; its existing runtime smoke
+is not a CATER quality result. If rights or identity cannot be resolved, stop
+this candidate and retain the negative gate.
