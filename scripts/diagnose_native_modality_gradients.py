@@ -2,12 +2,15 @@
 
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 
 import numpy as np
 import psutil
