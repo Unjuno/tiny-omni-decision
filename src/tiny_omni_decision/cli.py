@@ -39,6 +39,7 @@ PATH_A_WORKER_LOG_OPTION = typer.Option(..., "--worker-log-dir")
 PATH_A_DEVICE_OPTION = typer.Option("cpu", "--device")
 VIDEOMAE_MODEL_DIR_OPTION = typer.Option(None, "--videomae-model-dir")
 VIDEOMAE_READOUT_OPTION = typer.Option(None, "--videomae-readout")
+VIDEOMAE_SPATIAL_READOUT_OPTION = typer.Option(None, "--videomae-spatial-readout")
 VIDEOMAE_DEPENDENCY_DIR_OPTION = typer.Option(None, "--videomae-dependency-dir")
 
 
@@ -988,6 +989,7 @@ def path_a_jsonl(
     device: str = PATH_A_DEVICE_OPTION,
     videomae_model_dir: Path | None = VIDEOMAE_MODEL_DIR_OPTION,
     videomae_readout: Path | None = VIDEOMAE_READOUT_OPTION,
+    videomae_spatial_readout: Path | None = VIDEOMAE_SPATIAL_READOUT_OPTION,
     videomae_dependency_dir: Path | None = VIDEOMAE_DEPENDENCY_DIR_OPTION,
 ) -> None:
     """Run the existing task-scoped Path A bundle over JSONL on stdin/stdout."""
@@ -1001,6 +1003,7 @@ def path_a_jsonl(
         worker_log_dir=worker_log_dir,
         videomae_model_dir=videomae_model_dir,
         videomae_readout=videomae_readout,
+        videomae_spatial_readout=videomae_spatial_readout,
         videomae_dependency_dir=videomae_dependency_dir,
         device=device,
     )

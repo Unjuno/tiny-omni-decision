@@ -166,7 +166,8 @@ class PathARuntimeDispatcher:
     - text: ``state``, ``question``, ``options``
     - audio: ``audio_path``, ``queries`` (question/options pairs)
     - image: ``image_path``, ``taxonomy``, ``options``
-    - image_videomae: the same payload through the separate VideoMAE Path A image candidate
+    - image_videomae: the global-vector VideoMAE Path A image candidate
+    - image_videomae_spatial: the separate 4x4 spatial-grid VideoMAE candidate
     - video: ``video_path``, ``question``, ``candidate_statement``
     """
 
@@ -179,6 +180,7 @@ class PathARuntimeDispatcher:
         worker_log_dir: Path,
         videomae_model_dir: Path | None = None,
         videomae_readout: Path | None = None,
+        videomae_spatial_readout: Path | None = None,
         videomae_dependency_dir: Path | None = None,
         device: str = "cuda",
     ) -> None:
@@ -194,6 +196,11 @@ class PathARuntimeDispatcher:
         self.videomae_readout = (
             videomae_readout.resolve(strict=True) if videomae_readout is not None else None
         )
+        self.videomae_spatial_readout = (
+            videomae_spatial_readout.resolve(strict=True)
+            if videomae_spatial_readout is not None
+            else None
+        )
         self.videomae_dependency_dir = (
             videomae_dependency_dir.resolve(strict=True)
             if videomae_dependency_dir is not None
@@ -208,6 +215,7 @@ class PathARuntimeDispatcher:
         self._torch_worker: JsonLineWorker | None = None
         self._videoprism_worker: JsonLineWorker | None = None
         self._videomae_worker: JsonLineWorker | None = None
+        self._videomae_spatial_worker: JsonLineWorker | None = None
         self._request_id = 0
         self._project_root = Path(__file__).resolve().parents[2]
         env = os.environ.copy()
@@ -225,6 +233,11 @@ class PathARuntimeDispatcher:
             "torch": self._torch_worker.ready if self._torch_worker else None,
             "videoprism": self._videoprism_worker.ready if self._videoprism_worker else None,
             "videomae": self._videomae_worker.ready if self._videomae_worker else None,
+            "videomae_spatial": (
+                getattr(self, "_videomae_spatial_worker", None).ready
+                if getattr(self, "_videomae_spatial_worker", None)
+                else None
+            ),
         }
 
     def _next_id(self) -> str:
@@ -305,18 +318,60 @@ class PathARuntimeDispatcher:
             )
         return self._videomae_worker
 
+    def _ensure_videomae_spatial(self) -> JsonLineWorker:
+        if self._videomae_spatial_worker is None:
+            paths = (
+                self.videomae_model_dir,
+                self.videomae_spatial_readout,
+                self.videomae_dependency_dir,
+            )
+            if any(path is None for path in paths):
+                raise ValueError(
+                    "VideoMAE spatial image task requires --videomae-model-dir, "
+                    "--videomae-spatial-readout and --videomae-dependency-dir"
+                )
+            log_path = self.worker_log_dir / "videomae-spatial-worker.log"
+            self._videomae_spatial_worker = JsonLineWorker(
+                [
+                    sys.executable,
+                    "-B",
+                    "-m",
+                    "scripts.path_a_videomae_spatial_worker",
+                    "--model-root",
+                    str(self.videomae_model_dir),
+                    "--spatial-readout",
+                    str(self.videomae_spatial_readout),
+                    "--dependency-root",
+                    str(self.videomae_dependency_dir),
+                    "--device",
+                    self.device,
+                ],
+                cwd=self._project_root,
+                env=self._worker_env,
+                log_path=log_path,
+            )
+        return self._videomae_spatial_worker
+
     def dispatch(self, task: str, payload: dict[str, Any]) -> dict[str, Any]:
         request_id = self._next_id()
         started = time.perf_counter()
         torch_was_running = self._torch_worker is not None
         videoprism_was_running = self._videoprism_worker is not None
         videomae_was_running = getattr(self, "_videomae_worker", None) is not None
+        videomae_spatial_worker = getattr(self, "_videomae_spatial_worker", None)
+        videomae_spatial_was_running = videomae_spatial_worker is not None
         if task == "image":
             response = self._ensure_videoprism().request(
                 {"request_id": request_id, "task": task, "payload": payload}
             )
         elif task == "image_videomae":
             worker = self._ensure_videomae()
+            response = worker.request(
+                {"request_id": request_id, "task": "image", "payload": payload}
+            )
+            response["image_encoder"] = worker.ready
+        elif task == "image_videomae_spatial":
+            worker = self._ensure_videomae_spatial()
             response = worker.request(
                 {"request_id": request_id, "task": "image", "payload": payload}
             )
@@ -350,6 +405,11 @@ class PathARuntimeDispatcher:
         videomae_worker = getattr(self, "_videomae_worker", None)
         if not videomae_was_running and videomae_worker is not None:
             startup_wall["videomae"] = self._videomae_worker.startup_wall_seconds
+        videomae_spatial_worker = getattr(self, "_videomae_spatial_worker", None)
+        if not videomae_spatial_was_running and videomae_spatial_worker is not None:
+            startup_wall["videomae_spatial"] = (
+                videomae_spatial_worker.startup_wall_seconds
+            )
         return {
             **response,
             "dispatch_request_id": request_id,
@@ -391,7 +451,7 @@ class PathARuntimeDispatcher:
             if len(decision_specs) != 1:
                 raise ValueError("non-audio Path A tasks require exactly one decision spec")
             spec = decision_specs[0]
-            if task in {"text", "image", "image_videomae"}:
+            if task in {"text", "image", "image_videomae", "image_videomae_spatial"}:
                 payload_options = payload.get("options")
                 if (
                     not isinstance(payload_options, (list, tuple))
@@ -443,12 +503,15 @@ class PathARuntimeDispatcher:
             self._torch_worker,
             self._videoprism_worker,
             getattr(self, "_videomae_worker", None),
+            getattr(self, "_videomae_spatial_worker", None),
         ):
             if worker is not None:
                 worker.close()
         self._torch_worker = None
         self._videoprism_worker = None
         self._videomae_worker = None
+        if hasattr(self, "_videomae_spatial_worker"):
+            self._videomae_spatial_worker = None
 
     def __enter__(self) -> PathARuntimeDispatcher:
         return self
