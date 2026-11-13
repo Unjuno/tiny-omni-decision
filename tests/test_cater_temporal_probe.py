@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-import torch
+import pytest
 
-from tiny_omni_decision.cater_temporal_probe import CaterTemporalDecisionHead
+torch = pytest.importorskip("torch")
+
+from tiny_omni_decision.cater_temporal_probe import CaterTemporalDecisionHead  # noqa: E402
 
 
 def test_temporal_decision_head_scores_each_option_and_backpropagates() -> None:

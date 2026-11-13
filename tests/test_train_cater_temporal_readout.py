@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-import torch
+import pytest
 
-from scripts.train_cater_temporal_readout import (
+torch = pytest.importorskip("torch")
+
+from scripts.train_cater_temporal_readout import (  # noqa: E402
     _batch_metrics,
     _cluster_bootstrap_accuracy_delta,
     _feature_for_mode,
