@@ -62,25 +62,26 @@ def update_gradient_metrics(modality_gradients, shared_gradients, private_gradie
         or clip_norm <= 0
     ):
         raise ValueError("four modality gradients and positive clip norm required")
-    vectors = (
-        list(modality_gradients.values())
-        + list(shared_gradients.values())
-        + list(private_gradients.values())
-    )
-    reference = vectors[0]
-    if (
-        not isinstance(reference, torch.Tensor)
-        or reference.ndim != 1
-        or any(
-            not isinstance(value, torch.Tensor)
-            or value.ndim != 1
-            or value.shape != reference.shape
-            or value.device != reference.device
-            or not torch.isfinite(value).all()
-            for value in vectors
-        )
-    ):
-        raise ValueError("finite, aligned one-dimensional gradient vectors required")
+    groups = (modality_gradients, shared_gradients, private_gradients)
+    all_vectors = [value for group in groups for value in group.values()]
+    for group in groups:
+        vectors = list(group.values())
+        reference = vectors[0]
+        if (
+            not isinstance(reference, torch.Tensor)
+            or reference.ndim != 1
+            or any(
+                not isinstance(value, torch.Tensor)
+                or value.ndim != 1
+                or value.shape != reference.shape
+                or value.device != reference.device
+                or not torch.isfinite(value).all()
+                for value in vectors
+            )
+        ):
+            raise ValueError("finite, aligned one-dimensional gradient vectors required")
+    if any(value.device != all_vectors[0].device for value in all_vectors):
+        raise ValueError("gradient scopes must use one device")
 
     combined = torch.stack([modality_gradients[name] for name in MODALITIES]).mean(0)
     combined_norm = float(torch.linalg.vector_norm(combined).item())

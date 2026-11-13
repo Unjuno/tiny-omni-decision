@@ -57,6 +57,22 @@ def test_gradient_metrics_separate_shared_direction_and_global_clipping():
     assert metrics["shared_gradient_cancellation_ratio"] == 0.0
 
 
+def test_gradient_metrics_allow_distinct_parameter_scope_lengths():
+    all_parameters = {name: torch.ones(6) for name in MODALITIES}
+    shared = {name: torch.ones(4) for name in MODALITIES}
+    private = {name: torch.ones(2) for name in MODALITIES}
+
+    metrics = update_gradient_metrics(all_parameters, shared, private, clip_norm=1.0)
+
+    assert metrics["gradient_norms"]["all_parameters_by_modality"]["text"] == pytest.approx(
+        6**0.5
+    )
+    assert metrics["gradient_norms"]["shared_parameters_by_modality"]["text"] == 2.0
+    assert metrics["gradient_norms"]["modality_projection_parameters_by_modality"][
+        "text"
+    ] == pytest.approx(2**0.5)
+
+
 def test_gradient_metrics_reject_nonfinite_or_misaligned_vectors():
     values = {name: torch.ones(2) for name in MODALITIES}
     bad = dict(values)
