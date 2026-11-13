@@ -1,0 +1,42 @@
+{
+  "id": "native-shared-gradient-diagnostic-v1",
+  "training_source_commit": "8756a09f582554c0321ed5ece71846d6b19469cd",
+  "historical_source_root": "C:/CodexWorktrees/pretrained-reuse-omni",
+  "source_file_sha256": {
+    "scripts/train_native_long_budget.py": "28bc3eec5c1cebba34687857971aab577a5372de810e68d3ebefe9c26b3d0df0",
+    "scripts/native_fit_runtime.py": "63598df78a632b6a2a49c4d70f9c9e07a945f94793e07cb4144ec2234f346abe",
+    "scripts/native_fit.py": "62315a27e37c9b3c2837ee66c2d462c4285b4aca1a739fb769974c3330f8951b",
+    "scripts/native_candidate_inputs.py": "372e8c3664fbfa8627a9bba4ff4c7ab3c0f3fc92d8a0c5df3e8011b1a45cd7f3",
+    "src/tiny_omni_decision/native_candidate.py": "cd2ab4e45de5c5e3e037531bf8a9e967365f8ef2a60b5b20cddd0ba3e336a974",
+    "scripts/native_video_cache.py": "62ffe34c6db4a52ed93310c36939a74f356729db338a7aea49406f1cdfe58039"
+  },
+  "source_config": "configs/pretrained_reuse/native_long_budget_v1.json",
+  "source_config_sha256": "19e4a1f005856684950fb229a12d757768eb7369787ad08b40b3f85de2ba3e45",
+  "baseline_fit": "C:/CodexArtifacts/pretrained-reuse-r2/native-long-budget-fit-01",
+  "baseline_result_sha256": "645bedbe73ed508fad68c4f636a41df6c8630cd996641c44ce2a87d31550250b",
+  "selected_checkpoint": "best.pt",
+  "selected_checkpoint_sha256": "d7b666cd7ea60dcf236bd06e53b0107e0d5f74193824c1f4b44bbe4d5cdc1b56",
+  "selected_step": 8192,
+  "sampling_sha256": "267c2144c4bb3045e1bbc2365c83618306a086a9014f3ac7e44ac1e19bcc11bf",
+  "train_probe_ids_sha256": "d6293594fc44a9cb6d1bf251d08b1815550d555388214927cf2937a30fc76c96",
+  "window_updates": 256,
+  "optimizer_clip_norm": 1.0,
+  "expected_train_probe_count": 6656,
+  "expected_validation_count": 24346,
+  "corpus_result_sha256": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+  "query_cache_result_sha256": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a7f6dbdc21f1ef7d909e",
+  "corpus_artifact_sha256": {
+    "train.jsonl": "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb",
+    "observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+    "banks.json": "44ef5f26ffb01bd264c7283f82e6a6f37f1a4d3c34f522515ddfc7fc2acb6520",
+    "query-map.json": "6d7d0ed1dfe6ec50d1c9b0801c689f3584f2050c6237180b0303f758fe6e1e15"
+  },
+  "query_cache_artifact_sha256": {
+    "queries.npy": "a453b982e5d739303779b6dfccc91537d3521e8ad6be490263b44623c7f1f7e7"
+  },
+  "expected_output": "C:/CodexArtifacts/pretrained-reuse-r2/native-modality-gradient-diagnostic-v1-attempt-01",
+  "validation_labels_or_predictions_allowed": false,
+  "sealed_audit_allowed": false,
+  "optimizer_updates": 0,
+  "cloud_cost": 0
+}
