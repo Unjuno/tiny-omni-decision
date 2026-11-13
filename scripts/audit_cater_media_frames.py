@@ -45,20 +45,33 @@ def audit_media(media_root: Path, media_records: list[dict[str, Any]]) -> list[d
                 raise ValueError(f"expected exactly one video stream: {path}")
             stream = streams[0]
             declared_frames = int(stream.frames or 0)
-            decoded_frames = None
             first_pts = None
             last_pts = None
             decoded_frames = 0
-            for frame in container.decode(stream):
-                decoded_frames += 1
-                if first_pts is None:
-                    first_pts = frame.pts
-                last_pts = frame.pts
-            if decoded_frames != declared_frames and declared_frames:
-                raise ValueError(
-                    f"declared/decoded frame mismatch for {path}: "
-                    f"{declared_frames}/{decoded_frames}"
-                )
+            decoded_packet_pts = set()
+            invalid_packet_pts = set()
+            for packet in container.demux(stream):
+                if packet.pts is None or packet.size <= 0:
+                    continue
+                try:
+                    frames = packet.decode()
+                except av.error.InvalidDataError:
+                    invalid_packet_pts.add(int(packet.pts))
+                    continue
+                if not frames:
+                    invalid_packet_pts.add(int(packet.pts))
+                    continue
+                decoded_packet_pts.add(int(packet.pts))
+                for frame in frames:
+                    decoded_frames += 1
+                    if first_pts is None:
+                        first_pts = frame.pts
+                    last_pts = frame.pts
+            missing_packet_pts = sorted(
+                set(range(declared_frames)) - decoded_packet_pts
+            ) if declared_frames else []
+            unavailable_packet_pts = sorted(invalid_packet_pts | set(missing_packet_pts))
+            decode_status = "PASS" if not unavailable_packet_pts else "INCOMPLETE"
             records.append(
                 {
                     "split": split,
@@ -67,6 +80,12 @@ def audit_media(media_root: Path, media_records: list[dict[str, Any]]) -> list[d
                     "media_bytes": path.stat().st_size,
                     "stream_frames": declared_frames,
                     "decoded_frames": decoded_frames,
+                    "decoded_packet_pts": sorted(decoded_packet_pts),
+                    "unavailable_packet_pts": unavailable_packet_pts,
+                    "decode_status": decode_status,
+                    "codec": getattr(
+                        getattr(stream, "codec_context", None), "name", None
+                    ),
                     "fps": str(stream.average_rate),
                     "duration_frames": stream.duration,
                     "first_pts": first_pts,
@@ -98,11 +117,14 @@ def main() -> None:
     record_path.write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in records), encoding="utf-8"
     )
-    frame_counts = Counter(
-        int(row["decoded_frames"] or row["stream_frames"]) for row in records
-    )
+    frame_counts = Counter(int(row["decoded_frames"]) for row in records)
+    complete = all(row["decode_status"] == "PASS" for row in records)
     summary = {
-        "status": "PASS_CATER_MEDIA_FRAME_AUDIT",
+        "status": (
+            "PASS_CATER_MEDIA_FRAME_AUDIT"
+            if complete
+            else "CATER_MEDIA_DECODE_ISSUES_FOUND"
+        ),
         "media_root": str(media_dir),
         "media_manifest_sha256": sha256_file(media_manifest),
         "media_count": len(records),
@@ -114,6 +136,7 @@ def main() -> None:
         "below_301_frame_count": sum(
             count for frames, count in frame_counts.items() if frames < 301
         ),
+        "incomplete_video_count": sum(row["decode_status"] != "PASS" for row in records),
         "records_sha256": sha256_file(record_path),
     }
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

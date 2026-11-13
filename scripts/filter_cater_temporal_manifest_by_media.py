@@ -27,6 +27,15 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
+def selected_frame_indices(start: int, end: int, *, count: int = 13) -> tuple[int, ...]:
+    if start < 0 or end <= start or count < 2:
+        raise ValueError("expected a non-empty interval and at least two frame samples")
+    indices = tuple(round(start + (end - start) * index / (count - 1)) for index in range(count))
+    if len(set(indices)) != count:
+        raise ValueError("interval is too short for the requested number of distinct frames")
+    return indices
+
+
 def filter_by_media_frames(
     train_rows: list[dict[str, Any]],
     validation_rows: list[dict[str, Any]],
@@ -37,10 +46,15 @@ def filter_by_media_frames(
         key = (str(record["split"]), str(record["video_id"]))
         if key in available_frames:
             raise ValueError(f"duplicate media frame-count record: {key}")
-        count = int(record.get("decoded_frames") or record["stream_frames"])
+        if "decoded_packet_pts" not in record:
+            raise ValueError(f"missing packet decode inventory for {key}")
+        count = int(record["stream_frames"])
         if count < 1:
             raise ValueError(f"invalid media frame count for {key}: {count}")
-        available_frames[key] = count
+        decoded_packet_pts = {int(value) for value in record["decoded_packet_pts"]}
+        if any(value < 0 or value >= count for value in decoded_packet_pts):
+            raise ValueError(f"packet PTS is outside declared media range for {key}")
+        available_frames[key] = (count, decoded_packet_pts)
 
     filtered: dict[str, list[dict[str, Any]]] = {"train": [], "validation": []}
     rejected = []
@@ -57,9 +71,10 @@ def filter_by_media_frames(
             previous = split_by_video.setdefault(video_id, split)
             if previous != split:
                 raise ValueError(f"video occurs in both source splits: {video_id}")
-            count = available_frames.get((split, video_id))
-            if count is None:
+            inventory = available_frames.get((split, video_id))
+            if inventory is None:
                 raise ValueError(f"missing frame-count record: {split}/{video_id}")
+            count, decoded_packet_pts = inventory
             end_frame = int(row["frame_interval"][1])
             if end_frame >= count:
                 rejected.append(
@@ -69,11 +84,25 @@ def filter_by_media_frames(
                         "video_id": video_id,
                         "end_frame": end_frame,
                         "available_frames": count,
-                        "reason": "task endpoint is outside decoded media",
+                        "reason": "task endpoint is outside declared media",
                     }
                 )
             else:
-                filtered[split].append(row)
+                requested = selected_frame_indices(*map(int, row["frame_interval"]))
+                missing_selected = sorted(set(requested) - decoded_packet_pts)
+                if missing_selected:
+                    rejected.append(
+                        {
+                            "id": row["id"],
+                            "split": split,
+                            "video_id": video_id,
+                            "frame_interval": row["frame_interval"],
+                            "missing_selected_frame_pts": missing_selected,
+                            "reason": "one or more selected frame packets are unavailable",
+                        }
+                    )
+                else:
+                    filtered[split].append(row)
 
     media_keys = set(available_frames)
     task_video_keys = {
@@ -89,10 +118,9 @@ def filter_by_media_frames(
         raise ValueError("video overlap remains after media-frame filtering")
 
     summary = {
-        "status": "PASS_MEDIA_ENDPOINT_FILTER",
+        "status": "PASS_MEDIA_FRAME_ELIGIBILITY_FILTER",
         "filter_rule": (
-            "keep a question only when its inclusive end frame is less than "
-            "decoded frame count"
+            "keep intervals with an existing endpoint and all 13 selected packet PTS decoded"
         ),
         "input_rows": {"train": len(train_rows), "validation": len(validation_rows)},
         "kept_rows": {split: len(rows) for split, rows in filtered.items()},
@@ -104,6 +132,7 @@ def filter_by_media_frames(
             split: len({row["video_id"] for row in rows}) for split, rows in filtered.items()
         },
         "removed_rows_by_split": dict(sorted(Counter(row["split"] for row in rejected).items())),
+        "removed_rows_by_reason": dict(sorted(Counter(row["reason"] for row in rejected).items())),
         "option_count_unchanged": all(
             len(row["options"]) == int(row["num_options"])
             for rows in filtered.values()

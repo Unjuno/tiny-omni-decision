@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import hashlib
+import json
+from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
 from scripts.extract_cater_videoprism_temporal_features import (
     attach_media_records,
+    decode_cater_frames,
+    mark_run_failed,
     select_interval_frame_indices,
     token_tensor,
 )
@@ -34,6 +39,107 @@ def test_frame_indices_for_second_interval_never_read_later_video_content() -> N
     assert min(indices) == 75
     assert max(indices) == 150
     assert 151 not in indices
+
+
+def test_decoder_skips_corrupt_unsampled_packets_using_packet_pts() -> None:
+    class InvalidDataError(Exception):
+        pass
+
+    class Frame:
+        def __init__(self, pts: int) -> None:
+            self.pts = pts
+
+        def to_ndarray(self, *, format: str) -> np.ndarray:
+            assert format == "rgb24"
+            return np.full((1, 1, 3), self.pts, dtype=np.uint8)
+
+    class Packet:
+        def __init__(self, pts: int) -> None:
+            self.pts = pts
+            self.size = 10
+
+        def decode(self):
+            if self.pts == 1:
+                raise InvalidDataError("corrupt unsampled packet")
+            return [Frame(self.pts)]
+
+    class Container:
+        streams = [SimpleNamespace(type="video", frames=3)]
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def demux(self, _stream):
+            return iter([Packet(0), Packet(1), Packet(2)])
+
+    fake_av = SimpleNamespace(
+        open=lambda _path: Container(),
+        error=SimpleNamespace(InvalidDataError=InvalidDataError),
+    )
+
+    frames = decode_cater_frames(Path("unused.avi"), fake_av, (0, 2))
+
+    assert frames[:, 0, 0, 0].tolist() == [0, 2]
+
+
+def test_decoder_fails_closed_when_a_selected_packet_is_corrupt() -> None:
+    class InvalidDataError(Exception):
+        pass
+
+    class Frame:
+        pts = 0
+
+        def to_ndarray(self, *, format: str) -> np.ndarray:
+            return np.zeros((1, 1, 3), dtype=np.uint8)
+
+    class Packet:
+        def __init__(self, pts: int) -> None:
+            self.pts = pts
+            self.size = 10
+
+        def decode(self):
+            if self.pts == 1:
+                raise InvalidDataError("corrupt selected packet")
+            return [Frame()]
+
+    class Container:
+        streams = [SimpleNamespace(type="video", frames=2)]
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def demux(self, _stream):
+            return iter([Packet(0), Packet(1)])
+
+    fake_av = SimpleNamespace(
+        open=lambda _path: Container(),
+        error=SimpleNamespace(InvalidDataError=InvalidDataError),
+    )
+
+    with pytest.raises(ValueError, match="selected frame packet is unavailable.*1"):
+        decode_cater_frames(Path("unused.avi"), fake_av, (0, 1))
+
+
+def test_failed_run_status_is_persisted_without_discarding_provenance(tmp_path) -> None:
+    run_path = tmp_path / "run.json"
+    run_path.write_text(
+        json.dumps({"status": "RUNNING", "source_commit": "abc123"}),
+        encoding="utf-8",
+    )
+
+    mark_run_failed(run_path, RuntimeError("decode failed"))
+
+    saved = json.loads(run_path.read_text(encoding="utf-8"))
+    assert saved["status"] == "FAILED"
+    assert saved["source_commit"] == "abc123"
+    assert saved["failure_type"] == "RuntimeError"
+    assert saved["failure_message"] == "decode failed"
 
 
 def test_media_validation_hashes_each_group_asset_once_and_keeps_all_rows(tmp_path) -> None:

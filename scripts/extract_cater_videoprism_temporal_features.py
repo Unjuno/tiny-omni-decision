@@ -51,6 +51,32 @@ def atomic_json(path: Path, value: Any) -> None:
     os.replace(temporary, path)
 
 
+def mark_run_failed(
+    run_path: Path,
+    error: Exception,
+    *,
+    sample_id: str | None = None,
+    completed_samples: int | None = None,
+) -> None:
+    if not run_path.is_file():
+        return
+    metadata = json.loads(run_path.read_text(encoding="utf-8"))
+    if metadata.get("status") != "RUNNING":
+        return
+    metadata.update(
+        {
+            "status": "FAILED",
+            "failure_type": type(error).__name__,
+            "failure_message": str(error),
+        }
+    )
+    if sample_id is not None:
+        metadata["failed_sample_id"] = sample_id
+    if completed_samples is not None:
+        metadata["completed_samples"] = completed_samples
+    atomic_json(run_path, metadata)
+
+
 def attach_media_records(
     train: list[dict[str, Any]],
     validation: list[dict[str, Any]],
@@ -114,15 +140,24 @@ def decode_cater_frames(path: Path, av: Any, frame_indices: tuple[int, ...]) -> 
         stream = streams[0]
         if stream.frames and stream.frames < max(selected_indices) + 1:
             raise ValueError(f"CATER video does not cover the requested interval: {path}")
-        selected: list[np.ndarray] = []
-        for index, frame in enumerate(container.decode(stream)):
-            if index in selected_indices:
-                selected.append(frame.to_ndarray(format="rgb24"))
-            if index >= max(selected_indices):
-                break
-    if len(selected) != len(selected_indices):
-        raise ValueError(f"decoded {len(selected)}/{len(selected_indices)} required frames: {path}")
-    return np.stack(selected)
+        selected: dict[int, np.ndarray] = {}
+        for packet in container.demux(stream):
+            if packet.pts is None or packet.size <= 0:
+                continue
+            try:
+                frames = packet.decode()
+            except av.error.InvalidDataError:
+                if packet.pts in selected_indices:
+                    continue
+                continue
+            if len(frames) > 1:
+                raise ValueError(f"expected at most one CATER frame per packet: {path}")
+            if frames and packet.pts in selected_indices:
+                selected[int(packet.pts)] = frames[0].to_ndarray(format="rgb24")
+    missing = sorted(selected_indices - set(selected))
+    if missing:
+        raise ValueError(f"selected frame packet is unavailable for {path}: {missing}")
+    return np.stack([selected[index] for index in frame_indices])
 
 
 def preprocess(frames: np.ndarray, tf: Any) -> np.ndarray:
@@ -209,6 +244,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     encode = jax.jit(lambda batch: model.apply(variables, batch, train=False))
     metadata = {
         "status": "RUNNING",
+        "extractor_sha256": sha256_file(Path(__file__)),
         "source_commit": source_commit,
         "checkpoint_sha256": CHECKPOINT_SHA256,
         "parameters": parameter_count,
@@ -275,7 +311,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             record["feature_file_bytes"] = feature_path.stat().st_size
             records.append(record)
             continue
-        frames = decode_cater_frames(media, av, frame_indices)
+        try:
+            frames = decode_cater_frames(media, av, frame_indices)
+        except Exception as exc:
+            mark_run_failed(
+                output / "run.json",
+                exc,
+                sample_id=sample_id,
+                completed_samples=len(records),
+            )
+            raise
         batch = jnp.asarray(preprocess(frames, tf)[None])
         forward_started = time.perf_counter()
         encoded = encode(batch)
@@ -317,6 +362,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         record["feature_file_bytes"] = feature_path.stat().st_size
         records.append(record)
         if index % 16 == 0:
+            metadata["completed_samples"] = index
+            metadata["last_completed_sample_id"] = sample_id
+            atomic_json(output / "run.json", metadata)
             print(
                 json.dumps(
                     {"completed_samples": index, "total_samples": len(unique_by_sample)}

@@ -28,9 +28,25 @@ def test_media_filter_keeps_observable_windows_and_preserves_groups() -> None:
     ]
     validation = [_row("validation", "valid", 150, 225)]
     media = [
-        {"split": "train", "video_id": "full", "stream_frames": 301},
-        {"split": "train", "video_id": "short", "stream_frames": 100, "decoded_frames": 100},
-        {"split": "validation", "video_id": "valid", "stream_frames": 301},
+        {
+            "split": "train",
+            "video_id": "full",
+            "stream_frames": 301,
+            "decoded_packet_pts": list(range(301)),
+        },
+        {
+            "split": "train",
+            "video_id": "short",
+            "stream_frames": 100,
+            "decoded_frames": 100,
+            "decoded_packet_pts": list(range(100)),
+        },
+        {
+            "split": "validation",
+            "video_id": "valid",
+            "stream_frames": 301,
+            "decoded_packet_pts": list(range(301)),
+        },
     ]
 
     filtered_train, filtered_validation, summary = filter_by_media_frames(train, validation, media)
@@ -55,7 +71,44 @@ def test_media_filter_fails_closed_when_a_video_is_missing_frame_audit() -> None
 
 def test_media_filter_rejects_duplicate_frame_records() -> None:
     train = [_row("train", "duplicate", 0, 75)]
-    frame_record = {"split": "train", "video_id": "duplicate", "stream_frames": 301}
+    frame_record = {
+        "split": "train",
+        "video_id": "duplicate",
+        "stream_frames": 301,
+        "decoded_packet_pts": list(range(301)),
+    }
 
     with pytest.raises(ValueError, match="duplicate media frame-count record"):
         filter_by_media_frames(train, [], [frame_record, frame_record])
+
+
+def test_media_filter_rejects_only_intervals_whose_selected_packet_is_unavailable() -> None:
+    train = [
+        _row("train", "same-video", 0, 75),
+        _row("train", "same-video", 75, 150),
+    ]
+    media = [
+        {
+            "split": "train",
+            "video_id": "same-video",
+            "stream_frames": 301,
+            "decoded_frames": 300,
+            "decoded_packet_pts": [index for index in range(301) if index != 19],
+            "unavailable_packet_pts": [19],
+        }
+    ]
+
+    kept, validation, summary = filter_by_media_frames(train, [], media)
+
+    assert [row["id"] for row in kept] == ["same-video-75-150"]
+    assert validation == []
+    assert summary["removed_rows"][0]["missing_selected_frame_pts"] == [19]
+    assert summary["kept_video_groups"]["train"] == 1
+
+
+def test_media_filter_fails_closed_without_packet_decode_inventory() -> None:
+    train = [_row("train", "video", 0, 75)]
+    media = [{"split": "train", "video_id": "video", "stream_frames": 301}]
+
+    with pytest.raises(ValueError, match="missing packet decode inventory"):
+        filter_by_media_frames(train, [], media)

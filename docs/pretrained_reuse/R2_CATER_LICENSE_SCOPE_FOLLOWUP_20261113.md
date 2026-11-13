@@ -39,3 +39,13 @@ project-level license interpretation, not legal advice.
 - The task is synthetic temporal video-only 8x8 snitch localization. It is
   M1 video evidence and cannot close the roadmap's both-input-required M2
   fusion gate.
+
+## 2026-11-14 task-description correction
+
+The admitted development candidate uses a distinct fixed derived question:
+which object has the greatest annotated net displacement between the endpoints
+of one 75-frame interval. It retains every scene object as an option. The
+phrase “8x8 snitch localization” above describes the broader CATER source task
+and was inaccurate for the current derived readout. This correction does not
+change the source license interpretation or upgrade the candidate beyond a
+local video-only Path A development task.
