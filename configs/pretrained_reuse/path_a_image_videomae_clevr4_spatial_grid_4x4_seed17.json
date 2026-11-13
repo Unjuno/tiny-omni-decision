@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "experiment_id": "path-a-image-videomae-clevr4-spatial-grid-4x4-seed17",
+  "source_experiment_id": "path-a-image-videomae-clevr4-100k-seed17",
+  "seed": 17,
+  "input_receipt_sha256": "350e7d4dec9f113d941f1415dc3bda4e556315ea57baffb89fe2efa62717a16b",
+  "representation": {
+    "encoder": "OpenGVLab VideoMAE V2 ViT-Small K710",
+    "encoder_source_sha256": "d132c97369f25207e380e78c59294fd00b93d2f6aa0fb5c4ded19eff26a5a3cb",
+    "encoder_checkpoint_sha256": "24fb71687fa3671b8387cadfbcbab0f72af695692e93cf1ecc82caa888626172",
+    "encoder_parameters": 22153286,
+    "frozen": true,
+    "input_frames": 16,
+    "static_image_repeated_across_frames": true,
+    "temporal_reduction": "mean over temporal tubelets",
+    "spatial_reduction": "adaptive average pooling of final patch tokens to 4x4",
+    "normalization": "apply pretrained fc_norm independently to each pooled grid cell",
+    "feature_width": 6144
+  },
+  "data_policy": {
+    "features_include": ["frozen train images", "frozen selector images"],
+    "reporting_partition_extracted": false,
+    "reporting_partition_loaded": false,
+    "sealed_audit_loaded": false
+  },
+  "readout": {
+    "architecture": "same taxonomy-conditioned MLP as global-vector baseline; spatial-grid features flattened into input",
+    "hidden_width": 128,
+    "task_embedding_width": 16,
+    "epochs": 8,
+    "batch_tasks": 512,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "scheduler": "constant",
+    "checkpoint_selection": "minimum equal-taxonomy macro NLL on unchanged fixed 1000-image selector; earliest epoch on ties",
+    "training_examples_per_epoch": 288040,
+    "early_stopping": false
+  },
+  "selection_policy": {
+    "reporting_partition_loaded": false,
+    "sealed_audit_loaded": false,
+    "candidate_count": 1,
+    "no_seed_or_hyperparameter_sweep": true
+  }
+}
