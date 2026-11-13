@@ -3,13 +3,16 @@
 ## Result
 
 The fixed 256-update TRAIN window around the already selected native baseline
-checkpoint completed as `PASS_NATIVE_MODALITY_GRADIENT_DIAGNOSTIC`. The
-four-modality gradients on the shared readout are weakly aligned and frequently
-conflicting; the simulated equal-modality batch mean also reaches the baseline
-global clip threshold almost every update. This makes optimization interference
-a plausible contributor to the historical native-readout result. It does not
-show that interference is the only cause, and it is not a Path A quality or
-product result.
+checkpoint completed as `PASS_NATIVE_MODALITY_GRADIENT_DIAGNOSTIC`. Pairwise
+cosines are near zero on average and vary across updates; negative directions
+occur in about 39–45% of updates. The simulated equal-modality batch mean
+reaches the baseline global clip threshold almost every update. This is a later
+checkpoint follow-up to the earlier 32-location shared-readout audit in
+[PR #26](https://github.com/Unjuno/tiny-omni-decision/pull/26), not an
+independent-seed replication. Both observations support frequent clipping and
+variable local alignment in the historical native path; neither establishes a
+stable one-directional modality conflict or its causal effect on quality. This
+is not a Path A quality or product result.
 
 | Measure | Result |
 |---|---:|
@@ -68,6 +71,15 @@ window; it is not an independent estimate of generalization or an unbiased
 sample of the full learning trajectory. The pairwise gradient statistics are
 descriptive and do not establish that gradient conflict caused any specific
 validation error.
+
+The earlier PR #26 audit used 32 sampler locations (256 presentations) at a
+different checkpoint selected at step 2,048. Its pairwise cosine means were
+also near zero and its baseline clip threshold activated on 31/32 locations.
+The current fixed contiguous window is eight times as many presentations from
+the step-8,192 checkpoint. Similar clipping incidence across these two
+checkpoints strengthens the descriptive observation for this one training
+trajectory, but the runs are not independent replications and do not justify a
+new clipping, loss-weight, or architecture experiment by themselves.
 
 ## Attempts and code correction
 
