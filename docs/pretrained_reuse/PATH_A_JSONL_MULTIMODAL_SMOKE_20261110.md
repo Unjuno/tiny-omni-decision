@@ -1,5 +1,10 @@
 # Path A JSONL multimodal runtime smoke — 2026-11-10
 
+> **Follow-up:** The initial attempt below used a mixed `PYTHONPATH` and a
+> runtime missing `psutil`; it is not the final host-runtime result. A later
+> isolated-environment rerun verified Text, Audio, Image and Video request
+> paths. See [the follow-up report](PATH_A_JSONL_RUNTIME_FOLLOWUP_20261110.md).
+
 ## Result
 
 A CPU-only JSONL smoke was sent through the task-scoped Path A dispatcher for

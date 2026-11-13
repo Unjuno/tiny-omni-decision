@@ -116,6 +116,45 @@ def test_jsonl_rejects_media_without_sha256_before_dispatch() -> None:
     assert dispatcher.calls == []
 
 
+def test_jsonl_dispatches_task_scoped_videomae_image_route() -> None:
+    dispatcher = FakeDispatcher()
+    request = _request(
+        "path-a-image-videomaev2-clevr4-100k-runtime-v0",
+        "image_videomae",
+        {
+            "image_path": "sample.png",
+            "expected_media_sha256": "c" * 64,
+            "taxonomy": "color",
+            "options": ["red", "blue"],
+        },
+    )
+    stdout = io.StringIO()
+
+    run_jsonl(io.StringIO(json.dumps(request) + "\n"), stdout, dispatcher)
+
+    response = json.loads(stdout.getvalue())
+    assert response["status"] == "ok"
+    assert response["task_id"] == "path-a-image-videomaev2-clevr4-100k-runtime-v0"
+    assert dispatcher.calls[0][0] == "image_videomae"
+
+
+def test_jsonl_videomae_image_requires_media_sha256_before_dispatch() -> None:
+    dispatcher = FakeDispatcher()
+    request = _request(
+        "path-a-image-videomaev2-clevr4-100k-runtime-v0",
+        "image_videomae",
+        {"image_path": "sample.png", "taxonomy": "color", "options": ["red", "blue"]},
+    )
+    stdout = io.StringIO()
+
+    run_jsonl(io.StringIO(json.dumps(request) + "\n"), stdout, dispatcher)
+
+    response = json.loads(stdout.getvalue())
+    assert response["status"] == "error"
+    assert "expected_media_sha256" in response["error"]["message"]
+    assert dispatcher.calls == []
+
+
 def test_jsonl_rejects_video_options_that_do_not_match_frozen_head_order() -> None:
     dispatcher = FakeDispatcher()
     request = _request(

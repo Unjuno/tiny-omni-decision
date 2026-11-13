@@ -1,5 +1,7 @@
 # Tiny Omni Decision
 
+**2026-11-13 frozen VideoMAE Clevr-4 Decision fit:** 78,306 pinned image features and the fixed eight-epoch seed-17 readout completed. One-time internal macro accuracy was 80.01%, with count accuracy 43.43%; this is a synthetic static-image task result, not multimodal/product quality. [Curves, hashes and limits](docs/pretrained_reuse/R2_VIDEOMAE_CLEVR4_PATH_A_RESULTS_20261113.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results

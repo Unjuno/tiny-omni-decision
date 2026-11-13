@@ -160,12 +160,13 @@ class JsonLineWorker:
 
 
 class PathARuntimeDispatcher:
-    """Route typed task requests through resident Torch and VideoPrism workers.
+    """Route typed task requests through resident Torch, VideoPrism and VideoMAE workers.
 
     Request forms are task-specific and explicit:
     - text: ``state``, ``question``, ``options``
     - audio: ``audio_path``, ``queries`` (question/options pairs)
     - image: ``image_path``, ``taxonomy``, ``options``
+    - image_videomae: the same payload through the separate VideoMAE Path A image candidate
     - video: ``video_path``, ``question``, ``candidate_statement``
     """
 
@@ -176,6 +177,9 @@ class PathARuntimeDispatcher:
         videoprism_python: Path,
         videoprism_source: Path,
         worker_log_dir: Path,
+        videomae_model_dir: Path | None = None,
+        videomae_readout: Path | None = None,
+        videomae_dependency_dir: Path | None = None,
         device: str = "cuda",
     ) -> None:
         self.assembly_dir = assembly_dir.resolve(strict=True)
@@ -184,6 +188,17 @@ class PathARuntimeDispatcher:
         self.bundle_verification_seconds = time.perf_counter() - verify_started
         self.videoprism_python = videoprism_python.resolve(strict=True)
         self.videoprism_source = videoprism_source.resolve(strict=True)
+        self.videomae_model_dir = (
+            videomae_model_dir.resolve(strict=True) if videomae_model_dir is not None else None
+        )
+        self.videomae_readout = (
+            videomae_readout.resolve(strict=True) if videomae_readout is not None else None
+        )
+        self.videomae_dependency_dir = (
+            videomae_dependency_dir.resolve(strict=True)
+            if videomae_dependency_dir is not None
+            else None
+        )
         self.worker_log_dir = worker_log_dir.resolve()
         if self.worker_log_dir.exists() and any(self.worker_log_dir.iterdir()):
             raise FileExistsError(f"worker log directory is not empty: {self.worker_log_dir}")
@@ -192,6 +207,7 @@ class PathARuntimeDispatcher:
         self.device = device
         self._torch_worker: JsonLineWorker | None = None
         self._videoprism_worker: JsonLineWorker | None = None
+        self._videomae_worker: JsonLineWorker | None = None
         self._request_id = 0
         self._project_root = Path(__file__).resolve().parents[2]
         env = os.environ.copy()
@@ -208,6 +224,7 @@ class PathARuntimeDispatcher:
         return {
             "torch": self._torch_worker.ready if self._torch_worker else None,
             "videoprism": self._videoprism_worker.ready if self._videoprism_worker else None,
+            "videomae": self._videomae_worker.ready if self._videomae_worker else None,
         }
 
     def _next_id(self) -> str:
@@ -254,15 +271,56 @@ class PathARuntimeDispatcher:
             )
         return self._videoprism_worker
 
+    def _ensure_videomae(self) -> JsonLineWorker:
+        if self._videomae_worker is None:
+            paths = (
+                self.videomae_model_dir,
+                self.videomae_readout,
+                self.videomae_dependency_dir,
+            )
+            if any(path is None for path in paths):
+                raise ValueError(
+                    "VideoMAE image task requires --videomae-model-dir, "
+                    "--videomae-readout and --videomae-dependency-dir"
+                )
+            log_path = self.worker_log_dir / "videomae-worker.log"
+            self._videomae_worker = JsonLineWorker(
+                [
+                    sys.executable,
+                    "-B",
+                    "-m",
+                    "scripts.path_a_videomae_worker",
+                    "--model-root",
+                    str(self.videomae_model_dir),
+                    "--readout",
+                    str(self.videomae_readout),
+                    "--dependency-root",
+                    str(self.videomae_dependency_dir),
+                    "--device",
+                    self.device,
+                ],
+                cwd=self._project_root,
+                env=self._worker_env,
+                log_path=log_path,
+            )
+        return self._videomae_worker
+
     def dispatch(self, task: str, payload: dict[str, Any]) -> dict[str, Any]:
         request_id = self._next_id()
         started = time.perf_counter()
         torch_was_running = self._torch_worker is not None
         videoprism_was_running = self._videoprism_worker is not None
+        videomae_was_running = getattr(self, "_videomae_worker", None) is not None
         if task == "image":
             response = self._ensure_videoprism().request(
                 {"request_id": request_id, "task": task, "payload": payload}
             )
+        elif task == "image_videomae":
+            worker = self._ensure_videomae()
+            response = worker.request(
+                {"request_id": request_id, "task": "image", "payload": payload}
+            )
+            response["image_encoder"] = worker.ready
         elif task == "video":
             encoded = self._ensure_videoprism().request(
                 {"request_id": request_id, "task": "encode_video", "payload": payload}
@@ -289,6 +347,9 @@ class PathARuntimeDispatcher:
             startup_wall["torch"] = self._torch_worker.startup_wall_seconds
         if not videoprism_was_running and self._videoprism_worker is not None:
             startup_wall["videoprism"] = self._videoprism_worker.startup_wall_seconds
+        videomae_worker = getattr(self, "_videomae_worker", None)
+        if not videomae_was_running and videomae_worker is not None:
+            startup_wall["videomae"] = self._videomae_worker.startup_wall_seconds
         return {
             **response,
             "dispatch_request_id": request_id,
@@ -321,19 +382,21 @@ class PathARuntimeDispatcher:
                 raise ValueError("audio requires one decision spec per audio query")
             for query, spec in zip(queries, decision_specs, strict=True):
                 query_options = query.get("options") if isinstance(query, dict) else None
-                if not isinstance(query_options, (list, tuple)) or tuple(
-                    query_options
-                ) != spec.option_texts:
+                if (
+                    not isinstance(query_options, (list, tuple))
+                    or tuple(query_options) != spec.option_texts
+                ):
                     raise ValueError("audio decision option texts must match query order")
         else:
             if len(decision_specs) != 1:
                 raise ValueError("non-audio Path A tasks require exactly one decision spec")
             spec = decision_specs[0]
-            if task in {"text", "image"}:
+            if task in {"text", "image", "image_videomae"}:
                 payload_options = payload.get("options")
-                if not isinstance(payload_options, (list, tuple)) or tuple(
-                    payload_options
-                ) != spec.option_texts:
+                if (
+                    not isinstance(payload_options, (list, tuple))
+                    or tuple(payload_options) != spec.option_texts
+                ):
                     raise ValueError("decision option texts must match payload order")
             elif task == "video" and spec.option_texts != ("wrong", "correct"):
                 # The frozen video worker always emits [wrong, correct]. Keep
@@ -348,9 +411,7 @@ class PathARuntimeDispatcher:
                 option_ids=spec.option_ids,
                 option_texts=spec.option_texts,
                 probabilities=(
-                    [1.0 / len(spec.option_ids)] * len(spec.option_ids)
-                    if spec.option_ids
-                    else []
+                    [1.0 / len(spec.option_ids)] * len(spec.option_ids) if spec.option_ids else []
                 ),
                 ordinal_values=spec.ordinal_values,
             )
@@ -378,11 +439,16 @@ class PathARuntimeDispatcher:
         }
 
     def close(self) -> None:
-        for worker in (self._torch_worker, self._videoprism_worker):
+        for worker in (
+            self._torch_worker,
+            self._videoprism_worker,
+            getattr(self, "_videomae_worker", None),
+        ):
             if worker is not None:
                 worker.close()
         self._torch_worker = None
         self._videoprism_worker = None
+        self._videomae_worker = None
 
     def __enter__(self) -> PathARuntimeDispatcher:
         return self
