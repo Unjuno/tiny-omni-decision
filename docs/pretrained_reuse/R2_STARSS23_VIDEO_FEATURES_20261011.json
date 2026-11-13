@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "modality": "video",
+  "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+  "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+  "windows_sha256": "7ed1bf595a36ae9dd334c191806bad8e8d2b9f4574f051c5a40b2f8b79f4c3f1",
+  "features": [
+    {
+      "id": "fold3_room12_mix001:t0000-0005",
+      "window_sha256": "05f4be05373f280c4cbff0e0cb1d4ed9d50d33752cf97b7ff04376954e616c55",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-video-features-01\\feature-000.npy",
+      "sha256": "b027c80e959d9ac8a9e9570615d6d7b7f0f70fa02cef835203244f7458361304",
+      "shape": [
+        768
+      ],
+      "seconds": 6.437927799997851,
+      "repeat_max_abs_diff": 0.0
+    },
+    {
+      "id": "fold3_room12_mix001:t0005-0010",
+      "window_sha256": "cb61846555e861094211f98bf4ab9fe82bf9f5d7e3011758386007e4a25ac837",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-video-features-01\\feature-001.npy",
+      "sha256": "1c2eb046ffedad64f6cd414992fab5fb1e10ae897d494ef951eeca2c794fbbfe",
+      "shape": [
+        768
+      ],
+      "seconds": 1.2205989999929443,
+      "repeat_max_abs_diff": 0.0
+    },
+    {
+      "id": "fold3_room13_mix001:t0000-0005",
+      "window_sha256": "4f78afbb57497df7a3f193c84c8282b4c84fece91d24be9a69759193880a85bf",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-video-features-01\\feature-002.npy",
+      "sha256": "e5939fbe0500f95e014c50b51c103ebf0cb378bd3528d03a7021476c2d29711c",
+      "shape": [
+        768
+      ],
+      "seconds": 1.266576600028202,
+      "repeat_max_abs_diff": 0.0
+    },
+    {
+      "id": "fold3_room13_mix001:t0005-0010",
+      "window_sha256": "4d432d73787e38256908f97c726fe6e16c39ac1cfc3f26a5cd85c7eca3c04cb8",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-video-features-01\\feature-003.npy",
+      "sha256": "02ed072c97f9e7480578a96ba537ea2b1f7ccb0319e354f5fa1dc9ed50f7cd10",
+      "shape": [
+        768
+      ],
+      "seconds": 1.2585373999900185,
+      "repeat_max_abs_diff": 0.0
+    }
+  ],
+  "runner_sha256": "6eb79dd70c53732bc09e8b515af15ff91ca8080b8910307f6eb6eb7196d0787b",
+  "python": "3.11.16 (main, Sep  1 2026, 14:15:24) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "device": "cpu",
+  "precision": "float32",
+  "training": false,
+  "parameters": 114365184,
+  "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+  "jax": "0.6.2",
+  "tensorflow": "2.18.1",
+  "preprocessing": "full equirectangular frame bilinear resize 288x288 /255",
+  "load_seconds": 3.1695361000020057,
+  "wall_seconds": 18.36157429998275,
+  "peak_working_set_bytes": 4133212160
+}

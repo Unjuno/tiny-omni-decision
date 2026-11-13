@@ -1,0 +1,874 @@
+{
+  "status": "PASS_COMPLETE_DIRECTORY_GROUP_ACCOUNTING_ONLY",
+  "source_commit": "765c4595730230582f62cc5bff0625278f1802d5",
+  "archives": 60,
+  "rows": [
+    {
+      "archive": "00_Ar1_Vhigh_Ac0.zip",
+      "class_index": 0,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "csi": 34,
+        "cam": 102,
+        "mic": 102,
+        "pos": 34
+      }
+    },
+    {
+      "archive": "01_Ar1_Vhigh_Ac1.zip",
+      "class_index": 1,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "csi": 34,
+        "pos": 34,
+        "cam": 102,
+        "mic": 102
+      }
+    },
+    {
+      "archive": "02_Ar1_Vhigh_Ac2.zip",
+      "class_index": 2,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "mic": 102,
+        "cam": 102,
+        "pos": 34,
+        "csi": 34
+      }
+    },
+    {
+      "archive": "03_Ar1_Vhigh_Ac3.zip",
+      "class_index": 3,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "mic": 111,
+        "cam": 111,
+        "pos": 37,
+        "csi": 37
+      }
+    },
+    {
+      "archive": "04_Ar1_Vhigh_Ac4.zip",
+      "class_index": 4,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "csi": 34,
+        "cam": 102,
+        "mic": 102,
+        "pos": 34
+      }
+    },
+    {
+      "archive": "05_Ar1_Vhigh_Ac5.zip",
+      "class_index": 5,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "mic": 102,
+        "cam": 102,
+        "pos": 34,
+        "csi": 34
+      }
+    },
+    {
+      "archive": "06_Ar1_Vhigh_Ac6.zip",
+      "class_index": 6,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "mic": 105,
+        "pos": 35,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "07_Ar1_Vhigh_Ac7.zip",
+      "class_index": 7,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "cam": 111,
+        "mic": 111,
+        "csi": 37,
+        "pos": 37
+      }
+    },
+    {
+      "archive": "08_Ar1_Vhigh_Ac8.zip",
+      "class_index": 8,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "mic": 105,
+        "pos": 35,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "09_Ar1_Vhigh_Ac9.zip",
+      "class_index": 9,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "csi": 35,
+        "cam": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "10_Ar2_Vhigh_Ac0.zip",
+      "class_index": 10,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "mic": 102,
+        "pos": 34,
+        "cam": 102,
+        "csi": 34
+      }
+    },
+    {
+      "archive": "11_Ar2_Vhigh_Ac1.zip",
+      "class_index": 11,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "cam": 102,
+        "pos": 34,
+        "mic": 102,
+        "csi": 34
+      }
+    },
+    {
+      "archive": "12_Ar2_Vhigh_Ac2.zip",
+      "class_index": 12,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "pos": 35,
+        "csi": 35,
+        "mic": 105,
+        "cam": 105
+      }
+    },
+    {
+      "archive": "13_Ar2_Vhigh_Ac3.zip",
+      "class_index": 13,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "mic": 111,
+        "cam": 111,
+        "pos": 37,
+        "csi": 37
+      }
+    },
+    {
+      "archive": "14_Ar2_Vhigh_Ac4.zip",
+      "class_index": 14,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "mic": 102,
+        "cam": 102,
+        "pos": 34,
+        "csi": 34
+      }
+    },
+    {
+      "archive": "15_Ar2_Vhigh_Ac5.zip",
+      "class_index": 15,
+      "repetition_groups": 44,
+      "real_files": 352,
+      "macos_resource_forks": 353,
+      "stream_counts": {
+        "cam": 132,
+        "mic": 132,
+        "csi": 44,
+        "pos": 44
+      }
+    },
+    {
+      "archive": "16_Ar2_Vhigh_Ac6.zip",
+      "class_index": 16,
+      "repetition_groups": 39,
+      "real_files": 312,
+      "macos_resource_forks": 313,
+      "stream_counts": {
+        "mic": 117,
+        "pos": 39,
+        "cam": 117,
+        "csi": 39
+      }
+    },
+    {
+      "archive": "17_Ar2_Vhigh_Ac7.zip",
+      "class_index": 17,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "cam": 111,
+        "mic": 111,
+        "csi": 37,
+        "pos": 37
+      }
+    },
+    {
+      "archive": "18_Ar2_Vhigh_Ac8.zip",
+      "class_index": 18,
+      "repetition_groups": 40,
+      "real_files": 320,
+      "macos_resource_forks": 321,
+      "stream_counts": {
+        "mic": 120,
+        "csi": 40,
+        "cam": 120,
+        "pos": 40
+      }
+    },
+    {
+      "archive": "19_Ar2_Vhigh_Ac9.zip",
+      "class_index": 19,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "mic": 105,
+        "pos": 35,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "20_Ar1_Vmed_Ac0.zip",
+      "class_index": 20,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "cam": 105,
+        "csi": 35,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "21_Ar1_Vmed_Ac1.zip",
+      "class_index": 21,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "mic": 102,
+        "cam": 102,
+        "pos": 34,
+        "csi": 34
+      }
+    },
+    {
+      "archive": "22_Ar1_Vmed_Ac2.zip",
+      "class_index": 22,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "csi": 35,
+        "cam": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "23_Ar1_Vmed_Ac3.zip",
+      "class_index": 23,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "mic": 105,
+        "pos": 35,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "24_Ar1_Vmed_Ac4.zip",
+      "class_index": 24,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "pos": 35,
+        "mic": 105,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "25_Ar1_Vmed_Ac5.zip",
+      "class_index": 25,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "cam": 102,
+        "csi": 34,
+        "pos": 34,
+        "mic": 102
+      }
+    },
+    {
+      "archive": "26_Ar1_Vmed_Ac6.zip",
+      "class_index": 26,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "pos": 35,
+        "cam": 105,
+        "csi": 35,
+        "mic": 105
+      }
+    },
+    {
+      "archive": "27_Ar1_Vmed_Ac7.zip",
+      "class_index": 27,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "mic": 105,
+        "csi": 35,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "28_Ar1_Vmed_Ac8.zip",
+      "class_index": 28,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "csi": 35,
+        "mic": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "29_Ar1_Vmed_Ac9.zip",
+      "class_index": 29,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "csi": 35,
+        "cam": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "30_Ar2_Vmed_Ac0.zip",
+      "class_index": 30,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "csi": 35,
+        "cam": 105,
+        "mic": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "31_Ar2_Vmed_Ac1.zip",
+      "class_index": 31,
+      "repetition_groups": 36,
+      "real_files": 288,
+      "macos_resource_forks": 289,
+      "stream_counts": {
+        "pos": 36,
+        "mic": 108,
+        "cam": 108,
+        "csi": 36
+      }
+    },
+    {
+      "archive": "32_Ar2_Vmed_Ac2.zip",
+      "class_index": 32,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "pos": 35,
+        "cam": 105,
+        "mic": 105,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "33_Ar2_Vmed_Ac3.zip",
+      "class_index": 33,
+      "repetition_groups": 36,
+      "real_files": 288,
+      "macos_resource_forks": 289,
+      "stream_counts": {
+        "csi": 36,
+        "mic": 108,
+        "cam": 108,
+        "pos": 36
+      }
+    },
+    {
+      "archive": "34_Ar2_Vmed_Ac4.zip",
+      "class_index": 34,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "csi": 35,
+        "mic": 105,
+        "cam": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "35_Ar2_Vmed_Ac5.zip",
+      "class_index": 35,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "csi": 37,
+        "pos": 37,
+        "cam": 111,
+        "mic": 111
+      }
+    },
+    {
+      "archive": "36_Ar2_Vmed_Ac6.zip",
+      "class_index": 36,
+      "repetition_groups": 42,
+      "real_files": 336,
+      "macos_resource_forks": 337,
+      "stream_counts": {
+        "pos": 42,
+        "mic": 126,
+        "cam": 126,
+        "csi": 42
+      }
+    },
+    {
+      "archive": "37_Ar2_Vmed_Ac7.zip",
+      "class_index": 37,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "pos": 35,
+        "csi": 35,
+        "mic": 105,
+        "cam": 105
+      }
+    },
+    {
+      "archive": "38_Ar2_Vmed_Ac8.zip",
+      "class_index": 38,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "csi": 35,
+        "mic": 105,
+        "cam": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "39_Ar2_Vmed_Ac9.zip",
+      "class_index": 39,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "cam": 105,
+        "csi": 35,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "40_Ar1_Vlow_Ac0.zip",
+      "class_index": 40,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "csi": 35,
+        "mic": 105,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "41_Ar1_Vlow_Ac1.zip",
+      "class_index": 41,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "cam": 105,
+        "csi": 35,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "42_Ar1_Vlow_Ac2.zip",
+      "class_index": 42,
+      "repetition_groups": 36,
+      "real_files": 288,
+      "macos_resource_forks": 289,
+      "stream_counts": {
+        "mic": 108,
+        "pos": 36,
+        "csi": 36,
+        "cam": 108
+      }
+    },
+    {
+      "archive": "43_Ar1_Vlow_Ac3.zip",
+      "class_index": 43,
+      "repetition_groups": 36,
+      "real_files": 288,
+      "macos_resource_forks": 289,
+      "stream_counts": {
+        "csi": 36,
+        "cam": 108,
+        "mic": 108,
+        "pos": 36
+      }
+    },
+    {
+      "archive": "44_Ar1_Vlow_Ac4.zip",
+      "class_index": 44,
+      "repetition_groups": 36,
+      "real_files": 288,
+      "macos_resource_forks": 289,
+      "stream_counts": {
+        "mic": 108,
+        "csi": 36,
+        "cam": 108,
+        "pos": 36
+      }
+    },
+    {
+      "archive": "45_Ar1_Vlow_Ac5.zip",
+      "class_index": 45,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "cam": 111,
+        "csi": 37,
+        "mic": 111,
+        "pos": 37
+      }
+    },
+    {
+      "archive": "46_Ar1_Vlow_Ac6.zip",
+      "class_index": 46,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "cam": 102,
+        "mic": 102,
+        "csi": 34,
+        "pos": 34
+      }
+    },
+    {
+      "archive": "47_Ar1_Vlow_Ac7.zip",
+      "class_index": 47,
+      "repetition_groups": 36,
+      "real_files": 288,
+      "macos_resource_forks": 289,
+      "stream_counts": {
+        "cam": 108,
+        "mic": 108,
+        "pos": 36,
+        "csi": 36
+      }
+    },
+    {
+      "archive": "48_Ar1_Vlow_Ac8.zip",
+      "class_index": 48,
+      "repetition_groups": 34,
+      "real_files": 272,
+      "macos_resource_forks": 273,
+      "stream_counts": {
+        "cam": 102,
+        "mic": 102,
+        "pos": 34,
+        "csi": 34
+      }
+    },
+    {
+      "archive": "49_Ar1_Vlow_Ac9.zip",
+      "class_index": 49,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "pos": 35,
+        "cam": 105,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "50_Ar2_Vlow_Ac0.zip",
+      "class_index": 50,
+      "repetition_groups": 38,
+      "real_files": 304,
+      "macos_resource_forks": 305,
+      "stream_counts": {
+        "pos": 38,
+        "mic": 114,
+        "csi": 38,
+        "cam": 114
+      }
+    },
+    {
+      "archive": "51_Ar2_Vlow_Ac1.zip",
+      "class_index": 51,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "cam": 105,
+        "csi": 35,
+        "pos": 35
+      }
+    },
+    {
+      "archive": "52_Ar2_Vlow_Ac2.zip",
+      "class_index": 52,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "mic": 105,
+        "pos": 35,
+        "csi": 35
+      }
+    },
+    {
+      "archive": "53_Ar2_Vlow_Ac3.zip",
+      "class_index": 53,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "pos": 35,
+        "csi": 35,
+        "mic": 105
+      }
+    },
+    {
+      "archive": "54_Ar2_Vlow_Ac4.zip",
+      "class_index": 54,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "pos": 35,
+        "mic": 105,
+        "csi": 35,
+        "cam": 105
+      }
+    },
+    {
+      "archive": "55_Ar2_Vlow_Ac5.zip",
+      "class_index": 55,
+      "repetition_groups": 32,
+      "real_files": 256,
+      "macos_resource_forks": 257,
+      "stream_counts": {
+        "cam": 96,
+        "pos": 32,
+        "mic": 96,
+        "csi": 32
+      }
+    },
+    {
+      "archive": "56_Ar2_Vlow_Ac6.zip",
+      "class_index": 56,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "cam": 105,
+        "csi": 35,
+        "pos": 35,
+        "mic": 105
+      }
+    },
+    {
+      "archive": "57_Ar2_Vlow_Ac7.zip",
+      "class_index": 57,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "cam": 111,
+        "mic": 111,
+        "csi": 37,
+        "pos": 37
+      }
+    },
+    {
+      "archive": "58_Ar2_Vlow_Ac8.zip",
+      "class_index": 58,
+      "repetition_groups": 37,
+      "real_files": 296,
+      "macos_resource_forks": 297,
+      "stream_counts": {
+        "cam": 111,
+        "mic": 111,
+        "pos": 37,
+        "csi": 37
+      }
+    },
+    {
+      "archive": "59_Ar2_Vlow_Ac9.zip",
+      "class_index": 59,
+      "repetition_groups": 35,
+      "real_files": 280,
+      "macos_resource_forks": 281,
+      "stream_counts": {
+        "mic": 105,
+        "cam": 105,
+        "csi": 35,
+        "pos": 35
+      }
+    }
+  ],
+  "unique_repetition_groups": 2135,
+  "real_files": 17080,
+  "macos_resource_forks": 17140,
+  "source_transferred_bytes": 4691716,
+  "reserved_transfer_bytes": 4691896,
+  "main_seconds": 401.16613640007563,
+  "output_file_bytes": 7385225,
+  "replay_seconds": 0.1350737001048401,
+  "full_archive_or_member_payload_checksums_verified": false,
+  "media_members_opened": false,
+  "model_inference": false,
+  "training": false,
+  "sealed_audit_opened": false,
+  "training_admission": "NOT_ADMITTED: content/timing/session/split/complementarity unverified",
+  "validated_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-source-audit-01\\article-version-1.json": "18ef8b20c82056747c58572d24f262b2d12c9284e4ffd83c245ae64eca2ab120",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\audit_robomnist_all_directories.py": "7c72808221a95b2d392ce54577b38f60eb37abe0329890b011e2fcae4607ed29",
+    "scripts\\audit_robomnist_source.py": "8fc48b9fecee666643d80b85673ced0a9212c498a213d2f23a69c9c8b80b677a",
+    "scripts\\fetch_starss23_smoke.py": "8d7cdd5331b0174096275c47ff93a9291a8cccee6bea7ab10c4289e2a5951cc6",
+    "docs\\pretrained_reuse\\R2_ROBOMNIST_DIRECTORY_PROTOCOL_20261014.md": "3db87f8d6062ff137b8e20fd1537c03bccdc88a608936c18304e0a32c855d97a",
+    "docs\\superpowers\\plans\\2026-10-14-robomnist-directory-index.md": "c47d8173eab882eb70f557b4e2bca5a92f2662f3f95ee43bd889dd66737e05da",
+    "tests\\test_robomnist_all_directories.py": "7fac30f41f452db67d1c464d2e1391b84e1b496ac96fda1e7d9fd50b1bee1892",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\result.json": "23d4cf7ab084e4924f2f71564f490e57ea05a4f611e06cd483fe45796adce237",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\config.json": "9fd54bd8daa2196d523f515155a1415cd43d66c1afc5ecc28cbc9c5b67025b09",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\execution-source.py": "7c72808221a95b2d392ce54577b38f60eb37abe0329890b011e2fcae4607ed29",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-00.json": "900da2375691904f75477ec312f91c8d60cf9c3fb1eb12f861d57a8228694c08",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-01.json": "ea2a095cf5dfc0246e5f6f746b57f7a09fa872dd2c661bfa72a20cd981da193b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-02.json": "75933e37499c649c1c765bfbab6b86913df486201075e535676f54799af63880",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-03.json": "52dbe3a547bde4dc4cde70865a4c724c6b8cb2f6703eb4bdbd80b392c384fa66",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-04.json": "e8b8f92fb39240ac1341d28a46fa38e9cbf805d83139b39f77718de238e30d95",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-05.json": "266ca3cf678d9b2c9d14725675909e287f687c16313d8cfe58b2b7bf0741310c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-06.json": "fe9daab79f1070b584b776c7fbd399b1014c3091fb5740911d9427ef89b7ca74",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-07.json": "dadd7b7b576c0a58ea28de9ca4854952196f53fc0d4d711ad36767f2845a1269",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-08.json": "d6415db85244bfc6a5707585f1eeaf5545828c828b1e2a28228300a4cf175d04",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-09.json": "8054129d431f9985c67a490e05a6797102ad5b85def76fba224f600c32f8e8a7",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-10.json": "14d4d2fb34c91e4c5dd52665b31266c4545f5c73479b57758ba833eba7474c3a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-11.json": "fd169a31b406d44176c1e84b2d0f911ac7405c970eac77a89a27bfb62474937c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-12.json": "0938deb393bc6869b79727814715f452e7c6027302dfbaa905c526e83bf25016",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-13.json": "7fde0f2e9c34e7c4fbed93a01876db36a2e55d2aca7189b9ee696187be4b7eb0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-14.json": "ecbb47343b422bc7f6ef255df89501944f7502b91862976e3ba4df38e05aebca",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-15.json": "e2319a9d938726acb1ed7cbcc0fae5082a1befafc58ec6f88411c82d1e0e82bc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-16.json": "f43b51bc09225275208a9e88ee138ea599c793521c06632678effa23a0f4fbaf",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-17.json": "4195f6adb1f57a1732fbde067508fe566df5e1c257f7820386e22468c318f66e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-18.json": "77a8e8b35b355cb5de4cf0d2cc8eb3463c4b8923fc32475df43b566160157099",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-19.json": "2b22ad09a4d7d81e0e746d0a8a7ab46e6d1dde2df7b293f953bbe83d722577a9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-20.json": "1588b7d0acb8326d6160e0ab52495be37f59d4ca2226df326f441310e922bbea",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-21.json": "853ac7c86b32846558d185a04adea0327d050d3d58bb9de4863dbbafffa7f1b2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-22.json": "2a9174ca41e2c0cf8fd8be856043dd77c604b0a08b3e4efd4dae47a08dea2776",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-23.json": "e064a5d28c478d8d0ef330d5856241c0bf1e2b59d7ed26d5f600452e84d2d808",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-24.json": "e2e0d69e6c41383f6c8f59b2dda693f16fe5e1cf9c13389f92fc0c79202ad124",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-25.json": "e53a17fcc94b0f5ede8c6b2d8b5c7cc885f6baab0d4659be9371bb32f599290d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-26.json": "170bbe36074cdbcc783b9cf1604895f91815b95e6436bfec498937623a057ca4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-27.json": "ace28c841b636efaf9eb0636cb80410b32cf1e2edfe6db24aec003a4f73a1edb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-28.json": "4c3f76835edce6ea027d39032960e939dff45c0a291cfd9b3cf1cfa09bfda0bf",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-29.json": "137f68d3d05de212deb4a1d7bc61d1037d1fbb3a282284158ae4d43fe2cd3a03",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-30.json": "30df34dca74e8e4118152997fd6bd1a8a0cf387549ae23834bcd440c66735fd1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-31.json": "4d797ef62ac4440a8f89a8e662c1bd84317db7b13fd755c8c86ef71588cc39d2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-32.json": "ea668f7d70df74e3898a859d3ee762f27e339fc684563be8b8bd83c5b58ff3d0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-33.json": "ae0844030c0a84d1dec8b5cf3b2716ddc370dfa5d7509230b1e3843f57071049",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-34.json": "1e7594565cbcd918e46ed259d3a0cd0d21a1345b1c1835eacb897b528752c481",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-35.json": "23ea9d69f0215b45f493c71864f8ec89fe004a0e40d76bd217c89cbfccd1e851",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-36.json": "d55e4a972ed70d91c31cf719969f857c4dee1484c28113d3665cd540227cea3d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-37.json": "1ac830296c195ea787a5cfe03d16c4c519b3a67d3875c10155cd87a1c2495541",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-38.json": "855ae9493793676f6d9920c1a006b1d00892649b2e11af80dca4d67c1e0cbd0f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-39.json": "593caafe27a56f3787a616b14fac881e975bae91925c913516a0101c3de81086",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-40.json": "89b2730a584d0039ee53d5133fbab94c383b3f14850265430dd68c88173b3ab3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-41.json": "db64c3742b71401f2b7fad6763643b22c3b612c684f1e4996bd0fc9840bdbab0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-42.json": "53ed07e2be381c6092fc414cba3e388a1df18d0d63112890a8780b58e09433d2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-43.json": "4b6fcac4282815efaaac148cbc29d0ddbe140bc21adafc1f59fb9d77d2664e4d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-44.json": "2fb0a9b1118947ace08af0313a2cfc326ca2f07b338aa5564f07c5ff6dae803a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-45.json": "dbd03f1074b8cc87f0039b0f4375257f345b11946e45a93ebc4fb6a64b8adb72",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-46.json": "a147565b43005788d54432c7577157feb80a000fc2099d1e0ae03e13b2a415b6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-47.json": "705764e26d1c009bd9e1e271a0df81a604ee1ac4df563ee5e7b7400342dda8b2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-48.json": "787d31314991feb4b201b12874ab96edda3a5ebb48a61af1c590d36666e1ec28",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-49.json": "6ac0c2e63a8cc6674ff2d4b886a2ebf145e2b078fa2a14e373222d5c71817337",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-50.json": "6e2a930f3a616056ad77efa3ecb97f58856048fa67941b333c3785f1564c2aa5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-51.json": "a3e68ff74a6ebf6d675aa8bae6c8b959520f549d55e3de067554545567693d4c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-52.json": "74cfb417fc6d9c1869547e3b1bfb95459ee127d473c3f36cd4709b9fc0353803",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-53.json": "330a810c4121c720ee3b4d2683ce47f6291e58e9438c09760c1d7b31c329bb01",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-54.json": "b1ac441e11ec0ab0bf003be88d30efc04539ac02c6a8929a0b01edd05b123c34",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-55.json": "0904caee678c2bd32a3b9fb484c43ce004a73908a3746deddf9bbc754080c89c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-56.json": "b1e99cfcf7e6bf59aa67f19fd9a502f7bfc1eeebcf1d78069cce4c84b65981d8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-57.json": "b04edc3bdfd7a1712c4056db8d917acd15c18f018311dac97d1e3924996a1764",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-58.json": "27cf60b4ee21e11f5a4292e94f105bbacb35752deb93988b39f165cc43d0176a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-59.json": "a3fbfeacfc460c7882a3a85439bcf8792c7af2ac7938cabfb56455aabd2669fe"
+  },
+  "auditor_sha256": "595abe11972bde5afd77afa299803236da7e8ea97c1ca04fc337c209ffeaffe3"
+}

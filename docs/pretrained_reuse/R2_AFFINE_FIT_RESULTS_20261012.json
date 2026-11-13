@@ -1,0 +1,1214 @@
+{
+  "config": {
+    "smoke": false,
+    "started_at": "2026-10-12T08:52:03.499243+00:00",
+    "source_commit": "e0770686b2ebbb074b8417bc4250893047ef7d5d",
+    "runner_sha256": "6bbbe5c6c14255b615a1da9925e2b927bfef9f3251979b099b36af87d669a304",
+    "inputs": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\train-cells.npy": "0355ae96cfadf421266452cca5df950ba6d0a09e3bbbfc10d71c356bc556fa5b",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-spatial-image-readout-01\\global\\best.pt": "dc7053b7c6e949a08e3e3dae4ff5a4e651e042e097d6baba9756442d9fc7a48b",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-spatial-image-readout-01\\option-embeddings.npy": "97e212eee5b5f7121e6bdfba631620e5859403665da3ad2ffaf2b044c58a50dc",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-image-manifest.jsonl": "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010"
+    },
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "numpy": "2.4.6",
+    "device": "cpu",
+    "threads": 2,
+    "dtype": "float64",
+    "seed": 17,
+    "optimizer": "LBFGS",
+    "lr": 1,
+    "history_size": 50,
+    "line_search_fn": "strong_wolfe",
+    "max_iter": 10,
+    "max_eval": 20,
+    "calls": 20,
+    "tolerance_grad": 1e-07,
+    "tolerance_change": 1e-10,
+    "regularization": "none",
+    "training_only": true,
+    "validation_loaded": false,
+    "checkpoint_rule": "earliest minimum training CE; diagnostic only",
+    "unique_images": 8424,
+    "unique_questions": 33696
+  },
+  "result": {
+    "status": "PASS_TRAINING_DIAGNOSTIC",
+    "reason": "budget_completed",
+    "finished_at": "2026-10-12T08:52:25.677971+00:00",
+    "seconds": 22.17827989999205,
+    "best_call": 20,
+    "best_loss": 0.14640791450314786,
+    "reload_exact": true,
+    "source_unchanged": true,
+    "validation_loaded": false,
+    "source_projected_rank": 40,
+    "history": [
+      {
+        "call": 0,
+        "seconds": 13.231215700041503,
+        "loss": 0.19818685739014283,
+        "gradient_inf": 0.1696141556984913,
+        "optimizer_iterations": 0,
+        "closure_evaluations": 0,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.914292497625831,
+            "nll": 0.19818685739014277,
+            "brier": 0.11115356067775635,
+            "ece_15_bins": 0.005211633861152197,
+            "mean_confidence": 0.9110750405870058
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0019748533404463494,
+              "brier": 0.00010265636301236301,
+              "ece_15_bins": 0.0019454239618888185,
+              "mean_confidence": 0.9980545760381112
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9769705603038936,
+              "nll": 0.06331263226430975,
+              "brier": 0.032998583189186324,
+              "ece_15_bins": 0.002944910832243663,
+              "mean_confidence": 0.9763570251979581
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.6801994301994302,
+              "nll": 0.7260616701362186,
+              "brier": 0.411405740835521,
+              "ece_15_bins": 0.01705895537683414,
+              "mean_confidence": 0.6712518055113991
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001398273819596454,
+              "brier": 0.00010726232330566931,
+              "ece_15_bins": 0.001363244399444684,
+              "mean_confidence": 0.9986367556005551
+            }
+          }
+        }
+      },
+      {
+        "call": 1,
+        "seconds": 13.621755799977109,
+        "loss": 0.18005235234915284,
+        "gradient_inf": 0.015295519380195098,
+        "optimizer_iterations": 10,
+        "closure_evaluations": 12,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.925866571699905,
+            "nll": 0.18005235234915284,
+            "brier": 0.10006748700536018,
+            "ece_15_bins": 0.015188469454768264,
+            "mean_confidence": 0.9107313300171928
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001924513568595029,
+              "brier": 9.887047916280418e-05,
+              "ece_15_bins": 0.0018962925241419507,
+              "mean_confidence": 0.9981037074758581
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9865859449192782,
+              "nll": 0.039879085288750456,
+              "brier": 0.02058796463337503,
+              "ece_15_bins": 0.006617914580882096,
+              "mean_confidence": 0.9809766633839085
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7168803418803419,
+              "nll": 0.6771082960217418,
+              "brier": 0.3794896740069322,
+              "ece_15_bins": 0.0518406085007993,
+              "mean_confidence": 0.6651117465081775
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0012975145175240087,
+              "brier": 9.343890197071948e-05,
+              "ece_15_bins": 0.0012667972991729298,
+              "mean_confidence": 0.9987332027008271
+            }
+          }
+        }
+      },
+      {
+        "call": 2,
+        "seconds": 14.015328599954955,
+        "loss": 0.1781313518384353,
+        "gradient_inf": 0.005282863690524827,
+        "optimizer_iterations": 20,
+        "closure_evaluations": 24,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.926994301994302,
+            "nll": 0.1781313518384353,
+            "brier": 0.09896906278746516,
+            "ece_15_bins": 0.016472879773586687,
+            "mean_confidence": 0.9105214222207153
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0018375064137686205,
+              "brier": 0.00010278816618881578,
+              "ece_15_bins": 0.0018081592584359256,
+              "mean_confidence": 0.9981918407415641
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9876543209876543,
+              "nll": 0.03696064905620409,
+              "brier": 0.018715007511997242,
+              "ece_15_bins": 0.007232472802351715,
+              "mean_confidence": 0.9814451162714631
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7203228869895536,
+              "nll": 0.672663404279932,
+              "brier": 0.3769827516794629,
+              "ece_15_bins": 0.05683601283301143,
+              "mean_confidence": 0.6634868741565423
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0010638476038364998,
+              "brier": 7.570379221164743e-05,
+              "ece_15_bins": 0.0010381422867085468,
+              "mean_confidence": 0.9989618577132916
+            }
+          }
+        }
+      },
+      {
+        "call": 3,
+        "seconds": 14.399635400041007,
+        "loss": 0.17461571643390775,
+        "gradient_inf": 0.0032822211894322157,
+        "optimizer_iterations": 30,
+        "closure_evaluations": 35,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.929190408357075,
+            "nll": 0.17461571643390775,
+            "brier": 0.09688174389897691,
+            "ece_15_bins": 0.018534239833101027,
+            "mean_confidence": 0.910656168523974
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0018935944194113522,
+              "brier": 0.00010826751052155739,
+              "ece_15_bins": 0.0018622846489060839,
+              "mean_confidence": 0.9981377153510936
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9906220322886989,
+              "nll": 0.03051264630093077,
+              "brier": 0.015009143411866887,
+              "ece_15_bins": 0.008762717037416937,
+              "mean_confidence": 0.9824916349307227
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7261396011396012,
+              "nll": 0.6648844383667853,
+              "brier": 0.37231200472269127,
+              "ece_15_bins": 0.06300421480671839,
+              "mean_confidence": 0.6631353863328828
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.00117218664850363,
+              "brier": 9.755995082795944e-05,
+              "ece_15_bins": 0.0011400625188028978,
+              "mean_confidence": 0.9988599374811967
+            }
+          }
+        }
+      },
+      {
+        "call": 4,
+        "seconds": 14.800073500024155,
+        "loss": 0.17158889840770244,
+        "gradient_inf": 0.0022581491559599217,
+        "optimizer_iterations": 40,
+        "closure_evaluations": 46,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9326329534662868,
+            "nll": 0.17158889840770244,
+            "brier": 0.09502748364061443,
+            "ece_15_bins": 0.021519236551655947,
+            "mean_confidence": 0.911134762446094
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0019773160794146656,
+              "brier": 0.00016223085762616908,
+              "ece_15_bins": 0.0019301023667718435,
+              "mean_confidence": 0.9980698976332282
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9924026590693258,
+              "nll": 0.026998308281325052,
+              "brier": 0.012799366644742603,
+              "ece_15_bins": 0.008769767945267817,
+              "mean_confidence": 0.9836328911240579
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7381291547958214,
+              "nll": 0.6560858926395294,
+              "brier": 0.36704000437913664,
+              "ece_15_bins": 0.0741668965865601,
+              "mean_confidence": 0.6640952127758958
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001294076630540601,
+              "brier": 0.00010833268095229175,
+              "ece_15_bins": 0.0012589517488055626,
+              "mean_confidence": 0.9987410482511945
+            }
+          }
+        }
+      },
+      {
+        "call": 5,
+        "seconds": 15.21631020004861,
+        "loss": 0.16850920431679012,
+        "gradient_inf": 0.0012939245992988303,
+        "optimizer_iterations": 50,
+        "closure_evaluations": 57,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9332561728395061,
+            "nll": 0.16850920431679015,
+            "brier": 0.09309399896562147,
+            "ece_15_bins": 0.0210767486905992,
+            "mean_confidence": 0.9121914954101427
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001907031936301019,
+              "brier": 0.00012609249566100121,
+              "ece_15_bins": 0.0018706047308535477,
+              "mean_confidence": 0.9981293952691465
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.99335232668566,
+              "nll": 0.025496251271782632,
+              "brier": 0.011492419907317745,
+              "ece_15_bins": 0.009961861073818391,
+              "mean_confidence": 0.9840650875943346
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7396723646723646,
+              "nll": 0.6456811134362361,
+              "brier": 0.3607008131744267,
+              "ece_15_bins": 0.07216659848849397,
+              "mean_confidence": 0.6675057661838707
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.000952420622840813,
+              "brier": 5.667028508051388e-05,
+              "ece_15_bins": 0.0009342674067813324,
+              "mean_confidence": 0.9990657325932188
+            }
+          }
+        }
+      },
+      {
+        "call": 6,
+        "seconds": 15.699412800022401,
+        "loss": 0.16689246312738365,
+        "gradient_inf": 0.018780321300726148,
+        "optimizer_iterations": 60,
+        "closure_evaluations": 70,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.933909069325736,
+            "nll": 0.16689246312738368,
+            "brier": 0.09213938390738696,
+            "ece_15_bins": 0.02116375351988337,
+            "mean_confidence": 0.912761029247836
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0019121399566491095,
+              "brier": 9.607537052407715e-05,
+              "ece_15_bins": 0.0018842484507738014,
+              "mean_confidence": 0.9981157515492264
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9935897435897436,
+              "nll": 0.025333752905744193,
+              "brier": 0.011296068994801239,
+              "ece_15_bins": 0.009544307899234642,
+              "mean_confidence": 0.984045435690509
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7420465337132004,
+              "nll": 0.6390932348188773,
+              "brier": 0.3570394575443737,
+              "ece_15_bins": 0.07203850046849947,
+              "mean_confidence": 0.6700708870126335
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0012307248282641269,
+              "brier": 0.0001259337198487138,
+              "ece_15_bins": 0.0011879572610247586,
+              "mean_confidence": 0.9988120427389752
+            }
+          }
+        }
+      },
+      {
+        "call": 7,
+        "seconds": 16.111739999963902,
+        "loss": 0.16595650112244004,
+        "gradient_inf": 0.021356835297461813,
+        "optimizer_iterations": 70,
+        "closure_evaluations": 81,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.934769705603039,
+            "nll": 0.16595650112244006,
+            "brier": 0.091590312105709,
+            "ece_15_bins": 0.021742076053783976,
+            "mean_confidence": 0.9130768991799738
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0023120437489205113,
+              "brier": 0.00015940016301877027,
+              "ece_15_bins": 0.0022666545268228457,
+              "mean_confidence": 0.997733345473177
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9935897435897436,
+              "nll": 0.02577310472633714,
+              "brier": 0.011617140104958174,
+              "ece_15_bins": 0.009549022918142983,
+              "mean_confidence": 0.9840582127851101
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7454890788224121,
+              "nll": 0.634695528466874,
+              "brier": 0.3545031519705903,
+              "ece_15_bins": 0.0741499491180538,
+              "mean_confidence": 0.6715362082272341
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0010453275476283701,
+              "brier": 8.155618426878117e-05,
+              "ece_15_bins": 0.0010201697656260632,
+              "mean_confidence": 0.9989798302343738
+            }
+          }
+        }
+      },
+      {
+        "call": 8,
+        "seconds": 16.535520900040865,
+        "loss": 0.1646738519517637,
+        "gradient_inf": 0.004234503155443923,
+        "optimizer_iterations": 80,
+        "closure_evaluations": 92,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9351851851851852,
+            "nll": 0.16467385195176368,
+            "brier": 0.09079532758335528,
+            "ece_15_bins": 0.021628473859611905,
+            "mean_confidence": 0.9135567113255733
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001906663531728879,
+              "brier": 0.00011947796409636125,
+              "ece_15_bins": 0.0018715305697334463,
+              "mean_confidence": 0.9981284694302662
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9940645773979108,
+              "nll": 0.025818629130081178,
+              "brier": 0.011578997162821611,
+              "ece_15_bins": 0.010274051163418611,
+              "mean_confidence": 0.9837905262344923
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.74667616334283,
+              "nll": 0.6299972950552455,
+              "brier": 0.35141407528877316,
+              "ece_15_bins": 0.07341659497855536,
+              "mean_confidence": 0.6732595683642747
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0009728200899992429,
+              "brier": 6.875991772999394e-05,
+              "ece_15_bins": 0.0009517187267400109,
+              "mean_confidence": 0.99904828127326
+            }
+          }
+        }
+      },
+      {
+        "call": 9,
+        "seconds": 16.950134800048545,
+        "loss": 0.1626047904990112,
+        "gradient_inf": 0.003128075441335764,
+        "optimizer_iterations": 90,
+        "closure_evaluations": 103,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9369064577397911,
+            "nll": 0.1626047904990112,
+            "brier": 0.08945160561922534,
+            "ece_15_bins": 0.022405810602117958,
+            "mean_confidence": 0.9145006471376731
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0019361205743074175,
+              "brier": 0.00013918995720366717,
+              "ece_15_bins": 0.0018946259824096905,
+              "mean_confidence": 0.9981053740175904
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9945394112060779,
+              "nll": 0.025103822611236434,
+              "brier": 0.01106291859038533,
+              "ece_15_bins": 0.010840229807884585,
+              "mean_confidence": 0.9837239246472068
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7530864197530864,
+              "nll": 0.6223416674372974,
+              "brier": 0.34653632600457573,
+              "ece_15_bins": 0.07607231665318215,
+              "mean_confidence": 0.6771906792246485
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0010375513732035254,
+              "brier": 6.798792473667376e-05,
+              "ece_15_bins": 0.0010173893387529582,
+              "mean_confidence": 0.9989826106612468
+            }
+          }
+        }
+      },
+      {
+        "call": 10,
+        "seconds": 17.390781300025992,
+        "loss": 0.15979400073527816,
+        "gradient_inf": 0.005037292769951679,
+        "optimizer_iterations": 100,
+        "closure_evaluations": 115,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9382419278252612,
+            "nll": 0.1597940007352782,
+            "brier": 0.08786851055241289,
+            "ece_15_bins": 0.02229801192351598,
+            "mean_confidence": 0.9159446682540973
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0019126891919684851,
+              "brier": 0.00013145371130574983,
+              "ece_15_bins": 0.0018739638603354825,
+              "mean_confidence": 0.9981260361396643
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.994420702754036,
+              "nll": 0.02361331810819927,
+              "brier": 0.01021849131435855,
+              "ece_15_bins": 0.010566138544121337,
+              "mean_confidence": 0.9840106624940491
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7585470085470085,
+              "nll": 0.6126300920694061,
+              "brier": 0.3410592911483938,
+              "ece_15_bins": 0.07590474622678862,
+              "mean_confidence": 0.68264226232022
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0010199035715389,
+              "brier": 6.480603559350678e-05,
+              "ece_15_bins": 0.0010002879375447236,
+              "mean_confidence": 0.9989997120624553
+            }
+          }
+        }
+      },
+      {
+        "call": 11,
+        "seconds": 17.80532519996632,
+        "loss": 0.15828186082705772,
+        "gradient_inf": 0.00702803526617366,
+        "optimizer_iterations": 110,
+        "closure_evaluations": 126,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9390135327635327,
+            "nll": 0.1582818608270577,
+            "brier": 0.08703721232846241,
+            "ece_15_bins": 0.02202910363729138,
+            "mean_confidence": 0.917144473454235
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.002002136438216062,
+              "brier": 0.00013176742572379636,
+              "ece_15_bins": 0.001963742863195541,
+              "mean_confidence": 0.9980362571368043
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9941832858499525,
+              "nll": 0.02293429159488483,
+              "brier": 0.009728641734264036,
+              "ece_15_bins": 0.010854314678386035,
+              "mean_confidence": 0.9839289062305048
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7618708452041786,
+              "nll": 0.6073887650387181,
+              "brier": 0.3382198233794611,
+              "ece_15_bins": 0.0749900802654127,
+              "mean_confidence": 0.6873944178396364
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0008022502364118778,
+              "brier": 6.861677440069462e-05,
+              "ece_15_bins": 0.0007816873900055429,
+              "mean_confidence": 0.9992183126099942
+            }
+          }
+        }
+      },
+      {
+        "call": 12,
+        "seconds": 18.21675280004274,
+        "loss": 0.15721099594410862,
+        "gradient_inf": 0.0030388634285971917,
+        "optimizer_iterations": 120,
+        "closure_evaluations": 137,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9387167616334283,
+            "nll": 0.1572109959441086,
+            "brier": 0.08646463564047809,
+            "ece_15_bins": 0.02064443253118832,
+            "mean_confidence": 0.9180842406085337
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0016160509920565037,
+              "brier": 8.15820334834276e-05,
+              "ece_15_bins": 0.0015927960485702989,
+              "mean_confidence": 0.9984072039514298
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9945394112060779,
+              "nll": 0.022450907318348198,
+              "brier": 0.00942981918311132,
+              "ece_15_bins": 0.010876864739766453,
+              "mean_confidence": 0.9839714372888534
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7603276353276354,
+              "nll": 0.6038848672233392,
+              "brier": 0.33628749288703486,
+              "ece_15_bins": 0.0694949459080182,
+              "mean_confidence": 0.6908326894196172
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0008921582426904629,
+              "brier": 5.964845828275733e-05,
+              "ece_15_bins": 0.0008743682257656444,
+              "mean_confidence": 0.9991256317742344
+            }
+          }
+        }
+      },
+      {
+        "call": 13,
+        "seconds": 18.69354630005546,
+        "loss": 0.1560528583021199,
+        "gradient_inf": 0.007395076282154389,
+        "optimizer_iterations": 130,
+        "closure_evaluations": 150,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9403193257359924,
+            "nll": 0.1560528583021199,
+            "brier": 0.08572117946140681,
+            "ece_15_bins": 0.021920099495901096,
+            "mean_confidence": 0.9184425458101605
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0017693368979437162,
+              "brier": 0.00010874415203442784,
+              "ece_15_bins": 0.0017390573943836276,
+              "mean_confidence": 0.9982609426056163
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9946581196581197,
+              "nll": 0.02206991600030285,
+              "brier": 0.009218971813026215,
+              "ece_15_bins": 0.010999757364157203,
+              "mean_confidence": 0.9842206496148865
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.76661918328585,
+              "nll": 0.5993991570449325,
+              "brier": 0.3334344822158601,
+              "ece_15_bins": 0.07452250600454256,
+              "mean_confidence": 0.6922224738459823
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0009730232653005876,
+              "brier": 0.00012251966470644806,
+              "ece_15_bins": 0.0009338828258432554,
+              "mean_confidence": 0.9990661171741569
+            }
+          }
+        }
+      },
+      {
+        "call": 14,
+        "seconds": 19.110717999981716,
+        "loss": 0.15462501943760068,
+        "gradient_inf": 0.0039016877480012677,
+        "optimizer_iterations": 140,
+        "closure_evaluations": 161,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.94082383665717,
+            "nll": 0.15462501943760068,
+            "brier": 0.0848331084455118,
+            "ece_15_bins": 0.021043612881785558,
+            "mean_confidence": 0.9197958226862624
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001674842370729608,
+              "brier": 7.800506252790882e-05,
+              "ece_15_bins": 0.0016530140132530887,
+              "mean_confidence": 0.9983469859867466
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9948955365622032,
+              "nll": 0.021885203496497144,
+              "brier": 0.009084301109576476,
+              "ece_15_bins": 0.011291380663309777,
+              "mean_confidence": 0.9842538073545759
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7683998100664767,
+              "nll": 0.5940553159552979,
+              "brier": 0.3301137387983557,
+              "ece_15_bins": 0.07094966816690411,
+              "mean_confidence": 0.6974501418995727
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0008847159278780989,
+              "brier": 5.638881158705931e-05,
+              "ece_15_bins": 0.0008676444958460559,
+              "mean_confidence": 0.999132355504154
+            }
+          }
+        }
+      },
+      {
+        "call": 15,
+        "seconds": 19.530345499981195,
+        "loss": 0.15252050636939693,
+        "gradient_inf": 0.00963261921393304,
+        "optimizer_iterations": 150,
+        "closure_evaluations": 172,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9409722222222222,
+            "nll": 0.1525205063693969,
+            "brier": 0.08365270783774494,
+            "ece_15_bins": 0.020130745571979324,
+            "mean_confidence": 0.920841476650243
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0015596328418584333,
+              "brier": 6.61782531455559e-05,
+              "ece_15_bins": 0.0015410733245816626,
+              "mean_confidence": 0.9984589266754186
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9952516619183286,
+              "nll": 0.021628896679859982,
+              "brier": 0.008839339715023374,
+              "ece_15_bins": 0.011368465268043918,
+              "mean_confidence": 0.9841315088602626
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7686372269705603,
+              "nll": 0.5861081863070989,
+              "brier": 0.32563798475642847,
+              "ece_15_bins": 0.06709642216781832,
+              "mean_confidence": 0.701540804802742
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0007853096487703624,
+              "brier": 6.732862638241561e-05,
+              "ece_15_bins": 0.0007653337374515674,
+              "mean_confidence": 0.9992346662625484
+            }
+          }
+        }
+      },
+      {
+        "call": 16,
+        "seconds": 19.953896500053816,
+        "loss": 0.1511961412023134,
+        "gradient_inf": 0.0046677323080363,
+        "optimizer_iterations": 160,
+        "closure_evaluations": 183,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.941892212725546,
+            "nll": 0.1511961412023134,
+            "brier": 0.08288182021542716,
+            "ece_15_bins": 0.020178746183618278,
+            "mean_confidence": 0.9217134665419277
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0017090136758316193,
+              "brier": 7.206467239043743e-05,
+              "ece_15_bins": 0.0016889224454967172,
+              "mean_confidence": 0.9983110775545033
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9962013295346629,
+              "nll": 0.021310592378028365,
+              "brier": 0.008628412352517364,
+              "ece_15_bins": 0.012357305211909479,
+              "mean_confidence": 0.984242453485549
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7713675213675214,
+              "nll": 0.581060710283086,
+              "brier": 0.32278106919762495,
+              "ece_15_bins": 0.0663761088088852,
+              "mean_confidence": 0.7049914125586362
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0007042484723075749,
+              "brier": 4.573463917580674e-05,
+              "ece_15_bins": 0.0006910774309776796,
+              "mean_confidence": 0.9993089225690222
+            }
+          }
+        }
+      },
+      {
+        "call": 17,
+        "seconds": 20.41780369996559,
+        "loss": 0.1502300793235316,
+        "gradient_inf": 0.003082050143883349,
+        "optimizer_iterations": 170,
+        "closure_evaluations": 195,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9427528490028491,
+            "nll": 0.15023007932353158,
+            "brier": 0.08234233514756754,
+            "ece_15_bins": 0.021034517636941835,
+            "mean_confidence": 0.9217183313659071
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001476524213594153,
+              "brier": 5.776016992541965e-05,
+              "ece_15_bins": 0.0014605114410301495,
+              "mean_confidence": 0.9985394885589698
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9960826210826211,
+              "nll": 0.020885181696101814,
+              "brier": 0.00845877024287237,
+              "ece_15_bins": 0.011840609567949974,
+              "mean_confidence": 0.9844425146286252
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7749287749287749,
+              "nll": 0.5777438351365701,
+              "brier": 0.3207941473499354,
+              "ece_15_bins": 0.07023980883790708,
+              "mean_confidence": 0.7046889660908678
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0008147762478603671,
+              "brier": 5.8662827536969893e-05,
+              "ece_15_bins": 0.0007976438148343094,
+              "mean_confidence": 0.9992023561851655
+            }
+          }
+        }
+      },
+      {
+        "call": 18,
+        "seconds": 20.901315200026147,
+        "loss": 0.14905675220062603,
+        "gradient_inf": 0.003574992293776086,
+        "optimizer_iterations": 180,
+        "closure_evaluations": 207,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9437618708452041,
+            "nll": 0.14905675220062603,
+            "brier": 0.08173045898649507,
+            "ece_15_bins": 0.02047673449322552,
+            "mean_confidence": 0.9232851363519787
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0015586552619250337,
+              "brier": 7.864864519946168e-05,
+              "ece_15_bins": 0.0015367291596248358,
+              "mean_confidence": 0.9984632708403749
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9959639126305793,
+              "nll": 0.021082209066720724,
+              "brier": 0.008557443946582931,
+              "ece_15_bins": 0.012174531119612236,
+              "mean_confidence": 0.9841520995310432
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7790835707502374,
+              "nll": 0.5729421025101687,
+              "brier": 0.31822854271421624,
+              "ece_15_bins": 0.06793169662300648,
+              "mean_confidence": 0.7111518741272309
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0006440419636895701,
+              "brier": 5.720063998166915e-05,
+              "ece_15_bins": 0.0006266990907343165,
+              "mean_confidence": 0.9993733009092656
+            }
+          }
+        }
+      },
+      {
+        "call": 19,
+        "seconds": 21.36827680002898,
+        "loss": 0.14796859966092582,
+        "gradient_inf": 0.0017320479573500846,
+        "optimizer_iterations": 190,
+        "closure_evaluations": 218,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9442367046533713,
+            "nll": 0.1479685996609258,
+            "brier": 0.0810465578431043,
+            "ece_15_bins": 0.020915025252304625,
+            "mean_confidence": 0.9233216794010667
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001419738622705368,
+              "brier": 5.1681107045209e-05,
+              "ece_15_bins": 0.0014052282541089044,
+              "mean_confidence": 0.9985947717458911
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9962013295346629,
+              "nll": 0.020434758354094057,
+              "brier": 0.008140930109960094,
+              "ece_15_bins": 0.011838525176562326,
+              "mean_confidence": 0.9844030394633164
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7807454890788225,
+              "nll": 0.569249958844337,
+              "brier": 0.3159495101382546,
+              "ece_15_bins": 0.06970000780047053,
+              "mean_confidence": 0.7110454812783519
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0007699428225668486,
+              "brier": 4.4110017157244785e-05,
+              "ece_15_bins": 0.0007565748832927641,
+              "mean_confidence": 0.9992434251167075
+            }
+          }
+        }
+      },
+      {
+        "call": 20,
+        "seconds": 21.788392500020564,
+        "loss": 0.14640791450314786,
+        "gradient_inf": 0.004754646170047904,
+        "optimizer_iterations": 200,
+        "closure_evaluations": 229,
+        "metrics": {
+          "overall": {
+            "count": 33696,
+            "accuracy": 0.9446225071225072,
+            "nll": 0.1464079145031479,
+            "brier": 0.08012846210274785,
+            "ece_15_bins": 0.020295299100005607,
+            "mean_confidence": 0.9243430217600513
+          },
+          "tasks": {
+            "color": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.001650864541370529,
+              "brier": 0.00012720698679118388,
+              "ece_15_bins": 0.0016143737884181495,
+              "mean_confidence": 0.9983856262115819
+            },
+            "texture": {
+              "count": 8424,
+              "accuracy": 0.9967948717948718,
+              "nll": 0.020114943781224453,
+              "brier": 0.007837998742652695,
+              "ece_15_bins": 0.012387285661216253,
+              "mean_confidence": 0.9844075861336555
+            },
+            "count": {
+              "count": 8424,
+              "accuracy": 0.7816951566951567,
+              "nll": 0.5631975809949105,
+              "brier": 0.3124961650461649,
+              "ece_15_bins": 0.06652666182427316,
+              "mean_confidence": 0.7152317498210828
+            },
+            "shape": {
+              "count": 8424,
+              "accuracy": 1.0,
+              "nll": 0.0006682686950860355,
+              "brier": 5.2477635382644196e-05,
+              "ece_15_bins": 0.0006528751261149427,
+              "mean_confidence": 0.9993471248738849
+            }
+          }
+        }
+      }
+    ],
+    "hashes": {
+      "best-logits.npy": "4edf62926eebefba627879e56a3845df423bf3f65160e213cc255a1620e5bc6c",
+      "best.pt": "e0e82d251398ec311b7f47b6ffc22c29523c43cba73209a0c29974b59ad1d7c4",
+      "closures.jsonl": "0f55376189cd32a2d67a159124c6e129d4bb470922d2781206d542a6e872128b",
+      "config.json": "de03947e832377eee6726787361bd699a1b90db889332ae84910a23ed0b8eff8",
+      "final-logits.npy": "4edf62926eebefba627879e56a3845df423bf3f65160e213cc255a1620e5bc6c",
+      "final.pt": "817d2d054b1b8998da2687fd2d0b64396fa5d7c7d23d0d66d73bde130fc0b015",
+      "history.json": "cae553b2b99bd0744474150a642ff1a5da89c3ac46e856ad8b65b7a954acf8b2",
+      "identity.json": "a5d78dc5814077e7fc80c690ee9136c84dd98bc902d752e79e2ee466993cbe99",
+      "initial-logits.npy": "3591bac8a78847d6841e57ac72f1f335130d732d6c5057139aa74bf2f02ded10",
+      "initial.pt": "3dd6326e4c371b6f58ba47b2a8b3850229c5d117e0e507e280613dacbc8fef25"
+    }
+  },
+  "identity": {
+    "max_logit_delta": 1.2789769243681803e-13,
+    "projected_rank": 40,
+    "singular_values": [
+      107.82456613212172,
+      28.648178621297824,
+      19.71662712060593,
+      17.645298638067445,
+      16.94669920880881,
+      15.933511692109501,
+      14.14396874691318,
+      13.17162173357454,
+      12.845432575248617,
+      12.314492834457045,
+      11.34909256649158,
+      10.75044679237011,
+      9.881760149496925,
+      9.055907720328248,
+      8.500330455861793,
+      8.238494901851759,
+      7.8609831152370075,
+      7.584721300699961,
+      6.990271561474448,
+      6.752134942093005,
+      6.43813790503661,
+      5.861049851152552,
+      5.272353150687965,
+      4.527329752132281,
+      3.224675821964315,
+      3.145289287906238,
+      2.9425204118250545,
+      2.2066109014244915,
+      1.821769716056515,
+      1.5513374389639898,
+      1.2737206244428405,
+      1.0774880862986433,
+      0.860173072081106,
+      0.6499905635578097,
+      0.4973947895145908,
+      0.3666173546948412,
+      0.3237367191988026,
+      0.23841905879876354,
+      0.2175980750556476,
+      0.17611667411010146
+    ],
+    "trainable_parameters": 61480
+  },
+  "executed_source": {
+    "scripts/fit_shared_affine_training.py": "6bbbe5c6c14255b615a1da9925e2b927bfef9f3251979b099b36af87d669a304",
+    "src/tiny_omni_decision/count_diagnostic.py": "bb7f4bc34583ba1c7c978d6fab28366f46e8962a0c33d33af85b56431b2c5f67",
+    "src/tiny_omni_decision/global_readout.py": "272a9f4071d2707d9ad1f02c73778a1c31522be578507ffcceadf620426d18a2",
+    "src/tiny_omni_decision/bilinear_readout.py": "8d6a1eb78c5ead3632da4ed39ca53bd9f69282e042768a731820d5b521a5f6ca",
+    "docs/pretrained_reuse/R2_AFFINE_FIT_PROTOCOL_20261012.md": "b0414423a98fd365abf3254c74de0be70b0a5e9cf0971708d643f0630fac9dd7"
+  },
+  "artifact_bytes": {
+    "best.pt": 493190,
+    "final.pt": 493196,
+    "initial.pt": 493272
+  }
+}

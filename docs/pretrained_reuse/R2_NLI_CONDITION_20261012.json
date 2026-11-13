@@ -1,0 +1,168 @@
+{
+  "source_commit": "f9873fd",
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\nli-condition-probe-01",
+  "protocol": {
+    "seed": 17,
+    "states": 64,
+    "questions": 256,
+    "options": 3,
+    "training": false,
+    "selection": false,
+    "runner_sha256": "be617eb97d28a0c4b92b2ed354a7def8384051ec7de60bebe5446693ae844b72",
+    "base_revision": "b95119ce93d3e065de6214e38cd4a97b0f2f2c6d",
+    "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+  },
+  "result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "scoring": "entailment logit softmax over options; temperature 1",
+    "metrics": {
+      "count": 256,
+      "accuracy": 0.3203125,
+      "nll": 1.109837532043457,
+      "brier": 0.6740660071372986,
+      "ece_15_bins": 0.06790926487883553,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        231,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "groups": {
+      "price:lowest": {
+        "count": 64,
+        "accuracy": 0.3125,
+        "nll": 1.0955240726470947,
+        "brier": 0.6649759411811829,
+        "ece_15_bins": 0.08785055764019489,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          60,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "price:highest": {
+        "count": 64,
+        "accuracy": 0.203125,
+        "nll": 1.1380078792572021,
+        "brier": 0.6916011571884155,
+        "ece_15_bins": 0.18737011612392962,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          51,
+          13,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:lowest": {
+        "count": 64,
+        "accuracy": 0.3125,
+        "nll": 1.1173694133758545,
+        "brier": 0.6801184415817261,
+        "ece_15_bins": 0.07751620188355446,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          56,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:highest": {
+        "count": 64,
+        "accuracy": 0.453125,
+        "nll": 1.0884486436843872,
+        "brier": 0.6595684289932251,
+        "ece_15_bins": 0.06890976428985596,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          64,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "both_correct_condition_pairs": 12,
+    "total_condition_pairs": 128,
+    "changed_prediction_pairs": 70,
+    "target_counts": {
+      "0": 78,
+      "1": 92,
+      "2": 86
+    },
+    "max_tokens": 68,
+    "seconds": 2.1717705000191927,
+    "device": "cuda",
+    "torch": "2.6.0+cu124",
+    "dtype": "torch.float32",
+    "peak_vram_bytes": 414903296,
+    "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+  },
+  "same_inputs_as_original": true,
+  "prediction_counts": {
+    "1": 186,
+    "0": 70
+  },
+  "hashes": {
+    "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+    "predictions.json": "f7fdd5e1eb89fc2c4861e8bea8ec8d6fe34dcc57091957bd4e95908dc57d74f2",
+    "protocol.json": "19d5410217ea6991a9d071e13384b8b5fe3d398a60535bc88ddeca7afe280092",
+    "rendered-pairs.json": "a95faf303c4a4812fb75ea96f5fc02f1933352ab6b7f92f41ac19852718168ca",
+    "result.json": "6144f7124b1980c28ceabbee52217ec23d545dd357b4213dd54ef936c8cecc30"
+  }
+}

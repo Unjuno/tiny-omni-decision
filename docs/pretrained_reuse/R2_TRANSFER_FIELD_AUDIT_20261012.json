@@ -1,0 +1,10 @@
+{
+  "input_sha256": "1a825b413e32f319dead47ccbef07ef3b36f2c391ca2c197a694aaeb4ed54dd2",
+  "rows": 10240,
+  "paired_checks": 8192,
+  "state_options_target_oracle_task_group_equal": true,
+  "family4_question_changes": 1536,
+  "family4_total_rows": 2048,
+  "finding": "Family4 changes the question: domain adjective plus an explicit field-alias preamble. State keys and values are unchanged within each numeric regime. Prior field-name-change wording was inaccurate.",
+  "example_question": "Use cost as price, risk as danger, and time as timestamp. Return the cheapest item's ID."
+}

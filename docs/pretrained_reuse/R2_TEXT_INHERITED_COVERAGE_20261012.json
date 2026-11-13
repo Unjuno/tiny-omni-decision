@@ -1,0 +1,15 @@
+{
+  "purpose": "Audit inherited exposure before describing unused original examples as new data",
+  "files": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-crossencoder-adapt-v1\\train-inputs.json": "2356e3b6b238610092df5db9c785bab1b13e9033a83ca33dddca441ee184526a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-crossencoder-adapt-v1\\config.json": "ebf29de7f044598119ff50db38538980809ce6e12fa38b7e1284efbaa5a0bd7c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-crossencoder-adapt-v1\\result.json": "77d0ff79427fd6da6f468a9f2a1254a3baaa732371a618ab6c5103bdb97aeac2"
+  },
+  "original_train_states": 6682,
+  "original_train_questions": 23319,
+  "initial_adaptation_recorded_train_ids": 23319,
+  "initial_adaptation_epochs": 3,
+  "initial_adaptation_optimizer_steps": 8745,
+  "interpretation": "Recent paired runs use8192 original questions each, but their inherited checkpoint already consumed the full23319-question original training set. Omitted recent-run IDs are not lifetime-unseen. Additional full-corpus exposure would change coverage/frequency, not add new source records. No new training launched."
+}

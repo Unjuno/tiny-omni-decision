@@ -1,0 +1,47 @@
+schema_version: 1
+experiment_id: path-a-video-vjepa-clevrer-expanded-256-train-200-validation-seed17
+seed: 17
+source:
+  dataset_id: MIT-IBM/CLEVRER
+  revision: 98b842082ba4f7c18b6b9e3f39145871782a65ef
+  license: CC0-1.0
+  train_scenes: 256
+  validation_scenes: 200
+  questions_per_scene: 2
+  question_types: [temporal_descriptive, static_descriptive]
+  split_group: video_scene
+  sample_seed: 17
+  excluded_scenes_file: configs/pretrained_reuse/clevrer_video_expansion_seed17_exclusions.json
+  excluded_scenes_sha256: a567348f615aa3f953c7fd95287e45ec4bfca0e55af9f6f4176305827efde138
+  sample_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-expanded-seed17-256train-200val
+  normalized_question_content_overlap: 0
+  media_hash_overlap: 0
+  sealed_audit_loaded: false
+encoder:
+  repo_id: facebookresearch/vjepa2
+  source_revision: 204698b45b3712590f06245fbfba32d3be539812
+  checkpoint_sha256: 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d
+  frame_count: 8
+  resolution: 384
+  pooling: mean_spatiotemporal_tokens
+  media_decoder: PyAV
+  frozen: true
+  checkpoint_rights_status: REVIEW
+candidate_text_encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  frozen: true
+readout:
+  architecture: shared_candidate_mlp
+  hidden_size: 128
+  trainable_parameters: 295169
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.001
+  epochs: 24
+  batch_questions: 8
+  checkpoint_selection: minimum_validation_nll
+  compare_to: path-a-video-vjepa-clevrer-v0
+  changed_factor: unique_train_and_validation_scene_coverage
+  sampling_ratio_temporal_descriptive: 0.5
+  sampling_ratio_static_descriptive: 0.5

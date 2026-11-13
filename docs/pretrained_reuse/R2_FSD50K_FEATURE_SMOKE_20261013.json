@@ -1,0 +1,90 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "id": "29792",
+      "samples_32k": 70463,
+      "nearest_starss": {
+        "id": "fold3_room21_mix028:t0065-0070",
+        "split": "validation",
+        "cosine": 0.7531381845474243
+      }
+    },
+    {
+      "id": "432910",
+      "samples_32k": 36038,
+      "nearest_starss": {
+        "id": "fold3_room9_mix008:t0165-0170",
+        "split": "calibration",
+        "cosine": 0.8652324080467224
+      }
+    },
+    {
+      "id": "38229",
+      "samples_32k": 182271,
+      "nearest_starss": {
+        "id": "fold3_room9_mix001:t0145-0150",
+        "split": "calibration",
+        "cosine": 0.7381225824356079
+      }
+    },
+    {
+      "id": "233384",
+      "samples_32k": 278055,
+      "nearest_starss": {
+        "id": "fold3_room22_mix010:t0010-0015",
+        "split": "train",
+        "cosine": 0.8487086296081543
+      }
+    },
+    {
+      "id": "239746",
+      "samples_32k": 200000,
+      "nearest_starss": {
+        "id": "fold3_room6_mix005:t0220-0225",
+        "split": "train",
+        "cosine": 0.7585603594779968
+      }
+    },
+    {
+      "id": "209222",
+      "samples_32k": 62182,
+      "nearest_starss": {
+        "id": "fold3_room9_mix003:t0025-0030",
+        "split": "calibration",
+        "cosine": 0.8341353535652161
+      }
+    },
+    {
+      "id": "319041",
+      "samples_32k": 96225,
+      "nearest_starss": {
+        "id": "fold3_room6_mix005:t0180-0185",
+        "split": "train",
+        "cosine": 0.7539085745811462
+      }
+    },
+    {
+      "id": "273222",
+      "samples_32k": 652032,
+      "nearest_starss": {
+        "id": "fold3_room4_mix008:t0120-0125",
+        "split": "train",
+        "cosine": 0.7811905145645142
+      }
+    }
+  ],
+  "seconds": 0.7112859999760985,
+  "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+  "source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+  "feature_sha256": "69e03e7b8aec0aaa36e893c8054c662ee9d57021cc065ed2b1fc9044059f141f",
+  "media_report_sha256": "76ca357a21ef0a4138e3533919bb5f08b0c1b41e49e0a26917d0ef91cdac5a4b",
+  "reference_features_sha256": "7b633d8316d6a3c9e7cd6305072dc492036276fad35fb937d63aa96ea7cac860",
+  "script_sha256": "e670f85ccbb88b876a0d6ddc6773a63899f47f549921c9056ca17cf74eadd5ba",
+  "parameters": 1961239,
+  "device": "cpu",
+  "training": false,
+  "torch": "2.6.0+cu124",
+  "preprocessing": "native mono float; torchaudio native->32k; official eval mel",
+  "limitation": "Whole clips versus 5s windows. Cosine is not a duplication test."
+}

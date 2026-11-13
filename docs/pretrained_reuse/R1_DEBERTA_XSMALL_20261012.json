@@ -1,0 +1,67 @@
+{
+  "audit": {
+    "status": "PASS_LOAD_SMOKE_ONLY",
+    "repository": "MoritzLaurer/deberta-v3-xsmall-zeroshot-v1.1-all-33",
+    "revision": "262ae02f29173eec1c250f90804dc7edc677dcff",
+    "parameters": 70830722,
+    "header_elements": 70830722,
+    "parameters_by_group": {
+      "embeddings": 49191168,
+      "encoder": 21490944,
+      "pooler_classifier": 148610
+    },
+    "resident_fp32_bytes": 283322888,
+    "checkpoint_bytes": 141685964,
+    "logits": [
+      [
+        1.992916226387024,
+        -1.7629597187042236
+      ],
+      [
+        -4.074562072753906,
+        3.235137701034546
+      ]
+    ],
+    "id2label": {
+      "0": "entailment",
+      "1": "not_entailment"
+    },
+    "repeat_exact": true,
+    "loading_info": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "mismatched_keys": [],
+      "error_msgs": []
+    },
+    "seconds": 1.7950594999128953,
+    "device": "cpu",
+    "threads": 2,
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "python": "3.11.9",
+    "dtype": "torch.float32",
+    "tokenizer_class": "DebertaV2Tokenizer",
+    "source_sha256": "ec24172408b0820b9a2b042c46a4395ae08072baa8b0b1eeaf0be8c4f42f33b0",
+    "weights_sha256": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+    "limitation": "Two synthetic sentence pairs only; no benchmark or numeric-reasoning claim"
+  },
+  "download": {
+    "repository": "MoritzLaurer/deberta-v3-xsmall-zeroshot-v1.1-all-33",
+    "revision": "262ae02f29173eec1c250f90804dc7edc677dcff",
+    "hashes": {
+      "added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+      "config.json": "dc6de98193d85d4c45f96724e6dd3672b897af3f1592e02625b9a71be795887b",
+      "model.safetensors": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+      "README.md": "07134727f6e5a3f726ee869f7ff3b2700ca9d9f70b462746c73ac7e485eee606",
+      "special_tokens_map.json": "311de3f4eed9d76a43bf0d71f10e62e086ca65ccce9f15d5da0d2098bf519ecc",
+      "spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+      "tokenizer.json": "05402ffae6dd382a8491b1d29bfc139bec5d332662e86a026f433ce54c25c202",
+      "tokenizer_config.json": "d8d3bb123b99317634d5ee3d1d2d8b2ddb01510a0654687fc2639a5347a7291f"
+    }
+  },
+  "hypothetical_counts": {
+    "with_videoprism_whisper_before_heads": 222956546,
+    "with_tinyclip_whisper_before_heads": 191692547
+  },
+  "rights": "Model card declares MIT; upstream references diverse fine-tuning dataset licenses. No underlying dataset downloaded or separately re-audited. Not promoted."
+}

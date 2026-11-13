@@ -1,0 +1,65 @@
+{
+  "id": "native-common-corpus-v1",
+  "files": {
+    "text": {
+      "binding_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\binding_train.jsonl",
+      "numeric_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\numeric_train.jsonl",
+      "legacy_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_train.jsonl",
+      "validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\validation.jsonl",
+      "old_validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\old_validation.jsonl",
+      "legacy_validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_validation.jsonl"
+    },
+    "image": {
+      "train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-labels.jsonl",
+      "validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-sample-seed17-1024-512\\val-labels.jsonl"
+    },
+    "lombard": {
+      "train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-layout-02-media-gated\\train.json",
+      "validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-layout-02-media-gated\\validation.json"
+    },
+    "starss": {
+      "train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-all-windows-v1\\train.jsonl",
+      "validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-all-windows-v1\\validation.jsonl"
+    },
+    "video": {
+      "train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\train.jsonl",
+      "validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\validation.jsonl"
+    }
+  },
+  "feature_roots": {
+    "language": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02",
+    "image": "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01",
+    "audio": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-audio-cache-01",
+    "video": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-training-video-cache-01"
+  },
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\binding_train.jsonl": "89f1f2dff2a3ea1bdddc8a488fab454889a3a04cc803e34962937597db3b91e1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\numeric_train.jsonl": "c34b0d5ff04707b5af059f0886117583efd59808f5ec217fd995333aab644f9d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\validation.jsonl": "ebc458ec4dd0e64aaa8620d4bf5cdf7cb219b3fbf3bce148c479ea84f03532ae",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\old_validation.jsonl": "01cd6c8f55df5e68770408b8825711e9b7f2ea3ec7e9a3022725bbb4e5a0f536",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_validation.jsonl": "265aa8b5d9ee372a02481427bfa1620bc68f6593af1137fb3e000227e4a8774c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-sample-seed17-1024-512\\val-labels.jsonl": "3c213f13ef2214baf1130cbe49c1d981b0125bbff3813e4ac5b4e341e443d4a1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-layout-02-media-gated\\train.json": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-layout-02-media-gated\\validation.json": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-all-windows-v1\\train.jsonl": "2d06c0e94ea68d9b5372eb942f37cd87fcf4d9ba71f05ae71bb3be836ae73347",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-all-windows-v1\\validation.jsonl": "20f43eeb0e123b19809a1bf4e9f639f5af850481ba4164c77a3a4b22c603fbc9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\train.jsonl": "5cd4e5155b0161e35b10aad2c98e14afba7d46407e635bd1c08d786e1e51765d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val\\validation.jsonl": "53aa6f01447a43337a601279daf620c0df91d807773522cc92230fcab173db7c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02\\result.json": "21d427849547541ff3824843b3c2e5e855a6a958fbc88e21ae9e037ffe405278",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\result.json": "b45fd74ff59a2ba501443a91b31918e025e6d546668baeb58937f5754f080e3e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-audio-cache-01\\result.json": "02029f2935587f36b8a8deab1aa82e974b0e9d1582d074d2fede15f25ba87ae4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-training-video-cache-01\\result.json": "11358d26a6628f113caf4407c5297f6c492f8e263ed5eb2c688eab1fe6d1a089"
+  },
+  "receipt_status": {
+    "language": "PASS_NATIVE_LANGUAGE_CACHE",
+    "image": "PASS",
+    "audio": "PASS_NATIVE_AUDIO_CACHE",
+    "video": "PASS_COMPLETE_NATIVE_VIDEO_TOKEN_CACHE"
+  },
+  "expected_questions": {
+    "train": 100580,
+    "validation": 24346
+  }
+}

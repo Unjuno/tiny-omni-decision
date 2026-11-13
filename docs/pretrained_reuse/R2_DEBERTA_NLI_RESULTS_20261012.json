@@ -1,0 +1,310 @@
+{
+  "source_commit": "9dcfe02",
+  "protocol": {
+    "seed": 17,
+    "states": 64,
+    "questions": 256,
+    "options": 3,
+    "training": false,
+    "selection": false,
+    "runner_sha256": "01db5eb02f9fa9bae60e247c50f262abb0ea8baac690775364348cda53c81f9a",
+    "base_revision": "262ae02f29173eec1c250f90804dc7edc677dcff",
+    "weight_sha256": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+    "entailment_index": 0,
+    "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+  },
+  "result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "parameters": 70830722,
+    "scoring": "entailment logit softmax over options; temperature 1",
+    "metrics": {
+      "count": 256,
+      "accuracy": 0.3046875,
+      "nll": 1.1430271863937378,
+      "brier": 0.7000772953033447,
+      "ece_15_bins": 0.2040974082192406,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        54,
+        193,
+        9,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "groups": {
+      "price:lowest": {
+        "count": 64,
+        "accuracy": 0.375,
+        "nll": 1.090865135192871,
+        "brier": 0.6618528366088867,
+        "ece_15_bins": 0.13514297641813755,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10,
+          52,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "price:highest": {
+        "count": 64,
+        "accuracy": 0.265625,
+        "nll": 1.1559501886367798,
+        "brier": 0.7109804749488831,
+        "ece_15_bins": 0.21022854186594486,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          20,
+          44,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:lowest": {
+        "count": 64,
+        "accuracy": 0.3125,
+        "nll": 1.168246865272522,
+        "brier": 0.7145624160766602,
+        "ece_15_bins": 0.2612583190202713,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          56,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:highest": {
+        "count": 64,
+        "accuracy": 0.265625,
+        "nll": 1.1570465564727783,
+        "brier": 0.712913453578949,
+        "ece_15_bins": 0.20975980907678604,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          23,
+          41,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "both_correct_condition_pairs": 0,
+    "total_condition_pairs": 128,
+    "changed_prediction_pairs": 0,
+    "target_counts": {
+      "0": 78,
+      "1": 92,
+      "2": 86
+    },
+    "max_tokens": 79,
+    "seconds": 2.506323300069198,
+    "device": "cuda",
+    "torch": "2.6.0+cu124",
+    "dtype": "torch.float32",
+    "peak_vram_bytes": 458183680,
+    "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+  },
+  "reference": {
+    "status": "PASS_EXECUTION_ONLY",
+    "scoring": "entailment logit softmax over options; temperature 1",
+    "metrics": {
+      "count": 256,
+      "accuracy": 0.3203125,
+      "nll": 1.109837532043457,
+      "brier": 0.6740660071372986,
+      "ece_15_bins": 0.06790926487883553,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        231,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "groups": {
+      "price:lowest": {
+        "count": 64,
+        "accuracy": 0.3125,
+        "nll": 1.0955240726470947,
+        "brier": 0.6649759411811829,
+        "ece_15_bins": 0.08785055764019489,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          60,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "price:highest": {
+        "count": 64,
+        "accuracy": 0.203125,
+        "nll": 1.1380078792572021,
+        "brier": 0.6916011571884155,
+        "ece_15_bins": 0.18737011612392962,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          51,
+          13,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:lowest": {
+        "count": 64,
+        "accuracy": 0.3125,
+        "nll": 1.1173694133758545,
+        "brier": 0.6801184415817261,
+        "ece_15_bins": 0.07751620188355446,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          56,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:highest": {
+        "count": 64,
+        "accuracy": 0.453125,
+        "nll": 1.0884486436843872,
+        "brier": 0.6595684289932251,
+        "ece_15_bins": 0.06890976428985596,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          64,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "both_correct_condition_pairs": 12,
+    "total_condition_pairs": 128,
+    "changed_prediction_pairs": 70,
+    "target_counts": {
+      "0": 78,
+      "1": 92,
+      "2": 86
+    },
+    "max_tokens": 68,
+    "seconds": 2.1717705000191927,
+    "device": "cuda",
+    "torch": "2.6.0+cu124",
+    "dtype": "torch.float32",
+    "peak_vram_bytes": 414903296,
+    "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+  },
+  "inputs_and_rendered_pairs_exact": true,
+  "prediction_counts": {
+    "0": 256
+  },
+  "hashes": {
+    "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+    "predictions.json": "70df44e18571b4614027093b4bbeee99e36476b7271099b74ed400b3d9a533ab",
+    "protocol.json": "1ad95f2633b935c865c8ec2f45b5adcd71b4f43ef1874dacf39e3f6225a0d34a",
+    "rendered-pairs.json": "a95faf303c4a4812fb75ea96f5fc02f1933352ab6b7f92f41ac19852718168ca",
+    "result.json": "ccb8f52f2664ed33b6cf5389a309b08438696d6b845f3205295675f3da74826b"
+  }
+}

@@ -1,0 +1,3112 @@
+{
+  "config": {
+    "source_commit": "59dd88945b3455ceb5d585f0e624a869e15cf7e1",
+    "runner_sha256": "e8c50691e40a3ac3c5e86eac837ad1b765f8ca5b1852f98e880c99dfe564f5ce",
+    "smoke": false,
+    "coefficients": [
+      0.01,
+      0.1
+    ],
+    "inputs": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\train-cells.npy": "0355ae96cfadf421266452cca5df950ba6d0a09e3bbbfc10d71c356bc556fa5b",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-spatial-image-readout-01\\global\\best.pt": "dc7053b7c6e949a08e3e3dae4ff5a4e651e042e097d6baba9756442d9fc7a48b",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-spatial-image-readout-01\\option-embeddings.npy": "97e212eee5b5f7121e6bdfba631620e5859403665da3ad2ffaf2b044c58a50dc",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-image-manifest.jsonl": "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-training-fit-01\\initial.pt": "3dd6326e4c371b6f58ba47b2a8b3850229c5d117e0e507e280613dacbc8fef25"
+    },
+    "device": "cpu",
+    "threads": 2,
+    "dtype": "float64",
+    "seed": 17,
+    "settings_inherited": {
+      "smoke": false,
+      "started_at": "2026-10-12T08:52:03.499243+00:00",
+      "source_commit": "e0770686b2ebbb074b8417bc4250893047ef7d5d",
+      "runner_sha256": "6bbbe5c6c14255b615a1da9925e2b927bfef9f3251979b099b36af87d669a304",
+      "inputs": {
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\train-cells.npy": "0355ae96cfadf421266452cca5df950ba6d0a09e3bbbfc10d71c356bc556fa5b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-spatial-image-readout-01\\global\\best.pt": "dc7053b7c6e949a08e3e3dae4ff5a4e651e042e097d6baba9756442d9fc7a48b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-spatial-image-readout-01\\option-embeddings.npy": "97e212eee5b5f7121e6bdfba631620e5859403665da3ad2ffaf2b044c58a50dc",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-image-manifest.jsonl": "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010"
+      },
+      "python": "3.11.9",
+      "torch": "2.6.0+cu124",
+      "numpy": "2.4.6",
+      "device": "cpu",
+      "threads": 2,
+      "dtype": "float64",
+      "seed": 17,
+      "optimizer": "LBFGS",
+      "lr": 1,
+      "history_size": 50,
+      "line_search_fn": "strong_wolfe",
+      "max_iter": 10,
+      "max_eval": 20,
+      "calls": 20,
+      "tolerance_grad": 1e-07,
+      "tolerance_change": 1e-10,
+      "regularization": "none",
+      "training_only": true,
+      "validation_loaded": false,
+      "checkpoint_rule": "earliest minimum training CE; diagnostic only",
+      "unique_images": 8424,
+      "unique_questions": 33696
+    },
+    "validation_selector": "fixed final endpoints",
+    "objective": "CE + coefficient*sum((W-W_initial)^2)/(2*40); no bias penalty"
+  },
+  "result": {
+    "status": "PASS_EXECUTION",
+    "smoke": false,
+    "results": {
+      "0.01": {
+        "coefficient": 0.01,
+        "history": [
+          {
+            "call": 0,
+            "ce": 0.19818685739014283,
+            "penalty": 0.0,
+            "objective": 0.19818685739014283,
+            "gradient_inf": 0.1696141556984913,
+            "iterations": 0,
+            "evaluations": 0,
+            "seconds": 0.051357500022277236,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.914292497625831,
+                "nll": 0.19818685739014277,
+                "brier": 0.11115356067775635,
+                "ece_15_bins": 0.005211633861152197,
+                "mean_confidence": 0.9110750405870058
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0019748533404463494,
+                  "brier": 0.00010265636301236301,
+                  "ece_15_bins": 0.0019454239618888185,
+                  "mean_confidence": 0.9980545760381112
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9769705603038936,
+                  "nll": 0.06331263226430975,
+                  "brier": 0.032998583189186324,
+                  "ece_15_bins": 0.002944910832243663,
+                  "mean_confidence": 0.9763570251979581
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.6801994301994302,
+                  "nll": 0.7260616701362186,
+                  "brier": 0.411405740835521,
+                  "ece_15_bins": 0.01705895537683414,
+                  "mean_confidence": 0.6712518055113991
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001398273819596454,
+                  "brier": 0.00010726232330566931,
+                  "ece_15_bins": 0.001363244399444684,
+                  "mean_confidence": 0.9986367556005551
+                }
+              }
+            }
+          },
+          {
+            "call": 1,
+            "ce": 0.1800525608937158,
+            "penalty": 4.02570602228705e-06,
+            "objective": 0.18005658659973808,
+            "gradient_inf": 0.015286586485994857,
+            "iterations": 10,
+            "evaluations": 12,
+            "seconds": 0.44319669995456934,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.925866571699905,
+                "nll": 0.1800525608937158,
+                "brier": 0.10006782307216833,
+                "ece_15_bins": 0.015188624579853621,
+                "mean_confidence": 0.9107311590304871
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0019245338951688717,
+                  "brier": 9.887142324437998e-05,
+                  "ece_15_bins": 0.0018963125265327207,
+                  "mean_confidence": 0.9981036874734672
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9865859449192782,
+                  "nll": 0.03987958010540704,
+                  "brier": 0.020588190630257564,
+                  "ece_15_bins": 0.006538671935042298,
+                  "mean_confidence": 0.9809768003499321
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7168803418803419,
+                  "nll": 0.6771085703264449,
+                  "brier": 0.37949078571328304,
+                  "ece_15_bins": 0.05184134333517958,
+                  "mean_confidence": 0.665110988590601
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001297559247842345,
+                  "brier": 9.34445218883645e-05,
+                  "ece_15_bins": 0.0012668402920522903,
+                  "mean_confidence": 0.9987331597079474
+                }
+              }
+            }
+          },
+          {
+            "call": 2,
+            "ce": 0.17819816922737897,
+            "penalty": 1.5221687862657437e-05,
+            "objective": 0.17821339091524163,
+            "gradient_inf": 0.005067317397381617,
+            "iterations": 20,
+            "evaluations": 24,
+            "seconds": 0.8392839999869466,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9267568850902185,
+                "nll": 0.17819816922737897,
+                "brier": 0.09900760447069665,
+                "ece_15_bins": 0.01615975514352768,
+                "mean_confidence": 0.9105971299466907
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018405499277526064,
+                  "brier": 0.00010347718374224527,
+                  "ece_15_bins": 0.0018110232018694553,
+                  "mean_confidence": 0.9981889767981305
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9875356125356125,
+                  "nll": 0.03699854949556986,
+                  "brier": 0.0187386679179429,
+                  "ece_15_bins": 0.006882600907690196,
+                  "mean_confidence": 0.9814917462448691
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7194919278252612,
+                  "nll": 0.6728875783233029,
+                  "brier": 0.3771128996978581,
+                  "ece_15_bins": 0.05574370169925037,
+                  "mean_confidence": 0.6637482261260108
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0010659991628905637,
+                  "brier": 7.537308324339915e-05,
+                  "ece_15_bins": 0.0010404293822471379,
+                  "mean_confidence": 0.9989595706177529
+                }
+              }
+            }
+          },
+          {
+            "call": 3,
+            "ce": 0.17454773410282243,
+            "penalty": 0.00017826274565574634,
+            "objective": 0.17472599684847817,
+            "gradient_inf": 0.003222333625031689,
+            "iterations": 30,
+            "evaluations": 35,
+            "seconds": 1.22150560002774,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.929457502374169,
+                "nll": 0.17454773410282243,
+                "brier": 0.09684029826315053,
+                "ece_15_bins": 0.01887102082052253,
+                "mean_confidence": 0.9105864815536464
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018827010743191987,
+                  "brier": 0.00010871619584265067,
+                  "ece_15_bins": 0.0018513308314922687,
+                  "mean_confidence": 0.9981486691685078
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.030616658000592826,
+                  "brier": 0.015065402572201651,
+                  "ece_15_bins": 0.008429375350274972,
+                  "mean_confidence": 0.9824443895396404
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7272079772079773,
+                  "nll": 0.6645640369923042,
+                  "brier": 0.3720973943679563,
+                  "ece_15_bins": 0.0643568322580303,
+                  "mean_confidence": 0.6628511449499468
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001127540344073508,
+                  "brier": 8.967991660157724e-05,
+                  "ece_15_bins": 0.0010982774435091332,
+                  "mean_confidence": 0.9989017225564909
+                }
+              }
+            }
+          },
+          {
+            "call": 4,
+            "ce": 0.17145357318231405,
+            "penalty": 0.000645019504340708,
+            "objective": 0.17209859268665476,
+            "gradient_inf": 0.002107963976208834,
+            "iterations": 40,
+            "evaluations": 47,
+            "seconds": 1.648939699982293,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9325439221272555,
+                "nll": 0.17145357318231405,
+                "brier": 0.09494025394198169,
+                "ece_15_bins": 0.02147969787004715,
+                "mean_confidence": 0.9110642242572083
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0019479674291387617,
+                  "brier": 0.000154309787879493,
+                  "ece_15_bins": 0.0019033283602505565,
+                  "mean_confidence": 0.9980966716397494
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9921652421652422,
+                  "nll": 0.026840800075509864,
+                  "brier": 0.012681039457395515,
+                  "ece_15_bins": 0.008759331394593426,
+                  "mean_confidence": 0.9836527113827455
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7380104463437797,
+                  "nll": 0.6558922538067542,
+                  "brier": 0.3668499390291586,
+                  "ece_15_bins": 0.0745957583295533,
+                  "mean_confidence": 0.6636166146390398
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0011332714178533048,
+                  "brier": 7.572749349317267e-05,
+                  "ece_15_bins": 0.0011091006327016682,
+                  "mean_confidence": 0.9988908993672986
+                }
+              }
+            }
+          },
+          {
+            "call": 5,
+            "ce": 0.16869848050870212,
+            "penalty": 0.0014887492523464076,
+            "objective": 0.17018722976104853,
+            "gradient_inf": 0.0031984277175618795,
+            "iterations": 50,
+            "evaluations": 58,
+            "seconds": 2.0621733999578282,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9333155270655271,
+                "nll": 0.1686984805087021,
+                "brier": 0.09321151750506583,
+                "ece_15_bins": 0.02143019343314904,
+                "mean_confidence": 0.911885333632378
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018097892355624578,
+                  "brier": 0.00010795877417446207,
+                  "ece_15_bins": 0.0017787804792541956,
+                  "mean_confidence": 0.9982212195207457
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9937084520417854,
+                  "nll": 0.024835410474527107,
+                  "brier": 0.01119867515174465,
+                  "ece_15_bins": 0.009447483381592282,
+                  "mean_confidence": 0.9842969748356595
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7395536562203229,
+                  "nll": 0.6471808553441672,
+                  "brier": 0.3614908001248452,
+                  "ece_15_bins": 0.07357771495037488,
+                  "mean_confidence": 0.6659759412699481
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009678669805515262,
+                  "brier": 4.8635969498957777e-05,
+                  "ece_15_bins": 0.0009528010968412068,
+                  "mean_confidence": 0.999047198903159
+                }
+              }
+            }
+          },
+          {
+            "call": 6,
+            "ce": 0.1677150782537741,
+            "penalty": 0.0018716237128824681,
+            "objective": 0.16958670196665657,
+            "gradient_inf": 0.004471477318442848,
+            "iterations": 60,
+            "evaluations": 71,
+            "seconds": 2.5393297999398783,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9339387464387464,
+                "nll": 0.1677150782537741,
+                "brier": 0.09256567837805114,
+                "ece_15_bins": 0.022176692518312394,
+                "mean_confidence": 0.9119496062424881
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018764670267950663,
+                  "brier": 9.211129737114604e-05,
+                  "ece_15_bins": 0.0018498307650476403,
+                  "mean_confidence": 0.9981501692349524
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9939458689458689,
+                  "nll": 0.024327503159499667,
+                  "brier": 0.010870362980441263,
+                  "ece_15_bins": 0.009620904382059165,
+                  "mean_confidence": 0.9844833882224164
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7418091168091168,
+                  "nll": 0.6435168734870425,
+                  "brier": 0.3591881756785389,
+                  "ece_15_bins": 0.07614127839580653,
+                  "mean_confidence": 0.6662649313409723
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0011394693417591934,
+                  "brier": 0.00011206355585330062,
+                  "ece_15_bins": 0.0011000638283878688,
+                  "mean_confidence": 0.9988999361716121
+                }
+              }
+            }
+          },
+          {
+            "call": 7,
+            "ce": 0.16689404600822466,
+            "penalty": 0.002242114160384469,
+            "objective": 0.16913616016860913,
+            "gradient_inf": 0.001267995817046682,
+            "iterations": 70,
+            "evaluations": 83,
+            "seconds": 2.989503000047989,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9346509971509972,
+                "nll": 0.1668940460082247,
+                "brier": 0.09211823870358912,
+                "ece_15_bins": 0.022497418682455996,
+                "mean_confidence": 0.9121687737145088
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018195728979505386,
+                  "brier": 0.00010230156106856073,
+                  "ece_15_bins": 0.0017903748738353083,
+                  "mean_confidence": 0.9982096251261647
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9934710351377019,
+                  "nll": 0.024035087138260334,
+                  "brier": 0.010719024082713795,
+                  "ece_15_bins": 0.009079529861030894,
+                  "mean_confidence": 0.9847039305826724
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7451329534662868,
+                  "nll": 0.6406974624931373,
+                  "brier": 0.35758526387397255,
+                  "ece_15_bins": 0.0784280740308328,
+                  "mean_confidence": 0.6667656604193243
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001024061503550623,
+                  "brier": 6.63652966016168e-05,
+                  "ece_15_bins": 0.0010041212701262538,
+                  "mean_confidence": 0.9989958787298739
+                }
+              }
+            }
+          },
+          {
+            "call": 8,
+            "ce": 0.1660085137563042,
+            "penalty": 0.002676672295324745,
+            "objective": 0.16868518605162897,
+            "gradient_inf": 0.0038924984948354993,
+            "iterations": 80,
+            "evaluations": 96,
+            "seconds": 3.464968999964185,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.935570987654321,
+                "nll": 0.1660085137563042,
+                "brier": 0.09157650186843358,
+                "ece_15_bins": 0.02318198625295736,
+                "mean_confidence": 0.9123890014013636
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001777661110960265,
+                  "brier": 9.240588597341039e-05,
+                  "ece_15_bins": 0.001750797650547629,
+                  "mean_confidence": 0.9982492023494524
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9937084520417854,
+                  "nll": 0.023695481490329913,
+                  "brier": 0.010506982117593865,
+                  "ece_15_bins": 0.009240003823280303,
+                  "mean_confidence": 0.9847747366551619
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7485754985754985,
+                  "nll": 0.6376679992592645,
+                  "brier": 0.35565893577781477,
+                  "ece_15_bins": 0.08116598869814572,
+                  "mean_confidence": 0.6674095098773528
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0008929131646622509,
+                  "brier": 4.7683692352315376e-05,
+                  "ece_15_bins": 0.0008774432765126011,
+                  "mean_confidence": 0.9991225567234874
+                }
+              }
+            }
+          },
+          {
+            "call": 9,
+            "ce": 0.16503061548078699,
+            "penalty": 0.003196794271062941,
+            "objective": 0.16822740975184994,
+            "gradient_inf": 0.003537522417723064,
+            "iterations": 90,
+            "evaluations": 108,
+            "seconds": 3.9325228000525385,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9364613010446344,
+                "nll": 0.16503061548078696,
+                "brier": 0.0909196865163207,
+                "ece_15_bins": 0.0239543035073874,
+                "mean_confidence": 0.9126149158544062
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018086051657248171,
+                  "brier": 8.804778706169339e-05,
+                  "ece_15_bins": 0.0017831924626438792,
+                  "mean_confidence": 0.9982168075373563
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9939458689458689,
+                  "nll": 0.023171624127121215,
+                  "brier": 0.010178403195111521,
+                  "ece_15_bins": 0.009354367838792616,
+                  "mean_confidence": 0.9848176653279462
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7518993352326686,
+                  "nll": 0.6342921724115872,
+                  "brier": 0.3533685599510282,
+                  "ece_15_bins": 0.08401693810712979,
+                  "mean_confidence": 0.6682616334339857
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0008500602187146263,
+                  "brier": 4.373513208130364e-05,
+                  "ece_15_bins": 0.000836442881662972,
+                  "mean_confidence": 0.9991635571183369
+                }
+              }
+            }
+          },
+          {
+            "call": 10,
+            "ce": 0.16379647138532805,
+            "penalty": 0.003912040409174375,
+            "objective": 0.1677085117945024,
+            "gradient_inf": 0.0007101062239854349,
+            "iterations": 100,
+            "evaluations": 120,
+            "seconds": 4.376401899964549,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9367580721747388,
+                "nll": 0.16379647138532807,
+                "brier": 0.09018589458253863,
+                "ece_15_bins": 0.0239282466197188,
+                "mean_confidence": 0.9128993251591365
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017438630437058406,
+                  "brier": 8.541699491423628e-05,
+                  "ece_15_bins": 0.0017190123240366248,
+                  "mean_confidence": 0.9982809876759635
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9939458689458689,
+                  "nll": 0.022464819482554268,
+                  "brier": 0.009745966256321374,
+                  "ece_15_bins": 0.009260587284487747,
+                  "mean_confidence": 0.984950533192307
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7530864197530864,
+                  "nll": 0.630197279773695,
+                  "brier": 0.3508823161226989,
+                  "ece_15_bins": 0.08425237201675125,
+                  "mean_confidence": 0.6691366730380043
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007799232413571505,
+                  "brier": 2.9878956220064726e-05,
+                  "ece_15_bins": 0.0007708932697288462,
+                  "mean_confidence": 0.9992291067302713
+                }
+              }
+            }
+          },
+          {
+            "call": 11,
+            "ce": 0.16342370706172774,
+            "penalty": 0.004109797582295188,
+            "objective": 0.16753350464402292,
+            "gradient_inf": 0.0022795621412590133,
+            "iterations": 110,
+            "evaluations": 132,
+            "seconds": 4.821877900045365,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9369361348528015,
+                "nll": 0.16342370706172774,
+                "brier": 0.08994694234052417,
+                "ece_15_bins": 0.02397866817266535,
+                "mean_confidence": 0.9129882464185898
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017294706281833824,
+                  "brier": 8.7202351017792e-05,
+                  "ece_15_bins": 0.0017044713279078102,
+                  "mean_confidence": 0.9982955286720926
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9941832858499525,
+                  "nll": 0.02231061825339274,
+                  "brier": 0.009638738266508155,
+                  "ece_15_bins": 0.009574580719020096,
+                  "mean_confidence": 0.984951661408188
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7535612535612536,
+                  "nll": 0.6288710058535575,
+                  "brier": 0.350029365890274,
+                  "ece_15_bins": 0.08414304294223578,
+                  "mean_confidence": 0.6694791982660298
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007837335117773009,
+                  "brier": 3.2462854296703625e-05,
+                  "ece_15_bins": 0.0007734026719507911,
+                  "mean_confidence": 0.9992265973280491
+                }
+              }
+            }
+          },
+          {
+            "call": 12,
+            "ce": 0.16309685811139585,
+            "penalty": 0.0043135137946126376,
+            "objective": 0.1674103719060085,
+            "gradient_inf": 0.0029268382705751965,
+            "iterations": 120,
+            "evaluations": 146,
+            "seconds": 5.323177400045097,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9371141975308642,
+                "nll": 0.16309685811139585,
+                "brier": 0.08972626578753083,
+                "ece_15_bins": 0.024049837877109494,
+                "mean_confidence": 0.9130792118232668
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0016851494004698458,
+                  "brier": 7.696108554335882e-05,
+                  "ece_15_bins": 0.0016633432616163703,
+                  "mean_confidence": 0.9983366567383836
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9940645773979108,
+                  "nll": 0.022234175593460425,
+                  "brier": 0.009598492980979452,
+                  "ece_15_bins": 0.009769464386566562,
+                  "mean_confidence": 0.9849448675059427
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.754392212725546,
+                  "nll": 0.6276964392423688,
+                  "brier": 0.34920024784763004,
+                  "ece_15_bins": 0.08465341595340818,
+                  "mean_confidence": 0.6697982054501864
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007716682092842776,
+                  "brier": 2.9361235970433506e-05,
+                  "ece_15_bins": 0.0007628824014459989,
+                  "mean_confidence": 0.9992371175985542
+                }
+              }
+            }
+          },
+          {
+            "call": 13,
+            "ce": 0.16281962952728912,
+            "penalty": 0.0045216604229334455,
+            "objective": 0.16734128995022257,
+            "gradient_inf": 0.0012381486448869924,
+            "iterations": 130,
+            "evaluations": 158,
+            "seconds": 5.7698394999606535,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9377077397910731,
+                "nll": 0.16281962952728912,
+                "brier": 0.08955042778117697,
+                "ece_15_bins": 0.024578857337714883,
+                "mean_confidence": 0.9131288824533582
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.00167030122927205,
+                  "brier": 7.946825925663704e-05,
+                  "ece_15_bins": 0.0016475956413836462,
+                  "mean_confidence": 0.9983524043586164
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9945394112060779,
+                  "nll": 0.022124049237075265,
+                  "brier": 0.009505045153040787,
+                  "ece_15_bins": 0.009676181833756792,
+                  "mean_confidence": 0.9849969579292037
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7562915479582146,
+                  "nll": 0.6267189068462274,
+                  "brier": 0.3485850749575471,
+                  "ece_15_bins": 0.0864287462557901,
+                  "mean_confidence": 0.6699216051508331
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007652607965817891,
+                  "brier": 3.212275486336171e-05,
+                  "ece_15_bins": 0.0007554376252207468,
+                  "mean_confidence": 0.9992445623747794
+                }
+              }
+            }
+          },
+          {
+            "call": 14,
+            "ce": 0.16267312641645393,
+            "penalty": 0.00460432592967574,
+            "objective": 0.16727745234612967,
+            "gradient_inf": 0.000821992247730405,
+            "iterations": 140,
+            "evaluations": 171,
+            "seconds": 6.242071600048803,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9379154795821463,
+                "nll": 0.16267312641645393,
+                "brier": 0.08945291589992979,
+                "ece_15_bins": 0.02479775982756063,
+                "mean_confidence": 0.9131177197545857
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0016670908748412886,
+                  "brier": 7.849793323432519e-05,
+                  "ece_15_bins": 0.0016447698976191066,
+                  "mean_confidence": 0.998355230102381
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9948955365622032,
+                  "nll": 0.022121143426334717,
+                  "brier": 0.009517099754994067,
+                  "ece_15_bins": 0.010174495186452422,
+                  "mean_confidence": 0.9849595211848664
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7567663817663818,
+                  "nll": 0.6261431508765246,
+                  "brier": 0.3481870958476559,
+                  "ece_15_bins": 0.08691688391896561,
+                  "mean_confidence": 0.6699082265252496
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007611204881149234,
+                  "brier": 2.8970063834921082e-05,
+                  "ece_15_bins": 0.0007520987941546083,
+                  "mean_confidence": 0.999247901205845
+                }
+              }
+            }
+          },
+          {
+            "call": 15,
+            "ce": 0.16238572893225295,
+            "penalty": 0.004801170812180438,
+            "objective": 0.16718689974443338,
+            "gradient_inf": 0.0008616200370279302,
+            "iterations": 150,
+            "evaluations": 182,
+            "seconds": 6.670800199965015,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.938034188034188,
+                "nll": 0.16238572893225292,
+                "brier": 0.08928180702524531,
+                "ece_15_bins": 0.02489033894359705,
+                "mean_confidence": 0.9131586819944213
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0016604894403142421,
+                  "brier": 7.875829536602947e-05,
+                  "ece_15_bins": 0.0016379869288441968,
+                  "mean_confidence": 0.9983620130711558
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9947768281101614,
+                  "nll": 0.022066086459645546,
+                  "brier": 0.009497853188154682,
+                  "ece_15_bins": 0.00976593015448474,
+                  "mean_confidence": 0.9850108979556769
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7573599240265907,
+                  "nll": 0.6250483481973115,
+                  "brier": 0.34752069342938635,
+                  "ece_15_bins": 0.0874860663606351,
+                  "mean_confidence": 0.670020699423396
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.000767991631740452,
+                  "brier": 2.9923188074190432e-05,
+                  "ece_15_bins": 0.000758882472543728,
+                  "mean_confidence": 0.9992411175274564
+                }
+              }
+            }
+          },
+          {
+            "call": 16,
+            "ce": 0.16219216598271075,
+            "penalty": 0.004947127439882418,
+            "objective": 0.16713929342259315,
+            "gradient_inf": 0.0020600753341345574,
+            "iterations": 160,
+            "evaluations": 194,
+            "seconds": 7.119719899958,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9382419278252612,
+                "nll": 0.1621921659827107,
+                "brier": 0.08915594715990928,
+                "ece_15_bins": 0.025092717963148888,
+                "mean_confidence": 0.9131642921243585
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001656320057154125,
+                  "brier": 7.433822375194111e-05,
+                  "ece_15_bins": 0.0016351437457128905,
+                  "mean_confidence": 0.9983648562542874
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9946581196581197,
+                  "nll": 0.022051805566699858,
+                  "brier": 0.009509217759238566,
+                  "ece_15_bins": 0.009639037237534336,
+                  "mean_confidence": 0.9850190824205853
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.758309591642925,
+                  "nll": 0.6242972089272948,
+                  "brier": 0.34701043002694504,
+                  "ece_15_bins": 0.08835141441185085,
+                  "mean_confidence": 0.6700272500300455
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007633293796941124,
+                  "brier": 2.9802629701627766e-05,
+                  "ece_15_bins": 0.0007540202074844818,
+                  "mean_confidence": 0.9992459797925157
+                }
+              }
+            }
+          },
+          {
+            "call": 17,
+            "ce": 0.1620911433372612,
+            "penalty": 0.005023061199266037,
+            "objective": 0.16711420453652726,
+            "gradient_inf": 0.0011913607667706255,
+            "iterations": 170,
+            "evaluations": 205,
+            "seconds": 7.5393322999589145,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9381528964862298,
+                "nll": 0.16209114333726127,
+                "brier": 0.08909547619994157,
+                "ece_15_bins": 0.02500735693336012,
+                "mean_confidence": 0.9131751978332832
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0016581679624045117,
+                  "brier": 7.647735796331975e-05,
+                  "ece_15_bins": 0.0016364811698950708,
+                  "mean_confidence": 0.9983635188301051
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.994420702754036,
+                  "nll": 0.022026628103953273,
+                  "brier": 0.009499639836052938,
+                  "ece_15_bins": 0.009468405382095563,
+                  "mean_confidence": 0.9850105560978257
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7581908831908832,
+                  "nll": 0.6239193196956804,
+                  "brier": 0.3467765163929247,
+                  "ece_15_bins": 0.08817311576329556,
+                  "mean_confidence": 0.6700781418233565
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007604575870068309,
+                  "brier": 2.927121282525573e-05,
+                  "ece_15_bins": 0.0007514254181542416,
+                  "mean_confidence": 0.9992485745818457
+                }
+              }
+            }
+          },
+          {
+            "call": 18,
+            "ce": 0.162031694543287,
+            "penalty": 0.005059595218300857,
+            "objective": 0.16709128976158785,
+            "gradient_inf": 0.0004984504637798885,
+            "iterations": 180,
+            "evaluations": 218,
+            "seconds": 8.010686099994928,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9382716049382716,
+                "nll": 0.16203169454328697,
+                "brier": 0.08906255381241034,
+                "ece_15_bins": 0.025126156647170036,
+                "mean_confidence": 0.9131749327673259
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0016531788838982401,
+                  "brier": 7.406541453606767e-05,
+                  "ece_15_bins": 0.001632101489812505,
+                  "mean_confidence": 0.9983678985101876
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9943019943019943,
+                  "nll": 0.022051365953901284,
+                  "brier": 0.009528229077756129,
+                  "ece_15_bins": 0.009613925671611085,
+                  "mean_confidence": 0.9849917378429457
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7587844254510921,
+                  "nll": 0.6236611359690828,
+                  "brier": 0.34661675693387395,
+                  "ece_15_bins": 0.08875393087159757,
+                  "mean_confidence": 0.670091484220172
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007610973662656313,
+                  "brier": 3.1163823475203235e-05,
+                  "ece_15_bins": 0.0007513895040021654,
+                  "mean_confidence": 0.9992486104959979
+                }
+              }
+            }
+          },
+          {
+            "call": 19,
+            "ce": 0.1620096756606621,
+            "penalty": 0.005062476346379444,
+            "objective": 0.16707215200704154,
+            "gradient_inf": 0.0005921274506809588,
+            "iterations": 190,
+            "evaluations": 229,
+            "seconds": 8.426846500020474,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9380638651471985,
+                "nll": 0.1620096756606621,
+                "brier": 0.08905635766980066,
+                "ece_15_bins": 0.024938976684332276,
+                "mean_confidence": 0.9131542525141765
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0016543039108757778,
+                  "brier": 7.61201032174046e-05,
+                  "ece_15_bins": 0.0016326270272626626,
+                  "mean_confidence": 0.9983673729727375
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9940645773979108,
+                  "nll": 0.022039595499817936,
+                  "brier": 0.009533612425296373,
+                  "ece_15_bins": 0.009494798566355399,
+                  "mean_confidence": 0.9850039211325943
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7581908831908832,
+                  "nll": 0.6235818923632696,
+                  "brier": 0.34658541217730515,
+                  "ece_15_bins": 0.08825257665557219,
+                  "mean_confidence": 0.6699992339128703
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007629108686850877,
+                  "brier": 3.028597338372792e-05,
+                  "ece_15_bins": 0.0007535179614959783,
+                  "mean_confidence": 0.999246482038504
+                }
+              }
+            }
+          },
+          {
+            "call": 20,
+            "ce": 0.1619043998512842,
+            "penalty": 0.005148576495368026,
+            "objective": 0.16705297634665223,
+            "gradient_inf": 0.0013809745457077514,
+            "iterations": 200,
+            "evaluations": 240,
+            "seconds": 8.846105600008741,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9383309591642925,
+                "nll": 0.16190439985128416,
+                "brier": 0.08898454056210235,
+                "ece_15_bins": 0.025220679319980115,
+                "mean_confidence": 0.9131396846779551
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0016533721006948415,
+                  "brier": 7.636937656451817e-05,
+                  "ece_15_bins": 0.0016316223312826917,
+                  "mean_confidence": 0.9983683776687174
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9943019943019943,
+                  "nll": 0.022011560169961572,
+                  "brier": 0.009515547829410895,
+                  "ece_15_bins": 0.009477260088649311,
+                  "mean_confidence": 0.9849733374945858
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7590218423551757,
+                  "nll": 0.6231860111469628,
+                  "brier": 0.3463157232579223,
+                  "ece_15_bins": 0.08911883928837314,
+                  "mean_confidence": 0.6699741141226575
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0007666559875173619,
+                  "brier": 3.052178451165442e-05,
+                  "ece_15_bins": 0.0007570905741403685,
+                  "mean_confidence": 0.9992429094258596
+                }
+              }
+            }
+          }
+        ],
+        "best_objective_call": 20,
+        "reload_exact": true,
+        "final_sha256": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5",
+        "reason": "budget_completed",
+        "validation": {
+          "overall": {
+            "count": 2048,
+            "accuracy": 0.91943359375,
+            "nll": 0.19641192332743676,
+            "brier": 0.10948806591161649,
+            "ece_15_bins": 0.013229431993876212,
+            "mean_confidence": 0.9085130777948425
+          },
+          "tasks": {
+            "color": {
+              "count": 512,
+              "accuracy": 0.99609375,
+              "nll": 0.0067837928896832,
+              "brier": 0.0038136560866882233,
+              "ece_15_bins": 0.0036597725229153034,
+              "mean_confidence": 0.9958676297213176
+            },
+            "texture": {
+              "count": 512,
+              "accuracy": 0.978515625,
+              "nll": 0.0624399132943448,
+              "brier": 0.03237224593270607,
+              "ece_15_bins": 0.010669851063292619,
+              "mean_confidence": 0.9779019169425036
+            },
+            "count": {
+              "count": 512,
+              "accuracy": 0.705078125,
+              "nll": 0.7127709341907053,
+              "brier": 0.39998123985519474,
+              "ece_15_bins": 0.05435066166010017,
+              "mean_confidence": 0.6621746800193309
+            },
+            "shape": {
+              "count": 512,
+              "accuracy": 0.998046875,
+              "nll": 0.003653052935011731,
+              "brier": 0.0017851217718775805,
+              "ece_15_bins": 0.0021279869734421673,
+              "mean_confidence": 0.998108084496218
+            }
+          }
+        },
+        "paired_vs_zero": {
+          "overall": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": 0.0107421875,
+                "percentile_95_interval": [
+                  0.0029296875,
+                  0.01904296875
+                ]
+              },
+              "nll": {
+                "difference": -0.012356584805161412,
+                "percentile_95_interval": [
+                  -0.02012753337175826,
+                  -0.004528588489257637
+                ]
+              },
+              "brier": {
+                "difference": -0.007380924795800754,
+                "percentile_95_interval": [
+                  -0.012108165637833278,
+                  -0.0027374211026326358
+                ]
+              }
+            }
+          },
+          "color": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": 0.001953125,
+                "percentile_95_interval": [
+                  0.0,
+                  0.005859375
+                ]
+              },
+              "nll": {
+                "difference": -0.002010657559100257,
+                "percentile_95_interval": [
+                  -0.0046844127599750185,
+                  2.2425134393459e-05
+                ]
+              },
+              "brier": {
+                "difference": -0.0018409608157470344,
+                "percentile_95_interval": [
+                  -0.004173613529747125,
+                  -1.832091005758177e-05
+                ]
+              }
+            }
+          },
+          "texture": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": -0.00390625,
+                "percentile_95_interval": [
+                  -0.013671875,
+                  0.005859375
+                ]
+              },
+              "nll": {
+                "difference": 0.00949982845148182,
+                "percentile_95_interval": [
+                  -0.004183882200262064,
+                  0.024878188546250603
+                ]
+              },
+              "brier": {
+                "difference": 0.0043407199064917044,
+                "percentile_95_interval": [
+                  -0.0034201897324307707,
+                  0.012412963944434145
+                ]
+              }
+            }
+          },
+          "count": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": 0.046875,
+                "percentile_95_interval": [
+                  0.017578125,
+                  0.076171875
+                ]
+              },
+              "nll": {
+                "difference": -0.05852785177251536,
+                "percentile_95_interval": [
+                  -0.08810293404216818,
+                  -0.030128625605573778
+                ]
+              },
+              "brier": {
+                "difference": -0.03318051052824959,
+                "percentile_95_interval": [
+                  -0.05099078955251462,
+                  -0.0160909150610031
+                ]
+              }
+            }
+          },
+          "shape": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": -0.001953125,
+                "percentile_95_interval": [
+                  -0.005859375,
+                  0.0
+                ]
+              },
+              "nll": {
+                "difference": 0.0016123416594881527,
+                "percentile_95_interval": [
+                  -0.00021659859560290977,
+                  0.004886556153815339
+                ]
+              },
+              "brier": {
+                "difference": 0.0011570522543019033,
+                "percentile_95_interval": [
+                  -8.190440136722211e-05,
+                  0.003543664300281277
+                ]
+              }
+            }
+          }
+        }
+      },
+      "0.1": {
+        "coefficient": 0.1,
+        "history": [
+          {
+            "call": 0,
+            "ce": 0.19818685739014283,
+            "penalty": 0.0,
+            "objective": 0.19818685739014283,
+            "gradient_inf": 0.1696141556984913,
+            "iterations": 0,
+            "evaluations": 0,
+            "seconds": 0.02906480000820011,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.914292497625831,
+                "nll": 0.19818685739014277,
+                "brier": 0.11115356067775635,
+                "ece_15_bins": 0.005211633861152197,
+                "mean_confidence": 0.9110750405870058
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0019748533404463494,
+                  "brier": 0.00010265636301236301,
+                  "ece_15_bins": 0.0019454239618888185,
+                  "mean_confidence": 0.9980545760381112
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9769705603038936,
+                  "nll": 0.06331263226430975,
+                  "brier": 0.032998583189186324,
+                  "ece_15_bins": 0.002944910832243663,
+                  "mean_confidence": 0.9763570251979581
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.6801994301994302,
+                  "nll": 0.7260616701362186,
+                  "brier": 0.411405740835521,
+                  "ece_15_bins": 0.01705895537683414,
+                  "mean_confidence": 0.6712518055113991
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001398273819596454,
+                  "brier": 0.00010726232330566931,
+                  "ece_15_bins": 0.001363244399444684,
+                  "mean_confidence": 0.9986367556005551
+                }
+              }
+            }
+          },
+          {
+            "call": 1,
+            "ce": 0.18005454125595374,
+            "penalty": 4.000921606230725e-05,
+            "objective": 0.18009455047201606,
+            "gradient_inf": 0.015206175342046794,
+            "iterations": 10,
+            "evaluations": 12,
+            "seconds": 0.4134549000300467,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.925866571699905,
+                "nll": 0.18005454125595372,
+                "brier": 0.10007090360250936,
+                "ece_15_bins": 0.015190026785682181,
+                "mean_confidence": 0.9107296144313876
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0019247159806443023,
+                  "brier": 9.887991122041497e-05,
+                  "ece_15_bins": 0.001896491699364193,
+                  "mean_confidence": 0.9981035083006358
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9867046533713201,
+                  "nll": 0.039884295263934354,
+                  "brier": 0.02059036966588646,
+                  "ece_15_bins": 0.006649756682607094,
+                  "mean_confidence": 0.9809779072995992
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7167616334283001,
+                  "nll": 0.6771111940456286,
+                  "brier": 0.3795008699722531,
+                  "ece_15_bins": 0.05172914868540583,
+                  "mean_confidence": 0.6651042673397742
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.00129795973360749,
+                  "brier": 9.349486067750467e-05,
+                  "ece_15_bins": 0.0012672252144591341,
+                  "mean_confidence": 0.998732774785541
+                }
+              }
+            }
+          },
+          {
+            "call": 2,
+            "ce": 0.17820642806409193,
+            "penalty": 0.00014363270351946692,
+            "objective": 0.1783500607676114,
+            "gradient_inf": 0.0053524174047397885,
+            "iterations": 20,
+            "evaluations": 23,
+            "seconds": 0.7850095999892801,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9269349477682811,
+                "nll": 0.1782064280640919,
+                "brier": 0.09902726662585826,
+                "ece_15_bins": 0.016351840691133407,
+                "mean_confidence": 0.9105831070771476
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018391684227791222,
+                  "brier": 0.00010199863858155938,
+                  "ece_15_bins": 0.0018100596014672956,
+                  "mean_confidence": 0.9981899403985327
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9876543209876543,
+                  "nll": 0.036877428520781005,
+                  "brier": 0.0186796963341918,
+                  "ece_15_bins": 0.006805155223493007,
+                  "mean_confidence": 0.98159025555747
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7200854700854701,
+                  "nll": 0.6730420178121231,
+                  "brier": 0.3772526837509014,
+                  "ece_15_bins": 0.056491418876388436,
+                  "mean_confidence": 0.6635940512090818
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0010670975006843704,
+                  "brier": 7.468777975830701e-05,
+                  "ece_15_bins": 0.0010418188564937623,
+                  "mean_confidence": 0.9989581811435062
+                }
+              }
+            }
+          },
+          {
+            "call": 3,
+            "ce": 0.17506694982854715,
+            "penalty": 0.0009785531899447943,
+            "objective": 0.17604550301849195,
+            "gradient_inf": 0.0037835512745384736,
+            "iterations": 30,
+            "evaluations": 35,
+            "seconds": 1.2062085999641567,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9290420227920227,
+                "nll": 0.17506694982854717,
+                "brier": 0.09715165381323328,
+                "ece_15_bins": 0.018596575585840647,
+                "mean_confidence": 0.910494764532435
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018301238836607842,
+                  "brier": 0.00010043177272081934,
+                  "ece_15_bins": 0.0018012800053820621,
+                  "mean_confidence": 0.998198719994618
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9891975308641975,
+                  "nll": 0.03189763045764934,
+                  "brier": 0.0158489352077323,
+                  "ece_15_bins": 0.007571884972597118,
+                  "mean_confidence": 0.9822984581328758
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7269705603038936,
+                  "nll": 0.665461522613248,
+                  "brier": 0.37257784686227624,
+                  "ece_15_bins": 0.06444618279909753,
+                  "mean_confidence": 0.6625342447550506
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0010785223596304436,
+                  "brier": 7.940141020362186e-05,
+                  "ece_15_bins": 0.0010523647528044504,
+                  "mean_confidence": 0.9989476352471958
+                }
+              }
+            }
+          },
+          {
+            "call": 4,
+            "ce": 0.1734682912836484,
+            "penalty": 0.0018133395857550896,
+            "objective": 0.1752816308694035,
+            "gradient_inf": 0.002287725634573874,
+            "iterations": 40,
+            "evaluations": 47,
+            "seconds": 1.6436044999863952,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9300510446343779,
+                "nll": 0.17346829128364843,
+                "brier": 0.09616414819822575,
+                "ece_15_bins": 0.019303965817693454,
+                "mean_confidence": 0.9107470788166845
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018334699781355622,
+                  "brier": 9.063863536329913e-05,
+                  "ece_15_bins": 0.0018074164918422829,
+                  "mean_confidence": 0.9981925835081579
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.99002849002849,
+                  "nll": 0.029525486203488934,
+                  "brier": 0.01439477384819565,
+                  "ece_15_bins": 0.007711391014244223,
+                  "mean_confidence": 0.9832548931002394
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7301756885090218,
+                  "nll": 0.6614803869660881,
+                  "brier": 0.37010611883813266,
+                  "ece_15_bins": 0.06762301480769378,
+                  "mean_confidence": 0.6625526737013281
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0010338219868810772,
+                  "brier": 6.506147121138563e-05,
+                  "ece_15_bins": 0.001011835042986991,
+                  "mean_confidence": 0.9989881649570127
+                }
+              }
+            }
+          },
+          {
+            "call": 5,
+            "ce": 0.17289527805148586,
+            "penalty": 0.002189473983644825,
+            "objective": 0.1750847520351307,
+            "gradient_inf": 0.0004656570858849916,
+            "iterations": 50,
+            "evaluations": 58,
+            "seconds": 2.064632600056939,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301103988603988,
+                "nll": 0.17289527805148588,
+                "brier": 0.09582007836779897,
+                "ece_15_bins": 0.019257737314966675,
+                "mean_confidence": 0.9108526615454322
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0018014281005870397,
+                  "brier": 9.2859564303843e-05,
+                  "ece_15_bins": 0.001774805030274427,
+                  "mean_confidence": 0.9982251949697257
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9907407407407407,
+                  "nll": 0.028920036218765318,
+                  "brier": 0.014011833996141164,
+                  "ece_15_bins": 0.007513670817702434,
+                  "mean_confidence": 0.9833581391602809
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7297008547008547,
+                  "nll": 0.6598646105019293,
+                  "brier": 0.3691111134495429,
+                  "ece_15_bins": 0.06689958927320147,
+                  "mean_confidence": 0.6628012654276532
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.00099503738466184,
+                  "brier": 6.450646120797114e-05,
+                  "ece_15_bins": 0.0009739533759315298,
+                  "mean_confidence": 0.9990260466240686
+                }
+              }
+            }
+          },
+          {
+            "call": 6,
+            "ce": 0.1727886773434022,
+            "penalty": 0.002270887893150818,
+            "objective": 0.17505956523655303,
+            "gradient_inf": 0.00040727430939861687,
+            "iterations": 60,
+            "evaluations": 70,
+            "seconds": 2.526733799953945,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301103988603988,
+                "nll": 0.17278867734340222,
+                "brier": 0.0957590515399526,
+                "ece_15_bins": 0.019246468559092615,
+                "mean_confidence": 0.9108639303013064
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017925083291498972,
+                  "brier": 8.944883915397492e-05,
+                  "ece_15_bins": 0.001766865044383763,
+                  "mean_confidence": 0.998233134955616
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9908594491927826,
+                  "nll": 0.028945985111288545,
+                  "brier": 0.014026527067949997,
+                  "ece_15_bins": 0.007607665609752883,
+                  "mean_confidence": 0.9833535106836396
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7295821462488129,
+                  "nll": 0.6594248708481761,
+                  "brier": 0.3688584117208422,
+                  "ece_15_bins": 0.06674221035541303,
+                  "mean_confidence": 0.6628399358934
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009913450849943146,
+                  "brier": 6.181853186415119e-05,
+                  "ece_15_bins": 0.0009708603274303971,
+                  "mean_confidence": 0.9990291396725697
+                }
+              }
+            }
+          },
+          {
+            "call": 7,
+            "ce": 0.1727630102617032,
+            "penalty": 0.0022904544718263856,
+            "objective": 0.1750534647335296,
+            "gradient_inf": 0.00035623804443322445,
+            "iterations": 70,
+            "evaluations": 82,
+            "seconds": 2.986753899953328,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.929991690408357,
+                "nll": 0.1727630102617032,
+                "brier": 0.09574183449409063,
+                "ece_15_bins": 0.019130750887616742,
+                "mean_confidence": 0.9108609395207403
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017883102756571351,
+                  "brier": 9.058689449597808e-05,
+                  "ece_15_bins": 0.0017624143259380653,
+                  "mean_confidence": 0.9982375856740622
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9908594491927826,
+                  "nll": 0.028982763873278763,
+                  "brier": 0.014046011498133911,
+                  "ece_15_bins": 0.007631421109595077,
+                  "mean_confidence": 0.9833445325945798
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7291073124406457,
+                  "nll": 0.659289853842017,
+                  "brier": 0.36876962072118846,
+                  "ece_15_bins": 0.06627452518004179,
+                  "mean_confidence": 0.6628327872606039
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009911130558598377,
+                  "brier": 6.111886254417659e-05,
+                  "ece_15_bins": 0.0009711474462844697,
+                  "mean_confidence": 0.9990288525537157
+                }
+              }
+            }
+          },
+          {
+            "call": 8,
+            "ce": 0.17275358047005226,
+            "penalty": 0.0022968773321217053,
+            "objective": 0.17505045780217396,
+            "gradient_inf": 0.0004885378797861937,
+            "iterations": 80,
+            "evaluations": 93,
+            "seconds": 3.412155000027269,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301400759734093,
+                "nll": 0.1727535804700522,
+                "brier": 0.09573326083554691,
+                "ece_15_bins": 0.019284118798757757,
+                "mean_confidence": 0.9108559571746515
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017882008338071312,
+                  "brier": 9.021971747865673e-05,
+                  "ece_15_bins": 0.001762370295612536,
+                  "mean_confidence": 0.9982376297043873
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9907407407407407,
+                  "nll": 0.029016888798980688,
+                  "brier": 0.01406427778739546,
+                  "ece_15_bins": 0.007717487157717667,
+                  "mean_confidence": 0.9833321520564876
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7298195631528965,
+                  "nll": 0.6592208582133479,
+                  "brier": 0.36871892808984885,
+                  "ece_15_bins": 0.0669966307105993,
+                  "mean_confidence": 0.6628229324422972
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009883740340732464,
+                  "brier": 5.961774746461293e-05,
+                  "ece_15_bins": 0.000968885504566029,
+                  "mean_confidence": 0.9990311144954339
+                }
+              }
+            }
+          },
+          {
+            "call": 9,
+            "ce": 0.172740793794344,
+            "penalty": 0.0023083691386578944,
+            "objective": 0.1750491629330019,
+            "gradient_inf": 0.00041342192354855916,
+            "iterations": 90,
+            "evaluations": 104,
+            "seconds": 3.8368743000319228,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301400759734093,
+                "nll": 0.172740793794344,
+                "brier": 0.09572508526659254,
+                "ece_15_bins": 0.019279910004841812,
+                "mean_confidence": 0.9108601659685676
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001787664225005386,
+                  "brier": 9.11747768306814e-05,
+                  "ece_15_bins": 0.0017615541264460373,
+                  "mean_confidence": 0.998238445873554
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9907407407407407,
+                  "nll": 0.029026285718705983,
+                  "brier": 0.014069079340827625,
+                  "ece_15_bins": 0.0078878903814211,
+                  "mean_confidence": 0.983323402222546
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7298195631528965,
+                  "nll": 0.6591622351112812,
+                  "brier": 0.3686791762391996,
+                  "ece_15_bins": 0.06697377136459395,
+                  "mean_confidence": 0.6628457917883026
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009869901223833674,
+                  "brier": 6.09107095123327e-05,
+                  "ece_15_bins": 0.0009669760101325979,
+                  "mean_confidence": 0.9990330239898675
+                }
+              }
+            }
+          },
+          {
+            "call": 10,
+            "ce": 0.17274274419616872,
+            "penalty": 0.002305442151249589,
+            "objective": 0.1750481863474183,
+            "gradient_inf": 0.00011928599044042551,
+            "iterations": 100,
+            "evaluations": 115,
+            "seconds": 4.286183499963954,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301994301994302,
+                "nll": 0.1727427441961687,
+                "brier": 0.09572499370861372,
+                "ece_15_bins": 0.019343440544476568,
+                "mean_confidence": 0.9108559896549536
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.001787485692533076,
+                  "brier": 9.01708118738896e-05,
+                  "ece_15_bins": 0.0017616734661755242,
+                  "mean_confidence": 0.9982383265338246
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9907407407407407,
+                  "nll": 0.029048003695199054,
+                  "brier": 0.014081821308250923,
+                  "ece_15_bins": 0.007825579322063979,
+                  "mean_confidence": 0.9833065952360672
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.73005698005698,
+                  "nll": 0.6591476733183405,
+                  "brier": 0.3686676163070472,
+                  "ece_15_bins": 0.0672098562632323,
+                  "mean_confidence": 0.6628471237937478
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009878140786022558,
+                  "brier": 6.036640728292285e-05,
+                  "ece_15_bins": 0.0009680869438246733,
+                  "mean_confidence": 0.9990319130561752
+                }
+              }
+            }
+          },
+          {
+            "call": 11,
+            "ce": 0.1727334706447626,
+            "penalty": 0.002314486476311374,
+            "objective": 0.175047957121074,
+            "gradient_inf": 2.772589612618428e-05,
+            "iterations": 110,
+            "evaluations": 128,
+            "seconds": 4.931042599957436,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9300807217473884,
+                "nll": 0.1727334706447626,
+                "brier": 0.09571956502267423,
+                "ece_15_bins": 0.01922153518108078,
+                "mean_confidence": 0.9108591865663075
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017872076538925663,
+                  "brier": 9.014651378069677e-05,
+                  "ece_15_bins": 0.001761396601204823,
+                  "mean_confidence": 0.998238603398795
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9907407407407407,
+                  "nll": 0.029040044888317244,
+                  "brier": 0.01407698033665346,
+                  "ece_15_bins": 0.007969131086098868,
+                  "mean_confidence": 0.9833054137362996
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7295821462488129,
+                  "nll": 0.6591185568440643,
+                  "brier": 0.36865074672947135,
+                  "ece_15_bins": 0.0667211145119461,
+                  "mean_confidence": 0.662861031736867
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.000988073192776134,
+                  "brier": 6.038651079139126e-05,
+                  "ece_15_bins": 0.0009683026067313526,
+                  "mean_confidence": 0.9990316973932688
+                }
+              }
+            }
+          },
+          {
+            "call": 12,
+            "ce": 0.17273933587047452,
+            "penalty": 0.0023085211335715033,
+            "objective": 0.17504785700404601,
+            "gradient_inf": 6.989507014971097e-05,
+            "iterations": 120,
+            "evaluations": 141,
+            "seconds": 5.508831699960865,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9300510446343779,
+                "nll": 0.17273933587047452,
+                "brier": 0.09572288798398147,
+                "ece_15_bins": 0.019193168012604126,
+                "mean_confidence": 0.9108578766217738
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017872910625208625,
+                  "brier": 9.012113549567478e-05,
+                  "ece_15_bins": 0.0017614910153682262,
+                  "mean_confidence": 0.998238508984632
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.02905126628588503,
+                  "brier": 0.014084436098646826,
+                  "ece_15_bins": 0.007999017247939359,
+                  "mean_confidence": 0.9833006116401038
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7295821462488129,
+                  "nll": 0.6591305764936277,
+                  "brier": 0.36865656895966975,
+                  "ece_15_bins": 0.06672135096773453,
+                  "mean_confidence": 0.6628607952810784
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009882096398643682,
+                  "brier": 6.042574211363129e-05,
+                  "ece_15_bins": 0.0009684094187187586,
+                  "mean_confidence": 0.9990315905812812
+                }
+              }
+            }
+          },
+          {
+            "call": 13,
+            "ce": 0.17273642883570853,
+            "penalty": 0.002311360031199494,
+            "objective": 0.17504778886690803,
+            "gradient_inf": 2.433575350134997e-05,
+            "iterations": 130,
+            "evaluations": 153,
+            "seconds": 5.982430799980648,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301400759734093,
+                "nll": 0.17273642883570853,
+                "brier": 0.09572070890211143,
+                "ece_15_bins": 0.019282150253388888,
+                "mean_confidence": 0.9108579257200204
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017873053315563177,
+                  "brier": 9.0173749304459e-05,
+                  "ece_15_bins": 0.0017614888619189206,
+                  "mean_confidence": 0.9982385111380812
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.029052391879229145,
+                  "brier": 0.014085211285435809,
+                  "ece_15_bins": 0.008078314239661228,
+                  "mean_confidence": 0.9833009739628468
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7299382716049383,
+                  "nll": 0.6591178708908366,
+                  "brier": 0.3686469762643547,
+                  "ece_15_bins": 0.06707770352698715,
+                  "mean_confidence": 0.6628605680779511
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.000988147241212037,
+                  "brier": 6.047430935071865e-05,
+                  "ece_15_bins": 0.0009683502987977107,
+                  "mean_confidence": 0.9990316497012025
+                }
+              }
+            }
+          },
+          {
+            "call": 14,
+            "ce": 0.17273765973568628,
+            "penalty": 0.0023100704793541467,
+            "objective": 0.17504773021504041,
+            "gradient_inf": 2.372484462087005e-05,
+            "iterations": 140,
+            "evaluations": 164,
+            "seconds": 6.441931699984707,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301400759734093,
+                "nll": 0.17273765973568628,
+                "brier": 0.09572129180129915,
+                "ece_15_bins": 0.019283617165168073,
+                "mean_confidence": 0.9108564588082412
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017874549161412652,
+                  "brier": 9.028455223281032e-05,
+                  "ece_15_bins": 0.0017616030263620979,
+                  "mean_confidence": 0.9982383969736377
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.029051510006888225,
+                  "brier": 0.014085304255728529,
+                  "ece_15_bins": 0.008078165398592215,
+                  "mean_confidence": 0.9833009133908991
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7299382716049383,
+                  "nll": 0.6591230748681479,
+                  "brier": 0.36864923663032967,
+                  "ece_15_bins": 0.06708288439078834,
+                  "mean_confidence": 0.6628553872141499
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009885991515676893,
+                  "brier": 6.0341766905563194e-05,
+                  "ece_15_bins": 0.0009688623457220321,
+                  "mean_confidence": 0.999031137654278
+                }
+              }
+            }
+          },
+          {
+            "call": 15,
+            "ce": 0.17273733580965706,
+            "penalty": 0.0023103067729133677,
+            "objective": 0.1750476425825704,
+            "gradient_inf": 9.873109592836195e-05,
+            "iterations": 150,
+            "evaluations": 175,
+            "seconds": 6.8894112999551,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301697530864198,
+                "nll": 0.17273733580965706,
+                "brier": 0.0957214034162271,
+                "ece_15_bins": 0.019313455254506857,
+                "mean_confidence": 0.9108562978319128
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017874613624199265,
+                  "brier": 9.020518158818151e-05,
+                  "ece_15_bins": 0.0017616452302913926,
+                  "mean_confidence": 0.9982383547697086
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.02905424125499789,
+                  "brier": 0.014087583779134013,
+                  "ece_15_bins": 0.00791710198046286,
+                  "mean_confidence": 0.9833031290284793
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.73005698005698,
+                  "nll": 0.6591185819499364,
+                  "brier": 0.36864729948029296,
+                  "ece_15_bins": 0.06720404828301027,
+                  "mean_confidence": 0.6628529317739698
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009890586712738264,
+                  "brier": 6.052522389322068e-05,
+                  "ece_15_bins": 0.0009692242445061242,
+                  "mean_confidence": 0.9990307757554939
+                }
+              }
+            }
+          },
+          {
+            "call": 16,
+            "ce": 0.17273530437366932,
+            "penalty": 0.0023121557569843712,
+            "objective": 0.1750474601306537,
+            "gradient_inf": 4.3398929524334084e-05,
+            "iterations": 160,
+            "evaluations": 186,
+            "seconds": 7.339319200022146,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301400759734093,
+                "nll": 0.17273530437366935,
+                "brier": 0.09572028067228136,
+                "ece_15_bins": 0.019284535700462638,
+                "mean_confidence": 0.9108555402729466
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017874881887476,
+                  "brier": 9.010740000515116e-05,
+                  "ece_15_bins": 0.001761692455732435,
+                  "mean_confidence": 0.9982383075442672
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9907407407407407,
+                  "nll": 0.02905589429467241,
+                  "brier": 0.01408923298017295,
+                  "ece_15_bins": 0.007891541037440677,
+                  "mean_confidence": 0.9833029152265625
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7298195631528965,
+                  "nll": 0.6591083783692414,
+                  "brier": 0.36864089566802183,
+                  "ece_15_bins": 0.06696910929643814,
+                  "mean_confidence": 0.6628504538564584
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009894566420158234,
+                  "brier": 6.088664092546308e-05,
+                  "ece_15_bins": 0.0009695155355017825,
+                  "mean_confidence": 0.9990304844644982
+                }
+              }
+            }
+          },
+          {
+            "call": 17,
+            "ce": 0.1727359486745362,
+            "penalty": 0.0023112882585971843,
+            "objective": 0.1750472369331334,
+            "gradient_inf": 0.00012950732429971878,
+            "iterations": 170,
+            "evaluations": 199,
+            "seconds": 7.848789599956945,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301697530864198,
+                "nll": 0.17273594867453623,
+                "brier": 0.09572102689421973,
+                "ece_15_bins": 0.019315047678135078,
+                "mean_confidence": 0.9108547054082847
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017877581485451874,
+                  "brier": 9.036103324794504e-05,
+                  "ece_15_bins": 0.0017618948191973965,
+                  "mean_confidence": 0.9982381051808026
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.029055070069460256,
+                  "brier": 0.014088511842258525,
+                  "ece_15_bins": 0.007787015175371925,
+                  "mean_confidence": 0.9833069130831998
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.73005698005698,
+                  "nll": 0.6591115795013971,
+                  "brier": 0.3686445306381311,
+                  "ece_15_bins": 0.06721365946714332,
+                  "mean_confidence": 0.6628433205898367
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009893869787424014,
+                  "brier": 6.070406324139345e-05,
+                  "ece_15_bins": 0.0009695172207005486,
+                  "mean_confidence": 0.9990304827792995
+                }
+              }
+            }
+          },
+          {
+            "call": 18,
+            "ce": 0.17274688514914724,
+            "penalty": 0.0022999998108113135,
+            "objective": 0.17504688495995854,
+            "gradient_inf": 0.0001250392349756739,
+            "iterations": 180,
+            "evaluations": 210,
+            "seconds": 8.30590569996275,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301697530864198,
+                "nll": 0.17274688514914724,
+                "brier": 0.09572829905821847,
+                "ece_15_bins": 0.01931499084925395,
+                "mean_confidence": 0.9108547622371657
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017877570996444395,
+                  "brier": 9.040328257451547e-05,
+                  "ece_15_bins": 0.0017618817891380326,
+                  "mean_confidence": 0.998238118210862
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.029069920363391816,
+                  "brier": 0.014098105320120255,
+                  "ece_15_bins": 0.007793787063762544,
+                  "mean_confidence": 0.9832996517905633
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.73005698005698,
+                  "nll": 0.6591395298621893,
+                  "brier": 0.3686640584356131,
+                  "ece_15_bins": 0.06720524917282188,
+                  "mean_confidence": 0.6628517308841583
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009903332713634338,
+                  "brier": 6.062919456607895e-05,
+                  "ece_15_bins": 0.0009704519369204869,
+                  "mean_confidence": 0.9990295480630794
+                }
+              }
+            }
+          },
+          {
+            "call": 19,
+            "ce": 0.17274301520378657,
+            "penalty": 0.002302812911510543,
+            "objective": 0.17504582811529712,
+            "gradient_inf": 0.00028359827297407214,
+            "iterations": 190,
+            "evaluations": 221,
+            "seconds": 8.756574500002898,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301697530864198,
+                "nll": 0.17274301520378657,
+                "brier": 0.0957277330735556,
+                "ece_15_bins": 0.019310139742088395,
+                "mean_confidence": 0.9108596133443314
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017883193721266355,
+                  "brier": 9.011254494888367e-05,
+                  "ece_15_bins": 0.0017625197098256643,
+                  "mean_confidence": 0.9982374802901746
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.029057047561455995,
+                  "brier": 0.014092380327116962,
+                  "ece_15_bins": 0.007707218937247831,
+                  "mean_confidence": 0.9833080092312289
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.73005698005698,
+                  "nll": 0.6591349449216874,
+                  "brier": 0.3686678471065222,
+                  "ece_15_bins": 0.06719212388951915,
+                  "mean_confidence": 0.6628648561674609
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0009917489598760827,
+                  "brier": 6.059231563439234e-05,
+                  "ece_15_bins": 0.0009718923115388035,
+                  "mean_confidence": 0.9990281076884611
+                }
+              }
+            }
+          },
+          {
+            "call": 20,
+            "ce": 0.17272258264663418,
+            "penalty": 0.002321238942728983,
+            "objective": 0.17504382158936316,
+            "gradient_inf": 0.00021252571068780256,
+            "iterations": 200,
+            "evaluations": 232,
+            "seconds": 9.21713450003881,
+            "training": {
+              "overall": {
+                "count": 33696,
+                "accuracy": 0.9301103988603988,
+                "nll": 0.17272258264663418,
+                "brier": 0.09571724719632642,
+                "ece_15_bins": 0.019245027195911098,
+                "mean_confidence": 0.9108653716644878
+              },
+              "tasks": {
+                "color": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.0017881501829901806,
+                  "brier": 9.048500926369659e-05,
+                  "ece_15_bins": 0.0017622482228228519,
+                  "mean_confidence": 0.9982377517771771
+                },
+                "texture": {
+                  "count": 8424,
+                  "accuracy": 0.9906220322886989,
+                  "nll": 0.029024016238819676,
+                  "brier": 0.014067532163345655,
+                  "ece_15_bins": 0.007945690704185953,
+                  "mean_confidence": 0.9833070826107126
+                },
+                "count": {
+                  "count": 8424,
+                  "accuracy": 0.7298195631528965,
+                  "nll": 0.6590852352528898,
+                  "brier": 0.36865010406026644,
+                  "ece_15_bins": 0.06695061302819351,
+                  "mean_confidence": 0.6628896667502223
+                },
+                "shape": {
+                  "count": 8424,
+                  "accuracy": 1.0,
+                  "nll": 0.000992928911837062,
+                  "brier": 6.086755242989477e-05,
+                  "ece_15_bins": 0.0009730144801608225,
+                  "mean_confidence": 0.999026985519839
+                }
+              }
+            }
+          }
+        ],
+        "best_objective_call": 20,
+        "reload_exact": true,
+        "final_sha256": "3e672935bcfc5d8240d79bd56d51f044cadde9aa57ad576a3a8deacf882a5831",
+        "reason": "budget_completed",
+        "validation": {
+          "overall": {
+            "count": 2048,
+            "accuracy": 0.91845703125,
+            "nll": 0.1989889489901544,
+            "brier": 0.11095855090430193,
+            "ece_15_bins": 0.017427835167622,
+            "mean_confidence": 0.9059530127140708
+          },
+          "tasks": {
+            "color": {
+              "count": 512,
+              "accuracy": 0.99609375,
+              "nll": 0.006672239288181654,
+              "brier": 0.003614704200903196,
+              "ece_15_bins": 0.005097690126307435,
+              "mean_confidence": 0.9957990778758767
+            },
+            "texture": {
+              "count": 512,
+              "accuracy": 0.974609375,
+              "nll": 0.06826114715983538,
+              "brier": 0.03544254358008184,
+              "ece_15_bins": 0.006308493442603065,
+              "mean_confidence": 0.9770467098531646
+            },
+            "count": {
+              "count": 512,
+              "accuracy": 0.705078125,
+              "nll": 0.7166136663862287,
+              "brier": 0.40270490696278327,
+              "ece_15_bins": 0.06656420491534114,
+              "mean_confidence": 0.6532534735140391
+            },
+            "shape": {
+              "count": 512,
+              "accuracy": 0.998046875,
+              "nll": 0.0044087431263715995,
+              "brier": 0.0020720488734394106,
+              "ece_15_bins": 0.0025659527016089526,
+              "mean_confidence": 0.9977127896132031
+            }
+          }
+        },
+        "paired_vs_zero": {
+          "overall": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": 0.009765625,
+                "percentile_95_interval": [
+                  0.0009765625,
+                  0.0185546875
+                ]
+              },
+              "nll": {
+                "difference": -0.009779559142443106,
+                "percentile_95_interval": [
+                  -0.019725528636849402,
+                  0.00019505215217997812
+                ]
+              },
+              "brier": {
+                "difference": -0.0059104398031154,
+                "percentile_95_interval": [
+                  -0.011771956136596113,
+                  3.0395496801578957e-05
+                ]
+              }
+            }
+          },
+          "color": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": 0.001953125,
+                "percentile_95_interval": [
+                  0.0,
+                  0.005859375
+                ]
+              },
+              "nll": {
+                "difference": -0.0021222111606018024,
+                "percentile_95_interval": [
+                  -0.005124168571660671,
+                  0.00016787187372117022
+                ]
+              },
+              "brier": {
+                "difference": -0.002039912701532061,
+                "percentile_95_interval": [
+                  -0.004681818023632692,
+                  7.668554314277349e-06
+                ]
+              }
+            }
+          },
+          "texture": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": -0.0078125,
+                "percentile_95_interval": [
+                  -0.017578125,
+                  0.0
+                ]
+              },
+              "nll": {
+                "difference": 0.015321062316972285,
+                "percentile_95_interval": [
+                  -0.0015747678563230063,
+                  0.034485530563808445
+                ]
+              },
+              "brier": {
+                "difference": 0.007411017553867466,
+                "percentile_95_interval": [
+                  -0.0016565517917031922,
+                  0.017108939351193692
+                ]
+              }
+            }
+          },
+          "count": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": 0.046875,
+                "percentile_95_interval": [
+                  0.013671875,
+                  0.08203125
+                ]
+              },
+              "nll": {
+                "difference": -0.054685119576990945,
+                "percentile_95_interval": [
+                  -0.09181143556976921,
+                  -0.018782764388022743
+                ]
+              },
+              "brier": {
+                "difference": -0.030456843420660736,
+                "percentile_95_interval": [
+                  -0.052969246481002145,
+                  -0.008452884848090442
+                ]
+              }
+            }
+          },
+          "shape": {
+            "groups": 512,
+            "replicates": 10000,
+            "seed": 17,
+            "direction": "second minus first",
+            "quantiles": "linear percentile",
+            "metrics": {
+              "accuracy": {
+                "difference": -0.001953125,
+                "percentile_95_interval": [
+                  -0.005859375,
+                  0.0
+                ]
+              },
+              "nll": {
+                "difference": 0.002368031850848025,
+                "percentile_95_interval": [
+                  -3.189624027552453e-05,
+                  0.006505474502067699
+                ]
+              },
+              "brier": {
+                "difference": 0.0014439793558637334,
+                "percentile_95_interval": [
+                  -6.669875931557188e-05,
+                  0.004257667451457196
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "source_unchanged": true,
+    "hashes": {
+      "config.json": "dec046cee59a4b17188dd2ccd466b7a8148fe452b500813c0d1566084ff258c9",
+      "validation-inputs.json": "c1e997faf5f07270c5cf2ff90ed01c69e3395cb4b9ca18370fdf86f35465b597",
+      "0.01\\best-objective.pt": "c874346aeaa5787a39e674be120c2e8565474f0e7711994e3b371c2d6f849e6d",
+      "0.01\\closures.jsonl": "c598b04f3f98612384a8a5467b858b1a0ef3485052d3f2f2ac2d665f27edd6ba",
+      "0.01\\final-training-logits.npy": "96a10d07c144f256b79b8dfb47eb75041d280c5e03d2a795e7bac78d26bb39d0",
+      "0.01\\final.pt": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5",
+      "0.01\\fit-result.json": "2a3cdac44f660ce10473d0aa05461677096e5445620598adc751297fc4f9cf00",
+      "0.01\\history.json": "c0da64e40187d2e3bcd12e6ce6a8f89189f523415b166a153602b6be1c5b200e",
+      "0.01\\initial.pt": "3dd6326e4c371b6f58ba47b2a8b3850229c5d117e0e507e280613dacbc8fef25",
+      "0.01\\validation-predictions.json": "fccb050238ea963a7620dd6468265598a9a0b6c91ee416a2e9fe8873c4bfccf7",
+      "0.1\\best-objective.pt": "eb02caf850962bf441dee7e714f7c9595fe0c45b38be3104ea6834530f3b0692",
+      "0.1\\closures.jsonl": "784886b05a96fe51f8cf52bbc7e08845d8dd155fac8753b579e5f8478771a8fc",
+      "0.1\\final-training-logits.npy": "ad01b771942546a52d3bb726ffab09797df1f42d92354dead470f874592a7c5f",
+      "0.1\\final.pt": "3e672935bcfc5d8240d79bd56d51f044cadde9aa57ad576a3a8deacf882a5831",
+      "0.1\\fit-result.json": "9c13d260a1cd2f5a25c6bb058875fd7aae28568538f76f75665906dea1c3f57d",
+      "0.1\\history.json": "77cecbfc84e799411b67d8b8f392fcefc1966082bd3ce3aeb8376b1e827de1d8",
+      "0.1\\initial.pt": "3dd6326e4c371b6f58ba47b2a8b3850229c5d117e0e507e280613dacbc8fef25",
+      "0.1\\validation-predictions.json": "3b2940bb9e63bf9a8170f2510d4401e2641ffc4b16dacd11520cdaa1e6f4b6cd"
+    }
+  },
+  "reference": {
+    "status": "PASS_EVALUATION",
+    "primary_count_improvement": "UNCERTAIN_OR_NOT_SUPPORTED",
+    "seconds": 0.5439984999829903,
+    "metrics": {
+      "initial": {
+        "overall": {
+          "count": 2048,
+          "accuracy": 0.90771484375,
+          "nll": 0.22467728512117707,
+          "brier": 0.12473721974753088,
+          "ece_15_bins": 0.012183273150335487,
+          "mean_confidence": 0.9066495435508399
+        },
+        "tasks": {
+          "color": {
+            "count": 512,
+            "accuracy": 0.99609375,
+            "nll": 0.006115116263826935,
+            "brier": 0.003003412059124627,
+            "ece_15_bins": 0.004867267515521285,
+            "mean_confidence": 0.9956803155748597
+          },
+          "texture": {
+            "count": 512,
+            "accuracy": 0.97265625,
+            "nll": 0.1020025971805534,
+            "brier": 0.04808869152357759,
+            "ece_15_bins": 0.01579500674567644,
+            "mean_confidence": 0.9723179103075155
+          },
+          "count": {
+            "count": 512,
+            "accuracy": 0.6640625,
+            "nll": 0.7854795806762068,
+            "brier": 0.4455939812901347,
+            "ece_15_bins": 0.05218611400896014,
+            "mean_confidence": 0.6616990086071819
+          },
+          "shape": {
+            "count": 512,
+            "accuracy": 0.998046875,
+            "nll": 0.005111846364120658,
+            "brier": 0.0022627941172866563,
+            "ece_15_bins": 0.0033877263791394913,
+            "mean_confidence": 0.9969009397138029
+          }
+        }
+      },
+      "final": {
+        "overall": {
+          "count": 2048,
+          "accuracy": 0.90869140625,
+          "nll": 0.2087685081325976,
+          "brier": 0.11686899070741727,
+          "ece_15_bins": 0.017194862041719293,
+          "mean_confidence": 0.9191993510951313
+        },
+        "tasks": {
+          "color": {
+            "count": 512,
+            "accuracy": 0.994140625,
+            "nll": 0.008794450448783459,
+            "brier": 0.00565461690243526,
+            "ece_15_bins": 0.005042478828654594,
+            "mean_confidence": 0.9961756109750193
+          },
+          "texture": {
+            "count": 512,
+            "accuracy": 0.982421875,
+            "nll": 0.05294008484286303,
+            "brier": 0.028031526026214348,
+            "ece_15_bins": 0.01304937639351644,
+            "mean_confidence": 0.9786387162266887
+          },
+          "count": {
+            "count": 512,
+            "accuracy": 0.658203125,
+            "nll": 0.7712987859632192,
+            "brier": 0.4331617503834439,
+            "ece_15_bins": 0.06106072511457643,
+            "mean_confidence": 0.7037346075947898
+          },
+          "shape": {
+            "count": 512,
+            "accuracy": 1.0,
+            "nll": 0.002040711275523578,
+            "brier": 0.0006280695175756786,
+            "ece_15_bins": 0.0017515304159725724,
+            "mean_confidence": 0.9982484695840275
+          }
+        }
+      }
+    },
+    "comparisons": {
+      "overall": {
+        "groups": 512,
+        "replicates": 10000,
+        "seed": 17,
+        "direction": "second minus first",
+        "quantiles": "linear percentile",
+        "metrics": {
+          "accuracy": {
+            "difference": 0.0009765625,
+            "percentile_95_interval": [
+              -0.00927734375,
+              0.01123046875
+            ]
+          },
+          "nll": {
+            "difference": -0.015908776988579468,
+            "percentile_95_interval": [
+              -0.03158998176584751,
+              -0.0011305129387865884
+            ]
+          },
+          "brier": {
+            "difference": -0.007868229040113632,
+            "percentile_95_interval": [
+              -0.016153860791998105,
+              1.404514181468693e-05
+            ]
+          }
+        }
+      },
+      "color": {
+        "groups": 512,
+        "replicates": 10000,
+        "seed": 17,
+        "direction": "second minus first",
+        "quantiles": "linear percentile",
+        "metrics": {
+          "accuracy": {
+            "difference": -0.001953125,
+            "percentile_95_interval": [
+              -0.005859375,
+              0.0
+            ]
+          },
+          "nll": {
+            "difference": 0.002679334184956517,
+            "percentile_95_interval": [
+              -0.00032545444724006007,
+              0.006628436373358724
+            ]
+          },
+          "brier": {
+            "difference": 0.0026512048433106274,
+            "percentile_95_interval": [
+              -3.251330705470774e-05,
+              0.006105894368234839
+            ]
+          }
+        }
+      },
+      "texture": {
+        "groups": 512,
+        "replicates": 10000,
+        "seed": 17,
+        "direction": "second minus first",
+        "quantiles": "linear percentile",
+        "metrics": {
+          "accuracy": {
+            "difference": 0.009765625,
+            "percentile_95_interval": [
+              -0.00390625,
+              0.0234375
+            ]
+          },
+          "nll": {
+            "difference": -0.04906251233769034,
+            "percentile_95_interval": [
+              -0.08914723840326685,
+              -0.015392992212431022
+            ]
+          },
+          "brier": {
+            "difference": -0.020057165497363243,
+            "percentile_95_interval": [
+              -0.03733800684817963,
+              -0.004138017749296687
+            ]
+          }
+        }
+      },
+      "count": {
+        "groups": 512,
+        "replicates": 10000,
+        "seed": 17,
+        "direction": "second minus first",
+        "quantiles": "linear percentile",
+        "metrics": {
+          "accuracy": {
+            "difference": -0.005859375,
+            "percentile_95_interval": [
+              -0.044921875,
+              0.033203125
+            ]
+          },
+          "nll": {
+            "difference": -0.014180794712986968,
+            "percentile_95_interval": [
+              -0.06259123072661661,
+              0.03591032832617991
+            ]
+          },
+          "brier": {
+            "difference": -0.01243223090669093,
+            "percentile_95_interval": [
+              -0.04033290575991843,
+              0.015465774437263014
+            ]
+          }
+        }
+      },
+      "shape": {
+        "groups": 512,
+        "replicates": 10000,
+        "seed": 17,
+        "direction": "second minus first",
+        "quantiles": "linear percentile",
+        "metrics": {
+          "accuracy": {
+            "difference": 0.001953125,
+            "percentile_95_interval": [
+              0.0,
+              0.005859375
+            ]
+          },
+          "nll": {
+            "difference": -0.003071135088597082,
+            "percentile_95_interval": [
+              -0.007105381164180654,
+              -0.0004565312933379737
+            ]
+          },
+          "brier": {
+            "difference": -0.0016347245997109757,
+            "percentile_95_interval": [
+              -0.004469209589771303,
+              1.5508151312568264e-05
+            ]
+          }
+        }
+      }
+    },
+    "initial_probability_max_delta": 2.583110330522942e-06,
+    "changed_initial_answers": 0,
+    "training_metrics": {
+      "initial": {
+        "overall": {
+          "count": 33696,
+          "accuracy": 0.914292497625831,
+          "nll": 0.19818685739014277,
+          "brier": 0.11115356067775635,
+          "ece_15_bins": 0.005211633861152197,
+          "mean_confidence": 0.9110750405870058
+        },
+        "tasks": {
+          "color": {
+            "count": 8424,
+            "accuracy": 1.0,
+            "nll": 0.0019748533404463494,
+            "brier": 0.00010265636301236301,
+            "ece_15_bins": 0.0019454239618888185,
+            "mean_confidence": 0.9980545760381112
+          },
+          "texture": {
+            "count": 8424,
+            "accuracy": 0.9769705603038936,
+            "nll": 0.06331263226430975,
+            "brier": 0.032998583189186324,
+            "ece_15_bins": 0.002944910832243663,
+            "mean_confidence": 0.9763570251979581
+          },
+          "count": {
+            "count": 8424,
+            "accuracy": 0.6801994301994302,
+            "nll": 0.7260616701362186,
+            "brier": 0.411405740835521,
+            "ece_15_bins": 0.01705895537683414,
+            "mean_confidence": 0.6712518055113991
+          },
+          "shape": {
+            "count": 8424,
+            "accuracy": 1.0,
+            "nll": 0.001398273819596454,
+            "brier": 0.00010726232330566931,
+            "ece_15_bins": 0.001363244399444684,
+            "mean_confidence": 0.9986367556005551
+          }
+        }
+      },
+      "final": {
+        "overall": {
+          "count": 33696,
+          "accuracy": 0.9446225071225072,
+          "nll": 0.1464079145031479,
+          "brier": 0.08012846210274785,
+          "ece_15_bins": 0.020295299100005607,
+          "mean_confidence": 0.9243430217600513
+        },
+        "tasks": {
+          "color": {
+            "count": 8424,
+            "accuracy": 1.0,
+            "nll": 0.001650864541370529,
+            "brier": 0.00012720698679118388,
+            "ece_15_bins": 0.0016143737884181495,
+            "mean_confidence": 0.9983856262115819
+          },
+          "texture": {
+            "count": 8424,
+            "accuracy": 0.9967948717948718,
+            "nll": 0.020114943781224453,
+            "brier": 0.007837998742652695,
+            "ece_15_bins": 0.012387285661216253,
+            "mean_confidence": 0.9844075861336555
+          },
+          "count": {
+            "count": 8424,
+            "accuracy": 0.7816951566951567,
+            "nll": 0.5631975809949105,
+            "brier": 0.3124961650461649,
+            "ece_15_bins": 0.06652666182427316,
+            "mean_confidence": 0.7152317498210828
+          },
+          "shape": {
+            "count": 8424,
+            "accuracy": 1.0,
+            "nll": 0.0006682686950860355,
+            "brier": 5.2477635382644196e-05,
+            "ece_15_bins": 0.0006528751261149427,
+            "mean_confidence": 0.9993471248738849
+          }
+        }
+      }
+    },
+    "source_unchanged": true,
+    "hashes": {
+      "config.json": "c1e997faf5f07270c5cf2ff90ed01c69e3395cb4b9ca18370fdf86f35465b597",
+      "final-predictions.json": "e9c4a80e5b6bf0adf8cc081c4281ff2e8a75d4742c074ac77db199d3d9d025ca",
+      "initial-predictions.json": "e5c670e6ffe83b2faa5e6f48d76f75f5f85fcc2f99fc81d39b2290431a6b32ac"
+    }
+  },
+  "research_recommendation": "0.01",
+  "product_promotion": false
+}

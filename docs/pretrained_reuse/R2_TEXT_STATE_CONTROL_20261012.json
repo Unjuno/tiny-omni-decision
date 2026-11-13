@@ -1,0 +1,93 @@
+{
+  "source_commit": "e37c7d1",
+  "intact": {
+    "status": "PASS_EXECUTION_ONLY",
+    "omit_state": false,
+    "adaptation_sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+    "peak_vram_bytes": 384988672,
+    "metrics": {
+      "count": 2540,
+      "accuracy": 0.5811023712158203,
+      "nll": 0.9377868175506592,
+      "brier": 0.5343148112297058,
+      "ece_15_bins": 0.04276003046767918,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        34,
+        144,
+        249,
+        253,
+        284,
+        344,
+        321,
+        282,
+        197,
+        150,
+        140,
+        142
+      ]
+    },
+    "device": "cuda",
+    "wall_seconds": 22.461007399950176,
+    "parameters": 22713601,
+    "pairs": 9015,
+    "state_truncated_pairs": 239,
+    "temperature": 1.0,
+    "training": false,
+    "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+    "runner_sha256": "3fcd062445aa2bcbb568de62ec09279c2ef04fa1eaa1fd86b2d04a3bd6ff5eb9",
+    "blind_audit": false,
+    "limitation": "State omission is an off-distribution necessity diagnostic, not a new task. No checkpoint selection or calibration fitting uses this control."
+  },
+  "omitted": {
+    "status": "PASS_EXECUTION_ONLY",
+    "omit_state": true,
+    "adaptation_sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+    "peak_vram_bytes": 282849280,
+    "metrics": {
+      "count": 2540,
+      "accuracy": 0.45393699407577515,
+      "nll": 1.1101664304733276,
+      "brier": 0.6374344229698181,
+      "ece_15_bins": 0.08468176599327974,
+      "ece_bin_counts": [
+        0,
+        0,
+        2,
+        43,
+        232,
+        385,
+        300,
+        330,
+        375,
+        288,
+        214,
+        163,
+        119,
+        65,
+        24
+      ]
+    },
+    "device": "cuda",
+    "wall_seconds": 4.365916099981405,
+    "parameters": 22713601,
+    "pairs": 9015,
+    "state_truncated_pairs": 0,
+    "temperature": 1.0,
+    "training": false,
+    "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+    "runner_sha256": "3fcd062445aa2bcbb568de62ec09279c2ef04fa1eaa1fd86b2d04a3bd6ff5eb9",
+    "blind_audit": false,
+    "limitation": "State omission is an off-distribution necessity diagnostic, not a new task. No checkpoint selection or calibration fitting uses this control."
+  },
+  "changed_predictions": 1097,
+  "reload_max_probability_error": 1.9669532775878906e-06,
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-state-control-intact-01\\result.json": "e0f3f980264d31412a2765730d9815de46e0a19bf9ea385227fdcc16c3ae4dca",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-state-control-intact-01\\predictions.json": "00e30dea4e71913f2ae251104d80948db49fe94751d9911a0c106eb1f39b6016",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-state-control-omitted-01\\result.json": "9f2ee60f2f2c3f6d4d31e0dbf8df4952a5afd0065c56ad73a9e6d477444ed174",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-state-control-omitted-01\\predictions.json": "1ed3836807e35bcb2bbbc86f96ff7565463436423b71143ce690cf5baab22cad"
+  }
+}

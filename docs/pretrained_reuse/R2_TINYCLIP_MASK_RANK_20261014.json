@@ -1,0 +1,1109 @@
+{
+  "scope": "known training-only initial cup-family mask ranking; not hidden-item or QA quality",
+  "adopted": false,
+  "interpretation": "no overall group localization improvement; no threshold or prompt search",
+  "distinct_target_matching": "each predicted mask can match at most one ground-truth object",
+  "top3_limit": "four-object group cannot be complete under top3; original fixed probe retained",
+  "lineage": "existing SAM2 proposals remain unchanged, no SAM2 inference repeated",
+  "inference": {
+    "status": "PASS_FROZEN_SEMANTIC_RANK_EXECUTION_ONLY",
+    "pid": 57568,
+    "started_utc": "2026-10-13T22:41:04.110396+00:00",
+    "source_commit": "da3692796107a2ea254922d35d72272db4a22b5d",
+    "runner_sha256": "dc41f1be2a7679e4caeda1276fc3f5b2cd1ba6813ff9d9649d35e4fa03e22230",
+    "rows": [
+      {
+        "video_id": "video_10103",
+        "candidate_count": 55,
+        "bank_sha256": "55bdfdd0b04018404abd0fed2afd59f5443106f0d39a30aab0a4393d5ee6983b",
+        "ranking_sha256": "a94e59b6113c136d5cb5b8a5e2872cb509d779708b3d7f370d0f42b1ca885aad",
+        "presence_top3": [
+          711,
+          974,
+          888
+        ],
+        "semantic_top3": [
+          138,
+          748,
+          845
+        ],
+        "control_top3": [
+          779,
+          811,
+          748
+        ]
+      },
+      {
+        "video_id": "video_10186",
+        "candidate_count": 186,
+        "bank_sha256": "70cc54868dfe90554d9257c98fac8e0064daeb3c911169bbb1d8ad9a55590fd2",
+        "ranking_sha256": "b1cebd66e93a5ee004e9184bdb52337e9f4e8674222ffc338f891f963ea2845d",
+        "presence_top3": [
+          452,
+          490,
+          565
+        ],
+        "semantic_top3": [
+          565,
+          490,
+          495
+        ],
+        "control_top3": [
+          559,
+          621,
+          967
+        ]
+      },
+      {
+        "video_id": "video_10212",
+        "candidate_count": 43,
+        "bank_sha256": "347755deddab8ce0c9ca0040e701738dcd4a9190b0fdfd85a138e4e7a451aa46",
+        "ranking_sha256": "b4ab51ed5e4bfaa7108c74ea260d943f7bb461ec2f9ed965e8b85007e0f47754",
+        "presence_top3": [
+          711,
+          367,
+          255
+        ],
+        "semantic_top3": [
+          711,
+          554,
+          557
+        ],
+        "control_top3": [
+          255,
+          543,
+          586
+        ]
+      },
+      {
+        "video_id": "video_10387",
+        "candidate_count": 168,
+        "bank_sha256": "e6c24b0403759a319417f92b0cd29b71ac26a27cc0ff48e3f116e3c52d66a0c0",
+        "ranking_sha256": "0df10e0f0a61bd549fc803aeb2a6028b49cdfd6a2b89ba6f9f656a90a44ce3c6",
+        "presence_top3": [
+          713,
+          544,
+          559
+        ],
+        "semantic_top3": [
+          304,
+          489,
+          336
+        ],
+        "control_top3": [
+          1005,
+          489,
+          125
+        ]
+      },
+      {
+        "video_id": "video_1087",
+        "candidate_count": 67,
+        "bank_sha256": "a365493f0673e183d95d1c60a1889ea7dc37dbb857a061a979052ff0e4805ae5",
+        "ranking_sha256": "fb8885a2411bd9d650285ed2c09f495a95e32d65b0e118b1e0ce52e5c751cec5",
+        "presence_top3": [
+          485,
+          526,
+          500
+        ],
+        "semantic_top3": [
+          355,
+          261,
+          379
+        ],
+        "control_top3": [
+          355,
+          23,
+          515
+        ]
+      },
+      {
+        "video_id": "video_10886",
+        "candidate_count": 64,
+        "bank_sha256": "b257bcf6fb675a39b7c326e82472a36665b14b21016202580093015af2ddf412",
+        "ranking_sha256": "d100e3ac32838a7589eeaacf4404c754b9bd95fb72a75a3d357dde2e6e60f06e",
+        "presence_top3": [
+          284,
+          736,
+          585
+        ],
+        "semantic_top3": [
+          300,
+          736,
+          585
+        ],
+        "control_top3": [
+          217,
+          119,
+          52
+        ]
+      },
+      {
+        "video_id": "video_10894",
+        "candidate_count": 73,
+        "bank_sha256": "23226877ff029057c4274c45eb526853a10d4b4c6b9b5fc25aa08f81f270463b",
+        "ranking_sha256": "74c7546c74bd2b674b1476503b7e03b749f95e543d55dc9b2ce2c38f7026d25f",
+        "presence_top3": [
+          679,
+          774,
+          637
+        ],
+        "semantic_top3": [
+          690,
+          811,
+          679
+        ],
+        "control_top3": [
+          113,
+          50,
+          114
+        ]
+      },
+      {
+        "video_id": "video_10903",
+        "candidate_count": 40,
+        "bank_sha256": "9d4f50c0722a93589d05471f1b94e9c05b72dc7fb49edfc5deb7df63c528f075",
+        "ranking_sha256": "e092ba0e582a99f13c3531833da165f6c3799b7ec02124a50f4f6d261e90cf48",
+        "presence_top3": [
+          507,
+          618,
+          725
+        ],
+        "semantic_top3": [
+          356,
+          558,
+          18
+        ],
+        "control_top3": [
+          42,
+          744,
+          507
+        ]
+      }
+    ],
+    "annotations_loaded": false,
+    "training": false,
+    "validation_opened": false,
+    "sealed_audit_opened": false,
+    "cloud_cost": 0,
+    "config_sha256": "29516a3ac629dacaf154af9b724b9c822915d0f51f865dff140ecf4230d0c0fd",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "torch": "2.6.0+cu124",
+    "parameters": 83101185,
+    "model_state_sha256_before": "700c79f803b3e8b8343c43b47096e00c0322e6c62b5d1c949f567331b030171e",
+    "first_batch_repeat_bitwise": true,
+    "seconds": 7.253055899986066,
+    "model_state_sha256_after": "700c79f803b3e8b8343c43b47096e00c0322e6c62b5d1c949f567331b030171e",
+    "reload_bitwise": true,
+    "parameters_unchanged": true,
+    "peak_allocated_bytes": 453818880,
+    "peak_reserved_bytes": 509607936,
+    "ended_utc": "2026-10-13T22:41:11.366237+00:00"
+  },
+  "configuration": {
+    "model_id": "wkcn/TinyCLIP-ViT-39M-16-Text-19M-YFCC15M",
+    "revision": "07a4b0bc751cb64fecd2b661c048c1dd98d69444",
+    "model_hashes": {
+      "config.json": "de47e9e12875c7abb6e0ddd13b5b0f54851b96cefa5c2ed3aab881e3efd1647b",
+      "model.safetensors": "112bdfb07ebc8994e9afba7a2a314e278493a675033595cf48e54cf8a17ae587",
+      "preprocessor_config.json": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd",
+      "README.md": "6565f08e0bd79353937fd1b7c89b69d0383a5e8e511c260a7a091a2f95c359a9",
+      "tokenizer.json": "b556ac8c99757ffb677208af34bc8c6721572114111a6e0aaf5fa69ff0b8d842"
+    },
+    "bank_result_sha256": "75665a07c986dd0a97bff4854912b7a265e91baf49c0c5d45637886e880fa3d1",
+    "manifest_sha256": "469299ad240ff85c47ba44abb8920aae9994b0e3ec15a3fca1373c49b2fa6ee3",
+    "ids": [
+      "video_10103",
+      "video_10186",
+      "video_10212",
+      "video_10387",
+      "video_1087",
+      "video_10886",
+      "video_10894",
+      "video_10903"
+    ],
+    "frame_index": 0,
+    "candidate_policy": "all saved nonempty NMS survivors; NMS and masks unchanged",
+    "prompts": [
+      "A photo of a cup, glass or bowl.",
+      "A photo of a person."
+    ],
+    "conditions": [
+      "semantic_group",
+      "person_text_control"
+    ],
+    "crop": "original RGB bbox floor/ceil; model-generated mask nearest resized; outside mask neutral RGB128",
+    "processor": "existing published CLIPProcessor; no overrides",
+    "top_k": 3,
+    "ranking": "cosine; ties original row-major proposal index",
+    "precision": "float32",
+    "attention": "sdpa",
+    "seed": 17,
+    "batch_size": 16,
+    "max_seconds": 300,
+    "peak_torch_cap_bytes": 4294967296,
+    "training": false,
+    "annotation_inputs": false,
+    "prompt_search": false,
+    "scope": "known eight training clips, group localization only; not hidden identity or Decision quality"
+  },
+  "geometry": {
+    "status": "PASS_AFTER_INFERENCE_GROUP_GEOMETRY_ONLY",
+    "source_commit": "da3692796107a2ea254922d35d72272db4a22b5d",
+    "inference_result_sha256": "7153542764973c5d09eef2c1d8be41a4ab655f48779c01d17f5bf15210e4aea4",
+    "effective_config_sha256": "29516a3ac629dacaf154af9b724b9c822915d0f51f865dff140ecf4230d0c0fd",
+    "annotation_sha256": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78",
+    "scorer_sha256": "629e3b9d498e4121efafd3fa164b6eb43761239d364e849c8c62ba0b3f0bc4be",
+    "geometry_threshold": 0.5,
+    "top_k": 3,
+    "matching": "maximum cardinality injective bbox-IoU assignment",
+    "investigator_blindness": false,
+    "annotation_isolation": "separate scorer only; inference complete before this process",
+    "all_eight_known_train_clips_retained": true,
+    "model_or_gpu_calls": false,
+    "validation_opened": false,
+    "sealed_audit_opened": false,
+    "decision_quality": false,
+    "aggregate": {
+      "presence": {
+        "clips": 8,
+        "cover_bbox_hits": 2,
+        "distinct_similar_objects_matched": 10,
+        "annotated_similar_objects": 24,
+        "complete_groups": 1
+      },
+      "semantic_group": {
+        "clips": 8,
+        "cover_bbox_hits": 3,
+        "distinct_similar_objects_matched": 9,
+        "annotated_similar_objects": 24,
+        "complete_groups": 1
+      },
+      "person_text_control": {
+        "clips": 8,
+        "cover_bbox_hits": 1,
+        "distinct_similar_objects_matched": 1,
+        "annotated_similar_objects": 24,
+        "complete_groups": 0
+      }
+    },
+    "rows": [
+      {
+        "video_id": "video_10103",
+        "group_ids_diagnostic_only": [
+          4,
+          5
+        ],
+        "cover_id_diagnostic_only": 4,
+        "nms_candidate_count": 55,
+        "nms_distinct_group_opportunity": 2,
+        "group_count": 2,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              711,
+              974,
+              888
+            ],
+            "cover_best_bbox_iou": 0.037456279938871746,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 2,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.013225366117840415,
+                0.037456279938871746,
+                0.0
+              ],
+              [
+                0.00783139360415172,
+                0.02253448958325211,
+                0.0
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              138,
+              748,
+              845
+            ],
+            "cover_best_bbox_iou": 0.018850845603103964,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 2,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.018850845603103964,
+                0.0
+              ],
+              [
+                0.0,
+                0.13506862262342678,
+                0.008278486757112635
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              779,
+              811,
+              748
+            ],
+            "cover_best_bbox_iou": 0.7761055182470443,
+            "cover_bbox_hit": true,
+            "distinct_similar_objects_matched": 1,
+            "similar_object_count": 2,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.3712930054072238,
+                0.7761055182470443,
+                0.018850845603103964
+              ],
+              [
+                0.0,
+                0.0,
+                0.13506862262342678
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "video_id": "video_10186",
+        "group_ids_diagnostic_only": [
+          3,
+          4,
+          5
+        ],
+        "cover_id_diagnostic_only": 4,
+        "nms_candidate_count": 186,
+        "nms_distinct_group_opportunity": 3,
+        "group_count": 3,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              452,
+              490,
+              565
+            ],
+            "cover_best_bbox_iou": 0.0,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 2,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.9591006705108045
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.8833648450309747,
+                0.0
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              565,
+              490,
+              495
+            ],
+            "cover_best_bbox_iou": 0.9748382517689118,
+            "cover_bbox_hit": true,
+            "distinct_similar_objects_matched": 3,
+            "similar_object_count": 3,
+            "complete_group": true,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.9591006705108045,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.9748382517689118
+              ],
+              [
+                0.0,
+                0.8833648450309747,
+                0.0
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              559,
+              621,
+              967
+            ],
+            "cover_best_bbox_iou": 0.13302860999793406,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.13302860999793406,
+                0.01604835024660628,
+                0.0
+              ],
+              [
+                0.0,
+                0.03981898130372585,
+                0.0
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "video_id": "video_10212",
+        "group_ids_diagnostic_only": [
+          1,
+          2,
+          3
+        ],
+        "cover_id_diagnostic_only": 2,
+        "nms_candidate_count": 43,
+        "nms_distinct_group_opportunity": 3,
+        "group_count": 3,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              711,
+              367,
+              255
+            ],
+            "cover_best_bbox_iou": 0.8776350761511544,
+            "cover_bbox_hit": true,
+            "distinct_similar_objects_matched": 2,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.8776350761511544,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.9101287626482332,
+                0.0
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              711,
+              554,
+              557
+            ],
+            "cover_best_bbox_iou": 0.8776350761511544,
+            "cover_bbox_hit": true,
+            "distinct_similar_objects_matched": 1,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.8776350761511544,
+                0.2559768972107534,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0040065251711027036
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              255,
+              543,
+              586
+            ],
+            "cover_best_bbox_iou": 0.13514308237834807,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.13514308237834807
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "video_id": "video_10387",
+        "group_ids_diagnostic_only": [
+          9,
+          10,
+          11,
+          12
+        ],
+        "cover_id_diagnostic_only": 10,
+        "nms_candidate_count": 168,
+        "nms_distinct_group_opportunity": 4,
+        "group_count": 4,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              713,
+              544,
+              559
+            ],
+            "cover_best_bbox_iou": 0.01284325858625327,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 4,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.009509564285286482,
+                0.0,
+                0.00662581883167778
+              ],
+              [
+                0.01284325858625327,
+                0.0,
+                0.008948580823263308
+              ],
+              [
+                0.014768632098911964,
+                0.0,
+                0.010290090875193437
+              ],
+              [
+                0.01984583595404225,
+                0.0,
+                0.013827648633506212
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              304,
+              489,
+              336
+            ],
+            "cover_best_bbox_iou": 0.018469379434200437,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 1,
+            "similar_object_count": 4,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.22977512427955282,
+                0.0,
+                0.9080179712187028
+              ],
+              [
+                0.0,
+                0.0,
+                0.018469379434200437
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              1005,
+              489,
+              125
+            ],
+            "cover_best_bbox_iou": 0.0,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 4,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "video_id": "video_1087",
+        "group_ids_diagnostic_only": [
+          2,
+          3,
+          4
+        ],
+        "cover_id_diagnostic_only": 2,
+        "nms_candidate_count": 67,
+        "nms_distinct_group_opportunity": 3,
+        "group_count": 3,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              485,
+              526,
+              500
+            ],
+            "cover_best_bbox_iou": 0.9469661699434485,
+            "cover_bbox_hit": true,
+            "distinct_similar_objects_matched": 3,
+            "similar_object_count": 3,
+            "complete_group": true,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.9469661699434485
+              ],
+              [
+                0.9607475587544602,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.9257888417396397,
+                0.0
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              355,
+              261,
+              379
+            ],
+            "cover_best_bbox_iou": 0.0,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              355,
+              23,
+              515
+            ],
+            "cover_best_bbox_iou": 0.0,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "video_id": "video_10886",
+        "group_ids_diagnostic_only": [
+          0,
+          1,
+          2
+        ],
+        "cover_id_diagnostic_only": 0,
+        "nms_candidate_count": 64,
+        "nms_distinct_group_opportunity": 3,
+        "group_count": 3,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              284,
+              736,
+              585
+            ],
+            "cover_best_bbox_iou": 0.30792734376869274,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 1,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.30792734376869274,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.45806712520996157
+              ],
+              [
+                0.0,
+                0.9237950806017325,
+                0.0
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              300,
+              736,
+              585
+            ],
+            "cover_best_bbox_iou": 0.0,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 2,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.8788692943871598,
+                0.0,
+                0.45806712520996157
+              ],
+              [
+                0.0,
+                0.9237950806017325,
+                0.0
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              217,
+              119,
+              52
+            ],
+            "cover_best_bbox_iou": 0.07916387497835219,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.05897522216993229,
+                0.07916387497835219,
+                0.005752612557538954
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "video_id": "video_10894",
+        "group_ids_diagnostic_only": [
+          7,
+          1,
+          2
+        ],
+        "cover_id_diagnostic_only": 1,
+        "nms_candidate_count": 73,
+        "nms_distinct_group_opportunity": 3,
+        "group_count": 3,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              679,
+              774,
+              637
+            ],
+            "cover_best_bbox_iou": 0.2920861927753996,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 1,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.8903469857115763,
+                0.592155479284274,
+                0.0
+              ],
+              [
+                0.0,
+                0.2920861927753996,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.36175731807059186
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              690,
+              811,
+              679
+            ],
+            "cover_best_bbox_iou": 0.5282611719405196,
+            "cover_bbox_hit": true,
+            "distinct_similar_objects_matched": 2,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.3560249533673246,
+                0.39015315918173515,
+                0.8903469857115763
+              ],
+              [
+                0.3395862876389647,
+                0.5282611719405196,
+                0.0
+              ],
+              [
+                0.20399607986628301,
+                0.008679843297370921,
+                0.0
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              113,
+              50,
+              114
+            ],
+            "cover_best_bbox_iou": 0.0,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "video_id": "video_10903",
+        "group_ids_diagnostic_only": [
+          1,
+          2,
+          3
+        ],
+        "cover_id_diagnostic_only": 3,
+        "nms_candidate_count": 40,
+        "nms_distinct_group_opportunity": 3,
+        "group_count": 3,
+        "conditions": {
+          "presence": {
+            "selected_indices": [
+              507,
+              618,
+              725
+            ],
+            "cover_best_bbox_iou": 0.027929088315935345,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 1,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.035619314296838046,
+                0.9592867788235832
+              ],
+              [
+                0.0,
+                0.03025525709034031,
+                0.029706303499689155
+              ],
+              [
+                0.0,
+                0.027929088315935345,
+                0.0
+              ]
+            ]
+          },
+          "semantic_group": {
+            "selected_indices": [
+              356,
+              558,
+              18
+            ],
+            "cover_best_bbox_iou": 0.49345588238245036,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.004696662291305753,
+                0.0
+              ],
+              [
+                0.0,
+                0.29474755608944436,
+                0.0
+              ],
+              [
+                0.0,
+                0.49345588238245036,
+                0.0
+              ]
+            ]
+          },
+          "person_text_control": {
+            "selected_indices": [
+              42,
+              744,
+              507
+            ],
+            "cover_best_bbox_iou": 0.0,
+            "cover_bbox_hit": false,
+            "distinct_similar_objects_matched": 0,
+            "similar_object_count": 3,
+            "complete_group": false,
+            "iou_matrix_gt_group_by_predictions": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "sha256": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-tinyclip-mask-rank-01\\result.json": "7153542764973c5d09eef2c1d8be41a4ab655f48779c01d17f5bf15210e4aea4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-tinyclip-mask-rank-01\\effective-config.json": "29516a3ac629dacaf154af9b724b9c822915d0f51f865dff140ecf4230d0c0fd",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-tinyclip-mask-rank-score-01.json": "1cfbdb6c3cf8ae05051b994fe2b6fbb13b1df5bf21919b7c125228d59b0dbff5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_tinyclip_mask_rank_01.py": "dc41f1be2a7679e4caeda1276fc3f5b2cd1ba6813ff9d9649d35e4fa03e22230",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_tinyclip_mask_score_01.py": "629e3b9d498e4121efafd3fa164b6eb43761239d364e849c8c62ba0b3f0bc4be",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception_tinyclip_rank_publish_01.py": "733da9d9d369c48074bb69b893f72e348d9fc9893a1609b1bde5f051e7ac0317"
+  }
+}

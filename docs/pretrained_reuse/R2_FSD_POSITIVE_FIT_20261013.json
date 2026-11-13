@@ -1,0 +1,167 @@
+{
+  "selection": "consumed training positives only",
+  "calibration_applied": false,
+  "training": false,
+  "feature_sha256": "50712dc9e2ee1fdbbde85f8c46c37c79550d15acec48ef46d153545778a88212",
+  "conditions": {
+    "baseline_best": {
+      "checkpoint_sha256": "e9fa48136944819c43119c7e5208477c166e48838a9b173538ab52f2fa0164bd",
+      "per_event": {
+        "Bell": {
+          "positives": 16,
+          "correct_positive_decisions": 1,
+          "positive_only_nll": 5.213919639587402,
+          "mean_positive_probability": 0.05589410662651062
+        },
+        "Clapping": {
+          "positives": 16,
+          "correct_positive_decisions": 0,
+          "positive_only_nll": 6.127202987670898,
+          "mean_positive_probability": 0.008316883817315102
+        },
+        "Door": {
+          "positives": 16,
+          "correct_positive_decisions": 0,
+          "positive_only_nll": 2.8750061988830566,
+          "mean_positive_probability": 0.11452478915452957
+        },
+        "Knock": {
+          "positives": 16,
+          "correct_positive_decisions": 0,
+          "positive_only_nll": 3.395001173019409,
+          "mean_positive_probability": 0.08845015615224838
+        },
+        "Musical_instrument": {
+          "positives": 16,
+          "correct_positive_decisions": 0,
+          "positive_only_nll": 4.116146087646484,
+          "mean_positive_probability": 0.03148210793733597
+        },
+        "Telephone": {
+          "positives": 16,
+          "correct_positive_decisions": 0,
+          "positive_only_nll": 4.442828178405762,
+          "mean_positive_probability": 0.03869594633579254
+        },
+        "Walk_and_footsteps": {
+          "positives": 16,
+          "correct_positive_decisions": 1,
+          "positive_only_nll": 2.4698400497436523,
+          "mean_positive_probability": 0.16885553300380707
+        },
+        "Water_tap_and_faucet": {
+          "positives": 16,
+          "correct_positive_decisions": 0,
+          "positive_only_nll": 2.2971889972686768,
+          "mean_positive_probability": 0.14517831802368164
+        }
+      }
+    },
+    "augmented_best": {
+      "checkpoint_sha256": "6c89cd2ace5732b7c7cd4131b49056e8010ac97fdf30c1b758c128b0f63ab727",
+      "per_event": {
+        "Bell": {
+          "positives": 16,
+          "correct_positive_decisions": 13,
+          "positive_only_nll": 0.393191397190094,
+          "mean_positive_probability": 0.7403740882873535
+        },
+        "Clapping": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.15299537777900696,
+          "mean_positive_probability": 0.8630579710006714
+        },
+        "Door": {
+          "positives": 16,
+          "correct_positive_decisions": 15,
+          "positive_only_nll": 0.30793172121047974,
+          "mean_positive_probability": 0.7506940364837646
+        },
+        "Knock": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.11381889879703522,
+          "mean_positive_probability": 0.8991712331771851
+        },
+        "Musical_instrument": {
+          "positives": 16,
+          "correct_positive_decisions": 14,
+          "positive_only_nll": 0.23795923590660095,
+          "mean_positive_probability": 0.8056138753890991
+        },
+        "Telephone": {
+          "positives": 16,
+          "correct_positive_decisions": 15,
+          "positive_only_nll": 0.21696549654006958,
+          "mean_positive_probability": 0.82834792137146
+        },
+        "Walk_and_footsteps": {
+          "positives": 16,
+          "correct_positive_decisions": 13,
+          "positive_only_nll": 0.3013935685157776,
+          "mean_positive_probability": 0.781215250492096
+        },
+        "Water_tap_and_faucet": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.1549549698829651,
+          "mean_positive_probability": 0.8628588914871216
+        }
+      }
+    },
+    "augmented_final": {
+      "checkpoint_sha256": "7bf837f330712e5e930bc0b2d12b8ce0351330a3fb55429a719f615ee0388d90",
+      "per_event": {
+        "Bell": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.06750787049531937,
+          "mean_positive_probability": 0.939957320690155
+        },
+        "Clapping": {
+          "positives": 16,
+          "correct_positive_decisions": 15,
+          "positive_only_nll": 0.09331740438938141,
+          "mean_positive_probability": 0.9249451160430908
+        },
+        "Door": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.04307044297456741,
+          "mean_positive_probability": 0.9587591886520386
+        },
+        "Knock": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.09139955788850784,
+          "mean_positive_probability": 0.9227778911590576
+        },
+        "Musical_instrument": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.022325947880744934,
+          "mean_positive_probability": 0.9781175851821899
+        },
+        "Telephone": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.026256533339619637,
+          "mean_positive_probability": 0.9745104908943176
+        },
+        "Walk_and_footsteps": {
+          "positives": 16,
+          "correct_positive_decisions": 15,
+          "positive_only_nll": 0.07769369333982468,
+          "mean_positive_probability": 0.9436228275299072
+        },
+        "Water_tap_and_faucet": {
+          "positives": 16,
+          "correct_positive_decisions": 16,
+          "positive_only_nll": 0.0579221174120903,
+          "mean_positive_probability": 0.9476282596588135
+        }
+      }
+    }
+  }
+}

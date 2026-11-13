@@ -1,0 +1,668 @@
+{
+  "status": "PASS_CORPUS_CONTRACT_ONLY",
+  "source_commit": "f399216db6233f6a67d38f4149a410d13610c36c",
+  "corpus_manifest": {
+    "artifacts": {
+      "accounting.json": "a0e40dd98498a5f5e04429274a7b1955cfd4f94d6e7535cad4af4427502aa46f",
+      "excluded-state-keys.json": "1f72f817d21fe893b24eb1003033de016e8ea67d69926131d4f5e5f641d5ce2c",
+      "legacy-0.jsonl": "7f699763f931b753a954d613782aed571528dd00937bb60437f463a22c394d74",
+      "legacy-1.jsonl": "ce93c5951d9f8cbd189a7756348f809a4bd82bf4ea599f2930b1db4f1326b50d",
+      "legacy-2.jsonl": "e73d39a9a5b41c75c67e782fec6346e5a9d4abc3ee1f7745fa5b56dcbe49e1c0",
+      "retention_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+      "retention_validation.jsonl": "265aa8b5d9ee372a02481427bfa1620bc68f6593af1137fb3e000227e4a8774c",
+      "selection-schema.json": "a6d7aa74182b2f681819537d02d3befe44b10aeee6741370df736398360bbe63",
+      "state-partitions.json": "60204e0f782d167ec9551e58777fb9a39947b8d0ca3e0dd6c581f4defc85b453",
+      "train.jsonl": "ecadf350f1003842703a5f41aeb2eb5ab760b236130c4d1f0543b9b1886a53b3",
+      "transfer.jsonl": "85a1f1c46d7bb956b6d2718787ba38adc55fd16f90106d7bb0300c5a5f11f145",
+      "validation.jsonl": "01cd6c8f55df5e68770408b8825711e9b7f2ea3ec7e9a3022725bbb4e5a0f536"
+    },
+    "code_pins": {
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\configs\\pretrained_reuse\\decision_supervision_v1.json": "03b79e87d24e5bd336b9a42fc6ccda154c3e645e919486a819b503fcf19b6608",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\docs\\pretrained_reuse\\R2_DECISION_SUPERVISION_PROTOCOL_20261015.md": "fb31f2c821dd7ac7fc6f1ebe5032a2f524a49a9f478c9887bbaa64e1efb0837a",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_binding_corpus.py": "adf77f03c3328b3191dfaaef89b09910d9dfceb9562caeb7ce63291f9d8dd787",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\decision_supervision.py": "9ca92fae6f92ffad7181a927ffec7ee4f098fc0c0c682353f56472ff963e30bd",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\prepare_decision_supervision.py": "3f89a742867bcebf900fb39cac5bfc1d89cb73e65e2ea8468dbe673c6cf6903e",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\semantic_state_diagnostic.py": "2185c2685c72ce88c8f759fb91c7e6ca74b90735f66a2efd61bd691b45a594b7",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\dataset.py": "995cee33352f58f9dd927fdabbc74491abc0ee02aab7221a1700025bfc71893a",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\tests\\test_decision_supervision.py": "f675701bb3988aac4dd4e506420d8dbbae466e0f5afd6e89b88d4c6fcbd3725f",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\tests\\test_prepare_decision_supervision.py": "32e4017d79ef6e97c78eba7704a24ae3424cbd3cd034389b3a4822e25636f65b"
+    },
+    "config": {
+      "binding_counts": [
+        512,
+        128,
+        256
+      ],
+      "binding_exclusion_ids": "factorized-condition-corpus-01/excluded-identities.json",
+      "binding_observed_states": "factorized-condition-corpus-01/states.json",
+      "expected_exclusions": {
+        "binding": 7612,
+        "numeric": 3328
+      },
+      "id": "decision-supervision-v1-seed17",
+      "numeric_counts": [
+        1024,
+        256,
+        256
+      ],
+      "numeric_sources": [
+        "conditional-curriculum-01/train.jsonl",
+        "conditional-curriculum-01/validation.jsonl",
+        "numeric-range-curriculum-01/train.jsonl",
+        "numeric-range-curriculum-01/transfer.jsonl",
+        "condition-transfer-controls-01/inputs.jsonl",
+        "range-generalization-inputs-01/inputs.jsonl",
+        "lexical-range-curriculum-01/train.jsonl",
+        "lexical-transfer-inputs-01/inputs.jsonl",
+        "comparative-word-inputs-01/inputs.jsonl",
+        "comparison-vocabulary-curriculum-01/train.jsonl",
+        "vocabulary-transfer-inputs-01/inputs.jsonl",
+        "decoder-transfer-inputs-01/inputs.jsonl",
+        "transfer-factorial-inputs-01/inputs.jsonl",
+        "context-robustness-corpus-01/train.jsonl",
+        "context-robustness-corpus-01/development.jsonl",
+        "paired-wording-training-views-02/train-views.jsonl",
+        "text-prefix-factorial-01/inputs.jsonl"
+      ],
+      "retention_train": "binding-replay-coverage-corpus-01/replay.jsonl",
+      "retention_validation": [
+        "condition-binding-corpus-01/original.jsonl",
+        "condition-binding-corpus-01/curriculum.jsonl",
+        "condition-binding-corpus-01/validation.jsonl"
+      ],
+      "root": "C:/CodexArtifacts/pretrained-reuse-r2",
+      "seed": 17,
+      "source_pins": {
+        "binding-replay-coverage-corpus-01/replay.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+        "comparative-word-inputs-01/inputs.jsonl": "49593515a179956af2b64dac7af79e63ea3d1d87be7163d87c2cd7d7effee27c",
+        "comparison-vocabulary-curriculum-01/train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+        "condition-binding-corpus-01/curriculum.jsonl": "ce93c5951d9f8cbd189a7756348f809a4bd82bf4ea599f2930b1db4f1326b50d",
+        "condition-binding-corpus-01/original.jsonl": "7f699763f931b753a954d613782aed571528dd00937bb60437f463a22c394d74",
+        "condition-binding-corpus-01/validation.jsonl": "e73d39a9a5b41c75c67e782fec6346e5a9d4abc3ee1f7745fa5b56dcbe49e1c0",
+        "condition-transfer-controls-01/inputs.jsonl": "a1bad72fff10e9a264b66557e9b2c1079954d508aa6f07972060804dd0c6221b",
+        "conditional-curriculum-01/train.jsonl": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+        "conditional-curriculum-01/validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+        "context-robustness-corpus-01/development.jsonl": "310a0c7d3daad92dddb807a58d9e1483d06fd1b14bca67b4b29e9293520d8e4c",
+        "context-robustness-corpus-01/train.jsonl": "a0116e4e2c5024fe39e113461c3b286da3d76b1f8b11940dc195fd5594c2982b",
+        "decoder-transfer-inputs-01/inputs.jsonl": "dc5871692646473f8eac216aa7e0e9ee065040a4c5c9f6e3e22c0a16099ef51d",
+        "factorized-condition-corpus-01/excluded-identities.json": "7ee4c7b620cf7f8dd19e67630df4437ddd6c1eb39a59b40caf461337560b0fec",
+        "factorized-condition-corpus-01/states.json": "dec6210db18f7736d28f3a29ca749c51832956329a491a71472f4b15dcf98bac",
+        "lexical-range-curriculum-01/train.jsonl": "91c4b3f9ff81a3d01c5f4a9db0c83d548b33daab44a9ee879b236a5ded136645",
+        "lexical-transfer-inputs-01/inputs.jsonl": "39866689aa62fd2118e64d7b6c5a33232705070239034aeaf0cf2ef44b3dc3c6",
+        "numeric-range-curriculum-01/train.jsonl": "95f4edc33711a6ac334fff77cb08300a45bbe2bc8acefad1e8591b069c076101",
+        "numeric-range-curriculum-01/transfer.jsonl": "41df283d98a6e251482f9fedfed468e00231d179b32ae6891eadbe2bb820d16a",
+        "paired-wording-training-views-02/train-views.jsonl": "3e7722c5bd8494aa5b6f714b55f40f2ee551f82014007687bdb543a3977bb3de",
+        "range-generalization-inputs-01/inputs.jsonl": "7be0e5e6398a313051527122c95b928629b774080336c4a03e628b11c188a2a6",
+        "text-prefix-factorial-01/inputs.jsonl": "ebd762bdae9ff43b3f4f45d16c370d16a6f0550fd5aa5fba9111ff17e138f159",
+        "transfer-factorial-inputs-01/inputs.jsonl": "6fcead8721c40534fa994981a63403112df057b8f19daee11016836b7ab6878e",
+        "vocabulary-transfer-inputs-01/inputs.jsonl": "1a825b413e32f319dead47ccbef07ef3b36f2c391ca2c197a694aaeb4ed54dd2"
+      }
+    },
+    "excluded_binding_states": 7612,
+    "excluded_numeric_state_classes": 3328,
+    "historical_numeric_sources": {
+      "comparative-word-inputs-01/inputs.jsonl": {
+        "rows": 4096,
+        "state_classes": 128
+      },
+      "comparison-vocabulary-curriculum-01/train.jsonl": {
+        "rows": 8192,
+        "state_classes": 1024
+      },
+      "condition-transfer-controls-01/inputs.jsonl": {
+        "rows": 7168,
+        "state_classes": 128
+      },
+      "conditional-curriculum-01/train.jsonl": {
+        "rows": 8192,
+        "state_classes": 1024
+      },
+      "conditional-curriculum-01/validation.jsonl": {
+        "rows": 2048,
+        "state_classes": 256
+      },
+      "context-robustness-corpus-01/development.jsonl": {
+        "rows": 2304,
+        "state_classes": 128
+      },
+      "context-robustness-corpus-01/train.jsonl": {
+        "rows": 9216,
+        "state_classes": 512
+      },
+      "decoder-transfer-inputs-01/inputs.jsonl": {
+        "rows": 6144,
+        "state_classes": 128
+      },
+      "lexical-range-curriculum-01/train.jsonl": {
+        "rows": 8192,
+        "state_classes": 1024
+      },
+      "lexical-transfer-inputs-01/inputs.jsonl": {
+        "rows": 10240,
+        "state_classes": 256
+      },
+      "numeric-range-curriculum-01/train.jsonl": {
+        "rows": 8192,
+        "state_classes": 1024
+      },
+      "numeric-range-curriculum-01/transfer.jsonl": {
+        "rows": 2048,
+        "state_classes": 256
+      },
+      "paired-wording-training-views-02/train-views.jsonl": {
+        "rows": 26624,
+        "state_classes": 1024
+      },
+      "range-generalization-inputs-01/inputs.jsonl": {
+        "rows": 10240,
+        "state_classes": 256
+      },
+      "text-prefix-factorial-01/inputs.jsonl": {
+        "rows": 3072,
+        "state_classes": 128
+      },
+      "transfer-factorial-inputs-01/inputs.jsonl": {
+        "rows": 8192,
+        "state_classes": 128
+      },
+      "vocabulary-transfer-inputs-01/inputs.jsonl": {
+        "rows": 10240,
+        "state_classes": 128
+      }
+    },
+    "input_pins": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\binding-replay-coverage-corpus-01\\replay.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\comparative-word-inputs-01\\inputs.jsonl": "49593515a179956af2b64dac7af79e63ea3d1d87be7163d87c2cd7d7effee27c",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\comparison-vocabulary-curriculum-01\\train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-binding-corpus-01\\curriculum.jsonl": "ce93c5951d9f8cbd189a7756348f809a4bd82bf4ea599f2930b1db4f1326b50d",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-binding-corpus-01\\original.jsonl": "7f699763f931b753a954d613782aed571528dd00937bb60437f463a22c394d74",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-binding-corpus-01\\validation.jsonl": "e73d39a9a5b41c75c67e782fec6346e5a9d4abc3ee1f7745fa5b56dcbe49e1c0",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-transfer-controls-01\\inputs.jsonl": "a1bad72fff10e9a264b66557e9b2c1079954d508aa6f07972060804dd0c6221b",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\train.jsonl": "4d6110f4a401cfd6e50b9d0720a3a5fcc3aea146118ff7d1b0a05351764afbbe",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\context-robustness-corpus-01\\development.jsonl": "310a0c7d3daad92dddb807a58d9e1483d06fd1b14bca67b4b29e9293520d8e4c",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\context-robustness-corpus-01\\train.jsonl": "a0116e4e2c5024fe39e113461c3b286da3d76b1f8b11940dc195fd5594c2982b",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\decoder-transfer-inputs-01\\inputs.jsonl": "dc5871692646473f8eac216aa7e0e9ee065040a4c5c9f6e3e22c0a16099ef51d",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\factorized-condition-corpus-01\\excluded-identities.json": "7ee4c7b620cf7f8dd19e67630df4437ddd6c1eb39a59b40caf461337560b0fec",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\factorized-condition-corpus-01\\states.json": "dec6210db18f7736d28f3a29ca749c51832956329a491a71472f4b15dcf98bac",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\lexical-range-curriculum-01\\train.jsonl": "91c4b3f9ff81a3d01c5f4a9db0c83d548b33daab44a9ee879b236a5ded136645",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\lexical-transfer-inputs-01\\inputs.jsonl": "39866689aa62fd2118e64d7b6c5a33232705070239034aeaf0cf2ef44b3dc3c6",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-range-curriculum-01\\train.jsonl": "95f4edc33711a6ac334fff77cb08300a45bbe2bc8acefad1e8591b069c076101",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-range-curriculum-01\\transfer.jsonl": "41df283d98a6e251482f9fedfed468e00231d179b32ae6891eadbe2bb820d16a",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\paired-wording-training-views-02\\train-views.jsonl": "3e7722c5bd8494aa5b6f714b55f40f2ee551f82014007687bdb543a3977bb3de",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\range-generalization-inputs-01\\inputs.jsonl": "7be0e5e6398a313051527122c95b928629b774080336c4a03e628b11c188a2a6",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-prefix-factorial-01\\inputs.jsonl": "ebd762bdae9ff43b3f4f45d16c370d16a6f0550fd5aa5fba9111ff17e138f159",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\transfer-factorial-inputs-01\\inputs.jsonl": "6fcead8721c40534fa994981a63403112df057b8f19daee11016836b7ab6878e",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\vocabulary-transfer-inputs-01\\inputs.jsonl": "1a825b413e32f319dead47ccbef07ef3b36f2c391ca2c197a694aaeb4ed54dd2"
+    },
+    "integrity": {
+      "normalized_content_overlap": 0,
+      "partitions": {
+        "train": {
+          "rows": 16384,
+          "states": 1536
+        },
+        "transfer": {
+          "rows": 4096,
+          "states": 512
+        },
+        "validation": {
+          "rows": 3072,
+          "states": 384
+        }
+      },
+      "state_overlap": 0
+    },
+    "model_loaded": false,
+    "model_quality_evaluated": false,
+    "native_assets": 0,
+    "new_partitions": {
+      "train": {
+        "rows": 16384,
+        "states": 1536
+      },
+      "transfer": {
+        "rows": 4096,
+        "states": 512
+      },
+      "validation": {
+        "rows": 3072,
+        "states": 384
+      }
+    },
+    "numeric_collision_rejections": 0,
+    "optimizer_updates": 0,
+    "product_complete": false,
+    "retention": {
+      "train_rows": 2048,
+      "train_states": 1090,
+      "validation_rows": 5612,
+      "validation_states": 1244
+    },
+    "sealed_audit_loaded": false,
+    "selection_schema": {
+      "binding:4:color": 128,
+      "binding:4:count": 128,
+      "binding:4:shape": 128,
+      "binding:4:texture": 128,
+      "binding:5:color": 128,
+      "binding:5:count": 128,
+      "binding:5:shape": 128,
+      "binding:5:texture": 128,
+      "legacy:binding:color": 256,
+      "legacy:binding:count": 256,
+      "legacy:binding:shape": 256,
+      "legacy:binding:texture": 256,
+      "legacy:curriculum:conditional_selection": 256,
+      "legacy:curriculum:cost:maximum": 256,
+      "legacy:curriculum:cost:minimum": 256,
+      "legacy:curriculum:count": 256,
+      "legacy:curriculum:risk:maximum": 256,
+      "legacy:curriculum:risk:minimum": 256,
+      "legacy:curriculum:time:maximum": 256,
+      "legacy:curriculum:time:minimum": 256,
+      "legacy:original:choice": 1008,
+      "legacy:original:noul": 987,
+      "legacy:original:score": 545,
+      "numeric:count": 256,
+      "numeric:extremum:cost:maximum": 256,
+      "numeric:extremum:cost:minimum": 256,
+      "numeric:extremum:risk:maximum": 256,
+      "numeric:extremum:risk:minimum": 256,
+      "numeric:extremum:time:maximum": 256,
+      "numeric:extremum:time:minimum": 256,
+      "numeric:filter_min_cost": 256
+    },
+    "source_commit": "f399216db6233f6a67d38f4149a410d13610c36c",
+    "status": "PASS_FROZEN_DECISION_SUPERVISION",
+    "total_excluded_state_classes": 12634
+  },
+  "corpus_manifest_sha256": "f2fac1bb77e762748e9ce49077009bb69a50d7c2869b93c27de6ffbeb7c55d17",
+  "accounting": {
+    "train": {
+      "candidate_counts": {
+        "4": 6144,
+        "5": 2048,
+        "40": 8192
+      },
+      "numeric_count_targets": {
+        "0": 211,
+        "1": 201,
+        "2": 191,
+        "3": 204,
+        "4": 217
+      },
+      "numeric_none_targets": 211,
+      "rows": 16384,
+      "target_positions": {
+        "0": 2108,
+        "1": 2143,
+        "2": 2085,
+        "3": 2242,
+        "4": 590,
+        "5": 148,
+        "6": 200,
+        "7": 232,
+        "8": 212,
+        "9": 240,
+        "10": 188,
+        "11": 220,
+        "12": 248,
+        "13": 264,
+        "14": 180,
+        "15": 176,
+        "16": 216,
+        "17": 244,
+        "18": 188,
+        "19": 224,
+        "20": 172,
+        "21": 212,
+        "22": 196,
+        "23": 188,
+        "24": 164,
+        "25": 204,
+        "26": 196,
+        "27": 192,
+        "28": 160,
+        "29": 260,
+        "30": 204,
+        "31": 220,
+        "32": 164,
+        "33": 288,
+        "34": 232,
+        "35": 184,
+        "36": 188,
+        "37": 204,
+        "38": 204,
+        "39": 204
+      },
+      "tasks": {
+        "binding:0:color": 512,
+        "binding:0:count": 512,
+        "binding:0:shape": 512,
+        "binding:0:texture": 512,
+        "binding:1:color": 512,
+        "binding:1:count": 512,
+        "binding:1:shape": 512,
+        "binding:1:texture": 512,
+        "binding:2:color": 512,
+        "binding:2:count": 512,
+        "binding:2:shape": 512,
+        "binding:2:texture": 512,
+        "binding:3:color": 512,
+        "binding:3:count": 512,
+        "binding:3:shape": 512,
+        "binding:3:texture": 512,
+        "numeric:count": 1024,
+        "numeric:extremum:cost:maximum": 1024,
+        "numeric:extremum:cost:minimum": 1024,
+        "numeric:extremum:risk:maximum": 1024,
+        "numeric:extremum:risk:minimum": 1024,
+        "numeric:extremum:time:maximum": 1024,
+        "numeric:extremum:time:minimum": 1024,
+        "numeric:filter_min_cost": 1024
+      },
+      "templates": 424,
+      "unique_ids": 16384,
+      "unique_states": 1536
+    },
+    "transfer": {
+      "candidate_counts": {
+        "4": 1536,
+        "5": 512,
+        "40": 2048
+      },
+      "numeric_count_targets": {
+        "0": 66,
+        "1": 54,
+        "2": 44,
+        "3": 52,
+        "4": 40
+      },
+      "numeric_none_targets": 66,
+      "rows": 4096,
+      "target_positions": {
+        "0": 527,
+        "1": 555,
+        "2": 538,
+        "3": 541,
+        "4": 159,
+        "5": 50,
+        "6": 58,
+        "7": 54,
+        "8": 36,
+        "9": 46,
+        "10": 54,
+        "11": 40,
+        "12": 80,
+        "13": 42,
+        "14": 40,
+        "15": 52,
+        "16": 58,
+        "17": 48,
+        "18": 54,
+        "19": 40,
+        "20": 40,
+        "21": 52,
+        "22": 46,
+        "23": 54,
+        "24": 54,
+        "25": 40,
+        "26": 52,
+        "27": 38,
+        "28": 38,
+        "29": 70,
+        "30": 58,
+        "31": 64,
+        "32": 48,
+        "33": 52,
+        "34": 40,
+        "35": 46,
+        "36": 56,
+        "37": 60,
+        "38": 52,
+        "39": 64
+      },
+      "tasks": {
+        "binding:6:color": 256,
+        "binding:6:count": 256,
+        "binding:6:shape": 256,
+        "binding:6:texture": 256,
+        "binding:7:color": 256,
+        "binding:7:count": 256,
+        "binding:7:shape": 256,
+        "binding:7:texture": 256,
+        "numeric:count": 256,
+        "numeric:extremum:cost:maximum": 256,
+        "numeric:extremum:cost:minimum": 256,
+        "numeric:extremum:risk:maximum": 256,
+        "numeric:extremum:risk:minimum": 256,
+        "numeric:extremum:time:maximum": 256,
+        "numeric:extremum:time:minimum": 256,
+        "numeric:filter_min_cost": 256
+      },
+      "templates": 300,
+      "unique_ids": 4096,
+      "unique_states": 512
+    },
+    "validation": {
+      "candidate_counts": {
+        "4": 1536,
+        "5": 512,
+        "40": 1024
+      },
+      "numeric_count_targets": {
+        "0": 59,
+        "1": 49,
+        "2": 58,
+        "3": 38,
+        "4": 52
+      },
+      "numeric_none_targets": 59,
+      "rows": 3072,
+      "target_positions": {
+        "0": 532,
+        "1": 548,
+        "2": 492,
+        "3": 483,
+        "4": 117,
+        "5": 20,
+        "6": 30,
+        "7": 28,
+        "8": 20,
+        "9": 30,
+        "10": 24,
+        "11": 28,
+        "12": 28,
+        "13": 22,
+        "14": 20,
+        "15": 22,
+        "16": 20,
+        "17": 36,
+        "18": 14,
+        "19": 32,
+        "20": 24,
+        "21": 36,
+        "22": 22,
+        "23": 34,
+        "24": 20,
+        "25": 20,
+        "26": 24,
+        "27": 18,
+        "28": 34,
+        "29": 18,
+        "30": 26,
+        "31": 38,
+        "32": 22,
+        "33": 16,
+        "34": 20,
+        "35": 28,
+        "36": 32,
+        "37": 34,
+        "38": 32,
+        "39": 28
+      },
+      "tasks": {
+        "binding:4:color": 128,
+        "binding:4:count": 128,
+        "binding:4:shape": 128,
+        "binding:4:texture": 128,
+        "binding:5:color": 128,
+        "binding:5:count": 128,
+        "binding:5:shape": 128,
+        "binding:5:texture": 128,
+        "numeric:count": 256,
+        "numeric:extremum:cost:maximum": 256,
+        "numeric:extremum:cost:minimum": 256,
+        "numeric:extremum:risk:maximum": 256,
+        "numeric:extremum:risk:minimum": 256,
+        "numeric:extremum:time:maximum": 256,
+        "numeric:extremum:time:minimum": 256,
+        "numeric:filter_min_cost": 256
+      },
+      "templates": 310,
+      "unique_ids": 3072,
+      "unique_states": 384
+    }
+  },
+  "independent_verification": {
+    "status": "PASS_INDEPENDENT_CORPUS_READBACK",
+    "manifest_sha256": "f2fac1bb77e762748e9ce49077009bb69a50d7c2869b93c27de6ffbeb7c55d17",
+    "partitions": {
+      "train": {
+        "rows": 16384,
+        "states": 1536,
+        "tasks": {
+          "binding:0:color": 512,
+          "binding:0:texture": 512,
+          "binding:0:count": 512,
+          "binding:0:shape": 512,
+          "binding:1:color": 512,
+          "binding:1:texture": 512,
+          "binding:1:count": 512,
+          "binding:1:shape": 512,
+          "binding:2:color": 512,
+          "binding:2:texture": 512,
+          "binding:2:count": 512,
+          "binding:2:shape": 512,
+          "binding:3:color": 512,
+          "binding:3:texture": 512,
+          "binding:3:count": 512,
+          "binding:3:shape": 512,
+          "numeric:extremum:cost:minimum": 1024,
+          "numeric:extremum:cost:maximum": 1024,
+          "numeric:extremum:risk:minimum": 1024,
+          "numeric:extremum:risk:maximum": 1024,
+          "numeric:extremum:time:minimum": 1024,
+          "numeric:extremum:time:maximum": 1024,
+          "numeric:count": 1024,
+          "numeric:filter_min_cost": 1024
+        }
+      },
+      "validation": {
+        "rows": 3072,
+        "states": 384,
+        "tasks": {
+          "binding:4:color": 128,
+          "binding:4:texture": 128,
+          "binding:4:count": 128,
+          "binding:4:shape": 128,
+          "binding:5:color": 128,
+          "binding:5:texture": 128,
+          "binding:5:count": 128,
+          "binding:5:shape": 128,
+          "numeric:extremum:cost:minimum": 256,
+          "numeric:extremum:cost:maximum": 256,
+          "numeric:extremum:risk:minimum": 256,
+          "numeric:extremum:risk:maximum": 256,
+          "numeric:extremum:time:minimum": 256,
+          "numeric:extremum:time:maximum": 256,
+          "numeric:count": 256,
+          "numeric:filter_min_cost": 256
+        }
+      },
+      "transfer": {
+        "rows": 4096,
+        "states": 512,
+        "tasks": {
+          "binding:6:color": 256,
+          "binding:6:texture": 256,
+          "binding:6:count": 256,
+          "binding:6:shape": 256,
+          "binding:7:color": 256,
+          "binding:7:texture": 256,
+          "binding:7:count": 256,
+          "binding:7:shape": 256,
+          "numeric:extremum:cost:minimum": 256,
+          "numeric:extremum:cost:maximum": 256,
+          "numeric:extremum:risk:minimum": 256,
+          "numeric:extremum:risk:maximum": 256,
+          "numeric:extremum:time:minimum": 256,
+          "numeric:extremum:time:maximum": 256,
+          "numeric:count": 256,
+          "numeric:filter_min_cost": 256
+        }
+      }
+    },
+    "fresh_replay_equal_files": 13,
+    "all_new_questions": 23552,
+    "all_new_state_classes": 2432,
+    "candidate_label_presentations": 502784,
+    "binding_label_quadrants": {
+      "(False, False)": 304128,
+      "(False, True)": 101376,
+      "(True, False)": 33792,
+      "(True, True)": 11264
+    },
+    "legacy_train_rows": 2048,
+    "legacy_validation_rows": 5612,
+    "verifier_sha256": "af358cf0519caea10939a523bb39a4481a0d36d6d404ed9d3b16138624117387",
+    "model_loaded": false,
+    "optimizer_updates": 0
+  },
+  "executions": [
+    {
+      "started_utc": "2026-10-15T09:57:27.4315610Z",
+      "finished_utc": "2026-10-15T09:57:53.9625622Z",
+      "seconds": 26.5310012,
+      "exit_code": 0,
+      "mode": "CPU corpus generation",
+      "output": "C:/CodexArtifacts/pretrained-reuse-r2/decision-supervision-corpus-01"
+    },
+    {
+      "started_utc": "2026-10-15T09:58:03.9609751Z",
+      "finished_utc": "2026-10-15T09:58:30.2655140Z",
+      "seconds": 26.3045389,
+      "exit_code": 0,
+      "mode": "CPU fresh-process corpus replay",
+      "output": "C:/CodexArtifacts/pretrained-reuse-r2/decision-supervision-corpus-replay-01"
+    }
+  ],
+  "output_bytes_per_directory": 58176526,
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "free_disk_bytes_at_publication": 12792758272,
+    "gpu_model_loaded": false,
+    "gpu_training": false,
+    "cloud_cost": 0,
+    "peak_host_memory": "not measured"
+  },
+  "verification": {
+    "ruff": "passed",
+    "pytest_passed": 1671,
+    "pytest_skipped": 1,
+    "targeted_passed": 25,
+    "manifest_commands_passed": 25,
+    "frozen_ci_run": 38716810272,
+    "frozen_ci_number": 1765,
+    "frozen_ci_conclusion": "success"
+  },
+  "limitations": [
+    "No model predictions or optimizer updates; no quality improvement measured.",
+    "Known attribute vocabulary, authored template families and small numeric schema; not general language/native modalities.",
+    "accounting.templates counts rendered question strings including threshold values, not independent syntactic families.",
+    "Legacy validation is observed regression; new transfer is development-only, not a blind sealed product audit.",
+    "Training initialization, architecture, loss, optimizer and budget remain unselected; bootstrap implementation is required before fitting."
+  ]
+}

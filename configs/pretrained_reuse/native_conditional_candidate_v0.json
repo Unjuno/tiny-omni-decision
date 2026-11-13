@@ -1,0 +1,107 @@
+{
+  "id": "native-conditional-candidate-untrained-v0",
+  "seed": 17,
+  "training": false,
+  "quality_evaluation": false,
+  "model_paths": {
+    "language": "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model",
+    "speech": "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01"
+  },
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\config.json": "dc6de98193d85d4c45f96724e6dd3672b897af3f1592e02625b9a71be795887b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\model.safetensors": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\README.md": "07134727f6e5a3f726ee869f7ff3b2700ca9d9f70b462746c73ac7e485eee606",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\special_tokens_map.json": "311de3f4eed9d76a43bf0d71f10e62e086ca65ccce9f15d5da0d2098bf519ecc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\tokenizer.json": "05402ffae6dd382a8491b1d29bfc139bec5d332662e86a026f433ce54c25c202",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\tokenizer_config.json": "d8d3bb123b99317634d5ee3d1d2d8b2ddb01510a0654687fc2639a5347a7291f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\config.json": "d8c8d403350cf4e21b4351d3812fc61defc6c5784d2d8f8a622d4b8ca23b98e9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\encoder.safetensors": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\executed-source.py.txt": "98fe5f03efef7c19051b2f14c8648909378018546ea0bcc1770ae728dba29890",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\license-addendum.json": "bb882824b377a1857106ed7b68ada10da80e0fb25fa06623c66c21b14ac2d8ed",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\LICENSE_APACHE_2.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\MODEL_CARD_PINNED.md": "57a3bbbbf1e79369e4d1ced790812a1723b43a256c1b43fc70cc2f3339ae9881",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\preprocessor_config.json": "3e4dc53c73e7e3954fc4435034f5027733c61d7c123b38bbd1461598fd8503ef",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\result.json": "52d214017b4dc94dce1cd16e3e8283604a28c629d2613b0d5f5b89b483cfb852",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s16_l_bgah2n.wav.tokens.npy": "419df6feeb57fc64b8ff5a7c28b0f37607f00425d917a3b5c531d41be931071a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s16_p_bgah2n.wav.tokens.npy": "8cbebc033742721f1a9a6a3d65af791b860a9dd9b927fc96b56b71e544ec1235",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s22_l_sgbe5s.wav.tokens.npy": "6d588874d2404bf8cb381701ddd0e4e22f7f4130c550ef899ee817933cc283e4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s22_p_sgbe5s.wav.tokens.npy": "bc79d023626281964beb639be461309f590b087c0a9e83db7e725af78f27a49a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\efficientat-audit-v1\\dymn04_as.pt": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000000.png": "35124371d35f595370acb4845341cf8481dccba94b406a828a43ea7615ef3b3f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-av-correspondence-runtime-01\\d105f323bcf05a425eae3aab22ce971528c13eef2991a23a3a5d252c6159b112.avi": "d105f323bcf05a425eae3aab22ce971528c13eef2991a23a3a5d252c6159b112",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-archives-01\\audio.zip": "e36707602fdbeaa2e2284acb29bba883261d5e86857f694ac40cbb56cdcc5e10",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-media-integrity-01\\rows.json": "af7217e9323cc4a2d261baec65ccec23177e1889ab0adde25575036f9cfddce4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\records.json": "32944fc822c45a7a93ee06904c9a97acaa5bf6364c33c40525f535c59da55b41"
+  },
+  "source_revisions": {
+    "language": "262ae02f29173eec1c250f90804dc7edc677dcff",
+    "speech": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "visual": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "event_audio": "a425fdce92572e602a1d5634799bd9f1f2efa806"
+  },
+  "native_inputs": {
+    "image": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train\\images\\CLEVR_new_000000.png",
+    "video": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-av-correspondence-runtime-01\\d105f323bcf05a425eae3aab22ce971528c13eef2991a23a3a5d252c6159b112.avi",
+    "audio_archive": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-archives-01\\audio.zip",
+    "audio_member": "lombardgrid/audio/s11_l_bbab2n.wav",
+    "audio_sha256": "8408220551860f06b8ea61187802066a0b784578f88e130bfe9fdbec97cedd87",
+    "source_id": "s11_l_bbab2n",
+    "split": "train",
+    "text": "Three red cubes are on the left. Two blue spheres are on the right."
+  },
+  "replay_atol": 1e-06,
+  "max_parameters": 200000000,
+  "queries": {
+    "text": {
+      "questions": [
+        "Which color is on the left?",
+        "Which color is on the right?"
+      ],
+      "candidates": [
+        "red",
+        "blue",
+        "green",
+        "yellow"
+      ]
+    },
+    "image": {
+      "questions": [
+        "Which color is visible?",
+        "Which color is absent?"
+      ],
+      "candidates": [
+        "red",
+        "blue",
+        "green",
+        "yellow"
+      ]
+    },
+    "audio": {
+      "questions": [
+        "Which words are spoken?",
+        "Which words are not spoken?"
+      ],
+      "candidates": [
+        "bin blue at b two now",
+        "bin blue by b two now",
+        "place red at e three soon",
+        "set white with q five please"
+      ]
+    },
+    "video": {
+      "questions": [
+        "What happens at the beginning?",
+        "What happens at the end?"
+      ],
+      "candidates": [
+        "a person is speaking",
+        "a person is standing up",
+        "a person is walking",
+        "a person is clapping"
+      ]
+    }
+  }
+}

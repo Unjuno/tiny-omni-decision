@@ -1,0 +1,38 @@
+{
+  "id": "native-audio-profile-v1",
+  "speech_model": "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01",
+  "speech_revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+  "event_source": "C:\\CodexArtifacts\\pretrained-reuse-r1\\efficientat-audit-v1\\source",
+  "event_revision": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+  "event_weights": "C:\\CodexArtifacts\\pretrained-reuse-r1\\efficientat-audit-v1\\dymn04_as.pt",
+  "lombard_archive": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-archives-01\\audio.zip",
+  "lombard_member": "lombardgrid/audio/s11_l_bbab2n.wav",
+  "lombard_sha256": "8408220551860f06b8ea61187802066a0b784578f88e130bfe9fdbec97cedd87",
+  "starss_manifest": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-all-windows-v1\\train.jsonl",
+  "starss_id": "fold3_room12_mix001:t0000-0005",
+  "starss_audio_sha256": "a507f9f912ab6f28ec83bdedd174d2696206b5d61a69bc965f9ae88d856965e0",
+  "native_reference": {
+    "speech": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\speech-tokens.npy",
+    "event": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\event_audio-tokens.npy"
+  },
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\config.json": "d8c8d403350cf4e21b4351d3812fc61defc6c5784d2d8f8a622d4b8ca23b98e9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\encoder.safetensors": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\executed-source.py.txt": "98fe5f03efef7c19051b2f14c8648909378018546ea0bcc1770ae728dba29890",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\license-addendum.json": "bb882824b377a1857106ed7b68ada10da80e0fb25fa06623c66c21b14ac2d8ed",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\LICENSE_APACHE_2.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\MODEL_CARD_PINNED.md": "57a3bbbbf1e79369e4d1ced790812a1723b43a256c1b43fc70cc2f3339ae9881",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\preprocessor_config.json": "3e4dc53c73e7e3954fc4435034f5027733c61d7c123b38bbd1461598fd8503ef",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\result.json": "52d214017b4dc94dce1cd16e3e8283604a28c629d2613b0d5f5b89b483cfb852",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s16_l_bgah2n.wav.tokens.npy": "419df6feeb57fc64b8ff5a7c28b0f37607f00425d917a3b5c531d41be931071a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s16_p_bgah2n.wav.tokens.npy": "8cbebc033742721f1a9a6a3d65af791b860a9dd9b927fc96b56b71e544ec1235",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s22_l_sgbe5s.wav.tokens.npy": "6d588874d2404bf8cb381701ddd0e4e22f7f4130c550ef899ee817933cc283e4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\whisper-encoder-runtime-01\\s22_p_sgbe5s.wav.tokens.npy": "bc79d023626281964beb639be461309f590b087c0a9e83db7e725af78f27a49a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\efficientat-audit-v1\\dymn04_as.pt": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-archives-01\\audio.zip": "e36707602fdbeaa2e2284acb29bba883261d5e86857f694ac40cbb56cdcc5e10",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-all-windows-v1\\train.jsonl": "2d06c0e94ea68d9b5372eb942f37cd87fcf4d9ba71f05ae71bb3be836ae73347",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-paired-smoke-01\\fold3_room12_mix001.wav": "a507f9f912ab6f28ec83bdedd174d2696206b5d61a69bc965f9ae88d856965e0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\speech-tokens.npy": "e12b9c72791b91a92fbd97b7ac558bf7cfc2567c373d448701013666837f68b6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\event_audio-tokens.npy": "d12f73348f86e9c4c57945a7268c34bd7ab5b056db18ea01a57bf9909ad00f7d"
+  }
+}

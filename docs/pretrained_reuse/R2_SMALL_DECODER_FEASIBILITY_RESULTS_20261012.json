@@ -1,0 +1,139 @@
+{
+  "result": {
+    "status": "PASS_FEASIBILITY_ONLY",
+    "history": [
+      {
+        "step": 1,
+        "train_ce": 1.0264997482299805,
+        "gradient_norm": 7.623955249786377,
+        "seconds": 0.47082719998434186
+      },
+      {
+        "step": 2,
+        "train_ce": 1.481600284576416,
+        "gradient_norm": 9.117842674255371,
+        "seconds": 0.19599759997799993
+      }
+    ],
+    "parameters": 134515008,
+    "trainable_parameters": 14160960,
+    "trainable_names": [
+      "model.layers.26.self_attn.q_proj.weight",
+      "model.layers.26.self_attn.k_proj.weight",
+      "model.layers.26.self_attn.v_proj.weight",
+      "model.layers.26.self_attn.o_proj.weight",
+      "model.layers.26.mlp.gate_proj.weight",
+      "model.layers.26.mlp.up_proj.weight",
+      "model.layers.26.mlp.down_proj.weight",
+      "model.layers.26.input_layernorm.weight",
+      "model.layers.26.post_attention_layernorm.weight",
+      "model.layers.27.self_attn.q_proj.weight",
+      "model.layers.27.self_attn.k_proj.weight",
+      "model.layers.27.self_attn.v_proj.weight",
+      "model.layers.27.self_attn.o_proj.weight",
+      "model.layers.27.mlp.gate_proj.weight",
+      "model.layers.27.mlp.up_proj.weight",
+      "model.layers.27.mlp.down_proj.weight",
+      "model.layers.27.input_layernorm.weight",
+      "model.layers.27.post_attention_layernorm.weight",
+      "model.layers.28.self_attn.q_proj.weight",
+      "model.layers.28.self_attn.k_proj.weight",
+      "model.layers.28.self_attn.v_proj.weight",
+      "model.layers.28.self_attn.o_proj.weight",
+      "model.layers.28.mlp.gate_proj.weight",
+      "model.layers.28.mlp.up_proj.weight",
+      "model.layers.28.mlp.down_proj.weight",
+      "model.layers.28.input_layernorm.weight",
+      "model.layers.28.post_attention_layernorm.weight",
+      "model.layers.29.self_attn.q_proj.weight",
+      "model.layers.29.self_attn.k_proj.weight",
+      "model.layers.29.self_attn.v_proj.weight",
+      "model.layers.29.self_attn.o_proj.weight",
+      "model.layers.29.mlp.gate_proj.weight",
+      "model.layers.29.mlp.up_proj.weight",
+      "model.layers.29.mlp.down_proj.weight",
+      "model.layers.29.input_layernorm.weight",
+      "model.layers.29.post_attention_layernorm.weight",
+      "model.norm.weight"
+    ],
+    "frozen_sha256": "8afd0934deb1972912d37da7e6f6aef3506e10441ae997e7dc9484c0bdbccd0e",
+    "projection_max_abs": 7.62939453125e-06,
+    "reload_exact": true,
+    "training_peak_bytes": 1619352576,
+    "longest_batch_peak_bytes": 982538752,
+    "longest_batch_seconds": 0.554594699991867,
+    "longest_batch_lengths": [
+      1029,
+      1007,
+      945,
+      916,
+      913,
+      908,
+      902,
+      900
+    ],
+    "total_seconds": 3.8547389999730512,
+    "delta_sha256": "1a66bbc299d1fc5165eb2980e4cfd8c551a72d92e3fffe8dc562b00b41f1f654",
+    "delta_bytes": 56655883,
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "cost_usd": 0,
+    "validation_quality_evaluated": false,
+    "exact_resume": false
+  },
+  "config_sha256": "28e91f1d147cb0f7918ffe11f58a268c7498e8cfb019402ce47e902a549955ee",
+  "result_sha256": "f9e7009fe5d3c6aa3d098680966b8ee0fe99cbd4bcb7377ba3beed7588ecd4c7",
+  "protocol": {
+    "source_commit": "4adba68463594bdcc9ba51666c8ebf3b6a72b276",
+    "runner_sha256": "aab65359436c1ec8e1a28d127726519b1162d303aae85ed572397754f8f949b0",
+    "argv": {
+      "root": "C:\\CodexArtifacts\\pretrained-reuse-r2",
+      "model": "C:\\CodexArtifacts\\pretrained-reuse-r1\\smollm2-135m-audit-01\\model",
+      "output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\small-decoder-feasibility-01"
+    },
+    "input_hashes": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\comparison-vocabulary-curriculum-01\\train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c"
+    },
+    "reference_config_sha256": "0ad927647362433e661c3805e61f981e488cf3f78da7c5de5a32c53f268c1282",
+    "label_ids": [
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "prompt_lengths": {
+      "count": 20972,
+      "maximum": 1029,
+      "percentiles": [
+        208.0,
+        434.0,
+        652.0
+      ]
+    },
+    "model_files": {
+      "config.json": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a",
+      "generation_config.json": "87b916edaaab66b3899b9d0dd0752727dff6666686da0504d89ae0a6e055a013",
+      "model.safetensors": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+      "README.md": "4f97533ad95b1b2fea15fbc075c01b94578ebdd7c8138888fa43fa3abd530dc4",
+      "special_tokens_map.json": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+      "tokenizer.json": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+      "tokenizer_config.json": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df"
+    },
+    "versions": {
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "numpy": "2.4.6"
+    },
+    "seed": 17,
+    "optimizer": "AdamW2e-5/wd.01/clip1",
+    "updates": 2,
+    "smoke": true,
+    "trained_policy": "last4decoder+finalnorm",
+    "validation_quality_evaluated": false
+  }
+}

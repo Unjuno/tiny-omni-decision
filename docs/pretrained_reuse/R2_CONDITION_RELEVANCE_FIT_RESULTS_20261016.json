@@ -1,0 +1,2862 @@
+{
+  "status": "COMPLETED_FITS_AND_TRAIN_REPLAY_TRANSFER_IN_PROGRESS",
+  "utc": "2026-10-15T16:37:41.390564+00:00",
+  "scope": "authored structured-state text diagnosis; not four-modal product quality",
+  "training_source_commit": "6fb617f233752f582af7daf0dd131ba7cc281a5c",
+  "comparison_source_commit": "f2dc24872a22dad92344c2c3009c68f9feb5d44c",
+  "comparison_result_sha256": "b7541d4f7ec7b3736e78bd48d364f9fd007ffd985d9730e496ceb02ee5fa583e",
+  "freeze_sha256": "c39d0fc447ea8d233672368a7a1152ffb96ce473fe6cdfa61a4c83f76d7ca7c8",
+  "comparison": {
+    "scope": "fixed1024 endpoints on observed development validation; not blind audit",
+    "primary_endpoint_metrics": {
+      "ce": {
+        "overall": {
+          "count": 10732,
+          "accuracy": 0.7916511367871786,
+          "nll": 0.686302502299191,
+          "brier": 0.3434743343343588,
+          "ece": 0.1523696199448645,
+          "mean_confidence": 0.642532816500094
+        },
+        "metrics": {
+          "binding:4:color": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.10926779113185668,
+            "brier": 0.019016318007004523,
+            "ece": 0.09867871433074003
+          },
+          "binding:4:count": {
+            "count": 128,
+            "accuracy": 0.75,
+            "nll": 1.3359053204255058,
+            "brier": 0.6310679690526771,
+            "ece": 0.5333982604273118
+          },
+          "binding:4:shape": {
+            "count": 128,
+            "accuracy": 0.984375,
+            "nll": 0.23837817143681655,
+            "brier": 0.0786860330415105,
+            "ece": 0.17152358571693388
+          },
+          "binding:4:texture": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.010571466518571701,
+            "brier": 0.00048808425097194024,
+            "ece": 0.010329754702679564
+          },
+          "binding:5:color": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 2.86225301040421,
+            "brier": 1.102930857866154,
+            "ece": 0.4079488664331564
+          },
+          "binding:5:count": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 2.8528507256579636,
+            "brier": 1.1305231928608612,
+            "ece": 0.43139324817197655
+          },
+          "binding:5:shape": {
+            "count": 128,
+            "accuracy": 0.390625,
+            "nll": 1.5978606265520323,
+            "brier": 0.739019105179893,
+            "ece": 0.2611201575930554
+          },
+          "binding:5:texture": {
+            "count": 128,
+            "accuracy": 0.859375,
+            "nll": 0.5135584738008179,
+            "brier": 0.23718109111171065,
+            "ece": 0.16282342900781724
+          },
+          "legacy:binding:color": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0021495102508178408,
+            "brier": 2.9506815534229898e-05,
+            "ece": 0.002134902748710976
+          },
+          "legacy:binding:count": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0003112274324015849,
+            "brier": 6.076090155780529e-07,
+            "ece": 0.00031093703132345496
+          },
+          "legacy:binding:shape": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.00017101382781247693,
+            "brier": 4.1996089857652834e-08,
+            "ece": 0.0001709940660370446
+          },
+          "legacy:binding:texture": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.00016701181066319776,
+            "brier": 3.363351788621576e-08,
+            "ece": 0.00016699568921429986
+          },
+          "legacy:curriculum:conditional_selection": {
+            "count": 256,
+            "accuracy": 0.88671875,
+            "nll": 0.7672724001187181,
+            "brier": 0.3669257784036597,
+            "ece": 0.38595304009530673
+          },
+          "legacy:curriculum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.98046875,
+            "nll": 0.5154669038587611,
+            "brier": 0.2202536409504039,
+            "ece": 0.3755488332345806
+          },
+          "legacy:curriculum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.98828125,
+            "nll": 0.5185600235906234,
+            "brier": 0.22262761332692238,
+            "ece": 0.3870955812226964
+          },
+          "legacy:curriculum:count": {
+            "count": 256,
+            "accuracy": 0.65625,
+            "nll": 1.117081710069458,
+            "brier": 0.5768825080006397,
+            "ece": 0.28390099486901077
+          },
+          "legacy:curriculum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.97265625,
+            "nll": 0.5042366497095201,
+            "brier": 0.2140961509980047,
+            "ece": 0.3541699805658626
+          },
+          "legacy:curriculum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.984375,
+            "nll": 0.5553019203147823,
+            "brier": 0.24760079881078484,
+            "ece": 0.39873269606722916
+          },
+          "legacy:curriculum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.984375,
+            "nll": 0.5571411541956182,
+            "brier": 0.24559473939335547,
+            "ece": 0.4015942734954014
+          },
+          "legacy:curriculum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.9765625,
+            "nll": 0.5911776746331888,
+            "brier": 0.269091927045115,
+            "ece": 0.4094115427044549
+          },
+          "legacy:original:choice": {
+            "count": 1008,
+            "accuracy": 0.498015873015873,
+            "nll": 1.2335737843501955,
+            "brier": 0.6429490573512213,
+            "ece": 0.1099150928783298
+          },
+          "legacy:original:noul": {
+            "count": 987,
+            "accuracy": 0.6980749746707193,
+            "nll": 0.5790414469986108,
+            "brier": 0.3949289661101244,
+            "ece": 0.0358109603262493
+          },
+          "legacy:original:score": {
+            "count": 545,
+            "accuracy": 0.44036697247706424,
+            "nll": 1.3246746072221116,
+            "brier": 0.6882829490598791,
+            "ece": 0.07822709358785318
+          },
+          "numeric:count": {
+            "count": 256,
+            "accuracy": 0.69921875,
+            "nll": 0.9045918991862549,
+            "brier": 0.46840681485907576,
+            "ece": 0.21573352883882738
+          },
+          "numeric:extremum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.8359375,
+            "nll": 0.906575295090215,
+            "brier": 0.47574798509250005,
+            "ece": 0.4022857662637323
+          },
+          "numeric:extremum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.76171875,
+            "nll": 0.954527617129274,
+            "brier": 0.5116157051537163,
+            "ece": 0.3326141825959567
+          },
+          "numeric:extremum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.82421875,
+            "nll": 0.871752109324982,
+            "brier": 0.45741035459786994,
+            "ece": 0.3767605782774267
+          },
+          "numeric:extremum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.44140625,
+            "nll": 1.2130970233933296,
+            "brier": 0.6612451484435191,
+            "ece": 0.06993840066049425
+          },
+          "numeric:extremum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.71875,
+            "nll": 1.1630468017332978,
+            "brier": 0.632398479365925,
+            "ece": 0.38793209540919216
+          },
+          "numeric:extremum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.78515625,
+            "nll": 1.0260075686328454,
+            "brier": 0.554007892069661,
+            "ece": 0.40992130471036914
+          },
+          "numeric:filter_min_cost": {
+            "count": 256,
+            "accuracy": 0.609375,
+            "nll": 1.1909363387159666,
+            "brier": 0.5719613685598077,
+            "ece": 0.16859940083219033
+          },
+          "relevance:color:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0021422172144085643,
+            "brier": 8.2632762479221e-06,
+            "ece": 0.0021381815361088963
+          },
+          "relevance:color:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0015825453261379937,
+            "brier": 4.100439475074906e-06,
+            "ece": 0.0015805497438847738
+          },
+          "relevance:color:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.12253602169071745,
+            "brier": 0.018753053642727124,
+            "ece": 0.11163565768474237
+          },
+          "relevance:color:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.06427250672804574,
+            "brier": 0.0064766519405142445,
+            "ece": 0.06070163981846142
+          },
+          "relevance:count:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0020251781194629186,
+            "brier": 3.9042217674734394e-05,
+            "ece": 0.0020149708651217013
+          },
+          "relevance:count:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.002587465173120213,
+            "brier": 4.709042330138575e-05,
+            "ece": 0.002575255056746162
+          },
+          "relevance:count:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.8072122804481717,
+            "brier": 0.31616116068196254,
+            "ece": 0.5495266977236676
+          },
+          "relevance:count:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.13805770923625615,
+            "brier": 0.027626266847753128,
+            "ece": 0.12190661612413486
+          },
+          "relevance:shape:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0006580243404351493,
+            "brier": 6.141938226393574e-07,
+            "ece": 0.0006577262485343294
+          },
+          "relevance:shape:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0005248842378961698,
+            "brier": 3.3389437322795786e-07,
+            "ece": 0.0005247224993812916
+          },
+          "relevance:shape:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.18059522304954828,
+            "brier": 0.03426686123099388,
+            "ece": 0.16050854802250455
+          },
+          "relevance:shape:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.13738991592288557,
+            "brier": 0.023275277546719833,
+            "ece": 0.12495697234242058
+          },
+          "relevance:texture:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0002745402317720201,
+            "brier": 8.760789617705067e-08,
+            "ece": 0.0002744985137919098
+          },
+          "relevance:texture:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.00027191015324303083,
+            "brier": 8.675084369691668e-08,
+            "ece": 0.00027186841612092394
+          },
+          "relevance:texture:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.016471232915398537,
+            "brier": 0.0013884249178966702,
+            "ece": 0.015728493364123648
+          },
+          "relevance:texture:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.00622241985891976,
+            "brier": 0.00034591681350135107,
+            "ece": 0.0060454758545806005
+          }
+        },
+        "macro": {
+          "accuracy": 0.8452404589396523,
+          "nll": 0.5851134330247584,
+          "brier": 0.2721141266264432,
+          "ece": 0.18777006524188186
+        },
+        "minimum_accuracy": 0.0
+      },
+      "relevance": {
+        "overall": {
+          "count": 10732,
+          "accuracy": 0.7733879985091315,
+          "nll": 0.6965255207823197,
+          "brier": 0.34653278996156434,
+          "ece": 0.12231704752629445,
+          "mean_confidence": 0.6527242726612463
+        },
+        "metrics": {
+          "binding:4:color": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.001584187578320646,
+            "brier": 5.09834359411575e-06,
+            "ece": 0.0015817299450469058
+          },
+          "binding:4:count": {
+            "count": 128,
+            "accuracy": 0.9921875,
+            "nll": 0.09959588876397008,
+            "brier": 0.019609656851490208,
+            "ece": 0.08990327529246586
+          },
+          "binding:4:shape": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.014282610525134524,
+            "brier": 0.0010664545138332384,
+            "ece": 0.013711579875312884
+          },
+          "binding:4:texture": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.002491707243200927,
+            "brier": 3.037724995835006e-05,
+            "ece": 0.0024768010035848276
+          },
+          "binding:5:color": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 3.3601353979845525,
+            "brier": 1.0651683447429414,
+            "ece": 0.3056271428938317
+          },
+          "binding:5:count": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 2.76769041061901,
+            "brier": 0.9853925601355356,
+            "ece": 0.26917125350503823
+          },
+          "binding:5:shape": {
+            "count": 128,
+            "accuracy": 0.2421875,
+            "nll": 2.227089246786999,
+            "brier": 0.8474675014545535,
+            "ece": 0.20666703690648197
+          },
+          "binding:5:texture": {
+            "count": 128,
+            "accuracy": 0.7265625,
+            "nll": 1.1103312578545503,
+            "brier": 0.4878737255553589,
+            "ece": 0.29099768481286264
+          },
+          "legacy:binding:color": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0039892597367998765,
+            "brier": 0.00018654475552699667,
+            "ece": 0.0038933365062118644
+          },
+          "legacy:binding:count": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0003470086448278869,
+            "brier": 1.5192648305231218e-07,
+            "ece": 0.00034693625043902276
+          },
+          "legacy:binding:shape": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0014860433129058768,
+            "brier": 8.785904186627809e-06,
+            "ece": 0.0014819930017129224
+          },
+          "legacy:binding:texture": {
+            "count": 256,
+            "accuracy": 1.0,
+            "nll": 0.0005110671828456685,
+            "brier": 3.5972950256799107e-07,
+            "ece": 0.0005108999614725773
+          },
+          "legacy:curriculum:conditional_selection": {
+            "count": 256,
+            "accuracy": 0.875,
+            "nll": 0.7691853247417215,
+            "brier": 0.3671683148448119,
+            "ece": 0.36656075387880954
+          },
+          "legacy:curriculum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.98046875,
+            "nll": 0.5159703715349466,
+            "brier": 0.22118568649342848,
+            "ece": 0.37205378820277557
+          },
+          "legacy:curriculum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.98828125,
+            "nll": 0.5203228706879132,
+            "brier": 0.2243023960932355,
+            "ece": 0.38651228565742574
+          },
+          "legacy:curriculum:count": {
+            "count": 256,
+            "accuracy": 0.65625,
+            "nll": 1.1076829567314677,
+            "brier": 0.5791549440882037,
+            "ece": 0.28287555250433644
+          },
+          "legacy:curriculum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.96875,
+            "nll": 0.5080847167236401,
+            "brier": 0.21723900867395082,
+            "ece": 0.3544792121629422
+          },
+          "legacy:curriculum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.984375,
+            "nll": 0.5320459675722814,
+            "brier": 0.23250858448398098,
+            "ece": 0.38780254906083433
+          },
+          "legacy:curriculum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.984375,
+            "nll": 0.5438378890208635,
+            "brier": 0.23758556710889134,
+            "ece": 0.39175231897578067
+          },
+          "legacy:curriculum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.98046875,
+            "nll": 0.570700660533134,
+            "brier": 0.2560168807435211,
+            "ece": 0.4028357901376075
+          },
+          "legacy:original:choice": {
+            "count": 1008,
+            "accuracy": 0.5059523809523809,
+            "nll": 1.2478617844930966,
+            "brier": 0.6482961794335673,
+            "ece": 0.12303321328969423
+          },
+          "legacy:original:noul": {
+            "count": 987,
+            "accuracy": 0.7122593718338399,
+            "nll": 0.5743085183194017,
+            "brier": 0.3900553747780295,
+            "ece": 0.04671007238576832
+          },
+          "legacy:original:score": {
+            "count": 545,
+            "accuracy": 0.42935779816513764,
+            "nll": 1.33796586559149,
+            "brier": 0.694490138591893,
+            "ece": 0.0693377136158498
+          },
+          "numeric:count": {
+            "count": 256,
+            "accuracy": 0.59375,
+            "nll": 1.142500025721218,
+            "brier": 0.607677578938657,
+            "ece": 0.25594665697721247
+          },
+          "numeric:extremum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.625,
+            "nll": 1.2189870487317405,
+            "brier": 0.6625530796054129,
+            "ece": 0.3023217050426217
+          },
+          "numeric:extremum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.78515625,
+            "nll": 1.0890116501127816,
+            "brier": 0.5872401161896663,
+            "ece": 0.43089500856297264
+          },
+          "numeric:extremum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.3125,
+            "nll": 1.3753069198739831,
+            "brier": 0.7594901177858604,
+            "ece": 0.12004236066245103
+          },
+          "numeric:extremum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.8046875,
+            "nll": 0.9115134115238326,
+            "brier": 0.48046868857503927,
+            "ece": 0.36666061556696444
+          },
+          "numeric:extremum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.27734375,
+            "nll": 1.3230783168775169,
+            "brier": 0.7266409974534245,
+            "ece": 0.10068129900845053
+          },
+          "numeric:extremum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.92578125,
+            "nll": 0.8931812137010497,
+            "brier": 0.47002444457500936,
+            "ece": 0.5078325209616069
+          },
+          "numeric:filter_min_cost": {
+            "count": 256,
+            "accuracy": 0.546875,
+            "nll": 1.3255029922693495,
+            "brier": 0.654670949793531,
+            "ece": 0.21261342669475924
+          },
+          "relevance:color:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0027100489065807407,
+            "brier": 9.241337573274596e-06,
+            "ece": 0.00270570721743546
+          },
+          "relevance:color:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0033567474026488177,
+            "brier": 1.4700775349778188e-05,
+            "ece": 0.003349764267920996
+          },
+          "relevance:color:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.004583928716087005,
+            "brier": 3.0271362874292608e-05,
+            "ece": 0.004569413231431119
+          },
+          "relevance:color:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0032733887603063885,
+            "brier": 1.6664172045253374e-05,
+            "ece": 0.003265236083694223
+          },
+          "relevance:count:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.000718590882485905,
+            "brier": 9.737726237700095e-07,
+            "ece": 0.0007181438103616156
+          },
+          "relevance:count:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0004213834234184874,
+            "brier": 2.2636340630771904e-07,
+            "ece": 0.00042127729377117173
+          },
+          "relevance:count:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.06642263362498248,
+            "brier": 0.005334284979425095,
+            "ece": 0.06365903752870168
+          },
+          "relevance:count:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.003447789035692539,
+            "brier": 1.9569947396071338e-05,
+            "ece": 0.0034382238821022426
+          },
+          "relevance:shape:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0020461208968991945,
+            "brier": 5.9255794434767564e-06,
+            "ece": 0.002043317374470499
+          },
+          "relevance:shape:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0031092133031478493,
+            "brier": 1.2536349753262319e-05,
+            "ece": 0.003103245393193177
+          },
+          "relevance:shape:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.022354349451926655,
+            "brier": 0.0010859545741681235,
+            "ece": 0.021795343139545453
+          },
+          "relevance:shape:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.03981715136069403,
+            "brier": 0.003097996858943938,
+            "ece": 0.03816365245049816
+          },
+          "relevance:texture:q8:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0006640176724175644,
+            "brier": 5.344644997587257e-07,
+            "ece": 0.000663772014521502
+          },
+          "relevance:texture:q8:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0007138814523663893,
+            "brier": 5.910065627648414e-07,
+            "ece": 0.000713608393201115
+          },
+          "relevance:texture:q9:key_value": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.0008549339715312107,
+            "brier": 1.4048560898208547e-06,
+            "ece": 0.000854255949663596
+          },
+          "relevance:texture:q9:sentence": {
+            "count": 128,
+            "accuracy": 1.0,
+            "nll": 0.002948885955645501,
+            "brier": 8.379485274294184e-05,
+            "ece": 0.0029069281435584182
+          }
+        },
+        "macro": {
+          "accuracy": 0.8276078627861991,
+          "nll": 0.5798728862938591,
+          "brier": 0.26453815490778676,
+          "ece": 0.1450997327548382
+        },
+        "minimum_accuracy": 0.0
+      }
+    },
+    "selected_checkpoint_metrics": {
+      "ce": {
+        "overall": {
+          "count": 10732,
+          "accuracy": 0.36433097279165116,
+          "nll": 1.7852047122574295,
+          "brier": 0.7773127717812842,
+          "ece": 0.1400361450756975,
+          "mean_confidence": 0.2518549021560373
+        },
+        "metrics": {
+          "binding:4:color": {
+            "count": 128,
+            "accuracy": 0.4921875,
+            "nll": 2.8105381310846287,
+            "brier": 0.909624181195049,
+            "ece": 0.4266700216782634
+          },
+          "binding:4:count": {
+            "count": 128,
+            "accuracy": 0.046875,
+            "nll": 2.9431366669211565,
+            "brier": 0.9261222145634193,
+            "ece": 0.06348872250686591
+          },
+          "binding:4:shape": {
+            "count": 128,
+            "accuracy": 0.046875,
+            "nll": 3.215763684270179,
+            "brier": 0.9485168922671225,
+            "ece": 0.015115519861825712
+          },
+          "binding:4:texture": {
+            "count": 128,
+            "accuracy": 0.46875,
+            "nll": 2.861575884216233,
+            "brier": 0.9144912041875555,
+            "ece": 0.40687413686274077
+          },
+          "binding:5:color": {
+            "count": 128,
+            "accuracy": 0.140625,
+            "nll": 2.8128344405371077,
+            "brier": 0.9121645339734438,
+            "ece": 0.06290765106011989
+          },
+          "binding:5:count": {
+            "count": 128,
+            "accuracy": 0.09375,
+            "nll": 2.8187095374596054,
+            "brier": 0.9136759582705739,
+            "ece": 0.12041715662336747
+          },
+          "binding:5:shape": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 3.2339574261747606,
+            "brier": 0.9540284876567087,
+            "ece": 0.0868189514323288
+          },
+          "binding:5:texture": {
+            "count": 128,
+            "accuracy": 0.6484375,
+            "nll": 2.623807756470212,
+            "brier": 0.8852797052672498,
+            "ece": 0.5711410252948663
+          },
+          "legacy:binding:color": {
+            "count": 256,
+            "accuracy": 0.60546875,
+            "nll": 2.339019195806442,
+            "brier": 0.8434569902049305,
+            "ece": 0.4956559884722022
+          },
+          "legacy:binding:count": {
+            "count": 256,
+            "accuracy": 0.109375,
+            "nll": 2.5843045708007777,
+            "brier": 0.888899514704385,
+            "ece": 0.04432069532896517
+          },
+          "legacy:binding:shape": {
+            "count": 256,
+            "accuracy": 0.16015625,
+            "nll": 2.6038413868850347,
+            "brier": 0.8946830470185244,
+            "ece": 0.15001027970755215
+          },
+          "legacy:binding:texture": {
+            "count": 256,
+            "accuracy": 0.96875,
+            "nll": 1.8802889250449697,
+            "brier": 0.7303675131768907,
+            "ece": 0.806954433624848
+          },
+          "legacy:curriculum:conditional_selection": {
+            "count": 256,
+            "accuracy": 0.14453125,
+            "nll": 1.6529035389113604,
+            "brier": 0.8184278148286003,
+            "ece": 0.11426804961783071
+          },
+          "legacy:curriculum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.3125,
+            "nll": 1.3671377718437556,
+            "brier": 0.7401758775880283,
+            "ece": 0.07253093912113506
+          },
+          "legacy:curriculum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.19921875,
+            "nll": 1.4037854070216862,
+            "brier": 0.7587864260868762,
+            "ece": 0.08154098011664747
+          },
+          "legacy:curriculum:count": {
+            "count": 256,
+            "accuracy": 0.23828125,
+            "nll": 1.5916749625890345,
+            "brier": 0.7944312225984336,
+            "ece": 0.009738290030842423
+          },
+          "legacy:curriculum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.27734375,
+            "nll": 1.384686865065411,
+            "brier": 0.7490897228446461,
+            "ece": 0.014213833980523666
+          },
+          "legacy:curriculum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.203125,
+            "nll": 1.3942747542643252,
+            "brier": 0.7541074651783758,
+            "ece": 0.06670024767288463
+          },
+          "legacy:curriculum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.3125,
+            "nll": 1.382218552471306,
+            "brier": 0.7478400147746389,
+            "ece": 0.036322915475485426
+          },
+          "legacy:curriculum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.17578125,
+            "nll": 1.397553521698519,
+            "brier": 0.7557559376071644,
+            "ece": 0.09332847674993297
+          },
+          "legacy:original:choice": {
+            "count": 1008,
+            "accuracy": 0.3759920634920635,
+            "nll": 1.4153666609971027,
+            "brier": 0.7366467957529462,
+            "ece": 0.07978655256628078
+          },
+          "legacy:original:noul": {
+            "count": 987,
+            "accuracy": 0.5785207700101317,
+            "nll": 0.716052673725261,
+            "brier": 0.5110985184541071,
+            "ece": 0.07443424440224429
+          },
+          "legacy:original:score": {
+            "count": 545,
+            "accuracy": 0.3467889908256881,
+            "nll": 1.4556873887485215,
+            "brier": 0.7499016648241748,
+            "ece": 0.06817433338114773
+          },
+          "numeric:count": {
+            "count": 256,
+            "accuracy": 0.19921875,
+            "nll": 1.6261730896803037,
+            "brier": 0.8058658102730929,
+            "ece": 0.022874575986780832
+          },
+          "numeric:extremum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.25,
+            "nll": 1.3772159945854092,
+            "brier": 0.7455871805037699,
+            "ece": 0.039955069442391994
+          },
+          "numeric:extremum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.26953125,
+            "nll": 1.3981754083570872,
+            "brier": 0.7558325971348969,
+            "ece": 0.03531892803704717
+          },
+          "numeric:extremum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.30078125,
+            "nll": 1.3710934008840088,
+            "brier": 0.7423934022696601,
+            "ece": 0.011614645826571532
+          },
+          "numeric:extremum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.19140625,
+            "nll": 1.4074440433443365,
+            "brier": 0.7609605825370667,
+            "ece": 0.09173473440580508
+          },
+          "numeric:extremum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.2890625,
+            "nll": 1.3855095161357605,
+            "brier": 0.7492945616147957,
+            "ece": 0.014556578016394194
+          },
+          "numeric:extremum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.2265625,
+            "nll": 1.395926523356989,
+            "brier": 0.7550229723929767,
+            "ece": 0.055502187971259664
+          },
+          "numeric:filter_min_cost": {
+            "count": 256,
+            "accuracy": 0.23046875,
+            "nll": 1.7369666178270993,
+            "brier": 0.8720969335445554,
+            "ece": 0.24393607711004542
+          },
+          "relevance:color:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.609375,
+            "nll": 2.431014862058523,
+            "brier": 0.857476366538853,
+            "ece": 0.5162453253440153
+          },
+          "relevance:color:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.8359375,
+            "nll": 2.0024746380650926,
+            "brier": 0.7734895447830832,
+            "ece": 0.6951374605265855
+          },
+          "relevance:color:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.3671875,
+            "nll": 2.622607676458947,
+            "brier": 0.8869339993112142,
+            "ece": 0.28327566300805584
+          },
+          "relevance:color:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.7421875,
+            "nll": 2.2000165573427086,
+            "brier": 0.8197746063665476,
+            "ece": 0.6248217143503093
+          },
+          "relevance:count:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.140625,
+            "nll": 2.5520753161207272,
+            "brier": 0.88337228621236,
+            "ece": 0.08763753903789509
+          },
+          "relevance:count:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.6171875,
+            "nll": 2.1717109999687594,
+            "brier": 0.8183096031552228,
+            "ece": 0.4991032809640463
+          },
+          "relevance:count:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.3125,
+            "nll": 2.493855247209117,
+            "brier": 0.8696592228472428,
+            "ece": 0.2199398441759921
+          },
+          "relevance:count:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.734375,
+            "nll": 2.2290898894308198,
+            "brier": 0.8260522197112995,
+            "ece": 0.6222814597141785
+          },
+          "relevance:shape:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.171875,
+            "nll": 2.638112107582864,
+            "brier": 0.8917805568039915,
+            "ece": 0.08362254640393853
+          },
+          "relevance:shape:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.5625,
+            "nll": 2.364403683893197,
+            "brier": 0.84901590732988,
+            "ece": 0.454400071977985
+          },
+          "relevance:shape:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.0625,
+            "nll": 2.90562045333327,
+            "brier": 0.9249223935134299,
+            "ece": 0.09450390679550677
+          },
+          "relevance:shape:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 2.8756698359767054,
+            "brier": 0.9273409352006431,
+            "ece": 0.10776028385136197
+          },
+          "relevance:texture:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.90625,
+            "nll": 2.2496926238326145,
+            "brier": 0.8207176038729674,
+            "ece": 0.8003657820861594
+          },
+          "relevance:texture:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.53125,
+            "nll": 2.1436743028493574,
+            "brier": 0.8121293512729422,
+            "ece": 0.4017470502107946
+          },
+          "relevance:texture:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.90625,
+            "nll": 2.1570738820131306,
+            "brier": 0.7961698029788682,
+            "ece": 0.7945989270442546
+          },
+          "relevance:texture:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.8828125,
+            "nll": 2.094960067855532,
+            "brier": 0.7905360270369071,
+            "ece": 0.7540171522011747
+          }
+        },
+        "macro": {
+          "accuracy": 0.36778035796442304,
+          "nll": 2.0791420519397827,
+          "brier": 0.8206873653240446,
+          "ece": 0.24502902659696704
+        },
+        "minimum_accuracy": 0.0
+      },
+      "relevance": {
+        "overall": {
+          "count": 10732,
+          "accuracy": 0.36433097279165116,
+          "nll": 1.7852047122574295,
+          "brier": 0.7773127717812842,
+          "ece": 0.1400361450756975,
+          "mean_confidence": 0.2518549021560373
+        },
+        "metrics": {
+          "binding:4:color": {
+            "count": 128,
+            "accuracy": 0.4921875,
+            "nll": 2.8105381310846287,
+            "brier": 0.909624181195049,
+            "ece": 0.4266700216782634
+          },
+          "binding:4:count": {
+            "count": 128,
+            "accuracy": 0.046875,
+            "nll": 2.9431366669211565,
+            "brier": 0.9261222145634193,
+            "ece": 0.06348872250686591
+          },
+          "binding:4:shape": {
+            "count": 128,
+            "accuracy": 0.046875,
+            "nll": 3.215763684270179,
+            "brier": 0.9485168922671225,
+            "ece": 0.015115519861825712
+          },
+          "binding:4:texture": {
+            "count": 128,
+            "accuracy": 0.46875,
+            "nll": 2.861575884216233,
+            "brier": 0.9144912041875555,
+            "ece": 0.40687413686274077
+          },
+          "binding:5:color": {
+            "count": 128,
+            "accuracy": 0.140625,
+            "nll": 2.8128344405371077,
+            "brier": 0.9121645339734438,
+            "ece": 0.06290765106011989
+          },
+          "binding:5:count": {
+            "count": 128,
+            "accuracy": 0.09375,
+            "nll": 2.8187095374596054,
+            "brier": 0.9136759582705739,
+            "ece": 0.12041715662336747
+          },
+          "binding:5:shape": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 3.2339574261747606,
+            "brier": 0.9540284876567087,
+            "ece": 0.0868189514323288
+          },
+          "binding:5:texture": {
+            "count": 128,
+            "accuracy": 0.6484375,
+            "nll": 2.623807756470212,
+            "brier": 0.8852797052672498,
+            "ece": 0.5711410252948663
+          },
+          "legacy:binding:color": {
+            "count": 256,
+            "accuracy": 0.60546875,
+            "nll": 2.339019195806442,
+            "brier": 0.8434569902049305,
+            "ece": 0.4956559884722022
+          },
+          "legacy:binding:count": {
+            "count": 256,
+            "accuracy": 0.109375,
+            "nll": 2.5843045708007777,
+            "brier": 0.888899514704385,
+            "ece": 0.04432069532896517
+          },
+          "legacy:binding:shape": {
+            "count": 256,
+            "accuracy": 0.16015625,
+            "nll": 2.6038413868850347,
+            "brier": 0.8946830470185244,
+            "ece": 0.15001027970755215
+          },
+          "legacy:binding:texture": {
+            "count": 256,
+            "accuracy": 0.96875,
+            "nll": 1.8802889250449697,
+            "brier": 0.7303675131768907,
+            "ece": 0.806954433624848
+          },
+          "legacy:curriculum:conditional_selection": {
+            "count": 256,
+            "accuracy": 0.14453125,
+            "nll": 1.6529035389113604,
+            "brier": 0.8184278148286003,
+            "ece": 0.11426804961783071
+          },
+          "legacy:curriculum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.3125,
+            "nll": 1.3671377718437556,
+            "brier": 0.7401758775880283,
+            "ece": 0.07253093912113506
+          },
+          "legacy:curriculum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.19921875,
+            "nll": 1.4037854070216862,
+            "brier": 0.7587864260868762,
+            "ece": 0.08154098011664747
+          },
+          "legacy:curriculum:count": {
+            "count": 256,
+            "accuracy": 0.23828125,
+            "nll": 1.5916749625890345,
+            "brier": 0.7944312225984336,
+            "ece": 0.009738290030842423
+          },
+          "legacy:curriculum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.27734375,
+            "nll": 1.384686865065411,
+            "brier": 0.7490897228446461,
+            "ece": 0.014213833980523666
+          },
+          "legacy:curriculum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.203125,
+            "nll": 1.3942747542643252,
+            "brier": 0.7541074651783758,
+            "ece": 0.06670024767288463
+          },
+          "legacy:curriculum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.3125,
+            "nll": 1.382218552471306,
+            "brier": 0.7478400147746389,
+            "ece": 0.036322915475485426
+          },
+          "legacy:curriculum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.17578125,
+            "nll": 1.397553521698519,
+            "brier": 0.7557559376071644,
+            "ece": 0.09332847674993297
+          },
+          "legacy:original:choice": {
+            "count": 1008,
+            "accuracy": 0.3759920634920635,
+            "nll": 1.4153666609971027,
+            "brier": 0.7366467957529462,
+            "ece": 0.07978655256628078
+          },
+          "legacy:original:noul": {
+            "count": 987,
+            "accuracy": 0.5785207700101317,
+            "nll": 0.716052673725261,
+            "brier": 0.5110985184541071,
+            "ece": 0.07443424440224429
+          },
+          "legacy:original:score": {
+            "count": 545,
+            "accuracy": 0.3467889908256881,
+            "nll": 1.4556873887485215,
+            "brier": 0.7499016648241748,
+            "ece": 0.06817433338114773
+          },
+          "numeric:count": {
+            "count": 256,
+            "accuracy": 0.19921875,
+            "nll": 1.6261730896803037,
+            "brier": 0.8058658102730929,
+            "ece": 0.022874575986780832
+          },
+          "numeric:extremum:cost:maximum": {
+            "count": 256,
+            "accuracy": 0.25,
+            "nll": 1.3772159945854092,
+            "brier": 0.7455871805037699,
+            "ece": 0.039955069442391994
+          },
+          "numeric:extremum:cost:minimum": {
+            "count": 256,
+            "accuracy": 0.26953125,
+            "nll": 1.3981754083570872,
+            "brier": 0.7558325971348969,
+            "ece": 0.03531892803704717
+          },
+          "numeric:extremum:risk:maximum": {
+            "count": 256,
+            "accuracy": 0.30078125,
+            "nll": 1.3710934008840088,
+            "brier": 0.7423934022696601,
+            "ece": 0.011614645826571532
+          },
+          "numeric:extremum:risk:minimum": {
+            "count": 256,
+            "accuracy": 0.19140625,
+            "nll": 1.4074440433443365,
+            "brier": 0.7609605825370667,
+            "ece": 0.09173473440580508
+          },
+          "numeric:extremum:time:maximum": {
+            "count": 256,
+            "accuracy": 0.2890625,
+            "nll": 1.3855095161357605,
+            "brier": 0.7492945616147957,
+            "ece": 0.014556578016394194
+          },
+          "numeric:extremum:time:minimum": {
+            "count": 256,
+            "accuracy": 0.2265625,
+            "nll": 1.395926523356989,
+            "brier": 0.7550229723929767,
+            "ece": 0.055502187971259664
+          },
+          "numeric:filter_min_cost": {
+            "count": 256,
+            "accuracy": 0.23046875,
+            "nll": 1.7369666178270993,
+            "brier": 0.8720969335445554,
+            "ece": 0.24393607711004542
+          },
+          "relevance:color:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.609375,
+            "nll": 2.431014862058523,
+            "brier": 0.857476366538853,
+            "ece": 0.5162453253440153
+          },
+          "relevance:color:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.8359375,
+            "nll": 2.0024746380650926,
+            "brier": 0.7734895447830832,
+            "ece": 0.6951374605265855
+          },
+          "relevance:color:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.3671875,
+            "nll": 2.622607676458947,
+            "brier": 0.8869339993112142,
+            "ece": 0.28327566300805584
+          },
+          "relevance:color:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.7421875,
+            "nll": 2.2000165573427086,
+            "brier": 0.8197746063665476,
+            "ece": 0.6248217143503093
+          },
+          "relevance:count:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.140625,
+            "nll": 2.5520753161207272,
+            "brier": 0.88337228621236,
+            "ece": 0.08763753903789509
+          },
+          "relevance:count:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.6171875,
+            "nll": 2.1717109999687594,
+            "brier": 0.8183096031552228,
+            "ece": 0.4991032809640463
+          },
+          "relevance:count:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.3125,
+            "nll": 2.493855247209117,
+            "brier": 0.8696592228472428,
+            "ece": 0.2199398441759921
+          },
+          "relevance:count:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.734375,
+            "nll": 2.2290898894308198,
+            "brier": 0.8260522197112995,
+            "ece": 0.6222814597141785
+          },
+          "relevance:shape:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.171875,
+            "nll": 2.638112107582864,
+            "brier": 0.8917805568039915,
+            "ece": 0.08362254640393853
+          },
+          "relevance:shape:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.5625,
+            "nll": 2.364403683893197,
+            "brier": 0.84901590732988,
+            "ece": 0.454400071977985
+          },
+          "relevance:shape:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.0625,
+            "nll": 2.90562045333327,
+            "brier": 0.9249223935134299,
+            "ece": 0.09450390679550677
+          },
+          "relevance:shape:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.0,
+            "nll": 2.8756698359767054,
+            "brier": 0.9273409352006431,
+            "ece": 0.10776028385136197
+          },
+          "relevance:texture:q8:key_value": {
+            "count": 128,
+            "accuracy": 0.90625,
+            "nll": 2.2496926238326145,
+            "brier": 0.8207176038729674,
+            "ece": 0.8003657820861594
+          },
+          "relevance:texture:q8:sentence": {
+            "count": 128,
+            "accuracy": 0.53125,
+            "nll": 2.1436743028493574,
+            "brier": 0.8121293512729422,
+            "ece": 0.4017470502107946
+          },
+          "relevance:texture:q9:key_value": {
+            "count": 128,
+            "accuracy": 0.90625,
+            "nll": 2.1570738820131306,
+            "brier": 0.7961698029788682,
+            "ece": 0.7945989270442546
+          },
+          "relevance:texture:q9:sentence": {
+            "count": 128,
+            "accuracy": 0.8828125,
+            "nll": 2.094960067855532,
+            "brier": 0.7905360270369071,
+            "ece": 0.7540171522011747
+          }
+        },
+        "macro": {
+          "accuracy": 0.36778035796442304,
+          "nll": 2.0791420519397827,
+          "brier": 0.8206873653240446,
+          "ece": 0.24502902659696704
+        },
+        "minimum_accuracy": 0.0
+      }
+    },
+    "primary_minimum_slice_bootstrap": {
+      "baseline_minimum": 1.0,
+      "candidate_minimum": 1.0,
+      "difference": 0.0,
+      "interval95": [
+        0.0,
+        0.0
+      ],
+      "states": 128,
+      "slices": 16,
+      "replicates": 10000,
+      "seed": 17,
+      "method": "paired whole-state percentile; recompute minimum each replicate",
+      "validation_selected": true,
+      "blind_evaluation": false
+    },
+    "predefined_auxiliary_promising_gate": false,
+    "product_adoption": false,
+    "criterion_changed": false,
+    "fit_evidence": {
+      "ce": {
+        "updates": 1024,
+        "positive_lr_updates": 1023,
+        "consumed_questions": 18432,
+        "best_step": 0,
+        "selected_consumed_questions": 0,
+        "bucket_counts": [
+          8192,
+          8192,
+          2048
+        ],
+        "repeated_question_indices": 0,
+        "update_seconds": 2429.4615699000424,
+        "lr_consumption_sha256": "eb401df94dd417c98a3ce79f249afc9027fdbd6db75a1701d33373db7052593e",
+        "sampler_sha256": "2d9c08c10ada678800a361d4ddbb51124d76dfaa2b15dffa0d1c03b74fcb412e",
+        "curves": [
+          {
+            "step": 0,
+            "best_step": 0,
+            "consumed_questions": 0,
+            "macro": {
+              "accuracy": 0.36778035796442304,
+              "nll": 2.0791420519397827,
+              "brier": 0.8206873653240446,
+              "ece": 0.24502902659696704
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 256,
+            "best_step": 0,
+            "consumed_questions": 4608,
+            "macro": {
+              "accuracy": 0.7854433610692995,
+              "nll": 0.6841198951729457,
+              "brier": 0.323213578516595,
+              "ece": 0.1789771069269463
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 512,
+            "best_step": 0,
+            "consumed_questions": 9216,
+            "macro": {
+              "accuracy": 0.8239703283912643,
+              "nll": 0.5505931207021786,
+              "brier": 0.2682290749834372,
+              "ece": 0.15448443070457088
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 768,
+            "best_step": 0,
+            "consumed_questions": 13824,
+            "macro": {
+              "accuracy": 0.8429296433186865,
+              "nll": 0.5625928233690581,
+              "brier": 0.2662459136308149,
+              "ece": 0.17603143878642938
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 1024,
+            "best_step": 0,
+            "consumed_questions": 18432,
+            "macro": {
+              "accuracy": 0.8452404589396523,
+              "nll": 0.5851134330247584,
+              "brier": 0.27211412662644324,
+              "ece": 0.1877700652418818
+            },
+            "minimum_accuracy": 0.0
+          }
+        ],
+        "selected_reload_artifacts_exact": true
+      },
+      "relevance": {
+        "updates": 1024,
+        "positive_lr_updates": 1023,
+        "consumed_questions": 18432,
+        "best_step": 0,
+        "selected_consumed_questions": 0,
+        "bucket_counts": [
+          8192,
+          8192,
+          2048
+        ],
+        "repeated_question_indices": 0,
+        "update_seconds": 2455.210651500005,
+        "lr_consumption_sha256": "eb401df94dd417c98a3ce79f249afc9027fdbd6db75a1701d33373db7052593e",
+        "sampler_sha256": "2d9c08c10ada678800a361d4ddbb51124d76dfaa2b15dffa0d1c03b74fcb412e",
+        "curves": [
+          {
+            "step": 0,
+            "best_step": 0,
+            "consumed_questions": 0,
+            "macro": {
+              "accuracy": 0.36778035796442304,
+              "nll": 2.0791420519397827,
+              "brier": 0.8206873653240446,
+              "ece": 0.24502902659696704
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 256,
+            "best_step": 0,
+            "consumed_questions": 4608,
+            "macro": {
+              "accuracy": 0.8139262745667983,
+              "nll": 0.5896676651507774,
+              "brier": 0.2788526401001918,
+              "ece": 0.13591800591262274
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 512,
+            "best_step": 0,
+            "consumed_questions": 9216,
+            "macro": {
+              "accuracy": 0.8113781295583723,
+              "nll": 0.5564553487177544,
+              "brier": 0.26048756011936824,
+              "ece": 0.11474060490256043
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 768,
+            "best_step": 0,
+            "consumed_questions": 13824,
+            "macro": {
+              "accuracy": 0.8257024203599391,
+              "nll": 0.573696058987991,
+              "brier": 0.26492813306919405,
+              "ece": 0.1449312826247468
+            },
+            "minimum_accuracy": 0.0
+          },
+          {
+            "step": 1024,
+            "best_step": 0,
+            "consumed_questions": 18432,
+            "macro": {
+              "accuracy": 0.8276078627861991,
+              "nll": 0.579872886293859,
+              "brier": 0.26453815490778676,
+              "ece": 0.1450997327548382
+            },
+            "minimum_accuracy": 0.0
+          }
+        ],
+        "selected_reload_artifacts_exact": true
+      }
+    },
+    "retained_rule": "minimum new16 Accuracy >=+3pp with positive95% lower bound AND trained selected checkpoint retains all47 slices"
+  },
+  "runs": {
+    "ce": {
+      "status": "PASS_MATCHED_RELEVANCE_FIT",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\train_condition_relevance.py",
+        "--arm",
+        "ce",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/condition-relevance-fit-ce-01"
+      ],
+      "source_commit": "6fb617f233752f582af7daf0dd131ba7cc281a5c",
+      "config_sha256": "942e86187fa587689165269b92e424d70fe5d615fbc3301342af48204fe1b5db",
+      "started_utc": "2026-10-15T13:47:50.364693+00:00",
+      "finished_utc": "2026-10-15T15:05:51.285440+00:00",
+      "steps": 1024,
+      "best_step": 0,
+      "selected_sha256": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+      "selected_reload_exact": [
+        "validation",
+        "fixed-train"
+      ],
+      "consumed": {
+        "consumed": 18432,
+        "unique_questions": 18432,
+        "repeated_questions": 0,
+        "unique_states": 2626,
+        "unique_states_by_source": {
+          "condition_relevance_v1": 512,
+          "curriculum": 128,
+          "original": 962,
+          "programmatic_decision_v1": 1024
+        },
+        "sources": {
+          "programmatic_decision_v1": 8192,
+          "condition_relevance_v1": 8192,
+          "curriculum": 1024,
+          "original": 1024
+        },
+        "tasks": {
+          "numeric:extremum:risk:minimum": 1024,
+          "relevance:shape:q4:sentence": 171,
+          "numeric:filter_min_cost": 1024,
+          "numeric:extremum:cost:minimum": 1024,
+          "relevance:count:q3:key_value": 171,
+          "relevance:texture:q5:key_value": 170,
+          "numeric:extremum:time:minimum": 1024,
+          "relevance:texture:q3:key_value": 171,
+          "numeric:extremum:cost:maximum": 1024,
+          "relevance:shape:q1:sentence": 171,
+          "relevance:count:q0:sentence": 171,
+          "numeric:count": 1024,
+          "relevance:count:q0:key_value": 171,
+          "legacy:curriculum:risk:maximum": 128,
+          "legacy:original:choice": 396,
+          "legacy:curriculum:time:minimum": 128,
+          "relevance:shape:q2:key_value": 170,
+          "relevance:shape:q0:key_value": 171,
+          "relevance:texture:q3:sentence": 171,
+          "numeric:extremum:time:maximum": 1024,
+          "numeric:extremum:risk:maximum": 1024,
+          "relevance:shape:q1:key_value": 171,
+          "relevance:count:q1:key_value": 171,
+          "relevance:color:q5:sentence": 170,
+          "relevance:shape:q4:key_value": 171,
+          "relevance:texture:q2:sentence": 170,
+          "relevance:count:q4:key_value": 171,
+          "relevance:texture:q4:key_value": 171,
+          "relevance:color:q4:sentence": 171,
+          "legacy:curriculum:risk:minimum": 128,
+          "relevance:count:q1:sentence": 171,
+          "legacy:curriculum:conditional_selection": 128,
+          "legacy:curriculum:count": 128,
+          "relevance:color:q4:key_value": 171,
+          "relevance:count:q5:sentence": 170,
+          "relevance:count:q3:sentence": 171,
+          "relevance:color:q0:key_value": 171,
+          "relevance:shape:q5:key_value": 170,
+          "relevance:count:q2:sentence": 170,
+          "legacy:original:noul": 412,
+          "legacy:original:score": 216,
+          "legacy:curriculum:time:maximum": 128,
+          "relevance:color:q1:sentence": 171,
+          "relevance:color:q3:key_value": 171,
+          "relevance:texture:q1:sentence": 171,
+          "relevance:count:q5:key_value": 170,
+          "relevance:color:q2:sentence": 170,
+          "relevance:color:q3:sentence": 171,
+          "relevance:color:q0:sentence": 171,
+          "legacy:curriculum:cost:minimum": 128,
+          "relevance:shape:q3:sentence": 171,
+          "relevance:color:q1:key_value": 171,
+          "relevance:shape:q0:sentence": 171,
+          "relevance:count:q2:key_value": 170,
+          "relevance:texture:q0:sentence": 171,
+          "relevance:texture:q5:sentence": 170,
+          "relevance:texture:q4:sentence": 171,
+          "relevance:texture:q1:key_value": 171,
+          "relevance:texture:q0:key_value": 171,
+          "relevance:color:q5:key_value": 170,
+          "relevance:texture:q2:key_value": 170,
+          "relevance:shape:q3:key_value": 171,
+          "relevance:shape:q2:sentence": 170,
+          "relevance:color:q2:key_value": 170,
+          "relevance:count:q4:sentence": 171,
+          "relevance:shape:q5:sentence": 170,
+          "legacy:curriculum:cost:maximum": 128
+        },
+        "modalities": {
+          "text": 18432
+        },
+        "native_assets": 0
+      },
+      "selected_consumed": {
+        "consumed": 0,
+        "unique_questions": 0,
+        "repeated_questions": 0,
+        "unique_states": 0,
+        "unique_states_by_source": {},
+        "sources": {},
+        "tasks": {},
+        "modalities": {
+          "text": 0
+        },
+        "native_assets": 0
+      },
+      "trainable_parameters": 21639554,
+      "total_parameters": 70830722,
+      "auxiliary_training_only_parameters": 385,
+      "optimization_parameters": 21639939,
+      "seconds": 4680.924353199996,
+      "training_seconds": 2429.4615699000424,
+      "evaluation_seconds": 2157.395771299991,
+      "candidate_pair_forwards": 1615928,
+      "peak_cuda_allocated": 3420603904,
+      "peak_cuda_reserved": 3701473280,
+      "peak_host_bytes": 2492239872,
+      "free_disk_bytes": 10447110144,
+      "frozen_sha256": "7bfe64f42bce22f87ed18f9ecd0278a5a8ca828c2596f3c9b069d0fbf915c2f9",
+      "frozen_and_sources_unchanged": true,
+      "exact_resume": false,
+      "cloud_cost": 0,
+      "directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-fit-ce-01",
+      "result_sha256": "539d88b1166332404a61a27efc1fc9416b6590d74a339baff41a9be54ce2320a",
+      "effective_config_sha256": "904efafb8b5bb06e38581841f4393baa3ca229936ad82a542de55522256cd37b",
+      "environment": {
+        "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+        "dtype": "torch.float32",
+        "attention": "eager",
+        "packages": {
+          "transformers": "5.6.2",
+          "numpy": "2.4.6",
+          "tokenizers": "0.22.2",
+          "safetensors": "0.8.0",
+          "psutil": "7.2.2"
+        }
+      },
+      "artifacts": {
+        "best-delta.pt": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+        "effective-config.json": "904efafb8b5bb06e38581841f4393baa3ca229936ad82a542de55522256cd37b",
+        "final-delta.pt": "569c4d3fef03e5a8110903a21f3f18df38497cde1f859af063af59874578b69a",
+        "fixed-train-0-metrics.json": "1fe09359fc288f264ac7c37ce59087709350d0aefb697ef5f782d7cb168dccf4",
+        "fixed-train-0-predictions.jsonl": "a5d90d53fed95c27e42feff91b14e5183d36921880b2a54f2589103023280706",
+        "fixed-train-0-scores.npy": "a50f9df35cf4aaa2aedd6dfc7cc34f59b5e092036d503468a08a38e649a249be",
+        "fixed-train-1024-metrics.json": "3a24f46e02b0ca3334a037c490bbfb790c36d7a0646db7f8a7c313c209da3462",
+        "fixed-train-1024-predictions.jsonl": "6c63d36952c0be7ba4d1ca0fa0c7ae8535c361734cebf5368aa0cf5486637039",
+        "fixed-train-1024-scores.npy": "30a864dc07b2038c22306ec30c0e4aad22d3395751d5db2d5f51244c7e6cef18",
+        "fixed-train-256-metrics.json": "fd8ff9cc764349cfe0a4d5e8169c12342fad0aaa91cc7f0cf39ad8d4fa3f4a01",
+        "fixed-train-256-predictions.jsonl": "c4f87a935b6df8d2c896de49e2aae561b3830d92a9e634f8485043ac8542587e",
+        "fixed-train-256-scores.npy": "e2d634ffb9d6e823b4d1e19470696f821512bfc0a06209014f055f8776ec578b",
+        "fixed-train-512-metrics.json": "a09eb33b51c9c73ddfe361bac78ac917a0da8fb384ba6e9b8d2d481007cf0030",
+        "fixed-train-512-predictions.jsonl": "9e6f9d76014bd9b0a839d2af44993613843819df1a85157cdb2599512a52982b",
+        "fixed-train-512-scores.npy": "581830b7b6578d70145bc4ec4cf365f2920842fe043841b989dd3b70054d520a",
+        "fixed-train-768-metrics.json": "53900cd2c514646f4b57c74be7ace7f6a5d28946b914a6dacb4a43936b72c151",
+        "fixed-train-768-predictions.jsonl": "a4696e09ee95ac0d86afda85798571de1f205bc0b0609e5babd8682fa4c7eea5",
+        "fixed-train-768-scores.npy": "b2e1a79396b5fe24ce06c86845da9f59d46bf449fce8f586a48e25c85388fd86",
+        "history.json": "afc4362b7ceb2a2b673200d6e8e7a8ceafd4e414f0c5b9cc66eac7bf5379be0d",
+        "initial-delta.pt": "2adf82937665c2eea10c23aed348f512b84b514942be96e92bd26675508817f5",
+        "initial-retention-scores.npy": "e976c7b22739e0d0297fedf6830af746c331a24633753935f836ce97c46b676f",
+        "reload-fixed-train-metrics.json": "1fe09359fc288f264ac7c37ce59087709350d0aefb697ef5f782d7cb168dccf4",
+        "reload-fixed-train-predictions.jsonl": "a5d90d53fed95c27e42feff91b14e5183d36921880b2a54f2589103023280706",
+        "reload-fixed-train-scores.npy": "a50f9df35cf4aaa2aedd6dfc7cc34f59b5e092036d503468a08a38e649a249be",
+        "reload-validation-metrics.json": "1ae3961b4e130e856a65e7454deab68fc64b0128536309ac27e6fa91dd6a94ef",
+        "reload-validation-predictions.jsonl": "2ee40bcc4fc2fe6e62e3f79107a1ce5cb73a7efc20aef5a19047052861bb9f6b",
+        "reload-validation-scores.npy": "2a09afc12f427c068742d33f784d52d7c84a72d7e949e8586f57f72e107f356f",
+        "sample-accounting.json": "74210722032924a3e7342958326681729efa3c9511ad1678d70f090fb32c84af",
+        "sample-order.json": "4cd0e805fa558372fd0300ceb2af9b088e4979f05a5c40b7175e9e06d1364272",
+        "step-0-delta.pt": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+        "step-1024-delta.pt": "a7fa5ff60b81889a167c232c30709beb6193593395d4f0ac4e8abfd4004a80d3",
+        "step-256-delta.pt": "a4227645d3af87c4dba9ed24c861d7662b86ecb726718aa4857022ccbe45979f",
+        "step-512-delta.pt": "85b2ba7b4717d9600f4840d6b1d1f1d96376aa5dcb28caeb8961eb61a36bc625",
+        "step-768-delta.pt": "6027d2d016a87ff1d2a5ee280bb5577c6312834a43433335cf8b63f0b4e0f247",
+        "token-preflight.json": "5fde1d2afa5dfa1177b4c996ffb7f8ff703a39f855bb1cdae2ae501dfa030434",
+        "uncertainty.json": "8cb3545e35b0f3862d29e6e4b6601378433915955b60528ba9e4db0631f840bf",
+        "updates.jsonl": "efd88992f89652733164ba2a27bae4e29e842f6eb2e81aac331c120c099b9700",
+        "validation-0-metrics.json": "1ae3961b4e130e856a65e7454deab68fc64b0128536309ac27e6fa91dd6a94ef",
+        "validation-0-predictions.jsonl": "2ee40bcc4fc2fe6e62e3f79107a1ce5cb73a7efc20aef5a19047052861bb9f6b",
+        "validation-0-scores.npy": "2a09afc12f427c068742d33f784d52d7c84a72d7e949e8586f57f72e107f356f",
+        "validation-1024-metrics.json": "7305c0330be97b55ff35c39b93d0878cd9c61ac23e6afa582efd16112e0ca91f",
+        "validation-1024-predictions.jsonl": "fdbef71d15de9c65b06d615d94db0efcc86779b8112177d98d156b19512b16de",
+        "validation-1024-scores.npy": "508d8399e47dc58437207a8af433544cc0a738c3abef270c03b4dad1888ff899",
+        "validation-256-metrics.json": "22f790e061e03c280429923c0124202f79b2eb1b776c3ac8ec39a536a7520953",
+        "validation-256-predictions.jsonl": "27d954a3acc3c3c74f06efe7a76896751f8e3cfa67eebb66789ea33e70e78bb2",
+        "validation-256-scores.npy": "b9bec863c6bd0b93b410da7f123bfba6fc38e5cba0b952125ed615f087275cb9",
+        "validation-512-metrics.json": "8fda65c88eed59aa86f0a2a356ab52b776b5523bfe01dbd33f78071fcff097bd",
+        "validation-512-predictions.jsonl": "21d255e9be8dd175e6c839f98a1bec2cc83a1314c20547e52d9ebd03704cefaa",
+        "validation-512-scores.npy": "15a942d429e66881b83f19b26c20f428f37025d001348b98658bd4feebdb5d67",
+        "validation-768-metrics.json": "5beee681b85b6011060f06a718cd2cde6dc303463369c9a72c0d2af5aade5338",
+        "validation-768-predictions.jsonl": "7b574eec146a9ee8953971b7dbf4f212669dac2db77a76775b2e1f9a8e815798",
+        "validation-768-scores.npy": "4420845a317866c1ff7c35edfc244909e549cfe80218e982cacffcb79971b67b"
+      }
+    },
+    "relevance": {
+      "status": "PASS_MATCHED_RELEVANCE_FIT",
+      "command": [
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\train_condition_relevance.py",
+        "--arm",
+        "relevance",
+        "--output",
+        "C:/CodexArtifacts/pretrained-reuse-r2/condition-relevance-fit-aux-01"
+      ],
+      "source_commit": "6fb617f233752f582af7daf0dd131ba7cc281a5c",
+      "config_sha256": "942e86187fa587689165269b92e424d70fe5d615fbc3301342af48204fe1b5db",
+      "started_utc": "2026-10-15T15:07:48.085584+00:00",
+      "finished_utc": "2026-10-15T16:27:46.402214+00:00",
+      "steps": 1024,
+      "best_step": 0,
+      "selected_sha256": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+      "selected_reload_exact": [
+        "validation",
+        "fixed-train"
+      ],
+      "consumed": {
+        "consumed": 18432,
+        "unique_questions": 18432,
+        "repeated_questions": 0,
+        "unique_states": 2626,
+        "unique_states_by_source": {
+          "condition_relevance_v1": 512,
+          "curriculum": 128,
+          "original": 962,
+          "programmatic_decision_v1": 1024
+        },
+        "sources": {
+          "programmatic_decision_v1": 8192,
+          "condition_relevance_v1": 8192,
+          "curriculum": 1024,
+          "original": 1024
+        },
+        "tasks": {
+          "numeric:extremum:risk:minimum": 1024,
+          "relevance:shape:q4:sentence": 171,
+          "numeric:filter_min_cost": 1024,
+          "numeric:extremum:cost:minimum": 1024,
+          "relevance:count:q3:key_value": 171,
+          "relevance:texture:q5:key_value": 170,
+          "numeric:extremum:time:minimum": 1024,
+          "relevance:texture:q3:key_value": 171,
+          "numeric:extremum:cost:maximum": 1024,
+          "relevance:shape:q1:sentence": 171,
+          "relevance:count:q0:sentence": 171,
+          "numeric:count": 1024,
+          "relevance:count:q0:key_value": 171,
+          "legacy:curriculum:risk:maximum": 128,
+          "legacy:original:choice": 396,
+          "legacy:curriculum:time:minimum": 128,
+          "relevance:shape:q2:key_value": 170,
+          "relevance:shape:q0:key_value": 171,
+          "relevance:texture:q3:sentence": 171,
+          "numeric:extremum:time:maximum": 1024,
+          "numeric:extremum:risk:maximum": 1024,
+          "relevance:shape:q1:key_value": 171,
+          "relevance:count:q1:key_value": 171,
+          "relevance:color:q5:sentence": 170,
+          "relevance:shape:q4:key_value": 171,
+          "relevance:texture:q2:sentence": 170,
+          "relevance:count:q4:key_value": 171,
+          "relevance:texture:q4:key_value": 171,
+          "relevance:color:q4:sentence": 171,
+          "legacy:curriculum:risk:minimum": 128,
+          "relevance:count:q1:sentence": 171,
+          "legacy:curriculum:conditional_selection": 128,
+          "legacy:curriculum:count": 128,
+          "relevance:color:q4:key_value": 171,
+          "relevance:count:q5:sentence": 170,
+          "relevance:count:q3:sentence": 171,
+          "relevance:color:q0:key_value": 171,
+          "relevance:shape:q5:key_value": 170,
+          "relevance:count:q2:sentence": 170,
+          "legacy:original:noul": 412,
+          "legacy:original:score": 216,
+          "legacy:curriculum:time:maximum": 128,
+          "relevance:color:q1:sentence": 171,
+          "relevance:color:q3:key_value": 171,
+          "relevance:texture:q1:sentence": 171,
+          "relevance:count:q5:key_value": 170,
+          "relevance:color:q2:sentence": 170,
+          "relevance:color:q3:sentence": 171,
+          "relevance:color:q0:sentence": 171,
+          "legacy:curriculum:cost:minimum": 128,
+          "relevance:shape:q3:sentence": 171,
+          "relevance:color:q1:key_value": 171,
+          "relevance:shape:q0:sentence": 171,
+          "relevance:count:q2:key_value": 170,
+          "relevance:texture:q0:sentence": 171,
+          "relevance:texture:q5:sentence": 170,
+          "relevance:texture:q4:sentence": 171,
+          "relevance:texture:q1:key_value": 171,
+          "relevance:texture:q0:key_value": 171,
+          "relevance:color:q5:key_value": 170,
+          "relevance:texture:q2:key_value": 170,
+          "relevance:shape:q3:key_value": 171,
+          "relevance:shape:q2:sentence": 170,
+          "relevance:color:q2:key_value": 170,
+          "relevance:count:q4:sentence": 171,
+          "relevance:shape:q5:sentence": 170,
+          "legacy:curriculum:cost:maximum": 128
+        },
+        "modalities": {
+          "text": 18432
+        },
+        "native_assets": 0
+      },
+      "selected_consumed": {
+        "consumed": 0,
+        "unique_questions": 0,
+        "repeated_questions": 0,
+        "unique_states": 0,
+        "unique_states_by_source": {},
+        "sources": {},
+        "tasks": {},
+        "modalities": {
+          "text": 0
+        },
+        "native_assets": 0
+      },
+      "trainable_parameters": 21639554,
+      "total_parameters": 70830722,
+      "auxiliary_training_only_parameters": 385,
+      "optimization_parameters": 21639939,
+      "seconds": 4798.282565300004,
+      "training_seconds": 2455.210651500005,
+      "evaluation_seconds": 2248.6084883000076,
+      "candidate_pair_forwards": 1615928,
+      "peak_cuda_allocated": 3420603904,
+      "peak_cuda_reserved": 3701473280,
+      "peak_host_bytes": 2464546816,
+      "free_disk_bytes": 9925214208,
+      "frozen_sha256": "7bfe64f42bce22f87ed18f9ecd0278a5a8ca828c2596f3c9b069d0fbf915c2f9",
+      "frozen_and_sources_unchanged": true,
+      "exact_resume": false,
+      "cloud_cost": 0,
+      "directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-fit-aux-01",
+      "result_sha256": "c70b89d4b04c936ab213eef163bfa3342b1b8a98b3c87558b0f321dae4175e35",
+      "effective_config_sha256": "db82b920ea73b662a64c2458000d9696d60e119e8e79c550c754bb33e26d025d",
+      "environment": {
+        "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+        "dtype": "torch.float32",
+        "attention": "eager",
+        "packages": {
+          "transformers": "5.6.2",
+          "numpy": "2.4.6",
+          "tokenizers": "0.22.2",
+          "safetensors": "0.8.0",
+          "psutil": "7.2.2"
+        }
+      },
+      "artifacts": {
+        "best-delta.pt": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+        "effective-config.json": "db82b920ea73b662a64c2458000d9696d60e119e8e79c550c754bb33e26d025d",
+        "final-delta.pt": "ab03857def27de028a71952d182d62175c0d83fb1c23eebcaf32c5e1476400fe",
+        "fixed-train-0-metrics.json": "1fe09359fc288f264ac7c37ce59087709350d0aefb697ef5f782d7cb168dccf4",
+        "fixed-train-0-predictions.jsonl": "a5d90d53fed95c27e42feff91b14e5183d36921880b2a54f2589103023280706",
+        "fixed-train-0-scores.npy": "a50f9df35cf4aaa2aedd6dfc7cc34f59b5e092036d503468a08a38e649a249be",
+        "fixed-train-1024-metrics.json": "94d0f178396ae73b3f001af1ac3ddfcc262622491861503985e15c38afad8ff8",
+        "fixed-train-1024-predictions.jsonl": "81a0ef69b70704c820dfb7de89934cb5cbadf9b20b10169cef7a1a3fb4871849",
+        "fixed-train-1024-scores.npy": "52654da3aef59c81f6943051822ac5385e87ac98c58b3d0b6c9f3e2437180741",
+        "fixed-train-256-metrics.json": "0167dadefe7ef04240534a9ca84e9270574789be6b5ae8e3786c4bff7c6ce068",
+        "fixed-train-256-predictions.jsonl": "bbbad8d11189479551c6cc0afdff6902cdc025b1f5bcc53b80e1087fae5ce877",
+        "fixed-train-256-scores.npy": "74b9b02b2ddc677711d50279ea2622b9d62aef9531725972ad2f93716c9335ca",
+        "fixed-train-512-metrics.json": "b461fdcdf365e1ac304664ff19dfa7ffbb2f17a7008161e4a9c3ab59679b72c4",
+        "fixed-train-512-predictions.jsonl": "d1e613e7219ad9a6e8ee6ba5d72a670a12c13c077828600d679644f3cf1992bd",
+        "fixed-train-512-scores.npy": "24c4f9608cf960b1158eb5b21eea12ff90fe89c336764800f189ced3511085e8",
+        "fixed-train-768-metrics.json": "6e5dc25e2a617a95dfce0a5ddc7b263528d70488c75a8c80a0c72905ce940693",
+        "fixed-train-768-predictions.jsonl": "3ae302641a056e7c3acc660f9c1575e02d94c7bafa6cf17c0de61dd306b6ff32",
+        "fixed-train-768-scores.npy": "3c6906544bd52ed0f9a4a30c22fc5b730e3646c13dfc2c6d5bf70ec8829c027a",
+        "history.json": "669303b41260d846647d91746a2f6ea7bcc76516fad16acb6f569794c1ca75af",
+        "initial-delta.pt": "2adf82937665c2eea10c23aed348f512b84b514942be96e92bd26675508817f5",
+        "initial-retention-scores.npy": "e976c7b22739e0d0297fedf6830af746c331a24633753935f836ce97c46b676f",
+        "reload-fixed-train-metrics.json": "1fe09359fc288f264ac7c37ce59087709350d0aefb697ef5f782d7cb168dccf4",
+        "reload-fixed-train-predictions.jsonl": "a5d90d53fed95c27e42feff91b14e5183d36921880b2a54f2589103023280706",
+        "reload-fixed-train-scores.npy": "a50f9df35cf4aaa2aedd6dfc7cc34f59b5e092036d503468a08a38e649a249be",
+        "reload-validation-metrics.json": "1ae3961b4e130e856a65e7454deab68fc64b0128536309ac27e6fa91dd6a94ef",
+        "reload-validation-predictions.jsonl": "2ee40bcc4fc2fe6e62e3f79107a1ce5cb73a7efc20aef5a19047052861bb9f6b",
+        "reload-validation-scores.npy": "2a09afc12f427c068742d33f784d52d7c84a72d7e949e8586f57f72e107f356f",
+        "sample-accounting.json": "74210722032924a3e7342958326681729efa3c9511ad1678d70f090fb32c84af",
+        "sample-order.json": "4cd0e805fa558372fd0300ceb2af9b088e4979f05a5c40b7175e9e06d1364272",
+        "step-0-delta.pt": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+        "step-1024-delta.pt": "4f2286b0582cbe15cbd4be770014401c3457f37acf1f1b07119be965269c0eca",
+        "step-256-delta.pt": "4796543626c0304fa162ddf66cfc0f912c3feff6bf4ebe7617e960d019fed2a7",
+        "step-512-delta.pt": "8a0bd34e7bd399cdb19253e680877b5ec223027ddf16a7de0083eb5d07b75f3f",
+        "step-768-delta.pt": "f49d5b6f9b5e4e8a3f2b528a41afff75d7be3a6de026414f19a3e2bbab064b40",
+        "token-preflight.json": "5fde1d2afa5dfa1177b4c996ffb7f8ff703a39f855bb1cdae2ae501dfa030434",
+        "uncertainty.json": "8cb3545e35b0f3862d29e6e4b6601378433915955b60528ba9e4db0631f840bf",
+        "updates.jsonl": "33a6eb8437ee883333d2b5f2255e7dfe35933a82286b3fc8732976a83331a3ff",
+        "validation-0-metrics.json": "1ae3961b4e130e856a65e7454deab68fc64b0128536309ac27e6fa91dd6a94ef",
+        "validation-0-predictions.jsonl": "2ee40bcc4fc2fe6e62e3f79107a1ce5cb73a7efc20aef5a19047052861bb9f6b",
+        "validation-0-scores.npy": "2a09afc12f427c068742d33f784d52d7c84a72d7e949e8586f57f72e107f356f",
+        "validation-1024-metrics.json": "b01f35c4f510411676d0f06a06e43a781c4bcca6958ab89e7a947729fc40a3f5",
+        "validation-1024-predictions.jsonl": "65abfa5e968de82ba48ca25303b1cc349a31d362c6c0cab35185d23082e8a8a6",
+        "validation-1024-scores.npy": "87658d76cf9a277d68769e1eeedc00e297bccaae6d948a269f59182c830f9076",
+        "validation-256-metrics.json": "49dd18101a094d723e0dbff55d63bd9469bafe678220f3941588518ee1c5ef35",
+        "validation-256-predictions.jsonl": "e412f9297ab62f5302983759e17d75376431523567a5b8cd01768437a0a01292",
+        "validation-256-scores.npy": "3903974541058641a74c13993d54d0871d1d84fe1185cf423dee4ecd81cf0856",
+        "validation-512-metrics.json": "cebdc320b21d6e2bb1f374c4de0c46a9509bc6d9f36944949699b59787d4225a",
+        "validation-512-predictions.jsonl": "7c82fbbcf615003a06b0698d991e992c15e13f17a3ff2aa1afbaff7cfe926a57",
+        "validation-512-scores.npy": "f824cca0146d15462f52c304e923b279d9b466e4ba3920f71b98fda225249a46",
+        "validation-768-metrics.json": "3447a6f554c0f7f92e3456ecb9c8fe8a873f3b90e77d71d346dcb8c135367868",
+        "validation-768-predictions.jsonl": "d2e09f75025d27aa43a8f71799ce11c5cf89522b0c4f8740f566242c371e1c03",
+        "validation-768-scores.npy": "699dee5a1e1184febff0e576addf8b0942bb0e8421bd72f10670f06a4fd8ad84"
+      }
+    }
+  },
+  "curves": [
+    {
+      "arm": "ce",
+      "step": 0,
+      "consumed": 0,
+      "best_step": 0,
+      "accuracy": 0.36778035796442304,
+      "nll": 2.0791420519397827,
+      "brier": 0.8206873653240446,
+      "ece": 0.24502902659696704,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 0.0,
+      "failed_slices": 0,
+      "failures": {}
+    },
+    {
+      "arm": "ce",
+      "step": 256,
+      "consumed": 4608,
+      "best_step": 0,
+      "accuracy": 0.7854433610692995,
+      "nll": 0.6841198951729459,
+      "brier": 0.32321357851659505,
+      "ece": 0.1789771069269463,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 0.9921875,
+      "failed_slices": 22,
+      "failures": {
+        "binding:4:count": [
+          "ece"
+        ],
+        "binding:4:shape": [
+          "ece"
+        ],
+        "binding:5:color": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "accuracy",
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "accuracy",
+          "nll",
+          "brier",
+          "ece"
+        ],
+        "numeric:extremum:risk:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ],
+        "relevance:count:q9:key_value": [
+          "ece"
+        ],
+        "relevance:shape:q9:key_value": [
+          "ece"
+        ],
+        "relevance:shape:q9:sentence": [
+          "ece"
+        ]
+      }
+    },
+    {
+      "arm": "ce",
+      "step": 512,
+      "consumed": 9216,
+      "best_step": 0,
+      "accuracy": 0.823970328391264,
+      "nll": 0.5505931207021783,
+      "brier": 0.2682290749834372,
+      "ece": 0.15448443070457088,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 1.0,
+      "failed_slices": 20,
+      "failures": {
+        "binding:4:count": [
+          "ece"
+        ],
+        "binding:4:shape": [
+          "ece"
+        ],
+        "binding:5:color": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:cost:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "brier",
+          "ece"
+        ],
+        "numeric:extremum:risk:minimum": [
+          "brier",
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ]
+      }
+    },
+    {
+      "arm": "ce",
+      "step": 768,
+      "consumed": 13824,
+      "best_step": 0,
+      "accuracy": 0.8429296433186865,
+      "nll": 0.5625928233690581,
+      "brier": 0.26624591363081496,
+      "ece": 0.17603143878642935,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 1.0,
+      "failed_slices": 21,
+      "failures": {
+        "binding:4:count": [
+          "ece"
+        ],
+        "binding:4:shape": [
+          "ece"
+        ],
+        "binding:5:color": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:cost:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ],
+        "relevance:count:q9:key_value": [
+          "ece"
+        ],
+        "relevance:shape:q9:key_value": [
+          "ece"
+        ]
+      }
+    },
+    {
+      "arm": "ce",
+      "step": 1024,
+      "consumed": 18432,
+      "best_step": 0,
+      "accuracy": 0.8452404589396523,
+      "nll": 0.5851134330247584,
+      "brier": 0.2721141266264432,
+      "ece": 0.18777006524188186,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 1.0,
+      "failed_slices": 22,
+      "failures": {
+        "binding:4:count": [
+          "ece"
+        ],
+        "binding:4:shape": [
+          "ece"
+        ],
+        "binding:5:color": [
+          "accuracy",
+          "nll",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "accuracy",
+          "nll",
+          "brier",
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "legacy:original:choice": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:cost:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ],
+        "relevance:count:q9:key_value": [
+          "ece"
+        ],
+        "relevance:shape:q9:key_value": [
+          "ece"
+        ]
+      }
+    },
+    {
+      "arm": "relevance",
+      "step": 0,
+      "consumed": 0,
+      "best_step": 0,
+      "accuracy": 0.36778035796442304,
+      "nll": 2.0791420519397827,
+      "brier": 0.8206873653240446,
+      "ece": 0.24502902659696704,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 0.0,
+      "failed_slices": 0,
+      "failures": {}
+    },
+    {
+      "arm": "relevance",
+      "step": 256,
+      "consumed": 4608,
+      "best_step": 0,
+      "accuracy": 0.8139262745667983,
+      "nll": 0.5896676651507774,
+      "brier": 0.27885264010019184,
+      "ece": 0.13591800591262276,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 1.0,
+      "failed_slices": 22,
+      "failures": {
+        "binding:4:count": [
+          "ece"
+        ],
+        "binding:4:shape": [
+          "ece"
+        ],
+        "binding:5:color": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "legacy:original:score": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:cost:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ],
+        "relevance:count:q9:key_value": [
+          "ece"
+        ]
+      }
+    },
+    {
+      "arm": "relevance",
+      "step": 512,
+      "consumed": 9216,
+      "best_step": 0,
+      "accuracy": 0.8113781295583723,
+      "nll": 0.5564553487177544,
+      "brier": 0.26048756011936813,
+      "ece": 0.11474060490256043,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 1.0,
+      "failed_slices": 18,
+      "failures": {
+        "binding:5:color": [
+          "accuracy",
+          "nll",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:cost:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "brier",
+          "ece"
+        ],
+        "numeric:extremum:risk:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ]
+      }
+    },
+    {
+      "arm": "relevance",
+      "step": 768,
+      "consumed": 13824,
+      "best_step": 0,
+      "accuracy": 0.8257024203599391,
+      "nll": 0.5736960589879909,
+      "brier": 0.26492813306919405,
+      "ece": 0.14493128262474678,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 1.0,
+      "failed_slices": 20,
+      "failures": {
+        "binding:4:count": [
+          "ece"
+        ],
+        "binding:5:color": [
+          "accuracy",
+          "nll",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "legacy:original:choice": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:cost:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "accuracy",
+          "nll",
+          "brier",
+          "ece"
+        ],
+        "numeric:extremum:risk:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ]
+      }
+    },
+    {
+      "arm": "relevance",
+      "step": 1024,
+      "consumed": 18432,
+      "best_step": 0,
+      "accuracy": 0.8276078627861991,
+      "nll": 0.5798728862938591,
+      "brier": 0.26453815490778676,
+      "ece": 0.1450997327548382,
+      "minimum_accuracy": 0.0,
+      "minimum_new16_accuracy": 1.0,
+      "failed_slices": 20,
+      "failures": {
+        "binding:4:count": [
+          "ece"
+        ],
+        "binding:5:color": [
+          "accuracy",
+          "nll",
+          "brier",
+          "ece"
+        ],
+        "binding:5:count": [
+          "accuracy",
+          "brier",
+          "ece"
+        ],
+        "binding:5:shape": [
+          "ece"
+        ],
+        "legacy:curriculum:conditional_selection": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:cost:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:count": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:risk:minimum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:maximum": [
+          "ece"
+        ],
+        "legacy:curriculum:time:minimum": [
+          "ece"
+        ],
+        "legacy:original:choice": [
+          "ece"
+        ],
+        "numeric:count": [
+          "ece"
+        ],
+        "numeric:extremum:cost:maximum": [
+          "ece"
+        ],
+        "numeric:extremum:cost:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:risk:maximum": [
+          "brier",
+          "ece"
+        ],
+        "numeric:extremum:risk:minimum": [
+          "ece"
+        ],
+        "numeric:extremum:time:maximum": [
+          "accuracy",
+          "ece"
+        ],
+        "numeric:extremum:time:minimum": [
+          "ece"
+        ]
+      }
+    }
+  ],
+  "transfer": {
+    "status": "RUNNING",
+    "directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-postfit-transfer-01",
+    "pid": 11760,
+    "expected_rows": 16384,
+    "expected_unique_states": 256,
+    "product_adoption": false
+  },
+  "sealed_audit_loaded": false,
+  "calibration_loaded": false,
+  "product_complete": false,
+  "train_replay": {
+    "status": "PASS_CONDITION_RELEVANCE_TRAIN_REPLAY",
+    "rows": 536,
+    "unique_weights_evaluated": 3,
+    "seconds": 74.43078239999886,
+    "exact_replay_groups": [
+      "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+      "a7fa5ff60b81889a167c232c30709beb6193593395d4f0ac4e8abfd4004a80d3",
+      "4f2286b0582cbe15cbd4be770014401c3457f37acf1f1b07119be965269c0eca"
+    ],
+    "all_roles": {
+      "ce_endpoint": {
+        "arm": "ce",
+        "filename": "step-1024-delta.pt",
+        "sha256": "a7fa5ff60b81889a167c232c30709beb6193593395d4f0ac4e8abfd4004a80d3",
+        "step": 1024
+      },
+      "ce_selected": {
+        "arm": "ce",
+        "filename": "best-delta.pt",
+        "sha256": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+        "step": 0
+      },
+      "initial": {
+        "arm": "ce",
+        "filename": "step-0-delta.pt",
+        "sha256": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+        "step": 0
+      },
+      "relevance_endpoint": {
+        "arm": "relevance",
+        "filename": "step-1024-delta.pt",
+        "sha256": "4f2286b0582cbe15cbd4be770014401c3457f37acf1f1b07119be965269c0eca",
+        "step": 1024
+      },
+      "relevance_selected": {
+        "arm": "relevance",
+        "filename": "best-delta.pt",
+        "sha256": "ea43cc5dfedff0966fb2d99fb88e05cfef5196c47ca0ac71091397b8374e97a2",
+        "step": 0
+      }
+    },
+    "environment": {
+      "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+      "torch": "2.6.0+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "dtype": "torch.float32",
+      "attention": "eager",
+      "packages": {
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "tokenizers": "0.22.2",
+        "safetensors": "0.8.0",
+        "psutil": "7.2.2"
+      }
+    },
+    "peak_cuda_allocated": 1826286592,
+    "peak_cuda_reserved": 2497708032,
+    "peak_host_bytes": 1854980096,
+    "evaluation_source_commit": "f2dc24872a22dad92344c2c3009c68f9feb5d44c",
+    "module_origins": {
+      "__main__": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\evaluate_condition_relevance_transfer.py",
+        "sha256": "e9218c1fd8010af148de0f0cd757d82d0db07488cfbecdc43185b1a90d878a1f"
+      },
+      "tiny_omni_decision": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\__init__.py",
+        "sha256": "af9afa8b822925c9058f47b420225f9a6f269678cb2867c89b7c057768816b54"
+      },
+      "tiny_omni_decision.schema": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\schema.py",
+        "sha256": "5d5314122fa883da1e0172ce1bf2e6c96e0d2d883d7c41bc0040ebdcb9b03b61"
+      },
+      "tiny_omni_decision.dataset": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\dataset.py",
+        "sha256": "995cee33352f58f9dd927fdabbc74491abc0ee02aab7221a1700025bfc71893a"
+      },
+      "scripts.semantic_state_diagnostic": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\semantic_state_diagnostic.py",
+        "sha256": "2185c2685c72ce88c8f759fb91c7e6ca74b90735f66a2efd61bd691b45a594b7"
+      },
+      "scripts.decision_supervision": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\decision_supervision.py",
+        "sha256": "9ca92fae6f92ffad7181a927ffec7ee4f098fc0c0c682353f56472ff963e30bd"
+      },
+      "scripts.condition_relevance_corpus": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_relevance_corpus.py",
+        "sha256": "cf50a8627a87fe61a4cd588ead6f9c243c8ce693ac260de154520994fe26f5c3"
+      },
+      "scripts.condition_binding_corpus": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_binding_corpus.py",
+        "sha256": "adf77f03c3328b3191dfaaef89b09910d9dfceb9562caeb7ce63291f9d8dd787"
+      },
+      "scripts.condition_binding_training": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_binding_training.py",
+        "sha256": "21f1a5a227f6dac14a9295359e73a3603dbb556c40a98a06f5d13923c07783c7"
+      },
+      "scripts.prepare_decision_supervision": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\prepare_decision_supervision.py",
+        "sha256": "3f89a742867bcebf900fb39cac5bfc1d89cb73e65e2ea8468dbe673c6cf6903e"
+      },
+      "scripts.decision_semantic_training": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\decision_semantic_training.py",
+        "sha256": "07864892dfc83d6833e2d5ac3077560469688348c94e20893dcde5d2adb854e5"
+      },
+      "scripts.condition_relevance_inference": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_relevance_inference.py",
+        "sha256": "1ba9557c696f58c9ee7087ca64d1ede0473f0e571a88ad22fe8ec4c106799b73"
+      },
+      "scripts.condition_relevance_postfit": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_relevance_postfit.py",
+        "sha256": "671e31daa13865cd4d0349a54ac9f4d7c197ea7c527306a28f8fbdb1e0aea875"
+      },
+      "scripts.condition_relevance_postfit_io": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_relevance_postfit_io.py",
+        "sha256": "c0194d264b9f71406a1be806df1074133ab8f58d501f030ec9486c7ee72db45c"
+      },
+      "scripts.condition_relevance_training": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_relevance_training.py",
+        "sha256": "aa6d8ce44b377d475b1872f4b5656e62e4f06c5e7af898f50d92b698d3f74b91"
+      },
+      "scripts.condition_relevance_transfer": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\condition_relevance_transfer.py",
+        "sha256": "ba9cda46167213abec1efb6e2c20c27754bdf9d3f7143e92588d4730728f3cdd"
+      },
+      "tiny_omni_decision.decision": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\decision.py",
+        "sha256": "9a7f5c6d520405f066768e13f17137ce9da35db07d3359307c3d0e553c8f25e7"
+      },
+      "scripts.train_frozen_text_probe": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\train_frozen_text_probe.py",
+        "sha256": "606c3301bbd740fbc349f07fb1f09a6a86a0dc16ddef6c64700512ac42fd2ad7"
+      },
+      "scripts.train_text_crossencoder": {
+        "path": "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\train_text_crossencoder.py",
+        "sha256": "a6bfeeaeae1d55955ce31b4147896663679316326dc63baac0d1faa38e93311f"
+      }
+    },
+    "transfer_loaded": false,
+    "calibration_loaded": false,
+    "sealed_audit_loaded": false,
+    "directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-postfit-train-replay-01",
+    "result_sha256": "ce12d2c33b7266702bb708938db67ea5c7ff91672a7eaf1f85d3952285b5c338"
+  }
+}

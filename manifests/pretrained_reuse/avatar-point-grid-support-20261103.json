@@ -1,0 +1,91 @@
+{
+  "format": "avatar_point_grid_train_support_v1",
+  "created_local": "2026-11-03T00:02:24+09:00",
+  "source_commit": "ff26621b158290e0202067cd9261f7d23f6168bc",
+  "dataset": {
+    "repository": "mipal/AVATAR",
+    "revision": "a7f0146ff704799d044133e61137836cacc1c233",
+    "train_annotation_tree_sha256": "4c17a0bdbd7d488bced018404ce71be5659d27273efcfdec9e1cdfffd16eb651",
+    "train_annotation_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\avatar-av-decision-20261101-attempt-01\\train-validation-annotations-02\\train"
+  },
+  "inputs_and_access": {
+    "global_group_assignment": "source_group_global_across_tasks",
+    "prior_exposed_group_set_sha256": "4f0fbd6dc342c8c485c4c187bc102a988def78fdaeef11879ed11221ab4adf3a",
+    "seed": 17,
+    "validation_fraction": 0.4,
+    "unexposed_groups": 1015,
+    "train_groups": 609,
+    "validation_groups": 406,
+    "train_group_set_sha256": "2ab6aad8eb73e3c85f4529406068187244cf619e1edcddef2a7795739834d9be",
+    "validation_group_set_sha256": "9ee1a810ad8dd7032c2d46c55359fc80f19e7c73a8d8d58851386d4a0b55a65b",
+    "split_overlap_count": 0,
+    "internal_validation_group_json_parsed_for_split_replay": true,
+    "internal_validation_masks_or_dimensions_used": false,
+    "official_validation_accessed": false,
+    "sealed_audit_accessed": false,
+    "media_payloads_opened_or_decoded": false,
+    "features_or_model_loaded": false
+  },
+  "train_support": {
+    "task": "Mixed-Sound",
+    "source_groups": 370,
+    "clips": 426,
+    "frames": 1962,
+    "categories": 60,
+    "image_size": "640x360",
+    "frames_without_visible_union_mask": 0
+  },
+  "grid_center_support": {
+    "14": {
+      "queries_per_frame": 196,
+      "frames_with_positive": 1949,
+      "frames_with_multiple_positive": 1921,
+      "mean_positive_cells_per_frame": 27.6987767584,
+      "positive_query_fraction": 0.1413202896,
+      "total_queries": 384552
+    },
+    "16": {
+      "queries_per_frame": 256,
+      "frames_with_positive": 1949,
+      "frames_with_multiple_positive": 1932,
+      "mean_positive_cells_per_frame": 36.2991845056,
+      "positive_query_fraction": 0.1417936895,
+      "total_queries": 502272
+    },
+    "28": {
+      "queries_per_frame": 784,
+      "frames_with_positive": 1962,
+      "frames_with_multiple_positive": 1955,
+      "mean_positive_cells_per_frame": 111.0530071356,
+      "positive_query_fraction": 0.1416492438,
+      "total_queries": 1538208
+    }
+  },
+  "geometry": {
+    "method": "Pillow 1-bit rasterization, integer-truncated coordinates; one/two-point polygons handled",
+    "official_opencv_fillpoly_parity_verified": false,
+    "query_semantics": "independent binary Decision per grid point; multi-positive; no cross-point softmax",
+    "quality_result": false
+  },
+  "execution": {
+    "command": "python -m scripts.audit_avatar_point_grid_support --train-annotations <pinned TRAIN annotation root> --artifact-root C:/CodexArtifacts/pretrained-reuse-r2 --output C:/CodexArtifacts/pretrained-reuse-r2/avatar-point-grid-support-20261103-attempt-01/report.json",
+    "python": "3.11.9",
+    "pillow": "10.4.0",
+    "wall_seconds": 17.69,
+    "gpu_used": false,
+    "cloud_cost_usd": 0,
+    "report_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\avatar-point-grid-support-20261103-attempt-01\\report.json",
+    "report_sha256": "4d6b7e2449a60631e1791c425a7b2010489092ba3b00a8f82be3ce24f99c19ca",
+    "script_sha256": "e9d8b690cfb00e15cc2b31a468d1b12d752e048e78d0adf05c922861f6d0fb70",
+    "test_sha256": "0528aa23eb0effafebbbbdb8d6e53e39bcdf4e9a45d1c51263d1a2a868813"
+  },
+  "candidate_admitted_for_fitting": false,
+  "blocking_gates": [
+    "source video rights review",
+    "official rasterizer parity",
+    "frozen mapping from point coordinates to pretrained visual features",
+    "training-only loss and negative-query policy",
+    "pre-registered native-task metrics and matched modality controls"
+  ],
+  "decision": "TRAIN_SUPPORT_ONLY_REVIEW_NOT_ADMITTED"
+}

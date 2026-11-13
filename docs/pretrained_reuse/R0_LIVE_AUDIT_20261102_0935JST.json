@@ -1,0 +1,47 @@
+{
+  "captured_at": "2026-11-02T09:35:50+09:00",
+  "repository": "Unjuno/tiny-omni-decision",
+  "remote_main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+  "roadmap_branch": "docs/pretrained-reuse-roadmap-20261010",
+  "roadmap_head": "915e75b0ff8771cc09893eb9ef6b45b6f59cf817",
+  "pr15": {
+    "state": "open",
+    "draft": true,
+    "base_sha": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "head_sha": "915e75b0ff8771cc09893eb9ef6b45b6f59cf817",
+    "successful_check_run_ids": [41367850695, 41367845402]
+  },
+  "repository_inventory": {
+    "remote_branch_refs": 122,
+    "registered_worktrees": 89,
+    "worktrees_with_local_changes": 7,
+    "open_pull_requests": 36
+  },
+  "primary_onedrive_worktree": {
+    "branch": "codex/teacher-quality-clean-dev-v1",
+    "head_sha": "041c5954b37ba74dc9286d1d37d8bfe029dc6414",
+    "reported_modified_or_untracked_entries": 8,
+    "modified": false
+  },
+  "separate_orbitune_worker": {
+    "pid": 2128,
+    "alive_at_capture": true,
+    "intervened": false,
+    "gpu_samples_percent": [100, 74, 100, 69, 20],
+    "first_three_mean_gpu_percent": 91.333,
+    "observed_gpu_memory_mib": 15821,
+    "gpu_total_memory_mib": 16384,
+    "c_free_gib": 9.2
+  },
+  "avatar_gated_run": {
+    "sealed_audit_loaded": false,
+    "gate_best_state_sha256": "55ee4443ef057237eacf30c8677deffb7110523fed28e37c807847498a33023f",
+    "validation_predictions_sha256": "199cc4cc4b6abb95ee7dac74390b028f86abb00778fda01b91d109bd96407f28"
+  },
+  "open_gates": [
+    "R0 end-user device, latency/energy ceiling, and full task battery",
+    "R2-M multimodal task battery and generalization",
+    "R7 measured compact packaging and runtime",
+    "R8 locked release audit"
+  ]
+}

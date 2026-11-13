@@ -1,0 +1,215 @@
+{
+  "status": "PASS_NATIVE_EIGHT_CLIP_INPUT_ADMISSION_NOT_DECISION_QUALITY",
+  "source_commit": "566af2fafd5895711e2cf206615ff067014e8fa9",
+  "effective_config": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-eight-01\\effective-config.json",
+    "sha256": "5d4417e13d8c2a4f27593d3149ac4167e7d8ee13ff9c87a076ff9780f60aa79f"
+  },
+  "artifacts": [
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-eight-01\\result.json",
+      "sha256": "ebe85d5a33cea86a4b045e2244e52b4c8dbc03a3e7ab80b037d77762a238bcda",
+      "report": {
+        "status": "PASS_NATIVE_EIGHT_CLIP_PROPOSAL_CORPUS",
+        "pid": 38972,
+        "started_at": "2026-10-14T06:45:33.891905+00:00",
+        "training": false,
+        "annotations_loaded": false,
+        "validation_opened": false,
+        "sealed_audit_opened": false,
+        "cloud_cost": 0,
+        "smoke": false,
+        "replay": false,
+        "config_sha256": "5d4417e13d8c2a4f27593d3149ac4167e7d8ee13ff9c87a076ff9780f60aa79f",
+        "smoke_result_sha256": "d981602a7f032048468a74e6d59416425d4f375eff482d006afc6ce8ca695681",
+        "source_commit": "566af2fafd5895711e2cf206615ff067014e8fa9",
+        "model_state_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+        "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+        "torch": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "parameters": 38962498,
+        "seconds": 3769.5481797000393,
+        "encoder_calls_total": 217,
+        "model_state_after": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+        "frozen_state_unchanged": true,
+        "cpu_cuda_rng_unchanged": true,
+        "sources_unchanged": true,
+        "peak_allocated_bytes": 682148352,
+        "peak_reserved_bytes": 836763648,
+        "ended_at": "2026-10-14T07:48:23.437388+00:00"
+      }
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-fresh-frame-01\\result.json",
+      "sha256": "d20fca2664333ed4ef7f450903aa6fe224a5e36d22319d584c786729df1bfa3c",
+      "report": {
+        "status": "PASS_NATIVE_CORPUS_FRESH_FRAME_REPLAY",
+        "pid": 60800,
+        "started_at": "2026-10-14T07:48:47.022651+00:00",
+        "training": false,
+        "annotations_loaded": false,
+        "validation_opened": false,
+        "sealed_audit_opened": false,
+        "cloud_cost": 0,
+        "smoke": false,
+        "replay": true,
+        "config_sha256": "5d4417e13d8c2a4f27593d3149ac4167e7d8ee13ff9c87a076ff9780f60aa79f",
+        "smoke_result_sha256": "d981602a7f032048468a74e6d59416425d4f375eff482d006afc6ce8ca695681",
+        "replay_result_sha256": "ebe85d5a33cea86a4b045e2244e52b4c8dbc03a3e7ab80b037d77762a238bcda",
+        "source_commit": "fb2f2123774228b88128cdf741a1276bd28a34e2",
+        "model_state_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+        "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+        "torch": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "parameters": 38962498,
+        "fresh_replay_bitwise": true,
+        "seconds": 25.19181029999163,
+        "encoder_calls_total": 1,
+        "model_state_after": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+        "frozen_state_unchanged": true,
+        "cpu_cuda_rng_unchanged": true,
+        "sources_unchanged": true,
+        "peak_allocated_bytes": 682148352,
+        "peak_reserved_bytes": 761266176,
+        "ended_at": "2026-10-14T07:49:12.214487+00:00"
+      }
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-full-audit-01\\result.json",
+      "sha256": "e3bed6dc93aa299f2904aaad00fa8b00eb771b1d4e1fe1668c4799963f6750cc",
+      "report": {
+        "status": "PASS_NATIVE_FULL_CORPUS_INPUT_ADMISSION_NOT_QUALITY",
+        "captured_at": "2026-10-14T07:49:22.486918+00:00",
+        "ended_at": "2026-10-14T07:50:10.046829+00:00",
+        "source_commit": "fb2f2123774228b88128cdf741a1276bd28a34e2",
+        "snapshot": false,
+        "snapshot_does_not_prove_process_liveness": true,
+        "input_report_sha256": "ebe85d5a33cea86a4b045e2244e52b4c8dbc03a3e7ab80b037d77762a238bcda",
+        "config_sha256": "5d4417e13d8c2a4f27593d3149ac4167e7d8ee13ff9c87a076ff9780f60aa79f",
+        "script_sha256": "f15c539c4b4225151ed5e3fd9290f4f5bc7f2b78931e49004fd92abfb2dd74f9",
+        "helper_sha256": "d0ea7b2cafadf455a99180e37c423a4997dcced1a027887bb3811a3e502cb473",
+        "frames_checked": 256,
+        "raw_proposals_checked": 262144,
+        "nms_survivors": 18441,
+        "media_assets_checked": 8,
+        "reused_rows": 39,
+        "new_rows": 217,
+        "source_rgb_all_exact": true,
+        "source_hashes_checked": true,
+        "fresh_replay": {
+          "result_sha256": "d20fca2664333ed4ef7f450903aa6fe224a5e36d22319d584c786729df1bfa3c",
+          "config_sha256": "5d4417e13d8c2a4f27593d3149ac4167e7d8ee13ff9c87a076ff9780f60aa79f",
+          "all_five_arrays_exact": true
+        },
+        "full_corpus_complete": true,
+        "unique_objects_known": false,
+        "quality_evaluated": false,
+        "annotations_loaded": false,
+        "gpu_or_model_loaded": false,
+        "training": false,
+        "seconds": 47.59901020000689
+      }
+    }
+  ],
+  "per_clip": [
+    {
+      "video_id": "video_10103",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 1731,
+      "new_rows": 31,
+      "reused_rows": 1,
+      "archive_bytes": 9559694
+    },
+    {
+      "video_id": "video_10186",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 3876,
+      "new_rows": 31,
+      "reused_rows": 1,
+      "archive_bytes": 20486749
+    },
+    {
+      "video_id": "video_10212",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 1839,
+      "new_rows": 31,
+      "reused_rows": 1,
+      "archive_bytes": 12457355
+    },
+    {
+      "video_id": "video_10387",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 3210,
+      "new_rows": 31,
+      "reused_rows": 1,
+      "archive_bytes": 11400993
+    },
+    {
+      "video_id": "video_1087",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 2189,
+      "new_rows": 31,
+      "reused_rows": 1,
+      "archive_bytes": 5929963
+    },
+    {
+      "video_id": "video_10886",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 2303,
+      "new_rows": 31,
+      "reused_rows": 1,
+      "archive_bytes": 9470046
+    },
+    {
+      "video_id": "video_10894",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 2223,
+      "new_rows": 31,
+      "reused_rows": 1,
+      "archive_bytes": 14269038
+    },
+    {
+      "video_id": "video_10903",
+      "frames": 32,
+      "raw_proposals": 32768,
+      "nms_survivors": 1070,
+      "new_rows": 0,
+      "reused_rows": 32,
+      "archive_bytes": 10709457
+    }
+  ],
+  "archive_bytes": 94283295,
+  "measured_main_forward_seconds": 3612.7766014010413,
+  "total_measured_body_seconds": 3842.339000200038,
+  "additional_trainable_parameters": 0,
+  "quality_evaluated": false,
+  "unique_physical_objects_known": false,
+  "validation_opened": false,
+  "sealed_audit_opened": false,
+  "main_process_intervened": false,
+  "cloud_cost": 0,
+  "limitations": [
+    "Eight already-known training clips only; no new independent evaluation.",
+    "Fresh numeric replay covers only video_10103 frame15, not all256 times.",
+    "Full CPU audit reconstructs geometry/grid/NMS and verifies all256 sourceRGBs/artifact hashes, not source semantics.",
+    "1024 proposals/frame and NMS survivors are not unique physical objects.",
+    "No semantic role binding, QA, calibration, product latency or full Omni target established."
+  ],
+  "local_verification": {
+    "ruff": "PASS",
+    "cpu_tests_passed": 1292,
+    "cpu_tests_skipped": 1,
+    "cpu_test_seconds": 17.04,
+    "model_dataset_manifests": "PASS",
+    "four_catalogs": "PASS",
+    "dataset_policy": "ALLOW",
+    "read_only_publication_review": "no Critical/Important/Minor findings"
+  }
+}

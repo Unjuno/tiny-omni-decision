@@ -1,0 +1,69 @@
+schema_version: 1
+experiment_id: path-a-qasc-text-minilm-seed17-attempt01
+modality: text
+seed: 17
+source:
+  dataset_id: allenai/qasc
+  revision: a34ba204eb9a33b919c10cc08f4f1c8dae5ec070
+  official_repository_revision: c44a320c2bb682d614a675d2ba4be072150db4eb
+  license: CC-BY-4.0
+  train_file: C:/CodexArtifacts/pretrained-reuse-r2/qasc-path-a-seed17-attempt-01/train.jsonl
+  train_sha256: d2e220510f98e19a2df5e44f89d29e1b1bd5b218397264b08ff1102ea3903e51
+  validation_file: C:/CodexArtifacts/pretrained-reuse-r2/qasc-path-a-seed17-attempt-01/validation.jsonl
+  validation_sha256: e567639f9c869fad6473354ca0e7ccfe001fc24f933193cb686a3a64695b95e2
+  training_manifest: manifests/candidates/qasc.yaml
+  validation_manifest: manifests/candidates/qasc-validation.yaml
+  train_rows: 8134
+  validation_rows: 926
+  train_fact_pair_groups: 7139
+  validation_fact_pair_groups: 780
+  group_policy: unordered normalized fact1/fact2 pair, used only for grouping
+  normalized_question_and_option_overlap: 0
+  test_shard_downloaded_or_opened: false
+  metadata_only_controls:
+    path: C:/CodexArtifacts/pretrained-reuse-r2/qasc-metadata-only-baseline-20261026.json
+    sha256: dbfd0695de0cef7c9c372d0a48fbbb453a60ed80809d0dcd42a6d7887439c450
+encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  local_snapshot: C:/CodexArtifacts/pretrained-reuse-r2/models/text-minilm-en
+  weights_sha256: cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433
+  tokenizer_json_sha256: a9576e4dadfe7f78f071a1c00ba6902cc83ec6ed7e9b590ee974950bd4d54393
+  frozen: true
+  pooling: attention_masked_mean
+  max_length: 256
+  inputs: question and each supplied choice only
+  excluded_source_fields: [fact1, fact2, combinedfact]
+readout:
+  architecture: shared_candidate_mlp
+  input_features: [context, option, absolute_difference, elementwise_product]
+  hidden_size: 128
+  trainable_parameters: 196865
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  feature_batch_size: 64
+  checkpoint_selection: minimum_validation_nll
+training:
+  option_count: 8
+  source_option_order: preserved; shared scorer has no position feature
+  question_order: shuffled each epoch with seed 17
+  option_order_augmentation: none
+device: cuda through scripts/run_with_hotgpu_guard.py
+preflight_receipt:
+  path: C:/CodexArtifacts/pretrained-reuse-r2/qasc-path-a-seed17-attempt-01/model-tokenizer-preflight.json
+  torch: 2.6.0+cu124
+  transformers: 5.6.2
+  max_context_tokens_train_validation: [35, 27]
+  max_option_tokens_train_validation: [22, 13]
+  over_256_token_inputs: 0
+output_dir: C:/CodexArtifacts/pretrained-reuse-r2/qasc-path-a-seed17-attempt-01/run-01
+sealed_audit_loaded: false
+notes:
+  - QASC is a text-only science sentence-composition probe, not general factual understanding.
+  - Validation is development data used for checkpoint selection, not a blind audit.
+  - Train has 390 rows with choices that collide under NFKC/casefold/alphanumeric normalization; 20 have a target option in such a collision. Raw options are preserved, never collapsed.
+  - Metadata-only controls are reported before fit and cannot select a checkpoint.
+  - No quantization or model fine-tuning is performed; only the frozen-feature readout is fitted.

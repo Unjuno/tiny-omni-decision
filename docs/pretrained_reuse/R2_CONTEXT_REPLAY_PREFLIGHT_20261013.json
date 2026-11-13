@@ -1,0 +1,25 @@
+{
+  "status": "PASS_REPLAY_PREFLIGHT_NOT_TRAINED",
+  "count": 3072,
+  "unique_ids": 3072,
+  "source_counts": {
+    "context": 1536,
+    "original": 1536
+  },
+  "context_counts": {
+    "necessary": 527,
+    "irrelevant": 522,
+    "plain": 487
+  },
+  "max_untruncated_tokens": 879,
+  "truncated_candidate_pairs": 213,
+  "policy": "historical only_second max512 for both sources; no example removal",
+  "validation_id_state_group_overlap": 0,
+  "order_sha256": "86dd9a7e003267926c80f317a7ddbddef534a0ed8c6b15e42239774a475e5e09",
+  "inputs": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\context-robustness-corpus-01\\train.jsonl": "a0116e4e2c5024fe39e113461c3b286da3d76b1f8b11940dc195fd5594c2982b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\context-robustness-corpus-01\\development.jsonl": "310a0c7d3daad92dddb807a58d9e1483d06fd1b14bca67b4b29e9293520d8e4c"
+  }
+}

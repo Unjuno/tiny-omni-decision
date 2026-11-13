@@ -1,0 +1,210 @@
+{
+  "native-language-smoke-01": {
+    "status": "PASS_NATIVE_LANGUAGE_SMOKE",
+    "phase": "smoke",
+    "source_commit": "c83ebfca7b0f79a8731cd51ff7740f7d657ec916",
+    "config_sha256": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+    "started_utc": "2026-10-16T04:59:07.050030+00:00",
+    "finished_utc": "2026-10-16T04:59:19.762523+00:00",
+    "seconds": 12.71340720000444,
+    "command": [
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\capture_native_language.py",
+      "--phase",
+      "smoke",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/native-language-smoke-01"
+    ],
+    "optimizer_updates": 0,
+    "unique_states": 4382,
+    "unique_queries": 22328,
+    "long_states": 38,
+    "completed_states": 4,
+    "completed_queries": 8,
+    "tensor_bytes": 974550528,
+    "cuda_peak_allocated_bytes": 371848704,
+    "os_peak_working_set_bytes": 2052997120,
+    "native_short_max_abs": 0.0,
+    "single_pair_original_max_abs": 0.0,
+    "versions": {
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "numpy": "2.4.6",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.22.2"
+    },
+    "receipt_sha256": "7f2a732a76859cb8fc10461e4fade4a13bdfb3640a03099465b409b6061c9baa"
+  },
+  "native-language-cache-01": {
+    "status": "INCOMPLETE",
+    "phase": "cache",
+    "source_commit": "c83ebfca7b0f79a8731cd51ff7740f7d657ec916",
+    "config_sha256": "daacb73079945d62c357f5d006817e15bfcff0c8893f5e32116053ede4d801c5",
+    "started_utc": "2026-10-16T04:59:56.008834+00:00",
+    "finished_utc": "2026-10-16T05:00:04.717414+00:00",
+    "seconds": 8.708982600001036,
+    "command": [
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\capture_native_language.py",
+      "--phase",
+      "cache",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/native-language-cache-01",
+      "--reference",
+      "C:/CodexArtifacts/pretrained-reuse-r2/native-language-smoke-01",
+      "--reference-sha256",
+      "7f2a732a76859cb8fc10461e4fade4a13bdfb3640a03099465b409b6061c9baa"
+    ],
+    "optimizer_updates": 0,
+    "completed_states": 0,
+    "completed_queries": 0,
+    "error": "RuntimeError('insufficient disk for full arrays plus reserve')",
+    "receipt_sha256": "9f5eb737ab67c61f1df827eb94ea367714456393f4ac3e46c44d7f517caa4987"
+  },
+  "native-audio-profile-smoke-01": {
+    "status": "PASS_NATIVE_AUDIO_PROFILE",
+    "source_commit": "7130765d73d0cb4b80c4c6dc4066d585d5010fa2",
+    "config_sha256": "57fe149d4bccb09a4d28d3da0950efd4bb1cafdc15f8a95e78212c36ef9d39ae",
+    "started_utc": "2026-10-16T05:13:31.170715+00:00",
+    "finished_utc": "2026-10-16T05:13:37.092617+00:00",
+    "seconds": 5.923175200005062,
+    "command": [
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_native_audio_profile.py",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-profile-smoke-01"
+    ],
+    "optimizer_updates": 0,
+    "peak_vram_bytes": 200990208,
+    "os_peak_working_set_bytes": 1394356224,
+    "rows": [
+      {
+        "source": "lombard",
+        "sample_rate": 16000,
+        "samples": 35200,
+        "shapes": {
+          "pcm": [
+            35200
+          ],
+          "speech": [
+            110,
+            384
+          ],
+          "event": [
+            1,
+            384
+          ]
+        },
+        "deltas": {
+          "native_speech": 0.0,
+          "native_event": 0.0
+        }
+      },
+      {
+        "source": "starss",
+        "sample_rate": 24000,
+        "samples": 120000,
+        "shapes": {
+          "pcm": [
+            120000
+          ],
+          "speech": [
+            250,
+            384
+          ],
+          "event": [
+            1,
+            384
+          ]
+        },
+        "deltas": {}
+      }
+    ],
+    "versions": {
+      "torch": "2.6.0+cu124",
+      "torchaudio": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "numpy": "2.4.6",
+      "soundfile": "0.14.0",
+      "safetensors": "0.8.0"
+    },
+    "receipt_sha256": "e36ad9479f16fdb79d3b35e251e71ad99f653cd8753a4ab27b39040cf917fa17"
+  },
+  "native-audio-profile-replay-01": {
+    "status": "PASS_NATIVE_AUDIO_PROFILE",
+    "source_commit": "7130765d73d0cb4b80c4c6dc4066d585d5010fa2",
+    "config_sha256": "57fe149d4bccb09a4d28d3da0950efd4bb1cafdc15f8a95e78212c36ef9d39ae",
+    "started_utc": "2026-10-16T05:14:11.733642+00:00",
+    "finished_utc": "2026-10-16T05:14:17.900737+00:00",
+    "seconds": 6.163465199992061,
+    "command": [
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_native_audio_profile.py",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-profile-replay-01",
+      "--reference",
+      "C:/CodexArtifacts/pretrained-reuse-r2/native-audio-profile-smoke-01",
+      "--reference-sha256",
+      "e36ad9479f16fdb79d3b35e251e71ad99f653cd8753a4ab27b39040cf917fa17"
+    ],
+    "optimizer_updates": 0,
+    "peak_vram_bytes": 200990208,
+    "os_peak_working_set_bytes": 1395695616,
+    "rows": [
+      {
+        "source": "lombard",
+        "sample_rate": 16000,
+        "samples": 35200,
+        "shapes": {
+          "pcm": [
+            35200
+          ],
+          "speech": [
+            110,
+            384
+          ],
+          "event": [
+            1,
+            384
+          ]
+        },
+        "deltas": {
+          "pcm": 0.0,
+          "speech": 0.0,
+          "native_speech": 0.0,
+          "event": 0.0,
+          "native_event": 0.0
+        }
+      },
+      {
+        "source": "starss",
+        "sample_rate": 24000,
+        "samples": 120000,
+        "shapes": {
+          "pcm": [
+            120000
+          ],
+          "speech": [
+            250,
+            384
+          ],
+          "event": [
+            1,
+            384
+          ]
+        },
+        "deltas": {
+          "pcm": 0.0,
+          "speech": 0.0,
+          "event": 0.0
+        }
+      }
+    ],
+    "versions": {
+      "torch": "2.6.0+cu124",
+      "torchaudio": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "numpy": "2.4.6",
+      "soundfile": "0.14.0",
+      "safetensors": "0.8.0"
+    },
+    "receipt_sha256": "5ed786d51b21ee8159b1549a79a674083b24bf8199e0d8bcf5b38f1dc7555b3f"
+  },
+  "independent_saved_audio_arrays_checked": 6
+}

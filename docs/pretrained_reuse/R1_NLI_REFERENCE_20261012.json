@@ -1,0 +1,89 @@
+{
+  "status": "PASS_LOAD_SMOKE_ONLY",
+  "repo": "cross-encoder/nli-MiniLM2-L6-H768",
+  "revision": "b95119ce93d3e065de6214e38cd4a97b0f2f2c6d",
+  "parameters": 82120707,
+  "files": {
+    "README.md": {
+      "sha256": "1a6e3f880df3584acc1b209c7c667eb22cb7ddd98ab56a5905dda5cfc446ddd1",
+      "bytes": 2695
+    },
+    "config.json": {
+      "sha256": "8b0e41caff7567c0f53e6983f35591c3dec59507c9173ab125c5823394fb57f3",
+      "bytes": 875
+    },
+    "tokenizer.json": {
+      "sha256": "82139106e603ee4e1d5bc99d056ccbed5a92bc24848b1b5a7137c26e00d0dbf6",
+      "bytes": 1356048
+    },
+    "tokenizer_config.json": {
+      "sha256": "e06f5c3c435fc0255b08b5574cd574eec685390f60c85b27f83d785eb8ecaaa1",
+      "bytes": 330
+    },
+    "special_tokens_map.json": {
+      "sha256": "378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d",
+      "bytes": 239
+    },
+    "vocab.json": {
+      "sha256": "ed19656ea1707df69134c4af35c8ceda2cc9860bf2c3495026153a133670ab5e",
+      "bytes": 798293
+    },
+    "merges.txt": {
+      "sha256": "fe36cab26d4f4421ed725e10a2e9ddb7f799449c603a96e7f29b5a3c82a95862",
+      "bytes": 456356
+    },
+    "model.safetensors": {
+      "sha256": "ec9c5b6a08b60d7a01b465c7ed44b496244dfd1bed3274c95875a74cea89ab35",
+      "bytes": 328499560
+    }
+  },
+  "loading_info": {
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "mismatched_keys": [],
+    "error_msgs": []
+  },
+  "official_card_pairs": [
+    [
+      "A man is eating pizza",
+      "A man eats something"
+    ],
+    [
+      "A black race car starts up in front of a crowd of people.",
+      "A man is driving down a lonely road."
+    ]
+  ],
+  "logits": [
+    [
+      -4.012591361999512,
+      3.523131847381592,
+      -0.006588171236217022
+    ],
+    [
+      5.011362552642822,
+      -3.0577826499938965,
+      -1.6091772317886353
+    ]
+  ],
+  "id2label": {
+    "0": "contradiction",
+    "1": "entailment",
+    "2": "neutral"
+  },
+  "repeat_exact": true,
+  "seconds": 0.8686940000625327,
+  "device": "cpu",
+  "torch": "2.6.0+cu124",
+  "quality_claim": false,
+  "deployment_status": "REFERENCE_ONLY: aggregate parameter target exceeded with current other towers",
+  "rights": "Apache-2.0 per pinned model card",
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\nli-minilm2-audit-01",
+  "alternative_screen": {
+    "repo": "typeform/mobilebert-uncased-mnli",
+    "revision": "7bde1575aeaec3819a2ed901a35f114faf4a5318",
+    "hub_f32_elements": 24583427,
+    "status": "REVIEW_NO_DOWNLOAD",
+    "reason": "Pinned model card License: More information needed; parent license not assumed to cover fine-tuned weights."
+  },
+  "illustrative_replacement_parameters": 235033734
+}

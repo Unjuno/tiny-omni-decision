@@ -1,0 +1,63 @@
+{
+  "features": {
+    "crop": {
+      "train": {
+        "rms": 1.0,
+        "abs_p99": 2.629974126815796,
+        "abs_max": 6.925017833709717,
+        "fraction_abs_gt5": 1.0242543428384136e-05
+      },
+      "validation": {
+        "rms": 1.05156672000885,
+        "abs_p99": 2.8117849826812744,
+        "abs_max": 6.121050834655762,
+        "fraction_abs_gt5": 9.184820193637621e-05
+      }
+    },
+    "screen": {
+      "train": {
+        "rms": 0.9999998807907104,
+        "abs_p99": 2.724018096923828,
+        "abs_max": 6.772288799285889,
+        "fraction_abs_gt5": 0.0003226401179941003
+      },
+      "validation": {
+        "rms": 1.739522099494934,
+        "abs_p99": 5.938230991363525,
+        "abs_max": 14.2686767578125,
+        "fraction_abs_gt5": 0.016638932111572153
+      }
+    }
+  },
+  "logits": {
+    "initial": {
+      "train": {
+        "crop": 0.3865104913711548,
+        "screen": 0.42965078353881836
+      },
+      "validation": {
+        "crop": 0.43189331889152527,
+        "screen": 0.6406453847885132
+      }
+    },
+    "final": {
+      "train": {
+        "crop": 2.4495203495025635,
+        "screen": 3.068328857421875
+      },
+      "validation": {
+        "crop": 2.384546995162964,
+        "screen": 3.7425599098205566
+      }
+    }
+  },
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\groundcua-classifier-01\\features.npy": "4638bbf1719734f3591da7826c92ab64cb581e9bff40ac0eb59b79af8f410569",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\groundcua-classifier-01\\records.json": "872e5052451f3da220a0bd36b52d98ea4b34e5b2f147ba3961005378b6b3832f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\groundcua-fullscreen-features-01\\features.npy": "9fda8e085da85b67e8ed7be5eb156a72fa424cbdb606dbfd5620518d3f322663",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\groundcua-fullscreen-features-01\\records.json": "fe423516866c1bd72ca394be29087c23b349f1c777213b350dd7064a0e84139a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\groundcua-context-comparison-01\\context\\normalization.npz": "8fc3869025afcdc0a10a6d8984d1a69f315776ad5ce8101b43734296a0472a65",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\groundcua-context-comparison-01\\context\\initial.pt": "f9f24ee56e540f71c324c7e9a19e36881399a43661e7ad01128c9a1a484a0994",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\groundcua-context-comparison-01\\context\\final.pt": "59c2df960518f51c40b1ba87c83ee1c5e44ef54a536200a3e77f8b971b523744"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "acquisition": {
+    "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-frozen-media-ipv4-02\\progress.json",
+    "artifact_sha256": "aba5da16991e93c9ffcfe78c41855532a52a8b08f4c592399aa16382cac06382",
+    "summary": {
+      "status": "PASS",
+      "whole_archive_md5_verified": false,
+      "dev_test_accessed": false,
+      "summary_sha256": "209423b79c3bf1b98ce926aabf92a7f1f8262a5a8dea69e619f893fe9e1357b6",
+      "runner_sha256": "95a2f2b9973480d79f60e83f6e4b84f0f5d2fca23360a107a2d9211efe6d6652",
+      "reuse_progress_sha256": "c06721a9c0e7a7f086f4dd3c34769bd0d493a27253544ac17789be0fa7771fe1",
+      "short_body_retries": 2,
+      "wall_seconds": 9998.911502600007,
+      "transferred_bytes": {
+        "foa_dev.zip": 1390546029,
+        "video_dev.zip": 1748671546
+      }
+    },
+    "completed_pairs": 78
+  },
+  "windows": {
+    "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-all-windows-v1\\result.json",
+    "artifact_sha256": "8f08d3467bc49677fa432733b1bd3217b90056b649ad5c898202b6c97497c1a0",
+    "summary": {
+      "status": "PASS",
+      "verified_acquisition": {
+        "status": "PASS",
+        "recordings": 78,
+        "unique_media_assets": 156,
+        "rooms": 9
+      },
+      "acquisition_sha256": "aba5da16991e93c9ffcfe78c41855532a52a8b08f4c592399aa16382cac06382",
+      "summary_sha256": "209423b79c3bf1b98ce926aabf92a7f1f8262a5a8dea69e619f893fe9e1357b6",
+      "metadata_sha256": "2fa848545a520b4a9d490459de7f079aa49ae16daf0affc859c016f5146981d6",
+      "runner_sha256": "cbc991713a13b495a4704a0f04bd486a5cc0efe7feb9eb2ec7b97548b89228d2",
+      "window_seconds": 5,
+      "selection": "all complete nonoverlapping intervals",
+      "official_dev_test_accessed": false,
+      "splits": {
+        "train": {
+          "windows": 1955,
+          "queries": 23460,
+          "sha256": "2d06c0e94ea68d9b5372eb942f37cd87fcf4d9ba71f05ae71bb3be836ae73347"
+        },
+        "calibration": {
+          "windows": 279,
+          "queries": 3348,
+          "sha256": "09aa61cd3d04fd62ce32b6751e49dc8c94c159c848dfc3d0fa874933658ad55f"
+        },
+        "validation": {
+          "windows": 486,
+          "queries": 5832,
+          "sha256": "20f43eeb0e123b19809a1bf4e9f639f5af850481ba4164c77a3a4b22c603fbc9"
+        }
+      },
+      "train_positive_queries": {
+        "speech": 1631,
+        "laughter": 273,
+        "domestic sounds": 249,
+        "footsteps": 105,
+        "knock": 10,
+        "door": 60,
+        "music": 339,
+        "clapping": 9,
+        "telephone": 27,
+        "water tap": 28,
+        "instrument": 73
+      }
+    }
+  },
+  "audio": {
+    "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-audio-corpus-features-v1\\result.json",
+    "artifact_sha256": "e6d812bb77b4ce77b18652eba03756c144c644713dff42b10bf112af78d07658",
+    "summary": {
+      "status": "PASS",
+      "modality": "audio",
+      "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+      "source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+      "manifest_sha256": "8f08d3467bc49677fa432733b1bd3217b90056b649ad5c898202b6c97497c1a0",
+      "runner_sha256": "599aa2a9fbbd9845746d6db20f23972bf175c10e9728c4b363136b84e06214f3",
+      "device": "cpu",
+      "training": false,
+      "parameters": 1961239,
+      "preprocessing": "channel 0; 24k->32k torchaudio sinc; official eval mel",
+      "torch": "2.6.0+cu124",
+      "torchaudio": "2.6.0+cu124",
+      "load_seconds": 3.3098909999243915,
+      "feature_shape": [
+        2720,
+        384
+      ],
+      "feature_sha256": "7b633d8316d6a3c9e7cd6305072dc492036276fad35fb937d63aa96ea7cac860",
+      "wall_seconds": 174.44345159991644,
+      "peak_working_set_bytes": 604585984
+    },
+    "completed_windows": 2720,
+    "completed_recordings": 78
+  }
+}

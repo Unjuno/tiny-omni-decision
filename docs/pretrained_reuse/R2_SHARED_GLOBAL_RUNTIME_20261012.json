@@ -1,0 +1,128 @@
+{
+  "shared-global-folded-readout-01": {
+    "status": "PASS_REPLAY",
+    "config": {
+      "source_commit": "ae6dc8e1505d7ab5bf582e766d17e6fce6df5ae9",
+      "script_sha256": "b41f2abfbc353ab530d6cab52e0d67f7b752fb30817fa371fb9daf86b9cbbed6",
+      "source_sha256": "dc7053b7c6e949a08e3e3dae4ff5a4e651e042e097d6baba9756442d9fc7a48b",
+      "logits_atol": 0.0001,
+      "logits_rtol": 1e-05,
+      "probabilities_atol": 1e-05,
+      "metric_atol": 1e-05,
+      "answer_changes_allowed": 0,
+      "threads": 2,
+      "dtype": "float32",
+      "transform": "W_mean=sum(W_cell[0:16])/4; separate unscaled summary and cell mean",
+      "fitting": false,
+      "sealed_audit": false
+    },
+    "metrics": {
+      "count": 2048,
+      "accuracy": 0.90771484375,
+      "nll": 0.2246772697967199,
+      "brier": 0.1247372064836477,
+      "ece_15_bins": 0.012183266197098419,
+      "mean_confidence": 0.9066495625011157
+    },
+    "reference_metrics": {
+      "count": 2048,
+      "accuracy": 0.90771484375,
+      "nll": 0.22467731660669613,
+      "brier": 0.12473724438896293,
+      "ece_15_bins": 0.012183273473056033,
+      "mean_confidence": 0.9066495465522166
+    },
+    "count": 2048,
+    "unique_images": 512,
+    "max_logit_delta": 3.814697265625e-05,
+    "max_probability_delta": 3.635883331298828e-06,
+    "parameters": 246016,
+    "original_parameters": 1720576,
+    "bytes": 986000,
+    "original_bytes": 6884152,
+    "weights_sha256": "e78dbaa31a251f2668d411329ea05d9b0998d66aca6de0d0911991a1bc2bb6f9",
+    "predictions_sha256": "aa0a31e46b9234f14d269ed43521fad38120e970614665c7bdba175d07b007fe",
+    "source_unchanged": true,
+    "reload_exact": true,
+    "changed_answers": 0,
+    "timings_seconds": {
+      "original": [
+        0.020386200048960745,
+        0.01950829999987036,
+        0.019556400016881526,
+        0.019062899984419346,
+        0.01929490000475198,
+        0.019575999933294952,
+        0.019787200028076768,
+        0.020013100001960993,
+        0.0201127000618726,
+        0.02039279998280108,
+        0.020611800020560622,
+        0.020439299987629056,
+        0.020356900058686733,
+        0.019930300069972873,
+        0.020043600001372397,
+        0.020545699982903898,
+        0.02111299999523908,
+        0.020626100013032556,
+        0.020376999978907406,
+        0.01959460007492453
+      ],
+      "folded": [
+        0.003086299984715879,
+        0.0028530999552458525,
+        0.0029555000364780426,
+        0.0027611999539658427,
+        0.003194899996742606,
+        0.0027679000049829483,
+        0.0028865999775007367,
+        0.0030248999828472733,
+        0.0031166999833658338,
+        0.003131799981929362,
+        0.0030232000863179564,
+        0.003105200012214482,
+        0.003193399985320866,
+        0.0033515000250190496,
+        0.003054099972359836,
+        0.003063900046981871,
+        0.0032626999309286475,
+        0.0029066000133752823,
+        0.003139900043606758,
+        0.0031417999416589737
+      ]
+    },
+    "seconds": 1.1169769999105483,
+    "torch": "2.6.0+cu124",
+    "cloud_cost": 0
+  },
+  "shared-global-raw-image-replay-01": {
+    "status": "PASS_RAW_FEATURES",
+    "load_seconds": 0.31258670007809997,
+    "preprocessing_seconds": 0.12915749999228865,
+    "first_and_warm_batch_seconds": [
+      4.754761300049722,
+      0.875810099998489
+    ],
+    "max_cache_delta": 0.0,
+    "features_sha256": "6b8dacf30f815cf91dea26747fe898073973adb52e18867dbbe8b0121d65003d",
+    "peak_working_set_bytes": 3315384320,
+    "parameters": 114365184
+  },
+  "shared-global-json-replay-01": {
+    "status": "PASS_RAW_TO_JSON",
+    "images": 8,
+    "decisions": 32,
+    "changed_answers": 0,
+    "options_reordered_without_answer_changes": true,
+    "max_probability_delta": 2.205371856689453e-06,
+    "script_sha256": "897c7d29c282447c6acf5605a20315c7f48921782f29687814bb6ceadb663d17",
+    "decisions_sha256": "9820b8cf5cf581befcb9df27698be86819c423505f225854c5661499caf73031",
+    "raw_features_sha256": "6b8dacf30f815cf91dea26747fe898073973adb52e18867dbbe8b0121d65003d",
+    "weights_sha256": "e78dbaa31a251f2668d411329ea05d9b0998d66aca6de0d0911991a1bc2bb6f9",
+    "scope": "fixed 10-class taxonomies only; not arbitrary semantic options or joint fusion"
+  },
+  "executed_source_hashes": {
+    "export_shared_global_readout.py": "b41f2abfbc353ab530d6cab52e0d67f7b752fb30817fa371fb9daf86b9cbbed6",
+    "global_readout.py": "272a9f4071d2707d9ad1f02c73778a1c31522be578507ffcceadf620426d18a2"
+  }
+}

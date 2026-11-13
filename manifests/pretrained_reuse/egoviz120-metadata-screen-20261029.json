@@ -1,0 +1,56 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "EgoViz-120",
+  "status": "REVIEW_NOT_ADMITTED",
+  "official_sources": {
+    "dataset_card": "https://huggingface.co/datasets/humaidtech/EgoViz-120",
+    "storage_bucket": "https://huggingface.co/buckets/humaidtech/EgoViz-120",
+    "license_file": "https://github.com/humaidtech/EgoViz-120/blob/main/LICENSE"
+  },
+  "license_claim": "CC-BY-4.0",
+  "source_scope": "public bucket metadata index only; no video, MCAP, sensor payload, audio, or model weights accessed",
+  "index": {
+    "url": "https://huggingface.co/buckets/humaidtech/EgoViz-120/resolve/index.parquet?download=true",
+    "bytes": 870961,
+    "sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "retrieved_at": "2026-10-29T02:16:51+09:00",
+    "artifact_path": "C:/CodexArtifacts/pretrained-reuse-r2/egoviz-source-screen-01/index.parquet"
+  },
+  "metadata_counts": {
+    "clips": 5392,
+    "unique_chunk_ids": 5392,
+    "session_groups": 180,
+    "sequence_within_group_pairs": 369,
+    "sequence_ids_crossing_groups": 0,
+    "categories": 12,
+    "clips_per_group_min": 1,
+    "clips_per_group_median": 25.5,
+    "clips_per_group_p90": 52,
+    "clips_per_group_max": 203,
+    "official_split": null
+  },
+  "storage": {
+    "mcap_total_bytes": 6805356013034,
+    "mcap_min_bytes": 150184348,
+    "mcap_median_bytes": 668009041,
+    "mcap_max_bytes": 32683274041,
+    "dashboard_mp4_total_bytes": 445700482391,
+    "dataset_total_bytes_claim": 7250000000000
+  },
+  "label_quality": "Publisher states labels are model-generated and not human-verified",
+  "modalities": ["video", "depth", "imu", "hand_pose", "action_labels"],
+  "audio_stream_listed": false,
+  "privacy_claim": "Publisher states operators consented to public release and footage was automatically face-blurred",
+  "limitations": [
+    "No official train/validation/test split stated",
+    "group_id is session-level; cross-session participant independence is unverified",
+    "180 session groups is below the provisional 200 independent-group target",
+    "Action labels are model-generated and open-vocabulary",
+    "Dashboard MP4 previews overlay action labels and sensor visualizations; raw camera streams require MCAP extraction",
+    "A both-input-required Decision task has not been defined or verified",
+    "Full dataset and typical MCAP files exceed current safe free storage"
+  ],
+  "training_admission": "NOT_ADMITTED",
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

@@ -1,0 +1,23 @@
+{
+  "unit": "normalized uploader",
+  "groups": 81,
+  "questions": 560,
+  "seed": 17,
+  "replicates": 10000,
+  "method": "paired cluster bootstrap, percentile 2.5/97.5, question-weighted after cluster resampling",
+  "direction": "question-only minus train-prior",
+  "accuracy_difference": 0.08214285714285714,
+  "nll_difference": -0.06132645644247532,
+  "intervals": [
+    [
+      0.018907563025210083,
+      0.14115808537155317
+    ],
+    [
+      -0.08958834132757924,
+      -0.03220725822691055
+    ]
+  ],
+  "predictions_sha256": "37ab0c530d2b7a6b05d42dedfea60508b0012be8c5f2e06e7bd705ad14a24203",
+  "limitation": "development checkpoint selected on these validation labels; not blind or selection-adjusted"
+}

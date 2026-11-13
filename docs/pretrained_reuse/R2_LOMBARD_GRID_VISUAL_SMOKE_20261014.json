@@ -1,0 +1,237 @@
+{
+  "status": "PASS",
+  "scope": "four full-release training videos only; frozen16-frame native VideoPrism CPU runtime smoke, no quality scoring",
+  "frames": 16,
+  "model_parameters": 114365184,
+  "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+  "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+  "device": [
+    "TFRT_CPU_0"
+  ],
+  "dtype": "float32",
+  "rows": [
+    {
+      "source_id": "s16_l_bgah2n",
+      "input_sha256": "5f33283c865b2b6769f179fc0bb9c8ec42506661891b0e1ecd6dedd0ba575317",
+      "selected_indices": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        33,
+        37,
+        41,
+        45,
+        49,
+        53,
+        57,
+        61
+      ],
+      "selected_pts": [
+        0.0,
+        0.16608996539792387,
+        0.33217993079584773,
+        0.4982698961937716,
+        0.6643598615916955,
+        0.8304498269896193,
+        0.9965397923875432,
+        1.1626297577854672,
+        1.3702422145328719,
+        1.5363321799307958,
+        1.7024221453287198,
+        1.8685121107266436,
+        2.0346020761245676,
+        2.2006920415224913,
+        2.366782006920415,
+        2.5328719723183393
+      ],
+      "forward_seconds": 9.973486199975014,
+      "repeat_bitwise_equal": true,
+      "output_shape": [
+        1,
+        4096,
+        768
+      ],
+      "framewise_shape": [
+        16,
+        768
+      ]
+    },
+    {
+      "source_id": "s16_p_bgah2n",
+      "input_sha256": "32cee400742d84948838b5eede83ddde55c6ad80698ee6a5643f87e7aacc0941",
+      "selected_indices": [
+        0,
+        4,
+        8,
+        12,
+        15,
+        19,
+        23,
+        27,
+        31,
+        35,
+        39,
+        43,
+        46,
+        50,
+        54,
+        58
+      ],
+      "selected_pts": [
+        0.0,
+        0.16608996539792387,
+        0.33217993079584773,
+        0.4982698961937716,
+        0.6228373702422145,
+        0.7889273356401384,
+        0.9550173010380623,
+        1.1211072664359862,
+        1.28719723183391,
+        1.453287197231834,
+        1.6193771626297577,
+        1.7854671280276817,
+        1.9100346020761245,
+        2.0761245674740483,
+        2.2422145328719725,
+        2.4083044982698962
+      ],
+      "forward_seconds": 2.7774322000332177,
+      "repeat_bitwise_equal": true,
+      "output_shape": [
+        1,
+        4096,
+        768
+      ],
+      "framewise_shape": [
+        16,
+        768
+      ]
+    },
+    {
+      "source_id": "s22_l_sgbe5s",
+      "input_sha256": "71ffbbb539f9a1a72c34f0e49b1f9039e0a113b5affb0bc4772b5a4e073a379a",
+      "selected_indices": [
+        0,
+        4,
+        9,
+        13,
+        17,
+        21,
+        26,
+        30,
+        34,
+        38,
+        43,
+        47,
+        51,
+        55,
+        60,
+        64
+      ],
+      "selected_pts": [
+        0.0,
+        0.16666666666666666,
+        0.375,
+        0.5416666666666666,
+        0.7083333333333334,
+        0.875,
+        1.0833333333333333,
+        1.25,
+        1.4166666666666667,
+        1.5833333333333333,
+        1.7916666666666667,
+        1.9583333333333333,
+        2.125,
+        2.2916666666666665,
+        2.5,
+        2.6666666666666665
+      ],
+      "forward_seconds": 2.697655600029975,
+      "repeat_bitwise_equal": true,
+      "output_shape": [
+        1,
+        4096,
+        768
+      ],
+      "framewise_shape": [
+        16,
+        768
+      ]
+    },
+    {
+      "source_id": "s22_p_sgbe5s",
+      "input_sha256": "0ce9649d60bb2214155c47a9b74af527cd614f457340b72a3747497ffe77cba9",
+      "selected_indices": [
+        0,
+        4,
+        8,
+        12,
+        15,
+        19,
+        23,
+        27,
+        31,
+        35,
+        39,
+        43,
+        46,
+        50,
+        54,
+        58
+      ],
+      "selected_pts": [
+        0.0,
+        0.16666666666666666,
+        0.3333333333333333,
+        0.5,
+        0.625,
+        0.7916666666666666,
+        0.9583333333333334,
+        1.125,
+        1.2916666666666667,
+        1.4583333333333333,
+        1.625,
+        1.7916666666666667,
+        1.9166666666666667,
+        2.0833333333333335,
+        2.25,
+        2.4166666666666665
+      ],
+      "forward_seconds": 2.7342469999566674,
+      "repeat_bitwise_equal": true,
+      "output_shape": [
+        1,
+        4096,
+        768
+      ],
+      "framewise_shape": [
+        16,
+        768
+      ]
+    }
+  ],
+  "seconds": 30.735565500101075,
+  "peak_working_set_bytes": 4313677824,
+  "jax": "0.6.2",
+  "tensorflow": "2.18.1",
+  "training": false,
+  "input_features": "raw video only, actual-PTS uniform sampling; no labels, transcript or word alignment",
+  "projected_single_forward_5367_seconds": 14674.703648767434,
+  "projection_limitation": "three warm single-clip measurements, excludes decode/preprocess/replay/load; not measured full-corpus time",
+  "runner_sha256": "9a7647fa59b76d2e157c67d14cf303c682c2fbd3a21dd4f67c1f9e0185f29264",
+  "runtime_entry": {
+    "blocked_original_launcher": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-r1/venv/Scripts/python.exe",
+    "original_failure": "Windows application control policy rejected launch before Python/model execution",
+    "successful_interpreter": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "process_local_existing_dependency_directory": "C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-r1/venv/Lib/site-packages",
+    "environment_upgrade_performed": false,
+    "source_files_modified": false
+  },
+  "native_joint_quality": "UNMEASURED",
+  "full_corpus_video_extraction": "NOT_RUN; projection only"
+}

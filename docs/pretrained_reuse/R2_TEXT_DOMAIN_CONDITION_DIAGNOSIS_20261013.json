@@ -1,0 +1,154 @@
+{
+  "scope": "posthoc saved-prediction diagnosis, observed development only",
+  "input_sha256": "1a825b413e32f319dead47ccbef07ef3b36f2c391ca2c197a694aaeb4ed54dd2",
+  "arms": {
+    "base": {
+      "by_condition": {
+        "cost-minimum": {
+          "count": 128,
+          "familiar_correct": 124,
+          "domain_correct": 72,
+          "domain_selected_rank_2": 31,
+          "lost_correct": 52,
+          "lost_to_opposite_extreme": 5,
+          "domain_selected_rank_1": 72,
+          "domain_selected_rank_3": 19,
+          "domain_selected_rank_4": 6
+        },
+        "cost-maximum": {
+          "count": 128,
+          "familiar_correct": 108,
+          "domain_correct": 14,
+          "domain_selected_rank_2": 41,
+          "lost_correct": 98,
+          "lost_to_opposite_extreme": 36,
+          "domain_selected_rank_1": 43,
+          "domain_selected_rank_4": 14,
+          "domain_selected_rank_3": 30
+        },
+        "risk-minimum": {
+          "count": 128,
+          "familiar_correct": 121,
+          "domain_correct": 58,
+          "domain_selected_rank_3": 24,
+          "lost_correct": 63,
+          "lost_to_opposite_extreme": 7,
+          "domain_selected_rank_4": 9,
+          "domain_selected_rank_2": 37,
+          "domain_selected_rank_1": 58
+        },
+        "risk-maximum": {
+          "count": 128,
+          "familiar_correct": 115,
+          "domain_correct": 32,
+          "domain_selected_rank_3": 29,
+          "lost_correct": 86,
+          "lost_to_opposite_extreme": 28,
+          "domain_selected_rank_4": 32,
+          "domain_selected_rank_2": 35,
+          "domain_selected_rank_1": 32
+        },
+        "time-minimum": {
+          "count": 128,
+          "familiar_correct": 120,
+          "domain_correct": 43,
+          "domain_selected_rank_1": 43,
+          "domain_selected_rank_4": 26,
+          "lost_correct": 78,
+          "lost_to_opposite_extreme": 24,
+          "domain_selected_rank_3": 23,
+          "domain_selected_rank_2": 36
+        },
+        "time-maximum": {
+          "count": 128,
+          "familiar_correct": 120,
+          "domain_correct": 36,
+          "domain_selected_rank_1": 39,
+          "lost_correct": 86,
+          "lost_to_opposite_extreme": 37,
+          "domain_selected_rank_4": 36,
+          "domain_selected_rank_3": 26,
+          "domain_selected_rank_2": 27
+        }
+      },
+      "prediction_hashes": {
+        "candidate-base-0-predictions.json": "50ec83ed6cc1bee94ff4bcd40516816a406088cea5e9692175f83ba3cbf1982c",
+        "candidate-base-4-predictions.json": "8e656a8c808b64ea793ff2d1ce3cf909c7eeff11e985402c99dc08b6e2fa6590"
+      }
+    },
+    "expanded": {
+      "by_condition": {
+        "cost-minimum": {
+          "count": 128,
+          "familiar_correct": 117,
+          "domain_correct": 71,
+          "domain_selected_rank_1": 71,
+          "domain_selected_rank_3": 13,
+          "lost_correct": 50,
+          "lost_to_opposite_extreme": 17,
+          "domain_selected_rank_4": 18,
+          "domain_selected_rank_2": 26
+        },
+        "cost-maximum": {
+          "count": 128,
+          "familiar_correct": 88,
+          "domain_correct": 16,
+          "domain_selected_rank_1": 72,
+          "domain_selected_rank_3": 15,
+          "lost_correct": 79,
+          "lost_to_opposite_extreme": 51,
+          "domain_selected_rank_4": 16,
+          "domain_selected_rank_2": 25
+        },
+        "risk-minimum": {
+          "count": 128,
+          "familiar_correct": 113,
+          "domain_correct": 74,
+          "domain_selected_rank_1": 74,
+          "domain_selected_rank_2": 26,
+          "lost_correct": 46,
+          "lost_to_opposite_extreme": 3,
+          "domain_selected_rank_3": 23,
+          "domain_selected_rank_4": 5
+        },
+        "risk-maximum": {
+          "count": 128,
+          "familiar_correct": 98,
+          "domain_correct": 7,
+          "domain_selected_rank_1": 72,
+          "lost_correct": 95,
+          "lost_to_opposite_extreme": 54,
+          "domain_selected_rank_2": 28,
+          "domain_selected_rank_3": 21,
+          "domain_selected_rank_4": 7
+        },
+        "time-minimum": {
+          "count": 128,
+          "familiar_correct": 109,
+          "domain_correct": 46,
+          "domain_selected_rank_2": 37,
+          "lost_correct": 70,
+          "lost_to_opposite_extreme": 19,
+          "domain_selected_rank_1": 46,
+          "domain_selected_rank_3": 22,
+          "domain_selected_rank_4": 23
+        },
+        "time-maximum": {
+          "count": 128,
+          "familiar_correct": 105,
+          "domain_correct": 22,
+          "domain_selected_rank_2": 35,
+          "lost_correct": 86,
+          "lost_to_opposite_extreme": 40,
+          "domain_selected_rank_1": 50,
+          "domain_selected_rank_3": 21,
+          "domain_selected_rank_4": 22
+        }
+      },
+      "prediction_hashes": {
+        "candidate-expanded-0-predictions.json": "58d7c5c6b3fb4a9657c8ab88dd606cd9bb73454771a4afc3b22fee7e4b77c6c5",
+        "candidate-expanded-4-predictions.json": "81d5145cc45f98f06542d552f5816f86717c04fab8a04883155131c59a38730a"
+      }
+    }
+  }
+}

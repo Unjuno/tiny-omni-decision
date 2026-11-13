@@ -1,0 +1,39 @@
+{
+  "historical_revision": "842fb501b607ebe48494fd93fa0d933a9a22108d",
+  "url": "https://raw.githubusercontent.com/CaptainCook4D/annotations/842fb501b607ebe48494fd93fa0d933a9a22108d/metadata/video_info.csv",
+  "sha256": "5535fe3161eb3dae39b31c34df504b4124a20cea935022b513fbe03571223158",
+  "old_count": 388,
+  "new_count": 384,
+  "changed_persons": [],
+  "removed_ids": [
+    "16_110",
+    "17_2",
+    "26_37",
+    "4_120"
+  ],
+  "split_person_counts": {
+    "train": {
+      "6": 46,
+      "3": 55,
+      "5": 43,
+      "4": 55,
+      "2": 1,
+      "8": 1,
+      "1": 3
+    },
+    "val": {
+      "7": 43,
+      "8": 41
+    },
+    "test": {
+      "1": 52,
+      "3": 1,
+      "7": 3,
+      "2": 34,
+      "6": 3,
+      "4": 1,
+      "8": 2
+    }
+  },
+  "labels_loaded": false
+}

@@ -1,0 +1,62 @@
+import pytest
+
+from scripts.train_conditional_repair import schedule, verify_splits
+
+
+def test_equal_unique_reproducible_schedule():
+    sources = [list(range(3000)), list(range(8192))]
+    batches = schedule(sources, 512)
+    assert batches == schedule(sources, 512)
+    flat = [pair for batch in batches for pair in batch]
+    assert len(flat) == len(set(flat)) == 4096
+    assert all(sum(s == 0 for s, _ in batch) == 4 for batch in batches)
+    with pytest.raises(ValueError):
+        schedule([list(range(3)), list(range(20))], 1)
+
+
+def test_cross_source_state_overlap_and_duplicate_rejected():
+    train = [{"id": "a", "state": '{"x":1,"y":2}'}]
+    with pytest.raises(ValueError):
+        verify_splits(train, [{"id": "b", "state": '{"y": 2, "x":1}'}])
+    with pytest.raises(ValueError):
+        verify_splits(train * 2, [{"id": "b", "state": "other"}])
+    verify_splits(train, [{"id": "b", "state": "other"}])
+
+
+def test_full_coverage_budget_preserves_pilot_prefix():
+    sources = [list(range(23319)), list(range(8192))]
+    long = schedule(sources, 2048)
+    assert long[:512] == schedule(sources, 512)
+    curriculum = [i for batch in long for source, i in batch if source == 1]
+    original = [i for batch in long for source, i in batch if source == 0]
+    assert sorted(curriculum) == list(range(8192))
+    assert len(original) == len(set(original)) == 8192
+
+
+def test_curriculum_training_contract_preserves_old_default():
+    from pathlib import Path
+
+    from scripts.train_conditional_repair import curriculum_training_contract
+
+    root = Path("data")
+    original, old_sha = curriculum_training_contract(root, "original")
+    numeric, new_sha = curriculum_training_contract(root, "numeric_range")
+    assert original == root / "conditional-curriculum-01/train.jsonl"
+    assert numeric == root / "numeric-range-curriculum-01/train.jsonl"
+    assert len(old_sha) == len(new_sha) == 64 and old_sha != new_sha
+    with pytest.raises(ValueError):
+        curriculum_training_contract(root, "latest")
+
+
+def test_initial_checkpoint_contract_keeps_default_and_pins_warm_start():
+    from pathlib import Path
+
+    from scripts.train_conditional_repair import initial_checkpoint_contract
+
+    old = initial_checkpoint_contract(Path("data"), "epoch3")
+    new = initial_checkpoint_contract(Path("data"), "encoder_coverage")
+    assert old[0] != new[0] and old[1] != new[1]
+    assert len(old[1]) == len(new[1]) == 64
+    assert old[2] == "last_block" and new[2] == "all_encoder_blocks"
+    with pytest.raises(ValueError):
+        initial_checkpoint_contract(Path("data"), "latest")

@@ -1,0 +1,19 @@
+{
+  "commit": "204698b45b3712590f06245fbfba32d3be539812",
+  "previous_commit": "204698b45b3712590f06245fbfba32d3be539812",
+  "files": {
+    "README.md": {
+      "url": "https://raw.githubusercontent.com/facebookresearch/vjepa2/204698b45b3712590f06245fbfba32d3be539812/README.md",
+      "sha256": "55f8485d734a08d23170322cd13ad5ac2f4d63b3d1fd542b10ec0907042c5bb6"
+    },
+    "LICENSE": {
+      "url": "https://raw.githubusercontent.com/facebookresearch/vjepa2/204698b45b3712590f06245fbfba32d3be539812/LICENSE",
+      "sha256": "cf9b17822d1fcd4ff32ccbe14183386fb3adf6f2ff92dc184130823f7fc28173"
+    },
+    "APACHE-LICENSE": {
+      "url": "https://raw.githubusercontent.com/facebookresearch/vjepa2/204698b45b3712590f06245fbfba32d3be539812/APACHE-LICENSE",
+      "sha256": "a41e2fae9915ae56028f8dbd0bf27995f1907613cbcd2d81a61b010ad34e9fe9"
+    }
+  },
+  "scope": "read-only source-rights evidence; no checkpoint acquisition or status promotion"
+}

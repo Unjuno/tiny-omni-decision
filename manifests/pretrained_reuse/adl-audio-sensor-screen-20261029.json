@@ -1,0 +1,45 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "ADL ambient audio and environmental sensor dataset",
+  "doi": "10.5281/zenodo.7937591",
+  "status": "REVIEW_NOT_ADMITTED",
+  "screened_at": "2026-10-29",
+  "official_sources": {
+    "zenodo_record": "https://zenodo.org/records/7937591",
+    "dataset_paper": "https://www.mdpi.com/2306-5729/9/12/144"
+  },
+  "source_scope": "public record and paper metadata only; no archive or media downloaded or inspected",
+  "reported": {
+    "participants": 14,
+    "activity_instances": 8615,
+    "activity_classes": 25,
+    "sensor_devices_per_instance": 5,
+    "modalities": [
+      "ambient_audio",
+      "vibration",
+      "infrared_array",
+      "light_color",
+      "environmental_measurements"
+    ],
+    "total_archive_bytes_approx": 4600000000,
+    "smallest_activity_archive_bytes_approx": 69200000,
+    "official_split": null
+  },
+  "license": {
+    "paper_claim": "CC-BY-4.0",
+    "zenodo_rendered_rights_field": "blank",
+    "payload_license_confirmed": false
+  },
+  "limitations": [
+    "No video modality",
+    "Only 14 participants reported",
+    "Participant identifiers in the archive were not verified",
+    "No declared independent train/validation/test split found in inspected metadata",
+    "Activity labels do not establish that audio and sensors are both necessary",
+    "No archive checksum captured",
+    "Current local free storage is below the project 2-GiB reserve"
+  ],
+  "training_admission": "NOT_ADMITTED",
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

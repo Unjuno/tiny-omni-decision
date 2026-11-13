@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "id": "greatest-hits-encoders-20261017",
+  "scope": "fixed three-TRAIN frozen encoder and exact replay; no model quality",
+  "source_review": "REVIEW",
+  "training_admission": "NOT_ADMITTED",
+  "artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2",
+  "runs": [
+    {
+      "directory": "greatest-hits-encoder-audio-01",
+      "receipt_sha256": "b0035843449a66c509e662b08f249489ca48ebe8f174c9646514074064fd1985",
+      "source_commit": "92405b9d53f4f383c11f5dae3b2eb1a14c366bca",
+      "started_utc": "2026-10-16T17:45:01.014798+00:00",
+      "finished_utc": "2026-10-16T17:45:12.800855+00:00",
+      "status": "PASS_FROZEN_EVENT_ENCODERS",
+      "parameters": {
+        "speech": 8208384,
+        "event": 1961239,
+        "mel": 0
+      },
+      "seconds": 11.785602700023446,
+      "load_seconds": 9.835596400022041,
+      "host_peak_bytes": 1387479040,
+      "gpu_peak_allocated_bytes": 200990208,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "safetensors": "0.8.0"
+      },
+      "artifacts": {
+        "2015-03-30-00-26-27-speech.npy": "0cbbfeaa024e7e76d5639fee70f81ded79372b7a4453709582c06b3c5f2eb17f",
+        "2015-03-30-00-26-27-speech-positions.npy": "68d44c9ee792cbbd8c7f987666ce0d6ab693eb294114026fec627dca4ee5cf01",
+        "2015-03-30-00-26-27-event_audio.npy": "75b671203089a10df019b1be34e7adb44c149e42f136f9d2cd9fdd0481b3c5f7",
+        "2015-03-30-00-26-27-event_audio-positions.npy": "a3dc295f0c20d8bd96c676f0de7d0c36ccb423057e099a8883c1daa51ac98b8c",
+        "2015-03-12-20-15-29-speech.npy": "9550cf7e2f9f2c6c2c2921fc8355daac0fcc2bff72811175fc9d4a2da541772c",
+        "2015-03-12-20-15-29-speech-positions.npy": "68d44c9ee792cbbd8c7f987666ce0d6ab693eb294114026fec627dca4ee5cf01",
+        "2015-03-12-20-15-29-event_audio.npy": "6bc4e889a79b9b5229f972c96a3b5b6837fa19811d768c162f364d136b4c6cb3",
+        "2015-03-12-20-15-29-event_audio-positions.npy": "a3dc295f0c20d8bd96c676f0de7d0c36ccb423057e099a8883c1daa51ac98b8c",
+        "2015-03-31-02-08-23-speech.npy": "a32b72b7bb7c38e40f508947d7ec27c8977d12b6275ed88120daa7e15cca4147",
+        "2015-03-31-02-08-23-speech-positions.npy": "68d44c9ee792cbbd8c7f987666ce0d6ab693eb294114026fec627dca4ee5cf01",
+        "2015-03-31-02-08-23-event_audio.npy": "d78ae32250f17d8075edbb3f9579b91e77006a0f897f5e4eb4b5122c21791a6e",
+        "2015-03-31-02-08-23-event_audio-positions.npy": "a3dc295f0c20d8bd96c676f0de7d0c36ccb423057e099a8883c1daa51ac98b8c"
+      }
+    },
+    {
+      "directory": "greatest-hits-encoder-audio-replay-01",
+      "receipt_sha256": "c0860e1d1d721b347fa7826c976c66a2d746b43c212a2b6dd0ec2065194e1d6d",
+      "source_commit": "92405b9d53f4f383c11f5dae3b2eb1a14c366bca",
+      "started_utc": "2026-10-16T17:46:53.162206+00:00",
+      "finished_utc": "2026-10-16T17:47:02.205753+00:00",
+      "status": "PASS_FROZEN_EVENT_ENCODERS",
+      "parameters": {
+        "speech": 8208384,
+        "event": 1961239,
+        "mel": 0
+      },
+      "seconds": 9.044333400001051,
+      "load_seconds": 7.833018700010143,
+      "host_peak_bytes": 1387646976,
+      "gpu_peak_allocated_bytes": 200990208,
+      "versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "transformers": "5.6.2",
+        "numpy": "2.4.6",
+        "safetensors": "0.8.0"
+      },
+      "artifacts": {
+        "2015-03-30-00-26-27-speech.npy": "0cbbfeaa024e7e76d5639fee70f81ded79372b7a4453709582c06b3c5f2eb17f",
+        "2015-03-30-00-26-27-speech-positions.npy": "68d44c9ee792cbbd8c7f987666ce0d6ab693eb294114026fec627dca4ee5cf01",
+        "2015-03-30-00-26-27-event_audio.npy": "75b671203089a10df019b1be34e7adb44c149e42f136f9d2cd9fdd0481b3c5f7",
+        "2015-03-30-00-26-27-event_audio-positions.npy": "a3dc295f0c20d8bd96c676f0de7d0c36ccb423057e099a8883c1daa51ac98b8c",
+        "2015-03-12-20-15-29-speech.npy": "9550cf7e2f9f2c6c2c2921fc8355daac0fcc2bff72811175fc9d4a2da541772c",
+        "2015-03-12-20-15-29-speech-positions.npy": "68d44c9ee792cbbd8c7f987666ce0d6ab693eb294114026fec627dca4ee5cf01",
+        "2015-03-12-20-15-29-event_audio.npy": "6bc4e889a79b9b5229f972c96a3b5b6837fa19811d768c162f364d136b4c6cb3",
+        "2015-03-12-20-15-29-event_audio-positions.npy": "a3dc295f0c20d8bd96c676f0de7d0c36ccb423057e099a8883c1daa51ac98b8c",
+        "2015-03-31-02-08-23-speech.npy": "a32b72b7bb7c38e40f508947d7ec27c8977d12b6275ed88120daa7e15cca4147",
+        "2015-03-31-02-08-23-speech-positions.npy": "68d44c9ee792cbbd8c7f987666ce0d6ab693eb294114026fec627dca4ee5cf01",
+        "2015-03-31-02-08-23-event_audio.npy": "d78ae32250f17d8075edbb3f9579b91e77006a0f897f5e4eb4b5122c21791a6e",
+        "2015-03-31-02-08-23-event_audio-positions.npy": "a3dc295f0c20d8bd96c676f0de7d0c36ccb423057e099a8883c1daa51ac98b8c"
+      }
+    },
+    {
+      "directory": "greatest-hits-encoder-video-01",
+      "receipt_sha256": "790c5bccf76d5fd842777291a1fbf2d5d4ead0136f91dbffe1d4ec7bace97502",
+      "source_commit": "92405b9d53f4f383c11f5dae3b2eb1a14c366bca",
+      "started_utc": "2026-10-16T17:45:26.946767+00:00",
+      "finished_utc": "2026-10-16T17:45:43.688160+00:00",
+      "status": "PASS_FROZEN_EVENT_ENCODERS",
+      "parameters": 114365184,
+      "seconds": 16.74108450001222,
+      "load_seconds": 6.463159300008556,
+      "host_peak_bytes": 4137639936,
+      "gpu_peak_allocated_bytes": null,
+      "versions": {
+        "jax": "0.6.2",
+        "jaxlib": "0.6.2",
+        "numpy": "1.26.4",
+        "av": "18.1.0",
+        "psutil": "7.2.2",
+        "tensorflow_cpu": "2.18.1"
+      },
+      "artifacts": {
+        "2015-03-30-00-26-27-encoder-input.npy": "b092a4c1a500f4ff7119de192cedf28caebec097851ecc75de9200f5b056b036",
+        "2015-03-30-00-26-27-video.npy": "7fbe1cba36835f7cb49663f9023698c2b85bfa060560b500f83693c0477e4749",
+        "2015-03-30-00-26-27-video-positions.npy": "c00a8011f534b988395a57959a0d0a17912987fc7b8fc067ca561ac7d0cc8c01",
+        "2015-03-12-20-15-29-encoder-input.npy": "4541135de6b6ba2aa37e04fe365935f6789bce9470c72b7c1528aa2974055699",
+        "2015-03-12-20-15-29-video.npy": "ed3fa02c6d34febb17b126b8c33a41ddd95c93aad98bf9cd94e8b67a80c9455e",
+        "2015-03-12-20-15-29-video-positions.npy": "6e28bb2967ddc8d4ba28e035ff1ca54b7a62e0503f0085e99cdcf2b499d9d2a4",
+        "2015-03-31-02-08-23-encoder-input.npy": "92cb50090a8ec35648e87a2057640a53f12a2014b0e6a89682c503dcc16ca546",
+        "2015-03-31-02-08-23-video.npy": "2c4dc9ccccd693a34c1115c608e619f7812e827e5b619792b1d3a8d7f8c5466c",
+        "2015-03-31-02-08-23-video-positions.npy": "4a7aa74426bf93dac8cce57969028a045b3a8d9beed679a8387d87786c2c6668"
+      }
+    },
+    {
+      "directory": "greatest-hits-encoder-video-replay-01",
+      "receipt_sha256": "bfa357f80f7c84e072133ba9f15bbd5150c9af1e6afe28de37caff2bf480012b",
+      "source_commit": "92405b9d53f4f383c11f5dae3b2eb1a14c366bca",
+      "started_utc": "2026-10-16T17:47:15.976832+00:00",
+      "finished_utc": "2026-10-16T17:47:30.099252+00:00",
+      "status": "PASS_FROZEN_EVENT_ENCODERS",
+      "parameters": 114365184,
+      "seconds": 14.123004699999,
+      "load_seconds": 4.187357000017073,
+      "host_peak_bytes": 4138393600,
+      "gpu_peak_allocated_bytes": null,
+      "versions": {
+        "jax": "0.6.2",
+        "jaxlib": "0.6.2",
+        "numpy": "1.26.4",
+        "av": "18.1.0",
+        "psutil": "7.2.2",
+        "tensorflow_cpu": "2.18.1"
+      },
+      "artifacts": {
+        "2015-03-30-00-26-27-encoder-input.npy": "b092a4c1a500f4ff7119de192cedf28caebec097851ecc75de9200f5b056b036",
+        "2015-03-30-00-26-27-video.npy": "7fbe1cba36835f7cb49663f9023698c2b85bfa060560b500f83693c0477e4749",
+        "2015-03-30-00-26-27-video-positions.npy": "c00a8011f534b988395a57959a0d0a17912987fc7b8fc067ca561ac7d0cc8c01",
+        "2015-03-12-20-15-29-encoder-input.npy": "4541135de6b6ba2aa37e04fe365935f6789bce9470c72b7c1528aa2974055699",
+        "2015-03-12-20-15-29-video.npy": "ed3fa02c6d34febb17b126b8c33a41ddd95c93aad98bf9cd94e8b67a80c9455e",
+        "2015-03-12-20-15-29-video-positions.npy": "6e28bb2967ddc8d4ba28e035ff1ca54b7a62e0503f0085e99cdcf2b499d9d2a4",
+        "2015-03-31-02-08-23-encoder-input.npy": "92cb50090a8ec35648e87a2057640a53f12a2014b0e6a89682c503dcc16ca546",
+        "2015-03-31-02-08-23-video.npy": "2c4dc9ccccd693a34c1115c608e619f7812e827e5b619792b1d3a8d7f8c5466c",
+        "2015-03-31-02-08-23-video-positions.npy": "4a7aa74426bf93dac8cce57969028a045b3a8d9beed679a8387d87786c2c6668"
+      }
+    }
+  ],
+  "audit_receipt_sha256": "91dcec6f86d1416510ea62150c7ff50beb63bfa0620b29a3c7ba96e1f246ebd4",
+  "audit_script_sha256": "ced8cdfea2a8035d5afaffcbbe745abe4780056a823f89d9b417ae5bcafba4f1",
+  "artifact_ledger_sha256": "436014be858cd9cdac78ec17727f6bba6759fd209bcba5caddf5365a40d50827",
+  "exact_replayed_payloads": 21,
+  "preserved_old_model_files": 994,
+  "preserved_previous_source_files": 7310,
+  "temporal_coordinates": "common half-second input-window clock; nominal speech lattice; video actual PTS",
+  "physical_sync_proven": false,
+  "feature_semantics_proven": false,
+  "quality_evaluated": false,
+  "optimizer_updates": 0,
+  "sealed_audit_loaded": false,
+  "product_goal_complete": false,
+  "verification": {
+    "ruff": "PASS",
+    "cpu_pytest": "2242 passed, 1 skipped",
+    "manifest_commands_passed": 25
+  },
+  "ci_receipt": "local greatest-hits-encoder-verification-01/publication/ci.json after push"
+}

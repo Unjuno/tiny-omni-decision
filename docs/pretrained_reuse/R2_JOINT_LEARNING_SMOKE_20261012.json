@@ -1,0 +1,90 @@
+{
+  "joint-readout-smoke-01": {
+    "result": {
+      "status": "PASS_EXECUTION_ONLY",
+      "smoke": true,
+      "steps": 2,
+      "best_step": 0,
+      "best_sha256": "b063f124e59c8a4c1b09c7bf2a8423846f73489d7ce8cd6649735745bc6cebf5",
+      "final_sha256": "228a5803c72349462c5f31bc4a2ef027d3dbc44a897dc2644935db7bda97349a",
+      "frozen_sha256": "2947322a7fe4101ea8110b9689092ce542fbf0042d0204edacc5e6ce3477e7b9",
+      "reload_exact": true,
+      "seconds": 0.950528800021857,
+      "peak_vram_bytes": 859156480,
+      "exact_resume": false,
+      "ended_utc": "2026-10-12T02:36:18.352316+00:00"
+    },
+    "tokenization": {
+      "train": {
+        "questions": 16,
+        "state_tokens": 2842,
+        "kept_state_tokens": 2842,
+        "state_truncated": 0,
+        "input_sequences": 16,
+        "unpadded_tokens": 3751
+      },
+      "validation-0": {
+        "questions": 8,
+        "state_tokens": 1752,
+        "kept_state_tokens": 1752,
+        "state_truncated": 0,
+        "input_sequences": 8,
+        "unpadded_tokens": 2207
+      },
+      "validation-1": {
+        "questions": 8,
+        "state_tokens": 920,
+        "kept_state_tokens": 920,
+        "state_truncated": 0,
+        "input_sequences": 8,
+        "unpadded_tokens": 1218
+      }
+    },
+    "trainable": 10647169,
+    "parameters": 22713601
+  },
+  "independent-matched-smoke-01": {
+    "result": {
+      "status": "PASS_EXECUTION_ONLY",
+      "smoke": true,
+      "steps": 2,
+      "best_step": 2,
+      "best_sha256": "22d613e465f1f8a352aabb64e4f73f8ef5e9c458018fa231f78ea3afee0044e0",
+      "final_sha256": "11d4cf3d569c456cee7a225cc3dc2bc5e939ab3f963272975f0d8572c9985dcc",
+      "frozen_sha256": "2947322a7fe4101ea8110b9689092ce542fbf0042d0204edacc5e6ce3477e7b9",
+      "reload_exact": true,
+      "seconds": 1.3859519000397995,
+      "peak_vram_bytes": 2443544576,
+      "exact_resume": false,
+      "ended_utc": "2026-10-12T02:36:39.923631+00:00"
+    },
+    "tokenization": {
+      "train": {
+        "questions": 16,
+        "state_tokens": 2842,
+        "kept_state_tokens": 2842,
+        "state_truncated": 0,
+        "input_sequences": 61,
+        "unpadded_tokens": 12899
+      },
+      "validation-0": {
+        "questions": 8,
+        "state_tokens": 1752,
+        "kept_state_tokens": 1752,
+        "state_truncated": 0,
+        "input_sequences": 24,
+        "unpadded_tokens": 5985
+      },
+      "validation-1": {
+        "questions": 8,
+        "state_tokens": 920,
+        "kept_state_tokens": 920,
+        "state_truncated": 0,
+        "input_sequences": 34,
+        "unpadded_tokens": 4602
+      }
+    },
+    "trainable": 10647169,
+    "parameters": 22713601
+  }
+}

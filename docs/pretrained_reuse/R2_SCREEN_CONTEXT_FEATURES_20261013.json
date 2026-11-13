@@ -1,0 +1,19 @@
+{
+  "shape": [
+    48,
+    768
+  ],
+  "parameters": 22056576,
+  "trainable_parameters": 0,
+  "seconds": 0.7462313999421895,
+  "peak_vram": 150592000,
+  "weight_sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1",
+  "source_manifest_sha256": "0fce37ed881a754d43daa1c41c6846de79c8804ee0f33ce0674f549ffd27d658",
+  "script_sha256": "9a90c82a253bed6c6452e01a066b33d606be2fae32c048c02948b217bab53c62",
+  "features_sha256": "9fda8e085da85b67e8ed7be5eb156a72fa424cbdb606dbfd5620518d3f322663",
+  "records_sha256": "fe423516866c1bd72ca394be29087c23b349f1c777213b350dd7064a0e84139a",
+  "repeated_forward_exact": true,
+  "reload_exact": true,
+  "preprocessing": "full screen bicubic224x224, normalize only; no crop; no annotation inputs",
+  "quality_measured": false
+}

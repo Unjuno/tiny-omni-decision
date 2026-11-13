@@ -1,0 +1,93 @@
+{
+  "scope": "all frozen development questions; no selection/filter changes",
+  "splits": {
+    "train": {
+      "questions": 2312,
+      "unanimous": 1352,
+      "disagreed": 960,
+      "pairwise_agreement": 0.7231833910034601,
+      "fleiss_kappa": 0.43578214752335687,
+      "pooled_vote_agreement_with_majority": 0.8615916955017301,
+      "manifest_sha256": "4b3ee6fe483d20e55e32de47d491d946538df82ef7ce45698ec764d6aa0f1df3"
+    },
+    "calibration": {
+      "questions": 550,
+      "unanimous": 310,
+      "disagreed": 240,
+      "pairwise_agreement": 0.7090909090909091,
+      "fleiss_kappa": 0.40336735846924565,
+      "pooled_vote_agreement_with_majority": 0.8545454545454545,
+      "manifest_sha256": "dcdafb80a88999a5e1c401883d8b0a6c520a2e50059b1364769336e500c74291"
+    },
+    "validation": {
+      "questions": 560,
+      "unanimous": 331,
+      "disagreed": 229,
+      "pairwise_agreement": 0.7273809523809524,
+      "fleiss_kappa": 0.44489334195216546,
+      "pooled_vote_agreement_with_majority": 0.8636904761904761,
+      "manifest_sha256": "9587abbc775e03698f48bd10d45ac8fd8703018689999d3ed8925f7d2bf0527f",
+      "question_only_by_agreement": {
+        "unanimous": {
+          "count": 331,
+          "positive_count": 203,
+          "negative_count": 128,
+          "accuracy": 0.6858006042296072,
+          "nll": 0.5835226373677915,
+          "brier": 0.39687875488602653,
+          "ece": 0.061803608592543344,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            37,
+            67,
+            83,
+            78,
+            66,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.6731257697044335,
+          "sensitivity": 0.729064039408867,
+          "specificity": 0.6171875
+        },
+        "disagreed": {
+          "count": 229,
+          "positive_count": 114,
+          "negative_count": 115,
+          "accuracy": 0.5938864628820961,
+          "nll": 0.680254639725676,
+          "brier": 0.48555732777351407,
+          "ece": 0.07458069933553968,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            28,
+            47,
+            56,
+            53,
+            45,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.5941647597254005,
+          "sensitivity": 0.6578947368421053,
+          "specificity": 0.5304347826086957
+        }
+      }
+    }
+  },
+  "limitation": "Observed vote agreement is not a mathematical model Accuracy ceiling; same annotator identities unavailable, validation checkpoint selected on these questions; subgroup metrics descriptive only"
+}

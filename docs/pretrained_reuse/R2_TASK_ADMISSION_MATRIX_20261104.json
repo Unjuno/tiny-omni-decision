@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-11-04",
+  "scope": "metadata-only source reconciliation plus the one predeclared RoboMNIST AV-match validation evaluation recorded in R2_ROBOMNIST_AV_MATCH_EVALUATION_20261104.md; no sealed-audit or user-owned untracked manifest payloads opened",
+  "worktree_head": "477ece18fdd21869ee8287d7f3abcb4a4d68d10a",
+  "origin_head": "477ece18fdd21869ee8287d7f3abcb4a4d68d10a",
+  "capacity": {
+    "c_free_gib_approx": 7.8,
+    "robomnist_extractor_reserve_gib": 2.0,
+    "quartus_compile_live": true,
+    "intervened_in_process": false
+  },
+  "candidates": [
+    {
+      "id": "robomnist_av_repetition_match",
+      "rights": "ALLOW_CC_BY_4.0",
+      "source_revision": "figshare official v1; pinned details in R2_ROBOMNIST_SOURCE_20261014.md",
+      "group_key": "full primary-combination repetition; all modality files remain together",
+      "task_requires_both_by_construction": true,
+      "empirical_both_input_benefit": "SMALL_ACCURACY_SIGNAL; joint 0.5335 vs each unimodal 0.5000; paired 95% CI +0.0130 to +0.0550 over 500 pair units, but joint NLL/Brier/ECE-15 are severely poor (1.2494/0.7217/0.3074)",
+      "split": {"train_groups": 780, "validation_groups": 1000, "independent_pair_units": {"train": 390, "validation": 500}},
+      "validation_exposure": "development validation evaluated once; not blind, scene-held-out, or eligible for further model tuning",
+      "validation_metrics": {"rows": 2000, "pair_units": 500, "joint_accuracy": 0.5335, "joint_nll": 1.2494230554, "joint_brier": 0.7217002573, "joint_ece_15": 0.3074068756, "audio_only_accuracy": 0.5, "video_only_accuracy": 0.5, "paired_bootstrap_replicates": 2000, "seed": 17},
+      "cache": {"verified_groups": 1780, "required_groups": 1780, "missing_groups": 0, "missing_are_validation_only": true, "status": "COMPLETE"},
+      "decision": "DO_NOT_RETUNE_OR_PROMOTE; modest task-specific accuracy gain but severe calibration failure and limited split independence"
+    },
+    {
+      "id": "dcase2025_starss23_av_recording_match",
+      "rights": "ALLOW_MIT_FOR_STARSS23_RELEASE",
+      "source_revision": "STARSS23 v1.1 official Zenodo record 7880637; task source DCASE 2025 record",
+      "group_key": "parent recording and room",
+      "task_requires_both_by_construction": true,
+      "empirical_both_input_benefit": "NOT_ESTABLISHED; joint CV is near chance and proper scoring rules are worse than uniform",
+      "split": {"queries": 256, "parent_recordings": 78, "rooms": 9, "evaluation": "nested leave-one-room-out development CV"},
+      "validation_exposure": "development task already evaluated; dev-test/sealed audit unopened in cited reports",
+      "decision": "DO_NOT_RETUNE_WEAK_NEGATIVE_EVIDENCE"
+    },
+    {
+      "id": "eidon_tracker_pov_video_imu_match",
+      "rights": "CC_BY_4.0_CARDS; PRIVACY_SCOPE_REMAINS_CONSIDERATION",
+      "source_revision": {"video": "47c55ccc6d0308894ab482009c6fa91569057a08", "imu": "97d4441a7e915d2ad4b5988a43ebddd79a542aea"},
+      "group_key": "contributor/task and recording",
+      "task_requires_both_by_construction": true,
+      "empirical_both_input_benefit": "NOT_ESTABLISHED; reversed-time control slightly outperformed matched LSTM",
+      "split": {"development_queries": 24, "held_out_contributors": 3, "contributor_task_groups": 6},
+      "validation_exposure": "development set evaluated and used for checkpoint selection",
+      "decision": "DO_NOT_REPEAT_UNDERPOWERED_AND_OVERFIT"
+    },
+    {
+      "id": "physicalai_singlearm_video_proprio_action_choice",
+      "rights": "ALLOW_CC_BY_4.0_PUBLISHER_DECLARATION",
+      "source_revision": "73c00c18e7ca108e91846294b20a1d7cd5de9340",
+      "group_key": "episode; scene/layout identity absent and shared workspace observed",
+      "task_requires_both_by_construction": false,
+      "empirical_both_input_benefit": "UNCERTAIN; joint accuracy gain interval includes zero; calibration and overfit signals mixed",
+      "split": {"fresh_preflight_train_episodes": 4000, "fresh_preflight_validation_episodes": 1000, "reserved_episodes": 1000},
+      "validation_exposure": "prior pilot validation observed; fresh split metadata selected but no new quality evaluation",
+      "acquisition": "stopped on HTTP 429 after 175 verified files; do not inspect user-owned untracked split manifests",
+      "decision": "REVIEW_NOT_ADMITTED_SCENE_AND_COMPLEMENTARITY_GATES_OPEN"
+    },
+    {
+      "id": "hifi_umi_2k_video_state_action",
+      "rights": "CC_BY_4.0_PUBLISHER_CARD; CONSENT_SCOPE_UNKNOWN",
+      "source_revision": "a53b7b5784afdd50b2fda9195c9f724ef75ffdaf",
+      "group_key": "scene grouping not verified",
+      "task_requires_both_by_construction": false,
+      "empirical_both_input_benefit": "UNKNOWN; no quality result",
+      "payload": {"sampled_part_bytes": 40549578578, "sampled_part_gib": 37.765, "acquired": false},
+      "validation_exposure": "no evaluation",
+      "decision": "REVIEW_NOT_ADMITTED"
+    }
+  ],
+  "overall_decision": "NO_CANDIDATE_CURRENTLY_PASSES_ALL_R2_M_GATES",
+  "next_action": "do not retune or re-evaluate RoboMNIST validation; screen a genuinely fresh, rights-cleared, independently grouped task for measured modality-native and joint Path A evaluation, resolving task/data gates before fitting",
+  "sealed_audit_opened": false,
+  "new_training_or_inference": true,
+  "artifacts_deleted": false
+}

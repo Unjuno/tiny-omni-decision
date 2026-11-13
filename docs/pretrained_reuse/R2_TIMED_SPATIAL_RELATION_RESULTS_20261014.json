@@ -1,0 +1,2795 @@
+{
+  "status": "PASS_SPATIAL_RELATION_DIAGNOSTIC_POLICY_NOT_ADOPTED",
+  "source_commit": "3fd009189deda462ff31b8c9a491698d327c49e5",
+  "publisher_sha256": "7ce407f742d219ac51571a97039ee32af834703519271a2124325d6ffe310f92",
+  "artifacts": {
+    "primary": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\timed-spatial-relations-prediction-01\\result.json",
+      "sha256": "085ded0d55f20a7d0e0ccf9dab2142ae4e67155eb2888fb02ee8e0a70d8695bf"
+    },
+    "fresh_replay": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\timed-spatial-relations-fresh-replay-01\\result.json",
+      "sha256": "cd907fa6cf68ac400ed883a0b1588f51f6e3a3a6e1b3a61cb13c94c0b73d3c04"
+    },
+    "posthoc": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\timed-spatial-relations-posthoc-01\\result.json",
+      "sha256": "97a039cbbbf188873e300593b9f4e4b6dce968ef97506dc43f3a9e90f1a7dc7c"
+    },
+    "audit": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\timed-spatial-relations-independent-audit-01.json",
+      "sha256": "a807659259fde5b00cfc6e2342ab33751b1ec7ca2c7674c996a4fc1acdf7c636"
+    }
+  },
+  "reports": {
+    "primary": {
+      "status": "PASS_ALL_NEAREST_SPATIAL_PREDICTIONS_NOT_QA",
+      "source_commit": "3fd009189deda462ff31b8c9a491698d327c49e5",
+      "runner_sha256": "565ffa1a44c89c433389cd68e257cce82291b1c6265e940847ab6b94dc0be5b1",
+      "helper_sha256": "1ac6add13aa459ff6e526d1da7640521038361d98ff17725cf3afac240ce6554",
+      "track_result_sha256": "1ed0d7e4b3114be53fd6df7359d895f04f2e361579d052231f7c95b4e96d1c05",
+      "query_plan_sha256": "a683e5a6f9772ca1cde37eec10419364707b9f2f295bb282ca62cfab4ce2fee0",
+      "prediction_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\timed-spatial-relations-prediction-01\\predictions.npz",
+      "prediction_sha256": "a74c71e5fc88094dced91842079eb596b97a352feaf55c0203d5b56391f9bad9",
+      "queries": 1070,
+      "anchors": 40,
+      "times": 32,
+      "all_prediction_cases_per_arm": 34240,
+      "arrays_readback_bitwise": true,
+      "fresh_replay_bitwise": false,
+      "exact_distance_tie_counts": {
+        "actual": 6963,
+        "static": 4162,
+        "reversed": 6002
+      },
+      "annotations_loaded": false,
+      "training": false,
+      "validation_opened": false,
+      "sealed_audit_opened": false,
+      "gpu_or_model_loaded": false,
+      "cloud_cost": 0,
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "pid": 32292,
+      "seconds": 2.7593386999797076
+    },
+    "fresh_replay": {
+      "status": "PASS_ALL_NEAREST_SPATIAL_PREDICTIONS_NOT_QA",
+      "source_commit": "3fd009189deda462ff31b8c9a491698d327c49e5",
+      "runner_sha256": "565ffa1a44c89c433389cd68e257cce82291b1c6265e940847ab6b94dc0be5b1",
+      "helper_sha256": "1ac6add13aa459ff6e526d1da7640521038361d98ff17725cf3afac240ce6554",
+      "track_result_sha256": "1ed0d7e4b3114be53fd6df7359d895f04f2e361579d052231f7c95b4e96d1c05",
+      "query_plan_sha256": "a683e5a6f9772ca1cde37eec10419364707b9f2f295bb282ca62cfab4ce2fee0",
+      "prediction_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\timed-spatial-relations-fresh-replay-01\\predictions.npz",
+      "prediction_sha256": "a74c71e5fc88094dced91842079eb596b97a352feaf55c0203d5b56391f9bad9",
+      "queries": 1070,
+      "anchors": 40,
+      "times": 32,
+      "all_prediction_cases_per_arm": 34240,
+      "arrays_readback_bitwise": true,
+      "fresh_replay_bitwise": true,
+      "exact_distance_tie_counts": {
+        "actual": 6963,
+        "static": 4162,
+        "reversed": 6002
+      },
+      "annotations_loaded": false,
+      "training": false,
+      "validation_opened": false,
+      "sealed_audit_opened": false,
+      "gpu_or_model_loaded": false,
+      "cloud_cost": 0,
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "pid": 33800,
+      "seconds": 2.801273199962452
+    },
+    "posthoc": {
+      "status": "PASS_POSTHOC_SPATIAL_RELATION_DIAGNOSTIC_NOT_QA",
+      "source_commit": "3fd009189deda462ff31b8c9a491698d327c49e5",
+      "runner_sha256": "565ffa1a44c89c433389cd68e257cce82291b1c6265e940847ab6b94dc0be5b1",
+      "prediction_result_sha256": "085ded0d55f20a7d0e0ccf9dab2142ae4e67155eb2888fb02ee8e0a70d8695bf",
+      "annotation_sha256": "9eaa6aad3fabdf4cde4955f333cfddf3b9e6839c5abcb271afa410870f640d78",
+      "source_roles": {
+        "hidden": [
+          7
+        ],
+        "cover": [
+          3
+        ],
+        "group": [
+          1,
+          2,
+          3
+        ]
+      },
+      "source_cases": [
+        {
+          "frame_index": 0,
+          "queries": 40,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.592399001121521,
+                0.5850589871406555,
+                0.6935570240020752,
+                0.8817750215530396
+              ],
+              "bracket_frames": [
+                0,
+                0
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5137270092964172,
+                0.45935899019241333,
+                0.6037949919700623,
+                0.7424240112304688
+              ],
+              "bracket_frames": [
+                0,
+                0
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.4246380031108856,
+                0.38276100158691406,
+                0.5118460059165955,
+                0.6526319980621338
+              ],
+              "bracket_frames": [
+                0,
+                0
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 18,
+          "queries": 39,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6032139897346497,
+                0.554452407360077,
+                0.709521210193634,
+                0.8534424185752869
+              ],
+              "bracket_frames": [
+                0,
+                30
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5253028154373169,
+                0.4275307893753052,
+                0.6172499895095825,
+                0.709937596321106
+              ],
+              "bracket_frames": [
+                0,
+                30
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.43928279280662536,
+                0.34848240613937376,
+                0.5262969970703125,
+                0.6184152007102967
+              ],
+              "bracket_frames": [
+                0,
+                30
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 36,
+          "queries": 30,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6319731831550598,
+                0.46060181558132174,
+                0.7640100002288819,
+                0.7496020138263703
+              ],
+              "bracket_frames": [
+                30,
+                60
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5289204120635986,
+                0.4135909914970398,
+                0.6215689897537231,
+                0.6959757924079895
+              ],
+              "bracket_frames": [
+                30,
+                60
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.444392591714859,
+                0.3334878087043762,
+                0.5312127947807312,
+                0.6034821987152099
+              ],
+              "bracket_frames": [
+                30,
+                60
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 54,
+          "queries": 44,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.696620786190033,
+                0.24026319980621336,
+                0.8955479979515075,
+                0.4947460055351257
+              ],
+              "bracket_frames": [
+                30,
+                60
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5166215896606445,
+                0.43542799949645994,
+                0.6076159954071045,
+                0.7190632104873658
+              ],
+              "bracket_frames": [
+                30,
+                60
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.43043240904808044,
+                0.3570612072944641,
+                0.5170582056045532,
+                0.6271167874336243
+              ],
+              "bracket_frames": [
+                30,
+                60
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 72,
+          "queries": 43,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6638251900672912,
+                0.31553299725055695,
+                0.8415271997451782,
+                0.5828972041606904
+              ],
+              "bracket_frames": [
+                60,
+                90
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.509261178970337,
+                0.42864179611206055,
+                0.6009501934051513,
+                0.7145170092582702
+              ],
+              "bracket_frames": [
+                60,
+                90
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.4191554129123688,
+                0.3498170018196106,
+                0.5089088082313538,
+                0.6251453876495361
+              ],
+              "bracket_frames": [
+                60,
+                90
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 90,
+          "queries": 45,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5823079943656921,
+                0.5386070013046265,
+                0.6947270035743713,
+                0.8425520062446594
+              ],
+              "bracket_frames": [
+                90,
+                90
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5043699741363525,
+                0.40754398703575134,
+                0.597927987575531,
+                0.696153998374939
+              ],
+              "bracket_frames": [
+                90,
+                90
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.40922001004219055,
+                0.3271639943122864,
+                0.5037620067596436,
+                0.6103709936141968
+              ],
+              "bracket_frames": [
+                90,
+                90
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 108,
+          "queries": 36,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5788633942604064,
+                0.5372941851615906,
+                0.6921830177307129,
+                0.842752993106842
+              ],
+              "bracket_frames": [
+                90,
+                120
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.49689878821372985,
+                0.2357993945479393,
+                0.6584895849227905,
+                0.5319969952106476
+              ],
+              "bracket_frames": [
+                90,
+                120
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.41155220866203307,
+                0.31114339232444765,
+                0.5012504041194916,
+                0.5933519840240479
+              ],
+              "bracket_frames": [
+                90,
+                120
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 126,
+          "queries": 31,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5805611968040466,
+                0.5445085763931274,
+                0.6939474225044251,
+                0.8511673927307128
+              ],
+              "bracket_frames": [
+                120,
+                150
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5070544004440307,
+                0.10927339941263199,
+                0.7147831916809082,
+                0.41618979573249815
+              ],
+              "bracket_frames": [
+                120,
+                150
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.41581660509109497,
+                0.3116927921772003,
+                0.5031944036483764,
+                0.5929585814476013
+              ],
+              "bracket_frames": [
+                120,
+                150
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 144,
+          "queries": 25,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5925438046455384,
+                0.5687773823738098,
+                0.7043286085128784,
+                0.8760086178779602
+              ],
+              "bracket_frames": [
+                120,
+                150
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5524636089801789,
+                0.07318459898233415,
+                0.7625408172607422,
+                0.3970822036266327
+              ],
+              "bracket_frames": [
+                120,
+                150
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.4239453971385956,
+                0.3453821957111359,
+                0.5140496075153351,
+                0.6258163928985596
+              ],
+              "bracket_frames": [
+                120,
+                150
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 162,
+          "queries": 38,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6112876057624816,
+                0.5692773818969726,
+                0.7229038119316101,
+                0.8740178108215332
+              ],
+              "bracket_frames": [
+                150,
+                180
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5614200115203858,
+                0.20513139814138412,
+                0.7258012056350708,
+                0.5194094121456146
+              ],
+              "bracket_frames": [
+                150,
+                180
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.4404745936393738,
+                0.3510475933551788,
+                0.5305324077606202,
+                0.6277505993843079
+              ],
+              "bracket_frames": [
+                150,
+                180
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 180,
+          "queries": 36,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6334120035171509,
+                0.5578929781913757,
+                0.745576024055481,
+                0.858610987663269
+              ],
+              "bracket_frames": [
+                180,
+                180
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5521500110626221,
+                0.42109599709510803,
+                0.6468129754066467,
+                0.7124540209770203
+              ],
+              "bracket_frames": [
+                180,
+                180
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.46120399236679077,
+                0.3427009880542755,
+                0.5498290061950684,
+                0.6142230033874512
+              ],
+              "bracket_frames": [
+                180,
+                180
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 198,
+          "queries": 37,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6581224083900452,
+                0.5711115837097168,
+                0.7711498141288757,
+                0.8706050038337707
+              ],
+              "bracket_frames": [
+                180,
+                210
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5766018152236938,
+                0.4398292064666748,
+                0.6722338080406189,
+                0.7274270057678223
+              ],
+              "bracket_frames": [
+                180,
+                210
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.48512600660324096,
+                0.3595705986022949,
+                0.5715418100357056,
+                0.6305351972579956
+              ],
+              "bracket_frames": [
+                180,
+                210
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 216,
+          "queries": 34,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6720006108283997,
+                0.5868589878082275,
+                0.785696804523468,
+                0.8861836075782776
+              ],
+              "bracket_frames": [
+                210,
+                240
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5901326179504395,
+                0.45923560857772827,
+                0.6859368205070495,
+                0.7451128005981446
+              ],
+              "bracket_frames": [
+                210,
+                240
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5121368169784546,
+                0.29665360450744627,
+                0.6136492133140564,
+                0.5300003945827484
+              ],
+              "bracket_frames": [
+                210,
+                240
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": null,
+              "bracket_frames": null,
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": null,
+              "source_masked_flags": null
+            }
+          }
+        },
+        {
+          "frame_index": 234,
+          "queries": 35,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6642144083976745,
+                0.6076639890670776,
+                0.7781901955604553,
+                0.9089313864707946
+              ],
+              "bracket_frames": [
+                210,
+                240
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5818214178085327,
+                0.4799883961677551,
+                0.6762041926383973,
+                0.7682242155075073
+              ],
+              "bracket_frames": [
+                210,
+                240
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5453252196311951,
+                0.0741634011268616,
+                0.6965458154678345,
+                0.195771598815918
+              ],
+              "bracket_frames": [
+                210,
+                240
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.5030811093747616,
+                0.5604057461023331,
+                0.5392006263136864,
+                0.6188085004687309
+              ],
+              "bracket_frames": [
+                224,
+                240
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 6,
+              "source_masked_flags": [
+                0,
+                1
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 252,
+          "queries": 41,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6608614087104797,
+                0.6303570032119751,
+                0.7776455998420715,
+                0.9293431878089905
+              ],
+              "bracket_frames": [
+                240,
+                270
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5798366069793701,
+                0.4987208008766174,
+                0.6737563967704773,
+                0.7875012159347534
+              ],
+              "bracket_frames": [
+                240,
+                270
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5277068138122558,
+                0.13671799898147582,
+                0.6634292006492615,
+                0.30281999707221985
+              ],
+              "bracket_frames": [
+                240,
+                270
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.49720060229301455,
+                0.5829877853393555,
+                0.5342284083366394,
+                0.6433287978172302
+              ],
+              "bracket_frames": [
+                240,
+                270
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 12,
+              "source_masked_flags": [
+                1,
+                1
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 270,
+          "queries": 35,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.65972501039505,
+                0.6539940237998962,
+                0.7805820107460022,
+                0.9485870003700256
+              ],
+              "bracket_frames": [
+                270,
+                270
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5810149908065796,
+                0.5164430141448975,
+                0.6749510169029236,
+                0.8048610091209412
+              ],
+              "bracket_frames": [
+                270,
+                270
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.4846850037574768,
+                0.3417949974536896,
+                0.5723059773445129,
+                0.6305069923400879
+              ],
+              "bracket_frames": [
+                270,
+                270
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.5022370219230652,
+                0.6202459931373596,
+                0.5362780094146729,
+                0.6534850001335144
+              ],
+              "bracket_frames": [
+                270,
+                270
+              ],
+              "source_frame_exact": true,
+              "nearest_annotation_distance_frames": 0,
+              "source_masked_flags": [
+                1,
+                1
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 287,
+          "queries": 41,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6707744459311168,
+                0.6470189154148102,
+                0.7940573374430339,
+                0.9495871742566426
+              ],
+              "bracket_frames": [
+                270,
+                300
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5971094747384389,
+                0.5012121478716532,
+                0.6945757985115051,
+                0.7926346162954966
+              ],
+              "bracket_frames": [
+                270,
+                300
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.49233840107917787,
+                0.3655632625023524,
+                0.581319397687912,
+                0.6497068047523499
+              ],
+              "bracket_frames": [
+                270,
+                300
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.5154380877812703,
+                0.614627496401469,
+                0.5515139758586883,
+                0.6563001930713653
+              ],
+              "bracket_frames": [
+                270,
+                300
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                1,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 305,
+          "queries": 31,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6857696771621704,
+                0.6281261742115021,
+                0.8145968317985535,
+                0.9375828405221304
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5933645168940226,
+                0.4309470131993294,
+                0.690908819437027,
+                0.7223221858342489
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.508365660905838,
+                0.361647496620814,
+                0.5984468460083008,
+                0.6420413454373678
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.5356563528378805,
+                0.589008500178655,
+                0.5735765099525452,
+                0.6366461515426636
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 323,
+          "queries": 36,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.7093340635299683,
+                0.5793143689632416,
+                0.8514422297477722,
+                0.8916138192017873
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5355755011240642,
+                0.21992220729589462,
+                0.6236818253993988,
+                0.5028559764226277
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.544994443655014,
+                0.28211810390154524,
+                0.6352922439575195,
+                0.5615897377332052
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.5721003492673238,
+                0.512247504790624,
+                0.6110579133033752,
+                0.558141541481018
+              ],
+              "bracket_frames": [
+                300,
+                330
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 341,
+          "queries": 29,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.6272973616917928,
+                0.3863937673469384,
+                0.7521410008271535,
+                0.6897187183300654
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5248093008995056,
+                0.1532405028740565,
+                0.615762056907018,
+                0.4369629661242167
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5650315821170807,
+                0.27354676922162374,
+                0.6653546690940857,
+                0.5573446750640869
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.5942615767319998,
+                0.505205233891805,
+                0.6341993530591329,
+                0.5523476759592693
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 359,
+          "queries": 26,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.47805996735890705,
+                0.10176756804188092,
+                0.5662010093530019,
+                0.38859793047110236
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5439667105674744,
+                0.17841349939505258,
+                0.6455832501252492,
+                0.4687983552614848
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5745104014873504,
+                0.3101305623849233,
+                0.6911006569862366,
+                0.6015946865081787
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.6073337694009145,
+                0.5425294240315756,
+                0.6482153614362081,
+                0.5928242842356364
+              ],
+              "bracket_frames": [
+                330,
+                360
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 377,
+          "queries": 32,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5075883209705353,
+                0.10800796672701836,
+                0.5967044293880462,
+                0.39105349282423657
+              ],
+              "bracket_frames": [
+                360,
+                390
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5638279100259145,
+                0.20975806564092636,
+                0.6652242998282115,
+                0.5044173955917358
+              ],
+              "bracket_frames": [
+                360,
+                390
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5956336200237274,
+                0.34010135928789775,
+                0.7131423672040303,
+                0.6423959354559581
+              ],
+              "bracket_frames": [
+                360,
+                390
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.625643668572108,
+                0.5645564456780752,
+                0.6718153675397237,
+                0.6269978582859039
+              ],
+              "bracket_frames": [
+                360,
+                390
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 395,
+          "queries": 25,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5300808151563009,
+                0.12430449947714806,
+                0.6198658247788748,
+                0.40404049058755237
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5878380040327708,
+                0.27929650247097015,
+                0.6938426792621613,
+                0.5799663364887238
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.6053326427936554,
+                0.35888882478078205,
+                0.7205515106519064,
+                0.6683896581331888
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.6330380042394003,
+                0.5776631434758505,
+                0.6824446519215902,
+                0.6474986672401428
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 413,
+          "queries": 23,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.506939431031545,
+                0.1222615011036396,
+                0.5908348460992178,
+                0.39797989626725516
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.6225275854269663,
+                0.447195115685463,
+                0.7473590791225433,
+                0.7587543427944183
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5835478484630585,
+                0.3496110280354818,
+                0.690482517083486,
+                0.6564112703005472
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.6112508138020833,
+                0.569916566212972,
+                0.6578842719395955,
+                0.6334142804145813
+              ],
+              "bracket_frames": [
+                390,
+                420
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 431,
+          "queries": 33,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5245522916316986,
+                0.1124272013703982,
+                0.6129985908667247,
+                0.39955110251903536
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.6454017221927643,
+                0.5191022237141927,
+                0.7884011050065358,
+                0.8369249741236369
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5923397580782572,
+                0.3396802028020223,
+                0.7072419822216034,
+                0.6454928954442342
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.6209342420101166,
+                0.5587269683678945,
+                0.6679416139920552,
+                0.6201904356479645
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 449,
+          "queries": 31,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5680996716022492,
+                0.0976348007718722,
+                0.6677407960096995,
+                0.4059789091348648
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.6607569396495819,
+                0.5299238284428914,
+                0.8215048929055532,
+                0.8510663668314616
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.620589570204417,
+                0.3293338139851888,
+                0.7538013756275177,
+                0.6352490743001302
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.6506444275379181,
+                0.5453463574250539,
+                0.7000284155209859,
+                0.6075142085552215
+              ],
+              "bracket_frames": [
+                420,
+                450
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 467,
+          "queries": 32,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.55015922387441,
+                0.10280606870849927,
+                0.6488321781158447,
+                0.4021732737620672
+              ],
+              "bracket_frames": [
+                450,
+                480
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.6283551712830862,
+                0.4781298766533534,
+                0.7735311647256216,
+                0.7940559526284536
+              ],
+              "bracket_frames": [
+                450,
+                480
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5849046210447947,
+                0.2888928711414337,
+                0.7064323763052622,
+                0.5955669661362966
+              ],
+              "bracket_frames": [
+                450,
+                480
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.6137599607308706,
+                0.4973809649546941,
+                0.6632765233516693,
+                0.5662383516629537
+              ],
+              "bracket_frames": [
+                450,
+                480
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 485,
+          "queries": 21,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5472295085589091,
+                0.19328217208385468,
+                0.6545246640841166,
+                0.49074084063371026
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5919866661230723,
+                0.43956049780050915,
+                0.7213621735572815,
+                0.7519884804884592
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.5432991435130438,
+                0.2634381651878357,
+                0.6525095105171204,
+                0.5703348517417908
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.570757657289505,
+                0.46772534151872,
+                0.619944304227829,
+                0.5399079918861389
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 5,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 503,
+          "queries": 21,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5927317182223002,
+                0.5024975806474685,
+                0.7354442636171977,
+                0.8210438479979834
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5526086548964182,
+                0.4449515054623286,
+                0.6706855893135071,
+                0.7596546987692515
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.49607854982217153,
+                0.2815503716468811,
+                0.5959121108055114,
+                0.5871750473976135
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.5220340430736542,
+                0.49096455474694567,
+                0.5700315058231353,
+                0.5568099856376648
+              ],
+              "bracket_frames": [
+                480,
+                510
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 7,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 521,
+          "queries": 31,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5956884880860647,
+                0.6269558767477671,
+                0.7452411711215973,
+                0.9497700194517772
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.524330751101176,
+                0.44985703627268475,
+                0.638091512521108,
+                0.7669370114803314
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.46425722241401673,
+                0.29005113740762073,
+                0.5602638343969981,
+                0.5957604646682739
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.4888032128413518,
+                0.5012930472691853,
+                0.5375489513079326,
+                0.5676865458488465
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 11,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 539,
+          "queries": 34,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5715708871682484,
+                0.633841464916865,
+                0.7097781836986542,
+                0.9502200225989024
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5031165520350138,
+                0.4544536272684733,
+                0.6170044859250386,
+                0.7739750206470489
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.4422354280948639,
+                0.29243553181489307,
+                0.5379468182722728,
+                0.5990928411483765
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.4654314269622167,
+                0.5034056266148885,
+                0.5161583701769511,
+                0.5747287392616272
+              ],
+              "bracket_frames": [
+                510,
+                540
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 1,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 557,
+          "queries": 35,
+          "source_proxies": {
+            "1": {
+              "box": [
+                0.5718970199426016,
+                0.6009595354398092,
+                0.7169619460900625,
+                0.9367147088050842
+              ],
+              "bracket_frames": [
+                540,
+                570
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "2": {
+              "box": [
+                0.5126921852429708,
+                0.4528576989968618,
+                0.618920749425888,
+                0.7671823799610138
+              ],
+              "bracket_frames": [
+                540,
+                570
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "3": {
+              "box": [
+                0.4549984703461329,
+                0.30754443009694415,
+                0.5443468034267426,
+                0.6031216780344645
+              ],
+              "bracket_frames": [
+                540,
+                570
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            },
+            "7": {
+              "box": [
+                0.4764789710442225,
+                0.5101739525794983,
+                0.5254454175631206,
+                0.5791104674339295
+              ],
+              "bracket_frames": [
+                540,
+                570
+              ],
+              "source_frame_exact": false,
+              "nearest_annotation_distance_frames": 13,
+              "source_masked_flags": [
+                0,
+                0
+              ]
+            }
+          }
+        }
+      ],
+      "metrics": {
+        "actual": {
+          "hidden_to_cover": {
+            "initial_anchor_role": {
+              "queries": 1,
+              "future_denominator": 18,
+              "hits": 0,
+              "geometric_relation_rate": 0.0,
+              "unknown": 15,
+              "ambiguous": 0,
+              "resolved": 3,
+              "known_wrong": 3
+            },
+            "current_anchor_bbox_role": {
+              "queries": 1,
+              "future_denominator": 18,
+              "hits": 0,
+              "geometric_relation_rate": 0.0,
+              "unknown": 12,
+              "ambiguous": 1,
+              "resolved": 5,
+              "known_wrong": 5
+            }
+          },
+          "group_to_same": {
+            "initial_anchor_role": {
+              "queries": 92,
+              "future_denominator": 1363,
+              "hits": 1184,
+              "geometric_relation_rate": 0.8686720469552458,
+              "unknown": 76,
+              "ambiguous": 0,
+              "resolved": 1287,
+              "known_wrong": 103
+            },
+            "current_anchor_bbox_role": {
+              "queries": 92,
+              "future_denominator": 1363,
+              "hits": 950,
+              "geometric_relation_rate": 0.6969919295671313,
+              "unknown": 141,
+              "ambiguous": 174,
+              "resolved": 1048,
+              "known_wrong": 98
+            }
+          },
+          "later_group_to_same": {
+            "initial_anchor_role": {
+              "queries": 89,
+              "future_denominator": 1270,
+              "hits": 1091,
+              "geometric_relation_rate": 0.8590551181102363,
+              "unknown": 76,
+              "ambiguous": 0,
+              "resolved": 1194,
+              "known_wrong": 103
+            },
+            "current_anchor_bbox_role": {
+              "queries": 89,
+              "future_denominator": 1270,
+              "hits": 878,
+              "geometric_relation_rate": 0.6913385826771653,
+              "unknown": 131,
+              "ambiguous": 165,
+              "resolved": 974,
+              "known_wrong": 96
+            }
+          },
+          "initial_anchor_to_same": {
+            "initial_anchor_role": {
+              "queries": 3,
+              "future_denominator": 93,
+              "hits": 93,
+              "geometric_relation_rate": 1.0,
+              "unknown": 0,
+              "ambiguous": 0,
+              "resolved": 93,
+              "known_wrong": 0
+            },
+            "current_anchor_bbox_role": {
+              "queries": 3,
+              "future_denominator": 93,
+              "hits": 72,
+              "geometric_relation_rate": 0.7741935483870968,
+              "unknown": 10,
+              "ambiguous": 9,
+              "resolved": 74,
+              "known_wrong": 2
+            }
+          }
+        },
+        "static": {
+          "hidden_to_cover": {
+            "initial_anchor_role": {
+              "queries": 1,
+              "future_denominator": 18,
+              "hits": 2,
+              "geometric_relation_rate": 0.1111111111111111,
+              "unknown": 14,
+              "ambiguous": 0,
+              "resolved": 4,
+              "known_wrong": 2
+            },
+            "current_anchor_bbox_role": {
+              "queries": 1,
+              "future_denominator": 18,
+              "hits": 5,
+              "geometric_relation_rate": 0.2777777777777778,
+              "unknown": 7,
+              "ambiguous": 3,
+              "resolved": 8,
+              "known_wrong": 3
+            }
+          },
+          "group_to_same": {
+            "initial_anchor_role": {
+              "queries": 92,
+              "future_denominator": 1363,
+              "hits": 235,
+              "geometric_relation_rate": 0.1724137931034483,
+              "unknown": 1092,
+              "ambiguous": 0,
+              "resolved": 271,
+              "known_wrong": 36
+            },
+            "current_anchor_bbox_role": {
+              "queries": 92,
+              "future_denominator": 1363,
+              "hits": 516,
+              "geometric_relation_rate": 0.3785766691122524,
+              "unknown": 493,
+              "ambiguous": 35,
+              "resolved": 835,
+              "known_wrong": 319
+            }
+          },
+          "later_group_to_same": {
+            "initial_anchor_role": {
+              "queries": 89,
+              "future_denominator": 1270,
+              "hits": 211,
+              "geometric_relation_rate": 0.16614173228346457,
+              "unknown": 1024,
+              "ambiguous": 0,
+              "resolved": 246,
+              "known_wrong": 35
+            },
+            "current_anchor_bbox_role": {
+              "queries": 89,
+              "future_denominator": 1270,
+              "hits": 473,
+              "geometric_relation_rate": 0.3724409448818898,
+              "unknown": 466,
+              "ambiguous": 33,
+              "resolved": 771,
+              "known_wrong": 298
+            }
+          },
+          "initial_anchor_to_same": {
+            "initial_anchor_role": {
+              "queries": 3,
+              "future_denominator": 93,
+              "hits": 24,
+              "geometric_relation_rate": 0.25806451612903225,
+              "unknown": 68,
+              "ambiguous": 0,
+              "resolved": 25,
+              "known_wrong": 1
+            },
+            "current_anchor_bbox_role": {
+              "queries": 3,
+              "future_denominator": 93,
+              "hits": 43,
+              "geometric_relation_rate": 0.46236559139784944,
+              "unknown": 27,
+              "ambiguous": 2,
+              "resolved": 64,
+              "known_wrong": 21
+            }
+          }
+        },
+        "reversed": {
+          "hidden_to_cover": {
+            "initial_anchor_role": {
+              "queries": 1,
+              "future_denominator": 18,
+              "hits": 4,
+              "geometric_relation_rate": 0.2222222222222222,
+              "unknown": 12,
+              "ambiguous": 0,
+              "resolved": 6,
+              "known_wrong": 2
+            },
+            "current_anchor_bbox_role": {
+              "queries": 1,
+              "future_denominator": 18,
+              "hits": 3,
+              "geometric_relation_rate": 0.16666666666666666,
+              "unknown": 11,
+              "ambiguous": 3,
+              "resolved": 4,
+              "known_wrong": 1
+            }
+          },
+          "group_to_same": {
+            "initial_anchor_role": {
+              "queries": 92,
+              "future_denominator": 1363,
+              "hits": 363,
+              "geometric_relation_rate": 0.2663242846661775,
+              "unknown": 854,
+              "ambiguous": 0,
+              "resolved": 509,
+              "known_wrong": 146
+            },
+            "current_anchor_bbox_role": {
+              "queries": 92,
+              "future_denominator": 1363,
+              "hits": 471,
+              "geometric_relation_rate": 0.34556126192223036,
+              "unknown": 428,
+              "ambiguous": 84,
+              "resolved": 851,
+              "known_wrong": 380
+            }
+          },
+          "later_group_to_same": {
+            "initial_anchor_role": {
+              "queries": 89,
+              "future_denominator": 1270,
+              "hits": 337,
+              "geometric_relation_rate": 0.26535433070866143,
+              "unknown": 798,
+              "ambiguous": 0,
+              "resolved": 472,
+              "known_wrong": 135
+            },
+            "current_anchor_bbox_role": {
+              "queries": 89,
+              "future_denominator": 1270,
+              "hits": 438,
+              "geometric_relation_rate": 0.34488188976377954,
+              "unknown": 394,
+              "ambiguous": 80,
+              "resolved": 796,
+              "known_wrong": 358
+            }
+          },
+          "initial_anchor_to_same": {
+            "initial_anchor_role": {
+              "queries": 3,
+              "future_denominator": 93,
+              "hits": 26,
+              "geometric_relation_rate": 0.27956989247311825,
+              "unknown": 56,
+              "ambiguous": 0,
+              "resolved": 37,
+              "known_wrong": 11
+            },
+            "current_anchor_bbox_role": {
+              "queries": 3,
+              "future_denominator": 93,
+              "hits": 33,
+              "geometric_relation_rate": 0.3548387096774194,
+              "unknown": 34,
+              "ambiguous": 4,
+              "resolved": 55,
+              "known_wrong": 22
+            }
+          }
+        }
+      },
+      "hidden_track_bbox_retention": {
+        "queries": 1,
+        "future_denominator": 18,
+        "hits": 2,
+        "geometric_relation_rate": 0.1111111111111111,
+        "unknown": 16,
+        "ambiguous": 0,
+        "resolved": 2,
+        "known_wrong": 0
+      },
+      "all_queries": 1070,
+      "seed_known_group_queries": 92,
+      "seed_known_hidden_queries": 1,
+      "seed_unknown_queries": 974,
+      "seed_ambiguous_queries": 3,
+      "hidden_queries": [
+        {
+          "query_index": 501,
+          "frame": 234,
+          "proposal_id": 592
+        }
+      ],
+      "labels_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\timed-spatial-relations-posthoc-01\\posthoc-labels.npz",
+      "labels_sha256": "bb2002bd9ec5a0cb37dd507602354b76cae175e2de24de3973653adffa48745b",
+      "annotations_opened_after_complete_prediction_admission": true,
+      "training": false,
+      "validation_opened": false,
+      "sealed_audit_opened": false,
+      "gpu_or_model_loaded": false,
+      "cloud_cost": 0,
+      "seconds": 6.942032799939625
+    },
+    "audit": {
+      "status": "PASS_INDEPENDENT_SPATIAL_RELATION_AUDIT_NOT_QA",
+      "script_sha256": "e0d6bfc7e4eb917ad77c287dd49f2491a7bd58e1b24a45ad78b08b2e3f4029d6",
+      "primary_result_sha256": "085ded0d55f20a7d0e0ccf9dab2142ae4e67155eb2888fb02ee8e0a70d8695bf",
+      "fresh_result_sha256": "cd907fa6cf68ac400ed883a0b1588f51f6e3a3a6e1b3a61cb13c94c0b73d3c04",
+      "score_result_sha256": "97a039cbbbf188873e300593b9f4e4b6dce968ef97506dc43f3a9e90f1a7dc7c",
+      "fresh_arrays_compared": 18,
+      "prediction_cases_all_arms": 102720,
+      "all_seed_labels_recomputed": 1070,
+      "metrics_recomputed": 24,
+      "alternate_distance_max_difference": 0.0,
+      "annotations_after_complete_prediction_checks": true,
+      "training": false,
+      "validation_opened": false,
+      "sealed_audit_opened": false,
+      "gpu_or_model_loaded": false,
+      "seconds": 4.7884747999487445
+    }
+  },
+  "csv_sha256": "1f2cb608cded22feab3863b171314631b9397f9cfa2bfa4ddd2b0af5601bb750",
+  "total_measured_body_seconds": 17.29111949983053,
+  "cpu_checks": {
+    "ruff": "pass",
+    "passed": 1171,
+    "skipped": 1,
+    "seconds": 16.06
+  },
+  "no_new_model_or_training": true,
+  "cloud_cost": 0,
+  "no_qa_or_semantic_quality_claim": true,
+  "next_gate": "semantic cue-to-cover binding and identity memory; not nearest-distance tuning"
+}
