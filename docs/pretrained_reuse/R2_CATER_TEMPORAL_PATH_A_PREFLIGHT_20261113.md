@@ -303,3 +303,12 @@ written (260,836,698 bytes), with validation extraction not yet started. The
 worker remained alive at BelowNormal priority. `nvidia-smi` continued to show
 only the unrelated Orbitune process on the RTX 3080; this extraction used no
 GPU. These are progress counters, not a completion or quality result.
+
+Before fitting the readout, a code-path check found the full-cohort guard still
+expected the earlier provisional 4,372 train queries. The frozen derived
+manifest actually has 4,360 train rows / 1,196 scenes and 1,120 selector rows /
+308 scenes, with hashes matching the launch receipt. Updated the guard to the
+frozen 4,360/1,120 counts and added a regression test. The readout tests passed
+(6 passed) in the existing torch environment and Ruff passed. This fixes a
+pre-existing evaluation blocker; it does not change the extraction process,
+data, model, or training conditions.

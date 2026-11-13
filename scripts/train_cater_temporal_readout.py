@@ -34,6 +34,8 @@ PATIENCE = 4
 BATCH_GROUPS = 4
 BOOTSTRAP_SEED = 1701
 BOOTSTRAP_REPETITIONS = 2000
+FULL_TRAIN_QUERY_COUNT = 4360
+FULL_VALIDATION_QUERY_COUNT = 1120
 
 
 def sha256_file(path: Path) -> str:
@@ -96,6 +98,21 @@ def group_by_video(examples: list[dict[str, Any]]) -> list[tuple[str, list[dict[
     for example in examples:
         groups[str(example["row"]["video_id"])].append(example)
     return list(groups.items())
+
+
+def require_full_cohort(
+    train_rows: list[dict[str, Any]],
+    validation_rows: list[dict[str, Any]],
+    *,
+    expected_train_count: int = FULL_TRAIN_QUERY_COUNT,
+    expected_validation_count: int = FULL_VALIDATION_QUERY_COUNT,
+) -> None:
+    if len(train_rows) != expected_train_count or len(validation_rows) != expected_validation_count:
+        raise ValueError(
+            "full readout requires the frozen "
+            f"{expected_train_count}/{expected_validation_count} query cohort; got "
+            f"{len(train_rows)}/{len(validation_rows)}"
+        )
 
 
 def load_video_feature(
@@ -471,9 +488,8 @@ def main() -> None:
         manifest_dir / "validation.jsonl"
     ):
         raise ValueError("validation manifest differs from the feature-extraction run")
-    if len(train_rows) != 4372 or len(validation_rows) != 1120:
-        if args.max_video_groups is None:
-            raise ValueError("full readout requires the frozen 4,372/1,120 query cohort")
+    if args.max_video_groups is None:
+        require_full_cohort(train_rows, validation_rows)
     train_video_ids = {str(row["video_id"]) for row in train_rows}
     validation_video_ids = {str(row["video_id"]) for row in validation_rows}
     if train_video_ids & validation_video_ids:

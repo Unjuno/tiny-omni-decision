@@ -11,6 +11,7 @@ from scripts.train_cater_temporal_readout import (  # noqa: E402
     feature_record_for_example,
     group_by_video,
     prepare_examples,
+    require_full_cohort,
 )
 
 
@@ -55,6 +56,13 @@ def test_group_by_video_keeps_all_intervals_in_one_group() -> None:
     assert len(groups) == 1
     assert groups[0][0] == "video1"
     assert len(groups[0][1]) == 2
+
+
+def test_full_cohort_guard_matches_the_frozen_manifest_counts() -> None:
+    require_full_cohort([{}, {}], [{}], expected_train_count=2, expected_validation_count=1)
+
+    with pytest.raises(ValueError, match="got 1/1"):
+        require_full_cohort([{}], [{}], expected_train_count=2, expected_validation_count=1)
 
 
 def test_video_permutation_resolves_the_same_local_task_interval() -> None:
