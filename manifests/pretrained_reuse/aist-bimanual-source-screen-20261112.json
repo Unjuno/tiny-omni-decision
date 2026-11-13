@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "screen_date": "2026-11-12",
+  "candidate_id": "aist-bimanual-manipulation",
+  "status": "REVIEW_NOT_ADMITTED",
+  "scope": "metadata-only source/task screen plus one-member HDF5 structure inspection; no media values, labels, features, or model accessed",
+  "official_sources": {
+    "dataset_page": "https://aistairc.github.io/aist_bimanip_site/",
+    "dataset_details": "https://aistairc.github.io/aist_bimanip_site/dataset.html",
+    "publisher_announcement": "https://www.aist.go.jp/aist_j/press_release/pr2025/pr20250902/pr20250902.html",
+    "task_csv_url": "https://aistairc.github.io/aist_bimanip_site/statics/docs/sheet.csv",
+    "task_csv_bytes": 28827,
+    "task_csv_sha256": "62bd7daf3b43792575624cfc8942e32c65afcd0a1ff0f875850c3c666de10e33",
+    "task_csv_rows": 119,
+    "task_csv_demo_count_sum": 12025,
+    "downloader_repository": "https://github.com/aistairc/aist_bimanip_downloader",
+    "downloader_revision": "43ec219724f961996ae4d65ae75edcd697650247",
+    "archive_link_manifest": "hdf5_links.csv",
+    "archive_link_manifest_bytes": 17621,
+    "archive_link_manifest_sha256": "e9ec61dc96f832cbc43387fd74c0ddf96527655f0b9a89111d48f415fbbb7ae5",
+    "listed_archives": 117,
+    "listed_archive_demo_count_sum": 10705
+  },
+  "license": {
+    "page_displays": "CC BY 4.0",
+    "source_level_rights_screen": "PROVISIONALLY_FAVORABLE",
+    "archive_component_and_derivative_scope": "REVIEW_BEFORE_PAYLOAD_USE",
+    "human_content_and_privacy_scope": "UNKNOWN"
+  },
+  "modalities": {
+    "documented": ["rgb", "depth", "robot_qpos", "robot_qvel", "robot_action", "text_prompt"],
+    "audio": "UNKNOWN; CSV environment text mentions audio in HDF5 but official schema omits an audio field"
+  },
+  "split_and_task": {
+    "publisher_split": "not established in inspected official metadata",
+    "task_group_count": 117,
+    "nominal_demos_may_exceed_200_clip_floor": true,
+    "independent_trajectory_group_count": "UNKNOWN; must group stable demo IDs by shared session/scene/operator/configuration",
+    "proposed_task": "candidate action-chunk selection by preregistered normalized 14-D distance to the next teleoperated action, with frozen ambiguity margin; synchronized camera + proprioception, optional task prompt",
+    "camera_joint_clock_alignment": "UNKNOWN; published rates are 30 FPS RGB and 50 Hz joints; no timestamp mapping verified",
+    "one_member_hdf5_structure": {
+      "archive_member": "spoon_yellow_block_bowl/episode_366.hdf5",
+      "expanded_bytes": 28407872,
+      "archive_sha256": "794c5d61724f30764218d6cadad73d2ec341558a3671c360d3580fa5d800c8de",
+      "timestamp_dataset_present": false,
+      "action_qpos_qvel_effort_shapes": [339, 14],
+      "encoded_image_shapes": [339, 20828],
+      "depth_and_sound_groups_empty": true,
+      "hdf5_id_attribute": 140,
+      "archive_filename_suffix": 366,
+      "id_semantics_and_group_scope": "UNKNOWN",
+      "dataset_values_read": false,
+      "media_decoded": false,
+      "text_or_labels_read": false
+    },
+    "success_labels": "not documented",
+    "both_input_necessity": "not tested"
+  },
+  "discrepancies": [
+    "Current task CSV lists 119 tasks and sums to 12025 demos, but downloader manifest lists 117 archives and the older 10705 total.",
+    "fold_towel_in_half (600) and fold_towel_in_quarters (720) are absent from the pinned archive manifest.",
+    "Task CSV environment text mentions audio in HDF5, but published HDF5 schema does not enumerate audio.",
+    "Official dataset details page calls the collection 117 episodes while the current task CSV advertises 10705 demonstrations.",
+    "Official docs state 30 FPS RGB and 50 Hz joints but expose no common timestamps or alignment map; the sample loader's same-index slicing is not proof of synchronization.",
+    "The inspected episode_366.hdf5 has no timestamp dataset; its HDF5 id attribute is 140 while the archive filename suffix is 366, and the id's grouping semantics are unknown."
+  ],
+  "live_metadata_recheck_2026_11_12": {
+    "observed_at": "2026-11-12T22:04:19+09:00",
+    "official_task_csv": {
+      "bytes": 28827,
+      "sha256": "62bd7daf3b43792575624cfc8942e32c65afcd0a1ff0f875850c3c666de10e33",
+      "unique_task_names": 119
+    },
+    "downloader_main": "43ec219724f961996ae4d65ae75edcd697650247",
+    "joined_inventory": {
+      "matched_tasks": 117,
+      "matched_demo_count": 10705,
+      "unmatched_csv_rows": [
+        {"task_id": "0113", "task_name": "fold_towel_in_half", "demo_count": 600},
+        {"task_id": "0115", "task_name": "fold_towel_in_quarters", "demo_count": 720}
+      ],
+      "per_demo_or_session_ids_available_in_metadata": false,
+      "publisher_checksums_available": false
+    },
+    "official_dropbox_head_sizes_bytes": {
+      "spoon_yellow_block_bowl.zip": 11486224075,
+      "place_block_cup.zip": 23846203236,
+      "insert_wire_loop.zip": 128386174405
+    },
+    "provider_head_responses_had_etag_or_hash": false,
+    "media_or_dataset_values_read": false,
+    "bounded_archive": {
+      "official_shared_url": "https://www.dropbox.com/scl/fi/o3xtqjie51oyoz0whn21i/spoon_yellow_block_bowl.zip?rlkey=e2di9za4iy9grnp0q9tn3ef3b&dl=0",
+      "bytes": 11486224075,
+      "sha256": "794c5d61724f30764218d6cadad73d2ec341558a3671c360d3580fa5d800c8de",
+      "member_count": 400,
+      "filename_ids": "episode_0..episode_399, no gaps or duplicates",
+      "total_expanded_member_bytes": 28321523304,
+      "external_path": "D:\\CodexArtifacts\\pretrained-reuse-r2\\aist-bimanual-metadata-only-20261112-attempt-01\\spoon_yellow_block_bowl.zip",
+      "hdf5_members_extracted_for_metadata": 1,
+      "dataset_values_read": false,
+      "media_decoded": false
+    },
+    "next_allowed_scope": "STOP; no further archive-member inspection, media decode, labels, features, fitting, or evaluation unless the publisher first supplies auditable synchronization and group-identity evidence"
+  },
+  "payload_opened": true,
+  "payload_opened_scope": "ZIP central directory plus one HDF5 member structure/shape/attribute-name inspection; no dataset values read",
+  "labels_opened": false,
+  "model_loaded": false,
+  "training_run": false,
+  "sealed_audit_accessed": false,
+  "external_contact": false,
+  "next_gate": "STOP for this candidate: no timestamp dataset was found in the inspected member and episode/session grouping is unresolved. Reconsider only with publisher evidence for synchronized clocks, group identity, and an auditable frozen task protocol; do not inspect more members, decode media, fit, or evaluate now"
+}
