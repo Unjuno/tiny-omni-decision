@@ -43,7 +43,7 @@ validation remains part of the media verification.
 | `...media-...-attempt-01` | FAIL before saving any WAV | Windows Python lacks `os.statvfs`; the archive index also revealed a selected member larger than the original 5 MiB guard. Only the directory index was read. |
 | `...media-...-attempt-02` | FAIL before saving any WAV | ZIP local filename length and extra-field length were read in reverse order. The new output contains an empty receipt and the failure record. |
 | `...media-...-attempt-03` | FAIL at 2026-11-15 02:38 JST | 445 WAVs / receipt rows; terminal `result.json` records `ValueError('range length mismatch')`. Official eval access flags remain false. |
-| `...media-...-attempt-04` | RUNNING at 2026-11-15 03:09 JST | Fresh output; 445 prior files copied only after SHA/CRC/manifest verification. Receipt checkpoint 600; 628 WAVs visible, so 28 files are beyond the last durable receipt. |
+| `...media-...-attempt-04` | RUNNING at 2026-11-15 03:22 JST | Fresh output; 445 prior files copied only after SHA/CRC/manifest verification. Receipt checkpoint 750; 766 WAVs visible, so 16 files are beyond the last durable receipt. |
 
 The old reader raised a generic `range length mismatch` after its retry limit;
 it did not preserve the failing response body length or member ID. A read-only
@@ -63,13 +63,16 @@ into a distinct output directory, confirms the same central-directory hash,
 and resumes after the exact verified receipt prefix. Unit tests exercise
 short-body retry and reject corrupted partial media.
 
-Attempt-04 was observed alive at 03:09 JST after copying the 445 verified WAVs
+Attempt-04 was observed alive at 03:22 JST after copying the 445 verified WAVs
 to its new output and fetching the pinned archive index. Its durable progress
-checkpoint reached 600 rows; 628 WAV files were visible during the next batch.
+checkpoint reached 750 rows; 766 WAV files were visible during the next batch.
 The same PID (21948) and acquisition command were confirmed alive at a later
-read-only check. Treat the extra 28 files as in-flight beyond the last receipt,
+read-only check. Treat the extra 16 files as in-flight beyond the last receipt,
 not as verified progress. The run remains incomplete until a terminal PASS
-result and the full verifier.
+result and the full verifier. Checkpoints 650, 700 and 750 advanced over
+approximately nine minutes, a rough rate of 0.18 clips/second and about 28
+hours remaining at that moment; this is a variable network estimate, not an ETA
+guarantee.
 
 ## Pinned Path A audio encoder recheck
 
@@ -112,6 +115,13 @@ acquisition, verification, Decision fitting, and feature extraction passes 26
 tests, including verified shard-resume and corrupted-shard rejection; Ruff and
 `git diff --check` pass. These checks do not replace
 corpus-scale extraction or real task metrics.
+
+The full local suite passes 2,931 tests with 11 skipped. The first Actions run
+on the feature-extractor commit failed because the CI `dev` extra intentionally
+does not install PyTorch; lint passed, while collection failed for the two
+PyTorch-dependent test modules. They now use `pytest.importorskip("torch")`.
+The follow-up Actions run on commit `59a3a35e9edc416495a4ee5b617046f7bdf0f75b`
+passed its lint, test, and manifest-validation jobs.
 
 One receipt-verified FSD training clip (`119192`, 4.9067 seconds, 44.1 kHz
 mono) was decoded, resampled with the pinned torchaudio runtime to 32 kHz, and
