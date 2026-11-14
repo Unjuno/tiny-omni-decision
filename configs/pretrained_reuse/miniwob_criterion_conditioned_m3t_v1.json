@@ -1,0 +1,64 @@
+{
+  "experiment_id": "r2-miniwob-criterion-conditioned-m3t-v1-attempt02-seed17",
+  "seed": 17,
+  "task": "miniwob/click-color-v1:criterion-conditioned-screen",
+  "source": {
+    "repository": "https://github.com/Farama-Foundation/miniwob-plusplus",
+    "commit": "33c3b4ddef8c6eb67c57a29663d844b1eda7e614",
+    "license": "MIT",
+    "license_sha256": "24c56d96c8a2e4e20c20867b14d177b801027b603c45622218b34c841ad4972a",
+    "root": "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/source"
+  },
+  "mask_rows": 64,
+  "option_order_seed_xor": 23063,
+  "seed_windows": {
+    "train": [1100000, 1108192],
+    "validation": [1200000, 1208192],
+    "sealed_audit": [1300000, 1308192]
+  },
+  "group_counts": {
+    "train": 512,
+    "validation": 256,
+    "sealed_audit": 256
+  },
+  "historical_seeds_without_saved_corpus": [900000, 1050000, 1050001],
+  "historical_full_pixel_hashes_without_saved_screenshots": [
+    "bff3419ca56e1eaec021c6b4f9a2f9bfdb02738f560f0d73c5ae4339cd3e1f15"
+  ],
+  "historical_masked_pixel_hashes_without_saved_screenshots": [
+    "95ccdc97dd2821ac702075e6e2775ff42725c4ad923c3cf99f53ee458d8a86d4"
+  ],
+  "historical_artifacts": [
+    "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-screen-only-corpus-20261112-attempt-01",
+    "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-screen-only-corpus-20261112-attempt-02",
+    "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/click-color-smoke-seed910000-910031",
+    "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/click-color-text-only-smoke-seed920000",
+    "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/click-color-screen-only-smoke-seed930000",
+    "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-frozen-generalization-20261114-attempt-01/corpus",
+    "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-frozen-generalization-20261114-attempt-02/corpus"
+  ],
+  "model_input_contract": {
+    "visible": [
+      "masked 160x210 RGB screenshot",
+      "criterion question text",
+      "opaque candidate option IDs",
+      "normalized candidate center coordinates"
+    ],
+    "excluded": [
+      "original task instruction",
+      "original target swatch",
+      "DOM fields",
+      "CSS color names attached to candidate options",
+      "collector audit labels"
+    ],
+    "questions_per_group": 4,
+    "all_question_variants_stay_in_one_split": true
+  },
+  "output_policy": {
+    "training_and_validation_directory": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-criterion-conditioned-20261114-attempt-02/corpus",
+    "sealed_audit_separate_directory": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-criterion-conditioned-20261114-attempt-02/sealed-audit",
+    "sealed_audit_not_loaded_during_training_or_checkpoint_selection": true,
+    "fail_on_seed_or_masked_pixel_overlap": true,
+    "never_widen_seed_windows_implicitly": true
+  }
+}

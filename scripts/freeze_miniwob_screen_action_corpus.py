@@ -51,6 +51,22 @@ def _pixel_at(image: np.ndarray, rect: list[float]) -> tuple[int, int, int]:
     return tuple(int(value) for value in image[center_y, center_x])
 
 
+def _save_or_verify_screenshot(
+    image: np.ndarray, image_path: Path, *, reuse_existing: bool = False
+) -> str:
+    """Save a screenshot or verify exact decoded-pixel parity on recovery."""
+    if reuse_existing:
+        if not image_path.is_file():
+            raise FileNotFoundError(f"recovery screenshot is missing: {image_path}")
+        with Image.open(image_path) as saved:
+            saved_pixels = np.asarray(saved.convert("RGB"))
+        if saved_pixels.shape != image.shape or not np.array_equal(saved_pixels, image):
+            raise ValueError(f"replayed screenshot differs from preserved media: {image_path}")
+    else:
+        Image.fromarray(image).save(image_path, format="PNG", optimize=False)
+    return _sha256(image_path)
+
+
 def _configure_edge(args: argparse.Namespace) -> None:
     if not args.edge_compat:
         return
@@ -79,6 +95,7 @@ def _browser_state(driver: Any) -> dict[str, Any]:
           : null;
         return {
           queryChildTag:query.children[0]?query.children[0].tagName:null,
+          queryRect:rect(query),
           swatch:swatch?{visible:!!(swatch.offsetWidth||swatch.offsetHeight),rect:rect(swatch)}:null,
           targetColor:targetColor?targetColor.trim().toLowerCase():null,
           options:[...document.querySelectorAll('#area .color')].map(e=>({
@@ -155,14 +172,14 @@ def _collect_split(
 
         sample_id = f"{split}-seed-{seed}"
         image_path = split_dir / f"{sample_id}.png"
-        Image.fromarray(image).save(image_path, format="PNG", optimize=False)
+        screenshot_sha256 = _save_or_verify_screenshot(image, image_path)
         row = {
             "sample_id": sample_id,
             "episode_group_id": sample_id,
             "task_template": TASK_ID,
             "seed": seed,
             "screenshot_path": f"{split}/{image_path.name}",
-            "screenshot_sha256": _sha256(image_path),
+            "screenshot_sha256": screenshot_sha256,
             "screenshot_shape": list(image.shape),
             "option_order_seed": order_seed,
             "options": options,
