@@ -2833,6 +2833,8 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+- [x] 2026-11-15 independent CPU review of PR #94 JSONL/temporal-session contracts: 16 focused tests and Ruff pass; no inspected contract defect. This verifies runtime plumbing only. Existing Clotho-AQA joint evidence remains mixed/overfit and is not reopened. See [review](docs/pretrained_reuse/R2_PATH_A_PR94_INDEPENDENT_REVIEW_20261115.md).
+
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
 release is a relevant video/wearable-sensor work-activity source, but its
 non-RGB dataset is CC BY-NC-SA 4.0 and its RGB release is restricted to
