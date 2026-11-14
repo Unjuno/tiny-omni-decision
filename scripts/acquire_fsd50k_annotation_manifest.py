@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import struct
 import time
@@ -222,17 +223,40 @@ def _extract_member(
 def validate_failed_partial(
     preflight_dir: Path, partial_dir: Path
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Validate the known attempt-03 prefix before copying it to a fresh run."""
+    """Validate a specifically identified failed prefix before fresh-run resume."""
     report, splits = load_frozen_manifest(preflight_dir)
     prior_path = partial_dir / "result.json"
     prior = json.loads(prior_path.read_text(encoding="utf-8"))
-    if (
-        prior.get("status") != "FAIL"
-        or prior.get("error") != "ValueError('range length mismatch')"
-        or prior.get("runner_sha256")
-        != "784687424d0720626e89a284a4a9546e585b75e977d5321664d5c022dbe7a71d"
-    ):
-        raise ValueError("resume source is not the preserved, identified attempt-03 failure")
+    known_attempt_03 = (
+        prior.get("runner_sha256")
+        == "784687424d0720626e89a284a4a9546e585b75e977d5321664d5c022dbe7a71d"
+        and prior.get("error") == "ValueError('range length mismatch')"
+    )
+    attempt_04_match = re.fullmatch(
+        r'ValueError\("range request failed after 6 attempts at bytes=(\d+)-(\d+): '
+        r"ValueError\('short range response: got=(\d+), expected=(\d+), "
+        r'''start=(\d+), end=(\d+), attempt=6'\)"\)''',
+        str(prior.get("error", "")),
+    )
+    known_attempt_04 = (
+        prior.get("runner_sha256")
+        == "8b7f5b08aecb109db6072f5bcc035e42defff57defa875239c1d62568ef0ad4b"
+        and attempt_04_match is not None
+    )
+    if prior.get("status") != "FAIL" or not (known_attempt_03 or known_attempt_04):
+        raise ValueError("resume source is not an identified preserved range-read failure")
+    if attempt_04_match is not None:
+        range_start, range_end, got, expected_bytes, inner_start, inner_end = map(
+            int, attempt_04_match.groups()
+        )
+        if (
+            range_start != inner_start
+            or range_end != inner_end
+            or range_end < range_start
+            or got >= expected_bytes
+            or expected_bytes != range_end - range_start + 1
+        ):
+            raise ValueError("attempt-04 range failure details are inconsistent")
     if (
         prior.get("dataset_revision") != DATASET_REVISION
         or prior.get("preflight_manifest_sha256") != report["manifest_sha256"]
@@ -244,19 +268,18 @@ def validate_failed_partial(
         raise ValueError("resume source does not match the frozen safe FSD50K corpus")
     receipt_path = partial_dir / "files.jsonl"
     if prior.get("files_jsonl_sha256") != sha256_file(receipt_path):
-        raise ValueError("partial attempt-03 receipt hash mismatch")
+        raise ValueError("partial acquisition receipt hash mismatch")
     records = [json.loads(line) for line in receipt_path.read_text(encoding="utf-8").splitlines()]
     ordered = [row for split in ("train", "calibration", "validation") for row in splits[split]]
     record_ids = [record.get("sample_id") for record in records]
     expected_prefix_ids = [row["sample_id"] for row in ordered[: len(records)]]
     if (
         prior.get("expected_files") != len(ordered)
-        or
-        len(records) != prior.get("downloaded_files")
+        or len(records) != prior.get("downloaded_files")
         or record_ids != expected_prefix_ids
         or len(records) >= len(ordered)
     ):
-        raise ValueError("partial attempt-03 receipt count/order is invalid")
+        raise ValueError("partial acquisition receipt count/order is invalid")
     expected = {row["sample_id"]: row for row in ordered[: len(records)]}
     for record in records:
         sample_id = record.get("sample_id")
@@ -265,7 +288,7 @@ def validate_failed_partial(
             record.get(field) != row.get(field)
             for field in ("source_id", "group_id", "license", "split")
         ):
-            raise ValueError("partial attempt-03 receipt differs from frozen manifest")
+            raise ValueError("partial acquisition receipt differs from frozen manifest")
         media_path = partial_dir / row["split"] / f"{sample_id}.wav"
         size, digest, crc = sha256_and_crc32(media_path)
         if (
@@ -273,13 +296,19 @@ def validate_failed_partial(
             or digest != record.get("sha256")
             or crc != record.get("zip_crc32")
         ):
-            raise ValueError(f"partial attempt-03 media failed integrity check: {sample_id}")
+            raise ValueError(f"partial acquisition media failed integrity check: {sample_id}")
     expected_paths = {
         partial_dir / row["split"] / f"{row['sample_id']}.wav"
         for row in ordered[: len(records)]
     }
     if set(partial_dir.rglob("*.wav")) != expected_paths:
-        raise ValueError("partial attempt-03 contains unreceipted or missing WAV files")
+        raise ValueError("partial acquisition contains unreceipted or missing WAV files")
+    actual_output_bytes = sum(
+        (partial_dir / row["split"] / f"{row['sample_id']}.wav").stat().st_size
+        for row in ordered[: len(records)]
+    )
+    if prior.get("output_bytes") != actual_output_bytes:
+        raise ValueError("partial acquisition output byte count differs from receipt")
     return prior, records
 
 
@@ -357,7 +386,7 @@ def acquire(
             if prior_result is not None and result["archive_directory_sha256"] != prior_result.get(
                 "archive_directory_sha256"
             ):
-                raise ValueError("archive directory hash changed since attempt-03")
+                raise ValueError("archive directory hash changed since prior partial attempt")
             index = central_entries(directory, footer[4])
             output_bytes, transfer_budget = planned_budget(splits, index, footer[5])
             if transfer_budget > sum(ARCHIVE_SIZES):

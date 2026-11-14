@@ -230,6 +230,7 @@ def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
                 "official_eval_media_acquired": False,
                 "expected_files": 6,
                 "downloaded_files": 1,
+                "output_bytes": len(payload),
                 "files_jsonl_sha256": hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
                 "range_bytes": 100,
             }
@@ -237,6 +238,22 @@ def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
         encoding="utf-8",
     )
 
+    prior, records = acquisition.validate_failed_partial(preflight, partial)
+    assert prior["downloaded_files"] == 1
+    assert records == [receipt]
+
+    attempt_04_result = json.loads((partial / "result.json").read_text(encoding="utf-8"))
+    attempt_04_result.update(
+        runner_sha256=(
+            "8b7f5b08aecb109db6072f5bcc035e42defff57defa875239c1d62568ef0ad4b"
+        ),
+        error=(
+            'ValueError("range request failed after 6 attempts at bytes=10-19: '
+            "ValueError('short range response: got=5, expected=10, "
+            'start=10, end=19, attempt=6\')")'
+        ),
+    )
+    (partial / "result.json").write_text(json.dumps(attempt_04_result), encoding="utf-8")
     prior, records = acquisition.validate_failed_partial(preflight, partial)
     assert prior["downloaded_files"] == 1
     assert records == [receipt]

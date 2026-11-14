@@ -43,7 +43,7 @@ validation remains part of the media verification.
 | `...media-...-attempt-01` | FAIL before saving any WAV | Windows Python lacks `os.statvfs`; the archive index also revealed a selected member larger than the original 5 MiB guard. Only the directory index was read. |
 | `...media-...-attempt-02` | FAIL before saving any WAV | ZIP local filename length and extra-field length were read in reverse order. The new output contains an empty receipt and the failure record. |
 | `...media-...-attempt-03` | FAIL at 2026-11-15 02:38 JST | 445 WAVs / receipt rows; terminal `result.json` records `ValueError('range length mismatch')`. Official eval access flags remain false. |
-| `...media-...-attempt-04` | RUNNING at 2026-11-15 03:22 JST | Fresh output; 445 prior files copied only after SHA/CRC/manifest verification. Receipt checkpoint 750; 766 WAVs visible, so 16 files are beyond the last durable receipt. |
+| `...media-...-attempt-04` | FAIL at 2026-11-15 03:37 JST | Fresh output resumed the verified 445-file attempt-03 prefix. Six short-range attempts failed at bytes 902,885,557–903,241,699 (`337,620` received of `356,143` expected). It ended with 888 receipt rows / WAVs and 651,253,684 bytes. |
 
 The old reader raised a generic `range length mismatch` after its retry limit;
 it did not preserve the failing response body length or member ID. A read-only
@@ -55,24 +55,26 @@ restarted in place. All 445 committed receipt rows were validated against
 manifest identity, WAV bytes, SHA-256 and ZIP CRC, and the exact partial WAV set
 matched.
 
-The new reader retries short bodies from the same offset up to six total
-attempts, uses `Accept-Encoding: identity`, validates `Content-Range`, and
-charges each retry against the frozen total budget. The resume path accepts
-only the identified attempt-03 failure, revalidates every partial row, copies
-into a distinct output directory, confirms the same central-directory hash,
-and resumes after the exact verified receipt prefix. Unit tests exercise
+The reader retries short bodies from the same offset up to six total attempts,
+uses `Accept-Encoding: identity`, validates `Content-Range`, and charges each
+retry against the frozen total budget. The resume path now accepts only the
+identified attempt-03 or attempt-04 failure, revalidates every partial row,
+copies into a distinct output directory, confirms the same central-directory
+hash, and resumes after the exact verified receipt prefix. Unit tests exercise
 short-body retry and reject corrupted partial media.
 
-Attempt-04 was observed alive at 03:22 JST after copying the 445 verified WAVs
-to its new output and fetching the pinned archive index. Its durable progress
-checkpoint reached 750 rows; 766 WAV files were visible during the next batch.
-The same PID (21948) and acquisition command were confirmed alive at a later
-read-only check. Treat the extra 16 files as in-flight beyond the last receipt,
-not as verified progress. The run remains incomplete until a terminal PASS
-result and the full verifier. Checkpoints 650, 700 and 750 advanced over
-approximately nine minutes, a rough rate of 0.18 clips/second and about 28
-hours remaining at that moment; this is a variable network estimate, not an ETA
-guarantee.
+Attempt-04 stopped after six consecutive short range responses for bytes
+`902885557-903241699`: 337,620 bytes arrived where 356,143 were expected. Its
+terminal result records 888 rows and a cumulative range transfer of
+505,246,601 bytes, within the frozen transfer budget. A read-only full-prefix
+verification checked all 888 receipt rows against frozen manifest
+order/identity, recomputed every WAV SHA-256 and ZIP CRC, confirmed the exact
+WAV path set, and matched 651,253,684 bytes. The attempt-04 result SHA-256 is
+`e26b39ac9afa39fb9653bbd23e4d7cd5991d11f5419edd224c271db67abe4662`; its
+receipt SHA-256 is
+`7b594d268b2b9268a01cff2f900c9fa82d23838cab0625498c5746a0e9654aad5`. The
+runner SHA-256 is the pinned in-use code hash
+`8b7f5b08aecb109db6072f5bcc035e42defff57defa875239c1d62568ef0ad4b`.
 
 ## Pinned Path A audio encoder recheck
 
