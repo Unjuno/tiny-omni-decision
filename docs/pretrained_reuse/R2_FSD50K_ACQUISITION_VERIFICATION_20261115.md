@@ -199,6 +199,14 @@ bytes were 1,992,357,711 and durable output bytes 2,578,810,480. One additional
 WAV was visible beyond the durable count. This checkpoint followed 3,700 at
 07:46:25 (50 files in 3m45s). No terminal result was present.
 
+At 2026-11-15 07:55:18 JST, the same process remained alive at 3,800/18,879
+durable files, with matching receipt count and 2,578,810,480+ durable bytes
+reported by the last progress snapshot. Four WAVs were visible beyond the
+durable count. This followed 3,750 at 07:50:10 (50 files in 5m08s). No
+terminal result was present; a TCP connection was not observable in this
+instantaneous snapshot, so no process-state conclusion is drawn from that
+alone.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
