@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "localized-narratives-openimages-delta-screen-20261113",
+  "status": "REVIEW_NOT_ADMITTED",
+  "purpose": "metadata-only delta source screen; no training, media access, feature extraction, or model evaluation",
+  "candidate": {
+    "dataset": "Google Localized Narratives on Open Images V6",
+    "task_hypothesis": "spoken-segment plus image selects one independently generated candidate region",
+    "modalities": ["audio", "image"],
+    "is_audio_video": false
+  },
+  "official_sources": {
+    "localized_narratives": "https://google.github.io/localized-narratives/",
+    "open_images_v6_download": "https://storage.googleapis.com/openimages/web/download_v6.html",
+    "open_images_v6_facts": "https://storage.googleapis.com/openimages/web/factsfigures_v6.html"
+  },
+  "publisher_metadata": {
+    "localized_narratives_open_images_train_annotations": 507444,
+    "localized_narratives_open_images_train_images": 504413,
+    "annotation_license_statement": "CC BY 4.0 for annotations",
+    "annotation_fields_documented": [
+      "image_id",
+      "annotator_id",
+      "timed_caption",
+      "traces",
+      "voice_recording"
+    ],
+    "voice_recording_specific_license_scope": null,
+    "participant_consent_scope": null,
+    "open_images_v6_image_metadata_fields": [
+      "OriginalLandingURL",
+      "License",
+      "AuthorProfileURL",
+      "Author",
+      "OriginalMD5"
+    ],
+    "per_image_license_verified": false,
+    "open_images_license_warranty": "publisher disclaims warranty; verify each image license"
+  },
+  "http_head_observations": [
+    {
+      "url": "https://storage.googleapis.com/localized-narratives/annotations/open_images_train_v6_localized_narratives-00000-of-00010.jsonl",
+      "content_length_bytes": 1670796438,
+      "etag": "\"5d89107b4349acacc90e86311c14aa6e\"",
+      "last_modified": "2021-01-25T19:56:04Z",
+      "body_downloaded": false
+    },
+    {
+      "url": "https://storage.googleapis.com/localized-narratives/annotations/open_images_validation_localized_narratives.jsonl",
+      "content_length_bytes": 1139215790,
+      "etag": "\"9ec9c385ab42329d834762011f12e183\"",
+      "last_modified": "2021-01-25T19:56:04Z",
+      "body_downloaded": false
+    },
+    {
+      "url": "https://storage.googleapis.com/openimages/2018_04/train/train-images-boxable-with-rotation.csv",
+      "content_length_bytes": 638407721,
+      "etag": "\"a4ac0bcedb5c2df4d1b1230dc6b41b8f\"",
+      "last_modified": "2018-05-17T14:33:46Z",
+      "body_downloaded": false
+    }
+  ],
+  "gates": {
+    "voice_recording_rights_and_consent": "REVIEW",
+    "image_rights_and_attribution": "REVIEW_PER_IMAGE",
+    "source_family_exposure": "KNOWN_PRIOR_OPENIMAGES_IMAGE_PROBES_AND_FEATURE_WORK",
+    "exact_openimages_id_or_content_overlap": "UNKNOWN_NOT_RECONCILED",
+    "annotator_image_group_components": "NOT_CHECKED",
+    "task_label_and_option_integrity": "NOT_CHECKED",
+    "both_modalities_required": "UNTESTED"
+  },
+  "accessed": {
+    "official_documentation": true,
+    "http_head_metadata_only": true,
+    "annotation_body": false,
+    "image_media": false,
+    "audio_media": false,
+    "validation_or_test_payload": false,
+    "sealed_audit": false,
+    "gpu": false,
+    "optimizer_updates": 0
+  },
+  "decision": "Do not acquire annotation shards or media until voice rights and source exposure pass. If they pass, first perform a bounded train-only metadata and grouped-split feasibility audit; preserve official validation/test and sealed audit as closed."
+}
