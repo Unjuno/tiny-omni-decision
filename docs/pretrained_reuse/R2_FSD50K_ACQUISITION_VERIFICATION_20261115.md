@@ -207,6 +207,12 @@ terminal result was present; a TCP connection was not observable in this
 instantaneous snapshot, so no process-state conclusion is drawn from that
 alone.
 
+At 2026-11-15 08:10:45 JST, attempt-06/PID 5452 was still active at
+4,000/18,879 durable files with a matching receipt. The progress snapshot
+recorded 2,124,835,664 cumulative range bytes and 2,752,079,108 durable output
+bytes; 11 WAVs were visible beyond the durable count. This followed 3,900 at
+08:03:27 (100 files in about 7m18s). No terminal `result.json` was present.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
