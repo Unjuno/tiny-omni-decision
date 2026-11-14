@@ -2833,6 +2833,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+- [x] 2026-11-15 metadata-only AVSD/Charades screen: AVSD is response generation rather than supplied-option Decision, its repository describes registration-gated data access, and Charades rights remain non-commercial/primary-page-redirect unresolved. No data or media was accessed; candidate stays `REVIEW_NOT_ADMITTED`. See [screen](docs/pretrained_reuse/R2_AVSD_SOURCE_TASK_SCREEN_20261115.md).
 - [x] 2026-11-15 independent CPU review of PR #94 JSONL/temporal-session contracts: 16 focused tests and Ruff pass; no inspected contract defect. This verifies runtime plumbing only. Existing Clotho-AQA joint evidence remains mixed/overfit and is not reopened. See [review](docs/pretrained_reuse/R2_PATH_A_PR94_INDEPENDENT_REVIEW_20261115.md).
 
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
