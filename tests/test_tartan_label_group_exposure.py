@@ -7,6 +7,8 @@ from scripts.hash_tartan_label_group_exposure import (
     DERIVATIVE_SOURCE,
     OFFICIAL_REVISION,
     OFFICIAL_SOURCE,
+    UTTERANCE_REVISION,
+    UTTERANCE_SOURCE,
     build_exposure_roster,
     canonical_clip_group,
     source_group_digest,
@@ -27,7 +29,10 @@ def test_group_digest_is_source_and_revision_scoped() -> None:
     group = "kagc/01-02-22/0007"
     official = source_group_digest(OFFICIAL_SOURCE, OFFICIAL_REVISION, group)
     derivative = source_group_digest(DERIVATIVE_SOURCE, DERIVATIVE_REVISION, group)
+    utterance = source_group_digest(UTTERANCE_SOURCE, UTTERANCE_REVISION, group)
     assert official != derivative
+    assert official != utterance
+    assert derivative != utterance
     assert official == source_group_digest(OFFICIAL_SOURCE, OFFICIAL_REVISION, group)
 
 
@@ -42,5 +47,6 @@ def test_roster_records_only_digests_and_separate_source_revisions() -> None:
     assert [item["source_id"] for item in roster["sources"]] == [
         OFFICIAL_SOURCE,
         DERIVATIVE_SOURCE,
+        UTTERANCE_SOURCE,
     ]
     assert "KAGC_01-02-22_0007_001" not in str(roster)

@@ -19,6 +19,8 @@ OFFICIAL_SOURCE = "castacks/TartanAviation"
 OFFICIAL_REVISION = "077a04abac1e50953c45b72524edd79e3a21d9bd"
 DERIVATIVE_SOURCE = "twangodev/tartanaviation-atc-labels"
 DERIVATIVE_REVISION = "0775355c388aae64335522f40bff9fc5129b2922"
+UTTERANCE_SOURCE = "twangodev/tartanaviation-atc-adsb-utterances"
+UTTERANCE_REVISION = "bc588362d2f877e6ba0910fe7b6e035649d43918"
 
 
 def canonical_clip_group(utterance_id: str) -> str:
@@ -50,6 +52,7 @@ def build_exposure_roster(
     for source_id, revision in (
         (OFFICIAL_SOURCE, OFFICIAL_REVISION),
         (DERIVATIVE_SOURCE, DERIVATIVE_REVISION),
+        (UTTERANCE_SOURCE, UTTERANCE_REVISION),
     ):
         by_source.append(
             {
