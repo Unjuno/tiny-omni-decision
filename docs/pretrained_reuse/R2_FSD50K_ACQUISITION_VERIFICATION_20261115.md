@@ -45,7 +45,7 @@ validation remains part of the media verification.
 | `...media-...-attempt-03` | FAIL at 2026-11-15 02:38 JST | 445 WAVs / receipt rows; terminal `result.json` records `ValueError('range length mismatch')`. Official eval access flags remain false. |
 | `...media-...-attempt-04` | FAIL at 2026-11-15 03:37 JST | Fresh output resumed the verified 445-file attempt-03 prefix. Six short-range attempts failed at bytes 902,885,557–903,241,699 (`337,620` received of `356,143` expected). It ended with 888 receipt rows / WAVs and 651,253,684 bytes. |
 | `...media-...-attempt-05` | FAIL at 2026-11-15 03:46 JST | Fresh output copied the 888 verified attempt-04 files, then hit the same byte range after six attempts (`347,216` received of `356,143`). No additional complete receipt row was added; 888 WAVs were preserved. |
-| `...media-...-attempt-06` | RUNNING at 2026-11-15 03:54 JST | New output resumed the independently reverified attempt-04 prefix. It passed the former failure boundary and reached 900 durable rows / 903 visible WAVs; cumulative range bytes 518,791,233. |
+| `...media-...-attempt-06` | RUNNING at 2026-11-15 03:59 JST | New output resumed the independently reverified attempt-04 prefix. It passed the former failure boundary and reached 950 durable rows / WAVs; cumulative range bytes 551,857,211 and output bytes 703,481,890. |
 
 The old reader raised a generic `range length mismatch` after its retry limit;
 it did not preserve the failing response body length or member ID. A read-only
@@ -89,9 +89,10 @@ persistent short body, still charged to the frozen shared transfer budget. A
 deterministic test reproduces the short large response and verifies recovery
 via exact subranges; the actual source prefixes remain unchanged. Attempt-06
 uses a distinct output, resumes attempt-04's verified 888 rows, and has passed
-the previous failure boundary: 900 rows are durable and 903 WAV files were
-visible at 03:54 JST. It has used 518,791,233 cumulative requested range bytes
-and remains incomplete pending terminal PASS plus the full acquisition verifier.
+the previous failure boundary: 950 rows are durable with 950 WAV files at
+03:59 JST. It has used 551,857,211 cumulative requested range bytes and written
+703,481,890 media bytes; it remains incomplete pending terminal PASS plus the
+full acquisition verifier.
 
 ## Pinned Path A audio encoder recheck
 
