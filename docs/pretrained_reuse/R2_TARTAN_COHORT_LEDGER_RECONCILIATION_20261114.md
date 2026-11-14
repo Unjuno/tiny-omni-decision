@@ -38,7 +38,12 @@ was performed.
 - Added regression checks for all three Tartan source/revision pairs. A
   synthetic unseen group is blocked for each because history is incomplete.
 - `python -m pytest tests/test_check_cohort_usage.py -q`: 11 passed.
-- Ruff and `git diff --check`: passed.
+- Full repository CPU suite: 2,907 passed, 11 skipped.
+- `ruff check .`: passed.
+- CI-equivalent model/dataset manifest and catalog validation commands:
+  passed (training catalogs: 9 and 8 sources; evaluation catalogs: 11 and 10
+  sources; example dataset-manifest audit passed).
+- `git diff --check`: passed.
 
 The next task-quality step remains a fresh source/task admission gate. Do not
 reuse Tartan records unless a complete history audit, non-circular verified
