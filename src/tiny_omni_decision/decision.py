@@ -49,6 +49,7 @@ class DecisionOutput:
         option_ids: list[str],
         option_texts: list[str],
         reason: str,
+        ordinal_values: list[float] | None = None,
     ) -> str:
         """Serialize an explicit abstention without inventing option probabilities."""
         record = decision_json_abstention_record(
@@ -57,6 +58,7 @@ class DecisionOutput:
             option_ids=option_ids,
             option_texts=option_texts,
             reason=reason,
+            ordinal_values=ordinal_values,
         )
         return json.dumps(record, ensure_ascii=False, allow_nan=False)
 

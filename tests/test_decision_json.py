@@ -117,6 +117,21 @@ def test_typed_decision_json_can_serialize_explicit_abstention():
     assert [option["probability"] for option in decoded["options"]] == [None, None]
 
 
+def test_typed_ordinal_decision_json_can_abstain_without_an_expected_score():
+    decoded = json.loads(DecisionOutput.abstention_json(
+        request_id="uncertain-score",
+        decision_type="ordinal_score",
+        option_ids=["low", "mid", "high"],
+        option_texts=["Low", "Medium", "High"],
+        reason="insufficient_temporal_evidence",
+        ordinal_values=[0, 1, 2],
+    ))
+
+    assert decoded["status"] == "abstain"
+    assert decoded["expected_score"] is None
+    assert [option["probability"] for option in decoded["options"]] == [None] * 3
+
+
 @pytest.mark.parametrize("decision_type,ids,texts", [
     ("unknown", ["yes", "no"], ["yes", "no"]),
     ("yes_no", ["yes"], ["yes"]),

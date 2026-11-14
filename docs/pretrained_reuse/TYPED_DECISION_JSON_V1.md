@@ -33,8 +33,9 @@ probability-weighted `expected_score`.
 When the system cannot produce a supported decision, call
 `DecisionOutput.abstention_json` with a nonempty reason. The response has
 `status: "abstain"`, a null `selected_option_id` and confidence, and null option
-probabilities; it does not invent a uniform distribution. Abstention currently
-supports `choice` and `yes_no`, not `ordinal_score`.
+probabilities; it does not invent a uniform distribution. For `ordinal_score`,
+provide the ordered `ordinal_values`; an abstention returns a null
+`expected_score` and null option probabilities.
 
 This schema does not provide calibration guarantees or input-media transport.
 Ordinal values are supplied by the caller and do not define task semantics;

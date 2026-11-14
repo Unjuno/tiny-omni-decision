@@ -108,13 +108,16 @@ def decision_json_abstention_record(
     option_ids: Sequence[str],
     option_texts: Sequence[str],
     reason: str,
+    ordinal_values: Sequence[Real] | None = None,
 ) -> dict[str, object]:
     """Build a JSON record for a decision that intentionally has no distribution."""
 
     if not isinstance(reason, str) or not reason.strip():
         raise ValueError("abstention reason must be a nonempty string")
-    if not isinstance(decision_type, str) or decision_type not in {"choice", "yes_no"}:
-        raise ValueError("abstention supports choice and yes_no decisions only")
+    if not isinstance(decision_type, str) or decision_type not in {
+        "choice", "yes_no", "ordinal_score"
+    }:
+        raise ValueError("unsupported abstention decision_type")
     # Reuse the selected-record validator for request and option identity checks,
     # then replace its synthetic uniform probabilities with explicit nulls.
     record = decision_json_record(
@@ -125,6 +128,7 @@ def decision_json_abstention_record(
         probabilities=(
             [1.0 / len(option_ids)] * len(option_ids) if len(option_ids) else []
         ),
+        ordinal_values=ordinal_values,
     )
     record.update(
         status="abstain",
@@ -136,6 +140,8 @@ def decision_json_abstention_record(
             for option_id, option_text in zip(option_ids, option_texts, strict=True)
         ],
     )
+    if decision_type == "ordinal_score":
+        record["expected_score"] = None
     return record
 
 
