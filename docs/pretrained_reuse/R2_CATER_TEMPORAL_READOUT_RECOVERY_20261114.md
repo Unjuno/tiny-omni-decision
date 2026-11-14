@@ -91,6 +91,10 @@ recovery SHA-256 values match:
 
 Metrics below are macro-averaged across the four 75-frame question intervals;
 each row also covers all 1,120 validation examples.
+The deterministic uniform-choice Accuracy baseline computed from the actual
+5–10 options per query is 0.1468 macro-over-intervals (0.1468 sample-weighted).
+The learned heads are above this baseline, but the question-only head is
+slightly better and the input-corruption controls do not move the video head.
 
 | Condition | Accuracy | NLL | Brier | ECE |
 |---|---:|---:|---:|---:|
