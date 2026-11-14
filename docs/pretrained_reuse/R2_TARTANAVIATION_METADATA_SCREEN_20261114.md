@@ -70,9 +70,42 @@ the intended subset's actual download and feature-storage cost before any
 acquisition. If those gates fail, close this candidate without downloading the
 multi-terabyte vision collection.
 
+## Bounded official metadata joinability follow-up
+
+A follow-up checked only the pinned official Croissant metadata and the
+publisher paper; no archive, media, label, transcript, or model was downloaded.
+The pinned `croissant.json` is 18,285 bytes (SHA-256
+`2205ff39d5c970c29ddff799cadda353f96dfb8428b5afff82182641814001bf`). Its 12
+distributions list `weather_stats.csv`, two METAR files, and ADS-B archives;
+its three record sets are `vision-videos`, `weather-kagc`, and `weather-kbtp`.
+There is no audio/speech/utterance record set or speech-related field. The
+`vision-videos` metadata exposes video name/start time, aircraft count, and
+weather, but not per-video aircraft identity. Therefore the official metadata
+does not provide a direct speech-clip ↔ utterance ↔ aircraft/video crosswalk.
+
+The [publisher paper](https://www.nature.com/articles/s41597-025-04775-6)
+describes speech-side metadata as clip start, end, and duration. The official
+README says the video archives contain synchronized ADS-B and aircraft labels,
+but those identifiers are inside the per-video package. Matching a timestamp
+alone cannot determine which of multiple nearby aircraft an ATC utterance
+refers to, and the paper describes different capture thresholds for camera
+and speech. The README's 239 labeled-aircraft count and 72 repeated aircraft
+do not identify which video sequences are connected; an aircraft/video
+component count cannot be computed from the public metadata-only files.
+
+**Gate result:** target joinability is not established, and the >=200
+independent-group requirement cannot be verified. Do not acquire media to
+resolve this by exploratory annotation, and do not fit. Callsign/ICAO/tail
+identifiers would be answer-bearing and must be excluded from model inputs in
+any future task. Keep `REVIEW_NOT_ADMITTED`; revisit only if the publisher
+provides a speech-to-aircraft crosswalk and per-video identity inventory under
+the same rights grant, or a separately reviewed annotation source makes both
+labels and grouping auditable.
+
 ## Sources
 
 - Pinned official README: <https://raw.githubusercontent.com/castacks/TartanAviation/077a04abac1e50953c45b72524edd79e3a21d9bd/README.md>.
+- Pinned official Croissant metadata: <https://raw.githubusercontent.com/castacks/TartanAviation/077a04abac1e50953c45b72524edd79e3a21d9bd/croissant.json>.
 - Pinned repository code license: <https://raw.githubusercontent.com/castacks/TartanAviation/077a04abac1e50953c45b72524edd79e3a21d9bd/LICENSE>.
 - Official dataset page: <https://theairlab.org/tartanaviation/>.
 - Scientific Data paper: <https://doi.org/10.1038/s41597-025-04775-6>.
