@@ -8,6 +8,21 @@ general video understanding, multimodal quality, or product readiness. The
 fixed validation split has already participated in readout selection and is
 not blind evidence. No sealed audit was opened.
 
+The older 2026-11-13 source-screen entries still say `REVIEW_NOT_ADMITTED`
+because the CATER/Clevr-4 visual-identity check was then pending. The later
+bounded check in `R2_CATER_TEMPORAL_PATH_A_PREFLIGHT_20261113.md` completed at
+02:23 JST on 2026-11-14, before the frozen-feature run directory was created at
+07:23 JST. It compared 67,480 selected CATER interval frames with 10,531
+previously-used non-sealed Clevr-4 images, found zero exact RGB64 matches, and
+manually reviewed all 174 global nearest-pHash pairs at distance <=2 and the
+48 closest same-suffix pairs. No duplicate was identified; the receipt records
+the bounded scope and residual limitation (SHA-256
+`e4c906fb758f8678cb1e8bc239e36d92962f9a9c99e660b01bfeaa18f5d83499`). Together
+with the local non-redistributive research license interpretation in
+`R2_CATER_LICENSE_SCOPE_FOLLOWUP_20261113.md`, this cleared the stated local
+development gate for this fixed candidate. It does not admit CATER for M-2,
+product-quality claims, or sealed-audit use.
+
 The first readout attempt completed both conditions and wrote their selected
 head checkpoints, then failed while generating the `permuted_video` control:
 it mapped whole videos without checking that a replacement had the same task
