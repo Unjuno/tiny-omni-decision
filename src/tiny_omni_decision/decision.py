@@ -8,7 +8,10 @@ import torch
 from torch import Tensor, nn
 from torch.nn import functional as F
 
-from tiny_omni_decision.decision_json import decision_json_record
+from tiny_omni_decision.decision_json import (
+    decision_json_abstention_record,
+    decision_json_record,
+)
 
 
 @dataclass
@@ -36,6 +39,24 @@ class DecisionOutput:
             predicted_index=self.predicted_index,
             confidence=self.confidence,
             ordinal_values=ordinal_values,
+        )
+        return json.dumps(record, ensure_ascii=False, allow_nan=False)
+
+    @staticmethod
+    def abstention_json(
+        request_id: str,
+        decision_type: str,
+        option_ids: list[str],
+        option_texts: list[str],
+        reason: str,
+    ) -> str:
+        """Serialize an explicit abstention without inventing option probabilities."""
+        record = decision_json_abstention_record(
+            request_id=request_id,
+            decision_type=decision_type,
+            option_ids=option_ids,
+            option_texts=option_texts,
+            reason=reason,
         )
         return json.dumps(record, ensure_ascii=False, allow_nan=False)
 

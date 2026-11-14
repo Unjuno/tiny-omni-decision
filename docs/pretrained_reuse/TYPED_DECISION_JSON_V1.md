@@ -30,7 +30,13 @@ must be one within `1e-5`. `ordinal_score` also requires finite, strictly
 increasing numeric `ordinal_values` in option order and returns the
 probability-weighted `expected_score`.
 
-This contract does not define abstention, calibration guarantees, or input-media
-transport. Ordinal values are supplied by the caller and do not define task
-semantics; these require task-level policy and evaluation. A well-formed JSON
-response is not evidence of model quality.
+When the system cannot produce a supported decision, call
+`DecisionOutput.abstention_json` with a nonempty reason. The response has
+`status: "abstain"`, a null `selected_option_id` and confidence, and null option
+probabilities; it does not invent a uniform distribution. Abstention currently
+supports `choice` and `yes_no`, not `ordinal_score`.
+
+This schema does not provide calibration guarantees or input-media transport.
+Ordinal values are supplied by the caller and do not define task semantics;
+these require task-level policy and evaluation. A well-formed JSON response is
+not evidence of model quality.

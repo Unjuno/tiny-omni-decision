@@ -101,6 +101,22 @@ def test_ordinal_json_requires_ordered_values():
         )
 
 
+def test_typed_decision_json_can_serialize_explicit_abstention():
+    decoded = json.loads(DecisionOutput.abstention_json(
+        request_id="stale-video",
+        decision_type="choice",
+        option_ids=["left", "right"],
+        option_texts=["Left", "Right"],
+        reason="required_video_stale",
+    ))
+
+    assert decoded["status"] == "abstain"
+    assert decoded["selected_option_id"] is None
+    assert decoded["confidence"] is None
+    assert decoded["reason"] == "required_video_stale"
+    assert [option["probability"] for option in decoded["options"]] == [None, None]
+
+
 @pytest.mark.parametrize("decision_type,ids,texts", [
     ("unknown", ["yes", "no"], ["yes", "no"]),
     ("yes_no", ["yes"], ["yes"]),
