@@ -213,6 +213,12 @@ recorded 2,124,835,664 cumulative range bytes and 2,752,079,108 durable output
 bytes; 11 WAVs were visible beyond the durable count. This followed 3,900 at
 08:03:27 (100 files in about 7m18s). No terminal `result.json` was present.
 
+At 2026-11-15 08:24:09 JST, PID 5452 remained active at 4,200/18,879 durable
+files with a matching receipt, 2,205,238,779 cumulative range bytes, and
+2,853,378,868 durable output bytes. This followed 4,000 at 08:10:11 (200
+files in about 13m58s). No terminal `result.json` was present; this remains
+acquisition progress only, not a verification or quality result.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
