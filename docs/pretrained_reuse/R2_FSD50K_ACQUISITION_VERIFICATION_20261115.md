@@ -66,8 +66,11 @@ follow-up records explicit upstream commercial checkpoint permission and
 admits this as an ALLOW research candidate; task quality remains open. The
 reusable extractor pins the same source and checkpoint, requires the measured
 PyTorch/torchaudio `2.6.0+cu124` pair, and records 1,961,239 model parameters.
-These checks establish artifact identity and a licensed candidate, not an FSD
-runtime forward or audio-task accuracy result.
+The active Python runtime was rechecked as Python 3.11.9, PyTorch
+`2.6.0+cu124`, torchaudio `2.6.0+cu124`, and CUDA runtime 12.4. CUDA was
+reported available; no checkpoint forward was run in this audit. These checks
+establish artifact identity and a licensed candidate, not an FSD runtime
+forward or audio-task accuracy result.
 
 Attempt-03 uses a distinct output path and a 64 MiB per-member safety cap, above
 the observed 48,532,044-byte maximum. Its range-transfer budget remains bounded
