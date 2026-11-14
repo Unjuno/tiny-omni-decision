@@ -11,6 +11,7 @@ from scripts.train_cater_temporal_readout import (  # noqa: E402
     _cluster_bootstrap_accuracy_delta,
     _feature_for_mode,
     artifact_file_manifest,
+    build_interval_compatible_video_permutation,
     feature_record_for_example,
     group_by_video,
     prepare_examples,
@@ -96,6 +97,35 @@ def test_video_permutation_resolves_the_same_local_task_interval() -> None:
     )
 
     assert selected is same_interval_record
+
+
+def test_interval_compatible_video_permutation_is_deterministic_and_resolvable() -> None:
+    records = {
+        ("validation", "v1", (0, 75)): {"sample_id": "v1-0"},
+        ("validation", "v2", (0, 75)): {"sample_id": "v2-0"},
+        ("validation", "v3", (0, 75)): {"sample_id": "v3-0"},
+        ("validation", "v1", (75, 150)): {"sample_id": "v1-75"},
+        ("validation", "v2", (75, 150)): {"sample_id": "v2-75"},
+        ("train", "train-only", (0, 75)): {"sample_id": "train"},
+    }
+
+    permutation = build_interval_compatible_video_permutation(records, "validation", 17)
+
+    assert permutation == build_interval_compatible_video_permutation(records, "validation", 17)
+    for source, interval in permutation:
+        target = permutation[(source, interval)]
+        assert target != source
+        assert ("validation", target, interval) in records
+    assert ("train-only", (0, 75)) not in permutation
+    assert len(permutation) == 5
+
+
+def test_single_video_interval_is_left_unmapped() -> None:
+    records = {
+        ("validation", "only-video", (150, 225)): {"sample_id": "only"},
+    }
+
+    assert build_interval_compatible_video_permutation(records, "validation", 17) == {}
 
 
 def test_feature_controls_keep_expected_temporal_content() -> None:

@@ -8,6 +8,7 @@ import importlib.metadata
 import json
 import platform
 import random
+import shutil
 import subprocess
 import sys
 import time
@@ -164,6 +165,36 @@ def feature_record_for_example(
     return interval_records[(split, video_id, interval)]
 
 
+def build_interval_compatible_video_permutation(
+    interval_records: dict[tuple[str, str, tuple[int, int]], dict[str, Any]],
+    split: str,
+    seed: int,
+) -> dict[tuple[str, tuple[int, int]], str]:
+    """Map each source video to another video with the same task interval."""
+    videos_by_interval: dict[tuple[int, int], list[str]] = defaultdict(list)
+    for record_split, video_id, interval in interval_records:
+        if record_split == split:
+            videos_by_interval[interval].append(video_id)
+
+    mapping: dict[tuple[str, tuple[int, int]], str] = {}
+    for interval, video_ids in sorted(videos_by_interval.items()):
+        ordered = sorted(set(video_ids))
+        if len(ordered) < 2:
+            continue
+        interval_seed = seed + interval[0] * 1_000_003 + interval[1]
+        shuffled = ordered.copy()
+        random.Random(interval_seed).shuffle(shuffled)
+        if any(source == target for source, target in zip(ordered, shuffled, strict=True)):
+            # A cyclic derangement is deterministic and preserves interval coverage.
+            offset = 1 + (interval_seed % (len(ordered) - 1))
+            shuffled = ordered[offset:] + ordered[:offset]
+        mapping.update(
+            ((source, interval), target)
+            for source, target in zip(ordered, shuffled, strict=True)
+        )
+    return mapping
+
+
 def _feature_for_mode(video: Tensor, mode: str, seed: int, interval: tuple[int, int]) -> Tensor:
     if mode == "video":
         return video
@@ -224,23 +255,26 @@ def _predict(
     *,
     feature_mode: str,
     seed: int,
-    video_permutation: dict[str, str] | None = None,
+    video_permutation: dict[tuple[str, tuple[int, int]], str] | None = None,
 ) -> list[dict[str, Any]]:
     head.eval()
     results = []
     with torch.inference_mode():
         for video_id, examples in groups:
-            current_id = (
-                video_permutation.get(video_id, video_id) if video_permutation else video_id
-            )
             for example in examples:
+                interval = tuple(map(int, example["row"]["frame_interval"]))
+                current_id = (
+                    video_permutation.get((video_id, interval), video_id)
+                    if video_permutation
+                    else None
+                )
                 row = example["row"]
                 record = feature_record_for_example(
                     feature_records,
                     interval_records,
                     split,
                     example,
-                    current_id if video_permutation else None,
+                    current_id,
                 )
                 interval = list(map(int, row["frame_interval"]))
                 video = load_video_feature(
@@ -419,6 +453,64 @@ def _train_condition(
     }
 
 
+def _evaluate_saved_condition(
+    condition: str,
+    source_checkpoint: Path,
+    train_groups: list[tuple[str, list[dict[str, Any]]]],
+    validation_groups: list[tuple[str, list[dict[str, Any]]]],
+    feature_records: dict[tuple[str, str], dict[str, Any]],
+    interval_records: dict[tuple[str, str, tuple[int, int]], dict[str, Any]],
+    feature_root: Path,
+    *,
+    seed: int,
+    output_dir: Path,
+) -> dict[str, Any]:
+    """Re-score an existing selected head without repeating any training."""
+    checkpoint_path = output_dir / f"best-{condition}-readout.pt"
+    shutil.copy2(source_checkpoint, checkpoint_path)
+    head = CaterTemporalDecisionHead()
+    head.load_state_dict(torch.load(checkpoint_path, map_location="cpu", weights_only=True))
+    validation_predictions = _predict(
+        head,
+        validation_groups,
+        feature_records,
+        interval_records,
+        feature_root,
+        "validation",
+        feature_mode=condition,
+        seed=seed,
+    )
+    train_predictions = _predict(
+        head,
+        train_groups,
+        feature_records,
+        interval_records,
+        feature_root,
+        "train",
+        feature_mode=condition,
+        seed=seed,
+    )
+    return {
+        "condition": condition,
+        "best_epoch": None,
+        "epochs_completed": None,
+        "best_validation_macro_interval_nll": _batch_metrics(validation_predictions)[
+            "macro_by_interval"
+        ]["nll"],
+        "history": None,
+        "train_metrics_at_selected_checkpoint": _batch_metrics(train_predictions),
+        "validation_metrics_at_selected_checkpoint": _batch_metrics(validation_predictions),
+        "validation_predictions": validation_predictions,
+        "trainable_parameters": sum(parameter.numel() for parameter in head.parameters()),
+        "checkpoint_path": str(checkpoint_path),
+        "checkpoint_sha256": sha256_file(checkpoint_path),
+        "training_seconds": None,
+        "reused_checkpoint_from": str(source_checkpoint.resolve()),
+        "reused_checkpoint_sha256": sha256_file(source_checkpoint),
+        "training_history_available": False,
+    }
+
+
 def _cluster_bootstrap_accuracy_delta(
     video_predictions: list[dict[str, Any]],
     text_predictions: list[dict[str, Any]],
@@ -481,6 +573,12 @@ def main() -> None:
     parser.add_argument("--batch-groups", type=int, default=BATCH_GROUPS)
     parser.add_argument("--max-video-groups", type=int, default=None, help=argparse.SUPPRESS)
     parser.add_argument("--cpu-threads", type=int, default=4)
+    parser.add_argument(
+        "--reuse-checkpoints-from",
+        type=Path,
+        default=None,
+        help="evaluate saved video/text heads without training; source directory is read-only",
+    )
     args = parser.parse_args()
     manifest_dir = args.manifest_dir.resolve(strict=True)
     feature_dir = args.feature_dir.resolve(strict=True)
@@ -488,6 +586,13 @@ def main() -> None:
     text_model_path = args.text_model.resolve(strict=True)
     if output.exists():
         raise FileExistsError(f"refusing to overwrite readout output: {output}")
+    reuse_dir = (
+        args.reuse_checkpoints_from.resolve(strict=True)
+        if args.reuse_checkpoints_from
+        else None
+    )
+    if reuse_dir is not None and reuse_dir == output:
+        raise ValueError("checkpoint reuse output must differ from the source directory")
     if sha256_file(text_model_path / "model.safetensors") != TEXT_WEIGHTS_SHA256:
         raise ValueError("MiniLM checkpoint SHA-256 mismatch")
     result_path = feature_dir / "result.json"
@@ -545,32 +650,56 @@ def main() -> None:
         validation_groups = validation_groups[: args.max_video_groups]
     output.mkdir(parents=True)
     run_started = datetime.now(UTC).isoformat()
-    video_result = _train_condition(
-        "video",
-        train_groups,
-        validation_groups,
-        feature_records,
-        interval_records,
-        feature_dir / "features",
-        seed=args.seed,
-        output_dir=output,
-        batch_groups=args.batch_groups,
-        max_epochs=args.max_epochs,
-        patience=args.patience,
-    )
-    text_result = _train_condition(
-        "text_only",
-        train_groups,
-        validation_groups,
-        feature_records,
-        interval_records,
-        feature_dir / "features",
-        seed=args.seed,
-        output_dir=output,
-        batch_groups=args.batch_groups,
-        max_epochs=args.max_epochs,
-        patience=args.patience,
-    )
+    if reuse_dir is None:
+        video_result = _train_condition(
+            "video",
+            train_groups,
+            validation_groups,
+            feature_records,
+            interval_records,
+            feature_dir / "features",
+            seed=args.seed,
+            output_dir=output,
+            batch_groups=args.batch_groups,
+            max_epochs=args.max_epochs,
+            patience=args.patience,
+        )
+        text_result = _train_condition(
+            "text_only",
+            train_groups,
+            validation_groups,
+            feature_records,
+            interval_records,
+            feature_dir / "features",
+            seed=args.seed,
+            output_dir=output,
+            batch_groups=args.batch_groups,
+            max_epochs=args.max_epochs,
+            patience=args.patience,
+        )
+    else:
+        video_result = _evaluate_saved_condition(
+            "video",
+            reuse_dir / "best-video-readout.pt",
+            train_groups,
+            validation_groups,
+            feature_records,
+            interval_records,
+            feature_dir / "features",
+            seed=args.seed,
+            output_dir=output,
+        )
+        text_result = _evaluate_saved_condition(
+            "text_only",
+            reuse_dir / "best-text_only-readout.pt",
+            train_groups,
+            validation_groups,
+            feature_records,
+            interval_records,
+            feature_dir / "features",
+            seed=args.seed,
+            output_dir=output,
+        )
 
     # Controls are post-selection diagnostics on the fixed development validation set.
     video_head = CaterTemporalDecisionHead()
@@ -589,11 +718,9 @@ def main() -> None:
             feature_mode=mode,
             seed=args.seed,
         )
-    validation_video_ids_sorted = sorted(validation_video_ids)
-    permutation = list(validation_video_ids_sorted)
-    random.Random(args.seed).shuffle(permutation)
-    if len(permutation) > 1 and permutation == validation_video_ids_sorted:
-        permutation = permutation[1:] + permutation[:1]
+    permutation = build_interval_compatible_video_permutation(
+        interval_records, "validation", args.seed
+    )
     control_predictions["permuted_video"] = _predict(
         video_head,
         validation_groups,
@@ -603,7 +730,7 @@ def main() -> None:
         "validation",
         feature_mode="video",
         seed=args.seed,
-        video_permutation=dict(zip(validation_video_ids_sorted, permutation, strict=True)),
+        video_permutation=permutation,
     )
     bootstrap = _cluster_bootstrap_accuracy_delta(
         video_result["validation_predictions"], text_result["validation_predictions"]
@@ -622,6 +749,8 @@ def main() -> None:
         "status": "PASS_CATER_TEMPORAL_FROZEN_PATH_A_READOUT",
         "run_started_utc": run_started,
         "run_finished_utc": datetime.now(UTC).isoformat(),
+        "checkpoint_reuse_only": reuse_dir is not None,
+        "reused_checkpoint_directory": str(reuse_dir) if reuse_dir is not None else None,
         "source_commit": project_commit,
         "working_tree_had_changes": bool(
             subprocess.run(

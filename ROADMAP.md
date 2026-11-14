@@ -2838,6 +2838,19 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
 
+**2026-11-14 R2 CATER frozen temporal readout recovery:** The initial
+question-conditioned VideoPrism-B readout completed both fits but failed in
+post-fit video permutation because replacement clips did not all contain the
+same task interval. Reused the preserved checkpoints without further training,
+fixed the control to permute only within matching intervals, and completed the
+fixed validation evaluation. Video + question accuracy was 18.86% versus
+19.50% question-only; the paired video-group bootstrap for the difference
+spans zero, and temporal/video corruption controls are effectively unchanged.
+This provides no evidence of useful video dependence in this task/setup and
+does not establish a representation ceiling. Do not tune this readout further
+on the same validation; see
+[`R2_CATER_TEMPORAL_READOUT_RECOVERY_20261114.md`](docs/pretrained_reuse/R2_CATER_TEMPORAL_READOUT_RECOVERY_20261114.md).
+
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
 release is a relevant video/wearable-sensor work-activity source, but its
 non-RGB dataset is CC BY-NC-SA 4.0 and its RGB release is restricted to
