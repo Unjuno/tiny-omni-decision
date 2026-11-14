@@ -73,9 +73,14 @@ runtime and R2 heads rather than duplicating all 87 PR bodies.
   and both-input-necessary gates for a new M-2 quality experiment.
 - **R3/R4:** A shared Lens, weight merge, or alignment loss is not justified
   by current R2 evidence; do not start these experiments yet.
-- **R5:** Observation reuse and basic request caching have measured evidence;
-  concurrent streams and timestamped state remain open. The current JSONL
-  runtime supplies a task-scoped interface, not a joint world state.
+- **R5:** Observation reuse and basic request caching have measured evidence.
+  Open PR #82 has 47 focused CPU tests and 8/8 repeat passes for concurrent
+  audio/video state updates, causal `as_of` snapshots, FIFO limits, and
+  instance isolation. That PR is based on the video-text parity branch, not
+  the current canonical JSONL runtime stack, and verifies the in-memory store
+  rather than concurrent model inference or real-world clock synchronization.
+  The current JSONL runtime supplies a task-scoped interface, not a joint
+  world state.
 - **R6:** No compatible weight merge has been selected or validated.
 - **R7:** No quantized export/reload parity or low-bit deployment runtime is
   established. The full-precision runtime package is above the provisional
