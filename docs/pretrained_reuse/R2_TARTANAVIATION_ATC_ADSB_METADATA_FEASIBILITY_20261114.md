@@ -91,11 +91,12 @@ artifacts are:
 
 - `D:\CodexArtifacts\pretrained-reuse-r2\tartanaviation-atc-adbscreen-20261114-attempt-01\labels_metadata_integrity_summary.json` — SHA-256 `F8C1F8F19DDE8D845F208A9872E8F6479C46764C6CA4B5A11E30C619B5D56CF2`.
 - `D:\CodexArtifacts\pretrained-reuse-r2\tartanaviation-atc-adbscreen-20261114-attempt-01\tartan_atc_labels_metadata_screen.json` — SHA-256 `B2AB25D4C9D0E0CD788C84F7036618B87E4853F5740A03947C5967877130CA1D`.
+- Hash-only exposure roster for all 40,899 parent clips, keyed separately to the pinned official source and derivative: `D:\CodexArtifacts\pretrained-reuse-r2\tartanaviation-atc-adbscreen-20261114-attempt-01\group_exposure_roster.json` — SHA-256 `82E71738FCB7199D387D12D01B03DBC169C5DC302130834770DC1E9D54DC2B3F`. It contains no raw utterance or clip IDs. Reproduce with `scripts/hash_tartan_label_group_exposure.py`; this reads only the existing `utterance_id` column and rechecks every shard hash.
 
 The dataset-server preview and the full local metadata screen are distinct
-observations; neither admits this task. Until the per-example exposure roster
-is reconciled with the project cohort ledger, fail closed on any further use
-of this derivative or its groups. [Utterance card](https://huggingface.co/datasets/twangodev/tartanaviation-atc-adsb-utterances),
+observations; neither admits this task. The group roster is ready for cohort-
+ledger import, but the repository ledger has not yet been reconciled; fail
+closed on any further use of this derivative or its groups. [Utterance card](https://huggingface.co/datasets/twangodev/tartanaviation-atc-adsb-utterances),
 [label card](https://huggingface.co/datasets/twangodev/tartanaviation-atc-labels),
 [author's pipeline description](https://twango.dev/writing/tartanaviation-atc-labels).
 
@@ -109,11 +110,12 @@ identity grouping rejects the task before model fitting.
 ## Reproduction artifacts
 
 - Audit code: `scripts/audit_tartanaviation_availability.py`
-- Focused tests: `tests/test_tartanaviation_availability_audit.py`
+- Focused tests: `tests/test_tartanaviation_availability_audit.py` and `tests/test_tartan_label_group_exposure.py` (9 passed together).
 - External result: `D:\CodexArtifacts\pretrained-reuse-r2\tartanaviation-atc-adsb-metadata-20261114-attempt-01\availability.json`
 - Result SHA-256: `2c5a04e05017dd7a2a2627f6d25a9a0d1de068f950385cef8b073ca7a6265212`
 - Executed script SHA-256: `ac0e6691b22e419f03676109382c02012685764f7b1a1c0da5b33969e6c2499a`
-- Five focused tests pass; Ruff and `git diff --check` pass.
+- Executed exposure-roster script SHA-256: `72C83332D8EFE30AF47BDD1713C3BD1CC6639FE958B3BE33F153929812ACCD56`.
+- Nine focused tests pass; Ruff and `git diff --check` pass.
 
 No model, audio, video, trajectory row, validation label, sealed audit, or paid
 compute was used for this feasibility audit. R2 remains open; the next step is
