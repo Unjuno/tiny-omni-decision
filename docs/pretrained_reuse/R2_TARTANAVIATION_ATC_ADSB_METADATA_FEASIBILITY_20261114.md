@@ -3,11 +3,15 @@
 ## Disposition
 
 Keep this source/task **`REVIEW_NOT_ADMITTED`**. The official object index
-shows enough potentially synchronized airport-day groups to justify one next
-bounded feasibility check. It does not establish 1,000 usable examples, 200
-independent groups after aircraft/speaker grouping, reliable labels, or that a
-model must use both inputs. No media or trajectory records were downloaded,
-opened, or decoded; no fitting or model evaluation was run.
+shows potentially synchronized airport-day availability, but does not establish
+1,000 usable examples, 200 independent groups after aircraft/speaker grouping,
+reliable labels, or that a model must use both inputs. A prior local metadata
+screen of the third-party label derivative has exposed all 184 pinned Parquet
+shards and aggregate clip/date identities; this is now an additional source
+exposure that must be reconciled before any future reuse. It did not read
+transcript or callsign text, or media. No TartanAviation media or trajectory
+rows were downloaded, opened, or decoded for this audit; no fitting or model
+evaluation was run.
 
 ## Pinned source and rights
 
@@ -71,10 +75,27 @@ The third-party Hugging Face derivatives are **not** accepted as gold labels.
 Their cards describe ensemble ASR/ROVER labels and ADS-B callsign snapping;
 the author says the pipeline fuzzy-matches spoken callsigns to ADS-B tails.
 That makes snapped identity labels circular for a model receiving ADS-B. The
-public dataset-server statistics endpoint also reported only 61,311 processed
-rows with `partial=true`, one airport, and 93 dates; this is an incomplete
-preview, not evidence that the claimed full 531,050-row derivative satisfies
-the project split gate. [Utterance card](https://huggingface.co/datasets/twangodev/tartanaviation-atc-adsb-utterances),
+public dataset-server statistics endpoint reported a **partial preview** of
+61,311 processed rows (`partial=true`), one airport, and 93 dates. Separately,
+a pre-existing local metadata-only screen verified all 184 label shards
+(25,246,122 bytes; 531,050 unique utterance IDs; 40,899 parent clip groups;
+670 airport-date groups). It read only `utterance_id`, review/confidence and
+agreement fields, plus the boolean `callsign_matched`; transcript and callsign
+text columns were not read, and no media was downloaded. Of 531,050 rows, 157
+were marked `verified` and 35 `edited` (192 rows across 191 parent clips); the
+source has only a `train` split and no speaker ID. Those counts do not meet the
+1,000 human-reviewed-example floor, and the 191 clips do not establish 200
+independent groups. This full-shard metadata screen supersedes no official
+source split and is not evidence of usable gold labels. Its existing local
+artifacts are:
+
+- `D:\CodexArtifacts\pretrained-reuse-r2\tartanaviation-atc-adbscreen-20261114-attempt-01\labels_metadata_integrity_summary.json` — SHA-256 `F8C1F8F19DDE8D845F208A9872E8F6479C46764C6CA4B5A11E30C619B5D56CF2`.
+- `D:\CodexArtifacts\pretrained-reuse-r2\tartanaviation-atc-adbscreen-20261114-attempt-01\tartan_atc_labels_metadata_screen.json` — SHA-256 `B2AB25D4C9D0E0CD788C84F7036618B87E4853F5740A03947C5967877130CA1D`.
+
+The dataset-server preview and the full local metadata screen are distinct
+observations; neither admits this task. Until the per-example exposure roster
+is reconciled with the project cohort ledger, fail closed on any further use
+of this derivative or its groups. [Utterance card](https://huggingface.co/datasets/twangodev/tartanaviation-atc-adsb-utterances),
 [label card](https://huggingface.co/datasets/twangodev/tartanaviation-atc-labels),
 [author's pipeline description](https://twango.dev/writing/tartanaviation-atc-labels).
 
@@ -95,5 +116,7 @@ identity grouping rejects the task before model fitting.
 - Five focused tests pass; Ruff and `git diff --check` pass.
 
 No model, audio, video, trajectory row, validation label, sealed audit, or paid
-compute was used. R2 remains open; the next step is a separately gated,
-small-scale label/identity feasibility check, not training.
+compute was used for this feasibility audit. R2 remains open; the next step is
+to reconcile existing source exposure and identify a genuinely unexposed,
+rights-cleared task with independently verified groups. Do not start a Tartan
+payload pilot or training from the airport-date count alone.
