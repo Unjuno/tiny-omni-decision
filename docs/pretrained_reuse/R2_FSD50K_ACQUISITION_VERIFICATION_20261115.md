@@ -193,6 +193,12 @@ observed checkpoint interval was 50 files in about 3m48s; this is a local
 throughput observation, not a completion-time guarantee. Attempt-06 remains
 RUNNING and is not yet eligible for the full verifier.
 
+At 2026-11-15 07:50:16 JST, PID 5452 remained active and attempt-06 advanced
+to 3,750/18,879 durable files. The flushed receipt matched; cumulative range
+bytes were 1,992,357,711 and durable output bytes 2,578,810,480. One additional
+WAV was visible beyond the durable count. This checkpoint followed 3,700 at
+07:46:25 (50 files in 3m45s). No terminal result was present.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
