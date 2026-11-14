@@ -220,6 +220,12 @@ files with a matching receipt, 2,205,238,779 cumulative range bytes, and
 12m53s). No terminal `result.json` was present; this remains acquisition
 progress only, not a verification or quality result.
 
+At 2026-11-15 08:42:12 JST, PID 5452 remained active at 4,450/18,879 durable
+files with a matching receipt, 2,319,658,314 cumulative range bytes, and
+3,007,568,088 durable output bytes. The checkpoint was written at 08:41:04,
+250 files after the 4,200 checkpoint at 08:23:04 (18 minutes). No terminal
+`result.json` was present.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
