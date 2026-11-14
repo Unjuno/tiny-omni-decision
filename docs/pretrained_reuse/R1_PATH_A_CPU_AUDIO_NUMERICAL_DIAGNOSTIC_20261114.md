@@ -77,3 +77,29 @@ would need an explicitly separate frozen-feature training/validation track and
 its own task-quality evaluation; this diagnostic does not authorize that work
 or justify changing the current product candidate. No further repeated
 validation scoring is needed to reach this diagnosis.
+
+
+## Fixed-readout isolation follow-up
+
+To isolate the encoder from CPU text embedding, readout math, and JSON, the
+fixed CPU `SpeechCommandsMultiQueryRuntime` loaded the same readout and CPU
+MiniLM once, then scored all four saved question templates twice per clip: once
+with the immutable cached Whisper vector and once with a fresh CPU FP32 Whisper
+vector. The same saved probability rows were the numerical reference; labels
+were not used.
+
+The cache-feature arm reproduced the saved probabilities to at most
+`5.50e-8` across all eight queries. The CPU-reencoded-feature arm reproduced
+the prior CPU-runtime deltas exactly: up to `6.1774e-4` and `7.4472e-5` on the
+two keyword queries. All eight argmaxes were unchanged in both arms. Therefore,
+for these two clips, CPU text embeddings/readout and typed JSON are not the
+material parity source; the probability drift enters with the audio feature.
+This two-clip localization does not establish behavior for all Speech
+Commands inputs or other audio tasks.
+
+Machine-readable result: `D:\CodexArtifacts\pretrained-reuse-r2\path-a-audio-cpu-feature-isolation-v0-attempt-01\feature-readout-isolation.json`, SHA-256
+`80698559a4ae1f32c920fc0ed4c601c31d4842a6707d33dd828212ed933ba9ea`. The
+process ran CPU-only in Python 3.11.9 / PyTorch 2.6.0+cu124 with four Torch
+threads, used pinned cache, checkpoint, manifest and prediction hashes recorded
+in the JSON, performed no training, and loaded no sealed audit. No inference
+code or tolerance was changed.
