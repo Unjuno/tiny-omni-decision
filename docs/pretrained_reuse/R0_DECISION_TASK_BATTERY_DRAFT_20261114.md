@@ -104,6 +104,10 @@ until a rights-cleared source and independent groups support it.
   RGB rule solves the criterion-conditioned cohort.
 - CATER's observed validation shows no video dependence over question-only;
   do not tune on that cohort again.
+- The old Speech Commands model was near chance on LibriSpeech transcript
+  selection with either random or phoneme/lexical/length-matched distractors;
+  native Whisper nearly saturated both conditions. Distractor hardness alone
+  therefore does not establish broad audio Decision quality.
 - TartanAviation has 126 aircraft-linked video components (6 under
   day-plus-aircraft grouping); it fails the provisional 200-group gate.
 - Localized Narratives and RoboMIND2 remain unadmitted under their current
