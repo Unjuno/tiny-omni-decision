@@ -45,7 +45,7 @@ validation remains part of the media verification.
 | `...media-...-attempt-03` | FAIL at 2026-11-15 02:38 JST | 445 WAVs / receipt rows; terminal `result.json` records `ValueError('range length mismatch')`. Official eval access flags remain false. |
 | `...media-...-attempt-04` | FAIL at 2026-11-15 03:37 JST | Fresh output resumed the verified 445-file attempt-03 prefix. Six short-range attempts failed at bytes 902,885,557–903,241,699 (`337,620` received of `356,143` expected). It ended with 888 receipt rows / WAVs and 651,253,684 bytes. |
 | `...media-...-attempt-05` | FAIL at 2026-11-15 03:46 JST | Fresh output copied the 888 verified attempt-04 files, then hit the same byte range after six attempts (`347,216` received of `356,143`). No additional complete receipt row was added; 888 WAVs were preserved. |
-| `...media-...-attempt-06` | RUNNING at 2026-11-15 04:18 JST | New output resumed the independently reverified attempt-04 prefix. It passed the former failure boundary and reached 1,200 durable rows / 1,202 visible WAVs; cumulative range bytes 675,923,220 and durable output bytes 869,489,090. |
+| `...media-...-attempt-06` | RUNNING at 2026-11-15 04:27 JST | New output resumed the independently reverified attempt-04 prefix. It passed the former failure boundary and reached 1,300 durable rows / 1,303 visible WAVs; cumulative range bytes 753,702,990 and durable output bytes 972,866,062. |
 
 The old reader raised a generic `range length mismatch` after its retry limit;
 it did not preserve the failing response body length or member ID. A read-only
@@ -89,11 +89,11 @@ persistent short body, still charged to the frozen shared transfer budget. A
 deterministic test reproduces the short large response and verifies recovery
 via exact subranges; the actual source prefixes remain unchanged. Attempt-06
 uses a distinct output, resumes attempt-04's verified 888 rows, and has passed
-the previous failure boundary: 1,200 rows are durable with 1,202 WAV files at
-04:18 JST. It has used 675,923,220 cumulative requested range bytes and written
-869,489,090 durable media bytes. From attempt-06 start to 1,200 rows, the
+the previous failure boundary: 1,300 rows are durable with 1,303 WAV files at
+04:27 JST. It has used 753,702,990 cumulative requested range bytes and written
+972,866,062 durable media bytes. From attempt-06 start to 1,300 rows, the
 observed pace is approximately 0.19 clips/second; extrapolating the remaining
-17,679 rows is roughly 25 hours, an uncertain network-only estimate. It remains
+17,579 rows is roughly 25 hours, an uncertain network-only estimate. It remains
 incomplete pending terminal PASS plus the full acquisition verifier.
 
 ## Pinned Path A audio encoder recheck
