@@ -1174,3 +1174,8 @@ NLL.4133→.3983; random Accuracy and Brier worsen, so the combined prospective
 gate fails. Keep equal weights and close this coefficient comparison; no new
 runtime/Teacher promotion. The four-modality95–98% objective remains unmet.
 [Curves, paired intervals, all attempts and hashes](docs/pretrained_reuse/R2_AV_SLOT_WEIGHTS_RESULTS_20261015.md).
+
+The current frozen Path A stack also has a JSONL decision runtime for text,
+audio, image and video. Its fixed-request runtime parity passed on the local
+RTX 3080, while its task-quality, joint-fusion and 200 MB package gates remain
+open. See the [runtime contract, command and measured result](docs/pretrained_reuse/R5_PATH_A_CANONICAL_JSONL_RUNTIME_20261114.md).
