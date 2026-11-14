@@ -49,6 +49,26 @@ At 02:26 JST, the same PID was still alive; the output contained 288 WAVs and
 process CPU time had increased. This may indicate a long single-member transfer
 or decode, so it is being observed rather than treated as terminal.
 
+At 02:31 JST, PID 47840 remained alive and the 50-row checkpoint advanced to
+350 receipt rows (357 WAV files were present while the next batch was in
+progress). This confirms the previous apparent pause was the bounded receipt
+flush interval, not a terminal state.
+
+## Pinned Path A audio encoder recheck
+
+The selected EfficientAT DyMN-0.4 checkpoint is present at
+`C:/CodexArtifacts/pretrained-reuse-r1/efficientat-audit-v1/dymn04_as.pt`;
+its size is 8,086,973 bytes and its locally recomputed SHA-256 is
+`49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e`. The
+upstream source checkout is clean at commit
+`a425fdce92572e602a1d5634799bd9f1f2efa806`. The existing R1 release-license
+follow-up records explicit upstream commercial checkpoint permission and
+admits this as an ALLOW research candidate; task quality remains open. The
+reusable extractor pins the same source and checkpoint, requires the measured
+PyTorch/torchaudio `2.6.0+cu124` pair, and records 1,961,239 model parameters.
+These checks establish artifact identity and a licensed candidate, not an FSD
+runtime forward or audio-task accuracy result.
+
 Attempt-03 uses a distinct output path and a 64 MiB per-member safety cap, above
 the observed 48,532,044-byte maximum. Its range-transfer budget remains bounded
 by the planned 8,867,277,632 bytes. The two implementation defects were fixed
