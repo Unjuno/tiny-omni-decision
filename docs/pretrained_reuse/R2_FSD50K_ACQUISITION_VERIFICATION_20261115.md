@@ -108,8 +108,9 @@ whole-clip extraction path with hash-bound identity, 32-clip atomic shards,
 strict resume checks, final feature/row receipts, and CUDA peak-memory
 recording. Its synthetic CPU tests cover PCM decoding, whole-clip resampling
 and shape validation, and receipt resume checks. The focused suite for media
-acquisition, verification, Decision fitting, and feature extraction passes 24
-tests; Ruff and `git diff --check` pass. These checks do not replace
+acquisition, verification, Decision fitting, and feature extraction passes 26
+tests, including verified shard-resume and corrupted-shard rejection; Ruff and
+`git diff --check` pass. These checks do not replace
 corpus-scale extraction or real task metrics.
 
 One receipt-verified FSD training clip (`119192`, 4.9067 seconds, 44.1 kHz

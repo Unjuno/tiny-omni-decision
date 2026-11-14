@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import wave
 
 import numpy as np
@@ -7,8 +9,12 @@ import pytest
 import torch
 
 from scripts.extract_fsd50k_annotation_features import (
+    _load_resume,
+    atomic_json,
+    canonical_sha256,
     decode_mono_pcm_wav,
     encode_full_clip,
+    file_sha256,
 )
 
 
@@ -101,3 +107,86 @@ def test_encode_full_clip_resamples_native_rate_before_encoding():
 
     assert resampled_samples == 32_000
     assert encoder.mel.input_samples == 32_000
+
+
+def test_load_resume_revalidates_completed_feature_shard(tmp_path):
+    output = tmp_path / "features"
+    shards = output / "shards"
+    shards.mkdir(parents=True)
+    identity = {"fixture": "fixed"}
+    ordered_rows = [{"sample_id": "clip-a"}, {"sample_id": "clip-b"}]
+    rows = [
+        {"feature_index": index, "sample_id": row["sample_id"]}
+        for index, row in enumerate(ordered_rows)
+    ]
+    values = np.ones((2, 384), dtype=np.float32)
+    shard = shards / "shard-00000.npz"
+    with shard.open("wb") as stream:
+        np.savez_compressed(
+            stream,
+            sample_ids=np.asarray([row["sample_id"] for row in ordered_rows]),
+            features=values,
+            rows=np.asarray([json.dumps(row) for row in rows]),
+        )
+    identity_hash = canonical_sha256(identity)
+    atomic_json(output / "effective-config.json", {"identity": identity})
+    atomic_json(
+        output / "progress.json",
+        {
+            "status": "RUNNING",
+            "identity_sha256": identity_hash,
+            "completed_assets": 2,
+            "shards": [
+                {
+                    "name": shard.name,
+                    "sha256": file_sha256(shard),
+                    "first_feature_index": 0,
+                    "feature_count": 2,
+                }
+            ],
+        },
+    )
+
+    progress, completed, recovered_rows = _load_resume(output, identity, ordered_rows)
+
+    assert progress["status"] == "RUNNING"
+    assert completed == 2
+    assert recovered_rows == rows
+
+
+def test_load_resume_rejects_modified_feature_shard(tmp_path):
+    output = tmp_path / "features"
+    shards = output / "shards"
+    shards.mkdir(parents=True)
+    identity = {"fixture": "fixed"}
+    ordered_rows = [{"sample_id": "clip-a"}]
+    shard = shards / "shard-00000.npz"
+    values = np.ones((1, 384), dtype=np.float32)
+    with shard.open("wb") as stream:
+        np.savez_compressed(
+            stream,
+            sample_ids=np.asarray(["clip-a"]),
+            features=values,
+            rows=np.asarray([json.dumps({"feature_index": 0, "sample_id": "clip-a"})]),
+        )
+    identity_hash = canonical_sha256(identity)
+    atomic_json(output / "effective-config.json", {"identity": identity})
+    atomic_json(
+        output / "progress.json",
+        {
+            "status": "RUNNING",
+            "identity_sha256": identity_hash,
+            "completed_assets": 1,
+            "shards": [
+                {
+                    "name": shard.name,
+                    "sha256": hashlib.sha256(b"wrong").hexdigest(),
+                    "first_feature_index": 0,
+                    "feature_count": 1,
+                }
+            ],
+        },
+    )
+
+    with pytest.raises(ValueError, match="failed resume verification"):
+        _load_resume(output, identity, ordered_rows)
