@@ -183,6 +183,16 @@ calibration, validation scoring, or official eval access has yet occurred. The
 focused CPU tests for acquisition, complete-media validation, extraction, and
 Decision fitting pass (22 tests).
 
+At 2026-11-15 07:41:40 JST, the same attempt-06 process (PID 5452) was still
+active. Its durable progress and flushed receipt both reported 3,600/18,879
+files, with 1,954,595,046 cumulative range bytes and 2,490,104,322 durable
+output bytes. There were 3,614 visible train WAVs at the snapshot; this excess
+is in-flight/uncommitted output and is not counted as acquired. `result.json`
+did not exist. The previous durable checkpoint was 3,550 at 07:37:52, so the
+observed checkpoint interval was 50 files in about 3m48s; this is a local
+throughput observation, not a completion-time guarantee. Attempt-06 remains
+RUNNING and is not yet eligible for the full verifier.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
