@@ -44,6 +44,7 @@ EXPECTED_DIRECTORY_END = (
 )
 MAX_MEMBER_BYTES = 64 * 1024 * 1024
 DISK_RESERVE_BYTES = 2 * 1024**3
+SHORT_RESPONSE_FALLBACK_CHUNK_BYTES = 128 * 1024
 
 
 class SharedBudget:
@@ -66,8 +67,8 @@ class BudgetedRangeReader(HttpRangeReader):
         count = self.size - self.position if size < 0 else min(size, self.size - self.position)
         if count == 0:
             return b""
-        if count < 0 or self.transferred + count > self.budget:
-            raise ValueError("range transfer budget exceeded")
+        if count < 0:
+            raise ValueError("invalid negative range length")
         start = self.position
         end = start + count - 1
         expected_range = f"bytes {start}-{end}/{self.size}"
@@ -112,6 +113,14 @@ class BudgetedRangeReader(HttpRangeReader):
                 last_error = exc
             if attempt < self.retries:
                 time.sleep(min(0.5 * (2**attempt), 8.0))
+        if count > SHORT_RESPONSE_FALLBACK_CHUNK_BYTES:
+            chunks = []
+            remaining = count
+            while remaining:
+                chunk_size = min(remaining, SHORT_RESPONSE_FALLBACK_CHUNK_BYTES)
+                chunks.append(self.read(chunk_size))
+                remaining -= chunk_size
+            return b"".join(chunks)
         raise ValueError(
             f"range request failed after {self.retries + 1} attempts at "
             f"bytes={start}-{end}: {last_error!r}"

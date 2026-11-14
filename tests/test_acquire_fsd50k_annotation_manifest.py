@@ -156,6 +156,52 @@ def test_range_reader_retries_short_http_body_without_advancing_position(monkeyp
     assert budget.requested == 16
 
 
+def test_range_reader_splits_persistently_short_large_range(monkeypatch):
+    class Response:
+        status = 206
+
+        def __init__(self, payload, content_range):
+            self.payload = payload
+            self.headers = {"Content-Range": content_range}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self, _size):
+            return self.payload
+
+    payload = bytes(index % 251 for index in range(300_000))
+    calls = 0
+
+    def fake_urlopen(request, timeout):
+        nonlocal calls
+        calls += 1
+        assert timeout == 90
+        header = request.get_header("Range")
+        start, end = map(int, header.removeprefix("bytes=").split("-"))
+        expected = end - start + 1
+        content_range = f"bytes {start}-{end}/300000"
+        if expected > acquisition.SHORT_RESPONSE_FALLBACK_CHUNK_BYTES:
+            return Response(payload[start : start + expected - 50], content_range)
+        return Response(payload[start : end + 1], content_range)
+
+    monkeypatch.setattr(acquisition.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(acquisition.time, "sleep", lambda _seconds: None)
+    budget = acquisition.SharedBudget(10_000_000)
+    reader = acquisition.BudgetedRangeReader(
+        "https://example.invalid/archive", len(payload), budget
+    )
+
+    assert reader.read(len(payload)) == payload
+    assert calls == 6 + 3
+    assert reader.position == len(payload)
+    assert reader.transferred == 6 * (len(payload) - 50) + len(payload)
+    assert budget.requested == 6 * len(payload) + len(payload)
+
+
 def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
     preflight = tmp_path / "preflight"
     partial = tmp_path / "attempt-03"

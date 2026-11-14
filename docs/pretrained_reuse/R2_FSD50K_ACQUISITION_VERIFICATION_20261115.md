@@ -44,6 +44,7 @@ validation remains part of the media verification.
 | `...media-...-attempt-02` | FAIL before saving any WAV | ZIP local filename length and extra-field length were read in reverse order. The new output contains an empty receipt and the failure record. |
 | `...media-...-attempt-03` | FAIL at 2026-11-15 02:38 JST | 445 WAVs / receipt rows; terminal `result.json` records `ValueError('range length mismatch')`. Official eval access flags remain false. |
 | `...media-...-attempt-04` | FAIL at 2026-11-15 03:37 JST | Fresh output resumed the verified 445-file attempt-03 prefix. Six short-range attempts failed at bytes 902,885,557–903,241,699 (`337,620` received of `356,143` expected). It ended with 888 receipt rows / WAVs and 651,253,684 bytes. |
+| `...media-...-attempt-05` | FAIL at 2026-11-15 03:46 JST | Fresh output copied the 888 verified attempt-04 files, then hit the same byte range after six attempts (`347,216` received of `356,143`). No additional complete receipt row was added; 888 WAVs were preserved. |
 
 The old reader raised a generic `range length mismatch` after its retry limit;
 it did not preserve the failing response body length or member ID. A read-only
@@ -75,6 +76,17 @@ receipt SHA-256 is
 `7b594d268b2b9268a01cff2f900c9fa82d23838cab0625498c5746a0e9654aad5`. The
 runner SHA-256 is the pinned in-use code hash
 `8b7f5b08aecb109db6072f5bcc035e42defff57defa875239c1d62568ef0ad4b`.
+
+Attempt-05 independently reproduced the same short response at the same
+requested range, receiving 347,216 of 356,143 bytes on its sixth attempt. It
+stopped with the unchanged 888-file receipt prefix and 651,253,684 media bytes;
+its cumulative range counter was 511,346,228 bytes and result SHA-256 was
+`c1c2334c34e0b3a5e30209f6a8370b615671208b2d684a26fcc875799802f1b9`. This
+repeat at the identical offset indicates that retrying the full range alone is
+insufficient. The reader now has a bounded 128 KiB chunk fallback for a
+persistent short body, still charged to the frozen shared transfer budget. A
+deterministic test reproduces the short large response and verifies recovery
+via exact subranges; the actual source prefix remains unchanged.
 
 ## Pinned Path A audio encoder recheck
 
